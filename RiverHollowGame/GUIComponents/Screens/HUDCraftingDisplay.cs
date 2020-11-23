@@ -56,7 +56,7 @@ namespace RiverHollow.GUIComponents.Screens
             CenterOnScreen();
 
             //80, 48
-            _winMachineInfo = new GUIWindow(GUIWindow.RedWin, _winMain.Width, ScaleIt(GUIWindow.RedWin.Edge * 2) + ScaleIt(TileSize));
+            _winMachineInfo = new GUIWindow(GUIWindow.Window_1, _winMain.Width, ScaleIt(GUIWindow.Window_1.Edge * 2) + ScaleIt(TileSize));
             _winMachineInfo.AnchorAndAlignToObject(_winMain, SideEnum.Bottom, SideEnum.CenterX);
 
             _btnRemove = new GUIButton(new Rectangle(80, 48, 16, 16), ScaleIt(TileSize), ScaleIt(TileSize), DataManager.DIALOGUE_TEXTURE, RemoveCraftingStation);
@@ -90,11 +90,11 @@ namespace RiverHollow.GUIComponents.Screens
 
 
             //Determine how big the creation window needs to be
-            int creationWidth = (GUIWindow.RedWin.WidthEdges()) + (_columns * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_columns + 1));
-            int creationHeight = (GUIWindow.RedWin.HeightEdges()) + (_rows * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_rows + 1));
+            int creationWidth = (GUIWindow.Window_1.WidthEdges()) + (_columns * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_columns + 1));
+            int creationHeight = (GUIWindow.Window_1.HeightEdges()) + (_rows * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_rows + 1));
 
             //Create the creation window
-            _winCraftables = new GUIWindow(GUIWindow.RedWin, creationWidth, creationHeight);
+            _winCraftables = new GUIWindow(GUIWindow.Window_1, creationWidth, creationHeight);
 
             int i = 0; int j = 0;
             List<GUIObject> boxes = new List<GUIObject>();

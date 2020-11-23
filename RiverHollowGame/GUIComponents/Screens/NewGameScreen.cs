@@ -47,9 +47,9 @@ namespace RiverHollow.GUIComponents.Screens
             AssignClothes(ref _liHats, Util.GetEntries(DataManager.Config[4]["ItemID"]));
             AssignClothes(ref _liShirts, Util.GetEntries(DataManager.Config[5]["ItemID"]));
 
-            int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.BrownWin.Edge;
+            int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.Window_2.Edge;
 
-            _window = new GUIWindow(GUIWindow.BrownWin, RiverHollow.ScreenHeight, RiverHollow.ScreenHeight);
+            _window = new GUIWindow(GUIWindow.Window_2, RiverHollow.ScreenHeight, RiverHollow.ScreenHeight);
             _window.CenterOnScreen();
             AddControl(_window);
 
@@ -291,7 +291,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _main = mainSwatch;
                 _closeAction = closeIt;
                 _liSwatches = new List<GUISwatch>();
-                _winData = GUIWindow.RedWin;
+                _winData = GUIWindow.Window_1;
 
                 _target = target;
                 Width = 10;

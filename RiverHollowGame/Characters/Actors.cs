@@ -1544,7 +1544,7 @@ namespace RiverHollow.Characters
         #region StartPosition
         public void IncreaseStartPos()
         {
-            if (_vStartPosition.Y < 3)
+            if (_vStartPosition.Y < 2)
             {
                 _vStartPosition.Y++;
             }
@@ -2325,7 +2325,7 @@ namespace RiverHollow.Characters
 
                 MerchType = Util.ParseEnum<ItemType>(stringData["Type"]);
                 if (stringData.ContainsKey("WorkerID")) { MerchID = int.Parse(stringData["WorkerID"]); }
-                else if (stringData.ContainsKey("BuildngID")) { MerchID = int.Parse(stringData["BuildngID"]); }
+                else if (stringData.ContainsKey("BuildingID")) { MerchID = int.Parse(stringData["BuildingID"]); }
                 else if (stringData.ContainsKey("ItemID"))
                 {
                     //Some items may have unique data so only parse the first entry

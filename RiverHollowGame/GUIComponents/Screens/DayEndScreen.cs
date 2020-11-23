@@ -25,23 +25,17 @@ namespace RiverHollow.GUIComponents.Screens
         int _iTotalTiles;
         List<GUISprite> _liMonsters;
 
-        bool _bPopThem;
+        bool _bPopped;
         bool _bNextRow;
 
         public DayEndScreen()
         {
-            _bPopThem = false;
+            _bPopped = false;
             _bNextRow = true;
             _liMonsters = new List<GUISprite>();
 
             //Stop showing the WorldMap
             GameManager.ShowMap(false);
-
-            //Just for the purpose of testing, delete for actual use
-            for (int i =0; i < 60; i++)
-            {
-                GameManager.SlainMonsters.Add(new GUISprite(DataManager.GetMonsterByIndex(RHRandom.Instance.Next(0, 3)).BodySprite));
-            }
 
             //Determine how many total rows we will need
             foreach (GUISprite spr in GameManager.SlainMonsters) { TileCheck(spr, ref _iRows); }
@@ -80,8 +74,8 @@ namespace RiverHollow.GUIComponents.Screens
 
             //If we're popping the monsters, wait until the animation has played once and then
             //proceed to the next day
-            if (_bPopThem) {
-                if (_liMonsters[0].PlayCount > 0)
+            if (_bPopped) {
+                if (_liMonsters.Count == 0 || _liMonsters[0].PlayCount > 0)
                 {
                     GameCalendar.NextDay();
                     RiverHollow.Rollover();
@@ -162,7 +156,7 @@ namespace RiverHollow.GUIComponents.Screens
             //Clear here in case they weren't done spawning when button was pressed
             GameManager.SlainMonsters.Clear();
 
-            _bPopThem = true;
+            _bPopped = true;
             foreach (GUISprite spr in _liMonsters)
             {
                 spr.PlayAnimation(GameManager.AnimationEnum.KO);

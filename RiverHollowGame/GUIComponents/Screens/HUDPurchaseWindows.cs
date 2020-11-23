@@ -211,7 +211,7 @@ namespace RiverHollow.GUIComponents.Screens
                     float newScale = (float)(Scale * 0.75);
                     int width = (int)(TileSize * 9 * newScale);
                     int height = (int)(TileSize * 11 * newScale);
-                    _bldgWindow = new GUIWindow(GUIWindow.RedWin, width, height);
+                    _bldgWindow = new GUIWindow(GUIWindow.Window_1, width, height);
                     _bldgWindow.CenterOnScreen();
                     _bldgWindow.PositionSub(new Vector2(_bldgWindow.Width / 2 + TileSize / 2, 0));
 
@@ -220,7 +220,7 @@ namespace RiverHollow.GUIComponents.Screens
                     _giBuilding.AnchorToInnerSide(_bldgWindow, SideEnum.Bottom);
                     _giBuilding.AlignToObject(_bldgWindow, SideEnum.CenterX);
 
-                    _infoWindow = new GUIWindow(GUIWindow.RedWin, width, height);
+                    _infoWindow = new GUIWindow(GUIWindow.Window_1, width, height);
                     _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TileSize / 2);
 
                     _gtName = new GUIText(_bldg.Name);
@@ -239,10 +239,10 @@ namespace RiverHollow.GUIComponents.Screens
                     int height = 100;
                     int minWidth = width + margin * 2;
                     int minHeight = height + margin * 2;
-                    _bldgWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
+                    _bldgWindow = new GUIWindow(GUIWindow.Window_1, minWidth, minHeight);
                     _bldgWindow.CenterOnScreen();
 
-                    _infoWindow = new GUIWindow(GUIWindow.RedWin, width, height);
+                    _infoWindow = new GUIWindow(GUIWindow.Window_1, width, height);
                     _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TileSize / 2);
 
                     //Placeholderimage
@@ -299,7 +299,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             int minWidth = 64;
             int minHeight = 64;
-            _mainWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
+            _mainWindow = new GUIWindow(GUIWindow.Window_1, minWidth, minHeight);
 
             _liWorkers = new List<GUIObject>();
 
@@ -394,7 +394,7 @@ namespace RiverHollow.GUIComponents.Screens
             Cost = cost;
             ID = w.WorkerID;
             _workerWindow = new CharacterDisplayBox(w, null);
-            _costWindow = new GUIWindow(GUIWindow.RedWin, _workerWindow.Width, 16);
+            _costWindow = new GUIWindow(GUIWindow.Window_1, _workerWindow.Width, 16);
             AddControl(_workerWindow);
             AddControl(_costWindow);
 

@@ -270,9 +270,9 @@ Exit:
         /// <param name="num">Number of items</param>
         /// <param name="playerInventory">Bool representing whether or not to act on the players Inventory</param>
         /// <returns>True if successful</returns>
-        public static bool AddToInventory(int itemToAdd, int num = 1, bool playerInventory = true)
+        public static bool AddToInventory(int itemToAdd, int num = 1, bool playerInventory = true, bool silent = false)
         {
-            return AddToInventory(DataManager.GetItem(itemToAdd, num), playerInventory);
+            return AddToInventory(DataManager.GetItem(itemToAdd, num), playerInventory, silent);
         }
 
         /// <summary>
@@ -281,9 +281,9 @@ Exit:
         /// <param name="itemToAdd">The Item object to add</param>
         /// <param name="playerInventory">Bool representing whether or not to act on the players Inventory</param>
         /// <returns>True if successful</returns>
-        public static bool AddToInventory(Item itemToAdd, bool playerInventory = true)
+        public static bool AddToInventory(Item itemToAdd, bool playerInventory = true, bool silent = false)
         {
-            return AddToInventory(itemToAdd, GetInventory(playerInventory));
+            return AddToInventory(itemToAdd, GetInventory(playerInventory), silent);
         }
 
         /// <summary>
@@ -292,7 +292,7 @@ Exit:
         /// <param name="itemToAdd">The Item object to add</param>
         /// <param name="inventory">The Inventory to act on</param>
         /// <returns></returns>
-        private static bool AddToInventory(Item itemToAdd, Item[,] inventory)
+        private static bool AddToInventory(Item itemToAdd, Item[,] inventory, bool silent = false)
         {
             bool rv = false;
 
@@ -336,8 +336,11 @@ Exit:
                 {
                     PlayerManager.AdvanceQuestProgress(itemToAdd);
 
-                    //Used to display an item that was just added to the inventory
-                    AddedItemList.Add(itemToAdd);
+                    if (!silent)
+                    {
+                        //Used to display an item that was just added to the inventory
+                        AddedItemList.Add(itemToAdd);
+                    }
                 }
 
                 rv = true;

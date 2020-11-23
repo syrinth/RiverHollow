@@ -93,7 +93,7 @@ namespace RiverHollow.Game_Managers
             foreach (string s in splitItemValues)
             {
                 string[] splitString = s.Split('-');
-                InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1));
+                InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1), true, true);
             }
         }
 

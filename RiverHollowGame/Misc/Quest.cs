@@ -14,7 +14,7 @@ namespace RiverHollow.Misc
     public class Quest
     {
         public int QuestID { get; private set; }
-        public QuestTypeEnum QuestType { get; }
+        public QuestTypeEnum QuestType { get; private set; }
         private string _name;
         public string Name => _name;
         private string _sDescription;
@@ -310,6 +310,9 @@ namespace RiverHollow.Misc
 
         public struct QuestData
         {
+            [XmlElement(ElementName = "QuestType")]
+            public QuestTypeEnum questType;
+
             [XmlElement(ElementName = "QuestID")]
             public int questID;
 
@@ -354,6 +357,7 @@ namespace RiverHollow.Misc
         {
             QuestData qData = new QuestData
             {
+                questType = QuestType,
                 questID = QuestID,
                 name = _name,
                 description = _sDescription,
@@ -377,12 +381,13 @@ namespace RiverHollow.Misc
         }
         public void LoadData(QuestData qData)
         {
-            if(qData.questID != -1 )
-            {
-                Finished = qData.finished;
-            }
-            else
-            {
+            //if(qData.questID != -1 )
+            //{
+            //    Finished = qData.finished;
+            //}
+            //else
+            //{
+                QuestType = qData.questType;
                 QuestID = qData.questID;
                 _name = qData.name;
                 _sDescription = qData.description;
@@ -401,7 +406,7 @@ namespace RiverHollow.Misc
                     if (newItem != null) { newItem.ApplyUniqueData(i.strData); }
                     LiRewardItems.Add(newItem);
                 }
-            }
+            //}
         }
     }
 }

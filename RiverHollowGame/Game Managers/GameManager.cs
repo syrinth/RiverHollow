@@ -85,7 +85,7 @@ namespace RiverHollow.Game_Managers
 
         public static int MAX_NAME_LEN = 10;
 
-        public static int TotalExperience = 50;
+        public static int TotalExperience = 0;
         public static List<GUISprite> SlainMonsters;
 
         public static bool AutoDisband;

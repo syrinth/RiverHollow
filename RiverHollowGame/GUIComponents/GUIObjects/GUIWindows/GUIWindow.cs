@@ -12,23 +12,20 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             public Vector2 SourceVector { get; }
             public int Edge { get; }
             public int ScaledEdge => Edge * (int)GameManager.Scale;
-            public int BottomEdge { get; }
-            public int ScaledBottomEdge => BottomEdge * (int)GameManager.Scale;
             public int Size { get; }  //The size of the center of the image square
 
-            public WindowData(int x, int y, int edge, int size, int BottomEdge = -1)
+            public WindowData(int x, int y, int edge, int size)
             {
                 SourceVector = new Vector2(x, y);
                 Edge = edge;
-                this.BottomEdge = (BottomEdge == -1 ? Edge : BottomEdge);
                 Size = size;
             }
 
             public int WidthEdges() { return ScaledEdge * 2; }
-            public int HeightEdges() { return ScaledEdge + ScaledBottomEdge; }
+            public int HeightEdges() { return ScaledEdge * 2; }
         };
-        internal static WindowData RedWin = new WindowData(122, 58, 6, 16, 6);
-        internal static WindowData BrownWin = new WindowData(172, 60, 4, 16, 6);
+        internal static WindowData Window_1 = new WindowData(122, 58, 6, 16);
+        internal static WindowData Window_2 = new WindowData(170, 58, 6, 16);
         internal static WindowData GreyWin = new WindowData(206, 62, 2, 16);
         internal static WindowData DisplayWin = new WindowData(48, 32, 1, 14);
 
@@ -42,7 +39,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Height = 184;
             Width = RiverHollow.ScreenWidth / 2;
 
-            _winData = RedWin;
+            _winData = Window_1;
         }
 
         public GUIWindow(WindowData winData, int width, int height)
@@ -159,9 +156,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             int BorderLeft = (int)Position().X;
 
-            spriteBatch.Draw(_texture, new Rectangle(BorderLeft, EndStartY(), _winData.ScaledEdge, _winData.ScaledBottomEdge), Util.FloatRectangle(_winData.SourceVector.X, _winData.SourceVector.Y + SkipSize(), _winData.Edge, _winData.BottomEdge), EnabledColor * Alpha());
-            spriteBatch.Draw(_texture, new Rectangle(MidStartX(), EndStartY(), MidWidth(), _winData.ScaledBottomEdge), Util.FloatRectangle(_winData.SourceVector.X + _winData.Edge, _winData.SourceVector.Y + SkipSize(), _winData.Size, _winData.BottomEdge), EnabledColor * Alpha());
-            spriteBatch.Draw(_texture, new Rectangle(EndStartX(), EndStartY(), _winData.ScaledEdge, _winData.ScaledBottomEdge), Util.FloatRectangle(_winData.SourceVector.X + SkipSize(), _winData.SourceVector.Y + SkipSize(), _winData.Edge, _winData.BottomEdge), EnabledColor * Alpha());
+            spriteBatch.Draw(_texture, new Rectangle(BorderLeft, EndStartY(), _winData.ScaledEdge, _winData.ScaledEdge), Util.FloatRectangle(_winData.SourceVector.X, _winData.SourceVector.Y + SkipSize(), _winData.Edge, _winData.Edge), EnabledColor * Alpha());
+            spriteBatch.Draw(_texture, new Rectangle(MidStartX(), EndStartY(), MidWidth(), _winData.ScaledEdge), Util.FloatRectangle(_winData.SourceVector.X + _winData.Edge, _winData.SourceVector.Y + SkipSize(), _winData.Size, _winData.Edge), EnabledColor * Alpha());
+            spriteBatch.Draw(_texture, new Rectangle(EndStartX(), EndStartY(), _winData.ScaledEdge, _winData.ScaledEdge), Util.FloatRectangle(_winData.SourceVector.X + SkipSize(), _winData.SourceVector.Y + SkipSize(), _winData.Edge, _winData.Edge), EnabledColor * Alpha());
         }
 
         public int MidStartX() { return (int)Position().X + _winData.ScaledEdge; }

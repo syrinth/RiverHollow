@@ -995,7 +995,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (rv)
             {
-                _gWindow = new GUIWindow(GUIWindow.RedWin, 10, 10);
+                _gWindow = new GUIWindow(GUIWindow.Window_1, 10, 10);
                 GUIText gText = new GUIText(a.Name);
                 gText.AnchorToInnerSide(_gWindow, SideEnum.TopLeft);
                 _gWindow.Resize();

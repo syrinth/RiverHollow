@@ -352,7 +352,7 @@
  <objectgroup id="5" name="Character Layer">
   <object id="13" name="NPC_01" x="177.025" y="162.234" width="12.375" height="11.4375"/>
   <object id="16" name="NPC_17" x="33.8958" y="116.448" width="12.375" height="11.4375"/>
-  <object id="22" name="Check2" x="97.2188" y="128.5" width="11.875" height="12.5313"/>
+  <object id="22" name="Check2" x="113.48" y="128.413" width="11.875" height="12.5313"/>
   <object id="23" name="Shop" x="31.9983" y="118.75" width="16.0034" height="25">
    <properties>
     <property name="Owner" value="17"/>

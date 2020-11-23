@@ -296,8 +296,8 @@ namespace RiverHollow
         {
             SaveManager.Load(savefile);
             MapManager.PopulateMaps(true);
-            PlayerManager._iBuildingID = PlayerManager.Buildings[0].PersonalID;
 
+            GoToHUDScreen();
             StartGame();
         }
 

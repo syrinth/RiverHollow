@@ -20,7 +20,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public GUIInventory(bool PlayerInventory = false)
         {
             Position(Vector2.Zero);
-            _winData = GUIWindow.BrownWin;
+            _winData = GUIWindow.Window_2;
             _bPlayerInventory = PlayerInventory;
 
             //Retrieve the dimensions of the Inventory we're working on from the InventoryManager

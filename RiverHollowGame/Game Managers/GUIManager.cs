@@ -219,11 +219,11 @@ namespace RiverHollow.Game_Managers
         /// <returns>The created GUIWindow</returns>
         protected GUIWindow SetMainWindow()
         {
-            return SetMainWindow(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_WIDTH);
+            return SetMainWindow(GUIWindow.Window_1, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_WIDTH);
         }
         protected GUIWindow SetMainWindow(int w, int h)
         {
-            return SetMainWindow(GUIWindow.RedWin, w, h);
+            return SetMainWindow(GUIWindow.Window_1, w, h);
         }
         protected GUIWindow SetMainWindow(GUIWindow.WindowData wd, int w, int h)
         {
