@@ -227,8 +227,8 @@ namespace RiverHollow.GUIComponents.Screens
                     _gtName.AnchorToInnerSide(_infoWindow, SideEnum.Top);
                     _gtName.AlignToObject(_infoWindow, SideEnum.CenterX);
 
-                    _gtDesc = new GUIText(_bldg.Description);
-                    _gtDesc.ParseText(4, _infoWindow.Width);
+                    _gtDesc = new GUIText();
+                    _gtDesc.ParseAndSetText(_bldg.Description, _infoWindow.Width, 4, true);
                     _gtDesc.AnchorToInnerSide(_infoWindow, SideEnum.Left);
                     _gtDesc.AnchorToObject(_gtName, SideEnum.Bottom);
                 }
@@ -367,7 +367,7 @@ namespace RiverHollow.GUIComponents.Screens
                         _gName.SetText(value);
 
                         DataManager.GetTextData("Class", wB.ID, ref value, "Description");
-                        _gDescription.SetText(value);
+                        _gDescription.ParseAndSetText(value, _winMain.MidWidth(), 3, true, false);
                         _winMain.RemoveControl(_gCost);
                         _gCost = new GUIMoneyDisplay(wB.Cost);
                         _gCost.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.Bottom, ScaleIt(1));

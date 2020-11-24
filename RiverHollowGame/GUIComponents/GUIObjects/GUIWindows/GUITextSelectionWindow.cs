@@ -29,7 +29,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public void PostParse()
         {
-            ParseText(_sStatement);
+            SyncText(_sStatement, true);
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
             _giSelection = new GUIImage(new Rectangle(288, 96, 8, 9), GameManager.ScaleIt(8), GameManager.ScaleIt(9), DataManager.DIALOGUE_TEXTURE);
             _giSelection.AnchorAndAlignToObject(_giText, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);

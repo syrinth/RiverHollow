@@ -721,8 +721,8 @@ namespace RiverHollow.GUIComponents.Screens
                     _name = new GUIText(q.Name);
                     _name.AnchorToInnerSide(this, SideEnum.TopLeft);
 
-                    _desc = new GUIText(q.Description);
-                    _desc.ParseText(3, this.MidWidth(), true);
+                    _desc = new GUIText();
+                    _desc.ParseAndSetText(q.Description, MidWidth(), 3, true);
                     _desc.AnchorAndAlignToObject(_name, SideEnum.Bottom, SideEnum.Left, _name.CharHeight);
 
                     _progress = new GUIText(q.GetProgressString());
@@ -1357,8 +1357,7 @@ namespace RiverHollow.GUIComponents.Screens
             public class EquipWindow : GUIWindow
             {
                 List<GUIItemBox> _gItemBoxes;
-                Item _selectedItem;
-                public Item SelectedItem => _selectedItem;
+                public Item SelectedItem { get; private set; }
 
                 ItemEnum _itemType;
 
@@ -1403,7 +1402,7 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         if (g.Contains(mouse))
                         {
-                            _selectedItem = g.BoxItem;
+                            SelectedItem = g.BoxItem;
                             rv = true;
                             break;
                         }

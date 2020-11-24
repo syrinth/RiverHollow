@@ -21,8 +21,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         #region Parsing
         protected int _iCurrText = 0;
 
-        protected int _numReturns = 0;
-
         protected int _iCharHeight;
         protected int _iCharWidth;
 
@@ -52,8 +50,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public GUITextWindow(string text, bool open = true) : this()
         {
             ConfigureHeight();
-            ParseText(text, false);
-
+            SyncText(text);
             Setup(open);
         }
 
@@ -61,9 +58,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public GUITextWindow(Vector2 position, string text) : this()
         {
             Height = (int)_giText.MeasureString(text).Y + HeightEdges();
-            SetWidthMax((int)_giText.MeasureString(text).X, (int)(RiverHollow.ScreenWidth/4));
+            Width = (int)(RiverHollow.ScreenWidth / 4);
 
-            ParseText(text);
+            SyncText(text);
 
             string totalVal = string.Empty;
             foreach(string s in _liTextPages)
@@ -81,7 +78,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         //MAR this should probably be deleted.
         public GUITextWindow(string text, double duration) : this()
         {
-            ParseText(text);
+            SyncText(text);
             Duration = duration;
 
             Height = _iCharHeight;
@@ -111,6 +108,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Height = Math.Max(Height, (_iCharHeight * MAX_ROWS) + HeightEdges() + (2 * GUIManager.STANDARD_MARGIN));
         }
 
+        protected void SyncText(string text, bool printAll = false)
+        {
+            _liTextPages = _giText.ParseText(text, MidWidth(), MAX_ROWS, printAll);
+            if (_giText.PrintAll) { _giText.SetText(_liTextPages[0]); }
+            else { _giText.ResetText(_liTextPages[0]); }
+        }
         /// <summary>
         /// Method used to ensure that the components for the TextWindow are synced
         /// together. Called on finishing the opening animation, or immediately after
@@ -243,81 +246,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     _dOpenTimer = _dTimer;
                 }
             }
-        }
-
-        /// <summary>
-        /// Iterates over the given text word by word to create a list of text entries that will
-        /// be on each screen. These text entries will have /n entries manually inserted to properly
-        /// display based off of the GUITextWindow dimensions.
-        /// </summary>
-        /// <param name="text">The text to display</param>
-        /// <param name="printAll">Whether we will print everything at once</param>
-        protected void ParseText(string text, bool printAll = true)
-        {
-            bool grabLast = true;
-            _numReturns = 0;
-            string currentLineOfText = string.Empty;
-            string textToDisplay = string.Empty;
-            string[] wordArray = text.Split(' ');   //Split the given entry around each word. Note that it is important that /n be its own word
-
-            foreach (string word in wordArray)
-            {
-                //If there is a new line character in the word, prepare the text dialogue for the next screen.
-                if (word.Contains("\n") || word.Contains("\r\n"))
-                {
-                    string[] returnSplit = word.Split(new string[] {"\n", "\r\n"}, StringSplitOptions.RemoveEmptyEntries);
-
-                    if (returnSplit.Length > 0)
-                    {
-                        textToDisplay += currentLineOfText + returnSplit[0];
-                        TextSpilloverToNextScreen(ref textToDisplay, ref grabLast);
-
-                        if (returnSplit.Length > 1)
-                        {
-                            currentLineOfText = returnSplit[1] + ' ';
-                        }
-                    }
-                }
-                else
-                {
-                    Vector2 vMeasurement = _giText.MeasureString(currentLineOfText + word);
-
-                    //Measure the current line and the new word and see if adding the word will put the line out of bounds.
-                    //If so, we need to insert a carriage return character and clear the current line of text.
-                    if ((vMeasurement.Length() >= MidWidth() - GUIManager.STANDARD_MARGIN * 2) ||
-                        (_numReturns == MAX_ROWS - 1 && vMeasurement.Length() >= (Width) - _giText.CharHeight))
-                    {
-                        textToDisplay += currentLineOfText + '\n';
-                        currentLineOfText = string.Empty;
-                        _numReturns++;
-                    }
-
-                    grabLast = true;
-                    currentLineOfText += word + ' ';
-
-                    //Spill over to another screen when we have too many returns
-                    if (_numReturns + 1 > MAX_ROWS)
-                    {
-                        TextSpilloverToNextScreen(ref textToDisplay, ref grabLast);
-                    }
-                }
-            }
-
-            if (grabLast)
-            {
-                _liTextPages.Add(textToDisplay + currentLineOfText);
-            }
-
-            if (printAll) { _giText.SetText(_liTextPages[0]); }
-            else { _giText.ResetText(_liTextPages[0]); }
-        }
-
-        private void TextSpilloverToNextScreen(ref string textToDisplay, ref bool grabLast)
-        {
-            grabLast = false;
-            _liTextPages.Add(textToDisplay);
-            _numReturns = 0;
-            textToDisplay = string.Empty;
         }
 
         private bool ShowNextButton()
