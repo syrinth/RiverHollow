@@ -70,14 +70,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             foreach(GUIObject g in Controls)
             {
-                if (g.DrawRectangle.Right > InnerRectangle().Right)
-                {
-                    Width += g.DrawRectangle.Right - InnerRectangle().Right;
-                }
-                if (g.DrawRectangle.Bottom > InnerRectangle().Bottom)
-                {
-                    Height += g.DrawRectangle.Bottom - InnerRectangle().Bottom;
-                }
+                if (g.DrawRectangle.Right > InnerRectangle().Right) { Width += g.DrawRectangle.Right - InnerRectangle().Right; }
+                else if (g.DrawRectangle.Right < InnerRectangle().Right) { Width -= InnerRectangle().Right - g.DrawRectangle.Right; }
+
+                if (g.DrawRectangle.Bottom > InnerRectangle().Bottom) { Height += g.DrawRectangle.Bottom - InnerRectangle().Bottom; }
+                else if (g.DrawRectangle.Bottom < InnerRectangle().Bottom) { Height -= InnerRectangle().Bottom - g.DrawRectangle.Bottom; }
                 Position(Position());
             }
         }
