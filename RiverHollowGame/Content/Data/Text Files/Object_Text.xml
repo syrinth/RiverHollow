@@ -103,35 +103,35 @@
     </Item>
     <Item>
       <Key>Class_1</Key>
-      <Value>[Name:Wizard]</Value>
+      <Value>[Name:Wizard][Description:Practitioners of the arcane arts, wizards excel at  handling a multitude of foes.]</Value>
     </Item>
     <Item>
       <Key>Class_2</Key>
-      <Value>[Name:Healer]</Value>
+      <Value>[Name:Healer][Description:Healers]</Value>
     </Item>
     <Item>
       <Key>Class_3</Key>
-      <Value>[Name:Summoner]</Value>
+      <Value>[Name:Summoner][Description:Summon shit]</Value>
     </Item>
     <Item>
       <Key>Class_4</Key>
-      <Value>[Name:Witch]</Value>
+      <Value>[Name:Witch][Description:Witches curse your foes]</Value>
     </Item>
     <Item>
       <Key>Class_5</Key>
-      <Value>[Name:Lancer]</Value>
+      <Value>[Name:Lancer][Description:Stab]</Value>
     </Item>
     <Item>
       <Key>Class_6</Key>
-      <Value>[Name:Knight]</Value>
+      <Value>[Name:Knight][Description:He protecc]</Value>
     </Item>
     <Item>
       <Key>Class_7</Key>
-      <Value>[Name:Scout]</Value>
+      <Value>[Name:Scout][Description:Shooty boy]</Value>
     </Item>
     <Item>
       <Key>Class_8</Key>
-      <Value>[Name:Bard]</Value>
+      <Value>[Name:Bard][Description:Singing!]</Value>
     </Item>
     <Item>
       <Key>Adventurer_1</Key>

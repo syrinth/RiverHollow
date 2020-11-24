@@ -14,7 +14,7 @@ namespace RiverHollow.Game_Managers
         enum Fade { None, Out, In};
         static Fade _eFade;
 
-        public static int STANDARD_MARGIN = 4;
+        public static int STANDARD_MARGIN = 1;
         public static int MINI_BTN_HEIGHT = ScaledTileSize;
         public static int MINI_BTN_WIDTH = 168;
 
@@ -219,7 +219,7 @@ namespace RiverHollow.Game_Managers
         /// <returns>The created GUIWindow</returns>
         protected GUIWindow SetMainWindow()
         {
-            return SetMainWindow(GUIWindow.Window_1, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_WIDTH);
+            return SetMainWindow(GUIWindow.Window_1, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
         }
         protected GUIWindow SetMainWindow(int w, int h)
         {

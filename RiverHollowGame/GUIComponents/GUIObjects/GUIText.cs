@@ -37,9 +37,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public bool Done => _bDone;
         #endregion
 
-        public GUIText()
+        public GUIText(bool printAll = true)
         {
+            PrintAll = printAll;
             _sText = "";
+            _sFullText = _sText;
             _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
             SetDimensions("X");
         }
@@ -51,11 +53,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _font = DataManager.GetBitMapFont(f);
             PrintAll = printAll;
 
-            if (!printAll) { _sFullText = text; }
-            else {
+            if (printAll) { 
                 _sText = text;
-                _sFullText = _sText;
             }
+            _sFullText = text;
 
             SetDimensions(text);
         }

@@ -127,7 +127,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public void ConfigureInfo()
         {
-            _gName.AnchorToInnerSide(_winMain, SideEnum.TopLeft, 4);
+            _gName.AnchorToInnerSide(_winMain, SideEnum.TopLeft, ScaleIt(1));
             _gDescription.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left);
 
             for(int i=0; i <_liRequiredItems.Count; i++)

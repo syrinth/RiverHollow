@@ -35,9 +35,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         bool _bCoinOnRight;
 
         //Player Money Display
-        public GUIMoneyDisplay()
+        public GUIMoneyDisplay(bool playermoney = true)
         {
-            _bIsPlayerMoney = true;
+            _bIsPlayerMoney = playermoney;
             _bCoinOnRight = false;
 
             _gTextMoney = new GUIText(PlayerManager.Money.ToString("N0"));
@@ -59,11 +59,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             if (_bCoinOnRight)
             {
-                _gCoin.AnchorAndAlignToObject(_gTextMoney, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
+                _gCoin.AnchorAndAlignToObject(_gTextMoney, SideEnum.Right, SideEnum.CenterY, ScaleIt(GUIManager.STANDARD_MARGIN));
             }
             else
             {
-                _gTextMoney.AnchorAndAlignToObject(_gCoin, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
+                _gTextMoney.AnchorAndAlignToObject(_gCoin, SideEnum.Right, SideEnum.CenterY, ScaleIt(GUIManager.STANDARD_MARGIN));
             }
 
             Height = _gCoin.Height > _gTextMoney.Height ? _gCoin.Height : _gTextMoney.Height;

@@ -92,6 +92,7 @@
             this.colClassID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabAdventurers = new System.Windows.Forms.TabPage();
+            this.btnEditAdventurerDialogue = new System.Windows.Forms.Button();
             this.cbAdventurerType = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.dgvAdventurerTags = new System.Windows.Forms.DataGridView();
@@ -221,7 +222,8 @@
             this.dgvStatusEffects = new System.Windows.Forms.DataGridView();
             this.colStatusEffectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStatusEffectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnEditAdventurerDialogue = new System.Windows.Forms.Button();
+            this.tbClassDescription = new System.Windows.Forms.TextBox();
+            this.label37 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -793,6 +795,8 @@
             // 
             // tabClasses
             // 
+            this.tabClasses.Controls.Add(this.tbClassDescription);
+            this.tabClasses.Controls.Add(this.label37);
             this.tabClasses.Controls.Add(this.btnClassCancel);
             this.tabClasses.Controls.Add(this.dgClassTags);
             this.tabClasses.Controls.Add(this.label7);
@@ -822,10 +826,10 @@
             this.dgClassTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgClassTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colClassTags});
-            this.dgClassTags.Location = new System.Drawing.Point(320, 32);
+            this.dgClassTags.Location = new System.Drawing.Point(320, 110);
             this.dgClassTags.Name = "dgClassTags";
             this.dgClassTags.RowHeadersVisible = false;
-            this.dgClassTags.Size = new System.Drawing.Size(464, 356);
+            this.dgClassTags.Size = new System.Drawing.Size(464, 278);
             this.dgClassTags.TabIndex = 51;
             // 
             // colClassTags
@@ -922,6 +926,16 @@
             this.tabAdventurers.TabIndex = 4;
             this.tabAdventurers.Text = "Adventurers";
             this.tabAdventurers.UseVisualStyleBackColor = true;
+            // 
+            // btnEditAdventurerDialogue
+            // 
+            this.btnEditAdventurerDialogue.Location = new System.Drawing.Point(320, 394);
+            this.btnEditAdventurerDialogue.Name = "btnEditAdventurerDialogue";
+            this.btnEditAdventurerDialogue.Size = new System.Drawing.Size(110, 23);
+            this.btnEditAdventurerDialogue.TabIndex = 63;
+            this.btnEditAdventurerDialogue.Text = "Edit Dialogue";
+            this.btnEditAdventurerDialogue.UseVisualStyleBackColor = true;
+            this.btnEditAdventurerDialogue.Click += new System.EventHandler(this.btnEditAdventurerDialogue_Click);
             // 
             // cbAdventurerType
             // 
@@ -2243,15 +2257,22 @@
             this.colStatusEffectsName.ReadOnly = true;
             this.colStatusEffectsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // btnEditAdventurerDialogue
+            // tbClassDescription
             // 
-            this.btnEditAdventurerDialogue.Location = new System.Drawing.Point(320, 394);
-            this.btnEditAdventurerDialogue.Name = "btnEditAdventurerDialogue";
-            this.btnEditAdventurerDialogue.Size = new System.Drawing.Size(110, 23);
-            this.btnEditAdventurerDialogue.TabIndex = 63;
-            this.btnEditAdventurerDialogue.Text = "Edit Dialogue";
-            this.btnEditAdventurerDialogue.UseVisualStyleBackColor = true;
-            this.btnEditAdventurerDialogue.Click += new System.EventHandler(this.btnEditAdventurerDialogue_Click);
+            this.tbClassDescription.Location = new System.Drawing.Point(320, 51);
+            this.tbClassDescription.Multiline = true;
+            this.tbClassDescription.Name = "tbClassDescription";
+            this.tbClassDescription.Size = new System.Drawing.Size(464, 53);
+            this.tbClassDescription.TabIndex = 55;
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(317, 35);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(63, 13);
+            this.label37.TabIndex = 54;
+            this.label37.Text = "Description:";
             // 
             // frmDBEditor
             // 
@@ -2522,6 +2543,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatusEffectsName;
         private System.Windows.Forms.ToolStripMenuItem monsterToolStripMenuItem;
         private System.Windows.Forms.Button btnEditAdventurerDialogue;
+        private System.Windows.Forms.TextBox tbClassDescription;
+        private System.Windows.Forms.Label label37;
     }
 }
 

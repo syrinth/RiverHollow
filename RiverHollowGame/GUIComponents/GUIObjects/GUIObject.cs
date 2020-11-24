@@ -130,6 +130,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public virtual void Enable(bool value)
         {
             _bEnabled = value;
+            foreach(GUIObject obj in Controls)
+            {
+                obj.Enable(value);
+            }
         }
 
         public virtual void SetColor(Color c)

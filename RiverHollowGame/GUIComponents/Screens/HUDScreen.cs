@@ -192,7 +192,7 @@ namespace RiverHollow.GUIComponents.Screens
             HUDNewQuest newQuest = new HUDNewQuest(complete, RemoveQuestIcon);
 
             if (_liQuestIcons.Count == 0) { newQuest.AnchorToScreen(SideEnum.Right, 12); }
-            else { newQuest.AnchorAndAlignToObject(_liQuestIcons[_liQuestIcons.Count - 1], SideEnum.Top, SideEnum.Left, 4); }
+            else { newQuest.AnchorAndAlignToObject(_liQuestIcons[_liQuestIcons.Count - 1], SideEnum.Top, SideEnum.Left, ScaleIt(1)); }
 
             _liQuestIcons.Add(newQuest);
             AddControl(newQuest);
@@ -1045,7 +1045,7 @@ namespace RiverHollow.GUIComponents.Screens
                     //_winClothes.Height += SPACING;
                     //_winClothes.Width += SPACING;
 
-                    WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left, 4);
+                    WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left, ScaleIt(1));
                     //_winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
 
                     AddControl(_winName);
@@ -2750,7 +2750,7 @@ namespace RiverHollow.GUIComponents.Screens
             _gMarker = new GUIImage(new Rectangle(48, 80, 16, 16), ScaleIt(16), ScaleIt(16), DataManager.DIALOGUE_TEXTURE);
             _gText = new GUIText(questComplete ? "Quest Complete" : "New Quest");
 
-            _gText.AnchorAndAlignToObject(_gMarker, SideEnum.Right, SideEnum.CenterY, 4);
+            _gText.AnchorAndAlignToObject(_gMarker, SideEnum.Right, SideEnum.CenterY, ScaleIt(1));
             AddControl(_gMarker);
             AddControl(_gText);
 
