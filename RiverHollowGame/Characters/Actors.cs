@@ -2532,6 +2532,7 @@ namespace RiverHollow.Characters
         protected int _iDailyFoodReq;
         protected int _iCurrFood;
         protected int _iDailyItemID;
+        public int DailyItemID => _iDailyItemID;
         protected Item _heldItem;
         protected int _iMood;
         private int _iResting;

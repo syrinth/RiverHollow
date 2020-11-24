@@ -297,6 +297,7 @@ namespace RiverHollow.GUIComponents.Screens
         List<GUIObject> _liWorkers;
         WorkerBox _currentWorker;
         GUIButton _btnBuy;
+        GUIItem _gDailyItem;
 
         public HUDPurchaseWorkers(List<Merchandise> merch)
         {
@@ -368,9 +369,15 @@ namespace RiverHollow.GUIComponents.Screens
 
                         DataManager.GetTextData("Class", wB.ID, ref value, "Description");
                         _gDescription.ParseAndSetText(value, _winMain.MidWidth(), 3, true, false);
+
                         _winMain.RemoveControl(_gCost);
                         _gCost = new GUIMoneyDisplay(wB.Cost);
                         _gCost.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.Bottom, ScaleIt(1));
+
+                        _winMain.RemoveControl(_gDailyItem);
+                        _gDailyItem = new GUIItem(DataManager.GetItem(DataManager.GetAdventurer(wB.ID).DailyItemID));
+                        _gDailyItem.AnchorToInnerSide(_winMain, SideEnum.BottomLeft, ScaleIt(1));
+
                         _currentWorker = wB;
                     }
                 }
