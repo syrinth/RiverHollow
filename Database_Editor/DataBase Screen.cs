@@ -71,7 +71,6 @@ namespace Database_Editor
         static Dictionary<string, Dictionary<string, string>> _diCharacterDialogue;
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
         static Dictionary<ItemEnum, List<ItemXMLData>> _diItems;
-        static Dictionary<ObjectTypeEnum, List<XMLData>> _diWorldObjectData;
         static Dictionary<string, List<XMLData>> _diBasicXML;
         Dictionary<string, TMXData> _diMapData;
 
@@ -111,7 +110,6 @@ namespace Database_Editor
 
             _diMapData = new Dictionary<string, TMXData>();
             _diBasicXML = new Dictionary<string, List<XMLData>>();
-            _diWorldObjectData = new Dictionary<ObjectTypeEnum, List<XMLData>>();
             _diItems = new Dictionary<ItemEnum, List<ItemXMLData>>();
             _diCharacterDialogue = new Dictionary<string, Dictionary<string, string>>();
             foreach (string s in Directory.GetFiles(PATH_TO_DIALOGUE))
@@ -586,12 +584,6 @@ namespace Database_Editor
                 }
                 else { break; }
             }
-
-            foreach (ObjectTypeEnum e in Enum.GetValues(typeof(ObjectTypeEnum)))
-            {
-                _diWorldObjectData[e] = new List<XMLData>();
-                _diWorldObjectData[e].AddRange(_liWorldObjects.FindAll(x => Util.ParseEnum<ObjectTypeEnum>(x.GetStringValue("Type")) == e));
-            }
         }
 
         private void LoadItemData()
@@ -649,24 +641,22 @@ namespace Database_Editor
                 }
 
                 //Compare ItemData against the WorldObjectData
-                foreach (ObjectTypeEnum e in Enum.GetValues(typeof(ObjectTypeEnum)))
-                {
-                    foreach (XMLData testIt in _diWorldObjectData[e])
-                    {
-                        //First, check to see if the object refers to the item this
-                        //could be because the object makes the item for example
-                        if (testIt.RefersToID(theData.ID))
-                        {
-                            theData.AddLinkedItem(testIt);
-                        }
 
-                        //Next check to see if the item refers to the object, pass in
-                        //false here to ensure that we compare only to the worldObject tags
-                        //The item might place the object.
-                        if (theData.RefersToID(testIt.ID, false))
-                        {
-                            testIt.AddLinkedItem(theData);
-                        }
+                foreach (XMLData testIt in _liWorldObjects)
+                {
+                    //First, check to see if the object refers to the item this
+                    //could be because the object makes the item for example
+                    if (testIt.RefersToID(theData.ID))
+                    {
+                        theData.AddLinkedItem(testIt);
+                    }
+
+                    //Next check to see if the item refers to the object, pass in
+                    //false here to ensure that we compare only to the worldObject tags
+                    //The item might place the object.
+                    if (theData.RefersToID(testIt.ID, false))
+                    {
+                        testIt.AddLinkedItem(theData);
                     }
                 }
 
@@ -681,28 +671,26 @@ namespace Database_Editor
             }
 
             //Compare maps against the worldObjects
-            foreach (ObjectTypeEnum e in Enum.GetValues(typeof(ObjectTypeEnum)))
-            {
-                foreach (XMLData theData in _diWorldObjectData[e])
-                {
-                    //Find any maps that reference the ObjectID
-                    foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
-                    {
-                        if (kvp.Value.RefersToIDWithTag(theData.ID, MAP_WORLD_OBJECTS_TAG))
-                        {
-                            theData.AddLinkedItem(kvp.Value);
-                        }
-                    }
 
-                    //Find any files that reference the ObjectID
-                    foreach (string s in _diBasicXML.Keys)
+            foreach (XMLData theData in _liWorldObjects)
+            {
+                //Find any maps that reference the ObjectID
+                foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
+                {
+                    if (kvp.Value.RefersToIDWithTag(theData.ID, MAP_WORLD_OBJECTS_TAG))
                     {
-                        foreach (XMLData testIt in _diBasicXML[s])
+                        theData.AddLinkedItem(kvp.Value);
+                    }
+                }
+
+                //Find any files that reference the ObjectID
+                foreach (string s in _diBasicXML.Keys)
+                {
+                    foreach (XMLData testIt in _diBasicXML[s])
+                    {
+                        if (testIt.RefersToID(theData.ID, false))
                         {
-                            if (testIt.RefersToID(theData.ID, false))
-                            {
-                                theData.AddLinkedItem(testIt);
-                            }
+                            theData.AddLinkedItem(testIt);
                         }
                     }
                 }
@@ -718,20 +706,17 @@ namespace Database_Editor
             {
                 if (data != null)
                 {
-                    if(data.ID == _diTabIndices["Items"]) { _iNextCurrID = index; }
+                    if (data.ID == _diTabIndices["Items"]) { _iNextCurrID = index; }
                     data.ChangeID(index++);
                     itemDataList.Add(data);
                 }
             }
 
             index = 0;
-            foreach (ObjectTypeEnum e in Enum.GetValues(typeof(ObjectTypeEnum)))
+            foreach (XMLData data in _liWorldObjects)
             {
-                foreach (XMLData data in _diWorldObjectData[e])
-                {
-                    data.ChangeID(index++, false);
-                    worldObjectDataList.Add(data);
-                }
+                data.ChangeID(index++, false);
+                worldObjectDataList.Add(data);
             }
         }
 
@@ -1517,6 +1502,12 @@ namespace Database_Editor
                 if (typeComp == 0) { return x.ID.CompareTo(y.ID); }
                 else { return typeComp; }
             });
+            _liWorldObjects.Sort((x, y) =>
+            {
+                var typeComp = x.GetTagValue("Type").CompareTo(y.GetTagValue("Type"));
+                if (typeComp == 0) { return x.ID.CompareTo(y.ID); }
+                else { return typeComp; }
+            });
             List<ItemXMLData> itemDataList = new List<ItemXMLData>();
             List<XMLData> worldObjectDataList = new List<XMLData>();
             ChangeIDs(ref itemDataList, ref worldObjectDataList);
@@ -1528,12 +1519,9 @@ namespace Database_Editor
             }
 
             //Strip the special case character from the WorldObject files
-            foreach (ObjectTypeEnum it in Enum.GetValues(typeof(ObjectTypeEnum)))
+            foreach (XMLData data in _liWorldObjects)
             {
-                foreach (XMLData data in _diWorldObjectData[it])
-                {
-                    data.StripSpecialCharacter();
-                }
+                data.StripSpecialCharacter();
             }
 
             foreach (string s in _diBasicXML.Keys)
@@ -1545,7 +1533,7 @@ namespace Database_Editor
                 SaveXMLData(_diBasicXML[s], s, sWriter);
             }
 
-            foreach(string s in _diCharacterDialogue.Keys)
+            foreach (string s in _diCharacterDialogue.Keys)
             {
                 SaveXMLDictionary(_diCharacterDialogue[s], s, sWriter);
             }
