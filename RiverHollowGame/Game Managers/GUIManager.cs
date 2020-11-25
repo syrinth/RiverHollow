@@ -110,9 +110,9 @@ namespace RiverHollow.Game_Managers
         {
             OpenTextWindow(text, null, open);
         }
-        public static void OpenTextWindow(string text, TalkingActor talker, bool open = true)
+        public static void OpenTextWindow(string text, TalkingActor talker, bool open = true, bool displayDialogueIcon = false)
         {
-            _currentGUIScreen.OpenTextWindow(text, talker, open);
+            _currentGUIScreen.OpenTextWindow(text, talker, open, displayDialogueIcon);
         }
         public static bool CloseTextWindow()
         {
@@ -121,9 +121,9 @@ namespace RiverHollow.Game_Managers
         public static bool IsTextWindowOpen() { return _currentGUIScreen.IsTextWindowOpen(); }
 
 
-        public static void SetWindowText(string value)
+        public static void SetWindowText(string value, TalkingActor act = null, bool displayDialogueIcon = false)
         {
-            _currentGUIScreen.SetWindowText(value);
+            _currentGUIScreen.SetWindowText(value, act, displayDialogueIcon);
         }
 
         public static void CloseHoverWindow() {

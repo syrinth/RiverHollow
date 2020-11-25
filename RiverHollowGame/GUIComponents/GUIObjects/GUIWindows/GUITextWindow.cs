@@ -34,6 +34,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         #region Display
         public bool Paused = false;
+        protected bool _bDisplayDialogueIcon = false;
         #endregion
 
         public GUITextWindow() : base()
@@ -47,8 +48,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         }
 
         //Used for the default TextWindow that sits on the bottom of the screen
-        public GUITextWindow(string text, bool open = true) : this()
+        public GUITextWindow(string text, bool open = true, bool displayDialogueIcon = false) : this()
         {
+            _bDisplayDialogueIcon = displayDialogueIcon;
             ConfigureHeight();
             SyncText(text);
             Setup(open);
@@ -190,7 +192,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public override bool ProcessLeftButtonClick(Point mouse)
         {
            return HandleButtonClick();
-            
         }
 
         public override bool ProcessRightButtonClick(Point mouse)
@@ -281,15 +282,18 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         private void DisplayDialogueFinishedIcon()
         {
-            if (_iCurrText < _liTextPages.Count - 1)
+            if (_bDisplayDialogueIcon)
             {
-                _gNext = new GUIImage(new Rectangle(288, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
+                if (_iCurrText < _liTextPages.Count - 1)
+                {
+                    _gNext = new GUIImage(new Rectangle(288, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
+                }
+                else
+                {
+                    _gNext = new GUIImage(new Rectangle(304, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
+                }
+                _gNext.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.Bottom);
             }
-            else
-            {
-                _gNext = new GUIImage(new Rectangle(304, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
-            }
-            _gNext.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.Bottom);
         }
 
         public void ResetText(string text)

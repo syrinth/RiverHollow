@@ -144,9 +144,9 @@ namespace RiverHollow.GUIComponents.Screens
         #endregion
 
         #region Text Window Open/Close
-        public virtual void OpenTextWindow(string text, bool open = true)
+        public virtual void OpenTextWindow(string text, bool open = true, bool displayDialogueIcon = false)
         {
-            OpenTextWindow(text, null, open);
+            OpenTextWindow(text, null, open, displayDialogueIcon);
         }
         /// <summary>
         /// Removes any previous existing Text Windows fromthe Control, then determines whether
@@ -157,14 +157,14 @@ namespace RiverHollow.GUIComponents.Screens
         /// </summary>
         /// <param name="text">Text for the window</param>
         /// <param name="open">Whether or not to display an open animation</param>
-        public virtual void OpenTextWindow(string text, TalkingActor talker = null, bool open = true)
+        public virtual void OpenTextWindow(string text, TalkingActor talker = null, bool open = true, bool displayDialogueIcon = false)
         {
             CloseTextWindow();
             GameManager.Pause(talker);
 
             bool selection = text.Contains("[");
             if (selection) { _guiTextWindow = new GUITextSelectionWindow(text, open); }
-            else { _guiTextWindow = new GUITextWindow(text, open); }
+            else { _guiTextWindow = new GUITextWindow(text, open, displayDialogueIcon); }
             AddControl(_guiTextWindow);
         }
 
@@ -182,13 +182,13 @@ namespace RiverHollow.GUIComponents.Screens
         public bool IsTextWindowOpen() { return _guiTextWindow != null; }
         #endregion
 
-        public void SetWindowText(string value)
+        public void SetWindowText(string value, TalkingActor act, bool displayDialogueIcon)
         {
             if(_guiTextWindow != null)
             {
                 if (_guiTextWindow.IsSelectionBox())
                 {
-                    OpenTextWindow(value, false);
+                    OpenTextWindow(value, act, false, displayDialogueIcon);
                 }
                 else
                 {

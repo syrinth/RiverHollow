@@ -66,15 +66,15 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             return rv;
         }
 
-        public virtual void Resize()
+        public virtual void Resize(bool shrink = true)
         {
             foreach(GUIObject g in Controls)
             {
                 if (g.DrawRectangle.Right > InnerRectangle().Right) { Width += g.DrawRectangle.Right - InnerRectangle().Right; }
-                else if (g.DrawRectangle.Right < InnerRectangle().Right) { Width -= InnerRectangle().Right - g.DrawRectangle.Right; }
+                else if (shrink && g.DrawRectangle.Right < InnerRectangle().Right) { Width -= InnerRectangle().Right - g.DrawRectangle.Right; }
 
                 if (g.DrawRectangle.Bottom > InnerRectangle().Bottom) { Height += g.DrawRectangle.Bottom - InnerRectangle().Bottom; }
-                else if (g.DrawRectangle.Bottom < InnerRectangle().Bottom) { Height -= InnerRectangle().Bottom - g.DrawRectangle.Bottom; }
+                else if (shrink && g.DrawRectangle.Bottom < InnerRectangle().Bottom) { Height -= InnerRectangle().Bottom - g.DrawRectangle.Bottom; }
                 Position(Position());
             }
         }

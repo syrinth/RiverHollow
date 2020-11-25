@@ -48,7 +48,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _textLoc = SideEnum.Top;
             StatementSetup("Enter Name:  ");
             Width = Math.Max(_gStatement.Width, _gStatement.CharWidth * 10);
-            Resize();
+            Resize(false);
 
             CenterOnScreen();
         }
@@ -87,7 +87,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             AddControl(_gText);
             AddControl(_gMarker);
 
-            Resize();
+            Resize(false);
         }
 
         public override void Update(GameTime gTime)

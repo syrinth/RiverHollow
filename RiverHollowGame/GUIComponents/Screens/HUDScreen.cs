@@ -151,14 +151,14 @@ namespace RiverHollow.GUIComponents.Screens
         /// </summary>
         /// <param name="text">Text to open with</param>
         /// <param name="open">Whether to play the open animation</param>
-        public override void OpenTextWindow(string text, bool open = true)
+        public override void OpenTextWindow(string text, bool open = true, bool displayDialogueIcon = false)
         {
-            base.OpenTextWindow(text, open);
+            base.OpenTextWindow(text, open, displayDialogueIcon);
             _gInventory.Show(false);
         }
-        public override void OpenTextWindow(string text, TalkingActor talker, bool open = true)
+        public override void OpenTextWindow(string text, TalkingActor talker, bool open = true, bool displayDialogueIcon = false)
         {
-            base.OpenTextWindow(text, talker, open);
+            base.OpenTextWindow(text, talker, open, displayDialogueIcon);
             _gInventory.Show(false);
         }
         public override bool CloseTextWindow()

@@ -545,7 +545,7 @@ namespace RiverHollow.Characters
                 text = _diDialogue[dialogTag];
             }
             text = Util.ProcessText(text, _sName);
-            GUIManager.OpenTextWindow(text, this);
+            GUIManager.OpenTextWindow(text, this, true, true);
         }
 
         /// <summary>
@@ -559,7 +559,7 @@ namespace RiverHollow.Characters
             FacePlayer(true);
 
             text = Util.ProcessText(text, _sName);
-            GUIManager.OpenTextWindow(text, this);
+            GUIManager.OpenTextWindow(text, this, true, true);
         }
         protected void FacePlayer(bool facePlayer)
         {
@@ -599,7 +599,7 @@ namespace RiverHollow.Characters
         {
             string text = cutsceneLine;
             text = Util.ProcessText(text, _sName);
-            GUIManager.OpenTextWindow(text, this);
+            GUIManager.OpenTextWindow(text, this, true, true);
         }
 
         /// <summary>
@@ -3101,7 +3101,7 @@ namespace RiverHollow.Characters
                 //InventoryManager.AddToInventory(int.Parse(loot[arrayID]));
 
                 //_sText = Util.ProcessText(_sText.Replace("*", "*" + loot[arrayID] + "*"));
-                GUIManager.OpenTextWindow(_sText, this);
+                GUIManager.OpenTextWindow(_sText, this, true);
             }
             return rv;
         }

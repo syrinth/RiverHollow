@@ -122,7 +122,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 bool rv = GameManager.CurrentNPC.HandleTextSelection(selectedAction, ref nextText);
 
                 if (!rv) { GUIManager.CloseTextWindow(); }
-                else { GUIManager.SetWindowText(nextText); }
+                else { GUIManager.SetWindowText(nextText, GameManager.CurrentNPC, true); }
             }
             else if (GameManager.CurrentItem != null)
             {
