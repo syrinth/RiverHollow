@@ -211,7 +211,7 @@ namespace RiverHollow.GUIComponents.Screens
                     float newScale = (float)(Scale * 0.75);
                     int width = (int)(TileSize * 9 * newScale);
                     int height = (int)(TileSize * 11 * newScale);
-                    _bldgWindow = new GUIWindow(GUIWindow.RedWin, width, height);
+                    _bldgWindow = new GUIWindow(GUIWindow.Window_1, width, height);
                     _bldgWindow.CenterOnScreen();
                     _bldgWindow.PositionSub(new Vector2(_bldgWindow.Width / 2 + TileSize / 2, 0));
 
@@ -220,15 +220,15 @@ namespace RiverHollow.GUIComponents.Screens
                     _giBuilding.AnchorToInnerSide(_bldgWindow, SideEnum.Bottom);
                     _giBuilding.AlignToObject(_bldgWindow, SideEnum.CenterX);
 
-                    _infoWindow = new GUIWindow(GUIWindow.RedWin, width, height);
+                    _infoWindow = new GUIWindow(GUIWindow.Window_1, width, height);
                     _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TileSize / 2);
 
                     _gtName = new GUIText(_bldg.Name);
                     _gtName.AnchorToInnerSide(_infoWindow, SideEnum.Top);
                     _gtName.AlignToObject(_infoWindow, SideEnum.CenterX);
 
-                    _gtDesc = new GUIText(_bldg.Description);
-                    _gtDesc.ParseText(4, _infoWindow.Width);
+                    _gtDesc = new GUIText();
+                    _gtDesc.ParseAndSetText(_bldg.Description, _infoWindow.Width, 4, true);
                     _gtDesc.AnchorToInnerSide(_infoWindow, SideEnum.Left);
                     _gtDesc.AnchorToObject(_gtName, SideEnum.Bottom);
                 }
@@ -239,10 +239,10 @@ namespace RiverHollow.GUIComponents.Screens
                     int height = 100;
                     int minWidth = width + margin * 2;
                     int minHeight = height + margin * 2;
-                    _bldgWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
+                    _bldgWindow = new GUIWindow(GUIWindow.Window_1, minWidth, minHeight);
                     _bldgWindow.CenterOnScreen();
 
-                    _infoWindow = new GUIWindow(GUIWindow.RedWin, width, height);
+                    _infoWindow = new GUIWindow(GUIWindow.Window_1, width, height);
                     _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TileSize / 2);
 
                     //Placeholderimage
@@ -290,8 +290,14 @@ namespace RiverHollow.GUIComponents.Screens
     public class HUDPurchaseWorkers : GUIMainObject
     {
         GUIMoneyDisplay _gMoney;
-        private GUIWindow _mainWindow;
-        private List<GUIObject> _liWorkers;
+        GUIText _gName;
+        GUIText _gDescription;
+        GUIMoneyDisplay _gCost;
+        GUIWindow _winWorkers;
+        List<GUIObject> _liWorkers;
+        WorkerBox _currentWorker;
+        GUIButton _btnBuy;
+        GUIItem _gDailyItem;
 
         public HUDPurchaseWorkers(List<Merchandise> merch)
         {
@@ -299,8 +305,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             int minWidth = 64;
             int minHeight = 64;
-            _mainWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
-
+            _winWorkers = new GUIWindow(GUIWindow.Window_1, minWidth, minHeight);
             _liWorkers = new List<GUIObject>();
 
             int i = 0;
@@ -312,60 +317,37 @@ namespace RiverHollow.GUIComponents.Screens
                     WorkerBox wb = new WorkerBox(w, m.MoneyCost);
                     _liWorkers.Add(wb);
 
-                    if (i == 0) { wb.AnchorToInnerSide(_mainWindow, GUIObject.SideEnum.TopLeft); }
-                    else
-                    {
-                        if (i == merch.Count / 2)
-                        {
-                            wb.AnchorAndAlignToObject(_liWorkers[0], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left, 20);
-                        }
-                        else
-                        {
-                            wb.AnchorAndAlignToObject(_liWorkers[i - 1], GUIObject.SideEnum.Right, GUIObject.SideEnum.Top, 20);
-                        }
-                    }
+                    if (i == 0) { wb.AnchorToInnerSide(_winWorkers, GUIObject.SideEnum.TopLeft); }
+                    else {wb.AnchorAndAlignToObject(_liWorkers[i - 1], GUIObject.SideEnum.Right, GUIObject.SideEnum.Top, ScaleIt(1)); }
 
-                    _mainWindow.AddControl(wb);
+                    _winWorkers.AddControl(wb);
                     i++;
                 }
             }
 
-            _mainWindow.Resize();
+            _winWorkers.Resize();
 
+            _winMain = new GUIWindow(GUIWindow.Window_1, _winWorkers.Width, GUIManager.MAIN_COMPONENT_HEIGHT/2);
+            
             _gMoney = new GUIMoneyDisplay();
-            _gMoney.AnchorAndAlignToObject(_mainWindow, GUIObject.SideEnum.Top, GUIObject.SideEnum.Left);
+            _winWorkers.AnchorAndAlignToObject(_gMoney, SideEnum.Bottom, SideEnum.Left);
+            _winMain.AnchorAndAlignToObject(_winWorkers, SideEnum.Bottom, SideEnum.Left, ScaleIt(1));
 
-            AddControl(_mainWindow);
-            AddControl(_gMoney);
+            AddControl(_winMain);
+            AddControl(_winWorkers);
             AddControl(_gMoney);
 
-            Width = _mainWindow.Width;
-            Height = _mainWindow.Height;
+            _gName = new GUIText();
+            _gName.AnchorToInnerSide(_winMain, SideEnum.TopLeft, ScaleIt(1));
+            _gDescription = new GUIText();
+            _gDescription.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left, ScaleIt(1));
+            _btnBuy = new GUIButton("Buy", PurchaseWorker);
+            _btnBuy.AnchorToInnerSide(_winMain, SideEnum.BottomRight, ScaleIt(1));
+
+            Width = _winWorkers.Width;
+            Height = _winMain.Bottom - _gMoney.Top;
 
             CenterOnScreen();
-        }
-
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-
-            foreach (WorkerBox wB in _liWorkers)
-            {
-                if (wB.Contains(mouse))
-                {
-                    //If all items are found, then remove them.
-                    if (PlayerManager.Buildings.Count > 0 && PlayerManager.Money >= wB.Cost)
-                    {
-                        HUDManagement m = new HUDManagement();
-                        m.PurchaseWorker(DataManager.GetAdventurer(wB.ID), wB.Cost);
-                        GUIManager.OpenMainObject(m);
-
-                        rv = true;
-                    }
-                }
-            }
-
-            return rv;
         }
 
         public override bool ProcessHover(Point mouse)
@@ -374,18 +356,51 @@ namespace RiverHollow.GUIComponents.Screens
 
             foreach (WorkerBox wB in _liWorkers)
             {
-                wB.Enable(wB.Contains(mouse));
+                bool hovering = wB.Contains(mouse);
+                if (wB != _currentWorker)
+                {
+                    wB.Enable(hovering);
+
+                    if (hovering)
+                    {
+                        string value = string.Empty;
+                        DataManager.GetTextData("Class", wB.ID, ref value, "Name");
+                        _gName.SetText(value);
+
+                        DataManager.GetTextData("Class", wB.ID, ref value, "Description");
+                        _gDescription.ParseAndSetText(value, _winMain.MidWidth(), 3, true, false);
+
+                        _winMain.RemoveControl(_gCost);
+                        _gCost = new GUIMoneyDisplay(wB.Cost);
+                        _gCost.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.Bottom, ScaleIt(1));
+
+                        _winMain.RemoveControl(_gDailyItem);
+                        _gDailyItem = new GUIItem(DataManager.GetItem(DataManager.GetAdventurer(wB.ID).DailyItemID));
+                        _gDailyItem.AnchorToInnerSide(_winMain, SideEnum.BottomLeft, ScaleIt(1));
+
+                        _currentWorker = wB;
+                    }
+                }
             }
 
             return rv;
+        }
+
+        private void PurchaseWorker()
+        {
+            //If all items are found, then remove them.
+            if (PlayerManager.Buildings.Count > 0 && PlayerManager.Money >= _currentWorker.Cost)
+            {
+                HUDManagement m = new HUDManagement();
+                m.PurchaseWorker(DataManager.GetAdventurer(_currentWorker.ID), _currentWorker.Cost);
+                GUIManager.OpenMainObject(m);
+            }
         }
     }
 
     public class WorkerBox : GUIObject
     {
         CharacterDisplayBox _workerWindow;
-        GUIWindow _costWindow;
-        GUIMoneyDisplay _gMoney;
         public int Cost;
         public int ID;
 
@@ -394,24 +409,10 @@ namespace RiverHollow.GUIComponents.Screens
             Cost = cost;
             ID = w.WorkerID;
             _workerWindow = new CharacterDisplayBox(w, null);
-            _costWindow = new GUIWindow(GUIWindow.RedWin, _workerWindow.Width, 16);
             AddControl(_workerWindow);
-            AddControl(_costWindow);
-
-            _gMoney = new GUIMoneyDisplay(Cost);
-            _gMoney.AnchorToInnerSide(_costWindow, SideEnum.TopRight);
-
-            _costWindow.Resize();
-            _costWindow.AnchorAndAlignToObject(_workerWindow, SideEnum.Bottom, SideEnum.Left);
 
             Width = _workerWindow.Width;
-            Height = _workerWindow.Height + _costWindow.Height;
-        }
-
-        public override void Enable(bool val)
-        {
-            _workerWindow.Enable(val);
-            _costWindow.Enable(val);
+            Height = _workerWindow.Height;
         }
     }
 

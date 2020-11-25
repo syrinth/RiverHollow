@@ -350,12 +350,12 @@
  </objectgroup>
  <objectgroup id="9" name="MapObject"/>
  <objectgroup id="5" name="Character Layer">
-  <object id="24" name="NPC_16" x="177.816" y="127.644" width="11.5833" height="8.66667"/>
+  <object id="24" name="NPC_16" x="177.785" y="130.332" width="11.5833" height="8.66667"/>
   <object id="25" name="Shop" x="176" y="134" width="16.0034" height="25">
    <properties>
     <property name="Owner" value="16"/>
-    <property name="ShopKeepX" type="int" value="13"/>
-    <property name="ShopKeepY" type="int" value="11"/>
+    <property name="ShopKeepX" type="int" value="11"/>
+    <property name="ShopKeepY" type="int" value="8"/>
    </properties>
   </object>
  </objectgroup>

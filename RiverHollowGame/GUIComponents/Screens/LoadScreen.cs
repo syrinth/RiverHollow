@@ -76,9 +76,9 @@ namespace RiverHollow.GUIComponents.Screens
         private class SaveWindow : GUIWindow
         {
             GUIButton _gDelete;
-            GUIText _gText;
-            SaveInfoData _data;
-            public SaveInfoData Data => _data;
+            GUIText _gName;
+            GUIText _gDate;
+            public SaveInfoData Data { get; }
 
             public delegate void ReloadScreenDelegate();
             private ReloadScreenDelegate _delAction;
@@ -89,19 +89,22 @@ namespace RiverHollow.GUIComponents.Screens
             public SaveWindow(SaveInfoData data, int id, ReloadScreenDelegate del)
             {
                 //Creates the Individual Save Tiles on the load screen.
-                _data = data;
+                Data = data;
                 _iId = id;
-                _winData = GUIWindow.RedWin;
+                _winData = GUIWindow.Window_1;
 
-                _gText = new GUIText(data.playerData.name + ", " + DataManager.GetClassByIndex(data.playerData.currentClass).Name);
-                Vector2 stringsize = _gText.MeasureString("XXXXXXXXXXX XXXXXXXXXXXXXX");
+                _gName = new GUIText(data.playerData.name + ", " + DataManager.GetClassByIndex(data.playerData.currentClass).Name);
+                Vector2 stringsize = _gName.MeasureString("XXXXXXXXXXX XXXXXXXXXXXXXX");
 
-                _gText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
-                AddControl(_gText);
+                _gName.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
+                AddControl(_gName);
 
-                _gDelete = new GUIButton(new Rectangle(64, 48, TileSize, TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, @"Textures\Dialog", BtnDelete);
+                _gDelete = new GUIButton(new Rectangle(64, 48, TileSize, TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE, BtnDelete);
                 Height = (int)stringsize.Y + _gDelete.Height + HeightEdges();
                 _gDelete.AnchorToInnerSide(this, SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
+
+                _gDate = new GUIText("Day: " + data.Calendar.dayOfMonth.ToString("00") + ", " + GameCalendar.GetSeason(data.Calendar.currSeason));
+                _gDate.AnchorToInnerSide(this, SideEnum.BottomLeft, GUIManager.STANDARD_MARGIN);
 
                 _delAction = del;
             }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.3.4" name="tilesetHouses" tilewidth="16" tileheight="16" tilecount="520" columns="26">
+<tileset version="1.4" tiledversion="1.4.1" name="tilesetHouses" tilewidth="16" tileheight="16" tilecount="520" columns="26">
  <image source="..\Tilesets\tilesetHouses.png" trans="ffffff" width="416" height="320"/>
  <tile id="0">
   <properties>
@@ -427,6 +427,11 @@
   </properties>
  </tile>
  <tile id="469">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="476">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>

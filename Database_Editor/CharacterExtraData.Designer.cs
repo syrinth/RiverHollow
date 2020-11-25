@@ -77,6 +77,7 @@
             this.tbCharExtraDataInfo.Location = new System.Drawing.Point(329, 51);
             this.tbCharExtraDataInfo.Multiline = true;
             this.tbCharExtraDataInfo.Name = "tbCharExtraDataInfo";
+            this.tbCharExtraDataInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbCharExtraDataInfo.Size = new System.Drawing.Size(459, 189);
             this.tbCharExtraDataInfo.TabIndex = 21;
             // 

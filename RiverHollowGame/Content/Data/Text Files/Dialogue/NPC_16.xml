@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Welcome to the Adventurer's Guild. I'm $0$, guildmaster here. It's good to see a new face in town. You can hire adventurers here, as long as you have housing for them as well as send them on missions.</Value>
+      <Value>Welcome to the Adventurer's Guild. I'm $Character_16$, guildmaster here. It's good to see a new face in town. You can hire adventurers here, as long as you have housing for them as well as send them on missions.</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
@@ -16,6 +16,12 @@
     <Item>
       <Key>ShopOpen</Key>
       <Value>Greetings! What can I do for you today, $^$? [Talk:Talk|Hire Adventurers:BuyWorkers|Sell Contract:SellWorkers|See Missions:Missions|Never Mind:Cancel]</Value>
+    </Item>
+    <Item>
+      <Key>Quest2End</Key>
+      <Value>So, you're an adventurer too are you? I wouldn't wander too far in these lands without some extra help, and luckily for you, I can supply it.
+If you're willing to house and provision them, you can hire adventurers to join you.
+The first I'd recommend is a $Class_5$ and $Class_6$. You should build yourself a $Building_2$ to house them.</Value>
     </Item>
   </Asset>
 </XnaContent>

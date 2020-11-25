@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Texture:Batty][Lvl:1][Ability:300][Walk:0-0-4-.11-F][Attack:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F]</Value>
+      <Value>[Texture:Batty][Lvl:1][Ability:300][Walk:0-0-4-.11-F][Attack:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F][Loot:26]</Value>
     </Item>
   </Asset>
 </XnaContent>

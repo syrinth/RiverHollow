@@ -684,7 +684,7 @@ namespace RiverHollow.Items
 
                     _iWidth = TileSize * 2;
                     _iHeight = TileSize * 2;
-                    _sprite = new AnimatedSprite(@"Textures\Dialog");
+                    _sprite = new AnimatedSprite(DataManager.DIALOGUE_TEXTURE);
                     _sprite.AddAnimation(AnimationEnum.ObjectIdle, 16, 80, _iWidth, _iHeight);
 
                     _bDec = false;
@@ -1104,6 +1104,8 @@ namespace RiverHollow.Items
             {
                 LoadDictionaryData(stringData, false);
                 LoadAdjustableSprite(ref _sprite, DataManager.FILE_FLOORING);
+
+                _eObjectType = ObjectTypeEnum.Floor;
             }
 
             /// <summary>

@@ -73,7 +73,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (Show)
+            if (Show())
             {
                 if (_bFadeOnDisable) { _btnObject.Alpha(Enabled ? 1.0f : 0.5f); }
                 _btnObject.Draw(spriteBatch);

@@ -176,7 +176,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (Show)
+            if (Show())
             {
                 DrawWindow(spriteBatch);
 

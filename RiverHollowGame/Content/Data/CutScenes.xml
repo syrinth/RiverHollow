@@ -13,15 +13,15 @@
       <Key>1</Key>
       <Value>
         <Item></Item>
-        <Item>[Map:mapManorGrounds][Player:PlayerSpawn][Actors:11-CS1Spawn]</Item>
-        <Item>[Background:Textures\Valley][Text:IntroText][RemoveBackground][Face:11-Up Player-Up][Speed:Player-0.5 11-0.2][Speak:11-1][Move:11-3-Up Player-3-Up][Speak:11-2][Face:11-Left Player-Right][Speak:11-3][Wait:0.5][Move:11-1-Down][Wait:1][Face:11-Left][Speak:11-4][Wait:1][Speak:11-5][Move:11-5-Down][Quest:1][Speed:Player-1]</Item>
+        <Item>[Map:mapManorGrounds][Player:PlayerSpawn][Actors:11-CS1Spawn 21-NPC_21]</Item>
+        <Item>[Background:Textures\Valley][Text:IntroText][RemoveBackground][Face:11-Up Player-Up][Speed:Player-0.5 11-0.2][Speak:11-1][Move:11-3-Up Player-3-Up][Speak:11-2][Face:11-Left Player-Right][Speak:11-3][Wait:0.5][Move:11-1-Down][Wait:1][Face:11-Left][Speak:11-4][Wait:1][Speak:11-5][Move:11-5-Down][Speed:Player-1][Quest:1-2-0]</Item>
       </Value>
     </Item>
     <Item>
       <Key>2</Key>
       <Value>
         <Item></Item>
-        <Item>[Map][Player][Actors:0-NPC0][Deactivate:0]</Item>
+        <Item>[Map][Player][Actors:0-NPC_00][Deactivate:0]</Item>
         <Item>[Text:IntroText][Speak:0-1][Activate:0][Move:0-2-Down][Speak:0-2][Speed:0-2][Speak:0-3]</Item>
       </Value>
     </Item>

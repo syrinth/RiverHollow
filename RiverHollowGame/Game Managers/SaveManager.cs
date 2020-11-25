@@ -618,13 +618,6 @@ namespace RiverHollow.Game_Managers
             SaveInfoData data;
 
             string xml = path;
-            //TODO: STRIP THIS CODE OUT IF COMMMENTING CAUSES NO PROBLEMS
-            /*string _byteOrderMarkUtf16 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
-
-            if (xml.StartsWith(_byteOrderMarkUtf16))
-            {
-                xml = xml.Remove(0, _byteOrderMarkUtf16.Length);
-            }*/
             XmlSerializer serializer = new XmlSerializer(typeof(SaveInfoData));
 
             using (var sr = new StreamReader(xml))
@@ -639,11 +632,6 @@ namespace RiverHollow.Game_Managers
         {
             SaveData data;
             string xml = fileName;
-            /*string _byteOrderMarkUtf16 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
-            if (xml.StartsWith(_byteOrderMarkUtf16))
-            {
-                xml = xml.Remove(0, _byteOrderMarkUtf16.Length);
-            }*/
             XmlSerializer serializer = new XmlSerializer(typeof(SaveData));
 
             using (var sr = new StreamReader(xml))

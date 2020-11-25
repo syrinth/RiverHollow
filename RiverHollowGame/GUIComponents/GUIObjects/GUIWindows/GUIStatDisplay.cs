@@ -27,7 +27,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _delAction = del;
             _font = DataManager.GetBitMapFont(DataManager.FONT_STAT_DISPLAY);
 
-            _gFill = new GUIImage(new Rectangle(65, 33, 14, 14), Width - WidthEdges(), Height - HeightEdges(), @"Textures\Dialog");
+            _gFill = new GUIImage(new Rectangle(65, 33, 14, 14), Width - WidthEdges(), Height - HeightEdges(), DataManager.DIALOGUE_TEXTURE);
             _gFill.AnchorToInnerSide(this, SideEnum.TopLeft);
             _gText = new GUIText("", _font);
 

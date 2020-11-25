@@ -19,18 +19,14 @@ namespace RiverHollow.Game_Managers
     public static class PlayerManager
     {
         #region Properties
-        private static bool _bBusy;
-        public static bool Busy => _bBusy;
+        public static bool Busy { get; private set; }
         public static Tool ToolInUse;
+        public static List<Quest> QuestLog { get; private set; }
 
-        private static List<Quest> _questLog;
-        public static List<Quest> QuestLog  => _questLog;
-        
         public static int Stamina = 50;
         public static int MaxStamina = 50;
         public static int _iBuildingID = -1;
-        private static List<int> _canMake;
-        public static List<int> CanMake { get => _canMake; }
+        public static List<int> CanMake { get; private set; }
         private static string _currentMap;
         public static string CurrentMap
         {
@@ -72,17 +68,17 @@ namespace RiverHollow.Game_Managers
         public static void Initialize()
         {
             _liParty = new List<ClassedCombatant>();
-            _questLog = new List<Quest>();
+            QuestLog = new List<Quest>();
             World = new PlayerCharacter();
             _liParty.Add(World);
             _liBuildings = new List<Building>();
-            _canMake = new List<int>();
+            CanMake = new List<int>();
         }
 
         public static void NewPlayer()
         {
             World.Position = new Vector2(200, 200);
-            _canMake.Add(190);
+            CanMake.Add(190);
 
             CurrentMap = MapManager.CurrentMap.Name;
             World.Position = Util.GetMapPositionOfTile(MapManager.SpawnTile);
@@ -97,15 +93,8 @@ namespace RiverHollow.Game_Managers
             foreach (string s in splitItemValues)
             {
                 string[] splitString = s.Split('-');
-                InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1));
+                InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1), true, true);
             }
-
-            //DungeonManager.AddDungeonKey();
-            AddToQuestLog(new Quest("Gathering Wood", QuestTypeEnum.Fetch, "Getwood, dumbass", 1, null, DataManager.GetItem(2)));
-            AddToQuestLog(new Quest("Gathering Wood", QuestTypeEnum.Fetch, "Rude!", 1, null, DataManager.GetItem(2)));
-            AddToQuestLog(new Quest("Get Wood", QuestTypeEnum.Fetch, ";)", 1, null, DataManager.GetItem(2)));
-            AddToQuestLog(new Quest("Get Wood", QuestTypeEnum.Fetch, "Oh Yeaaah", 1, null, DataManager.GetItem(2)));
-            AddToQuestLog(new Quest("BLARGH", QuestTypeEnum.Fetch, ":ooooooo", 1, null, DataManager.GetItem(2)));
         }
 
         public static void SetPath(List<RHTile> list)
@@ -325,11 +314,13 @@ namespace RiverHollow.Game_Managers
                 if (i != null) { q.AttemptProgress(i); }
             }
             q.SpawnQuestMobs();
-            _questLog.Add(q);
+            QuestLog.Add(q);
+
+            GUIManager.NewQuestIcon();
         }
         public static void AdvanceQuestProgress(Monster m)
         {
-            foreach (Quest q in _questLog)
+            foreach (Quest q in QuestLog)
             {
                 if (q.AttemptProgress(m))
                 {
@@ -339,7 +330,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void AdvanceQuestProgress(Item i)
         {
-            foreach(Quest q in _questLog)
+            foreach(Quest q in QuestLog)
             {
                 if (q.AttemptProgress(i))
                 {
@@ -349,7 +340,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void RemoveQuestProgress(Item i)
         {
-            foreach (Quest q in _questLog)
+            foreach (Quest q in QuestLog)
             {
                 if (q.RemoveProgress(i))
                 {
@@ -368,11 +359,11 @@ namespace RiverHollow.Game_Managers
                 rv = true;
                 ToolInUse = t;
                 ToolInUse.Position = World.BodyPosition;
-                if (ToolInUse != null && !_bBusy)
+                if (ToolInUse != null && !Busy)
                 {
                     if (DecreaseStamina(ToolInUse.StaminaCost))
                     {
-                        _bBusy = true;
+                        Busy = true;
                         ToolInUse.ToolAnimation.IsAnimating = true;
                         PlayerManager.World.PlayAnimation(VerbEnum.UseTool, DirectionEnum.Down);
                     }
@@ -388,7 +379,7 @@ namespace RiverHollow.Game_Managers
         public static void UnsetTool()
         {
             PlayerManager.ToolInUse = null;
-            _bBusy = false;
+            Busy = false;
         }
 
         public static void AddBuilding(Building b)

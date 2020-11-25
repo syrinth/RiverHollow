@@ -14,12 +14,19 @@
     <Item>
       <Key>1</Key>
       <Value>
-        <Item>[IntroText:A long time ago, a great war broke out between the three kingdoms. Many lives were lost and as a result, much knowledge and hope was lost in the land. There is one place, however, where the spark of hope still burns, although the fires are quite low. That place, is River Hollow.]</Item>
-        <Item>[1:Well, this is it. I know it's not much to look at but I hope you'll find it perfectly serviceable.]</Item>
+        <Item>[IntroText:The road has been your companion for days. Stretching on endlessely as you leave your old life behind, searching for a place that could use someone of your talents. All around you, you leave behind the remnants of a war-torn land, until at last you arrive here. A small valley, all but hidden from the last war. River Hollow.]</Item>
+        <Item>[1:Well, this is it! I know it's not much to look at but I do hope you'll find it serviceable. It was a fine old house back in the day, but the years haven't exactly been kind to it.
+Once the old owners left, we had our own problems keeping us too busy to maintain it. But I've had $13$ take a look around inside and he assures me that it's safe, it just needs some love.]</Item>
         <Item>[2:...]</Item>
-        <Item>[3:I'm told it was once a fine old house, when your fmaily still ived here. After they left, we just didn't really know what to do with the property anymore. I've had $13$ take a look around inside and he assures me that it's safe. There's even some equipment in the basement that is apparently still in working order. Hopefully you can make some use of that.]</Item>
-        <Item>[4:There's an old Shrine to the West of here. Back in the day, people would pray to the the spirits in the four shrines. They've been long since abandoned but, maybe it'll do you some good. anyway, I should head back to town now, I hope to see you around. Oh, and if you're going to travel alone... be careful.]</Item>
-        <Item>[5:Oh! Before I forget. you should know that monsters roam the wilds here. You seem capable, but if you're going to go exploring you should be careful, and be prepared. If you find yourself needing any extra hands, $16$, at the Adventurer's Guild will be able to help you. Well, take care.]</Item>
+        <Item>[3:You said you're an artisan right? The old owners used to dabble in that sort of thing, it's how they made their money. There's some old equipment in the basement and $17$ says she has some supplies for you. When you have a moment, you should go see her at her shop in town.
+That should be enough to get you started, but you're going to need more supplies, so you should definitely explore the area.]</Item>
+        <Item>[4:The field here is on the Eastern edge of the valley. To the North of here, across the field, there is an old shrine to the Great Spirit of the fields. $20$ used to tell stories about the spirits and how people would pray at the shrines, but it's been a long time since anyone did that.]</Item>
+        <Item>[5:To the West,just past the town, is the Forest, it's probably the best place for you to start if you're looking for reagents.
+If you do go exploring, please be careful. You look capable, but it wouldn't do to have our newest resident sent to the apothecary on their first few days in the area now would it.
+If you do find yourself needing any extra hands, $16$, at the Adventurer's Guild will be able to help you.
+Take care!]</Item>
+        <Item>[6:]</Item>
+        <Item>[7:]</Item>
       </Value>
     </Item>
     <Item>

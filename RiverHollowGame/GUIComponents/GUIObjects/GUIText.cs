@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
+using System;
+using System.Collections.Generic;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
@@ -37,9 +39,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public bool Done => _bDone;
         #endregion
 
-        public GUIText()
+        public GUIText(bool printAll = true)
         {
+            PrintAll = printAll;
             _sText = "";
+            _sFullText = _sText;
             _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
             SetDimensions("X");
         }
@@ -51,11 +55,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _font = DataManager.GetBitMapFont(f);
             PrintAll = printAll;
 
-            if (!printAll) { _sFullText = text; }
-            else {
+            if (printAll) { 
                 _sText = text;
-                _sFullText = _sText;
             }
+            _sFullText = text;
 
             SetDimensions(text);
         }
@@ -74,7 +77,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!string.IsNullOrEmpty(_sText))
+            if (!string.IsNullOrEmpty(_sText) && Show())
             {
                 spriteBatch.DrawString(_font, _sText, Position(), _cColor * Alpha());
             }
@@ -109,6 +112,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _sText = text;
             _sFullText = _sText;
             SetDimensions(text);
+        }
+        public void ParseAndSetText(string text, int width, int maxRows, bool printAll = false, bool changePos = false)
+        {
+            SetText(ParseText(text, width, maxRows, printAll)[0]);
         }
 
         public void SetText(int num, bool changePos = false)
@@ -168,8 +175,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
                             _sText = _sFullText.Substring(0, (int)_dTypedTextLen);
 
-
-                            if (_sText[_sText.Length - 1].Equals(' ')) { _eCurrChar = LastCharacter.Space; }
+                            char currChar = _sText[_sText.Length - 1];
+                            if (currChar.Equals(' ')) { _eCurrChar = LastCharacter.Space; }
+                            else if (currChar.Equals(',')) { _dTextTimer -= 0.2; }
+                            else if (currChar.Equals('!')) { _dTextTimer -= 0.8; }
+                            else if (currChar.Equals('.') || currChar.Equals('?')) {
+                                _eCurrChar = LastCharacter.Even;
+                                _dTextTimer -= 0.5;
+                            }
 
                             if (_eCurrChar == LastCharacter.Space) { _eCurrChar = LastCharacter.Even; }
                             else if (_eCurrChar == LastCharacter.Odd) { _eCurrChar = LastCharacter.Even; }
@@ -193,31 +206,80 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
-        public void ParseText(int maxRows, int width, bool printAll = true)
+        /// <summary>
+        /// Iterates over the given text word by word to create a list of text entries that will
+        /// be on each screen. These text entries will have /n entries manually inserted to properly
+        /// display based off of the GUITextWindow dimensions.
+        /// </summary>
+        /// <param name="text">The text to display</param>
+        /// <param name="printAll">Whether we will print everything at once</param>
+        public List<string> ParseText(string text, int width, int maxRows, bool printAll = true)
         {
+            PrintAll = printAll;
+            List<string> textPages = new List<string>();
+            bool grabLast = true;
             int numReturns = 0;
-            string totalText = string.Empty;
-            string line = string.Empty;
-            string returnString = string.Empty;
-            string[] wordArray = _sFullText.Split(' ');
+            string currentLineOfText = string.Empty;
+            string textToDisplay = string.Empty;
+            string[] wordArray = text.Split(' ');   //Split the given entry around each word. Note that it is important that /n be its own word
 
             foreach (string word in wordArray)
             {
-                Vector2 measure = MeasureString(line + word);
-
-                if (measure.Length() >= (width) ||
-                    numReturns == maxRows - 1 && measure.Length() >= (width) - CharHeight)
+                //If there is a new line character in the word, prepare the text dialogue for the next screen.
+                if (word.Contains("\n") || word.Contains("\r\n"))
                 {
-                    returnString = returnString + line + '\n';
-                    totalText += returnString;
-                    line = string.Empty;
-                    numReturns++;
-                }
+                    string[] returnSplit = word.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-                line = line + word + ' ';
+                    if (returnSplit.Length > 0)
+                    {
+                        textToDisplay += currentLineOfText + returnSplit[0];
+                        TextSpilloverToNextScreen(ref textToDisplay, ref grabLast, ref numReturns, ref textPages);
+
+                        if (returnSplit.Length > 1)
+                        {
+                            currentLineOfText = returnSplit[1] + ' ';
+                        }
+                    }
+                }
+                else
+                {
+                    Vector2 vMeasurement = MeasureString(currentLineOfText + word);
+
+                    //Measure the current line and the new word and see if adding the word will put the line out of bounds.
+                    //If so, we need to insert a carriage return character and clear the current line of text.
+                    if ((vMeasurement.Length() >= width - GUIManager.STANDARD_MARGIN * 2) ||
+                        (numReturns == maxRows - 1 && vMeasurement.Length() >= (Width) - CharHeight))
+                    {
+                        textToDisplay += currentLineOfText + '\n';
+                        currentLineOfText = string.Empty;
+                        numReturns++;
+                    }
+
+                    grabLast = true;
+                    currentLineOfText += word + ' ';
+
+                    //Spill over to another screen when we have too many returns
+                    if (numReturns + 1 > maxRows)
+                    {
+                        TextSpilloverToNextScreen(ref textToDisplay, ref grabLast, ref numReturns, ref textPages);
+                    }
+                }
             }
 
-            SetText(returnString + line);
+            if (grabLast)
+            {
+                textPages.Add(textToDisplay + currentLineOfText);
+            }
+
+            return textPages;
+        }
+
+        private void TextSpilloverToNextScreen(ref string textToDisplay, ref bool grabLast, ref int numReturns, ref List<string> textPages)
+        {
+            grabLast = false;
+            textPages.Add(textToDisplay);
+            numReturns = 0;
+            textToDisplay = string.Empty;
         }
     }
 }

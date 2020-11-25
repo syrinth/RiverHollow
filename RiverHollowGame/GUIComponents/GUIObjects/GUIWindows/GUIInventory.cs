@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
@@ -19,7 +20,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public GUIInventory(bool PlayerInventory = false)
         {
             Position(Vector2.Zero);
-            _winData = GUIWindow.BrownWin;
+            _winData = GUIWindow.Window_2;
             _bPlayerInventory = PlayerInventory;
 
             //Retrieve the dimensions of the Inventory we're working on from the InventoryManager
@@ -30,7 +31,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Height = HeightEdges() + (_rows * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_rows + 1));
             Setup();
 
-            _texture = DataManager.GetTexture(@"Textures\Dialog");
+            _texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
         }
 
         public override void Update(GameTime gTime)
@@ -54,7 +55,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    _gItemBoxes[i, j] = new GUIItemBox(i, j, @"Textures\Dialog", null);
+                    _gItemBoxes[i, j] = new GUIItemBox(i, j, DataManager.DIALOGUE_TEXTURE, null);
 
                     if (i == 0 && j == 0) { _gItemBoxes[i, j].AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN); }
                     else if (j == 0) { _gItemBoxes[i, j].AnchorAndAlignToObject(_gItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
@@ -94,18 +95,22 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
             else
             {
+                Item clickedItem = IsItemThere(mouse);
                 if (GameManager.CurrentInventoryDisplay == GameManager.DisplayTypeEnum.Gift)
                 {
-                    rv = true;
-                    //Do not pick the item up, instead assign it.
-                   GameManager.CurrentItem = IsItemThere(mouse);
+                    if (clickedItem != null && clickedItem.Giftable())
+                    {
+                        rv = true;
+                        //Do not pick the item up, instead assign it.
+                        GameManager.CurrentItem = clickedItem;
+                    }
                 }
                 else if (GameManager.CurrentTriggerObject != null)
                 {
-                    Item it = IsItemThere(mouse);
-                    if (!GUIManager.IsTextWindowOpen() && Contains(mouse) && it != null)
+                    
+                    if (!GUIManager.IsTextWindowOpen() && Contains(mouse) && clickedItem != null)
                     {
-                        if (GameManager.CurrentTriggerObject.CheckForKey(it))
+                        if (GameManager.CurrentTriggerObject.CheckForKey(clickedItem))
                         {
                             GameManager.CurrentTriggerObject.AttemptToTrigger(GameManager.ITEM_OPEN);
                             GUIManager.CloseMainObject();

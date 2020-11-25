@@ -38,12 +38,18 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _drawRect, _sourceRect, _cColor * Alpha());
+            if (Show())
+            {
+                spriteBatch.Draw(_texture, _drawRect, _sourceRect, _cColor * Alpha());
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch, float alpha)
         {
-            spriteBatch.Draw(_texture, _drawRect, _sourceRect, Color.Black * alpha);
+            if (Show())
+            {
+                spriteBatch.Draw(_texture, _drawRect, _sourceRect, Color.Black * alpha);
+            }
         }
     }
 }

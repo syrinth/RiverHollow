@@ -35,7 +35,7 @@ namespace RiverHollow.Characters
     /// </summary>
     public abstract class Actor
     {
-        public const float NORMAL_SPEED = 1.0f;
+        public const float NORMAL_SPEED = 1f;
         public const float NPC_WALK_SPEED = 0.6f;
 
         protected const int HUMAN_HEIGHT = (TileSize * 2) + 2;
@@ -214,8 +214,8 @@ namespace RiverHollow.Characters
 
         protected bool _bHover;
 
-        int _iBaseSpeed = 2;
-        public float Speed => _iBaseSpeed * SpdMult;
+        float _fBaseSpeed = 2.0f;
+        public float Speed => _fBaseSpeed * SpdMult;
         public float SpdMult = NPC_WALK_SPEED;
 
         protected int _iSize = 1;
@@ -556,6 +556,13 @@ namespace RiverHollow.Characters
         {
             string text = GetOpeningText();
 
+            FacePlayer(true);
+
+            text = Util.ProcessText(text, _sName);
+            GUIManager.OpenTextWindow(text, this);
+        }
+        protected void FacePlayer(bool facePlayer)
+        {
             //Determine the position based off of where the player is and then have the NPC face the player
             //Only do this if they are idle so as to not disturb other animations they may be performing.
             if (facePlayer && BodySprite.CurrentAnimation.StartsWith("Idle"))
@@ -586,9 +593,6 @@ namespace RiverHollow.Characters
 
                 PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
             }
-
-            text = Util.ProcessText(text, _sName);
-            GUIManager.OpenTextWindow(text, this);
         }
 
         public void TalkCutscene(string cutsceneLine)
@@ -699,6 +703,7 @@ namespace RiverHollow.Characters
             }
             else if (chosenAction.StartsWith("Cancel"))
             {
+                GameManager.CurrentItem = null;
             }
             else
             {
@@ -834,7 +839,7 @@ namespace RiverHollow.Characters
 
             if (CombatManager.InCombat && _iCurrentHP > 0)
             {
-                Texture2D texture = DataManager.GetTexture(@"Textures\Dialog");
+                Texture2D texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
                 Vector2 pos = Position;
                 pos.Y += (TileSize * _iSize);
 
@@ -1539,7 +1544,7 @@ namespace RiverHollow.Characters
         #region StartPosition
         public void IncreaseStartPos()
         {
-            if (_vStartPosition.Y < 3)
+            if (_vStartPosition.Y < 2)
             {
                 _vStartPosition.Y++;
             }
@@ -1782,6 +1787,12 @@ namespace RiverHollow.Characters
         public override string GetOpeningText()
         {
             string rv = string.Empty;
+
+            foreach(Quest q in PlayerManager.QuestLog)
+            {
+                q.AttemptProgress(this);
+            }
+
             if (!Introduced)
             {
                 rv = GetDialogEntry("Introduction");
@@ -2004,15 +2015,17 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        private bool CheckQuestLogs(ref string text)
+        protected bool CheckQuestLogs(ref string questCompleteText)
         {
             bool rv = false;
 
             foreach (Quest q in PlayerManager.QuestLog)
             {
-                if (q.ReadyForHandIn && q.HandInTo == this)
+                if (q.ReadyForHandIn && q.GoalNPC == this)
                 {
-                    q.FinishQuest(ref text);
+                    q.FinishQuest(ref questCompleteText);
+
+                    questCompleteText = _diDialogue[questCompleteText];
 
                     rv = true;
                     break;
@@ -2178,6 +2191,7 @@ namespace RiverHollow.Characters
     }
     public class ShopKeeper : Villager
     {
+        private bool _bIsOpen;
         protected List<Merchandise> _liMerchandise;
         public List<Merchandise> Buildings { get => _liMerchandise; }
 
@@ -2195,28 +2209,23 @@ namespace RiverHollow.Characters
             }
         }
 
-        public override void Talk(bool IsOpen = false)
+        public override string GetOpeningText()
         {
-            GUICursor.SetCursor(GUICursor.CursorTypeEnum.Talk, HoverBox);
-            string text = string.Empty;
-            if (!Introduced)
+            string rv = string.Empty;
+            if (Introduced && !CheckQuestLogs(ref rv) && _bIsOpen)
             {
-                text = _diDialogue["Introduction"];
-                Introduced = true;
+                rv = _diDialogue["ShopOpen"];
             }
-            else
+            else if (string.IsNullOrEmpty(rv))  //For if the QuestLogs check actually caught something
             {
-                if (IsOpen)
-                {
-                    text = _diDialogue["ShopOpen"];
-                }
-                else
-                {
-                    text = GetDefaultText();
-                }
+                rv = base.GetOpeningText();
             }
-            text = Util.ProcessText(text, _sName);
-            GUIManager.OpenTextWindow(text, this);
+            return rv;
+        }
+
+        public void SetOpen(bool val)
+        {
+            _bIsOpen = true;
         }
 
         /// <summary>
@@ -2316,7 +2325,7 @@ namespace RiverHollow.Characters
 
                 MerchType = Util.ParseEnum<ItemType>(stringData["Type"]);
                 if (stringData.ContainsKey("WorkerID")) { MerchID = int.Parse(stringData["WorkerID"]); }
-                else if (stringData.ContainsKey("BuildngID")) { MerchID = int.Parse(stringData["BuildngID"]); }
+                else if (stringData.ContainsKey("BuildingID")) { MerchID = int.Parse(stringData["BuildingID"]); }
                 else if (stringData.ContainsKey("ItemID"))
                 {
                     //Some items may have unique data so only parse the first entry
@@ -2523,6 +2532,7 @@ namespace RiverHollow.Characters
         protected int _iDailyFoodReq;
         protected int _iCurrFood;
         protected int _iDailyItemID;
+        public int DailyItemID => _iDailyItemID;
         protected Item _heldItem;
         protected int _iMood;
         private int _iResting;
@@ -3113,7 +3123,7 @@ namespace RiverHollow.Characters
             _diDialogue = DataManager.GetNPCDialogue(_iIndex);
             _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Gremlin", _iIndex.ToString("00"));
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
-            Util.AssignValue(ref _sName, "Name", stringData);
+            DataManager.GetTextData("Character", _iIndex, ref _sName, "Name");
 
             if (stringData.ContainsKey("HomeMap"))
             {

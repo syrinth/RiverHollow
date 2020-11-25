@@ -14,7 +14,7 @@ namespace RiverHollow.Game_Managers
         enum Fade { None, Out, In};
         static Fade _eFade;
 
-        public static int STANDARD_MARGIN = 4;
+        public static int STANDARD_MARGIN = 1;
         public static int MINI_BTN_HEIGHT = ScaledTileSize;
         public static int MINI_BTN_WIDTH = 168;
 
@@ -29,7 +29,7 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadContent()
         {
-            _fadeImg = new GUIImage(new Rectangle(160, 128, TileSize, TileSize), RiverHollow.ScreenWidth*2, RiverHollow.ScreenHeight*2, @"Textures\Dialog");
+            _fadeImg = new GUIImage(new Rectangle(160, 128, TileSize, TileSize), RiverHollow.ScreenWidth*2, RiverHollow.ScreenHeight*2, DataManager.DIALOGUE_TEXTURE);
             GUICursor.LoadContent();
         }
 
@@ -39,11 +39,14 @@ namespace RiverHollow.Game_Managers
             {
                 UpdateFade();
             }
-            if (_currentGUIScreen != null)
+            else
             {
-                _currentGUIScreen.Update(gTime);
+                if (_currentGUIScreen != null)
+                {
+                    _currentGUIScreen.Update(gTime);
+                }
+                GUICursor.Update();
             }
-            GUICursor.Update();
         }
 
         public static void Draw(SpriteBatch spriteBatch)
@@ -111,9 +114,9 @@ namespace RiverHollow.Game_Managers
         {
             _currentGUIScreen.OpenTextWindow(text, talker, open);
         }
-        public static bool CloseTextWindow(GUITextWindow win)
+        public static bool CloseTextWindow()
         {
-            return _currentGUIScreen.CloseTextWindow(win);
+            return _currentGUIScreen.CloseTextWindow();
         }
         public static bool IsTextWindowOpen() { return _currentGUIScreen.IsTextWindowOpen(); }
 
@@ -190,6 +193,19 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
+
+        public static void NewQuestIcon(bool questComplete = false) {
+            _currentGUIScreen.NewQuestIcon(questComplete);
+        }
+
+        public static void AddSkipCutsceneButton()
+        {
+            _currentGUIScreen.AddSkipCutsceneButton();
+        }
+        public static void RemoveSkipCutsceneButton()
+        {
+            _currentGUIScreen.RemoveSkipCutsceneButton();
+        }
     }
 
     public abstract class GUIMainObject : GUIObject
@@ -203,11 +219,11 @@ namespace RiverHollow.Game_Managers
         /// <returns>The created GUIWindow</returns>
         protected GUIWindow SetMainWindow()
         {
-            return SetMainWindow(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_WIDTH);
+            return SetMainWindow(GUIWindow.Window_1, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
         }
         protected GUIWindow SetMainWindow(int w, int h)
         {
-            return SetMainWindow(GUIWindow.RedWin, w, h);
+            return SetMainWindow(GUIWindow.Window_1, w, h);
         }
         protected GUIWindow SetMainWindow(GUIWindow.WindowData wd, int w, int h)
         {

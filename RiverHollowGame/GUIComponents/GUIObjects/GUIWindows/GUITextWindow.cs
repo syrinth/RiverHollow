@@ -12,7 +12,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         GUIImage _gNext;
         protected GUIText _giText;
         protected GUIImage _giPortrait;
-        List<string> _liText;
+        List<string> _liTextPages;
 
         public double Duration;
 
@@ -20,8 +20,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         #region Parsing
         protected int _iCurrText = 0;
-
-        protected int _numReturns = 0;
 
         protected int _iCharHeight;
         protected int _iCharWidth;
@@ -41,7 +39,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public GUITextWindow() : base()
         {
             _giText = new GUIText();
-            _liText = new List<string>();
+            _liTextPages = new List<string>();
             _iCharWidth = _giText.CharWidth;
             _iCharHeight = _giText.CharHeight;
 
@@ -52,8 +50,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public GUITextWindow(string text, bool open = true) : this()
         {
             ConfigureHeight();
-            ParseText(text, false);
-
+            SyncText(text);
             Setup(open);
         }
 
@@ -61,12 +58,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public GUITextWindow(Vector2 position, string text) : this()
         {
             Height = (int)_giText.MeasureString(text).Y + HeightEdges();
-            SetWidthMax((int)_giText.MeasureString(text).X, (int)(RiverHollow.ScreenWidth/4));
+            Width = (int)(RiverHollow.ScreenWidth / 4);
 
-            ParseText(text);
+            SyncText(text);
 
             string totalVal = string.Empty;
-            foreach(string s in _liText)
+            foreach(string s in _liTextPages)
             {
                 totalVal += s;
             }
@@ -81,7 +78,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         //MAR this should probably be deleted.
         public GUITextWindow(string text, double duration) : this()
         {
-            ParseText(text);
+            SyncText(text);
             Duration = duration;
 
             Height = _iCharHeight;
@@ -111,6 +108,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Height = Math.Max(Height, (_iCharHeight * MAX_ROWS) + HeightEdges() + (2 * GUIManager.STANDARD_MARGIN));
         }
 
+        protected void SyncText(string text, bool printAll = false)
+        {
+            _liTextPages = _giText.ParseText(text, MidWidth(), MAX_ROWS, printAll);
+            if (_giText.PrintAll) { _giText.SetText(_liTextPages[0]); }
+            else { _giText.ResetText(_liTextPages[0]); }
+        }
         /// <summary>
         /// Method used to ensure that the components for the TextWindow are synced
         /// together. Called on finishing the opening animation, or immediately after
@@ -130,11 +133,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
 
-            if (_liText.Count > 1)
-            {
-                _gNext = new GUIImage(new Rectangle(288, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, @"Textures\Dialog");     //???
-                _gNext.AnchorToInnerSide(this, SideEnum.BottomRight);
-            }
+            DisplayDialogueFinishedIcon();
 
             AnchorToScreen(SideEnum.Bottom, SpaceFromBottom);
         }
@@ -159,6 +158,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 if (_giText.Done)
                 {
                     Paused = true;
+                    DisplayDialogueFinishedIcon();
                 }
             }
         }
@@ -209,7 +209,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 if (!NextText())
                 {
-                    rv = GUIManager.CloseTextWindow(this);
+                    rv = GUIManager.CloseTextWindow();
                 }
                 else
                 {
@@ -248,67 +248,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
         }
 
-        /// <summary>
-        /// Iterates over the given text word by word to create a list of text entries that will
-        /// be on each screen. These text entries will have /n entries manually inserted to properly
-        /// display based off of the GUITextWindow dimensions.
-        /// </summary>
-        /// <param name="text">The text to display</param>
-        /// <param name="printAll">Whether we will print everything at once</param>
-        protected void ParseText(string text, bool printAll = true)
-        {
-            bool grabLast = true;
-            _numReturns = 0;
-            string line = string.Empty;
-            string returnString = string.Empty;
-            string[] wordArray = text.Split(' ');   //Split the given entry around each word. Note that it is important that /n be its own word
-
-            foreach (string word in wordArray)
-            {
-                Vector2 measure = _giText.MeasureString(line + word);
-
-                if (word.Contains("\n"))
-                {
-                    returnString = returnString + line + word;
-                    line = string.Empty;
-                    _numReturns++;
-                }
-                else
-                {
-                    if ((measure.Length() >= MidWidth() - GUIManager.STANDARD_MARGIN * 2) ||
-                        (_numReturns == MAX_ROWS - 1 && measure.Length() >= (Width) - _giText.CharHeight))
-                    {
-                        returnString = returnString + line + '\n';
-                        line = string.Empty;
-                        _numReturns++;
-                    }
-
-                    grabLast = true;
-                    line = line + word + ' ';
-                }
-
-                //Spillover to another screen when we have too many returns
-                if (_numReturns + 1 > MAX_ROWS)
-                {
-                    grabLast = false;
-                    _liText.Add(returnString);
-                    _numReturns = 0;
-                    returnString = string.Empty;
-                }
-            }
-
-            if (grabLast)
-            {
-                _liText.Add(returnString + line);
-            }
-
-            if (printAll) { _giText.SetText(_liText[0]); }
-            else { _giText.ResetText(_liText[0]); }
-        }
-
         private bool ShowNextButton()
         {
-            return Paused && _gNext != null && _iCurrText < _liText.Count -1;
+            return Paused && _gNext != null;
         }
 
         public bool NextText()
@@ -317,9 +259,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             Paused = false;
             _iCurrText++;
-            if (_iCurrText < _liText.Count)
+            if (_iCurrText < _liTextPages.Count)
             {
-                _giText.ResetText(_liText[_iCurrText]);
+                _giText.ResetText(_liTextPages[_iCurrText]);
                 rv = true;
             }
 
@@ -329,11 +271,25 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public void PrintAll()
         {
             _giText.PrintAll = true;
+            DisplayDialogueFinishedIcon();
         }
 
         public bool Done()
         {
-            return _iCurrText == _liText.Count && _giText.Done;
+            return _iCurrText == _liTextPages.Count && _giText.Done;
+        }
+
+        private void DisplayDialogueFinishedIcon()
+        {
+            if (_iCurrText < _liTextPages.Count - 1)
+            {
+                _gNext = new GUIImage(new Rectangle(288, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
+            }
+            else
+            {
+                _gNext = new GUIImage(new Rectangle(304, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
+            }
+            _gNext.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.Bottom);
         }
 
         public void ResetText(string text)

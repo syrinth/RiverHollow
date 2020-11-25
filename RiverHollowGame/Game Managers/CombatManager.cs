@@ -270,15 +270,18 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         /// <param name="newPhase"></param>
         public static void ChangePhase(CmbtPhaseEnum newPhase)
-        { 
-            if(newPhase == CmbtPhaseEnum.PerformAction || newPhase == CmbtPhaseEnum.Moving)
+        {
+            if (newPhase == CmbtPhaseEnum.PerformAction || newPhase == CmbtPhaseEnum.Moving)
             {
-                if (ActiveCharacter != null && ActiveCharacter.IsActorType(ActorEnum.Adventurer))
+                if (ActiveCharacter != null && ActiveCharacter.IsActorType(ActorEnum.Adventurer) && GameManager.IsPaused())
                 {
                     GameManager.Unpause();
                 }
             }
-            else { GameManager.Pause(); }
+            else if (!GameManager.IsPaused())
+            {
+                GameManager.Pause();
+            }
 
             CurrentPhase = newPhase;
         }

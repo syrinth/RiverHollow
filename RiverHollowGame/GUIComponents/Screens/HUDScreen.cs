@@ -17,7 +17,6 @@ using static RiverHollow.GUIComponents.GUIObjects.GUIItemBox;
 using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
 using static RiverHollow.GUIComponents.Screens.HUDMenu.HUDManagement.MgmtWindow;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
-using static RiverHollow.Items.Clothes;
 using static RiverHollow.Items.Item;
 
 
@@ -25,6 +24,9 @@ namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDScreen : GUIScreen
     {
+        List<HUDNewQuest> _liQuestIcons;
+
+        GUIButton _btnSkipCutscene;
         GUIObject _gMenu;
         GUIStatDisplay _gHealthDisplay;
         GUIStatDisplay _gStaminaDisplay;
@@ -39,6 +41,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public HUDScreen()
         {
+            _liQuestIcons = new List<HUDNewQuest>();
             _gHealthDisplay = new GUIStatDisplay(PlayerManager.World.GetHP, Color.Green);
             _gHealthDisplay.AnchorToScreen(this, SideEnum.TopLeft, 10);
             AddControl(_gHealthDisplay);
@@ -73,23 +76,36 @@ namespace RiverHollow.GUIComponents.Screens
 
             HandleInput();
 
-            if (InventoryManager.AddedItem != null && _addedItem == null)
+            //If there are items queued to display and there is not currently a display up, create one.
+            if (InventoryManager.AddedItemList.Count > 0 && _addedItem == null)
             {
-                _addedItem = new GUIItemBox(InventoryManager.AddedItem);
-                _addedItem.AnchorAndAlignToObject(_gInventory, SideEnum.Left, SideEnum.CenterY, 10);
+                _addedItem = new GUIItemBox(InventoryManager.AddedItemList[0]);
+                _addedItem.AnchorToScreen(SideEnum.BottomRight, 12);
                 _dTimer = 1;
+                AddControl(_addedItem);
+                InventoryManager.AddedItemList.Remove(InventoryManager.AddedItemList[0]);
             }
             else
             {
-                if (_addedItem != null && _addedItem.Alpha() > 0)
+                //If there are more items to add, there is currently an ItemPickup Display and the next Item to add is the same as the one being displayed
+                //Remove it fromt he list of items to show added, add the current number tot he display, and refresh the display.
+                if(InventoryManager.AddedItemList.Count > 0 && _addedItem != null && InventoryManager.AddedItemList[0].ItemID == _addedItem.BoxItem.ItemID)
+                {
+                    _addedItem.BoxItem.Add(InventoryManager.AddedItemList[0].Number);
+                    InventoryManager.AddedItemList.Remove(InventoryManager.AddedItemList[0]);
+
+                    _dTimer = 1;
+                    _addedItem.SetAlpha(1);
+                }
+                else if (_addedItem != null && _addedItem.Alpha() > 0)  //Otherwise, if there is a display and the Alpha isn't yet 0, decrease the Alpha
                 {
                     _dTimer -= gTime.ElapsedGameTime.TotalSeconds;
                     _addedItem.SetAlpha((float)_dTimer);
                 }
-                else if (_addedItem != null)
+                else if (_addedItem != null)    //If we get here, there is a display, and the Alpha has reached 0, so remove it.
                 {
+                    RemoveControl(_addedItem);
                     _addedItem = null;
-                    InventoryManager.AddedItem = null;
                 }
             }
         }
@@ -138,12 +154,17 @@ namespace RiverHollow.GUIComponents.Screens
         public override void OpenTextWindow(string text, bool open = true)
         {
             base.OpenTextWindow(text, open);
-            _gInventory.Show = false;
+            _gInventory.Show(false);
         }
-        public override bool CloseTextWindow(GUITextWindow win)
+        public override void OpenTextWindow(string text, TalkingActor talker, bool open = true)
         {
-            bool rv = base.CloseTextWindow(win);
-            _gInventory.Show = true;
+            base.OpenTextWindow(text, talker, open);
+            _gInventory.Show(false);
+        }
+        public override bool CloseTextWindow()
+        {
+            bool rv = base.CloseTextWindow();
+            _gInventory.Show(true);
             return rv;
         }
         #endregion
@@ -166,6 +187,30 @@ namespace RiverHollow.GUIComponents.Screens
             }
         }
         #endregion
+
+        public override void NewQuestIcon(bool complete) {
+            HUDNewQuest newQuest = new HUDNewQuest(complete, RemoveQuestIcon);
+
+            if (_liQuestIcons.Count == 0) { newQuest.AnchorToScreen(SideEnum.Right, 12); }
+            else { newQuest.AnchorAndAlignToObject(_liQuestIcons[_liQuestIcons.Count - 1], SideEnum.Top, SideEnum.Left, ScaleIt(1)); }
+
+            _liQuestIcons.Add(newQuest);
+            AddControl(newQuest);
+        }
+        private void RemoveQuestIcon(HUDNewQuest q)
+        {
+            _liQuestIcons.Remove(q);
+            RemoveControl(q);
+        }
+
+        public override void AddSkipCutsceneButton() {
+            _btnSkipCutscene = new GUIButton(new Rectangle(64, 80, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, CutsceneManager.SkipCutscene);
+            _btnSkipCutscene.AnchorToScreen(SideEnum.BottomRight, 12);
+            AddControl(_btnSkipCutscene);
+        }
+        public override void RemoveSkipCutsceneButton() {
+            RemoveControl(_btnSkipCutscene);
+        }
     }
 
     public class HUDMiniInventory : GUIWindow
@@ -180,13 +225,12 @@ namespace RiverHollow.GUIComponents.Screens
         float _fItemFade = 1.0f;
         const float FADE_OUT = 0.1f;
 
-        public HUDMiniInventory() : base(GUIWindow.BrownWin, TileSize, TileSize)
+        public HUDMiniInventory() : base(GUIWindow.Window_2, TileSize, TileSize)
         {
-            _btnChangeRow = new GUIButton(new Rectangle(256, 96, 16, 16), ScaledTileSize, ScaledTileSize, @"Textures\Dialog", RowUp);
+            _btnChangeRow = new GUIButton(new Rectangle(256, 96, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, RowUp);
             _btnChangeRow.FadeOnDisable(false);
             _liItems = new List<GUIItemBox>();
-            _fBarFade = GameManager.HideMiniInventory ? FADE_OUT : 1.0f;
-            Alpha(_fBarFade);
+
             for (int i = 0; i < InventoryManager.maxItemColumns; i++)
             {
                 GUIItemBox ib = new GUIItemBox(InventoryManager.PlayerInventory[GameManager.HUDItemRow, i]);
@@ -203,39 +247,45 @@ namespace RiverHollow.GUIComponents.Screens
 
             _btnChangeRow.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.CenterY);
             AddControl(_btnChangeRow);
+
+            _fBarFade = GameManager.HideMiniInventory ? FADE_OUT : 1.0f;
+            Alpha(_fBarFade);
         }
 
         public override void Update(GameTime gTime)
         {
-            base.Update(gTime);
-            float startFade = _fBarFade;
-            if (_bFadeOutBar && GameManager.HideMiniInventory)
+            if (Show())
             {
-                if (_fBarFade - FADE_OUT > FADE_OUT) { _fBarFade -= FADE_OUT; }
+                base.Update(gTime);
+                float startFade = _fBarFade;
+                if (_bFadeOutBar && GameManager.HideMiniInventory)
+                {
+                    if (_fBarFade - FADE_OUT > FADE_OUT) { _fBarFade -= FADE_OUT; }
+                    else
+                    {
+                        _fBarFade = FADE_OUT;
+                    }
+                }
                 else
                 {
-                    _fBarFade = FADE_OUT;
+                    if (_fBarFade < 1)
+                    {
+                        _fBarFade += FADE_OUT;
+                    }
+
+                    UpdateItemFade(gTime);
+
                 }
-            }
-            else
-            {
-                if (_fBarFade < 1)
+                if (startFade != _fBarFade)
                 {
-                    _fBarFade += FADE_OUT;
+                    Alpha(_fBarFade);
+
+                    foreach (GUIItemBox gib in _liItems)
+                    {
+                        gib.SetAlpha(Alpha());
+                    }
+                    _btnChangeRow.Alpha(Alpha());
                 }
-
-                UpdateItemFade(gTime);
-
-            }
-            if (startFade != _fBarFade)
-            {
-                Alpha(_fBarFade);
-
-                foreach (GUIItemBox gib in _liItems)
-                {
-                    gib.SetAlpha(Alpha());
-                }
-                _btnChangeRow.Alpha(Alpha());
             }
         }
 
@@ -509,8 +559,8 @@ namespace RiverHollow.GUIComponents.Screens
                 _winMain = SetMainWindow();
 
                 _liQuests = new List<GUIObject>();
-                _detailWindow = new DetailBox(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
-                _detailWindow.Show = false;
+                _detailWindow = new DetailBox(GUIWindow.Window_1, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
+                _detailWindow.Show(false);
                 _detailWindow.CenterOnScreen();
                 AddControl(_detailWindow);
 
@@ -530,7 +580,7 @@ namespace RiverHollow.GUIComponents.Screens
             public override bool ProcessLeftButtonClick(Point mouse)
             {
                 bool rv = false;
-                if (!_detailWindow.Show)
+                if (!_detailWindow.Show())
                 {
                     foreach (GUIObject c in Controls)
                     {
@@ -545,7 +595,7 @@ namespace RiverHollow.GUIComponents.Screens
             public override bool ProcessRightButtonClick(Point mouse)
             {
                 bool rv = false;
-                if (_detailWindow.Show)
+                if (_detailWindow.Show())
                 {
                     rv = true;
                     ShowDetails(false);
@@ -586,18 +636,17 @@ namespace RiverHollow.GUIComponents.Screens
 
             private void ShowDetails(bool val)
             {
-                _detailWindow.Show = val;
-                _winMain.Show = !val;
-                _gList.Show = !val;
+                _detailWindow.Show(val);
+                _winMain.Show(!val);
+                _gList.Show(!val);
             }
 
             public class QuestBox : GUIObject
             {
                 GUIWindow _window;
                 GUIText _gName;
-                GUIText _gProgress;
-                Quest _quest;
-                public Quest TheQuest => _quest;
+                GUIText _gGoalProgress;
+                public Quest TheQuest { get; private set; }
                 public bool ClearThis;
                 public delegate void ClickDelegate(Quest q);
                 private ClickDelegate _delAction;
@@ -608,16 +657,16 @@ namespace RiverHollow.GUIComponents.Screens
 
                     int boxHeight = height;
                     int boxWidth = width;
-                    _window = new GUIWindow(GUIWindow.RedWin, boxWidth, boxHeight);
+                    _window = new GUIWindow(GUIWindow.Window_1, boxWidth, boxHeight);
                     AddControl(_window);
                     Width = _window.Width;
                     Height = _window.Height;
-                    _quest = null;
+                    TheQuest = null;
                 }
 
                 public override void Draw(SpriteBatch spriteBatch)
                 {
-                    if (_quest != null && Show)
+                    if (TheQuest != null && Show())
                     {
                         _window.Draw(spriteBatch);
                     }
@@ -627,7 +676,7 @@ namespace RiverHollow.GUIComponents.Screens
                     bool rv = false;
                     if (Contains(mouse))
                     {
-                        _delAction(_quest);
+                        _delAction(TheQuest);
                     }
 
                     return rv;
@@ -644,11 +693,16 @@ namespace RiverHollow.GUIComponents.Screens
 
                 public void SetQuest(Quest q)
                 {
-                    _quest = q;
-                    _gName = new GUIText(_quest.Name);
+                    TheQuest = q;
+                    _gName = new GUIText(TheQuest.Name);
                     _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
-                    _gProgress = new GUIText(_quest.Accomplished + @"/" + _quest.TargetGoal);
-                    _gProgress.AnchorToInnerSide(_window, SideEnum.BottomRight);
+
+                    string progressString = q.GetProgressString();
+                    if (!string.IsNullOrEmpty(progressString))
+                    {
+                        _gGoalProgress = new GUIText(progressString);
+                        _gGoalProgress.AnchorToInnerSide(_window, SideEnum.BottomRight);
+                    }
                 }
             }
 
@@ -667,8 +721,8 @@ namespace RiverHollow.GUIComponents.Screens
                     _name = new GUIText(q.Name);
                     _name.AnchorToInnerSide(this, SideEnum.TopLeft);
 
-                    _desc = new GUIText(q.Description);
-                    _desc.ParseText(3, this.MidWidth(), true);
+                    _desc = new GUIText();
+                    _desc.ParseAndSetText(q.Description, MidWidth(), 3, true);
                     _desc.AnchorAndAlignToObject(_name, SideEnum.Bottom, SideEnum.Left, _name.CharHeight);
 
                     _progress = new GUIText(q.GetProgressString());
@@ -765,7 +819,7 @@ namespace RiverHollow.GUIComponents.Screens
                 public delegate void ClickDelegate(ClassedCombatant selectedCharacter);
                 private ClickDelegate _delAction;
 
-                public PositionMap(ClickDelegate del) : base(BrownWin, 16, 16)
+                public PositionMap(ClickDelegate del) : base(Window_2, 16, 16)
                 {
                     _delAction = del;
 
@@ -969,8 +1023,8 @@ namespace RiverHollow.GUIComponents.Screens
 
                 public CharacterDetailObject(ClassedCombatant c)
                 {
-                    _winName = new GUIWindow(GUIWindow.RedWin, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.RedWin.Edge * 2), 10);
-                    WinDisplay = new GUIWindow(GUIWindow.RedWin, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.RedWin.Edge * 2), (GUIManager.MAIN_COMPONENT_HEIGHT / 4) - (GUIWindow.RedWin.Edge * 2));
+                    _winName = new GUIWindow(GUIWindow.Window_1, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.Window_1.Edge * 2), 10);
+                    WinDisplay = new GUIWindow(GUIWindow.Window_1, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.Window_1.Edge * 2), (GUIManager.MAIN_COMPONENT_HEIGHT / 4) - (GUIWindow.Window_1.Edge * 2));
                     WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left);
                     //_winClothes = new GUIWindow(GUIWindow.RedWin, 10, 10);
                     //_winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
@@ -991,7 +1045,7 @@ namespace RiverHollow.GUIComponents.Screens
                     //_winClothes.Height += SPACING;
                     //_winClothes.Width += SPACING;
 
-                    WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left);
+                    WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left, ScaleIt(1));
                     //_winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
 
                     AddControl(_winName);
@@ -1303,8 +1357,7 @@ namespace RiverHollow.GUIComponents.Screens
             public class EquipWindow : GUIWindow
             {
                 List<GUIItemBox> _gItemBoxes;
-                Item _selectedItem;
-                public Item SelectedItem => _selectedItem;
+                public Item SelectedItem { get; private set; }
 
                 ItemEnum _itemType;
 
@@ -1314,7 +1367,7 @@ namespace RiverHollow.GUIComponents.Screens
                 public delegate void DisplayEQ(Equipment test);
                 private DisplayEQ _delDisplayEQ;
 
-                public EquipWindow() : base(BrownWin, 20, 20)
+                public EquipWindow() : base(Window_2, 20, 20)
                 {
                     _gItemBoxes = new List<GUIItemBox>();
                 }
@@ -1349,7 +1402,7 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         if (g.Contains(mouse))
                         {
-                            _selectedItem = g.BoxItem;
+                            SelectedItem = g.BoxItem;
                             rv = true;
                             break;
                         }
@@ -1440,14 +1493,14 @@ namespace RiverHollow.GUIComponents.Screens
                 GUIImage _gGift;
                 List<GUIImage> _liFriendship;
 
-                public FriendshipBox(Villager c, int mainWidth) : base(GUIWindow.BrownWin, mainWidth, 16)
+                public FriendshipBox(Villager c, int mainWidth) : base(GUIWindow.Window_2, mainWidth, 16)
                 {
                     _liFriendship = new List<GUIImage>();
                     _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
                     _gTextName = new GUIText("XXXXXXXXXX");
                     if (c.GetFriendshipLevel() == 0)
                     {
-                        _liFriendship.Add(new GUIImage(new Rectangle(51, 68, 10, 9), ScaleIt(10), ScaleIt(9), @"Textures\Dialog"));
+                        _liFriendship.Add(new GUIImage(new Rectangle(51, 68, 10, 9), ScaleIt(10), ScaleIt(9), DataManager.DIALOGUE_TEXTURE));
                     }
                     else
                     {
@@ -1460,7 +1513,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                         while (notches > 0)
                         {
-                            _liFriendship.Add(new GUIImage(new Rectangle(x, 68, 10, 9), ScaleIt(10), ScaleIt(9), @"Textures\Dialog"));
+                            _liFriendship.Add(new GUIImage(new Rectangle(x, 68, 10, 9), ScaleIt(10), ScaleIt(9), DataManager.DIALOGUE_TEXTURE));
                             notches--;
                         }
                     }
@@ -1475,7 +1528,7 @@ namespace RiverHollow.GUIComponents.Screens
                     }
                     _gTextName.SetText(c.Name);
 
-                    _gGift = new GUIImage(new Rectangle(19, 52, 10, 8), ScaleIt(10), ScaleIt(8), @"Textures\Dialog");
+                    _gGift = new GUIImage(new Rectangle(19, 52, 10, 8), ScaleIt(10), ScaleIt(8), DataManager.DIALOGUE_TEXTURE);
                     _gGift.AnchorToInnerSide(this, SideEnum.Right);
                     _gGift.AlignToObject(_gTextName, SideEnum.CenterY);
                     _gGift.Alpha((c.CanGiveGift) ? 1 : 0.3f);
@@ -1483,7 +1536,7 @@ namespace RiverHollow.GUIComponents.Screens
                     if (c.IsEligible())
                     {
                         EligibleNPC e = (EligibleNPC)c;
-                        _gAdventure = new GUIImage(new Rectangle(4, 52, 8, 9), ScaleIt(8), ScaleIt(9), @"Textures\Dialog");
+                        _gAdventure = new GUIImage(new Rectangle(4, 52, 8, 9), ScaleIt(8), ScaleIt(9), DataManager.DIALOGUE_TEXTURE);
                         _gAdventure.AnchorAndAlignToObject(_gGift, SideEnum.Left, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
                         if (PlayerManager.GetParty().Contains(e))
                         {
@@ -1682,7 +1735,7 @@ namespace RiverHollow.GUIComponents.Screens
                     Controls = new List<GUIObject>();
                     _parent = s;
 
-                    _window = new GUIWindow(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
+                    _window = new GUIWindow(GUIWindow.Window_1, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
                     AddControl(_window);
 
                     AddControl(_window);
@@ -1860,10 +1913,10 @@ namespace RiverHollow.GUIComponents.Screens
                         _gClass.SetText(_character.CharacterClass.Name + " " + _character.ClassLevel);
                         _gXP.SetText("Exp:" + _character.XP);
 
-                        _weapon = new GUIItemBox(@"Textures\Dialog", _character.Weapon.GetItem());
+                        _weapon = new GUIItemBox(DataManager.DIALOGUE_TEXTURE, _character.Weapon.GetItem());
                         _weapon.AnchorToInnerSide(_window, SideEnum.TopRight);
 
-                        _armor = new GUIItemBox( @"Textures\Dialog", _character.Armor.GetItem());
+                        _armor = new GUIItemBox( DataManager.DIALOGUE_TEXTURE, _character.Armor.GetItem());
                         _armor.AnchorAndAlignToObject(_weapon, SideEnum.Left, SideEnum.Bottom);
 
                         _gStr = new GUIText("Dmg: 999");
@@ -2018,13 +2071,13 @@ namespace RiverHollow.GUIComponents.Screens
                     _fMax = max;
                     _gText = new GUIText("XXXXXXXXXX");
 
-                    _btnLeft = new GUIButton(new Rectangle(272, 112, 16, 16), ScaledTileSize, ScaledTileSize, @"Textures\Dialog", BtnLeftClick);
+                    _btnLeft = new GUIButton(new Rectangle(272, 112, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, BtnLeftClick);
                     _btnLeft.AnchorAndAlignToObject(_gText, SideEnum.Right, SideEnum.CenterY, 12);
 
                     _gValue = new GUIText("000");
                     _gValue.AnchorAndAlignToObject(_btnLeft, SideEnum.Right, SideEnum.CenterY, 12);
 
-                    _btnRight = new GUIButton(new Rectangle(256, 112, 16, 16), ScaledTileSize, ScaledTileSize, @"Textures\Dialog", BtnRightClick);
+                    _btnRight = new GUIButton(new Rectangle(256, 112, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, BtnRightClick);
                     _btnRight.AnchorAndAlignToObject(_gValue, SideEnum.Right, SideEnum.CenterY, 12);
 
                     _fValue = baseValue;
@@ -2150,7 +2203,7 @@ namespace RiverHollow.GUIComponents.Screens
     public class HUDCalendar : GUIWindow
     {
         static GUIText _gText;
-        public HUDCalendar() : base(GUIWindow.BrownWin, ScaledTileSize, ScaledTileSize)
+        public HUDCalendar() : base(GUIWindow.Window_2, ScaledTileSize, ScaledTileSize)
         {
             _gText = new GUIText("Day XX, XX:XX", DataManager.GetBitMapFont(DataManager.FONT_MAIN));
 
@@ -2181,7 +2234,7 @@ namespace RiverHollow.GUIComponents.Screens
         public HUDMissionWindow()
         {
             GameManager.Pause();
-            _gWin = new GUIWindow(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
+            _gWin = new GUIWindow(GUIWindow.Window_1, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
             _liMissions = new List<MissionBox>();
 
             AddControl(_gWin);
@@ -2195,8 +2248,8 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (MissionManager.AvailableMissions.Count > MAX_SHOWN_MISSIONS)
             {
-                _btnUp = new GUIButton(new Rectangle(272, 96, 16, 16), GUIManager.MINI_BTN_HEIGHT, GUIManager.MINI_BTN_HEIGHT, @"Textures\Dialog", BtnUpClick);
-                _btnDown = new GUIButton(new Rectangle(256, 96, 16, 16), GUIManager.MINI_BTN_HEIGHT, GUIManager.MINI_BTN_HEIGHT, @"Textures\Dialog", BtnDownClick);
+                _btnUp = new GUIButton(new Rectangle(272, 96, 16, 16), GUIManager.MINI_BTN_HEIGHT, GUIManager.MINI_BTN_HEIGHT, DataManager.DIALOGUE_TEXTURE, BtnUpClick);
+                _btnDown = new GUIButton(new Rectangle(256, 96, 16, 16), GUIManager.MINI_BTN_HEIGHT, GUIManager.MINI_BTN_HEIGHT, DataManager.DIALOGUE_TEXTURE, BtnDownClick);
 
                 _btnUp.AnchorAndAlignToObject(_gWin, GUIObject.SideEnum.Right, GUIObject.SideEnum.Top);
                 _btnDown.AnchorAndAlignToObject(_gWin, GUIObject.SideEnum.Right, GUIObject.SideEnum.Bottom);
@@ -2408,7 +2461,7 @@ namespace RiverHollow.GUIComponents.Screens
             public delegate void BoxClickDelegate(Mission m);
             private BoxClickDelegate _delAction;
 
-            public MissionBox(Mission m, BoxClickDelegate action, int width, int height) : base(GUIWindow.RedWin, width, height)
+            public MissionBox(Mission m, BoxClickDelegate action, int width, int height) : base(GUIWindow.Window_1, width, height)
             {
                 _mission = m;
                 _delAction = action;
@@ -2471,7 +2524,7 @@ namespace RiverHollow.GUIComponents.Screens
             public delegate void BoxClickDelegate();
             private BoxClickDelegate _delOpen;
 
-            public DetailWindow(Mission m, BoxClickDelegate open, BtnClickDelegate accept) : base(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT)
+            public DetailWindow(Mission m, BoxClickDelegate open, BtnClickDelegate accept) : base(GUIWindow.Window_1, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT)
             {
                 _liItems = new List<GUIItemBox>();
                 _liParty = new List<CharacterDisplayBox>();
@@ -2627,7 +2680,7 @@ namespace RiverHollow.GUIComponents.Screens
             /// them to the list of workers. Workers that are already Adventuring cannot appear.
             /// </summary>
             /// <param name="delClose">Delegate method for the Screen to know what to do when we're done here.</param>
-            public WorkerWindow(BoxClickDelegate delClose) : base(GUIWindow.BrownWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT)
+            public WorkerWindow(BoxClickDelegate delClose) : base(GUIWindow.Window_2, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT)
             {
                 _delClose = delClose;
                 _liWorkers = new List<CharacterDisplayBox>();
@@ -2678,6 +2731,40 @@ namespace RiverHollow.GUIComponents.Screens
                 }
 
                 return rv;
+            }
+        }
+    }
+
+    class HUDNewQuest : GUIObject
+    {
+        double _dTimer = 0;
+        GUIImage _gMarker;
+        GUIText _gText;
+
+        public delegate void RemoveDelegate(HUDNewQuest q);
+        private RemoveDelegate _delAction;
+        public HUDNewQuest(bool questComplete, RemoveDelegate del)
+        {
+            _delAction = del;
+            _gMarker = new GUIImage(new Rectangle(48, 80, 16, 16), ScaleIt(16), ScaleIt(16), DataManager.DIALOGUE_TEXTURE);
+            _gText = new GUIText(questComplete ? "Quest Complete" : "New Quest");
+
+            _gText.AnchorAndAlignToObject(_gMarker, SideEnum.Right, SideEnum.CenterY, ScaleIt(1));
+            AddControl(_gMarker);
+            AddControl(_gText);
+
+            Width = _gText.Right - _gMarker.Left;
+            Height = _gMarker.Height;
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            _dTimer += gTime.ElapsedGameTime.TotalSeconds;
+
+            if(_dTimer > 3) { _delAction(this); }
+            else {
+                MoveBy(new Vector2(0, -1));
+                Alpha(Alpha()-0.01f);
             }
         }
     }

@@ -189,6 +189,11 @@ namespace RiverHollow.Game_Managers
             return ListDays[_iDayOfWeek];
         }
 
+        public static string GetSeason(int val)
+        {
+            return ListSeasons[val];
+        }
+
         public static string GetSeason()
         {
             return ListSeasons[_iCurrSeason];

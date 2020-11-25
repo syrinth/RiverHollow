@@ -36,7 +36,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (Show)
+            if (Show())
             {
                 _sprite.Draw(spriteBatch, false);
             }

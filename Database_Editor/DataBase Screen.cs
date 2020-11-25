@@ -846,7 +846,7 @@ namespace Database_Editor
         private void LoadClassInfo()
         {
             XMLData data = _diBasicXML[CLASSES_XML_FILE][_diTabIndices["Classes"]];
-            LoadGenericDataInfo(data, tbClassName, tbClassID, dgClassTags);
+            LoadGenericDataInfo(data, tbClassName, tbClassID, dgClassTags, tbClassDescription);
         }
         private void LoadAdventurerInfo()
         {
@@ -1186,7 +1186,7 @@ namespace Database_Editor
         }
         private void SaveClassInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[CLASSES_XML_FILE], "Classes", "Class_", XMLTypeEnum.Class, tbClassName, tbClassID, null, dgvClasses, dgClassTags, "colClassID", "colClassName");
+            SaveXMLDataInfo(_diBasicXML[CLASSES_XML_FILE], "Classes", "Class_", XMLTypeEnum.Class, tbClassName, tbClassID, null, dgvClasses, dgClassTags, "colClassID", "colClassName", tbClassDescription);
         }
         private void SaveAdventurerInfo(List<XMLData> liData)
         {

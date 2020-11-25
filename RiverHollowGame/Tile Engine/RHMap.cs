@@ -74,6 +74,7 @@ namespace RiverHollow.Tile_Engine
         protected List<ResourceSpawn> _liResourceSpawnPoints;
         protected List<int> _liRandomSpawnItems;
         protected List<int> _liCutscenes;
+        private List<TiledMapObject> _liBarrenObjects;
 
         protected List<Item> _liItems;
         protected List<Item> _liItemsToRemove;
@@ -95,13 +96,15 @@ namespace RiverHollow.Tile_Engine
             _liItems = new List<Item>();
             _liItemsToRemove = new List<Item>();
             _liMapObjects = new List<TiledMapObject>();
-            DictionaryTravelPoints = new Dictionary<string, TravelPoint>();
-            DictionaryCharacterLayer = new Dictionary<string, Vector2>();
             _liShopData = new List<ShopData>();
             _liPlacedWorldObjects = new List<WorldObject>();
             _liRandomSpawnItems = new List<int>();
             _liCutscenes = new List<int>();
+            _liBarrenObjects = new List<TiledMapObject>();
+
             DictionaryCombatTiles = new Dictionary<string, RHTile[,]>();
+            DictionaryTravelPoints = new Dictionary<string, TravelPoint>();
+            DictionaryCharacterLayer = new Dictionary<string, Vector2>();
 
             ToRemove = new List<WorldActor>();
             ToAdd = new List<WorldActor>();
@@ -306,6 +309,10 @@ namespace RiverHollow.Tile_Engine
                             };
                             GameManager.AddSpirit(s);
                             _liActors.Add(s);
+                        }
+                        else if (obj.Name.Equals("Barren"))
+                        {
+                            _liBarrenObjects.Add(obj);
                         }
                         else
                         {
@@ -771,8 +778,13 @@ namespace RiverHollow.Tile_Engine
 
             foreach(RHTile t in _liTestTiles)
             {
-                bool passable = t.Passable() && !TileContainsActor(t) && (Scrying() || PlayerManager.PlayerInRange(t.Rect));
-                spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
+                StaticItem it = InventoryManager.GetCurrentStaticItem();
+                bool checkPlayer = true;
+
+                if (it != null) { checkPlayer = !it.GetWorldItem().CompareType(ObjectTypeEnum.Floor); }
+
+                bool passable = t.Passable() && !TileContainsActor(t, checkPlayer) && (Scrying() || PlayerManager.PlayerInRange(t.Rect));
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
             }
         }
 
@@ -849,11 +861,11 @@ namespace RiverHollow.Tile_Engine
         }
 
         #region Collision Code
-        private bool TileContainsActor(RHTile t)
+        private bool TileContainsActor(RHTile t, bool checkPlayer = true)
         {
             bool rv = false;
 
-            if (this == PlayerManager.World.CurrentMap && PlayerManager.World.CollisionIntersects(t.Rect)) { rv = true; }
+            if (checkPlayer && this == PlayerManager.World.CurrentMap && PlayerManager.World.CollisionIntersects(t.Rect)) { rv = true; }
             else
             {
                 foreach (WorldActor act in _liActors)
@@ -1121,6 +1133,8 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
+            if (IsPaused()) { return false; }
+
             RHTile tile = MapManager.RetrieveTile(mouseLocation);
 
             //Do nothing if no tile could be retrieved
@@ -1130,7 +1144,7 @@ namespace RiverHollow.Tile_Engine
             {
                 TravelPoint obj = tile.GetTravelPoint();
 
-                if (PlayerManager.PlayerInRange(obj.CollisionBox))
+                if (PlayerManager.PlayerInRange(obj.CollisionBox) && !MapManager.ChangingMaps())
                 {
                     if (obj.BuildingID > 1) {MapManager.EnterBuilding(obj, PlayerManager.Buildings.Find(x => x.PersonalID == obj.BuildingID)); }
                     else { MapManager.ChangeMaps(PlayerManager.World, this.Name, obj); }
@@ -1212,13 +1226,13 @@ namespace RiverHollow.Tile_Engine
                         break;
                     }
                 }
-
-                foreach (Item ii in removedList)
-                {
-                    _liItems.Remove(ii);
-                }
-                removedList.Clear();
             }
+
+            foreach (Item i in removedList)
+            {
+                _liItems.Remove(i);
+            }
+            removedList.Clear();
 
             if (Scrying())
             {
@@ -1240,6 +1254,8 @@ namespace RiverHollow.Tile_Engine
         public bool ProcessLeftButtonClick(Point mouseLocation)
         {
             bool rv = false;
+
+            if (IsPaused()) { return false; }
 
             if (!PlayerManager.Busy && !CombatManager.InCombat)
             {
@@ -1275,10 +1291,10 @@ namespace RiverHollow.Tile_Engine
                                     rv = true;
                                 }
                             }
-                            else if (c.IsActorType(ActorEnum.NPC))
+                            else if (c.IsActorType(ActorEnum.NPC) || c.IsActorType(ActorEnum.ShippingGremlin))
                             {
                                 Villager n = (Villager)c;
-                                if (InventoryManager.GetCurrentItem() != null &&
+                                if (n.CanGiveGift && InventoryManager.GetCurrentItem() != null &&
                                     n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
                                     InventoryManager.GetCurrentItem().Giftable())
                                 {
@@ -1438,18 +1454,22 @@ namespace RiverHollow.Tile_Engine
                     StaticItem selectedItem = InventoryManager.GetCurrentStaticItem();
                     if (!IsCombatMap && selectedItem != null)
                     {
-                        //Take the actual WorldObject item from the item and attempt to place it on the map
-                        WorldItem newItem = selectedItem.GetWorldItem();
-                        if (MapManager.PlacePlayerObject(newItem))
+                        bool isFloor = selectedItem.GetWorldItem().CompareType(ObjectTypeEnum.Floor);
+                        if (!isFloor || (isFloor && TargetTile.Flooring == null))
                         {
-                            rv = true;
-                            newItem.SetMapName(this.Name);      //Assign the map name tot he WorldItem
-                            selectedItem.Remove(1);             //Remove one of them from the inventory
-
-                            //If the item placed was a wall object, we need to adjust it based off any adjacent walls
-                            if (newItem.CompareType(ObjectTypeEnum.Wall))
+                            //Take the actual WorldObject item from the item and attempt to place it on the map
+                            WorldItem newItem = selectedItem.GetWorldItem();
+                            if (MapManager.PlacePlayerObject(newItem))
                             {
-                                ((Wall)newItem).AdjustObject();
+                                rv = true;
+                                newItem.SetMapName(this.Name);      //Assign the map name tot he WorldItem
+                                selectedItem.Remove(1);             //Remove one of them from the inventory
+
+                                //If the item placed was a wall object, we need to adjust it based off any adjacent walls
+                                if (newItem.CompareType(ObjectTypeEnum.Wall))
+                                {
+                                    ((Wall)newItem).AdjustObject();
+                                }
                             }
                         }
                     }
@@ -1781,13 +1801,16 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool PlaceWorldObject(WorldObject o, bool bounce = false)
+        public bool PlaceWorldObject(WorldObject o, bool bounce = false, bool respectBarrens = false)
         {
             bool rv = false;
 
             List<RHTile> tiles = new List<RHTile>();
-            rv = TestMapTiles(o, tiles);
-            
+            if (RespectBarrens(respectBarrens, o.CollisionBox))
+            {
+                rv = TestMapTiles(o, tiles);
+            }
+
             if (!rv && bounce)
             {
                 Vector2 position = o.MapPosition;
@@ -1797,13 +1820,36 @@ namespace RiverHollow.Tile_Engine
                     position.Y = (int)(RHRandom.Instance.Next(1, (MapHeightTiles - 1) * TileSize) / TileSize) * TileSize;
                     o.SnapPositionToGrid(position);
 
-                    rv = TestMapTiles(o, tiles);
+
+                    if (RespectBarrens(respectBarrens, o.CollisionBox))
+                    {
+                        rv = TestMapTiles(o, tiles);
+                    }
                 } while (!rv);
             }
 
             if (rv)
             {
                 AssignMapTiles(o, tiles);
+            }
+
+            return rv;
+        }
+
+        private bool RespectBarrens(bool respect, Rectangle collisionBox)
+        {
+            bool rv = true;
+            if (respect)
+            {
+                foreach (TiledMapObject mapObj in _liBarrenObjects)
+                {
+                    Rectangle r = Util.FloatRectangle(mapObj.Position.X, mapObj.Position.Y, mapObj.Size.Width, mapObj.Size.Height);
+                    if (r.Intersects(collisionBox))
+                    {
+                        rv = false;
+                        break;
+                    }
+                }
             }
 
             return rv;
@@ -1852,7 +1898,7 @@ namespace RiverHollow.Tile_Engine
 
                     RHTile tempTile = _arrTiles[x, y];
 
-                    if (!TileContainsActor(tempTile) && ((!o.WallObject && tempTile.Passable() && tempTile.WorldObject == null) || (o.WallObject && tempTile.IsValidWall())))
+                    if (!TileContainsActor(tempTile, !o.CompareType(ObjectTypeEnum.Floor)) && ((!o.WallObject && tempTile.Passable() && tempTile.WorldObject == null) || (o.WallObject && tempTile.IsValidWall())))
                     {
                         collisionTiles.Add(tempTile);
                     }
@@ -1932,7 +1978,11 @@ namespace RiverHollow.Tile_Engine
                 {
                     for (int y = obj.CollisionBox.Y; y < obj.CollisionBox.Y + obj.CollisionBox.Height; y += TileSize)
                     {
-                        liTiles.Add(GetTileByPixelPosition(x, y));
+                        RHTile t = GetTileByPixelPosition(x, y);
+                        if (t != null)
+                        {
+                            liTiles.Add(t);
+                        }
                     }
                 }
             }
@@ -1940,7 +1990,7 @@ namespace RiverHollow.Tile_Engine
             bool placeIt = true;
             foreach (RHTile t in liTiles)
             {
-                if (!t.Passable() || TileContainsActor(t))
+                if (!t.Passable() || TileContainsActor(t, !obj.CompareType(ObjectTypeEnum.Floor)))
                 {
                     placeIt = false;
                     break;
@@ -2647,7 +2697,6 @@ namespace RiverHollow.Tile_Engine
                     {
                         MapManager.DropItemsOnMap(WorldObject.GetDroppedItems(), WorldObject.CollisionBox.Location.ToVector2());
                         MapManager.RemoveWorldObject(WorldObject);
-                        WorldObject.RemoveSelfFromTiles();
                     }
                 }
             }
@@ -2896,7 +2945,9 @@ namespace RiverHollow.Tile_Engine
 
         internal void Talk()
         {
+            ((ShopKeeper)DataManager.DiNPC[_iShopID]).SetOpen(true);
             ((ShopKeeper)DataManager.DiNPC[_iShopID]).Talk();
+            ((ShopKeeper)DataManager.DiNPC[_iShopID]).SetOpen(false);
         }
     }
 

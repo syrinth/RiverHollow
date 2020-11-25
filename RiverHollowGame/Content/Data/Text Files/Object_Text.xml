@@ -3,11 +3,15 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Quest_0</Key>
-      <Value>[Name:Griselda's Orb][Description:Find Griselda's Orb!]</Value>
+      <Value>[Name:$Character_17$'s Supplies][Description:$Character_17$ is has some supplies to give you. Youshould go speak to her.]</Value>
     </Item>
     <Item>
       <Key>Quest_1</Key>
       <Value>[Name:Search the Manor][Description:Search the ruinsof the Manor for anything useful]</Value>
+    </Item>
+    <Item>
+      <Key>Quest_2</Key>
+      <Value>[Name:$Character_16$'s helping hand][Description:Find out how $Character_16$ can help you.]</Value>
     </Item>
     <Item>
       <Key>Character_0</Key>
@@ -99,35 +103,35 @@
     </Item>
     <Item>
       <Key>Class_1</Key>
-      <Value>[Name:Wizard]</Value>
+      <Value>[Name:Wizard][Description:Practitioners of the arcane arts, wizards excel at  handling a multitude of foes.]</Value>
     </Item>
     <Item>
       <Key>Class_2</Key>
-      <Value>[Name:Healer]</Value>
+      <Value>[Name:Healer][Description:Healers]</Value>
     </Item>
     <Item>
       <Key>Class_3</Key>
-      <Value>[Name:Summoner]</Value>
+      <Value>[Name:Summoner][Description:Summon shit]</Value>
     </Item>
     <Item>
       <Key>Class_4</Key>
-      <Value>[Name:Witch]</Value>
+      <Value>[Name:Witch][Description:Witches curse your foes]</Value>
     </Item>
     <Item>
       <Key>Class_5</Key>
-      <Value>[Name:Lancer]</Value>
+      <Value>[Name:Lancer][Description:Stab]</Value>
     </Item>
     <Item>
       <Key>Class_6</Key>
-      <Value>[Name:Knight]</Value>
+      <Value>[Name:Knight][Description:He protecc]</Value>
     </Item>
     <Item>
       <Key>Class_7</Key>
-      <Value>[Name:Scout]</Value>
+      <Value>[Name:Scout][Description:Shooty boy]</Value>
     </Item>
     <Item>
       <Key>Class_8</Key>
-      <Value>[Name:Bard]</Value>
+      <Value>[Name:Bard][Description:Singing!]</Value>
     </Item>
     <Item>
       <Key>Adventurer_1</Key>
@@ -355,7 +359,7 @@
     </Item>
     <Item>
       <Key>Building_1</Key>
-      <Value>[Name:Wizard's Tower]</Value>
+      <Value>[Name:Tower]</Value>
     </Item>
     <Item>
       <Key>Building_2</Key>
