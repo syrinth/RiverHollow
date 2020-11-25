@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDBEditor));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,6 +55,8 @@
             this.dgvItems = new System.Windows.Forms.DataGridView();
             this.colItemID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStripItems = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.dgvItemsContextMenuAll = new System.Windows.Forms.ToolStripMenuItem();
             this.tabWorldObjects = new System.Windows.Forms.TabPage();
             this.cbWorldObjectType = new System.Windows.Forms.ComboBox();
             this.btnWorldObjectCancel = new System.Windows.Forms.Button();
@@ -81,6 +84,8 @@
             this.colCharacterID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCharacterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabClasses = new System.Windows.Forms.TabPage();
+            this.tbClassDescription = new System.Windows.Forms.TextBox();
+            this.label37 = new System.Windows.Forms.Label();
             this.btnClassCancel = new System.Windows.Forms.Button();
             this.dgClassTags = new System.Windows.Forms.DataGridView();
             this.colClassTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -222,13 +227,14 @@
             this.dgvStatusEffects = new System.Windows.Forms.DataGridView();
             this.colStatusEffectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStatusEffectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tbClassDescription = new System.Windows.Forms.TextBox();
-            this.label37 = new System.Windows.Forms.Label();
+            this.contextMenuStripWorldObjects = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.allToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItemTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvItems)).BeginInit();
+            this.contextMenuStripItems.SuspendLayout();
             this.tabWorldObjects.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjectTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjects)).BeginInit();
@@ -268,6 +274,7 @@
             this.tabStatusEffects.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffectTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffects)).BeginInit();
+            this.contextMenuStripWorldObjects.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -494,6 +501,7 @@
             this.dgvItems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colItemID,
             this.colItemName});
+            this.dgvItems.ContextMenuStrip = this.contextMenuStripItems;
             this.dgvItems.Location = new System.Drawing.Point(6, 6);
             this.dgvItems.MultiSelect = false;
             this.dgvItems.Name = "dgvItems";
@@ -522,6 +530,20 @@
             this.colItemName.Name = "colItemName";
             this.colItemName.ReadOnly = true;
             this.colItemName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // contextMenuStripItems
+            // 
+            this.contextMenuStripItems.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dgvItemsContextMenuAll});
+            this.contextMenuStripItems.Name = "contextMenuStripItems";
+            this.contextMenuStripItems.Size = new System.Drawing.Size(89, 26);
+            // 
+            // dgvItemsContextMenuAll
+            // 
+            this.dgvItemsContextMenuAll.Name = "dgvItemsContextMenuAll";
+            this.dgvItemsContextMenuAll.Size = new System.Drawing.Size(88, 22);
+            this.dgvItemsContextMenuAll.Text = "All";
+            this.dgvItemsContextMenuAll.Click += new System.EventHandler(this.dgvItemsContextMenuClick);
             // 
             // tabWorldObjects
             // 
@@ -619,6 +641,7 @@
             this.dgvWorldObjects.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colWorldObjectsID,
             this.colWorldObjectsName});
+            this.dgvWorldObjects.ContextMenuStrip = this.contextMenuStripWorldObjects;
             this.dgvWorldObjects.Location = new System.Drawing.Point(6, 6);
             this.dgvWorldObjects.MultiSelect = false;
             this.dgvWorldObjects.Name = "dgvWorldObjects";
@@ -810,6 +833,23 @@
             this.tabClasses.TabIndex = 3;
             this.tabClasses.Text = "Classes";
             this.tabClasses.UseVisualStyleBackColor = true;
+            // 
+            // tbClassDescription
+            // 
+            this.tbClassDescription.Location = new System.Drawing.Point(320, 51);
+            this.tbClassDescription.Multiline = true;
+            this.tbClassDescription.Name = "tbClassDescription";
+            this.tbClassDescription.Size = new System.Drawing.Size(464, 53);
+            this.tbClassDescription.TabIndex = 55;
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(317, 35);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(63, 13);
+            this.label37.TabIndex = 54;
+            this.label37.Text = "Description:";
             // 
             // btnClassCancel
             // 
@@ -2257,22 +2297,19 @@
             this.colStatusEffectsName.ReadOnly = true;
             this.colStatusEffectsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tbClassDescription
+            // contextMenuStripWorldObjects
             // 
-            this.tbClassDescription.Location = new System.Drawing.Point(320, 51);
-            this.tbClassDescription.Multiline = true;
-            this.tbClassDescription.Name = "tbClassDescription";
-            this.tbClassDescription.Size = new System.Drawing.Size(464, 53);
-            this.tbClassDescription.TabIndex = 55;
+            this.contextMenuStripWorldObjects.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.allToolStripMenuItem});
+            this.contextMenuStripWorldObjects.Name = "contextMenuStripWorldObjects";
+            this.contextMenuStripWorldObjects.Size = new System.Drawing.Size(181, 48);
             // 
-            // label37
+            // allToolStripMenuItem
             // 
-            this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(317, 35);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(63, 13);
-            this.label37.TabIndex = 54;
-            this.label37.Text = "Description:";
+            this.allToolStripMenuItem.Name = "allToolStripMenuItem";
+            this.allToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.allToolStripMenuItem.Text = "All";
+            this.allToolStripMenuItem.Click += new System.EventHandler(this.dgvWorldObjectsContextMenuClick);
             // 
             // frmDBEditor
             // 
@@ -2292,6 +2329,7 @@
             this.tabItems.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItemTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvItems)).EndInit();
+            this.contextMenuStripItems.ResumeLayout(false);
             this.tabWorldObjects.ResumeLayout(false);
             this.tabWorldObjects.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjectTags)).EndInit();
@@ -2344,6 +2382,7 @@
             this.tabStatusEffects.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffectTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffects)).EndInit();
+            this.contextMenuStripWorldObjects.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2545,6 +2584,10 @@
         private System.Windows.Forms.Button btnEditAdventurerDialogue;
         private System.Windows.Forms.TextBox tbClassDescription;
         private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripItems;
+        private System.Windows.Forms.ToolStripMenuItem dgvItemsContextMenuAll;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripWorldObjects;
+        private System.Windows.Forms.ToolStripMenuItem allToolStripMenuItem;
     }
 }
 

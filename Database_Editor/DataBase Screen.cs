@@ -165,7 +165,7 @@ namespace Database_Editor
             LoadWorldObjects();
             LoadItemData();
 
-            LoadItemDatagrid();
+            LoadItemDataGrid();
             LoadWorldObjectDataGrid();
             LoadCharacterDataGrid();
             LoadClassDataGrid();
@@ -194,6 +194,19 @@ namespace Database_Editor
             LoadSpiritInfo();
             LoadSummonInfo();
             LoadStatusEffectInfo();
+
+            foreach(string s in Enum.GetNames(typeof(ItemEnum))){
+                ToolStripMenuItem tsmi = new ToolStripMenuItem(s);
+                tsmi.Click += new System.EventHandler(this.dgvItemsContextMenuClick);
+                contextMenuStripItems.Items.Add(tsmi);
+            }
+
+            foreach (string s in Enum.GetNames(typeof(ObjectTypeEnum)))
+            {
+                ToolStripMenuItem tsmi = new ToolStripMenuItem(s);
+                tsmi.Click += new System.EventHandler(this.dgvWorldObjectsContextMenuClick);
+                contextMenuStripWorldObjects.Items.Add(tsmi);
+            }
         }
 
         #region Helpers
@@ -247,39 +260,47 @@ namespace Database_Editor
         #endregion
 
         #region DataGridView Loading
-        private void LoadGenericDatagrid(DataGridView dgv, List<XMLData> data, string colID, string colName, string tabIndex)
+        private void LoadGenericDatagrid(DataGridView dgv, List<XMLData> data, string colID, string colName, string tabIndex, string filter = "All")
         {
             dgv.Rows.Clear();
+            int index = 0;
             for (int i = 0; i < data.Count; i++)
             {
-                dgv.Rows.Add();
-                DataGridViewRow row = dgv.Rows[i];
+                if (filter == "All" || data[i].GetTagValue("Type").ToString().Equals(filter))
+                {
+                    dgv.Rows.Add();
+                    DataGridViewRow row = dgv.Rows[index++];
 
-                row.Cells[colID].Value = data[i].ID;
-                row.Cells[colName].Value = data[i].Name;
+                    row.Cells[colID].Value = data[i].ID;
+                    row.Cells[colName].Value = data[i].Name;
+                }
             }
 
             SelectRow(dgv, _diTabIndices[tabIndex]);
             dgv.Focus();
         }
-        private void LoadItemDatagrid()
+        private void LoadItemDataGrid(string filter = "All")
         {
             dgvItems.Rows.Clear();
+            int index = 0;
             for (int i = 0; i < _liItemData.Count; i++)
             {
-                dgvItems.Rows.Add();
-                DataGridViewRow row = dgvItems.Rows[i];
+                if (filter == "All" || _liItemData[i].ItemType.ToString().Equals(filter))
+                {
+                    dgvItems.Rows.Add();
+                    DataGridViewRow row = dgvItems.Rows[index++];
 
-                row.Cells["colItemID"].Value = _liItemData[i].ID;
-                row.Cells["colItemName"].Value = _liItemData[i].Name;
+                    row.Cells["colItemID"].Value = _liItemData[i].ID;
+                    row.Cells["colItemName"].Value = _liItemData[i].Name;
+                }
             }
 
             SelectRow(dgvItems, _diTabIndices["Items"]);
             dgvItems.Focus();
         }
-        private void LoadWorldObjectDataGrid()
+        private void LoadWorldObjectDataGrid(string filter = "All")
         {
-            LoadGenericDatagrid(dgvWorldObjects, _liWorldObjects, "colWorldObjectsID", "colWorldObjectsName", "WorldObjects");
+            LoadGenericDatagrid(dgvWorldObjects, _liWorldObjects, "colWorldObjectsID", "colWorldObjectsName", "WorldObjects", filter);
         }
         private void LoadCharacterDataGrid()
         {
@@ -716,8 +737,11 @@ namespace Database_Editor
 
         private void SelectRow(DataGridView dg, int id)
         {
-            dg.Rows[id].Selected = true;
-            dg.CurrentCell = dg.Rows[id].Cells[0];
+            if (dg.Rows.Count > id)
+            {
+                dg.Rows[id].Selected = true;
+                dg.CurrentCell = dg.Rows[id].Cells[0];
+            }
         }
 
         private void SetItemSubtype()
@@ -1017,7 +1041,7 @@ namespace Database_Editor
             {
                 Dictionary<string, string> diText = new Dictionary<string, string>
                 {
-                    ["Name"] = tbItemName.Text,
+                    ["Name"] = tbName.Text,
                 };
                 if (tbDescription != null) { diText["Description"] = tbDescription.Text; }
 
@@ -1165,7 +1189,7 @@ namespace Database_Editor
                     }
                 }
 
-                LoadItemDatagrid();
+                LoadItemDataGrid();
                 SelectRow(dgvItems, ID);
             }
             else
@@ -1555,7 +1579,7 @@ namespace Database_Editor
                 _iNextCurrID = -1;
             }
 
-            LoadItemDatagrid();
+            LoadItemDataGrid();
         }
         private void tabCtl_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -2238,5 +2262,17 @@ namespace Database_Editor
         }
 
         #endregion
+
+        private void dgvItemsContextMenuClick(object sender, EventArgs e)
+        {
+            _diTabIndices["Items"] = 0;
+            LoadItemDataGrid(((ToolStripMenuItem)sender).Text);
+        }
+
+        private void dgvWorldObjectsContextMenuClick(object sender, EventArgs e)
+        {
+            _diTabIndices["WorldObjects"] = 0;
+            LoadWorldObjectDataGrid(((ToolStripMenuItem)sender).Text);
+        }
     }
 }

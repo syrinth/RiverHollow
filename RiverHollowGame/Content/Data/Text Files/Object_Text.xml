@@ -1083,11 +1083,11 @@
     </Item>
     <Item>
       <Key>WorldObject_10</Key>
-      <Value>[Name:Smelter]</Value>
+      <Value>[Name:Forge]</Value>
     </Item>
     <Item>
       <Key>WorldObject_11</Key>
-      <Value>[Name:Bronze Anvil]</Value>
+      <Value>[Name:Anvil]</Value>
     </Item>
     <Item>
       <Key>WorldObject_12</Key>
