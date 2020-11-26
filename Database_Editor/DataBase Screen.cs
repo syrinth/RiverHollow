@@ -258,7 +258,7 @@ namespace Database_Editor
         #endregion
 
         #region DataGridView Loading
-        private void LoadGenericDatagrid(DataGridView dgv, List<XMLData> data, string colID, string colName, string tabIndex, string filter = "All")
+        private void LoadGenericDatagrid(DataGridView dgv, List<XMLData> data, string colID, string colName, string tabIndex, int selectRow, string filter = "All")
         {
             dgv.Rows.Clear();
             int index = 0;
@@ -274,10 +274,10 @@ namespace Database_Editor
                 }
             }
 
-            SelectRow(dgv, _diTabIndices[tabIndex]);
+            SelectRow(dgv, selectRow);
             dgv.Focus();
         }
-        private void LoadItemDataGrid(string filter = "All")
+        private void LoadItemDataGrid(string filter = "All", int selectedIndex = -1)
         {
             dgvItems.Rows.Clear();
             int index = 0;
@@ -293,52 +293,52 @@ namespace Database_Editor
                 }
             }
 
-            SelectRow(dgvItems, _diTabIndices["Items"]);
+            SelectRow(dgvItems, selectedIndex == -1 ? _diTabIndices["Items"] : selectedIndex);
             dgvItems.Focus();
         }
-        private void LoadWorldObjectDataGrid(string filter = "All")
+        private void LoadWorldObjectDataGrid(string filter = "All", int selectedIndex = -1)
         {
-            LoadGenericDatagrid(dgvWorldObjects, _liWorldObjects, "colWorldObjectsID", "colWorldObjectsName", "WorldObjects", filter);
+            LoadGenericDatagrid(dgvWorldObjects, _liWorldObjects, "colWorldObjectsID", "colWorldObjectsName", "WorldObjects", selectedIndex == -1 ? _diTabIndices["WorldObjects"] : selectedIndex, filter);
         }
         private void LoadCharacterDataGrid()
         {
-            LoadGenericDatagrid(dgvCharacters, _diBasicXML[CHARACTER_XML_FILE], "colCharacterID", "colCharacterName", "Characters");
+            LoadGenericDatagrid(dgvCharacters, _diBasicXML[CHARACTER_XML_FILE], "colCharacterID", "colCharacterName", "Characters", _diTabIndices["Characters"]);
         }
         private void LoadClassDataGrid()
         {
-            LoadGenericDatagrid(dgvClasses, _diBasicXML[CLASSES_XML_FILE], "colClassID", "colClassName", "Classes");
+            LoadGenericDatagrid(dgvClasses, _diBasicXML[CLASSES_XML_FILE], "colClassID", "colClassName", "Classes", _diTabIndices["Classes"]);
         }
         private void LoadAdventurerDataGrid()
         {
-            LoadGenericDatagrid(dgvAdventurers, _diBasicXML[WORKERS_XML_FILE], "colAdventurersID", "colAdventurersName", "Adventurers");
+            LoadGenericDatagrid(dgvAdventurers, _diBasicXML[WORKERS_XML_FILE], "colAdventurersID", "colAdventurersName", "Adventurers", _diTabIndices["Adventurers"]);
         }
         private void LoadQuestDataGrid()
         {
-            LoadGenericDatagrid(dgvQuests, _diBasicXML[QUEST_XML_FILE], "colQuestsID", "colQuestsName", "Quests");
+            LoadGenericDatagrid(dgvQuests, _diBasicXML[QUEST_XML_FILE], "colQuestsID", "colQuestsName", "Quests", _diTabIndices["Quests"]);
         }
         private void LoadMonsterDataGrid()
         {
-            LoadGenericDatagrid(dgvMonsters, _diBasicXML[MONSTERS_XML_FILE], "colMonstersID", "colMonstersName", "Monsters");
+            LoadGenericDatagrid(dgvMonsters, _diBasicXML[MONSTERS_XML_FILE], "colMonstersID", "colMonstersName", "Monsters", _diTabIndices["Monsters"]);
         }
         private void LoadActionDataGrid()
         {
-            LoadGenericDatagrid(dgvActions, _diBasicXML[ACTIONS_XML_FILE], "colActionsID", "colActionsName", "Actions");
+            LoadGenericDatagrid(dgvActions, _diBasicXML[ACTIONS_XML_FILE], "colActionsID", "colActionsName", "Actions", _diTabIndices["Actions"]);
         } 
         private void LoadBuildingDataGrid()
         {
-            LoadGenericDatagrid(dgvBuildings, _diBasicXML[BUILDINGS_XML_FILE], "colBuildingsID", "colBuildingsName", "Buildings");
+            LoadGenericDatagrid(dgvBuildings, _diBasicXML[BUILDINGS_XML_FILE], "colBuildingsID", "colBuildingsName", "Buildings", _diTabIndices["Buildings"]);
         }
         private void LoadSpiritDataGrid()
         {
-            LoadGenericDatagrid(dgvSpirits, _diBasicXML[SPIRITS_XML_FILE], "colSpiritsID", "colSpiritsName", "Spirits");
+            LoadGenericDatagrid(dgvSpirits, _diBasicXML[SPIRITS_XML_FILE], "colSpiritsID", "colSpiritsName", "Spirits", _diTabIndices["Spirits"]);
         }
         private void LoadSummonDataGrid()
         {
-            LoadGenericDatagrid(dgvSummons, _diBasicXML[SUMMONS_XML_FILE], "colSummonsID", "colSummonsName", "Summons");
+            LoadGenericDatagrid(dgvSummons, _diBasicXML[SUMMONS_XML_FILE], "colSummonsID", "colSummonsName", "Summons", _diTabIndices["Summons"]);
         }
         private void LoadStatusEffectDataGrid()
         {
-            LoadGenericDatagrid(dgvStatusEffects, _diBasicXML[STATUS_EFFECTS_XML_FILE], "colStatusEffectsID", "colStatusEffectsName", "StatusEffects");
+            LoadGenericDatagrid(dgvStatusEffects, _diBasicXML[STATUS_EFFECTS_XML_FILE], "colStatusEffectsID", "colStatusEffectsName", "StatusEffects", _diTabIndices["StatusEffects"]);
         }
 
         private void LoadDictionaryListDatagrid(DataGridView dgv, Dictionary<int, List<XMLData>> di, string colID, string colName, string tabIndex, XMLTypeEnum xmlType)
@@ -818,7 +818,10 @@ namespace Database_Editor
         }
         private void LoadItemInfo()
         {
-            ItemXMLData data = _liItemData[_diTabIndices["Items"]];
+            DataGridViewRow r = dgvItems.SelectedRows[0];
+            string cellValue = r.Cells["colItemID"].Value.ToString();
+
+            ItemXMLData data = _liItemData[int.Parse(cellValue)];
             tbItemName.Text = data.Name;
             tbItemDesc.Text = data.Description;
             tbItemID.Text = data.ID.ToString();
@@ -842,7 +845,9 @@ namespace Database_Editor
         }
         private void LoadWorldObjectInfo()
         {
-            XMLData data = _liWorldObjects[_diTabIndices["WorldObjects"]];
+            DataGridViewRow r = dgvWorldObjects.SelectedRows[0];
+            string cellValue = r.Cells["colWorldObjectsID"].Value.ToString();
+            XMLData data = _liWorldObjects[int.Parse(cellValue)];
             LoadGenericDataInfo(data, tbWorldObjectName, tbWorldObjectID, dgvWorldObjectTags);
             cbWorldObjectType.SelectedIndex = (int)Util.ParseEnum<ObjectTypeEnum>(data.GetTagValue("Type"));
         }
@@ -1056,7 +1061,7 @@ namespace Database_Editor
             }
             else
             {
-                data = liData[_diTabIndices[tabIndex]];
+                data = liData[int.Parse(tbID.Text)];
                 if(tbDescription == null) { data.SetTextData(tbName.Text); }
                 else { data.SetTextData(tbName.Text, tbDescription.Text); }
 
@@ -1125,7 +1130,7 @@ namespace Database_Editor
             }
             else
             {
-                data = _liItemData[_diTabIndices["Items"]];
+                data = _liItemData[int.Parse(tbItemID.Text)];
                 data.SetTextData(tbItemName.Text, tbItemDesc.Text);
 
                 data.ClearTagInfo();
@@ -2254,13 +2259,15 @@ namespace Database_Editor
         private void dgvItemsContextMenuClick(object sender, EventArgs e)
         {
             _diTabIndices["Items"] = 0;
-            LoadItemDataGrid(((ToolStripMenuItem)sender).Text);
+            LoadItemDataGrid(((ToolStripMenuItem)sender).Text, 0);
+            LoadItemInfo();
         }
 
         private void dgvWorldObjectsContextMenuClick(object sender, EventArgs e)
         {
             _diTabIndices["WorldObjects"] = 0;
-            LoadWorldObjectDataGrid(((ToolStripMenuItem)sender).Text);
+            LoadWorldObjectDataGrid(((ToolStripMenuItem)sender).Text, 0);
+            LoadWorldObjectInfo();
         }
     }
 }
