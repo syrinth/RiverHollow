@@ -143,8 +143,9 @@ namespace RiverHollow.Buildings
                 _arrWorkerTypes[1] = int.Parse(workerTypes[1]);
 
                 //These should only be present in worker buildings
-                _buildingChest = (Container)DataManager.GetWorldObject(3);
-                _pantry = (Container)DataManager.GetWorldObject(3);
+                int chestID = int.Parse(DataManager.Config[10]["ObjectID"]);
+                _buildingChest = (Container)DataManager.GetWorldObject(chestID);
+                _pantry = (Container)DataManager.GetWorldObject(chestID);
             }
 
             //Default is 3, but some buildings may allow more or less
