@@ -129,7 +129,7 @@
   <object id="52" name="DungeonObject" x="416" y="256" width="32" height="32">
    <properties>
     <property name="MatchTrigger" value="Cave_Wing_2_Open"/>
-    <property name="ObjectID" type="int" value="41"/>
+    <property name="ObjectID" type="int" value="20"/>
     <property name="OutTrigger" value="Cave_Wing_2_Opened"/>
     <property name="TriggerNumber" type="int" value="2"/>
    </properties>

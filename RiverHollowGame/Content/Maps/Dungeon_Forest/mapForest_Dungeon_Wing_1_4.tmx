@@ -134,22 +134,22 @@
  <objectgroup id="5" name="MapObject">
   <object id="39" name="ResourceSpawn" x="33.667" y="177.001" width="171.333" height="170.833">
    <properties>
-    <property name="Resources" value="20"/>
+    <property name="Resources" value="6"/>
    </properties>
   </object>
   <object id="40" name="ResourceSpawn" x="129.5" y="78.7507" width="154.666" height="95.833">
    <properties>
-    <property name="Resources" value="20"/>
+    <property name="Resources" value="6"/>
    </properties>
   </object>
   <object id="41" name="ResourceSpawn" x="209.167" y="177.584" width="233" height="74.833">
    <properties>
-    <property name="Resources" value="20"/>
+    <property name="Resources" value="6"/>
    </properties>
   </object>
   <object id="47" name="DungeonObject" x="16" y="320" width="16" height="48">
    <properties>
-    <property name="ObjectID" type="int" value="43"/>
+    <property name="ObjectID" type="int" value="22"/>
     <property name="KeyDoor" type="bool" value="true"/>
     <property name="MatchTrigger" value="KEY_USED"/>
    </properties>
