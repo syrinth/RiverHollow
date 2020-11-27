@@ -232,7 +232,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
                     if (returnSplit.Length > 0)
                     {
+                        CompareStringLength(ref currentLineOfText, ref textToDisplay, ref numReturns, returnSplit[0], width, maxRows);
                         textToDisplay += currentLineOfText + returnSplit[0];
+
                         TextSpilloverToNextScreen(ref textToDisplay, ref grabLast, ref numReturns, ref textPages);
 
                         if (returnSplit.Length > 1)
@@ -243,17 +245,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 }
                 else
                 {
-                    Vector2 vMeasurement = MeasureString(currentLineOfText + word);
-
-                    //Measure the current line and the new word and see if adding the word will put the line out of bounds.
-                    //If so, we need to insert a carriage return character and clear the current line of text.
-                    if ((vMeasurement.Length() >= width - GUIManager.STANDARD_MARGIN * 2) ||
-                        (numReturns == maxRows - 1 && vMeasurement.Length() >= (Width) - CharHeight))
-                    {
-                        textToDisplay += currentLineOfText + '\n';
-                        currentLineOfText = string.Empty;
-                        numReturns++;
-                    }
+                    CompareStringLength(ref currentLineOfText, ref textToDisplay, ref numReturns, word, width, maxRows);
 
                     grabLast = true;
                     currentLineOfText += word + ' ';
@@ -272,6 +264,25 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
 
             return textPages;
+        }
+
+        private bool CompareStringLength(ref string currentLineOfText, ref string textToDisplay, ref int numReturns, string word, int width, int maxRows)
+        {
+            bool rv = false;
+            Vector2 vMeasurement = MeasureString(currentLineOfText + word);
+
+            //Measure the current line and the new word and see if adding the word will put the line out of bounds.
+            //If so, we need to insert a carriage return character and clear the current line of text.
+            if ((vMeasurement.Length() >= width - GUIManager.STANDARD_MARGIN * 2) ||
+                (numReturns == maxRows - 1 && vMeasurement.Length() >= (Width) - CharHeight))
+            {
+                textToDisplay += currentLineOfText + '\n';
+                currentLineOfText = string.Empty;
+                numReturns++;
+                rv = true;
+            }
+
+            return rv;
         }
 
         private void TextSpilloverToNextScreen(ref string textToDisplay, ref bool grabLast, ref int numReturns, ref List<string> textPages)
