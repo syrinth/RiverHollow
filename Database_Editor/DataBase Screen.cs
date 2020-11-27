@@ -45,10 +45,10 @@ namespace Database_Editor
         const string WORKERS_ITEM_TAG = "Item, ID";
         const string SHOP_TAG = "ItemID,Requires";
         const string CONFIG_ITEM_TAG = "ItemID";
-        const string CONFIG_WORLD_TAG = "ID";
+        const string CONFIG_WORLD_TAG = "ObjectID,Wall,Floor";
         const string DEFAULT_WORLD_TAG = "";
         public static string MAP_ITEM_TAGS = "Item";
-        public static string MAP_WORLD_OBJECTS_TAG = "Resources,ID";
+        public static string MAP_WORLD_OBJECTS_TAG = "Resources,ObjectID";
         #endregion
 
         List<ItemXMLData> _liItemData;
@@ -109,6 +109,17 @@ namespace Database_Editor
             };
 
             _diMapData = new Dictionary<string, TMXData>();
+            foreach (string s in Directory.GetDirectories(PATH_TO_MAPS))
+            {
+                foreach (string mapName in Directory.GetFiles(s))
+                {
+                    if (mapName.EndsWith(".tmx"))
+                    {
+                        _diMapData[mapName] = new TMXData(mapName);
+                    }
+                }
+            }
+
             _diBasicXML = new Dictionary<string, List<XMLData>>();
             _diItems = new Dictionary<ItemEnum, List<ItemXMLData>>();
             _diCharacterDialogue = new Dictionary<string, Dictionary<string, string>>();
@@ -193,7 +204,8 @@ namespace Database_Editor
             LoadSummonInfo();
             LoadStatusEffectInfo();
 
-            foreach(string s in Enum.GetNames(typeof(ItemEnum))){
+            foreach (string s in Enum.GetNames(typeof(ItemEnum)))
+            {
                 ToolStripMenuItem tsmi = new ToolStripMenuItem(s);
                 tsmi.Click += new System.EventHandler(this.dgvItemsContextMenuClick);
                 contextMenuStripItems.Items.Add(tsmi);
@@ -323,7 +335,7 @@ namespace Database_Editor
         private void LoadActionDataGrid()
         {
             LoadGenericDatagrid(dgvActions, _diBasicXML[ACTIONS_XML_FILE], "colActionsID", "colActionsName", "Actions", _diTabIndices["Actions"]);
-        } 
+        }
         private void LoadBuildingDataGrid()
         {
             LoadGenericDatagrid(dgvBuildings, _diBasicXML[BUILDINGS_XML_FILE], "colBuildingsID", "colBuildingsName", "Buildings", _diTabIndices["Buildings"]);
@@ -665,7 +677,7 @@ namespace Database_Editor
                 {
                     if (kvp.Value.RefersToIDWithTag(theData.ID, MAP_ITEM_TAGS))
                     {
-                        theData.AddLinkedItem(kvp.Value);
+                        theData.AddLinkedMap(kvp.Value);
                     }
                 }
             }
@@ -674,12 +686,16 @@ namespace Database_Editor
 
             foreach (XMLData theData in _liWorldObjects)
             {
+                if (theData.Name == "Dungeon Door")
+                {
+                    int i = 0;
+                }
                 //Find any maps that reference the ObjectID
                 foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
                 {
                     if (kvp.Value.RefersToIDWithTag(theData.ID, MAP_WORLD_OBJECTS_TAG))
                     {
-                        theData.AddLinkedItem(kvp.Value);
+                        theData.AddLinkedMap(kvp.Value);
                     }
                 }
 
@@ -1005,7 +1021,7 @@ namespace Database_Editor
                 _diCutsceneDialogue[keyValue] = new List<string>() { "" };
             }
             Dictionary<string, string> tags = new Dictionary<string, string>();
-            foreach(string s in _diCutsceneDialogue[keyValue])
+            foreach (string s in _diCutsceneDialogue[keyValue])
             {
                 string[] split = s.Split(new char[] { '[', ':', ']' }, StringSplitOptions.RemoveEmptyEntries);
                 tags[split[0]] = split.Length > 1 ? split[1] : "";
@@ -1015,7 +1031,7 @@ namespace Database_Editor
             frm.ShowDialog();
 
             List<string> listTags = new List<string>();
-            foreach(KeyValuePair<string, string> kvp in frm.StringData)
+            foreach (KeyValuePair<string, string> kvp in frm.StringData)
             {
                 listTags.Add("[" + kvp.Key + ":" + kvp.Value + "]");
             }
@@ -1062,7 +1078,7 @@ namespace Database_Editor
             else
             {
                 data = liData[int.Parse(tbID.Text)];
-                if(tbDescription == null) { data.SetTextData(tbName.Text); }
+                if (tbDescription == null) { data.SetTextData(tbName.Text); }
                 else { data.SetTextData(tbName.Text, tbDescription.Text); }
 
                 data.ClearTagInfo();
@@ -1174,7 +1190,7 @@ namespace Database_Editor
                         }
                         else if (d.ID >= oldID)
                         {
-                        //    d.ChangeID(d.ID - 1);
+                            //    d.ChangeID(d.ID - 1);
                         }
                     }
                 }
@@ -1464,7 +1480,7 @@ namespace Database_Editor
 
             if (defaultTags != null)
             {
-                foreach(string s in defaultTags) { dgTags.Rows.Add(); }
+                foreach (string s in defaultTags) { dgTags.Rows.Add(); }
                 for (int i = 0; i < defaultTags.Count; i++)
                 {
                     dgTags.Rows[i].Cells[tagCol].Value = defaultTags[i];
@@ -1557,9 +1573,9 @@ namespace Database_Editor
             foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
             {
                 kvp.Value.StripSpecialCharacter();
-                DirectoryInfo dirInfo = Directory.GetParent(mapPath + "\\" + kvp.Key);
+                DirectoryInfo dirInfo = Directory.GetParent(kvp.Key);
                 if (!Directory.Exists(dirInfo.FullName)) { Directory.CreateDirectory(dirInfo.FullName); }
-                SaveTMXData(kvp.Value, dirInfo.FullName + "\\" + Path.GetFileName(kvp.Key) + ".tmx");
+                SaveTMXData(kvp.Value, kvp.Key);
             }
 
             SaveItemXMLData(itemDataList, PATH_TO_DATA, sWriter);
@@ -1660,7 +1676,7 @@ namespace Database_Editor
             CloseStreamWriter(ref dataFile);
         }
 
-        public void SaveXMLDictionaryIntKeyList(Dictionary<int, List<string>> dataList, string fileName, XMLTypeEnum xmlType,  StreamWriter sWriter)
+        public void SaveXMLDictionaryIntKeyList(Dictionary<int, List<string>> dataList, string fileName, XMLTypeEnum xmlType, StreamWriter sWriter)
         {
             StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[int, List[string]]");
 
@@ -1721,7 +1737,7 @@ namespace Database_Editor
         public void SaveXMLData(List<XMLData> dataList, string fileName, StreamWriter sWriter)
         {
             StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[int, string]");
-            
+
             foreach (XMLData data in dataList)
             {
                 string id = data.ID.ToString();
@@ -1763,7 +1779,7 @@ namespace Database_Editor
             }
 
             CloseStreamWriter(ref dataFile);
-        }       
+        }
 
         public void SaveTMXData(TMXData data, string fileName)
         {
@@ -1802,11 +1818,13 @@ namespace Database_Editor
                 _arrWorldObjectTags = objectTags.Split(',');
 
                 string textID = Util.GetEnumString(xmlType) + "_" + id;
-                if (xmlType != XMLTypeEnum.None) {
-                    if (_diObjectText.ContainsKey(textID)) {
+                if (xmlType != XMLTypeEnum.None)
+                {
+                    if (_diObjectText.ContainsKey(textID))
+                    {
                         _sName = _diObjectText[textID]["Name"];
 
-                        if(_diObjectText[textID].ContainsKey("Description"))
+                        if (_diObjectText[textID].ContainsKey("Description"))
                         {
                             _sDescription = _diObjectText[textID]["Description"];
                         }
@@ -1818,7 +1836,7 @@ namespace Database_Editor
 
                 _eXMLType = xmlType;
             }
-            public XMLData(string id, string stringData, string itemTags, string objectTags, XMLTypeEnum xmlType) : this (id, DataManager.TaggedStringToDictionary(stringData), itemTags, objectTags, xmlType) { }
+            public XMLData(string id, string stringData, string itemTags, string objectTags, XMLTypeEnum xmlType) : this(id, DataManager.TaggedStringToDictionary(stringData), itemTags, objectTags, xmlType) { }
 
 
             public string GetStringValue(string value)
@@ -2016,7 +2034,7 @@ namespace Database_Editor
                     _liLinkedItems.Add(d);
                 }
             }
-            public void AddLinkedItem(TMXData d)
+            public void AddLinkedMap(TMXData d)
             {
                 if (!_liLinkedMaps.Contains(d))
                 {
@@ -2047,7 +2065,7 @@ namespace Database_Editor
             public ItemXMLData(string id, Dictionary<string, string> stringData, string itemTags, string worldTags) : base(id, stringData, itemTags, worldTags, XMLTypeEnum.Item)
             {
                 _eType = Util.ParseEnum<ItemEnum>(_diTags["Type"]);
-                string textID = "Item_" + id;   
+                string textID = "Item_" + id;
             }
 
             public void SetItemType(ItemEnum e)
