@@ -1003,46 +1003,50 @@
     </Item>
     <Item>
       <Key>Item_124</Key>
-      <Value>[Name:Red Shirt][Description:A Red Shirt]</Value>
+      <Value>[Name:Stoneworks][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_125</Key>
-      <Value>[Name:Blue Shirt][Description:A Blue Shirt]</Value>
+      <Value>[Name:Red Shirt][Description:A Red Shirt]</Value>
     </Item>
     <Item>
       <Key>Item_126</Key>
-      <Value>[Name:Witch's Hat][Description:A fashionable hat]</Value>
+      <Value>[Name:Blue Shirt][Description:A Blue Shirt]</Value>
     </Item>
     <Item>
       <Key>Item_127</Key>
-      <Value>[Name:Wizard's Robes][Description:The robes of a true wizard!]</Value>
+      <Value>[Name:Witch's Hat][Description:A fashionable hat]</Value>
     </Item>
     <Item>
       <Key>Item_128</Key>
-      <Value>[Name:Dark Pants][Description:A pair of dark pants]</Value>
+      <Value>[Name:Wizard's Robes][Description:The robes of a true wizard!]</Value>
     </Item>
     <Item>
       <Key>Item_129</Key>
-      <Value>[Name:Slime Berry][Description:A berry made of slime, attracts slimes.]</Value>
+      <Value>[Name:Dark Pants][Description:A pair of dark pants]</Value>
     </Item>
     <Item>
       <Key>Item_130</Key>
-      <Value>[Name:Griselda's Orb][Description:General Use]</Value>
+      <Value>[Name:Slime Berry][Description:A berry made of slime, attracts slimes.]</Value>
     </Item>
     <Item>
       <Key>Item_131</Key>
-      <Value>[Name:Adventure Map][Description:Off to find adventures!]</Value>
+      <Value>[Name:Griselda's Orb][Description:General Use]</Value>
     </Item>
     <Item>
       <Key>Item_132</Key>
-      <Value>[Name:Mask of Marriage][Description:A mask used by the people of River hollow to proess their love to one another.]</Value>
+      <Value>[Name:Adventure Map][Description:Off to find adventures!]</Value>
     </Item>
     <Item>
       <Key>Item_133</Key>
-      <Value>[Name:Essence of ][Description:Become a ]</Value>
+      <Value>[Name:Mask of Marriage][Description:A mask used by the people of River hollow to proess their love to one another.]</Value>
     </Item>
     <Item>
       <Key>Item_134</Key>
+      <Value>[Name:Essence of ][Description:Become a ]</Value>
+    </Item>
+    <Item>
+      <Key>Item_135</Key>
       <Value>[Name:Dungeon Key][Description:A key that unlocks a dungeon door.]</Value>
     </Item>
     <Item>
