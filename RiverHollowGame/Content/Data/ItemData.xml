@@ -499,11 +499,11 @@
     </Item>
     <Item>
       <Key>124</Key>
-      <Value>[Type:StaticItem][Image:0-192][Sell:2000][Place:36][ReqItems:2-10|0-5]</Value>
+      <Value>[Type:StaticItem][Image:112-0][Sell:2000][Place:36][ReqItems:2-10|0-5]</Value>
     </Item>
     <Item>
       <Key>125</Key>
-      <Value>[Type:Clothes][Image:112-0][ReqItems:2-10|0-5][TexName:400][Row:1]</Value>
+      <Value>[Type:Clothes][Subtype:None][Image:112-0][ReqItems:2-10|0-5][TexName:400][Row:1]</Value>
     </Item>
     <Item>
       <Key>126</Key>

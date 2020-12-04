@@ -37,7 +37,10 @@ namespace RiverHollow.GUIComponents.Screens
         HUDMiniInventory _gInventory;
         HUDCalendar _gCalendar;
         GUIItemBox _addedItem;
+
+        GUIText _gFPS;
         double _dTimer;
+        double _dFPStracker = 0;
 
         public HUDScreen()
         {
@@ -68,11 +71,17 @@ namespace RiverHollow.GUIComponents.Screens
             _gCalendar = new HUDCalendar();
             _gCalendar.AnchorToScreen(SideEnum.TopRight, 10);
             AddControl(_gCalendar);
+
+            _gFPS = new GUIText();
+            _gFPS.AnchorAndAlignToObject(_gCalendar, SideEnum.Bottom, SideEnum.Left);
+            AddControl(_gFPS);
         }
 
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
+
+            _gFPS.SetText("FPS: " + FrameCounter.CurrentFramesPerSecond);
 
             HandleInput();
 

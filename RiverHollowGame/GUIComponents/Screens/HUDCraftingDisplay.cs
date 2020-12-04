@@ -38,6 +38,7 @@ namespace RiverHollow.GUIComponents.Screens
         public HUDCraftingDisplay(CraftingMachine crafter)
         {
             _winMain = SetMainWindow();
+            _winMain.Height = _winMain.Height / 2;
 
             _liRequiredItems = new List<GUIItem>();
             _craftMachine = crafter;
@@ -46,23 +47,22 @@ namespace RiverHollow.GUIComponents.Screens
             _gDescription = new GUIText("");
 
             Setup(crafter.CraftingDictionary);
-            _winCraftables.AnchorAndAlignToObject(_winMain, SideEnum.Top, SideEnum.CenterX);
+            AddControl(_winCraftables);
 
             ConfigureInfo();
 
-            AddControl(_winCraftables);
-
-            DetermineSize();
-            CenterOnScreen();
-
             //80, 48
             _winMachineInfo = new GUIWindow(GUIWindow.Window_1, _winMain.Width, ScaleIt(GUIWindow.Window_1.Edge * 2) + ScaleIt(TileSize));
-            _winMachineInfo.AnchorAndAlignToObject(_winMain, SideEnum.Bottom, SideEnum.CenterX);
-
             _btnRemove = new GUIButton(new Rectangle(80, 48, 16, 16), ScaleIt(TileSize), ScaleIt(TileSize), DataManager.DIALOGUE_TEXTURE, RemoveCraftingStation);
+
+            _winCraftables.AnchorAndAlignToObject(_winMain, SideEnum.Top, SideEnum.CenterX);
+            _winMachineInfo.AnchorAndAlignToObject(_winMain, SideEnum.Bottom, SideEnum.CenterX);
             _btnRemove.AnchorToInnerSide(_winMachineInfo, SideEnum.Right);
 
+            DetermineSize();
+
             AddControl(_winMachineInfo);
+            Position();
         }
 
         /// <summary>
