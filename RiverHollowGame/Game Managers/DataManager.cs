@@ -77,6 +77,8 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, Dictionary<string, string>> DIClasses => _diClasses;
         static Dictionary<string, Dictionary<string, List<string>>> _diSchedule;
 
+        static Dictionary<string, string> _diConstructionZones;
+
         public static Dictionary<int, Dictionary<string, string>> Config;
 
         public static int ItemCount => _diItemData.Count;
@@ -93,6 +95,7 @@ namespace RiverHollow.Game_Managers
             _diTextures = new Dictionary<string, Texture2D>();
             DiUpgrades = Content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
             _diMonsterTraits = Content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
+            _diConstructionZones = Content.Load<Dictionary<string, string>>(@"Data\ConstructionZones");
 
             //Read in Content and allocate the appropriate Dictionaries
             LoadGUIs(Content);
@@ -655,6 +658,18 @@ namespace RiverHollow.Game_Managers
             if (_diNPCDialogue.ContainsKey(id))
             {
                 rv = _diNPCDialogue[id];
+            }
+
+            return rv;
+        }
+
+        public static string GetConstructionZoneStrings(string zone)
+        {
+            string rv = string.Empty;
+
+            if (_diConstructionZones.ContainsKey(zone))
+            {
+                rv = _diConstructionZones[zone];
             }
 
             return rv;

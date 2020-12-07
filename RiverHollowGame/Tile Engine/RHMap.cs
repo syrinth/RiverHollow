@@ -36,6 +36,7 @@ namespace RiverHollow.Tile_Engine
 
         public bool IsCombatMap => _liMonsterSpawnPoints.Count > 0;
         public bool IsBuilding { get; private set; }
+        public string ConstructionZone { get; private set; } = string.Empty;
         public string DungeonName { get; private set; } = string.Empty;
         public bool IsDungeon => !string.IsNullOrEmpty(DungeonName);
         public bool IsTown { get; private set; }
@@ -117,6 +118,7 @@ namespace RiverHollow.Tile_Engine
             _renderer = map._renderer;
             _arrTiles = map._arrTiles;
 
+            ConstructionZone = map.ConstructionZone;
             IsBuilding = _map.Properties.ContainsKey("Building");
             IsTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
@@ -166,7 +168,10 @@ namespace RiverHollow.Tile_Engine
                     _arrTiles[j, i].SetProperties(this);
                 }
             }
-
+            if (_map.Properties.ContainsKey("ConstructionZone"))
+            {
+                ConstructionZone = _map.Properties["ConstructionZone"];
+            }
             IsBuilding = _map.Properties.ContainsKey("Building");
             IsTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
@@ -778,12 +783,12 @@ namespace RiverHollow.Tile_Engine
 
             foreach(RHTile t in _liTestTiles)
             {
-                StaticItem it = InventoryManager.GetCurrentStaticItem();
+                WorldObject it = GameManager.ConstructionObject;
                 bool checkPlayer = true;
 
-                if (it != null) { checkPlayer = !it.GetWorldItem().CompareType(ObjectTypeEnum.Floor); }
+                if (it != null) { checkPlayer = !it.CompareType(ObjectTypeEnum.Floor); }
 
-                bool passable = t.Passable() && !TileContainsActor(t, checkPlayer) && (Scrying() || PlayerManager.PlayerInRange(t.Rect));
+                bool passable = t.Passable() && !TileContainsActor(t, checkPlayer);
                 spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
             }
         }
@@ -1267,7 +1272,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     //Ensure that we have a tile that we clicked on and that the player is close enough to interact with it.
                     TargetTile = MapManager.RetrieveTile(mouseLocation);
-                    if (TargetTile != null && PlayerManager.PlayerInRange(TargetTile.Center.ToPoint()))
+                    if (TargetTile != null)
                     {
 
                         //Handles interactions with objects on the tile, both actual and Shadow
@@ -1390,41 +1395,43 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            //Retrieves any object associated with the tile, this will include
-            //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
-            //as being on the tile.
-            WorldObject obj = TargetTile.GetWorldObject();
-            if (obj != null)
-            {
-                if (obj.CompareType(ObjectTypeEnum.Machine))       //Player interacts with a machine to either take a finished item or start working
+            if (PlayerManager.PlayerInRange(TargetTile.Center.ToPoint())){
+                //Retrieves any object associated with the tile, this will include
+                //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
+                //as being on the tile.
+                WorldObject obj = TargetTile.GetWorldObject();
+                if (obj != null)
                 {
-                    Machine p = (Machine)obj;
-                    if (p.HasItem()) { p.TakeFinishedItem(); }
+                    if (obj.CompareType(ObjectTypeEnum.Machine))       //Player interacts with a machine to either take a finished item or start working
+                    {
+                        Machine p = (Machine)obj;
+                        if (p.HasItem()) { p.TakeFinishedItem(); }
+                        else
+                        {
+                            if (!p.MakingSomething())
+                            {
+                                p.StartAutoWork();
+                            }
+                            else if (p.IsCraftingMachine()) {
+                                ((CraftingMachine)p).SetToWork();
+                            }
+                        }
+                        rv = true;
+                    }
+                    else if (obj.CompareType(ObjectTypeEnum.ClassChanger))
+                    {
+                        ((ClassChanger)obj).ProcessClick();
+                        rv = true;
+                    }
+                    else if (obj.CompareType(ObjectTypeEnum.Plant))
+                    {
+                        ((Plant)obj).Harvest();
+                        rv = true;
+                    }
                     else
                     {
-                        if (!p.MakingSomething())
-                        {
-                            p.StartAutoWork();
-                        }
-                        else if (p.IsCraftingMachine()) {
-                            ((CraftingMachine)p).SetToWork();
-                        }
+                        rv = UseTool(mouseLocation);
                     }
-                    rv = true;
-                }
-                else if (obj.CompareType(ObjectTypeEnum.ClassChanger))
-                {
-                    ((ClassChanger)obj).ProcessClick();
-                    rv = true;
-                }
-                else if (obj.CompareType(ObjectTypeEnum.Plant))
-                {
-                    ((Plant)obj).Harvest();
-                    rv = true;
-                }
-                else
-                {
-                    rv = UseTool(mouseLocation);
                 }
             }
 
@@ -1449,33 +1456,50 @@ namespace RiverHollow.Tile_Engine
             {
                 if (currentItem != null && currentItem.CompareType(ItemEnum.StaticItem))    //Only procees if tile is empty and we are holding an item)
                 {
-                    //If the player is currently holding a StaticItem, we need to place it
-                    //Do not, however, allow the placing of StaticItems on combat maps.
-                    StaticItem selectedItem = InventoryManager.GetCurrentStaticItem();
-                    if (!IsCombatMap && selectedItem != null)
+
+                }
+                else  if (!IsCombatMap && GameManager.ConstructionObject != null)
+                {
+                    Machine constructToBuild = GameManager.ConstructionObject;
+
+                    //Check that all required items are there first
+                    bool create = InventoryManager.SufficientItems(constructToBuild.RequiredToMake);
+                    
+                    //If all items are found, then remove them.
+                    if (create)
                     {
-                        bool isFloor = selectedItem.GetWorldItem().CompareType(ObjectTypeEnum.Floor);
+                        foreach (KeyValuePair<int, int> kvp in constructToBuild.RequiredToMake)
+                        {
+                            InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                        }
+
+                        //If the player is currently holding a StaticItem, we need to place it
+                        //Do not, however, allow the placing of StaticItems on combat maps.
+                        bool isFloor = constructToBuild.CompareType(ObjectTypeEnum.Floor);
                         if (!isFloor || (isFloor && TargetTile.Flooring == null))
                         {
-                            //Take the actual WorldObject item from the item and attempt to place it on the map
-                            WorldItem newItem = selectedItem.GetWorldItem();
-                            if (MapManager.PlacePlayerObject(newItem))
+                            WorldObject newObj = DataManager.GetWorldObject(constructToBuild.ID);
+                            newObj.SetCoordinates(Util.SnapToGrid(constructToBuild.MapPosition));
+                            if (MapManager.PlacePlayerObject(newObj))
                             {
                                 rv = true;
-                                newItem.SetMapName(this.Name);      //Assign the map name tot he WorldItem
-                                selectedItem.Remove(1);             //Remove one of them from the inventory
+                                //newItem.SetMapName(this.Name);      //Assign the map name tot he WorldItem
 
                                 //If the item placed was a wall object, we need to adjust it based off any adjacent walls
-                                if (newItem.CompareType(ObjectTypeEnum.Wall))
+                                if (newObj.CompareType(ObjectTypeEnum.Wall))
                                 {
-                                    ((Wall)newItem).AdjustObject();
+                                    ((Wall)newObj).AdjustObject();
                                 }
                             }
                         }
                     }
+
+                    if(!InventoryManager.SufficientItems(constructToBuild.RequiredToMake))
+                    {
+                        GameManager.ConstructionObject = null;
+                    }
                 }
-                else
-                {
+                else if(PlayerManager.PlayerInRange(TargetTile.Center.ToPoint())){
                     rv = UseTool(mouseLocation);
                 }
             }
@@ -1549,13 +1573,12 @@ namespace RiverHollow.Tile_Engine
                 }
 
                 //Do not draw test tiles on a map for combat
-                StaticItem selectedStaticItem = InventoryManager.GetCurrentStaticItem();
-                if (!IsCombatMap && selectedStaticItem != null)
+                WorldObject constructToBuild = GameManager.ConstructionObject;
+                if (!IsCombatMap && constructToBuild != null)
                 {
-                    WorldItem obj = selectedStaticItem.GetWorldItem();
-                    Vector2 vec = mouseLocation.ToVector2() - new Vector2(0, obj.Height - obj.BaseHeight);
-                    selectedStaticItem.SetWorldObjectCoords(vec);
-                    TestMapTiles(selectedStaticItem.GetWorldItem(), _liTestTiles);
+                    Vector2 vec = mouseLocation.ToVector2() - new Vector2(0, constructToBuild.Height - constructToBuild.BaseHeight);
+                    constructToBuild.SetCoordinates(Util.SnapToGrid(vec));
+                    TestMapTiles(constructToBuild, _liTestTiles);
                 }
 
                 if (!found)

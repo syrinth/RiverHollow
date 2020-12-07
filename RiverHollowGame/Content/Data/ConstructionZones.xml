@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <Item>
+      <Key>Workshop</Key>
+      <Value>[ObjectID:25|26|27|29|30|36|41|42]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

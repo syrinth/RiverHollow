@@ -52,6 +52,10 @@ namespace RiverHollow.Items
 
         protected int _iID;
         public int ID { get => _iID; }
+
+        protected string _sName;
+        public string Name { get => _sName; }
+
         #endregion
 
         protected WorldObject() {
@@ -64,6 +68,7 @@ namespace RiverHollow.Items
             _wallObject = false;
 
             SnapPositionToGrid(pos);
+            DataManager.GetTextData("WorldObject", _iID, ref _sName, "Name");
         }
 
         protected virtual void LoadDictionaryData(Dictionary<string, string> stringData, bool loadSprite = true)
@@ -396,6 +401,9 @@ namespace RiverHollow.Items
         {
             private MachineTypeEnum _eMachineType;
 
+            protected Dictionary<int, int> _diReqToMake;
+            public Dictionary<int, int> RequiredToMake => _diReqToMake;
+
             readonly string _sEffectWorking;
 
             protected double _dProcessedTime = 0;
@@ -424,6 +432,18 @@ namespace RiverHollow.Items
                     string[] baseStr = stringData["Base"].Split('-');
                     _iBaseWidth = int.Parse(baseStr[0]) * TileSize;
                     _iBaseHeight = int.Parse(baseStr[1]) * TileSize;
+                }
+
+                _diReqToMake = new Dictionary<int, int>();
+                if (stringData.ContainsKey("ReqItems"))
+                {
+                    //Split by "|" for each item set required
+                    string[] split = Util.GetEntries(stringData["ReqItems"]);
+                    foreach (string s in split)
+                    {
+                        string[] splitData = s.Split('-');
+                        _diReqToMake[int.Parse(splitData[0])] = int.Parse(splitData[1]);
+                    }
                 }
 
                 LoadDictionaryData(stringData);
@@ -581,13 +601,16 @@ namespace RiverHollow.Items
                     _eMachineType = MachineTypeEnum.CraftingMachine;
                     CraftingDictionary = new Dictionary<int, int>();
 
-                    //Read in what items the machine can make
-                    string[] processes = Util.GetEntries(stringData["Makes"]);
-                    foreach (string recipe in processes)
+                    if (stringData.ContainsKey("Makes"))
                     {
-                        //Each entry is in written like ID-NumDays
-                        string[] pieces = recipe.Split('-');
-                        CraftingDictionary.Add(int.Parse(pieces[0]), int.Parse(pieces[1]));
+                        //Read in what items the machine can make
+                        string[] processes = Util.GetEntries(stringData["Makes"]);
+                        foreach (string recipe in processes)
+                        {
+                            //Each entry is in written like ID-NumDays
+                            string[] pieces = recipe.Split('-');
+                            CraftingDictionary.Add(int.Parse(pieces[0]), int.Parse(pieces[1]));
+                        }
                     }
                 }
 

@@ -132,14 +132,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (!Scrying() && !MapManager.CurrentMap.IsCombatMap)
             {
-                StaticItem currentItem = InventoryManager.GetCurrentStaticItem();
-                if (currentItem != null)
+                WorldObject construct = GameManager.ConstructionObject;
+                if (construct != null)
                 {
-                    WorldItem worldItem = currentItem.GetWorldItem();
-                    if (worldItem != null)
-                    {
-                        worldItem.Draw(spriteBatch);
-                    }
+                    construct.Draw(spriteBatch);
                 }
             }
         }

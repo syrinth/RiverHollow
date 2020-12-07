@@ -18,7 +18,8 @@ using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
 using static RiverHollow.GUIComponents.Screens.HUDMenu.HUDManagement.MgmtWindow;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.Items.Item;
-
+using RiverHollow.Utilities;
+using static RiverHollow.Items.WorldItem;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -182,7 +183,7 @@ namespace RiverHollow.GUIComponents.Screens
         public bool IsMenuOpen() { return _gMenu != null; }
         public void OpenMenu()
         {
-            _gMenu = new HUDMenu();
+            _gMenu = new HUDMenu(CloseMenu);
             AddControl(_gMenu);
             GameManager.Pause();
         }
@@ -445,6 +446,7 @@ namespace RiverHollow.GUIComponents.Screens
         GUIButton _btnInventory;
         GUIButton _btnParty;
         GUIButton _btnManagement;
+        GUIButton _btnConstruction;
         GUIButton _btnOptions;
         GUIButton _btnFriendship;
         GUIMainObject _gMenuObject;
@@ -453,8 +455,12 @@ namespace RiverHollow.GUIComponents.Screens
         bool _bOpen = false;
         bool _bClose = false;
 
-        public HUDMenu()
+        public delegate void CloseMenuDelegate();
+        private CloseMenuDelegate _closeMenu;
+
+        public HUDMenu(CloseMenuDelegate closeMenu)
         {
+            _closeMenu = closeMenu;
             _btnInventory = new GUIButton("Inventory", BtnInventory);
             AddControl(_btnInventory);
 
@@ -473,10 +479,13 @@ namespace RiverHollow.GUIComponents.Screens
             _btnManagement = new GUIButton("Buildings", BtnManagement);
             AddControl(_btnManagement);
 
+            _btnConstruction = new GUIButton("Construction", BtnConstruction);
+            AddControl(_btnConstruction);
+
             _btnFriendship = new GUIButton("Friends", BtnFriendship);
             AddControl(_btnFriendship);
 
-            _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnManagement, _btnQuestLog, _btnOptions, _btnFriendship, _btnExitGame };
+            _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnManagement, _btnConstruction, _btnQuestLog, _btnOptions, _btnFriendship, _btnExitGame };
             GUIObject.CreateSpacedColumn(ref _liButtons, -GUIButton.BTN_WIDTH, 0, RiverHollow.ScreenHeight, BTN_PADDING);
 
             _bOpen = true;
@@ -543,6 +552,11 @@ namespace RiverHollow.GUIComponents.Screens
         public void BtnManagement()
         {
             _gMenuObject = new HUDManagement();
+            GUIManager.OpenMainObject(_gMenuObject);
+        }
+        public void BtnConstruction()
+        {
+            _gMenuObject = new HUDConstruction(_closeMenu);
             GUIManager.OpenMainObject(_gMenuObject);
         }
         public void BtnFriendship()
@@ -1968,6 +1982,168 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         _parent.SetMgmtWindow(new BuildingDetailsWin(_parent, _character.Building));
                         return true;
+                    }
+                }
+            }
+        }
+        public class HUDConstruction : GUIMainObject
+        {
+            //public static int BTNSIZE = ScaledTileSize;
+            public static int MAX_SHOWN_QUESTS = 4;
+            public static int QUEST_SPACING = 20;
+            public static int CONSTRUCTBOX_WIDTH = 544; //(GUIManager.MAIN_COMPONENT_WIDTH) - (_gWindow.EdgeSize * 2) - ScaledTileSize
+            public static int CONSTRUCTBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDQuestLog.MAX_SHOWN_QUESTS) - (_gWindow.EdgeSize * 2)
+            List<GUIObject> _liQuests;
+            GUIList _gList;
+
+            private HUDMenu.CloseMenuDelegate _closeMenu;
+
+            public HUDConstruction(CloseMenuDelegate closeMenu)
+            {
+                _closeMenu = closeMenu;
+                _winMain = SetMainWindow();
+
+                _liQuests = new List<GUIObject>();
+
+                string constructionList = DataManager.GetConstructionZoneStrings(MapManager.CurrentMap.ConstructionZone);
+
+                if (!string.IsNullOrEmpty(constructionList))
+                {
+                    List<GUIText> liText = new List<GUIText>();
+                    string[] entries = constructionList.Replace("[", "").Replace("]", "").Split(':')[1].Split('|');
+                    foreach (string s in entries)
+                    {
+                        ConstructBox box = new ConstructBox(CONSTRUCTBOX_WIDTH, CONSTRUCTBOX_HEIGHT, BuildConstruct);
+                        box.SetConstructionInfo(int.Parse(s));
+                        _liQuests.Add(box);
+                    }
+                }
+
+                _gList = new GUIList(_liQuests, MAX_SHOWN_QUESTS, QUEST_SPACING/*, _gWindow.Height*/);
+                _gList.CenterOnObject(_winMain);
+
+                AddControl(_gList);
+            }
+
+            public override bool ProcessLeftButtonClick(Point mouse)
+            {
+                bool rv = false;
+
+                foreach (GUIObject c in Controls)
+                {
+                    rv = c.ProcessLeftButtonClick(mouse);
+
+                    if (rv) { break; }
+                }
+
+                return rv;
+            }
+
+            public override bool ProcessRightButtonClick(Point mouse)
+            {
+                bool rv = false;
+                return rv;
+            }
+
+            public override bool ProcessHover(Point mouse)
+            {
+                bool rv = false;
+                return rv;
+            }
+
+            public override void Draw(SpriteBatch spriteBatch)
+            {
+                base.Draw(spriteBatch);
+            }
+
+            public override void Update(GameTime gTime)
+            {
+                base.Update(gTime);
+            }
+
+            public void BuildConstruct(Machine obj)
+            {
+                GameManager.ConstructionObject = obj;
+                GUIManager.CloseMainObject();
+                _closeMenu();
+            }
+
+            public class ConstructBox : GUIObject
+            {
+                GUIWindow _window;
+                GUIText _gName;
+                GUIText _gGoalProgress;
+                public Machine Construct { get; private set; }
+                public bool ClearThis;
+                public delegate void ClickDelegate(Machine obj);
+                private ClickDelegate _delAction;
+
+                public ConstructBox(int width, int height, ClickDelegate del)
+                {
+                    _delAction = del;
+
+                    int boxHeight = height;
+                    int boxWidth = width;
+                    _window = new GUIWindow(GUIWindow.Window_1, boxWidth, boxHeight);
+                    AddControl(_window);
+                    Width = _window.Width;
+                    Height = _window.Height;
+                    Construct = null;
+                }
+
+                public override void Draw(SpriteBatch spriteBatch)
+                {
+                    if (Construct != null && Show())
+                    {
+                        _window.Draw(spriteBatch);
+                    }
+                }
+                public override bool ProcessLeftButtonClick(Point mouse)
+                {
+                    bool rv = false;
+                    if (Contains(mouse) && _delAction != null)
+                    {
+                        rv = true;
+                        _delAction(Construct);
+                    }
+
+                    return rv;
+                }
+                public override bool ProcessHover(Point mouse)
+                {
+                    bool rv = false;
+                    return rv;
+                }
+                public override bool Contains(Point mouse)
+                {
+                    return _window.Contains(mouse);
+                }
+
+                public void SetConstructionInfo(int constructID)
+                {
+                    Construct = (Machine)DataManager.GetWorldObject(constructID);
+
+                    Color textColor = Color.White;
+                    if (!InventoryManager.SufficientItems(Construct.RequiredToMake))
+                    {
+                        textColor = Color.Red;
+                        _delAction = null;
+                    }
+
+                    _gName = new GUIText(Construct.Name);
+                    _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
+                    _gName.SetColor(textColor);
+
+                    List<GUIItemBox> list = new List<GUIItemBox>();
+                    foreach (KeyValuePair<int, int> kvp in Construct.RequiredToMake)
+                    {
+                        GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
+
+                        if (list.Count == 0) { box.AnchorToInnerSide(_window, SideEnum.BottomRight); }
+                        else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Left, SideEnum.Bottom); }
+
+                        list.Add(box);
+
                     }
                 }
             }

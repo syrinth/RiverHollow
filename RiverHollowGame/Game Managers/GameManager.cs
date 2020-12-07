@@ -81,6 +81,8 @@ namespace RiverHollow.Game_Managers
         public static Item CurrentItem;
         public static Spirit CurrentSpirit;
         public static TriggerObject CurrentTriggerObject;
+
+        public static Machine ConstructionObject;
         #endregion
 
         public static int MAX_NAME_LEN = 10;

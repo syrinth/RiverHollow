@@ -488,18 +488,6 @@ Exit:
             return _arrPlayerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
         }
 
-        public static StaticItem GetCurrentStaticItem()
-        {
-            StaticItem rv = null;
-            Item it = _arrPlayerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
-
-            if (it != null && it.CompareType(ItemEnum.StaticItem))
-            {
-                rv = (StaticItem)it;
-            }
-            return rv;
-        }
-
         internal static List<Consumable> GetPlayerCombatItems()
         {
             List<Consumable> items = new List<Consumable>();
@@ -524,6 +512,26 @@ Exit:
         public static Item GetItemFromLocation(int row, int column, bool PlayerInventory = true)
         {
             return GetInventory(PlayerInventory)[row, column];
+        }
+
+        /// <summary>
+        /// Runs through the given list and checks that the player has the required items.
+        /// </summary>
+        /// <param name="requiredItems">The list of required items and the numbers of each item</param>
+        /// <returns></returns>
+        public static bool SufficientItems(Dictionary<int, int> requiredItems)
+        {
+            bool rv = true;
+            foreach (KeyValuePair<int, int> kvp in requiredItems)
+            {
+                if (!HasItemInPlayerInventory(kvp.Key, kvp.Value))
+                {
+                    rv = false;
+                    break;
+                }
+            }
+
+            return rv;
         }
     }
 }
