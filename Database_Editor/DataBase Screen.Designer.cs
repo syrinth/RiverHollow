@@ -69,6 +69,8 @@
             this.dgvWorldObjects = new System.Windows.Forms.DataGridView();
             this.colWorldObjectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colWorldObjectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStripWorldObjects = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.allToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabCharacters = new System.Windows.Forms.TabPage();
             this.cbEditableCharData = new System.Windows.Forms.ComboBox();
             this.btnEdit = new System.Windows.Forms.Button();
@@ -227,8 +229,6 @@
             this.dgvStatusEffects = new System.Windows.Forms.DataGridView();
             this.colStatusEffectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStatusEffectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStripWorldObjects = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.allToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -238,6 +238,7 @@
             this.tabWorldObjects.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjectTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjects)).BeginInit();
+            this.contextMenuStripWorldObjects.SuspendLayout();
             this.tabCharacters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgCharacterTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCharacters)).BeginInit();
@@ -274,7 +275,6 @@
             this.tabStatusEffects.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffectTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffects)).BeginInit();
-            this.contextMenuStripWorldObjects.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -670,6 +670,20 @@
             this.colWorldObjectsName.Name = "colWorldObjectsName";
             this.colWorldObjectsName.ReadOnly = true;
             this.colWorldObjectsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // contextMenuStripWorldObjects
+            // 
+            this.contextMenuStripWorldObjects.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.allToolStripMenuItem});
+            this.contextMenuStripWorldObjects.Name = "contextMenuStripWorldObjects";
+            this.contextMenuStripWorldObjects.Size = new System.Drawing.Size(89, 26);
+            // 
+            // allToolStripMenuItem
+            // 
+            this.allToolStripMenuItem.Name = "allToolStripMenuItem";
+            this.allToolStripMenuItem.Size = new System.Drawing.Size(88, 22);
+            this.allToolStripMenuItem.Text = "All";
+            this.allToolStripMenuItem.Click += new System.EventHandler(this.dgvWorldObjectsContextMenuClick);
             // 
             // tabCharacters
             // 
@@ -2297,20 +2311,6 @@
             this.colStatusEffectsName.ReadOnly = true;
             this.colStatusEffectsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // contextMenuStripWorldObjects
-            // 
-            this.contextMenuStripWorldObjects.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.allToolStripMenuItem});
-            this.contextMenuStripWorldObjects.Name = "contextMenuStripWorldObjects";
-            this.contextMenuStripWorldObjects.Size = new System.Drawing.Size(181, 48);
-            // 
-            // allToolStripMenuItem
-            // 
-            this.allToolStripMenuItem.Name = "allToolStripMenuItem";
-            this.allToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.allToolStripMenuItem.Text = "All";
-            this.allToolStripMenuItem.Click += new System.EventHandler(this.dgvWorldObjectsContextMenuClick);
-            // 
             // frmDBEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2334,6 +2334,7 @@
             this.tabWorldObjects.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjectTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjects)).EndInit();
+            this.contextMenuStripWorldObjects.ResumeLayout(false);
             this.tabCharacters.ResumeLayout(false);
             this.tabCharacters.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgCharacterTags)).EndInit();
@@ -2382,7 +2383,6 @@
             this.tabStatusEffects.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffectTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffects)).EndInit();
-            this.contextMenuStripWorldObjects.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
