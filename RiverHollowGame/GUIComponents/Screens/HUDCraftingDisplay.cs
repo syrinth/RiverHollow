@@ -202,7 +202,7 @@ namespace RiverHollow.GUIComponents.Screens
                     if (gIB != null && gIB.Contains(mouse))
                     {
                         Item chosenItem = gIB.BoxItem;
-                        if(chosenItem.ItemID != _iSelectedItemID)
+                        if (chosenItem.ItemID != _iSelectedItemID)
                         {
                             foreach (GUIItem r in _liRequiredItems) { _winMain.RemoveControl(r); }
 
@@ -219,6 +219,13 @@ namespace RiverHollow.GUIComponents.Screens
                             ConfigureInfo();
                         }
                     }
+                }
+            }
+            else
+            {
+                foreach (GUIItem r in _liRequiredItems)
+                {
+                    r.ProcessHover(mouse);
                 }
             }
 

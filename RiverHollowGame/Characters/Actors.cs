@@ -3211,7 +3211,7 @@ namespace RiverHollow.Characters
             {
                 if (i != null)
                 {
-                    val += i.SellPrice;
+                    val += i.SellPrice * i.Number;
                     PlayerManager.AddMoney(i.SellPrice);
                 }
             }

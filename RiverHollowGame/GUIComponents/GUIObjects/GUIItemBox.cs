@@ -10,7 +10,6 @@ using RiverHollow.Items;
 using static RiverHollow.Game_Managers.DataManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Items.Item;
-using static RiverHollow.Items.Clothes;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
@@ -144,10 +143,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             bool rv = false;
             if (Contains(mouse))
             {
-                if (BoxItem != null)
-                {
-                    GUIManager.OpenHoverWindow(new GUITextWindow(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32), BoxItem.GetDescription()), this);
-                }
+                _guiItem?.ProcessHover(mouse);
                 rv = true;
             }
             return rv;

@@ -372,5 +372,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 _gText.Draw(spriteBatch);
             }
         }
+
+        public override bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+            if (Contains(mouse))
+            {
+                GUIManager.OpenHoverWindow(new GUITextWindow(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32), ItemObject.GetDescription()), this);
+                rv = true;
+            }
+            return rv;
+        }
     }
 }
