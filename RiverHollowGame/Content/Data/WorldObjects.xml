@@ -107,23 +107,23 @@
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:113-5|114-30|68-15][Base:2-1][MachineType:CraftingMachine][ItemID:114]</Value>
+      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:115-5|116-30|70-15][Base:2-1][MachineType:CraftingMachine][ItemID:114]</Value>
     </Item>
     <Item>
       <Key>27</Key>
-      <Value>[Type:Machine][Image:0-64][Work:4-0.3][Width:16][Height:32][Makes:107-2|108-3][Base:1-1][WorkEffect:bubbles][MachineType:CraftingMachine][ItemID:115]</Value>
+      <Value>[Type:Machine][Image:0-64][Work:4-0.3][Width:16][Height:32][Makes:109-2|110-3][Base:1-1][WorkEffect:bubbles][MachineType:CraftingMachine][ItemID:115]</Value>
     </Item>
     <Item>
       <Key>28</Key>
-      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:117-1|114-1|115-1|116-1|113-1|118-1|124-1][Base:2-1][MachineType:CraftingMachine][ItemID:116]</Value>
+      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:119-1|116-1|117-1|118-1|115-1|120-1|126-1][Base:2-1][MachineType:CraftingMachine][ItemID:116]</Value>
     </Item>
     <Item>
       <Key>29</Key>
-      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:109-2][Base:1-1][MachineType:CraftingMachine][ItemID:117]</Value>
+      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:111-2][Base:1-1][MachineType:CraftingMachine][ItemID:117]</Value>
     </Item>
     <Item>
       <Key>30</Key>
-      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Makes:82-3][Base:2-1][MachineType:CraftingMachine][ItemID:118]</Value>
+      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Makes:84-3][Base:2-1][MachineType:CraftingMachine][ItemID:118]</Value>
     </Item>
     <Item>
       <Key>31</Key>
@@ -183,11 +183,11 @@
     </Item>
     <Item>
       <Key>45</Key>
-      <Value>[Type:Plant][Image:192-16][Height:32][Item:103][TrNum:4][TrTime:1-2-3]</Value>
+      <Value>[Type:Plant][Image:192-16][Height:32][Item:105][TrNum:4][TrTime:1-2-3]</Value>
     </Item>
     <Item>
       <Key>46</Key>
-      <Value>[Type:Plant][Image:192-48][Height:32][Item:132][TrNum:4][TrTime:1-1-1]</Value>
+      <Value>[Type:Plant][Image:192-48][Height:32][Item:134][TrNum:4][TrTime:1-1-1]</Value>
     </Item>
     <Item>
       <Key>47</Key>

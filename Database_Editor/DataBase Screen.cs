@@ -174,6 +174,13 @@ namespace Database_Editor
             LoadWorldObjects();
             LoadItemData();
 
+            LoadDataGrids();
+            LoadAllInfoPanels();
+
+        }
+
+        private void LoadDataGrids()
+        {
             LoadItemDataGrid();
             LoadWorldObjectDataGrid();
             LoadCharacterDataGrid();
@@ -188,7 +195,10 @@ namespace Database_Editor
             LoadStatusEffectDataGrid();
             LoadCutsceneDataGrid();
             LoadShopsDataGrid();
+        }
 
+        private void LoadAllInfoPanels()
+        {
             LoadItemInfo();
             LoadWorldObjectInfo();
             LoadCharacterInfo();
@@ -1551,13 +1561,19 @@ namespace Database_Editor
             SaveXMLData(worldObjectDataList, WORLD_OBJECTS_DATA_XML_FILE, sWriter);
             CloseStreamWriter(ref sWriter);
 
-            if (_iNextCurrID != -1)
+            List<string> keys = new List<string>(_diTabIndices.Keys);
+            foreach(string key in keys)
             {
-                _diTabIndices["Items"] = _iNextCurrID;
-                _iNextCurrID = -1;
+                _diTabIndices[key] = 0;
             }
+            //if (_iNextCurrID != -1)
+            //{
+            //    _diTabIndices["Items"] = _iNextCurrID;
+            //    _iNextCurrID = -1;
+            //}
 
-            LoadItemDataGrid();
+            LoadDataGrids();
+            LoadAllInfoPanels();
         }
         private void tabCtl_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -2310,18 +2326,22 @@ namespace Database_Editor
         #region Add New
         private void AddNewItem(object sender, EventArgs e)
         {
+            SaveItemInfo();
             AddNewGenericXMLObject(tabCtl.TabPages["tabItems"], "Items", dgvItems, "colItemID", "colItemName", tbItemName, tbItemID, dgItemTags, "colItemTags", cbItemType, tbItemDesc, new List<string>() { "Image:0-0" });
         }
         private void AddNewWorldObject(object sender, EventArgs e)
         {
+            SaveWorldObjectInfo(_liWorldObjects);
             AddNewGenericXMLObject(tabCtl.TabPages["tabWorldObjects"], "WorldObjects", dgvWorldObjects, "colWorldObjectsID", "colWorldObjectsName", tbWorldObjectName, tbWorldObjectID, dgvWorldObjectTags, "colWorldObjectTags", cbWorldObjectType, null, new List<string>() { "Image:0-0" });
         }
         private void AddNewQuest(object sender, EventArgs e)
         {
+            SaveQuestInfo(_diBasicXML[QUEST_XML_FILE]);
             AddNewGenericXMLObject(tabCtl.TabPages["tabQuests"], "Quests", dgvQuests, "colQuestsID", "colQuestsName", tbQuestName, tbQuestID, dgvQuestTags, "colQuestTags", cbQuestType, tbQuestDescription);
         }
         private void AddNewMonster(object sender, EventArgs e)
         {
+            SaveMonsterInfo(_diBasicXML[MONSTERS_XML_FILE]);
             List<string> defaultTags = new List<string>() { "Texture:", "Condition:", "Lvl", "Ability:", "Loot:", "Trait:", "Walk:0-0-3-0.15-T", "Attack:0-0-3-0.15-T", "Cast:0-0-3-0.15-T", "Hurt:0-0-3-0.15-T", "Critical:0-0-3-0.15-T", "KO:0-0-3-0.15-T" };
             AddNewGenericXMLObject(tabCtl.TabPages["tabMonsters"], "Monsters", dgvMonsters, "colMonstersID", "colMonstersName", tbMonsterName, tbMonsterID, dgvMonsterTags, "colMonsterTags", null, tbMonsterDescription, defaultTags);
         }
