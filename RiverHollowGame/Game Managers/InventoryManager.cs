@@ -339,7 +339,7 @@ Exit:
                     if (!silent)
                     {
                         //Used to display an item that was just added to the inventory
-                        AddedItemList.Add(itemToAdd);
+                        AddedItemList.Add(new Item(itemToAdd));
                     }
                 }
 

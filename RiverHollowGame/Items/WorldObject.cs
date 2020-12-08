@@ -186,7 +186,7 @@ namespace RiverHollow.Items
             List<Item> itemList = new List<Item>();
             for (int i = 0; i < _kvpDrop.Value; i++)
             {
-                itemList.Add(DataManager.GetItem(_kvpDrop.Key, _kvpDrop.Value));
+                itemList.Add(DataManager.GetItem(_kvpDrop.Key, 1));
             }
 
             return itemList;
