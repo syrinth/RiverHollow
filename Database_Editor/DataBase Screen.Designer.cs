@@ -32,12 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDBEditor));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.itemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.monsterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.questToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.worldObjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabCtl = new System.Windows.Forms.TabControl();
             this.tabItems = new System.Windows.Forms.TabPage();
@@ -55,8 +49,7 @@
             this.dgvItems = new System.Windows.Forms.DataGridView();
             this.colItemID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStripItems = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.dgvItemsContextMenuAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tabWorldObjects = new System.Windows.Forms.TabPage();
             this.cbWorldObjectType = new System.Windows.Forms.ComboBox();
             this.btnWorldObjectCancel = new System.Windows.Forms.Button();
@@ -69,8 +62,6 @@
             this.dgvWorldObjects = new System.Windows.Forms.DataGridView();
             this.colWorldObjectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colWorldObjectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStripWorldObjects = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.allToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabCharacters = new System.Windows.Forms.TabPage();
             this.cbEditableCharData = new System.Windows.Forms.ComboBox();
             this.btnEdit = new System.Windows.Forms.Button();
@@ -234,11 +225,9 @@
             this.tabItems.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItemTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvItems)).BeginInit();
-            this.contextMenuStripItems.SuspendLayout();
             this.tabWorldObjects.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjectTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjects)).BeginInit();
-            this.contextMenuStripWorldObjects.SuspendLayout();
             this.tabCharacters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgCharacterTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCharacters)).BeginInit();
@@ -290,61 +279,15 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addNewToolStripMenuItem,
-            this.toolStripSeparator1,
             this.saveToFileToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
-            // addNewToolStripMenuItem
-            // 
-            this.addNewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.itemToolStripMenuItem,
-            this.monsterToolStripMenuItem,
-            this.questToolStripMenuItem,
-            this.worldObjectToolStripMenuItem});
-            this.addNewToolStripMenuItem.Name = "addNewToolStripMenuItem";
-            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
-            this.addNewToolStripMenuItem.Text = "Add New";
-            // 
-            // itemToolStripMenuItem
-            // 
-            this.itemToolStripMenuItem.Name = "itemToolStripMenuItem";
-            this.itemToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.itemToolStripMenuItem.Text = "Item";
-            this.itemToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuItem_Click);
-            // 
-            // monsterToolStripMenuItem
-            // 
-            this.monsterToolStripMenuItem.Name = "monsterToolStripMenuItem";
-            this.monsterToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.monsterToolStripMenuItem.Text = "Monster";
-            this.monsterToolStripMenuItem.Click += new System.EventHandler(this.monsterToolStripMenuItem_Click);
-            // 
-            // questToolStripMenuItem
-            // 
-            this.questToolStripMenuItem.Name = "questToolStripMenuItem";
-            this.questToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.questToolStripMenuItem.Text = "Quest";
-            this.questToolStripMenuItem.Click += new System.EventHandler(this.questToolStripMenuItem_Click);
-            // 
-            // worldObjectToolStripMenuItem
-            // 
-            this.worldObjectToolStripMenuItem.Name = "worldObjectToolStripMenuItem";
-            this.worldObjectToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.worldObjectToolStripMenuItem.Text = "World Object";
-            this.worldObjectToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuWorldObject_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(133, 6);
-            // 
             // saveToFileToolStripMenuItem
             // 
             this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
-            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToFileToolStripMenuItem.Text = "Save To File";
             this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
             // 
@@ -501,7 +444,7 @@
             this.dgvItems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colItemID,
             this.colItemName});
-            this.dgvItems.ContextMenuStrip = this.contextMenuStripItems;
+            this.dgvItems.ContextMenuStrip = this.contextMenu;
             this.dgvItems.Location = new System.Drawing.Point(6, 6);
             this.dgvItems.MultiSelect = false;
             this.dgvItems.Name = "dgvItems";
@@ -531,19 +474,11 @@
             this.colItemName.ReadOnly = true;
             this.colItemName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // contextMenuStripItems
+            // contextMenu
             // 
-            this.contextMenuStripItems.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.dgvItemsContextMenuAll});
-            this.contextMenuStripItems.Name = "contextMenuStripItems";
-            this.contextMenuStripItems.Size = new System.Drawing.Size(89, 26);
-            // 
-            // dgvItemsContextMenuAll
-            // 
-            this.dgvItemsContextMenuAll.Name = "dgvItemsContextMenuAll";
-            this.dgvItemsContextMenuAll.Size = new System.Drawing.Size(88, 22);
-            this.dgvItemsContextMenuAll.Text = "All";
-            this.dgvItemsContextMenuAll.Click += new System.EventHandler(this.dgvItemsContextMenuClick);
+            this.contextMenu.Name = "contextMenuStripItems";
+            this.contextMenu.Size = new System.Drawing.Size(61, 4);
+            this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // tabWorldObjects
             // 
@@ -641,7 +576,7 @@
             this.dgvWorldObjects.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colWorldObjectsID,
             this.colWorldObjectsName});
-            this.dgvWorldObjects.ContextMenuStrip = this.contextMenuStripWorldObjects;
+            this.dgvWorldObjects.ContextMenuStrip = this.contextMenu;
             this.dgvWorldObjects.Location = new System.Drawing.Point(6, 6);
             this.dgvWorldObjects.MultiSelect = false;
             this.dgvWorldObjects.Name = "dgvWorldObjects";
@@ -670,20 +605,6 @@
             this.colWorldObjectsName.Name = "colWorldObjectsName";
             this.colWorldObjectsName.ReadOnly = true;
             this.colWorldObjectsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // contextMenuStripWorldObjects
-            // 
-            this.contextMenuStripWorldObjects.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.allToolStripMenuItem});
-            this.contextMenuStripWorldObjects.Name = "contextMenuStripWorldObjects";
-            this.contextMenuStripWorldObjects.Size = new System.Drawing.Size(89, 26);
-            // 
-            // allToolStripMenuItem
-            // 
-            this.allToolStripMenuItem.Name = "allToolStripMenuItem";
-            this.allToolStripMenuItem.Size = new System.Drawing.Size(88, 22);
-            this.allToolStripMenuItem.Text = "All";
-            this.allToolStripMenuItem.Click += new System.EventHandler(this.dgvWorldObjectsContextMenuClick);
             // 
             // tabCharacters
             // 
@@ -801,6 +722,7 @@
             this.dgvCharacters.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colCharacterID,
             this.colCharacterName});
+            this.dgvCharacters.ContextMenuStrip = this.contextMenu;
             this.dgvCharacters.Location = new System.Drawing.Point(6, 6);
             this.dgvCharacters.MultiSelect = false;
             this.dgvCharacters.Name = "dgvCharacters";
@@ -934,6 +856,7 @@
             this.dgvClasses.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colClassID,
             this.colClassName});
+            this.dgvClasses.ContextMenuStrip = this.contextMenu;
             this.dgvClasses.Location = new System.Drawing.Point(6, 6);
             this.dgvClasses.MultiSelect = false;
             this.dgvClasses.Name = "dgvClasses";
@@ -1211,6 +1134,7 @@
             this.dgvQuests.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colQuestsID,
             this.colQuestsName});
+            this.dgvQuests.ContextMenuStrip = this.contextMenu;
             this.dgvQuests.Location = new System.Drawing.Point(6, 6);
             this.dgvQuests.MultiSelect = false;
             this.dgvQuests.Name = "dgvQuests";
@@ -1486,6 +1410,7 @@
             this.dgvMonsters.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colMonstersID,
             this.colMonstersName});
+            this.dgvMonsters.ContextMenuStrip = this.contextMenu;
             this.dgvMonsters.Location = new System.Drawing.Point(6, 6);
             this.dgvMonsters.MultiSelect = false;
             this.dgvMonsters.Name = "dgvMonsters";
@@ -2329,12 +2254,10 @@
             this.tabItems.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItemTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvItems)).EndInit();
-            this.contextMenuStripItems.ResumeLayout(false);
             this.tabWorldObjects.ResumeLayout(false);
             this.tabWorldObjects.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjectTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjects)).EndInit();
-            this.contextMenuStripWorldObjects.ResumeLayout(false);
             this.tabCharacters.ResumeLayout(false);
             this.tabCharacters.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgCharacterTags)).EndInit();
@@ -2392,8 +2315,6 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addNewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.TabControl tabCtl;
         private System.Windows.Forms.TabPage tabItems;
         private System.Windows.Forms.ComboBox cbItemSubtype;
@@ -2416,8 +2337,6 @@
         private System.Windows.Forms.TextBox tbWorldObjectName;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.DataGridView dgvWorldObjects;
-        private System.Windows.Forms.ToolStripMenuItem itemToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem worldObjectToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn colItemTags;
         private System.Windows.Forms.TabPage tabCharacters;
         private System.Windows.Forms.Button btnCancelCharacter;
@@ -2462,7 +2381,6 @@
         private System.Windows.Forms.DataGridView dgvQuests;
         private System.Windows.Forms.ComboBox cbQuestType;
         private System.Windows.Forms.ComboBox cbEditableCharData;
-        private System.Windows.Forms.ToolStripMenuItem questToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn colQuestTags;
         private System.Windows.Forms.TabPage tabCutscenes;
         private System.Windows.Forms.TextBox tbCutsceneDetails;
@@ -2580,14 +2498,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colSummonsName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatusEffectsID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatusEffectsName;
-        private System.Windows.Forms.ToolStripMenuItem monsterToolStripMenuItem;
         private System.Windows.Forms.Button btnEditAdventurerDialogue;
         private System.Windows.Forms.TextBox tbClassDescription;
         private System.Windows.Forms.Label label37;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripItems;
-        private System.Windows.Forms.ToolStripMenuItem dgvItemsContextMenuAll;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripWorldObjects;
-        private System.Windows.Forms.ToolStripMenuItem allToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenu;
     }
 }
 

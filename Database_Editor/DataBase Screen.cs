@@ -203,20 +203,6 @@ namespace Database_Editor
             LoadSpiritInfo();
             LoadSummonInfo();
             LoadStatusEffectInfo();
-
-            foreach (string s in Enum.GetNames(typeof(ItemEnum)))
-            {
-                ToolStripMenuItem tsmi = new ToolStripMenuItem(s);
-                tsmi.Click += new System.EventHandler(this.dgvItemsContextMenuClick);
-                contextMenuStripItems.Items.Add(tsmi);
-            }
-
-            foreach (string s in Enum.GetNames(typeof(ObjectTypeEnum)))
-            {
-                ToolStripMenuItem tsmi = new ToolStripMenuItem(s);
-                tsmi.Click += new System.EventHandler(this.dgvWorldObjectsContextMenuClick);
-                contextMenuStripWorldObjects.Items.Add(tsmi);
-            }
         }
 
         #region Helpers
@@ -1489,23 +1475,6 @@ namespace Database_Editor
 
             tbName.Focus();
         }
-        private void addNewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AddNewGenericXMLObject(tabCtl.TabPages["tabItems"], "Items", dgvItems, "colItemID", "colItemName", tbItemName, tbItemID, dgItemTags, "colItemTags", cbItemType, tbItemDesc, new List<string>() { "Image:0-0" });
-        }
-        private void addNewToolStripMenuWorldObject_Click(object sender, EventArgs e)
-        {
-            AddNewGenericXMLObject(tabCtl.TabPages["tabWorldObjects"], "WorldObjects", dgvWorldObjects, "colWorldObjectsID", "colWorldObjectsName", tbWorldObjectName, tbWorldObjectID, dgvWorldObjectTags, "colWorldObjectTags", cbWorldObjectType, null, new List<string>() { "Image:0-0" });
-        }
-        private void questToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AddNewGenericXMLObject(tabCtl.TabPages["tabQuests"], "Quests", dgvQuests, "colQuestsID", "colQuestsName", tbQuestName, tbQuestID, dgvQuestTags, "colQuestTags", cbQuestType, tbQuestDescription);
-        }
-        private void monsterToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            List<string> defaultTags = new List<string>() { "Texture:", "Condition:", "Lvl", "Ability:", "Loot:", "Trait:", "Walk:0-0-3-0.15-T", "Attack:0-0-3-0.15-T", "Cast:0-0-3-0.15-T", "Hurt:0-0-3-0.15-T", "Critical:0-0-3-0.15-T", "KO:0-0-3-0.15-T" };
-            AddNewGenericXMLObject(tabCtl.TabPages["tabMonsters"], "Monsters", dgvMonsters, "colMonstersID", "colMonstersName", tbMonsterName, tbMonsterID, dgvMonsterTags, "colMonsterTags", null, tbMonsterDescription, defaultTags);
-        }
 
         private void cbItemType_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -2274,6 +2243,56 @@ namespace Database_Editor
 
         #endregion
 
+        #region Context Menu Methods
+        private void contextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            DataGridView dgv = contextMenu.SourceControl as DataGridView;
+
+            contextMenu.Items.Clear();
+            if (dgv == dgvItems)
+            {
+                AddContextMenuItem("Add New", AddNewItem, true);
+
+                foreach (string s in Enum.GetNames(typeof(ItemEnum)))
+                {
+                    AddContextMenuItem(s, dgvItemsContextMenuClick, false);
+                }
+            }
+            else if (dgv == dgvWorldObjects)
+            {
+                AddContextMenuItem("Add New", AddNewWorldObject, true);
+
+                foreach (string s in Enum.GetNames(typeof(ObjectTypeEnum)))
+                {
+                    if (!s.Equals("Building") && !s.Equals("Earth"))
+                    {
+                        AddContextMenuItem(s, dgvWorldObjectsContextMenuClick, false);
+                    }
+                }
+            }
+            else if(dgv == dgvMonsters)
+            {
+                AddContextMenuItem("Add New", AddNewMonster, false);
+            }
+            else if (dgv == dgvQuests)
+            {
+                AddContextMenuItem("Add New", AddNewQuest, false);
+            }
+        }
+
+        private void AddContextMenuItem(string text, EventHandler triggeredEvent, bool separator)
+        {
+            ToolStripMenuItem tsmi = new ToolStripMenuItem(text);
+            tsmi.Click += new EventHandler(triggeredEvent);
+            contextMenu.Items.Add(tsmi);
+
+            if (separator)
+            {
+                contextMenu.Items.Add(new ToolStripSeparator());
+            }
+        }
+
+        #region Filters
         private void dgvItemsContextMenuClick(object sender, EventArgs e)
         {
             _diTabIndices["Items"] = 0;
@@ -2287,5 +2306,26 @@ namespace Database_Editor
             LoadWorldObjectDataGrid(((ToolStripMenuItem)sender).Text, 0);
             LoadWorldObjectInfo();
         }
+        #endregion
+        #region Add New
+        private void AddNewItem(object sender, EventArgs e)
+        {
+            AddNewGenericXMLObject(tabCtl.TabPages["tabItems"], "Items", dgvItems, "colItemID", "colItemName", tbItemName, tbItemID, dgItemTags, "colItemTags", cbItemType, tbItemDesc, new List<string>() { "Image:0-0" });
+        }
+        private void AddNewWorldObject(object sender, EventArgs e)
+        {
+            AddNewGenericXMLObject(tabCtl.TabPages["tabWorldObjects"], "WorldObjects", dgvWorldObjects, "colWorldObjectsID", "colWorldObjectsName", tbWorldObjectName, tbWorldObjectID, dgvWorldObjectTags, "colWorldObjectTags", cbWorldObjectType, null, new List<string>() { "Image:0-0" });
+        }
+        private void AddNewQuest(object sender, EventArgs e)
+        {
+            AddNewGenericXMLObject(tabCtl.TabPages["tabQuests"], "Quests", dgvQuests, "colQuestsID", "colQuestsName", tbQuestName, tbQuestID, dgvQuestTags, "colQuestTags", cbQuestType, tbQuestDescription);
+        }
+        private void AddNewMonster(object sender, EventArgs e)
+        {
+            List<string> defaultTags = new List<string>() { "Texture:", "Condition:", "Lvl", "Ability:", "Loot:", "Trait:", "Walk:0-0-3-0.15-T", "Attack:0-0-3-0.15-T", "Cast:0-0-3-0.15-T", "Hurt:0-0-3-0.15-T", "Critical:0-0-3-0.15-T", "KO:0-0-3-0.15-T" };
+            AddNewGenericXMLObject(tabCtl.TabPages["tabMonsters"], "Monsters", dgvMonsters, "colMonstersID", "colMonstersName", tbMonsterName, tbMonsterID, dgvMonsterTags, "colMonsterTags", null, tbMonsterDescription, defaultTags);
+        }
+        #endregion
+        #endregion
     }
 }

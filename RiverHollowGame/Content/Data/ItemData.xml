@@ -503,7 +503,7 @@
     </Item>
     <Item>
       <Key>125</Key>
-      <Value>[Type:Clothes][Subtype:None][Image:112-0][ReqItems:2-10|0-5][TexName:400][Row:1]</Value>
+      <Value>[Type:Clothes][Subtype:Body][Image:112-0][ReqItems:2-10|0-5][TexName:400][Row:1]</Value>
     </Item>
     <Item>
       <Key>126</Key>
@@ -511,7 +511,7 @@
     </Item>
     <Item>
       <Key>127</Key>
-      <Value>[Type:Clothes][Subtype:Body][Image:0-64][Sell:0][Row:0][TexName:400]</Value>
+      <Value>[Type:Clothes][Subtype:Hat][Image:0-64][Sell:0][Row:0][TexName:400]</Value>
     </Item>
     <Item>
       <Key>128</Key>
@@ -519,31 +519,31 @@
     </Item>
     <Item>
       <Key>129</Key>
-      <Value>[Type:Clothes][Subtype:Hat][Image:32-64][Sell:0][Row:2]</Value>
+      <Value>[Type:Clothes][Subtype:Legs][Image:32-64][Sell:0][Row:2][TexName:404]</Value>
     </Item>
     <Item>
       <Key>130</Key>
-      <Value>[Type:Clothes][Subtype:Body][Image:48-64][Sell:0][Row:3]</Value>
+      <Value>[Type:MonsterFood][Image:48-64][Sell:0][Spawn:3-4]</Value>
     </Item>
     <Item>
       <Key>131</Key>
-      <Value>[Type:Clothes][Subtype:Legs][Image:0-80][Sell:0][Neutral][Row:3][TexName:404]</Value>
+      <Value>[Type:Special][Subtype:Quest][Image:0-80][Sell:0]</Value>
     </Item>
     <Item>
       <Key>132</Key>
-      <Value>[Type:MonsterFood][Image:80-16][Sell:20][Spawn:3-4]</Value>
+      <Value>[Type:Special][Subtype:Map][Image:80-16]</Value>
     </Item>
     <Item>
       <Key>133</Key>
-      <Value>[Type:Special][Subtype:Quest][Image:16-48][Sell:0]</Value>
+      <Value>[Type:Special][Subtype:Marriage][Image:16-48][Sell:0]</Value>
     </Item>
     <Item>
       <Key>134</Key>
-      <Value>[Type:Special][Subtype:Map][Image:0-32]</Value>
+      <Value>[Type:Special][Subtype:Class][Image:0-32]</Value>
     </Item>
     <Item>
       <Key>135</Key>
-      <Value>[Type:Special][Subtype:Marriage][Image:32-48][Sell:0]</Value>
+      <Value>[Type:Special][Subtype:DungeonKey][Image:32-48][Sell:0]</Value>
     </Item>
   </Asset>
 </XnaContent>
