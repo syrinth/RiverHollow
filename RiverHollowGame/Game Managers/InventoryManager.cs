@@ -10,9 +10,7 @@ namespace RiverHollow.Game_Managers
         #region Properties
         public static int maxItemColumns = 10;
         public static int maxItemRows = 4;
-
-        private static Item[,] _arrPlayerInventory;
-        public static Item[,] PlayerInventory => _arrPlayerInventory;
+        public static Item[,] PlayerInventory { get; private set; }
         private static Item[,] _arrExtraInventory;
 
         public static List<Item> AddedItemList;
@@ -25,7 +23,7 @@ namespace RiverHollow.Game_Managers
         public static void InitPlayerInventory()
         {
             AddedItemList = new List<Item>();
-            _arrPlayerInventory = new Item[maxItemRows, maxItemColumns];
+            PlayerInventory = new Item[maxItemRows, maxItemColumns];
         }
 
         /// <summary>
@@ -60,7 +58,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         private static Item[,] GetInventory(bool PlayerInventory)
         {
-            return (PlayerInventory ? _arrPlayerInventory : _arrExtraInventory);
+            return (PlayerInventory ? InventoryManager.PlayerInventory : _arrExtraInventory);
         }
 
         /// <summary>
@@ -153,7 +151,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static bool HasItemInPlayerInventory(int itemID, int x)
         {
-            return HasItemInInventory(itemID, x, _arrPlayerInventory);
+            return HasItemInInventory(itemID, x, PlayerInventory);
         }
 
         /// <summary>
@@ -202,7 +200,7 @@ Exit:
         /// </summary>
         public static void RemoveItemsFromInventory(int itemID, int number, bool playerInventory = true)
         {
-            RemoveItemsFromInventory(itemID, number, _arrPlayerInventory);
+            RemoveItemsFromInventory(itemID, number, PlayerInventory);
         }
 
         /// <summary>
@@ -321,18 +319,18 @@ Exit:
                         int numToAdd = 999 - inventory[validRow, validCol].Number;
                         int leftOver = itemToAdd.Number - numToAdd;
 
-                        inventory[validRow, validCol].Add(numToAdd, inventory == _arrPlayerInventory);
+                        inventory[validRow, validCol].Add(numToAdd, inventory == PlayerInventory);
                         itemToAdd.Remove(numToAdd);
                         AddToInventory(itemToAdd, inventory);
                     }
                     else
                     {
-                        inventory[validRow, validCol].Add(itemToAdd.Number, inventory == _arrPlayerInventory);
+                        inventory[validRow, validCol].Add(itemToAdd.Number, inventory == PlayerInventory);
                     }
                 }
 
                 //Only perform this check if we are adding to the playerInventory
-                if (inventory == _arrPlayerInventory)
+                if (inventory == PlayerInventory)
                 {
                     PlayerManager.AdvanceQuestProgress(itemToAdd);
 
@@ -393,7 +391,7 @@ Exit:
                     {
                         inventory[row, column] = item;
                     }
-                    if (inventory == _arrPlayerInventory)
+                    if (inventory == PlayerInventory)
                     {
                         PlayerManager.AdvanceQuestProgress(item);
                     }
@@ -403,7 +401,7 @@ Exit:
                 {
                     if (inventory[row, column].ItemID == item.ItemID && inventory[row, column].DoesItStack && 999 >= (inventory[row, column].Number + item.Number))
                     {
-                        inventory[row, column].Add(item.Number, inventory == _arrPlayerInventory);
+                        inventory[row, column].Add(item.Number, inventory == PlayerInventory);
                         rv = true;
                     }
                 }
@@ -424,7 +422,7 @@ Exit:
         }
         private static void RemoveItemFromPlayerInventorySpot(int row, int column, Item[,] inventory)
         {
-            if (inventory == _arrPlayerInventory)
+            if (inventory == PlayerInventory)
             {
                 PlayerManager.RemoveQuestProgress(inventory[row, column]);
             }
@@ -464,9 +462,9 @@ Exit:
                     if (inventory[i, j] == it)
                     {
                         //Do the customary comparisons for updating information
-                        if (inventory == _arrPlayerInventory)
+                        if (inventory == PlayerInventory)
                         {
-                            if (_arrPlayerInventory[i, j] != null)
+                            if (PlayerInventory[i, j] != null)
                             {
                                 PlayerManager.RemoveQuestProgress(inventory[i, j]);
                             }
@@ -485,7 +483,7 @@ Exit:
 
         public static Item GetCurrentItem()
         {
-            return _arrPlayerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
+            return PlayerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
         }
 
         internal static List<Consumable> GetPlayerCombatItems()
@@ -495,9 +493,9 @@ Exit:
             {
                 for (int j = 0; j < maxItemColumns; j++)
                 {
-                    if (_arrPlayerInventory[i, j] != null && _arrPlayerInventory[i, j].CompareType(ItemEnum.Consumable))
+                    if (PlayerInventory[i, j] != null && PlayerInventory[i, j].CompareType(ItemEnum.Consumable))
                     {
-                        items.Add((Consumable)_arrPlayerInventory[i, j]);
+                        items.Add((Consumable)PlayerInventory[i, j]);
                     }
                 }
             }

@@ -367,7 +367,7 @@
     </Item>
     <Item>
       <Key>91</Key>
-      <Value>[Type:Equipment][Subtype:Accessory][Image:0-0][Sell:1000][Tier:1][Def:Major][Str:Minor]</Value>
+      <Value>[Type:Equipment][Image:0-0][Sell:1000][Tier:1][Def:Major][Str:Minor]</Value>
     </Item>
     <Item>
       <Key>92</Key>

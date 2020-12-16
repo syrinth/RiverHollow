@@ -214,7 +214,8 @@ namespace RiverHollow.GUIComponents.Screens
                             }
 
                             _gName.SetText(chosenItem.Name);
-                            _gDescription.SetText(chosenItem.GetDescription());
+                            
+                            _gDescription.SetText(_gDescription.ParseText(chosenItem.GetDescription(), _winMain.MidWidth(), 5)[0]);
 
                             ConfigureInfo();
                         }

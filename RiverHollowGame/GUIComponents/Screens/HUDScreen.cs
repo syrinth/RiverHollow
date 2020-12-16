@@ -297,6 +297,12 @@ namespace RiverHollow.GUIComponents.Screens
                     _btnChangeRow.Alpha(Alpha());
                 }
             }
+
+            for (int i = 0; i < _liItems.Count; i++)
+            {
+                _liItems[i].SetItem(InventoryManager.PlayerInventory[GameManager.HUDItemRow, i]);
+                _liItems[i].SetAlpha(Alpha());
+            }
         }
 
         /// <summary>

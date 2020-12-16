@@ -278,14 +278,11 @@ namespace RiverHollow
 
             GoToHUDScreen();
             GameCalendar.NewCalendar();
-            if (playIntro)
-            {
-                CutsceneManager.TriggerCutscene(1);
-            }
-            else
-            {
-                //PlayerManager.AddToQuestLog(GameManager.DiQuests[2]);
-            }
+
+            CutsceneManager.TriggerCutscene(1);
+            if (!playIntro) { CutsceneManager.SkipCutscene(); }
+
+
 
             StartGame();
         }

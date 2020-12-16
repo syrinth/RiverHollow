@@ -151,12 +151,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public void SetItem(Item it)
         {
-            if(it != null)
+            if (it != null)
             {
-                _guiItem = new GUIItem(it);
-                _guiItem.CenterOnObject(this);
-                if (GameManager.CurrentInventoryDisplay == DisplayTypeEnum.Gift && !it.Giftable()) { _guiItem.Alpha(0.5f); }
-                AddControl(_guiItem);
+                if (_guiItem == null || (_guiItem != null && _guiItem.ItemObject != it))
+                {
+                    _guiItem = new GUIItem(it);
+                    _guiItem.CenterOnObject(this);
+                    if (GameManager.CurrentInventoryDisplay == DisplayTypeEnum.Gift && !it.Giftable()) { _guiItem.Alpha(0.5f); }
+                    AddControl(_guiItem);
+                }
             }
             else
             {

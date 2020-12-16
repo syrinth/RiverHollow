@@ -30,7 +30,7 @@ namespace RiverHollow.GUIComponents.Screens
         GUITextInputWindow _nameWindow;
         GUITextInputWindow _manorWindow;
 
-        GUICheck _gCheck;
+        GUICheck _gCheckSkipCutscene;
 
         List<GUIObject> _liClassBoxes;
         ClassSelectionBox _csbSelected;
@@ -104,9 +104,9 @@ namespace RiverHollow.GUIComponents.Screens
 
             GUIObject.CreateSpacedRow(ref _liClassBoxes, _window.Height / 2, _window.Position().X, _window.Width, 20);
 
-            _gCheck = new GUICheck("Skip Intro");
-            _gCheck.SetChecked(false);
-            _gCheck.AnchorToInnerSide(_window, SideEnum.BottomLeft);
+            _gCheckSkipCutscene = new GUICheck("Skip Intro");
+            _gCheckSkipCutscene.SetChecked(false);
+            _gCheckSkipCutscene.AnchorToInnerSide(_window, SideEnum.BottomLeft);
         }
 
         public override void Update(GameTime gTime)
@@ -199,7 +199,7 @@ namespace RiverHollow.GUIComponents.Screens
             PlayerManager.SetName(_nameWindow.GetText());
             PlayerManager.SetManorName(_manorWindow.GetText());
 
-            RiverHollow.NewGame(DataManager.GetAdventurer(1), DataManager.GetAdventurer(2), !_gCheck.Checked());
+            RiverHollow.NewGame(DataManager.GetAdventurer(1), DataManager.GetAdventurer(2), !_gCheckSkipCutscene.Checked());
             GameManager.StopTakingInput();
 
         }
