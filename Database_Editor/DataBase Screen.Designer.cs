@@ -287,7 +287,7 @@
             // saveToFileToolStripMenuItem
             // 
             this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
-            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.saveToFileToolStripMenuItem.Text = "Save To File";
             this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
             // 
@@ -1560,6 +1560,7 @@
             this.dgvActions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colActionsID,
             this.colActionsName});
+            this.dgvActions.ContextMenuStrip = this.contextMenu;
             this.dgvActions.Location = new System.Drawing.Point(6, 6);
             this.dgvActions.MultiSelect = false;
             this.dgvActions.Name = "dgvActions";

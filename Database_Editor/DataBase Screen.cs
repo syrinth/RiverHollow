@@ -36,15 +36,32 @@ namespace Database_Editor
         #endregion
 
         #region Tags
+        const string TAGS_FOR_ITEMS = "ReqItems,RefinesInto,Item,ItemID,GoalItem,Collection,Makes,Processes,DWeap,DArmor,DHead,DWrist";
+        const string TAGS_FOR_WORLD_OBJECTS = "ObjectID,Wall,Floor,Resources,Place";
+        const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
+        const string TAGS_FOR_CLASSES = "Class";
+
+        const string ITEM_REF_TAGS = "ReqItems,RefinesInto,Place";
+        const string QUEST_REF_TAGS = "Item,GoalItem";
+        const string CHARACTER_REF_TAGS = "Collection,Class";
+        const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,Item";
+        const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
+        const string WORKERS_REF_TAG = "Item,ID";
+        const string SHOP_REF_TAG = "ItemID,Requires";
+        const string CONFIG_REF_TAG = "ItemID,ObjectID";
+        const string MONSTER_REF_TAGS = "Loot";
+
+
         const string ITEM_TAGS = "ReqItems,RefinesInto";
         const string ITEM_WORLD_TAGS = "Place";
         const string QUEST_ITEM_TAGS = "Item,GoalItem";
         const string CHARACTER_ITEM_TAGS = "Collection";
         const string WORLD_OBJECT_TAGS = "Makes,Processes,Item";
         const string CLASSES_ITEM_TAG = "DWeap,DArmor,DHead,DWrist";
-        const string WORKERS_ITEM_TAG = "Item, ID";
+        const string WORKERS_ITEM_TAG = "Item,ID";
         const string SHOP_TAG = "ItemID,Requires";
         const string CONFIG_ITEM_TAG = "ItemID";
+        const string CLASS_OTHER_TAG = "Ability,Spell";
         const string CONFIG_WORLD_TAG = "ObjectID,Wall,Floor";
         const string DEFAULT_WORLD_TAG = "";
         public static string MAP_ITEM_TAGS = "Item";
@@ -155,13 +172,13 @@ namespace Database_Editor
 
             _diObjectText = ReadTaggedXMLFile(OBJECT_TEXT_XML_FILE);
 
-            LoadXMLDictionary(QUEST_XML_FILE, QUEST_ITEM_TAGS, DEFAULT_WORLD_TAG);
-            LoadXMLDictionary(CHARACTER_XML_FILE, CHARACTER_ITEM_TAGS, DEFAULT_WORLD_TAG);
-            LoadXMLDictionary(CLASSES_XML_FILE, CLASSES_ITEM_TAG, DEFAULT_WORLD_TAG);
-            LoadXMLDictionary(WORKERS_XML_FILE, WORKERS_ITEM_TAG, DEFAULT_WORLD_TAG);
-            LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_ITEM_TAG, CONFIG_WORLD_TAG);
-            LoadXMLDictionary(MONSTERS_XML_FILE, "", "");
-            LoadXMLDictionary(ACTIONS_XML_FILE, "", "");
+            LoadXMLDictionary(QUEST_XML_FILE, QUEST_REF_TAGS, "");
+            LoadXMLDictionary(CHARACTER_XML_FILE, CHARACTER_REF_TAGS, "");
+            LoadXMLDictionary(CLASSES_XML_FILE, CLASSES_REF_TAGS, TAGS_FOR_CLASSES);
+            LoadXMLDictionary(WORKERS_XML_FILE, WORKERS_REF_TAG, "");
+            LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_REF_TAG, "");
+            LoadXMLDictionary(MONSTERS_XML_FILE, MONSTER_REF_TAGS, "");
+            LoadXMLDictionary(ACTIONS_XML_FILE, "", TAGS_FOR_COMBAT_ACTIONS);
             LoadXMLDictionary(BUILDINGS_XML_FILE, "", "");
             LoadXMLDictionary(SPIRITS_XML_FILE, "", "");
             LoadXMLDictionary(SUMMONS_XML_FILE, "", "");
@@ -173,6 +190,8 @@ namespace Database_Editor
 
             LoadWorldObjects();
             LoadItemData();
+
+            FindLinkedXMLObjects();
 
             LoadDataGrids();
             LoadAllInfoPanels();
@@ -560,12 +579,12 @@ namespace Database_Editor
             return xmlDictionary;
         }
 
-        private void LoadXMLDictionary(string fileName, string itemTags, string objectTags)
+        private void LoadXMLDictionary(string fileName, string tagsReferenced, string tagsThatReferenceMe)
         {
             List<XMLData> data = new List<XMLData>();
             foreach (KeyValuePair<string, Dictionary<string, string>> kvp in ReadTaggedXMLFile(fileName))
             {
-                data.Add(new XMLData(kvp.Key, kvp.Value, itemTags, objectTags, FileNameToXMLType(fileName)));
+                data.Add(new XMLData(kvp.Key, kvp.Value, tagsReferenced, tagsThatReferenceMe, FileNameToXMLType(fileName)));
             }
 
             _diBasicXML[fileName] = data;
@@ -587,7 +606,7 @@ namespace Database_Editor
                     Dictionary<string, string> stringData = worldObjectDictionary[strID];
                     if (stringData != null)
                     {
-                        _liWorldObjects.Add(new XMLData(strID, stringData, WORLD_OBJECT_TAGS, DEFAULT_WORLD_TAG, XMLTypeEnum.WorldObject));
+                        _liWorldObjects.Add(new XMLData(strID, stringData, WORLD_OBJECT_REF_TAGS, TAGS_FOR_WORLD_OBJECTS, XMLTypeEnum.WorldObject));
                     }
                 }
                 else { break; }
@@ -607,13 +626,11 @@ namespace Database_Editor
                     Dictionary<string, string> stringData = itemDictionary[strID];
                     if (stringData != null)
                     {
-                        _liItemData.Add(new ItemXMLData(strID, stringData, ITEM_TAGS, ITEM_WORLD_TAGS));
+                        _liItemData.Add(new ItemXMLData(strID, stringData, ITEM_REF_TAGS, TAGS_FOR_ITEMS));
                     }
                 }
                 else { break; }
             }
-
-            FindLinkedXMLObjects(_liItemData);
         }
 
         /// <summary>
@@ -622,29 +639,22 @@ namespace Database_Editor
         /// rfeferences it.
         /// </summary>
         /// <param name="dataList"></param>
-        private void FindLinkedXMLObjects(List<ItemXMLData> dataList)
+        private void FindLinkedXMLObjects()
         {
             //Compare item Data against the other Items
-            for (int i = 0; i < dataList.Count; i++)
+            for (int i = 0; i < _liItemData.Count; i++)
             {
-                ItemXMLData theData = dataList[i];
-                for (int j = 0; j < dataList.Count; j++)
+                ItemXMLData theData = _liItemData[i];
+                for (int j = 0; j < _liItemData.Count; j++)
                 {
-                    XMLData testIt = dataList[j];
-                    if (testIt.RefersToID(theData.ID))
-                    {
-                        theData.AddLinkedItem(testIt);
-                    }
+                    _liItemData[j].CheckForItemLink(theData);
                 }
 
                 foreach (string s in _diBasicXML.Keys)
                 {
                     foreach (XMLData testIt in _diBasicXML[s])
                     {
-                        if (testIt.RefersToID(theData.ID))
-                        {
-                            theData.AddLinkedItem(testIt);
-                        }
+                        testIt.CheckForItemLink(theData);
                     }
                 }
 
@@ -654,18 +664,12 @@ namespace Database_Editor
                 {
                     //First, check to see if the object refers to the item this
                     //could be because the object makes the item for example
-                    if (testIt.RefersToID(theData.ID))
-                    {
-                        theData.AddLinkedItem(testIt);
-                    }
+                    testIt.CheckForItemLink(theData);
 
                     //Next check to see if the item refers to the object, pass in
                     //false here to ensure that we compare only to the worldObject tags
                     //The item might place the object.
-                    if (theData.RefersToID(testIt.ID, false))
-                    {
-                        testIt.AddLinkedItem(theData);
-                    }
+                    theData.CheckForItemLink(testIt);
                 }
 
                 //Find any maps that reference the ItemID
@@ -682,10 +686,6 @@ namespace Database_Editor
 
             foreach (XMLData theData in _liWorldObjects)
             {
-                if (theData.Name == "Dungeon Door")
-                {
-                    int i = 0;
-                }
                 //Find any maps that reference the ObjectID
                 foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
                 {
@@ -700,9 +700,28 @@ namespace Database_Editor
                 {
                     foreach (XMLData testIt in _diBasicXML[s])
                     {
-                        if (testIt.RefersToID(theData.ID, false))
+                        testIt.CheckForItemLink(theData);
+                    }
+                }
+            }
+
+            foreach (string baseFile in _diBasicXML.Keys)
+            {
+                foreach (XMLData theData in _diBasicXML[baseFile])
+                {
+                    if(theData.ID == 21)
+                    {
+                        int i = 0;
+                    }
+                    //Find any files that reference the ObjectID
+                    foreach (string comparatorFile in _diBasicXML.Keys)
+                    {
+                        if (!baseFile.Equals(comparatorFile))
                         {
-                            theData.AddLinkedItem(testIt);
+                            foreach (XMLData testIt in _diBasicXML[comparatorFile])
+                            {
+                                testIt.CheckForItemLink(theData);
+                            }
                         }
                     }
                 }
@@ -1036,7 +1055,7 @@ namespace Database_Editor
         }
 
         #region SaveInfo
-        private void SaveXMLDataInfo(List<XMLData> liData, string tabIndex, string textIDPrefix, XMLTypeEnum xmlType, TextBox tbName, TextBox tbID, ComboBox cb, DataGridView baseGridView, DataGridView dgTags, string colID, string colName, TextBox tbDescription = null, string itemTags = "", string objectTags = "")
+        private void SaveXMLDataInfo(List<XMLData> liData, string tabIndex, string textIDPrefix, XMLTypeEnum xmlType, TextBox tbName, TextBox tbID, ComboBox cb, DataGridView baseGridView, DataGridView dgTags, string colID, string colName, string tagsReferenced, string tagsThatReferenceMe, TextBox tbDescription = null)
         {
             XMLData data = null;
             if (liData.Count == _diTabIndices[tabIndex])
@@ -1068,7 +1087,7 @@ namespace Database_Editor
                     }
                 }
 
-                data = new XMLData(tbID.Text, tags, itemTags, objectTags, xmlType);
+                data = new XMLData(tbID.Text, tags, tagsReferenced, tagsThatReferenceMe, xmlType);
                 liData.Add(data);
             }
             else
@@ -1137,7 +1156,7 @@ namespace Database_Editor
                     }
                 }
 
-                data = new ItemXMLData(tbItemID.Text, tags, ITEM_TAGS, ITEM_WORLD_TAGS);
+                data = new ItemXMLData(tbItemID.Text, tags, ITEM_REF_TAGS, TAGS_FOR_ITEMS);
                 _liItemData.Add(data);
             }
             else
@@ -1204,47 +1223,47 @@ namespace Database_Editor
         }
         private void SaveWorldObjectInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_liWorldObjects, "WorldObjects", "WorldObject", XMLTypeEnum.WorldObject, tbWorldObjectName, tbWorldObjectID, cbWorldObjectType, dgvWorldObjects, dgvWorldObjectTags, "colWorldObjectsID", "colWorldObjectsName");
+            SaveXMLDataInfo(_liWorldObjects, "WorldObjects", "WorldObject", XMLTypeEnum.WorldObject, tbWorldObjectName, tbWorldObjectID, cbWorldObjectType, dgvWorldObjects, dgvWorldObjectTags, "colWorldObjectsID", "colWorldObjectsName", WORLD_OBJECT_REF_TAGS, TAGS_FOR_WORLD_OBJECTS);
         }
         private void SaveCharacterInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[CHARACTER_XML_FILE], "Characters", "Character_", XMLTypeEnum.Character, tbCharacterName, tbCharacterID, cbCharacterType, dgvCharacters, dgCharacterTags, "colCharacterID", "colCharacterName");
+            SaveXMLDataInfo(_diBasicXML[CHARACTER_XML_FILE], "Characters", "Character_", XMLTypeEnum.Character, tbCharacterName, tbCharacterID, cbCharacterType, dgvCharacters, dgCharacterTags, "colCharacterID", "colCharacterName", CHARACTER_REF_TAGS, "");
         }
         private void SaveClassInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[CLASSES_XML_FILE], "Classes", "Class_", XMLTypeEnum.Class, tbClassName, tbClassID, null, dgvClasses, dgClassTags, "colClassID", "colClassName", tbClassDescription);
+            SaveXMLDataInfo(_diBasicXML[CLASSES_XML_FILE], "Classes", "Class_", XMLTypeEnum.Class, tbClassName, tbClassID, null, dgvClasses, dgClassTags, "colClassID", "colClassName", CLASSES_REF_TAGS, "", tbClassDescription);
         }
         private void SaveAdventurerInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[WORKERS_XML_FILE], "Adventurers", "Adventurer_", XMLTypeEnum.Adventurer, tbAdventurerName, tbAdventurerID, cbAdventurerType, dgvAdventurers, dgvAdventurerTags, "colAdventurersID", "colAdventurersName");
+            SaveXMLDataInfo(_diBasicXML[WORKERS_XML_FILE], "Adventurers", "Adventurer_", XMLTypeEnum.Adventurer, tbAdventurerName, tbAdventurerID, cbAdventurerType, dgvAdventurers, dgvAdventurerTags, "colAdventurersID", "colAdventurersName", WORKERS_REF_TAG, "");
         }
         private void SaveQuestInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[QUEST_XML_FILE], "Quests", "Quest_", XMLTypeEnum.Quest, tbQuestName, tbQuestID, cbQuestType, dgvQuests, dgvQuestTags, "colQuestsID", "colQuestsName", tbQuestDescription);
+            SaveXMLDataInfo(_diBasicXML[QUEST_XML_FILE], "Quests", "Quest_", XMLTypeEnum.Quest, tbQuestName, tbQuestID, cbQuestType, dgvQuests, dgvQuestTags, "colQuestsID", "colQuestsName", QUEST_REF_TAGS, "", tbQuestDescription);
         }
         private void SaveMonsterInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[MONSTERS_XML_FILE], "Monsters", "Monster_", XMLTypeEnum.Monster, tbMonsterName, tbMonsterID, null, dgvMonsters, dgvMonsterTags, "colMonstersID", "colMonstersName", tbMonsterDescription);
+            SaveXMLDataInfo(_diBasicXML[MONSTERS_XML_FILE], "Monsters", "Monster_", XMLTypeEnum.Monster, tbMonsterName, tbMonsterID, null, dgvMonsters, dgvMonsterTags, "colMonstersID", "colMonstersName", MONSTER_REF_TAGS, "", tbMonsterDescription);
         }
         private void SaveActionInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[ACTIONS_XML_FILE], "Actions", "Action_", XMLTypeEnum.Action, tbActionName, tbActionID, cbActionType, dgvActions, dgvActionTags, "colActionsID", "colActionsName", tbActionDescription);
+            SaveXMLDataInfo(_diBasicXML[ACTIONS_XML_FILE], "Actions", "Action_", XMLTypeEnum.Action, tbActionName, tbActionID, cbActionType, dgvActions, dgvActionTags, "colActionsID", "colActionsName", "", TAGS_FOR_COMBAT_ACTIONS, tbActionDescription);
         }
         private void SaveBuildingInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[BUILDINGS_XML_FILE], "Buildings", "Building_", XMLTypeEnum.Building, tbBuildingName, tbBuildingID, null, dgvBuildings, dgvBuildingTags, "colBuildingsID", "colBuildingsName", tbBuildingDescription);
+            SaveXMLDataInfo(_diBasicXML[BUILDINGS_XML_FILE], "Buildings", "Building_", XMLTypeEnum.Building, tbBuildingName, tbBuildingID, null, dgvBuildings, dgvBuildingTags, "colBuildingsID", "colBuildingsName", "", "", tbBuildingDescription);
         }
         private void SaveSpiritInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[SPIRITS_XML_FILE], "Spirits", "Spirit_", XMLTypeEnum.Spirit, tbSpiritName, tbSpiritID, null, dgvSpirits, dgvSpiritTags, "colSpiritsID", "colSpiritsName", tbSpiritDescription);
+            SaveXMLDataInfo(_diBasicXML[SPIRITS_XML_FILE], "Spirits", "Spirit_", XMLTypeEnum.Spirit, tbSpiritName, tbSpiritID, null, dgvSpirits, dgvSpiritTags, "colSpiritsID", "colSpiritsName", "", "", tbSpiritDescription);
         }
         private void SaveSummonInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[SUMMONS_XML_FILE], "Summons", "Summon_", XMLTypeEnum.Summon, tbSummonName, tbSummonID, null, dgvSummons, dgvSummonTags, "colSummonsID", "colSummonsName", tbSummonDescription);
+            SaveXMLDataInfo(_diBasicXML[SUMMONS_XML_FILE], "Summons", "Summon_", XMLTypeEnum.Summon, tbSummonName, tbSummonID, null, dgvSummons, dgvSummonTags, "colSummonsID", "colSummonsName", "", "", tbSummonDescription);
         }
         private void SaveStatusEffectInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", "StatusEffect_", XMLTypeEnum.StatusEffect, tbStatusEffectName, tbStatusEffectID, null, dgvStatusEffects, dgvStatusEffectTags, "colStatusEffectsID", "colStatusEffectsName", tbStatusEffectDescription);
+            SaveXMLDataInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", "StatusEffect_", XMLTypeEnum.StatusEffect, tbStatusEffectName, tbStatusEffectID, null, dgvStatusEffects, dgvStatusEffectTags, "colStatusEffectsID", "colStatusEffectsName", "", "", tbStatusEffectDescription);
         }
 
         private void SaveCutsceneInfo()
@@ -1782,6 +1801,17 @@ namespace Database_Editor
         #region Classes
         public class XMLData
         {
+            protected struct LinkedItem
+            {
+                public XMLData ItemData;
+                public string ItemTag;
+
+                public LinkedItem(XMLData data, string tag)
+                {
+                    ItemData = data;
+                    ItemTag = tag;
+                }
+            }
             protected string _sName;
             public string Name => _sName;
             protected string _sDescription;
@@ -1789,18 +1819,18 @@ namespace Database_Editor
             protected XMLTypeEnum _eXMLType;
             protected int _iID;
             public int ID => _iID;
-            protected string[] _arrItemTags;
-            protected string[] _arrWorldObjectTags;
-            protected List<XMLData> _liLinkedItems;
+            protected List<string> _arrTagsReferenced;
+            protected List<string> _arrTagsThatReferToMe;
+            protected List<LinkedItem> _liLinkedItems;
             protected List<TMXData> _liLinkedMaps;
             protected Dictionary<string, string> _diTags;
 
-            public XMLData(string id, Dictionary<string, string> stringData, string itemTags, string objectTags, XMLTypeEnum xmlType)
+            public XMLData(string id, Dictionary<string, string> stringData, string tagsReferenced, string tagsThatReferToMe, XMLTypeEnum xmlType)
             {
                 _liLinkedMaps = new List<TMXData>();
-                _liLinkedItems = new List<XMLData>();
-                _arrItemTags = itemTags.Split(',');
-                _arrWorldObjectTags = objectTags.Split(',');
+                _liLinkedItems = new List<LinkedItem>();
+                _arrTagsReferenced = new List<string>(tagsReferenced.Split(','));
+                _arrTagsThatReferToMe = new List<string>(tagsThatReferToMe.Split(','));
 
                 string textID = Util.GetEnumString(xmlType) + "_" + id;
                 if (xmlType != XMLTypeEnum.None)
@@ -1874,16 +1904,18 @@ namespace Database_Editor
             /// </summary>
             /// <param name="id">The ID to look for</param>
             /// <returns>True if there is at least one match</returns>
-            public bool RefersToID(int id, bool item = true)
+            public void CheckForItemLink(XMLData testData)
             {
-                bool rv = false;
-
-                foreach (string s in (item ? _arrItemTags : _arrWorldObjectTags))
+                foreach (string s in _arrTagsReferenced)
                 {
-                    CheckTagForID(s, id, ref rv);
+                    if (testData._arrTagsThatReferToMe.Contains(s))
+                    {
+                        if(CheckTagForID(s, testData.ID))
+                        {
+                            testData.AddLinkedObject(this, s);
+                        }
+                    }
                 }
-
-                return rv;
             }
 
             /// <summary>
@@ -1896,8 +1928,10 @@ namespace Database_Editor
             /// <param name="id">The ID to look for</param>
             /// <param name="val">Reference to the success or this and other checks</param>
             /// <returns>True if a match exists</returns>
-            private void CheckTagForID(string tag, int id, ref bool val)
+            private bool CheckTagForID(string tag, int id)
             {
+                bool rv = false;
+
                 //If we don't have the key, don't proceed
                 if (_diTags.ContainsKey(tag))
                 {
@@ -1909,11 +1943,13 @@ namespace Database_Editor
                         string[] splitData = s.Split('-');
                         if (int.Parse(splitData[0]) == id)
                         {
-                            val = true;
-                            return;
+                            rv = true;
+                            break;
                         }
                     }
                 }
+
+                return rv;
             }
 
             /// <summary>
@@ -1930,9 +1966,10 @@ namespace Database_Editor
                     int oldID = _iID;
                     _iID = newID;
 
-                    foreach (XMLData d in _liLinkedItems)
+                    foreach (LinkedItem d in _liLinkedItems)
                     {
-                        d.ReplaceLinkedIDs(oldID, _iID, item);
+                        XMLData data = d.ItemData;
+                        data.ReplaceLinkedIDs(oldID, _iID, d.ItemTag);
                     }
 
                     foreach (TMXData d in _liLinkedMaps)
@@ -1948,12 +1985,10 @@ namespace Database_Editor
             /// </summary>
             /// <param name="oldID">The old ID that has now changed</param>
             /// <param name="newID">The new ID to reference</param>
-            public void ReplaceLinkedIDs(int oldID, int newID, bool item = true)
+            /// <param name="tag">The specific tag to replace</param>
+            public void ReplaceLinkedIDs(int oldID, int newID, string tag)
             {
-                foreach (string s in (item ? _arrItemTags : _arrWorldObjectTags))
-                {
-                    ReplaceID(s, oldID, newID);
-                }
+                ReplaceID(tag, oldID, newID);
             }
 
             /// <summary>
@@ -2012,11 +2047,11 @@ namespace Database_Editor
             /// XMLData is this entry.
             /// </summary>
             /// <param name="d">The linked entry to add</param>
-            public void AddLinkedItem(XMLData d)
+            public void AddLinkedObject(XMLData d, string tag)
             {
-                if (!_liLinkedItems.Contains(d) && this != d)
+                if (this != d)
                 {
-                    _liLinkedItems.Add(d);
+                    _liLinkedItems.Add(new LinkedItem(d, tag));
                 }
             }
             public void AddLinkedMap(TMXData d)
@@ -2047,7 +2082,7 @@ namespace Database_Editor
             ItemEnum _eType;
             public ItemEnum ItemType => _eType;
 
-            public ItemXMLData(string id, Dictionary<string, string> stringData, string itemTags, string worldTags) : base(id, stringData, itemTags, worldTags, XMLTypeEnum.Item)
+            public ItemXMLData(string id, Dictionary<string, string> stringData, string tagsReferenced, string tagsThatReferenceMe) : base(id, stringData, tagsReferenced, tagsThatReferenceMe, XMLTypeEnum.Item)
             {
                 _eType = Util.ParseEnum<ItemEnum>(_diTags["Type"]);
                 string textID = "Item_" + id;
@@ -2262,6 +2297,7 @@ namespace Database_Editor
         #region Context Menu Methods
         private void contextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            e.Cancel = false;
             DataGridView dgv = contextMenu.SourceControl as DataGridView;
 
             contextMenu.Items.Clear();
@@ -2293,6 +2329,10 @@ namespace Database_Editor
             else if (dgv == dgvQuests)
             {
                 AddContextMenuItem("Add New", AddNewQuest, false);
+            }
+            else if (dgv == dgvActions)
+            {
+                AddContextMenuItem("Add New", AddNewAction, false);
             }
         }
 
@@ -2338,6 +2378,11 @@ namespace Database_Editor
         {
             SaveQuestInfo(_diBasicXML[QUEST_XML_FILE]);
             AddNewGenericXMLObject(tabCtl.TabPages["tabQuests"], "Quests", dgvQuests, "colQuestsID", "colQuestsName", tbQuestName, tbQuestID, dgvQuestTags, "colQuestTags", cbQuestType, tbQuestDescription);
+        }
+        private void AddNewAction(object sender, EventArgs e)
+        {
+            SaveQuestInfo(_diBasicXML[ACTIONS_XML_FILE]);
+            AddNewGenericXMLObject(tabCtl.TabPages["tabActions"], "Actions", dgvActions, "colActionsID", "colActionsName", tbActionName, tbActionID, dgvActionTags, "colActionTags", cbActionType, tbActionDescription);
         }
         private void AddNewMonster(object sender, EventArgs e)
         {

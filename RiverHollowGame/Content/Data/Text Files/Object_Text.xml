@@ -102,67 +102,67 @@
       <Value>[Name:Shipping Gremlin]</Value>
     </Item>
     <Item>
-      <Key>Class_1</Key>
+      <Key>Class_0</Key>
       <Value>[Name:Wizard][Description:Practitioners of the arcane arts, wizards excel at  handling a multitude of foes.]</Value>
     </Item>
     <Item>
-      <Key>Class_2</Key>
+      <Key>Class_1</Key>
       <Value>[Name:Healer][Description:Healers]</Value>
     </Item>
     <Item>
-      <Key>Class_3</Key>
+      <Key>Class_2</Key>
       <Value>[Name:Summoner][Description:Summon shit]</Value>
     </Item>
     <Item>
-      <Key>Class_4</Key>
+      <Key>Class_3</Key>
       <Value>[Name:Witch][Description:Witches curse your foes]</Value>
     </Item>
     <Item>
-      <Key>Class_5</Key>
+      <Key>Class_4</Key>
       <Value>[Name:Lancer][Description:Stab]</Value>
     </Item>
     <Item>
-      <Key>Class_6</Key>
+      <Key>Class_5</Key>
       <Value>[Name:Knight][Description:He protecc]</Value>
     </Item>
     <Item>
-      <Key>Class_7</Key>
+      <Key>Class_6</Key>
       <Value>[Name:Scout][Description:Shooty boy]</Value>
     </Item>
     <Item>
-      <Key>Class_8</Key>
+      <Key>Class_7</Key>
       <Value>[Name:Bard][Description:Singing!]</Value>
     </Item>
     <Item>
-      <Key>Adventurer_1</Key>
+      <Key>Adventurer_0</Key>
       <Value>[Name:Wizard]</Value>
     </Item>
     <Item>
-      <Key>Adventurer_2</Key>
+      <Key>Adventurer_1</Key>
       <Value>[Name:Healer]</Value>
     </Item>
     <Item>
-      <Key>Adventurer_3</Key>
+      <Key>Adventurer_2</Key>
       <Value>[Name:Summoner]</Value>
     </Item>
     <Item>
-      <Key>Adventurer_4</Key>
+      <Key>Adventurer_3</Key>
       <Value>[Name:Witch]</Value>
     </Item>
     <Item>
-      <Key>Adventurer_5</Key>
+      <Key>Adventurer_4</Key>
       <Value>[Name:Lancer]</Value>
     </Item>
     <Item>
-      <Key>Adventurer_6</Key>
+      <Key>Adventurer_5</Key>
       <Value>[Name:Knight]</Value>
     </Item>
     <Item>
-      <Key>Adventurer_7</Key>
+      <Key>Adventurer_6</Key>
       <Value>[Name:Scout]</Value>
     </Item>
     <Item>
-      <Key>Adventurer_8</Key>
+      <Key>Adventurer_7</Key>
       <Value>[Name:Bard]</Value>
     </Item>
     <Item>

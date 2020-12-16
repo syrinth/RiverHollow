@@ -2,20 +2,24 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>1</Key>
+      <Key>0</Key>
       <Value>[Type:Magic][Item:1][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-1-0.1-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
     <Item>
-      <Key>2</Key>
+      <Key>1</Key>
       <Value>[Type:Magic][Item:5][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-1-0.1-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
     <Item>
-      <Key>3</Key>
+      <Key>2</Key>
       <Value>[Type:Magic][Item:9][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-1-0.1-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
     <Item>
-      <Key>4</Key>
+      <Key>3</Key>
       <Value>[Type:Magic][Item:0][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-1-0.1-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Type:Martial][Item:0][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-1-0.1-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -23,14 +27,10 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Martial][Item:0][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-1-0.1-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
-    </Item>
-    <Item>
-      <Key>7</Key>
       <Value>[Type:Martial][Item:100][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-1-0.1-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
     <Item>
-      <Key>8</Key>
+      <Key>7</Key>
       <Value>[Type:Martial][Item:8][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-1-0.1-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
   </Asset>
