@@ -49,7 +49,7 @@ namespace Database_Editor
         const string WORKERS_REF_TAG = "Item,ID";
         const string SHOP_REF_TAG = "ItemID,Requires";
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
-        const string MONSTER_REF_TAGS = "Loot";
+        const string MONSTER_REF_TAGS = "Loot,Ability,Spell";
 
 
         const string ITEM_TAGS = "ReqItems,RefinesInto";

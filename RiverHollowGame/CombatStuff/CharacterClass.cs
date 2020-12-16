@@ -93,7 +93,7 @@ namespace RiverHollow.CombatStuff
 
             if (stringData.ContainsKey("Ability"))
             {
-                string[] split = stringData["Ability"].Split('-');
+                string[] split = stringData["Ability"].Split('|');
                 foreach (string ability in split)
                 {
                     CombatAction ac = (CombatAction)DataManager.GetActionByIndex(int.Parse(ability));
