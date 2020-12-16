@@ -3,23 +3,23 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Texture:MagicMushroom][Condition:Forest-Summer][Jump][Lvl:1][Ability:303][Loot:26][Trait:Coward][Walk:0-0-4-.2-F][Attack:0-0-4-.2-F][Cast:0-32-9-.07-F][Hurt:0-0-4-.2-F][Critical:0-0-4-.2-F][KO:256-0-3-.15-F]</Value>
+      <Value>[Texture:MagicMushroom][Condition:Forest-Summer][Jump][Lvl:1][Ability:41][Loot:26][Trait:Coward][Walk:0-0-4-.2-F][Attack:0-0-4-.2-F][Cast:0-32-9-.07-F][Hurt:0-0-4-.2-F][Critical:0-0-4-.2-F][KO:256-0-3-.15-F]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Texture:Bauble][Condition:Forest-Summer][Jump][Lvl:1][Ability:302-300][Loot:26][Walk:0-0-5-.1-F][Attack:0-0-5-.1-F][Cast:0-0-5-.1-F][Hurt:0-0-5-.1-F][Critical:0-0-5-.1-F][KO:320-0-3-.15-F]</Value>
+      <Value>[Texture:Bauble][Condition:Forest-Summer][Jump][Lvl:1][Ability:40|38][Loot:26][Walk:0-0-5-.1-F][Attack:0-0-5-.1-F][Cast:0-0-5-.1-F][Hurt:0-0-5-.1-F][Critical:0-0-5-.1-F][KO:320-0-3-.15-F]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Texture:FangedFur][Condition:Forest-Summer][Jump][Lvl:1][Ability:300][Loot:26 23 25][Walk:0-0-4-.15-T][Attack:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F]</Value>
+      <Value>[Texture:FangedFur][Condition:Forest-Summer][Jump][Lvl:1][Ability:38][Loot:26 23 25][Walk:0-0-4-.15-T][Attack:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Texture:BigBlob][Condition:Forest-Summer][Lvl:1][Width:32][Height:32][Size:2][Ability:300][Loot:26 23 25][Walk:0-0-1-.15-T][Attack:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F]</Value>
+      <Value>[Texture:BigBlob][Condition:Forest-Summer][Lvl:1][Width:32][Height:32][Size:2][Ability:38][Loot:26 23 25][Walk:0-0-1-.15-T][Attack:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Texture:Batty][Lvl:1][Ability:300][Walk:0-0-4-.11-F][Attack:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F][Loot:56]</Value>
+      <Value>[Texture:Batty][Lvl:1][Ability:38][Walk:0-0-4-.11-F][Attack:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F][Loot:56]</Value>
     </Item>
   </Asset>
 </XnaContent>
