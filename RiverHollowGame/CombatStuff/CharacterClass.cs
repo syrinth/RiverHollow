@@ -103,7 +103,7 @@ namespace RiverHollow.CombatStuff
 
             if (stringData.ContainsKey("Spell"))
             {
-                string[] spellSplit = stringData["Spell"].Split('-');
+                string[] spellSplit = stringData["Spell"].Split('|');
                 foreach (string spell in spellSplit)
                 {
                     CombatAction ac = (CombatAction)DataManager.GetActionByIndex(int.Parse(spell));

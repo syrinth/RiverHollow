@@ -354,6 +354,10 @@
       <Value>[Name:Mushroom Lightning]</Value>
     </Item>
     <Item>
+      <Key>Action_42</Key>
+      <Value>[Name:Batty Dive][Description:A weak attack]</Value>
+    </Item>
+    <Item>
       <Key>Building_0</Key>
       <Value>[Name:Manor]</Value>
     </Item>

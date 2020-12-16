@@ -70,7 +70,7 @@ namespace RiverHollow.GUIComponents.Screens
             _nameWindow.Activate();
 
             _liClassBoxes = new List<GUIObject>();
-            for (int i = 1; i <= DataManager.GetWorkerNum(); i++) {
+            for (int i = 0; i < DataManager.GetWorkerNum(); i++) {
                 ClassSelectionBox w = new ClassSelectionBox(DataManager.GetAdventurer(i), BtnAssignClass);
                 _liClassBoxes.Add(w);
                 _window.AddControl(w);

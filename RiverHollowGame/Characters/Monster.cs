@@ -118,7 +118,7 @@ namespace RiverHollow.Characters
 
             _bJump = false; // data.ContainsKey("Jump"); Turning off jump logic for now
 
-            foreach (string ability in data["Ability"].Split('-'))
+            foreach (string ability in data["Ability"].Split('|'))
             {
                 _liCombatActions.Add((CombatAction)DataManager.GetActionByIndex(int.Parse(ability)));
             }
