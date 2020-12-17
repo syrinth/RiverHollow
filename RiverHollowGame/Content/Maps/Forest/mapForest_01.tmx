@@ -120,7 +120,7 @@
     <property name="AwakenTrigger" value="Forest_Entrance_Opened"/>
     <property name="Condition" value="Day"/>
     <property name="Name" value="Francis"/>
-    <property name="SpiritID" value="2"/>
+    <property name="SpiritID" value="0"/>
     <property name="Text" value=""/>
    </properties>
   </object>

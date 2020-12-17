@@ -2,11 +2,11 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>2</Key>
+      <Key>0</Key>
       <Value>[Idle:0-0-2-.5-T]</Value>
     </Item>
     <Item>
-      <Key>3</Key>
+      <Key>1</Key>
       <Value>[Idle:0-0-2-.5-T]</Value>
     </Item>
   </Asset>

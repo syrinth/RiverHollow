@@ -40,6 +40,7 @@ namespace Database_Editor
         const string TAGS_FOR_WORLD_OBJECTS = "ObjectID,Wall,Floor,Resources,Place";
         const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         const string TAGS_FOR_CLASSES = "Class";
+        const string TAGS_FOR_SPIRITS = "SpiritID";
 
         const string ITEM_REF_TAGS = "ReqItems,RefinesInto,Place";
         const string QUEST_REF_TAGS = "Item,GoalItem";
@@ -51,21 +52,7 @@ namespace Database_Editor
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
         const string MONSTER_REF_TAGS = "Loot,Ability,Spell";
 
-
-        const string ITEM_TAGS = "ReqItems,RefinesInto";
-        const string ITEM_WORLD_TAGS = "Place";
-        const string QUEST_ITEM_TAGS = "Item,GoalItem";
-        const string CHARACTER_ITEM_TAGS = "Collection";
-        const string WORLD_OBJECT_TAGS = "Makes,Processes,Item";
-        const string CLASSES_ITEM_TAG = "DWeap,DArmor,DHead,DWrist";
-        const string WORKERS_ITEM_TAG = "Item,ID";
-        const string SHOP_TAG = "ItemID,Requires";
-        const string CONFIG_ITEM_TAG = "ItemID";
-        const string CLASS_OTHER_TAG = "Ability,Spell";
-        const string CONFIG_WORLD_TAG = "ObjectID,Wall,Floor";
-        const string DEFAULT_WORLD_TAG = "";
-        public static string MAP_ITEM_TAGS = "Item";
-        public static string MAP_WORLD_OBJECTS_TAG = "Resources,ObjectID";
+        const string MAP_REF_TAGS = "ItemID,Resources,ObjectID,SpiritID";
         #endregion
 
         List<ItemXMLData> _liItemData;
@@ -180,7 +167,7 @@ namespace Database_Editor
             LoadXMLDictionary(MONSTERS_XML_FILE, MONSTER_REF_TAGS, "");
             LoadXMLDictionary(ACTIONS_XML_FILE, "", TAGS_FOR_COMBAT_ACTIONS);
             LoadXMLDictionary(BUILDINGS_XML_FILE, "", "");
-            LoadXMLDictionary(SPIRITS_XML_FILE, "", "");
+            LoadXMLDictionary(SPIRITS_XML_FILE, "", TAGS_FOR_SPIRITS);
             LoadXMLDictionary(SUMMONS_XML_FILE, "", "");
             LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", "");
 
@@ -675,10 +662,7 @@ namespace Database_Editor
                 //Find any maps that reference the ItemID
                 foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
                 {
-                    if (kvp.Value.RefersToIDWithTag(theData.ID, MAP_ITEM_TAGS))
-                    {
-                        theData.AddLinkedMap(kvp.Value);
-                    }
+                    kvp.Value.RefersToIDWithTag(theData);
                 }
             }
 
@@ -689,10 +673,7 @@ namespace Database_Editor
                 //Find any maps that reference the ObjectID
                 foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
                 {
-                    if (kvp.Value.RefersToIDWithTag(theData.ID, MAP_WORLD_OBJECTS_TAG))
-                    {
-                        theData.AddLinkedMap(kvp.Value);
-                    }
+                    kvp.Value.RefersToIDWithTag(theData);
                 }
 
                 //Find any files that reference the ObjectID
@@ -723,6 +704,12 @@ namespace Database_Editor
                                 testIt.CheckForItemLink(theData);
                             }
                         }
+                    }
+
+                    //Find any maps that reference the XMLObject
+                    foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
+                    {
+                        kvp.Value.RefersToIDWithTag(theData);
                     }
                 }
             }
@@ -1803,13 +1790,21 @@ namespace Database_Editor
         {
             protected struct LinkedItem
             {
+                public TMXData MapData;
                 public XMLData ItemData;
-                public string ItemTag;
+                public string LinkedTag;
 
                 public LinkedItem(XMLData data, string tag)
                 {
+                    MapData = null;
                     ItemData = data;
-                    ItemTag = tag;
+                    LinkedTag = tag;
+                }
+                public LinkedItem(TMXData data, string tag)
+                {
+                    MapData = data;
+                    ItemData = null;
+                    LinkedTag = tag;
                 }
             }
             protected string _sName;
@@ -1819,18 +1814,19 @@ namespace Database_Editor
             protected XMLTypeEnum _eXMLType;
             protected int _iID;
             public int ID => _iID;
-            protected List<string> _arrTagsReferenced;
-            protected List<string> _arrTagsThatReferToMe;
+            protected List<string> _liTagsReferenced;
+            protected List<string> _liTagsThatReferToMe;
+            public List<string> TagsThatReferToMe => _liTagsThatReferToMe;
             protected List<LinkedItem> _liLinkedItems;
-            protected List<TMXData> _liLinkedMaps;
+            protected List<LinkedItem> _liLinkedMaps;
             protected Dictionary<string, string> _diTags;
 
             public XMLData(string id, Dictionary<string, string> stringData, string tagsReferenced, string tagsThatReferToMe, XMLTypeEnum xmlType)
             {
-                _liLinkedMaps = new List<TMXData>();
+                _liLinkedMaps = new List<LinkedItem>();
                 _liLinkedItems = new List<LinkedItem>();
-                _arrTagsReferenced = new List<string>(tagsReferenced.Split(','));
-                _arrTagsThatReferToMe = new List<string>(tagsThatReferToMe.Split(','));
+                _liTagsReferenced = new List<string>(tagsReferenced.Split(','));
+                _liTagsThatReferToMe = new List<string>(tagsThatReferToMe.Split(','));
 
                 string textID = Util.GetEnumString(xmlType) + "_" + id;
                 if (xmlType != XMLTypeEnum.None)
@@ -1906,9 +1902,9 @@ namespace Database_Editor
             /// <returns>True if there is at least one match</returns>
             public void CheckForItemLink(XMLData testData)
             {
-                foreach (string s in _arrTagsReferenced)
+                foreach (string s in _liTagsReferenced)
                 {
-                    if (testData._arrTagsThatReferToMe.Contains(s))
+                    if (testData._liTagsThatReferToMe.Contains(s))
                     {
                         if(CheckTagForID(s, testData.ID))
                         {
@@ -1969,12 +1965,13 @@ namespace Database_Editor
                     foreach (LinkedItem d in _liLinkedItems)
                     {
                         XMLData data = d.ItemData;
-                        data.ReplaceLinkedIDs(oldID, _iID, d.ItemTag);
+                        data.ReplaceLinkedIDs(oldID, _iID, d.LinkedTag);
                     }
 
-                    foreach (TMXData d in _liLinkedMaps)
+                    foreach (LinkedItem d in _liLinkedMaps)
                     {
-                        d.ReplaceID(MAP_WORLD_OBJECTS_TAG, oldID, newID);
+                        TMXData data = d.MapData;
+                        data.ReplaceID(oldID, newID, d.LinkedTag);
                     }
                 }
             }
@@ -2054,12 +2051,9 @@ namespace Database_Editor
                     _liLinkedItems.Add(new LinkedItem(d, tag));
                 }
             }
-            public void AddLinkedMap(TMXData d)
+            public void AddLinkedMap(TMXData d, string tag)
             {
-                if (!_liLinkedMaps.Contains(d))
-                {
-                    _liLinkedMaps.Add(d);
-                }
+                _liLinkedMaps.Add(new LinkedItem(d, tag));
             }
 
             /// <summary>
@@ -2120,7 +2114,7 @@ namespace Database_Editor
             /// <param name="id">The ID to search for</param>
             /// <param name="tags">The value tags to search for for this object type delimited by ','</param>
             /// <returns></returns>
-            public bool RefersToIDWithTag(int id, string tags)
+            public void RefersToIDWithTag(XMLData data)
             {
                 //Read through each line
                 for (int i = 0; i < _liAllLines.Count; i++)
@@ -2138,27 +2132,28 @@ namespace Database_Editor
                         GetNameAndValue(ref propertyName, ref propertyValue, propertyParams);
 
                         //We're going to loop through every tag we've been told to search for
-                        string[] tagArray = tags.Split(',');
-                        foreach (string tag in tagArray)
+                        List<string> referencedTags = new List<string>(MAP_REF_TAGS.Split(','));
+                        foreach (string refTag in referencedTags)
                         {
-                            if (propertyName.Equals(tag))
+                            if (data.TagsThatReferToMe.Contains(refTag))
                             {
-                                //Split the values in the property value by the '|' delimeter 
-                                string[] splitValues = Util.GetEntries(propertyValue);
-                                foreach (string spVal in splitValues)
+                                if (propertyName.Equals(refTag))
                                 {
-                                    //Do we have a match? return true
-                                    if (spVal == id.ToString())
+                                    //Split the values in the property value by the '|' delimeter 
+                                    string[] splitValues = Util.GetEntries(propertyValue);
+                                    foreach (string spVal in splitValues)
                                     {
-                                        return true;
+                                        //Do we have a match? return true
+                                        if (spVal == data.ID.ToString())
+                                        {
+                                            data.AddLinkedMap(this, refTag);
+                                        }
                                     }
                                 }
                             }
-                        }
+                        }   
                     }
                 }
-
-                return false;
             }
 
             /// <summary>
@@ -2169,7 +2164,7 @@ namespace Database_Editor
             /// <param name="tag">Tags to look at, delmitited by ','</param>
             /// <param name="oldID">The ID to look for</param>
             /// <param name="newID">The ID to replace the olf one with</param>
-            public void ReplaceID(string tags, int oldID, int newID)
+            public void ReplaceID(int oldID, int newID, string tag)
             {
                 //Read through every  line of the file
                 for (int i = 0; i < _liAllLines.Count; i++)
@@ -2193,35 +2188,32 @@ namespace Database_Editor
                         bool found = false;
 
                         //We're going to loop through every tag we've been told to search for
-                        string[] tagArray = tags.Split(',');
-                        foreach (string tag in tagArray)
+
+                        if (propertyName.Equals(tag))
                         {
-                            if (propertyName.Equals(tag))
+                            //Split the values in the property value by the '|' delimeter 
+                            string[] splitValues = Util.GetEntries(propertyValue);
+                            for (int j = 0; j < splitValues.Length; j++)
                             {
-                                //Split the values in the property value by the '|' delimeter 
-                                string[] splitValues = Util.GetEntries(propertyValue);
-                                for (int j = 0; j < splitValues.Length; j++)
+                                //If we found a match, set the flag to true and overwrite the value of this string
+                                if (splitValues[j] == oldID.ToString())
                                 {
-                                    //If we found a match, set the flag to true and overwrite the value of this string
-                                    if (splitValues[j] == oldID.ToString())
-                                    {
-                                        found = true;
-                                        splitValues[j] = SPECIAL_CHARACTER + newID.ToString() + SPECIAL_CHARACTER;
-                                    }
-
-                                    //Concatenate it to the newValue
-                                    newValue += splitValues[j];
-
-                                    //If there are more entries coming, add the '|' back
-                                    if (j < splitValues.Length - 1)
-                                    {
-                                        newValue += "|";
-                                    }
+                                    found = true;
+                                    splitValues[j] = SPECIAL_CHARACTER + newID.ToString() + SPECIAL_CHARACTER;
                                 }
 
-                                //Close the quote
-                                newValue += "\"";
+                                //Concatenate it to the newValue
+                                newValue += splitValues[j];
+
+                                //If there are more entries coming, add the '|' back
+                                if (j < splitValues.Length - 1)
+                                {
+                                    newValue += "|";
+                                }
                             }
+
+                            //Close the quote
+                            newValue += "\"";
                         }
 
                         //Put the buffer back at the beginning of the line
