@@ -36,16 +36,17 @@ namespace Database_Editor
         #endregion
 
         #region Tags
-        const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,RefinesInto,Item,ItemID,GoalItem,Collection,Makes,Processes,DWeap,DArmor,DHead,DWrist";
+        const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,RefinesInto,ItemID,GoalItem,ItemReward,Collection,Makes,Processes,DWeap,DArmor,DHead,DWrist";
         const string TAGS_FOR_WORLD_OBJECTS = "ObjectID,Wall,Floor,Resources,Place";
         const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         const string TAGS_FOR_CLASSES = "Class";
         const string TAGS_FOR_SPIRITS = "SpiritID";
         const string TAGS_FOR_STATUS_EFFECTS = "StatusEffectID";
+        const string TAGS_FOR_SHOPS = "ShopData";
 
         const string ITEM_REF_TAGS = "ReqItems,RefinesInto,Place";
-        const string QUEST_REF_TAGS = "Item,GoalItem";
-        const string CHARACTER_REF_TAGS = "Collection,Class";
+        const string QUEST_REF_TAGS = "GoalItem,ItemReward";
+        const string CHARACTER_REF_TAGS = "Collection,Class,ShopData";
         const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,Item";
         const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
         const string WORKERS_REF_TAG = "ItemID";
@@ -53,6 +54,7 @@ namespace Database_Editor
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
         const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
         const string ACTIONS_REF_TAGS = "StatusEffectID";
+        const string SHOPS_REF_TAGS = "ItemID";
 
         const string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,SpiritID";
         #endregion
@@ -173,7 +175,7 @@ namespace Database_Editor
             LoadXMLDictionary(SUMMONS_XML_FILE, "", "");
             LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", TAGS_FOR_STATUS_EFFECTS);
 
-            _diShops = ReadXMLFileToXMLDataListDictionary(SHOPS_XML_FILE, XMLTypeEnum.Shop);
+            _diShops = ReadXMLFileToXMLDataListDictionary(SHOPS_XML_FILE, XMLTypeEnum.Shop, SHOPS_REF_TAGS, TAGS_FOR_SHOPS);
             _diCutscenes = ReadXMLFileToIntKeyDictionaryStringList(CUTSCENE_XML_FILE);
             _diCutsceneDialogue = ReadXMLFileToStringKeyDictionaryStringList(CUTSCENE_DIALOGUE_XML_FILE);
 
@@ -413,7 +415,7 @@ namespace Database_Editor
 
             return xmlDictionary;
         }
-        private Dictionary<int, List<XMLData>> ReadXMLFileToXMLDataListDictionary(string fileName, XMLTypeEnum typeEnum)
+        private Dictionary<int, List<XMLData>> ReadXMLFileToXMLDataListDictionary(string fileName, XMLTypeEnum typeEnum, string refTags, string tagsThatRefertoMe)
         {
             string line = string.Empty;
             Dictionary<int, List<XMLData>> xmlDictionary = new Dictionary<int, List<XMLData>>();
@@ -445,7 +447,7 @@ namespace Database_Editor
                             if (n1.Name == "Item" && !string.IsNullOrEmpty(n1.InnerText))
                             {
                                 dataIndex++;
-                                XMLData data = new XMLData(dataIndex.ToString(), n1.InnerText, "", "", typeEnum);
+                                XMLData data = new XMLData(dataIndex.ToString(), n1.InnerText, refTags, tagsThatRefertoMe, typeEnum);
                                 tagList.Add(data);
                             }
                         }
