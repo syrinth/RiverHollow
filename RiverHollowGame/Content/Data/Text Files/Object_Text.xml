@@ -390,23 +390,23 @@
       <Value>[Name:Felicia]</Value>
     </Item>
     <Item>
-      <Key>Summon_1</Key>
+      <Key>Summon_0</Key>
       <Value>[Name:Earth Elemental]</Value>
     </Item>
     <Item>
-      <Key>Summon_2</Key>
+      <Key>Summon_1</Key>
       <Value>[Name:Water Elemental]</Value>
     </Item>
     <Item>
-      <Key>Summon_3</Key>
+      <Key>Summon_2</Key>
       <Value>[Name:Fire Elemental]</Value>
     </Item>
     <Item>
-      <Key>Summon_4</Key>
+      <Key>Summon_3</Key>
       <Value>[Name:Air Elemental]</Value>
     </Item>
     <Item>
-      <Key>Summon_5</Key>
+      <Key>Summon_4</Key>
       <Value>[Name:Magus]</Value>
     </Item>
     <Item>

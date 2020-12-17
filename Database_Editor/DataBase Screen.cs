@@ -43,6 +43,7 @@ namespace Database_Editor
         const string TAGS_FOR_SPIRITS = "SpiritID";
         const string TAGS_FOR_STATUS_EFFECTS = "StatusEffectID";
         const string TAGS_FOR_SHOPS = "ShopData";
+        const string TAGS_FOR_SUMMONS = "SummonID";
 
         const string ITEM_REF_TAGS = "ReqItems,RefinesInto,Place";
         const string QUEST_REF_TAGS = "GoalItem,ItemReward";
@@ -53,7 +54,7 @@ namespace Database_Editor
         const string SHOP_REF_TAG = "ItemID,Requires";
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
         const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
-        const string ACTIONS_REF_TAGS = "StatusEffectID";
+        const string ACTIONS_REF_TAGS = "StatusEffectID,SummonID";
         const string SHOPS_REF_TAGS = "ItemID";
 
         const string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,SpiritID";
@@ -172,7 +173,7 @@ namespace Database_Editor
             LoadXMLDictionary(ACTIONS_XML_FILE, ACTIONS_REF_TAGS, TAGS_FOR_COMBAT_ACTIONS);
             LoadXMLDictionary(BUILDINGS_XML_FILE, "", "");
             LoadXMLDictionary(SPIRITS_XML_FILE, "", TAGS_FOR_SPIRITS);
-            LoadXMLDictionary(SUMMONS_XML_FILE, "", "");
+            LoadXMLDictionary(SUMMONS_XML_FILE, "", TAGS_FOR_SUMMONS);
             LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", TAGS_FOR_STATUS_EFFECTS);
 
             _diShops = ReadXMLFileToXMLDataListDictionary(SHOPS_XML_FILE, XMLTypeEnum.Shop, SHOPS_REF_TAGS, TAGS_FOR_SHOPS);

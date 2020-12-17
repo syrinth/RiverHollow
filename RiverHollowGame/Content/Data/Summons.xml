@@ -2,23 +2,23 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>1</Key>
+      <Key>0</Key>
       <Value>[Texture:EarthElemental][Spawn:6-.1][Idle:7-.2][Cast:3-.2][Attack:0-0][Defensive]</Value>
     </Item>
     <Item>
-      <Key>2</Key>
+      <Key>1</Key>
       <Value>[Texture:WaterElemental][Spawn:2-.1][Idle:6-.2][Cast:3-.2][Attack:0-0][Regen]</Value>
     </Item>
     <Item>
-      <Key>3</Key>
+      <Key>2</Key>
       <Value>[Texture:FireElemental][Spawn:5-.1][Idle:2-.2][Cast:0-0][Attack:2-.2][Counter][Aggressive]</Value>
     </Item>
     <Item>
-      <Key>4</Key>
+      <Key>3</Key>
       <Value>[Texture:AirElemental][Spawn:8-.13][Idle:4-.15][Cast:0-0][Attack:2-.2][Spd][Evade][Int]</Value>
     </Item>
     <Item>
-      <Key>5</Key>
+      <Key>4</Key>
       <Value>[Texture:Magus][Spawn:7-.1][Idle:4-.2][Cast:3-.2][Attack:0-0][TwinCast][Int]</Value>
     </Item>
   </Asset>
