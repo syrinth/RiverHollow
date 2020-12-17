@@ -45,14 +45,14 @@ namespace Database_Editor
         const string ITEM_REF_TAGS = "ReqItems,RefinesInto,Place";
         const string QUEST_REF_TAGS = "Item,GoalItem";
         const string CHARACTER_REF_TAGS = "Collection,Class";
-        const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,Item,ItemKeyID";
+        const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,Item";
         const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
-        const string WORKERS_REF_TAG = "Item,ID";
+        const string WORKERS_REF_TAG = "ItemID";
         const string SHOP_REF_TAG = "ItemID,Requires";
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
         const string MONSTER_REF_TAGS = "Loot,Ability,Spell";
 
-        const string MAP_REF_TAGS = "ItemID,Resources,ObjectID,SpiritID";
+        const string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,SpiritID";
         #endregion
 
         List<ItemXMLData> _liItemData;
@@ -662,7 +662,7 @@ namespace Database_Editor
                 //Find any maps that reference the ItemID
                 foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
                 {
-                    kvp.Value.RefersToIDWithTag(theData);
+                    kvp.Value.ReferencesXMLObject(theData);
                 }
             }
 
@@ -673,7 +673,7 @@ namespace Database_Editor
                 //Find any maps that reference the ObjectID
                 foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
                 {
-                    kvp.Value.RefersToIDWithTag(theData);
+                    kvp.Value.ReferencesXMLObject(theData);
                 }
 
                 //Find any files that reference the ObjectID
@@ -690,10 +690,6 @@ namespace Database_Editor
             {
                 foreach (XMLData theData in _diBasicXML[baseFile])
                 {
-                    if(theData.ID == 21)
-                    {
-                        int i = 0;
-                    }
                     //Find any files that reference the ObjectID
                     foreach (string comparatorFile in _diBasicXML.Keys)
                     {
@@ -709,7 +705,7 @@ namespace Database_Editor
                     //Find any maps that reference the XMLObject
                     foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
                     {
-                        kvp.Value.RefersToIDWithTag(theData);
+                        kvp.Value.ReferencesXMLObject(theData);
                     }
                 }
             }
@@ -2113,7 +2109,7 @@ namespace Database_Editor
             /// <param name="id">The ID to search for</param>
             /// <param name="tags">The value tags to search for for this object type delimited by ','</param>
             /// <returns></returns>
-            public void RefersToIDWithTag(XMLData data)
+            public void ReferencesXMLObject(XMLData data)
             {
                 //Read through each line
                 for (int i = 0; i < _liAllLines.Count; i++)

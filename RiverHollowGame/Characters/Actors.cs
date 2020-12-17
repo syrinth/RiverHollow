@@ -2571,7 +2571,7 @@ namespace RiverHollow.Characters
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
 
             WorkerType = Util.ParseEnum<AdventurerTypeEnum>(data["Type"]);
-            _iDailyItemID = int.Parse(data["Item"]);
+            _iDailyItemID = int.Parse(data["ItemID"]);
             _iDailyFoodReq = int.Parse(data["Food"]);
 
             LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), _sAdventurerFolder + "Adventurer_" + _iID);
