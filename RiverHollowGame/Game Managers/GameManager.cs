@@ -45,7 +45,7 @@ namespace RiverHollow.Game_Managers
         public enum SpecialItemEnum { None, Marriage, Class, Map, DungeonKey, Quest };
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ActionEnum { Action, Item, Spell, MenuItem, MenuSpell, MenuAction, Move, EndTurn };
-        public enum SkillTagsEnum { Bonus, Harm, Heal, Push, Pull, Remove, Retreat, Step, Status, Summon };
+        public enum SkillTagsEnum { Bonus, Harm, Heal, Push, Pull, Remove, Retreat, Step, StatusEffectID, Summon };
         public enum TargetEnum { Enemy, Ally };
         public enum AreaTypeEnum { Single, Cross, Ring, Line };
         public enum ElementEnum { None, Fire, Ice, Lightning };

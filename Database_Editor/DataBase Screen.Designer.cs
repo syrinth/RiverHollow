@@ -370,9 +370,12 @@
             // 
             // dgItemTags
             // 
+            this.dgItemTags.AllowUserToResizeColumns = false;
+            this.dgItemTags.AllowUserToResizeRows = false;
             this.dgItemTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgItemTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colItemTags});
+            this.dgItemTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgItemTags.Location = new System.Drawing.Point(320, 137);
             this.dgItemTags.Name = "dgItemTags";
             this.dgItemTags.RowHeadersVisible = false;
@@ -519,9 +522,12 @@
             // 
             // dgvWorldObjectTags
             // 
+            this.dgvWorldObjectTags.AllowUserToResizeColumns = false;
+            this.dgvWorldObjectTags.AllowUserToResizeRows = false;
             this.dgvWorldObjectTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvWorldObjectTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colWorldObjectTags});
+            this.dgvWorldObjectTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgvWorldObjectTags.Location = new System.Drawing.Point(320, 60);
             this.dgvWorldObjectTags.Name = "dgvWorldObjectTags";
             this.dgvWorldObjectTags.RowHeadersVisible = false;
@@ -665,9 +671,12 @@
             // 
             // dgCharacterTags
             // 
+            this.dgCharacterTags.AllowUserToResizeColumns = false;
+            this.dgCharacterTags.AllowUserToResizeRows = false;
             this.dgCharacterTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgCharacterTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colCharacterTags});
+            this.dgCharacterTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgCharacterTags.Location = new System.Drawing.Point(320, 60);
             this.dgCharacterTags.Name = "dgCharacterTags";
             this.dgCharacterTags.RowHeadersVisible = false;
@@ -799,9 +808,12 @@
             // 
             // dgClassTags
             // 
+            this.dgClassTags.AllowUserToResizeColumns = false;
+            this.dgClassTags.AllowUserToResizeRows = false;
             this.dgClassTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgClassTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colClassTags});
+            this.dgClassTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgClassTags.Location = new System.Drawing.Point(320, 110);
             this.dgClassTags.Name = "dgClassTags";
             this.dgClassTags.RowHeadersVisible = false;
@@ -935,9 +947,12 @@
             // 
             // dgvAdventurerTags
             // 
+            this.dgvAdventurerTags.AllowUserToResizeColumns = false;
+            this.dgvAdventurerTags.AllowUserToResizeRows = false;
             this.dgvAdventurerTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAdventurerTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1});
+            this.dgvAdventurerTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgvAdventurerTags.Location = new System.Drawing.Point(320, 60);
             this.dgvAdventurerTags.Name = "dgvAdventurerTags";
             this.dgvAdventurerTags.RowHeadersVisible = false;
@@ -1060,9 +1075,12 @@
             // 
             // dgvQuestTags
             // 
+            this.dgvQuestTags.AllowUserToResizeColumns = false;
+            this.dgvQuestTags.AllowUserToResizeRows = false;
             this.dgvQuestTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvQuestTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colQuestTags});
+            this.dgvQuestTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgvQuestTags.Location = new System.Drawing.Point(320, 137);
             this.dgvQuestTags.Name = "dgvQuestTags";
             this.dgvQuestTags.RowHeadersVisible = false;
@@ -1237,9 +1255,12 @@
             // 
             // dgvCutsceneTags
             // 
+            this.dgvCutsceneTags.AllowUserToResizeColumns = false;
+            this.dgvCutsceneTags.AllowUserToResizeRows = false;
             this.dgvCutsceneTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCutsceneTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn2});
+            this.dgvCutsceneTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgvCutsceneTags.Location = new System.Drawing.Point(320, 110);
             this.dgvCutsceneTags.Name = "dgvCutsceneTags";
             this.dgvCutsceneTags.RowHeadersVisible = false;
@@ -1336,9 +1357,12 @@
             // 
             // dgvMonsterTags
             // 
+            this.dgvMonsterTags.AllowUserToResizeColumns = false;
+            this.dgvMonsterTags.AllowUserToResizeRows = false;
             this.dgvMonsterTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvMonsterTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colMonsterTags});
+            this.dgvMonsterTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgvMonsterTags.Location = new System.Drawing.Point(320, 110);
             this.dgvMonsterTags.Name = "dgvMonsterTags";
             this.dgvMonsterTags.RowHeadersVisible = false;
@@ -1481,12 +1505,15 @@
             // 
             // dgvActionTags
             // 
+            this.dgvActionTags.AllowUserToResizeColumns = false;
+            this.dgvActionTags.AllowUserToResizeRows = false;
             this.dgvActionTags.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvActionTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvActionTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn3});
+            this.dgvActionTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgvActionTags.Location = new System.Drawing.Point(320, 137);
             this.dgvActionTags.Name = "dgvActionTags";
             this.dgvActionTags.RowHeadersVisible = false;
@@ -1634,9 +1661,12 @@
             // 
             // dgvShopTags
             // 
+            this.dgvShopTags.AllowUserToResizeColumns = false;
+            this.dgvShopTags.AllowUserToResizeRows = false;
             this.dgvShopTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvShopTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colShopTags});
+            this.dgvShopTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgvShopTags.Location = new System.Drawing.Point(320, 33);
             this.dgvShopTags.Name = "dgvShopTags";
             this.dgvShopTags.RowHeadersVisible = false;
@@ -1734,9 +1764,12 @@
             // 
             // dgvBuildingTags
             // 
+            this.dgvBuildingTags.AllowUserToResizeColumns = false;
+            this.dgvBuildingTags.AllowUserToResizeRows = false;
             this.dgvBuildingTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvBuildingTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colBuildingTag});
+            this.dgvBuildingTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgvBuildingTags.Location = new System.Drawing.Point(320, 110);
             this.dgvBuildingTags.Name = "dgvBuildingTags";
             this.dgvBuildingTags.RowHeadersVisible = false;
@@ -1868,9 +1901,12 @@
             // 
             // dgvSpiritTags
             // 
+            this.dgvSpiritTags.AllowUserToResizeColumns = false;
+            this.dgvSpiritTags.AllowUserToResizeRows = false;
             this.dgvSpiritTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvSpiritTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colSpiritTags});
+            this.dgvSpiritTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgvSpiritTags.Location = new System.Drawing.Point(320, 110);
             this.dgvSpiritTags.Name = "dgvSpiritTags";
             this.dgvSpiritTags.RowHeadersVisible = false;
@@ -2001,9 +2037,12 @@
             // 
             // dgvSummonTags
             // 
+            this.dgvSummonTags.AllowUserToResizeColumns = false;
+            this.dgvSummonTags.AllowUserToResizeRows = false;
             this.dgvSummonTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvSummonTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn4});
+            this.dgvSummonTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgvSummonTags.Location = new System.Drawing.Point(320, 110);
             this.dgvSummonTags.Name = "dgvSummonTags";
             this.dgvSummonTags.RowHeadersVisible = false;
@@ -2134,9 +2173,12 @@
             // 
             // dgvStatusEffectTags
             // 
+            this.dgvStatusEffectTags.AllowUserToResizeColumns = false;
+            this.dgvStatusEffectTags.AllowUserToResizeRows = false;
             this.dgvStatusEffectTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvStatusEffectTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colStatusEffectsTag});
+            this.dgvStatusEffectTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgvStatusEffectTags.Location = new System.Drawing.Point(320, 110);
             this.dgvStatusEffectTags.Name = "dgvStatusEffectTags";
             this.dgvStatusEffectTags.RowHeadersVisible = false;

@@ -41,6 +41,7 @@ namespace Database_Editor
         const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         const string TAGS_FOR_CLASSES = "Class";
         const string TAGS_FOR_SPIRITS = "SpiritID";
+        const string TAGS_FOR_STATUS_EFFECTS = "StatusEffectID";
 
         const string ITEM_REF_TAGS = "ReqItems,RefinesInto,Place";
         const string QUEST_REF_TAGS = "Item,GoalItem";
@@ -50,7 +51,8 @@ namespace Database_Editor
         const string WORKERS_REF_TAG = "ItemID";
         const string SHOP_REF_TAG = "ItemID,Requires";
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
-        const string MONSTER_REF_TAGS = "Loot,Ability,Spell";
+        const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
+        const string ACTIONS_REF_TAGS = "StatusEffectID";
 
         const string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,SpiritID";
         #endregion
@@ -164,12 +166,12 @@ namespace Database_Editor
             LoadXMLDictionary(CLASSES_XML_FILE, CLASSES_REF_TAGS, TAGS_FOR_CLASSES);
             LoadXMLDictionary(WORKERS_XML_FILE, WORKERS_REF_TAG, "");
             LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_REF_TAG, "");
-            LoadXMLDictionary(MONSTERS_XML_FILE, MONSTER_REF_TAGS, "");
-            LoadXMLDictionary(ACTIONS_XML_FILE, "", TAGS_FOR_COMBAT_ACTIONS);
+            LoadXMLDictionary(MONSTERS_XML_FILE, MONSTERS_REF_TAGS, "");
+            LoadXMLDictionary(ACTIONS_XML_FILE, ACTIONS_REF_TAGS, TAGS_FOR_COMBAT_ACTIONS);
             LoadXMLDictionary(BUILDINGS_XML_FILE, "", "");
             LoadXMLDictionary(SPIRITS_XML_FILE, "", TAGS_FOR_SPIRITS);
             LoadXMLDictionary(SUMMONS_XML_FILE, "", "");
-            LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", "");
+            LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", TAGS_FOR_STATUS_EFFECTS);
 
             _diShops = ReadXMLFileToXMLDataListDictionary(SHOPS_XML_FILE, XMLTypeEnum.Shop);
             _diCutscenes = ReadXMLFileToIntKeyDictionaryStringList(CUTSCENE_XML_FILE);
@@ -1226,7 +1228,7 @@ namespace Database_Editor
         }
         private void SaveMonsterInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[MONSTERS_XML_FILE], "Monsters", "Monster_", XMLTypeEnum.Monster, tbMonsterName, tbMonsterID, null, dgvMonsters, dgvMonsterTags, "colMonstersID", "colMonstersName", MONSTER_REF_TAGS, "", tbMonsterDescription);
+            SaveXMLDataInfo(_diBasicXML[MONSTERS_XML_FILE], "Monsters", "Monster_", XMLTypeEnum.Monster, tbMonsterName, tbMonsterID, null, dgvMonsters, dgvMonsterTags, "colMonstersID", "colMonstersName", MONSTERS_REF_TAGS, "", tbMonsterDescription);
         }
         private void SaveActionInfo(List<XMLData> liData)
         {
@@ -2378,6 +2380,7 @@ namespace Database_Editor
             AddNewGenericXMLObject(tabCtl.TabPages["tabMonsters"], "Monsters", dgvMonsters, "colMonstersID", "colMonstersName", tbMonsterName, tbMonsterID, dgvMonsterTags, "colMonsterTags", null, tbMonsterDescription, defaultTags);
         }
         #endregion
+
         #endregion
     }
 }

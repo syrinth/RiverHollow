@@ -63,11 +63,11 @@
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Spell][Animation:WitchsCurse-30-38-8-0.1][Target:Enemy][Range:5][AreaType:Single][Cost:5][Status:4-4-Target][Action:UserCast Direct Apply]</Value>
+      <Value>[Type:Spell][Animation:WitchsCurse-30-38-8-0.1][Target:Enemy][Range:5][AreaType:Single][Cost:5][StatusEffectID:3-4-Target][Action:UserCast Direct Apply]</Value>
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Action][Target:Self][AreaType:Single][Status:6-3-Self][Action:UserCast Apply]</Value>
+      <Value>[Type:Action][Target:Self][AreaType:Single][StatusEffectID:5-3-Self][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>17</Key>
@@ -79,7 +79,7 @@
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Type:Action][Target:Self][AreaType:Single][Status:9-4-Self][Action:UserCast Apply]</Value>
+      <Value>[Type:Action][Target:Self][AreaType:Single][StatusEffectID:8-4-Self][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>20</Key>
@@ -99,15 +99,15 @@
     </Item>
     <Item>
       <Key>24</Key>
-      <Value>[Type:Action][Target:Self][Status:18-3-Self][Action:UserCast Apply]</Value>
+      <Value>[Type:Action][Target:Self][StatusEffectID:17-3-Self][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Action][Target:Self][Status:11-3-Self][Action:UserCast Apply]</Value>
+      <Value>[Type:Action][Target:Self][StatusEffectID:10-3-Self][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Action][Target:Enemy][Range:5][AreaType:Single][Status:12-3-Target][Action:UserCast Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][AreaType:Single][StatusEffectID:11-3-Target][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>27</Key>
@@ -127,31 +127,31 @@
     </Item>
     <Item>
       <Key>31</Key>
-      <Value>[Type:Action][Target:Ally][Range:5][AreaType:Single][Action:UserCast Apply][Status:7-3-Self]</Value>
+      <Value>[Type:Action][Target:Ally][Range:5][AreaType:Single][Action:UserCast Apply][StatusEffectID:6-3-Self]</Value>
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Action][Target:Ally][Range:5][AreaType:Single][Action:UserCast Apply][Status:8-3-Self]</Value>
+      <Value>[Type:Action][Target:Ally][Range:5][AreaType:Single][Action:UserCast Apply][StatusEffectID:7-3-Self]</Value>
     </Item>
     <Item>
       <Key>33</Key>
-      <Value>[Type:Action][Target:Allies][AreaType:Single][Action:UserCast Apply][Status:13-10-Allies]</Value>
+      <Value>[Type:Action][Target:Allies][AreaType:Single][Action:UserCast Apply][StatusEffectID:12-10-Allies]</Value>
     </Item>
     <Item>
       <Key>34</Key>
-      <Value>[Type:Action][Target:Enemy][AreaType:Single][Range:0][Status:14-2-Self][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][AreaType:Single][Range:0][StatusEffectID:13-2-Self][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Type:Action][Target:Allies][AreaType:Single][Action:UserCast Apply][Status:15-10-Allies]</Value>
+      <Value>[Type:Action][Target:Allies][AreaType:Single][Action:UserCast Apply][StatusEffectID:14-10-Allies]</Value>
     </Item>
     <Item>
       <Key>36</Key>
-      <Value>[Type:Action][Target:Allies][AreaType:Single][Action:UserCast Apply][Status:16-10-Allies]</Value>
+      <Value>[Type:Action][Target:Allies][AreaType:Single][Action:UserCast Apply][StatusEffectID:15-10-Allies]</Value>
     </Item>
     <Item>
       <Key>37</Key>
-      <Value>[Type:Action][Target:Enemy][AreaType:Single][Range:0][Status:17-3-Allies][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][AreaType:Single][Range:0][StatusEffectID:16-3-Allies][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>38</Key>

@@ -202,14 +202,14 @@ namespace RiverHollow.CombatStuff
                     _liEffects.Add(SkillTagsEnum.Remove);
                 }
 
-                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Status)))
+                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.StatusEffectID)))
                 {
-                    string[] parse = stringData[Util.GetEnumString(SkillTagsEnum.Status)].Split('-');
+                    string[] parse = stringData[Util.GetEnumString(SkillTagsEnum.StatusEffectID)].Split('-');
 
                     StatusEffectData statEffect = new StatusEffectData() { BuffID = int.Parse(parse[0]), Duration = int.Parse(parse[1]), Tags = parse[2] };
                     statEffect.Sprite = Sprite;
                     _liStatusEffects.Add(statEffect);
-                    _liEffects.Add(SkillTagsEnum.Status);
+                    _liEffects.Add(SkillTagsEnum.StatusEffectID);
                 }
 
                 if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Bonus)))
@@ -356,7 +356,7 @@ namespace RiverHollow.CombatStuff
             }
 
             //Handles when the action applies status effects
-            if (_liEffects.Contains(SkillTagsEnum.Status))
+            if (_liEffects.Contains(SkillTagsEnum.StatusEffectID))
             {
                 ApplyEffectStatus(targetActors);
             }

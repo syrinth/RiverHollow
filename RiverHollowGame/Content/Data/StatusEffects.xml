@@ -2,56 +2,60 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>1</Key>
+      <Key>0</Key>
       <Value>[Buff:Def-10]</Value>
     </Item>
     <Item>
-      <Key>2</Key>
+      <Key>1</Key>
       <Value>[Counter]</Value>
     </Item>
     <Item>
-      <Key>3</Key>
+      <Key>2</Key>
       <Value>[Buff:Int-10]</Value>
     </Item>
     <Item>
-      <Key>4</Key>
+      <Key>3</Key>
       <Value>[DoT][Potency:50]</Value>
     </Item>
     <Item>
-      <Key>5</Key>
+      <Key>4</Key>
       <Value>[Buff:Mag-10]</Value>
     </Item>
     <Item>
-      <Key>6</Key>
+      <Key>5</Key>
       <Value>[Buff:Str-10][Debuff:Def-10][Counter]</Value>
     </Item>
     <Item>
-      <Key>7</Key>
+      <Key>6</Key>
       <Value>[Buff:Def-10 Spd-10][Song]</Value>
     </Item>
     <Item>
-      <Key>8</Key>
+      <Key>7</Key>
       <Value>[Buff:Mag-10][Song]</Value>
     </Item>
     <Item>
-      <Key>9</Key>
+      <Key>8</Key>
       <Value>[Buff:Crit-20]</Value>
     </Item>
     <Item>
-      <Key>10</Key>
+      <Key>9</Key>
       <Value>[Buff:Def-20]</Value>
     </Item>
     <Item>
-      <Key>11</Key>
+      <Key>10</Key>
       <Value>[Buff:Eva-10]</Value>
     </Item>
     <Item>
-      <Key>12</Key>
+      <Key>11</Key>
       <Value>[Debuff:Eva-10 Spd-10]</Value>
     </Item>
     <Item>
-      <Key>13</Key>
+      <Key>12</Key>
       <Value>[HoT][Song][Potency:80]</Value>
+    </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>[Buff:Spd-10]</Value>
     </Item>
     <Item>
       <Key>14</Key>
@@ -59,18 +63,14 @@
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Buff:Spd-10]</Value>
-    </Item>
-    <Item>
-      <Key>16</Key>
       <Value>[Buff:Res-10]</Value>
     </Item>
     <Item>
-      <Key>17</Key>
+      <Key>16</Key>
       <Value>[Buff:Str-20]</Value>
     </Item>
     <Item>
-      <Key>18</Key>
+      <Key>17</Key>
       <Value>[Guard]</Value>
     </Item>
   </Asset>
