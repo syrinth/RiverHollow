@@ -115,7 +115,7 @@
   </object>
  </objectgroup>
  <objectgroup id="6" name="Character">
-  <object id="59" name="Spirit" x="368" y="128" width="16" height="16">
+  <object id="59" name="Spirit" x="416" y="112" width="16" height="16">
    <properties>
     <property name="AwakenTrigger" value="Forest_Entrance_Opened"/>
     <property name="Condition" value="Day"/>

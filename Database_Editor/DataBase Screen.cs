@@ -36,7 +36,7 @@ namespace Database_Editor
         #endregion
 
         #region Tags
-        const string TAGS_FOR_ITEMS = "ReqItems,RefinesInto,Item,ItemID,GoalItem,Collection,Makes,Processes,DWeap,DArmor,DHead,DWrist";
+        const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,RefinesInto,Item,ItemID,GoalItem,Collection,Makes,Processes,DWeap,DArmor,DHead,DWrist";
         const string TAGS_FOR_WORLD_OBJECTS = "ObjectID,Wall,Floor,Resources,Place";
         const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         const string TAGS_FOR_CLASSES = "Class";
@@ -45,7 +45,7 @@ namespace Database_Editor
         const string ITEM_REF_TAGS = "ReqItems,RefinesInto,Place";
         const string QUEST_REF_TAGS = "Item,GoalItem";
         const string CHARACTER_REF_TAGS = "Collection,Class";
-        const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,Item";
+        const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,Item,ItemKeyID";
         const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
         const string WORKERS_REF_TAG = "Item,ID";
         const string SHOP_REF_TAG = "ItemID,Requires";
@@ -1848,7 +1848,6 @@ namespace Database_Editor
                 _eXMLType = xmlType;
             }
             public XMLData(string id, string stringData, string itemTags, string objectTags, XMLTypeEnum xmlType) : this(id, DataManager.TaggedStringToDictionary(stringData), itemTags, objectTags, xmlType) { }
-
 
             public string GetStringValue(string value)
             {

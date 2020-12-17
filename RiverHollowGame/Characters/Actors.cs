@@ -207,7 +207,7 @@ namespace RiverHollow.Characters
         protected double _dCooldown = 0;
 
         public Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, TileSize);
-        public Rectangle HoverBox => new Rectangle((int)Position.X, (int)Position.Y - TileSize, Width, Height);
+        public virtual Rectangle HoverBox => new Rectangle((int)Position.X, (int)Position.Y - TileSize, Width, Height);
 
         protected bool _bActive = true;
         public virtual bool Active => _bActive;
@@ -2992,6 +2992,8 @@ namespace RiverHollow.Characters
 
     public class Spirit : TalkingActor
     {
+        public override Rectangle HoverBox => new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
+
         const float MIN_VISIBILITY = 0.05f;
         float _fVisibility;
         int _iID;
@@ -3013,6 +3015,8 @@ namespace RiverHollow.Characters
             Util.AssignValue(ref _sText, "Text", stringData);
             Util.AssignValue(ref _sCondition, "Condition", stringData);
             Util.AssignValue(ref _sAwakenTrigger, "AwakenTrigger", stringData);
+
+            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Spirit", _iID.ToString("00"));
 
             _bActive = false;
 

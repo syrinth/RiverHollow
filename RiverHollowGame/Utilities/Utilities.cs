@@ -276,6 +276,9 @@ namespace RiverHollow.Utilities
                 case "Adventurer":
                     cf = "A";
                     break;
+                case "Spirit":
+                    cf = "S";
+                    break;
             }
 
             string rv = $"{path}{cf}{num}";
