@@ -672,7 +672,8 @@ namespace Database_Editor
                     kvp.Value.ReferencesXMLObject(theData);
                 }
 
-                foreach(KeyValuePair<int, List<XMLData>> kvp in _diShops)
+
+                foreach (KeyValuePair<int, List<XMLData>> kvp in _diShops)
                 {
                     foreach(XMLData testIt in kvp.Value)
                     {
@@ -721,6 +722,15 @@ namespace Database_Editor
                     foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
                     {
                         kvp.Value.ReferencesXMLObject(theData);
+                    }
+
+                    foreach (KeyValuePair<int, List<XMLData>> kvp in _diShops)
+                    {
+                        foreach (XMLData testIt in kvp.Value)
+                        {
+                            testIt.CheckForItemLink(theData);
+
+                        }
                     }
                 }
             }
@@ -1550,6 +1560,15 @@ namespace Database_Editor
                 SaveXMLData(_diBasicXML[s], s, sWriter);
             }
 
+            foreach (KeyValuePair<int, List<XMLData>> kvp in _diShops)
+            {
+                foreach (XMLData data in kvp.Value)
+                {
+                    data.StripSpecialCharacter();
+                }
+            }
+            SaveXMLDictionarXMLDataList(_diShops, SHOPS_XML_FILE, XMLTypeEnum.Shop, sWriter);
+
             foreach (string s in _diCharacterDialogue.Keys)
             {
                 SaveXMLDictionary(_diCharacterDialogue[s], s, sWriter);
@@ -1561,7 +1580,6 @@ namespace Database_Editor
             }
 
             SaveXMLDictionaryIntKeyList(_diCutscenes, CUTSCENE_XML_FILE, XMLTypeEnum.Cutscene, sWriter);
-            SaveXMLDictionarXMLDataList(_diShops, SHOPS_XML_FILE, XMLTypeEnum.Shop, sWriter);
             SaveXMLDictionaryList(_diCutsceneDialogue, CUTSCENE_DIALOGUE_XML_FILE, sWriter, "int");
 
             string mapPath = PATH_TO_MAPS;
@@ -1579,7 +1597,7 @@ namespace Database_Editor
             CloseStreamWriter(ref sWriter);
 
             List<string> keys = new List<string>(_diTabIndices.Keys);
-            foreach(string key in keys)
+            foreach (string key in keys)
             {
                 _diTabIndices[key] = 0;
             }
