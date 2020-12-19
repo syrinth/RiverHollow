@@ -39,10 +39,11 @@ namespace Database_Editor
         const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,RefinesInto,ItemID,GoalItem,ItemReward,Collection,Makes,Processes,DWeap,DArmor,DHead,DWrist";
         const string TAGS_FOR_WORLD_OBJECTS = "ObjectID,Wall,Floor,Resources,Place";
         const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
+        const string TAGS_FOR_ADVENTURERS = "WorkerID";
         const string TAGS_FOR_CLASSES = "Class";
+        const string TAGS_FOR_SHOPDATA = "ShopData";
         const string TAGS_FOR_SPIRITS = "SpiritID";
         const string TAGS_FOR_STATUS_EFFECTS = "StatusEffectID";
-        const string TAGS_FOR_SHOPS = "ShopData";
         const string TAGS_FOR_SUMMONS = "SummonID";
 
         const string ITEM_REF_TAGS = "ReqItems,RefinesInto,Place";
@@ -50,12 +51,12 @@ namespace Database_Editor
         const string CHARACTER_REF_TAGS = "Collection,Class,ShopData";
         const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,Item";
         const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
-        const string WORKERS_REF_TAG = "ItemID";
+        const string SHOPDATA_REF_TAGS = "ItemID,WorkerID,BuildingID";
+        const string ADVENTURERS_REF_TAG = "ItemID";
         const string SHOP_REF_TAG = "ItemID,Requires";
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
         const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
         const string ACTIONS_REF_TAGS = "StatusEffectID,SummonID";
-        const string SHOPS_REF_TAGS = "ItemID";
 
         const string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,SpiritID";
         #endregion
@@ -167,7 +168,7 @@ namespace Database_Editor
             LoadXMLDictionary(QUEST_XML_FILE, QUEST_REF_TAGS, "");
             LoadXMLDictionary(CHARACTER_XML_FILE, CHARACTER_REF_TAGS, "");
             LoadXMLDictionary(CLASSES_XML_FILE, CLASSES_REF_TAGS, TAGS_FOR_CLASSES);
-            LoadXMLDictionary(WORKERS_XML_FILE, WORKERS_REF_TAG, "");
+            LoadXMLDictionary(WORKERS_XML_FILE, ADVENTURERS_REF_TAG, TAGS_FOR_ADVENTURERS);
             LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_REF_TAG, "");
             LoadXMLDictionary(MONSTERS_XML_FILE, MONSTERS_REF_TAGS, "");
             LoadXMLDictionary(ACTIONS_XML_FILE, ACTIONS_REF_TAGS, TAGS_FOR_COMBAT_ACTIONS);
@@ -176,7 +177,7 @@ namespace Database_Editor
             LoadXMLDictionary(SUMMONS_XML_FILE, "", TAGS_FOR_SUMMONS);
             LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", TAGS_FOR_STATUS_EFFECTS);
 
-            _diShops = ReadXMLFileToXMLDataListDictionary(SHOPS_XML_FILE, XMLTypeEnum.Shop, SHOPS_REF_TAGS, TAGS_FOR_SHOPS);
+            _diShops = ReadXMLFileToXMLDataListDictionary(SHOPS_XML_FILE, XMLTypeEnum.Shop, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA);
             _diCutscenes = ReadXMLFileToIntKeyDictionaryStringList(CUTSCENE_XML_FILE);
             _diCutsceneDialogue = ReadXMLFileToStringKeyDictionaryStringList(CUTSCENE_DIALOGUE_XML_FILE);
 
@@ -448,7 +449,8 @@ namespace Database_Editor
                             if (n1.Name == "Item" && !string.IsNullOrEmpty(n1.InnerText))
                             {
                                 dataIndex++;
-                                XMLData data = new XMLData(dataIndex.ToString(), n1.InnerText, refTags, tagsThatRefertoMe, typeEnum);
+                                XMLTypeEnum identifier = Util.ParseEnum<XMLTypeEnum>(DataManager.TaggedStringToDictionary(n1.InnerText)["Type"]);
+                                XMLData data = new XMLData(dataIndex.ToString(), n1.InnerText, refTags, tagsThatRefertoMe, identifier);
                                 tagList.Add(data);
                             }
                         }
@@ -668,6 +670,14 @@ namespace Database_Editor
                 foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
                 {
                     kvp.Value.ReferencesXMLObject(theData);
+                }
+
+                foreach(KeyValuePair<int, List<XMLData>> kvp in _diShops)
+                {
+                    foreach(XMLData testIt in kvp.Value)
+                    {
+                        testIt.CheckForItemLink(theData);
+                    }
                 }
             }
 
@@ -1223,7 +1233,7 @@ namespace Database_Editor
         }
         private void SaveAdventurerInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[WORKERS_XML_FILE], "Adventurers", "Adventurer_", XMLTypeEnum.Adventurer, tbAdventurerName, tbAdventurerID, cbAdventurerType, dgvAdventurers, dgvAdventurerTags, "colAdventurersID", "colAdventurersName", WORKERS_REF_TAG, "");
+            SaveXMLDataInfo(_diBasicXML[WORKERS_XML_FILE], "Adventurers", "Adventurer_", XMLTypeEnum.Adventurer, tbAdventurerName, tbAdventurerID, cbAdventurerType, dgvAdventurers, dgvAdventurerTags, "colAdventurersID", "colAdventurersName", SHOPDATA_REF_TAGS, "");
         }
         private void SaveQuestInfo(List<XMLData> liData)
         {
@@ -1848,7 +1858,7 @@ namespace Database_Editor
 
                 _eXMLType = xmlType;
             }
-            public XMLData(string id, string stringData, string itemTags, string objectTags, XMLTypeEnum xmlType) : this(id, DataManager.TaggedStringToDictionary(stringData), itemTags, objectTags, xmlType) { }
+            public XMLData(string id, string stringData, string tagsReferenced, string tagsThatReferToMe, XMLTypeEnum xmlType) : this(id, DataManager.TaggedStringToDictionary(stringData), tagsReferenced, tagsThatReferToMe, xmlType) { }
 
             public string GetStringValue(string value)
             {

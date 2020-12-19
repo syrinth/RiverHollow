@@ -2258,7 +2258,7 @@ namespace RiverHollow.Characters
                 {
                     foreach (Merchandise m in this._liMerchandise)
                     {
-                        if (m.MerchType == Merchandise.ItemType.Worker && m.Activated()) { _liMerchandise.Add(m); }
+                        if (m.MerchType == Merchandise.ItemType.Adventurer && m.Activated()) { _liMerchandise.Add(m); }
                     }
                     GUIManager.OpenMainObject(new HUDPurchaseWorkers(_liMerchandise));
                 }
@@ -2309,7 +2309,7 @@ namespace RiverHollow.Characters
         public class Merchandise
         {
             public string UniqueData { get; }
-            public enum ItemType { Building, Worker, Item, Upgrade }
+            public enum ItemType { Building, Adventurer, Item, Upgrade }
             public ItemType MerchType;
             public int MerchID { get; } = -1;
             string _sDescription;

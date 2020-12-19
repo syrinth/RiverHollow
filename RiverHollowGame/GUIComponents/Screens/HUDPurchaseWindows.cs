@@ -311,7 +311,7 @@ namespace RiverHollow.GUIComponents.Screens
             int i = 0;
             foreach (Merchandise m in merch)
             {
-                if (m.MerchType == Merchandise.ItemType.Worker)
+                if (m.MerchType == Merchandise.ItemType.Adventurer)
                 {
                     Adventurer w = DataManager.GetAdventurer(m.MerchID);
                     WorkerBox wb = new WorkerBox(w, m.MoneyCost);
