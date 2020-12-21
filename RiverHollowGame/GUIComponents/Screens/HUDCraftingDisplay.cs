@@ -210,7 +210,12 @@ namespace RiverHollow.GUIComponents.Screens
                             _iSelectedItemID = chosenItem.ItemID;
                             foreach (KeyValuePair<int, int> kvp in chosenItem.GetRequiredItems())
                             {
-                                _liRequiredItems.Add(new GUIItem(DataManager.GetItem(kvp.Key, kvp.Value)));
+                                GUIItem newItem = new GUIItem(DataManager.GetItem(kvp.Key, kvp.Value));
+                                if(!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
+                                {
+                                    newItem.SetColor(Color.Red);
+                                }
+                                _liRequiredItems.Add(newItem);
                             }
 
                             _gName.SetText(chosenItem.Name);

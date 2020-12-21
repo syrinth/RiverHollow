@@ -383,5 +383,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
             return rv;
         }
+
+        public override void SetColor(Color c)
+        {
+            _gText.SetColor(c);
+        }
     }
 }
