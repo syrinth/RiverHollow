@@ -384,22 +384,13 @@ namespace RiverHollow.Items
         public ArmorSlotEnum ArmorSlot => _eArmorSlot;
 
         int _iTier;
-
-        private int _iAttack;
-        public int Attack => _iAttack; 
-
-        private int _iStr;
-        public int Str => _iStr;
-        private int _iDef;
-        public int Def => _iDef;
-        private int _iVit;
-        public int Vit => _iVit;
-        private int _iMag;
-        public int Mag => _iMag;
-        private int _iRes;
-        public int Res => _iRes;
-        private int _iSpd;
-        public int Spd => _iSpd;
+        public int Attack { get; }
+        public int Str { get; }
+        public int Def { get; }
+        public int Vit { get; }
+        public int Mag { get; }
+        public int Res { get; }
+        public int Spd { get; }
 
         public Equipment(int id, Dictionary<string, string> stringData)
         {
@@ -427,13 +418,13 @@ namespace RiverHollow.Items
 
             //Stats
             _iTier = int.Parse(stringData["Tier"]);
-            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Str))) { _iStr = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Str)]); }
-            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Def))) { _iDef = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Def)]); }
-            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Vit))) { _iVit = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Vit)]); }
-            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Mag))) { _iMag = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Mag)]); }
-            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Res))) { _iRes = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Res)]); }
-            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Spd))) { _iSpd = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Spd)]); }
-            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Atk))) { _iAttack = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Atk)], false); }
+            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Str))) { Str = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Str)]); }
+            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Def))) { Def = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Def)]); }
+            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Vit))) { Vit = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Vit)]); }
+            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Mag))) { Mag = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Mag)]); }
+            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Res))) { Res = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Res)]); }
+            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Spd))) { Spd = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Spd)]); }
+            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Atk))) { Attack = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Atk)], false); }
         }
 
 
@@ -468,12 +459,12 @@ namespace RiverHollow.Items
         {
             string rv = base.GetDescription();
             rv += System.Environment.NewLine;
-            if (Attack > 0) { rv += " Attack: +" + _iAttack + " "; }
-            if (Str > 0) { rv += " Str: +" + _iStr + " "; }
-            if (Def > 0) { rv += " Def: +" + _iDef + " "; }
-            if (Mag > 0) { rv += " Mag: +" + _iMag + " "; }
-            if (Res > 0) { rv += " Res: +" + _iRes + " "; }
-            if (Spd > 0) { rv += " Spd: +" + _iSpd + " "; }
+            if (Attack > 0) { rv += " Attack: +" + Attack + " "; }
+            if (Str > 0) { rv += " Str: +" + Str + " "; }
+            if (Def > 0) { rv += " Def: +" + Def + " "; }
+            if (Mag > 0) { rv += " Mag: +" + Mag + " "; }
+            if (Res > 0) { rv += " Res: +" + Res + " "; }
+            if (Spd > 0) { rv += " Spd: +" + Spd + " "; }
             rv = rv.Trim();
 
             return rv;
