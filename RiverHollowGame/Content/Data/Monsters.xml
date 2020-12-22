@@ -21,5 +21,9 @@
       <Key>4</Key>
       <Value>[Texture:Batty][Lvl:1][Ability:42][Walk:0-0-4-.11-F][Attack:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F][Loot:56]</Value>
     </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Texture:Beard][Lvl:1][Ability:300][Loot:59][Walk:0-0-3-0.15-T][Attack:0-0-3-0.15-T][Cast:0-0-3-0.15-T][Hurt:0-0-3-0.15-T][Critical:0-0-3-0.15-T][KO:0-0-3-0.15-T]</Value>
+    </Item>
   </Asset>
 </XnaContent>

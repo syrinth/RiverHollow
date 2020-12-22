@@ -26,20 +26,24 @@
       <Value>Hello, what can I do for you?.[Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel]</Value>
     </Item>
     <Item>
-      <Key>JoinPartyYes</Key>
-      <Value>Certainly, I'd like to see what we can accomplish together.</Value>
+      <Key>Snowing_1</Key>
+      <Value>Nice to see you hon, we don't get too many customers on cold days like this. Why don't you treat yourself to something warm at the bar?</Value>
     </Item>
     <Item>
-      <Key>JoinPartyNo</Key>
-      <Value>Sorry,I'm very busy today. Maybe in a few days I can go with you again.</Value>
+      <Key>Snowing_2</Key>
+      <Value>Sometimes, days like these remind me of when $Character_9$ and I first met. It was the dead of winter and he'd just come into the tavern I was performing at, bundled up in his coat. There was something about him that caught my eye immediately.</Value>
     </Item>
     <Item>
-      <Key>MarriageYes</Key>
-      <Value>Yes I will marry you!</Value>
+      <Key>Rain_1</Key>
+      <Value>You know, I kind of love the rain now that I'm not on the road anymore. I hated it back then though. Now? It's nice to be warm inside and watch it fall.</Value>
     </Item>
     <Item>
-      <Key>MarriageNo</Key>
-      <Value>Oh... I'm sorry but. No.</Value>
+      <Key>Rain_2</Key>
+      <Value>Huh, rain? Guess we're not going to have too many customers tonight, huh?</Value>
+    </Item>
+    <Item>
+      <Key>Dialogue_3</Key>
+      <Value>Best be careful if you're gonna go exploring hon, I was out on the edge of the forest the other day, just minding my own business when I saw something creeping around. I didn't get a good look at it, but it didn't seem like a good idea to stick around.</Value>
     </Item>
   </Asset>
 </XnaContent>
