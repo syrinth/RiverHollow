@@ -196,6 +196,10 @@ namespace RiverHollow.Utilities
         {
             return GetEnumString(verb) + Util.GetEnumString(direction);
         }
+        public static string GetActorString(string verb, DirectionEnum direction)
+        {
+            return verb + Util.GetEnumString(direction);
+        }
 
         public static string[] FindTags(string data)
         {

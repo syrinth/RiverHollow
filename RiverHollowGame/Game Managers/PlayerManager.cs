@@ -352,7 +352,7 @@ namespace RiverHollow.Game_Managers
         public static bool SetTool(Tool t, Point mouse)
         {
             bool rv = false;
-            PlayerManager.World.PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+            PlayerManager.World.PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
 
             if (t != null && ToolInUse == null)
             {

@@ -126,7 +126,7 @@ namespace RiverHollow.Game_Managers
                 c.SetBaseTile(tiles[(int)startpos.X, (int)startpos.Y]);
                 c.Position = c.BaseTile.Position;
                 c.Facing = PlayerManager.World.Facing;
-                c.PlayAnimation(VerbEnum.Walk);
+                c.GoToIdle();
             }
 
 
@@ -135,7 +135,7 @@ namespace RiverHollow.Game_Managers
 
             InCombat = true;
             PlayerManager.AllowMovement = false;
-            PlayerManager.World.PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+            PlayerManager.World.PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
 
             PlayerManager.World.SetMoveObj(Util.SnapToGrid(PlayerManager.World.BaseTile.Center));
 
@@ -150,7 +150,7 @@ namespace RiverHollow.Game_Managers
                 case CmbtPhaseEnum.Setup:
                     if (PlayerManager.World.Position == PlayerManager.World.BaseTile.Position)
                     {
-                        PlayerManager.World.PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                        PlayerManager.World.PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
                         ChangePhase(CmbtPhaseEnum.Charging);
                     }
                     break;
@@ -196,11 +196,11 @@ namespace RiverHollow.Game_Managers
                     }
                     else if (activeSummon != null && activeSummon.Regen && activeSummon.BodySprite.CurrentAnimation != "Cast")
                     {
-                        activeSummon.PlayAnimation(VerbEnum.Cast);
+                        activeSummon.PlayAnimationVerb(VerbEnum.Cast);
                     }
                     else if (activeSummon.BodySprite.GetPlayCount() >= 1)
                     {
-                        activeSummon.PlayAnimation(VerbEnum.Idle);
+                        activeSummon.PlayAnimationVerb(VerbEnum.Idle);
                         ActiveCharacter.ModifyHealth(30, false);
                         GoToMainSelection();
                     }

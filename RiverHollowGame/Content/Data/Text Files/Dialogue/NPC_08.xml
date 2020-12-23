@@ -6,24 +6,25 @@
       <Value>Why hello. I haven't seen you around here before, I'd have remembered. The name's $Character_8$ and believe me, it's a pleasure to meet you.</Value>
     </Item>
     <Item>
-      <Key>IntroYes</Key>
-      <Value>Oh. How interesting. In that case, you should speak with $2$, he and his husband make excellent weapons.</Value>
+      <Key>Snowing_1</Key>
+      <Value>Oh, hello $^$. Care to join me for a hot drink this evening?</Value>
     </Item>
     <Item>
-      <Key>IntroNo</Key>
-      <Value>Oh, that's a shame</Value>
+      <Key>Winter_1</Key>
+      <Value>Hello, $^$. Enjoying the winter? You should come visit me at the tavern some time soon. I've got just the thing to ward off the cold.</Value>
     </Item>
     <Item>
-      <Key>IntroMaybe</Key>
-      <Value>What does that even mean?</Value>
+      <Key>Dialogue_1</Key>
+      <Value>You're always running around. Don't you ever just  take a break and relax?
+Try to take it easy sometimes, ok?</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hello $^$. I hope you're well today.</Value>
+      <Value>Off again $^$? If you need to relax after, you know where I'll be.</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.</Value>
+      <Value>There's something almost peaceful about the swamp, you know? It's a dreary place, but it's beautiful in its own way. We should go there some time.</Value>
     </Item>
     <Item>
       <Key>Gift</Key>

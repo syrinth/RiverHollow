@@ -57,29 +57,19 @@ namespace RiverHollow.CombatStuff
 
         PotencyBonusEnum _eBonusType;
         ElementEnum _eElement = ElementEnum.None;
-        List<ConditionEnum> _liCondition;
-        public List<ConditionEnum> LiCondition => _liCondition;
-        int _iMPcost;
-        public int MPCost => _iMPcost;
-        int _iPotency;
-        public int Potency => _iPotency;
+        public List<ConditionEnum> LiCondition { get; }
+        public int MPCost { get; private set; }
+        public int Potency { get; private set; }
 
-        int _iReqLevel;
-        public int ReqLevel => _iReqLevel;
-
-        bool _bHarm;
-        public bool Harm => _bHarm;
-        bool _bHeal;
-        public bool Heal => _bHeal;
+        public int ReqLevel { get; private set; }
+        public bool Harm { get; private set; }
+        public bool Heal { get; private set; }
 
         string _sAnimation;
-
-        TargetEnum _eTarget;
-        public TargetEnum Target => _eTarget;
-        int _iRange;
-        public int Range => _iRange;
-        AreaTypeEnum _eAreaType;
-        public AreaTypeEnum AreaType => _eAreaType;
+        VerbEnum _eUserAnimationVerb;
+        public TargetEnum Target { get; private set; }
+        public int Range { get; private set; }
+        public AreaTypeEnum AreaType { get; private set; }
         List<String> _liActionTags;
         int _iCurrentAction = 0;
         List<SkillTagsEnum> _liEffects;
@@ -122,9 +112,9 @@ namespace RiverHollow.CombatStuff
         {
             _chosenItem = it;
             _sName = it.Name;
-            _iRange = 1;
+            Range = 1;
             _eActionType = ActionEnum.Item;
-            _eTarget = it.Helpful ? TargetEnum.Ally : TargetEnum.Enemy;
+            Target = it.Helpful ? TargetEnum.Ally : TargetEnum.Enemy;
 
             TileTargetList = new List<RHTile>();
             _liActionTags = new List<string>() { "UseItem", "Apply", "End" };
@@ -132,7 +122,7 @@ namespace RiverHollow.CombatStuff
         public CombatAction(int id, Dictionary<string, string> stringData)
         {
             TileTargetList = new List<RHTile>();
-            _liCondition = new List<ConditionEnum>();
+            LiCondition = new List<ConditionEnum>();
             _liEffects = new List<SkillTagsEnum>();
             _liStatusEffects = new List<StatusEffectData>();
             _liActionTags = new List<string>();
@@ -147,13 +137,16 @@ namespace RiverHollow.CombatStuff
 
             _eActionType = Util.ParseEnum<ActionEnum>(stringData["Type"]);
             if (stringData.ContainsKey("Element")) { _eElement = Util.ParseEnum<ElementEnum>(stringData["Element"]); }
-            if (stringData.ContainsKey("Target")) { _eTarget = Util.ParseEnum<TargetEnum>(stringData["Target"]); }
-            if (stringData.ContainsKey("AreaType")) { _eAreaType = Util.ParseEnum<AreaTypeEnum>(stringData["AreaType"]); }
-            if (stringData.ContainsKey("Range")) { _iRange = int.Parse(stringData["Range"]); }
+            if (stringData.ContainsKey("Target")) { Target = Util.ParseEnum<TargetEnum>(stringData["Target"]); }
+            if (stringData.ContainsKey("AreaType")) { AreaType = Util.ParseEnum<AreaTypeEnum>(stringData["AreaType"]); }
+            if (stringData.ContainsKey("Range")) { Range = int.Parse(stringData["Range"]); }
             if (stringData.ContainsKey("Crit")) { _iCritRating = int.Parse(stringData["Crit"]); }
             if (stringData.ContainsKey("Accuracy")) { _iAccuracy = int.Parse(stringData["Accuracy"]); }
-            if (stringData.ContainsKey("Cost")) { _iMPcost = int.Parse(stringData["Cost"]); }
-            if (stringData.ContainsKey("Level")) { _iReqLevel = int.Parse(stringData["Level"]); }
+            if (stringData.ContainsKey("Cost")) { MPCost = int.Parse(stringData["Cost"]); }
+            if (stringData.ContainsKey("Level")) { ReqLevel = int.Parse(stringData["Level"]); }
+
+            if (stringData.ContainsKey("UserAnimation")) { _eUserAnimationVerb = Util.ParseEnum<VerbEnum>(stringData["UserAnimation"]); }
+            else { _eUserAnimationVerb = VerbEnum.Action1; }
 
             if (stringData.ContainsKey("Icon"))
             {
@@ -165,14 +158,14 @@ namespace RiverHollow.CombatStuff
             {
                 if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Harm)))
                 {
-                    _bHarm = true;
-                    _iPotency = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Harm)]);
+                    Harm = true;
+                    Potency = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Harm)]);
                     _liEffects.Add(SkillTagsEnum.Harm);
                 }
                 if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Heal)))
                 {
-                    _bHeal = true;
-                    _iPotency = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Heal)]);
+                    Heal = true;
+                    Potency = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Heal)]);
                     _liEffects.Add(SkillTagsEnum.Heal);
                 }
 
@@ -351,7 +344,7 @@ namespace RiverHollow.CombatStuff
             {
                 foreach (CombatActor act in targetActors)
                 {
-                    act.ProcessHealingSpell(_cmbtUser, _iPotency);
+                    act.ProcessHealingSpell(_cmbtUser, Potency);
                 }
             }
 
@@ -431,7 +424,7 @@ namespace RiverHollow.CombatStuff
         }
         private void ApplyEffectHarm(List<CombatActor> targetActors, int bonus)
         {
-            int totalPotency = _iPotency + bonus;
+            int totalPotency = Potency + bonus;
             //Iterate over each tile in the target list
             foreach (CombatActor act in targetActors)
             {
@@ -466,7 +459,7 @@ namespace RiverHollow.CombatStuff
                         #region Countering setup
                         //If the target has Counter turn on, prepare to counterattack
                         //Only counter melee attacks
-                        if (_iRange == 0)
+                        if (Range == 0)
                         {
                             if (targetActor.Counter)
                             {
@@ -717,24 +710,24 @@ namespace RiverHollow.CombatStuff
                         }
                     }
 
-                    if (!_cmbtUser.IsCurrentAnimation(VerbEnum.Attack))
+                    if (!_cmbtUser.IsCurrentAnimationVerb(_eUserAnimationVerb))
                     {
-                        _cmbtUser.PlayAnimation(VerbEnum.Attack);
+                        _cmbtUser.PlayAnimationVerb(_eUserAnimationVerb);
                     }
                     else if (_cmbtUser.AnimationPlayedXTimes(1))
                     {
-                        _cmbtUser.PlayAnimation(VerbEnum.Walk);
+                        _cmbtUser.GoToIdle();
                         _iCurrentAction++;
                     }
                     break;
                 case "UserCast":
                     if (!_cmbtUser.IsDirectionalAnimation(VerbEnum.Cast))
                     {
-                        _cmbtUser.PlayAnimation(VerbEnum.Cast);
+                        _cmbtUser.PlayAnimationVerb(VerbEnum.Cast);
                     }
                     else if (_cmbtUser.AnimationPlayedXTimes(2))
                     {
-                        _cmbtUser.PlayAnimation(VerbEnum.Walk);
+                        _cmbtUser.GoToIdle();
                         _iCurrentAction++;
                     }
                     break;
@@ -754,12 +747,12 @@ namespace RiverHollow.CombatStuff
                 case "UseItem":
                     if (!_cmbtUser.IsDirectionalAnimation(VerbEnum.Cast))
                     {
-                        _cmbtUser.PlayAnimation(VerbEnum.Cast);
+                        _cmbtUser.PlayAnimationVerb(VerbEnum.Cast);
                         //_bDrawItem = true;
                     }
                     else if (_cmbtUser.AnimationPlayedXTimes(3))
                     {
-                        _cmbtUser.PlayAnimation(VerbEnum.Walk);
+                        _cmbtUser.GoToIdle();
                         //_bDrawItem = false;
                         _iCurrentAction++;
                     }
@@ -790,13 +783,13 @@ namespace RiverHollow.CombatStuff
                         {
                             if (counteringChar != null)
                             {
-                                if (!counteringChar.IsDirectionalAnimation(VerbEnum.Attack))
+                                if (!CheckForAttackAnimation(counteringChar))
                                 {
-                                    counteringChar.PlayAnimation(VerbEnum.Attack);
+                                    counteringChar.PlayAnimationVerb(VerbEnum.Action1);
                                 }
                                 else if (counteringChar.AnimationPlayedXTimes(1))
                                 {
-                                    counteringChar.PlayAnimation(VerbEnum.Walk);
+                                    counteringChar.GoToIdle();
                                     _cmbtUser.ProcessAttack(counteringChar, ((CombatAction)DataManager.GetActionByIndex(1)).Potency, _iCritRating, counteringChar.GetAttackElement());
                                     counteringChar = null;
                                     _bPauseActionHandler = false;
@@ -805,13 +798,13 @@ namespace RiverHollow.CombatStuff
                             }
                             else if (counteringSummon != null)
                             {
-                                if (!counteringSummon.IsDirectionalAnimation(VerbEnum.Attack))
+                                if (!CheckForAttackAnimation(counteringChar))
                                 {
-                                    counteringSummon.PlayAnimation(VerbEnum.Attack);
+                                    counteringSummon.PlayAnimationVerb(VerbEnum.Action1);
                                 }
                                 else if (counteringSummon.AnimationPlayedXTimes(1))
                                 {
-                                    counteringSummon.PlayAnimation(VerbEnum.Walk);
+                                    counteringSummon.GoToIdle();
                                     _cmbtUser.ProcessAttack(counteringSummon, ((CombatAction)DataManager.GetActionByIndex(1)).Potency, _iCritRating, counteringSummon.GetAttackElement());
                                     counteringSummon = null;
                                     _bPauseActionHandler = false;
@@ -871,6 +864,12 @@ namespace RiverHollow.CombatStuff
             }
         }
 
+        public bool CheckForAttackAnimation(CombatActor testActor)
+        {
+            return !testActor.IsDirectionalAnimation(VerbEnum.Action1) || !testActor.IsDirectionalAnimation(VerbEnum.Action2) ||
+                !testActor.IsDirectionalAnimation(VerbEnum.Action3) || !testActor.IsDirectionalAnimation(VerbEnum.Action4);
+        }
+
         public bool MoveSpriteTo(GUISprite sprite, Vector2 target)
         {
             bool rv = sprite.Position() == target;
@@ -889,7 +888,7 @@ namespace RiverHollow.CombatStuff
         {
             if (CombatManager.LegalTiles.Contains(CombatManager.SelectedTile))
             {
-                CombatManager.ActiveCharacter.CurrentMP -= _iMPcost;          //Checked before Processing
+                CombatManager.ActiveCharacter.CurrentMP -= MPCost;          //Checked before Processing
                 AssignTargetTile(CombatManager.SelectedTile);
 
                 CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.PerformAction);
@@ -908,7 +907,7 @@ namespace RiverHollow.CombatStuff
         {
             List<RHTile> rvList = new List<RHTile>();
 
-            switch (_eAreaType)
+            switch (AreaType)
             {
                 case AreaTypeEnum.Cross:
                     foreach (RHTile t in targetedTile.GetAdjacentTiles())
@@ -931,7 +930,7 @@ namespace RiverHollow.CombatStuff
             _cmbtUser = user;
         }
 
-        public bool IsHelpful() { return _eTarget == TargetEnum.Ally; }
+        public bool IsHelpful() { return Target == TargetEnum.Ally; }
         public bool IsSummonSpell() { return _liEffects.Contains(SkillTagsEnum.Summon); }
     }
 

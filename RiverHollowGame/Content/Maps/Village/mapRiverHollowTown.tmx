@@ -341,7 +341,7 @@
     <property name="Map" value="mapConnection_01"/>
    </properties>
   </object>
-  <object id="35" name="Entrance" x="0" y="672" width="4" height="48">
+  <object id="35" name="Entrance" x="0" y="640" width="4" height="48">
    <properties>
     <property name="EntranceDir" value="Right"/>
     <property name="Map" value="mapConnection_02"/>

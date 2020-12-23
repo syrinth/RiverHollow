@@ -155,7 +155,7 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:1][AreaType:Single][Harm:100][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:1][AreaType:Single][Harm:100][Action:UserAttack Apply][UserAnimation:Action1]</Value>
     </Item>
     <Item>
       <Key>39</Key>
@@ -171,7 +171,7 @@
     </Item>
     <Item>
       <Key>42</Key>
-      <Value>[Type:Action][Target:Enemy][Range:1][AreaType:Single][Harm:50][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:1][AreaType:Single][Harm:50][Action:UserAttack Apply][UserAnimation:Action1]</Value>
     </Item>
   </Asset>
 </XnaContent>

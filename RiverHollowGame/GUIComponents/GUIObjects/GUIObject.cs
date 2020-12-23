@@ -209,7 +209,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             return rv;
         }
 
-        public Vector2 Position()
+        public virtual Vector2 Position()
         {
             return _vPos;
         }

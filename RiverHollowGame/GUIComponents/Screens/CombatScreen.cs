@@ -307,7 +307,7 @@ namespace RiverHollow.GUIComponents.Screens
                 AddControl(gMP);
             }
 
-            Width = TileSize * 10;
+            Width = TileSize;
             Height = _gSprite.Height;
             Resize();
             gName.SetText(actor.Name);    

@@ -19,6 +19,23 @@ namespace RiverHollow.Characters
     public class Monster : CombatActor
     {
         #region Properties
+        /// <summary>
+        /// As in the base, we need to calculate the Actor's position based off of the Sprite's position.
+        /// However, there is a new complication in that there are mandatory buffers of one TileSize
+        /// on both the Left, Right, and Bottom of the Sprite.
+        /// </summary>
+        public override Vector2 Position
+        {
+            get
+            {
+                return new Vector2(_sprBody.Position.X + TileSize, _sprBody.Position.Y + _sprBody.Height - (TileSize * (_iSize + 1)));
+            }
+            set
+            {
+                _sprBody.Position = new Vector2(value.X - TileSize, value.Y - _sprBody.Height + (TileSize * (_iSize + 1)));
+            }
+        }
+
         #region Traits
         enum TraitEnum { Coward };
         bool _bCoward;
@@ -87,11 +104,11 @@ namespace RiverHollow.Characters
             _iResistance = 2 * _iRating + 10;
             _iSpeed = 10;
 
-            if (data.ContainsKey("Width")) { _iWidth = int.Parse(data["Width"]); }
-            else { _iWidth = TileSize; }
+            if (data.ContainsKey("Width")) { _iBodyWidth = int.Parse(data["Width"]); }
+            else { _iBodyWidth = TileSize; }
 
-            if (data.ContainsKey("Height")) { _iHeight = int.Parse(data["Height"]); }
-            else { _iHeight = TileSize * 2; }
+            if (data.ContainsKey("Height")) { _iBodyHeight = int.Parse(data["Height"]); }
+            else { _iBodyHeight = TileSize * 2; }
 
             if (data.ContainsKey("Size")) {
                 _iSize = int.Parse(data["Size"]);
@@ -146,7 +163,10 @@ namespace RiverHollow.Characters
 
             _iCurrentHP = MaxHP;
             _iCurrentMP = MaxMP;
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), DataManager.FOLDER_MONSTERS + data["Texture"]);
+
+            _iSpriteWidth = TileSize * (_iSize + 2);
+            _iSpriteHeight = TileSize * (_iSize + 2);
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), DataManager.FOLDER_MONSTERS + data["Texture"], true);
         }
 
         public override void Update(GameTime gTime)
@@ -176,6 +196,7 @@ namespace RiverHollow.Characters
                     }
                     else if (!CombatPhaseCheck(CmbtPhaseEnum.PerformAction))
                     {
+                        DetermineFacing(_chosenAction.TileTargetList[0]);
                         CombatManager.SelectedAction = _chosenAction;
                         CombatManager.ActiveCharacter.CurrentMP -= _chosenAction.MPCost;          //Checked before Processing
                         CombatManager.ChangePhase(CmbtPhaseEnum.PerformAction);
@@ -270,7 +291,7 @@ namespace RiverHollow.Characters
                 {
                     move = false;
 
-                    PlayAnimation(VerbEnum.Ground);
+                    PlayAnimationVerb(VerbEnum.Ground);
                 }
                 else if (BodySprite.CurrentAnimation.StartsWith("Ground") && BodySprite.CurrentFrameAnimation.PlayCount < 1)
                 {
@@ -279,7 +300,7 @@ namespace RiverHollow.Characters
                 else if (!BodySprite.CurrentAnimation.StartsWith("Idle") && BodySprite.CurrentFrameAnimation.PlayCount >= 1)
                 {
                     bool jumping = BodySprite.CurrentAnimation.StartsWith("Air");
-                    PlayAnimation(jumping ? VerbEnum.Ground : VerbEnum.Air);
+                    PlayAnimationVerb(jumping ? VerbEnum.Ground : VerbEnum.Air);
                     _vJumpTo = Vector2.Zero;
                 }
             }
@@ -300,7 +321,7 @@ namespace RiverHollow.Characters
                 if (Position.X == _vMoveTo.X && Position.Y == _vMoveTo.Y)
                 {
                     _vMoveTo = Vector2.Zero;
-                    PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                    PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
                 }
             }
         }
@@ -322,7 +343,7 @@ namespace RiverHollow.Characters
                 {
                     _vMoveTo = Vector2.Zero;
                     _dIdleFor = 4;
-                    PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                    PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
                     skip = true;
                 }
 
@@ -343,7 +364,7 @@ namespace RiverHollow.Characters
 
             if (direction.Length() == 0)
             {
-                PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
             }
             else
             {
@@ -360,7 +381,7 @@ namespace RiverHollow.Characters
                         else if (direction.Y < 0) { Facing = DirectionEnum.Up; }
                     }
 
-                    PlayAnimation(_bJump ? VerbEnum.Ground : VerbEnum.Walk);
+                    PlayAnimationVerb(_bJump ? VerbEnum.Ground : VerbEnum.Walk);
                 }
             }
         }

@@ -12,7 +12,10 @@ namespace RiverHollow.SpriteAnimations
     public class AnimatedSprite
     {
         #region Properties
-        public float LayerDepth => Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100);
+        //Combatsprites have buffers that we need to accomodate
+        public bool CombatSprite { get; } = false;
+
+        public float LayerDepth => Position.Y + CurrentFrameAnimation.FrameHeight - (CombatSprite ? TileSize : 0) + ((Position.X + (CombatSprite ? TileSize : 0)) / 100);
 
         Texture2D _texture;                         // The texture that holds the images for this sprite
         bool _bAnimating = true;                     // True if animations are being played
@@ -28,7 +31,6 @@ namespace RiverHollow.SpriteAnimations
         string _sCurrAnim = string.Empty;   // Which FrameAnimation from the dictionary above is playing
 
         // Calculated center of the sprite
-        Vector2 v2Center;
         public Vector2 Center => new Vector2(_vPosition.X + _width / 2, Position.Y + _height / 2);
 
         // Calculated width and height of the sprite
@@ -54,12 +56,6 @@ namespace RiverHollow.SpriteAnimations
             get { return _vPosition; }
             set {_vPosition = value; }
         }
-
-
-        /// Screen coordinates of the bounding box surrounding this sprite
-
-        public Rectangle BoundingBox => new Rectangle((int)_vPosition.X, (int)_vPosition.Y, _width, _height);
-
 
         public bool IsAnimating
         {
@@ -110,14 +106,16 @@ namespace RiverHollow.SpriteAnimations
 
         #endregion
 
-        public AnimatedSprite(string Texture)
+        public AnimatedSprite(string Texture, bool combatSprite = false)
         {
+            CombatSprite = combatSprite;
             _texture = DataManager.GetTexture(Texture);
         }
 
         public AnimatedSprite(AnimatedSprite sprite)
         {
             _texture = sprite._texture;
+            CombatSprite = sprite.CombatSprite;
             _diFrameAnimations = sprite._diFrameAnimations;
             _iFrameCutoff = sprite._iFrameCutoff;
             _color = sprite._color;
@@ -138,7 +136,6 @@ namespace RiverHollow.SpriteAnimations
             _diFrameAnimations.Add(animationName, new FrameAnimation(startX, startY, Width, Height, Frames, FrameLength, pingPong));
             _width = Width;
             _height = Height;
-            v2Center = new Vector2(_width / 2, _height / 2);
             if (_diFrameAnimations.Count == 1)
             {
                 PlayAnimation(animationName);
@@ -151,6 +148,7 @@ namespace RiverHollow.SpriteAnimations
 
         public void PlayAnimation(AnimationEnum verb) { PlayAnimation(Util.GetEnumString(verb)); }
         public void PlayAnimation(VerbEnum verb, DirectionEnum dir) { PlayAnimation(Util.GetActorString(verb, dir)); }
+        public void PlayAnimation(string verb, DirectionEnum dir) { PlayAnimation(Util.GetActorString(verb, dir)); }
         public void PlayAnimation(string animate)
         {
             if (_sCurrAnim != animate && _diFrameAnimations.ContainsKey(animate))
@@ -162,6 +160,7 @@ namespace RiverHollow.SpriteAnimations
 
         public bool IsCurrentAnimation(AnimationEnum verb) { return IsCurrentAnimation(Util.GetEnumString(verb)); }
         public bool IsCurrentAnimation(VerbEnum verb, DirectionEnum dir) { return IsCurrentAnimation(Util.GetActorString(verb, dir)); }
+        public bool IsCurrentAnimation(string verb, DirectionEnum dir) { return IsCurrentAnimation(Util.GetActorString(verb, dir)); }
         private bool IsCurrentAnimation(string animate) { return CurrentAnimation.Equals(animate); }
 
         /// <summary>

@@ -2394,7 +2394,7 @@ namespace RiverHollow.Tile_Engine
         public override void Spawn()
         {
             if (_iPrimedMonsterID != -1) { _monster = DataManager.GetMonsterByIndex(_iPrimedMonsterID); }
-            else { _monster = DataManager.GetMonsterByIndex(4); }// RHRandom.Instance.Next(0, 3)); }
+            else { _monster = DataManager.GetMonsterByIndex(3); }// RHRandom.Instance.Next(0, 3)); }
 
             _monster.SpawnPoint = this;
             _map.AddMonsterByPosition(_monster, _vPosition);
