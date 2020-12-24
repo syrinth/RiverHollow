@@ -37,17 +37,17 @@ namespace RiverHollow.Game_Managers
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
         public enum QuestTypeEnum { GroupSlay, Slay, Fetch, Talk }
-        public enum ActorEnum { Actor, Adventurer, CombatActor, Monster, NPC, ShippingGremlin, Spirit, WorldCharacter };
+        public enum ActorEnum { Actor, Adventurer, CombatActor, Monster, NPC, ShippingGremlin, Spirit, Summon, WorldCharacter };
         public enum NPCTypeEnum { Villager, Eligible, Shopkeeper, Ranger, Worker, Mason, ShippingGremlin }
         public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade };
-        public enum PotencyBonusEnum { None, Conditions, Summons };
+        public enum PotencyBonusEnum { None, Conditions, Summon};
         public enum EquipmentEnum { Armor, Weapon, Accessory, Head, Wrist };
         public enum SpecialItemEnum { None, Marriage, Class, Map, DungeonKey, Quest };
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ActionEnum { Action, Item, Spell, MenuItem, MenuSpell, MenuAction, Move, EndTurn };
-        public enum SkillTagsEnum { Bonus, Harm, Heal, Push, Pull, Remove, Retreat, Step, StatusEffectID, Summon };
+        public enum SkillTagsEnum { Bonus, Harm, Heal, Push, Pull, Remove, Retreat, Step, StatusEffectID, SummonID };
         public enum TargetEnum { Enemy, Ally };
-        public enum AreaTypeEnum { Single, Cross, Ring, Line };
+        public enum AreaTypeEnum { Single, Cross, Ring, Line, Diamond };
         public enum ElementEnum { None, Fire, Ice, Lightning };
         public enum AttackTypeEnum { Physical, Magical };
         public enum ElementAlignment { Neutral, Vulnerable, Resists };

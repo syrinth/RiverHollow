@@ -35,7 +35,7 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:5][AreaType:Single][Harm:100][Bonus:Summons-10][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:5][AreaType:Single][Harm:100][Bonus:Summon-20][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>9</Key>
@@ -55,7 +55,7 @@
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][SummonID:3][Action:UserCast Apply]</Value>
+      <Value>[Type:Spell][Target:Enemy][Range:6][AreaType:Diamond][Cost:5][SummonID:3][Action:UserCast Apply][Harm:100]</Value>
     </Item>
     <Item>
       <Key>14</Key>
@@ -155,7 +155,7 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:1][AreaType:Single][Harm:100][Action:UserAttack Apply][UserAnimation:Action1]</Value>
+      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:1][AreaType:Single][Harm:100][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>39</Key>
@@ -172,6 +172,10 @@
     <Item>
       <Key>42</Key>
       <Value>[Type:Action][Target:Enemy][Range:1][AreaType:Single][Harm:50][Action:UserAttack Apply][UserAnimation:Action1]</Value>
+    </Item>
+    <Item>
+      <Key>43</Key>
+      <Value>[Type:Action][Target:Enemy][Range:1][AreaType:Diamond][Harm:100][Action:UserAttack Apply]</Value>
     </Item>
   </Asset>
 </XnaContent>

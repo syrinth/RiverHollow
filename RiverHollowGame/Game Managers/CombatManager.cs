@@ -34,6 +34,7 @@ namespace RiverHollow.Game_Managers
         public static CombatActor ActiveCharacter;
         public static List<CombatActor> Monsters { get; private set; }
         public static List<CombatActor> Party { get; private set; }
+        public static List<Summon> Summons { get; private set; }
 
         private static CombatScreen _scrCombat;
         public enum CmbtPhaseEnum { Setup, Charging, Upkeep, MainSelection, ChooseMoveTarget, Moving, ChooseAction, ChooseActionTarget, PerformAction, Victory, DisplayDefeat }//NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayVictory, Lost, PerformAction, EndCombat }
@@ -62,7 +63,7 @@ namespace RiverHollow.Game_Managers
         public static bool CheckForForcedEndOfTurn()
         {
             bool rv = false;
-            if(CurrentTurnInfo.HasActed && CurrentTurnInfo.HasMoved)
+            if(CurrentTurnInfo.HasActed && CurrentTurnInfo.HasMoved || (ActiveCharacter.IsSummon() && CurrentTurnInfo.HasActed))
             {
                 rv = true;
                 EndTurn();
@@ -80,6 +81,8 @@ namespace RiverHollow.Game_Managers
             SelectedTile = null;
 
             Delay = 0;
+
+            Summons = new List<Summon>();
 
             _liDroppedItems = new List<Item>();
             LegalTiles = new List<RHTile>();
@@ -107,7 +110,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (CombatActor c in Monsters)
             {
-                c.SetBaseTile(BattleMap.GetTileByPixelPosition(c.Position));
+                c.SetBaseTile(BattleMap.GetTileByPixelPosition(c.Position), true);
             }
 
             RHTile[,] tiles = BattleMap.DictionaryCombatTiles[oldMap];
@@ -123,8 +126,8 @@ namespace RiverHollow.Game_Managers
                 }
 
                 Vector2 startpos = c.StartPosition;
-                c.SetBaseTile(tiles[(int)startpos.X, (int)startpos.Y]);
-                c.Position = c.BaseTile.Position;
+                c.SetBaseTile(tiles[(int)startpos.X, (int)startpos.Y], true);
+                //c.Position = c.BaseTile.Position;
                 c.Facing = PlayerManager.World.Facing;
                 c.GoToIdle();
             }
@@ -179,30 +182,25 @@ namespace RiverHollow.Game_Managers
 
                 //Phase for when a new ActiveCharacter is set but before they can do anything
                 case CmbtPhaseEnum.Upkeep:
-                    CurrentTurnInfo = new TurnInfo();
-                    ActiveCharacter.TickStatusEffects();
-                    if (ActiveCharacter.Poisoned())
-                    {
-                        ActiveCharacter.ModifyHealth(Math.Max(1, (int)(ActiveCharacter.MaxHP / 20)), true);
-                    }
-
+                    //If the ActiveCharacter has a LinkedSummon, have the summon perform its action first
                     Summon activeSummon = ActiveCharacter.LinkedSummon;
-                    if ((activeSummon == null || !activeSummon.Regen))
+                    if (activeSummon != null && !activeSummon.Acted)
                     {
-                        if (!Camera.IsMoving())
+                        activeSummon.Acted = true;
+                        ActiveCharacter = activeSummon;
+                        //Have the summon perform its turn action and then reset the linked character to the ActiveCharacter
+                        activeSummon.TakeTurn();
+                    }
+                    else {
+                        CurrentTurnInfo = new TurnInfo();
+
+                        if (!Camera.IsMoving()) { GoToMainSelection(); }
+
+                        ActiveCharacter.TickStatusEffects();
+                        if (ActiveCharacter.Poisoned())
                         {
-                            GoToMainSelection();
+                            ActiveCharacter.ModifyHealth(Math.Max(1, (int)(ActiveCharacter.MaxHP / 20)), true);
                         }
-                    }
-                    else if (activeSummon != null && activeSummon.Regen && activeSummon.BodySprite.CurrentAnimation != "Cast")
-                    {
-                        activeSummon.PlayAnimationVerb(VerbEnum.Cast);
-                    }
-                    else if (activeSummon.BodySprite.GetPlayCount() >= 1)
-                    {
-                        activeSummon.PlayAnimationVerb(VerbEnum.Idle);
-                        ActiveCharacter.ModifyHealth(30, false);
-                        GoToMainSelection();
                     }
                     break;
 
@@ -222,7 +220,7 @@ namespace RiverHollow.Game_Managers
                     if (!ActiveCharacter.FollowingPath)
                     {
                         RHTile newTile = BattleMap.GetTileByPixelPosition(ActiveCharacter.Position);
-                        ActiveCharacter.SetBaseTile(newTile);
+                        ActiveCharacter.SetBaseTile(newTile, false);
 
                         Item tileItem = _liDroppedItems.Find(item => newTile.Rect.Contains(item.Position));
 
@@ -406,9 +404,11 @@ namespace RiverHollow.Game_Managers
             PlayerManager.AllowMovement = true;
             foreach (Item it in _liDroppedItems) { it.AutoPickup = true; }
 
+            MapManager.CurrentMap.CleanupSummons();
+
             foreach (ClassedCombatant c in Party.FindAll(x => x != PlayerManager.World))
             {
-                MapManager.Maps[c.CurrentMapName].RemoveCharacter(c);
+                MapManager.CurrentMap.RemoveCharacter(c);
                 c.Activate(false);
                 c.SpdMult = NPC_WALK_SPEED;
                 BattleMap.RemoveCharacter(c);
@@ -602,6 +602,12 @@ namespace RiverHollow.Game_Managers
                 if (kvp.Value.InRange)
                 {
                     LegalTiles.Add(kvp.Key);
+                }
+
+                //Summons must be placed on empty tiles
+                if(SelectedAction != null && SelectedAction.IsSummonSpell() && kvp.Key.Character != null)
+                {
+                    LegalTiles.Remove(kvp.Key);
                 }
             } 
 
@@ -967,31 +973,19 @@ namespace RiverHollow.Game_Managers
         {
             _scrCombat.CloseMainSelection();
 
-            Summon activeSummon = ActiveCharacter.LinkedSummon;
-            //If there is no linked summon, or it is a summon, end the turn normally.
-
-            if (activeSummon != null)
+            //If the character is a Summon, set the ActiveCharacter back to the linked character
+            if (ActiveCharacter.ActorType == ActorEnum.Summon)
             {
-                if (activeSummon.Aggressive)// && SelectedAction.IsMelee())
-                {
-                    //List<RHTile> targets = SelectedAction.GetTargetTiles();
-                    //ActiveCharacter = activeSummon;
-                    //SelectedAction = DataManager.GetActionByIndex(CombatManager.BASIC_ATTACK);
-                    //SelectedAction.AssignUser(ActiveCharacter);
-                    //SelectedAction.SetTargetTiles(targets);
-                }
-                else if (activeSummon.TwinCast && SelectedAction.IsSpell() && !SelectedAction.IsSummonSpell() && SelectedAction.Potency > 0)
-                {
-                    ActiveCharacter = activeSummon;
-                    SelectedAction.AssignUser(activeSummon);
-                }
-                else
-                {
-                    TurnOver();
-                }
+                ActiveCharacter = ((Summon)ActiveCharacter).linkedChar;
+                //Go into Upkeep phase
+                ChangePhase(CmbtPhaseEnum.Upkeep);
             }
             else
             {
+                //Only reset the summons acted flag after the summoner has gone
+                if (ActiveCharacter.LinkedSummon != null) {
+                    ActiveCharacter.LinkedSummon.Acted = false;
+                }
                 TurnOver();
             }
         }

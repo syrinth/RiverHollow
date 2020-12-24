@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Texture:AirElemental][Spawn:8-.13][Idle:4-.15][Cast:0-0][Attack:2-.2][Spd][Evade][Int]</Value>
+      <Value>[Texture:AirElemental][Spawn:8-.13][Walk:0-0-3-.15-F][Action1:0-48-3-.15-F][Hurt:0-96-3-.15-F][Critical:0-144-3-.15-F][KO:576-0-3-.2-F][Ability:43]</Value>
     </Item>
     <Item>
       <Key>4</Key>

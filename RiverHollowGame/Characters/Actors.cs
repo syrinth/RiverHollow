@@ -187,7 +187,7 @@ namespace RiverHollow.Characters
         protected Vector2 _vMoveTo;
         public Vector2 MoveToLocation => _vMoveTo;
         public string CurrentMapName;
-        public RHMap CurrentMap => MapManager.Maps[CurrentMapName];
+        public RHMap CurrentMap => (!string.IsNullOrEmpty(CurrentMapName) ? MapManager.Maps[CurrentMapName] : null);
         public Vector2 NewMapPosition;
         public DirectionEnum Facing = DirectionEnum.Down;
         public Point CharCenter => GetRectangle().Center;
@@ -818,8 +818,7 @@ namespace RiverHollow.Characters
         protected Dictionary<ElementEnum, ElementAlignment> _diElementalAlignment;
         public Dictionary<ElementEnum, ElementAlignment> DiElementalAlignment => _diElementalAlignment;
 
-        private Summon _linkedSummon;
-        public Summon LinkedSummon => _linkedSummon;
+        public Summon LinkedSummon { get; private set; }
 
         public bool Counter;
         public bool GoToCounter;
@@ -912,8 +911,6 @@ namespace RiverHollow.Characters
             {
                 PlayAnimationVerb(VerbEnum.Walk);
             }
-
-            _linkedSummon?.Update(gTime);
 
             if (!_bPause && (MapManager.Maps.ContainsKey(CurrentMapName) && MapManager.Maps[CurrentMapName].ContainsActor(this) || this == PlayerManager.World))
             {
@@ -1029,9 +1026,10 @@ namespace RiverHollow.Characters
                     else if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (dmg * 0.8) - dmg; }
                 }
 
-                if (_linkedSummon != null && _diElementalAlignment[element].Equals(ElementAlignment.Neutral))
+                //Should only apply for Summoners
+                if (LinkedSummon != null && _diElementalAlignment[element].Equals(ElementAlignment.Neutral))
                 {
-                    if (_linkedSummon.Element.Equals(element))
+                    if (LinkedSummon.Element.Equals(element))
                     {
                         modifiedDmg += (dmg * 0.8) - dmg;
                     }
@@ -1105,7 +1103,7 @@ namespace RiverHollow.Characters
                 }
             }
 
-            CombatManager.AddFloatingText(new FloatingText(this.Position, this.SpriteWidth, iValue.ToString(), bHarmful ? Color.Red : Color.Green));
+            CombatManager.AddFloatingText(new FloatingText(this.Position, this.Width, iValue.ToString(), bHarmful ? Color.Red : Color.Green));
         }
 
         public bool IsCritical()
@@ -1257,7 +1255,7 @@ namespace RiverHollow.Characters
         /// to the given tile, then assign the character to the appropiate tiles around it.
         /// </summary>
         /// <param name="newTile">The tile to be the new base tile</param>
-        public void SetBaseTile(RHTile newTile, bool setPosition = false)
+        public void SetBaseTile(RHTile newTile, bool setPosition)
         {
             ClearTiles();
 
@@ -1276,7 +1274,7 @@ namespace RiverHollow.Characters
             }
 
             CombatManager.CheckTileForActiveHazard(this);
-            if (setPosition) { Position = newTile.Position; }
+            if (setPosition) { Position = BaseTile.Position; }
         }
 
         /// <summary>
@@ -1335,28 +1333,22 @@ namespace RiverHollow.Characters
 
         public void LinkSummon(Summon s)
         {
-            _linkedSummon = s;
-            s.SetBaseTile(BaseTile);
-
-            foreach (KeyValuePair<StatEnum, int> kvp in _linkedSummon.BuffedStats)
-            {
-                this.HandleStatBuffs(kvp, false);
-            }
+            LinkedSummon = s;
+            s.linkedChar = this;
         }
 
         public void UnlinkSummon()
         {
-            if (_linkedSummon != null)
-            {
-                foreach (KeyValuePair<StatEnum, int> kvp in _linkedSummon.BuffedStats)
-                {
-                    this.HandleStatBuffs(kvp, true);
-                }
-            }
-
-            _linkedSummon = null;
+            LinkedSummon?.KO();
+            LinkedSummon = null;
         }
 
+        /// <summary>
+        /// Returns the Elemental type of the attack. In the event that there is
+        /// a LinkedSummon, which should only be the case for Summoners, use the Summons
+        /// elemental attack instead if none exists.
+        /// </summary>
+        /// <returns></returns>
         public virtual ElementEnum GetAttackElement()
         {
             ElementEnum e = _elementAttackEnum;
@@ -1365,6 +1357,7 @@ namespace RiverHollow.Characters
             {
                 e = LinkedSummon.Element;
             }
+
             return e;
         }
 
@@ -3294,85 +3287,79 @@ namespace RiverHollow.Characters
  
     public class Summon : CombatActor
     {
-        ElementEnum _element = ElementEnum.None;
-        public ElementEnum Element => _element;
+        public override Vector2 Position
+        {
+            get
+            {
+                return new Vector2(_sprBody.Position.X + TileSize, _sprBody.Position.Y + _sprBody.Height - (TileSize * (_iSize + 1)));
+            }
+            set
+            {
+                _sprBody.Position = new Vector2(value.X - TileSize, value.Y - _sprBody.Height + (TileSize * (_iSize + 1)));
+            }
+        }
 
+        public ElementEnum Element { get; } = ElementEnum.None;
+
+        public override int Attack => _iMagStat;
         int _iMagStat;
-        List<KeyValuePair<StatEnum, int>> _liBuffedStats;
-        public List<KeyValuePair<StatEnum, int>> BuffedStats => _liBuffedStats;
 
         public bool Acted;
-        bool _bTwinCast;
-        public bool TwinCast => _bTwinCast;
-        bool _bAggressive;
-        public bool Aggressive => _bAggressive;
-        bool _bRegen;
-        public bool Regen => _bRegen;
 
         public CombatActor linkedChar;
+        private CombatAction _action;
 
         public Summon(int id, Dictionary<string, string> stringData)
         {
-            _liBuffedStats = new List<KeyValuePair<StatEnum, int>>();
-            _bGuard = stringData.ContainsKey("Defensive");
-            _bAggressive = stringData.ContainsKey("Aggressive");
-            _bTwinCast = stringData.ContainsKey("TwinCast");
-            _bRegen = stringData.ContainsKey("Regen");
-            Counter = stringData.ContainsKey("Counter");
+            _eActorType = ActorEnum.Summon;
 
             if (stringData.ContainsKey("Element"))
             {
-                _element = Util.ParseEnum<ElementEnum>(stringData["Element"]);
+                Element = Util.ParseEnum<ElementEnum>(stringData["Element"]);
             }
+            _action = DataManager.GetActionByIndex(int.Parse(stringData["Ability"]));
 
-            foreach (StatEnum stat in Enum.GetValues(typeof(StatEnum)))
-            {
-                if (stringData.ContainsKey(Util.GetEnumString(stat)))
-                {
-                    _liBuffedStats.Add(new KeyValuePair<StatEnum, int>(stat, 0));
-                }
-            }
-
-            string[] spawn = stringData["Spawn"].Split('-');
-            string[] idle = stringData["Idle"].Split('-');
-            string[] cast = stringData["Cast"].Split('-');
-            string[] attack = stringData["Attack"].Split('-');
-
-            int iFrameSize = 16;
-            int startX = 0;
-            int startY = 0;
-
-            _sprBody = new AnimatedSprite(@"Textures\Actors\Summons\" + stringData["Texture"]);
-            _sprBody.AddAnimation(AnimationEnum.Spawn, startX, startY, iFrameSize, iFrameSize, int.Parse(spawn[0]), float.Parse(spawn[1]));
-
-            //startX += int.Parse(spawn[0]) * iFrameSize;
-            //_spriteBody.AddAnimation(CActorAnimEnum.Idle, startX, startY, iFrameSize, iFrameSize, int.Parse(idle[0]), float.Parse(idle[1]));
-            //startX += int.Parse(idle[0]) * iFrameSize;
-            //_spriteBody.AddAnimation(CActorAnimEnum.Cast, startX, startY, iFrameSize, iFrameSize, int.Parse(cast[0]), float.Parse(cast[1]));
-            //startX += int.Parse(cast[0]) * iFrameSize;
-            //_spriteBody.AddAnimation(CActorAnimEnum.Attack, startX, startY, iFrameSize, iFrameSize, int.Parse(attack[0]), float.Parse(attack[1]));
-
-            _sprBody.SetNextAnimation(Util.GetEnumString(AnimationEnum.Spawn), Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
-            _sprBody.PlayAnimation(AnimationEnum.Spawn);
-            _sprBody.SetScale(5);
+            _iSpriteWidth = TileSize * (_iSize + 2);
+            _iSpriteHeight = TileSize * (_iSize + 2);
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(stringData), DataManager.FOLDER_SUMMONS + stringData["Texture"], true);
         }
 
         public void SetStats(int magStat)
         {
             _iMagStat = magStat;
-            _iStrength = 2 * magStat + 10;
-            _iDefense = 2 * magStat + 10;
-            _iVitality = (3 * magStat) + 80;
-            _iMagic = 2 * magStat + 10;
-            _iResistance = 2 * magStat + 10;
+            _iStrength = magStat;
+            _iDefense = magStat;
+            _iVitality = magStat;
+            _iMagic = magStat;
+            _iResistance = magStat;
             _iSpeed = 10;
 
-            for (int i = 0; i < _liBuffedStats.Count; i++)
-            {
-                _liBuffedStats[i] = new KeyValuePair<StatEnum, int>(_liBuffedStats[i].Key, magStat/2);
-            }
-
             CurrentHP = MaxHP;
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+
+            ///When the Monster has finished playing the KO animation, let the CombatManager know so it can do any final actions
+            if (IsCurrentAnimation(AnimationEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
+            {
+                MapManager.RemoveCharacter(this);
+            }
+        }
+
+        public override void KO()
+        {
+            base.KO();
+            ClearTiles();
+            _diConditions[ConditionEnum.KO] = true;
+        }
+        public void TakeTurn()
+        {
+            _action.AssignUser(this);
+            _action.AssignTargetTile(BaseTile);
+            CombatManager.SelectedAction = _action;
+            CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.PerformAction);
         }
 
         /// <summary>

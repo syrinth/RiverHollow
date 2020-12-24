@@ -520,13 +520,13 @@ namespace RiverHollow.Characters
                     _liTurnSteps.Add(TurnStepsEnum.Move);
 
                     RHTile temp = this.BaseTile;
-                    this.SetBaseTile(_liFoundPath[_liFoundPath.Count - 1]);
+                    this.SetBaseTile(_liFoundPath[_liFoundPath.Count - 1], false);
                     if (InRangeForSkill(_selectedTile, _chosenAction.Range))
                     {
                         _liTurnSteps.Add(TurnStepsEnum.Act);
                         _chosenAction.AssignTargetTile(_selectedTile);
                     }
-                    this.SetBaseTile(temp);
+                    this.SetBaseTile(temp, false);
                 }
                 else
                 {

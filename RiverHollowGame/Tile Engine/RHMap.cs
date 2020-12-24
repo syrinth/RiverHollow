@@ -65,6 +65,7 @@ namespace RiverHollow.Tile_Engine
         protected List<WorldActor> _liActors;
         protected List<Monster> _liMonsters;
         public List<Monster> Monsters => _liMonsters;
+        protected List<Summon> _liSummons;
         public List<WorldActor> ToRemove;
         public List<WorldActor> ToAdd;
         protected List<Building> _liBuildings;
@@ -92,6 +93,7 @@ namespace RiverHollow.Tile_Engine
             _liTilesets = new List<TiledMapTileset>();
             _liActors = new List<WorldActor>();
             _liMonsters = new List<Monster>();
+            _liSummons = new List<Summon>();
             _liBuildings = new List<Building>();
             _liTilledTiles = new List<RHTile>();
             _liItems = new List<Item>();
@@ -669,6 +671,11 @@ namespace RiverHollow.Tile_Engine
                     {
                         m.Update(gTime);
                     }
+
+                    foreach (Summon s in _liSummons)
+                    {
+                        s.Update(gTime);
+                    }
                 }
 
                 foreach (Item i in _liItems)
@@ -703,6 +710,7 @@ namespace RiverHollow.Tile_Engine
             {
                 if (c.IsActorType(ActorEnum.Monster) && _liMonsters.Contains((Monster)c)) { _liMonsters.Remove((Monster)c); }
                 else if (_liActors.Contains(c)) { _liActors.Remove(c); }
+                else if (c.IsActorType(ActorEnum.Summon) && _liSummons.Contains((Summon)c)) { _liSummons.Remove((Summon)c); }
             }
             ToRemove.Clear();
 
@@ -761,7 +769,12 @@ namespace RiverHollow.Tile_Engine
                 m.Draw(spriteBatch, true);
             }
 
-            foreach(Building b in _liBuildings)
+            foreach (Summon s in _liSummons)
+            {
+                s.Draw(spriteBatch, true);
+            }
+
+            foreach (Building b in _liBuildings)
             {
                 b.Draw(spriteBatch);
             }
@@ -1628,6 +1641,17 @@ namespace RiverHollow.Tile_Engine
         {
             ToRemove.Add(m);
         }
+        public void RemoveSummon(Summon s)
+        {
+            ToRemove.Add(s);
+        }
+        public void CleanupSummons()
+        {
+            foreach(Summon s in _liSummons)
+            {
+                s.KO();
+            }
+        }
         public void DropItemsOnMap(List<Item>items, Vector2 position, bool flyingPop = true)
         {
             foreach(Item i in items)
@@ -2061,7 +2085,7 @@ namespace RiverHollow.Tile_Engine
         public bool AddCharacterImmediately(WorldActor c)
         {
             bool rv = false;
-            if (!MapManager.Maps[c.CurrentMapName].ContainsActor(c))
+            if (string.IsNullOrEmpty(c.CurrentMapName) || !MapManager.Maps[c.CurrentMapName].ContainsActor(c))
             {
                 rv = true;
                 if (c.IsActorType(ActorEnum.Monster) && !_liMonsters.Contains((Monster)c)) { _liMonsters.Add((Monster)c); }
@@ -2106,6 +2130,12 @@ namespace RiverHollow.Tile_Engine
             m.Position = Util.SnapToGrid(position);
 
             _liMonsters.Add(m);
+        }
+
+        public void AddSummon(Summon obj)
+        {
+            obj.CurrentMapName = _sName;
+            _liSummons.Add(obj);
         }
         #endregion
         
@@ -2394,7 +2424,7 @@ namespace RiverHollow.Tile_Engine
         public override void Spawn()
         {
             if (_iPrimedMonsterID != -1) { _monster = DataManager.GetMonsterByIndex(_iPrimedMonsterID); }
-            else { _monster = DataManager.GetMonsterByIndex(3); }// RHRandom.Instance.Next(0, 3)); }
+            else { _monster = DataManager.GetMonsterByIndex(4); }// RHRandom.Instance.Next(0, 3)); }
 
             _monster.SpawnPoint = this;
             _map.AddMonsterByPosition(_monster, _vPosition);

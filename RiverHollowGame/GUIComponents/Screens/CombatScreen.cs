@@ -68,15 +68,6 @@ namespace RiverHollow.GUIComponents.Screens
                     AddControl(window);
                     break;
             }
-
-            List<Summon> summons = new List<Summon>();
-            foreach (CombatActor act in CombatManager.Party)
-            {
-                if (act.LinkedSummon != null)
-                {
-                    summons.Add(act.LinkedSummon);
-                }
-            }
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

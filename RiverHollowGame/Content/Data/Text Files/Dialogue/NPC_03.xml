@@ -7,11 +7,11 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hello $^$, seeing you is a beacon of light on an otherwise dismal day.</Value>
+      <Value>Hi $^$. You know, seeing you running around is one of the few bright bright spots of this place. You're so driven, it's inspiring.</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>I love spring. Plants are blooming again after a long cold winter and it's not too hot or cold.</Value>
+      <Value>I'm not used to living on the outskirts like this. There's dirt everywhere. Do you have any idea how often I have to wash my robes to keep them clean? How do you handle it?</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>Collection</Key>
-      <Value>Oh! I've been wanting this! Thank you so much.</Value>
+      <Value>How did you get this out here? I thought I would have needed to take a trip out of town to get this! Thank you so much!</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
@@ -40,6 +40,14 @@
     <Item>
       <Key>MarriageNo</Key>
       <Value>Oh... I'm sorry but... No.</Value>
+    </Item>
+    <Item>
+      <Key>Dialogue_3</Key>
+      <Value>This town has it's quaint charm but... I miss the city. I can't wait until $Character_4$ and I have finished our business here.</Value>
+    </Item>
+    <Item>
+      <Key>Raining_1</Key>
+      <Value>I didn't think I'd see you today. I always jump at the opportunity to do nothing on rainy days. I guess you've got more on your plate than I do though, hm?</Value>
     </Item>
   </Asset>
 </XnaContent>

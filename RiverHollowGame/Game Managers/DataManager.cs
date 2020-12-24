@@ -26,6 +26,7 @@ namespace RiverHollow.Game_Managers
         public const string FOLDER_BUILDINGS = @"Textures\Buildings\";
         public const string FOLDER_ITEMS = @"Textures\Items\";
         public const string FOLDER_MONSTERS = @"Textures\Actors\Monsters\";
+        public const string FOLDER_SUMMONS = @"Textures\Actors\Summons\";
         public const string FOLDER_PLAYER = @"Textures\Actors\Player\";
         public const string FOLDER_TEXTFILES = @"Data\Text Files\";
         public const string FONT_MAIN = @"Fonts\Font_Main";

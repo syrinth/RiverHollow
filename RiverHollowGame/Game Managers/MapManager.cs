@@ -324,6 +324,14 @@ namespace RiverHollow.Game_Managers
         {
             CurrentMap.RemoveCharacter(c);
         }
+        public static void RemoveSummon(Summon s)
+        {
+            CurrentMap.RemoveSummon(s);
+        }
+        public static void CleanupSummons()
+        {
+            CurrentMap.CleanupSummons();
+        }
         public static void RemoveMonster(Monster m)
         {
             CurrentMap.RemoveMonster(m);

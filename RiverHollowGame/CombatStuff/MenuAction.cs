@@ -91,7 +91,6 @@ namespace RiverHollow.CombatStuff
 
         bool _bPauseActionHandler;
         CombatActor counteringChar;
-        Summon counteringSummon;
 
         int _iPushVal;
         int _iPullVal;
@@ -103,7 +102,7 @@ namespace RiverHollow.CombatStuff
 
         string _sRemoveString;
 
-        private CombatActor _cmbtUser;
+        private CombatActor _cmbtActionUser;
         public AnimatedSprite Sprite;
         private Consumable _chosenItem;
         #endregion
@@ -213,10 +212,10 @@ namespace RiverHollow.CombatStuff
                     _liEffects.Add(SkillTagsEnum.Bonus);
                 }
 
-                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Summon)))
+                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.SummonID)))
                 {
-                    _liEffects.Add(SkillTagsEnum.Summon);
-                    _iSummonID = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Summon)]);
+                    _liEffects.Add(SkillTagsEnum.SummonID);
+                    _iSummonID = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.SummonID)]);
                 }
             }
 
@@ -316,35 +315,17 @@ namespace RiverHollow.CombatStuff
                 _chosenItem.Remove(1);
                 return;
             }
-            //If the action has some type of bonus associated, we need to figure out what it is
-            //and get the appropriate bonus
-            int bonus = 0;
-            if (_eBonusType != PotencyBonusEnum.None)
-            {
-                //Bonus Summons increased the bonus amount for each summon attached to the party
-                //Note that this currently does not support enemy summons
-                if (_eBonusType == PotencyBonusEnum.Summons)
-                {
-                    foreach (ClassedCombatant c in CombatManager.Party)
-                    {
-                        if (c.LinkedSummon != null)
-                        {
-                            bonus += _iBonusMod;
-                        }
-                    }
-                }
-            }
 
             //This tag means that the action harms whatever is targetted
             if (_liEffects.Contains(SkillTagsEnum.Harm))
             {
-                ApplyEffectHarm(targetActors, bonus);
+                ApplyEffectHarm(targetActors, PotencyBonus());
             }
             else if (_liEffects.Contains(SkillTagsEnum.Heal))       //Handling for healing
             {
                 foreach (CombatActor act in targetActors)
                 {
-                    act.ProcessHealingSpell(_cmbtUser, Potency);
+                    act.ProcessHealingSpell(_cmbtActionUser, Potency);
                 }
             }
 
@@ -355,17 +336,18 @@ namespace RiverHollow.CombatStuff
             }
 
             //Handler for if the action Summons something
-            if (_liEffects.Contains(SkillTagsEnum.Summon))
+            if (_liEffects.Contains(SkillTagsEnum.SummonID))
             {
-                //This should only ever be one, butjust in case
-                foreach (CombatActor act in targetActors)
-                {
-                    Summon newSummon = DataManager.GetSummonByIndex(_iSummonID);
-                    newSummon.SetStats(_cmbtUser.StatMag);                //Summon stats are based off the Magic stat
-                    act.LinkSummon(newSummon);                 //Links the summon to the character
-                    newSummon.linkedChar = act;                //Links the character to the new summon
-                    _bPauseActionHandler = true;
-                }
+                _cmbtActionUser.UnlinkSummon();
+
+                //This should only ever be one, but just in case
+                Summon newSummon = DataManager.GetSummonByIndex(_iSummonID);
+                newSummon.SetStats(_cmbtActionUser.StatMag);                //Summon stats are based off the Magic stat
+                _cmbtActionUser.LinkSummon(newSummon);                      //Links the summon to the character
+                newSummon.SetBaseTile(TileTargetList[0], true);
+                //_bPauseActionHandler = true;
+
+                MapManager.CurrentMap.AddSummon(newSummon);
             }
 
             //Handler to push back the target
@@ -428,6 +410,11 @@ namespace RiverHollow.CombatStuff
             //Iterate over each tile in the target list
             foreach (CombatActor act in targetActors)
             {
+                if (FriendlyFireCheck(act))
+                {
+                    continue;
+                }
+
                 CombatActor targetActor = act;
                 //If the tile is unoccupied, don't do anything
                 if (targetActor == null) { continue; }
@@ -446,15 +433,7 @@ namespace RiverHollow.CombatStuff
                     attackRoll -= _iAccuracy;                       //Modify the chance to hit by the skill's accuracy. Rolling low is good, so subtract a positive and add a negative
                     if (attackRoll <= 90 - targetActor.Evasion)    //If the modified attack roll is less than 90 minus the character's evasion, then we hit
                     {
-                        targetActor.ProcessAttack(_cmbtUser, totalPotency, _iCritRating, targetActor.GetAttackElement());
-
-                        //If the target has a Summon linked to them, and they take
-                        ///any area damage, hit the Summon as well
-                        //Summon summ = targetActor.LinkedSummon;
-                        //if (_iArea > 0 && summ != null)
-                        //{
-                        //    summ.ProcessAttack(SkillUser, _iPotency + bonus, _iCritRating, targetActor.GetAttackElement());
-                        //}
+                        targetActor.ProcessAttack(_cmbtActionUser, totalPotency, _iCritRating, targetActor.GetAttackElement());
 
                         #region Countering setup
                         //If the target has Counter turn on, prepare to counterattack
@@ -467,20 +446,12 @@ namespace RiverHollow.CombatStuff
                                 counteringChar = targetActor;      //Sets who the countering character is
                                 _bPauseActionHandler = true;            //Tells the game to pause to allow for a counter
                             }
-
-                            //If there is a summon and it can counter, prepare it for countering.
-                            //if (summ != null && summ.Counter)
-                            //{
-                            //    summ.GoToCounter = true;
-                            //    counteringSummon = summ;
-                            //    _bPauseActionHandler = true;
-                            //}
                         }
                         #endregion
                     }
                     else    //Handling for when an attack is dodged
                     {
-                        CombatManager.AddFloatingText(new FloatingText(targetActor.Position, targetActor.SpriteWidth, "MISS", Color.White));
+                        CombatManager.AddFloatingText(new FloatingText(targetActor.Position, targetActor.Width, "MISS", Color.White));
                     }
 
                     //This code handles when someone is guarding the target and takes the damage for them instead
@@ -504,7 +475,7 @@ namespace RiverHollow.CombatStuff
                 else   //Handling for spells
                 {
                     //Process the damage of the spell, then apply it to the targeted tile
-                    targetActor.ProcessSpell(_cmbtUser, totalPotency, _eElement);
+                    targetActor.ProcessSpell(_cmbtActionUser, totalPotency, _eElement);
                 }
             }
         }
@@ -515,7 +486,7 @@ namespace RiverHollow.CombatStuff
                 //Makes a new StatusEffectobject from the data held in the action
                 StatusEffect status = DataManager.GetStatusEffectByIndex(effect.BuffID);
                 status.Duration = effect.Duration;
-                status.Caster = _cmbtUser;
+                status.Caster = _cmbtActionUser;
 
                 //Search for relevant tags, primarily targetting
                 string[] tags = effect.Tags.Split(' ');
@@ -527,7 +498,7 @@ namespace RiverHollow.CombatStuff
                     //Apply it to self
                     if (s.Equals("Self"))
                     {
-                        targets.Add(_cmbtUser);
+                        targets.Add(_cmbtActionUser);
                     }
 
                     //Apply to all targets of the skill
@@ -545,7 +516,7 @@ namespace RiverHollow.CombatStuff
                     //Apply to all allies of the user
                     if (s.Equals("Allies"))
                     {
-                        if (_cmbtUser.IsActorType(ActorEnum.Adventurer))
+                        if (_cmbtActionUser.IsActorType(ActorEnum.Adventurer))
                         {
                             targets.AddRange(CombatManager.Party);
                         }
@@ -558,7 +529,7 @@ namespace RiverHollow.CombatStuff
                     //Apply to all enemies of the user
                     if (s.Equals("Enemies"))
                     {
-                        if (_cmbtUser.IsActorType(ActorEnum.Adventurer))
+                        if (_cmbtActionUser.IsActorType(ActorEnum.Adventurer))
                         {
                             targets.AddRange(CombatManager.Monsters);
 
@@ -576,6 +547,70 @@ namespace RiverHollow.CombatStuff
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Checks the skill user and the target's types against each other as well as handling
+        /// if the skill user or target is a Summon in which case it tests against their linked Characters
+        /// </summary>
+        /// <param name="targetActor">The actor being targeted by the skill</param>
+        /// <returns>True if botht he skill user and the target are on the same side</returns>
+        private bool FriendlyFireCheck(CombatActor targetActor)
+        {
+            bool rv = false;
+            //Summons do not friendly fire
+            if (_cmbtActionUser.IsSummon())
+            {
+                //Do not attack the same side of the fight as you are linked to
+                Summon activeSummon = (Summon)_cmbtActionUser;
+                if ((targetActor.IsSummon() && OnSameSide(activeSummon.linkedChar, ((Summon)targetActor).linkedChar)) || OnSameSide(activeSummon.linkedChar, targetActor))
+                {
+                    rv = true;
+                }
+            }
+            else if (_liEffects.Contains(SkillTagsEnum.SummonID)){ //The initial summon spell does not friendly fire either.
+                if ((targetActor.IsSummon() && OnSameSide(_cmbtActionUser, ((Summon)targetActor).linkedChar)) || OnSameSide(_cmbtActionUser, targetActor))
+                {
+                    rv = true;
+                }
+            }
+
+            return rv;
+        }
+        private bool OnSameSide(CombatActor skillUser, CombatActor targetActor)
+        {
+            bool rv = false;
+
+            if(skillUser.ActorType == ActorEnum.Monster && targetActor.ActorType == ActorEnum.Monster) { rv = true; }
+            else if (skillUser.ActorType != ActorEnum.Monster && targetActor.ActorType != ActorEnum.Monster) { rv = true; }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Does any calculations for Potency bonuses and returns the total value
+        /// </summary>
+        /// <returns>The added potency</returns>
+        private int PotencyBonus()
+        {
+            int rv = 0;
+            if (_eBonusType != PotencyBonusEnum.None) {
+                switch (_eBonusType)
+                {
+                    case PotencyBonusEnum.Summon:
+                        if(_cmbtActionUser.LinkedSummon!= null)
+                        {
+                            Summon s = _cmbtActionUser.LinkedSummon;
+                            if(Math.Abs(s.BaseTile.X - _cmbtActionUser.BaseTile.X) + Math.Abs(s.BaseTile.Y - _cmbtActionUser.BaseTile.Y) <= 5)
+                            {
+                                rv += _iBonusMod;
+                            }
+                        }
+                        break;
+                }
+            }
+
+            return rv;
         }
 
         #region Combat Action Movement
@@ -598,10 +633,10 @@ namespace RiverHollow.CombatStuff
             while (i > 0)
             {
                 RHTile test = null;
-                test = DetermineMovementTile(targetActorTile, _cmbtUser.BaseTile, moveAction);
+                test = DetermineMovementTile(targetActorTile, _cmbtActionUser.BaseTile, moveAction);
                 if (test != null)
                 {
-                    RHTile movingTile = moveTarget ? targetActorTile : _cmbtUser.BaseTile;
+                    RHTile movingTile = moveTarget ? targetActorTile : _cmbtActionUser.BaseTile;
                     //Not working with Step or Retreat because this is moving the targeted character and NOT the active character
                     if (!test.HasCombatant() || test.Character == movingTile.Character)
                     {
@@ -691,9 +726,6 @@ namespace RiverHollow.CombatStuff
                                     liPotentialGuards.Add(t.Character);
                                 }
                             }
-                            
-                            Summon summ = tile.Character.LinkedSummon;
-                            if (summ != null && !summ.Swapped && summ.Guard) { liPotentialGuards.Add(summ); }
 
                             if (liPotentialGuards.Count > 0)
                             {
@@ -710,24 +742,24 @@ namespace RiverHollow.CombatStuff
                         }
                     }
 
-                    if (!_cmbtUser.IsCurrentAnimationVerb(_eUserAnimationVerb))
+                    if (!_cmbtActionUser.IsCurrentAnimationVerb(_eUserAnimationVerb))
                     {
-                        _cmbtUser.PlayAnimationVerb(_eUserAnimationVerb);
+                        _cmbtActionUser.PlayAnimationVerb(_eUserAnimationVerb);
                     }
-                    else if (_cmbtUser.AnimationPlayedXTimes(1))
+                    else if (_cmbtActionUser.AnimationPlayedXTimes(1))
                     {
-                        _cmbtUser.GoToIdle();
+                        _cmbtActionUser.GoToIdle();
                         _iCurrentAction++;
                     }
                     break;
                 case "UserCast":
-                    if (!_cmbtUser.IsDirectionalAnimation(VerbEnum.Cast))
+                    if (!_cmbtActionUser.IsDirectionalAnimation(VerbEnum.Cast))
                     {
-                        _cmbtUser.PlayAnimationVerb(VerbEnum.Cast);
+                        _cmbtActionUser.PlayAnimationVerb(VerbEnum.Cast);
                     }
-                    else if (_cmbtUser.AnimationPlayedXTimes(2))
+                    else if (_cmbtActionUser.AnimationPlayedXTimes(2))
                     {
-                        _cmbtUser.GoToIdle();
+                        _cmbtActionUser.GoToIdle();
                         _iCurrentAction++;
                     }
                     break;
@@ -745,14 +777,14 @@ namespace RiverHollow.CombatStuff
                     }
                     break;
                 case "UseItem":
-                    if (!_cmbtUser.IsDirectionalAnimation(VerbEnum.Cast))
+                    if (!_cmbtActionUser.IsDirectionalAnimation(VerbEnum.Cast))
                     {
-                        _cmbtUser.PlayAnimationVerb(VerbEnum.Cast);
+                        _cmbtActionUser.PlayAnimationVerb(VerbEnum.Cast);
                         //_bDrawItem = true;
                     }
-                    else if (_cmbtUser.AnimationPlayedXTimes(3))
+                    else if (_cmbtActionUser.AnimationPlayedXTimes(3))
                     {
-                        _cmbtUser.GoToIdle();
+                        _cmbtActionUser.GoToIdle();
                         //_bDrawItem = false;
                         _iCurrentAction++;
                     }
@@ -771,51 +803,26 @@ namespace RiverHollow.CombatStuff
                     }
                     else
                     {
-                        if (counteringChar == null && counteringSummon == null && TileTargetList[0].Character.LinkedSummon != null)
+                        if (counteringChar != null)
                         {
-                            if (TileTargetList[0].Character.LinkedSummon.BodySprite.CurrentAnimation == "Idle")
+                            if (!CheckForAttackAnimation(counteringChar))
                             {
+                                counteringChar.PlayAnimationVerb(VerbEnum.Action1);
+                            }
+                            else if (counteringChar.AnimationPlayedXTimes(1))
+                            {
+                                counteringChar.GoToIdle();
+                                _cmbtActionUser.ProcessAttack(counteringChar, ((CombatAction)DataManager.GetActionByIndex(1)).Potency, _iCritRating, counteringChar.GetAttackElement());
+                                counteringChar = null;
                                 _bPauseActionHandler = false;
                                 _iCurrentAction++;
                             }
                         }
                         else
                         {
-                            if (counteringChar != null)
-                            {
-                                if (!CheckForAttackAnimation(counteringChar))
-                                {
-                                    counteringChar.PlayAnimationVerb(VerbEnum.Action1);
-                                }
-                                else if (counteringChar.AnimationPlayedXTimes(1))
-                                {
-                                    counteringChar.GoToIdle();
-                                    _cmbtUser.ProcessAttack(counteringChar, ((CombatAction)DataManager.GetActionByIndex(1)).Potency, _iCritRating, counteringChar.GetAttackElement());
-                                    counteringChar = null;
-                                    _bPauseActionHandler = false;
-                                    _iCurrentAction++;
-                                }
-                            }
-                            else if (counteringSummon != null)
-                            {
-                                if (!CheckForAttackAnimation(counteringChar))
-                                {
-                                    counteringSummon.PlayAnimationVerb(VerbEnum.Action1);
-                                }
-                                else if (counteringSummon.AnimationPlayedXTimes(1))
-                                {
-                                    counteringSummon.GoToIdle();
-                                    _cmbtUser.ProcessAttack(counteringSummon, ((CombatAction)DataManager.GetActionByIndex(1)).Potency, _iCritRating, counteringSummon.GetAttackElement());
-                                    counteringSummon = null;
-                                    _bPauseActionHandler = false;
-                                    _iCurrentAction++;
-                                }
-                            }
-                            else
-                            {
-                                _bPauseActionHandler = false;
-                            }
+                            _bPauseActionHandler = false;
                         }
+
                     }
 
                     break;
@@ -918,6 +925,27 @@ namespace RiverHollow.CombatStuff
                         }
                     }
                     break;
+                case AreaTypeEnum.Diamond:
+                    List<RHTile> cross = new List<RHTile>();
+                    foreach (RHTile t in targetedTile.GetAdjacentTiles())
+                    {
+                        if (t.CanTargetTile())
+                        {
+                            cross.Add(t);
+                            rvList.Add(t);
+                        }
+                    }
+                    foreach (RHTile t in cross)
+                    {
+                        foreach (RHTile testTile in t.GetAdjacentTiles())
+                        {
+                            if (testTile.CanTargetTile() && !rvList.Contains(testTile))
+                            {
+                                rvList.Add(testTile);
+                            }
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
@@ -927,11 +955,11 @@ namespace RiverHollow.CombatStuff
 
         public void AssignUser(CombatActor user)
         {
-            _cmbtUser = user;
+            _cmbtActionUser = user;
         }
 
         public bool IsHelpful() { return Target == TargetEnum.Ally; }
-        public bool IsSummonSpell() { return _liEffects.Contains(SkillTagsEnum.Summon); }
+        public bool IsSummonSpell() { return _liEffects.Contains(SkillTagsEnum.SummonID); }
     }
 
     internal struct StatusEffectData
