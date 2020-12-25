@@ -55,7 +55,7 @@
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Spell][Target:Enemy][Range:6][AreaType:Diamond][Cost:5][SummonID:3][Action:UserCast Apply][Harm:100]</Value>
+      <Value>[Type:Spell][Target:Enemy][Range:6][AreaType:Diamond][Cost:5][SummonID:3][Action:UserCast Summon Apply][Harm:100][Animation:Summon_Air_Elemental-80-80-6-0.15][AnimOffset:32-32]</Value>
     </Item>
     <Item>
       <Key>14</Key>

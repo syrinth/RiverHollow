@@ -292,6 +292,7 @@ namespace RiverHollow.Characters
             AddToAnimationsList(ref listAnimations, data, VerbEnum.Critical);
             AddToAnimationsList(ref listAnimations, data, VerbEnum.Cast);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.KO);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Spawn);
             return listAnimations;
         }
         protected List<AnimationData> LoadWorldAndCombatAnimations(Dictionary<string, string> data)

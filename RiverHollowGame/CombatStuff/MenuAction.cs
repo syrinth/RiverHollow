@@ -78,6 +78,7 @@ namespace RiverHollow.CombatStuff
         int _iSummonID;
         public Vector2 SummonStartPosition;
 
+        bool _bSummonSpell = false;
         float _fFrameSpeed;
         int _iAnimWidth;
         int _iAnimHeight;
@@ -214,7 +215,7 @@ namespace RiverHollow.CombatStuff
 
                 if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.SummonID)))
                 {
-                    _liEffects.Add(SkillTagsEnum.SummonID);
+                    _bSummonSpell = true;
                     _iSummonID = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.SummonID)]);
                 }
             }
@@ -333,21 +334,6 @@ namespace RiverHollow.CombatStuff
             if (_liEffects.Contains(SkillTagsEnum.StatusEffectID))
             {
                 ApplyEffectStatus(targetActors);
-            }
-
-            //Handler for if the action Summons something
-            if (_liEffects.Contains(SkillTagsEnum.SummonID))
-            {
-                _cmbtActionUser.UnlinkSummon();
-
-                //This should only ever be one, but just in case
-                Summon newSummon = DataManager.GetSummonByIndex(_iSummonID);
-                newSummon.SetStats(_cmbtActionUser.StatMag);                //Summon stats are based off the Magic stat
-                _cmbtActionUser.LinkSummon(newSummon);                      //Links the summon to the character
-                newSummon.SetBaseTile(TileTargetList[0], true);
-                //_bPauseActionHandler = true;
-
-                MapManager.CurrentMap.AddSummon(newSummon);
             }
 
             //Handler to push back the target
@@ -568,7 +554,7 @@ namespace RiverHollow.CombatStuff
                     rv = true;
                 }
             }
-            else if (_liEffects.Contains(SkillTagsEnum.SummonID)){ //The initial summon spell does not friendly fire either.
+            else if (IsSummonSpell()){ //The initial summon spell does not friendly fire either.
                 if ((targetActor.IsSummon() && OnSameSide(_cmbtActionUser, ((Summon)targetActor).linkedChar)) || OnSameSide(_cmbtActionUser, targetActor))
                 {
                     rv = true;
@@ -776,6 +762,31 @@ namespace RiverHollow.CombatStuff
                         _iCurrentAction++;
                     }
                     break;
+                //Handler for if the action Summons something
+                case "Summon":
+                    if (!_bPauseActionHandler)
+                    {
+                        _bPauseActionHandler = true;
+                        _cmbtActionUser.UnlinkSummon();
+
+                        //This should only ever be one, but just in case
+                        Summon newSummon = DataManager.GetSummonByIndex(_iSummonID);
+                        newSummon.SetStats(_cmbtActionUser.StatMag);                //Summon stats are based off the Magic stat
+                        _cmbtActionUser.LinkSummon(newSummon);                      //Links the summon to the character
+                        newSummon.SetBaseTile(TileTargetList[0], true);
+                        newSummon.PlayAnimation(AnimationEnum.Spawn);
+                        newSummon.BodySprite.SetNextAnimation("Spawn", "WalkDown");
+                        MapManager.CurrentMap.AddSummon(newSummon);
+                    }
+                    else
+                    {
+                        Summon newSummon = _cmbtActionUser.LinkedSummon;
+                        if (newSummon!= null && newSummon.IsCurrentAnimationVerb(VerbEnum.Walk))
+                        {
+                            _iCurrentAction++;
+                        }
+                    }
+                    break;
                 case "UseItem":
                     if (!_cmbtActionUser.IsDirectionalAnimation(VerbEnum.Cast))
                     {
@@ -959,7 +970,7 @@ namespace RiverHollow.CombatStuff
         }
 
         public bool IsHelpful() { return Target == TargetEnum.Ally; }
-        public bool IsSummonSpell() { return _liEffects.Contains(SkillTagsEnum.SummonID); }
+        public bool IsSummonSpell() { return _bSummonSpell; }
     }
 
     internal struct StatusEffectData
