@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Oh. Hello, $^$! How are you? I'm just going for a walk, thout i might try to pick some reagents for mother. If I can remember what it was she needed anyway...</Value>
+      <Value>Oh. Hello, $^$! How are you? I'm just going for a walk. I thought i might try to pick some reagents for mother. If I can remember what it was she needed anyway...</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -51,7 +51,7 @@
     </Item>
     <Item>
       <Key>Snowing_1</Key>
-      <Value>There's a lot of snow today, isn't there? Mother says there's magic in the snow, but I have a hard time sensing it, I prefer warmer magic.</Value>
+      <Value>There's a lot of snow today, isn't there? Mother says there's magic in the snow, but... I'm only good with warmer magic.</Value>
     </Item>
   </Asset>
 </XnaContent>

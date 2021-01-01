@@ -3,19 +3,21 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Hello. I'm $Character_2$, an apprentice Healer. You're an adventurer right? If you ever need to be patched up, you should go to the Apothecary.</Value>
+      <Value>Um. Hi. I'm $Character_2$.
+I'm the Healer, I mean, apprentice Healer in town.
+You're an adventurer right? Well, if you ever need to be healed, or anything, you should come to the Apothecary.</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>$^$! How are you today?</Value>
+      <Value>Oh, $^$, it's nice to see you.</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>I love spring. Plants are blooming again after a long cold winter and it's not too hot or cold.</Value>
+      <Value>$^$, how are you? I... hope everything's alright with you.</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>For me? Oh no, you shouldn't have!</Value>
+      <Value>Oh? No, you shouldn't have. I mean, I'm grateful but... If you're sure.</Value>
     </Item>
     <Item>
       <Key>Collection</Key>
@@ -40,6 +42,22 @@
     <Item>
       <Key>MarriageNo</Key>
       <Value>Oh... I'm sorry but... No.</Value>
+    </Item>
+    <Item>
+      <Key>Raining_1</Key>
+      <Value>I don't like the rain. It's depressing.</Value>
+    </Item>
+    <Item>
+      <Key>Raining_2</Key>
+      <Value>I'm glad to see you today, $^$. You should try to dry off though. Those wet clothes can't be good for you. ... I mean, you should get home and dry off as soon as you can! That's all.</Value>
+    </Item>
+    <Item>
+      <Key>Snowing_1</Key>
+      <Value>It's nice, isn't it? The snow I mean? I uh, hope you've dressed warm.</Value>
+    </Item>
+    <Item>
+      <Key>Snowing_2</Key>
+      <Value>$^$... uh, how's the weather? I mean. How are you finding it? Not too cold I hope?</Value>
     </Item>
   </Asset>
 </XnaContent>

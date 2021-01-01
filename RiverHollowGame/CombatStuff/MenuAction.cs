@@ -326,6 +326,9 @@ namespace RiverHollow.CombatStuff
             {
                 foreach (CombatActor act in targetActors)
                 {
+                    if(_cmbtActionUser.IsSummon() && act == _cmbtActionUser) { continue; }
+                    if (!SummonFriendlyFireCheck(act)) { continue; }
+
                     act.ProcessHealingSpell(_cmbtActionUser, Potency);
                 }
             }
@@ -396,7 +399,7 @@ namespace RiverHollow.CombatStuff
             //Iterate over each tile in the target list
             foreach (CombatActor act in targetActors)
             {
-                if (FriendlyFireCheck(act))
+                if (SummonFriendlyFireCheck(act))
                 {
                     continue;
                 }
@@ -541,7 +544,7 @@ namespace RiverHollow.CombatStuff
         /// </summary>
         /// <param name="targetActor">The actor being targeted by the skill</param>
         /// <returns>True if botht he skill user and the target are on the same side</returns>
-        private bool FriendlyFireCheck(CombatActor targetActor)
+        private bool SummonFriendlyFireCheck(CombatActor targetActor)
         {
             bool rv = false;
             //Summons do not friendly fire

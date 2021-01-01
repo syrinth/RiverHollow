@@ -47,7 +47,7 @@
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][SummonID:1][Action:UserCast Apply]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:6][AreaType:Diamond][Cost:5][SummonID:1][Action:UserCast Summon Apply][Heal:120]</Value>
     </Item>
     <Item>
       <Key>12</Key>
@@ -55,7 +55,7 @@
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Spell][Target:Enemy][Range:6][AreaType:Diamond][Cost:5][SummonID:3][Action:UserCast Summon Apply][Harm:100][Animation:Summon_Air_Elemental-80-80-6-0.15][AnimOffset:32-32]</Value>
+      <Value>[Type:Spell][Target:Enemy][Range:6][AreaType:Diamond][Cost:5][SummonID:3][Action:UserCast Summon Apply][Harm:120]</Value>
     </Item>
     <Item>
       <Key>14</Key>
@@ -175,7 +175,11 @@
     </Item>
     <Item>
       <Key>43</Key>
-      <Value>[Type:Action][Target:Enemy][Range:1][AreaType:Diamond][Harm:100][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:1][AreaType:Diamond][Harm:80][Action:UserAttack Apply]</Value>
+    </Item>
+    <Item>
+      <Key>44</Key>
+      <Value>[Type:Action][Target:Ally][Range:1][AreaType:Diamond][Heal:50][Action:UserAttack Apply]</Value>
     </Item>
   </Asset>
 </XnaContent>

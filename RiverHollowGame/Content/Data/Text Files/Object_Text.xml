@@ -366,6 +366,10 @@
       <Value>[Name:Air Elemental Swirl]</Value>
     </Item>
     <Item>
+      <Key>Action_44</Key>
+      <Value>[Name:Water Elemental Heal]</Value>
+    </Item>
+    <Item>
       <Key>Building_0</Key>
       <Value>[Name:Manor]</Value>
     </Item>
