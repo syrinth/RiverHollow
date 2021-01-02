@@ -44,8 +44,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         public NewGameScreen()
         {
-            AssignClothes(ref _liHats, Util.GetEntries(DataManager.Config[4]["ItemID"]));
-            AssignClothes(ref _liShirts, Util.GetEntries(DataManager.Config[5]["ItemID"]));
+            AssignClothes(ref _liHats, Util.FindParams(DataManager.Config[4]["ItemID"]));
+            AssignClothes(ref _liShirts, Util.FindParams(DataManager.Config[5]["ItemID"]));
 
             int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.Window_2.Edge;
 

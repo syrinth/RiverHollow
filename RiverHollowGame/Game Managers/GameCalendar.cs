@@ -20,20 +20,12 @@ namespace RiverHollow.Game_Managers
         static string[] ListSeasons = { "Spring", "Summer", "Fall", "Winter" };
         static string[] ListDays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
         static AnimationEnum[] ListWeather = { AnimationEnum.None, AnimationEnum.Rain, AnimationEnum.Snow }; //Thunderstorm?
-
-        static int _iCurrSeason;
-        public static int CurrentSeason => _iCurrSeason;
-        static int _iDayOfWeek;
-        public static int DayOfWeek => _iDayOfWeek; 
-        static int _iCurrHour;
-        public static int CurrentHour => _iCurrHour;
-        static int _iCurrWeather;
-        public static int CurrentWeather => _iCurrWeather;
-
-        private static int _iCurrMin;
-        public static int CurrentMin => _iCurrMin;
-        static int _iCurrDay;
-        public static int CurrentDay => _iCurrDay;
+        static WeatherEnum _eCurrentWeather = WeatherEnum.Sunny;
+        public static int CurrentSeason { get; private set; }
+        public static int DayOfWeek { get; private set; }
+        public static int CurrentHour { get; private set; }
+        public static int CurrentMin { get; private set; }
+        public static int CurrentDay { get; private set; }
 
         static double _dLastUpdateinSeconds;
         static int _iSeasonPrecipDays = 0;
@@ -42,17 +34,15 @@ namespace RiverHollow.Game_Managers
 
         public static void NewCalendar()
         {
-            _iDayOfWeek = 0;
-            _iCurrDay = 1;
-            _iCurrSeason = 0;
-            _iCurrHour = 6;
-            _iCurrMin = 0;
+            DayOfWeek = 0;
+            CurrentDay = 1;
+            CurrentSeason = 0;
+            CurrentHour = 6;
+            CurrentMin = 0;
             _bNightfall = false;
 
             _dLastUpdateinSeconds = 0;
 
-
-            _iCurrWeather = 0;
             //RollForWeatherEffects();
 
             MapManager.CheckSpirits();
@@ -61,7 +51,7 @@ namespace RiverHollow.Game_Managers
         public static void Update(GameTime gTime)
         {
             _dLastUpdateinSeconds += gTime.ElapsedGameTime.TotalSeconds;
-            if(_iCurrHour == 26)
+            if(CurrentHour == 26)
             {
                 GUIManager.SetScreen(new DayEndScreen());
             }
@@ -79,10 +69,10 @@ namespace RiverHollow.Game_Managers
 
         public static void IncrementMinutes()
         {
-            if (_iCurrMin  > 59)
+            if (CurrentMin  > 59)
             {
-                _iCurrMin = 0;
-                _iCurrHour++;
+                CurrentMin = 0;
+                CurrentHour++;
 
                 if (!_bNightfall && IsNight())
                 {
@@ -92,22 +82,22 @@ namespace RiverHollow.Game_Managers
             }
             else
             {
-                _iCurrMin ++;
+                CurrentMin ++;
             }
         }
 
         public static string GetCalendarString()
         {
-            int minToFifteen = _iCurrMin / 15;
+            int minToFifteen = CurrentMin / 15;
             string mins = "00";
-            string hours = _iCurrHour.ToString();
-            if (_iCurrHour > 12 && _iCurrHour < 25)
+            string hours = CurrentHour.ToString();
+            if (CurrentHour > 12 && CurrentHour < 25)
             {
-                hours = (_iCurrHour - 12).ToString("00");
+                hours = (CurrentHour - 12).ToString("00");
             }
-            else if (_iCurrHour >= 25)
+            else if (CurrentHour >= 25)
             {
-                hours = (_iCurrHour - 24).ToString("00");
+                hours = (CurrentHour - 24).ToString("00");
             }
             switch (minToFifteen)
             {
@@ -125,24 +115,24 @@ namespace RiverHollow.Game_Managers
                     hours = (int.Parse(hours) + 1).ToString();
                     break;
             }
-            return String.Format("Day {0}, {1}:{2}", _iCurrDay.ToString("00"), hours, mins);
+            return String.Format("Day {0}, {1}:{2}", CurrentDay.ToString("00"), hours, mins);
         }
 
         public static void NextDay()
         {
             _bNightfall = false;
-            _iCurrHour = 6;
-            _iCurrMin = 0;
-            if(_iDayOfWeek < ListDays.Length - 1) { _iDayOfWeek++; }
-            else { _iDayOfWeek = 0; }
+            CurrentHour = 6;
+            CurrentMin = 0;
+            if(DayOfWeek < ListDays.Length - 1) { DayOfWeek++; }
+            else { DayOfWeek = 0; }
 
-            if(_iCurrDay == DAYS_IN_MONTH)
+            if(CurrentDay == DAYS_IN_MONTH)
             {
-                _iCurrDay = 1;
-                if (_iCurrSeason == 3) { _iCurrSeason = 0; }
-                else { _iCurrSeason++; }
+                CurrentDay = 1;
+                if (CurrentSeason == 3) { CurrentSeason = 0; }
+                else { CurrentSeason++; }
             }
-            else { _iCurrDay++; }
+            else { CurrentDay++; }
 
             //RollForWeatherEffects();
         }
@@ -150,43 +140,34 @@ namespace RiverHollow.Game_Managers
         private static void RollForWeatherEffects()
         {
             int roll = RHRandom.Instance.Next(1, 5);
-            if(roll > 2 || (_iSeasonPrecipDays < MIN_PRECIPITATION_DAYS && _iCurrDay + _iSeasonPrecipDays - 1 == DAYS_IN_MONTH))
+            if(roll > 2 || (_iSeasonPrecipDays < MIN_PRECIPITATION_DAYS && CurrentDay + _iSeasonPrecipDays - 1 == DAYS_IN_MONTH))
             {
                 _iSeasonPrecipDays++;
-                if (_iCurrSeason == 0) { _iCurrWeather = 1; }
-                else if(_iCurrSeason == 3) { _iCurrWeather = 2; }
+                if (CurrentSeason == 0) { _eCurrentWeather = WeatherEnum.Raining; }
+                else if(CurrentSeason == 3) { _eCurrentWeather = WeatherEnum.Snowing; }
 
-                MapManager.SetWeather(ListWeather[_iCurrWeather]);
+                MapManager.SetWeather(ListWeather[(int)_eCurrentWeather]);
             }
-            else { _iCurrWeather = 0; }
+            else { _eCurrentWeather = WeatherEnum.Sunny; }
         }
 
-        public static bool IsSunny()
-        {
-            return _iCurrWeather == 0;
-        }
-        public static bool IsRaining()
-        {
-            return _iCurrWeather == 1;
-        }
-        public static bool IsSnowing()
-        {
-            return _iCurrWeather == 2;
-        }
+        public static bool IsSunny() { return _eCurrentWeather == WeatherEnum.Sunny; }
+        public static bool IsRaining() { return _eCurrentWeather == WeatherEnum.Raining; }
+        public static bool IsSnowing() { return _eCurrentWeather == WeatherEnum.Snowing; }
 
         public static bool IsNight()
         {
-            return _iCurrHour >= 18;
+            return CurrentHour >= 18;
         }
 
         public static string GetTime()
         {
-            return _iCurrHour + ":" + _iCurrMin.ToString("00");
+            return CurrentHour + ":" + CurrentMin.ToString("00");
         }
 
         public static string GetDayOfWeek()
         {
-            return ListDays[_iDayOfWeek];
+            return ListDays[DayOfWeek];
         }
 
         public static string GetSeason(int val)
@@ -196,25 +177,25 @@ namespace RiverHollow.Game_Managers
 
         public static string GetSeason()
         {
-            return ListSeasons[_iCurrSeason];
+            return ListSeasons[CurrentSeason];
         }
 
         public static string GetWeatherString()
         {
-            return Util.GetEnumString(ListWeather[_iCurrWeather]);
+            return Util.GetEnumString(_eCurrentWeather);
         }
 
         public static void LoadCalendar(CalendarData d)
         {
-            _iCurrDay = d.dayOfMonth;
-            _iDayOfWeek = d.dayOfWeek;
-            _iCurrSeason = d.currSeason;
-            _iCurrWeather = d.currWeather;
+            CurrentDay = d.dayOfMonth;
+            DayOfWeek = d.dayOfWeek;
+            CurrentSeason = d.currSeason;
+            _eCurrentWeather = (WeatherEnum)d.currWeather;
             _iSeasonPrecipDays = d.currSeasonPrecipDays;
             _bNightfall = false;
 
-            _iCurrHour = 6;
-            _iCurrMin = 0;
+            CurrentHour = 6;
+            CurrentMin = 0;
         }
 
         /// <summary>
@@ -224,10 +205,10 @@ namespace RiverHollow.Game_Managers
         public static Color GetLightColor()
         {
             Color rv = Color.White;
-            if(_iCurrHour >= 18)
+            if(CurrentHour >= 18)
             {
                 int totalMinutes = 360;
-                float timeModifier = _iCurrMin + ((_iCurrHour - 18) * 60);  //Total number of minutes since 6 P.M.
+                float timeModifier = CurrentMin + ((CurrentHour - 18) * 60);  //Total number of minutes since 6 P.M.
                 float darkPercent = timeModifier / totalMinutes;
 
                 //Subtract the percent of darkness we currently have from the max then subtract
@@ -244,10 +225,10 @@ namespace RiverHollow.Game_Managers
         {
             return new CalendarData
             {
-                dayOfWeek = _iDayOfWeek,
-                dayOfMonth = _iCurrDay,
-                currSeason = _iCurrSeason,
-                currWeather = _iCurrWeather,
+                dayOfWeek = DayOfWeek,
+                dayOfMonth = CurrentDay,
+                currSeason = CurrentSeason,
+                currWeather = (int)_eCurrentWeather,
                 currSeasonPrecipDays = _iSeasonPrecipDays
             };
         }

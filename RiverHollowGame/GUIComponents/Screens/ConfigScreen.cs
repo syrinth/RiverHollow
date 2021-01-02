@@ -96,7 +96,7 @@ namespace RiverHollow.GUIComponents.Screens
                 else { found = true; }
             }
 
-            string[] maps = Util.GetEntries(DataManager.Config[7]["Maps"]);
+            string[] maps = Util.FindParams(DataManager.Config[7]["Maps"]);
 
             _liButtons = new List<GUIObject>();
 

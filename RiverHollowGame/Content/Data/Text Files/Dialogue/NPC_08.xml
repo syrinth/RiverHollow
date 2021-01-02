@@ -6,7 +6,7 @@
       <Value>Why hello. I haven't seen you around here before, I'd have remembered. The name's $Character_8$ and believe me, it's a pleasure to meet you.</Value>
     </Item>
     <Item>
-      <Key>Snowing_1</Key>
+      <Key>Snowing|1</Key>
       <Value>Oh, hello $^$. Care to join me for a hot drink this evening?</Value>
     </Item>
     <Item>
@@ -14,7 +14,7 @@
       <Value>Hello, $^$. Enjoying the winter? You should come visit me at the tavern some time soon. I've got just the thing to ward off the cold.</Value>
     </Item>
     <Item>
-      <Key>Dialogue_1</Key>
+      <Key>Dialogue|1</Key>
       <Value>You're always running around. Don't you ever just  take a break and relax?
 Try to take it easy sometimes, ok?</Value>
     </Item>

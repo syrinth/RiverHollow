@@ -205,7 +205,7 @@ namespace RiverHollow.Utilities
         {
             return data.Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
         }
-        public static string[] GetEntries(string data)
+        public static string[] FindParams(string data)
         {
             return data.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
         }

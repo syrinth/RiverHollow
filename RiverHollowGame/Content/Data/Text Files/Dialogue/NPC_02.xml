@@ -44,19 +44,19 @@ You're an adventurer right? Well, if you ever need to be healed, or anything, yo
       <Value>Oh... I'm sorry but... No.</Value>
     </Item>
     <Item>
-      <Key>Raining_1</Key>
+      <Key>Raining|1</Key>
       <Value>I don't like the rain. It's depressing.</Value>
     </Item>
     <Item>
-      <Key>Raining_2</Key>
+      <Key>Raining|2</Key>
       <Value>I'm glad to see you today, $^$. You should try to dry off though. Those wet clothes can't be good for you. ... I mean, you should get home and dry off as soon as you can! That's all.</Value>
     </Item>
     <Item>
-      <Key>Snowing_1</Key>
+      <Key>Snowing|1</Key>
       <Value>It's nice, isn't it? The snow I mean? I uh, hope you've dressed warm.</Value>
     </Item>
     <Item>
-      <Key>Snowing_2</Key>
+      <Key>Snowing|2</Key>
       <Value>$^$... uh, how's the weather? I mean. How are you finding it? Not too cold I hope?</Value>
     </Item>
   </Asset>

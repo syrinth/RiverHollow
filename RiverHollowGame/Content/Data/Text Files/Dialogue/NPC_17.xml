@@ -28,23 +28,23 @@ An artisan yes? I've never had the patience for that kind of thing. No, I prefer
 Here. It's not much, just a few odds and ends I had laying around but it should get you started.</Value>
     </Item>
     <Item>
-      <Key>Dialogue_1</Key>
+      <Key>Dialogue|1</Key>
       <Value>Hm. Do you need something from me? It seems that people only want to talk to me when they need something. Out with it.</Value>
     </Item>
     <Item>
-      <Key>Dialogue_2</Key>
+      <Key>Dialogue|2</Key>
       <Value>Hmm. You're in a rush today, aren't you? Slow down. The faster you run to your fate, the harder it is to escape the consequences.</Value>
     </Item>
     <Item>
-      <Key>Rain_1</Key>
+      <Key>Rain|1</Key>
       <Value>Huh, are you out and about today in this weather? In can't imagine why, it's intolerable. It's not fit for man, nor beast out there.</Value>
     </Item>
     <Item>
-      <Key>Snow_1</Key>
+      <Key>Snow|1</Key>
       <Value>Hm, snowing outside is it? $Character_1$ loves the snow, but I can't stand it. I'll leave trudging through the snow to you younger ones and stay inside, thank you very much.</Value>
     </Item>
     <Item>
-      <Key>Dialogue_3</Key>
+      <Key>Dialogue|3</Key>
       <Value>Keep your eyes peeled for the mushrooms that live in the forest. Their caps are useful for a lot of things, but they have an innate affinity for magic. Young $Character_8$ got a nasty shock from one a few years back.</Value>
     </Item>
   </Asset>

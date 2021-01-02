@@ -169,6 +169,12 @@ namespace RiverHollow.Characters
             LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), DataManager.FOLDER_MONSTERS + data["Texture"], true);
         }
 
+        /// <summary>
+        /// Override the Talk method so the player cannot talk to monsters
+        /// </summary>
+        /// <param name="facePlayer"></param>
+        public override void Talk(bool facePlayer = true) { }
+
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);

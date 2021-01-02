@@ -89,7 +89,7 @@ namespace RiverHollow.Game_Managers
         public static void AddTesting()
         {
             Dictionary<string, string> diTesting = DataManager.Config[0];
-            string[] splitItemValues = Util.GetEntries(diTesting["ItemID"]);
+            string[] splitItemValues = Util.FindParams(diTesting["ItemID"]);
             foreach (string s in splitItemValues)
             {
                 string[] splitString = s.Split('-');

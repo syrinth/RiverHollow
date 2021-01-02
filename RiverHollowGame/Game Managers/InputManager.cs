@@ -56,10 +56,6 @@ namespace RiverHollow.Game_Managers
                     if (ShiftDown()) { rv = "_"; }
                     else { rv = "-"; }
                 }
-                else if (key == Keys.OemOpenBrackets) { rv = "["; }
-                else if (key == Keys.OemCloseBrackets) { rv = "]"; }
-                else if (key == Keys.OemBackslash && ShiftDown()) { rv = "|"; }
-                else if (key == Keys.OemSemicolon && ShiftDown()) { rv = ":"; }
                 else if (IsNumber(key)) { rv = key.ToString().Remove(0, 1); }
                 else if (IsLetter(key))
                 {

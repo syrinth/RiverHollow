@@ -42,15 +42,15 @@
       <Value>Oh... I'm sorry but... No.</Value>
     </Item>
     <Item>
-      <Key>Raining_1</Key>
+      <Key>Raining|1</Key>
       <Value>Most people don't like being out in the rain, but it's never bothered me. Even when I was young, mother had to run after me with a raincoat.</Value>
     </Item>
     <Item>
-      <Key>Raining_2</Key>
+      <Key>Raining|2</Key>
       <Value>Would you like to come with me for a walk in the rain sometime? No one else will, but I think it'd be fun.</Value>
     </Item>
     <Item>
-      <Key>Snowing_1</Key>
+      <Key>Snowing|1</Key>
       <Value>There's a lot of snow today, isn't there? Mother says there's magic in the snow, but... I'm only good with warmer magic.</Value>
     </Item>
   </Asset>

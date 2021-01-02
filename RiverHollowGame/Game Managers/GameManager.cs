@@ -24,6 +24,8 @@ namespace RiverHollow.Game_Managers
         public const string KEY_OPEN = "KEY_USED";
         #endregion
 
+        public enum WeatherEnum { Sunny, Raining, Snowing };
+
         public enum DisplayTypeEnum { Inventory, Gift, Ship };
 
         public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };

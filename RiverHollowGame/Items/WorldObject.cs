@@ -438,7 +438,7 @@ namespace RiverHollow.Items
                 if (stringData.ContainsKey("ReqItems"))
                 {
                     //Split by "|" for each item set required
-                    string[] split = Util.GetEntries(stringData["ReqItems"]);
+                    string[] split = Util.FindParams(stringData["ReqItems"]);
                     foreach (string s in split)
                     {
                         string[] splitData = s.Split('-');
@@ -541,7 +541,7 @@ namespace RiverHollow.Items
                     _diProcessing = new Dictionary<int, ProcessRecipe>();
 
                     //Read in what items the machine processes
-                    string[] processes = Util.GetEntries(stringData["Processes"]);
+                    string[] processes = Util.FindParams(stringData["Processes"]);
                     foreach (string recipe in processes)
                     {
                         string[] pieces = recipe.Split('-');
@@ -604,7 +604,7 @@ namespace RiverHollow.Items
                     if (stringData.ContainsKey("Makes"))
                     {
                         //Read in what items the machine can make
-                        string[] processes = Util.GetEntries(stringData["Makes"]);
+                        string[] processes = Util.FindParams(stringData["Makes"]);
                         foreach (string recipe in processes)
                         {
                             //Each entry is in written like ID-NumDays

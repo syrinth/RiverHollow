@@ -1960,7 +1960,7 @@ namespace Database_Editor
                 if (_diTags.ContainsKey(tag))
                 {
                     //Isolate every group of entries that aredelineated by the '|'
-                    string[] split = Util.GetEntries(_diTags[tag]);
+                    string[] split = Util.FindParams(_diTags[tag]);
                     foreach (string s in split)
                     {
                         //The first entry is always the item, split by the '-', find it and compare
@@ -2030,7 +2030,7 @@ namespace Database_Editor
                 if (_diTags.ContainsKey(tag))
                 {
                     //Isolate every group of entries that are delineated by the '|'
-                    string[] split = Util.GetEntries(_diTags[tag]);
+                    string[] split = Util.FindParams(_diTags[tag]);
                     _diTags[tag] = string.Empty;
                     for (int i = 0; i < split.Length; i++)
                     {
@@ -2168,7 +2168,7 @@ namespace Database_Editor
                                 if (propertyName.Equals(refTag))
                                 {
                                     //Split the values in the property value by the '|' delimeter 
-                                    string[] splitValues = Util.GetEntries(propertyValue);
+                                    string[] splitValues = Util.FindParams(propertyValue);
                                     foreach (string spVal in splitValues)
                                     {
                                         //Do we have a match? return true
@@ -2220,7 +2220,7 @@ namespace Database_Editor
                         if (propertyName.Equals(tag))
                         {
                             //Split the values in the property value by the '|' delimeter 
-                            string[] splitValues = Util.GetEntries(propertyValue);
+                            string[] splitValues = Util.FindParams(propertyValue);
                             for (int j = 0; j < splitValues.Length; j++)
                             {
                                 //If we found a match, set the flag to true and overwrite the value of this string

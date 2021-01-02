@@ -543,12 +543,12 @@ namespace RiverHollow.Characters
 
         protected Dictionary<string, string> _diDialogue;
 
-        private int _iLockObjects;
+        public static List<int> FriendRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000 };
+        public int FriendshipPoints = 0;
 
         public TalkingActor() : base()
         {
             _bCanTalk = true;
-            _iLockObjects = 0;
         }
 
         public virtual void StopTalking() { }
@@ -642,7 +642,7 @@ namespace RiverHollow.Characters
             Util.ProcessText(text, _sName);
 
             string[] textFromData = Util.FindTags(text);
-            string[] options = Util.GetEntries(textFromData[1]);
+            string[] options = Util.FindParams(textFromData[1]);
 
             List<string> liCommands = RemoveEntries(options);
 
@@ -650,7 +650,7 @@ namespace RiverHollow.Characters
             string rv = string.Empty;
             if (liCommands.Count == 2)
             {
-                rv = GetDefaultText();
+                rv = GetDailyDialogue();
             }
             else
             {
@@ -678,10 +678,50 @@ namespace RiverHollow.Characters
         /// Mostly used for the "Talk" parameter or if the TalkingActor has no other options.
         /// </summary>
         /// <returns>The dialog string for the entry.</returns>
-        public string GetDefaultText()
+        public string GetDailyDialogue()
         {
-            string entry = RHRandom.Instance.Next(1, 2).ToString();
-            return GetDialogEntry(entry);
+            List<string> keyPool = new List<string>();
+            foreach (string s in _diDialogue.Keys)
+            {
+                int validation = 0;
+                string[] values = Util.FindParams(s);
+                foreach (string val in values)
+                {
+                    if (val.Equals(GameCalendar.GetWeatherString()))
+                    {
+                        validation++;
+                    }
+                    else if (val.StartsWith("Friend"))
+                    {
+                        string[] args = val.Split('-');
+                        if(args.Length == 2)
+                        {
+                            if(int.TryParse(args[1], out int NPCID) && this.GetFriendshipLevel() >= NPCID)
+                            {
+                                validation++;
+                            }
+                        }
+                        else if (args.Length == 3)
+                        {
+                            if (int.TryParse(args[1], out int NPCID) && int.TryParse(args[2], out int tempLevel) && DataManager.DiNPC[NPCID].GetFriendshipLevel() > tempLevel)
+                            {
+                                validation++;
+                            }
+                        }
+                    }
+                    else if (int.TryParse(val, out int ID))
+                    {
+                        validation++;
+                    }
+                }
+
+                if (validation == values.Length)
+                {
+                    keyPool.Add(s);
+                }
+            }
+
+            return GetDialogEntry(keyPool[RHRandom.Instance.Next(0, keyPool.Count -1)]);
         }
 
         /// <summary>
@@ -706,7 +746,7 @@ namespace RiverHollow.Characters
             bool rv = false;
 
             if (chosenAction.StartsWith("Talk")){
-                nextText = GetDefaultText();
+                nextText = GetDailyDialogue();
             }
             else if (chosenAction.StartsWith("Quest"))
             {
@@ -732,6 +772,24 @@ namespace RiverHollow.Characters
             }
 
             if (!string.IsNullOrEmpty(nextText)) { rv = true; }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Determines the level of Friendship based off of how many Friendship points the Actor has.
+        /// </summary>
+        /// <returns></returns>
+        public int GetFriendshipLevel()
+        {
+            int rv = 0;
+            for (int i = 0; i < FriendRange.Count; i++)
+            {
+                if (FriendshipPoints >= FriendRange[i])
+                {
+                    rv = i;
+                }
+            }
 
             return rv;
         }
@@ -1674,8 +1732,6 @@ namespace RiverHollow.Characters
         protected string _sHomeMap;
         protected NPCTypeEnum _eNPCType;
         public NPCTypeEnum NPCType => _eNPCType;
-        public static List<int> FriendRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000 };
-        public int FriendshipPoints = 1900;
 
         protected Dictionary<int, bool> _diCollection;
         public bool Introduced;
@@ -1706,7 +1762,7 @@ namespace RiverHollow.Characters
             _sprBody = new AnimatedSprite(n.BodySprite);
         }
 
-        public Villager(int index, Dictionary<string, string> stringData): this()
+        public Villager(int index, Dictionary<string, string> stringData, bool loadanimations = true): this()
         {
             _eActorType = ActorEnum.NPC;
             _diCompleteSchedule = new Dictionary<string, List<Dictionary<string, string>>>();
@@ -1715,10 +1771,10 @@ namespace RiverHollow.Characters
 
             Util.AssignValue(ref _bHover, "Hover", stringData);
 
-            ImportBasics(stringData);
+            ImportBasics(stringData, loadanimations);
         }
 
-        protected void ImportBasics(Dictionary<string, string> data)
+        protected void ImportBasics(Dictionary<string, string> data, bool loadanimations = true)
         {
             _diDialogue = DataManager.GetNPCDialogue(_iIndex);
             DataManager.GetTextData("Character", _iIndex, ref _sName, "Name");
@@ -1726,8 +1782,11 @@ namespace RiverHollow.Characters
             _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Villager", _iIndex.ToString("00"));
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
 
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(data), _sVillagerFolder + "NPC_" + _iIndex.ToString("00"));
-            PlayAnimationVerb(VerbEnum.Idle);
+            if (loadanimations)
+            {
+                LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(data), _sVillagerFolder + "NPC_" + _iIndex.ToString("00"));
+                PlayAnimationVerb(VerbEnum.Idle);
+            }
 
             _bActive = !data.ContainsKey("Inactive");
             if (data.ContainsKey("Type")) { _eNPCType = Util.ParseEnum<NPCTypeEnum>(data["Type"]); }
@@ -1740,7 +1799,7 @@ namespace RiverHollow.Characters
 
             if (data.ContainsKey("Collection"))
             {
-                string[] vectorSplit = Util.GetEntries(data["Collection"]);
+                string[] vectorSplit = Util.FindParams(data["Collection"]);
                 foreach (string s in vectorSplit)
                 {
                     _diCollection.Add(int.Parse(s), false);
@@ -2088,20 +2147,6 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        public int GetFriendshipLevel()
-        {
-            int rv = 0;
-            for (int i = 0; i < FriendRange.Count; i++)
-            {
-                if (FriendshipPoints >= FriendRange[i])
-                {
-                    rv = i;
-                }
-            }
-
-            return rv;
-        }
-
         public bool IsEligible() { return _eNPCType == NPCTypeEnum.Eligible; }
 
         /// <summary>
@@ -2364,7 +2409,7 @@ namespace RiverHollow.Characters
 
                 if (stringData.ContainsKey("Requires"))
                 {
-                    string[] reqItems = Util.GetEntries(stringData["Requires"]);
+                    string[] reqItems = Util.FindParams(stringData["Requires"]);
                     foreach (string str in reqItems)
                     {
                         string[] itemsSplit = str.Split('-');
@@ -2399,26 +2444,31 @@ namespace RiverHollow.Characters
         {
             get
             {
-                return new Vector2(_sprBody.Position.X + TileSize, _sprBody.Position.Y + _sprBody.Height - (TileSize * _iSize + 1));
+                return new Vector2(_sprBody.Position.X + TileSize, _sprBody.Position.Y + _sprBody.Height - (TileSize * 2));
             }
             set
             {
-                _sprBody.Position = new Vector2(value.X - TileSize, value.Y - _sprBody.Height + (TileSize * _iSize + 1));
+                _sprBody.Position = new Vector2(value.X - TileSize, value.Y - _sprBody.Height + (TileSize * 2));
             }
         }
 
         public bool Married;
         public bool CanJoinParty { get; private set; } = true;
 
-        public EligibleNPC(int index, Dictionary<string, string> stringData) : base(index, stringData)
+        public EligibleNPC(int index, Dictionary<string, string> data) : base(index, data, false)
         {
             _eNPCType = NPCTypeEnum.Eligible;
 
-            if (stringData.ContainsKey("Class"))
+            if (data.ContainsKey("Class"))
             {
-                SetClass(DataManager.GetClassByIndex(int.Parse(stringData["Class"])));
+                SetClass(DataManager.GetClassByIndex(int.Parse(data["Class"])));
                 AssignStartingGear();
             }
+
+            _iSpriteWidth = TileSize * 3;
+            _iSpriteHeight = TileSize * 3;
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), _sVillagerFolder + "NPC_" + _iIndex.ToString("00"));
+            PlayAnimationVerb(VerbEnum.Idle);
         }
 
         public override void Update(GameTime gTime)

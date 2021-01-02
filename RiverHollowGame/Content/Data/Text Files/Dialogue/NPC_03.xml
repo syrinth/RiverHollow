@@ -42,11 +42,11 @@
       <Value>Oh... I'm sorry but... No.</Value>
     </Item>
     <Item>
-      <Key>Dialogue_3</Key>
+      <Key>Dialogue|3</Key>
       <Value>This town has it's quaint charm but... I miss the city. I can't wait until $Character_4$ and I have finished our business here.</Value>
     </Item>
     <Item>
-      <Key>Raining_1</Key>
+      <Key>Raining|1</Key>
       <Value>I didn't think I'd see you today. I always jump at the opportunity to do nothing on rainy days. I guess you've got more on your plate than I do though, hm?</Value>
     </Item>
   </Asset>

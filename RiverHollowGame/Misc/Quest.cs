@@ -106,7 +106,7 @@ namespace RiverHollow.Misc
 
             if (stringData.ContainsKey("ItemReward"))
             {
-                string[] items = Util.GetEntries(stringData["ItemReward"]);
+                string[] items = Util.FindParams(stringData["ItemReward"]);
                 if (items.Length > 1)
                 {
                     foreach (string itemInfo in items)

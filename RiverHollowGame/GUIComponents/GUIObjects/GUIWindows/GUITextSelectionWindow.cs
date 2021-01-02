@@ -45,7 +45,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 _sStatement = firstPass[0];
 
-                string[] secondPass = Util.GetEntries(firstPass[1]);
+                string[] secondPass = Util.FindParams(firstPass[1]);
                 int key = 0;
                 foreach (string s in secondPass)
                 {

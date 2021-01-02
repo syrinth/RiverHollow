@@ -104,7 +104,7 @@ namespace RiverHollow.Items
             if (stringData.ContainsKey("ReqItems"))
             {
                 //Split by "|" for each item set required
-                string[] split = Util.GetEntries(stringData["ReqItems"]);
+                string[] split = Util.FindParams(stringData["ReqItems"]);
                 foreach(string s in split)
                 {
                     string[] splitData = s.Split('-');
