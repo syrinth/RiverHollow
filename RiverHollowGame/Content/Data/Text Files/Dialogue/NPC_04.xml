@@ -3,15 +3,15 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Not now sorry, I've got something on my mind. My name is $Character_4$, and whatever it is can wait.</Value>
+      <Value>Not now sorry, I've got something on my mind. I'm $Character_4$, nice to meet you, etcetera, everything else can wait.</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>$^$! How are you today?</Value>
+      <Value>$^$. I hope you're well? Good.</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>I love spring. Plants are blooming again after a long cold winter and it's not too hot or cold.</Value>
+      <Value>Oh, hello. I guess I have a moment. My latest experiment hasn't proven fruitful.</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>Collection</Key>
-      <Value>Oh! I've been wanting this! Thank you so much.</Value>
+      <Value>You got this for me? I... thank you. really, this will be invaluable to my research.</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
@@ -40,6 +40,14 @@
     <Item>
       <Key>MarriageNo</Key>
       <Value>Oh... I'm sorry but... No.</Value>
+    </Item>
+    <Item>
+      <Key>Raining|1</Key>
+      <Value>I hate weather like this. It just serves to delay my research.</Value>
+    </Item>
+    <Item>
+      <Key>Raining|2</Key>
+      <Value>Hm. I'm thinking I might take a walk. I despise the rain, but there are several species of flowers I'm interested in that only bloom in the rain.</Value>
     </Item>
   </Asset>
 </XnaContent>

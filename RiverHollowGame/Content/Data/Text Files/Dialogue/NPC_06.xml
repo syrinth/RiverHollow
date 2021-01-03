@@ -3,23 +3,23 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Welcome to town $^$. my name is $Character_6$. It's my job to make sure the monsters stay outside the walls. Have a good day exploring the town, but be careful if you wander outside.</Value>
+      <Value>Hi. $^$, right?, Welcome to River Hollow. I'm $Character_6$ and it's my job to make sure the monsters stay outside the walls. I recommend you not wander far from town.</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hello $^$. I hope you're well today.</Value>
+      <Value>$^$, hello. Having a good day I trust? Stay safe, and don't make me follow you around.</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.</Value>
+      <Value>$^$? You look stressed. Please don't push yourself and make sure you're getting enough sleep. a few years back I tried six hours a night and let me tell you what a mistake that was.</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>Oh, that's surprising. Thank you.</Value>
+      <Value>Oh, thank you. I really appreciate this.</Value>
     </Item>
     <Item>
       <Key>Collection</Key>
-      <Value>Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?</Value>
+      <Value>Is that really for me? $^$! Thank you. This really means a lot to me.</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
@@ -40,6 +40,10 @@
     <Item>
       <Key>MarriageNo</Key>
       <Value>Oh... I'm sorry but. No.</Value>
+    </Item>
+    <Item>
+      <Key>Raining|1</Key>
+      <Value>You're running around in this rain? Ha, of course you are. There's no stopping you, is there? It's admirable, if concerning.</Value>
     </Item>
   </Asset>
 </XnaContent>
