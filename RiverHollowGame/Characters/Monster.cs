@@ -316,7 +316,7 @@ namespace RiverHollow.Characters
                 float deltaX = Math.Abs(_vMoveTo.X - this.Position.X);
                 float deltaY = Math.Abs(_vMoveTo.Y - this.Position.Y);
 
-                Util.GetMoveSpeed(Position, _vMoveTo, Speed, ref direction);
+                Util.GetMoveSpeed(Position, _vMoveTo, BuffedSpeed, ref direction);
                 DetermineFacing(direction);
                 if (!CheckMapForCollisionsAndMove(direction, false))
                 {

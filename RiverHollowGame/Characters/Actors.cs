@@ -78,6 +78,8 @@ namespace RiverHollow.Characters
         public int SpriteWidth => _sprBody.Width;
         public int SpriteHeight => _sprBody.Height;
 
+        protected double _dAccumulatedMovement;
+
         protected bool _bCanTalk = false;
         public bool CanTalk => _bCanTalk;
 
@@ -223,8 +225,8 @@ namespace RiverHollow.Characters
 
         protected bool _bHover;
 
-        float _fBaseSpeed = 2.0f;
-        public float Speed => _fBaseSpeed * SpdMult;
+        float _fBaseSpeed = TileSize * 9;   //How many tiles/second to move
+        public float BuffedSpeed => _fBaseSpeed * SpdMult;
         public float SpdMult = NPC_WALK_SPEED;
 
         protected int _iSize = 1;
@@ -442,38 +444,68 @@ namespace RiverHollow.Characters
             float deltaX = Math.Abs(target.X - this.Position.X);
             float deltaY = Math.Abs(target.Y - this.Position.Y);
 
-            //Determines how much of the needed position we're capable of moving in one movement
-            Util.GetMoveSpeed(Position, target, Speed, ref direction);
-
-            //If we're following a path and there's more than one tile left, we don't want to cut
-            //short on individual steps, so recalculate based on the next target
-            float length = direction.Length();
-            if(_liTilePath.Count > 1 && length < Speed)
+            float moveDist = UseMovement();
+            if (moveDist >= 1)
             {
-                _liTilePath.RemoveAt(0);
+                //Determines how much of the needed position we're capable of moving in one movement
+                Util.GetMoveSpeed(Position, target, moveDist, ref direction);
 
-                if (DoorCheck())
+                //If we're following a path and there's more than one tile left, we don't want to cut
+                //short on individual steps, so recalculate based on the next target
+                float length = direction.Length();
+                if (_liTilePath.Count > 1 && length < moveDist)
                 {
-                    return;
+                    _liTilePath.RemoveAt(0);
+
+                    if (DoorCheck())
+                    {
+                        return;
+                    }
+
+                    //Recalculate for the next target
+                    target = _liTilePath[0].Position;
+                    Util.GetMoveSpeed(Position, target, moveDist, ref direction);
                 }
 
-                //Recalculate for the next target
-                target = _liTilePath[0].Position;
-                Util.GetMoveSpeed(Position, target, Speed, ref direction);
+                //Attempt to move
+                if (!CheckMapForCollisionsAndMove(direction, _bIgnoreCollisions))
+                {
+                    //If we can't move, set a timer to go Ethereal
+                    if (_dEtherealCD == 0) { _dEtherealCD = 5; }
+                }
+
+                //If, after movement, we've reached the given location, zero it.
+                if (_vMoveTo == Position && !CutsceneManager.Playing)
+                {
+                    _vMoveTo = Vector2.Zero;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Determines how much of the movement needs to be given based off of 
+        /// </summary>
+        /// <param name="gTime"></param>
+        public void AccumulateMovement(GameTime gTime)
+        {
+            double percent = gTime.ElapsedGameTime.TotalMilliseconds / 1000;    //The percentage of a whole second in this update frame
+            _dAccumulatedMovement += BuffedSpeed * percent;
+        }
+
+        public float UseMovement()
+        {
+            double wholeNumber = 0;
+            if (_dAccumulatedMovement >= 1)
+            {
+                wholeNumber = Math.Truncate(_dAccumulatedMovement);
+               // _dAccumulatedMovement -= wholeNumber;
+                _dAccumulatedMovement = 0;  //Need to reset to 0 to maintain a constant speed update
             }
 
-            //Attempt to move
-            if (!CheckMapForCollisionsAndMove(direction, _bIgnoreCollisions))
-            {
-                //If we can't move, set a timer to go Ethereal
-                if (_dEtherealCD == 0) { _dEtherealCD = 5; }
-            }
-
-            //If, after movement, we've reached the given location, zero it.
-            if(_vMoveTo == Position && !CutsceneManager.Playing)
-            {
-                _vMoveTo = Vector2.Zero;
-            }
+            return (float)wholeNumber;
+        }
+        public void ClearAccumulatedMovement() {
+            _dAccumulatedMovement = 0;
         }
 
         /// <summary>
@@ -975,10 +1007,12 @@ namespace RiverHollow.Characters
             {
                 if (_vMoveTo != Vector2.Zero)
                 {
+                    AccumulateMovement(gTime);
                     HandleMove(_vMoveTo);
                 }
                 else if (_liTilePath.Count > 0)
                 {
+                    AccumulateMovement(gTime);
                     if (!DoorCheck())
                     {
                         Vector2 targetPos = _liTilePath[0].Position;

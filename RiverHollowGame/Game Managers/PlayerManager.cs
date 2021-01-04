@@ -115,37 +115,39 @@ namespace RiverHollow.Game_Managers
                 if (ToolInUse == null)
                 {
                     KeyboardState ks = Keyboard.GetState();
-                    if (ks.IsKeyDown(Keys.W))
+                    if (InputManager.MovementKeyDown())
                     {
-                        moveDir += new Vector2(0, -World.Speed);
+                        World.AccumulateMovement(gTime);
                     }
-                    else if (ks.IsKeyDown(Keys.S))
+                    else
                     {
-                        moveDir += new Vector2(0, World.Speed);
-                    }
-
-                    if (ks.IsKeyDown(Keys.A))
-                    {
-                        moveDir += new Vector2(-World.Speed, 0);
-                    }
-                    else if (ks.IsKeyDown(Keys.D))
-                    {
-                        moveDir += new Vector2(World.Speed, 0);
+                        World.ClearAccumulatedMovement();
+                        World.DetermineFacing(moveDir);
                     }
 
-                    World.DetermineFacing(moveDir);
-
-                    if (moveDir.Length() != 0)
+                    float movement = World.UseMovement();
+                    if (movement > 0)
                     {
-                        Rectangle testRectX = new Rectangle((int)World.CollisionBox.X + (int)moveDir.X, (int)World.CollisionBox.Y, World.CollisionBox.Width, World.CollisionBox.Height);
-                        Rectangle testRectY = new Rectangle((int)World.CollisionBox.X, (int)World.CollisionBox.Y + (int)moveDir.Y, World.CollisionBox.Width, World.CollisionBox.Height);
+                        if (ks.IsKeyDown(Keys.W)) { moveDir += new Vector2(0, -movement); }
+                        else if (ks.IsKeyDown(Keys.S)) { moveDir += new Vector2(0, movement); }
 
-                        if (MapManager.CurrentMap.CheckForCollisions(World, testRectX, testRectY, ref moveDir))
+                        if (ks.IsKeyDown(Keys.A)) { moveDir += new Vector2(-movement, 0); }
+                        else if (ks.IsKeyDown(Keys.D)) { moveDir += new Vector2(movement, 0); }
+
+                        World.DetermineFacing(moveDir);
+
+                        if (moveDir.Length() != 0)
                         {
-                            //Might be technically correct but FEELS wrong
-                            //moveDir.Normalize();
-                            //moveDir *= World.Speed;
-                            World.MoveBy((int)moveDir.X, (int)moveDir.Y);
+                            Rectangle testRectX = new Rectangle((int)World.CollisionBox.X + (int)moveDir.X, (int)World.CollisionBox.Y, World.CollisionBox.Width, World.CollisionBox.Height);
+                            Rectangle testRectY = new Rectangle((int)World.CollisionBox.X, (int)World.CollisionBox.Y + (int)moveDir.Y, World.CollisionBox.Width, World.CollisionBox.Height);
+
+                            if (MapManager.CurrentMap.CheckForCollisions(World, testRectX, testRectY, ref moveDir))
+                            {
+                                //Might be technically correct but FEELS wrong
+                                //moveDir.Normalize();
+                                //moveDir *= World.Speed;
+                                World.MoveBy((int)moveDir.X, (int)moveDir.Y);
+                            }
                         }
                     }
                 }

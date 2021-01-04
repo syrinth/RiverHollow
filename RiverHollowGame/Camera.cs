@@ -32,17 +32,13 @@ namespace RiverHollow
 
             if (!TakingInput() && Scrying())
             {
-                KeyboardState ks = Keyboard.GetState();
                 int speed = 10;
-                if (ks.IsKeyDown(Keys.W)) {
-                    target += new Vector2(0, -speed); }
-                else if (ks.IsKeyDown(Keys.S)) {
-                    target += new Vector2(0, speed); }
+                KeyboardState ks = Keyboard.GetState();
+                if (ks.IsKeyDown(Keys.W)) { target += new Vector2(0, -speed); }
+                else if (ks.IsKeyDown(Keys.S)) { target += new Vector2(0, speed); }
 
-                if (ks.IsKeyDown(Keys.A)) {
-                    target += new Vector2(-speed, 0); }
-                else if (ks.IsKeyDown(Keys.D)) {
-                    target += new Vector2(speed, 0); }
+                if (ks.IsKeyDown(Keys.A)) { target += new Vector2(-speed, 0); }
+                else if (ks.IsKeyDown(Keys.D)) { target += new Vector2(speed, 0); }
             }
 
             if (target.X <= (RiverHollow.ScreenWidth / 2)) { target.X = (RiverHollow.ScreenWidth / 2); }

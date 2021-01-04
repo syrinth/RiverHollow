@@ -37,6 +37,16 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
+        /// <summary>
+        /// Checks to see if any keys mapped to movement are pressed
+        /// </summary>
+        /// <returns>True if at least one key is being pressed</returns>
+        public static bool MovementKeyDown()
+        {
+            KeyboardState ks = Keyboard.GetState();
+            return ks.IsKeyDown(Keys.W) || ks.IsKeyDown(Keys.S) || ks.IsKeyDown(Keys.A) || ks.IsKeyDown(Keys.D);
+        }
+
         public static bool IsKeyHeld(Keys key)
         {
             KeyboardState keyboardState = Keyboard.GetState();

@@ -3,23 +3,23 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Hey. I'm $Character_7$, you must be the one whose moving into the manor. Interesting, I've been wondering what you'd be like.</Value>
+      <Value>Oh, so you're the one moving into the manor. $^$ was it? Interesting, I've been wondering what you'd be like. The name's $Character_7$, and I'm the best shot for miles.</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hello $^$. I hope you're well today.</Value>
+      <Value>Have I told you about the time I took down a $Monster_4$ in a single shot?</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.</Value>
+      <Value>I've taken down thirty monsters this week. How about you?</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>Oh, that's surprising. Thank you.</Value>
+      <Value>A gift eh? You sure you don't just want something?</Value>
     </Item>
     <Item>
       <Key>Collection</Key>
-      <Value>Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?</Value>
+      <Value>You can't be serious. You're giving this to me? I've been looking for this! Thank you.</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
@@ -40,6 +40,10 @@
     <Item>
       <Key>MarriageNo</Key>
       <Value>Oh... I'm sorry but. No.</Value>
+    </Item>
+    <Item>
+      <Key>Raining|1</Key>
+      <Value>What are you doing skulking about in the rain? Not up to now good are you?</Value>
     </Item>
   </Asset>
 </XnaContent>
