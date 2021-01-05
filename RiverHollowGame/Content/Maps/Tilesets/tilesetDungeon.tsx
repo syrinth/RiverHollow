@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.4" tiledversion="1.4.1" name="tilesetDungeon" tilewidth="16" tileheight="16" tilecount="160" columns="20">
- <image source="..\Tilesets\tilesetDungeon.png" trans="ffffff" width="320" height="128"/>
+<tileset name="tilesetDungeon" tilewidth="16" tileheight="16" tilecount="160" columns="20">
+ <image source="tilesetDungeon.png" trans="ffffff" width="320" height="128"/>
  <terraintypes>
   <terrain name="Floor" tile="9"/>
   <terrain name="UpperWall" tile="28"/>
@@ -43,6 +43,11 @@
  <tile id="9" terrain="0,0,0,0"/>
  <tile id="10" terrain="0,0,0,0" probability="0.1"/>
  <tile id="11" terrain="0,0,0,0" probability="0.1"/>
+ <tile id="18">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="20" terrain=",1,,1">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
