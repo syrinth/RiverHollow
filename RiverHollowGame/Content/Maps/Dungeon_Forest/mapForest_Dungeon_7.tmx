@@ -130,22 +130,22 @@
   </object>
   <object id="35" name="SpawnPoint" x="51" y="66.25" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="36" name="SpawnPoint" x="49" y="196.25" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="37" name="SpawnPoint" x="274" y="67.75" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="39" name="SpawnPoint" x="258.5" y="207.75" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="42" name="DungeonObject" x="151" y="357" width="12" height="11">

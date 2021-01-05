@@ -91,17 +91,17 @@
   </object>
   <object id="48" name="SpawnPoint" x="49.5" y="196.25" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="49" name="SpawnPoint" x="353.5" y="51.75" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="50" name="SpawnPoint" x="418" y="226.75" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="56" name="WorldObject" x="260.792" y="196.792" width="5.75" height="5.75">

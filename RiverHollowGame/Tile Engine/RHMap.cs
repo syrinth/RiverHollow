@@ -2411,29 +2411,60 @@ namespace RiverHollow.Tile_Engine
     public class MonsterSpawn : SpawnPoint
     {
         Monster _monster;
-        Dictionary<string, string[]> _diMonsterSpawns;
+        Dictionary<string, Dictionary<string, List<string>>> _diMonsterSpawns;
         int _iPrimedMonsterID;
         public bool IsPrimed => _iPrimedMonsterID != -1;
 
         public MonsterSpawn(RHMap map, TiledMapObject obj) : base(map, obj)
         {
             _iPrimedMonsterID = -1;
-            _diMonsterSpawns = new Dictionary<string, string[]>();
+            _diMonsterSpawns = new Dictionary<string, Dictionary<string, List<string>>>();
             foreach(KeyValuePair<string, string> kvp in obj.Properties)
             {
+                //If the property starts with Spawn, it defines what mobs spawn under what conditions
+                //All, Weather, or Season are supported
                 if (kvp.Key.StartsWith("Spawn-"))
                 {
+                    //Prune out the word 'Spawn' and keep the other word 
                     string[] split = kvp.Key.Split('-');
-                    _diMonsterSpawns[split[1]] = Util.FindParams(kvp.Value);
+                    string spawnType = split[1];
+
+                    string[] monsterParams = Util.FindParams(kvp.Value);
+                    foreach(string s in monsterParams)
+                    {
+                        //Monster info is written like ID-Rarity|ID-Rarity etc
+                        string[] monsterInfo = s.Split('-');
+                        string monsterID = monsterInfo[0];
+                        string monsterRarity = monsterInfo[1];
+
+                        //If we haven't added a new dictionary for the spawnType, add one.
+                        if (!_diMonsterSpawns.ContainsKey(spawnType))
+                        {
+                            _diMonsterSpawns[spawnType] = new Dictionary<string, List<string>>();
+                        }
+
+                        //If we haven't made a new list for the rarity yet, add one.
+                        if (!_diMonsterSpawns[spawnType].ContainsKey(monsterRarity)) {
+                            _diMonsterSpawns[spawnType][monsterInfo[1]] = new List<string>();
+                        }
+
+                        //Ad the MonsterID to the SpawnType and Rarity dictionaries
+                        _diMonsterSpawns[spawnType][monsterRarity].Add(monsterID);
+                    }
                 }
             }
         }
 
+        /// <summary>
+        /// Tells the Spawn point to spawn a monster by checking it's spawnType and rarity dictionary.
+        /// If there is a primed monster, use that one instead.
+        /// </summary>
         public override void Spawn()
         {
             if (_iPrimedMonsterID != -1) { _monster = DataManager.GetMonsterByIndex(_iPrimedMonsterID); }
             else
             {
+                //Find which spawn type we're using
                 string key = "All";
                 if (!_diMonsterSpawns.ContainsKey("All"))
                 {
@@ -2441,8 +2472,16 @@ namespace RiverHollow.Tile_Engine
                     else { key = GameCalendar.GetSeason(); }
                 }
 
-                int spawnArrIndex = (int)RHRandom.Instance.Next(0, _diMonsterSpawns[key].Length - 1);
-                _monster = DataManager.GetMonsterByIndex(int.Parse(_diMonsterSpawns[key][spawnArrIndex]));
+                //Roll against rarity and backtrack until we find one of the rolled type that exists.
+                string rarityKey = string.Empty;
+                int rarityIndex = (int)RHRandom.Instance.Next(1,100);
+
+                if (rarityIndex > 90 && _diMonsterSpawns[key].ContainsKey("R")) { rarityKey = "R"; }
+                else if (rarityIndex > 60 && _diMonsterSpawns[key].ContainsKey("U")) { rarityKey = "U"; }
+                else { rarityKey = "C"; }
+
+                int spawnArrIndex = (int)RHRandom.Instance.Next(0, _diMonsterSpawns[key][rarityKey].Count - 1);
+                _monster = DataManager.GetMonsterByIndex(int.Parse(_diMonsterSpawns[key][rarityKey][spawnArrIndex]));
             }
 
             _monster.SpawnPoint = this;

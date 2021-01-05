@@ -96,17 +96,17 @@
  <objectgroup id="5" name="MapObject">
   <object id="36" name="SpawnPoint" x="35.1666" y="194.75" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="37" name="SpawnPoint" x="417.5" y="86.417" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="38" name="SpawnPoint" x="196.667" y="194.417" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="39" name="ResourceSpawn" x="50.667" y="80.501" width="332" height="75.4997">

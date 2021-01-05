@@ -99,17 +99,17 @@
   </object>
   <object id="46" name="SpawnPoint" x="82" y="212.25" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="47" name="SpawnPoint" x="387.229" y="162.825" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="48" name="SpawnPoint" x="273.5" y="115.75" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="49" name="DungeonObject" x="224" y="96" width="16" height="16">

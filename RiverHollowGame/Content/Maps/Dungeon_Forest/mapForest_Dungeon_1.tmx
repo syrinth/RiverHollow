@@ -107,17 +107,17 @@
  <objectgroup id="5" name="MapObject">
   <object id="36" name="SpawnPoint" x="51.5635" y="228.528" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="37" name="SpawnPoint" x="417.5" y="182.417" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="38" name="SpawnPoint" x="258.5" y="261.417" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
  </objectgroup>

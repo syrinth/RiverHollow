@@ -91,12 +91,12 @@
   </object>
   <object id="53" name="SpawnPoint" x="402.666" y="194.75" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
   <object id="54" name="SpawnPoint" x="82.0002" y="179.416" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="4-C"/>
    </properties>
   </object>
  </objectgroup>
