@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="46">
+<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="30" height="18" tilewidth="16" tileheight="16" nextobjectid="59">
  <properties>
   <property name="ActiveSpawn" type="int" value="1"/>
   <property name="Dungeon" value="Forest"/>
@@ -8,7 +8,7 @@
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetDungeon.tsx"/>
  <tileset firstgid="161" source="../Tilesets/tsWalls_Floors.tsx"/>
- <layer id="19" name="Base" width="30" height="18">
+ <layer name="Base" width="30" height="18">
   <data encoding="csv">
 234,234,234,234,234,234,234,234,234,234,234,234,234,234,309,309,234,234,234,234,234,234,234,234,234,234,234,234,234,234,
 234,309,309,309,309,309,309,309,309,309,309,309,309,309,309,309,309,309,309,309,309,309,309,309,309,309,309,309,309,234,
@@ -30,7 +30,7 @@
 234,234,234,234,234,234,234,234,234,234,234,234,234,234,234,234,234,234,234,234,234,234,234,234,234,234,234,234,234,234
 </data>
  </layer>
- <layer id="20" name="Ground" width="30" height="18">
+ <layer name="Ground" width="30" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,415,0,0,416,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,393,306,306,306,306,306,306,306,306,306,306,306,307,0,0,305,306,306,306,306,306,306,306,306,306,306,306,394,0,
@@ -52,7 +52,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="21" name="Upper" width="30" height="18">
+ <layer name="Upper" width="30" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -74,7 +74,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="Travel">
+ <objectgroup name="Travel">
   <object id="19" name="Entrance" x="224" y="0" width="32" height="4">
    <properties>
     <property name="EntranceDir" value="Down"/>
@@ -88,6 +88,50 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="MapObject"/>
- <objectgroup id="6" name="Character"/>
+ <objectgroup name="MapObject">
+  <object id="46" name="ResourceSpawn" x="35" y="84" width="410" height="168">
+   <properties>
+    <property name="Resources" value="47"/>
+   </properties>
+  </object>
+  <object id="51" name="SpawnPoint" x="371" y="118" width="11" height="9">
+   <properties>
+    <property name="Spawn-All" value="0-c"/>
+   </properties>
+  </object>
+  <object id="52" name="SpawnPoint" x="177.5" y="211.5" width="11" height="9">
+   <properties>
+    <property name="Spawn-All" value="0-c"/>
+   </properties>
+  </object>
+  <object id="53" name="SpawnPoint" x="226.5" y="196.5" width="11" height="9">
+   <properties>
+    <property name="Spawn-All" value="0-c"/>
+   </properties>
+  </object>
+  <object id="54" name="SpawnPoint" x="54.5" y="100.5" width="11" height="9">
+   <properties>
+    <property name="Spawn-All" value="0-c"/>
+   </properties>
+  </object>
+  <object id="55" name="SpawnPoint" x="389.5" y="214.5" width="11" height="9">
+   <properties>
+    <property name="Spawn-All" value="0-c"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Character">
+  <object id="56" name="CombatStart" x="242" y="117" width="9" height="8">
+   <properties>
+    <property name="Map" value="mapCave_Wing_1_2"/>
+    <property name="Position" value="SE"/>
+   </properties>
+  </object>
+  <object id="58" name="CombatStart" x="69.5" y="149" width="9" height="8">
+   <properties>
+    <property name="Map" value="mapCave_Wing_1_4"/>
+    <property name="Position" value="NE"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>
