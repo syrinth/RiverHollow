@@ -3101,26 +3101,43 @@ namespace RiverHollow.Tile_Engine
             return CollisionBox.Intersects(value);
         }
 
+        /// <summary>
+        /// USe to determine the exit point of the TravelObject based on the distance of the Actor to the
+        /// linked TravelObject they interacted with
+        /// </summary>
+        /// <param name="oldPointCenter">The center of the previous TravelPoint</param>
+        /// <param name="c">The moving Actor</param>
+        /// <returns></returns>
         public Vector2 FindLinkedPointPosition(Vector2 oldPointCenter, WorldActor c)
         {
+            //Find the difference between the position of the center of the actor's collisionBox
+            //and the TravelPoint that the actor interacted with.
             Point actorCollisionCenter = c.CollisionBox.Center;
             Vector2 vDiff = actorCollisionCenter.ToVector2() - oldPointCenter;
 
-            if (_eEntranceDir == DirectionEnum.Left || _eEntranceDir == DirectionEnum.Right)
+            //If we move Left/Right, ignore the X axis, Up/Down, ignore the Y axis then just set
+            //the difference in the relevant axis to the difference between the centers of those two boxes
+            switch (_eEntranceDir)
             {
-                vDiff.X *= -1;
-            }
-            else if (_eEntranceDir == DirectionEnum.Up || _eEntranceDir == DirectionEnum.Down)
-            {
-                vDiff.Y *= -1;
+                case DirectionEnum.Left:
+                    vDiff.X = -1 * (CollisionBox.Width / 2 + c.CollisionBox.Width/2);
+                    break;
+                case DirectionEnum.Right:
+                    vDiff.X = (CollisionBox.Width / 2 + c.CollisionBox.Width/2);
+                    break;
+                case DirectionEnum.Up:
+                    vDiff.Y = -1 * (CollisionBox.Height/2 + c.CollisionBox.Height/2);
+                    break;
+                case DirectionEnum.Down:
+                    vDiff.Y = (CollisionBox.Height / 2 + c.CollisionBox.Height/2);
+                    break;
             }
 
-            //Modify the reflected vector2 to correlate to the Actor's positio ninstead of the collisionbox center
+            //Add the diff to the center of the current TravelPoint
             Vector2 rv = new Vector2(Center.X + vDiff.X, Center.Y + vDiff.Y);
 
-            Vector2 pos = c.Position;
-            Vector2 collisionDiff = pos - actorCollisionCenter.ToVector2();
-            rv += collisionDiff;
+            //Get the difference between the Position of the character and the center of their collision box
+            rv += c.Position - actorCollisionCenter.ToVector2();
 
             return rv;
         }
