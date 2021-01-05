@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="54">
  <properties>
-  <property name="ActiveSpawn" type="int" value="2"/>
+  <property name="ActiveSpawn" type="int" value="3"/>
   <property name="Dungeon" value="Caves"/>
   <property name="Outside" type="bool" value="false"/>
  </properties>
@@ -90,22 +90,22 @@
  <objectgroup id="5" name="MapObject">
   <object id="46" name="SpawnPoint" x="258.316" y="99.5648" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="0|4|3"/>
    </properties>
   </object>
   <object id="47" name="SpawnPoint" x="354.66" y="148.37" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="0|4"/>
    </properties>
   </object>
   <object id="50" name="SpawnPoint" x="51.1404" y="84.488" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="0|4"/>
    </properties>
   </object>
   <object id="51" name="SpawnPoint" x="83.738" y="227.193" width="10" height="8.5">
    <properties>
-    <property name="SpawnType" value="Forest"/>
+    <property name="Spawn-All" value="0|4"/>
    </properties>
   </object>
  </objectgroup>

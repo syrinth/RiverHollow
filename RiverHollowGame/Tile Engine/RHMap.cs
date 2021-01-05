@@ -2411,20 +2411,39 @@ namespace RiverHollow.Tile_Engine
     public class MonsterSpawn : SpawnPoint
     {
         Monster _monster;
+        Dictionary<string, string[]> _diMonsterSpawns;
         int _iPrimedMonsterID;
         public bool IsPrimed => _iPrimedMonsterID != -1;
-        SpawnConditionEnum _eSpawnType = SpawnConditionEnum.Forest;
 
         public MonsterSpawn(RHMap map, TiledMapObject obj) : base(map, obj)
         {
             _iPrimedMonsterID = -1;
-            _eSpawnType = Util.ParseEnum<SpawnConditionEnum>(obj.Properties["SpawnType"]);
+            _diMonsterSpawns = new Dictionary<string, string[]>();
+            foreach(KeyValuePair<string, string> kvp in obj.Properties)
+            {
+                if (kvp.Key.StartsWith("Spawn-"))
+                {
+                    string[] split = kvp.Key.Split('-');
+                    _diMonsterSpawns[split[1]] = Util.FindParams(kvp.Value);
+                }
+            }
         }
 
         public override void Spawn()
         {
             if (_iPrimedMonsterID != -1) { _monster = DataManager.GetMonsterByIndex(_iPrimedMonsterID); }
-            else { _monster = DataManager.GetMonsterByIndex(4); }// RHRandom.Instance.Next(0, 3)); }
+            else
+            {
+                string key = "All";
+                if (!_diMonsterSpawns.ContainsKey("All"))
+                {
+                    if (_diMonsterSpawns.ContainsKey(GameCalendar.GetWeatherString())) { key = GameCalendar.GetWeatherString(); }
+                    else { key = GameCalendar.GetSeason(); }
+                }
+
+                int spawnArrIndex = (int)RHRandom.Instance.Next(0, _diMonsterSpawns[key].Length - 1);
+                _monster = DataManager.GetMonsterByIndex(int.Parse(_diMonsterSpawns[key][spawnArrIndex]));
+            }
 
             _monster.SpawnPoint = this;
             _map.AddMonsterByPosition(_monster, _vPosition);
