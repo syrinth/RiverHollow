@@ -3,15 +3,16 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Hello $^$, I'm $Character_11$, the mayor of our little town. I hope that soon you'll come to call this place home.</Value>
+      <Value>Hello $^$, settling in well I hope? How are you finding the town so far?
+If you ever need anything, you know where to find me.</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hey there, $^$,hope you're feeling well today!</Value>
+      <Value>Hello, $^$! What brings you into town today?</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Hey, $^$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.</Value>
+      <Value>My mother was mayor before me. I'm glad that the townsfolk placed their trust in me to lead them in her footsteps.</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>
@@ -19,15 +20,19 @@
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>Wow! Thanks!</Value>
+      <Value>Oh? Why, thank you for the kind thought.</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hey.[Talk:Talk|Gift:GiveGift|Never Mind:Cancel]</Value>
+      <Value>Yes? How can I help you?[Talk:Talk|Gift:GiveGift|Never Mind:Cancel]</Value>
     </Item>
     <Item>
-      <Key>Maintenance</Key>
-      <Value>What do you want to do?[Upgrade Buildings:UpgradeBuilding|Move Buildings:Move|Destroy Buildings:Destroy]</Value>
+      <Key>Raining|1</Key>
+      <Value>I hope the manor isn't leaking too much in all of this rain.</Value>
+    </Item>
+    <Item>
+      <Key>Collection</Key>
+      <Value>Oh! This is very thoughtful of you. How did you know I was looking for this? Thank you.</Value>
     </Item>
   </Asset>
 </XnaContent>
