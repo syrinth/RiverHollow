@@ -770,7 +770,7 @@ namespace RiverHollow.Items
             Item[,] _inventory;
             public Item[,] Inventory { get => _inventory; }
 
-            public Container(int id, Dictionary<string, string> stringData) : base(id, Vector2.Zero)
+            public Container(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
             {
                 LoadDictionaryData(stringData);
 

@@ -446,7 +446,7 @@ namespace RiverHollow.Game_Managers
                     case "Staircase":
                     //return new Staircase(id, pos, TileSize, TileSize);
                     case "Container":
-                        return new Container(id, diData);
+                        return new Container(id, diData, pos);
                     case "ClassChanger":
                         return new ClassChanger(id, diData, pos);
                     case "Plant":
