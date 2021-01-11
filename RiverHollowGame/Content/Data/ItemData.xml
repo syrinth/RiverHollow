@@ -383,11 +383,11 @@
     </Item>
     <Item>
       <Key>95</Key>
-      <Value>[Type:Tool][Subtype:Pick][Image:0-0][Sell:3000][Stam:1][Power:1]</Value>
+      <Value>[Type:Tool][Subtype:Pick][Image:0-0][Sell:3000][Stam:1][Power:1][AnimationPosition:0-0]</Value>
     </Item>
     <Item>
       <Key>96</Key>
-      <Value>[Type:Tool][Subtype:Axe][Image:0-16][Sell:3000][Stam:1][Power:1]</Value>
+      <Value>[Type:Tool][Subtype:Axe][Image:0-16][Sell:3000][Stam:1][Power:1][AnimationPosition:0-64]</Value>
     </Item>
     <Item>
       <Key>97</Key>

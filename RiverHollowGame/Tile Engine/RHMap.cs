@@ -1035,6 +1035,7 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = true;
 
+            Rectangle box = c.CollisionBox;
             //Checking for a MapChange takes priority overlooking for collisions.
             if (CheckForMapChange(c, testX) || CheckForMapChange(c, testY)) {
                 return false;

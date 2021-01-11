@@ -95,7 +95,7 @@ namespace RiverHollow.Game_Managers
         public static bool AutoDisband;
         public static bool HideMiniInventory = true;
 
-        public const float TOOL_ANIM_SPEED = 0.15f;
+        public const float TOOL_ANIM_SPEED = 0.08f;
 
         public static int HUDItemRow;
         public static int HUDItemCol;

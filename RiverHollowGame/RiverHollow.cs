@@ -18,7 +18,6 @@ namespace RiverHollow
     /// </summary>
     public class RiverHollow : Game
     {
-        const int TARGET_MS_PER_FRAME = 16;
         static bool _bLightingOn = false;
         static bool _bExit = false;
 
@@ -101,8 +100,6 @@ namespace RiverHollow
         {
             if (this.IsActive)
             {
-                double frameTime = gTime.ElapsedGameTime.Milliseconds;
-
                 if (_bExit)
                 {
                     Exit();
@@ -193,12 +190,6 @@ namespace RiverHollow
                 }
 
                 base.Update(gTime);
-
-                double sleepFor = TARGET_MS_PER_FRAME - frameTime;
-                if (sleepFor > 0)
-                {
-                    Thread.Sleep((int)sleepFor);
-                }
             }
         }
 

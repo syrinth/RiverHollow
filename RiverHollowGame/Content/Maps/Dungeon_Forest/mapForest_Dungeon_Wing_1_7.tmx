@@ -94,8 +94,8 @@
   </object>
   <object id="47" name="DungeonObject" x="272.01" y="176.01" width="32" height="32">
    <properties>
-    <property name="ObjectID" type="int" value="20"/>
     <property name="MatchTrigger" value="Trigger_2"/>
+    <property name="ObjectID" type="int" value="20"/>
     <property name="TriggerNumber" type="int" value="1"/>
    </properties>
   </object>

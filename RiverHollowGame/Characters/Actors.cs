@@ -217,7 +217,7 @@ namespace RiverHollow.Characters
 
         protected double _dCooldown = 0;
 
-        public Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, TileSize);
+        public virtual Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, TileSize);
         public virtual Rectangle HoverBox => new Rectangle((int)Position.X, (int)Position.Y - TileSize, Width, Height);
 
         protected bool _bActive = true;
@@ -578,6 +578,8 @@ namespace RiverHollow.Characters
         public static List<int> FriendRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000 };
         public int FriendshipPoints = 0;
 
+        protected bool _bHasTalked;
+
         public TalkingActor() : base()
         {
             _bCanTalk = true;
@@ -682,7 +684,7 @@ namespace RiverHollow.Characters
             string rv = string.Empty;
             if (liCommands.Count == 2)
             {
-                rv = GetDailyDialogue();
+                
             }
             else
             {
@@ -712,6 +714,7 @@ namespace RiverHollow.Characters
         /// <returns>The dialog string for the entry.</returns>
         public string GetDailyDialogue()
         {
+            _bHasTalked = true;
             List<string> keyPool = new List<string>();
             foreach (string s in _diDialogue.Keys)
             {
@@ -778,7 +781,7 @@ namespace RiverHollow.Characters
             bool rv = false;
 
             if (chosenAction.StartsWith("Talk")){
-                nextText = GetDailyDialogue();
+               //nextText = GetDailyDialogue();
             }
             else if (chosenAction.StartsWith("Quest"))
             {
@@ -1916,7 +1919,8 @@ namespace RiverHollow.Characters
             {
                 if (!CheckQuestLogs(ref rv))
                 {
-                    rv = GetSelectionText();
+                    if (!_bHasTalked) { rv = GetDailyDialogue(); }
+                    else { rv = GetSelectionText(); }
                 }
             }
             return rv;
@@ -3030,6 +3034,15 @@ namespace RiverHollow.Characters
             Legs?.Sprite.Draw(spriteBatch, useLayerDepth);
         }
 
+        private List<AnimationData> LoadPlayerAnimations(Dictionary<string, string> data)
+        {
+            List<AnimationData> rv;
+            rv = LoadWorldAndCombatAnimations(data);
+
+            AddToAnimationsList(ref rv, data, VerbEnum.UseTool);
+            return rv;
+        }
+
         /// <summary>
         /// Override for the ClassedCombatant SetClass methog. Calls the super method and then
         /// loads the appropriate sprites.
@@ -3041,13 +3054,13 @@ namespace RiverHollow.Characters
             base.SetClass(x);
 
             //Loads the Sprites for the players body for the appropriate class
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, BodyTypeStr), true);
+            LoadSpriteAnimations(ref _sprBody, LoadPlayerAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, BodyTypeStr), true);
 
             //Hair type has already been set either by default or by being allocated.
             SetHairType(HairIndex);
 
             //Loads the Sprites for the players body for the appropriate class
-            LoadSpriteAnimations(ref _sprEyes, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER), true);
+            LoadSpriteAnimations(ref _sprEyes, LoadPlayerAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER), true);
             //_sprEyes.SetDepthMod(EYE_DEPTH);
         }
 

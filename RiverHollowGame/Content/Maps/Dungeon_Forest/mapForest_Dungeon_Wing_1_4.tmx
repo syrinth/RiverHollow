@@ -149,9 +149,9 @@
   </object>
   <object id="47" name="DungeonObject" x="16" y="320" width="16" height="48">
    <properties>
-    <property name="ObjectID" type="int" value="22"/>
     <property name="KeyDoor" type="bool" value="true"/>
     <property name="MatchTrigger" value="KEY_USED"/>
+    <property name="ObjectID" type="int" value="22"/>
    </properties>
   </object>
  </objectgroup>

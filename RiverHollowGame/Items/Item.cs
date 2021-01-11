@@ -131,7 +131,7 @@ namespace RiverHollow.Items
             _bStacks = item.DoesItStack;
         }
 
-        public void Update(GameTime gTime)
+        public virtual void Update(GameTime gTime)
         {
             if (_movement != null)
             {
@@ -573,22 +573,42 @@ namespace RiverHollow.Items
             _iRowTexSize = TileSize;
 
             _sprite = new AnimatedSprite(@"Textures\Items\ToolAnimations");
-            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Down, (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, TileSize, TileSize * 2, 3, TOOL_ANIM_SPEED);
 
-            _sprite.PlayAnimation(VerbEnum.UseTool, DirectionEnum.Down);
+            Vector2 animationPosition = Vector2.Zero;
+            if (stringData.ContainsKey("AnimationPosition"))
+            {
+                string[] texIndices = stringData["AnimationPosition"].Split('-');
+                animationPosition = new Vector2(int.Parse(texIndices[0]), int.Parse(texIndices[1]));
+            }
+
+            int toolFrames = 5;
+            int toolWidth = TileSize * 3;
+            int toolHeight = TileSize * 4;
+            int xCrawl = 0;
+            int crawlIncrement = toolWidth * toolFrames;
+
+            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Down, (int)animationPosition.X, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED);
+            xCrawl += crawlIncrement;
+            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Right, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED);
+            xCrawl += crawlIncrement;
+            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Up, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED);
+            xCrawl += crawlIncrement;
+            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Left, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED);
+            xCrawl += crawlIncrement;
+
             _sprite.IsAnimating = true;
             _sprite.PlaysOnce = true;
         }
 
-        public void Update(GameTime gTime)
+        public override void Update(GameTime gTime)
         {
             _sprite.Update(gTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (OnTheMap) { base.Draw(spriteBatch); }
-            else { _sprite.Draw(spriteBatch, 99999); }
+            _sprite.SetDepthMod(1);
+            _sprite.Draw(spriteBatch);
         }
 
         public override void UseItem(string action)

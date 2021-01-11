@@ -13,6 +13,7 @@ using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers
 {
@@ -112,73 +113,72 @@ namespace RiverHollow.Game_Managers
 
             if (AllowMovement)
             {
-                if (ToolInUse == null)
+                KeyboardState ks = Keyboard.GetState();
+                if (InputManager.MovementKeyDown())
                 {
-                    KeyboardState ks = Keyboard.GetState();
-                    if (InputManager.MovementKeyDown())
-                    {
-                        World.AccumulateMovement(gTime);
-                    }
-                    else
-                    {
-                        World.ClearAccumulatedMovement();
-                        World.DetermineFacing(moveDir);
-                    }
-
-                    float movement = World.UseMovement();
-                    if (movement > 0)
-                    {
-                        if (ks.IsKeyDown(Keys.W)) { moveDir += new Vector2(0, -movement); }
-                        else if (ks.IsKeyDown(Keys.S)) { moveDir += new Vector2(0, movement); }
-
-                        if (ks.IsKeyDown(Keys.A)) { moveDir += new Vector2(-movement, 0); }
-                        else if (ks.IsKeyDown(Keys.D)) { moveDir += new Vector2(movement, 0); }
-
-                        World.DetermineFacing(moveDir);
-
-                        if (moveDir.Length() != 0)
-                        {
-                            Rectangle testRectX = new Rectangle((int)World.CollisionBox.X + (int)moveDir.X, (int)World.CollisionBox.Y, World.CollisionBox.Width, World.CollisionBox.Height);
-                            Rectangle testRectY = new Rectangle((int)World.CollisionBox.X, (int)World.CollisionBox.Y + (int)moveDir.Y, World.CollisionBox.Width, World.CollisionBox.Height);
-
-                            if (MapManager.CurrentMap.CheckForCollisions(World, testRectX, testRectY, ref moveDir))
-                            {
-                                //Might be technically correct but FEELS wrong
-                                //moveDir.Normalize();
-                                //moveDir *= World.Speed;
-                                World.MoveBy((int)moveDir.X, (int)moveDir.Y);
-                            }
-                        }
-                    }
+                    World.AccumulateMovement(gTime);
                 }
                 else
                 {
-                    ToolInUse.Update(gTime);
+                    World.ClearAccumulatedMovement();
+                    World.DetermineFacing(moveDir);
+                }
 
-                    bool finished = !World.BodySprite.CurrentAnimation.StartsWith("Tool");
+                float movement = World.UseMovement();
+                if (movement > 0)
+                {
+                    if (ks.IsKeyDown(Keys.W)) { moveDir += new Vector2(0, -movement); }
+                    else if (ks.IsKeyDown(Keys.S)) { moveDir += new Vector2(0, movement); }
 
-                    RHTile target = MapManager.CurrentMap.TargetTile;
-                    //UseTool
-                    if (target != null && finished)
+                    if (ks.IsKeyDown(Keys.A)) { moveDir += new Vector2(-movement, 0); }
+                    else if (ks.IsKeyDown(Keys.D)) { moveDir += new Vector2(movement, 0); }
+
+                    World.DetermineFacing(moveDir);
+
+                    if (moveDir.Length() != 0)
                     {
-                        if (PlayerManager.ToolIsAxe() || PlayerManager.ToolIsPick() || PlayerManager.ToolIsLantern())
-                        {
-                            target.DamageObject(PlayerManager.ToolInUse);
-                        }
-                        else if (PlayerManager.ToolIsShovel() && target.CanDig())
-                        {
-                            target.Dig();
-                            MapManager.CurrentMap.TilledTiles.Add(target);
-                        }
-                        else if (PlayerManager.ToolIsWateringCan() && target.Flooring != null && target.Flooring.CompareType(ObjectTypeEnum.Earth))
-                        {
-                            target.Water(true);
-                        }
+                        Rectangle testRectX = new Rectangle((int)World.CollisionBox.X + (int)moveDir.X, (int)World.CollisionBox.Y, World.CollisionBox.Width, World.CollisionBox.Height);
+                        Rectangle testRectY = new Rectangle((int)World.CollisionBox.X, (int)World.CollisionBox.Y + (int)moveDir.Y, World.CollisionBox.Width, World.CollisionBox.Height);
 
-                        target = null;
-                        PlayerManager.UnsetTool();
-                        World.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
+                        if (MapManager.CurrentMap.CheckForCollisions(World, testRectX, testRectY, ref moveDir))
+                        {
+                            //Might be technically correct but FEELS wrong
+                            //moveDir.Normalize();
+                            //moveDir *= World.Speed;
+                            World.MoveBy((int)moveDir.X, (int)moveDir.Y);
+                        }
                     }
+                }
+            }
+            else if (ToolInUse != null)
+            {
+                ToolInUse.Update(gTime);
+
+                bool isUseTool = World.IsCurrentAnimationVerb(VerbEnum.UseTool);
+                int playCount = World.BodySprite.GetPlayCount();
+                bool finished = isUseTool && playCount >= 1;
+
+                RHTile target = MapManager.CurrentMap.TargetTile;
+
+                if (target != null && finished)
+                {
+                    if (PlayerManager.ToolIsAxe() || PlayerManager.ToolIsPick() || PlayerManager.ToolIsLantern())
+                    {
+                        target.DamageObject(PlayerManager.ToolInUse);
+                    }
+                    else if (PlayerManager.ToolIsShovel() && target.CanDig())
+                    {
+                        target.Dig();
+                        MapManager.CurrentMap.TilledTiles.Add(target);
+                    }
+                    else if (PlayerManager.ToolIsWateringCan() && target.Flooring != null && target.Flooring.CompareType(ObjectTypeEnum.Earth))
+                    {
+                        target.Water(true);
+                    }
+
+                    target = null;
+                    PlayerManager.UnsetTool();
+                    World.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
                 }
             }
             World.Update(gTime);
@@ -354,20 +354,22 @@ namespace RiverHollow.Game_Managers
         public static bool SetTool(Tool t, Point mouse)
         {
             bool rv = false;
-            PlayerManager.World.PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
 
             if (t != null && ToolInUse == null)
             {
                 rv = true;
                 ToolInUse = t;
-                ToolInUse.Position = World.BodyPosition;
+                ToolInUse.Position = new Vector2(World.Position.X - TileSize, World.Position.Y - (TileSize * 2));
                 if (ToolInUse != null && !Busy)
                 {
                     if (DecreaseStamina(ToolInUse.StaminaCost))
                     {
+                        PlayerManager.World.DetermineFacing(MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition()));
                         Busy = true;
+                        AllowMovement = false;
                         ToolInUse.ToolAnimation.IsAnimating = true;
-                        PlayerManager.World.PlayAnimation(VerbEnum.UseTool, DirectionEnum.Down);
+                        PlayerManager.World.PlayAnimationVerb(VerbEnum.UseTool);
+                        ToolInUse.ToolAnimation.PlayAnimation(VerbEnum.UseTool, World.Facing);
                     }
                     else
                     {
@@ -382,6 +384,7 @@ namespace RiverHollow.Game_Managers
         {
             PlayerManager.ToolInUse = null;
             Busy = false;
+            AllowMovement = true;
         }
 
         public static void AddBuilding(Building b)

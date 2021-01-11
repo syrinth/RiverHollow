@@ -3,15 +3,15 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>You must be new in town. I'm $Character_13$, the Carpenter. I understand you're moving into the manor right? When you need furniture, come see me, OK?</Value>
+      <Value>Hey. $^$ right? $Character_11$ told us you were moving in soon. I'm $Character_13$ $Character_14$'s husband. I make and seel furniture if you ever have need any,</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hey there, $^$,hope you're feeling well today!</Value>
+      <Value>I hear you're an artisan right? That sounds so much more interesting than what I do. Do you enjoy it?</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Hey, $^$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.</Value>
+      <Value>Hey, $^$. You ever have one of those days where you just feel like you can't do anything right? Yeah. Hope your day is going better at least.</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>
@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>Wow! Thanks!</Value>
+      <Value>What? I haven't done anything to deserve this. Thank you.</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
@@ -28,6 +28,20 @@
     <Item>
       <Key>Maintenance</Key>
       <Value>What do you want to do?[Upgrade Buildings:UpgradeBuilding|Move Buildings:Move|Destroy Buildings:Destroy]</Value>
+    </Item>
+    <Item>
+      <Key>Collection</Key>
+      <Value>This is!? No. how did you get this? I don't... I can't...
+Really?
+Thank you so much!</Value>
+    </Item>
+    <Item>
+      <Key>Raining|1</Key>
+      <Value>My mother used to tell me stories of monsters that came out when it was raining. I know she just made them up but, sometimes, I can't help but wonder, you know?</Value>
+    </Item>
+    <Item>
+      <Key>Snowing|1</Key>
+      <Value>Brr, I hope you've got some warm clothing on today. I always make $Character_14$ a cup of tea on days like this.</Value>
     </Item>
   </Asset>
 </XnaContent>
