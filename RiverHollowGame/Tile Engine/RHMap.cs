@@ -2971,7 +2971,7 @@ namespace RiverHollow.Tile_Engine
             {
                 foreach (TiledMapTileLayer l in _diProps.Keys)
                 {
-                    if (l.IsVisible && ContainsProperty(l, "Impassable", out string val) && val.Equals("true"))
+                    if (l.IsVisible && !l.Name.Contains("Upper") && ContainsProperty(l, "Impassable", out string val) && val.Equals("true"))
                     {
                         rv = false;
                     }

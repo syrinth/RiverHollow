@@ -2644,3 +2644,8 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Spirit_3.png
 
+#begin Maps/Dungeon_Caves/mapCave_Wing_1_4a.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave_Wing_1_4a.tmx
+

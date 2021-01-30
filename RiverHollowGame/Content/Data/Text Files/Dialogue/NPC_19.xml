@@ -7,11 +7,11 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hey there, $^$,hope you're feeling well today!</Value>
+      <Value>Hello! You know, my family has been living in this town for over a century. It may not look like much, but this town runs in my blood.</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Hey, $^$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.</Value>
+      <Value>Lovely day today, isn't it? It's a wonder what some fresh air will do for you!</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>
@@ -19,15 +19,19 @@
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>Wow! Thanks!</Value>
+      <Value>Thank you!</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hey.[Talk:Talk|Gift:GiveGift|Never Mind:Cancel]</Value>
+      <Value>Well now, what can I do for you?[Talk:Talk|Gift:GiveGift|Never Mind:Cancel]</Value>
     </Item>
     <Item>
-      <Key>Maintenance</Key>
-      <Value>What do you want to do?[Upgrade Buildings:UpgradeBuilding|Move Buildings:Move|Destroy Buildings:Destroy]</Value>
+      <Key>Raining|1</Key>
+      <Value>What are you doing running around today? On a day like this, you should be inside where it's warm and dry.</Value>
+    </Item>
+    <Item>
+      <Key>Raining|2</Key>
+      <Value>My father used to tell me stories about nature spirits when I was a lad. Apparently some of them like to play in the rain. I fancy I can sometimes hear one, but I've never seen one with my own eyes.</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -3,25 +3,39 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Welcome to the Adventurer's Guild. I'm $Character_16$, guildmaster here. It's good to see a new face in town. You can hire adventurers here, as long as you have housing for them as well as send them on missions.</Value>
+      <Value>Welcome to the Adventurer's Guild. I'm $Character_16$, the guildmaster here. It's good to see a new face in town.
+If you decide to put some of that land to use constructing housing, I can get you in contact with other adventurers.</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>Really? For me? You shouldn't have! Well, I'll keep this in mind next time we go out and exploring.</Value>
+      <Value>Gratitude.</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hello lad! [Talk:Talk|Gift:GiveGift|Never Mind:Cancel]</Value>
+      <Value>[Talk:Talk|Gift:GiveGift|Never Mind:Cancel]</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>
-      <Value>Greetings! What can I do for you today, $^$? [Talk:Talk|Hire Adventurers:BuyWorkers|Sell Contract:SellWorkers|See Missions:Missions|Never Mind:Cancel]</Value>
+      <Value>Welcome! What can the Adventurer's Guild do for you today?[Talk:Talk|Hire Adventurers:BuyWorkers|Sell Contract:SellWorkers|See Missions:Missions|Never Mind:Cancel]</Value>
     </Item>
     <Item>
       <Key>Quest2End</Key>
       <Value>So, you're an adventurer too are you? I wouldn't wander too far in these lands without some extra help, and luckily for you, I can supply it.
 If you're willing to house and provision them, you can hire adventurers to join you.
 The first I'd recommend is a $Class_5$ and $Class_6$. You should build yourself a $Building_2$ to house them.</Value>
+    </Item>
+    <Item>
+      <Key>Collection</Key>
+      <Value>Well, this is a surprise! I'm touched. Thank you,</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>Back when I was younger, adventurers were far more common. They would use the guilds in towns to share news and information. It was amazing how fast word could spread that way.
+Nowadays though, it's rare to see a new face all year.</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>I've trained in many forms of combat over the years, but bladework has always been my favorite.</Value>
     </Item>
   </Asset>
 </XnaContent>
