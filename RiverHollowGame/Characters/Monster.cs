@@ -42,8 +42,6 @@ namespace RiverHollow.Characters
         #endregion
 
         public MonsterSpawn SpawnPoint;
-        int _iMaxMove = 5;
-        public int MaxMove => _iMaxMove;
         int _id;
         public int ID => _id;
         int _iRating;
@@ -104,11 +102,9 @@ namespace RiverHollow.Characters
             _iResistance = 2 * _iRating + 10;
             _iSpeed = 10;
 
-            if (data.ContainsKey("Width")) { _iBodyWidth = int.Parse(data["Width"]); }
-            else { _iBodyWidth = TileSize; }
-
-            if (data.ContainsKey("Height")) { _iBodyHeight = int.Parse(data["Height"]); }
-            else { _iBodyHeight = TileSize * 2; }
+            Util.AssignValue(ref _iMoveSpeed, "MoveSpeed", data);
+            Util.AssignValue(ref _iBodyWidth, "Width", data);
+            Util.AssignValue(ref _iBodyHeight, "Height", data);
 
             if (data.ContainsKey("Size")) {
                 _iSize = int.Parse(data["Size"]);
@@ -219,11 +215,6 @@ namespace RiverHollow.Characters
             {
                 CombatManager.MonsterKOAnimFinished(this);
             }
-
-            // Only comment this out for now in case we implement stealth or something so you can sneak past enemies without aggroing them
-            //if (!CombatManager.InCombat) {
-            //    UpdateMovement(gTime);
-            //}
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -453,7 +444,7 @@ namespace RiverHollow.Characters
 
         public void TakeTurn()
         {
-            TravelManager.SetParams(_iSize, this, _iMaxMove);
+            TravelManager.SetParams(_iSize, this, _iMoveSpeed);
 
             if (_liTurnSteps == null) {
                 _thrPathing = new Thread(PlanTurn);
@@ -464,7 +455,7 @@ namespace RiverHollow.Characters
         private void PlanTurn()
         {
             //Acquire the TravelMap for the Monster
-            _travelMap = TravelManager.FindRangeOfAction(this, _iMaxMove, true);
+            _travelMap = TravelManager.FindRangeOfAction(this, _iMoveSpeed, true);
 
             //First, determine which action we would prefer to use
             foreach (CombatAction testAction in this.GetCurrentSpecials())

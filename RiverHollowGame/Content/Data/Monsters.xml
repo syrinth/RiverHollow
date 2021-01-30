@@ -15,11 +15,11 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Texture:BigBlob][Condition:Forest-Summer][Lvl:1][Width:32][Height:32][Size:2][Ability:38][Loot:26][Walk:0-0-3-.2-T][Action1:0-64-2-.15-F][Hurt:0-128-3-.15-F][Critical:0-192-2-.3-F][KO:640-64-2-.15-F]</Value>
+      <Value>[Texture:BigBlob][Condition:Forest-Summer][Lvl:1][Width:32][Height:32][Size:2][Ability:38][Loot:26][Walk:0-0-3-.2-T][Action1:0-64-2-.15-F][Hurt:0-128-3-.15-F][Critical:0-192-2-.3-F][KO:640-64-2-.15-F][MoveSpeed:2]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Texture:Batty][Lvl:1][Ability:42][Walk:0-0-4-.11-F][Action1:0-48-4-.11-F][Hurt:0-96-3-.11-F][Critical:0-144-4-.11-F][KO:576-96-3-.15-F][Loot:56]</Value>
+      <Value>[Texture:Batty][Lvl:1][Ability:42][Walk:0-0-4-.11-F][Action1:0-48-4-.11-F][Hurt:0-96-3-.11-F][Critical:0-144-4-.11-F][KO:576-96-3-.15-F][Loot:56][MoveSpeed:7]</Value>
     </Item>
     <Item>
       <Key>5</Key>

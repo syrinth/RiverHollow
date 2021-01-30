@@ -20,6 +20,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class CombatManager
     {
+        private const int ENGAGEMENT_RANGE = 15;
         private const int MOVE_CHARGE = 40;
         private const int ATTACK_CHARGE = 60;
         private const double EXP_MULTIPLIER_BONUS = 0.3;
@@ -353,6 +354,43 @@ namespace RiverHollow.Game_Managers
                 _scrCombat.OpenMainSelection();
             }
         }
+
+        /// <summary>
+        /// Determine if the given character is within engagement range of at least one PC
+        /// </summary>
+        private static bool CanEngageWithAPlayer(CombatActor a)
+        {
+            bool rv = false;
+
+            foreach(CombatActor c in PlayerManager.GetParty())
+            {
+                if(Util.GetRHTileDelta(c.BaseTile, a.BaseTile) <= ENGAGEMENT_RANGE) {
+                    rv = true;
+                    break;
+                }
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Determine if the given character is within engagement range of at least one monster
+        /// </summary>
+        private static bool CanEngageWithAMonster(CombatActor a)
+        {
+            bool rv = false;
+
+            foreach (Monster m in Monsters)
+            {
+                if (Util.GetRHTileDelta(m.BaseTile, a.BaseTile) <= ENGAGEMENT_RANGE)
+                {
+                    rv = true;
+                    break;
+                }
+            }
+
+            return rv;
+        }
         #endregion
 
         internal static bool CanCancel()
@@ -593,8 +631,16 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static void FindAndHighlightLegalTiles()
         {
-            bool isMoving = CurrentPhase == CmbtPhaseEnum.ChooseMoveTarget;
-            int distance = (isMoving ? 5 : SelectedAction.Range);
+            bool isMoving = CombatPhaseCheck(CmbtPhaseEnum.ChooseMoveTarget);
+            int distance = 0;
+
+            if (!isMoving) { distance = SelectedAction.Range; }
+            else
+            {
+                distance = ActiveCharacter.MovementSpeed;
+                if (!CanEngageWithAMonster(ActiveCharacter)) { distance *= 3; }
+            }
+
             TravelManager.SetParams(ActiveCharacter.Size, ActiveCharacter);
             LegalTiles.Add(ActiveCharacter.BaseTile);
             foreach (KeyValuePair<RHTile, TravelData> kvp in TravelManager.FindRangeOfAction(ActiveCharacter, distance, isMoving))
@@ -851,8 +897,13 @@ namespace RiverHollow.Game_Managers
                 //If Actor is not knocked out, increment the charge, capping to 100
                 if (!c.KnockedOut() || c.CurrentHP > 0)
                 {
-                    if (dummy) { HandleChargeTick(ref c.DummyCharge, ref toQueue, c); }
-                    else { HandleChargeTick(ref c.CurrentCharge, ref toQueue, c); }
+                    //Do not charge monsters that are not in engagement range of a player
+                    bool actorIsMonster = c.IsActorType(ActorEnum.Monster);
+                    if (!actorIsMonster || (actorIsMonster && CanEngageWithAPlayer(c)))
+                    {
+                        if (dummy) { HandleChargeTick(ref c.DummyCharge, ref toQueue, c); }
+                        else { HandleChargeTick(ref c.CurrentCharge, ref toQueue, c); }
+                    }
                 }
             }
 

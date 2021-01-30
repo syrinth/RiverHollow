@@ -71,9 +71,9 @@ namespace RiverHollow.Characters
         protected int _iSpriteWidth;
         protected int _iSpriteHeight;
 
-        protected int _iBodyWidth;
+        protected int _iBodyWidth = TileSize;
         public int Width => _iBodyWidth;
-        protected int _iBodyHeight;
+        protected int _iBodyHeight = TileSize * 2;
         public int Height => _iBodyHeight; 
         public int SpriteWidth => _sprBody.Width;
         public int SpriteHeight => _sprBody.Height;
@@ -868,6 +868,9 @@ namespace RiverHollow.Characters
         public PriorityQueue<RHTile> legalTiles;
 
         #region Stats
+        protected int _iMoveSpeed = 5;
+        public int MovementSpeed => _iMoveSpeed;
+
         public virtual int Attack => 9;
 
         protected int _iStrength;
