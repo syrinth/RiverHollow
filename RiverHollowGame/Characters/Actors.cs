@@ -423,7 +423,7 @@ namespace RiverHollow.Characters
             Rectangle testRectY = Util.FloatRectangle(Position.X, Position.Y + direction.Y, CollisionBox.Width, CollisionBox.Height);
 
             //Check for collisions against the map and, if none are detected, move. Do not move if the direction Vector2 is Zero
-            if ((CombatManager.InCombat && CurrentMap == MapManager.CurrentMap) || CurrentMap.CheckForCollisions(this, testRectX, testRectY, ref direction, ignoreCollisions) && direction != Vector2.Zero)
+            if (CurrentMap.CheckForCollisions(this, testRectX, testRectY, ref direction, ignoreCollisions) && direction != Vector2.Zero)
             {
                 DetermineFacing(direction);
                 Position += new Vector2(direction.X, direction.Y);
@@ -559,6 +559,14 @@ namespace RiverHollow.Characters
         public void SetPath(List<RHTile> list)
         {
             _liTilePath = list;
+        }
+
+        /// <summary>
+        /// Wipes out the path the CombatActor is currently on.
+        /// </summary>
+        public void ClearPath()
+        {
+            _liTilePath.Clear();
         }
     }
 
@@ -2721,6 +2729,8 @@ namespace RiverHollow.Characters
             _iDailyItemID = int.Parse(data["ItemID"]);
             _iDailyFoodReq = int.Parse(data["Food"]);
 
+            _iSpriteWidth = TileSize * 3;
+            _iSpriteHeight = TileSize * 3;
             LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), _sAdventurerFolder + "Adventurer_" + _iID, true);
         }
 

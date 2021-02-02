@@ -253,7 +253,6 @@ namespace RiverHollow.Game_Managers
                 case CmbtPhaseEnum.Victory:
                     if (Monsters?.Count == 0 && !_scrCombat.AreThereFloatingText())
                     {
-                        InCombat = false;
                         EndCombatVictory();
                     }
                     break;
@@ -270,6 +269,10 @@ namespace RiverHollow.Game_Managers
         /// <param name="newPhase"></param>
         public static void ChangePhase(CmbtPhaseEnum newPhase)
         {
+            if(newPhase == CmbtPhaseEnum.ChooseActionTarget || newPhase == CmbtPhaseEnum.ChooseMoveTarget)
+            {
+                _scrCombat.HideMainSelection();
+            }
             if (newPhase == CmbtPhaseEnum.PerformAction || newPhase == CmbtPhaseEnum.Moving)
             {
                 if (ActiveCharacter != null && ActiveCharacter.IsActorType(ActorEnum.Adventurer) && GameManager.IsPaused())
@@ -439,6 +442,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static void EndCombatVictory()
         {
+            InCombat = false;
             PlayerManager.AllowMovement = true;
             foreach (Item it in _liDroppedItems) { it.AutoPickup = true; }
 
@@ -464,8 +468,11 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static void EndCombatEscape()
         {
+            InCombat = false;
+            MapManager.CurrentMap.CleanupSummons();
             Camera.SetObserver(PlayerManager.World);
             PlayerManager.AllowMovement = true;
+            PlayerManager.World.ClearPath();
             GoToHUDScreen();
         }
         #endregion

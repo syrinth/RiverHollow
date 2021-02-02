@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;
@@ -39,6 +40,12 @@ namespace RiverHollow
 
                 if (ks.IsKeyDown(Keys.A)) { target += new Vector2(-speed, 0); }
                 else if (ks.IsKeyDown(Keys.D)) { target += new Vector2(speed, 0); }
+
+                if(GUICursor.Position.Y == 0) { target += new Vector2(0, -speed); }
+                else if (GUICursor.Position.Y == RiverHollow.ScreenHeight - 1) { target += new Vector2(0, speed); }
+
+                if (GUICursor.Position.X <= 0) { target += new Vector2(-speed, 0); }
+                else if (GUICursor.Position.X == RiverHollow.ScreenWidth - 1) { target += new Vector2(speed, 0); }
             }
 
             if (target.X <= (RiverHollow.ScreenWidth / 2)) { target.X = (RiverHollow.ScreenWidth / 2); }
@@ -79,9 +86,10 @@ namespace RiverHollow
             _bTrackToTarget = swoopToTarget;
         }
 
-        public static void UnsetObserver()
+        public static void UnsetObserver(Vector2 pos)
         {
-            _vObserver = new Vector2(MapManager.CurrentMap.GetMapWidth() / 2, MapManager.CurrentMap.GetMapHeight() / 2);
+            if (pos != Vector2.Zero) { _vObserver = pos; }
+            else { _vObserver = new Vector2(MapManager.CurrentMap.GetMapWidth() / 2, MapManager.CurrentMap.GetMapHeight() / 2); }
         }
 
         public static void ResetObserver()

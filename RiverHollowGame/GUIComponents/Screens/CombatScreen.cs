@@ -12,7 +12,6 @@ using RiverHollow.Tile_Engine;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 
-using static RiverHollow.Characters.Actor;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 
@@ -21,6 +20,8 @@ namespace RiverHollow.GUIComponents.Screens
 {
     public class CombatScreen : GUIScreen
     {
+        GUIButton _btnMoveCamera;
+        GUIButton _btnCancelScry;
         ActionSelectObject _gActionSelect;
         TurnOrderDisplay _gTurnOrder;
         GUIActorInfoPanel _gActorInfoPanel;
@@ -38,6 +39,16 @@ namespace RiverHollow.GUIComponents.Screens
             _gTurnOrder = new TurnOrderDisplay();
             _gTurnOrder.AnchorToScreen(SideEnum.Top);
             AddControl(_gTurnOrder);
+
+            _btnMoveCamera = new GUIButton(new Rectangle(80, 80, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, ScryCombat);
+            _btnMoveCamera.AnchorToScreen(SideEnum.BottomRight);
+            _btnMoveCamera.Show(false);
+            AddControl(_btnMoveCamera);
+
+            _btnCancelScry = new GUIButton(new Rectangle(80, 48, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, EndCombatScry);
+            _btnCancelScry.AnchorToScreen(SideEnum.BottomRight);
+            _btnCancelScry.Show(false);
+            AddControl(_btnCancelScry);
         }
 
         public override void Update(GameTime gTime)
@@ -74,22 +85,30 @@ namespace RiverHollow.GUIComponents.Screens
         {
             bool rv = false;
 
-            _guiTextWindow?.ProcessLeftButtonClick(mouse);
+            if (_guiTextWindow != null) { rv = _guiTextWindow.ProcessLeftButtonClick(mouse); }
 
-            if (CombatManager.AreWeSelectingAnAction())
+            if (_btnMoveCamera.Show()) { rv = _btnMoveCamera.ProcessLeftButtonClick(mouse); }
+            else if (_btnCancelScry.Show()) { rv = _btnCancelScry.ProcessLeftButtonClick(mouse); }
+
+            if (!rv)
             {
-                if (_gActionSelect != null)
+                if (CombatManager.AreWeSelectingAnAction())
                 {
-                    rv = _gActionSelect.ProcessLeftButtonClick(mouse);
+                    if (_gActionSelect != null)
+                    {
+                        rv = _gActionSelect.ProcessLeftButtonClick(mouse);
+                    }
                 }
-            }
-            else if (CombatManager.CombatPhaseCheck(CombatManager.CmbtPhaseEnum.ChooseMoveTarget))
-            {
-                CombatManager.SetMoveTarget();
-            }
-            else if (CombatManager.CombatPhaseCheck(CombatManager.CmbtPhaseEnum.ChooseActionTarget))
-            {
-                CombatManager.SelectedAction.UseSkillOnTarget();
+                else if (CombatManager.CombatPhaseCheck(CombatManager.CmbtPhaseEnum.ChooseMoveTarget))
+                {
+                    CombatManager.SetMoveTarget();
+                    rv = true;
+                }
+                else if (CombatManager.CombatPhaseCheck(CombatManager.CmbtPhaseEnum.ChooseActionTarget))
+                {
+                    CombatManager.SelectedAction.UseSkillOnTarget();
+                    rv = true;
+                }
             }
 
             //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
@@ -122,6 +141,8 @@ namespace RiverHollow.GUIComponents.Screens
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = true;
+            if (Scrying()) { EndCombatScry(); }
+
             if (CombatManager.CanCancel())
             {
                 CancelAction();
@@ -185,6 +206,8 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 _gActionSelect = new ActionSelectObject();
                 AddControl(_gActionSelect);
+
+                AddMoveButton();
             }
         }
         public void CloseMainSelection()
@@ -193,9 +216,43 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 RemoveControl(_gActionSelect);
                 _gActionSelect = null;
+
+                AddCancelMoveButton();
+                _btnCancelScry.Show(false);
             }
         }
+
+        public void HideMainSelection()
+        {
+            _gActionSelect?.Show(false);
+        }
         #endregion
+
+        private void ScryCombat()
+        {
+            CloseMainSelection();
+            GameManager.Scry();
+            Camera.UnsetObserver(CombatManager.ActiveCharacter.CharCenter.ToVector2() * Scale);
+            _btnCancelScry.Show(true);
+        }
+
+        private void EndCombatScry()
+        {
+            OpenMainSelection();
+            GameManager.Scry(false);          
+        }
+
+        private void AddMoveButton()
+        {
+            _btnMoveCamera.Show(true);
+            _btnCancelScry.Show(false);
+        }
+
+        private void AddCancelMoveButton()
+        {
+            _btnMoveCamera.Show(false);
+            _btnCancelScry.Show(true);
+        }
 
         #region FloatingText Handling
         /// <summary>
@@ -495,18 +552,21 @@ namespace RiverHollow.GUIComponents.Screens
 
             public override void Draw(SpriteBatch spriteBatch)
             {
-                foreach (ActionButton ab in _liActionButtons)
+                if (Show())
                 {
-                    if (ab != _gSelectedAction && ab != _gSelectedMenu)
+                    foreach (ActionButton ab in _liActionButtons)
                     {
-                        ab.Draw(spriteBatch);
+                        if (ab != _gSelectedAction && ab != _gSelectedMenu)
+                        {
+                            ab.Draw(spriteBatch);
+                        }
                     }
+
+                    if (_gSelectedMenu != null) { _gSelectedMenu.Draw(spriteBatch); }
+                    if (_gSelectedAction != null) { _gSelectedAction.Draw(spriteBatch); }
+
+                    if (_actionMenu != null) { _actionMenu.Draw(spriteBatch); }
                 }
-
-                if (_gSelectedMenu != null) { _gSelectedMenu.Draw(spriteBatch); }
-                if (_gSelectedAction != null) { _gSelectedAction.Draw(spriteBatch); }
-
-                if (_actionMenu != null) { _actionMenu.Draw(spriteBatch); }
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)

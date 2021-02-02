@@ -276,7 +276,7 @@ namespace RiverHollow.Game_Managers
             List<RHTile> rvList = FindPathToLocation(ref start, target, mapName);
             return rvList;
         }
-        public static List<RHTile> FindPathToLocation(ref Vector2 start, Vector2 target, string mapName = null, bool addDoor = false)
+        public static List<RHTile> FindPathToLocation(ref Vector2 start, Vector2 target, string mapName = null, bool addDoor = false, bool meander = false)
         {
             WriteToTravelLog(System.Environment.NewLine + "+++ " + mapName + " -- [" + (int)start.X/16 + ", " + (int)start.Y / 16 + "] == > [ " + (int)target.X / 16 + ", " + (int)target.Y / 16 + " ] +++");
             
@@ -334,12 +334,20 @@ namespace RiverHollow.Game_Managers
                     if (TestTileForSize(next, nextTileIsLast))
                     {
                         double newCost = travelMap[current].CostSoFar + GetMovementCost(next);
-
+                        if (meander)
+                        {
+                            //If meander is turned on, implement a small distortion in the priority to avoid a perfect shortest path
+                            if (RHRandom.Instance.Next(1, 100) > 60)
+                            {
+                                newCost += RHRandom.Instance.Next(1, 4000);
+                            }
+                        }
                         if (!travelMap.ContainsKey(next) || newCost < travelMap[next].CostSoFar)
                         {
                             if (IsTileInLine(current, travelMap[current].CameFrom, next)) { newCost--; }
 
                             double priority = newCost + HeuristicToTile(next, goalNode);
+                            
                             frontier.Enqueue(next, priority);
                             travelMap.Store(next, current, newCost);
                         }

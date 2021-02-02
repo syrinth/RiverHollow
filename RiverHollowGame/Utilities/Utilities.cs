@@ -334,6 +334,53 @@ namespace RiverHollow.Utilities
             }
         }
         #endregion
+
+        /// <summary>
+        /// Takes in a parameter and returns the ID and the attached rarity.
+        /// Will always be 'ID-Rarity'
+        /// </summary>
+        /// <param name="value">rThe param to check</param>
+        /// <param name="ID">Ref to the ID</param>
+        /// <param name="rarity">Ref to the Rarity</param>
+        public static void GetRarity(string value, ref int ID, ref RarityEnum rarity)
+        {
+            //Monster info is written like ID-Rarity|ID-Rarity etc
+            string[] info = value.Split('-');
+            ID = int.Parse(info[0]);
+            rarity = ParseEnum<RarityEnum>(info[1]);
+        }
+
+        /// <summary>
+        /// Makes a roll against the rarity table and returns the determined rarity enum
+        /// </summary>
+        /// <param name="dictionary">The dictionary to check against the rarities</param>
+        /// <returns>The highest valid rarity</returns>
+        public static RarityEnum RollAgainstRarity(Dictionary<RarityEnum, List<int>> dictionary)
+        {
+            RarityEnum rv = RarityEnum.C;
+
+            int rarityIndex = (int)RHRandom.Instance.Next(1, 100);
+
+            if (rarityIndex > 98 && dictionary.ContainsKey(RarityEnum.M)) { rv = RarityEnum.M; }
+            else if (rarityIndex > 90 && dictionary.ContainsKey(RarityEnum.R)) { rv = RarityEnum.R; }
+            else if (rarityIndex > 70 && dictionary.ContainsKey(RarityEnum.U)) { rv = RarityEnum.U; }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Adds an object to a list as long as the object is not already present in it
+        /// </summary>
+        /// <typeparam name="T">Generic type</typeparam>
+        /// <param name="list">Reference to the list to add to</param>
+        /// <param name="obj">The object to add.</param>
+        public static void AddUniquelyToList<T>(ref List<T> list, T obj)
+        {
+            if (!list.Contains(obj))
+            {
+                list.Add(obj);
+            }
+        }
     }
 
     public class RHRandom : Random

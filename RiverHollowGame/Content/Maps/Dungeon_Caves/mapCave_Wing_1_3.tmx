@@ -4,6 +4,7 @@
   <property name="ActiveSpawn" type="int" value="3"/>
   <property name="Dungeon" value="Caves"/>
   <property name="Outside" type="bool" value="false"/>
+  <property name="Resources" value="48-C"/>
   <property name="ResourcesMinMax" value="30-60"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetDungeon.tsx"/>
@@ -101,11 +102,6 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="46" name="ResourceSpawn" x="177.667" y="146" width="215" height="58">
-   <properties>
-    <property name="Resources" value="48"/>
-   </properties>
-  </object>
   <object id="51" name="SpawnPoint" x="371" y="118" width="11" height="9">
    <properties>
     <property name="Spawn-All" value="0-C"/>
@@ -129,11 +125,6 @@
   <object id="55" name="SpawnPoint" x="97.5" y="66.5" width="11" height="9">
    <properties>
     <property name="Spawn-All" value="0-C"/>
-   </properties>
-  </object>
-  <object id="59" name="ResourceSpawn" x="85.75" y="144" width="85" height="168">
-   <properties>
-    <property name="Resources" value="48"/>
    </properties>
   </object>
  </objectgroup>

@@ -4,6 +4,8 @@
   <property name="ActiveSpawn" type="int" value="3"/>
   <property name="Dungeon" value="Caves"/>
   <property name="Outside" type="bool" value="false"/>
+  <property name="Resources" value="6-C|8-U|11-R|15-M"/>
+  <property name="ResourcesMinMax" value="50-150"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetDungeon.tsx"/>
  <tileset firstgid="161" source="../Tilesets/tsWalls_Floors.tsx"/>
@@ -107,7 +109,7 @@
     <property name="Map" value="mapCave_Entrance"/>
    </properties>
   </object>
-  <object id="28" name="Entrance" x="16" y="336" width="4" height="32">
+  <object id="28" name="Entrance" x="0" y="336" width="4" height="32">
    <properties>
     <property name="EntranceDir" value="Right"/>
     <property name="Map" value="mapCave_Wing_1_2"/>

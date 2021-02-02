@@ -104,6 +104,10 @@ namespace RiverHollow.Game_Managers
             //Handling for if the WorldActor is the player character
             if (c == PlayerManager.World)
             {
+                if (CombatManager.InCombat)
+                {
+                    CombatManager.EndCombatEscape();
+                }
                 //Handling for if the player is currently in a building and is leaving it
                 if (PlayerManager._iBuildingID != -1)
                 {
