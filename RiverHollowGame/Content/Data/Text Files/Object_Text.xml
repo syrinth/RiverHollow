@@ -1183,99 +1183,99 @@
     </Item>
     <Item>
       <Key>WorldObject_25</Key>
-      <Value>[Name:Torch]</Value>
+      <Value>[Name:Mushroom]</Value>
     </Item>
     <Item>
       <Key>WorldObject_26</Key>
-      <Value>[Name:Forge]</Value>
+      <Value>[Name:Torch]</Value>
     </Item>
     <Item>
       <Key>WorldObject_27</Key>
-      <Value>[Name:Anvil]</Value>
+      <Value>[Name:Forge]</Value>
     </Item>
     <Item>
       <Key>WorldObject_28</Key>
-      <Value>[Name:Cauldron]</Value>
+      <Value>[Name:Anvil]</Value>
     </Item>
     <Item>
       <Key>WorldObject_29</Key>
-      <Value>[Name:Work Bench]</Value>
+      <Value>[Name:Cauldron]</Value>
     </Item>
     <Item>
       <Key>WorldObject_30</Key>
-      <Value>[Name:Stone Mill]</Value>
+      <Value>[Name:Work Bench]</Value>
     </Item>
     <Item>
       <Key>WorldObject_31</Key>
-      <Value>[Name:Loom]</Value>
+      <Value>[Name:Stone Mill]</Value>
     </Item>
     <Item>
       <Key>WorldObject_32</Key>
-      <Value>[Name:Anvil II]</Value>
+      <Value>[Name:Loom]</Value>
     </Item>
     <Item>
       <Key>WorldObject_33</Key>
-      <Value>[Name:Anvil III]</Value>
+      <Value>[Name:Anvil II]</Value>
     </Item>
     <Item>
       <Key>WorldObject_34</Key>
-      <Value>[Name:Loom II]</Value>
+      <Value>[Name:Anvil III]</Value>
     </Item>
     <Item>
       <Key>WorldObject_35</Key>
-      <Value>[Name:Loom III]</Value>
+      <Value>[Name:Loom II]</Value>
     </Item>
     <Item>
       <Key>WorldObject_36</Key>
-      <Value>[Name:Forge II]</Value>
+      <Value>[Name:Loom III]</Value>
     </Item>
     <Item>
       <Key>WorldObject_37</Key>
-      <Value>[Name:Stoneworks]</Value>
+      <Value>[Name:Forge II]</Value>
     </Item>
     <Item>
       <Key>WorldObject_38</Key>
-      <Value>[Name:Cauldron II]</Value>
+      <Value>[Name:Stoneworks]</Value>
     </Item>
     <Item>
       <Key>WorldObject_39</Key>
-      <Value>[Name:Cauldron III]</Value>
+      <Value>[Name:Cauldron II]</Value>
     </Item>
     <Item>
       <Key>WorldObject_40</Key>
-      <Value>[Name:Stoneworks II]</Value>
+      <Value>[Name:Cauldron III]</Value>
     </Item>
     <Item>
       <Key>WorldObject_41</Key>
-      <Value>[Name:Stone Mill II]</Value>
+      <Value>[Name:Stoneworks II]</Value>
     </Item>
     <Item>
       <Key>WorldObject_42</Key>
-      <Value>[Name:Wood Shop]</Value>
+      <Value>[Name:Stone Mill II]</Value>
     </Item>
     <Item>
       <Key>WorldObject_43</Key>
-      <Value>[Name:Tannery]</Value>
+      <Value>[Name:Wood Shop]</Value>
     </Item>
     <Item>
       <Key>WorldObject_44</Key>
-      <Value>[Name:Tannery II]</Value>
+      <Value>[Name:Tannery]</Value>
     </Item>
     <Item>
       <Key>WorldObject_45</Key>
-      <Value>[Name:Silver Seed Plant]</Value>
+      <Value>[Name:Tannery II]</Value>
     </Item>
     <Item>
       <Key>WorldObject_46</Key>
-      <Value>[Name:Carrot Plant]</Value>
+      <Value>[Name:Silver Seed Plant]</Value>
     </Item>
     <Item>
       <Key>WorldObject_47</Key>
-      <Value>[Name:Slime Berry Plant]</Value>
+      <Value>[Name:Carrot Plant]</Value>
     </Item>
     <Item>
       <Key>WorldObject_48</Key>
-      <Value>[Name:Mushroom]</Value>
+      <Value>[Name:Slime Berry Plant]</Value>
     </Item>
     <Item>
       <Key>WorldObject_49</Key>

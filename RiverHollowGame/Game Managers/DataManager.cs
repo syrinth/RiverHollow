@@ -451,6 +451,8 @@ namespace RiverHollow.Game_Managers
                         return new ClassChanger(id, diData, pos);
                     case "Plant":
                         return new Plant(id, diData);
+                    case "Gatherable":
+                        return new Gatherable(id, diData,pos);
                     case "Machine":
                         MachineTypeEnum e = Util.ParseEnum<MachineTypeEnum>(diData["MachineType"]);
                         if(e == MachineTypeEnum.CraftingMachine) { return new CraftingMachine(id, diData, pos); }

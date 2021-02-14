@@ -2171,8 +2171,9 @@ namespace Database_Editor
                                     string[] splitValues = Util.FindParams(propertyValue);
                                     foreach (string spVal in splitValues)
                                     {
+                                        string[] splitArgs = spVal.Split('-');
                                         //Do we have a match? return true
-                                        if (spVal == data.ID.ToString())
+                                        if (splitArgs[0] == data.ID.ToString())
                                         {
                                             data.AddLinkedMap(this, refTag);
                                         }
@@ -2223,15 +2224,25 @@ namespace Database_Editor
                             string[] splitValues = Util.FindParams(propertyValue);
                             for (int j = 0; j < splitValues.Length; j++)
                             {
+                                string[] splitArgs = splitValues[j].Split('-');
                                 //If we found a match, set the flag to true and overwrite the value of this string
-                                if (splitValues[j] == oldID.ToString())
+                                if (splitArgs[0] == oldID.ToString())
                                 {
                                     found = true;
-                                    splitValues[j] = SPECIAL_CHARACTER + newID.ToString() + SPECIAL_CHARACTER;
+                                    splitArgs[0] = SPECIAL_CHARACTER + newID.ToString() + SPECIAL_CHARACTER;
                                 }
 
                                 //Concatenate it to the newValue
-                                newValue += splitValues[j];
+                                newValue += splitArgs[0];
+
+                                //If there are more entries coming, add the '|' back
+                                if (splitArgs.Length > 1)
+                                {
+                                    for (int k = 1; k < splitArgs.Length; k++)
+                                    {
+                                        newValue = newValue + "-" + splitArgs[k];
+                                    }
+                                }
 
                                 //If there are more entries coming, add the '|' back
                                 if (j < splitValues.Length - 1)
