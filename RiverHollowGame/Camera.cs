@@ -31,6 +31,7 @@ namespace RiverHollow
         {
             Vector2 target = Scrying() ? _vObserver : _actObserver.CharCenter.ToVector2() * Scale;
 
+            //If Scrying is turned on and we are not taking input, process input commands to move the camera
             if (!TakingInput() && Scrying())
             {
                 int speed = 10;
@@ -48,6 +49,7 @@ namespace RiverHollow
                 else if (GUICursor.Position.X == RiverHollow.ScreenWidth - 1) { target += new Vector2(speed, 0); }
             }
 
+            //This ensures that the camera observer position cannot go farther than the allowed positions,
             if (target.X <= (RiverHollow.ScreenWidth / 2)) { target.X = (RiverHollow.ScreenWidth / 2); }
             else if (target.X >= MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2)) { target.X = MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2); }
             if (target.Y <= (RiverHollow.ScreenHeight / 2)) { target.Y = (RiverHollow.ScreenHeight / 2); }

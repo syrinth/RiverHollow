@@ -3,15 +3,15 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>... Oh? Hello dear you must be the newcomer everyone's been talking about. You can call me $Character_20$. Oh but aren't you just the spitting image of my Jesse. I can't wait wait for you to meet.</Value>
+      <Value>... Oh? Hello dear you must be the newcomer everyone's been talking about. You can call me $Character_20$. Oh but aren't you just the spitting image of my Jesse. I can't wait for you to meet.</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hey there, $^$,hope you're feeling well today!</Value>
+      <Value>Hello dear, having a good day?</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Hey, $^$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.</Value>
+      <Value>When I was younger, young men and women from all over would come through here. Adventurers and gloryseekers, looking to make names for themselves. I can see the same fire in you.</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>
@@ -28,6 +28,18 @@
     <Item>
       <Key>Maintenance</Key>
       <Value>What do you want to do?[Upgrade Buildings:UpgradeBuilding|Move Buildings:Move|Destroy Buildings:Destroy]</Value>
+    </Item>
+    <Item>
+      <Key>Raining|1</Key>
+      <Value>Oh look at you, all soaked. Alex, you know you shouldn't go out when it's raining. Go sit by the fire and I'll bring you some stew.</Value>
+    </Item>
+    <Item>
+      <Key>Raining|2</Key>
+      <Value>The sound of the rain is pretty isn't it? It always makes me think of when I was younger. My family used to settle in on those rainy nights around the fireplace and tell each other stories. I hope Jesse comes home soon.</Value>
+    </Item>
+    <Item>
+      <Key>Snowing|1</Key>
+      <Value>... hm? Oh, hello dear. I was lost in my thoughts. It's alovely day out, isn't it? My husband and I used to go out for walks on days like this.</Value>
     </Item>
   </Asset>
 </XnaContent>

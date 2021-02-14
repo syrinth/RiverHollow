@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters;
 using RiverHollow.CombatStuff;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens;
-using RiverHollow.Tile_Engine;
 using RiverHollow.Items;
+using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
-
+using System;
+using System.Collections.Generic;
 using static RiverHollow.Characters.Actor;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.TravelManager;

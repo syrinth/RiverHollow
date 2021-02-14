@@ -341,6 +341,27 @@ namespace RiverHollow.Items
     //    }
     //}
 
+    public class Gatherable : WorldObject
+    {
+        int _iItemID;
+
+        public Gatherable(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
+        {
+            Util.AssignValue(ref _iItemID, "ItemID", stringData);
+            LoadDictionaryData(stringData);
+        }
+
+        public void Gather()
+        {
+            InventoryManager.AddToInventory(DataManager.GetItem(_iItemID));
+            MapManager.RemoveWorldObject(this);
+            RemoveSelfFromTiles();
+        }
+    }
+
+    /// <summary>
+    /// WorldItems represent WorldObjects that are created by placing down items
+    /// </summary>
     public abstract class WorldItem : WorldObject
     {
         protected int _iBaseItemID;
@@ -1528,5 +1549,4 @@ namespace RiverHollow.Items
             }
         }
     }
-
 }
