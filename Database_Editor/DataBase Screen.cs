@@ -49,7 +49,7 @@ namespace Database_Editor
         const string ITEM_REF_TAGS = "ReqItems,RefinesInto,Place";
         const string QUEST_REF_TAGS = "GoalItem,ItemReward";
         const string CHARACTER_REF_TAGS = "Collection,Class,ShopData";
-        const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,Item";
+        const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID";
         const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
         const string SHOPDATA_REF_TAGS = "ItemID,WorkerID,BuildingID";
         const string ADVENTURERS_REF_TAG = "ItemID";
