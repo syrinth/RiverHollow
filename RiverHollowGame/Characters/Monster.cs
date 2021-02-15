@@ -476,17 +476,8 @@ namespace RiverHollow.Characters
                     if (ShouldTryToUseOnActor(act))
                     {
                         skipThisSkill = false;
-                        bool found = false;
-                        foreach (RHTile adjTile in act.GetAdjacentTiles())
-                        {
-                            if (adjTile.Character == this || _travelMap.CanEndTurnHere(adjTile))
-                            {
-                                found = true;
-                                break;
-                            }
-                        }
-
-                    (found ? activeTargets : distantTargets).Add(act);
+                        DetermineRangeToActor(act, ref activeTargets, ref distantTargets);
+                        if (act.LinkedSummon != null) { DetermineRangeToActor(act.LinkedSummon, ref activeTargets, ref distantTargets); }
                     }
                     else { continue; }
                 }
@@ -569,6 +560,29 @@ namespace RiverHollow.Characters
         }
 
         /// <summary>
+        /// Given an actor, determines whether or not we are capable of moving to them in this turn
+        /// and adds them to the appropriate list
+        /// </summary>
+        /// <param name="act">The CombatActor to compare against</param>
+        /// <param name="activeTargets">List of targets we can reach</param>
+        /// <param name="distantTargets">List of targets we cannot reach</param>
+        private void DetermineRangeToActor(CombatActor act, ref List<CombatActor> activeTargets, ref List<CombatActor> distantTargets)
+        {
+            bool found = false;
+            foreach (RHTile adjTile in act.GetAdjacentTiles())
+            {
+                if (adjTile.Character == this || _travelMap.CanEndTurnHere(adjTile))
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) { activeTargets.Add(act); }
+            else { distantTargets.Add(act); }
+        }
+
+        /// <summary>
         /// Determines whether the chosen action can or should be used on the targetted actor
         /// </summary>
         /// <param name="actor"></param>
@@ -647,12 +661,20 @@ namespace RiverHollow.Characters
                     {
                         ShortestPathComparison(FindPath(tile), ref pathInfo);
 
-                        //We are moving, but now we want to make sure we will only move as far as we need to in order to use the skill.
-                        RHTile lastTile = pathInfo.ActualPath[pathInfo.ActualPath.Count - 1];
-                        while (Util.GetRHTileDelta(lastTile, tile) < skillRange)
+                        if (pathInfo.ActualPath != null)
                         {
-                            pathInfo = TravelManager.FindPathViaTravelMap(lastTile, _travelMap);
-                            lastTile = pathInfo.ActualPath[pathInfo.ActualPath.Count - 1];
+                            //We are moving, but now we want to make sure we will only move as far as we need to in order to use the skill.
+                            RHTile lastTile = pathInfo.ActualPath[pathInfo.ActualPath.Count - 1];
+                            while (Util.GetRHTileDelta(lastTile, tile) < skillRange)
+                            {
+                                pathInfo = TravelManager.FindPathViaTravelMap(lastTile, _travelMap);
+                                lastTile = pathInfo.ActualPath[pathInfo.ActualPath.Count - 1];
+                            }
+                        }
+                        else
+                        {
+                            pathInfo.Clean();
+                            break;
                         }
                     }
                     else
@@ -789,22 +811,25 @@ namespace RiverHollow.Characters
         /// <param name="tileList">The TileList to fill out</param>
         private void FindAdjacentTilesHelper(RHTile actorTile, DirectionEnum distanceDir, DirectionEnum moveDir, bool getDistance, ref List<RHTile> tileList)
         {
-            RHTile targetTile = actorTile;
-            for (int i = 0; i < (getDistance ? _iSize : 1); i++)
+            if (actorTile != null)
             {
-                targetTile = targetTile.GetTileByDirection(distanceDir);
-            }
-            if (TravelManager.TestTileForSize(targetTile, true))
-            {
-                tileList.Add(targetTile);
-            }
-
-            for (int i = 0; i < _iSize - 1; i++)
-            {
-                targetTile = targetTile.GetTileByDirection(moveDir);
+                RHTile targetTile = actorTile;
+                for (int i = 0; i < (getDistance ? _iSize : 1); i++)
+                {
+                    targetTile = targetTile.GetTileByDirection(distanceDir);
+                }
                 if (TravelManager.TestTileForSize(targetTile, true))
                 {
                     tileList.Add(targetTile);
+                }
+
+                for (int i = 0; i < _iSize - 1; i++)
+                {
+                    targetTile = targetTile.GetTileByDirection(moveDir);
+                    if (TravelManager.TestTileForSize(targetTile, true))
+                    {
+                        tileList.Add(targetTile);
+                    }
                 }
             }
         }

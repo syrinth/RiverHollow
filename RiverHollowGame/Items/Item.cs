@@ -172,7 +172,7 @@ namespace RiverHollow.Items
             return _sDescription;
         }
 
-        public void Pop(Vector2 pos, bool flyingPop = true)
+        public void Pop(Vector2 pos)
         {
             _vPosition = pos;
             _movement = new Parabola(_vPosition);

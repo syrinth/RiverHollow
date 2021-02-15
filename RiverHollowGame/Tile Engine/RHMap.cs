@@ -628,7 +628,8 @@ namespace RiverHollow.Tile_Engine
         private void SpawnResources(List<RHTile> skipTiles)
         {
             List<RHTile> validTiles = new List<RHTile>();
-            foreach(RHTile x in _arrTiles)
+            List<RHTile> usedTiles = new List<RHTile>();
+            foreach (RHTile x in _arrTiles)
             {
                 if (!skipTiles.Contains(x) && x.Passable()) {
                     validTiles.Add(x);
@@ -643,46 +644,49 @@ namespace RiverHollow.Tile_Engine
                 for (int i = 0; i < spawnNumber; i++)
                 {
                     //from the array as it gets filled so that we bounce less.
-                    RHTile targetTile = validTiles[RHRandom.Instance.Next(0, validTiles.Count-1)];
+                    RHTile targetTile = validTiles[RHRandom.Instance.Next(0, validTiles.Count - 1)];
+
+                    //If the object could not be placed, keep trying until you find one that can be
+                    bool objectIsValid = true;
+                    do
+                    {
+                        objectIsValid = true;
+                        RarityEnum rarityKey = Util.RollAgainstRarity(_diResources);
+
+                        WorldObject wObj = DataManager.GetWorldObject(_diResources[rarityKey][RHRandom.Instance.Next(0, _diResources[rarityKey].Count - 1)]);
+                        wObj.SnapPositionToGrid(new Vector2(targetTile.Position.X, targetTile.Position.Y));
+
+                        if (wObj.CompareType(ObjectTypeEnum.Plant))
+                        {
+                            ((Plant)wObj).FinishGrowth();
+                        }
+
+                        PlaceWorldObject(wObj, false);
+
+                        //If the object is larger than one tile, we need to ensure it can actually fit ont he tile(s) we've placed it
+                        if (wObj.CollisionBox.Width > TileSize || wObj.CollisionBox.Height > TileSize)
+                        {
+                            foreach (RHTile t in wObj.Tiles)
+                            {
+                                if (!validTiles.Contains(t) || usedTiles.Contains(t))
+                                {
+                                    objectIsValid = false;
+                                    wObj.RemoveSelfFromTiles();
+                                    RemoveWorldObject(wObj);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    while (!objectIsValid);
+
+                    //Remove the targetTile once it has been properly used
                     validTiles.Remove(targetTile);
 
-                    RarityEnum rarityKey = Util.RollAgainstRarity(_diResources);
-
-                    WorldObject wObj = DataManager.GetWorldObject(_diResources[rarityKey][RHRandom.Instance.Next(0, _diResources[rarityKey].Count - 1)]);
-                    wObj.SnapPositionToGrid(new Vector2(targetTile.Position.X, targetTile.Position.Y));
-
-                    if (wObj.CompareType(ObjectTypeEnum.Plant))
-                    {
-                        ((Plant)wObj).FinishGrowth();
-                    }
-
-                    PlaceWorldObject(wObj, false);
+                    //Keep track of which tiles were used
+                    usedTiles.Add(targetTile);
                 }
             }
-            ////Spawns a random assortment of resources them ap will allow wherever they're allowed
-            //if (_liResourceSpawnPoints.Count > 0)
-            //{
-            //    //Determine how many resources to spawn
-            //    string[] val = _map.Properties["ResourcesMinMax"].Split('-');
-            //    int spawnNumber = RHRandom.Instance.Next(int.Parse(val[0]), int.Parse(val[1]));
-
-            //    for (int i = 0; i < spawnNumber; i++)
-            //    {
-            //        int index = 0;
-            //        int current = 0;    //This variable will store how far we've gone in the list
-            //        int roll = RHRandom.Instance.Next(0, _iTotalResourceWeight);
-
-            //        ResourceSpawn ToSpawn = null;
-            //        do
-            //        {
-            //            ToSpawn = _liResourceSpawnPoints[index];
-            //            current += ToSpawn.Size;
-            //            index++;
-            //        } while (roll > current);
-
-            //        ToSpawn.Spawn();
-            //    }
-            //}
         }
 
         public void CheckSpirits()
@@ -1294,9 +1298,10 @@ namespace RiverHollow.Tile_Engine
                     }
                     GUIManager.OpenMainObject(new HUDInventoryDisplay(((Container)obj).Inventory));
                 }
-                else if (obj.CompareType(ObjectTypeEnum.Plant))
+                else if (obj.CanPickUp() && PlayerManager.PlayerInRange(obj.CollisionBox))
                 {
-                    ((Plant)obj).Harvest();
+                    if (obj.CompareType(ObjectTypeEnum.Plant)){ ((Plant)obj).Harvest(); }
+                    if(obj.CompareType(ObjectTypeEnum.Gatherable)) { ((Gatherable)obj).Gather(); }
                 }
                 else if (obj.CompareType(ObjectTypeEnum.DungeonObject))
                 {
@@ -1658,14 +1663,10 @@ namespace RiverHollow.Tile_Engine
                         found = true;
                         GUICursor.SetCursor(GUICursor.CursorTypeEnum.Door, t.GetTravelPoint().CollisionBox);
                     }
-                    else if(t.GetWorldObject(false) != null && t.GetWorldObject().CompareType(ObjectTypeEnum.Plant))
+                    else if (t.GetWorldObject(false) != null && t.GetWorldObject().CanPickUp())
                     {
-                        Plant obj = (Plant)t.GetWorldObject();
-                        if (obj.FinishedGrowing())
-                        {
-                            found = true;
-                            GUICursor.SetCursor(GUICursor.CursorTypeEnum.Pickup, obj.CollisionBox);
-                        }
+                        found = true;
+                        GUICursor.SetCursor(GUICursor.CursorTypeEnum.Pickup, t.GetWorldObject().CollisionBox);
                     }
                 }
 
@@ -1758,7 +1759,8 @@ namespace RiverHollow.Tile_Engine
 
         public void DropItemOnMap(Item item, Vector2 position, bool flyingPop = true)
         {
-            item.Pop(position, flyingPop);
+            if (flyingPop){ item.Pop(position); }
+            else { item.Position = position; }
 
             item.OnTheMap = true;
             _liItems.Add(item);
@@ -2055,7 +2057,6 @@ namespace RiverHollow.Tile_Engine
 
             return rv;
         }
-
 
         /// <summary>
         /// Assigns the Tiles that a WorldObject will occupy to the object, adds the

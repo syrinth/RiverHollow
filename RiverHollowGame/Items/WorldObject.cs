@@ -193,6 +193,7 @@ namespace RiverHollow.Items
         }
 
         public bool CompareType(ObjectTypeEnum t) { return Type == t; }
+        public virtual bool CanPickUp() { return false; }
     }
 
     public class Destructible : WorldObject
@@ -212,7 +213,7 @@ namespace RiverHollow.Items
 
             _wallObject = false;
 
-            if (stringData.ContainsKey("Item")) { ReadItemDrops(stringData["Item"]); }
+            if (stringData.ContainsKey("ItemID")) { ReadItemDrops(stringData["ItemID"]); }
 
             if (stringData.ContainsKey("Tool")) { _eToolType = Util.ParseEnum<ToolEnum>(stringData["Tool"]);}
             if (stringData.ContainsKey("Hp")) { _iHP = int.Parse(stringData["Hp"]); }
@@ -356,6 +357,11 @@ namespace RiverHollow.Items
             InventoryManager.AddToInventory(DataManager.GetItem(_iItemID));
             MapManager.RemoveWorldObject(this);
             RemoveSelfFromTiles();
+        }
+
+        public override bool CanPickUp()
+        {
+            return true;
         }
     }
 
@@ -998,6 +1004,11 @@ namespace RiverHollow.Items
             {
                 _iCurrentState = _iMaxStates - 1;
                 //_rSource.X += _iWidth * _iCurrentState;
+            }
+
+            public override bool CanPickUp()
+            {
+                return FinishedGrowing();
             }
 
             internal PlantData SaveData()

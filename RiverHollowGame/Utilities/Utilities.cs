@@ -359,11 +359,11 @@ namespace RiverHollow.Utilities
         {
             RarityEnum rv = RarityEnum.C;
 
-            int rarityIndex = (int)RHRandom.Instance.Next(1, 100);
+            int rarityIndex = (int)RHRandom.Instance.Next(1, 1000);
 
-            if (rarityIndex > 98 && dictionary.ContainsKey(RarityEnum.M)) { rv = RarityEnum.M; }
-            else if (rarityIndex > 90 && dictionary.ContainsKey(RarityEnum.R)) { rv = RarityEnum.R; }
-            else if (rarityIndex > 70 && dictionary.ContainsKey(RarityEnum.U)) { rv = RarityEnum.U; }
+            if (rarityIndex > 990 && dictionary.ContainsKey(RarityEnum.M)) { rv = RarityEnum.M; }
+            else if (rarityIndex > 950 && dictionary.ContainsKey(RarityEnum.R)) { rv = RarityEnum.R; }
+            else if (rarityIndex > 850 && dictionary.ContainsKey(RarityEnum.U)) { rv = RarityEnum.U; }
 
             return rv;
         }

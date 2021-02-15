@@ -45,7 +45,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, TileSize * 2, TileSize * 2);
 
                 if (_eCursorType == CursorTypeEnum.Normal) { Alpha = 1; }
-                else { Alpha = (PlayerManager.PlayerInRange(_rCollisionRectangle, (int)(TileSize * 1.5))) ? 1 : 0.5f; }
+                else { Alpha = (PlayerManager.PlayerInRange(_rCollisionRectangle)) ? 1 : 0.5f; }
 
                 spriteBatch.Draw(_texture, drawRectangle, _rSource, Color.White * Alpha);
                 _guiItem?.Draw(spriteBatch);

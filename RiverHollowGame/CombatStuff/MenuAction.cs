@@ -327,7 +327,7 @@ namespace RiverHollow.CombatStuff
                 foreach (CombatActor act in targetActors)
                 {
                     if(_cmbtActionUser.IsSummon() && act == _cmbtActionUser) { continue; }
-                    if (!SummonFriendlyFireCheck(act)) { continue; }
+                    if (SummonCheckNeeded() && !SummonFriendlyFireCheck(act)) { continue; }
 
                     act.ProcessHealingSpell(_cmbtActionUser, Potency);
                 }
@@ -537,13 +537,21 @@ namespace RiverHollow.CombatStuff
                 }
             }
         }
+        
+        /// <summary>
+        /// Returns true if the current actor is a summon or the spell is a summon spell.
+        /// </summary>
+        private bool SummonCheckNeeded()
+        {
+            return _cmbtActionUser.IsSummon() || IsSummonSpell();
+        }
 
         /// <summary>
         /// Checks the skill user and the target's types against each other as well as handling
         /// if the skill user or target is a Summon in which case it tests against their linked Characters
         /// </summary>
         /// <param name="targetActor">The actor being targeted by the skill</param>
-        /// <returns>True if botht he skill user and the target are on the same side</returns>
+        /// <returns>True if both the skill user and the target are on the same side</returns>
         private bool SummonFriendlyFireCheck(CombatActor targetActor)
         {
             bool rv = false;

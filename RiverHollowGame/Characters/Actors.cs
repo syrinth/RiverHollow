@@ -534,7 +534,7 @@ namespace RiverHollow.Characters
         /// </summary>
         public void ClearTileForMapChange()
         {
-            while (_liTilePath[0]?.MapName == CurrentMapName)
+            while (_liTilePath.Count > 0 && _liTilePath[0].MapName == CurrentMapName)
             {
                 _liTilePath.RemoveAt(0);
             }

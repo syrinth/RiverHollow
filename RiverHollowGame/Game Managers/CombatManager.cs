@@ -533,7 +533,10 @@ namespace RiverHollow.Game_Managers
         {
             PlayerManager.AddMonsterEnergyToQueue(100);
             MapManager.RemoveMonster(m);
-            _liDroppedItems.Add(DropManager.DropMonsterLoot(m));
+
+            Item droppedItem = DropManager.DropMonsterLoot(m);
+            if (CombatManager.InCombat) { _liDroppedItems.Add(droppedItem); }
+            else { droppedItem.AutoPickup = true; }
         }
 
         #region Enemy AI

@@ -4,8 +4,8 @@
   <property name="ActiveSpawn" type="int" value="1"/>
   <property name="Dungeon" value="Forest"/>
   <property name="Outside" type="bool" value="false"/>
-  <property name="Resources" value="6-C|8-U|11-R"/>
-  <property name="ResourcesMinMax" value="80-160"/>
+  <property name="Resources" value="6-C|7-R|8-U|11-R"/>
+  <property name="ResourcesMinMax" value="50-80"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetDungeon.tsx"/>
  <tileset firstgid="161" source="../Tilesets/tsWalls_Floors.tsx"/>

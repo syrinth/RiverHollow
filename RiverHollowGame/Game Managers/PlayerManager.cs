@@ -402,7 +402,8 @@ namespace RiverHollow.Game_Managers
 
         public static bool PlayerInRange(Rectangle rect)
         {
-            return PlayerInRange(rect, TileSize);
+            int hypotenuse = (int)Math.Sqrt(TileSize * TileSize + TileSize * TileSize);
+            return PlayerInRange(rect, hypotenuse);
         }
         public static bool PlayerInRange(Rectangle rect, int range)
         {
@@ -429,7 +430,8 @@ namespace RiverHollow.Game_Managers
 
         public static bool PlayerInRange(Point centre)
         {
-            return PlayerInRange(centre, TileSize*2);
+            int hypotenuse = (int)Math.Sqrt(TileSize*TileSize + TileSize*TileSize);
+            return PlayerInRange(centre, hypotenuse);
         }
         public static bool PlayerInRange(Vector2 centre, int range)
         {

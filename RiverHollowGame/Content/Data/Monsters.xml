@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Texture:MagicMushroom][Condition:Forest-Summer][Jump][Lvl:1][Ability:41][Loot:26][Trait:Coward][Walk:0-0-4-.2-F][Attack:0-48-2-.2-F][Cast:0-96-4-.07-F][Hurt:0-0-4-.2-F][Critical:0-0-4-.2-F][KO:384-48-3-.15-F]</Value>
+      <Value>[Texture:MagicMushroom][Condition:Forest-Summer][Jump][Lvl:1][Ability:41][Loot:23][Trait:Coward][Walk:0-0-4-.2-F][Attack:0-48-2-.2-F][Cast:0-96-4-.07-F][Hurt:0-0-4-.2-F][Critical:0-0-4-.2-F][KO:384-48-3-.15-F]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Texture:BigBlob][Condition:Forest-Summer][Lvl:1][Width:32][Height:32][Size:2][Ability:38][Loot:26][Walk:0-0-3-.2-T][Action1:0-64-2-.15-F][Hurt:0-128-3-.15-F][Critical:0-192-2-.3-F][KO:640-64-2-.15-F][MoveSpeed:2]</Value>
+      <Value>[Texture:BigBlob][Condition:Forest-Summer][Lvl:1][Width:32][Height:32][Size:2][Ability:38][Loot:26][Walk:0-0-3-.2-T][Action1:0-64-2-.15-F][Hurt:0-128-3-.15-F][Critical:0-192-2-.3-F][KO:640-64-2-.15-F][MoveSpeed:4]</Value>
     </Item>
     <Item>
       <Key>4</Key>

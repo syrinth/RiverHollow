@@ -4,8 +4,8 @@
   <property name="ActiveSpawn" type="int" value="3"/>
   <property name="Dungeon" value="Caves"/>
   <property name="Outside" type="bool" value="false"/>
-  <property name="Resources" value="6-C|8-U|11-R|15-M"/>
-  <property name="ResourcesMinMax" value="50-150"/>
+  <property name="Resources" value="6-C|7-C|8-U|11-R|15-M"/>
+  <property name="ResourcesMinMax" value="50-75"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetDungeon.tsx"/>
  <tileset firstgid="161" source="../Tilesets/tsWalls_Floors.tsx"/>
