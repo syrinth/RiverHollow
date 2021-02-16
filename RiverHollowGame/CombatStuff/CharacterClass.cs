@@ -131,7 +131,7 @@ namespace RiverHollow.CombatStuff
             ActionList.Add(new MenuAction(2, ActionEnum.MenuSpell, new Vector2(1, 0)));
             ActionList.Add(new MenuAction(1, ActionEnum.MenuItem, new Vector2(2, 0)));
             ActionList.Add(new MenuAction(0, ActionEnum.Move, new Vector2(3, 0)));
-            ActionList.Add(new MenuAction(4, ActionEnum.EndTurn, new Vector2(4, 0)));
+            ActionList.Add(new MenuAction(3, ActionEnum.EndTurn, new Vector2(4, 0)));
         }
 
         private void SetClassAnimation(Dictionary<string, string> stringData, string key, ref int frames, ref float frameLength)

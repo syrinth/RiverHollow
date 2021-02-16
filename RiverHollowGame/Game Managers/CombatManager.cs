@@ -751,11 +751,6 @@ namespace RiverHollow.Game_Managers
         /// <returns></returns>
         public static bool OnSameTeam(CombatActor actor)
         {
-            if (actor.IsActorType(ActorEnum.Monster))
-            {
-                int i = 0;
-                i++;
-            }
             return (ActiveCharacter.IsActorType(ActorEnum.Adventurer) && actor.IsActorType(ActorEnum.Adventurer)) || (ActiveCharacter.IsActorType(ActorEnum.Monster) && actor.IsActorType(ActorEnum.Monster));
         }
 

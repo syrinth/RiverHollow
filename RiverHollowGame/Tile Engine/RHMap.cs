@@ -3129,7 +3129,7 @@ namespace RiverHollow.Tile_Engine
             bool rv = true;
             if (CombatManager.InCombat)
             {
-                rv = Character == null || CombatManager.OnSameTeam(Character);
+                rv = Character == null || Character.IsSummon() || CombatManager.OnSameTeam(Character);
             }
             return rv;
         }

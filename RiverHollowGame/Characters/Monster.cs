@@ -477,7 +477,7 @@ namespace RiverHollow.Characters
                     {
                         skipThisSkill = false;
                         DetermineRangeToActor(act, ref activeTargets, ref distantTargets);
-                        if (act.LinkedSummon != null) { DetermineRangeToActor(act.LinkedSummon, ref activeTargets, ref distantTargets); }
+                        //if (act.LinkedSummon != null) { DetermineRangeToActor(act.LinkedSummon, ref activeTargets, ref distantTargets); }
                     }
                     else { continue; }
                 }
@@ -663,12 +663,15 @@ namespace RiverHollow.Characters
 
                         if (pathInfo.ActualPath != null)
                         {
+                            int backTrack = 1;
                             //We are moving, but now we want to make sure we will only move as far as we need to in order to use the skill.
                             RHTile lastTile = pathInfo.ActualPath[pathInfo.ActualPath.Count - 1];
                             while (Util.GetRHTileDelta(lastTile, tile) < skillRange)
                             {
                                 pathInfo = TravelManager.FindPathViaTravelMap(lastTile, _travelMap);
-                                lastTile = pathInfo.ActualPath[pathInfo.ActualPath.Count - 1];
+                                lastTile = pathInfo.ActualPath[pathInfo.ActualPath.Count - backTrack];
+                                if(backTrack < pathInfo.ActualPath.Count) { backTrack++; }
+                                if (lastTile.HasCombatant()) { break; }
                             }
                         }
                         else
