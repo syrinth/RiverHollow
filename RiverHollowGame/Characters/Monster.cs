@@ -670,7 +670,7 @@ namespace RiverHollow.Characters
                             {
                                 pathInfo = TravelManager.FindPathViaTravelMap(lastTile, _travelMap);
                                 lastTile = pathInfo.ActualPath[pathInfo.ActualPath.Count - backTrack];
-                                if(backTrack < pathInfo.ActualPath.Count) { backTrack++; }
+                                if (backTrack < pathInfo.ActualPath.Count) { backTrack++; }
                                 if (lastTile.HasCombatant()) { break; }
                             }
                         }

@@ -63,7 +63,6 @@ namespace RiverHollow.Tile_Engine
         private List<WorldActor> _liActors;
         public List<Monster> Monsters { get; }
         private List<Summon> _liSummons;
-        public List<WorldActor> ToRemove;
         public List<WorldActor> ToAdd;
         private List<Building> _liBuildings;
         private List<WorldObject> _liPlacedWorldObjects;
@@ -74,14 +73,16 @@ namespace RiverHollow.Tile_Engine
         private List<int> _liCutscenes;
         private List<TiledMapObject> _liBarrenObjects;
         private Dictionary<RarityEnum, List<int>> _diResources;
-
         protected List<Item> _liItems;
-        protected List<Item> _liItemsToRemove;
         protected List<ShopData> _liShopData;
         public Dictionary<string, RHTile[,]> DictionaryCombatTiles { get; }
         public Dictionary<string, TravelPoint> DictionaryTravelPoints { get; }
         public Dictionary<string, Vector2> DictionaryCharacterLayer { get; }
         private List<TiledMapObject> _liMapObjects;
+
+        private List<Item> _liItemsToRemove;
+        private List<WorldActor> _liActorsToRemove;
+        private List<WorldObject> _liObjectsToRemove;
 
         public RHMap() {
             _liMonsterSpawnPoints = new List<MonsterSpawn>();
@@ -94,7 +95,6 @@ namespace RiverHollow.Tile_Engine
             _liBuildings = new List<Building>();
             TilledTiles = new List<RHTile>();
             _liItems = new List<Item>();
-            _liItemsToRemove = new List<Item>();
             _liMapObjects = new List<TiledMapObject>();
             _liShopData = new List<ShopData>();
             _liPlacedWorldObjects = new List<WorldObject>();
@@ -107,7 +107,10 @@ namespace RiverHollow.Tile_Engine
             DictionaryTravelPoints = new Dictionary<string, TravelPoint>();
             DictionaryCharacterLayer = new Dictionary<string, Vector2>();
 
-            ToRemove = new List<WorldActor>();
+            _liItemsToRemove = new List<Item>();
+            _liActorsToRemove = new List<WorldActor>();
+            _liObjectsToRemove = new List<WorldObject>();
+
             ToAdd = new List<WorldActor>();
         }
 
@@ -237,6 +240,235 @@ namespace RiverHollow.Tile_Engine
                 }
             }
             _renderer = new TiledMapRenderer(GraphicsDevice);
+        }
+
+        public void Update(GameTime gTime)
+        {
+            //Used to prevent updates when we leave a cutscene.
+            //Maps should only be loose at the end of a cutscene.
+            if (!MapManager.Maps.ContainsKey(this.Name))
+            {
+                return;
+            }
+
+            if (this == MapManager.CurrentMap)
+            {
+                _renderer.Update(_map, gTime);
+                if (CombatManager.InCombat || IsRunning())
+                {
+                    foreach (Monster m in Monsters)
+                    {
+                        m.Update(gTime);
+                    }
+
+                    foreach (Summon s in _liSummons)
+                    {
+                        s.Update(gTime);
+                    }
+                }
+
+                foreach (Item i in _liItems)
+                {
+                    ((Item)i).Update(gTime);
+                }
+            }
+
+            foreach (WorldObject obj in _liObjectsToRemove) { _liPlacedWorldObjects.Remove(obj); }
+            _liObjectsToRemove.Clear();
+
+            foreach (WorldObject obj in _liPlacedWorldObjects) { obj.Update(gTime); }
+
+            if (ToAdd.Count > 0)
+            {
+                List<WorldActor> moved = new List<WorldActor>();
+                foreach (WorldActor c in ToAdd)
+                {
+                    if (AddCharacterImmediately(c))
+                    {
+                        moved.Add(c);
+                    }
+                }
+                foreach (WorldActor c in moved)
+                {
+                    ToAdd.Remove(c);
+                }
+                moved.Clear();
+            }
+
+            foreach (WorldActor c in _liActorsToRemove)
+            {
+                if (c.IsActorType(ActorEnum.Monster) && Monsters.Contains((Monster)c)) { Monsters.Remove((Monster)c); }
+                else if (_liActors.Contains(c)) { _liActors.Remove(c); }
+                else if (c.IsActorType(ActorEnum.Summon) && _liSummons.Contains((Summon)c)) { _liSummons.Remove((Summon)c); }
+            }
+            _liActorsToRemove.Clear();
+
+            if (IsRunning())
+            {
+                foreach (WorldActor c in _liActors)
+                {
+                    c.Update(gTime);
+                }
+            }
+
+
+            ItemPickUpdate();
+
+            foreach (Item i in _liItemsToRemove)
+            {
+                _liItems.Remove(i);
+            }
+            _liItemsToRemove.Clear();
+        }
+
+        public void DrawBase(SpriteBatch spriteBatch)
+        {
+            SetLayerVisibility(false);
+
+            _renderer.Draw(_map, Camera._transform);
+
+            if (CombatManager.InCombat)
+            {
+                if (CombatManager.ActiveCharacter != null && CombatManager.ActiveCharacter.IsActorType(ActorEnum.Adventurer))
+                {
+                    CombatManager.ActiveCharacter.BaseTile?.Draw(spriteBatch);
+                }
+
+                foreach (RHTile t in CombatManager.LegalTiles)
+                {
+                    t.Draw(spriteBatch);
+                }
+
+                foreach (RHTile t in CombatManager.AreaTiles)
+                {
+                    if (!CombatManager.LegalTiles.Contains(t))
+                    {
+                        t.Draw(spriteBatch);
+                    }
+                }
+            }
+
+            foreach (WorldActor c in _liActors)
+            {
+                c.Draw(spriteBatch, true);
+            }
+
+            foreach (Monster m in Monsters)
+            {
+                m.Draw(spriteBatch, true);
+            }
+
+            foreach (Summon s in _liSummons)
+            {
+                s.Draw(spriteBatch, true);
+            }
+
+            foreach (Building b in _liBuildings)
+            {
+                b.Draw(spriteBatch);
+            }
+
+            foreach (RHTile t in TilledTiles)
+            {
+                t.Draw(spriteBatch);
+            }
+
+            foreach (WorldObject obj in _liPlacedWorldObjects)
+            {
+                obj.Draw(spriteBatch);
+            }
+
+            foreach (Item i in _liItems)
+            {
+                i.Draw(spriteBatch);
+            }
+
+            foreach (RHTile t in _liTestTiles)
+            {
+                WorldObject it = GameManager.ConstructionObject;
+                bool checkPlayer = true;
+
+                if (it != null) { checkPlayer = !it.CompareType(ObjectTypeEnum.Floor); }
+
+                bool passable = t.Passable() && !TileContainsActor(t, checkPlayer);
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
+            }
+        }
+
+        public void DrawLights(SpriteBatch spriteBatch)
+        {
+            foreach (WorldObject obj in _liPlacedWorldObjects)
+            {
+                if (obj.CompareType(ObjectTypeEnum.Light))
+                {
+                    spriteBatch.Draw(lightMask, new Vector2(obj.CollisionBox.Center.X - lightMask.Width / 2, obj.CollisionBox.Y - lightMask.Height / 2), Color.White);
+                }
+            }
+        }
+
+        public void DrawUpper(SpriteBatch spriteBatch)
+        {
+            SetLayerVisibility(true);
+
+            _renderer.Draw(_map, Camera._transform);
+
+            SetLayerVisibility(false);
+        }
+
+        public void SetLayerVisibility(bool revealUpper)
+        {
+            foreach (TiledMapTileLayer l in _map.TileLayers)                            //Iterate over each TileLayer in the map
+            {
+                if (l.Name.StartsWith("ent"))                                           //The layer is a dungeon entrancel layer. Don't touch.
+                {
+                    continue;
+                }
+
+                bool upgrade = false;
+                if (IsTown)
+                {
+                    foreach (KeyValuePair<int, Upgrade> s in GameManager.DiUpgrades)    //Check each upgrade to see if it's enabled
+                    {
+                        if (l.Name.Contains(s.Key.ToString()))
+                        {
+                            upgrade = true;
+                        }
+                        if (s.Value.Enabled)
+                        {
+                            bool determinant = l.Name.Contains("Upper");
+                            if (revealUpper)
+                            {
+                                l.IsVisible = determinant;
+                            }
+                            else { l.IsVisible = !determinant; }
+                        }
+                    }
+                }
+
+                if (!upgrade)
+                {
+                    bool determinant = l.Name.Contains("Upper");
+
+                    if (revealUpper)
+                    {
+                        l.IsVisible = determinant;
+                    }
+                    else { l.IsVisible = !determinant; }
+                }
+
+                if (l.IsVisible && _bOutside)
+                {
+                    l.IsVisible = l.Name.Contains(GameCalendar.GetSeason());
+                }
+            }
+        }
+
+        public void EnableUpgradeVisibility(int upgradeID)
+        {
+            foreach (TiledMapTileLayer l in _map.TileLayers)
+            {
+                if (l.Name.Contains(upgradeID.ToString())) { l.IsVisible = true; }
+            }
         }
 
         public void WaterTiles()
@@ -750,231 +982,6 @@ namespace RiverHollow.Tile_Engine
         {
            _liItemsToRemove.Add(it);
            InventoryManager.AddToInventory(DataManager.GetItem(it.ItemID, it.Number));
-        }
-
-        public void Update(GameTime gTime)
-        {
-            //Used to prevent updates when we leave a cutscene.
-            //Maps should only be loose at the end of a cutscene.
-            if (!MapManager.Maps.ContainsKey(this.Name))
-            {
-                return;
-            }
-
-            if (this == MapManager.CurrentMap)
-            {
-                _renderer.Update(_map, gTime);
-                if (CombatManager.InCombat || IsRunning())
-                {
-                    foreach (Monster m in Monsters)
-                    {
-                        m.Update(gTime);
-                    }
-
-                    foreach (Summon s in _liSummons)
-                    {
-                        s.Update(gTime);
-                    }
-                }
-
-                foreach (Item i in _liItems)
-                {
-                    ((Item)i).Update(gTime);
-                }
-            }
-
-            foreach (WorldObject obj in _liPlacedWorldObjects)
-            {
-                obj.Update(gTime);
-            }
-
-            if (ToAdd.Count > 0)
-            {
-                List<WorldActor> moved = new List<WorldActor>();
-                foreach (WorldActor c in ToAdd)
-                {
-                    if (AddCharacterImmediately(c))
-                    {
-                        moved.Add(c);
-                    }
-                }
-                foreach (WorldActor c in moved)
-                {
-                    ToAdd.Remove(c);
-                }
-                moved.Clear();
-            }
-
-            foreach (WorldActor c in ToRemove)
-            {
-                if (c.IsActorType(ActorEnum.Monster) && Monsters.Contains((Monster)c)) { Monsters.Remove((Monster)c); }
-                else if (_liActors.Contains(c)) { _liActors.Remove(c); }
-                else if (c.IsActorType(ActorEnum.Summon) && _liSummons.Contains((Summon)c)) { _liSummons.Remove((Summon)c); }
-            }
-            ToRemove.Clear();
-
-            if (IsRunning())
-            {
-                foreach (WorldActor c in _liActors)
-                {
-                    c.Update(gTime);
-                }
-            }
-
-
-            ItemPickUpdate();
-
-            foreach (Item i in _liItemsToRemove)
-            {
-                _liItems.Remove(i);
-            }
-            _liItemsToRemove.Clear();
-        }
-
-        public void DrawBase(SpriteBatch spriteBatch)
-        {
-            SetLayerVisibility(false);
-
-            _renderer.Draw(_map, Camera._transform);
-
-            if (CombatManager.InCombat)
-            {
-                if(CombatManager.ActiveCharacter != null && CombatManager.ActiveCharacter.IsActorType(ActorEnum.Adventurer))
-                {
-                    CombatManager.ActiveCharacter.BaseTile?.Draw(spriteBatch);
-                }
-
-                foreach (RHTile t in CombatManager.LegalTiles)
-                {
-                    t.Draw(spriteBatch);
-                }
-
-                foreach (RHTile t in CombatManager.AreaTiles)
-                {
-                    if (!CombatManager.LegalTiles.Contains(t))
-                    {
-                        t.Draw(spriteBatch);
-                    }
-                }
-            }
-
-            foreach (WorldActor c in _liActors)
-            {
-                c.Draw(spriteBatch, true);
-            }
-
-            foreach (Monster m in Monsters)
-            {
-                m.Draw(spriteBatch, true);
-            }
-
-            foreach (Summon s in _liSummons)
-            {
-                s.Draw(spriteBatch, true);
-            }
-
-            foreach (Building b in _liBuildings)
-            {
-                b.Draw(spriteBatch);
-            }
-
-            foreach (RHTile t in TilledTiles)
-            {
-                t.Draw(spriteBatch);
-            }
-
-            foreach (WorldObject obj in _liPlacedWorldObjects)
-            {
-                obj.Draw(spriteBatch);
-            }
-
-            foreach (Item i in _liItems)
-            {
-                i.Draw(spriteBatch);
-            }
-
-            foreach(RHTile t in _liTestTiles)
-            {
-                WorldObject it = GameManager.ConstructionObject;
-                bool checkPlayer = true;
-
-                if (it != null) { checkPlayer = !it.CompareType(ObjectTypeEnum.Floor); }
-
-                bool passable = t.Passable() && !TileContainsActor(t, checkPlayer);
-                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
-            }
-        }
-
-        public void DrawLights(SpriteBatch spriteBatch)
-        {
-            foreach (WorldObject obj in _liPlacedWorldObjects)
-            {
-                if(obj.CompareType(ObjectTypeEnum.Light))
-                {
-                    spriteBatch.Draw(lightMask, new Vector2(obj.CollisionBox.Center.X - lightMask.Width / 2, obj.CollisionBox.Y - lightMask.Height / 2), Color.White);
-                }
-            }
-        }
-
-        public void DrawUpper(SpriteBatch spriteBatch)
-        {
-            SetLayerVisibility(true);
-
-            _renderer.Draw(_map, Camera._transform);
-
-            SetLayerVisibility(false);
-        }
-
-        public void SetLayerVisibility(bool revealUpper)
-        {
-            foreach (TiledMapTileLayer l in _map.TileLayers)                            //Iterate over each TileLayer in the map
-            {
-                if (l.Name.StartsWith("ent"))                                           //The layer is a dungeon entrancel layer. Don't touch.
-                {
-                    continue;
-                }
-
-                bool upgrade = false;
-                if (IsTown)
-                {
-                    foreach (KeyValuePair<int, Upgrade> s in GameManager.DiUpgrades)    //Check each upgrade to see if it's enabled
-                    {
-                        if(l.Name.Contains(s.Key.ToString())) {
-                            upgrade = true;
-                        }
-                        if (s.Value.Enabled)
-                        {                           
-                            bool determinant = l.Name.Contains("Upper");
-                            if (revealUpper) {
-                                l.IsVisible = determinant;
-                            }
-                            else { l.IsVisible = !determinant; }
-                        }
-                    }
-                }
-
-                if (!upgrade)
-                {
-                    bool determinant = l.Name.Contains("Upper");
-
-                    if (revealUpper) {
-                        l.IsVisible = determinant;
-                    }
-                    else { l.IsVisible = !determinant; }
-                }
-
-                if (l.IsVisible && _bOutside) {
-                    l.IsVisible = l.Name.Contains(GameCalendar.GetSeason());
-                }
-            }
-        }
-
-        public void EnableUpgradeVisibility(int upgradeID)
-        {
-            foreach (TiledMapTileLayer l in _map.TileLayers)
-            {
-                if (l.Name.Contains(upgradeID.ToString())) { l.IsVisible = true; }
-            }
         }
 
         #region Collision Code
@@ -1708,10 +1715,7 @@ namespace RiverHollow.Tile_Engine
 
         public void RemoveWorldObject(WorldObject o)
         {
-            if (_liPlacedWorldObjects.Contains(o))
-            {
-                _liPlacedWorldObjects.Remove(o);
-            }
+            _liObjectsToRemove.Add(o);
 
             //if (tile.Flooring == o)
             //{
@@ -1732,15 +1736,15 @@ namespace RiverHollow.Tile_Engine
         }
         public void RemoveCharacter(WorldActor c)
         {
-            ToRemove.Add(c);
+            _liActorsToRemove.Add(c);
         }
         public void RemoveMonster(Monster m)
         {
-            ToRemove.Add(m);
+            _liActorsToRemove.Add(m);
         }
         public void RemoveSummon(Summon s)
         {
-            ToRemove.Add(s);
+            _liActorsToRemove.Add(s);
         }
         public void CleanupSummons()
         {
@@ -2925,7 +2929,6 @@ namespace RiverHollow.Tile_Engine
                     if (rv)
                     {
                         MapManager.DropItemsOnMap(WorldObject.GetDroppedItems(), WorldObject.CollisionBox.Location.ToVector2());
-                        MapManager.RemoveWorldObject(WorldObject);
                     }
                 }
             }

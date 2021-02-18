@@ -18,12 +18,7 @@ namespace RiverHollow.SpriteAnimations
         public float LayerDepth => Position.Y + CurrentFrameAnimation.FrameHeight - (CombatSprite ? TileSize : 0) + ((Position.X + (CombatSprite ? TileSize : 0)) / 100);
 
         Texture2D _texture;                         // The texture that holds the images for this sprite
-        bool _bAnimating = true;                     // True if animations are being played
-        public bool PlayedOnce = false;
         Color _color = Color.White;              // If set to anything other than Color.White, will colorize the sprite with that color.
-
-        // Screen Position of the Sprite
-        private Vector2 _vPosition = Vector2.Zero;
 
         // Dictionary holding all of the FrameAnimation objects
         Dictionary<string, FrameAnimation> _diFrameAnimations = new Dictionary<string, FrameAnimation>();
@@ -31,37 +26,19 @@ namespace RiverHollow.SpriteAnimations
         string _sCurrAnim = string.Empty;   // Which FrameAnimation from the dictionary above is playing
 
         // Calculated center of the sprite
-        public Vector2 Center => new Vector2(_vPosition.X + _width / 2, Position.Y + _height / 2);
-
-        // Calculated width and height of the sprite
-        int _width;
-        public int Width => _width;
-        int _height;
-        public int Height => _height;
+        public Vector2 Center => new Vector2(Position.X + Width / 2, Position.Y + Height / 2);
+        public int Width { get; private set; }
+        public int Height { get; private set; }
 
         int _iScale = 1;
-
-        //Used for cutting off the top of hair
-        int _iFrameCutoff;          
-        public int FrameCutoff
-        {
-            get { return _iFrameCutoff; }
-            set { _iFrameCutoff = value; }
-        }
+        public int FrameCutoff { get; set; }
 
         /// Vector2 representing the position of the sprite's upper left
         /// corner pixel.
-        public Vector2 Position
-        {
-            get { return _vPosition; }
-            set {_vPosition = value; }
-        }
+        public Vector2 Position { get; set; } = Vector2.Zero;
 
-        public bool IsAnimating
-        {
-            get { return _bAnimating; }
-            set { _bAnimating = value; }
-        }
+        //When false, this
+        public bool Drawing { get; set; } = true;
 
         public bool Show = true;
 
@@ -80,10 +57,9 @@ namespace RiverHollow.SpriteAnimations
         float _fRotationAngle = 0;
         Vector2 _vRotationOrigin = Vector2.Zero;
 
-        public bool PlaysOnce = false;
-        ///
+        public bool PlayedOnce => CurrentFrameAnimation.PlayCount > 0;
+
         /// The FrameAnimation object of the currently playing animation
-        ///
         public FrameAnimation CurrentFrameAnimation
         {
             get
@@ -117,25 +93,24 @@ namespace RiverHollow.SpriteAnimations
             _texture = sprite._texture;
             CombatSprite = sprite.CombatSprite;
             _diFrameAnimations = sprite._diFrameAnimations;
-            _iFrameCutoff = sprite._iFrameCutoff;
+            FrameCutoff = sprite.FrameCutoff;
             _color = sprite._color;
             _sCurrAnim = sprite._sCurrAnim;
             _iScale = sprite._iScale;
 
-            IsAnimating = sprite.IsAnimating;
-            PlayedOnce = sprite.PlayedOnce;
+            Drawing = sprite.Drawing;
 
-            _width = sprite._width;
-            _height = sprite._height;
+            Width = sprite.Width;
+            Height = sprite.Height;
         }
 
-        public void AddAnimation(AnimationEnum verb, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, Width, Height, Frames, FrameLength, pingPong); }
-        public void AddAnimation(VerbEnum verb, DirectionEnum dir, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false) { AddAnimation(Util.GetActorString(verb, dir), startX, startY, Width, Height, Frames, FrameLength, pingPong); }
-        public void AddAnimation(string animationName, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false)
+        public void AddAnimation(AnimationEnum verb, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce); }
+        public void AddAnimation(VerbEnum verb, DirectionEnum dir, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetActorString(verb, dir), startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce); }
+        public void AddAnimation(string animationName, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false)
         {
-            _diFrameAnimations.Add(animationName, new FrameAnimation(startX, startY, Width, Height, Frames, FrameLength, pingPong));
-            _width = Width;
-            _height = Height;
+            _diFrameAnimations.Add(animationName, new FrameAnimation(startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce));
+            this.Width = Width;
+            this.Height = Height;
             if (_diFrameAnimations.Count == 1)
             {
                 PlayAnimation(animationName);
@@ -151,8 +126,9 @@ namespace RiverHollow.SpriteAnimations
         public void PlayAnimation(string verb, DirectionEnum dir) { PlayAnimation(Util.GetActorString(verb, dir)); }
         public void PlayAnimation(string animate)
         {
-            if (_sCurrAnim != animate && _diFrameAnimations.ContainsKey(animate))
+            if (_diFrameAnimations.ContainsKey(animate))
             {
+                Drawing = true;
                 _sCurrAnim = animate;
                 Reset();   
             }
@@ -182,11 +158,11 @@ namespace RiverHollow.SpriteAnimations
 
         public void SetScale(int x)
         {
-            _width = _width / _iScale;
-            _height = _height / _iScale;
+            Width = Width / _iScale;
+            Height = Height / _iScale;
 
-            _width = _width * x;
-            _height = _height * x;
+            Width = Width * x;
+            Height = Height * x;
 
             _iScale = x;
         }
@@ -206,14 +182,13 @@ namespace RiverHollow.SpriteAnimations
 
         public void MoveBy(float x, float y)
         {
-            _vPosition.X += x;
-            _vPosition.Y += y; 
+            Position = new Vector2(Position.X + x, Position.Y + y);
         }
 
         public void Update(GameTime gTime)
         {
             // Don't do anything if the sprite is not animating
-            if (_bAnimating)
+            if (Drawing)
             {
                 // If there is not a currently active animation
                 if (CurrentFrameAnimation == null)
@@ -238,15 +213,13 @@ namespace RiverHollow.SpriteAnimations
 
                 if (CurrentFrameAnimation.PlayCount > 0)
                 {
+                    if(CurrentFrameAnimation.PlayCount == 1 && CurrentFrameAnimation.PlayOnce)
+                    {
+                        Drawing  = false;
+                    }
                     if(!String.IsNullOrEmpty(CurrentFrameAnimation.NextAnimation))
                     {
                         PlayAnimation(CurrentFrameAnimation.NextAnimation);
-                    }
-                    else if (PlaysOnce)
-                    {
-                        PlayedOnce = true;
-                        IsAnimating = false;
-                        CurrentFrameAnimation.ResetPlayCount();
                     }
                 }
             }
@@ -254,31 +227,34 @@ namespace RiverHollow.SpriteAnimations
 
         public void Draw(SpriteBatch spriteBatch, bool useLayerDepth = true, float visibility = 1.0f, float forcedLayerDepth = -1)
         {
-            if (useLayerDepth)
+            if (Drawing)
             {
-                float layerDepth = forcedLayerDepth < 0 ? LayerDepth : forcedLayerDepth;
-                Draw(spriteBatch, layerDepth, visibility);
-            }
-            else
-            {
-                int newFrameCutoff = (int)(FrameCutoff * _iScale);
-                int drawAtY = (int)this.Position.Y;
-                Rectangle drawThis = CurrentFrameAnimation.FrameRectangle;
-
-                //This is used for lopping off the top part of a sprite,specifically for hair for hats
-                if (FrameCutoff != 0)
+                if (useLayerDepth)
                 {
-                    drawAtY += newFrameCutoff;
-                    drawThis = new Rectangle(drawThis.X, FrameCutoff, drawThis.Width, drawThis.Height - FrameCutoff);
+                    float layerDepth = forcedLayerDepth < 0 ? LayerDepth : forcedLayerDepth;
+                    Draw(spriteBatch, layerDepth, visibility);
                 }
+                else
+                {
+                    int newFrameCutoff = (int)(FrameCutoff * _iScale);
+                    int drawAtY = (int)this.Position.Y;
+                    Rectangle drawThis = CurrentFrameAnimation.FrameRectangle;
 
-                spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, drawAtY, this.Width, this.Height - newFrameCutoff), drawThis, _color * visibility);
+                    //This is used for lopping off the top part of a sprite,specifically for hair for hats
+                    if (FrameCutoff != 0)
+                    {
+                        drawAtY += newFrameCutoff;
+                        drawThis = new Rectangle(drawThis.X, FrameCutoff, drawThis.Width, drawThis.Height - FrameCutoff);
+                    }
+
+                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, drawAtY, this.Width, this.Height - newFrameCutoff), drawThis, _color * visibility);
+                }
             }
         }
 
         public void Draw(SpriteBatch spriteBatch, float layerDepth, float visibility = 1.0f)
         {
-            if (_bAnimating)
+            if (Drawing)
             {
                 int drawAtY = (int)this.Position.Y;
                 Rectangle drawThis = CurrentFrameAnimation.FrameRectangle;
@@ -333,6 +309,40 @@ namespace RiverHollow.SpriteAnimations
         public void SetRotationOrigin(Vector2 center)
         {
             _vRotationOrigin = center;
+        }
+
+        /// <summary>
+        /// Call this to confirm whether the Current Animation is the one we're looking for
+        /// and whether or not the animation is currently animating.
+        /// </summary>
+        /// <param name="val">The AnimationVerb to guard for</param>
+        /// <returns></returns>
+        public bool AnimationFinished(AnimationEnum val)
+        {
+            bool rv = false;
+
+            if(IsCurrentAnimation(val) && !Drawing && PlayedOnce)
+            {
+                rv = true;
+            }
+
+            return rv;
+        }
+        public bool AnimationVerbFinished(VerbEnum verb, DirectionEnum dir)
+        {
+            bool rv = false;
+
+            if (IsCurrentAnimation(Util.GetActorString(verb, dir)) && !Drawing)
+            {
+                rv = true;
+            }
+
+            return rv;
+        }
+
+        public bool ContainsAnimation(AnimationEnum val)
+        {
+            return _diFrameAnimations.ContainsKey(Util.GetEnumString(val));
         }
     }
 }

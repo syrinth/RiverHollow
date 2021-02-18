@@ -50,6 +50,8 @@ namespace RiverHollow.Characters
         protected ActorEnum _eActorType = ActorEnum.Actor;
         public ActorEnum ActorType => _eActorType;
 
+        public DirectionEnum Facing = DirectionEnum.Down;
+
         protected string _sName;
         public virtual string Name { get => _sName; }
 
@@ -117,17 +119,13 @@ namespace RiverHollow.Characters
         /// Adds a set of animations to the indicated Sprite for the given verb for each direction.
         /// </summary>
         /// <param name="sprite">Reference to the Sprite to add the animation to</param>
-        /// <param name="verb">The Verb to add, such as Attack, Hurt, etc</param>
-        /// <param name="firstX">The X-Position of the first frame</param>
-        /// <param name="firstY">The X-Position of the first Y. Should never move</param>
+        /// <param name="data">The AnimationData to use</param>
         /// <param name="width">Frame width</param>
         /// <param name="height">Frame height</param>
-        /// <param name="frames">Number of frames</param>
-        /// <param name="frameSpeed">The speed for each frame</param>
-        /// <param name="increment">The number of frames in width to skip between each animation.</param>
         /// <param name="pingpong">Whether the animation pingpong or not</param>
+        /// <param name="backToIdle">Whether or not the animation should go back to Idle after playing</param>
         /// <returns>The amount of pixels this animation sequence has crawled</returns>
-        protected int AddDirectionalAnimations(ref AnimatedSprite sprite, AnimationData data, int width, int height, bool pingpong = false)
+        protected int AddDirectionalAnimations(ref AnimatedSprite sprite, AnimationData data, int width, int height, bool pingpong, bool backToIdle)
         {
             int xCrawl = 0;
             sprite.AddAnimation(data.Verb, DirectionEnum.Down, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong);
@@ -139,7 +137,26 @@ namespace RiverHollow.Characters
             sprite.AddAnimation(data.Verb, DirectionEnum.Left, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong);
             xCrawl += width * data.Frames;
 
+            if (backToIdle)
+            {
+                SetNextAnimationToIdle(ref sprite, data.Verb, DirectionEnum.Down);
+                SetNextAnimationToIdle(ref sprite, data.Verb, DirectionEnum.Right);
+                SetNextAnimationToIdle(ref sprite, data.Verb, DirectionEnum.Up);
+                SetNextAnimationToIdle(ref sprite, data.Verb, DirectionEnum.Left);
+            }
+
             return xCrawl;
+        }
+
+        /// <summary>
+        /// Helper function to set the given Verbs next animation to Idle
+        /// </summary>
+        /// <param name="sprite">The sprite to modify</param>
+        /// <param name="verb">The verb to set the next animation of</param>
+        /// <param name="dir">The Direction to do it to</param>
+        private void SetNextAnimationToIdle(ref AnimatedSprite sprite, VerbEnum verb, DirectionEnum dir)
+        {
+            sprite.SetNextAnimation(Util.GetActorString(verb, dir), Util.GetActorString(VerbEnum.Idle, dir));
         }
 
         protected void RemoveDirectionalAnimations(ref AnimatedSprite sprite, VerbEnum verb)
@@ -150,10 +167,9 @@ namespace RiverHollow.Characters
             sprite.RemoveAnimation(verb, DirectionEnum.Left);
         }
 
-        public bool AnimationFinished() { return _sprBody.PlayedOnce && _sprBody.IsAnimating; }
         public bool IsCurrentAnimation(AnimationEnum val) { return _sprBody.IsCurrentAnimation(val); }
         public bool IsCurrentAnimation(VerbEnum verb, DirectionEnum dir) { return _sprBody.IsCurrentAnimation(verb, dir); }
-        public bool IsAnimating() { return _sprBody.IsAnimating; }
+        public bool IsAnimating() { return _sprBody.Drawing; }
         public bool AnimationPlayedXTimes(int x) { return _sprBody.GetPlayCount() >= x; }
 
         public bool IsActorType(ActorEnum act) { return _eActorType == act; }
@@ -164,11 +180,18 @@ namespace RiverHollow.Characters
         /// <param name="list">List to add to</param>
         /// <param name="data">Data to read form</param>
         /// <param name="verb">Verb to add</param>
-        protected void AddToAnimationsList(ref List<AnimationData> list, Dictionary<string, string> data, VerbEnum verb, bool directional = true)
+        /// <param name="directional">Whether the animation will have a version for each direction</param>
+        /// <param name="backToIdle">Whether the animation transitions to the Idle state after playing</param>
+        /// <param name="playsOnce">Whether the animation should play once then disappear</param>
+        protected void AddToAnimationsList(ref List<AnimationData> list, Dictionary<string, string> data, VerbEnum verb)
+        {
+            AddToAnimationsList(ref list, data, verb, true, false);
+        }
+        protected void AddToAnimationsList(ref List<AnimationData> list, Dictionary<string, string> data, VerbEnum verb, bool directional, bool backToIdle)
         {
             if (data.ContainsKey(Util.GetEnumString(verb)))
             {
-                list.Add(new AnimationData(data[Util.GetEnumString(verb)], verb, directional));
+                list.Add(new AnimationData(data[Util.GetEnumString(verb)], verb, backToIdle, directional));
             }
         }
         protected void AddToAnimationsList(ref List<AnimationData> list, Dictionary<string, string> data, AnimationEnum animation)
@@ -191,7 +214,6 @@ namespace RiverHollow.Characters
         public string CurrentMapName;
         public RHMap CurrentMap => (!string.IsNullOrEmpty(CurrentMapName) ? MapManager.Maps[CurrentMapName] : null);
         public Vector2 NewMapPosition;
-        public DirectionEnum Facing = DirectionEnum.Down;
         public Point CharCenter => GetRectangle().Center;
 
         /// <summary>
@@ -319,7 +341,7 @@ namespace RiverHollow.Characters
             {
                 if (data.Directional)
                 {
-                    AddDirectionalAnimations(ref sprite, data, _iSpriteWidth, _iSpriteHeight, data.PingPong);
+                    AddDirectionalAnimations(ref sprite, data, _iSpriteWidth, _iSpriteHeight, data.PingPong, data.BackToIdle);
                 }
                 else
                 {
@@ -406,6 +428,7 @@ namespace RiverHollow.Characters
         /// </summary>
         public void PlayAnimationVerb(VerbEnum verb) { PlayAnimation(verb, Facing); }
         public bool IsCurrentAnimationVerb(VerbEnum verb) { return _sprBody.IsCurrentAnimation(verb, Facing); }
+        public bool IsCurrentAnimationVerbFinished(VerbEnum verb) { return _sprBody.AnimationVerbFinished(verb, Facing); }
 
         /// <summary>
         /// Check the direction in which we wish to move the Actor for any possible collisions.
@@ -3052,7 +3075,7 @@ namespace RiverHollow.Characters
             List<AnimationData> rv;
             rv = LoadWorldAndCombatAnimations(data);
 
-            AddToAnimationsList(ref rv, data, VerbEnum.UseTool);
+            AddToAnimationsList(ref rv, data, VerbEnum.UseTool, true, true);
             return rv;
         }
 

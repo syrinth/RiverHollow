@@ -104,7 +104,7 @@ namespace RiverHollow.CombatStuff
         string _sRemoveString;
 
         private CombatActor _cmbtActionUser;
-        public AnimatedSprite Sprite;
+        public AnimatedSprite ActionSprite;
         private Consumable _chosenItem;
         #endregion
 
@@ -200,7 +200,7 @@ namespace RiverHollow.CombatStuff
                     string[] parse = stringData[Util.GetEnumString(SkillTagsEnum.StatusEffectID)].Split('-');
 
                     StatusEffectData statEffect = new StatusEffectData() { BuffID = int.Parse(parse[0]), Duration = int.Parse(parse[1]), Tags = parse[2] };
-                    statEffect.Sprite = Sprite;
+                    statEffect.Sprite = ActionSprite;
                     _liStatusEffects.Add(statEffect);
                     _liEffects.Add(SkillTagsEnum.StatusEffectID);
                 }
@@ -243,11 +243,9 @@ namespace RiverHollow.CombatStuff
                 _iFrames = int.Parse(parse[i++]);
                 _fFrameSpeed = float.Parse(parse[i++]);
 
-                Sprite = new AnimatedSprite(_sAnimation);
-                Sprite.AddAnimation(AnimationEnum.PlayAnimation, 0, 0, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed);
-                Sprite.PlayAnimation(AnimationEnum.PlayAnimation);
-                Sprite.IsAnimating = false;
-                Sprite.PlaysOnce = true;
+                ActionSprite = new AnimatedSprite(_sAnimation);
+                ActionSprite.AddAnimation(AnimationEnum.PlayAnimation, 0, 0, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed, false, true);
+                ActionSprite.Drawing = false;
             }
 
             if (stringData.ContainsKey("AnimOffset"))
@@ -270,7 +268,7 @@ namespace RiverHollow.CombatStuff
             //    //gItem.Draw(spritebatch);
             //}
 
-            Sprite?.Draw(spritebatch);
+            ActionSprite?.Draw(spritebatch);
         }
 
         public void Update(GameTime gTime)
@@ -761,16 +759,23 @@ namespace RiverHollow.CombatStuff
                     }
                     break;
                 case "Direct":
-                    if (Sprite != null && !Sprite.PlayedOnce && !Sprite.IsAnimating)
-                    {
-                        Sprite.IsAnimating = true;
-                        Sprite.Position = TileTargetList[0].Position;
-                        Sprite.Position -= new Vector2(_iAnimOffsetX, _iAnimOffsetY);
-                    }
-                    else if (Sprite != null && Sprite.IsAnimating) { Sprite.Update(gTime); }
-                    else if (Sprite == null || Sprite.PlayedOnce)
-                    {
-                        _iCurrentAction++;
+                    if (ActionSprite == null) { _iCurrentAction++; }
+                    else { 
+                        if (!ActionSprite.Drawing)
+                        {
+                            ActionSprite.PlayAnimation(AnimationEnum.PlayAnimation);
+                            ActionSprite.Position = TileTargetList[0].Position;
+                            ActionSprite.Position -= new Vector2(_iAnimOffsetX, _iAnimOffsetY);
+                        }
+                        else if (ActionSprite.Drawing) {
+                            ActionSprite.Update(gTime);
+
+                            if (ActionSprite.AnimationFinished(AnimationEnum.PlayAnimation))
+                            {
+                                ActionSprite.Reset();
+                                _iCurrentAction++;
+                            }
+                        }
                     }
                     break;
                 //Handler for if the action Summons something
@@ -867,11 +872,6 @@ namespace RiverHollow.CombatStuff
                     break;
                 case "End":
                     _iCurrentAction = 0;
-                    if (Sprite != null)
-                    {
-                        Sprite.IsAnimating = false;
-                        Sprite.PlayedOnce = false;
-                    }
                     CombatManager.CurrentTurnInfo.Acted();
 
                     if (!CombatManager.CheckForEndOfCombat())

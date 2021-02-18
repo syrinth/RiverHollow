@@ -154,13 +154,9 @@ namespace RiverHollow.Game_Managers
             {
                 ToolInUse.Update(gTime);
 
-                bool isUseTool = World.IsCurrentAnimationVerb(VerbEnum.UseTool);
-                int playCount = World.BodySprite.GetPlayCount();
-                bool finished = isUseTool && playCount >= 1;
-
                 RHTile target = MapManager.CurrentMap.TargetTile;
 
-                if (target != null && finished)
+                if (target != null && ToolInUse.ToolAnimation.AnimationVerbFinished(VerbEnum.UseTool, PlayerManager.World.Facing))
                 {
                     if (PlayerManager.ToolIsAxe() || PlayerManager.ToolIsPick() || PlayerManager.ToolIsLantern())
                     {
@@ -204,10 +200,7 @@ namespace RiverHollow.Game_Managers
             if (_currentMap == MapManager.CurrentMap.Name)
             {
                 World.Draw(spriteBatch, true);
-                if (ToolInUse != null)
-                {
-                    ToolInUse.Draw(spriteBatch);
-                }
+                ToolInUse?.Draw(spriteBatch);
             }
         }
 
@@ -367,7 +360,6 @@ namespace RiverHollow.Game_Managers
                         PlayerManager.World.DetermineFacing(MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition()));
                         Busy = true;
                         AllowMovement = false;
-                        ToolInUse.ToolAnimation.IsAnimating = true;
                         PlayerManager.World.PlayAnimationVerb(VerbEnum.UseTool);
                         ToolInUse.ToolAnimation.PlayAnimation(VerbEnum.UseTool, World.Facing);
                     }
@@ -380,6 +372,7 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
+
         public static void UnsetTool()
         {
             PlayerManager.ToolInUse = null;

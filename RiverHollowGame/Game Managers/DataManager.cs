@@ -691,45 +691,38 @@ namespace RiverHollow.Game_Managers
         #region Helper Objects
         public class AnimationData
         {
-            VerbEnum _eVerb;
-            AnimationEnum _eAnim;
-            bool _bPingPong;
-            bool _bDirectional;
-            int _iXLocation;
-            int _iYLocation;
-            int _iFrames;
-            float _fFrameSpeed;
+            public int XLocation { get; private set; }
+            public int YLocation { get; private set; }
+            public int Frames { get; private set; }
+            public float FrameSpeed { get; private set; }
+            public bool Directional { get; }
+            public bool PingPong { get; private set; }
+            public bool BackToIdle { get; private set; }
+            public VerbEnum Verb { get; }
+            public AnimationEnum Animation { get; }
 
-            public int XLocation => _iXLocation;
-            public int YLocation => _iYLocation;
-            public int Frames => _iFrames;
-            public float FrameSpeed => _fFrameSpeed;
-            public bool Directional => _bDirectional;
-            public bool PingPong => _bPingPong;
-            public VerbEnum Verb => _eVerb;
-            public AnimationEnum Animation => _eAnim;
-
-            public AnimationData(string value, VerbEnum verb, bool directional) : base()
+            public AnimationData(string value, VerbEnum verb, bool backToIdle, bool directional) : base()
             {
-                _bDirectional = directional;
-                _eVerb = verb;
+                Directional = directional;
+                Verb = verb;
+                BackToIdle = backToIdle;
                 StoreData(value);
             }
 
             public AnimationData(string value, AnimationEnum anim)
             {
-                _eAnim = anim;
+                Animation = anim;
                 StoreData(value);
             }
 
             public void StoreData(string value)
             {
                 string[] splitString = value.Split('-');
-                _iXLocation = int.Parse(splitString[0]);
-                _iYLocation = int.Parse(splitString[1]);
-                _iFrames = int.Parse(splitString[2]);
-                _fFrameSpeed = float.Parse(splitString[3]);
-                _bPingPong = splitString[4].Equals("T");
+                XLocation = int.Parse(splitString[0]);
+                YLocation = int.Parse(splitString[1]);
+                Frames = int.Parse(splitString[2]);
+                FrameSpeed = float.Parse(splitString[3]);
+                PingPong = splitString[4].Equals("T");
             }
         }
         #endregion

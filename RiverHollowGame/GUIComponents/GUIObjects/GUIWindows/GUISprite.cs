@@ -18,8 +18,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public int PlayCount => _sprite.GetPlayCount();
 
         public bool IsAnimating {
-            get { return _sprite.IsAnimating; }
-            set { _sprite.IsAnimating = value; }
+            get { return _sprite.Drawing; }
+            set { _sprite.Drawing = value; }
         }
 
         public GUISprite(AnimatedSprite sprite, bool overwrite = false)

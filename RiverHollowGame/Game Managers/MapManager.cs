@@ -416,18 +416,18 @@ namespace RiverHollow.Game_Managers
                 };
                 _sprite.AddAnimation(AnimationEnum.Rain, 0, 0, 160, 160, 2, 0.2f);
                 _sprite.AddAnimation(AnimationEnum.Snow, 0, 160, 160, 160, 3, 0.2f);
-                _sprite.IsAnimating = false;
+                _sprite.Drawing = false;
             }
 
             public void SetWeather(AnimationEnum weather)
             {
                 _sprite.PlayAnimation(weather);
-                _sprite.IsAnimating = true;
+                _sprite.Drawing = true;
             }
 
             public void StopWeather()
             {
-                _sprite.IsAnimating = false;
+                _sprite.Drawing = false;
             }
 
             internal void Draw(SpriteBatch spriteBatch)

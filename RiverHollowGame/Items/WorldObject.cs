@@ -25,6 +25,7 @@ namespace RiverHollow.Items
 
         public List<RHTile> Tiles;
 
+        protected string _sMapName;
         protected bool _bImpassable = true;
         public bool Blocking => _bImpassable;
         protected bool _wallObject;
@@ -218,13 +219,47 @@ namespace RiverHollow.Items
             if (stringData.ContainsKey("Tool")) { _eToolType = Util.ParseEnum<ToolEnum>(stringData["Tool"]);}
             if (stringData.ContainsKey("Hp")) { _iHP = int.Parse(stringData["Hp"]); }
             if (stringData.ContainsKey("ReqLvl")) { _lvltoDmg = int.Parse(stringData["ReqLvl"]); }
+
+            if (stringData.ContainsKey("DestructionAnim"))
+            {
+                string[] splitString = stringData["DestructionAnim"].Split('-');
+                _sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), TileSize, TileSize, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
+            }
+        }
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+            if(_sprite.Position != _vMapPosition) { _sprite.Position = _vMapPosition; }
+            if (_iHP <= 0 && (!_sprite.ContainsAnimation(AnimationEnum.KO) || _sprite.AnimationFinished(AnimationEnum.KO)))
+            {
+                MapManager.Maps[Tiles[0].MapName].RemoveWorldObject(this);
+            }
         }
 
         public virtual bool DealDamage(int dmg)
         {
             bool rv = false;
-            _iHP -= dmg;
-            rv = _iHP <= 0;
+            if (_iHP > 0)
+            {
+                _iHP -= dmg;
+                rv = _iHP <= 0;
+
+                if (rv)
+                {
+                    _bImpassable = false;
+                    _sprite.PlayAnimation(AnimationEnum.KO);
+                }
+            }
+
+            //Nudge the Object in the direction of the 'attack'
+            int xMod = 0, yMod = 0;
+            if (PlayerManager.World.Facing == DirectionEnum.Left) { xMod = -1; }
+            else if (PlayerManager.World.Facing == DirectionEnum.Right) { xMod = 1; }
+
+            if (PlayerManager.World.Facing == DirectionEnum.Up) { yMod = -1; }
+            else if (PlayerManager.World.Facing == DirectionEnum.Down) { yMod = 1; }
+            
+            _sprite.Position = new Vector2(_sprite.Position.X + xMod, _sprite.Position.Y + yMod);
 
             return rv;
         }
@@ -405,7 +440,7 @@ namespace RiverHollow.Items
             {
                 LoadDictionaryData(stringData);
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
-                _sprite.IsAnimating = true;
+                _sprite.Drawing = true;
             }
 
             public override void Draw(SpriteBatch spriteBatch)
@@ -483,7 +518,7 @@ namespace RiverHollow.Items
                 _sprite.AddAnimation(AnimationEnum.ObjectIdle, (int)_pImagePos.X, (int)_pImagePos.Y, _iWidth, _iHeight, 1, 0.3f, false);
                 _sprite.AddAnimation(AnimationEnum.PlayAnimation, (int)_pImagePos.X + _iWidth, (int)_pImagePos.Y, _iWidth, _iHeight, _iWorkingFrames, _fFrameSpeed, false);
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
-                _sprite.IsAnimating = true;
+                _sprite.Drawing = true;
 
                 SetSpritePos(_vMapPosition);
             }
@@ -1290,7 +1325,7 @@ namespace RiverHollow.Items
                 string[] idleSplit = stringData["Idle"].Split('-');
                 _sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _iWidth, _iHeight, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
-                _sprite.IsAnimating = true;
+                _sprite.Drawing = true;
             }
         }
     }

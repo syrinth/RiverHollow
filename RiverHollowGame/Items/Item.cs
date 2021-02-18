@@ -587,17 +587,16 @@ namespace RiverHollow.Items
             int xCrawl = 0;
             int crawlIncrement = toolWidth * toolFrames;
 
-            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Down, (int)animationPosition.X, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED);
+            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Down, (int)animationPosition.X, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED, false, true);
             xCrawl += crawlIncrement;
-            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Right, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED);
+            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Right, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED, false, true);
             xCrawl += crawlIncrement;
-            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Up, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED);
+            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Up, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED, false, true);
             xCrawl += crawlIncrement;
-            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Left, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED);
+            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Left, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED, false, true);
             xCrawl += crawlIncrement;
 
-            _sprite.IsAnimating = true;
-            _sprite.PlaysOnce = true;
+            _sprite.Drawing = false;
         }
 
         public override void Update(GameTime gTime)
@@ -629,10 +628,8 @@ namespace RiverHollow.Items
 
     public class Food : Item
     {
-        private int _stam;
-        public int Stamina { get => _stam; }
-        private int _health;
-        public int Health { get => _health; }
+        public int Stamina { get; }
+        public int Health { get; }
 
         public Food(int id, Dictionary<string, string> stringData, int num)
         {
@@ -640,8 +637,8 @@ namespace RiverHollow.Items
 
             ImportBasics(stringData, id, num);
 
-            if (stringData.ContainsKey("Stam")) { _stam = int.Parse(stringData["Stam"]); }
-            if (stringData.ContainsKey("Hp")) { _health = int.Parse(stringData["Hp"]); }
+            if (stringData.ContainsKey("Stam")) { Stamina = int.Parse(stringData["Stam"]); }
+            if (stringData.ContainsKey("Hp")) { Health = int.Parse(stringData["Hp"]); }
 
             _bStacks = true;
         }
@@ -650,8 +647,8 @@ namespace RiverHollow.Items
         {
             string rv = base.GetDescription();
             rv += System.Environment.NewLine;
-            if (Health > 0) { rv += "Health: +" + _health + " "; }
-            if (Stamina > 0) { rv += "Stamina: +" + _stam + " "; }
+            if (Health > 0) { rv += "Health: +" + Health + " "; }
+            if (Stamina > 0) { rv += "Stamina: +" + Stamina + " "; }
             rv = rv.Trim();
 
             return rv;
