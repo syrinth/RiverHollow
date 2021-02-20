@@ -72,7 +72,7 @@
   <object id="48" name="Entrance" x="0" y="128" width="4" height="48">
    <properties>
     <property name="EntranceDir" value="Right"/>
-    <property name="Map" value="mapRiverHollowTown"/>
+    <property name="Map" value="mapTown"/>
    </properties>
   </object>
   <object id="49" name="Entrance" x="476" y="128" width="4" height="48">

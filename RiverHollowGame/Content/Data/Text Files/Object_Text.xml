@@ -394,6 +394,14 @@
       <Value>[Name:Town Store]</Value>
     </Item>
     <Item>
+      <Key>Building_6</Key>
+      <Value>[Name:Building Store]</Value>
+    </Item>
+    <Item>
+      <Key>Building_7</Key>
+      <Value>[Name:Inn]</Value>
+    </Item>
+    <Item>
       <Key>Spirit_0</Key>
       <Value>[Name:Henry]</Value>
     </Item>

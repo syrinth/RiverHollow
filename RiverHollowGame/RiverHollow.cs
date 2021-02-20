@@ -268,8 +268,8 @@ namespace RiverHollow
             PlayerManager.NewPlayer();
             MapManager.PopulateMaps(false);
 
-            PlayerManager.Buildings[0].AddWorker(a);
-            PlayerManager.Buildings[0].AddWorker(b);
+           // PlayerManager._diBuildings[0].AddWorker(a);
+            //PlayerManager._diBuildings[0].AddWorker(b);
 
             PlayerManager.AddToParty(a);
             PlayerManager.AddToParty(b);
@@ -310,8 +310,11 @@ namespace RiverHollow
             //Places NPCs on the map
             foreach (Villager v in DataManager.DiNPC.Values)
             {
-                v.MoveToSpawn();
-                v.CalculatePathing();
+                if (v.ArrivedInTown)
+                {
+                    v.MoveToSpawn();
+                    //v.CalculatePathing();
+                }
             }
 
             Camera.SetObserver(PlayerManager.World);
@@ -325,10 +328,6 @@ namespace RiverHollow
             GameManager.RollOver();
             MissionManager.Rollover();
             PlayerManager.Rollover();
-            foreach (Building b in PlayerManager.Buildings)
-            {
-                b.Rollover();
-            }
 
             foreach (Villager n in DataManager.DiNPC.Values)
             {
@@ -344,6 +343,7 @@ namespace RiverHollow
 
         public static void HomeMapPlacement()
         {
+            SetGameScale(2);
             GUIManager.CloseMainObject();
             GameManager.Scry();
             MapManager.ViewMap(MapManager.HomeMap);

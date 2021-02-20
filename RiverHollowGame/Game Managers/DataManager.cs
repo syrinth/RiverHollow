@@ -332,15 +332,6 @@ namespace RiverHollow.Game_Managers
             return null;
         }
 
-        /// <summary>
-        /// The Manor is Building 0, so make a new building from the data
-        /// </summary>
-        /// <returns>A new building representing the Manor house.</returns>
-        public static Building GetManor()
-        {
-            return new Building(_diBuildings[0], 0);
-        }
-
         public static string GetAdventurerDialogue(int id, string key)
         {
             string rv = string.Empty;

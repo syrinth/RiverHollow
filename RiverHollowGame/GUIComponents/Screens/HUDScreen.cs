@@ -1775,20 +1775,20 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     public MainBuildingsWin(HUDManagement s, Adventurer w = null) : base(s)
                     {
-                        foreach (Building b in PlayerManager.Buildings)
-                        {
-                            bool good = false;
+                        //foreach (Building b in PlayerManager._diBuildings)
+                        //{
+                        //    bool good = false;
 
-                            if (_parent.Action == ActionTypeEnum.Upgrade) { good = b.Level < GameManager.MaxBldgLevel; }
-                            else if (w == null || b.CanHold(w)) { good = true; }
+                        //    if (_parent.Action == ActionTypeEnum.Upgrade) { good = b.Level < GameManager.MaxBldgLevel; }
+                        //    else if (w == null || b.CanHold(w)) { good = true; }
 
-                            if (good)
-                            {
-                                BuildingBox box = new BuildingBox(b, w != null);
-                                _liButtons.Add(box);
-                                AddControl(box);
-                            }
-                        }
+                        //    if (good)
+                        //    {
+                        //        BuildingBox box = new BuildingBox(b, w != null);
+                        //        _liButtons.Add(box);
+                        //        AddControl(box);
+                        //    }
+                        //}
 
                         CreateSpacedGrid(ref _liButtons, _window.InnerTopLeft(), _window.MidWidth(), 3);
                     }
@@ -2366,6 +2366,7 @@ namespace RiverHollow.GUIComponents.Screens
                         _bldg.SetName(_gInputWindow.EnteredText);
                     }
 
+                    SetGameScale(NORMAL_SCALE);
                     //We know that this window only gets created under special circumstances, so unset them
                     RiverHollow.ResetCamera();
                     GUIManager.CloseMainObject();
@@ -2868,18 +2869,18 @@ namespace RiverHollow.GUIComponents.Screens
                 _liWorkers = new List<CharacterDisplayBox>();
 
                 //Find all the relevant workers and create a CharacterDisplayBox for them
-                foreach (Building b in PlayerManager.Buildings)
-                {
-                    foreach (Adventurer adv in b.Workers)
-                    {
-                        if (adv.AvailableForMissions() && adv.ClassLevel >= MissionManager.SelectedMission.ReqLevel)
-                        {
-                            CharacterDisplayBox box = new CharacterDisplayBox(adv, null);
-                            box.WorldAdv = adv;
-                            _liWorkers.Add(box);
-                        }
-                    }
-                }
+                //foreach (Building b in PlayerManager._diBuildings)
+                //{
+                //    foreach (Adventurer adv in b.Workers)
+                //    {
+                //        if (adv.AvailableForMissions() && adv.ClassLevel >= MissionManager.SelectedMission.ReqLevel)
+                //        {
+                //            CharacterDisplayBox box = new CharacterDisplayBox(adv, null);
+                //            box.WorldAdv = adv;
+                //            _liWorkers.Add(box);
+                //        }
+                //    }
+                //}
 
                 //Organize all the CharacterDisplayBoxes.
                 for (int i = 0; i < _liWorkers.Count(); i++)

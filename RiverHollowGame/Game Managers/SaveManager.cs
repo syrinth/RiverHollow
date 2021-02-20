@@ -180,12 +180,6 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "UpgradeTime")]
             public int iUpgradeTimer;
-
-            [XmlElement(ElementName = "BuildingChest")]
-            public ContainerData buildingChest;
-
-            [XmlElement(ElementName = "Pantry")]
-            public ContainerData pantry;
         }
         public struct WorkerData
         {
@@ -492,7 +486,7 @@ namespace RiverHollow.Game_Managers
 
             data.playerData = playerData;
 
-            foreach (Building b in PlayerManager.Buildings)
+            foreach (Building b in PlayerManager.BuildingList)
             {
                 data.Buildings.Add(b.SaveData());
             }

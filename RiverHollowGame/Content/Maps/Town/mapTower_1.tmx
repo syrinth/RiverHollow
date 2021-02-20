@@ -81,7 +81,7 @@
  <objectgroup id="4" name="Travel Layer">
   <object id="2" name="Entrance" x="176" y="300" width="16" height="4">
    <properties>
-    <property name="Map" value="mapManorGrounds"/>
+    <property name="Map" value="mapTown"/>
    </properties>
   </object>
  </objectgroup>

@@ -30,12 +30,10 @@ namespace RiverHollow.Game_Managers
             }
         }//[Friends:1-30]
 
-        public const string HomeMap = "mapManorGrounds";
+        public const string HomeMap = "mapTown";
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
-
-        static string _sSpawnMap;
-        public static string SpawnMap => _sSpawnMap;
+        public static string SpawnMap { get; private set; }
         public static Vector2 SpawnTile { get; private set; }
         public static Dictionary<string, RHMap> Maps { get; private set; }
 
@@ -75,8 +73,8 @@ namespace RiverHollow.Game_Managers
         /// <param name="map">The name of the map</param>
         public static void SetSpawnMap(string map, int x, int y)
         {
-            _sSpawnMap = map;
-            CurrentMap = Maps[MapManager._sSpawnMap];
+            SpawnMap = map;
+            CurrentMap = Maps[MapManager.SpawnMap];
             SpawnTile = new Vector2(x, y);
         }
 
@@ -108,16 +106,18 @@ namespace RiverHollow.Game_Managers
                 {
                     CombatManager.EndCombatEscape();
                 }
-                //Handling for if the player is currently in a building and is leaving it
-                if (PlayerManager._iBuildingID != -1)
-                {
-                    entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[PlayerManager._iBuildingID.ToString()];
-                    PlayerManager._iBuildingID = -1;
-                }
-                else
-                {
-                    entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
-                }
+
+                entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
+                ////Handling for if the player is currently in a building and is leaving it
+                //if (PlayerManager._iBuildingID != -1)
+                //{
+                //    entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[PlayerManager._iBuildingID.ToString()];
+                //    PlayerManager._iBuildingID = -1;
+                //}
+                //else
+                //{
+                //    entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
+                //}
 
                 if (!string.IsNullOrEmpty(Maps[travelPoint.LinkedMap].BackgroundMusic))
                 {

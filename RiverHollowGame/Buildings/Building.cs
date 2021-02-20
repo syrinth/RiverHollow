@@ -15,70 +15,59 @@ namespace RiverHollow.Buildings
 {
     public class Building : WorldObject
     {
-        protected int _iNPCBuilderID;
-        protected int _iEntX;
-        protected int _iEntY;
-        protected int _iEntWidth;
-        protected int _iEntHeight;
-        protected int _iBaseX;
-        protected int _iBaseY;
+        private int _iNPCBuilderID;
+        private int _iEntX;
+        private int _iEntY;
+        private int _iEntWidth;
+        private int _iEntHeight;
+        private int _iBaseX;
+        private int _iBaseY;
         public override int BaseWidth => _iBaseWidth;
         public override int BaseHeight => _iBaseHeight;
+        public int Level { get; private set; } = 1;
 
-        protected int _iBldgLvl = 1;
-        public int Level => _iBldgLvl;
-
-        protected string _sDescription;
+        private string _sDescription;
         public string Description => _sDescription;
 
-        protected string _sHomeMap;
-        protected string _sName;
+        private string _sHomeMap;
+        private string _sName;
         public string Name => _sName;
-        public string MapName => "map" +_sName.Replace(" ", "") + (_iBldgLvl == 0 ? "" : _iBldgLvl.ToString());
-
-        protected string _sGivenName;
-        public string GivenName=> _sGivenName;
+        public string MapName => "map" +_sName.Replace(" ", "") + "_" + (Level == 0 ? "" : Level.ToString());
+        public string GivenName { get; private set; }
 
         public override Rectangle CollisionBox => GenerateCollisionBox();
         public Rectangle SelectionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _sprite.Width, _sprite.Height);
 
-        protected Rectangle _rEntrance;
-        public Rectangle TravelBox => _rEntrance;
+        public Rectangle TravelBox { get; private set; }
 
-        protected int _iPersonalID;
-        public int PersonalID => _iPersonalID;
+        public int PersonalID { get; private set; }
+        public bool Unique { get; private set; }
 
-        protected bool _bUnique;
-        public bool Unique => _bUnique;
-        protected bool _bManor;
-        public bool IsManor => _bManor;
+        private int _iUpgradeTime;
+        private int _iUpgradeTimer;
 
-        protected int _iUpgradeTime;
-        protected int _iUpgradeTimer;
-       
-        protected Vector2 _vecBuildspot;
-        public Vector2 BuildFromPosition => _vecBuildspot;
+        public Vector2 BuildFromPosition { get; private set; }
 
         #region Worker Info
         public bool HoldsWorkers { get; private set; }
         private int[] _arrWorkerTypes;
         public bool _selected = false;
 
-        protected int _iWorkersPerLevel = 3;
-        protected int _iMaxWorkers = 9;
-        protected int _iCurrWorkerMax => _iWorkersPerLevel * _iBldgLvl;
+        private int _iWorkersPerLevel = 3;
+        private int _iMaxWorkers = 9;
+        private int _iCurrWorkerMax => _iWorkersPerLevel * Level;
         public int MaxWorkers => _iCurrWorkerMax;
 
-        protected List<Adventurer> _liWorkers;
+        private List<Adventurer> _liWorkers;
         public List<Adventurer> Workers => _liWorkers;
 
-        protected Container _buildingChest;
+        private Container _buildingChest;
         public Container BuildingChest { get => _buildingChest; set => _buildingChest = value; }
 
-        protected Container _pantry;
+        private Container _pantry;
         public Container Pantry { get => _pantry; set => _pantry = value; }
 
-        protected List<WorldObject> _liPlacedObjects;
+        private List<WorldObject> _liPlacedObjects;
         public List<WorldObject> PlacedObjects => _liPlacedObjects;
         #endregion
 
@@ -89,7 +78,7 @@ namespace RiverHollow.Buildings
             ImportBasics(data, id);
         }
 
-        protected void ImportBasics(Dictionary<string, string> stringData, int id)
+        private void ImportBasics(Dictionary<string, string> stringData, int id)
         {
             _iID = id;
             DataManager.GetTextData("Building", _iID, ref _sName, "Name");
@@ -127,14 +116,14 @@ namespace RiverHollow.Buildings
             //Sets the position from which the Mason will spawn tobuild the building
             if (stringData.ContainsKey("BuildSpot")) {
                 string[] split = stringData["BuildSpot"].Split('-');
-                _vecBuildspot = new Vector2(int.Parse(split[0]), int.Parse(split[1]));
+                BuildFromPosition = new Vector2(int.Parse(split[0]), int.Parse(split[1]));
             }
 
             //Worker data for the building, if appropriate
             if (stringData.ContainsKey("Workers"))
             {
                 //Start level is 1 so that we display in built state
-                _iBldgLvl = 1;
+                Level = 1;
                 HoldsWorkers = true;
                 _arrWorkerTypes = new int[2];
 
@@ -151,13 +140,10 @@ namespace RiverHollow.Buildings
             //Default is 3, but some buildings may allow more or less
             if (stringData.ContainsKey("WorkersPerLevel")) { _iWorkersPerLevel = int.Parse(stringData["WorkersPerLevel"]); }
 
-            //Flag for whether or not this building is the Manor
-            _bManor = stringData.ContainsKey("Manor");
-
             //Flag for whether or not this building is unique
-            _bUnique = stringData.ContainsKey("Unique");
+            Unique = stringData.ContainsKey("Unique");
 
-            _iPersonalID = PlayerManager.GetNewBuildingID();
+            //PersonalID = PlayerManager.GetNewBuildingID();
 
             LoadSprite(stringData, DataManager.FOLDER_BUILDINGS + stringData["Texture"]);
         }
@@ -173,7 +159,7 @@ namespace RiverHollow.Buildings
                 _sprite.AddAnimation(i.ToString(), startX, startY, _iWidth, _iHeight);
                 startX += _iWidth;
             }
-            _sprite.PlayAnimation(_iBldgLvl.ToString());
+            _sprite.PlayAnimation(Level.ToString());
         }
 
         /// <summary>
@@ -183,7 +169,7 @@ namespace RiverHollow.Buildings
         /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (_iBldgLvl > 0)
+            if (Level > 0)
             {
                 _sprite.SetColor(_selected ? Color.Green : Color.White);
                 base.Draw(spriteBatch);
@@ -209,7 +195,7 @@ namespace RiverHollow.Buildings
         /// <param name="val">The name to assign</param>
         public void SetName(string val)
         {
-            _sGivenName = val;
+            GivenName = val;
         }
 
         /// <summary>
@@ -227,7 +213,7 @@ namespace RiverHollow.Buildings
             int startY = (int)_vMapPosition.Y + _iEntY;
 
             //Create the entrance and exit rectangles attached to the building
-            _rEntrance = new Rectangle(startX, startY, _iEntWidth, _iEntHeight);
+            TravelBox = new Rectangle(startX, startY, _iEntWidth, _iEntHeight);
         }
 
         /// <summary>
@@ -239,7 +225,7 @@ namespace RiverHollow.Buildings
         /// <returns>True if the building will accept the type of Worker</returns>
         internal bool CanHold(Adventurer w)
         {
-            return _bManor || w.WorkerID == _arrWorkerTypes[0] || w.WorkerID == _arrWorkerTypes[1];
+            return w.WorkerID == _arrWorkerTypes[0] || w.WorkerID == _arrWorkerTypes[1];
         }
 
         /// <summary>
@@ -356,54 +342,71 @@ namespace RiverHollow.Buildings
         /// <param name="startAtZero"> Whether to reset the building's value to 0 or not</param>
         public void StartBuilding(bool startAtZero = true)
         {
-            if (startAtZero)
+            RHMap buildingMap = MapManager.Maps[_sHomeMap];
+            foreach (RHTile t in Tiles)
             {
-                _iBldgLvl = 0;
-
-                Vector2 startAt = new Vector2(CollisionBox.X, CollisionBox.Y - TileSize);
-
-                for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
+                WorldObject w = t.WorldObject;
+                if (w != null)
                 {
-                    for (int y = (int)startAt.Y + TileSize; y < startAt.Y + TileSize + CollisionBox.Height; y += TileSize)
-                    {
-                        Floor obj = (Floor)DataManager.GetWorldObject(int.Parse(DataManager.Config[9]["Floor"]));
-                        obj.SetMapName(MapManager.CurrentMap.Name);
-                        obj.SnapPositionToGrid(new Vector2(x, y));
-                        MapManager.CurrentMap.TestMapTiles(obj);
-                        if (MapManager.PlacePlayerObject(obj))
-                        {
-                            obj.AdjustObject();
-                        }
-                    }
+                    buildingMap.RemoveWorldObject(w);
+
                 }
-
-                for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
+                w = t.Flooring;
+                if (w != null)
                 {
-                    PlaceWall(new Vector2(x, startAt.Y));
-                }
-
-                for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
-                {
-                    if (!_rEntrance.Contains(new Vector2(x, startAt.Y + CollisionBox.Height - TileSize)))
-                    {
-                        PlaceWall(new Vector2(x, startAt.Y + CollisionBox.Height - TileSize));
-                    }
-                }
-
-                for (int y = (int)startAt.Y; y < startAt.Y + CollisionBox.Height; y += TileSize)
-                {
-                    PlaceWall(new Vector2(startAt.X, y));
-                }
-
-                for (int y = (int)startAt.Y; y < startAt.Y + CollisionBox.Height; y += TileSize)
-                {
-                    PlaceWall(new Vector2(startAt.X + CollisionBox.Width - TileSize, y));
+                    buildingMap.RemoveWorldObject(w);
                 }
             }
-            _iUpgradeTimer = _iUpgradeTime + 1;
-            _sprite.PlayAnimation(_iBldgLvl.ToString());
+            buildingMap.AssignMapTiles(this, Tiles);
+            buildingMap.CreateBuildingEntrance(this);
+            //if (startAtZero)
+            //{
+            //    _iBldgLvl = 0;
 
-            DataManager.DiNPC[_iNPCBuilderID].SetBuildTarget(this);
+            //    Vector2 startAt = new Vector2(CollisionBox.X, CollisionBox.Y - TileSize);
+
+            //    for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
+            //    {
+            //        for (int y = (int)startAt.Y + TileSize; y < startAt.Y + TileSize + CollisionBox.Height; y += TileSize)
+            //        {
+            //            Floor obj = (Floor)DataManager.GetWorldObject(int.Parse(DataManager.Config[9]["Floor"]));
+            //            obj.SetMapName(MapManager.CurrentMap.Name);
+            //            obj.SnapPositionToGrid(new Vector2(x, y));
+            //            MapManager.CurrentMap.TestMapTiles(obj);
+            //            if (MapManager.PlacePlayerObject(obj))
+            //            {
+            //                obj.AdjustObject();
+            //            }
+            //        }
+            //    }
+
+            //    for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
+            //    {
+            //        PlaceWall(new Vector2(x, startAt.Y));
+            //    }
+
+            //    for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
+            //    {
+            //        if (!_rEntrance.Contains(new Vector2(x, startAt.Y + CollisionBox.Height - TileSize)))
+            //        {
+            //            PlaceWall(new Vector2(x, startAt.Y + CollisionBox.Height - TileSize));
+            //        }
+            //    }
+
+            //    for (int y = (int)startAt.Y; y < startAt.Y + CollisionBox.Height; y += TileSize)
+            //    {
+            //        PlaceWall(new Vector2(startAt.X, y));
+            //    }
+
+            //    for (int y = (int)startAt.Y; y < startAt.Y + CollisionBox.Height; y += TileSize)
+            //    {
+            //        PlaceWall(new Vector2(startAt.X + CollisionBox.Width - TileSize, y));
+            //    }
+            //}
+            //_iUpgradeTimer = _iUpgradeTime + 1;
+            //_sprite.PlayAnimation(_iBldgLvl.ToString());
+
+            //DataManager.DiNPC[_iNPCBuilderID].SetBuildTarget(this);
         }
 
         /// <summary>
@@ -434,7 +437,7 @@ namespace RiverHollow.Buildings
         /// </summary>
         public void Upgrade()
         {
-            if(_iBldgLvl == 0)
+            if(Level == 0)
             {
                 RHMap buildingMap = MapManager.Maps[_sHomeMap];
                 foreach (RHTile t in Tiles)
@@ -455,12 +458,12 @@ namespace RiverHollow.Buildings
                 buildingMap.CreateBuildingEntrance(this);
             }
 
-            if (_iBldgLvl + 1 <= MaxBldgLevel)
+            if (Level + 1 <= MaxBldgLevel)
             {
-                _iBldgLvl++;
+                Level++;
             }
 
-            _sprite.PlayAnimation(_iBldgLvl.ToString());
+            _sprite.PlayAnimation(Level.ToString());
 
             DataManager.DiNPC[_iNPCBuilderID].SetBuildTarget(null);
         }
@@ -487,9 +490,9 @@ namespace RiverHollow.Buildings
         public string TravelLink()
         {
             string rv = string.Empty;
-
-            if (_bUnique) { rv = MapName; }
-            else { rv = _iPersonalID.ToString(); }
+            rv = MapName;
+            //if (Unique) { rv = MapName; }
+            //else { rv = PersonalID.ToString(); }
 
             return rv;
         }
@@ -498,12 +501,12 @@ namespace RiverHollow.Buildings
         {
             BuildingData buildingData = new BuildingData
             {
-                iBldgLevel = this._iBldgLvl,
+                iBldgLevel = this.Level,
                 iBuildingID = this.ID,
                 iPosX = (int)this.MapPosition.X,
                 iPosY = (int)this.MapPosition.Y,
                 iPersonalID = this.PersonalID,
-                sName = this._sGivenName,
+                sName = this.GivenName,
                 iUpgradeTimer = this._iUpgradeTimer,
 
                 Workers = new List<WorkerData>()
@@ -513,9 +516,6 @@ namespace RiverHollow.Buildings
             {
                 buildingData.Workers.Add(w.SaveAdventurerData());
             }
-
-            buildingData.pantry = this.Pantry.SaveData();
-            buildingData.buildingChest = this.BuildingChest.SaveData();
 
             buildingData.containers = new List<ContainerData>();
             buildingData.machines = new List<MachineData>();
@@ -536,8 +536,8 @@ namespace RiverHollow.Buildings
         public void LoadData(BuildingData data)
         {
             SnapPositionToGrid(new Vector2(data.iPosX, data.iPosY));
-            _iPersonalID = data.iPersonalID;
-            _iBldgLvl = data.iBldgLevel;
+            PersonalID = data.iPersonalID;
+            Level = data.iBldgLevel;
             _iUpgradeTimer = data.iUpgradeTimer;
 
             if(_iUpgradeTimer > 0)
@@ -551,11 +551,7 @@ namespace RiverHollow.Buildings
                 w.LoadAdventurerData(wData);
                 AddWorker(w);
             }
-            this._sGivenName = data.sName;
-            this.Pantry = (Container)DataManager.GetWorldObject(data.pantry.containerID);
-            Pantry.LoadData(data.pantry);
-            this.BuildingChest = (Container)DataManager.GetWorldObject(data.pantry.containerID);
-            BuildingChest.LoadData(data.buildingChest);
+            this.GivenName = data.sName;
 
             foreach (ContainerData c in data.containers)
             {

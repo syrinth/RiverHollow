@@ -1812,13 +1812,15 @@ namespace RiverHollow.Characters
 
         protected int _iIndex;
         public int ID  => _iIndex;
-        protected string _sHomeMap;
+        protected int _iHouseBuildingID = -1;
+        protected List<int> _liRequiredBuildingIDs;
         protected NPCTypeEnum _eNPCType;
         public NPCTypeEnum NPCType => _eNPCType;
 
         protected Dictionary<int, bool> _diCollection;
         public bool Introduced;
         public bool CanGiveGift = true;
+        public bool ArrivedInTown = false;
 
         protected Dictionary<string, List<Dictionary<string, string>>> _diCompleteSchedule;         //Every day with a list of KVP Time/GoToLocations
         List<KeyValuePair<string, PathData>> _liTodayPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
@@ -1857,8 +1859,9 @@ namespace RiverHollow.Characters
             ImportBasics(stringData, loadanimations);
         }
 
-        protected void ImportBasics(Dictionary<string, string> data, bool loadanimations = true)
+        protected void ImportBasics(Dictionary<string, string> stringData, bool loadanimations = true)
         {
+            _liRequiredBuildingIDs = new List<int>();
             _diDialogue = DataManager.GetNPCDialogue(_iIndex);
             DataManager.GetTextData("Character", _iIndex, ref _sName, "Name");
 
@@ -1867,22 +1870,32 @@ namespace RiverHollow.Characters
 
             if (loadanimations)
             {
-                LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(data), _sVillagerFolder + "NPC_" + _iIndex.ToString("00"));
+                LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(stringData), _sVillagerFolder + "NPC_" + _iIndex.ToString("00"));
                 PlayAnimationVerb(VerbEnum.Idle);
             }
 
-            _bActive = !data.ContainsKey("Inactive");
-            if (data.ContainsKey("Type")) { _eNPCType = Util.ParseEnum<NPCTypeEnum>(data["Type"]); }
-            if (data.ContainsKey("PortRow")) { _rPortrait = new Rectangle(0, 0, 48, 60); }
-            if (data.ContainsKey("HomeMap"))
+            _bActive = !stringData.ContainsKey("Inactive");
+            if (stringData.ContainsKey("Type")) { _eNPCType = Util.ParseEnum<NPCTypeEnum>(stringData["Type"]); }
+            if (stringData.ContainsKey("PortRow")) { _rPortrait = new Rectangle(0, 0, 48, 60); }
+            //if (data.ContainsKey("HomeMap"))
+            //{
+            //    _iHouseBuildingID = data["HomeMap"];
+            //    CurrentMapName = _iHouseBuildingID;
+            //}
+            Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
+            Util.AssignValue(ref ArrivedInTown, "Arrived", stringData);
+            if (stringData.ContainsKey("RequiredBuildingID"))
             {
-                _sHomeMap = data["HomeMap"];
-                CurrentMapName = _sHomeMap;
+                string[] args = Util.FindParams(stringData["RequiredBuildingID"]);
+                foreach (string i in args)
+                {
+                    _liRequiredBuildingIDs.Add(int.Parse(i));
+                }
             }
 
-            if (data.ContainsKey("Collection"))
+            if (stringData.ContainsKey("Collection"))
             {
-                string[] vectorSplit = Util.FindParams(data["Collection"]);
+                string[] vectorSplit = Util.FindParams(stringData["Collection"]);
                 foreach (string s in vectorSplit)
                 {
                     _diCollection.Add(int.Parse(s), false);
@@ -2061,6 +2074,24 @@ namespace RiverHollow.Characters
             return _liCommands;
         }
 
+        protected void CheckForArrival()
+        {
+            if (!ArrivedInTown && _liRequiredBuildingIDs.Count > 0)
+            {
+                bool arrived = true;
+                foreach (int i in _liRequiredBuildingIDs)
+                {
+                    if (!PlayerManager.HaveBuiltBuildingID(i))
+                    {
+                        arrived = false;
+                        break;
+                    }
+                }
+
+                ArrivedInTown = arrived;
+            }
+        }
+
         public virtual void RollOver()
         {
             if (!_bStartedBuilding && _buildTarget != null)
@@ -2070,9 +2101,14 @@ namespace RiverHollow.Characters
 
             //If we failed to move the NPC to a building location, because there was none
             //Add the NPC to their home map
-            if (!MoveToBuildingLocation()) { 
-                MoveToSpawn();
-                CalculatePathing();
+            if (!MoveToBuildingLocation())
+            {
+                CheckForArrival();
+                if (ArrivedInTown)
+                {
+                    MoveToSpawn();
+                 //   CalculatePathing();
+                }
             }
         }
 
@@ -2082,13 +2118,28 @@ namespace RiverHollow.Characters
         /// </summary>
         public void MoveToSpawn()
         {
-            CurrentMap?.RemoveCharacterImmediately(this);
-            CurrentMapName = _sHomeMap;
-            RHMap map = MapManager.Maps[_sHomeMap];
-            string Spawn = "NPC_" + _iIndex.ToString("00");
+            string mapName = GetMapName();
 
-            Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
-            map.AddCharacterImmediately(this); 
+            if (!string.IsNullOrEmpty(mapName))
+            {
+                CurrentMap?.RemoveCharacterImmediately(this);
+                CurrentMapName = mapName;
+                RHMap map = MapManager.Maps[mapName];
+                string Spawn = "NPC_" + _iIndex.ToString("00");
+
+                Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
+                map.AddCharacterImmediately(this);
+            }
+        }
+
+        protected string GetMapName()
+        {
+            string rv = string.Empty;
+
+            if (PlayerManager.HaveBuiltBuildingID(_iHouseBuildingID)) { rv = PlayerManager.GetBuildingByID(_iHouseBuildingID).MapName; }
+            else { }
+
+            return rv;
         }
 
         public void CalculatePathing()
@@ -2599,24 +2650,28 @@ namespace RiverHollow.Characters
 
         public override void RollOver()
         {
-            CurrentMap.RemoveCharacter(this);
-            RHMap map = MapManager.Maps[Married ? "mapManor" : _sHomeMap];
-            string Spawn = Married ? "Spouse" : "NPC" + _iIndex;
+            CheckForArrival();
 
-            Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
-            map.AddCharacter(this);
+            if (ArrivedInTown) { 
+                CurrentMap?.RemoveCharacter(this);
+                RHMap map = MapManager.Maps[Married ? "mapManor" : GetMapName()];
+                string Spawn = Married ? "Spouse" : "NPC_" + _iIndex.ToString("00");
 
-            _bActive = true;
-            PlayerManager.RemoveFromParty(this);
+                Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
+                map.AddCharacter(this);
 
-            //Reset on Monday
-            if (GameCalendar.DayOfWeek == 0)
-            {
-                CanJoinParty = true;
-                CanGiveGift = true;
+                _bActive = true;
+                PlayerManager.RemoveFromParty(this);
+
+                //Reset on Monday
+                if (GameCalendar.DayOfWeek == 0)
+                {
+                    CanJoinParty = true;
+                    CanGiveGift = true;
+                }
+
+             //   CalculatePathing();
             }
-
-            CalculatePathing();
         }
 
         public override string Gift(Item item)
@@ -2682,7 +2737,7 @@ namespace RiverHollow.Characters
 
             if (Married)
             {
-                MapManager.Maps[_sHomeMap].RemoveCharacter(this);
+                MapManager.Maps[GetMapName()].RemoveCharacter(this);
                 MapManager.Maps["mapManor"].AddCharacter(this);
                 Position = MapManager.Maps["mapManor"].GetCharacterSpawn("Spouse");
             }
@@ -3322,6 +3377,7 @@ namespace RiverHollow.Characters
  
         public ShippingGremlin(int index, Dictionary<string, string> stringData)
         {
+            _liRequiredBuildingIDs = new List<int>();
             _arrInventory = new Item[_iRows, _iCols];
             _eActorType = ActorEnum.ShippingGremlin;
             _iIndex = index;
@@ -3336,11 +3392,12 @@ namespace RiverHollow.Characters
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
             DataManager.GetTextData("Character", _iIndex, ref _sName, "Name");
 
-            if (stringData.ContainsKey("HomeMap"))
-            {
-                _sHomeMap = stringData["HomeMap"];
-                CurrentMapName = _sHomeMap;
-            }
+            CurrentMapName = MapManager.HomeMap;
+            //if (stringData.ContainsKey("HomeMap"))
+            //{
+            //    _iHouseBuildingID = stringData["HomeMap"];
+            //    CurrentMapName = _iHouseBuildingID;
+            //}
 
             _sprBody = new AnimatedSprite(_sVillagerFolder + "NPC_" + _iIndex.ToString("00"));
             _sprBody.AddAnimation(AnimationEnum.ObjectIdle, 0, 0, _iBodyWidth, _iBodyHeight);

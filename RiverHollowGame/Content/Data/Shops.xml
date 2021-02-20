@@ -32,7 +32,7 @@
         <Item>[Type:Building][BuildingID:2][Cost:500][Requires:0-2|2-3][Text:A building used to house meleers]</Item>
         <Item>[Type:Building][BuildingID:3][Cost:500][Requires:0-2|2-3][Text:Houses Scouts and Bards]</Item>
         <Item>[Type:Building][BuildingID:4][Cost:500][Requires:0-2|2-3|4-4][Text:Houses Witches and Healers]</Item>
-        <Item>[Type:Upgrade][BuildingID:1][Cost:500][Requires:0-2|2-3][Text:A building used to house meleers]</Item>
+        <Item>[Type:Building][BuildingID:7][Cost:500][Requires:0-10|2-5][Text:A building used to house meleers]</Item>
       </Value>
     </Item>
     <Item>

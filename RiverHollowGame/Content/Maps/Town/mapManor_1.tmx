@@ -380,7 +380,7 @@
   <object id="1" name="Entrance" x="464" y="460.002" width="16" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
-    <property name="Map" value="mapManorGrounds"/>
+    <property name="Map" value="mapTown"/>
    </properties>
   </object>
   <object id="15" name="Entrance" x="672" y="428" width="32" height="4">

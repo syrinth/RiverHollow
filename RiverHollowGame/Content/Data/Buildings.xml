@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Texture:Tower][Dimensions:80-224][FirstBase:0-160][Width:80][Height:48][Entrance:32-200-15-5][Workers:1-3][UpgradeTime:3][Builder:14][BuildSpot:48-176]</Value>
+      <Value>[Texture:Tower][Dimensions:80-224][FirstBase:0-160][Width:80][Height:48][Entrance:32-176-16-32][Workers:1-3][UpgradeTime:3][Builder:14][BuildSpot:48-176]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -24,6 +24,14 @@
     <Item>
       <Key>5</Key>
       <Value>[Texture:TownStore][Dimensions:112-128][FirstBase:0-64][Width:112][Height:64][Entrance:56-97-16-32]</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Texture:BuildingStore][Dimensions:176-144][FirstBase:0-80][Width:176][Height:64][Entrance:80-114-16-32][Unique]</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>[Texture:Inn][Dimensions:208-176][FirstBase:16-112][Width:176][Height:64][Entrance:96-146-16-29][Unique]</Value>
     </Item>
   </Asset>
 </XnaContent>

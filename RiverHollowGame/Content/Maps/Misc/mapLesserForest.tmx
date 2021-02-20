@@ -481,12 +481,12 @@
   </object>
   <object id="10" name="Exit" x="1584.63" y="1442.83" width="13.8333" height="70.3333">
    <properties>
-    <property name="Map" value="mapRiverHollowTown"/>
+    <property name="Map" value="mapTown"/>
    </properties>
   </object>
   <object id="11" name="Entrance" x="1555.54" y="1474.58" width="7.9166" height="10">
    <properties>
-    <property name="Map" value="mapRiverHollowTown"/>
+    <property name="Map" value="mapTown"/>
    </properties>
   </object>
   <object id="12" name="Exit" x="1585.64" y="422.421" width="13.8333" height="70.3333">

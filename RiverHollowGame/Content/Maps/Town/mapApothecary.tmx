@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="35">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="16">
  <properties>
   <property name="Manor" type="bool" value="true"/>
   <property name="Production" type="bool" value="false"/>
@@ -340,34 +340,16 @@
 </data>
  </layer>
  <objectgroup id="4" name="Travel Layer">
-  <object id="1" name="Entrance" x="112" y="268" width="16" height="4">
+  <object id="1" name="Entrance" x="112" y="268.002" width="16" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
-    <property name="Map" value="mapRiverHollowTown"/>
+    <property name="Map" value="mapTown"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="9" name="MapObject"/>
  <objectgroup id="5" name="Character Layer">
-  <object id="15" name="8CS0" x="34.4598" y="178.125" width="12" height="12"/>
-  <object id="16" name="8Col8" x="32.2929" y="70.625" width="6.5" height="7"/>
-  <object id="17" name="8Col7" x="98.8768" y="53.8747" width="8.5" height="8.5"/>
-  <object id="18" name="8Col6" x="82.2138" y="55.4577" width="9" height="8"/>
-  <object id="19" name="8Col5" x="67.7105" y="69.7913" width="7.5" height="7"/>
-  <object id="20" name="8Col4" x="62.3768" y="51.125" width="11" height="10"/>
-  <object id="21" name="8Col3" x="47.0468" y="50.875" width="10" height="10"/>
-  <object id="22" name="8Col2" x="30.0468" y="53.958" width="8.5" height="6.5"/>
-  <object id="23" name="8Col1" x="18.0438" y="52.125" width="7" height="8"/>
-  <object id="24" name="NPC_18" x="49.8775" y="100.542" width="9.66667" height="8.66667"/>
-  <object id="25" name="1CS0" x="162.043" y="226.458" width="12" height="12"/>
-  <object id="26" name="1Col8" x="211.21" y="68.125" width="10" height="12"/>
-  <object id="27" name="1Col7" x="175.877" y="66.1247" width="14" height="9"/>
-  <object id="28" name="1Col6" x="144.585" y="65.2917" width="8.5" height="9"/>
-  <object id="29" name="1Col5" x="208.294" y="52.792" width="8.25" height="7.75"/>
-  <object id="30" name="1Col4" x="195.544" y="52.875" width="6.5" height="6.75"/>
-  <object id="31" name="1Col3" x="178.547" y="52.1253" width="9" height="6.5"/>
-  <object id="32" name="1Col2" x="162.88" y="53.3743" width="8.75" height="6.5"/>
-  <object id="33" name="1Col1" x="149.544" y="51.4583" width="7.5" height="8"/>
-  <object id="34" name="NPC_05" x="178.707" y="146.375" width="8.75" height="10.25"/>
+  <object id="13" name="NPC_02" x="33.6913" y="114.567" width="12.375" height="11.4375"/>
+  <object id="15" name="NPC_20" x="178.146" y="177.948" width="12.375" height="11.4375"/>
  </objectgroup>
 </map>

@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Villager][PortRow:1][HomeMap:mapManor1][Collection:0|1|2][Hover][Inactive][Idle:0-0-3-.3-T][Walk:0-0-3-.3-T]</Value>
+      <Value>[Type:Villager][PortRow:1][HomeMap:mapManor_1][Collection:0|1|2][Hover][Inactive][Idle:0-0-3-.3-T][Walk:0-0-3-.3-T]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -15,11 +15,11 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Eligible][PortRow:1][HomeMap:mapTavern_Upper][Collection:0|1|2][Class:2][Idle:0-0-1-0-T][Walk:192-0-3-.15-T]</Value>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapInn_Upper_1][Collection:0|1|2][Class:2][Idle:0-0-1-0-T][Walk:192-0-3-.15-T]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Eligible][PortRow:1][HomeMap:mapTavern_Upper][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T]</Value>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapInn_Upper_1][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T]</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -31,19 +31,19 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Eligible][PortRow:1][HomeMap:mapHouse_NPC3][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T]</Value>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapBuildingStore_1][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:6][RequiredBuildingID:7]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Eligible][PortRow:1][HomeMap:mapTavern][Collection:0|1|2][Class:7][Idle:0-0-1-0-T][Walk:192-0-3-.15-T]</Value>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapInn_1][Collection:0|1|2][Class:7][Idle:0-0-1-0-T][Walk:192-0-3-.15-T]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapTavern][Collection:7|111][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapInn_1][Collection:7|111][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapTavern][Collection:7|111][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapInn_1][Collection:7|111][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
     </Item>
     <Item>
       <Key>11</Key>
@@ -55,15 +55,15 @@
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Shopkeeper][PortRow:3][HomeMap:mapHouse_NPC3][Collection:5|6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Shopkeeper][PortRow:3][HomeMap:mapBuildingStore_1][Collection:5|6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:6][RequiredBuildingID:7]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Shopkeeper][PortRow:3][HomeMap:mapHouse_NPC3][Collection:7|138][ShopData:2][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Shopkeeper][PortRow:3][HomeMap:mapBuildingStore_1][Collection:7|138][ShopData:2][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:6][Arrived]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapHouse_NPC3][Collection:7|138][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapBuildingStore_1][Collection:7|138][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:6][RequiredBuildingID:7]</Value>
     </Item>
     <Item>
       <Key>16</Key>
@@ -87,7 +87,7 @@
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:ShippingGremlin][PortRow:3][HomeMap:mapManorGrounds]</Value>
+      <Value>[Type:ShippingGremlin][PortRow:3][HomeMap:mapTown]</Value>
     </Item>
   </Asset>
 </XnaContent>

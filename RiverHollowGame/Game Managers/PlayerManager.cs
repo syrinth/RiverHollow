@@ -43,18 +43,17 @@ namespace RiverHollow.Game_Managers
         public static int HitPoints => World.CurrentHP;
         public static int MaxHitPoints  => World.MaxHP;
 
-        private static List<Building> _liBuildings;
-        public static List<Building> Buildings { get => _liBuildings; }
+        private static Dictionary<int, Building> _diBuildings;
+        public static Dictionary<int, Building>.ValueCollection BuildingList => _diBuildings.Values;
 
         public static bool ReadyToSleep = false;
 
         private static List<ClassedCombatant> _liParty;
 
         public static string Name;
-        public static string ManorName;
+        public static string TownName;
 
-        private static int _iMoney = 2000;
-        public static int Money => _iMoney;
+        public static int Money { get; private set; } = 2000;
 
         private static int _iMonsterEnergy = 0;
         public static int MonsterEnergy => _iMonsterEnergy;
@@ -72,7 +71,7 @@ namespace RiverHollow.Game_Managers
             QuestLog = new List<Quest>();
             World = new PlayerCharacter();
             _liParty.Add(World);
-            _liBuildings = new List<Building>();
+            _diBuildings = new Dictionary<int, Building>();
             CanMake = new List<int>();
         }
 
@@ -239,10 +238,10 @@ namespace RiverHollow.Game_Managers
         public static int GetTotalWorkers()
         {
             int rv = 0;
-            foreach(Building b in _liBuildings)
-            {
-                rv += b.Workers.Count;
-            }
+            //foreach(Building b in Buildings)
+            //{
+            //    rv += b.Workers.Count;
+            //}
 
             return rv;
         }
@@ -257,17 +256,17 @@ namespace RiverHollow.Game_Managers
         {
             Adventurer adv = null;
 
-            foreach (Building b in _liBuildings)
-            {
-                foreach(Adventurer w in b.Workers)
-                {
-                    if(w.PersonalID == id)
-                    {
-                        adv = w;
-                        break;
-                    }
-                }
-            }
+            //foreach (Building b in Buildings)
+            //{
+            //    foreach(Adventurer w in b.Workers)
+            //    {
+            //        if(w.PersonalID == id)
+            //        {
+            //            adv = w;
+            //            break;
+            //        }
+            //    }
+            //}
 
             return adv;
         }
@@ -380,18 +379,28 @@ namespace RiverHollow.Game_Managers
             AllowMovement = true;
         }
 
+        #region Building Helpers
+        public static bool HaveBuiltBuildingID(int id)
+        {
+            return _diBuildings.ContainsKey(id);
+        }
         public static void AddBuilding(Building b)
         {
-            _liBuildings.Add(b);
+            _diBuildings.Add(b.ID, b);
         }
         public static void RemoveBuilding(Building b)
         {
-            _liBuildings.Remove(b);
+           // Buildings.Remove(b);
+        }
+        public static Building GetBuildingByID(int id)
+        {
+            return _diBuildings[id];
         }
         public static int GetNewBuildingID()
         {
-            return _liBuildings.Count +1 ;
+            return _diBuildings.Count +1 ;
         }
+        #endregion
 
         public static bool PlayerInRange(Rectangle rect)
         {
@@ -478,24 +487,24 @@ namespace RiverHollow.Game_Managers
 
         public static void TakeMoney(int x)
         {
-            _iMoney -= x;
+            Money -= x;
         }
         public static void AddMoney(int x)
         {
-            _iMoney += x;
+            Money += x;
         }
         public static void SetMoney(int x)
         {
-            _iMoney = x;
+            Money = x;
         }
         public static void SetName(string x)
         {
             Name = x;
             World.SetName(x);
         }
-        public static void SetManorName(string x)
+        public static void SetTownName(string x)
         {
-            ManorName = x;
+            TownName = x;
         }
         public static void SetClass(int x)
         {
@@ -532,6 +541,11 @@ namespace RiverHollow.Game_Managers
             {
                 _liParty.Clear();
                 _liParty.Add(World);
+            }
+
+            foreach (Building b in PlayerManager._diBuildings.Values)
+            {
+                b.Rollover();
             }
         }
 

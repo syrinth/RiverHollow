@@ -389,12 +389,12 @@ namespace RiverHollow.GUIComponents.Screens
         private void PurchaseWorker()
         {
             //If all items are found, then remove them.
-            if (PlayerManager.Buildings.Count > 0 && PlayerManager.Money >= _currentWorker.Cost)
-            {
-                HUDManagement m = new HUDManagement();
-                m.PurchaseWorker(DataManager.GetAdventurer(_currentWorker.ID), _currentWorker.Cost);
-                GUIManager.OpenMainObject(m);
-            }
+            //if (PlayerManager._diBuildings.Count > 0 && PlayerManager.Money >= _currentWorker.Cost)
+            //{
+            //    HUDManagement m = new HUDManagement();
+            //    m.PurchaseWorker(DataManager.GetAdventurer(_currentWorker.ID), _currentWorker.Cost);
+            //    GUIManager.OpenMainObject(m);
+            //}
         }
     }
 

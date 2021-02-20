@@ -340,16 +340,16 @@
 </data>
  </layer>
  <objectgroup id="4" name="Travel Layer">
-  <object id="1" name="Entrance" x="112" y="268" width="16" height="4">
+  <object id="1" name="Entrance" x="112" y="268.002" width="16" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
-    <property name="Map" value="mapRiverHollowTown"/>
+    <property name="Map" value="mapTown"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="9" name="MapObject"/>
  <objectgroup id="5" name="Character Layer">
-  <object id="13" name="NPC_11" x="33.6913" y="114.567" width="12.375" height="11.4375"/>
-  <object id="15" name="NPC_12" x="176.813" y="178.615" width="12.375" height="11.4375"/>
+  <object id="13" name="NPC_19" x="33.6913" y="114.567" width="12.375" height="11.4375"/>
+  <object id="15" name="NPC_06" x="178.146" y="177.948" width="12.375" height="11.4375"/>
  </objectgroup>
 </map>

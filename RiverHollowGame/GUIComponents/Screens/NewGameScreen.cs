@@ -28,7 +28,7 @@ namespace RiverHollow.GUIComponents.Screens
         GUIButton _btnOK;
         GUIButton _btnCancel;
         GUITextInputWindow _nameWindow;
-        GUITextInputWindow _manorWindow;
+        GUITextInputWindow _townWindow;
 
         GUICheck _gCheckSkipCutscene;
 
@@ -60,12 +60,12 @@ namespace RiverHollow.GUIComponents.Screens
             _window.AddControl(_btnOK);
             _btnOK.AnchorAndAlignToObject(_btnCancel, SideEnum.Left, SideEnum.Top, 0);
             
-            _manorWindow = new GUITextInputWindow("Manor Name:", SideEnum.Left);
-            _manorWindow.AnchorToInnerSide(_window, SideEnum.TopRight);
+            _townWindow = new GUITextInputWindow("Town Name:", SideEnum.Left);
+            _townWindow.AnchorToInnerSide(_window, SideEnum.TopRight);
             //_manorWindow.SetText("Panda's");
 
             _nameWindow = new GUITextInputWindow("Character Name:", SideEnum.Left);
-            _nameWindow.AnchorAndAlignToObject(_manorWindow, SideEnum.Bottom, SideEnum.Right );
+            _nameWindow.AnchorAndAlignToObject(_townWindow, SideEnum.Bottom, SideEnum.Right );
             //_nameWindow.SetText("Harold");
             _nameWindow.Activate();
 
@@ -139,8 +139,8 @@ namespace RiverHollow.GUIComponents.Screens
             if (_nameWindow.Contains(mouse)) {
                 SetSelection(_nameWindow);
             }
-            else if (_manorWindow.Contains(mouse)) {
-                SetSelection(_manorWindow);
+            else if (_townWindow.Contains(mouse)) {
+                SetSelection(_townWindow);
             }
             else {
                 SetSelection(null);
@@ -177,17 +177,17 @@ namespace RiverHollow.GUIComponents.Screens
             if(g == _nameWindow)
             {
                 _nameWindow.Activate();
-                _manorWindow.Activate(false);
+                _townWindow.Activate(false);
             }
-            else if (g == _manorWindow)
+            else if (g == _townWindow)
             {
-                _manorWindow.Activate();
+                _townWindow.Activate();
                 _nameWindow.Activate(false);
             }
             else
             {
                 _nameWindow.Activate(false);
-                _manorWindow.Activate(false);
+                _townWindow.Activate(false);
             }
         }
         #region Button Logic
@@ -197,7 +197,7 @@ namespace RiverHollow.GUIComponents.Screens
             PlayerManager.SetClass(_csbSelected.ClassID);
             PlayerManager.World.AssignStartingGear();
             PlayerManager.SetName(_nameWindow.GetText());
-            PlayerManager.SetManorName(_manorWindow.GetText());
+            PlayerManager.SetTownName(_townWindow.GetText());
 
             RiverHollow.NewGame(DataManager.GetAdventurer(1), DataManager.GetAdventurer(2), !_gCheckSkipCutscene.Checked());
             GameManager.StopTakingInput();

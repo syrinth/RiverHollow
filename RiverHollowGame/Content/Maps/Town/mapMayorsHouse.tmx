@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="26">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="16">
  <properties>
   <property name="Manor" type="bool" value="true"/>
   <property name="Production" type="bool" value="false"/>
@@ -273,7 +273,6 @@
   </tile>
  </tileset>
  <tileset firstgid="287" source="../Tilesets/tsFurniture.tsx"/>
- <tileset firstgid="587" source="../Tilesets/tilesetHouses.tsx"/>
  <layer id="6" name="Base Layer" width="15" height="18">
   <data encoding="csv">
 74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,
@@ -304,10 +303,10 @@
 136,52,52,49,49,49,49,49,49,49,49,49,49,49,137,
 136,71,71,71,71,71,71,71,71,71,71,71,71,71,137,
 136,93,93,93,93,93,93,93,93,93,93,93,93,93,137,
+136,0,0,0,0,0,0,0,0,0,0,0,371,372,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
+136,0,0,0,0,0,0,0,0,0,0,0,431,432,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
-136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
-136,1029,1063,1030,1031,1032,0,0,0,1029,1031,1063,1031,1032,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
@@ -326,9 +325,9 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,391,392,0,
+0,0,0,0,0,0,0,0,0,0,0,0,411,412,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1057,1037,1005,1005,1058,0,0,0,1057,1005,1037,1005,1058,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -341,22 +340,16 @@
 </data>
  </layer>
  <objectgroup id="4" name="Travel Layer">
-  <object id="1" name="Entrance" x="112" y="268.002" width="16" height="4">
+  <object id="1" name="Entrance" x="112" y="268" width="16" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
-    <property name="Map" value="mapRiverHollowTown"/>
+    <property name="Map" value="mapTown"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="9" name="MapObject"/>
  <objectgroup id="5" name="Character Layer">
-  <object id="24" name="NPC_16" x="177.785" y="130.332" width="11.5833" height="8.66667"/>
-  <object id="25" name="Shop" x="176" y="134" width="16.0034" height="25">
-   <properties>
-    <property name="Owner" value="16"/>
-    <property name="ShopKeepX" type="int" value="11"/>
-    <property name="ShopKeepY" type="int" value="8"/>
-   </properties>
-  </object>
+  <object id="13" name="NPC_11" x="33.6913" y="114.567" width="12.375" height="11.4375"/>
+  <object id="15" name="NPC_12" x="176.813" y="178.615" width="12.375" height="11.4375"/>
  </objectgroup>
 </map>

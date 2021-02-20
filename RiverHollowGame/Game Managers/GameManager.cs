@@ -24,6 +24,8 @@ namespace RiverHollow.Game_Managers
         public const string KEY_OPEN = "KEY_USED";
         #endregion
 
+        public const float NORMAL_SCALE = 4f;
+
         public enum RarityEnum { C, U, R, M };
         public enum WeatherEnum { Sunny, Raining, Snowing };
 
@@ -65,7 +67,7 @@ namespace RiverHollow.Game_Managers
         public enum ToolEnum { Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return };
         public enum ClothesEnum { None, Body, Legs, Hat };
         public enum MachineTypeEnum { Processer, CraftingMachine };
-        public static float Scale = 4f;
+        public static float Scale = NORMAL_SCALE;
         public const int TileSize = 16;
         public static int ScaledTileSize => (int)(TileSize * Scale);
         public static int ScaledPixel => (int)Scale;
@@ -290,6 +292,11 @@ namespace RiverHollow.Game_Managers
         public static bool IsPaused() { return interactionLock != null; }
         public static bool IsRunning() { return interactionLock == null; }
         #endregion
+
+        public static void SetGameScale(float val)
+        {
+            Scale = val;
+        }
 
         #region Scrying
         private static bool _bScrying;

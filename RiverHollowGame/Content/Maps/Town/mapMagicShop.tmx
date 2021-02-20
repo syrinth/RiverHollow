@@ -344,7 +344,7 @@
   <object id="1" name="Entrance" x="112" y="268" width="16" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
-    <property name="Map" value="mapRiverHollowTown"/>
+    <property name="Map" value="mapTown"/>
    </properties>
   </object>
  </objectgroup>
