@@ -355,34 +355,6 @@ namespace RiverHollow.Characters
             }
         }
 
-        public override void DetermineFacing(Vector2 direction)
-        {
-            string animation = string.Empty;
-
-            if (direction.Length() == 0)
-            {
-                PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
-            }
-            else
-            {
-                if (!_bJump || (_bJump && !BodySprite.CurrentAnimation.StartsWith("Air")))
-                {
-                    if (Math.Abs((int)direction.X) > Math.Abs((int)direction.Y))
-                    {
-                        if (direction.X > 0) { Facing = DirectionEnum.Right; }
-                        else if (direction.X < 0) { Facing = DirectionEnum.Left; }
-                    }
-                    else
-                    {
-                        if (direction.Y > 0) { Facing = DirectionEnum.Down; }
-                        else if (direction.Y < 0) { Facing = DirectionEnum.Up; }
-                    }
-
-                    PlayAnimationVerb(_bJump ? VerbEnum.Ground : VerbEnum.Walk);
-                }
-            }
-        }
-
         public bool CheckValidConditions(SpawnConditionEnum s)
         {
             bool rv = true;

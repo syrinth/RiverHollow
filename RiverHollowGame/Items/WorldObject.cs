@@ -25,7 +25,7 @@ namespace RiverHollow.Items
 
         public List<RHTile> Tiles;
 
-        protected string _sMapName;
+        protected string MapName => Tiles[0].MapName;
         protected bool _bImpassable = true;
         public bool Blocking => _bImpassable;
         protected bool _wallObject;
@@ -1457,10 +1457,13 @@ namespace RiverHollow.Items
 
         public class Trigger : TriggerObject
         {
+            string _sSoundEffect;
             Item _item;
             public Trigger(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
             {
                 _item = DataManager.GetItem(_iItemKeyID);
+
+                Util.AssignValue(ref _sSoundEffect, "SoundEffect", stringData);
 
                 if (_iItemKeyID == -1)
                 {
@@ -1493,6 +1496,7 @@ namespace RiverHollow.Items
                         GUIManager.OpenMainObject(new HUDInventoryDisplay());
                     }
                     else {
+                        SoundManager.PlayEffectAtLoc(_sSoundEffect, MapName, MapPosition, this);
                         FireTrigger();
                     }
                 }

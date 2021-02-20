@@ -150,7 +150,7 @@ namespace RiverHollow.Game_Managers
         }
 
         /// <summary>
-        /// Begins a fadeot so we can move to the next map and sets the info the map manager needs
+        /// Begins a fadeout so we can move to the next map and sets the info the map manager needs
         /// so that we know whichmap to move to once the fade is done.
         /// </summary>
         /// <param name="newMap">Map to move to</param>
@@ -158,6 +158,8 @@ namespace RiverHollow.Game_Managers
         public static void FadeToNewMap(RHMap newMap, Vector2 playerPos, Building b = null)
         {
             GUIManager.BeginFadeOut();
+
+            PlayerManager.World.SetMovementState(ActorStateEnum.Idle);
             PlayerManager.World.PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
             _newMapInfo = new NewMapInfo(newMap, playerPos, b);
         }
@@ -220,6 +222,10 @@ namespace RiverHollow.Game_Managers
                 for (int i = 0; i < 10; i++)
                 {
                     Maps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(bigRockID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true, true);
+                }
+                for (int i = 0; i < 10; i++)
+                {
+                    Maps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(19, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true, true);
                 }
             }
         }

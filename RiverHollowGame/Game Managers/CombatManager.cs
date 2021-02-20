@@ -127,7 +127,6 @@ namespace RiverHollow.Game_Managers
 
                 Vector2 startpos = c.StartPosition;
                 c.SetBaseTile(tiles[(int)startpos.X, (int)startpos.Y], true);
-                //c.Position = c.BaseTile.Position;
                 c.Facing = PlayerManager.World.Facing;
                 c.GoToIdle();
             }
@@ -222,11 +221,17 @@ namespace RiverHollow.Game_Managers
                         RHTile newTile = BattleMap.GetTileByPixelPosition(ActiveCharacter.Position);
                         ActiveCharacter.SetBaseTile(newTile, false);
 
-                        Item tileItem = _liDroppedItems.Find(item => newTile.Rect.Contains(item.Position));
-
-                        if (tileItem != null && InventoryManager.HasSpaceInInventory(tileItem.ItemID, tileItem.Number))
+                        if (ActiveCharacter.IsActorType(ActorEnum.Adventurer) || ActiveCharacter == PlayerManager.World)
                         {
-                            BattleMap.AddItemToPlayerInventory(tileItem);
+                            List<Item> tileItems = _liDroppedItems.FindAll(item => newTile.Rect.Contains(item.Position));
+
+                            foreach (Item tileItem in tileItems)
+                            {
+                                if (tileItem != null && InventoryManager.HasSpaceInInventory(tileItem.ItemID, tileItem.Number))
+                                {
+                                    BattleMap.AddItemToPlayerInventory(tileItem);
+                                }
+                            }
                         }
                         CurrentTurnInfo.Moved();
 
@@ -455,6 +460,7 @@ namespace RiverHollow.Game_Managers
                 BattleMap.RemoveCharacter(c);
             }
 
+            PlayerManager.World.PlayAnimation(VerbEnum.Idle, PlayerManager.World.Facing);
             Camera.SetObserver(PlayerManager.World);
             GameManager.ActivateTriggers(MapManager.CurrentMap.Name + MOB_OPEN);
 

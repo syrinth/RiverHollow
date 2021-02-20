@@ -2649,3 +2649,21 @@
 /processor:TiledMapProcessor
 /build:Maps/Dungeon_Caves/mapCave_Wing_1_4a.tmx
 
+#begin Sound/Stock/Effects/axe.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Effects/axe.wav
+
+#begin Sound/Stock/Effects/pickaxe.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Effects/pickaxe.wav
+
+#begin Sound/Stock/Effects/grinding_stone.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Effects/grinding_stone.wav
+

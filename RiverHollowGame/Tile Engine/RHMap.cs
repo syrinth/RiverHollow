@@ -2925,6 +2925,7 @@ namespace RiverHollow.Tile_Engine
             if (WorldObject != null && WorldObject.CompareType(ObjectTypeEnum.Destructible))
             {
                 if (((Destructible)WorldObject).WhichTool == toolUsed.ToolType){
+                    SoundManager.PlayEffectAtLoc(toolUsed.SoundEffect, MapName, Center, toolUsed);
                     rv = ((Destructible)WorldObject).DealDamage(toolUsed.Power);
                     if (rv)
                     {

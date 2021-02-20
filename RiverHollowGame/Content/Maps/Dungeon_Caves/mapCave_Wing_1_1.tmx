@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="27" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="57">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="27" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="58">
  <properties>
   <property name="ActiveSpawn" type="int" value="3"/>
   <property name="Dungeon" value="Caves"/>
@@ -127,7 +127,7 @@
     <property name="Spawn-All" value="0-U|4-C"/>
    </properties>
   </object>
-  <object id="50" name="SpawnPoint" x="339.749" y="148.488" width="10" height="8.5">
+  <object id="50" name="SpawnPoint" x="357.082" y="52.488" width="10" height="8.5">
    <properties>
     <property name="Spawn-All" value="0-U|4-C"/>
    </properties>
@@ -145,9 +145,14 @@
   <object id="55" name="DungeonObject" x="224" y="16" width="32" height="32">
    <properties>
     <property name="MatchTrigger" value="Cave_Wing_3_Open"/>
-    <property name="ObjectID" type="int" value="20"/>
+    <property name="ObjectID" type="int" value="21"/>
     <property name="OutTrigger" value="Cave_Wing_3_Opened"/>
     <property name="TriggerNumber" type="int" value="2"/>
+   </properties>
+  </object>
+  <object id="57" name="SpawnPoint" x="274.333" y="84.4167" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
    </properties>
   </object>
  </objectgroup>
@@ -158,7 +163,7 @@
     <property name="Position" value="NE"/>
    </properties>
   </object>
-  <object id="53" name="CombatStart" x="162.665" y="354.779" width="10.5" height="11.25">
+  <object id="53" name="CombatStart" x="162.665" y="370.779" width="10.5" height="11.25">
    <properties>
     <property name="Map" value="mapCave_Entrance"/>
     <property name="Position" value="NW"/>

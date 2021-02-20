@@ -4,7 +4,7 @@
   <property name="ActiveSpawn" type="int" value="3"/>
   <property name="Dungeon" value="Caves"/>
   <property name="Outside" type="bool" value="false"/>
-  <property name="Resources" value="6-C|7-U|25-C"/>
+  <property name="Resources" value="6-C|7-R|26-U"/>
   <property name="ResourcesMinMax" value="30-60"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetDungeon.tsx"/>
@@ -117,7 +117,7 @@
     <property name="Spawn-All" value="0-C"/>
    </properties>
   </object>
-  <object id="54" name="SpawnPoint" x="67.3333" y="308.167" width="11" height="9">
+  <object id="54" name="SpawnPoint" x="99.5151" y="308.167" width="11" height="9">
    <properties>
     <property name="Spawn-All" value="0-C"/>
    </properties>
@@ -135,7 +135,7 @@
     <property name="Position" value="SE"/>
    </properties>
   </object>
-  <object id="58" name="CombatStart" x="51.5" y="277.667" width="9" height="8">
+  <object id="58" name="CombatStart" x="68.0455" y="276.031" width="9" height="8">
    <properties>
     <property name="Map" value="mapCave_Wing_1_4"/>
     <property name="Position" value="NE"/>

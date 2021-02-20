@@ -340,7 +340,7 @@
  <objectgroup id="4" name="Travel Layer">
   <object id="37" name="Entrance" x="48" y="44" width="32" height="4">
    <properties>
-    <property name="EntranceDir" value="Up"/>
+    <property name="EntranceDir" value="Down"/>
     <property name="Map" value="mapManor1"/>
    </properties>
   </object>

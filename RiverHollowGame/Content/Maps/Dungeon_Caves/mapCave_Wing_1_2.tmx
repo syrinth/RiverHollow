@@ -122,7 +122,7 @@
  <objectgroup id="5" name="MapObject">
   <object id="57" name="DungeonObject" x="80" y="97.25" width="16" height="16">
    <properties>
-    <property name="ObjectID" type="int" value="19"/>
+    <property name="ObjectID" type="int" value="20"/>
     <property name="OutTrigger" value="Cave_Wing_1_Switch_1"/>
    </properties>
   </object>

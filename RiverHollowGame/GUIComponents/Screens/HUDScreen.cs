@@ -18,7 +18,6 @@ using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
 using static RiverHollow.GUIComponents.Screens.HUDMenu.HUDManagement.MgmtWindow;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.Items.Item;
-using RiverHollow.Utilities;
 using static RiverHollow.Items.WorldItem;
 
 namespace RiverHollow.GUIComponents.Screens
@@ -39,9 +38,7 @@ namespace RiverHollow.GUIComponents.Screens
         HUDCalendar _gCalendar;
         GUIItemBox _addedItem;
 
-        GUIText _gFPS;
         double _dTimer;
-        double _dFPStracker = 0;
 
         public HUDScreen()
         {
@@ -72,17 +69,11 @@ namespace RiverHollow.GUIComponents.Screens
             _gCalendar = new HUDCalendar();
             _gCalendar.AnchorToScreen(SideEnum.TopRight, 10);
             AddControl(_gCalendar);
-
-            _gFPS = new GUIText();
-            _gFPS.AnchorAndAlignToObject(_gCalendar, SideEnum.Bottom, SideEnum.Left);
-            AddControl(_gFPS);
         }
 
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-
-            _gFPS.SetText("FPS: " + FrameCounter.CurrentFramesPerSecond);
 
             HandleInput();
 

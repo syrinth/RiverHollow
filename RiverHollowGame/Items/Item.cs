@@ -543,6 +543,9 @@ namespace RiverHollow.Items
         protected int _iPower;
         public int Power => _iPower;
 
+        private string _sSoundEffect;
+        public string SoundEffect => _sSoundEffect;
+
         private int _iCharges;
 
         protected AnimatedSprite _sprite;
@@ -566,6 +569,7 @@ namespace RiverHollow.Items
             Util.AssignValue(ref _iPower, "Power", stringData);
             Util.AssignValue(ref _iStaminaCost, "Stam", stringData);
             Util.AssignValue(ref _iCharges, "Charges", stringData);
+            Util.AssignValue(ref _sSoundEffect, "SoundEffect", stringData);
 
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Tools");
 

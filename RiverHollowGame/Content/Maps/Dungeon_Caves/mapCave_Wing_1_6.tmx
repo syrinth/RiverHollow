@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="44" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="47">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="44" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="74">
  <properties>
-  <property name="ActiveSpawn" type="int" value="1"/>
+  <property name="ActiveSpawn" type="int" value="13"/>
   <property name="Dungeon" value="Forest"/>
   <property name="Outside" type="bool" value="false"/>
-  <property name="ResourcesMinMax" value="30-60"/>
+  <property name="Resources" value="6-C|7-U|8-U"/>
+  <property name="ResourcesMinMax" value="40-80"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetDungeon.tsx"/>
  <tileset firstgid="161" source="../Tilesets/tsWalls_Floors.tsx"/>
@@ -88,6 +89,105 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="MapObject"/>
- <objectgroup id="6" name="Character"/>
+ <objectgroup id="5" name="MapObject">
+  <object id="53" name="SpawnPoint" x="433.917" y="85.4165" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="54" name="SpawnPoint" x="450.917" y="51.0835" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="55" name="SpawnPoint" x="403.584" y="54.0835" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="56" name="SpawnPoint" x="323.667" y="180.417" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="57" name="SpawnPoint" x="370.917" y="180.584" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="58" name="SpawnPoint" x="290.584" y="148.584" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="59" name="SpawnPoint" x="68.6665" y="149.917" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="60" name="SpawnPoint" x="163.333" y="149.917" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="61" name="SpawnPoint" x="19.0002" y="84.2502" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="62" name="SpawnPoint" x="482.333" y="242.5" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="63" name="SpawnPoint" x="179.667" y="68.5835" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="64" name="SpawnPoint" x="452" y="211.167" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="65" name="SpawnPoint" x="546.167" y="133.667" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="66" name="SpawnPoint" x="626.417" y="230.084" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="67" name="SpawnPoint" x="515.833" y="102.334" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="68" name="SpawnPoint" x="565" y="98.25" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+  <object id="69" name="SpawnPoint" x="659.75" y="211.5" width="10" height="8.5">
+   <properties>
+    <property name="Spawn-All" value="0-U|4-C"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="6" name="Character">
+  <object id="72" name="CombatStart" x="116.167" y="84.8958" width="9" height="8">
+   <properties>
+    <property name="Map" value="mapCave_Wing_1_5"/>
+    <property name="Position" value="SE"/>
+   </properties>
+  </object>
+  <object id="73" name="CombatStart" x="514.667" y="225.975" width="10.5" height="11.25">
+   <properties>
+    <property name="Map" value="mapCave_Wing_1_7"/>
+    <property name="Position" value="NW"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

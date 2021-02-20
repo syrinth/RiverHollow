@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.CombatStuff;
 using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
-using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
 using RiverHollow.Misc;
@@ -17,11 +16,9 @@ using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.DataManager;
 using static RiverHollow.Game_Managers.TravelManager;
 using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Items.Clothes;
 using static RiverHollow.Items.WorldItem;
 using static RiverHollow.GUIComponents.Screens.HUDMenu;
 using static RiverHollow.GUIComponents.Screens.HUDMenu.HUDManagement;
-using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 namespace RiverHollow.Characters
 {
@@ -46,6 +43,8 @@ namespace RiverHollow.Characters
         protected static string _sAdventurerFolder = DataManager.FOLDER_ACTOR + @"Adventurers\";
         protected static string _sPortraitFolder = DataManager.FOLDER_ACTOR + @"Portraits\";
         protected static string _sNPsCFolder = DataManager.FOLDER_ACTOR + @"NPCs\";
+
+        protected ActorStateEnum _eMovementState = ActorStateEnum.Idle;
 
         protected ActorEnum _eActorType = ActorEnum.Actor;
         public ActorEnum ActorType => _eActorType;
@@ -380,8 +379,12 @@ namespace RiverHollow.Characters
         public virtual void DetermineFacing(Vector2 direction)
         {
             bool walk = false;
+
+            DirectionEnum initialFacing = Facing;
+            ActorStateEnum initialState = _eMovementState;
             if (direction.Length() != 0)
             {
+                SetMovementState(ActorStateEnum.Walking);
                 walk = true;
                 if (Math.Abs((int)direction.X) > Math.Abs((int)direction.Y))
                 {
@@ -408,8 +411,17 @@ namespace RiverHollow.Characters
                     }
                 }
             }
+            else { SetMovementState(ActorStateEnum.Idle); }
 
-            PlayAnimationVerb((walk || CombatManager.InCombat) ? VerbEnum.Walk : VerbEnum.Idle);
+            if (initialState != _eMovementState || initialFacing != Facing)
+            {
+                PlayAnimationVerb((walk || CombatManager.InCombat) ? VerbEnum.Walk : VerbEnum.Idle);
+            }
+        }
+
+        public void SetMovementState(ActorStateEnum e)
+        {
+            _eMovementState = e;
         }
 
         /// <summary>

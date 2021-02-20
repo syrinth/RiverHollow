@@ -151,7 +151,7 @@
    <properties>
     <property name="KeyDoor" type="bool" value="true"/>
     <property name="MatchTrigger" value="KEY_USED"/>
-    <property name="ObjectID" type="int" value="22"/>
+    <property name="ObjectID" type="int" value="23"/>
    </properties>
   </object>
  </objectgroup>

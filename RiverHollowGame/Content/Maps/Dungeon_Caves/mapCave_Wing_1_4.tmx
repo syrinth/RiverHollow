@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="27" height="32" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="47">
  <properties>
-  <property name="ActiveSpawn" type="int" value="1"/>
-  <property name="Dungeon" value="Forest"/>
+  <property name="Dungeon" value="Caves"/>
   <property name="Outside" type="bool" value="false"/>
-  <property name="ResourcesMinMax" value="30-60"/>
+  <property name="Resources" value="6-C|7-U"/>
+  <property name="ResourcesMinMax" value="50-80"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetDungeon.tsx"/>
  <tileset firstgid="161" source="../Tilesets/tsWalls_Floors.tsx"/>
@@ -107,7 +107,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,327,0,
 0,0,0,0,0,0,0,0,0,0,305,306,306,306,306,306,306,306,0,0,0,0,0,0,0,0,416,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,416,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,416,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,305,438,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

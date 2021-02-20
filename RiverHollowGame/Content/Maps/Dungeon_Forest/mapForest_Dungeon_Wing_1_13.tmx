@@ -114,7 +114,7 @@
   </object>
   <object id="49" name="DungeonObject" x="224" y="96" width="16" height="16">
    <properties>
-    <property name="ObjectID" type="int" value="19"/>
+    <property name="ObjectID" type="int" value="20"/>
     <property name="OutTrigger" value="Trigger_Forest_2"/>
    </properties>
   </object>
