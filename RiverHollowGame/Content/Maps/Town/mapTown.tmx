@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="67">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="68">
  <properties>
   <property name="Background" value="UO-Stones"/>
   <property name="Outside" type="bool" value="true"/>
@@ -322,6 +322,7 @@
  <objectgroup id="6" name="Character">
   <object id="65" name="PlayerSpawn" x="594.583" y="820.75" width="5.63636" height="5.27273"/>
   <object id="66" name="CS1Spawn" x="629.583" y="820.083" width="7.16667" height="6.5"/>
+  <object id="67" name="NPC_21" x="480.886" y="705.119" width="29.5" height="13.7614"/>
  </objectgroup>
  <objectgroup id="7" name="Travel">
   <object id="34" name="Entrance" x="1596" y="704" width="4" height="48">
@@ -349,7 +350,6 @@
     <property name="BuildingID" type="int" value="0"/>
    </properties>
   </object>
-  <object id="56" name="NPC_21" x="497.688" y="721.765" width="29.5" height="13.7614"/>
   <object id="57" name="Barren" x="577.083" y="720.083" width="78.833" height="191.333">
    <properties>
     <property name="Outside" type="bool" value="true"/>

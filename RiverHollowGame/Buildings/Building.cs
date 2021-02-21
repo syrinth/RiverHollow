@@ -41,7 +41,7 @@ namespace RiverHollow.Buildings
         public Rectangle TravelBox { get; private set; }
 
         public int PersonalID { get; private set; }
-        public bool Unique { get; private set; }
+        public bool Unique { get; private set; } = true;
 
         private int _iUpgradeTime;
         private int _iUpgradeTimer;
@@ -141,7 +141,7 @@ namespace RiverHollow.Buildings
             if (stringData.ContainsKey("WorkersPerLevel")) { _iWorkersPerLevel = int.Parse(stringData["WorkersPerLevel"]); }
 
             //Flag for whether or not this building is unique
-            Unique = stringData.ContainsKey("Unique");
+            //Unique = stringData.ContainsKey("Unique");
 
             //PersonalID = PlayerManager.GetNewBuildingID();
 

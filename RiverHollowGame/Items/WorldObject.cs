@@ -551,6 +551,7 @@ namespace RiverHollow.Items
 
                 _itemBubble = new ItemBubble(_heldItem, this);
             }
+
             public void TakeFinishedItem()
             {
                 InventoryManager.AddToInventory(_heldItem);
@@ -621,7 +622,15 @@ namespace RiverHollow.Items
                         _dProcessedTime += gTime.ElapsedGameTime.TotalSeconds;
                         if (_dProcessedTime >= CurrentlyProcessing.ProcessingTime)
                         {
-                            SetHeldItem(CurrentlyProcessing.Output);
+                            PlayerManager.AllowMovement = true;
+                            InventoryManager.AddToInventory(CurrentlyProcessing.Output);
+
+                            SoundManager.StopEffect(this);
+                            SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition, this);
+                            _dProcessedTime = 0;
+                            _iCurrentlyMaking = -1;
+                            _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
+                            //SetHeldItem(CurrentlyProcessing.Output);
                         }
                     }
                 }
@@ -629,7 +638,6 @@ namespace RiverHollow.Items
                 public override bool StartAutoWork()
                 {
                     bool rv = false;
-
                     Item itemToProcess = InventoryManager.GetCurrentItem();
                     if (itemToProcess != null)
                     {
@@ -638,6 +646,7 @@ namespace RiverHollow.Items
                             ProcessRecipe pr = _diProcessing[itemToProcess.ItemID];
                             if (itemToProcess.Number >= pr.InputNum)
                             {
+                                PlayerManager.AllowMovement = false;
                                 rv = true;
                                 itemToProcess.Remove(pr.InputNum);
                                 _iCurrentlyMaking = pr.Input;
@@ -726,7 +735,12 @@ namespace RiverHollow.Items
                         _dProcessedTime++;
                         if (_dProcessedTime >= CraftingDictionary[_iCurrentlyMaking])
                         {
-                            SetHeldItem(_iCurrentlyMaking);
+                            //SetHeldItem(_iCurrentlyMaking);
+                            SoundManager.StopEffect(this);
+                            SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition, this);
+                            _dProcessedTime = 0;
+                            _iCurrentlyMaking = -1;
+                            _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
                         }
 
                         _bWorking = false;

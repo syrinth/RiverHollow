@@ -1674,7 +1674,7 @@ namespace RiverHollow.GUIComponents.Screens
                         if (addSuccess)
                         {
                             PlayerManager.TakeMoney(_iCost);
-                            GUIManager.OpenMainObject(new HUDNamingWindow(_worker));
+                            //GUIManager.OpenMainObject(new HUDNamingWindow(_worker));
                             _worker = null;
                         }
                         else

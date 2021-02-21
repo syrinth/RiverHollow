@@ -2696,3 +2696,37 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapManor_1.tmx
 
+#begin Textures/Buildings/PotionHut.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/PotionHut.png
+
+#begin Maps/Town/mapPotionHut_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapPotionHut_1.tmx
+
+#begin Textures/Buildings/LumberMill.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/LumberMill.png
+
+#begin Maps/Town/mapLumberMill_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapLumberMill_1.tmx
+

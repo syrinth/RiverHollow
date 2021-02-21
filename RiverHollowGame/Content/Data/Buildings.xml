@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Texture:Manor][Dimensions:176-208][FirstBase:0-112][Width:176][Height:80][Entrance:80-188-16-4][Manor][Unique][Workers:1-2-3-4-5-6-7-8][WorkersPerLevel:2][UpgradeTime:3]</Value>
+      <Value>[Texture:Manor][Dimensions:176-208][FirstBase:0-112][Width:176][Height:80][Entrance:80-188-16-4][Workers:1-2-3-4-5-6-7-8][WorkersPerLevel:2][UpgradeTime:3]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -27,11 +27,19 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Texture:BuildingStore][Dimensions:176-144][FirstBase:0-80][Width:176][Height:64][Entrance:80-114-16-32][Unique]</Value>
+      <Value>[Texture:BuildingStore][Dimensions:176-144][FirstBase:0-80][Width:176][Height:64][Entrance:80-114-16-32]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Texture:Inn][Dimensions:208-176][FirstBase:16-112][Width:176][Height:64][Entrance:96-146-16-29][Unique]</Value>
+      <Value>[Texture:Inn][Dimensions:208-176][FirstBase:16-112][Width:176][Height:64][Entrance:96-146-16-29]</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>[Texture:PotionHut][Dimensions:128-144][FirstBase:16-80][Width:96][Height:64][Entrance:48-115-16-29]</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Texture:LumberMill][Dimensions:112-144][FirstBase:0-80][Width:112][Height:64][Entrance:48-112-16-32]</Value>
     </Item>
   </Asset>
 </XnaContent>

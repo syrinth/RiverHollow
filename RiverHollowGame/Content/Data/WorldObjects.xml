@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Container][Image:0-16][Width:16][Height:16][Rows:1][Cols:8][ItemID:112]</Value>
+      <Value>[Type:Container][Image:0-16][Width:16][Height:16][Rows:1][Cols:8][ItemID:113]</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -115,27 +115,27 @@
     </Item>
     <Item>
       <Key>28</Key>
-      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Processes:32-10|33-10|34-10|35-10|36-10][WorkEffect:stove_fire][MachineType:Processor][ItemID:113]</Value>
+      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Processes:32-10|33-10|34-10|35-10|36-10][WorkEffect:stove_fire][MachineType:Processor][ItemID:114]</Value>
     </Item>
     <Item>
       <Key>29</Key>
-      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:117-5|118-30|72-15][Base:2-1][MachineType:CraftingMachine][ItemID:114]</Value>
+      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:118-5|119-30|73-15][Base:2-1][MachineType:CraftingMachine][ItemID:115]</Value>
     </Item>
     <Item>
       <Key>30</Key>
-      <Value>[Type:Machine][Image:0-64][Work:4-0.3][Width:16][Height:32][Makes:111-2|112-3|58-1][Base:1-1][WorkEffect:bubbles][MachineType:CraftingMachine][ItemID:115][ReqItems:0-5]</Value>
+      <Value>[Type:Machine][Image:0-64][Work:4-0.3][Width:16][Height:32][Makes:112-2|113-3|58-1][Base:1-1][WorkEffect:bubbles][MachineType:CraftingMachine][ItemID:116][ReqItems:0-5]</Value>
     </Item>
     <Item>
       <Key>31</Key>
-      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:121-1|118-1|119-1|120-1|117-1|122-1|128-1][Base:2-1][MachineType:CraftingMachine][ItemID:116]</Value>
+      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:122-1|119-1|120-1|121-1|118-1|123-1|129-1][Base:2-1][MachineType:CraftingMachine][ItemID:117]</Value>
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:113-2][Base:1-1][MachineType:CraftingMachine][ItemID:117]</Value>
+      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:114-2][Base:1-1][MachineType:CraftingMachine][ItemID:118]</Value>
     </Item>
     <Item>
       <Key>33</Key>
-      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Makes:86-3][Base:2-1][MachineType:CraftingMachine][ItemID:118]</Value>
+      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Makes:87-3][Base:2-1][MachineType:CraftingMachine][ItemID:119]</Value>
     </Item>
     <Item>
       <Key>34</Key>
@@ -179,7 +179,7 @@
     </Item>
     <Item>
       <Key>44</Key>
-      <Value>[Type:Machine][Image:0-0][MachineType:CraftingMachine]</Value>
+      <Value>[Type:Machine][Image:0-224][MachineType:Processor][Width:32][Height:32][Processes:2-1][Base:2-2][Work:2-0.1]</Value>
     </Item>
     <Item>
       <Key>45</Key>
@@ -195,11 +195,11 @@
     </Item>
     <Item>
       <Key>48</Key>
-      <Value>[Type:Plant][Image:192-16][Height:32][ItemID:105][TrNum:4][TrTime:1-2-3]</Value>
+      <Value>[Type:Plant][Image:192-16][Height:32][ItemID:106][TrNum:4][TrTime:1-2-3]</Value>
     </Item>
     <Item>
       <Key>49</Key>
-      <Value>[Type:Plant][Image:192-48][Height:32][ItemID:134][TrNum:4][TrTime:1-1-1]</Value>
+      <Value>[Type:Plant][Image:192-48][Height:32][ItemID:135][TrNum:4][TrTime:1-1-1]</Value>
     </Item>
     <Item>
       <Key>50</Key>

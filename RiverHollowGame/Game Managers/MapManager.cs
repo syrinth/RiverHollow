@@ -111,6 +111,7 @@ namespace RiverHollow.Game_Managers
                 ////Handling for if the player is currently in a building and is leaving it
                 //if (PlayerManager._iBuildingID != -1)
                 //{
+                //{
                 //    entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[PlayerManager._iBuildingID.ToString()];
                 //    PlayerManager._iBuildingID = -1;
                 //}

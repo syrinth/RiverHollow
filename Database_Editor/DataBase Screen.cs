@@ -45,15 +45,16 @@ namespace Database_Editor
         const string TAGS_FOR_SPIRITS = "SpiritID";
         const string TAGS_FOR_STATUS_EFFECTS = "StatusEffectID";
         const string TAGS_FOR_SUMMONS = "SummonID";
+        const string TAGS_FOR_BUILDINGS = "BuildingID,HouseID,RequiredBuildingID";
 
         const string ITEM_REF_TAGS = "ReqItems,RefinesInto,Place";
         const string QUEST_REF_TAGS = "GoalItem,ItemReward";
-        const string CHARACTER_REF_TAGS = "Collection,Class,ShopData";
+        const string CHARACTER_REF_TAGS = "Collection,Class,ShopData,HouseID,RequiredBuildingID";
         const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID";
         const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
         const string SHOPDATA_REF_TAGS = "ItemID,WorkerID,BuildingID";
         const string ADVENTURERS_REF_TAG = "ItemID";
-        const string SHOP_REF_TAG = "ItemID,Requires";
+        const string SHOP_REF_TAG = "ItemID,Requires,BuildingID";
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
         const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
         const string ACTIONS_REF_TAGS = "StatusEffectID,SummonID";
@@ -2365,6 +2366,10 @@ namespace Database_Editor
             {
                 AddContextMenuItem("Add New", AddNewAction, false);
             }
+            else if (dgv == dgvBuildings)
+            {
+                AddContextMenuItem("Add New", AddNewBuilding, false);
+            }
         }
 
         private void AddContextMenuItem(string text, EventHandler triggeredEvent, bool separator)
@@ -2420,6 +2425,12 @@ namespace Database_Editor
             SaveMonsterInfo(_diBasicXML[MONSTERS_XML_FILE]);
             List<string> defaultTags = new List<string>() { "Texture:", "Condition:", "Lvl", "Ability:", "Loot:", "Trait:", "Walk:0-0-3-0.15-T", "Attack:0-0-3-0.15-T", "Cast:0-0-3-0.15-T", "Hurt:0-0-3-0.15-T", "Critical:0-0-3-0.15-T", "KO:0-0-3-0.15-T" };
             AddNewGenericXMLObject(tabCtl.TabPages["tabMonsters"], "Monsters", dgvMonsters, "colMonstersID", "colMonstersName", tbMonsterName, tbMonsterID, dgvMonsterTags, "colMonsterTags", null, tbMonsterDescription, defaultTags);
+        }
+        private void AddNewBuilding(object sender, EventArgs e)
+        {
+            SaveBuildingInfo(_diBasicXML[BUILDINGS_XML_FILE]);
+            List<string> defaultTags = new List<string>() { "Texture:", "Dimensions:", "FirstBase:", "Width:", "Height:", "Entrance:"};
+            AddNewGenericXMLObject(tabCtl.TabPages["tabBuildings"], "Buildings", dgvBuildings, "colBuildingsID", "colBuildingsName", tbBuildingName, tbBuildingID, dgvBuildingTags, "colBuildingTags", null, tbBuildingDescription, defaultTags);
         }
         #endregion
 

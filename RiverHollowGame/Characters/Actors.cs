@@ -2132,7 +2132,7 @@ namespace RiverHollow.Characters
             }
         }
 
-        protected string GetMapName()
+        protected virtual string GetMapName()
         {
             string rv = string.Empty;
 
@@ -3377,6 +3377,7 @@ namespace RiverHollow.Characters
  
         public ShippingGremlin(int index, Dictionary<string, string> stringData)
         {
+            ArrivedInTown = true;
             _liRequiredBuildingIDs = new List<int>();
             _arrInventory = new Item[_iRows, _iCols];
             _eActorType = ActorEnum.ShippingGremlin;
@@ -3485,6 +3486,11 @@ namespace RiverHollow.Characters
             }
             _arrInventory = new Item[_iRows, _iCols];
             return val;
+        }
+
+        protected override string GetMapName()
+        {
+            return "mapTown";
         }
     }
  

@@ -171,7 +171,6 @@
             this.tabBuildings = new System.Windows.Forms.TabPage();
             this.btnBuildingCancel = new System.Windows.Forms.Button();
             this.dgvBuildingTags = new System.Windows.Forms.DataGridView();
-            this.colBuildingTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbBuildingDescription = new System.Windows.Forms.TextBox();
             this.label23 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
@@ -220,6 +219,7 @@
             this.dgvStatusEffects = new System.Windows.Forms.DataGridView();
             this.colStatusEffectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStatusEffectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBuildingTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -1768,19 +1768,13 @@
             this.dgvBuildingTags.AllowUserToResizeRows = false;
             this.dgvBuildingTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvBuildingTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colBuildingTag});
+            this.colBuildingTags});
             this.dgvBuildingTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgvBuildingTags.Location = new System.Drawing.Point(320, 110);
             this.dgvBuildingTags.Name = "dgvBuildingTags";
             this.dgvBuildingTags.RowHeadersVisible = false;
             this.dgvBuildingTags.Size = new System.Drawing.Size(464, 278);
             this.dgvBuildingTags.TabIndex = 33;
-            // 
-            // colBuildingTag
-            // 
-            this.colBuildingTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colBuildingTag.HeaderText = "Tags";
-            this.colBuildingTag.Name = "colBuildingTag";
             // 
             // tbBuildingDescription
             // 
@@ -1841,6 +1835,7 @@
             this.dgvBuildings.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colBuildingsID,
             this.colBuildingsName});
+            this.dgvBuildings.ContextMenuStrip = this.contextMenu;
             this.dgvBuildings.Location = new System.Drawing.Point(6, 6);
             this.dgvBuildings.MultiSelect = false;
             this.dgvBuildings.Name = "dgvBuildings";
@@ -2279,6 +2274,12 @@
             this.colStatusEffectsName.ReadOnly = true;
             this.colStatusEffectsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // colBuildingTags
+            // 
+            this.colBuildingTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colBuildingTags.HeaderText = "Tags";
+            this.colBuildingTags.Name = "colBuildingTags";
+            // 
             // frmDBEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2480,7 +2481,6 @@
         private System.Windows.Forms.TabPage tabSpirits;
         private System.Windows.Forms.TabPage tabSummons;
         private System.Windows.Forms.TabPage tabStatusEffects;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colBuildingTag;
         private System.Windows.Forms.Button btnSpiritCancel;
         private System.Windows.Forms.DataGridView dgvSpiritTags;
         private System.Windows.Forms.TextBox tbSpiritDescription;
@@ -2545,6 +2545,7 @@
         private System.Windows.Forms.TextBox tbClassDescription;
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.ContextMenuStrip contextMenu;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBuildingTags;
     }
 }
 

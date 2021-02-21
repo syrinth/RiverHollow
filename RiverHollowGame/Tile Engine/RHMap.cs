@@ -1461,8 +1461,10 @@ namespace RiverHollow.Tile_Engine
                 if (GameManager.HeldBuilding != null && AddBuilding(GameManager.HeldBuilding, false, false))
                 {
                     GameManager.HeldBuilding.StartBuilding();   //Set the building to start being built
-                    GUIManager.OpenMainObject(new HUDNamingWindow(GameManager.HeldBuilding));   //Open a naming window
+                    //GUIManager.OpenMainObject(new HUDNamingWindow(GameManager.HeldBuilding));   //Open a naming window
+                    FinishBuilding();
                     GameManager.DropBuilding();                 //Drop the Building from the GameManger
+
 
                     //Take the resources from the player if there is merchandise
                     if (CurrentMerch != null)
@@ -1701,6 +1703,17 @@ namespace RiverHollow.Tile_Engine
         }
         #endregion
 
+        public void FinishBuilding()
+        {
+            SetGameScale(NORMAL_SCALE);
+            //We know that this window only gets created under special circumstances, so unset them
+            RiverHollow.ResetCamera();
+            GUIManager.CloseMainObject();
+            GameManager.Unpause();
+            GameManager.Scry(false);
+            GameManager.StopTakingInput();
+        }
+
         public void ClearWorkers()
         {
             _liActors.Clear();
@@ -1928,7 +1941,8 @@ namespace RiverHollow.Tile_Engine
                         Adventurer w = DataManager.GetAdventurer(GUICursor.WorkerToPlace);
                         b.AddWorker(w);
                         b._selected = false;
-                        GUIManager.OpenMainObject(new HUDNamingWindow(w));
+                        FinishBuilding();
+                        //GUIManager.OpenMainObject(new HUDNamingWindow(w));
                         //Scry(false);
                         rv = true;
                     }
