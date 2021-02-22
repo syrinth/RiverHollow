@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Oh, so you're the one moving into the manor. $^$ was it? Interesting, I've been wondering what you'd be like. The name's $Character_7$, and I'm the best shot for miles.</Value>
+      <Value>Oh, so you're the one moving into the manor. $Name$ was it? Interesting, I've been wondering what you'd be like. The name's $Character_7$, and I'm the best shot for miles.</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hello, what can I do for you?.[Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel]</Value>
+      <Value>Hello, what can I do for you?.{Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel}</Value>
     </Item>
     <Item>
       <Key>JoinPartyYes</Key>

@@ -828,9 +828,9 @@ namespace RiverHollow.Characters
             }
             else if (chosenAction.StartsWith("Quest"))
             {
-                Quest q = GameManager.DiQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
+                Task q = GameManager.DIQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
                 PlayerManager.AddToQuestLog(q);
-                nextText = GetDialogEntry("Quest" + q.QuestID);
+                nextText = GetDialogEntry("Quest" + q.TaskID);
             }
             else if (chosenAction.StartsWith("Donate"))
             {
@@ -1964,7 +1964,7 @@ namespace RiverHollow.Characters
         {
             string rv = string.Empty;
 
-            foreach(Quest q in PlayerManager.QuestLog)
+            foreach(Task q in PlayerManager.TaskLog)
             {
                 q.AttemptProgress(this);
             }
@@ -1976,7 +1976,7 @@ namespace RiverHollow.Characters
             }
             else
             {
-                if (!CheckQuestLogs(ref rv))
+                if (!CheckTaskLog(ref rv))
                 {
                     if (!_bHasTalked) { rv = GetDailyDialogue(); }
                     else { rv = GetSelectionText(); }
@@ -2006,9 +2006,9 @@ namespace RiverHollow.Characters
                 }
                 else if (chosenAction.StartsWith("Quest"))
                 {
-                    Quest q = GameManager.DiQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
+                    Task q = GameManager.DIQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
                     PlayerManager.AddToQuestLog(q);
-                    nextText = GetDialogEntry("Quest" + q.QuestID);
+                    nextText = GetDialogEntry("Quest" + q.TaskID);
                 }
                 else if (chosenAction.StartsWith("Donate"))
                 {
@@ -2051,8 +2051,8 @@ namespace RiverHollow.Characters
                     }
                     else if (specialVal[0].Equals("Quest"))
                     {
-                        Quest newQuest = GameManager.DiQuests[val];
-                        removeIt = PlayerManager.QuestLog.Contains(newQuest) || newQuest.ReadyForHandIn || newQuest.Finished || !newQuest.CanBeGiven();
+                        Task newQuest = GameManager.DIQuests[val];
+                        removeIt = PlayerManager.TaskLog.Contains(newQuest) || newQuest.ReadyForHandIn || newQuest.Finished || !newQuest.CanBeGiven();
                     }
 
                     s = s.Remove(s.IndexOf(specialParse[0]) - 1, specialParse[0].Length + 2);
@@ -2081,7 +2081,7 @@ namespace RiverHollow.Characters
                 bool arrived = true;
                 foreach (int i in _liRequiredBuildingIDs)
                 {
-                    if (!PlayerManager.HaveBuiltBuildingID(i))
+                    if (!GameManager.DIBuildInfo[i].Built)
                     {
                         arrived = false;
                         break;
@@ -2136,7 +2136,7 @@ namespace RiverHollow.Characters
         {
             string rv = string.Empty;
 
-            if (PlayerManager.HaveBuiltBuildingID(_iHouseBuildingID)) { rv = PlayerManager.GetBuildingByID(_iHouseBuildingID).MapName; }
+            if (GameManager.DIBuildInfo[_iHouseBuildingID].Built) { rv = PlayerManager.GetBuildingByID(_iHouseBuildingID).MapName; }
             else { }
 
             return rv;
@@ -2230,17 +2230,17 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        protected bool CheckQuestLogs(ref string questCompleteText)
+        protected bool CheckTaskLog(ref string taskCompleteText)
         {
             bool rv = false;
 
-            foreach (Quest q in PlayerManager.QuestLog)
+            foreach (Task t in PlayerManager.TaskLog)
             {
-                if (q.ReadyForHandIn && q.GoalNPC == this)
+                if (t.ReadyForHandIn && t.GoalNPC == this)
                 {
-                    q.FinishQuest(ref questCompleteText);
+                    t.FinishQuest(ref taskCompleteText);
 
-                    questCompleteText = _diDialogue[questCompleteText];
+                    taskCompleteText = _diDialogue[taskCompleteText];
 
                     rv = true;
                     break;
@@ -2413,7 +2413,7 @@ namespace RiverHollow.Characters
         public override string GetOpeningText()
         {
             string rv = string.Empty;
-            if (Introduced && !CheckQuestLogs(ref rv) && _bIsOpen)
+            if (Introduced && !CheckTaskLog(ref rv) && _bIsOpen)
             {
                 rv = _diDialogue["ShopOpen"];
             }
@@ -2484,7 +2484,7 @@ namespace RiverHollow.Characters
                 }
                 else if (chosenAction.Equals("Move"))
                 {
-                    RiverHollow.HomeMapPlacement();
+                    RiverHollow.EnterBuildMode();
                     GameManager.ClearGMObjects();
                     GameManager.MoveBuilding();
                 }
@@ -2496,7 +2496,7 @@ namespace RiverHollow.Characters
                 }
                 else if (chosenAction.Equals("Destroy"))
                 {
-                    RiverHollow.HomeMapPlacement();
+                    RiverHollow.EnterBuildMode();
                     GameManager.ClearGMObjects();
                     GameManager.DestroyBuilding();
                 }
@@ -2562,7 +2562,7 @@ namespace RiverHollow.Characters
             public bool Activated()
             {
                 bool rv = false;
-                rv = _iQuestReq == -1 || GameManager.DiQuests[_iQuestReq].Finished;
+                rv = _iQuestReq == -1 || GameManager.DIQuests[_iQuestReq].Finished;
                 return rv;
             }
         }

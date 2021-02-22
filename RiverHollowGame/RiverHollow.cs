@@ -71,7 +71,8 @@ namespace RiverHollow
             GUIManager.LoadContent();
 
             CutsceneManager.LoadContent(Content);
-            GameManager.LoadQuests(Content);
+            GameManager.LoadQuests();
+            GameManager.LoadBuildInfo();
 
             var pp = GraphicsDevice.PresentationParameters;
             _renderLights = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
@@ -341,13 +342,13 @@ namespace RiverHollow
             _bExit = true;
         }
 
-        public static void HomeMapPlacement()
+        public static void EnterBuildMode()
         {
             SetGameScale(2);
             GUIManager.CloseMainObject();
             GameManager.Scry();
-            MapManager.ViewMap(MapManager.HomeMap);
             Camera.UnsetObserver(Vector2.Zero);
+            ConstructBuilding();
         }
     }
 }

@@ -52,7 +52,7 @@ namespace RiverHollow.Items
         public virtual int BaseHeight => _iBaseHeight;
 
         protected int _iID;
-        public int ID { get => _iID; }
+        public int ID  => _iID;
 
         protected string _sName;
         public string Name { get => _sName; }

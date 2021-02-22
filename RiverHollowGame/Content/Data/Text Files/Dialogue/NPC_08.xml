@@ -7,11 +7,11 @@
     </Item>
     <Item>
       <Key>Snowing|1</Key>
-      <Value>Oh, hello $^$. Care to join me for a hot drink this evening?</Value>
+      <Value>Oh, hello $Name$. Care to join me for a hot drink this evening?</Value>
     </Item>
     <Item>
       <Key>Winter|1</Key>
-      <Value>Hello, $^$. Enjoying the winter? You should come visit me at the tavern some time soon. I've got just the thing to ward off the cold.</Value>
+      <Value>Hello, $Name$. Enjoying the winter? You should come visit me at the tavern some time soon. I've got just the thing to ward off the cold.</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -20,7 +20,7 @@ Try to take it easy sometimes, ok?</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Off again $^$? If you need to relax after, you know where I'll be.</Value>
+      <Value>Off again $Name$? If you need to relax after, you know where I'll be.</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -36,7 +36,7 @@ Try to take it easy sometimes, ok?</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hello, what can I do for you?.[Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel]</Value>
+      <Value>Hello, what can I do for you?.{Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel}</Value>
     </Item>
     <Item>
       <Key>JoinPartyYes</Key>

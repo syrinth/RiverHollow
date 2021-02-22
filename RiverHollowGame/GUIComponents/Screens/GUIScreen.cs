@@ -162,7 +162,7 @@ namespace RiverHollow.GUIComponents.Screens
             CloseTextWindow();
             GameManager.Pause(talker);
 
-            bool selection = text.Contains("[");
+            bool selection = text.Contains("{");
             if (selection) { _guiTextWindow = new GUITextSelectionWindow(text, open); }
             else { _guiTextWindow = new GUITextWindow(text, open, displayDialogueIcon); }
             AddControl(_guiTextWindow);

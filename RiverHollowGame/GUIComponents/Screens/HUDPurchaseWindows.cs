@@ -151,7 +151,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                 if (CurrentMerch.MerchType == Merchandise.ItemType.Building)
                 {
-                    RiverHollow.HomeMapPlacement();
+                    RiverHollow.EnterBuildMode();
                     GameManager.PickUpBuilding(DataManager.GetBuilding(CurrentMerch.MerchID));
                     ConstructBuilding();
                 }

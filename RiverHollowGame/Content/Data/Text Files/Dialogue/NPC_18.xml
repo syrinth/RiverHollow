@@ -11,15 +11,15 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Hello, $^$. Could you talk to $1$ for me by any chance? I worry about her, always pushing herself so hard.</Value>
+      <Value>Hello, $Name$. Could you talk to $1$ for me by any chance? I worry about her, always pushing herself so hard.</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>For me? Oh, $^$, you shouldn't have.</Value>
+      <Value>For me? Oh, $Name$, you shouldn't have.</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Oh, hello. [Talk:Talk|Gift:GiveGift|Never Mind:Cancel]</Value>
+      <Value>Oh, hello. {Talk:Talk|Gift:GiveGift|Never Mind:Cancel}</Value>
     </Item>
   </Asset>
 </XnaContent>

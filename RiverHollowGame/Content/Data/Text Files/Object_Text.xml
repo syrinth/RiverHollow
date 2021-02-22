@@ -2,16 +2,20 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, string]">
     <Item>
-      <Key>Quest_0</Key>
-      <Value>[Name:$Character_17$'s Supplies][Description:$Character_17$ is has some supplies to give you. Youshould go speak to her.]</Value>
+      <Key>Task_0</Key>
+      <Value>[Name:Build a $Building_9$][Description:$Character_14$ want you to build a $Building_9$]</Value>
     </Item>
     <Item>
-      <Key>Quest_1</Key>
+      <Key>Task_1</Key>
       <Value>[Name:Search the Manor][Description:Search the ruinsof the Manor for anything useful]</Value>
     </Item>
     <Item>
-      <Key>Quest_2</Key>
+      <Key>Task_2</Key>
       <Value>[Name:$Character_16$'s helping hand][Description:Find out how $Character_16$ can help you.]</Value>
+    </Item>
+    <Item>
+      <Key>Task_3</Key>
+      <Value>[Name:Build a $Building_7$][Description:$Character_14$ want you to build a $Building_7$]</Value>
     </Item>
     <Item>
       <Key>Character_0</Key>
@@ -391,7 +395,7 @@
     </Item>
     <Item>
       <Key>Building_5</Key>
-      <Value>[Name:Town Store]</Value>
+      <Value>[Name:Home]</Value>
     </Item>
     <Item>
       <Key>Building_6</Key>

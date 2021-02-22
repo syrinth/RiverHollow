@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hello $^$. I hope you're well today.</Value>
+      <Value>Hello $Name$. I hope you're well today.</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hello, what can I do for you?.[Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel]</Value>
+      <Value>Hello, what can I do for you?.{Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel}</Value>
     </Item>
     <Item>
       <Key>Snowing|1</Key>

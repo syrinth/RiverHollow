@@ -3,12 +3,12 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Hello $^$, settling in well I hope? How are you finding the town so far?
+      <Value>Hello $Name$, settling in well I hope? How are you finding the town so far?
 If you ever need anything, you know where to find me.</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hello, $^$! What brings you into town today?</Value>
+      <Value>Hello, $Name$! What brings you into town today?</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -16,7 +16,7 @@ If you ever need anything, you know where to find me.</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>
-      <Value>Oh, hello $^$, What can I do for you? [Talk:Talk|Construct Buildings:BuyBuildings|Maintain Buildings:Maintenance|Never Mind:Cancel]</Value>
+      <Value>Oh, hello $Name$, What can I do for you? {Talk:Talk|Construct Buildings:BuyBuildings|Maintain Buildings:Maintenance|Never Mind:Cancel}</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
@@ -24,7 +24,7 @@ If you ever need anything, you know where to find me.</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Yes? How can I help you?[Talk:Talk|Gift:GiveGift|Never Mind:Cancel]</Value>
+      <Value>Yes? How can I help you?{Talk:Talk|Gift:GiveGift|Never Mind:Cancel}</Value>
     </Item>
     <Item>
       <Key>Raining|1</Key>

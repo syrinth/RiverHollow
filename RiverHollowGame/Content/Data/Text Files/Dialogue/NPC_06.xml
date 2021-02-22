@@ -3,15 +3,15 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Hi. $^$, right?, Welcome to River Hollow. I'm $Character_6$ and it's my job to make sure the monsters stay outside the walls. I recommend you not wander far from town.</Value>
+      <Value>Hi. $Name$, right?, Welcome to River Hollow. I'm $Character_6$ and it's my job to make sure the monsters stay outside the walls. I recommend you not wander far from town.</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>$^$, hello. Having a good day I trust? Stay safe, and don't make me follow you around.</Value>
+      <Value>$Name$, hello. Having a good day I trust? Stay safe, and don't make me follow you around.</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>$^$? You look stressed. Please don't push yourself and make sure you're getting enough sleep. a few years back I tried six hours a night and let me tell you what a mistake that was.</Value>
+      <Value>$Name$? You look stressed. Please don't push yourself and make sure you're getting enough sleep. a few years back I tried six hours a night and let me tell you what a mistake that was.</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
@@ -19,11 +19,11 @@
     </Item>
     <Item>
       <Key>Collection</Key>
-      <Value>Is that really for me? $^$! Thank you. This really means a lot to me.</Value>
+      <Value>Is that really for me? $Name$! Thank you. This really means a lot to me.</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hello, what can I do for you?.[Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel]</Value>
+      <Value>Hello, what can I do for you?.{Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel}</Value>
     </Item>
     <Item>
       <Key>JoinPartyYes</Key>

@@ -277,7 +277,7 @@ namespace RiverHollow.Game_Managers
                                     _dTimer = double.Parse(sCommandData[0]);
                                     break;
                                 case EnumCSCommand.Quest:
-                                    PlayerManager.AddToQuestLog(GameManager.DiQuests[int.Parse(sCommandData[0])]);
+                                    PlayerManager.AddToQuestLog(GameManager.DIQuests[int.Parse(sCommandData[0])]);
                                     bGoToNext = true;
                                     break;
                                 case EnumCSCommand.Speed:
@@ -577,7 +577,7 @@ namespace RiverHollow.Game_Managers
                         {
                             foreach (string questID in sCommandData)
                             {
-                                PlayerManager.AddToQuestLog(GameManager.DiQuests[int.Parse(questID)]);
+                                PlayerManager.AddToQuestLog(GameManager.DIQuests[int.Parse(questID)]);
                             }
                         }
                         else if (currentCommand.Command == EnumCSCommand.Activate)

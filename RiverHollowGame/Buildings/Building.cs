@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
@@ -10,6 +9,7 @@ using RiverHollow.Items;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Items.WorldItem;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.Buildings
 {
@@ -30,55 +30,35 @@ namespace RiverHollow.Buildings
         public string Description => _sDescription;
 
         private string _sHomeMap;
-        private string _sName;
-        public string Name => _sName;
-        public string MapName => "map" +_sName.Replace(" ", "") + "_" + (Level == 0 ? "" : Level.ToString());
-        public string GivenName { get; private set; }
+        public new string MapName => "map" + _sName.Replace(" ", "") + "_" + (Level == 0 ? "" : Level.ToString());
 
         public override Rectangle CollisionBox => GenerateCollisionBox();
         public Rectangle SelectionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _sprite.Width, _sprite.Height);
 
         public Rectangle TravelBox { get; private set; }
 
-        public int PersonalID { get; private set; }
-        public bool Unique { get; private set; } = true;
-
         private int _iUpgradeTime;
         private int _iUpgradeTimer;
 
         public Vector2 BuildFromPosition { get; private set; }
 
-        #region Worker Info
-        public bool HoldsWorkers { get; private set; }
-        private int[] _arrWorkerTypes;
         public bool _selected = false;
+        public Container BuildingChest { get; set; }
 
-        private int _iWorkersPerLevel = 3;
-        private int _iMaxWorkers = 9;
-        private int _iCurrWorkerMax => _iWorkersPerLevel * Level;
-        public int MaxWorkers => _iCurrWorkerMax;
-
-        private List<Adventurer> _liWorkers;
-        public List<Adventurer> Workers => _liWorkers;
-
-        private Container _buildingChest;
-        public Container BuildingChest { get => _buildingChest; set => _buildingChest = value; }
-
-        private Container _pantry;
-        public Container Pantry { get => _pantry; set => _pantry = value; }
-
-        private List<WorldObject> _liPlacedObjects;
-        public List<WorldObject> PlacedObjects => _liPlacedObjects;
+        #region Non-Uniqueness
+        public List<WorldObject> PlacedObjects { get; }
+        public int PersonalID { get; private set; }
+        public bool Unique { get; private set; } = true;
         #endregion
 
-        public Building(Dictionary<string, string> data, int id)
+        public Building(int id, Dictionary<string, string> stringData)
         {
-            _liWorkers = new List<Adventurer>();
-            _liPlacedObjects = new List<WorldObject>();
-            ImportBasics(data, id);
+            
+            PlacedObjects = new List<WorldObject>();
+            ImportBasics(id, stringData);
         }
 
-        private void ImportBasics(Dictionary<string, string> stringData, int id)
+        private void ImportBasics(int id, Dictionary<string, string> stringData)
         {
             _iID = id;
             DataManager.GetTextData("Building", _iID, ref _sName, "Name");
@@ -89,14 +69,15 @@ namespace RiverHollow.Buildings
             _iWidth = int.Parse(dimensions[0]);
             _iHeight = int.Parse(dimensions[1]);
 
-            //The top-left most tile that forms the base of the building
-            string[] baseSq = stringData["FirstBase"].Split('-');
-            _iBaseX = int.Parse(baseSq[0]);
-            _iBaseY = int.Parse(baseSq[1]);
-
-            //Width and Height of the building's base
-            _iBaseWidth = int.Parse(stringData["Width"]);
-            _iBaseHeight = int.Parse(stringData["Height"]);
+            //Starts at the top-left most tile that forms the base of the building
+            if (stringData.ContainsKey("Base"))
+            {
+                string[] str = stringData["Base"].Split('-');
+                _iBaseX = int.Parse(str[0]);
+                _iBaseY = int.Parse(str[1]);
+                _iBaseWidth = int.Parse(str[2]);
+                _iBaseHeight = int.Parse(str[3]);
+            }
 
             //The rectangle, in pixels, that forms the entrance to the building
             string[] ent = stringData["Entrance"].Split('-');
@@ -119,27 +100,6 @@ namespace RiverHollow.Buildings
                 BuildFromPosition = new Vector2(int.Parse(split[0]), int.Parse(split[1]));
             }
 
-            //Worker data for the building, if appropriate
-            if (stringData.ContainsKey("Workers"))
-            {
-                //Start level is 1 so that we display in built state
-                Level = 1;
-                HoldsWorkers = true;
-                _arrWorkerTypes = new int[2];
-
-                string[] workerTypes = stringData["Workers"].Split('-');
-                _arrWorkerTypes[0] = int.Parse(workerTypes[0]);
-                _arrWorkerTypes[1] = int.Parse(workerTypes[1]);
-
-                //These should only be present in worker buildings
-                int chestID = int.Parse(DataManager.Config[10]["ObjectID"]);
-                _buildingChest = (Container)DataManager.GetWorldObject(chestID);
-                _pantry = (Container)DataManager.GetWorldObject(chestID);
-            }
-
-            //Default is 3, but some buildings may allow more or less
-            if (stringData.ContainsKey("WorkersPerLevel")) { _iWorkersPerLevel = int.Parse(stringData["WorkersPerLevel"]); }
-
             //Flag for whether or not this building is unique
             //Unique = stringData.ContainsKey("Unique");
 
@@ -154,7 +114,7 @@ namespace RiverHollow.Buildings
             int startY = 0;
 
             _sprite = new AnimatedSprite(textureName);
-            for(int i = 1; i <= MaxBldgLevel; i++)
+            for (int i = 1; i <= MaxBldgLevel; i++)
             {
                 _sprite.AddAnimation(i.ToString(), startX, startY, _iWidth, _iHeight);
                 startX += _iWidth;
@@ -190,15 +150,6 @@ namespace RiverHollow.Buildings
         }
 
         /// <summary>
-        /// Sets the name of the building
-        /// </summary>
-        /// <param name="val">The name to assign</param>
-        public void SetName(string val)
-        {
-            GivenName = val;
-        }
-
-        /// <summary>
         /// Sets up the map position of the map based off of its screen position. Called
         /// when placing the Building onto the map.
         /// </summary>
@@ -217,70 +168,6 @@ namespace RiverHollow.Buildings
         }
 
         /// <summary>
-        /// Checks to ensure that the building is valid for the worker type.
-        /// Manor can hold all worker types.
-        /// Array checks against the two types of workers the building can hold.
-        /// </summary>
-        /// <param name="w">The Adventurer to compare against.</param>
-        /// <returns>True if the building will accept the type of Worker</returns>
-        internal bool CanHold(Adventurer w)
-        {
-            return w.WorkerID == _arrWorkerTypes[0] || w.WorkerID == _arrWorkerTypes[1];
-        }
-
-        /// <summary>
-        /// Checks against the size of the worker list
-        /// </summary>
-        /// <returns>True if the worker list isn't full yet.</returns>
-        public bool HasSpace()
-        {
-            bool rv = false;
-
-            rv = _liWorkers.Count < _iCurrWorkerMax;
-
-            return rv;
-        }
-
-        /// <summary>
-        /// Call to add the worker to the building. The # of workers must not
-        /// exceed the max number of workers and the worker must be of the
-        /// appropriate type.
-        /// </summary>
-        /// <param name="worker"></param>
-        /// <returns>True if the worker has been successfully added</returns>
-        public bool AddWorker(Adventurer worker)
-        {
-            bool rv = false;
-
-            if (worker != null && CanHold(worker) && HasSpace())
-            {
-                worker.SetBuilding(this);
-                _liWorkers.Add(worker);
-
-                if (Unique)
-                {
-                    worker.Position = MapManager.Maps[MapName].GetCharacterSpawn("WSpawn" + (_liWorkers.Count-1));
-                    worker.CurrentMapName = MapName;
-
-                    MapManager.Maps[MapName].AddCharacter(worker);
-                }
-
-                rv = true;
-            }
-
-            return rv;
-        }
-
-        /// <summary>
-        /// Call to remove a worker from the building
-        /// </summary>
-        /// <param name="worker"></param>
-        public void RemoveWorker(Adventurer worker)
-        {
-            _liWorkers.Remove(worker);
-        }
-
-        /// <summary>
         /// During rollover, the worker only makes their item if they were not
         /// adventuring that day, and if they are assigned to a production building.
         /// </summary>
@@ -294,33 +181,6 @@ namespace RiverHollow.Buildings
                 if (_iUpgradeTimer == 0)
                 {
                     Upgrade();
-                }
-            }
-
-            foreach (Adventurer w in _liWorkers)
-            {
-                if (w.Rollover() && MapManager.Maps[MapName].Production)
-                {
-                    w.MakeDailyItem();
-                    //bool eaten = false;
-                    //for (int i = 0; i < Pantry.Rows; i++)
-                    //{
-                    //    for (int j = 0; j < Pantry.Rows; j++)
-                    //    {
-                    //        Item item = Pantry.Inventory[i, j];
-                    //        if (item != null && item.Type == Item.ItemType.Food)
-                    //        {
-                    //            Pantry.RemoveItemFromInventory(i, j);
-                    //            w.MakeDailyItem();
-                    //            eaten = true;
-                    //            break;
-                    //        }
-                    //    }
-                    //    if (!eaten)
-                    //    {
-                    //        break;
-                    //    }
-                    //}
                 }
             }
         }
@@ -437,7 +297,7 @@ namespace RiverHollow.Buildings
         /// </summary>
         public void Upgrade()
         {
-            if(Level == 0)
+            if (Level == 0)
             {
                 RHMap buildingMap = MapManager.Maps[_sHomeMap];
                 foreach (RHTile t in Tiles)
@@ -446,7 +306,7 @@ namespace RiverHollow.Buildings
                     if (w != null)
                     {
                         buildingMap.RemoveWorldObject(w);
-                        
+
                     }
                     w = t.Flooring;
                     if (w != null)
@@ -506,24 +366,16 @@ namespace RiverHollow.Buildings
                 iPosX = (int)this.MapPosition.X,
                 iPosY = (int)this.MapPosition.Y,
                 iPersonalID = this.PersonalID,
-                sName = this.GivenName,
                 iUpgradeTimer = this._iUpgradeTimer,
-
-                Workers = new List<WorkerData>()
             };
-
-            foreach (Adventurer w in this.Workers)
-            {
-                buildingData.Workers.Add(w.SaveAdventurerData());
-            }
 
             buildingData.containers = new List<ContainerData>();
             buildingData.machines = new List<MachineData>();
-            foreach (WorldObject w in _liPlacedObjects)
+            foreach (WorldObject w in PlacedObjects)
             {
                 if (w.CompareType(ObjectTypeEnum.Machine))
                 {
-                   // buildingData.machines.Add(((Machine)w).SaveData());
+                    // buildingData.machines.Add(((Machine)w).SaveData());
                 }
                 if (w.CompareType(ObjectTypeEnum.Container))
                 {
@@ -540,32 +392,87 @@ namespace RiverHollow.Buildings
             Level = data.iBldgLevel;
             _iUpgradeTimer = data.iUpgradeTimer;
 
-            if(_iUpgradeTimer > 0)
+            if (_iUpgradeTimer > 0)
             {
                 DataManager.DiNPC[_iNPCBuilderID].SetBuildTarget(this, true);
             }
-
-            foreach (WorkerData wData in data.Workers)
-            {
-                Adventurer w = DataManager.GetAdventurer(wData.workerID);
-                w.LoadAdventurerData(wData);
-                AddWorker(w);
-            }
-            this.GivenName = data.sName;
 
             foreach (ContainerData c in data.containers)
             {
                 Container con = (Container)DataManager.GetWorldObject(c.containerID);
                 con.LoadData(c);
-                _liPlacedObjects.Add(con);
+                PlacedObjects.Add(con);
             }
 
             foreach (MachineData mac in data.machines)
             {
                 Machine theMachine = (Machine)DataManager.GetWorldObject(mac.ID);
-               // theMachine.LoadData(mac);
-                _liPlacedObjects.Add(theMachine);
+                // theMachine.LoadData(mac);
+                PlacedObjects.Add(theMachine);
             }
         }
+    }
+
+    /// <summary>
+    /// Represents surface level information needed for buildings so we can avoid
+    /// maintaining a complete list of all Building structures that aren't required.
+    /// </summary>
+    public class BuildInfo
+    {
+        public Dictionary<int, int> RequiredToMake { get; }
+
+        private string _sName;
+        public string Name => _sName;
+
+        private string _sDescription;
+        public string Description => _sDescription;
+
+        protected int _iID;
+        public int ID => _iID;
+
+        private bool _bUnlocked = false;
+        public bool Unlocked => _bUnlocked;
+        public bool Built { get; set; } = false;
+
+        public BuildInfo(int id, Dictionary<string, string> stringData)
+        {
+            _iID = id;
+
+            DataManager.GetTextData("Building", _iID, ref _sName, "Name");
+            DataManager.GetTextData("Building", _iID, ref _sDescription, "Description");
+
+            RequiredToMake = new Dictionary<int, int>();
+            if (stringData.ContainsKey("ReqItems"))
+            {
+                //Split by "|" for each item set required
+                string[] split = Util.FindParams(stringData["ReqItems"]);
+                foreach (string s in split)
+                {
+                    string[] splitData = s.Split('-');
+                    RequiredToMake[int.Parse(splitData[0])] = int.Parse(splitData[1]);
+                }
+            }
+
+            Util.AssignValue(ref _bUnlocked, "Unlocked", stringData);
+        }
+
+        public BuildInfoData SaveData()
+        {
+            BuildInfoData buildInfoData = new BuildInfoData
+            {
+                built = this.Built,
+                unlocked = this.Unlocked
+            };
+
+            return buildInfoData;
+        }
+
+        public void LoadData(BuildInfoData data)
+        {
+            Built = data.built;
+            if (data.unlocked) { Unlock(); }
+        }
+
+        public void Unlock() { _bUnlocked = true; }
     }
 }

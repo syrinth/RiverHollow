@@ -132,11 +132,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (!Scrying() && !MapManager.CurrentMap.IsCombatMap)
             {
-                WorldObject construct = GameManager.ConstructionObject;
-                if (construct != null)
-                {
-                    construct.Draw(spriteBatch);
-                }
+                //WorldObject construct = GameManager.ConstructionObject;
+                //if (construct != null)
+                //{
+                //    construct.Draw(spriteBatch);
+                //}
             }
         }
     }

@@ -12,7 +12,7 @@ using RiverHollow.Tile_Engine;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 
-using static RiverHollow.Misc.Quest;
+using static RiverHollow.Misc.Task;
 
 namespace RiverHollow.Game_Managers
 {
@@ -85,6 +85,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "EligibleData")]
             public List<EligibleNPCData> EligibleData;
+
+            [XmlArray(ElementName = "BuildingInfoData")]
+            public List<BuildInfoData> BuildingInfoData;
         }
         public struct OptionsData
         {
@@ -151,9 +154,6 @@ namespace RiverHollow.Game_Managers
         }
         public struct BuildingData
         {
-            [XmlArray(ElementName = "Workers")]
-            public List<WorkerData> Workers;
-
             [XmlArray(ElementName = "Containers")]
             public List<ContainerData> containers;
 
@@ -180,6 +180,14 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "UpgradeTime")]
             public int iUpgradeTimer;
+        }
+        public struct BuildInfoData
+        {
+            [XmlElement(ElementName = "Built")]
+            public bool built;
+
+            [XmlElement(ElementName = "Unlocked")]
+            public bool unlocked;
         }
         public struct WorkerData
         {
@@ -506,12 +514,12 @@ namespace RiverHollow.Game_Managers
                 data.UpgradeData.Add(upgData);
             }
 
-            foreach (Quest q in GameManager.DiQuests.Values)
+            foreach (Task q in GameManager.DIQuests.Values)
             {
                 data.PlotQuestData.Add(q.SaveData());
             }
 
-            foreach (Quest q in PlayerManager.QuestLog)
+            foreach (Task q in PlayerManager.TaskLog)
             {
                 data.QuestLogData.Add(q.SaveData());
             }
@@ -530,6 +538,11 @@ namespace RiverHollow.Game_Managers
             {
                 if (n.IsEligible()) { data.EligibleData.Add(((EligibleNPC)n).SaveData()); }
                 else { data.NPCData.Add(n.SaveData()); }
+            }
+
+            foreach (BuildInfo b in GameManager.DIBuildInfo.Values)
+            {
+                data.BuildingInfoData.Add(b.SaveData());
             }
 
             // Convert the object to XML data and put it in the stream.
@@ -668,12 +681,12 @@ namespace RiverHollow.Game_Managers
             }
             foreach (QuestData q in dataToLoad.PlotQuestData)
             {
-                Quest plotQuest = GameManager.DiQuests[q.questID];
+                Task plotQuest = GameManager.DIQuests[q.questID];
                 plotQuest.LoadData(q);
             }
             foreach (QuestData q in dataToLoad.QuestLogData)
             {
-                Quest newQuest = new Quest();
+                Task newQuest = new Task();
                 newQuest.LoadData(q);
                 PlayerManager.AddToQuestLog(newQuest);
             }

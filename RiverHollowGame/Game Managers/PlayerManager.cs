@@ -22,7 +22,7 @@ namespace RiverHollow.Game_Managers
         #region Properties
         public static bool Busy { get; private set; }
         public static Tool ToolInUse;
-        public static List<Quest> QuestLog { get; private set; }
+        public static List<Task> TaskLog { get; private set; }
 
         public static int Stamina = 50;
         public static int MaxStamina = 50;
@@ -68,7 +68,7 @@ namespace RiverHollow.Game_Managers
         public static void Initialize()
         {
             _liParty = new List<ClassedCombatant>();
-            QuestLog = new List<Quest>();
+            TaskLog = new List<Task>();
             World = new PlayerCharacter();
             _liParty.Add(World);
             _diBuildings = new Dictionary<int, Building>();
@@ -301,20 +301,30 @@ namespace RiverHollow.Game_Managers
         }
 
         //Random quests should not generate a quest with the same goal as a pre-existing quest
-        public static void AddToQuestLog(Quest q)
+        public static void AddToQuestLog(Task q)
         {
             foreach(Item i in InventoryManager.PlayerInventory)
             {
                 if (i != null) { q.AttemptProgress(i); }
             }
             q.SpawnQuestMobs();
-            QuestLog.Add(q);
+            TaskLog.Add(q);
 
             GUIManager.NewQuestIcon();
         }
+        public static void AdvanceTaskProgress(Building b)
+        {
+            foreach (Task q in TaskLog)
+            {
+                if (q.AttemptBuildingProgress(b.ID))
+                {
+                    break;
+                }
+            }
+        }
         public static void AdvanceQuestProgress(Monster m)
         {
-            foreach (Quest q in QuestLog)
+            foreach (Task q in TaskLog)
             {
                 if (q.AttemptProgress(m))
                 {
@@ -324,7 +334,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void AdvanceQuestProgress(Item i)
         {
-            foreach(Quest q in QuestLog)
+            foreach(Task q in TaskLog)
             {
                 if (q.AttemptProgress(i))
                 {
@@ -334,7 +344,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void RemoveQuestProgress(Item i)
         {
-            foreach (Quest q in QuestLog)
+            foreach (Task q in TaskLog)
             {
                 if (q.RemoveProgress(i))
                 {
@@ -380,13 +390,12 @@ namespace RiverHollow.Game_Managers
         }
 
         #region Building Helpers
-        public static bool HaveBuiltBuildingID(int id)
-        {
-            return _diBuildings.ContainsKey(id);
-        }
         public static void AddBuilding(Building b)
         {
             _diBuildings.Add(b.ID, b);
+            GameManager.DIBuildInfo[b.ID].Built = true;
+
+            AdvanceTaskProgress(b);
         }
         public static void RemoveBuilding(Building b)
         {

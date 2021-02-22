@@ -13,7 +13,7 @@ namespace Database_Editor
     public partial class frmDBEditor : Form
     {
         private enum EditableCharacterDataEnum { Dialogue, Schedule };
-        public enum XMLTypeEnum { None, Quest, Character, Class, Adventurer, Building, WorldObject, Item, Monster, Action, Shop, Spirit, Summon, StatusEffect, Cutscene };
+        public enum XMLTypeEnum { None, Task, Character, Class, Adventurer, Building, WorldObject, Item, Monster, Action, Shop, Spirit, Summon, StatusEffect, Cutscene };
         #region XML Files
         string SHOPS_XML_FILE = PATH_TO_DATA + @"\Shops.xml";
         string ACTIONS_XML_FILE = PATH_TO_DATA + @"\CombatActions.xml";
@@ -48,7 +48,7 @@ namespace Database_Editor
         const string TAGS_FOR_BUILDINGS = "BuildingID,HouseID,RequiredBuildingID";
 
         const string ITEM_REF_TAGS = "ReqItems,RefinesInto,Place";
-        const string QUEST_REF_TAGS = "GoalItem,ItemReward";
+        const string TASK_REF_TAGS = "GoalItem,ItemReward,BuildingID,BuildingRewardID";
         const string CHARACTER_REF_TAGS = "Collection,Class,ShopData,HouseID,RequiredBuildingID";
         const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID";
         const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
@@ -58,6 +58,7 @@ namespace Database_Editor
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
         const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
         const string ACTIONS_REF_TAGS = "StatusEffectID,SummonID";
+        const string BUILDINGS_REF_TAGS = "ReqItems";
 
         const string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,SpiritID";
         #endregion
@@ -96,7 +97,7 @@ namespace Database_Editor
             InitComboBox<ObjectTypeEnum>(cbWorldObjectType);
             InitComboBox<NPCTypeEnum>(cbCharacterType);
             InitComboBox<AdventurerTypeEnum>(cbAdventurerType);
-            InitComboBox<QuestTypeEnum>(cbQuestType);
+            InitComboBox<TaskTypeEnum>(cbQuestType);
             InitComboBox<EditableCharacterDataEnum>(cbEditableCharData, false);
             InitComboBox<ActionEnum>(cbActionType);
 
@@ -166,14 +167,14 @@ namespace Database_Editor
 
             _diObjectText = ReadTaggedXMLFile(OBJECT_TEXT_XML_FILE);
 
-            LoadXMLDictionary(QUEST_XML_FILE, QUEST_REF_TAGS, "");
+            LoadXMLDictionary(QUEST_XML_FILE, TASK_REF_TAGS, "");
             LoadXMLDictionary(CHARACTER_XML_FILE, CHARACTER_REF_TAGS, "");
             LoadXMLDictionary(CLASSES_XML_FILE, CLASSES_REF_TAGS, TAGS_FOR_CLASSES);
             LoadXMLDictionary(WORKERS_XML_FILE, ADVENTURERS_REF_TAG, TAGS_FOR_ADVENTURERS);
             LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_REF_TAG, "");
             LoadXMLDictionary(MONSTERS_XML_FILE, MONSTERS_REF_TAGS, "");
             LoadXMLDictionary(ACTIONS_XML_FILE, ACTIONS_REF_TAGS, TAGS_FOR_COMBAT_ACTIONS);
-            LoadXMLDictionary(BUILDINGS_XML_FILE, "", "");
+            LoadXMLDictionary(BUILDINGS_XML_FILE, BUILDINGS_REF_TAGS, TAGS_FOR_BUILDINGS);
             LoadXMLDictionary(SPIRITS_XML_FILE, "", TAGS_FOR_SPIRITS);
             LoadXMLDictionary(SUMMONS_XML_FILE, "", TAGS_FOR_SUMMONS);
             LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", TAGS_FOR_STATUS_EFFECTS);
@@ -242,7 +243,7 @@ namespace Database_Editor
         {
             XMLTypeEnum rv = XMLTypeEnum.None;
 
-            if (fileName == QUEST_XML_FILE) { rv = XMLTypeEnum.Quest; }
+            if (fileName == QUEST_XML_FILE) { rv = XMLTypeEnum.Task; }
             else if (fileName == CHARACTER_XML_FILE) { rv = XMLTypeEnum.Character; }
             else if (fileName == CLASSES_XML_FILE) { rv = XMLTypeEnum.Class; }
             else if (fileName == WORKERS_XML_FILE) { rv = XMLTypeEnum.Adventurer; }
@@ -912,7 +913,7 @@ namespace Database_Editor
         {
             XMLData data = _diBasicXML[QUEST_XML_FILE][_diTabIndices["Quests"]];
             LoadGenericDataInfo(data, tbQuestName, tbQuestID, dgvQuestTags, tbQuestDescription);
-            cbQuestType.SelectedIndex = (int)Util.ParseEnum<QuestTypeEnum>(data.GetTagValue("Type"));
+            cbQuestType.SelectedIndex = (int)Util.ParseEnum<TaskTypeEnum>(data.GetTagValue("Type"));
         }
         private void LoadMonsterInfo()
         {
@@ -1248,7 +1249,7 @@ namespace Database_Editor
         }
         private void SaveQuestInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[QUEST_XML_FILE], "Quests", "Quest_", XMLTypeEnum.Quest, tbQuestName, tbQuestID, cbQuestType, dgvQuests, dgvQuestTags, "colQuestsID", "colQuestsName", QUEST_REF_TAGS, "", tbQuestDescription);
+            SaveXMLDataInfo(_diBasicXML[QUEST_XML_FILE], "Quests", "Quest_", XMLTypeEnum.Task, tbQuestName, tbQuestID, cbQuestType, dgvQuests, dgvQuestTags, "colQuestsID", "colQuestsName", TASK_REF_TAGS, "", tbQuestDescription);
         }
         private void SaveMonsterInfo(List<XMLData> liData)
         {

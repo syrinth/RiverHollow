@@ -35,7 +35,6 @@ namespace RiverHollow.Tile_Engine
 
         public bool IsCombatMap => _liMonsterSpawnPoints.Count > 0;
         public bool IsBuilding { get; private set; }
-        public string ConstructionZone { get; private set; } = string.Empty;
         public string DungeonName { get; private set; } = string.Empty;
         public bool IsDungeon => !string.IsNullOrEmpty(DungeonName);
         public bool IsTown { get; private set; }
@@ -120,7 +119,6 @@ namespace RiverHollow.Tile_Engine
             _renderer = map._renderer;
             _arrTiles = map._arrTiles;
 
-            ConstructionZone = map.ConstructionZone;
             IsBuilding = _map.Properties.ContainsKey("Building");
             IsTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
@@ -168,10 +166,6 @@ namespace RiverHollow.Tile_Engine
                     _arrTiles[j, i] = new RHTile(j, i, _sName);
                     _arrTiles[j, i].SetProperties(this);
                 }
-            }
-            if (_map.Properties.ContainsKey("ConstructionZone"))
-            {
-                ConstructionZone = _map.Properties["ConstructionZone"];
             }
             IsBuilding = _map.Properties.ContainsKey("Building");
             IsTown = _map.Properties.ContainsKey("Town");
@@ -382,10 +376,10 @@ namespace RiverHollow.Tile_Engine
 
             foreach (RHTile t in _liTestTiles)
             {
-                WorldObject it = GameManager.ConstructionObject;
+                //WorldObject it = GameManager.ConstructionObject;
                 bool checkPlayer = true;
 
-                if (it != null) { checkPlayer = !it.CompareType(ObjectTypeEnum.Floor); }
+               // if (it != null) { checkPlayer = !it.CompareType(ObjectTypeEnum.Floor); }
 
                 bool passable = t.Passable() && !TileContainsActor(t, checkPlayer);
                 spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
@@ -599,7 +593,8 @@ namespace RiverHollow.Tile_Engine
                 else if (obj.Name.Equals("WorldObject"))
                 {
                     //AddMachine
-                    WorldObject w = DataManager.GetWorldObject(int.Parse(obj.Properties["ObjectID"]), Util.SnapToGrid(obj.Position));
+                    int objectID = int.Parse(obj.Properties["ObjectID"]);
+                    WorldObject w = DataManager.GetWorldObject(objectID, Util.SnapToGrid(obj.Position));
                     if (PlaceWorldObject(w))
                     {
                         if (w.CompareType(ObjectTypeEnum.Machine)) { GameManager.AddMachine((Machine)w, this.Name); }
@@ -626,7 +621,6 @@ namespace RiverHollow.Tile_Engine
                 {
                     Building building = DataManager.GetBuilding(int.Parse(obj.Properties["BuildingID"]));
                     building.SnapPositionToGrid(obj.Position);
-                    building.SetName(PlayerManager.TownName);
                     AddBuilding(building, true);
                 }
                 else if (obj.Name.Equals("Item"))
@@ -1463,19 +1457,19 @@ namespace RiverHollow.Tile_Engine
                     GameManager.HeldBuilding.StartBuilding();   //Set the building to start being built
                     //GUIManager.OpenMainObject(new HUDNamingWindow(GameManager.HeldBuilding));   //Open a naming window
                     FinishBuilding();
-                    GameManager.DropBuilding();                 //Drop the Building from the GameManger
-
 
                     //Take the resources from the player if there is merchandise
-                    if (CurrentMerch != null)
+                    if (GameManager.HeldBuilding != null)
                     {
-                        PlayerManager.TakeMoney(CurrentMerch.MoneyCost);
-                        foreach (KeyValuePair<int, int> kvp in CurrentMerch.RequiredItems)
+                        BuildInfo info = GameManager.DIBuildInfo[HeldBuilding.ID];
+                        //PlayerManager.TakeMoney(CurrentMerch.MoneyCost);
+                        foreach (KeyValuePair<int, int> kvp in info.RequiredToMake)
                         {
                             InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
                         }
 
-                        CurrentMerch = null;
+                        //Drop the Building from the GameManger
+                        GameManager.DropBuilding();
                     }
 
                     LeaveBuildMode();
@@ -1490,16 +1484,6 @@ namespace RiverHollow.Tile_Engine
             else if (DestroyingBuildings())
             {
                 //rv = RemoveBuilding(mouseLocation);
-            }
-            else
-            {
-                if (GUICursor.WorkerToPlace > -1)
-                {
-                    if (AddWorkerToBuilding(mouseLocation))
-                    {
-                        rv = true;
-                    }
-                }
             }
 
             return rv;
@@ -1577,47 +1561,47 @@ namespace RiverHollow.Tile_Engine
                 {
 
                 }
-                else  if (!IsCombatMap && GameManager.ConstructionObject != null)
-                {
-                    Machine constructToBuild = GameManager.ConstructionObject;
+                //else  if (!IsCombatMap && GameManager.ConstructionObject != null)
+                //{
+                //    Building constructToBuild = GameManager.ConstructionObject;
 
-                    //Check that all required items are there first
-                    bool create = InventoryManager.SufficientItems(constructToBuild.RequiredToMake);
+                //    //Check that all required items are there first
+                //    bool create = InventoryManager.SufficientItems(constructToBuild.RequiredToMake);
                     
-                    //If all items are found, then remove them.
-                    if (create)
-                    {
-                        foreach (KeyValuePair<int, int> kvp in constructToBuild.RequiredToMake)
-                        {
-                            InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
-                        }
+                //    //If all items are found, then remove them.
+                //    if (create)
+                //    {
+                //        foreach (KeyValuePair<int, int> kvp in constructToBuild.RequiredToMake)
+                //        {
+                //            InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                //        }
 
-                        //If the player is currently holding a StaticItem, we need to place it
-                        //Do not, however, allow the placing of StaticItems on combat maps.
-                        bool isFloor = constructToBuild.CompareType(ObjectTypeEnum.Floor);
-                        if (!isFloor || (isFloor && TargetTile.Flooring == null))
-                        {
-                            WorldObject newObj = DataManager.GetWorldObject(constructToBuild.ID);
-                            newObj.SetCoordinates(Util.SnapToGrid(constructToBuild.MapPosition));
-                            if (MapManager.PlacePlayerObject(newObj))
-                            {
-                                rv = true;
-                                //newItem.SetMapName(this.Name);      //Assign the map name tot he WorldItem
+                //        //If the player is currently holding a StaticItem, we need to place it
+                //        //Do not, however, allow the placing of StaticItems on combat maps.
+                //        bool isFloor = constructToBuild.CompareType(ObjectTypeEnum.Floor);
+                //        if (!isFloor || (isFloor && TargetTile.Flooring == null))
+                //        {
+                //            WorldObject newObj = DataManager.GetWorldObject(constructToBuild.ID);
+                //            newObj.SetCoordinates(Util.SnapToGrid(constructToBuild.MapPosition));
+                //            if (MapManager.PlacePlayerObject(newObj))
+                //            {
+                //                rv = true;
+                //                //newItem.SetMapName(this.Name);      //Assign the map name tot he WorldItem
 
-                                //If the item placed was a wall object, we need to adjust it based off any adjacent walls
-                                if (newObj.CompareType(ObjectTypeEnum.Wall))
-                                {
-                                    ((Wall)newObj).AdjustObject();
-                                }
-                            }
-                        }
-                    }
+                //                //If the item placed was a wall object, we need to adjust it based off any adjacent walls
+                //                if (newObj.CompareType(ObjectTypeEnum.Wall))
+                //                {
+                //                    ((Wall)newObj).AdjustObject();
+                //                }
+                //            }
+                //        }
+                //    }
 
-                    if(!InventoryManager.SufficientItems(constructToBuild.RequiredToMake))
-                    {
-                        GameManager.ConstructionObject = null;
-                    }
-                }
+                //    if(!InventoryManager.SufficientItems(constructToBuild.RequiredToMake))
+                //    {
+                //        GameManager.ConstructionObject = null;
+                //    }
+                //}
                 else if(PlayerManager.PlayerInRange(TargetTile.Center.ToPoint())){
                     rv = UseTool(mouseLocation);
                 }
@@ -1685,13 +1669,13 @@ namespace RiverHollow.Tile_Engine
                 }
 
                 //Do not draw test tiles on a map for combat
-                WorldObject constructToBuild = GameManager.ConstructionObject;
-                if (!IsCombatMap && constructToBuild != null)
-                {
-                    Vector2 vec = mouseLocation.ToVector2() - new Vector2(0, constructToBuild.Height - constructToBuild.BaseHeight);
-                    constructToBuild.SetCoordinates(Util.SnapToGrid(vec));
-                    TestMapTiles(constructToBuild, _liTestTiles);
-                }
+                //WorldObject constructToBuild = GameManager.ConstructionObject;
+                //if (!IsCombatMap && constructToBuild != null)
+                //{
+                //    Vector2 vec = mouseLocation.ToVector2() - new Vector2(0, constructToBuild.Height - constructToBuild.BaseHeight);
+                //    constructToBuild.SetCoordinates(Util.SnapToGrid(vec));
+                //    TestMapTiles(constructToBuild, _liTestTiles);
+                //}
 
                 if (!found)
                 {
@@ -1819,20 +1803,10 @@ namespace RiverHollow.Tile_Engine
                             b.BuildingChest.SnapPositionToGrid(mapObject.Position);
                             PlacePlayerObject(b.BuildingChest);
                         }
-                        else if (mapObject.Name.Contains("Pantry"))
-                        {
-                            b.Pantry.SnapPositionToGrid(mapObject.Position);
-                            PlacePlayerObject(b.Pantry);
-                        }
                     }
                 }
             }
-            for (int i = 0; i < b.Workers.Count; i++)
-            {
-                b.Workers[i].Position = GetCharacterSpawn("WSpawn"+i);
-                b.Workers[i].CurrentMapName = _sName;
-                _liActors.Add(b.Workers[i]);
-            }
+
             foreach (WorldObject w in b.PlacedObjects)
             {
                 PlacePlayerObject(w);
@@ -1859,27 +1833,17 @@ namespace RiverHollow.Tile_Engine
             Building bldg = null;
             foreach (Building b in _liBuildings)
             {
+                if (b.Contains(mouseLocation))
                 {
-                    if (b.Contains(mouseLocation))
-                    {
-                        if (b.Workers.Count == 0)
-                        {
-                            SetGameScale(NORMAL_SCALE);
-                            bldg = b;
-                            b.RemoveSelfFromTiles();
-                            DictionaryTravelPoints.Remove(b.PersonalID.ToString());
-                            PlayerManager.RemoveBuilding(b);
-                            LeaveBuildMode();
-                            Unpause();
-                            Scry(false);
-                            ResetCamera();
-                        }
-                        else
-                        {
-                            GUIManager.OpenTextWindow(DataManager.GetGameText("Cannot Destroy occupied buildings."));
-                            //GUIManager.SetScreen(new TextScreen("Cannot Destroy occupied buildings.", false));
-                        }
-                    }
+                    SetGameScale(NORMAL_SCALE);
+                    bldg = b;
+                    b.RemoveSelfFromTiles();
+                    DictionaryTravelPoints.Remove(b.PersonalID.ToString());
+                    PlayerManager.RemoveBuilding(b);
+                    LeaveBuildMode();
+                    Unpause();
+                    Scry(false);
+                    ResetCamera();
                 }
             }
             if(bldg != null) {
@@ -1927,28 +1891,6 @@ namespace RiverHollow.Tile_Engine
             TravelPoint buildPoint = new TravelPoint(b.TravelBox, b.MapName, b.PersonalID);
             DictionaryTravelPoints.Add(b.TravelLink(), buildPoint); //TODO: FIX THIS
             CreateDoor(ref buildPoint, b.TravelBox.X, b.TravelBox.Y, b.TravelBox.Width, b.TravelBox.Height);
-        }
-
-        public bool AddWorkerToBuilding(Point mouseLocation)
-        {
-            bool rv = false;
-            foreach (Building b in _liBuildings)
-            {
-                if (b.SelectionBox.Contains(mouseLocation))
-                {
-                    if (b.HasSpace())
-                    {
-                        Adventurer w = DataManager.GetAdventurer(GUICursor.WorkerToPlace);
-                        b.AddWorker(w);
-                        b._selected = false;
-                        FinishBuilding();
-                        //GUIManager.OpenMainObject(new HUDNamingWindow(w));
-                        //Scry(false);
-                        rv = true;
-                    }
-                }
-            }
-            return rv;
         }
 
         public bool PlaceWorldObject(WorldObject o, bool bounce = false, bool respectBarrens = false)

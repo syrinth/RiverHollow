@@ -2410,11 +2410,6 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Adventurer_08.xml
 
-#begin Data/ConstructionZones.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/ConstructionZones.xml
-
 #begin Textures/Actors/Adventurers/Adventurer_0.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -59,7 +59,7 @@
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Shopkeeper][PortRow:3][HomeMap:mapBuildingStore_1][Collection:7|139][ShopData:2][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:6][Arrived]</Value>
+      <Value>[Type:Shopkeeper][PortRow:3][HomeMap:mapBuildingStore_1][Collection:7|139][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:6][Arrived]</Value>
     </Item>
     <Item>
       <Key>15</Key>

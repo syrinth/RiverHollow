@@ -157,14 +157,28 @@ namespace RiverHollow.Utilities
                 for (int i = 0; i < specialSections.Length; i++)
                 {
                     string value = specialSections[i];
-                    if (value == "^") {
-                        value = PlayerManager.Name;
-                    }
-                    else if(DataManager.TextDataHasKey(value)){
+                    if (value == "Name") { value = PlayerManager.Name; }
+                    else if (value == "Town") { value = PlayerManager.TownName; }
+                    else if (DataManager.TextDataHasKey(value))
+                    {
                         DataManager.GetTextData(value, ref value, "Name");
                     }
 
                     rv += value;
+                }
+            }
+
+            specialSections = Util.FindTags(rv);
+            if (specialSections.Length > 1)
+            {
+                rv = specialSections[0];
+                for(int i = 1; i <= specialSections.Length - 1; i++)
+                {
+                    string[] tagInfo = specialSections[i].Split(':');
+                    if (tagInfo[0].Equals("Task"))
+                    {
+                        PlayerManager.AddToQuestLog(GameManager.DIQuests[int.Parse(tagInfo[1])]);
+                    }
                 }
             }
 

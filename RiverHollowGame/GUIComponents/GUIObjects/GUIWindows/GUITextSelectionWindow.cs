@@ -40,7 +40,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         private void SeparateText(string selectionText)
         {
-            string[] firstPass = selectionText.Split(new[] { '[', ']'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] firstPass = selectionText.Split(new[] { '{', '}'}, StringSplitOptions.RemoveEmptyEntries);
             if (firstPass.Length > 0)
             {
                 _sStatement = firstPass[0];

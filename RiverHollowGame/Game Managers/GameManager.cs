@@ -42,7 +42,7 @@ namespace RiverHollow.Game_Managers
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
         public enum ActorStateEnum { Idle, Walking };
-        public enum QuestTypeEnum { GroupSlay, Slay, Fetch, Talk };
+        public enum TaskTypeEnum { None, GroupSlay, Slay, Fetch, Talk, Build };
         public enum ActorEnum { Actor, Adventurer, CombatActor, Monster, NPC, ShippingGremlin, Spirit, Summon, WorldCharacter };
         public enum NPCTypeEnum { Villager, Eligible, Shopkeeper, Ranger, Worker, Mason, ShippingGremlin }
         public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade };
@@ -72,8 +72,9 @@ namespace RiverHollow.Game_Managers
         public static int ScaledTileSize => (int)(TileSize * Scale);
         public static int ScaledPixel => (int)Scale;
         public static int MaxBldgLevel = 3;
+        public static Dictionary<int, BuildInfo> DIBuildInfo;
         public static Dictionary<int, Upgrade> DiUpgrades;
-        public static Dictionary<int, Quest> DiQuests;
+        public static Dictionary<int, Task> DIQuests;
         private static List<TriggerObject> _liTriggerObjects;
         private static List<Spirit> _liSpirits;
         private static List<Machine> _liMachines;
@@ -87,8 +88,6 @@ namespace RiverHollow.Game_Managers
         public static Item CurrentItem;
         public static Spirit CurrentSpirit;
         public static TriggerObject CurrentTriggerObject;
-
-        public static Machine ConstructionObject;
         #endregion
 
         public static int MAX_NAME_LEN = 10;
@@ -117,13 +116,17 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void LoadQuests(ContentManager Content)
+        public static void LoadQuests()
         {
-            DiQuests = new Dictionary<int, Quest>();
+            DIQuests = new Dictionary<int, Task>();
             foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.DiQuestData)
             {
-                DiQuests.Add(kvp.Key, new Quest(kvp.Key, kvp.Value));
+                DIQuests.Add(kvp.Key, new Task(kvp.Key, kvp.Value));
             }
+        }
+        public static void LoadBuildInfo()
+        {
+            DIBuildInfo = DataManager.GetBuildInfoList();
         }
 
         public static void ProcessTextInteraction(string selectedAction)
@@ -133,15 +136,6 @@ namespace RiverHollow.Game_Managers
                 Vector2 pos = PlayerManager.World.CollisionBox.Center.ToVector2();
                 PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
                 GUIManager.SetScreen(new DayEndScreen());
-            }
-            else if (selectedAction.Contains("SellContract") && GameManager.CurrentAdventurer != null)
-            {
-                if (GameManager.CurrentAdventurer.IsActorType(ActorEnum.Adventurer))
-                {
-                    ((Adventurer)GameManager.CurrentAdventurer).Building.RemoveWorker((Adventurer)GameManager.CurrentAdventurer);
-                    PlayerManager.AddMoney(1000);
-                    GUIManager.CloseMainObject();
-                }
             }
         }
 

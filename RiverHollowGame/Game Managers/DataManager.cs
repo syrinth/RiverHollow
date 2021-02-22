@@ -42,7 +42,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, string> _diGameText;
         static Dictionary<int, Dictionary<string, string>> _diAdventurerDialogue;
         public static Dictionary<int, string> DiUpgrades { get; private set; }
-        static Dictionary<int, string> _diClassText;
         static Dictionary<string, string> _diMonsterTraits;
 
         static Dictionary<int, List<string>> _diSongs;
@@ -70,15 +69,13 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<int, Dictionary<string, string>> _diMonsterData;
         static Dictionary<int, Dictionary<string, string>> _diSummonData;
-        static Dictionary<int, Villager> _diNPCs;
-        public static Dictionary<int, Villager> DiNPC => _diNPCs;
+        public static Dictionary<int, Villager> DiNPC { get; private set; }
         static Dictionary<int, Dictionary<string, string>> _diActions;
 
         static Dictionary<int, Dictionary<string, string>> _diClasses;
         public static Dictionary<int, Dictionary<string, string>> DIClasses => _diClasses;
         static Dictionary<string, Dictionary<string, List<string>>> _diSchedule;
 
-        static Dictionary<string, string> _diConstructionZones;
 
         public static Dictionary<int, Dictionary<string, string>> Config;
 
@@ -96,7 +93,6 @@ namespace RiverHollow.Game_Managers
             _diTextures = new Dictionary<string, Texture2D>();
             DiUpgrades = Content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
             _diMonsterTraits = Content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
-            _diConstructionZones = Content.Load<Dictionary<string, string>>(@"Data\ConstructionZones");
 
             //Read in Content and allocate the appropriate Dictionaries
             LoadGUIs(Content);
@@ -286,7 +282,7 @@ namespace RiverHollow.Game_Managers
 
         private static void LoadNPCs(ContentManager Content)
         {
-            _diNPCs = new Dictionary<int, Villager>();
+            DiNPC = new Dictionary<int, Villager>();
             foreach (KeyValuePair<int, Dictionary<string, string>> npcData in _diVillagerData)
             {
                 Villager n = null;
@@ -308,7 +304,7 @@ namespace RiverHollow.Game_Managers
                         n = new Villager(npcData.Key, diData);
                         break;
                 }
-                _diNPCs.Add(npcData.Key, n);
+                DiNPC.Add(npcData.Key, n);
             }
         }
         private static void LoadNPCSchedules(ContentManager Content)
@@ -327,9 +323,18 @@ namespace RiverHollow.Game_Managers
         {
             if (_diBuildings.ContainsKey(id))
             {
-                return new Building(_diBuildings[id], id);
+                return new Building(id, _diBuildings[id]);
             }
             return null;
+        }
+        public static Dictionary<int, BuildInfo> GetBuildInfoList()
+        {
+            Dictionary<int, BuildInfo> rvList = new Dictionary<int, BuildInfo>();
+            foreach(KeyValuePair<int, Dictionary<string, string>> kvp in _diBuildings)
+            {
+                rvList.Add(kvp.Key, new BuildInfo(kvp.Key, _diBuildings[kvp.Key]));
+            }
+            return rvList;
         }
 
         public static string GetAdventurerDialogue(int id, string key)
@@ -501,7 +506,7 @@ namespace RiverHollow.Game_Managers
 
         public static string GetCharacterNameByIndex(int i)
         {
-            return _diNPCs[i].Name;
+            return DiNPC[i].Name;
         }
 
         public static Summon GetSummonByIndex(int id)
@@ -654,18 +659,6 @@ namespace RiverHollow.Game_Managers
             if (_diNPCDialogue.ContainsKey(id))
             {
                 rv = _diNPCDialogue[id];
-            }
-
-            return rv;
-        }
-
-        public static string GetConstructionZoneStrings(string zone)
-        {
-            string rv = string.Empty;
-
-            if (_diConstructionZones.ContainsKey(zone))
-            {
-                rv = _diConstructionZones[zone];
             }
 
             return rv;

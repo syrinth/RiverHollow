@@ -11,12 +11,12 @@ using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Misc
 {
-    public class Quest
+    public class Task
     {
-        public int QuestID { get; private set; }
-        public QuestTypeEnum QuestType { get; private set; }
-        private string _name;
-        public string Name => _name;
+        public int TaskID { get; private set; }
+        private TaskTypeEnum _eTaskType;
+        private string _sName;
+        public string Name => _sName;
         private string _sDescription;
         public string Description => _sDescription;
         public Villager GoalNPC { get; private set; }
@@ -27,16 +27,19 @@ namespace RiverHollow.Misc
 
         private Monster _questMob;
         private Item _targetItem;
-        public bool ReadyForHandIn { get; private set; }
+        private int _iTargetBuildingID = -1;
+        public bool ReadyForHandIn { get; private set; } = false;
         public bool Finished { get; private set; }
 
-        bool _bImmediate;
+        bool _bFinishOnCompletion;
         int _iActivateID;
         bool _bHideGoal;
         #region Rewards
-        public int Friendship { get; }
+        private int _iUnlockBuildingID = -1;
+        private int _iRewardMoney = 0;
+        private int _iFriendPoints = 0;
         public string FriendTarget { get; }
-        public int RewardMoney { get; }
+
         public List<Item> LiRewardItems { get; }
         #endregion
         #region Spawn Mobs
@@ -49,15 +52,15 @@ namespace RiverHollow.Misc
         int _iSeason;
         #endregion
 
-        public Quest()
+        public Task()
         {
             _iCutsceneID = -1;
-            _bImmediate = false;
+            _bFinishOnCompletion = false;
             _iActivateID = -1;
-            QuestID = -1;
+            TaskID = -1;
             _iSeason = -1;
             _iDay = -1;
-            _name = string.Empty;
+            _sName = string.Empty;
             _sDescription = string.Empty;
             FriendTarget = string.Empty;
             GoalNPC = null;
@@ -70,10 +73,10 @@ namespace RiverHollow.Misc
 
             LiRewardItems = new List<Item>();
         }
-        public Quest(string name, QuestTypeEnum type, string desc, int target, Monster m, Item i, Villager giver = null) : this()
+        public Task(string name, TaskTypeEnum type, string desc, int target, Monster m, Item i, Villager giver = null) : this()
         {
-            _name = name;
-            QuestType = type;
+            _sName = name;
+            _eTaskType = type;
             _sDescription = desc;
             GoalNPC = giver;
             RequiredItemAmount = target;
@@ -83,19 +86,16 @@ namespace RiverHollow.Misc
             ReadyForHandIn = false;
         }
 
-        public Quest(int id, Dictionary<string, string> stringData) : this()
+        public Task(int id, Dictionary<string, string> stringData) : this()
         {
-            QuestID = id;
+            TaskID = id;
             TargetsAccomplished = 0;
             LiRewardItems = new List<Item>();
 
-            DataManager.GetTextData("Quest", QuestID, ref _name, "Name");
-            DataManager.GetTextData("Quest", QuestID, ref _sDescription, "Description");
+            DataManager.GetTextData("Task", TaskID, ref _sName, "Name");
+            DataManager.GetTextData("Task", TaskID, ref _sDescription, "Description");
 
-            _name = Util.ProcessText(_name);
-            _sDescription = Util.ProcessText(_sDescription);
-
-            QuestType = Util.ParseEnum<QuestTypeEnum>(stringData["Type"]);
+            _eTaskType = Util.ParseEnum<TaskTypeEnum>(stringData["Type"]);
 
             if (stringData.ContainsKey("GoalItem"))
             {
@@ -125,7 +125,7 @@ namespace RiverHollow.Misc
                 if (parse.Length > 1)
                 {
                     FriendTarget = parse[0];
-                    Friendship = int.Parse(parse[1]);
+                    _iFriendPoints = int.Parse(parse[1]);
                 }
             }
 
@@ -141,20 +141,25 @@ namespace RiverHollow.Misc
             }
 
             if (stringData.ContainsKey("GoalNPC")) { GoalNPC = DataManager.DiNPC[int.Parse(stringData["GoalNPC"])]; }
-            if (stringData.ContainsKey("Money")) { RewardMoney = int.Parse(stringData["Money"]); }
-            if (stringData.ContainsKey("Day")) { _iDay = int.Parse(stringData["Day"]); }
-            if (stringData.ContainsKey("Season")) { _iSeason = int.Parse(stringData["Season"]); }
-            if (stringData.ContainsKey("Immediate")) { _bImmediate = true; }
-            if (stringData.ContainsKey("Activate")) { _iActivateID = int.Parse(stringData["Activate"]); }
-            if (stringData.ContainsKey("Cutscene")) { _iCutsceneID = int.Parse(stringData["Cutscene"]); }
-            if (stringData.ContainsKey("HideGoal")) { _bHideGoal = true; }
+
+            Util.AssignValue(ref _iRewardMoney, "Money", stringData);
+            Util.AssignValue(ref _iTargetBuildingID, "BuildingID", stringData);
+            Util.AssignValue(ref _iUnlockBuildingID, "BuildingRewardID", stringData);
+
+            Util.AssignValue(ref _iDay, "Day", stringData);
+            Util.AssignValue(ref _iSeason, "Season", stringData);
+
+            Util.AssignValue(ref _bFinishOnCompletion, "Immediate", stringData);
+            Util.AssignValue(ref _iActivateID, "Activate", stringData);
+            Util.AssignValue(ref _iCutsceneID, "Cutscene", stringData);
+            Util.AssignValue(ref _bHideGoal, "HideGoal", stringData);
         }
 
         public bool AttemptProgress(Villager a)
         {
             bool rv = false;
 
-            if(QuestType == QuestTypeEnum.Talk && GoalNPC == a) {
+            if(_eTaskType == TaskTypeEnum.Talk && GoalNPC == a) {
                 rv = true;
                 ReadyForHandIn = true;
             }
@@ -185,6 +190,18 @@ namespace RiverHollow.Misc
 
             return rv;
         }
+        public bool AttemptBuildingProgress(int i)
+        {
+            bool rv = false;
+
+            if (_eTaskType == TaskTypeEnum.Build && i == _iTargetBuildingID)
+            {
+                rv = true;
+                ReadyForHandIn = true;
+            }
+
+            return rv;
+        }
 
         public void IncrementProgress(int num)
         {
@@ -195,7 +212,7 @@ namespace RiverHollow.Misc
                 {
                     TargetsAccomplished = RequiredItemAmount;
                     ReadyForHandIn = true;
-                    if (_bImmediate)
+                    if (_bFinishOnCompletion)
                     {
                         string questCompleteText = string.Empty;
                         FinishQuest(ref questCompleteText);
@@ -231,18 +248,23 @@ namespace RiverHollow.Misc
 
             if (GoalNPC != null)
             {
-                questCompleteText = "Quest" + QuestID + "End";
+                questCompleteText = "Task_" + TaskID + "_End";
             }
-            //text = HandInTo.GetDialogEntry("Quest"+_iQuestID+"End");
+
             foreach (Item i in LiRewardItems)
             {
                 InventoryManager.AddToInventory(i);
             }
-            PlayerManager.AddMoney(RewardMoney);
+            PlayerManager.AddMoney(_iRewardMoney);
 
             if (FriendTarget.Equals("Giver"))
             {
-                GoalNPC.FriendshipPoints += Friendship;
+                GoalNPC.FriendshipPoints += _iFriendPoints;
+            }
+
+            if(_iUnlockBuildingID != -1)
+            {
+                GameManager.DIBuildInfo[_iUnlockBuildingID].Unlock();
             }
 
             if (_iActivateID > -1)
@@ -250,7 +272,7 @@ namespace RiverHollow.Misc
                 DataManager.DiNPC[_iActivateID].Activate(true);
             }
 
-            PlayerManager.QuestLog.Remove(this);
+            PlayerManager.TaskLog.Remove(this);
             GUIManager.NewQuestIcon(true);
 
             if (_iCutsceneID != -1)
@@ -288,18 +310,18 @@ namespace RiverHollow.Misc
             }
             else
             {
-                switch (QuestType)
+                switch (_eTaskType)
                 {
-                    case QuestTypeEnum.Fetch:
+                    case TaskTypeEnum.Fetch:
                         rv = _targetItem.Name + " Found: " + TargetsAccomplished + "/" + RequiredItemAmount;
                         break;
-                    case QuestTypeEnum.GroupSlay:
+                    case TaskTypeEnum.GroupSlay:
                         rv = _questMob.Name + " Defeated: " + TargetsAccomplished + "/" + RequiredItemAmount;
                         break;
-                    case QuestTypeEnum.Slay:
+                    case TaskTypeEnum.Slay:
                         rv = _questMob.Name + " Defeated: " + TargetsAccomplished + "/" + RequiredItemAmount;
                         break;
-                    case QuestTypeEnum.Talk:
+                    case TaskTypeEnum.Talk:
                         rv = "Speak to " + GoalNPC.Name;
                         break;
                 }
@@ -311,7 +333,7 @@ namespace RiverHollow.Misc
         public struct QuestData
         {
             [XmlElement(ElementName = "QuestType")]
-            public QuestTypeEnum questType;
+            public TaskTypeEnum questType;
 
             [XmlElement(ElementName = "QuestID")]
             public int questID;
@@ -357,9 +379,9 @@ namespace RiverHollow.Misc
         {
             QuestData qData = new QuestData
             {
-                questType = QuestType,
-                questID = QuestID,
-                name = _name,
+                questType = _eTaskType,
+                questID = TaskID,
+                name = _sName,
                 description = _sDescription,
                 goalNPC = GoalNPC != null ? GoalNPC.ID : -1,
                 itemID = _targetItem != null  ? _targetItem.ItemID : -1,
@@ -387,9 +409,9 @@ namespace RiverHollow.Misc
             //}
             //else
             //{
-                QuestType = qData.questType;
-                QuestID = qData.questID;
-                _name = qData.name;
+                _eTaskType = qData.questType;
+                TaskID = qData.questID;
+                _sName = qData.name;
                 _sDescription = qData.description;
                 GoalNPC = qData.goalNPC != -1 ? DataManager.DiNPC[qData.goalNPC] : null;
                 _targetItem = qData.itemID != -1 ? DataManager.GetItem(qData.itemID) : null;
