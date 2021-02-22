@@ -24,7 +24,7 @@ namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDScreen : GUIScreen
     {
-        List<HUDNewQuest> _liQuestIcons;
+        List<HUDNewTask> _liTaskIcons;
 
         GUIButton _btnSkipCutscene;
         GUIObject _gMenu;
@@ -42,7 +42,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public HUDScreen()
         {
-            _liQuestIcons = new List<HUDNewQuest>();
+            _liTaskIcons = new List<HUDNewTask>();
             _gHealthDisplay = new GUIStatDisplay(PlayerManager.World.GetHP, Color.Green);
             _gHealthDisplay.AnchorToScreen(this, SideEnum.TopLeft, 10);
             AddControl(_gHealthDisplay);
@@ -189,18 +189,18 @@ namespace RiverHollow.GUIComponents.Screens
         }
         #endregion
 
-        public override void NewQuestIcon(bool complete) {
-            HUDNewQuest newQuest = new HUDNewQuest(complete, RemoveQuestIcon);
+        public override void NewTaskIcon(bool complete) {
+            HUDNewTask newTask = new HUDNewTask(complete, RemoveTaskIcon);
 
-            if (_liQuestIcons.Count == 0) { newQuest.AnchorToScreen(SideEnum.Right, 12); }
-            else { newQuest.AnchorAndAlignToObject(_liQuestIcons[_liQuestIcons.Count - 1], SideEnum.Top, SideEnum.Left, ScaleIt(1)); }
+            if (_liTaskIcons.Count == 0) { newTask.AnchorToScreen(SideEnum.Right, 12); }
+            else { newTask.AnchorAndAlignToObject(_liTaskIcons[_liTaskIcons.Count - 1], SideEnum.Top, SideEnum.Left, ScaleIt(1)); }
 
-            _liQuestIcons.Add(newQuest);
-            AddControl(newQuest);
+            _liTaskIcons.Add(newTask);
+            AddControl(newTask);
         }
-        private void RemoveQuestIcon(HUDNewQuest q)
+        private void RemoveTaskIcon(HUDNewTask q)
         {
-            _liQuestIcons.Remove(q);
+            _liTaskIcons.Remove(q);
             RemoveControl(q);
         }
 
@@ -439,7 +439,7 @@ namespace RiverHollow.GUIComponents.Screens
     {
         const int BTN_PADDING = 10;
         GUIButton _btnExitGame;
-        GUIButton _btnQuestLog;
+        GUIButton _btnTaskLog;
         GUIButton _btnInventory;
         GUIButton _btnParty;
         GUIButton _btnManagement;
@@ -464,8 +464,8 @@ namespace RiverHollow.GUIComponents.Screens
             _btnParty = new GUIButton("Party", BtnParty);
             AddControl(_btnParty);
 
-            _btnQuestLog = new GUIButton("Quest Log", BtnQuestLog);
-            AddControl(_btnQuestLog);
+            _btnTaskLog = new GUIButton("Task Log", BtnTaskLog);
+            AddControl(_btnTaskLog);
 
             _btnExitGame = new GUIButton("Exit Game", BtnExitGame);
             AddControl(_btnExitGame);
@@ -482,7 +482,7 @@ namespace RiverHollow.GUIComponents.Screens
             _btnFriendship = new GUIButton("Friends", BtnFriendship);
             AddControl(_btnFriendship);
 
-            _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnManagement, _btnConstruction, _btnQuestLog, _btnOptions, _btnFriendship, _btnExitGame };
+            _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnManagement, _btnConstruction, _btnTaskLog, _btnOptions, _btnFriendship, _btnExitGame };
             GUIObject.CreateSpacedColumn(ref _liButtons, -GUIButton.BTN_WIDTH, 0, RiverHollow.ScreenHeight, BTN_PADDING);
 
             _bOpen = true;
@@ -531,7 +531,7 @@ namespace RiverHollow.GUIComponents.Screens
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
         }
-        public void BtnQuestLog()
+        public void BtnTaskLog()
         {
             _gMenuObject = new HUDTaskLog();
             GUIManager.OpenMainObject(_gMenuObject);
@@ -566,11 +566,11 @@ namespace RiverHollow.GUIComponents.Screens
         public class HUDTaskLog : GUIMainObject
         {
             //public static int BTNSIZE = ScaledTileSize;
-            public static int MAX_SHOWN_QUESTS = 4;
-            public static int QUEST_SPACING = 20;
+            public static int MAX_SHOWN_TASKS = 4;
+            public static int TASK_SPACING = 20;
             public static int TASKBOX_WIDTH = 544; //(GUIManager.MAIN_COMPONENT_WIDTH) - (_gWindow.EdgeSize * 2) - ScaledTileSize
-            public static int TASKBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDQuestLog.MAX_SHOWN_QUESTS) - (_gWindow.EdgeSize * 2)
-            List<GUIObject> _liQuests;
+            public static int TASKBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDTaskLog.MAX_SHOWN_TASKS) - (_gWindow.EdgeSize * 2)
+            List<GUIObject> _liTasks;
             DetailBox _detailWindow;
             GUIList _gList;
 
@@ -578,7 +578,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 _winMain = SetMainWindow();
 
-                _liQuests = new List<GUIObject>();
+                _liTasks = new List<GUIObject>();
                 _detailWindow = new DetailBox(GUIWindow.Window_1, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
                 _detailWindow.Show(false);
                 _detailWindow.CenterOnScreen();
@@ -587,11 +587,11 @@ namespace RiverHollow.GUIComponents.Screens
                 for (int i = 0; i < PlayerManager.TaskLog.Count; i++)
                 {
                     TaskBox q = new TaskBox(TASKBOX_WIDTH, TASKBOX_HEIGHT, OpenDetailBox);
-                    q.SetQuest(PlayerManager.TaskLog[i]);
-                    _liQuests.Add(q);
+                    q.SetTask(PlayerManager.TaskLog[i]);
+                    _liTasks.Add(q);
                 }
 
-                _gList = new GUIList(_liQuests, MAX_SHOWN_QUESTS, QUEST_SPACING/*, _gWindow.Height*/);
+                _gList = new GUIList(_liTasks, MAX_SHOWN_TASKS, TASK_SPACING/*, _gWindow.Height*/);
                 _gList.CenterOnObject(_winMain);
 
                 AddControl(_gList);
@@ -626,7 +626,7 @@ namespace RiverHollow.GUIComponents.Screens
             public override bool ProcessHover(Point mouse)
             {
                 bool rv = true;
-                foreach (TaskBox c in _liQuests)
+                foreach (TaskBox c in _liTasks)
                 {
                     rv = c.ProcessHover(mouse);
                     if (rv)
@@ -665,7 +665,7 @@ namespace RiverHollow.GUIComponents.Screens
                 GUIWindow _window;
                 GUIText _gName;
                 GUIText _gGoalProgress;
-                public Task TheQuest { get; private set; }
+                public Task TheTask { get; private set; }
                 public bool ClearThis;
                 public delegate void ClickDelegate(Task q);
                 private ClickDelegate _delAction;
@@ -680,12 +680,12 @@ namespace RiverHollow.GUIComponents.Screens
                     AddControl(_window);
                     Width = _window.Width;
                     Height = _window.Height;
-                    TheQuest = null;
+                    TheTask = null;
                 }
 
                 public override void Draw(SpriteBatch spriteBatch)
                 {
-                    if (TheQuest != null && Show())
+                    if (TheTask != null && Show())
                     {
                         _window.Draw(spriteBatch);
                     }
@@ -695,7 +695,7 @@ namespace RiverHollow.GUIComponents.Screens
                     bool rv = false;
                     if (Contains(mouse))
                     {
-                        _delAction(TheQuest);
+                        _delAction(TheTask);
                     }
 
                     return rv;
@@ -710,10 +710,10 @@ namespace RiverHollow.GUIComponents.Screens
                     return _window.Contains(mouse);
                 }
 
-                public void SetQuest(Task q)
+                public void SetTask(Task q)
                 {
-                    TheQuest = q;
-                    _gName = new GUIText(TheQuest.Name);
+                    TheTask = q;
+                    _gName = new GUIText(TheTask.Name);
                     _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
 
                     string progressString = q.GetProgressString();
@@ -1984,11 +1984,11 @@ namespace RiverHollow.GUIComponents.Screens
         public class HUDConstruction : GUIMainObject
         {
             //public static int BTNSIZE = ScaledTileSize;
-            public static int MAX_SHOWN_QUESTS = 4;
-            public static int QUEST_SPACING = 20;
+            public static int MAX_SHOWN_TASKS = 4;
+            public static int TASK_SPACING = 20;
             public static int CONSTRUCTBOX_WIDTH = 544; //(GUIManager.MAIN_COMPONENT_WIDTH) - (_gWindow.EdgeSize * 2) - ScaledTileSize
-            public static int CONSTRUCTBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDQuestLog.MAX_SHOWN_QUESTS) - (_gWindow.EdgeSize * 2)
-            List<GUIObject> _liQuests;
+            public static int CONSTRUCTBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDTaskLog.MAX_SHOWN_TASKS) - (_gWindow.EdgeSize * 2)
+            List<GUIObject> _liTasks;
             GUIList _gList;
 
             private HUDMenu.CloseMenuDelegate _closeMenu;
@@ -1998,7 +1998,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _closeMenu = closeMenu;
                 _winMain = SetMainWindow();
 
-                _liQuests = new List<GUIObject>();
+                _liTasks = new List<GUIObject>();
 
 
                 foreach (BuildInfo b in GameManager.DIBuildInfo.Values)
@@ -2007,11 +2007,11 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         ConstructBox box = new ConstructBox(CONSTRUCTBOX_WIDTH, CONSTRUCTBOX_HEIGHT, BuildConstruct);
                         box.SetConstructionInfo(b);
-                        _liQuests.Add(box);
+                        _liTasks.Add(box);
                     }
                 }
 
-                _gList = new GUIList(_liQuests, MAX_SHOWN_QUESTS, QUEST_SPACING/*, _gWindow.Height*/);
+                _gList = new GUIList(_liTasks, MAX_SHOWN_TASKS, TASK_SPACING/*, _gWindow.Height*/);
                 _gList.CenterOnObject(_winMain);
 
                 AddControl(_gList);
@@ -2925,19 +2925,19 @@ namespace RiverHollow.GUIComponents.Screens
         }
     }
 
-    class HUDNewQuest : GUIObject
+    class HUDNewTask : GUIObject
     {
         double _dTimer = 0;
         GUIImage _gMarker;
         GUIText _gText;
 
-        public delegate void RemoveDelegate(HUDNewQuest q);
+        public delegate void RemoveDelegate(HUDNewTask q);
         private RemoveDelegate _delAction;
-        public HUDNewQuest(bool questComplete, RemoveDelegate del)
+        public HUDNewTask(bool questComplete, RemoveDelegate del)
         {
             _delAction = del;
             _gMarker = new GUIImage(new Rectangle(48, 80, 16, 16), ScaleIt(16), ScaleIt(16), DataManager.DIALOGUE_TEXTURE);
-            _gText = new GUIText(questComplete ? "Quest Complete" : "New Quest");
+            _gText = new GUIText(questComplete ? "Task Complete" : "New Task");
 
             _gText.AnchorAndAlignToObject(_gMarker, SideEnum.Right, SideEnum.CenterY, ScaleIt(1));
             AddControl(_gMarker);

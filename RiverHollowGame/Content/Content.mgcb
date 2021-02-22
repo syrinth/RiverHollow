@@ -185,11 +185,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/lightmask.png
 
-#begin Data/Quests.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Quests.xml
-
 #begin Textures/texClothes.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2724,4 +2719,9 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapLumberMill_1.tmx
+
+#begin Data/Tasks.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Tasks.xml
 

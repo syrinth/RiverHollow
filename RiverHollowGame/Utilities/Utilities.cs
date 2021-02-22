@@ -177,7 +177,7 @@ namespace RiverHollow.Utilities
                     string[] tagInfo = specialSections[i].Split(':');
                     if (tagInfo[0].Equals("Task"))
                     {
-                        PlayerManager.AddToQuestLog(GameManager.DIQuests[int.Parse(tagInfo[1])]);
+                        PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(tagInfo[1])]);
                     }
                 }
             }

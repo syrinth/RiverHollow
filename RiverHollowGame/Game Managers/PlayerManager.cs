@@ -301,16 +301,16 @@ namespace RiverHollow.Game_Managers
         }
 
         //Random quests should not generate a quest with the same goal as a pre-existing quest
-        public static void AddToQuestLog(Task q)
+        public static void AddToTaskLog(Task q)
         {
             foreach(Item i in InventoryManager.PlayerInventory)
             {
                 if (i != null) { q.AttemptProgress(i); }
             }
-            q.SpawnQuestMobs();
+            q.SpawnTaskMobs();
             TaskLog.Add(q);
 
-            GUIManager.NewQuestIcon();
+            GUIManager.NewTaskIcon();
         }
         public static void AdvanceTaskProgress(Building b)
         {
@@ -322,7 +322,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
-        public static void AdvanceQuestProgress(Monster m)
+        public static void AdvanceTaskProgress(Monster m)
         {
             foreach (Task q in TaskLog)
             {
@@ -332,7 +332,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
-        public static void AdvanceQuestProgress(Item i)
+        public static void AdvanceTaskProgress(Item i)
         {
             foreach(Task q in TaskLog)
             {
@@ -342,7 +342,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
-        public static void RemoveQuestProgress(Item i)
+        public static void RemoveTaskProgress(Item i)
         {
             foreach (Task q in TaskLog)
             {

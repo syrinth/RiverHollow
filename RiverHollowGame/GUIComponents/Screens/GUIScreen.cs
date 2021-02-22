@@ -238,7 +238,7 @@ namespace RiverHollow.GUIComponents.Screens
         }
         #endregion
 
-        public virtual void NewQuestIcon(bool complete) { }
+        public virtual void NewTaskIcon(bool complete) { }
         public virtual void AddSkipCutsceneButton() { }
         public virtual void RemoveSkipCutsceneButton() { }
 

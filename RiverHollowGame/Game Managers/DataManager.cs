@@ -61,8 +61,8 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, Dictionary<string, string>> DIWorkers => _diWorkers;
         static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
 
-        static Dictionary<int, Dictionary<string, string>> _diQuestData;
-        public static Dictionary<int, Dictionary<string, string>> DiQuestData => _diQuestData;
+        static Dictionary<int, Dictionary<string, string>> _diTaskData;
+        public static Dictionary<int, Dictionary<string, string>> DiTaskData => _diTaskData;
 
         static Dictionary<int, Dictionary<string, string>> _diSpiritInfo;
         public static Dictionary<int, Dictionary<string, string>> DiSpiritInfo => _diSpiritInfo;
@@ -128,7 +128,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content);
             LoadDictionary(ref _diWorkers, @"Data\Workers", Content);
             LoadDictionary(ref _diSpiritInfo, @"Data\Spirits", Content);
-            LoadDictionary(ref _diQuestData, @"Data\Quests", Content);
+            LoadDictionary(ref _diTaskData, @"Data\Tasks", Content);
             LoadDictionary(ref _diClasses, @"Data\Classes", Content);
             LoadDictionary(ref Config, @"Data\Config", Content);
         }

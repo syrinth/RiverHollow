@@ -48,7 +48,7 @@ namespace RiverHollow.Game_Managers
         public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade };
         public enum PotencyBonusEnum { None, Conditions, Summon};
         public enum EquipmentEnum { Armor, Weapon, Accessory, Head, Wrist };
-        public enum SpecialItemEnum { None, Marriage, Class, Map, DungeonKey, Quest };
+        public enum SpecialItemEnum { None, Marriage, Class, Map, DungeonKey, Task };
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ActionEnum { Action, Item, Spell, MenuItem, MenuSpell, MenuAction, Move, EndTurn };
         public enum SkillTagsEnum { Bonus, Harm, Heal, Push, Pull, Remove, Retreat, Step, StatusEffectID, SummonID };
@@ -74,7 +74,7 @@ namespace RiverHollow.Game_Managers
         public static int MaxBldgLevel = 3;
         public static Dictionary<int, BuildInfo> DIBuildInfo;
         public static Dictionary<int, Upgrade> DiUpgrades;
-        public static Dictionary<int, Task> DIQuests;
+        public static Dictionary<int, Task> DITasks;
         private static List<TriggerObject> _liTriggerObjects;
         private static List<Spirit> _liSpirits;
         private static List<Machine> _liMachines;
@@ -116,12 +116,12 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void LoadQuests()
+        public static void LoadTasks()
         {
-            DIQuests = new Dictionary<int, Task>();
-            foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.DiQuestData)
+            DITasks = new Dictionary<int, Task>();
+            foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.DiTaskData)
             {
-                DIQuests.Add(kvp.Key, new Task(kvp.Key, kvp.Value));
+                DITasks.Add(kvp.Key, new Task(kvp.Key, kvp.Value));
             }
         }
         public static void LoadBuildInfo()

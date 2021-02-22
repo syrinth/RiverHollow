@@ -332,7 +332,7 @@ Exit:
                 //Only perform this check if we are adding to the playerInventory
                 if (inventory == PlayerInventory)
                 {
-                    PlayerManager.AdvanceQuestProgress(itemToAdd);
+                    PlayerManager.AdvanceTaskProgress(itemToAdd);
 
                     if (!silent)
                     {
@@ -393,7 +393,7 @@ Exit:
                     }
                     if (inventory == PlayerInventory)
                     {
-                        PlayerManager.AdvanceQuestProgress(item);
+                        PlayerManager.AdvanceTaskProgress(item);
                     }
                     rv = true;
                 }
@@ -424,7 +424,7 @@ Exit:
         {
             if (inventory == PlayerInventory)
             {
-                PlayerManager.RemoveQuestProgress(inventory[row, column]);
+                PlayerManager.RemoveTaskProgress(inventory[row, column]);
             }
 
             inventory[row, column] = null;
@@ -466,7 +466,7 @@ Exit:
                         {
                             if (PlayerInventory[i, j] != null)
                             {
-                                PlayerManager.RemoveQuestProgress(inventory[i, j]);
+                                PlayerManager.RemoveTaskProgress(inventory[i, j]);
                             }
                         }
                         //null the item and exit

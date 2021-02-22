@@ -37,7 +37,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnAddNew = new System.Windows.Forms.Button();
             this.dgvEditTags = new System.Windows.Forms.DataGridView();
-            this.colQuestTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTaskTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCharExtraData)).BeginInit();
@@ -120,18 +120,18 @@
             // 
             this.dgvEditTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvEditTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colQuestTags});
+            this.colTaskTags});
             this.dgvEditTags.Location = new System.Drawing.Point(329, 51);
             this.dgvEditTags.Name = "dgvEditTags";
             this.dgvEditTags.RowHeadersVisible = false;
             this.dgvEditTags.Size = new System.Drawing.Size(459, 189);
             this.dgvEditTags.TabIndex = 46;
             // 
-            // colQuestTags
+            // colTaskTags
             // 
-            this.colQuestTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colQuestTags.HeaderText = "Tags";
-            this.colQuestTags.Name = "colQuestTags";
+            this.colTaskTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colTaskTags.HeaderText = "Tags";
+            this.colTaskTags.Name = "colTaskTags";
             // 
             // btnSave
             // 
@@ -186,7 +186,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnAddNew;
         private System.Windows.Forms.DataGridView dgvEditTags;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colQuestTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTaskTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharExtraID;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnRemove;

@@ -102,20 +102,20 @@
             this.dgvAdventurers = new System.Windows.Forms.DataGridView();
             this.colAdventurersID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAdventurersName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabQuests = new System.Windows.Forms.TabPage();
-            this.cbQuestType = new System.Windows.Forms.ComboBox();
-            this.btnQuestCancel = new System.Windows.Forms.Button();
-            this.dgvQuestTags = new System.Windows.Forms.DataGridView();
-            this.colQuestTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tbQuestDescription = new System.Windows.Forms.TextBox();
+            this.tabTasks = new System.Windows.Forms.TabPage();
+            this.cbTaskType = new System.Windows.Forms.ComboBox();
+            this.btnTaskCancel = new System.Windows.Forms.Button();
+            this.dgvTaskTags = new System.Windows.Forms.DataGridView();
+            this.colTaskTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tbTaskDescription = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.tbQuestID = new System.Windows.Forms.TextBox();
-            this.tbQuestName = new System.Windows.Forms.TextBox();
+            this.tbTaskID = new System.Windows.Forms.TextBox();
+            this.tbTaskName = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.dgvQuests = new System.Windows.Forms.DataGridView();
-            this.colQuestsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colQuestsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvTasks = new System.Windows.Forms.DataGridView();
+            this.colTasksID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTasksName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabCutscenes = new System.Windows.Forms.TabPage();
             this.btnEditCutsceneDialogue = new System.Windows.Forms.Button();
             this.tbCutsceneDetails = new System.Windows.Forms.TextBox();
@@ -237,9 +237,9 @@
             this.tabAdventurers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAdventurerTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAdventurers)).BeginInit();
-            this.tabQuests.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvQuestTags)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvQuests)).BeginInit();
+            this.tabTasks.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTaskTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTasks)).BeginInit();
             this.tabCutscenes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCutsceneTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCutscenes)).BeginInit();
@@ -301,7 +301,7 @@
             this.tabCtl.Controls.Add(this.tabCharacters);
             this.tabCtl.Controls.Add(this.tabClasses);
             this.tabCtl.Controls.Add(this.tabAdventurers);
-            this.tabCtl.Controls.Add(this.tabQuests);
+            this.tabCtl.Controls.Add(this.tabTasks);
             this.tabCtl.Controls.Add(this.tabCutscenes);
             this.tabCtl.Controls.Add(this.tabMonsters);
             this.tabCtl.Controls.Add(this.tabActions);
@@ -1036,70 +1036,70 @@
             this.colAdventurersName.ReadOnly = true;
             this.colAdventurersName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tabQuests
+            // tabTasks
             // 
-            this.tabQuests.Controls.Add(this.cbQuestType);
-            this.tabQuests.Controls.Add(this.btnQuestCancel);
-            this.tabQuests.Controls.Add(this.dgvQuestTags);
-            this.tabQuests.Controls.Add(this.tbQuestDescription);
-            this.tabQuests.Controls.Add(this.label11);
-            this.tabQuests.Controls.Add(this.label12);
-            this.tabQuests.Controls.Add(this.tbQuestID);
-            this.tabQuests.Controls.Add(this.tbQuestName);
-            this.tabQuests.Controls.Add(this.label13);
-            this.tabQuests.Controls.Add(this.dgvQuests);
-            this.tabQuests.Location = new System.Drawing.Point(4, 22);
-            this.tabQuests.Name = "tabQuests";
-            this.tabQuests.Size = new System.Drawing.Size(790, 425);
-            this.tabQuests.TabIndex = 5;
-            this.tabQuests.Text = "Quests";
-            this.tabQuests.UseVisualStyleBackColor = true;
+            this.tabTasks.Controls.Add(this.cbTaskType);
+            this.tabTasks.Controls.Add(this.btnTaskCancel);
+            this.tabTasks.Controls.Add(this.dgvTaskTags);
+            this.tabTasks.Controls.Add(this.tbTaskDescription);
+            this.tabTasks.Controls.Add(this.label11);
+            this.tabTasks.Controls.Add(this.label12);
+            this.tabTasks.Controls.Add(this.tbTaskID);
+            this.tabTasks.Controls.Add(this.tbTaskName);
+            this.tabTasks.Controls.Add(this.label13);
+            this.tabTasks.Controls.Add(this.dgvTasks);
+            this.tabTasks.Location = new System.Drawing.Point(4, 22);
+            this.tabTasks.Name = "tabTasks";
+            this.tabTasks.Size = new System.Drawing.Size(790, 425);
+            this.tabTasks.TabIndex = 5;
+            this.tabTasks.Text = "Tasks";
+            this.tabTasks.UseVisualStyleBackColor = true;
             // 
-            // cbQuestType
+            // cbTaskType
             // 
-            this.cbQuestType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbQuestType.FormattingEnabled = true;
-            this.cbQuestType.Location = new System.Drawing.Point(320, 110);
-            this.cbQuestType.Name = "cbQuestType";
-            this.cbQuestType.Size = new System.Drawing.Size(149, 21);
-            this.cbQuestType.TabIndex = 37;
+            this.cbTaskType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbTaskType.FormattingEnabled = true;
+            this.cbTaskType.Location = new System.Drawing.Point(320, 110);
+            this.cbTaskType.Name = "cbTaskType";
+            this.cbTaskType.Size = new System.Drawing.Size(149, 21);
+            this.cbTaskType.TabIndex = 37;
             // 
-            // btnQuestCancel
+            // btnTaskCancel
             // 
-            this.btnQuestCancel.Location = new System.Drawing.Point(709, 394);
-            this.btnQuestCancel.Name = "btnQuestCancel";
-            this.btnQuestCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnQuestCancel.TabIndex = 34;
-            this.btnQuestCancel.Text = "Cancel";
-            this.btnQuestCancel.UseVisualStyleBackColor = true;
+            this.btnTaskCancel.Location = new System.Drawing.Point(709, 394);
+            this.btnTaskCancel.Name = "btnTaskCancel";
+            this.btnTaskCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnTaskCancel.TabIndex = 34;
+            this.btnTaskCancel.Text = "Cancel";
+            this.btnTaskCancel.UseVisualStyleBackColor = true;
             // 
-            // dgvQuestTags
+            // dgvTaskTags
             // 
-            this.dgvQuestTags.AllowUserToResizeColumns = false;
-            this.dgvQuestTags.AllowUserToResizeRows = false;
-            this.dgvQuestTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvQuestTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colQuestTags});
-            this.dgvQuestTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dgvQuestTags.Location = new System.Drawing.Point(320, 137);
-            this.dgvQuestTags.Name = "dgvQuestTags";
-            this.dgvQuestTags.RowHeadersVisible = false;
-            this.dgvQuestTags.Size = new System.Drawing.Size(464, 251);
-            this.dgvQuestTags.TabIndex = 33;
+            this.dgvTaskTags.AllowUserToResizeColumns = false;
+            this.dgvTaskTags.AllowUserToResizeRows = false;
+            this.dgvTaskTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTaskTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colTaskTags});
+            this.dgvTaskTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.dgvTaskTags.Location = new System.Drawing.Point(320, 137);
+            this.dgvTaskTags.Name = "dgvTaskTags";
+            this.dgvTaskTags.RowHeadersVisible = false;
+            this.dgvTaskTags.Size = new System.Drawing.Size(464, 251);
+            this.dgvTaskTags.TabIndex = 33;
             // 
-            // colQuestTags
+            // colTaskTags
             // 
-            this.colQuestTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colQuestTags.HeaderText = "Tags";
-            this.colQuestTags.Name = "colQuestTags";
+            this.colTaskTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colTaskTags.HeaderText = "Tags";
+            this.colTaskTags.Name = "colTaskTags";
             // 
-            // tbQuestDescription
+            // tbTaskDescription
             // 
-            this.tbQuestDescription.Location = new System.Drawing.Point(320, 51);
-            this.tbQuestDescription.Multiline = true;
-            this.tbQuestDescription.Name = "tbQuestDescription";
-            this.tbQuestDescription.Size = new System.Drawing.Size(464, 53);
-            this.tbQuestDescription.TabIndex = 32;
+            this.tbTaskDescription.Location = new System.Drawing.Point(320, 51);
+            this.tbTaskDescription.Multiline = true;
+            this.tbTaskDescription.Name = "tbTaskDescription";
+            this.tbTaskDescription.Size = new System.Drawing.Size(464, 53);
+            this.tbTaskDescription.TabIndex = 32;
             // 
             // label11
             // 
@@ -1119,19 +1119,19 @@
             this.label12.TabIndex = 30;
             this.label12.Text = "ID:";
             // 
-            // tbQuestID
+            // tbTaskID
             // 
-            this.tbQuestID.Location = new System.Drawing.Point(741, 6);
-            this.tbQuestID.Name = "tbQuestID";
-            this.tbQuestID.Size = new System.Drawing.Size(43, 20);
-            this.tbQuestID.TabIndex = 29;
+            this.tbTaskID.Location = new System.Drawing.Point(741, 6);
+            this.tbTaskID.Name = "tbTaskID";
+            this.tbTaskID.Size = new System.Drawing.Size(43, 20);
+            this.tbTaskID.TabIndex = 29;
             // 
-            // tbQuestName
+            // tbTaskName
             // 
-            this.tbQuestName.Location = new System.Drawing.Point(361, 6);
-            this.tbQuestName.Name = "tbQuestName";
-            this.tbQuestName.Size = new System.Drawing.Size(108, 20);
-            this.tbQuestName.TabIndex = 28;
+            this.tbTaskName.Location = new System.Drawing.Point(361, 6);
+            this.tbTaskName.Name = "tbTaskName";
+            this.tbTaskName.Size = new System.Drawing.Size(108, 20);
+            this.tbTaskName.TabIndex = 28;
             // 
             // label13
             // 
@@ -1142,45 +1142,45 @@
             this.label13.TabIndex = 27;
             this.label13.Text = "Name:";
             // 
-            // dgvQuests
+            // dgvTasks
             // 
-            this.dgvQuests.AllowUserToAddRows = false;
-            this.dgvQuests.AllowUserToDeleteRows = false;
-            this.dgvQuests.AllowUserToResizeColumns = false;
-            this.dgvQuests.AllowUserToResizeRows = false;
-            this.dgvQuests.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvQuests.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colQuestsID,
-            this.colQuestsName});
-            this.dgvQuests.ContextMenuStrip = this.contextMenu;
-            this.dgvQuests.Location = new System.Drawing.Point(6, 6);
-            this.dgvQuests.MultiSelect = false;
-            this.dgvQuests.Name = "dgvQuests";
-            this.dgvQuests.ReadOnly = true;
-            this.dgvQuests.RowHeadersVisible = false;
-            this.dgvQuests.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvQuests.Size = new System.Drawing.Size(308, 411);
-            this.dgvQuests.TabIndex = 26;
-            this.dgvQuests.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvQuests_CellClick);
+            this.dgvTasks.AllowUserToAddRows = false;
+            this.dgvTasks.AllowUserToDeleteRows = false;
+            this.dgvTasks.AllowUserToResizeColumns = false;
+            this.dgvTasks.AllowUserToResizeRows = false;
+            this.dgvTasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTasks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colTasksID,
+            this.colTasksName});
+            this.dgvTasks.ContextMenuStrip = this.contextMenu;
+            this.dgvTasks.Location = new System.Drawing.Point(6, 6);
+            this.dgvTasks.MultiSelect = false;
+            this.dgvTasks.Name = "dgvTasks";
+            this.dgvTasks.ReadOnly = true;
+            this.dgvTasks.RowHeadersVisible = false;
+            this.dgvTasks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvTasks.Size = new System.Drawing.Size(308, 411);
+            this.dgvTasks.TabIndex = 26;
+            this.dgvTasks.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTasks_CellClick);
             // 
-            // colQuestsID
+            // colTasksID
             // 
-            this.colQuestsID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colQuestsID.FillWeight = 10F;
-            this.colQuestsID.HeaderText = "ID";
-            this.colQuestsID.Name = "colQuestsID";
-            this.colQuestsID.ReadOnly = true;
-            this.colQuestsID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colQuestsID.Width = 31;
+            this.colTasksID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colTasksID.FillWeight = 10F;
+            this.colTasksID.HeaderText = "ID";
+            this.colTasksID.Name = "colTasksID";
+            this.colTasksID.ReadOnly = true;
+            this.colTasksID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colTasksID.Width = 31;
             // 
-            // colQuestsName
+            // colTasksName
             // 
-            this.colQuestsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colQuestsName.FillWeight = 90F;
-            this.colQuestsName.HeaderText = "Name";
-            this.colQuestsName.Name = "colQuestsName";
-            this.colQuestsName.ReadOnly = true;
-            this.colQuestsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colTasksName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colTasksName.FillWeight = 90F;
+            this.colTasksName.HeaderText = "Name";
+            this.colTasksName.Name = "colTasksName";
+            this.colTasksName.ReadOnly = true;
+            this.colTasksName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tabCutscenes
             // 
@@ -2314,10 +2314,10 @@
             this.tabAdventurers.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAdventurerTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAdventurers)).EndInit();
-            this.tabQuests.ResumeLayout(false);
-            this.tabQuests.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvQuestTags)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvQuests)).EndInit();
+            this.tabTasks.ResumeLayout(false);
+            this.tabTasks.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTaskTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTasks)).EndInit();
             this.tabCutscenes.ResumeLayout(false);
             this.tabCutscenes.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCutsceneTags)).EndInit();
@@ -2413,19 +2413,19 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.DataGridView dgvAdventurers;
         private System.Windows.Forms.ComboBox cbAdventurerType;
-        private System.Windows.Forms.TabPage tabQuests;
-        private System.Windows.Forms.Button btnQuestCancel;
-        private System.Windows.Forms.DataGridView dgvQuestTags;
-        private System.Windows.Forms.TextBox tbQuestDescription;
+        private System.Windows.Forms.TabPage tabTasks;
+        private System.Windows.Forms.Button btnTaskCancel;
+        private System.Windows.Forms.DataGridView dgvTaskTags;
+        private System.Windows.Forms.TextBox tbTaskDescription;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox tbQuestID;
-        private System.Windows.Forms.TextBox tbQuestName;
+        private System.Windows.Forms.TextBox tbTaskID;
+        private System.Windows.Forms.TextBox tbTaskName;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.DataGridView dgvQuests;
-        private System.Windows.Forms.ComboBox cbQuestType;
+        private System.Windows.Forms.DataGridView dgvTasks;
+        private System.Windows.Forms.ComboBox cbTaskType;
         private System.Windows.Forms.ComboBox cbEditableCharData;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colQuestTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTaskTags;
         private System.Windows.Forms.TabPage tabCutscenes;
         private System.Windows.Forms.TextBox tbCutsceneDetails;
         private System.Windows.Forms.Label label17;
@@ -2523,8 +2523,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colClassName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAdventurersID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAdventurersName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colQuestsID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colQuestsName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTasksID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTasksName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCutscenesID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCutscenesName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colMonstersID;

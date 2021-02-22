@@ -19,7 +19,7 @@ namespace Database_Editor
         string ACTIONS_XML_FILE = PATH_TO_DATA + @"\CombatActions.xml";
         string CUTSCENE_XML_FILE = PATH_TO_DATA + @"\CutScenes.xml";
         string CUTSCENE_DIALOGUE_XML_FILE = PATH_TO_DIALOGUE + @"\CutsceneDialogue.xml";
-        string QUEST_XML_FILE = PATH_TO_DATA + @"\Quests.xml";
+        string TASK_XML_FILE = PATH_TO_DATA + @"\Tasks.xml";
         string MONSTERS_XML_FILE = PATH_TO_DATA + @"\Monsters.xml";
         string CHARACTER_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
         string CLASSES_XML_FILE = PATH_TO_DATA + @"\Classes.xml";
@@ -97,7 +97,7 @@ namespace Database_Editor
             InitComboBox<ObjectTypeEnum>(cbWorldObjectType);
             InitComboBox<NPCTypeEnum>(cbCharacterType);
             InitComboBox<AdventurerTypeEnum>(cbAdventurerType);
-            InitComboBox<TaskTypeEnum>(cbQuestType);
+            InitComboBox<TaskTypeEnum>(cbTaskType);
             InitComboBox<EditableCharacterDataEnum>(cbEditableCharData, false);
             InitComboBox<ActionEnum>(cbActionType);
 
@@ -109,7 +109,7 @@ namespace Database_Editor
                 { "Characters", 0 },
                 { "Classes", 0 },
                 { "Adventurers", 0 },
-                { "Quests", 0 },
+                { "Tasks", 0 },
                 { "Cutscenes", 0},
                 { "Monsters", 0},
                 { "Actions", 0 },
@@ -167,7 +167,7 @@ namespace Database_Editor
 
             _diObjectText = ReadTaggedXMLFile(OBJECT_TEXT_XML_FILE);
 
-            LoadXMLDictionary(QUEST_XML_FILE, TASK_REF_TAGS, "");
+            LoadXMLDictionary(TASK_XML_FILE, TASK_REF_TAGS, "");
             LoadXMLDictionary(CHARACTER_XML_FILE, CHARACTER_REF_TAGS, "");
             LoadXMLDictionary(CLASSES_XML_FILE, CLASSES_REF_TAGS, TAGS_FOR_CLASSES);
             LoadXMLDictionary(WORKERS_XML_FILE, ADVENTURERS_REF_TAG, TAGS_FOR_ADVENTURERS);
@@ -200,7 +200,7 @@ namespace Database_Editor
             LoadCharacterDataGrid();
             LoadClassDataGrid();
             LoadAdventurerDataGrid();
-            LoadQuestDataGrid();
+            LoadTaskDataGrid();
             LoadMonsterDataGrid();
             LoadActionDataGrid();
             LoadBuildingDataGrid();
@@ -218,7 +218,7 @@ namespace Database_Editor
             LoadCharacterInfo();
             LoadClassInfo();
             LoadAdventurerInfo();
-            LoadQuestInfo();
+            LoadTaskInfo();
             LoadCutsceneInfo();
             LoadMonsterInfo();
             LoadActionInfo();
@@ -243,7 +243,7 @@ namespace Database_Editor
         {
             XMLTypeEnum rv = XMLTypeEnum.None;
 
-            if (fileName == QUEST_XML_FILE) { rv = XMLTypeEnum.Task; }
+            if (fileName == TASK_XML_FILE) { rv = XMLTypeEnum.Task; }
             else if (fileName == CHARACTER_XML_FILE) { rv = XMLTypeEnum.Character; }
             else if (fileName == CLASSES_XML_FILE) { rv = XMLTypeEnum.Class; }
             else if (fileName == WORKERS_XML_FILE) { rv = XMLTypeEnum.Adventurer; }
@@ -334,9 +334,9 @@ namespace Database_Editor
         {
             LoadGenericDatagrid(dgvAdventurers, _diBasicXML[WORKERS_XML_FILE], "colAdventurersID", "colAdventurersName", "Adventurers", _diTabIndices["Adventurers"]);
         }
-        private void LoadQuestDataGrid()
+        private void LoadTaskDataGrid()
         {
-            LoadGenericDatagrid(dgvQuests, _diBasicXML[QUEST_XML_FILE], "colQuestsID", "colQuestsName", "Quests", _diTabIndices["Quests"]);
+            LoadGenericDatagrid(dgvTasks, _diBasicXML[TASK_XML_FILE], "colTasksID", "colTasksName", "Tasks", _diTabIndices["Tasks"]);
         }
         private void LoadMonsterDataGrid()
         {
@@ -909,11 +909,11 @@ namespace Database_Editor
             LoadGenericDataInfo(data, tbAdventurerName, tbAdventurerID, dgvAdventurerTags);
             cbAdventurerType.SelectedIndex = (int)Util.ParseEnum<AdventurerTypeEnum>(data.GetTagValue("Type"));
         }
-        private void LoadQuestInfo()
+        private void LoadTaskInfo()
         {
-            XMLData data = _diBasicXML[QUEST_XML_FILE][_diTabIndices["Quests"]];
-            LoadGenericDataInfo(data, tbQuestName, tbQuestID, dgvQuestTags, tbQuestDescription);
-            cbQuestType.SelectedIndex = (int)Util.ParseEnum<TaskTypeEnum>(data.GetTagValue("Type"));
+            XMLData data = _diBasicXML[TASK_XML_FILE][_diTabIndices["Tasks"]];
+            LoadGenericDataInfo(data, tbTaskName, tbTaskID, dgvTaskTags, tbTaskDescription);
+            cbTaskType.SelectedIndex = (int)Util.ParseEnum<TaskTypeEnum>(data.GetTagValue("Type"));
         }
         private void LoadMonsterInfo()
         {
@@ -1247,9 +1247,9 @@ namespace Database_Editor
         {
             SaveXMLDataInfo(_diBasicXML[WORKERS_XML_FILE], "Adventurers", "Adventurer_", XMLTypeEnum.Adventurer, tbAdventurerName, tbAdventurerID, cbAdventurerType, dgvAdventurers, dgvAdventurerTags, "colAdventurersID", "colAdventurersName", SHOPDATA_REF_TAGS, "");
         }
-        private void SaveQuestInfo(List<XMLData> liData)
+        private void SaveTaskInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[QUEST_XML_FILE], "Quests", "Quest_", XMLTypeEnum.Task, tbQuestName, tbQuestID, cbQuestType, dgvQuests, dgvQuestTags, "colQuestsID", "colQuestsName", TASK_REF_TAGS, "", tbQuestDescription);
+            SaveXMLDataInfo(_diBasicXML[TASK_XML_FILE], "Tasks", "Task_", XMLTypeEnum.Task, tbTaskName, tbTaskID, cbTaskType, dgvTasks, dgvTaskTags, "colTasksID", "colTasksName", TASK_REF_TAGS, "", tbTaskDescription);
         }
         private void SaveMonsterInfo(List<XMLData> liData)
         {
@@ -1356,9 +1356,9 @@ namespace Database_Editor
         {
             GenericCancel(_diBasicXML[WORKERS_XML_FILE], "Adventurers", dgvAdventurers, LoadAdventurerInfo);
         }
-        private void btnQuestCancel_Click(object sender, EventArgs e)
+        private void btnTaskCancel_Click(object sender, EventArgs e)
         {
-            GenericCancel(_diBasicXML[QUEST_XML_FILE], "Quests", dgvQuests, LoadQuestInfo);
+            GenericCancel(_diBasicXML[TASK_XML_FILE], "Tasks", dgvTasks, LoadTaskInfo);
         }
         private void btnCutsceneCancel_Click(object sednder, EventArgs e)
         {
@@ -1437,9 +1437,9 @@ namespace Database_Editor
         {
             GenericCellClick(e, _diBasicXML[WORKERS_XML_FILE], "Adventurers", dgvAdventurers, LoadAdventurerInfo, SaveAdventurerInfo);
         }
-        private void dgvQuests_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvTasks_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            GenericCellClick(e, _diBasicXML[QUEST_XML_FILE], "Quests", dgvQuests, LoadQuestInfo, SaveQuestInfo);
+            GenericCellClick(e, _diBasicXML[TASK_XML_FILE], "Tasks", dgvTasks, LoadTaskInfo, SaveTaskInfo);
         }
         private void dgvCutscenes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1621,7 +1621,7 @@ namespace Database_Editor
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCharacters"]) { dgvCharacters.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabClasses"]) { dgvClasses.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabAdventurers"]) { dgvAdventurers.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabQuests"]) { dgvQuests.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabTasks"]) { dgvTasks.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscenes"]) { dgvCutscenes.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabMonsters"]) { dgvMonsters.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabActions"]) { dgvActions.Focus(); }
@@ -1642,7 +1642,7 @@ namespace Database_Editor
             else if (prevPage == tabCtl.TabPages["tabCharacters"]) { SaveCharacterInfo(_diBasicXML[CHARACTER_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabClasses"]) { SaveClassInfo(_diBasicXML[CLASSES_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabAdventurers"]) { SaveAdventurerInfo(_diBasicXML[WORKERS_XML_FILE]); }
-            else if (prevPage == tabCtl.TabPages["tabQuests"]) { SaveQuestInfo(_diBasicXML[QUEST_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabTasks"]) { SaveTaskInfo(_diBasicXML[TASK_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabCutscenes"]) { SaveCutsceneInfo(); }
             else if (prevPage == tabCtl.TabPages["tabMonsters"]) { SaveMonsterInfo(_diBasicXML[MONSTERS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabActions"]) { SaveActionInfo(_diBasicXML[ACTIONS_XML_FILE]); }
@@ -2359,9 +2359,9 @@ namespace Database_Editor
             {
                 AddContextMenuItem("Add New", AddNewMonster, false);
             }
-            else if (dgv == dgvQuests)
+            else if (dgv == dgvTasks)
             {
-                AddContextMenuItem("Add New", AddNewQuest, false);
+                AddContextMenuItem("Add New", AddNewTask, false);
             }
             else if (dgv == dgvActions)
             {
@@ -2411,14 +2411,14 @@ namespace Database_Editor
             SaveWorldObjectInfo(_liWorldObjects);
             AddNewGenericXMLObject(tabCtl.TabPages["tabWorldObjects"], "WorldObjects", dgvWorldObjects, "colWorldObjectsID", "colWorldObjectsName", tbWorldObjectName, tbWorldObjectID, dgvWorldObjectTags, "colWorldObjectTags", cbWorldObjectType, null, new List<string>() { "Image:0-0" });
         }
-        private void AddNewQuest(object sender, EventArgs e)
+        private void AddNewTask(object sender, EventArgs e)
         {
-            SaveQuestInfo(_diBasicXML[QUEST_XML_FILE]);
-            AddNewGenericXMLObject(tabCtl.TabPages["tabQuests"], "Quests", dgvQuests, "colQuestsID", "colQuestsName", tbQuestName, tbQuestID, dgvQuestTags, "colQuestTags", cbQuestType, tbQuestDescription);
+            SaveTaskInfo(_diBasicXML[TASK_XML_FILE]);
+            AddNewGenericXMLObject(tabCtl.TabPages["tabTasks"], "Tasks", dgvTasks, "colTasksID", "colTasksName", tbTaskName, tbTaskID, dgvTaskTags, "colTaskTags", cbTaskType, tbTaskDescription);
         }
         private void AddNewAction(object sender, EventArgs e)
         {
-            SaveQuestInfo(_diBasicXML[ACTIONS_XML_FILE]);
+            SaveTaskInfo(_diBasicXML[ACTIONS_XML_FILE]);
             AddNewGenericXMLObject(tabCtl.TabPages["tabActions"], "Actions", dgvActions, "colActionsID", "colActionsName", tbActionName, tbActionID, dgvActionTags, "colActionTags", cbActionType, tbActionDescription);
         }
         private void AddNewMonster(object sender, EventArgs e)

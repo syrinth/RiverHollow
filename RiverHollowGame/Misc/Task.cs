@@ -215,7 +215,7 @@ namespace RiverHollow.Misc
                     if (_bFinishOnCompletion)
                     {
                         string questCompleteText = string.Empty;
-                        FinishQuest(ref questCompleteText);
+                        FinishTask(ref questCompleteText);
                     }
                 }
             }
@@ -234,7 +234,7 @@ namespace RiverHollow.Misc
             return rv;
         }
 
-        public void SpawnQuestMobs()
+        public void SpawnTaskMobs()
         {
             if (_spawnMob != null)
             {
@@ -242,7 +242,7 @@ namespace RiverHollow.Misc
                 map.AddMonsterByPosition(_spawnMob, map.DictionaryCharacterLayer[_sLocName]);
             }
         }
-        public void FinishQuest(ref string questCompleteText)
+        public void FinishTask(ref string questCompleteText)
         {
             Finished = true;
 
@@ -273,7 +273,7 @@ namespace RiverHollow.Misc
             }
 
             PlayerManager.TaskLog.Remove(this);
-            GUIManager.NewQuestIcon(true);
+            GUIManager.NewTaskIcon(true);
 
             if (_iCutsceneID != -1)
             {
@@ -330,12 +330,12 @@ namespace RiverHollow.Misc
             return rv;
         }
 
-        public struct QuestData
+        public struct TaskData
         {
-            [XmlElement(ElementName = "QuestType")]
+            [XmlElement(ElementName = "TaskType")]
             public TaskTypeEnum questType;
 
-            [XmlElement(ElementName = "QuestID")]
+            [XmlElement(ElementName = "TaskID")]
             public int questID;
 
             [XmlElement(ElementName = "Name")]
@@ -350,10 +350,10 @@ namespace RiverHollow.Misc
             [XmlElement(ElementName = "GoalNPC")]
             public int goalNPC;
 
-            [XmlElement(ElementName = "QuestItem")]
+            [XmlElement(ElementName = "TaskItem")]
             public int itemID;
 
-            [XmlElement(ElementName = "QuestMob")]
+            [XmlElement(ElementName = "TaskMob")]
             public int mobID;
 
             [XmlElement(ElementName = "TargetGoal")]
@@ -375,9 +375,9 @@ namespace RiverHollow.Misc
             public List<ItemData> Items;
         }
 
-        public QuestData SaveData()
+        public TaskData SaveData()
         {
-            QuestData qData = new QuestData
+            TaskData qData = new TaskData
             {
                 questType = _eTaskType,
                 questID = TaskID,
@@ -401,7 +401,7 @@ namespace RiverHollow.Misc
 
             return qData;
         }
-        public void LoadData(QuestData qData)
+        public void LoadData(TaskData qData)
         {
             //if(qData.questID != -1 )
             //{

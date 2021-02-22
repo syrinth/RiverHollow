@@ -68,11 +68,11 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Upgrades")]
             public List<UpgradeData> UpgradeData;
 
-            [XmlArray(ElementName = "PlotQuests")]
-            public List<QuestData> PlotQuestData;
+            [XmlArray(ElementName = "PlotTasks")]
+            public List<TaskData> PlotTaskData;
 
-            [XmlArray(ElementName = "QuestLog")]
-            public List<QuestData> QuestLogData;
+            [XmlArray(ElementName = "TaskLog")]
+            public List<TaskData> TaskLogData;
 
             [XmlArray(ElementName = "CurrentMissions")]
             public List<MissionData> CurrentMissions;
@@ -474,8 +474,8 @@ namespace RiverHollow.Game_Managers
                 Buildings = new List<BuildingData>(),
                 MapData = new List<MapData>(),
                 UpgradeData = new List<UpgradeData>(),
-                PlotQuestData = new List<QuestData>(),
-                QuestLogData = new List<QuestData>(),
+                PlotTaskData = new List<TaskData>(),
+                TaskLogData = new List<TaskData>(),
                 CurrentMissions = new List<MissionData>(),
                 AvailableMissions = new List<MissionData>(),
                 NPCData = new List<NPCData>(),
@@ -514,14 +514,14 @@ namespace RiverHollow.Game_Managers
                 data.UpgradeData.Add(upgData);
             }
 
-            foreach (Task q in GameManager.DIQuests.Values)
+            foreach (Task q in GameManager.DITasks.Values)
             {
-                data.PlotQuestData.Add(q.SaveData());
+                data.PlotTaskData.Add(q.SaveData());
             }
 
             foreach (Task q in PlayerManager.TaskLog)
             {
-                data.QuestLogData.Add(q.SaveData());
+                data.TaskLogData.Add(q.SaveData());
             }
 
             foreach (Mission m in MissionManager.AvailableMissions)
@@ -679,16 +679,16 @@ namespace RiverHollow.Game_Managers
             {
                 GameManager.DiUpgrades[u.upgradeID].Enabled = u.enabled;
             }
-            foreach (QuestData q in dataToLoad.PlotQuestData)
+            foreach (TaskData q in dataToLoad.PlotTaskData)
             {
-                Task plotQuest = GameManager.DIQuests[q.questID];
-                plotQuest.LoadData(q);
+                Task plotTask = GameManager.DITasks[q.questID];
+                plotTask.LoadData(q);
             }
-            foreach (QuestData q in dataToLoad.QuestLogData)
+            foreach (TaskData q in dataToLoad.TaskLogData)
             {
-                Task newQuest = new Task();
-                newQuest.LoadData(q);
-                PlayerManager.AddToQuestLog(newQuest);
+                Task newTask = new Task();
+                newTask.LoadData(q);
+                PlayerManager.AddToTaskLog(newTask);
             }
             foreach (MissionData m in dataToLoad.CurrentMissions)
             {

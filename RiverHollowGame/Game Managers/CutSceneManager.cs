@@ -107,7 +107,7 @@ namespace RiverHollow.Game_Managers
     public class Cutscene
     {
         #region CutScene Commandinformation
-        enum EnumCSCommand { Activate, Speak, Move, Face, Wait, End, Quest, Speed, Text, Background, RemoveBackground };
+        enum EnumCSCommand { Activate, Speak, Move, Face, Wait, End, Task, Speed, Text, Background, RemoveBackground };
 
         /// <summary>
         /// A class to hold the information for a CutSceneCommand step
@@ -276,8 +276,8 @@ namespace RiverHollow.Game_Managers
                                 case EnumCSCommand.Wait:
                                     _dTimer = double.Parse(sCommandData[0]);
                                     break;
-                                case EnumCSCommand.Quest:
-                                    PlayerManager.AddToQuestLog(GameManager.DIQuests[int.Parse(sCommandData[0])]);
+                                case EnumCSCommand.Task:
+                                    PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(sCommandData[0])]);
                                     bGoToNext = true;
                                     break;
                                 case EnumCSCommand.Speed:
@@ -573,11 +573,11 @@ namespace RiverHollow.Game_Managers
                     foreach (string s in currentCommand.Data)   //Need to perform the action for each character
                     {
                         string[] sCommandData = s.Split('-');   //split the data into segments
-                        if (currentCommand.Command == EnumCSCommand.Quest)
+                        if (currentCommand.Command == EnumCSCommand.Task)
                         {
                             foreach (string questID in sCommandData)
                             {
-                                PlayerManager.AddToQuestLog(GameManager.DIQuests[int.Parse(questID)]);
+                                PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(questID)]);
                             }
                         }
                         else if (currentCommand.Command == EnumCSCommand.Activate)

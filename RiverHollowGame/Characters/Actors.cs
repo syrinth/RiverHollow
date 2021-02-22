@@ -826,11 +826,11 @@ namespace RiverHollow.Characters
             if (chosenAction.StartsWith("Talk")){
                //nextText = GetDailyDialogue();
             }
-            else if (chosenAction.StartsWith("Quest"))
+            else if (chosenAction.StartsWith("Task"))
             {
-                Task q = GameManager.DIQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
-                PlayerManager.AddToQuestLog(q);
-                nextText = GetDialogEntry("Quest" + q.TaskID);
+                Task q = GameManager.DITasks[int.Parse(chosenAction.Remove(0, "Task".Length))];
+                PlayerManager.AddToTaskLog(q);
+                nextText = GetDialogEntry("Task" + q.TaskID);
             }
             else if (chosenAction.StartsWith("Donate"))
             {
@@ -2004,11 +2004,11 @@ namespace RiverHollow.Characters
                 {
                     GUIManager.OpenMainObject(new HUDInventoryDisplay(GameManager.DisplayTypeEnum.Gift));
                 }
-                else if (chosenAction.StartsWith("Quest"))
+                else if (chosenAction.StartsWith("Task"))
                 {
-                    Task q = GameManager.DIQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
-                    PlayerManager.AddToQuestLog(q);
-                    nextText = GetDialogEntry("Quest" + q.TaskID);
+                    Task q = GameManager.DITasks[int.Parse(chosenAction.Remove(0, "Task".Length))];
+                    PlayerManager.AddToTaskLog(q);
+                    nextText = GetDialogEntry("Task" + q.TaskID);
                 }
                 else if (chosenAction.StartsWith("Donate"))
                 {
@@ -2039,7 +2039,7 @@ namespace RiverHollow.Characters
 
                 if (s.Contains("%"))
                 {
-                    //Special checks are in the format %type:val% so, |%Friend:50%Join Party:Party| or |%Quest:1%Business:Quest1|
+                    //Special checks are in the format %type:val% so, |%Friend:50%Join Party:Party| or |%Task:1%Business:Task1|
                     string[] specialParse = s.Split(new[] { '%' }, StringSplitOptions.RemoveEmptyEntries);
                     string[] specialVal = specialParse[0].Split(':');
 
@@ -2049,10 +2049,10 @@ namespace RiverHollow.Characters
                     {
                         removeIt = FriendshipPoints < val;
                     }
-                    else if (specialVal[0].Equals("Quest"))
+                    else if (specialVal[0].Equals("Task"))
                     {
-                        Task newQuest = GameManager.DIQuests[val];
-                        removeIt = PlayerManager.TaskLog.Contains(newQuest) || newQuest.ReadyForHandIn || newQuest.Finished || !newQuest.CanBeGiven();
+                        Task newTask = GameManager.DITasks[val];
+                        removeIt = PlayerManager.TaskLog.Contains(newTask) || newTask.ReadyForHandIn || newTask.Finished || !newTask.CanBeGiven();
                     }
 
                     s = s.Remove(s.IndexOf(specialParse[0]) - 1, specialParse[0].Length + 2);
@@ -2238,7 +2238,7 @@ namespace RiverHollow.Characters
             {
                 if (t.ReadyForHandIn && t.GoalNPC == this)
                 {
-                    t.FinishQuest(ref taskCompleteText);
+                    t.FinishTask(ref taskCompleteText);
 
                     taskCompleteText = _diDialogue[taskCompleteText];
 
@@ -2417,7 +2417,7 @@ namespace RiverHollow.Characters
             {
                 rv = _diDialogue["ShopOpen"];
             }
-            else if (string.IsNullOrEmpty(rv))  //For if the QuestLogs check actually caught something
+            else if (string.IsNullOrEmpty(rv))  //For if the TaskLogs check actually caught something
             {
                 rv = base.GetOpeningText();
             }
@@ -2515,7 +2515,7 @@ namespace RiverHollow.Characters
             public int MerchID { get; } = -1;
             string _sDescription;
             public int MoneyCost { get; }
-            int _iQuestReq = -1;
+            int _iTaskReq = -1;
 
             List<KeyValuePair<int, int>> _items; //item, then num required
             public List<KeyValuePair<int, int>> RequiredItems { get => _items; }
@@ -2540,7 +2540,7 @@ namespace RiverHollow.Characters
                 MoneyCost = int.Parse(stringData["Cost"]);
 
                 if (stringData.ContainsKey("Text")) { _sDescription = stringData["Text"]; }
-                if (stringData.ContainsKey("QuestReq")) { _iQuestReq = int.Parse(stringData["QuestReq"]); }
+                if (stringData.ContainsKey("TaskReq")) { _iTaskReq = int.Parse(stringData["TaskReq"]); }
 
                 if (stringData.ContainsKey("Requires"))
                 {
@@ -2562,7 +2562,7 @@ namespace RiverHollow.Characters
             public bool Activated()
             {
                 bool rv = false;
-                rv = _iQuestReq == -1 || GameManager.DIQuests[_iQuestReq].Finished;
+                rv = _iTaskReq == -1 || GameManager.DITasks[_iTaskReq].Finished;
                 return rv;
             }
         }
