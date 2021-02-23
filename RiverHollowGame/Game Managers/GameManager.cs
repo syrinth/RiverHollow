@@ -41,6 +41,16 @@ namespace RiverHollow.Game_Managers
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
+        public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, StaticItem, Clothes, MonsterFood, Blueprint, Special };
+        public enum ToolEnum { Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return };
+        public enum SpecialItemEnum { None, Marriage, Class, Map, DungeonKey, Task };
+        public enum EquipmentEnum { Armor, Weapon, Accessory, Head, Wrist };
+        public enum WeaponEnum { None, Spear, Shield, Rapier, Bow, Wand, Knife, Orb, Staff };
+        public enum ArmorEnum { None, Cloth, Light, Heavy };
+        public enum ArmorSlotEnum { None, Head, Armor, Wrist };
+        public enum ClothesEnum { None, Body, Legs, Hat };
+        public enum MachineTypeEnum { Processer, CraftingMachine };
+
         public enum ActorMovementStateEnum { Idle, Walking };
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum TaskTypeEnum { None, GroupSlay, Slay, Fetch, Talk, Build };
@@ -48,8 +58,6 @@ namespace RiverHollow.Game_Managers
         public enum NPCTypeEnum { Villager, Eligible, Shopkeeper, Ranger, Worker, Mason, ShippingGremlin }
         public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade };
         public enum PotencyBonusEnum { None, Conditions, Summon};
-        public enum EquipmentEnum { Armor, Weapon, Accessory, Head, Wrist };
-        public enum SpecialItemEnum { None, Marriage, Class, Map, DungeonKey, Task };
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ActionEnum { Action, Item, Spell, MenuItem, MenuSpell, MenuAction, Move, EndTurn };
         public enum SkillTagsEnum { Bonus, Harm, Heal, Push, Pull, Remove, Retreat, Step, StatusEffectID, SummonID };
@@ -61,13 +69,8 @@ namespace RiverHollow.Game_Managers
         public enum ConditionEnum { None, KO, Poisoned, Silenced };
         public enum AdventurerTypeEnum { Magic, Martial };
         public enum ObjectTypeEnum { WorldObject, Building, ClassChanger, Machine, Container, Earth, Floor, Destructible, Gatherable, Plant, Wall, Light, DungeonObject, CombatHazard };
-        public enum WeaponEnum { None, Spear, Shield, Rapier, Bow, Wand, Knife, Orb, Staff };
-        public enum ArmorEnum { None, Cloth, Light, Heavy };
-        public enum ArmorSlotEnum { None, Head, Armor, Wrist };
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
-        public enum ToolEnum { Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return };
-        public enum ClothesEnum { None, Body, Legs, Hat };
-        public enum MachineTypeEnum { Processer, CraftingMachine };
+
         public static float Scale = NORMAL_SCALE;
         public const int TileSize = 16;
         public static int ScaledTileSize => (int)(TileSize * Scale);

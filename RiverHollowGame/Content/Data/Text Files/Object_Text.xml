@@ -399,7 +399,7 @@
     </Item>
     <Item>
       <Key>Building_6</Key>
-      <Value>[Name:Building Store]</Value>
+      <Value>[Name:Architect's]</Value>
     </Item>
     <Item>
       <Key>Building_7</Key>
@@ -412,6 +412,10 @@
     <Item>
       <Key>Building_9</Key>
       <Value>[Name:Lumber Mill]</Value>
+    </Item>
+    <Item>
+      <Key>Building_10</Key>
+      <Value>[Name:$Character_14$s House]</Value>
     </Item>
     <Item>
       <Key>Spirit_0</Key>
@@ -523,7 +527,7 @@
     </Item>
     <Item>
       <Key>Shop_2</Key>
-      <Value>[Name:Buildings]</Value>
+      <Value>[Name:Architect]</Value>
     </Item>
     <Item>
       <Key>Shop_3</Key>
@@ -1087,22 +1091,26 @@
     </Item>
     <Item>
       <Key>Item_136</Key>
-      <Value>[Name:Griselda's Orb][Description:General Use]</Value>
+      <Value>[Name:$Building_8$ Blueprint][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_137</Key>
-      <Value>[Name:Adventure Map][Description:Off to find adventures!]</Value>
+      <Value>[Name:Griselda's Orb][Description:General Use]</Value>
     </Item>
     <Item>
       <Key>Item_138</Key>
-      <Value>[Name:Mask of Marriage][Description:A mask used by the people of River hollow to proess their love to one another.]</Value>
+      <Value>[Name:Adventure Map][Description:Off to find adventures!]</Value>
     </Item>
     <Item>
       <Key>Item_139</Key>
-      <Value>[Name:Essence of ][Description:Become a ]</Value>
+      <Value>[Name:Mask of Marriage][Description:A mask used by the people of River hollow to proess their love to one another.]</Value>
     </Item>
     <Item>
       <Key>Item_140</Key>
+      <Value>[Name:Essence of ][Description:Become a ]</Value>
+    </Item>
+    <Item>
+      <Key>Item_141</Key>
       <Value>[Name:Dungeon Key][Description:A key that unlocks a dungeon door.]</Value>
     </Item>
     <Item>

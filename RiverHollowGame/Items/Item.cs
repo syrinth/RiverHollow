@@ -15,8 +15,6 @@ namespace RiverHollow.Items
 {
     public class Item
     {
-        public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, StaticItem, Clothes, MonsterFood, Special };
-
         #region properties
         protected ItemEnum _eItemType;
         public ItemEnum ItemType => _eItemType;
@@ -667,6 +665,28 @@ namespace RiverHollow.Items
                 PlayerManager.World.ModifyHealth(Health, true);
             }
             ClearGMObjects();
+        }
+    }
+
+    public class Blueprint : Item
+    {
+        private readonly int _iUnlocks;
+        public Blueprint(int id, Dictionary<string, string> stringData)
+        {
+            ImportBasics(stringData, id, 1);
+
+            Util.AssignValue(ref _iUnlocks, "Unlocks", stringData);
+
+            _bStacks = false;
+            _texTexture = DataManager.GetTexture(@"Textures\items");
+        }
+
+        /// <summary>
+        /// When called, unlocks the buildingID
+        /// </summary>
+        public void UnlockBuilding()
+        {
+            GameManager.DIBuildInfo[_iUnlocks].Unlock();
         }
     }
 

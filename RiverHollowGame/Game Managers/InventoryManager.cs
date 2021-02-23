@@ -299,6 +299,11 @@ Exit:
                 DungeonManager.AddDungeonKey();
                 return true;
             }
+            else if (itemToAdd.CompareType(ItemEnum.Blueprint))
+            {
+                ((Blueprint)itemToAdd).UnlockBuilding();
+                return true;
+            }
 
             int validRow = -1;
             int validCol = -1;

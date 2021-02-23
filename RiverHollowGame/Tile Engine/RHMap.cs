@@ -583,55 +583,61 @@ namespace RiverHollow.Tile_Engine
 
             foreach (TiledMapObject obj in _liMapObjects)
             {
-                if (obj.Name.Equals("DungeonObject"))
+                if (!loaded)
                 {
-                    TriggerObject d = DataManager.GetDungeonObject(obj.Properties, Util.SnapToGrid(obj.Position));
+                    if (obj.Name.Equals("DungeonObject"))
+                    {
+                        TriggerObject d = DataManager.GetDungeonObject(obj.Properties, Util.SnapToGrid(obj.Position));
 
-                    PlaceWorldObject(d);
-                    GameManager.AddTrigger(d);
-                 }
-                else if (obj.Name.Equals("WorldObject"))
-                {
-                    //AddMachine
-                    int objectID = int.Parse(obj.Properties["ObjectID"]);
-                    WorldObject w = DataManager.GetWorldObject(objectID, Util.SnapToGrid(obj.Position));
-                    if (PlaceWorldObject(w))
+                        PlaceWorldObject(d);
+                        GameManager.AddTrigger(d);
+                    }
+                    else if (obj.Name.Equals("WorldObject"))
                     {
-                        if (w.CompareType(ObjectTypeEnum.Machine)) { GameManager.AddMachine((Machine)w, this.Name); }
+                        //AddMachine
+                        int objectID = int.Parse(obj.Properties["ObjectID"]);
+                        WorldObject w = DataManager.GetWorldObject(objectID, Util.SnapToGrid(obj.Position));
+                        if (PlaceWorldObject(w))
+                        {
+                            if (w.CompareType(ObjectTypeEnum.Machine)) { GameManager.AddMachine((Machine)w, this.Name); }
+                        }
+                    }
+                    else if (obj.Name.Equals("Chest"))
+                    {
+                        Container c = (Container)DataManager.GetWorldObject(190);
+                        InventoryManager.InitContainerInventory(c.Inventory);
+                        c.SnapPositionToGrid(obj.Position);
+                        PlacePlayerObject(c);
+                        string[] holdSplit = obj.Properties["Holding"].Split('/');
+                        foreach (string s in holdSplit)
+                        {
+                            InventoryManager.AddToInventory(int.Parse(s), 1, false);
+                        }
+                        InventoryManager.ClearExtraInventory();
+                    }
+                    else if (obj.Name.Equals("Building") && !loaded)
+                    {
+                        Building building = DataManager.GetBuilding(int.Parse(obj.Properties["BuildingID"]));
+                        building.SnapPositionToGrid(obj.Position);
+                        AddBuilding(building, true);
+                    }
+                    else if (obj.Name.Equals("Item"))
+                    {
+                        Item item = DataManager.GetItem(int.Parse(obj.Properties["ItemID"]));
+                        item.AutoPickup = false;
+                        item.ManualPickup = true;
+                        item.OnTheMap = true;
+                        item.Position = Util.SnapToGrid(obj.Position);
+                        _liItems.Add(item);
                     }
                 }
-                else if (obj.Name.Equals("Chest"))
-                {
-                    Container c = (Container)DataManager.GetWorldObject(190);
-                    InventoryManager.InitContainerInventory(c.Inventory);
-                    c.SnapPositionToGrid(obj.Position);
-                    PlacePlayerObject(c);
-                    string[] holdSplit = obj.Properties["Holding"].Split('/');
-                    foreach (string s in holdSplit)
-                    {
-                        InventoryManager.AddToInventory(int.Parse(s), 1, false);
-                    }
-                    InventoryManager.ClearExtraInventory();
-                }
-                else if (obj.Name.Equals("SpawnPoint"))
+
+                if (obj.Name.Equals("SpawnPoint"))
                 {
                     _liMonsterSpawnPoints.Add(new MonsterSpawn(this, obj));
                 }
-                else if (obj.Name.Equals("Building") && !loaded)
-                {
-                    Building building = DataManager.GetBuilding(int.Parse(obj.Properties["BuildingID"]));
-                    building.SnapPositionToGrid(obj.Position);
-                    AddBuilding(building, true);
-                }
-                else if (obj.Name.Equals("Item"))
-                {
-                    Item item = DataManager.GetItem(int.Parse(obj.Properties["ItemID"]));
-                    item.AutoPickup = false;
-                    item.ManualPickup = true;
-                    item.OnTheMap = true;
-                    item.Position = Util.SnapToGrid(obj.Position);
-                    _liItems.Add(item);
-                }
+
+
                 //else if (obj.Name.Equals("Building"))
                 //{
                 //    Building b = ObjectManager.GetBuilding(int.Parse(obj.Properties["ID"]));
@@ -641,43 +647,46 @@ namespace RiverHollow.Tile_Engine
                 //}
             }
 
-            if(_liRandomSpawnItems.Count > 0)
+            if (!loaded)
             {
-                for (int i = 0; i < 30; i++)
+                if (_liRandomSpawnItems.Count > 0)
                 {
-                    Plant obj = (Plant)DataManager.GetWorldObject(_liRandomSpawnItems[0], new Vector2(rand.Next(1, _map.Width - 1) * TileSize, rand.Next(1, _map.Height - 1) * TileSize));
-                    obj.FinishGrowth();
-                    PlaceWorldObject(obj, true);
+                    for (int i = 0; i < 30; i++)
+                    {
+                        Plant obj = (Plant)DataManager.GetWorldObject(_liRandomSpawnItems[0], new Vector2(rand.Next(1, _map.Width - 1) * TileSize, rand.Next(1, _map.Height - 1) * TileSize));
+                        obj.FinishGrowth();
+                        PlaceWorldObject(obj, true);
+                    }
                 }
-            }
 
-            if (_liMobs.Count > 0)
-            {
-                int numMobs = rand.Next(minMobs, maxMobs);
-                while (numMobs != 0)
+                if (_liMobs.Count > 0)
                 {
-                    int chosenMob = rand.Next(0, _liMobs.Count - 1);
+                    int numMobs = rand.Next(minMobs, maxMobs);
+                    while (numMobs != 0)
+                    {
+                        int chosenMob = rand.Next(0, _liMobs.Count - 1);
 
-                    Vector2 vect = new Vector2(rand.Next(1, _map.Width - 1) * TileSize, rand.Next(1, _map.Height - 2) * TileSize);
-                    Monster newMonster = DataManager.GetMonster(_liMobs[chosenMob], vect);
-                    newMonster.CurrentMapName = _sName;
-                    AddMonster(newMonster);
+                        Vector2 vect = new Vector2(rand.Next(1, _map.Width - 1) * TileSize, rand.Next(1, _map.Height - 2) * TileSize);
+                        Monster newMonster = DataManager.GetMonster(_liMobs[chosenMob], vect);
+                        newMonster.CurrentMapName = _sName;
+                        AddMonster(newMonster);
 
-                    numMobs--;
+                        numMobs--;
+                    }
                 }
             }
 
             List<RHTile> skipTiles = new List<RHTile>();
-            foreach(RHTile[,] tileArray in DictionaryCombatTiles.Values)
+            foreach (RHTile[,] tileArray in DictionaryCombatTiles.Values)
             {
                 foreach (RHTile tile in tileArray)
                 {
                     skipTiles.Add(tile);
                 }
             }
-            foreach(TravelPoint tp in DictionaryTravelPoints.Values)
+            foreach (TravelPoint tp in DictionaryTravelPoints.Values)
             {
-                foreach(RHTile tile in GetTilesFromRectangle(tp.CollisionBox))
+                foreach (RHTile tile in GetTilesFromRectangle(tp.CollisionBox))
                 {
                     Util.AddUniquelyToList(ref skipTiles, tile);
 
@@ -687,43 +696,47 @@ namespace RiverHollow.Tile_Engine
                     }
                 }
             }
-            foreach(MonsterSpawn spawn in _liMonsterSpawnPoints)
-            {
-                foreach (KeyValuePair<string, RHTile[,]> kvp in DictionaryCombatTiles)
-                {
-                    Vector2 pos = spawn.Position;
-                    List<RHTile> path = TravelManager.FindPathToLocation(ref pos, kvp.Value[0, 0].Position, this.Name, false, true);
-                    if (path != null)
-                    {
-                        bool connected = false;
-                        foreach (RHTile tile in path)
-                        {
-                            if (!skipTiles.Contains(tile))
-                            {
-                                foreach(RHTile neighbour in tile.GetWalkableNeighbours())
-                                {
-                                    if (skipTiles.Contains(neighbour) && !path.Contains(neighbour))
-                                    {
-                                        connected = true;
-                                        break;
-                                    }
-                                }
-                                skipTiles.Add(tile);
-                                if (connected) { break; }
 
+            if (!loaded)
+            {
+                foreach (MonsterSpawn spawn in _liMonsterSpawnPoints)
+                {
+                    foreach (KeyValuePair<string, RHTile[,]> kvp in DictionaryCombatTiles)
+                    {
+                        Vector2 pos = spawn.Position;
+                        List<RHTile> path = TravelManager.FindPathToLocation(ref pos, kvp.Value[0, 0].Position, this.Name, false, true);
+                        if (path != null)
+                        {
+                            bool connected = false;
+                            foreach (RHTile tile in path)
+                            {
+                                if (!skipTiles.Contains(tile))
+                                {
+                                    foreach (RHTile neighbour in tile.GetWalkableNeighbours())
+                                    {
+                                        if (skipTiles.Contains(neighbour) && !path.Contains(neighbour))
+                                        {
+                                            connected = true;
+                                            break;
+                                        }
+                                    }
+                                    skipTiles.Add(tile);
+                                    if (connected) { break; }
+
+                                }
                             }
                         }
+                        else
+                        {
+                            int i = 0;
+                        }
                     }
-                    else
-                    {
-                        int i = 0;
-                    }
+                    skipTiles.Add(GetTileByPixelPosition(spawn.Position));
                 }
-                skipTiles.Add(GetTileByPixelPosition(spawn.Position));
-            }
 
-            SpawnMonsters();
-            SpawnResources(skipTiles);
+                SpawnMonsters();
+                SpawnResources(skipTiles);
+            }
         }
 
         public void Rollover()
@@ -1888,7 +1901,7 @@ namespace RiverHollow.Tile_Engine
 
         public void CreateBuildingEntrance(Building b)
         {
-            TravelPoint buildPoint = new TravelPoint(b.TravelBox, b.MapName, b.PersonalID);
+            TravelPoint buildPoint = new TravelPoint(b.TravelBox, b.MapName, this.Name, b.PersonalID);
             DictionaryTravelPoints.Add(b.TravelLink(), buildPoint); //TODO: FIX THIS
             CreateDoor(ref buildPoint, b.TravelBox.X, b.TravelBox.Y, b.TravelBox.Width, b.TravelBox.Height);
         }
@@ -3152,8 +3165,9 @@ namespace RiverHollow.Tile_Engine
                 _eEntranceDir = Util.ParseEnum<DirectionEnum>(obj.Properties["EntranceDir"]);
             }
         }
-        public TravelPoint(Rectangle collision, string linkedMap, int buildingID)
+        public TravelPoint(Rectangle collision, string linkedMap, string mapName, int buildingID)
         {
+            _sMapName = mapName;
             CollisionBox = collision;
             LinkedMap = linkedMap;
            // BuildingID = buildingID;

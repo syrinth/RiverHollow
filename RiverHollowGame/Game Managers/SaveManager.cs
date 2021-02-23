@@ -480,6 +480,7 @@ namespace RiverHollow.Game_Managers
                 AvailableMissions = new List<MissionData>(),
                 NPCData = new List<NPCData>(),
                 EligibleData = new List<EligibleNPCData>(),
+                BuildingInfoData = new List<BuildInfoData>(),
                 optionData = SaveOptions()
             };
 

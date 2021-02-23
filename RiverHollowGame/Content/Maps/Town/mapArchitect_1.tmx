@@ -336,7 +336,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="Travel Layer">
+ <objectgroup id="4" name="Travel Layer" visible="0">
   <object id="1" name="Entrance" x="112" y="268.002" width="16" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
@@ -344,9 +344,9 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="9" name="MapObject"/>
+ <objectgroup id="9" name="MapObject" visible="0"/>
  <objectgroup id="5" name="Character Layer">
-  <object id="17" name="NPC_14" x="35.3259" y="132.076" width="9" height="8"/>
+  <object id="17" name="Architect_Shop" x="35.3259" y="132.076" width="9" height="8"/>
   <object id="18" name="Wait" x="35.0759" y="181.617" width="11.25" height="8.5"/>
   <object id="19" name="Shop" x="32.5742" y="132.992" width="16.0034" height="25">
    <properties>

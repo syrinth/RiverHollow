@@ -27,7 +27,7 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Texture:BuildingStore][Dimensions:176-144][Base:0-80-176-64][Entrance:80-114-16-32][Unlocked]</Value>
+      <Value>[Texture:BuildingStore][Dimensions:176-144][Base:0-80-176-64][Entrance:80-114-16-32][ReqItems:0-5|60-10][Unlocked]</Value>
     </Item>
     <Item>
       <Key>7</Key>
@@ -40,6 +40,10 @@
     <Item>
       <Key>9</Key>
       <Value>[Texture:LumberMill][Dimensions:112-144][Base:0-80-112-64][Entrance:48-112-16-32][ReqItems:0-5|2-10][Unlocked]</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Texture:House_14][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][Unlocked]</Value>
     </Item>
   </Asset>
 </XnaContent>

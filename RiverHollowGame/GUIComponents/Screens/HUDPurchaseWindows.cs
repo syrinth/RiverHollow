@@ -52,240 +52,240 @@ namespace RiverHollow.GUIComponents.Screens
         }
     }
 
-    public class HUDPurchaseBuildings : GUIMainObject
-    {
-        private List<Merchandise> _liMerchandise;
-        private GUIButton _btnNext;
-        private GUIButton _btnLast;
-        private GUIButton _btnBuy;
-        private int _iCurrIndex;
+    //public class HUDPurchaseBuildings : GUIMainObject
+    //{
+    //    private List<Merchandise> _liMerchandise;
+    //    private GUIButton _btnNext;
+    //    private GUIButton _btnLast;
+    //    private GUIButton _btnBuy;
+    //    private int _iCurrIndex;
 
-        private BuildingInfoDisplay _bldgWindow;
+    //    private BuildingInfoDisplay _bldgWindow;
 
-        public HUDPurchaseBuildings(List<Merchandise> merch)
-        {
-            _liMerchandise = merch;
-            _iCurrIndex = 0;
+    //    public HUDPurchaseBuildings(List<Merchandise> merch)
+    //    {
+    //        _liMerchandise = merch;
+    //        _iCurrIndex = 0;
 
-            _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
-            AddControl(_bldgWindow);
+    //        _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
+    //        AddControl(_bldgWindow);
 
-            _btnBuy = new GUIButton("Buy", GUIManager.MINI_BTN_WIDTH, GUIManager.MINI_BTN_HEIGHT, BtnBuy);
-            _btnBuy.AnchorAndAlignToObject(_bldgWindow, SideEnum.Bottom, SideEnum.CenterX, 50);
-            AddControl(_btnBuy);
-            _bldgWindow.Load();
+    //        _btnBuy = new GUIButton("Buy", GUIManager.MINI_BTN_WIDTH, GUIManager.MINI_BTN_HEIGHT, BtnBuy);
+    //        _btnBuy.AnchorAndAlignToObject(_bldgWindow, SideEnum.Bottom, SideEnum.CenterX, 50);
+    //        AddControl(_btnBuy);
+    //        _bldgWindow.Load();
 
-            _btnLast = new GUIButton("Last", GUIManager.MINI_BTN_WIDTH, GUIManager.MINI_BTN_HEIGHT, BtnLast);
-            _btnLast.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.Bottom, 100);
-            AddControl(_btnLast);
-            _btnNext = new GUIButton("Next", GUIManager.MINI_BTN_WIDTH, GUIManager.MINI_BTN_HEIGHT, BtnNext);
-            _btnNext.AnchorAndAlignToObject(_btnBuy, SideEnum.Right, SideEnum.CenterY, 100);
-            AddControl(_btnNext);
+    //        _btnLast = new GUIButton("Last", GUIManager.MINI_BTN_WIDTH, GUIManager.MINI_BTN_HEIGHT, BtnLast);
+    //        _btnLast.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.Bottom, 100);
+    //        AddControl(_btnLast);
+    //        _btnNext = new GUIButton("Next", GUIManager.MINI_BTN_WIDTH, GUIManager.MINI_BTN_HEIGHT, BtnNext);
+    //        _btnNext.AnchorAndAlignToObject(_btnBuy, SideEnum.Right, SideEnum.CenterY, 100);
+    //        AddControl(_btnNext);
 
-            Width = _bldgWindow.Width;
-            Height = _bldgWindow.Height;
-        }
+    //        Width = _bldgWindow.Width;
+    //        Height = _bldgWindow.Height;
+    //    }
 
-        public override void Update(GameTime gTime)
-        {
-            base.Update(gTime);
-            _btnLast.Enable(_iCurrIndex != 0);
-            _btnNext.Enable(_iCurrIndex != _liMerchandise.Count - 1);
+    //    public override void Update(GameTime gTime)
+    //    {
+    //        base.Update(gTime);
+    //        _btnLast.Enable(_iCurrIndex != 0);
+    //        _btnNext.Enable(_iCurrIndex != _liMerchandise.Count - 1);
 
-            if (InputManager.CheckPressedKey(Keys.Escape))
-            {
-                GUIManager.CloseMainObject();
-            }
-        }
+    //        if (InputManager.CheckPressedKey(Keys.Escape))
+    //        {
+    //            GUIManager.CloseMainObject();
+    //        }
+    //    }
 
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
+    //    public override bool ProcessLeftButtonClick(Point mouse)
+    //    {
+    //        bool rv = false;
 
-            foreach (GUIObject c in Controls)
-            {
-                rv = c.ProcessLeftButtonClick(mouse);
-                if (rv) { break; }
-            }
+    //        foreach (GUIObject c in Controls)
+    //        {
+    //            rv = c.ProcessLeftButtonClick(mouse);
+    //            if (rv) { break; }
+    //        }
 
-            return rv;
-        }
+    //        return rv;
+    //    }
 
-        public override bool ProcessRightButtonClick(Point mouse)
-        {
-            bool rv = true;
-            if (!Contains(mouse))
-            {
-                GUIManager.CloseMainObject();
-                GameManager.Unpause();
-                rv = true;
-            }
+    //    public override bool ProcessRightButtonClick(Point mouse)
+    //    {
+    //        bool rv = true;
+    //        if (!Contains(mouse))
+    //        {
+    //            GUIManager.CloseMainObject();
+    //            GameManager.Unpause();
+    //            rv = true;
+    //        }
 
-            return rv;
-        }
+    //        return rv;
+    //    }
 
-        public override bool ProcessHover(Point mouse)
-        {
-            return true;
-        }
+    //    public override bool ProcessHover(Point mouse)
+    //    {
+    //        return true;
+    //    }
 
-        #region Buttons
-        public void BtnBuy()
-        {
-            bool create = true;
-            create = PlayerManager.Money >= _liMerchandise[_iCurrIndex].MoneyCost;
-            if (create)
-            {
-                foreach (KeyValuePair<int, int> kvp in _liMerchandise[_iCurrIndex].RequiredItems)
-                {
-                    if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
-                    {
-                        create = false;
-                    }
-                }
-            }
+    //    #region Buttons
+    //    public void BtnBuy()
+    //    {
+    //        bool create = true;
+    //        create = PlayerManager.Money >= _liMerchandise[_iCurrIndex].MoneyCost;
+    //        if (create)
+    //        {
+    //            foreach (KeyValuePair<int, int> kvp in _liMerchandise[_iCurrIndex].RequiredItems)
+    //            {
+    //                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
+    //                {
+    //                    create = false;
+    //                }
+    //            }
+    //        }
 
-            if (create)
-            {
-                CurrentMerch = _liMerchandise[_iCurrIndex];
+    //        if (create)
+    //        {
+    //            CurrentMerch = _liMerchandise[_iCurrIndex];
 
-                if (CurrentMerch.MerchType == Merchandise.ItemType.Building)
-                {
-                    RiverHollow.EnterBuildMode();
-                    GameManager.PickUpBuilding(DataManager.GetBuilding(CurrentMerch.MerchID));
-                    ConstructBuilding();
-                }
-                else
-                {
-                    DiUpgrades[CurrentMerch.MerchID].Enabled = true;
-                    CurrentMerch = null;
-                    GUIManager.CloseMainObject();
-                }
-            }
-        }
-        public void BtnLast()
-        {
-            _iCurrIndex--;
-            RemoveControl(_bldgWindow);
-            _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
-            AddControl(_bldgWindow);
-            _bldgWindow.Load();
-        }
-        public void BtnNext()
-        {
-            _iCurrIndex++;
-            RemoveControl(_bldgWindow);
-            _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
-            AddControl(_bldgWindow);
-            _bldgWindow.Load();
-        }
-        #endregion
+    //            if (CurrentMerch.MerchType == Merchandise.ItemType.Building)
+    //            {
+    //                RiverHollow.EnterBuildMode();
+    //                GameManager.PickUpBuilding(DataManager.GetBuilding(CurrentMerch.MerchID));
+    //                ConstructBuilding();
+    //            }
+    //            else
+    //            {
+    //                DiUpgrades[CurrentMerch.MerchID].Enabled = true;
+    //                CurrentMerch = null;
+    //                GUIManager.CloseMainObject();
+    //            }
+    //        }
+    //    }
+    //    public void BtnLast()
+    //    {
+    //        _iCurrIndex--;
+    //        RemoveControl(_bldgWindow);
+    //        _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
+    //        AddControl(_bldgWindow);
+    //        _bldgWindow.Load();
+    //    }
+    //    public void BtnNext()
+    //    {
+    //        _iCurrIndex++;
+    //        RemoveControl(_bldgWindow);
+    //        _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
+    //        AddControl(_bldgWindow);
+    //        _bldgWindow.Load();
+    //    }
+    //    #endregion
 
-        public class BuildingInfoDisplay : GUIObject
-        {
-            private const int margin = 64;
+    //    public class BuildingInfoDisplay : GUIObject
+    //    {
+    //        private const int margin = 64;
 
-            Building _bldg;
-            public Building Building => _bldg;
-            GUISprite _giBuilding;
-            BitmapFont _font;
-            List<GUIObject> _liReqs;
-            Merchandise _merch;
-            GUIWindow _bldgWindow;
-            GUIWindow _infoWindow;
-            GUIMoneyDisplay _gMoney;
-            GUIText _gtName;
-            GUIText _gtDesc;
+    //        Building _bldg;
+    //        public Building Building => _bldg;
+    //        GUISprite _giBuilding;
+    //        BitmapFont _font;
+    //        List<GUIObject> _liReqs;
+    //        Merchandise _merch;
+    //        GUIWindow _bldgWindow;
+    //        GUIWindow _infoWindow;
+    //        GUIMoneyDisplay _gMoney;
+    //        GUIText _gtName;
+    //        GUIText _gtDesc;
 
-            public BuildingInfoDisplay(Merchandise merch)
-            {
-                _liReqs = new List<GUIObject>();
+    //        public BuildingInfoDisplay(Merchandise merch)
+    //        {
+    //            _liReqs = new List<GUIObject>();
 
-                _merch = merch;
+    //            _merch = merch;
 
-                if (_merch.MerchType == Merchandise.ItemType.Building)
-                {
-                    _bldg = DataManager.GetBuilding(_merch.MerchID);
-                    _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
+    //            if (_merch.MerchType == Merchandise.ItemType.Building)
+    //            {
+    //                _bldg = DataManager.GetBuilding(_merch.MerchID);
+    //                _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
 
-                    float newScale = (float)(Scale * 0.75);
-                    int width = (int)(TileSize * 9 * newScale);
-                    int height = (int)(TileSize * 11 * newScale);
-                    _bldgWindow = new GUIWindow(GUIWindow.Window_1, width, height);
-                    _bldgWindow.CenterOnScreen();
-                    _bldgWindow.PositionSub(new Vector2(_bldgWindow.Width / 2 + TileSize / 2, 0));
+    //                float newScale = (float)(Scale * 0.75);
+    //                int width = (int)(TileSize * 9 * newScale);
+    //                int height = (int)(TileSize * 11 * newScale);
+    //                _bldgWindow = new GUIWindow(GUIWindow.Window_1, width, height);
+    //                _bldgWindow.CenterOnScreen();
+    //                _bldgWindow.PositionSub(new Vector2(_bldgWindow.Width / 2 + TileSize / 2, 0));
 
-                    _giBuilding = new GUISprite(_bldg.Sprite);
-                    _giBuilding.SetScale(newScale);
-                    _giBuilding.AnchorToInnerSide(_bldgWindow, SideEnum.Bottom);
-                    _giBuilding.AlignToObject(_bldgWindow, SideEnum.CenterX);
+    //                _giBuilding = new GUISprite(_bldg.Sprite);
+    //                _giBuilding.SetScale(newScale);
+    //                _giBuilding.AnchorToInnerSide(_bldgWindow, SideEnum.Bottom);
+    //                _giBuilding.AlignToObject(_bldgWindow, SideEnum.CenterX);
 
-                    _infoWindow = new GUIWindow(GUIWindow.Window_1, width, height);
-                    _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TileSize / 2);
+    //                _infoWindow = new GUIWindow(GUIWindow.Window_1, width, height);
+    //                _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TileSize / 2);
 
-                    _gtName = new GUIText(_bldg.Name);
-                    _gtName.AnchorToInnerSide(_infoWindow, SideEnum.Top);
-                    _gtName.AlignToObject(_infoWindow, SideEnum.CenterX);
+    //                _gtName = new GUIText(_bldg.Name);
+    //                _gtName.AnchorToInnerSide(_infoWindow, SideEnum.Top);
+    //                _gtName.AlignToObject(_infoWindow, SideEnum.CenterX);
 
-                    _gtDesc = new GUIText();
-                    _gtDesc.ParseAndSetText(_bldg.Description, _infoWindow.Width, 4, true);
-                    _gtDesc.AnchorToInnerSide(_infoWindow, SideEnum.Left);
-                    _gtDesc.AnchorToObject(_gtName, SideEnum.Bottom);
-                }
-                else
-                {
-                    _gtName = new GUIText(DiUpgrades[merch.MerchID].Name);
-                    int width = 100;
-                    int height = 100;
-                    int minWidth = width + margin * 2;
-                    int minHeight = height + margin * 2;
-                    _bldgWindow = new GUIWindow(GUIWindow.Window_1, minWidth, minHeight);
-                    _bldgWindow.CenterOnScreen();
+    //                _gtDesc = new GUIText();
+    //                _gtDesc.ParseAndSetText(_bldg.Description, _infoWindow.Width, 4, true);
+    //                _gtDesc.AnchorToInnerSide(_infoWindow, SideEnum.Left);
+    //                _gtDesc.AnchorToObject(_gtName, SideEnum.Bottom);
+    //            }
+    //            else
+    //            {
+    //                _gtName = new GUIText(DiUpgrades[merch.MerchID].Name);
+    //                int width = 100;
+    //                int height = 100;
+    //                int minWidth = width + margin * 2;
+    //                int minHeight = height + margin * 2;
+    //                _bldgWindow = new GUIWindow(GUIWindow.Window_1, minWidth, minHeight);
+    //                _bldgWindow.CenterOnScreen();
 
-                    _infoWindow = new GUIWindow(GUIWindow.Window_1, width, height);
-                    _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TileSize / 2);
+    //                _infoWindow = new GUIWindow(GUIWindow.Window_1, width, height);
+    //                _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TileSize / 2);
 
-                    //Placeholderimage
-                    _giBuilding = new GUISprite(new SpriteAnimations.AnimatedSprite(DataManager.FILE_WORLDOBJECTS));
-                    _giBuilding.CenterOnObject(_bldgWindow);
-                }
+    //                //Placeholderimage
+    //                _giBuilding = new GUISprite(new SpriteAnimations.AnimatedSprite(DataManager.FILE_WORLDOBJECTS));
+    //                _giBuilding.CenterOnObject(_bldgWindow);
+    //            }
 
-                Width = _bldgWindow.Width + _infoWindow.Width + TileSize;
-                Height = _bldgWindow.Height;
-                Position(_bldgWindow.Position());
-            }
+    //            Width = _bldgWindow.Width + _infoWindow.Width + TileSize;
+    //            Height = _bldgWindow.Height;
+    //            Position(_bldgWindow.Position());
+    //        }
 
-            public void Load()
-            {
-                _gMoney = new GUIMoneyDisplay(_merch.MoneyCost);
+    //        public void Load()
+    //        {
+    //            _gMoney = new GUIMoneyDisplay(_merch.MoneyCost);
 
-                for (int i = 0; i < _merch.RequiredItems.Count; i++)
-                {
-                    KeyValuePair<int, int> kvp = _merch.RequiredItems[i];
-                    GUIItem it = new GUIItem(DataManager.GetItem(kvp.Key, kvp.Value));
-                    _liReqs.Add(it);
-                }
+    //            for (int i = 0; i < _merch.RequiredItems.Count; i++)
+    //            {
+    //                KeyValuePair<int, int> kvp = _merch.RequiredItems[i];
+    //                GUIItem it = new GUIItem(DataManager.GetItem(kvp.Key, kvp.Value));
+    //                _liReqs.Add(it);
+    //            }
 
-                CreateSpacedGrid(ref _liReqs, new Vector2(_infoWindow.InnerLeft(), _infoWindow.DrawRectangle.Center.Y), _bldgWindow.Width, 3);
+    //            CreateSpacedGrid(ref _liReqs, new Vector2(_infoWindow.InnerLeft(), _infoWindow.DrawRectangle.Center.Y), _bldgWindow.Width, 3);
 
-                _gMoney.AnchorToInnerSide(_infoWindow, SideEnum.BottomRight, 10);
+    //            _gMoney.AnchorToInnerSide(_infoWindow, SideEnum.BottomRight, 10);
 
-                _bldgWindow.AddControl(_gMoney);
-            }
+    //            _bldgWindow.AddControl(_gMoney);
+    //        }
 
-            public override void Draw(SpriteBatch spriteBatch)
-            {
-                _bldgWindow.Draw(spriteBatch);
-                _infoWindow.Draw(spriteBatch);
-                _giBuilding.Draw(spriteBatch);
-                _gMoney.Draw(spriteBatch);
-                foreach (GUIItem c in _liReqs)
-                {
-                    c.Draw(spriteBatch);
-                }
-            }
-        }
-    }
+    //        public override void Draw(SpriteBatch spriteBatch)
+    //        {
+    //            _bldgWindow.Draw(spriteBatch);
+    //            _infoWindow.Draw(spriteBatch);
+    //            _giBuilding.Draw(spriteBatch);
+    //            _gMoney.Draw(spriteBatch);
+    //            foreach (GUIItem c in _liReqs)
+    //            {
+    //                c.Draw(spriteBatch);
+    //            }
+    //        }
+    //    }
+    //}
 
     public class HUDPurchaseWorkers : GUIMainObject
     {
@@ -460,7 +460,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (PlayerManager.Money >= Cost)
             {
                 PlayerManager.TakeMoney(Cost);
-                InventoryManager.AddToInventory(new Item(itemForSale));
+                InventoryManager.AddToInventory(DataManager.GetItem(itemForSale.ItemID));
 
                 rv = true;
             }

@@ -1867,7 +1867,7 @@ namespace RiverHollow.GUIComponents.Screens
                                 if (_parent.Selling())
                                 {
                                     GameManager.CurrentAdventurer = w.Worker;
-                                    GUIManager.OpenTextWindow("Really sell contract? [Yes:SellContract|No:Cancel]");
+                                    GUIManager.OpenTextWindow("Really sell contract? {Yes:SellContract|No:Cancel}");
                                 }
                                 else
                                 {

@@ -314,7 +314,7 @@ namespace RiverHollow
                 if (v.ArrivedInTown)
                 {
                     v.MoveToSpawn();
-                    //v.CalculatePathing();
+                    v.CalculatePathing();
                 }
             }
 

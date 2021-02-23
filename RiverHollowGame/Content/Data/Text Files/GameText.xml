@@ -3,35 +3,35 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>FoodConfirm</Key>
-      <Value>Really eat the {0}? [Yes:UseItem|No:Cancel]</Value>
+      <Value>Really eat the {0}? {Yes:UseItem|No:Cancel}</Value>
     </Item>
     <Item>
       <Key>GiftConfirm</Key>
-      <Value>Give {0} to {1}? [Yes:ConfirmGift|No:Cancel]</Value>
+      <Value>Give {0} to {1}? {Yes:ConfirmGift|No:Cancel}</Value>
     </Item>
     <Item>
       <Key>ItemConfirm</Key>
-      <Value>"Use {0} on who? [</Value>
+      <Value>"Use {0} on who? {</Value>
     </Item>
     <Item>
       <Key>ClassItemConfirm</Key>
-      <Value>Really use the {0}? [Yes:UseItem|No:Cancel]</Value>
+      <Value>Really use the {0}? {Yes:UseItem|No:Cancel}</Value>
     </Item>
     <Item>
       <Key>AdventurerTree</Key>
-      <Value>...[Talk:Talk|Join Party:Party]</Value>
+      <Value>...{Talk:Talk|Join Party:Party}</Value>
     </Item>
     <Item>
       <Key>Save</Key>
-      <Value>Save and end the day?[Yes:EndDay|No:Cancel]</Value>
+      <Value>Save and end the day?{Yes:EndDay|No:Cancel}</Value>
     </Item>
     <Item>
       <Key>ReallyExit</Key>
-      <Value>Are you sure?[Exit:Exit|Cancel:Cancel]</Value>
+      <Value>Are you sure?{Exit:Exit|Cancel:Cancel}</Value>
     </Item>
 	<Item>
       <Key>Rune_of_Return_Use</Key>
-      <Value>Use the {0} to the dungeon entrance? [Yes:UseItem|No:Cancel]</Value>
+      <Value>Use the {0} to the dungeon entrance? {Yes:UseItem|No:Cancel}</Value>
     </Item>
 	<Item>
       <Key>Rune_of_Return_Empty</Key>
@@ -47,7 +47,7 @@
     </Item>
     <Item>
       <Key>Item_Door</Key>
-      <Value>A strangely shaped keyhole is embedded in the door [Attempt to Open:OpenDoor|Never Mind:Cancel]</Value>
+      <Value>A strangely shaped keyhole is embedded in the door {Attempt to Open:OpenDoor|Never Mind:Cancel}</Value>
     </Item>
     <Item>
       <Key>Item_Door_Open</Key>
@@ -63,7 +63,7 @@
     </Item>
 	<Item>
       <Key>MonsterFood_Confirm</Key>
-      <Value>Set out the {0} here?[Yes:UseItem|No:Cancel]</Value>
+      <Value>Set out the {0} here?{Yes:UseItem|No:Cancel}</Value>
     </Item>
     <Item>
       <Key>MonsterFood_Yes</Key>

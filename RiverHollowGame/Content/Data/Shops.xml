@@ -28,13 +28,7 @@
     <Item>
       <Key>2</Key>
       <Value>
-        <Item>[Type:Building][BuildingID:1][Cost:100][Requires:0-1|2-1][Text:A building used to house practitioners of the magical arts]</Item>
-        <Item>[Type:Building][BuildingID:2][Cost:500][Text:A building used to house meleers]</Item>
-        <Item>[Type:Building][BuildingID:3][Cost:500][Text:Houses Scouts and Bards]</Item>
-        <Item>[Type:Building][BuildingID:4][Cost:500][Text:Houses Witches and Healers]</Item>
-        <Item>[Type:Building][BuildingID:7][Cost:500][Text:A building used to house meleers]</Item>
-        <Item>[Type:Building][BuildingID:8][Cost:500][Text:A building used to house meleers]</Item>
-        <Item>[Type:Building][BuildingID:9][Cost:500][Text:A building used to house meleers]</Item>
+        <Item>[Type:Item][ItemID:136][Cost:500]</Item>
       </Value>
     </Item>
     <Item>

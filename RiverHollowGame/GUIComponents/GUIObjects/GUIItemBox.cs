@@ -124,7 +124,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     {
                         text += adv.Name + ":" + i++ + "|";
                     }
-                    text += "Cancel:Cancel]";
+                    text += "Cancel:Cancel}";
                 }
 
                 //If we have a text string after handling, set the active item and open a new textWindow

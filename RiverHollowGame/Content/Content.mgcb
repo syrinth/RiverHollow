@@ -2572,18 +2572,6 @@
 /processorParam:Quality=Best
 /build:Sound/Stock/Effects/grinding_stone.wav
 
-#begin Textures/Buildings/BuildingStore.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Buildings/BuildingStore.png
-
 #begin Maps/Town/mapApothecary.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -2676,11 +2664,6 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapTower_3.tmx
 
-#begin Maps/Town/mapBuildingStore_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapBuildingStore_1.tmx
-
 #begin Maps/Town/mapManor_1.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -2724,4 +2707,43 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Tasks.xml
+
+#begin Textures/Buildings/House_14.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/House_14.png
+
+#begin Maps/Town/mapHouse_14_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_14_1.tmx
+
+#begin Data/Schedules/NPC_14.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Schedules/NPC_14.xml
+
+#begin Maps/Town/mapArchitect_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapArchitect_1.tmx
+
+#begin Textures/Buildings/Architect.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/Architect.png
 

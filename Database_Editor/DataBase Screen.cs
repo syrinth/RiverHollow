@@ -2430,7 +2430,7 @@ namespace Database_Editor
         private void AddNewBuilding(object sender, EventArgs e)
         {
             SaveBuildingInfo(_diBasicXML[BUILDINGS_XML_FILE]);
-            List<string> defaultTags = new List<string>() { "Texture:", "Dimensions:", "FirstBase:", "Width:", "Height:", "Entrance:"};
+            List<string> defaultTags = new List<string>() { "Texture:", "Dimensions:", "Base:", "Entrance:", "ReqItems:"};
             AddNewGenericXMLObject(tabCtl.TabPages["tabBuildings"], "Buildings", dgvBuildings, "colBuildingsID", "colBuildingsName", tbBuildingName, tbBuildingID, dgvBuildingTags, "colBuildingTags", null, tbBuildingDescription, defaultTags);
         }
         #endregion

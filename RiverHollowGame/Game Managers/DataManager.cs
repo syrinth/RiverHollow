@@ -397,6 +397,8 @@ namespace RiverHollow.Game_Managers
                         return new Food(id, liData, num);
                     case "Consumable":
                         return new Consumable(id, liData, num);
+                    case "Blueprint":
+                        return new Blueprint(id, liData);
                     case "Special":
                         switch (liData["Subtype"])
                         {

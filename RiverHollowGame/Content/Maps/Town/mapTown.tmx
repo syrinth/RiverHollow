@@ -355,9 +355,9 @@
     <property name="Outside" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="58" name="Building" x="225.917" y="434.333" width="156.833" height="124">
+  <object id="58" name="Building" x="146.584" y="481.666" width="109.5" height="124">
    <properties>
-    <property name="BuildingID" type="int" value="6"/>
+    <property name="BuildingID" type="int" value="10"/>
    </properties>
   </object>
  </objectgroup>

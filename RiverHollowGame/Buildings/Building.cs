@@ -29,8 +29,10 @@ namespace RiverHollow.Buildings
         private string _sDescription;
         public string Description => _sDescription;
 
+        private string _sTextureName;
+
         private string _sHomeMap;
-        public new string MapName => "map" + _sName.Replace(" ", "") + "_" + (Level == 0 ? "" : Level.ToString());
+        public new string MapName => "map" + _sTextureName.Replace(" ", "") + "_" + (Level == 0 ? "" : Level.ToString());
 
         public override Rectangle CollisionBox => GenerateCollisionBox();
         public Rectangle SelectionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _sprite.Width, _sprite.Height);
@@ -105,7 +107,8 @@ namespace RiverHollow.Buildings
 
             //PersonalID = PlayerManager.GetNewBuildingID();
 
-            LoadSprite(stringData, DataManager.FOLDER_BUILDINGS + stringData["Texture"]);
+            Util.AssignValue(ref _sTextureName, "Texture", stringData);
+            LoadSprite(stringData, DataManager.FOLDER_BUILDINGS + _sTextureName);
         }
 
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\worldObjects")

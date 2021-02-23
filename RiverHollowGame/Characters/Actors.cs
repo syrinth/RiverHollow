@@ -738,7 +738,7 @@ namespace RiverHollow.Characters
             string[] specialActions = null;
             Util.ProcessText(text, ref specialActions, _sName);
 
-            string[] textFromData = Util.FindTags(text);
+            string[] textFromData = text.Split(new[] { '{', '}' }, StringSplitOptions.RemoveEmptyEntries);
             string[] options = Util.FindParams(textFromData[1]);
 
             List<string> liCommands = RemoveEntries(options);
@@ -751,13 +751,13 @@ namespace RiverHollow.Characters
             }
             else
             {
-                rv = textFromData[0] + "[";   //Puts back the pre selection text
+                rv = textFromData[0] + "{";   //Puts back the pre selection text
                 foreach (string s in liCommands)
                 {
                     rv += s + "|";
                 }
                 rv = rv.Remove(rv.Length - 1);
-                rv += "]";
+                rv += "}";
             }
 
             return rv;
@@ -1165,7 +1165,7 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void GoToIdle()
+        public virtual void GoToIdle()
         {
             if (IsCritical()) { PlayAnimationVerb(VerbEnum.Critical); }
             else { PlayAnimationVerb(VerbEnum.Walk); }
@@ -2168,7 +2168,7 @@ namespace RiverHollow.Characters
                 if (ArrivedInTown)
                 {
                     MoveToSpawn();
-                 //   CalculatePathing();
+                    CalculatePathing();
                 }
             }
         }
@@ -2210,22 +2210,52 @@ namespace RiverHollow.Characters
             string currWeather = GameCalendar.GetWeatherString();
             if (_diCompleteSchedule != null && _diCompleteSchedule.Count > 0)
             {
-                string searchVal = currSeason + currDay + currWeather;
                 List<Dictionary<string, string>> listPathingForDay = null;
+                #region old
+                //string searchVal = currSeason + currDay + currWeather;
 
-                //Search to see if there exists any pathing instructions for the day.
-                //If so, set the value of listPathingForDay to the list of times/locations
-                if (_diCompleteSchedule.ContainsKey(currSeason + currDay + currWeather))
+
+                ////Search to see if there exists any pathing instructions for the day.
+                ////If so, set the value of listPathingForDay to the list of times/locations
+                //if (_diCompleteSchedule.ContainsKey(currSeason + currDay + currWeather))
+                //{
+                //    listPathingForDay = _diCompleteSchedule[currSeason + currDay + currWeather];
+                //}
+                //else if (_diCompleteSchedule.ContainsKey(currSeason + currDay))
+                //{
+                //    listPathingForDay = _diCompleteSchedule[currSeason + currDay];
+                //}
+                //else if (_diCompleteSchedule.ContainsKey(currDay))
+                //{
+                //    listPathingForDay = _diCompleteSchedule[currDay];
+                //}
+                #endregion
+
+                //Iterate through each Key in the Schedule and see if the key values are valid.
+                //Lowest index keys are highest priority. Special case keys need to be first.
+                foreach (string s in _diCompleteSchedule.Keys)
                 {
-                    listPathingForDay = _diCompleteSchedule[currSeason + currDay + currWeather];
-                }
-                else if (_diCompleteSchedule.ContainsKey(currSeason + currDay))
-                {
-                    listPathingForDay = _diCompleteSchedule[currSeason + currDay];
-                }
-                else if (_diCompleteSchedule.ContainsKey(currDay))
-                {
-                    listPathingForDay = _diCompleteSchedule[currDay];
+                    bool valid = true;
+                    string[] args = Util.FindParams(s);
+                    foreach (string arg in args)
+                    {
+                        string[] split = arg.Split(':');
+                        if (split[0].Equals("Built"))
+                        {
+                            int buildingID = int.Parse(split[1]);
+                            if (!GameManager.DIBuildInfo[buildingID].Built)
+                            {
+                                valid = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (valid)
+                    {
+                        listPathingForDay = _diCompleteSchedule[s];
+                        break;
+                    }
                 }
 
                 //If there is pathing instructions for the day, proceed
@@ -2392,6 +2422,14 @@ namespace RiverHollow.Characters
             return rv;
         }
 
+        /// <summary>
+        /// Override for CombatActor's GoToIdle method to prevent checking against stats
+        /// </summary>
+        public override void GoToIdle()
+        {
+            PlayAnimationVerb(VerbEnum.Idle);
+        }
+
         public NPCData SaveData()
         {
             NPCData npcData = new NPCData()
@@ -2506,17 +2544,7 @@ namespace RiverHollow.Characters
             if (!rv)
             {
                 List<Merchandise> _liMerchandise = new List<Merchandise>();
-                if (chosenAction.Equals("BuyBuildings"))
-                {
-                    foreach (Merchandise m in this._liMerchandise)
-                    {
-                        if ((m.MerchType == Merchandise.ItemType.Building || m.MerchType == Merchandise.ItemType.Upgrade) && m.Activated()) { _liMerchandise.Add(m); }
-                    }
-
-                    GUIManager.OpenMainObject(new HUDPurchaseBuildings(_liMerchandise));
-                    GameManager.ClearGMObjects();
-                }
-                else if (chosenAction.Equals("BuyWorkers"))
+                if (chosenAction.Equals("BuyWorkers"))
                 {
                     foreach (Merchandise m in this._liMerchandise)
                     {
@@ -2571,7 +2599,7 @@ namespace RiverHollow.Characters
         public class Merchandise
         {
             public string UniqueData { get; }
-            public enum ItemType { Building, Adventurer, Item, Upgrade }
+            public enum ItemType { Adventurer, Item, Upgrade }
             public ItemType MerchType;
             public int MerchID { get; } = -1;
             string _sDescription;
