@@ -179,7 +179,7 @@
     </Item>
     <Item>
       <Key>44</Key>
-      <Value>[Type:Machine][Image:0-224][MachineType:Processor][Width:32][Height:32][Processes:2-2][Base:2-2][Work:2-0.1]</Value>
+      <Value>[Type:Machine][Image:0-224][MachineType:Processor][Width:32][Height:32][Processes:2-0.2][Base:2-2][Work:2-0.1]</Value>
     </Item>
     <Item>
       <Key>45</Key>

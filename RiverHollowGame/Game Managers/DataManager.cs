@@ -371,7 +371,8 @@ namespace RiverHollow.Game_Managers
             if (_diItemText[textKey].ContainsKey(key)) { value = _diItemText[textKey][key];  }
             else { value = string.Empty;}
 
-            value = Util.ProcessText(value);
+            string[] specialActions = null;
+            value = Util.ProcessText(value, ref specialActions);
         }
         public static Item GetItem(int id)
         {

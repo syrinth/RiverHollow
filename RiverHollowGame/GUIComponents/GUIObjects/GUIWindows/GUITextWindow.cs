@@ -123,21 +123,28 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         /// </summary>
         protected void SyncObjects()
         {
-            if (GameManager.CurrentNPC != null)
-            {
-                TalkingActor talker = GameManager.CurrentNPC;
-                _giPortrait = new GUIImage(talker.PortraitRectangle, talker.PortraitRectangle.Width, talker.PortraitRectangle.Height, talker.Portrait);
-                _giPortrait.SetScale(GameManager.Scale);
-                _giPortrait.AnchorToInnerSide(this, SideEnum.Left);
-                _giPortrait.AnchorToObject(this, SideEnum.Top);
-                AddControl(_giPortrait);
-            }
+            DisplayCharacterPortrait();
 
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
 
             DisplayDialogueFinishedIcon();
 
             AnchorToScreen(SideEnum.Bottom, SpaceFromBottom);
+        }
+
+        protected void DisplayCharacterPortrait()
+        {
+            if (GameManager.CurrentNPC != null)
+            {
+                RemoveControl(_giPortrait);
+                TalkingActor talker = GameManager.CurrentNPC;
+                talker.DeQueueActorFace();
+                _giPortrait = new GUIImage(talker.GetPortraitRectangle(), talker.GetPortraitRectangle().Width, talker.GetPortraitRectangle().Height, talker.Portrait);
+                _giPortrait.SetScale(GameManager.Scale);
+                _giPortrait.AnchorToInnerSide(this, SideEnum.Left);
+                _giPortrait.AnchorToObject(this, SideEnum.Top);
+                AddControl(_giPortrait);
+            }
         }
 
         public override void Update(GameTime gTime)
@@ -208,6 +215,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
             else
             {
+                DisplayCharacterPortrait();
                 if (!NextText())
                 {
                     rv = GUIManager.CloseTextWindow();

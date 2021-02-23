@@ -754,12 +754,12 @@ namespace RiverHollow.Items
                 public int Input { get; private set; }
                 public int InputNum { get; private set; }
                 public int Output { get; private set; }
-                public int ProcessingTime { get; private set; }
+                public double ProcessingTime { get; private set; }
 
                 public ProcessRecipe(string[] data)
                 {
                     Input = int.Parse(data[0]);
-                    ProcessingTime = int.Parse(data[1]);
+                    ProcessingTime = double.Parse(data[1]);
 
                     Item processedItem = DataManager.GetItem(Input);
                     Output = processedItem.RefinesInto.Key;

@@ -344,10 +344,8 @@ namespace RiverHollow
 
         public static void EnterBuildMode()
         {
-            SetGameScale(2);
             GUIManager.CloseMainObject();
             GameManager.Scry();
-            Camera.UnsetObserver(Vector2.Zero);
             ConstructBuilding();
         }
     }

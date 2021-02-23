@@ -44,7 +44,7 @@ namespace RiverHollow.Characters
         protected static string _sPortraitFolder = DataManager.FOLDER_ACTOR + @"Portraits\";
         protected static string _sNPsCFolder = DataManager.FOLDER_ACTOR + @"NPCs\";
 
-        protected ActorStateEnum _eMovementState = ActorStateEnum.Idle;
+        protected ActorMovementStateEnum _eMovementState = ActorMovementStateEnum.Idle;
 
         protected ActorEnum _eActorType = ActorEnum.Actor;
         public ActorEnum ActorType => _eActorType;
@@ -381,10 +381,10 @@ namespace RiverHollow.Characters
             bool walk = false;
 
             DirectionEnum initialFacing = Facing;
-            ActorStateEnum initialState = _eMovementState;
+            ActorMovementStateEnum initialState = _eMovementState;
             if (direction.Length() != 0)
             {
-                SetMovementState(ActorStateEnum.Walking);
+                SetMovementState(ActorMovementStateEnum.Walking);
                 walk = true;
                 if (Math.Abs((int)direction.X) > Math.Abs((int)direction.Y))
                 {
@@ -411,7 +411,7 @@ namespace RiverHollow.Characters
                     }
                 }
             }
-            else { SetMovementState(ActorStateEnum.Idle); }
+            else { SetMovementState(ActorMovementStateEnum.Idle); }
 
             if (initialState != _eMovementState || initialFacing != Facing)
             {
@@ -419,7 +419,7 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void SetMovementState(ActorStateEnum e)
+        public void SetMovementState(ActorMovementStateEnum e)
         {
             _eMovementState = e;
         }
@@ -610,11 +610,10 @@ namespace RiverHollow.Characters
         protected const int PortraitWidth = 160;
         protected const int PortraitHeight = 192;
 
+        protected ActorFaceEnum _eFaceEnum;
+        protected List<ActorFaceEnum> _liActorFaceQueue;
         protected string _sPortrait;
         public string Portrait => _sPortrait;
-
-        protected Rectangle _rPortrait;
-        public Rectangle PortraitRectangle => _rPortrait;
 
         protected Dictionary<string, string> _diDialogue;
 
@@ -626,9 +625,10 @@ namespace RiverHollow.Characters
         public TalkingActor() : base()
         {
             _bCanTalk = true;
+            _liActorFaceQueue = new List<ActorFaceEnum>();
         }
 
-        public virtual void StopTalking() { }
+        public virtual void StopTalking() { ResetActorFace(); }
 
         /// <summary>
         /// Used when already talking to an NPC, gets the next dialog tag in the conversation
@@ -642,8 +642,8 @@ namespace RiverHollow.Characters
             {
                 text = _diDialogue[dialogTag];
             }
-            text = Util.ProcessText(text, _sName);
-            GUIManager.OpenTextWindow(text, this, true, true);
+
+            ProcessTextAndOpenDialogue(text);
         }
 
         /// <summary>
@@ -652,12 +652,8 @@ namespace RiverHollow.Characters
         /// <param name="facePlayer">Whether the NPC should face the player. Mainly used to avoid messing up a cutscene</param>
         public virtual void Talk(bool facePlayer = true)
         {
-            string text = GetOpeningText();
-
             FacePlayer(true);
-
-            text = Util.ProcessText(text, _sName);
-            GUIManager.OpenTextWindow(text, this, true, true);
+            ProcessTextAndOpenDialogue(GetOpeningText());
         }
         protected void FacePlayer(bool facePlayer)
         {
@@ -695,8 +691,31 @@ namespace RiverHollow.Characters
 
         public void TalkCutscene(string cutsceneLine)
         {
-            string text = cutsceneLine;
-            text = Util.ProcessText(text, _sName);
+            ProcessTextAndOpenDialogue(cutsceneLine);
+        }
+
+        private void ProcessTextAndOpenDialogue(string text)
+        {
+            string[] specialActions = null;
+            text = Util.ProcessText(text, ref specialActions, _sName);
+
+            //Index 0 is going to be the actual processed text, so we need to skip it
+            if (specialActions.Length > 1)
+            {
+                for (int i = 1; i <= specialActions.Length - 1; i++)
+                {
+                    string[] tagInfo = specialActions[i].Split(':');
+                    if (tagInfo[0].Equals("Task"))
+                    {
+                        PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(tagInfo[1])]);
+                    }
+                    if (tagInfo[0].Equals("Face"))
+                    {
+                        QueueActorFace(tagInfo[1]);
+                    }
+                }
+            }
+
             GUIManager.OpenTextWindow(text, this, true, true);
         }
 
@@ -716,7 +735,8 @@ namespace RiverHollow.Characters
         public string GetSelectionText()
         {
             string text = _diDialogue["Selection"];
-            Util.ProcessText(text, _sName);
+            string[] specialActions = null;
+            Util.ProcessText(text, ref specialActions, _sName);
 
             string[] textFromData = Util.FindTags(text);
             string[] options = Util.FindParams(textFromData[1]);
@@ -808,7 +828,8 @@ namespace RiverHollow.Characters
         /// <param name="entry">The key of the entry to get from the Dictionary</param>
         /// <returns>The processed string text for the entry </returns>
         public virtual string GetDialogEntry(string entry) {
-            return Util.ProcessText(_diDialogue.ContainsKey(entry) ? Util.ProcessText(_diDialogue[entry], _sName) : string.Empty);
+            string[] specialActions = null;
+            return Util.ProcessText(_diDialogue.ContainsKey(entry) ? Util.ProcessText(_diDialogue[entry], ref specialActions, _sName) : string.Empty, ref specialActions);
         }
 
         /// <summary>
@@ -870,6 +891,48 @@ namespace RiverHollow.Characters
             }
 
             return rv;
+        }
+
+        /// <summary>
+        /// Creates the queue of faces the TalkingActor will progress through as they talk.
+        /// </summary>
+        /// <param name="value">A '-' delimited list of facial expressions corresponding to ActoEnumFaces</param>
+        public void QueueActorFace(string value)
+        {
+            foreach (string s in value.Split('-'))
+            {
+                _liActorFaceQueue.Add(Util.ParseEnum<ActorFaceEnum>(s));
+            }
+        }
+
+        /// <summary>
+        /// Removes the first entry from list of queued faces and sets it as the current face.
+        /// Calling this again on an empty list resets the face to default
+        /// </summary>
+        public void DeQueueActorFace()
+        {
+            if(_liActorFaceQueue.Count == 0) { ResetActorFace(); }
+            else {
+                _eFaceEnum = _liActorFaceQueue[0];
+                _liActorFaceQueue.RemoveAt(0);
+            }
+        }
+
+        /// <summary>
+        /// Clears the FaceQueue and resets the face to Default
+        /// </summary>
+        public void ResetActorFace()
+        {
+            _liActorFaceQueue.Clear();
+            _eFaceEnum = ActorFaceEnum.Default;
+        }
+
+        public Rectangle GetPortraitRectangle()
+        {
+            int startX = 0;
+            int width = 48;
+            startX += (int)_eFaceEnum * width;
+            return new Rectangle(startX, 0, width, 60);
         }
     }
 
@@ -1838,7 +1901,6 @@ namespace RiverHollow.Characters
             _sName = n.Name;
             _diDialogue = n._diDialogue;
             _sPortrait = n.Portrait;
-            _rPortrait = n._rPortrait;
             //_rPortrait = new Rectangle(0, 0, 48, 60);
             //_sPortrait = _sAdventurerFolder + "WizardPortrait";
 
@@ -1876,7 +1938,6 @@ namespace RiverHollow.Characters
 
             _bActive = !stringData.ContainsKey("Inactive");
             if (stringData.ContainsKey("Type")) { _eNPCType = Util.ParseEnum<NPCTypeEnum>(stringData["Type"]); }
-            if (stringData.ContainsKey("PortRow")) { _rPortrait = new Rectangle(0, 0, 48, 60); }
             //if (data.ContainsKey("HomeMap"))
             //{
             //    _iHouseBuildingID = data["HomeMap"];
@@ -2811,7 +2872,6 @@ namespace RiverHollow.Characters
         {
             _iID = id;
 
-            _rPortrait = new Rectangle(0, 0, 48, 60);
             _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Adventurer", id.ToString("00"));
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
 
@@ -2857,7 +2917,8 @@ namespace RiverHollow.Characters
 
         public override string GetDialogEntry(string entry)
         {
-            return Util.ProcessText(DataManager.GetAdventurerDialogue(_iID, entry), _sName);
+            string[] specialActions = null;
+            return Util.ProcessText(DataManager.GetAdventurerDialogue(_iID, entry), ref specialActions, _sName);
         }
         
         public override string GetOpeningText()
@@ -3470,6 +3531,7 @@ namespace RiverHollow.Characters
         /// </summary>
         public override void StopTalking()
         {
+            base.StopTalking();
             _sprBody.PlayAnimation(AnimationEnum.ObjectAction2);
         }
 

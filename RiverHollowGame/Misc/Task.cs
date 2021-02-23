@@ -305,9 +305,9 @@ namespace RiverHollow.Misc
         public string GetProgressString()
         {
             string rv = string.Empty;
-            if (_bHideGoal) {
-                rv = "???";
-            }
+
+            if (_bHideGoal) { rv = "???"; }
+            else if (ReadyForHandIn) { rv = "Speak to " + GoalNPC.Name; }
             else
             {
                 switch (_eTaskType)
@@ -320,6 +320,9 @@ namespace RiverHollow.Misc
                         break;
                     case TaskTypeEnum.Slay:
                         rv = _questMob.Name + " Defeated: " + TargetsAccomplished + "/" + RequiredItemAmount;
+                        break;
+                    case TaskTypeEnum.Build:
+                        rv = "Build " + GameManager.DIBuildInfo[_iTargetBuildingID].Name;
                         break;
                     case TaskTypeEnum.Talk:
                         rv = "Speak to " + GoalNPC.Name;

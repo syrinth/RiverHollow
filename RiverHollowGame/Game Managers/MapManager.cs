@@ -160,7 +160,7 @@ namespace RiverHollow.Game_Managers
         {
             GUIManager.BeginFadeOut();
 
-            PlayerManager.World.SetMovementState(ActorStateEnum.Idle);
+            PlayerManager.World.SetMovementState(ActorMovementStateEnum.Idle);
             PlayerManager.World.PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
             _newMapInfo = new NewMapInfo(newMap, playerPos, b);
         }

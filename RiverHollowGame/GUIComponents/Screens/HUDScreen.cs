@@ -666,7 +666,6 @@ namespace RiverHollow.GUIComponents.Screens
                 GUIText _gName;
                 GUIText _gGoalProgress;
                 public Task TheTask { get; private set; }
-                public bool ClearThis;
                 public delegate void ClickDelegate(Task q);
                 private ClickDelegate _delAction;
 

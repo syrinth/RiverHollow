@@ -144,7 +144,7 @@ namespace RiverHollow.Utilities
             return new Rectangle((int)x, (int)y, (int)width, (int)height);
         }
 
-        public static string ProcessText(string text, string name = "")
+        public static string ProcessText(string text, ref string[] specialActions, string name = "")
         {
             string rv = string.Empty;
 
@@ -168,19 +168,10 @@ namespace RiverHollow.Utilities
                 }
             }
 
-            specialSections = Util.FindTags(rv);
-            if (specialSections.Length > 1)
-            {
-                rv = specialSections[0];
-                for(int i = 1; i <= specialSections.Length - 1; i++)
-                {
-                    string[] tagInfo = specialSections[i].Split(':');
-                    if (tagInfo[0].Equals("Task"))
-                    {
-                        PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(tagInfo[1])]);
-                    }
-                }
-            }
+            specialActions = Util.FindTags(rv);
+
+            //This cuts off any of the special actions we've found so they are not displayed
+            if (specialActions.Length > 1) { rv = specialActions[0]; }
 
             if (string.IsNullOrEmpty(rv)) { rv = text; }
             return rv;
