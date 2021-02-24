@@ -34,7 +34,6 @@ namespace RiverHollow.Tile_Engine
         public string Name { get => _sName.Replace(@"Maps\", ""); } //Fuck off with that path bullshit
 
         public bool IsCombatMap => _liMonsterSpawnPoints.Count > 0;
-        public bool IsBuilding { get; private set; }
         public string DungeonName { get; private set; } = string.Empty;
         public bool IsDungeon => !string.IsNullOrEmpty(DungeonName);
         public bool IsTown { get; private set; }
@@ -119,7 +118,6 @@ namespace RiverHollow.Tile_Engine
             _renderer = map._renderer;
             _arrTiles = map._arrTiles;
 
-            IsBuilding = _map.Properties.ContainsKey("Building");
             IsTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
 
@@ -167,7 +165,6 @@ namespace RiverHollow.Tile_Engine
                     _arrTiles[j, i].SetProperties(this);
                 }
             }
-            IsBuilding = _map.Properties.ContainsKey("Building");
             IsTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
 
@@ -2034,8 +2031,8 @@ namespace RiverHollow.Tile_Engine
             //Call AddRange to ensure that it has the actual tiles, and isn't just a copy of the list
             o.Tiles.AddRange(tiles);                    
 
-            //Adds the object to the list of player objects
-            if (!_liPlacedWorldObjects.Contains(o))
+            //Adds the object to the list of player objects unless it is a Building
+            if (!o.CompareType(ObjectTypeEnum.Building) && !_liPlacedWorldObjects.Contains(o))
             {
                 _liPlacedWorldObjects.Add(o);
             }
@@ -2309,57 +2306,55 @@ namespace RiverHollow.Tile_Engine
                 earth = new List<FloorData>()
             };
 
-            if (!this.IsBuilding)
+
+            foreach (WorldObject wObj in _liPlacedWorldObjects)
             {
-                foreach (WorldObject wObj in _liPlacedWorldObjects)
+                if (wObj.CompareType(ObjectTypeEnum.Machine))
                 {
-                    if (wObj.CompareType(ObjectTypeEnum.Machine))
+                    mapData.machines.Add(((Machine)wObj).SaveData());
+                }
+                else if (wObj.CompareType(ObjectTypeEnum.Container))
+                {
+                    mapData.containers.Add(((Container)wObj).SaveData());
+                }
+                else if (wObj.CompareType(ObjectTypeEnum.Plant))
+                {
+                    mapData.plants.Add(((Plant)wObj).SaveData());
+                }
+                else if (wObj.CompareType(ObjectTypeEnum.ClassChanger))
+                {
+                    WorldObjectData d = new WorldObjectData
                     {
-                        //mapData.machines.Add(((Machine)wObj).SaveData());
-                    }
-                    else if (wObj.CompareType(ObjectTypeEnum.Container))
+                        worldObjectID = wObj.ID,
+                        x = (int)((ClassChanger)wObj).MapPosition.X,
+                        y = (int)((ClassChanger)wObj).MapPosition.Y
+                    };
+                    mapData.worldObjects.Add(d);
+                }
+                else
+                {
+                    WorldObjectData d = new WorldObjectData
                     {
-                        mapData.containers.Add(((Container)wObj).SaveData());
-                    }
-                    else if (wObj.CompareType(ObjectTypeEnum.Plant))
+                        worldObjectID = wObj.ID,
+                        x = (int)wObj.MapPosition.X,
+                        y = (int)wObj.MapPosition.Y
+                    };
+                    mapData.worldObjects.Add(d);
+                }
+            }
+            foreach (RHTile tile in TilledTiles)
+            {
+                Floor f = tile.Flooring;
+                if (f != null)
+                {
+                    if (f.CompareType(ObjectTypeEnum.Earth))
                     {
-                        mapData.plants.Add(((Plant)wObj).SaveData());
-                    }
-                    else if (wObj.CompareType(ObjectTypeEnum.ClassChanger))
-                    {
-                        WorldObjectData d = new WorldObjectData
-                        {
-                            worldObjectID = wObj.ID,
-                            x = (int)((ClassChanger)wObj).MapPosition.X,
-                            y = (int)((ClassChanger)wObj).MapPosition.Y
-                        };
-                        mapData.worldObjects.Add(d);
+                        Earth e = (Earth)f;
+                        mapData.earth.Add(e.SaveData());
                     }
                     else
                     {
-                        WorldObjectData d = new WorldObjectData
-                        {
-                            worldObjectID = wObj.ID,
-                            x = (int)wObj.MapPosition.X,
-                            y = (int)wObj.MapPosition.Y
-                        };
-                        mapData.worldObjects.Add(d);
-                    }
-                }
-                foreach (RHTile tile in TilledTiles)
-                {
-                    Floor f = tile.Flooring;
-                    if(f != null)
-                    {
-                        if (f.CompareType(ObjectTypeEnum.Earth))
-                        {
-                            Earth e = (Earth)f;
-                            mapData.earth.Add(e.SaveData());
-                        }
-                        else
-                        {
-                            mapData.floors.Add(f.SaveData());
-                        }
+                        mapData.floors.Add(f.SaveData());
                     }
                 }
             }
@@ -2404,7 +2399,7 @@ namespace RiverHollow.Tile_Engine
             foreach (MachineData mac in data.machines)
             {
                 Machine theMachine = (Machine)DataManager.GetWorldObject(mac.ID);
-                //theMachine.LoadData(mac);
+                theMachine.LoadData(mac);
                 PlacePlayerObject(theMachine);
             }
             foreach (PlantData plantData in data.plants)

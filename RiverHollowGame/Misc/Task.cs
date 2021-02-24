@@ -33,7 +33,7 @@ namespace RiverHollow.Misc
 
         bool _bFinishOnCompletion;
         int _iActivateID;
-        bool _bHideGoal;
+        bool _bHiddenGoal;
         #region Rewards
         private int _iUnlockBuildingID = -1;
         private int _iRewardMoney = 0;
@@ -152,7 +152,7 @@ namespace RiverHollow.Misc
             Util.AssignValue(ref _bFinishOnCompletion, "Immediate", stringData);
             Util.AssignValue(ref _iActivateID, "Activate", stringData);
             Util.AssignValue(ref _iCutsceneID, "Cutscene", stringData);
-            Util.AssignValue(ref _bHideGoal, "HideGoal", stringData);
+            Util.AssignValue(ref _bHiddenGoal, "HideGoal", stringData);
         }
 
         public bool AttemptProgress(Villager a)
@@ -306,7 +306,7 @@ namespace RiverHollow.Misc
         {
             string rv = string.Empty;
 
-            if (_bHideGoal) { rv = "???"; }
+            if (_bHiddenGoal) { rv = "???"; }
             else if (ReadyForHandIn) { rv = "Speak to " + GoalNPC.Name; }
             else
             {
@@ -339,7 +339,7 @@ namespace RiverHollow.Misc
             public TaskTypeEnum questType;
 
             [XmlElement(ElementName = "TaskID")]
-            public int questID;
+            public int taskID;
 
             [XmlElement(ElementName = "Name")]
             public string name;
@@ -359,6 +359,9 @@ namespace RiverHollow.Misc
             [XmlElement(ElementName = "TaskMob")]
             public int mobID;
 
+            [XmlElement(ElementName = "TaskBuilding")]
+            public int targetBuildingID;
+
             [XmlElement(ElementName = "TargetGoal")]
             public int targetGoal;
 
@@ -371,11 +374,17 @@ namespace RiverHollow.Misc
             [XmlElement(ElementName = "Finished")]
             public bool finished;
 
+            [XmlElement(ElementName = "HiddenGoal")]
+            public bool hiddenGoal;
+
             [XmlElement(ElementName = "RewardMoney")]
             public int rewardMoney;
 
             [XmlArray(ElementName = "RewardItems")]
             public List<ItemData> Items;
+
+            [XmlElement(ElementName = "RewardUnlock")]
+            public int unlockBuildingID;
         }
 
         public TaskData SaveData()
@@ -383,17 +392,19 @@ namespace RiverHollow.Misc
             TaskData qData = new TaskData
             {
                 questType = _eTaskType,
-                questID = TaskID,
+                taskID = TaskID,
                 name = _sName,
                 description = _sDescription,
                 goalNPC = GoalNPC != null ? GoalNPC.ID : -1,
-                itemID = _targetItem != null  ? _targetItem.ItemID : -1,
+                itemID = _targetItem != null ? _targetItem.ItemID : -1,
                 mobID = _questMob != null ? _questMob.ID : -1,
+                targetBuildingID = _iTargetBuildingID,
+                unlockBuildingID = _iUnlockBuildingID,
                 targetGoal = RequiredItemAmount, 
+                hiddenGoal = _bHiddenGoal,
                 accomplished = TargetsAccomplished, 
                 readyForHandIn = ReadyForHandIn,
                 finished = Finished
-                //rewardMoney = _re
             };
 
             qData.Items = new List<ItemData>();
@@ -406,32 +417,28 @@ namespace RiverHollow.Misc
         }
         public void LoadData(TaskData qData)
         {
-            //if(qData.questID != -1 )
-            //{
-            //    Finished = qData.finished;
-            //}
-            //else
-            //{
-                _eTaskType = qData.questType;
-                TaskID = qData.questID;
-                _sName = qData.name;
-                _sDescription = qData.description;
-                GoalNPC = qData.goalNPC != -1 ? DataManager.DiNPC[qData.goalNPC] : null;
-                _targetItem = qData.itemID != -1 ? DataManager.GetItem(qData.itemID) : null;
-                _questMob = qData.mobID != -1 ? DataManager.GetMonsterByIndex(qData.mobID) : null;
-                RequiredItemAmount = qData.targetGoal;
-                TargetsAccomplished = qData.accomplished;
-                ReadyForHandIn = qData.readyForHandIn;
-                Finished = qData.finished;
+            _eTaskType = qData.questType;
+            TaskID = qData.taskID;
+            _sName = qData.name;
+            _sDescription = qData.description;
+            GoalNPC = qData.goalNPC != -1 ? DataManager.DiNPC[qData.goalNPC] : null;
+            _targetItem = qData.itemID != -1 ? DataManager.GetItem(qData.itemID) : null;
+            _questMob = qData.mobID != -1 ? DataManager.GetMonsterByIndex(qData.mobID) : null;
+            _iTargetBuildingID = qData.targetBuildingID;
+            _iUnlockBuildingID = qData.unlockBuildingID;
+            RequiredItemAmount = qData.targetGoal;
+            _bHiddenGoal = qData.hiddenGoal;
+            TargetsAccomplished = qData.accomplished;
+            ReadyForHandIn = qData.readyForHandIn;
+            Finished = qData.finished;
 
-                foreach (ItemData i in qData.Items)
-                {
-                    Item newItem = DataManager.GetItem(i.itemID, i.num);
+            foreach (ItemData i in qData.Items)
+            {
+                Item newItem = DataManager.GetItem(i.itemID, i.num);
 
-                    if (newItem != null) { newItem.ApplyUniqueData(i.strData); }
-                    LiRewardItems.Add(newItem);
-                }
-            //}
+                if (newItem != null) { newItem.ApplyUniqueData(i.strData); }
+                LiRewardItems.Add(newItem);
+            }
         }
     }
 }

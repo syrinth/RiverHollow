@@ -682,13 +682,17 @@ namespace RiverHollow.Game_Managers
             }
             foreach (TaskData q in dataToLoad.PlotTaskData)
             {
-                Task plotTask = GameManager.DITasks[q.questID];
+                Task plotTask = GameManager.DITasks[q.taskID];
                 plotTask.LoadData(q);
             }
             foreach (TaskData q in dataToLoad.TaskLogData)
             {
                 Task newTask = new Task();
-                newTask.LoadData(q);
+
+                //We've already loaded plotQuests, no need to redo it
+                if (q.taskID == -1) { newTask.LoadData(q); }
+                else { newTask = GameManager.DITasks[q.taskID]; }
+
                 PlayerManager.AddToTaskLog(newTask);
             }
             foreach (MissionData m in dataToLoad.CurrentMissions)

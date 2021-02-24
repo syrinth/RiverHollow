@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Task_0</Key>
-      <Value>[Name:Build a $Building_9$][Description:$Character_14$ want you to build a $Building_9$]</Value>
+      <Value>[Name:You Gotta Mill][Description:$Character_14$ want you to build a $Building_9$]</Value>
     </Item>
     <Item>
       <Key>Task_1</Key>
@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>Task_3</Key>
-      <Value>[Name:You gotta mill][Description:$Character_14$ want you to build a $Building_7$]</Value>
+      <Value>[Name:Room At The Inn?][Description:$Character_14$ want you to build a $Building_7$]</Value>
     </Item>
     <Item>
       <Key>Character_0</Key>

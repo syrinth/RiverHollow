@@ -205,6 +205,7 @@ namespace RiverHollow.Game_Managers
             int mapWidth = Maps[MapManager.HomeMap].MapWidthTiles;
             int mapHeight = Maps[MapManager.HomeMap].MapHeightTiles;
             RHRandom rand = RHRandom.Instance;
+
             //LoadMap1
             if (!loaded)
             {

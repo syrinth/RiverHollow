@@ -55,7 +55,6 @@ namespace RiverHollow.Buildings
 
         public Building(int id, Dictionary<string, string> stringData)
         {
-            
             PlacedObjects = new List<WorldObject>();
             ImportBasics(id, stringData);
         }
@@ -63,6 +62,8 @@ namespace RiverHollow.Buildings
         private void ImportBasics(int id, Dictionary<string, string> stringData)
         {
             _iID = id;
+            _eObjectType = ObjectTypeEnum.Building;
+
             DataManager.GetTextData("Building", _iID, ref _sName, "Name");
             DataManager.GetTextData("Building", _iID, ref _sDescription, "Description");
 

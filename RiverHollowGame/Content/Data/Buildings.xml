@@ -27,7 +27,7 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Texture:BuildingStore][Dimensions:176-144][Base:0-80-176-64][Entrance:80-114-16-32][ReqItems:0-5|60-10][Unlocked]</Value>
+      <Value>[Texture:Architect][Dimensions:176-144][Base:0-80-176-64][Entrance:80-114-16-32][ReqItems:0-5|60-10][Unlocked]</Value>
     </Item>
     <Item>
       <Key>7</Key>

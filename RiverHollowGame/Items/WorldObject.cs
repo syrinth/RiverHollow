@@ -567,30 +567,30 @@ namespace RiverHollow.Items
             public bool IsProcessor() { return _eMachineType == MachineTypeEnum.Processer; }
             public bool IsCraftingMachine() { return _eMachineType == MachineTypeEnum.CraftingMachine; }
 
-            //public MachineData SaveData()
-            //{
-            //    MachineData m = new MachineData
-            //    {
-            //        ID = this.ID,
-            //        x = (int)this.MapPosition.X,
-            //        y = (int)this.MapPosition.Y,
-            //        processedTime = this.ProcessedTime,
-            //        currentItemID = (this.CurrentlyProcessing == null) ? _iCurrentlyMaking : this.CurrentlyProcessing.Input,
-            //        heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID
-            //    };
+            public MachineData SaveData()
+            {
+                MachineData m = new MachineData
+                {
+                    ID = this.ID,
+                    x = (int)this.MapPosition.X,
+                    y = (int)this.MapPosition.Y,
+                    processedTime = this._dProcessedTime,
+                   // currentItemID = (this.p == null) ? _iCurrentlyMaking : this.CurrentlyProcessing.Input,
+                    heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID
+                };
 
-            //    return m;
-            //}
-            //public void LoadData(MachineData mac)
-            //{
-            //    _iID = mac.ID;
-            //    SnapPositionToGrid(new Vector2(mac.x, mac.y));
-            //    _dProcessedTime = mac.processedTime;
-            //    _iCurrentlyMaking = mac.currentItemID;
-            //    _heldItem = DataManager.GetItem(mac.heldItemID);
+                return m;
+            }
+            public void LoadData(MachineData mac)
+            {
+                _iID = mac.ID;
+                SnapPositionToGrid(new Vector2(mac.x, mac.y));
+                _dProcessedTime = mac.processedTime;
+                _iCurrentlyMaking = mac.currentItemID;
+                _heldItem = DataManager.GetItem(mac.heldItemID);
 
-            //    if (CurrentlyProcessing != null) { _sprite.PlayAnimation(AnimationEnum.ObjectIdle); }
-            //}
+               // if (CurrentlyProcessing != null) { _sprite.PlayAnimation(AnimationEnum.ObjectIdle); }
+            }
 
             public class Processor : Machine
             {

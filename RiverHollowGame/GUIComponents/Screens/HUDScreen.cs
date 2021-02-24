@@ -553,8 +553,11 @@ namespace RiverHollow.GUIComponents.Screens
         }
         public void BtnBuild()
         {
-            _gMenuObject = new HUDConstruction(_closeMenu);
-            GUIManager.OpenMainObject(_gMenuObject);
+            if (MapManager.CurrentMap.IsTown)
+            {
+                _gMenuObject = new HUDConstruction(_closeMenu);
+                GUIManager.OpenMainObject(_gMenuObject);
+            }
         }
         public void BtnFriendship()
         {

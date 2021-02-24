@@ -300,17 +300,29 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        //Random quests should not generate a quest with the same goal as a pre-existing quest
-        public static void AddToTaskLog(Task q)
+        /// <summary>
+        /// Adds a Task to the Task Log.
+        /// 
+        /// First we guard against adding any Task that has been Finished. It should never
+        /// happen, but just to be sure.
+        /// 
+        /// Upon adding a Task to the Task Log, we should see if the Task is complete/nearly complete.
+        /// 
+        /// Some Tasks may involve the defeat of a Task specific monster. If such a monster exists, spawn it now.
+        /// </summary>
+        /// <param name="t">The Task to add</param>
+        public static void AddToTaskLog(Task t)
         {
-            foreach(Item i in InventoryManager.PlayerInventory)
+            if (!t.Finished)
             {
-                if (i != null) { q.AttemptProgress(i); }
-            }
-            q.SpawnTaskMobs();
-            TaskLog.Add(q);
+                foreach (Item i in InventoryManager.PlayerInventory) { if (i != null) { t.AttemptProgress(i); } }
+                foreach(BuildInfo bi in GameManager.DIBuildInfo.Values) { t.AttemptBuildingProgress(bi.ID); }
 
-            GUIManager.NewTaskIcon();
+                t.SpawnTaskMobs();
+                TaskLog.Add(t);
+
+                GUIManager.NewTaskIcon();
+            }
         }
         public static void AdvanceTaskProgress(Building b)
         {
