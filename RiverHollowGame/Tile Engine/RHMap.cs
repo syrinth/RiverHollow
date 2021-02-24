@@ -371,15 +371,18 @@ namespace RiverHollow.Tile_Engine
                 i.Draw(spriteBatch);
             }
 
-            foreach (RHTile t in _liTestTiles)
+            if (GameManager.IsRunning())
             {
-                //WorldObject it = GameManager.ConstructionObject;
-                bool checkPlayer = true;
+                foreach (RHTile t in _liTestTiles)
+                {
+                    //WorldObject it = GameManager.ConstructionObject;
+                    bool checkPlayer = true;
 
-               // if (it != null) { checkPlayer = !it.CompareType(ObjectTypeEnum.Floor); }
+                    // if (it != null) { checkPlayer = !it.CompareType(ObjectTypeEnum.Floor); }
 
-                bool passable = t.Passable() && !TileContainsActor(t, checkPlayer);
-                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
+                    bool passable = t.Passable() && !TileContainsActor(t, checkPlayer);
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
+                }
             }
         }
 
