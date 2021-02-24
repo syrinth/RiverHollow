@@ -1436,19 +1436,6 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        private bool UseTool(Point mouseLocation)
-        {
-            bool rv = false;
-
-            if (InventoryManager.GetCurrentItem() != null && InventoryManager.GetCurrentItem().CompareType(ItemEnum.Tool))
-            {
-                Tool currentTool = (Tool)InventoryManager.GetCurrentItem();
-                rv = PlayerManager.SetTool(currentTool, mouseLocation);
-            }
-
-            return rv;
-        }
-
         /// <summary>
         /// Handles building interactions. Called after a successful Scrying check in the main handler.
         /// </summary>
@@ -1512,7 +1499,7 @@ namespace RiverHollow.Tile_Engine
                 //Retrieves any object associated with the tile, this will include
                 //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
                 //as being on the tile.
-                WorldObject obj = TargetTile.GetWorldObject();
+                WorldObject obj = TargetTile.GetWorldObject(false);
                 if (obj != null)
                 {
                     if (obj.CompareType(ObjectTypeEnum.Machine))       //Player interacts with a machine to either take a finished item or start working
@@ -1541,9 +1528,10 @@ namespace RiverHollow.Tile_Engine
                         ((Plant)obj).Harvest();
                         rv = true;
                     }
-                    else
+                    else if (obj.CompareType(ObjectTypeEnum.Destructible))
                     {
-                        rv = UseTool(mouseLocation);
+                        Tool currentTool = PlayerManager.RetrieveTool(((Destructible)obj).NeededTool);
+                        rv = PlayerManager.SetTool(currentTool, mouseLocation);
                     }
                 }
             }
@@ -1612,9 +1600,6 @@ namespace RiverHollow.Tile_Engine
                 //        GameManager.ConstructionObject = null;
                 //    }
                 //}
-                else if(PlayerManager.PlayerInRange(TargetTile.Center.ToPoint())){
-                    rv = UseTool(mouseLocation);
-                }
             }
 
 
@@ -2726,6 +2711,7 @@ namespace RiverHollow.Tile_Engine
         {
             WorldObject obj = null;
 
+            //Only return the Shadow object if there is no actual WorldObject
             if(WorldObject != null) { obj = WorldObject; }
             else if(AlsoCheckShadow) { obj = ShadowObject; }
 
@@ -2875,9 +2861,9 @@ namespace RiverHollow.Tile_Engine
             bool rv = false;
             if (WorldObject != null && WorldObject.CompareType(ObjectTypeEnum.Destructible))
             {
-                if (((Destructible)WorldObject).WhichTool == toolUsed.ToolType){
+                if (((Destructible)WorldObject).NeededTool == toolUsed.ToolType){
                     SoundManager.PlayEffectAtLoc(toolUsed.SoundEffect, MapName, Center, toolUsed);
-                    rv = ((Destructible)WorldObject).DealDamage(toolUsed.Power);
+                    rv = ((Destructible)WorldObject).DealDamage(toolUsed.ToolLevel);
                     if (rv)
                     {
                         MapManager.DropItemsOnMap(WorldObject.GetDroppedItems(), WorldObject.CollisionBox.Location.ToVector2());

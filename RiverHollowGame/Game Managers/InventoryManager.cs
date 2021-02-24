@@ -304,6 +304,11 @@ Exit:
                 ((Blueprint)itemToAdd).UnlockBuilding();
                 return true;
             }
+            else if (itemToAdd.CompareType(ItemEnum.Tool))
+            {
+                PlayerManager.AddTool((Tool)itemToAdd);
+                return true;
+            }
 
             int validRow = -1;
             int validCol = -1;

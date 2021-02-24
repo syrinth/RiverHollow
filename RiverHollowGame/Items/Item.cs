@@ -538,8 +538,8 @@ namespace RiverHollow.Items
         public ToolEnum ToolType;
         protected int _iStaminaCost;
         public int StaminaCost => _iStaminaCost;
-        protected int _iPower;
-        public int Power => _iPower;
+        protected int _iToolLevel;
+        public int ToolLevel => _iToolLevel;
 
         private string _sSoundEffect;
         public string SoundEffect => _sSoundEffect;
@@ -564,7 +564,7 @@ namespace RiverHollow.Items
             ToolType = Util.ParseEnum<ToolEnum>(stringData["Subtype"]);
 
             _iCharges = 0;
-            Util.AssignValue(ref _iPower, "Power", stringData);
+            Util.AssignValue(ref _iToolLevel, "Level", stringData);
             Util.AssignValue(ref _iStaminaCost, "Stam", stringData);
             Util.AssignValue(ref _iCharges, "Charges", stringData);
             Util.AssignValue(ref _sSoundEffect, "SoundEffect", stringData);

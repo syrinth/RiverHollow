@@ -203,7 +203,7 @@ namespace RiverHollow.Items
         public int HP => _iHP;
 
         protected ToolEnum _eToolType;
-        public ToolEnum WhichTool => _eToolType;
+        public ToolEnum NeededTool => _eToolType;
 
         protected int _lvltoDmg;
         public int LvlToDmg => _lvltoDmg;

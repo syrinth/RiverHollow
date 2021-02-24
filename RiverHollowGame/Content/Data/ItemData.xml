@@ -387,31 +387,31 @@
     </Item>
     <Item>
       <Key>96</Key>
-      <Value>[Type:Tool][Subtype:Pick][Image:0-0][Sell:3000][Stam:1][Power:1][AnimationPosition:0-0][SoundEffect:pickaxe]</Value>
+      <Value>[Type:Tool][Subtype:Pick][Image:0-0][Stam:1][Level:1][AnimationPosition:0-0][SoundEffect:pickaxe]</Value>
     </Item>
     <Item>
       <Key>97</Key>
-      <Value>[Type:Tool][Subtype:Axe][Image:0-16][Sell:3000][Stam:1][Power:1][AnimationPosition:0-64][SoundEffect:axe]</Value>
+      <Value>[Type:Tool][Subtype:Axe][Image:0-16][Stam:1][Level:1][AnimationPosition:0-64][SoundEffect:axe]</Value>
     </Item>
     <Item>
       <Key>98</Key>
-      <Value>[Type:Tool][Subtype:Shovel][Image:0-32][Sell:3000][Stam:1][Power:1]</Value>
+      <Value>[Type:Tool][Subtype:Shovel][Image:0-32][Stam:1][Level:1]</Value>
     </Item>
     <Item>
       <Key>99</Key>
-      <Value>[Type:Tool][Subtype:WateringCan][Image:0-48][Sell:3000][Stam:1][Power:1]</Value>
+      <Value>[Type:Tool][Subtype:WateringCan][Image:0-48][Stam:1][Level:1]</Value>
     </Item>
     <Item>
       <Key>100</Key>
-      <Value>[Type:Tool][Subtype:Harp][Image:0-96][Sell:3000][Stam:1][Power:1]</Value>
+      <Value>[Type:Tool][Subtype:Harp][Image:0-96][Stam:1][Level:1]</Value>
     </Item>
     <Item>
       <Key>101</Key>
-      <Value>[Type:Tool][Subtype:Lantern][Image:0-64][Sell:3000][Stam:1][Power:1]</Value>
+      <Value>[Type:Tool][Subtype:Lantern][Image:0-64][Stam:1][Level:1]</Value>
     </Item>
     <Item>
       <Key>102</Key>
-      <Value>[Type:Tool][Subtype:Return][Image:0-112][Charges:1]</Value>
+      <Value>[Type:Tool][Subtype:Return][Image:0-112][Charges:1][Level:1]</Value>
     </Item>
     <Item>
       <Key>103</Key>
