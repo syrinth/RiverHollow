@@ -1673,7 +1673,7 @@ namespace Database_Editor
 
         public void SaveXMLDictionarXMLDataList(Dictionary<int, List<XMLData>> dataList, string fileName, XMLTypeEnum xmlType, StreamWriter sWriter)
         {
-            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[string, List[string]]");
+            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[int, List[string]]");
 
             foreach (KeyValuePair<int, List<XMLData>> kvp in dataList)
             {

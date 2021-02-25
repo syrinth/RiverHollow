@@ -31,7 +31,7 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Eligible][PortRow:1][HomeMap:mapBuildingStore_1][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:6][RequiredBuildingID:7]</Value>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapBuildingStore_1][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:6]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -39,11 +39,11 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapInn_1][Collection:7|112][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapInn_1][Collection:7|112][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:7][HouseID:7]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapInn_1][Collection:7|112][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapInn_1][Collection:7|112][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:7][HouseID:7]</Value>
     </Item>
     <Item>
       <Key>11</Key>
@@ -55,7 +55,7 @@
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Shopkeeper][PortRow:3][HomeMap:mapBuildingStore_1][Collection:5|6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:6][RequiredBuildingID:7]</Value>
+      <Value>[Type:Shopkeeper][PortRow:3][HomeMap:mapBuildingStore_1][Collection:5|6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:6]</Value>
     </Item>
     <Item>
       <Key>14</Key>
@@ -63,7 +63,7 @@
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapBuildingStore_1][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:6][RequiredBuildingID:7]</Value>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapBuildingStore_1][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:6]</Value>
     </Item>
     <Item>
       <Key>16</Key>

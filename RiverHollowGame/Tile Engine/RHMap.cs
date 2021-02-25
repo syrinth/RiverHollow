@@ -71,7 +71,7 @@ namespace RiverHollow.Tile_Engine
         private List<TiledMapObject> _liBarrenObjects;
         private Dictionary<RarityEnum, List<int>> _diResources;
         protected List<Item> _liItems;
-        protected List<ShopData> _liShopData;
+        protected List<ShopLocation> _liShopData;
         public Dictionary<string, RHTile[,]> DictionaryCombatTiles { get; }
         public Dictionary<string, TravelPoint> DictionaryTravelPoints { get; }
         public Dictionary<string, Vector2> DictionaryCharacterLayer { get; }
@@ -93,7 +93,7 @@ namespace RiverHollow.Tile_Engine
             TilledTiles = new List<RHTile>();
             _liItems = new List<Item>();
             _liMapObjects = new List<TiledMapObject>();
-            _liShopData = new List<ShopData>();
+            _liShopData = new List<ShopLocation>();
             _liPlacedWorldObjects = new List<WorldObject>();
             _liRandomSpawnItems = new List<int>();
             _liCutscenes = new List<int>();
@@ -220,13 +220,6 @@ namespace RiverHollow.Tile_Engine
                 }
             }
 
-            if (IsTown)
-            {
-                foreach (KeyValuePair<int, Upgrade> kvp in GameManager.DiUpgrades)
-                {
-                    if (kvp.Value.Enabled) { EnableUpgradeVisibility(kvp.Key); }
-                }
-            }
             _renderer = new TiledMapRenderer(GraphicsDevice);
         }
 
@@ -415,50 +408,17 @@ namespace RiverHollow.Tile_Engine
                     continue;
                 }
 
-                bool upgrade = false;
-                if (IsTown)
+                bool determinant = l.Name.Contains("Upper");
+                if (revealUpper)
                 {
-                    foreach (KeyValuePair<int, Upgrade> s in GameManager.DiUpgrades)    //Check each upgrade to see if it's enabled
-                    {
-                        if (l.Name.Contains(s.Key.ToString()))
-                        {
-                            upgrade = true;
-                        }
-                        if (s.Value.Enabled)
-                        {
-                            bool determinant = l.Name.Contains("Upper");
-                            if (revealUpper)
-                            {
-                                l.IsVisible = determinant;
-                            }
-                            else { l.IsVisible = !determinant; }
-                        }
-                    }
+                    l.IsVisible = determinant;
                 }
-
-                if (!upgrade)
-                {
-                    bool determinant = l.Name.Contains("Upper");
-
-                    if (revealUpper)
-                    {
-                        l.IsVisible = determinant;
-                    }
-                    else { l.IsVisible = !determinant; }
-                }
+                else { l.IsVisible = !determinant; }
 
                 if (l.IsVisible && _bOutside)
                 {
                     l.IsVisible = l.Name.Contains(GameCalendar.GetSeason());
                 }
-            }
-        }
-
-        public void EnableUpgradeVisibility(int upgradeID)
-        {
-            foreach (TiledMapTileLayer l in _map.TileLayers)
-            {
-                if (l.Name.Contains(upgradeID.ToString())) { l.IsVisible = true; }
             }
         }
 
@@ -543,7 +503,7 @@ namespace RiverHollow.Tile_Engine
                         }
                         else if (obj.Name.Equals("Shop"))
                         {
-                            _liShopData.Add(new ShopData(_sName, obj));
+                            _liShopData.Add(new ShopLocation(_sName, obj));
                         }
                         else if (obj.Name.Equals("Spirit"))
                         {
@@ -1317,6 +1277,9 @@ namespace RiverHollow.Tile_Engine
                     GameManager.CurrentTriggerObject = (TriggerObject)obj;
                     ((TriggerObject)obj).Interact();
                 }
+                else if (obj.CompareType(ObjectTypeEnum.Mailbox)){
+                    ((Mailbox)obj).TakeMessage();
+                }
             }
 
             if (tile.ContainsProperty("Save", out string val) && val.Equals("true"))
@@ -1324,7 +1287,7 @@ namespace RiverHollow.Tile_Engine
                 GUIManager.OpenTextWindow(DataManager.GetGameText("Save"));
             }
 
-            foreach (ShopData shop in _liShopData)
+            foreach (ShopLocation shop in _liShopData)
             {
                 if (shop.Contains(mouseLocation) && shop.IsOpen())
                 {
@@ -3080,14 +3043,14 @@ namespace RiverHollow.Tile_Engine
         #endregion
     }
 
-    public class ShopData
+    public class ShopLocation
     {
         string _sMap;
         int _iShopID;
         Rectangle _rCLick;
         int _iShopX;
         int _iShopY;
-        public ShopData(string map, TiledMapObject shopObj)
+        public ShopLocation(string map, TiledMapObject shopObj)
         {
             _sMap = map;
             _rCLick = Util.FloatRectangle(shopObj.Position, shopObj.Size.Width, shopObj.Size.Height);

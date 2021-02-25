@@ -27,11 +27,11 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Texture:Architect][Dimensions:176-144][Base:0-80-176-64][Entrance:80-114-16-32][ReqItems:0-5|60-10][Unlocked]</Value>
+      <Value>[Texture:Architect][Dimensions:176-144][Base:0-80-176-64][Entrance:80-114-16-32][ReqItems:0-5|60-10]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Texture:Inn][Dimensions:208-176][Base:16-112-176-64][Entrance:96-146-16-29][ReqItems:0-10|60-20]</Value>
+      <Value>[Texture:Inn][Dimensions:208-176][Base:16-112-176-64][Entrance:96-146-16-29][ReqItems:55-8|60-12][Unlocked]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -39,11 +39,15 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Texture:LumberMill][Dimensions:112-144][Base:0-80-112-64][Entrance:48-112-16-32][ReqItems:0-5|2-10][Unlocked]</Value>
+      <Value>[Texture:LumberMill][Dimensions:112-144][Base:0-80-112-64][Entrance:48-112-16-32][Unlocked]</Value>
     </Item>
     <Item>
       <Key>10</Key>
       <Value>[Texture:House_14][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][Unlocked]</Value>
+    </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>[Texture:StoneMason][Dimensions:128-144][Base:0-96-128-48][Entrance:80-113-16-30][Unlocked]</Value>
     </Item>
   </Asset>
 </XnaContent>

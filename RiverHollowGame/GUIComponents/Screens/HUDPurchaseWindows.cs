@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Characters;
-using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
@@ -13,7 +10,6 @@ using RiverHollow.Items;
 using static RiverHollow.Characters.ShopKeeper;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
-using static RiverHollow.GUIComponents.Screens.HUDMenu;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -311,18 +307,18 @@ namespace RiverHollow.GUIComponents.Screens
             int i = 0;
             foreach (Merchandise m in merch)
             {
-                if (m.MerchType == Merchandise.ItemType.Adventurer)
-                {
-                    Adventurer w = DataManager.GetAdventurer(m.MerchID);
-                    WorkerBox wb = new WorkerBox(w, m.MoneyCost);
-                    _liWorkers.Add(wb);
+                //if (m.MerchType == Merchandise.ItemType.Adventurer)
+                //{
+                //    Adventurer w = DataManager.GetAdventurer(m.MerchID);
+                //    WorkerBox wb = new WorkerBox(w, m.MoneyCost);
+                //    _liWorkers.Add(wb);
 
-                    if (i == 0) { wb.AnchorToInnerSide(_winWorkers, GUIObject.SideEnum.TopLeft); }
-                    else {wb.AnchorAndAlignToObject(_liWorkers[i - 1], GUIObject.SideEnum.Right, GUIObject.SideEnum.Top, ScaleIt(1)); }
+                //    if (i == 0) { wb.AnchorToInnerSide(_winWorkers, GUIObject.SideEnum.TopLeft); }
+                //    else {wb.AnchorAndAlignToObject(_liWorkers[i - 1], GUIObject.SideEnum.Right, GUIObject.SideEnum.Top, ScaleIt(1)); }
 
-                    _winWorkers.AddControl(wb);
-                    i++;
-                }
+                //    _winWorkers.AddControl(wb);
+                //    i++;
+                //}
             }
 
             _winWorkers.Resize();
@@ -470,11 +466,10 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override bool ProcessHover(Point mouse)
         {
-            bool rv = Contains(mouse);
+            Enable(Contains(mouse));
 
-            Enable(rv);
-
-            return rv;
+            //Return false here to not skip any other ProcessHovers that are coming
+            return false;
         }
     }
 }

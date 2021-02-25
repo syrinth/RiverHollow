@@ -71,8 +71,7 @@ namespace RiverHollow
             GUIManager.LoadContent();
 
             CutsceneManager.LoadContent(Content);
-            GameManager.LoadTasks();
-            GameManager.LoadBuildInfo();
+            GameManager.LoadManagedDataLists();
 
             var pp = GraphicsDevice.PresentationParameters;
             _renderLights = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);

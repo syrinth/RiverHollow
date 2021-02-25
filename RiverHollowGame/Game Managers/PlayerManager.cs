@@ -290,7 +290,11 @@ namespace RiverHollow.Game_Managers
             if (!t.Finished)
             {
                 foreach (Item i in InventoryManager.PlayerInventory) { if (i != null) { t.AttemptProgress(i); } }
-                foreach(BuildInfo bi in GameManager.DIBuildInfo.Values) { t.AttemptBuildingProgress(bi.ID); }
+                foreach(BuildInfo bi in GameManager.DIBuildInfo.Values) {
+                    if (bi.Built) {
+                        t.AttemptBuildingProgress(bi.ID);
+                    }
+                }
 
                 t.SpawnTaskMobs();
                 TaskLog.Add(t);
@@ -506,6 +510,8 @@ namespace RiverHollow.Game_Managers
             {
                 b.Rollover();
             }
+
+            PlayerMailbox.Rollover();
         }
 
         public static void GetStamina(ref int curr, ref int max)
@@ -710,6 +716,24 @@ namespace RiverHollow.Game_Managers
         public static bool ToolIsShovel() { return ToolInUse.ToolType == ToolEnum.Shovel; }
         public static bool ToolIsWateringCan() { return ToolInUse.ToolType == ToolEnum.WateringCan; }
 
+        public static ToolData SaveToolData()
+        {
+            ToolData d = new ToolData()
+            {
+                pickID = _tPick.ItemID,
+                axeID = _tAxe.ItemID
+            };
+
+            return d;
+        }
+        public static void LoadToolData(ToolData d)
+        {
+            _tPick = (Tool)DataManager.GetItem(d.pickID);
+            _tAxe = (Tool)DataManager.GetItem(d.axeID);
+        }
+
         #endregion
+
+        public static Mailbox PlayerMailbox;
     }
 }

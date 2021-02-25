@@ -702,17 +702,15 @@ namespace RiverHollow.Characters
             //Index 0 is going to be the actual processed text, so we need to skip it
             if (specialActions.Length > 1)
             {
+                int _iTargetShopIndex = -1;
                 for (int i = 1; i <= specialActions.Length - 1; i++)
                 {
                     string[] tagInfo = specialActions[i].Split(':');
-                    if (tagInfo[0].Equals("Task"))
-                    {
-                        PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(tagInfo[1])]);
-                    }
-                    if (tagInfo[0].Equals("Face"))
-                    {
-                        QueueActorFace(tagInfo[1]);
-                    }
+                    if (tagInfo[0].Equals("Task")) { PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(tagInfo[1])]); }
+                    else if (tagInfo[0].Equals("Face")) { QueueActorFace(tagInfo[1]); }
+                    else if (tagInfo[0].Equals("ShopTargetID")) { _iTargetShopIndex = int.Parse(tagInfo[1]); }
+                    else if (tagInfo[0].Equals("UnlockItemID") && _iTargetShopIndex != -1) { DIShops[_iTargetShopIndex].Find(x => x.MerchID == int.Parse(tagInfo[1])).Unlock(); }
+                    else if (tagInfo[0].Equals("SendMessage")) { PlayerManager.PlayerMailbox.SendMessage(DataManager.DiMessages[int.Parse(tagInfo[1])]); }
                 }
             }
 
@@ -2135,8 +2133,14 @@ namespace RiverHollow.Characters
             return _liCommands;
         }
 
-        protected void CheckForArrival()
+        /// <summary>
+        /// Call this method to determine if a Villager has arrived in town.
+        /// This method returns true if the villager arrived in town overnight and was not previously there
+        /// </summary>
+        /// <returns>True if a villager has just arrived</returns>
+        public bool CheckForArrival()
         {
+            bool rv = false;
             if (!ArrivedInTown && _liRequiredBuildingIDs.Count > 0)
             {
                 bool arrived = true;
@@ -2150,7 +2154,10 @@ namespace RiverHollow.Characters
                 }
 
                 ArrivedInTown = arrived;
+                rv = ArrivedInTown;
             }
+
+            return rv;
         }
 
         public virtual void RollOver()
@@ -2164,7 +2171,6 @@ namespace RiverHollow.Characters
             //Add the NPC to their home map
             if (!MoveToBuildingLocation())
             {
-                CheckForArrival();
                 if (ArrivedInTown)
                 {
                     MoveToSpawn();
@@ -2492,21 +2498,13 @@ namespace RiverHollow.Characters
     public class ShopKeeper : Villager
     {
         private bool _bIsOpen;
-        protected List<Merchandise> _liMerchandise;
-        public List<Merchandise> Buildings { get => _liMerchandise; }
+        private int _iShopIndex;
 
         public ShopKeeper(int index, Dictionary<string, string> stringData) : base(index, stringData)
         {
             _eNPCType = NPCTypeEnum.Shopkeeper;
-            _liMerchandise = new List<Merchandise>();
 
-            if (stringData.ContainsKey("ShopData"))
-            {
-                foreach (Dictionary<string, string> di in DataManager.GetShopData(stringData["ShopData"]))
-                {
-                    _liMerchandise.Add(new Merchandise(di));
-                }
-            }
+            Util.AssignValue(ref _iShopIndex, "ShopData", stringData);
         }
 
         public override string GetOpeningText()
@@ -2543,33 +2541,18 @@ namespace RiverHollow.Characters
 
             if (!rv)
             {
-                List<Merchandise> _liMerchandise = new List<Merchandise>();
-                if (chosenAction.Equals("BuyWorkers"))
-                {
-                    foreach (Merchandise m in this._liMerchandise)
-                    {
-                        if (m.MerchType == Merchandise.ItemType.Adventurer && m.Activated()) { _liMerchandise.Add(m); }
-                    }
-                    GUIManager.OpenMainObject(new HUDPurchaseWorkers(_liMerchandise));
-                }
-                else if (chosenAction.Equals("Missions"))
+                List<Merchandise> merch = new List<Merchandise>();
+                if (chosenAction.Equals("Missions"))
                 {
                     GUIManager.OpenMainObject(new HUDMissionWindow());
                 }
                 else if (chosenAction.Equals("BuyItems"))
                 {
-                    foreach (Merchandise m in this._liMerchandise)
+                    foreach (Merchandise m in GameManager.DIShops[_iShopIndex])
                     {
-                        if (m.MerchType == Merchandise.ItemType.Item && m.Activated()) { _liMerchandise.Add(m); }
+                        if (m.Unlocked) { merch.Add(m); }
                     }
-                    GUIManager.OpenMainObject(new HUDPurchaseItems(_liMerchandise));
-                }
-                else if (chosenAction.Equals("SellWorkers"))
-                {
-                    HUDManagement s = new HUDManagement();
-                    s.Sell();
-                    GUIManager.OpenMainObject(s);
-                    GameManager.ClearGMObjects();
+                    GUIManager.OpenMainObject(new HUDPurchaseItems(merch));
                 }
                 else if (chosenAction.Equals("Move"))
                 {
@@ -2598,61 +2581,38 @@ namespace RiverHollow.Characters
 
         public class Merchandise
         {
+            private bool _bLocked = false;
+            public bool Unlocked => !_bLocked;
             public string UniqueData { get; }
-            public enum ItemType { Adventurer, Item, Upgrade }
-            public ItemType MerchType;
             public int MerchID { get; } = -1;
-            string _sDescription;
-            public int MoneyCost { get; }
-            int _iTaskReq = -1;
+            private int _iCost;
+            public int MoneyCost => _iCost;
 
-            List<KeyValuePair<int, int>> _items; //item, then num required
-            public List<KeyValuePair<int, int>> RequiredItems { get => _items; }
+            private readonly int _iTaskReq = -1;
 
             public Merchandise(Dictionary<string, string> stringData)
             {
-                _items = new List<KeyValuePair<int, int>>();
-
-                MerchType = Util.ParseEnum<ItemType>(stringData["Type"]);
-                if (stringData.ContainsKey("WorkerID")) { MerchID = int.Parse(stringData["WorkerID"]); }
-                else if (stringData.ContainsKey("BuildingID")) { MerchID = int.Parse(stringData["BuildingID"]); }
-                else if (stringData.ContainsKey("ItemID"))
+                if (stringData.ContainsKey("ItemID"))
                 {
                     //Some items may have unique data so only parse the first entry
                     //tag is ItemID to differentiate the tag from in the GUI ItemData Manager
-                    string[] itemData = stringData["ItemID"].Split('-');
-                    MerchID = int.Parse(itemData[0]);
-                    if (itemData.Length > 1) { UniqueData = itemData[1]; }
+                    string[] data = stringData["ItemID"].Split('-');
+                    MerchID = int.Parse(data[0]);
+                    if (data.Length > 1) { UniqueData = data[1]; }
                 }
 
- 
-                MoneyCost = int.Parse(stringData["Cost"]);
 
-                if (stringData.ContainsKey("Text")) { _sDescription = stringData["Text"]; }
-                if (stringData.ContainsKey("TaskReq")) { _iTaskReq = int.Parse(stringData["TaskReq"]); }
-
-                if (stringData.ContainsKey("Requires"))
-                {
-                    string[] reqItems = Util.FindParams(stringData["Requires"]);
-                    foreach (string str in reqItems)
-                    {
-                        string[] itemsSplit = str.Split('-');
-                        _items.Add(new KeyValuePair<int, int>(int.Parse(itemsSplit[0]), int.Parse(itemsSplit[1])));
-                    }
-                }
-
-                if (MerchType == ItemType.Item)
-                {
-                    string[] itemData = stringData["ItemID"].Split('-');
-                    if (itemData.Length > 1) { UniqueData = itemData[1]; }
-                }
+                Util.AssignValue(ref _iCost, "Cost", stringData);
+                Util.AssignValue(ref _iTaskReq, "TaskReq", stringData);
+                Util.AssignValue(ref _bLocked, "Locked", stringData);
             }
 
-            public bool Activated()
+            /// <summary>
+            /// Call to unlock the Merchandise so that it can be purchased.
+            /// </summary>
+            public void Unlock()
             {
-                bool rv = false;
-                rv = _iTaskReq == -1 || GameManager.DITasks[_iTaskReq].Finished;
-                return rv;
+                _bLocked = false;
             }
         }
     }
@@ -2739,8 +2699,6 @@ namespace RiverHollow.Characters
 
         public override void RollOver()
         {
-            CheckForArrival();
-
             if (ArrivedInTown) { 
                 CurrentMap?.RemoveCharacter(this);
                 RHMap map = MapManager.Maps[Married ? "mapManor" : GetMapName()];

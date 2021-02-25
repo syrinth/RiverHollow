@@ -464,6 +464,7 @@ namespace RiverHollow.Buildings
         {
             BuildInfoData buildInfoData = new BuildInfoData
             {
+                id = this.ID,
                 built = this.Built,
                 unlocked = this.Unlocked
             };

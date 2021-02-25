@@ -24,6 +24,7 @@ namespace RiverHollow.GUIComponents.Screens
         int _iCurrRow;
         int _iTotalTiles;
         List<GUISprite> _liMonsters;
+        int _iNewVillagers = 0;
 
         bool _bPopped;
         bool _bNextRow;
@@ -41,6 +42,14 @@ namespace RiverHollow.GUIComponents.Screens
             foreach (GUISprite spr in GameManager.SlainMonsters) { TileCheck(spr, ref _iRows); }
             _iTotalTiles = 0;
 
+            foreach(Villager v in DataManager.DiNPC.Values)
+            {
+                if (v.CheckForArrival())
+                {
+                    _iNewVillagers++;
+                }
+            }
+
             string results = String.Format("Gold: {0}\nExperience: {1}", GameManager.ShippingGremlin.SellAll(), GameManager.TotalExperience);
 
             //Give the XP to the party
@@ -54,6 +63,9 @@ namespace RiverHollow.GUIComponents.Screens
                     results += String.Format("\n{0} Level Up!", c.Name);
                 }
             }
+
+            if(_iNewVillagers == 1) { results += String.Format("\nA new villager has arrived in town."); }
+            else if(_iNewVillagers > 1) { results += String.Format("\nNew villagers have arrived in town."); }
 
             _btnOK = new GUIButton("OK", BtnOK);
             _btnOK.AnchorToScreen( SideEnum.Bottom, GUIManager.STANDARD_MARGIN);

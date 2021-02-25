@@ -13,6 +13,7 @@ using RiverHollow.Items;
 using RiverHollow.Utilities;
 
 using static RiverHollow.Misc.Task;
+using static RiverHollow.Characters.ShopKeeper;
 
 namespace RiverHollow.Game_Managers
 {
@@ -59,14 +60,14 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Calendar")]
             public CalendarData Calendar;
 
+            [XmlElement(ElementName = "Tools")]
+            public ToolData Tools;
+
             [XmlArray(ElementName = "Buildings")]
             public List<BuildingData> Buildings;
 
             [XmlArray(ElementName = "Maps")]
             public List<MapData> MapData;
-
-            [XmlArray(ElementName = "Upgrades")]
-            public List<UpgradeData> UpgradeData;
 
             [XmlArray(ElementName = "PlotTasks")]
             public List<TaskData> PlotTaskData;
@@ -88,6 +89,13 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "BuildingInfoData")]
             public List<BuildInfoData> BuildingInfoData;
+
+            [XmlArray(ElementName = "ShopIData")]
+            public List<ShopData> ShopData;
+
+            [XmlElement(ElementName = "Mailbox")]
+            public MailboxData TheMailbox;
+
         }
         public struct OptionsData
         {
@@ -183,11 +191,19 @@ namespace RiverHollow.Game_Managers
         }
         public struct BuildInfoData
         {
+            [XmlElement(ElementName = "InfoID")]
+            public int id;
+
             [XmlElement(ElementName = "Built")]
             public bool built;
 
             [XmlElement(ElementName = "Unlocked")]
             public bool unlocked;
+        }
+        public struct MailboxData
+        {
+            [XmlArray(ElementName = "MailboxMessages")]
+            public List<string> MailboxMessages;
         }
         public struct WorkerData
         {
@@ -266,14 +282,6 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Earth")]
             public List<FloorData> earth;
         }
-        public struct UpgradeData
-        {
-            [XmlElement(ElementName = "UpgradeID")]
-            public int upgradeID;
-
-            [XmlElement(ElementName = "Enabled")]
-            public bool enabled;
-        }
         public struct NPCData
         {
             [XmlElement(ElementName = "NPCID")]
@@ -288,7 +296,6 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Collection")]
             public List<bool> collection;
         }
-
         public struct EligibleNPCData
         {
             [XmlElement(ElementName = "NPCData")]
@@ -306,7 +313,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "AdventurerData")]
             public ClassedCharData classedData;
         }
-
         public struct CollectionData
         {
             [XmlElement(ElementName = "ItemID")]
@@ -416,6 +422,22 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Y")]
             public int y;
         }
+        public struct ShopData
+        {
+            [XmlElement(ElementName = "ShopID")]
+            public int shopID;
+
+            [XmlElement(ElementName = "LockedItems")]
+            public string merchUnlockedString;
+        }
+        public struct ToolData
+        {
+            [XmlElement(ElementName = "PickID")]
+            public int pickID;
+
+            [XmlElement(ElementName = "AxeID")]
+            public int axeID;
+        }
 
         public struct MissionData
         {
@@ -471,9 +493,9 @@ namespace RiverHollow.Game_Managers
                 saveID = GetSaveID(),
                 currentMap = PlayerManager.CurrentMap,
                 Calendar = GameCalendar.SaveCalendar(),
+                Tools = PlayerManager.SaveToolData(),
                 Buildings = new List<BuildingData>(),
                 MapData = new List<MapData>(),
-                UpgradeData = new List<UpgradeData>(),
                 PlotTaskData = new List<TaskData>(),
                 TaskLogData = new List<TaskData>(),
                 CurrentMissions = new List<MissionData>(),
@@ -481,6 +503,8 @@ namespace RiverHollow.Game_Managers
                 NPCData = new List<NPCData>(),
                 EligibleData = new List<EligibleNPCData>(),
                 BuildingInfoData = new List<BuildInfoData>(),
+                ShopData = new List<ShopData>(),
+                TheMailbox = PlayerManager.PlayerMailbox.SaveData(),
                 optionData = SaveOptions()
             };
 
@@ -503,16 +527,6 @@ namespace RiverHollow.Game_Managers
             foreach (RHMap tileMap in MapManager.Maps.Values)
             {
                 data.MapData.Add(tileMap.SaveData());
-            }
-
-            foreach (Upgrade u in GameManager.DiUpgrades.Values)
-            {
-                UpgradeData upgData = new UpgradeData
-                {
-                    upgradeID = u.ID,
-                    enabled = u.Enabled
-                };
-                data.UpgradeData.Add(upgData);
             }
 
             foreach (Task q in GameManager.DITasks.Values)
@@ -544,6 +558,24 @@ namespace RiverHollow.Game_Managers
             foreach (BuildInfo b in GameManager.DIBuildInfo.Values)
             {
                 data.BuildingInfoData.Add(b.SaveData());
+            }
+
+            foreach(KeyValuePair<int, List<Merchandise>> kvp in GameManager.DIShops)
+            {
+                string value = string.Empty;
+                foreach(Merchandise m in kvp.Value)
+                {
+                    value += m.Unlocked;
+
+                    if(m != kvp.Value[kvp.Value.Count - 1]) { value += "-"; }
+                }
+
+                ShopData sData = new ShopData
+                {
+                    shopID = kvp.Key,
+                    merchUnlockedString = value
+                };
+                data.ShopData.Add(sData);
             }
 
             // Convert the object to XML data and put it in the stream.
@@ -663,6 +695,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.World.DetermineFacing(new Vector2(0, 1));
             LoadOptions(dataToLoad.optionData);
             GameCalendar.LoadCalendar(dataToLoad.Calendar);
+            PlayerManager.LoadToolData(dataToLoad.Tools);
             foreach (BuildingData b in dataToLoad.Buildings)
             {
                 Building newBuilding = DataManager.GetBuilding(b.iBuildingID);
@@ -676,10 +709,10 @@ namespace RiverHollow.Game_Managers
                 RHMap map = MapManager.Maps[mapData.mapName];
                 map.LoadData(mapData);
             }
-            foreach (UpgradeData u in dataToLoad.UpgradeData)
-            {
-                GameManager.DiUpgrades[u.upgradeID].Enabled = u.enabled;
-            }
+
+            //Needs to be here because the Mailbox is a worldobject
+            PlayerManager.PlayerMailbox.LoadData(dataToLoad.TheMailbox);
+
             foreach (TaskData q in dataToLoad.PlotTaskData)
             {
                 Task plotTask = GameManager.DITasks[q.taskID];
@@ -718,6 +751,44 @@ namespace RiverHollow.Game_Managers
                 EligibleNPC target = (EligibleNPC)DataManager.DiNPC[n.npcData.npcID];
                 target.LoadData(n);
             }
+
+            foreach (BuildInfoData n in dataToLoad.BuildingInfoData)
+            {
+                GameManager.DIBuildInfo[n.id].Built = n.built;
+                if (n.unlocked) { GameManager.DIBuildInfo[n.id].Unlock(); }
+            }
+
+            foreach(ShopData s in dataToLoad.ShopData)
+            {
+                string[] split = s.merchUnlockedString.Split('-');
+                for (int i = 0; i < GameManager.DIShops[s.shopID].Count; i++)
+                {
+                    if (i < split.Length && split[i].Equals("True"))
+                    {
+                        GameManager.DIShops[s.shopID][i].Unlock();
+                    }
+                }
+            }
+
+            //foreach (BuildInfo b in GameManager.DIBuildInfo.Values)
+            //{
+            //    data.BuildingInfoData.Add(b.SaveData());
+            //}
+
+            //string value = string.Empty;
+            //foreach (Merchandise m in kvp.Value)
+            //{
+            //    value += m.Unlocked;
+
+            //    if (m != kvp.Value[kvp.Value.Count - 1]) { value += "-"; }
+            //}
+
+            //ShopData sData = new ShopData
+            //{
+            //    shopID = kvp.Key,
+            //    merchStatusString = value
+            //};
+            //data.ShopData.Add(sData);
         }
         #endregion
 

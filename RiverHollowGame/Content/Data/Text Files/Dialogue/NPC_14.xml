@@ -27,11 +27,12 @@
     </Item>
     <Item>
       <Key>Task_0_End</Key>
-      <Value>Great job! Now that we have a $Building_9$, we can make lots of $Item_60$s. Next up is building an $Building_7$.[Task:3][Face:Happy]</Value>
+      <Value>Great job! Now that we have a $Building_9$, we can make lots of $Item_60$s. Next up is building an $Building_7$.[Task:3][Face:Happy][SendMessage:0]</Value>
     </Item>
     <Item>
       <Key>Task_3_End</Key>
-      <Value>Wow, you did that already? Great. Now any travelers that pass through will have a place to stay. This is it, $Name$. This is the first real step we take to rebuiling $Town$.</Value>
+      <Value>Wow, you did that already? Great. Now any travelers that pass through will have a place to stay. This is it, $Name$. This is the first real step we take to rebuiling $Town$.
+We're going to need money though. I've got some ideas, come to my shop and pick up one of my blueprints.[ShopTargetID:2][UnlockItemID:136]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Task_0</Key>
-      <Value>[Name:You Gotta Mill][Description:$Character_14$ want you to build a $Building_9$]</Value>
+      <Value>[Name:Room At The Inn?][Description:$Character_14$ want you to build a $Building_7$]</Value>
     </Item>
     <Item>
       <Key>Task_1</Key>
@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>Task_3</Key>
-      <Value>[Name:Room At The Inn?][Description:$Character_14$ want you to build a $Building_7$]</Value>
+      <Value>[Name:Not Available][Description:$Character_14$ want you to build a $Building_7$]</Value>
     </Item>
     <Item>
       <Key>Character_0</Key>
@@ -418,6 +418,10 @@
       <Value>[Name:$Character_14$s House]</Value>
     </Item>
     <Item>
+      <Key>Building_11</Key>
+      <Value>[Name:StoneMason]</Value>
+    </Item>
+    <Item>
       <Key>Spirit_0</Key>
       <Value>[Name:Henry]</Value>
     </Item>
@@ -767,7 +771,7 @@
     </Item>
     <Item>
       <Key>Item_55</Key>
-      <Value>[Name:Stone Block][Description:A block made of rough-hewn stone. Peerfect for building with.]</Value>
+      <Value>[Name:Stone Brick][Description:A brick made of rough-hewn stone. Peerfect for building with.]</Value>
     </Item>
     <Item>
       <Key>Item_56</Key>
@@ -1303,54 +1307,58 @@
     </Item>
     <Item>
       <Key>WorldObject_47</Key>
-      <Value>[Name:Silver Seed Plant]</Value>
+      <Value>[Name:Mailbox]</Value>
     </Item>
     <Item>
       <Key>WorldObject_48</Key>
-      <Value>[Name:Carrot Plant]</Value>
+      <Value>[Name:Silver Seed Plant]</Value>
     </Item>
     <Item>
       <Key>WorldObject_49</Key>
-      <Value>[Name:Slime Berry Plant]</Value>
+      <Value>[Name:Carrot Plant]</Value>
     </Item>
     <Item>
       <Key>WorldObject_50</Key>
-      <Value>[Name:Mage Bells]</Value>
+      <Value>[Name:Slime Berry Plant]</Value>
     </Item>
     <Item>
       <Key>WorldObject_51</Key>
-      <Value>[Name:Stone Wall]</Value>
+      <Value>[Name:Mage Bells]</Value>
     </Item>
     <Item>
       <Key>WorldObject_52</Key>
-      <Value>[Name:Echo of Joy]</Value>
+      <Value>[Name:Stone Wall]</Value>
     </Item>
     <Item>
       <Key>WorldObject_53</Key>
-      <Value>[Name:Cotton]</Value>
+      <Value>[Name:Echo of Joy]</Value>
     </Item>
     <Item>
       <Key>WorldObject_54</Key>
-      <Value>[Name:Dragon Thistle]</Value>
+      <Value>[Name:Cotton]</Value>
     </Item>
     <Item>
       <Key>WorldObject_55</Key>
-      <Value>[Name:Staircase]</Value>
+      <Value>[Name:Dragon Thistle]</Value>
     </Item>
     <Item>
       <Key>WorldObject_56</Key>
-      <Value>[Name:Door_Up]</Value>
+      <Value>[Name:Staircase]</Value>
     </Item>
     <Item>
       <Key>WorldObject_57</Key>
-      <Value>[Name:Peat]</Value>
+      <Value>[Name:Door_Up]</Value>
     </Item>
     <Item>
       <Key>WorldObject_58</Key>
-      <Value>[Name:Lavender]</Value>
+      <Value>[Name:Peat]</Value>
     </Item>
     <Item>
       <Key>WorldObject_59</Key>
+      <Value>[Name:Lavender]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_60</Key>
       <Value>[Name:Flax]</Value>
     </Item>
   </Asset>

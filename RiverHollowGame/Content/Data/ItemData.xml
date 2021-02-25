@@ -463,15 +463,15 @@
     </Item>
     <Item>
       <Key>115</Key>
-      <Value>[Type:StaticItem][Image:0-32][Sell:3][Stacks][Place:47]</Value>
+      <Value>[Type:StaticItem][Image:0-32][Sell:3][Stacks][Place:48]</Value>
     </Item>
     <Item>
       <Key>116</Key>
-      <Value>[Type:StaticItem][Image:32-32][Sell:3][Stacks][Place:48]</Value>
+      <Value>[Type:StaticItem][Image:32-32][Sell:3][Stacks][Place:49]</Value>
     </Item>
     <Item>
       <Key>117</Key>
-      <Value>[Type:StaticItem][Image:48-32][Sell:1500][Stacks][Place:49]</Value>
+      <Value>[Type:StaticItem][Image:48-32][Sell:1500][Stacks][Place:50]</Value>
     </Item>
     <Item>
       <Key>118</Key>
@@ -503,7 +503,7 @@
     </Item>
     <Item>
       <Key>125</Key>
-      <Value>[Type:StaticItem][Image:0-16][Sell:500][Stacks][Place:51]</Value>
+      <Value>[Type:StaticItem][Image:0-16][Sell:500][Stacks][Place:52]</Value>
     </Item>
     <Item>
       <Key>126</Key>

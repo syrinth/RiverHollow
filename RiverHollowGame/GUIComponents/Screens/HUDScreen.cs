@@ -1590,7 +1590,7 @@ namespace RiverHollow.GUIComponents.Screens
         }
         public class HUDManagement : GUIMainObject
         {
-            public enum ActionTypeEnum { View, Sell, Buy, Upgrade };
+            public enum ActionTypeEnum { View, Buy, Upgrade };
             public ActionTypeEnum Action { get; private set; }
             public static int BTN_PADDING = 20;
 
@@ -1690,43 +1690,11 @@ namespace RiverHollow.GUIComponents.Screens
                 //}
             }
 
-            public void HandleMoveWorker(Adventurer worldAdventurer)
-            {
-                if (worldAdventurer != null)
-                {
-                    RemoveControl(_mgmtWindow);
-                    _mgmtWindow = new MainBuildingsWin(this);
-                    _worker = worldAdventurer;
-                    AddControl(_mgmtWindow);
-                }
-            }
-
             public void SetMgmtWindow(MgmtWindow newWin)
             {
                 RemoveControl(_mgmtWindow);
                 _mgmtWindow = newWin;
                 AddControl(_mgmtWindow);
-            }
-
-            public void Sell()
-            {
-                Action = ActionTypeEnum.Sell;
-            }
-
-            public bool Selling()
-            {
-                return Action == ActionTypeEnum.Sell;
-            }
-
-            public void PurchaseWorker(Adventurer w, int cost)
-            {
-                if (w != null)
-                {
-                    _iCost = cost;
-                    _worker = w;
-                    Action = ActionTypeEnum.Buy;
-                    SetMgmtWindow(new MainBuildingsWin(this, w));
-                }
             }
 
             public override bool Contains(Point mouse)
@@ -1863,23 +1831,6 @@ namespace RiverHollow.GUIComponents.Screens
                     public override bool ProcessLeftButtonClick(Point mouse)
                     {
                         bool rv = false;
-                        foreach (WorkerBox w in _liButtons)
-                        {
-                            if (w.Contains(mouse))
-                            {
-                                if (_parent.Selling())
-                                {
-                                    GameManager.CurrentAdventurer = w.Worker;
-                                    GUIManager.OpenTextWindow("Really sell contract? {Yes:SellContract|No:Cancel}");
-                                }
-                                else
-                                {
-                                    _parent.SetMgmtWindow(new WorkerDetailsWin(_parent, w.Worker));
-                                }
-                                rv = true;
-                                break;
-                            }
-                        }
                         return rv;
                     }
                     public override bool ProcessRightButtonClick(Point mouse)
@@ -1969,7 +1920,6 @@ namespace RiverHollow.GUIComponents.Screens
                         bool rv = false;
                         if (_btnMove.Contains(mouse))
                         {
-                            _parent.HandleMoveWorker(_character);
                             rv = true;
                         }
 

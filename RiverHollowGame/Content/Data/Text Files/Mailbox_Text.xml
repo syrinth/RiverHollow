@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>Hello, $Name$, Good job yesterday. Just wanted to test the mailbox out :)</Value>
+    </Item>
+  </Asset>
+</XnaContent>

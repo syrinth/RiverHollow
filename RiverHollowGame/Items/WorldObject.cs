@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
@@ -358,6 +359,94 @@ namespace RiverHollow.Items
         }
     }
 
+    public class Mailbox : WorldObject
+    {
+        private AnimatedSprite _alertSprite;
+        private List<string> _liCurrentMessages;
+        private List<string> _liSentMessages;
+        public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + (_iHeight - BaseHeight), BaseWidth, BaseHeight);
+
+        public Mailbox(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos - new Vector2(0, TileSize))
+        {
+            _liCurrentMessages = new List<string>();
+            _liSentMessages = new List<string>();
+            LoadDictionaryData(stringData);
+            PlayerManager.PlayerMailbox = this;
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+            _alertSprite?.Update(gTime);
+        }
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+            _alertSprite?.Draw(spriteBatch, 99999);
+        }
+
+        public void SendMessage(string message)
+        {
+            string[] specialActions = null;
+            message = Util.ProcessText(message, ref specialActions);
+
+            _liSentMessages.Add(message);
+        }
+
+        public void Rollover()
+        {
+            foreach(string s in _liSentMessages)
+            {
+                _liCurrentMessages.Add(s);
+            }
+            _liSentMessages.Clear();
+
+            if (_liCurrentMessages.Count > 0)
+            {
+                _alertSprite = new AnimatedSprite(DataManager.DIALOGUE_TEXTURE);
+                _alertSprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 64, TileSize, TileSize, 3, 0.150f, true);
+                _alertSprite.Position = new Vector2(_vMapPosition.X, _vMapPosition.Y - TileSize);
+            }
+        }
+
+        public MailboxData SaveData()
+        {
+            MailboxData data = new MailboxData();
+            data.MailboxMessages = new List<string>();
+            foreach(string s in _liCurrentMessages)
+            {
+                data.MailboxMessages.Add(s);
+            }
+
+            return data;
+        }
+        public void LoadData(MailboxData data)
+        {
+            foreach(string s in data.MailboxMessages)
+            {
+                _liSentMessages.Add(s);
+            }
+
+            Rollover();
+        }
+
+        public void TakeMessage()
+        {
+            if (_liCurrentMessages.Count > 0)
+            {
+                string s = _liCurrentMessages[0];
+                _liCurrentMessages.RemoveAt(0);
+
+                if (_liCurrentMessages.Count == 0)
+                {
+                    _alertSprite = null;
+                }
+
+                GUIManager.OpenTextWindow(s);
+            }
+        }
+    }
+
     //public class Staircase : WorldObject
     //{
     //    protected string _toMap;
@@ -482,9 +571,9 @@ namespace RiverHollow.Items
 
                 Util.AssignValue(ref _iBaseItemID, "ItemID", stringData);
 
-                if (stringData.ContainsKey("Work"))
+                if (stringData.ContainsKey("WorkAnimation"))
                 {
-                    string[] split = stringData["Work"].Split('-');
+                    string[] split = stringData["WorkAnimation"].Split('-');
                     _iWorkingFrames = int.Parse(split[0]);
                     _fFrameSpeed = float.Parse(split[1]);
                 }

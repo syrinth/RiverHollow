@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
-  <Asset Type="Dictionary[string, List[string]]">
+  <Asset Type="Dictionary[int, List[string]]">
     <Item>
       <Key>0</Key>
       <Value>
@@ -15,20 +15,14 @@
     <Item>
       <Key>1</Key>
       <Value>
-        <Item>[Type:Adventurer][WorkerID:0][Cost:100][Text:Practitioner of the arcane arts]</Item>
-        <Item>[Type:Adventurer][WorkerID:1][Cost:200][Text:Weapons Master]</Item>
-        <Item>[Type:Adventurer][WorkerID:2][Cost:300][Text:Knights!]</Item>
-        <Item>[Type:Adventurer][WorkerID:3][Cost:400][Text:Healer]</Item>
-        <Item>[Type:Adventurer][WorkerID:4][Cost:500][Text:Healer]</Item>
-        <Item>[Type:Adventurer][WorkerID:5][Cost:600][Text:Healer]</Item>
-        <Item>[Type:Adventurer][WorkerID:6][Cost:700][Text:Healer]</Item>
-        <Item>[Type:Adventurer][WorkerID:7][Cost:800][Text:Healer]</Item>
       </Value>
     </Item>
     <Item>
       <Key>2</Key>
       <Value>
-        <Item>[Type:Item][ItemID:136][Cost:500]</Item>
+        <Item>[Type:Item][ItemID:0][Cost:10]</Item>
+        <Item>[Type:Item][ItemID:2][Cost:10]</Item>
+        <Item>[Type:Item][ItemID:136][Cost:500][Locked]</Item>
       </Value>
     </Item>
     <Item>

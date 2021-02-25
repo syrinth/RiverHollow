@@ -14,6 +14,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Items.WorldItem;
 using static RiverHollow.Items.TriggerObject;
 using static RiverHollow.Items.WorldItem.Machine;
+using static RiverHollow.Characters.ShopKeeper;
 
 namespace RiverHollow.Game_Managers
 {
@@ -46,12 +47,14 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<int, List<string>> _diSongs;
         static Dictionary<int, Dictionary<string, string>> _diNPCDialogue;
-        static Dictionary<string, List<Dictionary<string, string>>> _diShops;
+        static Dictionary<int, List<Dictionary<string, string>>> _diShops;
 
         static Dictionary<int, Dictionary<string, string>> _diVillagerData;
         public static Dictionary<int, Dictionary<string, string>> DiVillagerData => _diVillagerData;
         static Dictionary<int, Dictionary<string, string>> _diPlayerAnimationData;
         public static Dictionary<int, Dictionary<string, string>> PlayerAnimationData => _diPlayerAnimationData;
+
+        public static Dictionary<int, string> DiMessages;
 
         static Dictionary<int, Dictionary<string, string>> _diBuildings;
         static Dictionary<int, Dictionary<string, string>> _diItemData;
@@ -93,6 +96,8 @@ namespace RiverHollow.Game_Managers
             _diTextures = new Dictionary<string, Texture2D>();
             DiUpgrades = Content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
             _diMonsterTraits = Content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
+
+            DiMessages = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + @"Mailbox_Text");
 
             //Read in Content and allocate the appropriate Dictionaries
             LoadGUIs(Content);
@@ -267,11 +272,11 @@ namespace RiverHollow.Game_Managers
 
         private static void LoadShopFile(ContentManager Content)
         {
-            Dictionary<string, List<string>> shopFile = Content.Load<Dictionary<string, List<string>>>(@"Data\Shops");
+            Dictionary<int, List<string>> shopFile = Content.Load<Dictionary<int, List<string>>>(@"Data\Shops");
 
-            _diShops = new Dictionary<string, List<Dictionary<string, string>>>();
+            _diShops = new Dictionary<int, List<Dictionary<string, string>>>();
 
-            foreach(KeyValuePair<string, List<string>> kvp in  shopFile){
+            foreach(KeyValuePair<int, List<string>> kvp in  shopFile){
                 _diShops[kvp.Key] = new List<Dictionary<string, string>>();
                 foreach (string s in kvp.Value)
                 {
@@ -333,6 +338,21 @@ namespace RiverHollow.Game_Managers
             foreach(KeyValuePair<int, Dictionary<string, string>> kvp in _diBuildings)
             {
                 rvList.Add(kvp.Key, new BuildInfo(kvp.Key, _diBuildings[kvp.Key]));
+            }
+            return rvList;
+        }
+
+        public static Dictionary<int, List<Merchandise>> GetShopInfoList()
+        {
+            Dictionary<int, List<Merchandise>> rvList = new Dictionary<int, List<Merchandise>>();
+            foreach (KeyValuePair<int, List<Dictionary<string, string>>> kvp in _diShops)
+            {
+                List<Merchandise> liMerch = new List<Merchandise>();
+                foreach(Dictionary<string, string> d in kvp.Value)
+                {
+                    liMerch.Add(new Merchandise(d));
+                }
+                rvList.Add(kvp.Key, liMerch);
             }
             return rvList;
         }
@@ -434,6 +454,10 @@ namespace RiverHollow.Game_Managers
         }
         public static WorldObject GetWorldObject(int id, Vector2 pos)
         {
+            if(id == 47)
+            {
+                int i = 0;
+            }
             if (id != -1 && _diWorldObjects.ContainsKey(id))
             {
                 Dictionary<string, string> diData = _diWorldObjects[id];
@@ -467,6 +491,8 @@ namespace RiverHollow.Game_Managers
                         return new Light(id, diData, pos);
                     case "CombatHazard":
                         return new CombatHazard(id, diData, pos);
+                    case "Mailbox":
+                        return new Mailbox(id, diData, pos);
                 }
             }
 
@@ -621,10 +647,6 @@ namespace RiverHollow.Game_Managers
             return _diBMFonts[font];
         }
 
-        public static List<Dictionary<string, string>> GetShopData(string shopID)
-        {
-            return _diShops[shopID];
-        }
 
         public static string GetGameText(string key)
         {

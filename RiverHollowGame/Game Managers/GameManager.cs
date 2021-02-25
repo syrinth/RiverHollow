@@ -68,7 +68,7 @@ namespace RiverHollow.Game_Managers
         public enum ElementAlignment { Neutral, Vulnerable, Resists };
         public enum ConditionEnum { None, KO, Poisoned, Silenced };
         public enum AdventurerTypeEnum { Magic, Martial };
-        public enum ObjectTypeEnum { WorldObject, Building, ClassChanger, Machine, Container, Earth, Floor, Destructible, Gatherable, Plant, Wall, Light, DungeonObject, CombatHazard };
+        public enum ObjectTypeEnum { WorldObject, Building, ClassChanger, Machine, Container, Earth, Floor, Destructible, Gatherable, Plant, Wall, Light, DungeonObject, CombatHazard, Mailbox };
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
 
         public static float Scale = NORMAL_SCALE;
@@ -76,15 +76,18 @@ namespace RiverHollow.Game_Managers
         public static int ScaledTileSize => (int)(TileSize * Scale);
         public static int ScaledPixel => (int)Scale;
         public static int MaxBldgLevel = 3;
-        public static Dictionary<int, BuildInfo> DIBuildInfo;
-        public static Dictionary<int, Upgrade> DiUpgrades;
-        public static Dictionary<int, Task> DITasks;
         private static List<TriggerObject> _liTriggerObjects;
         private static List<Spirit> _liSpirits;
         private static List<Machine> _liMachines;
         public static TalkingActor CurrentNPC => interactionLock?.CurrentActor;
         public static ShippingGremlin ShippingGremlin;
         public static DisplayTypeEnum CurrentInventoryDisplay;
+
+        #region Managed Data Lists
+        public static Dictionary<int, BuildInfo> DIBuildInfo;
+        public static Dictionary<int, Task> DITasks;
+        public static Dictionary<int, List<Merchandise>> DIShops;
+        #endregion
 
         #region Interaction Objects
         public static Adventurer CurrentAdventurer;
@@ -113,24 +116,19 @@ namespace RiverHollow.Game_Managers
             _liSpirits = new List<Spirit>();
             _liTriggerObjects = new List<TriggerObject>();
             SlainMonsters = new List<GUISprite>();
-            DiUpgrades = new Dictionary<int, Upgrade>();
-            foreach (KeyValuePair<int, string> kvp in DataManager.DiUpgrades)
-            {
-                DiUpgrades.Add(kvp.Key, new Upgrade(kvp.Key, kvp.Value));
-            }
         }
 
-        public static void LoadTasks()
+        public static void LoadManagedDataLists()
         {
             DITasks = new Dictionary<int, Task>();
             foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.DiTaskData)
             {
                 DITasks.Add(kvp.Key, new Task(kvp.Key, kvp.Value));
             }
-        }
-        public static void LoadBuildInfo()
-        {
+
             DIBuildInfo = DataManager.GetBuildInfoList();
+
+            DIShops = DataManager.GetShopInfoList();
         }
 
         public static void ProcessTextInteraction(string selectedAction)
@@ -350,54 +348,6 @@ namespace RiverHollow.Game_Managers
 
                 return rv;
             }
-        }
-    }
-
-    public class Upgrade
-    {
-        enum UpgradeTypeEnum { Building }
-        UpgradeTypeEnum _type;
-        int _id;
-        public int ID { get => _id; }
-        string _name;
-        public string Name { get => _name; }
-        string _description;
-        public string Description { get => _description; }
-        int _iCost;
-        public int MoneyCost { get => _iCost; }
-        List<KeyValuePair<int, int>> _liRequiredItems;
-        public List<KeyValuePair<int, int>> LiRquiredItems { get => _liRequiredItems; }
-        public bool Enabled;
-
-        public Upgrade(int id, string strData)
-        {
-            _id = id;
-            _liRequiredItems = new List<KeyValuePair<int, int>>();
-
-            DataManager.GetUpgradeText(_id, ref _name, ref _description);
-
-            string[] strSplit = Util.FindTags(strData);
-            foreach (string s in strSplit)
-            {
-                string[] tagType = s.Split(':');
-                if (tagType[0].Equals("Type"))
-                {
-                    _type = Util.ParseEnum<UpgradeTypeEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Cost"))
-                {
-                    _iCost = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("ItemReq"))
-                {
-                    string[] itemSplit = tagType[1].Split(':');
-                    for (int i = 0; i < itemSplit.Length; i++)
-                    {
-                        string[] entrySplit = itemSplit[i].Split('-');
-                        _liRequiredItems.Add(new KeyValuePair<int, int>(int.Parse(entrySplit[0]), int.Parse(entrySplit[1])));
-                    }
-                }
-            } 
         }
     }
 }
