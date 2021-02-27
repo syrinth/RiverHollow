@@ -3,47 +3,47 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Hi! Welcome to the Blue Hare Inn. I'm $Character_10$. I hope the road wasn't too bad to get here.</Value>
+      <Value>[Text:Hi! Welcome to the Blue Hare Inn. I'm $Character_10$. I hope the road wasn't too bad to get here.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hello $Name$. I hope you're well today.</Value>
+      <Value>[Text:Hello $Name$. I hope you're well today.]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.</Value>
+      <Value>[Text:You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>Oh, that's surprising. Thank you.</Value>
+      <Value>[Text:Oh, that's surprising. Thank you.]</Value>
     </Item>
     <Item>
       <Key>Collection</Key>
-      <Value>Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?</Value>
+      <Value>[Text:Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hello, what can I do for you?.{Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel}</Value>
+      <Value>[Text:Hello, what can I do for you?.{Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel}]</Value>
     </Item>
     <Item>
       <Key>Snowing|1</Key>
-      <Value>Nice to see you hon, we don't get too many customers on cold days like this. Why don't you treat yourself to something warm at the bar?</Value>
+      <Value>[Text:Nice to see you hon, we don't get too many customers on cold days like this. Why don't you treat yourself to something warm at the bar?]</Value>
     </Item>
     <Item>
       <Key>Snowing|2</Key>
-      <Value>Sometimes, days like these remind me of when $Character_9$ and I first met. It was the dead of winter and he'd just come into the tavern I was performing at, bundled up in his coat. There was something about him that caught my eye immediately.</Value>
+      <Value>[Text:Sometimes, days like these remind me of when $Character_9$ and I first met. It was the dead of winter and he'd just come into the tavern I was performing at, bundled up in his coat. There was something about him that caught my eye immediately.]</Value>
     </Item>
     <Item>
       <Key>Rain|1</Key>
-      <Value>You know, I kind of love the rain now that I'm not on the road anymore. I hated it back then though. Now? It's nice to be warm inside and watch it fall.</Value>
+      <Value>[Text:You know, I kind of love the rain now that I'm not on the road anymore. I hated it back then though. Now? It's nice to be warm inside and watch it fall.]</Value>
     </Item>
     <Item>
       <Key>Rain|2</Key>
-      <Value>Huh, rain? Guess we're not going to have too many customers tonight, huh?</Value>
+      <Value>[Text:Huh, rain? Guess we're not going to have too many customers tonight, huh?]</Value>
     </Item>
     <Item>
       <Key>Dialogue|3</Key>
-      <Value>Best be careful if you're gonna go exploring hon, I was out on the edge of the forest the other day, just minding my own business when I saw something creeping around. I didn't get a good look at it, but it didn't seem like a good idea to stick around.</Value>
+      <Value>[Text:Best be careful if you're gonna go exploring hon, I was out on the edge of the forest the other day, just minding my own business when I saw something creeping around. I didn't get a good look at it, but it didn't seem like a good idea to stick around.]</Value>
     </Item>
   </Asset>
 </XnaContent>

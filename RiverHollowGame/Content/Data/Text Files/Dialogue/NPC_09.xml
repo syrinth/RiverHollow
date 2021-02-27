@@ -3,55 +3,55 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Hello there! Welcome to the Blue Hare Inn. You must be $Name$. You can call me $Character_9$. The town's been abuzz about the manor being filled again. Let me know if you need anything.</Value>
+      <Value>[Text:Hello there! Welcome to the Blue Hare Inn. You must be $Name$. You can call me $Character_9$. The town's been abuzz about the manor being filled again. Let me know if you need anything.]</Value>
     </Item>
     <Item>
       <Key>IntroYes</Key>
-      <Value>Oh. How interesting. In that case, you should speak with $2$, he and his husband make excellent weapons.</Value>
+      <Value>[Text:Oh. How interesting. In that case, you should speak with $2$, he and his husband make excellent weapons.]</Value>
     </Item>
     <Item>
       <Key>IntroNo</Key>
-      <Value>Oh, that's a shame</Value>
+      <Value>[Text:Oh, that's a shame]</Value>
     </Item>
     <Item>
       <Key>IntroMaybe</Key>
-      <Value>What does that even mean?</Value>
+      <Value>[Text:What does that even mean?]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hello $Name$. I hope you're well today.</Value>
+      <Value>[Text:Hello $Name$. I hope you're well today.]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.</Value>
+      <Value>[Text:You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>Oh, that's surprising. Thank you.</Value>
+      <Value>[Text:Oh, that's surprising. Thank you.]</Value>
     </Item>
     <Item>
       <Key>Collection</Key>
-      <Value>Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?</Value>
+      <Value>[Text:Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hello, what can I do for you?.{Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel}</Value>
+      <Value>[Text:Hello, what can I do for you?.{Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel}]</Value>
     </Item>
     <Item>
       <Key>JoinPartyYes</Key>
-      <Value>Certainly, I'd like to see what we can accomplish together.</Value>
+      <Value>[Text:Certainly, I'd like to see what we can accomplish together.]</Value>
     </Item>
     <Item>
       <Key>JoinPartyNo</Key>
-      <Value>Sorry,I'm very busy today. Maybe in a few days I can go with you again.</Value>
+      <Value>[Text:Sorry,I'm very busy today. Maybe in a few days I can go with you again.]</Value>
     </Item>
     <Item>
       <Key>MarriageYes</Key>
-      <Value>Yes I will marry you!</Value>
+      <Value>[Text:Yes I will marry you!]</Value>
     </Item>
     <Item>
       <Key>MarriageNo</Key>
-      <Value>Oh... I'm sorry but. No.</Value>
+      <Value>[Text:Oh... I'm sorry but. No.]</Value>
     </Item>
   </Asset>
 </XnaContent>

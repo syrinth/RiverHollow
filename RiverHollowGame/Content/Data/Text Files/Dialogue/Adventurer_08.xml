@@ -3,19 +3,19 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>1</Key>
-      <Value>I'm working on a new song, once it's ready, want to hear it?</Value>
+      <Value>[Text:I'm working on a new song, once it's ready, want to hear it?]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Yes? I could use a break.</Value>
+      <Value>[Text:Yes? I could use a break.]</Value>
     </Item>
     <Item>
       <Key>JoinParty</Key>
-      <Value>I shall compose a ballad of our victories!</Value>
+      <Value>[Text:I shall compose a ballad of our victories!]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Oh? Is my song not to your liking?{Talk:Talk|Join Party:Party}</Value>
+      <Value>[Text:Oh? Is my song not to your liking?{Talk:Talk|Join Party:Party}]</Value>
     </Item>
   </Asset>
 </XnaContent>

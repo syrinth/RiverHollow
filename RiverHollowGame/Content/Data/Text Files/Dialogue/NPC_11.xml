@@ -3,36 +3,36 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Hello $Name$, settling in well I hope? How are you finding the town so far?
-If you ever need anything, you know where to find me.</Value>
+      <Value>[Text:Hello $Name$, settling in well I hope? How are you finding the town so far?
+If you ever need anything, you know where to find me.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hello, $Name$! What brings you into town today?</Value>
+      <Value>[Text:Hello, $Name$! What brings you into town today?]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>My mother was mayor before me. I'm glad that the townsfolk placed their trust in me to lead them in her footsteps.</Value>
+      <Value>[Text:My mother was mayor before me. I'm glad that the townsfolk placed their trust in me to lead them in her footsteps.]</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>
-      <Value>Oh, hello $Name$, What can I do for you? {Talk:Talk|Construct Buildings:BuyBuildings|Maintain Buildings:Maintenance|Never Mind:Cancel}</Value>
+      <Value>[Text:Oh, hello $Name$, What can I do for you? {Talk:Talk|Construct Buildings:BuyBuildings|Maintain Buildings:Maintenance|Never Mind:Cancel}]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>Oh? Why, thank you for the kind thought.</Value>
+      <Value>[Text:Oh? Why, thank you for the kind thought.]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Yes? How can I help you?{Talk:Talk|Gift:GiveGift|Never Mind:Cancel}</Value>
+      <Value>[Text:Yes? How can I help you?{Talk:Talk|Gift:GiveGift|Never Mind:Cancel}]</Value>
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>I hope the manor isn't leaking too much in all of this rain.</Value>
+      <Value>[Text:I hope the manor isn't leaking too much in all of this rain.]</Value>
     </Item>
     <Item>
       <Key>Collection</Key>
-      <Value>Oh! This is very thoughtful of you. How did you know I was looking for this? Thank you.</Value>
+      <Value>[Text:Oh! This is very thoughtful of you. How did you know I was looking for this? Thank you.]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -3,36 +3,36 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Hi there, $Character_14$'s my name and I'm the mason here in town. You're moving into the abandoned Manor right? Come get me when you're ready to start renovating. I also sell building materials if you find yourself short.</Value>
+      <Value>[Text:Hi there, $Character_14$'s my name and I'm the mason here in town. You're moving into the abandoned Manor right? Come get me when you're ready to start renovating. I also sell building materials if you find yourself short.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hey there, $Name$,hope you're feeling well today!</Value>
+      <Value>[Text:Hey there, $Name$,hope you're feeling well today!]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Hey, $Name$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.</Value>
+      <Value>[Text:Hey, $Name$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.]</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>
-      <Value>Oh, hello $Name$, What can I do for you? {Talk:Talk|Gift:GiveGift|Buy Items:BuyItems|Never Mind:Cancel}</Value>
+      <Value>[Text:Oh, hello $Name$, What can I do for you? {Talk:Talk|Gift:GiveGift|Buy Items:BuyItems|Never Mind:Cancel}]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>Wow! Thanks!</Value>
+      <Value>[Text:Wow! Thanks!]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hey.{Talk:Talk|Gift:GiveGift|Never Mind:Cancel}</Value>
+      <Value>[Text:Hey.{Talk:Talk|Gift:GiveGift|Never Mind:Cancel}]</Value>
     </Item>
     <Item>
       <Key>Task_0_End</Key>
-      <Value>Wow, you did that already? Great. Now any travelers that pass through will have a place to stay. This is it, $Name$. This is the first real step we take to rebuiling $Town$.
-We're going to need money though. I've got some thinking to do...[Face:Happy][SendMessage:0]</Value>
+      <Value>[Text:Wow, you did that already? Great. Now any travelers that pass through will have a place to stay. This is it, $Name$. This is the first real step we take to rebuiling $Town$.
+We're going to need money though. I've got some thinking to do...[Face:Happy][SendMessage:0]]</Value>
     </Item>
     <Item>
       <Key>NA</Key>
-      <Value></Value>
+      <Value>[Text:]</Value>
     </Item>
   </Asset>
 </XnaContent>

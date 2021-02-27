@@ -3,51 +3,51 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Hmm? I haven't seen you before, are you new? I'm $Character_3$. Charmed to meet you. Welcome to River Hollow, the town where nothing happens.</Value>
+      <Value>[Text:Hmm? I haven't seen you before, are you new? I'm $Character_3$. Charmed to meet you. Welcome to River Hollow, the town where nothing happens.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hi $Name$. You know, seeing you running around is one of the few bright bright spots of this place. You're so driven, it's inspiring.</Value>
+      <Value>[Text:Hi $Name$. You know, seeing you running around is one of the few bright bright spots of this place. You're so driven, it's inspiring.]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>I'm not used to living on the outskirts like this. There's dirt everywhere. Do you have any idea how often I have to wash my robes to keep them clean? How do you handle it?</Value>
+      <Value>[Text:I'm not used to living on the outskirts like this. There's dirt everywhere. Do you have any idea how often I have to wash my robes to keep them clean? How do you handle it?]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>For me? Oh no, you shouldn't have!</Value>
+      <Value>[Text:For me? Oh no, you shouldn't have!]</Value>
     </Item>
     <Item>
       <Key>Collection</Key>
-      <Value>How did you get this out here? I thought I would have needed to take a trip out of town to get this! Thank you so much!</Value>
+      <Value>[Text:How did you get this out here? I thought I would have needed to take a trip out of town to get this! Thank you so much!]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hey, $Name$, what do you need?{Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel}</Value>
+      <Value>[Text:Hey, $Name$, what do you need?{Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel}]</Value>
     </Item>
     <Item>
       <Key>JoinPartyYes</Key>
-      <Value>Are you sure? I guess I can join you for an adventure today.</Value>
+      <Value>[Text:Are you sure? I guess I can join you for an adventure today.]</Value>
     </Item>
     <Item>
       <Key>JoinPartyNo</Key>
-      <Value>Sorry... I've got things to do today. Maybe later?</Value>
+      <Value>[Text:Sorry... I've got things to do today. Maybe later?]</Value>
     </Item>
     <Item>
       <Key>MarriageYes</Key>
-      <Value>Yes I will marry you!</Value>
+      <Value>[Text:Yes I will marry you!]</Value>
     </Item>
     <Item>
       <Key>MarriageNo</Key>
-      <Value>Oh... I'm sorry but... No.</Value>
+      <Value>[Text:Oh... I'm sorry but... No.]</Value>
     </Item>
     <Item>
       <Key>Dialogue|3</Key>
-      <Value>This town has it's quaint charm but... I miss the city. I can't wait until $Character_4$ and I have finished our business here.</Value>
+      <Value>[Text:This town has it's quaint charm but... I miss the city. I can't wait until $Character_4$ and I have finished our business here.]</Value>
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>I didn't think I'd see you today. I always jump at the opportunity to do nothing on rainy days. I guess you've got more on your plate than I do though, hm?</Value>
+      <Value>[Text:I didn't think I'd see you today. I always jump at the opportunity to do nothing on rainy days. I guess you've got more on your plate than I do though, hm?]</Value>
     </Item>
   </Asset>
 </XnaContent>

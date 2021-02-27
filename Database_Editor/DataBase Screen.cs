@@ -76,11 +76,11 @@ namespace Database_Editor
         static string PATH_TO_DIALOGUE = PATH_TO_TEXT_FILES + @"\Dialogue";
         static string PATH_TO_SCHEDULES = PATH_TO_DATA + @"\Schedules";
 
-        static Dictionary<string, List<string>> _diCutsceneDialogue;
         static Dictionary<int, List<string>> _diCutscenes;
         static Dictionary<int, List<XMLData>> _diShops;
         static Dictionary<string, Dictionary<string, List<string>>> _diCharacterSchedules;
-        static Dictionary<string, Dictionary<string, string>> _diCharacterDialogue;
+        static Dictionary<string, List<string>> _diCutsceneDialogue;
+        static Dictionary<string, Dictionary<string, Dictionary<string, string>>> _diCharacterDialogue; //File/EntryKey/Tags
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
         static Dictionary<ItemEnum, List<ItemXMLData>> _diItems;
         static Dictionary<string, List<XMLData>> _diBasicXML;
@@ -134,7 +134,7 @@ namespace Database_Editor
 
             _diBasicXML = new Dictionary<string, List<XMLData>>();
             _diItems = new Dictionary<ItemEnum, List<ItemXMLData>>();
-            _diCharacterDialogue = new Dictionary<string, Dictionary<string, string>>();
+            _diCharacterDialogue = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
             foreach (string s in Directory.GetFiles(PATH_TO_DIALOGUE))
             {
                 string fileName = string.Empty;
@@ -148,7 +148,7 @@ namespace Database_Editor
                 {
                     fileName = s;
                     Util.ParseContentFile(ref fileName);
-                    _diCharacterDialogue.Add(s, ReadXMLFilToDictionary(fileName));
+                    _diCharacterDialogue.Add(s, ReadTaggedXMLFile(fileName));
                 }
             }
 
@@ -400,25 +400,28 @@ namespace Database_Editor
         }
         #endregion
 
-        private Dictionary<string, string> ReadXMLFilToDictionary(string fileName)
-        {
-            string line = string.Empty;
-            Dictionary<string, string> xmlDictionary = new Dictionary<string, string>();
+        //private Dictionary<string, string> ReadXMLFileToDictionary(string fileName)
+        //{
+        //    string line = string.Empty;
+        //    Dictionary<string, string> xmlDictionary = new Dictionary<string, string>();
 
-            XmlDocument xmldoc = new XmlDocument();
-            XmlNodeList xmlnode;
-            int i = 0;
+        //    XmlDocument xmldoc = new XmlDocument();
+        //    XmlNodeList xmlnode;
+        //    int i = 0;
 
-            FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            xmldoc.Load(fs);
-            xmlnode = xmldoc.GetElementsByTagName("Item");
-            for (i = 0; i <= xmlnode.Count - 1; i++)
-            {
-                xmlDictionary[xmlnode[i].ChildNodes.Item(0).InnerText] = xmlnode[i].ChildNodes.Item(1).InnerText.Trim();
-            }
+        //    FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+        //    xmldoc.Load(fs);
+        //    xmlnode = xmldoc.GetElementsByTagName("Item");
+        //    for (i = 0; i <= xmlnode.Count - 1; i++)
+        //    {
+        //        //MAR
+        //        //Dictionary<string, string> diTags = new Dictionary<string, string>();
+        //        //Util.DictionaryFromTaggedString(ref diTags, xmlnode[i].ChildNodes.Item(1).InnerText.Trim());
+        //        //xmlDictionary[xmlnode[i].ChildNodes.Item(0).InnerText] = ;
+        //    }
 
-            return xmlDictionary;
-        }
+        //    return xmlDictionary;
+        //}
         private Dictionary<int, List<XMLData>> ReadXMLFileToXMLDataListDictionary(string fileName, XMLTypeEnum typeEnum, string refTags, string tagsThatRefertoMe)
         {
             string line = string.Empty;
@@ -1001,7 +1004,7 @@ namespace Database_Editor
                 string key = PATH_TO_DIALOGUE + npcKey;
                 if (!_diCharacterDialogue.ContainsKey(key))
                 {
-                    _diCharacterDialogue[key] = new Dictionary<string, string> { ["New"] = "" };
+                    _diCharacterDialogue[key] = new Dictionary<string, Dictionary<string, string>> { ["New"] = { [""] = "" } };
                 }
 
                 frm = new FormCharExtraData("Dialogue", _diCharacterDialogue[key]);
@@ -1030,7 +1033,7 @@ namespace Database_Editor
             string key = PATH_TO_DIALOGUE + npcKey;
             if (!_diCharacterDialogue.ContainsKey(key))
             {
-                _diCharacterDialogue[key] = new Dictionary<string, string> { ["New"] = "" };
+                _diCharacterDialogue[key] = new Dictionary<string, Dictionary<string, string>> { ["New"] = { [""] = "" } };
             }
 
             frm = new FormCharExtraData("Dialogue", _diCharacterDialogue[key]);
@@ -1040,28 +1043,29 @@ namespace Database_Editor
         }
         private void btnEditCutsceneDialogue_Click(object sender, EventArgs e)
         {
-            string keyValue = dgvCutscenes.CurrentRow.Cells["colCutscenesID"].Value.ToString();
-            if (!_diCutsceneDialogue.ContainsKey(keyValue))
-            {
-                _diCutsceneDialogue[keyValue] = new List<string>() { "" };
-            }
-            Dictionary<string, string> tags = new Dictionary<string, string>();
-            foreach (string s in _diCutsceneDialogue[keyValue])
-            {
-                string[] split = s.Split(new char[] { '[', ':', ']' }, StringSplitOptions.RemoveEmptyEntries);
-                tags[split[0]] = split.Length > 1 ? split[1] : "";
-            }
+            //string keyValue = dgvCutscenes.CurrentRow.Cells["colCutscenesID"].Value.ToString();
+            //if (!_diCutsceneDialogue.ContainsKey(keyValue))
+            //{
+            //    _diCutsceneDialogue[keyValue] = new List<string>() { "" };
+            //}
 
-            FormCharExtraData frm = new FormCharExtraData("Cutscene Dialogue", tags);
-            frm.ShowDialog();
+            //Dictionary<string, Dictionary<string, string>> entries = new Dictionary<string, Dictionary<string, string>>();
+            //foreach (string s in _diCutsceneDialogue[keyValue])
+            //{
+            //    string[] split = s.Split(new char[] { '[', ':', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            //    entries[split[0]] = split.Length > 1 ? split[1] : "";
+            //}
 
-            List<string> listTags = new List<string>();
-            foreach (KeyValuePair<string, string> kvp in frm.StringData)
-            {
-                listTags.Add("[" + kvp.Key + ":" + kvp.Value + "]");
-            }
+            //FormCharExtraData frm = new FormCharExtraData("Cutscene Dialogue", entries);
+            //frm.ShowDialog();
 
-            _diCutsceneDialogue[keyValue] = listTags;
+            //List<string> listTags = new List<string>();
+            //foreach (KeyValuePair<string, Dictionary<string, string>> kvp in frm.StringData)
+            //{
+            //    listTags.Add("[" + kvp.Key + ":" + kvp.Value + "]");
+            //}
+
+            //_diCutsceneDialogue[keyValue] = listTags;
         }
 
         #region SaveInfo
@@ -1744,13 +1748,20 @@ namespace Database_Editor
             CloseStreamWriter(ref dataFile);
         }
 
-        public void SaveXMLDictionary(Dictionary<string, string> dataList, string fileName, StreamWriter sWriter)
+        public void SaveXMLDictionary(Dictionary<string, Dictionary<string, string>> dataList, string fileName, StreamWriter sWriter)
         {
             StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[string, string]");
 
-            foreach (KeyValuePair<string, string> kvp in dataList)
+            foreach (KeyValuePair<string, Dictionary<string, string>> kvp in dataList)
             {
-                WriteXMLEntry(dataFile, string.Format("      <Key>{0}</Key>", kvp.Key), string.Format("      <Value>{0}</Value>", kvp.Value));
+                string tagString = string.Empty;
+
+                foreach (KeyValuePair<string, string> tag in kvp.Value)
+                {
+                    tagString += "[" + kvp.Key + (string.IsNullOrEmpty(tag.Value) ? "" : ":" + kvp.Value) + "]";
+                }
+
+                WriteXMLEntry(dataFile, string.Format("      <Key>{0}</Key>", kvp.Key), string.Format("      <Value>{0}</Value>", tagString));
             }
 
             CloseStreamWriter(ref dataFile);

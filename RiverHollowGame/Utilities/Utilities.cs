@@ -226,6 +226,21 @@ namespace RiverHollow.Utilities
             return verb + Util.GetEnumString(direction);
         }
 
+        public static void DictionaryFromTaggedString(ref Dictionary<string, string> dss, string taggedString)
+        {
+            foreach (string s in Util.FindTags(taggedString))
+            {
+                if (s.Contains(":"))
+                {
+                    string[] tagSplit = s.Split(':');
+                    dss[tagSplit[0]] = tagSplit[1];
+                }
+                else
+                {
+                    dss[s] = "";
+                }
+            }
+        }
         public static string[] FindTags(string data)
         {
             return data.Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);

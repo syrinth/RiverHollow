@@ -3,35 +3,35 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Ah! I was wondering when I'd hear from you. $Character_11$  told me you'd be arriving soon. I'm $Character_12$, the village blacksmith. Not what you were expecting from the mayor's wife I bet, am I? If you need anything hammered out, you come visit me at my forge, alright?</Value>
+      <Value>[Text:Ah! I was wondering when I'd hear from you. $Character_11$  told me you'd be arriving soon. I'm $Character_12$, the village blacksmith. Not what you were expecting from the mayor's wife I bet, am I? If you need anything hammered out, you come visit me at my forge, alright?]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Well, hello there! HOw's the day treatin' you $Name$?</Value>
+      <Value>[Text:Well, hello there! HOw's the day treatin' you $Name$?]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>If you find yourself running low on ore, I keep a stock of it myself. It'll cost you, of course, but I promise I'll give you the best deal I can!</Value>
+      <Value>[Text:If you find yourself running low on ore, I keep a stock of it myself. It'll cost you, of course, but I promise I'll give you the best deal I can!]</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>
-      <Value>What do you need today? {Talk:Talk|Construct Buildings:BuyBuildings|Maintain Buildings:Maintenance|Never Mind:Cancel}</Value>
+      <Value>[Text:What do you need today? {Talk:Talk|Construct Buildings:BuyBuildings|Maintain Buildings:Maintenance|Never Mind:Cancel}]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>Wow! Thanks!</Value>
+      <Value>[Text:Wow! Thanks!]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hey.{Talk:Talk|Gift:GiveGift|Never Mind:Cancel}</Value>
+      <Value>[Text:Hey.{Talk:Talk|Gift:GiveGift|Never Mind:Cancel}]</Value>
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>Weather like this makes my bones ache. I hope $Character_11$ has a bath running for me tonight.</Value>
+      <Value>[Text:Weather like this makes my bones ache. I hope $Character_11$ has a bath running for me tonight.]</Value>
     </Item>
     <Item>
       <Key>Snowing|1</Key>
-      <Value>The best part of the winter for me is looking out at the falling snow from the heat of my forge. Sometimes, I go out and just run around to cool off. $Character_11$ says flopping down in the snow to make snow angels is undignified, but I've never let dignity stop me from having fun before!</Value>
+      <Value>[Text:The best part of the winter for me is looking out at the falling snow from the heat of my forge. Sometimes, I go out and just run around to cool off. $Character_11$ says flopping down in the snow to make snow angels is undignified, but I've never let dignity stop me from having fun before!]</Value>
     </Item>
   </Asset>
 </XnaContent>

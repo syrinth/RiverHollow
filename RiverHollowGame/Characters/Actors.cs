@@ -703,8 +703,6 @@ namespace RiverHollow.Characters
             GUIManager.OpenTextWindow(text, this, true, true);
         }
 
-        
-
         /// <summary>
         /// Stand-in Virtual method to be overrriden. Should never get called.
         /// </summary>
@@ -928,6 +926,17 @@ namespace RiverHollow.Characters
             int width = 48;
             startX += (int)_eFaceEnum * width;
             return new Rectangle(startX, 0, width, 60);
+        }
+
+        public class TextEntry
+        {
+            int _iLookupID;
+            int _iPriority;
+            string _sText;
+
+            public TextEntry()
+            {
+            }
         }
     }
 

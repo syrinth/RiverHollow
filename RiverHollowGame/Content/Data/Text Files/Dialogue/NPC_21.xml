@@ -3,40 +3,40 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Eek! Eh... hello! New house person, yes? Me $Character_21$. Place things here with me, yes, I sell for you at night while you sleeps. Mutually beneficial! {Talk:Talk|Gift:GiveGift|Ship Goods:ShipGoods|Never Mind:Cancel}</Value>
+      <Value>[Text:Eek! Eh... hello! New house person, yes? Me $Character_21$. Place things here with me, yes, I sell for you at night while you sleeps. Mutually beneficial! {Talk:Talk|Gift:GiveGift|Ship Goods:ShipGoods|Never Mind:Cancel}]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Me going okies today. Bin is comfy, air is fresh. Very happies today</Value>
+      <Value>[Text:Me going okies today. Bin is comfy, air is fresh. Very happies today]</Value>
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>Why you out in the rain? Is cold! Is wet! Go inside where warm...
-Do you want to come inside bin? $21$ can scootch over.</Value>
+      <Value>[Text:Why you out in the rain? Is cold! Is wet! Go inside where warm...
+Do you want to come inside bin? $21$ can scootch over.]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>Oh! Oh! Thank! Thank you very muchlike. This makes $21$ very happy!</Value>
+      <Value>[Text:Oh! Oh! Thank! Thank you very muchlike. This makes $21$ very happy!]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hello, hello! How can meek, humble $21$ be helping you? {Talk:Talk|Gift:GiveGift|Ship Goods:ShipGoods|Never Mind:Cancel}</Value>
+      <Value>[Text:Hello, hello! How can meek, humble $21$ be helping you? {Talk:Talk|Gift:GiveGift|Ship Goods:ShipGoods|Never Mind:Cancel}]</Value>
     </Item>
     <Item>
       <Key>Goodbye</Key>
-      <Value>Okie Bye!</Value>
+      <Value>[Text:Okie Bye!]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>There be many gremlins running around. We stay just out of sight but try to be helpful when we can.</Value>
+      <Value>[Text:There be many gremlins running around. We stay just out of sight but try to be helpful when we can.]</Value>
     </Item>
     <Item>
       <Key>Raining|2</Key>
-      <Value>Yes? Is very wet outside. No like.</Value>
+      <Value>[Text:Yes? Is very wet outside. No like.]</Value>
     </Item>
     <Item>
       <Key>Snowing|1</Key>
-      <Value>Cold! Why so cold? You should go inside, yes. Sleep until Spring.</Value>
+      <Value>[Text:Cold! Why so cold? You should go inside, yes. Sleep until Spring.]</Value>
     </Item>
   </Asset>
 </XnaContent>

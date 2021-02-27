@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Database_Editor
@@ -15,19 +10,17 @@ namespace Database_Editor
         enum DataMode { Dialogue, Schedule };
         DataMode _eDataMode;
         int _iIndex = 0;
-        Dictionary<string, string> _diStringData;
-        public Dictionary<string, string> StringData => _diStringData;
+        Dictionary<string, Dictionary<string, string>> _diStringData;
+        public Dictionary<string, Dictionary<string,string>> StringData => _diStringData;
 
         Dictionary<string, List<string>> _diListData;
         public Dictionary<string, List<string>> ListData => _diListData;
-        public FormCharExtraData(string value, Dictionary<string, string> diCharacterData)
+        public FormCharExtraData(string value, Dictionary<string, Dictionary<string, string>> diCharacterData)
         {
             InitializeComponent();
 
             _diStringData = diCharacterData;
             this.Text = value;
-            tbCharExtraDataInfo.Visible = true;
-            dgvEditTags.Visible = false;
             LoadDataGridViewString();
 
             dgvCharExtraData.Focus();
@@ -40,8 +33,6 @@ namespace Database_Editor
 
             _diListData = diCharacterData;
             this.Text = value;
-            tbCharExtraDataInfo.Visible = false;
-            dgvEditTags.Visible = true;
             LoadDataGridViewList();
 
             dgvCharExtraData.Focus();
@@ -52,7 +43,7 @@ namespace Database_Editor
         {
             int index = 0;
             dgvCharExtraData.Rows.Clear();
-            foreach (KeyValuePair<string, string> kvp in _diStringData)
+            foreach (KeyValuePair<string, Dictionary<string, string>> kvp in _diStringData)
             {
                 dgvCharExtraData.Rows.Add();
                 DataGridViewRow row = dgvCharExtraData.Rows[index++];
@@ -89,7 +80,12 @@ namespace Database_Editor
         {
             string keyValue = dgvCharExtraData.Rows[index].Cells[0].Value.ToString();
             tbCharExtraDataName.Text = keyValue;
-            tbCharExtraDataInfo.Text = _diStringData[keyValue];
+
+            foreach (KeyValuePair<string, string> kvp in _diStringData[keyValue])
+            {
+                if (kvp.Key.Equals("Text")) { tbCharExtraDataInfo.Text = kvp.Value; }
+                else { dgvEditTags.Rows.Add(kvp.Key + ":" + kvp.Value); }
+            }
         }
         private void LoadDataInfoList(int index)
         {
@@ -165,16 +161,17 @@ namespace Database_Editor
         }
         private void SaveDictionaryData()
         {
-            DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
+            //MAR
+            //DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
 
-            string oldKey = row.Cells["colCharExtraID"].Value.ToString();
-            if (_diStringData.ContainsKey(oldKey))
-            {
-                _diStringData.Remove(oldKey);
-            }
+            //string oldKey = row.Cells["colCharExtraID"].Value.ToString();
+            //if (_diStringData.ContainsKey(oldKey))
+            //{
+            //    _diStringData.Remove(oldKey);
+            //}
 
-            _diStringData[tbCharExtraDataName.Text] = tbCharExtraDataInfo.Text;
-            row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
+            //_diStringData[tbCharExtraDataName.Text] = tbCharExtraDataInfo.Text;
+            //row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
         }
         private void SaveListData()
         {

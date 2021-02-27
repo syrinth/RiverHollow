@@ -3,48 +3,48 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>You $Name$? I heard that you were starting a town out here and figured you could use a hand.
-My name's $Character_6$, a $Class_5$ looking for work. I'd appreciate it if you could set up a house for me. Maybe something that looks like this.[UnlockBuildingID:12]</Value>
+      <Value>[Text:You $Name$? I heard that you were starting a town out here and figured you could use a hand.
+My name's $Character_6$, a $Class_5$ looking for work. I'd appreciate it if you could set up a house for me. Maybe something that looks like this.[UnlockBuildingID:12]]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>$Name$, hello. Having a good day I trust? Stay safe, and don't make me follow you around.</Value>
+      <Value>[Text:$Name$, hello. Having a good day I trust? Stay safe, and don't make me follow you around.]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>$Name$? You look stressed. Please don't push yourself and make sure you're getting enough sleep. a few years back I tried six hours a night and let me tell you what a mistake that was.</Value>
+      <Value>[Text:$Name$? You look stressed. Please don't push yourself and make sure you're getting enough sleep. a few years back I tried six hours a night and let me tell you what a mistake that was.]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>Oh, thank you. I really appreciate this.</Value>
+      <Value>[Text:Oh, thank you. I really appreciate this.]</Value>
     </Item>
     <Item>
       <Key>Collection</Key>
-      <Value>Is that really for me? $Name$! Thank you. This really means a lot to me.</Value>
+      <Value>[Text:Is that really for me? $Name$! Thank you. This really means a lot to me.]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hello, what can I do for you?.{Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel}</Value>
+      <Value>[Text:Hello, what can I do for you?.{Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel}]</Value>
     </Item>
     <Item>
       <Key>JoinPartyYes</Key>
-      <Value>Certainly, I'd like to see what we can accomplish together.</Value>
+      <Value>[Text:Certainly, I'd like to see what we can accomplish together.]</Value>
     </Item>
     <Item>
       <Key>JoinPartyNo</Key>
-      <Value>Sorry,I'm very busy today. Maybe in a few days I can go with you again.</Value>
+      <Value>[Text:Sorry,I'm very busy today. Maybe in a few days I can go with you again.]</Value>
     </Item>
     <Item>
       <Key>MarriageYes</Key>
-      <Value>Yes I will marry you!</Value>
+      <Value>[Text:Yes I will marry you!]</Value>
     </Item>
     <Item>
       <Key>MarriageNo</Key>
-      <Value>Oh... I'm sorry but. No.</Value>
+      <Value>[Text:Oh... I'm sorry but. No.]</Value>
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>You're running around in this rain? Ha, of course you are. There's no stopping you, is there? It's admirable, if concerning.</Value>
+      <Value>[Text:You're running around in this rain? Ha, of course you are. There's no stopping you, is there? It's admirable, if concerning.]</Value>
     </Item>
   </Asset>
 </XnaContent>

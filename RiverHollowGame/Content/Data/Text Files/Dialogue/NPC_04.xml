@@ -3,51 +3,51 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Not now sorry, I've got something on my mind. I'm $Character_4$, nice to meet you, etcetera, everything else can wait.</Value>
+      <Value>[Text:Not now sorry, I've got something on my mind. I'm $Character_4$, nice to meet you, etcetera, everything else can wait.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>$Name$. I hope you're well? Good.</Value>
+      <Value>[Text:$Name$. I hope you're well? Good.]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Oh, hello. I guess I have a moment. My latest experiment hasn't proven fruitful.</Value>
+      <Value>[Text:Oh, hello. I guess I have a moment. My latest experiment hasn't proven fruitful.]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>For me? Oh no, you shouldn't have!</Value>
+      <Value>[Text:For me? Oh no, you shouldn't have!]</Value>
     </Item>
     <Item>
       <Key>Collection</Key>
-      <Value>You got this for me? I... thank you. really, this will be invaluable to my research.</Value>
+      <Value>[Text:You got this for me? I... thank you. really, this will be invaluable to my research.]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hey, $Name$, what do you need?{Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel}</Value>
+      <Value>[Text:Hey, $Name$, what do you need?{Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel}]</Value>
     </Item>
     <Item>
       <Key>JoinPartyYes</Key>
-      <Value>Are you sure? I guess I can join you for an adventure today.</Value>
+      <Value>[Text:Are you sure? I guess I can join you for an adventure today.]</Value>
     </Item>
     <Item>
       <Key>JoinPartyNo</Key>
-      <Value>Sorry... I've got things to do today. Maybe later?</Value>
+      <Value>[Text:Sorry... I've got things to do today. Maybe later?]</Value>
     </Item>
     <Item>
       <Key>MarriageYes</Key>
-      <Value>Yes I will marry you!</Value>
+      <Value>[Text:Yes I will marry you!]</Value>
     </Item>
     <Item>
       <Key>MarriageNo</Key>
-      <Value>Oh... I'm sorry but... No.</Value>
+      <Value>[Text:Oh... I'm sorry but... No.]</Value>
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>I hate weather like this. It just serves to delay my research.</Value>
+      <Value>[Text:I hate weather like this. It just serves to delay my research.]</Value>
     </Item>
     <Item>
       <Key>Raining|2</Key>
-      <Value>Hm. I'm thinking I might take a walk. I despise the rain, but there are several species of flowers I'm interested in that only bloom in the rain.</Value>
+      <Value>[Text:Hm. I'm thinking I might take a walk. I despise the rain, but there are several species of flowers I'm interested in that only bloom in the rain.]</Value>
     </Item>
   </Asset>
 </XnaContent>

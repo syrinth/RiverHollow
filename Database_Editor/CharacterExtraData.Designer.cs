@@ -78,7 +78,7 @@
             this.tbCharExtraDataInfo.Multiline = true;
             this.tbCharExtraDataInfo.Name = "tbCharExtraDataInfo";
             this.tbCharExtraDataInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbCharExtraDataInfo.Size = new System.Drawing.Size(459, 189);
+            this.tbCharExtraDataInfo.Size = new System.Drawing.Size(459, 117);
             this.tbCharExtraDataInfo.TabIndex = 21;
             // 
             // tbCharExtraDataName
@@ -121,10 +121,10 @@
             this.dgvEditTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvEditTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colTaskTags});
-            this.dgvEditTags.Location = new System.Drawing.Point(329, 51);
+            this.dgvEditTags.Location = new System.Drawing.Point(329, 174);
             this.dgvEditTags.Name = "dgvEditTags";
             this.dgvEditTags.RowHeadersVisible = false;
-            this.dgvEditTags.Size = new System.Drawing.Size(459, 189);
+            this.dgvEditTags.Size = new System.Drawing.Size(459, 206);
             this.dgvEditTags.TabIndex = 46;
             // 
             // colTaskTags
@@ -135,7 +135,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(713, 246);
+            this.btnSave.Location = new System.Drawing.Point(713, 386);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 47;

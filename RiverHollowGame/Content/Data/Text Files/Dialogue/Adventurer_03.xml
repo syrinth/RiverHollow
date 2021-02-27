@@ -3,19 +3,19 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>1</Key>
-      <Value>Hmmm... I sense something off with you.</Value>
+      <Value>[Text:Hmmm... I sense something off with you.]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>My elementals are getting stronger, there's something about this hollow...</Value>
+      <Value>[Text:My elementals are getting stronger, there's something about this hollow...]</Value>
     </Item>
     <Item>
       <Key>JoinParty</Key>
-      <Value>Yes. We'll accompany you for the day.</Value>
+      <Value>[Text:Yes. We'll accompany you for the day.]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>How can I aid you?{Talk:Talk|Join Party:Party}</Value>
+      <Value>[Text:How can I aid you?{Talk:Talk|Join Party:Party}]</Value>
     </Item>
   </Asset>
 </XnaContent>

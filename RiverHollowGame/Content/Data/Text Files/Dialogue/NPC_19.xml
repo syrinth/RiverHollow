@@ -3,35 +3,35 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Well now, there's an adventurer if I've ever seen one. Welcome to town! I'm $Character_19$, and I run the General Store. I'm sure I've got all manner of useful things in stock for you.</Value>
+      <Value>[Text:Well now, there's an adventurer if I've ever seen one. Welcome to town! I'm $Character_19$, and I run the General Store. I'm sure I've got all manner of useful things in stock for you.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Hello! You know, my family has been living in this town for over a century. It may not look like much, but this town runs in my blood.</Value>
+      <Value>[Text:Hello! You know, my family has been living in this town for over a century. It may not look like much, but this town runs in my blood.]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Lovely day today, isn't it? It's a wonder what some fresh air will do for you!</Value>
+      <Value>[Text:Lovely day today, isn't it? It's a wonder what some fresh air will do for you!]</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>
-      <Value>Oh, hello $Name$, What can I do for you? {Talk:Talk|Construct Buildings:BuyBuildings|Maintain Buildings:Maintenance|Never Mind:Cancel}</Value>
+      <Value>[Text:Oh, hello $Name$, What can I do for you? {Talk:Talk|Construct Buildings:BuyBuildings|Maintain Buildings:Maintenance|Never Mind:Cancel}]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>Thank you!</Value>
+      <Value>[Text:Thank you!]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Well now, what can I do for you?{Talk:Talk|Gift:GiveGift|Never Mind:Cancel}</Value>
+      <Value>[Text:Well now, what can I do for you?{Talk:Talk|Gift:GiveGift|Never Mind:Cancel}]</Value>
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>What are you doing running around today? On a day like this, you should be inside where it's warm and dry.</Value>
+      <Value>[Text:What are you doing running around today? On a day like this, you should be inside where it's warm and dry.]</Value>
     </Item>
     <Item>
       <Key>Raining|2</Key>
-      <Value>My father used to tell me stories about nature spirits when I was a lad. Apparently some of them like to play in the rain. I fancy I can sometimes hear one, but I've never seen one with my own eyes.</Value>
+      <Value>[Text:My father used to tell me stories about nature spirits when I was a lad. Apparently some of them like to play in the rain. I fancy I can sometimes hear one, but I've never seen one with my own eyes.]</Value>
     </Item>
   </Asset>
 </XnaContent>

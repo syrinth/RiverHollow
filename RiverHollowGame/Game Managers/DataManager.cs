@@ -54,11 +54,13 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diPlayerAnimationData;
         public static Dictionary<int, Dictionary<string, string>> PlayerAnimationData => _diPlayerAnimationData;
 
+        static Dictionary<string, Dictionary<string, string>> _di;
+        static Dictionary<string, Dictionary<string, string>> _diObjectText;
         public static Dictionary<int, string> DiMessages;
 
         static Dictionary<int, Dictionary<string, string>> _diBuildings;
         static Dictionary<int, Dictionary<string, string>> _diItemData;
-        static Dictionary<string, Dictionary<string, string>> _diItemText;
+       
         static Dictionary<int, Dictionary<string, string>> _diStatusEffects;
         static Dictionary<int, Dictionary<string, string>> _diWorkers;
         public static Dictionary<int, Dictionary<string, string>> DIWorkers => _diWorkers;
@@ -160,24 +162,13 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<string, string> TaggedStringToDictionary(string data)
         {
             Dictionary<string, string> dss = new Dictionary<string, string>();
-            foreach (string s in Util.FindTags(data))
-            {
-                if (s.Contains(":"))
-                {
-                    string[] tagSplit = s.Split(':');
-                    dss[tagSplit[0]] = tagSplit[1];
-                }
-                else
-                {
-                    dss[s] = "";
-                }
-            }
+            Util.DictionaryFromTaggedString(ref dss, data);
             return dss;
         }
 
         private static void LoadTextFiles(ContentManager Content)
         {
-            LoadDictionary(ref _diItemText, FOLDER_TEXTFILES + "Object_Text", Content);
+            LoadDictionary(ref _diObjectText, FOLDER_TEXTFILES + "Object_Text", Content);
             _diGameText = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + "GameText");
 
             _diSongs = Content.Load<Dictionary<int, List<string>>>(@"Data\Songs");
@@ -372,7 +363,7 @@ namespace RiverHollow.Game_Managers
 
         public static bool TextDataHasKey(string identifier)
         {
-            return _diItemText.ContainsKey(identifier);
+            return _diObjectText.ContainsKey(identifier);
         }
 
         public static void GetTextData(string identifier, int id, ref string value, string key)
@@ -382,7 +373,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void GetTextData(string textKey, ref string value, string key)
         {
-            if (_diItemText[textKey].ContainsKey(key)) { value = _diItemText[textKey][key];  }
+            if (_diObjectText[textKey].ContainsKey(key)) { value = _diObjectText[textKey][key];  }
             else { value = string.Empty;}
 
             string[] specialActions = null;

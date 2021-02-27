@@ -3,23 +3,23 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Oh... hello. I don't think I've seen your face before, are you new to town? Yes, you must be. Well, my name is $Character_18$, I'm $Character_5$'s aunt.</Value>
+      <Value>[Text:Oh... hello. I don't think I've seen your face before, are you new to town? Yes, you must be. Well, my name is $Character_18$, I'm $Character_5$'s aunt.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>You seem to be in a rush, don't let me keep you. I hope you have a good day.</Value>
+      <Value>[Text:You seem to be in a rush, don't let me keep you. I hope you have a good day.]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Hello, $Name$. Could you talk to $1$ for me by any chance? I worry about her, always pushing herself so hard.</Value>
+      <Value>[Text:Hello, $Name$. Could you talk to $1$ for me by any chance? I worry about her, always pushing herself so hard.]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
-      <Value>For me? Oh, $Name$, you shouldn't have.</Value>
+      <Value>[Text:For me? Oh, $Name$, you shouldn't have.]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Oh, hello. {Talk:Talk|Gift:GiveGift|Never Mind:Cancel}</Value>
+      <Value>[Text:Oh, hello. {Talk:Talk|Gift:GiveGift|Never Mind:Cancel}]</Value>
     </Item>
   </Asset>
 </XnaContent>
