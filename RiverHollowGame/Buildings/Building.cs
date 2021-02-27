@@ -328,8 +328,6 @@ namespace RiverHollow.Buildings
             }
 
             _sprite.PlayAnimation(Level.ToString());
-
-            DataManager.DiNPC[_iNPCBuilderID].SetBuildTarget(null);
         }
 
         /// <summary>
@@ -395,11 +393,6 @@ namespace RiverHollow.Buildings
             PersonalID = data.iPersonalID;
             Level = data.iBldgLevel;
             _iUpgradeTimer = data.iUpgradeTimer;
-
-            if (_iUpgradeTimer > 0)
-            {
-                DataManager.DiNPC[_iNPCBuilderID].SetBuildTarget(this, true);
-            }
 
             foreach (ContainerData c in data.containers)
             {

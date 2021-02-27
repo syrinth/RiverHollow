@@ -84,9 +84,6 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "NPCData")]
             public List<NPCData> NPCData;
 
-            [XmlArray(ElementName = "EligibleData")]
-            public List<EligibleNPCData> EligibleData;
-
             [XmlArray(ElementName = "BuildingInfoData")]
             public List<BuildInfoData> BuildingInfoData;
 
@@ -301,11 +298,6 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "Collection")]
             public List<bool> collection;
-        }
-        public struct EligibleNPCData
-        {
-            [XmlElement(ElementName = "NPCData")]
-            public NPCData npcData;
 
             [XmlElement(ElementName = "Married")]
             public bool married;
@@ -507,7 +499,6 @@ namespace RiverHollow.Game_Managers
                 CurrentMissions = new List<MissionData>(),
                 AvailableMissions = new List<MissionData>(),
                 NPCData = new List<NPCData>(),
-                EligibleData = new List<EligibleNPCData>(),
                 BuildingInfoData = new List<BuildInfoData>(),
                 ShopData = new List<ShopData>(),
                 TheMailbox = PlayerManager.PlayerMailbox.SaveData(),
@@ -557,8 +548,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (Villager n in DataManager.DiNPC.Values)
             {
-                if (n.IsEligible()) { data.EligibleData.Add(((EligibleNPC)n).SaveData()); }
-                else { data.NPCData.Add(n.SaveData()); }
+                data.NPCData.Add(n.SaveData());
             }
 
             foreach (BuildInfo b in GameManager.DIBuildInfo.Values)
@@ -749,12 +739,6 @@ namespace RiverHollow.Game_Managers
             foreach (NPCData n in dataToLoad.NPCData)
             {
                 Villager target = DataManager.DiNPC[n.npcID];
-                target.LoadData(n);
-            }
-
-            foreach (EligibleNPCData n in dataToLoad.EligibleData)
-            {
-                EligibleNPC target = (EligibleNPC)DataManager.DiNPC[n.npcData.npcID];
                 target.LoadData(n);
             }
 

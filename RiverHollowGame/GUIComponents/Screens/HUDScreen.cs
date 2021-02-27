@@ -1514,18 +1514,18 @@ namespace RiverHollow.GUIComponents.Screens
                 GUIImage _gGift;
                 List<GUIImage> _liFriendship;
 
-                public FriendshipBox(Villager c, int mainWidth) : base(GUIWindow.Window_2, mainWidth, 16)
+                public FriendshipBox(Villager v, int mainWidth) : base(GUIWindow.Window_2, mainWidth, 16)
                 {
                     _liFriendship = new List<GUIImage>();
                     _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
                     _gTextName = new GUIText("XXXXXXXXXX");
-                    if (c.GetFriendshipLevel() == 0)
+                    if (v.GetFriendshipLevel() == 0)
                     {
                         _liFriendship.Add(new GUIImage(new Rectangle(51, 68, 10, 9), ScaleIt(10), ScaleIt(9), DataManager.DIALOGUE_TEXTURE));
                     }
                     else
                     {
-                        int notches = c.GetFriendshipLevel() - 1;
+                        int notches = v.GetFriendshipLevel() - 1;
                         int x = 0;
                         if (notches <= 3) { x = 16; }
                         else if (notches <= 6) { x = 32; }
@@ -1547,23 +1547,22 @@ namespace RiverHollow.GUIComponents.Screens
                         if (j == 0) { _liFriendship[j].AnchorAndAlignToObject(_gTextName, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN); }
                         else { _liFriendship[j].AnchorAndAlignToObject(_liFriendship[j - 1], SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN); }
                     }
-                    _gTextName.SetText(c.Name);
+                    _gTextName.SetText(v.Name);
 
                     _gGift = new GUIImage(new Rectangle(19, 52, 10, 8), ScaleIt(10), ScaleIt(8), DataManager.DIALOGUE_TEXTURE);
                     _gGift.AnchorToInnerSide(this, SideEnum.Right);
                     _gGift.AlignToObject(_gTextName, SideEnum.CenterY);
-                    _gGift.Alpha((c.CanGiveGift) ? 1 : 0.3f);
+                    _gGift.Alpha((v.CanGiveGift) ? 1 : 0.3f);
 
-                    if (c.IsEligible())
+                    if (v.CanBeMarried)
                     {
-                        EligibleNPC e = (EligibleNPC)c;
                         _gAdventure = new GUIImage(new Rectangle(4, 52, 8, 9), ScaleIt(8), ScaleIt(9), DataManager.DIALOGUE_TEXTURE);
                         _gAdventure.AnchorAndAlignToObject(_gGift, SideEnum.Left, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
-                        if (PlayerManager.GetParty().Contains(e))
+                        if (PlayerManager.GetParty().Contains(v))
                         {
                             _gAdventure.SetColor(Color.Gold);
                         }
-                        else { _gAdventure.Alpha(e.CanJoinParty ? 1 : 0.3f); }
+                        else { _gAdventure.Alpha(v.CanJoinParty ? 1 : 0.3f); }
                     }
 
                     Resize();

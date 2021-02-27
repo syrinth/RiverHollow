@@ -298,9 +298,6 @@ namespace RiverHollow.Game_Managers
                     case "Shopkeeper":
                         n = new ShopKeeper(npcData.Key, diData);
                         break;
-                    case "Eligible":
-                        n = new EligibleNPC(npcData.Key, diData);
-                        break;
                     case "ShippingGremlin":
                         GameManager.ShippingGremlin = new ShippingGremlin(npcData.Key, diData);
                         n = GameManager.ShippingGremlin;

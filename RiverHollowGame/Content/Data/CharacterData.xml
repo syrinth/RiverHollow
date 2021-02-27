@@ -7,35 +7,35 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Eligible][PortRow:1][Collection:0|1|2][Class:0][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:8][ArrivalDelay:1][HouseID:13]</Value>
+      <Value>[Type:Eligible][PortRow:1][Collection:0|1|2][Class:0][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:8][ArrivalDelay:1][HouseID:13][CanMarry]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Eligible][PortRow:1][HouseID:14][Collection:0|1|2][Class:1][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:24]</Value>
+      <Value>[Type:Eligible][PortRow:1][HouseID:14][Collection:0|1|2][Class:1][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:24][CanMarry]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Eligible][PortRow:1][HouseID:15][Collection:0|1|2][Class:2][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:22][ArrivalDelay:2]</Value>
+      <Value>[Type:Eligible][PortRow:1][HouseID:15][Collection:0|1|2][Class:2][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:22][ArrivalDelay:2][CanMarry]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Eligible][PortRow:1][HouseID:16][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:18]</Value>
+      <Value>[Type:Eligible][PortRow:1][HouseID:16][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:18][CanMarry]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Eligible][PortRow:1][HouseID:17][Collection:0|1|2][Class:4][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:20]</Value>
+      <Value>[Type:Eligible][PortRow:1][HouseID:17][Collection:0|1|2][Class:4][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:20][CanMarry]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Eligible][PortRow:1][Collection:0|1|2][Class:5][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:12][RequiredBuildingID:7][ArrivalDelay:1]</Value>
+      <Value>[Type:Eligible][PortRow:1][Collection:0|1|2][Class:5][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:12][RequiredBuildingID:7][ArrivalDelay:1][CanMarry]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Eligible][PortRow:1][HouseID:19][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:6]</Value>
+      <Value>[Type:Eligible][PortRow:1][HouseID:19][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:6][CanMarry]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Eligible][PortRow:1][HouseID:7][Collection:0|1|2][Class:7][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:24][ArrivalDelay:4]</Value>
+      <Value>[Type:Eligible][PortRow:1][HouseID:7][Collection:0|1|2][Class:7][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:24][ArrivalDelay:4][CanMarry]</Value>
     </Item>
     <Item>
       <Key>9</Key>

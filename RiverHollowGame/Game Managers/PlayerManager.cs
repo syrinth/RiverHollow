@@ -44,6 +44,7 @@ namespace RiverHollow.Game_Managers
 
         private static Dictionary<int, Building> _diBuildings;
         public static Dictionary<int, Building>.ValueCollection BuildingList => _diBuildings.Values;
+        public static Building PlayerHome => _diBuildings[0];
 
         public static bool ReadyToSleep = false;
 
@@ -61,7 +62,7 @@ namespace RiverHollow.Game_Managers
 
         public static bool AllowMovement = true;
 
-        private static EligibleNPC _marriedTo;
+        private static Villager _npcSpouse;
         #endregion
 
         public static void Initialize()

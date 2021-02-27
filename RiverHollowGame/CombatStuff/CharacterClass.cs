@@ -70,10 +70,16 @@ namespace RiverHollow.CombatStuff
         public int HeadID;
         public int WristID;
 
-        public CharacterClass(int id, Dictionary<string, string> stringData)
+        public CharacterClass()
         {
             ActionList = new List<MenuAction>();
             _liSpecialActionsList = new List<CombatAction>();
+
+            _iID = -1;
+        }
+
+        public CharacterClass(int id, Dictionary<string, string> stringData) : this()
+        {
             ImportBasics(id, stringData);
         }
 

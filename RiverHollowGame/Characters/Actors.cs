@@ -241,8 +241,8 @@ namespace RiverHollow.Characters
         public virtual Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, TileSize);
         public virtual Rectangle HoverBox => new Rectangle((int)Position.X, (int)Position.Y - TileSize, Width, Height);
 
-        protected bool _bActive = true;
-        public virtual bool Active => _bActive;
+        protected bool _bOnTheMap = true;
+        public virtual bool Active => _bOnTheMap;
 
         protected bool _bHover;
 
@@ -269,7 +269,7 @@ namespace RiverHollow.Characters
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
-            if (_bActive)
+            if (_bOnTheMap)
             {
                 base.Draw(spriteBatch, useLayerDepth);
             }
@@ -585,7 +585,7 @@ namespace RiverHollow.Characters
         /// <param name="value">Whether the actor is active or not.</param>
         public void Activate (bool value)
         {
-            _bActive = value;
+            _bOnTheMap = value;
         }
 
         /// <summary>
@@ -1865,10 +1865,6 @@ namespace RiverHollow.Characters
    
     public class Villager : ClassedCombatant
     {
-        //Data for building structures
-        Building _buildTarget;
-        bool _bStartedBuilding;
-
         protected int _iIndex;
         public int ID  => _iIndex;
         protected int _iHouseBuildingID = -1;
@@ -1877,15 +1873,38 @@ namespace RiverHollow.Characters
         public NPCTypeEnum NPCType => _eNPCType;
 
         protected Dictionary<int, bool> _diCollection;
-        public bool Introduced;
+        public bool Introduced = false;
         public bool CanGiveGift = true;
-        public bool ArrivedInTown = false;
 
+        private bool _bCanMarry = false;
+        public bool CanBeMarried => _bCanMarry;
+        private bool _bMarried = false;
+        public bool CanJoinParty { get; private set; } = false;
+
+        private bool _bArrivedInTown = false;
+        public bool ArrivedInTown => _bArrivedInTown;
         private int _iArrivalDelay = 0;
 
         protected Dictionary<string, List<Dictionary<string, string>>> _diCompleteSchedule;         //Every day with a list of KVP Time/GoToLocations
         List<KeyValuePair<string, PathData>> _liTodayPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
         protected int _iScheduleIndex;
+
+        /// <summary>
+        /// As in the base, we need to calculate the Actor's position based off of the Sprite's position.
+        /// However, there is a new complication in that there are mandatory buffers of one TileSize
+        /// on both the Left, Right, and Bottom of the Sprite.
+        /// </summary>
+        public override Vector2 Position
+        {
+            get
+            {
+                return new Vector2(_sprBody.Position.X + TileSize, _sprBody.Position.Y + _sprBody.Height - (TileSize * 2));
+            }
+            set
+            {
+                _sprBody.Position = new Vector2(value.X - TileSize, value.Y - _sprBody.Height + (TileSize * 2));
+            }
+        }
 
         public Villager() {
             _diCollection = new Dictionary<int, bool>();
@@ -1899,8 +1918,6 @@ namespace RiverHollow.Characters
             _sName = n.Name;
             _diDialogue = n._diDialogue;
             _sPortrait = n.Portrait;
-            //_rPortrait = new Rectangle(0, 0, 48, 60);
-            //_sPortrait = _sAdventurerFolder + "WizardPortrait";
 
             _iBodyWidth = n._sprBody.Width;
             _iBodyHeight = n._sprBody.Height;
@@ -1924,25 +1941,38 @@ namespace RiverHollow.Characters
             _liRequiredBuildingIDs = new List<int>();
             _diDialogue = DataManager.GetNPCDialogue(_iIndex);
             DataManager.GetTextData("Character", _iIndex, ref _sName, "Name");
+            if (stringData.ContainsKey("Type")) {
+                _eNPCType = Util.ParseEnum<NPCTypeEnum>(stringData["Type"]);
+            }
 
             _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Villager", _iIndex.ToString("00"));
-            //_sPortrait = _sPortraitFolder + "WizardPortrait";
+
+            if (stringData.ContainsKey("Class"))
+            {
+                SetClass(DataManager.GetClassByIndex(int.Parse(stringData["Class"])));
+                AssignStartingGear();
+            }
+            else { SetClass(new CharacterClass()); }
+
+            _iSpriteWidth = TileSize * 3;
+            _iSpriteHeight = TileSize * 3;
 
             if (loadanimations)
             {
-                LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(stringData), _sVillagerFolder + "NPC_" + _iIndex.ToString("00"));
+                List<AnimationData> liAnimationData;
+                if (stringData.ContainsKey("Class")) { liAnimationData = LoadWorldAndCombatAnimations(stringData); }
+                else { liAnimationData = LoadWorldAnimations(stringData); }
+
+                LoadSpriteAnimations(ref _sprBody, liAnimationData, _sVillagerFolder + "NPC_" + _iIndex.ToString("00"));
                 PlayAnimationVerb(VerbEnum.Idle);
             }
 
-            _bActive = !stringData.ContainsKey("Inactive");
-            if (stringData.ContainsKey("Type")) { _eNPCType = Util.ParseEnum<NPCTypeEnum>(stringData["Type"]); }
-            //if (data.ContainsKey("HomeMap"))
-            //{
-            //    _iHouseBuildingID = data["HomeMap"];
-            //    CurrentMapName = _iHouseBuildingID;
-            //}
+            _bOnTheMap = !stringData.ContainsKey("Inactive");
+
+            Util.AssignValue(ref _bCanMarry, "CanMarry", stringData);
+
             Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
-            Util.AssignValue(ref ArrivedInTown, "Arrived", stringData);
+            Util.AssignValue(ref _bArrivedInTown, "Arrived", stringData);
             Util.AssignValue(ref _iArrivalDelay, "ArrivalDelay", stringData);
             if (stringData.ContainsKey("RequiredBuildingID"))
             {
@@ -1979,39 +2009,43 @@ namespace RiverHollow.Characters
 
         public override void Update(GameTime gTime)
         {
-            if (_liTodayPathing != null)
+            //Only follow schedules ATM if they are active and not married
+            if (_bOnTheMap && !_bMarried)
             {
-                string currTime = GameCalendar.GetTime();
-                //_scheduleIndex keeps track of which pathing route we're currently following.
-                //Running late code to be implemented later
-                if (_iScheduleIndex < _liTodayPathing.Count && ((_liTodayPathing[_iScheduleIndex].Key == currTime)))// || RunningLate(movementList[_scheduleIndex].Key, currTime)))
+                if (_liTodayPathing != null)
                 {
-                    _liTilePath = _liTodayPathing[_iScheduleIndex++].Value.Path;
-                }
-            }
-
-            //Determine whether or not we are currently moving
-            bool stillMoving = _liTilePath.Count > 0;
-
-            //Call up to the base to handle normal Update methods
-            //Movement is handled here
-            base.Update(gTime);
-
-            //If we ended out movement during the update, process any directional facting
-            //And animations that may be requested
-            if (stillMoving && _liTilePath.Count == 0)
-            {
-                string direction = _liTodayPathing[_iScheduleIndex-1].Value.Direction;
-                string animation = _liTodayPathing[_iScheduleIndex-1].Value.Animation;
-                if (!string.IsNullOrEmpty(direction))
-                {
-                    Facing = Util.ParseEnum<DirectionEnum>(direction);
-                    PlayAnimation(VerbEnum.Idle, Facing);
+                    string currTime = GameCalendar.GetTime();
+                    //_scheduleIndex keeps track of which pathing route we're currently following.
+                    //Running late code to be implemented later
+                    if (_iScheduleIndex < _liTodayPathing.Count && ((_liTodayPathing[_iScheduleIndex].Key == currTime)))// || RunningLate(movementList[_scheduleIndex].Key, currTime)))
+                    {
+                        _liTilePath = _liTodayPathing[_iScheduleIndex++].Value.Path;
+                    }
                 }
 
-                if (!string.IsNullOrEmpty(animation))
+                //Determine whether or not we are currently moving
+                bool stillMoving = _liTilePath.Count > 0;
+
+                //Call up to the base to handle normal Update methods
+                //Movement is handled here
+                base.Update(gTime);
+
+                //If we ended out movement during the update, process any directional facting
+                //And animations that may be requested
+                if (stillMoving && _liTilePath.Count == 0)
                 {
-                    _sprBody.PlayAnimation(animation);
+                    string direction = _liTodayPathing[_iScheduleIndex - 1].Value.Direction;
+                    string animation = _liTodayPathing[_iScheduleIndex - 1].Value.Animation;
+                    if (!string.IsNullOrEmpty(direction))
+                    {
+                        Facing = Util.ParseEnum<DirectionEnum>(direction);
+                        PlayAnimation(VerbEnum.Idle, Facing);
+                    }
+
+                    if (!string.IsNullOrEmpty(animation))
+                    {
+                        _sprBody.PlayAnimation(animation);
+                    }
                 }
             }
         }
@@ -2083,6 +2117,18 @@ namespace RiverHollow.Characters
                     GUIManager.CloseMainObject();
                     nextText = Gift(GameManager.CurrentItem);
                 }
+                else if (chosenAction.Equals("Party"))
+                {
+                    if (_bMarried || CanJoinParty)
+                    {
+                        JoinParty();
+                        nextText = GetDialogEntry("JoinPartyYes");
+                    }
+                    else
+                    {
+                        nextText = GetDialogEntry("JoinPartyNo");
+                    }
+                }
             }
 
             if (!string.IsNullOrEmpty(nextText)) { rv = true; }
@@ -2134,6 +2180,7 @@ namespace RiverHollow.Characters
             return _liCommands;
         }
 
+        #region Spawning methods
         /// <summary>
         /// Call this method to determine if a Villager has arrived in town.
         /// This method returns true if the villager arrived in town overnight and was not previously there
@@ -2156,8 +2203,8 @@ namespace RiverHollow.Characters
                         }
                     }
 
-                    ArrivedInTown = arrived;
-                    rv = ArrivedInTown;
+                    _bArrivedInTown = arrived;
+                    rv = _bArrivedInTown;
                 }
                 else
                 {
@@ -2168,23 +2215,31 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        public virtual void RollOver()
+        /// <summary>
+        /// Quick call to see if the NPC's home is built. Returns false if they have no assigned home.
+        /// </summary>
+        protected bool IsHomeBuilt()
         {
-            if (!_bStartedBuilding && _buildTarget != null)
-            {
-                _bStartedBuilding = true;
-            }
+            return _iHouseBuildingID != -1 && GameManager.DIBuildInfo[_iHouseBuildingID].Built;
+        }
 
-            //If we failed to move the NPC to a building location, because there was none
-            //Add the NPC to their home map
-            if (!MoveToBuildingLocation())
-            {
-                if (ArrivedInTown)
-                {
-                    MoveToSpawn();
-                    CalculatePathing();
-                }
-            }
+        /// <summary>
+        /// Call to return the name of the map the Villager should return to on Rollover.
+        /// 
+        /// If the NPC is married, they spawn in the house, otherwise if their home is built, they spawn there.
+        /// 
+        /// Otherwise, they spawn in the Inn.
+        /// </summary>
+        /// <returns>The string name of the map to put the NPC on</returns>
+        protected virtual string GetSpawnMapName()
+        {
+            string rv = string.Empty;
+
+            if (_bMarried) { rv = PlayerManager.PlayerHome.MapName; }
+            else if (IsHomeBuilt()) { rv = PlayerManager.GetBuildingByID(_iHouseBuildingID).MapName; }
+            else if (_iHouseBuildingID != -1) { rv = "mapInn_Upper_1"; }
+
+            return rv;
         }
 
         /// <summary>
@@ -2193,40 +2248,28 @@ namespace RiverHollow.Characters
         /// </summary>
         public void MoveToSpawn()
         {
-            string mapName = GetMapName();
+            _bOnTheMap = true;
+            PlayerManager.RemoveFromParty(this);
+
+            string mapName = GetSpawnMapName();
 
             if (!string.IsNullOrEmpty(mapName))
             {
                 CurrentMap?.RemoveCharacterImmediately(this);
                 CurrentMapName = mapName;
                 RHMap map = MapManager.Maps[mapName];
-                string strSpawn = string.Empty;
 
-                if (IsHomeBuilt()) {
-                    strSpawn = "NPC_" + _iIndex.ToString("00"); }
-                else {
-                    strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
+                string strSpawn = string.Empty;
+                if (IsHomeBuilt()) { strSpawn = "NPC_" + _iIndex.ToString("00"); }
+                else { strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
 
                 Position = Util.SnapToGrid(map.GetCharacterSpawn(strSpawn));
                 map.AddCharacterImmediately(this);
             }
         }
+        #endregion
 
-        protected bool IsHomeBuilt()
-        {
-            return _iHouseBuildingID != -1 && GameManager.DIBuildInfo[_iHouseBuildingID].Built;
-        }
-
-        protected virtual string GetMapName()
-        {
-            string rv = string.Empty;
-
-            if (IsHomeBuilt()) { rv = PlayerManager.GetBuildingByID(_iHouseBuildingID).MapName; }
-            else if(_iHouseBuildingID != -1) { rv = "mapInn_Upper_1"; }
-
-            return rv;
-        }
-
+        #region Pathing Handlers
         public void CalculatePathing()
         {
             string currDay = GameCalendar.GetDayOfWeek();
@@ -2344,6 +2387,23 @@ namespace RiverHollow.Characters
 
             return rv;
         }
+        #endregion
+
+        public void RollOver()
+        {
+            if (ArrivedInTown)
+            {
+                MoveToSpawn();
+                CalculatePathing();
+
+                //Reset on Monday
+                if (GameCalendar.DayOfWeek == 0)
+                {
+                    CanJoinParty = true;
+                    CanGiveGift = true;
+                }
+            }
+        }
 
         protected bool CheckTaskLog(ref string taskCompleteText)
         {
@@ -2365,14 +2425,13 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        public virtual string Gift(Item item)
+        public string Gift(Item item)
         {
             string rv = string.Empty;
+
+            bool giftGiven = true;
             if (item != null)
             {
-                item.Remove(1);
-                CanGiveGift = false;
-
                 if (_diCollection.ContainsKey(item.ItemID))
                 {
                     FriendshipPoints += _diCollection[item.ItemID] ? 50 : 20;
@@ -2380,70 +2439,49 @@ namespace RiverHollow.Characters
                     int index = new List<int>(_diCollection.Keys).FindIndex( x => x == item.ItemID);
 
                     _diCollection[item.ItemID] = true;
-                    MapManager.Maps["mapHouseNPC" + _iIndex].AddCollectionItem(item.ItemID, _iIndex, index);
+                    MapManager.Maps[GetSpawnMapName()].AddCollectionItem(item.ItemID, _iIndex, index);
+                }
+                else if (item.CompareSpecialType(SpecialItemEnum.Marriage))
+                {
+                    if (_bCanMarry)
+                    {
+                        if (FriendshipPoints > 200)
+                        {
+                            _bMarried = true;
+                            rv = GetDialogEntry("MarriageYes");
+                        }
+                        else   //Marriage refused, re-add the item
+                        {
+                            giftGiven = false;
+                            rv = GetDialogEntry("MarriageNo");
+                        }
+                    }
+                    else {
+                        giftGiven = false;
+                        rv = GetDialogEntry("MarriageNo");
+                    }
                 }
                 else
                 {
                     rv = GetDialogEntry("Gift");
                     FriendshipPoints += 1000;
                 }
-
-                //if (item.IsMap() && NPCType == Villager.NPCTypeEnum.Ranger)
-                //{
-                //    rv = GetDialogEntry("Adventure");
-                //    DungeonManagerOld.LoadNewDungeon((AdventureMap)item);
-                //}
             }
+
+            if (giftGiven)
+            {
+                item.Remove(1);
+                CanGiveGift = false;
+            }
+
             return rv;
         }
 
-        public bool IsEligible() { return _eNPCType == NPCTypeEnum.Eligible; }
-
-        /// <summary>
-        /// Assigns the building for the mason to build
-        /// If there is no building, also unset the building flag because he's finished.
-        /// </summary>
-        /// <param name="b">The building to build</param>
-        public void SetBuildTarget(Building b, bool startBuilding = false)
+        public void JoinParty()
         {
-            _buildTarget = b;
-            if (b == null)
-            {
-                _bStartedBuilding = false;
-            }
-            else
-            {
-                _bStartedBuilding = startBuilding;
-            }
-        }
-
-        /// <summary>
-        /// Use to determine whether the mason is currently building and nees to follow
-        /// nonstandardlogic
-        /// </summary>
-        private bool IsBuilding()
-        {
-            return _bStartedBuilding && _buildTarget != null;
-        }
-
-        /// <summary>
-        /// Check to see if the NPC is currently responsible for building anything and,
-        /// if so, move them to the appropriate map and position.
-        /// </summary>
-        /// <returns>True if they are buildingand have been moved.</returns>
-        private bool MoveToBuildingLocation()
-        {
-            bool rv = false;
-            if (IsBuilding())
-            {
-                rv = true;
-                CurrentMap.RemoveCharacter(this);
-                RHMap map = MapManager.Maps[MapManager.HomeMap];
-                Position = Util.SnapToGrid(_buildTarget.MapPosition + _buildTarget.BuildFromPosition);
-                map.AddCharacterImmediately(this);
-            }
-
-            return rv;
+            _bOnTheMap = false;
+            CanJoinParty = false;
+            PlayerManager.AddToParty(this);
         }
 
         /// <summary>
@@ -2463,21 +2501,29 @@ namespace RiverHollow.Characters
                 arrivalDelay = _iArrivalDelay,
                 introduced = Introduced,
                 friendship = FriendshipPoints,
-                collection = new List<bool>(_diCollection.Values)
+                collection = new List<bool>(_diCollection.Values),
+                married = _bMarried,
+                canJoinParty = CanJoinParty,
+                canGiveGift = CanGiveGift
             };
+
+            if (_class != null) { npcData.classedData = SaveClassedCharData(); }
 
             return npcData;
         }
         public void LoadData(NPCData data)
         {
             Introduced = data.introduced;
-            ArrivedInTown = data.arrived;
+            _bArrivedInTown = data.arrived;
             _iArrivalDelay = data.arrivalDelay;
             FriendshipPoints = data.friendship;
+            _bMarried = data.married;
+            CanJoinParty = data.canJoinParty;
+            CanGiveGift = data.canGiveGift;
+
+            if (_class != null) { LoadClassedCharData(data.classedData); }
 
             LoadCollection(data.collection);
-
-            MoveToBuildingLocation();
         }
 
         /// <summary>
@@ -2635,185 +2681,6 @@ namespace RiverHollow.Characters
             public void Unlock()
             {
                 _bLocked = false;
-            }
-        }
-    }
-
-    public class EligibleNPC : Villager
-    {
-        /// <summary>
-        /// As in the base, we need to calculate the Actor's position based off of the Sprite's position.
-        /// However, there is a new complication in that there are mandatory buffers of one TileSize
-        /// on both the Left, Right, and Bottom of the Sprite.
-        /// </summary>
-        public override Vector2 Position
-        {
-            get
-            {
-                return new Vector2(_sprBody.Position.X + TileSize, _sprBody.Position.Y + _sprBody.Height - (TileSize * 2));
-            }
-            set
-            {
-                _sprBody.Position = new Vector2(value.X - TileSize, value.Y - _sprBody.Height + (TileSize * 2));
-            }
-        }
-
-        public bool Married;
-        public bool CanJoinParty { get; private set; } = true;
-
-        public EligibleNPC(int index, Dictionary<string, string> data) : base(index, data, false)
-        {
-            _eNPCType = NPCTypeEnum.Eligible;
-
-            if (data.ContainsKey("Class"))
-            {
-                SetClass(DataManager.GetClassByIndex(int.Parse(data["Class"])));
-                AssignStartingGear();
-            }
-
-            _iSpriteWidth = TileSize * 3;
-            _iSpriteHeight = TileSize * 3;
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), _sVillagerFolder + "NPC_" + _iIndex.ToString("00"));
-            PlayAnimationVerb(VerbEnum.Idle);
-        }
-
-        public override void Update(GameTime gTime)
-        {
-            if (_bActive && !Married)   //Just for now
-            {
-                base.Update(gTime);
-            }
-        }
-
-        /// <summary>
-        /// Handler for the chosen action in a GUITextSelectionWindow.
-        /// Retrieve the next text based off of the Chosen Action from the GetDialogEntry
-        /// and perform any required actions.
-        /// </summary>
-        /// <param name="chosenAction">The action to perform logic on</param>
-        /// <param name="nextText">A reference to be filled out for the next text to display</param>
-        /// <returns>False if was triggered and we want to close the text window</returns>
-        public override bool HandleTextSelection(string chosenAction, ref string nextText)
-        {
-            bool rv = false;
-            rv = base.HandleTextSelection(chosenAction, ref nextText);
-
-            if (!rv)
-            {
-                if (chosenAction.Equals("Party"))
-                {
-                    if (Married || CanJoinParty)
-                    {
-                        JoinParty();
-                        nextText = GetDialogEntry("JoinPartyYes");
-                    }
-                    else
-                    {
-                        nextText = GetDialogEntry("JoinPartyNo");
-                    }
-                }
-            }
-
-            if (!string.IsNullOrEmpty(nextText)) { rv = true; }
-
-            return rv;
-        }
-
-        public override void RollOver()
-        {
-            if (ArrivedInTown) { 
-                CurrentMap?.RemoveCharacter(this);
-                RHMap map = MapManager.Maps[Married ? "mapManor" : GetMapName()];
-                string strSpawn = string.Empty;
-
-                if (IsHomeBuilt()) { strSpawn = "NPC_" + _iIndex.ToString("00"); }
-                else { strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
-
-                Position = Util.SnapToGrid(map.GetCharacterSpawn(strSpawn));
-
-                map.AddCharacter(this);
-
-                _bActive = true;
-                PlayerManager.RemoveFromParty(this);
-
-                //Reset on Monday
-                if (GameCalendar.DayOfWeek == 0)
-                {
-                    CanJoinParty = true;
-                    CanGiveGift = true;
-                }
-
-             //   CalculatePathing();
-            }
-        }
-
-        public override string Gift(Item item)
-        {
-            string rv = string.Empty;
-            if (item != null)
-            {
-                item.Remove(1);
-
-                if (item.CompareSpecialType(SpecialItemEnum.Marriage))
-                {
-                    if (FriendshipPoints > 200)
-                    {
-                        Married = true;
-                        rv = GetDialogEntry("MarriageYes");
-                    }
-                    else   //Marriage refused, readd the item
-                    {
-                        item.Add(1);
-                        InventoryManager.AddToInventory(item);
-                        rv = GetDialogEntry("MarriageNo");
-                    }
-                }
-                else
-                {
-                    rv = base.Gift(item);
-                }
-            }
-
-            return rv;
-        }
-
-        public void JoinParty()
-        {
-            _bActive = false;
-            CanJoinParty = false;
-            PlayerManager.AddToParty(((EligibleNPC)this));
-        }
-
-        public new EligibleNPCData SaveData()
-        {
-            EligibleNPCData npcData = new EligibleNPCData()
-            {
-                npcData = base.SaveData(),
-                married = Married,
-                canJoinParty = CanJoinParty,
-                canGiveGift = CanGiveGift,
-                classedData = SaveClassedCharData()
-            };
-
-            return npcData;
-        }
-        public void LoadData(EligibleNPCData data)
-        {
-            base.LoadData(data.npcData);
-            Introduced = data.npcData.introduced;
-            FriendshipPoints = data.npcData.friendship;
-            Married = data.married;
-            CanJoinParty = data.canJoinParty;
-            CanGiveGift = data.canGiveGift;
-            LoadClassedCharData(data.classedData);
-
-            LoadCollection(data.npcData.collection);
-
-            if (Married)
-            {
-                MapManager.Maps[GetMapName()].RemoveCharacter(this);
-                MapManager.Maps["mapManor"].AddCharacter(this);
-                Position = MapManager.Maps["mapManor"].GetCharacterSpawn("Spouse");
             }
         }
     }
@@ -3350,7 +3217,7 @@ namespace RiverHollow.Characters
 
             _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Spirit", _iID.ToString("00"));
 
-            _bActive = false;
+            _bOnTheMap = false;
 
             _iBodyWidth = TileSize;
             _iBodyHeight = TileSize + 2;
@@ -3361,7 +3228,7 @@ namespace RiverHollow.Characters
 
         public override void Update(GameTime gTime)
         {
-            if (_bActive && _bAwoken)
+            if (_bOnTheMap && _bAwoken)
             {
                 _sprBody.Update(gTime);
                 //if (_bActive)
@@ -3386,7 +3253,7 @@ namespace RiverHollow.Characters
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
-            if (_bActive && _bAwoken)
+            if (_bOnTheMap && _bAwoken)
             {
                 _sprBody.Draw(spriteBatch, useLayerDepth, _fVisibility);
             }
@@ -3421,13 +3288,13 @@ namespace RiverHollow.Characters
                 if (!active) { break; }
             }
 
-            _bActive = active;
+            _bOnTheMap = active;
             Triggered = false;
         }
         public override string GetOpeningText()
         {
             string rv = string.Empty;
-            if (_bActive)
+            if (_bOnTheMap)
             {
                 Triggered = true;
                 _fVisibility = 1.0f;
@@ -3562,7 +3429,7 @@ namespace RiverHollow.Characters
             return val;
         }
 
-        protected override string GetMapName()
+        protected override string GetSpawnMapName()
         {
             return "mapTown";
         }
