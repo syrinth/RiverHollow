@@ -7,10 +7,7 @@ using RiverHollow.GUIComponents.Screens;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
 using RiverHollow.Misc;
-using RiverHollow.Utilities;
 
-using static RiverHollow.Characters.ShopKeeper;
-using static RiverHollow.Characters.Actor;
 using RiverHollow.GUIComponents.GUIObjects;
 using static RiverHollow.Items.WorldItem;
 
@@ -54,8 +51,8 @@ namespace RiverHollow.Game_Managers
         public enum ActorMovementStateEnum { Idle, Walking };
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum TaskTypeEnum { None, GroupSlay, Slay, Fetch, Talk, Build };
-        public enum ActorEnum { Actor, Adventurer, CombatActor, Monster, NPC, ShippingGremlin, Spirit, Summon, WorldCharacter };
-        public enum NPCTypeEnum { Villager, Shopkeeper, Worker, ShippingGremlin }
+        public enum ActorEnum { Actor, Adventurer, Monster, Villager, ShippingGremlin, Spirit, Summon};
+        public enum NPCTypeEnum { Villager, Worker, ShippingGremlin }
         public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade };
         public enum PotencyBonusEnum { None, Conditions, Summon};
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };

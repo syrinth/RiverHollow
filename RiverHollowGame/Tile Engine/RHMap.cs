@@ -1383,7 +1383,7 @@ namespace RiverHollow.Tile_Engine
                                     rv = true;
                                 }
                             }
-                            else if (c.IsActorType(ActorEnum.NPC) || c.IsActorType(ActorEnum.ShippingGremlin))
+                            else if (c.IsActorType(ActorEnum.Villager) || c.IsActorType(ActorEnum.ShippingGremlin))
                             {
                                 Villager n = (Villager)c;
                                 if (n.CanGiveGift && InventoryManager.GetCurrentItem() != null &&
@@ -3081,9 +3081,9 @@ namespace RiverHollow.Tile_Engine
 
         internal void Talk()
         {
-            ((ShopKeeper)DataManager.DiNPC[_iShopID]).SetOpen(true);
-            ((ShopKeeper)DataManager.DiNPC[_iShopID]).Talk();
-            ((ShopKeeper)DataManager.DiNPC[_iShopID]).SetOpen(false);
+            (DataManager.DiNPC[_iShopID]).SetShopOpenStatus(true);
+            (DataManager.DiNPC[_iShopID]).Talk();
+            (DataManager.DiNPC[_iShopID]).SetShopOpenStatus(false);
         }
     }
 

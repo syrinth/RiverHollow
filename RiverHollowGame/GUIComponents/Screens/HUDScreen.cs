@@ -553,6 +553,11 @@ namespace RiverHollow.GUIComponents.Screens
         }
         public void BtnBuild()
         {
+            //Saving here to remember how we moved buildings
+            //RiverHollow.EnterBuildMode();
+            //GameManager.ClearGMObjects();
+            //GameManager.MoveBuilding();
+
             if (MapManager.CurrentMap.IsTown)
             {
                 _gMenuObject = new HUDConstruction(_closeMenu);

@@ -257,7 +257,6 @@ namespace RiverHollow.Characters
 
         public WorldActor() : base()
         {
-            _eActorType = ActorEnum.WorldCharacter;
             _iBodyWidth = TileSize;
             _iBodyHeight = HUMAN_HEIGHT;
 
@@ -730,7 +729,7 @@ namespace RiverHollow.Characters
 
             List<string> liCommands = RemoveEntries(options);
 
-            //If there's only two entires left, Talk and Never Mind, then go straight to Talk
+            //If there's only two entries left, Talk and Never Mind, then go straight to Talk
             string rv = string.Empty;
             if (liCommands.Count == 2)
             {
@@ -1033,7 +1032,6 @@ namespace RiverHollow.Characters
         public CombatActor() : base()
         {
             legalTiles = new PriorityQueue<RHTile>();
-            _eActorType = ActorEnum.CombatActor;
             _arrTiles = new RHTile[_iSize, _iSize];
             _liActions = new List<MenuAction>();
             _liStatusEffects = new List<StatusEffect>();
@@ -1881,6 +1879,9 @@ namespace RiverHollow.Characters
         private bool _bMarried = false;
         public bool CanJoinParty { get; private set; } = false;
 
+        private bool _bShopIsOpen = false;
+        private int _iShopIndex = -1;
+
         private bool _bArrivedInTown = false;
         public bool ArrivedInTown => _bArrivedInTown;
         private int _iArrivalDelay = 0;
@@ -1913,7 +1914,7 @@ namespace RiverHollow.Characters
         //Copy Construcor for Cutscenes
         public Villager(Villager n)
         {
-            _eActorType = ActorEnum.NPC;
+            _eActorType = ActorEnum.Villager;
             _iIndex = n.ID;
             _sName = n.Name;
             _diDialogue = n._diDialogue;
@@ -1926,7 +1927,7 @@ namespace RiverHollow.Characters
 
         public Villager(int index, Dictionary<string, string> stringData, bool loadanimations = true): this()
         {
-            _eActorType = ActorEnum.NPC;
+            _eActorType = ActorEnum.Villager;
             _diCompleteSchedule = new Dictionary<string, List<Dictionary<string, string>>>();
             _iScheduleIndex = 0;
             _iIndex = index;
@@ -1969,6 +1970,7 @@ namespace RiverHollow.Characters
 
             _bOnTheMap = !stringData.ContainsKey("Inactive");
 
+            Util.AssignValue(ref _iShopIndex, "ShopData", stringData);
             Util.AssignValue(ref _bCanMarry, "CanMarry", stringData);
 
             Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
@@ -2072,7 +2074,8 @@ namespace RiverHollow.Characters
             {
                 if (!CheckTaskLog(ref rv))
                 {
-                    if (!_bHasTalked) { rv = GetDailyDialogue(); }
+                    if (_bShopIsOpen) { rv = _diDialogue["ShopOpen"]; }
+                    else if (!_bHasTalked) { rv = GetDailyDialogue(); }
                     else { rv = GetSelectionText(); }
                 }
             }
@@ -2116,6 +2119,10 @@ namespace RiverHollow.Characters
                 {
                     GUIManager.CloseMainObject();
                     nextText = Gift(GameManager.CurrentItem);
+                }
+                else if (chosenAction.Equals("BuyItems"))
+                {
+                    GUIManager.OpenMainObject(new HUDPurchaseItems(GameManager.DIShops[_iShopIndex].FindAll(m => m.Unlocked)));
                 }
                 else if (chosenAction.Equals("Party"))
                 {
@@ -2389,6 +2396,18 @@ namespace RiverHollow.Characters
         }
         #endregion
 
+        /// <summary>
+        /// Flags the Villager that the shop open status is changing, as long as the Villager has Shop Data
+        /// </summary>
+        /// <param name="val">Whether the shop is open or closed</param>
+        public void SetShopOpenStatus(bool val)
+        {
+            if (_iShopIndex != -1)
+            {
+                _bShopIsOpen = true;
+            }
+        }
+
         public void RollOver()
         {
             if (ArrivedInTown)
@@ -2560,127 +2579,6 @@ namespace RiverHollow.Characters
                 _liPathing = path;
                 _sDir = direction;
                 _sAnimationName = animation;
-            }
-        }
-    }
-    public class ShopKeeper : Villager
-    {
-        private bool _bIsOpen;
-        private int _iShopIndex;
-
-        public ShopKeeper(int index, Dictionary<string, string> stringData) : base(index, stringData)
-        {
-            _eNPCType = NPCTypeEnum.Shopkeeper;
-
-            Util.AssignValue(ref _iShopIndex, "ShopData", stringData);
-        }
-
-        public override string GetOpeningText()
-        {
-            string rv = string.Empty;
-            if (Introduced && !CheckTaskLog(ref rv) && _bIsOpen)
-            {
-                rv = _diDialogue["ShopOpen"];
-            }
-            else if (string.IsNullOrEmpty(rv))  //For if the TaskLogs check actually caught something
-            {
-                rv = base.GetOpeningText();
-            }
-            return rv;
-        }
-
-        public void SetOpen(bool val)
-        {
-            _bIsOpen = true;
-        }
-
-        /// <summary>
-        /// Handler for the chosen action in a GUITextSelectionWindow.
-        /// Retrieve the next text based off of the Chosen Action from the GetDialogEntry
-        /// and perform any required actions.
-        /// </summary>
-        /// <param name="chosenAction">The action to perform logic on</param>
-        /// <param name="nextText">A reference to be filled out for the next text to display</param>
-        /// <returns>False if was triggered and we want to close the text window</returns>
-        public override bool HandleTextSelection(string chosenAction, ref string nextText)
-        {
-            bool rv = false;
-            rv = base.HandleTextSelection(chosenAction, ref nextText);
-
-            if (!rv)
-            {
-                List<Merchandise> merch = new List<Merchandise>();
-                if (chosenAction.Equals("Missions"))
-                {
-                    GUIManager.OpenMainObject(new HUDMissionWindow());
-                }
-                else if (chosenAction.Equals("BuyItems"))
-                {
-                    foreach (Merchandise m in GameManager.DIShops[_iShopIndex])
-                    {
-                        if (m.Unlocked) { merch.Add(m); }
-                    }
-                    GUIManager.OpenMainObject(new HUDPurchaseItems(merch));
-                }
-                else if (chosenAction.Equals("Move"))
-                {
-                    RiverHollow.EnterBuildMode();
-                    GameManager.ClearGMObjects();
-                    GameManager.MoveBuilding();
-                }
-                else if (chosenAction.Equals("UpgradeBuilding"))
-                {
-                    HUDManagement m = new HUDManagement(ActionTypeEnum.Upgrade);
-                    GUIManager.OpenMainObject(m);
-                    GameManager.ClearGMObjects();
-                }
-                else if (chosenAction.Equals("Destroy"))
-                {
-                    RiverHollow.EnterBuildMode();
-                    GameManager.ClearGMObjects();
-                    GameManager.DestroyBuilding();
-                }
-            }
-
-            if (!string.IsNullOrEmpty(nextText)) { rv = true; }
-
-            return rv;
-        }
-
-        public class Merchandise
-        {
-            private bool _bLocked = false;
-            public bool Unlocked => !_bLocked;
-            public string UniqueData { get; }
-            public int MerchID { get; } = -1;
-            private int _iCost;
-            public int MoneyCost => _iCost;
-
-            private readonly int _iTaskReq = -1;
-
-            public Merchandise(Dictionary<string, string> stringData)
-            {
-                if (stringData.ContainsKey("ItemID"))
-                {
-                    //Some items may have unique data so only parse the first entry
-                    //tag is ItemID to differentiate the tag from in the GUI ItemData Manager
-                    string[] data = stringData["ItemID"].Split('-');
-                    MerchID = int.Parse(data[0]);
-                    if (data.Length > 1) { UniqueData = data[1]; }
-                }
-
-
-                Util.AssignValue(ref _iCost, "Cost", stringData);
-                Util.AssignValue(ref _iTaskReq, "TaskReq", stringData);
-                Util.AssignValue(ref _bLocked, "Locked", stringData);
-            }
-
-            /// <summary>
-            /// Call to unlock the Merchandise so that it can be purchased.
-            /// </summary>
-            public void Unlock()
-            {
-                _bLocked = false;
             }
         }
     }

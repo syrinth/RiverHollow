@@ -14,7 +14,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Items.WorldItem;
 using static RiverHollow.Items.TriggerObject;
 using static RiverHollow.Items.WorldItem.Machine;
-using static RiverHollow.Characters.ShopKeeper;
+using RiverHollow.Misc;
 
 namespace RiverHollow.Game_Managers
 {
@@ -295,9 +295,6 @@ namespace RiverHollow.Game_Managers
                 Dictionary<string, string> diData = _diVillagerData[npcData.Key];
                 switch (diData["Type"])
                 {
-                    case "Shopkeeper":
-                        n = new ShopKeeper(npcData.Key, diData);
-                        break;
                     case "ShippingGremlin":
                         GameManager.ShippingGremlin = new ShippingGremlin(npcData.Key, diData);
                         n = GameManager.ShippingGremlin;

@@ -13,7 +13,6 @@ using RiverHollow.Items;
 using RiverHollow.Utilities;
 
 using static RiverHollow.Misc.Task;
-using static RiverHollow.Characters.ShopKeeper;
 
 namespace RiverHollow.Game_Managers
 {

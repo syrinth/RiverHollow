@@ -6,8 +6,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
-
-using static RiverHollow.Characters.ShopKeeper;
+using RiverHollow.Misc;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
 
