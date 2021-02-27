@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>Task_3</Key>
-      <Value>[Name:Not Available][Description:$Character_14$ want you to build a $Building_7$]</Value>
+      <Value>[Name:Potion Compensation][Description:$Character_14$ want you to build a $Building_8$]</Value>
     </Item>
     <Item>
       <Key>Character_0</Key>
@@ -420,6 +420,82 @@
     <Item>
       <Key>Building_11</Key>
       <Value>[Name:StoneMason]</Value>
+    </Item>
+    <Item>
+      <Key>Building_12</Key>
+      <Value>[Name:$Character_6$s House]</Value>
+    </Item>
+    <Item>
+      <Key>Building_13</Key>
+      <Value>[Name:$Character_17$s House]</Value>
+    </Item>
+    <Item>
+      <Key>Building_14</Key>
+      <Value>[Name:$Character_2$s House]</Value>
+    </Item>
+    <Item>
+      <Key>Building_15</Key>
+      <Value>[Name:$Character_3$s House]</Value>
+    </Item>
+    <Item>
+      <Key>Building_16</Key>
+      <Value>[Name:$Character_4$s House]</Value>
+    </Item>
+    <Item>
+      <Key>Building_17</Key>
+      <Value>[Name:$Character_5$s House]</Value>
+    </Item>
+    <Item>
+      <Key>Building_18</Key>
+      <Value>[Name:Magic Shop]</Value>
+    </Item>
+    <Item>
+      <Key>Building_19</Key>
+      <Value>[Name:$Character_7$s House]</Value>
+    </Item>
+    <Item>
+      <Key>Building_20</Key>
+      <Value>[Name:General Store]</Value>
+    </Item>
+    <Item>
+      <Key>Building_21</Key>
+      <Value>[Name:Forge]</Value>
+    </Item>
+    <Item>
+      <Key>Building_22</Key>
+      <Value>[Name:Tailor]</Value>
+    </Item>
+    <Item>
+      <Key>Building_23</Key>
+      <Value>[Name:$Character_11$s House]</Value>
+    </Item>
+    <Item>
+      <Key>Building_24</Key>
+      <Value>[Name:Apothecary]</Value>
+    </Item>
+    <Item>
+      <Key>Building_25</Key>
+      <Value>[Name:Carpenter's]</Value>
+    </Item>
+    <Item>
+      <Key>Building_26</Key>
+      <Value>[Name:$Character_19$s House]</Value>
+    </Item>
+    <Item>
+      <Key>Building_27</Key>
+      <Value>[Name:Market]</Value>
+    </Item>
+    <Item>
+      <Key>Building_28</Key>
+      <Value>[Name:$Character_16$s House]</Value>
+    </Item>
+    <Item>
+      <Key>Building_29</Key>
+      <Value>[Name:$Character_20$s House]</Value>
+    </Item>
+    <Item>
+      <Key>Building_30</Key>
+      <Value>[Name:$Character_18$s House]</Value>
     </Item>
     <Item>
       <Key>Spirit_0</Key>

@@ -35,7 +35,7 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Texture:PotionHut][Dimensions:128-144][Base:16-80-96-64][Entrance:48-115-16-29][ReqItems:0-10|2-5]</Value>
+      <Value>[Texture:PotionHut][Dimensions:128-144][Base:16-80-96-64][Entrance:48-115-16-29][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>9</Key>
@@ -48,6 +48,82 @@
     <Item>
       <Key>11</Key>
       <Value>[Texture:StoneMason][Dimensions:128-144][Base:0-96-128-48][Entrance:80-113-16-30][Unlocked]</Value>
+    </Item>
+    <Item>
+      <Key>12</Key>
+      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>14</Key>
+      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>15</Key>
+      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>16</Key>
+      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>17</Key>
+      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>18</Key>
+      <Value>[Texture:MagicShop][Dimensions:112-128][Base:0-64-112-64][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>19</Key>
+      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>20</Key>
+      <Value>[Texture:GeneralStore][Dimensions:112-128][Base:0-64-112-64][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>21</Key>
+      <Value>[Texture:Forge][Dimensions:112-128][Base:0-64-112-64][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>22</Key>
+      <Value>[Texture:Tailor][Dimensions:112-128][Base:0-64-112-64][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>23</Key>
+      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>24</Key>
+      <Value>[Texture:Apothecary][Dimensions:112-128][Base:0-64-112-64][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>25</Key>
+      <Value>[Texture:Carpenter][Dimensions:112-128][Base:0-64-112-64][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>26</Key>
+      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>27</Key>
+      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>28</Key>
+      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>29</Key>
+      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>30</Key>
+      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
   </Asset>
 </XnaContent>

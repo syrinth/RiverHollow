@@ -290,6 +290,12 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Introduced")]
             public bool introduced;
 
+            [XmlElement(ElementName = "Arrived")]
+            public bool arrived;
+
+            [XmlElement(ElementName = "ArrivalDelay")]
+            public int arrivalDelay;
+
             [XmlElement(ElementName = "Friendship")]
             public int friendship;
 

@@ -7,83 +7,83 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Eligible][PortRow:1][HomeMap:mapMagicShop][Collection:0|1|2][Class:0][Idle:0-0-1-0-T][Walk:192-0-3-.15-T]</Value>
+      <Value>[Type:Eligible][PortRow:1][Collection:0|1|2][Class:0][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:8][ArrivalDelay:1][HouseID:13]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Eligible][PortRow:1][HomeMap:mapApothecary][Collection:0|1|2][Class:1][Idle:0-0-1-0-T][Walk:192-0-3-.15-T]</Value>
+      <Value>[Type:Eligible][PortRow:1][HouseID:14][Collection:0|1|2][Class:1][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:24]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Eligible][PortRow:1][HomeMap:mapInn_Upper_1][Collection:0|1|2][Class:2][Idle:0-0-1-0-T][Walk:192-0-3-.15-T]</Value>
+      <Value>[Type:Eligible][PortRow:1][HouseID:15][Collection:0|1|2][Class:2][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:22][ArrivalDelay:2]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Eligible][PortRow:1][HomeMap:mapInn_Upper_1][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T]</Value>
+      <Value>[Type:Eligible][PortRow:1][HouseID:16][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:18]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Eligible][PortRow:1][HomeMap:mapHouseNPC1][Collection:0|1|2][Class:4][Idle:0-0-1-0-T][Walk:192-0-3-.15-T]</Value>
+      <Value>[Type:Eligible][PortRow:1][HouseID:17][Collection:0|1|2][Class:4][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:20]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Eligible][PortRow:1][HomeMap:mapGeneralStore][Collection:0|1|2][Class:5][Idle:0-0-1-0-T][Walk:192-0-3-.15-T]</Value>
+      <Value>[Type:Eligible][PortRow:1][Collection:0|1|2][Class:5][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:12][RequiredBuildingID:7][ArrivalDelay:1]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Eligible][PortRow:1][HomeMap:mapBuildingStore_1][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:6]</Value>
+      <Value>[Type:Eligible][PortRow:1][HouseID:19][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:6]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Eligible][PortRow:1][HomeMap:mapInn_1][Collection:0|1|2][Class:7][Idle:0-0-1-0-T][Walk:192-0-3-.15-T]</Value>
+      <Value>[Type:Eligible][PortRow:1][HouseID:7][Collection:0|1|2][Class:7][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:24][ArrivalDelay:4]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapInn_1][Collection:7|112][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:7][HouseID:7]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7|112][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:7]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapInn_1][Collection:7|112][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:7][HouseID:7]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7|112][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:7]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapMayorsHouse][Collection:7|112][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:23][Collection:7|112][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:20][ArrivalDelay:3]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapMayorsHouse][Collection:7|112][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:23][Collection:7|112][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:20][ArrivalDelay:3]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Shopkeeper][PortRow:3][HomeMap:mapBuildingStore_1][Collection:5|6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:6]</Value>
+      <Value>[Type:Shopkeeper][PortRow:3][HouseID:10][Collection:5|6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:6]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Shopkeeper][PortRow:3][HomeMap:mapBuildingStore_1][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:10][Arrived][ShopData:2]</Value>
+      <Value>[Type:Shopkeeper][PortRow:3][HouseID:10][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Arrived][ShopData:2]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapBuildingStore_1][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:6]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:10][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:6]</Value>
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Shopkeeper][PortRow:1][HomeMap:mapGuildhouse][Collection:7|140][ShopData:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Shopkeeper][PortRow:1][HouseID:28][Collection:7|140][ShopData:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:21]</Value>
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Type:Shopkeeper][PortRow:3][HomeMap:mapMagicShop][Collection:7|140][ShopData:0][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Shopkeeper][PortRow:3][HouseID:13][Collection:7|140][ShopData:0][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:8][ArrivalDelay:1]</Value>
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapHouseNPC1][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:30][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:17]</Value>
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapGeneralStore][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:26][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:12]</Value>
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapApothecary][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:8][ArrivalDelay:3]</Value>
     </Item>
     <Item>
       <Key>21</Key>

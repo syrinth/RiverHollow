@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="32" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="6">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="32" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="10">
  <tileset firstgid="1" source="../Tilesets/tilesetHouses.tsx"/>
  <layer id="2" name="Base" width="32" height="23">
   <data encoding="csv">
@@ -86,12 +86,15 @@
   <object id="1" name="Entrance" x="192" y="364" width="48" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
-    <property name="Map" value="mapTavern"/>
+    <property name="Map" value="mapInn_1"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="5" name="Character">
   <object id="4" name="NPC_03" x="226.085" y="257.591" width="12.375" height="11.4375"/>
   <object id="5" name="NPC_04" x="354.04" y="257.472" width="12.375" height="11.4375"/>
+  <object id="7" name="NPC_Wait_1" x="33.4195" y="257.754" width="12.375" height="11.4375"/>
+  <object id="8" name="NPC_Wait_2" x="129.313" y="257.781" width="12.375" height="11.4375"/>
+  <object id="9" name="NPC_Wait_3" x="161.313" y="290.781" width="12.375" height="11.4375"/>
  </objectgroup>
 </map>

@@ -3,7 +3,8 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Hi. $Name$, right?, Welcome to River Hollow. I'm $Character_6$ and it's my job to make sure the monsters stay outside the walls. I recommend you not wander far from town.</Value>
+      <Value>You $Name$? I heard that you were starting a town out here and figured you could use a hand.
+My name's $Character_6$, a $Class_5$ looking for work. I'd appreciate it if you could set up a house for me. Maybe something that looks like this.[UnlockBuildingID:12]</Value>
     </Item>
     <Item>
       <Key>1</Key>

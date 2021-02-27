@@ -2572,61 +2572,6 @@
 /processorParam:Quality=Best
 /build:Sound/Stock/Effects/grinding_stone.wav
 
-#begin Maps/Town/mapApothecary.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapApothecary.tmx
-
-#begin Maps/Town/mapGeneralStore.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapGeneralStore.tmx
-
-#begin Maps/Town/mapGuildhouse.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapGuildhouse.tmx
-
-#begin Maps/Town/mapHospital.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHospital.tmx
-
-#begin Maps/Town/mapHouse_Template.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_Template.tmx
-
-#begin Maps/Town/mapHouseNPC1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouseNPC1.tmx
-
-#begin Maps/Town/mapMagicShop.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapMagicShop.tmx
-
-#begin Maps/Town/mapManor_Basement_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapManor_Basement_1.tmx
-
-#begin Maps/Town/mapManorGrounds.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapManorGrounds.tmx
-
-#begin Maps/Town/mapMayorsHouse.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapMayorsHouse.tmx
-
-#begin Maps/Town/mapTown.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapTown.tmx
-
 #begin Textures/Buildings/Inn.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2638,36 +2583,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/Inn.png
-
-#begin Maps/Town/mapInn_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapInn_1.tmx
-
-#begin Maps/Town/mapInn_Upper_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapInn_Upper_1.tmx
-
-#begin Maps/Town/mapTower_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapTower_1.tmx
-
-#begin Maps/Town/mapTower_2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapTower_2.tmx
-
-#begin Maps/Town/mapTower_3.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapTower_3.tmx
-
-#begin Maps/Town/mapManor_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapManor_1.tmx
 
 #begin Textures/Buildings/PotionHut.png
 /importer:TextureImporter
@@ -2681,11 +2596,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/PotionHut.png
 
-#begin Maps/Town/mapPotionHut_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapPotionHut_1.tmx
-
 #begin Textures/Buildings/LumberMill.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2697,11 +2607,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/LumberMill.png
-
-#begin Maps/Town/mapLumberMill_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapLumberMill_1.tmx
 
 #begin Data/Tasks.xml
 /importer:XmlImporter
@@ -2720,20 +2625,10 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/House_14.png
 
-#begin Maps/Town/mapHouse_14_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_14_1.tmx
-
 #begin Data/Schedules/NPC_14.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Schedules/NPC_14.xml
-
-#begin Maps/Town/mapArchitect_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapArchitect_1.tmx
 
 #begin Textures/Buildings/Architect.png
 /importer:TextureImporter
@@ -2746,11 +2641,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/Architect.png
-
-#begin Maps/Town/mapStoneMason_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapStoneMason_1.tmx
 
 #begin Textures/Buildings/StoneMason.png
 /importer:TextureImporter
@@ -2768,4 +2658,415 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Text Files/Mailbox_Text.xml
+
+#begin Textures/Buildings/House_6.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/House_6.png
+
+#begin Textures/Buildings/Apothecary.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/Apothecary.png
+
+#begin Textures/Buildings/Carpenter.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/Carpenter.png
+
+#begin Textures/Buildings/Forge.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/Forge.png
+
+#begin Textures/Buildings/GeneralStore.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/GeneralStore.png
+
+#begin Textures/Buildings/House_1_17.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/House_1_17.png
+
+#begin Textures/Buildings/House_2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/House_2.png
+
+#begin Textures/Buildings/House_3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/House_3.png
+
+#begin Textures/Buildings/House_4.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/House_4.png
+
+#begin Textures/Buildings/House_5.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/House_5.png
+
+#begin Textures/Buildings/House_7.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/House_7.png
+
+#begin Textures/Buildings/House_11.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/House_11.png
+
+#begin Textures/Buildings/House_16.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/House_16.png
+
+#begin Textures/Buildings/House_18.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/House_18.png
+
+#begin Textures/Buildings/House_19.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/House_19.png
+
+#begin Textures/Buildings/House_20.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/House_20.png
+
+#begin Textures/Buildings/MagicShop.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/MagicShop.png
+
+#begin Textures/Buildings/Tailor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/Tailor.png
+
+#begin Maps/Town/mapApothecary_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapApothecary_1.tmx
+
+#begin Maps/Town/mapArchitect_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapArchitect_1.tmx
+
+#begin Maps/Town/mapCarpenter_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapCarpenter_1.tmx
+
+#begin Maps/Town/mapForge_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapForge_1.tmx
+
+#begin Maps/Town/mapGeneralStore.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapGeneralStore.tmx
+
+#begin Maps/Town/mapGeneralStore_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapGeneralStore_1.tmx
+
+#begin Maps/Town/mapGuildhouse.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapGuildhouse.tmx
+
+#begin Maps/Town/mapHospital.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHospital.tmx
+
+#begin Maps/Town/mapHouseNPC1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouseNPC1.tmx
+
+#begin Maps/Town/mapHouse_11_1 - Copy.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_11_1 - Copy.tmx
+
+#begin Maps/Town/mapHouse_14_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_14_1.tmx
+
+#begin Maps/Town/mapHouse_16_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_16_1.tmx
+
+#begin Maps/Town/mapHouse_18_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_18_1.tmx
+
+#begin Maps/Town/mapHouse_19_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_19_1.tmx
+
+#begin Maps/Town/mapHouse_20_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_20_1.tmx
+
+#begin Maps/Town/mapHouse_2_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_2_1.tmx
+
+#begin Maps/Town/mapHouse_3_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_3_1.tmx
+
+#begin Maps/Town/mapHouse_4_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_4_1.tmx
+
+#begin Maps/Town/mapHouse_5_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_5_1.tmx
+
+#begin Maps/Town/mapHouse_6_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_6_1.tmx
+
+#begin Maps/Town/mapHouse_7_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_7_1.tmx
+
+#begin Maps/Town/mapHouse_Template.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_Template.tmx
+
+#begin Maps/Town/mapInn_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapInn_1.tmx
+
+#begin Maps/Town/mapInn_Upper_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapInn_Upper_1.tmx
+
+#begin Maps/Town/mapLumberMill_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapLumberMill_1.tmx
+
+#begin Maps/Town/mapMagicShop.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapMagicShop.tmx
+
+#begin Maps/Town/mapMagicShop_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapMagicShop_1.tmx
+
+#begin Maps/Town/mapManorGrounds.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapManorGrounds.tmx
+
+#begin Maps/Town/mapManor_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapManor_1.tmx
+
+#begin Maps/Town/mapManor_Basement_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapManor_Basement_1.tmx
+
+#begin Maps/Town/mapMarket_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapMarket_1.tmx
+
+#begin Maps/Town/mapMayorsHouse.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapMayorsHouse.tmx
+
+#begin Maps/Town/mapPotionHut_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapPotionHut_1.tmx
+
+#begin Maps/Town/mapStoneMason_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapStoneMason_1.tmx
+
+#begin Maps/Town/mapTailor_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapTailor_1.tmx
+
+#begin Maps/Town/mapTower_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapTower_1.tmx
+
+#begin Maps/Town/mapTower_2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapTower_2.tmx
+
+#begin Maps/Town/mapTower_3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapTower_3.tmx
+
+#begin Maps/Town/mapTown.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapTown.tmx
 

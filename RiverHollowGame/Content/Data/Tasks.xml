@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Build]</Value>
+      <Value>[Type:Build][GoalNPC:14][BuildingID:7]</Value>
     </Item>
   </Asset>
 </XnaContent>

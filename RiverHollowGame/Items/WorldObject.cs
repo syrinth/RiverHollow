@@ -387,10 +387,28 @@ namespace RiverHollow.Items
 
         public void SendMessage(string message)
         {
-            string[] specialActions = null;
-            message = Util.ProcessText(message, ref specialActions);
-
             _liSentMessages.Add(message);
+        }
+
+        public void TakeMessage()
+        {
+            if (_liCurrentMessages.Count > 0)
+            {
+                string s = _liCurrentMessages[0];
+                _liCurrentMessages.RemoveAt(0);
+
+                if (_liCurrentMessages.Count == 0)
+                {
+                    _alertSprite = null;
+                }
+
+                string[] specialActions = null;
+
+                s = Util.ProcessText(s, ref specialActions);
+                Util.HandleSpecialDialogueActions(specialActions);
+
+                GUIManager.OpenTextWindow(s);
+            }
         }
 
         public void Rollover()
@@ -428,22 +446,6 @@ namespace RiverHollow.Items
             }
 
             Rollover();
-        }
-
-        public void TakeMessage()
-        {
-            if (_liCurrentMessages.Count > 0)
-            {
-                string s = _liCurrentMessages[0];
-                _liCurrentMessages.RemoveAt(0);
-
-                if (_liCurrentMessages.Count == 0)
-                {
-                    _alertSprite = null;
-                }
-
-                GUIManager.OpenTextWindow(s);
-            }
         }
     }
 

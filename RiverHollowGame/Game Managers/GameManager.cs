@@ -83,6 +83,8 @@ namespace RiverHollow.Game_Managers
         public static ShippingGremlin ShippingGremlin;
         public static DisplayTypeEnum CurrentInventoryDisplay;
 
+        public static int VillagersInTheInn = 0;
+
         #region Managed Data Lists
         public static Dictionary<int, BuildInfo> DIBuildInfo;
         public static Dictionary<int, Task> DITasks;

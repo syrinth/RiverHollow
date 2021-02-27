@@ -294,7 +294,7 @@
   <object id="2" name="Entrance" x="32" y="336" width="48" height="4">
    <properties>
     <property name="EntranceDir" value="Down"/>
-    <property name="Map" value="mapTavern_Upper"/>
+    <property name="Map" value="mapInn_Upper_1"/>
    </properties>
   </object>
  </objectgroup>

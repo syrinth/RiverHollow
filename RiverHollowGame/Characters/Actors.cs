@@ -699,23 +699,12 @@ namespace RiverHollow.Characters
             string[] specialActions = null;
             text = Util.ProcessText(text, ref specialActions, _sName);
 
-            //Index 0 is going to be the actual processed text, so we need to skip it
-            if (specialActions.Length > 1)
-            {
-                int _iTargetShopIndex = -1;
-                for (int i = 1; i <= specialActions.Length - 1; i++)
-                {
-                    string[] tagInfo = specialActions[i].Split(':');
-                    if (tagInfo[0].Equals("Task")) { PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(tagInfo[1])]); }
-                    else if (tagInfo[0].Equals("Face")) { QueueActorFace(tagInfo[1]); }
-                    else if (tagInfo[0].Equals("ShopTargetID")) { _iTargetShopIndex = int.Parse(tagInfo[1]); }
-                    else if (tagInfo[0].Equals("UnlockItemID") && _iTargetShopIndex != -1) { DIShops[_iTargetShopIndex].Find(x => x.MerchID == int.Parse(tagInfo[1])).Unlock(); }
-                    else if (tagInfo[0].Equals("SendMessage")) { PlayerManager.PlayerMailbox.SendMessage(DataManager.DiMessages[int.Parse(tagInfo[1])]); }
-                }
-            }
+            Util.HandleSpecialDialogueActions(specialActions, this);
 
             GUIManager.OpenTextWindow(text, this, true, true);
         }
+
+        
 
         /// <summary>
         /// Stand-in Virtual method to be overrriden. Should never get called.
@@ -825,9 +814,18 @@ namespace RiverHollow.Characters
         /// </summary>
         /// <param name="entry">The key of the entry to get from the Dictionary</param>
         /// <returns>The processed string text for the entry </returns>
-        public virtual string GetDialogEntry(string entry) {
+        public virtual string GetDialogEntry(string entry)
+        {
+            string rv = string.Empty;
             string[] specialActions = null;
-            return Util.ProcessText(_diDialogue.ContainsKey(entry) ? Util.ProcessText(_diDialogue[entry], ref specialActions, _sName) : string.Empty, ref specialActions);
+
+            if (_diDialogue.ContainsKey(entry))
+            {
+                rv = Util.ProcessText(_diDialogue[entry], ref specialActions, _sName);
+                Util.HandleSpecialDialogueActions(specialActions, this);
+            }
+
+            return rv;
         }
 
         /// <summary>
@@ -1883,6 +1881,8 @@ namespace RiverHollow.Characters
         public bool CanGiveGift = true;
         public bool ArrivedInTown = false;
 
+        private int _iArrivalDelay = 0;
+
         protected Dictionary<string, List<Dictionary<string, string>>> _diCompleteSchedule;         //Every day with a list of KVP Time/GoToLocations
         List<KeyValuePair<string, PathData>> _liTodayPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
         protected int _iScheduleIndex;
@@ -1943,6 +1943,7 @@ namespace RiverHollow.Characters
             //}
             Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
             Util.AssignValue(ref ArrivedInTown, "Arrived", stringData);
+            Util.AssignValue(ref _iArrivalDelay, "ArrivalDelay", stringData);
             if (stringData.ContainsKey("RequiredBuildingID"))
             {
                 string[] args = Util.FindParams(stringData["RequiredBuildingID"]);
@@ -2143,18 +2144,25 @@ namespace RiverHollow.Characters
             bool rv = false;
             if (!ArrivedInTown && _liRequiredBuildingIDs.Count > 0)
             {
-                bool arrived = true;
-                foreach (int i in _liRequiredBuildingIDs)
+                if (_iArrivalDelay == 0)
                 {
-                    if (!GameManager.DIBuildInfo[i].Built)
+                    bool arrived = true;
+                    foreach (int i in _liRequiredBuildingIDs)
                     {
-                        arrived = false;
-                        break;
+                        if (!GameManager.DIBuildInfo[i].Built)
+                        {
+                            arrived = false;
+                            break;
+                        }
                     }
-                }
 
-                ArrivedInTown = arrived;
-                rv = ArrivedInTown;
+                    ArrivedInTown = arrived;
+                    rv = ArrivedInTown;
+                }
+                else
+                {
+                    _iArrivalDelay--;
+                }
             }
 
             return rv;
@@ -2192,19 +2200,29 @@ namespace RiverHollow.Characters
                 CurrentMap?.RemoveCharacterImmediately(this);
                 CurrentMapName = mapName;
                 RHMap map = MapManager.Maps[mapName];
-                string Spawn = "NPC_" + _iIndex.ToString("00");
+                string strSpawn = string.Empty;
 
-                Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
+                if (IsHomeBuilt()) {
+                    strSpawn = "NPC_" + _iIndex.ToString("00"); }
+                else {
+                    strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
+
+                Position = Util.SnapToGrid(map.GetCharacterSpawn(strSpawn));
                 map.AddCharacterImmediately(this);
             }
+        }
+
+        protected bool IsHomeBuilt()
+        {
+            return _iHouseBuildingID != -1 && GameManager.DIBuildInfo[_iHouseBuildingID].Built;
         }
 
         protected virtual string GetMapName()
         {
             string rv = string.Empty;
 
-            if (GameManager.DIBuildInfo[_iHouseBuildingID].Built) { rv = PlayerManager.GetBuildingByID(_iHouseBuildingID).MapName; }
-            else { }
+            if (IsHomeBuilt()) { rv = PlayerManager.GetBuildingByID(_iHouseBuildingID).MapName; }
+            else if(_iHouseBuildingID != -1) { rv = "mapInn_Upper_1"; }
 
             return rv;
         }
@@ -2441,6 +2459,8 @@ namespace RiverHollow.Characters
             NPCData npcData = new NPCData()
             {
                 npcID = ID,
+                arrived = ArrivedInTown,
+                arrivalDelay = _iArrivalDelay,
                 introduced = Introduced,
                 friendship = FriendshipPoints,
                 collection = new List<bool>(_diCollection.Values)
@@ -2451,6 +2471,8 @@ namespace RiverHollow.Characters
         public void LoadData(NPCData data)
         {
             Introduced = data.introduced;
+            ArrivedInTown = data.arrived;
+            _iArrivalDelay = data.arrivalDelay;
             FriendshipPoints = data.friendship;
 
             LoadCollection(data.collection);
@@ -2702,9 +2724,13 @@ namespace RiverHollow.Characters
             if (ArrivedInTown) { 
                 CurrentMap?.RemoveCharacter(this);
                 RHMap map = MapManager.Maps[Married ? "mapManor" : GetMapName()];
-                string Spawn = Married ? "Spouse" : "NPC_" + _iIndex.ToString("00");
+                string strSpawn = string.Empty;
 
-                Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
+                if (IsHomeBuilt()) { strSpawn = "NPC_" + _iIndex.ToString("00"); }
+                else { strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
+
+                Position = Util.SnapToGrid(map.GetCharacterSpawn(strSpawn));
+
                 map.AddCharacter(this);
 
                 _bActive = true;
@@ -2773,6 +2799,7 @@ namespace RiverHollow.Characters
         }
         public void LoadData(EligibleNPCData data)
         {
+            base.LoadData(data.npcData);
             Introduced = data.npcData.introduced;
             FriendshipPoints = data.npcData.friendship;
             Married = data.married;
@@ -3424,7 +3451,6 @@ namespace RiverHollow.Characters
  
         public ShippingGremlin(int index, Dictionary<string, string> stringData)
         {
-            ArrivedInTown = true;
             _liRequiredBuildingIDs = new List<int>();
             _arrInventory = new Item[_iRows, _iCols];
             _eActorType = ActorEnum.ShippingGremlin;

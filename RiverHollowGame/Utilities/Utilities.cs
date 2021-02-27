@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.Tile_Engine;
 using System;
@@ -175,6 +176,25 @@ namespace RiverHollow.Utilities
 
             if (string.IsNullOrEmpty(rv)) { rv = text; }
             return rv;
+        }
+
+        public static void HandleSpecialDialogueActions(string[] specialActions, TalkingActor act = null)
+        {
+            //Index 0 is going to be the actual processed text, so we need to skip it
+            if (specialActions.Length > 1)
+            {
+                int _iTargetShopIndex = -1;
+                for (int i = 1; i <= specialActions.Length - 1; i++)
+                {
+                    string[] tagInfo = specialActions[i].Split(':');
+                    if (tagInfo[0].Equals("Task")) { PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(tagInfo[1])]); }
+                    else if (tagInfo[0].Equals("Face")) { act.QueueActorFace(tagInfo[1]); }
+                    else if (tagInfo[0].Equals("ShopTargetID")) { _iTargetShopIndex = int.Parse(tagInfo[1]); }
+                    else if (tagInfo[0].Equals("UnlockBuildingID")) { GameManager.DIBuildInfo[int.Parse(tagInfo[1])].Unlock(); }
+                    else if (tagInfo[0].Equals("UnlockItemID") && _iTargetShopIndex != -1) { DIShops[_iTargetShopIndex].Find(x => x.MerchID == int.Parse(tagInfo[1])).Unlock(); }
+                    else if (tagInfo[0].Equals("SendMessage")) { PlayerManager.PlayerMailbox.SendMessage(DataManager.DiMessages[int.Parse(tagInfo[1])]); }
+                }
+            }
         }
 
         public static TEnum ParseEnum<TEnum>(string convertThis) where TEnum : struct

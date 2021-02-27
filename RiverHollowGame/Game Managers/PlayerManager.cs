@@ -512,6 +512,7 @@ namespace RiverHollow.Game_Managers
             }
 
             PlayerMailbox.Rollover();
+            GameManager.VillagersInTheInn = 0;
         }
 
         public static void GetStamina(ref int curr, ref int max)
