@@ -1758,7 +1758,7 @@ namespace Database_Editor
 
                 foreach (KeyValuePair<string, string> tag in kvp.Value)
                 {
-                    tagString += "[" + kvp.Key + (string.IsNullOrEmpty(tag.Value) ? "" : ":" + kvp.Value) + "]";
+                    tagString += "[" + tag.Key + (string.IsNullOrEmpty(tag.Value) ? "" : ":" + tag.Value) + "]";
                 }
 
                 WriteXMLEntry(dataFile, string.Format("      <Key>{0}</Key>", kvp.Key), string.Format("      <Value>{0}</Value>", tagString));

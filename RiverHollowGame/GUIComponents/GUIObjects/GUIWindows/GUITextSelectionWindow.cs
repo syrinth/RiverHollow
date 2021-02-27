@@ -49,7 +49,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 int key = 0;
                 foreach (string s in secondPass)
                 {
-                    string[] actionType = s.Split(':');
+                    string[] actionType = s.Split('-');
                     SelectionData t = new SelectionData(actionType[0], actionType[1]);
                     _diOptions.Add(key++, t);
                 }

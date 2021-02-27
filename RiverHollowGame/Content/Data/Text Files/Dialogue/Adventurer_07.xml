@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>[Text:Am I needed somewhere?{Talk:Talk|Join Party:Party}]</Value>
+      <Value>[Text:Am I needed somewhere?{Talk-Talk|Join Party-Party}]</Value>
     </Item>
   </Asset>
 </XnaContent>

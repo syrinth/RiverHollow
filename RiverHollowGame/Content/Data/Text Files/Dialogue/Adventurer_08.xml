@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>[Text:Oh? Is my song not to your liking?{Talk:Talk|Join Party:Party}]</Value>
+      <Value>[Text:Oh? Is my song not to your liking?{Talk-Talk|Join Party-Party}]</Value>
     </Item>
   </Asset>
 </XnaContent>

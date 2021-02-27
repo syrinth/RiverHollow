@@ -81,6 +81,7 @@ namespace Database_Editor
             string keyValue = dgvCharExtraData.Rows[index].Cells[0].Value.ToString();
             tbCharExtraDataName.Text = keyValue;
 
+            dgvEditTags.Rows.Clear();
             foreach (KeyValuePair<string, string> kvp in _diStringData[keyValue])
             {
                 if (kvp.Key.Equals("Text")) { tbCharExtraDataInfo.Text = kvp.Value; }
@@ -161,17 +162,30 @@ namespace Database_Editor
         }
         private void SaveDictionaryData()
         {
-            //MAR
-            //DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
+            DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
 
-            //string oldKey = row.Cells["colCharExtraID"].Value.ToString();
-            //if (_diStringData.ContainsKey(oldKey))
-            //{
-            //    _diStringData.Remove(oldKey);
-            //}
+            string oldKey = row.Cells["colCharExtraID"].Value.ToString();
+            if (_diStringData.ContainsKey(oldKey))
+            {
+                _diStringData.Remove(oldKey);
+            }
 
-            //_diStringData[tbCharExtraDataName.Text] = tbCharExtraDataInfo.Text;
-            //row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
+            Dictionary<string, string> diTags = new Dictionary<string, string>
+            {
+                ["Text"] = tbCharExtraDataInfo.Text
+            };
+
+            foreach (DataGridViewRow r in dgvEditTags.Rows)
+            {
+                if (r.Cells[0].Value != null)
+                {
+                    string[] tagInfo = r.Cells[0].Value.ToString().Split(':');
+                    diTags[tagInfo[0]] = tagInfo[1];
+                }
+            }
+
+            _diStringData[tbCharExtraDataName.Text] = diTags;
+            row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
         }
         private void SaveListData()
         {
