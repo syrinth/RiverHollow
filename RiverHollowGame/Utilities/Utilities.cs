@@ -226,8 +226,9 @@ namespace RiverHollow.Utilities
             return verb + Util.GetEnumString(direction);
         }
 
-        public static void DictionaryFromTaggedString(ref Dictionary<string, string> dss, string taggedString)
+        public static Dictionary<string, string> DictionaryFromTaggedString(string taggedString)
         {
+            Dictionary<string, string> dss = new Dictionary<string, string>();
             foreach (string s in Util.FindTags(taggedString))
             {
                 if (s.Contains(":"))
@@ -240,6 +241,8 @@ namespace RiverHollow.Utilities
                     dss[s] = "";
                 }
             }
+
+            return dss;
         }
         public static string[] FindTags(string data)
         {

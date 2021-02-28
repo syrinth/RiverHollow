@@ -614,7 +614,7 @@ namespace RiverHollow.Characters
         protected string _sPortrait;
         public string Portrait => _sPortrait;
 
-        protected Dictionary<string, string> _diDialogue;
+        protected Dictionary<string, TextEntry> _diDialogue;
 
         public static List<int> FriendRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000 };
         public int FriendshipPoints = 0;
@@ -639,7 +639,7 @@ namespace RiverHollow.Characters
             string text = string.Empty;
             if (_diDialogue.ContainsKey(dialogTag))
             {
-                text = _diDialogue[dialogTag];
+                text = _diDialogue[dialogTag].Text;
             }
 
             ProcessTextAndOpenDialogue(text);
@@ -718,7 +718,7 @@ namespace RiverHollow.Characters
         /// <returns></returns>
         public string GetSelectionText()
         {
-            string text = _diDialogue["Selection"];
+            string text = _diDialogue["Selection"].Text;
             string[] specialActions = null;
             Util.ProcessText(text, ref specialActions, _sName);
 
@@ -818,7 +818,7 @@ namespace RiverHollow.Characters
 
             if (_diDialogue.ContainsKey(entry))
             {
-                rv = Util.ProcessText(_diDialogue[entry], ref specialActions, _sName);
+                rv = Util.ProcessText(_diDialogue[entry].Text, ref specialActions, _sName);
                 Util.HandleSpecialDialogueActions(specialActions, this);
             }
 
@@ -933,9 +933,11 @@ namespace RiverHollow.Characters
             int _iLookupID;
             int _iPriority;
             string _sText;
+            public string Text => _sText;
 
-            public TextEntry()
+            public TextEntry(Dictionary<string, string> stringData)
             {
+                Util.AssignValue(ref _sText, "Text", stringData);
             }
         }
     }
@@ -2083,7 +2085,7 @@ namespace RiverHollow.Characters
             {
                 if (!CheckTaskLog(ref rv))
                 {
-                    if (_bShopIsOpen) { rv = _diDialogue["ShopOpen"]; }
+                    if (_bShopIsOpen) { rv = _diDialogue["ShopOpen"].Text; }
                     else if (!_bHasTalked) { rv = GetDailyDialogue(); }
                     else { rv = GetSelectionText(); }
                 }
@@ -2443,7 +2445,7 @@ namespace RiverHollow.Characters
                 {
                     t.FinishTask(ref taskCompleteText);
 
-                    taskCompleteText = _diDialogue[taskCompleteText];
+                    taskCompleteText = _diDialogue[taskCompleteText].Text;
 
                     rv = true;
                     break;

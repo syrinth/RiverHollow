@@ -15,6 +15,7 @@ using static RiverHollow.Items.WorldItem;
 using static RiverHollow.Items.TriggerObject;
 using static RiverHollow.Items.WorldItem.Machine;
 using RiverHollow.Misc;
+using static RiverHollow.Characters.TalkingActor;
 
 namespace RiverHollow.Game_Managers
 {
@@ -161,9 +162,7 @@ namespace RiverHollow.Game_Managers
 
         public static Dictionary<string, string> TaggedStringToDictionary(string data)
         {
-            Dictionary<string, string> dss = new Dictionary<string, string>();
-            Util.DictionaryFromTaggedString(ref dss, data);
-            return dss;
+            return Util.DictionaryFromTaggedString(data);
         }
 
         private static void LoadTextFiles(ContentManager Content)
@@ -632,7 +631,6 @@ namespace RiverHollow.Game_Managers
             return _diBMFonts[font];
         }
 
-
         public static string GetGameText(string key)
         {
             string rv = string.Empty;
@@ -662,13 +660,16 @@ namespace RiverHollow.Game_Managers
                 return null;
             }
         }
-        public static Dictionary<string, string> GetNPCDialogue(int id)
+        public static Dictionary<string, TextEntry> GetNPCDialogue(int id)
         {
-            Dictionary<string, string> rv = null;
+            Dictionary<string, TextEntry> rv = new Dictionary<string, TextEntry>();
 
             if (_diNPCDialogue.ContainsKey(id))
             {
-                rv = _diNPCDialogue[id];
+                foreach(KeyValuePair<string, string> kvp in _diNPCDialogue[id])
+                {
+                    rv[kvp.Key] = new TextEntry(Util.DictionaryFromTaggedString(kvp.Value));
+                }
             }
 
             return rv;

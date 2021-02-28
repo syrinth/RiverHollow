@@ -37,7 +37,7 @@ I like Pandas, how about you?]</Value>
     </Item>
     <Item>
       <Key>Testing</Key>
-      <Value>[Text:This is a test :)]</Value>
+      <Value>[Text:This is a test ]</Value>
     </Item>
   </Asset>
 </XnaContent>
