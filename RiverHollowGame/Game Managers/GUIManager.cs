@@ -6,6 +6,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Characters.TalkingActor;
 
 namespace RiverHollow.Game_Managers
 {
@@ -106,13 +107,13 @@ namespace RiverHollow.Game_Managers
         /// <param name="text">Text to speak</param>
         /// <param name="talker">NPC being talked to</param>
         /// <param name="open">Whether or not to play the animation for an opening window.</param>
-        public static void OpenTextWindow(string text, bool open = true)
+        public static void OpenTextWindow(TextEntry text, bool open = true)
         {
             OpenTextWindow(text, null, open);
         }
-        public static void OpenTextWindow(string text, TalkingActor talker, bool open = true, bool displayDialogueIcon = false)
+        public static void OpenTextWindow(TextEntry text, TalkingActor talker, bool open = true, bool displayDialogueIcon = false)
         {
-            _currentGUIScreen.OpenTextWindow(text, talker, open, displayDialogueIcon);
+            _currentGUIScreen.OpenTextWindow(text.Text, talker, open, displayDialogueIcon);
         }
         public static bool CloseTextWindow()
         {

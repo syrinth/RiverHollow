@@ -636,13 +636,13 @@ namespace RiverHollow.Characters
         /// <param name="dialogTag">The dialog tag to talk with</param>
         public void Talk(string dialogTag)
         {
-            string text = string.Empty;
+            TextEntry text = null;
             if (_diDialogue.ContainsKey(dialogTag))
             {
-                text = _diDialogue[dialogTag].Text;
+                text = _diDialogue[dialogTag];
             }
 
-            ProcessTextAndOpenDialogue(text);
+            GUIManager.OpenTextWindow(text, this, true, true);
         }
 
         /// <summary>
@@ -652,7 +652,7 @@ namespace RiverHollow.Characters
         public virtual void Talk(bool facePlayer = true)
         {
             FacePlayer(true);
-            ProcessTextAndOpenDialogue(GetOpeningText());
+            GUIManager.OpenTextWindow(GetOpeningText(), this, true, true);
         }
         protected void FacePlayer(bool facePlayer)
         {
@@ -688,25 +688,15 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void TalkCutscene(string cutsceneLine)
+        public void TalkCutscene(TextEntry cutsceneEntry)
         {
-            ProcessTextAndOpenDialogue(cutsceneLine);
-        }
-
-        private void ProcessTextAndOpenDialogue(string text)
-        {
-            string[] specialActions = null;
-            text = Util.ProcessText(text, ref specialActions, _sName);
-
-            Util.HandleSpecialDialogueActions(specialActions, this);
-
-            GUIManager.OpenTextWindow(text, this, true, true);
+            GUIManager.OpenTextWindow(cutsceneEntry, this, true, true);
         }
 
         /// <summary>
         /// Stand-in Virtual method to be overrriden. Should never get called.
         /// </summary>
-        public virtual string GetOpeningText() { return "I have nothing to say."; }
+        public virtual TextEntry GetOpeningText() { return new TextEntry(); }
 
         /// <summary>
         /// Retrieves the 'Selection' text for when an Actor with options is first talked to.
@@ -718,39 +708,9 @@ namespace RiverHollow.Characters
         /// <returns></returns>
         public string GetSelectionText()
         {
-            string text = _diDialogue["Selection"].Text;
-            string[] specialActions = null;
-            Util.ProcessText(text, ref specialActions, _sName);
+            
 
-            string[] textFromData = text.Split(new[] { '{', '}' }, StringSplitOptions.RemoveEmptyEntries);
-            string[] options = Util.FindParams(textFromData[1]);
-
-            List<string> liCommands = RemoveEntries(options);
-
-            //If there's only two entries left, Talk and Never Mind, then go straight to Talk
-            string rv = string.Empty;
-            if (liCommands.Count == 2)
-            {
-                
-            }
-            else
-            {
-                rv = textFromData[0] + "{";   //Puts back the pre selection text
-                foreach (string s in liCommands)
-                {
-                    rv += s + "|";
-                }
-                rv = rv.Remove(rv.Length - 1);
-                rv += "}";
-            }
-
-            return rv;
-        }
-        public virtual List<string> RemoveEntries(string[] options)
-        {
-            List<string> _liCommands = new List<string>();
-            _liCommands.AddRange(options);
-            return _liCommands;
+            return string.Empty;
         }
 
         /// <summary>
@@ -759,51 +719,19 @@ namespace RiverHollow.Characters
         /// Mostly used for the "Talk" parameter or if the TalkingActor has no other options.
         /// </summary>
         /// <returns>The dialog string for the entry.</returns>
-        public string GetDailyDialogue()
+        public TextEntry GetDailyDialogue()
         {
             _bHasTalked = true;
-            List<string> keyPool = new List<string>();
-            foreach (string s in _diDialogue.Keys)
+            List<TextEntry> keyPool = new List<TextEntry>();
+            foreach (TextEntry entry in _diDialogue.Values)
             {
-                int validation = 0;
-                string[] values = Util.FindParams(s);
-                foreach (string val in values)
+                if (entry.Valid())
                 {
-                    if (val.Equals(GameCalendar.GetWeatherString()))
-                    {
-                        validation++;
-                    }
-                    else if (val.StartsWith("Friend"))
-                    {
-                        string[] args = val.Split('-');
-                        if(args.Length == 2)
-                        {
-                            if(int.TryParse(args[1], out int NPCID) && this.GetFriendshipLevel() >= NPCID)
-                            {
-                                validation++;
-                            }
-                        }
-                        else if (args.Length == 3)
-                        {
-                            if (int.TryParse(args[1], out int NPCID) && int.TryParse(args[2], out int tempLevel) && DataManager.DiNPC[NPCID].GetFriendshipLevel() > tempLevel)
-                            {
-                                validation++;
-                            }
-                        }
-                    }
-                    else if (int.TryParse(val, out int ID))
-                    {
-                        validation++;
-                    }
-                }
-
-                if (validation == values.Length)
-                {
-                    keyPool.Add(s);
+                    keyPool.Add(entry);
                 }
             }
 
-            return GetDialogEntry(keyPool[RHRandom.Instance.Next(0, keyPool.Count -1)]);
+            return keyPool[RHRandom.Instance.Next(0, keyPool.Count - 1)];
         }
 
         /// <summary>
@@ -811,15 +739,13 @@ namespace RiverHollow.Characters
         /// </summary>
         /// <param name="entry">The key of the entry to get from the Dictionary</param>
         /// <returns>The processed string text for the entry </returns>
-        public virtual string GetDialogEntry(string entry)
+        public virtual TextEntry GetDialogEntry(string entry)
         {
-            string rv = string.Empty;
-            string[] specialActions = null;
+            TextEntry rv = null;
 
             if (_diDialogue.ContainsKey(entry))
             {
-                rv = Util.ProcessText(_diDialogue[entry].Text, ref specialActions, _sName);
-                Util.HandleSpecialDialogueActions(specialActions, this);
+                rv = _diDialogue[entry];
             }
 
             return rv;
@@ -833,12 +759,12 @@ namespace RiverHollow.Characters
         /// <param name="chosenAction">The action to perform logic on</param>
         /// <param name="nextText">A reference to be filled out for the next text to display</param>
         /// <returns>False if was triggered and we want to close the text window</returns>
-        public virtual bool HandleTextSelection(string chosenAction, ref string nextText)
+        public virtual bool HandleTextSelection(string chosenAction, ref TextEntry nextText)
         {
             bool rv = false;
 
             if (chosenAction.StartsWith("Talk")){
-               //nextText = GetDailyDialogue();
+               nextText = GetDailyDialogue();
             }
             else if (chosenAction.StartsWith("Task"))
             {
@@ -863,7 +789,7 @@ namespace RiverHollow.Characters
                 nextText = GetDialogEntry(chosenAction);
             }
 
-            if (!string.IsNullOrEmpty(nextText)) { rv = true; }
+            if (nextText == null) { rv = true; }
 
             return rv;
         }
@@ -930,16 +856,183 @@ namespace RiverHollow.Characters
 
         public class TextEntry
         {
-            int _iLookupID;
-            int _iPriority;
+            int _iTargetShopID = -1;
+            int _iUnlockBuildingID = -1;
+            int _iUnlockItemID = -1;
+            int _iSendMessageID = -1;
+            int _iTaskToAssign = -1;
+            int _iLookupID = -1;
+            int _iPriority = 0;
+            string _sFaceQueue;
             string _sText;
             public string Text => _sText;
 
+            public TextEntry()
+            {
+                _sText = "No Text Assigned.";
+            }
+
             public TextEntry(Dictionary<string, string> stringData)
             {
+                Util.AssignValue(ref _iTaskToAssign, "Task", stringData);
+                Util.AssignValue(ref _sFaceQueue, "Face", stringData);
+                Util.AssignValue(ref _iTargetShopID, "ShopTargetID", stringData);
+                Util.AssignValue(ref _iUnlockBuildingID, "UnlockBuildingID", stringData);
+                Util.AssignValue(ref _iUnlockItemID, "UnlockItemID", stringData);
+                Util.AssignValue(ref _iSendMessageID, "SendMessage", stringData);
                 Util.AssignValue(ref _sText, "Text", stringData);
+                _sText = Util.ProcessText(_sText);
+
+                ParseSelectionText();
+            }
+
+            public void FormatText(params object[] list)
+            {
+                _sText = string.Format(_sText, list);
+            }
+            public void AppendParty()
+            {
+                int i = 0;
+                foreach (ClassedCombatant adv in PlayerManager.GetParty())
+                {
+                    _sText += adv.Name + ":" + i++ + "|";
+                }
+                _sText += "Cancel:Cancel}";
+            }
+
+            private List<string> RemoveEntries(string[] options)
+            {
+                List<string> _liCommands = new List<string>();
+                for (int i = 0; i < options.Length; i++)
+                {
+                    bool removeIt = false;
+                    string s = options[i];
+
+                    if (s.Contains("%"))
+                    {
+                        //Special checks are in the format %type:val% so, |%Friend:50%Join Party:Party| or |%Task:1%Business:Task1|
+                        string[] specialParse = s.Split(new[] { '%' }, StringSplitOptions.RemoveEmptyEntries);
+                        string[] specialVal = specialParse[0].Split('-');
+
+                        int.TryParse(specialVal[1], out int val);
+
+                        if (specialVal[0].Equals("Friend"))
+                        {
+                            //removeIt = FriendshipPoints < val;
+                        }
+                        else if (specialVal[0].Equals("Task"))
+                        {
+                            Task newTask = GameManager.DITasks[val];
+                            removeIt = PlayerManager.TaskLog.Contains(newTask) || newTask.ReadyForHandIn || newTask.Finished || !newTask.CanBeGiven();
+                        }
+
+                        s = s.Remove(s.IndexOf(specialParse[0]) - 1, specialParse[0].Length + 2);
+                    }
+                    else
+                    {
+                      //  if (!CanGiveGift && s.Contains("GiveGift"))
+                      //  {
+                      //      removeIt = true;
+                      //  }
+                    }
+
+                    if (!removeIt)
+                    {
+                        _liCommands.Add(s);
+                    }
+                }
+
+                return _liCommands;
+            }
+
+            private void ParseSelectionText()
+            {
+                if (_sText.Contains("{"))
+                {
+                    string text = _sText;
+
+                    string[] textFromData = text.Split(new[] { '{', '}' }, StringSplitOptions.RemoveEmptyEntries);
+                    int index = textFromData.Length == 1 ? 0 : 1;
+                    string[] options = Util.FindParams(textFromData[index]);
+
+                    List<string> liCommands = RemoveEntries(options);
+
+                    //If there's only two entries left, Talk and Never Mind, then go straight to Talk
+                    string rv = string.Empty;
+                    if (liCommands.Count == 2)
+                    {
+
+                    }
+                    else
+                    {
+                        rv = textFromData[0] + "{";   //Puts back the pre selection text
+                        foreach (string s in liCommands)
+                        {
+                            rv += s + "|";
+                        }
+                        rv = rv.Remove(rv.Length - 1);
+                        rv += "}";
+                    }
+                }
+            }
+
+            public bool Valid()
+            {
+                //int validation = 0;
+                //string[] values = Util.FindParams(entry);
+                //foreach (string val in values)
+                //{
+                //    if (val.Equals(GameCalendar.GetWeatherString()))
+                //    {
+                //        validation++;
+                //    }
+                //    else if (val.StartsWith("Friend"))
+                //    {
+                //        string[] args = val.Split('-');
+                //        if(args.Length == 2)
+                //        {
+                //            if(int.TryParse(args[1], out int NPCID) && this.GetFriendshipLevel() >= NPCID)
+                //            {
+                //                validation++;
+                //            }
+                //        }
+                //        else if (args.Length == 3)
+                //        {
+                //            if (int.TryParse(args[1], out int NPCID) && int.TryParse(args[2], out int tempLevel) && DataManager.DiNPC[NPCID].GetFriendshipLevel() > tempLevel)
+                //            {
+                //                validation++;
+                //            }
+                //        }
+                //    }
+                //    else if (int.TryParse(val, out int ID))
+                //    {
+                //        validation++;
+                //    }
+                //}
+                return true;
             }
         }
+
+        //public 
+
+        //private void HandleSpecialDialogueActions(string[] specialActions, TalkingActor act = null)
+        //{
+        //    //Index 0 is going to be the actual processed text, so we need to skip it
+        //    if (specialActions.Length > 1)
+        //    {
+        //        int _iTargetShopIndex = -1;
+        //        for (int i = 1; i <= specialActions.Length - 1; i++)
+        //        {
+        //            string[] tagInfo = specialActions[i].Split(':');
+        //            //if (tagInfo[0].Equals("Task")) { PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(tagInfo[1])]); }
+        //            //else if (tagInfo[0].Equals("Face")) { act.QueueActorFace(tagInfo[1]); }
+        //            //else if (tagInfo[0].Equals("ShopTargetID")) { _iTargetShopIndex = int.Parse(tagInfo[1]); }
+        //            else if (tagInfo[0].Equals("UnlockBuildingID")) { GameManager.DIBuildInfo[int.Parse(tagInfo[1])].Unlock(); }
+        //            else if (tagInfo[0].Equals("UnlockItemID") && _iTargetShopIndex != -1) { DIShops[_iTargetShopIndex].Find(x => x.MerchID == int.Parse(tagInfo[1])).Unlock(); }
+        //            else if (tagInfo[0].Equals("SendMessage")) { PlayerManager.PlayerMailbox.SendMessage(int.Parse(tagInfo[1])); }
+        //        }
+        //    }
+        //}
     }
 
     /// <summary>
@@ -2067,9 +2160,9 @@ namespace RiverHollow.Characters
         /// Returns the initial text for when the Actor is first talked to.
         /// </summary>
         /// <returns>The text string to display</returns>
-        public override string GetOpeningText()
+        public override TextEntry GetOpeningText()
         {
-            string rv = string.Empty;
+            TextEntry rv = null;
 
             foreach(Task q in PlayerManager.TaskLog)
             {
@@ -2085,9 +2178,9 @@ namespace RiverHollow.Characters
             {
                 if (!CheckTaskLog(ref rv))
                 {
-                    if (_bShopIsOpen) { rv = _diDialogue["ShopOpen"].Text; }
+                    if (_bShopIsOpen) { rv = _diDialogue["ShopOpen"]; }
                     else if (!_bHasTalked) { rv = GetDailyDialogue(); }
-                    else { rv = GetSelectionText(); }
+                    else { rv = _diDialogue["Selection"]; }
                 }
             }
             return rv;
@@ -2101,7 +2194,7 @@ namespace RiverHollow.Characters
         /// <param name="chosenAction">The action to perform logic on</param>
         /// <param name="nextText">A reference to be filled out for the next text to display</param>
         /// <returns>False if was triggered and we want to close the text window</returns>
-        public override bool HandleTextSelection(string chosenAction, ref string nextText)
+        public override bool HandleTextSelection(string chosenAction, ref TextEntry nextText)
         {
             bool rv = false;
             rv = base.HandleTextSelection(chosenAction, ref nextText);
@@ -2149,53 +2242,9 @@ namespace RiverHollow.Characters
                 }
             }
 
-            if (!string.IsNullOrEmpty(nextText)) { rv = true; }
+            if (nextText != null) { rv = true; }
 
             return rv;
-        }
-        public override List<string> RemoveEntries(string[] options)
-        {
-            List<string> _liCommands = new List<string>();
-            for (int i = 0; i < options.Length; i++)
-            {
-                bool removeIt = false;
-                string s = options[i];
-
-                if (s.Contains("%"))
-                {
-                    //Special checks are in the format %type:val% so, |%Friend:50%Join Party:Party| or |%Task:1%Business:Task1|
-                    string[] specialParse = s.Split(new[] { '%' }, StringSplitOptions.RemoveEmptyEntries);
-                    string[] specialVal = specialParse[0].Split(':');
-
-                    int.TryParse(specialVal[1], out int val);
-
-                    if (specialVal[0].Equals("Friend"))
-                    {
-                        removeIt = FriendshipPoints < val;
-                    }
-                    else if (specialVal[0].Equals("Task"))
-                    {
-                        Task newTask = GameManager.DITasks[val];
-                        removeIt = PlayerManager.TaskLog.Contains(newTask) || newTask.ReadyForHandIn || newTask.Finished || !newTask.CanBeGiven();
-                    }
-
-                    s = s.Remove(s.IndexOf(specialParse[0]) - 1, specialParse[0].Length + 2);
-                }
-                else
-                {
-                    if (!CanGiveGift && s.Contains("GiveGift"))
-                    {
-                        removeIt = true;
-                    }
-                }
-
-                if (!removeIt)
-                {
-                    _liCommands.Add(s);
-                }
-            }
-
-            return _liCommands;
         }
 
         #region Spawning methods
@@ -2435,7 +2484,7 @@ namespace RiverHollow.Characters
             }
         }
 
-        protected bool CheckTaskLog(ref string taskCompleteText)
+        protected bool CheckTaskLog(ref TextEntry taskEntry)
         {
             bool rv = false;
 
@@ -2443,9 +2492,10 @@ namespace RiverHollow.Characters
             {
                 if (t.ReadyForHandIn && t.GoalNPC == this)
                 {
-                    t.FinishTask(ref taskCompleteText);
+                    string taskCompleteKey = string.Empty;
+                    t.FinishTask(ref taskCompleteKey);
 
-                    taskCompleteText = _diDialogue[taskCompleteText].Text;
+                    taskEntry = _diDialogue[taskCompleteKey];
 
                     rv = true;
                     break;
@@ -2455,9 +2505,9 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        public string Gift(Item item)
+        public TextEntry Gift(Item item)
         {
-            string rv = string.Empty;
+            TextEntry rv = null;
 
             bool giftGiven = true;
             if (item != null)
@@ -2704,15 +2754,14 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        public override string GetDialogEntry(string entry)
-        {
-            string[] specialActions = null;
-            return Util.ProcessText(DataManager.GetAdventurerDialogue(_iID, entry), ref specialActions, _sName);
-        }
+        //public override string GetDialogEntry(string entry)
+        //{
+        //    return Util.ProcessText(DataManager.GetAdventurerDialogue(_iID, entry));
+        //}
         
-        public override string GetOpeningText()
+        public override TextEntry GetOpeningText()
         {
-            return Name + ": " + DataManager.GetAdventurerDialogue(_iID, "Selection");
+            return new TextEntry();//Name + ": " + DataManager.GetAdventurerDialogue(_iID, "Selection");
         }
 
         /// <summary>
@@ -2723,7 +2772,7 @@ namespace RiverHollow.Characters
         /// <param name="chosenAction">The action to perform logic on</param>
         /// <param name="nextText">A reference to be filled out for the next text to display</param>
         /// <returns>False if was triggered and we want to close the text window</returns>
-        public override bool HandleTextSelection(string chosenAction, ref string nextText)
+        public override bool HandleTextSelection(string chosenAction, ref TextEntry nextText)
         {
             bool rv = false;
             rv = base.HandleTextSelection(chosenAction, ref nextText);
@@ -2737,7 +2786,7 @@ namespace RiverHollow.Characters
                 }
             }
 
-            if (!string.IsNullOrEmpty(nextText)) {
+            if (nextText != null) {
                 _iMood++;
                 rv = true;
             }
@@ -3200,9 +3249,9 @@ namespace RiverHollow.Characters
             _bOnTheMap = active;
             Triggered = false;
         }
-        public override string GetOpeningText()
+        public override TextEntry GetOpeningText()
         {
-            string rv = string.Empty;
+            TextEntry rv = null;
             if (_bOnTheMap)
             {
                 Triggered = true;
@@ -3213,7 +3262,7 @@ namespace RiverHollow.Characters
                 //InventoryManager.AddToInventory(int.Parse(loot[arrayID]));
 
                 //_sText = Util.ProcessText(_sText.Replace("*", "*" + loot[arrayID] + "*"));
-                GUIManager.OpenTextWindow(_sText, this, true);
+               // GUIManager.OpenTextWindow(_sText, this, true);
             }
             return rv;
         }
@@ -3282,7 +3331,7 @@ namespace RiverHollow.Characters
         /// <param name="chosenAction">The action to perform logic on</param>
         /// <param name="nextText">A reference to be filled out for the next text to display</param>
         /// <returns>False if was triggered and we want to close the text window</returns>
-        public override bool HandleTextSelection(string chosenAction, ref string nextText)
+        public override bool HandleTextSelection(string chosenAction, ref TextEntry nextText)
         {
             bool rv = false;
             rv = base.HandleTextSelection(chosenAction, ref nextText);
@@ -3299,7 +3348,7 @@ namespace RiverHollow.Characters
                 }
             }
 
-            if (!string.IsNullOrEmpty(nextText)) { rv = true; }
+            if (nextText != null) { rv = true; }
 
             return rv; 
         }

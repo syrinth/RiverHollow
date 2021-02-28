@@ -1284,7 +1284,7 @@ namespace RiverHollow.Tile_Engine
 
             if (tile.ContainsProperty("Save", out string val) && val.Equals("true"))
             {
-                GUIManager.OpenTextWindow(DataManager.GetGameText("Save"));
+                GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("Save"));
             }
 
             foreach (ShopLocation shop in _liShopData)

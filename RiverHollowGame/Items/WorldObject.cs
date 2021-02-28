@@ -7,7 +7,7 @@ using RiverHollow.GUIComponents.Screens;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
-
+using static RiverHollow.Characters.TalkingActor;
 using static RiverHollow.Game_Managers.DataManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
@@ -362,14 +362,14 @@ namespace RiverHollow.Items
     public class Mailbox : WorldObject
     {
         private AnimatedSprite _alertSprite;
-        private List<string> _liCurrentMessages;
-        private List<string> _liSentMessages;
+        private List<int> _liCurrentMessages;
+        private List<int> _liSentMessages;
         public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + (_iHeight - BaseHeight), BaseWidth, BaseHeight);
 
         public Mailbox(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos - new Vector2(0, TileSize))
         {
-            _liCurrentMessages = new List<string>();
-            _liSentMessages = new List<string>();
+            _liCurrentMessages = new List<int>();
+            _liSentMessages = new List<int>();
             LoadDictionaryData(stringData);
             PlayerManager.PlayerMailbox = this;
         }
@@ -385,7 +385,7 @@ namespace RiverHollow.Items
             _alertSprite?.Draw(spriteBatch, 99999);
         }
 
-        public void SendMessage(string message)
+        public void SendMessage(int message)
         {
             _liSentMessages.Add(message);
         }
@@ -394,7 +394,7 @@ namespace RiverHollow.Items
         {
             if (_liCurrentMessages.Count > 0)
             {
-                string s = _liCurrentMessages[0];
+                TextEntry tEntry = DataManager.GetMailboxMessage(_liCurrentMessages[0]);
                 _liCurrentMessages.RemoveAt(0);
 
                 if (_liCurrentMessages.Count == 0)
@@ -402,20 +402,15 @@ namespace RiverHollow.Items
                     _alertSprite = null;
                 }
 
-                string[] specialActions = null;
-
-                s = Util.ProcessText(s, ref specialActions);
-                Util.HandleSpecialDialogueActions(specialActions);
-
-                GUIManager.OpenTextWindow(s);
+                GUIManager.OpenTextWindow(tEntry);
             }
         }
 
         public void Rollover()
         {
-            foreach(string s in _liSentMessages)
+            foreach(int i in _liSentMessages)
             {
-                _liCurrentMessages.Add(s);
+                _liCurrentMessages.Add(i);
             }
             _liSentMessages.Clear();
 
@@ -430,8 +425,8 @@ namespace RiverHollow.Items
         public MailboxData SaveData()
         {
             MailboxData data = new MailboxData();
-            data.MailboxMessages = new List<string>();
-            foreach(string s in _liCurrentMessages)
+            data.MailboxMessages = new List<int>();
+            foreach(int s in _liCurrentMessages)
             {
                 data.MailboxMessages.Add(s);
             }
@@ -440,9 +435,9 @@ namespace RiverHollow.Items
         }
         public void LoadData(MailboxData data)
         {
-            foreach(string s in data.MailboxMessages)
+            foreach(int i in data.MailboxMessages)
             {
-                _liSentMessages.Add(s);
+                _liSentMessages.Add(i);
             }
 
             Rollover();
@@ -1690,7 +1685,7 @@ namespace RiverHollow.Items
                     }
                     else
                     {
-                        GUIManager.OpenTextWindow(DataManager.GetGameText("Key_Door"));
+                        GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("Key_Door"));
                     }
                 }
                 else if (_iItemKeyID != -1)
@@ -1699,7 +1694,7 @@ namespace RiverHollow.Items
                 }
                 else
                 {
-                    GUIManager.OpenTextWindow(DataManager.GetGameText("Trigger_Door"));
+                    GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("Trigger_Door"));
                 }
             }
         }

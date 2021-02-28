@@ -57,7 +57,7 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<string, Dictionary<string, string>> _di;
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
-        public static Dictionary<int, string> DiMessages;
+        static Dictionary<int, string> _diMailboxMessages;
 
         static Dictionary<int, Dictionary<string, string>> _diBuildings;
         static Dictionary<int, Dictionary<string, string>> _diItemData;
@@ -100,7 +100,7 @@ namespace RiverHollow.Game_Managers
             DiUpgrades = Content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
             _diMonsterTraits = Content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
 
-            DiMessages = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + @"Mailbox_Text");
+            _diMailboxMessages = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + @"Mailbox_Text");
 
             //Read in Content and allocate the appropriate Dictionaries
             LoadGUIs(Content);
@@ -360,24 +360,6 @@ namespace RiverHollow.Game_Managers
             return null;
         }
 
-        public static bool TextDataHasKey(string identifier)
-        {
-            return _diObjectText.ContainsKey(identifier);
-        }
-
-        public static void GetTextData(string identifier, int id, ref string value, string key)
-        {
-            string textKey = identifier + "_" + id;
-            GetTextData(textKey, ref value, key);
-        }
-        public static void GetTextData(string textKey, ref string value, string key)
-        {
-            if (_diObjectText[textKey].ContainsKey(key)) { value = _diObjectText[textKey][key];  }
-            else { value = string.Empty;}
-
-            string[] specialActions = null;
-            value = Util.ProcessText(value, ref specialActions);
-        }
         public static Item GetItem(int id)
         {
             return GetItem(id, 1);
@@ -630,17 +612,6 @@ namespace RiverHollow.Game_Managers
         {
             return _diBMFonts[font];
         }
-
-        public static string GetGameText(string key)
-        {
-            string rv = string.Empty;
-            if (_diGameText.ContainsKey(key))
-            {
-                rv = _diGameText[key];
-            }
-
-            return rv;
-        }
         
         public static void GetUpgradeText(int id, ref string name, ref string desc)
         {
@@ -660,6 +631,27 @@ namespace RiverHollow.Game_Managers
                 return null;
             }
         }
+
+        #region Text Handlers
+        private static string GetGameText(string key)
+        {
+            string rv = string.Empty;
+            if (_diGameText.ContainsKey(key))
+            {
+                rv = _diGameText[key];
+            }
+
+            return rv;
+        }
+
+        public static TextEntry GetGameTextEntry(string key)
+        {
+            return new TextEntry(Util.DictionaryFromTaggedString(GetGameText(key)));
+        }
+        public static TextEntry GetMailboxMessage(int id)
+        {
+            return new TextEntry(Util.DictionaryFromTaggedString(_diMailboxMessages[id]));
+        }
         public static Dictionary<string, TextEntry> GetNPCDialogue(int id)
         {
             Dictionary<string, TextEntry> rv = new Dictionary<string, TextEntry>();
@@ -674,6 +666,24 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
+
+        public static bool TextDataHasKey(string identifier)
+        {
+            return _diObjectText.ContainsKey(identifier);
+        }
+        public static void GetTextData(string identifier, int id, ref string value, string key)
+        {
+            string textKey = identifier + "_" + id;
+            GetTextData(textKey, ref value, key);
+        }
+        public static void GetTextData(string textKey, ref string value, string key)
+        {
+            if (_diObjectText[textKey].ContainsKey(key)) { value = _diObjectText[textKey][key]; }
+            else { value = string.Empty; }
+
+            value = Util.ProcessText(value);
+        }
+        #endregion
         #endregion
 
         #region Spawn Code

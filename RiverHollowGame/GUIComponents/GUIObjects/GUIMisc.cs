@@ -295,7 +295,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             if (_gImage.Contains(mouse))
             {
                 rv = true;
-                _gText = new GUITextWindow(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32), DataManager.GetGameText(_status.ToString() + " Description"));
+                _gText = new GUITextWindow(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32), DataManager.GetGameTextEntry(_status.ToString() + " Description").Text);
                 AddControl(_gText);
             }
 

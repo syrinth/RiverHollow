@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
+using static RiverHollow.Characters.TalkingActor;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
@@ -118,11 +119,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             if (GameManager.CurrentNPC != null)
             {
-                string nextText = string.Empty;
+                TextEntry nextText = null;
                 bool rv = GameManager.CurrentNPC.HandleTextSelection(selectedAction, ref nextText);
 
-                if (!rv) { GUIManager.CloseTextWindow(); }
-                else { GUIManager.SetWindowText(nextText, GameManager.CurrentNPC, true); }
+                if (!rv || nextText == null) { GUIManager.CloseTextWindow(); }
+                else { GUIManager.SetWindowText(nextText.Text, GameManager.CurrentNPC, true); }
             }
             else if (GameManager.CurrentItem != null)
             {

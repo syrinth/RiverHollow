@@ -3,92 +3,92 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>FoodConfirm</Key>
-      <Value>Really eat the {0}? {Yes-UseItem|No-Cancel}</Value>
+      <Value>[Text:Really eat the {0}? {Yes-UseItem|No-Cancel}]</Value>
     </Item>
     <Item>
       <Key>GiftConfirm</Key>
-      <Value>Give {0} to {1}? {Yes-ConfirmGift|No-Cancel}</Value>
+      <Value>[Text:Give {0} to {1}? {Yes-ConfirmGift|No-Cancel}]</Value>
     </Item>
     <Item>
       <Key>ItemConfirm</Key>
-      <Value>"Use {0} on who? {</Value>
+      <Value>[Text:"Use {0} on who? {]</Value>
     </Item>
     <Item>
       <Key>ClassItemConfirm</Key>
-      <Value>Really use the {0}? {Yes-UseItem|No-Cancel}</Value>
+      <Value>[Text:Really use the {0}? {Yes-UseItem|No-Cancel}]</Value>
     </Item>
     <Item>
       <Key>AdventurerTree</Key>
-      <Value>...{Talk-Talk|Join Party-Party}</Value>
+      <Value>[Text:...{Talk-Talk|Join Party-Party}]</Value>
     </Item>
     <Item>
       <Key>Save</Key>
-      <Value>Save and end the day?{Yes-EndDay|No-Cancel}</Value>
+      <Value>[Text:Save and end the day?{Yes-EndDay|No-Cancel}]</Value>
     </Item>
     <Item>
       <Key>ReallyExit</Key>
-      <Value>Are you sure?{Exit-Exit|Cancel-Cancel}</Value>
+      <Value>[Text:Are you sure?{Exit-Exit|Cancel-Cancel}]</Value>
     </Item>
 	<Item>
       <Key>Rune_of_Return_Use</Key>
-      <Value>Use the {0} to the dungeon entrance? {Yes-UseItem|No-Cancel}</Value>
+      <Value>[Text:Use the {0} to the dungeon entrance? {Yes-UseItem|No-Cancel}]</Value>
     </Item>
 	<Item>
       <Key>Rune_of_Return_Empty</Key>
-      <Value>The {0}'s energy is spent.</Value>
+      <Value>[Text:The {0}'s energy is spent.]</Value>
     </Item>
 	<Item>
       <Key>Rune_of_Return_No_Dungeon</Key>
-      <Value>The rune cannot work here.</Value>
+      <Value>[Text:The rune cannot work here.]</Value>
     </Item>
     <Item>
       <Key>Key_Door</Key>
-      <Value>The door is locked. You will need a key to open it.</Value>
+      <Value>[Text:The door is locked. You will need a key to open it.]</Value>
     </Item>
     <Item>
       <Key>Item_Door</Key>
-      <Value>A strangely shaped keyhole is embedded in the door {Attempt to Open-OpenDoor|Never Mind-Cancel}</Value>
+      <Value>[Text:A strangely shaped keyhole is embedded in the door {Attempt to Open-OpenDoor|Never Mind-Cancel}]</Value>
     </Item>
     <Item>
       <Key>Item_Door_Open</Key>
-      <Value>As you place the item into the keyhole, it vanishes, becoming one with the door!</Value>
+      <Value>[Text:As you place the item into the keyhole, it vanishes, becoming one with the door!]</Value>
     </Item>
     <Item>
       <Key>Item_Door_Close</Key>
-      <Value>No matter how hard you try, it seems like that item won't fit here.</Value>
+      <Value>[Text:No matter how hard you try, it seems like that item won't fit here.]</Value>
     </Item>
     <Item>
       <Key>Trigger_Door</Key>
-      <Value>You see no visible means of opening this door. There must be a hidden switch or something.</Value>
+      <Value>[Text:You see no visible means of opening this door. There must be a hidden switch or something.]</Value>
     </Item>
 	<Item>
       <Key>MonsterFood_Confirm</Key>
-      <Value>Set out the {0} here?{Yes-UseItem|No-Cancel}</Value>
+      <Value>[Text:Set out the {0} here?{Yes-UseItem|No-Cancel}]</Value>
     </Item>
     <Item>
       <Key>MonsterFood_Yes</Key>
-      <Value>You place the {0} on the ground.</Value>
+      <Value>[Text:You place the {0} on the ground.]</Value>
     </Item>
 	<Item>
       <Key>MonsterFood_False</Key>
-      <Value>You see no monster tracks here, better use it somewhere else.</Value>
+      <Value>[Text:You see no monster tracks here, better use it somewhere else.]</Value>
     </Item>
 	<Item>
       <Key>MonsterFood_Duplicate</Key>
-      <Value>Tantalizing food has already been placed.</Value>
+      <Value>[Text:Tantalizing food has already been placed.]</Value>
     </Item>
 	<Item>
       <Key>Pedestal_Ruby</Key>
-      <Value>A shining red gem.</Value>
+      <Value>[Text:A shining red gem.]</Value>
     </Item>
 	<Item>
       <Key>Pedestal_Emerald</Key>
-      <Value>A shining red gem.</Value>
+      <Value>[Text:A shining red gem.]</Value>
     </Item>
     <!--Upgrade Text -->
     <Item>
       <Key>Upgrade 1</Key>
-      <Value>Tavern/A place where people can gather</Value>
+      <Value>[Text:Tavern/A place where people can gather]</Value>
     </Item>
   </Asset>
 </XnaContent>

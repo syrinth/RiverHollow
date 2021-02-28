@@ -6,7 +6,7 @@ using RiverHollow.Characters;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
-
+using static RiverHollow.Characters.TalkingActor;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Game_Managers
@@ -15,7 +15,7 @@ namespace RiverHollow.Game_Managers
     {
         static Cutscene _currentCutscene;
         static Dictionary<int, Cutscene> _diCutscenes;
-        static Dictionary<int, Dictionary<string, string>> _diCutsceneDialogue;
+        static Dictionary<int, Dictionary<string, TextEntry>> _diCutsceneDialogue;
         public static bool Playing;
         
         /// <summary>
@@ -26,23 +26,22 @@ namespace RiverHollow.Game_Managers
         {
             Playing = false;
             _diCutscenes = new Dictionary<int, Cutscene>();
-            _diCutsceneDialogue = new Dictionary<int, Dictionary<string, string>>();
+            _diCutsceneDialogue = new Dictionary<int, Dictionary<string, TextEntry>>();
 
             //We need to do this bullshit because the god damn XML Importer can't have nested Dictionaries. WE MAKE OUR OWN!
             Dictionary<int, List<string>> dataList = Content.Load<Dictionary<int, List<string>>>(@"Data\Text Files\Dialogue\CutsceneDialogue");
             foreach (KeyValuePair<int, List<string>> kvp in dataList)
             {
-                Dictionary<string, string> dss = new Dictionary<string, string>();
+                Dictionary<string, TextEntry> entryDictionary = new Dictionary<string, TextEntry>();
                 foreach (string s in kvp.Value)
                 {
-                    string newVal = s.Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries)[0];
-                    if (newVal.Contains(":"))
-                    {
-                        string[] tagSplit = newVal.Split(':');
-                        dss[tagSplit[0]] = tagSplit[1];
-                    }
+                    Dictionary<string, string> tagDictionary = Util.DictionaryFromTaggedString(s);
+                    string key = tagDictionary["Key"];
+                    tagDictionary.Remove("Key");
+
+                    entryDictionary[key] = new TextEntry(tagDictionary);
                 }
-                _diCutsceneDialogue.Add(kvp.Key, dss);
+                _diCutsceneDialogue.Add(kvp.Key, entryDictionary);
             }
 
             Dictionary<int, List<string>> rawData = Content.Load<Dictionary<int, List<string>>>(@"Data\CutScenes");
@@ -88,7 +87,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="cutsceneID">ID of the Cutscene</param>
         /// <param name="stringID">The string ID to query for</param>
         /// <returns></returns>
-        public static string GetDialogue(int cutsceneID, string stringID)
+        public static TextEntry GetDialogue(int cutsceneID, string stringID)
         {
             return _diCutsceneDialogue[cutsceneID][stringID];
         }

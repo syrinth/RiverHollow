@@ -199,7 +199,7 @@ namespace RiverHollow.Game_Managers
         public struct MailboxData
         {
             [XmlArray(ElementName = "MailboxMessages")]
-            public List<string> MailboxMessages;
+            public List<int> MailboxMessages;
         }
         public struct WorkerData
         {

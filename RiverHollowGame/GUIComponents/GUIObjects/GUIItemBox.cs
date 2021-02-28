@@ -6,7 +6,7 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
-
+using static RiverHollow.Characters.TalkingActor;
 using static RiverHollow.Game_Managers.DataManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Items.Item;
@@ -74,23 +74,23 @@ namespace RiverHollow.GUIComponents.GUIObjects
             if (Contains(mouse))
             {
                 rv = true;
-                string text = string.Empty;
+                TextEntry entry = null;
                 if (BoxItem.CompareType(ItemEnum.Food))                  //Text has a {0} parameter so Item.Name fills it out
                 {
-                    text = string.Format(DataManager.GetGameText("FoodConfirm"), BoxItem.Name);
+                    entry.FormatText(DataManager.GetGameTextEntry("FoodConfirm"), BoxItem.Name);
                 }
                 else if (BoxItem.CompareSpecialType(SpecialItemEnum.Class))        //Class Change handler
                 {
-                    text = DataManager.GetGameText("ClassItemConfirm");
+                    entry = DataManager.GetGameTextEntry("ClassItemConfirm");
                 }
                 else if (BoxItem.CompareType(ItemEnum.MonsterFood))        //Class Change handler
                 {
                     if (MapManager.CurrentMap.IsCombatMap)
                     {
-                        if (MapManager.CurrentMap.PrimedFood != null) { text = DataManager.GetGameText("MonsterFood_Duplicate"); }
-                        else { text = string.Format(DataManager.GetGameText("MonsterFood_Confirm"), BoxItem.Name); }
+                        if (MapManager.CurrentMap.PrimedFood != null) { entry = DataManager.GetGameTextEntry("MonsterFood_Duplicate"); }
+                        else { entry.FormatText(DataManager.GetGameTextEntry("MonsterFood_Confirm"), BoxItem.Name); }
                     }
-                    else { text = DataManager.GetGameText("MonsterFood_False"); }
+                    else { entry = DataManager.GetGameTextEntry("MonsterFood_False"); }
                 }
                 else if (BoxItem.CompareType(ItemEnum.Tool))
                 {
@@ -107,31 +107,27 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     {
                         if (DungeonManager.CurrentDungeon != null)
                         {
-                            if (t.HasCharges()) { text = string.Format(DataManager.GetGameText("Rune_of_Return_Use"), BoxItem.Name); }
-                            else { text = string.Format(DataManager.GetGameText("Rune_of_Return_Empty"), BoxItem.Name); }
+                            if (t.HasCharges()) { entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_Use"), BoxItem.Name); }
+                            else { entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_Empty"), BoxItem.Name); }
                         }
                         else
                         {
-                            text = string.Format(DataManager.GetGameText("Rune_of_Return_No_Dungeon"), BoxItem.Name);
+                            entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_No_Dungeon"), BoxItem.Name);
                         }
                     }
                 }
                 else if (BoxItem.CompareType(ItemEnum.Consumable))       //If the item is a Consumable, construct the selection options from the party
                 {
                     int i = 0;
-                    text = string.Format(DataManager.GetGameText("ItemConfirm"), BoxItem.Name);
-                    foreach (ClassedCombatant adv in PlayerManager.GetParty())
-                    {
-                        text += adv.Name + ":" + i++ + "|";
-                    }
-                    text += "Cancel:Cancel}";
+                    entry.FormatText(DataManager.GetGameTextEntry("ItemConfirm"), BoxItem.Name);
+                    entry.AppendParty();
                 }
 
                 //If we have a text string after handling, set the active item and open a new textWindow
-                if (!string.IsNullOrEmpty(text))
+                if (entry != null)
                 {
                     GameManager.CurrentItem = BoxItem;
-                    GUIManager.OpenTextWindow(text, false);
+                    GUIManager.OpenTextWindow(entry, false);
                 }
             }
 
