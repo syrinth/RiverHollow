@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
-using static RiverHollow.Characters.TalkingActor;
-using static RiverHollow.Game_Managers.DataManager;
+using RiverHollow.Misc;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Items.Item;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
@@ -118,7 +114,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 }
                 else if (BoxItem.CompareType(ItemEnum.Consumable))       //If the item is a Consumable, construct the selection options from the party
                 {
-                    int i = 0;
                     entry.FormatText(DataManager.GetGameTextEntry("ItemConfirm"), BoxItem.Name);
                     entry.AppendParty();
                 }

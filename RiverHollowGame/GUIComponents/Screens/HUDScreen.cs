@@ -19,6 +19,7 @@ using static RiverHollow.GUIComponents.Screens.HUDMenu.HUDManagement.MgmtWindow;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.Items.Item;
 using static RiverHollow.Items.WorldItem;
+using static RiverHollow.Characters.TalkingActor;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -152,12 +153,12 @@ namespace RiverHollow.GUIComponents.Screens
         /// </summary>
         /// <param name="text">Text to open with</param>
         /// <param name="open">Whether to play the open animation</param>
-        public override void OpenTextWindow(string text, bool open = true, bool displayDialogueIcon = false)
+        public override void OpenTextWindow(TextEntry text, bool open = true, bool displayDialogueIcon = false)
         {
             base.OpenTextWindow(text, open, displayDialogueIcon);
             _gInventory.Show(false);
         }
-        public override void OpenTextWindow(string text, TalkingActor talker, bool open = true, bool displayDialogueIcon = false)
+        public override void OpenTextWindow(TextEntry text, TalkingActor talker, bool open = true, bool displayDialogueIcon = false)
         {
             base.OpenTextWindow(text, talker, open, displayDialogueIcon);
             _gInventory.Show(false);
@@ -1891,7 +1892,7 @@ namespace RiverHollow.GUIComponents.Screens
                         _weapon = new GUIItemBox(DataManager.DIALOGUE_TEXTURE, _character.Weapon.GetItem());
                         _weapon.AnchorToInnerSide(_window, SideEnum.TopRight);
 
-                        _armor = new GUIItemBox( DataManager.DIALOGUE_TEXTURE, _character.Armor.GetItem());
+                        _armor = new GUIItemBox(DataManager.DIALOGUE_TEXTURE, _character.Armor.GetItem());
                         _armor.AnchorAndAlignToObject(_weapon, SideEnum.Left, SideEnum.Bottom);
 
                         _gStr = new GUIText("Dmg: 999");

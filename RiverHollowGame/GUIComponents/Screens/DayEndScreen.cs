@@ -5,8 +5,7 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Utilities;
-
+using RiverHollow.Misc;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 
 namespace RiverHollow.GUIComponents.Screens
@@ -50,22 +49,23 @@ namespace RiverHollow.GUIComponents.Screens
                 }
             }
 
-            string results = String.Format("Gold: {0}\nExperience: {1}", GameManager.ShippingGremlin.SellAll(), GameManager.TotalExperience);
+            //string results = String.Format("Gold: {0}\nExperience: {1}", GameManager.ShippingGremlin.SellAll(), GameManager.TotalExperience);
 
-            //Give the XP to the party
-            foreach (ClassedCombatant c in PlayerManager.GetParty())
-            {
-                int startLevel = c.ClassLevel;
-                c.AddXP(GameManager.TotalExperience);
+            ////Give the XP to the party
+            //foreach (ClassedCombatant c in PlayerManager.GetParty())
+            //{
+            //    int startLevel = c.ClassLevel;
+            //    c.AddXP(GameManager.TotalExperience);
 
-                if (c.ClassLevel > startLevel)
-                {
-                    results += String.Format("\n{0} Level Up!", c.Name);
-                }
-            }
+            //    if (c.ClassLevel > startLevel)
+            //    {
+            //        results += String.Format("\n{0} Level Up!", c.Name);
+            //    }
+            //}
 
-            if(_iNewVillagers == 1) { results += String.Format("\nA new villager has arrived in town."); }
-            else if(_iNewVillagers > 1) { results += String.Format("\nNew villagers have arrived in town."); }
+            TextEntry results = null;
+            if(_iNewVillagers == 1) { results = DataManager.GetGameTextEntry("New_Villager"); }
+            else if(_iNewVillagers > 1) { results = DataManager.GetGameTextEntry("New_Villagers"); }
 
             _btnOK = new GUIButton("OK", BtnOK);
             _btnOK.AnchorToScreen( SideEnum.Bottom, GUIManager.STANDARD_MARGIN);

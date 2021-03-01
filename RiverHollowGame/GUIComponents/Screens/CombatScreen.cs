@@ -74,7 +74,7 @@ namespace RiverHollow.GUIComponents.Screens
                     break;
 
                 case CombatManager.CmbtPhaseEnum.DisplayDefeat:
-                    GUITextWindow window = new GUITextWindow("Defeated");
+                    GUITextWindow window = new GUITextWindow(DataManager.GetGameTextEntry("Defeated"));
                     window.CenterOnScreen();
                     AddControl(window);
                     break;

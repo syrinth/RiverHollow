@@ -6,7 +6,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Characters.TalkingActor;
+using RiverHollow.Misc;
 
 namespace RiverHollow.Game_Managers
 {
@@ -113,7 +113,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void OpenTextWindow(TextEntry text, TalkingActor talker, bool open = true, bool displayDialogueIcon = false)
         {
-            _currentGUIScreen.OpenTextWindow(text.Text, talker, open, displayDialogueIcon);
+            _currentGUIScreen.OpenTextWindow(text, talker, open, displayDialogueIcon);
         }
         public static bool CloseTextWindow()
         {
@@ -122,7 +122,7 @@ namespace RiverHollow.Game_Managers
         public static bool IsTextWindowOpen() { return _currentGUIScreen.IsTextWindowOpen(); }
 
 
-        public static void SetWindowText(string value, TalkingActor act = null, bool displayDialogueIcon = false)
+        public static void SetWindowText(TextEntry value, TalkingActor act = null, bool displayDialogueIcon = false)
         {
             _currentGUIScreen.SetWindowText(value, act, displayDialogueIcon);
         }

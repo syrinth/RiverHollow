@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
+using RiverHollow.Misc;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
@@ -37,6 +38,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         protected bool _bDisplayDialogueIcon = false;
         #endregion
 
+        protected TextEntry _textEntry;
+
         public GUITextWindow() : base()
         {
             _giText = new GUIText();
@@ -48,21 +51,25 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         }
 
         //Used for the default TextWindow that sits on the bottom of the screen
-        public GUITextWindow(string text, bool open = true, bool displayDialogueIcon = false) : this()
+        public GUITextWindow(TextEntry text, bool open = true, bool displayDialogueIcon = false) : this()
         {
+            _textEntry = text;
+            _textEntry.HandlePreWindowActions(GameManager.CurrentNPC);
             _bDisplayDialogueIcon = displayDialogueIcon;
             ConfigureHeight();
-            SyncText(text);
+            SyncText(_textEntry.Text);
             Setup(open);
         }
 
         //Informational boxes that show up anywhere, like tooltips
-        public GUITextWindow(Vector2 position, string text) : this()
+        public GUITextWindow(TextEntry text, Vector2 position) : this()
         {
-            Height = (int)_giText.MeasureString(text).Y + HeightEdges();
+            _textEntry = text;
+            _textEntry.HandlePreWindowActions();
+            Height = (int)_giText.MeasureString(_textEntry.Text).Y + HeightEdges();
             Width = (int)(RiverHollow.ScreenWidth / 4);
 
-            SyncText(text);
+            SyncText(_textEntry.Text);
 
             string totalVal = string.Empty;
             foreach(string s in _liTextPages)
@@ -78,15 +85,22 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         //Temporary TextWindow that just shows up briefly and is disposed of later.
         //MAR this should probably be deleted.
-        public GUITextWindow(string text, double duration) : this()
+        public GUITextWindow(TextEntry text, double duration) : this()
         {
-            SyncText(text);
+            _textEntry = text;
+            _textEntry.HandlePreWindowActions();
+            SyncText(_textEntry.Text);
             Duration = duration;
 
             Height = _iCharHeight;
             Width = (int)_giText.TextSize.X;
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
             Resize();
+        }
+
+        public void ClosingWindow()
+        {
+            _textEntry.HandlePostWindowActions();
         }
 
         public void Setup(bool openUp)
@@ -304,9 +318,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
         }
 
-        public void ResetText(string text)
+        public void ResetText(TextEntry text)
         {
-            _giText.ResetText(text);
+            _giText.ResetText(text.Text);
         }
 
         protected void SetWidthMax(int val, int maxWidth)

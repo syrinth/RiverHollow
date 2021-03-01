@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
-
+using RiverHollow.Misc;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.Screens
@@ -54,8 +54,9 @@ namespace RiverHollow.GUIComponents.Screens
 
                 if(GameManager.CurrentNPC != null && GameManager.CurrentItem != null && GameManager.CurrentInventoryDisplay == DisplayTypeEnum.Gift)
                 {
-                    //string.Format(DataManager.GetGameText("GiftConfirm"), GameManager.CurrentItem.Name, GameManager.CurrentNPC.Name)
-                    GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("GiftConfirm"), GameManager.CurrentNPC);
+                    TextEntry entry = DataManager.GetGameTextEntry("GiftConfirm");
+                    entry.FormatText(GameManager.CurrentItem.Name, GameManager.CurrentNPC.Name);
+                    GUIManager.OpenTextWindow(entry, GameManager.CurrentNPC);
                 }
             }
             else if (_container != null && _container.Contains(mouse))

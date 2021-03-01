@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>[Text:Eek! Eh... hello! New house person, yes? Me $Character_21$. Place things here with me, yes, I sell for you at night while you sleeps. Mutually beneficial! {Talk-Talk|Gift-GiveGift|Ship Goods-ShipGoods|Never Mind-Cancel}]</Value>
+      <Value>[Text:Eek! Eh... hello! New house person, yes? Me $Character_21$. Place things here with me, yes, I sell for you at night while you sleeps. Mutually beneficial! {{Talk-Talk|Gift-GiveGift|Ship Goods-ShipGoods|Never Mind-Cancel}}]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -20,7 +20,7 @@ Do you want to come inside bin? $21$ can scootch over.]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>[Text:Hello, hello! How can meek, humble $21$ be helping you? {Talk-Talk|Gift-GiveGift|Ship Goods-ShipGoods|Never Mind-Cancel}]</Value>
+      <Value>[Text:Hello, hello! How can meek, humble $21$ be helping you? {{Talk-Talk|Gift-GiveGift|Ship Goods-ShipGoods|Never Mind-Cancel}}]</Value>
     </Item>
     <Item>
       <Key>Goodbye</Key>

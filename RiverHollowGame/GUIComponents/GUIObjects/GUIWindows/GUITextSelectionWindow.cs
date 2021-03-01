@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
+using RiverHollow.Misc;
 using RiverHollow.Utilities;
-using static RiverHollow.Characters.TalkingActor;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
@@ -17,12 +17,14 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         protected Dictionary<int, SelectionData> _diOptions;
 
-        public GUITextSelectionWindow(string selectionText, bool open = true)
+        public GUITextSelectionWindow(TextEntry selectionText, bool open = true)
         {
+            _textEntry = selectionText;
+            _textEntry.HandlePreWindowActions();
             _diOptions = new Dictionary<int, SelectionData>();
             ConfigureHeight();
             _iKeySelection = 0;
-            SeparateText(selectionText);
+            SeparateText(_textEntry.Text);
             PostParse();
 
             Setup(open);
@@ -41,7 +43,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         private void SeparateText(string selectionText)
         {
-            string[] firstPass = selectionText.Split(new[] { '{', '}'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] firstPass = selectionText.Split(new[] { "{{", "}}"}, StringSplitOptions.RemoveEmptyEntries);
             if (firstPass.Length > 0)
             {
                 _sStatement = firstPass[0];
@@ -123,7 +125,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 bool rv = GameManager.CurrentNPC.HandleTextSelection(selectedAction, ref nextText);
 
                 if (!rv || nextText == null) { GUIManager.CloseTextWindow(); }
-                else { GUIManager.SetWindowText(nextText.Text, GameManager.CurrentNPC, true); }
+                else { GUIManager.SetWindowText(nextText, GameManager.CurrentNPC, true); }
             }
             else if (GameManager.CurrentItem != null)
             {

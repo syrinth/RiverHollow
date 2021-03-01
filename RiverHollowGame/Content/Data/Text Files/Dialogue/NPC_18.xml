@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>[Text:Oh, hello. {Talk-Talk|Gift-GiveGift|Never Mind-Cancel}]</Value>
+      <Value>[Text:Oh, hello. {{Talk-Talk|Gift-GiveGift|Never Mind-Cancel}}]</Value>
     </Item>
   </Asset>
 </XnaContent>

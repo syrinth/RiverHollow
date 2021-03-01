@@ -774,7 +774,7 @@ namespace RiverHollow.Characters
                 nextText = GetDialogEntry(chosenAction);
             }
 
-            if (nextText == null) { rv = true; }
+            if (nextText != null) { rv = true; }
 
             return rv;
         }
@@ -838,185 +838,6 @@ namespace RiverHollow.Characters
             startX += (int)_eFaceEnum * width;
             return new Rectangle(startX, 0, width, 60);
         }
-
-        public class TextEntry
-        {
-            Dictionary<string, string> _diTags;
-            int _iTargetShopID = -1;
-            int _iUnlockBuildingID = -1;
-            int _iUnlockItemID = -1;
-            int _iSendMessageID = -1;
-            int _iTaskToAssign = -1;
-            int _iLookupID = -1;
-            int _iPriority = 0;
-            string _sFaceQueue;
-            string _sText;
-            public string Text => _sText;
-
-            public TextEntry()
-            {
-                _sText = "No Text Assigned.";
-            }
-
-            public TextEntry(Dictionary<string, string> stringData)
-            {
-                _diTags = stringData;
-                Util.AssignValue(ref _iTaskToAssign, "Task", stringData);
-                Util.AssignValue(ref _iTargetShopID, "ShopTargetID", stringData);
-                Util.AssignValue(ref _iUnlockBuildingID, "UnlockBuildingID", stringData);
-                Util.AssignValue(ref _iUnlockItemID, "UnlockItemID", stringData);
-                Util.AssignValue(ref _iSendMessageID, "SendMessage", stringData);
-
-                Util.AssignValue(ref _sFaceQueue, "Face", stringData);
-                Util.AssignValue(ref _sText, "Text", stringData);
-                _sText = Util.ProcessText(_sText);
-
-                ParseSelectionText();
-            }
-
-            public void FormatText(params object[] list)
-            {
-                _sText = string.Format(_sText, list);
-            }
-            public void AppendParty()
-            {
-                int i = 0;
-                foreach (ClassedCombatant adv in PlayerManager.GetParty())
-                {
-                    _sText += adv.Name + ":" + i++ + "|";
-                }
-                _sText += "Cancel:Cancel}";
-            }
-
-            private List<string> RemoveEntries(string[] options)
-            {
-                List<string> _liCommands = new List<string>();
-                for (int i = 0; i < options.Length; i++)
-                {
-                    bool removeIt = false;
-                    string s = options[i];
-
-                    if (s.Contains("%"))
-                    {
-                        //Special checks are in the format %type:val% so, |%Friend:50%Join Party:Party| or |%Task:1%Business:Task1|
-                        string[] specialParse = s.Split(new[] { '%' }, StringSplitOptions.RemoveEmptyEntries);
-                        string[] specialVal = specialParse[0].Split('-');
-
-                        int.TryParse(specialVal[1], out int val);
-
-                        if (specialVal[0].Equals("Friend"))
-                        {
-                            //removeIt = FriendshipPoints < val;
-                        }
-                        else if (specialVal[0].Equals("Task"))
-                        {
-                            Task newTask = GameManager.DITasks[val];
-                            removeIt = PlayerManager.TaskLog.Contains(newTask) || newTask.ReadyForHandIn || newTask.Finished || !newTask.CanBeGiven();
-                        }
-
-                        s = s.Remove(s.IndexOf(specialParse[0]) - 1, specialParse[0].Length + 2);
-                    }
-                    else
-                    {
-                      //  if (!CanGiveGift && s.Contains("GiveGift"))
-                      //  {
-                      //      removeIt = true;
-                      //  }
-                    }
-
-                    if (!removeIt)
-                    {
-                        _liCommands.Add(s);
-                    }
-                }
-
-                return _liCommands;
-            }
-
-            private void ParseSelectionText()
-            {
-                if (_sText.Contains("{"))
-                {
-                    string text = _sText;
-
-                    string[] textFromData = text.Split(new[] { '{', '}' }, StringSplitOptions.RemoveEmptyEntries);
-                    int index = textFromData.Length == 1 ? 0 : 1;
-                    string[] options = Util.FindParams(textFromData[index]);
-
-                    List<string> liCommands = RemoveEntries(options);
-
-                    //If there's only two entries left, Talk and Never Mind, then go straight to Talk
-                    string rv = string.Empty;
-                    if (liCommands.Count == 2)
-                    {
-
-                    }
-                    else
-                    {
-                        rv = textFromData[0] + "{";   //Puts back the pre selection text
-                        foreach (string s in liCommands)
-                        {
-                            rv += s + "|";
-                        }
-                        rv = rv.Remove(rv.Length - 1);
-                        rv += "}";
-                    }
-                }
-            }
-
-            public bool Valid(TalkingActor act = null)
-            {
-                bool rv = false;
-
-                //Default is always valid
-                if (_diTags.ContainsKey("Default")) { rv = true; }
-                else
-                {
-                    if (_diTags.ContainsKey("Weather"))
-                    {
-                        if (GameCalendar.GetWeatherString().Equals(_diTags["Weather"])) { rv = true; }
-                        else { return false; }
-                    }
-                    if (_diTags.ContainsKey("Friend"))
-                    {
-                        string[] args = _diTags["Friend"].Split('-');
-                        if (args.Length == 2)
-                        {
-                            if (int.TryParse(args[1], out int NPCID) && act.GetFriendshipLevel() >= NPCID) { rv = true; }
-                            else { return false; }
-                        }
-                        else if (args.Length == 3)
-                        {
-                            if (int.TryParse(args[1], out int NPCID) && int.TryParse(args[2], out int tempLevel) && DataManager.DiNPC[NPCID].GetFriendshipLevel() > tempLevel) { rv = true; }
-                            else { return false; }
-                        }
-                    }
-                }
-
-                return rv;
-            }
-        }
-
-        //public 
-
-        //private void HandleSpecialDialogueActions(string[] specialActions, TalkingActor act = null)
-        //{
-        //    //Index 0 is going to be the actual processed text, so we need to skip it
-        //    if (specialActions.Length > 1)
-        //    {
-        //        int _iTargetShopIndex = -1;
-        //        for (int i = 1; i <= specialActions.Length - 1; i++)
-        //        {
-        //            string[] tagInfo = specialActions[i].Split(':');
-        //            //if (tagInfo[0].Equals("Task")) { PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(tagInfo[1])]); }
-        //            //else if (tagInfo[0].Equals("Face")) { act.QueueActorFace(tagInfo[1]); }
-        //            //else if (tagInfo[0].Equals("ShopTargetID")) { _iTargetShopIndex = int.Parse(tagInfo[1]); }
-        //            else if (tagInfo[0].Equals("UnlockBuildingID")) { GameManager.DIBuildInfo[int.Parse(tagInfo[1])].Unlock(); }
-        //            else if (tagInfo[0].Equals("UnlockItemID") && _iTargetShopIndex != -1) { DIShops[_iTargetShopIndex].Find(x => x.MerchID == int.Parse(tagInfo[1])).Unlock(); }
-        //            else if (tagInfo[0].Equals("SendMessage")) { PlayerManager.PlayerMailbox.SendMessage(int.Parse(tagInfo[1])); }
-        //        }
-        //    }
-        //}
     }
 
     /// <summary>
@@ -2164,7 +1985,10 @@ namespace RiverHollow.Characters
                 {
                     if (_bShopIsOpen) { rv = _diDialogue["ShopOpen"]; }
                     else if (!_bHasTalked) { rv = GetDailyDialogue(); }
-                    else { rv = _diDialogue["Selection"]; }
+                    else {
+                        rv = _diDialogue["Selection"];
+                        rv.ParseSelectionText(this);
+                    }
                 }
             }
             return rv;

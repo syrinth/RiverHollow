@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
+using RiverHollow.Misc;
 using System;
 using static RiverHollow.Game_Managers.GameManager;
 
@@ -295,7 +296,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             if (_gImage.Contains(mouse))
             {
                 rv = true;
-                _gText = new GUITextWindow(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32), DataManager.GetGameTextEntry(_status.ToString() + " Description").Text);
+                _gText = new GUITextWindow(DataManager.GetGameTextEntry(_status.ToString() + " Description"), new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32));
                 AddControl(_gText);
             }
 
@@ -378,7 +379,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             bool rv = false;
             if (Contains(mouse))
             {
-                GUIManager.OpenHoverWindow(new GUITextWindow(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32), ItemObject.GetDescription()), this);
+                GUIManager.OpenHoverWindow(new GUITextWindow(new TextEntry(ItemObject.GetDescription()), new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32)), this);
                 rv = true;
             }
             return rv;

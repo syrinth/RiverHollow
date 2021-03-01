@@ -25,7 +25,7 @@ You're an adventurer right? Well, if you ever need to be healed, or anything, yo
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>[Text:Hey, $Name$, what do you need?{Talk-Talk|Gift-GiveGift|%Friend-50%Join Party-Party|Never Mind-Cancel}]</Value>
+      <Value>[Text:Hey, $Name$, what do you need?{{Talk-Talk|Gift-GiveGift|%Friend-50%Join Party-Party|Never Mind-Cancel}}]</Value>
     </Item>
     <Item>
       <Key>JoinPartyYes</Key>
