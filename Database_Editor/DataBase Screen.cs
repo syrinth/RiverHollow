@@ -1096,7 +1096,7 @@ namespace Database_Editor
                     {
                         string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                         string key = tagInfo[0];
-                        string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
+                        string val = (tagInfo.Length > 1 ? tagInfo[1] : string.Empty);
                         tags[key] = val;
                     }
                 }

@@ -699,21 +699,6 @@ namespace RiverHollow.Characters
         public virtual TextEntry GetOpeningText() { return new TextEntry(); }
 
         /// <summary>
-        /// Retrieves the 'Selection' text for when an Actor with options is first talked to.
-        /// 
-        /// Removes entries that are not valid due to conditions not being met. If there are
-        /// only two entries left, instead of providing the selection text, just call
-        /// the default GetText method.
-        /// </summary>
-        /// <returns></returns>
-        public string GetSelectionText()
-        {
-            
-
-            return string.Empty;
-        }
-
-        /// <summary>
         /// Base method to get a line of dialog from the dialog dictionary.
         /// 
         /// Mostly used for the "Talk" parameter or if the TalkingActor has no other options.
@@ -856,6 +841,7 @@ namespace RiverHollow.Characters
 
         public class TextEntry
         {
+            Dictionary<string, string> _diTags;
             int _iTargetShopID = -1;
             int _iUnlockBuildingID = -1;
             int _iUnlockItemID = -1;
@@ -874,12 +860,14 @@ namespace RiverHollow.Characters
 
             public TextEntry(Dictionary<string, string> stringData)
             {
+                _diTags = stringData;
                 Util.AssignValue(ref _iTaskToAssign, "Task", stringData);
-                Util.AssignValue(ref _sFaceQueue, "Face", stringData);
                 Util.AssignValue(ref _iTargetShopID, "ShopTargetID", stringData);
                 Util.AssignValue(ref _iUnlockBuildingID, "UnlockBuildingID", stringData);
                 Util.AssignValue(ref _iUnlockItemID, "UnlockItemID", stringData);
                 Util.AssignValue(ref _iSendMessageID, "SendMessage", stringData);
+
+                Util.AssignValue(ref _sFaceQueue, "Face", stringData);
                 Util.AssignValue(ref _sText, "Text", stringData);
                 _sText = Util.ProcessText(_sText);
 
@@ -976,40 +964,36 @@ namespace RiverHollow.Characters
                 }
             }
 
-            public bool Valid()
+            public bool Valid(TalkingActor act = null)
             {
-                //int validation = 0;
-                //string[] values = Util.FindParams(entry);
-                //foreach (string val in values)
-                //{
-                //    if (val.Equals(GameCalendar.GetWeatherString()))
-                //    {
-                //        validation++;
-                //    }
-                //    else if (val.StartsWith("Friend"))
-                //    {
-                //        string[] args = val.Split('-');
-                //        if(args.Length == 2)
-                //        {
-                //            if(int.TryParse(args[1], out int NPCID) && this.GetFriendshipLevel() >= NPCID)
-                //            {
-                //                validation++;
-                //            }
-                //        }
-                //        else if (args.Length == 3)
-                //        {
-                //            if (int.TryParse(args[1], out int NPCID) && int.TryParse(args[2], out int tempLevel) && DataManager.DiNPC[NPCID].GetFriendshipLevel() > tempLevel)
-                //            {
-                //                validation++;
-                //            }
-                //        }
-                //    }
-                //    else if (int.TryParse(val, out int ID))
-                //    {
-                //        validation++;
-                //    }
-                //}
-                return true;
+                bool rv = false;
+
+                //Default is always valid
+                if (_diTags.ContainsKey("Default")) { rv = true; }
+                else
+                {
+                    if (_diTags.ContainsKey("Weather"))
+                    {
+                        if (GameCalendar.GetWeatherString().Equals(_diTags["Weather"])) { rv = true; }
+                        else { return false; }
+                    }
+                    if (_diTags.ContainsKey("Friend"))
+                    {
+                        string[] args = _diTags["Friend"].Split('-');
+                        if (args.Length == 2)
+                        {
+                            if (int.TryParse(args[1], out int NPCID) && act.GetFriendshipLevel() >= NPCID) { rv = true; }
+                            else { return false; }
+                        }
+                        else if (args.Length == 3)
+                        {
+                            if (int.TryParse(args[1], out int NPCID) && int.TryParse(args[2], out int tempLevel) && DataManager.DiNPC[NPCID].GetFriendshipLevel() > tempLevel) { rv = true; }
+                            else { return false; }
+                        }
+                    }
+                }
+
+                return rv;
             }
         }
 

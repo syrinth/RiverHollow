@@ -180,7 +180,8 @@ namespace Database_Editor
                 if (r.Cells[0].Value != null)
                 {
                     string[] tagInfo = r.Cells[0].Value.ToString().Split(':');
-                    diTags[tagInfo[0]] = tagInfo[1];
+
+                    diTags[tagInfo[0]] = tagInfo.Length > 1 ? tagInfo[1] : string.Empty;
                 }
             }
 
