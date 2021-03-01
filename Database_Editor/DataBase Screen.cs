@@ -6,14 +6,13 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Items.Item;
 
 namespace Database_Editor
 {
     public partial class frmDBEditor : Form
     {
         private enum EditableCharacterDataEnum { Dialogue, Schedule };
-        public enum XMLTypeEnum { None, Task, Character, Class, Adventurer, Building, WorldObject, Item, Monster, Action, Shop, Spirit, Summon, StatusEffect, Cutscene };
+        public enum XMLTypeEnum { None, Task, Character, Class, Building, WorldObject, Item, Monster, Action, Shop, Spirit, Summon, StatusEffect, Cutscene };
         #region XML Files
         string SHOPS_XML_FILE = PATH_TO_DATA + @"\Shops.xml";
         string ACTIONS_XML_FILE = PATH_TO_DATA + @"\CombatActions.xml";
@@ -23,7 +22,6 @@ namespace Database_Editor
         string MONSTERS_XML_FILE = PATH_TO_DATA + @"\Monsters.xml";
         string CHARACTER_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
         string CLASSES_XML_FILE = PATH_TO_DATA + @"\Classes.xml";
-        string WORKERS_XML_FILE = PATH_TO_DATA + @"\Workers.xml";
         string CONFIG_XML_FILE = PATH_TO_DATA + @"\Config.xml";
         string MAGIC_SHOP_XML_FILE = PATH_TO_DATA + @"\Shops\MagicShop.xml";
         string SPIRITS_XML_FILE = PATH_TO_DATA + @"\Spirits.xml";
@@ -39,7 +37,6 @@ namespace Database_Editor
         const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,RefinesInto,ItemID,GoalItem,ItemReward,Collection,Makes,Processes,DWeap,DArmor,DHead,DWrist";
         const string TAGS_FOR_WORLD_OBJECTS = "ObjectID,Wall,Floor,Resources,Place";
         const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
-        const string TAGS_FOR_ADVENTURERS = "WorkerID";
         const string TAGS_FOR_CLASSES = "Class";
         const string TAGS_FOR_SHOPDATA = "ShopData";
         const string TAGS_FOR_SPIRITS = "SpiritID";
@@ -52,8 +49,7 @@ namespace Database_Editor
         const string CHARACTER_REF_TAGS = "Collection,Class,ShopData,HouseID,RequiredBuildingID";
         const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID";
         const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
-        const string SHOPDATA_REF_TAGS = "ItemID,WorkerID,BuildingID";
-        const string ADVENTURERS_REF_TAG = "ItemID";
+        const string SHOPDATA_REF_TAGS = "ItemID,BuildingID";
         const string SHOP_REF_TAG = "ItemID,Requires,BuildingID";
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
         const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
@@ -96,7 +92,6 @@ namespace Database_Editor
             InitComboBox<ItemEnum>(cbItemType);
             InitComboBox<ObjectTypeEnum>(cbWorldObjectType);
             InitComboBox<NPCTypeEnum>(cbCharacterType);
-            InitComboBox<AdventurerTypeEnum>(cbAdventurerType);
             InitComboBox<TaskTypeEnum>(cbTaskType);
             InitComboBox<EditableCharacterDataEnum>(cbEditableCharData, false);
             InitComboBox<ActionEnum>(cbActionType);
@@ -108,7 +103,6 @@ namespace Database_Editor
                 { "WorldObjects", 0 },
                 { "Characters", 0 },
                 { "Classes", 0 },
-                { "Adventurers", 0 },
                 { "Tasks", 0 },
                 { "Cutscenes", 0},
                 { "Monsters", 0},
@@ -140,7 +134,6 @@ namespace Database_Editor
                 string fileName = string.Empty;
 
                 if (s.Contains("NPC_")) { fileName = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0]; }
-                else if (s.Contains("Adventurer_")) { fileName = Path.GetFileName(s).Replace("Adventurer_", "").Split('.')[0]; }
                 else { continue; }
 
                 int charID = -1;
@@ -170,7 +163,6 @@ namespace Database_Editor
             LoadXMLDictionary(TASK_XML_FILE, TASK_REF_TAGS, "");
             LoadXMLDictionary(CHARACTER_XML_FILE, CHARACTER_REF_TAGS, "");
             LoadXMLDictionary(CLASSES_XML_FILE, CLASSES_REF_TAGS, TAGS_FOR_CLASSES);
-            LoadXMLDictionary(WORKERS_XML_FILE, ADVENTURERS_REF_TAG, TAGS_FOR_ADVENTURERS);
             LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_REF_TAG, "");
             LoadXMLDictionary(MONSTERS_XML_FILE, MONSTERS_REF_TAGS, "");
             LoadXMLDictionary(ACTIONS_XML_FILE, ACTIONS_REF_TAGS, TAGS_FOR_COMBAT_ACTIONS);
@@ -199,7 +191,6 @@ namespace Database_Editor
             LoadWorldObjectDataGrid();
             LoadCharacterDataGrid();
             LoadClassDataGrid();
-            LoadAdventurerDataGrid();
             LoadTaskDataGrid();
             LoadMonsterDataGrid();
             LoadActionDataGrid();
@@ -217,7 +208,6 @@ namespace Database_Editor
             LoadWorldObjectInfo();
             LoadCharacterInfo();
             LoadClassInfo();
-            LoadAdventurerInfo();
             LoadTaskInfo();
             LoadCutsceneInfo();
             LoadMonsterInfo();
@@ -246,7 +236,6 @@ namespace Database_Editor
             if (fileName == TASK_XML_FILE) { rv = XMLTypeEnum.Task; }
             else if (fileName == CHARACTER_XML_FILE) { rv = XMLTypeEnum.Character; }
             else if (fileName == CLASSES_XML_FILE) { rv = XMLTypeEnum.Class; }
-            else if (fileName == WORKERS_XML_FILE) { rv = XMLTypeEnum.Adventurer; }
             else if (fileName == WORLD_OBJECTS_DATA_XML_FILE) { rv = XMLTypeEnum.WorldObject; }
             else if (fileName == MONSTERS_XML_FILE) { rv = XMLTypeEnum.Monster; }
             else if (fileName == ACTIONS_XML_FILE) { rv = XMLTypeEnum.Action; }
@@ -329,10 +318,6 @@ namespace Database_Editor
         private void LoadClassDataGrid()
         {
             LoadGenericDatagrid(dgvClasses, _diBasicXML[CLASSES_XML_FILE], "colClassID", "colClassName", "Classes", _diTabIndices["Classes"]);
-        }
-        private void LoadAdventurerDataGrid()
-        {
-            LoadGenericDatagrid(dgvAdventurers, _diBasicXML[WORKERS_XML_FILE], "colAdventurersID", "colAdventurersName", "Adventurers", _diTabIndices["Adventurers"]);
         }
         private void LoadTaskDataGrid()
         {
@@ -906,12 +891,6 @@ namespace Database_Editor
             XMLData data = _diBasicXML[CLASSES_XML_FILE][_diTabIndices["Classes"]];
             LoadGenericDataInfo(data, tbClassName, tbClassID, dgClassTags, tbClassDescription);
         }
-        private void LoadAdventurerInfo()
-        {
-            XMLData data = _diBasicXML[WORKERS_XML_FILE][_diTabIndices["Adventurers"]];
-            LoadGenericDataInfo(data, tbAdventurerName, tbAdventurerID, dgvAdventurerTags);
-            cbAdventurerType.SelectedIndex = (int)Util.ParseEnum<AdventurerTypeEnum>(data.GetTagValue("Type"));
-        }
         private void LoadTaskInfo()
         {
             XMLData data = _diBasicXML[TASK_XML_FILE][_diTabIndices["Tasks"]];
@@ -1026,21 +1005,7 @@ namespace Database_Editor
                 _diCharacterSchedules[key] = frm.ListData;
             }
         }
-        private void btnEditAdventurerDialogue_Click(object sender, EventArgs e)
-        {
-            string npcKey = @"\Adventurer_" + _diBasicXML[WORKERS_XML_FILE][_diTabIndices["Adventurers"]].ID.ToString("00") + ".xml";
-            FormCharExtraData frm = null;
-            string key = PATH_TO_DIALOGUE + npcKey;
-            if (!_diCharacterDialogue.ContainsKey(key))
-            {
-                _diCharacterDialogue[key] = new Dictionary<string, Dictionary<string, string>> { ["New"] = { [""] = "" } };
-            }
 
-            frm = new FormCharExtraData("Dialogue", _diCharacterDialogue[key]);
-            frm.ShowDialog();
-
-            _diCharacterDialogue[key] = frm.StringData;
-        }
         private void btnEditCutsceneDialogue_Click(object sender, EventArgs e)
         {
             //string keyValue = dgvCutscenes.CurrentRow.Cells["colCutscenesID"].Value.ToString();
@@ -1247,10 +1212,6 @@ namespace Database_Editor
         {
             SaveXMLDataInfo(_diBasicXML[CLASSES_XML_FILE], "Classes", "Class_", XMLTypeEnum.Class, tbClassName, tbClassID, null, dgvClasses, dgClassTags, "colClassID", "colClassName", CLASSES_REF_TAGS, "", tbClassDescription);
         }
-        private void SaveAdventurerInfo(List<XMLData> liData)
-        {
-            SaveXMLDataInfo(_diBasicXML[WORKERS_XML_FILE], "Adventurers", "Adventurer_", XMLTypeEnum.Adventurer, tbAdventurerName, tbAdventurerID, cbAdventurerType, dgvAdventurers, dgvAdventurerTags, "colAdventurersID", "colAdventurersName", SHOPDATA_REF_TAGS, "");
-        }
         private void SaveTaskInfo(List<XMLData> liData)
         {
             SaveXMLDataInfo(_diBasicXML[TASK_XML_FILE], "Tasks", "Task_", XMLTypeEnum.Task, tbTaskName, tbTaskID, cbTaskType, dgvTasks, dgvTaskTags, "colTasksID", "colTasksName", TASK_REF_TAGS, "", tbTaskDescription);
@@ -1356,10 +1317,6 @@ namespace Database_Editor
         {
             GenericCancel(_diBasicXML[CLASSES_XML_FILE], "Classes", dgvClasses, LoadClassInfo);
         }
-        private void btnAdventurerCancel_Click(object sender, EventArgs e)
-        {
-            GenericCancel(_diBasicXML[WORKERS_XML_FILE], "Adventurers", dgvAdventurers, LoadAdventurerInfo);
-        }
         private void btnTaskCancel_Click(object sender, EventArgs e)
         {
             GenericCancel(_diBasicXML[TASK_XML_FILE], "Tasks", dgvTasks, LoadTaskInfo);
@@ -1436,10 +1393,6 @@ namespace Database_Editor
         private void dgvClasses_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             GenericCellClick(e, _diBasicXML[CLASSES_XML_FILE], "Classes", dgvClasses, LoadClassInfo, SaveClassInfo);
-        }
-        private void dgvAdventurers_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            GenericCellClick(e, _diBasicXML[WORKERS_XML_FILE], "Adventurers", dgvAdventurers, LoadAdventurerInfo, SaveAdventurerInfo);
         }
         private void dgvTasks_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1624,7 +1577,6 @@ namespace Database_Editor
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItems"]) { dgvItems.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCharacters"]) { dgvCharacters.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabClasses"]) { dgvClasses.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabAdventurers"]) { dgvAdventurers.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabTasks"]) { dgvTasks.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscenes"]) { dgvCutscenes.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabMonsters"]) { dgvMonsters.Focus(); }
@@ -1645,7 +1597,6 @@ namespace Database_Editor
             else if (prevPage == tabCtl.TabPages["tabItems"]) { SaveItemInfo(); }
             else if (prevPage == tabCtl.TabPages["tabCharacters"]) { SaveCharacterInfo(_diBasicXML[CHARACTER_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabClasses"]) { SaveClassInfo(_diBasicXML[CLASSES_XML_FILE]); }
-            else if (prevPage == tabCtl.TabPages["tabAdventurers"]) { SaveAdventurerInfo(_diBasicXML[WORKERS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabTasks"]) { SaveTaskInfo(_diBasicXML[TASK_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabCutscenes"]) { SaveCutsceneInfo(); }
             else if (prevPage == tabCtl.TabPages["tabMonsters"]) { SaveMonsterInfo(_diBasicXML[MONSTERS_XML_FILE]); }
