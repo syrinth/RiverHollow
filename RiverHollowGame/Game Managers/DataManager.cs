@@ -57,7 +57,7 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<string, Dictionary<string, string>> _di;
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
-        static Dictionary<int, string> _diMailboxMessages;
+        static Dictionary<string, string> _diMailboxMessages;
 
         static Dictionary<int, Dictionary<string, string>> _diBuildings;
         static Dictionary<int, Dictionary<string, string>> _diItemData;
@@ -100,7 +100,7 @@ namespace RiverHollow.Game_Managers
             DiUpgrades = Content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
             _diMonsterTraits = Content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
 
-            _diMailboxMessages = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + @"Mailbox_Text");
+            _diMailboxMessages = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + @"Mailbox_Text");
 
             //Read in Content and allocate the appropriate Dictionaries
             LoadGUIs(Content);
@@ -648,9 +648,9 @@ namespace RiverHollow.Game_Managers
         {
             return new TextEntry(Util.DictionaryFromTaggedString(GetGameText(key)));
         }
-        public static TextEntry GetMailboxMessage(int id)
+        public static TextEntry GetMailboxMessage(string messageID)
         {
-            return new TextEntry(Util.DictionaryFromTaggedString(_diMailboxMessages[id]));
+            return new TextEntry(Util.DictionaryFromTaggedString(_diMailboxMessages[messageID]));
         }
         public static Dictionary<string, TextEntry> GetNPCDialogue(int id)
         {

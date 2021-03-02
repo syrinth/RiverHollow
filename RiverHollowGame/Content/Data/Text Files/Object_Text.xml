@@ -138,38 +138,6 @@
       <Value>[Name:Bard][Description:Singing!]</Value>
     </Item>
     <Item>
-      <Key>Adventurer_0</Key>
-      <Value>[Name:Wizard]</Value>
-    </Item>
-    <Item>
-      <Key>Adventurer_1</Key>
-      <Value>[Name:Healer]</Value>
-    </Item>
-    <Item>
-      <Key>Adventurer_2</Key>
-      <Value>[Name:Summoner]</Value>
-    </Item>
-    <Item>
-      <Key>Adventurer_3</Key>
-      <Value>[Name:Witch]</Value>
-    </Item>
-    <Item>
-      <Key>Adventurer_4</Key>
-      <Value>[Name:Lancer]</Value>
-    </Item>
-    <Item>
-      <Key>Adventurer_5</Key>
-      <Value>[Name:Knight]</Value>
-    </Item>
-    <Item>
-      <Key>Adventurer_6</Key>
-      <Value>[Name:Scout]</Value>
-    </Item>
-    <Item>
-      <Key>Adventurer_7</Key>
-      <Value>[Name:Bard]</Value>
-    </Item>
-    <Item>
       <Key>Monster_0</Key>
       <Value>[Name:Magic Mushroom]</Value>
     </Item>

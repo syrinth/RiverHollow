@@ -77,6 +77,8 @@ namespace Database_Editor
         static Dictionary<string, Dictionary<string, List<string>>> _diCharacterSchedules;
         static Dictionary<string, List<string>> _diCutsceneDialogue;
         static Dictionary<string, Dictionary<string, Dictionary<string, string>>> _diCharacterDialogue; //File/EntryKey/Tags
+        static Dictionary<string, Dictionary<string, string>> _diMailbox;
+        static Dictionary<string, Dictionary<string, string>> _diGameText; 
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
         static Dictionary<ItemEnum, List<ItemXMLData>> _diItems;
         static Dictionary<string, List<XMLData>> _diBasicXML;
@@ -144,6 +146,9 @@ namespace Database_Editor
                     _diCharacterDialogue.Add(s, ReadTaggedXMLFile(fileName));
                 }
             }
+
+            _diGameText = ReadTaggedXMLFile(PATH_TO_TEXT_FILES + @"\GameText.xml");
+            _diMailbox = ReadTaggedXMLFile(PATH_TO_TEXT_FILES + @"\Mailbox_Text.xml");
 
             _diCharacterSchedules = new Dictionary<string, Dictionary<string, List<string>>>();
             foreach (string s in Directory.GetFiles(PATH_TO_SCHEDULES))
@@ -1533,6 +1538,9 @@ namespace Database_Editor
                 SaveXMLDictionary(_diCharacterDialogue[s], s, sWriter);
             }
 
+            SaveXMLDictionary(_diGameText, PATH_TO_TEXT_FILES + @"\GameText.xml", sWriter);
+            SaveXMLDictionary(_diMailbox, PATH_TO_TEXT_FILES + @"\Mailbox_Text.xml", sWriter);
+
             foreach (string s in _diCharacterSchedules.Keys)
             {
                 SaveXMLDictionaryList(_diCharacterSchedules[s], s, sWriter, "string");
@@ -2398,5 +2406,25 @@ namespace Database_Editor
         #endregion
 
         #endregion
+
+        private void gameTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCharExtraData frm = null;
+
+            frm = new FormCharExtraData("Dialogue", _diGameText);
+            frm.ShowDialog();
+
+            _diGameText = frm.StringData;
+        }
+
+        private void mailboxMessagesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCharExtraData frm = null;
+
+            frm = new FormCharExtraData("Dialogue", _diMailbox);
+            frm.ShowDialog();
+
+            _diGameText = frm.StringData;
+        }
     }
 }

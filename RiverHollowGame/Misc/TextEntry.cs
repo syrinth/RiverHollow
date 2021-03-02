@@ -231,7 +231,7 @@ namespace RiverHollow.Misc
             }
             else if (_diTags.ContainsKey("SendMessage"))
             {
-                PlayerManager.PlayerMailbox.SendMessage(int.Parse(_diTags["SendMessage"]));
+                PlayerManager.PlayerMailbox.SendMessage(_diTags["SendMessage"]);
             }
         }
     }

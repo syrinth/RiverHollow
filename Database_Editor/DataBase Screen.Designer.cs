@@ -207,6 +207,9 @@
             this.dgvStatusEffects = new System.Windows.Forms.DataGridView();
             this.colStatusEffectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStatusEffectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.textToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gameTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mailboxMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -253,7 +256,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.textToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(816, 24);
@@ -2125,6 +2129,29 @@
             this.colStatusEffectsName.ReadOnly = true;
             this.colStatusEffectsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // textToolStripMenuItem
+            // 
+            this.textToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.gameTextToolStripMenuItem,
+            this.mailboxMessagesToolStripMenuItem});
+            this.textToolStripMenuItem.Name = "textToolStripMenuItem";
+            this.textToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.textToolStripMenuItem.Text = "Text";
+            // 
+            // gameTextToolStripMenuItem
+            // 
+            this.gameTextToolStripMenuItem.Name = "gameTextToolStripMenuItem";
+            this.gameTextToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gameTextToolStripMenuItem.Text = "Game Text";
+            this.gameTextToolStripMenuItem.Click += new System.EventHandler(this.gameTextToolStripMenuItem_Click);
+            // 
+            // mailboxMessagesToolStripMenuItem
+            // 
+            this.mailboxMessagesToolStripMenuItem.Name = "mailboxMessagesToolStripMenuItem";
+            this.mailboxMessagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mailboxMessagesToolStripMenuItem.Text = "Mailbox Messages";
+            this.mailboxMessagesToolStripMenuItem.Click += new System.EventHandler(this.mailboxMessagesToolStripMenuItem_Click);
+            // 
             // frmDBEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2374,6 +2401,9 @@
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.ContextMenuStrip contextMenu;
         private System.Windows.Forms.DataGridViewTextBoxColumn colBuildingTags;
+        private System.Windows.Forms.ToolStripMenuItem textToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gameTextToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mailboxMessagesToolStripMenuItem;
     }
 }
 

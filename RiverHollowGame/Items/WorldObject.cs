@@ -360,14 +360,14 @@ namespace RiverHollow.Items
     public class Mailbox : WorldObject
     {
         private AnimatedSprite _alertSprite;
-        private List<int> _liCurrentMessages;
-        private List<int> _liSentMessages;
+        private List<string> _liCurrentMessages;
+        private List<string> _liSentMessages;
         public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + (_iHeight - BaseHeight), BaseWidth, BaseHeight);
 
         public Mailbox(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos - new Vector2(0, TileSize))
         {
-            _liCurrentMessages = new List<int>();
-            _liSentMessages = new List<int>();
+            _liCurrentMessages = new List<string>();
+            _liSentMessages = new List<string>();
             LoadDictionaryData(stringData);
             PlayerManager.PlayerMailbox = this;
         }
@@ -383,9 +383,9 @@ namespace RiverHollow.Items
             _alertSprite?.Draw(spriteBatch, 99999);
         }
 
-        public void SendMessage(int message)
+        public void SendMessage(string messageID)
         {
-            _liSentMessages.Add(message);
+            _liSentMessages.Add(messageID);
         }
 
         public void TakeMessage()
@@ -406,9 +406,9 @@ namespace RiverHollow.Items
 
         public void Rollover()
         {
-            foreach(int i in _liSentMessages)
+            foreach(string strID in _liSentMessages)
             {
-                _liCurrentMessages.Add(i);
+                _liCurrentMessages.Add(strID);
             }
             _liSentMessages.Clear();
 
@@ -423,19 +423,19 @@ namespace RiverHollow.Items
         public MailboxData SaveData()
         {
             MailboxData data = new MailboxData();
-            data.MailboxMessages = new List<int>();
-            foreach(int s in _liCurrentMessages)
+            data.MailboxMessages = new List<string>();
+            foreach(string strID in _liCurrentMessages)
             {
-                data.MailboxMessages.Add(s);
+                data.MailboxMessages.Add(strID);
             }
 
             return data;
         }
         public void LoadData(MailboxData data)
         {
-            foreach(int i in data.MailboxMessages)
+            foreach(string strID in data.MailboxMessages)
             {
-                _liSentMessages.Add(i);
+                _liSentMessages.Add(strID);
             }
 
             Rollover();
