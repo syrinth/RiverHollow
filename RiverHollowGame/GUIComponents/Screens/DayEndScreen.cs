@@ -71,9 +71,12 @@ namespace RiverHollow.GUIComponents.Screens
             _btnOK.AnchorToScreen( SideEnum.Bottom, GUIManager.STANDARD_MARGIN);
             AddControl(_btnOK);
 
-            _gResults = new GUITextWindow(results, false);
-            _gResults.AnchorAndAlignToObject(_btnOK, SideEnum.Top, SideEnum.CenterX, GUIManager.STANDARD_MARGIN);
-            AddControl(_gResults);
+            if (results != null)
+            {
+                _gResults = new GUITextWindow(results, false);
+                _gResults.AnchorAndAlignToObject(_btnOK, SideEnum.Top, SideEnum.CenterX, GUIManager.STANDARD_MARGIN);
+                AddControl(_gResults);
+            }
 
             //Determine how fast to spawn each Monster image based off of how 
             //many there are and the total time we want it to take

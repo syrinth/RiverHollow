@@ -39,7 +39,7 @@ namespace RiverHollow.Game_Managers
                     string key = tagDictionary["Key"];
                     tagDictionary.Remove("Key");
 
-                    entryDictionary[key] = new TextEntry(tagDictionary);
+                    entryDictionary[key] = new TextEntry(key, tagDictionary);
                 }
                 _diCutsceneDialogue.Add(kvp.Key, entryDictionary);
             }

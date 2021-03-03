@@ -309,6 +309,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "AdventurerData")]
             public ClassedCharData classedData;
+
+            [XmlArray(ElementName = "SpokenKeys")]
+            public List<string> spokenKeys;
         }
         public struct CollectionData
         {

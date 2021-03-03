@@ -85,7 +85,10 @@ namespace Database_Editor
             foreach (KeyValuePair<string, string> kvp in _diStringData[keyValue])
             {
                 if (kvp.Key.Equals("Text")) { tbCharExtraDataInfo.Text = kvp.Value; }
-                else { dgvEditTags.Rows.Add(kvp.Key + ":" + kvp.Value); }
+                else {
+                    string tag = kvp.Key + (string.IsNullOrEmpty(kvp.Value) ? "" : ":" + kvp.Value);
+                    dgvEditTags.Rows.Add(tag);
+                }
             }
         }
         private void LoadDataInfoList(int index)

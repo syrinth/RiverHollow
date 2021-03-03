@@ -621,10 +621,13 @@ namespace RiverHollow.Characters
 
         protected bool _bHasTalked;
 
+        protected List<string> _liSpokenKeys;
+
         public TalkingActor() : base()
         {
             _bCanTalk = true;
             _liActorFaceQueue = new List<ActorFaceEnum>();
+            _liSpokenKeys = new List<string>();
         }
 
         public virtual void StopTalking() { ResetActorFace(); }
@@ -707,16 +710,18 @@ namespace RiverHollow.Characters
         public TextEntry GetDailyDialogue()
         {
             _bHasTalked = true;
-            List<TextEntry> keyPool = new List<TextEntry>();
+            PriorityQueue<TextEntry> keyPool = new PriorityQueue<TextEntry>();
             foreach (TextEntry entry in _diDialogue.Values)
             {
                 if (entry.Valid())
                 {
-                    keyPool.Add(entry);
+                    keyPool.Enqueue(entry, entry.Priority);
                 }
             }
 
-            return keyPool[RHRandom.Instance.Next(0, keyPool.Count - 1)];
+            List<TextEntry> possibles = keyPool.DequeueAllLowest();
+
+            return possibles[RHRandom.Instance.Next(0, possibles.Count - 1)];
         }
 
         /// <summary>
@@ -837,6 +842,11 @@ namespace RiverHollow.Characters
             int width = 48;
             startX += (int)_eFaceEnum * width;
             return new Rectangle(startX, 0, width, 60);
+        }
+
+        public void AddSpokenKey(string key)
+        {
+            _liSpokenKeys.Add(key);
         }
     }
 
@@ -1799,6 +1809,8 @@ namespace RiverHollow.Characters
         List<KeyValuePair<string, PathData>> _liTodayPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
         protected int _iScheduleIndex;
 
+
+
         /// <summary>
         /// As in the base, we need to calculate the Actor's position based off of the Sprite's position.
         /// However, there is a new complication in that there are mandatory buffers of one TileSize
@@ -2392,7 +2404,8 @@ namespace RiverHollow.Characters
                 collection = new List<bool>(_diCollection.Values),
                 married = _bMarried,
                 canJoinParty = CanJoinParty,
-                canGiveGift = CanGiveGift
+                canGiveGift = CanGiveGift,
+                spokenKeys = _liSpokenKeys
             };
 
             if (_class != null) { npcData.classedData = SaveClassedCharData(); }
@@ -2410,6 +2423,11 @@ namespace RiverHollow.Characters
             CanGiveGift = data.canGiveGift;
 
             if (_class != null) { LoadClassedCharData(data.classedData); }
+
+            foreach(string s in data.spokenKeys)
+            {
+                _diDialogue[s].Spoken(this);
+            }
 
             LoadCollection(data.collection);
         }

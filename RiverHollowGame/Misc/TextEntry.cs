@@ -3,17 +3,23 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace RiverHollow.Misc
 {
     public class TextEntry
     {
+        string _sKey = string.Empty;
+
         Dictionary<string, string> _diTags;
         int _iLookupID = -1;
-        int _iPriority = 0;
+
+        double _dPriority = 100;
+        public double Priority => _dPriority;
+
         string _sText;
         public string Text => _sText;
+
+        bool _bSpoken = false;
 
         //Whether or not this TextEntry has Selection options
         public bool Selection { get; private set; } = false;
@@ -32,11 +38,14 @@ namespace RiverHollow.Misc
             _sText = "[Text:" + text + "]";
         }
 
-        public TextEntry(Dictionary<string, string> stringData)
+        public TextEntry(string key, Dictionary<string, string> stringData)
         {
             _diTags = stringData;
 
+            _sKey = key;
+
             Util.AssignValue(ref _sText, "Text", stringData);
+            Util.AssignValue(ref _dPriority, "Priority", stringData);
             _sText = Util.ProcessText(_sText);
 
             ParseSelectionText();
@@ -54,7 +63,7 @@ namespace RiverHollow.Misc
             string first = string.Format(splitForSelection[0], list);
             _sText = first;
 
-            if(splitForSelection.Length > 1)
+            if (splitForSelection.Length > 1)
             {
                 _sText += "{{" + splitForSelection[1];
             }
@@ -171,6 +180,8 @@ namespace RiverHollow.Misc
         {
             bool rv = false;
 
+            if (_bSpoken) { return false; }
+
             //Default is always valid
             if (_diTags.ContainsKey("Default")) { rv = true; }
             else
@@ -205,6 +216,7 @@ namespace RiverHollow.Misc
         /// <param name="act">The TalkingActor we're talking to</param>
         public void HandlePreWindowActions(TalkingActor act = null)
         {
+            Spoken(act);
             if (_diTags.ContainsKey("Face"))
             {
                 act?.QueueActorFace(_diTags["Face"]);
@@ -232,6 +244,15 @@ namespace RiverHollow.Misc
             else if (_diTags.ContainsKey("SendMessage"))
             {
                 PlayerManager.PlayerMailbox.SendMessage(_diTags["SendMessage"]);
+            }
+        }
+
+        public void Spoken(TalkingActor act)
+        {
+            if (act != null && _diTags.ContainsKey("Once"))
+            {
+                _bSpoken = true;
+                act.AddSpokenKey(_sKey);
             }
         }
     }

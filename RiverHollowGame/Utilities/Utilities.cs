@@ -345,6 +345,13 @@ namespace RiverHollow.Utilities
                 obj = int.Parse(dict[key]);
             }
         }
+        public static void AssignValue(ref double obj, string key, Dictionary<string, string> dict)
+        {
+            if (dict.ContainsKey(key))
+            {
+                obj = double.Parse(dict[key]);
+            }
+        }
         public static void AssignValue(ref float obj, string key, Dictionary<string, string> dict)
         {
             if (dict.ContainsKey(key))

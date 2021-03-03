@@ -646,11 +646,11 @@ namespace RiverHollow.Game_Managers
 
         public static TextEntry GetGameTextEntry(string key)
         {
-            return new TextEntry(Util.DictionaryFromTaggedString(GetGameText(key)));
+            return new TextEntry(key, Util.DictionaryFromTaggedString(GetGameText(key)));
         }
         public static TextEntry GetMailboxMessage(string messageID)
         {
-            return new TextEntry(Util.DictionaryFromTaggedString(_diMailboxMessages[messageID]));
+            return new TextEntry(messageID, Util.DictionaryFromTaggedString(_diMailboxMessages[messageID]));
         }
         public static Dictionary<string, TextEntry> GetNPCDialogue(int id)
         {
@@ -660,7 +660,7 @@ namespace RiverHollow.Game_Managers
             {
                 foreach(KeyValuePair<string, string> kvp in _diNPCDialogue[id])
                 {
-                    rv[kvp.Key] = new TextEntry(Util.DictionaryFromTaggedString(kvp.Value));
+                    rv[kvp.Key] = new TextEntry(kvp.Key, Util.DictionaryFromTaggedString(kvp.Value));
                 }
             }
 

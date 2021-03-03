@@ -2424,7 +2424,7 @@ namespace Database_Editor
             frm = new FormCharExtraData("Dialogue", _diMailbox);
             frm.ShowDialog();
 
-            _diGameText = frm.StringData;
+            _diMailbox = frm.StringData;
         }
     }
 }

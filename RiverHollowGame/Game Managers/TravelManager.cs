@@ -143,6 +143,33 @@ namespace RiverHollow.Game_Managers
                 elements.RemoveAt(bestIndex);
                 return bestItem;
             }
+
+            public List<T> DequeueAllLowest()
+            {
+                List<T> rvList = new List<T>();
+                int bestIndex = 0;
+
+                for (int i = 0; i < elements.Count; i++)
+                {
+                    if (elements[i].Item2 < elements[bestIndex].Item2)
+                    {
+                        bestIndex = i;
+                    }
+                }
+
+                Tuple<T, double> bestItem = elements[bestIndex];
+                rvList.Add(bestItem.Item1);
+                elements.RemoveAt(bestIndex);
+
+                foreach (Tuple<T, double> t in elements)
+                {
+                    if(t != bestItem && t.Item2 == bestItem.Item2)
+                    {
+                        rvList.Add(t.Item1);
+                    }
+                }
+                return rvList;
+            }
         }
 
         /// <summary>
