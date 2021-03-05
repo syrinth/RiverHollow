@@ -3,15 +3,15 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>[Text:... Oh? Hello dear you must be the newcomer everyone's been talking about. You can call me $Character_20$. Oh but aren't you just the spitting image of my Jesse. I can't wait for you to meet.]</Value>
+      <Value>[Text:... Oh? Hello dear, it's so nice to see a friendly face. I've been traveling for some time, you see. I'm $Character_20$ a traveling healer. I hate to be a bother, but is there any chance you could make room for me here? I think it's time for me to get some rest for the first time in a while.][UnlockBuildingID:29]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Hello dear, having a good day?]</Value>
+      <Value>[Text:Hello dear, having a good day?][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:When I was younger, young men and women from all over would come through here. Adventurers and gloryseekers, looking to make names for themselves. I can see the same fire in you.]</Value>
+      <Value>[Text:When I was younger, young men and women from all over would come through here. Adventurers and gloryseekers, looking to make names for themselves. I can see the same fire in you.][Default]</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>
@@ -31,15 +31,20 @@
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>[Text:Oh look at you, all soaked. Alex, you know you shouldn't go out when it's raining. Go sit by the fire and I'll bring you some stew.]</Value>
+      <Value>[Text:Oh look at you, all soaked. Alex, you know you shouldn't go out when it's raining. Go sit by the fire and I'll bring you some stew.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>Raining|2</Key>
-      <Value>[Text:The sound of the rain is pretty isn't it? It always makes me think of when I was younger. My family used to settle in on those rainy nights around the fireplace and tell each other stories. I hope Jesse comes home soon.]</Value>
+      <Value>[Text:The sound of the rain is pretty isn't it? It always makes me think of when I was younger. My family used to settle in on those rainy nights around the fireplace and tell each other stories. I hope Jesse comes home soon.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>Snowing|1</Key>
-      <Value>[Text:... hm? Oh, hello dear. I was lost in my thoughts. It's alovely day out, isn't it? My husband and I used to go out for walks on days like this.]</Value>
+      <Value>[Text:... hm? Oh, hello dear. I was lost in my thoughts. It's alovely day out, isn't it? My husband and I used to go out for walks on days like this.][Weather:Snowing]</Value>
+    </Item>
+    <Item>
+      <Key>Apothecary_Request</Key>
+      <Value>[Text:You know... now that I've settled in, I was thinking. This town could really use an $Building_24$. It's been so long since I've taught anyone. My Jesse would sit at my knees and listen to my tell him the names of all the plants and herbs...
+If you could build me such a place, that would make an old woman very happy.][ShopTargetID:2][UnlockItemID:137][Once][Default][Priority:50]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -115,6 +115,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Money")]
             public int money;
 
+            [XmlElement(ElementName = "TotalMoneyEarned")]
+            public int totalMoneyEarned;
+
             [XmlElement(ElementName = "CurrentClass")]
             public int currentClass;
 

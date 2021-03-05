@@ -3,17 +3,16 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>[Text:Um. Hi. I'm $Character_2$.
-I'm the Healer, I mean, apprentice Healer in town.
-You're an adventurer right? Well, if you ever need to be healed, or anything, you should come to the Apothecary.]</Value>
+      <Value>[Text:Um, hi! $Character_2$, I mean,my name is $Character_2$. It's nice to meet you. I heard that you've opened an $Building_24$?
+I'd love to help out. I've been looking for a place to practice my skills, I'm still learning, you see...][UnlockBuildingID:14]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Oh, $Name$, it's nice to see you.]</Value>
+      <Value>[Text:Oh, $Name$, it's nice to see you.][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:$Name$, how are you? I... hope everything's alright with you.]</Value>
+      <Value>[Text:$Name$, how are you? I... hope everything's alright with you.][Default]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
@@ -45,19 +44,19 @@ You're an adventurer right? Well, if you ever need to be healed, or anything, yo
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>[Text:I don't like the rain. It's depressing.]</Value>
+      <Value>[Text:I don't like the rain. It's depressing.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>Raining|2</Key>
-      <Value>[Text:I'm glad to see you today, $Name$. You should try to dry off though. Those wet clothes can't be good for you. ... I mean, you should get home and dry off as soon as you can! That's all.]</Value>
+      <Value>[Text:I'm glad to see you today, $Name$. You should try to dry off though. Those wet clothes can't be good for you. ... I mean, you should get home and dry off as soon as you can! That's all.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>Snowing|1</Key>
-      <Value>[Text:It's nice, isn't it? The snow I mean? I uh, hope you've dressed warm.]</Value>
+      <Value>[Text:It's nice, isn't it? The snow I mean? I uh, hope you've dressed warm.][Weather:Snowing]</Value>
     </Item>
     <Item>
       <Key>Snowing|2</Key>
-      <Value>[Text:$Name$... uh, how's the weather? I mean. How are you finding it? Not too cold I hope?]</Value>
+      <Value>[Text:$Name$... uh, how's the weather? I mean. How are you finding it? Not too cold I hope?][Weather:Snowing]</Value>
     </Item>
   </Asset>
 </XnaContent>

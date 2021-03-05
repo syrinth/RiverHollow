@@ -115,7 +115,7 @@ namespace RiverHollow.Game_Managers
             AddDirectoryTextures(FOLDER_BUILDINGS, Content);
 
             LoadNPCSchedules(Content);
-            LoadNPCs(Content);
+            LoadNPCs();
 
             _liForest = new List<int>();
             _liMountain = new List<int>();
@@ -275,7 +275,7 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        private static void LoadNPCs(ContentManager Content)
+        private static void LoadNPCs()
         {
             DiNPC = new Dictionary<int, Villager>();
             foreach (KeyValuePair<int, Dictionary<string, string>> npcData in _diVillagerData)

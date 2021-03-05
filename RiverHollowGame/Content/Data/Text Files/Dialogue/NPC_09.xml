@@ -19,11 +19,11 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Hello $Name$. I hope you're well today.]</Value>
+      <Value>[Text:Hello $Name$. I hope you're well today.][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.]</Value>
+      <Value>[Text:You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.][Default]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>

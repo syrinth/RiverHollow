@@ -7,12 +7,12 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Me going okies today. Bin is comfy, air is fresh. Very happies today]</Value>
+      <Value>[Text:Me going okies today. Bin is comfy, air is fresh. Very happies today][Default]</Value>
     </Item>
     <Item>
       <Key>Raining|1</Key>
       <Value>[Text:Why you out in the rain? Is cold! Is wet! Go inside where warm...
-Do you want to come inside bin? $21$ can scootch over.]</Value>
+Do you want to come inside bin? $21$ can scootch over.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
@@ -28,15 +28,15 @@ Do you want to come inside bin? $21$ can scootch over.]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:There be many gremlins running around. We stay just out of sight but try to be helpful when we can.]</Value>
+      <Value>[Text:There be many gremlins running around. We stay just out of sight but try to be helpful when we can.][Default]</Value>
     </Item>
     <Item>
       <Key>Raining|2</Key>
-      <Value>[Text:Yes? Is very wet outside. No like.]</Value>
+      <Value>[Text:Yes? Is very wet outside. No like.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>Snowing|1</Key>
-      <Value>[Text:Cold! Why so cold? You should go inside, yes. Sleep until Spring.]</Value>
+      <Value>[Text:Cold! Why so cold? You should go inside, yes. Sleep until Spring.][Weather:Snowing]</Value>
     </Item>
   </Asset>
 </XnaContent>

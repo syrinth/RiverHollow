@@ -1139,26 +1139,34 @@
     </Item>
     <Item>
       <Key>Item_136</Key>
-      <Value>[Name:$Building_8$ Blueprint][Description:]</Value>
+      <Value>[Name:$Building_18$ Blueprint][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_137</Key>
-      <Value>[Name:Griselda's Orb][Description:General Use]</Value>
+      <Value>[Name:$Building_24$ Blueprint][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_138</Key>
-      <Value>[Name:Adventure Map][Description:Off to find adventures!]</Value>
+      <Value>[Name:$Building_20$ Blueprint][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_139</Key>
-      <Value>[Name:Mask of Marriage][Description:A mask used by the people of River hollow to proess their love to one another.]</Value>
+      <Value>[Name:Griselda's Orb][Description:General Use]</Value>
     </Item>
     <Item>
       <Key>Item_140</Key>
-      <Value>[Name:Essence of ][Description:Become a ]</Value>
+      <Value>[Name:Adventure Map][Description:Off to find adventures!]</Value>
     </Item>
     <Item>
       <Key>Item_141</Key>
+      <Value>[Name:Mask of Marriage][Description:A mask used by the people of River hollow to proess their love to one another.]</Value>
+    </Item>
+    <Item>
+      <Key>Item_142</Key>
+      <Value>[Name:Essence of ][Description:Become a ]</Value>
+    </Item>
+    <Item>
+      <Key>Item_143</Key>
       <Value>[Name:Dungeon Key][Description:A key that unlocks a dungeon door.]</Value>
     </Item>
     <Item>

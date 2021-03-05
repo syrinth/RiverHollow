@@ -27,7 +27,7 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Texture:Architect][Dimensions:176-144][Base:0-80-176-64][Entrance:80-114-16-32][ReqItems:0-5|60-10][Unlocked]</Value>
+      <Value>[Texture:Architect][Dimensions:176-144][Base:0-80-176-64][Entrance:80-114-16-32][ReqItems:0-5|60-10]</Value>
     </Item>
     <Item>
       <Key>7</Key>
@@ -55,11 +55,11 @@
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_1_17][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_2][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>15</Key>
@@ -67,19 +67,19 @@
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_4][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_5][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Texture:MagicShop][Dimensions:112-128][Base:0-64-112-64][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:MagicShop][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-30][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_7][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>20</Key>
@@ -95,7 +95,7 @@
     </Item>
     <Item>
       <Key>23</Key>
-      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_11][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>24</Key>
@@ -107,7 +107,7 @@
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_19][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>27</Key>
@@ -119,7 +119,7 @@
     </Item>
     <Item>
       <Key>29</Key>
-      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_20][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>30</Key>

@@ -7,11 +7,11 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Oh. Hello, $Name$! How are you? I'm just going for a walk. I thought i might try to pick some reagents for mother. If I can remember what it was she needed anyway...]</Value>
+      <Value>[Text:Oh. Hello, $Name$! How are you? I'm just going for a walk. I thought i might try to pick some reagents for mother. If I can remember what it was she needed anyway...][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:I love Spring, don't you? Everything is waking up after a long sleep, just aching to grow and change.]</Value>
+      <Value>[Text:I love Spring, don't you? Everything is waking up after a long sleep, just aching to grow and change.][Default]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
@@ -43,15 +43,15 @@
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>[Text:Most people don't like being out in the rain, but it's never bothered me. Even when I was young, mother had to run after me with a raincoat.]</Value>
+      <Value>[Text:Most people don't like being out in the rain, but it's never bothered me. Even when I was young, mother had to run after me with a raincoat.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>Raining|2</Key>
-      <Value>[Text:Would you like to come with me for a walk in the rain sometime? No one else will, but I think it'd be fun.]</Value>
+      <Value>[Text:Would you like to come with me for a walk in the rain sometime? No one else will, but I think it'd be fun.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>Snowing|1</Key>
-      <Value>[Text:There's a lot of snow today, isn't there? Mother says there's magic in the snow, but... I'm only good with warmer magic.]</Value>
+      <Value>[Text:There's a lot of snow today, isn't there? Mother says there's magic in the snow, but... I'm only good with warmer magic.][Weather:Snowing]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -7,11 +7,11 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Well, hello there! HOw's the day treatin' you $Name$?]</Value>
+      <Value>[Text:Well, hello there! HOw's the day treatin' you $Name$?][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:If you find yourself running low on ore, I keep a stock of it myself. It'll cost you, of course, but I promise I'll give you the best deal I can!]</Value>
+      <Value>[Text:If you find yourself running low on ore, I keep a stock of it myself. It'll cost you, of course, but I promise I'll give you the best deal I can!][Default]</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>
@@ -27,11 +27,11 @@
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>[Text:Weather like this makes my bones ache. I hope $Character_11$ has a bath running for me tonight.]</Value>
+      <Value>[Text:Weather like this makes my bones ache. I hope $Character_11$ has a bath running for me tonight.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>Snowing|1</Key>
-      <Value>[Text:The best part of the winter for me is looking out at the falling snow from the heat of my forge. Sometimes, I go out and just run around to cool off. $Character_11$ says flopping down in the snow to make snow angels is undignified, but I've never let dignity stop me from having fun before!]</Value>
+      <Value>[Text:The best part of the winter for me is looking out at the falling snow from the heat of my forge. Sometimes, I go out and just run around to cool off. $Character_11$ says flopping down in the snow to make snow angels is undignified, but I've never let dignity stop me from having fun before!][Weather:Snowing]</Value>
     </Item>
   </Asset>
 </XnaContent>

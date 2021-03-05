@@ -341,7 +341,7 @@
   <object id="37" name="Entrance" x="48" y="44" width="32" height="4">
    <properties>
     <property name="EntranceDir" value="Down"/>
-    <property name="Map" value="mapManor1"/>
+    <property name="Map" value="mapManor_1"/>
    </properties>
   </object>
  </objectgroup>

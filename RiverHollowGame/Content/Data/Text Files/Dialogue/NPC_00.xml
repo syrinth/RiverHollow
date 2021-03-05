@@ -9,11 +9,11 @@ I like Pandas, how about you?]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Hey there, $Name$,hope you're feeling well today!]</Value>
+      <Value>[Text:Hey there, $Name$,hope you're feeling well today!][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:Hey, $Name$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.]</Value>
+      <Value>[Text:Hey, $Name$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.][Default]</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>

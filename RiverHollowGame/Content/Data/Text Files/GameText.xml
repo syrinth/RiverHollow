@@ -29,15 +29,15 @@
       <Key>ReallyExit</Key>
       <Value>[Text:Are you sure?{{Exit-Exit|Cancel-Cancel}}]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>Rune_of_Return_Use</Key>
       <Value>[Text:Use the {0} to the dungeon entrance? {{Yes-UseItem|No-Cancel}}]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>Rune_of_Return_Empty</Key>
       <Value>[Text:The {0}'s energy is spent.]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>Rune_of_Return_No_Dungeon</Key>
       <Value>[Text:The rune cannot work here.]</Value>
     </Item>
@@ -61,7 +61,7 @@
       <Key>Trigger_Door</Key>
       <Value>[Text:You see no visible means of opening this door. There must be a hidden switch or something.]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>MonsterFood_Confirm</Key>
       <Value>[Text:Set out the {0} here?{{Yes-UseItem|No-Cancel}}]</Value>
     </Item>
@@ -69,38 +69,37 @@
       <Key>MonsterFood_Yes</Key>
       <Value>[Text:You place the {0} on the ground.]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>MonsterFood_False</Key>
       <Value>[Text:You see no monster tracks here, better use it somewhere else.]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>MonsterFood_Duplicate</Key>
       <Value>[Text:Tantalizing food has already been placed.]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>Pedestal_Ruby</Key>
       <Value>[Text:A shining red gem.]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>Pedestal_Emerald</Key>
       <Value>[Text:A shining red gem.]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>Defeat</Key>
       <Value>[Text:You have been defeated.]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>New_Villager</Key>
       <Value>[Text:A New Villager has arrived in town.]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>New_Villagers</Key>
       <Value>[Text:New Villagers have arrived in town.]</Value>
     </Item>
-    <!--Upgrade Text -->
     <Item>
       <Key>Upgrade 1</Key>
       <Value>[Text:Tavern/A place where people can gather]</Value>
-	</Item>
+    </Item>
   </Asset>
 </XnaContent>

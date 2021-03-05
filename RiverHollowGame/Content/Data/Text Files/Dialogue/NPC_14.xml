@@ -31,8 +31,8 @@
 We're going to need money though. I've got some thinking to do...][Face:Happy][SendMessage:0]</Value>
     </Item>
     <Item>
-      <Key>Priority_Once_Test</Key>
-      <Value>[Text:You should only see me once! Ever!][Once][Priority:50][Default]</Value>
+      <Key>Architect</Key>
+      <Value>[Text:$Name$! I'm glad to see you. So, I've been thinking... I've just about finished witht he plans I brought with me. If I'm going to design any more buildings, I'm going to need a place to work.  Could you build this for me?][Once][Priority:50][RequiredBuildingID:8][UnlockBuildingID:6]</Value>
     </Item>
   </Asset>
 </XnaContent>

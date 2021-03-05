@@ -1785,6 +1785,7 @@ namespace RiverHollow.Characters
         protected int _iIndex;
         public int ID  => _iIndex;
         protected int _iHouseBuildingID = -1;
+        protected int _iTotalMoneyEarnedReq = -1;
         protected List<int> _liRequiredBuildingIDs;
         protected NPCTypeEnum _eNPCType;
         public NPCTypeEnum NPCType => _eNPCType;
@@ -1808,8 +1809,6 @@ namespace RiverHollow.Characters
         protected Dictionary<string, List<Dictionary<string, string>>> _diCompleteSchedule;         //Every day with a list of KVP Time/GoToLocations
         List<KeyValuePair<string, PathData>> _liTodayPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
         protected int _iScheduleIndex;
-
-
 
         /// <summary>
         /// As in the base, we need to calculate the Actor's position based off of the Sprite's position.
@@ -1896,6 +1895,7 @@ namespace RiverHollow.Characters
 
             Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
             Util.AssignValue(ref _bArrivedInTown, "Arrived", stringData);
+            Util.AssignValue(ref _iTotalMoneyEarnedReq, "TotalMoneyEarnedReq", stringData);
             Util.AssignValue(ref _iArrivalDelay, "ArrivalDelay", stringData);
             if (stringData.ContainsKey("RequiredBuildingID"))
             {
@@ -2076,26 +2076,30 @@ namespace RiverHollow.Characters
         public bool CheckForArrival()
         {
             bool rv = false;
-            if (!ArrivedInTown && _liRequiredBuildingIDs.Count > 0)
+            if (!ArrivedInTown)
             {
-                if (_iArrivalDelay == 0)
+                bool shouldArrive = true;
+                foreach (int i in _liRequiredBuildingIDs)
                 {
-                    bool arrived = true;
-                    foreach (int i in _liRequiredBuildingIDs)
+                    if (!GameManager.DIBuildInfo[i].Built)
                     {
-                        if (!GameManager.DIBuildInfo[i].Built)
-                        {
-                            arrived = false;
-                            break;
-                        }
+                        shouldArrive = false;
+                        break;
                     }
-
-                    _bArrivedInTown = arrived;
-                    rv = _bArrivedInTown;
                 }
-                else
+
+                if (_iTotalMoneyEarnedReq != -1 && _iTotalMoneyEarnedReq > PlayerManager.TotalMoneyEarned)
                 {
-                    _iArrivalDelay--;
+                    shouldArrive = false;
+                }
+
+                if (shouldArrive) {
+                    if (_iArrivalDelay > 0) { _iArrivalDelay--; }
+                    else if (_iArrivalDelay == 0)
+                    {
+                        _bArrivedInTown = true;
+                        rv = true;
+                    }
                 }
             }
 
@@ -3210,6 +3214,7 @@ namespace RiverHollow.Characters
                 }
             }
             _arrInventory = new Item[_iRows, _iCols];
+
             return val;
         }
 

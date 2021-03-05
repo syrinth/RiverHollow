@@ -49,6 +49,8 @@ namespace RiverHollow.GUIComponents.Screens
                 }
             }
 
+            GameManager.ShippingGremlin.SellAll();
+
             //string results = String.Format("Gold: {0}\nExperience: {1}", GameManager.ShippingGremlin.SellAll(), GameManager.TotalExperience);
 
             ////Give the XP to the party

@@ -349,6 +349,6 @@
  </objectgroup>
  <objectgroup id="9" name="MapObject"/>
  <objectgroup id="5" name="Character Layer">
-  <object id="34" name="NPC_06" x="179.377" y="114.552" width="8.75" height="10.25"/>
+  <object id="34" name="NPC_04" x="179.377" y="114.552" width="8.75" height="10.25"/>
  </objectgroup>
 </map>

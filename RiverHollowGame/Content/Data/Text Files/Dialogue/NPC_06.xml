@@ -8,11 +8,11 @@ My name's $Character_6$, a $Class_5$ looking for work. I'd appreciate it if you 
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:$Name$, hello. Having a good day I trust? Stay safe, and don't make me follow you around.]</Value>
+      <Value>[Text:$Name$, hello. Having a good day I trust? Stay safe, and don't make me follow you around.][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:$Name$? You look stressed. Please don't push yourself and make sure you're getting enough sleep. a few years back I tried six hours a night and let me tell you what a mistake that was.]</Value>
+      <Value>[Text:$Name$? You look stressed. Please don't push yourself and make sure you're getting enough sleep. a few years back I tried six hours a night and let me tell you what a mistake that was.][Default]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
@@ -44,7 +44,7 @@ My name's $Character_6$, a $Class_5$ looking for work. I'd appreciate it if you 
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>[Text:You're running around in this rain? Ha, of course you are. There's no stopping you, is there? It's admirable, if concerning.]</Value>
+      <Value>[Text:You're running around in this rain? Ha, of course you are. There's no stopping you, is there? It's admirable, if concerning.][Weather:Raining]</Value>
     </Item>
   </Asset>
 </XnaContent>

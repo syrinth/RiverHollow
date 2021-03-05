@@ -3,15 +3,15 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>[Text:Oh, so you're the one moving into the manor. $Name$ was it? Interesting, I've been wondering what you'd be like. The name's $Character_7$, and I'm the best shot for miles.]</Value>
+      <Value>[Text:Hey, name's $Character_7$. I heard that you might be needing some extra hands to help withsome of the monsters around here. All I ask is that you build me a place to live. Doesn't need to be anything fancy. There is no way I'm moving back in with dad.][UnlockBuildingID:19]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Have I told you about the time I took down a $Monster_4$ in a single shot?]</Value>
+      <Value>[Text:Have I told you about the time I took down a $Monster_4$ in a single shot?][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:I've taken down thirty monsters this week. How about you?]</Value>
+      <Value>[Text:I've taken down thirty monsters this week. How about you?][Default]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
@@ -43,7 +43,7 @@
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>[Text:What are you doing skulking about in the rain? Not up to now good are you?]</Value>
+      <Value>[Text:What are you doing skulking about in the rain? Not up to now good are you?][Weather:Raining]</Value>
     </Item>
   </Asset>
 </XnaContent>

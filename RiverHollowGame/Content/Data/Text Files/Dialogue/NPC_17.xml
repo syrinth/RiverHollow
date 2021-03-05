@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>[Text:Greetings, young one. I am $Character_17$, purveyor of magic and enchantments. I hope you find your stay in town pleasant.]</Value>
+      <Value>[Text:Greetings, young one. I am $Character_17$, a purveyor of magic and enchantments. My daughter and I heard about $Town$ and thought we should visit. A charming place, if lacking in amenities. Build us a house, and I'll see what can be done here.][UnlockBuildingID:13]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
@@ -29,23 +29,27 @@ Here. It's not much, just a few odds and ends I had laying around but it should 
     </Item>
     <Item>
       <Key>Dialogue|1</Key>
-      <Value>[Text:Hm. Do you need something from me? It seems that people only want to talk to me when they need something. Out with it.]</Value>
+      <Value>[Text:Hm. Do you need something from me? It seems that people only want to talk to me when they need something. Out with it.][Default]</Value>
     </Item>
     <Item>
       <Key>Dialogue|2</Key>
-      <Value>[Text:Hmm. You're in a rush today, aren't you? Slow down. The faster you run to your fate, the harder it is to escape the consequences.]</Value>
+      <Value>[Text:Hmm. You're in a rush today, aren't you? Slow down. The faster you run to your fate, the harder it is to escape the consequences.][Default]</Value>
     </Item>
     <Item>
       <Key>Rain|1</Key>
-      <Value>[Text:Huh, are you out and about today in this weather? In can't imagine why, it's intolerable. It's not fit for man, nor beast out there.]</Value>
+      <Value>[Text:Huh, are you out and about today in this weather? In can't imagine why, it's intolerable. It's not fit for man, nor beast out there.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>Snow|1</Key>
-      <Value>[Text:Hm, snowing outside is it? $Character_1$ loves the snow, but I can't stand it. I'll leave trudging through the snow to you younger ones and stay inside, thank you very much.]</Value>
+      <Value>[Text:Hm, snowing outside is it? $Character_1$ loves the snow, but I can't stand it. I'll leave trudging through the snow to you younger ones and stay inside, thank you very much.][Weather:Snowing]</Value>
     </Item>
     <Item>
       <Key>Dialogue|3</Key>
       <Value>[Text:Keep your eyes peeled for the mushrooms that live in the forest. Their caps are useful for a lot of things, but they have an innate affinity for magic. Young $Character_8$ got a nasty shock from one a few years back.]</Value>
+    </Item>
+    <Item>
+      <Key>House Built</Key>
+      <Value>[Text:Hm. Well done, this house is adequate enough for our needs. Once I'm settled,I'll discuss with your Architect friend what can be done.][Once][RequiredBuildingID:13][SendMessage:1]</Value>
     </Item>
   </Asset>
 </XnaContent>

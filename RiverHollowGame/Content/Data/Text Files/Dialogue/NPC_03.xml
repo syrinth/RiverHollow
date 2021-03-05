@@ -7,11 +7,11 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Hi $Name$. You know, seeing you running around is one of the few bright bright spots of this place. You're so driven, it's inspiring.]</Value>
+      <Value>[Text:Hi $Name$. You know, seeing you running around is one of the few bright bright spots of this place. You're so driven, it's inspiring.][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:I'm not used to living on the outskirts like this. There's dirt everywhere. Do you have any idea how often I have to wash my robes to keep them clean? How do you handle it?]</Value>
+      <Value>[Text:I'm not used to living on the outskirts like this. There's dirt everywhere. Do you have any idea how often I have to wash my robes to keep them clean? How do you handle it?][Default]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
@@ -47,7 +47,7 @@
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>[Text:I didn't think I'd see you today. I always jump at the opportunity to do nothing on rainy days. I guess you've got more on your plate than I do though, hm?]</Value>
+      <Value>[Text:I didn't think I'd see you today. I always jump at the opportunity to do nothing on rainy days. I guess you've got more on your plate than I do though, hm?][Weather:Raining]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -31,11 +31,11 @@ The first I'd recommend is a $Class_5$ and $Class_6$. You should build yourself 
     <Item>
       <Key>1</Key>
       <Value>[Text:Back when I was younger, adventurers were far more common. They would use the guilds in towns to share news and information. It was amazing how fast word could spread that way.
-Nowadays though, it's rare to see a new face all year.]</Value>
+Nowadays though, it's rare to see a new face all year.][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:I've trained in many forms of combat over the years, but bladework has always been my favorite.]</Value>
+      <Value>[Text:I've trained in many forms of combat over the years, but bladework has always been my favorite.][Default]</Value>
     </Item>
   </Asset>
 </XnaContent>

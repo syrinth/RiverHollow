@@ -7,11 +7,11 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Hello $Name$. I hope you're well today.]</Value>
+      <Value>[Text:Hello $Name$. I hope you're well today.][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.]</Value>
+      <Value>[Text:You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.][Default]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
@@ -27,19 +27,19 @@
     </Item>
     <Item>
       <Key>Snowing|1</Key>
-      <Value>[Text:Nice to see you hon, we don't get too many customers on cold days like this. Why don't you treat yourself to something warm at the bar?]</Value>
+      <Value>[Text:Nice to see you hon, we don't get too many customers on cold days like this. Why don't you treat yourself to something warm at the bar?][Weather:Snowing]</Value>
     </Item>
     <Item>
       <Key>Snowing|2</Key>
-      <Value>[Text:Sometimes, days like these remind me of when $Character_9$ and I first met. It was the dead of winter and he'd just come into the tavern I was performing at, bundled up in his coat. There was something about him that caught my eye immediately.]</Value>
+      <Value>[Text:Sometimes, days like these remind me of when $Character_9$ and I first met. It was the dead of winter and he'd just come into the tavern I was performing at, bundled up in his coat. There was something about him that caught my eye immediately.][Weather:Snowing]</Value>
     </Item>
     <Item>
       <Key>Rain|1</Key>
-      <Value>[Text:You know, I kind of love the rain now that I'm not on the road anymore. I hated it back then though. Now? It's nice to be warm inside and watch it fall.]</Value>
+      <Value>[Text:You know, I kind of love the rain now that I'm not on the road anymore. I hated it back then though. Now? It's nice to be warm inside and watch it fall.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>Rain|2</Key>
-      <Value>[Text:Huh, rain? Guess we're not going to have too many customers tonight, huh?]</Value>
+      <Value>[Text:Huh, rain? Guess we're not going to have too many customers tonight, huh?][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>Dialogue|3</Key>

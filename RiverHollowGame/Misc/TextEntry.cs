@@ -46,6 +46,7 @@ namespace RiverHollow.Misc
 
             Util.AssignValue(ref _sText, "Text", stringData);
             Util.AssignValue(ref _dPriority, "Priority", stringData);
+
             _sText = Util.ProcessText(_sText);
 
             ParseSelectionText();
@@ -205,6 +206,15 @@ namespace RiverHollow.Misc
                         else { return false; }
                     }
                 }
+                if (_diTags.ContainsKey("RequiredBuildingID"))
+                {
+                    foreach (string i in _diTags["RequiredBuildingID"].Split('-'))
+                    {
+                        if (!GameManager.DIBuildInfo[int.Parse(i)].Built) { return false; }
+                    }
+
+                    rv = true;
+                }
             }
 
             return rv;
@@ -233,15 +243,15 @@ namespace RiverHollow.Misc
             {
                 PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(_diTags["Task"])]);
             }
-            else if (_diTags.ContainsKey("UnlockBuildingID"))
+            if (_diTags.ContainsKey("UnlockBuildingID"))
             {
                 GameManager.DIBuildInfo[int.Parse(_diTags["UnlockBuildingID"])].Unlock();
             }
-            else if (_diTags.ContainsKey("UnlockItemID"))
+            if (_diTags.ContainsKey("UnlockItemID"))
             {
                 GameManager.DIShops[int.Parse(_diTags["ShopTargetID"])].Find(x => x.MerchID == int.Parse(_diTags["UnlockItemID"])).Unlock();
             }
-            else if (_diTags.ContainsKey("SendMessage"))
+            if (_diTags.ContainsKey("SendMessage"))
             {
                 PlayerManager.PlayerMailbox.SendMessage(_diTags["SendMessage"]);
             }

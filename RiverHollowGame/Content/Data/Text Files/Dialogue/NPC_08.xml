@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>Snowing|1</Key>
-      <Value>[Text:Oh, hello $Name$. Care to join me for a hot drink this evening?]</Value>
+      <Value>[Text:Oh, hello $Name$. Care to join me for a hot drink this evening?][Weather:Snowing]</Value>
     </Item>
     <Item>
       <Key>Winter|1</Key>
@@ -16,15 +16,15 @@
     <Item>
       <Key>3</Key>
       <Value>[Text:You're always running around. Don't you ever just  take a break and relax?
-Try to take it easy sometimes, ok?]</Value>
+Try to take it easy sometimes, ok?][Default]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Off again $Name$? If you need to relax after, you know where I'll be.]</Value>
+      <Value>[Text:Off again $Name$? If you need to relax after, you know where I'll be.][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:There's something almost peaceful about the swamp, you know? It's a dreary place, but it's beautiful in its own way. We should go there some time.]</Value>
+      <Value>[Text:There's something almost peaceful about the swamp, you know? It's a dreary place, but it's beautiful in its own way. We should go there some time.][Default]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>

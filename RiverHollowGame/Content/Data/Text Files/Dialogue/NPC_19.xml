@@ -3,15 +3,15 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>[Text:Well now, there's an adventurer if I've ever seen one. Welcome to town! I'm $Character_19$, and I run the General Store. I'm sure I've got all manner of useful things in stock for you.]</Value>
+      <Value>[Text:Well hello! The name's $Character_19$ and can I say what a pleasure it is to take a break from the road. It's a nice little town you have here, and I've been looking for a place to settle down.][UnlockBuildingID:26]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Hello! You know, my family has been living in this town for over a century. It may not look like much, but this town runs in my blood.]</Value>
+      <Value>[Text:Hello! You know, my family has been living in this town for over a century. It may not look like much, but this town runs in my blood.][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:Lovely day today, isn't it? It's a wonder what some fresh air will do for you!]</Value>
+      <Value>[Text:Lovely day today, isn't it? It's a wonder what some fresh air will do for you!][Default]</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>
@@ -27,11 +27,15 @@
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>[Text:What are you doing running around today? On a day like this, you should be inside where it's warm and dry.]</Value>
+      <Value>[Text:What are you doing running around today? On a day like this, you should be inside where it's warm and dry.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>Raining|2</Key>
-      <Value>[Text:My father used to tell me stories about nature spirits when I was a lad. Apparently some of them like to play in the rain. I fancy I can sometimes hear one, but I've never seen one with my own eyes.]</Value>
+      <Value>[Text:My father used to tell me stories about nature spirits when I was a lad. Apparently some of them like to play in the rain. I fancy I can sometimes hear one, but I've never seen one with my own eyes.][Weather:Raining]</Value>
+    </Item>
+    <Item>
+      <Key>General_Store_request</Key>
+      <Value>[Text:You know what this place needs? A $Building_20$ I've talked to $Character_14$ and he says he has some ideas. Once you get that built for me, I'll be able to set up shop here, I'm sure I can find some items that you'll find useful!][ShopTargetID:2][UnlockItemID:138][Default][Priority:50]</Value>
     </Item>
   </Asset>
 </XnaContent>

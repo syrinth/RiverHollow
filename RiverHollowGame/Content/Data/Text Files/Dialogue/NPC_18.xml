@@ -7,11 +7,11 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:You seem to be in a rush, don't let me keep you. I hope you have a good day.]</Value>
+      <Value>[Text:You seem to be in a rush, don't let me keep you. I hope you have a good day.][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:Hello, $Name$. Could you talk to $1$ for me by any chance? I worry about her, always pushing herself so hard.]</Value>
+      <Value>[Text:Hello, $Name$. Could you talk to $1$ for me by any chance? I worry about her, always pushing herself so hard.][Default]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>

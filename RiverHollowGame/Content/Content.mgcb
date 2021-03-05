@@ -2920,11 +2920,6 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapHouseNPC1.tmx
 
-#begin Maps/Town/mapHouse_11_1 - Copy.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_11_1 - Copy.tmx
-
 #begin Maps/Town/mapHouse_14_1.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -3000,11 +2995,6 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapLumberMill_1.tmx
 
-#begin Maps/Town/mapMagicShop.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapMagicShop.tmx
-
 #begin Maps/Town/mapMagicShop_1.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -3069,4 +3059,19 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapTown.tmx
+
+#begin Maps/Town/mapHouse_1_17_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_1_17_1.tmx
+
+#begin Data/Schedules/NPC_17.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Schedules/NPC_17.xml
+
+#begin Maps/Town/mapHouse_11_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_11_1.tmx
 

@@ -3,15 +3,15 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>[Text:Not now sorry, I've got something on my mind. I'm $Character_4$, nice to meet you, etcetera, everything else can wait.]</Value>
+      <Value>[Text:Finally. It's nice to speak to someone who can help me. I'm $Character_4$, nice to meet you, etcetera. Be a dear and arrange me someplace to stay will you? My research has been stalled for long enough.][UnlockBuildingID:16]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:$Name$. I hope you're well? Good.]</Value>
+      <Value>[Text:$Name$. I hope you're well? Good.][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:Oh, hello. I guess I have a moment. My latest experiment hasn't proven fruitful.]</Value>
+      <Value>[Text:Oh, hello. I guess I have a moment. My latest experiment hasn't proven fruitful.][Default]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
@@ -43,11 +43,11 @@
     </Item>
     <Item>
       <Key>Raining|1</Key>
-      <Value>[Text:I hate weather like this. It just serves to delay my research.]</Value>
+      <Value>[Text:I hate weather like this. It just serves to delay my research.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>Raining|2</Key>
-      <Value>[Text:Hm. I'm thinking I might take a walk. I despise the rain, but there are several species of flowers I'm interested in that only bloom in the rain.]</Value>
+      <Value>[Text:Hm. I'm thinking I might take a walk. I despise the rain, but there are several species of flowers I'm interested in that only bloom in the rain.][Weather:Raining]</Value>
     </Item>
   </Asset>
 </XnaContent>

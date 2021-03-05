@@ -53,6 +53,7 @@ namespace RiverHollow.Game_Managers
         public static string Name;
         public static string TownName;
 
+        public static int TotalMoneyEarned { get; private set; } = 0;
         public static int Money { get; private set; } = 2000;
 
         private static int _iMonsterEnergy = 0;
@@ -456,6 +457,7 @@ namespace RiverHollow.Game_Managers
         public static void AddMoney(int x)
         {
             Money += x;
+            TotalMoneyEarned += x;
         }
         public static void SetMoney(int x)
         {
@@ -528,6 +530,7 @@ namespace RiverHollow.Game_Managers
             {
                 name = PlayerManager.Name,
                 money = PlayerManager.Money,
+                totalMoneyEarned = PlayerManager.TotalMoneyEarned,
                 bodyTypeIndex = PlayerManager.World.BodyType,
                 hairColor = PlayerManager.World.HairColor,
                 hairIndex = PlayerManager.World.HairIndex,
@@ -545,6 +548,8 @@ namespace RiverHollow.Game_Managers
         {
             SetName(data.name);
             SetMoney(data.money);
+            TotalMoneyEarned = data.totalMoneyEarned;
+
             World.SetHairColor(data.hairColor);
             World.SetHairType(data.hairIndex);
 
