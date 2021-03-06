@@ -63,7 +63,7 @@
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_3][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>16</Key>
@@ -123,7 +123,7 @@
     </Item>
     <Item>
       <Key>30</Key>
-      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_18][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
   </Asset>
 </XnaContent>
