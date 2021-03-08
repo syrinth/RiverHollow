@@ -101,6 +101,9 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
+        public static void OpenMenu() { _currentGUIScreen.OpenMenu(); }
+        public static void CloseMenu() { _currentGUIScreen.CloseMenu(); }
+
         /// <summary>
         /// 
         /// </summary>

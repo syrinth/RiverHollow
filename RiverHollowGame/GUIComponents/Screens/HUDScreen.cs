@@ -91,7 +91,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 //If there are more items to add, there is currently an ItemPickup Display and the next Item to add is the same as the one being displayed
                 //Remove it fromt he list of items to show added, add the current number tot he display, and refresh the display.
-                if(InventoryManager.AddedItemList.Count > 0 && _addedItem != null && InventoryManager.AddedItemList[0].ItemID == _addedItem.BoxItem.ItemID)
+                if (InventoryManager.AddedItemList.Count > 0 && _addedItem != null && InventoryManager.AddedItemList[0].ItemID == _addedItem.BoxItem.ItemID)
                 {
                     _addedItem.BoxItem.Add(InventoryManager.AddedItemList[0].Number);
                     InventoryManager.AddedItemList.Remove(InventoryManager.AddedItemList[0]);
@@ -173,13 +173,13 @@ namespace RiverHollow.GUIComponents.Screens
 
         #region Menu
         public bool IsMenuOpen() { return _gMenu != null; }
-        public void OpenMenu()
+        public override void OpenMenu()
         {
             _gMenu = new HUDMenu(CloseMenu);
             AddControl(_gMenu);
             GameManager.Pause();
         }
-        public void CloseMenu()
+        public override void CloseMenu()
         {
             if (_gMenu != null)
             {
@@ -190,7 +190,8 @@ namespace RiverHollow.GUIComponents.Screens
         }
         #endregion
 
-        public override void NewTaskIcon(bool complete) {
+        public override void NewTaskIcon(bool complete)
+        {
             HUDNewTask newTask = new HUDNewTask(complete, RemoveTaskIcon);
 
             if (_liTaskIcons.Count == 0) { newTask.AnchorToScreen(SideEnum.Right, 12); }
@@ -205,12 +206,14 @@ namespace RiverHollow.GUIComponents.Screens
             RemoveControl(q);
         }
 
-        public override void AddSkipCutsceneButton() {
+        public override void AddSkipCutsceneButton()
+        {
             _btnSkipCutscene = new GUIButton(new Rectangle(64, 80, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, CutsceneManager.SkipCutscene);
             _btnSkipCutscene.AnchorToScreen(SideEnum.BottomRight, 12);
             AddControl(_btnSkipCutscene);
         }
-        public override void RemoveSkipCutsceneButton() {
+        public override void RemoveSkipCutsceneButton()
+        {
             RemoveControl(_btnSkipCutscene);
         }
     }
@@ -554,15 +557,9 @@ namespace RiverHollow.GUIComponents.Screens
         }
         public void BtnBuild()
         {
-            //Saving here to remember how we moved buildings
-            //RiverHollow.EnterBuildMode();
-            //GameManager.ClearGMObjects();
-            //GameManager.MoveBuilding();
-
             if (MapManager.CurrentMap.IsTown)
             {
-                _gMenuObject = new HUDConstruction(_closeMenu);
-                GUIManager.OpenMainObject(_gMenuObject);
+                GUIManager.SetScreen(new BuildScreen());
             }
         }
         public void BtnFriendship()
@@ -855,7 +852,7 @@ namespace RiverHollow.GUIComponents.Screens
                     int maxRowIndex = 2;
 
                     int spacing = 10;
-                    _arrStartPositions = new StartPosition[maxColIndex +1, maxRowIndex +1]; //increment by one as stated above
+                    _arrStartPositions = new StartPosition[maxColIndex + 1, maxRowIndex + 1]; //increment by one as stated above
                     for (int cols = maxColIndex; cols >= 0; cols--)
                     {
                         for (int rows = maxRowIndex; rows >= 0; rows--)
@@ -1018,7 +1015,7 @@ namespace RiverHollow.GUIComponents.Screens
                     /// <param name="animation">The animation enum to play</param>
                     public void PlayAnimation(VerbEnum verb, DirectionEnum dir)
                     {
-                        _sprite.PlayAnimation(verb,dir);
+                        _sprite.PlayAnimation(verb, dir);
                     }
                 }
             }
@@ -1938,181 +1935,6 @@ namespace RiverHollow.GUIComponents.Screens
                 }
             }
         }
-        public class HUDConstruction : GUIMainObject
-        {
-            //public static int BTNSIZE = ScaledTileSize;
-            public static int MAX_SHOWN_TASKS = 4;
-            public static int TASK_SPACING = 20;
-            public static int CONSTRUCTBOX_WIDTH = 544; //(GUIManager.MAIN_COMPONENT_WIDTH) - (_gWindow.EdgeSize * 2) - ScaledTileSize
-            public static int CONSTRUCTBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDTaskLog.MAX_SHOWN_TASKS) - (_gWindow.EdgeSize * 2)
-            List<GUIObject> _liTasks;
-            GUIList _gList;
-
-            private HUDMenu.CloseMenuDelegate _closeMenu;
-
-            public HUDConstruction(CloseMenuDelegate closeMenu)
-            {
-                _closeMenu = closeMenu;
-                _winMain = SetMainWindow();
-
-                _liTasks = new List<GUIObject>();
-
-
-                foreach (BuildInfo b in GameManager.DIBuildInfo.Values)
-                {
-                    if (b.Unlocked && !b.Built)
-                    {
-                        ConstructBox box = new ConstructBox(CONSTRUCTBOX_WIDTH, CONSTRUCTBOX_HEIGHT, BuildConstruct);
-                        box.SetConstructionInfo(b);
-                        _liTasks.Add(box);
-                    }
-                }
-
-                _gList = new GUIList(_liTasks, MAX_SHOWN_TASKS, TASK_SPACING/*, _gWindow.Height*/);
-                _gList.CenterOnObject(_winMain);
-
-                AddControl(_gList);
-            }
-
-            public override bool ProcessLeftButtonClick(Point mouse)
-            {
-                bool rv = false;
-
-                foreach (GUIObject c in Controls)
-                {
-                    rv = c.ProcessLeftButtonClick(mouse);
-
-                    if (rv) { break; }
-                }
-
-                return rv;
-            }
-
-            public override bool ProcessRightButtonClick(Point mouse)
-            {
-                bool rv = false;
-                return rv;
-            }
-
-            public override bool ProcessHover(Point mouse)
-            {
-                bool rv = false;
-                return rv;
-            }
-
-            public override void Draw(SpriteBatch spriteBatch)
-            {
-                base.Draw(spriteBatch);
-            }
-
-            public override void Update(GameTime gTime)
-            {
-                base.Update(gTime);
-            }
-
-            public void BuildConstruct(BuildInfo obj)
-            {
-                bool create = true;
-                //create = PlayerManager.Money >= _liMerchandise[_iCurrIndex].MoneyCost;
-               // if (create)
-                {
-                    foreach (KeyValuePair<int, int> kvp in obj.RequiredToMake)
-                    {
-                        if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
-                        {
-                            create = false;
-                        }
-                    }
-                }
-
-                if (create)
-                {
-                    RiverHollow.EnterBuildMode();
-                    GameManager.PickUpBuilding(DataManager.GetBuilding(obj.ID));
-                }
-
-                GUIManager.CloseMainObject();
-                _closeMenu();
-            }
-
-            public class ConstructBox : GUIObject
-            {
-                GUIWindow _window;
-                GUIText _gName;
-                public BuildInfo BuildingInfo { get; private set; }
-                public bool ClearThis;
-                public delegate void ClickDelegate(BuildInfo obj);
-                private ClickDelegate _delAction;
-
-                public ConstructBox(int width, int height, ClickDelegate del)
-                {
-                    _delAction = del;
-
-                    int boxHeight = height;
-                    int boxWidth = width;
-                    _window = new GUIWindow(GUIWindow.Window_1, boxWidth, boxHeight);
-                    AddControl(_window);
-                    Width = _window.Width;
-                    Height = _window.Height;
-                    BuildingInfo = null;
-                }
-
-                public override void Draw(SpriteBatch spriteBatch)
-                {
-                    if (BuildingInfo != null && Show())
-                    {
-                        _window.Draw(spriteBatch);
-                    }
-                }
-                public override bool ProcessLeftButtonClick(Point mouse)
-                {
-                    bool rv = false;
-                    if (Contains(mouse) && _delAction != null)
-                    {
-                        rv = true;
-                        _delAction(BuildingInfo);
-                    }
-
-                    return rv;
-                }
-                public override bool ProcessHover(Point mouse)
-                {
-                    bool rv = false;
-                    return rv;
-                }
-                public override bool Contains(Point mouse)
-                {
-                    return _window.Contains(mouse);
-                }
-
-                public void SetConstructionInfo(BuildInfo b)
-                {
-                    BuildingInfo = b;
-
-                    Color textColor = Color.White;
-                    if (!InventoryManager.SufficientItems(BuildingInfo.RequiredToMake))
-                    {
-                        textColor = Color.Red;
-                        _delAction = null;
-                    }
-
-                    _gName = new GUIText(BuildingInfo.Name);
-                    _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
-                    _gName.SetColor(textColor);
-
-                    List<GUIItemBox> list = new List<GUIItemBox>();
-                    foreach (KeyValuePair<int, int> kvp in BuildingInfo.RequiredToMake)
-                    {
-                        GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
-
-                        if (list.Count == 0) { box.AnchorToInnerSide(_window, SideEnum.BottomRight); }
-                        else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Left, SideEnum.Bottom); }
-
-                        list.Add(box);
-                    }
-                }
-            }
-        }
         public class HUDOptions : GUIMainObject
         {
             GUICheck _gAutoDisband;
@@ -2184,7 +2006,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             public void UpdateMusicVolume()
             {
-                SoundManager.SetMusicVolume((float)_gVolumeControl.Value/100.0f);
+                SoundManager.SetMusicVolume((float)_gVolumeControl.Value / 100.0f);
             }
 
             public void UpdateEffectsVolume()
@@ -2908,10 +2730,11 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _dTimer += gTime.ElapsedGameTime.TotalSeconds;
 
-            if(_dTimer > 3) { _delAction(this); }
-            else {
+            if (_dTimer > 3) { _delAction(this); }
+            else
+            {
                 MoveBy(new Vector2(0, -1));
-                Alpha(Alpha()-0.01f);
+                Alpha(Alpha() - 0.01f);
             }
         }
     }

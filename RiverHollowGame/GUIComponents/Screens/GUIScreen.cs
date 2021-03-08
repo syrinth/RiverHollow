@@ -110,6 +110,9 @@ namespace RiverHollow.GUIComponents.Screens
             if (_guiHoverWindow != null) { _guiHoverWindow.Draw(spriteBatch); }
         }
 
+        public virtual void OpenMenu() { }
+        public virtual void CloseMenu() { }
+
         protected virtual void HandleInput() { }
 
         public virtual bool Contains(Point mouse)
@@ -244,12 +247,19 @@ namespace RiverHollow.GUIComponents.Screens
 
         public void AddControl(GUIObject control)
         {
-            _liToAdd.Add(control);
+            if (control != null)
+            {
+                control.Show(true);
+                _liToAdd.Add(control);
+            }
         }
         public void RemoveControl(GUIObject control)
         {
-            if (control != null){ control.Show(false); }
-            _liToRemove.Add(control);
+            if (control != null)
+            {
+                control.Show(false);
+                _liToRemove.Add(control);
+            }
         }
     }
 }

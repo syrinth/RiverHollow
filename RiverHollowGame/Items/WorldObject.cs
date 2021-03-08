@@ -56,6 +56,8 @@ namespace RiverHollow.Items
         protected string _sName;
         public string Name { get => _sName; }
 
+        public Dictionary<int, int> RequiredToMake { get; private set; }
+
         #endregion
 
         protected WorldObject() {
@@ -79,6 +81,18 @@ namespace RiverHollow.Items
             Util.AssignValue(ref _iWidth, "Width", stringData);
             Util.AssignValue(ref _iHeight, "Height", stringData);
             if (stringData.ContainsKey("Type")) { _eObjectType = Util.ParseEnum<ObjectTypeEnum>(stringData["Type"]); }
+
+            RequiredToMake = new Dictionary<int, int>();
+            if (stringData.ContainsKey("ReqItems"))
+            {
+                //Split by "|" for each item set required
+                string[] split = Util.FindParams(stringData["ReqItems"]);
+                foreach (string s in split)
+                {
+                    string[] splitData = s.Split('-');
+                    RequiredToMake[int.Parse(splitData[0])] = int.Parse(splitData[1]);
+                }
+            }
 
             if (loadSprite)
             {
@@ -168,6 +182,8 @@ namespace RiverHollow.Items
                 if (t.Flooring == this) { t.RemoveFlooring(); }
                 if (t.WorldObject == this) { t.RemoveWorldObject(); }
                 if (t.ShadowObject == this) { t.RemoveShadowObject(); }
+
+                t.SetMapObject(null);
             }
         }
 
@@ -364,7 +380,7 @@ namespace RiverHollow.Items
         private List<string> _liSentMessages;
         public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + (_iHeight - BaseHeight), BaseWidth, BaseHeight);
 
-        public Mailbox(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos - new Vector2(0, TileSize))
+        public Mailbox(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
         {
             _liCurrentMessages = new List<string>();
             _liSentMessages = new List<string>();
@@ -547,9 +563,6 @@ namespace RiverHollow.Items
         {
             private MachineTypeEnum _eMachineType;
 
-            protected Dictionary<int, int> _diReqToMake;
-            public Dictionary<int, int> RequiredToMake => _diReqToMake;
-
             readonly string _sEffectWorking;
 
             protected double _dProcessedTime = 0;
@@ -578,18 +591,6 @@ namespace RiverHollow.Items
                     string[] baseStr = stringData["Base"].Split('-');
                     _iBaseWidth = int.Parse(baseStr[0]) * TileSize;
                     _iBaseHeight = int.Parse(baseStr[1]) * TileSize;
-                }
-
-                _diReqToMake = new Dictionary<int, int>();
-                if (stringData.ContainsKey("ReqItems"))
-                {
-                    //Split by "|" for each item set required
-                    string[] split = Util.FindParams(stringData["ReqItems"]);
-                    foreach (string s in split)
-                    {
-                        string[] splitData = s.Split('-');
-                        _diReqToMake[int.Parse(splitData[0])] = int.Parse(splitData[1]);
-                    }
                 }
 
                 LoadDictionaryData(stringData);

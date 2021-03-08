@@ -364,7 +364,7 @@ namespace RiverHollow.Tile_Engine
                 i.Draw(spriteBatch);
             }
 
-            if (GameManager.IsRunning())
+            if (GameManager.IsRunning() || Scrying())
             {
                 foreach (RHTile t in _liTestTiles)
                 {
@@ -722,7 +722,6 @@ namespace RiverHollow.Tile_Engine
                     if (t != null)
                     {
                         t.SetMapObject(trvlPt);
-                        t.GetTileByDirection(DirectionEnum.Up).SetMapObject(trvlPt);
                     }
                 }
             }
@@ -1347,8 +1346,6 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            if (IsPaused()) { return false; }
-
             if (!PlayerManager.Busy && !CombatManager.InCombat)
             {
                 if (Scrying())
@@ -1357,6 +1354,8 @@ namespace RiverHollow.Tile_Engine
                 }
                 else
                 {
+                    if (IsPaused()) { return false; }
+
                     //Ensure that we have a tile that we clicked on and that the player is close enough to interact with it.
                     TargetTile = MapManager.RetrieveTile(mouseLocation);
                     if (TargetTile != null)
@@ -1418,14 +1417,12 @@ namespace RiverHollow.Tile_Engine
                 if (GameManager.HeldBuilding != null && AddBuilding(GameManager.HeldBuilding, false, false))
                 {
                     GameManager.HeldBuilding.StartBuilding();   //Set the building to start being built
-                    //GUIManager.OpenMainObject(new HUDNamingWindow(GameManager.HeldBuilding));   //Open a naming window
                     FinishBuilding();
 
                     //Take the resources from the player if there is merchandise
                     if (GameManager.HeldBuilding != null)
                     {
                         BuildInfo info = GameManager.DIBuildInfo[HeldBuilding.ID];
-                        //PlayerManager.TakeMoney(CurrentMerch.MoneyCost);
                         foreach (KeyValuePair<int, int> kvp in info.RequiredToMake)
                         {
                             InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
@@ -1651,12 +1648,10 @@ namespace RiverHollow.Tile_Engine
         public void FinishBuilding()
         {
             SetGameScale(NORMAL_SCALE);
-            //We know that this window only gets created under special circumstances, so unset them
-            RiverHollow.ResetCamera();
-            GUIManager.CloseMainObject();
-            GameManager.Unpause();
+
+            //Re-open the Building Menu
+            GUIManager.OpenMenu();
             GameManager.Scry(false);
-            GameManager.StopTakingInput();
         }
 
         public void ClearWorkers()
@@ -1782,7 +1777,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     GameManager.PickUpBuilding(b);
                     b.RemoveSelfFromTiles();
-                    DictionaryTravelPoints.Remove(b.PersonalID.ToString());
+                    DictionaryTravelPoints.Remove(b.MapName);
                     break;
                 }
             }
@@ -1799,7 +1794,7 @@ namespace RiverHollow.Tile_Engine
                     SetGameScale(NORMAL_SCALE);
                     bldg = b;
                     b.RemoveSelfFromTiles();
-                    DictionaryTravelPoints.Remove(b.PersonalID.ToString());
+                    DictionaryTravelPoints.Remove(b.MapName);
                     PlayerManager.RemoveBuilding(b);
                     LeaveBuildMode();
                     Unpause();

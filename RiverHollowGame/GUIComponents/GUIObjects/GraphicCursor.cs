@@ -112,7 +112,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public static void DrawBuilding(SpriteBatch spriteBatch)
         {
-            if (GameManager.IsRunning() && GameManager.Scrying() && GameManager.HeldBuilding != null)
+            if (GameManager.HeldBuilding != null)
             {
                 Vector2 mousePosition = GetWorldMousePosition();
                 Rectangle drawRectangle = new Rectangle(((int)((mousePosition.X - HeldBuilding.Width / 2) / TileSize)) * TileSize, ((int)((mousePosition.Y - HeldBuilding.Height / 2) / TileSize)) * TileSize, HeldBuilding.Width, HeldBuilding.Height);

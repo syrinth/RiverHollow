@@ -348,7 +348,10 @@ namespace RiverHollow.Game_Managers
         #region Building Helpers
         public static void AddBuilding(Building b)
         {
-            _diBuildings.Add(b.ID, b);
+            if (!_diBuildings.ContainsKey(b.ID))
+            {
+                _diBuildings.Add(b.ID, b);
+            }
             GameManager.DIBuildInfo[b.ID].Built = true;
 
             AdvanceTaskProgress(b);

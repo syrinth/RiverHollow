@@ -82,6 +82,7 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, Dictionary<string, string>> DIClasses => _diClasses;
         static Dictionary<string, Dictionary<string, List<string>>> _diSchedule;
 
+        public static List<int> FloorIDs { get; private set; }
 
         public static Dictionary<int, Dictionary<string, string>> Config;
 
@@ -96,7 +97,9 @@ namespace RiverHollow.Game_Managers
         public static void LoadContent(ContentManager Content)
         {
             //Allocate Dictionaries
+            FloorIDs = new List<int>();
             _diTextures = new Dictionary<string, Texture2D>();
+
             DiUpgrades = Content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
             _diMonsterTraits = Content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
 
@@ -123,32 +126,45 @@ namespace RiverHollow.Game_Managers
         }
 
         #region Load Methods
+        private delegate void LoadDictionaryWorkDelegate(int id, Dictionary<string, string> taggedDictionary);
         private static void LoadDictionaries(ContentManager Content)
         {
-            LoadDictionary(ref _diPlayerAnimationData, @"Data\PlayerClassAnimationConfig", Content);
-            LoadDictionary(ref _diItemData, @"Data\ItemData", Content);
-            LoadDictionary(ref _diWorldObjects, @"Data\WorldObjects", Content);
-            LoadDictionary(ref _diActions, @"Data\CombatActions", Content);
-            LoadDictionary(ref _diVillagerData, @"Data\CharacterData", Content);
-            LoadDictionary(ref _diMonsterData, @"Data\Monsters", Content);
-            LoadDictionary(ref _diSummonData, @"Data\Summons", Content);
-            LoadDictionary(ref _diBuildings, @"Data\Buildings", Content);
-            LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content);
-            LoadDictionary(ref _diWorkers, @"Data\Workers", Content);
-            LoadDictionary(ref _diSpiritInfo, @"Data\Spirits", Content);
-            LoadDictionary(ref _diTaskData, @"Data\Tasks", Content);
-            LoadDictionary(ref _diClasses, @"Data\Classes", Content);
-            LoadDictionary(ref Config, @"Data\Config", Content);
+            LoadDictionary(ref _diPlayerAnimationData, @"Data\PlayerClassAnimationConfig", Content, null);
+            LoadDictionary(ref _diItemData, @"Data\ItemData", Content, null);
+            LoadDictionary(ref _diWorldObjects, @"Data\WorldObjects", Content, LoadWorldObjectsDoWork);
+            LoadDictionary(ref _diActions, @"Data\CombatActions", Content, null);
+            LoadDictionary(ref _diVillagerData, @"Data\CharacterData", Content, null);
+            LoadDictionary(ref _diMonsterData, @"Data\Monsters", Content, null);
+            LoadDictionary(ref _diSummonData, @"Data\Summons", Content, null);
+            LoadDictionary(ref _diBuildings, @"Data\Buildings", Content, null);
+            LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
+            LoadDictionary(ref _diWorkers, @"Data\Workers", Content, null);
+            LoadDictionary(ref _diSpiritInfo, @"Data\Spirits", Content, null);
+            LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);
+            LoadDictionary(ref _diClasses, @"Data\Classes", Content, null);
+            LoadDictionary(ref Config, @"Data\Config", Content, null);
         }
-        private static void LoadDictionary(ref Dictionary<int, Dictionary<string, string>> dictionaryAddTo, string dataFile, ContentManager Content)
+        private static void LoadDictionary(ref Dictionary<int, Dictionary<string, string>> dictionaryAddTo, string dataFile, ContentManager Content, LoadDictionaryWorkDelegate workDelegate)
         {
             dictionaryAddTo = new Dictionary<int, Dictionary<string, string>>();
             Dictionary<int, string> dictionaryData = Content.Load<Dictionary<int, string>>(dataFile);
             foreach (KeyValuePair<int, string> kvp in dictionaryData)
             {
-                dictionaryAddTo[kvp.Key] = TaggedStringToDictionary(kvp.Value);
+                Dictionary<string, string> taggedDictionary = TaggedStringToDictionary(kvp.Value);
+                dictionaryAddTo[kvp.Key] = taggedDictionary;
+
+                workDelegate?.Invoke(kvp.Key, taggedDictionary);
             }
         }
+
+        private static void LoadWorldObjectsDoWork(int id, Dictionary<string, string> taggedDictionary)
+        {
+            if (Util.ParseEnum<ObjectTypeEnum>(taggedDictionary["Type"]) == ObjectTypeEnum.Floor)
+            {
+                FloorIDs.Add(id);
+            }
+        }
+
 
         private static void LoadDictionary(ref Dictionary<string, Dictionary<string, string>> dictionaryAddTo, string dataFile, ContentManager Content)
         {

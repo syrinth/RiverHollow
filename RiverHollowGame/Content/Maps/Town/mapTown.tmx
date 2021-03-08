@@ -370,7 +370,7 @@
     <property name="BuildingID" type="int" value="9"/>
    </properties>
   </object>
-  <object id="71" name="WorldObject" x="512.946" y="705.209" width="14.1071" height="13.5823">
+  <object id="71" name="WorldObject" x="512.53" y="688.521" width="14.94" height="30.8948">
    <properties>
     <property name="ObjectID" type="int" value="47"/>
    </properties>

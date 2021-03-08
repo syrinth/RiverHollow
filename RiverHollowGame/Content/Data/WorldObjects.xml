@@ -103,7 +103,7 @@
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Floor][Image:0-32]</Value>
+      <Value>[Type:Floor][Image:0-32][ReqItems:0-1]</Value>
     </Item>
     <Item>
       <Key>26</Key>
