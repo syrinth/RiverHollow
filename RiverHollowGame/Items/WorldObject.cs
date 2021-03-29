@@ -133,6 +133,9 @@ namespace RiverHollow.Items
             _sprite.Draw(spriteBatch);
         }
 
+        public virtual void ProcessLeftClick(Point mouseLocation) {}
+        public virtual void ProcessRightClick(Point mouseLocation) { }
+
         public virtual bool IntersectsWith(Rectangle r)
         {
             return CollisionBox.Intersects(r);
@@ -210,6 +213,8 @@ namespace RiverHollow.Items
         }
 
         public bool CompareType(ObjectTypeEnum t) { return Type == t; }
+        public bool IsDestructible() { return CompareType(ObjectTypeEnum.Destructible) || CompareType(ObjectTypeEnum.Plant); }
+
         public virtual bool CanPickUp() { return false; }
     }
 
@@ -224,9 +229,9 @@ namespace RiverHollow.Items
         protected int _lvltoDmg;
         public int LvlToDmg => _lvltoDmg;
 
-        public Destructible(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
+        public Destructible(int id, Dictionary<string, string> stringData, Vector2 pos, bool loadSprite = true) : base(id, pos)
         {
-            LoadDictionaryData(stringData);
+            LoadDictionaryData(stringData, loadSprite);
 
             _wallObject = false;
 
@@ -250,6 +255,11 @@ namespace RiverHollow.Items
             {
                 MapManager.Maps[Tiles[0].MapName].RemoveWorldObject(this);
             }
+        }
+
+        public override void ProcessLeftClick(Point mouseLocation)
+        {
+             PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool), mouseLocation);
         }
 
         public virtual bool DealDamage(int dmg)
@@ -400,6 +410,11 @@ namespace RiverHollow.Items
             _alertSprite?.Draw(spriteBatch, 99999);
         }
 
+        public override void ProcessRightClick(Point mouseLocation)
+        {
+            TakeMessage();
+        }
+
         public void SendMessage(string messageID)
         {
             _liSentMessages.Add(messageID);
@@ -487,6 +502,9 @@ namespace RiverHollow.Items
             Util.AssignValue(ref _iItemID, "ItemID", stringData);
             LoadDictionaryData(stringData);
         }
+
+        public override void ProcessLeftClick(Point mouseLocation) { Gather(); }
+        public override void ProcessRightClick(Point mouseLocation) { Gather(); }
 
         public void Gather()
         {
@@ -721,6 +739,15 @@ namespace RiverHollow.Items
                     }
                 }
 
+                public override void ProcessLeftClick(Point mouseLocation) { Process(); }
+                public override void ProcessRightClick(Point mouseLocation) { Process(); }
+
+                private void Process()
+                {
+                    if (HasItem()) { TakeFinishedItem(); }
+                    else if (!MakingSomething()) { StartAutoWork(); }
+                }
+
                 public override bool StartAutoWork()
                 {
                     bool rv = false;
@@ -778,6 +805,25 @@ namespace RiverHollow.Items
                     {
                         SoundManager.PlayEffectAtLoc(_sEffectWorking, _sMapName, MapPosition, this);
                         _sprite.Update(gTime);
+                    }
+                }
+
+                public override void ProcessLeftClick(Point mouseLocation) { Craft();  }
+                public override void ProcessRightClick(Point mouseLocation) { Craft(); }
+
+                private void Craft()
+                {
+                    if (HasItem()) { TakeFinishedItem(); }
+                    else
+                    {
+                        if (!MakingSomething())
+                        {
+                            StartAutoWork();
+                        }
+                        else
+                        {
+                            SetToWork();
+                        }
                     }
                 }
 
@@ -942,6 +988,11 @@ namespace RiverHollow.Items
                 _inventory = new Item[_iRows, _iColumns];
             }
 
+            public override void ProcessRightClick(Point mouseLocation)
+            {
+                GUIManager.OpenMainObject(new HUDInventoryDisplay(Inventory));
+            }
+
             internal ContainerData SaveData()
             {
                 ContainerData containerData = new ContainerData
@@ -980,7 +1031,7 @@ namespace RiverHollow.Items
             }
         }
 
-        public class Plant : WorldItem
+        public class Plant : Destructible
         {
             #region consts
             const float MAX_ROTATION = 0.15f;
@@ -1002,7 +1053,7 @@ namespace RiverHollow.Items
             int _iDaysLeft;
             Dictionary<int, int> _diTransitionTimes;
 
-            public Plant(int id, Dictionary<string, string> stringData) : base(id, Vector2.Zero)
+            public Plant(int id, Dictionary<string, string> stringData, Vector2 position) : base(id, stringData, position, false)
             {
                 _diTransitionTimes = new Dictionary<int, int>();
 
@@ -1036,10 +1087,6 @@ namespace RiverHollow.Items
                 }
             }
 
-            public override void Draw(SpriteBatch spriteBatch)
-            {
-                base.Draw(spriteBatch);
-            }
             public override void Update(GameTime gTime)
             {
                 //If the object is shaking, we need to determine what step it's in
@@ -1072,6 +1119,9 @@ namespace RiverHollow.Items
                 }
                 _sprite.Update(gTime);
             }
+
+            public override void ProcessLeftClick(Point mouseLocation) { Harvest(); }
+            public override void ProcessRightClick(Point mouseLocation) { Harvest(); }
 
             /// <summary>
             /// Tell the object to shake
@@ -1476,11 +1526,6 @@ namespace RiverHollow.Items
         }
 
         /// <summary>
-        /// This method is called when the player interacts with the object.
-        /// </summary>
-        public virtual void Interact() { }
-
-        /// <summary>
         /// This method is called when something attempts to trigger it
         /// </summary>
         /// <param name="name">The name of the trigger</param>
@@ -1590,8 +1635,10 @@ namespace RiverHollow.Items
             /// 
             /// If it's already triggered, do nothing.
             /// </summary>
-            public override void Interact()
+            public override void ProcessRightClick(Point mouseLocation)
             {
+                GameManager.CurrentTriggerObject = this;
+
                 if (!_bHasBeenTriggered)
                 {
                     //If there's an itemKeyID, display appropriate text
@@ -1678,8 +1725,9 @@ namespace RiverHollow.Items
             /// Handles the response from whent he player attempts to Interact with the Door object.
             /// Primarily just handles the output for the doors and the type of triggers required to use it.
             /// </summary>
-            public override void Interact()
+            public override void ProcessRightClick(Point mouseLocation)
             {
+                GameManager.CurrentTriggerObject = this;
                 if (_bKeyDoor)
                 {
                     if (DungeonManager.DungeonKeys() > 0)

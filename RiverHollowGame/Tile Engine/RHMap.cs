@@ -1241,46 +1241,8 @@ namespace RiverHollow.Tile_Engine
             }
             else if (tile.GetWorldObject() != null)
             {
-                WorldObject obj = tile.GetWorldObject();
-                if (obj.CompareType(ObjectTypeEnum.Machine))
-                {
-                    Machine p = (Machine)obj;
-                    if (p.HasItem()) { p.TakeFinishedItem(); }
-                    else
-                    {
-                        if (!p.MakingSomething())
-                        {
-                            p.StartAutoWork();
-                        }
-                        else if (p.IsCraftingMachine())
-                        {
-                            ((CraftingMachine)p).SetToWork();
-                        }
-                    }
-                }
-                else if (obj.CompareType(ObjectTypeEnum.Container))
-                {
-                    if (IsDungeon && DungeonManagerOld.IsEndChest((Container)obj))
-                    {
-                        //Staircase stairs = (Staircase)DataManager.GetWorldObject(3, Vector2.Zero);
-                        //stairs.SetExit(MapManager.HomeMap);
-                        //PlaceWorldObject(stairs, true);
-                    }
-                    GUIManager.OpenMainObject(new HUDInventoryDisplay(((Container)obj).Inventory));
-                }
-                else if (obj.CanPickUp() && PlayerManager.PlayerInRange(obj.CollisionBox))
-                {
-                    if (obj.CompareType(ObjectTypeEnum.Plant)){ ((Plant)obj).Harvest(); }
-                    if(obj.CompareType(ObjectTypeEnum.Gatherable)) { ((Gatherable)obj).Gather(); }
-                }
-                else if (obj.CompareType(ObjectTypeEnum.DungeonObject))
-                {
-                    GameManager.CurrentTriggerObject = (TriggerObject)obj;
-                    ((TriggerObject)obj).Interact();
-                }
-                else if (obj.CompareType(ObjectTypeEnum.Mailbox)){
-                    ((Mailbox)obj).TakeMessage();
-                }
+                tile.GetWorldObject().ProcessRightClick(mouseLocation);
+                rv = true;
             }
 
             if (tile.ContainsProperty("Save", out string val) && val.Equals("true"))
@@ -1512,37 +1474,8 @@ namespace RiverHollow.Tile_Engine
                 WorldObject obj = TargetTile.GetWorldObject(false);
                 if (obj != null)
                 {
-                    if (obj.CompareType(ObjectTypeEnum.Machine))       //Player interacts with a machine to either take a finished item or start working
-                    {
-                        Machine p = (Machine)obj;
-                        if (p.HasItem()) { p.TakeFinishedItem(); }
-                        else
-                        {
-                            if (!p.MakingSomething())
-                            {
-                                p.StartAutoWork();
-                            }
-                            else if (p.IsCraftingMachine()) {
-                                ((CraftingMachine)p).SetToWork();
-                            }
-                        }
-                        rv = true;
-                    }
-                    else if (obj.CompareType(ObjectTypeEnum.ClassChanger))
-                    {
-                        ((ClassChanger)obj).ProcessClick();
-                        rv = true;
-                    }
-                    else if (obj.CompareType(ObjectTypeEnum.Plant))
-                    {
-                        ((Plant)obj).Harvest();
-                        rv = true;
-                    }
-                    else if (obj.CompareType(ObjectTypeEnum.Destructible))
-                    {
-                        Tool currentTool = PlayerManager.RetrieveTool(((Destructible)obj).NeededTool);
-                        rv = PlayerManager.SetTool(currentTool, mouseLocation);
-                    }
+                    obj.ProcessLeftClick(mouseLocation);
+                    rv = true;
                 }
             }
 

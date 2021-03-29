@@ -455,7 +455,7 @@ namespace RiverHollow.Game_Managers
                     case "ClassChanger":
                         return new ClassChanger(id, diData, pos);
                     case "Plant":
-                        return new Plant(id, diData);
+                        return new Plant(id, diData, pos);
                     case "Gatherable":
                         return new Gatherable(id, diData,pos);
                     case "Machine":

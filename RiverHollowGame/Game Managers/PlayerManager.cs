@@ -681,13 +681,10 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static bool SetTool(Tool t, Point mouse)
+        public static void SetTool(Tool t, Point mouse)
         {
-            bool rv = false;
-
             if (t != null && ToolInUse == null)
             {
-                rv = true;
                 ToolInUse = t;
                 ToolInUse.Position = new Vector2(World.Position.X - TileSize, World.Position.Y - (TileSize * 2));
                 if (ToolInUse != null && !Busy)
@@ -706,8 +703,6 @@ namespace RiverHollow.Game_Managers
                     }
                 }
             }
-
-            return rv;
         }
 
         /// <summary>
