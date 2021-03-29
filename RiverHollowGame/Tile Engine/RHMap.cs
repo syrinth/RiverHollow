@@ -22,6 +22,7 @@ using static RiverHollow.Items.Item;
 using static RiverHollow.Items.WorldItem.Floor;
 using static RiverHollow.GUIComponents.Screens.HUDMenu;
 using static RiverHollow.Items.WorldItem.Machine;
+using System.Linq;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -51,6 +52,7 @@ namespace RiverHollow.Tile_Engine
         public TiledMap Map { get => _map; }
 
         protected RHTile[,] _arrTiles;
+        public List<RHTile> TileList => _arrTiles.Cast<RHTile>().ToList();
         protected TiledMapRenderer _renderer;
         protected List<TiledMapTileset> _liTilesets;
         protected Dictionary<string, TiledMapTileLayer> _diLayers;
@@ -1327,7 +1329,7 @@ namespace RiverHollow.Tile_Engine
             if (Scrying())
             {
                 SetGameScale(NORMAL_SCALE);
-                GameManager.DropBuilding();
+                GameManager.DropWorldObject();
                 LeaveBuildMode();
                 Unpause();
                 Scry(false);
@@ -1411,31 +1413,76 @@ namespace RiverHollow.Tile_Engine
             bool rv = false;
 
             //Are we constructing or moving a building?
-            if (Constructing() || MovingBuildings())
+            if (InBuildMode() || MovingBuildings())
             {
+                WorldObject toBuild = GameManager.HeldObject;
                 //If we are holding a building, we should attempt to drop it.
-                if (GameManager.HeldBuilding != null && AddBuilding(GameManager.HeldBuilding, false, false))
+                if (GameManager.HeldObject != null)
                 {
-                    GameManager.HeldBuilding.StartBuilding();   //Set the building to start being built
-                    FinishBuilding();
-
-                    //Take the resources from the player if there is merchandise
-                    if (GameManager.HeldBuilding != null)
+                    if (toBuild.CompareType(ObjectTypeEnum.Building))
                     {
-                        BuildInfo info = GameManager.DIBuildInfo[HeldBuilding.ID];
-                        foreach (KeyValuePair<int, int> kvp in info.RequiredToMake)
+                        Building b = (Building)toBuild;
+                        if (AddBuilding(b, false, false))
                         {
-                            InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                            b.StartBuilding();   //Set the building to start being built
+                            FinishBuilding();
+
+                            foreach (KeyValuePair<int, int> kvp in b.RequiredToMake)
+                            {
+                                InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                            }
+
+                            //Drop the Building from the GameManger
+                            GameManager.DropWorldObject();
+
+                            LeaveBuildMode();
+                            rv = true;
                         }
-
-                        //Drop the Building from the GameManger
-                        GameManager.DropBuilding();
                     }
+                    else
+                    {
+                        bool isFloor = toBuild.CompareType(ObjectTypeEnum.Floor);
+                        if (!isFloor || (isFloor && TargetTile.Flooring == null))
+                        {
+                            toBuild.SetCoordinates(Util.SnapToGrid(toBuild.MapPosition));
+                            WorldObject obj = DataManager.GetWorldObject(toBuild.ID);
+                            obj.SetCoordinates(Util.SnapToGrid(toBuild.MapPosition));
+                            if (MapManager.PlacePlayerObject(obj))
+                            {
+                                rv = true;
+                                //newItem.SetMapName(this.Name);      //Assign the map name tot he WorldItem
 
-                    LeaveBuildMode();
-                    rv = true;
+                                //If the item placed was a wall object, we need to adjust it based off any adjacent walls
+                                if (obj.CompareType(ObjectTypeEnum.Floor)) { ((Floor)obj).AdjustObject(); }
+                                else if (obj.CompareType(ObjectTypeEnum.Wall)) { ((Wall)obj).AdjustObject(); }
+
+                                foreach (KeyValuePair<int, int> kvp in obj.RequiredToMake)
+                                {
+                                    InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                                }
+
+                                bool canBuildAgain = true;
+                                foreach (KeyValuePair<int, int> kvp in obj.RequiredToMake)
+                                {
+                                    if(!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
+                                    {
+                                        canBuildAgain = false;
+                                        break;
+                                    }
+                                }
+
+                                if (!canBuildAgain)
+                                {
+                                    FinishBuilding();
+
+                                    GameManager.DropWorldObject();
+                                    LeaveBuildMode();
+                                }
+                            }
+                        }
+                    }
                 }
-                else if (GameManager.HeldBuilding == null)
+                else if (GameManager.HeldObject == null)
                 {
                     PickUpBuilding(mouseLocation);
                     rv = true;
@@ -1522,49 +1569,7 @@ namespace RiverHollow.Tile_Engine
                 {
 
                 }
-                //else  if (!IsCombatMap && GameManager.ConstructionObject != null)
-                //{
-                //    Building constructToBuild = GameManager.ConstructionObject;
-
-                //    //Check that all required items are there first
-                //    bool create = InventoryManager.SufficientItems(constructToBuild.RequiredToMake);
-                    
-                //    //If all items are found, then remove them.
-                //    if (create)
-                //    {
-                //        foreach (KeyValuePair<int, int> kvp in constructToBuild.RequiredToMake)
-                //        {
-                //            InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
-                //        }
-
-                //        //If the player is currently holding a StaticItem, we need to place it
-                //        //Do not, however, allow the placing of StaticItems on combat maps.
-                //        bool isFloor = constructToBuild.CompareType(ObjectTypeEnum.Floor);
-                //        if (!isFloor || (isFloor && TargetTile.Flooring == null))
-                //        {
-                //            WorldObject newObj = DataManager.GetWorldObject(constructToBuild.ID);
-                //            newObj.SetCoordinates(Util.SnapToGrid(constructToBuild.MapPosition));
-                //            if (MapManager.PlacePlayerObject(newObj))
-                //            {
-                //                rv = true;
-                //                //newItem.SetMapName(this.Name);      //Assign the map name tot he WorldItem
-
-                //                //If the item placed was a wall object, we need to adjust it based off any adjacent walls
-                //                if (newObj.CompareType(ObjectTypeEnum.Wall))
-                //                {
-                //                    ((Wall)newObj).AdjustObject();
-                //                }
-                //            }
-                //        }
-                //    }
-
-                //    if(!InventoryManager.SufficientItems(constructToBuild.RequiredToMake))
-                //    {
-                //        GameManager.ConstructionObject = null;
-                //    }
-                //}
             }
-
 
             return rv;
         }
@@ -1577,16 +1582,15 @@ namespace RiverHollow.Tile_Engine
 
             if (Scrying())
             {
-                Building building = GameManager.HeldBuilding;
                 _liTestTiles = new List<RHTile>();
-                if (building != null)
+                if (GameManager.HeldObject != null)
                 {
-                    TestMapTiles(building, _liTestTiles);
+                    TestMapTiles(GameManager.HeldObject, _liTestTiles);
                 }
 
                 foreach (Building b in _liBuildings)
                 {
-                    if (b.SelectionBox.Contains(mouseLocation) && GameManager.HeldBuilding == null)
+                    if (b.SelectionBox.Contains(mouseLocation) && GameManager.HeldObject == null)
                     {
                         b._selected = true;
                     }
@@ -1775,7 +1779,7 @@ namespace RiverHollow.Tile_Engine
             {
                 if (b.Contains(mouseLocation))
                 {
-                    GameManager.PickUpBuilding(b);
+                    GameManager.PickUpWorldObject(b);
                     b.RemoveSelfFromTiles();
                     DictionaryTravelPoints.Remove(b.MapName);
                     break;
@@ -2037,7 +2041,7 @@ namespace RiverHollow.Tile_Engine
             bool placeIt = true;
             foreach (RHTile t in liTiles)
             {
-                if (!t.Passable() || TileContainsActor(t, !obj.CompareType(ObjectTypeEnum.Floor)))
+                if (!t.Passable() || TileContainsActor(t, !obj.CompareType(ObjectTypeEnum.Floor)) || (obj.CompareType(ObjectTypeEnum.Floor) && t.GetFloorObject() != null))
                 {
                     placeIt = false;
                     break;

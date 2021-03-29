@@ -39,7 +39,7 @@ namespace RiverHollow.Game_Managers
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
         public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, StaticItem, Clothes, MonsterFood, Blueprint, Special };
-        public enum ToolEnum { Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return };
+        public enum ToolEnum { Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return, Scythe };
         public enum SpecialItemEnum { None, Marriage, Class, Map, DungeonKey, Task };
         public enum EquipmentEnum { Armor, Weapon, Accessory, Head, Wrist };
         public enum WeaponEnum { None, Spear, Shield, Rapier, Bow, Wand, Knife, Orb, Staff };
@@ -204,27 +204,27 @@ namespace RiverHollow.Game_Managers
         #region Held Objects
         static Item _heldItem;
         public static Item HeldItem { get => _heldItem; }
-        static Building _heldBuilding;
-        public static Building HeldBuilding { get => _heldBuilding; }
+        static WorldObject _heldWorldObject;
+        public static WorldObject HeldObject { get => _heldWorldObject; }
 
         /// <summary>
         /// Grabs a building to be placed and/or moved.
         /// </summary>
         /// <returns>True if the building exists</returns>
-        public static bool PickUpBuilding(Building bldg)
+        public static bool PickUpWorldObject(WorldObject obj)
         {
             bool rv = false;
-            if (bldg != null)
+            if (obj != null)
             {
-                _heldBuilding = bldg;
+                _heldWorldObject = obj;
                 rv = true;
             }
 
             return rv;
         }
-        public static void DropBuilding()
+        public static void DropWorldObject()
         {
-            _heldBuilding = null;
+            _heldWorldObject = null;
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region States
-        private enum EnumBuildType { None, Construct, Destroy, Move }
+        private enum EnumBuildType { None, BuildMode, Destroy, Move }
         private static EnumBuildType _buildType;
 
         #region TakeInput
@@ -312,8 +312,16 @@ namespace RiverHollow.Game_Managers
             ShowMap();
         }
 
-        public static bool Constructing() { return _buildType == EnumBuildType.Construct; }
-        public static void ConstructBuilding() { _buildType = EnumBuildType.Construct; }
+        public static void EnterBuildMode()
+        {
+            _buildType = EnumBuildType.BuildMode;
+
+            GUIManager.CloseMainObject();
+            Scry();
+        }
+
+        public static bool InBuildMode() { return _buildType == EnumBuildType.BuildMode; }
+
         public static bool MovingBuildings() { return _buildType == EnumBuildType.Move; }
         public static void MoveBuilding() { _buildType = EnumBuildType.Move; }
         public static bool DestroyingBuildings() { return _buildType == EnumBuildType.Destroy; }

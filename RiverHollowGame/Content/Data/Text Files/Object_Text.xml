@@ -1007,174 +1007,178 @@
     </Item>
     <Item>
       <Key>Item_103</Key>
-      <Value>[Name:Meat][Description:A slice of meat, used for cooking]</Value>
+      <Value>[Name:Scythe][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_104</Key>
-      <Value>[Name:Egg][Description:A single plain egg, you think it's clean...]</Value>
+      <Value>[Name:Meat][Description:A slice of meat, used for cooking]</Value>
     </Item>
     <Item>
       <Key>Item_105</Key>
-      <Value>[Name:Flour][Description:Freshly milled flour, not delicious... yet.]</Value>
+      <Value>[Name:Egg][Description:A single plain egg, you think it's clean...]</Value>
     </Item>
     <Item>
       <Key>Item_106</Key>
-      <Value>[Name:Apple][Description:Nomnom]</Value>
+      <Value>[Name:Flour][Description:Freshly milled flour, not delicious... yet.]</Value>
     </Item>
     <Item>
       <Key>Item_107</Key>
-      <Value>[Name:Strawberry][Description:Delicious and fruity]</Value>
+      <Value>[Name:Apple][Description:Nomnom]</Value>
     </Item>
     <Item>
       <Key>Item_108</Key>
-      <Value>[Name:Carrot][Description:Crisp and crunchy]</Value>
+      <Value>[Name:Strawberry][Description:Delicious and fruity]</Value>
     </Item>
     <Item>
       <Key>Item_109</Key>
-      <Value>[Name:Smelling Salts][Description:Wake Up]</Value>
+      <Value>[Name:Carrot][Description:Crisp and crunchy]</Value>
     </Item>
     <Item>
       <Key>Item_110</Key>
-      <Value>[Name:Antidote][Description:Cures Poisons]</Value>
+      <Value>[Name:Smelling Salts][Description:Wake Up]</Value>
     </Item>
     <Item>
       <Key>Item_111</Key>
-      <Value>[Name:Poisoned Knife][Description:Inflicts Poison]</Value>
+      <Value>[Name:Antidote][Description:Cures Poisons]</Value>
     </Item>
     <Item>
       <Key>Item_112</Key>
-      <Value>[Name:Minor Healing Potion][Description:Although bitter to the taste, this potion is ideal for healing minor cuts and bruises.]</Value>
+      <Value>[Name:Poisoned Knife][Description:Inflicts Poison]</Value>
     </Item>
     <Item>
       <Key>Item_113</Key>
-      <Value>[Name:Lesser Mana Potion][Description:This energy drink will get you casting in no time.]</Value>
+      <Value>[Name:Minor Healing Potion][Description:Although bitter to the taste, this potion is ideal for healing minor cuts and bruises.]</Value>
     </Item>
     <Item>
       <Key>Item_114</Key>
-      <Value>[Name:Intelligence Powder][Description:These mushrooms will expand your mind]</Value>
+      <Value>[Name:Lesser Mana Potion][Description:This energy drink will get you casting in no time.]</Value>
     </Item>
     <Item>
       <Key>Item_115</Key>
-      <Value>[Name:Silver Seeds][Description:Used to grow a Silver Herb bush]</Value>
+      <Value>[Name:Intelligence Powder][Description:These mushrooms will expand your mind]</Value>
     </Item>
     <Item>
       <Key>Item_116</Key>
-      <Value>[Name:Carrot Seeds][Description:Grows a carrot]</Value>
+      <Value>[Name:Silver Seeds][Description:Used to grow a Silver Herb bush]</Value>
     </Item>
     <Item>
       <Key>Item_117</Key>
-      <Value>[Name:Slime Berry Seeds][Description:Grows a Slime Berry]</Value>
+      <Value>[Name:Carrot Seeds][Description:Grows a carrot]</Value>
     </Item>
     <Item>
       <Key>Item_118</Key>
-      <Value>[Name:Small Chest][Description:Holds eight items]</Value>
+      <Value>[Name:Slime Berry Seeds][Description:Grows a Slime Berry]</Value>
     </Item>
     <Item>
       <Key>Item_119</Key>
-      <Value>[Name:Smelter][Description:Smelts Ore]</Value>
+      <Value>[Name:Small Chest][Description:Holds eight items]</Value>
     </Item>
     <Item>
       <Key>Item_120</Key>
-      <Value>[Name:Bronze Anvil][Description:Hammer out your problems]</Value>
+      <Value>[Name:Smelter][Description:Smelts Ore]</Value>
     </Item>
     <Item>
       <Key>Item_121</Key>
-      <Value>[Name:Cauldron][Description:Used for brewing potions]</Value>
+      <Value>[Name:Bronze Anvil][Description:Hammer out your problems]</Value>
     </Item>
     <Item>
       <Key>Item_122</Key>
-      <Value>[Name:Workbench][Description:The perfect crafting station]</Value>
+      <Value>[Name:Cauldron][Description:Used for brewing potions]</Value>
     </Item>
     <Item>
       <Key>Item_123</Key>
-      <Value>[Name:Mortar and Pestle][Description:Allows the creation of powders]</Value>
+      <Value>[Name:Workbench][Description:The perfect crafting station]</Value>
     </Item>
     <Item>
       <Key>Item_124</Key>
-      <Value>[Name:Loom][Description:You can make clothes here.]</Value>
+      <Value>[Name:Mortar and Pestle][Description:Allows the creation of powders]</Value>
     </Item>
     <Item>
       <Key>Item_125</Key>
-      <Value>[Name:Wall][Description:Stone Wall]</Value>
+      <Value>[Name:Loom][Description:You can make clothes here.]</Value>
     </Item>
     <Item>
       <Key>Item_126</Key>
-      <Value>[Name:Stone Floor][Description:Flooring made of stone]</Value>
+      <Value>[Name:Wall][Description:Stone Wall]</Value>
     </Item>
     <Item>
       <Key>Item_127</Key>
-      <Value>[Name:Essence Extractor][Description:Changes your class]</Value>
+      <Value>[Name:Stone Floor][Description:Flooring made of stone]</Value>
     </Item>
     <Item>
       <Key>Item_128</Key>
-      <Value>[Name:Torch][Description:A torch to light the way]</Value>
+      <Value>[Name:Essence Extractor][Description:Changes your class]</Value>
     </Item>
     <Item>
       <Key>Item_129</Key>
-      <Value>[Name:Stoneworks][Description:]</Value>
+      <Value>[Name:Torch][Description:A torch to light the way]</Value>
     </Item>
     <Item>
       <Key>Item_130</Key>
-      <Value>[Name:Red Shirt][Description:A Red Shirt]</Value>
+      <Value>[Name:Stoneworks][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_131</Key>
-      <Value>[Name:Blue Shirt][Description:A Blue Shirt]</Value>
+      <Value>[Name:Red Shirt][Description:A Red Shirt]</Value>
     </Item>
     <Item>
       <Key>Item_132</Key>
-      <Value>[Name:Witch's Hat][Description:A fashionable hat]</Value>
+      <Value>[Name:Blue Shirt][Description:A Blue Shirt]</Value>
     </Item>
     <Item>
       <Key>Item_133</Key>
-      <Value>[Name:Wizard's Robes][Description:The robes of a true wizard!]</Value>
+      <Value>[Name:Witch's Hat][Description:A fashionable hat]</Value>
     </Item>
     <Item>
       <Key>Item_134</Key>
-      <Value>[Name:Dark Pants][Description:A pair of dark pants]</Value>
+      <Value>[Name:Wizard's Robes][Description:The robes of a true wizard!]</Value>
     </Item>
     <Item>
       <Key>Item_135</Key>
-      <Value>[Name:Slime Berry][Description:A berry made of slime, attracts slimes.]</Value>
+      <Value>[Name:Dark Pants][Description:A pair of dark pants]</Value>
     </Item>
     <Item>
       <Key>Item_136</Key>
-      <Value>[Name:$Building_18$ Blueprint][Description:]</Value>
+      <Value>[Name:Slime Berry][Description:A berry made of slime, attracts slimes.]</Value>
     </Item>
     <Item>
       <Key>Item_137</Key>
-      <Value>[Name:$Building_24$ Blueprint][Description:]</Value>
+      <Value>[Name:$Building_18$ Blueprint][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_138</Key>
-      <Value>[Name:$Building_20$ Blueprint][Description:]</Value>
+      <Value>[Name:$Building_24$ Blueprint][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_139</Key>
-      <Value>[Name:$Building_22$ Blueprint][Description:]</Value>
+      <Value>[Name:$Building_20$ Blueprint][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_140</Key>
-      <Value>[Name:$Building_21$ Blueprint][Description:]</Value>
+      <Value>[Name:$Building_22$ Blueprint][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_141</Key>
-      <Value>[Name:Griselda's Orb][Description:General Use]</Value>
+      <Value>[Name:$Building_21$ Blueprint][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_142</Key>
-      <Value>[Name:Adventure Map][Description:Off to find adventures!]</Value>
+      <Value>[Name:Griselda's Orb][Description:General Use]</Value>
     </Item>
     <Item>
       <Key>Item_143</Key>
-      <Value>[Name:Mask of Marriage][Description:A mask used by the people of River hollow to proess their love to one another.]</Value>
+      <Value>[Name:Adventure Map][Description:Off to find adventures!]</Value>
     </Item>
     <Item>
       <Key>Item_144</Key>
-      <Value>[Name:Essence of ][Description:Become a ]</Value>
+      <Value>[Name:Mask of Marriage][Description:A mask used by the people of River hollow to proess their love to one another.]</Value>
     </Item>
     <Item>
       <Key>Item_145</Key>
+      <Value>[Name:Essence of ][Description:Become a ]</Value>
+    </Item>
+    <Item>
+      <Key>Item_146</Key>
       <Value>[Name:Dungeon Key][Description:A key that unlocks a dungeon door.]</Value>
     </Item>
     <Item>
@@ -1387,38 +1391,42 @@
     </Item>
     <Item>
       <Key>WorldObject_52</Key>
-      <Value>[Name:Stone Wall]</Value>
+      <Value>[Name:Grass]</Value>
     </Item>
     <Item>
       <Key>WorldObject_53</Key>
-      <Value>[Name:Echo of Joy]</Value>
+      <Value>[Name:Stone Wall]</Value>
     </Item>
     <Item>
       <Key>WorldObject_54</Key>
-      <Value>[Name:Cotton]</Value>
+      <Value>[Name:Echo of Joy]</Value>
     </Item>
     <Item>
       <Key>WorldObject_55</Key>
-      <Value>[Name:Dragon Thistle]</Value>
+      <Value>[Name:Cotton]</Value>
     </Item>
     <Item>
       <Key>WorldObject_56</Key>
-      <Value>[Name:Staircase]</Value>
+      <Value>[Name:Dragon Thistle]</Value>
     </Item>
     <Item>
       <Key>WorldObject_57</Key>
-      <Value>[Name:Door_Up]</Value>
+      <Value>[Name:Staircase]</Value>
     </Item>
     <Item>
       <Key>WorldObject_58</Key>
-      <Value>[Name:Peat]</Value>
+      <Value>[Name:Door_Up]</Value>
     </Item>
     <Item>
       <Key>WorldObject_59</Key>
-      <Value>[Name:Lavender]</Value>
+      <Value>[Name:Peat]</Value>
     </Item>
     <Item>
       <Key>WorldObject_60</Key>
+      <Value>[Name:Lavender]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_61</Key>
       <Value>[Name:Flax]</Value>
     </Item>
   </Asset>

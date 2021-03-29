@@ -6,6 +6,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
 using System.Collections.Generic;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -47,21 +48,34 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override bool ProcessRightButtonClick(Point mouse)
         {
-            //Returns false here because we don't handle it
-            //By returning false, we will start closing options
-            return false;
+            bool rv = base.ProcessRightButtonClick(mouse);
+
+            //If the right click has not been processed, we probably want to close anything that we have open.
+            if (!rv)
+            {
+                if (_gMainObject == null)
+                {
+                    CloseMenu();
+                }
+
+                GUIManager.CloseMainObject();
+                GameManager.GoToHUDScreen();
+                GUIManager.OpenMenu();
+            }
+
+            return rv;
         }
 
         public void BtnBuild()
         {
-            _gMenuObject = new HUDConstruction(CloseMenu, HUDConstruction.ConstructionEnum.Building);
+            _gMenuObject = new HUDConstruction(CloseMenu, ObjectTypeEnum.Building);
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
         }
 
         public void BtnFlooring()
         {
-            _gMenuObject = new HUDConstruction(CloseMenu, HUDConstruction.ConstructionEnum.Flooring);
+            _gMenuObject = new HUDConstruction(CloseMenu, ObjectTypeEnum.Floor);
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
         }
@@ -69,7 +83,7 @@ namespace RiverHollow.GUIComponents.Screens
         public void BtnMove()
         {
             CloseMenu();
-            RiverHollow.EnterBuildMode();
+            GameManager.EnterBuildMode();
             GameManager.ClearGMObjects();
             GameManager.MoveBuilding();
         }
@@ -98,8 +112,8 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (create)
             {
-                RiverHollow.EnterBuildMode();
-                GameManager.PickUpBuilding(DataManager.GetBuilding(obj.ID));
+                GameManager.EnterBuildMode();
+                GameManager.PickUpWorldObject(DataManager.GetBuilding(obj.ID));
             }
 
             GUIManager.CloseMainObject();
@@ -123,43 +137,41 @@ namespace RiverHollow.GUIComponents.Screens
 
         public class HUDConstruction : GUIMainObject
         {
-            public enum ConstructionEnum { Building, Flooring}
-            private ConstructionEnum _eConstructionType;
-
             public static int MAX_SHOWN_TASKS = 4;
             public static int TASK_SPACING = 20;
             public static int CONSTRUCTBOX_WIDTH = 544; //(GUIManager.MAIN_COMPONENT_WIDTH) - (_gWindow.EdgeSize * 2) - ScaledTileSize
             public static int CONSTRUCTBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDTaskLog.MAX_SHOWN_TASKS) - (_gWindow.EdgeSize * 2)
             List<GUIObject> _liStructures;
             GUIList _gList;
+            ObjectTypeEnum _eObjectBuildType;
 
             private CloseMenuDelegate _closeMenu;
 
-            public HUDConstruction(CloseMenuDelegate closeMenu, ConstructionEnum type)
+            public HUDConstruction(CloseMenuDelegate closeMenu, ObjectTypeEnum objType)
             {
-                _eConstructionType = type;
+                _eObjectBuildType = objType;
                 _closeMenu = closeMenu;
                 _winMain = SetMainWindow();
 
                 _liStructures = new List<GUIObject>();
 
-                if (_eConstructionType == ConstructionEnum.Building)
+                if (objType == ObjectTypeEnum.Building)
                 {
                     foreach (BuildInfo b in GameManager.DIBuildInfo.Values)
                     {
                         if (b.Unlocked && !b.Built)
                         {
-                            ConstructBox box = new ConstructBox(CONSTRUCTBOX_WIDTH, CONSTRUCTBOX_HEIGHT, _eConstructionType, ConstructBuilding);
-                            box.SetConstructionInfo(b);
+                            ConstructBox box = new ConstructBox(CONSTRUCTBOX_WIDTH, CONSTRUCTBOX_HEIGHT, objType, ConstructWorldObject);
+                            box.SetConstructionInfo(b.ID);
                             _liStructures.Add(box);
                         }
                     }
                 }
-                else if (_eConstructionType == ConstructionEnum.Flooring)
+                else if (objType == ObjectTypeEnum.Floor)
                 {
                     foreach(int i in DataManager.FloorIDs)
                     {
-                        ConstructBox box = new ConstructBox(CONSTRUCTBOX_WIDTH, CONSTRUCTBOX_HEIGHT, _eConstructionType, ConstructBuilding);
+                        ConstructBox box = new ConstructBox(CONSTRUCTBOX_WIDTH, CONSTRUCTBOX_HEIGHT, objType, ConstructWorldObject);
                         box.SetConstructionInfo(i);
                         _liStructures.Add(box);
                     }
@@ -207,13 +219,29 @@ namespace RiverHollow.GUIComponents.Screens
                 base.Update(gTime);
             }
 
-            public void ConstructBuilding(BuildInfo obj)
+            public void ConstructWorldObject(int objID)
             {
+                WorldObject obj;
+                string name = string.Empty;
+                Dictionary<int, int> requiredToMake;
+                if (_eObjectBuildType == ObjectTypeEnum.Building)
+                {
+                    obj = DataManager.GetBuilding(objID);
+                    requiredToMake = GameManager.DIBuildInfo[objID].RequiredToMake;
+                    name = GameManager.DIBuildInfo[objID].Name;
+                }
+                else
+                {
+                    obj = DataManager.GetWorldObject(objID);
+                    requiredToMake = obj.RequiredToMake;
+                    name = obj.Name;
+                }
+
                 bool create = true;
                 //create = PlayerManager.Money >= _liMerchandise[_iCurrIndex].MoneyCost;
                 // if (create)
                 {
-                    foreach (KeyValuePair<int, int> kvp in obj.RequiredToMake)
+                    foreach (KeyValuePair<int, int> kvp in requiredToMake)
                     {
                         if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
                         {
@@ -224,33 +252,8 @@ namespace RiverHollow.GUIComponents.Screens
 
                 if (create)
                 {
-                    RiverHollow.EnterBuildMode();
-                    GameManager.PickUpBuilding(DataManager.GetBuilding(obj.ID));
-                }
-
-                GUIManager.CloseMainObject();
-                _closeMenu();
-            }
-
-            public void ConstructWorldObject(WorldObject obj)
-            {
-                bool create = true;
-                //create = PlayerManager.Money >= _liMerchandise[_iCurrIndex].MoneyCost;
-                // if (create)
-                {
-                    foreach (KeyValuePair<int, int> kvp in obj.RequiredToMake)
-                    {
-                        if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
-                        {
-                            create = false;
-                        }
-                    }
-                }
-
-                if (create)
-                {
-                    RiverHollow.EnterBuildMode();
-                    GameManager.PickUpBuilding(DataManager.GetBuilding(obj.ID));
+                    GameManager.EnterBuildMode();
+                    GameManager.PickUpWorldObject(obj);
                 }
 
                 GUIManager.CloseMainObject();
@@ -259,18 +262,17 @@ namespace RiverHollow.GUIComponents.Screens
 
             public class ConstructBox : GUIObject
             {
+                ObjectTypeEnum _eObjectBuildType;
                 GUIWindow _window;
                 GUIText _gName;
-                public BuildInfo BuildingInfo { get; private set; }
-                public WorldObject BuildObj;
-                public delegate void ConstructBuilding(BuildInfo obj);
-                public delegate void ConstructObject(WorldObject obj);
-                private ConstructBuilding _delAction;
-                private ConstructObject _delActionObject;
+                public int _iBuildID;
+                public delegate void ConstructObject(int objID);
+                private ConstructObject _delAction;
 
-                public ConstructBox(int width, int height, HUDConstruction.ConstructionEnum type, ConstructBuilding del)
+                public ConstructBox(int width, int height, ObjectTypeEnum type, ConstructObject del)
                 {
                     _delAction = del;
+                    _eObjectBuildType = type;
 
                     int boxHeight = height;
                     int boxWidth = width;
@@ -278,25 +280,11 @@ namespace RiverHollow.GUIComponents.Screens
                     AddControl(_window);
                     Width = _window.Width;
                     Height = _window.Height;
-                    BuildingInfo = null;
-                }
-
-                public ConstructBox(int width, int height, HUDConstruction.ConstructionEnum type, ConstructObject del)
-                {
-                    _delActionObject = del;
-
-                    int boxHeight = height;
-                    int boxWidth = width;
-                    _window = new GUIWindow(GUIWindow.Window_1, boxWidth, boxHeight);
-                    AddControl(_window);
-                    Width = _window.Width;
-                    Height = _window.Height;
-                    BuildingInfo = null;
                 }
 
                 public override void Draw(SpriteBatch spriteBatch)
                 {
-                    if ((BuildingInfo != null  || BuildObj  != null) && Show())
+                    if (Show())
                     {
                         _window.Draw(spriteBatch);
                     }
@@ -307,12 +295,7 @@ namespace RiverHollow.GUIComponents.Screens
                     if (Contains(mouse) && _delAction != null)
                     {
                         rv = true;
-                        _delAction(BuildingInfo);
-                    }
-                    else if (Contains(mouse) && _delActionObject != null)
-                    {
-                        rv = true;
-                        _delActionObject(BuildObj);
+                        _delAction(_iBuildID);
                     }
 
                     return rv;
@@ -331,50 +314,35 @@ namespace RiverHollow.GUIComponents.Screens
                     return _window.Contains(mouse);
                 }
 
-                public void SetConstructionInfo(BuildInfo b)
-                {
-                    BuildingInfo = b;
-
-                    Color textColor = Color.White;
-                    if (!InventoryManager.SufficientItems(BuildingInfo.RequiredToMake))
-                    {
-                        textColor = Color.Red;
-                        _delAction = null;
-                    }
-
-                    _gName = new GUIText(BuildingInfo.Name);
-                    _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
-                    _gName.SetColor(textColor);
-
-                    List<GUIItemBox> list = new List<GUIItemBox>();
-                    foreach (KeyValuePair<int, int> kvp in BuildingInfo.RequiredToMake)
-                    {
-                        GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
-
-                        if (list.Count == 0) { box.AnchorToInnerSide(_window, SideEnum.BottomRight); }
-                        else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Left, SideEnum.Bottom); }
-
-                        list.Add(box);
-                    }
-                }
-
                 public void SetConstructionInfo(int id)
                 {
-                    BuildObj = DataManager.GetWorldObject(id);
+                    _iBuildID = id;
+
+                    string name = string.Empty;
+                    Dictionary<int, int> requiredToMake;
+                    if (_eObjectBuildType == ObjectTypeEnum.Building) {
+                        requiredToMake = GameManager.DIBuildInfo[id].RequiredToMake;
+                        name = GameManager.DIBuildInfo[id].Name;
+                    }
+                    else {
+                        WorldObject obj = DataManager.GetWorldObject(id);
+                        requiredToMake = obj.RequiredToMake;
+                        name = obj.Name;
+                    }
 
                     Color textColor = Color.White;
-                    if (!InventoryManager.SufficientItems(BuildObj.RequiredToMake))
+                    if (!InventoryManager.SufficientItems(requiredToMake))
                     {
                         textColor = Color.Red;
                         _delAction = null;
                     }
 
-                    _gName = new GUIText(BuildObj.Name);
+                    _gName = new GUIText(name);
                     _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
                     _gName.SetColor(textColor);
 
                     List<GUIItemBox> list = new List<GUIItemBox>();
-                    foreach (KeyValuePair<int, int> kvp in BuildObj.RequiredToMake)
+                    foreach (KeyValuePair<int, int> kvp in requiredToMake)
                     {
                         GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
 

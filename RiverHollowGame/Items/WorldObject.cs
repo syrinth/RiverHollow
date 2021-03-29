@@ -56,7 +56,8 @@ namespace RiverHollow.Items
         protected string _sName;
         public string Name { get => _sName; }
 
-        public Dictionary<int, int> RequiredToMake { get; private set; }
+        protected Dictionary<int, int> _diReqToMake;
+        public Dictionary<int, int> RequiredToMake => _diReqToMake;
 
         #endregion
 
@@ -82,7 +83,7 @@ namespace RiverHollow.Items
             Util.AssignValue(ref _iHeight, "Height", stringData);
             if (stringData.ContainsKey("Type")) { _eObjectType = Util.ParseEnum<ObjectTypeEnum>(stringData["Type"]); }
 
-            RequiredToMake = new Dictionary<int, int>();
+            _diReqToMake = new Dictionary<int, int>();
             if (stringData.ContainsKey("ReqItems"))
             {
                 //Split by "|" for each item set required
@@ -90,7 +91,7 @@ namespace RiverHollow.Items
                 foreach (string s in split)
                 {
                     string[] splitData = s.Split('-');
-                    RequiredToMake[int.Parse(splitData[0])] = int.Parse(splitData[1]);
+                    _diReqToMake[int.Parse(splitData[0])] = int.Parse(splitData[1]);
                 }
             }
 
@@ -1035,6 +1036,10 @@ namespace RiverHollow.Items
                 }
             }
 
+            public override void Draw(SpriteBatch spriteBatch)
+            {
+                base.Draw(spriteBatch);
+            }
             public override void Update(GameTime gTime)
             {
                 //If the object is shaking, we need to determine what step it's in

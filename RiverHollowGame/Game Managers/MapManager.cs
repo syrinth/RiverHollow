@@ -213,22 +213,28 @@ namespace RiverHollow.Game_Managers
                 int bigRockID = int.Parse(DataManager.Config[2]["ObjectID"]);
                 int treeID = int.Parse(DataManager.Config[3]["ObjectID"]);
 
-                for (int i = 0; i < 99; i++)
-                {
-                    Maps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(rockID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true, true);
-                }
-                for (int i = 0; i < 99; i++)
-                {
-                    Maps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(treeID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true, true);
-                }
-                for (int i = 0; i < 10; i++)
-                {
-                    Maps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(bigRockID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true, true);
-                }
-                for (int i = 0; i < 10; i++)
-                {
-                    Maps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(19, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true, true);
-                }
+                List<RHTile> possibleTiles = Maps[MapManager.HomeMap].TileList;
+                possibleTiles.RemoveAll(x => !x.Passable());
+
+                PopulateHomeMap(ref possibleTiles, 52, 5000);
+                PopulateHomeMap(ref possibleTiles, rockID, 99);
+                PopulateHomeMap(ref possibleTiles, treeID, 99);
+                PopulateHomeMap(ref possibleTiles, bigRockID, 10);
+                PopulateHomeMap(ref possibleTiles, 19, 10);
+            }
+        }
+
+        private static void PopulateHomeMap(ref List<RHTile> possibleTiles, int ID, int numToPlace)
+        {
+            RHRandom rand = RHRandom.Instance;
+            for (int i = 0; i < numToPlace; i++)
+            {
+                RHTile targetTile = possibleTiles[rand.Next(0, possibleTiles.Count - 1)];
+                WorldObject obj = DataManager.GetWorldObject(ID, targetTile.Position);
+                obj.SnapPositionToGrid(targetTile.Position);
+
+                Maps[MapManager.HomeMap].PlaceWorldObject(obj, false, true);
+                possibleTiles.Remove(targetTile);
             }
         }
 

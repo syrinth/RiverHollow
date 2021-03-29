@@ -339,12 +339,5 @@ namespace RiverHollow
         {
             _bExit = true;
         }
-
-        public static void EnterBuildMode()
-        {
-            GUIManager.CloseMainObject();
-            GameManager.Scry();
-            ConstructBuilding();
-        }
     }
 }

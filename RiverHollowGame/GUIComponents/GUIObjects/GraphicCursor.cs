@@ -40,7 +40,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            if (GameManager.HeldBuilding == null)
+            if (GameManager.HeldObject == null)
             {
                 Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, TileSize * 2, TileSize * 2);
 
@@ -112,13 +112,13 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public static void DrawBuilding(SpriteBatch spriteBatch)
         {
-            if (GameManager.HeldBuilding != null)
+            if (GameManager.HeldObject != null)
             {
                 Vector2 mousePosition = GetWorldMousePosition();
-                Rectangle drawRectangle = new Rectangle(((int)((mousePosition.X - HeldBuilding.Width / 2) / TileSize)) * TileSize, ((int)((mousePosition.Y - HeldBuilding.Height / 2) / TileSize)) * TileSize, HeldBuilding.Width, HeldBuilding.Height);
+                Rectangle drawRectangle = new Rectangle(((int)((mousePosition.X - HeldObject.Width / 2) / TileSize)) * TileSize, ((int)((mousePosition.Y - HeldObject.Height / 2) / TileSize)) * TileSize, HeldObject.Width, HeldObject.Height);
 
-                GameManager.HeldBuilding.SnapPositionToGrid(new Vector2(drawRectangle.X, drawRectangle.Y));
-                HeldBuilding.Sprite.Draw(spriteBatch);
+                GameManager.HeldObject.SnapPositionToGrid(new Vector2(drawRectangle.X, drawRectangle.Y));
+                HeldObject.Sprite.Draw(spriteBatch);
             }
         }
 

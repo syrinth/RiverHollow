@@ -97,6 +97,18 @@ namespace RiverHollow.Buildings
                 _iNPCBuilderID = int.Parse(stringData["Builder"]);
             }
 
+            _diReqToMake = new Dictionary<int, int>();
+            if (stringData.ContainsKey("ReqItems"))
+            {
+                //Split by "|" for each item set required
+                string[] split = Util.FindParams(stringData["ReqItems"]);
+                foreach (string s in split)
+                {
+                    string[] splitData = s.Split('-');
+                    _diReqToMake[int.Parse(splitData[0])] = int.Parse(splitData[1]);
+                }
+            }
+
             //Sets the position from which the Mason will spawn tobuild the building
             if (stringData.ContainsKey("BuildSpot")) {
                 string[] split = stringData["BuildSpot"].Split('-');
