@@ -440,6 +440,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "AxeID")]
             public int axeID;
+
+            [XmlElement(ElementName = "ScytheID")]
+            public int scytheID;
         }
 
         public struct MissionData

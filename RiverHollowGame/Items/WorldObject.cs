@@ -133,8 +133,10 @@ namespace RiverHollow.Items
             _sprite.Draw(spriteBatch);
         }
 
-        public virtual void ProcessLeftClick(Point mouseLocation) {}
-        public virtual void ProcessRightClick(Point mouseLocation) { }
+        public virtual void ProcessLeftClick() { }
+        public virtual void ProcessRightClick() { }
+
+        public virtual void Rollover() { }
 
         public virtual bool IntersectsWith(Rectangle r)
         {
@@ -220,7 +222,7 @@ namespace RiverHollow.Items
 
     public class Destructible : WorldObject
     {
-        protected int _iHP;
+        protected int _iHP = 1;
         public int HP => _iHP;
 
         protected ToolEnum _eToolType;
@@ -241,7 +243,7 @@ namespace RiverHollow.Items
             if (stringData.ContainsKey("Hp")) { _iHP = int.Parse(stringData["Hp"]); }
             if (stringData.ContainsKey("ReqLvl")) { _lvltoDmg = int.Parse(stringData["ReqLvl"]); }
 
-            if (stringData.ContainsKey("DestructionAnim"))
+            if (loadSprite && stringData.ContainsKey("DestructionAnim"))
             {
                 string[] splitString = stringData["DestructionAnim"].Split('-');
                 _sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), TileSize, TileSize, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
@@ -257,23 +259,20 @@ namespace RiverHollow.Items
             }
         }
 
-        public override void ProcessLeftClick(Point mouseLocation)
-        {
-             PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool), mouseLocation);
-        }
+        public override void ProcessLeftClick() { PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool)); }
 
-        public virtual bool DealDamage(int dmg)
+        public virtual void DealDamage(int dmg)
         {
-            bool rv = false;
             if (_iHP > 0)
             {
                 _iHP -= dmg;
-                rv = _iHP <= 0;
 
-                if (rv)
+                if (_iHP <= 0)
                 {
                     _bImpassable = false;
                     _sprite.PlayAnimation(AnimationEnum.KO);
+
+                    MapManager.DropItemsOnMap(GetDroppedItems(), CollisionBox.Location.ToVector2());
                 }
             }
 
@@ -286,8 +285,6 @@ namespace RiverHollow.Items
             else if (PlayerManager.World.Facing == DirectionEnum.Down) { yMod = 1; }
             
             _sprite.Position = new Vector2(_sprite.Position.X + xMod, _sprite.Position.Y + yMod);
-
-            return rv;
         }
     }
 
@@ -300,32 +297,6 @@ namespace RiverHollow.Items
             LoadDictionaryData(stringData);
 
             _eToolType = ToolEnum.Axe;
-        }
-    }
-
-    public class EchoNode : Destructible
-    {
-        public EchoNode(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
-        {
-            LoadDictionaryData(stringData);
-            _eToolType = ToolEnum.Lantern;
-
-            string[] gatheredSplit = stringData["Gathered"].Split('-');
-            //_sprite.AddAnimation(WorldObjAnimEnum.Gathered, startX + (int.Parse(idleSplit[0]) * TileSize), startY, TileSize, TileSize, int.Parse(gatheredSplit[0]), float.Parse(gatheredSplit[1]));
-
-            //_sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
-        }
-
-        public override bool DealDamage(int dmg)
-        {
-            bool rv = false;
-            rv = base.DealDamage(dmg);
-
-            if (rv)
-            {
-                //_sprite.SetCurrentAnimation(WorldObjAnimEnum.Gathered);
-            }
-            return rv;
         }
     }
 
@@ -410,7 +381,7 @@ namespace RiverHollow.Items
             _alertSprite?.Draw(spriteBatch, 99999);
         }
 
-        public override void ProcessRightClick(Point mouseLocation)
+        public override void ProcessRightClick()
         {
             TakeMessage();
         }
@@ -503,8 +474,8 @@ namespace RiverHollow.Items
             LoadDictionaryData(stringData);
         }
 
-        public override void ProcessLeftClick(Point mouseLocation) { Gather(); }
-        public override void ProcessRightClick(Point mouseLocation) { Gather(); }
+        public override void ProcessLeftClick() { Gather(); }
+        public override void ProcessRightClick() { Gather(); }
 
         public void Gather()
         {
@@ -739,8 +710,8 @@ namespace RiverHollow.Items
                     }
                 }
 
-                public override void ProcessLeftClick(Point mouseLocation) { Process(); }
-                public override void ProcessRightClick(Point mouseLocation) { Process(); }
+                public override void ProcessLeftClick() { Process(); }
+                public override void ProcessRightClick() { Process(); }
 
                 private void Process()
                 {
@@ -808,8 +779,8 @@ namespace RiverHollow.Items
                     }
                 }
 
-                public override void ProcessLeftClick(Point mouseLocation) { Craft();  }
-                public override void ProcessRightClick(Point mouseLocation) { Craft(); }
+                public override void ProcessLeftClick() { Craft();  }
+                public override void ProcessRightClick() { Craft(); }
 
                 private void Craft()
                 {
@@ -988,7 +959,7 @@ namespace RiverHollow.Items
                 _inventory = new Item[_iRows, _iColumns];
             }
 
-            public override void ProcessRightClick(Point mouseLocation)
+            public override void ProcessRightClick()
             {
                 GUIManager.OpenMainObject(new HUDInventoryDisplay(Inventory));
             }
@@ -1041,6 +1012,7 @@ namespace RiverHollow.Items
 
             public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + _iHeight - TileSize, TileSize, TileSize);
 
+            bool _bNoWater = false;
             bool _bShaking = false;
             DirectionEnum dir = DirectionEnum.Right;
             float _fCurrentRotation = 0f;
@@ -1058,10 +1030,12 @@ namespace RiverHollow.Items
                 _diTransitionTimes = new Dictionary<int, int>();
 
                 LoadDictionaryData(stringData);
+
                 _bImpassable = false;
 
                 _iCurrentState = 0;
 
+                Util.AssignValue(ref _bNoWater, "NoWater", stringData);
                 Util.AssignValue(ref _iResourceID, "Item", stringData);
                 Util.AssignValue(ref _iMaxStates, "TrNum", stringData); //Number of growth phases
 
@@ -1074,6 +1048,12 @@ namespace RiverHollow.Items
                     _diTransitionTimes.Add(j, int.Parse(dayStr[j]));
                 }
                 _iDaysLeft = _diTransitionTimes[0];
+
+                if (stringData.ContainsKey("DestructionAnim"))
+                {
+                    string[] splitString = stringData["DestructionAnim"].Split('-');
+                    _sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), _iWidth, _iHeight, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
+                }
 
                 _sprite.SetRotationOrigin(new Vector2(_iWidth / 2, _iHeight - 1));    //Subtract one to keep it in the bounds of the rectangle
             }
@@ -1120,8 +1100,38 @@ namespace RiverHollow.Items
                 _sprite.Update(gTime);
             }
 
-            public override void ProcessLeftClick(Point mouseLocation) { Harvest(); }
-            public override void ProcessRightClick(Point mouseLocation) { Harvest(); }
+            public override void ProcessLeftClick() { Harvest(); }
+            //public override void ProcessRightClick() { Harvest(); }
+
+            /// <summary>
+            /// Call to tell the plant that it is being Harvested, and follow any logic
+            /// that needs to happen for this to occur.
+            /// 
+            /// Can only Harvest plants that are finished growing.
+            /// </summary>
+            public void Harvest()
+            {
+                if (NeededTool != ToolEnum.None) { PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool)); }
+                else
+                {
+                    Item it = null;
+                    if (FinishedGrowing())
+                    {
+                        it = DataManager.GetItem(_iResourceID);
+                        if (_bPopItem)
+                        {
+                            it.Pop(MapPosition);
+                        }
+                        else
+                        {
+                            InventoryManager.AddToInventory(it);
+                        }
+
+                        MapManager.RemoveWorldObject(this);
+                        RemoveSelfFromTiles();
+                    }
+                }
+            }
 
             /// <summary>
             /// Tell the object to shake
@@ -1139,9 +1149,9 @@ namespace RiverHollow.Items
             /// <summary>
             /// On rollover, increase the plant's growth cycle if it has been watered.
             /// </summary>
-            public void Rollover()
+            public override void Rollover()
             {
-                if (Tiles[0].IsWatered()) {
+                if (_bNoWater || Tiles[0].IsWatered()) {
                     if (_iDaysLeft > 0) //Decrement the number of days until the next phase
                     {
                         _iDaysLeft--;
@@ -1162,32 +1172,6 @@ namespace RiverHollow.Items
             /// </summary>
             /// <returns>True if it's on the last phase</returns>
             public bool FinishedGrowing() { return _iCurrentState == _iMaxStates-1; }
-
-            /// <summary>
-            /// Call to tell the plant that it is being Harvested, and follow any logic
-            /// that needs to happen for this to occur.
-            /// 
-            /// Can only Harvest plants that are finished growing.
-            /// </summary>
-            public void Harvest()
-            {
-                Item it = null;
-                if (FinishedGrowing())
-                {
-                    it = DataManager.GetItem(_iResourceID);
-                    if (_bPopItem)
-                    {
-                        it.Pop(MapPosition);
-                    }
-                    else
-                    {
-                        InventoryManager.AddToInventory(it);
-                    }
-
-                    MapManager.RemoveWorldObject(this);
-                    RemoveSelfFromTiles();
-                }
-            }
 
             public void FinishGrowth()
             {
@@ -1427,6 +1411,11 @@ namespace RiverHollow.Items
                     _sprWatered.Position = position;
                 }
 
+                public override void Rollover()
+                {
+                    Watered(false);
+                }
+
                 public void Watered(bool value)
                 {
                     _bWatered = value;
@@ -1635,7 +1624,7 @@ namespace RiverHollow.Items
             /// 
             /// If it's already triggered, do nothing.
             /// </summary>
-            public override void ProcessRightClick(Point mouseLocation)
+            public override void ProcessRightClick()
             {
                 GameManager.CurrentTriggerObject = this;
 
@@ -1725,7 +1714,7 @@ namespace RiverHollow.Items
             /// Handles the response from whent he player attempts to Interact with the Door object.
             /// Primarily just handles the output for the doors and the type of triggers required to use it.
             /// </summary>
-            public override void ProcessRightClick(Point mouseLocation)
+            public override void ProcessRightClick()
             {
                 GameManager.CurrentTriggerObject = this;
                 if (_bKeyDoor)

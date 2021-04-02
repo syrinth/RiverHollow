@@ -68,6 +68,7 @@ namespace RiverHollow.Game_Managers
 
         public static void Initialize()
         {
+            _diTools = new Dictionary<ToolEnum, Tool>();
             _liParty = new List<ClassedCombatant>();
             TaskLog = new List<Task>();
             World = new PlayerCharacter();
@@ -602,9 +603,7 @@ namespace RiverHollow.Game_Managers
 
         #region Tool Management
         public static Tool ToolInUse;
-
-        private static Tool _tPick;
-        private static Tool _tAxe;
+        private static Dictionary<ToolEnum, Tool> _diTools;
 
         private static void UpdateTool(GameTime gTime)
         {
@@ -619,6 +618,21 @@ namespace RiverHollow.Game_Managers
                     if (PlayerManager.ToolIsAxe() || PlayerManager.ToolIsPick() || PlayerManager.ToolIsLantern())
                     {
                         target.DamageObject(PlayerManager.ToolInUse);
+                    }
+                    else if (PlayerManager.ToolIsScythe())
+                    {
+                        target.DamageObject(PlayerManager.ToolInUse);
+
+                        if(PlayerManager.World.Facing == DirectionEnum.Left || PlayerManager.World.Facing == DirectionEnum.Right)
+                        {
+                            target.GetTileByDirection(DirectionEnum.Up).DamageObject(PlayerManager.ToolInUse);
+                            target.GetTileByDirection(DirectionEnum.Down).DamageObject(PlayerManager.ToolInUse);
+                        }
+                        else
+                        {
+                            target.GetTileByDirection(DirectionEnum.Left).DamageObject(PlayerManager.ToolInUse);
+                            target.GetTileByDirection(DirectionEnum.Right).DamageObject(PlayerManager.ToolInUse);
+                        }
                     }
                     else if (PlayerManager.ToolIsShovel() && target.CanDig())
                     {
@@ -649,8 +663,7 @@ namespace RiverHollow.Game_Managers
         {
             if(CompareTools(newTool))
             {
-                if (newTool.ToolType == ToolEnum.Pick) { _tPick = newTool; }
-                else if (newTool.ToolType == ToolEnum.Axe) { _tAxe = newTool; }
+                _diTools[newTool.ToolType] = newTool;
             }
         }
 
@@ -663,7 +676,7 @@ namespace RiverHollow.Game_Managers
         /// <returns>True if the newTool is better or there is no original tool.</returns>
         private static bool CompareTools(Tool newTool)
         {
-            return (RetrieveTool(newTool.ToolType) == null) || newTool.ToolType == ToolEnum.Pick && newTool.ToolLevel > RetrieveTool(newTool.ToolType).ToolLevel;
+            return (RetrieveTool(newTool.ToolType) == null) || newTool.ToolLevel > RetrieveTool(newTool.ToolType).ToolLevel;
         }
 
         /// <summary>
@@ -675,13 +688,14 @@ namespace RiverHollow.Game_Managers
         {
             Tool rv = null;
 
-            if (toolType == ToolEnum.Pick) { rv = _tPick; }
-            else if (toolType == ToolEnum.Axe) { rv = _tAxe; }
+            if (_diTools.ContainsKey(toolType)) {
+                rv = _diTools[toolType];
+            }
 
             return rv;
         }
 
-        public static void SetTool(Tool t, Point mouse)
+        public static void SetTool(Tool t)
         {
             if (t != null && ToolInUse == null)
             {
@@ -718,6 +732,7 @@ namespace RiverHollow.Game_Managers
         public static bool ToolIsAxe() { return ToolInUse.ToolType == ToolEnum.Axe; }
         public static bool ToolIsPick() { return ToolInUse.ToolType == ToolEnum.Pick; }
         public static bool ToolIsLantern() { return ToolInUse.ToolType == ToolEnum.Lantern; }
+        public static bool ToolIsScythe() { return ToolInUse.ToolType == ToolEnum.Scythe; }
         public static bool ToolIsShovel() { return ToolInUse.ToolType == ToolEnum.Shovel; }
         public static bool ToolIsWateringCan() { return ToolInUse.ToolType == ToolEnum.WateringCan; }
 
@@ -725,16 +740,18 @@ namespace RiverHollow.Game_Managers
         {
             ToolData d = new ToolData()
             {
-                pickID = _tPick.ItemID,
-                axeID = _tAxe.ItemID
+                pickID = _diTools[ToolEnum.Pick].ItemID,
+                axeID = _diTools[ToolEnum.Axe].ItemID,
+                scytheID = _diTools[ToolEnum.Scythe].ItemID,
             };
 
             return d;
         }
         public static void LoadToolData(ToolData d)
         {
-            _tPick = (Tool)DataManager.GetItem(d.pickID);
-            _tAxe = (Tool)DataManager.GetItem(d.axeID);
+            _diTools[ToolEnum.Pick] = (Tool)DataManager.GetItem(d.pickID);
+            _diTools[ToolEnum.Axe] = (Tool)DataManager.GetItem(d.axeID);
+            _diTools[ToolEnum.Scythe] = (Tool)DataManager.GetItem(d.scytheID);
         }
 
         #endregion

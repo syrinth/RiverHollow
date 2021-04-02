@@ -35,7 +35,7 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Texture:PotionHut][Dimensions:128-144][Base:16-80-96-64][Entrance:48-115-16-29][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:PotionHut][Dimensions:128-144][Base:16-80-96-64][Entrance:48-115-16-29][ReqItems:60-15|61-15]</Value>
     </Item>
     <Item>
       <Key>9</Key>

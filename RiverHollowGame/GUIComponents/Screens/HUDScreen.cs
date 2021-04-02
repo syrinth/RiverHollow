@@ -462,31 +462,20 @@ namespace RiverHollow.GUIComponents.Screens
         public HUDMenu(CloseMenuDelegate closeMenu)
         {
             _closeMenu = closeMenu;
-            _btnInventory = new GUIButton("Inventory", BtnInventory);
-            AddControl(_btnInventory);
 
-            _btnParty = new GUIButton("Party", BtnParty);
-            AddControl(_btnParty);
+            _liButtons = new List<GUIObject>() {
+                new GUIButton("Inventory", BtnInventory),
+                new GUIButton("Party", BtnParty),
+                new GUIButton("Buildings", BtnManagement),
+                new GUIButton("Build", BtnBuild),
+                new GUIButton("Task Log", BtnTaskLog),
+                new GUIButton("Options", BtnOptions),
+                new GUIButton("Friends", BtnFriendship),
+                new GUIButton("Exit Game", BtnExitGame)
+            };
 
-            _btnTaskLog = new GUIButton("Task Log", BtnTaskLog);
-            AddControl(_btnTaskLog);
-
-            _btnExitGame = new GUIButton("Exit Game", BtnExitGame);
-            AddControl(_btnExitGame);
-
-            _btnOptions = new GUIButton("Options", BtnOptions);
-            AddControl(_btnOptions);
-
-            _btnManagement = new GUIButton("Buildings", BtnManagement);
-            AddControl(_btnManagement);
-
-            _btnConstruction = new GUIButton("Build", BtnBuild);
-            AddControl(_btnConstruction);
-
-            _btnFriendship = new GUIButton("Friends", BtnFriendship);
-            AddControl(_btnFriendship);
-
-            _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnManagement, _btnConstruction, _btnTaskLog, _btnOptions, _btnFriendship, _btnExitGame };
+            AddControls(_liButtons);
+           
             GUIObject.CreateSpacedColumn(ref _liButtons, -GUIButton.BTN_WIDTH, 0, RiverHollow.ScreenHeight, BTN_PADDING);
 
             _bOpen = true;

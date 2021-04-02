@@ -13,10 +13,6 @@ namespace RiverHollow.GUIComponents.Screens
     class BuildScreen : GUIScreen
     {
         const int BTN_PADDING = 10;
-        GUIButton _btnBuild;
-        GUIButton _btnFlooring;
-        GUIButton _btnMove;
-        GUIButton _btnExitBuild;
 
         //public static int BTNSIZE = ScaledTileSize;
         public static int CONSTRUCTBOX_WIDTH = 544; //(GUIManager.MAIN_COMPONENT_WIDTH) - (_gWindow.EdgeSize * 2) - ScaledTileSize
@@ -28,21 +24,15 @@ namespace RiverHollow.GUIComponents.Screens
 
         public BuildScreen()
         {
-            _liButtons = new List<GUIObject>();
+            _liButtons = new List<GUIObject>() {
+                new GUIButton("Build", BtnBuildings),
+                new GUIButton("Structures", BtnBuildings),
+                new GUIButton("Flooring", BtnFlooring),
+                new GUIButton("Move", BtnMove),
+                new GUIButton("Exit", BtnExitMenu)
+            };
+            AddControls(_liButtons);
 
-            _btnBuild = new GUIButton("Build", BtnBuild);
-            AddControl(_btnBuild);
-
-            _btnFlooring = new GUIButton("Flooring", BtnFlooring);
-            AddControl(_btnFlooring);
-
-            _btnMove = new GUIButton("Move", BtnMove);
-            AddControl(_btnMove);
-
-            _btnExitBuild = new GUIButton("Exit", BtnExitMenu);
-            AddControl(_btnExitBuild);
-
-            _liButtons = new List<GUIObject>() { _btnBuild, _btnFlooring, _btnMove, _btnExitBuild };
             GUIObject.CreateSpacedColumn(ref _liButtons, GUIButton.BTN_WIDTH/2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
         }
 
@@ -66,9 +56,16 @@ namespace RiverHollow.GUIComponents.Screens
             return rv;
         }
 
-        public void BtnBuild()
+        public void BtnBuildings()
         {
             _gMenuObject = new HUDConstruction(CloseMenu, ObjectTypeEnum.Building);
+            _gMenuObject.CenterOnScreen();
+            GUIManager.OpenMainObject(_gMenuObject);
+        }
+
+        public void BtnStructures()
+        {
+            _gMenuObject = new HUDConstruction(CloseMenu, ObjectTypeEnum.WorldObject);
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
         }
@@ -121,18 +118,12 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override void CloseMenu()
         {
-            foreach (GUIObject obj in _liButtons)
-            {
-                RemoveControl(obj);
-            }
+            RemoveControls(_liButtons);
         }
-
+    
         public override void OpenMenu()
         {
-            foreach (GUIObject obj in _liButtons)
-            {
-                AddControl(obj);
-            }
+            AddControls(_liButtons);
         }
 
         public class HUDConstruction : GUIMainObject

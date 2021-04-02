@@ -245,12 +245,26 @@ namespace RiverHollow.GUIComponents.Screens
         public virtual void AddSkipCutsceneButton() { }
         public virtual void RemoveSkipCutsceneButton() { }
 
+        public void AddControls(List<GUIObject> controls)
+        {
+            foreach(GUIObject obj in controls)
+            {
+                AddControl(obj);
+            }
+        }
         public void AddControl(GUIObject control)
         {
             if (control != null)
             {
                 control.Show(true);
                 _liToAdd.Add(control);
+            }
+        }
+        public void RemoveControls(List<GUIObject> controls)
+        {
+            foreach (GUIObject obj in controls)
+            {
+                RemoveControl(obj);
             }
         }
         public void RemoveControl(GUIObject control)

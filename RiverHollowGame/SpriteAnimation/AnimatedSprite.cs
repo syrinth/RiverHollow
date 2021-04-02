@@ -27,8 +27,8 @@ namespace RiverHollow.SpriteAnimations
 
         // Calculated center of the sprite
         public Vector2 Center => new Vector2(Position.X + Width / 2, Position.Y + Height / 2);
-        public int Width { get; private set; }
-        public int Height { get; private set; }
+        public int Width { get; private set; } = -1;
+        public int Height { get; private set; } = -1;
 
         int _iScale = 1;
         public int FrameCutoff { get; set; }
@@ -109,8 +109,8 @@ namespace RiverHollow.SpriteAnimations
         public void AddAnimation(string animationName, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false)
         {
             _diFrameAnimations.Add(animationName, new FrameAnimation(startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce));
-            this.Width = Width;
-            this.Height = Height;
+            if (this.Width == -1) { this.Width = Width; }
+            if (this.Height == -1) { this.Height = Height; }
             if (_diFrameAnimations.Count == 1)
             {
                 PlayAnimation(animationName);

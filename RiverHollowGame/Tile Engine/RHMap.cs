@@ -703,10 +703,8 @@ namespace RiverHollow.Tile_Engine
 
         public void Rollover()
         {
-            foreach(RHTile tile in TilledTiles)
-            {
-                tile.Rollover();
-            }
+            foreach(RHTile tile in TilledTiles) { tile.Flooring.Rollover(); }
+            foreach(WorldObject obj in _liPlacedWorldObjects) { obj.Rollover(); }
 
             SpawnMonsters();
 
@@ -1241,7 +1239,7 @@ namespace RiverHollow.Tile_Engine
             }
             else if (tile.GetWorldObject() != null)
             {
-                tile.GetWorldObject().ProcessRightClick(mouseLocation);
+                tile.GetWorldObject().ProcessRightClick();
                 rv = true;
             }
 
@@ -1474,7 +1472,7 @@ namespace RiverHollow.Tile_Engine
                 WorldObject obj = TargetTile.GetWorldObject(false);
                 if (obj != null)
                 {
-                    obj.ProcessLeftClick(mouseLocation);
+                    obj.ProcessLeftClick();
                     rv = true;
                 }
             }
@@ -2757,15 +2755,11 @@ namespace RiverHollow.Tile_Engine
         public bool DamageObject(Tool toolUsed)
         {
             bool rv = false;
-            if (WorldObject != null && WorldObject.CompareType(ObjectTypeEnum.Destructible))
+            if (WorldObject != null && WorldObject.IsDestructible())
             {
                 if (((Destructible)WorldObject).NeededTool == toolUsed.ToolType){
                     SoundManager.PlayEffectAtLoc(toolUsed.SoundEffect, MapName, Center, toolUsed);
-                    rv = ((Destructible)WorldObject).DealDamage(toolUsed.ToolLevel);
-                    if (rv)
-                    {
-                        MapManager.DropItemsOnMap(WorldObject.GetDroppedItems(), WorldObject.CollisionBox.Location.ToVector2());
-                    }
+                    ((Destructible)WorldObject).DealDamage(toolUsed.ToolLevel);
                 }
             }
 
@@ -2780,14 +2774,8 @@ namespace RiverHollow.Tile_Engine
 
         public void Rollover()
         {
-            if (WorldObject != null && WorldObject.CompareType(ObjectTypeEnum.Plant))
-            {
-                ((Plant)WorldObject).Rollover();
-            }
-            if (Flooring != null && Flooring.CompareType(ObjectTypeEnum.Earth))
-            {
-                ((Earth)Flooring).Watered(false);
-            }
+            WorldObject.Rollover();
+            Flooring.Rollover();
         }
 
         /// <summary>

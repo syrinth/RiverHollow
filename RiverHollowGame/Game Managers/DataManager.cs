@@ -55,7 +55,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diPlayerAnimationData;
         public static Dictionary<int, Dictionary<string, string>> PlayerAnimationData => _diPlayerAnimationData;
 
-        static Dictionary<string, Dictionary<string, string>> _di;
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
         static Dictionary<string, string> _diMailboxMessages;
 
@@ -467,8 +466,6 @@ namespace RiverHollow.Game_Managers
                         return new Wall(id, diData, pos);
                     case "Floor":
                         return new Floor(id, diData, pos);
-                    case "EchoNode":
-                        return new EchoNode(id, diData, pos);
                     case "Light":
                         return new Light(id, diData, pos);
                     case "CombatHazard":
