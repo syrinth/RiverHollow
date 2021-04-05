@@ -48,15 +48,8 @@ namespace RiverHollow.Buildings
         public bool _selected = false;
         public Container BuildingChest { get; set; }
 
-        #region Non-Uniqueness
-        public List<WorldObject> PlacedObjects { get; }
-        public int PersonalID { get; private set; }
-        public bool Unique { get; private set; } = true;
-        #endregion
-
-        public Building(int id, Dictionary<string, string> stringData)
+        public Building(int id, Dictionary<string, string> stringData) : base(id)
         {
-            PlacedObjects = new List<WorldObject>();
             ImportBasics(id, stringData);
         }
 
@@ -293,14 +286,7 @@ namespace RiverHollow.Buildings
         /// <param name="location">The map location to create the wall.</param>
         private void PlaceWall(Vector2 location)
         {
-            Structure obj = (Structure)DataManager.GetWorldObject(int.Parse(DataManager.Config[9]["Wall"]));
-            ((Wall)obj).SetMapName(MapManager.CurrentMap.Name);
-            obj.SnapPositionToGrid(location);
-            MapManager.CurrentMap.TestMapTiles(obj);
-            if (MapManager.PlacePlayerObject(obj))
-            {
-                ((Wall)obj).AdjustObject();
-            }
+            DataManager.CreateAndPlaceNewWorldObject(int.Parse(DataManager.Config[9]["Wall"]), location, MapManager.CurrentMap);
         }
 
         /// <summary>
@@ -380,46 +366,17 @@ namespace RiverHollow.Buildings
                 iBuildingID = this.ID,
                 iPosX = (int)this.MapPosition.X,
                 iPosY = (int)this.MapPosition.Y,
-                iPersonalID = this.PersonalID,
                 iUpgradeTimer = this._iUpgradeTimer,
             };
-
-            buildingData.containers = new List<ContainerData>();
-            buildingData.machines = new List<MachineData>();
-            foreach (WorldObject w in PlacedObjects)
-            {
-                if (w.CompareType(ObjectTypeEnum.Machine))
-                {
-                    // buildingData.machines.Add(((Machine)w).SaveData());
-                }
-                if (w.CompareType(ObjectTypeEnum.Container))
-                {
-                    buildingData.containers.Add(((Container)w).SaveData());
-                }
-            }
 
             return buildingData;
         }
         public void LoadData(BuildingData data)
         {
             SnapPositionToGrid(new Vector2(data.iPosX, data.iPosY));
-            PersonalID = data.iPersonalID;
             Level = data.iBldgLevel;
             _iUpgradeTimer = data.iUpgradeTimer;
 
-            foreach (ContainerData c in data.containers)
-            {
-                Container con = (Container)DataManager.GetWorldObject(c.containerID);
-                con.LoadData(c);
-                PlacedObjects.Add(con);
-            }
-
-            foreach (MachineData mac in data.machines)
-            {
-                Machine theMachine = (Machine)DataManager.GetWorldObject(mac.ID);
-                // theMachine.LoadData(mac);
-                PlacedObjects.Add(theMachine);
-            }
         }
     }
 

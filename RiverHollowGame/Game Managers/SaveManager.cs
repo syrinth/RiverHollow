@@ -161,12 +161,6 @@ namespace RiverHollow.Game_Managers
         }
         public struct BuildingData
         {
-            [XmlArray(ElementName = "Containers")]
-            public List<ContainerData> containers;
-
-            [XmlArray(ElementName = "Machines")]
-            public List<MachineData> machines;
-
             [XmlElement(ElementName = "name")]
             public string sName;
 

@@ -173,7 +173,6 @@ namespace RiverHollow.Game_Managers
         public static void EnterBuilding(TravelPoint doorLoc, Building b)
         {
             TravelPoint tPoint = null;
-            PlayerManager._iBuildingID = b.PersonalID;
 
             foreach (string s in Maps[b.MapName].DictionaryTravelPoints.Keys)
             {
@@ -206,7 +205,6 @@ namespace RiverHollow.Game_Managers
             int mapHeight = Maps[MapManager.HomeMap].MapHeightTiles;
             RHRandom rand = RHRandom.Instance;
 
-            //LoadMap1
             if (!loaded)
             {
                 int rockID = int.Parse(DataManager.Config[1]["ObjectID"]);
@@ -214,26 +212,24 @@ namespace RiverHollow.Game_Managers
                 int treeID = int.Parse(DataManager.Config[3]["ObjectID"]);
 
                 List<RHTile> possibleTiles = Maps[MapManager.HomeMap].TileList;
-                possibleTiles.RemoveAll(x => !x.Passable());
+                possibleTiles.RemoveAll(x => !x.Passable() || x.Flooring != null);
 
-                PopulateHomeMap(ref possibleTiles, 52, 5000);
-                PopulateHomeMap(ref possibleTiles, rockID, 99);
-                PopulateHomeMap(ref possibleTiles, treeID, 99);
-                PopulateHomeMap(ref possibleTiles, bigRockID, 10);
-                PopulateHomeMap(ref possibleTiles, 19, 10);
+                PopulateHomeMapHelper(ref possibleTiles, bigRockID, 10);
+                PopulateHomeMapHelper(ref possibleTiles, rockID, 99);
+                PopulateHomeMapHelper(ref possibleTiles, treeID, 99);
+                PopulateHomeMapHelper(ref possibleTiles, 19, 10);
+                PopulateHomeMapHelper(ref possibleTiles, 52, 1000);
             }
         }
 
-        private static void PopulateHomeMap(ref List<RHTile> possibleTiles, int ID, int numToPlace)
+        private static void PopulateHomeMapHelper(ref List<RHTile> possibleTiles, int ID, int numToPlace)
         {
             RHRandom rand = RHRandom.Instance;
             for (int i = 0; i < numToPlace; i++)
             {
                 RHTile targetTile = possibleTiles[rand.Next(0, possibleTiles.Count - 1)];
-                WorldObject obj = DataManager.GetWorldObject(ID, targetTile.Position);
-                obj.SnapPositionToGrid(targetTile.Position);
+                DataManager.CreateAndPlaceNewWorldObject(ID, targetTile.Position, MapManager.Maps[HomeMap]);
 
-                Maps[MapManager.HomeMap].PlaceWorldObject(obj, false, true);
                 possibleTiles.Remove(targetTile);
             }
         }
@@ -358,13 +354,9 @@ namespace RiverHollow.Game_Managers
         {
             CurrentMap.DropItemsOnMap(items, position, flyingPop);
         }
-        public static void PlaceWorldObject(WorldObject worldObject)
+        public static bool PlaceWorldObject(WorldObject worldObject)
         {
-            CurrentMap.PlaceWorldObject(worldObject);
-        }
-        public static bool PlacePlayerObject(WorldObject worldObject)
-        {
-            return CurrentMap.PlacePlayerObject(worldObject);
+            return CurrentMap.PlaceWorldObject(worldObject);
         }
 
         public static void InitWeather()

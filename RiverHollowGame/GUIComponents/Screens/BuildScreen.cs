@@ -240,7 +240,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
                 else
                 {
-                    obj = DataManager.GetWorldObject(objID);
+                    obj = DataManager.GetWorldObjectByID(objID);
                     requiredToMake = obj.RequiredToMake;
                     name = obj.Name;
                 }
@@ -333,7 +333,7 @@ namespace RiverHollow.GUIComponents.Screens
                         name = GameManager.DIBuildInfo[id].Name;
                     }
                     else {
-                        WorldObject obj = DataManager.GetWorldObject(id);
+                        WorldObject obj = DataManager.GetWorldObjectByID(id);
                         requiredToMake = obj.RequiredToMake;
                         name = obj.Name;
                     }

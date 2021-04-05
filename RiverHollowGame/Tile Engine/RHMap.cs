@@ -66,9 +66,7 @@ namespace RiverHollow.Tile_Engine
         public List<RHTile> TilledTiles { get; }
         private List<MonsterSpawn> _liMonsterSpawnPoints;
         private List<ResourceSpawn> _liResourceSpawnPoints;
-        private List<int> _liRandomSpawnItems;
         private List<int> _liCutscenes;
-        private List<TiledMapObject> _liBarrenObjects;
         private Dictionary<RarityEnum, List<int>> _diResources;
         protected List<Item> _liItems;
         protected List<ShopLocation> _liShopData;
@@ -95,9 +93,7 @@ namespace RiverHollow.Tile_Engine
             _liMapObjects = new List<TiledMapObject>();
             _liShopData = new List<ShopLocation>();
             _liPlacedWorldObjects = new List<WorldObject>();
-            _liRandomSpawnItems = new List<int>();
             _liCutscenes = new List<int>();
-            _liBarrenObjects = new List<TiledMapObject>();
             _diResources = new Dictionary<RarityEnum, List<int>>();
 
             DictionaryCombatTiles = new Dictionary<string, RHTile[,]>();
@@ -366,16 +362,11 @@ namespace RiverHollow.Tile_Engine
                 i.Draw(spriteBatch);
             }
 
-            if (GameManager.IsRunning() || Scrying())
+            if (HeldObject != null && (GameManager.IsRunning() || Scrying()))
             {
                 foreach (RHTile t in _liTestTiles)
                 {
-                    //WorldObject it = GameManager.ConstructionObject;
-                    bool checkPlayer = true;
-
-                    // if (it != null) { checkPlayer = !it.CompareType(ObjectTypeEnum.Floor); }
-
-                    bool passable = t.Passable() && !TileContainsActor(t, checkPlayer);
+                    bool passable = CanPlaceObject(t, HeldObject);
                     spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
                 }
             }
@@ -527,8 +518,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
-                        if (mapObject.Name.Equals("Barren")) { _liBarrenObjects.Add(mapObject); }
-                        else { _liMapObjects.Add(mapObject); }
+                        _liMapObjects.Add(mapObject);
                     }
                 }
             }
@@ -538,9 +528,6 @@ namespace RiverHollow.Tile_Engine
         {
             RHRandom rand = RHRandom.Instance;
             TiledMapProperties props = _map.Properties;
-            List<int> _liMobs = new List<int>();
-            int minMobs = 0;
-            int maxMobs = 0;
             List<int> resources = new List<int>();
 
             foreach (TiledMapObject tiledObj in _liMapObjects)
@@ -556,27 +543,24 @@ namespace RiverHollow.Tile_Engine
                     }
                     else if (tiledObj.Name.Equals("WorldObject"))
                     {
-                        //AddMachine
-                        int objectID = int.Parse(tiledObj.Properties["ObjectID"]);
-                        WorldObject obj = DataManager.GetWorldObject(objectID, Util.SnapToGrid(tiledObj.Position));
-                        if (PlaceWorldObject(obj))
+                        DataManager.CreateAndPlaceNewWorldObject(int.Parse(tiledObj.Properties["ObjectID"]), tiledObj.Position, this);
+                    }
+                    else if (tiledObj.Name.Equals("Floor"))
+                    {
+                        for (int y = (int)tiledObj.Position.Y; y < (int)tiledObj.Position.Y + tiledObj.Size.Height; y += TileSize)
                         {
-                            if (obj.CompareType(ObjectTypeEnum.Machine)) { GameManager.AddMachine((Machine)obj, this.Name); }
-                            if (obj.CompareType(ObjectTypeEnum.StructureUpgrader)) {
-
-                                if (BuildingMap)
-                                {
-                                    ((StructureUpgrader)obj).SetBuildingId(int.Parse(GetMapProperties()["BuildingID"]));
-                                }
+                            for (int x = (int)tiledObj.Position.X; x < (int)tiledObj.Position.X + tiledObj.Size.Width; x += TileSize)
+                            {
+                                DataManager.CreateAndPlaceNewWorldObject(int.Parse(tiledObj.Properties["ObjectID"]), new Vector2(x, y), this);
                             }
                         }
                     }
                     else if (tiledObj.Name.Equals("Chest"))
                     {
-                        Container c = (Container)DataManager.GetWorldObject(190);
+                        Container c = (Container)DataManager.GetWorldObjectByID(190);
+                        c.PlaceOnMap(tiledObj.Position, this);
+
                         InventoryManager.InitContainerInventory(c.Inventory);
-                        c.SnapPositionToGrid(tiledObj.Position);
-                        PlacePlayerObject(c);
                         string[] holdSplit = tiledObj.Properties["Holding"].Split('/');
                         foreach (string s in holdSplit)
                         {
@@ -605,107 +589,83 @@ namespace RiverHollow.Tile_Engine
                 {
                     _liMonsterSpawnPoints.Add(new MonsterSpawn(this, tiledObj));
                 }
-
-
-                //else if (obj.Name.Equals("Building"))
-                //{
-                //    Building b = ObjectManager.GetBuilding(int.Parse(obj.Properties["ID"]));
-                //    b.SetCoordinatesByGrid(obj.Position);
-                //    //b.SetName(PlayerManager.ManorName);
-                //    AddBuilding(b);
-                //}
             }
 
-            if (!loaded)
-            {
-                if (_liRandomSpawnItems.Count > 0)
-                {
-                    for (int i = 0; i < 30; i++)
-                    {
-                        Plant obj = (Plant)DataManager.GetWorldObject(_liRandomSpawnItems[0], new Vector2(rand.Next(1, _map.Width - 1) * TileSize, rand.Next(1, _map.Height - 1) * TileSize));
-                        obj.FinishGrowth();
-                        PlaceWorldObject(obj, true);
-                    }
-                }
+            SpawnMonsters();
+            SpawnResources(GetSkipTiles(loaded));
+        }
 
-                if (_liMobs.Count > 0)
-                {
-                    int numMobs = rand.Next(minMobs, maxMobs);
-                    while (numMobs != 0)
-                    {
-                        int chosenMob = rand.Next(0, _liMobs.Count - 1);
-
-                        Vector2 vect = new Vector2(rand.Next(1, _map.Width - 1) * TileSize, rand.Next(1, _map.Height - 2) * TileSize);
-                        Monster newMonster = DataManager.GetMonster(_liMobs[chosenMob], vect);
-                        newMonster.CurrentMapName = _sName;
-                        AddMonster(newMonster);
-
-                        numMobs--;
-                    }
-                }
-            }
-
+        /// <summary>
+        /// Call to retrieve a list of RHTiles that cannot be used to spawn resources on. These tiles
+        /// are chosen due to proximity to monster spawn points, combat start tiles, and travel points.
+        /// 
+        /// Additionally, it ensures that there exists a path between each monster spawn point and each
+        /// potential player combat start area
+        /// </summary>
+        /// <param name="loaded">Whether the map was loaded or not. To avoid double spawning</param>
+        /// <returns>A list of tiles to ignore when spawning resources.</returns>
+        private List<RHTile> GetSkipTiles(bool loaded)
+        {
             List<RHTile> skipTiles = new List<RHTile>();
-            foreach (RHTile[,] tileArray in DictionaryCombatTiles.Values)
-            {
-                foreach (RHTile tile in tileArray)
-                {
-                    skipTiles.Add(tile);
-                }
-            }
-            foreach (TravelPoint tp in DictionaryTravelPoints.Values)
-            {
-                foreach (RHTile tile in GetTilesFromRectangle(tp.CollisionBox))
-                {
-                    Util.AddUniquelyToList(ref skipTiles, tile);
 
-                    foreach (RHTile neighbour in tile.GetWalkableNeighbours())
+            if (IsCombatMap)
+            {
+                foreach (RHTile[,] tileArray in DictionaryCombatTiles.Values)
+                {
+                    foreach (RHTile tile in tileArray)
                     {
-                        Util.AddUniquelyToList(ref skipTiles, neighbour);
+                        skipTiles.Add(tile);
                     }
                 }
-            }
-
-            if (!loaded)
-            {
-                foreach (MonsterSpawn spawn in _liMonsterSpawnPoints)
+                foreach (TravelPoint tp in DictionaryTravelPoints.Values)
                 {
-                    foreach (KeyValuePair<string, RHTile[,]> kvp in DictionaryCombatTiles)
+                    foreach (RHTile tile in GetTilesFromRectangle(tp.CollisionBox))
                     {
-                        Vector2 pos = spawn.Position;
-                        List<RHTile> path = TravelManager.FindPathToLocation(ref pos, kvp.Value[0, 0].Position, this.Name, false, true);
-                        if (path != null)
-                        {
-                            bool connected = false;
-                            foreach (RHTile tile in path)
-                            {
-                                if (!skipTiles.Contains(tile))
-                                {
-                                    foreach (RHTile neighbour in tile.GetWalkableNeighbours())
-                                    {
-                                        if (skipTiles.Contains(neighbour) && !path.Contains(neighbour))
-                                        {
-                                            connected = true;
-                                            break;
-                                        }
-                                    }
-                                    skipTiles.Add(tile);
-                                    if (connected) { break; }
+                        Util.AddUniquelyToList(ref skipTiles, tile);
 
+                        foreach (RHTile neighbour in tile.GetWalkableNeighbours())
+                        {
+                            Util.AddUniquelyToList(ref skipTiles, neighbour);
+                        }
+                    }
+                }
+
+                if (!loaded)
+                {
+                    foreach (MonsterSpawn spawn in _liMonsterSpawnPoints)
+                    {
+                        foreach (KeyValuePair<string, RHTile[,]> kvp in DictionaryCombatTiles)
+                        {
+                            Vector2 pos = spawn.Position;
+                            List<RHTile> path = TravelManager.FindPathToLocation(ref pos, kvp.Value[0, 0].Position, this.Name, false, true);
+                            if (path != null)
+                            {
+                                bool connected = false;
+                                foreach (RHTile tile in path)
+                                {
+                                    if (!skipTiles.Contains(tile))
+                                    {
+                                        foreach (RHTile neighbour in tile.GetWalkableNeighbours())
+                                        {
+                                            if (skipTiles.Contains(neighbour) && !path.Contains(neighbour))
+                                            {
+                                                connected = true;
+                                                break;
+                                            }
+                                        }
+                                        skipTiles.Add(tile);
+                                        if (connected) { break; }
+
+                                    }
                                 }
                             }
                         }
-                        else
-                        {
-                            int i = 0;
-                        }
+                        skipTiles.Add(GetTileByPixelPosition(spawn.Position));
                     }
-                    skipTiles.Add(GetTileByPixelPosition(spawn.Position));
                 }
-
-                SpawnMonsters();
-                SpawnResources(skipTiles);
             }
+
+            return skipTiles;
         }
 
         public void Rollover()
@@ -852,7 +812,7 @@ namespace RiverHollow.Tile_Engine
                         objectIsValid = true;
                         RarityEnum rarityKey = Util.RollAgainstRarity(_diResources);
 
-                        WorldObject wObj = DataManager.GetWorldObject(_diResources[rarityKey][RHRandom.Instance.Next(0, _diResources[rarityKey].Count - 1)]);
+                        WorldObject wObj = DataManager.GetWorldObjectByID(_diResources[rarityKey][RHRandom.Instance.Next(0, _diResources[rarityKey].Count - 1)]);
                         wObj.SnapPositionToGrid(new Vector2(targetTile.Position.X, targetTile.Position.Y));
 
                         if (wObj.CompareType(ObjectTypeEnum.Plant))
@@ -860,7 +820,7 @@ namespace RiverHollow.Tile_Engine
                             ((Plant)wObj).FinishGrowth();
                         }
 
-                        PlaceWorldObject(wObj, false);
+                        PlaceWorldObject(wObj);
 
                         //If the object is larger than one tile, we need to ensure it can actually fit ont he tile(s) we've placed it
                         if (wObj.CollisionBox.Width > TileSize || wObj.CollisionBox.Height > TileSize)
@@ -1415,13 +1375,13 @@ namespace RiverHollow.Tile_Engine
                         bool isFloor = toBuild.CompareType(ObjectTypeEnum.Floor);
                         if (!isFloor || (isFloor && TargetTile.Flooring == null))
                         {
-                            toBuild.SetCoordinates(Util.SnapToGrid(toBuild.MapPosition));
-                            WorldObject obj = DataManager.GetWorldObject(toBuild.ID);
-                            obj.SetCoordinates(Util.SnapToGrid(toBuild.MapPosition));
-                            if (MapManager.PlacePlayerObject(obj))
+                            toBuild.SnapPositionToGrid(toBuild.MapPosition);
+                            WorldObject obj = DataManager.GetWorldObjectByID(toBuild.ID);
+                            obj.SnapPositionToGrid(toBuild.MapPosition);
+                            if (MapManager.PlaceWorldObject(obj))
                             {
                                 rv = true;
-                                //newItem.SetMapName(this.Name);      //Assign the map name to the WorldItem
+                                obj.SetMapName(this.Name);
 
                                 //If the item placed was a wall object, we need to adjust it based off any adjacent walls
                                 if (obj.CompareType(ObjectTypeEnum.Floor)) { ((Floor)obj).AdjustObject(); }
@@ -1673,11 +1633,8 @@ namespace RiverHollow.Tile_Engine
         /// <param name="b">The building to load</param>
         public void LoadBuilding(Building b)
         {
-            if (!b.Unique)
-            {
-                ClearWorkers();
-                AddBuildingObjectsToMap(b);
-            }
+            ClearWorkers();
+            AddBuildingObjectsToMap(b);
         }
 
         public void LayerVisible(string name, bool val) {
@@ -1703,15 +1660,10 @@ namespace RiverHollow.Tile_Engine
                         if (mapObject.Name.Contains("BuildingChest"))
                         {
                             b.BuildingChest.SnapPositionToGrid(mapObject.Position);
-                            PlacePlayerObject(b.BuildingChest);
+                            PlaceWorldObject(b.BuildingChest);
                         }
                     }
                 }
-            }
-
-            foreach (WorldObject w in b.PlacedObjects)
-            {
-                PlacePlayerObject(w);
             }
         }
 
@@ -1790,60 +1742,20 @@ namespace RiverHollow.Tile_Engine
 
         public void CreateBuildingEntrance(Building b)
         {
-            TravelPoint buildPoint = new TravelPoint(b.TravelBox, b.MapName, this.Name, b.PersonalID);
+            TravelPoint buildPoint = new TravelPoint(b.TravelBox, b.MapName, this.Name, b.ID);
             DictionaryTravelPoints.Add(b.TravelLink(), buildPoint); //TODO: FIX THIS
             CreateDoor(ref buildPoint, b.TravelBox.X, b.TravelBox.Y, b.TravelBox.Width, b.TravelBox.Height);
         }
 
-        public bool PlaceWorldObject(WorldObject o, bool bounce = false, bool respectBarrens = false)
+        public bool PlaceWorldObject(WorldObject o)
         {
             bool rv = false;
 
             List<RHTile> tiles = new List<RHTile>();
-            if (RespectBarrens(respectBarrens, o.CollisionBox))
-            {
-                rv = TestMapTiles(o, tiles);
-            }
-
-            if (!rv && bounce)
-            {
-                Vector2 position = o.MapPosition;
-                do
-                {
-                    position.X = (int)(RHRandom.Instance.Next(1, (MapWidthTiles - 1) * TileSize) / TileSize) * TileSize;
-                    position.Y = (int)(RHRandom.Instance.Next(1, (MapHeightTiles - 1) * TileSize) / TileSize) * TileSize;
-                    o.SnapPositionToGrid(position);
-
-
-                    if (RespectBarrens(respectBarrens, o.CollisionBox))
-                    {
-                        rv = TestMapTiles(o, tiles);
-                    }
-                } while (!rv);
-            }
-
-            if (rv)
+            if (TestMapTiles(o, tiles))
             {
                 AssignMapTiles(o, tiles);
-            }
-
-            return rv;
-        }
-
-        private bool RespectBarrens(bool respect, Rectangle collisionBox)
-        {
-            bool rv = true;
-            if (respect)
-            {
-                foreach (TiledMapObject mapObj in _liBarrenObjects)
-                {
-                    Rectangle r = Util.FloatRectangle(mapObj.Position.X, mapObj.Position.Y, mapObj.Size.Width, mapObj.Size.Height);
-                    if (r.Intersects(collisionBox))
-                    {
-                        rv = false;
-                        break;
-                    }
-                }
+                rv = true;
             }
 
             return rv;
@@ -1863,27 +1775,27 @@ namespace RiverHollow.Tile_Engine
         /// Given a World Object item, determine which tiles on the map collide with
         /// the defined CollisionBox of the WorldObject.
         /// </summary>
-        /// <param name="o">The WorldObject to test</param>
+        /// <param name="obj">The WorldObject to test</param>
         /// <param name="collisionTiles">The Tiles on the map that are in the object's CollisionBox</param>
         /// <returns></returns>
-        public bool TestMapTiles(WorldObject o, List<RHTile> collisionTiles)
+        public bool TestMapTiles(WorldObject obj, List<RHTile> collisionTiles)
         {
             bool rv = true;
             collisionTiles.Clear();
-            Vector2 position = o.MapPosition;
+            Vector2 position = obj.MapPosition;
             position.X = ((int)(position.X / TileSize)) * TileSize;
             position.Y = ((int)(position.Y / TileSize)) * TileSize;
 
-            int colColumns = o.CollisionBox.Width / TileSize;
-            int colRows = o.CollisionBox.Height / TileSize;
+            int colColumns = obj.CollisionBox.Width / TileSize;
+            int colRows = obj.CollisionBox.Height / TileSize;
             
             //This is used to get all the tiles based off the collisonbox size
             for (int i = 0; i < colRows; i++)
             {
                 for (int j = 0; j < colColumns; j++)
                 {
-                    int x = Math.Min((o.CollisionBox.Left + (j * TileSize)) / TileSize, MapWidthTiles-1);
-                    int y = Math.Min((o.CollisionBox.Top + (i * TileSize)) / TileSize, MapHeightTiles-1);
+                    int x = Math.Min((obj.CollisionBox.Left + (j * TileSize)) / TileSize, MapWidthTiles-1);
+                    int y = Math.Min((obj.CollisionBox.Top + (i * TileSize)) / TileSize, MapHeightTiles-1);
                     if (x < 0 || x > this.MapWidthTiles || y < 0 || y > this.MapHeightTiles)
                     {
                         rv = false;
@@ -1891,8 +1803,7 @@ namespace RiverHollow.Tile_Engine
                     }
 
                     RHTile tempTile = _arrTiles[x, y];
-
-                    if (!TileContainsActor(tempTile, !o.CompareType(ObjectTypeEnum.Floor)) && ((!o.WallObject && tempTile.Passable() && tempTile.WorldObject == null) || (o.WallObject && tempTile.IsValidWall())))
+                    if (CanPlaceObject(tempTile, obj))
                     {
                         collisionTiles.Add(tempTile);
                     }
@@ -1901,6 +1812,39 @@ namespace RiverHollow.Tile_Engine
                         collisionTiles.Add(tempTile);
                         rv = false;
                     }
+                }
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Method to call to make it easier to parse if a given WorldObject can be placed.
+        /// </summary>
+        /// <param name="testTile">The RHtile to test</param>
+        /// <param name="obj">The WorldObject we want to place</param>
+        /// <returns></returns>
+        private bool CanPlaceObject(RHTile testTile, WorldObject obj)
+        {
+            bool rv = false;
+            //We can place flooring anywhere there isn't flooring as long as the base tile is passable.
+            if (obj.CompareType(ObjectTypeEnum.Floor))
+            {
+                if(testTile.Flooring == null && (testTile.Passable()
+                    || testTile.WorldObject.CompareType(ObjectTypeEnum.Building)))
+                {
+                    rv = true;
+                }
+            }
+            else if (!TileContainsActor(testTile))
+            {
+                if (obj.WallObject)
+                {
+                    if(testTile.IsValidWall()) { rv = true; }
+                }
+                else
+                {
+                    if(testTile.Passable() && testTile.WorldObject == null) { rv = true; }
                 }
             }
 
@@ -1958,49 +1902,6 @@ namespace RiverHollow.Tile_Engine
                     }
                 }
             }
-        }
-
-        public bool PlacePlayerObject(WorldObject obj)
-        {
-            bool rv = false;
-            List<RHTile> liTiles = new List<RHTile>();
-            liTiles.AddRange(_liTestTiles);
-            if (liTiles.Count == 0)
-            {
-                for (int x = obj.CollisionBox.X; x < obj.CollisionBox.X + obj.CollisionBox.Width; x += TileSize)
-                {
-                    for (int y = obj.CollisionBox.Y; y < obj.CollisionBox.Y + obj.CollisionBox.Height; y += TileSize)
-                    {
-                        RHTile t = GetTileByPixelPosition(x, y);
-                        if (t != null)
-                        {
-                            liTiles.Add(t);
-                        }
-                    }
-                }
-            }
-
-            bool placeIt = true;
-            foreach (RHTile t in liTiles)
-            {
-                if (!t.Passable() || TileContainsActor(t, !obj.CompareType(ObjectTypeEnum.Floor)) || (obj.CompareType(ObjectTypeEnum.Floor) && t.GetFloorObject() != null))
-                {
-                    placeIt = false;
-                    break;
-                }
-            }
-
-            if (placeIt)
-            {
-                if (obj.CompareType(ObjectTypeEnum.Machine))
-                {
-                    GameManager.AddMachine((Machine)obj, this.Name);
-                }
-                AssignMapTiles(obj, liTiles);
-                rv = true;
-            }
-
-            return rv;
         }
 
         public void AddCharacter(WorldActor c)
@@ -2241,8 +2142,8 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (f.CompareType(ObjectTypeEnum.Earth))
                     {
-                        Earth e = (Earth)f;
-                        mapData.earth.Add(e.SaveData());
+                        //Earth e = (Earth)f;
+                        //mapData.earth.Add(e.SaveData());
                     }
                     else
                     {
@@ -2257,48 +2158,25 @@ namespace RiverHollow.Tile_Engine
         {
             foreach (WorldObjectData w in data.worldObjects)
             {
-                if (w.worldObjectID != -1)
-                {
-                    WorldObject obj = DataManager.GetWorldObject(w.worldObjectID, new Vector2(w.x, w.y));
-                    if (obj != null)
-                    {
-                        if (obj.CompareType(ObjectTypeEnum.Wall) || obj.CompareType(ObjectTypeEnum.Floor))
-                        {
-                            if (PlacePlayerObject(obj))
-                            {
-                                ((AdjustableObject)obj).SetMapName(this.Name);
-                                ((AdjustableObject)obj).AdjustObject();
-                            }
-                        }
-
-                        if (obj.CompareType(ObjectTypeEnum.ClassChanger))
-                        {
-                            PlacePlayerObject(obj);
-                        }
-                        else
-                        {
-                            PlaceWorldObject(obj);
-                        }
-                    }
-                }
+                DataManager.CreateAndPlaceNewWorldObject(w.worldObjectID, new Vector2(w.x, w.y), this);
             }
             foreach (ContainerData c in data.containers)
             {
-                Container con = (Container)DataManager.GetWorldObject(c.containerID);
+                Container con = (Container)DataManager.GetWorldObjectByID(c.containerID);
                 con.LoadData(c);
-                PlacePlayerObject(con);
+                PlaceWorldObject(con);
             }
             foreach (MachineData mac in data.machines)
             {
-                Machine theMachine = (Machine)DataManager.GetWorldObject(mac.ID);
+                Machine theMachine = (Machine)DataManager.GetWorldObjectByID(mac.ID);
                 theMachine.LoadData(mac);
-                PlacePlayerObject(theMachine);
+                PlaceWorldObject(theMachine);
             }
             foreach (PlantData plantData in data.plants)
             {
-                Plant plant = (Plant)DataManager.GetWorldObject(plantData.ID);
+                Plant plant = (Plant)DataManager.GetWorldObjectByID(plantData.ID);
                 plant.LoadData(plantData);
-                PlacePlayerObject(plant);
+                PlaceWorldObject(plant);
             }
             foreach (FloorData floorData in data.floors)
             {
@@ -2308,11 +2186,11 @@ namespace RiverHollow.Tile_Engine
             }
             foreach (FloorData earthData in data.earth)
             {
-                Earth e = new Earth();
-                e.LoadData(earthData);
-                RHTile tile = _arrTiles[(int)e.MapPosition.X / TileSize, (int)e.MapPosition.Y / TileSize];
-                tile.SetFloor(e);
-                TilledTiles.Add(tile);
+                //Earth e = new Earth();
+               // e.LoadData(earthData);
+                //RHTile tile = _arrTiles[(int)e.MapPosition.X / TileSize, (int)e.MapPosition.Y / TileSize];
+               // tile.SetFloor(e);
+               // TilledTiles.Add(tile);
             }
         } 
     }
@@ -2358,18 +2236,18 @@ namespace RiverHollow.Tile_Engine
         public override void Spawn()
         {
             //ToDo //Give ResourceSpawns an internal array corresponding to the size and remove objects
-            //fromt he array as it gets filled so that we bounce less.
+            //from the array as it gets filled so that we bounce less.
             int xPoint = RHRandom.Instance.Next((int)(_vPosition.X), (int)(_vPosition.X + _iWidth));
             int yPoint = RHRandom.Instance.Next((int)(_vPosition.Y), (int)(_vPosition.Y + _iHeight));
 
-            WorldObject wObj = DataManager.GetWorldObject(_liPossibleResources[RHRandom.Instance.Next(0, _liPossibleResources.Count-1)]);
-            wObj.SnapPositionToGrid(new Vector2(xPoint, yPoint));
+            WorldObject wObj = DataManager.GetWorldObjectByID(_liPossibleResources[RHRandom.Instance.Next(0, _liPossibleResources.Count-1)]);
 
             if (wObj.CompareType(ObjectTypeEnum.Plant))
             {
                 ((Plant)wObj).FinishGrowth();
             }
-            _map.PlaceWorldObject(wObj, false);
+
+            wObj.PlaceOnMap(new Vector2(xPoint, yPoint), _map);
         }
 
         public override bool HasSpawned()
@@ -2538,7 +2416,7 @@ namespace RiverHollow.Tile_Engine
         {
             if (Flooring == null)
             {
-                SetFloor(new Earth());
+                //SetFloor(new Earth());
                 if (GameCalendar.IsRaining())
                 {
                     Water(true);
@@ -2553,15 +2431,10 @@ namespace RiverHollow.Tile_Engine
         public bool SetFloor(Floor f)
         {
             bool rv = false;
-            if (Flooring == null && Passable())
+            if (Flooring == null)
             {
                 rv = true;
                 Flooring = f;
-                Flooring.SnapPositionToGrid(Position);
-                Flooring.SetMapName(MapName);
-                Flooring.Tiles.Clear();
-                Flooring.AddTile(this);
-                Flooring.AdjustObject();
             }
 
             return rv;
@@ -2570,8 +2443,8 @@ namespace RiverHollow.Tile_Engine
         {
             if (Flooring != null && Flooring.CompareType(ObjectTypeEnum.Earth))
             {
-                Earth e = (Earth)Flooring;
-                e.Watered(value);
+                //Earth e = (Earth)Flooring;
+                //e.Watered(value);
             }
         }
         public bool IsWatered()
@@ -2579,7 +2452,7 @@ namespace RiverHollow.Tile_Engine
             bool rv = false;
             if (Flooring != null && Flooring.CompareType(ObjectTypeEnum.Earth))
             {
-                rv = ((Earth)Flooring).Watered();
+               // rv = ((Earth)Flooring).Watered();
             }
 
             return rv;

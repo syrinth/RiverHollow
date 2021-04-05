@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="73">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="80">
  <properties>
   <property name="Background" value="UO-Stones"/>
   <property name="Outside" type="bool" value="true"/>
@@ -320,8 +320,8 @@
 </data>
  </layer>
  <objectgroup id="6" name="Character">
-  <object id="65" name="PlayerSpawn" x="594.583" y="820.75" width="5.63636" height="5.27273"/>
-  <object id="66" name="CS1Spawn" x="629.583" y="820.083" width="7.16667" height="6.5"/>
+  <object id="65" name="PlayerSpawn" x="613.583" y="805.25" width="5.63636" height="5.27273"/>
+  <object id="66" name="CS1Spawn" x="597.083" y="725.083" width="7.16667" height="6.5"/>
   <object id="67" name="NPC_21" x="465.219" y="673.786" width="29.5" height="13.7614"/>
  </objectgroup>
  <objectgroup id="7" name="Travel">
@@ -350,9 +350,9 @@
     <property name="BuildingID" type="int" value="0"/>
    </properties>
   </object>
-  <object id="57" name="Barren" x="577.083" y="720.083" width="78.833" height="191.333">
+  <object id="57" name="Floor" x="610.856" y="741.947" width="10.9997" height="184.833">
    <properties>
-    <property name="Outside" type="bool" value="true"/>
+    <property name="ObjectID" type="int" value="25"/>
    </properties>
   </object>
   <object id="58" name="Building" x="1170.08" y="659.666" width="124.5" height="137.5">
@@ -378,6 +378,41 @@
   <object id="72" name="Building" x="161.75" y="706" width="173.25" height="173">
    <properties>
     <property name="BuildingID" type="int" value="7"/>
+   </properties>
+  </object>
+  <object id="73" name="Floor" x="242.25" y="883.833" width="10.4997" height="55.333">
+   <properties>
+    <property name="ObjectID" type="int" value="25"/>
+   </properties>
+  </object>
+  <object id="74" name="Floor" x="257.75" y="930.833" width="362" height="9.833">
+   <properties>
+    <property name="ObjectID" type="int" value="25"/>
+   </properties>
+  </object>
+  <object id="75" name="Floor" x="211.25" y="597.333" width="10.4997" height="37.833">
+   <properties>
+    <property name="ObjectID" type="int" value="25"/>
+   </properties>
+  </object>
+  <object id="76" name="Floor" x="226.75" y="628.083" width="217.5" height="9.833">
+   <properties>
+    <property name="ObjectID" type="int" value="25"/>
+   </properties>
+  </object>
+  <object id="77" name="Floor" x="434.75" y="646.833" width="10.4997" height="130.333">
+   <properties>
+    <property name="ObjectID" type="int" value="25"/>
+   </properties>
+  </object>
+  <object id="78" name="Floor" x="594.75" y="722.583" width="42" height="9.833">
+   <properties>
+    <property name="ObjectID" type="int" value="25"/>
+   </properties>
+  </object>
+  <object id="79" name="Floor" x="434.75" y="786.083" width="172.5" height="9.833">
+   <properties>
+    <property name="ObjectID" type="int" value="25"/>
    </properties>
   </object>
  </objectgroup>

@@ -54,23 +54,23 @@ namespace RiverHollow.Items
         public int ID  => _iID;
 
         protected string _sName;
-        public string Name { get => _sName; }
+        public string Name => _sName;
+
+        protected string _sMapName;                                 //Used to play sounds on that map
+        public void SetMapName(string val) { _sMapName = val; }
 
         protected Dictionary<int, int> _diReqToMake;
         public Dictionary<int, int> RequiredToMake => _diReqToMake;
 
         #endregion
 
-        protected WorldObject() {
-            Tiles = new List<RHTile>();
-        }
-
-        public WorldObject(int id, Vector2 pos) : this()
+        public WorldObject(int id)
         {
+            Tiles = new List<RHTile>();
+
             _iID = id;
             _wallObject = false;
 
-            SnapPositionToGrid(pos);
             DataManager.GetTextData("WorldObject", _iID, ref _sName, "Name");
         }
 
@@ -148,6 +148,14 @@ namespace RiverHollow.Items
             return CollisionBox.Contains(m);
         }
 
+        public virtual void PlaceOnMap(Vector2 pos, RHMap map)
+        {
+            SetMapName(map.Name);
+
+            SnapPositionToGrid(pos);
+            map.PlaceWorldObject(this);
+        }
+
         protected void SetSpritePos(Vector2 position)
         {
             if (_sprite != null)
@@ -158,11 +166,6 @@ namespace RiverHollow.Items
         public virtual void SnapPositionToGrid(Vector2 position)
         {
             _vMapPosition = Util.SnapToGrid(position);
-            SetSpritePos(_vMapPosition);
-        }
-        public void SetCoordinates(Vector2 position)
-        {
-            _vMapPosition = position;
             SetSpritePos(_vMapPosition);
         }
 
@@ -231,7 +234,7 @@ namespace RiverHollow.Items
         protected int _lvltoDmg;
         public int LvlToDmg => _lvltoDmg;
 
-        public Destructible(int id, Dictionary<string, string> stringData, Vector2 pos, bool loadSprite = true) : base(id, pos)
+        public Destructible(int id, Dictionary<string, string> stringData, bool loadSprite = true) : base(id)
         {
             LoadDictionaryData(stringData, loadSprite);
 
@@ -314,7 +317,7 @@ namespace RiverHollow.Items
         int _iDaysLeft;
         Dictionary<int, int> _diTransitionTimes;
 
-        public Plant(int id, Dictionary<string, string> stringData, Vector2 position) : base(id, stringData, position, false)
+        public Plant(int id, Dictionary<string, string> stringData) : base(id, stringData, false)
         {
             _diTransitionTimes = new Dictionary<int, int>();
 
@@ -393,6 +396,11 @@ namespace RiverHollow.Items
 
         public override void ProcessLeftClick() { Harvest(); }
         //public override void ProcessRightClick() { Harvest(); }
+
+        public override void PlaceOnMap(Vector2 pos, RHMap map)
+        {
+            base.PlaceOnMap(pos - new Vector2(0, _iHeight - TileSize), map);
+        }
 
         /// <summary>
         /// Call to tell the plant that it is being Harvested, and follow any logic
@@ -504,11 +512,16 @@ namespace RiverHollow.Items
     {
         public override Rectangle CollisionBox { get => new Rectangle((int)MapPosition.X + TileSize, (int)MapPosition.Y + TileSize * 4, TileSize, TileSize); }
 
-        public Tree(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
+        public Tree(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             LoadDictionaryData(stringData);
 
             _eToolType = ToolEnum.Axe;
+        }
+
+        public override void PlaceOnMap(Vector2 pos, RHMap map)
+        {
+            base.PlaceOnMap(new Vector2(pos.X - TileSize, pos.Y - (TileSize * 4)), map);
         }
     }
 
@@ -522,7 +535,7 @@ namespace RiverHollow.Items
         public int Damage { get; }
         public bool Active { get; private set; }
 
-        public CombatHazard(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
+        public CombatHazard(int id, Dictionary<string, string> stringData) : base(id)
         {
             LoadDictionaryData(stringData);
             _eHazardType = Util.ParseEnum<HazardTypeEnum>(stringData["Subtype"]);
@@ -574,7 +587,7 @@ namespace RiverHollow.Items
         private List<string> _liSentMessages;
         public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + (_iHeight - BaseHeight), BaseWidth, BaseHeight);
 
-        public Mailbox(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
+        public Mailbox(int id, Dictionary<string, string> stringData) : base(id)
         {
             _liCurrentMessages = new List<string>();
             _liSentMessages = new List<string>();
@@ -680,7 +693,7 @@ namespace RiverHollow.Items
     {
         int _iItemID;
 
-        public Gatherable(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
+        public Gatherable(int id, Dictionary<string, string> stringData) : base(id)
         {
             Util.AssignValue(ref _iItemID, "ItemID", stringData);
             LoadDictionaryData(stringData);
@@ -707,7 +720,6 @@ namespace RiverHollow.Items
     /// </summary>
     public abstract class Structure : WorldObject
     {
-        protected string _sMapName;                                 //Used to play sounds on that map
         public Vector2 HeldItemPos
         {
             get { return _vMapPosition; }
@@ -723,19 +735,17 @@ namespace RiverHollow.Items
 
         public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + (_iHeight - BaseHeight), BaseWidth, BaseHeight);
 
-        protected Structure() : base() {}
-        protected Structure(int id, Vector2 pos) : base(id, pos) {}
+        protected Structure(int id) : base(id) {}
 
         public override void SnapPositionToGrid(Vector2 position)
         {
             base.SnapPositionToGrid(position);
             HeldItemPos = _vMapPosition;
         }
-        public void SetMapName(string val) { _sMapName = val; }
 
         public class ClassChanger : Structure
         {
-            public ClassChanger(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
+            public ClassChanger(int id, Dictionary<string, string> stringData) : base(id)
             {
                 LoadDictionaryData(stringData);
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
@@ -769,10 +779,10 @@ namespace RiverHollow.Items
 
             protected int _iWorkingFrames = 2;
             protected float _fFrameSpeed = 0.3f;
-            protected ItemBubble _itemBubble;
+            //protected ItemBubble _itemBubble;
             protected Item _heldItem;
 
-            public Machine(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos - new Vector2(0, TileSize))
+            public Machine(int id, Dictionary<string, string> stringData) : base(id)
             {
                 _heldItem = null;
 
@@ -807,12 +817,18 @@ namespace RiverHollow.Items
 
             public override void Update(GameTime gTime)
             {
-                _itemBubble?.Update(gTime);
+                //_itemBubble?.Update(gTime);
             }
             public override void Draw(SpriteBatch spriteBatch)
             {
                 _sprite.Draw(spriteBatch);
-                _itemBubble?.Draw(spriteBatch);
+                //_itemBubble?.Draw(spriteBatch);
+            }
+
+            public override void PlaceOnMap(Vector2 pos, RHMap map)
+            {
+                base.PlaceOnMap(pos - new Vector2(0, TileSize), map);
+                GameManager.AddMachine(this, Name);
             }
 
             public virtual bool StartAutoWork() { return false; }
@@ -831,17 +847,15 @@ namespace RiverHollow.Items
                 _iCurrentlyMaking = -1;
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
 
-                _itemBubble = new ItemBubble(_heldItem, this);
+                //_itemBubble = new ItemBubble(_heldItem, this);
             }
 
             public void TakeFinishedItem()
             {
                 InventoryManager.AddToInventory(_heldItem);
                 _heldItem = null;
-                _itemBubble = null;
+                //_itemBubble = null;
             }
-
-            public virtual void Rollover() { }
 
             public bool MakingSomething() { return _iCurrentlyMaking != -1; }
             public bool HasItem() { return _heldItem != null; }
@@ -880,7 +894,7 @@ namespace RiverHollow.Items
                 Dictionary<int, ProcessRecipe> _diProcessing;
                 ProcessRecipe CurrentlyProcessing => (_diProcessing.ContainsKey(_iCurrentlyMaking) ? _diProcessing[_iCurrentlyMaking] : null);
 
-                public Processor(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
+                public Processor(int id, Dictionary<string, string> stringData) : base(id, stringData)
                 {
                     _eMachineType = MachineTypeEnum.Processer;
                     _diProcessing = new Dictionary<int, ProcessRecipe>();
@@ -958,7 +972,7 @@ namespace RiverHollow.Items
                 public Dictionary<int, int> CraftingDictionary { get; }
                 private bool _bWorking = false;
 
-                public CraftingMachine(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
+                public CraftingMachine(int id, Dictionary<string, string> stringData) : base(id, stringData)
                 {
                     _eMachineType = MachineTypeEnum.CraftingMachine;
                     CraftingDictionary = new Dictionary<int, int>();
@@ -1077,73 +1091,75 @@ namespace RiverHollow.Items
                 }
             }
 
-            public class ItemBubble : WorldObject
-            {
-                private const int MAX_POSITIONS = 3;
-                private const double TICK_TIMER = 0.3;
-                private Item _item;
-                private double _dTimer;
-                private Vector2[] _vArrPositions;
-                private int _iCurrentPosition;
-                private bool _bDec;
+            #region ItemBubble
+            //public class ItemBubble : WorldObject
+            //{
+            //    private const int MAX_POSITIONS = 3;
+            //    private const double TICK_TIMER = 0.3;
+            //    private Item _item;
+            //    private double _dTimer;
+            //    private Vector2[] _vArrPositions;
+            //    private int _iCurrentPosition;
+            //    private bool _bDec;
 
-                public ItemBubble(Item it, Machine myMachine)
-                {
-                    _item = it;
+            //    public ItemBubble(Item it, Machine myMachine)
+            //    {
+            //        _item = it;
 
-                    _iWidth = TileSize * 2;
-                    _iHeight = TileSize * 2;
-                    _sprite = new AnimatedSprite(DataManager.DIALOGUE_TEXTURE);
-                    _sprite.AddAnimation(AnimationEnum.ObjectIdle, 16, 80, _iWidth, _iHeight);
+            //        _iWidth = TileSize * 2;
+            //        _iHeight = TileSize * 2;
+            //        _sprite = new AnimatedSprite(DataManager.DIALOGUE_TEXTURE);
+            //        _sprite.AddAnimation(AnimationEnum.ObjectIdle, 16, 80, _iWidth, _iHeight);
 
-                    _bDec = false;
-                    _dTimer = 0;
-                    _iCurrentPosition = 0;
+            //        _bDec = false;
+            //        _dTimer = 0;
+            //        _iCurrentPosition = 0;
 
-                    SetCoordinates(myMachine._vMapPosition + new Vector2((myMachine.Width / 2) - (_iWidth / 2), -_iHeight));
+            //        SetCoordinates(myMachine._vMapPosition + new Vector2((myMachine.Width / 2) - (_iWidth / 2), -_iHeight));
 
-                    _vArrPositions = new Vector2[3];
-                    _vArrPositions[0] = new Vector2(_vMapPosition.X, _vMapPosition.Y + 1);
-                    _vArrPositions[1] = new Vector2(_vMapPosition.X, _vMapPosition.Y);
-                    _vArrPositions[2] = new Vector2(_vMapPosition.X, _vMapPosition.Y - 1);
-                }
+            //        _vArrPositions = new Vector2[3];
+            //        _vArrPositions[0] = new Vector2(_vMapPosition.X, _vMapPosition.Y + 1);
+            //        _vArrPositions[1] = new Vector2(_vMapPosition.X, _vMapPosition.Y);
+            //        _vArrPositions[2] = new Vector2(_vMapPosition.X, _vMapPosition.Y - 1);
+            //    }
 
-                public override void Draw(SpriteBatch spriteBatch)
-                {
-                    _sprite.Draw(spriteBatch, 99998);
-                    if (_item != null)
-                    {
-                        _item.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X + 8), (int)(_vMapPosition.Y + 8), TileSize, TileSize), true);
-                    }
-                }
+            //    public override void Draw(SpriteBatch spriteBatch)
+            //    {
+            //        _sprite.Draw(spriteBatch, 99998);
+            //        if (_item != null)
+            //        {
+            //            _item.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X + 8), (int)(_vMapPosition.Y + 8), TileSize, TileSize), true);
+            //        }
+            //    }
 
-                public override void Update(GameTime gTime)
-                {
-                    _dTimer += gTime.ElapsedGameTime.TotalSeconds;
-                    if(_dTimer >= TICK_TIMER)
-                    {
-                        _dTimer = 0;
+            //    public override void Update(GameTime gTime)
+            //    {
+            //        _dTimer += gTime.ElapsedGameTime.TotalSeconds;
+            //        if(_dTimer >= TICK_TIMER)
+            //        {
+            //            _dTimer = 0;
 
-                        if(_iCurrentPosition == MAX_POSITIONS - 1)
-                        {
-                            _bDec = true;
-                            _iCurrentPosition--;
-                        }
-                        else if (_iCurrentPosition == 0) {
-                            _bDec = false;
-                            _iCurrentPosition++;
-                        }
-                        else
-                        {
-                            if (_bDec) { _iCurrentPosition--; }
-                            else { _iCurrentPosition++; }
-                        }
+            //            if(_iCurrentPosition == MAX_POSITIONS - 1)
+            //            {
+            //                _bDec = true;
+            //                _iCurrentPosition--;
+            //            }
+            //            else if (_iCurrentPosition == 0) {
+            //                _bDec = false;
+            //                _iCurrentPosition++;
+            //            }
+            //            else
+            //            {
+            //                if (_bDec) { _iCurrentPosition--; }
+            //                else { _iCurrentPosition++; }
+            //            }
 
-                        _vMapPosition = _vArrPositions[_iCurrentPosition];
-                        _sprite.Position = _vMapPosition;
-                    }
-                }
-            }
+            //            _vMapPosition = _vArrPositions[_iCurrentPosition];
+            //            _sprite.Position = _vMapPosition;
+            //        }
+            //    }
+            //}
+            #endregion
         }
 
         public class Container : Structure
@@ -1152,7 +1168,7 @@ namespace RiverHollow.Items
             public int Columns { get; }
             public Item[,] Inventory { get; }
 
-            public Container(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
+            public Container(int id, Dictionary<string, string> stringData) : base(id)
             {
                 LoadDictionaryData(stringData);
 
@@ -1205,14 +1221,20 @@ namespace RiverHollow.Items
             }
         }
 
-        public class AdjustableObject : Structure
+        public abstract class AdjustableObject : Structure
         {
             //This is used for subtypes that have different sprites.
             //Like the Earth which has a watered and unwatered Sprite
             protected virtual AnimatedSprite Target => _sprite;
 
-            public AdjustableObject() : base(){}
-            public AdjustableObject(int id, Vector2 pos) : base(id, pos) { }
+            public AdjustableObject(int id) : base(id) { }
+
+            public override void PlaceOnMap(Vector2 pos, RHMap map)
+            {
+                base.PlaceOnMap(pos, map);
+
+               AdjustObject();
+            }
 
             /// <summary>
             /// Loads in the different sprite versions required for an AdjustableObject
@@ -1319,12 +1341,10 @@ namespace RiverHollow.Items
 
             public class Floor : AdjustableObject
             {
-                public Floor() : base() { }
-
                 /// <summary>
                 /// Base Constructor to hard define the Height and Width
                 /// </summary>
-                public Floor(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
+                public Floor(int id, Dictionary<string, string> stringData) : base(id)
                 {
                     LoadDictionaryData(stringData, false);
                     LoadAdjustableSprite(ref _sprite, DataManager.FILE_FLOORING);
@@ -1379,46 +1399,49 @@ namespace RiverHollow.Items
                     SnapPositionToGrid(new Vector2(data.x, data.y));
                 }
 
-                public class Earth : Floor
-                {
-                    protected override AnimatedSprite Target => _bWatered ? _sprWatered : _sprite;
+                #region Earth
 
-                    AnimatedSprite _sprWatered;
-                    bool _bWatered;
+                //public class Earth : Floor
+                //{
+                //    protected override AnimatedSprite Target => _bWatered ? _sprWatered : _sprite;
 
-                    public Earth()
-                    {
-                        _iID = 0;
-                        _eObjectType = ObjectTypeEnum.Earth;
-                        _pImagePos = Point.Zero;
+                //    AnimatedSprite _sprWatered;
+                //    bool _bWatered;
 
-                        LoadAdjustableSprite(ref _sprite);
-                        _pImagePos.Y += TileSize;
+                //    public Earth() : base(0)
+                //    {
+                //        _iID = 0;
+                //        _eObjectType = ObjectTypeEnum.Earth;
+                //        _pImagePos = Point.Zero;
 
-                        LoadAdjustableSprite(ref _sprWatered);
-                        _pImagePos.Y -= TileSize;
+                //        LoadAdjustableSprite(ref _sprite);
+                //        _pImagePos.Y += TileSize;
 
-                        Watered(false);
-                    }
+                //        LoadAdjustableSprite(ref _sprWatered);
+                //        _pImagePos.Y -= TileSize;
 
-                    public override void SnapPositionToGrid(Vector2 position)
-                    {
-                        base.SnapPositionToGrid(position);
-                        _sprWatered.Position = position;
-                    }
+                //        Watered(false);
+                //    }
 
-                    public override void Rollover()
-                    {
-                        Watered(false);
-                    }
+                //    public override void SnapPositionToGrid(Vector2 position)
+                //    {
+                //        base.SnapPositionToGrid(position);
+                //        _sprWatered.Position = position;
+                //    }
 
-                    public void Watered(bool value)
-                    {
-                        _bWatered = value;
-                        _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
-                    }
-                    public bool Watered() { return _bWatered; }
-                }
+                //    public override void Rollover()
+                //    {
+                //        Watered(false);
+                //    }
+
+                //    public void Watered(bool value)
+                //    {
+                //        _bWatered = value;
+                //        _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
+                //    }
+                //    public bool Watered() { return _bWatered; }
+                //}
+                #endregion
             }
 
             /// <summary>
@@ -1426,7 +1449,7 @@ namespace RiverHollow.Items
             /// </summary>
             public class Wall : AdjustableObject
             {
-                public Wall(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
+                public Wall(int id, Dictionary<string, string> stringData) : base(id)
                 {
                     LoadDictionaryData(stringData, false);
                     LoadAdjustableSprite(ref _sprite, DataManager.FILE_WORLDOBJECTS);
@@ -1458,7 +1481,7 @@ namespace RiverHollow.Items
 
         public class Light : Structure
         {
-            public Light(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
+            public Light(int id, Dictionary<string, string> stringData) : base(id)
             {
                 LoadDictionaryData(stringData);
 
@@ -1490,7 +1513,7 @@ namespace RiverHollow.Items
         readonly int _iItemKeyID = -1;
         bool _bHasBeenTriggered = false;
 
-        protected TriggerObject(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
+        protected TriggerObject(int id, Dictionary<string, string> stringData) : base(id)
         {
             LoadDictionaryData(stringData);
             _eSubType = Util.ParseEnum<DungeonObjectType>(stringData["Subtype"]);
@@ -1594,7 +1617,7 @@ namespace RiverHollow.Items
         {
             string _sSoundEffect;
             Item _item;
-            public Trigger(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
+            public Trigger(int id, Dictionary<string, string> stringData) : base(id, stringData)
             {
                 _item = DataManager.GetItem(_iItemKeyID);
 
@@ -1663,7 +1686,7 @@ namespace RiverHollow.Items
             public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + (_iHeight - BaseHeight), BaseWidth, BaseHeight);
 
             readonly bool _bKeyDoor;
-            public Door(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
+            public Door(int id, Dictionary<string, string> stringData) : base(id, stringData)
             {
                 if (stringData.ContainsKey("Base"))
                 {
@@ -1743,7 +1766,7 @@ namespace RiverHollow.Items
         int _iStructureID = -1;
         int _iBuildingID = -1;
 
-        public StructureUpgrader(int id, Dictionary<string, string> stringData, Vector2 pos) : base (id, pos) {
+        public StructureUpgrader(int id, Dictionary<string, string> stringData) : base (id) {
             LoadDictionaryData(stringData);
         }
 
@@ -1752,7 +1775,16 @@ namespace RiverHollow.Items
             GUIManager.OpenMainObject(new HUDUpgradeWindow(PlayerManager.GetBuildingByID(_iBuildingID)));
         }
 
-        public void SetBuildingId(int ID)
+        public override void PlaceOnMap(Vector2 pos, RHMap map)
+        {
+            base.PlaceOnMap(pos, map);
+            if (map.BuildingMap)
+            {
+                SetBuildingID(int.Parse(map.GetMapProperties()["BuildingID"]));
+            }
+        }
+
+        public void SetBuildingID(int ID)
         {
             _iBuildingID = ID;
             _iStructureID = -1;

@@ -16,6 +16,7 @@ using static RiverHollow.Items.TriggerObject;
 using static RiverHollow.Items.Structure.Machine;
 using RiverHollow.Misc;
 using static RiverHollow.Items.Structure.AdjustableObject;
+using RiverHollow.Tile_Engine;
 
 namespace RiverHollow.Game_Managers
 {
@@ -430,11 +431,12 @@ namespace RiverHollow.Game_Managers
             else { return null; }
         }
 
-        public static WorldObject GetWorldObject(int id)
-        {
-            return GetWorldObject(id, Vector2.Zero);
-        }
-        public static WorldObject GetWorldObject(int id, Vector2 pos)
+        /// <summary>
+        /// Creates and returns a WorldObject based on the given ID
+        /// </summary>
+        /// <param name="id">The ID of the WorldObject</param>
+        /// <returns>The WorldObject if it was successfully created, null otherwise</returns>
+        public static WorldObject GetWorldObjectByID(int id)
         {
             if (id != -1 && _diWorldObjects.ContainsKey(id))
             {
@@ -442,40 +444,55 @@ namespace RiverHollow.Game_Managers
                 switch (diData["Type"])
                 {
                     case "Destructible":
-                        if (diData.ContainsKey("Tree")) { return new Tree(id, diData, pos); }
-                        else { return new Destructible(id, diData, pos); }
-                    case "Staircase":
-                    //return new Staircase(id, pos, TileSize, TileSize);
+                        if (diData.ContainsKey("Tree")) { return new Tree(id, diData); }
+                        else { return new Destructible(id, diData); }
                     case "Container":
-                        return new Container(id, diData, pos);
+                        return new Container(id, diData);
                     case "ClassChanger":
-                        return new ClassChanger(id, diData, pos);
+                        return new ClassChanger(id, diData);
                     case "StructureUpgrader":
-                        return new StructureUpgrader(id, diData, pos);
+                        return new StructureUpgrader(id, diData);
                     case "Plant":
-                        return new Plant(id, diData, pos);
+                        return new Plant(id, diData);
                     case "Gatherable":
-                        return new Gatherable(id, diData,pos);
+                        return new Gatherable(id, diData);
                     case "Machine":
                         MachineTypeEnum e = Util.ParseEnum<MachineTypeEnum>(diData["MachineType"]);
-                        if(e == MachineTypeEnum.CraftingMachine) { return new CraftingMachine(id, diData, pos); }
-                        else if (e == MachineTypeEnum.Processer) { return new Processor(id, diData, pos); }
+                        if (e == MachineTypeEnum.CraftingMachine) { return new CraftingMachine(id, diData); }
+                        else if (e == MachineTypeEnum.Processer) { return new Processor(id, diData); }
                         break;
                     case "Wall":
-                        return new Wall(id, diData, pos);
+                        return new Wall(id, diData);
                     case "Floor":
-                        return new Floor(id, diData, pos);
+                        return new Floor(id, diData);
                     case "Light":
-                        return new Light(id, diData, pos);
+                        return new Light(id, diData);
                     case "CombatHazard":
-                        return new CombatHazard(id, diData, pos);
+                        return new CombatHazard(id, diData);
                     case "Mailbox":
-                        return new Mailbox(id, diData, pos);
+                        return new Mailbox(id, diData);
                 }
             }
 
             return null;
         }
+
+        /// <summary>
+        /// Creates a new WorldObject based off of the given ID and then calls to the object
+        /// for it to place itself on the given map at the indicated Vector2.
+        /// 
+        /// Objects are responsible for placing themselves and may have unique additional handling.
+        /// 
+        /// The position is the location of the top-left most tile on the base of the object.
+        /// </summary>
+        /// <param name="id">The ID of the WorldObject</param>
+        /// <param name="pos">The position in pixels of the place to put the object</param>
+        /// <param name="map">The map the WorldObject is to be put on</param>
+        public static void CreateAndPlaceNewWorldObject(int id, Vector2 pos, RHMap map)
+        {
+            GetWorldObjectByID(id)?.PlaceOnMap(pos, map);
+        }
+
         public static Dictionary<string, string> GetWorldObjectData(int id)
         {
             if (_diWorldObjects.ContainsKey(id)) { return _diWorldObjects[id]; }
@@ -496,10 +513,10 @@ namespace RiverHollow.Game_Managers
                 }
 
                 if (liData["Subtype"].Contains("Door")){
-                    return new Door(id, liData, pos);
+                    return new Door(id, liData);
                 }
                 else if (liData["Subtype"].Equals("Trigger")){
-                    return new Trigger(id, liData, pos);
+                    return new Trigger(id, liData);
                 }
             }
 
