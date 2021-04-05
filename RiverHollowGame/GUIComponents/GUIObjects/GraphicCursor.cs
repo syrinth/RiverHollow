@@ -55,7 +55,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public static void SetGUIItem(Item heldItem)
         {
             if (heldItem == null) { _guiItem = null; }
-            else { _guiItem = new GUIItem(heldItem); }
+            else {
+                _guiItem = new GUIItem(heldItem);
+                _guiItem.Position(new Vector2((int)Position.X + 16, (int)Position.Y + 16));
+            }
         }
 
         public static void ResetCursor()

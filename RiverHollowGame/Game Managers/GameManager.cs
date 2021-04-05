@@ -9,7 +9,7 @@ using RiverHollow.Items;
 using RiverHollow.Misc;
 
 using RiverHollow.GUIComponents.GUIObjects;
-using static RiverHollow.Items.WorldItem;
+using static RiverHollow.Items.Structure;
 
 namespace RiverHollow.Game_Managers
 {
@@ -65,7 +65,7 @@ namespace RiverHollow.Game_Managers
         public enum ElementAlignment { Neutral, Vulnerable, Resists };
         public enum ConditionEnum { None, KO, Poisoned, Silenced };
         public enum AdventurerTypeEnum { Magic, Martial };
-        public enum ObjectTypeEnum { WorldObject, Building, ClassChanger, Machine, Container, Earth, Floor, Destructible, Gatherable, Plant, Wall, Light, DungeonObject, CombatHazard, Mailbox };
+        public enum ObjectTypeEnum { WorldObject, Building, ClassChanger, Machine, Container, Earth, Floor, Destructible, Gatherable, Plant, Wall, Light, DungeonObject, CombatHazard, Mailbox, StructureUpgrader};
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
 
         public static float Scale = NORMAL_SCALE;

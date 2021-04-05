@@ -11,11 +11,11 @@ using RiverHollow.Items;
 using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Items.WorldItem;
+using static RiverHollow.Items.Structure;
 using static RiverHollow.Items.TriggerObject;
-using static RiverHollow.Items.WorldItem.Machine;
+using static RiverHollow.Items.Structure.Machine;
 using RiverHollow.Misc;
-using static RiverHollow.Characters.TalkingActor;
+using static RiverHollow.Items.Structure.AdjustableObject;
 
 namespace RiverHollow.Game_Managers
 {
@@ -82,6 +82,7 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, Dictionary<string, List<string>>> _diSchedule;
 
         public static List<int> FloorIDs { get; private set; }
+        public static List<int> StructureIDs { get; private set; }
 
         public static Dictionary<int, Dictionary<string, string>> Config;
 
@@ -97,6 +98,7 @@ namespace RiverHollow.Game_Managers
         {
             //Allocate Dictionaries
             FloorIDs = new List<int>();
+            StructureIDs = new List<int>();
             _diTextures = new Dictionary<string, Texture2D>();
 
             DiUpgrades = Content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
@@ -158,10 +160,9 @@ namespace RiverHollow.Game_Managers
 
         private static void LoadWorldObjectsDoWork(int id, Dictionary<string, string> taggedDictionary)
         {
-            if (Util.ParseEnum<ObjectTypeEnum>(taggedDictionary["Type"]) == ObjectTypeEnum.Floor)
-            {
-                FloorIDs.Add(id);
-            }
+            ObjectTypeEnum type = Util.ParseEnum<ObjectTypeEnum>(taggedDictionary["Type"]);
+            if (type == ObjectTypeEnum.Floor) { FloorIDs.Add(id); }
+            else if (type == ObjectTypeEnum.Container) { StructureIDs.Add(id); }
         }
 
 
@@ -435,10 +436,6 @@ namespace RiverHollow.Game_Managers
         }
         public static WorldObject GetWorldObject(int id, Vector2 pos)
         {
-            if(id == 47)
-            {
-                int i = 0;
-            }
             if (id != -1 && _diWorldObjects.ContainsKey(id))
             {
                 Dictionary<string, string> diData = _diWorldObjects[id];
@@ -453,6 +450,8 @@ namespace RiverHollow.Game_Managers
                         return new Container(id, diData, pos);
                     case "ClassChanger":
                         return new ClassChanger(id, diData, pos);
+                    case "StructureUpgrader":
+                        return new StructureUpgrader(id, diData, pos);
                     case "Plant":
                         return new Plant(id, diData, pos);
                     case "Gatherable":

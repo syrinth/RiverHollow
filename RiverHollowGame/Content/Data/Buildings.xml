@@ -31,11 +31,11 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Texture:Inn][Dimensions:208-176][Base:16-112-176-64][Entrance:96-146-16-29][ReqItems:55-8|60-12][Unlocked]</Value>
+      <Value>[Texture:Inn][Dimensions:176-176][Base:0-112-176-64][Entrance:80-144-16-31][ReqItems:55-8|60-12][Unlocked]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Texture:PotionHut][Dimensions:128-144][Base:16-80-96-64][Entrance:48-115-16-29][ReqItems:60-15|61-15]</Value>
+      <Value>[Texture:PotionHut][Dimensions:128-144][Base:16-80-96-64][Entrance:48-115-16-29][ReqItems:60-15|61-15][Unlocked]</Value>
     </Item>
     <Item>
       <Key>9</Key>

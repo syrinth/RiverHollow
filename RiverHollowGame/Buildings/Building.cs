@@ -8,8 +8,9 @@ using RiverHollow.Items;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Items.WorldItem;
+using static RiverHollow.Items.Structure;
 using RiverHollow.Utilities;
+using static RiverHollow.Items.Structure.AdjustableObject;
 
 namespace RiverHollow.Buildings
 {
@@ -292,7 +293,7 @@ namespace RiverHollow.Buildings
         /// <param name="location">The map location to create the wall.</param>
         private void PlaceWall(Vector2 location)
         {
-            WorldItem obj = (WorldItem)DataManager.GetWorldObject(int.Parse(DataManager.Config[9]["Wall"]));
+            Structure obj = (Structure)DataManager.GetWorldObject(int.Parse(DataManager.Config[9]["Wall"]));
             ((Wall)obj).SetMapName(MapManager.CurrentMap.Name);
             obj.SnapPositionToGrid(location);
             MapManager.CurrentMap.TestMapTiles(obj);

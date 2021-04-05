@@ -18,7 +18,7 @@ using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
 using static RiverHollow.GUIComponents.Screens.HUDMenu.HUDManagement.MgmtWindow;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.Items.Item;
-using static RiverHollow.Items.WorldItem;
+using static RiverHollow.Items.Structure;
 using static RiverHollow.Characters.TalkingActor;
 
 namespace RiverHollow.GUIComponents.Screens
@@ -2690,6 +2690,19 @@ namespace RiverHollow.GUIComponents.Screens
 
                 return rv;
             }
+        }
+    }
+
+    class HUDUpgradeWindow : GUIMainObject
+    {
+        public HUDUpgradeWindow(Building b)
+        {
+            _winMain = SetMainWindow();
+
+            GUIText name = new GUIText(b.Name);
+            name.AnchorToInnerSide(this, SideEnum.TopLeft);
+
+            AddControl(name);
         }
     }
 

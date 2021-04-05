@@ -8,8 +8,8 @@ using RiverHollow.Items;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.DataManager;
-using static RiverHollow.Items.WorldItem;
-using static RiverHollow.Items.WorldItem.Machine;
+using static RiverHollow.Items.Structure;
+using static RiverHollow.Items.Structure.Machine;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -27,8 +27,6 @@ namespace RiverHollow.GUIComponents.Screens
         private List<GUIItem> _liRequiredItems;
         private GUIText _gName;
         private GUIText _gDescription;
-
-        private GUIButton _btnRemove;
 
         private int _iSelectedItemID = -1;
 
@@ -53,11 +51,9 @@ namespace RiverHollow.GUIComponents.Screens
 
             //80, 48
             _winMachineInfo = new GUIWindow(GUIWindow.Window_1, _winMain.Width, ScaleIt(GUIWindow.Window_1.Edge * 2) + ScaleIt(TileSize));
-            _btnRemove = new GUIButton(new Rectangle(80, 48, 16, 16), ScaleIt(TileSize), ScaleIt(TileSize), DataManager.DIALOGUE_TEXTURE, RemoveCraftingStation);
 
             _winCraftables.AnchorAndAlignToObject(_winMain, SideEnum.Top, SideEnum.CenterX);
             _winMachineInfo.AnchorAndAlignToObject(_winMain, SideEnum.Bottom, SideEnum.CenterX);
-            _btnRemove.AnchorToInnerSide(_winMachineInfo, SideEnum.Right);
 
             DetermineSize();
 
@@ -236,14 +232,6 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             return rv;
-        }
-
-        private void RemoveCraftingStation()
-        {
-            GameManager.RemoveMachine(_craftMachine);
-            MapManager.CurrentMap.RemoveWorldObject(_craftMachine);
-            InventoryManager.AddToInventory(DataManager.GetItem(_craftMachine.BaseItemID));
-            GUIManager.CloseMainObject();
         }
     }
 }

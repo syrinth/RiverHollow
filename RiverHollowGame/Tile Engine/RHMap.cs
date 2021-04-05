@@ -10,19 +10,16 @@ using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using static RiverHollow.RiverHollow;
 using static RiverHollow.Game_Managers.CombatManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Items.WorldItem;
-using static RiverHollow.Items.Item;
-using static RiverHollow.Items.WorldItem.Floor;
-using static RiverHollow.GUIComponents.Screens.HUDMenu;
-using static RiverHollow.Items.WorldItem.Machine;
+using static RiverHollow.Items.Structure;
 using System.Linq;
+using static RiverHollow.Items.Structure.AdjustableObject;
+using static RiverHollow.Items.Structure.AdjustableObject.Floor;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -38,6 +35,7 @@ namespace RiverHollow.Tile_Engine
         public string DungeonName { get; private set; } = string.Empty;
         public bool IsDungeon => !string.IsNullOrEmpty(DungeonName);
         public bool IsTown { get; private set; }
+        public bool BuildingMap { get; private set; }
         bool _bOutside;
         public bool IsOutside => _bOutside;
         bool _bProduction = true;
@@ -120,6 +118,7 @@ namespace RiverHollow.Tile_Engine
             _renderer = map._renderer;
             _arrTiles = map._arrTiles;
 
+            BuildingMap = _map.Properties.ContainsKey("Building");
             IsTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
 
@@ -167,6 +166,7 @@ namespace RiverHollow.Tile_Engine
                     _arrTiles[j, i].SetProperties(this);
                 }
             }
+            BuildingMap = _map.Properties.ContainsKey("Building");
             IsTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
 
@@ -543,60 +543,67 @@ namespace RiverHollow.Tile_Engine
             int maxMobs = 0;
             List<int> resources = new List<int>();
 
-            foreach (TiledMapObject obj in _liMapObjects)
+            foreach (TiledMapObject tiledObj in _liMapObjects)
             {
                 if (!loaded)
                 {
-                    if (obj.Name.Equals("DungeonObject"))
+                    if (tiledObj.Name.Equals("DungeonObject"))
                     {
-                        TriggerObject d = DataManager.GetDungeonObject(obj.Properties, Util.SnapToGrid(obj.Position));
+                        TriggerObject d = DataManager.GetDungeonObject(tiledObj.Properties, Util.SnapToGrid(tiledObj.Position));
 
                         PlaceWorldObject(d);
                         GameManager.AddTrigger(d);
                     }
-                    else if (obj.Name.Equals("WorldObject"))
+                    else if (tiledObj.Name.Equals("WorldObject"))
                     {
                         //AddMachine
-                        int objectID = int.Parse(obj.Properties["ObjectID"]);
-                        WorldObject w = DataManager.GetWorldObject(objectID, Util.SnapToGrid(obj.Position));
-                        if (PlaceWorldObject(w))
+                        int objectID = int.Parse(tiledObj.Properties["ObjectID"]);
+                        WorldObject obj = DataManager.GetWorldObject(objectID, Util.SnapToGrid(tiledObj.Position));
+                        if (PlaceWorldObject(obj))
                         {
-                            if (w.CompareType(ObjectTypeEnum.Machine)) { GameManager.AddMachine((Machine)w, this.Name); }
+                            if (obj.CompareType(ObjectTypeEnum.Machine)) { GameManager.AddMachine((Machine)obj, this.Name); }
+                            if (obj.CompareType(ObjectTypeEnum.StructureUpgrader)) {
+
+                                if (BuildingMap)
+                                {
+                                    ((StructureUpgrader)obj).SetBuildingId(int.Parse(GetMapProperties()["BuildingID"]));
+                                }
+                            }
                         }
                     }
-                    else if (obj.Name.Equals("Chest"))
+                    else if (tiledObj.Name.Equals("Chest"))
                     {
                         Container c = (Container)DataManager.GetWorldObject(190);
                         InventoryManager.InitContainerInventory(c.Inventory);
-                        c.SnapPositionToGrid(obj.Position);
+                        c.SnapPositionToGrid(tiledObj.Position);
                         PlacePlayerObject(c);
-                        string[] holdSplit = obj.Properties["Holding"].Split('/');
+                        string[] holdSplit = tiledObj.Properties["Holding"].Split('/');
                         foreach (string s in holdSplit)
                         {
                             InventoryManager.AddToInventory(int.Parse(s), 1, false);
                         }
                         InventoryManager.ClearExtraInventory();
                     }
-                    else if (obj.Name.Equals("Building") && !loaded)
+                    else if (tiledObj.Name.Equals("Building") && !loaded)
                     {
-                        Building building = DataManager.GetBuilding(int.Parse(obj.Properties["BuildingID"]));
-                        building.SnapPositionToGrid(obj.Position);
+                        Building building = DataManager.GetBuilding(int.Parse(tiledObj.Properties["BuildingID"]));
+                        building.SnapPositionToGrid(tiledObj.Position);
                         AddBuilding(building, true);
                     }
-                    else if (obj.Name.Equals("Item"))
+                    else if (tiledObj.Name.Equals("Item"))
                     {
-                        Item item = DataManager.GetItem(int.Parse(obj.Properties["ItemID"]));
+                        Item item = DataManager.GetItem(int.Parse(tiledObj.Properties["ItemID"]));
                         item.AutoPickup = false;
                         item.ManualPickup = true;
                         item.OnTheMap = true;
-                        item.Position = Util.SnapToGrid(obj.Position);
+                        item.Position = Util.SnapToGrid(tiledObj.Position);
                         _liItems.Add(item);
                     }
                 }
 
-                if (obj.Name.Equals("SpawnPoint"))
+                if (tiledObj.Name.Equals("SpawnPoint"))
                 {
-                    _liMonsterSpawnPoints.Add(new MonsterSpawn(this, obj));
+                    _liMonsterSpawnPoints.Add(new MonsterSpawn(this, tiledObj));
                 }
 
 
@@ -1182,6 +1189,10 @@ namespace RiverHollow.Tile_Engine
             _liItems.Add(displayItem);
         }
 
+        public Dictionary<string, string> GetMapProperties()
+        {
+            return _map.Properties;
+        }
         public Dictionary<string, string> GetProperties(TiledMapTile tile)
         {
             Dictionary<string, string> propList = new Dictionary<string, string>();
@@ -1410,7 +1421,7 @@ namespace RiverHollow.Tile_Engine
                             if (MapManager.PlacePlayerObject(obj))
                             {
                                 rv = true;
-                                //newItem.SetMapName(this.Name);      //Assign the map name tot he WorldItem
+                                //newItem.SetMapName(this.Name);      //Assign the map name to the WorldItem
 
                                 //If the item placed was a wall object, we need to adjust it based off any adjacent walls
                                 if (obj.CompareType(ObjectTypeEnum.Floor)) { ((Floor)obj).AdjustObject(); }

@@ -5,7 +5,7 @@ using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Items.WorldItem;
+using static RiverHollow.Items.Structure;
 
 
 namespace RiverHollow.Game_Managers

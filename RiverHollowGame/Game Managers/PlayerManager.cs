@@ -23,8 +23,8 @@ namespace RiverHollow.Game_Managers
         public static bool Busy { get; private set; }
         public static List<Task> TaskLog { get; private set; }
 
-        public static int Stamina = 50;
-        public static int MaxStamina = 50;
+        public static int Stamina = 100;
+        public static int MaxStamina = 100;
         public static int _iBuildingID = -1;
         public static List<int> CanMake { get; private set; }
         private static string _currentMap;

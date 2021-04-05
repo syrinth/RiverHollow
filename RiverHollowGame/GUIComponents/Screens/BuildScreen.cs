@@ -26,7 +26,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _liButtons = new List<GUIObject>() {
                 new GUIButton("Build", BtnBuildings),
-                new GUIButton("Structures", BtnBuildings),
+                new GUIButton("Structures", BtnStructures),
                 new GUIButton("Flooring", BtnFlooring),
                 new GUIButton("Move", BtnMove),
                 new GUIButton("Exit", BtnExitMenu)
@@ -43,14 +43,22 @@ namespace RiverHollow.GUIComponents.Screens
             //If the right click has not been processed, we probably want to close anything that we have open.
             if (!rv)
             {
-                if (_gMainObject == null)
+                //ToDo: Need to handle right-clicking while building which should go back to menu
+                if (false)
                 {
-                    CloseMenu();
+                    GUIManager.OpenMenu();
                 }
+                else
+                {
+                    if (_gMainObject == null)
+                    {
+                        CloseMenu();
+                    }
 
-                GUIManager.CloseMainObject();
-                GameManager.GoToHUDScreen();
-                GUIManager.OpenMenu();
+                    GUIManager.CloseMainObject();
+                    GameManager.GoToHUDScreen();
+                    GUIManager.OpenMenu();
+                }
             }
 
             return rv;
@@ -161,6 +169,15 @@ namespace RiverHollow.GUIComponents.Screens
                 else if (objType == ObjectTypeEnum.Floor)
                 {
                     foreach(int i in DataManager.FloorIDs)
+                    {
+                        ConstructBox box = new ConstructBox(CONSTRUCTBOX_WIDTH, CONSTRUCTBOX_HEIGHT, objType, ConstructWorldObject);
+                        box.SetConstructionInfo(i);
+                        _liStructures.Add(box);
+                    }
+                }
+                else if (objType == ObjectTypeEnum.WorldObject)
+                {
+                    foreach (int i in DataManager.StructureIDs)
                     {
                         ConstructBox box = new ConstructBox(CONSTRUCTBOX_WIDTH, CONSTRUCTBOX_HEIGHT, objType, ConstructWorldObject);
                         box.SetConstructionInfo(i);

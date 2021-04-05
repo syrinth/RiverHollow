@@ -49,5 +49,28 @@
       <Key>Raining|2</Key>
       <Value>[Text:Hm. I'm thinking I might take a walk. I despise the rain, but there are several species of flowers I'm interested in that only bloom in the rain.][Weather:Raining]</Value>
     </Item>
+    <Item>
+      <Key>Emmanuel_1</Key>
+      <Value>[Text:I love my brother, but he can be so frustratingly vain sometimes. I was trying to tell him about my latest magical discovery and do you know what he said to me afterwards?
+"Do you think this new pin goes with my robes."
+I swear, he doesn't listen to a word I say.][Villager:3]</Value>
+    </Item>
+    <Item>
+      <Key>Daria_1</Key>
+      <Value>[Text:$Name$, you know $Character_6$ right? Do you have any idea why she asked me to arm wrestle the other day?
+I didn't know what to say, so I just stood there, staring at her until she left.][Villager:6]</Value>
+    </Item>
+    <Item>
+      <Key>Griselda_1</Key>
+      <Value>[Text:I tried to talk with $Character_17$ the other day but she just blew me off. She said she had no time for me! Can you believe that!][Villager:17]</Value>
+    </Item>
+    <Item>
+      <Key>Michael_1</Key>
+      <Value>[Text:You know, $Character_2$ is a lot more knowledgeable than he looks, once you get him to stop babbling and talk straight.][Villager:2]</Value>
+    </Item>
+    <Item>
+      <Key>Isabelle_1</Key>
+      <Value>[Text:$Character_11$ said she was going to try to get a book for me, but it hasn't arrived yet. Do you think it's too soon to ask her about it?][Villager:11]</Value>
+    </Item>
   </Asset>
 </XnaContent>

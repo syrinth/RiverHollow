@@ -387,7 +387,7 @@
     </Item>
     <Item>
       <Key>Building_11</Key>
-      <Value>[Name:StoneMason]</Value>
+      <Value>[Name:Stoneworks]</Value>
     </Item>
     <Item>
       <Key>Building_12</Key>
@@ -1399,38 +1399,42 @@
     </Item>
     <Item>
       <Key>WorldObject_53</Key>
-      <Value>[Name:Stone Wall]</Value>
+      <Value>[Name:Upgrade Board]</Value>
     </Item>
     <Item>
       <Key>WorldObject_54</Key>
-      <Value>[Name:Echo of Joy]</Value>
+      <Value>[Name:Stone Wall]</Value>
     </Item>
     <Item>
       <Key>WorldObject_55</Key>
-      <Value>[Name:Cotton]</Value>
+      <Value>[Name:Echo of Joy]</Value>
     </Item>
     <Item>
       <Key>WorldObject_56</Key>
-      <Value>[Name:Dragon Thistle]</Value>
+      <Value>[Name:Cotton]</Value>
     </Item>
     <Item>
       <Key>WorldObject_57</Key>
-      <Value>[Name:Staircase]</Value>
+      <Value>[Name:Dragon Thistle]</Value>
     </Item>
     <Item>
       <Key>WorldObject_58</Key>
-      <Value>[Name:Door_Up]</Value>
+      <Value>[Name:Staircase]</Value>
     </Item>
     <Item>
       <Key>WorldObject_59</Key>
-      <Value>[Name:Peat]</Value>
+      <Value>[Name:Door_Up]</Value>
     </Item>
     <Item>
       <Key>WorldObject_60</Key>
-      <Value>[Name:Lavender]</Value>
+      <Value>[Name:Peat]</Value>
     </Item>
     <Item>
       <Key>WorldObject_61</Key>
+      <Value>[Name:Lavender]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_62</Key>
       <Value>[Name:Flax]</Value>
     </Item>
   </Asset>

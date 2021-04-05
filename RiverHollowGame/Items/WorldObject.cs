@@ -253,9 +253,12 @@ namespace RiverHollow.Items
         {
             base.Update(gTime);
             if(_sprite.Position != _vMapPosition) { _sprite.Position = _vMapPosition; }
-            if (_iHP <= 0 && (!_sprite.ContainsAnimation(AnimationEnum.KO) || _sprite.AnimationFinished(AnimationEnum.KO)))
+            if (_iHP <= 0)
             {
-                MapManager.Maps[Tiles[0].MapName].RemoveWorldObject(this);
+                if (!_sprite.ContainsAnimation(AnimationEnum.KO) || _sprite.AnimationFinished(AnimationEnum.KO))
+                {
+                    MapManager.Maps[Tiles[0].MapName].RemoveWorldObject(this);
+                }
             }
         }
 
@@ -285,6 +288,215 @@ namespace RiverHollow.Items
             else if (PlayerManager.World.Facing == DirectionEnum.Down) { yMod = 1; }
             
             _sprite.Position = new Vector2(_sprite.Position.X + xMod, _sprite.Position.Y + yMod);
+        }
+    }
+
+    public class Plant : Destructible
+    {
+        #region consts
+        const float MAX_ROTATION = 0.15f;
+        const float ROTATION_MOD = 0.02f;
+        const float MAX_BOUNCE = 3;
+        #endregion
+
+        public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + _iHeight - TileSize, TileSize, TileSize);
+
+        bool _bNoWater = false;
+        bool _bShaking = false;
+        DirectionEnum dir = DirectionEnum.Right;
+        float _fCurrentRotation = 0f;
+        int _iBounceCount = 0;
+
+        readonly bool _bPopItem;
+        int _iCurrentState;
+        readonly int _iMaxStates;
+        readonly int _iResourceID;
+        int _iDaysLeft;
+        Dictionary<int, int> _diTransitionTimes;
+
+        public Plant(int id, Dictionary<string, string> stringData, Vector2 position) : base(id, stringData, position, false)
+        {
+            _diTransitionTimes = new Dictionary<int, int>();
+
+            LoadDictionaryData(stringData);
+
+            _bImpassable = false;
+
+            _iCurrentState = 0;
+
+            Util.AssignValue(ref _bNoWater, "NoWater", stringData);
+            Util.AssignValue(ref _iResourceID, "Item", stringData);
+            Util.AssignValue(ref _iMaxStates, "TrNum", stringData); //Number of growth phases
+
+            _bPopItem = false;
+
+            //The amount of time for each phase
+            string[] dayStr = stringData["TrTime"].Split('-');
+            for (int j = 0; j < _iMaxStates - 1; j++)
+            {
+                _diTransitionTimes.Add(j, int.Parse(dayStr[j]));
+            }
+            _iDaysLeft = _diTransitionTimes[0];
+
+            if (stringData.ContainsKey("DestructionAnim"))
+            {
+                string[] splitString = stringData["DestructionAnim"].Split('-');
+                _sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), _iWidth, _iHeight, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
+            }
+
+            _sprite.SetRotationOrigin(new Vector2(_iWidth / 2, _iHeight - 1));    //Subtract one to keep it in the bounds of the rectangle
+        }
+
+        protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
+        {
+            _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
+            _sprite.AddAnimation(0.ToString(), (int)_pImagePos.X, (int)_pImagePos.Y, _iWidth, _iHeight);
+            for (int j = 1; j < _diTransitionTimes.Count + 1; j++)
+            {
+                _sprite.AddAnimation(j.ToString(), (int)_pImagePos.X + (TileSize * j), (int)_pImagePos.Y, _iWidth, _iHeight);
+            }
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            //If the object is shaking, we need to determine what step it's in
+            if (_bShaking)
+            {
+                if (dir == DirectionEnum.Right) { _fCurrentRotation += ROTATION_MOD; }
+                else if (dir == DirectionEnum.Left) { _fCurrentRotation -= ROTATION_MOD; }
+
+                _sprite.SetRotationAngle(_fCurrentRotation);
+
+                //If we've reached the end of our bounce, increment the bounce count
+                //and set us to just below the trigger value for the statement we just hit.
+                if (_iBounceCount == MAX_BOUNCE && _fCurrentRotation >= -ROTATION_MOD && _fCurrentRotation <= ROTATION_MOD)
+                {
+                    _bShaking = false;
+                    _iBounceCount = 0;
+                }
+                else if (_fCurrentRotation >= MAX_ROTATION)
+                {
+                    dir = DirectionEnum.Left;
+                    _iBounceCount++;
+                    _fCurrentRotation = MAX_ROTATION - ROTATION_MOD;
+                }
+                else if (_fCurrentRotation <= -MAX_ROTATION)
+                {
+                    dir = DirectionEnum.Right;
+                    _iBounceCount++;
+                    _fCurrentRotation = -MAX_ROTATION + ROTATION_MOD;
+                }
+            }
+
+            base.Update(gTime);
+        }
+
+        public override void ProcessLeftClick() { Harvest(); }
+        //public override void ProcessRightClick() { Harvest(); }
+
+        /// <summary>
+        /// Call to tell the plant that it is being Harvested, and follow any logic
+        /// that needs to happen for this to occur.
+        /// 
+        /// Can only Harvest plants that are finished growing.
+        /// </summary>
+        public void Harvest()
+        {
+            if (NeededTool != ToolEnum.None) { PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool)); }
+            else
+            {
+                Item it = null;
+                if (FinishedGrowing())
+                {
+                    it = DataManager.GetItem(_iResourceID);
+                    if (_bPopItem)
+                    {
+                        it.Pop(MapPosition);
+                    }
+                    else
+                    {
+                        InventoryManager.AddToInventory(it);
+                    }
+
+                    MapManager.RemoveWorldObject(this);
+                    RemoveSelfFromTiles();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Tell the object to shake
+        /// </summary>
+        public void Shake()
+        {
+            if (!_bShaking)
+            {
+                if (PlayerManager.World.CollisionBox.Center.X > CollisionBox.Center.X) { dir = DirectionEnum.Left; }
+                else if (PlayerManager.World.CollisionBox.Center.X < CollisionBox.Center.X) { dir = DirectionEnum.Right; }
+                _bShaking = true;
+            }
+        }
+
+        /// <summary>
+        /// On rollover, increase the plant's growth cycle if it has been watered.
+        /// </summary>
+        public override void Rollover()
+        {
+            if (_bNoWater || Tiles[0].IsWatered())
+            {
+                if (_iDaysLeft > 0) //Decrement the number of days until the next phase
+                {
+                    _iDaysLeft--;
+                }
+                else if (!FinishedGrowing()) //If it hasn't finished growing, and there'sno days left, go to the next phase
+                {
+                    _iCurrentState++;
+                    _sprite.PlayAnimation(_iCurrentState.ToString());
+                    if (_diTransitionTimes.ContainsKey(_iCurrentState))
+                    {
+                        _iDaysLeft = _diTransitionTimes[_iCurrentState];
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// Check if the plant has finished growing or not.
+        /// </summary>
+        /// <returns>True if it's on the last phase</returns>
+        public bool FinishedGrowing() { return _iCurrentState == _iMaxStates - 1; }
+
+        public void FinishGrowth()
+        {
+            _iCurrentState = _iMaxStates - 1;
+            //_rSource.X += _iWidth * _iCurrentState;
+        }
+
+        public override bool CanPickUp()
+        {
+            return FinishedGrowing();
+        }
+
+        internal PlantData SaveData()
+        {
+            PlantData plantData = new PlantData
+            {
+                ID = _iID,
+                x = (int)MapPosition.X,
+                y = (int)this.MapPosition.Y,
+                currentState = _iCurrentState,
+                daysLeft = _iDaysLeft
+            };
+
+            return plantData;
+        }
+
+        internal void LoadData(PlantData data)
+        {
+            SnapPositionToGrid(new Vector2(data.x, data.y));
+            _iCurrentState = data.currentState;
+            _iDaysLeft = data.daysLeft;
+
+            _sprite.PlayAnimation(_iCurrentState.ToString());
         }
     }
 
@@ -493,11 +705,8 @@ namespace RiverHollow.Items
     /// <summary>
     /// WorldItems represent WorldObjects that are created by placing down items
     /// </summary>
-    public abstract class WorldItem : WorldObject
+    public abstract class Structure : WorldObject
     {
-        protected int _iBaseItemID;
-        public int BaseItemID => _iBaseItemID;
-
         protected string _sMapName;                                 //Used to play sounds on that map
         public Vector2 HeldItemPos
         {
@@ -514,8 +723,8 @@ namespace RiverHollow.Items
 
         public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + (_iHeight - BaseHeight), BaseWidth, BaseHeight);
 
-        protected WorldItem() : base() {}
-        protected WorldItem(int id, Vector2 pos) : base(id, pos) {}
+        protected Structure() : base() {}
+        protected Structure(int id, Vector2 pos) : base(id, pos) {}
 
         public override void SnapPositionToGrid(Vector2 position)
         {
@@ -524,7 +733,7 @@ namespace RiverHollow.Items
         }
         public void SetMapName(string val) { _sMapName = val; }
 
-        public class ClassChanger : WorldItem
+        public class ClassChanger : Structure
         {
             public ClassChanger(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
             {
@@ -549,7 +758,7 @@ namespace RiverHollow.Items
             public virtual void LoadData(MachineData mac) { }
         }
 
-        public abstract class Machine : WorldItem
+        public abstract class Machine : Structure
         {
             private MachineTypeEnum _eMachineType;
 
@@ -566,8 +775,6 @@ namespace RiverHollow.Items
             public Machine(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos - new Vector2(0, TileSize))
             {
                 _heldItem = null;
-
-                Util.AssignValue(ref _iBaseItemID, "ItemID", stringData);
 
                 if (stringData.ContainsKey("WorkAnimation"))
                 {
@@ -939,24 +1146,20 @@ namespace RiverHollow.Items
             }
         }
 
-        public class Container : WorldItem
+        public class Container : Structure
         {
-            int _iRows;
-            public int Rows { get => _iRows; }
-            int _iColumns;
-            public int Columns { get => _iColumns; }
-
-            Item[,] _inventory;
-            public Item[,] Inventory { get => _inventory; }
+            public int Rows { get; }
+            public int Columns { get; }
+            public Item[,] Inventory { get; }
 
             public Container(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
             {
                 LoadDictionaryData(stringData);
 
-                _iRows = int.Parse(stringData["Rows"]);
-                _iColumns = int.Parse(stringData["Cols"]);
+                Rows = int.Parse(stringData["Rows"]);
+                Columns = int.Parse(stringData["Cols"]);
 
-                _inventory = new Item[_iRows, _iColumns];
+                Inventory = new Item[Rows, Columns];
             }
 
             public override void ProcessRightClick()
@@ -969,8 +1172,8 @@ namespace RiverHollow.Items
                 ContainerData containerData = new ContainerData
                 {
                     containerID = this.ID,
-                    rows = _iRows,
-                    cols = _iColumns,
+                    rows = Rows,
+                    cols = Columns,
                     x = (int)this.MapPosition.X,
                     y = (int)this.MapPosition.Y
                 };
@@ -1002,213 +1205,7 @@ namespace RiverHollow.Items
             }
         }
 
-        public class Plant : Destructible
-        {
-            #region consts
-            const float MAX_ROTATION = 0.15f;
-            const float ROTATION_MOD = 0.02f;
-            const float MAX_BOUNCE = 3;
-            #endregion
-
-            public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + _iHeight - TileSize, TileSize, TileSize);
-
-            bool _bNoWater = false;
-            bool _bShaking = false;
-            DirectionEnum dir = DirectionEnum.Right;
-            float _fCurrentRotation = 0f;
-            int _iBounceCount = 0;
-
-            readonly bool _bPopItem;
-            int _iCurrentState;
-            readonly int _iMaxStates;
-            readonly int _iResourceID;
-            int _iDaysLeft;
-            Dictionary<int, int> _diTransitionTimes;
-
-            public Plant(int id, Dictionary<string, string> stringData, Vector2 position) : base(id, stringData, position, false)
-            {
-                _diTransitionTimes = new Dictionary<int, int>();
-
-                LoadDictionaryData(stringData);
-
-                _bImpassable = false;
-
-                _iCurrentState = 0;
-
-                Util.AssignValue(ref _bNoWater, "NoWater", stringData);
-                Util.AssignValue(ref _iResourceID, "Item", stringData);
-                Util.AssignValue(ref _iMaxStates, "TrNum", stringData); //Number of growth phases
-
-                _bPopItem = false;
-
-                //The amount of time for each phase
-                string[] dayStr = stringData["TrTime"].Split('-');
-                for (int j = 0; j < _iMaxStates - 1; j++)
-                {
-                    _diTransitionTimes.Add(j, int.Parse(dayStr[j]));
-                }
-                _iDaysLeft = _diTransitionTimes[0];
-
-                if (stringData.ContainsKey("DestructionAnim"))
-                {
-                    string[] splitString = stringData["DestructionAnim"].Split('-');
-                    _sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), _iWidth, _iHeight, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
-                }
-
-                _sprite.SetRotationOrigin(new Vector2(_iWidth / 2, _iHeight - 1));    //Subtract one to keep it in the bounds of the rectangle
-            }
-
-            protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
-            {
-                _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-                _sprite.AddAnimation(0.ToString(), (int)_pImagePos.X, (int)_pImagePos.Y, _iWidth, _iHeight);
-                for (int j = 1; j < _diTransitionTimes.Count + 1; j++){
-                    _sprite.AddAnimation(j.ToString(), (int)_pImagePos.X + (TileSize * j), (int)_pImagePos.Y, _iWidth, _iHeight);
-                }
-            }
-
-            public override void Update(GameTime gTime)
-            {
-                //If the object is shaking, we need to determine what step it's in
-                if (_bShaking)
-                {
-                    if (dir == DirectionEnum.Right) { _fCurrentRotation += ROTATION_MOD;}
-                    else if (dir == DirectionEnum.Left) { _fCurrentRotation -= ROTATION_MOD; }
-
-                    _sprite.SetRotationAngle(_fCurrentRotation);
-
-                    //If we've reached the end of our bounce, increment the bounce count
-                    //and set us to just below the trigger value for the statement we just hit.
-                    if (_iBounceCount == MAX_BOUNCE && _fCurrentRotation >= - ROTATION_MOD && _fCurrentRotation <= ROTATION_MOD)
-                    {
-                        _bShaking = false;
-                        _iBounceCount = 0;
-                    }
-                    else if (_fCurrentRotation >= MAX_ROTATION)
-                    {
-                        dir = DirectionEnum.Left;
-                        _iBounceCount++;
-                        _fCurrentRotation = MAX_ROTATION - ROTATION_MOD;
-                    }
-                    else if (_fCurrentRotation <= -MAX_ROTATION)
-                    {
-                        dir = DirectionEnum.Right;
-                        _iBounceCount++;
-                        _fCurrentRotation = -MAX_ROTATION + ROTATION_MOD;
-                    }
-                }
-                _sprite.Update(gTime);
-            }
-
-            public override void ProcessLeftClick() { Harvest(); }
-            //public override void ProcessRightClick() { Harvest(); }
-
-            /// <summary>
-            /// Call to tell the plant that it is being Harvested, and follow any logic
-            /// that needs to happen for this to occur.
-            /// 
-            /// Can only Harvest plants that are finished growing.
-            /// </summary>
-            public void Harvest()
-            {
-                if (NeededTool != ToolEnum.None) { PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool)); }
-                else
-                {
-                    Item it = null;
-                    if (FinishedGrowing())
-                    {
-                        it = DataManager.GetItem(_iResourceID);
-                        if (_bPopItem)
-                        {
-                            it.Pop(MapPosition);
-                        }
-                        else
-                        {
-                            InventoryManager.AddToInventory(it);
-                        }
-
-                        MapManager.RemoveWorldObject(this);
-                        RemoveSelfFromTiles();
-                    }
-                }
-            }
-
-            /// <summary>
-            /// Tell the object to shake
-            /// </summary>
-            public void Shake()
-            {
-                if (!_bShaking)
-                {
-                    if (PlayerManager.World.CollisionBox.Center.X > CollisionBox.Center.X) { dir = DirectionEnum.Left; }
-                    else if (PlayerManager.World.CollisionBox.Center.X < CollisionBox.Center.X) { dir = DirectionEnum.Right; }
-                    _bShaking = true;
-                }
-            }
-
-            /// <summary>
-            /// On rollover, increase the plant's growth cycle if it has been watered.
-            /// </summary>
-            public override void Rollover()
-            {
-                if (_bNoWater || Tiles[0].IsWatered()) {
-                    if (_iDaysLeft > 0) //Decrement the number of days until the next phase
-                    {
-                        _iDaysLeft--;
-                    }
-                    else if(!FinishedGrowing()) //If it hasn't finished growing, and there'sno days left, go to the next phase
-                    {
-                        _iCurrentState++;
-                        _sprite.PlayAnimation(_iCurrentState.ToString());
-                        if (_diTransitionTimes.ContainsKey(_iCurrentState))
-                        {
-                            _iDaysLeft = _diTransitionTimes[_iCurrentState];
-                        }
-                    }
-                }
-            }
-            /// <summary>
-            /// Check if the plant has finished growing or not.
-            /// </summary>
-            /// <returns>True if it's on the last phase</returns>
-            public bool FinishedGrowing() { return _iCurrentState == _iMaxStates-1; }
-
-            public void FinishGrowth()
-            {
-                _iCurrentState = _iMaxStates - 1;
-                //_rSource.X += _iWidth * _iCurrentState;
-            }
-
-            public override bool CanPickUp()
-            {
-                return FinishedGrowing();
-            }
-
-            internal PlantData SaveData()
-            {
-                PlantData plantData = new PlantData
-                {
-                    ID = _iID,
-                    x = (int)MapPosition.X,
-                    y = (int)this.MapPosition.Y,
-                    currentState = _iCurrentState,
-                    daysLeft = _iDaysLeft
-                };
-
-                return plantData;
-            }
-
-            internal void LoadData(PlantData data)
-            {
-                SnapPositionToGrid(new Vector2(data.x, data.y));
-                _iCurrentState = data.currentState;
-                _iDaysLeft = data.daysLeft;
-
-                _sprite.PlayAnimation(_iCurrentState.ToString());
-            }
-        }
-
-        public class AdjustableObject : WorldItem
+        public class AdjustableObject : Structure
         {
             //This is used for subtypes that have different sprites.
             //Like the Earth which has a watered and unwatered Sprite
@@ -1319,147 +1316,147 @@ namespace RiverHollow.Items
             /// <param name="obj">Reference to any AdjustableObject that may be found</param>
             /// <returns>True if the tile exists and contains a matching AdjustableObject</returns>
             protected virtual bool MatchingObjectTest(RHTile tile, ref AdjustableObject obj) { return false; }
-        }
 
-        public class Floor : AdjustableObject
-        {
-            public Floor() : base() { }
-
-            /// <summary>
-            /// Base Constructor to hard define the Height and Width
-            /// </summary>
-            public Floor(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
+            public class Floor : AdjustableObject
             {
-                LoadDictionaryData(stringData, false);
-                LoadAdjustableSprite(ref _sprite, DataManager.FILE_FLOORING);
+                public Floor() : base() { }
 
-                _eObjectType = ObjectTypeEnum.Floor;
-            }
-
-            /// <summary>
-            /// Overriding because weneed to set the Depth to 0 for drawing since
-            /// this is a floor object and needs to beon the bottom.
-            /// </summary>
-            public override void Draw(SpriteBatch spriteBatch)
-            {
-                Target.Draw(spriteBatch, 0);
-            }
-
-            /// <summary>
-            /// Check to see that the tile exists, has an AdjustableObject and that AdjustableObject matches the initial type
-            /// </summary>
-            /// <param name="tile">Tile to test against</param>
-            /// <returns>True if the tile exists and contains a Wall</returns>
-            protected override bool MatchingObjectTest(RHTile tile, ref AdjustableObject obj)
-            {
-                bool rv = false;
-
-                if (tile != null)
+                /// <summary>
+                /// Base Constructor to hard define the Height and Width
+                /// </summary>
+                public Floor(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
                 {
-                    obj = tile.GetFloorObject();
-                    if (obj != null && obj.Type == Type)
+                    LoadDictionaryData(stringData, false);
+                    LoadAdjustableSprite(ref _sprite, DataManager.FILE_FLOORING);
+
+                    _eObjectType = ObjectTypeEnum.Floor;
+                }
+
+                /// <summary>
+                /// Overriding because weneed to set the Depth to 0 for drawing since
+                /// this is a floor object and needs to beon the bottom.
+                /// </summary>
+                public override void Draw(SpriteBatch spriteBatch)
+                {
+                    Target.Draw(spriteBatch, 0);
+                }
+
+                /// <summary>
+                /// Check to see that the tile exists, has an AdjustableObject and that AdjustableObject matches the initial type
+                /// </summary>
+                /// <param name="tile">Tile to test against</param>
+                /// <returns>True if the tile exists and contains a Wall</returns>
+                protected override bool MatchingObjectTest(RHTile tile, ref AdjustableObject obj)
+                {
+                    bool rv = false;
+
+                    if (tile != null)
                     {
-                        rv = true;
+                        obj = tile.GetFloorObject();
+                        if (obj != null && obj.Type == Type)
+                        {
+                            rv = true;
+                        }
                     }
+
+                    return rv;
                 }
 
-                return rv;
-            }
-
-            internal FloorData SaveData()
-            {
-                FloorData floorData = new FloorData
+                internal FloorData SaveData()
                 {
-                    ID = _iID,
-                    x = (int)MapPosition.X,
-                    y = (int)MapPosition.Y
-                };
+                    FloorData floorData = new FloorData
+                    {
+                        ID = _iID,
+                        x = (int)MapPosition.X,
+                        y = (int)MapPosition.Y
+                    };
 
-                return floorData;
-            }
-            internal void LoadData(FloorData data)
-            {
-                _iID = data.ID;
-                SnapPositionToGrid(new Vector2(data.x, data.y));
-            }
-
-            public class Earth : Floor
-            {
-                protected override AnimatedSprite Target => _bWatered ? _sprWatered : _sprite;
-
-                AnimatedSprite _sprWatered;
-                bool _bWatered;
-
-                public Earth()
+                    return floorData;
+                }
+                internal void LoadData(FloorData data)
                 {
-                    _iID = 0;
-                    _eObjectType = ObjectTypeEnum.Earth;
-                    _pImagePos = Point.Zero;
-
-                    LoadAdjustableSprite(ref _sprite);
-                    _pImagePos.Y += TileSize;
-
-                    LoadAdjustableSprite(ref _sprWatered);
-                    _pImagePos.Y -= TileSize;
-
-                    Watered(false);
+                    _iID = data.ID;
+                    SnapPositionToGrid(new Vector2(data.x, data.y));
                 }
 
-                public override void SnapPositionToGrid(Vector2 position)
+                public class Earth : Floor
                 {
-                    base.SnapPositionToGrid(position);
-                    _sprWatered.Position = position;
-                }
+                    protected override AnimatedSprite Target => _bWatered ? _sprWatered : _sprite;
 
-                public override void Rollover()
-                {
-                    Watered(false);
-                }
+                    AnimatedSprite _sprWatered;
+                    bool _bWatered;
 
-                public void Watered(bool value)
-                {
-                    _bWatered = value;
-                    _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
-                }
-                public bool Watered() { return _bWatered; }
-            }
-        }
+                    public Earth()
+                    {
+                        _iID = 0;
+                        _eObjectType = ObjectTypeEnum.Earth;
+                        _pImagePos = Point.Zero;
 
-        /// <summary>
-        /// Wall object that can adjust themselves based off of other, adjacent walls
-        /// </summary>
-        public class Wall : AdjustableObject
-        {
-            public Wall(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
-            {
-                LoadDictionaryData(stringData, false);
-                LoadAdjustableSprite(ref _sprite, DataManager.FILE_WORLDOBJECTS);
+                        LoadAdjustableSprite(ref _sprite);
+                        _pImagePos.Y += TileSize;
+
+                        LoadAdjustableSprite(ref _sprWatered);
+                        _pImagePos.Y -= TileSize;
+
+                        Watered(false);
+                    }
+
+                    public override void SnapPositionToGrid(Vector2 position)
+                    {
+                        base.SnapPositionToGrid(position);
+                        _sprWatered.Position = position;
+                    }
+
+                    public override void Rollover()
+                    {
+                        Watered(false);
+                    }
+
+                    public void Watered(bool value)
+                    {
+                        _bWatered = value;
+                        _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
+                    }
+                    public bool Watered() { return _bWatered; }
+                }
             }
 
             /// <summary>
-            /// Check to see that the tile exists, has an AdjustableObject and that AdjustableObject matches the initial type
+            /// Wall object that can adjust themselves based off of other, adjacent walls
             /// </summary>
-            /// <param name="tile">Tile to test against</param>
-            /// <returns>True if the tile exists and contains a Wall</returns>
-            protected override bool MatchingObjectTest(RHTile tile, ref AdjustableObject obj)
+            public class Wall : AdjustableObject
             {
-                bool rv = false;
-
-                if (tile != null)
+                public Wall(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
                 {
-                    WorldObject wObj = tile.GetWorldObject(false);
-                    if (wObj != null && wObj.Type == Type)
-                    {
-                        obj = (AdjustableObject)wObj;
-                        rv = true;
-                    }
+                    LoadDictionaryData(stringData, false);
+                    LoadAdjustableSprite(ref _sprite, DataManager.FILE_WORLDOBJECTS);
                 }
 
-                return rv;
+                /// <summary>
+                /// Check to see that the tile exists, has an AdjustableObject and that AdjustableObject matches the initial type
+                /// </summary>
+                /// <param name="tile">Tile to test against</param>
+                /// <returns>True if the tile exists and contains a Wall</returns>
+                protected override bool MatchingObjectTest(RHTile tile, ref AdjustableObject obj)
+                {
+                    bool rv = false;
+
+                    if (tile != null)
+                    {
+                        WorldObject wObj = tile.GetWorldObject(false);
+                        if (wObj != null && wObj.Type == Type)
+                        {
+                            obj = (AdjustableObject)wObj;
+                            rv = true;
+                        }
+                    }
+
+                    return rv;
+                }
             }
         }
 
-        public class Light : WorldItem
+        public class Light : Structure
         {
             public Light(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
             {
@@ -1739,5 +1736,33 @@ namespace RiverHollow.Items
                 }
             }
         }
+    }
+
+    public class StructureUpgrader : WorldObject
+    {
+        int _iStructureID = -1;
+        int _iBuildingID = -1;
+
+        public StructureUpgrader(int id, Dictionary<string, string> stringData, Vector2 pos) : base (id, pos) {
+            LoadDictionaryData(stringData);
+        }
+
+        public override void ProcessLeftClick()
+        {
+            GUIManager.OpenMainObject(new HUDUpgradeWindow(PlayerManager.GetBuildingByID(_iBuildingID)));
+        }
+
+        public void SetBuildingId(int ID)
+        {
+            _iBuildingID = ID;
+            _iStructureID = -1;
+        }
+
+        public void SetStructureId(int ID)
+        {
+            _iStructureID = ID;
+            _iBuildingID = -1;
+        }
+
     }
 }

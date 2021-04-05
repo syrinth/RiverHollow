@@ -35,7 +35,7 @@ namespace RiverHollow.Misc
         //This should be used as little as possible.
         public TextEntry(string text)
         {
-            _sText = "[Text:" + text + "]";
+            _sText = text;
         }
 
         public TextEntry(string key, Dictionary<string, string> stringData)
@@ -215,6 +215,15 @@ namespace RiverHollow.Misc
 
                     rv = true;
                 }
+                if (_diTags.ContainsKey("Villager"))
+                {
+                    foreach (string i in _diTags["Villager"].Split('-'))
+                    {
+                        if (!DataManager.DiNPC[int.Parse(i)].ArrivedInTown) { return false; }
+                    }
+
+                    rv = true;
+                }
             }
 
             return rv;
@@ -227,7 +236,7 @@ namespace RiverHollow.Misc
         public void HandlePreWindowActions(TalkingActor act = null)
         {
             Spoken(act);
-            if (_diTags.ContainsKey("Face"))
+            if (_diTags != null && _diTags.ContainsKey("Face"))
             {
                 act?.QueueActorFace(_diTags["Face"]);
             }

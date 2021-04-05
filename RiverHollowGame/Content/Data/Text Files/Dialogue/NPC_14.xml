@@ -26,7 +26,7 @@
       <Value>[Text:Hey.{{Talk-Talk|Gift-GiveGift|Never Mind-Cancel}}]</Value>
     </Item>
     <Item>
-      <Key>Task_0_End</Key>
+      <Key>Task_3_End</Key>
       <Value>[Text:Wow, you did that already? Great. Now any travelers that pass through will have a place to stay. This is it, $Name$. This is the first real step we take to rebuiling $Town$.
 We're going to need money though. I've got some thinking to do...][Face:Happy][SendMessage:0]</Value>
     </Item>

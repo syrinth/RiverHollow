@@ -215,38 +215,42 @@
     </Item>
     <Item>
       <Key>53</Key>
-      <Value>[Type:Wall][Image:0-128][Width:16][Height:32]</Value>
+      <Value>[Type:StructureUpgrader][Image:176-48]</Value>
     </Item>
     <Item>
       <Key>54</Key>
-      <Value>[Type:WorldObject][Image:0-80][Width:16][Height:16][Tool:Lantern][Hp:5][ReqLvl:1][ItemID:18][Idle:5-0.150][Gathered:7-0.150]</Value>
+      <Value>[Type:Wall][Image:0-128][Width:16][Height:32]</Value>
     </Item>
     <Item>
       <Key>55</Key>
-      <Value>[Type:WorldObject][Image:96-0][Width:16][Height:16][ItemID:26][Passable]</Value>
+      <Value>[Type:WorldObject][Image:0-80][Width:16][Height:16][Tool:Lantern][Hp:5][ReqLvl:1][ItemID:18][Idle:5-0.150][Gathered:7-0.150]</Value>
     </Item>
     <Item>
       <Key>56</Key>
-      <Value>[Type:WorldObject][Image:112-16][Width:16][Height:32][ItemID:27][Passable]</Value>
+      <Value>[Type:WorldObject][Image:96-0][Width:16][Height:16][ItemID:26][Passable]</Value>
     </Item>
     <Item>
       <Key>57</Key>
-      <Value>[Type:WorldObject][Image:48-0][Width:16][Height:16]</Value>
+      <Value>[Type:WorldObject][Image:112-16][Width:16][Height:32][ItemID:27][Passable]</Value>
     </Item>
     <Item>
       <Key>58</Key>
-      <Value>[Type:WorldObject][Image:64-0][Width:16][Height:32]</Value>
+      <Value>[Type:WorldObject][Image:48-0][Width:16][Height:16]</Value>
     </Item>
     <Item>
       <Key>59</Key>
-      <Value>[Type:WorldObject][Image:80-64][Width:16][Height:16][ItemID:4]</Value>
+      <Value>[Type:WorldObject][Image:64-0][Width:16][Height:32]</Value>
     </Item>
     <Item>
       <Key>60</Key>
-      <Value>[Type:WorldObject][Image:96-16][Width:16][Height:16][ItemID:24]</Value>
+      <Value>[Type:WorldObject][Image:80-64][Width:16][Height:16][ItemID:4]</Value>
     </Item>
     <Item>
       <Key>61</Key>
+      <Value>[Type:WorldObject][Image:96-16][Width:16][Height:16][ItemID:24]</Value>
+    </Item>
+    <Item>
+      <Key>62</Key>
       <Value>[Type:WorldObject][Image:80-32][Width:16][Height:16][ItemID:25][Passable]</Value>
     </Item>
   </Asset>

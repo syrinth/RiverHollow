@@ -16,7 +16,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.DataManager;
 using static RiverHollow.Game_Managers.TravelManager;
 using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Items.WorldItem;
+using static RiverHollow.Items.Structure;
 using static RiverHollow.GUIComponents.Screens.HUDMenu;
 using static RiverHollow.GUIComponents.Screens.HUDMenu.HUDManagement;
 
