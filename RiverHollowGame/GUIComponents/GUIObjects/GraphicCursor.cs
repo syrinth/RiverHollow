@@ -117,10 +117,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (GameManager.HeldObject != null)
             {
-                Vector2 mousePosition = GetWorldMousePosition();
-                Rectangle drawRectangle = new Rectangle(((int)((mousePosition.X - HeldObject.Width / 2) / TileSize)) * TileSize, ((int)((mousePosition.Y - HeldObject.Height / 2) / TileSize)) * TileSize, HeldObject.Width, HeldObject.Height);
-
-                GameManager.HeldObject.SnapPositionToGrid(new Vector2(drawRectangle.X, drawRectangle.Y));
+                GameManager.HeldObject.SnapPositionToGrid(GetWorldMousePosition() - GameManager.HeldObject.PickupOffset);
                 HeldObject.Sprite.Draw(spriteBatch);
             }
         }

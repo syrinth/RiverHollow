@@ -35,11 +35,11 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Texture:PotionHut][Dimensions:128-144][Base:16-80-96-64][Entrance:48-115-16-29][ReqItems:60-15|61-15][Unlocked]</Value>
+      <Value>[Texture:PotionHut][Dimensions:128-144][Base:16-80-96-64][Entrance:48-115-16-29][ReqItems:60-15|61-15][Unlocked][Upgrade_1:55-10|60-10][Upgrade_2:55-10|60-10]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Texture:LumberMill][Dimensions:112-144][Base:0-80-112-64][Entrance:48-112-16-32][Unlocked]</Value>
+      <Value>[Texture:LumberMill][Dimensions:112-144][Base:0-80-112-64][Entrance:48-112-16-32][Unlocked][Upgrade_1:55-10|60-10]</Value>
     </Item>
     <Item>
       <Key>10</Key>

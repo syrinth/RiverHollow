@@ -11,8 +11,11 @@ namespace RiverHollow.Game_Managers
 {
     public static class GameCalendar
     {
+        static int MINUTES_PER_SECOND = 1;
         static int DAYS_IN_MONTH = 28;
         static int MIN_PRECIPITATION_DAYS = 6;
+        static int NEW_DAY_HOUR = 6;
+        static int NEW_DAY_MIN = 0;
 
         //One day goes from 6 AM - 2 AM => 20 hours
         //Each hour should be one minute
@@ -26,6 +29,9 @@ namespace RiverHollow.Game_Managers
         public static int CurrentHour { get; private set; }
         public static int CurrentMin { get; private set; }
         public static int CurrentDay { get; private set; }
+
+        private static int _iBedHour = 0;
+        private static int _iBedMinute = 0;
 
         static double _dLastUpdateinSeconds;
         static int _iSeasonPrecipDays = 0;
@@ -55,7 +61,7 @@ namespace RiverHollow.Game_Managers
             {
                 GUIManager.SetScreen(new DayEndScreen());
             }
-            if (_dLastUpdateinSeconds >= 1)
+            if (_dLastUpdateinSeconds >= MINUTES_PER_SECOND)
             {
                 _dLastUpdateinSeconds = 0;
                 IncrementMinutes();
@@ -120,9 +126,12 @@ namespace RiverHollow.Game_Managers
 
         public static void NextDay()
         {
+            _iBedHour = CurrentHour;
+            _iBedMinute = CurrentMin;
+
             _bNightfall = false;
-            CurrentHour = 6;
-            CurrentMin = 0;
+            CurrentHour = NEW_DAY_HOUR;
+            CurrentMin = NEW_DAY_MIN;
             if(DayOfWeek < ListDays.Length - 1) { DayOfWeek++; }
             else { DayOfWeek = 0; }
 
@@ -183,6 +192,23 @@ namespace RiverHollow.Game_Managers
         public static string GetWeatherString()
         {
             return Util.GetEnumString(_eCurrentWeather);
+        }
+
+        /// <summary>
+        /// Returns the number of minutes between the current time and dawn of the next day.
+        /// Currently, one minute in game is equal to one second in real time. We are future proofed
+        /// in case this changes
+        /// </summary>
+        public static int GetMinutesToNextMorning()
+        {
+            int rv = 0;
+
+            int hoursLeftUntilMidnight = 24 > _iBedHour ? (24 - _iBedHour) : 0;
+            int minutesToNextHour = 60 - _iBedMinute;
+
+            rv = (hoursLeftUntilMidnight + NEW_DAY_HOUR) * 60 + minutesToNextHour;
+
+            return rv * MINUTES_PER_SECOND;
         }
 
         public static void LoadCalendar(CalendarData d)

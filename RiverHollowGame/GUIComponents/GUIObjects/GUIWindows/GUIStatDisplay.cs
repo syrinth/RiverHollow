@@ -12,11 +12,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         GUIImage _gFill;
         GUIText _gText;
 
-        int _iMax;
-        int _iCurr;
+        double _iMax;
+        double _iCurr;
         const int EDGE = 4;
 
-        public delegate void DelegateRetrieveValues(ref int curr, ref int max);
+        public delegate void DelegateRetrieveValues(ref double curr, ref double max);
         DelegateRetrieveValues _delAction;
 
         public GUIStatDisplay(DelegateRetrieveValues del, Color c, int width = 200) : base(DisplayWin, width, GameManager.ScaledTileSize/2)

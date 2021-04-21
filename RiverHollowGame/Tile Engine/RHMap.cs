@@ -35,7 +35,7 @@ namespace RiverHollow.Tile_Engine
         public string DungeonName { get; private set; } = string.Empty;
         public bool IsDungeon => !string.IsNullOrEmpty(DungeonName);
         public bool IsTown { get; private set; }
-        public bool BuildingMap { get; private set; }
+        public int BuildingID { get; private set; } = -1;
         bool _bOutside;
         public bool IsOutside => _bOutside;
         bool _bProduction = true;
@@ -114,7 +114,7 @@ namespace RiverHollow.Tile_Engine
             _renderer = map._renderer;
             _arrTiles = map._arrTiles;
 
-            BuildingMap = _map.Properties.ContainsKey("Building");
+            BuildingID = map.BuildingID;
             IsTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
 
@@ -162,7 +162,10 @@ namespace RiverHollow.Tile_Engine
                     _arrTiles[j, i].SetProperties(this);
                 }
             }
-            BuildingMap = _map.Properties.ContainsKey("Building");
+            if (_map.Properties.ContainsKey("BuildingID"))
+            {
+                BuildingID = int.Parse(_map.Properties["BuildingID"]);
+            }
             IsTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
 
@@ -1281,6 +1284,9 @@ namespace RiverHollow.Tile_Engine
 
             if (!PlayerManager.Busy && !CombatManager.InCombat)
             {
+                //Ensure that we have a tile that we clicked on and that the player is close enough to interact with it.
+                TargetTile = MapManager.RetrieveTile(mouseLocation);
+
                 if (Scrying())
                 {
                     rv = ProcessLeftButtonClickHandleBuilding(mouseLocation);
@@ -1288,12 +1294,9 @@ namespace RiverHollow.Tile_Engine
                 else
                 {
                     if (IsPaused()) { return false; }
-
-                    //Ensure that we have a tile that we clicked on and that the player is close enough to interact with it.
-                    TargetTile = MapManager.RetrieveTile(mouseLocation);
+                    
                     if (TargetTile != null)
                     {
-
                         //Handles interactions with objects on the tile, both actual and Shadow
                         rv = ProcessLeftButtonClickOnObject(mouseLocation);
 
@@ -1352,22 +1355,21 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (toBuild.CompareType(ObjectTypeEnum.Building))
                     {
-                        Building b = (Building)toBuild;
-                        if (AddBuilding(b, false, false))
+                        Building obj = (Building)toBuild;
+                        if (AddBuilding(obj, false, false))
                         {
-                            b.StartBuilding();   //Set the building to start being built
-                            FinishBuilding();
-
-                            foreach (KeyValuePair<int, int> kvp in b.RequiredToMake)
+                            if (MovingBuildings() || PlayerManager.ExpendResources(obj.RequiredToMake))
                             {
-                                InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                                SoundManager.PlayEffect("thump3");
+                                obj.StartBuilding();   //Set the building to start being built
+                                FinishBuilding();
+
+                                //Drop the Building from the GameManger
+                                GameManager.DropWorldObject();
+
+                                LeaveBuildMode();
+                                rv = true;
                             }
-
-                            //Drop the Building from the GameManger
-                            GameManager.DropWorldObject();
-
-                            LeaveBuildMode();
-                            rv = true;
                         }
                     }
                     else
@@ -1380,34 +1382,32 @@ namespace RiverHollow.Tile_Engine
                             obj.SnapPositionToGrid(toBuild.MapPosition);
                             if (MapManager.PlaceWorldObject(obj))
                             {
-                                rv = true;
-                                obj.SetMapName(this.Name);
-
-                                //If the item placed was a wall object, we need to adjust it based off any adjacent walls
-                                if (obj.CompareType(ObjectTypeEnum.Floor)) { ((Floor)obj).AdjustObject(); }
-                                else if (obj.CompareType(ObjectTypeEnum.Wall)) { ((Wall)obj).AdjustObject(); }
-
-                                foreach (KeyValuePair<int, int> kvp in obj.RequiredToMake)
+                                if (PlayerManager.ExpendResources(obj.RequiredToMake))
                                 {
-                                    InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
-                                }
+                                    rv = true;
+                                    obj.SetMapName(this.Name);
 
-                                bool canBuildAgain = true;
-                                foreach (KeyValuePair<int, int> kvp in obj.RequiredToMake)
-                                {
-                                    if(!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
+                                    //If the item placed was a wall object, we need to adjust it based off any adjacent walls
+                                    if (obj.CompareType(ObjectTypeEnum.Floor)) { ((Floor)obj).AdjustObject(); }
+                                    else if (obj.CompareType(ObjectTypeEnum.Wall)) { ((Wall)obj).AdjustObject(); }
+
+                                    bool canBuildAgain = true;
+                                    foreach (KeyValuePair<int, int> kvp in obj.RequiredToMake)
                                     {
-                                        canBuildAgain = false;
-                                        break;
+                                        if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
+                                        {
+                                            canBuildAgain = false;
+                                            break;
+                                        }
                                     }
-                                }
 
-                                if (!canBuildAgain)
-                                {
-                                    FinishBuilding();
+                                    if (!canBuildAgain)
+                                    {
+                                        FinishBuilding();
 
-                                    GameManager.DropWorldObject();
-                                    LeaveBuildMode();
+                                        GameManager.DropWorldObject();
+                                        LeaveBuildMode();
+                                    }
                                 }
                             }
                         }
@@ -1482,24 +1482,21 @@ namespace RiverHollow.Tile_Engine
 
             if (_liTestTiles.Count > 0) { _liTestTiles.Clear(); }
 
+            foreach (Building b in _liBuildings)
+            {
+                if (MovingBuildings() &&  b.SelectionBox.Contains(mouseLocation) && GameManager.HeldObject == null)
+                {
+                    b._bSelected = true;
+                }
+                else { b._bSelected = false; }
+            }
+
             if (Scrying())
             {
                 _liTestTiles = new List<RHTile>();
                 if (GameManager.HeldObject != null)
                 {
                     TestMapTiles(GameManager.HeldObject, _liTestTiles);
-                }
-
-                foreach (Building b in _liBuildings)
-                {
-                    if (b.SelectionBox.Contains(mouseLocation) && GameManager.HeldObject == null)
-                    {
-                        b._selected = true;
-                    }
-                    else
-                    {
-                        b._selected = false;
-                    }
                 }
             }
             else{
@@ -1557,7 +1554,6 @@ namespace RiverHollow.Tile_Engine
 
             //Re-open the Building Menu
             GUIManager.OpenMenu();
-            GameManager.Scry(false);
         }
 
         public void ClearWorkers()
@@ -1671,9 +1667,11 @@ namespace RiverHollow.Tile_Engine
         {
             foreach (Building b in _liBuildings)
             {
-                if (b.Contains(mouseLocation))
+                if (b.SelectionBox.Contains(mouseLocation))
                 {
+                    SoundManager.PlayEffect("buildingGrab");
                     GameManager.PickUpWorldObject(b);
+                    b.SetPickupOffset(mouseLocation.ToVector2());
                     b.RemoveSelfFromTiles();
                     DictionaryTravelPoints.Remove(b.MapName);
                     break;
@@ -2641,9 +2639,10 @@ namespace RiverHollow.Tile_Engine
             bool rv = false;
             if (WorldObject != null && WorldObject.IsDestructible())
             {
-                if (((Destructible)WorldObject).NeededTool == toolUsed.ToolType){
+                Destructible d = (Destructible)WorldObject;
+                if (d.NeededTool == toolUsed.ToolType){
                     SoundManager.PlayEffectAtLoc(toolUsed.SoundEffect, MapName, Center, toolUsed);
-                    ((Destructible)WorldObject).DealDamage(toolUsed.ToolLevel);
+                    d.DealDamage(toolUsed.ToolLevel);
                 }
             }
 

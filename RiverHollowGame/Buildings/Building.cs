@@ -11,6 +11,7 @@ using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Items.Structure;
 using RiverHollow.Utilities;
 using static RiverHollow.Items.Structure.AdjustableObject;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Buildings
 {
@@ -27,6 +28,8 @@ namespace RiverHollow.Buildings
         public override int BaseHeight => _iBaseHeight;
         public int Level { get; private set; } = 1;
 
+        private Dictionary<int, Dictionary<int, int>> _diUpgradeInfo;
+
         private string _sDescription;
         public string Description => _sDescription;
 
@@ -40,12 +43,9 @@ namespace RiverHollow.Buildings
 
         public Rectangle TravelBox { get; private set; }
 
-        private int _iUpgradeTime;
-        private int _iUpgradeTimer;
-
         public Vector2 BuildFromPosition { get; private set; }
 
-        public bool _selected = false;
+        public bool _bSelected = false;
         public Container BuildingChest { get; set; }
 
         public Building(int id, Dictionary<string, string> stringData) : base(id)
@@ -83,8 +83,22 @@ namespace RiverHollow.Buildings
             _iEntWidth = int.Parse(ent[2]);
             _iEntHeight = int.Parse(ent[3]);
 
-            //The amount of time it takes for a building to change stages
-            if (stringData.ContainsKey("UpgradeTime")) { _iUpgradeTime = int.Parse(stringData["UpgradeTime"]); }
+            _diUpgradeInfo = new Dictionary<int, Dictionary<int, int>>();
+            foreach (string s in new List<string>(stringData.Keys).FindAll(x => x.StartsWith("Upgrade_")))
+            {
+                int upgradeLevel = int.Parse(s.Substring(s.IndexOf("_") + 1));
+                string val = stringData[s];
+
+                Dictionary<int, int> reqs = new Dictionary<int, int>();
+                foreach (string arg in Util.FindParams(val))
+                {
+                    string[] split = arg.Split('-');
+                    reqs[int.Parse(split[0])] =  int.Parse(split[1]);
+                }
+
+                //Upgrade 1 is actually Level 2, so increment
+                _diUpgradeInfo[upgradeLevel + 1] = reqs;
+            }
 
             if (stringData.ContainsKey("Builder"))
             {
@@ -141,7 +155,7 @@ namespace RiverHollow.Buildings
         {
             if (Level > 0)
             {
-                _sprite.SetColor(_selected ? Color.Green : Color.White);
+                _sprite.SetColor(_bSelected ? Color.Green : Color.White);
                 base.Draw(spriteBatch);
             }
         }
@@ -177,22 +191,8 @@ namespace RiverHollow.Buildings
             TravelBox = new Rectangle(startX, startY, _iEntWidth, _iEntHeight);
         }
 
-        /// <summary>
-        /// During rollover, the worker only makes their item if they were not
-        /// adventuring that day, and if they are assigned to a production building.
-        /// </summary>
-        public void Rollover()
+        public override void Rollover()
         {
-            //If we are upgrading the building, get closer to the build count
-            if (_iUpgradeTimer > 0) {
-                _iUpgradeTimer--;
-
-                //When the timer reaches 0, Upgrade the Building
-                if (_iUpgradeTimer == 0)
-                {
-                    Upgrade();
-                }
-            }
         }
 
         /// <summary>
@@ -289,6 +289,11 @@ namespace RiverHollow.Buildings
             DataManager.CreateAndPlaceNewWorldObject(int.Parse(DataManager.Config[9]["Wall"]), location, MapManager.CurrentMap);
         }
 
+        public Dictionary<int, int> UpgradeReqs()
+        {
+            return _diUpgradeInfo[Level + 1];
+        }
+
         /// <summary>
         /// Increases the building level as long as it will not exceed the Building's max level.
         /// 
@@ -366,7 +371,6 @@ namespace RiverHollow.Buildings
                 iBuildingID = this.ID,
                 iPosX = (int)this.MapPosition.X,
                 iPosY = (int)this.MapPosition.Y,
-                iUpgradeTimer = this._iUpgradeTimer,
             };
 
             return buildingData;
@@ -375,8 +379,6 @@ namespace RiverHollow.Buildings
         {
             SnapPositionToGrid(new Vector2(data.iPosX, data.iPosY));
             Level = data.iBldgLevel;
-            _iUpgradeTimer = data.iUpgradeTimer;
-
         }
     }
 

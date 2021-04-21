@@ -20,10 +20,8 @@ namespace RiverHollow.Game_Managers
         const string STOCK_EFFECT_FOLDER = @"Content\Sound\Stock\Effects";
         const string EFFECT_FOLDER = @"Content\Sound\Original\Effects";
         const string HARP_FOLDER = @"Content\Sound\Stock\Harp";
-        static float _fMusicVol = 0.4f;
-        public static float MusicVolume => _fMusicVol;
-        static float _fEffectVol = 0.4f;
-        public static float EffectVolume => _fEffectVol;
+        public static float MusicVolume { get; private set; } = 0.0f;
+        public static float EffectVolume { get; private set; } = 0.4f;
         static Dictionary<string, Song> _diSongs;
         static Dictionary<string, SoundEffect> _diEffects;
         static Dictionary<object, EffectData> _diCurrentEffects;
@@ -38,7 +36,7 @@ namespace RiverHollow.Game_Managers
             _diEffects = new Dictionary<string, SoundEffect>();
             _diCurrentEffects = new Dictionary<object, EffectData>();
 
-            MediaPlayer.Volume = _fMusicVol;
+            MediaPlayer.Volume = MusicVolume;
             foreach (string s in Directory.GetFiles(SONG_FOLDER)) { AddSong(Content, s); }
             foreach (string s in Directory.GetFiles(STOCK_EFFECT_FOLDER)) { AddEffect(Content, s); }
             foreach (string s in Directory.GetFiles(EFFECT_FOLDER)) { AddEffect(Content, s); }
@@ -60,7 +58,7 @@ namespace RiverHollow.Game_Managers
             }
             else if (_eQueuePhase == QueuePhase.Up)
             {
-                if (MediaPlayer.Volume < _fMusicVol) { MediaPlayer.Volume += PHASE_VAL; }
+                if (MediaPlayer.Volume < MusicVolume) { MediaPlayer.Volume += PHASE_VAL; }
                 else { _eQueuePhase = QueuePhase.None; }
             }
 
@@ -121,12 +119,12 @@ namespace RiverHollow.Game_Managers
 
         public static void SetMusicVolume(float value)
         {
-            _fMusicVol = value;
-            MediaPlayer.Volume = _fMusicVol;
+            MusicVolume = value;
+            MediaPlayer.Volume = MusicVolume;
         }
         public static void SetEffectVolume(float value)
         {
-            _fEffectVol = value;
+            EffectVolume = value;
             foreach (KeyValuePair<object, EffectData> kvp in _diCurrentEffects)
             {
                 if (kvp.Value.Position != Vector2.Zero)
@@ -197,7 +195,7 @@ namespace RiverHollow.Game_Managers
 
         public static void PlayEffect(string effectName, object obj = null)
         {
-            EffectData data = new EffectData("", effectName, obj, _fEffectVol);
+            EffectData data = new EffectData("", effectName, obj, EffectVolume);
             PlayEffect(data);
         }
 
@@ -251,7 +249,7 @@ namespace RiverHollow.Game_Managers
             int distance = -1;
 
             PlayerManager.PlayerInRangeGetDist(loc.ToPoint(), range, ref distance);
-            float volume = Math.Max(0f, ((float)range - (float)distance) / (float)range) * _fEffectVol;
+            float volume = Math.Max(0f, ((float)range - (float)distance) / (float)range) * EffectVolume;
             return volume;
         }
 

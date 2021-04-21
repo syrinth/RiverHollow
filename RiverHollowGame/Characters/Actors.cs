@@ -1519,13 +1519,13 @@ namespace RiverHollow.Characters
 
         public virtual void EndTurn() { }
 
-        public void GetHP(ref int curr, ref int max)
+        public void GetHP(ref double curr, ref double max)
         {
             curr = _iCurrentHP;
             max = MaxHP;
         }
 
-        public void GetMP(ref int curr, ref int max)
+        public void GetMP(ref double curr, ref double max)
         {
             curr = _iCurrentMP;
             max = MaxMP;
@@ -1673,7 +1673,7 @@ namespace RiverHollow.Characters
             base.PlayAnimation(animation);
         }
 
-        public void GetXP(ref int curr, ref int max)
+        public void GetXP(ref double curr, ref double max)
         {
             curr = _iXP;
             max = ClassedCombatant.LevelRange[this.ClassLevel];
@@ -1802,7 +1802,7 @@ namespace RiverHollow.Characters
         private bool _bShopIsOpen = false;
         private int _iShopIndex = -1;
 
-        private bool _bArrivedInTown = false;
+        protected bool _bArrivedInTown = false;
         public bool ArrivedInTown => _bArrivedInTown;
         private int _iArrivalDelay = 0;
 
@@ -3106,6 +3106,7 @@ namespace RiverHollow.Characters
  
         public ShippingGremlin(int index, Dictionary<string, string> stringData)
         {
+            _bArrivedInTown = true;
             _liRequiredBuildingIDs = new List<int>();
             _arrInventory = new Item[_iRows, _iCols];
             _eActorType = ActorEnum.ShippingGremlin;

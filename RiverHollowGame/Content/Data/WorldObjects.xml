@@ -123,7 +123,7 @@
     </Item>
     <Item>
       <Key>30</Key>
-      <Value>[Type:Machine][Image:0-64][Work:4-0.3][Width:16][Height:32][Makes:114-2|115-3|58-1][Base:1-1][WorkEffect:bubbles][MachineType:CraftingMachine][ItemID:118][ReqItems:0-5]</Value>
+      <Value>[Type:Machine][Image:0-64][Work:4-0.3][Width:16][Height:32][Makes:114-70|115-3|58-1][Base:1-1][WorkEffect:bubbles][MachineType:CraftingMachine][ItemID:118][ReqItems:0-5]</Value>
     </Item>
     <Item>
       <Key>31</Key>

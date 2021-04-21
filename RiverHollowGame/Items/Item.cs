@@ -222,15 +222,9 @@ namespace RiverHollow.Items
             return rv;
         }
 
-        public List<KeyValuePair<int, int>> GetRequiredItems()
+        public Dictionary<int, int> GetRequiredItems()
         {
-            List<KeyValuePair<int, int>> ret = new List<KeyValuePair<int, int>>();
-            foreach(int key in _diReqToMake.Keys)
-            {
-                ret.Add(new KeyValuePair<int, int>(key, _diReqToMake[key]));
-            }
-
-            return ret;
+            return _diReqToMake;
         }
 
         public bool Giftable()

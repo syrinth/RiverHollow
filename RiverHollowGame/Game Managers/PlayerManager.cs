@@ -23,8 +23,8 @@ namespace RiverHollow.Game_Managers
         public static bool Busy { get; private set; }
         public static List<Task> TaskLog { get; private set; }
 
-        public static int Stamina = 100;
-        public static int MaxStamina = 100;
+        public static double MaxStamina = 100;
+        public static double Stamina = MaxStamina;
         public static int _iBuildingID = -1;
         public static List<int> CanMake { get; private set; }
         private static string _currentMap;
@@ -371,6 +371,7 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
+        #region PlayerInRange
         public static bool PlayerInRange(Rectangle rect)
         {
             int hypotenuse = (int)Math.Sqrt(TileSize * TileSize + TileSize * TileSize);
@@ -447,9 +448,25 @@ namespace RiverHollow.Game_Managers
             Rectangle playerRect = World.GetRectangle();
             int a = Math.Abs(playerRect.Center.X - centre.X);
             int b = Math.Abs(playerRect.Center.Y - centre.Y);
-            int c = (int)Math.Sqrt(a*a + b*b);
+            int c = (int)Math.Sqrt(a * a + b * b);
 
             rv = c > minRange && c <= maxRange;
+
+            return rv;
+        }
+        #endregion
+
+        public static bool ExpendResources(Dictionary<int, int> requiredItems)
+        {
+            bool rv = false;
+            if (InventoryManager.SufficientItems(requiredItems))
+            {
+                rv = true;
+                foreach (KeyValuePair<int, int> kvp in requiredItems)
+                {
+                    InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                }
+            }
 
             return rv;
         }
@@ -482,7 +499,7 @@ namespace RiverHollow.Game_Managers
             World.SetClass(combatClass);
         }
 
-        public static bool DecreaseStamina(int x)
+        public static bool DecreaseStamina(double x)
         {
             bool rv = false;
             if (Stamina >= x)
@@ -493,7 +510,7 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static void IncreaseStamina(int x)
+        public static void IncreaseStamina(double x)
         {
             if (Stamina + x <= MaxStamina)
             {
@@ -522,7 +539,7 @@ namespace RiverHollow.Game_Managers
             GameManager.VillagersInTheInn = 0;
         }
 
-        public static void GetStamina(ref int curr, ref int max)
+        public static void GetStamina(ref double curr, ref double max)
         {
             curr = Stamina;
             max = MaxStamina;

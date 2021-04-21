@@ -3075,3 +3075,15 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapHouse_11_1.tmx
 
+#begin Sound/Stock/Effects/thump3.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Effects/thump3.mp3
+
+#begin Sound/Stock/Effects/buildingGrab.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Effects/buildingGrab.mp3
+

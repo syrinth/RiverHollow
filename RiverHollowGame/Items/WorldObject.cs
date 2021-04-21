@@ -33,6 +33,7 @@ namespace RiverHollow.Items
         protected KeyValuePair<int, int> _kvpDrop; //itemID, # of items dropped
 
         protected Point _pImagePos;
+        public Vector2 PickupOffset { get; private set; }
 
         protected Vector2 _vMapPosition;
         public virtual Vector2 MapPosition => _vMapPosition;
@@ -206,6 +207,15 @@ namespace RiverHollow.Items
             _kvpDrop = new KeyValuePair<int, int>(id, num);
         }
 
+        /// <summary>
+        /// Sets the offset of the mouse based on the 
+        /// </summary>
+        /// <param name="mousePosition"></param>
+        public void SetPickupOffset(Vector2 mousePosition)
+        {
+            PickupOffset = mousePosition - _sprite.Position;
+        }
+
         public List<Item> GetDroppedItems()
         {
             List<Item> itemList = new List<Item>();
@@ -265,7 +275,12 @@ namespace RiverHollow.Items
             }
         }
 
-        public override void ProcessLeftClick() { PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool)); }
+        public override void ProcessLeftClick() {
+            if (_iHP > 0)
+            {
+                PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool));
+            }
+        }
 
         public virtual void DealDamage(int dmg)
         {
@@ -394,7 +409,12 @@ namespace RiverHollow.Items
             base.Update(gTime);
         }
 
-        public override void ProcessLeftClick() { Harvest(); }
+        public override void ProcessLeftClick() {
+            if (_iHP > 0)
+            {
+                Harvest();
+            }
+        }
         //public override void ProcessRightClick() { Harvest(); }
 
         public override void PlaceOnMap(Vector2 pos, RHMap map)
@@ -774,6 +794,8 @@ namespace RiverHollow.Items
 
             readonly string _sEffectWorking;
 
+            protected int _iContainingBuildingID = -1;
+
             protected double _dProcessedTime = 0;
             int _iCurrentlyMaking = -1;
 
@@ -825,10 +847,29 @@ namespace RiverHollow.Items
                 //_itemBubble?.Draw(spriteBatch);
             }
 
+            public override void ProcessLeftClick() { ClickProcess(); }
+            public override void ProcessRightClick() { ClickProcess(); }
+
+            private void ClickProcess()
+            {
+                double mod = 0;
+                if (_iContainingBuildingID != -1)
+                {
+                    mod = 0.1 * (PlayerManager.GetBuildingByID(_iContainingBuildingID).Level - 1);
+                }
+
+                PlayerManager.DecreaseStamina(1 - mod);
+            }
+
             public override void PlaceOnMap(Vector2 pos, RHMap map)
             {
                 base.PlaceOnMap(pos - new Vector2(0, TileSize), map);
                 GameManager.AddMachine(this, Name);
+
+                if(map.BuildingID != -1)
+                {
+                    _iContainingBuildingID = map.BuildingID;
+                }
             }
 
             public virtual bool StartAutoWork() { return false; }
@@ -871,7 +912,7 @@ namespace RiverHollow.Items
                     x = (int)this.MapPosition.X,
                     y = (int)this.MapPosition.Y,
                     processedTime = this._dProcessedTime,
-                   // currentItemID = (this.p == null) ? _iCurrentlyMaking : this.CurrentlyProcessing.Input,
+                    currentItemID = _iCurrentlyMaking,
                     heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID
                 };
 
@@ -931,8 +972,16 @@ namespace RiverHollow.Items
                     }
                 }
 
-                public override void ProcessLeftClick() { Process(); }
-                public override void ProcessRightClick() { Process(); }
+                public override void ProcessLeftClick()
+                {
+                    base.ProcessLeftClick();
+                    Process();
+                }
+                public override void ProcessRightClick()
+                {
+                    base.ProcessLeftClick();
+                    Process();
+                }
 
                 private void Process()
                 {
@@ -997,6 +1046,8 @@ namespace RiverHollow.Items
                     {
                         SoundManager.PlayEffectAtLoc(_sEffectWorking, _sMapName, MapPosition, this);
                         _sprite.Update(gTime);
+
+                        CheckFinishedCrafting();
                     }
                 }
 
@@ -1016,6 +1067,19 @@ namespace RiverHollow.Items
                         {
                             SetToWork();
                         }
+                    }
+                }
+
+                private void CheckFinishedCrafting()
+                {
+                    if (_iCurrentlyMaking != -1 && _dProcessedTime >= CraftingDictionary[_iCurrentlyMaking])
+                    {
+                        SetHeldItem(_iCurrentlyMaking);
+                        SoundManager.StopEffect(this);
+                        SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition, this);
+                        _dProcessedTime = 0;
+                        _iCurrentlyMaking = -1;
+                        _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
                     }
                 }
 
@@ -1047,7 +1111,15 @@ namespace RiverHollow.Items
                     if (!_bWorking)
                     {
                         _bWorking = true;
-                        PlayerManager.DecreaseStamina(2);
+
+                        double mod = 0;
+                        if(_iContainingBuildingID != -1)
+                        {
+                            mod = (0.1 * PlayerManager.GetBuildingByID(_iContainingBuildingID).Level) - 0.1;
+                        }
+
+
+                        PlayerManager.DecreaseStamina(2 - mod);
                         _sprite.PlayAnimation(AnimationEnum.PlayAnimation);
                     }
                 }
@@ -1056,16 +1128,8 @@ namespace RiverHollow.Items
                 {
                     if (_bWorking)
                     {
-                        _dProcessedTime++;
-                        if (_dProcessedTime >= CraftingDictionary[_iCurrentlyMaking])
-                        {
-                            //SetHeldItem(_iCurrentlyMaking);
-                            SoundManager.StopEffect(this);
-                            SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition, this);
-                            _dProcessedTime = 0;
-                            _iCurrentlyMaking = -1;
-                            _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
-                        }
+                        _dProcessedTime += GameCalendar.GetMinutesToNextMorning();
+                        CheckFinishedCrafting();
 
                         _bWorking = false;
                         _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
@@ -1778,9 +1842,9 @@ namespace RiverHollow.Items
         public override void PlaceOnMap(Vector2 pos, RHMap map)
         {
             base.PlaceOnMap(pos, map);
-            if (map.BuildingMap)
+            if (map.BuildingID != -1)
             {
-                SetBuildingID(int.Parse(map.GetMapProperties()["BuildingID"]));
+                SetBuildingID(map.BuildingID);
             }
         }
 

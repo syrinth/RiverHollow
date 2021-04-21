@@ -17,9 +17,6 @@ using static RiverHollow.GUIComponents.GUIObjects.GUIItemBox;
 using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
 using static RiverHollow.GUIComponents.Screens.HUDMenu.HUDManagement.MgmtWindow;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
-using static RiverHollow.Items.Item;
-using static RiverHollow.Items.Structure;
-using static RiverHollow.Characters.TalkingActor;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -2695,14 +2692,47 @@ namespace RiverHollow.GUIComponents.Screens
 
     class HUDUpgradeWindow : GUIMainObject
     {
+        Building _bldg;
         public HUDUpgradeWindow(Building b)
         {
             _winMain = SetMainWindow();
 
-            GUIText name = new GUIText(b.Name);
-            name.AnchorToInnerSide(this, SideEnum.TopLeft);
+            _bldg = b;
+
+            GUIText name = new GUIText(_bldg.Name + ", Level " + _bldg.Level);
+            name.AnchorToInnerSide(_winMain, SideEnum.Top);
+
+            GUIButton btn = new GUIButton("Upgrade", Upgrade);
+            btn.AnchorToInnerSide(_winMain, SideEnum.Bottom);
+
+            Color textColor = Color.White;
+            if (!InventoryManager.SufficientItems(_bldg.UpgradeReqs()))
+            {
+                textColor = Color.Red;
+                btn.Enable(false);
+            }
+
+            List<GUIItemBox> list = new List<GUIItemBox>();
+            foreach (KeyValuePair<int, int> kvp in _bldg.UpgradeReqs())
+            {
+                GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
+
+                if (list.Count == 0) { box.AnchorToInnerSide(_winMain, SideEnum.Left); }
+                else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Right, SideEnum.Bottom); }
+
+                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value)) { box.SetColor(Color.Red); }
+
+                list.Add(box);
+            }
 
             AddControl(name);
+        }
+
+        private void Upgrade()
+        {
+            if (PlayerManager.ExpendResources(_bldg.UpgradeReqs())) { 
+                _bldg.Upgrade();
+            }
         }
     }
 

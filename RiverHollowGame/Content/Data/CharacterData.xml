@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Villager][PortRow:1][HomeMap:mapManor_1][Collection:0|1|2][Hover][Inactive][Idle:0-0-3-.3-T][Walk:0-0-3-.3-T]</Value>
+      <Value>[Type:Villager][PortRow:1][HomeMap:mapManor_1][Collection:0|1|2][Hover][Inactive][Idle:0-0-3-.3-T][Walk:0-0-3-.3-T][Arrived]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -87,7 +87,7 @@
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:ShippingGremlin][PortRow:3][HomeMap:mapTown]</Value>
+      <Value>[Type:ShippingGremlin][PortRow:3][HomeMap:mapTown][Arrived]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -158,6 +158,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
+        public override void SetColor(Color c)
+        {
+            _guiItem?.SetColor(c);
+        }
+
         public void Select(bool val)
         {
             _bSelected = val;

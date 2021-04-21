@@ -24,6 +24,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         public BuildScreen()
         {
+            Scry(true);
+
             _liButtons = new List<GUIObject>() {
                 new GUIButton("Build", BtnBuildings),
                 new GUIButton("Structures", BtnStructures),
@@ -40,6 +42,9 @@ namespace RiverHollow.GUIComponents.Screens
         {
             bool rv = base.ProcessRightButtonClick(mouse);
 
+            //Only close things if we're not holding anything
+            if (GameManager.HeldObject != null) { rv = true; }
+
             //If the right click has not been processed, we probably want to close anything that we have open.
             if (!rv)
             {
@@ -53,6 +58,13 @@ namespace RiverHollow.GUIComponents.Screens
                     if (_gMainObject == null)
                     {
                         CloseMenu();
+                    }
+
+                    Scry(false);
+
+                    foreach (Building b in PlayerManager.BuildingList)
+                    {
+                        b._bSelected = false; 
                     }
 
                     GUIManager.CloseMainObject();
@@ -356,6 +368,8 @@ namespace RiverHollow.GUIComponents.Screens
 
                         if (list.Count == 0) { box.AnchorToInnerSide(_window, SideEnum.BottomRight); }
                         else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Left, SideEnum.Bottom); }
+
+                        if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value)) { box.SetColor(Color.Red); }
 
                         list.Add(box);
                     }

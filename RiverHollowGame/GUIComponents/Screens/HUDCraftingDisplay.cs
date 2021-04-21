@@ -143,26 +143,13 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     if (gIB != null && gIB.Contains(mouse))
                     {
-                        //Check that all required items are there first
-                        bool create = true;
-                        foreach(KeyValuePair<int, int> kvp in gIB.BoxItem.GetRequiredItems())
+                        if (PlayerManager.ExpendResources(gIB.BoxItem.GetRequiredItems()))
                         {
-                            if(!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
+                            if (_craftMachine != null)
                             {
-                                create = false;
-                            }
-                        }
-                        //If all items are found, then remove them.
-                        if (create)
-                        {
-                            foreach (KeyValuePair<int, int> kvp in gIB.BoxItem.GetRequiredItems())
-                            {
-                                InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
-                                if (_craftMachine != null) {
-                                    _craftMachine.MakeChosenItem(gIB.BoxItem.ItemID);
-                                    GUIManager.CloseMainObject();
-                                    GameManager.Unpause();
-                                }
+                                _craftMachine.MakeChosenItem(gIB.BoxItem.ItemID);
+                                GUIManager.CloseMainObject();
+                                GameManager.Unpause();
                             }
                         }
                     }
