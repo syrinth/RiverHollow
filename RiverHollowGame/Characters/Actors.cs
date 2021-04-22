@@ -481,7 +481,7 @@ namespace RiverHollow.Characters
             float moveDist = UseMovement();
             if (moveDist >= 1)
             {
-                //Determines how much of the needed position we're capable of moving in one movement
+                //Determines how much of the needed position we're capable of  in one movement
                 Util.GetMoveSpeed(Position, target, moveDist, ref direction);
 
                 //If we're following a path and there's more than one tile left, we don't want to cut

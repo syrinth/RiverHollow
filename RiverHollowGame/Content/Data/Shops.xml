@@ -22,11 +22,12 @@
       <Value>
         <Item>[Type:Item][ItemID:0][Cost:10]</Item>
         <Item>[Type:Item][ItemID:2][Cost:10]</Item>
-        <Item>[Type:Item][ItemID:138][Cost:500][Locked]</Item>
-        <Item>[Type:Item][ItemID:139][Cost:500][Locked]</Item>
-        <Item>[Type:Item][ItemID:140][Cost:500][Locked]</Item>
-        <Item>[Type:Item][ItemID:141][Cost:500][Locked]</Item>
-        <Item>[Type:Item][ItemID:142][Cost:500][Locked]</Item>
+        <Item>[Type:Item][ItemID:138][Cost:1000]</Item>
+        <Item>[Type:Item][ItemID:139][Cost:1000]</Item>
+        <Item>[Type:Item][ItemID:140][Cost:1000]</Item>
+        <Item>[Type:Item][ItemID:141][Cost:1000]</Item>
+        <Item>[Type:Item][ItemID:142][Cost:1000]</Item>
+        <Item>[Type:Item][ItemID:143][Cost:1000]</Item>
       </Value>
     </Item>
     <Item>

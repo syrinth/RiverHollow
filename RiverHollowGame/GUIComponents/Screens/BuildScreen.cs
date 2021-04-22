@@ -42,8 +42,8 @@ namespace RiverHollow.GUIComponents.Screens
         {
             bool rv = base.ProcessRightButtonClick(mouse);
 
-            //Only close things if we're not holding anything
-            if (GameManager.HeldObject != null) { rv = true; }
+            //If we're holding something, and we're moving an object. Do not close anything
+            if (GameManager.HeldObject != null && GameManager.MovingBuildings()) { rv = true; }
 
             //If the right click has not been processed, we probably want to close anything that we have open.
             if (!rv)
@@ -67,6 +67,7 @@ namespace RiverHollow.GUIComponents.Screens
                         b._bSelected = false; 
                     }
 
+                    GameManager.DropWorldObject();
                     GUIManager.CloseMainObject();
                     GameManager.GoToHUDScreen();
                     GUIManager.OpenMenu();
@@ -274,6 +275,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     GameManager.EnterBuildMode();
                     GameManager.PickUpWorldObject(obj);
+                    obj.SetPickupOffset();
                 }
 
                 GUIManager.CloseMainObject();

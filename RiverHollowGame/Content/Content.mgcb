@@ -3087,3 +3087,9 @@
 /processorParam:Quality=Best
 /build:Sound/Stock/Effects/buildingGrab.mp3
 
+#begin Sound/Original/Effects/ButtonPress.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Original/Effects/ButtonPress.wav
+

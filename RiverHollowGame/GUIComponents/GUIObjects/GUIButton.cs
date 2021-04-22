@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
+using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 using static RiverHollow.GUIComponents.GUIObjects.GUIWindows.GUIWindow;
@@ -95,6 +96,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             bool rv = false;
             if (Contains(mouse) && Enabled && _delAction != null)
             {
+                SoundManager.PlayEffect("ButtonPress");
                 _delAction();
                 rv = true;
             }

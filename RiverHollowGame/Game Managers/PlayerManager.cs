@@ -54,7 +54,7 @@ namespace RiverHollow.Game_Managers
         public static string TownName;
 
         public static int TotalMoneyEarned { get; private set; } = 0;
-        public static int Money { get; private set; } = 2000;
+        public static int Money { get; private set; } = 0;
 
         private static int _iMonsterEnergy = 0;
         public static int MonsterEnergy => _iMonsterEnergy;

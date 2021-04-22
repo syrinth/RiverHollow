@@ -197,13 +197,7 @@
 </data>
  </layer>
  <objectgroup id="4" name="MapObject"/>
- <objectgroup id="5" name="Travel" visible="0">
-  <object id="11" name="Entrance" x="0" y="512" width="4" height="48">
-   <properties>
-    <property name="EntranceDir" value="Right"/>
-    <property name="Map" value="mapConnection_01"/>
-   </properties>
-  </object>
+ <objectgroup id="5" name="Travel">
   <object id="57" name="Entrance" x="800" y="0" width="32" height="4">
    <properties>
     <property name="EntranceDir" value="Down"/>

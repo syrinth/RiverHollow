@@ -215,6 +215,10 @@ namespace RiverHollow.Items
         {
             PickupOffset = mousePosition - _sprite.Position;
         }
+        public void SetPickupOffset()
+        {
+            PickupOffset = new Vector2(Width/2, Height/2);
+        }
 
         public List<Item> GetDroppedItems()
         {
