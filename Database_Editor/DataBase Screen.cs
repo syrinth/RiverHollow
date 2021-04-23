@@ -9,7 +9,7 @@ using static RiverHollow.Game_Managers.GameManager;
 
 namespace Database_Editor
 {
-    public partial class frmDBEditor : Form
+    public partial class FrmDBEditor : Form
     {
         private enum EditableCharacterDataEnum { Dialogue, Schedule };
         public enum XMLTypeEnum { None, Task, Character, Class, Building, WorldObject, Item, Monster, Action, Shop, Spirit, Summon, StatusEffect, Cutscene };
@@ -17,7 +17,6 @@ namespace Database_Editor
         string SHOPS_XML_FILE = PATH_TO_DATA + @"\Shops.xml";
         string ACTIONS_XML_FILE = PATH_TO_DATA + @"\CombatActions.xml";
         string CUTSCENE_XML_FILE = PATH_TO_DATA + @"\CutScenes.xml";
-        string CUTSCENE_DIALOGUE_XML_FILE = PATH_TO_DIALOGUE + @"\CutsceneDialogue.xml";
         string TASK_XML_FILE = PATH_TO_DATA + @"\Tasks.xml";
         string MONSTERS_XML_FILE = PATH_TO_DATA + @"\Monsters.xml";
         string CHARACTER_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
@@ -70,13 +69,15 @@ namespace Database_Editor
         static string PATH_TO_DATA = PATH_TO_CONTENT + @"\Data";
         static string PATH_TO_TEXT_FILES = PATH_TO_DATA + @"\Text Files";
         static string PATH_TO_DIALOGUE = PATH_TO_TEXT_FILES + @"\Dialogue";
+        static string PATH_TO_VILLAGER_DIALOGUE = PATH_TO_DIALOGUE + @"\Villagers";
+        static string PATH_TO_CUTSCENE_DIALOGUE = PATH_TO_DIALOGUE + @"\Cutscenes";
         static string PATH_TO_SCHEDULES = PATH_TO_DATA + @"\Schedules";
 
         static Dictionary<int, List<string>> _diCutscenes;
         static Dictionary<int, List<XMLData>> _diShops;
         static Dictionary<string, Dictionary<string, List<string>>> _diCharacterSchedules;
-        static Dictionary<string, List<string>> _diCutsceneDialogue;
         static Dictionary<string, Dictionary<string, Dictionary<string, string>>> _diCharacterDialogue; //File/EntryKey/Tags
+        static Dictionary<string, Dictionary<string, Dictionary<string, string>>> _diCutsceneDialogue; //File/EntryKey/Tags
         static Dictionary<string, Dictionary<string, string>> _diMailbox;
         static Dictionary<string, Dictionary<string, string>> _diGameText; 
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
@@ -87,7 +88,7 @@ namespace Database_Editor
         delegate void VoidDelegate();
         delegate void XMLListDataDelegate(List<XMLData> Data);
 
-        public frmDBEditor()
+        public FrmDBEditor()
         {
             InitializeComponent();
 
@@ -130,22 +131,9 @@ namespace Database_Editor
 
             _diBasicXML = new Dictionary<string, List<XMLData>>();
             _diItems = new Dictionary<ItemEnum, List<ItemXMLData>>();
-            _diCharacterDialogue = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
-            foreach (string s in Directory.GetFiles(PATH_TO_DIALOGUE))
-            {
-                string fileName = string.Empty;
 
-                if (s.Contains("NPC_")) { fileName = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0]; }
-                else { continue; }
-
-                int charID = -1;
-                if (int.TryParse(fileName, out charID))
-                {
-                    fileName = s;
-                    Util.ParseContentFile(ref fileName);
-                    _diCharacterDialogue.Add(s, ReadTaggedXMLFile(fileName));
-                }
-            }
+            LoadDialogueDictionary(PATH_TO_VILLAGER_DIALOGUE, "NPC_", ref _diCharacterDialogue);
+            LoadDialogueDictionary(PATH_TO_CUTSCENE_DIALOGUE, "Cutscene_", ref _diCutsceneDialogue);
 
             _diGameText = ReadTaggedXMLFile(PATH_TO_TEXT_FILES + @"\GameText.xml");
             _diMailbox = ReadTaggedXMLFile(PATH_TO_TEXT_FILES + @"\Mailbox_Text.xml");
@@ -178,7 +166,6 @@ namespace Database_Editor
 
             _diShops = ReadXMLFileToXMLDataListDictionary(SHOPS_XML_FILE, XMLTypeEnum.Shop, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA);
             _diCutscenes = ReadXMLFileToIntKeyDictionaryStringList(CUTSCENE_XML_FILE);
-            _diCutsceneDialogue = ReadXMLFileToStringKeyDictionaryStringList(CUTSCENE_DIALOGUE_XML_FILE);
 
             LoadWorldObjects();
             LoadItemData();
@@ -566,6 +553,23 @@ namespace Database_Editor
             }
 
             return xmlDictionary;
+        }
+
+        private void LoadDialogueDictionary(string path, string fileMatch, ref Dictionary<string, Dictionary<string, Dictionary<string, string>>> dialogueDictionary)
+        {
+            dialogueDictionary = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
+            foreach (string s in Directory.GetFiles(path))
+            {
+                string fileNameID = Path.GetFileName(s).Replace(fileMatch, "").Split('.')[0];
+
+                int charID = -1;
+                if (int.TryParse(fileNameID, out charID))
+                {
+                    fileNameID = s;
+                    Util.ParseContentFile(ref fileNameID);
+                    dialogueDictionary.Add(s, ReadTaggedXMLFile(fileNameID));
+                }
+            }
         }
 
         private void LoadXMLDictionary(string fileName, string tagsReferenced, string tagsThatReferenceMe)
@@ -1013,29 +1017,23 @@ namespace Database_Editor
 
         private void btnEditCutsceneDialogue_Click(object sender, EventArgs e)
         {
-            //string keyValue = dgvCutscenes.CurrentRow.Cells["colCutscenesID"].Value.ToString();
-            //if (!_diCutsceneDialogue.ContainsKey(keyValue))
-            //{
-            //    _diCutsceneDialogue[keyValue] = new List<string>() { "" };
-            //}
+            string cutSceneFileName = String.Format(@"{0}\Cutscene_{1}.xml", PATH_TO_CUTSCENE_DIALOGUE, dgvCutscenes.CurrentRow.Cells["colCutscenesID"].Value.ToString());
 
-            //Dictionary<string, Dictionary<string, string>> entries = new Dictionary<string, Dictionary<string, string>>();
-            //foreach (string s in _diCutsceneDialogue[keyValue])
-            //{
-            //    string[] split = s.Split(new char[] { '[', ':', ']' }, StringSplitOptions.RemoveEmptyEntries);
-            //    entries[split[0]] = split.Length > 1 ? split[1] : "";
-            //}
+            if (!_diCutsceneDialogue.ContainsKey(cutSceneFileName))
+            {
+                _diCutsceneDialogue[cutSceneFileName] = new Dictionary<string, Dictionary<string, string>>()
+                {
+                    ["0"] = new Dictionary<string, string>()
+                    {
+                        ["Text"] = ""
+                    }
+                };
+            }
 
-            //FormCharExtraData frm = new FormCharExtraData("Cutscene Dialogue", entries);
-            //frm.ShowDialog();
+            FormCharExtraData frm = new FormCharExtraData("Cutscene Dialogue", _diCutsceneDialogue[cutSceneFileName]);
+            frm.ShowDialog();
 
-            //List<string> listTags = new List<string>();
-            //foreach (KeyValuePair<string, Dictionary<string, string>> kvp in frm.StringData)
-            //{
-            //    listTags.Add("[" + kvp.Key + ":" + kvp.Value + "]");
-            //}
-
-            //_diCutsceneDialogue[keyValue] = listTags;
+            _diCutsceneDialogue[cutSceneFileName] = frm.StringData;
         }
 
         #region SaveInfo
@@ -1044,66 +1042,40 @@ namespace Database_Editor
             XMLData data = null;
             if (liData.Count == _diTabIndices[tabIndex])
             {
-                Dictionary<string, string> diText = new Dictionary<string, string>
-                {
-                    ["Name"] = tbName.Text,
-                };
-                if (tbDescription != null) { diText["Description"] = tbDescription.Text; }
-
-                _diObjectText[textIDPrefix + "_" + tbID.Text] = diText;
-
-                Dictionary<string, string> tags = new Dictionary<string, string>();
-
-                if (cb != null)
-                {
-                    string[] typeTag = cb.SelectedItem.ToString().Split(':');
-                    tags[typeTag[0]] = typeTag[1];
-                }
-
-                foreach (DataGridViewRow row in dgTags.Rows)
-                {
-                    if (row.Cells[0].Value != null)
-                    {
-                        string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                        string key = tagInfo[0];
-                        string val = (tagInfo.Length > 1 ? tagInfo[1] : string.Empty);
-                        tags[key] = val;
-                    }
-                }
-
-                data = new XMLData(tbID.Text, tags, tagsReferenced, tagsThatReferenceMe, xmlType);
+                data = new XMLData(tbID.Text, new Dictionary<string, string>(), tagsReferenced, tagsThatReferenceMe, xmlType);
                 liData.Add(data);
             }
-            else
-            {
-                data = liData[int.Parse(tbID.Text)];
-                if (tbDescription == null) { data.SetTextData(tbName.Text); }
-                else { data.SetTextData(tbName.Text, tbDescription.Text); }
+            else { data = liData[int.Parse(tbID.Text)]; }
 
-                data.ClearTagInfo();
-                if (cb != null)
-                {
-                    string[] typeTag = cb.SelectedItem.ToString().Split(':');
-                    data.SetTagInfo(typeTag[0], typeTag[1]);
-                }
-                foreach (DataGridViewRow row in dgTags.Rows)
-                {
-                    if (row.Cells[0].Value != null)
-                    {
-                        string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                        string key = tagInfo[0];
-                        string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
-                        data.SetTagInfo(key, val);
-                    }
-                }
-                data.ChangeID(int.Parse(tbID.Text), false);
+
+            if (tbDescription == null) { data.SetTextData(tbName.Text); }
+            else { data.SetTextData(tbName.Text, tbDescription.Text); }
+
+            data.ClearTagInfo();
+            if (cb != null)
+            {
+                string[] typeTag = cb.SelectedItem.ToString().Split(':');
+                data.SetTagInfo(typeTag[0], typeTag[1]);
             }
+            foreach (DataGridViewRow row in dgTags.Rows)
+            {
+                if (row.Cells[0].Value != null)
+                {
+                    string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                    string key = tagInfo[0];
+                    string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
+                    data.SetTagInfo(key, val);
+                }
+            }
+            data.ChangeID(int.Parse(tbID.Text), false);
+
 
             DataGridViewRow updatedRow = baseGridView.Rows[_diTabIndices[tabIndex]];
 
             updatedRow.Cells[colID].Value = data.ID;
             updatedRow.Cells[colName].Value = data.Name;
         }
+
         private void SaveItemInfo()
         {
             ItemXMLData data = null;
@@ -1248,7 +1220,14 @@ namespace Database_Editor
 
         private void SaveCutsceneInfo()
         {
-            List<string> listData = _diCutscenes[_diTabIndices["Cutscenes"]];
+            List<string> listData;
+            if (!_diCutscenes.ContainsKey(_diTabIndices["Cutscenes"]))
+            {
+                _diCutscenes[_diTabIndices["Cutscenes"]] = new List<string>();
+                listData = _diCutscenes[_diTabIndices["Cutscenes"]];
+            }
+            else { listData = _diCutscenes[_diTabIndices["Cutscenes"]]; }
+
             listData.Clear();
             listData.Add(tbCutsceneTriggers.Text);
             listData.Add(tbCutsceneDetails.Text);
@@ -1269,6 +1248,7 @@ namespace Database_Editor
             updatedRow.Cells["colCutscenesID"].Value = _diTabIndices["Cutscenes"];
             updatedRow.Cells["colCutscenesName"].Value = GetTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name");
         }
+
         private void SaveShopInfo()
         {
             List<XMLData> listData = _diShops[_diTabIndices["Shops"]];
@@ -1538,6 +1518,11 @@ namespace Database_Editor
                 SaveXMLDictionary(_diCharacterDialogue[s], s, sWriter);
             }
 
+            foreach (string s in _diCutsceneDialogue.Keys)
+            {
+                SaveXMLDictionary(_diCutsceneDialogue[s], s, sWriter);
+            }
+
             SaveXMLDictionary(_diGameText, PATH_TO_TEXT_FILES + @"\GameText.xml", sWriter);
             SaveXMLDictionary(_diMailbox, PATH_TO_TEXT_FILES + @"\Mailbox_Text.xml", sWriter);
 
@@ -1547,7 +1532,7 @@ namespace Database_Editor
             }
 
             SaveXMLDictionaryIntKeyList(_diCutscenes, CUTSCENE_XML_FILE, XMLTypeEnum.Cutscene, sWriter);
-            SaveXMLDictionaryList(_diCutsceneDialogue, CUTSCENE_DIALOGUE_XML_FILE, sWriter, "int");
+            //SaveXMLDictionaryList(_diCutsceneDialogue, PATH_TO_CUTSCENE_DIALOGUE, sWriter, "int");
 
             string mapPath = PATH_TO_MAPS;
             if (!Directory.Exists(mapPath)) { Directory.CreateDirectory(mapPath); }
@@ -2325,22 +2310,11 @@ namespace Database_Editor
                     }
                 }
             }
-            else if(dgv == dgvMonsters)
-            {
-                AddContextMenuItem("Add New", AddNewMonster, false);
-            }
-            else if (dgv == dgvTasks)
-            {
-                AddContextMenuItem("Add New", AddNewTask, false);
-            }
-            else if (dgv == dgvActions)
-            {
-                AddContextMenuItem("Add New", AddNewAction, false);
-            }
-            else if (dgv == dgvBuildings)
-            {
-                AddContextMenuItem("Add New", AddNewBuilding, false);
-            }
+            else if(dgv == dgvMonsters) { AddContextMenuItem("Add New", AddNewMonster, false); }
+            else if (dgv == dgvTasks) { AddContextMenuItem("Add New", AddNewTask, false); }
+            else if (dgv == dgvActions) { AddContextMenuItem("Add New", AddNewAction, false); }
+            else if (dgv == dgvBuildings) { AddContextMenuItem("Add New", AddNewBuilding, false); }
+            else if (dgv == dgvCutscenes) { AddContextMenuItem("Add New", AddNewCutscene, false); }
         }
 
         private void AddContextMenuItem(string text, EventHandler triggeredEvent, bool separator)
@@ -2402,6 +2376,14 @@ namespace Database_Editor
             SaveBuildingInfo(_diBasicXML[BUILDINGS_XML_FILE]);
             List<string> defaultTags = new List<string>() { "Texture:", "Dimensions:", "Base:", "Entrance:", "ReqItems:"};
             AddNewGenericXMLObject(tabCtl.TabPages["tabBuildings"], "Buildings", dgvBuildings, "colBuildingsID", "colBuildingsName", tbBuildingName, tbBuildingID, dgvBuildingTags, "colBuildingTags", null, tbBuildingDescription, defaultTags);
+        }
+        private void AddNewCutscene(object sender, EventArgs e)
+        {
+            SaveCutsceneInfo();
+            List<string> defaultTags = new List<string>() { "" };
+            tbCutsceneTriggers.Clear();
+            tbCutsceneDetails.Clear();
+            AddNewGenericXMLObject(tabCtl.TabPages["tabCutscenes"], "Cutscenes", dgvCutscenes, "colCutscenesID", "colCutscenesName", tbCutsceneName, tbCutsceneName, dgvCutsceneTags, "colCutsceneTags", null, null, defaultTags);
         }
         #endregion
 

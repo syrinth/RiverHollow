@@ -594,6 +594,10 @@
       <Value>[Name:Harp]</Value>
     </Item>
     <Item>
+      <Key>Cutscene_3</Key>
+      <Value>[Name:Griselda]</Value>
+    </Item>
+    <Item>
       <Key>Item_0</Key>
       <Value>[Name:Stone][Description:Stone, for building things]</Value>
     </Item>

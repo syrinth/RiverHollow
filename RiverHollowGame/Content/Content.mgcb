@@ -528,11 +528,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Summons/Magus.png
 
-#begin Data/Text Files/Dialogue/CutsceneDialogue.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/CutsceneDialogue.xml
-
 #begin Textures/Valley.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1333,51 +1328,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Villagers/NPC_17.png
 
-#begin Data/Text Files/Dialogue/NPC_05.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_05.xml
-
-#begin Data/Text Files/Dialogue/NPC_11.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_11.xml
-
-#begin Data/Text Files/Dialogue/NPC_13.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_13.xml
-
-#begin Data/Text Files/Dialogue/NPC_14.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_14.xml
-
-#begin Data/Text Files/Dialogue/NPC_16.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_16.xml
-
-#begin Data/Text Files/Dialogue/NPC_17.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_17.xml
-
-#begin Data/Text Files/Dialogue/NPC_18.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_18.xml
-
-#begin Data/Text Files/Dialogue/NPC_19.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_19.xml
-
-#begin Data/Text Files/Dialogue/NPC_21.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_21.xml
-
 #begin Textures/Actors/Villagers/NPC_00.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1389,11 +1339,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Villagers/NPC_00.png
-
-#begin Data/Text Files/Dialogue/NPC_00.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_00.xml
 
 #begin Textures/Actors/Villagers/NPC_13.png
 /importer:TextureImporter
@@ -1547,11 +1492,6 @@
 /processor:PassThroughProcessor
 /build:Data/Config.xml
 
-#begin Data/Text Files/Dialogue/NPC_01.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_01.xml
-
 #begin Textures/Actors/Villagers/NPC_01.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1588,21 +1528,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Villagers/NPC_20.png
 
-#begin Data/Text Files/Dialogue/NPC_02.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_02.xml
-
-#begin Data/Text Files/Dialogue/NPC_20.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_20.xml
-
-#begin Data/Text Files/Dialogue/NPC_06.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_06.xml
-
 #begin Textures/Actors/Villagers/NPC_06.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1614,16 +1539,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Villagers/NPC_06.png
-
-#begin Data/Text Files/Dialogue/NPC_03.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_03.xml
-
-#begin Data/Text Files/Dialogue/NPC_04.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_04.xml
 
 #begin Textures/Actors/Villagers/NPC_03.png
 /importer:TextureImporter
@@ -1720,36 +1635,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Villagers/NPC_07.png
-
-#begin Data/Text Files/Dialogue/NPC_07.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_07.xml
-
-#begin Data/Text Files/Dialogue/NPC_08.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_08.xml
-
-#begin Data/Text Files/Dialogue/NPC_09.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_09.xml
-
-#begin Data/Text Files/Dialogue/NPC_10.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_10.xml
-
-#begin Data/Text Files/Dialogue/NPC_12.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_12.xml
-
-#begin Data/Text Files/Dialogue/NPC_15.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/NPC_15.xml
 
 #begin Maps/Swamp/mapSwamp_03.tmx
 /importer:TiledMapImporter
@@ -3092,4 +2977,134 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sound/Original/Effects/ButtonPress.wav
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_00.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_00.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_01.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_01.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_02.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_02.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_03.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_03.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_04.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_04.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_05.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_05.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_06.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_06.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_07.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_07.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_08.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_08.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_09.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_09.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_10.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_10.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_11.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_11.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_12.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_12.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_13.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_13.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_14.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_14.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_15.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_15.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_16.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_16.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_17.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_17.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_18.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_18.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_19.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_19.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_20.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_20.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_21.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_21.xml
+
+#begin Data/Text Files/Dialogue/Cutscenes/Cutscene_0.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Cutscenes/Cutscene_0.xml
+
+#begin Data/Text Files/Dialogue/Cutscenes/Cutscene_1.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Cutscenes/Cutscene_1.xml
+
+#begin Data/Text Files/Dialogue/Cutscenes/Cutscene_2.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Cutscenes/Cutscene_2.xml
+
+#begin Data/Text Files/Dialogue/Cutscenes/Cutscene_3.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Cutscenes/Cutscene_3.xml
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using RiverHollow.Characters;
@@ -15,7 +16,7 @@ namespace RiverHollow.Game_Managers
     {
         static Cutscene _currentCutscene;
         static Dictionary<int, Cutscene> _diCutscenes;
-        static Dictionary<int, Dictionary<string, TextEntry>> _diCutsceneDialogue;
+        static Dictionary<int, Dictionary<string, TextEntry>> _diAllCutsceneDialogue;
         public static bool Playing;
         
         /// <summary>
@@ -26,22 +27,22 @@ namespace RiverHollow.Game_Managers
         {
             Playing = false;
             _diCutscenes = new Dictionary<int, Cutscene>();
-            _diCutsceneDialogue = new Dictionary<int, Dictionary<string, TextEntry>>();
-
-            //We need to do this bullshit because the god damn XML Importer can't have nested Dictionaries. WE MAKE OUR OWN!
-            Dictionary<int, List<string>> dataList = Content.Load<Dictionary<int, List<string>>>(@"Data\Text Files\Dialogue\CutsceneDialogue");
-            foreach (KeyValuePair<int, List<string>> kvp in dataList)
+            _diAllCutsceneDialogue = new Dictionary<int, Dictionary<string, TextEntry>>();
+            
+            foreach(string s in Directory.GetFiles(@"Content\Data\Text Files\Dialogue\Cutscenes"))
             {
-                Dictionary<string, TextEntry> entryDictionary = new Dictionary<string, TextEntry>();
-                foreach (string s in kvp.Value)
-                {
-                    Dictionary<string, string> tagDictionary = Util.DictionaryFromTaggedString(s);
-                    string key = tagDictionary["Key"];
-                    tagDictionary.Remove("Key");
+                string fileName = s;
+                Util.ParseContentFile(ref fileName);
+                int fileID = int.Parse(Path.GetFileName(fileName).Replace("Cutscene_", "").Split('.')[0]);
+                Dictionary<string, string> dss = Content.Load<Dictionary<string, string>>(fileName);
 
-                    entryDictionary[key] = new TextEntry(key, tagDictionary);
+                Dictionary<string, TextEntry> entryDictionary = new Dictionary<string, TextEntry>();
+                foreach (KeyValuePair<string, string> kvp in dss)
+                {
+                    entryDictionary[kvp.Key] = new TextEntry(kvp.Key, Util.DictionaryFromTaggedString(kvp.Value));
                 }
-                _diCutsceneDialogue.Add(kvp.Key, entryDictionary);
+
+                _diAllCutsceneDialogue[fileID] = entryDictionary;
             }
 
             Dictionary<int, List<string>> rawData = Content.Load<Dictionary<int, List<string>>>(@"Data\CutScenes");
@@ -89,7 +90,7 @@ namespace RiverHollow.Game_Managers
         /// <returns></returns>
         public static TextEntry GetDialogue(int cutsceneID, string stringID)
         {
-            return _diCutsceneDialogue[cutsceneID][stringID];
+            return _diAllCutsceneDialogue[cutsceneID][stringID];
         }
 
         public static void SkipCutscene()

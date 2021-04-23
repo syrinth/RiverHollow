@@ -1,6 +1,6 @@
 ﻿namespace Database_Editor
 {
-    partial class frmDBEditor
+    partial class FrmDBEditor
     {
         /// <summary>
         /// Required designer variable.
@@ -29,10 +29,13 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDBEditor));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDBEditor));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gameTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mailboxMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabCtl = new System.Windows.Forms.TabControl();
             this.tabItems = new System.Windows.Forms.TabPage();
             this.cbItemSubtype = new System.Windows.Forms.ComboBox();
@@ -111,7 +114,6 @@
             this.label14 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.dgvCutsceneTags = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbCutsceneName = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.dgvCutscenes = new System.Windows.Forms.DataGridView();
@@ -207,9 +209,7 @@
             this.dgvStatusEffects = new System.Windows.Forms.DataGridView();
             this.colStatusEffectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStatusEffectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gameTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mailboxMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colCutsceneTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -278,6 +278,29 @@
             this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.saveToFileToolStripMenuItem.Text = "Save To File";
             this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
+            // 
+            // textToolStripMenuItem
+            // 
+            this.textToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.gameTextToolStripMenuItem,
+            this.mailboxMessagesToolStripMenuItem});
+            this.textToolStripMenuItem.Name = "textToolStripMenuItem";
+            this.textToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.textToolStripMenuItem.Text = "Text";
+            // 
+            // gameTextToolStripMenuItem
+            // 
+            this.gameTextToolStripMenuItem.Name = "gameTextToolStripMenuItem";
+            this.gameTextToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.gameTextToolStripMenuItem.Text = "Game Text";
+            this.gameTextToolStripMenuItem.Click += new System.EventHandler(this.gameTextToolStripMenuItem_Click);
+            // 
+            // mailboxMessagesToolStripMenuItem
+            // 
+            this.mailboxMessagesToolStripMenuItem.Name = "mailboxMessagesToolStripMenuItem";
+            this.mailboxMessagesToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.mailboxMessagesToolStripMenuItem.Text = "Mailbox Messages";
+            this.mailboxMessagesToolStripMenuItem.Click += new System.EventHandler(this.mailboxMessagesToolStripMenuItem_Click);
             // 
             // tabCtl
             // 
@@ -1108,19 +1131,13 @@
             this.dgvCutsceneTags.AllowUserToResizeRows = false;
             this.dgvCutsceneTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCutsceneTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn2});
+            this.colCutsceneTags});
             this.dgvCutsceneTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgvCutsceneTags.Location = new System.Drawing.Point(320, 110);
             this.dgvCutsceneTags.Name = "dgvCutsceneTags";
             this.dgvCutsceneTags.RowHeadersVisible = false;
             this.dgvCutsceneTags.Size = new System.Drawing.Size(464, 278);
             this.dgvCutsceneTags.TabIndex = 33;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn2.HeaderText = "Tags";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             // 
             // tbCutsceneName
             // 
@@ -1148,6 +1165,7 @@
             this.dgvCutscenes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colCutscenesID,
             this.colCutscenesName});
+            this.dgvCutscenes.ContextMenuStrip = this.contextMenu;
             this.dgvCutscenes.Location = new System.Drawing.Point(6, 6);
             this.dgvCutscenes.MultiSelect = false;
             this.dgvCutscenes.Name = "dgvCutscenes";
@@ -2129,28 +2147,11 @@
             this.colStatusEffectsName.ReadOnly = true;
             this.colStatusEffectsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // textToolStripMenuItem
+            // colCutsceneTags
             // 
-            this.textToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gameTextToolStripMenuItem,
-            this.mailboxMessagesToolStripMenuItem});
-            this.textToolStripMenuItem.Name = "textToolStripMenuItem";
-            this.textToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
-            this.textToolStripMenuItem.Text = "Text";
-            // 
-            // gameTextToolStripMenuItem
-            // 
-            this.gameTextToolStripMenuItem.Name = "gameTextToolStripMenuItem";
-            this.gameTextToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.gameTextToolStripMenuItem.Text = "Game Text";
-            this.gameTextToolStripMenuItem.Click += new System.EventHandler(this.gameTextToolStripMenuItem_Click);
-            // 
-            // mailboxMessagesToolStripMenuItem
-            // 
-            this.mailboxMessagesToolStripMenuItem.Name = "mailboxMessagesToolStripMenuItem";
-            this.mailboxMessagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.mailboxMessagesToolStripMenuItem.Text = "Mailbox Messages";
-            this.mailboxMessagesToolStripMenuItem.Click += new System.EventHandler(this.mailboxMessagesToolStripMenuItem_Click);
+            this.colCutsceneTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCutsceneTags.HeaderText = "Tags";
+            this.colCutsceneTags.Name = "colCutsceneTags";
             // 
             // frmDBEditor
             // 
@@ -2291,7 +2292,6 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.DataGridView dgvCutsceneTags;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.TextBox tbCutsceneName;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.DataGridView dgvCutscenes;
@@ -2404,6 +2404,7 @@
         private System.Windows.Forms.ToolStripMenuItem textToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gameTextToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mailboxMessagesToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCutsceneTags;
     }
 }
 

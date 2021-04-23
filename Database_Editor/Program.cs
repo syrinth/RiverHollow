@@ -13,7 +13,7 @@ namespace Database_Editor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmDBEditor());
+            Application.Run(new FrmDBEditor());
         }
     }
 }

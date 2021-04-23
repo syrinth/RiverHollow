@@ -166,7 +166,6 @@ namespace RiverHollow.Game_Managers
             else if (type == ObjectTypeEnum.Container) { StructureIDs.Add(id); }
         }
 
-
         private static void LoadDictionary(ref Dictionary<string, Dictionary<string, string>> dictionaryAddTo, string dataFile, ContentManager Content)
         {
             dictionaryAddTo = new Dictionary<string, Dictionary<string, string>>();
