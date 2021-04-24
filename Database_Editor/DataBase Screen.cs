@@ -989,7 +989,7 @@ namespace Database_Editor
             FormCharExtraData frm = null;
             if (cbEditableCharData.SelectedItem.ToString() == "Dialogue")
             {
-                string key = PATH_TO_DIALOGUE + npcKey;
+                string key = PATH_TO_VILLAGER_DIALOGUE + npcKey;
                 if (!_diCharacterDialogue.ContainsKey(key))
                 {
                     _diCharacterDialogue[key] = new Dictionary<string, Dictionary<string, string>> { ["New"] = { [""] = "" } };

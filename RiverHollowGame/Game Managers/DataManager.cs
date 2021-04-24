@@ -190,7 +190,7 @@ namespace RiverHollow.Game_Managers
             
             _diNPCDialogue = new Dictionary<int, Dictionary<string, string>>();
             _diAdventurerDialogue = new Dictionary<int, Dictionary<string, string>>();
-            foreach (string s in Directory.GetFiles(@"Content\" + FOLDER_TEXTFILES + "Dialogue"))
+            foreach (string s in Directory.GetFiles(@"Content\" + FOLDER_TEXTFILES + @"Dialogue\Villagers"))
             {
                 string fileName = string.Empty;
 
@@ -205,17 +205,17 @@ namespace RiverHollow.Game_Managers
                         _diNPCDialogue.Add(file, Content.Load<Dictionary<string, string>>(fileName));
                     }
                 }
-                else if (s.Contains("Adventurer_")) {
-                    fileName = Path.GetFileName(s).Replace("Adventurer_", "").Split('.')[0];
+                //else if (s.Contains("Adventurer_")) {
+                //    fileName = Path.GetFileName(s).Replace("Adventurer_", "").Split('.')[0];
 
-                    int file = -1;
-                    if (int.TryParse(fileName, out file))
-                    {
-                        fileName = s;
-                        Util.ParseContentFile(ref fileName);
-                        _diAdventurerDialogue.Add(file, Content.Load<Dictionary<string, string>>(fileName));
-                    }
-                }
+                //    int file = -1;
+                //    if (int.TryParse(fileName, out file))
+                //    {
+                //        fileName = s;
+                //        Util.ParseContentFile(ref fileName);
+                //        _diAdventurerDialogue.Add(file, Content.Load<Dictionary<string, string>>(fileName));
+                //    }
+                //}
             }
         }
         private static void LoadCharacters(ContentManager Content)

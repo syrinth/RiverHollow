@@ -27,8 +27,8 @@
     </Item>
     <Item>
       <Key>Task_3_End</Key>
-      <Value>[Text:Wow, you did that already? Great. Now any travelers that pass through will have a place to stay. This is it, $Name$. This is the first real step we take to rebuiling $Town$.
-We're going to need money though. I've got some thinking to do...][Face:Happy][SendMessage:0]</Value>
+      <Value>[Text:$Building_8$ up? Great work! Here, I found a few odds and ends when I was setting up and thought they might be useful for you.
+Just brew up some potions and put them in the bin so we can ship them to a nearby city. We're going to need a lot of money if we're going to get this town up and running!][Face:Happy][SendMessage:0]</Value>
     </Item>
     <Item>
       <Key>Architect</Key>
