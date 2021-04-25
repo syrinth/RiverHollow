@@ -127,7 +127,7 @@
     </Item>
     <Item>
       <Key>31</Key>
-      <Value>[Type:Machine][Image:0-64][Work:4-0.3][Width:16][Height:32][Makes:114-3|115-3|58-3][Base:1-1][WorkEffect:bubbles][MachineType:CraftingMachine][ItemID:118][ReqItems:0-5]</Value>
+      <Value>[Type:Machine][Image:0-64][Work:4-0.3][Width:16][Height:32][Makes:114-0|115-0|58-0][Base:1-1][WorkEffect:Cauldron][MachineType:CraftingMachine][ItemID:118][ReqItems:0-5]</Value>
     </Item>
     <Item>
       <Key>32</Key>

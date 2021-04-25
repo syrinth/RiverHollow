@@ -3108,3 +3108,9 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Cutscenes/Cutscene_3.xml
 
+#begin Sound/Stock/Effects/Cauldron.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Effects/Cauldron.wav
+

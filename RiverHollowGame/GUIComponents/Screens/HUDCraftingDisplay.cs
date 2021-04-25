@@ -20,7 +20,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         Machine _craftMachine;
         private GUIWindow _winCraftables;
-        private GUIWindow _winMachineInfo;
+        private GUIWindow _winExtra;
+        private GUIButton _btnFinished;
         protected GUIItemBox[,] _arrDisplay;
         protected Item _autoItem;
 
@@ -49,15 +50,17 @@ namespace RiverHollow.GUIComponents.Screens
 
             ConfigureInfo();
 
-            //80, 48
-            _winMachineInfo = new GUIWindow(GUIWindow.Window_1, _winMain.Width, ScaleIt(GUIWindow.Window_1.Edge * 2) + ScaleIt(TileSize));
+            _winExtra = new GUIWindow(GUIWindow.Window_1, _winMain.Width, ScaleIt(GUIWindow.Window_1.Edge * 2) + ScaleIt(TileSize));
+            _btnFinished = new GUIButton("Done", Finished);
+            _btnFinished.CenterOnObject(_winExtra);
+            _winExtra.AddControl(_btnFinished);
 
             _winCraftables.AnchorAndAlignToObject(_winMain, SideEnum.Top, SideEnum.CenterX);
-            _winMachineInfo.AnchorAndAlignToObject(_winMain, SideEnum.Bottom, SideEnum.CenterX);
+            _winExtra.AnchorAndAlignToObject(_winMain, SideEnum.Bottom, SideEnum.CenterX);
 
             DetermineSize();
 
-            AddControl(_winMachineInfo);
+            AddControl(_winExtra);
             Position();
         }
 
@@ -143,22 +146,20 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     if (gIB != null && gIB.Contains(mouse))
                     {
-                        if (PlayerManager.ExpendResources(gIB.BoxItem.GetRequiredItems()))
+                        if (InventoryManager.HasSpaceInInventory(gIB.BoxItem.ItemID, 1) && PlayerManager.ExpendResources(gIB.BoxItem.GetRequiredItems()))
                         {
                             if (_craftMachine != null)
                             {
                                 _craftMachine.MakeChosenItem(gIB.BoxItem.ItemID);
-                                GUIManager.CloseMainObject();
-                                GameManager.Unpause();
                             }
                         }
                     }
                 }
                 rv = true;
             }
-            else if (_winMachineInfo.Contains(mouse))
+            else if (_winExtra.Contains(mouse))
             {
-                _winMachineInfo.ProcessLeftButtonClick(mouse);
+                _winExtra.ProcessLeftButtonClick(mouse);
                 rv = true;
             }
             return rv;
@@ -219,6 +220,12 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             return rv;
+        }
+
+        private void Finished()
+        {
+            GUIManager.CloseMainObject();
+            GameManager.Unpause();
         }
     }
 }

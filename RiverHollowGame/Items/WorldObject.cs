@@ -1050,7 +1050,6 @@ namespace RiverHollow.Items
                     base.Update(gTime);
                     if (_iCurrentlyMaking != -1)       //Crafting Handling
                     {
-                        SoundManager.PlayEffectAtLoc(_sEffectWorking, _sMapName, MapPosition, this);
                         _sprite.Update(gTime);
 
                         _dProcessedTime += gTime.ElapsedGameTime.TotalSeconds;
@@ -1081,7 +1080,8 @@ namespace RiverHollow.Items
                 {
                     if (_iCurrentlyMaking != -1 && _dProcessedTime >= CraftingDictionary[_iCurrentlyMaking])
                     {
-                        SetHeldItem(_iCurrentlyMaking);
+                        InventoryManager.AddToInventory(_iCurrentlyMaking);
+                        //SetHeldItem(_iCurrentlyMaking);
                         SoundManager.StopEffect(this);
                         SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition, this);
                         _dProcessedTime = 0;
@@ -1104,10 +1104,12 @@ namespace RiverHollow.Items
 
                 public override void MakeChosenItem(int itemID)
                 {
-                    base.MakeChosenItem(itemID);
-                    _bWorking = true;
+                    //base.MakeChosenItem(itemID);
+                    //_bWorking = true;
 
+                    InventoryManager.AddToInventory(itemID);
                     PlayerManager.DecreaseStamina(1);
+                    SoundManager.PlayEffect(_sEffectWorking);
                 }
                 public override void SetHeldItem(int itemID)
                 {
