@@ -2151,7 +2151,7 @@ namespace RiverHollow.Characters
                 RHMap map = MapManager.Maps[mapName];
 
                 string strSpawn = string.Empty;
-                if (IsHomeBuilt()) { strSpawn = "NPC_" + _iIndex.ToString("00"); }
+                if (IsHomeBuilt() || GetSpawnMapName() == MapManager.HomeMap) { strSpawn = "NPC_" + _iIndex.ToString("00"); }
                 else { strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
 
                 Position = Util.SnapToGrid(map.GetCharacterSpawn(strSpawn));
@@ -3103,7 +3103,19 @@ namespace RiverHollow.Characters
         private int _iRows = 4;
         private int _iCols = 10;
         private Item[,] _arrInventory;
- 
+
+        public override Vector2 Position
+        {
+            get
+            {
+                return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TileSize);
+            }
+            set
+            {
+                _sprBody.Position = new Vector2(value.X , value.Y - _sprBody.Height + TileSize);
+            }
+        }
+
         public ShippingGremlin(int index, Dictionary<string, string> stringData)
         {
             _bArrivedInTown = true;
@@ -3152,6 +3164,11 @@ namespace RiverHollow.Characters
             {
                 PlayAnimation(AnimationEnum.ObjectIdle);
             }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
+        {
+            base.Draw(spriteBatch, useLayerDepth);
         }
 
         /// <summary>
@@ -3203,6 +3220,12 @@ namespace RiverHollow.Characters
             _sprBody.PlayAnimation(AnimationEnum.ObjectAction2);
         }
 
+        /// <summary>
+        /// Iterate through every item in the Shipping Bin and calculate the
+        /// sell price of each item. Add the total to the Player's inventory
+        /// and then clear out the Shipping Bin.
+        /// </summary>
+        /// <returns></returns>
         public int SellAll()
         {
             int val = 0;
@@ -3211,7 +3234,7 @@ namespace RiverHollow.Characters
                 if (i != null)
                 {
                     val += i.SellPrice * i.Number;
-                    PlayerManager.AddMoney(i.SellPrice);
+                    PlayerManager.AddMoney(val);
                 }
             }
             _arrInventory = new Item[_iRows, _iCols];

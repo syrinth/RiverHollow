@@ -27,7 +27,8 @@
     </Item>
     <Item>
       <Key>Task_3_End</Key>
-      <Value>[Text:$Building_8$ up? Great work! Here, I found a few odds and ends when I was setting up and thought they might be useful for you.
+      <Value>[Text:Has the $Building_8$ been built already?
+Great work! Here, I found a few odds and ends when I was setting up and thought they might be useful for you.
 Just brew up some potions and put them in the bin so we can ship them to a nearby city. We're going to need a lot of money if we're going to get this town up and running!][Face:Happy][SendMessage:0]</Value>
     </Item>
     <Item>

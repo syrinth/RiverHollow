@@ -322,7 +322,7 @@
  <objectgroup id="6" name="Character">
   <object id="65" name="PlayerSpawn" x="613.583" y="805.25" width="5.63636" height="5.27273"/>
   <object id="66" name="CS1Spawn" x="597.083" y="725.083" width="7.16667" height="6.5"/>
-  <object id="67" name="NPC_21" x="465.219" y="673.786" width="29.5" height="13.7614"/>
+  <object id="67" name="NPC_21" x="449.469" y="770.036" width="29.5" height="13.7614"/>
  </objectgroup>
  <objectgroup id="7" name="Travel">
   <object id="34" name="Entrance" x="1596" y="704" width="4" height="48">
@@ -372,7 +372,7 @@
   </object>
   <object id="71" name="WorldObject" x="512.53" y="688.521" width="14.94" height="30.8948">
    <properties>
-    <property name="ObjectID" type="int" value="47"/>
+    <property name="ObjectID" type="int" value="48"/>
    </properties>
   </object>
   <object id="72" name="Building" x="161.75" y="706" width="173.25" height="173">

@@ -35,7 +35,7 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:7][Collection:0|1|2][Class:7][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:24][ArrivalDelay:4][CanMarry]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:7][Collection:0|1|2][Class:7][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][Arrived][CanMarry]</Value>
     </Item>
     <Item>
       <Key>9</Key>

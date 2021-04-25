@@ -440,6 +440,7 @@ namespace RiverHollow.Items
                 Item it = null;
                 if (FinishedGrowing())
                 {
+                    PlayerManager.DecreaseStamina(1);
                     it = DataManager.GetItem(_iResourceID);
                     if (_bPopItem)
                     {
@@ -728,6 +729,7 @@ namespace RiverHollow.Items
 
         public void Gather()
         {
+            PlayerManager.DecreaseStamina(1);
             InventoryManager.AddToInventory(DataManager.GetItem(_iItemID));
             MapManager.RemoveWorldObject(this);
             RemoveSelfFromTiles();
@@ -1051,6 +1053,7 @@ namespace RiverHollow.Items
                         SoundManager.PlayEffectAtLoc(_sEffectWorking, _sMapName, MapPosition, this);
                         _sprite.Update(gTime);
 
+                        _dProcessedTime += gTime.ElapsedGameTime.TotalSeconds;
                         CheckFinishedCrafting();
                     }
                 }
@@ -1103,6 +1106,8 @@ namespace RiverHollow.Items
                 {
                     base.MakeChosenItem(itemID);
                     _bWorking = true;
+
+                    PlayerManager.DecreaseStamina(1);
                 }
                 public override void SetHeldItem(int itemID)
                 {
