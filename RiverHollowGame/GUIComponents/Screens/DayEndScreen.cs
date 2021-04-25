@@ -41,13 +41,13 @@ namespace RiverHollow.GUIComponents.Screens
             foreach (GUISprite spr in GameManager.SlainMonsters) { TileCheck(spr, ref _iRows); }
             _iTotalTiles = 0;
 
-            foreach(Villager v in DataManager.DiNPC.Values)
-            {
-                if (v.CheckForArrival())
-                {
-                    _iNewVillagers++;
-                }
-            }
+            //foreach(Villager v in DataManager.DiNPC.Values)
+            //{
+            //    if (v.ShouldIStayInTown())
+            //    {
+            //        _iNewVillagers++;
+            //    }
+            //}
 
             GameManager.ShippingGremlin.SellAll();
 
@@ -66,8 +66,8 @@ namespace RiverHollow.GUIComponents.Screens
             //}
 
             TextEntry results = null;
-            if(_iNewVillagers == 1) { results = DataManager.GetGameTextEntry("New_Villager"); }
-            else if(_iNewVillagers > 1) { results = DataManager.GetGameTextEntry("New_Villagers"); }
+            //if(_iNewVillagers == 1) { results = DataManager.GetGameTextEntry("New_Villager"); }
+            //else if(_iNewVillagers > 1) { results = DataManager.GetGameTextEntry("New_Villagers"); }
 
             _btnOK = new GUIButton("OK", BtnOK);
             _btnOK.AnchorToScreen( SideEnum.Bottom, GUIManager.STANDARD_MARGIN);

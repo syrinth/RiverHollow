@@ -219,7 +219,7 @@ namespace RiverHollow.Misc
                 {
                     foreach (string i in _diTags["Villager"].Split('-'))
                     {
-                        if (!DataManager.DiNPC[int.Parse(i)].ArrivedInTown) { return false; }
+                        if (!DataManager.DiNPC[int.Parse(i)].LivesInTown) { return false; }
                     }
 
                     rv = true;

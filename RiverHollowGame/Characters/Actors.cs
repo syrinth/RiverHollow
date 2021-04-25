@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.CombatStuff;
 using RiverHollow.Buildings;
+using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
@@ -11,14 +9,12 @@ using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
-
-using static RiverHollow.Game_Managers.GameManager;
+using System;
+using System.Collections.Generic;
 using static RiverHollow.Game_Managers.DataManager;
-using static RiverHollow.Game_Managers.TravelManager;
+using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Items.Structure;
-using static RiverHollow.GUIComponents.Screens.HUDMenu;
-using static RiverHollow.GUIComponents.Screens.HUDMenu.HUDManagement;
+using static RiverHollow.Game_Managers.TravelManager;
 
 namespace RiverHollow.Characters
 {
@@ -1802,9 +1798,12 @@ namespace RiverHollow.Characters
         private bool _bShopIsOpen = false;
         private int _iShopIndex = -1;
 
-        protected bool _bArrivedInTown = false;
-        public bool ArrivedInTown => _bArrivedInTown;
-        private int _iArrivalDelay = 0;
+        protected bool _bLivesInTown = false;
+        public bool LivesInTown => _bLivesInTown;
+
+        private int _iDaysToFirstArrival = 0;
+        private int _iArrivalPeriod = 0;
+        private int _iNextArrival = -1;
 
         protected Dictionary<string, List<Dictionary<string, string>>> _diCompleteSchedule;         //Every day with a list of KVP Time/GoToLocations
         List<KeyValuePair<string, PathData>> _liTodayPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
@@ -1894,9 +1893,13 @@ namespace RiverHollow.Characters
             Util.AssignValue(ref _bCanMarry, "CanMarry", stringData);
 
             Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
-            Util.AssignValue(ref _bArrivedInTown, "Arrived", stringData);
             Util.AssignValue(ref _iTotalMoneyEarnedReq, "TotalMoneyEarnedReq", stringData);
-            Util.AssignValue(ref _iArrivalDelay, "ArrivalDelay", stringData);
+
+            Util.AssignValue(ref _bLivesInTown, "InTown", stringData);
+            Util.AssignValue(ref _iDaysToFirstArrival, "FirstArrival", stringData);
+            Util.AssignValue(ref _iArrivalPeriod, "ArrivalPeriod", stringData);
+
+
             if (stringData.ContainsKey("RequiredBuildingID"))
             {
                 string[] args = Util.FindParams(stringData["RequiredBuildingID"]);
@@ -2067,41 +2070,81 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        #region Spawning methods
+        #region Movement methods
         /// <summary>
-        /// Call this method to determine if a Villager has arrived in town.
-        /// This method returns true if the villager arrived in town overnight and was not previously there
+        /// Counts down the days until the Villager's first arrival, or
+        /// time to the next arrival if they do not live in town.
         /// </summary>
-        /// <returns>True if a villager has just arrived</returns>
-        public bool CheckForArrival()
+        /// <returns></returns>
+        public bool HandleTravelTiming()
         {
             bool rv = false;
-            if (!ArrivedInTown)
+
+            if (!_bLivesInTown)
             {
-                bool shouldArrive = true;
-                foreach (int i in _liRequiredBuildingIDs)
+                if (_iDaysToFirstArrival > 0)
                 {
-                    if (!GameManager.DIBuildInfo[i].Built)
-                    {
-                        shouldArrive = false;
-                        break;
-                    }
+                    rv = TravelTimingHelper(ref _iDaysToFirstArrival);
                 }
-
-                if (_iTotalMoneyEarnedReq != -1 && _iTotalMoneyEarnedReq > PlayerManager.TotalMoneyEarned)
+                else if (_iNextArrival > 0)
                 {
-                    shouldArrive = false;
-                }
-
-                if (shouldArrive) {
-                    if (_iArrivalDelay > 0) { _iArrivalDelay--; }
-                    else if (_iArrivalDelay == 0)
-                    {
-                        _bArrivedInTown = true;
-                        rv = true;
-                    }
+                    rv = TravelTimingHelper(ref _iNextArrival);
                 }
             }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Given a timer, subtract one from the elapsed time and, if it has become 0
+        /// reset the time to next arrival.
+        /// </summary>
+        /// <param name="arrivalPeriod"></param>
+        /// <returns></returns>
+        private bool TravelTimingHelper(ref int arrivalPeriod)
+        {
+            bool rv = --arrivalPeriod == 0;
+            if (rv)
+            {
+                _iNextArrival = _iArrivalPeriod;
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Call this method to determine if a Villager has decided to stay in town
+        /// </summary>
+        /// <returns>True if villager wants to stay in town</returns>
+        public bool ShouldIStayInTown()
+        {
+            bool rv = false;
+            //if (!LivesInTown)
+            //{
+            //    bool shouldArrive = true;
+            //    foreach (int i in _liRequiredBuildingIDs)
+            //    {
+            //        if (!GameManager.DIBuildInfo[i].Built)
+            //        {
+            //            shouldArrive = false;
+            //            break;
+            //        }
+            //    }
+
+            //    if (_iTotalMoneyEarnedReq != -1 && _iTotalMoneyEarnedReq > PlayerManager.TotalMoneyEarned)
+            //    {
+            //        shouldArrive = false;
+            //    }
+
+            //    if (shouldArrive) {
+            //        if (_iDaysToFirstArrival > 0) { _iDaysToFirstArrival--; }
+            //        else if (_iDaysToFirstArrival == 0)
+            //        {
+            //            _bLivesInTown = true;
+            //            rv = true;
+            //        }
+            //    }
+            //}
 
             return rv;
         }
@@ -2152,7 +2195,7 @@ namespace RiverHollow.Characters
 
                 string strSpawn = string.Empty;
                 if (IsHomeBuilt() || GetSpawnMapName() == MapManager.HomeMap) { strSpawn = "NPC_" + _iIndex.ToString("00"); }
-                else { strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
+                else if(GameManager.VillagersInTheInn < 3){ strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
 
                 Position = Util.SnapToGrid(map.GetCharacterSpawn(strSpawn));
                 map.AddCharacterImmediately(this);
@@ -2294,7 +2337,7 @@ namespace RiverHollow.Characters
 
         public void RollOver()
         {
-            if (ArrivedInTown)
+            if (LivesInTown || HandleTravelTiming())
             {
                 MoveToSpawn();
                 CalculatePathing();
@@ -2401,8 +2444,8 @@ namespace RiverHollow.Characters
             NPCData npcData = new NPCData()
             {
                 npcID = ID,
-                arrived = ArrivedInTown,
-                arrivalDelay = _iArrivalDelay,
+                arrived = LivesInTown,
+                arrivalDelay = _iDaysToFirstArrival,
                 introduced = Introduced,
                 friendship = FriendshipPoints,
                 collection = new List<bool>(_diCollection.Values),
@@ -2419,8 +2462,8 @@ namespace RiverHollow.Characters
         public void LoadData(NPCData data)
         {
             Introduced = data.introduced;
-            _bArrivedInTown = data.arrived;
-            _iArrivalDelay = data.arrivalDelay;
+            _bLivesInTown = data.arrived;
+            _iDaysToFirstArrival = data.arrivalDelay;
             FriendshipPoints = data.friendship;
             _bMarried = data.married;
             CanJoinParty = data.canJoinParty;
@@ -3118,7 +3161,7 @@ namespace RiverHollow.Characters
 
         public ShippingGremlin(int index, Dictionary<string, string> stringData)
         {
-            _bArrivedInTown = true;
+            _bLivesInTown = true;
             _liRequiredBuildingIDs = new List<int>();
             _arrInventory = new Item[_iRows, _iCols];
             _eActorType = ActorEnum.ShippingGremlin;

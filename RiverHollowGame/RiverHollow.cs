@@ -309,7 +309,7 @@ namespace RiverHollow
             //Places NPCs on the map
             foreach (Villager v in DataManager.DiNPC.Values)
             {
-                if (v.ArrivedInTown)
+                if (v.LivesInTown)
                 {
                     v.MoveToSpawn();
                     v.CalculatePathing();
