@@ -100,10 +100,7 @@ namespace RiverHollow.Buildings
                 _diUpgradeInfo[upgradeLevel + 1] = reqs;
             }
 
-            if (stringData.ContainsKey("Builder"))
-            {
-                _iNPCBuilderID = int.Parse(stringData["Builder"]);
-            }
+            Util.AssignValue(ref _iNPCBuilderID, "Builder", stringData);
 
             _diReqToMake = new Dictionary<int, int>();
             if (stringData.ContainsKey("ReqItems"))

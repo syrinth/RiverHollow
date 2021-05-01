@@ -21,7 +21,7 @@ I'd be grateful if you could build me a house.][UnlockBuildingID:30]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>[Text:Oh, hello. {{Talk-Talk|Gift-GiveGift|Never Mind-Cancel}}]</Value>
+      <Value>[Text:Oh, hello. ][Selection:VillageTalk]</Value>
     </Item>
     <Item>
       <Key>Tailor request</Key>

@@ -24,7 +24,7 @@ Could you fix me up a place to live please? I'm afraid that I'm stuck here with 
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>[Text:Hey, $Name$, what do you need?{{Talk-Talk|Gift-GiveGift|%Friend-50%Join Party-Party|Never Mind-Cancel}}]</Value>
+      <Value>[Text:Hey, $Name$, what do you need?][Selection:VillageTalk]</Value>
     </Item>
     <Item>
       <Key>JoinPartyYes</Key>

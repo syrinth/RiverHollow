@@ -3,19 +3,19 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>FoodConfirm</Key>
-      <Value>[Text:Really eat the {0}? {{Yes-UseItem|No-Cancel}}]</Value>
+      <Value>[Text:Really eat the {0}?][Selection:YesNo][Trigger:UseItem]</Value>
     </Item>
     <Item>
       <Key>GiftConfirm</Key>
-      <Value>[Text:Give {0} to {1}? {{Yes-ConfirmGift|No-Cancel}}]</Value>
+      <Value>[Text:Give {0} to {1}?][Selection:YesNo][Trigger:ConfirmGift]</Value>
     </Item>
     <Item>
       <Key>ItemConfirm</Key>
-      <Value>[Text:"Use {0} on who? {{]</Value>
+      <Value>[Text:Use {0} on who?][Selection:Party][Trigger:UseItem]</Value>
     </Item>
     <Item>
       <Key>ClassItemConfirm</Key>
-      <Value>[Text:Really use the {0}? {{Yes-UseItem|No-Cancel}}]</Value>
+      <Value>[Text:Really use the {0}?][Selection:YesNo][Trigger:UseItem]</Value>
     </Item>
     <Item>
       <Key>AdventurerTree</Key>
@@ -23,15 +23,15 @@
     </Item>
     <Item>
       <Key>Save</Key>
-      <Value>[Text:Save and end the day?{{Yes-EndDay|No-Cancel}}]</Value>
+      <Value>[Text:Save and end the day?][Selection:YesNo][Trigger:EndDay]</Value>
     </Item>
     <Item>
       <Key>ReallyExit</Key>
-      <Value>[Text:Are you sure?{{Exit-Exit|Cancel-Cancel}}]</Value>
+      <Value>[Text:Are you sure?][Selection:YesNo][Trigger:Exit]</Value>
     </Item>
     <Item>
       <Key>Rune_of_Return_Use</Key>
-      <Value>[Text:Use the {0} to the dungeon entrance? {{Yes-UseItem|No-Cancel}}]</Value>
+      <Value>[Text:Use the {0} to the dungeon entrance?][Selection:YesNo][Trigger:UseItem]</Value>
     </Item>
     <Item>
       <Key>Rune_of_Return_Empty</Key>
@@ -63,7 +63,7 @@
     </Item>
     <Item>
       <Key>MonsterFood_Confirm</Key>
-      <Value>[Text:Set out the {0} here?{{Yes-UseItem|No-Cancel}}]</Value>
+      <Value>[Text:Set out the {0} here?][Selection:YesNo][Trigger:UseItem]</Value>
     </Item>
     <Item>
       <Key>MonsterFood_Yes</Key>
@@ -100,6 +100,38 @@
     <Item>
       <Key>Upgrade 1</Key>
       <Value>[Text:Tavern/A place where people can gather]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_Talk</Key>
+      <Value>[Text:Talk][TextVerb:Talk]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_Gift</Key>
+      <Value>[Text:Gift][TextVerb:Gift]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_Party</Key>
+      <Value>[Text:Join Party][TextVerb:Party]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_NeverMind</Key>
+      <Value>[Text:Never Mind][TextVerb:Cancel]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_ShipGoods</Key>
+      <Value>[Text:Ship Goods][TextVerb:ShipGoods]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_Yes</Key>
+      <Value>[Text:Yes][TextVerb:Yes]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_No</Key>
+      <Value>[Text:No][TextVerb:Cancel]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_Buy</Key>
+      <Value>[Text:Buy Items][TextVerb:Buy]</Value>
     </Item>
   </Asset>
 </XnaContent>

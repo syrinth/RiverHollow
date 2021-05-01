@@ -3,6 +3,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Misc
 {
@@ -10,19 +11,29 @@ namespace RiverHollow.Misc
     {
         string _sKey = string.Empty;
 
-        Dictionary<string, string> _diTags;
-        int _iLookupID = -1;
+        //The type of selection menu to create, identifies the options
+        TextEntrySelectionEnum _eSelectionType = TextEntrySelectionEnum.None;
+        public TextEntrySelectionEnum SelectionType => _eSelectionType;
 
+        //The type of selection taking place. Determines what the chosen action will do
+        TextEntryTriggerEnum _eGameTrigger = TextEntryTriggerEnum.None;
+        public TextEntryTriggerEnum GameTrigger => _eGameTrigger;
+
+        //The tied result to the indicated option
+        TextEntryVerbEnum _eVerb = TextEntryVerbEnum.None;
+        public TextEntryVerbEnum TextVerb => _eVerb;
+
+        Dictionary<string, string> _diTags;
+        //int _iLookupID = -1;
+
+        public string NextEntry => _diTags.ContainsKey("NextEntry") ? _diTags["NextEntry"] : string.Empty;
+        private string _sText;
+        public string FormattedText { get; private set; }
         double _dPriority = 100;
         public double Priority => _dPriority;
 
-        string _sText;
-        public string Text => _sText;
-
         bool _bSpoken = false;
-
-        //Whether or not this TextEntry has Selection options
-        public bool Selection { get; private set; } = false;
+        public bool Selection => SelectionType != TextEntrySelectionEnum.None;
 
         /// <summary>
         /// Default TextEntry, this should never be seen.
@@ -36,6 +47,7 @@ namespace RiverHollow.Misc
         public TextEntry(string text)
         {
             _sText = text;
+            FormattedText = _sText;
         }
 
         public TextEntry(string key, Dictionary<string, string> stringData)
@@ -46,42 +58,30 @@ namespace RiverHollow.Misc
 
             Util.AssignValue(ref _sText, "Text", stringData);
             Util.AssignValue(ref _dPriority, "Priority", stringData);
+            Util.AssignValue(ref _eSelectionType, "Selection", stringData);
+            Util.AssignValue(ref _eGameTrigger, "Trigger", stringData);
+            Util.AssignValue(ref _eVerb, "TextVerb", stringData);
 
-            _sText = Util.ProcessText(_sText);
-
-            ParseSelectionText();
+            FormattedText = Util.ProcessText(_sText);
         }
 
         /// <summary>
-        /// Runs string.Format against the _sText using the list as the parameters. Since we use the {{ and }}
-        /// characters to delimit selection text, that will interfere with string.Format so we need to remove them
-        /// then re-add them manually.
+        /// Use to determine if the tag dictionary contains the indicated key
+        /// </summary>
+        /// <param name="key">Key to look for</param>
+        /// <returns>True if the key exists in the tag dictionary</returns>
+        public bool HasTag(string key)
+        {
+            return _diTags.ContainsKey(key);
+        }
+
+        /// <summary>
+        /// Runs string.Format against the _sText using the list as the parameters.
         /// </summary>
         /// <param name="list">List of variables to format</param>
         public void FormatText(params object[] list)
         {
-            string[] splitForSelection = _sText.Split(new string[] { "{{" }, StringSplitOptions.None);
-            string first = string.Format(splitForSelection[0], list);
-            _sText = first;
-
-            if (splitForSelection.Length > 1)
-            {
-                _sText += "{{" + splitForSelection[1];
-            }
-        }
-
-        /// <summary>
-        /// Appends the party list to the TextEntry. Only used when selecting what
-        /// to use on a party member.
-        /// </summary>
-        public void AppendParty()
-        {
-            int i = 0;
-            foreach (ClassedCombatant adv in PlayerManager.GetParty())
-            {
-                _sText += adv.Name + ":" + i++ + "|";
-            }
-            _sText += "Cancel:Cancel}}";
+            FormattedText = string.Format(_sText, list);
         }
 
         /// <summary>
@@ -133,42 +133,6 @@ namespace RiverHollow.Misc
             }
 
             return _liCommands;
-        }
-
-        /// <summary>
-        /// This method parses the selection text to ensure that all of the options we have are valid
-        /// </summary>
-        /// <param name="act">The Villager we are talking to</param>
-        public void ParseSelectionText(Villager act = null)
-        {
-            if (_sText.Contains("{{"))
-            {
-                Selection = true;
-                string text = _sText;
-
-                string[] textFromData = text.Split(new[] { "{{", "}}" }, StringSplitOptions.RemoveEmptyEntries);
-                int index = textFromData.Length == 1 ? 0 : 1;
-                string[] options = Util.FindParams(textFromData[index]);
-
-                List<string> liCommands = RemoveEntries(options, act);
-
-                //If there's only two entries left, Talk and Never Mind, then go straight to Talk
-                string rv = string.Empty;
-                if (liCommands.Count == 2)
-                {
-
-                }
-                else
-                {
-                    rv = textFromData[0] + "{{";   //Puts back the pre selection text
-                    foreach (string s in liCommands)
-                    {
-                        rv += s + "|";
-                    }
-                    rv = rv.Remove(rv.Length - 1);
-                    rv += "}}";
-                }
-            }
         }
 
         /// <summary>

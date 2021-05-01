@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>ShopOpen</Key>
-      <Value>[Text:Oh, hello $Name$, What can I do for you? {{Talk-Talk|Construct Buildings-BuyBuildings|Maintain Buildings-Maintenance|Never Mind-Cancel}}]</Value>
+      <Value>[Text:Oh, hello $Name$, What can I do for you?]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>
@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>[Text:Well now, what can I do for you?{{Talk-Talk|Gift-GiveGift|Never Mind-Cancel}}]</Value>
+      <Value>[Text:Well now, what can I do for you?][Selection:VillageTalk]</Value>
     </Item>
     <Item>
       <Key>Raining|1</Key>

@@ -58,18 +58,24 @@ namespace RiverHollow.CombatStuff
         PotencyBonusEnum _eBonusType;
         ElementEnum _eElement = ElementEnum.None;
         public List<ConditionEnum> LiCondition { get; }
-        public int MPCost { get; private set; }
+        int _iMPCost = 0;
+        public int MPCost => _iMPCost;
         public int Potency { get; private set; }
 
-        public int ReqLevel { get; private set; }
+        int _iReqLevel = 0;
+        public int ReqLevel => _iReqLevel;
         public bool Harm { get; private set; }
         public bool Heal { get; private set; }
 
         string _sAnimation;
-        VerbEnum _eUserAnimationVerb;
-        public TargetEnum Target { get; private set; }
-        public int Range { get; private set; }
-        public AreaTypeEnum AreaType { get; private set; }
+        VerbEnum _eUserAnimationVerb = VerbEnum.Action1;
+        TargetEnum _eTarget;
+        public TargetEnum Target => _eTarget;
+        int _iRange = 1;
+        public int Range => _iRange;
+
+        AreaTypeEnum _eAreaType;
+        public AreaTypeEnum AreaType => _eAreaType;
         List<String> _liActionTags;
         int _iCurrentAction = 0;
         List<SkillTagsEnum> _liEffects;
@@ -112,9 +118,8 @@ namespace RiverHollow.CombatStuff
         {
             _chosenItem = it;
             _sName = it.Name;
-            Range = 1;
             _eActionType = ActionEnum.Item;
-            Target = it.Helpful ? TargetEnum.Ally : TargetEnum.Enemy;
+            _eTarget = it.Helpful ? TargetEnum.Ally : TargetEnum.Enemy;
 
             TileTargetList = new List<RHTile>();
             _liActionTags = new List<string>() { "UseItem", "Apply", "End" };
@@ -135,18 +140,17 @@ namespace RiverHollow.CombatStuff
             DataManager.GetTextData("Action", _iId, ref _sName, "Name");
             DataManager.GetTextData("Action", _iId, ref _sDescription, "Description");
 
-            _eActionType = Util.ParseEnum<ActionEnum>(stringData["Type"]);
-            if (stringData.ContainsKey("Element")) { _eElement = Util.ParseEnum<ElementEnum>(stringData["Element"]); }
-            if (stringData.ContainsKey("Target")) { Target = Util.ParseEnum<TargetEnum>(stringData["Target"]); }
-            if (stringData.ContainsKey("AreaType")) { AreaType = Util.ParseEnum<AreaTypeEnum>(stringData["AreaType"]); }
-            if (stringData.ContainsKey("Range")) { Range = int.Parse(stringData["Range"]); }
-            if (stringData.ContainsKey("Crit")) { _iCritRating = int.Parse(stringData["Crit"]); }
-            if (stringData.ContainsKey("Accuracy")) { _iAccuracy = int.Parse(stringData["Accuracy"]); }
-            if (stringData.ContainsKey("Cost")) { MPCost = int.Parse(stringData["Cost"]); }
-            if (stringData.ContainsKey("Level")) { ReqLevel = int.Parse(stringData["Level"]); }
+            Util.AssignValue(ref _eActionType, "Type", stringData);
+            Util.AssignValue(ref _eElement, "Element", stringData);
+            Util.AssignValue(ref _eTarget, "Target", stringData);
+            Util.AssignValue(ref _eAreaType, "AreaType", stringData);
+            Util.AssignValue(ref _iRange, "Range", stringData);
+            Util.AssignValue(ref _iCritRating, "Crit", stringData);
+            Util.AssignValue(ref _iAccuracy, "Accuracy", stringData);
+            Util.AssignValue(ref _iMPCost, "Cost", stringData);
+            Util.AssignValue(ref _iReqLevel, "Level", stringData);
 
-            if (stringData.ContainsKey("UserAnimation")) { _eUserAnimationVerb = Util.ParseEnum<VerbEnum>(stringData["UserAnimation"]); }
-            else { _eUserAnimationVerb = VerbEnum.Action1; }
+            Util.AssignValue(ref _eUserAnimationVerb, "UserAnimation", stringData);
 
             if (stringData.ContainsKey("Icon"))
             {

@@ -89,8 +89,8 @@ namespace RiverHollow.CombatStuff
             DataManager.GetTextData("Class", _iID, ref _sName, "Name");
             DataManager.GetTextData("Class", _iID, ref _sDescription, "Description");
 
-            _weaponType = Util.ParseEnum<WeaponEnum>(stringData["Weapon"]);
-            _armorType = Util.ParseEnum<ArmorEnum>(stringData["Armor"]);
+            Util.AssignValue(ref _weaponType, "Weapon", stringData);
+            Util.AssignValue(ref _armorType, "Armor", stringData);
 
             WeaponID = int.Parse(stringData["DWeap"]);
             ArmorID = int.Parse(stringData["DArmor"]);

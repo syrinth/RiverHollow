@@ -12,11 +12,11 @@ If you decide to put some of that land to use constructing housing, I can get yo
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>[Text:{{Talk-Talk|Gift-GiveGift|Never Mind-Cancel}}]</Value>
+      <Value>[Text][Selection:VillageTalk]</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>
-      <Value>[Text:Welcome! What can the Adventurer's Guild do for you today?{{Talk-Talk|Hire Adventurers-BuyWorkers|Sell Contract-SellWorkers|See Missions-Missions|Never Mind-Cancel}}]</Value>
+      <Value>[Text:Welcome! What can the Adventurer's Guild do for you today?]</Value>
     </Item>
     <Item>
       <Key>Quest2End</Key>

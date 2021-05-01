@@ -236,7 +236,7 @@ namespace RiverHollow.Items
             return rv;
         }
 
-        public virtual void UseItem(string action) { }
+        public virtual void UseItem(TextEntryVerbEnum action) { }
 
         public virtual void ApplyUniqueData(string str) { }
         public virtual string GetUniqueData() { return string.Empty; }
@@ -606,7 +606,7 @@ namespace RiverHollow.Items
             _sprite.Draw(spriteBatch);
         }
 
-        public override void UseItem(string action)
+        public override void UseItem(TextEntryVerbEnum action)
         {
             if(ToolType == ToolEnum.Return)
             {
@@ -650,7 +650,7 @@ namespace RiverHollow.Items
             return rv;
         }
 
-        public override void UseItem(string action)
+        public override void UseItem(TextEntryVerbEnum action)
         {
             if (Number > 0)
             {
@@ -776,11 +776,13 @@ namespace RiverHollow.Items
             return rv;
         }
 
-        public override void UseItem(string action)
+        public override void UseItem(TextEntryVerbEnum action)
         {
             if (Helpful)
             {
-                CombatActor target = PlayerManager.GetParty()[int.Parse(action)];
+                //We're passing in a verb entry of Option_#, need to isolate the int
+                int partyPosition = int.Parse(Util.GetEnumString<TextEntryVerbEnum>(action).Replace("Option_", ""));
+                CombatActor target = PlayerManager.GetParty()[partyPosition];
 
                 if (Health > 0) { target.ModifyHealth(Health, false); }
                 if (Mana > 0) { target.IncreaseMana(Mana); }
@@ -811,7 +813,7 @@ namespace RiverHollow.Items
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Consumables");
         }
 
-        public override void UseItem(string action)
+        public override void UseItem(TextEntryVerbEnum action)
         {
             if (action.Equals("UseItem"))
             {
@@ -912,7 +914,7 @@ namespace RiverHollow.Items
             }
         }
 
-        public override void UseItem(string action)
+        public override void UseItem(TextEntryVerbEnum action)
         {
             if (Number > 0)
             {

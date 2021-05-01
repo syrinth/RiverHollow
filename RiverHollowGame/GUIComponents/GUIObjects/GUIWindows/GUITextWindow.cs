@@ -57,7 +57,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _textEntry.HandlePreWindowActions(GameManager.CurrentNPC);
             _bDisplayDialogueIcon = displayDialogueIcon;
             ConfigureHeight();
-            SyncText(_textEntry.Text);
+            SyncText(_textEntry.FormattedText);
             Setup(open);
         }
 
@@ -66,10 +66,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             _textEntry = text;
             _textEntry.HandlePreWindowActions();
-            Height = (int)_giText.MeasureString(_textEntry.Text).Y + HeightEdges();
+            Height = (int)_giText.MeasureString(_textEntry.FormattedText).Y + HeightEdges();
             Width = (int)(RiverHollow.ScreenWidth / 4);
 
-            SyncText(_textEntry.Text);
+            SyncText(_textEntry.FormattedText);
 
             string totalVal = string.Empty;
             foreach(string s in _liTextPages)
@@ -89,7 +89,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             _textEntry = text;
             _textEntry.HandlePreWindowActions();
-            SyncText(_textEntry.Text);
+            SyncText(_textEntry.FormattedText);
             Duration = duration;
 
             Height = _iCharHeight;
@@ -320,7 +320,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public void ResetText(TextEntry text)
         {
-            _giText.ResetText(text.Text);
+            _giText.ResetText(text.FormattedText);
         }
 
         protected void SetWidthMax(int val, int maxWidth)

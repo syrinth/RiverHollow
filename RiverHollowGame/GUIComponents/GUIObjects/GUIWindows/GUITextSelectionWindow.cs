@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUITextSelectionWindow : GUITextWindow
@@ -24,7 +27,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _diOptions = new Dictionary<int, SelectionData>();
             ConfigureHeight();
             _iKeySelection = 0;
-            SeparateText(_textEntry.Text);
+            ConstructSelectionMenu();
+
             PostParse();
 
             Setup(open);
@@ -41,23 +45,115 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             AssignToColumn();
         }
 
-        private void SeparateText(string selectionText)
+        #region Selection Menu Creation
+        /// <summary>
+        /// Constructs the appropriate Selection Menu based on the TextEntry's selection type
+        /// </summary>
+        private void ConstructSelectionMenu()
         {
-            string[] firstPass = selectionText.Split(new[] { "{{", "}}"}, StringSplitOptions.RemoveEmptyEntries);
-            if (firstPass.Length > 0)
+            _sStatement = _textEntry.FormattedText;
+            switch (_textEntry.SelectionType)
             {
-                _sStatement = firstPass[0];
-
-                string[] secondPass = Util.FindParams(firstPass[1]);
-                int key = 0;
-                foreach (string s in secondPass)
-                {
-                    string[] actionType = s.Split('-');
-                    SelectionData t = new SelectionData(actionType[0], actionType[1]);
-                    _diOptions.Add(key++, t);
-                }
+                case GameManager.TextEntrySelectionEnum.VillageTalk:
+                    AddVillagerTalkOptions();
+                    break;
+                case GameManager.TextEntrySelectionEnum.YesNo:
+                    AddYesNoOptions();
+                    break;
+                case GameManager.TextEntrySelectionEnum.Shop:
+                    AddShopOptions();
+                    break;
+                case GameManager.TextEntrySelectionEnum.Party:
+                    AddPartyOptions();
+                    break;
+                default:
+                    break;
             }
         }
+
+        /// <summary>
+        /// Adds the appropriate Villager talk options
+        /// </summary>
+        private void AddVillagerTalkOptions()
+        {
+            if (GameManager.CurrentNPC != null)
+            {
+                TalkingActor act = CurrentNPC;
+                List<TextEntry> liCommands = new List<TextEntry> { DataManager.GetGameTextEntry("Selection_Talk") };
+
+                if (act.CanGiveGift) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Gift")); }
+                if (act.GetFriendshipLevel() > 2) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Party")); }
+                if (_textEntry.HasTag("ShipGoods")) { liCommands.Add(DataManager.GetGameTextEntry("Selection_ShipGoods")); }
+                liCommands.Add(DataManager.GetGameTextEntry("Selection_NeverMind"));
+
+                AddOptions(liCommands);
+            }
+        }
+
+        /// <summary>
+        /// Adds the TextEntry options for a Shop
+        /// </summary>
+        private void AddShopOptions()
+        {
+            if (GameManager.CurrentNPC != null)
+            {
+                TalkingActor act = CurrentNPC;
+                List<TextEntry> liCommands = new List<TextEntry> { DataManager.GetGameTextEntry("Selection_Talk") };
+
+                if (act.CanGiveGift) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Gift")); }
+                liCommands.Add(DataManager.GetGameTextEntry("Selection_Buy"));
+                liCommands.Add(DataManager.GetGameTextEntry("Selection_NeverMind"));
+
+                AddOptions(liCommands);
+            }
+        }
+
+        /// <summary>
+        /// Constructs new TextEntry objects for each character in the party
+        /// with an Option_# verb attached
+        /// </summary>
+        private void AddPartyOptions()
+        {
+            List<TextEntry> liCommands = new List<TextEntry>();
+
+            int i = 0;
+            foreach(ClassedCombatant act in PlayerManager.GetParty())
+            {
+                string verb = "Option_" + i++;
+                Dictionary<string, string> stringData = new Dictionary<string, string> { ["Text"] = act.Name, ["TextVerb"] = verb };
+
+                liCommands.Add(new TextEntry(verb, stringData));
+            }
+
+            AddOptions(liCommands);
+        }
+
+        /// <summary>
+        /// Adds the Yes and No TextEntry objects
+        /// </summary>
+        private void AddYesNoOptions()
+        {
+            List<TextEntry> liCommands = new List<TextEntry> {
+                DataManager.GetGameTextEntry("Selection_Yes"),
+                DataManager.GetGameTextEntry("Selection_No")
+            };
+
+            AddOptions(liCommands);
+        }
+
+        /// <summary>
+        /// Adds the given list of TextEntries to the _diOptions dictionary
+        /// </summary>
+        /// <param name="liCommands"></param>
+        private void AddOptions(List<TextEntry> liCommands)
+        {
+            int key = 0;
+            foreach (TextEntry s in liCommands)
+            {
+                _diOptions.Add(key++, new SelectionData(s));
+            }
+        }
+        #endregion
 
         public override void Update(GameTime gTime)
         {
@@ -112,31 +208,70 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         /// <summary>
         /// Triggered when the user selects an option in the GUITextSelectionWindow
         /// 
-        /// This method retrieves the appropriate selectedAction and passes it to the relevant
-        /// object for processing.
+        /// This method analyzes the chosen TextEntry object and determines what actions to take
+        /// as a result of the chosenAction and the current TextEntry
         /// </summary>
         protected void SelectAction()
         {
-            string selectedAction = _diOptions[_iKeySelection].Action;
+            TextEntry chosenAction = _diOptions[_iKeySelection].SelectionEntry;
+            TextEntry nextText = null;
 
-            if (GameManager.CurrentNPC != null)
+            if(GameManager.CurrentNPC != null)
             {
-                TextEntry nextText = null;
-                bool rv = GameManager.CurrentNPC.HandleTextSelection(selectedAction, ref nextText);
+                TalkingActor act = GameManager.CurrentNPC;
+                if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Yes))
+                {
+                    if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.ConfirmGift))
+                    {
+                        nextText = act.Gift(GameManager.CurrentItem);
+                        GUIManager.CloseMainObject();
+                    }
+                    else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.Donate))
+                    {
+                        ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;
+                    }
+                }
+                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.No)){
+                    if(_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.Donate)) {
+                        ((Villager)GameManager.CurrentNPC).FriendshipPoints += 1000;
+                    }
 
-                if (!rv || nextText == null) { GUIManager.CloseTextWindow(); }
-                else { GUIManager.SetWindowText(nextText, GameManager.CurrentNPC, true); }
+                    //Just pop this here for now
+                    if (act.IsActorType(ActorEnum.ShippingGremlin)) { act.PlayAnimation(AnimationEnum.ObjectAction2); }
+                }
+                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Gift)) { GUIManager.OpenMainObject(new HUDInventoryDisplay(DisplayTypeEnum.Gift)); }
+                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Party)) { nextText = act.JoinParty(); }
+                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Buy)) { act.OpenShop(); }
+                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Talk)) { nextText = act.GetDailyDialogue(); }
+                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.ShipGoods)) { ((ShippingGremlin)GameManager.CurrentNPC).OpenShipping(); }
             }
             else if (GameManager.CurrentItem != null)
             {
-                if (!selectedAction.Equals("Cancel")) { GameManager.CurrentItem.UseItem(selectedAction); }
-                GUIManager.CloseTextWindow();
+                //Valid verbs to continue are "yes" or "option_#"
+                if (!chosenAction.TextVerb.Equals(TextEntryVerbEnum.No))
+                {
+                    if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.UseItem))
+                    {
+                        GameManager.CurrentItem.UseItem(chosenAction.TextVerb);
+                    }
+                }
             }
             else
             {
-                GameManager.ProcessTextInteraction(selectedAction);
-                GUIManager.CloseTextWindow();
+                if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Yes))
+                {
+                    if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.Exit)) { }
+                    else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.EndDay))
+                    {
+                        Vector2 pos = PlayerManager.World.CollisionBox.Center.ToVector2();
+                        PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
+                        GUIManager.SetScreen(new DayEndScreen());
+                    }
+                }
             }
+
+            if (nextText == null) { GUIManager.CloseTextWindow(); }
+            else { GUIManager.SetWindowText(nextText, GameManager.CurrentNPC, true); }
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -180,15 +315,15 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             GUIText _gText;
             public GUIText GText => _gText;
-            string _sAction;
-            public string Action => _sAction;
 
             public string Text => _gText.Text;
 
-            public SelectionData(string text, string action = "", string fontName = DataManager.FONT_MAIN)
+            public TextEntry SelectionEntry { get; private set; }
+
+            public SelectionData(TextEntry textEntry, string fontName = DataManager.FONT_MAIN)
             {
-                _gText = new GUIText(text, true, fontName);
-                _sAction = action;
+                SelectionEntry = textEntry;
+                _gText = new GUIText(textEntry.FormattedText, true, fontName);
             }
         }
 

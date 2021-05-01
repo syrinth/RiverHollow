@@ -11,11 +11,11 @@
     </Item>
     <Item>
       <Key>ShopOpen</Key>
-      <Value>[Text:Greeeeeeeetings... {{Talk-Talk|Gift-GiveGift|Buy Items-BuyItems|Never Mind-Cancel}}]</Value>
+      <Value>[Text:Greeeeeeeetings...]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>[Text:Greeeeeeeetings... {{Talk-Talk|Gift-GiveGift|Never Mind-Cancel}}]</Value>
+      <Value>[Text:Greeeeeeeetings... ][Selection:VillageTalk]</Value>
     </Item>
     <Item>
       <Key>Quest0</Key>

@@ -23,6 +23,10 @@ namespace RiverHollow.Game_Managers
 
         public const float NORMAL_SCALE = 4f;
 
+        public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, Option_0, Option_1, Option_2, Option_3 };
+        public enum TextEntrySelectionEnum { None, VillageTalk, YesNo, Shop, Party };
+        public enum TextEntryTriggerEnum { None, UseItem, ConfirmGift, EndDay, Exit, Donate }
+
         public enum RarityEnum { C, U, R, M };
         public enum WeatherEnum { Sunny, Raining, Snowing };
 
@@ -128,16 +132,6 @@ namespace RiverHollow.Game_Managers
             DIBuildInfo = DataManager.GetBuildInfoList();
 
             DIShops = DataManager.GetShopInfoList();
-        }
-
-        public static void ProcessTextInteraction(string selectedAction)
-        {
-            if (selectedAction.Equals("EndDay"))
-            {
-                Vector2 pos = PlayerManager.World.CollisionBox.Center.ToVector2();
-                PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
-                GUIManager.SetScreen(new DayEndScreen());
-            }
         }
 
         public static void ClearGMObjects()

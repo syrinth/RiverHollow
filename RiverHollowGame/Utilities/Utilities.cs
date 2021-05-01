@@ -323,40 +323,45 @@ namespace RiverHollow.Utilities
         /// <param name="obj">Reference to the object to assign to</param>
         /// <param name="key">The key to look for</param>
         /// <param name="dict">The dictionary to search</param>
-        public static void AssignValue(ref bool obj, string key, Dictionary<string, string> dict)
+        public static void AssignValue(ref bool value, string key, Dictionary<string, string> dict)
         {
             if (dict.ContainsKey(key))
             {
-                obj = true;
+                value = true;
             }
         }
-        public static void AssignValue(ref string obj, string key, Dictionary<string, string> dict)
+        public static void AssignValue(ref string value, string key, Dictionary<string, string> dict)
         {
             if (dict.ContainsKey(key))
             {
-                obj = dict[key];
-            }
-            else { obj = string.Empty; }
-        }
-        public static void AssignValue(ref int obj, string key, Dictionary<string, string> dict)
-        {
-            if (dict.ContainsKey(key))
-            {
-                obj = int.Parse(dict[key]);
+                value = dict[key];
             }
         }
-        public static void AssignValue(ref double obj, string key, Dictionary<string, string> dict)
+        public static void AssignValue(ref int value, string key, Dictionary<string, string> dict)
         {
             if (dict.ContainsKey(key))
             {
-                obj = double.Parse(dict[key]);
+                value = int.Parse(dict[key]);
             }
         }
-        public static void AssignValue(ref float obj, string key, Dictionary<string, string> dict)
+        public static void AssignValue(ref double value, string key, Dictionary<string, string> dict)
         {
             if (dict.ContainsKey(key))
             {
-                obj = float.Parse(dict[key]);
+                value = double.Parse(dict[key]);
+            }
+        }
+        public static void AssignValue(ref float value, string key, Dictionary<string, string> dict)
+        {
+            if (dict.ContainsKey(key))
+            {
+                value = float.Parse(dict[key]);
+            }
+        }
+        public static void AssignValue<TEnum>(ref TEnum value, string key, Dictionary<string, string> dict) where TEnum : struct
+        {
+            if (dict.ContainsKey(key)) {
+                value = Util.ParseEnum<TEnum>(dict[key]);
             }
         }
         #endregion

@@ -114,15 +114,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 }
                 else if (BoxItem.CompareType(ItemEnum.Consumable))       //If the item is a Consumable, construct the selection options from the party
                 {
-                    entry.FormatText(DataManager.GetGameTextEntry("ItemConfirm"), BoxItem.Name);
-                    entry.AppendParty();
+                    entry = DataManager.GetGameTextEntry("ItemConfirm");
+                    entry.FormatText(BoxItem.Name);
                 }
 
                 //If we have a text string after handling, set the active item and open a new textWindow
                 if (entry != null)
                 {
-                    GameManager.CurrentItem = BoxItem;
                     GUIManager.OpenTextWindow(entry, false);
+                    GameManager.CurrentItem = BoxItem;
                 }
             }
 
