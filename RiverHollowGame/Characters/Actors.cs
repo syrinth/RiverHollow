@@ -618,7 +618,7 @@ namespace RiverHollow.Characters
         protected bool _bHasTalked;
 
         public bool CanGiveGift = false;
-        public bool CanJoinParty { get; protected set; } = false;
+        public bool CanJoinParty = false;
 
         protected List<string> _liSpokenKeys;
 
@@ -1853,6 +1853,7 @@ namespace RiverHollow.Characters
 
             Util.AssignValue(ref _iShopIndex, "ShopData", stringData);
             Util.AssignValue(ref _bCanMarry, "CanMarry", stringData);
+            CanJoinParty = _bCanMarry;
 
             Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
             Util.AssignValue(ref _iTotalMoneyEarnedReq, "TotalMoneyEarnedReq", stringData);
@@ -2246,7 +2247,6 @@ namespace RiverHollow.Characters
                 //Reset on Monday
                 if (GameCalendar.DayOfWeek == 0)
                 {
-                    CanJoinParty = true;
                     CanGiveGift = true;
                 }
             }
@@ -2331,7 +2331,6 @@ namespace RiverHollow.Characters
             if (_bMarried || CanJoinParty)
             {
                 _bOnTheMap = false;
-                CanJoinParty = false;
                 PlayerManager.AddToParty(this);
                 rv = GetDialogEntry("JoinPartyYes");
             }
@@ -2366,7 +2365,6 @@ namespace RiverHollow.Characters
                 friendship = FriendshipPoints,
                 collection = new List<bool>(_diCollection.Values),
                 married = _bMarried,
-                canJoinParty = CanJoinParty,
                 canGiveGift = CanGiveGift,
                 spokenKeys = _liSpokenKeys
             };
@@ -2382,7 +2380,6 @@ namespace RiverHollow.Characters
             _iDaysToFirstArrival = data.arrivalDelay;
             FriendshipPoints = data.friendship;
             _bMarried = data.married;
-            CanJoinParty = data.canJoinParty;
             CanGiveGift = data.canGiveGift;
 
             if (_class != null) { LoadClassedCharData(data.classedData); }

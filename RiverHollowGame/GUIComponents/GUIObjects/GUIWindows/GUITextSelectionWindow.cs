@@ -82,7 +82,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 List<TextEntry> liCommands = new List<TextEntry> { DataManager.GetGameTextEntry("Selection_Talk") };
 
                 if (act.CanGiveGift) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Gift")); }
-                if (act.GetFriendshipLevel() > 2) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Party")); }
+                if (act.CanJoinParty && act.GetFriendshipLevel() >= 2) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Party")); }
                 if (_textEntry.HasTag("ShipGoods")) { liCommands.Add(DataManager.GetGameTextEntry("Selection_ShipGoods")); }
                 liCommands.Add(DataManager.GetGameTextEntry("Selection_NeverMind"));
 
