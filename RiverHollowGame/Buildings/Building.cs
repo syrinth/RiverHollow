@@ -35,8 +35,8 @@ namespace RiverHollow.Buildings
 
         private string _sTextureName;
 
-        private string _sHomeMap;
-        public new string MapName => "map" + _sTextureName.Replace(" ", "") + "_" + (Level == 0 ? "" : Level.ToString());
+        private string _sBuildingMap;
+        public new string MapName => "map" + _sTextureName.Replace(" ", "") + "_1";// + (Level == 0 ? "" : Level.ToString());
 
         public override Rectangle CollisionBox => GenerateCollisionBox();
         public Rectangle SelectionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _sprite.Width, _sprite.Height);
@@ -140,7 +140,7 @@ namespace RiverHollow.Buildings
                 _sprite.AddAnimation(i.ToString(), startX, startY, _iWidth, _iHeight);
                 startX += _iWidth;
             }
-            _sprite.PlayAnimation(Level.ToString());
+            _sprite.PlayAnimation("1");
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace RiverHollow.Buildings
         /// <param name="startAtZero"> Whether to reset the building's value to 0 or not</param>
         public void StartBuilding(bool startAtZero = true)
         {
-            RHMap buildingMap = MapManager.Maps[_sHomeMap];
+            RHMap buildingMap = MapManager.Maps[_sBuildingMap];
             foreach (RHTile t in Tiles)
             {
                 WorldObject w = t.WorldObject;
@@ -302,9 +302,9 @@ namespace RiverHollow.Buildings
         /// </summary>
         public void Upgrade()
         {
+            RHMap buildingMap = MapManager.Maps[_sBuildingMap];
             if (Level == 0)
             {
-                RHMap buildingMap = MapManager.Maps[_sHomeMap];
                 foreach (RHTile t in Tiles)
                 {
                     WorldObject w = t.WorldObject;
@@ -328,7 +328,9 @@ namespace RiverHollow.Buildings
                 Level++;
             }
 
-            _sprite.PlayAnimation(Level.ToString());
+            MapManager.Maps[MapName].UpgradeMap(Level);
+
+            //_sprite.PlayAnimation(Level.ToString());
         }
 
         /// <summary>
@@ -337,7 +339,7 @@ namespace RiverHollow.Buildings
         /// <param name="name"></param>
         public void SetHomeMap(string name)
         {
-            _sHomeMap = name;
+            _sBuildingMap = name;
         }
 
         /// <summary>

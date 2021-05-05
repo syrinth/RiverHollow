@@ -33,7 +33,7 @@ namespace Database_Editor
         #endregion
 
         #region Tags
-        const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,RefinesInto,ItemID,GoalItem,ItemReward,Collection,Makes,Processes,DWeap,DArmor,DHead,DWrist";
+        const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,ItemID,GoalItem,ItemReward,Collection,Makes,Processes,DWeap,DArmor,DHead,DWrist";
         const string TAGS_FOR_WORLD_OBJECTS = "ObjectID,Wall,Floor,Resources,Place";
         const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         const string TAGS_FOR_CLASSES = "Class";
@@ -43,7 +43,7 @@ namespace Database_Editor
         const string TAGS_FOR_SUMMONS = "SummonID";
         const string TAGS_FOR_BUILDINGS = "BuildingID,HouseID,RequiredBuildingID";
 
-        const string ITEM_REF_TAGS = "ReqItems,RefinesInto,Place";
+        const string ITEM_REF_TAGS = "ReqItems,Place";
         const string TASK_REF_TAGS = "GoalItem,ItemReward,BuildingID,BuildingRewardID";
         const string CHARACTER_REF_TAGS = "Collection,Class,ShopData,HouseID,RequiredBuildingID";
         const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID";

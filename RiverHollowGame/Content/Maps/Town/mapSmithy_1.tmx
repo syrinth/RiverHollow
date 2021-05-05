@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="15" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="38">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="30">
  <properties>
-  <property name="Building" type="bool" value="true"/>
-  <property name="BuildingID" type="int" value="8"/>
+  <property name="Manor" type="bool" value="true"/>
+  <property name="Production" type="bool" value="false"/>
  </properties>
  <tileset firstgid="1" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="286" columns="22">
   <image source="../Tilesets/tsWalls_Floors.png" trans="ffffff" width="352" height="209"/>
@@ -273,10 +273,12 @@
   </tile>
  </tileset>
  <tileset firstgid="287" source="../Tilesets/tsFurniture.tsx"/>
- <layer id="6" name="Base Layer" width="15" height="13">
+ <tileset firstgid="587" source="../Tilesets/tilesetHouses.tsx"/>
+ <layer id="6" name="Base Layer" width="15" height="18">
   <data encoding="csv">
 74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,
-74,0,0,0,0,0,0,0,0,0,0,0,0,0,74,
+74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,
+74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,
 74,103,103,103,103,103,103,103,103,103,103,103,103,103,74,
 74,103,103,103,103,103,103,103,103,103,103,103,103,103,74,
 74,103,103,103,103,103,103,103,103,103,103,103,103,103,74,
@@ -284,19 +286,28 @@
 74,85,85,85,86,85,85,85,85,85,86,85,85,85,74,
 74,85,85,85,85,85,85,85,85,85,85,85,85,85,74,
 74,85,86,85,85,85,85,86,85,85,85,86,85,85,74,
+74,85,85,85,86,85,85,85,85,85,85,85,85,85,74,
+74,85,85,85,85,85,85,85,85,86,85,85,86,85,74,
+74,85,86,85,85,85,85,85,85,85,85,85,85,85,74,
+74,85,85,85,85,85,86,85,85,85,85,85,85,85,74,
 74,85,85,86,85,85,85,85,86,85,85,86,85,85,74,
 74,109,85,131,132,109,110,85,85,85,85,85,85,85,74,
 74,74,74,74,74,74,74,109,74,74,74,74,74,74,74,
 74,74,74,74,74,74,74,74,74,74,74,74,74,74,74
 </data>
  </layer>
- <layer id="7" name="Ground Layer" width="15" height="13">
+ <layer id="7" name="Ground Layer" width="15" height="18">
   <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 114,27,27,27,27,27,27,27,27,27,27,27,27,27,115,
 136,52,52,49,49,49,49,49,49,49,49,49,49,49,137,
 136,71,71,71,71,71,71,71,71,71,71,71,71,71,137,
 136,93,93,93,93,93,93,93,93,93,93,93,93,93,137,
+136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
+136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
+136,1029,1063,1030,1031,1032,0,0,0,0,0,0,0,0,137,
+136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
@@ -307,11 +318,16 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="8" name="Upper Layer" width="15" height="13">
+ <layer id="8" name="Upper Layer" width="15" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1057,1037,1005,1005,1058,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -325,7 +341,7 @@
 </data>
  </layer>
  <objectgroup id="4" name="Travel Layer">
-  <object id="1" name="Entrance" x="112" y="188" width="16" height="4">
+  <object id="1" name="Entrance" x="112" y="268" width="16" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
     <property name="Map" value="mapTown"/>
@@ -333,22 +349,29 @@
   </object>
  </objectgroup>
  <objectgroup id="9" name="MapObject">
-  <object id="35" name="WorldObject" x="145.287" y="81.5742" width="12.8117" height="10.48">
+  <object id="27" name="WorldObject" x="193.169" y="98.495" width="12.8117" height="10.48">
    <properties>
     <property name="ObjectID" type="int" value="54"/>
    </properties>
   </object>
-  <object id="36" name="WorldObject" x="34.231" y="82.692" width="12.8117" height="10.48">
+  <object id="28" name="WorldObject" x="113.403" y="99.2657" width="12.8117" height="10.48">
    <properties>
-    <property name="ObjectID" type="int" value="33"/>
-    <property name="UpgradeLevel" type="int" value="2"/>
+    <property name="ObjectID" type="int" value="29"/>
    </properties>
   </object>
-  <object id="37" name="WorldObject" x="97.344" y="82.01" width="12.8117" height="10.48">
+  <object id="29" name="WorldObject" x="16.4463" y="179.109" width="12.8117" height="10.48">
    <properties>
-    <property name="ObjectID" type="int" value="31"/>
+    <property name="ObjectID" type="int" value="30"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="Character Layer"/>
+ <objectgroup id="5" name="Character Layer">
+  <object id="23" name="Shop" x="31.9983" y="118.75" width="16.0034" height="25">
+   <properties>
+    <property name="Owner" value="17"/>
+    <property name="ShopKeepX" type="int" value="2"/>
+    <property name="ShopKeepY" type="int" value="7"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

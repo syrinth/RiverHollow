@@ -546,7 +546,10 @@ namespace RiverHollow.Tile_Engine
                     }
                     else if (tiledObj.Name.Equals("WorldObject"))
                     {
-                        DataManager.CreateAndPlaceNewWorldObject(int.Parse(tiledObj.Properties["ObjectID"]), tiledObj.Position, this);
+                        if (!tiledObj.Properties.ContainsKey("UpgradeLevel"))
+                        {
+                            DataManager.CreateAndPlaceNewWorldObject(int.Parse(tiledObj.Properties["ObjectID"]), tiledObj.Position, this);
+                        }
                     }
                     else if (tiledObj.Name.Equals("Floor"))
                     {
@@ -847,6 +850,27 @@ namespace RiverHollow.Tile_Engine
 
                     //Keep track of which tiles were used
                     usedTiles.Add(targetTile);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Call this to trigger any changes on the map that needed to occur
+        /// as a result of the Building being upgraded.
+        /// </summary>
+        /// <param name="newLevel"></param>
+        public void UpgradeMap(int newLevel)
+        {
+            foreach (TiledMapObject tiledObj in _liMapObjects)
+            {
+                if (tiledObj.Properties.ContainsKey("UpgradeLevel"))
+                {
+                    int upgradeLevel = int.Parse(tiledObj.Properties["UpgradeLevel"]);
+                    if (newLevel == upgradeLevel)
+                    {
+                        DataManager.CreateAndPlaceNewWorldObject(int.Parse(tiledObj.Properties["ObjectID"]), tiledObj.Position, this);
+                    }
+
                 }
             }
         }

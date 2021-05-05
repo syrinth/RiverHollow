@@ -3,35 +3,35 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Weapon:Wand][Armor:Cloth][Hp:4][Ability:38][Spell:4|5][DWeap:62][DArmor:88][DHead:91][DWrist:94]</Value>
+      <Value>[Weapon:Wand][Armor:Cloth][Hp:4][Ability:38][Spell:4|5][DWeap:63][DArmor:89][DHead:92][DWrist:95]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Weapon:Staff][Armor:Cloth][Hp:3][Ability:38][Spell:6|7][DWeap:68][DArmor:88][DHead:91][DWrist:94]</Value>
+      <Value>[Weapon:Staff][Armor:Cloth][Hp:3][Ability:38][Spell:6|7][DWeap:69][DArmor:89][DHead:92][DWrist:95]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Weapon:Orb][Armor:Cloth][Hp:4][Ability:8][Spell:9|10|11|12|13|14][DWeap:72][DArmor:88][DHead:91][DWrist:94]</Value>
+      <Value>[Weapon:Orb][Armor:Cloth][Hp:4][Ability:8][Spell:9|10|11|12|13|14][DWeap:73][DArmor:89][DHead:92][DWrist:95]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Weapon:Knife][Armor:Cloth][Hp:4][Ability:38][Spell:15][DWeap:82][DArmor:88][DHead:91][DWrist:94]</Value>
+      <Value>[Weapon:Knife][Armor:Cloth][Hp:4][Ability:38][Spell:15][DWeap:83][DArmor:89][DHead:92][DWrist:95]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Weapon:Spear][Armor:Heavy][Hp:6][Ability:38|16|17|18|19|20][DWeap:83][DArmor:89][DHead:92][DWrist:94]</Value>
+      <Value>[Weapon:Spear][Armor:Heavy][Hp:6][Ability:38|16|17|18|19|20][DWeap:84][DArmor:90][DHead:93][DWrist:95]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Weapon:Shield][Armor:Heavy][Hp:10][Spd:1][Ability:38|21|22|23|24][DWeap:85][DArmor:90][DHead:93][DWrist:94]</Value>
+      <Value>[Weapon:Shield][Armor:Heavy][Hp:10][Spd:1][Ability:38|21|22|23|24][DWeap:86][DArmor:91][DHead:94][DWrist:95]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Weapon:Bow][Armor:Heavy][Hp:5][Spd:1][Ability:38|25|26|27|28][DWeap:86][DArmor:89][DHead:92][DWrist:94]</Value>
+      <Value>[Weapon:Bow][Armor:Heavy][Hp:5][Spd:1][Ability:38|25|26|27|28][DWeap:87][DArmor:90][DHead:93][DWrist:95]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Weapon:Rapier][Armor:Light][Hp:5][Spd:1][Ability:38|30|31|32|33|34|35|36|37][DWeap:87][DArmor:89][DHead:92][DWrist:94]</Value>
+      <Value>[Weapon:Rapier][Armor:Light][Hp:5][Spd:1][Ability:38|30|31|32|33|34|35|36|37][DWeap:88][DArmor:90][DHead:93][DWrist:95]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[ItemID:97|98|99|100|102|104]</Value>
+      <Value>[ItemID:98|99|100|101|103|105|60-99|61-99|55-99|62-99|32-99]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -19,15 +19,15 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[ItemID:136]</Value>
+      <Value>[ItemID:137]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[ItemID:134|135]</Value>
+      <Value>[ItemID:135|136]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[ItemID:144]</Value>
+      <Value>[ItemID:145]</Value>
     </Item>
     <Item>
       <Key>7</Key>

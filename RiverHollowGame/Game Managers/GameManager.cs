@@ -50,7 +50,6 @@ namespace RiverHollow.Game_Managers
         public enum ArmorEnum { None, Cloth, Light, Heavy };
         public enum ArmorSlotEnum { None, Head, Armor, Wrist };
         public enum ClothesEnum { None, Body, Legs, Hat };
-        public enum MachineTypeEnum { Processer, CraftingMachine };
 
         public enum ActorMovementStateEnum { Idle, Walking };
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };

@@ -456,10 +456,7 @@ namespace RiverHollow.Game_Managers
                     case "Gatherable":
                         return new Gatherable(id, diData);
                     case "Machine":
-                        MachineTypeEnum e = Util.ParseEnum<MachineTypeEnum>(diData["MachineType"]);
-                        if (e == MachineTypeEnum.CraftingMachine) { return new CraftingMachine(id, diData); }
-                        else if (e == MachineTypeEnum.Processer) { return new Processor(id, diData); }
-                        break;
+                        return new Machine(id, diData);
                     case "Wall":
                         return new Wall(id, diData);
                     case "Floor":

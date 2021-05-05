@@ -2580,18 +2580,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/Carpenter.png
 
-#begin Textures/Buildings/Forge.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Buildings/Forge.png
-
 #begin Textures/Buildings/GeneralStore.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2774,11 +2762,6 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapCarpenter_1.tmx
-
-#begin Maps/Town/mapForge_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapForge_1.tmx
 
 #begin Maps/Town/mapGeneralStore.tmx
 /importer:TiledMapImporter
@@ -3113,4 +3096,21 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sound/Stock/Effects/Cauldron.wav
+
+#begin Maps/Town/mapSmithy_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapSmithy_1.tmx
+
+#begin Textures/Buildings/Smithy.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/Smithy.png
 

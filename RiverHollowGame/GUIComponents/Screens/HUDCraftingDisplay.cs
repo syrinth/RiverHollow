@@ -23,7 +23,6 @@ namespace RiverHollow.GUIComponents.Screens
         private GUIWindow _winExtra;
         private GUIButton _btnFinished;
         protected GUIItemBox[,] _arrDisplay;
-        protected Item _autoItem;
 
         private List<GUIItem> _liRequiredItems;
         private GUIText _gName;
@@ -34,14 +33,13 @@ namespace RiverHollow.GUIComponents.Screens
         private int _rows;
         private int _columns;
 
-        public HUDCraftingDisplay(CraftingMachine crafter)
+        public HUDCraftingDisplay(Machine crafter)
         {
             _winMain = SetMainWindow();
             _winMain.Height = _winMain.Height / 2;
 
             _liRequiredItems = new List<GUIItem>();
             _craftMachine = crafter;
-            _autoItem = DataManager.GetItem(crafter.AutomatedItem);
             _gName = new GUIText("");
             _gDescription = new GUIText("");
 
@@ -146,13 +144,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     if (gIB != null && gIB.Contains(mouse))
                     {
-                        if (InventoryManager.HasSpaceInInventory(gIB.BoxItem.ItemID, 1) && PlayerManager.ExpendResources(gIB.BoxItem.GetRequiredItems()))
-                        {
-                            if (_craftMachine != null)
-                            {
-                                _craftMachine.MakeChosenItem(gIB.BoxItem.ItemID);
-                            }
-                        }
+                        _craftMachine?.AttemptToCraftChosenItem(gIB.BoxItem);
                     }
                 }
                 rv = true;

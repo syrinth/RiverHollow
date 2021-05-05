@@ -2241,6 +2241,7 @@ namespace RiverHollow.Characters
         {
             if (LivesInTown || HandleTravelTiming())
             {
+                ClearPath();
                 MoveToSpawn();
                 CalculatePathing();
 
