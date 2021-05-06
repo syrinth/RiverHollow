@@ -31,7 +31,7 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Resource][Image:96-0][Sell:20][ReqItems:5-25]</Value>
+      <Value>[Type:Resource][Image:96-0][Sell:20][ReqItems:25-5]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -259,7 +259,7 @@
     </Item>
     <Item>
       <Key>64</Key>
-      <Value>[Type:Equipment][Image:16-0][Sell:1500][ESub:Wand][Tier:2][Atk:Minor][Mag:Major][ReqItems:22-3]</Value>
+      <Value>[Type:Equipment][Subtype:Weapon][Image:16-0][Sell:1500][ESub:Wand][Tier:2][Atk:Minor][Mag:Major][ReqItems:22-3]</Value>
     </Item>
     <Item>
       <Key>65</Key>
@@ -531,7 +531,7 @@
     </Item>
     <Item>
       <Key>132</Key>
-      <Value>[Type:StaticItem][Image:112-0][Sell:2000][Place:40][ReqItems:2-10|0-5]</Value>
+      <Value>[Type:StaticItem][Image:112-0][Sell:2000][Place:37][ReqItems:2-10|0-5]</Value>
     </Item>
     <Item>
       <Key>133</Key>

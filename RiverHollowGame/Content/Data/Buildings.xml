@@ -91,7 +91,7 @@
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Texture:Tailor][Dimensions:112-128][Base:0-64-112-64][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:Weaver][Dimensions:112-128][Base:0-64-112-64][Entrance:48-97-16-30][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>23</Key>

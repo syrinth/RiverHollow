@@ -2736,18 +2736,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/MagicShop.png
 
-#begin Textures/Buildings/Tailor.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Buildings/Tailor.png
-
 #begin Maps/Town/mapApothecary_1.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -2902,11 +2890,6 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapStoneMason_1.tmx
-
-#begin Maps/Town/mapTailor_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapTailor_1.tmx
 
 #begin Maps/Town/mapTower_1.tmx
 /importer:TiledMapImporter
@@ -3113,4 +3096,21 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/Smithy.png
+
+#begin Maps/Town/mapWeaver_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapWeaver_1.tmx
+
+#begin Textures/Buildings/Weaver.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/Weaver.png
 

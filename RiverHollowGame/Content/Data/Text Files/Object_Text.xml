@@ -1339,55 +1339,55 @@
     </Item>
     <Item>
       <Key>WorldObject_35</Key>
-      <Value>[Name:Anvil II]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_36</Key>
-      <Value>[Name:Anvil III]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_37</Key>
-      <Value>[Name:Loom II]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_38</Key>
-      <Value>[Name:Loom III]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_39</Key>
-      <Value>[Name:Forge II]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_40</Key>
       <Value>[Name:Stoneworks]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_38</Key>
+      <Value>[Name:]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_39</Key>
+      <Value>[Name:]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_40</Key>
+      <Value>[Name:]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_41</Key>
-      <Value>[Name:Cauldron II]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_42</Key>
-      <Value>[Name:Cauldron III]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_43</Key>
-      <Value>[Name:Stoneworks II]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_44</Key>
-      <Value>[Name:Stone Mill II]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_45</Key>
       <Value>[Name:SawMill]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_46</Key>
+      <Key>WorldObject_43</Key>
       <Value>[Name:Tannery]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_44</Key>
+      <Value>[Name:]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_45</Key>
+      <Value>[Name:]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_46</Key>
+      <Value>[Name:]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_47</Key>
-      <Value>[Name:Tannery II]</Value>
+      <Value>[Name:Anvil II]</Value>
     </Item>
     <Item>
       <Key>WorldObject_48</Key>

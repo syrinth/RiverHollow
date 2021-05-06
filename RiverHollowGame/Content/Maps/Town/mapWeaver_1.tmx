@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="24">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="26">
  <properties>
   <property name="Manor" type="bool" value="true"/>
   <property name="Production" type="bool" value="false"/>
@@ -304,9 +304,9 @@
 136,52,52,49,49,49,49,49,49,49,49,49,49,49,137,
 136,71,71,71,71,71,71,71,71,71,71,71,71,71,137,
 136,93,93,93,93,93,93,93,93,93,93,93,93,93,137,
-136,0,0,0,0,0,0,0,0,0,0,0,371,372,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
-136,1029,1063,1030,1031,1032,0,0,0,0,0,0,431,432,137,
+136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
+136,1029,1063,1030,1031,1032,0,0,0,0,0,0,0,0,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
@@ -326,8 +326,8 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,391,392,0,
-0,1057,1037,1005,1005,1058,0,0,0,0,0,0,411,412,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1057,1037,1005,1005,1058,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -348,11 +348,19 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="9" name="MapObject"/>
+ <objectgroup id="9" name="MapObject">
+  <object id="24" name="WorldObject" x="208.977" y="98.1247" width="12.8117" height="10.48">
+   <properties>
+    <property name="ObjectID" type="int" value="54"/>
+   </properties>
+  </object>
+  <object id="25" name="WorldObject" x="128.961" y="114.645" width="12.8117" height="10.48">
+   <properties>
+    <property name="ObjectID" type="int" value="34"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup id="5" name="Character Layer">
-  <object id="13" name="NPC_01" x="177.025" y="162.234" width="12.375" height="11.4375"/>
-  <object id="16" name="NPC_17" x="33.8958" y="116.448" width="12.375" height="11.4375"/>
-  <object id="22" name="Check2" x="113.48" y="128.413" width="11.875" height="12.5313"/>
   <object id="23" name="Shop" x="31.9983" y="118.75" width="16.0034" height="25">
    <properties>
     <property name="Owner" value="17"/>
