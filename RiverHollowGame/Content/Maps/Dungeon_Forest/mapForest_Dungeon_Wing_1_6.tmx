@@ -157,7 +157,7 @@
   <object id="48" name="DungeonObject" x="176" y="336" width="32" height="32">
    <properties>
     <property name="MatchTrigger" value="Trigger_1"/>
-    <property name="ObjectID" type="int" value="21"/>
+    <property name="ObjectID" type="int" value="22"/>
     <property name="TriggerNumber" type="int" value="1"/>
    </properties>
   </object>

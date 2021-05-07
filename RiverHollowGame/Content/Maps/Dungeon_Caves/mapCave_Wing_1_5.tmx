@@ -99,7 +99,7 @@
   <object id="47" name="DungeonObject" x="224.188" y="272.25" width="31.6563" height="15.75">
    <properties>
     <property name="MatchTrigger" value="Cave_Wing_1_Switch_1"/>
-    <property name="ObjectID" type="int" value="24"/>
+    <property name="ObjectID" type="int" value="25"/>
     <property name="OutTrigger" value=""/>
     <property name="TriggerNumber" type="int" value="1"/>
    </properties>

@@ -95,13 +95,13 @@
   <object id="47" name="DungeonObject" x="272.01" y="176.01" width="32" height="32">
    <properties>
     <property name="MatchTrigger" value="Trigger_2"/>
-    <property name="ObjectID" type="int" value="21"/>
+    <property name="ObjectID" type="int" value="22"/>
     <property name="TriggerNumber" type="int" value="1"/>
    </properties>
   </object>
   <object id="49" name="Item" x="243.083" y="100.917" width="9.33333" height="6.66667">
    <properties>
-    <property name="ItemID" type="int" value="147"/>
+    <property name="ItemID" type="int" value="151"/>
    </properties>
   </object>
  </objectgroup>

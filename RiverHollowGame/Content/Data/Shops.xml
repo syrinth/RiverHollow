@@ -7,9 +7,9 @@
         <Item>[Type:Item][ItemID:1][Cost:100]</Item>
         <Item>[Type:Item][ItemID:57][Cost:20]</Item>
         <Item>[Type:Item][ItemID:21][Cost:50]</Item>
-        <Item>[Type:Item][ItemID:115][Cost:50]</Item>
+        <Item>[Type:Item][ItemID:119][Cost:50]</Item>
         <Item>[Type:Item][ItemID:5][Cost:100]</Item>
-        <Item>[Type:Item][ItemID:96][Cost:3000]</Item>
+        <Item>[Type:Item][ItemID:100][Cost:3000]</Item>
       </Value>
     </Item>
     <Item>
@@ -22,12 +22,12 @@
       <Value>
         <Item>[Type:Item][ItemID:0][Cost:10]</Item>
         <Item>[Type:Item][ItemID:2][Cost:10]</Item>
-        <Item>[Type:Item][ItemID:139][Cost:1000]</Item>
-        <Item>[Type:Item][ItemID:140][Cost:1000]</Item>
-        <Item>[Type:Item][ItemID:141][Cost:1000]</Item>
-        <Item>[Type:Item][ItemID:142][Cost:1000]</Item>
         <Item>[Type:Item][ItemID:143][Cost:1000]</Item>
         <Item>[Type:Item][ItemID:144][Cost:1000]</Item>
+        <Item>[Type:Item][ItemID:145][Cost:1000]</Item>
+        <Item>[Type:Item][ItemID:146][Cost:1000]</Item>
+        <Item>[Type:Item][ItemID:147][Cost:1000]</Item>
+        <Item>[Type:Item][ItemID:148][Cost:1000]</Item>
       </Value>
     </Item>
     <Item>
