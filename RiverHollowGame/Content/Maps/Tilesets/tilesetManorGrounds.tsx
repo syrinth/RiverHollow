@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.4" tiledversion="1.4.1" name="tilesetManorGrounds" tilewidth="16" tileheight="16" tilecount="625" columns="25">
+<tileset version="1.5" tiledversion="1.6.0" name="tilesetManorGrounds" tilewidth="16" tileheight="16" tilecount="625" columns="25">
  <image source="..\Tilesets\tilesetManorGrounds.png" trans="ffffff" width="400" height="400"/>
- <terraintypes>
-  <terrain name="Blank" tile="18"/>
-  <terrain name="Grass" tile="26"/>
-  <terrain name="Dirt" tile="29"/>
-  <terrain name="Upper Leaves" tile="40"/>
-  <terrain name="Shade Grass" tile="126"/>
-  <terrain name="Swamp" tile="201"/>
-  <terrain name="Swamp Water" tile="207"/>
-  <terrain name="Road" tile="279"/>
-  <terrain name="Water" tile="285"/>
- </terraintypes>
- <tile id="0" terrain="2,2,2,1"/>
- <tile id="1" terrain="2,2,1,1"/>
- <tile id="2" terrain="2,2,1,2"/>
- <tile id="3" terrain="1,1,1,2"/>
- <tile id="4" terrain="1,1,2,2"/>
- <tile id="5" terrain="1,1,2,1"/>
  <tile id="6">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
@@ -48,27 +31,17 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="14" terrain=",,,3"/>
- <tile id="15" terrain=",,3,3"/>
- <tile id="16" terrain=",,3,"/>
- <tile id="17" terrain="3,3,3,"/>
- <tile id="18" terrain="3,3,,"/>
- <tile id="19" terrain="3,3,,3"/>
- <tile id="25" terrain="2,1,2,1"/>
- <tile id="26" terrain="1,1,1,1">
+ <tile id="26">
   <properties>
    <property name="CanDig" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="27" terrain="1,2,1,2"/>
- <tile id="28" terrain="1,2,1,2"/>
- <tile id="29" terrain="2,2,2,2">
+ <tile id="29">
   <properties>
    <property name="CanDig" type="bool" value="true"/>
    <property name="Road" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="30" terrain="2,1,2,1"/>
  <tile id="31">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
@@ -89,7 +62,7 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="35" terrain="1,1,1,1" probability="0.005"/>
+ <tile id="35" probability="0.005"/>
  <tile id="36">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
@@ -100,15 +73,6 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="39" terrain=",3,,3"/>
- <tile id="40" terrain="3,3,3,3"/>
- <tile id="41" terrain="3,,3,"/>
- <tile id="50" terrain="2,1,2,2"/>
- <tile id="51" terrain="1,1,2,2"/>
- <tile id="52" terrain="1,2,2,2"/>
- <tile id="53" terrain="1,2,1,1"/>
- <tile id="54" terrain="2,2,1,1"/>
- <tile id="55" terrain="2,1,1,1"/>
  <tile id="56">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
@@ -139,15 +103,12 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="64" terrain=",3,,"/>
- <tile id="65" terrain="3,3,,"/>
- <tile id="66" terrain="3,,,"/>
- <tile id="75" terrain="1,1,1,1" probability="0.005">
+ <tile id="75" probability="0.005">
   <properties>
    <property name="CanDig" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="76" terrain="1,1,1,1" probability="0.005">
+ <tile id="76" probability="0.005">
   <properties>
    <property name="CanDig" type="bool" value="true"/>
   </properties>
@@ -192,19 +153,11 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="92" terrain="3,,3,3"/>
- <tile id="93" terrain=",,3,3"/>
- <tile id="94" terrain=",3,3,3">
+ <tile id="94">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="100" terrain="1,1,1,4"/>
- <tile id="101" terrain="1,1,4,4"/>
- <tile id="102" terrain="1,1,4,1"/>
- <tile id="103" terrain="4,4,4,1"/>
- <tile id="104" terrain="4,4,1,1"/>
- <tile id="105" terrain="4,4,1,4"/>
  <tile id="106">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
@@ -235,15 +188,8 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="115" terrain="3,,3,"/>
- <tile id="116" terrain=",3,,3"/>
- <tile id="125" terrain="1,4,1,4"/>
- <tile id="126" terrain="4,4,4,4"/>
- <tile id="127" terrain="4,1,4,1"/>
- <tile id="128" terrain="4,1,4,1"/>
  <tile id="129" probability="0.001"/>
- <tile id="130" terrain="1,4,1,4"/>
- <tile id="131" terrain="4,4,4,4" probability="0.001"/>
+ <tile id="131" probability="0.001"/>
  <tile id="134">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
@@ -264,77 +210,58 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="150" terrain="1,4,1,1"/>
- <tile id="151" terrain="4,4,1,1"/>
- <tile id="152" terrain="4,1,1,1"/>
- <tile id="153" terrain="4,1,4,4"/>
- <tile id="154" terrain="1,1,4,4"/>
- <tile id="155" terrain="1,4,4,4"/>
- <tile id="157" terrain="6,6,6,6" probability="0.1"/>
- <tile id="175" terrain="1,1,1,5"/>
- <tile id="176" terrain="1,1,5,5"/>
- <tile id="177" terrain="1,1,5,1"/>
- <tile id="178" terrain="5,5,5,1"/>
- <tile id="179" terrain="5,5,1,1"/>
- <tile id="180" terrain="5,5,1,5"/>
- <tile id="181" terrain="5,5,5,6">
+ <tile id="157" probability="0.1"/>
+ <tile id="181">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="182" terrain="5,5,6,6">
+ <tile id="182">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="183" terrain="5,5,6,5">
+ <tile id="183">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="184" terrain="6,6,6,5">
+ <tile id="184">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="185" terrain="6,6,5,5">
+ <tile id="185">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="186" terrain="6,6,5,6">
+ <tile id="186">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="200" terrain="1,5,1,5"/>
- <tile id="201" terrain="5,5,5,5"/>
- <tile id="202" terrain="5,1,5,1"/>
- <tile id="203" terrain="5,1,5,1"/>
- <tile id="204" terrain="1,1,1,1"/>
- <tile id="205" terrain="1,5,1,5"/>
- <tile id="206" terrain="5,6,5,6">
+ <tile id="206">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="207" terrain="6,6,6,6">
+ <tile id="207">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="208" terrain="6,5,6,5">
+ <tile id="208">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="209" terrain="6,5,6,5">
+ <tile id="209">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="210" terrain="5,5,5,5"/>
- <tile id="211" terrain="5,6,5,6">
+ <tile id="211">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
@@ -364,38 +291,32 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="225" terrain="1,5,1,1"/>
- <tile id="226" terrain="5,5,1,1"/>
- <tile id="227" terrain="5,1,1,1"/>
- <tile id="228" terrain="5,1,5,5"/>
- <tile id="229" terrain="1,1,5,5"/>
- <tile id="230" terrain="1,5,5,5"/>
- <tile id="231" terrain="5,6,5,5">
+ <tile id="231">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="232" terrain="6,6,5,5">
+ <tile id="232">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="233" terrain="6,5,5,5">
+ <tile id="233">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="234" terrain="6,5,6,6">
+ <tile id="234">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="235" terrain="5,5,6,6">
+ <tile id="235">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="236" terrain="5,6,6,6">
+ <tile id="236">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
@@ -425,38 +346,32 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="253" terrain="1,1,1,7"/>
- <tile id="254" terrain="1,1,7,7"/>
- <tile id="255" terrain="1,1,7,1"/>
- <tile id="256" terrain="7,7,7,1"/>
- <tile id="257" terrain="7,7,1,1"/>
- <tile id="258" terrain="7,7,1,7"/>
- <tile id="259" terrain="1,1,1,8">
+ <tile id="259">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="260" terrain="1,1,8,8">
+ <tile id="260">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="261" terrain="1,1,8,1">
+ <tile id="261">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="262" terrain="8,8,8,1">
+ <tile id="262">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="263" terrain="8,8,1,1">
+ <tile id="263">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="264" terrain="8,8,1,8">
+ <tile id="264">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
@@ -501,38 +416,33 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="278" terrain="1,7,1,7"/>
- <tile id="279" terrain="7,7,7,7">
+ <tile id="279">
   <properties>
    <property name="Road" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="280" terrain="7,1,7,1"/>
- <tile id="281" terrain="7,1,7,1"/>
- <tile id="282" terrain="1,1,1,1" probability="0.05"/>
- <tile id="283" terrain="1,7,1,7"/>
- <tile id="284" terrain="1,8,1,8">
+ <tile id="282" probability="0.05"/>
+ <tile id="284">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="285" terrain="8,8,8,8">
+ <tile id="285">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="286" terrain="8,1,8,1">
+ <tile id="286">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="287" terrain="8,1,8,1">
+ <tile id="287">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="288" terrain="1,1,1,1"/>
- <tile id="289" terrain="1,8,1,8">
+ <tile id="289">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
@@ -552,38 +462,32 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="303" terrain="1,7,1,1"/>
- <tile id="304" terrain="7,7,1,1"/>
- <tile id="305" terrain="7,1,1,1"/>
- <tile id="306" terrain="7,1,7,7"/>
- <tile id="307" terrain="1,1,7,7"/>
- <tile id="308" terrain="1,7,7,7"/>
- <tile id="309" terrain="1,8,1,1">
+ <tile id="309">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="310" terrain="8,8,1,1">
+ <tile id="310">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="311" terrain="8,1,1,1">
+ <tile id="311">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="312" terrain="8,1,8,8">
+ <tile id="312">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="313" terrain="1,1,8,8">
+ <tile id="313">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="314" terrain="1,8,8,8">
+ <tile id="314">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
@@ -726,6 +630,26 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="437">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="438">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="439">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="440">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="453">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
@@ -751,4 +675,255 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="462">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="463">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="464">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="465">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="487">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="488">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="489">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="490">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <wangsets>
+  <wangset name="Terrains" type="corner" tile="-1">
+   <wangcolor name="Blank" color="#ff0000" tile="18" probability="1"/>
+   <wangcolor name="Grass" color="#00ff00" tile="26" probability="1"/>
+   <wangcolor name="Dirt" color="#0000ff" tile="29" probability="1"/>
+   <wangcolor name="Upper Leaves" color="#ff7700" tile="40" probability="1"/>
+   <wangcolor name="Shade Grass" color="#00e9ff" tile="126" probability="1"/>
+   <wangcolor name="Swamp" color="#ff00d8" tile="201" probability="1"/>
+   <wangcolor name="Swamp Water" color="#ffff00" tile="207" probability="1"/>
+   <wangcolor name="Road" color="#a000ff" tile="279" probability="1"/>
+   <wangcolor name="Water" color="#00ffa1" tile="285" probability="1"/>
+   <wangcolor name="CaveMoss" color="#ffa8a8" tile="432" probability="1"/>
+   <wangcolor name="CaveDirt" color="#b4a8ff" tile="435" probability="1"/>
+   <wangcolor name="CaveWater" color="#96ffa7" tile="414" probability="1"/>
+   <wangcolor name="CaveDarkEarth" color="#8e7848" tile="-1" probability="1"/>
+   <wangtile tileid="0" wangid="0,3,0,2,0,3,0,3"/>
+   <wangtile tileid="1" wangid="0,3,0,2,0,2,0,3"/>
+   <wangtile tileid="2" wangid="0,3,0,3,0,2,0,3"/>
+   <wangtile tileid="3" wangid="0,2,0,3,0,2,0,2"/>
+   <wangtile tileid="4" wangid="0,2,0,3,0,3,0,2"/>
+   <wangtile tileid="5" wangid="0,2,0,2,0,3,0,2"/>
+   <wangtile tileid="14" wangid="0,0,0,4,0,0,0,0"/>
+   <wangtile tileid="15" wangid="0,0,0,4,0,4,0,0"/>
+   <wangtile tileid="16" wangid="0,0,0,0,0,4,0,0"/>
+   <wangtile tileid="17" wangid="0,4,0,0,0,4,0,4"/>
+   <wangtile tileid="18" wangid="0,4,0,0,0,0,0,4"/>
+   <wangtile tileid="19" wangid="0,4,0,4,0,0,0,4"/>
+   <wangtile tileid="25" wangid="0,2,0,2,0,3,0,3"/>
+   <wangtile tileid="26" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="27" wangid="0,3,0,3,0,2,0,2"/>
+   <wangtile tileid="28" wangid="0,3,0,3,0,2,0,2"/>
+   <wangtile tileid="29" wangid="0,3,0,3,0,3,0,3"/>
+   <wangtile tileid="30" wangid="0,2,0,2,0,3,0,3"/>
+   <wangtile tileid="35" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="39" wangid="0,4,0,4,0,0,0,0"/>
+   <wangtile tileid="40" wangid="0,4,0,4,0,4,0,4"/>
+   <wangtile tileid="41" wangid="0,0,0,0,0,4,0,4"/>
+   <wangtile tileid="50" wangid="0,2,0,3,0,3,0,3"/>
+   <wangtile tileid="51" wangid="0,2,0,3,0,3,0,2"/>
+   <wangtile tileid="52" wangid="0,3,0,3,0,3,0,2"/>
+   <wangtile tileid="53" wangid="0,3,0,2,0,2,0,2"/>
+   <wangtile tileid="54" wangid="0,3,0,2,0,2,0,3"/>
+   <wangtile tileid="55" wangid="0,2,0,2,0,2,0,3"/>
+   <wangtile tileid="64" wangid="0,4,0,0,0,0,0,0"/>
+   <wangtile tileid="65" wangid="0,4,0,0,0,0,0,4"/>
+   <wangtile tileid="66" wangid="0,0,0,0,0,0,0,4"/>
+   <wangtile tileid="75" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="76" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="92" wangid="0,0,0,4,0,4,0,4"/>
+   <wangtile tileid="93" wangid="0,0,0,4,0,4,0,0"/>
+   <wangtile tileid="94" wangid="0,4,0,4,0,4,0,0"/>
+   <wangtile tileid="100" wangid="0,2,0,5,0,2,0,2"/>
+   <wangtile tileid="101" wangid="0,2,0,5,0,5,0,2"/>
+   <wangtile tileid="102" wangid="0,2,0,2,0,5,0,2"/>
+   <wangtile tileid="103" wangid="0,5,0,2,0,5,0,5"/>
+   <wangtile tileid="104" wangid="0,5,0,2,0,2,0,5"/>
+   <wangtile tileid="105" wangid="0,5,0,5,0,2,0,5"/>
+   <wangtile tileid="115" wangid="0,0,0,0,0,4,0,4"/>
+   <wangtile tileid="116" wangid="0,4,0,4,0,0,0,0"/>
+   <wangtile tileid="125" wangid="0,5,0,5,0,2,0,2"/>
+   <wangtile tileid="126" wangid="0,5,0,5,0,5,0,5"/>
+   <wangtile tileid="127" wangid="0,2,0,2,0,5,0,5"/>
+   <wangtile tileid="128" wangid="0,2,0,2,0,5,0,5"/>
+   <wangtile tileid="130" wangid="0,5,0,5,0,2,0,2"/>
+   <wangtile tileid="131" wangid="0,5,0,5,0,5,0,5"/>
+   <wangtile tileid="150" wangid="0,5,0,2,0,2,0,2"/>
+   <wangtile tileid="151" wangid="0,5,0,2,0,2,0,5"/>
+   <wangtile tileid="152" wangid="0,2,0,2,0,2,0,5"/>
+   <wangtile tileid="153" wangid="0,2,0,5,0,5,0,5"/>
+   <wangtile tileid="154" wangid="0,2,0,5,0,5,0,2"/>
+   <wangtile tileid="155" wangid="0,5,0,5,0,5,0,2"/>
+   <wangtile tileid="157" wangid="0,7,0,7,0,7,0,7"/>
+   <wangtile tileid="175" wangid="0,2,0,6,0,2,0,2"/>
+   <wangtile tileid="176" wangid="0,2,0,6,0,6,0,2"/>
+   <wangtile tileid="177" wangid="0,2,0,2,0,6,0,2"/>
+   <wangtile tileid="178" wangid="0,6,0,2,0,6,0,6"/>
+   <wangtile tileid="179" wangid="0,6,0,2,0,2,0,6"/>
+   <wangtile tileid="180" wangid="0,6,0,6,0,2,0,6"/>
+   <wangtile tileid="181" wangid="0,6,0,7,0,6,0,6"/>
+   <wangtile tileid="182" wangid="0,6,0,7,0,7,0,6"/>
+   <wangtile tileid="183" wangid="0,6,0,6,0,7,0,6"/>
+   <wangtile tileid="184" wangid="0,7,0,6,0,7,0,7"/>
+   <wangtile tileid="185" wangid="0,7,0,6,0,6,0,7"/>
+   <wangtile tileid="186" wangid="0,7,0,7,0,6,0,7"/>
+   <wangtile tileid="200" wangid="0,6,0,6,0,2,0,2"/>
+   <wangtile tileid="201" wangid="0,6,0,6,0,6,0,6"/>
+   <wangtile tileid="202" wangid="0,2,0,2,0,6,0,6"/>
+   <wangtile tileid="203" wangid="0,2,0,2,0,6,0,6"/>
+   <wangtile tileid="204" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="205" wangid="0,6,0,6,0,2,0,2"/>
+   <wangtile tileid="206" wangid="0,7,0,7,0,6,0,6"/>
+   <wangtile tileid="207" wangid="0,7,0,7,0,7,0,7"/>
+   <wangtile tileid="208" wangid="0,6,0,6,0,7,0,7"/>
+   <wangtile tileid="209" wangid="0,6,0,6,0,7,0,7"/>
+   <wangtile tileid="210" wangid="0,6,0,6,0,6,0,6"/>
+   <wangtile tileid="211" wangid="0,7,0,7,0,6,0,6"/>
+   <wangtile tileid="225" wangid="0,6,0,2,0,2,0,2"/>
+   <wangtile tileid="226" wangid="0,6,0,2,0,2,0,6"/>
+   <wangtile tileid="227" wangid="0,2,0,2,0,2,0,6"/>
+   <wangtile tileid="228" wangid="0,2,0,6,0,6,0,6"/>
+   <wangtile tileid="229" wangid="0,2,0,6,0,6,0,2"/>
+   <wangtile tileid="230" wangid="0,6,0,6,0,6,0,2"/>
+   <wangtile tileid="231" wangid="0,7,0,6,0,6,0,6"/>
+   <wangtile tileid="232" wangid="0,7,0,6,0,6,0,7"/>
+   <wangtile tileid="233" wangid="0,6,0,6,0,6,0,7"/>
+   <wangtile tileid="234" wangid="0,6,0,7,0,7,0,7"/>
+   <wangtile tileid="235" wangid="0,6,0,7,0,7,0,6"/>
+   <wangtile tileid="236" wangid="0,7,0,7,0,7,0,6"/>
+   <wangtile tileid="253" wangid="0,2,0,8,0,2,0,2"/>
+   <wangtile tileid="254" wangid="0,2,0,8,0,8,0,2"/>
+   <wangtile tileid="255" wangid="0,2,0,2,0,8,0,2"/>
+   <wangtile tileid="256" wangid="0,8,0,2,0,8,0,8"/>
+   <wangtile tileid="257" wangid="0,8,0,2,0,2,0,8"/>
+   <wangtile tileid="258" wangid="0,8,0,8,0,2,0,8"/>
+   <wangtile tileid="259" wangid="0,2,0,9,0,2,0,2"/>
+   <wangtile tileid="260" wangid="0,2,0,9,0,9,0,2"/>
+   <wangtile tileid="261" wangid="0,2,0,2,0,9,0,2"/>
+   <wangtile tileid="262" wangid="0,9,0,2,0,9,0,9"/>
+   <wangtile tileid="263" wangid="0,9,0,2,0,2,0,9"/>
+   <wangtile tileid="264" wangid="0,9,0,9,0,2,0,9"/>
+   <wangtile tileid="278" wangid="0,8,0,8,0,2,0,2"/>
+   <wangtile tileid="279" wangid="0,8,0,8,0,8,0,8"/>
+   <wangtile tileid="280" wangid="0,2,0,2,0,8,0,8"/>
+   <wangtile tileid="281" wangid="0,2,0,2,0,8,0,8"/>
+   <wangtile tileid="282" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="283" wangid="0,8,0,8,0,2,0,2"/>
+   <wangtile tileid="284" wangid="0,9,0,9,0,2,0,2"/>
+   <wangtile tileid="285" wangid="0,9,0,9,0,9,0,9"/>
+   <wangtile tileid="286" wangid="0,2,0,2,0,9,0,9"/>
+   <wangtile tileid="287" wangid="0,2,0,2,0,9,0,9"/>
+   <wangtile tileid="288" wangid="0,2,0,2,0,2,0,2"/>
+   <wangtile tileid="289" wangid="0,9,0,9,0,2,0,2"/>
+   <wangtile tileid="303" wangid="0,8,0,2,0,2,0,2"/>
+   <wangtile tileid="304" wangid="0,8,0,2,0,2,0,8"/>
+   <wangtile tileid="305" wangid="0,2,0,2,0,2,0,8"/>
+   <wangtile tileid="306" wangid="0,2,0,8,0,8,0,8"/>
+   <wangtile tileid="307" wangid="0,2,0,8,0,8,0,2"/>
+   <wangtile tileid="308" wangid="0,8,0,8,0,8,0,2"/>
+   <wangtile tileid="309" wangid="0,9,0,2,0,2,0,2"/>
+   <wangtile tileid="310" wangid="0,9,0,2,0,2,0,9"/>
+   <wangtile tileid="311" wangid="0,2,0,2,0,2,0,9"/>
+   <wangtile tileid="312" wangid="0,2,0,9,0,9,0,9"/>
+   <wangtile tileid="313" wangid="0,2,0,9,0,9,0,2"/>
+   <wangtile tileid="314" wangid="0,9,0,9,0,9,0,2"/>
+   <wangtile tileid="406" wangid="0,11,0,10,0,11,0,11"/>
+   <wangtile tileid="407" wangid="0,11,0,10,0,10,0,11"/>
+   <wangtile tileid="408" wangid="0,11,0,11,0,10,0,11"/>
+   <wangtile tileid="409" wangid="0,10,0,11,0,10,0,10"/>
+   <wangtile tileid="410" wangid="0,10,0,11,0,11,0,10"/>
+   <wangtile tileid="411" wangid="0,10,0,10,0,11,0,10"/>
+   <wangtile tileid="416" wangid="0,12,0,11,0,12,0,12"/>
+   <wangtile tileid="417" wangid="0,12,0,11,0,11,0,12"/>
+   <wangtile tileid="418" wangid="0,12,0,11,0,11,0,12"/>
+   <wangtile tileid="419" wangid="0,12,0,12,0,11,0,12"/>
+   <wangtile tileid="431" wangid="0,10,0,10,0,11,0,11"/>
+   <wangtile tileid="432" wangid="0,10,0,10,0,10,0,10"/>
+   <wangtile tileid="433" wangid="0,11,0,11,0,10,0,10"/>
+   <wangtile tileid="434" wangid="0,11,0,11,0,10,0,10"/>
+   <wangtile tileid="435" wangid="0,11,0,11,0,11,0,11"/>
+   <wangtile tileid="436" wangid="0,10,0,10,0,11,0,11"/>
+   <wangtile tileid="437" wangid="0,11,0,12,0,11,0,11"/>
+   <wangtile tileid="438" wangid="0,11,0,12,0,12,0,11"/>
+   <wangtile tileid="439" wangid="0,11,0,12,0,12,0,11"/>
+   <wangtile tileid="440" wangid="0,11,0,11,0,12,0,11"/>
+   <wangtile tileid="441" wangid="0,11,0,11,0,12,0,12"/>
+   <wangtile tileid="442" wangid="0,11,0,11,0,11,0,11"/>
+   <wangtile tileid="443" wangid="0,11,0,11,0,11,0,11"/>
+   <wangtile tileid="444" wangid="0,12,0,12,0,11,0,11"/>
+   <wangtile tileid="456" wangid="0,10,0,11,0,11,0,11"/>
+   <wangtile tileid="457" wangid="0,10,0,11,0,11,0,10"/>
+   <wangtile tileid="458" wangid="0,11,0,11,0,11,0,10"/>
+   <wangtile tileid="459" wangid="0,11,0,10,0,10,0,10"/>
+   <wangtile tileid="460" wangid="0,11,0,10,0,10,0,11"/>
+   <wangtile tileid="461" wangid="0,10,0,10,0,10,0,11"/>
+   <wangtile tileid="462" wangid="0,12,0,12,0,11,0,11"/>
+   <wangtile tileid="463" wangid="0,12,0,12,0,12,0,12"/>
+   <wangtile tileid="464" wangid="0,12,0,12,0,12,0,12"/>
+   <wangtile tileid="465" wangid="0,11,0,11,0,12,0,12"/>
+   <wangtile tileid="466" wangid="0,11,0,11,0,12,0,12"/>
+   <wangtile tileid="469" wangid="0,12,0,12,0,11,0,11"/>
+   <wangtile tileid="481" wangid="0,11,0,13,0,11,0,11"/>
+   <wangtile tileid="482" wangid="0,11,0,13,0,13,0,11"/>
+   <wangtile tileid="483" wangid="0,11,0,11,0,13,0,11"/>
+   <wangtile tileid="484" wangid="0,13,0,11,0,13,0,13"/>
+   <wangtile tileid="485" wangid="0,13,0,11,0,11,0,13"/>
+   <wangtile tileid="486" wangid="0,13,0,13,0,11,0,13"/>
+   <wangtile tileid="487" wangid="0,12,0,11,0,11,0,11"/>
+   <wangtile tileid="488" wangid="0,12,0,11,0,11,0,12"/>
+   <wangtile tileid="489" wangid="0,12,0,11,0,11,0,12"/>
+   <wangtile tileid="490" wangid="0,11,0,11,0,11,0,12"/>
+   <wangtile tileid="491" wangid="0,11,0,12,0,12,0,12"/>
+   <wangtile tileid="492" wangid="0,11,0,12,0,12,0,11"/>
+   <wangtile tileid="493" wangid="0,11,0,12,0,12,0,11"/>
+   <wangtile tileid="494" wangid="0,12,0,12,0,12,0,11"/>
+   <wangtile tileid="506" wangid="0,13,0,13,0,11,0,11"/>
+   <wangtile tileid="507" wangid="0,13,0,13,0,13,0,13"/>
+   <wangtile tileid="508" wangid="0,11,0,11,0,13,0,13"/>
+   <wangtile tileid="509" wangid="0,11,0,11,0,13,0,13"/>
+   <wangtile tileid="510" wangid="0,11,0,11,0,11,0,11"/>
+   <wangtile tileid="511" wangid="0,13,0,13,0,11,0,11"/>
+   <wangtile tileid="531" wangid="0,13,0,11,0,11,0,11"/>
+   <wangtile tileid="532" wangid="0,13,0,11,0,11,0,13"/>
+   <wangtile tileid="533" wangid="0,11,0,11,0,11,0,13"/>
+   <wangtile tileid="534" wangid="0,11,0,13,0,13,0,13"/>
+   <wangtile tileid="535" wangid="0,11,0,13,0,13,0,11"/>
+   <wangtile tileid="536" wangid="0,13,0,13,0,13,0,11"/>
+  </wangset>
+  <wangset name="Unnamed Set" type="mixed" tile="-1">
+   <wangcolor name="" color="#ff0000" tile="-1" probability="1"/>
+  </wangset>
+ </wangsets>
 </tileset>
