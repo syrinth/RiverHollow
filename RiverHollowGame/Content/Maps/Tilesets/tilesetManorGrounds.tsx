@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.5" tiledversion="1.6.0" name="tilesetManorGrounds" tilewidth="16" tileheight="16" tilecount="625" columns="25">
- <image source="..\Tilesets\tilesetManorGrounds.png" trans="ffffff" width="400" height="400"/>
+ <image source="tilesetManorGrounds.png" trans="ffffff" width="400" height="400"/>
  <tile id="6">
   <properties>
    <property name="Impassable" type="bool" value="true"/>

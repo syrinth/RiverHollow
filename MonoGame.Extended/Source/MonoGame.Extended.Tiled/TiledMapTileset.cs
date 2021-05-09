@@ -26,7 +26,7 @@ namespace MonoGame.Extended.Tiled
 
         internal TiledMapTileset(ContentReader input)
         {
-            var textureAssetName = input.GetRelativeAssetName(input.ReadString());
+            var textureAssetName = @"Maps\Tilesets\" + input.ReadString();
             var animatedTiles = new List<TiledMapTilesetAnimatedTile>();
             var tiles = new List<TiledMapTilesetTile>();
 

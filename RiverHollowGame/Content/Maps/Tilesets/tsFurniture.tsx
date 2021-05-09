@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.4" tiledversion="1.4.1" name="tsFurniture" tilewidth="16" tileheight="16" tilecount="300" columns="20">
- <image source="..\Tilesets\tsFurniture.png" trans="ffffff" width="320" height="240"/>
+ <image source="tsFurniture.png" trans="ffffff" width="320" height="240"/>
  <tile id="60">
   <properties>
    <property name="Impassable" type="bool" value="true"/>

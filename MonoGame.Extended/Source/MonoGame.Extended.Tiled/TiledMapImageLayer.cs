@@ -13,7 +13,7 @@ namespace MonoGame.Extended.Tiled
         internal TiledMapImageLayer(ContentReader input)
             : base(input)
         {
-            var textureAssetName = input.GetRelativeAssetName(input.ReadString());
+            var textureAssetName = @"Maps\Tilesets\" + input.ReadString();
             Texture = input.ContentManager.Load<Texture2D>(textureAssetName);
             var x = input.ReadSingle();
             var y = input.ReadSingle();
