@@ -101,32 +101,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 }
                 return rv;
             }
-
-            public class ClassSelectionBox : CharacterDisplayBox
-            {
-                private  ClickDelegate _delClassAction;
-                public new delegate void ClickDelegate(ClassSelectionBox o);
-
-                private int _iClassID;
-                public int ClassID => _iClassID;
-
-                public ClassSelectionBox(Adventurer w, ClickDelegate del) : base(w, null)
-                {
-                    _iClassID = w.CharacterClass.ID;
-                    _delClassAction = del;
-                }
-
-                public override bool ProcessLeftButtonClick(Point mouse)
-                {
-                    bool rv = false;
-                    if (Contains(mouse) && _delClassAction != null)
-                    {
-                        _delClassAction(this);
-                        rv = true;
-                    }
-                    return rv;
-                }
-            }
         }
 
         public class PlayerDisplayBox : NPCDisplayBox

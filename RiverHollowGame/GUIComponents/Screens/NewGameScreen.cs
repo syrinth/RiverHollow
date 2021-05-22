@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
@@ -33,7 +34,7 @@ namespace RiverHollow.GUIComponents.Screens
         GUICheck _gCheckSkipCutscene;
 
         List<GUIObject> _liClassBoxes;
-        ClassSelectionBox _csbSelected;
+        ClassSelector _csbSelected;
         PlayerDisplayBox _playerDisplayBox;
 
         GUISwatch _btnHairColor;
@@ -71,12 +72,13 @@ namespace RiverHollow.GUIComponents.Screens
 
             _liClassBoxes = new List<GUIObject>();
             for (int i = 0; i < DataManager.GetWorkerNum(); i++) {
-                ClassSelectionBox w = new ClassSelectionBox(DataManager.GetAdventurer(i), BtnAssignClass);
+                ClassSelector w = new ClassSelector(i, BtnAssignClass);
+                w.Enable(false);
                 _liClassBoxes.Add(w);
                 _window.AddControl(w);
             }
-            _csbSelected = (ClassSelectionBox)_liClassBoxes[0];
-            _csbSelected.PlayAnimation(VerbEnum.Walk, DirectionEnum.Down);
+            _csbSelected = (ClassSelector)_liClassBoxes[0];
+            _csbSelected.Enable(true);
 
             _playerDisplayBox = new PlayerDisplayBox(false);
             _playerDisplayBox.AnchorToInnerSide(_window, SideEnum.TopLeft);
@@ -260,14 +262,13 @@ namespace RiverHollow.GUIComponents.Screens
             else { PlayerManager.World.RemoveClothes(e); }
         }
 
-        public void BtnAssignClass(ClassSelectionBox o)
+        public void BtnAssignClass(ClassSelector obj)
         {
-            ClassSelectionBox csb = ((ClassSelectionBox)o);
-            if (_csbSelected != csb)
+            if (obj != null && _csbSelected != obj)
             {
-                csb.PlayAnimation(VerbEnum.Walk, DirectionEnum.Down);
-                _csbSelected.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
-                _csbSelected = csb;
+                _csbSelected.Enable(false);
+                _csbSelected = obj;
+                _csbSelected.Enable(true);
             }
         }
         public void CloseColorSelection()
@@ -370,6 +371,50 @@ namespace RiverHollow.GUIComponents.Screens
                     default:
                         break;
                 }
+            }
+        }
+
+        public class ClassSelector : GUIObject
+        {
+            public int ClassID { get; } = -1;
+            GUIImage _gImage;
+
+            private ClickDelegate _delClassAction;
+            public delegate void ClickDelegate(ClassSelector obj);
+
+            public ClassSelector(int classID, ClickDelegate del)
+            {
+                ClassID = classID;
+                _delClassAction = del;
+
+                int xCrawl = classID * TileSize;
+                _gImage = new GUIImage(new Rectangle(0 + xCrawl, 112, TileSize, TileSize), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE);
+                AddControl(_gImage);
+
+                Width = _gImage.Width;
+                Height = _gImage.Height;
+            }
+
+            public override void Draw(SpriteBatch spriteBatch)
+            {
+                _gImage.Alpha(Enabled ? 1.0f : 0.5f);
+                _gImage.Draw(spriteBatch);
+            }
+
+            public override bool ProcessLeftButtonClick(Point mouse)
+            {
+                bool rv = false;
+                if (Contains(mouse) && _delClassAction != null)
+                {
+                    _delClassAction(this);
+                    rv = true;
+                }
+                return rv;
+            }
+
+            public override void Enable(bool value)
+            {
+                base.Enable(value);
             }
         }
     }

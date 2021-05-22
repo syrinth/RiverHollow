@@ -19,23 +19,6 @@ namespace RiverHollow.Characters
     public class Monster : CombatActor
     {
         #region Properties
-        /// <summary>
-        /// As in the base, we need to calculate the Actor's position based off of the Sprite's position.
-        /// However, there is a new complication in that there are mandatory buffers of one TileSize
-        /// on both the Left, Right, and Bottom of the Sprite.
-        /// </summary>
-        public override Vector2 Position
-        {
-            get
-            {
-                return new Vector2(_sprBody.Position.X + TileSize, _sprBody.Position.Y + _sprBody.Height - (TileSize * (_iSize + 1)));
-            }
-            set
-            {
-                _sprBody.Position = new Vector2(value.X - TileSize, value.Y - _sprBody.Height + (TileSize * (_iSize + 1)));
-            }
-        }
-
         #region Traits
         enum TraitEnum { Coward };
         bool _bCoward;
@@ -160,9 +143,7 @@ namespace RiverHollow.Characters
             _iCurrentHP = MaxHP;
             _iCurrentMP = MaxMP;
 
-            _iSpriteWidth = TileSize * (_iSize + 2);
-            _iSpriteHeight = TileSize * (_iSize + 2);
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), DataManager.FOLDER_MONSTERS + data["Texture"], true);
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), DataManager.FOLDER_MONSTERS + data["Texture"]);
         }
 
         /// <summary>

@@ -12,10 +12,7 @@ namespace RiverHollow.SpriteAnimations
     public class AnimatedSprite
     {
         #region Properties
-        //Combatsprites have buffers that we need to accomodate
-        public bool CombatSprite { get; } = false;
-
-        public float LayerDepth => Position.Y + CurrentFrameAnimation.FrameHeight - (CombatSprite ? TileSize : 0) + ((Position.X + (CombatSprite ? TileSize : 0)) / 100);
+        public float LayerDepth => Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100);
 
         Texture2D _texture;                         // The texture that holds the images for this sprite
         Color _color = Color.White;              // If set to anything other than Color.White, will colorize the sprite with that color.
@@ -84,14 +81,12 @@ namespace RiverHollow.SpriteAnimations
 
         public AnimatedSprite(string Texture, bool combatSprite = false)
         {
-            CombatSprite = combatSprite;
             _texture = DataManager.GetTexture(Texture);
         }
 
         public AnimatedSprite(AnimatedSprite sprite)
         {
             _texture = sprite._texture;
-            CombatSprite = sprite.CombatSprite;
             _diFrameAnimations = sprite._diFrameAnimations;
             FrameCutoff = sprite.FrameCutoff;
             _color = sprite._color;

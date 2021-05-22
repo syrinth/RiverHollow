@@ -65,9 +65,6 @@ namespace RiverHollow.Characters
             return new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
         }
 
-        protected int _iSpriteWidth;
-        protected int _iSpriteHeight;
-
         protected int _iBodyWidth = TileSize;
         public int Width => _iBodyWidth;
         protected int _iBodyHeight = TileSize * 2;
@@ -256,9 +253,6 @@ namespace RiverHollow.Characters
             _iBodyWidth = TileSize;
             _iBodyHeight = HUMAN_HEIGHT;
 
-            _iSpriteWidth = _iBodyWidth;
-            _iSpriteHeight = _iBodyHeight;
-
             _liTilePath = new List<RHTile>();
         }
 
@@ -327,19 +321,19 @@ namespace RiverHollow.Characters
         /// </summary>
         /// <param name="listAnimations">A list of AnimationData to add to the sprite</param>
         /// <param name="textureName">The texture name for the AnimatedSprite</param>
-        protected void LoadSpriteAnimations(ref AnimatedSprite sprite, List<AnimationData> listAnimations, string textureName, bool combatSprite = false)
+        protected void LoadSpriteAnimations(ref AnimatedSprite sprite, List<AnimationData> listAnimations, string textureName)
         {
-            sprite = new AnimatedSprite(textureName, combatSprite);
+            sprite = new AnimatedSprite(textureName);
 
             foreach (AnimationData data in listAnimations)
             {
                 if (data.Directional)
                 {
-                    AddDirectionalAnimations(ref sprite, data, _iSpriteWidth, _iSpriteHeight, data.PingPong, data.BackToIdle);
+                    AddDirectionalAnimations(ref sprite, data, _iBodyWidth, _iBodyHeight, data.PingPong, data.BackToIdle);
                 }
                 else
                 {
-                    sprite.AddAnimation(data.Animation, data.XLocation, data.YLocation, _iSpriteWidth, _iSpriteHeight, data.Frames, data.FrameSpeed, data.PingPong);
+                    sprite.AddAnimation(data.Animation, data.XLocation, data.YLocation, _iBodyWidth, _iBodyHeight, data.Frames, data.FrameSpeed, data.PingPong);
                 }
             }
 
@@ -1771,23 +1765,6 @@ namespace RiverHollow.Characters
         List<KeyValuePair<string, PathData>> _liTodayPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
         protected int _iScheduleIndex;
 
-        /// <summary>
-        /// As in the base, we need to calculate the Actor's position based off of the Sprite's position.
-        /// However, there is a new complication in that there are mandatory buffers of one TileSize
-        /// on both the Left, Right, and Bottom of the Sprite.
-        /// </summary>
-        public override Vector2 Position
-        {
-            get
-            {
-                return new Vector2(_sprBody.Position.X + TileSize, _sprBody.Position.Y + _sprBody.Height - (TileSize * 2));
-            }
-            set
-            {
-                _sprBody.Position = new Vector2(value.X - TileSize, value.Y - _sprBody.Height + (TileSize * 2));
-            }
-        }
-
         public Villager() {
             _diCollection = new Dictionary<int, bool>();
         }
@@ -1835,9 +1812,6 @@ namespace RiverHollow.Characters
                 AssignStartingGear();
             }
             else { SetClass(new CharacterClass()); }
-
-            _iSpriteWidth = TileSize * 3;
-            _iSpriteHeight = TileSize * 3;
 
             if (loadanimations)
             {
@@ -2434,24 +2408,6 @@ namespace RiverHollow.Characters
     public class Adventurer : ClassedCombatant
     {
         #region Properties
-
-        /// <summary>
-        /// As in the base, we need to calculate the Actor's position based off of the Sprite's position.
-        /// However, there is a new complication in that there are mandatory buffers of one TileSize
-        /// on both the Left, Right, and Bottom of the Sprite.
-        /// </summary>
-        public override Vector2 Position
-        {
-            get
-            {
-                return new Vector2(_sprBody.Position.X + TileSize, _sprBody.Position.Y + _sprBody.Height - (TileSize * 2));
-            }
-            set
-            {
-                _sprBody.Position = new Vector2(value.X - TileSize, value.Y - _sprBody.Height + (TileSize * 2));
-            }
-        }
-
         private enum AdventurerStateEnum { Idle, InParty, OnMission, AddToParty };
         private AdventurerStateEnum _eState;
         public AdventurerTypeEnum WorkerType { get; private set; }
@@ -2505,9 +2461,7 @@ namespace RiverHollow.Characters
             _iDailyItemID = int.Parse(data["ItemID"]);
             _iDailyFoodReq = int.Parse(data["Food"]);
 
-            _iSpriteWidth = TileSize * 3;
-            _iSpriteHeight = TileSize * 3;
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), _sAdventurerFolder + "Adventurer_" + _iID, true);
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), _sAdventurerFolder + "Adventurer_" + _iID);
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -2744,10 +2698,10 @@ namespace RiverHollow.Characters
         public Vector2 BodyPosition => _sprBody.Position;
         public override Vector2 Position
         {
-            get { return new Vector2(_sprBody.Position.X + TileSize, _sprBody.Position.Y + _sprBody.Height - (TileSize * 2)); }
+            get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TileSize); }
             set
             {
-                Vector2 vPos = new Vector2(value.X - TileSize, value.Y - _sprBody.Height + (TileSize * 2));
+                Vector2 vPos = new Vector2(value.X, value.Y - _sprBody.Height + TileSize);
                 foreach(AnimatedSprite spr in GetSprites()) { spr.Position = vPos; }
             }
         }
@@ -2763,9 +2717,6 @@ namespace RiverHollow.Characters
             _sName = PlayerManager.Name;
             _iBodyWidth = TileSize;
             _iBodyHeight = HUMAN_HEIGHT;
-
-            _iSpriteWidth = TileSize * 3;
-            _iSpriteHeight = TileSize * 3;
 
             HairColor = Color.Red;
 
@@ -2814,13 +2765,13 @@ namespace RiverHollow.Characters
             base.SetClass(x);
 
             //Loads the Sprites for the players body for the appropriate class
-            LoadSpriteAnimations(ref _sprBody, LoadPlayerAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, BodyTypeStr), true);
+            LoadSpriteAnimations(ref _sprBody, LoadPlayerAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, BodyTypeStr));
 
             //Hair type has already been set either by default or by being allocated.
             SetHairType(HairIndex);
 
             //Loads the Sprites for the players body for the appropriate class
-            LoadSpriteAnimations(ref _sprEyes, LoadPlayerAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER), true);
+            LoadSpriteAnimations(ref _sprEyes, LoadPlayerAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER));
             //_sprEyes.SetDepthMod(EYE_DEPTH);
         }
 
@@ -2838,7 +2789,7 @@ namespace RiverHollow.Characters
         {
             HairIndex = index;
             //Loads the Sprites for the players hair animations for the class based off of the hair ID
-            LoadSpriteAnimations(ref _sprHair, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[CharacterClass.ID]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex), true);
+            LoadSpriteAnimations(ref _sprHair, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[CharacterClass.ID]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex));
             _sprHair.SetDepthMod(HAIR_DEPTH);
         }
 
@@ -3054,9 +3005,6 @@ namespace RiverHollow.Characters
             _iBodyWidth = 32;
             _iBodyHeight = 32;
 
-            _iSpriteWidth = _iBodyWidth;
-            _iSpriteHeight = _iBodyHeight;
-
             _diDialogue = DataManager.GetNPCDialogue(_iIndex);
             _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Gremlin", _iIndex.ToString("00"));
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
@@ -3184,9 +3132,7 @@ namespace RiverHollow.Characters
 
             _action = DataManager.GetActionByIndex(int.Parse(stringData["Ability"]));
 
-            _iSpriteWidth = TileSize * (_iSize + 2);
-            _iSpriteHeight = TileSize * (_iSize + 2);
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(stringData), DataManager.FOLDER_SUMMONS + stringData["Texture"], true);
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(stringData), DataManager.FOLDER_SUMMONS + stringData["Texture"]);
         }
 
         public void SetStats(int magStat)
