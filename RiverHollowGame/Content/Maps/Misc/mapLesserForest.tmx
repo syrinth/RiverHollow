@@ -513,7 +513,7 @@
  <objectgroup id="5" name="MapObjec">
   <object id="16" name="ResourceSpawn" x="575" y="1368" width="62.6667" height="64.3333">
    <properties>
-    <property name="Resources" value="39|32"/>
+    <property name="Resources" value="32|33"/>
    </properties>
   </object>
   <object id="18" name="ResourceSpawn" x="554.333" y="1527.33" width="112.333" height="111">

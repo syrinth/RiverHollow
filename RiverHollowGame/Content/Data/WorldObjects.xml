@@ -131,35 +131,35 @@
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Light][Image:112-0][Width:16][Height:16][Idle:6-0.1]</Value>
+      <Value>[Type:Gatherable][Image:256-0][Width:16][Height:32][ItemID:74]</Value>
     </Item>
     <Item>
       <Key>33</Key>
-      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Makes:37-0|38-0|39-0|40-0|41-0][WorkEffect:stove_fire]</Value>
+      <Value>[Type:Light][Image:112-0][Width:16][Height:16][Idle:6-0.1]</Value>
     </Item>
     <Item>
       <Key>34</Key>
-      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:68-0][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Makes:37-0|38-0|39-0|40-0|41-0][WorkEffect:stove_fire]</Value>
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Type:Machine][Image:0-256][Work:4-0.3][Width:48][Height:48][Makes:119-0|120-0|58-0][Base:3-2][WorkEffect:Cauldron]</Value>
+      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:75-0][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>36</Key>
-      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:129-1|126-1|127-1|128-1|125-1|130-1|136-1][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-256][Work:4-0.3][Width:48][Height:48][Makes:130-0|131-0|58-0][Base:3-2][WorkEffect:Cauldron]</Value>
     </Item>
     <Item>
       <Key>37</Key>
-      <Value>[Type:Machine][Image:48-256][Work:3-0.15][Width:32][Height:48][Makes:121-2][Base:2-2]</Value>
+      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:72-1|71-1|126-1|125-1|73-1|136-1|142-1][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Makes:3-0|7-0|52-0|53-0|93-0][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:48-256][Work:3-0.15][Width:32][Height:48][Makes:132-2][Base:2-2]</Value>
     </Item>
     <Item>
       <Key>39</Key>
-      <Value>[Type:Machine][Image:0-0]</Value>
+      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Makes:3-0|7-0|52-0|53-0|100-0][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>40</Key>
@@ -167,7 +167,7 @@
     </Item>
     <Item>
       <Key>41</Key>
-      <Value>[Type:Machine][Image:0-192][Makes:55-0][Width:32][Height:32][Base:2-2][WorkAnimation:2-0.1]</Value>
+      <Value>[Type:Machine][Image:0-192][Makes:55-0|68-0][Width:32][Height:32][Base:2-2][WorkAnimation:2-0.1]</Value>
     </Item>
     <Item>
       <Key>42</Key>
@@ -207,11 +207,11 @@
     </Item>
     <Item>
       <Key>51</Key>
-      <Value>[Type:Plant][Image:192-16][Height:32][ItemID:113][TrNum:4][TrTime:1-2-3]</Value>
+      <Value>[Type:Plant][Image:192-16][Height:32][ItemID:121][TrNum:4][TrTime:1-2-3]</Value>
     </Item>
     <Item>
       <Key>52</Key>
-      <Value>[Type:Plant][Image:192-48][Height:32][ItemID:142][TrNum:4][TrTime:1-1-1]</Value>
+      <Value>[Type:Plant][Image:192-48][Height:32][ItemID:148][TrNum:4][TrTime:1-1-1]</Value>
     </Item>
     <Item>
       <Key>53</Key>

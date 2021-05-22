@@ -340,13 +340,13 @@
   </object>
   <object id="36" name="WorldObject" x="34.231" y="82.692" width="12.8117" height="10.48">
    <properties>
-    <property name="ObjectID" type="int" value="37"/>
+    <property name="ObjectID" type="int" value="38"/>
     <property name="UpgradeLevel" type="int" value="2"/>
    </properties>
   </object>
   <object id="37" name="WorldObject" x="97.344" y="82.01" width="12.8117" height="10.48">
    <properties>
-    <property name="ObjectID" type="int" value="35"/>
+    <property name="ObjectID" type="int" value="36"/>
    </properties>
   </object>
  </objectgroup>
