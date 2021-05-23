@@ -374,31 +374,26 @@ namespace RiverHollow.GUIComponents.Screens
             }
         }
 
-        public class ClassSelector : GUIObject
+        /// <summary>
+        /// This class is a GUIImage that will diplay a class Icon and maintain an associated
+        /// ClassID number to return to a query.
+        /// </summary>
+        public class ClassSelector : GUIImage
         {
             public int ClassID { get; } = -1;
-            GUIImage _gImage;
-
             private ClickDelegate _delClassAction;
             public delegate void ClickDelegate(ClassSelector obj);
 
-            public ClassSelector(int classID, ClickDelegate del)
+            public ClassSelector(int classID, ClickDelegate del) : base(new Rectangle(0 + (classID * TileSize), 112, TileSize, TileSize), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE)
             {
                 ClassID = classID;
                 _delClassAction = del;
-
-                int xCrawl = classID * TileSize;
-                _gImage = new GUIImage(new Rectangle(0 + xCrawl, 112, TileSize, TileSize), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE);
-                AddControl(_gImage);
-
-                Width = _gImage.Width;
-                Height = _gImage.Height;
             }
 
             public override void Draw(SpriteBatch spriteBatch)
             {
-                _gImage.Alpha(Enabled ? 1.0f : 0.5f);
-                _gImage.Draw(spriteBatch);
+                this.Alpha(Enabled ? 1.0f : 0.5f);
+                base.Draw(spriteBatch);
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)
@@ -410,11 +405,6 @@ namespace RiverHollow.GUIComponents.Screens
                     rv = true;
                 }
                 return rv;
-            }
-
-            public override void Enable(bool value)
-            {
-                base.Enable(value);
             }
         }
     }
