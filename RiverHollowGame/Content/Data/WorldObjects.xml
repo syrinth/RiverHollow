@@ -31,7 +31,7 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Destructible][Image:32-32][Width:32][Height:32][Tool:Pick][Hp:5][ReqLvl:1][ItemID:0-5]</Value>
+      <Value>[Type:Destructible][Image:32-32][Width:32][Height:32][Tool:Pick][Hp:5][ReqLvl:1][ItemID:0-5][Base:2-2]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -79,7 +79,7 @@
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Type:Destructible][Image:176-96][Width:32][Height:32][Tool:Axe][Hp:5][ReqLvl:1][ItemID:2-5]</Value>
+      <Value>[Type:Destructible][Image:176-96][Width:32][Height:32][Tool:Axe][Hp:5][ReqLvl:1][ItemID:2-5][Base:2-2]</Value>
     </Item>
     <Item>
       <Key>20</Key>
@@ -131,7 +131,7 @@
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Gatherable][Image:256-0][Width:16][Height:32][ItemID:74]</Value>
+      <Value>[Type:Gatherable][Image:256-0][Width:16][Height:32][ItemID:74][BaseOffset:0-1]</Value>
     </Item>
     <Item>
       <Key>33</Key>

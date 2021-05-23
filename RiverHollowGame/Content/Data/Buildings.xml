@@ -3,127 +3,127 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Texture:Manor][Dimensions:176-208][Base:0-112-176-80][Entrance:80-160-16-32][UpgradeTime:3][Unlocked]</Value>
+      <Value>[Texture:Manor][Dimensions:176-208][BaseOffset:0-7][Base:11-5][Entrance:80-160-16-32][UpgradeTime:3][Unlocked]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Texture:Tower][Dimensions:80-224][Base:0-160-80-48][Entrance:32-176-16-32][UpgradeTime:3][BuildSpot:48-176][ReqItems:0-1|2-1]</Value>
+      <Value>[Texture:Tower][Dimensions:80-224][BaseOffset:0-10][Base:5-3][Entrance:32-176-16-32][UpgradeTime:3][BuildSpot:48-176][ReqItems:0-1|2-1]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Texture:Barracks][Dimensions:128-144][Base:0-80-128-64][Entrance:80-112-16-32][UpgradeTime:3][ReqItems:0-2|2-3]</Value>
+      <Value>[Texture:Barracks][Dimensions:128-144][BaseOffset:0-5][Base:8-4][Entrance:80-112-16-32][UpgradeTime:3][ReqItems:0-2|2-3]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Texture:Lodge][Dimensions:112-128][Base:0-64-112-64][Entrance:112-128-16-32][UpgradeTime:3][ReqItems:0-2|2-3]</Value>
+      <Value>[Texture:Lodge][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:112-128-16-32][UpgradeTime:3][ReqItems:0-2|2-3]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Texture:Cottage][Dimensions:112-128][Base:0-64-112-64][Entrance:112-128-16-32][Workers:2-4][UpgradeTime:3][ReqItems:0-2|2-3|4-4]</Value>
+      <Value>[Texture:Cottage][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:112-128-16-32][Workers:2-4][UpgradeTime:3][ReqItems:0-2|2-3|4-4]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Texture:Home][Dimensions:112-128][Base:0-64-112-64][Entrance:56-97-16-32]</Value>
+      <Value>[Texture:Home][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:56-97-16-32]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Texture:Architect][Dimensions:176-144][Base:0-80-176-64][Entrance:80-114-16-32][ReqItems:0-5|60-10]</Value>
+      <Value>[Texture:Architect][Dimensions:176-144][BaseOffset:0-5][Base:11-4][Entrance:80-114-16-32][ReqItems:0-5|60-10]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Texture:Inn][Dimensions:176-176][Base:0-112-176-64][Entrance:80-144-16-31][ReqItems:55-8|60-12][Unlocked]</Value>
+      <Value>[Texture:Inn][Dimensions:176-176][BaseOffset:0-7][Base:11-4][Entrance:80-144-16-31][ReqItems:55-8|60-12][Unlocked]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Texture:PotionHut][Dimensions:128-144][Base:16-80-96-64][Entrance:48-115-16-29][ReqItems:60-15|61-15][Unlocked][Upgrade_1:55-10|60-10][Upgrade_2:55-10|60-10]</Value>
+      <Value>[Texture:PotionHut][Dimensions:128-144][BaseOffset:1-5][Base:6-4][Entrance:48-115-16-29][ReqItems:60-15|61-15][Unlocked][Upgrade_1:55-10|60-10][Upgrade_2:55-10|60-10]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Texture:LumberMill][Dimensions:112-144][Base:0-80-112-64][Entrance:48-112-16-32][Unlocked][Upgrade_1:55-10|60-10]</Value>
+      <Value>[Texture:LumberMill][Dimensions:112-144][BaseOffset:0-5][Base:7-4][Entrance:48-112-16-32][Unlocked][Upgrade_1:55-10|60-10]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Texture:House_14][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][Unlocked]</Value>
+      <Value>[Texture:House_14][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][Unlocked]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Texture:StoneMason][Dimensions:128-144][Base:0-96-128-48][Entrance:80-113-16-30][Unlocked]</Value>
+      <Value>[Texture:StoneMason][Dimensions:128-144][BaseOffset:0-6][Base:8-3][Entrance:80-113-16-30][Unlocked]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_6][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Texture:House_1_17][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_1_17][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Texture:House_2][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_2][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Texture:House_3][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_3][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Texture:House_4][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_4][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Texture:House_5][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_5][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Texture:MagicShop][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-30][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:MagicShop][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-30][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Texture:House_7][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_7][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Texture:GeneralStore][Dimensions:112-128][Base:0-64-112-64][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:GeneralStore][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Texture:Smithy][Dimensions:112-128][Base:0-64-112-64][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:Smithy][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Texture:Weaver][Dimensions:112-128][Base:0-64-112-64][Entrance:48-97-16-30][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:Weaver][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:48-97-16-30][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>23</Key>
-      <Value>[Texture:House_11][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_11][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>24</Key>
-      <Value>[Texture:Apothecary][Dimensions:112-128][Base:0-64-112-64][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:Apothecary][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Texture:Carpenter][Dimensions:112-128][Base:0-64-112-64][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:Carpenter][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Texture:House_19][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_19][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>27</Key>
-      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_6][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>28</Key>
-      <Value>[Texture:House_6][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_6][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>29</Key>
-      <Value>[Texture:House_20][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_20][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>30</Key>
-      <Value>[Texture:House_18][Dimensions:112-128][Base:0-64-112-64][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:House_18][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
   </Asset>
 </XnaContent>

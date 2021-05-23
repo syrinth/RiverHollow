@@ -10,8 +10,6 @@ using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Items.Structure;
 using RiverHollow.Utilities;
-using static RiverHollow.Items.Structure.AdjustableObject;
-using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Buildings
 {
@@ -22,10 +20,6 @@ namespace RiverHollow.Buildings
         private int _iEntY;
         private int _iEntWidth;
         private int _iEntHeight;
-        private int _iBaseX;
-        private int _iBaseY;
-        public override int BaseWidth => _iBaseWidth;
-        public override int BaseHeight => _iBaseHeight;
         public int Level { get; private set; } = 1;
 
         private Dictionary<int, Dictionary<int, int>> _diUpgradeInfo;
@@ -38,7 +32,6 @@ namespace RiverHollow.Buildings
         private string _sBuildingMap;
         public new string MapName => "map" + _sTextureName.Replace(" ", "") + "_1";// + (Level == 0 ? "" : Level.ToString());
 
-        public override Rectangle CollisionBox => GenerateCollisionBox();
         public Rectangle SelectionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _sprite.Width, _sprite.Height);
 
         public Rectangle TravelBox { get; private set; }
@@ -62,19 +55,10 @@ namespace RiverHollow.Buildings
             DataManager.GetTextData("Building", _iID, ref _sDescription, "Description");
 
             //The dimensions of the Building in tiles
-            string[] dimensions = stringData["Dimensions"].Split('-');
-            _iWidth = int.Parse(dimensions[0]);
-            _iHeight = int.Parse(dimensions[1]);
+            Util.AssignValues(ref _iSpriteWidth, ref _iSpriteHeight, "Dimensions", stringData);
 
-            //Starts at the top-left most tile that forms the base of the building
-            if (stringData.ContainsKey("Base"))
-            {
-                string[] str = stringData["Base"].Split('-');
-                _iBaseX = int.Parse(str[0]);
-                _iBaseY = int.Parse(str[1]);
-                _iBaseWidth = int.Parse(str[2]);
-                _iBaseHeight = int.Parse(str[3]);
-            }
+            Util.AssignValues(ref _iBaseXOffset, ref _iBaseYOffset, "BaseOffset", stringData);
+            Util.AssignValues(ref _iBaseWidth, ref _iBaseHeight, "Base", stringData);
 
             //The rectangle, in pixels, that forms the entrance to the building
             string[] ent = stringData["Entrance"].Split('-');
@@ -137,8 +121,8 @@ namespace RiverHollow.Buildings
             _sprite = new AnimatedSprite(textureName);
             for (int i = 1; i <= MaxBldgLevel; i++)
             {
-                _sprite.AddAnimation(i.ToString(), startX, startY, _iWidth, _iHeight);
-                startX += _iWidth;
+                _sprite.AddAnimation(i.ToString(), startX, startY, _iSpriteWidth, _iSpriteHeight);
+                startX += _iSpriteWidth;
             }
             _sprite.PlayAnimation("1");
         }
@@ -155,19 +139,6 @@ namespace RiverHollow.Buildings
                 _sprite.SetColor(_bSelected ? Color.Green : Color.White);
                 base.Draw(spriteBatch);
             }
-        }
-
-        /// <summary>
-        /// Generates a new Rectangle that represents the area of the building that is collidabke.
-        /// </summary>
-        public Rectangle GenerateCollisionBox()
-        {
-            //Start at the top left corner of the building, then move over and
-            //down by the number of pixels required to get to the base.
-            int startX = (int)_vMapPosition.X + _iBaseX;
-            int startY = (int)_vMapPosition.Y + _iBaseY;
-
-            return new Rectangle(startX, startY, BaseWidth, BaseHeight);
         }
 
         /// <summary>

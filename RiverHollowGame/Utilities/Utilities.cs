@@ -358,6 +358,36 @@ namespace RiverHollow.Utilities
                 value = float.Parse(dict[key]);
             }
         }
+        public static void AssignValue(ref Vector2 value, string key, Dictionary<string, string> dict)
+        {
+            if (dict.ContainsKey(key))
+            {
+                string[] splitVal = dict[key].Split('-');
+                value = new Vector2(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
+            }
+        }
+        public static void AssignValue(ref Point value, string key, Dictionary<string, string> dict)
+        {
+            if (dict.ContainsKey(key))
+            {
+                string[] splitVal = dict[key].Split('-');
+                value = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
+            }
+        }
+        public static bool AssignValues(ref int value1, ref int value2, string key, Dictionary<string, string> dict)
+        {
+            bool rv = false;
+            if (dict.ContainsKey(key))
+            {
+                string[] dimensions = dict[key].Split('-');
+                value1 = int.Parse(dimensions[0]);
+                value2 = int.Parse(dimensions[1]);
+
+                rv = true;
+            }
+
+            return rv;
+        }
         public static void AssignValue<TEnum>(ref TEnum value, string key, Dictionary<string, string> dict) where TEnum : struct
         {
             if (dict.ContainsKey(key)) {
