@@ -394,6 +394,20 @@ namespace RiverHollow.Utilities
                 value = Util.ParseEnum<TEnum>(dict[key]);
             }
         }
+        public static void AssignValue(ref Dictionary<int, int> dictValue, string key, Dictionary<string, string> dict)
+        {
+            dictValue = new Dictionary<int, int>();
+            if (dict.ContainsKey(key))
+            {
+                //Split by "|" for each item set required
+                string[] split = Util.FindParams(dict[key]);
+                foreach (string s in split)
+                {
+                    string[] splitData = s.Split('-');
+                    dictValue[int.Parse(splitData[0])] = int.Parse(splitData[1]);
+                }
+            }
+        }
         #endregion
 
         /// <summary>

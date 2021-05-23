@@ -93,17 +93,7 @@ namespace RiverHollow.Items
 
             Util.AssignValue(ref _eObjectType, "Type", stringData);
 
-            _diReqToMake = new Dictionary<int, int>();
-            if (stringData.ContainsKey("ReqItems"))
-            {
-                //Split by "|" for each item set required
-                string[] split = Util.FindParams(stringData["ReqItems"]);
-                foreach (string s in split)
-                {
-                    string[] splitData = s.Split('-');
-                    _diReqToMake[int.Parse(splitData[0])] = int.Parse(splitData[1]);
-                }
-            }
+            Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
 
             if (loadSprite)
             {
@@ -161,6 +151,8 @@ namespace RiverHollow.Items
         public virtual void PlaceOnMap(Vector2 pos, RHMap map)
         {
             SetMapName(map.Name);
+
+            pos = new Vector2(pos.X - (_iBaseXOffset * TileSize), pos.Y - (_iBaseYOffset * TileSize));
 
             SnapPositionToGrid(pos);
             map.PlaceWorldObject(this);
@@ -435,11 +427,6 @@ namespace RiverHollow.Items
         }
         //public override void ProcessRightClick() { Harvest(); }
 
-        public override void PlaceOnMap(Vector2 pos, RHMap map)
-        {
-            base.PlaceOnMap(pos - new Vector2(0, _iSpriteHeight - TileSize), map);
-        }
-
         /// <summary>
         /// Call to tell the plant that it is being Harvested, and follow any logic
         /// that needs to happen for this to occur.
@@ -557,11 +544,6 @@ namespace RiverHollow.Items
 
             LoadDictionaryData(stringData);
         }
-
-        public override void PlaceOnMap(Vector2 pos, RHMap map)
-        {
-            base.PlaceOnMap(new Vector2(pos.X - TileSize, pos.Y - (TileSize * 4)), map);
-        }
     }
 
     public class CombatHazard : WorldObject
@@ -672,7 +654,7 @@ namespace RiverHollow.Items
             }
         }
 
-        public void Rollover()
+        public override void Rollover()
         {
             foreach(string strID in _liSentMessages)
             {
@@ -952,7 +934,7 @@ namespace RiverHollow.Items
 
             public override void PlaceOnMap(Vector2 pos, RHMap map)
             {
-                base.PlaceOnMap(pos - new Vector2(0, TileSize), map);
+                base.PlaceOnMap(pos, map);
                 GameManager.AddMachine(this, Name);
 
                 if (map.BuildingID != -1)
@@ -1055,8 +1037,7 @@ namespace RiverHollow.Items
             public override void PlaceOnMap(Vector2 pos, RHMap map)
             {
                 base.PlaceOnMap(pos, map);
-
-               AdjustObject();
+                AdjustObject();
             }
 
             /// <summary>

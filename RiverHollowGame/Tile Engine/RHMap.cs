@@ -2121,7 +2121,6 @@ namespace RiverHollow.Tile_Engine
                 earth = new List<FloorData>()
             };
 
-
             foreach (WorldObject wObj in _liPlacedWorldObjects)
             {
                 if (wObj.CompareType(ObjectTypeEnum.Machine))
@@ -2151,8 +2150,8 @@ namespace RiverHollow.Tile_Engine
                     WorldObjectData d = new WorldObjectData
                     {
                         worldObjectID = wObj.ID,
-                        x = (int)wObj.MapPosition.X,
-                        y = (int)wObj.MapPosition.Y
+                        x = (int)wObj.CollisionBox.X,
+                        y = (int)wObj.CollisionBox.Y
                     };
                     mapData.worldObjects.Add(d);
                 }

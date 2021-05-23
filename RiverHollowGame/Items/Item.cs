@@ -84,7 +84,6 @@ namespace RiverHollow.Items
         {
             _iNum = num;
             _iItemID = id;
-            _diReqToMake = new Dictionary<int, int>();
 
             DataManager.GetTextData("Item", _iItemID, ref _sName, "Name");
             DataManager.GetTextData("Item", _iItemID, ref _sDescription, "Description");
@@ -99,16 +98,7 @@ namespace RiverHollow.Items
             string[] texIndices = stringData["Image"].Split('-');
             _vSourcePos = new Vector2(int.Parse(texIndices[0]), int.Parse(texIndices[1]));
 
-            if (stringData.ContainsKey("ReqItems"))
-            {
-                //Split by "|" for each item set required
-                string[] split = Util.FindParams(stringData["ReqItems"]);
-                foreach(string s in split)
-                {
-                    string[] splitData = s.Split('-');
-                    _diReqToMake[int.Parse(splitData[0])] = int.Parse(splitData[1]);
-                }
-            }
+            Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
 
             if (stringData.ContainsKey("RefinesInto"))
             {

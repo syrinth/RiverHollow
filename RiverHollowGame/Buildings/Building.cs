@@ -86,17 +86,7 @@ namespace RiverHollow.Buildings
 
             Util.AssignValue(ref _iNPCBuilderID, "Builder", stringData);
 
-            _diReqToMake = new Dictionary<int, int>();
-            if (stringData.ContainsKey("ReqItems"))
-            {
-                //Split by "|" for each item set required
-                string[] split = Util.FindParams(stringData["ReqItems"]);
-                foreach (string s in split)
-                {
-                    string[] splitData = s.Split('-');
-                    _diReqToMake[int.Parse(splitData[0])] = int.Parse(splitData[1]);
-                }
-            }
+            Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
 
             //Sets the position from which the Mason will spawn tobuild the building
             if (stringData.ContainsKey("BuildSpot")) {
@@ -358,7 +348,8 @@ namespace RiverHollow.Buildings
     /// </summary>
     public class BuildInfo
     {
-        public Dictionary<int, int> RequiredToMake { get; }
+        private Dictionary<int, int> _diReqToMake;
+        public Dictionary<int, int> RequiredToMake => _diReqToMake;
 
         private string _sName;
         public string Name => _sName;
@@ -380,17 +371,7 @@ namespace RiverHollow.Buildings
             DataManager.GetTextData("Building", _iID, ref _sName, "Name");
             DataManager.GetTextData("Building", _iID, ref _sDescription, "Description");
 
-            RequiredToMake = new Dictionary<int, int>();
-            if (stringData.ContainsKey("ReqItems"))
-            {
-                //Split by "|" for each item set required
-                string[] split = Util.FindParams(stringData["ReqItems"]);
-                foreach (string s in split)
-                {
-                    string[] splitData = s.Split('-');
-                    RequiredToMake[int.Parse(splitData[0])] = int.Parse(splitData[1]);
-                }
-            }
+            Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
 
             Util.AssignValue(ref _bUnlocked, "Unlocked", stringData);
         }
