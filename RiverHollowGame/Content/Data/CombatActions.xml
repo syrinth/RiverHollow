@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Spell][Animation:LightningSprite-94-160-14-0.1][AnimOffset:41-105][Target:Enemy][Range:9][AreaType:Cross][Cost:5][Harm:300][Action:UserCast Direct Apply][Element:Lightning][Level:2]</Value>
+      <Value>[Type:Spell][Animation:Eldritch_Blast-16-64-7-0.05][AnimOffset:0-48][Target:Enemy][Range:9][AreaType:Single][Cost:5][Harm:300][Action:UserCast Direct Apply]</Value>
     </Item>
     <Item>
       <Key>6</Key>

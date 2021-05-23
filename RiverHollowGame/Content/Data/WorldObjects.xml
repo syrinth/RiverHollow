@@ -147,7 +147,7 @@
     </Item>
     <Item>
       <Key>36</Key>
-      <Value>[Type:Machine][Image:0-256][Work:4-0.3][Width:48][Height:48][Makes:130-0|131-0|58-0][Base:3-2][WorkEffect:Cauldron]</Value>
+      <Value>[Type:Machine][Image:0-256][Work:4-0.3][Width:48][Height:48][Makes:130-0|131-0|58-0][Base:3-2][BaseOffset:0-1][WorkEffect:Cauldron]</Value>
     </Item>
     <Item>
       <Key>37</Key>
