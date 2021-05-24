@@ -905,7 +905,7 @@ namespace RiverHollow.Items
                     PlayerManager.DecreaseStamina(1 - mod);
 
                     //_iCurrentlyMaking = itemToCraft.ItemID;
-                    _sprite.PlayAnimation(AnimationEnum.PlayAnimation);
+                    //_sprite.PlayAnimation(AnimationEnum.PlayAnimation);
 
                     InventoryManager.AddToInventory(itemToCraft.ItemID);
                     if (!string.IsNullOrEmpty(_sEffectWorking))
