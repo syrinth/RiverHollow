@@ -37,11 +37,10 @@ namespace RiverHollow.Tile_Engine
         public int BuildingID { get; private set; } = -1;
         bool _bOutside;
         public bool IsOutside => _bOutside;
-        bool _bProduction = true;
-        public bool Production => _bProduction;
         int _iActiveSpawnPoints;
         public int ActiveSpawnPoints => _iActiveSpawnPoints;
-        public string BackgroundMusic { get; private set; }
+        private string _sMapType;
+        public string MapType => _sMapType;
         public MonsterFood PrimedFood { get; private set; }
         public RHTile TargetTile { get; private set; } = null;
 
@@ -119,17 +118,14 @@ namespace RiverHollow.Tile_Engine
             _arrTiles = map._arrTiles;
 
             BuildingID = map.BuildingID;
-            IsTown = _map.Properties.ContainsKey("Town");
-            _bOutside = _map.Properties.ContainsKey("Outside");
+            IsTown = map.IsTown;
+            _bOutside = map.IsOutside;
+            _sMapType = map.MapType;
 
             if (_map.Properties.ContainsKey("Dungeon"))
             {
                 DungeonName = _map.Properties["Dungeon"];
                 DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], this);
-            }
-
-            if (_map.Properties.ContainsKey("Production")) {
-                bool.TryParse(_map.Properties["Production"], out _bProduction);
             }
 
             if (_map.Properties.ContainsKey("ActiveSpawn")) {
@@ -179,11 +175,6 @@ namespace RiverHollow.Tile_Engine
                 DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], this);
             }
 
-            if (_map.Properties.ContainsKey("Production"))
-            {
-                bool.TryParse(_map.Properties["Production"], out _bProduction);
-            }
-
             if (_map.Properties.ContainsKey("Outside"))
             {
                 bool.TryParse(_map.Properties["Outside"], out _bOutside);
@@ -211,10 +202,7 @@ namespace RiverHollow.Tile_Engine
                 }
             }
 
-            if (_map.Properties.ContainsKey("Background"))
-            {
-                BackgroundMusic = _map.Properties["Background"];
-            }
+            Util.AssignValue(ref _sMapType, "MapType", _map.Properties);
 
             if (_map.Properties.ContainsKey("Cutscenes"))
             {
@@ -2054,6 +2042,7 @@ namespace RiverHollow.Tile_Engine
         public void EnterMap()
         {
             EnvironmentManager.LoadEnvironment(this);
+            SoundManager.PlayBackgroundMusic();
 
             foreach (int cutsceneID in _liCutscenes)
             {

@@ -1922,12 +1922,6 @@
 /processorParam:Quality=Best
 /build:Sound/Stock/Songs/UO-Stones.mp3
 
-#begin Sound/Stock/Songs/Lost In The Forest.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Sound/Stock/Songs/Lost In The Forest.mp3
-
 #begin Sound/Stock/Effects/bubbles.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -3161,4 +3155,22 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/lightmask1.png
+
+#begin Sound/Stock/Songs/LostInTheForest.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Songs/LostInTheForest.mp3
+
+#begin Sound/Stock/Effects/Rainfall.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Effects/Rainfall.mp3
+
+#begin Sound/Stock/Songs/DarkCaveMusic.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Songs/DarkCaveMusic.mp3
 

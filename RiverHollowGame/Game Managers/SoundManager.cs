@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
+using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,18 @@ namespace RiverHollow.Game_Managers
         static Song _queuedSong;
         const float PHASE_VAL = 0.02f;
 
+        //Dummy object to track environmental effects
+        static object environmentObject;
+        
         const string SONG_FOLDER = @"Content\Sound\Stock\Songs";
         const string STOCK_EFFECT_FOLDER = @"Content\Sound\Stock\Effects";
         const string EFFECT_FOLDER = @"Content\Sound\Original\Effects";
         const string HARP_FOLDER = @"Content\Sound\Stock\Harp";
-        public static float MusicVolume { get; private set; } = 0.0f;
+        public static float MusicVolume { get; private set; } = 0.4f;
         public static float EffectVolume { get; private set; } = 0.4f;
+
+        private static Dictionary<string, string> BackgroundKeys => DataManager.Config[14];
+
         static Dictionary<string, Song> _diSongs;
         static Dictionary<string, SoundEffect> _diEffects;
         static Dictionary<object, EffectData> _diCurrentEffects;
@@ -32,6 +39,7 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadContent(ContentManager Content)
         {
+            environmentObject = new object();
             _diSongs = new Dictionary<string, Song>();
             _diEffects = new Dictionary<string, SoundEffect>();
             _diCurrentEffects = new Dictionary<object, EffectData>();
@@ -41,6 +49,7 @@ namespace RiverHollow.Game_Managers
             foreach (string s in Directory.GetFiles(STOCK_EFFECT_FOLDER)) { AddEffect(Content, s); }
             foreach (string s in Directory.GetFiles(EFFECT_FOLDER)) { AddEffect(Content, s); }
             foreach (string s in Directory.GetFiles(HARP_FOLDER)) { AddEffect(Content, s); }
+
         }
 
         public static void Update(GameTime gameTime)
@@ -169,15 +178,27 @@ namespace RiverHollow.Game_Managers
         /// queue it up and fade the song out.
         /// </summary>
         /// <param name="song">The name of the song file to play</param>
-        public static void PlayBackgroundMusic(string song)
+        public static void PlayBackgroundMusic()
         {
-            if (_diSongs.ContainsKey(song))
+            if (EnvironmentManager.IsRaining() && MapManager.CurrentMap.IsOutside)
             {
-                Song s = _diSongs[song];
-                if (BackgroundSong != s)
+                MediaPlayer.Stop();
+                PlayEffect("Rainfall", environmentObject, true);
+            }
+            else
+            {
+                StopEffect(environmentObject);
+
+                string mapType = MapManager.CurrentMap.MapType;
+                if (mapType != null && BackgroundKeys.ContainsKey(mapType) && _diSongs.ContainsKey(BackgroundKeys[mapType]))
                 {
-                    _eQueuePhase = QueuePhase.Down;
-                    _queuedSong = s;
+                    Song s = _diSongs[BackgroundKeys[mapType]];
+
+                    if (BackgroundSong != s || MediaPlayer.State == MediaState.Stopped)
+                    {
+                        _eQueuePhase = QueuePhase.Down;
+                        _queuedSong = s;
+                    }
                 }
             }
         }
@@ -193,9 +214,10 @@ namespace RiverHollow.Game_Managers
             MediaPlayer.IsRepeating = repeating;
         }
 
-        public static void PlayEffect(string effectName, object obj = null)
+        public static void PlayEffect(string effectName, object obj = null, bool loop = false)
         {
             EffectData data = new EffectData("", effectName, obj, EffectVolume);
+            data.SoundEffect.IsLooped = loop;
             PlayEffect(data);
         }
 
@@ -230,7 +252,7 @@ namespace RiverHollow.Game_Managers
         }
 
         /// <summary>
-        /// Stops the sound effect attached to theo bject
+        /// Stops the sound effect attached to the object
         /// </summary>
         /// <param name="obj">The object that the sound effect is attached to</param>
         public static void StopEffect(object obj)

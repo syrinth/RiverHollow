@@ -310,7 +310,7 @@ namespace RiverHollow
         /// </summary>
         private static void StartGame()
         {
-            SoundManager.PlayBackgroundMusic("UO-Stones");
+            SoundManager.PlayBackgroundMusic();
 
             //Places NPCs on the map
             foreach (Villager v in DataManager.DiNPC.Values)

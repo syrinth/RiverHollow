@@ -116,10 +116,6 @@ namespace RiverHollow.Game_Managers
                 //    entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
                 //}
 
-                if (!string.IsNullOrEmpty(Maps[travelPoint.LinkedMap].BackgroundMusic))
-                {
-                    SoundManager.PlayBackgroundMusic(Maps[travelPoint.LinkedMap].BackgroundMusic);
-                }
                 Vector2 newPos = Vector2.Zero;
                 if (travelPoint.IsDoor)
                 {

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextobjectid="14">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="14">
  <properties>
   <property name="Building" type="bool" value="true"/>
-  <property name="WorkerBuilding" type="bool" value="true"/>
+  <property name="MapType" value="Town"/>
  </properties>
- <tileset firstgid="1" source="..\Tilesets\tilesetManorGrounds.tsx"/>
- <layer name="Base Layer" width="100" height="100">
+ <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
+ <layer id="1" name="Base Layer" width="100" height="100">
   <data encoding="csv">
 27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,
 27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,
@@ -109,19 +109,19 @@
 27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,29,30,26,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27
 </data>
  </layer>
- <objectgroup name="Travel Layer">
+ <objectgroup id="2" name="Travel Layer">
   <object id="1" name="Exit" x="1030" y="1585.5" width="69" height="13">
    <properties>
-    <property name="Map"  value="mapTown"/>
+    <property name="Map" value="mapTown"/>
    </properties>
   </object>
   <object id="2" name="Entrance" x="1058.58" y="1557.17" width="9" height="7.5">
    <properties>
-    <property name="Map"  value="mapTown"/>
+    <property name="Map" value="mapTown"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Building Layer">
+ <objectgroup id="3" name="Building Layer">
   <object id="4" name="Spawn1" x="802.667" y="1202.67" width="8.3333" height="13.3333"/>
   <object id="5" name="Spawn2" x="1045.33" y="947.667" width="6.3333" height="12.6667"/>
   <object id="6" name="Spawn3" x="1298.67" y="1202.85" width="9.33333" height="11.6364"/>

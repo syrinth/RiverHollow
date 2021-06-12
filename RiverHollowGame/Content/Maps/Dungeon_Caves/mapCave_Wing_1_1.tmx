@@ -2,7 +2,8 @@
 <map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="27" height="27" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="58">
  <properties>
   <property name="ActiveSpawn" type="int" value="3"/>
-  <property name="Dungeon" value="Caves"/>
+  <property name="Dungeon" value="Cave"/>
+  <property name="MapType" value="Cave"/>
   <property name="Outside" type="bool" value="false"/>
   <property name="Resources" value="20-C|7-C|8-U|29-R|31-M|32-U"/>
   <property name="ResourcesMinMax" value="50-75"/>

@@ -3,7 +3,7 @@
  <properties>
   <property name="Building" type="bool" value="true"/>
   <property name="Manor" type="bool" value="true"/>
-  <property name="Production" type="bool" value="false"/>
+  <property name="MapType" value="Town"/>
  </properties>
  <tileset firstgid="1" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="286" columns="22">
   <image source="../Tilesets/tsWalls_Floors.png" trans="ffffff" width="352" height="209"/>
