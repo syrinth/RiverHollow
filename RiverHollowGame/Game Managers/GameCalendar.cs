@@ -227,13 +227,13 @@ namespace RiverHollow.Game_Managers
         /// <summary>
         /// Using the time of day, calculate how dark it should be
         /// </summary>
-        /// <returns>The Color of thenight-time darkness mask</returns>
+        /// <returns>The Color of the night-time darkness mask</returns>
         public static Color GetLightColor()
         {
             Color rv = Color.White;
-            float totalMinutes = 360f;
+            float totalMinutes = 180;
             float timeModifier = CurrentMin + ((CurrentHour - 18f) * 60f);  //Total number of minutes since 6 P.M.
-            float darkPercent = timeModifier / totalMinutes;
+            float darkPercent = Math.Min(0.9f, timeModifier / totalMinutes);
 
             //Subtract the percent of darkness we currently have from the max then subtract
             // it from the max value of 255 to find our relative number. Since new Color takes

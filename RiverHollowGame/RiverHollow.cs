@@ -21,7 +21,6 @@ namespace RiverHollow
         public static int ScreenWidth = 1920;
         public static int ScreenHeight = 1080;
 
-        //TEST
         public static Texture2D lightMask;
         public static Effect _effectLights;
         static RenderTarget2D _renderLights;
