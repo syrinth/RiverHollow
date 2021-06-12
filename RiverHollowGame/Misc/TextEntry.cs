@@ -153,7 +153,7 @@ namespace RiverHollow.Misc
             {
                 if (_diTags.ContainsKey("Weather"))
                 {
-                    if (GameCalendar.GetWeatherString().Equals(_diTags["Weather"])) { rv = true; }
+                    if (EnvironmentManager.GetWeatherString().Equals(_diTags["Weather"])) { rv = true; }
                     else { return false; }
                 }
                 if (_diTags.ContainsKey("Friend"))

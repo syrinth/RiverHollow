@@ -1087,12 +1087,12 @@ namespace RiverHollow.Characters
             double modifiedDmg = 0;
             if (element != ElementEnum.None)
             {
-                if (MapManager.CurrentMap.IsOutside && GameCalendar.IsRaining())
+                if (MapManager.CurrentMap.IsOutside && EnvironmentManager.IsRaining())
                 {
                     if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (dmg * 1.2) - dmg; }
                     else if (element.Equals(ElementEnum.Fire)) { modifiedDmg += (dmg * 0.8) - dmg; }
                 }
-                else if (MapManager.CurrentMap.IsOutside && GameCalendar.IsSnowing())
+                else if (MapManager.CurrentMap.IsOutside && EnvironmentManager.IsSnowing())
                 {
                     if (element.Equals(ElementEnum.Ice)) { modifiedDmg += (dmg * 1.2) - dmg; }
                     else if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (dmg * 0.8) - dmg; }
@@ -2083,7 +2083,7 @@ namespace RiverHollow.Characters
         {
             string currDay = GameCalendar.GetDayOfWeek();
             string currSeason = GameCalendar.GetSeason();
-            string currWeather = GameCalendar.GetWeatherString();
+            string currWeather = EnvironmentManager.GetWeatherString();
             if (_diCompleteSchedule != null && _diCompleteSchedule.Count > 0)
             {
                 List<Dictionary<string, string>> listPathingForDay = null;
@@ -2941,7 +2941,7 @@ namespace RiverHollow.Characters
             {
                 if (s.Equals("Raining"))
                 {
-                    active = GameCalendar.IsRaining();
+                    active = EnvironmentManager.IsRaining();
                 }
                 else if (s.Contains("Day"))
                 {

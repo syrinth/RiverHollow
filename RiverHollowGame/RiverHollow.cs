@@ -58,6 +58,7 @@ namespace RiverHollow
             InputManager.Load();
             SoundManager.LoadContent(Content);
             DataManager.LoadContent(Content);
+            EnvironmentManager.Initialize();
             GameManager.LoadContent(Content);
             MapManager.LoadContent(Content, GraphicsDevice);
             MapManager.LoadObjects();
@@ -242,7 +243,7 @@ namespace RiverHollow
             if (LightingActive())
             {
                 GraphicsDevice.SetRenderTarget(_renderLights);
-                GraphicsDevice.Clear(GameCalendar.GetLightColor());
+                GraphicsDevice.Clear(EnvironmentManager.GetAmbientLight());
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
                 //draw light mask where there should be torches etc...
                 MapManager.DrawLights(spriteBatch);

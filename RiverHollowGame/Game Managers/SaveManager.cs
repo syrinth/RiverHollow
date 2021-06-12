@@ -59,6 +59,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Calendar")]
             public CalendarData Calendar;
 
+            [XmlElement(ElementName = "Environment")]
+            public EnvironmentData Environment;
+
             [XmlElement(ElementName = "Tools")]
             public ToolData Tools;
 
@@ -153,6 +156,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "currSeason")]
             public int currSeason;
 
+        }
+        public struct EnvironmentData
+        {
             [XmlElement(ElementName = "currWeather")]
             public int currWeather;
 
@@ -493,6 +499,7 @@ namespace RiverHollow.Game_Managers
                 saveID = GetSaveID(),
                 currentMap = PlayerManager.CurrentMap,
                 Calendar = GameCalendar.SaveCalendar(),
+                Environment = EnvironmentManager.SaveEnvironment(),
                 Tools = PlayerManager.SaveToolData(),
                 Buildings = new List<BuildingData>(),
                 MapData = new List<MapData>(),
@@ -693,6 +700,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.World.DetermineFacing(new Vector2(0, 1));
             LoadOptions(dataToLoad.optionData);
             GameCalendar.LoadCalendar(dataToLoad.Calendar);
+            EnvironmentManager.LoadEnvironment(dataToLoad.Environment);
             PlayerManager.LoadToolData(dataToLoad.Tools);
             foreach (BuildingData b in dataToLoad.Buildings)
             {
