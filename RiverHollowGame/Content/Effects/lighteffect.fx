@@ -1,7 +1,7 @@
 ﻿sampler s0;  
-texture lightMask1;
+texture lightMask;
 
-sampler lightSampler = sampler_state{Texture = (lightMask1);};  
+sampler lightSampler = sampler_state{Texture = (lightMask);};  
 
 float4 PixelShaderLight(float4 pos : SV_POSITION, float4 color1 : COLOR0, float2 coords: TEXCOORD0) : COLOR0
 {  

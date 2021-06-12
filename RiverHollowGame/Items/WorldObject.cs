@@ -1290,7 +1290,6 @@ namespace RiverHollow.Items
                 LoadDictionaryData(stringData);
 
                 string[] idleSplit = stringData["Idle"].Split('-');
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _iSpriteWidth, _iSpriteHeight, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
                 _sprite.Drawing = true;
             }

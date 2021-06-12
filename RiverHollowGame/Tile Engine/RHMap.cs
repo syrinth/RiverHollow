@@ -409,6 +409,9 @@ namespace RiverHollow.Tile_Engine
                     spriteBatch.Draw(lightMask, new Vector2(obj.CollisionBox.Center.X - lightMask.Width / 2, obj.CollisionBox.Y - lightMask.Height / 2), Color.White);
                 }
             }
+
+            spriteBatch.Draw(lightMask, new Vector2(PlayerManager.World.CollisionBox.Center.X - lightMask.Width / 2, PlayerManager.World.CollisionBox.Y - lightMask.Height / 2), Color.White);
+
         }
 
         public void DrawUpper(SpriteBatch spriteBatch)

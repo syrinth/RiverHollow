@@ -250,6 +250,7 @@ namespace RiverHollow.Game_Managers
                 }
 
                 SoundManager.ChangeMap();
+                CurrentMap.LeaveMap();
                 PlayerManager.CurrentMap = _newMapInfo.NextMap.Name;
                 PlayerManager.World.Position = _newMapInfo.PlayerPosition;
                 CurrentMap.EnterMap();

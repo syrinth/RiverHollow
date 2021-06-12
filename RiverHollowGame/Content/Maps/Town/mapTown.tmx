@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="84">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="85">
  <properties>
   <property name="Background" value="UO-Stones"/>
   <property name="Outside" type="bool" value="true"/>
@@ -433,6 +433,11 @@
   <object id="83" name="Floor" x="451.477" y="771.606" width="24.1361" height="9.51482">
    <properties>
     <property name="ObjectID" type="int" value="26"/>
+   </properties>
+  </object>
+  <object id="84" name="WorldObject" x="562.197" y="724.886" width="10.94" height="9.8948">
+   <properties>
+    <property name="ObjectID" type="int" value="33"/>
    </properties>
   </object>
  </objectgroup>

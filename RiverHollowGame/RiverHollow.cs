@@ -1,14 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow
@@ -18,7 +14,6 @@ namespace RiverHollow
     /// </summary>
     public class RiverHollow : Game
     {
-        static bool _bLightingOn = false;
         static bool _bExit = false;
 
         public GraphicsDeviceManager _graphicsDeviceManager;
@@ -195,16 +190,6 @@ namespace RiverHollow
 
         protected override void Draw(GameTime gTime)
         {
-            if (_bLightingOn)
-            {
-                GraphicsDevice.SetRenderTarget(_renderLights);
-                GraphicsDevice.Clear(GameCalendar.GetLightColor());
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, null, null, null, Camera._transform);
-                //draw light mask where there should be torches etc...
-                MapManager.DrawLights(spriteBatch);
-                spriteBatch.End();
-            }
-
             //This is when we start drawing the World
             //If we're in an informational state, then only the GUIScreen data should be visible, don't draw anything except for the GUI
             if (GameManager.IsMapShown())
@@ -232,13 +217,15 @@ namespace RiverHollow
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(Color.Black);
 
+            DrawLighting();
+
             //This is the portion of code where we draw to the screen. If we are on the map, we want to apply the
             //lighting effect. Since we will be drawing on the _renderMain, the effectsfile.
             //testMask is the name of the texture contained in the _effectLights file.
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
-            if (IsMapShown() && _bLightingOn)
+            if (IsMapShown() && LightingActive())
             {
-                _effectLights.Parameters["lightMask1"].SetValue(_renderLights);
+                _effectLights.Parameters["lightMask"].SetValue(_renderLights);
                 _effectLights.CurrentTechnique.Passes[0].Apply();
             }
             spriteBatch.Draw(_renderMain, Vector2.Zero, Color.White);
@@ -249,6 +236,25 @@ namespace RiverHollow
             spriteBatch.End();
 
             base.Draw(gTime);
+        }
+
+        private void DrawLighting()
+        {
+            if (LightingActive())
+            {
+                GraphicsDevice.SetRenderTarget(_renderLights);
+                GraphicsDevice.Clear(GameCalendar.GetLightColor());
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
+                //draw light mask where there should be torches etc...
+                MapManager.DrawLights(spriteBatch);
+                spriteBatch.End();
+                GraphicsDevice.SetRenderTarget(null);
+            }
+        }
+
+        private bool LightingActive()
+        {
+            return GameCalendar.CurrentHour >= 18 && MapManager.CurrentMap.IsOutside;
         }
 
         public static void ResetCamera()
