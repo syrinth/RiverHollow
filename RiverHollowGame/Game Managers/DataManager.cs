@@ -28,6 +28,7 @@ namespace RiverHollow.Game_Managers
         public const string FOLDER_ACTOR = @"Textures\Actors\";
         public const string FOLDER_BUILDINGS = @"Textures\Buildings\";
         public const string FOLDER_ITEMS = @"Textures\Items\";
+        public const string FOLDER_ENVIRONMENT = @"Textures\Environmental\";
         public const string FOLDER_MONSTERS = @"Textures\Actors\Monsters\";
         public const string FOLDER_SUMMONS = @"Textures\Actors\Summons\";
         public const string FOLDER_PLAYER = @"Textures\Actors\Player\";
@@ -115,9 +116,10 @@ namespace RiverHollow.Game_Managers
             LoadCharacters(Content);
             LoadShopFile(Content);
             LoadDictionaries(Content);
-
+            
             AddDirectoryTextures(FOLDER_ITEMS, Content);
             AddDirectoryTextures(FOLDER_BUILDINGS, Content);
+            AddDirectoryTextures(FOLDER_ENVIRONMENT, Content);
 
             LoadNPCSchedules(Content);
             LoadNPCs();

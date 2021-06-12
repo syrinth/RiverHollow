@@ -572,7 +572,7 @@ namespace RiverHollow.Items
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
         {
             base.LoadSprite(stringData, textureName);
-            _sprite.AddAnimation(AnimationEnum.ObjectAction1, _pImagePos.X + TileSize, _pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+            _sprite.AddAnimation(AnimationEnum.Action_One, _pImagePos.X + TileSize, _pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
         }
 
         public bool Charge() {
@@ -592,7 +592,7 @@ namespace RiverHollow.Items
         private void Activate(bool value)
         {
             Active = value;
-            _sprite.PlayAnimation(value ? AnimationEnum.ObjectAction1 : AnimationEnum.ObjectIdle);
+            _sprite.PlayAnimation(value ? AnimationEnum.Action_One : AnimationEnum.ObjectIdle);
         }
 
         public bool SubtypeMatch(HazardTypeEnum cmp)
@@ -1429,7 +1429,7 @@ namespace RiverHollow.Items
 
                 if (_iItemKeyID == -1)
                 {
-                    _sprite.AddAnimation(AnimationEnum.ObjectAction1, _pImagePos.X + Width, _pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                    _sprite.AddAnimation(AnimationEnum.Action_One, _pImagePos.X + Width, _pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
                 }
             }
 
@@ -1479,7 +1479,7 @@ namespace RiverHollow.Items
                 if(CanTrigger())
                 {
                     _bHasBeenTriggered = true;
-                    _sprite.PlayAnimation(AnimationEnum.ObjectAction1);
+                    _sprite.PlayAnimation(AnimationEnum.Action_One);
                     GameManager.ActivateTriggers(_sOutTrigger);
                 }
             }

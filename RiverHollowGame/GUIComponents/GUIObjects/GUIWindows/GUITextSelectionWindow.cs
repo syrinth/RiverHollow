@@ -237,7 +237,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     }
 
                     //Just pop this here for now
-                    if (act.IsActorType(ActorEnum.ShippingGremlin)) { act.PlayAnimation(AnimationEnum.ObjectAction2); }
+                    if (act.IsActorType(ActorEnum.ShippingGremlin)) { act.PlayAnimation(AnimationEnum.Action_Two); }
                 }
                 else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Gift)) { GUIManager.OpenMainObject(new HUDInventoryDisplay(DisplayTypeEnum.Gift)); }
                 else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Party)) { nextText = act.JoinParty(); }

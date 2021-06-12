@@ -19,7 +19,8 @@ using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Items.Structure;
 using System.Linq;
 using static RiverHollow.Items.Structure.AdjustableObject;
-using static RiverHollow.Items.Structure.AdjustableObject.Floor;
+using RiverHollow.SpriteAnimations;
+using static RiverHollow.Tile_Engine.EnvironmentalEffect;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -79,7 +80,10 @@ namespace RiverHollow.Tile_Engine
         private List<WorldActor> _liActorsToRemove;
         private List<WorldObject> _liObjectsToRemove;
 
+        private List<EnvironmentalEffect> _liEnvironmentalEffects;
+
         public RHMap() {
+            _liEnvironmentalEffects = new List<EnvironmentalEffect>();
             _liMonsterSpawnPoints = new List<MonsterSpawn>();
             _liResourceSpawnPoints = new List<ResourceSpawn>();
             _liTestTiles = new List<RHTile>();
@@ -107,6 +111,10 @@ namespace RiverHollow.Tile_Engine
             ToAdd = new List<WorldActor>();
         }
 
+        /// <summary>
+        /// THIS IS THE COPY CONSTRUCTOR
+        /// </summary>
+        /// <param name="map"></param>
         public RHMap(RHMap map) : this()
         {
             _map = map.Map;
@@ -236,6 +244,23 @@ namespace RiverHollow.Tile_Engine
             if (this == MapManager.CurrentMap)
             {
                 _renderer.Update(_map, gTime);
+
+                List<EnvironmentalEffect> finished = new List<EnvironmentalEffect>();
+                foreach (EnvironmentalEffect e in _liEnvironmentalEffects)
+                {
+                    e.Update(gTime);
+                    if (e.IsFinished()) {
+                        finished.Add(e);
+                    }
+                }
+
+                foreach (EnvironmentalEffect e in finished)
+                {
+                    _liEnvironmentalEffects.Remove(e);
+                    AddNewEnvironmentalEffect();
+                }
+                finished.Clear();
+
                 if (CombatManager.InCombat || IsRunning())
                 {
                     foreach (Monster m in Monsters)
@@ -391,6 +416,8 @@ namespace RiverHollow.Tile_Engine
             SetLayerVisibility(true);
 
             _renderer.Draw(_map, Camera._transform);
+
+            foreach (EnvironmentalEffect e in _liEnvironmentalEffects) { e.Draw(spriteBatch); }
 
             SetLayerVisibility(false);
         }
@@ -2034,11 +2061,37 @@ namespace RiverHollow.Tile_Engine
             return liRv;
         }
 
-        public void CheckForTriggeredCutScenes()
+        public void LeaveMap()
         {
-            foreach(int cutsceneID in _liCutscenes)
+            _liEnvironmentalEffects.Clear();
+        }
+
+        public void EnterMap()
+        {
+            if ((GameCalendar.IsRaining() || GameCalendar.IsSnowing()) && IsOutside)
+            {
+                for (int i = 0; i < 700; i++)
+                {
+                    AddNewEnvironmentalEffect();
+                }
+            }
+
+            foreach (int cutsceneID in _liCutscenes)
             {
                 CutsceneManager.CheckForTriggedCutscene(cutsceneID);
+            }
+        }
+
+        public void AddNewEnvironmentalEffect()
+        {
+            if (GameCalendar.IsRaining())
+            {
+                _liEnvironmentalEffects.Add(new Raindrop(MapWidthTiles, MapHeightTiles));
+            }
+
+            if (GameCalendar.IsSnowing())
+            {
+                _liEnvironmentalEffects.Add(new Snowflake(MapWidthTiles, MapHeightTiles));
             }
         }
 
@@ -3015,6 +3068,91 @@ namespace RiverHollow.Tile_Engine
         {
             RHTile rv = MapManager.Maps[_sMapName].GetTileByPixelPosition(GetCenterTilePosition());
             return rv.GetTileByDirection(_eEntranceDir).Position;
+        }
+    }
+
+    public abstract class EnvironmentalEffect {
+        protected AnimatedSprite _sprBody;
+
+        public virtual void Update(GameTime gTime) { }
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            _sprBody.Draw(spriteBatch, 999999999);
+        }
+
+        public virtual bool IsFinished()
+        {
+            return false;
+        }
+
+        public class Raindrop : EnvironmentalEffect
+        {
+            int _iFallDistance = 0;
+            public Raindrop(int mapWidth, int mapHeight)
+            {
+                _iFallDistance = RHRandom.Instance.Next(50, 100);
+                _sprBody = new AnimatedSprite(DataManager.FOLDER_ENVIRONMENT + "Rain");
+                _sprBody.AddAnimation(AnimationEnum.Action_One, 0, 0, TileSize, TileSize * 2);
+                _sprBody.AddAnimation(AnimationEnum.Action_Finished, TileSize, 0, TileSize, TileSize * 2, 2, 0.1f, false, true);
+                _sprBody.PlayAnimation(AnimationEnum.Action_One);
+
+                Vector2 pos = new Vector2(RHRandom.Instance.Next(0, mapWidth * TileSize), RHRandom.Instance.Next(0, mapHeight * TileSize));
+                _sprBody.Position = pos;
+            }
+
+            public override void Update(GameTime gTime)
+            {
+                if (_sprBody.IsCurrentAnimation(AnimationEnum.Action_One))
+                {
+                    Vector2 landingPos = _sprBody.Position + new Vector2(0, TileSize);
+                    RHTile landingTile = MapManager.CurrentMap.GetTileByPixelPosition(landingPos);
+                    if (landingTile == null || (_iFallDistance <= 0 && landingTile.WorldObject == null))
+                    {
+                        _sprBody.PlayAnimation(AnimationEnum.Action_Finished);
+                    }
+                    else
+                    {
+                        int modifier = RHRandom.Instance.Next(2, 3);
+                        _iFallDistance -= modifier;
+                        _sprBody.Position += new Vector2(-2 * modifier, 3 * modifier);
+                    }
+                }
+
+                _sprBody.Update(gTime);
+            }
+
+            public override bool IsFinished()
+            {
+                return !_sprBody.Drawing;
+            }
+        }
+
+        public class Snowflake : EnvironmentalEffect
+        {
+            readonly int _iMaxHeight = 0;
+            public Snowflake(int mapWidth, int mapHeight)
+            {
+                float frameLength = RHRandom.Instance.Next(3, 5) / 10f;
+                _iMaxHeight = mapHeight * ScaledTileSize;
+                _sprBody = new AnimatedSprite(DataManager.FOLDER_ENVIRONMENT + "Snow");
+                _sprBody.AddAnimation(AnimationEnum.Action_One, 0, 0, TileSize, TileSize, 3, frameLength, true);
+                _sprBody.PlayAnimation(AnimationEnum.Action_One);
+
+                Vector2 pos = new Vector2(RHRandom.Instance.Next(0, mapWidth * ScaledTileSize), RHRandom.Instance.Next(0, mapHeight * ScaledTileSize));
+                _sprBody.Position = pos;
+            }
+
+            public override void Update(GameTime gTime)
+            {
+                _sprBody.Position += new Vector2(0, 2);
+
+                _sprBody.Update(gTime);
+            }
+
+            public override bool IsFinished()
+            {
+                return _sprBody.Position.Y >= _iMaxHeight;
+            }
         }
     }
 }

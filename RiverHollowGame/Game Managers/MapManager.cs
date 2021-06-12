@@ -252,7 +252,7 @@ namespace RiverHollow.Game_Managers
                 SoundManager.ChangeMap();
                 PlayerManager.CurrentMap = _newMapInfo.NextMap.Name;
                 PlayerManager.World.Position = _newMapInfo.PlayerPosition;
-                CurrentMap.CheckForTriggeredCutScenes();
+                CurrentMap.EnterMap();
                 _newMapInfo = default;
 
                 //Enter combat upon entering a map with living monsters

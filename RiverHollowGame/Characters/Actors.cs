@@ -3019,9 +3019,9 @@ namespace RiverHollow.Characters
 
             _sprBody = new AnimatedSprite(_sVillagerFolder + "NPC_" + _iIndex.ToString("00"));
             _sprBody.AddAnimation(AnimationEnum.ObjectIdle, 0, 0, _iBodyWidth, _iBodyHeight);
-            _sprBody.AddAnimation(AnimationEnum.ObjectAction1, 32, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);
-            _sprBody.AddAnimation(AnimationEnum.ObjectActionFinished, 128, 0, _iBodyWidth, _iBodyHeight);
-            _sprBody.AddAnimation(AnimationEnum.ObjectAction2, 160, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);
+            _sprBody.AddAnimation(AnimationEnum.Action_One, 32, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);
+            _sprBody.AddAnimation(AnimationEnum.Action_Finished, 128, 0, _iBodyWidth, _iBodyHeight);
+            _sprBody.AddAnimation(AnimationEnum.Action_Two, 160, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);
             PlayAnimation(AnimationEnum.ObjectIdle);
 
             if(GameManager.ShippingGremlin == null) { GameManager.ShippingGremlin = this; }
@@ -3030,13 +3030,13 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            if (IsCurrentAnimation(AnimationEnum.ObjectAction1) && _sprBody.CurrentFrameAnimation.PlayCount == 1)
+            if (IsCurrentAnimation(AnimationEnum.Action_One) && _sprBody.CurrentFrameAnimation.PlayCount == 1)
             {
-                PlayAnimation(AnimationEnum.ObjectActionFinished);
+                PlayAnimation(AnimationEnum.Action_Finished);
                 PlayerManager.AllowMovement = true;
                 base.Talk(false);
             }
-            else if (IsCurrentAnimation(AnimationEnum.ObjectAction2) && _sprBody.CurrentFrameAnimation.PlayCount == 1)
+            else if (IsCurrentAnimation(AnimationEnum.Action_Two) && _sprBody.CurrentFrameAnimation.PlayCount == 1)
             {
                 PlayAnimation(AnimationEnum.ObjectIdle);
             }
@@ -3054,7 +3054,7 @@ namespace RiverHollow.Characters
         public override void Talk(bool facePlayer = false)
         {
             PlayerManager.AllowMovement = false;
-            _sprBody.PlayAnimation(AnimationEnum.ObjectAction1);
+            _sprBody.PlayAnimation(AnimationEnum.Action_One);
         }
 
         /// <summary>
@@ -3063,7 +3063,7 @@ namespace RiverHollow.Characters
         public override void StopTalking()
         {
             base.StopTalking();
-            _sprBody.PlayAnimation(AnimationEnum.ObjectAction2);
+            _sprBody.PlayAnimation(AnimationEnum.Action_Two);
         }
 
         public void OpenShipping()

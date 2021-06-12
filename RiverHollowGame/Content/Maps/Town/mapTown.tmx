@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="81">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="84">
  <properties>
   <property name="Background" value="UO-Stones"/>
   <property name="Outside" type="bool" value="true"/>
@@ -355,7 +355,7 @@
     <property name="ObjectID" type="int" value="26"/>
    </properties>
   </object>
-  <object id="58" name="Building" x="1170.08" y="659.666" width="124.5" height="137.5">
+  <object id="58" name="Building" x="770.58" y="755.166" width="124.5" height="137.5">
    <properties>
     <property name="BuildingID" type="int" value="11"/>
    </properties>
@@ -365,7 +365,7 @@
     <property name="BuildingID" type="int" value="10"/>
    </properties>
   </object>
-  <object id="69" name="Building" x="962.25" y="323" width="109.5" height="138">
+  <object id="69" name="Building" x="642.583" y="756" width="109.5" height="138">
    <properties>
     <property name="BuildingID" type="int" value="9"/>
    </properties>
@@ -385,7 +385,7 @@
     <property name="ObjectID" type="int" value="26"/>
    </properties>
   </object>
-  <object id="74" name="Floor" x="257.75" y="930.833" width="362" height="9.833">
+  <object id="74" name="Floor" x="257.75" y="930.833" width="602.636" height="9.833">
    <properties>
     <property name="ObjectID" type="int" value="26"/>
    </properties>
@@ -418,6 +418,21 @@
   <object id="80" name="Building" x="289.841" y="481.909" width="170.727" height="140.545">
    <properties>
     <property name="BuildingID" type="int" value="6"/>
+   </properties>
+  </object>
+  <object id="81" name="Floor" x="849.977" y="899.402" width="10.9997" height="25.833">
+   <properties>
+    <property name="ObjectID" type="int" value="26"/>
+   </properties>
+  </object>
+  <object id="82" name="Floor" x="691.5" y="896.833" width="10.9997" height="28.583">
+   <properties>
+    <property name="ObjectID" type="int" value="26"/>
+   </properties>
+  </object>
+  <object id="83" name="Floor" x="451.477" y="771.606" width="24.1361" height="9.51482">
+   <properties>
+    <property name="ObjectID" type="int" value="26"/>
    </properties>
   </object>
  </objectgroup>
