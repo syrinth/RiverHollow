@@ -395,15 +395,14 @@ namespace RiverHollow.Tile_Engine
             SetLayerVisibility(false);
         }
 
+        /// <summary>
+        /// Sets the layer visibility for what will be drawn in a pass.
+        /// </summary>
+        /// <param name="revealUpper">Whether we're drawing the upper layer or not</param>
         public void SetLayerVisibility(bool revealUpper)
         {
             foreach (TiledMapTileLayer l in _map.TileLayers)                            //Iterate over each TileLayer in the map
             {
-                if (l.Name.StartsWith("ent"))                                           //The layer is a dungeon entrancel layer. Don't touch.
-                {
-                    continue;
-                }
-
                 bool determinant = l.Name.Contains("Upper");
                 if (revealUpper)
                 {
@@ -411,10 +410,12 @@ namespace RiverHollow.Tile_Engine
                 }
                 else { l.IsVisible = !determinant; }
 
-                if (l.IsVisible && _bOutside)
-                {
-                    l.IsVisible = l.Name.Contains(GameCalendar.GetSeason());
-                }
+                //Used to switch the tile layer based on the current Season
+                //Currently disabled.
+                //if (l.IsVisible && IsOutside)
+                //{
+                //    l.IsVisible = l.Name.Contains(GameCalendar.GetSeason());
+                //}
             }
         }
 
