@@ -91,7 +91,7 @@
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:5][RequestIDs:58|68|79|130|131]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:5][RequestIDs:58|68|71|130|131]</Value>
     </Item>
   </Asset>
 </XnaContent>

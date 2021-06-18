@@ -23,8 +23,8 @@ namespace RiverHollow.Game_Managers
 
         public const float NORMAL_SCALE = 4f;
 
-        public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, Option_0, Option_1, Option_2, Option_3 };
-        public enum TextEntrySelectionEnum { None, VillageTalk, YesNo, Shop, Party };
+        public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, ShowRequests, Option_0, Option_1, Option_2, Option_3 };
+        public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Party };
         public enum TextEntryTriggerEnum { None, UseItem, ConfirmGift, EndDay, Exit, Donate }
 
         public enum RarityEnum { C, U, R, M };

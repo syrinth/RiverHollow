@@ -271,11 +271,11 @@
     </Item>
     <Item>
       <Key>67</Key>
-      <Value>[Type:Resource][Image:16-128]</Value>
+      <Value>[Type:Resource][Image:16-128][Sell:70]</Value>
     </Item>
     <Item>
       <Key>68</Key>
-      <Value>[Type:Resource][Image:32-128][ReqItems:67-2]</Value>
+      <Value>[Type:Resource][Image:32-128][ReqItems:67-2][Sell:150]</Value>
     </Item>
     <Item>
       <Key>69</Key>
@@ -287,7 +287,7 @@
     </Item>
     <Item>
       <Key>71</Key>
-      <Value>[Type:Resource][Image:96-128]</Value>
+      <Value>[Type:Resource][Image:96-128][Sell:50]</Value>
     </Item>
     <Item>
       <Key>72</Key>
@@ -527,7 +527,7 @@
     </Item>
     <Item>
       <Key>131</Key>
-      <Value>[Type:Consumable][Image:16-16][Sell:3000][CombatType:Helpful][Mana:20][ReqItems:5-1|22-3]</Value>
+      <Value>[Type:Consumable][Image:16-16][Sell:100][CombatType:Helpful][Mana:20][ReqItems:5-1|22-3]</Value>
     </Item>
     <Item>
       <Key>132</Key>

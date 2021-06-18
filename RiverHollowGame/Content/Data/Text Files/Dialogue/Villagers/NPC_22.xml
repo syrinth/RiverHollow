@@ -5,5 +5,21 @@
       <Key>Introduction</Key>
       <Value>[Text:Hello! Hello! I am Wagren, merchant and wizard extraordinaire!]</Value>
     </Item>
+    <Item>
+      <Key>Requests</Key>
+      <Value>[Text:Ah! I'm hoping you can help me. I'm looking for the following items!]</Value>
+    </Item>
+    <Item>
+      <Key>Selection</Key>
+      <Value>[Text:Aha! Welcome! How can I help you today?][Selection:MerchantTalk]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Text:I may be used to life on the road, but I'm always happy to arrive in a nice place such as this!][Default]</Value>
+    </Item>
+    <Item>
+      <Key>RequestsComplete</Key>
+      <Value>[Text:You've helped me enough for now!]</Value>
+    </Item>
   </Asset>
 </XnaContent>

@@ -133,5 +133,9 @@
       <Key>Selection_Buy</Key>
       <Value>[Text:Buy Items][TextVerb:Buy]</Value>
     </Item>
+    <Item>
+      <Key>Selection_Requests</Key>
+      <Value>[Text:Show Requests][TextVerb:ShowRequests]</Value>
+    </Item>
   </Asset>
 </XnaContent>

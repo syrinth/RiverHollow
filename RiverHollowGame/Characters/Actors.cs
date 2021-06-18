@@ -623,10 +623,10 @@ namespace RiverHollow.Characters
             _liSpokenKeys = new List<string>();
         }
 
-        public virtual TextEntry OpenRequests() { return null; }
         public virtual TextEntry Gift(Item item) { return null; }
         public virtual TextEntry JoinParty() { return null; }
         public virtual void OpenShop() { }
+        public virtual TextEntry OpenRequests() { return null; }
 
         public virtual void StopTalking() { ResetActorFace(); }
 
@@ -2432,13 +2432,15 @@ namespace RiverHollow.Characters
     public class Merchant : TravellingNPC
     {
         List<int> _liRequestItems;
-        List<Item> _liChosenItems;
+        public Dictionary<Item, bool> DiChosenItems;
+        private bool _bRequestsComplete = false;
+
         public Merchant(int index, Dictionary<string, string> stringData, bool loadanimations = true)
         {
             _eActorType = ActorEnum.Merchant;
 
             _liRequestItems = new List<int>();
-            _liChosenItems = new List<Item>();
+            DiChosenItems = new Dictionary<Item, bool>();
             ImportBasics(index, stringData, loadanimations);
 
             _bOnTheMap = false;
@@ -2466,7 +2468,7 @@ namespace RiverHollow.Characters
                     for (int i = 0; i < 3; i++)
                     {
                         int chosenValue = RHRandom.Instance.Next(0, copy.Count - 1);
-                        _liChosenItems.Add(DataManager.GetItem(copy[chosenValue]));
+                        DiChosenItems[DataManager.GetItem(copy[chosenValue])] = false;
                         copy.RemoveAt(chosenValue);
                     }
                    
@@ -2512,7 +2514,15 @@ namespace RiverHollow.Characters
         {
             TextEntry rv = null;
 
+            if (!_bRequestsComplete) { GUIManager.OpenMainObject(new HUDRequestWindow(_diDialogue["Requests"], this)); }
+            else { rv = _diDialogue["RequestsComplete"]; }
+
             return rv;
+        }
+
+        public void FinishRequests()
+        {
+            _bRequestsComplete = true;
         }
 
         public override void MoveToSpawn()

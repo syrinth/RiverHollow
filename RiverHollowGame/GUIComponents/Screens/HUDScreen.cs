@@ -2736,6 +2736,82 @@ namespace RiverHollow.GUIComponents.Screens
         }
     }
 
+    class HUDRequestWindow : GUIMainObject
+    {
+        Merchant _merchant;
+        List<GUIItemBox> _liRequestedItemBoxes;
+        public HUDRequestWindow(TextEntry requestText, Merchant m)
+        {
+            _winMain = SetMainWindow();
+
+            _merchant = m;
+
+            GUIText text = new GUIText(requestText.FormattedText);
+            text.SetText(text.ParseText(requestText.FormattedText, _winMain.MidWidth(), 3, true)[0]);
+            text.AnchorToInnerSide(_winMain, SideEnum.Top);
+
+            int edgeSpacing = ScaledTileSize;
+            int spacing = (_winMain.MidWidth() - (edgeSpacing * 2) - (ScaleIt(RECT_IMG.Width) * 3)) / 2;
+            _liRequestedItemBoxes = new List<GUIItemBox>();
+            foreach (KeyValuePair<Item, bool> kvp in _merchant.DiChosenItems)
+            {
+                GUIItemBox box = new GUIItemBox(kvp.Key);
+                if (kvp.Value) {
+                    box.Enable(false);
+                    box.SetColor(Color.Gray);
+                }
+
+                if (_liRequestedItemBoxes.Count == 0) { box.AnchorToInnerSide(_winMain, SideEnum.Left, edgeSpacing); }
+                else { box.AnchorAndAlignToObject(_liRequestedItemBoxes[_liRequestedItemBoxes.Count - 1], SideEnum.Right, SideEnum.Bottom, spacing); }
+
+                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key.ItemID, 1)) { box.SetColor(Color.Red); }
+
+                GUIMoneyDisplay money = new GUIMoneyDisplay(kvp.Key.SellPrice * 5);
+                money.AnchorAndAlignToObject(box, SideEnum.Bottom, SideEnum.CenterX, 10);
+
+                _liRequestedItemBoxes.Add(box);
+            }
+
+            AddControl(text);
+        }
+
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+
+            bool sold = false;
+            int givenRequests = 0;
+            foreach (GUIItemBox gib in _liRequestedItemBoxes)
+            {
+                if (!gib.Enabled) { givenRequests++; }
+                else if (gib.Contains(mouse))
+                {
+                    if (InventoryManager.HasItemInPlayerInventory(gib.BoxItem.ItemID, 1))
+                    {
+                        _merchant.DiChosenItems[gib.BoxItem] = true;
+                        InventoryManager.RemoveItemsFromInventory(gib.BoxItem.ItemID, 1);
+                        PlayerManager.AddMoney(gib.BoxItem.SellPrice * 5);
+                        gib.Enable(false);
+                        gib.SetColor(Color.Gray);
+                        givenRequests++;
+                        sold = true;
+                    }
+
+                    rv = true;
+                    break;
+                }
+            }
+
+            if (sold && givenRequests == 3)
+            {
+                PlayerManager.AddMoney(1000);
+                _merchant.FinishRequests();
+            }
+
+            return rv;
+        }
+    }
+
     class HUDNewTask : GUIObject
     {
         double _dTimer = 0;

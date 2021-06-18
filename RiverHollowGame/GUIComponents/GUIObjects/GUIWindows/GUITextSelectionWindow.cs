@@ -57,6 +57,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 case GameManager.TextEntrySelectionEnum.VillageTalk:
                     AddVillagerTalkOptions();
                     break;
+                case GameManager.TextEntrySelectionEnum.MerchantTalk:
+                    AddMerchantTalkOptions();
+                    break;
                 case GameManager.TextEntrySelectionEnum.YesNo:
                     AddYesNoOptions();
                     break;
@@ -84,6 +87,25 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 if (act.CanGiveGift) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Gift")); }
                 if (act.CanJoinParty && act.GetFriendshipLevel() >= 2) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Party")); }
                 if (_textEntry.HasTag("ShipGoods")) { liCommands.Add(DataManager.GetGameTextEntry("Selection_ShipGoods")); }
+                liCommands.Add(DataManager.GetGameTextEntry("Selection_NeverMind"));
+
+                AddOptions(liCommands);
+            }
+        }
+
+        /// <summary>
+        /// Adds the appropriate Merchant talk options
+        /// </summary>
+        private void AddMerchantTalkOptions()
+        {
+            if (GameManager.CurrentNPC != null)
+            {
+                TalkingActor act = CurrentNPC;
+                List<TextEntry> liCommands = new List<TextEntry> { DataManager.GetGameTextEntry("Selection_Talk") };
+
+                if (act.CanGiveGift) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Gift")); }
+                if (act.CanJoinParty && act.GetFriendshipLevel() >= 2) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Party")); }
+                liCommands.Add(DataManager.GetGameTextEntry("Selection_Requests"));
                 liCommands.Add(DataManager.GetGameTextEntry("Selection_NeverMind"));
 
                 AddOptions(liCommands);
@@ -241,6 +263,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 }
                 else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Gift)) { GUIManager.OpenMainObject(new HUDInventoryDisplay(DisplayTypeEnum.Gift)); }
                 else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Party)) { nextText = act.JoinParty(); }
+                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.ShowRequests)) { nextText = act.OpenRequests(); }
                 else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Buy)) { act.OpenShop(); }
                 else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Talk)) { nextText = act.GetDailyDialogue(); }
                 else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.ShipGoods)) { ((ShippingGremlin)GameManager.CurrentNPC).OpenShipping(); }
