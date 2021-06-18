@@ -106,6 +106,10 @@
       <Value>[Name:Shipping Gremlin]</Value>
     </Item>
     <Item>
+      <Key>Character_22</Key>
+      <Value>[Name:Wagren]</Value>
+    </Item>
+    <Item>
       <Key>Class_0</Key>
       <Value>[Name:Wizard][Description:Practitioners of the arcane arts, wizards excel at  handling a multitude of foes.]</Value>
     </Item>
@@ -423,7 +427,7 @@
     </Item>
     <Item>
       <Key>Building_20</Key>
-      <Value>[Name:General Store]</Value>
+      <Value>[Name:Market]</Value>
     </Item>
     <Item>
       <Key>Building_21</Key>

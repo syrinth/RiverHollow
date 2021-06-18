@@ -76,7 +76,8 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<int, Dictionary<string, string>> _diMonsterData;
         static Dictionary<int, Dictionary<string, string>> _diSummonData;
-        public static Dictionary<int, Villager> DiNPC { get; private set; }
+        public static Dictionary<int, Villager> DIVillagers { get; private set; }
+        public static Dictionary<int, Merchant> DIMerchants { get; private set; }
         static Dictionary<int, Dictionary<string, string>> _diActions;
 
         static Dictionary<int, Dictionary<string, string>> _diClasses;
@@ -296,23 +297,28 @@ namespace RiverHollow.Game_Managers
 
         private static void LoadNPCs()
         {
-            DiNPC = new Dictionary<int, Villager>();
+            DIMerchants = new Dictionary<int, Merchant>();
+            DIVillagers = new Dictionary<int, Villager>();
             foreach (KeyValuePair<int, Dictionary<string, string>> npcData in _diVillagerData)
             {
-                Villager n = null;
-
                 Dictionary<string, string> diData = _diVillagerData[npcData.Key];
                 switch (diData["Type"])
                 {
                     case "ShippingGremlin":
                         GameManager.ShippingGremlin = new ShippingGremlin(npcData.Key, diData);
-                        n = GameManager.ShippingGremlin;
+                        DIVillagers.Add(npcData.Key, GameManager.ShippingGremlin);
+                        break;
+                    case "Merchant":
+                        DIMerchants.Add(npcData.Key, new Merchant(npcData.Key, diData));
+                        break;
+
+                    case "Villager":
+                        DIVillagers.Add(npcData.Key, new Villager(npcData.Key, diData));
                         break;
                     default:
-                        n = new Villager(npcData.Key, diData);
                         break;
                 }
-                DiNPC.Add(npcData.Key, n);
+
             }
         }
         private static void LoadNPCSchedules(ContentManager Content)
@@ -529,7 +535,7 @@ namespace RiverHollow.Game_Managers
 
         public static string GetCharacterNameByIndex(int i)
         {
-            return DiNPC[i].Name;
+            return DIVillagers[i].Name;
         }
 
         public static Summon GetSummonByIndex(int id)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="85">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="86">
  <properties>
   <property name="MapType" value="Town"/>
   <property name="Outside" type="bool" value="true"/>
@@ -438,6 +438,11 @@
   <object id="84" name="WorldObject" x="562.197" y="724.886" width="10.94" height="9.8948">
    <properties>
     <property name="ObjectID" type="int" value="33"/>
+   </properties>
+  </object>
+  <object id="85" name="Building" x="754.417" y="581.25" width="124.5" height="137.5">
+   <properties>
+    <property name="BuildingID" type="int" value="20"/>
    </properties>
   </object>
  </objectgroup>

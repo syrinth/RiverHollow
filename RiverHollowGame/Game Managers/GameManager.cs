@@ -54,8 +54,7 @@ namespace RiverHollow.Game_Managers
         public enum ActorMovementStateEnum { Idle, Walking };
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum TaskTypeEnum { None, GroupSlay, Slay, Fetch, Talk, Build };
-        public enum ActorEnum { Actor, Adventurer, Monster, Villager, ShippingGremlin, Spirit, Summon};
-        public enum NPCTypeEnum { Villager, Worker, ShippingGremlin }
+        public enum ActorEnum { Actor, Merchant, Monster, ShippingGremlin, Spirit, Summon, Villager };
         public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade };
         public enum PotencyBonusEnum { None, Conditions, Summon};
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
@@ -92,7 +91,6 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Interaction Objects
-        public static Adventurer CurrentAdventurer;
         public static Merchandise CurrentMerch;
         public static Item CurrentItem;
         public static Spirit CurrentSpirit;
@@ -135,7 +133,6 @@ namespace RiverHollow.Game_Managers
 
         public static void ClearGMObjects()
         {
-            CurrentAdventurer = null;
             CurrentTriggerObject = null;
             CurrentItem = null;
             CurrentSpirit = null;

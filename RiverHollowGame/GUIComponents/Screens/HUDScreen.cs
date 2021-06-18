@@ -1468,7 +1468,7 @@ namespace RiverHollow.GUIComponents.Screens
                 List<GUIObject> vList;
                 vList = new List<GUIObject>();
 
-                foreach (Villager n in DataManager.DiNPC.Values)
+                foreach (Villager n in DataManager.DIVillagers.Values)
                 {
                     FriendshipBox f = new FriendshipBox(n, _gWindow.MidWidth() - GUIList.BTNSIZE);
 

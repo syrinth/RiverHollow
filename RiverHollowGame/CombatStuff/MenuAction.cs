@@ -507,7 +507,7 @@ namespace RiverHollow.CombatStuff
                     //Apply to all allies of the user
                     if (s.Equals("Allies"))
                     {
-                        if (_cmbtActionUser.IsActorType(ActorEnum.Adventurer))
+                        if (_cmbtActionUser.IsActorType(ActorEnum.Villager))
                         {
                             targets.AddRange(CombatManager.Party);
                         }
@@ -520,7 +520,7 @@ namespace RiverHollow.CombatStuff
                     //Apply to all enemies of the user
                     if (s.Equals("Enemies"))
                     {
-                        if (_cmbtActionUser.IsActorType(ActorEnum.Adventurer))
+                        if (_cmbtActionUser.IsActorType(ActorEnum.Villager))
                         {
                             targets.AddRange(CombatManager.Monsters);
 
@@ -886,7 +886,7 @@ namespace RiverHollow.CombatStuff
                             {
                                 CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.ChooseMoveTarget);
                             }
-                            else if (CombatManager.ActiveCharacter.IsActorType(ActorEnum.Adventurer))
+                            else if (CombatManager.ActiveCharacter.IsActorType(ActorEnum.Villager))
                             {
                                 CombatManager.GoToMainSelection();
                             }

@@ -33,7 +33,7 @@ namespace Database_Editor
         #endregion
 
         #region Tags
-        const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,ItemID,GoalItem,ItemReward,Collection,Makes,Processes,DWeap,DArmor,DHead,DWrist";
+        const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,ItemID,GoalItem,ItemReward,Collection,Makes,Processes,DWeap,DArmor,DHead,DWrist,RequestIDs";
         const string TAGS_FOR_WORLD_OBJECTS = "ObjectID,Wall,Floor,Resources,Place";
         const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         const string TAGS_FOR_CLASSES = "Class";
@@ -45,7 +45,7 @@ namespace Database_Editor
 
         const string ITEM_REF_TAGS = "ReqItems,Place";
         const string TASK_REF_TAGS = "GoalItem,ItemReward,BuildingID,BuildingRewardID";
-        const string CHARACTER_REF_TAGS = "Collection,Class,ShopData,HouseID,RequiredBuildingID";
+        const string CHARACTER_REF_TAGS = "Collection,Class,ShopData,HouseID,RequiredBuildingID,RequestIDs";
         const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID";
         const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
         const string SHOPDATA_REF_TAGS = "ItemID,BuildingID";
@@ -94,10 +94,15 @@ namespace Database_Editor
 
             InitComboBox<ItemEnum>(cbItemType);
             InitComboBox<ObjectTypeEnum>(cbWorldObjectType);
-            InitComboBox<NPCTypeEnum>(cbCharacterType);
             InitComboBox<TaskTypeEnum>(cbTaskType);
             InitComboBox<EditableCharacterDataEnum>(cbEditableCharData, false);
             InitComboBox<ActionEnum>(cbActionType);
+
+            cbCharacterType.Items.Clear();
+            cbCharacterType.Items.Add("Type:" + ActorEnum.Villager.ToString());
+            cbCharacterType.Items.Add("Type:" + ActorEnum.Merchant.ToString());
+            cbCharacterType.Items.Add("Type:" + ActorEnum.ShippingGremlin.ToString());
+            cbCharacterType.SelectedIndex = 0;
 
             _diTabIndices = new Dictionary<string, int>()
             {
@@ -305,7 +310,7 @@ namespace Database_Editor
         }
         private void LoadCharacterDataGrid()
         {
-            LoadGenericDatagrid(dgvCharacters, _diBasicXML[CHARACTER_XML_FILE], "colCharacterID", "colCharacterName", "Characters", _diTabIndices["Characters"]);
+            LoadGenericDatagrid(dgvCharacters, _diBasicXML[CHARACTER_XML_FILE], "colCharactersID", "colCharactersName", "Characters", _diTabIndices["Characters"]);
         }
         private void LoadClassDataGrid()
         {
@@ -892,8 +897,13 @@ namespace Database_Editor
         private void LoadCharacterInfo()
         {
             XMLData data = _diBasicXML[CHARACTER_XML_FILE][_diTabIndices["Characters"]];
-            LoadGenericDataInfo(data, tbCharacterName, tbCharacterID, dgCharacterTags);
-            cbCharacterType.SelectedIndex = (int)Util.ParseEnum<NPCTypeEnum>(data.GetTagValue("Type"));
+            LoadGenericDataInfo(data, tbCharacterName, tbCharacterID, dgvCharacterTags);
+
+            int selectedIndex = 0;
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Villager){ selectedIndex = 0; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Merchant){ selectedIndex = 1; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.ShippingGremlin) { selectedIndex = 2; }
+            cbCharacterType.SelectedIndex = selectedIndex;
         }
         private void LoadClassInfo()
         {
@@ -1183,7 +1193,7 @@ namespace Database_Editor
         }
         private void SaveCharacterInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[CHARACTER_XML_FILE], "Characters", "Character_", XMLTypeEnum.Character, tbCharacterName, tbCharacterID, cbCharacterType, dgvCharacters, dgCharacterTags, "colCharacterID", "colCharacterName", CHARACTER_REF_TAGS, "");
+            SaveXMLDataInfo(_diBasicXML[CHARACTER_XML_FILE], "Characters", "Character_", XMLTypeEnum.Character, tbCharacterName, tbCharacterID, cbCharacterType, dgvCharacters, dgvCharacterTags, "colCharactersID", "colCharactersName", CHARACTER_REF_TAGS, "");
         }
         private void SaveClassInfo(List<XMLData> liData)
         {
@@ -2315,6 +2325,7 @@ namespace Database_Editor
             else if (dgv == dgvActions) { AddContextMenuItem("Add New", AddNewAction, false); }
             else if (dgv == dgvBuildings) { AddContextMenuItem("Add New", AddNewBuilding, false); }
             else if (dgv == dgvCutscenes) { AddContextMenuItem("Add New", AddNewCutscene, false); }
+            else if (dgv == dgvCharacters) { AddContextMenuItem("Add New", AddNewCharacter, false); }
         }
 
         private void AddContextMenuItem(string text, EventHandler triggeredEvent, bool separator)
@@ -2384,6 +2395,12 @@ namespace Database_Editor
             tbCutsceneTriggers.Clear();
             tbCutsceneDetails.Clear();
             AddNewGenericXMLObject(tabCtl.TabPages["tabCutscenes"], "Cutscenes", dgvCutscenes, "colCutscenesID", "colCutscenesName", tbCutsceneName, tbCutsceneName, dgvCutsceneTags, "colCutsceneTags", null, null, defaultTags);
+        }
+        private void AddNewCharacter(object sender, EventArgs e)
+        {
+            SaveCharacterInfo(_diBasicXML[CHARACTER_XML_FILE]);
+            List<string> defaultTags = new List<string>() { "PortRow:1", "Idle:0-0-1-0-T", "Walk:0-0-1-0-T", "FirstArrival:0", "ArrivalPeriod:0" };
+            AddNewGenericXMLObject(tabCtl.TabPages["tabCharacters"], "Characters", dgvCharacters, "colCharactersID", "colCharactersName", tbCharacterName, tbCharacterName, dgvCharacterTags, "colCharacterTags", null, null, defaultTags);
         }
         #endregion
 

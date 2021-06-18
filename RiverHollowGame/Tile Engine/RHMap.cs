@@ -306,7 +306,7 @@ namespace RiverHollow.Tile_Engine
 
             if (CombatManager.InCombat)
             {
-                if (CombatManager.ActiveCharacter != null && CombatManager.ActiveCharacter.IsActorType(ActorEnum.Adventurer))
+                if (CombatManager.ActiveCharacter != null && CombatManager.ActiveCharacter.IsActorType(ActorEnum.Villager))
                 {
                     CombatManager.ActiveCharacter.BaseTile?.Draw(spriteBatch);
                 }
@@ -1331,19 +1331,7 @@ namespace RiverHollow.Tile_Engine
                         //Handles interacting with NPCs
                         foreach (WorldActor c in _liActors)
                         {
-                            if (c.IsActorType(ActorEnum.Adventurer))
-                            {
-                                int row = 0;
-                                int col = 0;
-                                Adventurer w = (Adventurer)c;
-                                if (w.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(w.CharCenter) &&
-                                    InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding(), 1, ref row, ref col, true))
-                                {
-                                    InventoryManager.AddItemToInventorySpot(DataManager.GetItem(w.TakeItem()), row, col);
-                                    rv = true;
-                                }
-                            }
-                            else if (c.IsActorType(ActorEnum.Villager) || c.IsActorType(ActorEnum.ShippingGremlin))
+                            if (c.IsActorType(ActorEnum.Villager) || c.IsActorType(ActorEnum.ShippingGremlin))
                             {
                                 Villager n = (Villager)c;
                                 if (n.CanGiveGift && InventoryManager.GetCurrentItem() != null &&
@@ -2903,9 +2891,9 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            if(DataManager.DiNPC[_iShopID].CurrentMapName == _sMap)
+            if(DataManager.DIVillagers[_iShopID].CurrentMapName == _sMap)
             {
-                if (MapManager.RetrieveTile(_iShopX, _iShopY).Contains(DataManager.DiNPC[_iShopID]))
+                if (MapManager.RetrieveTile(_iShopX, _iShopY).Contains(DataManager.DIVillagers[_iShopID]))
                 {
                     rv = true;
                 }
@@ -2916,9 +2904,9 @@ namespace RiverHollow.Tile_Engine
 
         internal void Talk()
         {
-            (DataManager.DiNPC[_iShopID]).SetShopOpenStatus(true);
-            (DataManager.DiNPC[_iShopID]).Talk();
-            (DataManager.DiNPC[_iShopID]).SetShopOpenStatus(false);
+            (DataManager.DIVillagers[_iShopID]).SetShopOpenStatus(true);
+            (DataManager.DIVillagers[_iShopID]).Talk();
+            (DataManager.DIVillagers[_iShopID]).SetShopOpenStatus(false);
         }
     }
 

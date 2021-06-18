@@ -313,7 +313,7 @@ namespace RiverHollow
             SoundManager.PlayBackgroundMusic();
 
             //Places NPCs on the map
-            foreach (Villager v in DataManager.DiNPC.Values)
+            foreach (Villager v in DataManager.DIVillagers.Values)
             {
                 if (v.LivesInTown)
                 {
@@ -334,10 +334,13 @@ namespace RiverHollow
             MissionManager.Rollover();
             PlayerManager.Rollover();
 
-            foreach (Villager n in DataManager.DiNPC.Values)
-            {
+            foreach (Villager n in DataManager.DIVillagers.Values) {
                 n.RollOver();
             }
+            foreach (Merchant m in DataManager.DIMerchants.Values) {
+                m.RollOver();
+            }
+
             MapManager.Rollover();
         }
 

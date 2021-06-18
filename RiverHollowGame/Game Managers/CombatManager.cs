@@ -221,7 +221,7 @@ namespace RiverHollow.Game_Managers
                         RHTile newTile = BattleMap.GetTileByPixelPosition(ActiveCharacter.Position);
                         ActiveCharacter.SetBaseTile(newTile, false);
 
-                        if (ActiveCharacter.IsActorType(ActorEnum.Adventurer) || ActiveCharacter == PlayerManager.World)
+                        if (ActiveCharacter.IsActorType(ActorEnum.Villager) || ActiveCharacter == PlayerManager.World)
                         {
                             List<Item> tileItems = _liDroppedItems.FindAll(item => newTile.Rect.Contains(item.Position));
 
@@ -237,7 +237,7 @@ namespace RiverHollow.Game_Managers
 
                         if (!CheckForForcedEndOfTurn())
                         {
-                            if (ActiveCharacter.IsActorType(ActorEnum.Adventurer))
+                            if (ActiveCharacter.IsActorType(ActorEnum.Villager))
                             {
                                 GoToMainSelection();
                             }
@@ -279,7 +279,7 @@ namespace RiverHollow.Game_Managers
             }
             if (newPhase == CmbtPhaseEnum.PerformAction || newPhase == CmbtPhaseEnum.Moving)
             {
-                if (ActiveCharacter != null && ActiveCharacter.IsActorType(ActorEnum.Adventurer) && GameManager.IsPaused())
+                if (ActiveCharacter != null && ActiveCharacter.IsActorType(ActorEnum.Villager) && GameManager.IsPaused())
                 {
                     GameManager.Unpause();
                 }
@@ -562,7 +562,7 @@ namespace RiverHollow.Game_Managers
                 {
                     foreach (RHTile t in ActiveCharacter.BaseTile.GetAdjacentTiles())
                     {
-                        if (t.HasCombatant() && t.Character.IsActorType(ActorEnum.Adventurer))
+                        if (t.HasCombatant() && t.Character.IsActorType(ActorEnum.Villager))
                         {
                             gottaMove = false;
                             SelectedAction = c;
@@ -618,7 +618,7 @@ namespace RiverHollow.Game_Managers
             {
                 foreach (RHTile t in ActiveCharacter.BaseTile.GetAdjacentTiles())
                 {
-                    if (t.HasCombatant() && t.Character.IsActorType(ActorEnum.Adventurer))
+                    if (t.HasCombatant() && t.Character.IsActorType(ActorEnum.Villager))
                     {
                         SelectedTile = t;
                         SelectedAction = ActiveCharacter.GetCurrentSpecials()[0];
@@ -757,7 +757,7 @@ namespace RiverHollow.Game_Managers
         /// <returns></returns>
         public static bool OnSameTeam(CombatActor actor)
         {
-            return (ActiveCharacter.IsActorType(ActorEnum.Adventurer) && actor.IsActorType(ActorEnum.Adventurer)) || (ActiveCharacter.IsActorType(ActorEnum.Monster) && actor.IsActorType(ActorEnum.Monster));
+            return (ActiveCharacter.IsActorType(ActorEnum.Villager) && actor.IsActorType(ActorEnum.Villager)) || (ActiveCharacter.IsActorType(ActorEnum.Monster) && actor.IsActorType(ActorEnum.Monster));
         }
 
         public static void CheckTileForActiveHazard(CombatActor c)

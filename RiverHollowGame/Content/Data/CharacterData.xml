@@ -87,7 +87,11 @@
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:ShippingGremlin][PortRow:3][HomeMap:mapTown][InTown]</Value>
+      <Value>[Type:ShippingGremlin][PortRow:3][HouseID:20][InTown]</Value>
+    </Item>
+    <Item>
+      <Key>22</Key>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:5][RequestIDs:58|68|79|130|131]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -35,10 +35,10 @@ namespace RiverHollow.Characters
         protected const float EYE_DEPTH = 0.001f;
         protected const float HAIR_DEPTH = 0.003f;
 
-        protected static string _sVillagerFolder = DataManager.FOLDER_ACTOR + @"Villagers\";
-        protected static string _sAdventurerFolder = DataManager.FOLDER_ACTOR + @"Adventurers\";
+        protected static string _sMerchantFolder = DataManager.FOLDER_ACTOR + @"Merchants\";
         protected static string _sPortraitFolder = DataManager.FOLDER_ACTOR + @"Portraits\";
-        protected static string _sNPsCFolder = DataManager.FOLDER_ACTOR + @"NPCs\";
+        protected static string _sNPCFolder = DataManager.FOLDER_ACTOR + @"NPCs\";
+        protected static string _sSpiritFolder = DataManager.FOLDER_ACTOR + @"Spirits\";
 
         protected ActorMovementStateEnum _eMovementState = ActorMovementStateEnum.Idle;
 
@@ -594,7 +594,7 @@ namespace RiverHollow.Characters
         }
     }
 
-    public class TalkingActor : WorldActor
+    public abstract class TalkingActor : WorldActor
     {
         protected const int PortraitWidth = 160;
         protected const int PortraitHeight = 192;
@@ -611,7 +611,7 @@ namespace RiverHollow.Characters
 
         protected bool _bHasTalked;
 
-        public bool CanGiveGift = false;
+        public bool CanGiveGift = true;
         public bool CanJoinParty = false;
 
         protected List<string> _liSpokenKeys;
@@ -623,6 +623,7 @@ namespace RiverHollow.Characters
             _liSpokenKeys = new List<string>();
         }
 
+        public virtual TextEntry OpenRequests() { return null; }
         public virtual TextEntry Gift(Item item) { return null; }
         public virtual TextEntry JoinParty() { return null; }
         public virtual void OpenShop() { }
@@ -1575,7 +1576,6 @@ namespace RiverHollow.Characters
 
         public ClassedCombatant() : base()
         {
-            _eActorType = ActorEnum.Adventurer;
             _classLevel = 1;
 
             _liGearSlots = new List<GearSlot>();
@@ -1734,18 +1734,109 @@ namespace RiverHollow.Characters
         }
     }
    
-    public class Villager : ClassedCombatant
+    public class TravellingNPC : ClassedCombatant
     {
         protected int _iIndex;
-        public int ID  => _iIndex;
-        protected int _iHouseBuildingID = -1;
+        public int ID => _iIndex;
+
         protected int _iTotalMoneyEarnedReq = -1;
+
+        protected int _iDaysToFirstArrival = 0;
+        protected int _iArrivalPeriod = 0;
+        protected int _iNextArrival = -1;
+
+        public bool Introduced = false;
+
+        protected virtual void ImportBasics(int index, Dictionary<string, string> stringData, bool loadanimations = true)
+        {
+            _iIndex = index;
+
+            Util.AssignValue(ref _bHover, "Hover", stringData);
+
+            _diDialogue = DataManager.GetNPCDialogue(_iIndex);
+            DataManager.GetTextData("Character", _iIndex, ref _sName, "Name");
+
+            if (stringData.ContainsKey("Class"))
+            {
+                SetClass(DataManager.GetClassByIndex(int.Parse(stringData["Class"])));
+                AssignStartingGear();
+            }
+            else { SetClass(new CharacterClass()); }
+
+            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Villager", _iIndex.ToString("00"));
+
+            if (loadanimations)
+            {
+                List<AnimationData> liAnimationData;
+                if (stringData.ContainsKey("Class")) { liAnimationData = LoadWorldAndCombatAnimations(stringData); }
+                else { liAnimationData = LoadWorldAnimations(stringData); }
+
+                LoadSpriteAnimations(ref _sprBody, liAnimationData, _sNPCFolder + "NPC_" + _iIndex.ToString("00"));
+                PlayAnimationVerb(VerbEnum.Idle);
+            }
+
+            _bOnTheMap = !stringData.ContainsKey("Inactive");
+
+
+            Util.AssignValue(ref _iDaysToFirstArrival, "FirstArrival", stringData);
+            Util.AssignValue(ref _iArrivalPeriod, "ArrivalPeriod", stringData);
+        }
+
+        public virtual void RollOver() { }
+
+        #region Travel Methods
+        /// <summary>
+        /// Counts down the days until the Villager's first arrival, or
+        /// time to the next arrival if they do not live in town.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool HandleTravelTiming()
+        {
+            bool rv = false;
+
+            if (_iDaysToFirstArrival > 0)
+            {
+                rv = TravelTimingHelper(ref _iDaysToFirstArrival);
+            }
+            else if (_iNextArrival > 0)
+            {
+                rv = TravelTimingHelper(ref _iNextArrival);
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Given a timer, subtract one from the elapsed time and, if it has become 0
+        /// reset the time to next arrival.
+        /// </summary>
+        /// <param name="arrivalPeriod"></param>
+        /// <returns></returns>
+        private bool TravelTimingHelper(ref int arrivalPeriod)
+        {
+            bool rv = --arrivalPeriod == 0;
+            if (rv)
+            {
+                _iNextArrival = _iArrivalPeriod;
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Removes the NPC from the current map and moves them back
+        /// to their home map and back to their spawn point.
+        /// </summary>
+        public virtual void MoveToSpawn() { }
+        #endregion
+    }
+
+    public class Villager : TravellingNPC
+    {
+        protected int _iHouseBuildingID = -1;
         protected List<int> _liRequiredBuildingIDs;
-        protected NPCTypeEnum _eNPCType;
-        public NPCTypeEnum NPCType => _eNPCType;
 
         protected Dictionary<int, bool> _diCollection;
-        public bool Introduced = false;
 
         private bool _bCanMarry = false;
         public bool CanBeMarried => _bCanMarry;
@@ -1756,10 +1847,6 @@ namespace RiverHollow.Characters
 
         protected bool _bLivesInTown = false;
         public bool LivesInTown => _bLivesInTown;
-
-        private int _iDaysToFirstArrival = 0;
-        private int _iArrivalPeriod = 0;
-        private int _iNextArrival = -1;
 
         protected Dictionary<string, List<Dictionary<string, string>>> _diCompleteSchedule;         //Every day with a list of KVP Time/GoToLocations
         List<KeyValuePair<string, PathData>> _liTodayPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
@@ -1786,56 +1873,16 @@ namespace RiverHollow.Characters
         public Villager(int index, Dictionary<string, string> stringData, bool loadanimations = true): this()
         {
             _eActorType = ActorEnum.Villager;
+            _liRequiredBuildingIDs = new List<int>();
             _diCompleteSchedule = new Dictionary<string, List<Dictionary<string, string>>>();
             _iScheduleIndex = 0;
-            _iIndex = index;
 
-            Util.AssignValue(ref _bHover, "Hover", stringData);
-
-            ImportBasics(stringData, loadanimations);
-            CanGiveGift = true;
+            ImportBasics(index, stringData, loadanimations);
         }
 
-        protected void ImportBasics(Dictionary<string, string> stringData, bool loadanimations = true)
+        protected override void ImportBasics(int index, Dictionary<string, string> stringData, bool loadanimations = true)
         {
-            _liRequiredBuildingIDs = new List<int>();
-            _diDialogue = DataManager.GetNPCDialogue(_iIndex);
-            DataManager.GetTextData("Character", _iIndex, ref _sName, "Name");
-
-            Util.AssignValue(ref _eNPCType, "Type", stringData);
-
-            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Villager", _iIndex.ToString("00"));
-
-            if (stringData.ContainsKey("Class"))
-            {
-                SetClass(DataManager.GetClassByIndex(int.Parse(stringData["Class"])));
-                AssignStartingGear();
-            }
-            else { SetClass(new CharacterClass()); }
-
-            if (loadanimations)
-            {
-                List<AnimationData> liAnimationData;
-                if (stringData.ContainsKey("Class")) { liAnimationData = LoadWorldAndCombatAnimations(stringData); }
-                else { liAnimationData = LoadWorldAnimations(stringData); }
-
-                LoadSpriteAnimations(ref _sprBody, liAnimationData, _sVillagerFolder + "NPC_" + _iIndex.ToString("00"));
-                PlayAnimationVerb(VerbEnum.Idle);
-            }
-
-            _bOnTheMap = !stringData.ContainsKey("Inactive");
-
-            Util.AssignValue(ref _iShopIndex, "ShopData", stringData);
-            Util.AssignValue(ref _bCanMarry, "CanMarry", stringData);
-            CanJoinParty = _bCanMarry;
-
-            Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
-            Util.AssignValue(ref _iTotalMoneyEarnedReq, "TotalMoneyEarnedReq", stringData);
-
-            Util.AssignValue(ref _bLivesInTown, "InTown", stringData);
-            Util.AssignValue(ref _iDaysToFirstArrival, "FirstArrival", stringData);
-            Util.AssignValue(ref _iArrivalPeriod, "ArrivalPeriod", stringData);
-
+            base.ImportBasics(index, stringData, loadanimations);
 
             if (stringData.ContainsKey("RequiredBuildingID"))
             {
@@ -1845,6 +1892,16 @@ namespace RiverHollow.Characters
                     _liRequiredBuildingIDs.Add(int.Parse(i));
                 }
             }
+
+            Util.AssignValue(ref _iShopIndex, "ShopData", stringData);
+            Util.AssignValue(ref _bCanMarry, "CanMarry", stringData);
+
+            CanJoinParty = _bCanMarry;
+
+            Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
+            Util.AssignValue(ref _iTotalMoneyEarnedReq, "TotalMoneyEarnedReq", stringData);
+
+            Util.AssignValue(ref _bLivesInTown, "InTown", stringData);
 
             if (stringData.ContainsKey("Collection"))
             {
@@ -1913,6 +1970,22 @@ namespace RiverHollow.Characters
             }
         }
 
+        public override void RollOver()
+        {
+            if (LivesInTown || HandleTravelTiming())
+            {
+                ClearPath();
+                MoveToSpawn();
+                CalculatePathing();
+
+                //Reset on Monday
+                if (GameCalendar.DayOfWeek == 0)
+                {
+                    CanGiveGift = true;
+                }
+            }
+        }
+
         /// <summary>
         /// Returns the initial text for when the Actor is first talked to.
         /// </summary>
@@ -1945,43 +2018,14 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        #region Movement methods
-        /// <summary>
-        /// Counts down the days until the Villager's first arrival, or
-        /// time to the next arrival if they do not live in town.
-        /// </summary>
-        /// <returns></returns>
-        public bool HandleTravelTiming()
+        #region Travel Methods
+        public override bool HandleTravelTiming()
         {
             bool rv = false;
 
             if (!_bLivesInTown)
             {
-                if (_iDaysToFirstArrival > 0)
-                {
-                    rv = TravelTimingHelper(ref _iDaysToFirstArrival);
-                }
-                else if (_iNextArrival > 0)
-                {
-                    rv = TravelTimingHelper(ref _iNextArrival);
-                }
-            }
-
-            return rv;
-        }
-
-        /// <summary>
-        /// Given a timer, subtract one from the elapsed time and, if it has become 0
-        /// reset the time to next arrival.
-        /// </summary>
-        /// <param name="arrivalPeriod"></param>
-        /// <returns></returns>
-        private bool TravelTimingHelper(ref int arrivalPeriod)
-        {
-            bool rv = --arrivalPeriod == 0;
-            if (rv)
-            {
-                _iNextArrival = _iArrivalPeriod;
+                rv = base.HandleTravelTiming();
             }
 
             return rv;
@@ -2040,7 +2084,7 @@ namespace RiverHollow.Characters
         /// Otherwise, they spawn in the Inn.
         /// </summary>
         /// <returns>The string name of the map to put the NPC on</returns>
-        protected virtual string GetSpawnMapName()
+        protected string GetSpawnMapName()
         {
             string rv = string.Empty;
 
@@ -2055,7 +2099,7 @@ namespace RiverHollow.Characters
         /// Removes the NPC from the current map and moves them back
         /// to their home map and back to their spawn point.
         /// </summary>
-        public void MoveToSpawn()
+        public override void MoveToSpawn()
         {
             _bOnTheMap = true;
             PlayerManager.RemoveFromParty(this);
@@ -2211,20 +2255,9 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void RollOver()
+        public override void OpenShop()
         {
-            if (LivesInTown || HandleTravelTiming())
-            {
-                ClearPath();
-                MoveToSpawn();
-                CalculatePathing();
-
-                //Reset on Monday
-                if (GameCalendar.DayOfWeek == 0)
-                {
-                    CanGiveGift = true;
-                }
-            }
+            GUIManager.OpenMainObject(new HUDPurchaseItems(GameManager.DIShops[_iShopIndex].FindAll(m => m.Unlocked)));
         }
 
         protected bool CheckTaskLog(ref TextEntry taskEntry)
@@ -2317,10 +2350,6 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        public override void OpenShop() {
-            GUIManager.OpenMainObject(new HUDPurchaseItems(GameManager.DIShops[_iShopIndex].FindAll(m => m.Unlocked)));
-        }
-
         /// <summary>
         /// Override for CombatActor's GoToIdle method to prevent checking against stats
         /// </summary>
@@ -2329,9 +2358,9 @@ namespace RiverHollow.Characters
             PlayAnimationVerb(VerbEnum.Idle);
         }
 
-        public NPCData SaveData()
+        public VillagerData SaveData()
         {
-            NPCData npcData = new NPCData()
+            VillagerData npcData = new VillagerData()
             {
                 npcID = ID,
                 arrived = LivesInTown,
@@ -2348,7 +2377,7 @@ namespace RiverHollow.Characters
 
             return npcData;
         }
-        public void LoadData(NPCData data)
+        public void LoadData(VillagerData data)
         {
             Introduced = data.introduced;
             _bLivesInTown = data.arrived;
@@ -2364,20 +2393,11 @@ namespace RiverHollow.Characters
                 _diDialogue[s].Spoken(this);
             }
 
-            LoadCollection(data.collection);
-        }
-
-        /// <summary>
-        /// Iterates through the already loaded list of collection keys, then assigns the saved value from teh given data.
-        /// </summary>
-        /// <param name="data"></param>
-        protected void LoadCollection(List<bool> data)
-        {
             int index = 0;
             List<int> keys = new List<int>(_diCollection.Keys);
             foreach (int key in keys)
             {
-                _diCollection[key] = data[index++];
+                _diCollection[key] = data.collection[index++];
             }
         }
 
@@ -2405,278 +2425,130 @@ namespace RiverHollow.Characters
         }
     }
 
-    public class Adventurer : ClassedCombatant
+    /// <summary>
+    /// The Merchant is a class of Actor that appear periodically to both sell items
+    /// to the player character as well as requesting specific items at a premium.
+    /// </summary>
+    public class Merchant : TravellingNPC
     {
-        #region Properties
-        private enum AdventurerStateEnum { Idle, InParty, OnMission, AddToParty };
-        private AdventurerStateEnum _eState;
-        public AdventurerTypeEnum WorkerType { get; private set; }
-        protected int _iPersonalID;
-        public int PersonalID { get => _iPersonalID; }
-        protected int _iID;
-        public int WorkerID { get => _iID; }
-        protected string _sAdventurerType;
-        public Building Building { get; private set; }
-        protected int _iDailyFoodReq;
-        protected int _iCurrFood;
-        protected int _iDailyItemID;
-        public int DailyItemID => _iDailyItemID;
-        protected Item _heldItem;
-        protected int _iMood;
-        private int _iResting;
-        public int Mood { get => _iMood; }
-        public Mission CurrentMission { get; private set; }
-
-        public override bool Active => _eState == AdventurerStateEnum.Idle;
-        #endregion
-
-        public Adventurer(Dictionary<string, string> data, int id)
+        List<int> _liRequestItems;
+        List<Item> _liChosenItems;
+        public Merchant(int index, Dictionary<string, string> stringData, bool loadanimations = true)
         {
-            _iID = id;
-            _iPersonalID = PlayerManager.GetTotalWorkers();
-            _eActorType = ActorEnum.Adventurer;
-            ImportBasics(data, id);
+            _eActorType = ActorEnum.Merchant;
 
-            SetClass(DataManager.GetClassByIndex(_iID));
-            AssignStartingGear();
-            _sAdventurerType = CharacterClass.Name;
+            _liRequestItems = new List<int>();
+            _liChosenItems = new List<Item>();
+            ImportBasics(index, stringData, loadanimations);
 
-            _iCurrFood = 0;
-            _heldItem = null;
-            _iMood = 0;
-
-            _eState = AdventurerStateEnum.Idle;
-
-            _sName = _sAdventurerType.Substring(0, 1);
+            _bOnTheMap = false;
         }
 
-        protected void ImportBasics(Dictionary<string, string> data, int id)
+        protected override void ImportBasics(int index, Dictionary<string, string> stringData, bool loadanimations = true)
         {
-            _iID = id;
+            base.ImportBasics(index, stringData, loadanimations);
 
-            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Adventurer", id.ToString("00"));
-            //_sPortrait = _sPortraitFolder + "WizardPortrait";
-
-            WorkerType = Util.ParseEnum<AdventurerTypeEnum>(data["Type"]);
-            _iDailyItemID = int.Parse(data["ItemID"]);
-            _iDailyFoodReq = int.Parse(data["Food"]);
-
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), _sAdventurerFolder + "Adventurer_" + _iID);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
-        {
-            if (_eState == AdventurerStateEnum.Idle || _eState == AdventurerStateEnum.AddToParty || (CombatManager.InCombat && _eState == AdventurerStateEnum.InParty))
+            foreach(string s in Util.FindParams(stringData["RequestIDs"]))
             {
-                base.Draw(spriteBatch, useLayerDepth);
-                if (_heldItem != null)
+                _liRequestItems.Add(int.Parse(s));
+            }
+        }
+
+        public override void RollOver()
+        {
+            if (!_bOnTheMap)
+            {
+                if (HandleTravelTiming())
                 {
-                    _heldItem.Draw(spriteBatch, new Rectangle(Position.ToPoint(), new Point(32, 32)), true);
+                    MoveToSpawn();
+
+                    List<int> copy = new List<int>(_liRequestItems);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        int chosenValue = RHRandom.Instance.Next(0, copy.Count - 1);
+                        _liChosenItems.Add(DataManager.GetItem(copy[chosenValue]));
+                        copy.RemoveAt(chosenValue);
+                    }
+                   
+                    //ClearPath();
+                    //CalculatePathing();
+
+                    CanGiveGift = true;
                 }
             }
+            else
+            {
+                _bOnTheMap = false;
+                CurrentMap?.RemoveCharacterImmediately(this);
+            }
         }
 
-        public override bool CollisionContains(Point mouse)
-        {
-            bool rv = false;
-            if (_eState == AdventurerStateEnum.Idle)
-            {
-                rv = base.CollisionContains(mouse);
-            }
-            return rv;
-        }
-        public override bool CollisionIntersects(Rectangle rect)
-        {
-            bool rv = false;
-            if (_eState == AdventurerStateEnum.Idle)
-            {
-                rv = base.CollisionIntersects(rect);
-            }
-            return rv;
-        }
-
-        //public override string GetDialogEntry(string entry)
-        //{
-        //    return Util.ProcessText(DataManager.GetAdventurerDialogue(_iID, entry));
-        //}
-        
+        /// <summary>
+        /// Returns the initial text for when the Actor is first talked to.
+        /// </summary>
+        /// <returns>The text string to display</returns>
         public override TextEntry GetOpeningText()
         {
-            return new TextEntry();//Name + ": " + DataManager.GetAdventurerDialogue(_iID, "Selection");
-        }
+            TextEntry rv = null;
 
-        public override void StopTalking()
-        {
-            if (_eState == AdventurerStateEnum.AddToParty)
+            if (!Introduced)
             {
-                _eState = AdventurerStateEnum.InParty;
-                PlayerManager.AddToParty(this);
+                rv = GetDialogEntry("Introduction");
+                Introduced = true;
             }
-        }
-
-        public int TakeItem()
-        {
-            int giveItem = -1;
-            if (_heldItem != null)
+            else
             {
-                giveItem = _heldItem.ItemID;
-                _heldItem = null;
-            }
-            return giveItem;
-        }
-
-        public int WhatAreYouHolding()
-        {
-            if (_heldItem != null)
-            {
-                return _heldItem.ItemID;
-            }
-            return -1;
-        }
-
-        public void SetBuilding(Building b)
-        {
-            Building = b;
-        }
-
-        /// <summary>
-        /// Called on rollover, if the WorldAdventurer is in a rest state, subtract one
-        /// from the int. If they are currently on a mission, but the mission has been 
-        /// completed by the MissionManager's rollover method, reset the state to idle,
-        /// null the mission, and set _iResting to be half of the runtime of the Mission.
-        /// </summary>
-        /// <returns>True if the WorldAdventurer should make their daily item.</returns>
-        public bool Rollover()
-        {
-            bool rv = false;
-
-            if (_iResting > 0) { _iResting--; }
-
-            switch(_eState) {
-                case AdventurerStateEnum.Idle:
-                    _iCurrentHP = MaxHP;
-                    rv = true;
-                    break;
-                case AdventurerStateEnum.InParty:
-                    if (GameManager.AutoDisband)
-                    {
-                        _eState = AdventurerStateEnum.Idle;
-                    }
-                    break;
-                case AdventurerStateEnum.OnMission:
-                    if (CurrentMission.Completed())
-                    {
-                        _eState = AdventurerStateEnum.Idle;
-                        _iResting = CurrentMission.DaysToComplete / 2;
-                        CurrentMission = null;
-                    }
-                    break;
+                if (!_bHasTalked) { rv = GetDailyDialogue(); }
+                else
+                {
+                    rv = _diDialogue["Selection"];
+                }
             }
 
             return rv;
         }
 
-        /// <summary>
-        /// Creates the worers daily item in the inventory of the building's container.
-        /// Need to set the InventoryManager to look at it, then clear it.
-        /// </summary>
-        public void MakeDailyItem()
+        public override TextEntry OpenRequests()
         {
-            if (_iDailyItemID != -1)
-            {
-                InventoryManager.InitContainerInventory(Building.BuildingChest.Inventory);
-                InventoryManager.AddToInventory(_iDailyItemID, 1, false);
-                InventoryManager.ClearExtraInventory();
-            }
-        }
-
-        public string GetName()
-        {
-            return _sName;
-        }
-
-        /// <summary>
-        /// Assigns the WorldAdventurer to the given mission.
-        /// </summary>
-        /// <param name="m">The mission they are on</param>
-        public void AssignToMission(Mission m)
-        {
-            CurrentMission = m;
-            _eState = AdventurerStateEnum.OnMission;
-        }
-
-        /// <summary>
-        /// Cancels the indicated mission, returning the adventurer to their
-        /// home building. Does not get called unless a mission has been canceled.
-        /// </summary>
-        public void EndMission()
-        {
-            _iResting = CurrentMission.DaysToComplete / 2;
-            CurrentMission = null;
-        }
-
-        /// <summary>
-        /// Gets a string representation of the WorldAdventurers current state
-        /// </summary>
-        public string GetStateText()
-        {
-            string rv = string.Empty;
-
-            switch (_eState) {
-                case AdventurerStateEnum.Idle:
-                    rv = "Idle";
-                    break;
-                case AdventurerStateEnum.InParty:
-                    rv = "In Party";
-                    break;
-                case AdventurerStateEnum.OnMission:
-                    rv = "On Mission \"" + CurrentMission.Name + "\" days left: " + (CurrentMission.DaysToComplete - CurrentMission.DaysFinished).ToString();
-                    break;
-            }
+            TextEntry rv = null;
 
             return rv;
         }
 
-        /// <summary>
-        /// WorldAdventurers are only available for missions if they're not on
-        /// a mission and they are not currently in a resting state.
-        /// </summary>
-        public bool AvailableForMissions()
+        public override void MoveToSpawn()
         {
-            return (_eState != AdventurerStateEnum.OnMission && _iResting == 0);
+            _bOnTheMap = true;
+
+            CurrentMapName = MapManager.MarketMap.Name;
+
+            Position = Util.SnapToGrid(MapManager.MarketMap.GetCharacterSpawn("Merchant"));
+            MapManager.MarketMap.AddCharacterImmediately(this);
         }
 
-        public WorkerData SaveAdventurerData()
+        public MerchantData SaveData()
         {
-            WorkerData workerData = new WorkerData
+            MerchantData npcData = new MerchantData()
             {
-                workerID = this.WorkerID,
-                PersonalID = this.PersonalID,
-                advData = base.SaveClassedCharData(),
-                mood = this.Mood,
-                name = this.Name,
-                heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID,
-                state = (int)_eState
+                npcID = ID,
+                arrivalDelay = _iDaysToFirstArrival,
+                introduced = Introduced,
+                spokenKeys = _liSpokenKeys
             };
 
-            return workerData;
+            return npcData;
         }
-        public void LoadAdventurerData(WorkerData data)
+        public void LoadData(MerchantData data)
         {
-            _iID = data.workerID;
-            _iPersonalID = data.PersonalID;
-            _iMood = data.mood;
-            _sName = data.name;
-            _heldItem = DataManager.GetItem(data.heldItemID);
-            _eState = (AdventurerStateEnum)data.state;
+            Introduced = data.introduced;
+            _iDaysToFirstArrival = data.arrivalDelay;
 
-            base.LoadClassedCharData(data.advData);
-
-            if (_eState == AdventurerStateEnum.InParty) {
-                PlayerManager.AddToParty(this);
+            foreach (string s in data.spokenKeys)
+            {
+                _diDialogue[s].Spoken(this);
             }
         }
     }
+
     public class PlayerCharacter : ClassedCombatant
     {
         AnimatedSprite _sprEyes;
@@ -2890,7 +2762,7 @@ namespace RiverHollow.Characters
             _iBodyHeight = TileSize + 2;
             List<AnimationData> liData = new List<AnimationData>();
             AddToAnimationsList(ref liData, DataManager.DiSpiritInfo[_iID], VerbEnum.Idle);
-            LoadSpriteAnimations(ref _sprBody, liData, _sNPsCFolder + "Spirit_" + _iID);
+            LoadSpriteAnimations(ref _sprBody, liData, _sNPCFolder + "Spirit_" + _iID);
         }
 
         public override void Update(GameTime gTime)
@@ -3010,14 +2882,9 @@ namespace RiverHollow.Characters
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
             DataManager.GetTextData("Character", _iIndex, ref _sName, "Name");
 
-            CurrentMapName = MapManager.HomeMap;
-            //if (stringData.ContainsKey("HomeMap"))
-            //{
-            //    _iHouseBuildingID = stringData["HomeMap"];
-            //    CurrentMapName = _iHouseBuildingID;
-            //}
+            Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
 
-            _sprBody = new AnimatedSprite(_sVillagerFolder + "NPC_" + _iIndex.ToString("00"));
+            _sprBody = new AnimatedSprite(_sNPCFolder + "NPC_" + _iIndex.ToString("00"));
             _sprBody.AddAnimation(AnimationEnum.ObjectIdle, 0, 0, _iBodyWidth, _iBodyHeight);
             _sprBody.AddAnimation(AnimationEnum.Action_One, 32, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);
             _sprBody.AddAnimation(AnimationEnum.Action_Finished, 128, 0, _iBodyWidth, _iBodyHeight);
@@ -3091,11 +2958,6 @@ namespace RiverHollow.Characters
             _arrInventory = new Item[_iRows, _iCols];
 
             return val;
-        }
-
-        protected override string GetSpawnMapName()
-        {
-            return "mapTown";
         }
     }
  
@@ -3189,5 +3051,281 @@ namespace RiverHollow.Characters
         }
 
         public override bool IsSummon() { return true; }
+    }
+
+    public class Adventurer : ClassedCombatant
+    {
+        #region Properties
+        private enum AdventurerStateEnum { Idle, InParty, OnMission, AddToParty };
+        private AdventurerStateEnum _eState;
+        public AdventurerTypeEnum WorkerType { get; private set; }
+        protected int _iPersonalID;
+        public int PersonalID { get => _iPersonalID; }
+        protected int _iID;
+        public int WorkerID { get => _iID; }
+        protected string _sAdventurerType;
+        public Building Building { get; private set; }
+        protected int _iDailyFoodReq;
+        protected int _iCurrFood;
+        protected int _iDailyItemID;
+        public int DailyItemID => _iDailyItemID;
+        protected Item _heldItem;
+        protected int _iMood;
+        private int _iResting;
+        public int Mood { get => _iMood; }
+        public Mission CurrentMission { get; private set; }
+
+        public override bool Active => _eState == AdventurerStateEnum.Idle;
+        #endregion
+
+        public Adventurer(Dictionary<string, string> data, int id)
+        {
+            _iID = id;
+            _iPersonalID = PlayerManager.GetTotalWorkers();
+            //_eActorType = ActorEnum.Adventurer;
+            ImportBasics(data, id);
+
+            SetClass(DataManager.GetClassByIndex(_iID));
+            AssignStartingGear();
+            _sAdventurerType = CharacterClass.Name;
+
+            _iCurrFood = 0;
+            _heldItem = null;
+            _iMood = 0;
+
+            _eState = AdventurerStateEnum.Idle;
+
+            _sName = _sAdventurerType.Substring(0, 1);
+        }
+
+        protected void ImportBasics(Dictionary<string, string> data, int id)
+        {
+            _iID = id;
+
+            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Adventurer", id.ToString("00"));
+            //_sPortrait = _sPortraitFolder + "WizardPortrait";
+
+            WorkerType = Util.ParseEnum<AdventurerTypeEnum>(data["Type"]);
+            _iDailyItemID = int.Parse(data["ItemID"]);
+            _iDailyFoodReq = int.Parse(data["Food"]);
+
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), _sMerchantFolder + "Adventurer_" + _iID);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
+        {
+            if (_eState == AdventurerStateEnum.Idle || _eState == AdventurerStateEnum.AddToParty || (CombatManager.InCombat && _eState == AdventurerStateEnum.InParty))
+            {
+                base.Draw(spriteBatch, useLayerDepth);
+                if (_heldItem != null)
+                {
+                    _heldItem.Draw(spriteBatch, new Rectangle(Position.ToPoint(), new Point(32, 32)), true);
+                }
+            }
+        }
+
+        public override bool CollisionContains(Point mouse)
+        {
+            bool rv = false;
+            if (_eState == AdventurerStateEnum.Idle)
+            {
+                rv = base.CollisionContains(mouse);
+            }
+            return rv;
+        }
+        public override bool CollisionIntersects(Rectangle rect)
+        {
+            bool rv = false;
+            if (_eState == AdventurerStateEnum.Idle)
+            {
+                rv = base.CollisionIntersects(rect);
+            }
+            return rv;
+        }
+
+        //public override string GetDialogEntry(string entry)
+        //{
+        //    return Util.ProcessText(DataManager.GetAdventurerDialogue(_iID, entry));
+        //}
+
+        public override TextEntry GetOpeningText()
+        {
+            return new TextEntry();//Name + ": " + DataManager.GetAdventurerDialogue(_iID, "Selection");
+        }
+
+        public override void StopTalking()
+        {
+            if (_eState == AdventurerStateEnum.AddToParty)
+            {
+                _eState = AdventurerStateEnum.InParty;
+                PlayerManager.AddToParty(this);
+            }
+        }
+
+        public int TakeItem()
+        {
+            int giveItem = -1;
+            if (_heldItem != null)
+            {
+                giveItem = _heldItem.ItemID;
+                _heldItem = null;
+            }
+            return giveItem;
+        }
+
+        public int WhatAreYouHolding()
+        {
+            if (_heldItem != null)
+            {
+                return _heldItem.ItemID;
+            }
+            return -1;
+        }
+
+        public void SetBuilding(Building b)
+        {
+            Building = b;
+        }
+
+        /// <summary>
+        /// Called on rollover, if the WorldAdventurer is in a rest state, subtract one
+        /// from the int. If they are currently on a mission, but the mission has been 
+        /// completed by the MissionManager's rollover method, reset the state to idle,
+        /// null the mission, and set _iResting to be half of the runtime of the Mission.
+        /// </summary>
+        /// <returns>True if the WorldAdventurer should make their daily item.</returns>
+        public bool Rollover()
+        {
+            bool rv = false;
+
+            if (_iResting > 0) { _iResting--; }
+
+            switch (_eState)
+            {
+                case AdventurerStateEnum.Idle:
+                    _iCurrentHP = MaxHP;
+                    rv = true;
+                    break;
+                case AdventurerStateEnum.InParty:
+                    if (GameManager.AutoDisband)
+                    {
+                        _eState = AdventurerStateEnum.Idle;
+                    }
+                    break;
+                case AdventurerStateEnum.OnMission:
+                    if (CurrentMission.Completed())
+                    {
+                        _eState = AdventurerStateEnum.Idle;
+                        _iResting = CurrentMission.DaysToComplete / 2;
+                        CurrentMission = null;
+                    }
+                    break;
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Creates the worers daily item in the inventory of the building's container.
+        /// Need to set the InventoryManager to look at it, then clear it.
+        /// </summary>
+        public void MakeDailyItem()
+        {
+            if (_iDailyItemID != -1)
+            {
+                InventoryManager.InitContainerInventory(Building.BuildingChest.Inventory);
+                InventoryManager.AddToInventory(_iDailyItemID, 1, false);
+                InventoryManager.ClearExtraInventory();
+            }
+        }
+
+        public string GetName()
+        {
+            return _sName;
+        }
+
+        /// <summary>
+        /// Assigns the WorldAdventurer to the given mission.
+        /// </summary>
+        /// <param name="m">The mission they are on</param>
+        public void AssignToMission(Mission m)
+        {
+            CurrentMission = m;
+            _eState = AdventurerStateEnum.OnMission;
+        }
+
+        /// <summary>
+        /// Cancels the indicated mission, returning the adventurer to their
+        /// home building. Does not get called unless a mission has been canceled.
+        /// </summary>
+        public void EndMission()
+        {
+            _iResting = CurrentMission.DaysToComplete / 2;
+            CurrentMission = null;
+        }
+
+        /// <summary>
+        /// Gets a string representation of the WorldAdventurers current state
+        /// </summary>
+        public string GetStateText()
+        {
+            string rv = string.Empty;
+
+            switch (_eState)
+            {
+                case AdventurerStateEnum.Idle:
+                    rv = "Idle";
+                    break;
+                case AdventurerStateEnum.InParty:
+                    rv = "In Party";
+                    break;
+                case AdventurerStateEnum.OnMission:
+                    rv = "On Mission \"" + CurrentMission.Name + "\" days left: " + (CurrentMission.DaysToComplete - CurrentMission.DaysFinished).ToString();
+                    break;
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// WorldAdventurers are only available for missions if they're not on
+        /// a mission and they are not currently in a resting state.
+        /// </summary>
+        public bool AvailableForMissions()
+        {
+            return (_eState != AdventurerStateEnum.OnMission && _iResting == 0);
+        }
+
+        public WorkerData SaveAdventurerData()
+        {
+            WorkerData workerData = new WorkerData
+            {
+                workerID = this.WorkerID,
+                PersonalID = this.PersonalID,
+                advData = base.SaveClassedCharData(),
+                mood = this.Mood,
+                name = this.Name,
+                heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID,
+                state = (int)_eState
+            };
+
+            return workerData;
+        }
+        public void LoadAdventurerData(WorkerData data)
+        {
+            _iID = data.workerID;
+            _iPersonalID = data.PersonalID;
+            _iMood = data.mood;
+            _sName = data.name;
+            _heldItem = DataManager.GetItem(data.heldItemID);
+            _eState = (AdventurerStateEnum)data.state;
+
+            base.LoadClassedCharData(data.advData);
+
+            if (_eState == AdventurerStateEnum.InParty)
+            {
+                PlayerManager.AddToParty(this);
+            }
+        }
     }
 }

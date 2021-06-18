@@ -83,7 +83,7 @@
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Texture:GeneralStore][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:56-97-16-30][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:Market][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:48-97-16-30][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>21</Key>

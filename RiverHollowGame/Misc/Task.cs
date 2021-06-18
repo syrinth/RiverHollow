@@ -140,7 +140,7 @@ namespace RiverHollow.Misc
                 }
             }
 
-            if (stringData.ContainsKey("GoalNPC")) { GoalNPC = DataManager.DiNPC[int.Parse(stringData["GoalNPC"])]; }
+            if (stringData.ContainsKey("GoalNPC")) { GoalNPC = DataManager.DIVillagers[int.Parse(stringData["GoalNPC"])]; }
 
             Util.AssignValue(ref _iRewardMoney, "Money", stringData);
             Util.AssignValue(ref _iTargetBuildingID, "BuildingID", stringData);
@@ -269,7 +269,7 @@ namespace RiverHollow.Misc
 
             if (_iActivateID > -1)
             {
-                DataManager.DiNPC[_iActivateID].Activate(true);
+                DataManager.DIVillagers[_iActivateID].Activate(true);
             }
 
             PlayerManager.TaskLog.Remove(this);
@@ -421,7 +421,7 @@ namespace RiverHollow.Misc
             TaskID = qData.taskID;
             _sName = qData.name;
             _sDescription = qData.description;
-            GoalNPC = qData.goalNPC != -1 ? DataManager.DiNPC[qData.goalNPC] : null;
+            GoalNPC = qData.goalNPC != -1 ? DataManager.DIVillagers[qData.goalNPC] : null;
             _targetItem = qData.itemID != -1 ? DataManager.GetItem(qData.itemID) : null;
             _questMob = qData.mobID != -1 ? DataManager.GetMonsterByIndex(qData.mobID) : null;
             _iTargetBuildingID = qData.targetBuildingID;

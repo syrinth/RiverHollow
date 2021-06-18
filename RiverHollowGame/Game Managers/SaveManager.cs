@@ -83,8 +83,11 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "AvailableMissions")]
             public List<MissionData> AvailableMissions;
 
-            [XmlArray(ElementName = "NPCData")]
-            public List<NPCData> NPCData;
+            [XmlArray(ElementName = "VillagerData")]
+            public List<VillagerData> VillagerData;
+
+            [XmlArray(ElementName = "MerchantData")]
+            public List<MerchantData> MerchantData;
 
             [XmlArray(ElementName = "BuildingInfoData")]
             public List<BuildInfoData> BuildingInfoData;
@@ -281,7 +284,7 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Earth")]
             public List<FloorData> earth;
         }
-        public struct NPCData
+        public struct VillagerData
         {
             [XmlElement(ElementName = "NPCID")]
             public int npcID;
@@ -312,6 +315,20 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "AdventurerData")]
             public ClassedCharData classedData;
+
+            [XmlArray(ElementName = "SpokenKeys")]
+            public List<string> spokenKeys;
+        }
+        public struct MerchantData
+        {
+            [XmlElement(ElementName = "NPCID")]
+            public int npcID;
+
+            [XmlElement(ElementName = "Introduced")]
+            public bool introduced;
+
+            [XmlElement(ElementName = "ArrivalDelay")]
+            public int arrivalDelay;
 
             [XmlArray(ElementName = "SpokenKeys")]
             public List<string> spokenKeys;
@@ -507,7 +524,8 @@ namespace RiverHollow.Game_Managers
                 TaskLogData = new List<TaskData>(),
                 CurrentMissions = new List<MissionData>(),
                 AvailableMissions = new List<MissionData>(),
-                NPCData = new List<NPCData>(),
+                VillagerData = new List<VillagerData>(),
+                MerchantData = new List<MerchantData>(),
                 BuildingInfoData = new List<BuildInfoData>(),
                 ShopData = new List<ShopData>(),
                 TheMailbox = PlayerManager.PlayerMailbox.SaveData(),
@@ -555,9 +573,14 @@ namespace RiverHollow.Game_Managers
                 data.CurrentMissions.Add(m.SaveData());
             }
 
-            foreach (Villager n in DataManager.DiNPC.Values)
+            foreach (Villager n in DataManager.DIVillagers.Values)
             {
-                data.NPCData.Add(n.SaveData());
+                data.VillagerData.Add(n.SaveData());
+            }
+
+            foreach (Merchant m in DataManager.DIMerchants.Values)
+            {
+                data.MerchantData.Add(m.SaveData());
             }
 
             foreach (BuildInfo b in GameManager.DIBuildInfo.Values)
@@ -746,9 +769,15 @@ namespace RiverHollow.Game_Managers
                 newMission.LoadData(m);
                 MissionManager.AvailableMissions.Add(newMission);
             }
-            foreach (NPCData n in dataToLoad.NPCData)
+            foreach (VillagerData n in dataToLoad.VillagerData)
             {
-                Villager target = DataManager.DiNPC[n.npcID];
+                Villager target = DataManager.DIVillagers[n.npcID];
+                target.LoadData(n);
+            }
+
+            foreach (MerchantData n in dataToLoad.MerchantData)
+            {
+                Merchant target = DataManager.DIMerchants[n.npcID];
                 target.LoadData(n);
             }
 

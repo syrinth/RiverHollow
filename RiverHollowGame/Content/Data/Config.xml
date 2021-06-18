@@ -57,9 +57,13 @@
       <Key>13</Key>
       <Value>[ObjectID:20]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>14</Key>
       <Value>[Town:UO-Stones][Swamp:LostInTheForest][Cave:DarkCaveMusic][Rain:Rainfall]</Value>
+    </Item>
+    <Item>
+      <Key>15</Key>
+      <Value>[HouseID:20]</Value>
     </Item>
   </Asset>
 </XnaContent>
