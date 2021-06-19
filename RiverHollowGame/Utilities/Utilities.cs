@@ -248,11 +248,11 @@ namespace RiverHollow.Utilities
         public static float GetRandomFloat(int min, int max, int precision)
         {
             float rv = 0;
-            string composite = RHRandom.Instance.Next(min, max).ToString() + ".";
+            string composite = RHRandom.Instance().Next(min, max).ToString() + ".";
 
             for (int i = 0; i < precision; i++)
             {
-                composite += RHRandom.Instance.Next(0, 9);
+                composite += RHRandom.Instance().Next(0, 9);
             }
 
             rv = float.Parse(composite);
@@ -434,7 +434,7 @@ namespace RiverHollow.Utilities
         {
             RarityEnum rv = RarityEnum.C;
 
-            int rarityIndex = (int)RHRandom.Instance.Next(1, 1000);
+            int rarityIndex = (int)RHRandom.Instance().Next(1, 1000);
 
             if (rarityIndex > 990 && dictionary.ContainsKey(RarityEnum.M)) { rv = RarityEnum.M; }
             else if (rarityIndex > 950 && dictionary.ContainsKey(RarityEnum.R)) { rv = RarityEnum.R; }
@@ -460,9 +460,14 @@ namespace RiverHollow.Utilities
 
     public class RHRandom : Random
     {
-        private static RHRandom _rhInstance = new RHRandom();
+        private static RHRandom _randomizer;
 
-        public static RHRandom Instance => _rhInstance;
+        public static RHRandom Instance()
+        {
+            if(_randomizer == null) { _randomizer = new RHRandom(); }
+            return _randomizer;
+        }
+
         private RHRandom() : base() {}
 
         public override int Next(int min, int max)

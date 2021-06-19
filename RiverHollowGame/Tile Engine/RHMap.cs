@@ -530,7 +530,7 @@ namespace RiverHollow.Tile_Engine
 
         public void PopulateMap(bool loaded = false)
         {
-            RHRandom rand = RHRandom.Instance;
+            RHRandom rand = RHRandom.Instance();
             TiledMapProperties props = _map.Properties;
             List<int> resources = new List<int>();
 
@@ -743,7 +743,7 @@ namespace RiverHollow.Tile_Engine
                     try
                     {
                         //Get a random Spawn Point
-                        int point = RHRandom.Instance.Next(0, spawnCopy.Count - 1);
+                        int point = RHRandom.Instance().Next(0, spawnCopy.Count - 1);
                         if (!spawnCopy[point].HasSpawned())
                         {
                             //Trigger the Spawn point and remove it from the copied list
@@ -780,7 +780,7 @@ namespace RiverHollow.Tile_Engine
             for (int i = 0; i < spawnNum; i++)
             {
                 //Get a random Spawn Point
-                int point = RHRandom.Instance.Next(0, spawnCopy.Count - 1);
+                int point = RHRandom.Instance().Next(0, spawnCopy.Count - 1);
                 spawnCopy[point].SetSpawn(PrimedFood.SpawnID);
 
                 //remove it from the copied list so it won't be an option for future spawning.
@@ -805,12 +805,12 @@ namespace RiverHollow.Tile_Engine
             if (_diResources.Count > 0)
             {
                 string[] val = _map.Properties["ResourcesMinMax"].Split('-');
-                int spawnNumber = RHRandom.Instance.Next(int.Parse(val[0]), int.Parse(val[1]));
+                int spawnNumber = RHRandom.Instance().Next(int.Parse(val[0]), int.Parse(val[1]));
 
                 for (int i = 0; i < spawnNumber; i++)
                 {
                     //from the array as it gets filled so that we bounce less.
-                    RHTile targetTile = validTiles[RHRandom.Instance.Next(0, validTiles.Count - 1)];
+                    RHTile targetTile = validTiles[RHRandom.Instance().Next(0, validTiles.Count - 1)];
 
                     //If the object could not be placed, keep trying until you find one that can be
                     bool objectIsValid = true;
@@ -819,7 +819,7 @@ namespace RiverHollow.Tile_Engine
                         objectIsValid = true;
                         RarityEnum rarityKey = Util.RollAgainstRarity(_diResources);
 
-                        WorldObject wObj = DataManager.GetWorldObjectByID(_diResources[rarityKey][RHRandom.Instance.Next(0, _diResources[rarityKey].Count - 1)]);
+                        WorldObject wObj = DataManager.GetWorldObjectByID(_diResources[rarityKey][RHRandom.Instance().Next(0, _diResources[rarityKey].Count - 1)]);
                         wObj.SnapPositionToGrid(new Vector2(targetTile.Position.X, targetTile.Position.Y));
 
                         if (wObj.CompareType(ObjectTypeEnum.Plant))
@@ -1999,7 +1999,7 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            RHRandom rand = RHRandom.Instance;
+            RHRandom rand = RHRandom.Instance();
             Vector2 position = m.Position;
             position.X = ((int)(position.X / TileSize)) * TileSize;
             position.Y = ((int)(position.Y / TileSize)) * TileSize;
@@ -2036,12 +2036,12 @@ namespace RiverHollow.Tile_Engine
         }
         #endregion
         
-        public int GetMapWidth()
+        public int GetMapWidthInScaledPixels()
         {
             return MapWidthTiles * ScaledTileSize;
         }
 
-        public int GetMapHeight()
+        public int GetMapHeightInScaledPixels()
         {
             return MapHeightTiles * ScaledTileSize;
         }
@@ -2086,17 +2086,10 @@ namespace RiverHollow.Tile_Engine
         }
         public RHTile GetTileByPixelPosition(int x, int y)
         {
-            if (x >= GetMapWidth() || x < 0) { return null; }
-            if (y >= GetMapHeight() || y < 0) { return null; }
+            if (x >= MapWidthTiles * TileSize || x < 0) { return null; }
+            if (y >= MapHeightTiles * TileSize || y < 0) { return null; }
 
-            try
-            {
-                return _arrTiles[x / TileSize, y / TileSize];
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            return _arrTiles[x / TileSize, y / TileSize];
         }
 
         public RHTile GetTileByGridCoords(Point targetLoc)
@@ -2292,10 +2285,10 @@ namespace RiverHollow.Tile_Engine
         {
             //ToDo //Give ResourceSpawns an internal array corresponding to the size and remove objects
             //from the array as it gets filled so that we bounce less.
-            int xPoint = RHRandom.Instance.Next((int)(_vPosition.X), (int)(_vPosition.X + _iWidth));
-            int yPoint = RHRandom.Instance.Next((int)(_vPosition.Y), (int)(_vPosition.Y + _iHeight));
+            int xPoint = RHRandom.Instance().Next((int)(_vPosition.X), (int)(_vPosition.X + _iWidth));
+            int yPoint = RHRandom.Instance().Next((int)(_vPosition.Y), (int)(_vPosition.Y + _iHeight));
 
-            WorldObject wObj = DataManager.GetWorldObjectByID(_liPossibleResources[RHRandom.Instance.Next(0, _liPossibleResources.Count-1)]);
+            WorldObject wObj = DataManager.GetWorldObjectByID(_liPossibleResources[RHRandom.Instance().Next(0, _liPossibleResources.Count-1)]);
 
             if (wObj.CompareType(ObjectTypeEnum.Plant))
             {
@@ -2378,7 +2371,7 @@ namespace RiverHollow.Tile_Engine
                 //Roll against rarity and backtrack until we find one of the rolled type that exists.
                 RarityEnum rarityKey = Util.RollAgainstRarity(_diMonsterSpawns[key]);
 
-                int spawnArrIndex = (int)RHRandom.Instance.Next(0, _diMonsterSpawns[key][rarityKey].Count - 1);
+                int spawnArrIndex = (int)RHRandom.Instance().Next(0, _diMonsterSpawns[key][rarityKey].Count - 1);
                 _monster = DataManager.GetMonsterByIndex(_diMonsterSpawns[key][rarityKey][spawnArrIndex]);
             }
 

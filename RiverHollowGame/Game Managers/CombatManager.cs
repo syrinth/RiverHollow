@@ -105,7 +105,7 @@ namespace RiverHollow.Game_Managers
 
             foreach(CombatActor c in _liChargingCharacters)
             {
-                c.CurrentCharge = RHRandom.Instance.Next(0, 50);
+                c.CurrentCharge = RHRandom.Instance().Next(0, 50);
             }
 
             foreach (CombatActor c in Monsters)

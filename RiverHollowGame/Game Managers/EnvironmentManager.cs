@@ -57,7 +57,7 @@ namespace RiverHollow.Game_Managers
         {
             if ((IsRaining() || IsSnowing()) && map.IsOutside)
             {
-                for (int i = 0; i < 700; i++)
+                for (int i = 0; i < 2000; i++)
                 {
                     AddNewEnvironmentalEffect();
                 }
@@ -107,7 +107,7 @@ namespace RiverHollow.Game_Managers
         #region Weather handling
         public static void RollForWeatherEffects()
         {
-            int roll = RHRandom.Instance.Next(1, 5);
+            int roll = RHRandom.Instance().Next(1, 5);
             if (roll > 2 || (_iSeasonPrecipDays < MIN_PRECIPITATION_DAYS && GameCalendar.CurrentDay + _iSeasonPrecipDays - 1 == GameCalendar.DAYS_IN_MONTH))
             {
                 _iSeasonPrecipDays++;
@@ -120,7 +120,7 @@ namespace RiverHollow.Game_Managers
         }
 
         public static bool IsSunny() { return _eCurrentWeather == WeatherEnum.Sunny; }
-        public static bool IsRaining() { return  _eCurrentWeather == WeatherEnum.Raining; }
+        public static bool IsRaining() { return _eCurrentWeather == WeatherEnum.Raining; }
         public static bool IsSnowing() { return _eCurrentWeather == WeatherEnum.Snowing; }
 
         public static string GetWeatherString()
@@ -165,13 +165,14 @@ namespace RiverHollow.Game_Managers
             int _iFallDistance = 0;
             public Raindrop(int mapWidth, int mapHeight)
             {
-                _iFallDistance = RHRandom.Instance.Next(50, 100);
+                _iFallDistance = RHRandom.Instance().Next(50, 100);
                 _sprBody = new AnimatedSprite(DataManager.FOLDER_ENVIRONMENT + "Rain");
                 _sprBody.AddAnimation(AnimationEnum.Action_One, 0, 0, TileSize, TileSize * 2);
                 _sprBody.AddAnimation(AnimationEnum.Action_Finished, TileSize, 0, TileSize, TileSize * 2, 2, 0.1f, false, true);
                 _sprBody.PlayAnimation(AnimationEnum.Action_One);
 
-                Vector2 pos = new Vector2(RHRandom.Instance.Next(0, mapWidth * TileSize), RHRandom.Instance.Next(0, mapHeight * TileSize));
+                int screenBuffer = TileSize * 3;
+                Vector2 pos = new Vector2(RHRandom.Instance().Next(0 - screenBuffer, (mapWidth * TileSize) + screenBuffer), RHRandom.Instance().Next(0 - screenBuffer, (mapHeight * TileSize) + screenBuffer));
                 _sprBody.Position = pos;
             }
 
@@ -181,13 +182,14 @@ namespace RiverHollow.Game_Managers
                 {
                     Vector2 landingPos = _sprBody.Position + new Vector2(0, TileSize);
                     RHTile landingTile = MapManager.CurrentMap.GetTileByPixelPosition(landingPos);
-                    if (landingTile == null || (_iFallDistance <= 0 && landingTile.WorldObject == null))
+                    if (landingTile == null) { _sprBody.PlayAnimation(AnimationEnum.Action_Finished); }//_sprBody.Drawing = false; }
+                    else if (_iFallDistance <= 0 && landingTile.WorldObject == null)
                     {
                         _sprBody.PlayAnimation(AnimationEnum.Action_Finished);
                     }
                     else
                     {
-                        int modifier = RHRandom.Instance.Next(2, 3);
+                        int modifier = RHRandom.Instance().Next(2, 3);
                         _iFallDistance -= modifier;
                         _sprBody.Position += new Vector2(-2 * modifier, 3 * modifier);
                     }
@@ -207,13 +209,13 @@ namespace RiverHollow.Game_Managers
             readonly int _iMaxHeight = 0;
             public Snowflake(int mapWidth, int mapHeight)
             {
-                float frameLength = RHRandom.Instance.Next(3, 5) / 10f;
+                float frameLength = RHRandom.Instance().Next(3, 5) / 10f;
                 _iMaxHeight = mapHeight * ScaledTileSize;
                 _sprBody = new AnimatedSprite(DataManager.FOLDER_ENVIRONMENT + "Snow");
                 _sprBody.AddAnimation(AnimationEnum.Action_One, 0, 0, TileSize, TileSize, 3, frameLength, true);
                 _sprBody.PlayAnimation(AnimationEnum.Action_One);
 
-                Vector2 pos = new Vector2(RHRandom.Instance.Next(0, mapWidth * ScaledTileSize), RHRandom.Instance.Next(0, mapHeight * ScaledTileSize));
+                Vector2 pos = new Vector2(RHRandom.Instance().Next(0, mapWidth * ScaledTileSize), RHRandom.Instance().Next(0, mapHeight * ScaledTileSize));
                 _sprBody.Position = pos;
             }
 

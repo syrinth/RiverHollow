@@ -195,7 +195,7 @@ namespace RiverHollow.Game_Managers
             }
             int mapWidth = Maps[MapManager.HomeMap].MapWidthTiles;
             int mapHeight = Maps[MapManager.HomeMap].MapHeightTiles;
-            RHRandom rand = RHRandom.Instance;
+            RHRandom rand = RHRandom.Instance();
 
             if (!loaded)
             {
@@ -220,7 +220,7 @@ namespace RiverHollow.Game_Managers
 
         private static void PopulateHomeMapHelper(ref List<RHTile> possibleTiles, int ID, int numToPlace)
         {
-            RHRandom rand = RHRandom.Instance;
+            RHRandom rand = RHRandom.Instance();
             for (int i = 0; i < numToPlace; i++)
             {
                 RHTile targetTile = possibleTiles[rand.Next(0, possibleTiles.Count - 1)];

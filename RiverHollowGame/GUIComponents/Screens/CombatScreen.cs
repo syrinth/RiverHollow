@@ -292,7 +292,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public FloatingText(Vector2 position, int spriteWidth, string text, Color c)
         {
-            RHRandom rand = RHRandom.Instance;
+            RHRandom rand = RHRandom.Instance();
 
             _font = DataManager.GetBitMapFont(@"Fonts\FontBattle");
             _sText = text;

@@ -51,14 +51,14 @@ namespace RiverHollow
 
             //This ensures that the camera observer position cannot go farther than the allowed positions,
             if (target.X <= (RiverHollow.ScreenWidth / 2)) { target.X = (RiverHollow.ScreenWidth / 2); }
-            else if (target.X >= MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2)) { target.X = MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2); }
+            else if (target.X >= MapManager.CurrentMap.GetMapWidthInScaledPixels() - (RiverHollow.ScreenWidth / 2)) { target.X = MapManager.CurrentMap.GetMapWidthInScaledPixels() - (RiverHollow.ScreenWidth / 2); }
             if (target.Y <= (RiverHollow.ScreenHeight / 2)) { target.Y = (RiverHollow.ScreenHeight / 2); }
-            else if (target.Y >= MapManager.CurrentMap.GetMapHeight() - (RiverHollow.ScreenHeight / 2)) { target.Y = MapManager.CurrentMap.GetMapHeight() - (RiverHollow.ScreenHeight / 2); }
+            else if (target.Y >= MapManager.CurrentMap.GetMapHeightInScaledPixels() - (RiverHollow.ScreenHeight / 2)) { target.Y = MapManager.CurrentMap.GetMapHeightInScaledPixels() - (RiverHollow.ScreenHeight / 2); }
 
-            if (MapManager.CurrentMap.GetMapWidth() / TileSize <= Math.Ceiling((double)RiverHollow.ScreenWidth / TileSize)) { target.X = (MapManager.CurrentMap.GetMapWidth() / 2); }
+            if (MapManager.CurrentMap.GetMapWidthInScaledPixels() / TileSize <= Math.Ceiling((double)RiverHollow.ScreenWidth / TileSize)) { target.X = (MapManager.CurrentMap.GetMapWidthInScaledPixels() / 2); }
 
             double val = Math.Ceiling((double)RiverHollow.ScreenHeight / TileSize);
-            if (MapManager.CurrentMap.GetMapHeight() / TileSize <= val) { target.Y = (MapManager.CurrentMap.GetMapHeight() / 2); }
+            if (MapManager.CurrentMap.GetMapHeightInScaledPixels() / TileSize <= val) { target.Y = (MapManager.CurrentMap.GetMapHeightInScaledPixels() / 2); }
 
             if (!Scrying())
             {
@@ -91,7 +91,7 @@ namespace RiverHollow
         public static void UnsetObserver(Vector2 pos)
         {
             if (pos != Vector2.Zero) { _vObserver = pos; }
-            else { _vObserver = new Vector2(MapManager.CurrentMap.GetMapWidth() / 2, MapManager.CurrentMap.GetMapHeight() / 2); }
+            else { _vObserver = new Vector2(MapManager.CurrentMap.GetMapWidthInScaledPixels() / 2, MapManager.CurrentMap.GetMapHeightInScaledPixels() / 2); }
         }
 
         public static void ResetObserver()

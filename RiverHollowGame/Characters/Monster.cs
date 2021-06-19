@@ -311,7 +311,7 @@ namespace RiverHollow.Characters
                 _iMoveFailures = 0;
                 int howFar = 2;
                 bool skip = false;
-                RHRandom rand = RHRandom.Instance;
+                RHRandom rand = RHRandom.Instance();
                 int decision = rand.Next(1, 5);
                 if (decision == 1) { _vMoveTo = new Vector2(Position.X - rand.Next(1, howFar) * TileSize, Position.Y); }
                 else if (decision == 2) { _vMoveTo = new Vector2(Position.X + rand.Next(1, howFar) * TileSize, Position.Y); }
@@ -379,7 +379,7 @@ namespace RiverHollow.Characters
 
         public int GetRandomLootItem()
         {
-            return _liLootIDs[RHRandom.Instance.Next(0, _liLootIDs.Count-1)];
+            return _liLootIDs[RHRandom.Instance().Next(0, _liLootIDs.Count-1)];
         } 
 
         public override void KO()
@@ -719,7 +719,7 @@ namespace RiverHollow.Characters
         /// <returns>True if we should switch</returns>
         private bool ChooseBetweenEquals(int testCount, int shortestCount, int percent)
         {
-            return testCount == shortestCount && RHRandom.Instance.Next(0, 100) < percent;
+            return testCount == shortestCount && RHRandom.Instance().Next(0, 100) < percent;
         }
 
         private PathInfo FindPath(RHTile tile)

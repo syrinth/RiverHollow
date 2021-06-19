@@ -420,7 +420,7 @@ namespace RiverHollow.CombatStuff
                 if (!IsSpell())
                 {
                     //Roll randomly between 1-100 to determine the chance of hir
-                    int attackRoll = RHRandom.Instance.Next(1, 100);
+                    int attackRoll = RHRandom.Instance().Next(1, 100);
                     attackRoll -= _iAccuracy;                       //Modify the chance to hit by the skill's accuracy. Rolling low is good, so subtract a positive and add a negative
                     if (attackRoll <= 90 - targetActor.Evasion)    //If the modified attack roll is less than 90 minus the character's evasion, then we hit
                     {
@@ -704,7 +704,7 @@ namespace RiverHollow.CombatStuff
                 case "Escape":
                     {
                         int spd = CombatManager.ActiveCharacter.StatSpd;
-                        if (RHRandom.Instance.Next(1, 20) + spd/2 > 15){
+                        if (RHRandom.Instance().Next(1, 20) + spd/2 > 15){
                             CombatManager.EndCombatEscape();
                         }
                         break;
@@ -728,7 +728,7 @@ namespace RiverHollow.CombatStuff
 
                             if (liPotentialGuards.Count > 0)
                             {
-                                int which = RHRandom.Instance.Next(0, liPotentialGuards.Count - 1);
+                                int which = RHRandom.Instance().Next(0, liPotentialGuards.Count - 1);
 
                                 CombatActor guard = liPotentialGuards[which];
                                 guard.Swapped = true;

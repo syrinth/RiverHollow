@@ -719,7 +719,7 @@ namespace RiverHollow.Characters
 
             List<TextEntry> possibles = keyPool.DequeueAllLowest();
 
-            return possibles[RHRandom.Instance.Next(0, possibles.Count - 1)];
+            return possibles[RHRandom.Instance().Next(0, possibles.Count - 1)];
         }
 
         /// <summary>
@@ -1069,7 +1069,7 @@ namespace RiverHollow.Characters
             double dmg = (Math.Max(1, base_attack - StatDef) * compression * StrMult * potencyMod);
             dmg += ApplyResistances(dmg, element);
 
-            if (RHRandom.Instance.Next(1, 100) <= (attacker.CritRating + critRating)) { dmg *= 2; }
+            if (RHRandom.Instance().Next(1, 100) <= (attacker.CritRating + critRating)) { dmg *= 2; }
 
             ModifyHealth(dmg, true);
         }
@@ -2467,7 +2467,7 @@ namespace RiverHollow.Characters
                     List<int> copy = new List<int>(_liRequestItems);
                     for (int i = 0; i < 3; i++)
                     {
-                        int chosenValue = RHRandom.Instance.Next(0, copy.Count - 1);
+                        int chosenValue = RHRandom.Instance().Next(0, copy.Count - 1);
                         DiChosenItems[DataManager.GetItem(copy[chosenValue])] = false;
                         copy.RemoveAt(chosenValue);
                     }
@@ -2857,7 +2857,7 @@ namespace RiverHollow.Characters
                 _fVisibility = 1.0f;
 
                 //string[] loot = DataManager.DiSpiritInfo[_sType].Split('/');
-                //int arrayID = RHRandom.Instance.Next(0, loot.Length - 1);
+                //int arrayID = RHRandom.Instance().Next(0, loot.Length - 1);
                 //InventoryManager.AddToInventory(int.Parse(loot[arrayID]));
 
                 //_sText = Util.ProcessText(_sText.Replace("*", "*" + loot[arrayID] + "*"));

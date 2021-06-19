@@ -364,9 +364,9 @@ namespace RiverHollow.Game_Managers
                         if (meander)
                         {
                             //If meander is turned on, implement a small distortion in the priority to avoid a perfect shortest path
-                            if (RHRandom.Instance.Next(1, 100) > 60)
+                            if (RHRandom.Instance().Next(1, 100) > 60)
                             {
-                                newCost += RHRandom.Instance.Next(1, 4000);
+                                newCost += RHRandom.Instance().Next(1, 4000);
                             }
                         }
                         if (!travelMap.ContainsKey(next) || newCost < travelMap[next].CostSoFar)

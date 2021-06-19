@@ -277,7 +277,7 @@ namespace RiverHollow.Items
             Parabola subBounce;
             public Parabola(Vector2 pos)
             {
-                RHRandom r = RHRandom.Instance;
+                RHRandom r = RHRandom.Instance();
 
                 float widthChange = r.Next(0, 5);
                 widthChange *= 0.1f;
@@ -683,7 +683,7 @@ namespace RiverHollow.Items
             ImportBasics(stringData, id, num);
             _eItemType = ItemEnum.Special;
             _eSpecialItem = SpecialItemEnum.Map;
-            _difficulty = RHRandom.Instance.Next(4, 5);
+            _difficulty = RHRandom.Instance().Next(4, 5);
 
             _bStacks = false;
             _texTexture = DataManager.GetTexture(@"Textures\items");
