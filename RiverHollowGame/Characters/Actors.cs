@@ -2520,6 +2520,10 @@ namespace RiverHollow.Characters
             return rv;
         }
 
+        /// <summary>
+        /// Set the FinishedRequest flag to true.
+        /// Ensures that we do not display the requests list after.
+        /// </summary>
         public void FinishRequests()
         {
             _bRequestsComplete = true;
@@ -2587,12 +2591,16 @@ namespace RiverHollow.Characters
                 foreach(AnimatedSprite spr in GetSprites()) { spr.Position = vPos; }
             }
         }
+        public override Rectangle CollisionBox => new Rectangle((int)Position.X + 2, (int)Position.Y + 2, Width - 4, TileSize - 4);
+
+        #region Clothing
         public Clothes Hat { get; private set; }
         public Clothes Body { get; private set; }
         Clothes Back;
         Clothes Hands;
         public Clothes Legs { get; private set; }
         Clothes Feet;
+        #endregion
 
         public PlayerCharacter() : base()
         {

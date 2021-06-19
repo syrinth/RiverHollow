@@ -193,19 +193,7 @@ namespace RiverHollow.Items
                 if (t.Flooring == this) { t.RemoveFlooring(); }
                 if (t.WorldObject == this) { t.RemoveWorldObject(); }
                 if (t.ShadowObject == this) { t.RemoveShadowObject(); }
-
-                t.SetMapObject(null);
             }
-        }
-
-        public void ReadItemDrops(string itemDrop)
-        {
-            string[] split = itemDrop.Split('-');
-            int id = int.Parse(split[0]);
-            int num = 1;
-
-            if (split.Length == 2) { num = int.Parse(split[1]); }
-            _kvpDrop = new KeyValuePair<int, int>(id, num);
         }
 
         /// <summary>
@@ -255,7 +243,14 @@ namespace RiverHollow.Items
 
             _wallObject = false;
 
-            if (stringData.ContainsKey("ItemID")) { ReadItemDrops(stringData["ItemID"]); }
+            if (stringData.ContainsKey("ItemID")) {
+                string[] split = stringData["ItemID"].Split('-');
+                int itemID = int.Parse(split[0]);
+                int num = 1;
+
+                if (split.Length == 2) { num = int.Parse(split[1]); }
+                _kvpDrop = new KeyValuePair<int, int>(itemID, num);
+            }
 
             if (stringData.ContainsKey("Tool")) { _eToolType = Util.ParseEnum<ToolEnum>(stringData["Tool"]);}
             if (stringData.ContainsKey("Hp")) { _iHP = int.Parse(stringData["Hp"]); }
@@ -266,11 +261,6 @@ namespace RiverHollow.Items
                 string[] splitString = stringData["DestructionAnim"].Split('-');
                 _sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), TileSize, TileSize, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
             }
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gTime)
