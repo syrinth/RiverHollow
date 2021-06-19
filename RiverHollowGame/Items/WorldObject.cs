@@ -133,7 +133,7 @@ namespace RiverHollow.Items
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if (_bDrawUnder) { _sprite.Draw(spriteBatch, 0); }
+            if (_bDrawUnder) { _sprite.Draw(spriteBatch, 1); }
             else { _sprite.Draw(spriteBatch); }
         }
 

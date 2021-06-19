@@ -1430,9 +1430,9 @@ namespace RiverHollow.Tile_Engine
                         if (MovingBuildings())// || PlayerManager.ExpendResources(obj.RequiredToMake))
                         {
                             SoundManager.PlayEffect("thump3");
-                            WorldObject obj = DataManager.GetWorldObjectByID(toBuild.ID);
+                            //WorldObject obj = DataManager.GetWorldObjectByID(toBuild.ID);
                             //obj.SnapPositionToGrid(toBuild.MapPosition);
-                            obj.PlaceOnMap(toBuild.MapPosition, this);
+                            toBuild.PlaceOnMap(toBuild.MapPosition, this);
                             FinishBuilding();
 
                             //Drop the Building from the GameManger
@@ -1911,12 +1911,14 @@ namespace RiverHollow.Tile_Engine
         public void AssignMapTiles(WorldObject o, List<RHTile> tiles)
         {
             //Call AddRange to ensure that it has the actual tiles, and isn't just a copy of the list
-            o.Tiles.AddRange(tiles);                    
+            o.Tiles.AddRange(tiles);
 
-            //Adds the object to the list of player objects unless it is a Building
-            if (!o.CompareType(ObjectTypeEnum.Building) && !_liPlacedWorldObjects.Contains(o))
-            {
-                _liPlacedWorldObjects.Add(o);
+            if (!_liPlacedWorldObjects.Contains(o)) {
+                //Adds the object to the list of player objects unless it is a Building
+                if (!o.CompareType(ObjectTypeEnum.Building))
+                {
+                    _liPlacedWorldObjects.Add(o);
+                }
             }
 
             if (o.CompareType(ObjectTypeEnum.CombatHazard)){
