@@ -999,7 +999,7 @@ namespace RiverHollow.Tile_Engine
             //WorldActor's CollisionBox to the list, as long as the WorldActor in question is not the moving WorldActor.
             foreach(WorldActor w in _liActors)
             {
-                if (w.Active && w != actor) { list.Add(w.CollisionBox);}
+                if (w.OnTheMap && w != actor) { list.Add(w.CollisionBox);}
             }
 
             //If the actor is not the Player Character, add the Player Character's CollisionBox to the list as well
@@ -1258,7 +1258,7 @@ namespace RiverHollow.Tile_Engine
 
             foreach (WorldActor c in _liActors)
             {
-                if (PlayerManager.PlayerInRange(c.HoverBox, (int)(TileSize * 1.5)) && c.HoverContains(mouseLocation) && c.CanTalk && c.Active)
+                if (PlayerManager.PlayerInRange(c.HoverBox, (int)(TileSize * 1.5)) && c.HoverContains(mouseLocation) && c.CanTalk && c.OnTheMap)
                 {
                     ((TalkingActor)c).Talk();
                     return true;
@@ -1385,7 +1385,7 @@ namespace RiverHollow.Tile_Engine
                             }
                         }
                     }
-                    else
+                    else if (toBuild.CompareType(ObjectTypeEnum.Floor))
                     {
                         bool isFloor = toBuild.CompareType(ObjectTypeEnum.Floor);
                         if (!isFloor || (isFloor && TargetTile.Flooring == null))
@@ -1425,10 +1425,27 @@ namespace RiverHollow.Tile_Engine
                             }
                         }
                     }
+                    else if (toBuild.CompareType(ObjectTypeEnum.WalkableStructure))
+                    {
+                        if (MovingBuildings())// || PlayerManager.ExpendResources(obj.RequiredToMake))
+                        {
+                            SoundManager.PlayEffect("thump3");
+                            WorldObject obj = DataManager.GetWorldObjectByID(toBuild.ID);
+                            //obj.SnapPositionToGrid(toBuild.MapPosition);
+                            obj.PlaceOnMap(toBuild.MapPosition, this);
+                            FinishBuilding();
+
+                            //Drop the Building from the GameManger
+                            GameManager.DropWorldObject();
+
+                            LeaveBuildMode();
+                            rv = true;
+                        }
+                    }
                 }
                 else if (GameManager.HeldObject == null)
                 {
-                    PickUpBuilding(mouseLocation);
+                    PickupWorldObject(mouseLocation);
                     rv = true;
                 }
             }
@@ -1504,6 +1521,15 @@ namespace RiverHollow.Tile_Engine
                 else { b._bSelected = false; }
             }
 
+            //RHTile targetTile = GetTileByPixelPosition(GUICursor.GetWorldMousePosition());
+            //if (targetTile.WorldObject != null)
+            //{
+            //    SoundManager.PlayEffect("buildingGrab");
+            //    GameManager.PickUpWorldObject(targetTile.WorldObject);
+            //    targetTile.WorldObject.SetPickupOffset(mouseLocation.ToVector2());
+            //    targetTile.WorldObject.RemoveSelfFromTiles();
+            //}
+
             if (Scrying())
             {
                 _liTestTiles = new List<RHTile>();
@@ -1533,7 +1559,7 @@ namespace RiverHollow.Tile_Engine
                 foreach (WorldActor c in _liActors)
                 {
                     if(!c.IsActorType(ActorEnum.Monster) && c.HoverContains(mouseLocation)){
-                        if (c.Active)
+                        if (c.OnTheMap)
                         {
                             GUICursor.SetCursor(GUICursor.CursorTypeEnum.Talk, c.HoverBox);
                             found = true;
@@ -1676,7 +1702,7 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
-        public void PickUpBuilding(Point mouseLocation)
+        public void PickupWorldObject(Point mouseLocation)
         {
             foreach (Building b in _liBuildings)
             {
@@ -1687,8 +1713,17 @@ namespace RiverHollow.Tile_Engine
                     b.SetPickupOffset(mouseLocation.ToVector2());
                     b.RemoveSelfFromTiles();
                     DictionaryTravelPoints.Remove(b.MapName);
-                    break;
+                    return;
                 }
+            }
+
+            RHTile targetTile = GetTileByPixelPosition(GUICursor.GetWorldMousePosition());
+            if(targetTile.WorldObject != null)
+            {
+                SoundManager.PlayEffect("buildingGrab");
+                GameManager.PickUpWorldObject(targetTile.WorldObject);
+                targetTile.WorldObject.SetPickupOffset(mouseLocation.ToVector2());
+                targetTile.WorldObject.RemoveSelfFromTiles();
             }
         }
 
@@ -2813,7 +2848,7 @@ namespace RiverHollow.Tile_Engine
         /// <returns>True if the tile is not itself locked down</returns>
         public bool Passable()
         {
-            bool rv = _tileExists && (WorldObject == null || !WorldObject.Blocking);
+            bool rv = _tileExists && (WorldObject == null || WorldObject.Walkable);
             if (_tileExists)
             {
                 foreach (TiledMapTileLayer l in _diProps.Keys)

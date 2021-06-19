@@ -67,7 +67,7 @@ namespace RiverHollow.Game_Managers
         public enum ElementAlignment { Neutral, Vulnerable, Resists };
         public enum ConditionEnum { None, KO, Poisoned, Silenced };
         public enum AdventurerTypeEnum { Magic, Martial };
-        public enum ObjectTypeEnum { WorldObject, Building, ClassChanger, Machine, Container, Earth, Floor, Destructible, Gatherable, Plant, Wall, Light, DungeonObject, CombatHazard, Mailbox, StructureUpgrader};
+        public enum ObjectTypeEnum { WorldObject, Building, ClassChanger, Machine, Container, Earth, Floor, Destructible, Gatherable, Plant, Wall, Light, DungeonObject, CombatHazard, Mailbox, StructureUpgrader, WalkableStructure};
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
 
         public static float Scale = NORMAL_SCALE;
@@ -192,6 +192,7 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Held Objects
+        public static Vector2 MarketPosition = new Vector2(-1, -1);
         static Item _heldItem;
         public static Item HeldItem { get => _heldItem; }
         static WorldObject _heldWorldObject;

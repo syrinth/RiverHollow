@@ -235,7 +235,7 @@ namespace RiverHollow.Characters
         public virtual Rectangle HoverBox => new Rectangle((int)Position.X, (int)Position.Y - TileSize, Width, Height);
 
         protected bool _bOnTheMap = true;
-        public virtual bool Active => _bOnTheMap;
+        public virtual bool OnTheMap => _bOnTheMap;
 
         protected bool _bHover;
 
@@ -2533,10 +2533,10 @@ namespace RiverHollow.Characters
         {
             _bOnTheMap = true;
 
-            CurrentMapName = MapManager.MarketMap.Name;
+            CurrentMapName = MapManager.HomeMap;
+            MapManager.Maps[CurrentMapName].AddCharacterImmediately(this);
 
-            Position = Util.SnapToGrid(MapManager.MarketMap.GetCharacterSpawn("Merchant"));
-            MapManager.MarketMap.AddCharacterImmediately(this);
+            Position = Util.SnapToGrid(GameManager.MarketPosition);
         }
 
         public MerchantData SaveData()
@@ -3093,7 +3093,7 @@ namespace RiverHollow.Characters
         public int Mood { get => _iMood; }
         public Mission CurrentMission { get; private set; }
 
-        public override bool Active => _eState == AdventurerStateEnum.Idle;
+        public override bool OnTheMap => _eState == AdventurerStateEnum.Idle;
         #endregion
 
         public Adventurer(Dictionary<string, string> data, int id)

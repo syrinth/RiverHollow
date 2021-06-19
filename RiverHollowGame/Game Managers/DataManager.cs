@@ -449,32 +449,34 @@ namespace RiverHollow.Game_Managers
             if (id != -1 && _diWorldObjects.ContainsKey(id))
             {
                 Dictionary<string, string> diData = _diWorldObjects[id];
-                switch (diData["Type"])
+                switch (Util.ParseEnum<ObjectTypeEnum>(diData["Type"]))
                 {
-                    case "Destructible":
+                    case ObjectTypeEnum.Destructible:
                         if (diData.ContainsKey("Tree")) { return new Tree(id, diData); }
                         else { return new Destructible(id, diData); }
-                    case "Container":
+                    case ObjectTypeEnum.Container:
                         return new Container(id, diData);
-                    case "ClassChanger":
+                    case ObjectTypeEnum.ClassChanger:
                         return new ClassChanger(id, diData);
-                    case "StructureUpgrader":
+                    case ObjectTypeEnum.StructureUpgrader:
                         return new StructureUpgrader(id, diData);
-                    case "Plant":
+                    case ObjectTypeEnum.Plant:
                         return new Plant(id, diData);
-                    case "Gatherable":
+                    case ObjectTypeEnum.Gatherable:
                         return new Gatherable(id, diData);
-                    case "Machine":
+                    case ObjectTypeEnum.Machine:
                         return new Machine(id, diData);
-                    case "Wall":
+                    case ObjectTypeEnum.WalkableStructure:
+                        return new WalkableStructure(id, diData);
+                    case ObjectTypeEnum.Wall:
                         return new Wall(id, diData);
-                    case "Floor":
+                    case ObjectTypeEnum.Floor:
                         return new Floor(id, diData);
-                    case "Light":
+                    case ObjectTypeEnum.Light:
                         return new Light(id, diData);
-                    case "CombatHazard":
+                    case ObjectTypeEnum.CombatHazard:
                         return new CombatHazard(id, diData);
-                    case "Mailbox":
+                    case ObjectTypeEnum.Mailbox:
                         return new Mailbox(id, diData);
                 }
             }

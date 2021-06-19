@@ -1403,23 +1403,23 @@
     </Item>
     <Item>
       <Key>WorldObject_40</Key>
-      <Value>[Name:]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_41</Key>
       <Value>[Name:Stoneworks]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_42</Key>
+      <Key>WorldObject_41</Key>
       <Value>[Name:]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_43</Key>
+      <Key>WorldObject_42</Key>
       <Value>[Name:SawMill]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_44</Key>
+      <Key>WorldObject_43</Key>
       <Value>[Name:Tannery]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_44</Key>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_45</Key>
@@ -1431,39 +1431,39 @@
     </Item>
     <Item>
       <Key>WorldObject_47</Key>
-      <Value>[Name:]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_48</Key>
       <Value>[Name:Anvil II]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_49</Key>
+      <Key>WorldObject_48</Key>
       <Value>[Name:Mailbox]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_50</Key>
+      <Key>WorldObject_49</Key>
       <Value>[Name:Silver Seed Plant]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_51</Key>
+      <Key>WorldObject_50</Key>
       <Value>[Name:Carrot Plant]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_52</Key>
+      <Key>WorldObject_51</Key>
       <Value>[Name:Slime Berry Plant]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_53</Key>
+      <Key>WorldObject_52</Key>
       <Value>[Name:Mage Bells]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_54</Key>
+      <Key>WorldObject_53</Key>
       <Value>[Name:Grass]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_55</Key>
+      <Key>WorldObject_54</Key>
       <Value>[Name:Upgrade Board]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_55</Key>
+      <Value>[Name:Market]</Value>
     </Item>
     <Item>
       <Key>WorldObject_56</Key>

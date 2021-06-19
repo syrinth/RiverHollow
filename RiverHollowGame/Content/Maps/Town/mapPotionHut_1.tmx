@@ -336,7 +336,7 @@
  <objectgroup id="9" name="MapObject">
   <object id="35" name="WorldObject" x="145.287" y="81.5742" width="12.8117" height="10.48">
    <properties>
-    <property name="ObjectID" type="int" value="55"/>
+    <property name="ObjectID" type="int" value="54"/>
    </properties>
   </object>
   <object id="36" name="WorldObject" x="34.231" y="82.692" width="12.8117" height="10.48">

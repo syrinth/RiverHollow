@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
@@ -13,7 +14,7 @@ using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Items
 {
-    public class WorldObject
+    public abstract class WorldObject
     {
         #region Properties
         protected ObjectTypeEnum _eObjectType;
@@ -25,12 +26,14 @@ namespace RiverHollow.Items
         public List<RHTile> Tiles;
 
         protected string MapName => Tiles[0].MapName;
-        protected bool _bImpassable = true;
-        public bool Blocking => _bImpassable;
+        protected bool _bWalkable = false;
+        public bool Walkable => _bWalkable;
         protected bool _wallObject;
         public bool WallObject => _wallObject;
 
         protected KeyValuePair<int, int> _kvpDrop; //itemID, # of items dropped
+
+        protected bool _bDrawUnder = false;
 
         protected Point _pImagePos;
         public Vector2 PickupOffset { get; private set; }
@@ -71,7 +74,7 @@ namespace RiverHollow.Items
 
         #endregion
 
-        public WorldObject(int id)
+        protected WorldObject(int id)
         {
             Tiles = new List<RHTile>();
 
@@ -130,7 +133,8 @@ namespace RiverHollow.Items
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            _sprite.Draw(spriteBatch);
+            if (_bDrawUnder) { _sprite.Draw(spriteBatch, 0); }
+            else { _sprite.Draw(spriteBatch); }
         }
 
         public virtual void ProcessLeftClick() { }
@@ -186,7 +190,7 @@ namespace RiverHollow.Items
         /// <summary>
         /// Removes the object from the Tiles this Object sits upon
         /// </summary>
-        public void RemoveSelfFromTiles()
+        public virtual void RemoveSelfFromTiles()
         {
             foreach (RHTile t in Tiles)
             {
@@ -283,7 +287,7 @@ namespace RiverHollow.Items
             }
         }
 
-        public virtual void DealDamage(int dmg)
+        public void DealDamage(int dmg)
         {
             if (_iHP > 0)
             {
@@ -291,7 +295,7 @@ namespace RiverHollow.Items
 
                 if (_iHP <= 0)
                 {
-                    _bImpassable = false;
+                    _bWalkable = true;
                     _sprite.PlayAnimation(AnimationEnum.KO);
 
                     MapManager.DropItemsOnMap(GetDroppedItems(), CollisionBox.Location.ToVector2());
@@ -337,7 +341,7 @@ namespace RiverHollow.Items
 
             LoadDictionaryData(stringData);
 
-            _bImpassable = false;
+            _bWalkable = true;
 
             _iCurrentState = 0;
             _iBaseYOffset = (_iSpriteHeight / TileSize) - 1;
@@ -729,31 +733,81 @@ namespace RiverHollow.Items
     }
 
     /// <summary>
-    /// WorldItems represent WorldObjects that are created by placing down items
+    /// Structures represent WorldObjects that are built by the player
     /// </summary>
     public abstract class Structure : WorldObject
     {
-        public Vector2 HeldItemPos
-        {
-            get { return _vMapPosition; }
-            set
-            {
-                _vMapPosition = value;
-                if (_sprite != null)
-                {
-                    _sprite.Position = _vMapPosition;// new Vector2(_sprite.Width > TileSize ? value.X - (_sprite.Width - TileSize) / 2 : value.X, (_sprite.Height > TileSize) ? value.Y - (_sprite.Height - TileSize) : value.Y);
-                }
-            }
-        }
-
         protected Structure(int id) : base(id) {
             _iBaseYOffset = (_iSpriteHeight / TileSize) - BaseHeight;
         }
 
-        public override void SnapPositionToGrid(Vector2 position)
+        public class WalkableStructure : Structure
         {
-            base.SnapPositionToGrid(position);
-            HeldItemPos = _vMapPosition;
+            List<SubObjectInfo> _liSubObjectInfo;
+            Vector2 _vecSpecialCoords = Vector2.Zero;
+            public WalkableStructure(int id, Dictionary<string, string> stringData) : base (id)
+            {
+                _liSubObjectInfo = new List<SubObjectInfo>();
+                LoadDictionaryData(stringData);
+
+                Util.AssignValue(ref _vecSpecialCoords, "SpecialCoords", stringData);
+
+                if (stringData.ContainsKey("SubObjects"))
+                {
+                    foreach(string s in Util.FindParams(stringData["SubObjects"]))
+                    {
+                        string[] split = s.Split('-');
+                        _liSubObjectInfo.Add(new SubObjectInfo() { ObjectID = int.Parse(split[0]), Position = new Vector2(int.Parse(split[1]), int.Parse(split[2])) });
+                    }
+                }
+
+                _bWalkable = true;
+                _bDrawUnder = true;
+            }
+
+            public override void PlaceOnMap(Vector2 pos, RHMap map)
+            {
+                base.PlaceOnMap(pos, map);
+                if(_iID == int.Parse(DataManager.Config[15]["ObjectID"]))
+                {
+                    GameManager.MarketPosition = new Vector2(pos.X + _vecSpecialCoords.X, pos.Y + _vecSpecialCoords.Y);
+                    foreach(Merchant m in DIMerchants.Values)
+                    {
+                        if (m.OnTheMap)
+                        {
+                            m.MoveToSpawn();
+                        }
+                    }
+                }
+
+                foreach (SubObjectInfo info in _liSubObjectInfo)
+                {
+                    WorldObject obj = DataManager.GetWorldObjectByID(info.ObjectID);
+                    RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Vector2(pos.X + info.Position.X, pos.Y + info.Position.Y));
+                    targetTile.RemoveWorldObject();
+                    obj.PlaceOnMap(targetTile.Position, MapManager.Maps[MapName]);
+                }
+            }
+
+            public override void RemoveSelfFromTiles()
+            {
+                base.RemoveSelfFromTiles();
+                foreach (SubObjectInfo info in _liSubObjectInfo)
+                {
+                    RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Vector2(_vMapPosition.X + info.Position.X, _vMapPosition.Y + info.Position.Y));
+                    if (targetTile.WorldObject != null)
+                    {
+                        targetTile.WorldObject.Sprite.Drawing = false;
+                        MapManager.Maps[MapName].RemoveWorldObject(targetTile.WorldObject);
+                    }
+                }
+            }
+
+            private struct SubObjectInfo
+            {
+                public int ObjectID;
+                public Vector2 Position;
+            }
         }
 
         public class ClassChanger : Structure
@@ -1016,6 +1070,18 @@ namespace RiverHollow.Items
             }
         }
 
+        public class Light : Structure
+        {
+            public Light(int id, Dictionary<string, string> stringData) : base(id)
+            {
+                LoadDictionaryData(stringData);
+
+                string[] idleSplit = stringData["Idle"].Split('-');
+                _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
+                _sprite.Drawing = true;
+            }
+        }
+
         public abstract class AdjustableObject : Structure
         {
             //This is used for subtypes that have different sprites.
@@ -1090,7 +1156,7 @@ namespace RiverHollow.Items
                     foreach (RHTile t in liAdjacentTiles)
                     {
                         AdjustableObject obj = null;
-                        if(MatchingObjectTest(t, ref obj))
+                        if (MatchingObjectTest(t, ref obj))
                         {
                             obj.AdjustObject(false);
                         }
@@ -1120,7 +1186,8 @@ namespace RiverHollow.Items
             /// </summary>
             /// <param name="tile">Tile to test against</param>
             /// <returns>True if the tile exists and contains a matching AdjustableObject</returns>
-            protected virtual bool MatchingObjectTest(RHTile tile) {
+            protected virtual bool MatchingObjectTest(RHTile tile)
+            {
                 AdjustableObject obj = null;
                 return MatchingObjectTest(tile, ref obj);
             }
@@ -1273,17 +1340,6 @@ namespace RiverHollow.Items
             }
         }
 
-        public class Light : Structure
-        {
-            public Light(int id, Dictionary<string, string> stringData) : base(id)
-            {
-                LoadDictionaryData(stringData);
-
-                string[] idleSplit = stringData["Idle"].Split('-');
-                _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
-                _sprite.Drawing = true;
-            }
-        }
     }
 
     public abstract class TriggerObject : WorldObject
@@ -1501,7 +1557,7 @@ namespace RiverHollow.Items
                         GameManager.ActivateTriggers(_sOutTrigger);
                     }
                     _bHasBeenTriggered = true;
-                    _bImpassable = false;
+                    _bWalkable = true;
                     _bVisible = false;
                 }
             }
@@ -1511,7 +1567,7 @@ namespace RiverHollow.Items
             /// </summary>
             public override void Reset()
             {
-                _bImpassable = true;
+                _bWalkable = false;
                 _bVisible = true;
                 _iTriggersLeft = _iTriggerNumber;
             }

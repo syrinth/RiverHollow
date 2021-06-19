@@ -39,8 +39,6 @@ namespace RiverHollow.Game_Managers
 
         static NewMapInfo _newMapInfo;
         public static RHMap CurrentMap { get; set; }
-
-        public static RHMap MarketMap => Maps[PlayerManager.GetBuildingByID(int.Parse(DataManager.Config[15]["HouseID"])).MapName];
         
         public static void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice)
         {

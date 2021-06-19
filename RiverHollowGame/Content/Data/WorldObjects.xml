@@ -163,19 +163,19 @@
     </Item>
     <Item>
       <Key>40</Key>
-      <Value>[Type:Machine][Image:0-0]</Value>
-    </Item>
-    <Item>
-      <Key>41</Key>
       <Value>[Type:Machine][Image:0-192][Makes:55-0|68-0][Width:32][Height:32][Base:2-2][WorkAnimation:2-0.1]</Value>
     </Item>
     <Item>
-      <Key>42</Key>
+      <Key>41</Key>
       <Value>[Type:Machine][Image:0-0]</Value>
     </Item>
     <Item>
-      <Key>43</Key>
+      <Key>42</Key>
       <Value>[Type:Machine][Image:0-224][MachineType:Processor][Width:32][Height:32][Makes:60-0][Base:2-2][WorkAnimation:2-0.1]</Value>
+    </Item>
+    <Item>
+      <Key>43</Key>
+      <Value>[Type:Machine][Image:0-0]</Value>
     </Item>
     <Item>
       <Key>44</Key>
@@ -195,35 +195,35 @@
     </Item>
     <Item>
       <Key>48</Key>
-      <Value>[Type:Machine][Image:0-0]</Value>
-    </Item>
-    <Item>
-      <Key>49</Key>
       <Value>[Type:Mailbox][Image:208-96][Width:16][Height:32]</Value>
     </Item>
     <Item>
-      <Key>50</Key>
+      <Key>49</Key>
       <Value>[Type:Plant][Image:0-64][ItemID:21][TrNum:4][TrTime:2-3-4]</Value>
     </Item>
     <Item>
-      <Key>51</Key>
+      <Key>50</Key>
       <Value>[Type:Plant][Image:192-16][Height:32][ItemID:121][TrNum:4][TrTime:1-2-3]</Value>
     </Item>
     <Item>
-      <Key>52</Key>
+      <Key>51</Key>
       <Value>[Type:Plant][Image:192-48][Height:32][ItemID:148][TrNum:4][TrTime:1-1-1]</Value>
     </Item>
     <Item>
-      <Key>53</Key>
+      <Key>52</Key>
       <Value>[Type:Plant][Image:64-48][ItemID:22][TrNum:4][TrTime:2-3-4]</Value>
     </Item>
     <Item>
-      <Key>54</Key>
+      <Key>53</Key>
       <Value>[Type:Plant][Image:224-80][Height:32][TrNum:2][TrTime:2][Tool:Scythe][ItemID:61][DestructionAnim:208-0-3-0.1][NoWater]</Value>
     </Item>
     <Item>
-      <Key>55</Key>
+      <Key>54</Key>
       <Value>[Type:StructureUpgrader][Image:176-48]</Value>
+    </Item>
+    <Item>
+      <Key>55</Key>
+      <Value>[Type:WalkableStructure][Image:0-160][Width:80][Height:80][ReqItems:66-15][Base:5-5][SpecialCoords:33-33][SubObjects:6-0-0]</Value>
     </Item>
     <Item>
       <Key>56</Key>
