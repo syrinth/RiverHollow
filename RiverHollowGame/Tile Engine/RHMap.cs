@@ -723,15 +723,12 @@ namespace RiverHollow.Tile_Engine
         /// <param name="height">The Height</param>
         public void CreateDoor(TravelPoint trvlPt, float rectX, float rectY, float width, float height)
         {
-            for (float x = rectX; x < rectX + width; x += TileSize)
+            foreach (Vector2 vec in Util.GetAllPointsInArea(rectX, rectY, width, height, TileSize))
             {
-                for (float y = rectY; y < rectY + height; y += TileSize)
+                RHTile t = GetTileByPixelPosition(vec);
+                if (t != null)
                 {
-                    RHTile t = GetTileByPixelPosition((int)x, (int)y);
-                    if (t != null)
-                    {
-                        t.SetTravelPoint(trvlPt);
-                    }
+                    t.SetTravelPoint(trvlPt);
                 }
             }
         }
@@ -747,15 +744,13 @@ namespace RiverHollow.Tile_Engine
         {
             string mapName = b.MapName;
             TravelPoint pt = DictionaryTravelPoints[mapName];
-            for (float x = pt.Location.X; x < pt.Location.X + pt.CollisionBox.Width; x += TileSize)
+
+            foreach (Vector2 vec in Util.GetAllPointsInArea(pt.Location.X, pt.Location.Y, pt.CollisionBox.Width, pt.CollisionBox.Height, TileSize))
             {
-                for (float y = pt.Location.Y; y < pt.Location.Y + pt.CollisionBox.Height; y += TileSize)
+                RHTile t = GetTileByPixelPosition(vec);
+                if (t != null)
                 {
-                    RHTile t = GetTileByPixelPosition((int)x, (int)y);
-                    if (t != null)
-                    {
-                        t.SetTravelPoint(null);
-                    }
+                    t.SetTravelPoint(null);
                 }
             }
 
@@ -1890,7 +1885,7 @@ namespace RiverHollow.Tile_Engine
                     rv = true;
                 }
             }
-            else if (!TileContainsActor(testTile))
+            else if (!TileContainsActor(testTile) || obj.Walkable)
             {
                 if (obj.WallObject)
                 {

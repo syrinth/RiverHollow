@@ -457,23 +457,24 @@ namespace RiverHollow.Utilities
             }
         }
 
-        //public static List<Vector2> GetAllPointsInArea(float startX, float startY, float width, float height, float incrementSize = 1)
-        //{
-        //    return GetAllPointsInArea((int)startX, (int)startY, (int)width, (int)height);
-        //}
-        //public static List<Vector2> GetAllPointsInArea(int startX, int startY, int width, int height, int incrementSize = 1)
-        //{
-        //    List<Vector2> rv = new List<Vector2>();
-        //    for (int y = startY; y < startY + height; y += incrementSize)
-        //    {
-        //        for (int x = startX; x < startX + width; x += incrementSize)
-        //        {
-        //            rv.Add(new Vector2(x, y));
-        //        }
-        //    }
+        public static List<Vector2> GetAllPointsInArea(float startX, float startY, float width, float height, float incrementSize = 1)
+        {
+            return GetAllPointsInArea((int)startX, (int)startY, (int)width, (int)height);
+        }
+        public static List<Vector2> GetAllPointsInArea(int startX, int startY, int width, int height, int incrementSize = 1)
+        {
+            List<Vector2> rv = new List<Vector2>();
 
-        //    return rv;
-        //}
+            for (int y = startY; y < startY + height; y += incrementSize)
+            {
+                for (int x = startX; x < startX + width; x += incrementSize)
+                {
+                    rv.Add(new Vector2(x, y));
+                }
+            }
+
+            return rv;
+        }
     }
 
     public class RHRandom : Random
