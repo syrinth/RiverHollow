@@ -153,17 +153,21 @@ namespace RiverHollow.Buildings
         {
         }
 
-        public override void PlaceOnMap(Vector2 pos, RHMap map)
+        public override bool PlaceOnMap(Vector2 pos, RHMap map)
         {
+            bool rv = false;
             SetMapName(map.Name);
             if (map.TestMapTiles(this, Tiles))
             {
+                rv = true;
                 map.AssignMapTiles(this, Tiles);
-            }
-            map.CreateBuildingEntrance(this);
+                map.CreateBuildingEntrance(this);
+                map.AddBuilding(this);
 
-            map.AddBuilding(this);
-            PlayerManager.AddBuilding(this);
+                PlayerManager.AddBuilding(this);
+            }
+
+            return rv;
         }
         /// <summary>
         /// Sets the upgrade timer on the building so we know how long we have

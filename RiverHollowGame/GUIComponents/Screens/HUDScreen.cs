@@ -2706,7 +2706,7 @@ namespace RiverHollow.GUIComponents.Screens
             btn.AnchorToInnerSide(_winMain, SideEnum.Bottom);
 
             Color textColor = Color.White;
-            if (!InventoryManager.SufficientItems(_bldg.UpgradeReqs()))
+            if (!InventoryManager.HasSufficientItems(_bldg.UpgradeReqs()))
             {
                 textColor = Color.Red;
                 btn.Enable(false);

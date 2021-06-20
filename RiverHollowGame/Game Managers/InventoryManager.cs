@@ -527,7 +527,7 @@ Exit:
         /// </summary>
         /// <param name="requiredItems">The list of required items and the numbers of each item</param>
         /// <returns></returns>
-        public static bool SufficientItems(Dictionary<int, int> requiredItems)
+        public static bool HasSufficientItems(Dictionary<int, int> requiredItems)
         {
             bool rv = true;
             foreach (KeyValuePair<int, int> kvp in requiredItems)

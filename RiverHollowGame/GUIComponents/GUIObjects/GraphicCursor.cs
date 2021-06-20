@@ -40,16 +40,13 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            if (GameManager.HeldObject == null)
-            {
-                Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, TileSize * 2, TileSize * 2);
+            Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, TileSize * 2, TileSize * 2);
 
-                if (_eCursorType == CursorTypeEnum.Normal) { Alpha = 1; }
-                else { Alpha = (PlayerManager.PlayerInRange(_rCollisionRectangle)) ? 1 : 0.5f; }
+            if (_eCursorType == CursorTypeEnum.Normal) { Alpha = 1; }
+            else { Alpha = (PlayerManager.PlayerInRange(_rCollisionRectangle)) ? 1 : 0.5f; }
 
-                spriteBatch.Draw(_texture, drawRectangle, _rSource, Color.White * Alpha);
-                _guiItem?.Draw(spriteBatch);
-            }
+            spriteBatch.Draw(_texture, drawRectangle, _rSource, Color.White * Alpha);
+            _guiItem?.Draw(spriteBatch);
         }
 
         public static void SetGUIItem(Item heldItem)
@@ -113,7 +110,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             return rv;
         }
 
-        public static void DrawBuilding(SpriteBatch spriteBatch)
+        public static void DrawTownBuildObject(SpriteBatch spriteBatch)
         {
             if (GameManager.HeldObject != null)
             {

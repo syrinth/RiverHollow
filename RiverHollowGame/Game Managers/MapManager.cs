@@ -264,7 +264,7 @@ namespace RiverHollow.Game_Managers
         public static void DrawBase(SpriteBatch spriteBatch)
         {
             CurrentMap.DrawBase(spriteBatch);
-            GUICursor.DrawBuilding(spriteBatch);
+            GUICursor.DrawTownBuildObject(spriteBatch);
             GUICursor.DrawPotentialWorldObject(spriteBatch);
         }
 
@@ -330,10 +330,6 @@ namespace RiverHollow.Game_Managers
         {
             CurrentMap.DropItemsOnMap(items, position, flyingPop);
         }
-        public static bool PlaceWorldObject(WorldObject worldObject)
-        {
-            return CurrentMap.PlaceWorldObject(worldObject);
-        }   
 
         public static void ApplyWeather()
         {

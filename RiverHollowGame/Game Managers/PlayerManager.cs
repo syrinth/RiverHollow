@@ -459,7 +459,7 @@ namespace RiverHollow.Game_Managers
         public static bool ExpendResources(Dictionary<int, int> requiredItems)
         {
             bool rv = false;
-            if (InventoryManager.SufficientItems(requiredItems))
+            if (InventoryManager.HasSufficientItems(requiredItems))
             {
                 rv = true;
                 foreach (KeyValuePair<int, int> kvp in requiredItems)

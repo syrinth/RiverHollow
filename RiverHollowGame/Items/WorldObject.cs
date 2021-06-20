@@ -146,19 +146,19 @@ namespace RiverHollow.Items
             return CollisionBox.Contains(m);
         }
 
-        public virtual void PlaceOnMap(RHMap map)
+        public virtual bool PlaceOnMap(RHMap map)
         {
-            PlaceOnMap(this.MapPosition, map);
+            return PlaceOnMap(this.MapPosition, map);
         }
 
-        public virtual void PlaceOnMap(Vector2 pos, RHMap map)
+        public virtual bool PlaceOnMap(Vector2 pos, RHMap map)
         {
             SetMapName(map.Name);
 
             pos = new Vector2(pos.X - (_iBaseXOffset * TileSize), pos.Y - (_iBaseYOffset * TileSize));
 
             SnapPositionToGrid(pos);
-            map.PlaceWorldObject(this);
+            return map.PlaceWorldObject(this);
         }
 
         protected void SetSpritePos(Vector2 position)
@@ -168,6 +168,8 @@ namespace RiverHollow.Items
                 _sprite.Position = position;
             }
         }
+
+        public virtual void SnapPositionToGrid(Point position) { SnapPositionToGrid(position.ToVector2()); }
         public virtual void SnapPositionToGrid(Vector2 position)
         {
             _vMapPosition = Util.SnapToGrid(position);
@@ -202,14 +204,21 @@ namespace RiverHollow.Items
         /// <summary>
         /// Sets the offset of the mouse based on the 
         /// </summary>
-        /// <param name="mousePosition"></param>
+        /// <param name="mousePosition">The current mousePosition</param>
         public void SetPickupOffset(Vector2 mousePosition)
         {
             PickupOffset = mousePosition - _sprite.Position;
         }
+
+        /// <summary>
+        /// Sets the default PickupOffset if the Width of height
+        /// is greater than a single RHTile
+        /// </summary>
         public void SetPickupOffset()
         {
-            PickupOffset = new Vector2(Width/2, Height/2);
+            int xOffset = (_iBaseWidth > 1) ? (_iBaseWidth - 1) / 2 : 0;
+            int yOffset = (_iBaseHeight > 1) ? (_iBaseHeight -1) / 2 : 0;
+            PickupOffset = new Vector2((_iBaseXOffset + xOffset) * TileSize, (_iBaseYOffset + yOffset) * TileSize);
         }
 
         public List<Item> GetDroppedItems()
@@ -774,28 +783,33 @@ namespace RiverHollow.Items
                 _bDrawUnder = true;
             }
 
-            public override void PlaceOnMap(Vector2 pos, RHMap map)
+            public override bool PlaceOnMap(Vector2 pos, RHMap map)
             {
-                base.PlaceOnMap(pos, map);
-                if(_iID == int.Parse(DataManager.Config[15]["ObjectID"]))
-                {
-                    GameManager.MarketPosition = new Vector2(pos.X + _vecSpecialCoords.X, pos.Y + _vecSpecialCoords.Y);
-                    foreach(Merchant m in DIMerchants.Values)
+                bool rv = false;
+                if (base.PlaceOnMap(pos, map)) {
+                    rv = true;
+                    if (_iID == int.Parse(DataManager.Config[15]["ObjectID"]))
                     {
-                        if (m.OnTheMap)
+                        GameManager.MarketPosition = new Vector2(pos.X + _vecSpecialCoords.X, pos.Y + _vecSpecialCoords.Y);
+                        foreach (Merchant m in DIMerchants.Values)
                         {
-                            m.MoveToSpawn();
+                            if (m.OnTheMap)
+                            {
+                                m.MoveToSpawn();
+                            }
                         }
+                    }
+
+                    foreach (SubObjectInfo info in _liSubObjectInfo)
+                    {
+                        WorldObject obj = DataManager.GetWorldObjectByID(info.ObjectID);
+                        RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Vector2(pos.X + info.Position.X, pos.Y + info.Position.Y));
+                        targetTile.RemoveWorldObject();
+                        obj.PlaceOnMap(targetTile.Position, MapManager.Maps[MapName]);
                     }
                 }
 
-                foreach (SubObjectInfo info in _liSubObjectInfo)
-                {
-                    WorldObject obj = DataManager.GetWorldObjectByID(info.ObjectID);
-                    RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Vector2(pos.X + info.Position.X, pos.Y + info.Position.Y));
-                    targetTile.RemoveWorldObject();
-                    obj.PlaceOnMap(targetTile.Position, MapManager.Maps[MapName]);
-                }
+                return rv;
             }
 
             public override void RemoveSelfFromTiles()
@@ -985,15 +999,21 @@ namespace RiverHollow.Items
 
             public bool MakingSomething() { return _iCurrentlyMaking != -1; }
 
-            public override void PlaceOnMap(Vector2 pos, RHMap map)
+            public override bool PlaceOnMap(Vector2 pos, RHMap map)
             {
-                base.PlaceOnMap(pos, map);
-                GameManager.AddMachine(this, Name);
-
-                if (map.BuildingID != -1)
+                bool rv = false;
+                if (base.PlaceOnMap(pos, map))
                 {
-                    _iContainingBuildingID = map.BuildingID;
+                    rv = true;
+                    GameManager.AddMachine(this, Name);
+
+                    if (map.BuildingID != -1)
+                    {
+                        _iContainingBuildingID = map.BuildingID;
+                    }
                 }
+
+                return rv;
             }
 
             public MachineData SaveData()
@@ -1099,10 +1119,15 @@ namespace RiverHollow.Items
 
             public AdjustableObject(int id) : base(id) { }
 
-            public override void PlaceOnMap(Vector2 pos, RHMap map)
+            public override bool PlaceOnMap(Vector2 pos, RHMap map)
             {
-                base.PlaceOnMap(pos, map);
-                AdjustObject();
+                bool rv = false;
+                if (base.PlaceOnMap(pos, map))
+                {
+                    rv = true;
+                    AdjustObject();
+                }
+                return rv;
             }
 
             /// <summary>
@@ -1626,13 +1651,19 @@ namespace RiverHollow.Items
             GUIManager.OpenMainObject(new HUDUpgradeWindow(PlayerManager.GetBuildingByID(_iBuildingID)));
         }
 
-        public override void PlaceOnMap(Vector2 pos, RHMap map)
+        public override bool PlaceOnMap(Vector2 pos, RHMap map)
         {
-            base.PlaceOnMap(pos, map);
-            if (map.BuildingID != -1)
+            bool rv = false;
+            if (base.PlaceOnMap(pos, map))
             {
-                SetBuildingID(map.BuildingID);
+                rv = true;
+                if (map.BuildingID != -1)
+                {
+                    SetBuildingID(map.BuildingID);
+                }
             }
+
+            return rv;
         }
 
         public void SetBuildingID(int ID)

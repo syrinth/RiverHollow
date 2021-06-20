@@ -51,6 +51,7 @@ namespace RiverHollow.GUIComponents.Screens
                 if (InTownMode()) {
                     LeaveTownMode();
                     GUIManager.OpenMenu();
+                    GameManager.DropWorldObject();
                 }
                 else
                 {
@@ -66,7 +67,6 @@ namespace RiverHollow.GUIComponents.Screens
                         b._bSelected = false; 
                     }
 
-                    GameManager.DropWorldObject();
                     GUIManager.CloseMainObject();
                     GameManager.GoToHUDScreen();
                     GUIManager.OpenMenu();
@@ -352,7 +352,7 @@ namespace RiverHollow.GUIComponents.Screens
                     }
 
                     Color textColor = Color.White;
-                    if (!InventoryManager.SufficientItems(requiredToMake))
+                    if (!InventoryManager.HasSufficientItems(requiredToMake))
                     {
                         textColor = Color.Red;
                         _delAction = null;
