@@ -79,6 +79,7 @@ namespace RiverHollow.Tile_Engine
         private List<WorldActor> _liActorsToRemove;
         private List<WorldObject> _liObjectsToRemove;
 
+        Structure _objSelectedObject = null;
 
         public RHMap() {
             _liMonsterSpawnPoints = new List<MonsterSpawn>();
@@ -1423,23 +1424,16 @@ namespace RiverHollow.Tile_Engine
 
             if (_liTestTiles.Count > 0) { _liTestTiles.Clear(); }
 
-            foreach (Building b in _liBuildings)
+            _objSelectedObject?.SelectObject(false);
+            if (TownModeMoving() && GameManager.HeldObject == null && MouseTile.HasStructureObject())
             {
-                if (TownModeMoving() &&  b.SelectionBox.Contains(mouseLocation) && GameManager.HeldObject == null)
+                WorldObject obj = MouseTile.RetrieveUppermostStructureObject();
+                if (obj != null && obj.IsStructure())
                 {
-                    b._bSelected = true;
+                    _objSelectedObject = (Structure)obj;
+                    _objSelectedObject.SelectObject(true);
                 }
-                else { b._bSelected = false; }
             }
-
-            //RHTile targetTile = GetTileByPixelPosition(GUICursor.GetWorldMousePosition());
-            //if (targetTile.WorldObject != null)
-            //{
-            //    SoundManager.PlayEffect("buildingGrab");
-            //    GameManager.PickUpWorldObject(targetTile.WorldObject);
-            //    targetTile.WorldObject.SetPickupOffset(mouseLocation.ToVector2());
-            //    targetTile.WorldObject.RemoveSelfFromTiles();
-            //}
 
             if (Scrying())
             {
@@ -1519,6 +1513,7 @@ namespace RiverHollow.Tile_Engine
                     switch (toBuild.Type)
                     {
                         case ObjectTypeEnum.Building:
+                        case ObjectTypeEnum.Light:
                         case ObjectTypeEnum.WalkableStructure:
                             rv = PlaceSingleObject(toBuild);
                             break;
@@ -1533,9 +1528,9 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (GameManager.HeldObject == null)
                 {
-                    if (MouseTile.HasObject())
+                    if (MouseTile.HasStructureObject())
                     {
-                        WorldObject targetObj = MouseTile.RetrieveUppermostObject();
+                        WorldObject targetObj = MouseTile.RetrieveUppermostStructureObject();
                         if (targetObj != null)
                         {
                             switch (targetObj.Type)
@@ -1543,6 +1538,7 @@ namespace RiverHollow.Tile_Engine
                                 case ObjectTypeEnum.Building:
                                     RemoveDoor((Building)targetObj);
                                     goto case ObjectTypeEnum.WalkableStructure;
+                                case ObjectTypeEnum.Light:
                                 case ObjectTypeEnum.WalkableStructure:
                                     PickUpWorldObject(mouseLocation, targetObj);
                                     break;
@@ -1554,9 +1550,9 @@ namespace RiverHollow.Tile_Engine
             }
             else if (TownModeDestroy())
             {
-                if (MouseTile != null && MouseTile.HasObject())
+                if (MouseTile != null && MouseTile.HasStructureObject())
                 {
-                    WorldObject toRemove = MouseTile.RetrieveUppermostObject();
+                    WorldObject toRemove = MouseTile.RetrieveUppermostStructureObject();
 
                     switch (toRemove.Type)
                     {
@@ -1616,7 +1612,7 @@ namespace RiverHollow.Tile_Engine
 
             //Create a new object to place, since toBuild is the object we're holding
             Structure newObject = (Structure)DataManager.GetWorldObjectByID(toBuild.ID);
-            newObject.SnapPositionToGrid(toBuild.MapPosition);
+            newObject.SnapPositionToGrid(toBuild.CollisionBox.Location);
 
             if (newObject.PlaceOnMap(this) && PlayerManager.ExpendResources(newObject.RequiredToMake))
             {
@@ -2574,13 +2570,17 @@ namespace RiverHollow.Tile_Engine
             return obj;
         }
 
-        public bool HasObject()
+        private WorldObject ShadowStructure()
         {
-            return WorldObject != null || ShadowObject != null || Flooring != null;
+            return (ShadowObject != null && ShadowObject.IsStructure()) ? ShadowObject : null;
         }
-        public WorldObject RetrieveUppermostObject()
+        public bool HasStructureObject()
         {
-            return ShadowObject ?? WorldObject ?? Flooring;
+            return WorldObject != null || ShadowStructure() != null || Flooring != null;
+        }
+        public WorldObject RetrieveUppermostStructureObject()
+        {
+            return ShadowStructure() ?? WorldObject ?? Flooring;
         }
 
         public void RemoveWorldObject()

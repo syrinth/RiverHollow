@@ -150,6 +150,7 @@ namespace RiverHollow.Items
 
         public virtual bool PlaceOnMap(Vector2 pos, RHMap map)
         {
+            pos = new Vector2(pos.X - (_iBaseXOffset * TileSize), pos.Y - (_iBaseYOffset * TileSize));
             SnapPositionToGrid(pos);
             return map.PlaceWorldObject(this);
         }
@@ -227,6 +228,23 @@ namespace RiverHollow.Items
 
         public bool CompareType(ObjectTypeEnum t) { return Type == t; }
         public bool IsDestructible() { return CompareType(ObjectTypeEnum.Destructible) || CompareType(ObjectTypeEnum.Plant); }
+        public bool IsStructure()
+        {
+            bool rv = false;
+            switch (_eObjectType)
+            {
+                case ObjectTypeEnum.Building:
+                case ObjectTypeEnum.Container:
+                case ObjectTypeEnum.Floor:
+                case ObjectTypeEnum.Light:
+                case ObjectTypeEnum.WalkableStructure:
+                case ObjectTypeEnum.Wall:
+                    rv = true;
+                    break;
+            }
+
+            return rv;
+        }
 
         public virtual bool CanPickUp() { return false; }
     }
@@ -741,6 +759,8 @@ namespace RiverHollow.Items
         protected Dictionary<int, int> _diReqToMake;
         public Dictionary<int, int> RequiredToMake => _diReqToMake;
 
+        protected bool _bSelected = false;
+
         protected Structure(int id) : base(id) {
             _iBaseYOffset = (_iSpriteHeight / TileSize) - BaseHeight;
         }
@@ -751,6 +771,14 @@ namespace RiverHollow.Items
 
             Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
         }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            _sprite.SetColor(_bSelected ? Color.Green : Color.White);
+            base.Draw(spriteBatch);
+        }
+
+        public void SelectObject(bool val) { _bSelected = val; }
 
         public class WalkableStructure : Structure
         {

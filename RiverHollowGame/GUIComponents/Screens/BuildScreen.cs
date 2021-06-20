@@ -63,11 +63,6 @@ namespace RiverHollow.GUIComponents.Screens
 
                     Scry(false);
 
-                    foreach (Building b in PlayerManager.BuildingList)
-                    {
-                        b._bSelected = false; 
-                    }
-
                     GUIManager.CloseMainObject();
                     GameManager.GoToHUDScreen();
                     GUIManager.OpenMenu();

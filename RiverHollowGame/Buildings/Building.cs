@@ -38,7 +38,6 @@ namespace RiverHollow.Buildings
 
         public Vector2 BuildFromPosition { get; private set; }
 
-        public bool _bSelected = false;
         public Container BuildingChest { get; set; }
 
         public Building(int id, Dictionary<string, string> stringData) : base(id)
@@ -115,20 +114,6 @@ namespace RiverHollow.Buildings
                 startX += _iSpriteWidth;
             }
             _sprite.PlayAnimation("1");
-        }
-
-        /// <summary>
-        /// Gets the Building to draw itself, the source rectangle needs to move along the x-axis
-        /// in order to get the proper building image
-        /// </summary>
-        /// <param name="spriteBatch"></param>
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            if (Level > 0)
-            {
-                _sprite.SetColor(_bSelected ? Color.Green : Color.White);
-                base.Draw(spriteBatch);
-            }
         }
 
         /// <summary>
