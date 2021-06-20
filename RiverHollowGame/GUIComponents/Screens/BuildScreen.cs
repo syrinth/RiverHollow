@@ -31,6 +31,7 @@ namespace RiverHollow.GUIComponents.Screens
                 new GUIButton("Structures", BtnStructures),
                 new GUIButton("Flooring", BtnFlooring),
                 new GUIButton("Move", BtnMove),
+                new GUIButton("Remove", BtnRemove),
                 new GUIButton("Exit", BtnExitMenu)
             };
             AddControls(_liButtons);
@@ -100,9 +101,15 @@ namespace RiverHollow.GUIComponents.Screens
         public void BtnMove()
         {
             CloseMenu();
-            GameManager.EnterTownModeBuild();
             GameManager.ClearGMObjects();
             GameManager.EnterTownModeMoving();
+        }
+
+        public void BtnRemove()
+        {
+            CloseMenu();
+            GameManager.ClearGMObjects();
+            GameManager.EnterTownModeDestroy();
         }
 
         public void BtnExitMenu()

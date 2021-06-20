@@ -276,10 +276,20 @@ namespace RiverHollow.Tile_Engine
 
             foreach (WorldActor c in _liActorsToRemove)
             {
-                if (c.IsActorType(ActorEnum.Monster) && Monsters.Contains((Monster)c)) { Monsters.Remove((Monster)c); }
-                else if (_liActors.Contains(c)) { _liActors.Remove(c); }
-                else if (c.IsActorType(ActorEnum.Summon) && _liSummons.Contains((Summon)c)) { _liSummons.Remove((Summon)c); }
+                switch (c.ActorType)
+                {
+                    case ActorEnum.Monster:
+                        Monsters.Remove((Monster)c);
+                        break;
+                    case ActorEnum.Summon:
+                        _liSummons.Remove((Summon)c);
+                        break;
+                    default:
+                        _liActors.Remove(c);
+                        break;
+                }
             }
+
             _liActorsToRemove.Clear();
 
             if (IsRunning())
@@ -1364,7 +1374,7 @@ namespace RiverHollow.Tile_Engine
 
                 if (InTownMode())
                 {
-                    rv = ProcessLeftButtonClickTownMode(mouseLocation);
+                    rv = TownModeLeftClick(mouseLocation);
                 }
                 else
                 {
@@ -1372,11 +1382,18 @@ namespace RiverHollow.Tile_Engine
                     
                     if (TargetTile != null)
                     {
-                        //Handles interactions with objects on the tile, both actual and Shadow
-                        rv = ProcessLeftButtonClickOnObject(mouseLocation);
-
-                        //Handles interactions with a tile that is actually empty, ignores Shadow Tiles
-                        rv = ProcessLeftButtonClickOnEmptyTile(mouseLocation);
+                        if (PlayerManager.PlayerInRange(TargetTile.Center.ToPoint()))
+                        {
+                            //Retrieves any object associated with the tile, this will include
+                            //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
+                            //as being on the tile.
+                            WorldObject obj = TargetTile.GetWorldObject(false);
+                            if (obj != null)
+                            {
+                                obj.ProcessLeftClick();
+                                rv = true;
+                            }
+                        }
 
                         //Handles interacting with NPCs
                         foreach (WorldActor c in _liActors)
@@ -1394,198 +1411,6 @@ namespace RiverHollow.Tile_Engine
                             }
                         }
                     }
-                }
-            }
-
-            return rv;
-        }
-
-        #region Town mode handling
-        /// <summary>
-        /// Handles TownMode interactions
-        /// </summary>
-        /// <param name="mouseLocation">Location of the mouse</param>
-        /// <returns>True if we successfully interacted with an object</returns>
-        private bool ProcessLeftButtonClickTownMode(Point mouseLocation)
-        {
-            bool rv = false;
-
-            //Are we constructing or moving a building?
-            if (TownModeBuild() || TownModeMoving())
-            {
-                Structure toBuild = (Structure)GameManager.HeldObject;
-
-                //If we are holding a WorldObject, we should attempt to place it
-                if (GameManager.HeldObject != null)
-                {
-                    switch (toBuild.Type)
-                    {
-                        case ObjectTypeEnum.Building:
-                        case ObjectTypeEnum.WalkableStructure:
-                            rv = PlaceSingleObject(toBuild);
-                            break;
-                        case ObjectTypeEnum.Floor:
-                            if (MouseTile.Flooring == null) { goto case ObjectTypeEnum.Wall; }
-                            break;
-                        case ObjectTypeEnum.Wall:
-                            rv = BuildMultiObject(toBuild);
-                            break;
-                    }
-                    SoundManager.PlayEffect(rv ? "thump3" : "Cancel");
-                }
-                else if (GameManager.HeldObject == null)
-                {
-                    if (MouseTile.HasObject())
-                    {
-                        WorldObject targetObj = MouseTile.RetrieveUppermostObject();
-                        if (targetObj != null)
-                        {
-                            switch (targetObj.Type)
-                            {
-                                case ObjectTypeEnum.Building:
-                                    RemoveDoor((Building)targetObj);
-                                    goto case ObjectTypeEnum.WalkableStructure;
-                                case ObjectTypeEnum.WalkableStructure:
-                                    PickUpWorldObject(mouseLocation, targetObj);
-                                    break;
-                            }
-                            rv = true;
-                        }
-                    }
-                }
-            }
-            else if (TownModeDestroy())
-            {
-                if (MouseTile != null && MouseTile.HasObject())
-                {
-                    WorldObject toBuild = MouseTile.RetrieveUppermostObject();
-
-                    switch (toBuild.Type)
-                    {
-                        case ObjectTypeEnum.Building:
-                        case ObjectTypeEnum.WalkableStructure:
-                            break;
-                    }
-                }
-            }
-
-            return rv;
-        }
-
-        /// <summary>
-        /// Helper method to process the placement of a singular object
-        /// </summary>
-        /// <param name="toBuild">The Structure object we are placing down.</param>
-        /// <returns>True if we successfully build.</returns>
-        private bool PlaceSingleObject(Structure toBuild)
-        {
-            bool rv = false;
-
-            if (TownModeMoving() || PlayerManager.ExpendResources(toBuild.RequiredToMake))
-            {
-                if (toBuild.PlaceOnMap(this))
-                {
-                    //Drop the Building from the GameManger
-                    GameManager.DropWorldObject();
-
-                    //Only leave TownMode if we were in Build Mode
-                    if (TownModeBuild())
-                    {
-                        LeaveTownMode();
-                        FinishBuilding();
-                    }
-                    rv = true;
-                }
-            }
-
-            return rv;
-        }
-
-        /// <summary>
-        /// Helper method for building one object and allowing the
-        /// possibility of building additional ones
-        /// </summary>
-        /// <param name="toBuild">The Structure that will act as the template to build offo f</param>
-        /// <returns>True if we successfully build.</returns>
-        private bool BuildMultiObject(Structure toBuild)
-        {
-            bool rv = false;
-            //toBuild.SnapPositionToGrid(toBuild.MapPosition);
-
-            //Create a new object to place, since toBuild is the object we're holding
-            Structure newObject = (Structure)DataManager.GetWorldObjectByID(toBuild.ID);
-            newObject.SnapPositionToGrid(toBuild.MapPosition);
-
-            if (newObject.PlaceOnMap(this) && PlayerManager.ExpendResources(newObject.RequiredToMake))
-            {
-                switch (newObject.Type)
-                {
-                    case ObjectTypeEnum.Wall:
-                    case ObjectTypeEnum.Floor:
-                        ((AdjustableObject)newObject).AdjustObject();
-                        break;
-                }
-
-                //If we cannot build the WorldObject again, due to lack of resources, 
-                //clean up after ourselves and drop the WorldObject that we're holding
-                if (!InventoryManager.HasSufficientItems(newObject.RequiredToMake))
-                {
-                    LeaveTownMode();
-                    FinishBuilding();
-
-                    GameManager.DropWorldObject();
-                }
-
-                rv = true;
-            }
-
-            return rv;
-        }
-        #endregion
-
-        /// <summary>
-        /// Handles clicking on any objects that may exist on the clicked tile
-        /// </summary>
-        /// <param name="mouseLocation">Location of the mouse</param>
-        /// <returns></returns>
-        private bool ProcessLeftButtonClickOnObject(Point mouseLocation)
-        {
-            bool rv = false;
-
-            if (PlayerManager.PlayerInRange(TargetTile.Center.ToPoint())){
-                //Retrieves any object associated with the tile, this will include
-                //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
-                //as being on the tile.
-                WorldObject obj = TargetTile.GetWorldObject(false);
-                if (obj != null)
-                {
-                    obj.ProcessLeftClick();
-                    rv = true;
-                }
-            }
-
-            return rv;
-        }
-
-        /// <summary>
-        /// Handles clicking on tiles that have nothing actually set to them.
-        /// This ignores Shadow Tiles.
-        /// </summary>
-        /// <param name="mouseLocation">Location of the mouse</param>
-        /// <returns></returns>
-        private bool ProcessLeftButtonClickOnEmptyTile(Point mouseLocation)
-        {
-            bool rv = false;
-
-            //Get any actual tiles, the false excludes Shadow Tiles
-            WorldObject obj = TargetTile.GetWorldObject(false);
-
-            Item currentItem = InventoryManager.GetCurrentItem();
-            if (obj == null)
-            {
-                if (currentItem != null && currentItem.CompareType(ItemEnum.StaticItem))    //Only procees if tile is empty and we are holding an item)
-                {
-
                 }
             }
 
@@ -1671,6 +1496,155 @@ namespace RiverHollow.Tile_Engine
 
             return rv;
         }
+
+
+        #region Town Mode handling
+        /// <summary>
+        /// Handles TownMode interactions
+        /// </summary>
+        /// <param name="mouseLocation">Location of the mouse</param>
+        /// <returns>True if we successfully interacted with an object</returns>
+        private bool TownModeLeftClick(Point mouseLocation)
+        {
+            bool rv = false;
+
+            //Are we constructing or moving a building?
+            if (TownModeBuild() || TownModeMoving())
+            {
+                Structure toBuild = (Structure)GameManager.HeldObject;
+
+                //If we are holding a WorldObject, we should attempt to place it
+                if (GameManager.HeldObject != null)
+                {
+                    switch (toBuild.Type)
+                    {
+                        case ObjectTypeEnum.Building:
+                        case ObjectTypeEnum.WalkableStructure:
+                            rv = PlaceSingleObject(toBuild);
+                            break;
+                        case ObjectTypeEnum.Floor:
+                            if (MouseTile.Flooring == null) { goto case ObjectTypeEnum.Wall; }
+                            break;
+                        case ObjectTypeEnum.Wall:
+                            rv = BuildMultiObject(toBuild);
+                            break;
+                    }
+                    SoundManager.PlayEffect(rv ? "thump3" : "Cancel");
+                }
+                else if (GameManager.HeldObject == null)
+                {
+                    if (MouseTile.HasObject())
+                    {
+                        WorldObject targetObj = MouseTile.RetrieveUppermostObject();
+                        if (targetObj != null)
+                        {
+                            switch (targetObj.Type)
+                            {
+                                case ObjectTypeEnum.Building:
+                                    RemoveDoor((Building)targetObj);
+                                    goto case ObjectTypeEnum.WalkableStructure;
+                                case ObjectTypeEnum.WalkableStructure:
+                                    PickUpWorldObject(mouseLocation, targetObj);
+                                    break;
+                            }
+                            rv = true;
+                        }
+                    }
+                }
+            }
+            else if (TownModeDestroy())
+            {
+                if (MouseTile != null && MouseTile.HasObject())
+                {
+                    WorldObject toRemove = MouseTile.RetrieveUppermostObject();
+
+                    switch (toRemove.Type)
+                    {
+                        case ObjectTypeEnum.Floor:
+                        case ObjectTypeEnum.Wall:
+                            RemoveWorldObject(toRemove);
+                            foreach(KeyValuePair<int, int> kvp in ((Structure)toRemove).RequiredToMake)
+                            {
+                                InventoryManager.AddToInventory(kvp.Key, kvp.Value);
+                            }
+                            break;
+                    }
+                }
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Helper method to process the placement of a singular object
+        /// </summary>
+        /// <param name="toBuild">The Structure object we are placing down.</param>
+        /// <returns>True if we successfully build.</returns>
+        private bool PlaceSingleObject(Structure toBuild)
+        {
+            bool rv = false;
+
+            if (TownModeMoving() || PlayerManager.ExpendResources(toBuild.RequiredToMake))
+            {
+                if (toBuild.PlaceOnMap(this))
+                {
+                    //Drop the Building from the GameManger
+                    GameManager.DropWorldObject();
+
+                    //Only leave TownMode if we were in Build Mode
+                    if (TownModeBuild())
+                    {
+                        LeaveTownMode();
+                        FinishBuilding();
+                    }
+                    rv = true;
+                }
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Helper method for building one object and allowing the
+        /// possibility of building additional ones
+        /// </summary>
+        /// <param name="toBuild">The Structure that will act as the template to build offo f</param>
+        /// <returns>True if we successfully build.</returns>
+        private bool BuildMultiObject(Structure toBuild)
+        {
+            bool rv = false;
+
+            //Create a new object to place, since toBuild is the object we're holding
+            Structure newObject = (Structure)DataManager.GetWorldObjectByID(toBuild.ID);
+            newObject.SnapPositionToGrid(toBuild.MapPosition);
+
+            if (newObject.PlaceOnMap(this) && PlayerManager.ExpendResources(newObject.RequiredToMake))
+            {
+                switch (newObject.Type)
+                {
+                    case ObjectTypeEnum.Wall:
+                    case ObjectTypeEnum.Floor:
+                        ((AdjustableObject)newObject).AdjustObject();
+                        break;
+                }
+
+                //If we cannot build the WorldObject again, due to lack of resources, 
+                //clean up after ourselves and drop the WorldObject that we're holding
+                if (!InventoryManager.HasSufficientItems(newObject.RequiredToMake))
+                {
+                    LeaveTownMode();
+                    FinishBuilding();
+
+                    GameManager.DropWorldObject();
+                }
+
+                rv = true;
+            }
+
+            return rv;
+        }
+        #endregion
+
         #endregion
 
         public void FinishBuilding()

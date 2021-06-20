@@ -227,7 +227,7 @@
     </Item>
     <Item>
       <Key>56</Key>
-      <Value>[Type:Wall][Image:0-128][Width:16][Height:32]</Value>
+      <Value>[Type:Wall][Image:0-128][Width:16][Height:32][BaseOffset:0-1][ReqItems:0-1]</Value>
     </Item>
     <Item>
       <Key>57</Key>

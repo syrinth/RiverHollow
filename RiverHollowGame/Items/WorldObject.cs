@@ -65,9 +65,6 @@ namespace RiverHollow.Items
 
         protected string _sName;
         public string Name => _sName;
-
-        protected string _sMapName;                                 //Used to play sounds on that map
-        public void SetMapName(string val) { _sMapName = val; }
         #endregion
 
         protected WorldObject(int id)
@@ -153,10 +150,6 @@ namespace RiverHollow.Items
 
         public virtual bool PlaceOnMap(Vector2 pos, RHMap map)
         {
-            SetMapName(map.Name);
-
-            pos = new Vector2(pos.X - (_iBaseXOffset * TileSize), pos.Y - (_iBaseYOffset * TileSize));
-
             SnapPositionToGrid(pos);
             return map.PlaceWorldObject(this);
         }
@@ -1119,17 +1112,6 @@ namespace RiverHollow.Items
 
             public AdjustableObject(int id) : base(id) { }
 
-            public override bool PlaceOnMap(Vector2 pos, RHMap map)
-            {
-                bool rv = false;
-                if (base.PlaceOnMap(pos, map))
-                {
-                    rv = true;
-                    AdjustObject();
-                }
-                return rv;
-            }
-
             /// <summary>
             /// Loads in the different sprite versions required for an AdjustableObject
             /// so that they can be easily played and referenced in the future.
@@ -1157,6 +1139,38 @@ namespace RiverHollow.Items
                 spr.AddAnimation("N", (int)_pImagePos.X + TileSize * 15, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
             }
 
+            public override bool PlaceOnMap(Vector2 pos, RHMap map)
+            {
+                bool rv = false;
+                if (base.PlaceOnMap(pos, map))
+                {
+                    rv = true;
+                    AdjustObject();
+                }
+                return rv;
+            }
+
+            #region Adjustment
+            /// <summary>
+            /// Calls the AdjustmentHelper on the main base RHTile after first
+            /// removing it from the map.
+            /// </summary>
+            public override void RemoveSelfFromTiles()
+            { 
+                RHTile startTile = Tiles[0];
+
+                base.RemoveSelfFromTiles();
+                AdjustmentHelper(Tiles[0]);
+            }
+
+            /// <summary>
+            /// Calls the AdjustmentHelper on the main base RHTile
+            /// </summary>
+            public void AdjustObject()
+            {
+                AdjustmentHelper(Tiles[0]);                
+            }
+
             /// <summary>
             /// Adjusts the source rectangle for the AdjustableObject compared to nearby AdjustableObjects
             /// 
@@ -1167,19 +1181,19 @@ namespace RiverHollow.Items
             /// 
             /// Finally, run this method again on each of the adjacent AdjustableObjects to update their appearance
             /// </summary>
+            /// <param name="startTile">The RHTile to center the adjustments on.</param>
             /// <param name="adjustAdjacent">Whether or not to call this method against the adjacent tiles</param>
-            public void AdjustObject(bool adjustAdjacent = true)
+            protected void AdjustmentHelper(RHTile startTile, bool adjustAdjacent = true)
             {
-                List<RHTile> liAdjacentTiles = new List<RHTile>();
-                RHTile startTile = Tiles[0];
-
+                string mapName = startTile.MapName;
                 string sAdjacent = string.Empty;
+                List<RHTile> liAdjacentTiles = new List<RHTile>();
 
                 //Create the adjacent tiles string
-                MakeAdjustments("N", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sMapName].GetTileByGridCoords(new Point((int)(startTile.X), (int)(startTile.Y - 1))));
-                MakeAdjustments("S", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sMapName].GetTileByGridCoords(new Point((int)(startTile.X), (int)(startTile.Y + 1))));
-                MakeAdjustments("E", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sMapName].GetTileByGridCoords(new Point((int)(startTile.X + 1), (int)(startTile.Y))));
-                MakeAdjustments("W", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sMapName].GetTileByGridCoords(new Point((int)(startTile.X - 1), (int)(startTile.Y))));
+                MakeAdjustments("N", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[mapName].GetTileByGridCoords(new Point((int)(startTile.X), (int)(startTile.Y - 1))));
+                MakeAdjustments("S", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[mapName].GetTileByGridCoords(new Point((int)(startTile.X), (int)(startTile.Y + 1))));
+                MakeAdjustments("E", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[mapName].GetTileByGridCoords(new Point((int)(startTile.X + 1), (int)(startTile.Y))));
+                MakeAdjustments("W", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[mapName].GetTileByGridCoords(new Point((int)(startTile.X - 1), (int)(startTile.Y))));
 
                 Target.PlayAnimation(string.IsNullOrEmpty(sAdjacent) ? "None" : sAdjacent);
 
@@ -1192,7 +1206,7 @@ namespace RiverHollow.Items
                         AdjustableObject obj = null;
                         if (MatchingObjectTest(t, ref obj))
                         {
-                            obj.AdjustObject(false);
+                            obj.AdjustmentHelper(t, false);
                         }
                     }
                 }
@@ -1233,6 +1247,7 @@ namespace RiverHollow.Items
             /// <param name="obj">Reference to any AdjustableObject that may be found</param>
             /// <returns>True if the tile exists and contains a matching AdjustableObject</returns>
             protected virtual bool MatchingObjectTest(RHTile tile, ref AdjustableObject obj) { return false; }
+            #endregion
 
             public class Floor : AdjustableObject
             {

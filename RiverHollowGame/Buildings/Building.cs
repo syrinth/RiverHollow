@@ -156,7 +156,6 @@ namespace RiverHollow.Buildings
         public override bool PlaceOnMap(Vector2 pos, RHMap map)
         {
             bool rv = false;
-            SetMapName(map.Name);
             if (map.TestMapTiles(this, Tiles))
             {
                 rv = true;

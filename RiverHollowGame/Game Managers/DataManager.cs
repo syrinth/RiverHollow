@@ -165,8 +165,16 @@ namespace RiverHollow.Game_Managers
         private static void LoadWorldObjectsDoWork(int id, Dictionary<string, string> taggedDictionary)
         {
             ObjectTypeEnum type = Util.ParseEnum<ObjectTypeEnum>(taggedDictionary["Type"]);
-            if (type == ObjectTypeEnum.Floor) { FloorIDs.Add(id); }
-            else if (type == ObjectTypeEnum.Container) { StructureIDs.Add(id); }
+            switch (type)
+            {
+                case ObjectTypeEnum.Floor:
+                    FloorIDs.Add(id);
+                    break;
+                case ObjectTypeEnum.Wall:
+                case ObjectTypeEnum.Container:
+                    StructureIDs.Add(id);
+                    break;
+            }
         }
 
         private static void LoadDictionary(ref Dictionary<string, Dictionary<string, string>> dictionaryAddTo, string dataFile, ContentManager Content)

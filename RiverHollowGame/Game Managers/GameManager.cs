@@ -149,7 +149,6 @@ namespace RiverHollow.Game_Managers
         #region Machine Handling
         public static void AddMachine(Machine m, string mapName)
         {
-            m.SetMapName(mapName);
             _liMachines.Add(m);
         }
         public static void RemoveMachine(Machine m)
