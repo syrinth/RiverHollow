@@ -303,7 +303,7 @@ namespace RiverHollow.Game_Managers
             ShowMap();
         }
 
-        public static void EnterBuildMode()
+        public static void EnterTownModeBuild()
         {
             _buildType = EnumBuildType.BuildMode;
 
@@ -311,13 +311,15 @@ namespace RiverHollow.Game_Managers
             Scry();
         }
 
-        public static bool InBuildMode() { return _buildType == EnumBuildType.BuildMode; }
+        public static bool InTownMode() { return TownModeBuild() || TownModeMoving() || TownModeDestroy(); }
+        public static bool TownModeBuild() { return _buildType == EnumBuildType.BuildMode; }
+        public static bool TownModeMoving() { return _buildType == EnumBuildType.Move; }
+        public static bool TownModeDestroy() { return _buildType == EnumBuildType.Destroy; }
 
-        public static bool MovingBuildings() { return _buildType == EnumBuildType.Move; }
-        public static void MoveBuilding() { _buildType = EnumBuildType.Move; }
-        public static bool DestroyingBuildings() { return _buildType == EnumBuildType.Destroy; }
-        public static void DestroyBuilding() { _buildType = EnumBuildType.Destroy; }
-        public static void LeaveBuildMode() { _buildType = EnumBuildType.None; }
+        public static void EnterTownModeMoving() { _buildType = EnumBuildType.Move; }
+        public static void EnterTownModeDestroy() { _buildType = EnumBuildType.Destroy; }
+
+        public static void LeaveTownMode() { _buildType = EnumBuildType.None; }
         #endregion
 
         private class InteractionLock

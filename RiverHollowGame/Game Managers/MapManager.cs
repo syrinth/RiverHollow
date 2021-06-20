@@ -305,10 +305,6 @@ namespace RiverHollow.Game_Managers
         {
             return CurrentMap.GetTileByGridCoords(x, y);
         }
-        public static RHTile RetrieveTile(Point mouseLocation)
-        {
-            return CurrentMap.GetTileByPixelPosition(mouseLocation);
-        }
         public static void RemoveWorldObject(WorldObject o)
         {
             CurrentMap.RemoveWorldObject(o);

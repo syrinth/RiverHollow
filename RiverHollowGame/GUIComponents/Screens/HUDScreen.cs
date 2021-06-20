@@ -1759,7 +1759,7 @@ namespace RiverHollow.GUIComponents.Screens
                             {
                                 if (_parent.Action == ActionTypeEnum.Upgrade)
                                 {
-                                    b.Building.StartBuilding(false);
+                                    //b.Building.StartBuilding(false);
                                     GUIManager.CloseMainObject();
                                 }
                                 else { _parent.HandleBuildingSelection(b.Building); }

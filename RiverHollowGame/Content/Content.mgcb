@@ -3095,3 +3095,9 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/Market.png
 
+#begin Sound/Stock/Effects/Cancel.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Effects/Cancel.wav
+

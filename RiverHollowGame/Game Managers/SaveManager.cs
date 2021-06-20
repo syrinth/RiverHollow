@@ -729,8 +729,7 @@ namespace RiverHollow.Game_Managers
             {
                 Building newBuilding = DataManager.GetBuilding(b.iBuildingID);
                 newBuilding.LoadData(b);
-                bool place = b.iBuildingID == 0 || b.iBldgLevel != 0;
-                MapManager.Maps[MapManager.HomeMap].AddBuilding(newBuilding, place, place);
+                newBuilding.PlaceOnMap(newBuilding.MapPosition, MapManager.Maps[MapManager.HomeMap]);
             }
 
             foreach (MapData mapData in dataToLoad.MapData)

@@ -13,7 +13,7 @@ using RiverHollow.Utilities;
 
 namespace RiverHollow.Buildings
 {
-    public class Building : WorldObject
+    public class Building : Structure
     {
         private int _iNPCBuilderID;
         private int _iEntX;
@@ -153,6 +153,18 @@ namespace RiverHollow.Buildings
         {
         }
 
+        public override void PlaceOnMap(Vector2 pos, RHMap map)
+        {
+            SetMapName(map.Name);
+            if (map.TestMapTiles(this, Tiles))
+            {
+                map.AssignMapTiles(this, Tiles);
+            }
+            map.CreateBuildingEntrance(this);
+
+            map.AddBuilding(this);
+            PlayerManager.AddBuilding(this);
+        }
         /// <summary>
         /// Sets the upgrade timer on the building so we know how long we have
         /// until we need to upgrade it to the next stage.
@@ -168,74 +180,74 @@ namespace RiverHollow.Buildings
         /// the original building level.
         /// </summary>
         /// <param name="startAtZero"> Whether to reset the building's value to 0 or not</param>
-        public void StartBuilding(bool startAtZero = true)
-        {
-            RHMap buildingMap = MapManager.Maps[_sBuildingMap];
-            foreach (RHTile t in Tiles)
-            {
-                WorldObject w = t.WorldObject;
-                if (w != null)
-                {
-                    buildingMap.RemoveWorldObject(w);
+        //public void StartBuilding(bool startAtZero = true)
+        //{
+        //    RHMap buildingMap = MapManager.Maps[_sBuildingMap];
+        //    foreach (RHTile t in Tiles)
+        //    {
+        //        WorldObject w = t.WorldObject;
+        //        if (w != null)
+        //        {
+        //            buildingMap.RemoveWorldObject(w);
 
-                }
-                w = t.Flooring;
-                if (w != null)
-                {
-                    buildingMap.RemoveWorldObject(w);
-                }
-            }
-            buildingMap.AssignMapTiles(this, Tiles);
-            buildingMap.CreateBuildingEntrance(this);
-            //if (startAtZero)
-            //{
-            //    _iBldgLvl = 0;
+        //        }
+        //        w = t.Flooring;
+        //        if (w != null)
+        //        {
+        //            buildingMap.RemoveWorldObject(w);
+        //        }
+        //    }
+        //    buildingMap.AssignMapTiles(this, Tiles);
+        //    buildingMap.CreateBuildingEntrance(this);
+        //    //if (startAtZero)
+        //    //{
+        //    //    _iBldgLvl = 0;
 
-            //    Vector2 startAt = new Vector2(CollisionBox.X, CollisionBox.Y - TileSize);
+        //    //    Vector2 startAt = new Vector2(CollisionBox.X, CollisionBox.Y - TileSize);
 
-            //    for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
-            //    {
-            //        for (int y = (int)startAt.Y + TileSize; y < startAt.Y + TileSize + CollisionBox.Height; y += TileSize)
-            //        {
-            //            Floor obj = (Floor)DataManager.GetWorldObject(int.Parse(DataManager.Config[9]["Floor"]));
-            //            obj.SetMapName(MapManager.CurrentMap.Name);
-            //            obj.SnapPositionToGrid(new Vector2(x, y));
-            //            MapManager.CurrentMap.TestMapTiles(obj);
-            //            if (MapManager.PlacePlayerObject(obj))
-            //            {
-            //                obj.AdjustObject();
-            //            }
-            //        }
-            //    }
+        //    //    for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
+        //    //    {
+        //    //        for (int y = (int)startAt.Y + TileSize; y < startAt.Y + TileSize + CollisionBox.Height; y += TileSize)
+        //    //        {
+        //    //            Floor obj = (Floor)DataManager.GetWorldObject(int.Parse(DataManager.Config[9]["Floor"]));
+        //    //            obj.SetMapName(MapManager.CurrentMap.Name);
+        //    //            obj.SnapPositionToGrid(new Vector2(x, y));
+        //    //            MapManager.CurrentMap.TestMapTiles(obj);
+        //    //            if (MapManager.PlacePlayerObject(obj))
+        //    //            {
+        //    //                obj.AdjustObject();
+        //    //            }
+        //    //        }
+        //    //    }
 
-            //    for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
-            //    {
-            //        PlaceWall(new Vector2(x, startAt.Y));
-            //    }
+        //    //    for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
+        //    //    {
+        //    //        PlaceWall(new Vector2(x, startAt.Y));
+        //    //    }
 
-            //    for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
-            //    {
-            //        if (!_rEntrance.Contains(new Vector2(x, startAt.Y + CollisionBox.Height - TileSize)))
-            //        {
-            //            PlaceWall(new Vector2(x, startAt.Y + CollisionBox.Height - TileSize));
-            //        }
-            //    }
+        //    //    for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
+        //    //    {
+        //    //        if (!_rEntrance.Contains(new Vector2(x, startAt.Y + CollisionBox.Height - TileSize)))
+        //    //        {
+        //    //            PlaceWall(new Vector2(x, startAt.Y + CollisionBox.Height - TileSize));
+        //    //        }
+        //    //    }
 
-            //    for (int y = (int)startAt.Y; y < startAt.Y + CollisionBox.Height; y += TileSize)
-            //    {
-            //        PlaceWall(new Vector2(startAt.X, y));
-            //    }
+        //    //    for (int y = (int)startAt.Y; y < startAt.Y + CollisionBox.Height; y += TileSize)
+        //    //    {
+        //    //        PlaceWall(new Vector2(startAt.X, y));
+        //    //    }
 
-            //    for (int y = (int)startAt.Y; y < startAt.Y + CollisionBox.Height; y += TileSize)
-            //    {
-            //        PlaceWall(new Vector2(startAt.X + CollisionBox.Width - TileSize, y));
-            //    }
-            //}
-            //_iUpgradeTimer = _iUpgradeTime + 1;
-            //_sprite.PlayAnimation(_iBldgLvl.ToString());
+        //    //    for (int y = (int)startAt.Y; y < startAt.Y + CollisionBox.Height; y += TileSize)
+        //    //    {
+        //    //        PlaceWall(new Vector2(startAt.X + CollisionBox.Width - TileSize, y));
+        //    //    }
+        //    //}
+        //    //_iUpgradeTimer = _iUpgradeTime + 1;
+        //    //_sprite.PlayAnimation(_iBldgLvl.ToString());
 
-            //DataManager.DiNPC[_iNPCBuilderID].SetBuildTarget(this);
-        }
+        //    //DataManager.DiNPC[_iNPCBuilderID].SetBuildTarget(this);
+        //}
 
         /// <summary>
         /// Helper method for when we start building to place a wall

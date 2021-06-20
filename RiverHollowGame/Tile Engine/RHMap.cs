@@ -44,6 +44,8 @@ namespace RiverHollow.Tile_Engine
         public MonsterFood PrimedFood { get; private set; }
         public RHTile TargetTile { get; private set; } = null;
 
+        private RHTile MouseTile => GetMouseOverTile();
+
         protected TiledMap _map;
         public TiledMap Map { get => _map; }
 
@@ -445,7 +447,7 @@ namespace RiverHollow.Tile_Engine
                             TravelPoint trvlPt = new TravelPoint(mapObject, this.Name);
                             if (mapObject.Properties.ContainsKey("Door")) {
                                 trvlPt.SetDoor();
-                                CreateDoor(ref trvlPt, mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height);
+                                CreateDoor(trvlPt, mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height);
                             }
                             DictionaryTravelPoints.Add(trvlPt.LinkedMap, trvlPt);
                         }
@@ -579,7 +581,7 @@ namespace RiverHollow.Tile_Engine
                     {
                         Building building = DataManager.GetBuilding(int.Parse(tiledObj.Properties["BuildingID"]));
                         building.SnapPositionToGrid(tiledObj.Position);
-                        AddBuilding(building, true);
+                        building.PlaceOnMap(building.MapPosition, this);
                     }
                     else if (tiledObj.Name.Equals("Item"))
                     {
@@ -686,7 +688,28 @@ namespace RiverHollow.Tile_Engine
             _liItems.Clear();
         }
 
-        public void CreateDoor(ref TravelPoint trvlPt, float rectX, float rectY, float width, float height)
+        /// <summary>
+        /// Creates the TravelPoint object necessary for the given Building
+        /// and calls CreateDoor to add the travel info to the correct RHTiles
+        /// </summary>
+        /// <param name="b">The building to create the door for</param>
+        public void CreateBuildingEntrance(Building b)
+        {
+            TravelPoint buildPoint = new TravelPoint(b.TravelBox, b.MapName, this.Name, b.ID);
+            DictionaryTravelPoints.Add(b.TravelLink(), buildPoint); //TODO: FIX THIS
+            CreateDoor(buildPoint, b.TravelBox.X, b.TravelBox.Y, b.TravelBox.Width, b.TravelBox.Height);
+        }
+
+        /// <summary>
+        /// Using the provided information, assign the given TravelPoint to
+        /// the appropriate RHTiles.
+        /// </summary>
+        /// <param name="trvlPt">The TravelPoint to assign</param>
+        /// <param name="rectX">The starting x position</param>
+        /// <param name="rectY">The starting y position</param>
+        /// <param name="width">The Width</param>
+        /// <param name="height">The Height</param>
+        public void CreateDoor(TravelPoint trvlPt, float rectX, float rectY, float width, float height)
         {
             for (float x = rectX; x < rectX + width; x += TileSize)
             {
@@ -695,10 +718,36 @@ namespace RiverHollow.Tile_Engine
                     RHTile t = GetTileByPixelPosition((int)x, (int)y);
                     if (t != null)
                     {
-                        t.SetMapObject(trvlPt);
+                        t.SetTravelPoint(trvlPt);
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Removes the doorway attached to the building.
+        /// 
+        /// Iterates over all tiles described by the TravelPoint and
+        /// clears the relevant Tile's TravelPoint object.
+        /// </summary>
+        /// <param name="b">The building to remove the door of</param>
+        public void RemoveDoor(Building b)
+        {
+            string mapName = b.MapName;
+            TravelPoint pt = DictionaryTravelPoints[mapName];
+            for (float x = pt.Location.X; x < pt.Location.X + pt.CollisionBox.Width; x += TileSize)
+            {
+                for (float y = pt.Location.Y; y < pt.Location.Y + pt.CollisionBox.Height; y += TileSize)
+                {
+                    RHTile t = GetTileByPixelPosition((int)x, (int)y);
+                    if (t != null)
+                    {
+                        t.SetTravelPoint(null);
+                    }
+                }
+            }
+
+            DictionaryTravelPoints.Remove(mapName);
         }
 
         /// <summary>
@@ -1219,7 +1268,7 @@ namespace RiverHollow.Tile_Engine
 
             if (IsPaused()) { return false; }
 
-            RHTile tile = MapManager.RetrieveTile(mouseLocation);
+            RHTile tile = MouseTile;
 
             //Do nothing if no tile could be retrieved
             if (tile == null) { return rv; }
@@ -1289,7 +1338,7 @@ namespace RiverHollow.Tile_Engine
             {
                 SetGameScale(NORMAL_SCALE);
                 GameManager.DropWorldObject();
-                LeaveBuildMode();
+                LeaveTownMode();
                 Unpause();
                 Scry(false);
                 ResetCamera();
@@ -1310,11 +1359,11 @@ namespace RiverHollow.Tile_Engine
             if (!PlayerManager.Busy && !CombatManager.InCombat)
             {
                 //Ensure that we have a tile that we clicked on and that the player is close enough to interact with it.
-                TargetTile = MapManager.RetrieveTile(mouseLocation);
+                TargetTile = MouseTile;
 
-                if (Scrying())
+                if (InTownMode())
                 {
-                    rv = ProcessLeftButtonClickHandleBuilding(mouseLocation);
+                    rv = ProcessLeftButtonClickTownMode(mouseLocation);
                 }
                 else
                 {
@@ -1351,109 +1400,137 @@ namespace RiverHollow.Tile_Engine
         }
 
         /// <summary>
-        /// Handles building interactions. Called after a successful Scrying check in the main handler.
+        /// Handles TownMode interactions
         /// </summary>
         /// <param name="mouseLocation">Location of the mouse</param>
-        /// <returns>True if we successfully interacted with a building</returns>
-        private bool ProcessLeftButtonClickHandleBuilding(Point mouseLocation)
+        /// <returns>True if we successfully interacted with an object</returns>
+        private bool ProcessLeftButtonClickTownMode(Point mouseLocation)
         {
             bool rv = false;
 
             //Are we constructing or moving a building?
-            if (InBuildMode() || MovingBuildings())
+            if (TownModeBuild() || TownModeMoving())
             {
-                WorldObject toBuild = GameManager.HeldObject;
-                //If we are holding a building, we should attempt to drop it.
+                Structure toBuild = (Structure)GameManager.HeldObject;
+
+                //If we are holding a WorldObject, we should attempt to place it
                 if (GameManager.HeldObject != null)
                 {
-                    if (toBuild.CompareType(ObjectTypeEnum.Building))
+                    switch (toBuild.Type)
                     {
-                        Building obj = (Building)toBuild;
-                        if (AddBuilding(obj, false, false))
-                        {
-                            if (MovingBuildings() || PlayerManager.ExpendResources(obj.RequiredToMake))
+                        case ObjectTypeEnum.Building:
+                        case ObjectTypeEnum.WalkableStructure:
+                            rv = PlaceSingleObject(toBuild);
+                            break;
+                        case ObjectTypeEnum.Floor:
+                            bool isFloor = toBuild.CompareType(ObjectTypeEnum.Floor);
+                            if (!isFloor || (isFloor && TargetTile.Flooring == null))
                             {
-                                SoundManager.PlayEffect("thump3");
-                                obj.StartBuilding();   //Set the building to start being built
-                                FinishBuilding();
+                                toBuild.SnapPositionToGrid(toBuild.MapPosition);
 
-                                //Drop the Building from the GameManger
-                                GameManager.DropWorldObject();
-
-                                LeaveBuildMode();
-                                rv = true;
-                            }
-                        }
-                    }
-                    else if (toBuild.CompareType(ObjectTypeEnum.Floor))
-                    {
-                        bool isFloor = toBuild.CompareType(ObjectTypeEnum.Floor);
-                        if (!isFloor || (isFloor && TargetTile.Flooring == null))
-                        {
-                            toBuild.SnapPositionToGrid(toBuild.MapPosition);
-                            WorldObject obj = DataManager.GetWorldObjectByID(toBuild.ID);
-                            obj.SnapPositionToGrid(toBuild.MapPosition);
-                            if (MapManager.PlaceWorldObject(obj))
-                            {
-                                if (PlayerManager.ExpendResources(obj.RequiredToMake))
+                                Structure newObject = (Structure)DataManager.GetWorldObjectByID(toBuild.ID);
+                                newObject.SnapPositionToGrid(toBuild.MapPosition);
+                                if (MapManager.PlaceWorldObject(newObject))
                                 {
-                                    rv = true;
-                                    obj.SetMapName(this.Name);
-
-                                    //If the item placed was a wall object, we need to adjust it based off any adjacent walls
-                                    if (obj.CompareType(ObjectTypeEnum.Floor)) { ((Floor)obj).AdjustObject(); }
-                                    else if (obj.CompareType(ObjectTypeEnum.Wall)) { ((Wall)obj).AdjustObject(); }
-
-                                    bool canBuildAgain = true;
-                                    foreach (KeyValuePair<int, int> kvp in obj.RequiredToMake)
+                                    if (PlayerManager.ExpendResources(newObject.RequiredToMake))
                                     {
-                                        if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
+                                        rv = true;
+                                        newObject.SetMapName(this.Name);
+
+                                        //If the item placed was a wall object, we need to adjust it based off any adjacent walls
+                                        if (newObject.CompareType(ObjectTypeEnum.Floor)) { ((Floor)newObject).AdjustObject(); }
+                                        else if (newObject.CompareType(ObjectTypeEnum.Wall)) { ((Wall)newObject).AdjustObject(); }
+
+                                        bool canBuildAgain = true;
+                                        foreach (KeyValuePair<int, int> kvp in newObject.RequiredToMake)
                                         {
-                                            canBuildAgain = false;
-                                            break;
+                                            if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
+                                            {
+                                                canBuildAgain = false;
+                                                break;
+                                            }
                                         }
-                                    }
 
-                                    if (!canBuildAgain)
-                                    {
-                                        FinishBuilding();
+                                        if (!canBuildAgain)
+                                        {
+                                            FinishBuilding();
 
-                                        GameManager.DropWorldObject();
-                                        LeaveBuildMode();
+                                            GameManager.DropWorldObject();
+                                            LeaveTownMode();
+                                        }
                                     }
                                 }
                             }
-                        }
-                    }
-                    else if (toBuild.CompareType(ObjectTypeEnum.WalkableStructure))
-                    {
-                        if (MovingBuildings())// || PlayerManager.ExpendResources(obj.RequiredToMake))
-                        {
-                            SoundManager.PlayEffect("thump3");
-                            //WorldObject obj = DataManager.GetWorldObjectByID(toBuild.ID);
-                            //obj.SnapPositionToGrid(toBuild.MapPosition);
-                            toBuild.PlaceOnMap(toBuild.MapPosition, this);
-                            FinishBuilding();
-
-                            //Drop the Building from the GameManger
-                            GameManager.DropWorldObject();
-
-                            LeaveBuildMode();
-                            rv = true;
-                        }
+                            break;
                     }
                 }
                 else if (GameManager.HeldObject == null)
                 {
-                    PickupWorldObject(mouseLocation);
+                    if (MouseTile.HasObject())
+                    {
+                        WorldObject targetObj = MouseTile.RetrieveUppermostObject();
+                        if (targetObj != null)
+                        {
+                            switch (targetObj.Type)
+                            {
+                                case ObjectTypeEnum.Building:
+                                    RemoveDoor((Building)targetObj);
+                                    goto case ObjectTypeEnum.WalkableStructure;
+                                case ObjectTypeEnum.WalkableStructure:
+                                    PickUpWorldObject(mouseLocation, targetObj);
+                                    break;
+                            }
+                            rv = true;
+                        }
+                    }
+                }
+            }
+            else if (TownModeDestroy())
+            {
+                if (MouseTile != null && MouseTile.HasObject())
+                {
+                    WorldObject toBuild = MouseTile.RetrieveUppermostObject();
+
+                    switch (toBuild.Type)
+                    {
+                        case ObjectTypeEnum.Building:
+                        case ObjectTypeEnum.WalkableStructure:
+                            break;
+                    }
+                }
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Helper method to process the placement of a singular object
+        /// </summary>
+        /// <param name="toBuild">The Structure object we are placing down.</param>
+        /// <returns></returns>
+        private bool PlaceSingleObject(Structure toBuild)
+        {
+            bool rv = false;
+
+            if (TestMapTiles(toBuild)) {
+                if (TownModeMoving() || PlayerManager.ExpendResources(toBuild.RequiredToMake))
+                {
+                    SoundManager.PlayEffect("thump3");
+                    toBuild.PlaceOnMap(this);
+
+                    //Drop the Building from the GameManger
+                    GameManager.DropWorldObject();
+
+                    //Only leave TownMode if we were in Build Mode
+                    if (TownModeBuild()) {
+                        LeaveTownMode();
+                        FinishBuilding();
+                    }
                     rv = true;
                 }
             }
-            else if (DestroyingBuildings())
-            {
-                //rv = RemoveBuilding(mouseLocation);
-            }
 
+            if (!rv) { SoundManager.PlayEffect("Cancel"); }
             return rv;
         }
 
@@ -1514,7 +1591,7 @@ namespace RiverHollow.Tile_Engine
 
             foreach (Building b in _liBuildings)
             {
-                if (MovingBuildings() &&  b.SelectionBox.Contains(mouseLocation) && GameManager.HeldObject == null)
+                if (TownModeMoving() &&  b.SelectionBox.Contains(mouseLocation) && GameManager.HeldObject == null)
                 {
                     b._bSelected = true;
                 }
@@ -1702,29 +1779,20 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
-        public void PickupWorldObject(Point mouseLocation)
+        /// <summary>
+        /// Look at the tile the mouse is over and, if the tile has an object present,
+        /// pick it up.
+        /// 
+        /// We prioritize picking up a ShadowObject so we grab whatever is in front, instead
+        /// of picking up objects hiding behind a building.
+        /// </summary>
+        /// <param name="mouseLocation"></param>
+        public void PickUpWorldObject(Point mouseLocation, WorldObject targetObj)
         {
-            foreach (Building b in _liBuildings)
-            {
-                if (b.SelectionBox.Contains(mouseLocation))
-                {
-                    SoundManager.PlayEffect("buildingGrab");
-                    GameManager.PickUpWorldObject(b);
-                    b.SetPickupOffset(mouseLocation.ToVector2());
-                    b.RemoveSelfFromTiles();
-                    DictionaryTravelPoints.Remove(b.MapName);
-                    return;
-                }
-            }
-
-            RHTile targetTile = GetTileByPixelPosition(GUICursor.GetWorldMousePosition());
-            if(targetTile.WorldObject != null)
-            {
-                SoundManager.PlayEffect("buildingGrab");
-                GameManager.PickUpWorldObject(targetTile.WorldObject);
-                targetTile.WorldObject.SetPickupOffset(mouseLocation.ToVector2());
-                targetTile.WorldObject.RemoveSelfFromTiles();
-            }
+            SoundManager.PlayEffect("buildingGrab");
+            GameManager.PickUpWorldObject(targetObj);
+            targetObj.SetPickupOffset(mouseLocation.ToVector2());
+            targetObj.RemoveSelfFromTiles();
         }
 
         public bool RemoveBuilding(Point mouseLocation)
@@ -1740,7 +1808,7 @@ namespace RiverHollow.Tile_Engine
                     b.RemoveSelfFromTiles();
                     DictionaryTravelPoints.Remove(b.MapName);
                     PlayerManager.RemoveBuilding(b);
-                    LeaveBuildMode();
+                    LeaveTownMode();
                     Unpause();
                     Scry(false);
                     ResetCamera();
@@ -1752,46 +1820,7 @@ namespace RiverHollow.Tile_Engine
             }
 
             return rv;
-        }
-
-        public bool AddBuilding(Building b, bool placeImmediately = false, bool createEntrance = true)
-        {
-            bool rv = false;
-            List<RHTile> tiles = new List<RHTile>();
-            if (TestMapTiles(b, tiles))
-            {
-                _liTestTiles.Clear();
-                b.SetTiles(tiles);
-
-                if (placeImmediately)
-                {
-                    AssignMapTiles(b, b.Tiles);
-                }
-
-                b.SetHomeMap(this.Name);
-                //Only create the entrance is the bool is set
-                if (createEntrance){
-                    CreateBuildingEntrance(b);
-                }
-
-                if (!_liBuildings.Contains(b)) //For the use case of moving buildings
-                { 
-                    _liBuildings.Add(b);
-                } 
-                PlayerManager.AddBuilding(b);
-                
-                rv = true;
-            }
-
-            return rv;
-        }
-
-        public void CreateBuildingEntrance(Building b)
-        {
-            TravelPoint buildPoint = new TravelPoint(b.TravelBox, b.MapName, this.Name, b.ID);
-            DictionaryTravelPoints.Add(b.TravelLink(), buildPoint); //TODO: FIX THIS
-            CreateDoor(ref buildPoint, b.TravelBox.X, b.TravelBox.Y, b.TravelBox.Width, b.TravelBox.Height);
-        }
+        }        
 
         public bool PlaceWorldObject(WorldObject o)
         {
@@ -2029,6 +2058,14 @@ namespace RiverHollow.Tile_Engine
             Monsters.Add(m);
         }
 
+        public void AddBuilding(Building b)
+        {
+            if (!_liBuildings.Contains(b))
+            {
+                _liBuildings.Add(b);
+            }
+        }
+
         public void AddSummon(Summon obj)
         {
             obj.CurrentMapName = _sName;
@@ -2076,6 +2113,14 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
+        /// <summary>
+        /// Returns the RHTile the mouse is pointing to
+        /// </summary>
+        /// <returns></returns>
+        public RHTile GetMouseOverTile()
+        {
+            return GetTileByPixelPosition(GUICursor.GetWorldMousePosition());
+        }
         public RHTile GetTileByPixelPosition(Vector2 targetLoc)
         {
             return GetTileByPixelPosition((int)targetLoc.X, (int)targetLoc.Y);
@@ -2546,6 +2591,15 @@ namespace RiverHollow.Tile_Engine
             return obj;
         }
 
+        public bool HasObject()
+        {
+            return WorldObject != null || ShadowObject != null || Flooring != null;
+        }
+        public WorldObject RetrieveUppermostObject()
+        {
+            return ShadowObject ?? WorldObject ?? Flooring;
+        }
+
         public void RemoveWorldObject()
         {
             WorldObject = null;
@@ -2636,11 +2690,7 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public void SetMapObject(TravelPoint obj)
-        {
-            _travelPoint = obj;
-        }
-
+        public void SetTravelPoint(TravelPoint obj) { _travelPoint = obj; }
         public TravelPoint GetTravelPoint()
         {
             return _travelPoint;

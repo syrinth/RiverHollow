@@ -43,14 +43,13 @@ namespace RiverHollow.GUIComponents.Screens
             bool rv = base.ProcessRightButtonClick(mouse);
 
             //If we're holding something, and we're moving an object. Do not close anything
-            if (GameManager.HeldObject != null && GameManager.MovingBuildings()) { rv = true; }
+            if (GameManager.HeldObject != null && GameManager.TownModeMoving()) { rv = true; }
 
             //If the right click has not been processed, we probably want to close anything that we have open.
             if (!rv)
             {
-                //ToDo: Need to handle right-clicking while building which should go back to menu
-                if (false)
-                {
+                if (InTownMode()) {
+                    LeaveTownMode();
                     GUIManager.OpenMenu();
                 }
                 else
@@ -101,9 +100,9 @@ namespace RiverHollow.GUIComponents.Screens
         public void BtnMove()
         {
             CloseMenu();
-            GameManager.EnterBuildMode();
+            GameManager.EnterTownModeBuild();
             GameManager.ClearGMObjects();
-            GameManager.MoveBuilding();
+            GameManager.EnterTownModeMoving();
         }
 
         public void BtnExitMenu()
@@ -130,7 +129,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (create)
             {
-                GameManager.EnterBuildMode();
+                GameManager.EnterTownModeBuild();
                 GameManager.PickUpWorldObject(DataManager.GetBuilding(obj.ID));
             }
 
@@ -242,7 +241,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             public void ConstructWorldObject(int objID)
             {
-                WorldObject obj;
+                Structure obj;
                 string name = string.Empty;
                 Dictionary<int, int> requiredToMake;
                 if (_eObjectBuildType == ObjectTypeEnum.Building)
@@ -252,8 +251,8 @@ namespace RiverHollow.GUIComponents.Screens
                     name = GameManager.DIBuildInfo[objID].Name;
                 }
                 else
-                {
-                    obj = DataManager.GetWorldObjectByID(objID);
+                {                   
+                    obj = (Structure)DataManager.GetWorldObjectByID(objID);
                     requiredToMake = obj.RequiredToMake;
                     name = obj.Name;
                 }
@@ -273,7 +272,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                 if (create)
                 {
-                    GameManager.EnterBuildMode();
+                    GameManager.EnterTownModeBuild();
                     GameManager.PickUpWorldObject(obj);
                     obj.SetPickupOffset();
                 }
@@ -347,7 +346,7 @@ namespace RiverHollow.GUIComponents.Screens
                         name = GameManager.DIBuildInfo[id].Name;
                     }
                     else {
-                        WorldObject obj = DataManager.GetWorldObjectByID(id);
+                        Structure obj = (Structure)DataManager.GetWorldObjectByID(id);
                         requiredToMake = obj.RequiredToMake;
                         name = obj.Name;
                     }

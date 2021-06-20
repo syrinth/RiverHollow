@@ -68,10 +68,6 @@ namespace RiverHollow.Items
 
         protected string _sMapName;                                 //Used to play sounds on that map
         public void SetMapName(string val) { _sMapName = val; }
-
-        protected Dictionary<int, int> _diReqToMake;
-        public Dictionary<int, int> RequiredToMake => _diReqToMake;
-
         #endregion
 
         protected WorldObject(int id)
@@ -84,7 +80,7 @@ namespace RiverHollow.Items
             DataManager.GetTextData("WorldObject", _iID, ref _sName, "Name");
         }
 
-        protected void LoadDictionaryData(Dictionary<string, string> stringData, bool loadSprite = true)
+        protected virtual void LoadDictionaryData(Dictionary<string, string> stringData, bool loadSprite = true)
         {
             Util.AssignValue(ref _pImagePos, "Image", stringData);
 
@@ -95,8 +91,6 @@ namespace RiverHollow.Items
             Util.AssignValues(ref _iBaseWidth, ref _iBaseHeight, "Base", stringData);
 
             Util.AssignValue(ref _eObjectType, "Type", stringData);
-
-            Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
 
             if (loadSprite)
             {
@@ -150,6 +144,11 @@ namespace RiverHollow.Items
         public virtual bool Contains(Point m)
         {
             return CollisionBox.Contains(m);
+        }
+
+        public virtual void PlaceOnMap(RHMap map)
+        {
+            PlaceOnMap(this.MapPosition, map);
         }
 
         public virtual void PlaceOnMap(Vector2 pos, RHMap map)
@@ -737,8 +736,18 @@ namespace RiverHollow.Items
     /// </summary>
     public abstract class Structure : WorldObject
     {
+        protected Dictionary<int, int> _diReqToMake;
+        public Dictionary<int, int> RequiredToMake => _diReqToMake;
+
         protected Structure(int id) : base(id) {
             _iBaseYOffset = (_iSpriteHeight / TileSize) - BaseHeight;
+        }
+
+        protected override void LoadDictionaryData(Dictionary<string, string> stringData, bool loadSprite = true)
+        {
+            base.LoadDictionaryData(stringData, loadSprite);
+
+            Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
         }
 
         public class WalkableStructure : Structure
