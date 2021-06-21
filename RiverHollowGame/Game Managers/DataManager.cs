@@ -11,11 +11,11 @@ using RiverHollow.Items;
 using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Items.Structure;
+using static RiverHollow.Items.Buildable;
 using static RiverHollow.Items.TriggerObject;
-using static RiverHollow.Items.Structure.Machine;
+using static RiverHollow.Items.Buildable.Machine;
 using RiverHollow.Misc;
-using static RiverHollow.Items.Structure.AdjustableObject;
+using static RiverHollow.Items.Buildable.AdjustableObject;
 using RiverHollow.Tile_Engine;
 
 namespace RiverHollow.Game_Managers
@@ -474,8 +474,8 @@ namespace RiverHollow.Game_Managers
                         return new Gatherable(id, diData);
                     case ObjectTypeEnum.Machine:
                         return new Machine(id, diData);
-                    case ObjectTypeEnum.WalkableStructure:
-                        return new WalkableStructure(id, diData);
+                    case ObjectTypeEnum.Structure:
+                        return new Structure(id, diData);
                     case ObjectTypeEnum.Wall:
                         return new Wall(id, diData);
                     case ObjectTypeEnum.Floor:

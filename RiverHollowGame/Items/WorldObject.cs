@@ -228,7 +228,7 @@ namespace RiverHollow.Items
 
         public bool CompareType(ObjectTypeEnum t) { return Type == t; }
         public bool IsDestructible() { return CompareType(ObjectTypeEnum.Destructible) || CompareType(ObjectTypeEnum.Plant); }
-        public bool IsStructure()
+        public bool IsBuildable()
         {
             bool rv = false;
             switch (_eObjectType)
@@ -237,7 +237,7 @@ namespace RiverHollow.Items
                 case ObjectTypeEnum.Container:
                 case ObjectTypeEnum.Floor:
                 case ObjectTypeEnum.Light:
-                case ObjectTypeEnum.WalkableStructure:
+                case ObjectTypeEnum.Structure:
                 case ObjectTypeEnum.Wall:
                     rv = true;
                     break;
@@ -754,14 +754,14 @@ namespace RiverHollow.Items
     /// <summary>
     /// Structures represent WorldObjects that are built by the player
     /// </summary>
-    public abstract class Structure : WorldObject
+    public abstract class Buildable : WorldObject
     {
         protected Dictionary<int, int> _diReqToMake;
         public Dictionary<int, int> RequiredToMake => _diReqToMake;
 
         protected bool _bSelected = false;
 
-        protected Structure(int id) : base(id) {
+        protected Buildable(int id) : base(id) {
             _iBaseYOffset = (_iSpriteHeight / TileSize) - BaseHeight;
         }
 
@@ -780,11 +780,11 @@ namespace RiverHollow.Items
 
         public void SelectObject(bool val) { _bSelected = val; }
 
-        public class WalkableStructure : Structure
+        public class Structure : Buildable
         {
             List<SubObjectInfo> _liSubObjectInfo;
             Vector2 _vecSpecialCoords = Vector2.Zero;
-            public WalkableStructure(int id, Dictionary<string, string> stringData) : base (id)
+            public Structure(int id, Dictionary<string, string> stringData) : base (id)
             {
                 _liSubObjectInfo = new List<SubObjectInfo>();
                 LoadDictionaryData(stringData);
@@ -854,7 +854,7 @@ namespace RiverHollow.Items
             }
         }
 
-        public class ClassChanger : Structure
+        public class ClassChanger : Buildable
         {
             public ClassChanger(int id, Dictionary<string, string> stringData) : base(id)
             {
@@ -879,7 +879,7 @@ namespace RiverHollow.Items
             public virtual void LoadData(MachineData mac) { }
         }
 
-        public class Machine : Structure
+        public class Machine : Buildable
         {
             readonly string _sEffectWorking = "";
 
@@ -1061,7 +1061,7 @@ namespace RiverHollow.Items
             }
         }
 
-        public class Container : Structure
+        public class Container : Buildable
         {
             public int Rows { get; }
             public int Columns { get; }
@@ -1120,7 +1120,7 @@ namespace RiverHollow.Items
             }
         }
 
-        public class Light : Structure
+        public class Light : Buildable
         {
             public Light(int id, Dictionary<string, string> stringData) : base(id)
             {
@@ -1132,7 +1132,7 @@ namespace RiverHollow.Items
             }
         }
 
-        public abstract class AdjustableObject : Structure
+        public abstract class AdjustableObject : Buildable
         {
             //This is used for subtypes that have different sprites.
             //Like the Earth which has a watered and unwatered Sprite

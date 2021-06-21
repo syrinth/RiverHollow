@@ -8,12 +8,12 @@ using RiverHollow.Items;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Items.Structure;
+using static RiverHollow.Items.Buildable;
 using RiverHollow.Utilities;
 
 namespace RiverHollow.Buildings
 {
-    public class Building : Structure
+    public class Building : Buildable
     {
         private int _iNPCBuilderID;
         private int _iEntX;
@@ -148,16 +148,6 @@ namespace RiverHollow.Buildings
 
             return rv;
         }
- 
-        /// <summary>
-        /// Helper method for when we start building to place a wall
-        /// at the given location in the buildings collision box.
-        /// </summary>
-        /// <param name="location">The map location to create the wall.</param>
-        private void PlaceWall(Vector2 location)
-        {
-            DataManager.CreateAndPlaceNewWorldObject(int.Parse(DataManager.Config[9]["Wall"]), location, MapManager.CurrentMap);
-        }
 
         public Dictionary<int, int> UpgradeReqs()
         {
@@ -175,27 +165,6 @@ namespace RiverHollow.Buildings
         /// </summary>
         public void Upgrade()
         {
-            RHMap buildingMap = MapManager.Maps[_sBuildingMap];
-            if (Level == 0)
-            {
-                foreach (RHTile t in Tiles)
-                {
-                    WorldObject w = t.WorldObject;
-                    if (w != null)
-                    {
-                        buildingMap.RemoveWorldObject(w);
-
-                    }
-                    w = t.Flooring;
-                    if (w != null)
-                    {
-                        buildingMap.RemoveWorldObject(w);
-                    }
-                }
-                buildingMap.AssignMapTiles(this, Tiles);
-                buildingMap.CreateBuildingEntrance(this);
-            }
-
             if (Level + 1 <= MaxBldgLevel)
             {
                 Level++;
@@ -213,16 +182,6 @@ namespace RiverHollow.Buildings
         public void SetHomeMap(string name)
         {
             _sBuildingMap = name;
-        }
-
-        /// <summary>
-        /// Tells the building which tiles it is sitting on for the base. Required
-        /// for the set up and take down of the walls during initial construction.
-        /// </summary>
-        /// <param name="tiles">List of Tiles on the building's base.</param>
-        public void SetTiles(List<RHTile> tiles)
-        {
-            Tiles = tiles;
         }
 
         public string TravelLink()

@@ -219,11 +219,11 @@
     </Item>
     <Item>
       <Key>54</Key>
-      <Value>[Type:StructureUpgrader][Image:176-48]</Value>
+      <Value>[Type:Structure][Image:0-160][Width:80][Height:80][ReqItems:66-15][Base:5-5][SpecialCoords:33-33][SubObjects:6-0-0]</Value>
     </Item>
     <Item>
       <Key>55</Key>
-      <Value>[Type:WalkableStructure][Image:0-160][Width:80][Height:80][ReqItems:66-15][Base:5-5][SpecialCoords:33-33][SubObjects:6-0-0]</Value>
+      <Value>[Type:StructureUpgrader][Image:176-48]</Value>
     </Item>
     <Item>
       <Key>56</Key>

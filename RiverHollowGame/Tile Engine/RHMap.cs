@@ -16,9 +16,9 @@ using static RiverHollow.RiverHollow;
 using static RiverHollow.Game_Managers.CombatManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Items.Structure;
+using static RiverHollow.Items.Buildable;
 using System.Linq;
-using static RiverHollow.Items.Structure.AdjustableObject;
+using static RiverHollow.Items.Buildable.AdjustableObject;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -79,7 +79,7 @@ namespace RiverHollow.Tile_Engine
         private List<WorldActor> _liActorsToRemove;
         private List<WorldObject> _liObjectsToRemove;
 
-        Structure _objSelectedObject = null;
+        Buildable _objSelectedObject = null;
 
         public RHMap() {
             _liMonsterSpawnPoints = new List<MonsterSpawn>();
@@ -1420,12 +1420,12 @@ namespace RiverHollow.Tile_Engine
             if (_liTestTiles.Count > 0) { _liTestTiles.Clear(); }
 
             _objSelectedObject?.SelectObject(false);
-            if (TownModeMoving() && GameManager.HeldObject == null && MouseTile.HasStructureObject())
+            if (TownModeMoving() && GameManager.HeldObject == null && MouseTile.HasBuildableObject())
             {
                 WorldObject obj = MouseTile.RetrieveUppermostStructureObject();
-                if (obj != null && obj.IsStructure())
+                if (obj != null && obj.IsBuildable())
                 {
-                    _objSelectedObject = (Structure)obj;
+                    _objSelectedObject = (Buildable)obj;
                     _objSelectedObject.SelectObject(true);
                 }
             }
@@ -1500,7 +1500,7 @@ namespace RiverHollow.Tile_Engine
             //Are we constructing or moving a building?
             if (TownModeBuild() || TownModeMoving())
             {
-                Structure toBuild = (Structure)GameManager.HeldObject;
+                Buildable toBuild = (Buildable)GameManager.HeldObject;
 
                 //If we are holding a WorldObject, we should attempt to place it
                 if (GameManager.HeldObject != null)
@@ -1509,7 +1509,7 @@ namespace RiverHollow.Tile_Engine
                     {
                         case ObjectTypeEnum.Building:
                         case ObjectTypeEnum.Light:
-                        case ObjectTypeEnum.WalkableStructure:
+                        case ObjectTypeEnum.Structure:
                             rv = PlaceSingleObject(toBuild);
                             break;
                         case ObjectTypeEnum.Floor:
@@ -1523,7 +1523,7 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (GameManager.HeldObject == null)
                 {
-                    if (MouseTile.HasStructureObject())
+                    if (MouseTile.HasBuildableObject())
                     {
                         WorldObject targetObj = MouseTile.RetrieveUppermostStructureObject();
                         if (targetObj != null)
@@ -1532,9 +1532,9 @@ namespace RiverHollow.Tile_Engine
                             {
                                 case ObjectTypeEnum.Building:
                                     RemoveDoor((Building)targetObj);
-                                    goto case ObjectTypeEnum.WalkableStructure;
+                                    goto case ObjectTypeEnum.Structure;
                                 case ObjectTypeEnum.Light:
-                                case ObjectTypeEnum.WalkableStructure:
+                                case ObjectTypeEnum.Structure:
                                     PickUpWorldObject(mouseLocation, targetObj);
                                     break;
                             }
@@ -1545,7 +1545,7 @@ namespace RiverHollow.Tile_Engine
             }
             else if (TownModeDestroy())
             {
-                if (MouseTile != null && MouseTile.HasStructureObject())
+                if (MouseTile != null && MouseTile.HasBuildableObject())
                 {
                     WorldObject toRemove = MouseTile.RetrieveUppermostStructureObject();
 
@@ -1554,7 +1554,7 @@ namespace RiverHollow.Tile_Engine
                         case ObjectTypeEnum.Floor:
                         case ObjectTypeEnum.Wall:
                             RemoveWorldObject(toRemove);
-                            foreach(KeyValuePair<int, int> kvp in ((Structure)toRemove).RequiredToMake)
+                            foreach(KeyValuePair<int, int> kvp in ((Buildable)toRemove).RequiredToMake)
                             {
                                 InventoryManager.AddToInventory(kvp.Key, kvp.Value);
                             }
@@ -1571,7 +1571,7 @@ namespace RiverHollow.Tile_Engine
         /// </summary>
         /// <param name="toBuild">The Structure object we are placing down.</param>
         /// <returns>True if we successfully build.</returns>
-        private bool PlaceSingleObject(Structure toBuild)
+        private bool PlaceSingleObject(Buildable toBuild)
         {
             bool rv = false;
 
@@ -1601,12 +1601,12 @@ namespace RiverHollow.Tile_Engine
         /// </summary>
         /// <param name="toBuild">The Structure that will act as the template to build offo f</param>
         /// <returns>True if we successfully build.</returns>
-        private bool BuildMultiObject(Structure toBuild)
+        private bool BuildMultiObject(Buildable toBuild)
         {
             bool rv = false;
 
             //Create a new object to place, since toBuild is the object we're holding
-            Structure newObject = (Structure)DataManager.GetWorldObjectByID(toBuild.ID);
+            Buildable newObject = (Buildable)DataManager.GetWorldObjectByID(toBuild.ID);
             newObject.SnapPositionToGrid(toBuild.CollisionBox.Location);
 
             if (newObject.PlaceOnMap(this) && PlayerManager.ExpendResources(newObject.RequiredToMake))
@@ -2567,9 +2567,9 @@ namespace RiverHollow.Tile_Engine
 
         private WorldObject ShadowStructure()
         {
-            return (ShadowObject != null && ShadowObject.IsStructure()) ? ShadowObject : null;
+            return (ShadowObject != null && ShadowObject.IsBuildable()) ? ShadowObject : null;
         }
-        public bool HasStructureObject()
+        public bool HasBuildableObject()
         {
             return WorldObject != null || ShadowStructure() != null || Flooring != null;
         }

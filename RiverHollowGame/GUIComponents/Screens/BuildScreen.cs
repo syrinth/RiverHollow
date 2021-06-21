@@ -243,7 +243,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             public void ConstructWorldObject(int objID)
             {
-                Structure obj;
+                Buildable obj;
                 string name = string.Empty;
                 Dictionary<int, int> requiredToMake;
                 if (_eObjectBuildType == ObjectTypeEnum.Building)
@@ -254,7 +254,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
                 else
                 {                   
-                    obj = (Structure)DataManager.GetWorldObjectByID(objID);
+                    obj = (Buildable)DataManager.GetWorldObjectByID(objID);
                     requiredToMake = obj.RequiredToMake;
                     name = obj.Name;
                 }
@@ -348,7 +348,7 @@ namespace RiverHollow.GUIComponents.Screens
                         name = GameManager.DIBuildInfo[id].Name;
                     }
                     else {
-                        Structure obj = (Structure)DataManager.GetWorldObjectByID(id);
+                        Buildable obj = (Buildable)DataManager.GetWorldObjectByID(id);
                         requiredToMake = obj.RequiredToMake;
                         name = obj.Name;
                     }

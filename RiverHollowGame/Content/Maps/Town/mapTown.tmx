@@ -441,7 +441,7 @@
   </object>
   <object id="86" name="WorldObject" x="403.03" y="836.053" width="73.94" height="70.1448">
    <properties>
-    <property name="ObjectID" type="int" value="55"/>
+    <property name="ObjectID" type="int" value="54"/>
    </properties>
   </object>
  </objectgroup>

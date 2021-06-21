@@ -519,7 +519,7 @@
   </object>
   <object id="18" name="ResourceSpawn" x="554.333" y="1527.33" width="112.333" height="111">
    <properties>
-    <property name="Resources" value="24|55"/>
+    <property name="Resources" value="24|54"/>
    </properties>
   </object>
   <object id="20" name="ResourceSpawn" x="1380.67" y="858.5" width="97.3334" height="195">
@@ -534,7 +534,7 @@
   </object>
   <object id="24" name="ResourceSpawn" x="195.333" y="87.8333" width="297.333" height="228.333">
    <properties>
-    <property name="Resources" value="55|3|47"/>
+    <property name="Resources" value="54|3|47"/>
    </properties>
   </object>
   <object id="28" name="ResourceSpawn" x="1150.67" y="1778.67" width="193.333" height="157.333">

@@ -1459,11 +1459,11 @@
     </Item>
     <Item>
       <Key>WorldObject_54</Key>
-      <Value>[Name:Upgrade Board]</Value>
+      <Value>[Name:Market]</Value>
     </Item>
     <Item>
       <Key>WorldObject_55</Key>
-      <Value>[Name:Market]</Value>
+      <Value>[Name:Upgrade Board]</Value>
     </Item>
     <Item>
       <Key>WorldObject_56</Key>
