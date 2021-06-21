@@ -86,7 +86,7 @@
  <objectgroup id="5" name="MapObject">
   <object id="40" name="ResourceSpawn" x="96.2798" y="54.0405" width="124.333" height="96.333">
    <properties>
-    <property name="Resources" value="6"/>
+    <property name="Resources" value="5"/>
    </properties>
   </object>
   <object id="48" name="SpawnPoint" x="49.5" y="196.25" width="10" height="8.5">
@@ -106,7 +106,7 @@
   </object>
   <object id="56" name="WorldObject" x="260.792" y="196.792" width="5.75" height="5.75">
    <properties>
-    <property name="ObjectID" type="int" value="1"/>
+    <property name="ObjectID" type="int" value="0"/>
    </properties>
   </object>
  </objectgroup>

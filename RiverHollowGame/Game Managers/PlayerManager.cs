@@ -651,14 +651,9 @@ namespace RiverHollow.Game_Managers
                             target.GetTileByDirection(DirectionEnum.Right).DamageObject(PlayerManager.ToolInUse);
                         }
                     }
-                    else if (PlayerManager.ToolIsShovel() && target.CanDig())
+                    else if (PlayerManager.ToolIsWateringCan() && target.Flooring != null)
                     {
-                        target.Dig();
-                        MapManager.CurrentMap.TilledTiles.Add(target);
-                    }
-                    else if (PlayerManager.ToolIsWateringCan() && target.Flooring != null && target.Flooring.CompareType(ObjectTypeEnum.Earth))
-                    {
-                        target.Water(true);
+                        //target.Water(true);
                     }
 
                     target = null;

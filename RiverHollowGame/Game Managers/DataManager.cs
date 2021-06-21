@@ -13,10 +13,10 @@ using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Items.Buildable;
 using static RiverHollow.Items.TriggerObject;
-using static RiverHollow.Items.Buildable.Machine;
 using RiverHollow.Misc;
 using static RiverHollow.Items.Buildable.AdjustableObject;
 using RiverHollow.Tile_Engine;
+using static RiverHollow.Items.Buildable.AdjustableObject.Floor;
 
 namespace RiverHollow.Game_Managers
 {
@@ -170,8 +170,10 @@ namespace RiverHollow.Game_Managers
                 case ObjectTypeEnum.Floor:
                     FloorIDs.Add(id);
                     break;
-                case ObjectTypeEnum.Wall:
                 case ObjectTypeEnum.Container:
+                case ObjectTypeEnum.Garden:
+                case ObjectTypeEnum.Light:
+                case ObjectTypeEnum.Wall:
                     StructureIDs.Add(id);
                     break;
             }
@@ -459,33 +461,33 @@ namespace RiverHollow.Game_Managers
                 Dictionary<string, string> diData = _diWorldObjects[id];
                 switch (Util.ParseEnum<ObjectTypeEnum>(diData["Type"]))
                 {
+                    case ObjectTypeEnum.CombatHazard:
+                        return new CombatHazard(id, diData);
+                    case ObjectTypeEnum.Container:
+                        return new Container(id, diData);
                     case ObjectTypeEnum.Destructible:
                         if (diData.ContainsKey("Tree")) { return new Tree(id, diData); }
                         else { return new Destructible(id, diData); }
-                    case ObjectTypeEnum.Container:
-                        return new Container(id, diData);
-                    case ObjectTypeEnum.ClassChanger:
-                        return new ClassChanger(id, diData);
-                    case ObjectTypeEnum.StructureUpgrader:
-                        return new StructureUpgrader(id, diData);
-                    case ObjectTypeEnum.Plant:
-                        return new Plant(id, diData);
-                    case ObjectTypeEnum.Gatherable:
-                        return new Gatherable(id, diData);
-                    case ObjectTypeEnum.Machine:
-                        return new Machine(id, diData);
-                    case ObjectTypeEnum.Structure:
-                        return new Structure(id, diData);
-                    case ObjectTypeEnum.Wall:
-                        return new Wall(id, diData);
                     case ObjectTypeEnum.Floor:
                         return new Floor(id, diData);
+                    case ObjectTypeEnum.Garden:
+                        return new Garden(id, diData);
+                    case ObjectTypeEnum.Gatherable:
+                        return new Gatherable(id, diData);
                     case ObjectTypeEnum.Light:
                         return new Light(id, diData);
-                    case ObjectTypeEnum.CombatHazard:
-                        return new CombatHazard(id, diData);
+                    case ObjectTypeEnum.Machine:
+                        return new Machine(id, diData);
                     case ObjectTypeEnum.Mailbox:
                         return new Mailbox(id, diData);
+                    case ObjectTypeEnum.Plant:
+                        return new Plant(id, diData);
+                    case ObjectTypeEnum.Structure:
+                        return new Structure(id, diData);
+                    case ObjectTypeEnum.StructureUpgrader:
+                        return new StructureUpgrader(id, diData);
+                    case ObjectTypeEnum.Wall:
+                        return new Wall(id, diData);
                 }
             }
 

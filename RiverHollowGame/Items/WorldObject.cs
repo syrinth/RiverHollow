@@ -376,6 +376,7 @@ namespace RiverHollow.Items
             for (int j = 0; j < _iMaxStates - 1; j++)
             {
                 _diTransitionTimes.Add(j, int.Parse(dayStr[j]));
+                _sprite.AddAnimation((j + 1).ToString(), _pImagePos.X + (TileSize * (j+1)), _pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
             }
             _iDaysLeft = _diTransitionTimes[0];
 
@@ -433,7 +434,7 @@ namespace RiverHollow.Items
         }
 
         public override void ProcessLeftClick() {
-            if (_iHP > 0)
+            if (FinishedGrowing() && _iHP > 0)
             {
                 Harvest();
             }
@@ -489,20 +490,17 @@ namespace RiverHollow.Items
         /// </summary>
         public override void Rollover()
         {
-            if (_bNoWater || Tiles[0].IsWatered())
+            if (_iDaysLeft > 0) //Decrement the number of days until the next phase
             {
-                if (_iDaysLeft > 0) //Decrement the number of days until the next phase
+                _iDaysLeft--;
+            }
+            else if (!FinishedGrowing()) //If it hasn't finished growing, and there'sno days left, go to the next phase
+            {
+                _iCurrentState++;
+                _sprite.PlayAnimation(_iCurrentState.ToString());
+                if (_diTransitionTimes.ContainsKey(_iCurrentState))
                 {
-                    _iDaysLeft--;
-                }
-                else if (!FinishedGrowing()) //If it hasn't finished growing, and there'sno days left, go to the next phase
-                {
-                    _iCurrentState++;
-                    _sprite.PlayAnimation(_iCurrentState.ToString());
-                    if (_diTransitionTimes.ContainsKey(_iCurrentState))
-                    {
-                        _iDaysLeft = _diTransitionTimes[_iCurrentState];
-                    }
+                    _iDaysLeft = _diTransitionTimes[_iCurrentState];
                 }
             }
         }
@@ -752,7 +750,7 @@ namespace RiverHollow.Items
     }
 
     /// <summary>
-    /// Structures represent WorldObjects that are built by the player
+    /// Buildable represent WorldObjects that are built by the player
     /// </summary>
     public abstract class Buildable : WorldObject
     {
@@ -854,213 +852,6 @@ namespace RiverHollow.Items
             }
         }
 
-        public class ClassChanger : Buildable
-        {
-            public ClassChanger(int id, Dictionary<string, string> stringData) : base(id)
-            {
-                LoadDictionaryData(stringData);
-                _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
-                _sprite.Drawing = true;
-            }
-
-            public override void Draw(SpriteBatch spriteBatch)
-            {
-                _sprite.Draw(spriteBatch, true);
-            }
-
-            public void ProcessClick()
-            {
-                int currID = PlayerManager.World.CharacterClass.ID;
-                int toSet = (currID < DataManager.GetClassCount() - 1) ? (PlayerManager.World.CharacterClass.ID + 1) : 1;
-                PlayerManager.SetClass(toSet);
-            }
-
-            public MachineData SaveData() { return new MachineData(); }
-            public virtual void LoadData(MachineData mac) { }
-        }
-
-        public class Machine : Buildable
-        {
-            readonly string _sEffectWorking = "";
-
-            protected int _iContainingBuildingID = -1;
-
-            protected double _dProcessedTime = 0;
-            int _iCurrentlyMaking = -1;
-
-            protected int _iWorkingFrames = 2;
-            protected float _fFrameSpeed = 0.3f;
-
-            public Dictionary<int, int> CraftingDictionary { get; }
-            private bool _bWorking = false;
-
-            public Machine(int id, Dictionary<string, string> stringData) : base(id)
-            {
-                if (stringData.ContainsKey("WorkAnimation"))
-                {
-                    string[] split = stringData["WorkAnimation"].Split('-');
-                    _iWorkingFrames = int.Parse(split[0]);
-                    _fFrameSpeed = float.Parse(split[1]);
-                }
-
-                Util.AssignValue(ref _sEffectWorking, "WorkEffect", stringData);
-
-                CraftingDictionary = new Dictionary<int, int>();
-                if (stringData.ContainsKey("Makes"))
-                {
-                    //Read in what items the machine can make
-                    string[] processes = Util.FindParams(stringData["Makes"]);
-                    foreach (string recipe in processes)
-                    {
-                        //Each entry is in written like ID-NumDays
-                        string[] pieces = recipe.Split('-');
-                        CraftingDictionary.Add(int.Parse(pieces[0]), int.Parse(pieces[1]));
-                    }
-                }
-
-                LoadDictionaryData(stringData);
-            }
-
-            protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\texMachines")
-            {
-                _sprite = new AnimatedSprite(@"Textures\texMachines");
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, (int)_pImagePos.X, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight, 1, 0.3f, false);
-                _sprite.AddAnimation(AnimationEnum.PlayAnimation, (int)_pImagePos.X + _iSpriteWidth, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight, _iWorkingFrames, _fFrameSpeed, false);
-                _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
-                _sprite.Drawing = true;
-
-                SetSpritePos(_vMapPosition);
-            }
-
-            public override void Update(GameTime gTime)
-            {
-                if (_iCurrentlyMaking != -1)       //Crafting Handling
-                {
-                    _sprite.Update(gTime);
-
-                    _dProcessedTime += gTime.ElapsedGameTime.TotalSeconds;
-                   // CheckFinishedCrafting();
-                }
-            }
-
-            public override void ProcessLeftClick() { ClickProcess(); }
-            public override void ProcessRightClick() { ClickProcess(); }
-
-            private void ClickProcess()
-            {
-                if (!MakingSomething())
-                {
-                    GUIManager.OpenMainObject(new HUDCraftingDisplay(this));
-                }
-            }
-
-            /// <summary>
-            /// Not currently used
-            /// </summary>
-            //private void CheckFinishedCrafting()
-            //{
-            //    if (_iCurrentlyMaking != -1 && _dProcessedTime >= CraftingDictionary[_iCurrentlyMaking])
-            //    {
-            //        InventoryManager.AddToInventory(_iCurrentlyMaking);
-            //        SoundManager.StopEffect(this);
-            //        SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition, this);
-            //        _dProcessedTime = 0;
-            //        _iCurrentlyMaking = -1;
-            //        _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
-            //    }
-            //}
-           
-
-            /// <summary>
-            /// Called by the HUDCraftingMenu to craft the selected item.
-            /// 
-            /// Ensure that the Player has enough space in their inventory for the item
-            /// as well as they have the required items to make it.
-            /// 
-            /// Perform the Crafting steps and add the item to the inventory.
-            /// </summary>
-            /// <param name="itemToCraft">The Item object to craft</param>
-            public void AttemptToCraftChosenItem(Item itemToCraft)
-            {
-                if (InventoryManager.HasSpaceInInventory(itemToCraft.ItemID, 1) && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
-                {
-                    double mod = 0;
-                    if (_iContainingBuildingID != -1)
-                    {
-                        mod = 0.1 * (PlayerManager.GetBuildingByID(_iContainingBuildingID).Level - 1);
-                    }
-
-                    PlayerManager.DecreaseStamina(1 - mod);
-
-                    //_iCurrentlyMaking = itemToCraft.ItemID;
-                    //_sprite.PlayAnimation(AnimationEnum.PlayAnimation);
-
-                    InventoryManager.AddToInventory(itemToCraft.ItemID);
-                    if (!string.IsNullOrEmpty(_sEffectWorking))
-                    {
-                        SoundManager.PlayEffect(_sEffectWorking);
-                    }
-                }
-            }
-
-            /// <summary>
-            /// OVerride method for Rollover. Shouldn't matter since item crafting should take no time
-            /// but for future proofing we'll have this here.
-            /// </summary>
-            public override void Rollover()
-            {
-                if (_bWorking)
-                {
-                    _dProcessedTime += GameCalendar.GetMinutesToNextMorning();
-                    //CheckFinishedCrafting();
-
-                    _bWorking = false;
-                }
-            }
-
-            public bool MakingSomething() { return _iCurrentlyMaking != -1; }
-
-            public override bool PlaceOnMap(Vector2 pos, RHMap map)
-            {
-                bool rv = false;
-                if (base.PlaceOnMap(pos, map))
-                {
-                    rv = true;
-                    GameManager.AddMachine(this, Name);
-
-                    if (map.BuildingID != -1)
-                    {
-                        _iContainingBuildingID = map.BuildingID;
-                    }
-                }
-
-                return rv;
-            }
-
-            public MachineData SaveData()
-            {
-                MachineData m = new MachineData
-                {
-                    ID = this.ID,
-                    x = (int)this.MapPosition.X,
-                    y = (int)this.MapPosition.Y,
-                    processedTime = this._dProcessedTime,
-                    currentItemID = _iCurrentlyMaking
-                };
-
-                return m;
-            }
-            public void LoadData(MachineData mac)
-            {
-                _iID = mac.ID;
-                SnapPositionToGrid(new Vector2(mac.x, mac.y));
-                _dProcessedTime = mac.processedTime;
-                _iCurrentlyMaking = mac.currentItemID;
-
-               // if (CurrentlyProcessing != null) { _sprite.PlayAnimation(AnimationEnum.ObjectIdle); }
-            }
-        }
-
         public class Container : Buildable
         {
             public int Rows { get; }
@@ -1134,10 +925,6 @@ namespace RiverHollow.Items
 
         public abstract class AdjustableObject : Buildable
         {
-            //This is used for subtypes that have different sprites.
-            //Like the Earth which has a watered and unwatered Sprite
-            protected virtual AnimatedSprite Target => _sprite;
-
             public AdjustableObject(int id) : base(id) { }
 
             /// <summary>
@@ -1223,7 +1010,7 @@ namespace RiverHollow.Items
                 MakeAdjustments("E", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[mapName].GetTileByGridCoords(new Point((int)(startTile.X + 1), (int)(startTile.Y))));
                 MakeAdjustments("W", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[mapName].GetTileByGridCoords(new Point((int)(startTile.X - 1), (int)(startTile.Y))));
 
-                Target.PlayAnimation(string.IsNullOrEmpty(sAdjacent) ? "None" : sAdjacent);
+                _sprite.PlayAnimation(string.IsNullOrEmpty(sAdjacent) ? "None" : sAdjacent);
 
                 //Find all matching objects in the adjacent tiles and call
                 //this method without recursion on them.
@@ -1274,7 +1061,22 @@ namespace RiverHollow.Items
             /// <param name="tile">Tile to test against</param>
             /// <param name="obj">Reference to any AdjustableObject that may be found</param>
             /// <returns>True if the tile exists and contains a matching AdjustableObject</returns>
-            protected virtual bool MatchingObjectTest(RHTile tile, ref AdjustableObject obj) { return false; }
+            protected virtual bool MatchingObjectTest(RHTile tile, ref AdjustableObject obj)
+            {
+                bool rv = false;
+
+                if (tile != null)
+                {
+                    WorldObject wObj = tile.GetWorldObject(false);
+                    if (wObj != null && wObj.Type == Type)
+                    {
+                        obj = (AdjustableObject)wObj;
+                        rv = true;
+                    }
+                }
+
+                return rv;
+            }
             #endregion
 
             public class Floor : AdjustableObject
@@ -1290,13 +1092,9 @@ namespace RiverHollow.Items
                     _eObjectType = ObjectTypeEnum.Floor;
                 }
 
-                /// <summary>
-                /// Overriding because weneed to set the Depth to 0 for drawing since
-                /// this is a floor object and needs to beon the bottom.
-                /// </summary>
                 public override void Draw(SpriteBatch spriteBatch)
                 {
-                    Target.Draw(spriteBatch, 0);
+                    _sprite.Draw(spriteBatch, 0);
                 }
 
                 /// <summary>
@@ -1336,50 +1134,6 @@ namespace RiverHollow.Items
                     _iID = data.ID;
                     SnapPositionToGrid(new Vector2(data.x, data.y));
                 }
-
-                #region Earth
-
-                //public class Earth : Floor
-                //{
-                //    protected override AnimatedSprite Target => _bWatered ? _sprWatered : _sprite;
-
-                //    AnimatedSprite _sprWatered;
-                //    bool _bWatered;
-
-                //    public Earth() : base(0)
-                //    {
-                //        _iID = 0;
-                //        _eObjectType = ObjectTypeEnum.Earth;
-                //        _pImagePos = Point.Zero;
-
-                //        LoadAdjustableSprite(ref _sprite);
-                //        _pImagePos.Y += TileSize;
-
-                //        LoadAdjustableSprite(ref _sprWatered);
-                //        _pImagePos.Y -= TileSize;
-
-                //        Watered(false);
-                //    }
-
-                //    public override void SnapPositionToGrid(Vector2 position)
-                //    {
-                //        base.SnapPositionToGrid(position);
-                //        _sprWatered.Position = position;
-                //    }
-
-                //    public override void Rollover()
-                //    {
-                //        Watered(false);
-                //    }
-
-                //    public void Watered(bool value)
-                //    {
-                //        _bWatered = value;
-                //        _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
-                //    }
-                //    public bool Watered() { return _bWatered; }
-                //}
-                #endregion
             }
 
             /// <summary>
@@ -1392,31 +1146,265 @@ namespace RiverHollow.Items
                     LoadDictionaryData(stringData, false);
                     LoadAdjustableSprite(ref _sprite, DataManager.FILE_WORLDOBJECTS);
                 }
+            }
+
+            public class Garden : AdjustableObject
+            {
+                Plant _objPlant;
+                AnimatedSprite _sprWatered;
+                bool _bWatered;
+
+                public Garden(int id, Dictionary<string, string> stringData) : base(id)
+                {
+                    _eObjectType = ObjectTypeEnum.Garden;
+
+                    LoadDictionaryData(stringData, false);
+
+                    LoadAdjustableSprite(ref _sprite, DataManager.FILE_WORLDOBJECTS);
+                    _pImagePos.Y += TileSize;
+
+                    LoadAdjustableSprite(ref _sprWatered, DataManager.FILE_WORLDOBJECTS);
+                    _pImagePos.Y -= TileSize;
+
+                    WaterGardenBed(EnvironmentManager.IsRaining());
+                }
 
                 /// <summary>
-                /// Check to see that the tile exists, has an AdjustableObject and that AdjustableObject matches the initial type
+                /// Overriding because weneed to set the Depth to 0 for drawing since
+                /// this is a floor object and needs to beon the bottom.
                 /// </summary>
-                /// <param name="tile">Tile to test against</param>
-                /// <returns>True if the tile exists and contains a Wall</returns>
-                protected override bool MatchingObjectTest(RHTile tile, ref AdjustableObject obj)
+                public override void Draw(SpriteBatch spriteBatch)
                 {
-                    bool rv = false;
+                    if (_bWatered) { _sprWatered.Draw(spriteBatch, 0); }
+                    else { _sprite.Draw(spriteBatch, 0); }
 
-                    if (tile != null)
+                    _objPlant?.Draw(spriteBatch);
+                }
+
+                public override void ProcessLeftClick() { HandleGarden(); }
+                public override void ProcessRightClick() { HandleGarden(); }
+
+                private void HandleGarden()
+                {
+                    if(_objPlant == null)
                     {
-                        WorldObject wObj = tile.GetWorldObject(false);
-                        if (wObj != null && wObj.Type == Type)
+                        //TODO: Open plant gui
+                        WorldObject obj = DataManager.GetWorldObjectByID(49);
+                        if (obj.CompareType(ObjectTypeEnum.Plant))
                         {
-                            obj = (AdjustableObject)wObj;
-                            rv = true;
+                            _objPlant = (Plant)obj;
+                            _objPlant.SnapPositionToGrid(_vMapPosition);
                         }
                     }
+                    else
+                    {
+                        if (_objPlant.FinishedGrowing()) { _objPlant.ProcessLeftClick(); }
+                        else if(!_bWatered) { WaterGardenBed(true); }
+                    }
+                }
 
-                    return rv;
+                public override void SnapPositionToGrid(Vector2 position)
+                {
+                    base.SnapPositionToGrid(position);
+                    _sprWatered.Position = position;
+                }
+
+                public override void Rollover()
+                {
+                    if (_bWatered) { _objPlant?.Rollover(); }
+
+                    WaterGardenBed(EnvironmentManager.IsRaining());
+                }
+
+                public void WaterGardenBed(bool value)
+                {
+                    _bWatered = value;
+                    _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
+                }
+            }
+        }
+    }
+
+    public class Machine : WorldObject
+    {
+        readonly string _sEffectWorking = "";
+
+        protected int _iContainingBuildingID = -1;
+
+        protected double _dProcessedTime = 0;
+        int _iCurrentlyMaking = -1;
+
+        protected int _iWorkingFrames = 2;
+        protected float _fFrameSpeed = 0.3f;
+
+        public Dictionary<int, int> CraftingDictionary { get; }
+        private bool _bWorking = false;
+
+        public Machine(int id, Dictionary<string, string> stringData) : base(id)
+        {
+            if (stringData.ContainsKey("WorkAnimation"))
+            {
+                string[] split = stringData["WorkAnimation"].Split('-');
+                _iWorkingFrames = int.Parse(split[0]);
+                _fFrameSpeed = float.Parse(split[1]);
+            }
+
+            Util.AssignValue(ref _sEffectWorking, "WorkEffect", stringData);
+
+            CraftingDictionary = new Dictionary<int, int>();
+            if (stringData.ContainsKey("Makes"))
+            {
+                //Read in what items the machine can make
+                string[] processes = Util.FindParams(stringData["Makes"]);
+                foreach (string recipe in processes)
+                {
+                    //Each entry is in written like ID-NumDays
+                    string[] pieces = recipe.Split('-');
+                    CraftingDictionary.Add(int.Parse(pieces[0]), int.Parse(pieces[1]));
+                }
+            }
+
+            LoadDictionaryData(stringData);
+        }
+
+        protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\texMachines")
+        {
+            _sprite = new AnimatedSprite(@"Textures\texMachines");
+            _sprite.AddAnimation(AnimationEnum.ObjectIdle, (int)_pImagePos.X, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight, 1, 0.3f, false);
+            _sprite.AddAnimation(AnimationEnum.PlayAnimation, (int)_pImagePos.X + _iSpriteWidth, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight, _iWorkingFrames, _fFrameSpeed, false);
+            _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
+            _sprite.Drawing = true;
+
+            SetSpritePos(_vMapPosition);
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            if (_iCurrentlyMaking != -1)       //Crafting Handling
+            {
+                _sprite.Update(gTime);
+
+                _dProcessedTime += gTime.ElapsedGameTime.TotalSeconds;
+                // CheckFinishedCrafting();
+            }
+        }
+
+        public override void ProcessLeftClick() { ClickProcess(); }
+        public override void ProcessRightClick() { ClickProcess(); }
+
+        private void ClickProcess()
+        {
+            if (!MakingSomething())
+            {
+                GUIManager.OpenMainObject(new HUDCraftingDisplay(this));
+            }
+        }
+
+        /// <summary>
+        /// Not currently used
+        /// </summary>
+        //private void CheckFinishedCrafting()
+        //{
+        //    if (_iCurrentlyMaking != -1 && _dProcessedTime >= CraftingDictionary[_iCurrentlyMaking])
+        //    {
+        //        InventoryManager.AddToInventory(_iCurrentlyMaking);
+        //        SoundManager.StopEffect(this);
+        //        SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition, this);
+        //        _dProcessedTime = 0;
+        //        _iCurrentlyMaking = -1;
+        //        _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
+        //    }
+        //}
+
+
+        /// <summary>
+        /// Called by the HUDCraftingMenu to craft the selected item.
+        /// 
+        /// Ensure that the Player has enough space in their inventory for the item
+        /// as well as they have the required items to make it.
+        /// 
+        /// Perform the Crafting steps and add the item to the inventory.
+        /// </summary>
+        /// <param name="itemToCraft">The Item object to craft</param>
+        public void AttemptToCraftChosenItem(Item itemToCraft)
+        {
+            if (InventoryManager.HasSpaceInInventory(itemToCraft.ItemID, 1) && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
+            {
+                double mod = 0;
+                if (_iContainingBuildingID != -1)
+                {
+                    mod = 0.1 * (PlayerManager.GetBuildingByID(_iContainingBuildingID).Level - 1);
+                }
+
+                PlayerManager.DecreaseStamina(1 - mod);
+
+                //_iCurrentlyMaking = itemToCraft.ItemID;
+                //_sprite.PlayAnimation(AnimationEnum.PlayAnimation);
+
+                InventoryManager.AddToInventory(itemToCraft.ItemID);
+                if (!string.IsNullOrEmpty(_sEffectWorking))
+                {
+                    SoundManager.PlayEffect(_sEffectWorking);
                 }
             }
         }
 
+        /// <summary>
+        /// OVerride method for Rollover. Shouldn't matter since item crafting should take no time
+        /// but for future proofing we'll have this here.
+        /// </summary>
+        public override void Rollover()
+        {
+            if (_bWorking)
+            {
+                _dProcessedTime += GameCalendar.GetMinutesToNextMorning();
+                //CheckFinishedCrafting();
+
+                _bWorking = false;
+            }
+        }
+
+        public bool MakingSomething() { return _iCurrentlyMaking != -1; }
+
+        public override bool PlaceOnMap(Vector2 pos, RHMap map)
+        {
+            bool rv = false;
+            if (base.PlaceOnMap(pos, map))
+            {
+                rv = true;
+                GameManager.AddMachine(this, Name);
+
+                if (map.BuildingID != -1)
+                {
+                    _iContainingBuildingID = map.BuildingID;
+                }
+            }
+
+            return rv;
+        }
+
+        public MachineData SaveData()
+        {
+            MachineData m = new MachineData
+            {
+                ID = this.ID,
+                x = (int)this.MapPosition.X,
+                y = (int)this.MapPosition.Y,
+                processedTime = this._dProcessedTime,
+                currentItemID = _iCurrentlyMaking
+            };
+
+            return m;
+        }
+        public void LoadData(MachineData mac)
+        {
+            _iID = mac.ID;
+            SnapPositionToGrid(new Vector2(mac.x, mac.y));
+            _dProcessedTime = mac.processedTime;
+            _iCurrentlyMaking = mac.currentItemID;
+
+            // if (CurrentlyProcessing != null) { _sprite.PlayAnimation(AnimationEnum.ObjectIdle); }
+        }
     }
 
     public abstract class TriggerObject : WorldObject
