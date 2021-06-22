@@ -24,6 +24,9 @@ namespace RiverHollow.Game_Managers
         const string STOCK_EFFECT_FOLDER = @"Content\Sound\Stock\Effects";
         const string EFFECT_FOLDER = @"Content\Sound\Original\Effects";
         const string HARP_FOLDER = @"Content\Sound\Stock\Harp";
+        private static float MuteMemoryMusic = 0f;
+        private static float MuteMemoryEffect = 0f;
+        public static bool IsMuted { get; private set; } = false;
         public static float MusicVolume { get; private set; } = 0.4f;
         public static float EffectVolume { get; private set; } = 0.4f;
 
@@ -126,6 +129,26 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
+        public static void MuteAllSound()
+        {
+            if (!IsMuted)
+            {
+                MuteMemoryEffect = EffectVolume;
+                MuteMemoryMusic = MusicVolume;
+                IsMuted = true;
+                SetMusicVolume(0);
+                SetEffectVolume(0);
+            }
+        }
+        public static void UnmuteAllSound()
+        {
+            if (IsMuted)
+            {
+                IsMuted = false;
+                SetMusicVolume(MuteMemoryMusic);
+                SetEffectVolume(MuteMemoryEffect);
+            }
+        }
         public static void SetMusicVolume(float value)
         {
             MusicVolume = value;

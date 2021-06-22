@@ -32,6 +32,7 @@ namespace RiverHollow.GUIComponents.Screens
         GUITextInputWindow _townWindow;
 
         GUICheck _gCheckSkipCutscene;
+        GUIButton _gMuteButton;
 
         List<GUIObject> _liClassBoxes;
         ClassSelector _csbSelected;
@@ -60,6 +61,10 @@ namespace RiverHollow.GUIComponents.Screens
             _btnOK = new GUIButton("OK", BtnNewGame);
             _window.AddControl(_btnOK);
             _btnOK.AnchorAndAlignToObject(_btnCancel, SideEnum.Left, SideEnum.Top, 0);
+
+            _gMuteButton = new GUIButton(new Rectangle(96, 80, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, ClickMuteButton);
+            _window.AddControl(_gMuteButton);
+            _gMuteButton.AnchorAndAlignToObject(_btnOK, SideEnum.Left, SideEnum.Top, 10);
             
             _townWindow = new GUITextInputWindow("Town Name:", SideEnum.Left);
             _townWindow.AnchorToInnerSide(_window, SideEnum.TopRight);
@@ -166,6 +171,22 @@ namespace RiverHollow.GUIComponents.Screens
             return rv;
         }
 
+        public void ClickMuteButton()
+        {
+            if (SoundManager.IsMuted) {
+                SoundManager.UnmuteAllSound();
+                _window.RemoveControl(_gMuteButton);
+                _gMuteButton = new GUIButton(new Rectangle(96, 80, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, ClickMuteButton);
+                _window.AddControl(_gMuteButton);
+                _gMuteButton.AnchorAndAlignToObject(_btnOK, SideEnum.Left, SideEnum.Top, 10);
+            } else { 
+                SoundManager.MuteAllSound();
+                _window.RemoveControl(_gMuteButton);
+                _gMuteButton = new GUIButton(new Rectangle(96, 96, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, ClickMuteButton);
+                _window.AddControl(_gMuteButton);
+                _gMuteButton.AnchorAndAlignToObject(_btnOK, SideEnum.Left, SideEnum.Top, 10);
+            }
+        }
         public void AssignClothes(ref List<int> clothesList, string[] clothingIDs)
         {
             clothesList = new List<int>();

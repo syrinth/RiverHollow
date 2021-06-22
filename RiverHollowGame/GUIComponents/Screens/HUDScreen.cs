@@ -1930,6 +1930,9 @@ namespace RiverHollow.GUIComponents.Screens
             GUIText _gSoundSettings;
             GUINumberControl _gVolumeControl;
             GUINumberControl _gEffectControl;
+            GUICheck _gMute;
+
+            const int SOUND_VOLUME_SCALAR = 100;
 
             public HUDOptions()
             {
@@ -1944,12 +1947,15 @@ namespace RiverHollow.GUIComponents.Screens
                 _gSoundSettings = new GUIText("Sound Settings");
                 _gSoundSettings.AnchorAndAlignToObject(_gHideMiniInventory, SideEnum.Bottom, SideEnum.Left, 32);
 
-                _gVolumeControl = new GUINumberControl("Music", SoundManager.MusicVolume * 100, UpdateMusicVolume);
+                _gVolumeControl = new GUINumberControl("Music", SoundManager.MusicVolume * SOUND_VOLUME_SCALAR, UpdateMusicVolume);
                 _gVolumeControl.AnchorAndAlignToObject(_gSoundSettings, SideEnum.Bottom, SideEnum.Left);
                 _gVolumeControl.MoveBy(new Vector2(32, 0));
 
-                _gEffectControl = new GUINumberControl("Effects", SoundManager.EffectVolume * 100, UpdateEffectsVolume);
+                _gEffectControl = new GUINumberControl("Effects", SoundManager.EffectVolume * SOUND_VOLUME_SCALAR, UpdateEffectsVolume);
                 _gEffectControl.AnchorAndAlignToObject(_gVolumeControl, SideEnum.Bottom, SideEnum.Left);
+
+                _gMute = new GUICheck("Mute All", SoundManager.IsMuted, ProcessMuteAll);
+                _gMute.AnchorAndAlignToObject(_gEffectControl, SideEnum.Bottom, SideEnum.Left);
 
                 _btnSave = new GUIButton("Save", BtnSave);
                 _btnSave.AnchorToInnerSide(_winMain, SideEnum.BottomRight);
@@ -1990,6 +1996,18 @@ namespace RiverHollow.GUIComponents.Screens
                 base.Update(gTime);
             }
 
+            public void ProcessMuteAll()
+            {
+                if(SoundManager.IsMuted) {
+                    SoundManager.UnmuteAllSound();
+                    _gVolumeControl.RefreshValue(SoundManager.MusicVolume * SOUND_VOLUME_SCALAR);
+                    _gEffectControl.RefreshValue(SoundManager.EffectVolume * SOUND_VOLUME_SCALAR);
+                } else {
+                    SoundManager.MuteAllSound();
+                    _gVolumeControl.RefreshValue(SoundManager.MusicVolume * SOUND_VOLUME_SCALAR);
+                    _gEffectControl.RefreshValue(SoundManager.EffectVolume * SOUND_VOLUME_SCALAR);
+                }
+            }
             public void UpdateMusicVolume()
             {
                 SoundManager.SetMusicVolume((float)_gVolumeControl.Value / 100.0f);
@@ -2072,7 +2090,11 @@ namespace RiverHollow.GUIComponents.Screens
                         _del();
                     }
                 }
-
+                public void RefreshValue(float value)
+                {
+                    _fValue = value;
+                    UpdateValue();
+                }
                 private void UpdateValue()
                 {
                     _gValue.SetText((int)_fValue, false);

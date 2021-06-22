@@ -208,7 +208,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         GUIImage _gUnchecked;
         GUIImage _gChecked;
         GUIText _gText;
-        public GUICheck(string text, bool isChecked = false)
+        protected BtnClickDelegate _delAction;
+        public GUICheck(string text, bool isChecked = false, BtnClickDelegate del = null)
         {
             int squareSize = TileSize * 2;
             _bChecked = isChecked;
@@ -228,6 +229,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             Width = _gText.Right - _gChecked.Left;
             Height = _gText.Height;
+
+            if (del != null) { _delAction = del; }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -247,6 +250,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             if (Contains(mouse))
             {
                 SetChecked(!_bChecked);
+                if (_delAction != null)
+                {
+                    _delAction();
+                }
+                rv = true;
             }
 
             return rv;
