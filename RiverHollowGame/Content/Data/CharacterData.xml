@@ -39,19 +39,19 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7|130][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7|130][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:23][Collection:7|130][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:20][FirstArrival:5][ArrivalPeriod:5]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:23][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:20][FirstArrival:5][ArrivalPeriod:5]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:23][Collection:7|130][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:20][FirstArrival:5][ArrivalPeriod:5]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:23][Collection:7|140][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:20][FirstArrival:5][ArrivalPeriod:5]</Value>
     </Item>
     <Item>
       <Key>13</Key>
@@ -91,7 +91,7 @@
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:5][RequestIDs:58|68|71|130|131]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:5][RequestIDs:58|68|71|140|141]</Value>
     </Item>
   </Asset>
 </XnaContent>

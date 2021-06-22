@@ -152,7 +152,7 @@
   </object>
   <object id="51" name="Item" x="162" y="246.333" width="9.33333" height="6.66667">
    <properties>
-    <property name="ItemID" type="int" value="113"/>
+    <property name="ItemID" type="int" value="123"/>
    </properties>
   </object>
  </objectgroup>

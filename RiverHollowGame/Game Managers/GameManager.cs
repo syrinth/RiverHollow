@@ -42,7 +42,7 @@ namespace RiverHollow.Game_Managers
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
-        public enum ItemEnum { Item, Blueprint, Clothes, Consumable, Equipment, Food, MonsterFood, Resource, Special, Tool };
+        public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, Clothes, MonsterFood, Blueprint, Special };
         public enum ToolEnum { None, Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return, Scythe };
         public enum SpecialItemEnum { None, Marriage, Class, Map, DungeonKey, Task };
         public enum EquipmentEnum { Armor, Weapon, Accessory, Head, Wrist };
