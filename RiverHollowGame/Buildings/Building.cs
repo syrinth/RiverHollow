@@ -136,6 +136,10 @@ namespace RiverHollow.Buildings
         public override bool PlaceOnMap(Vector2 pos, RHMap map)
         {
             bool rv = false;
+
+            pos = new Vector2(pos.X - (_iBaseXOffset * TileSize), pos.Y - (_iBaseYOffset * TileSize));
+            SnapPositionToGrid(pos);
+
             if (map.TestMapTiles(this, Tiles))
             {
                 rv = true;
@@ -198,8 +202,8 @@ namespace RiverHollow.Buildings
             {
                 iBldgLevel = this.Level,
                 iBuildingID = this.ID,
-                iPosX = (int)this.MapPosition.X,
-                iPosY = (int)this.MapPosition.Y,
+                iPosX = (int)this.CollisionBox.X,
+                iPosY = (int)this.CollisionBox.Y,
             };
 
             return buildingData;

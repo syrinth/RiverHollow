@@ -344,7 +344,7 @@
   </object>
  </objectgroup>
  <objectgroup id="9" name="MapObject">
-  <object id="53" name="Building" x="531.917" y="531" width="170.833" height="186">
+  <object id="53" name="Building" x="531.917" y="643.667" width="170.833" height="73.3333">
    <properties>
     <property name="BuildingID" type="int" value="0"/>
    </properties>
@@ -354,27 +354,27 @@
     <property name="ObjectID" type="int" value="25"/>
    </properties>
   </object>
-  <object id="58" name="Building" x="770.58" y="755.166" width="124.5" height="137.5">
+  <object id="58" name="Building" x="770.58" y="851.166" width="124.5" height="41.5">
    <properties>
     <property name="BuildingID" type="int" value="11"/>
    </properties>
   </object>
-  <object id="68" name="Building" x="159.25" y="468" width="109.5" height="124">
+  <object id="68" name="Building" x="159.25" y="530.333" width="109.5" height="61.6667">
    <properties>
     <property name="BuildingID" type="int" value="10"/>
    </properties>
   </object>
-  <object id="69" name="Building" x="642.583" y="756" width="109.5" height="138">
+  <object id="69" name="Building" x="642.583" y="836" width="109.5" height="58">
    <properties>
     <property name="BuildingID" type="int" value="9"/>
    </properties>
   </object>
-  <object id="71" name="WorldObject" x="512.53" y="706.854" width="14.94" height="12.5615">
+  <object id="71" name="WorldObject" x="512.53" y="708.521" width="14.94" height="10.8948">
    <properties>
     <property name="ObjectID" type="int" value="48"/>
    </properties>
   </object>
-  <object id="72" name="Building" x="161.75" y="706" width="173.25" height="173">
+  <object id="72" name="Building" x="161.75" y="818.333" width="173.25" height="60.6667">
    <properties>
     <property name="BuildingID" type="int" value="7"/>
    </properties>
@@ -414,7 +414,7 @@
     <property name="ObjectID" type="int" value="25"/>
    </properties>
   </object>
-  <object id="80" name="Building" x="289.841" y="481.909" width="170.727" height="140.545">
+  <object id="80" name="Building" x="289.841" y="562.909" width="170.727" height="59.545">
    <properties>
     <property name="BuildingID" type="int" value="6"/>
    </properties>
@@ -434,12 +434,12 @@
     <property name="ObjectID" type="int" value="33"/>
    </properties>
   </object>
-  <object id="85" name="Building" x="754.417" y="581.25" width="124.5" height="137.5">
+  <object id="85" name="Building" x="754.417" y="659.583" width="124.5" height="59.1667">
    <properties>
     <property name="BuildingID" type="int" value="20"/>
    </properties>
   </object>
-  <object id="86" name="WorldObject" x="403.03" y="836.053" width="73.94" height="70.1448">
+  <object id="86" name="WorldObject" x="515.363" y="805.386" width="73.94" height="70.1448">
    <properties>
     <property name="ObjectID" type="int" value="54"/>
    </properties>

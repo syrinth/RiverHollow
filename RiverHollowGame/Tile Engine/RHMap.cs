@@ -1471,7 +1471,6 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-
         #region Town Mode handling
         /// <summary>
         /// Handles TownMode interactions
@@ -1493,6 +1492,7 @@ namespace RiverHollow.Tile_Engine
                     switch (toBuild.Type)
                     {
                         case ObjectTypeEnum.Building:
+                        case ObjectTypeEnum.Mailbox:
                         case ObjectTypeEnum.Structure:
                             rv = PlaceSingleObject(toBuild);
                             break;
@@ -1521,7 +1521,9 @@ namespace RiverHollow.Tile_Engine
                                     goto case ObjectTypeEnum.Structure;
                                 case ObjectTypeEnum.Garden:
                                 case ObjectTypeEnum.Light:
+                                case ObjectTypeEnum.Mailbox:
                                 case ObjectTypeEnum.Structure:
+                                case ObjectTypeEnum.Wall:
                                     PickUpWorldObject(mouseLocation, targetObj);
                                     break;
                             }
@@ -1565,6 +1567,7 @@ namespace RiverHollow.Tile_Engine
 
             if (TownModeMoving() || PlayerManager.ExpendResources(toBuild.RequiredToMake))
             {
+                toBuild.SnapPositionToGrid(toBuild.CollisionBox.Location);
                 if (toBuild.PlaceOnMap(this))
                 {
                     //Drop the Building from the GameManger
@@ -1593,14 +1596,14 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
             Buildable placeObject;
-            //Create a new object to place, since toBuild is the object we're holding
 
+            //If we're moving the object, set it as the object to be placed. Otherwise, we need
+            //to make a new object based off theo ne we're holding.
             if (TownModeMoving()) { placeObject = templateObject; }
-            else
-            {
-                placeObject = (Buildable)DataManager.GetWorldObjectByID(templateObject.ID);
-                placeObject.SnapPositionToGrid(templateObject.CollisionBox.Location);
-            }
+            else { placeObject = (Buildable)DataManager.GetWorldObjectByID(templateObject.ID); }
+
+            //PlaceOnMap uses the CollisionBox as the base, then calculates backwards
+            placeObject.SnapPositionToGrid(templateObject.CollisionBox.Location);
 
             if (placeObject.PlaceOnMap(this) && (TownModeMoving() || PlayerManager.ExpendResources(placeObject.RequiredToMake)))
             {
@@ -1815,7 +1818,7 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = true;
             collisionTiles.Clear();
-            Vector2 position = obj.MapPosition;
+            Vector2 position = obj.CollisionBox.Location.ToVector2();
             position.X = ((int)(position.X / TileSize)) * TileSize;
             position.Y = ((int)(position.Y / TileSize)) * TileSize;
 

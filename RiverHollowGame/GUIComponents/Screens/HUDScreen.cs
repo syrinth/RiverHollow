@@ -62,7 +62,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             _gInventory = new HUDMiniInventory();
             _gInventory.AnchorToScreen(SideEnum.Bottom);
-            AddControl(_gInventory);
+            //AddControl(_gInventory);
 
             _gCalendar = new HUDCalendar();
             _gCalendar.AnchorToScreen(SideEnum.TopRight, 10);

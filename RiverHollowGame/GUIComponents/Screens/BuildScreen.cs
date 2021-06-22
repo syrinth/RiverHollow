@@ -96,6 +96,7 @@ namespace RiverHollow.GUIComponents.Screens
         public void BtnMove()
         {
             CloseMenu();
+            GUIManager.CloseMainObject();
             GameManager.ClearGMObjects();
             GameManager.EnterTownModeMoving();
         }
@@ -103,6 +104,7 @@ namespace RiverHollow.GUIComponents.Screens
         public void BtnRemove()
         {
             CloseMenu();
+            GUIManager.CloseMainObject();
             GameManager.ClearGMObjects();
             GameManager.EnterTownModeDestroy();
         }

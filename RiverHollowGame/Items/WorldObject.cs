@@ -209,8 +209,11 @@ namespace RiverHollow.Items
         /// <param name="mousePosition">The current mousePosition</param>
         public void SetPickupOffset(Vector2 mousePosition)
         {
-            if (Width > TileSize) { PickupOffset = mousePosition - _sprite.Position; }
-            else { PickupOffset = new Vector2(0, 0); }
+            Vector2 temp = mousePosition - _sprite.Position;
+            if (Width <= TileSize) { temp.X = 0; }
+            if (Height <= TileSize) { temp.Y = 0; }
+
+            PickupOffset = temp;
         }
 
         /// <summary>
@@ -247,6 +250,7 @@ namespace RiverHollow.Items
                 case ObjectTypeEnum.Floor:
                 case ObjectTypeEnum.Garden:
                 case ObjectTypeEnum.Light:
+                case ObjectTypeEnum.Mailbox:
                 case ObjectTypeEnum.Structure:
                 case ObjectTypeEnum.Wall:
                     rv = true;
@@ -631,97 +635,6 @@ namespace RiverHollow.Items
         }
     }
 
-    public class Mailbox : WorldObject
-    {
-        private AnimatedSprite _alertSprite;
-        private List<string> _liCurrentMessages;
-        private List<string> _liSentMessages;
-
-        public Mailbox(int id, Dictionary<string, string> stringData) : base(id)
-        {
-            _liCurrentMessages = new List<string>();
-            _liSentMessages = new List<string>();
-            LoadDictionaryData(stringData);
-            PlayerManager.PlayerMailbox = this;
-
-            _iBaseYOffset = (_iSpriteHeight / TileSize) - BaseHeight;
-        }
-
-        public override void Update(GameTime gTime)
-        {
-            base.Update(gTime);
-            _alertSprite?.Update(gTime);
-        }
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-            _alertSprite?.Draw(spriteBatch, 99999);
-        }
-
-        public override void ProcessRightClick()
-        {
-            TakeMessage();
-        }
-
-        public void SendMessage(string messageID)
-        {
-            _liSentMessages.Add(messageID);
-        }
-
-        public void TakeMessage()
-        {
-            if (_liCurrentMessages.Count > 0)
-            {
-                TextEntry tEntry = DataManager.GetMailboxMessage(_liCurrentMessages[0]);
-                _liCurrentMessages.RemoveAt(0);
-
-                if (_liCurrentMessages.Count == 0)
-                {
-                    _alertSprite = null;
-                }
-
-                GUIManager.OpenTextWindow(tEntry);
-            }
-        }
-
-        public override void Rollover()
-        {
-            foreach(string strID in _liSentMessages)
-            {
-                _liCurrentMessages.Add(strID);
-            }
-            _liSentMessages.Clear();
-
-            if (_liCurrentMessages.Count > 0)
-            {
-                _alertSprite = new AnimatedSprite(DataManager.DIALOGUE_TEXTURE);
-                _alertSprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 64, TileSize, TileSize, 3, 0.150f, true);
-                _alertSprite.Position = new Vector2(_vMapPosition.X, _vMapPosition.Y - TileSize);
-            }
-        }
-
-        public MailboxData SaveData()
-        {
-            MailboxData data = new MailboxData();
-            data.MailboxMessages = new List<string>();
-            foreach(string strID in _liCurrentMessages)
-            {
-                data.MailboxMessages.Add(strID);
-            }
-
-            return data;
-        }
-        public void LoadData(MailboxData data)
-        {
-            foreach(string strID in data.MailboxMessages)
-            {
-                _liSentMessages.Add(strID);
-            }
-
-            Rollover();
-        }
-    }
-
     //public class Staircase : WorldObject
     //{
     //    protected string _toMap;
@@ -852,7 +765,6 @@ namespace RiverHollow.Items
 
             public override void RemoveSelfFromTiles()
             {
-                base.RemoveSelfFromTiles();
                 foreach (SubObjectInfo info in _liSubObjectInfo)
                 {
                     RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Vector2(_vMapPosition.X + info.Position.X, _vMapPosition.Y + info.Position.Y));
@@ -862,6 +774,7 @@ namespace RiverHollow.Items
                         MapManager.Maps[MapName].RemoveWorldObject(targetTile.WorldObject);
                     }
                 }
+                base.RemoveSelfFromTiles();
             }
 
             private struct SubObjectInfo
@@ -939,6 +852,97 @@ namespace RiverHollow.Items
                 string[] idleSplit = stringData["Idle"].Split('-');
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
                 _sprite.Drawing = true;
+            }
+        }
+
+        public class Mailbox : Buildable
+        {
+            private AnimatedSprite _alertSprite;
+            private List<string> _liCurrentMessages;
+            private List<string> _liSentMessages;
+
+            public Mailbox(int id, Dictionary<string, string> stringData) : base(id)
+            {
+                _liCurrentMessages = new List<string>();
+                _liSentMessages = new List<string>();
+                LoadDictionaryData(stringData);
+                PlayerManager.PlayerMailbox = this;
+
+                _iBaseYOffset = (_iSpriteHeight / TileSize) - BaseHeight;
+            }
+
+            public override void Update(GameTime gTime)
+            {
+                base.Update(gTime);
+                _alertSprite?.Update(gTime);
+            }
+            public override void Draw(SpriteBatch spriteBatch)
+            {
+                base.Draw(spriteBatch);
+                _alertSprite?.Draw(spriteBatch, 99999);
+            }
+
+            public override void ProcessRightClick()
+            {
+                TakeMessage();
+            }
+
+            public void SendMessage(string messageID)
+            {
+                _liSentMessages.Add(messageID);
+            }
+
+            public void TakeMessage()
+            {
+                if (_liCurrentMessages.Count > 0)
+                {
+                    TextEntry tEntry = DataManager.GetMailboxMessage(_liCurrentMessages[0]);
+                    _liCurrentMessages.RemoveAt(0);
+
+                    if (_liCurrentMessages.Count == 0)
+                    {
+                        _alertSprite = null;
+                    }
+
+                    GUIManager.OpenTextWindow(tEntry);
+                }
+            }
+
+            public override void Rollover()
+            {
+                foreach (string strID in _liSentMessages)
+                {
+                    _liCurrentMessages.Add(strID);
+                }
+                _liSentMessages.Clear();
+
+                if (_liCurrentMessages.Count > 0)
+                {
+                    _alertSprite = new AnimatedSprite(DataManager.DIALOGUE_TEXTURE);
+                    _alertSprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 64, TileSize, TileSize, 3, 0.150f, true);
+                    _alertSprite.Position = new Vector2(_vMapPosition.X, _vMapPosition.Y - TileSize);
+                }
+            }
+
+            public MailboxData SaveData()
+            {
+                MailboxData data = new MailboxData();
+                data.MailboxMessages = new List<string>();
+                foreach (string strID in _liCurrentMessages)
+                {
+                    data.MailboxMessages.Add(strID);
+                }
+
+                return data;
+            }
+            public void LoadData(MailboxData data)
+            {
+                foreach (string strID in data.MailboxMessages)
+                {
+                    _liSentMessages.Add(strID);
+                }
+
+                Rollover();
             }
         }
 
