@@ -1405,7 +1405,7 @@ namespace RiverHollow.Tile_Engine
             if (_liTestTiles.Count > 0) { _liTestTiles.Clear(); }
 
             _objSelectedObject?.SelectObject(false);
-            if (TownModeMoving() && GameManager.HeldObject == null && MouseTile.HasBuildableObject())
+            if (TownModeMoving() && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasBuildableObject())
             {
                 WorldObject obj = MouseTile.RetrieveUppermostStructureObject();
                 if (obj != null && obj.IsBuildable())

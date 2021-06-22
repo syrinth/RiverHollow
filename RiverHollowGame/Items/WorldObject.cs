@@ -209,11 +209,13 @@ namespace RiverHollow.Items
         /// <param name="mousePosition">The current mousePosition</param>
         public void SetPickupOffset(Vector2 mousePosition)
         {
-            Vector2 temp = mousePosition - _sprite.Position;
-            if (Width <= TileSize) { temp.X = 0; }
-            if (Height <= TileSize) { temp.Y = 0; }
+            int xOffset = (Width > TileSize) ? (int)(mousePosition.X - _sprite.Position.X) : 0;
+            int yOffset = (Height > TileSize) ? (int)(mousePosition.Y - _sprite.Position.Y) : 0;
 
-            PickupOffset = temp;
+            xOffset = (xOffset / TileSize) * TileSize;
+            yOffset = (yOffset / TileSize) * TileSize;
+            PickupOffset = new Vector2(xOffset, yOffset);
+            
         }
 
         /// <summary>
@@ -225,6 +227,7 @@ namespace RiverHollow.Items
             int xOffset = (_iBaseWidth > 1) ? (_iBaseWidth - 1) / 2 : 0;
             int yOffset = (_iBaseHeight > 1) ? (_iBaseHeight -1) / 2 : 0;
             PickupOffset = new Vector2((_iBaseXOffset + xOffset) * TileSize, (_iBaseYOffset + yOffset) * TileSize);
+            PickupOffset = (PickupOffset / TileSize) * TileSize;
         }
 
         public List<Item> GetDroppedItems()
