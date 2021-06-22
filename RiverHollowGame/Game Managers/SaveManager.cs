@@ -278,11 +278,9 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Plants")]
             public List<PlantData> plants;
 
-            [XmlArray(ElementName = "Floors")]
-            public List<FloorData> floors;
+            [XmlArray(ElementName = "Gardens")]
+            public List<GardenData> gardens;
 
-            [XmlArray(ElementName = "Earth")]
-            public List<FloorData> earth;
         }
         public struct VillagerData
         {
@@ -431,16 +429,19 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Y")]
             public int y;
         }
-        public struct EarthData
+        public struct GardenData
         {
-            [XmlElement(ElementName = "Watered")]
-            public bool watered;
+            [XmlElement(ElementName = "GardenID")]
+            public int ID;
 
             [XmlElement(ElementName = "X")]
             public int x;
 
             [XmlElement(ElementName = "Y")]
             public int y;
+
+            [XmlElement(ElementName = "Plantdata")]
+            public PlantData plantData;
         }
         public struct ShopData
         {

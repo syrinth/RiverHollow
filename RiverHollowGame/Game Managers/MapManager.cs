@@ -331,17 +331,6 @@ namespace RiverHollow.Game_Managers
             CurrentMap.DropItemsOnMap(items, position, flyingPop);
         }
 
-        public static void ApplyWeather()
-        {
-            if (EnvironmentManager.IsRaining())
-            {
-                foreach (RHMap map in Maps.Values)
-                {
-                    map.WaterTiles();
-                }
-            }
-        }
-
         public static void Rollover()
         {
             foreach(RHMap map in Maps.Values)

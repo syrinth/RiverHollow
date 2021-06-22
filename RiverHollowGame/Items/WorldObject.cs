@@ -5,6 +5,7 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.GUIComponents.MainObjects;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
@@ -188,6 +189,7 @@ namespace RiverHollow.Items
 
         /// <summary>
         /// Removes the object from the Tiles this Object sits upon
+        /// then clears the Tile list that belongs to the WorldObject
         /// </summary>
         public virtual void RemoveSelfFromTiles()
         {
@@ -197,6 +199,8 @@ namespace RiverHollow.Items
                 if (t.WorldObject == this) { t.RemoveWorldObject(); }
                 if (t.ShadowObject == this) { t.RemoveShadowObject(); }
             }
+
+            Tiles.Clear();
         }
 
         /// <summary>
@@ -205,7 +209,8 @@ namespace RiverHollow.Items
         /// <param name="mousePosition">The current mousePosition</param>
         public void SetPickupOffset(Vector2 mousePosition)
         {
-            PickupOffset = mousePosition - _sprite.Position;
+            if (Width > TileSize) { PickupOffset = mousePosition - _sprite.Position; }
+            else { PickupOffset = new Vector2(0, 0); }
         }
 
         /// <summary>
@@ -240,6 +245,7 @@ namespace RiverHollow.Items
                 case ObjectTypeEnum.Building:
                 case ObjectTypeEnum.Container:
                 case ObjectTypeEnum.Floor:
+                case ObjectTypeEnum.Garden:
                 case ObjectTypeEnum.Light:
                 case ObjectTypeEnum.Structure:
                 case ObjectTypeEnum.Wall:
@@ -539,8 +545,8 @@ namespace RiverHollow.Items
             PlantData plantData = new PlantData
             {
                 ID = _iID,
-                x = (int)MapPosition.X,
-                y = (int)this.MapPosition.Y,
+                x = CollisionBox.X,
+                y = CollisionBox.Y,
                 currentState = _iCurrentState,
                 daysLeft = _iDaysLeft
             };
@@ -984,11 +990,13 @@ namespace RiverHollow.Items
             /// removing it from the map.
             /// </summary>
             public override void RemoveSelfFromTiles()
-            { 
-                RHTile startTile = Tiles[0];
-
-                base.RemoveSelfFromTiles();
-                AdjustmentHelper(Tiles[0]);
+            {
+                if (Tiles.Count > 0)
+                {
+                    RHTile startTile = Tiles[0];
+                    base.RemoveSelfFromTiles();
+                    AdjustmentHelper(startTile);
+                }
             }
 
             /// <summary>
@@ -1011,7 +1019,7 @@ namespace RiverHollow.Items
             /// </summary>
             /// <param name="startTile">The RHTile to center the adjustments on.</param>
             /// <param name="adjustAdjacent">Whether or not to call this method against the adjacent tiles</param>
-            protected void AdjustmentHelper(RHTile startTile, bool adjustAdjacent = true)
+            protected virtual void AdjustmentHelper(RHTile startTile, bool adjustAdjacent = true)
             {
                 string mapName = startTile.MapName;
                 string sAdjacent = string.Empty;
@@ -1188,32 +1196,58 @@ namespace RiverHollow.Items
                 /// </summary>
                 public override void Draw(SpriteBatch spriteBatch)
                 {
+                    _sprite.SetColor(_bSelected ? Color.Green : Color.White);
+                    _sprWatered.SetColor(_bSelected ? Color.Green : Color.White);
+
                     if (_bWatered) { _sprWatered.Draw(spriteBatch, 0); }
                     else { _sprite.Draw(spriteBatch, 0); }
 
                     _objPlant?.Draw(spriteBatch);
                 }
 
-                public override void ProcessLeftClick() { HandleGarden(); }
-                public override void ProcessRightClick() { HandleGarden(); }
+                /// <summary>
+                /// Override to ensure that _sprWatered stays in sync with _sprite
+                /// </summary>
+                protected override void AdjustmentHelper(RHTile startTile, bool adjustAdjacent = true)
+                {
+                    base.AdjustmentHelper(startTile, adjustAdjacent);
+                    _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
+                }
 
+                public override void ProcessLeftClick() { HandleGarden(); }
+
+                /// <summary>
+                /// Handles for when the Garden is clicked on to perform
+                /// the work that needs to get done
+                /// </summary>
                 private void HandleGarden()
                 {
+                    //If no plant, open the Garden window
                     if(_objPlant == null){ GUIManager.OpenMainObject(new GardenWindow(this)); }
                     else
                     {
+                        //If the plant is finished growing, harvest it. Otherwise, water it.
                         if (_objPlant.FinishedGrowing()) { _objPlant.ProcessLeftClick(); }
                         else if(!_bWatered) { WaterGardenBed(true); }
                     }
                 }
 
+                /// <summary>
+                /// Assigns a Plant to the Garden
+                /// </summary>
+                /// <param name="obj">The plant to assign to the garden</param>
                 public void SetPlant(Plant obj)
                 {
                     _objPlant = obj;
                     _objPlant?.SetGarden(this);
-                    _objPlant?.SnapPositionToGrid(_vMapPosition);
+                    _objPlant?.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objPlant.Sprite.Height - TileSize)));
                 }
+                public Plant GetPlant() { return _objPlant; }
 
+                /// <summary>
+                /// Syncs up the _sprWatered and the plant with the new position
+                /// </summary>
+                /// <param name="position"></param>
                 public override void SnapPositionToGrid(Vector2 position)
                 {
                     base.SnapPositionToGrid(position);
@@ -1234,161 +1268,32 @@ namespace RiverHollow.Items
                     _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
                 }
 
-                public class GardenWindow : GUIMainObject
+                public GardenData SaveData()
                 {
-                    public static int MAX_SHOWN_TASKS = 4;
-                    public static int TASK_SPACING = 20;
-                    public static int CONSTRUCTBOX_WIDTH = 544; //(GUIManager.MAIN_COMPONENT_WIDTH) - (_gWindow.EdgeSize * 2) - ScaledTileSize
-                    public static int CONSTRUCTBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDTaskLog.MAX_SHOWN_TASKS) - (_gWindow.EdgeSize * 2)
-                    List<GUIObject> _liStructures;
-                    GUIList _gList;
-                    Garden _objGarden;
-
-                    public GardenWindow(Garden targetGarden)
+                    GardenData g = new GardenData
                     {
-                        _winMain = SetMainWindow();
-                        _objGarden = targetGarden;
+                        ID = this.ID,
+                        x = (int)this.MapPosition.X,
+                        y = (int)this.MapPosition.Y
+                    };
 
-                        _liStructures = new List<GUIObject>();
+                    if (_objPlant != null) { g.plantData = _objPlant.SaveData(); }
+                    else { g.plantData = new PlantData { ID = -1 }; };
 
-                        foreach (int i in DataManager.PlantIDs)
-                        {
-                            ConstructBox box = new ConstructBox(CONSTRUCTBOX_WIDTH, CONSTRUCTBOX_HEIGHT, ConstructWorldObject);
-                            box.SetConstructionInfo(i);
-                            _liStructures.Add(box);
-                        }
+                    return g;
+                }
 
-                        _gList = new GUIList(_liStructures, MAX_SHOWN_TASKS, TASK_SPACING/*, _gWindow.Height*/);
-                        _gList.CenterOnObject(_winMain);
+                public void LoadData(GardenData garden)
+                {
+                    _iID = garden.ID;
+                    SnapPositionToGrid(new Vector2(garden.x, garden.y));
 
-                        AddControl(_gList);
-                    }
-
-                    public override bool ProcessLeftButtonClick(Point mouse)
+                    if (garden.plantData.ID != -1)
                     {
-                        bool rv = false;
+                        _objPlant = (Plant)DataManager.GetWorldObjectByID(garden.plantData.ID);
+                        _objPlant.LoadData(garden.plantData);
 
-                        foreach (GUIObject c in Controls)
-                        {
-                            rv = c.ProcessLeftButtonClick(mouse);
-
-                            if (rv) { break; }
-                        }
-
-                        return rv;
-                    }
-
-                    public override bool ProcessRightButtonClick(Point mouse)
-                    {
-                        bool rv = false;
-                        return rv;
-                    }
-
-                    public override bool ProcessHover(Point mouse)
-                    {
-                        bool rv = false;
-                        return rv;
-                    }
-
-                    public void ConstructWorldObject(int objID)
-                    {
-                        Plant obj = (Plant)DataManager.GetWorldObjectByID(objID);
-
-                        if (InventoryManager.HasItemInPlayerInventory(obj.SeedID, 1))
-                        {
-                            _objGarden.SetPlant(obj);
-                        }
-
-                        GUIManager.CloseMainObject();
-                    }
-
-                    public class ConstructBox : GUIObject
-                    {
-                        GUIWindow _window;
-                        GUIText _gName;
-                        public int _iBuildID;
-                        public delegate void ConstructObject(int objID);
-                        private ConstructObject _delAction;
-
-                        public ConstructBox(int width, int height, ConstructObject del)
-                        {
-                            _delAction = del;
-
-                            int boxHeight = height;
-                            int boxWidth = width;
-                            _window = new GUIWindow(GUIWindow.Window_1, boxWidth, boxHeight);
-                            AddControl(_window);
-                            Width = _window.Width;
-                            Height = _window.Height;
-                        }
-
-                        public override void Draw(SpriteBatch spriteBatch)
-                        {
-                            if (Show())
-                            {
-                                _window.Draw(spriteBatch);
-                            }
-                        }
-                        public override bool ProcessLeftButtonClick(Point mouse)
-                        {
-                            bool rv = false;
-                            if (Contains(mouse) && _delAction != null)
-                            {
-                                rv = true;
-                                _delAction(_iBuildID);
-                            }
-
-                            return rv;
-                        }
-                        public override bool ProcessRightButtonClick(Point mouse)
-                        {
-                            return base.ProcessRightButtonClick(mouse);
-                        }
-                        public override bool ProcessHover(Point mouse)
-                        {
-                            bool rv = false;
-                            return rv;
-                        }
-                        public override bool Contains(Point mouse)
-                        {
-                            return _window.Contains(mouse);
-                        }
-
-                        public void SetConstructionInfo(int id)
-                        {
-                            _iBuildID = id;
-
-                            string name = string.Empty;
-                            Dictionary<int, int> requiredToMake;
-
-                            Plant obj = (Plant)DataManager.GetWorldObjectByID(id);
-                            requiredToMake = new Dictionary<int, int> { [obj.SeedID] = 1 };
-                            name = obj.Name;
-
-                            Color textColor = Color.White;
-                            if (!InventoryManager.HasSufficientItems(requiredToMake))
-                            {
-                                textColor = Color.Red;
-                                _delAction = null;
-                            }
-
-                            _gName = new GUIText(name);
-                            _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
-                            _gName.SetColor(textColor);
-
-                            List<GUIItemBox> list = new List<GUIItemBox>();
-                            foreach (KeyValuePair<int, int> kvp in requiredToMake)
-                            {
-                                GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
-
-                                if (list.Count == 0) { box.AnchorToInnerSide(_window, SideEnum.BottomRight); }
-                                else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Left, SideEnum.Bottom); }
-
-                                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value)) { box.SetColor(Color.Red); }
-
-                                list.Add(box);
-                            }
-                        }
+                        SetPlant(_objPlant);
                     }
                 }
             }

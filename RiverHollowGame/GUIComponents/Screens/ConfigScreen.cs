@@ -79,7 +79,6 @@ namespace RiverHollow.GUIComponents.Screens
         int _iSpawnMapIndex;
         List<SpawnXMLData> _liConfigData;
         List<GUIObject> _liButtons;
-        Dictionary<int, string> _diConfig;
         SpawnData targetSpawnData;
         GUIButton _btnAddNew;
 

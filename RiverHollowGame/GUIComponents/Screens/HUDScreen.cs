@@ -439,14 +439,6 @@ namespace RiverHollow.GUIComponents.Screens
     public class HUDMenu : GUIObject
     {
         const int BTN_PADDING = 10;
-        GUIButton _btnExitGame;
-        GUIButton _btnTaskLog;
-        GUIButton _btnInventory;
-        GUIButton _btnParty;
-        GUIButton _btnManagement;
-        GUIButton _btnConstruction;
-        GUIButton _btnOptions;
-        GUIButton _btnFriendship;
         GUIMainObject _gMenuObject;
         List<GUIObject> _liButtons;
 
@@ -463,7 +455,6 @@ namespace RiverHollow.GUIComponents.Screens
             _liButtons = new List<GUIObject>() {
                 new GUIButton("Inventory", BtnInventory),
                 new GUIButton("Party", BtnParty),
-                new GUIButton("Buildings", BtnManagement),
                 new GUIButton("Build", BtnBuild),
                 new GUIButton("Task Log", BtnTaskLog),
                 new GUIButton("Options", BtnOptions),
@@ -534,11 +525,6 @@ namespace RiverHollow.GUIComponents.Screens
         public void BtnOptions()
         {
             _gMenuObject = new HUDOptions();
-            GUIManager.OpenMainObject(_gMenuObject);
-        }
-        public void BtnManagement()
-        {
-            _gMenuObject = new HUDManagement();
             GUIManager.OpenMainObject(_gMenuObject);
         }
         public void BtnBuild()

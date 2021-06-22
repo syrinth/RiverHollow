@@ -23,7 +23,6 @@ namespace RiverHollow.GUIComponents.Screens
         int _iCurrRow;
         int _iTotalTiles;
         List<GUISprite> _liMonsters;
-        int _iNewVillagers = 0;
 
         bool _bPopped;
         bool _bNextRow;

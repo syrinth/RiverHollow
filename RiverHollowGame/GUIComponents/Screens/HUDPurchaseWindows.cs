@@ -303,7 +303,6 @@ namespace RiverHollow.GUIComponents.Screens
             _winWorkers = new GUIWindow(GUIWindow.Window_1, minWidth, minHeight);
             _liWorkers = new List<GUIObject>();
 
-            int i = 0;
             foreach (Merchandise m in merch)
             {
                 //if (m.MerchType == Merchandise.ItemType.Adventurer)

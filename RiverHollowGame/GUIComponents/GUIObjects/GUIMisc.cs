@@ -4,6 +4,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Misc;
 using System;
+using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
@@ -396,6 +397,91 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public override void SetColor(Color c)
         {
             _gText.SetColor(c);
+        }
+    }
+
+    public class ConstructBox : GUIObject
+    {
+        public static int CONSTRUCTBOX_WIDTH = 544; //(GUIManager.MAIN_COMPONENT_WIDTH) - (_gWindow.EdgeSize * 2) - ScaledTileSize
+        public static int CONSTRUCTBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDTaskLog.MAX_SHOWN_TASKS) - (_gWindow.EdgeSize * 2)
+
+        GUIWindow _window;
+        GUIText _gName;
+        public int _iBuildID;
+        public delegate void SelectConstructID(int objID);
+        private SelectConstructID _delAction;
+
+        public ConstructBox(SelectConstructID del)
+        {
+            _delAction = del;
+
+            int boxWidth = CONSTRUCTBOX_WIDTH;
+            int boxHeight = CONSTRUCTBOX_HEIGHT;            
+
+            _window = new GUIWindow(GUIWindow.Window_1, boxWidth, boxHeight);
+            AddControl(_window);
+            Width = _window.Width;
+            Height = _window.Height;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (Show())
+            {
+                _window.Draw(spriteBatch);
+            }
+        }
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+            if (Contains(mouse) && _delAction != null)
+            {
+                rv = true;
+                _delAction(_iBuildID);
+            }
+
+            return rv;
+        }
+
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            return base.ProcessRightButtonClick(mouse);
+        }
+
+        public override bool ProcessHover(Point mouse) { return false; }
+
+        public override bool Contains(Point mouse)
+        {
+            return _window.Contains(mouse);
+        }
+
+        public void SetConstructionInfo(int id, string objName, Dictionary<int, int> requiredToMake)
+        {
+            _iBuildID = id;
+
+            Color textColor = Color.White;
+            if (!InventoryManager.HasSufficientItems(requiredToMake))
+            {
+                textColor = Color.Red;
+                _delAction = null;
+            }
+
+            _gName = new GUIText(objName);
+            _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
+            _gName.SetColor(textColor);
+
+            List<GUIItemBox> list = new List<GUIItemBox>();
+            foreach (KeyValuePair<int, int> kvp in requiredToMake)
+            {
+                GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
+
+                if (list.Count == 0) { box.AnchorToInnerSide(_window, SideEnum.BottomRight); }
+                else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Left, SideEnum.Bottom); }
+
+                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value)) { box.SetColor(Color.Red); }
+
+                list.Add(box);
+            }
         }
     }
 }

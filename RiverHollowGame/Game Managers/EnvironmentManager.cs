@@ -113,8 +113,6 @@ namespace RiverHollow.Game_Managers
                 _iSeasonPrecipDays++;
                 if (GameCalendar.CurrentSeason == 0) { _eCurrentWeather = WeatherEnum.Raining; }
                 else if (GameCalendar.CurrentSeason == 3) { _eCurrentWeather = WeatherEnum.Snowing; }
-
-                MapManager.ApplyWeather();
             }
             else { _eCurrentWeather = WeatherEnum.Sunny; }
         }
