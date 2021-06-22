@@ -535,7 +535,7 @@
     </Item>
     <Item>
       <Key>133</Key>
-      <Value>[Type:StaticItem][Image:0-32][Sell:3][Stacks][Place:49]</Value>
+      <Value>[Type:Resource][Image:144-128][Sell:3][Stacks][Place:49]</Value>
     </Item>
     <Item>
       <Key>134</Key>

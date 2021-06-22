@@ -886,7 +886,7 @@ namespace RiverHollow.CombatStuff
                             {
                                 CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.ChooseMoveTarget);
                             }
-                            else if (CombatManager.ActiveCharacter.IsActorType(ActorEnum.Villager))
+                            else if (!CombatManager.ActiveCharacter.IsActorType(ActorEnum.Monster))
                             {
                                 CombatManager.GoToMainSelection();
                             }

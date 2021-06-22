@@ -237,7 +237,7 @@ namespace RiverHollow.Game_Managers
 
                         if (!CheckForForcedEndOfTurn())
                         {
-                            if (ActiveCharacter.IsActorType(ActorEnum.Villager))
+                            if (!ActiveCharacter.IsActorType(ActorEnum.Monster))
                             {
                                 GoToMainSelection();
                             }
@@ -279,7 +279,7 @@ namespace RiverHollow.Game_Managers
             }
             if (newPhase == CmbtPhaseEnum.PerformAction || newPhase == CmbtPhaseEnum.Moving)
             {
-                if (ActiveCharacter != null && ActiveCharacter.IsActorType(ActorEnum.Villager) && GameManager.IsPaused())
+                if (ActiveCharacter != null && !ActiveCharacter.IsActorType(ActorEnum.Monster) && GameManager.IsPaused())
                 {
                     GameManager.Unpause();
                 }
@@ -562,7 +562,7 @@ namespace RiverHollow.Game_Managers
                 {
                     foreach (RHTile t in ActiveCharacter.BaseTile.GetAdjacentTiles())
                     {
-                        if (t.HasCombatant() && t.Character.IsActorType(ActorEnum.Villager))
+                        if (t.HasCombatant() && !t.Character.IsActorType(ActorEnum.Monster))
                         {
                             gottaMove = false;
                             SelectedAction = c;
@@ -618,7 +618,7 @@ namespace RiverHollow.Game_Managers
             {
                 foreach (RHTile t in ActiveCharacter.BaseTile.GetAdjacentTiles())
                 {
-                    if (t.HasCombatant() && t.Character.IsActorType(ActorEnum.Villager))
+                    if (t.HasCombatant() && !t.Character.IsActorType(ActorEnum.Monster))
                     {
                         SelectedTile = t;
                         SelectedAction = ActiveCharacter.GetCurrentSpecials()[0];
@@ -757,7 +757,7 @@ namespace RiverHollow.Game_Managers
         /// <returns></returns>
         public static bool OnSameTeam(CombatActor actor)
         {
-            return (ActiveCharacter.IsActorType(ActorEnum.Villager) && actor.IsActorType(ActorEnum.Villager)) || (ActiveCharacter.IsActorType(ActorEnum.Monster) && actor.IsActorType(ActorEnum.Monster));
+            return (!ActiveCharacter.IsActorType(ActorEnum.Monster) && !actor.IsActorType(ActorEnum.Monster)) || (ActiveCharacter.IsActorType(ActorEnum.Monster) && actor.IsActorType(ActorEnum.Monster));
         }
 
         public static void CheckTileForActiveHazard(CombatActor c)

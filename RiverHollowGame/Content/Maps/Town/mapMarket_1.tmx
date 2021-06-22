@@ -359,6 +359,5 @@
     <property name="ShopKeepY" type="int" value="7"/>
    </properties>
   </object>
-  <object id="24" name="Merchant" x="194.793" y="177.876" width="12.375" height="11.4375"/>
  </objectgroup>
 </map>

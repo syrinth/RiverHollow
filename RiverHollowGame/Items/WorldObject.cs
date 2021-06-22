@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
@@ -11,6 +13,8 @@ using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.DataManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
+using static RiverHollow.GUIComponents.Screens.BuildScreen;
+using static RiverHollow.Items.Buildable.AdjustableObject;
 
 namespace RiverHollow.Items
 {
@@ -341,7 +345,6 @@ namespace RiverHollow.Items
         const float MAX_BOUNCE = 3;
         #endregion
 
-        bool _bNoWater = false;
         bool _bShaking = false;
         DirectionEnum dir = DirectionEnum.Right;
         float _fCurrentRotation = 0f;
@@ -353,6 +356,10 @@ namespace RiverHollow.Items
         readonly int _iResourceID;
         int _iDaysLeft;
         Dictionary<int, int> _diTransitionTimes;
+        int _iSeedID = 0;
+        public int SeedID => _iSeedID;
+
+        Garden _objGarden;
 
         public Plant(int id, Dictionary<string, string> stringData) : base(id, stringData, false)
         {
@@ -365,7 +372,7 @@ namespace RiverHollow.Items
             _iCurrentState = 0;
             _iBaseYOffset = (_iSpriteHeight / TileSize) - 1;
 
-            Util.AssignValue(ref _bNoWater, "NoWater", stringData);
+            Util.AssignValue(ref _iSeedID, "SeedID", stringData);
             Util.AssignValue(ref _iResourceID, "Item", stringData);
             Util.AssignValue(ref _iMaxStates, "TrNum", stringData); //Number of growth phases
 
@@ -468,6 +475,7 @@ namespace RiverHollow.Items
 
                     MapManager.RemoveWorldObject(this);
                     RemoveSelfFromTiles();
+                    _objGarden.SetPlant(null);
                 }
             }
         }
@@ -519,6 +527,11 @@ namespace RiverHollow.Items
         public override bool CanPickUp()
         {
             return FinishedGrowing();
+        }
+
+        public void SetGarden(Garden g)
+        {
+            _objGarden = g;
         }
 
         internal PlantData SaveData()
@@ -1186,16 +1199,7 @@ namespace RiverHollow.Items
 
                 private void HandleGarden()
                 {
-                    if(_objPlant == null)
-                    {
-                        //TODO: Open plant gui
-                        WorldObject obj = DataManager.GetWorldObjectByID(49);
-                        if (obj.CompareType(ObjectTypeEnum.Plant))
-                        {
-                            _objPlant = (Plant)obj;
-                            _objPlant.SnapPositionToGrid(_vMapPosition);
-                        }
-                    }
+                    if(_objPlant == null){ GUIManager.OpenMainObject(new GardenWindow(this)); }
                     else
                     {
                         if (_objPlant.FinishedGrowing()) { _objPlant.ProcessLeftClick(); }
@@ -1203,10 +1207,18 @@ namespace RiverHollow.Items
                     }
                 }
 
+                public void SetPlant(Plant obj)
+                {
+                    _objPlant = obj;
+                    _objPlant?.SetGarden(this);
+                    _objPlant?.SnapPositionToGrid(_vMapPosition);
+                }
+
                 public override void SnapPositionToGrid(Vector2 position)
                 {
                     base.SnapPositionToGrid(position);
                     _sprWatered.Position = position;
+                    _objPlant?.SnapPositionToGrid(_vMapPosition);
                 }
 
                 public override void Rollover()
@@ -1220,6 +1232,164 @@ namespace RiverHollow.Items
                 {
                     _bWatered = value;
                     _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
+                }
+
+                public class GardenWindow : GUIMainObject
+                {
+                    public static int MAX_SHOWN_TASKS = 4;
+                    public static int TASK_SPACING = 20;
+                    public static int CONSTRUCTBOX_WIDTH = 544; //(GUIManager.MAIN_COMPONENT_WIDTH) - (_gWindow.EdgeSize * 2) - ScaledTileSize
+                    public static int CONSTRUCTBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDTaskLog.MAX_SHOWN_TASKS) - (_gWindow.EdgeSize * 2)
+                    List<GUIObject> _liStructures;
+                    GUIList _gList;
+                    Garden _objGarden;
+
+                    public GardenWindow(Garden targetGarden)
+                    {
+                        _winMain = SetMainWindow();
+                        _objGarden = targetGarden;
+
+                        _liStructures = new List<GUIObject>();
+
+                        foreach (int i in DataManager.PlantIDs)
+                        {
+                            ConstructBox box = new ConstructBox(CONSTRUCTBOX_WIDTH, CONSTRUCTBOX_HEIGHT, ConstructWorldObject);
+                            box.SetConstructionInfo(i);
+                            _liStructures.Add(box);
+                        }
+
+                        _gList = new GUIList(_liStructures, MAX_SHOWN_TASKS, TASK_SPACING/*, _gWindow.Height*/);
+                        _gList.CenterOnObject(_winMain);
+
+                        AddControl(_gList);
+                    }
+
+                    public override bool ProcessLeftButtonClick(Point mouse)
+                    {
+                        bool rv = false;
+
+                        foreach (GUIObject c in Controls)
+                        {
+                            rv = c.ProcessLeftButtonClick(mouse);
+
+                            if (rv) { break; }
+                        }
+
+                        return rv;
+                    }
+
+                    public override bool ProcessRightButtonClick(Point mouse)
+                    {
+                        bool rv = false;
+                        return rv;
+                    }
+
+                    public override bool ProcessHover(Point mouse)
+                    {
+                        bool rv = false;
+                        return rv;
+                    }
+
+                    public void ConstructWorldObject(int objID)
+                    {
+                        Plant obj = (Plant)DataManager.GetWorldObjectByID(objID);
+
+                        if (InventoryManager.HasItemInPlayerInventory(obj.SeedID, 1))
+                        {
+                            _objGarden.SetPlant(obj);
+                        }
+
+                        GUIManager.CloseMainObject();
+                    }
+
+                    public class ConstructBox : GUIObject
+                    {
+                        GUIWindow _window;
+                        GUIText _gName;
+                        public int _iBuildID;
+                        public delegate void ConstructObject(int objID);
+                        private ConstructObject _delAction;
+
+                        public ConstructBox(int width, int height, ConstructObject del)
+                        {
+                            _delAction = del;
+
+                            int boxHeight = height;
+                            int boxWidth = width;
+                            _window = new GUIWindow(GUIWindow.Window_1, boxWidth, boxHeight);
+                            AddControl(_window);
+                            Width = _window.Width;
+                            Height = _window.Height;
+                        }
+
+                        public override void Draw(SpriteBatch spriteBatch)
+                        {
+                            if (Show())
+                            {
+                                _window.Draw(spriteBatch);
+                            }
+                        }
+                        public override bool ProcessLeftButtonClick(Point mouse)
+                        {
+                            bool rv = false;
+                            if (Contains(mouse) && _delAction != null)
+                            {
+                                rv = true;
+                                _delAction(_iBuildID);
+                            }
+
+                            return rv;
+                        }
+                        public override bool ProcessRightButtonClick(Point mouse)
+                        {
+                            return base.ProcessRightButtonClick(mouse);
+                        }
+                        public override bool ProcessHover(Point mouse)
+                        {
+                            bool rv = false;
+                            return rv;
+                        }
+                        public override bool Contains(Point mouse)
+                        {
+                            return _window.Contains(mouse);
+                        }
+
+                        public void SetConstructionInfo(int id)
+                        {
+                            _iBuildID = id;
+
+                            string name = string.Empty;
+                            Dictionary<int, int> requiredToMake;
+
+                            Plant obj = (Plant)DataManager.GetWorldObjectByID(id);
+                            requiredToMake = new Dictionary<int, int> { [obj.SeedID] = 1 };
+                            name = obj.Name;
+
+                            Color textColor = Color.White;
+                            if (!InventoryManager.HasSufficientItems(requiredToMake))
+                            {
+                                textColor = Color.Red;
+                                _delAction = null;
+                            }
+
+                            _gName = new GUIText(name);
+                            _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
+                            _gName.SetColor(textColor);
+
+                            List<GUIItemBox> list = new List<GUIItemBox>();
+                            foreach (KeyValuePair<int, int> kvp in requiredToMake)
+                            {
+                                GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
+
+                                if (list.Count == 0) { box.AnchorToInnerSide(_window, SideEnum.BottomRight); }
+                                else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Left, SideEnum.Bottom); }
+
+                                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value)) { box.SetColor(Color.Red); }
+
+                                list.Add(box);
+                            }
+                        }
+                    }
                 }
             }
         }

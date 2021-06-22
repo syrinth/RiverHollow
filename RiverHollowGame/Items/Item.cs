@@ -221,7 +221,7 @@ namespace RiverHollow.Items
         {
             bool rv = false;
 
-            rv = !(CompareType(ItemEnum.Tool) || CompareType(ItemEnum.Special) || CompareType(ItemEnum.StaticItem));
+            rv = !(CompareType(ItemEnum.Tool) || CompareType(ItemEnum.Special));
 
             return rv;
         }

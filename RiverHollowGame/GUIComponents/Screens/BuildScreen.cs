@@ -189,6 +189,15 @@ namespace RiverHollow.GUIComponents.Screens
                         _liStructures.Add(box);
                     }
                 }
+                else if (objType == ObjectTypeEnum.Plant)
+                {
+                    foreach (int i in DataManager.PlantIDs)
+                    {
+                        ConstructBox box = new ConstructBox(CONSTRUCTBOX_WIDTH, CONSTRUCTBOX_HEIGHT, objType, ConstructWorldObject);
+                        box.SetConstructionInfo(i);
+                        _liStructures.Add(box);
+                    }
+                }
                 else if (objType == ObjectTypeEnum.WorldObject)
                 {
                     foreach (int i in DataManager.StructureIDs)

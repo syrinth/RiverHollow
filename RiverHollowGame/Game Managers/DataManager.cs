@@ -86,6 +86,7 @@ namespace RiverHollow.Game_Managers
 
         public static List<int> FloorIDs { get; private set; }
         public static List<int> StructureIDs { get; private set; }
+        public static List<int> PlantIDs { get; private set; }
 
         public static Dictionary<int, Dictionary<string, string>> Config;
 
@@ -102,6 +103,7 @@ namespace RiverHollow.Game_Managers
             //Allocate Dictionaries
             FloorIDs = new List<int>();
             StructureIDs = new List<int>();
+            PlantIDs = new List<int>();
             _diTextures = new Dictionary<string, Texture2D>();
 
             DiUpgrades = Content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
@@ -175,6 +177,9 @@ namespace RiverHollow.Game_Managers
                 case ObjectTypeEnum.Light:
                 case ObjectTypeEnum.Wall:
                     StructureIDs.Add(id);
+                    break;
+                case ObjectTypeEnum.Plant:
+                    PlantIDs.Add(id);
                     break;
             }
         }
@@ -403,42 +408,38 @@ namespace RiverHollow.Game_Managers
         {
             if (id != -1 && _diItemData.ContainsKey(id))
             {
-                Dictionary<string, string> liData = _diItemData[id];
-                switch (liData["Type"])
+                Dictionary<string, string> diData = _diItemData[id];
+                switch (Util.ParseEnum<ItemEnum>(diData["Type"]))
                 {
-                    case "Resource":
-                        return new Item(id, liData, num);
-                    case "Tool":
-                        return new Tool(id, liData);
-                    case "Equipment":
-                        return new Equipment(id, liData);
-                    case "StaticItem":
-                        return new StaticItem(id, liData, num);
-                    case "Food":
-                        return new Food(id, liData, num);
-                    case "Consumable":
-                        return new Consumable(id, liData, num);
-                    case "Blueprint":
-                        return new Blueprint(id, liData);
-                    case "Special":
-                        switch (liData["Subtype"])
+                    case ItemEnum.Blueprint:
+                        return new Blueprint(id, diData);
+                    case ItemEnum.Clothes:
+                        return new Clothes(id, diData); 
+                    case ItemEnum.Consumable:
+                        return new Consumable(id, diData, num);
+                    case ItemEnum.Equipment:
+                        return new Equipment(id, diData);
+                    case ItemEnum.Food:
+                        return new Food(id, diData, num);
+                    case ItemEnum.MonsterFood:
+                        return new MonsterFood(id, diData, num);
+                    case ItemEnum.Resource:
+                        return new Item(id, diData, num);
+                    case ItemEnum.Special:
+                        switch (diData["Subtype"])
                         {
                             case "Class":
-                                return new ClassItem(id, liData, num);
+                                return new ClassItem(id, diData, num);
                             case "Marriage":
-                                return new MarriageItem(id, liData);
+                                return new MarriageItem(id, diData);
                             case "Map":
-                                return new AdventureMap(id, liData, num);
+                                return new AdventureMap(id, diData, num);
                             case "DungeonKey":
-                                return new DungeonKey(id, liData);
+                                return new DungeonKey(id, diData);
                         }
                         break;
-                    case "Marriage":
-                        return new MarriageItem(id, liData);
-                    case "Clothes":
-                        return new Clothes(id, liData);
-                    case "MonsterFood":
-                        return new MonsterFood(id, liData, num);
+                    case ItemEnum.Tool:
+                        return new Tool(id, diData);
                 }
             }
             return null;

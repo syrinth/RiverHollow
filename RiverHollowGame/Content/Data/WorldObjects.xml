@@ -199,7 +199,7 @@
     </Item>
     <Item>
       <Key>49</Key>
-      <Value>[Type:Plant][Image:0-64][ItemID:21][TrNum:4][TrTime:2-3-4]</Value>
+      <Value>[Type:Plant][Image:0-64][ItemID:21][TrNum:4][TrTime:1-1-1][SeedID:133]</Value>
     </Item>
     <Item>
       <Key>50</Key>
