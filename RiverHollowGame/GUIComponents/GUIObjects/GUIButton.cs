@@ -71,6 +71,31 @@ namespace RiverHollow.GUIComponents.GUIObjects
             AddControl(_gImage);
             AddControl(_btnObject);
         }
+        public void ChangeImage(Rectangle sourceRect, int width, int height, string texture)
+        {
+            if(_gText != null)
+            {
+                return;
+            }
+
+            Width = width;
+            Height = height;
+            RemoveControl(_gImage);
+            _gImage = new GUIImage(sourceRect, width, height, texture);
+            _gImage.Position(this.Position());
+
+            _btnObject = _gImage;
+        }
+        public void ChangeText(string text)
+        {
+            if (_gImage != null)
+            {
+                return;
+            }
+
+            _gText.SetText(text);
+            _gText.CenterOnObject(_gWindow);
+        }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
