@@ -175,16 +175,10 @@ namespace RiverHollow.GUIComponents.Screens
         {
             if (SoundManager.IsMuted) {
                 SoundManager.UnmuteAllSound();
-                _window.RemoveControl(_gMuteButton);
-                _gMuteButton = new GUIButton(new Rectangle(96, 80, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, ClickMuteButton);
-                _window.AddControl(_gMuteButton);
-                _gMuteButton.AnchorAndAlignToObject(_btnOK, SideEnum.Left, SideEnum.Top, 10);
+                 _gMuteButton.ChangeImage(new Rectangle(96, 80, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE);
             } else { 
                 SoundManager.MuteAllSound();
-                _window.RemoveControl(_gMuteButton);
-                _gMuteButton = new GUIButton(new Rectangle(96, 96, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, ClickMuteButton);
-                _window.AddControl(_gMuteButton);
-                _gMuteButton.AnchorAndAlignToObject(_btnOK, SideEnum.Left, SideEnum.Top, 10);
+                _gMuteButton.ChangeImage(new Rectangle(96, 96, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE);
             }
         }
         public void AssignClothes(ref List<int> clothesList, string[] clothingIDs)
