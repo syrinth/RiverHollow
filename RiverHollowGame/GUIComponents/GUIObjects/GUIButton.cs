@@ -94,6 +94,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
 
             _gText.SetText(text);
+            _gText.CenterOnObject(_gWindow);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

@@ -107,7 +107,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             return _font.MeasureString(s);
         }
 
-        public void SetText(string text, bool changePos = false)
+        public void SetText(string text)
         {
             _sText = text;
             _sFullText = _sText;
@@ -118,9 +118,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
             SetText(ParseText(text, width, maxRows, printAll)[0]);
         }
 
-        public void SetText(int num, bool changePos = false)
+        public void SetText(int num)
         {
-            SetText(num.ToString(), changePos);
+            SetText(num.ToString());
         }
         public void ResetText(string text)
         {

@@ -2083,7 +2083,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
                 private void UpdateValue()
                 {
-                    _gValue.SetText((int)_fValue, false);
+                    _gValue.SetText((int)_fValue);
                     _gValue.AnchorAndAlignToObject(_btnRight, SideEnum.Left, SideEnum.CenterY, 12);
                 }
             }
