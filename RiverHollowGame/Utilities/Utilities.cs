@@ -363,7 +363,7 @@ namespace RiverHollow.Utilities
             if (dict.ContainsKey(key))
             {
                 string[] splitVal = dict[key].Split('-');
-                value = new Vector2(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
+                value = new Vector2(float.Parse(splitVal[0]), float.Parse(splitVal[1]));
             }
         }
         public static void AssignValue(ref Point value, string key, Dictionary<string, string> dict)

@@ -848,13 +848,59 @@ namespace RiverHollow.Items
 
         public class Light : Buildable
         {
+            AnimatedSprite _sprLight;
+            public AnimatedSprite LightSprite => _sprLight;
+            private Vector2 _vLightPos;
+            public Vector2 LightPosition => _vLightPos;
+
             public Light(int id, Dictionary<string, string> stringData) : base(id)
             {
                 LoadDictionaryData(stringData);
 
+                Util.AssignValue(ref _vLightPos, "LightPosition", stringData);
+                string lightTex = string.Empty;
+                Util.AssignValue(ref lightTex, "LightTexture", stringData);
+
                 string[] idleSplit = stringData["Idle"].Split('-');
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
                 _sprite.Drawing = true;
+
+                _sprLight = new AnimatedSprite(DataManager.FOLDER_ENVIRONMENT + lightTex);
+
+                Vector2 animDescriptor = new Vector2(1, 1);
+                Util.AssignValue(ref animDescriptor, "LightIdle", stringData);
+
+                Vector2 lightDimensions = Vector2.Zero;
+                Util.AssignValue(ref lightDimensions, "LightDimensions", stringData);
+                _sprLight.AddAnimation(AnimationEnum.ObjectIdle, 0, 0, (int)lightDimensions.X, (int)lightDimensions.Y, (int)animDescriptor.X, animDescriptor.Y, true);
+                SyncLightPosition();
+            }
+
+            public override void Update(GameTime gTime)
+            {
+                base.Update(gTime);
+                _sprLight.Update(gTime);
+            }
+
+            public void DrawLight(SpriteBatch spriteBatch)
+            {
+                _sprLight.Draw(spriteBatch);
+            }
+
+            public override bool PlaceOnMap(Vector2 pos, RHMap map)
+            {
+                bool rv = base.PlaceOnMap(pos, map);
+
+                SyncLightPosition();
+
+                return rv;
+
+            }
+
+            private void SyncLightPosition()
+            {
+                _sprLight.Position = new Vector2(MapPosition.X - _sprLight.Width / 2, MapPosition.Y - _sprLight.Height / 2);
+                _sprLight.Position += _vLightPos;
             }
         }
 

@@ -173,18 +173,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/texWeather.png
 
-#begin Textures/lightmask.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/lightmask.png
-
 #begin Textures/texClothes.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2724,18 +2712,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Environmental/Snow.png
 
-#begin Textures/lightmask1.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/lightmask1.png
-
 #begin Sound/Stock/Songs/LostInTheForest.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
@@ -3100,4 +3076,28 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sound/Stock/Effects/Cancel.wav
+
+#begin Textures/Environmental/lightmask.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Environmental/lightmask.png
+
+#begin Textures/Environmental/lightmask1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Environmental/lightmask1.png
 
