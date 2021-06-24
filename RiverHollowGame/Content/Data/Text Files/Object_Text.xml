@@ -1499,34 +1499,38 @@
     </Item>
     <Item>
       <Key>WorldObject_58</Key>
-      <Value>[Name:Class Changer]</Value>
+      <Value>[Name:Caves Runestone]</Value>
     </Item>
     <Item>
       <Key>WorldObject_59</Key>
-      <Value>[Name:Echo of Joy]</Value>
+      <Value>[Name:Class Changer]</Value>
     </Item>
     <Item>
       <Key>WorldObject_60</Key>
-      <Value>[Name:Cotton]</Value>
+      <Value>[Name:Echo of Joy]</Value>
     </Item>
     <Item>
       <Key>WorldObject_61</Key>
-      <Value>[Name:Staircase]</Value>
+      <Value>[Name:Cotton]</Value>
     </Item>
     <Item>
       <Key>WorldObject_62</Key>
-      <Value>[Name:Door_Up]</Value>
+      <Value>[Name:Staircase]</Value>
     </Item>
     <Item>
       <Key>WorldObject_63</Key>
-      <Value>[Name:Peat]</Value>
+      <Value>[Name:Door_Up]</Value>
     </Item>
     <Item>
       <Key>WorldObject_64</Key>
-      <Value>[Name:Lavender]</Value>
+      <Value>[Name:Peat]</Value>
     </Item>
     <Item>
       <Key>WorldObject_65</Key>
+      <Value>[Name:Lavender]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_66</Key>
       <Value>[Name:Flax]</Value>
     </Item>
   </Asset>

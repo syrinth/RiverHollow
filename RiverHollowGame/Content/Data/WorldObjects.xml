@@ -235,34 +235,38 @@
     </Item>
     <Item>
       <Key>58</Key>
-      <Value>[Type:WorldObject][Image:0-2][Width:16][Height:32][Texture:Textures\texMachines]</Value>
+      <Value>[Type:WarpPoint][Image:288-0][Width:32][Height:32][Base:2-1][BaseOffset:0-1]</Value>
     </Item>
     <Item>
       <Key>59</Key>
-      <Value>[Type:WorldObject][Image:0-80][Width:16][Height:16][Tool:Lantern][Hp:5][ReqLvl:1][ItemID:18][Idle:5-0.150][Gathered:7-0.150]</Value>
+      <Value>[Type:WorldObject][Image:0-2][Width:16][Height:32][Texture:Textures\texMachines]</Value>
     </Item>
     <Item>
       <Key>60</Key>
-      <Value>[Type:WorldObject][Image:96-0][Width:16][Height:16][ItemID:26][Passable]</Value>
+      <Value>[Type:WorldObject][Image:0-80][Width:16][Height:16][Tool:Lantern][Hp:5][ReqLvl:1][ItemID:18][Idle:5-0.150][Gathered:7-0.150]</Value>
     </Item>
     <Item>
       <Key>61</Key>
-      <Value>[Type:WorldObject][Image:48-0][Width:16][Height:16]</Value>
+      <Value>[Type:WorldObject][Image:96-0][Width:16][Height:16][ItemID:26][Passable]</Value>
     </Item>
     <Item>
       <Key>62</Key>
-      <Value>[Type:WorldObject][Image:64-0][Width:16][Height:32]</Value>
+      <Value>[Type:WorldObject][Image:48-0][Width:16][Height:16]</Value>
     </Item>
     <Item>
       <Key>63</Key>
-      <Value>[Type:WorldObject][Image:80-64][Width:16][Height:16][ItemID:4]</Value>
+      <Value>[Type:WorldObject][Image:64-0][Width:16][Height:32]</Value>
     </Item>
     <Item>
       <Key>64</Key>
-      <Value>[Type:WorldObject][Image:96-16][Width:16][Height:16][ItemID:24]</Value>
+      <Value>[Type:WorldObject][Image:80-64][Width:16][Height:16][ItemID:4]</Value>
     </Item>
     <Item>
       <Key>65</Key>
+      <Value>[Type:WorldObject][Image:96-16][Width:16][Height:16][ItemID:24]</Value>
+    </Item>
+    <Item>
+      <Key>66</Key>
       <Value>[Type:WorldObject][Image:80-32][Width:16][Height:16][ItemID:25][Passable]</Value>
     </Item>
   </Asset>

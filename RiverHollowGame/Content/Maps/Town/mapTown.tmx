@@ -429,9 +429,9 @@
     <property name="ObjectID" type="int" value="25"/>
    </properties>
   </object>
-  <object id="84" name="WorldObject" x="562.197" y="724.886" width="10.94" height="9.8948">
+  <object id="84" name="WorldObject" x="434.53" y="820.219" width="26.6067" height="9.8948">
    <properties>
-    <property name="ObjectID" type="int" value="33"/>
+    <property name="ObjectID" type="int" value="58"/>
    </properties>
   </object>
   <object id="85" name="Building" x="754.417" y="659.583" width="124.5" height="59.1667">

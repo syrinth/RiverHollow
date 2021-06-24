@@ -1824,6 +1824,14 @@ namespace RiverHollow.Items
 
     }
 
+    public class WarpPoint : WorldObject
+    {
+        public WarpPoint(int id, Dictionary<string, string> stringData) : base(id)
+        {
+            LoadDictionaryData(stringData);
+        }
+    }
+
     public class Light
     {
         AnimatedSprite _sprite;

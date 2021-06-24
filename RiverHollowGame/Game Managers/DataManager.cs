@@ -498,6 +498,8 @@ namespace RiverHollow.Game_Managers
                         return new StructureUpgrader(id, diData);
                     case ObjectTypeEnum.Wall:
                         return new Wall(id, diData);
+                    case ObjectTypeEnum.WarpPoint:
+                        return new WarpPoint(id, diData);
                 }
             }
 
