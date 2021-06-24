@@ -582,6 +582,18 @@
       <Value>[Name:WindowLight]</Value>
     </Item>
     <Item>
+      <Key>Light_3</Key>
+      <Value>[Name:SmallWindowLight]</Value>
+    </Item>
+    <Item>
+      <Key>Light_4</Key>
+      <Value>[Name:WindowInnLarge]</Value>
+    </Item>
+    <Item>
+      <Key>Light_5</Key>
+      <Value>[Name:WindowInnCircle]</Value>
+    </Item>
+    <Item>
       <Key>Shop_0</Key>
       <Value>[Name:Magic Shop]</Value>
     </Item>

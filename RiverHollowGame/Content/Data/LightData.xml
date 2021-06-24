@@ -13,5 +13,17 @@
       <Key>2</Key>
       <Value>[Texture:WindowLight][Idle:1-1][Dimensions:30-40]</Value>
     </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Texture:SmallWindowLight][Idle:1-1][Dimensions:22-24]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Texture:WindowInnLarge][Idle:1-1][Dimensions:38-40]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Texture:WindowInnCircle][Idle:1-1][Dimensions:40-40]</Value>
+    </Item>
   </Asset>
 </XnaContent>

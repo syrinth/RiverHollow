@@ -2443,7 +2443,7 @@ namespace Database_Editor
         private void AddNewLight(object sender, EventArgs e)
         {
             SaveLightInfo(_diBasicXML[LIGHTS_XML_FILE]);
-            List<string> defaultTags = new List<string>() { "Texture:", "Idle:0-0", "Dimensions:" };
+            List<string> defaultTags = new List<string>() { "Texture:", "Idle:1-1", "Dimensions:" };
             AddNewGenericXMLObject(tabCtl.TabPages["tabLights"], "Lights", dgvLights, "colLightsID", "colLightsName", tbLightName, tbLightID, dgvLightTags, "colLightTags", null, null, defaultTags);
         }
         #endregion

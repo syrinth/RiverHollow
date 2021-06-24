@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Texture:Manor][Dimensions:176-192][BaseOffset:0-7][Base:11-5][Entrance:80-160-16-32][UpgradeTime:3][Unlocked][LightID:2-30-166|2-144-166]</Value>
+      <Value>[Texture:Manor][Dimensions:176-192][BaseOffset:0-7][Base:11-5][Entrance:80-160-16-32][UpgradeTime:3][Unlocked][LightID:2-30-166|2-144-166|2-44-118|2-129-118]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -31,7 +31,7 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Texture:Inn][Dimensions:176-176][BaseOffset:0-7][Base:11-4][Entrance:80-144-16-31][ReqItems:55-8|60-12][Unlocked]</Value>
+      <Value>[Texture:Inn][Dimensions:176-176][BaseOffset:0-7][Base:11-4][Entrance:80-144-16-31][ReqItems:55-8|60-12][Unlocked][LightID:5-87-95|4-39-151|4-135-151]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -43,11 +43,11 @@
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Texture:House_14][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][Unlocked]</Value>
+      <Value>[Texture:House_14][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][Unlocked][LightID:3-20-103]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Texture:StoneMason][Dimensions:128-144][BaseOffset:0-6][Base:8-3][Entrance:80-113-16-30][Unlocked]</Value>
+      <Value>[Texture:StoneMason][Dimensions:128-144][BaseOffset:0-6][Base:8-3][Entrance:80-113-16-30][Unlocked][LightID:3-31-81|3-63-81|3-95-81]</Value>
     </Item>
     <Item>
       <Key>12</Key>
@@ -83,7 +83,7 @@
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Texture:Market][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:48-97-16-30][ReqItems:55-5|60-5]</Value>
+      <Value>[Texture:Market][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:48-97-16-30][ReqItems:55-5|60-5][LightID:3-20-103|3-91-103]</Value>
     </Item>
     <Item>
       <Key>21</Key>
