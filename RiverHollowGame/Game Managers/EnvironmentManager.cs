@@ -181,7 +181,7 @@ namespace RiverHollow.Game_Managers
                     Vector2 landingPos = _sprBody.Position + new Vector2(0, TileSize);
                     RHTile landingTile = MapManager.CurrentMap.GetTileByPixelPosition(landingPos);
                     if (landingTile == null) { _sprBody.PlayAnimation(AnimationEnum.Action_Finished); }//_sprBody.Drawing = false; }
-                    else if (_iFallDistance <= 0 && landingTile.WorldObject == null)
+                    else if (_iFallDistance <= 0 && (landingTile.WorldObject == null || landingTile.WorldObject.CompareType(ObjectTypeEnum.Structure)))
                     {
                         _sprBody.PlayAnimation(AnimationEnum.Action_Finished);
                     }
