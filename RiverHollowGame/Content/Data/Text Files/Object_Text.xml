@@ -570,6 +570,18 @@
       <Value>[Name:Guard]</Value>
     </Item>
     <Item>
+      <Key>Light_0</Key>
+      <Value>[Name:TorchLight]</Value>
+    </Item>
+    <Item>
+      <Key>Light_1</Key>
+      <Value>[Name:LanternLight]</Value>
+    </Item>
+    <Item>
+      <Key>Light_2</Key>
+      <Value>[Name:WindowLight]</Value>
+    </Item>
+    <Item>
       <Key>Shop_0</Key>
       <Value>[Name:Magic Shop]</Value>
     </Item>

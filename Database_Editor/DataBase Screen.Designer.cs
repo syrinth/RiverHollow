@@ -77,6 +77,8 @@
             this.tbCharacterName = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.dgvCharacters = new System.Windows.Forms.DataGridView();
+            this.colCharactersID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCharactersName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabClasses = new System.Windows.Forms.TabPage();
             this.tbClassDescription = new System.Windows.Forms.TextBox();
             this.label37 = new System.Windows.Forms.Label();
@@ -208,8 +210,17 @@
             this.dgvStatusEffects = new System.Windows.Forms.DataGridView();
             this.colStatusEffectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStatusEffectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCharactersID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCharactersName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabLights = new System.Windows.Forms.TabPage();
+            this.label9 = new System.Windows.Forms.Label();
+            this.tbLightID = new System.Windows.Forms.TextBox();
+            this.tbLightName = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.dgvLightTags = new System.Windows.Forms.DataGridView();
+            this.colLightTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvLights = new System.Windows.Forms.DataGridView();
+            this.colLightsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colLightsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -251,6 +262,9 @@
             this.tabStatusEffects.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffectTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffects)).BeginInit();
+            this.tabLights.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvLightTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvLights)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -320,6 +334,7 @@
             this.tabCtl.Controls.Add(this.tabSpirits);
             this.tabCtl.Controls.Add(this.tabSummons);
             this.tabCtl.Controls.Add(this.tabStatusEffects);
+            this.tabCtl.Controls.Add(this.tabLights);
             this.tabCtl.Location = new System.Drawing.Point(12, 27);
             this.tabCtl.Name = "tabCtl";
             this.tabCtl.SelectedIndex = 0;
@@ -751,6 +766,25 @@
             this.dgvCharacters.Size = new System.Drawing.Size(308, 411);
             this.dgvCharacters.TabIndex = 37;
             this.dgvCharacters.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCharacters_CellClick);
+            // 
+            // colCharactersID
+            // 
+            this.colCharactersID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colCharactersID.FillWeight = 10F;
+            this.colCharactersID.HeaderText = "ID";
+            this.colCharactersID.Name = "colCharactersID";
+            this.colCharactersID.ReadOnly = true;
+            this.colCharactersID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colCharactersID.Width = 31;
+            // 
+            // colCharactersName
+            // 
+            this.colCharactersName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCharactersName.FillWeight = 90F;
+            this.colCharactersName.HeaderText = "Name";
+            this.colCharactersName.Name = "colCharactersName";
+            this.colCharactersName.ReadOnly = true;
+            this.colCharactersName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tabClasses
             // 
@@ -2134,24 +2168,123 @@
             this.colStatusEffectsName.ReadOnly = true;
             this.colStatusEffectsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // colCharactersID
+            // tabLights
             // 
-            this.colCharactersID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colCharactersID.FillWeight = 10F;
-            this.colCharactersID.HeaderText = "ID";
-            this.colCharactersID.Name = "colCharactersID";
-            this.colCharactersID.ReadOnly = true;
-            this.colCharactersID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colCharactersID.Width = 31;
+            this.tabLights.Controls.Add(this.label9);
+            this.tabLights.Controls.Add(this.tbLightID);
+            this.tabLights.Controls.Add(this.tbLightName);
+            this.tabLights.Controls.Add(this.label10);
+            this.tabLights.Controls.Add(this.button1);
+            this.tabLights.Controls.Add(this.dgvLightTags);
+            this.tabLights.Controls.Add(this.dgvLights);
+            this.tabLights.Location = new System.Drawing.Point(4, 22);
+            this.tabLights.Name = "tabLights";
+            this.tabLights.Size = new System.Drawing.Size(790, 425);
+            this.tabLights.TabIndex = 14;
+            this.tabLights.Text = "Lights";
+            this.tabLights.UseVisualStyleBackColor = true;
             // 
-            // colCharactersName
+            // label9
             // 
-            this.colCharactersName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colCharactersName.FillWeight = 90F;
-            this.colCharactersName.HeaderText = "Name";
-            this.colCharactersName.Name = "colCharactersName";
-            this.colCharactersName.ReadOnly = true;
-            this.colCharactersName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(714, 9);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(21, 13);
+            this.label9.TabIndex = 61;
+            this.label9.Text = "ID:";
+            // 
+            // tbLightID
+            // 
+            this.tbLightID.Location = new System.Drawing.Point(741, 6);
+            this.tbLightID.Name = "tbLightID";
+            this.tbLightID.Size = new System.Drawing.Size(43, 20);
+            this.tbLightID.TabIndex = 60;
+            // 
+            // tbLightName
+            // 
+            this.tbLightName.Location = new System.Drawing.Point(361, 6);
+            this.tbLightName.Name = "tbLightName";
+            this.tbLightName.Size = new System.Drawing.Size(108, 20);
+            this.tbLightName.TabIndex = 59;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(317, 9);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(38, 13);
+            this.label10.TabIndex = 58;
+            this.label10.Text = "Name:";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(709, 394);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 28;
+            this.button1.Text = "Cancel";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.btnLightCancel_Click);
+            // 
+            // dgvLightTags
+            // 
+            this.dgvLightTags.AllowUserToResizeColumns = false;
+            this.dgvLightTags.AllowUserToResizeRows = false;
+            this.dgvLightTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvLightTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colLightTags});
+            this.dgvLightTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.dgvLightTags.Location = new System.Drawing.Point(320, 33);
+            this.dgvLightTags.Name = "dgvLightTags";
+            this.dgvLightTags.RowHeadersVisible = false;
+            this.dgvLightTags.Size = new System.Drawing.Size(464, 355);
+            this.dgvLightTags.TabIndex = 27;
+            // 
+            // colLightTags
+            // 
+            this.colLightTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colLightTags.HeaderText = "Tags";
+            this.colLightTags.Name = "colLightTags";
+            // 
+            // dgvLights
+            // 
+            this.dgvLights.AllowUserToAddRows = false;
+            this.dgvLights.AllowUserToDeleteRows = false;
+            this.dgvLights.AllowUserToResizeColumns = false;
+            this.dgvLights.AllowUserToResizeRows = false;
+            this.dgvLights.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvLights.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colLightsID,
+            this.colLightsName});
+            this.dgvLights.ContextMenuStrip = this.contextMenu;
+            this.dgvLights.Location = new System.Drawing.Point(6, 6);
+            this.dgvLights.MultiSelect = false;
+            this.dgvLights.Name = "dgvLights";
+            this.dgvLights.ReadOnly = true;
+            this.dgvLights.RowHeadersVisible = false;
+            this.dgvLights.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvLights.Size = new System.Drawing.Size(308, 411);
+            this.dgvLights.TabIndex = 26;
+            this.dgvLights.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvLights_CellClick);
+            // 
+            // colLightsID
+            // 
+            this.colLightsID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colLightsID.FillWeight = 10F;
+            this.colLightsID.HeaderText = "ID";
+            this.colLightsID.Name = "colLightsID";
+            this.colLightsID.ReadOnly = true;
+            this.colLightsID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colLightsID.Width = 31;
+            // 
+            // colLightsName
+            // 
+            this.colLightsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colLightsName.FillWeight = 90F;
+            this.colLightsName.HeaderText = "Name";
+            this.colLightsName.Name = "colLightsName";
+            this.colLightsName.ReadOnly = true;
+            this.colLightsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // FrmDBEditor
             // 
@@ -2219,6 +2352,10 @@
             this.tabStatusEffects.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffectTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffects)).EndInit();
+            this.tabLights.ResumeLayout(false);
+            this.tabLights.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvLightTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvLights)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2405,6 +2542,17 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colCutsceneTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharactersID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharactersName;
+        private System.Windows.Forms.TabPage tabLights;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox tbLightID;
+        private System.Windows.Forms.TextBox tbLightName;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.DataGridView dgvLightTags;
+        private System.Windows.Forms.DataGridView dgvLights;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colLightTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colLightsID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colLightsName;
     }
 }
 

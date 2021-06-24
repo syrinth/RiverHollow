@@ -62,7 +62,8 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<int, Dictionary<string, string>> _diBuildings;
         static Dictionary<int, Dictionary<string, string>> _diItemData;
-       
+
+        static Dictionary<int, Dictionary<string, string>> _diLightData;
         static Dictionary<int, Dictionary<string, string>> _diStatusEffects;
         static Dictionary<int, Dictionary<string, string>> _diWorkers;
         public static Dictionary<int, Dictionary<string, string>> DIWorkers => _diWorkers;
@@ -150,6 +151,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);
             LoadDictionary(ref _diClasses, @"Data\Classes", Content, null);
             LoadDictionary(ref Config, @"Data\Config", Content, null);
+            LoadDictionary(ref _diLightData, @"Data\LightData", Content, null);
         }
         private static void LoadDictionary(ref Dictionary<int, Dictionary<string, string>> dictionaryAddTo, string dataFile, ContentManager Content, LoadDictionaryWorkDelegate workDelegate)
         {
@@ -346,6 +348,15 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region GetMethods
+        public static Light GetLight(int id)
+        {
+            if (_diLightData.ContainsKey(id))
+            {
+                return new Light(id, _diLightData[id]);
+            }
+            return null;
+        }
+
         public static Building GetBuilding(int id)
         {
             if (_diBuildings.ContainsKey(id))
@@ -474,7 +485,7 @@ namespace RiverHollow.Game_Managers
                     case ObjectTypeEnum.Gatherable:
                         return new Gatherable(id, diData);
                     case ObjectTypeEnum.Light:
-                        return new Light(id, diData);
+                        return new LightSource(id, diData);
                     case ObjectTypeEnum.Machine:
                         return new Machine(id, diData);
                     case ObjectTypeEnum.Mailbox:

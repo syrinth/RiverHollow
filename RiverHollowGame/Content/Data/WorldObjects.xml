@@ -135,11 +135,11 @@
     </Item>
     <Item>
       <Key>33</Key>
-      <Value>[Type:Light][Image:112-0][Width:16][Height:16][Idle:6-0.1][ReqItems:2-1|61-5][LightIdle:3-0.2][LightTexture:lightmask][LightDimensions:128-128][LightPosition:8-8]</Value>
+      <Value>[Type:Light][Image:112-0][Width:16][Height:16][Idle:6-0.1][ReqItems:2-1|61-5][LightID:0][LightPosition:8-8]</Value>
     </Item>
     <Item>
       <Key>34</Key>
-      <Value>[Type:Light][Image:272-0][LightPosition:8-8][Width:16][Height:32][ReqItems:2-1|61-5][Idle:1-0.1][BaseOffset:0-1]</Value>
+      <Value>[Type:Light][Image:272-0][LightPosition:8-8][Width:16][Height:48][ReqItems:2-1|61-5][Idle:1-0.1][BaseOffset:0-2][LightID:1]</Value>
     </Item>
     <Item>
       <Key>35</Key>

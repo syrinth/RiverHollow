@@ -386,8 +386,13 @@ namespace RiverHollow.Tile_Engine
             {
                 if (obj.CompareType(ObjectTypeEnum.Light))
                 {
-                    ((Light)obj).DrawLight(spriteBatch);
+                    ((LightSource)obj).DrawLight(spriteBatch);
                 }
+            }
+
+            foreach(Building obj in _liBuildings)
+            {
+                obj.DrawLights(spriteBatch);
             }
 
             //spriteBatch.Draw(lightMask, new Vector2(PlayerManager.World.CollisionBox.Center.X - lightMask.Width / 2, PlayerManager.World.CollisionBox.Y - lightMask.Height / 2), Color.White);

@@ -22,6 +22,7 @@ namespace RiverHollow.Buildings
         private int _iEntHeight;
         public int Level { get; private set; } = 1;
 
+        private List<LightInfo> _liLights;
         private Dictionary<int, Dictionary<int, int>> _diUpgradeInfo;
 
         private string _sDescription;
@@ -76,7 +77,7 @@ namespace RiverHollow.Buildings
                 foreach (string arg in Util.FindParams(val))
                 {
                     string[] split = arg.Split('-');
-                    reqs[int.Parse(split[0])] =  int.Parse(split[1]);
+                    reqs[int.Parse(split[0])] = int.Parse(split[1]);
                 }
 
                 //Upgrade 1 is actually Level 2, so increment
@@ -95,6 +96,28 @@ namespace RiverHollow.Buildings
 
             Util.AssignValue(ref _sTextureName, "Texture", stringData);
             LoadSprite(stringData, DataManager.FOLDER_BUILDINGS + _sTextureName);
+
+            _liLights = new List<LightInfo>();
+            if (stringData.ContainsKey("LightID"))
+            {
+                foreach (string s in Util.FindParams(stringData["LightID"]))
+                {
+                    string[] split = s.Split('-');
+
+                    LightInfo info;
+                    info.LightObject = DataManager.GetLight(int.Parse(split[0]));
+                    info.Offset = new Vector2(int.Parse(split[1]), int.Parse(split[2]));
+
+                    SyncLightPosition(info);
+                    _liLights.Add(info);
+                }
+            }
+        }
+
+        private void SyncLightPosition(LightInfo obj)
+        {
+            obj.LightObject.Position = new Vector2(MapPosition.X - obj.LightObject.Width / 2, MapPosition.Y - obj.LightObject.Height / 2);
+            obj.LightObject.Position += obj.Offset;
         }
 
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\worldObjects")
@@ -109,6 +132,23 @@ namespace RiverHollow.Buildings
                 startX += _iSpriteWidth;
             }
             _sprite.PlayAnimation("1");
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+            foreach (LightInfo info in _liLights)
+            {
+                info.LightObject.Update(gTime);
+            }
+        }
+
+        public void DrawLights(SpriteBatch spriteBatch)
+        {
+            foreach(LightInfo info in _liLights)
+            {
+                info.LightObject.Draw(spriteBatch);
+            }
         }
 
         /// <summary>
@@ -147,6 +187,10 @@ namespace RiverHollow.Buildings
                 map.CreateBuildingEntrance(this);
                 map.AddBuilding(this);
 
+                foreach (LightInfo info in _liLights)
+                {
+                    SyncLightPosition(info);
+                }
                 PlayerManager.AddBuilding(this);
             }
 
@@ -212,6 +256,12 @@ namespace RiverHollow.Buildings
         {
             SnapPositionToGrid(new Vector2(data.iPosX, data.iPosY));
             Level = data.iBldgLevel;
+        }
+
+        private struct LightInfo
+        {
+            public Light LightObject;
+            public Vector2 Offset;
         }
     }
 

@@ -12,24 +12,25 @@ namespace Database_Editor
     public partial class FrmDBEditor : Form
     {
         private enum EditableCharacterDataEnum { Dialogue, Schedule };
-        public enum XMLTypeEnum { None, Task, Character, Class, Building, WorldObject, Item, Monster, Action, Shop, Spirit, Summon, StatusEffect, Cutscene };
+        public enum XMLTypeEnum { None, Task, Character, Class, Building, WorldObject, Item, Monster, Action, Shop, Spirit, Summon, StatusEffect, Cutscene, Light };
         #region XML Files
-        string SHOPS_XML_FILE = PATH_TO_DATA + @"\Shops.xml";
         string ACTIONS_XML_FILE = PATH_TO_DATA + @"\CombatActions.xml";
-        string CUTSCENE_XML_FILE = PATH_TO_DATA + @"\CutScenes.xml";
-        string TASK_XML_FILE = PATH_TO_DATA + @"\Tasks.xml";
-        string MONSTERS_XML_FILE = PATH_TO_DATA + @"\Monsters.xml";
-        string CHARACTER_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
-        string CLASSES_XML_FILE = PATH_TO_DATA + @"\Classes.xml";
-        string CONFIG_XML_FILE = PATH_TO_DATA + @"\Config.xml";
-        string MAGIC_SHOP_XML_FILE = PATH_TO_DATA + @"\Shops\MagicShop.xml";
-        string SPIRITS_XML_FILE = PATH_TO_DATA + @"\Spirits.xml";
-        string SUMMONS_XML_FILE = PATH_TO_DATA + @"\Summons.xml";
-        string STATUS_EFFECTS_XML_FILE = PATH_TO_DATA + @"\StatusEffects.xml";
         string BUILDINGS_XML_FILE = PATH_TO_DATA + @"\Buildings.xml";
+        string CLASSES_XML_FILE = PATH_TO_DATA + @"\Classes.xml";
+        string CHARACTER_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
+        string CONFIG_XML_FILE = PATH_TO_DATA + @"\Config.xml";
+        string CUTSCENE_XML_FILE = PATH_TO_DATA + @"\CutScenes.xml";
         string ITEM_DATA_XML_FILE = PATH_TO_DATA + @"\ItemData.xml";
-        string OBJECT_TEXT_XML_FILE = PATH_TO_TEXT_FILES + @"\Object_Text.xml";
+        string LIGHTS_XML_FILE = PATH_TO_DATA + @"\LightData.xml";
+        string MONSTERS_XML_FILE = PATH_TO_DATA + @"\Monsters.xml";
+        string SHOPS_XML_FILE = PATH_TO_DATA + @"\Shops.xml";
+        string SPIRITS_XML_FILE = PATH_TO_DATA + @"\Spirits.xml";
+        string STATUS_EFFECTS_XML_FILE = PATH_TO_DATA + @"\StatusEffects.xml";
+        string SUMMONS_XML_FILE = PATH_TO_DATA + @"\Summons.xml";
+        string TASK_XML_FILE = PATH_TO_DATA + @"\Tasks.xml";
         string WORLD_OBJECTS_DATA_XML_FILE = PATH_TO_DATA + @"\WorldObjects.xml";
+
+        string OBJECT_TEXT_XML_FILE = PATH_TO_TEXT_FILES + @"\Object_Text.xml";
         #endregion
 
         #region Tags
@@ -41,19 +42,20 @@ namespace Database_Editor
         const string TAGS_FOR_SPIRITS = "SpiritID";
         const string TAGS_FOR_STATUS_EFFECTS = "StatusEffectID";
         const string TAGS_FOR_SUMMONS = "SummonID";
+        const string TAGS_FOR_LIGHTS = "LightID";
         const string TAGS_FOR_BUILDINGS = "BuildingID,HouseID,RequiredBuildingID";
 
         const string ITEM_REF_TAGS = "ReqItems,Place";
         const string TASK_REF_TAGS = "GoalItem,ItemReward,BuildingID,BuildingRewardID";
         const string CHARACTER_REF_TAGS = "Collection,Class,ShopData,HouseID,RequiredBuildingID,RequestIDs";
-        const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID,SubObjects,SeedID";
+        const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID,SubObjects,SeedID,LightID";
         const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
         const string SHOPDATA_REF_TAGS = "ItemID,BuildingID";
         const string SHOP_REF_TAG = "ItemID,Requires,BuildingID";
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
         const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
         const string ACTIONS_REF_TAGS = "StatusEffectID,SummonID";
-        const string BUILDINGS_REF_TAGS = "ReqItems";
+        const string BUILDINGS_REF_TAGS = "ReqItems,LightID";
 
         const string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,SpiritID";
         #endregion
@@ -119,7 +121,8 @@ namespace Database_Editor
                 { "Buildings", 0 },
                 { "Spirits", 0 },
                 { "Summons", 0 },
-                { "StatusEffects", 0 }
+                { "StatusEffects", 0 },
+                { "Lights", 0 }
             };
 
             _diMapData = new Dictionary<string, TMXData>();
@@ -168,6 +171,7 @@ namespace Database_Editor
             LoadXMLDictionary(SPIRITS_XML_FILE, "", TAGS_FOR_SPIRITS);
             LoadXMLDictionary(SUMMONS_XML_FILE, "", TAGS_FOR_SUMMONS);
             LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", TAGS_FOR_STATUS_EFFECTS);
+            LoadXMLDictionary(LIGHTS_XML_FILE, "", TAGS_FOR_LIGHTS);
 
             _diShops = ReadXMLFileToXMLDataListDictionary(SHOPS_XML_FILE, XMLTypeEnum.Shop, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA);
             _diCutscenes = ReadXMLFileToIntKeyDictionaryStringList(CUTSCENE_XML_FILE);
@@ -179,7 +183,6 @@ namespace Database_Editor
 
             LoadDataGrids();
             LoadAllInfoPanels();
-
         }
 
         private void LoadDataGrids()
@@ -195,6 +198,7 @@ namespace Database_Editor
             LoadSpiritDataGrid();
             LoadSummonDataGrid();
             LoadStatusEffectDataGrid();
+            LoadLightDataGrid();
             LoadCutsceneDataGrid();
             LoadShopsDataGrid();
         }
@@ -214,6 +218,7 @@ namespace Database_Editor
             LoadSpiritInfo();
             LoadSummonInfo();
             LoadStatusEffectInfo();
+            LoadLightInfo();
         }
 
         #region Helpers
@@ -240,6 +245,7 @@ namespace Database_Editor
             else if (fileName == BUILDINGS_XML_FILE) { rv = XMLTypeEnum.Building; }
             else if (fileName == SUMMONS_XML_FILE) { rv = XMLTypeEnum.Summon; }
             else if (fileName == STATUS_EFFECTS_XML_FILE) { rv = XMLTypeEnum.StatusEffect; }
+            else if (fileName == LIGHTS_XML_FILE) { rv = XMLTypeEnum.Light; }
 
             return rv;
         }
@@ -343,6 +349,10 @@ namespace Database_Editor
         private void LoadStatusEffectDataGrid()
         {
             LoadGenericDatagrid(dgvStatusEffects, _diBasicXML[STATUS_EFFECTS_XML_FILE], "colStatusEffectsID", "colStatusEffectsName", "StatusEffects", _diTabIndices["StatusEffects"]);
+        }
+        private void LoadLightDataGrid()
+        {
+            LoadGenericDatagrid(dgvLights, _diBasicXML[LIGHTS_XML_FILE], "colLightsID", "colLightsName", "Lights", _diTabIndices["Lights"]);
         }
 
         private void LoadDictionaryListDatagrid(DataGridView dgv, Dictionary<int, List<XMLData>> di, string colID, string colName, string tabIndex, XMLTypeEnum xmlType)
@@ -955,6 +965,11 @@ namespace Database_Editor
             XMLData data = _diBasicXML[STATUS_EFFECTS_XML_FILE][_diTabIndices["StatusEffects"]];
             LoadGenericDataInfo(data, tbStatusEffectName, tbStatusEffectID, dgvStatusEffectTags, tbStatusEffectDescription);
         }
+        private void LoadLightInfo()
+        {
+            XMLData data = _diBasicXML[LIGHTS_XML_FILE][_diTabIndices["Lights"]];
+            LoadGenericDataInfo(data, tbLightName, tbLightID, dgvLightTags);
+        }
 
         private void LoadDictionaryListInfo(int index, List<XMLData> dataList, TextBox tbName, DataGridView dgvTags, XMLTypeEnum xmlType, TextBox tbDescription = null)
         {
@@ -1235,6 +1250,10 @@ namespace Database_Editor
         {
             SaveXMLDataInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", "StatusEffect_", XMLTypeEnum.StatusEffect, tbStatusEffectName, tbStatusEffectID, null, dgvStatusEffects, dgvStatusEffectTags, "colStatusEffectsID", "colStatusEffectsName", "", "", tbStatusEffectDescription);
         }
+        private void SaveLightInfo(List<XMLData> liData)
+        {
+            SaveXMLDataInfo(_diBasicXML[LIGHTS_XML_FILE], "Lights", "Light_", XMLTypeEnum.Light, tbLightName, tbLightID, null, dgvLights, dgvLightTags, "colLightsID", "colLightsName", "", "");
+        }
 
         private void SaveCutsceneInfo()
         {
@@ -1366,6 +1385,10 @@ namespace Database_Editor
         {
             GenericCancel(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", dgvStatusEffects, LoadStatusEffectInfo);
         }
+        private void btnLightCancel_Click(object sender, EventArgs e)
+        {
+            GenericCancel(_diBasicXML[LIGHTS_XML_FILE], "Light", dgvLights, LoadLightInfo);
+        }
 
         private void GenericCellClick(DataGridViewCellEventArgs e, List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate loadDel, XMLListDataDelegate saveDel)
         {
@@ -1442,6 +1465,10 @@ namespace Database_Editor
         private void dgvStatusEffects_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             GenericCellClick(e, _diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", dgvStatusEffects, LoadStatusEffectInfo, SaveStatusEffectInfo);
+        }
+        private void dgvLights_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            GenericCellClick(e, _diBasicXML[STATUS_EFFECTS_XML_FILE], "Lights", dgvLights, LoadLightInfo, SaveLightInfo);
         }
 
         private void AddNewGenericXMLObject(TabPage page, string tabIndex, DataGridView dg, string colID, string colName, TextBox tbName, TextBox tbID, DataGridView dgTags, string tagCol, ComboBox cb = null, TextBox tbDesc = null, List<string> defaultTags = null)
@@ -1597,6 +1624,7 @@ namespace Database_Editor
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabSpirits"]) { dgvSpirits.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabSummons"]) { dgvSummons.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabStatusEffects"]) { dgvStatusEffects.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabLights"]) { dgvLights.Focus(); }
 
             _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
         }
@@ -1617,6 +1645,7 @@ namespace Database_Editor
             else if (prevPage == tabCtl.TabPages["tabSpirits"]) { SaveSpiritInfo(_diBasicXML[SPIRITS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabSummons"]) { SaveSummonInfo(_diBasicXML[SUMMONS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabStatusEffects"]) { SaveStatusEffectInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabLights"]) { SaveLightInfo(_diBasicXML[LIGHTS_XML_FILE]); }
         }
         #endregion
 
@@ -2334,6 +2363,7 @@ namespace Database_Editor
             else if (dgv == dgvBuildings) { AddContextMenuItem("Add New", AddNewBuilding, false); }
             else if (dgv == dgvCutscenes) { AddContextMenuItem("Add New", AddNewCutscene, false); }
             else if (dgv == dgvCharacters) { AddContextMenuItem("Add New", AddNewCharacter, false); }
+            else if (dgv == dgvLights) { AddContextMenuItem("Add New", AddNewLight, false); }
         }
 
         private void AddContextMenuItem(string text, EventHandler triggeredEvent, bool separator)
@@ -2408,7 +2438,13 @@ namespace Database_Editor
         {
             SaveCharacterInfo(_diBasicXML[CHARACTER_XML_FILE]);
             List<string> defaultTags = new List<string>() { "PortRow:1", "Idle:0-0-1-0-T", "Walk:0-0-1-0-T", "FirstArrival:0", "ArrivalPeriod:0" };
-            AddNewGenericXMLObject(tabCtl.TabPages["tabCharacters"], "Characters", dgvCharacters, "colCharactersID", "colCharactersName", tbCharacterName, tbCharacterName, dgvCharacterTags, "colCharacterTags", null, null, defaultTags);
+            AddNewGenericXMLObject(tabCtl.TabPages["tabCharacters"], "Characters", dgvCharacters, "colCharactersID", "colCharactersName", tbCharacterName, tbCharacterID, dgvCharacterTags, "colCharacterTags", null, null, defaultTags);
+        }
+        private void AddNewLight(object sender, EventArgs e)
+        {
+            SaveLightInfo(_diBasicXML[LIGHTS_XML_FILE]);
+            List<string> defaultTags = new List<string>() { "Texture:", "Idle:0-0", "Dimensions:" };
+            AddNewGenericXMLObject(tabCtl.TabPages["tabLights"], "Lights", dgvLights, "colLightsID", "colLightsName", tbLightName, tbLightID, dgvLightTags, "colLightTags", null, null, defaultTags);
         }
         #endregion
 

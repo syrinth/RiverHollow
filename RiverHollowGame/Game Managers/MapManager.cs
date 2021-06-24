@@ -224,7 +224,12 @@ namespace RiverHollow.Game_Managers
             for (int i = 0; i < numToPlace; i++)
             {
                 RHTile targetTile = possibleTiles[rand.Next(0, possibleTiles.Count - 1)];
-                DataManager.CreateAndPlaceNewWorldObject(ID, targetTile.Position, MapManager.Maps[HomeMap]);
+                WorldObject obj = DataManager.GetWorldObjectByID(ID);
+                obj.PlaceOnMap(targetTile.Position, MapManager.Maps[HomeMap]);
+                if (obj.CompareType(ObjectTypeEnum.Plant))
+                {
+                    ((Plant)obj).FinishGrowth();
+                }
 
                 possibleTiles.Remove(targetTile);
             }

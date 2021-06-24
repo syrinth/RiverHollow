@@ -1,20 +1,17 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
-using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIComponents.MainObjects;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
+using System.Collections.Generic;
 using static RiverHollow.Game_Managers.DataManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.GUIComponents.Screens.BuildScreen;
 using static RiverHollow.Items.Buildable.AdjustableObject;
 
 namespace RiverHollow.Items
@@ -846,45 +843,34 @@ namespace RiverHollow.Items
             }
         }
 
-        public class Light : Buildable
+        public class LightSource : Buildable
         {
-            AnimatedSprite _sprLight;
-            public AnimatedSprite LightSprite => _sprLight;
+            private Light _objLight;
+            public Light LightObject => _objLight;
             private Vector2 _vLightPos;
             public Vector2 LightPosition => _vLightPos;
 
-            public Light(int id, Dictionary<string, string> stringData) : base(id)
+            public LightSource(int id, Dictionary<string, string> stringData) : base(id)
             {
                 LoadDictionaryData(stringData);
 
+                int lightID = -1;
+                Util.AssignValue(ref lightID, "LightID", stringData);
+                _objLight = DataManager.GetLight(lightID);
+
                 Util.AssignValue(ref _vLightPos, "LightPosition", stringData);
-                string lightTex = string.Empty;
-                Util.AssignValue(ref lightTex, "LightTexture", stringData);
-
-                string[] idleSplit = stringData["Idle"].Split('-');
-                _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
-                _sprite.Drawing = true;
-
-                _sprLight = new AnimatedSprite(DataManager.FOLDER_ENVIRONMENT + lightTex);
-
-                Vector2 animDescriptor = new Vector2(1, 1);
-                Util.AssignValue(ref animDescriptor, "LightIdle", stringData);
-
-                Vector2 lightDimensions = Vector2.Zero;
-                Util.AssignValue(ref lightDimensions, "LightDimensions", stringData);
-                _sprLight.AddAnimation(AnimationEnum.ObjectIdle, 0, 0, (int)lightDimensions.X, (int)lightDimensions.Y, (int)animDescriptor.X, animDescriptor.Y, true);
                 SyncLightPosition();
             }
 
             public override void Update(GameTime gTime)
             {
                 base.Update(gTime);
-                _sprLight.Update(gTime);
+                _objLight.Update(gTime);
             }
 
             public void DrawLight(SpriteBatch spriteBatch)
             {
-                _sprLight.Draw(spriteBatch);
+                _objLight.Draw(spriteBatch);
             }
 
             public override bool PlaceOnMap(Vector2 pos, RHMap map)
@@ -899,8 +885,8 @@ namespace RiverHollow.Items
 
             private void SyncLightPosition()
             {
-                _sprLight.Position = new Vector2(MapPosition.X - _sprLight.Width / 2, MapPosition.Y - _sprLight.Height / 2);
-                _sprLight.Position += _vLightPos;
+                _objLight.Position = new Vector2(MapPosition.X - _objLight.Width / 2, MapPosition.Y - _objLight.Height / 2);
+                _objLight.Position += _vLightPos;
             }
         }
 
@@ -1542,7 +1528,6 @@ namespace RiverHollow.Items
         const string TRIGGER_NUMBER = "TriggerNumber";
         const string ITEM_KEY_ID = "ItemKeyID";
         const string OUT_TRIGGER = "OutTrigger";
-
         #endregion
 
         enum DungeonObjectType { Trigger, Door };
@@ -1837,5 +1822,43 @@ namespace RiverHollow.Items
             _iBuildingID = -1;
         }
 
+    }
+
+    public class Light
+    {
+        AnimatedSprite _sprite;
+        public Vector2 Position
+        {
+            get { return _sprite.Position; }
+            set { _sprite.Position = value; }
+        }
+
+        private Vector2 _vecDimensions;
+
+        public int Width => (int)_vecDimensions.X;
+        public int Height => (int)_vecDimensions.Y;
+
+        public Light(int id, Dictionary<string, string> stringData)
+        {
+            string lightTex = string.Empty;
+            Util.AssignValue(ref lightTex, "Texture", stringData);
+
+            _sprite = new AnimatedSprite(DataManager.FOLDER_ENVIRONMENT + lightTex);
+
+            Vector2 animDescriptor = new Vector2(1, 1);
+            Util.AssignValue(ref animDescriptor, "Idle", stringData);
+            Util.AssignValue(ref _vecDimensions, "Dimensions", stringData);
+            _sprite.AddAnimation(AnimationEnum.ObjectIdle, 0, 0, Width, Height, (int)animDescriptor.X, animDescriptor.Y, true);
+        }
+
+        public void Update(GameTime gTime)
+        {
+            _sprite.Update(gTime);
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            _sprite.Draw(spriteBatch);
+        }
     }
 }
