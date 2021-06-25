@@ -3259,3 +3259,8 @@
 /processor:TiledMapProcessor
 /build:Maps/Dungeon_Caves/mapCave__20.tmx
 
+#begin Data/DungeonData.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/DungeonData.xml
+

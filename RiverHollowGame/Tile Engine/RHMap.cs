@@ -2922,8 +2922,11 @@ namespace RiverHollow.Tile_Engine
         public bool IsDoor { get; private set; }
         public bool IsActive { get; private set; } = false;
 
-        private int _bGenerateZoneMap = -1;
-        public int GenerateZoneMap => _bGenerateZoneMap;
+        private int _iDungeonInfoID = -1;
+        public int DungeonInfoID => _iDungeonInfoID;
+
+        private int _iToCheckpoint = -1;
+        public int ToCheckpoint => _iToCheckpoint;
 
         DirectionEnum _eEntranceDir;
         public DirectionEnum Dir => _eEntranceDir;
@@ -2939,9 +2942,10 @@ namespace RiverHollow.Tile_Engine
             }
 
             Util.AssignValue(ref _eEntranceDir, "EntranceDir", obj.Properties);
-            Util.AssignValue(ref _bGenerateZoneMap, "GenerateLevel", obj.Properties);
+            Util.AssignValue(ref _iDungeonInfoID, "DungeonID", obj.Properties);
+            Util.AssignValue(ref _iToCheckpoint, "ToCheckpoint", obj.Properties);
 
-            if(_bGenerateZoneMap > -1) { IsActive = true; }
+            if (_iDungeonInfoID > -1) { IsActive = true; }
 
         }
         public TravelPoint(Rectangle collision, string linkedMap, string mapName, int buildingID)

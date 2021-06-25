@@ -594,6 +594,10 @@
       <Value>[Name:WindowInnCircle]</Value>
     </Item>
     <Item>
+      <Key>Dungeon_0</Key>
+      <Value>[Name:Cave]</Value>
+    </Item>
+    <Item>
       <Key>Shop_0</Key>
       <Value>[Name:Magic Shop]</Value>
     </Item>

@@ -45,7 +45,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, BitmapFont> _diBMFonts;
         static Dictionary<string, string> _diGameText;
         static Dictionary<int, Dictionary<string, string>> _diAdventurerDialogue;
-        public static Dictionary<int, string> DiUpgrades { get; private set; }
         static Dictionary<string, string> _diMonsterTraits;
 
         static Dictionary<int, List<string>> _diSongs;
@@ -63,6 +62,7 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diBuildings;
         static Dictionary<int, Dictionary<string, string>> _diItemData;
 
+        static Dictionary<int, Dictionary<string, string>> _diDungeonData;
         static Dictionary<int, Dictionary<string, string>> _diLightData;
         static Dictionary<int, Dictionary<string, string>> _diStatusEffects;
         static Dictionary<int, Dictionary<string, string>> _diWorkers;
@@ -90,8 +90,6 @@ namespace RiverHollow.Game_Managers
         public static List<int> PlantIDs { get; private set; }
 
         public static Dictionary<int, Dictionary<string, string>> Config;
-
-        public static int ItemCount => _diItemData.Count;
         #endregion
 
         public static BitmapFont _bmFont;
@@ -107,7 +105,6 @@ namespace RiverHollow.Game_Managers
             PlantIDs = new List<int>();
             _diTextures = new Dictionary<string, Texture2D>();
 
-            DiUpgrades = Content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
             _diMonsterTraits = Content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
 
             _diMailboxMessages = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + @"Mailbox_Text");
@@ -152,6 +149,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diClasses, @"Data\Classes", Content, null);
             LoadDictionary(ref Config, @"Data\Config", Content, null);
             LoadDictionary(ref _diLightData, @"Data\LightData", Content, null);
+            LoadDictionary(ref _diDungeonData, @"Data\DungeonData", Content, null);
         }
         private static void LoadDictionary(ref Dictionary<int, Dictionary<string, string>> dictionaryAddTo, string dataFile, ContentManager Content, LoadDictionaryWorkDelegate workDelegate)
         {
@@ -353,6 +351,15 @@ namespace RiverHollow.Game_Managers
             if (_diLightData.ContainsKey(id))
             {
                 return new Light(id, _diLightData[id]);
+            }
+            return null;
+        }
+
+        public static Dictionary<string, string> GetDungeonInfo(int id)
+        {
+            if (_diDungeonData.ContainsKey(id))
+            {
+                return _diDungeonData[id];
             }
             return null;
         }

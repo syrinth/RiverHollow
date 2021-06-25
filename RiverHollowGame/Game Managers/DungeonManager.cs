@@ -48,9 +48,9 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static void InitializeDungeon(string dungeonName, int level)
+        public static void InitializeDungeon(string dungeonName, int level, int toCheckpoint)
         {
-            _liDungeons[dungeonName].InitializeDungeon(level);
+            _liDungeons[dungeonName].InitializeDungeon(level, toCheckpoint);
         }
     }
 
@@ -88,15 +88,15 @@ namespace RiverHollow.Game_Managers
             PlayerManager.World.DetermineFacing(new Vector2(0, 1));
         }
 
-        public void InitializeDungeon(int dungeonLevel)
+        public void InitializeDungeon(int dungeonLevel, int toCheckpoint)
         {
             int mapArraySize = 7;
 
             string mapStart = "map" + Name + "_";
             RHMap[,] dungeonMapArray = new RHMap[mapArraySize, mapArraySize];
 
-            string firstStaticMapName = (dungeonLevel > 1) ? mapStart + "Checkpoint_" + (dungeonLevel - 1).ToString() : mapStart + "Entrance";
-            string lastStaticMapName = mapStart + "Checkpoint_" + (dungeonLevel).ToString();
+            string firstStaticMapName = (toCheckpoint > 1) ? mapStart + "Checkpoint_" + (toCheckpoint - 1).ToString() : mapStart + "Entrance";
+            string lastStaticMapName = mapStart + "Checkpoint_" + (toCheckpoint).ToString();
 
             RHMap firstStaticMap = MapManager.Maps[firstStaticMapName];
             RHMap lastStaticMap = MapManager.Maps[lastStaticMapName];
@@ -146,11 +146,11 @@ namespace RiverHollow.Game_Managers
 
             foreach (Vector2 vec in Util.GetAllPointsInArea(0, 0, mapArraySize, mapArraySize))
             {
-                ConnectToNeighbours(ref dungeonMapArray, mapArraySize, vec);
+                ConnectToNeighbours(ref dungeonMapArray, mapArraySize, vec, dungeonLevel);
             }
         }
 
-        private void ConnectToNeighbours(ref RHMap[,] dungeonMap, int mapSize, Vector2 mapPosition)
+        private void ConnectToNeighbours(ref RHMap[,] dungeonMap, int mapSize, Vector2 mapPosition, int dungeonLevel)
         {
             RHMap targetMap = dungeonMap[(int)mapPosition.X, (int)mapPosition.Y];
             if (targetMap != null)
@@ -161,11 +161,12 @@ namespace RiverHollow.Game_Managers
                 if (mapPosition.Y - 1 >= 0) { ConnectMaps(dungeonMap[(int)mapPosition.X, (int)mapPosition.Y], dungeonMap[(int)mapPosition.X, (int)mapPosition.Y - 1], DirectionEnum.Down); }
 
                 //Spawn resources on the targetMap
-                targetMap.AssignResourceSpawns("20-40", "19-C|5-C|6-R|7-U|29-R|31-M|32-U");
+                Dictionary<string, string> dungeonInfo = DataManager.GetDungeonInfo(dungeonLevel);
+                targetMap.AssignResourceSpawns("20-40", dungeonInfo["ObjectID"]);
  
                 foreach(MonsterSpawn spawn in targetMap.MonsterSpawnPoints)
                 {
-                    spawn.AssignMonsterIDs("Spawn-All", "0-U|4-R|3-C");
+                    spawn.AssignMonsterIDs("Spawn-All", dungeonInfo["MonsterID"]);
                 }
 
                 targetMap.SpawnMapEntities();

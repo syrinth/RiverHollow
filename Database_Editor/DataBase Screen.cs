@@ -12,7 +12,7 @@ namespace Database_Editor
     public partial class FrmDBEditor : Form
     {
         private enum EditableCharacterDataEnum { Dialogue, Schedule };
-        public enum XMLTypeEnum { None, Task, Character, Class, Building, WorldObject, Item, Monster, Action, Shop, Spirit, Summon, StatusEffect, Cutscene, Light };
+        public enum XMLTypeEnum { None, Task, Character, Class, Building, WorldObject, Item, Monster, Action, Shop, Spirit, Summon, StatusEffect, Cutscene, Light, Dungeon };
         #region XML Files
         string ACTIONS_XML_FILE = PATH_TO_DATA + @"\CombatActions.xml";
         string BUILDINGS_XML_FILE = PATH_TO_DATA + @"\Buildings.xml";
@@ -20,6 +20,7 @@ namespace Database_Editor
         string CHARACTER_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
         string CONFIG_XML_FILE = PATH_TO_DATA + @"\Config.xml";
         string CUTSCENE_XML_FILE = PATH_TO_DATA + @"\CutScenes.xml";
+        string DUNGEON_XML_FILE = PATH_TO_DATA + @"\DungeonData.xml";
         string ITEM_DATA_XML_FILE = PATH_TO_DATA + @"\ItemData.xml";
         string LIGHTS_XML_FILE = PATH_TO_DATA + @"\LightData.xml";
         string MONSTERS_XML_FILE = PATH_TO_DATA + @"\Monsters.xml";
@@ -44,6 +45,8 @@ namespace Database_Editor
         const string TAGS_FOR_SUMMONS = "SummonID";
         const string TAGS_FOR_LIGHTS = "LightID";
         const string TAGS_FOR_BUILDINGS = "BuildingID,HouseID,RequiredBuildingID";
+        const string TAGS_FOR_MONSTERS = "MonsterID";
+        const string TAGS_FOR_DUNGEONS = "DungeonID";
 
         const string ITEM_REF_TAGS = "ReqItems,Place";
         const string TASK_REF_TAGS = "GoalItem,ItemReward,BuildingID,BuildingRewardID";
@@ -56,6 +59,7 @@ namespace Database_Editor
         const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
         const string ACTIONS_REF_TAGS = "StatusEffectID,SummonID";
         const string BUILDINGS_REF_TAGS = "ReqItems,LightID";
+        const string DUNGEON_REF_TAGS = "ItemID,MonsterID";
 
         const string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,SpiritID";
         #endregion
@@ -122,7 +126,8 @@ namespace Database_Editor
                 { "Spirits", 0 },
                 { "Summons", 0 },
                 { "StatusEffects", 0 },
-                { "Lights", 0 }
+                { "Lights", 0 },
+                { "Dungeons", 0 }
             };
 
             _diMapData = new Dictionary<string, TMXData>();
@@ -165,13 +170,14 @@ namespace Database_Editor
             LoadXMLDictionary(CHARACTER_XML_FILE, CHARACTER_REF_TAGS, "");
             LoadXMLDictionary(CLASSES_XML_FILE, CLASSES_REF_TAGS, TAGS_FOR_CLASSES);
             LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_REF_TAG, "");
-            LoadXMLDictionary(MONSTERS_XML_FILE, MONSTERS_REF_TAGS, "");
+            LoadXMLDictionary(MONSTERS_XML_FILE, MONSTERS_REF_TAGS, TAGS_FOR_MONSTERS);
             LoadXMLDictionary(ACTIONS_XML_FILE, ACTIONS_REF_TAGS, TAGS_FOR_COMBAT_ACTIONS);
             LoadXMLDictionary(BUILDINGS_XML_FILE, BUILDINGS_REF_TAGS, TAGS_FOR_BUILDINGS);
             LoadXMLDictionary(SPIRITS_XML_FILE, "", TAGS_FOR_SPIRITS);
             LoadXMLDictionary(SUMMONS_XML_FILE, "", TAGS_FOR_SUMMONS);
             LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", TAGS_FOR_STATUS_EFFECTS);
             LoadXMLDictionary(LIGHTS_XML_FILE, "", TAGS_FOR_LIGHTS);
+            LoadXMLDictionary(DUNGEON_XML_FILE, DUNGEON_REF_TAGS, TAGS_FOR_DUNGEONS);
 
             _diShops = ReadXMLFileToXMLDataListDictionary(SHOPS_XML_FILE, XMLTypeEnum.Shop, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA);
             _diCutscenes = ReadXMLFileToIntKeyDictionaryStringList(CUTSCENE_XML_FILE);
@@ -201,6 +207,7 @@ namespace Database_Editor
             LoadLightDataGrid();
             LoadCutsceneDataGrid();
             LoadShopsDataGrid();
+            LoadDungeonDataGrid();
         }
 
         private void LoadAllInfoPanels()
@@ -219,6 +226,7 @@ namespace Database_Editor
             LoadSummonInfo();
             LoadStatusEffectInfo();
             LoadLightInfo();
+            LoadDungeonInfo();
         }
 
         #region Helpers
@@ -246,6 +254,7 @@ namespace Database_Editor
             else if (fileName == SUMMONS_XML_FILE) { rv = XMLTypeEnum.Summon; }
             else if (fileName == STATUS_EFFECTS_XML_FILE) { rv = XMLTypeEnum.StatusEffect; }
             else if (fileName == LIGHTS_XML_FILE) { rv = XMLTypeEnum.Light; }
+            else if (fileName == DUNGEON_XML_FILE) { rv = XMLTypeEnum.Dungeon; }
 
             return rv;
         }
@@ -353,6 +362,10 @@ namespace Database_Editor
         private void LoadLightDataGrid()
         {
             LoadGenericDatagrid(dgvLights, _diBasicXML[LIGHTS_XML_FILE], "colLightsID", "colLightsName", "Lights", _diTabIndices["Lights"]);
+        }
+        private void LoadDungeonDataGrid()
+        {
+            LoadGenericDatagrid(dgvDungeons, _diBasicXML[DUNGEON_XML_FILE], "colDungeonsID", "colDungeonsName", "Dungeons", _diTabIndices["Dungeons"]);
         }
 
         private void LoadDictionaryListDatagrid(DataGridView dgv, Dictionary<int, List<XMLData>> di, string colID, string colName, string tabIndex, XMLTypeEnum xmlType)
@@ -970,6 +983,11 @@ namespace Database_Editor
             XMLData data = _diBasicXML[LIGHTS_XML_FILE][_diTabIndices["Lights"]];
             LoadGenericDataInfo(data, tbLightName, tbLightID, dgvLightTags);
         }
+        private void LoadDungeonInfo()
+        {
+            XMLData data = _diBasicXML[DUNGEON_XML_FILE][_diTabIndices["Dungeons"]];
+            LoadGenericDataInfo(data, tbDungeonName, tbDungeonID, dgvDungeonTags);
+        }
 
         private void LoadDictionaryListInfo(int index, List<XMLData> dataList, TextBox tbName, DataGridView dgvTags, XMLTypeEnum xmlType, TextBox tbDescription = null)
         {
@@ -1254,6 +1272,10 @@ namespace Database_Editor
         {
             SaveXMLDataInfo(_diBasicXML[LIGHTS_XML_FILE], "Lights", "Light_", XMLTypeEnum.Light, tbLightName, tbLightID, null, dgvLights, dgvLightTags, "colLightsID", "colLightsName", "", "");
         }
+        private void SaveDungeonInfo(List<XMLData> liData)
+        {
+            SaveXMLDataInfo(_diBasicXML[DUNGEON_XML_FILE], "Dungeons", "Dungeon_", XMLTypeEnum.Dungeon, tbDungeonName, tbDungeonID, null, dgvDungeons, dgvDungeonTags, "colDungeonsID", "colDungeonsName", "", "");
+        }
 
         private void SaveCutsceneInfo()
         {
@@ -1389,6 +1411,10 @@ namespace Database_Editor
         {
             GenericCancel(_diBasicXML[LIGHTS_XML_FILE], "Light", dgvLights, LoadLightInfo);
         }
+        private void btnDungeonCancel_Click(object sender, EventArgs e)
+        {
+            GenericCancel(_diBasicXML[DUNGEON_XML_FILE], "Dungeon", dgvDungeons, LoadDungeonInfo);
+        }
 
         private void GenericCellClick(DataGridViewCellEventArgs e, List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate loadDel, XMLListDataDelegate saveDel)
         {
@@ -1468,7 +1494,11 @@ namespace Database_Editor
         }
         private void dgvLights_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            GenericCellClick(e, _diBasicXML[STATUS_EFFECTS_XML_FILE], "Lights", dgvLights, LoadLightInfo, SaveLightInfo);
+            GenericCellClick(e, _diBasicXML[LIGHTS_XML_FILE], "Lights", dgvLights, LoadLightInfo, SaveLightInfo);
+        }
+        private void dgvDungeons_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            GenericCellClick(e, _diBasicXML[DUNGEON_XML_FILE], "Dungeons", dgvDungeons, LoadDungeonInfo, SaveDungeonInfo);
         }
 
         private void AddNewGenericXMLObject(TabPage page, string tabIndex, DataGridView dg, string colID, string colName, TextBox tbName, TextBox tbID, DataGridView dgTags, string tagCol, ComboBox cb = null, TextBox tbDesc = null, List<string> defaultTags = null)
@@ -1625,6 +1655,7 @@ namespace Database_Editor
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabSummons"]) { dgvSummons.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabStatusEffects"]) { dgvStatusEffects.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabLights"]) { dgvLights.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeons"]) { dgvDungeons.Focus(); }
 
             _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
         }
@@ -1646,6 +1677,7 @@ namespace Database_Editor
             else if (prevPage == tabCtl.TabPages["tabSummons"]) { SaveSummonInfo(_diBasicXML[SUMMONS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabStatusEffects"]) { SaveStatusEffectInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabLights"]) { SaveLightInfo(_diBasicXML[LIGHTS_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabDungeons"]) { SaveDungeonInfo(_diBasicXML[DUNGEON_XML_FILE]); }
         }
         #endregion
 
@@ -2143,8 +2175,7 @@ namespace Database_Editor
             /// Needs to be careful here because maps can refer to multiple things, so the tag
             /// input is very important to be coordinated with what ovbject type is being passed in
             /// </summary>
-            /// <param name="id">The ID to search for</param>
-            /// <param name="tags">The value tags to search for for this object type delimited by ','</param>
+            /// <param name="data">The XML data file to compare against</param>
             /// <returns></returns>
             public void ReferencesXMLObject(XMLData data)
             {
@@ -2364,6 +2395,7 @@ namespace Database_Editor
             else if (dgv == dgvCutscenes) { AddContextMenuItem("Add New", AddNewCutscene, false); }
             else if (dgv == dgvCharacters) { AddContextMenuItem("Add New", AddNewCharacter, false); }
             else if (dgv == dgvLights) { AddContextMenuItem("Add New", AddNewLight, false); }
+            else if (dgv == dgvDungeons) { AddContextMenuItem("Add New", AddNewDungeon, false); }
         }
 
         private void AddContextMenuItem(string text, EventHandler triggeredEvent, bool separator)
@@ -2445,6 +2477,12 @@ namespace Database_Editor
             SaveLightInfo(_diBasicXML[LIGHTS_XML_FILE]);
             List<string> defaultTags = new List<string>() { "Texture:", "Idle:1-1", "Dimensions:" };
             AddNewGenericXMLObject(tabCtl.TabPages["tabLights"], "Lights", dgvLights, "colLightsID", "colLightsName", tbLightName, tbLightID, dgvLightTags, "colLightTags", null, null, defaultTags);
+        }
+        private void AddNewDungeon(object sender, EventArgs e)
+        {
+            SaveDungeonInfo(_diBasicXML[DUNGEON_XML_FILE]);
+            List<string> defaultTags = new List<string>() { "" };
+            AddNewGenericXMLObject(tabCtl.TabPages["tabDungeons"], "Dungeons", dgvDungeons, "colDungeonsID", "colDungeonsName", tbDungeonName, tbDungeonID, dgvDungeonTags, "colDungeonTags", null, null, defaultTags);
         }
         #endregion
 

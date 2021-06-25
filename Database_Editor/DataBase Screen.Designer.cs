@@ -221,6 +221,19 @@
             this.dgvLights = new System.Windows.Forms.DataGridView();
             this.colLightsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colLightsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabDungeons = new System.Windows.Forms.TabPage();
+            this.label38 = new System.Windows.Forms.Label();
+            this.tbDungeonID = new System.Windows.Forms.TextBox();
+            this.tbDungeonName = new System.Windows.Forms.TextBox();
+            this.label39 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
+            this.dgvDungeonTags = new System.Windows.Forms.DataGridView();
+            this.dgvDungeons = new System.Windows.Forms.DataGridView();
+            this.colDungeonsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDungeonsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tbDungeonDescription = new System.Windows.Forms.TextBox();
+            this.label40 = new System.Windows.Forms.Label();
+            this.colDungeonsTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -265,6 +278,9 @@
             this.tabLights.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLightTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLights)).BeginInit();
+            this.tabDungeons.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDungeonTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDungeons)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -335,6 +351,7 @@
             this.tabCtl.Controls.Add(this.tabSummons);
             this.tabCtl.Controls.Add(this.tabStatusEffects);
             this.tabCtl.Controls.Add(this.tabLights);
+            this.tabCtl.Controls.Add(this.tabDungeons);
             this.tabCtl.Location = new System.Drawing.Point(12, 27);
             this.tabCtl.Name = "tabCtl";
             this.tabCtl.SelectedIndex = 0;
@@ -2286,6 +2303,143 @@
             this.colLightsName.ReadOnly = true;
             this.colLightsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // tabDungeons
+            // 
+            this.tabDungeons.Controls.Add(this.tbDungeonDescription);
+            this.tabDungeons.Controls.Add(this.label40);
+            this.tabDungeons.Controls.Add(this.label38);
+            this.tabDungeons.Controls.Add(this.tbDungeonID);
+            this.tabDungeons.Controls.Add(this.tbDungeonName);
+            this.tabDungeons.Controls.Add(this.label39);
+            this.tabDungeons.Controls.Add(this.button4);
+            this.tabDungeons.Controls.Add(this.dgvDungeonTags);
+            this.tabDungeons.Controls.Add(this.dgvDungeons);
+            this.tabDungeons.Location = new System.Drawing.Point(4, 22);
+            this.tabDungeons.Name = "tabDungeons";
+            this.tabDungeons.Size = new System.Drawing.Size(790, 425);
+            this.tabDungeons.TabIndex = 15;
+            this.tabDungeons.Text = "Dungeons";
+            this.tabDungeons.UseVisualStyleBackColor = true;
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(714, 9);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(21, 13);
+            this.label38.TabIndex = 68;
+            this.label38.Text = "ID:";
+            // 
+            // tbDungeonID
+            // 
+            this.tbDungeonID.Location = new System.Drawing.Point(741, 6);
+            this.tbDungeonID.Name = "tbDungeonID";
+            this.tbDungeonID.Size = new System.Drawing.Size(43, 20);
+            this.tbDungeonID.TabIndex = 67;
+            // 
+            // tbDungeonName
+            // 
+            this.tbDungeonName.Location = new System.Drawing.Point(361, 6);
+            this.tbDungeonName.Name = "tbDungeonName";
+            this.tbDungeonName.Size = new System.Drawing.Size(108, 20);
+            this.tbDungeonName.TabIndex = 66;
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(317, 9);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(38, 13);
+            this.label39.TabIndex = 65;
+            this.label39.Text = "Name:";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(709, 394);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 64;
+            this.button4.Text = "Cancel";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.btnDungeonCancel_Click);
+            // 
+            // dgvDungeonTags
+            // 
+            this.dgvDungeonTags.AllowUserToResizeColumns = false;
+            this.dgvDungeonTags.AllowUserToResizeRows = false;
+            this.dgvDungeonTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvDungeonTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colDungeonsTag});
+            this.dgvDungeonTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.dgvDungeonTags.Location = new System.Drawing.Point(320, 110);
+            this.dgvDungeonTags.Name = "dgvDungeonTags";
+            this.dgvDungeonTags.RowHeadersVisible = false;
+            this.dgvDungeonTags.Size = new System.Drawing.Size(464, 278);
+            this.dgvDungeonTags.TabIndex = 63;
+            // 
+            // dgvDungeons
+            // 
+            this.dgvDungeons.AllowUserToAddRows = false;
+            this.dgvDungeons.AllowUserToDeleteRows = false;
+            this.dgvDungeons.AllowUserToResizeColumns = false;
+            this.dgvDungeons.AllowUserToResizeRows = false;
+            this.dgvDungeons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvDungeons.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colDungeonsID,
+            this.colDungeonsName});
+            this.dgvDungeons.ContextMenuStrip = this.contextMenu;
+            this.dgvDungeons.Location = new System.Drawing.Point(6, 6);
+            this.dgvDungeons.MultiSelect = false;
+            this.dgvDungeons.Name = "dgvDungeons";
+            this.dgvDungeons.ReadOnly = true;
+            this.dgvDungeons.RowHeadersVisible = false;
+            this.dgvDungeons.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvDungeons.Size = new System.Drawing.Size(308, 411);
+            this.dgvDungeons.TabIndex = 62;
+            this.dgvDungeons.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDungeons_CellClick);
+            // 
+            // colDungeonsID
+            // 
+            this.colDungeonsID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colDungeonsID.FillWeight = 10F;
+            this.colDungeonsID.HeaderText = "ID";
+            this.colDungeonsID.Name = "colDungeonsID";
+            this.colDungeonsID.ReadOnly = true;
+            this.colDungeonsID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colDungeonsID.Width = 31;
+            // 
+            // colDungeonsName
+            // 
+            this.colDungeonsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colDungeonsName.FillWeight = 90F;
+            this.colDungeonsName.HeaderText = "Name";
+            this.colDungeonsName.Name = "colDungeonsName";
+            this.colDungeonsName.ReadOnly = true;
+            this.colDungeonsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // tbDungeonDescription
+            // 
+            this.tbDungeonDescription.Location = new System.Drawing.Point(320, 51);
+            this.tbDungeonDescription.Multiline = true;
+            this.tbDungeonDescription.Name = "tbDungeonDescription";
+            this.tbDungeonDescription.Size = new System.Drawing.Size(464, 53);
+            this.tbDungeonDescription.TabIndex = 70;
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(317, 35);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(63, 13);
+            this.label40.TabIndex = 69;
+            this.label40.Text = "Description:";
+            // 
+            // colDungeonsTag
+            // 
+            this.colDungeonsTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colDungeonsTag.HeaderText = "Tags";
+            this.colDungeonsTag.Name = "colDungeonsTag";
+            // 
             // FrmDBEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2356,6 +2510,10 @@
             this.tabLights.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLightTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLights)).EndInit();
+            this.tabDungeons.ResumeLayout(false);
+            this.tabDungeons.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDungeonTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDungeons)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2553,6 +2711,19 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colLightTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLightsID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLightsName;
+        private System.Windows.Forms.TabPage tabDungeons;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.TextBox tbDungeonID;
+        private System.Windows.Forms.TextBox tbDungeonName;
+        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.DataGridView dgvDungeonTags;
+        private System.Windows.Forms.DataGridView dgvDungeons;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDungeonsID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDungeonsName;
+        private System.Windows.Forms.TextBox tbDungeonDescription;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDungeonsTag;
     }
 }
 
