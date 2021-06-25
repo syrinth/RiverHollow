@@ -30,7 +30,7 @@ namespace RiverHollow.Tile_Engine
         private string _sName;
         public string Name { get => _sName.Replace(@"Maps\", ""); } //Fuck off with that path bullshit
 
-        public bool IsCombatMap => _liMonsterSpawnPoints.Count > 0;
+        public bool IsCombatMap => MonsterSpawnPoints.Count > 0;
         public string DungeonName { get; private set; } = string.Empty;
         public bool IsDungeon => !string.IsNullOrEmpty(DungeonName);
         public bool IsTown { get; private set; }
@@ -63,10 +63,11 @@ namespace RiverHollow.Tile_Engine
         public List<WorldActor> ToAdd;
         private List<Building> _liBuildings;
         private List<WorldObject> _liPlacedWorldObjects;
-        private List<MonsterSpawn> _liMonsterSpawnPoints;
+        public List<MonsterSpawn> MonsterSpawnPoints { get; private set; }
         private List<ResourceSpawn> _liResourceSpawnPoints;
         private List<int> _liCutscenes;
         private Dictionary<RarityEnum, List<int>> _diResources;
+        private string _sResourceMinMax;
         protected List<Item> _liItems;
         protected List<ShopLocation> _liShopData;
         public Dictionary<string, RHTile[,]> DictionaryCombatTiles { get; }
@@ -81,7 +82,7 @@ namespace RiverHollow.Tile_Engine
         Buildable _objSelectedObject = null;
 
         public RHMap() {
-            _liMonsterSpawnPoints = new List<MonsterSpawn>();
+            MonsterSpawnPoints = new List<MonsterSpawn>();
             _liResourceSpawnPoints = new List<ResourceSpawn>();
             _liTestTiles = new List<RHTile>();
             _liTilesets = new List<TiledMapTileset>();
@@ -188,19 +189,7 @@ namespace RiverHollow.Tile_Engine
 
             if (_map.Properties.ContainsKey("Resources"))
             {
-                string[] spawnResources = Util.FindParams(_map.Properties["Resources"]);
-                foreach (string s in spawnResources)
-                {
-                    int resourceID = -1;
-                    RarityEnum rarity = RarityEnum.C;
-                    Util.GetRarity(s, ref resourceID, ref rarity);
-
-                    if (!_diResources.ContainsKey(rarity)) {
-                        _diResources[rarity] = new List<int>();
-                    }
-
-                    _diResources[rarity].Add(resourceID);
-                }
+                AssignResourceSpawns(_map.Properties["ResourcesMinMax"], _map.Properties["Resources"]);
             }
 
             Util.AssignValue(ref _sMapType, "MapType", _map.Properties);
@@ -215,6 +204,25 @@ namespace RiverHollow.Tile_Engine
             }
 
             _renderer = new TiledMapRenderer(GraphicsDevice);
+        }
+
+        public void AssignResourceSpawns(string resourceMinMax, string resourceString)
+        {
+            _sResourceMinMax = resourceMinMax;
+            string[] spawnResources = Util.FindParams(resourceString);
+            foreach (string s in spawnResources)
+            {
+                int resourceID = -1;
+                RarityEnum rarity = RarityEnum.C;
+                Util.GetRarity(s, ref resourceID, ref rarity);
+
+                if (!_diResources.ContainsKey(rarity))
+                {
+                    _diResources[rarity] = new List<int>();
+                }
+
+                _diResources[rarity].Add(resourceID);
+            }
         }
 
         public void Update(GameTime gTime)
@@ -463,7 +471,7 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (obj.Name.Equals("CombatStart"))
                         {
-                            string entrance = obj.Properties["Map"];
+                            string entrance = obj.Properties.ContainsKey("Map") ? obj.Properties["Map"] : obj.Properties["Dir"];
                             RHTile[,] tiles = new RHTile[3, 3];
 
                             DirectionEnum sidle = DirectionEnum.Right;
@@ -602,10 +610,15 @@ namespace RiverHollow.Tile_Engine
 
                 if (tiledObj.Name.Equals("SpawnPoint"))
                 {
-                    _liMonsterSpawnPoints.Add(new MonsterSpawn(this, tiledObj));
+                    MonsterSpawnPoints.Add(new MonsterSpawn(this, tiledObj));
                 }
             }
 
+            SpawnMapEntities();
+        }
+
+        public void SpawnMapEntities(bool loaded = false)
+        {
             SpawnMonsters();
             SpawnResources(GetSkipTiles(loaded));
         }
@@ -647,7 +660,7 @@ namespace RiverHollow.Tile_Engine
 
                 if (!loaded)
                 {
-                    foreach (MonsterSpawn spawn in _liMonsterSpawnPoints)
+                    foreach (MonsterSpawn spawn in MonsterSpawnPoints)
                     {
                         foreach (KeyValuePair<string, RHTile[,]> kvp in DictionaryCombatTiles)
                         {
@@ -766,7 +779,7 @@ namespace RiverHollow.Tile_Engine
             {
                 //Check to see if the spawn points have been set by MonsterFood and
                 //resets any monsters that may already be set to them.
-                foreach (MonsterSpawn spawn in _liMonsterSpawnPoints)
+                foreach (MonsterSpawn spawn in MonsterSpawnPoints)
                 {
                     if (spawn.IsPrimed)
                     {
@@ -784,7 +797,7 @@ namespace RiverHollow.Tile_Engine
             {
                 //Copy the spawn points to a list we can safely modify
                 List<MonsterSpawn> spawnCopy = new List<MonsterSpawn>();
-                spawnCopy.AddRange(_liMonsterSpawnPoints);
+                spawnCopy.AddRange(MonsterSpawnPoints);
 
                 //Trigger x number of SpawnPoints
                 for (int i = 0; i < _iActiveSpawnPoints; i++)
@@ -818,7 +831,7 @@ namespace RiverHollow.Tile_Engine
 
             //Copy the spawn points to a list we can safely modify
             List<MonsterSpawn> spawnCopy = new List<MonsterSpawn>();
-            spawnCopy.AddRange(_liMonsterSpawnPoints);
+            spawnCopy.AddRange(MonsterSpawnPoints);
 
             int spawnNum = PrimedFood.SpawnNumber;
             //For safety, but this looks like bad design
@@ -852,7 +865,7 @@ namespace RiverHollow.Tile_Engine
 
             if (_diResources.Count > 0)
             {
-                string[] val = _map.Properties["ResourcesMinMax"].Split('-');
+                string[] val = _sResourceMinMax.Split('-');
                 int spawnNumber = RHRandom.Instance().Next(int.Parse(val[0]), int.Parse(val[1]));
 
                 for (int i = 0; i < spawnNumber; i++)
@@ -2298,36 +2311,42 @@ namespace RiverHollow.Tile_Engine
             _diMonsterSpawns = new Dictionary<string, Dictionary<RarityEnum, List<int>>>();
             foreach(KeyValuePair<string, string> kvp in obj.Properties)
             {
-                //If the property starts with Spawn, it defines what mobs spawn under what conditions
-                //All, Weather, or Season are supported
-                if (kvp.Key.StartsWith("Spawn-"))
+                AssignMonsterIDs(kvp.Key, kvp.Value);
+            }
+        }
+
+        public void AssignMonsterIDs(string spawnKey, string spawnInfo)
+        {
+            //If the property starts with Spawn, it defines what mobs spawn under what conditions
+            //All, Weather, or Season are supported
+            if (spawnKey.StartsWith("Spawn-"))
+            {
+                //Prune out the word 'Spawn' and keep the other word 
+                string[] split = spawnKey.Split('-');
+                string spawnType = split[1];
+
+                string[] monsterParams = Util.FindParams(spawnInfo);
+                foreach (string s in monsterParams)
                 {
-                    //Prune out the word 'Spawn' and keep the other word 
-                    string[] split = kvp.Key.Split('-');
-                    string spawnType = split[1];
+                    int monsterID = -1;
+                    RarityEnum monsterRarity = RarityEnum.C;
 
-                    string[] monsterParams = Util.FindParams(kvp.Value);
-                    foreach(string s in monsterParams)
+                    Util.GetRarity(s, ref monsterID, ref monsterRarity);
+
+                    //If we haven't added a new dictionary for the spawnType, add one.
+                    if (!_diMonsterSpawns.ContainsKey(spawnType))
                     {
-                        int monsterID = -1;
-                        RarityEnum monsterRarity = RarityEnum.C;
-
-                        Util.GetRarity(s, ref monsterID, ref monsterRarity);
-
-                        //If we haven't added a new dictionary for the spawnType, add one.
-                        if (!_diMonsterSpawns.ContainsKey(spawnType))
-                        {
-                            _diMonsterSpawns[spawnType] = new Dictionary<RarityEnum, List<int>>();
-                        }
-
-                        //If we haven't made a new list for the rarity yet, add one.
-                        if (!_diMonsterSpawns[spawnType].ContainsKey(monsterRarity)) {
-                            _diMonsterSpawns[spawnType][monsterRarity] = new List<int>();
-                        }
-
-                        //Ad the MonsterID to the SpawnType and Rarity dictionaries
-                        _diMonsterSpawns[spawnType][monsterRarity].Add(monsterID);
+                        _diMonsterSpawns[spawnType] = new Dictionary<RarityEnum, List<int>>();
                     }
+
+                    //If we haven't made a new list for the rarity yet, add one.
+                    if (!_diMonsterSpawns[spawnType].ContainsKey(monsterRarity))
+                    {
+                        _diMonsterSpawns[spawnType][monsterRarity] = new List<int>();
+                    }
+
+                    //Ad the MonsterID to the SpawnType and Rarity dictionaries
+                    _diMonsterSpawns[spawnType][monsterRarity].Add(monsterID);
                 }
             }
         }
@@ -2903,7 +2922,8 @@ namespace RiverHollow.Tile_Engine
         public bool IsDoor { get; private set; }
         public bool IsActive { get; private set; } = false;
 
-        private bool _bGenerateZoneMap;
+        private int _bGenerateZoneMap = -1;
+        public int GenerateZoneMap => _bGenerateZoneMap;
 
         DirectionEnum _eEntranceDir;
         public DirectionEnum Dir => _eEntranceDir;
@@ -2920,6 +2940,8 @@ namespace RiverHollow.Tile_Engine
 
             Util.AssignValue(ref _eEntranceDir, "EntranceDir", obj.Properties);
             Util.AssignValue(ref _bGenerateZoneMap, "GenerateLevel", obj.Properties);
+
+            if(_bGenerateZoneMap > -1) { IsActive = true; }
 
         }
         public TravelPoint(Rectangle collision, string linkedMap, string mapName, int buildingID)

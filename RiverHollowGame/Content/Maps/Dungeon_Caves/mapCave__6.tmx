@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="56">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="72">
  <properties>
+  <property name="ActiveSpawn" type="int" value="3"/>
   <property name="Dungeon" value="Cave"/>
   <property name="MapType" value="Cave"/>
   <property name="Outside" type="bool" value="false"/>
@@ -93,6 +94,38 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="MapObject"/>
- <objectgroup id="6" name="Character"/>
+ <objectgroup id="5" name="MapObject">
+  <object id="66" name="SpawnPoint" x="100.494" y="69.5171" width="10" height="8.5"/>
+  <object id="67" name="SpawnPoint" x="165.14" y="133.765" width="10" height="8.5"/>
+  <object id="68" name="SpawnPoint" x="405.874" y="69.9137" width="10" height="8.5"/>
+  <object id="69" name="SpawnPoint" x="52.5063" y="228.948" width="10" height="8.5"/>
+  <object id="70" name="SpawnPoint" x="419.754" y="211.895" width="10" height="8.5"/>
+  <object id="71" name="SpawnPoint" x="340.039" y="132.575" width="10" height="8.5"/>
+ </objectgroup>
+ <objectgroup id="6" name="Character">
+  <object id="56" name="CombatStart" x="66.5034" y="129.489" width="10.5" height="11.25">
+   <properties>
+    <property name="Dir" value="Right"/>
+    <property name="Position" value="NE"/>
+   </properties>
+  </object>
+  <object id="57" name="CombatStart" x="211.383" y="195.359" width="10.5" height="11.25">
+   <properties>
+    <property name="Dir" value="Up"/>
+    <property name="Position" value="NW"/>
+   </properties>
+  </object>
+  <object id="58" name="CombatStart" x="258.12" y="66.2491" width="10.5" height="11.25">
+   <properties>
+    <property name="Dir" value="Down"/>
+    <property name="Position" value="SE"/>
+   </properties>
+  </object>
+  <object id="59" name="CombatStart" x="400.498" y="161.432" width="10.5" height="11.25">
+   <properties>
+    <property name="Dir" value="Left"/>
+    <property name="Position" value="SW"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

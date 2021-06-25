@@ -3199,3 +3199,63 @@
 /processor:TiledMapProcessor
 /build:Maps/Dungeon_Caves/mapCave__9.tmx
 
+#begin Maps/Dungeon_Caves/mapCave_Checkpoint_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave_Checkpoint_1.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__10.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__10.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__11.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__11.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__12.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__12.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__13.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__13.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__14.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__14.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__15.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__15.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__16.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__16.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__17.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__17.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__18.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__18.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__19.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__19.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__20.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__20.tmx
+

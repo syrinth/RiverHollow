@@ -323,8 +323,6 @@ namespace RiverHollow
             }
 
             Camera.SetObserver(PlayerManager.World);
-
-            DungeonManager.InitializeDungeon();
         }
 
         /// <summary>

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using static RiverHollow.Game_Managers.GameManager;
 
@@ -173,11 +174,26 @@ namespace RiverHollow.Utilities
             return rv;
         }
 
+        public static bool StringIsEnum<TEnum>(string val)
+        {
+            bool rv = false;
+
+            foreach(TEnum e in Enum.GetValues(typeof(TEnum)).Cast<TEnum>().ToList())
+            {
+                if (val.Equals(GetEnumString(e)))
+                {
+                    rv = true;
+                    break;
+                }
+            }
+
+            return rv;
+        }
         public static TEnum ParseEnum<TEnum>(string convertThis) where TEnum : struct
         {
-            TEnum rv = default(TEnum);
+            TEnum rv = default;
 
-            rv = Enum.TryParse<TEnum>(convertThis, true, out rv) ? rv : default(TEnum);
+            rv = Enum.TryParse(convertThis, true, out rv) ? rv : default;
             return rv;
         }
         public static string GetEnumString<TEnum>(TEnum convertThis)
@@ -476,7 +492,7 @@ namespace RiverHollow.Utilities
             return rv;
         }
 
-        public static DirectionEnum GetOpposite(DirectionEnum value)
+        public static DirectionEnum GetOppositeDirection(DirectionEnum value)
         {
             switch (value)
             {

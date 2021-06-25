@@ -103,18 +103,14 @@ namespace RiverHollow.Game_Managers
                     CombatManager.EndCombatEscape();
                 }
 
+                //IF the travel point has no linked map yet and is supposed to generate a level,
+                //send a message off to the DungeonManager to initialize it
+                if (travelPoint.GenerateZoneMap > 0 && string.IsNullOrEmpty(travelPoint.LinkedMap))
+                {
+                    DungeonManager.InitializeDungeon(MapManager.CurrentMap.DungeonName, travelPoint.GenerateZoneMap);
+                }
+
                 entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
-                ////Handling for if the player is currently in a building and is leaving it
-                //if (PlayerManager._iBuildingID != -1)
-                //{
-                //{
-                //    entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[PlayerManager._iBuildingID.ToString()];
-                //    PlayerManager._iBuildingID = -1;
-                //}
-                //else
-                //{
-                //    entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
-                //}
 
                 Vector2 newPos = Vector2.Zero;
                 if (travelPoint.IsDoor)
