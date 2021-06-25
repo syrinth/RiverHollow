@@ -451,7 +451,9 @@ namespace RiverHollow.Tile_Engine
                                 trvlPt.SetDoor();
                                 CreateDoor(trvlPt, mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height);
                             }
-                            DictionaryTravelPoints.Add(trvlPt.LinkedMap, trvlPt);
+
+                            if (!string.IsNullOrEmpty(trvlPt.LinkedMap)) { DictionaryTravelPoints.Add(trvlPt.LinkedMap, trvlPt); }
+                            else { DictionaryTravelPoints.Add(Util.GetEnumString(trvlPt.Dir), trvlPt); }
                         }
                     }
                 }
@@ -1167,7 +1169,7 @@ namespace RiverHollow.Tile_Engine
         {
             foreach(KeyValuePair<string, TravelPoint> kvp in DictionaryTravelPoints)
             {
-                if (kvp.Value.Intersects(movingChar) && !kvp.Value.IsDoor)
+                if (kvp.Value.Intersects(movingChar) && !kvp.Value.IsDoor && kvp.Value.IsActive)
                 {
                     MapManager.ChangeMaps(c, this.Name, kvp.Value);
                     return true;
@@ -2896,11 +2898,15 @@ namespace RiverHollow.Tile_Engine
         public Rectangle CollisionBox { get; private set; }
         public Point Location => CollisionBox.Location;
         string _sMapName;
-        public string LinkedMap { get; private set; }
+        public string LinkedMap { get; private set; } = string.Empty;
         public Vector2 Center => CollisionBox.Center.ToVector2();
         public bool IsDoor { get; private set; }
+        public bool IsActive { get; private set; } = false;
+
+        private bool _bGenerateZoneMap;
 
         DirectionEnum _eEntranceDir;
+        public DirectionEnum Dir => _eEntranceDir;
 
         public TravelPoint(TiledMapObject obj, string mapName)
         {
@@ -2909,11 +2915,12 @@ namespace RiverHollow.Tile_Engine
             if (obj.Properties.ContainsKey("Map"))
             {
                 LinkedMap = obj.Properties["Map"] == "Home" ? MapManager.HomeMap : obj.Properties["Map"];
+                IsActive = true;
             }
-            if (obj.Properties.ContainsKey("EntranceDir"))
-            {
-                _eEntranceDir = Util.ParseEnum<DirectionEnum>(obj.Properties["EntranceDir"]);
-            }
+
+            Util.AssignValue(ref _eEntranceDir, "EntranceDir", obj.Properties);
+            Util.AssignValue(ref _bGenerateZoneMap, "GenerateLevel", obj.Properties);
+
         }
         public TravelPoint(Rectangle collision, string linkedMap, string mapName, int buildingID)
         {
@@ -2923,6 +2930,7 @@ namespace RiverHollow.Tile_Engine
            // BuildingID = buildingID;
             _eEntranceDir = DirectionEnum.Down;
             IsDoor = true;
+            IsActive = true;
         }
 
         public bool Intersects(Rectangle value)
@@ -2992,6 +3000,12 @@ namespace RiverHollow.Tile_Engine
         {
             RHTile rv = MapManager.Maps[_sMapName].GetTileByPixelPosition(GetCenterTilePosition());
             return rv.GetTileByDirection(_eEntranceDir).Position;
+        }
+
+        public void AssignLinkedMap(string mapName)
+        {
+            LinkedMap = mapName;
+            IsActive = true;
         }
     }
 }

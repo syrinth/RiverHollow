@@ -3154,3 +3154,48 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Environmental/WindowInnLarge.png
 
+#begin Maps/Dungeon_Caves/mapCave__1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__1.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__2.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__3.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__4.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__4.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__5.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__5.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__6.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__6.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__7.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__7.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__8.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__8.tmx
+
+#begin Maps/Dungeon_Caves/mapCave__9.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave__9.tmx
+

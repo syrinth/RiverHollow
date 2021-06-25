@@ -2,7 +2,10 @@
 using RiverHollow.Items;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Game_Managers
 {
@@ -44,10 +47,16 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
+
+        public static void InitializeDungeon()
+        {
+            _liDungeons["Cave"].InitializeDungeon();
+        }
     }
 
     public class Dungeon
     {
+        const int DUNGEON_SIZE = 6;
         string _sEntranceMapName;
         Vector2 _vRecallPoint;
         public int NumKeys { get; private set; }
@@ -77,6 +86,46 @@ namespace RiverHollow.Game_Managers
         {
             MapManager.FadeToNewMap(MapManager.Maps[_sEntranceMapName], _vRecallPoint);
             PlayerManager.World.DetermineFacing(new Vector2(0, 1));
+        }
+
+        public void InitializeDungeon()
+        {
+            RHMap lastMap = MapManager.Maps["mapCave_Entrance"];
+            DirectionEnum lastDir = DirectionEnum.Down;
+
+            List<string> copy = new List<string>(_liMapNames.FindAll(x => x.StartsWith("mapCave__")));
+            for (int i= 0; i < DUNGEON_SIZE; i++){
+                int randomInt = RHRandom.Instance().Next(copy.Count - 1); 
+                RHMap nextMap = MapManager.Maps[copy[randomInt]];
+
+                //Remove the map from consideration
+                copy.RemoveAt(randomInt);
+
+                //Get the opposite direction of the last map
+                DirectionEnum oppDir = Util.GetOpposite(lastDir);
+
+                //Find the TravelPoints on each map that touch each other
+                TravelPoint lastMapTravelPt = lastMap.DictionaryTravelPoints[Util.GetEnumString(lastDir)];
+                TravelPoint nextMapTravelPt = nextMap.DictionaryTravelPoints[Util.GetEnumString(oppDir)];
+
+                lastMapTravelPt.AssignLinkedMap(nextMap.Name);
+                nextMapTravelPt.AssignLinkedMap(lastMap.Name);
+
+                //Remove the initial link between the Direction and the Travelpoint
+                //Assign the appropriate map key
+                lastMap.DictionaryTravelPoints.Remove(Util.GetEnumString(lastDir));
+                lastMap.DictionaryTravelPoints[lastMapTravelPt.LinkedMap] = lastMapTravelPt;
+
+                nextMap.DictionaryTravelPoints.Remove(Util.GetEnumString(oppDir));
+                nextMap.DictionaryTravelPoints[nextMapTravelPt.LinkedMap] = nextMapTravelPt;
+
+                lastMap = nextMap;
+
+                List<DirectionEnum> dirList = Enum.GetValues(typeof(DirectionEnum)).Cast<DirectionEnum>().ToList();
+                dirList.Remove(oppDir);
+
+                lastDir = dirList[RHRandom.Instance().Next(dirList.Count - 1)];
+            }
         }
 
         public void AddKey() { NumKeys++; }

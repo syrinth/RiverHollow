@@ -475,6 +475,23 @@ namespace RiverHollow.Utilities
 
             return rv;
         }
+
+        public static DirectionEnum GetOpposite(DirectionEnum value)
+        {
+            switch (value)
+            {
+                case DirectionEnum.Down:
+                    return DirectionEnum.Up;
+                case DirectionEnum.Up:
+                    return DirectionEnum.Down;
+                case DirectionEnum.Left:
+                    return DirectionEnum.Right;
+                case DirectionEnum.Right:
+                    return DirectionEnum.Left;
+            }
+
+            return DirectionEnum.Up;
+        }
     }
 
     public class RHRandom : Random
