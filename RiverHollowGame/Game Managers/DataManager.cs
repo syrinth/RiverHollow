@@ -507,6 +507,8 @@ namespace RiverHollow.Game_Managers
                         return new Wall(id, diData);
                     case ObjectTypeEnum.WarpPoint:
                         return new WarpPoint(id, diData);
+                    case ObjectTypeEnum.WorldObject:
+                        return new WorldObject(id, diData);
                 }
             }
 

@@ -16,7 +16,7 @@ using static RiverHollow.Items.Buildable.AdjustableObject;
 
 namespace RiverHollow.Items
 {
-    public abstract class WorldObject
+    public class WorldObject
     {
         #region Properties
         protected ObjectTypeEnum _eObjectType;
@@ -77,6 +77,11 @@ namespace RiverHollow.Items
             _wallObject = false;
 
             DataManager.GetTextData("WorldObject", _iID, ref _sName, "Name");
+        }
+
+        public WorldObject(int id, Dictionary<string, string> stringData) : this(id)
+        {
+            LoadDictionaryData(stringData);
         }
 
         protected virtual void LoadDictionaryData(Dictionary<string, string> stringData, bool loadSprite = true)

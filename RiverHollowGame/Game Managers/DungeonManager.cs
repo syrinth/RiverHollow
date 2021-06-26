@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame.Extended.Tiled;
 using RiverHollow.Items;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
@@ -148,6 +149,16 @@ namespace RiverHollow.Game_Managers
             {
                 ConnectToNeighbours(ref dungeonMapArray, mapArraySize, vec, dungeonLevel);
             }
+
+            foreach (Vector2 vec in Util.GetAllPointsInArea(0, 0, mapArraySize, mapArraySize))
+            {
+                RHMap map = dungeonMapArray[(int)vec.X, (int)vec.Y];
+                if (map != null)
+                {
+                    CreateBlockers(map);
+                    map.SpawnMapEntities();
+                }
+            }
         }
 
         private void ConnectToNeighbours(ref RHMap[,] dungeonMap, int mapSize, Vector2 mapPosition, int dungeonLevel)
@@ -168,14 +179,11 @@ namespace RiverHollow.Game_Managers
                 {
                     spawn.AssignMonsterIDs("Spawn-All", dungeonInfo["MonsterID"]);
                 }
-
-                targetMap.SpawnMapEntities();
             }
         }
 
         private void ConnectMaps(RHMap map1, RHMap map2, DirectionEnum movementDir)
         {
-
             if (map2 == null || map2.DictionaryTravelPoints.ContainsKey(map1.Name))
             {
                 return;
@@ -197,11 +205,6 @@ namespace RiverHollow.Game_Managers
             map2.DictionaryTravelPoints.Remove(Util.GetEnumString(oppDir));
             map2.DictionaryTravelPoints[linkedPoint.LinkedMap] = linkedPoint;
 
-            if(map2.Name.Contains("Entrance") || map1.Name.Contains("Entrance"))
-            {
-                int i = 0;
-            }
-
             RHTile[,] startTiles;
             if (map1.DictionaryCombatTiles.Count > 0)
             {
@@ -216,6 +219,99 @@ namespace RiverHollow.Game_Managers
                 map2.DictionaryCombatTiles.Remove(Util.GetEnumString(oppDir));
                 map2.DictionaryCombatTiles[map1.Name] = startTiles;
             }
+
+            //Set the relevant blockerObject Open value to true
+            if (map1.GetMapObjectByTagAndValue("Dir", Util.GetEnumString(oppDir)) != null)
+            {
+                map1.GetMapObjectByTagAndValue("Dir", Util.GetEnumString(oppDir)).Properties["Open"] = "true";
+            }
+
+            //Set the relevant blockerObject Open value to true
+            if (map2.GetMapObjectByTagAndValue("Dir", Util.GetEnumString(movementDir)) != null)
+            {
+                map2.GetMapObjectByTagAndValue("Dir", Util.GetEnumString(movementDir)).Properties["Open"] = "true";
+            }
+        }
+
+        private void CreateBlockers(RHMap map)
+        {
+            foreach(TiledMapObject blocker in map.GetMapObjectsByName("BlockObject"))
+            {
+                DirectionEnum dir = Util.ParseEnum<DirectionEnum>(blocker.Properties["Dir"]);
+                switch (dir)
+                {
+                    case DirectionEnum.Up:
+                        if (bool.Parse(blocker.Properties["Open"]))
+                        {
+                            WorldObject obj = DataManager.GetWorldObjectByID(60);
+                            obj.PlaceOnMap(blocker.Position, map);
+
+                            obj = DataManager.GetWorldObjectByID(61);
+                            obj.PlaceOnMap(new Vector2(blocker.Position.X + blocker.Size.Width, (int)blocker.Position.Y), map);
+                        }
+                        else
+                        {
+                            WorldObject obj = DataManager.GetWorldObjectByID(59);
+                            obj.PlaceOnMap(blocker.Position, map);
+                        }
+                        break;
+                    case DirectionEnum.Down:
+                        if (bool.Parse(blocker.Properties["Open"]))
+                        {
+                            Vector2 pos = blocker.Position;
+                            pos += new Vector2(0, TileSize);
+                            WorldObject obj = DataManager.GetWorldObjectByID(71);
+                            obj.PlaceOnMap(pos, map);
+
+                            obj = DataManager.GetWorldObjectByID(72);
+                            obj.PlaceOnMap(new Vector2(pos.X + blocker.Size.Width, pos.Y), map);
+                        }
+                        else
+                        {
+                            Vector2 pos = blocker.Position;
+                            pos += new Vector2(0, TileSize);
+                            WorldObject obj = DataManager.GetWorldObjectByID(70);
+                            obj.PlaceOnMap(pos, map);
+                        }
+                        break;
+                    case DirectionEnum.Left:
+                        if (bool.Parse(blocker.Properties["Open"]))
+                        {
+                            Vector2 pos = blocker.Position;
+                            WorldObject obj = DataManager.GetWorldObjectByID(74);
+                            obj.PlaceOnMap(blocker.Position, map);
+
+                            obj = DataManager.GetWorldObjectByID(75);
+                            obj.PlaceOnMap(new Vector2(blocker.Position.X, blocker.Position.Y + blocker.Size.Height), map);
+                        }
+                        else
+                        {
+                            WorldObject obj = DataManager.GetWorldObjectByID(73);
+                            obj.PlaceOnMap(blocker.Position, map);
+                        }
+                        break;
+                    case DirectionEnum.Right:
+                        if (bool.Parse(blocker.Properties["Open"]))
+                        {
+                            Vector2 pos = blocker.Position;
+                            WorldObject obj = DataManager.GetWorldObjectByID(77);
+                            obj.PlaceOnMap(blocker.Position, map);
+
+                            obj = DataManager.GetWorldObjectByID(78);
+                            obj.PlaceOnMap(new Vector2(blocker.Position.X, blocker.Position.Y + blocker.Size.Height), map);
+                        }
+                        else
+                        {
+                            WorldObject obj = DataManager.GetWorldObjectByID(76);
+                            obj.PlaceOnMap(blocker.Position, map);
+                        }
+                        break;
+                }
+            }
+
+            //Create Special Objects on the reverse of the direction of the movement
+            //Because the movement describes where someone came from to arrive there
+            //While the blocker object describes the direction it is blocking
         }
 
         private Vector2 MoveHorizontal(ref Vector2 delta)

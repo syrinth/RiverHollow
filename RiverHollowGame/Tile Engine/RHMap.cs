@@ -619,7 +619,7 @@ namespace RiverHollow.Tile_Engine
 
         public void SpawnMapEntities(bool loaded = false)
         {
-            SpawnMonsters();
+            //SpawnMonsters();
             SpawnResources(GetSkipTiles(loaded));
         }
 
@@ -2053,7 +2053,16 @@ namespace RiverHollow.Tile_Engine
             _liSummons.Add(obj);
         }
         #endregion
-        
+
+        public List<TiledMapObject> GetMapObjectsByName(string name)
+        {
+            return _liMapObjects.FindAll(x => x.Name.Equals(name));
+        }
+
+        public TiledMapObject GetMapObjectByTagAndValue(string tag, string value)
+        {
+            return _liMapObjects.Find(x => x.Properties.ContainsKey(tag) && x.Properties[tag].Equals(value));
+        }
         public int GetMapWidthInScaledPixels()
         {
             return MapWidthTiles * ScaledTileSize;

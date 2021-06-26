@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="286" columns="22">
+<tileset version="1.5" tiledversion="1.6.0" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="286" columns="22">
  <image source="tsWalls_Floors.png" trans="ffffff" width="352" height="209"/>
  <tile id="9">
   <properties>
@@ -356,6 +356,16 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="191">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="194">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="210">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
@@ -367,6 +377,16 @@
   </properties>
  </tile>
  <tile id="212">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="213">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="216">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>

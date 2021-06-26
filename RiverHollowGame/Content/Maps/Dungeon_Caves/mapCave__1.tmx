@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="23" nextobjectid="78">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="23" nextobjectid="85">
  <properties>
   <property name="ActiveSpawn" type="int" value="3"/>
   <property name="Dungeon" value="Cave"/>
@@ -12,13 +12,13 @@
  <layer id="19" name="Base" width="30" height="17">
   <data encoding="csv">
 699,699,699,699,699,699,699,699,699,699,699,699,699,773,773,773,773,699,699,699,699,699,699,699,699,699,699,699,699,699,
-699,699,699,699,699,699,699,699,699,699,699,699,699,773,773,773,773,699,699,699,699,699,699,699,699,699,699,699,699,699,
+699,699,699,699,699,699,699,699,699,699,699,699,699,773,818,819,773,699,699,699,699,699,699,699,699,699,699,699,699,699,
+699,773,773,773,773,773,773,773,773,773,773,773,773,773,840,841,773,773,773,773,773,773,773,773,773,773,773,773,773,699,
 699,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,699,
 699,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,699,
 699,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,699,
-699,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,699,
-699,773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,773,773,773,773,773,773,773,773,773,773,773,773,699,
-699,773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,773,773,773,773,773,773,773,773,773,773,773,773,699,
+773,773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,
+773,773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,
 773,773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,
 773,773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,
 773,773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,
@@ -38,8 +38,8 @@
 0,880,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,881,0,
 0,880,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,881,0,
 0,880,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,881,0,
-0,880,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,881,0,
-0,880,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,881,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -78,12 +78,12 @@
     <property name="EntranceDir" value="Up"/>
    </properties>
   </object>
-  <object id="53" name="Entrance" x="224" y="0" width="32" height="4">
+  <object id="53" name="Entrance" x="224" y="28" width="32" height="4">
    <properties>
     <property name="EntranceDir" value="Down"/>
    </properties>
   </object>
-  <object id="54" name="Entrance" x="0" y="128" width="4" height="32">
+  <object id="54" name="Entrance" x="16" y="128" width="4" height="32">
    <properties>
     <property name="EntranceDir" value="Right"/>
    </properties>
@@ -101,14 +101,30 @@
   <object id="69" name="SpawnPoint" x="52.1099" y="228.155" width="10" height="8.5"/>
   <object id="70" name="SpawnPoint" x="419.358" y="211.102" width="10" height="8.5"/>
   <object id="71" name="SpawnPoint" x="339.643" y="131.782" width="10" height="8.5"/>
- </objectgroup>
- <objectgroup id="22" name="Copy of MapObject">
-  <object id="72" name="SpawnPoint" x="100.098" y="68.7237" width="10" height="8.5"/>
-  <object id="73" name="SpawnPoint" x="194.885" y="133.368" width="10" height="8.5"/>
-  <object id="74" name="SpawnPoint" x="405.478" y="69.1203" width="10" height="8.5"/>
-  <object id="75" name="SpawnPoint" x="52.1099" y="228.155" width="10" height="8.5"/>
-  <object id="76" name="SpawnPoint" x="419.358" y="211.102" width="10" height="8.5"/>
-  <object id="77" name="SpawnPoint" x="339.643" y="131.782" width="10" height="8.5"/>
+  <object id="79" name="BlockObject" x="211.375" y="4" width="55.625" height="9.75">
+   <properties>
+    <property name="Dir" value="Up"/>
+    <property name="Open" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="82" name="BlockObject" x="210.217" y="243.202" width="55.625" height="9.75">
+   <properties>
+    <property name="Dir" value="Down"/>
+    <property name="Open" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="83" name="BlockObject" x="1.625" y="98.5" width="26.75" height="74">
+   <properties>
+    <property name="Dir" value="Left"/>
+    <property name="Open" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="84" name="BlockObject" x="452.625" y="100" width="26.75" height="74">
+   <properties>
+    <property name="Dir" value="Right"/>
+    <property name="Open" type="bool" value="false"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="6" name="Character">
   <object id="56" name="CombatStart" x="67.2966" y="129.885" width="10.5" height="11.25">

@@ -1507,35 +1507,83 @@
     </Item>
     <Item>
       <Key>WorldObject_59</Key>
-      <Value>[Name:Class Changer]</Value>
+      <Value>[Name:Cave_Up_Closed]</Value>
     </Item>
     <Item>
       <Key>WorldObject_60</Key>
-      <Value>[Name:Echo of Joy]</Value>
+      <Value>[Name:Cave_Up_Open_1]</Value>
     </Item>
     <Item>
       <Key>WorldObject_61</Key>
-      <Value>[Name:Cotton]</Value>
+      <Value>[Name:Cave_Up_Open_2]</Value>
     </Item>
     <Item>
       <Key>WorldObject_62</Key>
-      <Value>[Name:Staircase]</Value>
+      <Value>[Name:Class Changer]</Value>
     </Item>
     <Item>
       <Key>WorldObject_63</Key>
-      <Value>[Name:Door_Up]</Value>
+      <Value>[Name:Echo of Joy]</Value>
     </Item>
     <Item>
       <Key>WorldObject_64</Key>
-      <Value>[Name:Peat]</Value>
+      <Value>[Name:Cotton]</Value>
     </Item>
     <Item>
       <Key>WorldObject_65</Key>
-      <Value>[Name:Lavender]</Value>
+      <Value>[Name:Staircase]</Value>
     </Item>
     <Item>
       <Key>WorldObject_66</Key>
+      <Value>[Name:Door_Up]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_67</Key>
+      <Value>[Name:Peat]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_68</Key>
+      <Value>[Name:Lavender]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_69</Key>
       <Value>[Name:Flax]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_70</Key>
+      <Value>[Name:Cave_Down_Closed]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_71</Key>
+      <Value>[Name:Cave_Down_Open_1]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_72</Key>
+      <Value>[Name:Cave_Down_Open_2]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_73</Key>
+      <Value>[Name:Cave_Left_Closed]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_74</Key>
+      <Value>[Name:Cave_Left_Open_1]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_75</Key>
+      <Value>[Name:Cave_Left_Open_2]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_76</Key>
+      <Value>[Name:Cave_Right_Closed]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_77</Key>
+      <Value>[Name:Cave_Right_Open_1]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_78</Key>
+      <Value>[Name:Cave_Right_Open_2]</Value>
     </Item>
   </Asset>
 </XnaContent>
