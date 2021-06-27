@@ -619,8 +619,8 @@ namespace RiverHollow.Tile_Engine
 
         public void SpawnMapEntities(bool loaded = false)
         {
-            //SpawnMonsters();
-            //SpawnResources(GetSkipTiles(loaded));
+            SpawnMonsters();
+            SpawnResources(GetSkipTiles(loaded));
         }
 
         /// <summary>

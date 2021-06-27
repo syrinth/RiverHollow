@@ -127,7 +127,7 @@ namespace RiverHollow.Game_Managers
 
         public static bool IsSunny() { return _eCurrentWeather == WeatherEnum.Sunny; }
         public static bool IsRaining() { return _eCurrentWeather == WeatherEnum.Raining; }
-        public static bool IsSnowing() { return true; }// _eCurrentWeather == WeatherEnum.Snowing; }
+        public static bool IsSnowing() { return _eCurrentWeather == WeatherEnum.Snowing; }
 
         public static string GetWeatherString()
         {

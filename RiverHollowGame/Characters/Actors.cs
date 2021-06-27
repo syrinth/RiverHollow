@@ -2462,20 +2462,7 @@ namespace RiverHollow.Characters
             {
                 if (HandleTravelTiming())
                 {
-                    MoveToSpawn();
-
-                    List<int> copy = new List<int>(_liRequestItems);
-                    for (int i = 0; i < 3; i++)
-                    {
-                        int chosenValue = RHRandom.Instance().Next(0, copy.Count - 1);
-                        DiChosenItems[DataManager.GetItem(copy[chosenValue])] = false;
-                        copy.RemoveAt(chosenValue);
-                    }
-                   
-                    //ClearPath();
-                    //CalculatePathing();
-
-                    CanGiveGift = true;
+                    ArriveInTown();
                 }
             }
             else
@@ -2483,6 +2470,24 @@ namespace RiverHollow.Characters
                 _bOnTheMap = false;
                 CurrentMap?.RemoveCharacterImmediately(this);
             }
+        }
+
+        private void ArriveInTown()
+        {
+            MoveToSpawn();
+
+            List<int> copy = new List<int>(_liRequestItems);
+            for (int i = 0; i < 3; i++)
+            {
+                int chosenValue = RHRandom.Instance().Next(0, copy.Count - 1);
+                DiChosenItems[DataManager.GetItem(copy[chosenValue])] = false;
+                copy.RemoveAt(chosenValue);
+            }
+
+            //ClearPath();
+            //CalculatePathing();
+
+            CanGiveGift = true;
         }
 
         /// <summary>
@@ -2545,6 +2550,7 @@ namespace RiverHollow.Characters
             {
                 npcID = ID,
                 arrivalDelay = _iDaysToFirstArrival,
+                timeToNextArrival = _iNextArrival,
                 introduced = Introduced,
                 spokenKeys = _liSpokenKeys
             };
@@ -2555,6 +2561,12 @@ namespace RiverHollow.Characters
         {
             Introduced = data.introduced;
             _iDaysToFirstArrival = data.arrivalDelay;
+            _iNextArrival = data.timeToNextArrival;
+
+            if(_iNextArrival == _iArrivalPeriod)
+            {
+                ArriveInTown();
+            }
 
             foreach (string s in data.spokenKeys)
             {

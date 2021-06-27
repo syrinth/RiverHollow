@@ -331,6 +331,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "ArrivalDelay")]
             public int arrivalDelay;
 
+            [XmlElement(ElementName = "NextArrival")]
+            public int timeToNextArrival;
+
             [XmlArray(ElementName = "SpokenKeys")]
             public List<string> spokenKeys;
         }
