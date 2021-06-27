@@ -57,11 +57,19 @@ namespace RiverHollow.Game_Managers
         {
             if ((IsRaining() || IsSnowing()) && map.IsOutside)
             {
-                for (int i = 0; i < 2000; i++)
+                for (int i = 0; i < GetEnvironmentalDensity(); i++)
                 {
                     AddNewEnvironmentalEffect();
                 }
             }
+        }
+
+        private static int GetEnvironmentalDensity()
+        {
+            float tileDensity = IsRaining() ? 0.2f : 1;
+            int tiles = MapManager.CurrentMap.MapWidthTiles * MapManager.CurrentMap.MapHeightTiles;
+
+            return (int)(tiles * tileDensity);
         }
 
         public static void UnloadEnvironment()
@@ -119,7 +127,7 @@ namespace RiverHollow.Game_Managers
 
         public static bool IsSunny() { return _eCurrentWeather == WeatherEnum.Sunny; }
         public static bool IsRaining() { return _eCurrentWeather == WeatherEnum.Raining; }
-        public static bool IsSnowing() { return _eCurrentWeather == WeatherEnum.Snowing; }
+        public static bool IsSnowing() { return true; }// _eCurrentWeather == WeatherEnum.Snowing; }
 
         public static string GetWeatherString()
         {
@@ -169,8 +177,12 @@ namespace RiverHollow.Game_Managers
                 _sprBody.AddAnimation(AnimationEnum.Action_Finished, TileSize, 0, TileSize, TileSize * 2, 2, 0.1f, false, true);
                 _sprBody.PlayAnimation(AnimationEnum.Action_One);
 
-                int screenBuffer = TileSize * 3;
-                Vector2 pos = new Vector2(RHRandom.Instance().Next(0 - screenBuffer, (mapWidth * TileSize) + screenBuffer), RHRandom.Instance().Next(0 - screenBuffer, (mapHeight * TileSize) + screenBuffer));
+                int top = (0 - 400);
+                int bottom = (mapWidth * TileSize) + _iFallDistance;
+                int left = (0 - _iFallDistance);
+                int right = (mapWidth * TileSize) + _iFallDistance;
+                Vector2 pos = new Vector2(RHRandom.Instance().Next(0, (mapWidth * TileSize) + 300), RHRandom.Instance().Next(-400, mapHeight*TileSize));
+                //Vector2 pos = new Vector2(300, -300);
                 _sprBody.Position = pos;
             }
 
@@ -180,8 +192,8 @@ namespace RiverHollow.Game_Managers
                 {
                     Vector2 landingPos = _sprBody.Position + new Vector2(0, TileSize);
                     RHTile landingTile = MapManager.CurrentMap.GetTileByPixelPosition(landingPos);
-                    if (landingTile == null) { _sprBody.PlayAnimation(AnimationEnum.Action_Finished); }//_sprBody.Drawing = false; }
-                    else if (_iFallDistance <= 0 && (landingTile.WorldObject == null || landingTile.WorldObject.CompareType(ObjectTypeEnum.Structure)))
+                    //if (landingTile == null) { _sprBody.PlayAnimation(AnimationEnum.Action_Finished); }//_sprBody.Drawing = false; }
+                    if (_iFallDistance <= 0 && (landingTile == null || landingTile.WorldObject == null || landingTile.WorldObject.CompareType(ObjectTypeEnum.Structure)))
                     {
                         _sprBody.PlayAnimation(AnimationEnum.Action_Finished);
                     }
