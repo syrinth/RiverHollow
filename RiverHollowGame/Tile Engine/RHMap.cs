@@ -620,7 +620,7 @@ namespace RiverHollow.Tile_Engine
         public void SpawnMapEntities(bool loaded = false)
         {
             //SpawnMonsters();
-            SpawnResources(GetSkipTiles(loaded));
+            //SpawnResources(GetSkipTiles(loaded));
         }
 
         /// <summary>
@@ -2179,7 +2179,8 @@ namespace RiverHollow.Tile_Engine
                 containers = new List<ContainerData>(),
                 machines = new List<MachineData>(),
                 plants = new List<PlantData>(),
-                gardens = new List<GardenData>()
+                gardens = new List<GardenData>(),
+                warpPoints = new List<WarpPointData>()
             };
 
             foreach (WorldObject wObj in _liPlacedWorldObjects)
@@ -2198,6 +2199,9 @@ namespace RiverHollow.Tile_Engine
 
                     case ObjectTypeEnum.Plant:
                         mapData.plants.Add(((Plant)wObj).SaveData());
+                        break;
+                    case ObjectTypeEnum.WarpPoint:
+                        mapData.warpPoints.Add(((WarpPoint)wObj).SaveData());
                         break;
                     default:
                         WorldObjectData d = new WorldObjectData
@@ -2242,6 +2246,12 @@ namespace RiverHollow.Tile_Engine
                 Garden g = (Garden)DataManager.GetWorldObjectByID(gardenData.ID);
                 g.LoadData(gardenData);
                 g.PlaceOnMap(this);
+            }
+            foreach (WarpPointData warpData in data.warpPoints)
+            {
+                WarpPoint w = (WarpPoint)DataManager.GetWorldObjectByID(warpData.ID);
+                w.LoadData(warpData);
+                w.PlaceOnMap(this);
             }
         } 
     }

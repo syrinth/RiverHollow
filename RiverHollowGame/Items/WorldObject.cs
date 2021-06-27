@@ -28,6 +28,8 @@ namespace RiverHollow.Items
         public List<RHTile> Tiles;
 
         protected string MapName => Tiles[0].MapName;
+        public RHMap CurrentMap => MapManager.Maps[Tiles[0].MapName];
+
         protected bool _bWalkable = false;
         public bool Walkable => _bWalkable;
         protected bool _wallObject;
@@ -150,7 +152,7 @@ namespace RiverHollow.Items
             return CollisionBox.Contains(m);
         }
 
-        public virtual bool PlaceOnMap(RHMap map)
+        public bool PlaceOnMap(RHMap map)
         {
             return PlaceOnMap(this.MapPosition, map);
         }
@@ -1831,9 +1833,56 @@ namespace RiverHollow.Items
 
     public class WarpPoint : WorldObject
     {
+        public bool Active { get; private set; } = false;
+        private string _sDungeonName;
+
         public WarpPoint(int id, Dictionary<string, string> stringData) : base(id)
         {
             LoadDictionaryData(stringData);
+            _sprite.AddAnimation(AnimationEnum.Action_One, _pImagePos.X + (TileSize * 2), _pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+        }
+
+        public override bool PlaceOnMap(Vector2 pos, RHMap map)
+        {
+            bool rv = base.PlaceOnMap(pos, map);
+            _sDungeonName = map.DungeonName;
+            DungeonManager.AddWarpPoint(this, _sDungeonName);
+
+            return rv;
+        }
+
+        public override void ProcessRightClick()
+        {
+            if (!Active)
+            {
+                Active = true;
+                _sprite.PlayAnimation(AnimationEnum.Action_One);
+            }
+            else
+            {
+                GUIManager.OpenMainObject(new WarpPointWindow(this));
+            }
+        }
+
+        public WarpPointData SaveData()
+        {
+            WarpPointData w = new WarpPointData
+            {
+                ID = this.ID,
+                x = (int)this.CollisionBox.X,
+                y = (int)this.CollisionBox.Y,
+                active = this.Active
+            };
+
+            return w;
+        }
+        public void LoadData(WarpPointData warpPt)
+        {
+            _iID = warpPt.ID;
+            SnapPositionToGrid(new Vector2(warpPt.x, warpPt.y));
+            Active = warpPt.active;
+
+            if (Active) { _sprite.PlayAnimation(AnimationEnum.Action_One); }
         }
     }
 

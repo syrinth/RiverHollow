@@ -12,12 +12,12 @@ namespace RiverHollow.Game_Managers
 {
     public static class DungeonManager
     {
-        public static Dungeon CurrentDungeon => (_liDungeons.ContainsKey(MapManager.CurrentMap.DungeonName) ? _liDungeons[MapManager.CurrentMap.DungeonName] : null);
-        private static Dictionary<string, Dungeon> _liDungeons;
+        public static Dungeon CurrentDungeon => (_diDungeons.ContainsKey(MapManager.CurrentMap.DungeonName) ? _diDungeons[MapManager.CurrentMap.DungeonName] : null);
+        private static Dictionary<string, Dungeon> _diDungeons;
 
         public static void Instantiate()
         {
-            _liDungeons = new Dictionary<string, Dungeon>();
+            _diDungeons = new Dictionary<string, Dungeon>();
         }
 
         public static void GoToEntrance()
@@ -27,14 +27,18 @@ namespace RiverHollow.Game_Managers
         }
 
         public static void AddMapToDungeon(string dungeonName, RHMap map) {
-            if (!_liDungeons.ContainsKey(dungeonName))
+            if (!_diDungeons.ContainsKey(dungeonName))
             {
-                _liDungeons[dungeonName] = new Dungeon(dungeonName);
+                _diDungeons[dungeonName] = new Dungeon(dungeonName);
             }
 
-            _liDungeons[dungeonName].AddMap(map);
+            _diDungeons[dungeonName].AddMap(map);
         }
 
+        public static void AddWarpPoint(WarpPoint obj, string dungeon)
+        {
+            _diDungeons[dungeon].AddWarpPoint(obj);
+        }
         public static void AddDungeonKey() { CurrentDungeon.AddKey(); }
         public static void UseDungeonKey() { CurrentDungeon.UseKey(); }
         public static int DungeonKeys()
@@ -51,7 +55,7 @@ namespace RiverHollow.Game_Managers
 
         public static void InitializeDungeon(string dungeonName, int level, int toCheckpoint)
         {
-            _liDungeons[dungeonName].InitializeDungeon(level, toCheckpoint);
+            _diDungeons[dungeonName].InitializeDungeon(level, toCheckpoint);
         }
     }
 
@@ -62,12 +66,20 @@ namespace RiverHollow.Game_Managers
         Vector2 _vRecallPoint;
         public int NumKeys { get; private set; }
         public string Name { get; private set; }
+        List<WarpPoint> _liWarpPoints;
+        public IList<WarpPoint> WarpPoints { get { return _liWarpPoints.AsReadOnly(); } }
 
         private List<string> _liMapNames;
         public Dungeon(string name)
         {
+            _liWarpPoints = new List<WarpPoint>();
             _liMapNames = new List<string>();
             Name = name;
+        }
+
+        public void AddWarpPoint(WarpPoint obj)
+        {
+            _liWarpPoints.Add(obj);
         }
 
         public void AddMap(RHMap map)

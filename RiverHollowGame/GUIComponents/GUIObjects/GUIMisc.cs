@@ -443,17 +443,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             return rv;
         }
 
-        public override bool ProcessRightButtonClick(Point mouse)
-        {
-            return base.ProcessRightButtonClick(mouse);
-        }
-
         public override bool ProcessHover(Point mouse) { return false; }
-
-        public override bool Contains(Point mouse)
-        {
-            return _window.Contains(mouse);
-        }
 
         public void SetConstructionInfo(int id, string objName, Dictionary<int, int> requiredToMake)
         {

@@ -84,6 +84,7 @@
     <Compile Include="GUIComponents\GUIObjects\GUIMisc.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUISprite.cs" />
     <Compile Include="GUIComponents\MainObjects\GardenWindow.cs" />
+    <Compile Include="GUIComponents\MainObjects\WarpPointWindow.cs" />
     <Compile Include="GUIComponents\Screens\BuildScreen.cs" />
     <Compile Include="GUIComponents\Screens\CombatScreen.cs" />
     <Compile Include="GUIComponents\Screens\ConfigScreen.cs" />
