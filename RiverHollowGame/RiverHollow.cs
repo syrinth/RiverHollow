@@ -342,6 +342,7 @@ namespace RiverHollow
             }
 
             MapManager.Rollover();
+            DungeonManager.ResetDungeons();
         }
 
         public static void PrepExit()

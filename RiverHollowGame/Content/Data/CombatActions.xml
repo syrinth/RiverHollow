@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Spell][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Target:Enemy][Range:7][AreaType:Cross][Cost:5][Harm:200][Action:UserCast Direct Apply][Element:Lightning]</Value>
+      <Value>[Type:Spell][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Target:Enemy][Range:7][AreaType:Cross][Cost:2][Harm:300][Action:UserCast Direct Apply][Element:Lightning]</Value>
     </Item>
     <Item>
       <Key>5</Key>

@@ -103,11 +103,11 @@ namespace RiverHollow.Game_Managers
                     CombatManager.EndCombatEscape();
                 }
 
-                //IF the travel point has no linked map yet and is supposed to generate a level,
+                //If the travel point has no linked map yet and is supposed to generate a level,
                 //send a message off to the DungeonManager to initialize it
                 if (travelPoint.DungeonInfoID > -1 && string.IsNullOrEmpty(travelPoint.LinkedMap))
                 {
-                    DungeonManager.InitializeDungeon(MapManager.CurrentMap.DungeonName, travelPoint.DungeonInfoID, travelPoint.ToCheckpoint);
+                    DungeonManager.InitializeDungeon(MapManager.CurrentMap.DungeonName, MapManager.CurrentMap.Name, travelPoint);
                 }
 
                 entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];

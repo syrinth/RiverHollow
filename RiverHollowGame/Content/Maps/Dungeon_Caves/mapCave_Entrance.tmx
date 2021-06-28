@@ -81,7 +81,8 @@
    <properties>
     <property name="DungeonID" type="int" value="0"/>
     <property name="EntranceDir" value="Down"/>
-    <property name="ToCheckpoint" type="int" value="1"/>
+    <property name="GoTo" value="mapCave_Checkpoint_1"/>
+    <property name="Modular" type="bool" value="true"/>
    </properties>
   </object>
  </objectgroup>

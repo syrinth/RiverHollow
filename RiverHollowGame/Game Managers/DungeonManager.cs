@@ -20,6 +20,14 @@ namespace RiverHollow.Game_Managers
             _diDungeons = new Dictionary<string, Dungeon>();
         }
 
+        public static void ResetDungeons()
+        {
+            foreach(Dungeon d in _diDungeons.Values)
+            {
+                d.ResetDungeon();
+            }
+        }
+
         public static void GoToEntrance()
         {
             CurrentDungeon?.GoToEntrance();
@@ -53,9 +61,9 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static void InitializeDungeon(string dungeonName, int level, int toCheckpoint)
+        public static void InitializeDungeon(string dungeonName, string currentMap, TravelPoint pt)
         {
-            _diDungeons[dungeonName].InitializeDungeon(level, toCheckpoint);
+            _diDungeons[dungeonName].InitializeDungeon(currentMap, pt);
         }
     }
 
@@ -75,6 +83,118 @@ namespace RiverHollow.Game_Managers
             _liWarpPoints = new List<WarpPoint>();
             _liMapNames = new List<string>();
             Name = name;
+        }
+
+        public void InitializeDungeon(string currentMap, TravelPoint pt)
+        {
+            int mapArraySize = 7;
+
+            string mapStart = "map" + Name + "_";
+            RHMap[,] dungeonMapArray = new RHMap[mapArraySize, mapArraySize];
+
+            string firstStaticMapName = (pt.Dir == DirectionEnum.Down) ? currentMap : pt.GoToMap;
+            string lastStaticMapName = (pt.Dir == DirectionEnum.Down) ? pt.GoToMap : currentMap;
+
+            RHMap firstStaticMap = MapManager.Maps[firstStaticMapName];
+            RHMap lastStaticMap = MapManager.Maps[lastStaticMapName];
+
+            TravelPoint fromFirstRandom = GetFirstDirectionalTravelPoint(firstStaticMap.DictionaryTravelPoints);
+            TravelPoint fromLastRandom = GetFirstDirectionalTravelPoint(lastStaticMap.DictionaryTravelPoints);
+
+            List<string> mapPieces = new List<string>(_liMapNames.FindAll(x => x.StartsWith("mapCave__")));
+
+            RHMap firstRandomMap = RetrieveMapPiece(ref mapPieces);
+            RHMap lastRandomMap = RetrieveMapPiece(ref mapPieces);
+
+            Vector2 startMapPosition = Vector2.Zero;
+            Vector2 endMapPosition = Vector2.Zero;
+            AssignEndPieceToMap(ref dungeonMapArray, mapArraySize, firstRandomMap, fromFirstRandom, ref startMapPosition);
+            AssignEndPieceToMap(ref dungeonMapArray, mapArraySize, lastRandomMap, fromLastRandom, ref endMapPosition);
+
+            //Fill in the map
+            Vector2 delta = endMapPosition - startMapPosition;
+
+            int totalDistance = (int)(Math.Abs(delta.X) + Math.Abs(delta.Y));
+
+            Vector2 fillPosition = startMapPosition;
+            for (int i = 0; i < totalDistance - 1; i++)
+            {
+                int coinFlip = RHRandom.Instance().Next(1, 2);
+
+                Vector2 moveBy = Vector2.Zero;
+                //if 1, move horizontally
+                if (coinFlip == 1)
+                {
+                    if (delta.X != 0) { moveBy = MoveHorizontal(ref delta); }
+                    else { moveBy = MoveVertical(ref delta); }
+                }
+                else if (coinFlip == 2)
+                {
+                    if (delta.Y != 0) { moveBy = MoveVertical(ref delta); }
+                    else { moveBy = MoveHorizontal(ref delta); }
+                }
+
+                fillPosition += moveBy;
+                dungeonMapArray[(int)fillPosition.X, (int)fillPosition.Y] = RetrieveMapPiece(ref mapPieces);
+            }
+
+            ConnectMaps(firstStaticMap, firstRandomMap, DirectionEnum.Down);
+            ConnectMaps(lastRandomMap, lastStaticMap, DirectionEnum.Down);
+
+            foreach (Vector2 vec in Util.GetAllPointsInArea(0, 0, mapArraySize, mapArraySize))
+            {
+                ConnectToNeighbours(ref dungeonMapArray, mapArraySize, vec, pt.DungeonInfoID);
+            }
+
+            foreach (Vector2 vec in Util.GetAllPointsInArea(0, 0, mapArraySize, mapArraySize))
+            {
+                RHMap map = dungeonMapArray[(int)vec.X, (int)vec.Y];
+                if (map != null)
+                {
+                    CreateBlockers(map);
+                    map.SpawnMapEntities();
+                }
+            }
+        }
+
+        public void ResetDungeon()
+        {
+            foreach (string mapName in _liMapNames)
+            {
+                RHMap m = MapManager.Maps[mapName];
+                Dictionary<string, TravelPoint> travlCpy = new Dictionary<string, TravelPoint>(m.DictionaryTravelPoints);
+                foreach (KeyValuePair<string, TravelPoint> kvp in travlCpy)
+                {
+                    if (kvp.Value.Modular)
+                    {
+                        TravelPoint pt = m.DictionaryTravelPoints[kvp.Key];
+                        pt.Reset();
+
+                        m.DictionaryTravelPoints.Remove(kvp.Key);
+                        m.DictionaryTravelPoints[Util.GetEnumString(pt.Dir)] = pt;
+                    }
+                }
+
+                Dictionary<string, BattleStartInfo> battleCpy = new Dictionary<string, BattleStartInfo>(m.DictionaryBattleStarts);
+                foreach (KeyValuePair<string, BattleStartInfo> kvp in battleCpy)
+                {
+                    if (kvp.Value.Modular)
+                    {
+                        BattleStartInfo bInfo = m.DictionaryBattleStarts[kvp.Key];
+                        bInfo.Reset();
+
+                        m.DictionaryBattleStarts.Remove(kvp.Key);
+                        m.DictionaryBattleStarts[Util.GetEnumString(bInfo.Dir)] = bInfo;
+                    }
+                }
+
+                foreach (TiledMapObject blocker in m.GetMapObjectsByName("BlockObject"))
+                {
+                    blocker.Properties["Open"] = "false";
+                }
+
+                m.ClearMapEntities();
+            }
         }
 
         public void AddWarpPoint(WarpPoint obj)
@@ -99,78 +219,6 @@ namespace RiverHollow.Game_Managers
         {
             MapManager.FadeToNewMap(MapManager.Maps[_sEntranceMapName], _vRecallPoint);
             PlayerManager.World.DetermineFacing(new Vector2(0, 1));
-        }
-
-        public void InitializeDungeon(int dungeonLevel, int toCheckpoint)
-        {
-            int mapArraySize = 7;
-
-            string mapStart = "map" + Name + "_";
-            RHMap[,] dungeonMapArray = new RHMap[mapArraySize, mapArraySize];
-
-            string firstStaticMapName = (toCheckpoint > 1) ? mapStart + "Checkpoint_" + (toCheckpoint - 1).ToString() : mapStart + "Entrance";
-            string lastStaticMapName = mapStart + "Checkpoint_" + (toCheckpoint).ToString();
-
-            RHMap firstStaticMap = MapManager.Maps[firstStaticMapName];
-            RHMap lastStaticMap = MapManager.Maps[lastStaticMapName];
-
-            TravelPoint fromFirstRandom = GetFirstDirectionalTravelPoint(firstStaticMap.DictionaryTravelPoints);
-            TravelPoint fromLastRandom = GetFirstDirectionalTravelPoint(lastStaticMap.DictionaryTravelPoints);
-
-            List<string> mapPieces = new List<string>(_liMapNames.FindAll(x => x.StartsWith("mapCave__")));
-
-            RHMap firstRandomMap = RetrieveMapPiece(ref mapPieces);
-            RHMap lastRandomMap = RetrieveMapPiece(ref mapPieces);
-
-            Vector2 startMapPosition = Vector2.Zero;
-            Vector2 endMapPosition = Vector2.Zero;
-            AssignEndPieceToMap(ref dungeonMapArray, mapArraySize, firstRandomMap, fromFirstRandom, ref startMapPosition);
-            AssignEndPieceToMap(ref dungeonMapArray, mapArraySize, lastRandomMap, fromLastRandom, ref endMapPosition);
-
-            //Fill in the map
-            Vector2 delta = endMapPosition - startMapPosition;
-
-            int totalDistance = (int)(Math.Abs(delta.X) + Math.Abs(delta.Y));
-
-            Vector2 fillPosition = startMapPosition;
-            for (int i=0; i< totalDistance - 1; i++)
-            {
-                int coinFlip = RHRandom.Instance().Next(1, 2);
-
-                Vector2 moveBy = Vector2.Zero;
-                //if 1, move horizontally
-                if(coinFlip == 1)
-                {
-                    if(delta.X != 0) { moveBy = MoveHorizontal(ref delta); }
-                    else { moveBy = MoveVertical(ref delta); }
-                }
-                else if(coinFlip== 2)
-                {
-                    if (delta.Y != 0) { moveBy = MoveVertical(ref delta); }
-                    else { moveBy = MoveHorizontal(ref delta); }
-                }
-
-                fillPosition += moveBy; 
-                dungeonMapArray[(int)fillPosition.X, (int)fillPosition.Y] = RetrieveMapPiece(ref mapPieces);
-            }
-
-            ConnectMaps(firstStaticMap, firstRandomMap, DirectionEnum.Down);
-            ConnectMaps(lastRandomMap, lastStaticMap, DirectionEnum.Down);
-
-            foreach (Vector2 vec in Util.GetAllPointsInArea(0, 0, mapArraySize, mapArraySize))
-            {
-                ConnectToNeighbours(ref dungeonMapArray, mapArraySize, vec, dungeonLevel);
-            }
-
-            foreach (Vector2 vec in Util.GetAllPointsInArea(0, 0, mapArraySize, mapArraySize))
-            {
-                RHMap map = dungeonMapArray[(int)vec.X, (int)vec.Y];
-                if (map != null)
-                {
-                    CreateBlockers(map);
-                    map.SpawnMapEntities();
-                }
-            }
         }
 
         private void ConnectToNeighbours(ref RHMap[,] dungeonMap, int mapSize, Vector2 mapPosition, int dungeonLevel)
@@ -217,19 +265,21 @@ namespace RiverHollow.Game_Managers
             map2.DictionaryTravelPoints.Remove(Util.GetEnumString(oppDir));
             map2.DictionaryTravelPoints[linkedPoint.LinkedMap] = linkedPoint;
 
-            RHTile[,] startTiles;
-            if (map1.DictionaryCombatTiles.Count > 0)
+            BattleStartInfo bInfo;
+            if (map1.DictionaryBattleStarts.Count > 0)
             {
-                startTiles = map1.DictionaryCombatTiles[Util.GetEnumString(movementDir)];
-                map1.DictionaryCombatTiles.Remove(Util.GetEnumString(movementDir));
-                map1.DictionaryCombatTiles[map2.Name] = startTiles;
+                bInfo = map1.DictionaryBattleStarts[Util.GetEnumString(movementDir)];
+                map1.DictionaryBattleStarts.Remove(Util.GetEnumString(movementDir));
+                bInfo.AssignLinkedMap(map2.Name);
+                map1.DictionaryBattleStarts[map2.Name] = bInfo;
             }
 
-            if (map2.DictionaryCombatTiles.Count > 0)
+            if (map2.DictionaryBattleStarts.Count > 0)
             {
-                startTiles = map2.DictionaryCombatTiles[Util.GetEnumString(oppDir)];
-                map2.DictionaryCombatTiles.Remove(Util.GetEnumString(oppDir));
-                map2.DictionaryCombatTiles[map1.Name] = startTiles;
+                bInfo = map2.DictionaryBattleStarts[Util.GetEnumString(oppDir)];
+                map2.DictionaryBattleStarts.Remove(Util.GetEnumString(oppDir));
+                bInfo.AssignLinkedMap(map1.Name);
+                map2.DictionaryBattleStarts[map1.Name] = bInfo;
             }
 
             //Set the relevant blockerObject Open value to true

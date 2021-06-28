@@ -2,6 +2,7 @@
 <map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="20" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="55">
  <properties>
   <property name="Dungeon" value="Cave"/>
+  <property name="GoTo" value="mapCave_Checkpoint_1"/>
   <property name="MapType" value="Cave"/>
   <property name="Outside" type="bool" value="false"/>
  </properties>
@@ -73,7 +74,10 @@
  <objectgroup id="4" name="Travel">
   <object id="51" name="Entrance" x="144" y="268" width="32" height="4">
    <properties>
+    <property name="DungeonID" type="int" value="0"/>
     <property name="EntranceDir" value="Up"/>
+    <property name="GoTo" value="mapCave_Entrance"/>
+    <property name="Modular" type="bool" value="true"/>
    </properties>
   </object>
   <object id="54" name="Entrance" x="144" y="28" width="32" height="4">

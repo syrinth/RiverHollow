@@ -113,7 +113,7 @@ namespace RiverHollow.Game_Managers
                 c.SetBaseTile(BattleMap.GetTileByPixelPosition(c.Position), true);
             }
 
-            RHTile[,] tiles = BattleMap.DictionaryCombatTiles[oldMap];
+            BattleStartInfo bInfo = BattleMap.DictionaryBattleStarts[oldMap];
             foreach (ClassedCombatant c in Party)
             {
                 if (c != PlayerManager.World)
@@ -126,7 +126,7 @@ namespace RiverHollow.Game_Managers
                 }
 
                 Vector2 startpos = c.StartPosition;
-                c.SetBaseTile(tiles[(int)startpos.X, (int)startpos.Y], true);
+                c.SetBaseTile(bInfo.CombatTiles[(int)startpos.X, (int)startpos.Y], true);
                 c.Facing = PlayerManager.World.Facing;
                 c.GoToIdle();
             }

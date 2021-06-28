@@ -64,20 +64,13 @@ namespace RiverHollow.GUIComponents.Screens
             //    }
             //}
 
-            TextEntry results = null;
-            //if(_iNewVillagers == 1) { results = DataManager.GetGameTextEntry("New_Villager"); }
-            //else if(_iNewVillagers > 1) { results = DataManager.GetGameTextEntry("New_Villagers"); }
-
             _btnOK = new GUIButton("OK", BtnOK);
-            _btnOK.AnchorToScreen( SideEnum.Bottom, GUIManager.STANDARD_MARGIN);
+            _btnOK.AnchorToScreen(SideEnum.Bottom, GUIManager.STANDARD_MARGIN);
             AddControl(_btnOK);
 
-            if (results != null)
-            {
-                _gResults = new GUITextWindow(results, false);
-                _gResults.AnchorAndAlignToObject(_btnOK, SideEnum.Top, SideEnum.CenterX, GUIManager.STANDARD_MARGIN);
-                AddControl(_gResults);
-            }
+            _gResults = new GUITextWindow(new TextEntry("Day Over"));
+            _gResults.AnchorAndAlignToObject(_btnOK, SideEnum.Top, SideEnum.CenterX, GUIManager.STANDARD_MARGIN);
+            AddControl(_gResults);
 
             //Determine how fast to spawn each Monster image based off of how 
             //many there are and the total time we want it to take
@@ -90,6 +83,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             //If we're popping the monsters, wait until the animation has played once and then
             //proceed to the next day
+
             if (_bPopped) {
                 if (_liMonsters.Count == 0 || _liMonsters[0].PlayCount > 0)
                 {

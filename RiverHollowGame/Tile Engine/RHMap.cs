@@ -35,6 +35,8 @@ namespace RiverHollow.Tile_Engine
         public bool IsDungeon => !string.IsNullOrEmpty(DungeonName);
         public bool IsTown { get; private set; }
         public int BuildingID { get; private set; } = -1;
+        bool _bModular;
+        public bool Modular => _bModular;
         bool _bOutside;
         public bool IsOutside => _bOutside;
         int _iActiveSpawnPoints;
@@ -70,7 +72,7 @@ namespace RiverHollow.Tile_Engine
         private string _sResourceMinMax;
         protected List<Item> _liItems;
         protected List<ShopLocation> _liShopData;
-        public Dictionary<string, RHTile[,]> DictionaryCombatTiles { get; }
+        public Dictionary<string, BattleStartInfo> DictionaryBattleStarts { get; }
         public Dictionary<string, TravelPoint> DictionaryTravelPoints { get; }
         public Dictionary<string, Vector2> DictionaryCharacterLayer { get; }
         private List<TiledMapObject> _liMapObjects;
@@ -97,7 +99,7 @@ namespace RiverHollow.Tile_Engine
             _liCutscenes = new List<int>();
             _diResources = new Dictionary<RarityEnum, List<int>>();
 
-            DictionaryCombatTiles = new Dictionary<string, RHTile[,]>();
+            DictionaryBattleStarts = new Dictionary<string, BattleStartInfo>();
             DictionaryTravelPoints = new Dictionary<string, TravelPoint>();
             DictionaryCharacterLayer = new Dictionary<string, Vector2>();
 
@@ -169,7 +171,14 @@ namespace RiverHollow.Tile_Engine
                 BuildingID = int.Parse(_map.Properties["BuildingID"]);
             }
             IsTown = _map.Properties.ContainsKey("Town");
-            _bOutside = _map.Properties.ContainsKey("Outside");
+            Util.AssignValue(ref _bModular, "Modular", _map.Properties);
+            Util.AssignValue(ref _iActiveSpawnPoints, "ActiveSpawn", _map.Properties);
+            Util.AssignValue(ref _sMapType, "MapType", _map.Properties);
+
+            if (_map.Properties.ContainsKey("Outside"))
+            {
+                bool.TryParse(_map.Properties["Outside"], out _bOutside);
+            }
 
             if (_map.Properties.ContainsKey("Dungeon"))
             {
@@ -177,22 +186,10 @@ namespace RiverHollow.Tile_Engine
                 DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], this);
             }
 
-            if (_map.Properties.ContainsKey("Outside"))
-            {
-                bool.TryParse(_map.Properties["Outside"], out _bOutside);
-            }
-
-            if (_map.Properties.ContainsKey("ActiveSpawn"))
-            {
-                int.TryParse(_map.Properties["ActiveSpawn"].ToString(), out _iActiveSpawnPoints);
-            }
-
             if (_map.Properties.ContainsKey("Resources"))
             {
                 AssignResourceSpawns(_map.Properties["ResourcesMinMax"], _map.Properties["Resources"]);
             }
-
-            Util.AssignValue(ref _sMapType, "MapType", _map.Properties);
 
             if (_map.Properties.ContainsKey("Cutscenes"))
             {
@@ -471,46 +468,8 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (obj.Name.Equals("CombatStart"))
                         {
-                            string entrance = obj.Properties.ContainsKey("Map") ? obj.Properties["Map"] : obj.Properties["Dir"];
-                            RHTile[,] tiles = new RHTile[3, 3];
-
-                            DirectionEnum sidle = DirectionEnum.Right;
-                            DirectionEnum change = DirectionEnum.Down;
-
-                            string startPoint = obj.Properties["Position"];
-                            if (startPoint == "NW")
-                            {
-                                sidle = DirectionEnum.Right;
-                                change = DirectionEnum.Down;
-                            }
-                            else if (startPoint == "NE")
-                            {
-                                sidle = DirectionEnum.Down;
-                                change = DirectionEnum.Left;
-                            }
-                            else if (startPoint == "SE")
-                            {
-                                sidle = DirectionEnum.Left;
-                                change = DirectionEnum.Up;
-                            }
-                            else if (startPoint == "SW")
-                            {
-                                sidle = DirectionEnum.Up;
-                                change = DirectionEnum.Right;
-                            }
-
-                            tiles[0, 0] = GetTileByPixelPosition(obj.Position);
-                            tiles[1, 0] = tiles[0, 0].GetTileByDirection(sidle);
-                            tiles[2, 0] = tiles[1, 0].GetTileByDirection(sidle);
-
-                            tiles[0, 1] = tiles[0, 0].GetTileByDirection(change);
-                            tiles[1, 1] = tiles[0, 1].GetTileByDirection(sidle);
-                            tiles[2, 1] = tiles[1, 1].GetTileByDirection(sidle);
-
-                            tiles[0, 2] = tiles[0, 1].GetTileByDirection(change);
-                            tiles[1, 2] = tiles[0, 2].GetTileByDirection(sidle);
-                            tiles[2, 2] = tiles[1, 2].GetTileByDirection(sidle);
-                            DictionaryCombatTiles[entrance] = tiles;
+                            BattleStartInfo battleInfo = new BattleStartInfo(obj, this);
+                            DictionaryBattleStarts[battleInfo.LinkedMap] = battleInfo;
                         }
                         else if (obj.Name.Equals("Shop"))
                         {
@@ -623,6 +582,26 @@ namespace RiverHollow.Tile_Engine
             SpawnResources(GetSkipTiles(loaded));
         }
 
+        public void ClearMapEntities()
+        {
+            foreach (Monster m in Monsters) { RemoveMonster(m); }
+            foreach (WorldObject obj in _liPlacedWorldObjects) {
+                switch (obj.Type)
+                {
+                    case ObjectTypeEnum.DungeonObject:
+                        if (_bModular) { goto case ObjectTypeEnum.WorldObject; }
+                        else { break; }
+                    case ObjectTypeEnum.CombatHazard:
+                    case ObjectTypeEnum.Destructible:
+                    case ObjectTypeEnum.Gatherable:
+                    case ObjectTypeEnum.Plant:
+                    case ObjectTypeEnum.WorldObject:
+                        RemoveWorldObject(obj);
+                        break;
+                }
+            }
+        }
+
         /// <summary>
         /// Call to retrieve a list of RHTiles that cannot be used to spawn resources on. These tiles
         /// are chosen due to proximity to monster spawn points, combat start tiles, and travel points.
@@ -638,9 +617,9 @@ namespace RiverHollow.Tile_Engine
 
             if (IsCombatMap)
             {
-                foreach (RHTile[,] tileArray in DictionaryCombatTiles.Values)
+                foreach (BattleStartInfo bInfo in DictionaryBattleStarts.Values)
                 {
-                    foreach (RHTile tile in tileArray)
+                    foreach (RHTile tile in bInfo.CombatTiles)
                     {
                         skipTiles.Add(tile);
                     }
@@ -662,10 +641,10 @@ namespace RiverHollow.Tile_Engine
                 {
                     foreach (MonsterSpawn spawn in MonsterSpawnPoints)
                     {
-                        foreach (KeyValuePair<string, RHTile[,]> kvp in DictionaryCombatTiles)
+                        foreach (KeyValuePair<string, BattleStartInfo> kvp in DictionaryBattleStarts)
                         {
                             Vector2 pos = spawn.Position;
-                            List<RHTile> path = TravelManager.FindPathToLocation(ref pos, kvp.Value[0, 0].Position, this.Name, false, true);
+                            List<RHTile> path = TravelManager.FindPathToLocation(ref pos, kvp.Value.CombatTiles[0, 0].Position, this.Name, false, true);
                             if (path != null)
                             {
                                 bool connected = false;
@@ -700,7 +679,10 @@ namespace RiverHollow.Tile_Engine
         {
             foreach(WorldObject obj in _liPlacedWorldObjects) { obj.Rollover(); }
 
-            SpawnMonsters();
+            if (!_bModular)
+            {
+                SpawnMonsters();
+            }
 
             CheckSpirits();
             _liItems.Clear();
@@ -2936,16 +2918,20 @@ namespace RiverHollow.Tile_Engine
         public Rectangle CollisionBox { get; private set; }
         public Point Location => CollisionBox.Location;
         string _sMapName;
+
         public string LinkedMap { get; private set; } = string.Empty;
         public Vector2 Center => CollisionBox.Center.ToVector2();
         public bool IsDoor { get; private set; }
         public bool IsActive { get; private set; } = false;
 
+        private bool _bModular = false;
+        public bool Modular => _bModular;
+
         private int _iDungeonInfoID = -1;
         public int DungeonInfoID => _iDungeonInfoID;
 
-        private int _iToCheckpoint = -1;
-        public int ToCheckpoint => _iToCheckpoint;
+        private string _sGoToMap;
+        public string GoToMap => _sGoToMap;
 
         DirectionEnum _eEntranceDir;
         public DirectionEnum Dir => _eEntranceDir;
@@ -2962,7 +2948,8 @@ namespace RiverHollow.Tile_Engine
 
             Util.AssignValue(ref _eEntranceDir, "EntranceDir", obj.Properties);
             Util.AssignValue(ref _iDungeonInfoID, "DungeonID", obj.Properties);
-            Util.AssignValue(ref _iToCheckpoint, "ToCheckpoint", obj.Properties);
+            Util.AssignValue(ref _sGoToMap, "GoTo", obj.Properties);
+            Util.AssignValue(ref _bModular, "Modular", obj.Properties);
 
             if (_iDungeonInfoID > -1) { IsActive = true; }
 
@@ -3049,8 +3036,99 @@ namespace RiverHollow.Tile_Engine
 
         public void AssignLinkedMap(string mapName)
         {
-            LinkedMap = mapName;
-            IsActive = true;
+            if (_bModular)
+            {
+                LinkedMap = mapName;
+                IsActive = true;
+            }
+        }
+
+        public void Reset()
+        {
+            if (_bModular)
+            {
+                LinkedMap = string.Empty;
+                if (MapManager.Maps[_sMapName].Modular)
+                {
+                    IsActive = false;
+                }
+            }
+        }
+    }
+
+    public class BattleStartInfo
+    {
+        public RHTile[,] CombatTiles { get; }
+        public string LinkedMap { get; private set; } = string.Empty;
+        public bool Modular { get; } = false;
+
+        public DirectionEnum Dir { get; }
+
+        public BattleStartInfo(TiledMapObject obj, RHMap currentMap)
+        {
+            if (obj.Properties.ContainsKey("Map")) { LinkedMap = obj.Properties["Map"]; }
+            else if (obj.Properties.ContainsKey("Dir")) {
+                LinkedMap = obj.Properties["Dir"];
+                Dir = Util.ParseEnum<DirectionEnum>(obj.Properties["Dir"]);
+                Modular = true;
+            }
+
+            CombatTiles = new RHTile[3,3];
+
+            string entrance = obj.Properties.ContainsKey("Map") ? obj.Properties["Map"] : obj.Properties["Dir"];
+
+            DirectionEnum sidle = DirectionEnum.Right;
+            DirectionEnum change = DirectionEnum.Down;
+
+            string startPoint = obj.Properties["Position"];
+            if (startPoint == "NW")
+            {
+                sidle = DirectionEnum.Right;
+                change = DirectionEnum.Down;
+            }
+            else if (startPoint == "NE")
+            {
+                sidle = DirectionEnum.Down;
+                change = DirectionEnum.Left;
+            }
+            else if (startPoint == "SE")
+            {
+                sidle = DirectionEnum.Left;
+                change = DirectionEnum.Up;
+            }
+            else if (startPoint == "SW")
+            {
+                sidle = DirectionEnum.Up;
+                change = DirectionEnum.Right;
+            }
+
+            CombatTiles[0, 0] = currentMap.GetTileByPixelPosition(obj.Position);
+            CombatTiles[1, 0] = CombatTiles[0, 0].GetTileByDirection(sidle);
+            CombatTiles[2, 0] = CombatTiles[1, 0].GetTileByDirection(sidle);
+
+            CombatTiles[0, 1] = CombatTiles[0, 0].GetTileByDirection(change);
+            CombatTiles[1, 1] = CombatTiles[0, 1].GetTileByDirection(sidle);
+            CombatTiles[2, 1] = CombatTiles[1, 1].GetTileByDirection(sidle);
+
+            CombatTiles[0, 2] = CombatTiles[0, 1].GetTileByDirection(change);
+            CombatTiles[1, 2] = CombatTiles[0, 2].GetTileByDirection(sidle);
+            CombatTiles[2, 2] = CombatTiles[1, 2].GetTileByDirection(sidle);
+        }
+
+        public void AssignLinkedMap(string newMap)
+        {
+            if (Modular)
+            {
+                LinkedMap = newMap;
+            }
+        }
+
+        public void Reset()
+        {
+            if (Modular)
+            {
+                LinkedMap = Util.GetEnumString(Dir);
+            }
         }
     }
 }
