@@ -615,7 +615,6 @@ namespace RiverHollow.Game_Managers
             else
             {
                 distance = ActiveCharacter.MovementSpeed;
-                if (!CanEngageWithAMonster(ActiveCharacter)) { distance *= 3; }
             }
 
             TravelManager.SetParams(ActiveCharacter.Size, ActiveCharacter);
@@ -871,11 +870,9 @@ namespace RiverHollow.Game_Managers
                 {
                     //Do not charge monsters that are not in engagement range of a player
                     bool actorIsMonster = c.IsActorType(ActorEnum.Monster);
-                    if (!actorIsMonster || (actorIsMonster && CanEngageWithAPlayer(c)))
-                    {
-                        if (dummy) { HandleChargeTick(ref c.DummyCharge, ref toQueue, c); }
-                        else { HandleChargeTick(ref c.CurrentCharge, ref toQueue, c); }
-                    }
+
+                    if (dummy) { HandleChargeTick(ref c.DummyCharge, ref toQueue, c); }
+                    else { HandleChargeTick(ref c.CurrentCharge, ref toQueue, c); }
                 }
             }
 

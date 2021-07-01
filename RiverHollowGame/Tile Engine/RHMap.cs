@@ -1281,8 +1281,11 @@ namespace RiverHollow.Tile_Engine
             }
             else if (tile.GetWorldObject() != null)
             {
-                tile.GetWorldObject().ProcessRightClick();
-                rv = true;
+                if (PlayerManager.PlayerInRange(tile.Center.ToPoint()))
+                {
+                    tile.GetWorldObject().ProcessRightClick();
+                    rv = true;
+                }
             }
 
             if (tile.ContainsProperty("Save", out string val) && val.Equals("true"))
