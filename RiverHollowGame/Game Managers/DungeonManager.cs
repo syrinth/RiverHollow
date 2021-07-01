@@ -114,14 +114,17 @@ namespace RiverHollow.Game_Managers
             List<RoomInfo> mapsInUse = new List<RoomInfo>{ firstRoom };
 
             //Kick off the recursive method
-            GrowMapFromRoom(firstRoom, 70, ref modularMaps, ref mapsInUse, ref arrDungeonMap);
+            GrowMapFromRoom(firstRoom, 65, ref modularMaps, ref mapsInUse, ref arrDungeonMap);
+
+            //startingMap.DictionaryTravelPoints.Values.ToList().Find(x => x.Modular).Dir; 
 
             //Connect the start and end rooms to the generated dungeon map
-            ConnectTerminalMap(startingMap, DirectionEnum.Up,mapsInUse, arrDungeonMap);
-            ConnectTerminalMap(targetMap, DirectionEnum.Down, mapsInUse, arrDungeonMap);
+            ConnectTerminalMap(startingMap, Util.GetOppositeDirection(pt.Dir), mapsInUse, arrDungeonMap);
+            ConnectTerminalMap(targetMap, pt.Dir, mapsInUse, arrDungeonMap);
 
+            //For each map, assign the information needed to spawn resources, and monsters
+            //then handle the entrances, and spawn themap entities.
             Dictionary<string, string> dungeonInfo = DataManager.GetDungeonInfo(pt.DungeonInfoID);
-            //For each map, create the entrance objects and spawn entities
             foreach (RoomInfo rmInfo in mapsInUse)
             {
                 rmInfo.Map.AssignResourceSpawns("20-40", dungeonInfo["ObjectID"]);
@@ -137,7 +140,8 @@ namespace RiverHollow.Game_Managers
         }
 
         /// <summary>
-        /// Recursive function used to grow the Dungeon Map from a single start location
+        /// Procedural function used to grow the Dungeon Map. Using a do/while loop to
+        /// proof it against the possibility of having a map with too few rooms
         /// </summary>
         /// <param name="rmInfo">The roomInfo to run this iteration on</param>
         /// <param name="chancePerEntrance">The chance to propogate an entrance</param>
@@ -147,52 +151,61 @@ namespace RiverHollow.Game_Managers
         private void GrowMapFromRoom(RoomInfo rmInfo, int chancePerEntrance, ref List<RoomInfo> modularMaps, ref List<RoomInfo> mapsInUse, ref RoomInfo[,] dungeonMap)
         {
             List<RoomInfo> roomQueue = new List<RoomInfo>();
-            List<TravelPoint> pointsToConnect = new List<TravelPoint>();
 
-            Vector2 roomCoordinates = rmInfo.Coordinates;
-            //Because we are modifying the Dictionary of TravelPoints, we need to first determine
-            //which TravelPoints will be used and act on that list separately.
-            foreach (TravelPoint pt in rmInfo.Map.DictionaryTravelPoints.Values)
+            do
             {
-                //Do a string empty check to ensure that we don't overwrite a connected map
-                if (RHRandom.Instance().Next(1, 100) <= chancePerEntrance && string.IsNullOrEmpty(pt.LinkedMap))
+                List<TravelPoint> pointsToConnect = new List<TravelPoint>();
+
+                Vector2 roomCoordinates = rmInfo.Coordinates;
+                //Because we are modifying the Dictionary of TravelPoints, we need to first determine
+                //which TravelPoints will be used and act on that list separately.
+                foreach (TravelPoint pt in rmInfo.Map.DictionaryTravelPoints.Values)
                 {
-                    Vector2 newCoords = roomCoordinates + GetDirectionCoordinates(pt.Dir);
-                    if (AreCoordinatesValid(newCoords))
+                    //Do a string empty check to ensure that we don't overwrite a connected map
+                    if (RHRandom.Instance().Next(1, 100) <= chancePerEntrance && string.IsNullOrEmpty(pt.LinkedMap))
                     {
-                        pointsToConnect.Add(pt);
+                        Vector2 newCoords = roomCoordinates + GetDirectionCoordinates(pt.Dir);
+                        if (AreCoordinatesValid(newCoords))
+                        {
+                            pointsToConnect.Add(pt);
+                        }
                     }
                 }
-            }
 
-            foreach (TravelPoint pt in pointsToConnect)
-            {
-                RoomInfo room;
-
-                //Update the coordinates of the new room, relative to the coordinates of the room it is now attached to.
-                //This will overwrite if a room gets attached to multiple times, but they should all be in sync
-                Vector2 newCoords = roomCoordinates + GetDirectionCoordinates(pt.Dir);
-                if (dungeonMap[(int)newCoords.X, (int)newCoords.Y] != null) { room = dungeonMap[(int)newCoords.X, (int)newCoords.Y]; }
-                else
+                foreach (TravelPoint pt in pointsToConnect)
                 {
-                    room = RetrieveRandomRoomInfo(ref modularMaps);
-                    room.SetCoordinates(newCoords);
-                    mapsInUse.Add(room);
-                    dungeonMap[(int)newCoords.X, (int)newCoords.Y] = room;
-                    _iCurrentLevelSize++;
+                    RoomInfo room;
+
+                    //Update the coordinates of the new room, relative to the coordinates of the room it is now attached to.
+                    //This will overwrite if a room gets attached to multiple times, but they should all be in sync
+                    Vector2 newCoords = roomCoordinates + GetDirectionCoordinates(pt.Dir);
+                    if (dungeonMap[(int)newCoords.X, (int)newCoords.Y] != null) { room = dungeonMap[(int)newCoords.X, (int)newCoords.Y]; }
+                    else
+                    {
+                        room = RetrieveRandomRoomInfo(ref modularMaps);
+                        room.SetCoordinates(newCoords);
+                        mapsInUse.Add(room);
+                        dungeonMap[(int)newCoords.X, (int)newCoords.Y] = room;
+                        _iCurrentLevelSize++;
+                    }
+
+                    ConnectMaps(rmInfo.Map, room.Map, pt.Dir);
+
+                    if (_iCurrentLevelSize == MAX_DUNGEON) { return; }
+                    else { roomQueue.Add(room); }
                 }
 
-                ConnectMaps(rmInfo.Map, room.Map, pt.Dir);
-
-                if (_iCurrentLevelSize == MAX_DUNGEON) { return; }
-                else { roomQueue.Add(room); }
-            }
-
-            foreach (RoomInfo r in roomQueue)
-            {
-                if (_iCurrentLevelSize == MAX_DUNGEON) { return; }
-                else { GrowMapFromRoom(r, chancePerEntrance, ref modularMaps, ref mapsInUse, ref dungeonMap); }
-            }
+                if (roomQueue.Count > 0) {
+                    rmInfo = roomQueue[0];
+                    roomQueue.RemoveAt(0);
+                }
+                else
+                {
+                    //If we've run out of rooms in the queue pick a random room out of the list of used rooms and try again
+                    rmInfo = mapsInUse[RHRandom.Instance().Next(mapsInUse.Count)];
+                }
+                
+            } while (_iCurrentLevelSize < MAX_DUNGEON);
         }
 
         /// <summary>
