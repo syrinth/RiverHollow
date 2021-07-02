@@ -2113,7 +2113,7 @@ namespace RiverHollow.Characters
                 RHMap map = MapManager.Maps[mapName];
 
                 string strSpawn = string.Empty;
-                if (IsHomeBuilt() || GetSpawnMapName() == MapManager.HomeMap) { strSpawn = "NPC_" + _iIndex.ToString("00"); }
+                if (IsHomeBuilt() || GetSpawnMapName() == MapManager.HomeMapName) { strSpawn = "NPC_" + _iIndex.ToString("00"); }
                 else if(GameManager.VillagersInTheInn < 3){ strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
 
                 Position = Util.SnapToGrid(map.GetCharacterSpawn(strSpawn));
@@ -2538,7 +2538,7 @@ namespace RiverHollow.Characters
         {
             _bOnTheMap = true;
 
-            CurrentMapName = MapManager.HomeMap;
+            CurrentMapName = MapManager.HomeMapName;
             MapManager.Maps[CurrentMapName].AddCharacterImmediately(this);
 
             Position = Util.SnapToGrid(GameManager.MarketPosition);

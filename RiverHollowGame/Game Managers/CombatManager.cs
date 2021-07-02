@@ -395,8 +395,7 @@ namespace RiverHollow.Game_Managers
             else if (!partyUp)
             {
                 rv = true;
-                Unpause();
-                //ChangePhase(PhaseEnum.Defeat);
+                ChangePhase(CmbtPhaseEnum.DisplayDefeat);
             }
 
             return rv;
@@ -441,6 +440,26 @@ namespace RiverHollow.Game_Managers
             PlayerManager.AllowMovement = true;
             PlayerManager.World.ClearPath();
             GoToHUDScreen();
+        }
+
+        /// <summary>
+        /// Called when the Battle ends in escape.
+        /// We need to re-enable movement as it's locked down in combat
+        /// </summary>
+        public static void EndCombatDefeat()
+        {
+            InCombat = false;
+            MapManager.CurrentMap.CleanupSummons();
+            Camera.SetObserver(PlayerManager.World);
+            //PlayerManager.AllowMovement = true;
+            PlayerManager.World.ClearPath();
+
+            //Give the player back 1 hp
+            PlayerManager.World.ClearConditions();
+            PlayerManager.World.ModifyHealth(1, false);
+            GoToHUDScreen();
+
+            MapManager.FadeToNewMap(MapManager.HomeMap, MapManager.HomeMap.GetCharacterSpawn("PlayerSpawn"));
         }
         #endregion
 

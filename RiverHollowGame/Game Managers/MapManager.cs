@@ -30,7 +30,8 @@ namespace RiverHollow.Game_Managers
             }
         }//[Friends:1-30]
 
-        public const string HomeMap = "mapTown";
+        public const string HomeMapName = "mapTown";
+        public static RHMap HomeMap => Maps[HomeMapName];
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
         public static string SpawnMap { get; private set; }
@@ -189,8 +190,8 @@ namespace RiverHollow.Game_Managers
             {
                 map.PopulateMap(loaded);
             }
-            int mapWidth = Maps[MapManager.HomeMap].MapWidthTiles;
-            int mapHeight = Maps[MapManager.HomeMap].MapHeightTiles;
+            int mapWidth = Maps[MapManager.HomeMapName].MapWidthTiles;
+            int mapHeight = Maps[MapManager.HomeMapName].MapHeightTiles;
             RHRandom rand = RHRandom.Instance();
 
             if (!loaded)
@@ -202,7 +203,7 @@ namespace RiverHollow.Game_Managers
                 int stumpID = int.Parse(DataManager.Config[12]["ObjectID"]);
                 int clayID = int.Parse(DataManager.Config[13]["ObjectID"]);
 
-                List <RHTile> possibleTiles = Maps[MapManager.HomeMap].TileList;
+                List <RHTile> possibleTiles = Maps[MapManager.HomeMapName].TileList;
                 possibleTiles.RemoveAll(x => !x.Passable() || x.Flooring != null);
 
                 PopulateHomeMapHelper(ref possibleTiles, bigRockID, 10);
@@ -221,7 +222,7 @@ namespace RiverHollow.Game_Managers
             {
                 RHTile targetTile = possibleTiles[rand.Next(0, possibleTiles.Count - 1)];
                 WorldObject obj = DataManager.GetWorldObjectByID(ID);
-                obj.PlaceOnMap(targetTile.Position, MapManager.Maps[HomeMap]);
+                obj.PlaceOnMap(targetTile.Position, MapManager.Maps[HomeMapName]);
                 if (obj.CompareType(ObjectTypeEnum.Plant))
                 {
                     ((Plant)obj).FinishGrowth();

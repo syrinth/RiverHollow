@@ -20,8 +20,7 @@ namespace RiverHollow.GUIComponents.Screens
 {
     public class CombatScreen : GUIScreen
     {
-        GUIButton _btnMoveCamera;
-        GUIButton _btnCancelScry;
+        GUIButton _btnAcceptDefeat;
         ActionSelectObject _gActionSelect;
         TurnOrderDisplay _gTurnOrder;
         GUIActorInfoPanel _gActorInfoPanel;
@@ -39,16 +38,6 @@ namespace RiverHollow.GUIComponents.Screens
             _gTurnOrder = new TurnOrderDisplay();
             _gTurnOrder.AnchorToScreen(SideEnum.Top);
             AddControl(_gTurnOrder);
-
-            _btnMoveCamera = new GUIButton(new Rectangle(80, 80, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, ScryCombat);
-            _btnMoveCamera.AnchorToScreen(SideEnum.BottomRight);
-            _btnMoveCamera.Show(false);
-            AddControl(_btnMoveCamera);
-
-            _btnCancelScry = new GUIButton(new Rectangle(80, 48, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, EndCombatScry);
-            _btnCancelScry.AnchorToScreen(SideEnum.BottomRight);
-            _btnCancelScry.Show(false);
-            AddControl(_btnCancelScry);
         }
 
         public override void Update(GameTime gTime)
@@ -74,11 +63,24 @@ namespace RiverHollow.GUIComponents.Screens
                     break;
 
                 case CombatManager.CmbtPhaseEnum.DisplayDefeat:
-                    GUITextWindow window = new GUITextWindow(DataManager.GetGameTextEntry("Defeated"));
+                    GUIWindow window = new GUIWindow();
                     window.CenterOnScreen();
                     AddControl(window);
+
+                    _btnAcceptDefeat = new GUIButton("OK", AcceptDefeat);
+                    _btnAcceptDefeat.AnchorToInnerSide(window, SideEnum.Bottom);
+
+
+                    GUIText text = new GUIText(DataManager.GetGameTextEntry("Defeat").FormattedText);
+                    text.AnchorToInnerSide(window, SideEnum.Top);
                     break;
             }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+            _gActorInfoPanel?.Draw(spriteBatch);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -86,9 +88,7 @@ namespace RiverHollow.GUIComponents.Screens
             bool rv = false;
 
             if (_guiTextWindow != null) { rv = _guiTextWindow.ProcessLeftButtonClick(mouse); }
-
-            if (_btnMoveCamera.Show()) { rv = _btnMoveCamera.ProcessLeftButtonClick(mouse); }
-            else if (_btnCancelScry.Show()) { rv = _btnCancelScry.ProcessLeftButtonClick(mouse); }
+            if (_btnAcceptDefeat != null) { rv = _btnAcceptDefeat.ProcessLeftButtonClick(mouse); }
 
             if (!rv)
             {
@@ -141,18 +141,12 @@ namespace RiverHollow.GUIComponents.Screens
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = true;
-            if (Scrying()) { EndCombatScry(); }
 
             if (CombatManager.CanCancel())
             {
                 CancelAction();
             }
             return rv;
-        }
-
-        public void CancelAction()
-        {
-            _gActionSelect.CancelAction();
         }
 
         public override bool ProcessHover(Point mouse)
@@ -162,7 +156,7 @@ namespace RiverHollow.GUIComponents.Screens
             RHTile hoverTile = MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition());
             if (hoverTile?.Character != null)
             {
-                if(_gActorInfoPanel?.Character != hoverTile.Character)
+                if (_gActorInfoPanel?.Character != hoverTile.Character)
                 {
                     _gActorInfoPanel = new GUIActorInfoPanel(hoverTile.Character);
                     _gActorInfoPanel.AnchorToScreen(SideEnum.BottomRight);
@@ -173,17 +167,22 @@ namespace RiverHollow.GUIComponents.Screens
                 _gActorInfoPanel = null;
             }
 
-            if (!rv && _gActionSelect != null) {
+            if (!rv && _gActionSelect != null)
+            {
                 rv = _gActionSelect.ProcessHover(mouse);
             }
 
             return rv;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public void AcceptDefeat()
         {
-            base.Draw(spriteBatch);
-            _gActorInfoPanel?.Draw(spriteBatch);
+            CombatManager.EndCombatDefeat();
+        }
+
+        public void CancelAction()
+        {
+            _gActionSelect.CancelAction();
         }
 
         /// <summary>
@@ -206,8 +205,6 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 _gActionSelect = new ActionSelectObject();
                 AddControl(_gActionSelect);
-
-                AddMoveButton();
             }
         }
         public void CloseMainSelection()
@@ -216,9 +213,6 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 RemoveControl(_gActionSelect);
                 _gActionSelect = null;
-
-                AddCancelMoveButton();
-                _btnCancelScry.Show(false);
             }
         }
 
@@ -227,32 +221,6 @@ namespace RiverHollow.GUIComponents.Screens
             _gActionSelect?.Show(false);
         }
         #endregion
-
-        private void ScryCombat()
-        {
-            CloseMainSelection();
-            GameManager.Scry();
-            Camera.UnsetObserver(CombatManager.ActiveCharacter.CharCenter.ToVector2() * Scale);
-            _btnCancelScry.Show(true);
-        }
-
-        private void EndCombatScry()
-        {
-            OpenMainSelection();
-            GameManager.Scry(false);          
-        }
-
-        private void AddMoveButton()
-        {
-            _btnMoveCamera.Show(true);
-            _btnCancelScry.Show(false);
-        }
-
-        private void AddCancelMoveButton()
-        {
-            _btnMoveCamera.Show(false);
-            _btnCancelScry.Show(true);
-        }
 
         #region FloatingText Handling
         /// <summary>

@@ -69,6 +69,7 @@ namespace RiverHollow.Game_Managers
 
     public class Dungeon
     {
+        const int ENCOUNTER_RATE = 7;
         const int MAP_DIMENSIONS = 7;
         const int MIN_DUNGEON = 7;
         const int MAX_DUNGEON = 12;
@@ -135,7 +136,7 @@ namespace RiverHollow.Game_Managers
                 }
 
                 HandleEntrances(rmInfo.Map);
-                rmInfo.Map.SpawnMapEntities();
+                rmInfo.Map.SpawnMapEntities(RHRandom.Instance().Next(10) < ENCOUNTER_RATE);
             }
         }
 

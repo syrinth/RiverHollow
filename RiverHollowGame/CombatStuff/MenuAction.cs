@@ -285,6 +285,7 @@ namespace RiverHollow.CombatStuff
         /// </summary>
         public void AssignTargetTile(RHTile target)
         {
+            ClearTargets();
             TileTargetList.Add(target);
             TileTargetList.AddRange(DetermineTargetTiles(target));
         }
@@ -701,14 +702,6 @@ namespace RiverHollow.CombatStuff
         {
             switch (_liActionTags[_iCurrentAction])
             {
-                case "Escape":
-                    {
-                        int spd = CombatManager.ActiveCharacter.StatSpd;
-                        if (RHRandom.Instance().Next(1, 20) + spd/2 > 15){
-                            CombatManager.EndCombatEscape();
-                        }
-                        break;
-                    }
                 case "UserAttack":
                     foreach (RHTile tile in TileTargetList)
                     {

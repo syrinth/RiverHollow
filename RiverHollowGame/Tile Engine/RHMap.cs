@@ -576,9 +576,9 @@ namespace RiverHollow.Tile_Engine
             SpawnMapEntities();
         }
 
-        public void SpawnMapEntities(bool loaded = false)
+        public void SpawnMapEntities(bool spawnmonsters = true,  bool loaded = false)
         {
-            SpawnMonsters();
+            if (spawnmonsters) { SpawnMonsters(); }
             SpawnResources(GetSkipTiles(loaded));
         }
 
@@ -2945,7 +2945,7 @@ namespace RiverHollow.Tile_Engine
             CollisionBox = Util.FloatRectangle(obj.Position, obj.Size.Width, obj.Size.Height);
             if (obj.Properties.ContainsKey("Map"))
             {
-                LinkedMap = obj.Properties["Map"] == "Home" ? MapManager.HomeMap : obj.Properties["Map"];
+                LinkedMap = obj.Properties["Map"] == "Home" ? MapManager.HomeMapName : obj.Properties["Map"];
                 IsActive = true;
             }
 
