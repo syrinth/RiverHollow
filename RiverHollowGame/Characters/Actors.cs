@@ -943,6 +943,10 @@ namespace RiverHollow.Characters
 
                 if (MaxMP > 0)
                 {
+                    totalWidth = TileSize * Size;
+                    percent = (double)CurrentMP / (double)MaxMP;
+                    drawWidth = Math.Max((int)(totalWidth * percent), 2);
+
                     pos.Y += 4;
                     DrawDisplayBar(spriteBatch, pos, texture, drawWidth, (int)totalWidth, 22, 0);
                 }
