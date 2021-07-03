@@ -29,6 +29,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "SaveFile")]
             public string saveFile;
 
+            [XmlElement(ElementName = "TimeStamp")]
+            public DateTime timeStamp;
+
             [XmlElement(ElementName = "SaveID")]
             public long saveID;
 
@@ -647,6 +650,7 @@ namespace RiverHollow.Game_Managers
             SaveInfoData infoData = new SaveInfoData()
             {
                 saveFile = String.Format(@"{0}\{1}", saveFolder, saveName),
+                timeStamp = DateTime.Now,
                 saveID = data.saveID,
                 Calendar = data.Calendar,
                 playerData = data.playerData

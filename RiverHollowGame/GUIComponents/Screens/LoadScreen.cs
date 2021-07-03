@@ -21,8 +21,9 @@ namespace RiverHollow.GUIComponents.Screens
             _btnBack = new GUIButton("Back", BtnBack);
             _liDataWindows = new List<GUIObject>();
             _liData = SaveManager.LoadFiles();
+            _liData.Sort((x, y) => y.timeStamp.CompareTo(x.timeStamp));
 
-            foreach(SaveInfoData data in _liData)
+            foreach (SaveInfoData data in _liData)
             {
                 SaveWindow s = new SaveWindow(data, _liData.IndexOf(data), RefreshScreen);
                 //AddControl(s);
@@ -77,6 +78,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             GUIButton _gDelete;
             GUIText _gName;
+            GUIText _gTimeStamp;
             GUIText _gDate;
             public SaveInfoData Data { get; }
 
@@ -105,6 +107,9 @@ namespace RiverHollow.GUIComponents.Screens
 
                 _gDate = new GUIText("Day: " + data.Calendar.dayOfMonth.ToString("00") + ", " + GameCalendar.GetSeason(data.Calendar.currSeason));
                 _gDate.AnchorToInnerSide(this, SideEnum.BottomLeft, GUIManager.STANDARD_MARGIN);
+
+                _gTimeStamp = new GUIText(data.timeStamp.ToUniversalTime().ToString());
+                _gTimeStamp.AnchorAndAlignToObject(_gDelete, SideEnum.Left, SideEnum.Bottom);
 
                 _delAction = del;
             }
