@@ -10,7 +10,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
     {
         protected GUIItemBox[,] _gItemBoxes;
 
-        protected int _iBoxSize = GUIItemBox.RECT_IMG.Width * (int)GameManager.Scale;
+        protected int _iBoxSize = GUIItemBox.RECT_IMG.Width * (int)GameManager.CurrentScale;
 
         protected int _columns;
         protected int _rows;

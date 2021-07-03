@@ -114,11 +114,11 @@ namespace RiverHollow.GUIComponents.Screens
                         //If we're going to another row, set the flag
                         if(TileCheck(spr, ref _iCurrRow)) { _bNextRow = true; }
 
-                        spr.SetScale(GameManager.Scale);
+                        spr.SetScale(GameManager.CurrentScale);
 
                         if (_bNextRow) {
                             _bNextRow = false;
-                            spr.AnchorAndAlignToObject(_gResults, SideEnum.Top, SideEnum.Left, (int)((_iRows - _iCurrRow) * GameManager.TileSize * GameManager.Scale)); }
+                            spr.AnchorAndAlignToObject(_gResults, SideEnum.Top, SideEnum.Left, (int)((_iRows - _iCurrRow) * GameManager.TILE_SIZE * GameManager.CurrentScale)); }
                         else {
                             spr.AnchorAndAlignToObject(_liMonsters[_liMonsters.Count - 1], SideEnum.Right, SideEnum.Bottom);
                         }
@@ -147,11 +147,11 @@ namespace RiverHollow.GUIComponents.Screens
         {
             bool rv = false;
 
-            _iTotalTiles += (spr.Width / GameManager.TileSize);
+            _iTotalTiles += (spr.Width / GameManager.TILE_SIZE);
             if (_iTotalTiles > MAX_TILES)
             {
                 rv = true;
-                _iTotalTiles = (spr.Width / GameManager.TileSize);
+                _iTotalTiles = (spr.Width / GameManager.TILE_SIZE);
                 toIncrement++;
             }
 

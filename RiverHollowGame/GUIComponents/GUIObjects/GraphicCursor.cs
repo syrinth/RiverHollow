@@ -40,7 +40,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, TileSize * 2, TileSize * 2);
+            Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, TILE_SIZE * 2, TILE_SIZE * 2);
 
             if (_eCursorType == CursorTypeEnum.Normal) { Alpha = 1; }
             else { Alpha = (PlayerManager.PlayerInRange(_rCollisionRectangle)) ? 1 : 0.5f; }
@@ -92,8 +92,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             Vector3 translate = Camera._transform.Translation;
             Vector2 mousePoint = Vector2.Zero;
-            mousePoint.X = (int)((Position.X - translate.X) / Scale);
-            mousePoint.Y = (int)((Position.Y - translate.Y) / Scale);
+            mousePoint.X = (int)((Position.X - translate.X) / CurrentScale);
+            mousePoint.Y = (int)((Position.Y - translate.Y) / CurrentScale);
 
             return mousePoint;
         }

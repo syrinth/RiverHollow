@@ -174,7 +174,7 @@ namespace RiverHollow.Misc
                 {
                     foreach (string i in _diTags["RequiredBuildingID"].Split('-'))
                     {
-                        if (!GameManager.DIBuildInfo[int.Parse(i)].Built) { return false; }
+                        if (!PlayerManager.DIBuildInfo[int.Parse(i)].Built) { return false; }
                     }
 
                     rv = true;
@@ -218,7 +218,7 @@ namespace RiverHollow.Misc
             }
             if (_diTags.ContainsKey("UnlockBuildingID"))
             {
-                GameManager.DIBuildInfo[int.Parse(_diTags["UnlockBuildingID"])].Unlock();
+                PlayerManager.DIBuildInfo[int.Parse(_diTags["UnlockBuildingID"])].Unlock();
             }
             if (_diTags.ContainsKey("UnlockItemID"))
             {

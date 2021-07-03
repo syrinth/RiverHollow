@@ -8,7 +8,6 @@ using RiverHollow.Items;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Items.Buildable;
 using RiverHollow.Utilities;
 
 namespace RiverHollow.Buildings
@@ -126,7 +125,7 @@ namespace RiverHollow.Buildings
             int startY = 0;
 
             _sprite = new AnimatedSprite(textureName);
-            for (int i = 1; i <= MaxBldgLevel; i++)
+            for (int i = 1; i <= MAX_BUILDING_LEVEL; i++)
             {
                 _sprite.AddAnimation(i.ToString(), startX, startY, _iSpriteWidth, _iSpriteHeight);
                 startX += _iSpriteWidth;
@@ -177,7 +176,7 @@ namespace RiverHollow.Buildings
         {
             bool rv = false;
 
-            pos = new Vector2(pos.X - (_iBaseXOffset * TileSize), pos.Y - (_iBaseYOffset * TileSize));
+            pos = new Vector2(pos.X - (_iBaseXOffset * TILE_SIZE), pos.Y - (_iBaseYOffset * TILE_SIZE));
             SnapPositionToGrid(pos);
 
             if (map.TestMapTiles(this, Tiles))
@@ -213,7 +212,7 @@ namespace RiverHollow.Buildings
         /// </summary>
         public void Upgrade()
         {
-            if (Level + 1 <= MaxBldgLevel)
+            if (Level + 1 <= MAX_BUILDING_LEVEL)
             {
                 Level++;
             }

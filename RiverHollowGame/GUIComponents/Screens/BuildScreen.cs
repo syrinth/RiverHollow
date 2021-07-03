@@ -156,7 +156,7 @@ namespace RiverHollow.GUIComponents.Screens
                         GenerateConstructBoxes(DataManager.StructureIDs);
                         break;
                     case ObjectTypeEnum.Building:
-                        foreach (BuildInfo b in GameManager.DIBuildInfo.Values)
+                        foreach (BuildInfo b in PlayerManager.DIBuildInfo.Values)
                         {
                             if (b.Unlocked && !b.Built)
                             {
@@ -215,8 +215,8 @@ namespace RiverHollow.GUIComponents.Screens
                 if (_eObjectBuildType == ObjectTypeEnum.Building)
                 {
                     obj = DataManager.GetBuilding(objID);
-                    requiredToMake = GameManager.DIBuildInfo[objID].RequiredToMake;
-                    name = GameManager.DIBuildInfo[objID].Name;
+                    requiredToMake = PlayerManager.DIBuildInfo[objID].RequiredToMake;
+                    name = PlayerManager.DIBuildInfo[objID].Name;
                 }
                 else
                 {

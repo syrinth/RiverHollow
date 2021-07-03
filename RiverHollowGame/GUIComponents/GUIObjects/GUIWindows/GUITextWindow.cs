@@ -154,7 +154,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 TalkingActor talker = GameManager.CurrentNPC;
                 talker.DeQueueActorFace();
                 _giPortrait = new GUIImage(talker.GetPortraitRectangle(), talker.GetPortraitRectangle().Width, talker.GetPortraitRectangle().Height, talker.Portrait);
-                _giPortrait.SetScale(GameManager.Scale);
+                _giPortrait.SetScale(GameManager.CurrentScale);
                 _giPortrait.AnchorToInnerSide(this, SideEnum.Left);
                 _giPortrait.AnchorToObject(this, SideEnum.Top);
                 AddControl(_giPortrait);
@@ -308,11 +308,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 if (_iCurrText < _liTextPages.Count - 1)
                 {
-                    _gNext = new GUIImage(new Rectangle(288, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
+                    _gNext = new GUIImage(new Rectangle(288, 64, GameManager.TILE_SIZE, GameManager.TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
                 }
                 else
                 {
-                    _gNext = new GUIImage(new Rectangle(304, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
+                    _gNext = new GUIImage(new Rectangle(304, 64, GameManager.TILE_SIZE, GameManager.TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
                 }
                 _gNext.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.Bottom);
             }

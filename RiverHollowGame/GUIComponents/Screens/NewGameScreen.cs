@@ -399,7 +399,7 @@ namespace RiverHollow.GUIComponents.Screens
             private ClickDelegate _delClassAction;
             public delegate void ClickDelegate(ClassSelector obj);
 
-            public ClassSelector(int classID, ClickDelegate del) : base(new Rectangle(0 + (classID * TileSize), 112, TileSize, TileSize), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE)
+            public ClassSelector(int classID, ClickDelegate del) : base(new Rectangle(0 + (classID * TILE_SIZE), 112, TILE_SIZE, TILE_SIZE), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE)
             {
                 ClassID = classID;
                 _delClassAction = del;

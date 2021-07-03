@@ -264,7 +264,7 @@ namespace RiverHollow.Misc
 
             if(_iUnlockBuildingID != -1)
             {
-                GameManager.DIBuildInfo[_iUnlockBuildingID].Unlock();
+                PlayerManager.DIBuildInfo[_iUnlockBuildingID].Unlock();
             }
 
             if (_iActivateID > -1)
@@ -322,7 +322,7 @@ namespace RiverHollow.Misc
                         rv = _questMob.Name + " Defeated: " + TargetsAccomplished + "/" + RequiredItemAmount;
                         break;
                     case TaskTypeEnum.Build:
-                        rv = "Build " + GameManager.DIBuildInfo[_iTargetBuildingID].Name;
+                        rv = "Build " + PlayerManager.DIBuildInfo[_iTargetBuildingID].Name;
                         break;
                     case TaskTypeEnum.Talk:
                         rv = "Speak to " + GoalNPC.Name;

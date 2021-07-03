@@ -45,9 +45,9 @@ namespace RiverHollow.Items
         protected Vector2 _vMapPosition;
         public virtual Vector2 MapPosition => _vMapPosition;
 
-        protected int _iSpriteWidth = TileSize;
+        protected int _iSpriteWidth = TILE_SIZE;
         public int Width => _iSpriteWidth;
-        protected int _iSpriteHeight = TileSize;
+        protected int _iSpriteHeight = TILE_SIZE;
         public int Height => _iSpriteHeight;
 
         protected int _iBaseWidth = 1;
@@ -62,7 +62,7 @@ namespace RiverHollow.Items
         public Rectangle ClickBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _iSpriteWidth, _iSpriteHeight);
 
         //Base is always described in # of Tiles so we must multiply by the TileSize
-        public Rectangle CollisionBox => Util.FloatRectangle(MapPosition.X + (_iBaseXOffset * TileSize), MapPosition.Y + (_iBaseYOffset * TileSize), (_iBaseWidth * TileSize), (_iBaseHeight * TileSize));
+        public Rectangle CollisionBox => Util.FloatRectangle(MapPosition.X + (_iBaseXOffset * TILE_SIZE), MapPosition.Y + (_iBaseYOffset * TILE_SIZE), (_iBaseWidth * TILE_SIZE), (_iBaseHeight * TILE_SIZE));
 
         protected int _iID;
         public int ID  => _iID;
@@ -159,7 +159,8 @@ namespace RiverHollow.Items
 
         public virtual bool PlaceOnMap(Vector2 pos, RHMap map)
         {
-            pos = new Vector2(pos.X - (_iBaseXOffset * TileSize), pos.Y - (_iBaseYOffset * TileSize));
+            if (map == MapManager.HomeMap) { PlayerManager.AddToTownObjects(_iID); }
+            pos = new Vector2(pos.X - (_iBaseXOffset * TILE_SIZE), pos.Y - (_iBaseYOffset * TILE_SIZE));
             SnapPositionToGrid(pos);
             return map.PlaceWorldObject(this);
         }
@@ -213,11 +214,11 @@ namespace RiverHollow.Items
         /// <param name="mousePosition">The current mousePosition</param>
         public void SetPickupOffset(Vector2 mousePosition)
         {
-            int xOffset = (Width > TileSize) ? (int)(mousePosition.X - _sprite.Position.X) : 0;
-            int yOffset = (Height > TileSize) ? (int)(mousePosition.Y - _sprite.Position.Y) : 0;
+            int xOffset = (Width > TILE_SIZE) ? (int)(mousePosition.X - _sprite.Position.X) : 0;
+            int yOffset = (Height > TILE_SIZE) ? (int)(mousePosition.Y - _sprite.Position.Y) : 0;
 
-            xOffset = (xOffset / TileSize) * TileSize;
-            yOffset = (yOffset / TileSize) * TileSize;
+            xOffset = (xOffset / TILE_SIZE) * TILE_SIZE;
+            yOffset = (yOffset / TILE_SIZE) * TILE_SIZE;
             PickupOffset = new Vector2(xOffset, yOffset);
             
         }
@@ -230,8 +231,8 @@ namespace RiverHollow.Items
         {
             int xOffset = (_iBaseWidth > 1) ? (_iBaseWidth - 1) / 2 : 0;
             int yOffset = (_iBaseHeight > 1) ? (_iBaseHeight -1) / 2 : 0;
-            PickupOffset = new Vector2((_iBaseXOffset + xOffset) * TileSize, (_iBaseYOffset + yOffset) * TileSize);
-            PickupOffset = (PickupOffset / TileSize) * TileSize;
+            PickupOffset = new Vector2((_iBaseXOffset + xOffset) * TILE_SIZE, (_iBaseYOffset + yOffset) * TILE_SIZE);
+            PickupOffset = (PickupOffset / TILE_SIZE) * TILE_SIZE;
         }
 
         public List<Item> GetDroppedItems()
@@ -303,7 +304,7 @@ namespace RiverHollow.Items
             if (loadSprite && stringData.ContainsKey("DestructionAnim"))
             {
                 string[] splitString = stringData["DestructionAnim"].Split('-');
-                _sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), TileSize, TileSize, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
+                _sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), TILE_SIZE, TILE_SIZE, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
             }
         }
 
@@ -387,7 +388,7 @@ namespace RiverHollow.Items
             _bWalkable = true;
 
             _iCurrentState = 0;
-            _iBaseYOffset = (_iSpriteHeight / TileSize) - 1;
+            _iBaseYOffset = (_iSpriteHeight / TILE_SIZE) - 1;
 
             Util.AssignValue(ref _iSeedID, "SeedID", stringData);
             Util.AssignValue(ref _iResourceID, "Item", stringData);
@@ -400,7 +401,7 @@ namespace RiverHollow.Items
             for (int j = 0; j < _iMaxStates - 1; j++)
             {
                 _diTransitionTimes.Add(j, int.Parse(dayStr[j]));
-                _sprite.AddAnimation((j + 1).ToString(), _pImagePos.X + (TileSize * (j+1)), _pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                _sprite.AddAnimation((j + 1).ToString(), _pImagePos.X + (TILE_SIZE * (j+1)), _pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
             }
             _iDaysLeft = _diTransitionTimes[0];
 
@@ -419,7 +420,7 @@ namespace RiverHollow.Items
             _sprite.AddAnimation(0.ToString(), (int)_pImagePos.X, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
             for (int j = 1; j < _diTransitionTimes.Count + 1; j++)
             {
-                _sprite.AddAnimation(j.ToString(), (int)_pImagePos.X + (TileSize * j), (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                _sprite.AddAnimation(j.ToString(), (int)_pImagePos.X + (TILE_SIZE * j), (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
             }
         }
 
@@ -613,7 +614,7 @@ namespace RiverHollow.Items
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
         {
             base.LoadSprite(stringData, textureName);
-            _sprite.AddAnimation(AnimationEnum.Action_One, _pImagePos.X + TileSize, _pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+            _sprite.AddAnimation(AnimationEnum.Action_One, _pImagePos.X + TILE_SIZE, _pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
         }
 
         public bool Charge() {
@@ -699,7 +700,7 @@ namespace RiverHollow.Items
         protected bool _bSelected = false;
 
         protected Buildable(int id) : base(id) {
-            _iBaseYOffset = (_iSpriteHeight / TileSize) - BaseHeight;
+            _iBaseYOffset = (_iSpriteHeight / TILE_SIZE) - BaseHeight;
         }
 
         protected override void LoadDictionaryData(Dictionary<string, string> stringData, bool loadSprite = true)
@@ -910,7 +911,7 @@ namespace RiverHollow.Items
                 LoadDictionaryData(stringData);
                 PlayerManager.PlayerMailbox = this;
 
-                _iBaseYOffset = (_iSpriteHeight / TileSize) - BaseHeight;
+                _iBaseYOffset = (_iSpriteHeight / TILE_SIZE) - BaseHeight;
             }
 
             public override void Update(GameTime gTime)
@@ -961,8 +962,8 @@ namespace RiverHollow.Items
                 if (_liCurrentMessages.Count > 0)
                 {
                     _alertSprite = new AnimatedSprite(DataManager.DIALOGUE_TEXTURE);
-                    _alertSprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 64, TileSize, TileSize, 3, 0.150f, true);
-                    _alertSprite.Position = new Vector2(_vMapPosition.X, _vMapPosition.Y - TileSize);
+                    _alertSprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 64, TILE_SIZE, TILE_SIZE, 3, 0.150f, true);
+                    _alertSprite.Position = new Vector2(_vMapPosition.X, _vMapPosition.Y - TILE_SIZE);
                 }
             }
 
@@ -1002,21 +1003,21 @@ namespace RiverHollow.Items
             {
                 spr = new AnimatedSprite(textureName);
                 spr.AddAnimation("None", (int)_pImagePos.X, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
-                spr.AddAnimation("NS", (int)_pImagePos.X + TileSize, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
-                spr.AddAnimation("EW", (int)_pImagePos.X + TileSize * 2, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
-                spr.AddAnimation("SW", (int)_pImagePos.X + TileSize * 3, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
-                spr.AddAnimation("NW", (int)_pImagePos.X + TileSize * 4, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
-                spr.AddAnimation("NE", (int)_pImagePos.X + TileSize * 5, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
-                spr.AddAnimation("SE", (int)_pImagePos.X + TileSize * 6, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
-                spr.AddAnimation("NSE", (int)_pImagePos.X + TileSize * 7, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
-                spr.AddAnimation("NSW", (int)_pImagePos.X + TileSize * 8, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
-                spr.AddAnimation("NEW", (int)_pImagePos.X + TileSize * 9, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
-                spr.AddAnimation("SEW", (int)_pImagePos.X + TileSize * 10, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
-                spr.AddAnimation("NSEW", (int)_pImagePos.X + TileSize * 11, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
-                spr.AddAnimation("W", (int)_pImagePos.X + TileSize * 12, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
-                spr.AddAnimation("E", (int)_pImagePos.X + TileSize * 13, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
-                spr.AddAnimation("S", (int)_pImagePos.X + TileSize * 14, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
-                spr.AddAnimation("N", (int)_pImagePos.X + TileSize * 15, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                spr.AddAnimation("NS", (int)_pImagePos.X + TILE_SIZE, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                spr.AddAnimation("EW", (int)_pImagePos.X + TILE_SIZE * 2, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                spr.AddAnimation("SW", (int)_pImagePos.X + TILE_SIZE * 3, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                spr.AddAnimation("NW", (int)_pImagePos.X + TILE_SIZE * 4, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                spr.AddAnimation("NE", (int)_pImagePos.X + TILE_SIZE * 5, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                spr.AddAnimation("SE", (int)_pImagePos.X + TILE_SIZE * 6, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                spr.AddAnimation("NSE", (int)_pImagePos.X + TILE_SIZE * 7, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                spr.AddAnimation("NSW", (int)_pImagePos.X + TILE_SIZE * 8, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                spr.AddAnimation("NEW", (int)_pImagePos.X + TILE_SIZE * 9, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                spr.AddAnimation("SEW", (int)_pImagePos.X + TILE_SIZE * 10, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                spr.AddAnimation("NSEW", (int)_pImagePos.X + TILE_SIZE * 11, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                spr.AddAnimation("W", (int)_pImagePos.X + TILE_SIZE * 12, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                spr.AddAnimation("E", (int)_pImagePos.X + TILE_SIZE * 13, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                spr.AddAnimation("S", (int)_pImagePos.X + TILE_SIZE * 14, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+                spr.AddAnimation("N", (int)_pImagePos.X + TILE_SIZE * 15, (int)_pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
             }
 
             public override bool PlaceOnMap(Vector2 pos, RHMap map)
@@ -1228,10 +1229,10 @@ namespace RiverHollow.Items
                     LoadDictionaryData(stringData, false);
 
                     LoadAdjustableSprite(ref _sprite, DataManager.FILE_WORLDOBJECTS);
-                    _pImagePos.Y += TileSize;
+                    _pImagePos.Y += TILE_SIZE;
 
                     LoadAdjustableSprite(ref _sprWatered, DataManager.FILE_WORLDOBJECTS);
-                    _pImagePos.Y -= TileSize;
+                    _pImagePos.Y -= TILE_SIZE;
 
                     WaterGardenBed(EnvironmentManager.IsRaining());
                 }
@@ -1284,9 +1285,12 @@ namespace RiverHollow.Items
                 /// <param name="obj">The plant to assign to the garden</param>
                 public void SetPlant(Plant obj)
                 {
+                    if (obj != null) {PlayerManager.AddToTownObjects(obj.ID); }
+                    else if(_objPlant != null) { PlayerManager.RemoveTownObjects(_objPlant.ID); }
+
                     _objPlant = obj;
                     _objPlant?.SetGarden(this);
-                    _objPlant?.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objPlant.Sprite.Height - TileSize)));
+                    _objPlant?.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objPlant.Sprite.Height - TILE_SIZE)));
                 }
                 public Plant GetPlant() { return _objPlant; }
 
@@ -1669,7 +1673,7 @@ namespace RiverHollow.Items
                 if(_item != null)
                 {
                     float visibility = _bHasBeenTriggered ? 1f : 0.25f;
-                    _item.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X), (int)(_vMapPosition.Y - 6), TileSize, TileSize), true, _sprite.LayerDepth + 1, visibility);
+                    _item.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X), (int)(_vMapPosition.Y - 6), TILE_SIZE, TILE_SIZE), true, _sprite.LayerDepth + 1, visibility);
                 }
             }
 
@@ -1726,7 +1730,7 @@ namespace RiverHollow.Items
                     _sMatchTrigger = GameManager.KEY_OPEN;
                 }
 
-                _iBaseYOffset = (_iSpriteHeight / TileSize) - BaseHeight;
+                _iBaseYOffset = (_iSpriteHeight / TILE_SIZE) - BaseHeight;
             }
 
             /// <summary>
@@ -1839,7 +1843,7 @@ namespace RiverHollow.Items
         public WarpPoint(int id, Dictionary<string, string> stringData) : base(id)
         {
             LoadDictionaryData(stringData);
-            _sprite.AddAnimation(AnimationEnum.Action_One, _pImagePos.X + (TileSize * 2), _pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+            _sprite.AddAnimation(AnimationEnum.Action_One, _pImagePos.X + (TILE_SIZE * 2), _pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
         }
 
         public override bool PlaceOnMap(Vector2 pos, RHMap map)

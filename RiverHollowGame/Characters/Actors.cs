@@ -31,7 +31,7 @@ namespace RiverHollow.Characters
         public const float NORMAL_SPEED = 1f;
         public const float NPC_WALK_SPEED = 0.6f;
 
-        protected const int HUMAN_HEIGHT = (TileSize * 2) + 2;
+        protected const int HUMAN_HEIGHT = (TILE_SIZE * 2) + 2;
         protected const float EYE_DEPTH = 0.001f;
         protected const float HAIR_DEPTH = 0.003f;
 
@@ -65,9 +65,9 @@ namespace RiverHollow.Characters
             return new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
         }
 
-        protected int _iBodyWidth = TileSize;
+        protected int _iBodyWidth = TILE_SIZE;
         public int Width => _iBodyWidth;
-        protected int _iBodyHeight = TileSize * 2;
+        protected int _iBodyHeight = TILE_SIZE * 2;
         public int Height => _iBodyHeight; 
         public int SpriteWidth => _sprBody.Width;
         public int SpriteHeight => _sprBody.Height;
@@ -217,10 +217,10 @@ namespace RiverHollow.Characters
         public override Vector2 Position
         {
             get {
-                return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - (TileSize * _iSize));
+                return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - (TILE_SIZE * _iSize));
             } //MAR this is fucked up
             set {
-                _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + (TileSize * _iSize));
+                _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + (TILE_SIZE * _iSize));
             }
         }
 
@@ -231,15 +231,15 @@ namespace RiverHollow.Characters
 
         protected double _dCooldown = 0;
 
-        public virtual Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, TileSize);
-        public virtual Rectangle HoverBox => new Rectangle((int)Position.X, (int)Position.Y - TileSize, Width, Height);
+        public virtual Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, TILE_SIZE);
+        public virtual Rectangle HoverBox => new Rectangle((int)Position.X, (int)Position.Y - TILE_SIZE, Width, Height);
 
         protected bool _bOnTheMap = true;
         public virtual bool OnTheMap => _bOnTheMap;
 
         protected bool _bHover;
 
-        float _fBaseSpeed = TileSize * 9;   //How many tiles/second to move
+        float _fBaseSpeed = TILE_SIZE * 9;   //How many tiles/second to move
         public float BuffedSpeed => _fBaseSpeed * SpdMult;
         public float SpdMult = NPC_WALK_SPEED;
 
@@ -250,7 +250,7 @@ namespace RiverHollow.Characters
 
         public WorldActor() : base()
         {
-            _iBodyWidth = TileSize;
+            _iBodyWidth = TILE_SIZE;
             _iBodyHeight = HUMAN_HEIGHT;
 
             _liTilePath = new List<RHTile>();
@@ -932,10 +932,10 @@ namespace RiverHollow.Characters
             {
                 Texture2D texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
                 Vector2 pos = Position;
-                pos.Y += (TileSize * _iSize);
+                pos.Y += (TILE_SIZE * _iSize);
 
                 //Do not allow the bar to have less than 2 pixels, one for the border and one to display.
-                double totalWidth = TileSize * Size;
+                double totalWidth = TILE_SIZE * Size;
                 double percent = (double)CurrentHP / (double)MaxHP;
                 int drawWidth = Math.Max((int)(totalWidth * percent), 2);
 
@@ -943,7 +943,7 @@ namespace RiverHollow.Characters
 
                 if (MaxMP > 0)
                 {
-                    totalWidth = TileSize * Size;
+                    totalWidth = TILE_SIZE * Size;
                     percent = (double)CurrentMP / (double)MaxMP;
                     drawWidth = Math.Max((int)(totalWidth * percent), 2);
 
@@ -2077,7 +2077,7 @@ namespace RiverHollow.Characters
         /// </summary>
         protected bool IsHomeBuilt()
         {
-            return _iHouseBuildingID != -1 && GameManager.DIBuildInfo[_iHouseBuildingID].Built;
+            return _iHouseBuildingID != -1 && PlayerManager.DIBuildInfo[_iHouseBuildingID].Built;
         }
 
         /// <summary>
@@ -2167,7 +2167,7 @@ namespace RiverHollow.Characters
                         if (split[0].Equals("Built"))
                         {
                             int buildingID = int.Parse(split[1]);
-                            if (!GameManager.DIBuildInfo[buildingID].Built)
+                            if (!PlayerManager.DIBuildInfo[buildingID].Built)
                             {
                                 valid = false;
                                 break;
@@ -2600,14 +2600,14 @@ namespace RiverHollow.Characters
         public Vector2 BodyPosition => _sprBody.Position;
         public override Vector2 Position
         {
-            get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TileSize); }
+            get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TILE_SIZE); }
             set
             {
-                Vector2 vPos = new Vector2(value.X, value.Y - _sprBody.Height + TileSize);
+                Vector2 vPos = new Vector2(value.X, value.Y - _sprBody.Height + TILE_SIZE);
                 foreach(AnimatedSprite spr in GetSprites()) { spr.Position = vPos; }
             }
         }
-        public override Rectangle CollisionBox => new Rectangle((int)Position.X + 2, (int)Position.Y + 2, Width - 4, TileSize - 4);
+        public override Rectangle CollisionBox => new Rectangle((int)Position.X + 2, (int)Position.Y + 2, Width - 4, TILE_SIZE - 4);
 
         #region Clothing
         public Clothes Hat { get; private set; }
@@ -2621,7 +2621,7 @@ namespace RiverHollow.Characters
         public PlayerCharacter() : base()
         {
             _sName = PlayerManager.Name;
-            _iBodyWidth = TileSize;
+            _iBodyWidth = TILE_SIZE;
             _iBodyHeight = HUMAN_HEIGHT;
 
             HairColor = Color.Red;
@@ -2792,8 +2792,8 @@ namespace RiverHollow.Characters
 
             _bOnTheMap = false;
 
-            _iBodyWidth = TileSize;
-            _iBodyHeight = TileSize + 2;
+            _iBodyWidth = TILE_SIZE;
+            _iBodyHeight = TILE_SIZE + 2;
             List<AnimationData> liData = new List<AnimationData>();
             AddToAnimationsList(ref liData, DataManager.DiSpiritInfo[_iID], VerbEnum.Idle);
             LoadSpriteAnimations(ref _sprBody, liData, _sNPCFolder + "Spirit_" + _iID);
@@ -2893,11 +2893,11 @@ namespace RiverHollow.Characters
         {
             get
             {
-                return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TileSize);
+                return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TILE_SIZE);
             }
             set
             {
-                _sprBody.Position = new Vector2(value.X , value.Y - _sprBody.Height + TileSize);
+                _sprBody.Position = new Vector2(value.X , value.Y - _sprBody.Height + TILE_SIZE);
             }
         }
 
@@ -3001,11 +3001,11 @@ namespace RiverHollow.Characters
         {
             get
             {
-                return new Vector2(_sprBody.Position.X + TileSize, _sprBody.Position.Y + _sprBody.Height - (TileSize * (_iSize + 1)));
+                return new Vector2(_sprBody.Position.X + TILE_SIZE, _sprBody.Position.Y + _sprBody.Height - (TILE_SIZE * (_iSize + 1)));
             }
             set
             {
-                _sprBody.Position = new Vector2(value.X - TileSize, value.Y - _sprBody.Height + (TileSize * (_iSize + 1)));
+                _sprBody.Position = new Vector2(value.X - TILE_SIZE, value.Y - _sprBody.Height + (TILE_SIZE * (_iSize + 1)));
             }
         }
 

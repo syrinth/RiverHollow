@@ -48,8 +48,8 @@ namespace RiverHollow.Utilities
         public static Vector2 SnapToGrid(Vector2 p)
         {
             Vector2 newVec = Vector2.Zero;
-            newVec.X = ((int)(p.X / TileSize)) * TileSize;
-            newVec.Y = ((int)(p.Y / TileSize)) * TileSize;
+            newVec.X = ((int)(p.X / TILE_SIZE)) * TILE_SIZE;
+            newVec.Y = ((int)(p.Y / TILE_SIZE)) * TILE_SIZE;
 
             return newVec;
         }
@@ -63,8 +63,8 @@ namespace RiverHollow.Utilities
         public static Vector2 GetMapPositionOfTile(Vector2 tile)
         {
             Vector2 newVec = Vector2.Zero;
-            newVec.X = tile.X * TileSize;
-            newVec.Y = tile.Y  * TileSize;
+            newVec.X = tile.X * TILE_SIZE;
+            newVec.Y = tile.Y  * TILE_SIZE;
 
             return newVec;
         }
@@ -84,7 +84,7 @@ namespace RiverHollow.Utilities
         }
         public static Vector2 GetGridCoords(Vector2 vec)
         {
-            Vector2 rv = new Vector2(vec.X / TileSize, vec.Y / TileSize);
+            Vector2 rv = new Vector2(vec.X / TILE_SIZE, vec.Y / TILE_SIZE);
             return rv;
         }
         #endregion
@@ -295,8 +295,8 @@ namespace RiverHollow.Utilities
         {
             Vector3 translate = Camera._transform.Translation;
             Vector2 newPos = Vector2.Zero;
-            newPos.X = (int)translate.X + (worldPosition.X * Scale);
-            newPos.Y = (int)translate.Y + (worldPosition.Y * Scale);
+            newPos.X = (int)translate.X + (worldPosition.X * CurrentScale);
+            newPos.Y = (int)translate.Y + (worldPosition.Y * CurrentScale);
 
             return newPos;
         }

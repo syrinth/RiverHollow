@@ -21,8 +21,22 @@ namespace RiverHollow.Game_Managers
         public const string KEY_OPEN = "KEY_USED";
         #endregion
 
+        #region Defined Values
         public const float NORMAL_SCALE = 4f;
+        public const float TOOL_ANIM_SPEED = 0.08f;
+        public const int MAX_BUILDING_LEVEL = 3;
+        public const int TILE_SIZE = 16;
 
+        public static float CurrentScale = NORMAL_SCALE;
+        public static int ScaledTileSize => (int)(TILE_SIZE * CurrentScale);
+        public static int ScaledPixel => (int)CurrentScale;
+        #endregion
+
+        private static List<TriggerObject> _liTriggerObjects;
+        private static List<Spirit> _liSpirits;
+        private static List<Machine> _liMachines;
+
+        #region Game Enums
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, ShowRequests, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Party };
         public enum TextEntryTriggerEnum { None, UseItem, ConfirmGift, EndDay, Exit, Donate }
@@ -69,23 +83,9 @@ namespace RiverHollow.Game_Managers
         public enum AdventurerTypeEnum { Magic, Martial };
         public enum ObjectTypeEnum { WorldObject, Building, CombatHazard, Container, Destructible, DungeonObject, Floor, Gatherable, Garden, Light, Machine, Mailbox, Plant, Structure, StructureUpgrader, Wall, WarpPoint };
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
-
-        public static float Scale = NORMAL_SCALE;
-        public const int TileSize = 16;
-        public static int ScaledTileSize => (int)(TileSize * Scale);
-        public static int ScaledPixel => (int)Scale;
-        public static int MaxBldgLevel = 3;
-        private static List<TriggerObject> _liTriggerObjects;
-        private static List<Spirit> _liSpirits;
-        private static List<Machine> _liMachines;
-        public static TalkingActor CurrentNPC => interactionLock?.CurrentActor;
-        public static ShippingGremlin ShippingGremlin;
-        public static DisplayTypeEnum CurrentInventoryDisplay;
-
-        public static int VillagersInTheInn = 0;
+        #endregion
 
         #region Managed Data Lists
-        public static Dictionary<int, BuildInfo> DIBuildInfo;
         public static Dictionary<int, Task> DITasks;
         public static Dictionary<int, List<Merchandise>> DIShops;
         #endregion
@@ -97,6 +97,8 @@ namespace RiverHollow.Game_Managers
         public static TriggerObject CurrentTriggerObject;
         #endregion
 
+        #region Game State Values
+        public static int VillagersInTheInn = 0;
         public static int MAX_NAME_LEN = 10;
 
         public static int TotalExperience = 0;
@@ -105,7 +107,10 @@ namespace RiverHollow.Game_Managers
         public static bool AutoDisband;
         public static bool HideMiniInventory = true;
 
-        public const float TOOL_ANIM_SPEED = 0.08f;
+        public static TalkingActor CurrentNPC => interactionLock?.CurrentActor;
+        public static ShippingGremlin ShippingGremlin;
+        public static DisplayTypeEnum CurrentInventoryDisplay;
+        #endregion
 
         public static int HUDItemRow;
         public static int HUDItemCol;
@@ -126,8 +131,6 @@ namespace RiverHollow.Game_Managers
                 DITasks.Add(kvp.Key, new Task(kvp.Key, kvp.Value));
             }
 
-            DIBuildInfo = DataManager.GetBuildInfoList();
-
             DIShops = DataManager.GetShopInfoList();
         }
 
@@ -143,7 +146,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static int ScaleIt(int val)
         {
-            return (int)(Scale * val);
+            return (int)(CurrentScale * val);
         }
 
         #region Machine Handling
@@ -280,7 +283,7 @@ namespace RiverHollow.Game_Managers
 
         public static void SetGameScale(float val)
         {
-            Scale = val;
+            CurrentScale = val;
         }
 
         #region Scrying

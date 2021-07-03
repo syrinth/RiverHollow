@@ -122,8 +122,8 @@ namespace RiverHollow
                     if (!GUIManager.ProcessRightButtonClick(mousePoint) && IsMapShown())
                     {
                         //GUI does NOT use Camera translations
-                        mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
-                        mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
+                        mousePoint.X = (int)((mousePoint.X - translate.X) / CurrentScale);
+                        mousePoint.Y = (int)((mousePoint.Y - translate.Y) / CurrentScale);
                         if (IsRunning() || Scrying())
                         {
                             MapManager.ProcessRightButtonClick(mousePoint);
@@ -134,8 +134,8 @@ namespace RiverHollow
                 {
                     if (!GUIManager.ProcessLeftButtonClick(mousePoint) && IsMapShown())
                     {
-                        mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
-                        mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
+                        mousePoint.X = (int)((mousePoint.X - translate.X) / CurrentScale);
+                        mousePoint.Y = (int)((mousePoint.Y - translate.Y) / CurrentScale);
                         if (IsRunning() || Scrying())
                         {
                             MapManager.ProcessLeftButtonClick(mousePoint);
@@ -146,8 +146,8 @@ namespace RiverHollow
                 {
                     if (!GUIManager.ProcessHover(mousePoint))
                     {
-                        mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
-                        mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
+                        mousePoint.X = (int)((mousePoint.X - translate.X) / CurrentScale);
+                        mousePoint.Y = (int)((mousePoint.Y - translate.Y) / CurrentScale);
                         if (IsRunning() || Scrying())
                         {
                             MapManager.ProcessHover(mousePoint);

@@ -29,7 +29,7 @@ namespace RiverHollow
 
         public static void Update(GameTime gTime)
         {
-            Vector2 target = Scrying() ? _vObserver : _actObserver.CharCenter.ToVector2() * Scale;
+            Vector2 target = Scrying() ? _vObserver : _actObserver.CharCenter.ToVector2() * CurrentScale;
 
             //If Scrying is turned on and we are not taking input, process input commands to move the camera
             if (!TakingInput() && Scrying())
@@ -55,10 +55,10 @@ namespace RiverHollow
             if (target.Y <= (RiverHollow.ScreenHeight / 2)) { target.Y = (RiverHollow.ScreenHeight / 2); }
             else if (target.Y >= MapManager.CurrentMap.GetMapHeightInScaledPixels() - (RiverHollow.ScreenHeight / 2)) { target.Y = MapManager.CurrentMap.GetMapHeightInScaledPixels() - (RiverHollow.ScreenHeight / 2); }
 
-            if (MapManager.CurrentMap.GetMapWidthInScaledPixels() / TileSize <= Math.Ceiling((double)RiverHollow.ScreenWidth / TileSize)) { target.X = (MapManager.CurrentMap.GetMapWidthInScaledPixels() / 2); }
+            if (MapManager.CurrentMap.GetMapWidthInScaledPixels() / TILE_SIZE <= Math.Ceiling((double)RiverHollow.ScreenWidth / TILE_SIZE)) { target.X = (MapManager.CurrentMap.GetMapWidthInScaledPixels() / 2); }
 
-            double val = Math.Ceiling((double)RiverHollow.ScreenHeight / TileSize);
-            if (MapManager.CurrentMap.GetMapHeightInScaledPixels() / TileSize <= val) { target.Y = (MapManager.CurrentMap.GetMapHeightInScaledPixels() / 2); }
+            double val = Math.Ceiling((double)RiverHollow.ScreenHeight / TILE_SIZE);
+            if (MapManager.CurrentMap.GetMapHeightInScaledPixels() / TILE_SIZE <= val) { target.Y = (MapManager.CurrentMap.GetMapHeightInScaledPixels() / 2); }
 
             if (!Scrying())
             {
@@ -79,7 +79,7 @@ namespace RiverHollow
             else { _vObserver = target; }
 
             _vCenter = new Vector2(_vObserver.X - (RiverHollow.ScreenWidth / 2), _vObserver.Y - (RiverHollow.ScreenHeight / 2));
-            _transform = Matrix.CreateScale(new Vector3(Scale, Scale, 0)) * Matrix.CreateTranslation(new Vector3(-_vCenter.X, -_vCenter.Y, 0));
+            _transform = Matrix.CreateScale(new Vector3(CurrentScale, CurrentScale, 0)) * Matrix.CreateTranslation(new Vector3(-_vCenter.X, -_vCenter.Y, 0));
         }
 
         public static void SetObserver(WorldActor act, bool swoopToTarget = false)

@@ -212,10 +212,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         protected BtnClickDelegate _delAction;
         public GUICheck(string text, bool isChecked = false, BtnClickDelegate del = null)
         {
-            int squareSize = TileSize * 2;
+            int squareSize = TILE_SIZE * 2;
             _bChecked = isChecked;
-            _gUnchecked = new GUIImage(new Rectangle(16, 32, TileSize, TileSize), squareSize, squareSize, DataManager.DIALOGUE_TEXTURE);
-            _gChecked = new GUIImage(new Rectangle(32, 32, TileSize, TileSize), squareSize, squareSize, DataManager.DIALOGUE_TEXTURE);
+            _gUnchecked = new GUIImage(new Rectangle(16, 32, TILE_SIZE, TILE_SIZE), squareSize, squareSize, DataManager.DIALOGUE_TEXTURE);
+            _gChecked = new GUIImage(new Rectangle(32, 32, TILE_SIZE, TILE_SIZE), squareSize, squareSize, DataManager.DIALOGUE_TEXTURE);
             _gText = new GUIText(" - " + text);
 
             int delta = _gText.Height - squareSize;
@@ -283,9 +283,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _status = status;
             int startX = 176;
 
-            startX += ((int)status - 2) * TileSize;
+            startX += ((int)status - 2) * TILE_SIZE;
 
-            _gImage = new GUIImage(new Rectangle(startX, 0, TileSize, TileSize), TileSize, TileSize, DataManager.DIALOGUE_TEXTURE);
+            _gImage = new GUIImage(new Rectangle(startX, 0, TILE_SIZE, TILE_SIZE), TILE_SIZE, TILE_SIZE, DataManager.DIALOGUE_TEXTURE);
             AddControl(_gImage);
 
             Width = _gImage.Width;
@@ -318,13 +318,13 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         private BtnClickDelegate _delAction;
         public Color SwatchColor => _cColor;
 
-        public GUISwatch(Color c, BtnClickDelegate del = null) : base(new Rectangle(0, 80, TileSize, TileSize), 8, 16, DataManager.DIALOGUE_TEXTURE)
+        public GUISwatch(Color c, BtnClickDelegate del = null) : base(new Rectangle(0, 80, TILE_SIZE, TILE_SIZE), 8, 16, DataManager.DIALOGUE_TEXTURE)
         {
             _cColor = c;
             _delAction = del;
         }
 
-        public GUISwatch(Color c, int width, int height, BtnClickDelegate del = null) : base(new Rectangle(0, 80, TileSize, TileSize), width, height, DataManager.DIALOGUE_TEXTURE)
+        public GUISwatch(Color c, int width, int height, BtnClickDelegate del = null) : base(new Rectangle(0, 80, TILE_SIZE, TILE_SIZE), width, height, DataManager.DIALOGUE_TEXTURE)
         {
             _cColor = c;
             _delAction = del;
@@ -353,7 +353,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             ItemObject = it;
             _gImg = new GUIImage(ItemObject.SourceRectangle, ItemObject.SourceRectangle.Width, ItemObject.SourceRectangle.Height, ItemObject.Texture);
-            _gImg.SetScale(Scale);
+            _gImg.SetScale(CurrentScale);
 
             _gText = new GUIText(ItemObject.Number.ToString(), true, DataManager.FONT_NUMBER_DISPLAY);
 

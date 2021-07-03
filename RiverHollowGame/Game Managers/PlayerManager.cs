@@ -27,7 +27,6 @@ namespace RiverHollow.Game_Managers
         public static double MaxStamina = 100;
         public static double Stamina = MaxStamina;
         public static int _iBuildingID = -1;
-        public static List<int> CanMake { get; private set; }
         private static string _currentMap;
         public static string CurrentMap
         {
@@ -67,21 +66,26 @@ namespace RiverHollow.Game_Managers
         private static Villager _npcSpouse;
         #endregion
 
+        #region Data Collections
+        public static Dictionary<int, BuildInfo> DIBuildInfo;
+        private static Dictionary<int, int> _diTownObjects;
+        #endregion
+
         public static void Initialize()
         {
+            _diTownObjects = new Dictionary<int, int>();
             _diTools = new Dictionary<ToolEnum, Tool>();
             _liParty = new List<ClassedCombatant>();
             TaskLog = new List<Task>();
             World = new PlayerCharacter();
             _liParty.Add(World);
             _diBuildings = new Dictionary<int, Building>();
-            CanMake = new List<int>();
+            DIBuildInfo = DataManager.GetBuildInfoList();
         }
 
         public static void NewPlayer()
         {
             World.Position = new Vector2(200, 200);
-            CanMake.Add(190);
 
             CurrentMap = MapManager.CurrentMap.Name;
             World.Position = Util.GetMapPositionOfTile(MapManager.SpawnTile);
@@ -294,7 +298,7 @@ namespace RiverHollow.Game_Managers
             if (!t.Finished)
             {
                 foreach (Item i in InventoryManager.PlayerInventory) { if (i != null) { t.AttemptProgress(i); } }
-                foreach(BuildInfo bi in GameManager.DIBuildInfo.Values) {
+                foreach(BuildInfo bi in PlayerManager.DIBuildInfo.Values) {
                     if (bi.Built) {
                         t.AttemptBuildingProgress(bi.ID);
                     }
@@ -347,14 +351,27 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        #region Building Helpers
+        #region Town Helpers
+        public static void AddToTownObjects(int worldObjectID) { _diTownObjects[worldObjectID] = GetNumberTownObjects(worldObjectID) + 1; }
+        public static void RemoveTownObjects(int worldObjectID) { _diTownObjects[worldObjectID] = GetNumberTownObjects(worldObjectID) - 1; }
+        public static int GetNumberTownObjects(int worldObjectID)
+        {
+            int rv = 0;
+
+            if (_diTownObjects.ContainsKey(worldObjectID))
+            {
+                rv = _diTownObjects[worldObjectID];
+            }
+            return rv;
+        }
+
         public static void AddBuilding(Building b)
         {
             if (!_diBuildings.ContainsKey(b.ID))
             {
                 _diBuildings.Add(b.ID, b);
             }
-            GameManager.DIBuildInfo[b.ID].Built = true;
+            PlayerManager.DIBuildInfo[b.ID].Built = true;
 
             AdvanceTaskProgress(b);
         }
@@ -375,7 +392,7 @@ namespace RiverHollow.Game_Managers
         #region PlayerInRange
         public static bool PlayerInRange(Rectangle rect)
         {
-            int hypotenuse = (int)Math.Sqrt(TileSize * TileSize + TileSize * TileSize);
+            int hypotenuse = (int)Math.Sqrt(TILE_SIZE * TILE_SIZE + TILE_SIZE * TILE_SIZE);
             return PlayerInRange(rect, hypotenuse);
         }
         public static bool PlayerInRange(Rectangle rect, int range)
@@ -403,7 +420,7 @@ namespace RiverHollow.Game_Managers
 
         public static bool PlayerInRange(Point centre)
         {
-            int hypotenuse = (int)Math.Sqrt(TileSize*TileSize + TileSize*TileSize);
+            int hypotenuse = (int)Math.Sqrt(TILE_SIZE*TILE_SIZE + TILE_SIZE*TILE_SIZE);
             return PlayerInRange(centre, hypotenuse);
         }
         public static bool PlayerInRange(Vector2 centre, int range)
@@ -713,7 +730,7 @@ namespace RiverHollow.Game_Managers
             if (t != null && ToolInUse == null)
             {
                 ToolInUse = t;
-                ToolInUse.Position = new Vector2(World.Position.X - TileSize, World.Position.Y - (TileSize * 2));
+                ToolInUse.Position = new Vector2(World.Position.X - TILE_SIZE, World.Position.Y - (TILE_SIZE * 2));
                 if (ToolInUse != null && !Busy)
                 {
                     if (DecreaseStamina(ToolInUse.StaminaCost))

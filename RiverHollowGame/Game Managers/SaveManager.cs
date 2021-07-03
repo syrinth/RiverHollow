@@ -604,7 +604,7 @@ namespace RiverHollow.Game_Managers
                 data.MerchantData.Add(m.SaveData());
             }
 
-            foreach (BuildInfo b in GameManager.DIBuildInfo.Values)
+            foreach (BuildInfo b in PlayerManager.DIBuildInfo.Values)
             {
                 data.BuildingInfoData.Add(b.SaveData());
             }
@@ -803,8 +803,8 @@ namespace RiverHollow.Game_Managers
 
             foreach (BuildInfoData n in dataToLoad.BuildingInfoData)
             {
-                GameManager.DIBuildInfo[n.id].Built = n.built;
-                if (n.unlocked) { GameManager.DIBuildInfo[n.id].Unlock(); }
+                PlayerManager.DIBuildInfo[n.id].Built = n.built;
+                if (n.unlocked) { PlayerManager.DIBuildInfo[n.id].Unlock(); }
             }
 
             foreach(ShopData s in dataToLoad.ShopData)

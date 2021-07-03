@@ -99,7 +99,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _gName.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
                 AddControl(_gName);
 
-                _gDelete = new GUIButton(new Rectangle(64, 48, TileSize, TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE, BtnDelete);
+                _gDelete = new GUIButton(new Rectangle(64, 48, TILE_SIZE, TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE, BtnDelete);
                 Height = (int)stringsize.Y + _gDelete.Height + HeightEdges();
                 _gDelete.AnchorToInnerSide(this, SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
 

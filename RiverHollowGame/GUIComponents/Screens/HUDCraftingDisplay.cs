@@ -13,7 +13,7 @@ namespace RiverHollow.GUIComponents.Screens
 {
     class HUDCraftingDisplay : GUIMainObject
     {
-        int _iBoxSize = GUIItemBox.RECT_IMG.Width * (int)GameManager.Scale;
+        int _iBoxSize = GUIItemBox.RECT_IMG.Width * (int)GameManager.CurrentScale;
         const int _iMaxColumns = 5;
 
         Machine _craftMachine;
@@ -46,7 +46,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             ConfigureInfo();
 
-            _winExtra = new GUIWindow(GUIWindow.Window_1, _winMain.Width, ScaleIt(GUIWindow.Window_1.Edge * 2) + ScaleIt(TileSize));
+            _winExtra = new GUIWindow(GUIWindow.Window_1, _winMain.Width, ScaleIt(GUIWindow.Window_1.Edge * 2) + ScaleIt(TILE_SIZE));
             _btnFinished = new GUIButton("Done", Finished);
             _btnFinished.CenterOnObject(_winExtra);
             _winExtra.AddControl(_btnFinished);
@@ -71,7 +71,7 @@ namespace RiverHollow.GUIComponents.Screens
             foreach (int id in recipes.Keys)
             {
                 //Ensure that either the creation of the item is enabled by a crafter or that the player knows the recipe themselves
-                if (_craftMachine != null || PlayerManager.CanMake.Contains(id))
+                if (_craftMachine != null)
                 {
                     canMake.Add(id);
                 }

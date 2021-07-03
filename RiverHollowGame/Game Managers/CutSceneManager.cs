@@ -398,16 +398,16 @@ namespace RiverHollow.Game_Managers
                 switch (dir)
                 {
                     case 0:
-                        vec = new Vector2(0, -numSquares * TileSize);
+                        vec = new Vector2(0, -numSquares * TILE_SIZE);
                         break;
                     case 1:
-                        vec = new Vector2(0, numSquares * TileSize);
+                        vec = new Vector2(0, numSquares * TILE_SIZE);
                         break;
                     case 2:
-                        vec = new Vector2(numSquares * TileSize, 0);
+                        vec = new Vector2(numSquares * TILE_SIZE, 0);
                         break;
                     case 3:
-                        vec = new Vector2(-numSquares * TileSize, 0);
+                        vec = new Vector2(-numSquares * TILE_SIZE, 0);
                         break;
 
                 }

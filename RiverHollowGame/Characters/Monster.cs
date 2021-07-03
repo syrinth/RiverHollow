@@ -313,10 +313,10 @@ namespace RiverHollow.Characters
                 bool skip = false;
                 RHRandom rand = RHRandom.Instance();
                 int decision = rand.Next(1, 5);
-                if (decision == 1) { _vMoveTo = new Vector2(Position.X - rand.Next(1, howFar) * TileSize, Position.Y); }
-                else if (decision == 2) { _vMoveTo = new Vector2(Position.X + rand.Next(1, howFar) * TileSize, Position.Y); }
-                else if (decision == 3) { _vMoveTo = new Vector2(Position.X, Position.Y - rand.Next(1, howFar) * TileSize); }
-                else if (decision == 4) { _vMoveTo = new Vector2(Position.X, Position.Y + rand.Next(1, howFar) * TileSize); }
+                if (decision == 1) { _vMoveTo = new Vector2(Position.X - rand.Next(1, howFar) * TILE_SIZE, Position.Y); }
+                else if (decision == 2) { _vMoveTo = new Vector2(Position.X + rand.Next(1, howFar) * TILE_SIZE, Position.Y); }
+                else if (decision == 3) { _vMoveTo = new Vector2(Position.X, Position.Y - rand.Next(1, howFar) * TILE_SIZE); }
+                else if (decision == 4) { _vMoveTo = new Vector2(Position.X, Position.Y + rand.Next(1, howFar) * TILE_SIZE); }
                 else
                 {
                     _vMoveTo = Vector2.Zero;

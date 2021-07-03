@@ -16,7 +16,7 @@ namespace RiverHollow.GUIComponents
         {
             _winMain = SetMainWindow();
             _gSprite = new GUISprite(HarpManager.SongSpirit.BodySprite);
-            _gSprite.SetScale(Scale);
+            _gSprite.SetScale(CurrentScale);
             _liGNotes = new List<GUIMusicNote>();
 
             _gSprite.CenterOnWindow(_winMain);
@@ -74,7 +74,7 @@ namespace RiverHollow.GUIComponents
 
         public class GUIMusicNote : GUIImage
         {
-            public GUIMusicNote() : base(new Rectangle(0, 0, TileSize, TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE)
+            public GUIMusicNote() : base(new Rectangle(0, 0, TILE_SIZE, TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE)
             {
 
             }

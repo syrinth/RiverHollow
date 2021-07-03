@@ -271,7 +271,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             Position.X += spriteWidth / 2; //get the center
             Position.X += rand.Next(-8, 8); //displace the x position
-            Position.Y -= rand.Next(0, TileSize / 2); //Subtract this number to go 'up' the screen
+            Position.Y -= rand.Next(0, TILE_SIZE / 2); //Subtract this number to go 'up' the screen
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -303,7 +303,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _actor = actor;
             _gSprite = new GUISprite(actor.BodySprite, true);
-            _gSprite.SetScale(Scale);
+            _gSprite.SetScale(CurrentScale);
             _gSprite.AnchorToInnerSide(this, SideEnum.TopLeft);
             _gSprite.PlayAnimation(VerbEnum.Walk, DirectionEnum.Down);
             AddControl(_gSprite);
@@ -323,7 +323,7 @@ namespace RiverHollow.GUIComponents.Screens
                 AddControl(gMP);
             }
 
-            Width = TileSize;
+            Width = TILE_SIZE;
             Height = _gSprite.Height;
             Resize();
             gName.SetText(actor.Name);    
@@ -832,17 +832,17 @@ namespace RiverHollow.GUIComponents.Screens
 
                 GUIImage _gItem;
 
-                public ActionButton(MenuAction action) : base(new Rectangle((int)action.IconGrid.X * TileSize, (int)action.IconGrid.Y * TileSize, TileSize, TileSize), TileSize, TileSize, @"Textures\texCmbtActions")
+                public ActionButton(MenuAction action) : base(new Rectangle((int)action.IconGrid.X * TILE_SIZE, (int)action.IconGrid.Y * TILE_SIZE, TILE_SIZE, TILE_SIZE), TILE_SIZE, TILE_SIZE, @"Textures\texCmbtActions")
                 {
                     _action = action;
-                    SetScale(GameManager.Scale);
+                    SetScale(GameManager.CurrentScale);
                 }
 
                 public ActionButton(Item i) : base(new Rectangle(288, 32, 32, 32), 16, 16, DataManager.DIALOGUE_TEXTURE)
                 {
                     _item = i;
                     _gItem = new GUIImage(_item.SourceRectangle, Width, Height, _item.Texture);
-                    SetScale(GameManager.Scale);
+                    SetScale(GameManager.CurrentScale);
                 }
 
                 public override void Draw(SpriteBatch spriteBatch)
@@ -865,7 +865,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     int firstWidth = Width;
                     int firstHeight = Height;
-                    SetScale(GameManager.Scale + 1);
+                    SetScale(GameManager.CurrentScale + 1);
 
                     int diffWidth = Width - firstWidth;
                     int diffHeight = Height - firstHeight;
@@ -876,7 +876,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     int firstWidth = Width;
                     int firstHeight = Height;
-                    SetScale(GameManager.Scale);
+                    SetScale(GameManager.CurrentScale);
 
                     int diffWidth = firstWidth - Width;
                     int diffHeight = firstHeight - Height;
@@ -924,7 +924,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 _arrTurnDisplay[i] = new TurnDisplay(_liNewTurnOrder[i], _arrBarDisplay);
                 _arrBarDisplay[i] = new GUIImage(new Rectangle(48, 58, 10, 2), 10, 2, DataManager.DIALOGUE_TEXTURE);
-                _arrBarDisplay[i].SetScale(GameManager.Scale);
+                _arrBarDisplay[i].SetScale(GameManager.CurrentScale);
             }
 
             Width = MAX_SHOWN * _arrTurnDisplay[0].Width;
@@ -1113,7 +1113,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _bInParty = !actor.IsActorType(ActorEnum.Monster);
                 _gName = new GUIText(actor.Name.Substring(0, 1));
                 _gImage = new GUIImage(new Rectangle(48, 48, 10, 10), 10, 10, DataManager.DIALOGUE_TEXTURE);
-                _gImage.SetScale(GameManager.Scale);
+                _gImage.SetScale(GameManager.CurrentScale);
 
                 _arrBarDisplay = barDisplay;
                 Width = _gImage.Width;

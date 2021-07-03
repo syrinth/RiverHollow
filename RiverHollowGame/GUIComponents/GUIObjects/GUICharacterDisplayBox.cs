@@ -50,7 +50,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     Actor = adv;
                     _sprite = new GUISprite(adv.BodySprite, true);
 
-                    _sprite.SetScale((int)GameManager.Scale);
+                    _sprite.SetScale((int)GameManager.CurrentScale);
                     _sprite.CenterOnWindow(this);
                     _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
 
@@ -68,11 +68,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
             public void Setup()
             {
                 Width = ScaledTileSize + WidthEdges();
-                Height = ScaleIt((TileSize * 2) + 2) + HeightEdges();
+                Height = ScaleIt((TILE_SIZE * 2) + 2) + HeightEdges();
 
                 if (Actor != null)
                 {
-                    _sprite.SetScale((int)GameManager.Scale);
+                    _sprite.SetScale((int)GameManager.CurrentScale);
                     _sprite.CenterOnWindow(this);
                     _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
 
@@ -139,7 +139,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 Controls.Clear();
                 _playerSprite = new GUICharacterSprite(_bOverwrite);
-                _playerSprite.SetScale((int)GameManager.Scale);
+                _playerSprite.SetScale((int)GameManager.CurrentScale);
                 _playerSprite.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
 
                 Width = _playerSprite.Width + WidthEdges();

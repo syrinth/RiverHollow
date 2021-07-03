@@ -380,7 +380,7 @@ namespace RiverHollow.Tile_Engine
                 foreach (RHTile t in _liTestTiles)
                 {
                     bool passable = CanPlaceObject(t, HeldObject);
-                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TILE_SIZE, TILE_SIZE), new Rectangle(288, 128, TILE_SIZE, TILE_SIZE), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
                 }
             }
         }
@@ -527,9 +527,9 @@ namespace RiverHollow.Tile_Engine
                     }
                     else if (tiledObj.Name.Equals("Floor"))
                     {
-                        for (int y = (int)tiledObj.Position.Y; y < (int)tiledObj.Position.Y + tiledObj.Size.Height; y += TileSize)
+                        for (int y = (int)tiledObj.Position.Y; y < (int)tiledObj.Position.Y + tiledObj.Size.Height; y += TILE_SIZE)
                         {
-                            for (int x = (int)tiledObj.Position.X; x < (int)tiledObj.Position.X + tiledObj.Size.Width; x += TileSize)
+                            for (int x = (int)tiledObj.Position.X; x < (int)tiledObj.Position.X + tiledObj.Size.Width; x += TILE_SIZE)
                             {
                                 DataManager.CreateAndPlaceNewWorldObject(int.Parse(tiledObj.Properties["ObjectID"]), new Vector2(x, y), this);
                             }
@@ -711,7 +711,7 @@ namespace RiverHollow.Tile_Engine
         /// <param name="height">The Height</param>
         public void CreateDoor(TravelPoint trvlPt, float rectX, float rectY, float width, float height)
         {
-            foreach (Vector2 vec in Util.GetAllPointsInArea(rectX, rectY, width, height, TileSize))
+            foreach (Vector2 vec in Util.GetAllPointsInArea(rectX, rectY, width, height, TILE_SIZE))
             {
                 RHTile t = GetTileByPixelPosition(vec);
                 if (t != null)
@@ -733,7 +733,7 @@ namespace RiverHollow.Tile_Engine
             string mapName = b.MapName;
             TravelPoint pt = DictionaryTravelPoints[mapName];
 
-            foreach (Vector2 vec in Util.GetAllPointsInArea(pt.Location.X, pt.Location.Y, pt.CollisionBox.Width, pt.CollisionBox.Height, TileSize))
+            foreach (Vector2 vec in Util.GetAllPointsInArea(pt.Location.X, pt.Location.Y, pt.CollisionBox.Width, pt.CollisionBox.Height, TILE_SIZE))
             {
                 RHTile t = GetTileByPixelPosition(vec);
                 if (t != null)
@@ -873,7 +873,7 @@ namespace RiverHollow.Tile_Engine
                         wObj.PlaceOnMap(this);
 
                         //If the object is larger than one tile, we need to ensure it can actually fit ont he tile(s) we've placed it
-                        if (wObj.CollisionBox.Width > TileSize || wObj.CollisionBox.Height > TileSize)
+                        if (wObj.CollisionBox.Width > TILE_SIZE || wObj.CollisionBox.Height > TILE_SIZE)
                         {
                             foreach (RHTile t in wObj.Tiles)
                             {
@@ -1304,7 +1304,7 @@ namespace RiverHollow.Tile_Engine
 
             foreach (WorldActor c in _liActors)
             {
-                if (PlayerManager.PlayerInRange(c.HoverBox, (int)(TileSize * 1.5)) && c.HoverContains(mouseLocation) && c.CanTalk && c.OnTheMap)
+                if (PlayerManager.PlayerInRange(c.HoverBox, (int)(TILE_SIZE * 1.5)) && c.HoverContains(mouseLocation) && c.CanTalk && c.OnTheMap)
                 {
                     ((TalkingActor)c).Talk();
                     return true;
@@ -1824,19 +1824,19 @@ namespace RiverHollow.Tile_Engine
             bool rv = true;
             collisionTiles.Clear();
             Vector2 position = obj.CollisionBox.Location.ToVector2();
-            position.X = ((int)(position.X / TileSize)) * TileSize;
-            position.Y = ((int)(position.Y / TileSize)) * TileSize;
+            position.X = ((int)(position.X / TILE_SIZE)) * TILE_SIZE;
+            position.Y = ((int)(position.Y / TILE_SIZE)) * TILE_SIZE;
 
-            int colColumns = obj.CollisionBox.Width / TileSize;
-            int colRows = obj.CollisionBox.Height / TileSize;
+            int colColumns = obj.CollisionBox.Width / TILE_SIZE;
+            int colRows = obj.CollisionBox.Height / TILE_SIZE;
             
             //This is used to get all the tiles based off the collisonbox size
             for (int i = 0; i < colRows; i++)
             {
                 for (int j = 0; j < colColumns; j++)
                 {
-                    int x = Math.Min((obj.CollisionBox.Left + (j * TileSize)) / TileSize, MapWidthTiles-1);
-                    int y = Math.Min((obj.CollisionBox.Top + (i * TileSize)) / TileSize, MapHeightTiles-1);
+                    int x = Math.Min((obj.CollisionBox.Left + (j * TILE_SIZE)) / TILE_SIZE, MapWidthTiles-1);
+                    int y = Math.Min((obj.CollisionBox.Top + (i * TILE_SIZE)) / TILE_SIZE, MapHeightTiles-1);
                     if (x < 0 || x > this.MapWidthTiles || y < 0 || y > this.MapHeightTiles)
                     {
                         rv = false;
@@ -1933,9 +1933,9 @@ namespace RiverHollow.Tile_Engine
             //Iterate over the WorldObject image in TileSize increments to discover any tiles
             //that the image overlaps. Add those tiles as Shadow Tiles as long as they're not
             //actual Tiles the object sits on. Also add the Tiles to the objects Shadow Tiles list
-            for (int i = (int)o.MapPosition.X; i < o.MapPosition.X + o.Width; i += TileSize)
+            for (int i = (int)o.MapPosition.X; i < o.MapPosition.X + o.Width; i += TILE_SIZE)
             {
-                for (int j = (int)o.MapPosition.Y; j < o.MapPosition.Y + o.Height; j += TileSize)
+                for (int j = (int)o.MapPosition.Y; j < o.MapPosition.Y + o.Height; j += TILE_SIZE)
                 {
                     RHTile t = GetTileByGridCoords(Util.GetGridCoords(i, j));
                     if (t != null && !o.Tiles.Contains(t))
@@ -1996,17 +1996,17 @@ namespace RiverHollow.Tile_Engine
 
             RHRandom rand = RHRandom.Instance();
             Vector2 position = m.Position;
-            position.X = ((int)(position.X / TileSize)) * TileSize;
-            position.Y = ((int)(position.Y / TileSize)) * TileSize;
+            position.X = ((int)(position.X / TILE_SIZE)) * TILE_SIZE;
+            position.Y = ((int)(position.Y / TILE_SIZE)) * TILE_SIZE;
 
-            rv = _arrTiles[((int)position.X / TileSize), ((int)position.Y / TileSize)].Passable();
+            rv = _arrTiles[((int)position.X / TILE_SIZE), ((int)position.Y / TILE_SIZE)].Passable();
             if (!rv)
             {
                 do
                 {
-                    position.X = (int)(rand.Next(1, (MapWidthTiles - 1) * TileSize) / TileSize) * TileSize;
-                    position.Y = (int)(rand.Next(1, (MapHeightTiles - 1) * TileSize) / TileSize) * TileSize;
-                    rv = _arrTiles[((int)position.X / TileSize), ((int)position.Y / TileSize)].Passable();
+                    position.X = (int)(rand.Next(1, (MapWidthTiles - 1) * TILE_SIZE) / TILE_SIZE) * TILE_SIZE;
+                    position.Y = (int)(rand.Next(1, (MapHeightTiles - 1) * TILE_SIZE) / TILE_SIZE) * TILE_SIZE;
+                    rv = _arrTiles[((int)position.X / TILE_SIZE), ((int)position.Y / TILE_SIZE)].Passable();
                 } while (!rv);
             }
 
@@ -2106,10 +2106,10 @@ namespace RiverHollow.Tile_Engine
         }
         public RHTile GetTileByPixelPosition(int x, int y)
         {
-            if (x >= MapWidthTiles * TileSize || x < 0) { return null; }
-            if (y >= MapHeightTiles * TileSize || y < 0) { return null; }
+            if (x >= MapWidthTiles * TILE_SIZE || x < 0) { return null; }
+            if (y >= MapHeightTiles * TILE_SIZE || y < 0) { return null; }
 
-            return _arrTiles[x / TileSize, y / TileSize];
+            return _arrTiles[x / TILE_SIZE, y / TILE_SIZE];
         }
 
         public RHTile GetTileByGridCoords(Point targetLoc)
@@ -2141,9 +2141,9 @@ namespace RiverHollow.Tile_Engine
         {
             List<RHTile> rvList = new List<RHTile>();
 
-            for (int y = obj.Top; y <= obj.Top + obj.Height; y += TileSize)
+            for (int y = obj.Top; y <= obj.Top + obj.Height; y += TILE_SIZE)
             {
-                for (int x = obj.Left; x <= obj.Left + obj.Width; x += TileSize)
+                for (int x = obj.Left; x <= obj.Left + obj.Width; x += TILE_SIZE)
                 {
                     RHTile tile = GetTileByPixelPosition(new Point(x, y));
                     if (!rvList.Contains(tile)) {
@@ -2414,9 +2414,9 @@ namespace RiverHollow.Tile_Engine
         public string MapName { get; }
         public int X { get; }
         public int Y { get; }
-        public Vector2 Position => new Vector2(X * TileSize, Y * TileSize);
-        public Vector2 Center => new Vector2(Position.X + TileSize/2, Position.Y + TileSize/2);
-        public Rectangle Rect => Util.FloatRectangle(Position, TileSize, TileSize);
+        public Vector2 Position => new Vector2(X * TILE_SIZE, Y * TILE_SIZE);
+        public Vector2 Center => new Vector2(Position.X + TILE_SIZE/2, Position.Y + TILE_SIZE/2);
+        public Rectangle Rect => Util.FloatRectangle(Position, TILE_SIZE, TILE_SIZE);
 
         TravelPoint _travelPoint;
         public CombatActor Character { get; private set; }
@@ -2444,7 +2444,7 @@ namespace RiverHollow.Tile_Engine
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle dest = new Rectangle((int)Position.X, (int)Position.Y, TileSize, TileSize);
+            Rectangle dest = new Rectangle((int)Position.X, (int)Position.Y, TILE_SIZE, TILE_SIZE);
 
             if (CombatManager.InCombat)
             {

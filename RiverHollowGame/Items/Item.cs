@@ -38,7 +38,7 @@ namespace RiverHollow.Items
         protected Vector2 _vPosition;
         public virtual Vector2 Position { get => _vPosition; set => _vPosition = value; }
 
-        public virtual Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, TileSize, TileSize); }
+        public virtual Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, TILE_SIZE, TILE_SIZE); }
         public Rectangle SourceRectangle { get => new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight); }
 
         protected bool _bOnMap;
@@ -51,8 +51,8 @@ namespace RiverHollow.Items
 
         protected string _sDescription;
 
-        protected int _iColTexSize = TileSize;
-        protected int _iRowTexSize = TileSize;
+        protected int _iColTexSize = TILE_SIZE;
+        protected int _iRowTexSize = TILE_SIZE;
         private Parabola _movement;
         protected bool _bStacks;
         public bool DoesItStack => _bStacks;
@@ -556,7 +556,7 @@ namespace RiverHollow.Items
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Tools");
 
             _iColTexSize = 128;
-            _iRowTexSize = TileSize;
+            _iRowTexSize = TILE_SIZE;
 
             _sprite = new AnimatedSprite(@"Textures\Items\ToolAnimations");
 
@@ -568,8 +568,8 @@ namespace RiverHollow.Items
             }
 
             int toolFrames = 5;
-            int toolWidth = TileSize * 3;
-            int toolHeight = TileSize * 4;
+            int toolWidth = TILE_SIZE * 3;
+            int toolHeight = TILE_SIZE * 4;
             int xCrawl = 0;
             int crawlIncrement = toolWidth * toolFrames;
 
@@ -670,7 +670,7 @@ namespace RiverHollow.Items
         /// </summary>
         public void UnlockBuilding()
         {
-            GameManager.DIBuildInfo[_iUnlocks].Unlock();
+            PlayerManager.DIBuildInfo[_iUnlocks].Unlock();
         }
     }
 

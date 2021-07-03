@@ -227,7 +227,7 @@ namespace RiverHollow.GUIComponents.Screens
         float _fItemFade = 1.0f;
         const float FADE_OUT = 0.1f;
 
-        public HUDMiniInventory() : base(GUIWindow.Window_2, TileSize, TileSize)
+        public HUDMiniInventory() : base(GUIWindow.Window_2, TILE_SIZE, TILE_SIZE)
         {
             _btnChangeRow = new GUIButton(new Rectangle(256, 96, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, RowUp);
             _btnChangeRow.FadeOnDisable(false);
@@ -930,12 +930,12 @@ namespace RiverHollow.GUIComponents.Screens
                     public int Row => _iRow;
 
                     private GUICharacterSprite _sprite;
-                    public StartPosition(int col, int row) : base(new Rectangle(0, 112, 16, 16), TileSize, TileSize, DataManager.FILE_WORLDOBJECTS)
+                    public StartPosition(int col, int row) : base(new Rectangle(0, 112, 16, 16), TILE_SIZE, TILE_SIZE, DataManager.FILE_WORLDOBJECTS)
                     {
                         _iCol = col;
                         _iRow = row;
 
-                        SetScale(Scale);
+                        SetScale(CurrentScale);
                     }
 
                     public override void Draw(SpriteBatch spriteBatch)
