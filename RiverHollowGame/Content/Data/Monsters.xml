@@ -27,7 +27,7 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Texture:AngryHive][Lvl:1][Ability:45][Loot:85|138][Walk:0-0-4-0.15-F][Action1:0-32-4-0.15-F][Cast:0-32-4-0.15-F][Hurt:0-64-4-0.15-F][Critical:0-96-4-0.15-F][KO:0-128-3-0.15-F]</Value>
+      <Value>[Texture:AngryHive][Lvl:1][Ability:45][Loot:84|138][Walk:0-0-4-0.15-F][Action1:0-32-4-0.15-F][Cast:0-32-4-0.15-F][Hurt:0-64-4-0.15-F][Critical:0-96-4-0.15-F][KO:0-128-3-0.15-F]</Value>
     </Item>
   </Asset>
 </XnaContent>

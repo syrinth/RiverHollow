@@ -436,7 +436,7 @@
   </object>
   <object id="86" name="WorldObject" x="515.363" y="805.386" width="73.94" height="70.1448">
    <properties>
-    <property name="ObjectID" type="int" value="57"/>
+    <property name="ObjectID" type="int" value="58"/>
    </properties>
   </object>
  </objectgroup>

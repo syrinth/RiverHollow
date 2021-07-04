@@ -2135,6 +2135,28 @@ namespace RiverHollow.Tile_Engine
             return tile;
         }
 
+        public List<RHTile> GetAllTilesInRange(RHTile startTile, int range)
+        {
+            List<RHTile> rv = new List<RHTile>();
+            int startX = startTile.X - range;
+            int startY = startTile.Y - range;
+
+            int dimensions = ((range * 2) + 1);
+            foreach (Vector2 vec in Util.GetAllPointsInArea(startX, startY, dimensions, dimensions))
+            {
+                RHTile tile = GetTileByGridCoords(vec);
+                if (tile != null)
+                {
+                    if(Util.GetRHTileDelta(startTile, tile) <= 7)
+                    {
+                        rv.Add(tile);
+                    }
+                }
+            }
+
+            return rv;
+        }
+
         /// <summary>
         /// Returns a list of all RHTiles that exist
         /// </summary>

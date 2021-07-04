@@ -378,6 +378,11 @@ namespace RiverHollow.Items
         int _iSeedID = 0;
         public int SeedID => _iSeedID;
 
+        int _iHoneyID = -1;
+        public int HoneyID => _iHoneyID;
+
+        int _iRange = -1;
+
         Garden _objGarden;
 
         public Plant(int id, Dictionary<string, string> stringData) : base(id, stringData, false)
@@ -391,6 +396,9 @@ namespace RiverHollow.Items
             _iCurrentState = 0;
             _iBaseYOffset = (_iSpriteHeight / TILE_SIZE) - 1;
 
+            
+            Util.AssignValue(ref _iRange, "Range", stringData);
+            Util.AssignValue(ref _iHoneyID, "HoneyID", stringData);
             Util.AssignValue(ref _iSeedID, "SeedID", stringData);
             Util.AssignValue(ref _iResourceID, "Item", stringData);
             Util.AssignValue(ref _iMaxStates, "TrNum", stringData); //Number of growth phases
@@ -854,8 +862,7 @@ namespace RiverHollow.Items
 
         public class LightSource : Buildable
         {
-            private Light _objLight;
-            public Light LightObject => _objLight;
+            public Light LightObject { get; }
             private Vector2 _vLightPos;
             public Vector2 LightPosition => _vLightPos;
 
@@ -865,7 +872,7 @@ namespace RiverHollow.Items
 
                 int lightID = -1;
                 Util.AssignValue(ref lightID, "LightID", stringData);
-                _objLight = DataManager.GetLight(lightID);
+                LightObject = DataManager.GetLight(lightID);
 
                 Util.AssignValue(ref _vLightPos, "LightPosition", stringData);
                 SyncLightPosition();
@@ -874,12 +881,12 @@ namespace RiverHollow.Items
             public override void Update(GameTime gTime)
             {
                 base.Update(gTime);
-                _objLight.Update(gTime);
+                LightObject.Update(gTime);
             }
 
             public void DrawLight(SpriteBatch spriteBatch)
             {
-                _objLight.Draw(spriteBatch);
+                LightObject.Draw(spriteBatch);
             }
 
             public override bool PlaceOnMap(Vector2 pos, RHMap map)
@@ -894,8 +901,8 @@ namespace RiverHollow.Items
 
             private void SyncLightPosition()
             {
-                _objLight.Position = new Vector2(MapPosition.X - _objLight.Width / 2, MapPosition.Y - _objLight.Height / 2);
-                _objLight.Position += _vLightPos;
+                LightObject.Position = new Vector2(MapPosition.X - LightObject.Width / 2, MapPosition.Y - LightObject.Height / 2);
+                LightObject.Position += _vLightPos;
             }
         }
 
@@ -995,6 +1002,8 @@ namespace RiverHollow.Items
             int _iPeriod = -1;
             int _iDaysToHoney = -1;
             int _iItemID = -1;
+
+            int _iHoneyToGather = -1;
             bool _bReady = false;
             public BeeHive(int id, Dictionary<string, string> stringData) : base(id)
             {
@@ -1010,7 +1019,7 @@ namespace RiverHollow.Items
             {
                 if (_bReady)
                 {
-                    InventoryManager.AddToInventory(_iItemID);
+                    InventoryManager.AddToInventory(_iHoneyToGather);
                     _bReady = false;
                     _iDaysToHoney = _iPeriod;
                     _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
@@ -1021,6 +1030,21 @@ namespace RiverHollow.Items
             {
                 if (_iDaysToHoney == 0)
                 {
+                    RHTile closestFlowerTile = Tiles[0];
+                    foreach (RHTile t in MapManager.Maps[Tiles[0].MapName].GetAllTilesInRange(Tiles[0], 7)){
+                        if(t.WorldObject!= null && t.WorldObject.CompareType(ObjectTypeEnum.Garden))
+                        {
+                            Plant p = ((Garden)t.WorldObject).GetPlant();
+                            if(p!= null && p.HoneyID != -1 && p.FinishedGrowing() &&  (closestFlowerTile == Tiles[0] || Util.GetRHTileDelta(Tiles[0], t) < Util.GetRHTileDelta(closestFlowerTile, t)))
+                            {
+                                closestFlowerTile = t;
+                            }
+                        }
+                    }
+
+                    if (closestFlowerTile == Tiles[0]) { _iHoneyToGather = _iItemID; }
+                    else { _iHoneyToGather = ((Garden)closestFlowerTile.WorldObject).GetPlant().HoneyID; }
+
                     _bReady = true;
                     _sprite.PlayAnimation(AnimationEnum.Action_Finished);
                 }

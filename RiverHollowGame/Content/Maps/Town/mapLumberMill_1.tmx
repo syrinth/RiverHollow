@@ -340,7 +340,7 @@
   </object>
   <object id="38" name="WorldObject" x="160.927" y="82.76" width="12.8117" height="10.48">
    <properties>
-    <property name="ObjectID" type="int" value="58"/>
+    <property name="ObjectID" type="int" value="59"/>
    </properties>
   </object>
  </objectgroup>
