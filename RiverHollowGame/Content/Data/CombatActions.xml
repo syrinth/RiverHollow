@@ -181,5 +181,9 @@
       <Key>44</Key>
       <Value>[Type:Action][Target:Ally][Range:1][AreaType:Diamond][Heal:50][Action:UserAttack Apply]</Value>
     </Item>
+    <Item>
+      <Key>45</Key>
+      <Value>[Type:Action][Animation:HiveAttack-16-16-4-0.1][Target:Enemy][Range:7][AreaType:Single][Harm:100][Action:UserAttack Direct Apply]</Value>
+    </Item>
   </Asset>
 </XnaContent>

@@ -2,7 +2,7 @@
 <map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="51">
  <properties>
   <property name="Outside" type="bool" value="false"/>
-  <property name="Resources" value="28-C"/>
+  <property name="Resources" value="29-C"/>
   <property name="ResourcesMinMax" value="1-5"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>

@@ -253,6 +253,7 @@ namespace RiverHollow.Items
             bool rv = false;
             switch (_eObjectType)
             {
+                case ObjectTypeEnum.BeeHive:
                 case ObjectTypeEnum.Building:
                 case ObjectTypeEnum.Container:
                 case ObjectTypeEnum.Floor:
@@ -986,6 +987,47 @@ namespace RiverHollow.Items
                 }
 
                 Rollover();
+            }
+        }
+
+        public class BeeHive : Buildable
+        {
+            int _iPeriod = -1;
+            int _iDaysToHoney = -1;
+            int _iItemID = -1;
+            bool _bReady = false;
+            public BeeHive(int id, Dictionary<string, string> stringData) : base(id)
+            {
+                LoadDictionaryData(stringData);
+                _sprite.AddAnimation(AnimationEnum.Action_Finished, _pImagePos.X + TILE_SIZE, _pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
+
+                Util.AssignValue(ref _iItemID, "ItemID", stringData);
+                Util.AssignValue(ref _iPeriod, "Period", stringData);
+                _iDaysToHoney = _iPeriod;
+            }
+
+            public override void ProcessRightClick()
+            {
+                if (_bReady)
+                {
+                    InventoryManager.AddToInventory(_iItemID);
+                    _bReady = false;
+                    _iDaysToHoney = _iPeriod;
+                    _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
+                }
+            }
+
+            public override void Rollover()
+            {
+                if (_iDaysToHoney == 0)
+                {
+                    _bReady = true;
+                    _sprite.PlayAnimation(AnimationEnum.Action_Finished);
+                }
+                else
+                {
+                    _iDaysToHoney--;
+                }
             }
         }
 

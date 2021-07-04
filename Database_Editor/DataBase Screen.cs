@@ -59,7 +59,7 @@ namespace Database_Editor
         const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
         const string ACTIONS_REF_TAGS = "StatusEffectID,SummonID";
         const string BUILDINGS_REF_TAGS = "ReqItems,LightID";
-        const string DUNGEON_REF_TAGS = "ItemID,MonsterID";
+        const string DUNGEON_REF_TAGS = "ObjectID,MonsterID";
 
         const string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,SpiritID";
         #endregion

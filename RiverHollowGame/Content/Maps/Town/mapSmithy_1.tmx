@@ -351,17 +351,17 @@
  <objectgroup id="9" name="MapObject">
   <object id="27" name="WorldObject" x="193.169" y="98.495" width="12.8117" height="10.48">
    <properties>
-    <property name="ObjectID" type="int" value="56"/>
+    <property name="ObjectID" type="int" value="58"/>
    </properties>
   </object>
   <object id="28" name="WorldObject" x="113.403" y="99.2657" width="12.8117" height="10.48">
    <properties>
-    <property name="ObjectID" type="int" value="35"/>
+    <property name="ObjectID" type="int" value="37"/>
    </properties>
   </object>
   <object id="29" name="WorldObject" x="16.4463" y="179.109" width="12.8117" height="10.48">
    <properties>
-    <property name="ObjectID" type="int" value="36"/>
+    <property name="ObjectID" type="int" value="38"/>
    </properties>
   </object>
  </objectgroup>

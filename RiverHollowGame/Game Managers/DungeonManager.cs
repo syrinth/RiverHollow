@@ -364,17 +364,17 @@ namespace RiverHollow.Game_Managers
                 {
                     case DirectionEnum.Up:
                         pos = new Vector2(blocker.Position.X + blocker.Size.Width, (int)blocker.Position.Y);
-                        CreateEntranceObject(blocker, map, 59, 60, 61, blocker.Position, pos, blocker.Position);
+                        CreateEntranceObject(blocker, map, 62, 63, 64, blocker.Position, pos, blocker.Position);
                         break;
                     case DirectionEnum.Down:
                         pos = blocker.Position + new Vector2(0, TILE_SIZE);
-                        CreateEntranceObject(blocker, map, 70, 71, 72, pos, new Vector2(pos.X + blocker.Size.Width, pos.Y), pos);
+                        CreateEntranceObject(blocker, map, 73, 74, 75, pos, new Vector2(pos.X + blocker.Size.Width, pos.Y), pos);
                         break;
                     case DirectionEnum.Left:
-                        CreateEntranceObject(blocker, map, 73, 74, 75, blocker.Position, blocker.Position + new Vector2(0, blocker.Size.Height), blocker.Position);
+                        CreateEntranceObject(blocker, map, 76, 77, 78, blocker.Position, blocker.Position + new Vector2(0, blocker.Size.Height), blocker.Position);
                         break;
                     case DirectionEnum.Right:
-                        CreateEntranceObject(blocker, map, 76, 77, 78, blocker.Position, blocker.Position + new Vector2(0, blocker.Size.Height), blocker.Position);
+                        CreateEntranceObject(blocker, map, 79, 80, 81, blocker.Position, blocker.Position + new Vector2(0, blocker.Size.Height), blocker.Position);
                         break;
                 }
             }

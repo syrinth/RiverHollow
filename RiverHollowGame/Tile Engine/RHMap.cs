@@ -1504,6 +1504,7 @@ namespace RiverHollow.Tile_Engine
                         case ObjectTypeEnum.Floor:
                             if (MouseTile.Flooring == null) { goto case ObjectTypeEnum.Wall; }
                             break;
+                        case ObjectTypeEnum.BeeHive:
                         case ObjectTypeEnum.Garden:
                         case ObjectTypeEnum.Light:
                         case ObjectTypeEnum.Wall:
@@ -1524,6 +1525,7 @@ namespace RiverHollow.Tile_Engine
                                 case ObjectTypeEnum.Building:
                                     RemoveDoor((Building)targetObj);
                                     goto case ObjectTypeEnum.Structure;
+                                case ObjectTypeEnum.BeeHive:
                                 case ObjectTypeEnum.Garden:
                                 case ObjectTypeEnum.Light:
                                 case ObjectTypeEnum.Mailbox:
@@ -1545,6 +1547,7 @@ namespace RiverHollow.Tile_Engine
 
                     switch (toRemove.Type)
                     {
+                        case ObjectTypeEnum.BeeHive:
                         case ObjectTypeEnum.Floor:
                         case ObjectTypeEnum.Garden:
                         case ObjectTypeEnum.Wall:

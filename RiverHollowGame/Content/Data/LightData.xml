@@ -25,5 +25,9 @@
       <Key>5</Key>
       <Value>[Texture:WindowInnCircle][Idle:1-1][Dimensions:40-40]</Value>
     </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Texture:GlowLight][Idle:1-1][Dimensions:256-256]</Value>
+    </Item>
   </Asset>
 </XnaContent>

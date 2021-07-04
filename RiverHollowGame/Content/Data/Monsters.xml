@@ -11,7 +11,7 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Texture:FangedFur][Condition:Forest-Summer][Jump][Lvl:1][Ability:38][Loot:26 23 25][Walk:0-0-4-.15-T][Action1:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F]</Value>
+      <Value>[Texture:FangedFur][Condition:Forest-Summer][Jump][Lvl:1][Ability:38][Loot:26|23|25][Walk:0-0-4-.15-T][Action1:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -23,7 +23,11 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Texture:Beard][Lvl:1][Ability:300][Loot:59][Walk:0-0-3-0.15-T][Action1:0-0-3-0.15-T][Cast:0-0-3-0.15-T][Hurt:0-0-3-0.15-T][Critical:0-0-3-0.15-T][KO:0-0-3-0.15-T]</Value>
+      <Value>[Texture:Beard][Lvl:1][Ability:45][Loot:138|85][Walk:0-0-4-0.15-T][Action1:0-0-4-0.15-T][Cast:0-0-3-0.15-T][Hurt:0-0-3-0.15-T][Critical:0-0-3-0.15-T][KO:0-0-3-0.15-T]</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Texture:AngryHive][Lvl:1][Ability:45][Loot:85|138][Walk:0-0-4-0.15-F][Action1:0-32-4-0.15-F][Cast:0-32-4-0.15-F][Hurt:0-64-4-0.15-F][Critical:0-96-4-0.15-F][KO:0-128-3-0.15-F]</Value>
     </Item>
   </Asset>
 </XnaContent>

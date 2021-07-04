@@ -105,7 +105,7 @@ namespace RiverHollow.Characters
 
             if (data.ContainsKey("Loot"))
             {
-                split = data["Loot"].Split(' ');
+                split = data["Loot"].Split('|');
                 for (int i = 0; i < split.Length; i++)
                 {
                     _liLootIDs.Add(int.Parse(split[i]));
