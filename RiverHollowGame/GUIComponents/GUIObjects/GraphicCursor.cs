@@ -110,12 +110,20 @@ namespace RiverHollow.GUIComponents.GUIObjects
             return rv;
         }
 
+        public static void UpdateTownBuildObject(GameTime gTime)
+        {
+            if (GameManager.HeldObject != null)
+            {
+                GameManager.HeldObject?.SnapPositionToGrid(GetWorldMousePosition() - GameManager.HeldObject.PickupOffset);
+                HeldObject?.Update(gTime);
+            }
+        }
+
         public static void DrawTownBuildObject(SpriteBatch spriteBatch)
         {
             if (GameManager.HeldObject != null)
             {
-                GameManager.HeldObject.SnapPositionToGrid(GetWorldMousePosition() - GameManager.HeldObject.PickupOffset);
-                HeldObject.Sprite.Draw(spriteBatch);
+                HeldObject?.Draw(spriteBatch);
             }
         }
 

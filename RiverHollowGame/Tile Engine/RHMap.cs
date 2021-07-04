@@ -58,6 +58,8 @@ namespace RiverHollow.Tile_Engine
         protected Dictionary<string, TiledMapTileLayer> _diLayers;
         public Dictionary<string, TiledMapTileLayer> Layers => _diLayers;
 
+        private List<Light> _liLights;
+        private List<Light> _liHeldLights;
         private List<RHTile> _liTestTiles;
         private List<WorldActor> _liActors;
         public List<Monster> Monsters { get; }
@@ -96,6 +98,8 @@ namespace RiverHollow.Tile_Engine
             _liMapObjects = new List<TiledMapObject>();
             _liShopData = new List<ShopLocation>();
             _liPlacedWorldObjects = new List<WorldObject>();
+            _liLights = new List<Light>();
+            _liHeldLights = new List<Light>();
             _liCutscenes = new List<int>();
             _diResources = new Dictionary<RarityEnum, List<int>>();
 
@@ -138,6 +142,8 @@ namespace RiverHollow.Tile_Engine
 
             _liBuildings = map._liBuildings;
             _liPlacedWorldObjects = map._liPlacedWorldObjects;
+            _liLights = map._liLights;
+            _liHeldLights = map._liHeldLights;
 
             MapWidthTiles = _map.Width;
             MapHeightTiles = _map.Height;
@@ -385,23 +391,44 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
-        public void DrawLights(SpriteBatch spriteBatch)
+        public void AddHeldLights(List<Light> newLights)
         {
-            foreach (WorldObject obj in _liPlacedWorldObjects)
+            if (newLights != null)
             {
-                if (obj.CompareType(ObjectTypeEnum.Light))
+                _liHeldLights.AddRange(newLights);
+            }
+        }
+        public void ClearHeldLights() { _liHeldLights.Clear(); }
+        public void AddLights(List<Light> newLights)
+        {
+            if (newLights != null)
+            {
+                foreach (Light obj in newLights)
                 {
-                    ((LightSource)obj).DrawLight(spriteBatch);
+                    if (!_liLights.Contains(obj))
+                    {
+                        _liLights.Add(obj);
+                    }
                 }
             }
-
-            foreach(Building obj in _liBuildings)
+        }
+        public void RemoveLights(List<Light> newLights)
+        {
+            if (newLights != null)
             {
-                obj.DrawLights(spriteBatch);
+                foreach (Light obj in newLights)
+                {
+                    _liLights.Remove(obj);
+                }
             }
+        }
+
+        public void DrawLights(SpriteBatch spriteBatch)
+        {
+            foreach (Light obj in _liLights) { obj.Draw(spriteBatch); }
+            foreach (Light obj in _liHeldLights) { obj.Draw(spriteBatch); }
 
             //spriteBatch.Draw(lightMask, new Vector2(PlayerManager.World.CollisionBox.Center.X - lightMask.Width / 2, PlayerManager.World.CollisionBox.Y - lightMask.Height / 2), Color.White);
-
         }
 
         public void DrawUpper(SpriteBatch spriteBatch)
@@ -1504,9 +1531,9 @@ namespace RiverHollow.Tile_Engine
                         case ObjectTypeEnum.Floor:
                             if (MouseTile.Flooring == null) { goto case ObjectTypeEnum.Wall; }
                             break;
-                        case ObjectTypeEnum.BeeHive:
+                        case ObjectTypeEnum.Beehive:
+                        case ObjectTypeEnum.Buildable:
                         case ObjectTypeEnum.Garden:
-                        case ObjectTypeEnum.Light:
                         case ObjectTypeEnum.Wall:
                             rv = BuildMultiObject(toBuild);
                             break;
@@ -1525,9 +1552,9 @@ namespace RiverHollow.Tile_Engine
                                 case ObjectTypeEnum.Building:
                                     RemoveDoor((Building)targetObj);
                                     goto case ObjectTypeEnum.Structure;
-                                case ObjectTypeEnum.BeeHive:
+                                case ObjectTypeEnum.Beehive:
+                                case ObjectTypeEnum.Buildable:
                                 case ObjectTypeEnum.Garden:
-                                case ObjectTypeEnum.Light:
                                 case ObjectTypeEnum.Mailbox:
                                 case ObjectTypeEnum.Structure:
                                 case ObjectTypeEnum.Wall:
@@ -1547,7 +1574,7 @@ namespace RiverHollow.Tile_Engine
 
                     switch (toRemove.Type)
                     {
-                        case ObjectTypeEnum.BeeHive:
+                        case ObjectTypeEnum.Beehive:
                         case ObjectTypeEnum.Floor:
                         case ObjectTypeEnum.Garden:
                         case ObjectTypeEnum.Wall:
@@ -1580,6 +1607,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     //Drop the Building from the GameManger
                     GameManager.DropWorldObject();
+                    ClearHeldLights();
 
                     //Only leave TownMode if we were in Build Mode
                     if (TownModeBuild())
@@ -1638,6 +1666,7 @@ namespace RiverHollow.Tile_Engine
                     }
 
                     GameManager.DropWorldObject();
+                    ClearHeldLights();
                 }
 
                 rv = true;
@@ -1762,6 +1791,8 @@ namespace RiverHollow.Tile_Engine
             GameManager.PickUpWorldObject(targetObj);
             targetObj.SetPickupOffset(mouseLocation.ToVector2());
             targetObj.RemoveSelfFromTiles();
+            RemoveLights(targetObj.GetLights());
+            AddHeldLights(targetObj.GetLights());
         }
 
         public bool RemoveBuilding(Point mouseLocation)
@@ -2190,6 +2221,7 @@ namespace RiverHollow.Tile_Engine
                 machines = new List<MachineData>(),
                 plants = new List<PlantData>(),
                 gardens = new List<GardenData>(),
+                beehives = new List<BeehiveData>(),
                 warpPoints = new List<WarpPointData>()
             };
 
@@ -2197,6 +2229,9 @@ namespace RiverHollow.Tile_Engine
             {
                 switch (wObj.Type)
                 {
+                    case ObjectTypeEnum.Beehive:
+                        mapData.beehives.Add(((Beehive)wObj).SaveData());
+                        break;
                     case ObjectTypeEnum.Container:
                         mapData.containers.Add(((Container)wObj).SaveData());
                         break;
@@ -2227,37 +2262,43 @@ namespace RiverHollow.Tile_Engine
 
             return mapData;
         }
-        internal void LoadData(MapData data)
+        internal void LoadData(MapData mData)
         {
-            foreach (WorldObjectData w in data.worldObjects)
+            foreach (WorldObjectData w in mData.worldObjects)
             {
                 DataManager.CreateAndPlaceNewWorldObject(w.worldObjectID, new Vector2(w.x, w.y), this);
             }
-            foreach (ContainerData c in data.containers)
+            foreach (ContainerData c in mData.containers)
             {
                 Container con = (Container)DataManager.GetWorldObjectByID(c.containerID);
                 con.LoadData(c);
                 con.PlaceOnMap(this);
             }
-            foreach (MachineData mac in data.machines)
+            foreach (MachineData mac in mData.machines)
             {
                 Machine theMachine = (Machine)DataManager.GetWorldObjectByID(mac.ID);
                 theMachine.LoadData(mac);
                 theMachine.PlaceOnMap(this);
             }
-            foreach (PlantData plantData in data.plants)
+            foreach (PlantData plantData in mData.plants)
             {
                 Plant plant = (Plant)DataManager.GetWorldObjectByID(plantData.ID);
                 plant.LoadData(plantData);
                 plant.PlaceOnMap(this);
             }
-            foreach (GardenData gardenData in data.gardens)
+            foreach (GardenData gardenData in mData.gardens)
             {
                 Garden g = (Garden)DataManager.GetWorldObjectByID(gardenData.ID);
                 g.LoadData(gardenData);
                 g.PlaceOnMap(this);
             }
-            foreach (WarpPointData warpData in data.warpPoints)
+            foreach (BeehiveData data in mData.beehives)
+            {
+                Beehive obj = (Beehive)DataManager.GetWorldObjectByID(data.ID);
+                obj.LoadData(data);
+                obj.PlaceOnMap(this);
+            }
+            foreach (WarpPointData warpData in mData.warpPoints)
             {
                 WarpPoint w = (WarpPoint)DataManager.GetWorldObjectByID(warpData.ID);
                 w.LoadData(warpData);

@@ -1299,147 +1299,147 @@
     </Item>
     <Item>
       <Key>WorldObject_1</Key>
-      <Value>[Name:Poison Tile]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_2</Key>
-      <Value>[Name:Floor Spikes]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_3</Key>
-      <Value>[Name:Chest]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_4</Key>
-      <Value>[Name:Tree]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_5</Key>
-      <Value>[Name:Darkwood Tree]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_6</Key>
-      <Value>[Name:Rock]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_7</Key>
-      <Value>[Name:Big Rock]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_8</Key>
-      <Value>[Name:Copper Ore]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_9</Key>
-      <Value>[Name:Diamond Node]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_10</Key>
-      <Value>[Name:Emerald Node]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_11</Key>
-      <Value>[Name:Ruby Node]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_12</Key>
-      <Value>[Name:Sapphire Node]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_13</Key>
-      <Value>[Name:Opal Node]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_14</Key>
-      <Value>[Name:Jet Node]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_15</Key>
-      <Value>[Name:Amber Node]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_16</Key>
-      <Value>[Name:Jade Node]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_17</Key>
-      <Value>[Name:Amethyst Node]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_18</Key>
-      <Value>[Name:Topaz Node]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_19</Key>
-      <Value>[Name:Stump]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_20</Key>
-      <Value>[Name:Clay Mound]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_21</Key>
-      <Value>[Name:Push-Trigger]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_22</Key>
-      <Value>[Name:Dungeon Door_Up]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_23</Key>
-      <Value>[Name:Interaction Trigger]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_24</Key>
-      <Value>[Name:Dungeon Side Door]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_25</Key>
-      <Value>[Name:Dungeon Door_Down1]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_26</Key>
-      <Value>[Name:Stone Floor]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_27</Key>
-      <Value>[Name:Garden Bed]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_28</Key>
-      <Value>[Name:Mushroom]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_29</Key>
-      <Value>[Name:Dragon Thistle]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_30</Key>
-      <Value>[Name:Aether Shroom]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_31</Key>
-      <Value>[Name:Vision Shroom]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_32</Key>
-      <Value>[Name:Dream Root]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_33</Key>
-      <Value>[Name:Vampire Plant]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_34</Key>
       <Value>[Name:Torch]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_35</Key>
+      <Key>WorldObject_2</Key>
       <Value>[Name:Lantern]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_36</Key>
+      <Key>WorldObject_3</Key>
       <Value>[Name:Glowing Orb]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_4</Key>
+      <Value>[Name:Poison Tile]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_5</Key>
+      <Value>[Name:Floor Spikes]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_6</Key>
+      <Value>[Name:Chest]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_7</Key>
+      <Value>[Name:Tree]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_8</Key>
+      <Value>[Name:Darkwood Tree]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_9</Key>
+      <Value>[Name:Rock]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_10</Key>
+      <Value>[Name:Big Rock]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_11</Key>
+      <Value>[Name:Copper Ore]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_12</Key>
+      <Value>[Name:Diamond Node]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_13</Key>
+      <Value>[Name:Emerald Node]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_14</Key>
+      <Value>[Name:Ruby Node]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_15</Key>
+      <Value>[Name:Sapphire Node]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_16</Key>
+      <Value>[Name:Opal Node]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_17</Key>
+      <Value>[Name:Jet Node]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_18</Key>
+      <Value>[Name:Amber Node]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_19</Key>
+      <Value>[Name:Jade Node]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_20</Key>
+      <Value>[Name:Amethyst Node]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_21</Key>
+      <Value>[Name:Topaz Node]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_22</Key>
+      <Value>[Name:Stump]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_23</Key>
+      <Value>[Name:Clay Mound]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_24</Key>
+      <Value>[Name:Push-Trigger]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_25</Key>
+      <Value>[Name:Dungeon Door_Up]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_26</Key>
+      <Value>[Name:Interaction Trigger]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_27</Key>
+      <Value>[Name:Dungeon Side Door]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_28</Key>
+      <Value>[Name:Dungeon Door_Down1]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_29</Key>
+      <Value>[Name:Stone Floor]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_30</Key>
+      <Value>[Name:Garden Bed]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_31</Key>
+      <Value>[Name:Mushroom]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_32</Key>
+      <Value>[Name:Dragon Thistle]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_33</Key>
+      <Value>[Name:Aether Shroom]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_34</Key>
+      <Value>[Name:Vision Shroom]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_35</Key>
+      <Value>[Name:Dream Root]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_36</Key>
+      <Value>[Name:Vampire Plant]</Value>
     </Item>
     <Item>
       <Key>WorldObject_37</Key>

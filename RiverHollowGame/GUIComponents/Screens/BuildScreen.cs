@@ -229,6 +229,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     GameManager.EnterTownModeBuild();
                     GameManager.PickUpWorldObject(obj);
+                    MapManager.CurrentMap.AddHeldLights(obj.GetLights());
                     obj.SetPickupOffset();
                 }
 

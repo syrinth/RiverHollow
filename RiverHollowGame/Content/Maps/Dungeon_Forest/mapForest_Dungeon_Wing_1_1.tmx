@@ -105,17 +105,17 @@
   </object>
   <object id="39" name="ResourceSpawn" x="159.667" y="81.001" width="217.666" height="75.4997">
    <properties>
-    <property name="Resources" value="6"/>
+    <property name="Resources" value="9"/>
    </properties>
   </object>
   <object id="40" name="ResourceSpawn" x="36.1668" y="161.084" width="106.333" height="85.833">
    <properties>
-    <property name="Resources" value="6"/>
+    <property name="Resources" value="9"/>
    </properties>
   </object>
   <object id="41" name="ResourceSpawn" x="275.834" y="211.584" width="166.333" height="41.833">
    <properties>
-    <property name="Resources" value="6"/>
+    <property name="Resources" value="9"/>
    </properties>
   </object>
  </objectgroup>

@@ -284,6 +284,9 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Gardens")]
             public List<GardenData> gardens;
 
+            [XmlArray(ElementName = "Beehives")]
+            public List<BeehiveData> beehives;
+
             [XmlArray(ElementName = "WarpPoints")]
             public List<WarpPointData> warpPoints;
 
@@ -465,6 +468,26 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "Plantdata")]
             public PlantData plantData;
+        }
+        public struct BeehiveData
+        {
+            [XmlElement(ElementName = "BeehiveID")]
+            public int ID;
+
+            [XmlElement(ElementName = "X")]
+            public int x;
+
+            [XmlElement(ElementName = "Y")]
+            public int y;
+
+            [XmlElement(ElementName = "TimeLeft")]
+            public int timeLeft;
+
+            [XmlElement(ElementName = "Ready")]
+            public bool ready;
+
+            [XmlElement(ElementName = "HoneyType")]
+            public int honeyType;
         }
         public struct ShopData
         {

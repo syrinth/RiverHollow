@@ -160,6 +160,7 @@ namespace RiverHollow
                 if (IsMapShown())
                 {
                     Camera.Update(gTime);
+                    GUICursor.UpdateTownBuildObject(gTime);
                     if (CutsceneManager.Playing) { CutsceneManager.Update(gTime); }
                     else
                     {

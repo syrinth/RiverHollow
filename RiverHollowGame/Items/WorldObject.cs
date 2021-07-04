@@ -27,8 +27,10 @@ namespace RiverHollow.Items
 
         public List<RHTile> Tiles;
 
-        protected string MapName => Tiles[0].MapName;
-        public RHMap CurrentMap => MapManager.Maps[Tiles[0].MapName];
+        protected bool AssignedToTiles => Tiles.Count > 0;
+
+        protected string MapName => AssignedToTiles ? Tiles[0].MapName : string.Empty;
+        public RHMap CurrentMap => AssignedToTiles ? MapManager.Maps[Tiles[0].MapName] : null;
 
         protected bool _bWalkable = false;
         public bool Walkable => _bWalkable;
@@ -54,6 +56,9 @@ namespace RiverHollow.Items
         public int BaseWidth => _iBaseWidth;
         protected int _iBaseHeight = 1;
         public int BaseHeight => _iBaseHeight;
+
+        protected List<LightInfo> _liLights;
+        public IList<LightInfo> Lights => _liLights.AsReadOnly();
 
         protected int _iBaseXOffset = 0;
         protected int _iBaseYOffset = 0;
@@ -98,6 +103,23 @@ namespace RiverHollow.Items
 
             Util.AssignValue(ref _eObjectType, "Type", stringData);
 
+            if (stringData.ContainsKey("LightID"))
+            {
+                _liLights = new List<LightInfo>();
+
+                foreach (string s in Util.FindParams(stringData["LightID"]))
+                {
+                    string[] split = s.Split('-');
+
+                    LightInfo info;
+                    info.LightObject = DataManager.GetLight(int.Parse(split[0]));
+                    info.Offset = new Vector2(int.Parse(split[1]), int.Parse(split[2]));
+
+                    SyncLightPositions();
+                    _liLights.Add(info);
+                }
+            }
+
             if (loadSprite)
             {
                 if (stringData.ContainsKey("Texture")) { LoadSprite(stringData, stringData["Texture"]); }
@@ -129,6 +151,14 @@ namespace RiverHollow.Items
 
         public virtual void Update(GameTime gTime) {
             _sprite.Update(gTime);
+            SyncLightPositions();
+            if (_liLights != null)
+            {
+                foreach (LightInfo info in _liLights)
+                {
+                    info.LightObject.Update(gTime);
+                }
+            }
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
@@ -154,7 +184,10 @@ namespace RiverHollow.Items
 
         public bool PlaceOnMap(RHMap map)
         {
-            return PlaceOnMap(this.MapPosition, map);
+            bool rv = PlaceOnMap(this.MapPosition, map);
+            map.AddLights(GetLights());
+            SyncLightPositions();
+            return rv;
         }
 
         public virtual bool PlaceOnMap(Vector2 pos, RHMap map)
@@ -246,6 +279,32 @@ namespace RiverHollow.Items
             return itemList;
         }
 
+        public virtual List<Light> GetLights()
+        {
+            List<Light> lights = null;
+            if (_liLights != null)
+            {
+                lights = new List<Light>();
+                foreach (LightInfo info in _liLights)
+                {
+                    lights.Add(info.LightObject);
+                }
+            }
+
+            return lights;
+        }
+        public virtual void SyncLightPositions()
+        {
+            if (_liLights != null)
+            {
+                foreach (LightInfo info in _liLights)
+                {
+                    info.LightObject.Position = new Vector2(MapPosition.X - info.LightObject.Width / 2, MapPosition.Y - info.LightObject.Height / 2);
+                    info.LightObject.Position += info.Offset;
+                }
+            }
+        }
+
         public bool CompareType(ObjectTypeEnum t) { return Type == t; }
         public bool IsDestructible() { return CompareType(ObjectTypeEnum.Destructible) || CompareType(ObjectTypeEnum.Plant); }
         public bool IsBuildable()
@@ -253,12 +312,12 @@ namespace RiverHollow.Items
             bool rv = false;
             switch (_eObjectType)
             {
-                case ObjectTypeEnum.BeeHive:
+                case ObjectTypeEnum.Beehive:
                 case ObjectTypeEnum.Building:
+                case ObjectTypeEnum.Buildable:
                 case ObjectTypeEnum.Container:
                 case ObjectTypeEnum.Floor:
                 case ObjectTypeEnum.Garden:
-                case ObjectTypeEnum.Light:
                 case ObjectTypeEnum.Mailbox:
                 case ObjectTypeEnum.Structure:
                 case ObjectTypeEnum.Wall:
@@ -270,6 +329,12 @@ namespace RiverHollow.Items
         }
 
         public virtual bool CanPickUp() { return false; }
+
+        public struct LightInfo
+        {
+            public Light LightObject;
+            public Vector2 Offset;
+        }
     }
 
     public class Destructible : WorldObject
@@ -529,7 +594,7 @@ namespace RiverHollow.Items
             {
                 _iDaysLeft--;
             }
-            else if (!FinishedGrowing()) //If it hasn't finished growing, and there'sno days left, go to the next phase
+            else if (!FinishedGrowing()) //If it hasn't finished growing, and there's no days left, go to the next phase
             {
                 _iCurrentState++;
                 _sprite.PlayAnimation(_iCurrentState.ToString());
@@ -537,6 +602,10 @@ namespace RiverHollow.Items
                 {
                     _iDaysLeft = _diTransitionTimes[_iCurrentState];
                 }
+            }
+            else
+            {
+                CurrentMap.AddLights(GetLights());
             }
         }
         /// <summary>
@@ -701,15 +770,18 @@ namespace RiverHollow.Items
     /// <summary>
     /// Buildable represent WorldObjects that are built by the player
     /// </summary>
-    public abstract class Buildable : WorldObject
+    public class Buildable : WorldObject
     {
         protected Dictionary<int, int> _diReqToMake;
         public Dictionary<int, int> RequiredToMake => _diReqToMake;
 
         protected bool _bSelected = false;
 
-        protected Buildable(int id) : base(id) {
+        protected Buildable(int id) : base(id) { }
+
+        public Buildable(int id, Dictionary<string, string> stringData) : base(id) {
             _iBaseYOffset = (_iSpriteHeight / TILE_SIZE) - BaseHeight;
+            LoadDictionaryData(stringData);
         }
 
         protected override void LoadDictionaryData(Dictionary<string, string> stringData, bool loadSprite = true)
@@ -731,10 +803,9 @@ namespace RiverHollow.Items
         {
             List<SubObjectInfo> _liSubObjectInfo;
             Vector2 _vecSpecialCoords = Vector2.Zero;
-            public Structure(int id, Dictionary<string, string> stringData) : base (id)
+            public Structure(int id, Dictionary<string, string> stringData) : base (id, stringData)
             {
                 _liSubObjectInfo = new List<SubObjectInfo>();
-                LoadDictionaryData(stringData);
 
                 Util.AssignValue(ref _vecSpecialCoords, "SpecialCoords", stringData);
 
@@ -807,10 +878,8 @@ namespace RiverHollow.Items
             public int Columns { get; }
             public Item[,] Inventory { get; }
 
-            public Container(int id, Dictionary<string, string> stringData) : base(id)
+            public Container(int id, Dictionary<string, string> stringData) : base(id, stringData)
             {
-                LoadDictionaryData(stringData);
-
                 Rows = int.Parse(stringData["Rows"]);
                 Columns = int.Parse(stringData["Cols"]);
 
@@ -860,63 +929,16 @@ namespace RiverHollow.Items
             }
         }
 
-        public class LightSource : Buildable
-        {
-            public Light LightObject { get; }
-            private Vector2 _vLightPos;
-            public Vector2 LightPosition => _vLightPos;
-
-            public LightSource(int id, Dictionary<string, string> stringData) : base(id)
-            {
-                LoadDictionaryData(stringData);
-
-                int lightID = -1;
-                Util.AssignValue(ref lightID, "LightID", stringData);
-                LightObject = DataManager.GetLight(lightID);
-
-                Util.AssignValue(ref _vLightPos, "LightPosition", stringData);
-                SyncLightPosition();
-            }
-
-            public override void Update(GameTime gTime)
-            {
-                base.Update(gTime);
-                LightObject.Update(gTime);
-            }
-
-            public void DrawLight(SpriteBatch spriteBatch)
-            {
-                LightObject.Draw(spriteBatch);
-            }
-
-            public override bool PlaceOnMap(Vector2 pos, RHMap map)
-            {
-                bool rv = base.PlaceOnMap(pos, map);
-
-                SyncLightPosition();
-
-                return rv;
-
-            }
-
-            private void SyncLightPosition()
-            {
-                LightObject.Position = new Vector2(MapPosition.X - LightObject.Width / 2, MapPosition.Y - LightObject.Height / 2);
-                LightObject.Position += _vLightPos;
-            }
-        }
-
         public class Mailbox : Buildable
         {
             private AnimatedSprite _alertSprite;
             private List<string> _liCurrentMessages;
             private List<string> _liSentMessages;
 
-            public Mailbox(int id, Dictionary<string, string> stringData) : base(id)
+            public Mailbox(int id, Dictionary<string, string> stringData) : base(id, stringData)
             {
                 _liCurrentMessages = new List<string>();
                 _liSentMessages = new List<string>();
-                LoadDictionaryData(stringData);
                 PlayerManager.PlayerMailbox = this;
 
                 _iBaseYOffset = (_iSpriteHeight / TILE_SIZE) - BaseHeight;
@@ -997,7 +1019,7 @@ namespace RiverHollow.Items
             }
         }
 
-        public class BeeHive : Buildable
+        public class Beehive : Buildable
         {
             int _iPeriod = -1;
             int _iDaysToHoney = -1;
@@ -1005,9 +1027,8 @@ namespace RiverHollow.Items
 
             int _iHoneyToGather = -1;
             bool _bReady = false;
-            public BeeHive(int id, Dictionary<string, string> stringData) : base(id)
+            public Beehive(int id, Dictionary<string, string> stringData) : base(id, stringData)
             {
-                LoadDictionaryData(stringData);
                 _sprite.AddAnimation(AnimationEnum.Action_Finished, _pImagePos.X + TILE_SIZE, _pImagePos.Y, _iSpriteWidth, _iSpriteHeight);
 
                 Util.AssignValue(ref _iItemID, "ItemID", stringData);
@@ -1022,13 +1043,14 @@ namespace RiverHollow.Items
                     InventoryManager.AddToInventory(_iHoneyToGather);
                     _bReady = false;
                     _iDaysToHoney = _iPeriod;
+                    _iHoneyToGather = -1;
                     _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
                 }
             }
 
             public override void Rollover()
             {
-                if (_iDaysToHoney == 0)
+                if (_iDaysToHoney == 0 && !_bReady)
                 {
                     RHTile closestFlowerTile = Tiles[0];
                     foreach (RHTile t in MapManager.Maps[Tiles[0].MapName].GetAllTilesInRange(Tiles[0], 7)){
@@ -1052,6 +1074,29 @@ namespace RiverHollow.Items
                 {
                     _iDaysToHoney--;
                 }
+            }
+
+            public BeehiveData SaveData()
+            {
+                BeehiveData data = new BeehiveData
+                {
+                    ID = this.ID,
+                    x = (int)this.MapPosition.X,
+                    y = (int)this.MapPosition.Y,
+                    timeLeft = this._iDaysToHoney,
+                    ready = this._bReady,
+                    honeyType = _bReady ? _iHoneyToGather : -1
+                };
+
+                return data;
+            }
+            public void LoadData(BeehiveData data)
+            {
+                _iID = data.ID;
+                SnapPositionToGrid(new Vector2(data.x, data.y));
+                _bReady = data.ready;
+                _iDaysToHoney = data.timeLeft;
+                _iHoneyToGather = data.honeyType;
             }
         }
 
@@ -1303,6 +1348,12 @@ namespace RiverHollow.Items
                     WaterGardenBed(EnvironmentManager.IsRaining());
                 }
 
+                public override void Update(GameTime gTime)
+                {
+                    base.Update(gTime);
+                    _objPlant?.Update(gTime);
+                }
+
                 /// <summary>
                 /// Overriding because weneed to set the Depth to 0 for drawing since
                 /// this is a floor object and needs to beon the bottom.
@@ -1325,6 +1376,25 @@ namespace RiverHollow.Items
                 {
                     base.AdjustmentHelper(startTile, adjustAdjacent);
                     _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
+                }
+
+                public override bool PlaceOnMap(Vector2 pos, RHMap map)
+                {
+                    bool rv = base.PlaceOnMap(pos, map);
+
+                    if (_objPlant != null)
+                    {
+                        _objPlant?.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objPlant.Sprite.Height - TILE_SIZE)));
+                        _objPlant?.SyncLightPositions();
+
+                        if (_objPlant.FinishedGrowing())
+                        {
+                            //Need to do this here for loading because the plant is
+                            //set before it's placed
+                            CurrentMap.AddLights(_objPlant?.GetLights());
+                        }
+                    }
+                    return rv;
                 }
 
                 public override void ProcessLeftClick() { HandleGarden(); }
@@ -1351,12 +1421,22 @@ namespace RiverHollow.Items
                 /// <param name="obj">The plant to assign to the garden</param>
                 public void SetPlant(Plant obj)
                 {
-                    if (obj != null) {PlayerManager.AddToTownObjects(obj.ID); }
-                    else if(_objPlant != null) { PlayerManager.RemoveTownObjects(_objPlant.ID); }
+                    if (obj != null) {
+                        PlayerManager.AddToTownObjects(obj.ID);
+                        if (_objPlant != null && _objPlant.FinishedGrowing())
+                        {
+                            CurrentMap?.AddLights(_objPlant?.GetLights());
+                        }
+                    }
+                    else if(_objPlant != null) {
+                        PlayerManager.RemoveTownObjects(_objPlant.ID);
+                        CurrentMap.RemoveLights(obj.GetLights());
+                    }
 
                     _objPlant = obj;
                     _objPlant?.SetGarden(this);
                     _objPlant?.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objPlant.Sprite.Height - TILE_SIZE)));
+                    _objPlant?.SyncLightPositions();
                 }
                 public Plant GetPlant() { return _objPlant; }
 
@@ -1367,8 +1447,8 @@ namespace RiverHollow.Items
                 public override void SnapPositionToGrid(Vector2 position)
                 {
                     base.SnapPositionToGrid(position);
-                    _sprWatered.Position = position;
-                    _objPlant?.SnapPositionToGrid(_vMapPosition);
+                    _sprWatered.Position = _vMapPosition;
+                    _objPlant?.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objPlant.Sprite.Height - TILE_SIZE)));
                 }
 
                 public override void Rollover()
@@ -1382,6 +1462,19 @@ namespace RiverHollow.Items
                 {
                     _bWatered = value;
                     _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
+                }
+
+                public override List<Light> GetLights()
+                {
+                    if(_objPlant!= null) { return _objPlant.GetLights(); }
+                    else { return base.GetLights(); }
+                }
+
+                public override void SyncLightPositions()
+                {
+                    if (_objPlant != null) { _objPlant.SyncLightPositions(); }
+                    else { base.SyncLightPositions(); }
+                    
                 }
 
                 public GardenData SaveData()

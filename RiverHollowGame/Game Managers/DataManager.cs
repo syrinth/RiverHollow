@@ -172,10 +172,10 @@ namespace RiverHollow.Game_Managers
                 case ObjectTypeEnum.Floor:
                     FloorIDs.Add(id);
                     break;
-                case ObjectTypeEnum.BeeHive:
+                case ObjectTypeEnum.Beehive:
+                case ObjectTypeEnum.Buildable:
                 case ObjectTypeEnum.Container:
                 case ObjectTypeEnum.Garden:
-                case ObjectTypeEnum.Light:
                 case ObjectTypeEnum.Wall:
                     StructureIDs.Add(id);
                     break;
@@ -479,8 +479,10 @@ namespace RiverHollow.Game_Managers
                 Dictionary<string, string> diData = _diWorldObjects[id];
                 switch (Util.ParseEnum<ObjectTypeEnum>(diData["Type"]))
                 {
-                    case ObjectTypeEnum.BeeHive:
-                        return new BeeHive(id, diData);
+                    case ObjectTypeEnum.Beehive:
+                        return new Beehive(id, diData);
+                    case ObjectTypeEnum.Buildable:
+                        return new Buildable(id, diData);
                     case ObjectTypeEnum.CombatHazard:
                         return new CombatHazard(id, diData);
                     case ObjectTypeEnum.Container:
@@ -494,8 +496,6 @@ namespace RiverHollow.Game_Managers
                         return new Garden(id, diData);
                     case ObjectTypeEnum.Gatherable:
                         return new Gatherable(id, diData);
-                    case ObjectTypeEnum.Light:
-                        return new LightSource(id, diData);
                     case ObjectTypeEnum.Machine:
                         return new Machine(id, diData);
                     case ObjectTypeEnum.Mailbox:
