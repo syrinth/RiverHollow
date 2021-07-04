@@ -222,18 +222,18 @@
             this.colLightsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colLightsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabDungeons = new System.Windows.Forms.TabPage();
+            this.tbDungeonDescription = new System.Windows.Forms.TextBox();
+            this.label40 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.tbDungeonID = new System.Windows.Forms.TextBox();
             this.tbDungeonName = new System.Windows.Forms.TextBox();
             this.label39 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.dgvDungeonTags = new System.Windows.Forms.DataGridView();
+            this.colDungeonsTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvDungeons = new System.Windows.Forms.DataGridView();
             this.colDungeonsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDungeonsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tbDungeonDescription = new System.Windows.Forms.TextBox();
-            this.label40 = new System.Windows.Forms.Label();
-            this.colDungeonsTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -1610,6 +1610,7 @@
             this.dgvShops.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colShopsID,
             this.colShopsName});
+            this.dgvShops.ContextMenuStrip = this.contextMenu;
             this.dgvShops.Location = new System.Drawing.Point(6, 6);
             this.dgvShops.MultiSelect = false;
             this.dgvShops.Name = "dgvShops";
@@ -2321,6 +2322,23 @@
             this.tabDungeons.Text = "Dungeons";
             this.tabDungeons.UseVisualStyleBackColor = true;
             // 
+            // tbDungeonDescription
+            // 
+            this.tbDungeonDescription.Location = new System.Drawing.Point(320, 51);
+            this.tbDungeonDescription.Multiline = true;
+            this.tbDungeonDescription.Name = "tbDungeonDescription";
+            this.tbDungeonDescription.Size = new System.Drawing.Size(464, 53);
+            this.tbDungeonDescription.TabIndex = 70;
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(317, 35);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(63, 13);
+            this.label40.TabIndex = 69;
+            this.label40.Text = "Description:";
+            // 
             // label38
             // 
             this.label38.AutoSize = true;
@@ -2377,6 +2395,12 @@
             this.dgvDungeonTags.Size = new System.Drawing.Size(464, 278);
             this.dgvDungeonTags.TabIndex = 63;
             // 
+            // colDungeonsTag
+            // 
+            this.colDungeonsTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colDungeonsTag.HeaderText = "Tags";
+            this.colDungeonsTag.Name = "colDungeonsTag";
+            // 
             // dgvDungeons
             // 
             this.dgvDungeons.AllowUserToAddRows = false;
@@ -2416,29 +2440,6 @@
             this.colDungeonsName.Name = "colDungeonsName";
             this.colDungeonsName.ReadOnly = true;
             this.colDungeonsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // tbDungeonDescription
-            // 
-            this.tbDungeonDescription.Location = new System.Drawing.Point(320, 51);
-            this.tbDungeonDescription.Multiline = true;
-            this.tbDungeonDescription.Name = "tbDungeonDescription";
-            this.tbDungeonDescription.Size = new System.Drawing.Size(464, 53);
-            this.tbDungeonDescription.TabIndex = 70;
-            // 
-            // label40
-            // 
-            this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(317, 35);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(63, 13);
-            this.label40.TabIndex = 69;
-            this.label40.Text = "Description:";
-            // 
-            // colDungeonsTag
-            // 
-            this.colDungeonsTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colDungeonsTag.HeaderText = "Tags";
-            this.colDungeonsTag.Name = "colDungeonsTag";
             // 
             // FrmDBEditor
             // 

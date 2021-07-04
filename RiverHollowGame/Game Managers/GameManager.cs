@@ -32,10 +32,6 @@ namespace RiverHollow.Game_Managers
         public static int ScaledPixel => (int)CurrentScale;
         #endregion
 
-        private static List<TriggerObject> _liTriggerObjects;
-        private static List<Spirit> _liSpirits;
-        private static List<Machine> _liMachines;
-
         #region Game Enums
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, ShowRequests, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Party };
@@ -86,6 +82,11 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Managed Data Lists
+        public static List<Merchant> MerchantQueue;
+        private static List<TriggerObject> _liTriggerObjects;
+        private static List<Spirit> _liSpirits;
+        private static List<Machine> _liMachines;
+
         public static Dictionary<int, Task> DITasks;
         public static Dictionary<int, List<Merchandise>> DIShops;
         #endregion
@@ -117,6 +118,7 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadContent(ContentManager Content)
         {
+            MerchantQueue = new List<Merchant>();
             _liMachines = new List<Machine>();
             _liSpirits = new List<Spirit>();
             _liTriggerObjects = new List<TriggerObject>();

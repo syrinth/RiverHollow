@@ -36,7 +36,7 @@ namespace Database_Editor
 
         #region Tags
         const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,ItemID,GoalItem,ItemReward,Collection,Makes,Processes,DWeap,DArmor,DHead,DWrist,RequestIDs,SeedID,HoneyID";
-        const string TAGS_FOR_WORLD_OBJECTS = "ObjectID,Wall,Floor,Resources,Place,SubObjects";
+        const string TAGS_FOR_WORLD_OBJECTS = "ObjectID,Wall,Floor,Resources,Place,SubObjects,RequiredObjectID";
         const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         const string TAGS_FOR_CLASSES = "Class";
         const string TAGS_FOR_SHOPDATA = "ShopData";
@@ -50,7 +50,7 @@ namespace Database_Editor
 
         const string ITEM_REF_TAGS = "ReqItems,Place";
         const string TASK_REF_TAGS = "GoalItem,ItemReward,BuildingID,BuildingRewardID";
-        const string CHARACTER_REF_TAGS = "Collection,Class,ShopData,HouseID,RequiredBuildingID,RequestIDs";
+        const string CHARACTER_REF_TAGS = "Collection,Class,ShopData,HouseID,RequiredBuildingID,RequiredObjectID,RequestIDs";
         const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID,SubObjects,SeedID,HoneyID,LightID";
         const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
         const string SHOPDATA_REF_TAGS = "ItemID,BuildingID";
@@ -1310,6 +1310,11 @@ namespace Database_Editor
 
         private void SaveShopInfo()
         {
+            if (_diShops.Count == _diTabIndices["Shops"])
+            {
+                _diShops[_diTabIndices["Shops"]] = new List<XMLData>();
+            }
+
             List<XMLData> listData = _diShops[_diTabIndices["Shops"]];
             listData.Clear();
 
@@ -2396,6 +2401,7 @@ namespace Database_Editor
             else if (dgv == dgvCharacters) { AddContextMenuItem("Add New", AddNewCharacter, false); }
             else if (dgv == dgvLights) { AddContextMenuItem("Add New", AddNewLight, false); }
             else if (dgv == dgvDungeons) { AddContextMenuItem("Add New", AddNewDungeon, false); }
+            else if (dgv == dgvShops) { AddContextMenuItem("Add New", AddNewShop, false); }
         }
 
         private void AddContextMenuItem(string text, EventHandler triggeredEvent, bool separator)
@@ -2483,6 +2489,12 @@ namespace Database_Editor
             SaveDungeonInfo(_diBasicXML[DUNGEON_XML_FILE]);
             List<string> defaultTags = new List<string>() { "" };
             AddNewGenericXMLObject(tabCtl.TabPages["tabDungeons"], "Dungeons", dgvDungeons, "colDungeonsID", "colDungeonsName", tbDungeonName, tbDungeonID, dgvDungeonTags, "colDungeonTags", null, null, defaultTags);
+        }
+        private void AddNewShop(object sender, EventArgs e)
+        {
+            SaveShopInfo();
+            List<string> defaultTags = new List<string>() { "" };
+            AddNewGenericXMLObject(tabCtl.TabPages["tabShops"], "Shops", dgvShops, "colShopsID", "colShopsName", tbShopName, tbShopID, dgvShopTags, "colShopTags", null, null, defaultTags);
         }
         #endregion
 

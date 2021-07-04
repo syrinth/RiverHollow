@@ -342,6 +342,13 @@ namespace RiverHollow
                 m.RollOver();
             }
 
+            if (GameManager.MerchantQueue.Count > 0)
+            {
+                Merchant chosenMerchant = GameManager.MerchantQueue[0];
+                chosenMerchant.ArriveInTown();
+                GameManager.MerchantQueue.Remove(chosenMerchant);
+            }
+
             MapManager.Rollover();
             DungeonManager.ResetDungeons();
         }

@@ -630,6 +630,10 @@
       <Value>[Name:Grocery]</Value>
     </Item>
     <Item>
+      <Key>Shop_4</Key>
+      <Value>[Name:Abeline's Apiary]</Value>
+    </Item>
+    <Item>
       <Key>Cutscene_0</Key>
       <Value>[Name:Amanda and Gail]</Value>
     </Item>

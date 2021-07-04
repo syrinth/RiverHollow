@@ -105,6 +105,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
                 if (act.CanGiveGift) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Gift")); }
                 if (act.CanJoinParty && act.GetFriendshipLevel() >= 2) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Party")); }
+                liCommands.Add(DataManager.GetGameTextEntry("Selection_Buy"));
                 liCommands.Add(DataManager.GetGameTextEntry("Selection_Requests"));
                 liCommands.Add(DataManager.GetGameTextEntry("Selection_NeverMind"));
 

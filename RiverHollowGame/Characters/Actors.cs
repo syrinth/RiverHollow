@@ -1749,7 +1749,14 @@ namespace RiverHollow.Characters
         protected int _iArrivalPeriod = 0;
         protected int _iNextArrival = -1;
 
+        protected bool _bShopIsOpen = false;
+        protected int _iShopIndex = -1;
+
+        protected List<int> _liRequiredBuildingIDs;
+        protected Dictionary<int, int> _diRequiredObjectIDs;
+
         public bool Introduced = false;
+        protected bool _bArrivedOnce = false;
 
         protected virtual void ImportBasics(int index, Dictionary<string, string> stringData, bool loadanimations = true)
         {
@@ -1769,6 +1776,27 @@ namespace RiverHollow.Characters
 
             _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Villager", _iIndex.ToString("00"));
 
+            if (stringData.ContainsKey("RequiredBuildingID"))
+            {
+                string[] args = Util.FindParams(stringData["RequiredBuildingID"]);
+                foreach (string i in args)
+                {
+                    _liRequiredBuildingIDs.Add(int.Parse(i));
+                }
+            }
+
+            if (stringData.ContainsKey("RequiredObjectID"))
+            {
+                string[] args = Util.FindParams(stringData["RequiredObjectID"]);
+                foreach (string i in args)
+                {
+                    string[] split = i.Split('-');
+                    _diRequiredObjectIDs[int.Parse(split[0])] = int.Parse(split[1]);
+                }
+            }
+
+            Util.AssignValue(ref _iShopIndex, "ShopData", stringData);
+
             if (loadanimations)
             {
                 List<AnimationData> liAnimationData;
@@ -1787,6 +1815,11 @@ namespace RiverHollow.Characters
         }
 
         public virtual void RollOver() { }
+
+        public override void OpenShop()
+        {
+            GUIManager.OpenMainObject(new HUDPurchaseItems(GameManager.DIShops[_iShopIndex].FindAll(m => m.Unlocked)));
+        }
 
         #region Travel Methods
         /// <summary>
@@ -1838,16 +1871,12 @@ namespace RiverHollow.Characters
     public class Villager : TravellingNPC
     {
         protected int _iHouseBuildingID = -1;
-        protected List<int> _liRequiredBuildingIDs;
 
         protected Dictionary<int, bool> _diCollection;
 
         private bool _bCanMarry = false;
         public bool CanBeMarried => _bCanMarry;
         private bool _bMarried = false;
-
-        private bool _bShopIsOpen = false;
-        private int _iShopIndex = -1;
 
         protected bool _bLivesInTown = false;
         public bool LivesInTown => _bLivesInTown;
@@ -1878,6 +1907,7 @@ namespace RiverHollow.Characters
         {
             _eActorType = ActorEnum.Villager;
             _liRequiredBuildingIDs = new List<int>();
+            _diRequiredObjectIDs = new Dictionary<int, int>();
             _diCompleteSchedule = new Dictionary<string, List<Dictionary<string, string>>>();
             _iScheduleIndex = 0;
 
@@ -1888,16 +1918,6 @@ namespace RiverHollow.Characters
         {
             base.ImportBasics(index, stringData, loadanimations);
 
-            if (stringData.ContainsKey("RequiredBuildingID"))
-            {
-                string[] args = Util.FindParams(stringData["RequiredBuildingID"]);
-                foreach (string i in args)
-                {
-                    _liRequiredBuildingIDs.Add(int.Parse(i));
-                }
-            }
-
-            Util.AssignValue(ref _iShopIndex, "ShopData", stringData);
             Util.AssignValue(ref _bCanMarry, "CanMarry", stringData);
 
             CanJoinParty = _bCanMarry;
@@ -2259,11 +2279,6 @@ namespace RiverHollow.Characters
             }
         }
 
-        public override void OpenShop()
-        {
-            GUIManager.OpenMainObject(new HUDPurchaseItems(GameManager.DIShops[_iShopIndex].FindAll(m => m.Unlocked)));
-        }
-
         protected bool CheckTaskLog(ref TextEntry taskEntry)
         {
             bool rv = false;
@@ -2443,11 +2458,15 @@ namespace RiverHollow.Characters
         {
             _eActorType = ActorEnum.Merchant;
 
+            _liRequiredBuildingIDs = new List<int>();
+            _diRequiredObjectIDs = new Dictionary<int, int>();
+
             _liRequestItems = new List<int>();
             DiChosenItems = new Dictionary<Item, bool>();
             ImportBasics(index, stringData, loadanimations);
 
             _bOnTheMap = false;
+            _bShopIsOpen = true;
         }
 
         protected override void ImportBasics(int index, Dictionary<string, string> stringData, bool loadanimations = true)
@@ -2464,9 +2483,28 @@ namespace RiverHollow.Characters
         {
             if (!_bOnTheMap)
             {
-                if (HandleTravelTiming())
+                bool reqsMet = true;
+                foreach(KeyValuePair<int, int> kvp in _diRequiredObjectIDs)
                 {
-                    ArriveInTown();
+                    if(PlayerManager.GetNumberTownObjects(kvp.Key) < kvp.Value) {
+                        reqsMet = false;
+                        break;
+                    }
+                }
+
+                foreach(int i in _liRequiredBuildingIDs)
+                {
+                    if (!PlayerManager.DIBuildInfo[i].Built)
+                    {
+                        reqsMet = false;
+                        break;
+                    }
+                }
+
+                if (reqsMet && HandleTravelTiming())
+                {
+                    if (!_bArrivedOnce) { GameManager.MerchantQueue.Add(this); }
+                    else { GameManager.MerchantQueue.Insert(0, this); }
                 }
             }
             else
@@ -2476,9 +2514,10 @@ namespace RiverHollow.Characters
             }
         }
 
-        private void ArriveInTown()
+        public void ArriveInTown()
         {
             MoveToSpawn();
+            _bArrivedOnce = true;
 
             List<int> copy = new List<int>(_liRequestItems);
             for (int i = 0; i < 3; i++)
@@ -2556,7 +2595,8 @@ namespace RiverHollow.Characters
                 arrivalDelay = _iDaysToFirstArrival,
                 timeToNextArrival = _iNextArrival,
                 introduced = Introduced,
-                spokenKeys = _liSpokenKeys
+                spokenKeys = _liSpokenKeys,
+                arrivedOnce = _bArrivedOnce
             };
 
             return npcData;
@@ -2566,6 +2606,7 @@ namespace RiverHollow.Characters
             Introduced = data.introduced;
             _iDaysToFirstArrival = data.arrivalDelay;
             _iNextArrival = data.timeToNextArrival;
+            _bArrivedOnce = data.arrivedOnce;
 
             if(_iNextArrival == _iArrivalPeriod)
             {
@@ -2905,6 +2946,7 @@ namespace RiverHollow.Characters
         {
             _bLivesInTown = true;
             _liRequiredBuildingIDs = new List<int>();
+            _diRequiredObjectIDs = new Dictionary<int, int>();
             _arrInventory = new Item[_iRows, _iCols];
             _eActorType = ActorEnum.ShippingGremlin;
             _iIndex = index;
