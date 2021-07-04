@@ -446,8 +446,6 @@ namespace RiverHollow.Items
         int _iHoneyID = -1;
         public int HoneyID => _iHoneyID;
 
-        int _iRange = -1;
-
         Garden _objGarden;
 
         public Plant(int id, Dictionary<string, string> stringData) : base(id, stringData, false)
@@ -461,11 +459,9 @@ namespace RiverHollow.Items
             _iCurrentState = 0;
             _iBaseYOffset = (_iSpriteHeight / TILE_SIZE) - 1;
 
-            
-            Util.AssignValue(ref _iRange, "Range", stringData);
             Util.AssignValue(ref _iHoneyID, "HoneyID", stringData);
             Util.AssignValue(ref _iSeedID, "SeedID", stringData);
-            Util.AssignValue(ref _iResourceID, "Item", stringData);
+            Util.AssignValue(ref _iResourceID, "ItemID", stringData);
             Util.AssignValue(ref _iMaxStates, "TrNum", stringData); //Number of growth phases
 
             _bPopItem = false;
@@ -1430,7 +1426,7 @@ namespace RiverHollow.Items
                     }
                     else if(_objPlant != null) {
                         PlayerManager.RemoveTownObjects(_objPlant.ID);
-                        CurrentMap.RemoveLights(obj.GetLights());
+                        CurrentMap.RemoveLights(_objPlant.GetLights());
                     }
 
                     _objPlant = obj;

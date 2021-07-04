@@ -7,6 +7,7 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
+using System;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -108,7 +109,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _gDate = new GUIText("Day: " + data.Calendar.dayOfMonth.ToString("00") + ", " + GameCalendar.GetSeason(data.Calendar.currSeason));
                 _gDate.AnchorToInnerSide(this, SideEnum.BottomLeft, GUIManager.STANDARD_MARGIN);
 
-                _gTimeStamp = new GUIText(data.timeStamp.ToUniversalTime().ToString());
+                _gTimeStamp = new GUIText(data.timeStamp.ToString("g"));
                 _gTimeStamp.AnchorAndAlignToObject(_gDelete, SideEnum.Left, SideEnum.Bottom);
 
                 _delAction = del;
