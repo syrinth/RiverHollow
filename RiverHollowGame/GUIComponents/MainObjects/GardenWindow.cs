@@ -30,9 +30,12 @@ namespace RiverHollow.GUIComponents.MainObjects
                 ConstructBox box = new ConstructBox(ChoosePlant);
                 Plant obj = (Plant)DataManager.GetWorldObjectByID(i);
 
-                Dictionary<int, int> toMake = new Dictionary<int, int> { [obj.SeedID] = 1 };
-                box.SetConstructionInfo(i, obj.Name, toMake);
-                _liStructures.Add(box);
+                if (obj.InSeason())
+                {
+                    Dictionary<int, int> toMake = new Dictionary<int, int> { [obj.SeedID] = 1 };
+                    box.SetConstructionInfo(i, obj.Name, toMake);
+                    _liStructures.Add(box);
+                }
             }
 
             _gList = new GUIList(_liStructures, MAX_SHOWN_TASKS, TASK_SPACING);
@@ -65,6 +68,7 @@ namespace RiverHollow.GUIComponents.MainObjects
 
             if (InventoryManager.HasItemInPlayerInventory(obj.SeedID, 1))
             {
+                InventoryManager.RemoveItemsFromInventory(obj.SeedID, 1);
                 _objGarden.SetPlant(obj);
             }
 

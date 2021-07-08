@@ -42,6 +42,7 @@ namespace RiverHollow.Game_Managers
 
         public enum DisplayTypeEnum { Inventory, Gift, Ship };
 
+        public enum SeasonEnum { None, Spring, Summer, Fall, Winter };
         public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };
         public enum DirectionEnum { Up, Down, Right, Left };
         public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };

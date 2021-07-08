@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Beehive][Image:112-160][Height:32][BaseOffset:0-1][ItemID:138][Period:5][ReqItems:60-4|84-3]</Value>
+      <Value>[Type:Beehive][Image:112-160][Height:32][BaseOffset:0-1][ItemID:155][Period:5][ReqItems:60-4|84-3]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -155,23 +155,23 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:85-0][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:97-0][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>39</Key>
-      <Value>[Type:Machine][Image:0-256][Work:4-0.3][Width:48][Height:48][Makes:142-0|143-0|58-0][Base:3-2][BaseOffset:0-1][WorkEffect:Cauldron]</Value>
+      <Value>[Type:Machine][Image:0-256][Work:4-0.3][Width:48][Height:48][Makes:162-0|163-0|58-0][Base:3-2][BaseOffset:0-1][WorkEffect:Cauldron]</Value>
     </Item>
     <Item>
       <Key>40</Key>
-      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:72-1|71-1|137-1|136-1|73-1|78-1|83-1][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:72-1|71-1|154-1|153-1|73-1|78-1|83-1][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>41</Key>
-      <Value>[Type:Machine][Image:48-256][Work:3-0.15][Width:32][Height:48][Makes:144-2][Base:2-2]</Value>
+      <Value>[Type:Machine][Image:48-256][Work:3-0.15][Width:32][Height:48][Makes:164-2][Base:2-2]</Value>
     </Item>
     <Item>
       <Key>42</Key>
-      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Makes:3-0|7-0|52-0|53-0|110-0][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Makes:3-0|7-0|52-0|53-0|122-0][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>43</Key>
@@ -179,11 +179,11 @@
     </Item>
     <Item>
       <Key>44</Key>
-      <Value>[Type:Machine][Image:0-0]</Value>
+      <Value>[Type:Machine][Image:0-224][MachineType:Processor][Width:32][Height:32][Makes:60-0][Base:2-2][WorkAnimation:2-0.1]</Value>
     </Item>
     <Item>
       <Key>45</Key>
-      <Value>[Type:Machine][Image:0-224][MachineType:Processor][Width:32][Height:32][Makes:60-0][Base:2-2][WorkAnimation:2-0.1]</Value>
+      <Value>[Type:Machine][Image:0-0]</Value>
     </Item>
     <Item>
       <Key>46</Key>
@@ -195,19 +195,19 @@
     </Item>
     <Item>
       <Key>48</Key>
-      <Value>[Type:Machine][Image:0-0]</Value>
+      <Value>[Type:Mailbox][Image:208-96][Width:16][Height:32]</Value>
     </Item>
     <Item>
       <Key>49</Key>
-      <Value>[Type:Machine][Image:0-0]</Value>
+      <Value>[Type:Plant][Image:64-336][Height:32][SeedID:83][ItemID:89][TrNum:4][TrTime:1-1-1][HoneyID:158][Season:Fall]</Value>
     </Item>
     <Item>
       <Key>50</Key>
-      <Value>[Type:Machine][Image:0-0]</Value>
+      <Value>[Type:Plant][Image:0-304][Height:32][SeedID:86][ItemID:94][TrNum:4][TrTime:1-1-1][HoneyID:142][Season:Summer]</Value>
     </Item>
     <Item>
       <Key>51</Key>
-      <Value>[Type:Mailbox][Image:208-96][Width:16][Height:32]</Value>
+      <Value>[Type:Plant][Image:64-304][Height:32][SeedID:88][ItemID:91][TrNum:4][TrTime:1-1-1][HoneyID:141][Season:Summer]</Value>
     </Item>
     <Item>
       <Key>52</Key>
@@ -215,11 +215,11 @@
     </Item>
     <Item>
       <Key>53</Key>
-      <Value>[Type:Plant][Image:192-16][Height:32][ItemID:132][TrNum:4][TrTime:1-2-3]</Value>
+      <Value>[Type:Plant][Image:192-16][Height:32][ItemID:149][TrNum:4][TrTime:1-2-3]</Value>
     </Item>
     <Item>
       <Key>54</Key>
-      <Value>[Type:Plant][Image:192-48][Height:32][ItemID:150][TrNum:4][TrTime:1-1-1]</Value>
+      <Value>[Type:Plant][Image:192-48][Height:32][ItemID:170][TrNum:4][TrTime:1-1-1]</Value>
     </Item>
     <Item>
       <Key>55</Key>
@@ -231,106 +231,126 @@
     </Item>
     <Item>
       <Key>57</Key>
-      <Value>[Type:Plant][Image:128-208][Height:32][SeedID:78][ItemID:79][TrNum:4][TrTime:1-1-1][HoneyID:127][LightID:3-8-16]</Value>
+      <Value>[Type:Plant][Image:128-208][Height:32][SeedID:78][ItemID:79][TrNum:4][TrTime:1-1-1][HoneyID:144][LightID:3-8-16][Season:Fall]</Value>
     </Item>
     <Item>
       <Key>58</Key>
-      <Value>[Type:Structure][Image:0-160][Width:80][Height:80][ReqItems:66-15][Base:5-5][SpecialCoords:33-33][SubObjects:9-0-0]</Value>
+      <Value>[Type:Plant][Image:192-304][Height:32][SeedID:85][ItemID:92][TrNum:4][TrTime:1-1-1][HoneyID:156][Season:Summer]</Value>
     </Item>
     <Item>
       <Key>59</Key>
-      <Value>[Type:StructureUpgrader][Image:176-48]</Value>
+      <Value>[Type:Plant][Image:256-272][Height:32][SeedID:80][ItemID:95][TrNum:4][TrTime:1-1-1][HoneyID:157][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>60</Key>
-      <Value>[Type:Wall][Image:0-128][Width:16][Height:32][BaseOffset:0-1][ReqItems:0-1]</Value>
+      <Value>[Type:Plant][Image:128-336][Height:32][SeedID:82][ItemID:93][TrNum:4][TrTime:1-1-1][HoneyID:140][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>61</Key>
-      <Value>[Type:Wall][Image:0-272][Width:16][Height:32][BaseOffset:0-1][ReqItems:2-1|60-2]</Value>
+      <Value>[Type:Plant][Image:0-336][Height:32][SeedID:81][ItemID:90][TrNum:4][TrTime:1-1-1][HoneyID:143][Season:Fall]</Value>
     </Item>
     <Item>
       <Key>62</Key>
-      <Value>[Type:WarpPoint][Image:288-0][Width:32][Height:32][Base:2-1][BaseOffset:0-1]</Value>
+      <Value>[Type:Plant][Image:128-304][Height:32][SeedID:87][ItemID:96][TrNum:4][TrTime:1-1-1][HoneyID:139][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>63</Key>
-      <Value>[Type:WorldObject][Image:288-32][Base:4-3][Width:64][Height:48]</Value>
+      <Value>[Type:Structure][Image:0-160][Width:80][Height:80][ReqItems:66-15][Base:5-5][SpecialCoords:33-33][SubObjects:9-0-0]</Value>
     </Item>
     <Item>
       <Key>64</Key>
-      <Value>[Type:WorldObject][Image:288-80][Base:1-3][Width:32][Height:48]</Value>
+      <Value>[Type:StructureUpgrader][Image:176-48]</Value>
     </Item>
     <Item>
       <Key>65</Key>
-      <Value>[Type:WorldObject][Image:320-80][BaseOffset:1-0][Base:1-3][Width:32][Height:48]</Value>
+      <Value>[Type:Wall][Image:0-128][Width:16][Height:32][BaseOffset:0-1][ReqItems:0-1]</Value>
     </Item>
     <Item>
       <Key>66</Key>
-      <Value>[Type:WorldObject][Image:0-2][Width:16][Height:32][Texture:Textures\texMachines]</Value>
+      <Value>[Type:Wall][Image:0-272][Width:16][Height:32][BaseOffset:0-1][ReqItems:2-1|60-2]</Value>
     </Item>
     <Item>
       <Key>67</Key>
-      <Value>[Type:WorldObject][Image:0-80][Width:16][Height:16][Tool:Lantern][Hp:5][ReqLvl:1][ItemID:18][Idle:5-0.150][Gathered:7-0.150]</Value>
+      <Value>[Type:WarpPoint][Image:288-0][Width:32][Height:32][Base:2-1][BaseOffset:0-1]</Value>
     </Item>
     <Item>
       <Key>68</Key>
-      <Value>[Type:WorldObject][Image:96-0][Width:16][Height:16][ItemID:26][Passable]</Value>
+      <Value>[Type:WorldObject][Image:288-32][Base:4-3][Width:64][Height:48]</Value>
     </Item>
     <Item>
       <Key>69</Key>
-      <Value>[Type:WorldObject][Image:48-0][Width:16][Height:16]</Value>
+      <Value>[Type:WorldObject][Image:288-80][Base:1-3][Width:32][Height:48]</Value>
     </Item>
     <Item>
       <Key>70</Key>
-      <Value>[Type:WorldObject][Image:64-0][Width:16][Height:32]</Value>
+      <Value>[Type:WorldObject][Image:320-80][BaseOffset:1-0][Base:1-3][Width:32][Height:48]</Value>
     </Item>
     <Item>
       <Key>71</Key>
-      <Value>[Type:WorldObject][Image:80-64][Width:16][Height:16][ItemID:4]</Value>
+      <Value>[Type:WorldObject][Image:0-2][Width:16][Height:32][Texture:Textures\texMachines]</Value>
     </Item>
     <Item>
       <Key>72</Key>
-      <Value>[Type:WorldObject][Image:96-16][Width:16][Height:16][ItemID:24]</Value>
+      <Value>[Type:WorldObject][Image:0-80][Width:16][Height:16][Tool:Lantern][Hp:5][ReqLvl:1][ItemID:18][Idle:5-0.150][Gathered:7-0.150]</Value>
     </Item>
     <Item>
       <Key>73</Key>
-      <Value>[Type:WorldObject][Image:80-32][Width:16][Height:16][ItemID:25][Passable]</Value>
+      <Value>[Type:WorldObject][Image:96-0][Width:16][Height:16][ItemID:26][Passable]</Value>
     </Item>
     <Item>
       <Key>74</Key>
-      <Value>[Type:WorldObject][Image:288-160][Width:64][Height:32][Base:4-1][BaseOffset:0-1]</Value>
+      <Value>[Type:WorldObject][Image:48-0][Width:16][Height:16]</Value>
     </Item>
     <Item>
       <Key>75</Key>
-      <Value>[Type:WorldObject][Image:288-128][BaseOffset:0-1][Width:32][Height:32]</Value>
+      <Value>[Type:WorldObject][Image:64-0][Width:16][Height:32]</Value>
     </Item>
     <Item>
       <Key>76</Key>
-      <Value>[Type:WorldObject][Image:320-128][BaseOffset:1-1][Width:32][Height:32]</Value>
+      <Value>[Type:WorldObject][Image:80-64][Width:16][Height:16][ItemID:4]</Value>
     </Item>
     <Item>
       <Key>77</Key>
-      <Value>[Type:WorldObject][Image:256-128][Width:32][Height:80][Base:2-5]</Value>
+      <Value>[Type:WorldObject][Image:96-16][Width:16][Height:16][ItemID:24]</Value>
     </Item>
     <Item>
       <Key>78</Key>
-      <Value>[Type:WorldObject][Image:224-160][Width:32][Height:48][Base:2-3]</Value>
+      <Value>[Type:WorldObject][Image:80-32][Width:16][Height:16][ItemID:25][Passable]</Value>
     </Item>
     <Item>
       <Key>79</Key>
-      <Value>[Type:WorldObject][Image:192-176][BaseOffset:0-3][Width:32][Height:64][Base:2-1]</Value>
+      <Value>[Type:WorldObject][Image:288-160][Width:64][Height:32][Base:4-1][BaseOffset:0-1]</Value>
     </Item>
     <Item>
       <Key>80</Key>
-      <Value>[Type:WorldObject][Image:288-192][Width:32][Height:80][Base:2-5]</Value>
+      <Value>[Type:WorldObject][Image:288-128][BaseOffset:0-1][Width:32][Height:32]</Value>
     </Item>
     <Item>
       <Key>81</Key>
-      <Value>[Type:WorldObject][Image:256-224][Width:32][Height:48][Base:2-3]</Value>
+      <Value>[Type:WorldObject][Image:320-128][BaseOffset:1-1][Width:32][Height:32]</Value>
     </Item>
     <Item>
       <Key>82</Key>
+      <Value>[Type:WorldObject][Image:256-128][Width:32][Height:80][Base:2-5]</Value>
+    </Item>
+    <Item>
+      <Key>83</Key>
+      <Value>[Type:WorldObject][Image:224-160][Width:32][Height:48][Base:2-3]</Value>
+    </Item>
+    <Item>
+      <Key>84</Key>
+      <Value>[Type:WorldObject][Image:192-176][BaseOffset:0-3][Width:32][Height:64][Base:2-1]</Value>
+    </Item>
+    <Item>
+      <Key>85</Key>
+      <Value>[Type:WorldObject][Image:288-192][Width:32][Height:80][Base:2-5]</Value>
+    </Item>
+    <Item>
+      <Key>86</Key>
+      <Value>[Type:WorldObject][Image:256-224][Width:32][Height:48][Base:2-3]</Value>
+    </Item>
+    <Item>
+      <Key>87</Key>
       <Value>[Type:WorldObject][Image:320-208][BaseOffset:0-3][Width:32][Height:64][Base:2-1]</Value>
     </Item>
   </Asset>

@@ -114,6 +114,14 @@
       <Value>[Name:Abeline]</Value>
     </Item>
     <Item>
+      <Key>Character_24</Key>
+      <Value>[Name:Magda]</Value>
+    </Item>
+    <Item>
+      <Key>Character_25</Key>
+      <Value>[Name:Jason]</Value>
+    </Item>
+    <Item>
       <Key>Class_0</Key>
       <Value>[Name:Wizard][Description:Practitioners of the arcane arts, wizards excel at  handling a multitude of foes.]</Value>
     </Item>
@@ -634,6 +642,10 @@
       <Value>[Name:Abeline's Apiary]</Value>
     </Item>
     <Item>
+      <Key>Shop_5</Key>
+      <Value>[Name:Magda's Occultum]</Value>
+    </Item>
+    <Item>
       <Key>Cutscene_0</Key>
       <Value>[Name:Amanda and Gail]</Value>
     </Item>
@@ -963,7 +975,7 @@
     </Item>
     <Item>
       <Key>Item_78</Key>
-      <Value>[Name:Glow Flower Seed][Description:A flower blessedby the touch of flame.]</Value>
+      <Value>[Name:Glow Flower Seeds][Description:A flower blessedby the touch of flame.]</Value>
     </Item>
     <Item>
       <Key>Item_79</Key>
@@ -971,19 +983,19 @@
     </Item>
     <Item>
       <Key>Item_80</Key>
-      <Value>[Name:][Description:]</Value>
+      <Value>[Name:Mage's Cup Seeds][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_81</Key>
-      <Value>[Name:][Description:]</Value>
+      <Value>[Name:Trumpet Seeds][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_82</Key>
-      <Value>[Name:][Description:]</Value>
+      <Value>[Name:Piff-Puff Seeds][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_83</Key>
-      <Value>[Name:][Description:]</Value>
+      <Value>[Name:Spirean Seed][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_84</Key>
@@ -991,310 +1003,390 @@
     </Item>
     <Item>
       <Key>Item_85</Key>
-      <Value>[Name:Copper Wand][Description:A magical wand]</Value>
+      <Value>[Name:Black Iris Seeds][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_86</Key>
-      <Value>[Name:Divining Wand][Description:A wand used by seers to help them predict the future.]</Value>
+      <Value>[Name:Blood Rose Seeds][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_87</Key>
-      <Value>[Name:Black Night][Description:This wand was enchanted with the essences of many dark creatures, giving it a sinister power.]</Value>
+      <Value>[Name:Windblossom Seeds][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_88</Key>
-      <Value>[Name:Thunderstorm][Description:These crackling wands were first created during the largest thunderstorm in three centuries.]</Value>
+      <Value>[Name:Calla Seeds][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_89</Key>
-      <Value>[Name:Will of the Archmage][Description:Only the most puissant of Wizards can hope to channel the powerful energies that course through this wand.]</Value>
+      <Value>[Name:Spirean][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_90</Key>
-      <Value>[Name:Acolyte's Staff][Description:A staff for trainee healers]</Value>
+      <Value>[Name:Trumpet Flower][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_91</Key>
-      <Value>[Name:Coiled Staff][Description:A carefully worked staff that twists and coils]</Value>
+      <Value>[Name:Calla][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_92</Key>
-      <Value>[Name:Emerald Staff][Description:A carven staff topped with an emerald]</Value>
+      <Value>[Name:Black Iris][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_93</Key>
-      <Value>[Name:Winter's Blessing][Description:A powerful staff enchanted with the chill winds of winter.]</Value>
+      <Value>[Name:Piff-Puff][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_94</Key>
-      <Value>[Name:Glass Orb][Description:An orb made of glass]</Value>
+      <Value>[Name:Blood Rose][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_95</Key>
-      <Value>[Name:Copper Orb][Description:A magical orb made of polished copper]</Value>
+      <Value>[Name:Mage's Cup][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_96</Key>
-      <Value>[Name:Gazing Orb][Description:An orb of polished steel set with a bright Sapphire.]</Value>
+      <Value>[Name:Windblossom][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_97</Key>
-      <Value>[Name:Ruby Rose][Description:These stones were first popularized by a trio of sisters that defended the Western Woods.]</Value>
+      <Value>[Name:Copper Wand][Description:A magical wand]</Value>
     </Item>
     <Item>
       <Key>Item_98</Key>
-      <Value>[Name:Light of Inspiration][Description:A polished golden orb which holds the magical accomplishments of countless Summoners within its polished depths.]</Value>
+      <Value>[Name:Divining Wand][Description:A wand used by seers to help them predict the future.]</Value>
     </Item>
     <Item>
       <Key>Item_99</Key>
-      <Value>[Name:Ancient Orb][Description:This orb holds within it whispers and echoes of an ancient time, held in amber and boundi nmythril.]</Value>
+      <Value>[Name:Black Night][Description:This wand was enchanted with the essences of many dark creatures, giving it a sinister power.]</Value>
     </Item>
     <Item>
       <Key>Item_100</Key>
-      <Value>[Name:Songsphere][Description:A collaborative effort between Bards and Summoners, these magical stones resonate with music and are often used to create a gentle atmosphere in upper class locales.]</Value>
+      <Value>[Name:Thunderstorm][Description:These crackling wands were first created during the largest thunderstorm in three centuries.]</Value>
     </Item>
     <Item>
       <Key>Item_101</Key>
-      <Value>[Name:Serpent's Eye][Description:Jade polished and imbued with the ferocity of a dragon. Some way that these orbs grant the wielder a powerful affinity for dragons.]</Value>
+      <Value>[Name:Will of the Archmage][Description:Only the most puissant of Wizards can hope to channel the powerful energies that course through this wand.]</Value>
     </Item>
     <Item>
       <Key>Item_102</Key>
-      <Value>[Name:Spring's Promise][Description:Infused withmagical herbs and reagents, this orb has been blessed by the spirits of spring and always smells faintly of lavender.]</Value>
+      <Value>[Name:Acolyte's Staff][Description:A staff for trainee healers]</Value>
     </Item>
     <Item>
       <Key>Item_103</Key>
-      <Value>[Name:Eye of Eternity][Description:Only the purest Diamond and Adamantine can be used to make this orb. The first such orb was said to have been blessed by the spirits that dwell beyond our world, granting it's wielder insight into worlds beyond our own.]</Value>
+      <Value>[Name:Coiled Staff][Description:A carefully worked staff that twists and coils]</Value>
     </Item>
     <Item>
       <Key>Item_104</Key>
-      <Value>[Name:Dulled Knife][Description:It could use sharpening]</Value>
+      <Value>[Name:Emerald Staff][Description:A carven staff topped with an emerald]</Value>
     </Item>
     <Item>
       <Key>Item_105</Key>
-      <Value>[Name:Spear][Description:A sharpened spear]</Value>
+      <Value>[Name:Winter's Blessing][Description:A powerful staff enchanted with the chill winds of winter.]</Value>
     </Item>
     <Item>
       <Key>Item_106</Key>
-      <Value>[Name:Copper Spear][Description:A copper tipped spear, decorated with a bright feather]</Value>
+      <Value>[Name:Glass Orb][Description:An orb made of glass]</Value>
     </Item>
     <Item>
       <Key>Item_107</Key>
-      <Value>[Name:Wooden Mace][Description:More of a club, honestly]</Value>
+      <Value>[Name:Copper Orb][Description:A magical orb made of polished copper]</Value>
     </Item>
     <Item>
       <Key>Item_108</Key>
-      <Value>[Name:Shortbow][Description:A small bow used to hunt game]</Value>
+      <Value>[Name:Gazing Orb][Description:An orb of polished steel set with a bright Sapphire.]</Value>
     </Item>
     <Item>
       <Key>Item_109</Key>
-      <Value>[Name:Flimsy Rapier][Description:A thin rapier]</Value>
+      <Value>[Name:Ruby Rose][Description:These stones were first popularized by a trio of sisters that defended the Western Woods.]</Value>
     </Item>
     <Item>
       <Key>Item_110</Key>
-      <Value>[Name:Cloth Robes][Description:Robes made of simple cloth]</Value>
+      <Value>[Name:Light of Inspiration][Description:A polished golden orb which holds the magical accomplishments of countless Summoners within its polished depths.]</Value>
     </Item>
     <Item>
       <Key>Item_111</Key>
-      <Value>[Name:Basic Armor][Description:Training Armor]</Value>
+      <Value>[Name:Ancient Orb][Description:This orb holds within it whispers and echoes of an ancient time, held in amber and boundi nmythril.]</Value>
     </Item>
     <Item>
       <Key>Item_112</Key>
-      <Value>[Name:Heavy Armor][Description:It's heavy]</Value>
+      <Value>[Name:Songsphere][Description:A collaborative effort between Bards and Summoners, these magical stones resonate with music and are often used to create a gentle atmosphere in upper class locales.]</Value>
     </Item>
     <Item>
       <Key>Item_113</Key>
-      <Value>[Name:Cloth Hat][Description:A floppy brimmed hat]</Value>
+      <Value>[Name:Serpent's Eye][Description:Jade polished and imbued with the ferocity of a dragon. Some way that these orbs grant the wielder a powerful affinity for dragons.]</Value>
     </Item>
     <Item>
       <Key>Item_114</Key>
-      <Value>[Name:Leather Helm][Description:A light leather helm]</Value>
+      <Value>[Name:Spring's Promise][Description:Infused withmagical herbs and reagents, this orb has been blessed by the spirits of spring and always smells faintly of lavender.]</Value>
     </Item>
     <Item>
       <Key>Item_115</Key>
-      <Value>[Name:Heavy Helm][Description:A heavy helm]</Value>
+      <Value>[Name:Eye of Eternity][Description:Only the purest Diamond and Adamantine can be used to make this orb. The first such orb was said to have been blessed by the spirits that dwell beyond our world, granting it's wielder insight into worlds beyond our own.]</Value>
     </Item>
     <Item>
       <Key>Item_116</Key>
-      <Value>[Name:Heavy Bracelet][Description:A defensible bracelet]</Value>
+      <Value>[Name:Dulled Knife][Description:It could use sharpening]</Value>
     </Item>
     <Item>
       <Key>Item_117</Key>
-      <Value>[Name:Ring of Protection][Description:A bronze ring that wards against harm]</Value>
+      <Value>[Name:Spear][Description:A sharpened spear]</Value>
     </Item>
     <Item>
       <Key>Item_118</Key>
-      <Value>[Name:Bracelet of Speed][Description:A bracelet that enhancers the users speed]</Value>
+      <Value>[Name:Copper Spear][Description:A copper tipped spear, decorated with a bright feather]</Value>
     </Item>
     <Item>
       <Key>Item_119</Key>
-      <Value>[Name:Pick Axe][Description:Breaks things]</Value>
+      <Value>[Name:Wooden Mace][Description:More of a club, honestly]</Value>
     </Item>
     <Item>
       <Key>Item_120</Key>
-      <Value>[Name:Wooden Axe][Description:Chop Chop Motherfucker]</Value>
+      <Value>[Name:Shortbow][Description:A small bow used to hunt game]</Value>
     </Item>
     <Item>
       <Key>Item_121</Key>
-      <Value>[Name:Shovel][Description:Dig the thing]</Value>
+      <Value>[Name:Flimsy Rapier][Description:A thin rapier]</Value>
     </Item>
     <Item>
       <Key>Item_122</Key>
-      <Value>[Name:Watering Can][Description:Watering the thing]</Value>
+      <Value>[Name:Cloth Robes][Description:Robes made of simple cloth]</Value>
     </Item>
     <Item>
       <Key>Item_123</Key>
-      <Value>[Name:Harp][Description:The harp of your ancestors. According to legend, this instrument will let you communicate with the spirits of nature.]</Value>
+      <Value>[Name:Basic Armor][Description:Training Armor]</Value>
     </Item>
     <Item>
       <Key>Item_124</Key>
-      <Value>[Name:Lantern][Description:Used to call forth the energy of spent emotions]</Value>
+      <Value>[Name:Heavy Armor][Description:It's heavy]</Value>
     </Item>
     <Item>
       <Key>Item_125</Key>
-      <Value>[Name:Rune of Return][Description:A mystical stone]</Value>
+      <Value>[Name:Cloth Hat][Description:A floppy brimmed hat]</Value>
     </Item>
     <Item>
       <Key>Item_126</Key>
-      <Value>[Name:Scythe][Description:]</Value>
+      <Value>[Name:Leather Helm][Description:A light leather helm]</Value>
     </Item>
     <Item>
       <Key>Item_127</Key>
-      <Value>[Name:Glow Honey][Description:]</Value>
+      <Value>[Name:Heavy Helm][Description:A heavy helm]</Value>
     </Item>
     <Item>
       <Key>Item_128</Key>
-      <Value>[Name:Cave Berry][Description:]</Value>
+      <Value>[Name:Heavy Bracelet][Description:A defensible bracelet]</Value>
     </Item>
     <Item>
       <Key>Item_129</Key>
-      <Value>[Name:Meat][Description:A slice of meat, used for cooking]</Value>
+      <Value>[Name:Ring of Protection][Description:A bronze ring that wards against harm]</Value>
     </Item>
     <Item>
       <Key>Item_130</Key>
-      <Value>[Name:Egg][Description:A single plain egg, you think it's clean...]</Value>
+      <Value>[Name:Bracelet of Speed][Description:A bracelet that enhancers the users speed]</Value>
     </Item>
     <Item>
       <Key>Item_131</Key>
-      <Value>[Name:Flour][Description:Freshly milled flour, not delicious... yet.]</Value>
+      <Value>[Name:Pick Axe][Description:Breaks things]</Value>
     </Item>
     <Item>
       <Key>Item_132</Key>
-      <Value>[Name:Apple][Description:Nomnom]</Value>
+      <Value>[Name:Wooden Axe][Description:Chop Chop Motherfucker]</Value>
     </Item>
     <Item>
       <Key>Item_133</Key>
-      <Value>[Name:Strawberry][Description:Delicious and fruity]</Value>
+      <Value>[Name:Shovel][Description:Dig the thing]</Value>
     </Item>
     <Item>
       <Key>Item_134</Key>
-      <Value>[Name:Carrot][Description:Crisp and crunchy]</Value>
+      <Value>[Name:Watering Can][Description:Watering the thing]</Value>
     </Item>
     <Item>
       <Key>Item_135</Key>
-      <Value>[Name:Blue Jelly][Description:]</Value>
+      <Value>[Name:Harp][Description:The harp of your ancestors. According to legend, this instrument will let you communicate with the spirits of nature.]</Value>
     </Item>
     <Item>
       <Key>Item_136</Key>
-      <Value>[Name:YumYum Slime][Description:]</Value>
+      <Value>[Name:Lantern][Description:Used to call forth the energy of spent emotions]</Value>
     </Item>
     <Item>
       <Key>Item_137</Key>
-      <Value>[Name:Muck Root][Description:]</Value>
+      <Value>[Name:Rune of Return][Description:A mystical stone]</Value>
     </Item>
     <Item>
       <Key>Item_138</Key>
-      <Value>[Name:Honey][Description:Delicious honey]</Value>
+      <Value>[Name:Scythe][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_139</Key>
-      <Value>[Name:Smelling Salts][Description:Wake Up]</Value>
+      <Value>[Name:Windblossom Honey][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_140</Key>
-      <Value>[Name:Antidote][Description:Cures Poisons]</Value>
+      <Value>[Name:Piff-Puff Honey][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_141</Key>
-      <Value>[Name:Poisoned Knife][Description:Inflicts Poison]</Value>
+      <Value>[Name:Calla Honey][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_142</Key>
-      <Value>[Name:Minor Healing Potion][Description:Although bitter to the taste, this potion is ideal for healing minor cuts and bruises.]</Value>
+      <Value>[Name:Rose Honey][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_143</Key>
-      <Value>[Name:Lesser Mana Potion][Description:This energy drink will get you casting in no time.]</Value>
+      <Value>[Name:Trumpet Honey][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_144</Key>
-      <Value>[Name:Intelligence Powder][Description:These mushrooms will expand your mind]</Value>
+      <Value>[Name:Glow Honey][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_145</Key>
-      <Value>[Name:Red Shirt][Description:A Red Shirt]</Value>
+      <Value>[Name:Cave Berry][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_146</Key>
-      <Value>[Name:Blue Shirt][Description:A Blue Shirt]</Value>
+      <Value>[Name:Meat][Description:A slice of meat, used for cooking]</Value>
     </Item>
     <Item>
       <Key>Item_147</Key>
-      <Value>[Name:Witch's Hat][Description:A fashionable hat]</Value>
+      <Value>[Name:Egg][Description:A single plain egg, you think it's clean...]</Value>
     </Item>
     <Item>
       <Key>Item_148</Key>
-      <Value>[Name:Wizard's Robes][Description:The robes of a true wizard!]</Value>
+      <Value>[Name:Flour][Description:Freshly milled flour, not delicious... yet.]</Value>
     </Item>
     <Item>
       <Key>Item_149</Key>
-      <Value>[Name:Dark Pants][Description:A pair of dark pants]</Value>
+      <Value>[Name:Apple][Description:Nomnom]</Value>
     </Item>
     <Item>
       <Key>Item_150</Key>
-      <Value>[Name:Slime Berry][Description:A berry made of slime, attracts slimes.]</Value>
+      <Value>[Name:Strawberry][Description:Delicious and fruity]</Value>
     </Item>
     <Item>
       <Key>Item_151</Key>
-      <Value>[Name:$Building_18$ Blueprint][Description:]</Value>
+      <Value>[Name:Carrot][Description:Crisp and crunchy]</Value>
     </Item>
     <Item>
       <Key>Item_152</Key>
-      <Value>[Name:$Building_24$ Blueprint][Description:]</Value>
+      <Value>[Name:Blue Jelly][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_153</Key>
-      <Value>[Name:$Building_20$ Blueprint][Description:]</Value>
+      <Value>[Name:YumYum Slime][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_154</Key>
-      <Value>[Name:$Building_22$ Blueprint][Description:]</Value>
+      <Value>[Name:Muck Root][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_155</Key>
-      <Value>[Name:$Building_21$ Blueprint][Description:]</Value>
+      <Value>[Name:Honey][Description:Delicious honey]</Value>
     </Item>
     <Item>
       <Key>Item_156</Key>
-      <Value>[Name:$Building_25$ Blueprint][Description:]</Value>
+      <Value>[Name:Black Honey][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_157</Key>
-      <Value>[Name:Griselda's Orb][Description:General Use]</Value>
+      <Value>[Name:Mages Honey][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_158</Key>
-      <Value>[Name:Adventure Map][Description:Off to find adventures!]</Value>
+      <Value>[Name:Spirean Honey][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_159</Key>
-      <Value>[Name:Mask of Marriage][Description:A mask used by the people of River hollow to proess their love to one another.]</Value>
+      <Value>[Name:Smelling Salts][Description:Wake Up]</Value>
     </Item>
     <Item>
       <Key>Item_160</Key>
-      <Value>[Name:Essence of ][Description:Become a ]</Value>
+      <Value>[Name:Antidote][Description:Cures Poisons]</Value>
     </Item>
     <Item>
       <Key>Item_161</Key>
+      <Value>[Name:Poisoned Knife][Description:Inflicts Poison]</Value>
+    </Item>
+    <Item>
+      <Key>Item_162</Key>
+      <Value>[Name:Minor Healing Potion][Description:Although bitter to the taste, this potion is ideal for healing minor cuts and bruises.]</Value>
+    </Item>
+    <Item>
+      <Key>Item_163</Key>
+      <Value>[Name:Lesser Mana Potion][Description:This energy drink will get you casting in no time.]</Value>
+    </Item>
+    <Item>
+      <Key>Item_164</Key>
+      <Value>[Name:Intelligence Powder][Description:These mushrooms will expand your mind]</Value>
+    </Item>
+    <Item>
+      <Key>Item_165</Key>
+      <Value>[Name:Red Shirt][Description:A Red Shirt]</Value>
+    </Item>
+    <Item>
+      <Key>Item_166</Key>
+      <Value>[Name:Blue Shirt][Description:A Blue Shirt]</Value>
+    </Item>
+    <Item>
+      <Key>Item_167</Key>
+      <Value>[Name:Witch's Hat][Description:A fashionable hat]</Value>
+    </Item>
+    <Item>
+      <Key>Item_168</Key>
+      <Value>[Name:Wizard's Robes][Description:The robes of a true wizard!]</Value>
+    </Item>
+    <Item>
+      <Key>Item_169</Key>
+      <Value>[Name:Dark Pants][Description:A pair of dark pants]</Value>
+    </Item>
+    <Item>
+      <Key>Item_170</Key>
+      <Value>[Name:Slime Berry][Description:A berry made of slime, attracts slimes.]</Value>
+    </Item>
+    <Item>
+      <Key>Item_171</Key>
+      <Value>[Name:$Building_18$ Blueprint][Description:]</Value>
+    </Item>
+    <Item>
+      <Key>Item_172</Key>
+      <Value>[Name:$Building_24$ Blueprint][Description:]</Value>
+    </Item>
+    <Item>
+      <Key>Item_173</Key>
+      <Value>[Name:$Building_20$ Blueprint][Description:]</Value>
+    </Item>
+    <Item>
+      <Key>Item_174</Key>
+      <Value>[Name:$Building_22$ Blueprint][Description:]</Value>
+    </Item>
+    <Item>
+      <Key>Item_175</Key>
+      <Value>[Name:$Building_21$ Blueprint][Description:]</Value>
+    </Item>
+    <Item>
+      <Key>Item_176</Key>
+      <Value>[Name:$Building_25$ Blueprint][Description:]</Value>
+    </Item>
+    <Item>
+      <Key>Item_177</Key>
+      <Value>[Name:Griselda's Orb][Description:General Use]</Value>
+    </Item>
+    <Item>
+      <Key>Item_178</Key>
+      <Value>[Name:Adventure Map][Description:Off to find adventures!]</Value>
+    </Item>
+    <Item>
+      <Key>Item_179</Key>
+      <Value>[Name:Mask of Marriage][Description:A mask used by the people of River hollow to proess their love to one another.]</Value>
+    </Item>
+    <Item>
+      <Key>Item_180</Key>
+      <Value>[Name:Essence of ][Description:Become a ]</Value>
+    </Item>
+    <Item>
+      <Key>Item_181</Key>
       <Value>[Name:Dungeon Key][Description:A key that unlocks a dungeon door.]</Value>
     </Item>
     <Item>
@@ -1475,35 +1567,35 @@
     </Item>
     <Item>
       <Key>WorldObject_44</Key>
-      <Value>[Name:]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_45</Key>
       <Value>[Name:SawMill]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_46</Key>
+      <Key>WorldObject_45</Key>
       <Value>[Name:Tannery]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_46</Key>
+      <Value>[Name:Windblossom]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_47</Key>
-      <Value>[Name:]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_48</Key>
-      <Value>[Name:]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_49</Key>
-      <Value>[Name:]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_50</Key>
       <Value>[Name:Anvil II]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_51</Key>
+      <Key>WorldObject_48</Key>
       <Value>[Name:Mailbox]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_49</Key>
+      <Value>[Name:Spirean]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_50</Key>
+      <Value>[Name:Blood Rose]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_51</Key>
+      <Value>[Name:Calla]</Value>
     </Item>
     <Item>
       <Key>WorldObject_52</Key>
@@ -1531,102 +1623,122 @@
     </Item>
     <Item>
       <Key>WorldObject_58</Key>
-      <Value>[Name:Market]</Value>
+      <Value>[Name:Black Iris]</Value>
     </Item>
     <Item>
       <Key>WorldObject_59</Key>
-      <Value>[Name:Upgrade Board]</Value>
+      <Value>[Name:Mage's Cup]</Value>
     </Item>
     <Item>
       <Key>WorldObject_60</Key>
-      <Value>[Name:Stone Wall]</Value>
+      <Value>[Name:Piff-Puff]</Value>
     </Item>
     <Item>
       <Key>WorldObject_61</Key>
-      <Value>[Name:Wooden Fence]</Value>
+      <Value>[Name:Trumpet]</Value>
     </Item>
     <Item>
       <Key>WorldObject_62</Key>
-      <Value>[Name:Caves Runestone]</Value>
+      <Value>[Name:Windblossom]</Value>
     </Item>
     <Item>
       <Key>WorldObject_63</Key>
-      <Value>[Name:Cave_Up_Closed]</Value>
+      <Value>[Name:Market]</Value>
     </Item>
     <Item>
       <Key>WorldObject_64</Key>
-      <Value>[Name:Cave_Up_Open_1]</Value>
+      <Value>[Name:Upgrade Board]</Value>
     </Item>
     <Item>
       <Key>WorldObject_65</Key>
-      <Value>[Name:Cave_Up_Open_2]</Value>
+      <Value>[Name:Stone Wall]</Value>
     </Item>
     <Item>
       <Key>WorldObject_66</Key>
-      <Value>[Name:Class Changer]</Value>
+      <Value>[Name:Wooden Fence]</Value>
     </Item>
     <Item>
       <Key>WorldObject_67</Key>
-      <Value>[Name:Echo of Joy]</Value>
+      <Value>[Name:Caves Runestone]</Value>
     </Item>
     <Item>
       <Key>WorldObject_68</Key>
-      <Value>[Name:Cotton]</Value>
+      <Value>[Name:Cave_Up_Closed]</Value>
     </Item>
     <Item>
       <Key>WorldObject_69</Key>
-      <Value>[Name:Staircase]</Value>
+      <Value>[Name:Cave_Up_Open_1]</Value>
     </Item>
     <Item>
       <Key>WorldObject_70</Key>
-      <Value>[Name:Door_Up]</Value>
+      <Value>[Name:Cave_Up_Open_2]</Value>
     </Item>
     <Item>
       <Key>WorldObject_71</Key>
-      <Value>[Name:Peat]</Value>
+      <Value>[Name:Class Changer]</Value>
     </Item>
     <Item>
       <Key>WorldObject_72</Key>
-      <Value>[Name:Lavender]</Value>
+      <Value>[Name:Echo of Joy]</Value>
     </Item>
     <Item>
       <Key>WorldObject_73</Key>
-      <Value>[Name:Flax]</Value>
+      <Value>[Name:Cotton]</Value>
     </Item>
     <Item>
       <Key>WorldObject_74</Key>
-      <Value>[Name:Cave_Down_Closed]</Value>
+      <Value>[Name:Staircase]</Value>
     </Item>
     <Item>
       <Key>WorldObject_75</Key>
-      <Value>[Name:Cave_Down_Open_1]</Value>
+      <Value>[Name:Door_Up]</Value>
     </Item>
     <Item>
       <Key>WorldObject_76</Key>
-      <Value>[Name:Cave_Down_Open_2]</Value>
+      <Value>[Name:Peat]</Value>
     </Item>
     <Item>
       <Key>WorldObject_77</Key>
-      <Value>[Name:Cave_Left_Closed]</Value>
+      <Value>[Name:Lavender]</Value>
     </Item>
     <Item>
       <Key>WorldObject_78</Key>
-      <Value>[Name:Cave_Left_Open_1]</Value>
+      <Value>[Name:Flax]</Value>
     </Item>
     <Item>
       <Key>WorldObject_79</Key>
-      <Value>[Name:Cave_Left_Open_2]</Value>
+      <Value>[Name:Cave_Down_Closed]</Value>
     </Item>
     <Item>
       <Key>WorldObject_80</Key>
-      <Value>[Name:Cave_Right_Closed]</Value>
+      <Value>[Name:Cave_Down_Open_1]</Value>
     </Item>
     <Item>
       <Key>WorldObject_81</Key>
-      <Value>[Name:Cave_Right_Open_1]</Value>
+      <Value>[Name:Cave_Down_Open_2]</Value>
     </Item>
     <Item>
       <Key>WorldObject_82</Key>
+      <Value>[Name:Cave_Left_Closed]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_83</Key>
+      <Value>[Name:Cave_Left_Open_1]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_84</Key>
+      <Value>[Name:Cave_Left_Open_2]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_85</Key>
+      <Value>[Name:Cave_Right_Closed]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_86</Key>
+      <Value>[Name:Cave_Right_Open_1]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_87</Key>
       <Value>[Name:Cave_Right_Open_2]</Value>
     </Item>
   </Asset>

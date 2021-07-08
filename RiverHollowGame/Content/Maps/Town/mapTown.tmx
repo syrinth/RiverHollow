@@ -371,7 +371,7 @@
   </object>
   <object id="71" name="WorldObject" x="512.53" y="708.521" width="14.94" height="10.8948">
    <properties>
-    <property name="ObjectID" type="int" value="51"/>
+    <property name="ObjectID" type="int" value="48"/>
    </properties>
   </object>
   <object id="72" name="Building" x="161.75" y="818.333" width="173.25" height="60.6667">
@@ -436,7 +436,7 @@
   </object>
   <object id="86" name="WorldObject" x="515.363" y="805.386" width="73.94" height="70.1448">
    <properties>
-    <property name="ObjectID" type="int" value="58"/>
+    <property name="ObjectID" type="int" value="63"/>
    </properties>
   </object>
  </objectgroup>

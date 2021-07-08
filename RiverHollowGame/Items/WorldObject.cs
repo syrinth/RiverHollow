@@ -447,6 +447,7 @@ namespace RiverHollow.Items
         public int HoneyID => _iHoneyID;
 
         Garden _objGarden;
+        SeasonEnum _eSeason;
 
         public Plant(int id, Dictionary<string, string> stringData) : base(id, stringData, false)
         {
@@ -459,6 +460,7 @@ namespace RiverHollow.Items
             _iCurrentState = 0;
             _iBaseYOffset = (_iSpriteHeight / TILE_SIZE) - 1;
 
+            Util.AssignValue(ref _eSeason, "Season", stringData);
             Util.AssignValue(ref _iHoneyID, "HoneyID", stringData);
             Util.AssignValue(ref _iSeedID, "SeedID", stringData);
             Util.AssignValue(ref _iResourceID, "ItemID", stringData);
@@ -599,11 +601,14 @@ namespace RiverHollow.Items
                     _iDaysLeft = _diTransitionTimes[_iCurrentState];
                 }
             }
-            else
+            else if(_objGarden == null)
             {
                 CurrentMap.AddLights(GetLights());
             }
         }
+
+        public bool InSeason() { return Util.GetEnumString(_eSeason).Equals(GameCalendar.GetSeason(GameCalendar.CurrentSeason)); }
+
         /// <summary>
         /// Check if the plant has finished growing or not.
         /// </summary>
@@ -1053,7 +1058,7 @@ namespace RiverHollow.Items
                         if(t.WorldObject!= null && t.WorldObject.CompareType(ObjectTypeEnum.Garden))
                         {
                             Plant p = ((Garden)t.WorldObject).GetPlant();
-                            if(p!= null && p.HoneyID != -1 && p.FinishedGrowing() &&  (closestFlowerTile == Tiles[0] || Util.GetRHTileDelta(Tiles[0], t) < Util.GetRHTileDelta(closestFlowerTile, t)))
+                            if(p!= null && p.HoneyID != -1 && p.FinishedGrowing() &&  (closestFlowerTile == Tiles[0] || Util.GetRHTileDelta(Tiles[0], t) < Util.GetRHTileDelta(Tiles[0], closestFlowerTile)))
                             {
                                 closestFlowerTile = t;
                             }
@@ -1077,8 +1082,8 @@ namespace RiverHollow.Items
                 BeehiveData data = new BeehiveData
                 {
                     ID = this.ID,
-                    x = (int)this.MapPosition.X,
-                    y = (int)this.MapPosition.Y,
+                    x = (int)this.CollisionBox.X,
+                    y = (int)this.CollisionBox.Y,
                     timeLeft = this._iDaysToHoney,
                     ready = this._bReady,
                     honeyType = _bReady ? _iHoneyToGather : -1

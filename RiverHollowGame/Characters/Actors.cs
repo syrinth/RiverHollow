@@ -1821,6 +1821,39 @@ namespace RiverHollow.Characters
             GUIManager.OpenMainObject(new HUDPurchaseItems(GameManager.DIShops[_iShopIndex].FindAll(m => m.Unlocked)));
         }
 
+        protected bool RequirementsMet()
+        {
+            bool rv = true;
+            foreach (KeyValuePair<int, int> kvp in _diRequiredObjectIDs)
+            {
+                if (PlayerManager.GetNumberTownObjects(kvp.Key) < kvp.Value)
+                {
+                    rv = false;
+                    break;
+                }
+            }
+
+            if (rv)
+            {
+                foreach (int i in _liRequiredBuildingIDs)
+                {
+                    if (!PlayerManager.DIBuildInfo[i].Built)
+                    {
+                        rv = false;
+                        break;
+                    }
+                }
+            }
+
+            //If there is a Money Earned Requirement and we have not reached it, fail the test
+            if (_iTotalMoneyEarnedReq != -1 && _iTotalMoneyEarnedReq < PlayerManager.TotalMoneyEarned)
+            {
+                rv = false;
+            }
+
+            return rv;
+        }
+
         #region Travel Methods
         /// <summary>
         /// Counts down the days until the Villager's first arrival, or
@@ -2062,32 +2095,18 @@ namespace RiverHollow.Characters
         public bool ShouldIStayInTown()
         {
             bool rv = false;
-            //if (!LivesInTown)
-            //{
-            //    bool shouldArrive = true;
-            //    foreach (int i in _liRequiredBuildingIDs)
-            //    {
-            //        if (!GameManager.DIBuildInfo[i].Built)
-            //        {
-            //            shouldArrive = false;
-            //            break;
-            //        }
-            //    }
-
-            //    if (_iTotalMoneyEarnedReq != -1 && _iTotalMoneyEarnedReq > PlayerManager.TotalMoneyEarned)
-            //    {
-            //        shouldArrive = false;
-            //    }
-
-            //    if (shouldArrive) {
-            //        if (_iDaysToFirstArrival > 0) { _iDaysToFirstArrival--; }
-            //        else if (_iDaysToFirstArrival == 0)
-            //        {
-            //            _bLivesInTown = true;
-            //            rv = true;
-            //        }
-            //    }
-            //}
+            if (!LivesInTown)
+            {
+                if (RequirementsMet())
+                {
+                    if (_iDaysToFirstArrival > 0) { _iDaysToFirstArrival--; }
+                    else if (_iDaysToFirstArrival == 0)
+                    {
+                        _bLivesInTown = true;
+                        rv = true;
+                    }
+                }
+            }
 
             return rv;
         }
@@ -2483,25 +2502,7 @@ namespace RiverHollow.Characters
         {
             if (!_bOnTheMap)
             {
-                bool reqsMet = true;
-                foreach(KeyValuePair<int, int> kvp in _diRequiredObjectIDs)
-                {
-                    if(PlayerManager.GetNumberTownObjects(kvp.Key) < kvp.Value) {
-                        reqsMet = false;
-                        break;
-                    }
-                }
-
-                foreach(int i in _liRequiredBuildingIDs)
-                {
-                    if (!PlayerManager.DIBuildInfo[i].Built)
-                    {
-                        reqsMet = false;
-                        break;
-                    }
-                }
-
-                if (reqsMet && HandleTravelTiming())
+                if (RequirementsMet() && HandleTravelTiming())
                 {
                     if (!_bArrivedOnce) { GameManager.MerchantQueue.Add(this); }
                     else { GameManager.MerchantQueue.Insert(0, this); }
@@ -2519,6 +2520,7 @@ namespace RiverHollow.Characters
             MoveToSpawn();
             _bArrivedOnce = true;
 
+            DiChosenItems.Clear();
             List<int> copy = new List<int>(_liRequestItems);
             for (int i = 0; i < 3; i++)
             {

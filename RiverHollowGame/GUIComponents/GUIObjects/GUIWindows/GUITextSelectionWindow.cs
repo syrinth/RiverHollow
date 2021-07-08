@@ -102,9 +102,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 TalkingActor act = CurrentNPC;
                 List<TextEntry> liCommands = new List<TextEntry> { DataManager.GetGameTextEntry("Selection_Talk") };
-
-                if (act.CanGiveGift) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Gift")); }
-                if (act.CanJoinParty && act.GetFriendshipLevel() >= 2) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Party")); }
                 liCommands.Add(DataManager.GetGameTextEntry("Selection_Buy"));
                 liCommands.Add(DataManager.GetGameTextEntry("Selection_Requests"));
                 liCommands.Add(DataManager.GetGameTextEntry("Selection_NeverMind"));
