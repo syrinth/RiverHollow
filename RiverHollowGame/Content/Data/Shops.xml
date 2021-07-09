@@ -7,9 +7,9 @@
         <Item>[Type:Item][ItemID:1][Cost:100]</Item>
         <Item>[Type:Item][ItemID:57][Cost:20]</Item>
         <Item>[Type:Item][ItemID:21][Cost:50]</Item>
-        <Item>[Type:Item][ItemID:154][Cost:50]</Item>
+        <Item>[Type:Item][ItemID:153][Cost:50]</Item>
         <Item>[Type:Item][ItemID:5][Cost:100]</Item>
-        <Item>[Type:Item][ItemID:124][Cost:3000]</Item>
+        <Item>[Type:Item][ItemID:123][Cost:3000]</Item>
       </Value>
     </Item>
     <Item>
@@ -22,12 +22,13 @@
       <Value>
         <Item>[Type:Item][ItemID:0][Cost:10]</Item>
         <Item>[Type:Item][ItemID:2][Cost:10]</Item>
-        <Item>[Type:Item][ItemID:171][Cost:1000]</Item>
+        <Item>[Type:Item][ItemID:170][Cost:1000]</Item>
         <Item>[Type:Item][ItemID:172][Cost:1000]</Item>
         <Item>[Type:Item][ItemID:173][Cost:1000]</Item>
         <Item>[Type:Item][ItemID:174][Cost:1000]</Item>
         <Item>[Type:Item][ItemID:175][Cost:1000]</Item>
         <Item>[Type:Item][ItemID:176][Cost:1000]</Item>
+        <Item>[Type:Item][ItemID:171][Cost:1000]</Item>
       </Value>
     </Item>
     <Item>
@@ -56,6 +57,20 @@
       <Key>5</Key>
       <Value>
         <Item>[Type:Item][ItemID:57][Cost:20]</Item>
+      </Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>
+        <Item>[Type:Item][ItemID:78][Cost:500]</Item>
+        <Item>[Type:Item][ItemID:80][Cost:250]</Item>
+        <Item>[Type:Item][ItemID:81][Cost:250]</Item>
+        <Item>[Type:Item][ItemID:82][Cost:250]</Item>
+        <Item>[Type:Item][ItemID:83][Cost:250]</Item>
+        <Item>[Type:Item][ItemID:85][Cost:250]</Item>
+        <Item>[Type:Item][ItemID:86][Cost:250]</Item>
+        <Item>[Type:Item][ItemID:87][Cost:250]</Item>
+        <Item>[Type:Item][ItemID:88][Cost:250]</Item>
       </Value>
     </Item>
   </Asset>

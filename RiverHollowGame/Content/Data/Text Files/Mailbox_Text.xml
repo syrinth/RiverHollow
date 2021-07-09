@@ -8,7 +8,13 @@ I've enclosed the designs for a $Building_8$, the faster you build it, the faste
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:I've spoken with $Character_14$ and set him to work. Go see him in his shop when you're ready to start work on a $Building_18$.][ShopTargetID:2][UnlockItemID:136]</Value>
+      <Value>[Text:I've spoken with $Character_14$ and set him to work. Go see him in his shop when you're ready to start work on a $Building_18$.][ShopTargetID:2][UnlockItemID:172]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Text:Hey, thanks for the house. It's really roomy here. Now that I'm settled in, I thought maybe  I could open up a $Building_32$? I used to run one a few years ago. I spoke with $Character_14$ and he told me to tell you to see him.
+
+No rush, but I think it'd help liven up the town.][ShopTargetID:2][UnlockItemID:171]</Value>
     </Item>
   </Asset>
 </XnaContent>

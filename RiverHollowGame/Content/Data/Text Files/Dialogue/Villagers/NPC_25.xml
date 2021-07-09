@@ -3,23 +3,23 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>[Text:Hello! Hello! I am $Character_23$, merchant and wizard extraordinaire!]</Value>
+      <Value>[Text:Hi, I'm $Character_25$, it's nice to meet you. Nice town you have here. Could use some more plants though I think eh?][UnlockBuildingID:31]</Value>
     </Item>
     <Item>
-      <Key>Requests</Key>
-      <Value>[Text:Ah! I'm hoping you can help me. I'm looking for the following items!]</Value>
+      <Key>ShopOpen</Key>
+      <Value>[Text:What can I do?][Selection:Shop]</Value>
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>[Text:Aha! Welcome! How can I help you today?][Selection:MerchantTalk]</Value>
+      <Value>[Text:Hey.][Selection:VillageTalk]</Value>
     </Item>
     <Item>
-      <Key>1</Key>
-      <Value>[Text:I may be used to life on the road, but I'm always happy to arrive in a nice place such as this!][Default]</Value>
+      <Key>2</Key>
+      <Value>[Text:I love plants, there's nothing more fascinating to me than watching them grow.][Default]</Value>
     </Item>
     <Item>
-      <Key>RequestsComplete</Key>
-      <Value>[Text:You've helped me enough for now!]</Value>
+      <Key>HouseBuilt</Key>
+      <Value>[Text][Once][RequiredBuildingID:31][SendMessage:3]</Value>
     </Item>
   </Asset>
 </XnaContent>

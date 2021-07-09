@@ -59,31 +59,31 @@
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:10][Collection:7|180][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][ShopData:2]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:10][Collection:7|181][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][ShopData:2]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:10][Collection:7|180][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:6][TotalMoneyEarnedReq:1000]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:10][Collection:7|181][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:6][TotalMoneyEarnedReq:1000]</Value>
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:28][Collection:7|180][ShopData:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:21][FirstArrival:6][ArrivalPeriod:4]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:28][Collection:7|181][ShopData:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:21][FirstArrival:6][ArrivalPeriod:4]</Value>
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:13][Collection:7|180][ShopData:0][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:8][FirstArrival:6][ArrivalPeriod:7]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:13][Collection:7|181][ShopData:0][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:8][FirstArrival:6][ArrivalPeriod:7]</Value>
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:30][Collection:7|180][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:17][FirstArrival:3][ArrivalPeriod:10]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:30][Collection:7|181][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:17][FirstArrival:3][ArrivalPeriod:10]</Value>
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:26][Collection:7|180][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:12][FirstArrival:1][ArrivalPeriod:6]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:26][Collection:7|181][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:12][FirstArrival:1][ArrivalPeriod:6]</Value>
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:7|180][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:8][FirstArrival:20][ArrivalPeriod:4]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:7|181][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:8][FirstArrival:20][ArrivalPeriod:4]</Value>
     </Item>
     <Item>
       <Key>21</Key>
@@ -91,7 +91,7 @@
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:10][ArrivalPeriod:5][RequestIDs:58|68|71|162|163]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:2][RequestIDs:58|68|71|162|163]</Value>
     </Item>
     <Item>
       <Key>23</Key>
@@ -103,7 +103,7 @@
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:99][ArrivalPeriod:9]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:31][Collection:7|181][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:2][RequiredObjectID:30-5][ShopData:6]</Value>
     </Item>
   </Asset>
 </XnaContent>

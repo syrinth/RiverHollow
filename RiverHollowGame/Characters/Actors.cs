@@ -1823,35 +1823,29 @@ namespace RiverHollow.Characters
 
         protected bool RequirementsMet()
         {
-            bool rv = true;
             foreach (KeyValuePair<int, int> kvp in _diRequiredObjectIDs)
             {
                 if (PlayerManager.GetNumberTownObjects(kvp.Key) < kvp.Value)
                 {
-                    rv = false;
-                    break;
+                    return false;
                 }
             }
 
-            if (rv)
+            foreach (int i in _liRequiredBuildingIDs)
             {
-                foreach (int i in _liRequiredBuildingIDs)
+                if (!PlayerManager.DIBuildInfo[i].Built)
                 {
-                    if (!PlayerManager.DIBuildInfo[i].Built)
-                    {
-                        rv = false;
-                        break;
-                    }
+                    return false;
                 }
             }
 
             //If there is a Money Earned Requirement and we have not reached it, fail the test
             if (_iTotalMoneyEarnedReq != -1 && _iTotalMoneyEarnedReq < PlayerManager.TotalMoneyEarned)
             {
-                rv = false;
+                return false;
             }
 
-            return rv;
+            return true;
         }
 
         #region Travel Methods
@@ -1887,7 +1881,7 @@ namespace RiverHollow.Characters
             bool rv = --arrivalPeriod == 0;
             if (rv)
             {
-                _iNextArrival = _iArrivalPeriod;
+                _iNextArrival = 0;
             }
 
             return rv;
@@ -2029,6 +2023,8 @@ namespace RiverHollow.Characters
 
         public override void RollOver()
         {
+            if (RequirementsMet() && CurrentMap != null) { _bLivesInTown = true; }
+
             if (LivesInTown || HandleTravelTiming())
             {
                 ClearPath();
@@ -2040,6 +2036,12 @@ namespace RiverHollow.Characters
                 {
                     CanGiveGift = true;
                 }
+            }
+            else if(CurrentMap != null)
+            {
+                CurrentMap.RemoveCharacter(this);
+                CurrentMapName = string.Empty;
+                _iNextArrival = _iArrivalPeriod;
             }
         }
 
@@ -2403,6 +2405,7 @@ namespace RiverHollow.Characters
                 npcID = ID,
                 arrived = LivesInTown,
                 arrivalDelay = _iDaysToFirstArrival,
+                nextArrival = _iNextArrival,
                 introduced = Introduced,
                 friendship = FriendshipPoints,
                 collection = new List<bool>(_diCollection.Values),
@@ -2419,10 +2422,16 @@ namespace RiverHollow.Characters
         {
             Introduced = data.introduced;
             _bLivesInTown = data.arrived;
+            _iNextArrival = data.nextArrival;
             _iDaysToFirstArrival = data.arrivalDelay;
             FriendshipPoints = data.friendship;
             _bMarried = data.married;
             CanGiveGift = data.canGiveGift;
+
+            if (_iNextArrival == 0)
+            {
+                MoveToSpawn();
+            }
 
             if (_class != null) { LoadClassedCharData(data.classedData); }
 
@@ -2511,6 +2520,7 @@ namespace RiverHollow.Characters
             else
             {
                 _bOnTheMap = false;
+                _iNextArrival = _iArrivalPeriod;
                 CurrentMap?.RemoveCharacterImmediately(this);
             }
         }
@@ -2610,7 +2620,7 @@ namespace RiverHollow.Characters
             _iNextArrival = data.timeToNextArrival;
             _bArrivedOnce = data.arrivedOnce;
 
-            if(_iNextArrival == _iArrivalPeriod)
+            if(_iNextArrival == 0)
             {
                 ArriveInTown();
             }

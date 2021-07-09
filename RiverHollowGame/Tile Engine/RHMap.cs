@@ -872,7 +872,7 @@ namespace RiverHollow.Tile_Engine
                 }
             }
 
-            if (_diResources.Count > 0)
+            if (_diResources.Count > 0 && validTiles.Count > 0)
             {
                 string[] val = _sResourceMinMax.Split('-');
                 int spawnNumber = RHRandom.Instance().Next(int.Parse(val[0]), int.Parse(val[1]));
@@ -921,6 +921,12 @@ namespace RiverHollow.Tile_Engine
 
                     //Keep track of which tiles were used
                     usedTiles.Add(targetTile);
+
+                    if (validTiles.Count == 0)
+                    {
+                        int pump = 0;
+                        break;
+                    }
                 }
             }
         }

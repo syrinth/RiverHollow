@@ -305,6 +305,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "ArrivalDelay")]
             public int arrivalDelay;
 
+            [XmlElement(ElementName = "NextArrival")]
+            public int nextArrival;
+
             [XmlElement(ElementName = "Friendship")]
             public int friendship;
 

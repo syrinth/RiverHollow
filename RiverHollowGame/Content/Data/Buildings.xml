@@ -125,5 +125,13 @@
       <Key>30</Key>
       <Value>[Texture:House_18][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-97-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
+    <Item>
+      <Key>31</Key>
+      <Value>[Texture:House_25][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-96-16-32][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>32</Key>
+      <Value>[Texture:Flower_Shop][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-96-16-32][ReqItems:55-5|60-5]</Value>
+    </Item>
   </Asset>
 </XnaContent>
