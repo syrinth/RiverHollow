@@ -87,13 +87,17 @@ namespace RiverHollow.SpriteAnimations
         public AnimatedSprite(AnimatedSprite sprite)
         {
             _texture = sprite._texture;
-            _diFrameAnimations = sprite._diFrameAnimations;
             FrameCutoff = sprite.FrameCutoff;
             _color = sprite._color;
             _sCurrAnim = sprite._sCurrAnim;
             _iScale = sprite._iScale;
 
             Drawing = sprite.Drawing;
+
+            _diFrameAnimations = new Dictionary<string, FrameAnimation>();
+            foreach (KeyValuePair<string, FrameAnimation> kvp in sprite._diFrameAnimations){
+                _diFrameAnimations[kvp.Key] = new FrameAnimation(kvp.Value);
+            }
 
             Width = sprite.Width;
             Height = sprite.Height;

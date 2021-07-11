@@ -182,6 +182,18 @@
       <Value>[Name:Angry Hive]</Value>
     </Item>
     <Item>
+      <Key>Monster_7</Key>
+      <Value>[Name:Mossy Slime]</Value>
+    </Item>
+    <Item>
+      <Key>Monster_8</Key>
+      <Value>[Name:Forest Impling]</Value>
+    </Item>
+    <Item>
+      <Key>Monster_9</Key>
+      <Value>[Name:Carnivorous Plant]</Value>
+    </Item>
+    <Item>
       <Key>Action_0</Key>
       <Value>[Name:Move]</Value>
     </Item>

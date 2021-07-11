@@ -75,6 +75,19 @@ namespace RiverHollow.SpriteAnimations
             PlayOnce = playsOnce;
         }
 
+        public FrameAnimation(FrameAnimation initial)
+        {
+            rectInitialFrame = initial.rectInitialFrame;
+            FrameCount = initial.FrameCount;
+            this.FrameLength = initial.FrameLength;
+            _bPingPong = initial._bPingPong;
+            PlayOnce = initial.PlayOnce;
+            NextAnimation = initial.NextAnimation;
+
+            CurrentFrame = initial.CurrentFrame;
+            FrameTimer = initial.FrameTimer;
+        }
+
         public void Update(GameTime gTime)
         {
             if (FrameCount > 1)

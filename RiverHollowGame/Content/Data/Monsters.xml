@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Texture:MagicMushroom][Condition:Forest-Summer][Jump][Lvl:1][Ability:41][Loot:23][Trait:Coward][Walk:0-0-4-.2-F][Attack:0-48-2-.2-F][Cast:0-96-4-.07-F][Hurt:0-0-4-.2-F][Critical:0-0-4-.2-F][KO:384-48-3-.15-F]</Value>
+      <Value>[Texture:MagicMushroom][Condition:Forest-Summer][Jump][Lvl:1][Ability:41][Loot:23][Trait:Coward][Walk:0-0-4-.2-F][Action1:0-48-2-.2-F][Cast:0-96-4-.07-F][Hurt:0-0-4-.2-F][Critical:0-0-4-.2-F][KO:384-48-3-.15-F]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Texture:BigBlob][Condition:Forest-Summer][Lvl:1][Width:32][Height:48][Size:2][Ability:38][Loot:26][Walk:0-0-3-.2-T][Action1:0-64-2-.15-F][Hurt:0-128-3-.15-F][Critical:0-192-2-.3-F][KO:640-64-2-.15-F][MoveSpeed:4]</Value>
+      <Value>[Texture:BigBlob][Condition:Forest-Summer][Lvl:1][Size:2][Ability:38][Loot:26][Walk:0-0-3-.2-T][Action1:0-64-2-.15-F][Hurt:0-128-3-.15-F][Critical:0-192-2-.3-F][KO:640-64-2-.15-F][MoveSpeed:4][Width:32][Height:48]</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -28,6 +28,18 @@
     <Item>
       <Key>6</Key>
       <Value>[Texture:AngryHive][Lvl:1][Ability:45][Loot:84|138][Walk:0-0-4-0.15-F][Action1:0-32-4-0.15-F][Cast:0-32-4-0.15-F][Hurt:0-64-4-0.15-F][Critical:0-96-4-0.15-F][KO:0-128-3-0.15-F]</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>[Texture:Mossy_Slime][Condition:Forest-Summer][Lvl:1][Ability:38][Loot:77|78|80|81|82|83|85|86|87|88][Walk:0-0-3-0.15-T][Action1:0-32-3-0.15-T][Cast:0-64-3-0.15-T][Hurt:0-96-3-0.15-T][Critical:0-128-3-0.15-T][KO:0-160-3-0.15-T]</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>[Texture:Forest_Impling][Condition:Forest-Summer][Lvl:1][Ability:38][Loot:77|78|80|81|82|83|85|86|87|88][Walk:0-0-3-0.15-T][Action1:0-32-3-0.15-T][Cast:0-64-3-0.15-T][Hurt:0-96-3-0.15-T][Critical:0-128-3-0.15-T][KO:0-160-3-0.15-T]</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Texture:Carnivorous_Plant][Condition:Forest-Summer][Lvl:2][Size:2][Ability:38][Loot:77|78|80|81|82|83|85|86|87|88][Walk:0-0-3-0.2-T][Action1:0-48-3-0.2-T][Cast:0-96-3-0.2-T][Hurt:0-144-3-0.2-T][Critical:0-192-3-0.2-T][KO:0-240-3-0.15-T][Width:32][Height:48]</Value>
     </Item>
   </Asset>
 </XnaContent>

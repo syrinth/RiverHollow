@@ -15,7 +15,6 @@ using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 
-
 namespace RiverHollow.GUIComponents.Screens
 {
     public class CombatScreen : GUIScreen
@@ -75,12 +74,6 @@ namespace RiverHollow.GUIComponents.Screens
                     text.AnchorToInnerSide(window, SideEnum.Top);
                     break;
             }
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-            _gActorInfoPanel?.Draw(spriteBatch);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -158,12 +151,17 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 if (_gActorInfoPanel?.Character != hoverTile.Character)
                 {
+                    RemoveControl(_gActorInfoPanel);
+                    _gActorInfoPanel = null;
+
                     _gActorInfoPanel = new GUIActorInfoPanel(hoverTile.Character);
                     _gActorInfoPanel.AnchorToScreen(SideEnum.BottomRight);
+                    AddControl(_gActorInfoPanel);
                 }
             }
             else
             {
+                RemoveControl(_gActorInfoPanel);
                 _gActorInfoPanel = null;
             }
 
@@ -328,47 +326,6 @@ namespace RiverHollow.GUIComponents.Screens
             Resize();
             gName.SetText(actor.Name);    
         }
-
-//SetWeapon();
-            //_gHP = new GUIStatDisplay(actor.GetHP, Color.Green, 100);
-            //_gHP.AnchorAndAlignToObject(_gSprite, SideEnum.Bottom, SideEnum.Left);
-            //AddControl(_gHP);
-            //if (actor.MaxMP > 0) { 
-            //    _gMP = new GUIStatDisplay(actor.GetMP, Color.LightBlue, 100);
-            //    _gMP.AnchorAndAlignToObject(_gHP, SideEnum.Bottom, SideEnum.Left);
-            //    AddControl(_gMP);
-            //}
-
-        //public void SetWeapon()
-        //{
-        //    if (_actor.IsActorType(ActorEnum.Adventurer))
-        //    {
-        //        ClassedCombatant adv = (ClassedCombatant)_actor;
-        //        CharacterClass cClass = adv.CharacterClass;
-
-        //        AnimatedSprite sprWeaponSprite = new AnimatedSprite(GameContentManager.FOLDER_ITEMS + "Combat\\Weapons\\" + cClass.WeaponType.ToString() + "\\" + adv.Weapon.GetItem().ItemID);
-
-        //        int xCrawl = 0;
-        //        int frameWidth = 32;
-        //        int frameHeight = 32;
-        //        sprWeaponSprite.AddAnimation(CActorAnimEnum.Idle, xCrawl, 0, 32, 32, cClass.IdleFrames, cClass.IdleFramesLength);
-        //        xCrawl += cClass.IdleFrames;
-        //        sprWeaponSprite.AddAnimation(CActorAnimEnum.Cast, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.CastFrames, cClass.CastFramesLength);
-        //        xCrawl += cClass.CastFrames;
-        //        sprWeaponSprite.AddAnimation(CActorAnimEnum.Hurt, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.HitFrames, cClass.HitFramesLength);
-        //        xCrawl += cClass.HitFrames;
-        //        sprWeaponSprite.AddAnimation(CActorAnimEnum.Attack, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.AttackFrames, cClass.AttackFramesLength);
-        //        xCrawl += cClass.AttackFrames;
-        //        sprWeaponSprite.AddAnimation(CActorAnimEnum.Critical, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.CriticalFrames, cClass.CriticalFramesLength);
-        //        xCrawl += cClass.CriticalFrames;
-        //        sprWeaponSprite.AddAnimation(CActorAnimEnum.KO, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.KOFrames, cClass.KOFramesLength);
-        //        xCrawl += cClass.KOFrames;
-        //        sprWeaponSprite.AddAnimation(CActorAnimEnum.Win, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.WinFrames, cClass.WinFramesLength);
-        //        sprWeaponSprite.SetScale(CombatManager.CombatScale);
-
-        //        _gSprite.SetWeapon(sprWeaponSprite);
-        //    }
-        //}
 
         public void Reset()
         {

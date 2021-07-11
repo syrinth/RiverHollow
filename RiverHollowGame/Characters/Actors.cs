@@ -31,7 +31,7 @@ namespace RiverHollow.Characters
         public const float NORMAL_SPEED = 1f;
         public const float NPC_WALK_SPEED = 0.6f;
 
-        protected const int HUMAN_HEIGHT = (TILE_SIZE * 2) + 2;
+        protected const int HUMAN_HEIGHT = (TILE_SIZE * 2);
         protected const float EYE_DEPTH = 0.001f;
         protected const float HAIR_DEPTH = 0.003f;
 
