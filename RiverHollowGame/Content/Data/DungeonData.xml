@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[MonsterID:9-U|8-C|7-C][ObjectID:23-C|9-C|10-R|11-U|31-R|33-M|36-U]</Value>
+      <Value>[MonsterID:9-U|8-C|7-C][ObjectID:25-C|11-C|12-R|13-U|33-R|35-M|38-U]</Value>
     </Item>
   </Asset>
 </XnaContent>

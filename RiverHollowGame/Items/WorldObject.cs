@@ -773,9 +773,20 @@ namespace RiverHollow.Items
     /// </summary>
     public class Buildable : WorldObject
     {
+        protected enum RotationalEnum { None, FourWay };
+        protected RotationalEnum _eRotationType = RotationalEnum.None;
+
+        protected DirectionEnum _eFacingDir = DirectionEnum.Down;
+
+        protected int _iRotationBaseOffsetX;
+        protected int _iRotationBaseOffsetY;
+        protected int _iRotationWidth;
+        protected int _iRotationHeight;
+
         protected Dictionary<int, int> _diReqToMake;
         public Dictionary<int, int> RequiredToMake => _diReqToMake;
 
+        public bool OutsideOnly { get; private set; } = false;
         protected bool _bSelected = false;
 
         protected Buildable(int id) : base(id) { }
@@ -790,6 +801,10 @@ namespace RiverHollow.Items
             base.LoadDictionaryData(stringData, loadSprite);
 
             Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
+            Util.AssignValue(ref _eRotationType, "Rotation", stringData);
+            Util.AssignValues(ref _iRotationBaseOffsetX, ref _iRotationBaseOffsetY, "RotationBaseOffset", stringData);
+            Util.AssignValue(ref _iRotationWidth, "RotationWidth", stringData);
+            Util.AssignValue(ref _iRotationHeight, "RotationHeight", stringData);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -799,6 +814,73 @@ namespace RiverHollow.Items
         }
 
         public void SelectObject(bool val) { _bSelected = val; }
+
+        public bool CanBuild()
+        {
+            return !OutsideOnly || (OutsideOnly && MapManager.CurrentMap.IsOutside);
+        }
+
+        public void Rotate()
+        {
+            if(_eRotationType != RotationalEnum.None)
+            {
+                if (_iBaseWidth != _iBaseHeight)
+                {
+                    Util.SwitchValues(ref _iBaseWidth, ref _iBaseHeight);
+                    Util.SwitchValues(ref _iSpriteWidth, ref _iRotationWidth);
+                    Util.SwitchValues(ref _iSpriteHeight, ref _iRotationHeight);
+                    Util.SwitchValues(ref _iBaseXOffset, ref _iRotationBaseOffsetX);
+                    Util.SwitchValues(ref _iBaseYOffset, ref _iRotationBaseOffsetY);
+                }
+
+                Rectangle spriteFrameRectangle = _sprite.CurrentFrameAnimation.FrameRectangle;
+
+                Point newImage = spriteFrameRectangle.Location + new Point(spriteFrameRectangle.Width, 0);
+                switch (_eFacingDir)
+                {
+                    case DirectionEnum.Down:
+                        _eFacingDir = DirectionEnum.Right;
+                        break;
+                    case DirectionEnum.Right:
+                        _eFacingDir = DirectionEnum.Up;
+                        break;
+                    case DirectionEnum.Up:
+                        _eFacingDir = DirectionEnum.Left;
+                        break;
+                    case DirectionEnum.Left:
+                        newImage = _pImagePos;
+                        _eFacingDir = DirectionEnum.Down;
+                        break;
+                }
+
+                _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, newImage.X, newImage.Y, _iSpriteWidth, _iSpriteHeight);
+                SetSpritePos(_vMapPosition);
+            }            
+        }
+
+        internal BuildableData SaveData()
+        {
+            BuildableData data = new BuildableData
+            {
+                ID = _iID,
+                x = CollisionBox.X,
+                y = CollisionBox.Y,
+                dir = (int)_eFacingDir
+            };
+
+            return data;
+        }
+
+        internal void LoadData(BuildableData data)
+        {
+            SnapPositionToGrid(new Vector2(data.x, data.y));
+
+            for (int i = 0; i < data.dir; i++)
+            {
+                Rotate();
+            }
+        }
 
         public class Structure : Buildable
         {
@@ -1274,6 +1356,7 @@ namespace RiverHollow.Items
 
                 public override void Draw(SpriteBatch spriteBatch)
                 {
+                    _sprite.SetColor(_bSelected ? Color.Green : Color.White);
                     _sprite.Draw(spriteBatch, 0);
                 }
 
@@ -1336,6 +1419,7 @@ namespace RiverHollow.Items
 
                 public Garden(int id, Dictionary<string, string> stringData) : base(id)
                 {
+                    OutsideOnly = true;
                     _eObjectType = ObjectTypeEnum.Garden;
 
                     LoadDictionaryData(stringData, false);

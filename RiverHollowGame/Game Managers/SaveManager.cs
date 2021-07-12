@@ -148,8 +148,19 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Items")]
             public List<ItemData> Items;
 
+            [XmlArray(ElementName = "Storage")]
+            public List<StorageData> Storage;
+
             [XmlElement(ElementName = "AdventurerData")]
             public ClassedCharData adventurerData;
+        }
+        public struct StorageData
+        {
+            [XmlElement(ElementName = "ObjectID")]
+            public int objID;
+
+            [XmlElement(ElementName = "Number")]
+            public int number;
         }
         public struct CalendarData
         {
@@ -272,6 +283,9 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "WorldObjects")]
             public List<WorldObjectData> worldObjects;
 
+            [XmlArray(ElementName = "Buildables")]
+            public List<BuildableData> buildables;
+
             [XmlArray(ElementName = "Containers")]
             public List<ContainerData> containers;
 
@@ -367,6 +381,20 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "Y")]
             public int y;
+        }
+        public struct BuildableData
+        {
+            [XmlElement(ElementName = "WorldObjectID")]
+            public int ID;
+
+            [XmlElement(ElementName = "X")]
+            public int x;
+
+            [XmlElement(ElementName = "Y")]
+            public int y;
+
+            [XmlElement(ElementName = "Facing")]
+            public int dir;
         }
         public struct RHTileData
         {
@@ -594,6 +622,14 @@ namespace RiverHollow.Game_Managers
                 playerData.Items.Add(itemData);
             }
 
+            foreach (KeyValuePair<int, int> kvp in PlayerManager.GetStorageItems()) {
+                StorageData storageData = new StorageData
+                {
+                    objID = kvp.Key,
+                    number = kvp.Value
+                };
+                playerData.Storage.Add(storageData);
+            }
             data.playerData = playerData;
 
             foreach (Building b in PlayerManager.BuildingList)

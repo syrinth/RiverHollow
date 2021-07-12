@@ -12,31 +12,55 @@ namespace RiverHollow.GUIComponents.Screens
 {
     class BuildScreen : GUIScreen
     {
+        public enum MenuEnum { BuildMenu, EditMenu };
+        public enum BuildTypeEnum { Building, Floor, WorldObject, Storage };
         const int BTN_PADDING = 10;
+
+        private MenuEnum _eCurrentMenu;
 
         //public static int BTNSIZE = ScaledTileSize;
         public static int CONSTRUCTBOX_WIDTH = 544; //(GUIManager.MAIN_COMPONENT_WIDTH) - (_gWindow.EdgeSize * 2) - ScaledTileSize
         public static int CONSTRUCTBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDTaskLog.MAX_SHOWN_TASKS) - (_gWindow.EdgeSize * 2)
-        List<GUIObject> _liButtons;
+
+        GUIButton storageButton;
+        List<GUIObject> _liBuildMenuObjects;
+        List<GUIObject> _liEditMenuObjects;
         GUIMainObject _gMenuObject;
 
         public delegate void CloseMenuDelegate();
 
         public BuildScreen()
         {
+            _eCurrentMenu = MenuEnum.BuildMenu;
             Scry(true);
+            GUIButton buildingsButton = new GUIButton("Buildings", BtnBuildings);
+            storageButton = new GUIButton("Storage", BtnStorage);
+            storageButton.Enable(PlayerManager.GetStorageItems().Count > 0);
 
-            _liButtons = new List<GUIObject>() {
-                new GUIButton("Build", BtnBuildings),
-                new GUIButton("Structures", BtnStructures),
-                new GUIButton("Flooring", BtnFlooring),
+            _liBuildMenuObjects = new List<GUIObject>();
+            if (MapManager.CurrentMap.IsOutside && MapManager.CurrentMap.IsTown) {
+                _liBuildMenuObjects.Add(buildingsButton);
+            }
+
+            _liBuildMenuObjects.Add(new GUIButton("Structures", BtnStructures));
+            _liBuildMenuObjects.Add(new GUIButton("Flooring", BtnFlooring));
+            _liBuildMenuObjects.Add(storageButton);
+            _liBuildMenuObjects.Add(new GUIButton("Edit Town", BtnEditTown));
+            _liBuildMenuObjects.Add(new GUIButton("Exit", BtnExitBuildMenu));
+
+            AddControls(_liBuildMenuObjects);
+            GUIObject.CreateSpacedColumn(ref _liBuildMenuObjects, GUIButton.BTN_WIDTH/2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
+
+            _liEditMenuObjects = new List<GUIObject>
+            {
                 new GUIButton("Move", BtnMove),
+                new GUIButton("Rotate", BtnRotate),
+                new GUIButton("Upgrade", BtnUpgrade),
                 new GUIButton("Remove", BtnRemove),
-                new GUIButton("Exit", BtnExitMenu)
+                new GUIButton("Storage", BtnStorageMode),
+                new GUIButton("Exit", BtnLeaveEditMode)
             };
-            AddControls(_liButtons);
-
-            GUIObject.CreateSpacedColumn(ref _liButtons, GUIButton.BTN_WIDTH/2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
+            GUIObject.CreateSpacedColumn(ref _liEditMenuObjects, GUIButton.BTN_WIDTH / 2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
         }
 
         public override bool ProcessRightButtonClick(Point mouse)
@@ -49,23 +73,42 @@ namespace RiverHollow.GUIComponents.Screens
             //If the right click has not been processed, we probably want to close anything that we have open.
             if (!rv)
             {
-                if (InTownMode()) {
+                if (TownModeUpgrade()) {
+                    if (_gMainObject != null) { GUIManager.CloseMainObject(); }
+                    else {
+                        LeaveTownMode();
+                        GUIManager.OpenMenu();
+                        GameManager.DropWorldObject();
+                    }
+                }
+                else if (InTownMode())
+                {
                     LeaveTownMode();
                     GUIManager.OpenMenu();
                     GameManager.DropWorldObject();
                 }
                 else
                 {
-                    if (_gMainObject == null)
+                    switch (_eCurrentMenu)
                     {
-                        CloseMenu();
+                        case MenuEnum.BuildMenu:
+                            if (_gMainObject != null) { GUIManager.CloseMainObject(); }
+                            else
+                            {
+                                CloseMenu();
+
+                                Scry(false);
+
+                                GUIManager.CloseMainObject();
+                                GameManager.GoToHUDScreen();
+                                GUIManager.OpenMenu();
+                            }
+                            break;
+                        case MenuEnum.EditMenu:
+                            if (_gMainObject != null) { GUIManager.CloseMainObject(); }
+                            else { BtnLeaveEditMode(); }
+                            break;
                     }
-
-                    Scry(false);
-
-                    GUIManager.CloseMainObject();
-                    GameManager.GoToHUDScreen();
-                    GUIManager.OpenMenu();
                 }
             }
 
@@ -74,23 +117,49 @@ namespace RiverHollow.GUIComponents.Screens
 
         public void BtnBuildings()
         {
-            _gMenuObject = new HUDConstruction(CloseMenu, ObjectTypeEnum.Building);
+            _gMenuObject = new HUDConstruction(CloseMenu, BuildTypeEnum.Building);
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
         }
 
         public void BtnStructures()
         {
-            _gMenuObject = new HUDConstruction(CloseMenu, ObjectTypeEnum.WorldObject);
+            _gMenuObject = new HUDConstruction(CloseMenu, BuildTypeEnum.WorldObject);
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
         }
 
         public void BtnFlooring()
         {
-            _gMenuObject = new HUDConstruction(CloseMenu, ObjectTypeEnum.Floor);
+            _gMenuObject = new HUDConstruction(CloseMenu, BuildTypeEnum.Floor);
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
+        }
+
+        public void BtnStorage()
+        {
+            _gMenuObject = new HUDConstruction(CloseMenu, BuildTypeEnum.Storage);
+            _gMenuObject.CenterOnScreen();
+            GUIManager.OpenMainObject(_gMenuObject);
+        }
+
+        public void BtnEditTown()
+        {
+            SwitchMenus(MenuEnum.EditMenu);
+        }
+
+        public void BtnExitBuildMenu()
+        {
+            if (_gMainObject == null)
+            {
+                CloseMenu();
+            }
+
+            Scry(false);
+
+            GUIManager.CloseMainObject();
+            GameManager.GoToHUDScreen();
+            GUIManager.OpenMenu();
         }
 
         public void BtnMove()
@@ -101,6 +170,22 @@ namespace RiverHollow.GUIComponents.Screens
             GameManager.EnterTownModeMoving();
         }
 
+        public void BtnRotate()
+        {
+            CloseMenu();
+            GUIManager.CloseMainObject();
+            GameManager.ClearGMObjects();
+            GameManager.EnterTownModeRotate();
+        }
+
+        public void BtnUpgrade()
+        {
+            CloseMenu();
+            GUIManager.CloseMainObject();
+            GameManager.ClearGMObjects();
+            GameManager.EnterTownModeUpgrade();
+        }
+
         public void BtnRemove()
         {
             CloseMenu();
@@ -109,21 +194,55 @@ namespace RiverHollow.GUIComponents.Screens
             GameManager.EnterTownModeDestroy();
         }
 
-        public void BtnExitMenu()
+        public void BtnStorageMode()
         {
-            RiverHollow.ResetCamera();
-            GUIManager.SetScreen(new HUDScreen());
-            GameManager.Unpause();
+            CloseMenu();
+            GUIManager.CloseMainObject();
+            GameManager.ClearGMObjects();
+            GameManager.EnterTownModeStorage();
+        }
+
+        public void BtnLeaveEditMode()
+        {
+            SwitchMenus(MenuEnum.BuildMenu);
         }
 
         public override void CloseMenu()
         {
-            RemoveControls(_liButtons);
+            switch (_eCurrentMenu)
+            {
+                case MenuEnum.BuildMenu:
+                    RemoveControls(_liBuildMenuObjects);
+                    break;
+                case MenuEnum.EditMenu:
+                    RemoveControls(_liEditMenuObjects);
+                    break;
+            }            
         }
     
         public override void OpenMenu()
         {
-            AddControls(_liButtons);
+            switch (_eCurrentMenu)
+            {
+                case MenuEnum.BuildMenu:
+                    AddControls(_liBuildMenuObjects);
+                    storageButton.Enable(PlayerManager.GetStorageItems().Count > 0);
+                    break;
+                case MenuEnum.EditMenu:
+                    AddControls(_liEditMenuObjects);
+                    break;
+            }
+            
+        }
+
+        private void SwitchMenus(MenuEnum newMenu)
+        {
+            CloseMenu();
+
+            _eCurrentMenu = newMenu;
+            OpenMenu();
+            GUIManager.CloseMainObject();
+            GameManager.ClearGMObjects();
         }
 
         public class HUDConstruction : GUIMainObject
@@ -132,11 +251,11 @@ namespace RiverHollow.GUIComponents.Screens
             public static int TASK_SPACING = 20;
             List<GUIObject> _liStructures;
             GUIList _gList;
-            ObjectTypeEnum _eObjectBuildType;
+            BuildTypeEnum _eObjectBuildType;
 
             private CloseMenuDelegate _closeMenu;
 
-            public HUDConstruction(CloseMenuDelegate closeMenu, ObjectTypeEnum objType)
+            public HUDConstruction(CloseMenuDelegate closeMenu, BuildTypeEnum objType)
             {
                 _eObjectBuildType = objType;
                 _closeMenu = closeMenu;
@@ -146,16 +265,16 @@ namespace RiverHollow.GUIComponents.Screens
 
                 switch (objType)
                 {
-                    case ObjectTypeEnum.Floor:
+                    case BuildTypeEnum.Floor:
                         GenerateConstructBoxes(DataManager.FloorIDs);
                         break;
-                    case ObjectTypeEnum.Plant:
-                        GenerateConstructBoxes(DataManager.PlantIDs);
-                        break;
-                    case ObjectTypeEnum.WorldObject:
+                    case BuildTypeEnum.WorldObject:
                         GenerateConstructBoxes(DataManager.StructureIDs);
                         break;
-                    case ObjectTypeEnum.Building:
+                    case BuildTypeEnum.Storage:
+                        GenerateConstructBoxes(PlayerManager.GetStorageItems());
+                        break;
+                    case BuildTypeEnum.Building:
                         foreach (BuildInfo b in PlayerManager.DIBuildInfo.Values)
                         {
                             if (b.Unlocked && !b.Built)
@@ -182,9 +301,27 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 foreach (int i in idList)
                 {
-                    ConstructBox box = new ConstructBox(ConstructWorldObject);
                     Buildable obj = (Buildable)DataManager.GetWorldObjectByID(i);
-                    box.SetConstructionInfo(i, obj.Name, obj.RequiredToMake);
+                    if (obj.RequiredToMake.Count > 0 && obj.CanBuild())
+                    {
+                        ConstructBox box = new ConstructBox(ConstructWorldObject);
+                        box.SetConstructionInfo(i, obj.Name, obj.RequiredToMake);
+                        _liStructures.Add(box);
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Given a list of WorldObject ids, generate a ConstructBox
+            /// </summary>
+            /// <param name="idList">The list of item IDs to create a box for</param>
+            public void GenerateConstructBoxes(Dictionary<int, int> dictionary)
+            {
+                foreach (KeyValuePair<int, int> kvp in dictionary)
+                {
+                    ConstructBox box = new ConstructBox(ConstructStorageObject);
+                    Buildable obj = (Buildable)DataManager.GetWorldObjectByID(kvp.Key);
+                    box.SetConstructionInfo(kvp.Key, obj.Name, kvp.Value);
                     _liStructures.Add(box);
                 }
             }
@@ -210,19 +347,17 @@ namespace RiverHollow.GUIComponents.Screens
             public void ConstructWorldObject(int objID)
             {
                 Buildable obj;
-                string name = string.Empty;
+
                 Dictionary<int, int> requiredToMake;
-                if (_eObjectBuildType == ObjectTypeEnum.Building)
+                if (_eObjectBuildType == BuildTypeEnum.Building)
                 {
                     obj = DataManager.GetBuilding(objID);
                     requiredToMake = PlayerManager.DIBuildInfo[objID].RequiredToMake;
-                    name = PlayerManager.DIBuildInfo[objID].Name;
                 }
                 else
                 {
                     obj = (Buildable)DataManager.GetWorldObjectByID(objID);
                     requiredToMake = obj.RequiredToMake;
-                    name = obj.Name;
                 }
 
                 if (InventoryManager.HasSufficientItems(requiredToMake))
@@ -232,6 +367,19 @@ namespace RiverHollow.GUIComponents.Screens
                     MapManager.CurrentMap.AddHeldLights(obj.GetLights());
                     obj.SetPickupOffset();
                 }
+
+                GUIManager.CloseMainObject();
+                _closeMenu();
+            }
+
+            public void ConstructStorageObject(int objID)
+            {
+                Buildable obj = (Buildable)DataManager.GetWorldObjectByID(objID);
+
+                GameManager.EnterTownModeBuild(true);
+                GameManager.PickUpWorldObject(obj);
+                MapManager.CurrentMap.AddHeldLights(obj.GetLights());
+                obj.SetPickupOffset();
 
                 GUIManager.CloseMainObject();
                 _closeMenu();

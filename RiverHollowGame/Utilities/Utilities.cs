@@ -508,6 +508,13 @@ namespace RiverHollow.Utilities
 
             return DirectionEnum.Up;
         }
+
+        public static void SwitchValues(ref int x, ref int y)
+        {
+            int temp = x;
+            x = y;
+            y = temp;
+        }
     }
 
     public class RHRandom : Random

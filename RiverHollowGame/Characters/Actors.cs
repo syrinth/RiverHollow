@@ -2478,7 +2478,7 @@ namespace RiverHollow.Characters
     /// </summary>
     public class Merchant : TravellingNPC
     {
-        List<int> _liRequestItems;
+        List<RequestItem> _liRequestItems;
         public Dictionary<Item, bool> DiChosenItems;
         private bool _bRequestsComplete = false;
 
@@ -2489,7 +2489,7 @@ namespace RiverHollow.Characters
             _liRequiredBuildingIDs = new List<int>();
             _diRequiredObjectIDs = new Dictionary<int, int>();
 
-            _liRequestItems = new List<int>();
+            _liRequestItems = new List<RequestItem>();
             DiChosenItems = new Dictionary<Item, bool>();
             ImportBasics(index, stringData, loadanimations);
 
@@ -2503,7 +2503,12 @@ namespace RiverHollow.Characters
 
             foreach(string s in Util.FindParams(stringData["RequestIDs"]))
             {
-                _liRequestItems.Add(int.Parse(s));
+                RequestItem request = new RequestItem();
+                string[] split = s.Split('-');
+                request.ItemID = int.Parse(split[0]);
+                request.Number = (split.Length > 1) ? int.Parse(split[1]) : 1;
+
+                _liRequestItems.Add(request);
             }
         }
 
@@ -2531,11 +2536,15 @@ namespace RiverHollow.Characters
             _bArrivedOnce = true;
 
             DiChosenItems.Clear();
-            List<int> copy = new List<int>(_liRequestItems);
+            List<RequestItem> copy = new List<RequestItem>(_liRequestItems);
             for (int i = 0; i < 3; i++)
             {
                 int chosenValue = RHRandom.Instance().Next(0, copy.Count - 1);
-                DiChosenItems[DataManager.GetItem(copy[chosenValue])] = false;
+
+                RequestItem request = copy[chosenValue];
+                Item it = DataManager.GetItem(request.ItemID, request.Number);
+
+                DiChosenItems[it] = false;
                 copy.RemoveAt(chosenValue);
             }
 
@@ -2597,6 +2606,11 @@ namespace RiverHollow.Characters
             MapManager.Maps[CurrentMapName].AddCharacterImmediately(this);
 
             Position = Util.SnapToGrid(GameManager.MarketPosition);
+        }
+
+        private struct RequestItem {
+            public int ItemID;
+            public int Number;
         }
 
         public MerchantData SaveData()

@@ -173,7 +173,8 @@ namespace RiverHollow.Buildings
 
         public Dictionary<int, int> UpgradeReqs()
         {
-            return _diUpgradeInfo[Level + 1];
+            if (_diUpgradeInfo.Count > 0) { return _diUpgradeInfo[Level + 1]; }
+            else { return null; }
         }
 
         /// <summary>

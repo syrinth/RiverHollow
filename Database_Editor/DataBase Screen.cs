@@ -54,7 +54,7 @@ namespace Database_Editor
         const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID,SubObjects,SeedID,HoneyID,LightID";
         const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
         const string SHOPDATA_REF_TAGS = "ItemID,BuildingID";
-        const string SHOP_REF_TAG = "ItemID,Requires,BuildingID";
+        const string SHOP_REF_TAG = "ItemID,Requires,BuildingID,ObjectID";
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
         const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
         const string ACTIONS_REF_TAGS = "StatusEffectID,SummonID";

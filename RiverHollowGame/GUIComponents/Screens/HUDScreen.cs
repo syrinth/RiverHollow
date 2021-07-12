@@ -454,13 +454,17 @@ namespace RiverHollow.GUIComponents.Screens
 
             _liButtons = new List<GUIObject>() {
                 new GUIButton("Inventory", BtnInventory),
-                new GUIButton("Party", BtnParty),
-                new GUIButton("Build", BtnBuild),
-                new GUIButton("Task Log", BtnTaskLog),
-                new GUIButton("Options", BtnOptions),
-                new GUIButton("Friends", BtnFriendship),
-                new GUIButton("Exit Game", BtnExitGame)
+                new GUIButton("Party", BtnParty)
             };
+
+            GUIButton btnBuild = new GUIButton("Build", BtnBuild);
+            btnBuild.Enable(!MapManager.CurrentMap.Modular);
+            _liButtons.Add(btnBuild);
+
+            _liButtons.Add(new GUIButton("Task Log", BtnTaskLog));
+            _liButtons.Add(new GUIButton("Options", BtnOptions));
+            _liButtons.Add(new GUIButton("Friends", BtnFriendship));
+            _liButtons.Add(new GUIButton("Exit Game", BtnExitGame));
 
             AddControls(_liButtons);
            
@@ -529,7 +533,7 @@ namespace RiverHollow.GUIComponents.Screens
         }
         public void BtnBuild()
         {
-            if (MapManager.CurrentMap.IsTown)
+            if (!MapManager.CurrentMap.Modular)
             {
                 GUIManager.SetScreen(new BuildScreen());
             }
@@ -2713,24 +2717,27 @@ namespace RiverHollow.GUIComponents.Screens
             GUIButton btn = new GUIButton("Upgrade", Upgrade);
             btn.AnchorToInnerSide(_winMain, SideEnum.Bottom);
 
-            Color textColor = Color.White;
-            if (!InventoryManager.HasSufficientItems(_bldg.UpgradeReqs()))
+            if (_bldg.UpgradeReqs() != null)
             {
-                textColor = Color.Red;
-                btn.Enable(false);
-            }
+                Color textColor = Color.White;
+                if (!InventoryManager.HasSufficientItems(_bldg.UpgradeReqs()))
+                {
+                    textColor = Color.Red;
+                    btn.Enable(false);
+                }
 
-            List<GUIItemBox> list = new List<GUIItemBox>();
-            foreach (KeyValuePair<int, int> kvp in _bldg.UpgradeReqs())
-            {
-                GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
+                List<GUIItemBox> list = new List<GUIItemBox>();
+                foreach (KeyValuePair<int, int> kvp in _bldg.UpgradeReqs())
+                {
+                    GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
 
-                if (list.Count == 0) { box.AnchorToInnerSide(_winMain, SideEnum.Left); }
-                else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Right, SideEnum.Bottom); }
+                    if (list.Count == 0) { box.AnchorToInnerSide(_winMain, SideEnum.Left); }
+                    else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Right, SideEnum.Bottom); }
 
-                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value)) { box.SetColor(Color.Red); }
+                    if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value)) { box.SetColor(Color.Red); }
 
-                list.Add(box);
+                    list.Add(box);
+                }
             }
 
             AddControl(name);
@@ -2741,6 +2748,18 @@ namespace RiverHollow.GUIComponents.Screens
             if (PlayerManager.ExpendResources(_bldg.UpgradeReqs())) { 
                 _bldg.Upgrade();
             }
+        }
+
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            bool rv = false;
+            if (Contains(mouse))
+            {
+                rv = true;
+                GUIManager.CloseMainObject();
+            }
+
+            return rv;
         }
     }
 
@@ -2772,9 +2791,9 @@ namespace RiverHollow.GUIComponents.Screens
                 if (_liRequestedItemBoxes.Count == 0) { box.AnchorToInnerSide(_winMain, SideEnum.Left, edgeSpacing); }
                 else { box.AnchorAndAlignToObject(_liRequestedItemBoxes[_liRequestedItemBoxes.Count - 1], SideEnum.Right, SideEnum.Bottom, spacing); }
 
-                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key.ItemID, 1)) { box.SetColor(Color.Red); }
+                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key.ItemID, kvp.Key.Number)) { box.SetColor(Color.Red); }
 
-                GUIMoneyDisplay money = new GUIMoneyDisplay(kvp.Key.SellPrice * 5);
+                GUIMoneyDisplay money = new GUIMoneyDisplay(kvp.Key.SellPrice * 5 * kvp.Key.Number);
                 money.AnchorAndAlignToObject(box, SideEnum.Bottom, SideEnum.CenterX, 10);
 
                 _liRequestedItemBoxes.Add(box);
@@ -2794,15 +2813,21 @@ namespace RiverHollow.GUIComponents.Screens
                 if (!gib.Enabled) { givenRequests++; }
                 else if (gib.Contains(mouse))
                 {
-                    if (InventoryManager.HasItemInPlayerInventory(gib.BoxItem.ItemID, 1))
+                    if (InventoryManager.HasItemInPlayerInventory(gib.BoxItem.ItemID, gib.BoxItem.Number))
                     {
                         _merchant.DiChosenItems[gib.BoxItem] = true;
-                        InventoryManager.RemoveItemsFromInventory(gib.BoxItem.ItemID, 1);
-                        PlayerManager.AddMoney(gib.BoxItem.SellPrice * 5);
+                        InventoryManager.RemoveItemsFromInventory(gib.BoxItem.ItemID, gib.BoxItem.Number);
+                        PlayerManager.AddMoney(gib.BoxItem.SellPrice * 5* gib.BoxItem.Number);
                         gib.Enable(false);
                         gib.SetColor(Color.Gray);
                         givenRequests++;
                         sold = true;
+
+                        //In case the Merchant is asking for the same item multipe times, refresh the color on the request boxes
+                        foreach(GUIItemBox obj in _liRequestedItemBoxes)
+                        {
+                            if (obj.Enabled && !InventoryManager.HasItemInPlayerInventory(obj.BoxItem.ItemID, obj.BoxItem.Number)) { obj.SetColor(Color.Red); }
+                        }
                     }
 
                     rv = true;

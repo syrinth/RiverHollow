@@ -19,6 +19,7 @@ using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Items.Buildable;
 using System.Linq;
 using static RiverHollow.Items.Buildable.AdjustableObject;
+using RiverHollow.GUIComponents.Screens;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -1443,10 +1444,20 @@ namespace RiverHollow.Tile_Engine
             if (_liTestTiles.Count > 0) { _liTestTiles.Clear(); }
 
             _objSelectedObject?.SelectObject(false);
-            if (TownModeMoving() && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasBuildableObject())
+            if ((TownModeMoving() || TownModeDestroy() || TownModeStorage() || TownModeRotate()) && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasBuildableObject())
             {
                 WorldObject obj = MouseTile.RetrieveUppermostStructureObject();
                 if (obj != null && obj.IsBuildable())
+                {
+                    _objSelectedObject = (Buildable)obj;
+                    _objSelectedObject.SelectObject(true);
+                }
+            }
+
+            if (TownModeUpgrade() && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasBuildableObject())
+            {
+                WorldObject obj = MouseTile.RetrieveUppermostStructureObject();
+                if (obj != null && obj.CompareType(ObjectTypeEnum.Building))
                 {
                     _objSelectedObject = (Buildable)obj;
                     _objSelectedObject.SelectObject(true);
@@ -1560,6 +1571,7 @@ namespace RiverHollow.Tile_Engine
                                     goto case ObjectTypeEnum.Structure;
                                 case ObjectTypeEnum.Beehive:
                                 case ObjectTypeEnum.Buildable:
+                                case ObjectTypeEnum.Floor:
                                 case ObjectTypeEnum.Garden:
                                 case ObjectTypeEnum.Mailbox:
                                 case ObjectTypeEnum.Structure:
@@ -1572,7 +1584,7 @@ namespace RiverHollow.Tile_Engine
                     }
                 }
             }
-            else if (TownModeDestroy())
+            else if (TownModeDestroy() || TownModeStorage())
             {
                 if (MouseTile != null && MouseTile.HasBuildableObject())
                 {
@@ -1581,15 +1593,48 @@ namespace RiverHollow.Tile_Engine
                     switch (toRemove.Type)
                     {
                         case ObjectTypeEnum.Beehive:
+                        case ObjectTypeEnum.Buildable:
                         case ObjectTypeEnum.Floor:
                         case ObjectTypeEnum.Garden:
                         case ObjectTypeEnum.Wall:
+                            SoundManager.PlayEffect("buildingGrab");
                             RemoveWorldObject(toRemove);
-                            foreach(KeyValuePair<int, int> kvp in ((Buildable)toRemove).RequiredToMake)
+                            if (TownModeDestroy())
                             {
-                                InventoryManager.AddToInventory(kvp.Key, kvp.Value);
+                                foreach (KeyValuePair<int, int> kvp in ((Buildable)toRemove).RequiredToMake)
+                                {
+                                    InventoryManager.AddToInventory(kvp.Key, kvp.Value);
+                                }
+                            }
+                            else if (TownModeStorage())
+                            {
+                                PlayerManager.AddToStorage(toRemove.ID);
                             }
                             break;
+                    }
+                }
+            }
+            else if (TownModeUpgrade())
+            {
+                if (MouseTile != null && MouseTile.HasBuildableObject())
+                {
+                    WorldObject obj = MouseTile.RetrieveUppermostStructureObject();
+
+                    if (obj.CompareType(ObjectTypeEnum.Building))
+                    {
+                        GUIManager.OpenMainObject(new HUDUpgradeWindow((Building)obj));
+                    }
+                }
+            }
+            else if (TownModeRotate())
+            {
+                if (MouseTile != null && MouseTile.HasBuildableObject())
+                {
+                    WorldObject obj = MouseTile.RetrieveUppermostStructureObject();
+
+                    if (obj.IsBuildable())
+                    {
+                        ((Buildable)obj).Rotate();
                     }
                 }
             }
@@ -1606,7 +1651,7 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            if (TownModeMoving() || PlayerManager.ExpendResources(toBuild.RequiredToMake))
+            if (TownModeMoving() || GameManager.BuildFromStorage || PlayerManager.ExpendResources(toBuild.RequiredToMake))
             {
                 toBuild.SnapPositionToGrid(toBuild.CollisionBox.Location);
                 if (toBuild.PlaceOnMap(this))
@@ -1618,6 +1663,8 @@ namespace RiverHollow.Tile_Engine
                     //Only leave TownMode if we were in Build Mode
                     if (TownModeBuild())
                     {
+                        if (GameManager.BuildFromStorage) { PlayerManager.RemoveFromStorage(toBuild.ID); }
+
                         LeaveTownMode();
                         FinishBuilding();
                     }
@@ -1647,23 +1694,25 @@ namespace RiverHollow.Tile_Engine
             //PlaceOnMap uses the CollisionBox as the base, then calculates backwards
             placeObject.SnapPositionToGrid(templateObject.CollisionBox.Location);
 
-            if (placeObject.PlaceOnMap(this) && (TownModeMoving() || PlayerManager.ExpendResources(placeObject.RequiredToMake)))
+            if (placeObject.PlaceOnMap(this) && (TownModeMoving() || GameManager.BuildFromStorage || PlayerManager.ExpendResources(placeObject.RequiredToMake)))
             {
+                if (GameManager.BuildFromStorage) { PlayerManager.RemoveFromStorage(placeObject.ID); }
+
                 switch (placeObject.Type)
                 {
-                    case ObjectTypeEnum.Floor:
                     case ObjectTypeEnum.Garden:
                         ((Garden)placeObject).SetPlant(((Garden)placeObject).GetPlant());
                         goto case ObjectTypeEnum.Wall;
+                    case ObjectTypeEnum.Floor:
                     case ObjectTypeEnum.Wall:
                         ((AdjustableObject)placeObject).AdjustObject();
                         break;
                 }
 
-                //If we cannot build the WorldObject again due to lack of resources, 
+                //If we cannot build the WorldObject again due to lack of resources or running out of storage,
                 //clean up after ourselves and drop the WorldObject that we're holding
                 //If we're moving, we need to drop the object but do not leave build mode
-                if (TownModeMoving() || !InventoryManager.HasSufficientItems(placeObject.RequiredToMake))
+                if (TownModeMoving() || (GameManager.BuildFromStorage && !PlayerManager.HasInStorage(placeObject.ID)) || (!GameManager.BuildFromStorage && !InventoryManager.HasSufficientItems(placeObject.RequiredToMake)))
                 {
                     if (!TownModeMoving())
                     {
@@ -2223,6 +2272,7 @@ namespace RiverHollow.Tile_Engine
             {
                 mapName = this.Name,
                 worldObjects = new List<WorldObjectData>(),
+                buildables = new List<BuildableData>(),
                 containers = new List<ContainerData>(),
                 machines = new List<MachineData>(),
                 plants = new List<PlantData>(),
@@ -2237,6 +2287,9 @@ namespace RiverHollow.Tile_Engine
                 {
                     case ObjectTypeEnum.Beehive:
                         mapData.beehives.Add(((Beehive)wObj).SaveData());
+                        break;
+                    case ObjectTypeEnum.Buildable:
+                        mapData.buildables.Add(((Buildable)wObj).SaveData());
                         break;
                     case ObjectTypeEnum.Container:
                         mapData.containers.Add(((Container)wObj).SaveData());
@@ -2273,6 +2326,13 @@ namespace RiverHollow.Tile_Engine
             foreach (WorldObjectData w in mData.worldObjects)
             {
                 DataManager.CreateAndPlaceNewWorldObject(w.worldObjectID, new Vector2(w.x, w.y), this);
+            }
+
+            foreach (BuildableData d in mData.buildables)
+            {
+                Buildable con = (Buildable)DataManager.GetWorldObjectByID(d.ID);
+                con.LoadData(d);
+                con.PlaceOnMap(this);
             }
             foreach (ContainerData c in mData.containers)
             {

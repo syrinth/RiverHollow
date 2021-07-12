@@ -49,6 +49,7 @@ namespace RiverHollow.Game_Managers
         public static bool ReadyToSleep = false;
 
         private static List<ClassedCombatant> _liParty;
+        private static Dictionary<int, int> _diStorage;
 
         public static string Name;
         public static string TownName;
@@ -73,6 +74,7 @@ namespace RiverHollow.Game_Managers
 
         public static void Initialize()
         {
+            _diStorage = new Dictionary<int, int>();
             _diTownObjects = new Dictionary<int, int>();
             _diTools = new Dictionary<ToolEnum, Tool>();
             _liParty = new List<ClassedCombatant>();
@@ -352,6 +354,35 @@ namespace RiverHollow.Game_Managers
         }
 
         #region Town Helpers
+        public static Dictionary<int, int> GetStorageItems()
+        {
+            Dictionary<int, int> rvDictionary = new Dictionary<int, int>();
+
+            foreach(KeyValuePair<int, int> kvp in _diStorage)
+            {
+                rvDictionary[kvp.Key] = kvp.Value;
+            }
+
+            return rvDictionary;
+        }
+        public static void AddToStorage(int itemID, int num = 1)
+        {
+            if (_diStorage.ContainsKey(itemID)) { _diStorage[itemID] += num; }
+            else { _diStorage[itemID] = num; }
+        }
+        public static bool HasInStorage(int itemID) { return _diStorage.ContainsKey(itemID) && _diStorage[itemID] > 0; }
+        public static void RemoveFromStorage(int itemID)
+        {
+            if (_diStorage.ContainsKey(itemID)) {
+                _diStorage[itemID]--;
+
+                if (_diStorage[itemID] == 0)
+                {
+                    _diStorage.Remove(itemID);
+                }
+            }
+        }
+
         public static void AddToTownObjects(int worldObjectID) { _diTownObjects[worldObjectID] = GetNumberTownObjects(worldObjectID) + 1; }
         public static void RemoveTownObjects(int worldObjectID) { _diTownObjects[worldObjectID] = GetNumberTownObjects(worldObjectID) - 1; }
         public static int GetNumberTownObjects(int worldObjectID)
@@ -577,7 +608,8 @@ namespace RiverHollow.Game_Managers
                 chest = Item.SaveData(World.Body),
                 adventurerData = World.SaveClassedCharData(),
                 currentClass = World.CharacterClass.ID,
-                Items = new List<ItemData>()
+                Items = new List<ItemData>(),
+                Storage = new List<StorageData>()
             };
 
             return d;
@@ -611,6 +643,11 @@ namespace RiverHollow.Game_Managers
                     if (newItem != null) { newItem.ApplyUniqueData(item.strData); }
                     InventoryManager.AddItemToInventorySpot(newItem, i, j);
                 }
+            }
+
+            foreach(StorageData storageData in data.Storage)
+            {
+                PlayerManager.AddToStorage(storageData.objID, storageData.number);
             }
         }
 

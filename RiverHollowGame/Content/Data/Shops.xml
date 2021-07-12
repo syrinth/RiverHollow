@@ -73,5 +73,12 @@
         <Item>[Type:Item][ItemID:88][Cost:250]</Item>
       </Value>
     </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>
+        <Item>[Type:WorldObject][ObjectID:4][Cost:500]</Item>
+        <Item>[Type:WorldObject][ObjectID:5][Cost:500]</Item>
+      </Value>
+    </Item>
   </Asset>
 </XnaContent>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <Item>
+      <Key>Introduction</Key>
+      <Value>[Text:Welcome! I'm, $Character_26$, purveyor of fine furniture across the realm. Come take up one of my fine chairs and rest your feet!]</Value>
+    </Item>
+    <Item>
+      <Key>Requests</Key>
+      <Value>[Text:Ah! I'm hoping you can help me. I'm looking for the following items!]</Value>
+    </Item>
+    <Item>
+      <Key>Selection</Key>
+      <Value>[Text:Aha! Welcome! How can I help you today?][Selection:MerchantTalk]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Text:I may be used to life on the road, but I'm always happy to arrive in a nice place such as this!][Default]</Value>
+    </Item>
+    <Item>
+      <Key>RequestsComplete</Key>
+      <Value>[Text:You've helped me enough for now!]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

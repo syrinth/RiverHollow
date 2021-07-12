@@ -473,5 +473,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 list.Add(box);
             }
         }
+
+        public void SetConstructionInfo(int id, string objName, int number)
+        {
+            _iBuildID = id;
+
+            _gName = new GUIText(objName);
+            _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
+
+            GUIText text = new GUIText(number);
+            text.AnchorToInnerSide(_window, SideEnum.Right);
+        }
     }
 }

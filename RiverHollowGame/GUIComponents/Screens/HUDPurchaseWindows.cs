@@ -26,10 +26,20 @@ namespace RiverHollow.GUIComponents.Screens
             int i = 0;
             foreach (Merchandise m in merch)
             {
-                Item it = DataManager.GetItem(m.MerchID);
-                it.ApplyUniqueData(m.UniqueData);
+                PurchaseBox newBox = null;
+                if (m.MerchType == Merchandise.MerchTypeEnum.Item)
+                {
+                    Item it = DataManager.GetItem(m.MerchID);
+                    it.ApplyUniqueData(m.UniqueData);
 
-                items.Add(new BuyItemBox(it, m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE));
+                    newBox = new PurchaseBox(it, m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE); 
+                }
+                else if (m.MerchType == Merchandise.MerchTypeEnum.WorldObject)
+                {
+                    newBox = new PurchaseBox(DataManager.GetWorldObjectByID(m.MerchID), m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE);
+                }
+
+                items.Add(newBox);
 
                 if (i == 0) { items[i].AnchorToInnerSide(_winMain, GUIObject.SideEnum.TopLeft); }
                 else { items[i].AnchorAndAlignToObject(items[i - 1], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left); }
@@ -410,23 +420,26 @@ namespace RiverHollow.GUIComponents.Screens
         }
     }
 
-    public class BuyItemBox : GUIWindow
+    public class PurchaseBox : GUIWindow
     {
         private BitmapFont _font;
         GUIImage _giItem;
         GUIText _gTextName;
         GUIMoneyDisplay _gMoney;
-        public Item itemForSale;
+
+        Item _item;
+        WorldObject _obj;
+
         public int Cost;
 
-        public BuyItemBox(Item i, int cost, int mainWidth) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
+        public PurchaseBox(Item i, int cost, int mainWidth) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
         {
             _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
             Cost = cost;
-            itemForSale = i;
-            _giItem = new GUIImage(itemForSale.SourceRectangle, ScaledTileSize, ScaledTileSize, itemForSale.Texture);
+            _item = i;
+            _giItem = new GUIImage(_item.SourceRectangle, ScaledTileSize, ScaledTileSize, _item.Texture);
             _giItem.SetColor(i.ItemColor);
-            _gTextName = new GUIText(itemForSale.Name);
+            _gTextName = new GUIText(_item.Name);
 
             _giItem.AnchorToInnerSide(this, SideEnum.Left);
             _gTextName.AnchorAndAlignToObject(_giItem, SideEnum.Right, SideEnum.CenterY);
@@ -435,9 +448,22 @@ namespace RiverHollow.GUIComponents.Screens
             _gMoney.AnchorToInnerSide(this, SideEnum.Right, ScaleIt(2));
         }
 
+        public PurchaseBox(WorldObject obj, int cost, int mainWidth) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
+        {
+            _obj = obj;
+            _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
+            Cost = cost;
+            _gTextName = new GUIText(obj.Name);
+
+            _gTextName.AnchorToInnerSide(this, SideEnum.Left);
+
+            _gMoney = new GUIMoneyDisplay(Cost);
+            _gMoney.AnchorToInnerSide(this, SideEnum.Right, ScaleIt(2));
+        }
+
         public override void Update(GameTime gTime)
         {
-            if (!InventoryManager.HasSpaceInInventory(itemForSale.ItemID, itemForSale.Number) || PlayerManager.Money < Cost)
+            if (PlayerManager.Money < Cost || (_item != null && !InventoryManager.HasSpaceInInventory(_item.ItemID, _item.Number)))
             {
                 _gMoney.SetColor(Color.Red);
             }
@@ -454,7 +480,8 @@ namespace RiverHollow.GUIComponents.Screens
             if (PlayerManager.Money >= Cost)
             {
                 PlayerManager.TakeMoney(Cost);
-                InventoryManager.AddToInventory(DataManager.GetItem(itemForSale.ItemID));
+                if (_item != null) { InventoryManager.AddToInventory(DataManager.GetItem(_item.ItemID)); }
+                if(_obj != null) {PlayerManager.AddToStorage(_obj.ID); }
 
                 rv = true;
             }

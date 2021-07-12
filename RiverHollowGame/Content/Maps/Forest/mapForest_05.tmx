@@ -97,12 +97,12 @@
  <objectgroup id="5" name="MapObject">
   <object id="40" name="ResourceSpawn" x="96.2798" y="54.0405" width="124.333" height="96.333">
    <properties>
-    <property name="Resources" value="9"/>
+    <property name="Resources" value="11"/>
    </properties>
   </object>
   <object id="49" name="DungeonObject" x="16" y="112" width="16" height="48">
    <properties>
-    <property name="ObjectID" type="int" value="27"/>
+    <property name="ObjectID" type="int" value="29"/>
     <property name="MatchTrigger" value="Trigger_Forest_2"/>
    </properties>
   </object>

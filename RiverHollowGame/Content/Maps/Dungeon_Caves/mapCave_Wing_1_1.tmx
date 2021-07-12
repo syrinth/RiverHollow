@@ -5,7 +5,7 @@
   <property name="Dungeon" value="Cave"/>
   <property name="MapType" value="Cave"/>
   <property name="Outside" type="bool" value="false"/>
-  <property name="Resources" value="23-C|10-C|11-U|33-R|35-M|36-U"/>
+  <property name="Resources" value="25-C|12-C|13-U|35-R|37-M|38-U"/>
   <property name="ResourcesMinMax" value="50-75"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetDungeon.tsx"/>
@@ -141,7 +141,7 @@
   <object id="55" name="DungeonObject" x="224" y="16" width="32" height="32">
    <properties>
     <property name="MatchTrigger" value="Cave_Wing_3_Open"/>
-    <property name="ObjectID" type="int" value="25"/>
+    <property name="ObjectID" type="int" value="27"/>
     <property name="OutTrigger" value="Cave_Wing_3_Opened"/>
     <property name="TriggerNumber" type="int" value="2"/>
    </properties>

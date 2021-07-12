@@ -44,7 +44,7 @@ namespace RiverHollow.Game_Managers
 
         public enum SeasonEnum { None, Spring, Summer, Fall, Winter };
         public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };
-        public enum DirectionEnum { Up, Down, Right, Left };
+        public enum DirectionEnum { Down, Right, Up, Left };
         public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };
         public enum VerbEnum { Walk, Idle, Hurt, Critical, Ground, Air, UseTool, Action1, Action2, Action3, Action4, Cast, MakeItem };
         public enum AnimationEnum { None, Spawn, KO, Win, PlayAnimation, Rain, Snow, ObjectIdle, Action_One, Action_Two, Action_Finished };
@@ -247,8 +247,9 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region States
-        private enum EnumBuildType { None, BuildMode, Destroy, Move }
-        private static EnumBuildType _buildType;
+        private enum EnumBuildType { None, BuildMode, Destroy, Storage, Move, Upgrade, Rotate };
+        private static EnumBuildType _eBuildType;
+        public static bool BuildFromStorage { get; private set; } = false;
 
         #region TakeInput
         private static bool _bTakeInput;
@@ -308,23 +309,33 @@ namespace RiverHollow.Game_Managers
             ShowMap();
         }
 
-        public static void EnterTownModeBuild()
+        public static void EnterTownModeBuild(bool fromStorage = false)
         {
-            _buildType = EnumBuildType.BuildMode;
+            BuildFromStorage = fromStorage;
+            _eBuildType = EnumBuildType.BuildMode;
 
             GUIManager.CloseMainObject();
             Scry();
         }
 
-        public static bool InTownMode() { return TownModeBuild() || TownModeMoving() || TownModeDestroy(); }
-        public static bool TownModeBuild() { return _buildType == EnumBuildType.BuildMode; }
-        public static bool TownModeMoving() { return _buildType == EnumBuildType.Move; }
-        public static bool TownModeDestroy() { return _buildType == EnumBuildType.Destroy; }
+        public static bool InTownMode() { return TownModeBuild() || TownModeMoving() || TownModeDestroy() || TownModeStorage() || TownModeUpgrade() || TownModeRotate(); }
+        public static bool TownModeBuild() { return _eBuildType == EnumBuildType.BuildMode; }
+        public static bool TownModeMoving() { return _eBuildType == EnumBuildType.Move; }
+        public static bool TownModeDestroy() { return _eBuildType == EnumBuildType.Destroy; }
+        public static bool TownModeStorage() { return _eBuildType == EnumBuildType.Storage; }
+        public static bool TownModeUpgrade() { return _eBuildType == EnumBuildType.Upgrade; }
+        public static bool TownModeRotate() { return _eBuildType == EnumBuildType.Rotate; }
 
-        public static void EnterTownModeMoving() { _buildType = EnumBuildType.Move; }
-        public static void EnterTownModeDestroy() { _buildType = EnumBuildType.Destroy; }
+        public static void EnterTownModeMoving() { _eBuildType = EnumBuildType.Move; }
+        public static void EnterTownModeDestroy() { _eBuildType = EnumBuildType.Destroy; }
+        public static void EnterTownModeStorage() { _eBuildType = EnumBuildType.Storage; }
+        public static void EnterTownModeUpgrade() { _eBuildType = EnumBuildType.Upgrade; }
+        public static void EnterTownModeRotate() { _eBuildType = EnumBuildType.Rotate; }
 
-        public static void LeaveTownMode() { _buildType = EnumBuildType.None; }
+        public static void LeaveTownMode() {
+            BuildFromStorage = false;
+            _eBuildType = EnumBuildType.None;
+        }
         #endregion
 
         private class InteractionLock

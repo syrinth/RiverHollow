@@ -3426,3 +3426,20 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Monsters/Carnivorous_Plant.png
 
+#begin Textures/Actors/NPCs/NPC_26.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/NPC_26.png
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_26.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_26.xml
+
