@@ -1052,7 +1052,10 @@ namespace RiverHollow.Items
             /// <summary>
             /// This method sends any display entity to the appropriate storage 
             /// and blanks out its reference on the Displaying Decor.
+            /// 
+            /// Only store entity if there is space in storage
             /// </summary>
+            /// <returns>True as long as there is space in storage</returns>
             private bool StoreDisplayEntity() {
                 bool rv = true;
                 if (_itemDisplay != null) {
