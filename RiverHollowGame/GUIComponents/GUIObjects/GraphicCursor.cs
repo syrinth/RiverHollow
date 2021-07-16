@@ -114,9 +114,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (GameManager.HeldObject != null)
             {
-                GameManager.HeldObject?.SnapPositionToGrid(GetWorldMousePosition() - GameManager.HeldObject.PickupOffset);
+                UpdateTownObjectLocation();
                 HeldObject?.Update(gTime);
             }
+        }
+
+        public static void UpdateTownObjectLocation()
+        {
+            GameManager.HeldObject?.SnapPositionToGrid(GetWorldMousePosition() - GameManager.HeldObject.PickupOffset);
         }
 
         public static void DrawTownBuildObject(SpriteBatch spriteBatch)

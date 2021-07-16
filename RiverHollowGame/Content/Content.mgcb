@@ -3443,3 +3443,8 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_26.xml
 
+#begin Data/Schedules/NPC_13.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Schedules/NPC_13.xml
+

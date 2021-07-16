@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Items.Buildable;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
@@ -105,15 +106,22 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         GameManager.CurrentItem = clickedItem;
                     }
                 }
-                else if (GameManager.CurrentTriggerObject != null)
+                else if (GameManager.CurrentWorldObject != null)
                 {
-                    
+
                     if (!GUIManager.IsTextWindowOpen() && Contains(mouse) && clickedItem != null)
                     {
-                        if (GameManager.CurrentTriggerObject.CheckForKey(clickedItem))
+                        if (GameManager.CurrentWorldObject.CompareType(ObjectTypeEnum.DungeonObject))
                         {
-                            GameManager.CurrentTriggerObject.AttemptToTrigger(GameManager.ITEM_OPEN);
-                            GUIManager.CloseMainObject();
+                            if (((TriggerObject)GameManager.CurrentWorldObject).CheckForKey(clickedItem))
+                            {
+                                ((TriggerObject)GameManager.CurrentWorldObject).AttemptToTrigger(GameManager.ITEM_OPEN);
+                                GUIManager.CloseMainObject();
+                            }
+                        }
+                        else if (GameManager.CurrentWorldObject.CompareType(ObjectTypeEnum.Decor))
+                        {
+                            ((Decor)GameManager.CurrentWorldObject).SetDisplayItem(clickedItem);
                         }
                     }
                 }

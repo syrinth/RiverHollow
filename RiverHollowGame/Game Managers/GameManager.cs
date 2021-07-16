@@ -78,7 +78,7 @@ namespace RiverHollow.Game_Managers
         public enum ElementAlignment { Neutral, Vulnerable, Resists };
         public enum ConditionEnum { None, KO, Poisoned, Silenced };
         public enum AdventurerTypeEnum { Magic, Martial };
-        public enum ObjectTypeEnum { WorldObject, Beehive, Buildable, Building, CombatHazard, Container, Destructible, DungeonObject, Floor, Gatherable, Garden, Machine, Mailbox, Plant, Structure, StructureUpgrader, Wall, WarpPoint };
+        public enum ObjectTypeEnum { WorldObject, Beehive, Buildable, Building, CombatHazard, Container, Decor, Destructible, DungeonObject, Floor, Gatherable, Garden, Machine, Mailbox, Plant, Structure, StructureUpgrader, Wall, WarpPoint };
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
         #endregion
 
@@ -96,7 +96,7 @@ namespace RiverHollow.Game_Managers
         public static Merchandise CurrentMerch;
         public static Item CurrentItem;
         public static Spirit CurrentSpirit;
-        public static TriggerObject CurrentTriggerObject;
+        public static WorldObject CurrentWorldObject;
         #endregion
 
         #region Game State Values
@@ -139,7 +139,7 @@ namespace RiverHollow.Game_Managers
 
         public static void ClearGMObjects()
         {
-            CurrentTriggerObject = null;
+            CurrentWorldObject = null;
             CurrentItem = null;
             CurrentSpirit = null;
         }
@@ -247,7 +247,7 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region States
-        private enum EnumBuildType { None, BuildMode, Destroy, Storage, Move, Upgrade, Rotate };
+        private enum EnumBuildType { None, BuildMode, Destroy, Storage, Move, Upgrade };
         private static EnumBuildType _eBuildType;
         public static bool BuildFromStorage { get; private set; } = false;
 
@@ -318,19 +318,17 @@ namespace RiverHollow.Game_Managers
             Scry();
         }
 
-        public static bool InTownMode() { return TownModeBuild() || TownModeMoving() || TownModeDestroy() || TownModeStorage() || TownModeUpgrade() || TownModeRotate(); }
+        public static bool InTownMode() { return TownModeBuild() || TownModeMoving() || TownModeDestroy() || TownModeStorage() || TownModeUpgrade(); }
         public static bool TownModeBuild() { return _eBuildType == EnumBuildType.BuildMode; }
         public static bool TownModeMoving() { return _eBuildType == EnumBuildType.Move; }
         public static bool TownModeDestroy() { return _eBuildType == EnumBuildType.Destroy; }
         public static bool TownModeStorage() { return _eBuildType == EnumBuildType.Storage; }
         public static bool TownModeUpgrade() { return _eBuildType == EnumBuildType.Upgrade; }
-        public static bool TownModeRotate() { return _eBuildType == EnumBuildType.Rotate; }
 
         public static void EnterTownModeMoving() { _eBuildType = EnumBuildType.Move; }
         public static void EnterTownModeDestroy() { _eBuildType = EnumBuildType.Destroy; }
         public static void EnterTownModeStorage() { _eBuildType = EnumBuildType.Storage; }
         public static void EnterTownModeUpgrade() { _eBuildType = EnumBuildType.Upgrade; }
-        public static void EnterTownModeRotate() { _eBuildType = EnumBuildType.Rotate; }
 
         public static void LeaveTownMode() {
             BuildFromStorage = false;

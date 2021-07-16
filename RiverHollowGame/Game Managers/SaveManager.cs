@@ -284,7 +284,7 @@ namespace RiverHollow.Game_Managers
             public List<WorldObjectData> worldObjects;
 
             [XmlArray(ElementName = "Buildables")]
-            public List<BuildableData> buildables;
+            public List<DecorData> decor;
 
             [XmlArray(ElementName = "Containers")]
             public List<ContainerData> containers;
@@ -382,7 +382,7 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Y")]
             public int y;
         }
-        public struct BuildableData
+        public struct DecorData
         {
             [XmlElement(ElementName = "WorldObjectID")]
             public int ID;
@@ -395,6 +395,12 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "Facing")]
             public int dir;
+
+            [XmlElement(ElementName = "ObjDisplayID")]
+            public int objDisplayID;
+
+            [XmlElement(ElementName = "ItemDisplayID")]
+            public int itemDisplayID;
         }
         public struct RHTileData
         {

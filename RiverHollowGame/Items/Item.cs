@@ -231,6 +231,8 @@ namespace RiverHollow.Items
         public virtual void ApplyUniqueData(string str) { }
         public virtual string GetUniqueData() { return string.Empty; }
 
+        public void SetColor(Color c) { _c = c; }
+
         public bool CompareType(ItemEnum type) { return _eItemType == type; }
         public bool CompareSpecialType(SpecialItemEnum type) { return _eSpecialItem == type; }
 

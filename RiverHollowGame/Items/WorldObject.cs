@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.MainObjects;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
@@ -34,8 +35,8 @@ namespace RiverHollow.Items
 
         protected bool _bWalkable = false;
         public bool Walkable => _bWalkable;
-        protected bool _wallObject;
-        public bool WallObject => _wallObject;
+        protected bool _bWallObject;
+        public bool WallObject => _bWallObject;
 
         protected KeyValuePair<int, int> _kvpDrop; //itemID, # of items dropped
 
@@ -81,7 +82,7 @@ namespace RiverHollow.Items
             Tiles = new List<RHTile>();
 
             _iID = id;
-            _wallObject = false;
+            _bWallObject = false;
 
             DataManager.GetTextData("WorldObject", _iID, ref _sName, "Name");
         }
@@ -102,6 +103,8 @@ namespace RiverHollow.Items
             Util.AssignValues(ref _iBaseWidth, ref _iBaseHeight, "Base", stringData);
 
             Util.AssignValue(ref _eObjectType, "Type", stringData);
+
+            Util.AssignValue(ref _bWallObject, "WallObject", stringData);
 
             if (stringData.ContainsKey("LightID"))
             {
@@ -182,7 +185,7 @@ namespace RiverHollow.Items
             return CollisionBox.Contains(m);
         }
 
-        public bool PlaceOnMap(RHMap map)
+        public virtual bool PlaceOnMap(RHMap map)
         {
             bool rv = PlaceOnMap(this.MapPosition, map);
             map.AddLights(GetLights());
@@ -316,6 +319,7 @@ namespace RiverHollow.Items
                 case ObjectTypeEnum.Building:
                 case ObjectTypeEnum.Buildable:
                 case ObjectTypeEnum.Container:
+                case ObjectTypeEnum.Decor:
                 case ObjectTypeEnum.Floor:
                 case ObjectTypeEnum.Garden:
                 case ObjectTypeEnum.Mailbox:
@@ -352,7 +356,7 @@ namespace RiverHollow.Items
         {
             LoadDictionaryData(stringData, loadSprite);
 
-            _wallObject = false;
+            _bWallObject = false;
 
             if (stringData.ContainsKey("ItemID")) {
                 string[] split = stringData["ItemID"].Split('-');
@@ -773,16 +777,6 @@ namespace RiverHollow.Items
     /// </summary>
     public class Buildable : WorldObject
     {
-        protected enum RotationalEnum { None, FourWay };
-        protected RotationalEnum _eRotationType = RotationalEnum.None;
-
-        protected DirectionEnum _eFacingDir = DirectionEnum.Down;
-
-        protected int _iRotationBaseOffsetX;
-        protected int _iRotationBaseOffsetY;
-        protected int _iRotationWidth;
-        protected int _iRotationHeight;
-
         protected Dictionary<int, int> _diReqToMake;
         public Dictionary<int, int> RequiredToMake => _diReqToMake;
 
@@ -801,10 +795,6 @@ namespace RiverHollow.Items
             base.LoadDictionaryData(stringData, loadSprite);
 
             Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
-            Util.AssignValue(ref _eRotationType, "Rotation", stringData);
-            Util.AssignValues(ref _iRotationBaseOffsetX, ref _iRotationBaseOffsetY, "RotationBaseOffset", stringData);
-            Util.AssignValue(ref _iRotationWidth, "RotationWidth", stringData);
-            Util.AssignValue(ref _iRotationHeight, "RotationHeight", stringData);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -820,65 +810,302 @@ namespace RiverHollow.Items
             return !OutsideOnly || (OutsideOnly && MapManager.CurrentMap.IsOutside);
         }
 
-        public void Rotate()
+        public class Decor : Buildable
         {
-            if(_eRotationType != RotationalEnum.None)
+            protected enum RotationalEnum { None, FourWay, TwoWay };
+            protected RotationalEnum _eRotationType = RotationalEnum.None;
+
+            protected DirectionEnum _eFacingDir = DirectionEnum.Down;
+            public DirectionEnum Facing => _eFacingDir;
+
+            protected Vector2 _vDisplayOffset = Vector2.Zero;
+            protected Vector2 _vRotatedDisplayOffset = Vector2.Zero;
+
+            protected int _iRotationBaseOffsetX;
+            protected int _iRotationBaseOffsetY;
+            protected int _iRotationWidth;
+            protected int _iRotationHeight;
+
+            private readonly bool _bDisplaysObject = false;
+            public bool CanDisplay => _bDisplaysObject;
+
+            private readonly bool _bCanBeDisplayed = false;
+            public bool CanBeDisplayed => _bCanBeDisplayed;
+            private Item _itemDisplay;
+            private Decor _objDisplay;
+            public bool HasDisplay => _objDisplay != null || _itemDisplay != null;
+
+            public Decor (int id, Dictionary<string, string> stringData) : base(id, stringData)
             {
-                if (_iBaseWidth != _iBaseHeight)
+                _eObjectType = ObjectTypeEnum.Decor;
+                Util.AssignValue(ref _eRotationType, "Rotation", stringData);
+                Util.AssignValues(ref _iRotationBaseOffsetX, ref _iRotationBaseOffsetY, "RotationBaseOffset", stringData);
+                Util.AssignValue(ref _iRotationWidth, "RotationWidth", stringData);
+                Util.AssignValue(ref _iRotationHeight, "RotationHeight", stringData);
+                Util.AssignValue(ref _bDisplaysObject, "Display", stringData);
+                Util.AssignValue(ref _bCanBeDisplayed, "CanBeDisplayed", stringData);
+                Util.AssignValue(ref _vDisplayOffset, "DisplayOffset", stringData);
+                Util.AssignValue(ref _vRotatedDisplayOffset, "RotatedDisplayOffset", stringData); 
+            }
+
+            public override void Draw(SpriteBatch spriteBatch)
+            {
+                base.Draw(spriteBatch);
+                if (_objDisplay != null)
                 {
-                    Util.SwitchValues(ref _iBaseWidth, ref _iBaseHeight);
-                    Util.SwitchValues(ref _iSpriteWidth, ref _iRotationWidth);
-                    Util.SwitchValues(ref _iSpriteHeight, ref _iRotationHeight);
-                    Util.SwitchValues(ref _iBaseXOffset, ref _iRotationBaseOffsetX);
-                    Util.SwitchValues(ref _iBaseYOffset, ref _iRotationBaseOffsetY);
+                    _objDisplay.Sprite.SetColor(_bSelected ? Color.Green : Color.White);
+                    _objDisplay.Sprite.Draw(spriteBatch, _sprite.LayerDepth + 1);
+                }
+                else if(_itemDisplay != null)
+                {
+                    //Because Items don't exist directly on the map, we only need to tell it where to draw itself here
+                    _itemDisplay.SetColor(_bSelected ? Color.Green : Color.White);
+                    _itemDisplay.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X + _vDisplayOffset.X), (int)(_vMapPosition.Y + _vDisplayOffset.Y), TILE_SIZE, TILE_SIZE), true, _sprite.LayerDepth + 1);
+                }
+            }
+
+            /// <summary>
+            /// Handler for when a Decor object hasbeen right-clicked
+            /// </summary>
+            public override void ProcessRightClick()
+            {
+                //Currently, only display Decor objects can be interacted with.
+                if (CanDisplay)
+                {
+                    GameManager.CurrentWorldObject = this;
+                    GUIManager.OpenMainObject(new HUDInventoryDisplay());
+                }
+            }
+
+            /// <summary>
+            /// When snapping, we need to call SyncDisplayObject to make sure it
+            /// matches the new position
+            /// </summary>
+            /// <param name="position">The position to snap to.</param>
+            public override void SnapPositionToGrid(Vector2 position)
+            {
+                base.SnapPositionToGrid(position);
+                SyncDisplayObject();
+            }
+
+            /// <summary>
+            /// This override handles the situation where we are attempting to place a decor object
+            /// on top of another one.
+            /// 
+            /// If we are not attempting to make a valid display placement, call the vase PlaceOnMap method
+            /// and then sync any display object we may have.
+            /// </summary>
+            /// <param name="map">The map to place the object on</param>
+            /// <returns></returns>
+            public override bool PlaceOnMap(RHMap map)
+            {
+                bool rv = false;
+
+                RHTile tile = map.GetTileByPixelPosition(_vMapPosition);
+                if (tile.CanPlaceOnTabletop(this)) {
+                    rv = ((Decor)tile.WorldObject).SetDisplayObject(this);
+                }
+                else {
+                    rv = base.PlaceOnMap(map);
+                    SyncDisplayObject();
                 }
 
-                Rectangle spriteFrameRectangle = _sprite.CurrentFrameAnimation.FrameRectangle;
+                return rv;
+            }
 
-                Point newImage = spriteFrameRectangle.Location + new Point(spriteFrameRectangle.Width, 0);
-                switch (_eFacingDir)
+            /// <summary>
+            /// Assuming the object is capable of rotation, this method does the math
+            /// required to change the sprite and base tiles accordingly.
+            /// </summary>
+            public void Rotate()
+            {
+                if (_eRotationType != RotationalEnum.None)
                 {
-                    case DirectionEnum.Down:
-                        _eFacingDir = DirectionEnum.Right;
-                        break;
-                    case DirectionEnum.Right:
-                        _eFacingDir = DirectionEnum.Up;
-                        break;
-                    case DirectionEnum.Up:
-                        _eFacingDir = DirectionEnum.Left;
-                        break;
-                    case DirectionEnum.Left:
-                        newImage = _pImagePos;
-                        _eFacingDir = DirectionEnum.Down;
-                        break;
+                    //We don't need to do any swaps if the object has the same base and height
+                    if (_iBaseWidth != _iBaseHeight)
+                    {
+                        Vector2 temp = _vDisplayOffset;
+                        _vDisplayOffset = _vRotatedDisplayOffset;
+                        _vRotatedDisplayOffset = temp;
+
+                        Util.SwitchValues(ref _iBaseWidth, ref _iBaseHeight);
+                        Util.SwitchValues(ref _iSpriteWidth, ref _iRotationWidth);
+                        Util.SwitchValues(ref _iSpriteHeight, ref _iRotationHeight);
+                        Util.SwitchValues(ref _iBaseXOffset, ref _iRotationBaseOffsetX);
+                        Util.SwitchValues(ref _iBaseYOffset, ref _iRotationBaseOffsetY);
+                    }
+
+                    Rectangle spriteFrameRectangle = _sprite.CurrentFrameAnimation.FrameRectangle;
+                    Point newImage = spriteFrameRectangle.Location + new Point(spriteFrameRectangle.Width, 0);
+
+                    //Direction handling for the different rotation types
+                    if (_eRotationType == RotationalEnum.FourWay)
+                    {
+                        switch (_eFacingDir)
+                        {
+                            case DirectionEnum.Down:
+                                _eFacingDir = DirectionEnum.Right;
+                                break;
+                            case DirectionEnum.Right:
+                                _eFacingDir = DirectionEnum.Up;
+                                break;
+                            case DirectionEnum.Up:
+                                _eFacingDir = DirectionEnum.Left;
+                                break;
+                            case DirectionEnum.Left:
+                                newImage = _pImagePos;
+                                _eFacingDir = DirectionEnum.Down;
+                                break;
+                        }
+                    }
+                    else if (_eRotationType == RotationalEnum.TwoWay)
+                    {
+                        switch (_eFacingDir)
+                        {
+                            case DirectionEnum.Down:
+                                _eFacingDir = DirectionEnum.Right;
+                                break;
+                            case DirectionEnum.Right:
+                                newImage = _pImagePos;
+                                _eFacingDir = DirectionEnum.Down;
+                                break;
+                        }
+                    }
+
+                    //Updates the sprite info
+                    _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
+                    _sprite.AddAnimation(AnimationEnum.ObjectIdle, newImage.X, newImage.Y, _iSpriteWidth, _iSpriteHeight);
+                    SetSpritePos(_vMapPosition);
+
+                    //Sets the pickup offset to the center of the object.
+                    SetPickupOffset();
+
+                    //Important to not have a flicker before the game asserts where the obeject's new location is
+                    GUICursor.UpdateTownObjectLocation();
+                }
+            }
+
+            /// <summary>
+            /// Helper methods for loading data. Just keeps rotating in sequence
+            /// until we get to the appropriate Facing direction.
+            /// </summary>
+            /// <param name="dir"></param>
+            public void RotateToDirection(DirectionEnum dir) { RotateToDirection((int)dir); }
+            private void RotateToDirection(int dir)
+            {
+                for (int i = 0; i < dir; i++)
+                {
+                    Rotate();
+                }
+            }
+
+            /// <summary>
+            /// Handler for removing, and not swapping out, the display entity.
+            /// If we're in destroy mode, destroy the display object. Otherwise, send
+            /// the entity to storage
+            /// </summary>
+            public void RemoveDisplayEntity()
+            {
+                if (_objDisplay != null && GameManager.TownModeDestroy())
+                {
+                    foreach (KeyValuePair<int, int> kvp in _objDisplay.RequiredToMake)
+                    {
+                        InventoryManager.AddToInventory(kvp.Key, kvp.Value);
+                    }
+                }
+                else { StoreDisplayEntity(); }
+            }
+
+            /// <summary>
+            /// Sets the display Decor object, swaps out any pre-existing display entity
+            /// for the given Decor.
+            /// </summary>
+            /// <param name="obj">The Decor object to display</param>
+            public bool SetDisplayObject(Decor obj)
+            {
+                bool rv = false;
+                if (StoreDisplayEntity())
+                {
+                    rv = true;
+                    _objDisplay = obj;
+                    SyncDisplayObject();
                 }
 
-                _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, newImage.X, newImage.Y, _iSpriteWidth, _iSpriteHeight);
-                SetSpritePos(_vMapPosition);
-            }            
-        }
+                return rv;
+            }
 
-        internal BuildableData SaveData()
-        {
-            BuildableData data = new BuildableData
+            /// <summary>
+            /// Sets the display Item, swaps out any pre-existing display entity
+            /// for the given item.
+            /// </summary>
+            /// <param name="it">The Item object to display</param>
+            public void SetDisplayItem(Item it)
             {
-                ID = _iID,
-                x = CollisionBox.X,
-                y = CollisionBox.Y,
-                dir = (int)_eFacingDir
-            };
+                if (StoreDisplayEntity())
+                {
+                    _itemDisplay = DataManager.GetItem(it.ItemID);
+                    InventoryManager.RemoveItemsFromInventory(it.ItemID, 1);
+                    GUIManager.CloseMainObject();
+                }
+            }
 
-            return data;
-        }
+            /// <summary>
+            /// This method sends any display entity to the appropriate storage 
+            /// and blanks out its reference on the Displaying Decor.
+            /// </summary>
+            private bool StoreDisplayEntity() {
+                bool rv = true;
+                if (_itemDisplay != null) {
+                    if (InventoryManager.HasSpaceInInventory(_itemDisplay.ItemID, 1))
+                    {
+                        InventoryManager.AddToInventory(_itemDisplay);
+                        _itemDisplay = null;
+                    }
+                    else { rv = false; }
+                }
+                if (_objDisplay != null) {
+                    PlayerManager.AddToStorage(_objDisplay.ID);
+                    _objDisplay = null;
+                }
 
-        internal void LoadData(BuildableData data)
-        {
-            SnapPositionToGrid(new Vector2(data.x, data.y));
+                return rv;
+            }
 
-            for (int i = 0; i < data.dir; i++)
+            /// <summary>
+            /// This method ensures that the DisplayObject's location is always synced up relative to the Decor object it's placed on.
+            /// </summary>
+            private void SyncDisplayObject()
             {
-                Rotate();
+                if (_objDisplay != null)
+                {
+                    _objDisplay.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objDisplay.Sprite.Height - TILE_SIZE)));
+                    _objDisplay._vMapPosition += _vDisplayOffset;
+                    _objDisplay.SetSpritePos(_objDisplay._vMapPosition);
+                }
+            }
+
+            internal DecorData SaveData()
+            {
+                DecorData data = new DecorData
+                {
+                    ID = _iID,
+                    x = CollisionBox.X,
+                    y = CollisionBox.Y,
+                    dir = (int)_eFacingDir,
+                    objDisplayID = _objDisplay == null ? -1 : _objDisplay.ID,
+                    itemDisplayID = _itemDisplay == null ? -1 : _itemDisplay.ItemID,
+                };
+
+                return data;
+            }
+
+            internal void LoadData(DecorData data)
+            {
+                SnapPositionToGrid(new Vector2(data.x, data.y));
+                RotateToDirection(data.dir);
+
+                if(data.objDisplayID != -1) { SetDisplayObject((Decor)DataManager.GetWorldObjectByID(data.objDisplayID)); }
+                if(data.itemDisplayID != -1) { SetDisplayItem(DataManager.GetItem(data.itemDisplayID)); }
             }
         }
 
@@ -1180,6 +1407,12 @@ namespace RiverHollow.Items
                 _bReady = data.ready;
                 _iDaysToHoney = data.timeLeft;
                 _iHoneyToGather = data.honeyType;
+                
+                if(_iHoneyToGather != -1)
+                {
+                    _bReady = true;
+                    _sprite.PlayAnimation(AnimationEnum.Action_Finished);
+                }
             }
         }
 
@@ -1798,6 +2031,7 @@ namespace RiverHollow.Items
         protected TriggerObject(int id, Dictionary<string, string> stringData) : base(id)
         {
             LoadDictionaryData(stringData);
+            _eObjectType = ObjectTypeEnum.DungeonObject;
             _eSubType = Util.ParseEnum<DungeonObjectType>(stringData["Subtype"]);
 
             Util.AssignValue(ref _sOutTrigger, OUT_TRIGGER, stringData);
@@ -1928,7 +2162,7 @@ namespace RiverHollow.Items
             /// </summary>
             public override void ProcessRightClick()
             {
-                GameManager.CurrentTriggerObject = this;
+                GameManager.CurrentWorldObject = this;
 
                 if (!_bHasBeenTriggered)
                 {
@@ -2011,7 +2245,7 @@ namespace RiverHollow.Items
             /// </summary>
             public override void ProcessRightClick()
             {
-                GameManager.CurrentTriggerObject = this;
+                GameManager.CurrentWorldObject = this;
                 if (_bKeyDoor)
                 {
                     if (DungeonManager.DungeonKeys() > 0)

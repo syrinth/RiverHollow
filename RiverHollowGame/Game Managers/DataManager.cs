@@ -487,6 +487,8 @@ namespace RiverHollow.Game_Managers
                         return new CombatHazard(id, diData);
                     case ObjectTypeEnum.Container:
                         return new Container(id, diData);
+                    case ObjectTypeEnum.Decor:
+                        return new Decor(id, diData);
                     case ObjectTypeEnum.Destructible:
                         if (diData.ContainsKey("Tree")) { return new Tree(id, diData); }
                         else { return new Destructible(id, diData); }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
@@ -7,6 +8,7 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Items.Buildable;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -54,13 +56,36 @@ namespace RiverHollow.GUIComponents.Screens
             _liEditMenuObjects = new List<GUIObject>
             {
                 new GUIButton("Move", BtnMove),
-                new GUIButton("Rotate", BtnRotate),
                 new GUIButton("Upgrade", BtnUpgrade),
-                new GUIButton("Remove", BtnRemove),
+                new GUIButton("Destroy", BtnDestroy),
                 new GUIButton("Storage", BtnStorageMode),
                 new GUIButton("Exit", BtnLeaveEditMode)
             };
             GUIObject.CreateSpacedColumn(ref _liEditMenuObjects, GUIButton.BTN_WIDTH / 2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+            HandleInput();
+        }
+
+        protected override void HandleInput()
+        {
+            if (!TakingInput())
+            {
+                if (InputManager.CheckPressedKey(Keys.R))
+                {
+                    if (HeldObject != null) {
+                        WorldObject obj = HeldObject;
+
+                        if (obj.CompareType(ObjectTypeEnum.Decor))
+                        {
+                            ((Decor)obj).Rotate();
+                        }
+                    }
+                }
+            }
         }
 
         public override bool ProcessRightButtonClick(Point mouse)
@@ -170,14 +195,6 @@ namespace RiverHollow.GUIComponents.Screens
             GameManager.EnterTownModeMoving();
         }
 
-        public void BtnRotate()
-        {
-            CloseMenu();
-            GUIManager.CloseMainObject();
-            GameManager.ClearGMObjects();
-            GameManager.EnterTownModeRotate();
-        }
-
         public void BtnUpgrade()
         {
             CloseMenu();
@@ -186,7 +203,7 @@ namespace RiverHollow.GUIComponents.Screens
             GameManager.EnterTownModeUpgrade();
         }
 
-        public void BtnRemove()
+        public void BtnDestroy()
         {
             CloseMenu();
             GUIManager.CloseMainObject();

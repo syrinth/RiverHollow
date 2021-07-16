@@ -336,18 +336,18 @@
  <objectgroup id="9" name="MapObject">
   <object id="35" name="WorldObject" x="145.287" y="81.5742" width="12.8117" height="10.48">
    <properties>
-    <property name="ObjectID" type="int" value="66"/>
+    <property name="ObjectID" type="int" value="71"/>
    </properties>
   </object>
   <object id="36" name="WorldObject" x="34.231" y="82.692" width="12.8117" height="10.48">
    <properties>
-    <property name="ObjectID" type="int" value="43"/>
+    <property name="ObjectID" type="int" value="48"/>
     <property name="UpgradeLevel" type="int" value="2"/>
    </properties>
   </object>
   <object id="37" name="WorldObject" x="97.344" y="82.01" width="12.8117" height="10.48">
    <properties>
-    <property name="ObjectID" type="int" value="41"/>
+    <property name="ObjectID" type="int" value="46"/>
    </properties>
   </object>
  </objectgroup>

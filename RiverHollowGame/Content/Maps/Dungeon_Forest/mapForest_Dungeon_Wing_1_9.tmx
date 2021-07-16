@@ -84,7 +84,7 @@
  <objectgroup id="5" name="MapObject">
   <object id="47" name="DungeonObject" x="256" y="208" width="16" height="16">
    <properties>
-    <property name="ObjectID" type="int" value="26"/>
+    <property name="ObjectID" type="int" value="31"/>
     <property name="OutTrigger" value="Trigger_2"/>
    </properties>
   </object>

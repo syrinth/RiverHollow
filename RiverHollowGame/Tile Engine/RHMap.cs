@@ -523,7 +523,14 @@ namespace RiverHollow.Tile_Engine
                 {
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
-                        _liMapObjects.Add(mapObject);
+                        if (mapObject.Name.Equals("Wall"))
+                        {
+                            foreach(Vector2 v in Util.GetAllPointsInArea(mapObject.Position.X, mapObject.Position.Y,mapObject.Size.Width, mapObject.Size.Height, TILE_SIZE))
+                            {
+                                GetTileByPixelPosition(v).SetWallTrue();
+                            }
+                        }
+                        else { _liMapObjects.Add(mapObject); }
                     }
                 }
             }
@@ -1444,7 +1451,7 @@ namespace RiverHollow.Tile_Engine
             if (_liTestTiles.Count > 0) { _liTestTiles.Clear(); }
 
             _objSelectedObject?.SelectObject(false);
-            if ((TownModeMoving() || TownModeDestroy() || TownModeStorage() || TownModeRotate()) && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasBuildableObject())
+            if ((TownModeMoving() || TownModeDestroy() || TownModeStorage() ) && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasBuildableObject())
             {
                 WorldObject obj = MouseTile.RetrieveUppermostStructureObject();
                 if (obj != null && obj.IsBuildable())
@@ -1550,9 +1557,10 @@ namespace RiverHollow.Tile_Engine
                             break;
                         case ObjectTypeEnum.Beehive:
                         case ObjectTypeEnum.Buildable:
+                        case ObjectTypeEnum.Decor:
                         case ObjectTypeEnum.Garden:
                         case ObjectTypeEnum.Wall:
-                            rv = BuildMultiObject(toBuild);
+                            rv = PlaceMultiObject(toBuild);
                             break;
                     }
                     SoundManager.PlayEffect(rv ? "thump3" : "Cancel");
@@ -1571,6 +1579,7 @@ namespace RiverHollow.Tile_Engine
                                     goto case ObjectTypeEnum.Structure;
                                 case ObjectTypeEnum.Beehive:
                                 case ObjectTypeEnum.Buildable:
+                                case ObjectTypeEnum.Decor:
                                 case ObjectTypeEnum.Floor:
                                 case ObjectTypeEnum.Garden:
                                 case ObjectTypeEnum.Mailbox:
@@ -1594,6 +1603,10 @@ namespace RiverHollow.Tile_Engine
                     {
                         case ObjectTypeEnum.Beehive:
                         case ObjectTypeEnum.Buildable:
+                        case ObjectTypeEnum.Decor:
+                            if (((Decor)toRemove).HasDisplay) { ((Decor)toRemove).RemoveDisplayEntity(); }
+                            else { goto case ObjectTypeEnum.Wall; }
+                            break;
                         case ObjectTypeEnum.Floor:
                         case ObjectTypeEnum.Garden:
                         case ObjectTypeEnum.Wall:
@@ -1623,18 +1636,6 @@ namespace RiverHollow.Tile_Engine
                     if (obj.CompareType(ObjectTypeEnum.Building))
                     {
                         GUIManager.OpenMainObject(new HUDUpgradeWindow((Building)obj));
-                    }
-                }
-            }
-            else if (TownModeRotate())
-            {
-                if (MouseTile != null && MouseTile.HasBuildableObject())
-                {
-                    WorldObject obj = MouseTile.RetrieveUppermostStructureObject();
-
-                    if (obj.IsBuildable())
-                    {
-                        ((Buildable)obj).Rotate();
                     }
                 }
             }
@@ -1681,7 +1682,7 @@ namespace RiverHollow.Tile_Engine
         /// </summary>
         /// <param name="templateObject">The Structure that will act as the template to build offo f</param>
         /// <returns>True if we successfully build.</returns>
-        private bool BuildMultiObject(Buildable templateObject)
+        private bool PlaceMultiObject(Buildable templateObject)
         {
             bool rv = false;
             Buildable placeObject;
@@ -1689,7 +1690,14 @@ namespace RiverHollow.Tile_Engine
             //If we're moving the object, set it as the object to be placed. Otherwise, we need
             //to make a new object based off theo ne we're holding.
             if (TownModeMoving()) { placeObject = templateObject; }
-            else { placeObject = (Buildable)DataManager.GetWorldObjectByID(templateObject.ID); }
+            else
+            {
+                placeObject = (Buildable)DataManager.GetWorldObjectByID(templateObject.ID);
+                if (templateObject.CompareType(ObjectTypeEnum.Decor))
+                {
+                    ((Decor)placeObject).RotateToDirection(((Decor)templateObject).Facing);
+                }
+            }
 
             //PlaceOnMap uses the CollisionBox as the base, then calculates backwards
             placeObject.SnapPositionToGrid(templateObject.CollisionBox.Location);
@@ -1892,16 +1900,6 @@ namespace RiverHollow.Tile_Engine
         }
 
         /// <summary>
-        /// Helper for TestMapTiles for programatic assignation of objects
-        /// </summary>
-        /// <param name="o"></param>
-        /// <returns></returns>
-        public bool TestMapTiles(WorldObject o)
-        {
-            return TestMapTiles(o, _liTestTiles);
-        }
-
-        /// <summary>
         /// Given a World Object item, determine which tiles on the map collide with
         /// the defined CollisionBox of the WorldObject.
         /// </summary>
@@ -1960,21 +1958,21 @@ namespace RiverHollow.Tile_Engine
             //We can place flooring anywhere there isn't flooring as long as the base tile is passable.
             if (obj.CompareType(ObjectTypeEnum.Floor))
             {
-                if(testTile.Flooring == null && (testTile.Passable()
+                if (testTile.Flooring == null && (testTile.Passable()
                     || testTile.WorldObject.CompareType(ObjectTypeEnum.Building)))
                 {
                     rv = true;
                 }
             }
+            else if (obj.WallObject)
+            {
+                rv = (testTile.WorldObject == null && testTile.IsWall);
+            }
             else if (!TileContainsActor(testTile) || obj.Walkable)
             {
-                if (obj.WallObject)
+                if (testTile.CanPlaceOnTabletop(obj) || (testTile.Passable() && testTile.WorldObject == null))
                 {
-                    if(testTile.IsValidWall()) { rv = true; }
-                }
-                else
-                {
-                    if(testTile.Passable() && testTile.WorldObject == null) { rv = true; }
+                    rv = true;
                 }
             }
 
@@ -2272,7 +2270,7 @@ namespace RiverHollow.Tile_Engine
             {
                 mapName = this.Name,
                 worldObjects = new List<WorldObjectData>(),
-                buildables = new List<BuildableData>(),
+                decor = new List<DecorData>(),
                 containers = new List<ContainerData>(),
                 machines = new List<MachineData>(),
                 plants = new List<PlantData>(),
@@ -2288,8 +2286,8 @@ namespace RiverHollow.Tile_Engine
                     case ObjectTypeEnum.Beehive:
                         mapData.beehives.Add(((Beehive)wObj).SaveData());
                         break;
-                    case ObjectTypeEnum.Buildable:
-                        mapData.buildables.Add(((Buildable)wObj).SaveData());
+                    case ObjectTypeEnum.Decor:
+                        mapData.decor.Add(((Decor)wObj).SaveData());
                         break;
                     case ObjectTypeEnum.Container:
                         mapData.containers.Add(((Container)wObj).SaveData());
@@ -2328,11 +2326,11 @@ namespace RiverHollow.Tile_Engine
                 DataManager.CreateAndPlaceNewWorldObject(w.worldObjectID, new Vector2(w.x, w.y), this);
             }
 
-            foreach (BuildableData d in mData.buildables)
+            foreach (DecorData d in mData.decor)
             {
-                Buildable con = (Buildable)DataManager.GetWorldObjectByID(d.ID);
-                con.LoadData(d);
-                con.PlaceOnMap(this);
+                Decor obj = (Decor)DataManager.GetWorldObjectByID(d.ID);
+                obj.LoadData(d);
+                obj.PlaceOnMap(this);
             }
             foreach (ContainerData c in mData.containers)
             {
@@ -2564,6 +2562,8 @@ namespace RiverHollow.Tile_Engine
         bool _bArea = false;
         bool _bSelected = false;
         bool _bLegalTile = false;
+        bool _bIsWall = false;
+        public bool IsWall => _bIsWall;
 
         public RHTile(int x, int y, string mapName)
         {
@@ -2594,6 +2594,11 @@ namespace RiverHollow.Tile_Engine
         private bool DisplaySelectedTile()
         {
             return CombatPhaseCheck(CmbtPhaseEnum.ChooseActionTarget) || CombatPhaseCheck(CmbtPhaseEnum.ChooseMoveTarget) || CombatPhaseCheck(CmbtPhaseEnum.MainSelection);
+        }
+
+        public void SetWallTrue()
+        {
+            _bIsWall = true;
         }
 
         public bool SetFloor(Floor f)
@@ -2676,7 +2681,7 @@ namespace RiverHollow.Tile_Engine
             {
                 rv = SetFloor((Floor)o);
             }
-            else if ((!o.WallObject && Passable()) || (o.WallObject && IsValidWall()))
+            else if ((!o.WallObject && Passable()) || (o.WallObject && IsWall))
             {
                 WorldObject = o;
                 rv = true;
@@ -2686,7 +2691,7 @@ namespace RiverHollow.Tile_Engine
         public bool SetShadowObject(WorldObject o)
         {
             bool rv = false;
-            if ((!o.WallObject && Passable()) || (o.WallObject && IsValidWall()))
+            if ((!o.WallObject && Passable()) || (o.WallObject && IsWall))
             {
                 ShadowObject = o;
                 rv = true;
@@ -2728,22 +2733,6 @@ namespace RiverHollow.Tile_Engine
                 }
             }
 
-            return rv;
-        }
-
-        public bool IsValidWall()
-        {
-            bool rv = false;
-            if (_tileExists && WorldObject == null)
-            {
-                foreach (TiledMapTileLayer l in _diProps.Keys)
-                {
-                    if (l.IsVisible && ContainsProperty(l, "Impassable", out string val) && val.Equals("true"))
-                    {
-                        rv = true;
-                    }
-                }
-            }
             return rv;
         }
 
@@ -2959,6 +2948,23 @@ namespace RiverHollow.Tile_Engine
                     {
                         rv = false;
                     }
+                }
+            }
+
+            return rv;
+        }
+
+        public bool CanPlaceOnTabletop(WorldObject objToPlace)
+        {
+            bool rv = false;
+
+            if (WorldObject != null && WorldObject.CompareType(ObjectTypeEnum.Decor) && WorldObject.CompareType(ObjectTypeEnum.Decor))
+            {
+                Decor decorObj = (Decor)WorldObject;
+                Decor decorToPlace = (Decor)objToPlace;
+                if (decorObj.CanDisplay && decorToPlace.CanBeDisplayed)
+                {
+                    rv = ((Decor)WorldObject).CanDisplay;
                 }
             }
 
