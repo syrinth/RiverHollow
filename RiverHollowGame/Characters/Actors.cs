@@ -2685,6 +2685,8 @@ namespace RiverHollow.Characters
         Clothes Feet;
         #endregion
 
+        Pet _actPet;
+
         public PlayerCharacter() : base()
         {
             _sName = PlayerManager.Name;
@@ -2827,6 +2829,12 @@ namespace RiverHollow.Characters
             SetClothes(Body);
             SetClothes(Legs);
         }
+
+        public void SetPet(Pet actor)
+        {
+            _actPet = actor;
+            _actPet.SetFollow(true);
+        }
     }
 
     public class Spirit : TalkingActor
@@ -2862,7 +2870,7 @@ namespace RiverHollow.Characters
             _iBodyWidth = TILE_SIZE;
             _iBodyHeight = TILE_SIZE + 2;
             List<AnimationData> liData = new List<AnimationData>();
-            AddToAnimationsList(ref liData, DataManager.DiSpiritInfo[_iID], VerbEnum.Idle);
+            AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
             LoadSpriteAnimations(ref _sprBody, liData, _sNPCFolder + "Spirit_" + _iID);
         }
 
@@ -3428,6 +3436,87 @@ namespace RiverHollow.Characters
             {
                 PlayerManager.AddToParty(this);
             }
+        }
+    }
+
+    public class Pet : WorldActor
+    {
+        const double MOVE_COUNTDOWN = 5;
+        private bool _bFollow = false;
+        private bool _bLeash = false;
+
+        private double _dMoveCountdown = 0;
+
+        public Pet(int id, Dictionary<string, string> stringData) : base()
+        {
+            _eActorType = ActorEnum.Pet;
+
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(stringData), DataManager.FOLDER_MONSTERS + stringData["Texture"]);
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+
+            if (_bFollow)
+            {
+                if(PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE * 8) && !_bLeash) { UpdateIdle(gTime); }
+                else { FollowPlayer(gTime); }
+            }
+        }
+
+        private void UpdateIdle(GameTime gTime)
+        {
+            if(_dMoveCountdown < MOVE_COUNTDOWN) { _dMoveCountdown += gTime.ElapsedGameTime.TotalSeconds; }
+            else if(MoveToLocation == Vector2.Zero)
+            {
+                _dMoveCountdown -= MOVE_COUNTDOWN;
+
+                Vector2 moveTo = Vector2.Zero;
+                int distance = RHRandom.Instance().Next(3) * TILE_SIZE;
+                DirectionEnum dir = (DirectionEnum)RHRandom.Instance().Next(0, 3);
+                switch (dir)
+                {
+                    case DirectionEnum.Down:
+                        moveTo = new Vector2(0, distance);
+                        break;
+                    case DirectionEnum.Right:
+                        moveTo = new Vector2(distance, 0);
+                        break;
+                    case DirectionEnum.Up:
+                        moveTo = new Vector2(0, -distance);
+                        break;
+                    case DirectionEnum.Left:
+                        moveTo = new Vector2(-distance, 0);
+                        break;
+                }
+
+                SetMoveObj(Position + moveTo);
+            }
+
+            if (MoveToLocation != Vector2.Zero)
+            {
+                AccumulateMovement(gTime);
+                HandleMove(_vMoveTo);
+            }
+        }
+
+        private void FollowPlayer(GameTime gTime)
+        {
+            if (!_bLeash) { _bLeash = true; }
+            Vector2 delta = Position - PlayerManager.World.Position;
+            AccumulateMovement(gTime);
+            HandleMove(Position - delta);
+
+            if (PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE))
+            {
+                _bLeash = false;
+            }
+        }
+
+        public void SetFollow(bool value)
+        {
+            _bFollow = value;
         }
     }
 }

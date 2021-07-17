@@ -39,23 +39,23 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][SummonID:4][Action:UserCast Apply]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][NPC_ID:6][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][SummonID:0][Action:UserCast Apply]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][NPC_ID:2][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Spell][Target:Ally][Range:6][AreaType:Diamond][Cost:5][SummonID:1][Action:UserCast Summon Apply][Heal:120]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:6][AreaType:Diamond][Cost:5][NPC_ID:3][Action:UserCast Summon Apply][Heal:120]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][SummonID:2][Action:UserCast Apply]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][NPC_ID:4][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Spell][Target:Enemy][Range:6][AreaType:Diamond][Cost:5][SummonID:3][Action:UserCast Summon Apply][Harm:120]</Value>
+      <Value>[Type:Spell][Target:Enemy][Range:6][AreaType:Diamond][Cost:5][NPC_ID:5][Action:UserCast Summon Apply][Harm:120]</Value>
     </Item>
     <Item>
       <Key>14</Key>

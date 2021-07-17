@@ -65,12 +65,12 @@ namespace RiverHollow.Game_Managers
         public enum ActorMovementStateEnum { Idle, Walking };
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum TaskTypeEnum { None, GroupSlay, Slay, Fetch, Talk, Build };
-        public enum ActorEnum { Actor, Merchant, Monster, ShippingGremlin, Spirit, Summon, Villager };
+        public enum ActorEnum { Actor, Merchant, Monster, Mount, Pet, ShippingGremlin, Spirit, Summon, Villager };
         public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade };
         public enum PotencyBonusEnum { None, Conditions, Summon};
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ActionEnum { Action, Item, Spell, MenuItem, MenuSpell, MenuAction, Move, EndTurn };
-        public enum SkillTagsEnum { Bonus, Harm, Heal, Push, Pull, Remove, Retreat, Step, StatusEffectID, SummonID };
+        public enum SkillTagsEnum { Bonus, Harm, Heal, NPC_ID, Push, Pull, Remove, Retreat, Step, StatusEffectID };
         public enum TargetEnum { Enemy, Ally };
         public enum AreaTypeEnum { Single, Cross, Ring, Line, Diamond };
         public enum ElementEnum { None, Fire, Ice, Lightning };

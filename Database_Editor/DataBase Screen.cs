@@ -12,7 +12,7 @@ namespace Database_Editor
     public partial class FrmDBEditor : Form
     {
         private enum EditableCharacterDataEnum { Dialogue, Schedule };
-        public enum XMLTypeEnum { None, Task, Character, Class, Building, WorldObject, Item, Monster, Action, Shop, Spirit, Summon, StatusEffect, Cutscene, Light, Dungeon };
+        public enum XMLTypeEnum { None, Task, Character, Class, Building, WorldObject, Item, Monster, Action, Shop, NPC, StatusEffect, Cutscene, Light, Dungeon };
         #region XML Files
         string ACTIONS_XML_FILE = PATH_TO_DATA + @"\CombatActions.xml";
         string BUILDINGS_XML_FILE = PATH_TO_DATA + @"\Buildings.xml";
@@ -25,9 +25,8 @@ namespace Database_Editor
         string LIGHTS_XML_FILE = PATH_TO_DATA + @"\LightData.xml";
         string MONSTERS_XML_FILE = PATH_TO_DATA + @"\Monsters.xml";
         string SHOPS_XML_FILE = PATH_TO_DATA + @"\Shops.xml";
-        string SPIRITS_XML_FILE = PATH_TO_DATA + @"\Spirits.xml";
+        string NPCS_XML_FILE = PATH_TO_DATA + @"\NPCs.xml";
         string STATUS_EFFECTS_XML_FILE = PATH_TO_DATA + @"\StatusEffects.xml";
-        string SUMMONS_XML_FILE = PATH_TO_DATA + @"\Summons.xml";
         string TASK_XML_FILE = PATH_TO_DATA + @"\Tasks.xml";
         string WORLD_OBJECTS_DATA_XML_FILE = PATH_TO_DATA + @"\WorldObjects.xml";
 
@@ -40,9 +39,8 @@ namespace Database_Editor
         const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         const string TAGS_FOR_CLASSES = "Class";
         const string TAGS_FOR_SHOPDATA = "ShopData";
-        const string TAGS_FOR_SPIRITS = "SpiritID";
+        const string TAGS_FOR_NPCS = "NPC_ID";
         const string TAGS_FOR_STATUS_EFFECTS = "StatusEffectID";
-        const string TAGS_FOR_SUMMONS = "SummonID";
         const string TAGS_FOR_LIGHTS = "LightID";
         const string TAGS_FOR_BUILDINGS = "BuildingID,HouseID,RequiredBuildingID";
         const string TAGS_FOR_MONSTERS = "MonsterID";
@@ -57,11 +55,11 @@ namespace Database_Editor
         const string SHOP_REF_TAG = "ItemID,Requires,BuildingID,ObjectID";
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
         const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
-        const string ACTIONS_REF_TAGS = "StatusEffectID,SummonID";
+        const string ACTIONS_REF_TAGS = "StatusEffectID,NPC_ID";
         const string BUILDINGS_REF_TAGS = "ReqItems,LightID";
         const string DUNGEON_REF_TAGS = "ObjectID,MonsterID";
 
-        const string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,SpiritID";
+        const string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,NPCID";
         #endregion
 
         List<ItemXMLData> _liItemData;
@@ -110,6 +108,12 @@ namespace Database_Editor
             cbCharacterType.Items.Add("Type:" + ActorEnum.ShippingGremlin.ToString());
             cbCharacterType.SelectedIndex = 0;
 
+            cbNPCType.Items.Clear();
+            cbNPCType.Items.Add("Type:" + ActorEnum.Mount.ToString());
+            cbNPCType.Items.Add("Type:" + ActorEnum.Pet.ToString());
+            cbNPCType.Items.Add("Type:" + ActorEnum.Spirit.ToString());
+            cbNPCType.Items.Add("Type:" + ActorEnum.Summon.ToString());
+
             _diTabIndices = new Dictionary<string, int>()
             {
                 { "PreviousTab", 0 },
@@ -123,8 +127,7 @@ namespace Database_Editor
                 { "Actions", 0 },
                 { "Shops", 0 },
                 { "Buildings", 0 },
-                { "Spirits", 0 },
-                { "Summons", 0 },
+                { "NPCs", 0 },
                 { "StatusEffects", 0 },
                 { "Lights", 0 },
                 { "Dungeons", 0 }
@@ -173,8 +176,7 @@ namespace Database_Editor
             LoadXMLDictionary(MONSTERS_XML_FILE, MONSTERS_REF_TAGS, TAGS_FOR_MONSTERS);
             LoadXMLDictionary(ACTIONS_XML_FILE, ACTIONS_REF_TAGS, TAGS_FOR_COMBAT_ACTIONS);
             LoadXMLDictionary(BUILDINGS_XML_FILE, BUILDINGS_REF_TAGS, TAGS_FOR_BUILDINGS);
-            LoadXMLDictionary(SPIRITS_XML_FILE, "", TAGS_FOR_SPIRITS);
-            LoadXMLDictionary(SUMMONS_XML_FILE, "", TAGS_FOR_SUMMONS);
+            LoadXMLDictionary(NPCS_XML_FILE, "", TAGS_FOR_NPCS);
             LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", TAGS_FOR_STATUS_EFFECTS);
             LoadXMLDictionary(LIGHTS_XML_FILE, "", TAGS_FOR_LIGHTS);
             LoadXMLDictionary(DUNGEON_XML_FILE, DUNGEON_REF_TAGS, TAGS_FOR_DUNGEONS);
@@ -201,8 +203,7 @@ namespace Database_Editor
             LoadMonsterDataGrid();
             LoadActionDataGrid();
             LoadBuildingDataGrid();
-            LoadSpiritDataGrid();
-            LoadSummonDataGrid();
+            LoadNPCDataGrid();
             LoadStatusEffectDataGrid();
             LoadLightDataGrid();
             LoadCutsceneDataGrid();
@@ -222,8 +223,7 @@ namespace Database_Editor
             LoadActionInfo();
             LoadShopInfo();
             LoadBuildingInfo();
-            LoadSpiritInfo();
-            LoadSummonInfo();
+            LoadNPCInfo();
             LoadStatusEffectInfo();
             LoadLightInfo();
             LoadDungeonInfo();
@@ -249,9 +249,8 @@ namespace Database_Editor
             else if (fileName == WORLD_OBJECTS_DATA_XML_FILE) { rv = XMLTypeEnum.WorldObject; }
             else if (fileName == MONSTERS_XML_FILE) { rv = XMLTypeEnum.Monster; }
             else if (fileName == ACTIONS_XML_FILE) { rv = XMLTypeEnum.Action; }
-            else if (fileName == SPIRITS_XML_FILE) { rv = XMLTypeEnum.Spirit; }
+            else if (fileName == NPCS_XML_FILE) { rv = XMLTypeEnum.NPC; }
             else if (fileName == BUILDINGS_XML_FILE) { rv = XMLTypeEnum.Building; }
-            else if (fileName == SUMMONS_XML_FILE) { rv = XMLTypeEnum.Summon; }
             else if (fileName == STATUS_EFFECTS_XML_FILE) { rv = XMLTypeEnum.StatusEffect; }
             else if (fileName == LIGHTS_XML_FILE) { rv = XMLTypeEnum.Light; }
             else if (fileName == DUNGEON_XML_FILE) { rv = XMLTypeEnum.Dungeon; }
@@ -347,13 +346,9 @@ namespace Database_Editor
         {
             LoadGenericDatagrid(dgvBuildings, _diBasicXML[BUILDINGS_XML_FILE], "colBuildingsID", "colBuildingsName", "Buildings", _diTabIndices["Buildings"]);
         }
-        private void LoadSpiritDataGrid()
+        private void LoadNPCDataGrid()
         {
-            LoadGenericDatagrid(dgvSpirits, _diBasicXML[SPIRITS_XML_FILE], "colSpiritsID", "colSpiritsName", "Spirits", _diTabIndices["Spirits"]);
-        }
-        private void LoadSummonDataGrid()
-        {
-            LoadGenericDatagrid(dgvSummons, _diBasicXML[SUMMONS_XML_FILE], "colSummonsID", "colSummonsName", "Summons", _diTabIndices["Summons"]);
+            LoadGenericDatagrid(dgvNPCs, _diBasicXML[NPCS_XML_FILE], "colNPCsID", "colNPCsName", "NPCs", _diTabIndices["NPCs"]);
         }
         private void LoadStatusEffectDataGrid()
         {
@@ -963,15 +958,17 @@ namespace Database_Editor
             XMLData data = _diBasicXML[BUILDINGS_XML_FILE][_diTabIndices["Buildings"]];
             LoadGenericDataInfo(data, tbBuildingName, tbBuildingID, dgvBuildingTags, tbBuildingDescription);
         }
-        private void LoadSpiritInfo()
+        private void LoadNPCInfo()
         {
-            XMLData data = _diBasicXML[SPIRITS_XML_FILE][_diTabIndices["Spirits"]];
-            LoadGenericDataInfo(data, tbSpiritName, tbSpiritID, dgvSpiritTags, tbSpiritDescription);
-        }
-        private void LoadSummonInfo()
-        {
-            XMLData data = _diBasicXML[SUMMONS_XML_FILE][_diTabIndices["Summons"]];
-            LoadGenericDataInfo(data, tbSummonName, tbSummonID, dgvSummonTags, tbSummonDescription);
+            XMLData data = _diBasicXML[NPCS_XML_FILE][_diTabIndices["NPCs"]];
+            LoadGenericDataInfo(data, tbNPCName, tbNPCID, dgvNPCTags, tbNPCDescription);
+
+            int selectedIndex = 0;
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Mount) { selectedIndex = 0; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Pet) { selectedIndex = 1; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Spirit) { selectedIndex = 2; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Summon) { selectedIndex = 3; }
+            cbNPCType.SelectedIndex = selectedIndex;
         }
         private void LoadStatusEffectInfo()
         {
@@ -1256,13 +1253,9 @@ namespace Database_Editor
         {
             SaveXMLDataInfo(_diBasicXML[BUILDINGS_XML_FILE], "Buildings", "Building_", XMLTypeEnum.Building, tbBuildingName, tbBuildingID, null, dgvBuildings, dgvBuildingTags, "colBuildingsID", "colBuildingsName", "", "", tbBuildingDescription);
         }
-        private void SaveSpiritInfo(List<XMLData> liData)
+        private void SaveNPCInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[SPIRITS_XML_FILE], "Spirits", "Spirit_", XMLTypeEnum.Spirit, tbSpiritName, tbSpiritID, null, dgvSpirits, dgvSpiritTags, "colSpiritsID", "colSpiritsName", "", "", tbSpiritDescription);
-        }
-        private void SaveSummonInfo(List<XMLData> liData)
-        {
-            SaveXMLDataInfo(_diBasicXML[SUMMONS_XML_FILE], "Summons", "Summon_", XMLTypeEnum.Summon, tbSummonName, tbSummonID, null, dgvSummons, dgvSummonTags, "colSummonsID", "colSummonsName", "", "", tbSummonDescription);
+            SaveXMLDataInfo(_diBasicXML[NPCS_XML_FILE], "NPCs", "NPC_", XMLTypeEnum.NPC, tbNPCName, tbNPCID, cbNPCType, dgvNPCs, dgvNPCTags, "colNPCsID", "colNPCsName", "", "", tbNPCDescription);
         }
         private void SaveStatusEffectInfo(List<XMLData> liData)
         {
@@ -1400,13 +1393,9 @@ namespace Database_Editor
         {
             GenericCancel(_diBasicXML[BUILDINGS_XML_FILE], "Buildings", dgvBuildings, LoadBuildingInfo);
         }
-        private void btnSpiritCancel_Click(object sender, EventArgs e)
+        private void btnNPCCancel_Click(object sender, EventArgs e)
         {
-            GenericCancel(_diBasicXML[SPIRITS_XML_FILE], "Spirits", dgvSpirits, LoadSpiritInfo);
-        }
-        private void btnSummonCancel_Click(object sender, EventArgs e)
-        {
-            GenericCancel(_diBasicXML[SUMMONS_XML_FILE], "Summons", dgvSummons, LoadSummonInfo);
+            GenericCancel(_diBasicXML[NPCS_XML_FILE], "NPCs", dgvNPCs, LoadNPCInfo);
         }
         private void btnStatusEffectCancel_Click(object sender, EventArgs e)
         {
@@ -1485,13 +1474,9 @@ namespace Database_Editor
         {
             GenericCellClick(e, _diBasicXML[BUILDINGS_XML_FILE], "Buildings", dgvBuildings, LoadBuildingInfo, SaveBuildingInfo);
         }
-        private void dgvSpirits_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvNPCs_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            GenericCellClick(e, _diBasicXML[SPIRITS_XML_FILE], "Spirits", dgvSpirits, LoadSpiritInfo, SaveSpiritInfo);
-        }
-        private void dgvSummons_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            GenericCellClick(e, _diBasicXML[SUMMONS_XML_FILE], "Summons", dgvSummons, LoadSummonInfo, SaveSummonInfo);
+            GenericCellClick(e, _diBasicXML[NPCS_XML_FILE], "NPCs", dgvNPCs, LoadNPCInfo, SaveNPCInfo);
         }
         private void dgvStatusEffects_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1656,8 +1641,7 @@ namespace Database_Editor
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabActions"]) { dgvActions.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabShops"]) { dgvShops.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabBuildings"]) { dgvBuildings.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabSpirits"]) { dgvSpirits.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabSummons"]) { dgvSummons.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabNPCs"]) { dgvNPCs.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabStatusEffects"]) { dgvStatusEffects.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabLights"]) { dgvLights.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeons"]) { dgvDungeons.Focus(); }
@@ -1678,8 +1662,7 @@ namespace Database_Editor
             else if (prevPage == tabCtl.TabPages["tabActions"]) { SaveActionInfo(_diBasicXML[ACTIONS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabShops"]) { SaveShopInfo(); }
             else if (prevPage == tabCtl.TabPages["tabBuildings"]) { SaveBuildingInfo(_diBasicXML[BUILDINGS_XML_FILE]); }
-            else if (prevPage == tabCtl.TabPages["tabSpirits"]) { SaveSpiritInfo(_diBasicXML[SPIRITS_XML_FILE]); }
-            else if (prevPage == tabCtl.TabPages["tabSummons"]) { SaveSummonInfo(_diBasicXML[SUMMONS_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabNPCs"]) { SaveNPCInfo(_diBasicXML[NPCS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabStatusEffects"]) { SaveStatusEffectInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabLights"]) { SaveLightInfo(_diBasicXML[LIGHTS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabDungeons"]) { SaveDungeonInfo(_diBasicXML[DUNGEON_XML_FILE]); }
@@ -2399,6 +2382,7 @@ namespace Database_Editor
             else if (dgv == dgvBuildings) { AddContextMenuItem("Add New", AddNewBuilding, false); }
             else if (dgv == dgvCutscenes) { AddContextMenuItem("Add New", AddNewCutscene, false); }
             else if (dgv == dgvCharacters) { AddContextMenuItem("Add New", AddNewCharacter, false); }
+            else if (dgv == dgvNPCs) { AddContextMenuItem("Add New", AddNewNPC, false); }
             else if (dgv == dgvLights) { AddContextMenuItem("Add New", AddNewLight, false); }
             else if (dgv == dgvDungeons) { AddContextMenuItem("Add New", AddNewDungeon, false); }
             else if (dgv == dgvShops) { AddContextMenuItem("Add New", AddNewShop, false); }
@@ -2457,6 +2441,12 @@ namespace Database_Editor
             SaveMonsterInfo(_diBasicXML[MONSTERS_XML_FILE]);
             List<string> defaultTags = new List<string>() { "Texture:", "Condition:", "Lvl", "Ability:", "Loot:", "Trait:", "Walk:0-0-3-0.15-T", "Action1:0-0-3-0.15-T", "Cast:0-0-3-0.15-T", "Hurt:0-0-3-0.15-T", "Critical:0-0-3-0.15-T", "KO:0-0-3-0.15-T" };
             AddNewGenericXMLObject(tabCtl.TabPages["tabMonsters"], "Monsters", dgvMonsters, "colMonstersID", "colMonstersName", tbMonsterName, tbMonsterID, dgvMonsterTags, "colMonsterTags", null, tbMonsterDescription, defaultTags);
+        }
+        private void AddNewNPC(object sender, EventArgs e)
+        {
+            SaveNPCInfo(_diBasicXML[NPCS_XML_FILE]);
+            List<string> defaultTags = new List<string>() { "Texture:" };
+            AddNewGenericXMLObject(tabCtl.TabPages["tabNPCs"], "NPCs", dgvNPCs, "colNPCsID", "colNPCsName", tbNPCName, tbNPCID, dgvNPCTags, "colNPCTags", null, tbNPCDescription, defaultTags);
         }
         private void AddNewBuilding(object sender, EventArgs e)
         {

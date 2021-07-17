@@ -72,11 +72,9 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diTaskData;
         public static Dictionary<int, Dictionary<string, string>> DiTaskData => _diTaskData;
 
-        static Dictionary<int, Dictionary<string, string>> _diSpiritInfo;
-        public static Dictionary<int, Dictionary<string, string>> DiSpiritInfo => _diSpiritInfo;
+        static Dictionary<int, Dictionary<string, string>> _diNPCData;
 
         static Dictionary<int, Dictionary<string, string>> _diMonsterData;
-        static Dictionary<int, Dictionary<string, string>> _diSummonData;
         public static Dictionary<int, Villager> DIVillagers { get; private set; }
         public static Dictionary<int, Merchant> DIMerchants { get; private set; }
         static Dictionary<int, Dictionary<string, string>> _diActions;
@@ -140,11 +138,10 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diActions, @"Data\CombatActions", Content, null);
             LoadDictionary(ref _diVillagerData, @"Data\CharacterData", Content, null);
             LoadDictionary(ref _diMonsterData, @"Data\Monsters", Content, null);
-            LoadDictionary(ref _diSummonData, @"Data\Summons", Content, null);
+            LoadDictionary(ref _diNPCData, @"Data\NPCs", Content, null);
             LoadDictionary(ref _diBuildings, @"Data\Buildings", Content, null);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
             LoadDictionary(ref _diWorkers, @"Data\Workers", Content, null);
-            LoadDictionary(ref _diSpiritInfo, @"Data\Spirits", Content, null);
             LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);
             LoadDictionary(ref _diClasses, @"Data\Classes", Content, null);
             LoadDictionary(ref Config, @"Data\Config", Content, null);
@@ -576,15 +573,26 @@ namespace RiverHollow.Game_Managers
             return DIVillagers[i].Name;
         }
 
-        public static Summon GetSummonByIndex(int id)
+        public static WorldActor GetNPCByIndex(int id)
         {
-            Summon m = null;
-
-            if (_diSummonData.ContainsKey(id))
+            if (_diNPCData.ContainsKey(id))
             {
-                m = new Summon(id, _diSummonData[id]);
+                Dictionary<string, string> diData = _diNPCData[id];
+                switch (Util.ParseEnum<ActorEnum>(diData["Type"]))
+                {
+                    case ActorEnum.Mount:
+                        break;
+                    case ActorEnum.Pet:
+                        return new Pet(id, diData);
+                    case ActorEnum.Spirit:
+                        return new Spirit(diData);
+                    case ActorEnum.Summon:
+                        return new Summon(id, diData);
+
+                }
             }
-            return m;
+
+            return null;
         }
 
         public static string GetMonsterTraitData(string trait)

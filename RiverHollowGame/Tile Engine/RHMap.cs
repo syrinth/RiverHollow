@@ -1499,13 +1499,19 @@ namespace RiverHollow.Tile_Engine
 
                 foreach (WorldActor c in _liActors)
                 {
-                    if(!c.IsActorType(ActorEnum.Monster) && c.HoverContains(mouseLocation)){
-                        if (c.OnTheMap)
+                    if(c.HoverContains(mouseLocation) && c.OnTheMap)
+                    {
+                        switch (c.ActorType)
                         {
-                            GUICursor.SetCursor(GUICursor.CursorTypeEnum.Talk, c.HoverBox);
-                            found = true;
-                            break;
+                            case ActorEnum.Merchant:
+                            case ActorEnum.ShippingGremlin:
+                            case ActorEnum.Spirit:
+                            case ActorEnum.Villager:
+                                GUICursor.SetCursor(GUICursor.CursorTypeEnum.Talk, c.HoverBox);
+                                found = true;
+                                break;
                         }
+                        if (found) { break; }
                     }
                 }
 

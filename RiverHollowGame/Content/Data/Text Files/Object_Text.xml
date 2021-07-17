@@ -514,32 +514,36 @@
       <Value>[Name:Flower Shop]</Value>
     </Item>
     <Item>
-      <Key>Spirit_0</Key>
+      <Key>NPC_0</Key>
       <Value>[Name:Henry]</Value>
     </Item>
     <Item>
-      <Key>Spirit_1</Key>
+      <Key>NPC_1</Key>
       <Value>[Name:Felicia]</Value>
     </Item>
     <Item>
-      <Key>Summon_0</Key>
+      <Key>NPC_2</Key>
       <Value>[Name:Earth Elemental]</Value>
     </Item>
     <Item>
-      <Key>Summon_1</Key>
+      <Key>NPC_3</Key>
       <Value>[Name:Water Elemental]</Value>
     </Item>
     <Item>
-      <Key>Summon_2</Key>
+      <Key>NPC_4</Key>
       <Value>[Name:Fire Elemental]</Value>
     </Item>
     <Item>
-      <Key>Summon_3</Key>
+      <Key>NPC_5</Key>
       <Value>[Name:Air Elemental]</Value>
     </Item>
     <Item>
-      <Key>Summon_4</Key>
+      <Key>NPC_6</Key>
       <Value>[Name:Magus]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_7</Key>
+      <Value>[Name:Pet Slime]</Value>
     </Item>
     <Item>
       <Key>StatusEffect_0</Key>

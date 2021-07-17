@@ -217,10 +217,10 @@ namespace RiverHollow.CombatStuff
                     _liEffects.Add(SkillTagsEnum.Bonus);
                 }
 
-                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.SummonID)))
+                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.NPC_ID)))
                 {
                     _bSummonSpell = true;
-                    _iSummonID = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.SummonID)]);
+                    _iSummonID = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.NPC_ID)]);
                 }
             }
 
@@ -783,7 +783,7 @@ namespace RiverHollow.CombatStuff
                         _cmbtActionUser.UnlinkSummon();
 
                         //This should only ever be one, but just in case
-                        Summon newSummon = DataManager.GetSummonByIndex(_iSummonID);
+                        Summon newSummon = (Summon)DataManager.GetNPCByIndex(_iSummonID);
                         newSummon.SetStats(_cmbtActionUser.StatMag);                //Summon stats are based off the Magic stat
                         _cmbtActionUser.LinkSummon(newSummon);                      //Links the summon to the character
                         newSummon.SetBaseTile(TileTargetList[0], true);

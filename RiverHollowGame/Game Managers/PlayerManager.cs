@@ -104,6 +104,11 @@ namespace RiverHollow.Game_Managers
                 string[] splitString = s.Split('-');
                 InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1), true, true);
             }
+
+            WorldActor act = DataManager.GetNPCByIndex(7);
+            act.Position = World.Position;
+            World.SetPet((Pet)act);
+            MapManager.HomeMap.AddCharacter(act);
         }
 
         public static void SetPath(List<RHTile> list)

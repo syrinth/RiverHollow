@@ -475,11 +475,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Summons/WaterElemental.png
 
-#begin Data/Summons.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Summons.xml
-
 #begin Textures/Actors/Summons/FireElemental.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1720,11 +1715,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Shops.xml
-
-#begin Data/Spirits.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Spirits.xml
 
 #begin Data/Text Files/Object_Text.xml
 /importer:XmlImporter
@@ -3447,4 +3437,9 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Schedules/NPC_13.xml
+
+#begin Data/NPCs.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/NPCs.xml
 
