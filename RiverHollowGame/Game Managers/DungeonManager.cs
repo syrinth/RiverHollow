@@ -83,6 +83,8 @@ namespace RiverHollow.Game_Managers
         List<WarpPoint> _liWarpPoints;
         public IList<WarpPoint> WarpPoints { get { return _liWarpPoints.AsReadOnly(); } }
 
+        protected Dictionary<string, string> _diDungeonInfo;
+
         private List<RoomInfo> _liMapInfo;
         public Dungeon(string name)
         {
@@ -94,6 +96,8 @@ namespace RiverHollow.Game_Managers
         public void InitializeDungeon(string currentMap, TravelPoint pt)
         {
             _iCurrentLevelSize = 0;
+
+            _diDungeonInfo = DataManager.GetDungeonInfo(pt.DungeonInfoID);
 
             //Generate a new DungeonMap
             RoomInfo[,] arrDungeonMap = new RoomInfo[MAP_DIMENSIONS, MAP_DIMENSIONS];
@@ -125,14 +129,13 @@ namespace RiverHollow.Game_Managers
 
             //For each map, assign the information needed to spawn resources, and monsters
             //then handle the entrances, and spawn themap entities.
-            Dictionary<string, string> dungeonInfo = DataManager.GetDungeonInfo(pt.DungeonInfoID);
             foreach (RoomInfo rmInfo in mapsInUse)
             {
-                rmInfo.Map.AssignResourceSpawns("20-40", dungeonInfo["ObjectID"]);
+                rmInfo.Map.AssignResourceSpawns("20-40", _diDungeonInfo["ObjectID"]);
 
                 foreach (MonsterSpawn spawn in rmInfo.Map.MonsterSpawnPoints)
                 {
-                    spawn.AssignMonsterIDs("Spawn-All", dungeonInfo["MonsterID"]);
+                    spawn.AssignMonsterIDs("Spawn-All", _diDungeonInfo["MonsterID"]);
                 }
 
                 HandleEntrances(rmInfo.Map);
@@ -356,6 +359,8 @@ namespace RiverHollow.Game_Managers
         /// <param name="map"></param>
         private void HandleEntrances(RHMap map)
         {
+            string[] strsplit = Util.FindParams(_diDungeonInfo["EntranceID"]);
+
             foreach (TiledMapObject blocker in map.GetMapObjectsByName("BlockObject"))
             {
                 Vector2 pos = Vector2.Zero;
@@ -364,17 +369,17 @@ namespace RiverHollow.Game_Managers
                 {
                     case DirectionEnum.Up:
                         pos = new Vector2(blocker.Position.X + blocker.Size.Width, (int)blocker.Position.Y);
-                        CreateEntranceObject(blocker, map, 68, 69, 70, blocker.Position, pos, blocker.Position);
+                        CreateEntranceObject(blocker, map, int.Parse(strsplit[0]), int.Parse(strsplit[1]), int.Parse(strsplit[2]), blocker.Position, pos, blocker.Position);
                         break;
                     case DirectionEnum.Down:
                         pos = blocker.Position + new Vector2(0, TILE_SIZE);
-                        CreateEntranceObject(blocker, map, 79, 80, 81, pos, new Vector2(pos.X + blocker.Size.Width, pos.Y), pos);
+                        CreateEntranceObject(blocker, map, int.Parse(strsplit[3]), int.Parse(strsplit[4]), int.Parse(strsplit[5]), pos, new Vector2(pos.X + blocker.Size.Width, pos.Y), pos);
                         break;
                     case DirectionEnum.Left:
-                        CreateEntranceObject(blocker, map, 82, 83, 84, blocker.Position, blocker.Position + new Vector2(0, blocker.Size.Height), blocker.Position);
+                        CreateEntranceObject(blocker, map, int.Parse(strsplit[6]), int.Parse(strsplit[7]), int.Parse(strsplit[8]), blocker.Position, blocker.Position + new Vector2(0, blocker.Size.Height), blocker.Position);
                         break;
                     case DirectionEnum.Right:
-                        CreateEntranceObject(blocker, map, 85, 86, 87, blocker.Position, blocker.Position + new Vector2(0, blocker.Size.Height), blocker.Position);
+                        CreateEntranceObject(blocker, map, int.Parse(strsplit[9]), int.Parse(strsplit[10]), int.Parse(strsplit[11]), blocker.Position, blocker.Position + new Vector2(0, blocker.Size.Height), blocker.Position);
                         break;
                 }
             }

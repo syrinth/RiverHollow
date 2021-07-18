@@ -35,7 +35,7 @@ namespace Database_Editor
 
         #region Tags
         const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,ItemID,GoalItem,ItemReward,Collection,Makes,Processes,DWeap,DArmor,DHead,DWrist,RequestIDs,SeedID,HoneyID";
-        const string TAGS_FOR_WORLD_OBJECTS = "ObjectID,Wall,Floor,Resources,Place,SubObjects,RequiredObjectID";
+        const string TAGS_FOR_WORLD_OBJECTS = "ObjectID,Wall,Floor,Resources,Place,SubObjects,RequiredObjectID,EntranceID";
         const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         const string TAGS_FOR_CLASSES = "Class";
         const string TAGS_FOR_SHOPDATA = "ShopData";
@@ -51,13 +51,12 @@ namespace Database_Editor
         const string CHARACTER_REF_TAGS = "Collection,Class,ShopData,HouseID,RequiredBuildingID,RequiredObjectID,RequestIDs";
         const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID,SubObjects,SeedID,HoneyID,LightID";
         const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
-        const string SHOPDATA_REF_TAGS = "ItemID,BuildingID";
-        const string SHOP_REF_TAG = "ItemID,Requires,BuildingID,ObjectID";
+        const string SHOPDATA_REF_TAGS = "ItemID,BuildingID,ObjectID,NPC_ID";
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
         const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
         const string ACTIONS_REF_TAGS = "StatusEffectID,NPC_ID";
         const string BUILDINGS_REF_TAGS = "ReqItems,LightID";
-        const string DUNGEON_REF_TAGS = "ObjectID,MonsterID";
+        const string DUNGEON_REF_TAGS = "ObjectID,MonsterID,EntranceID";
 
         const string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,NPCID";
         #endregion
@@ -688,32 +687,11 @@ namespace Database_Editor
                     theData.CheckForItemLink(testIt);
                 }
 
-                //Find any maps that reference the ItemID
-                foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
-                {
-                    kvp.Value.ReferencesXMLObject(theData);
-                }
-
-
-                foreach (KeyValuePair<int, List<XMLData>> kvp in _diShops)
-                {
-                    foreach(XMLData testIt in kvp.Value)
-                    {
-                        testIt.CheckForItemLink(theData);
-                    }
-                }
+                FindLinkedXMLObjectsHelper(theData);
             }
 
-            //Compare maps against the worldObjects
-
             foreach (XMLData theData in _liWorldObjects)
-            {
-                //Find any maps that reference the ObjectID
-                foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
-                {
-                    kvp.Value.ReferencesXMLObject(theData);
-                }
-
+            { 
                 foreach (XMLData testIt in _liWorldObjects)
                 {
                     if(testIt != theData)
@@ -730,6 +708,8 @@ namespace Database_Editor
                         testIt.CheckForItemLink(theData);
                     }
                 }
+
+                FindLinkedXMLObjectsHelper(theData);
             }
 
             foreach (string baseFile in _diBasicXML.Keys)
@@ -748,20 +728,25 @@ namespace Database_Editor
                         }
                     }
 
-                    //Find any maps that reference the XMLObject
-                    foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
-                    {
-                        kvp.Value.ReferencesXMLObject(theData);
-                    }
+                    FindLinkedXMLObjectsHelper(theData);
+                }
+            }
+        }
 
-                    foreach (KeyValuePair<int, List<XMLData>> kvp in _diShops)
-                    {
-                        foreach (XMLData testIt in kvp.Value)
-                        {
-                            testIt.CheckForItemLink(theData);
+        private void FindLinkedXMLObjectsHelper(XMLData data)
+        {
+            //Find any maps that reference the ItemID
+            foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
+            {
+                kvp.Value.ReferencesXMLObject(data);
+            }
 
-                        }
-                    }
+            //Sweep the shops for a match
+            foreach (KeyValuePair<int, List<XMLData>> kvp in _diShops)
+            {
+                foreach (XMLData testIt in kvp.Value)
+                {
+                    testIt.CheckForItemLink(data);
                 }
             }
         }

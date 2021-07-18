@@ -5,7 +5,7 @@
   <property name="Dungeon" value="Cave"/>
   <property name="MapType" value="Cave"/>
   <property name="Outside" type="bool" value="false"/>
-  <property name="Resources" value="16-C|17-R|38-U"/>
+  <property name="Resources" value="17-C|18-R|39-U"/>
   <property name="ResourcesMinMax" value="30-60"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetDungeon.tsx"/>

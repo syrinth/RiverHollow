@@ -126,14 +126,14 @@
   <object id="52" name="DungeonObject" x="528" y="16" width="32" height="32">
    <properties>
     <property name="MatchTrigger" value="Cave_Wing_2_Open"/>
-    <property name="ObjectID" type="int" value="32"/>
+    <property name="ObjectID" type="int" value="33"/>
     <property name="OutTrigger" value="Cave_Wing_2_Opened"/>
     <property name="TriggerNumber" type="int" value="2"/>
    </properties>
   </object>
   <object id="54" name="WorldObject" x="305.667" y="148.167" width="10.5" height="10">
    <properties>
-    <property name="ObjectID" value="6"/>
+    <property name="ObjectID" value="7"/>
    </properties>
   </object>
  </objectgroup>

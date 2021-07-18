@@ -1463,207 +1463,207 @@
     </Item>
     <Item>
       <Key>WorldObject_4</Key>
-      <Value>[Name:Poison Tile]</Value>
+      <Value>[Name:Pet House]</Value>
     </Item>
     <Item>
       <Key>WorldObject_5</Key>
-      <Value>[Name:Floor Spikes]</Value>
+      <Value>[Name:Poison Tile]</Value>
     </Item>
     <Item>
       <Key>WorldObject_6</Key>
-      <Value>[Name:Chest]</Value>
+      <Value>[Name:Floor Spikes]</Value>
     </Item>
     <Item>
       <Key>WorldObject_7</Key>
-      <Value>[Name:End Table]</Value>
+      <Value>[Name:Chest]</Value>
     </Item>
     <Item>
       <Key>WorldObject_8</Key>
-      <Value>[Name:Desk]</Value>
+      <Value>[Name:End Table]</Value>
     </Item>
     <Item>
       <Key>WorldObject_9</Key>
-      <Value>[Name:Potted Rose]</Value>
+      <Value>[Name:Desk]</Value>
     </Item>
     <Item>
       <Key>WorldObject_10</Key>
-      <Value>[Name:Painting]</Value>
+      <Value>[Name:Potted Rose]</Value>
     </Item>
     <Item>
       <Key>WorldObject_11</Key>
-      <Value>[Name:Wooden Chair]</Value>
+      <Value>[Name:Painting]</Value>
     </Item>
     <Item>
       <Key>WorldObject_12</Key>
-      <Value>[Name:Wooden Table]</Value>
+      <Value>[Name:Wooden Chair]</Value>
     </Item>
     <Item>
       <Key>WorldObject_13</Key>
-      <Value>[Name:Wooden Stool]</Value>
+      <Value>[Name:Wooden Table]</Value>
     </Item>
     <Item>
       <Key>WorldObject_14</Key>
-      <Value>[Name:Tree]</Value>
+      <Value>[Name:Wooden Stool]</Value>
     </Item>
     <Item>
       <Key>WorldObject_15</Key>
-      <Value>[Name:Darkwood Tree]</Value>
+      <Value>[Name:Tree]</Value>
     </Item>
     <Item>
       <Key>WorldObject_16</Key>
-      <Value>[Name:Rock]</Value>
+      <Value>[Name:Darkwood Tree]</Value>
     </Item>
     <Item>
       <Key>WorldObject_17</Key>
-      <Value>[Name:Big Rock]</Value>
+      <Value>[Name:Rock]</Value>
     </Item>
     <Item>
       <Key>WorldObject_18</Key>
-      <Value>[Name:Copper Ore]</Value>
+      <Value>[Name:Big Rock]</Value>
     </Item>
     <Item>
       <Key>WorldObject_19</Key>
-      <Value>[Name:Diamond Node]</Value>
+      <Value>[Name:Copper Ore]</Value>
     </Item>
     <Item>
       <Key>WorldObject_20</Key>
-      <Value>[Name:Emerald Node]</Value>
+      <Value>[Name:Diamond Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_21</Key>
-      <Value>[Name:Ruby Node]</Value>
+      <Value>[Name:Emerald Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_22</Key>
-      <Value>[Name:Sapphire Node]</Value>
+      <Value>[Name:Ruby Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_23</Key>
-      <Value>[Name:Opal Node]</Value>
+      <Value>[Name:Sapphire Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_24</Key>
-      <Value>[Name:Jet Node]</Value>
+      <Value>[Name:Opal Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_25</Key>
-      <Value>[Name:Amber Node]</Value>
+      <Value>[Name:Jet Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_26</Key>
-      <Value>[Name:Jade Node]</Value>
+      <Value>[Name:Amber Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_27</Key>
-      <Value>[Name:Amethyst Node]</Value>
+      <Value>[Name:Jade Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_28</Key>
-      <Value>[Name:Topaz Node]</Value>
+      <Value>[Name:Amethyst Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_29</Key>
-      <Value>[Name:Stump]</Value>
+      <Value>[Name:Topaz Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_30</Key>
-      <Value>[Name:Clay Mound]</Value>
+      <Value>[Name:Stump]</Value>
     </Item>
     <Item>
       <Key>WorldObject_31</Key>
-      <Value>[Name:Push-Trigger]</Value>
+      <Value>[Name:Clay Mound]</Value>
     </Item>
     <Item>
       <Key>WorldObject_32</Key>
-      <Value>[Name:Dungeon Door_Up]</Value>
+      <Value>[Name:Push-Trigger]</Value>
     </Item>
     <Item>
       <Key>WorldObject_33</Key>
-      <Value>[Name:Interaction Trigger]</Value>
+      <Value>[Name:Dungeon Door_Up]</Value>
     </Item>
     <Item>
       <Key>WorldObject_34</Key>
-      <Value>[Name:Dungeon Side Door]</Value>
+      <Value>[Name:Interaction Trigger]</Value>
     </Item>
     <Item>
       <Key>WorldObject_35</Key>
-      <Value>[Name:Dungeon Door_Down1]</Value>
+      <Value>[Name:Dungeon Side Door]</Value>
     </Item>
     <Item>
       <Key>WorldObject_36</Key>
-      <Value>[Name:Stone Floor]</Value>
+      <Value>[Name:Dungeon Door_Down1]</Value>
     </Item>
     <Item>
       <Key>WorldObject_37</Key>
-      <Value>[Name:Garden Bed]</Value>
+      <Value>[Name:Stone Floor]</Value>
     </Item>
     <Item>
       <Key>WorldObject_38</Key>
-      <Value>[Name:Mushroom]</Value>
+      <Value>[Name:Garden Bed]</Value>
     </Item>
     <Item>
       <Key>WorldObject_39</Key>
-      <Value>[Name:Dragon Thistle]</Value>
+      <Value>[Name:Mushroom]</Value>
     </Item>
     <Item>
       <Key>WorldObject_40</Key>
-      <Value>[Name:Aether Shroom]</Value>
+      <Value>[Name:Dragon Thistle]</Value>
     </Item>
     <Item>
       <Key>WorldObject_41</Key>
-      <Value>[Name:Vision Shroom]</Value>
+      <Value>[Name:Aether Shroom]</Value>
     </Item>
     <Item>
       <Key>WorldObject_42</Key>
-      <Value>[Name:Dream Root]</Value>
+      <Value>[Name:Vision Shroom]</Value>
     </Item>
     <Item>
       <Key>WorldObject_43</Key>
-      <Value>[Name:Vampire Plant]</Value>
+      <Value>[Name:Dream Root]</Value>
     </Item>
     <Item>
       <Key>WorldObject_44</Key>
-      <Value>[Name:Forge]</Value>
+      <Value>[Name:Vampire Plant]</Value>
     </Item>
     <Item>
       <Key>WorldObject_45</Key>
-      <Value>[Name:Anvil]</Value>
+      <Value>[Name:Forge]</Value>
     </Item>
     <Item>
       <Key>WorldObject_46</Key>
-      <Value>[Name:Cauldron]</Value>
+      <Value>[Name:Anvil]</Value>
     </Item>
     <Item>
       <Key>WorldObject_47</Key>
-      <Value>[Name:Work Bench]</Value>
+      <Value>[Name:Cauldron]</Value>
     </Item>
     <Item>
       <Key>WorldObject_48</Key>
-      <Value>[Name:Grindstone]</Value>
+      <Value>[Name:Work Bench]</Value>
     </Item>
     <Item>
       <Key>WorldObject_49</Key>
-      <Value>[Name:Loom]</Value>
+      <Value>[Name:Grindstone]</Value>
     </Item>
     <Item>
       <Key>WorldObject_50</Key>
-      <Value>[Name:Stoneworks]</Value>
+      <Value>[Name:Loom]</Value>
     </Item>
     <Item>
       <Key>WorldObject_51</Key>
-      <Value>[Name:SawMill]</Value>
+      <Value>[Name:Stoneworks]</Value>
     </Item>
     <Item>
       <Key>WorldObject_52</Key>
-      <Value>[Name:Tannery]</Value>
+      <Value>[Name:SawMill]</Value>
     </Item>
     <Item>
       <Key>WorldObject_53</Key>
-      <Value>[Name:Windblossom]</Value>
+      <Value>[Name:Tannery]</Value>
     </Item>
     <Item>
       <Key>WorldObject_54</Key>
-      <Value>[Name:Anvil II]</Value>
+      <Value>[Name:Windblossom]</Value>
     </Item>
     <Item>
       <Key>WorldObject_55</Key>
