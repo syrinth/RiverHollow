@@ -3443,3 +3443,44 @@
 /processor:PassThroughProcessor
 /build:Data/NPCs.xml
 
+#begin Textures/Actors/Creatures/NPC_7.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Creatures/NPC_7.png
+
+#begin Textures/Actors/NPCs/NPC_27.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/NPC_27.png
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_27.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_27.xml
+
+#begin Textures/Actors/Creatures/NPC_8.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Creatures/NPC_8.png
+

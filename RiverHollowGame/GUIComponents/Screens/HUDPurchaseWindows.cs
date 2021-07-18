@@ -12,12 +12,12 @@ using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
 
 namespace RiverHollow.GUIComponents.Screens
 {
-    public class HUDPurchaseItems : GUIMainObject
+    public class HUDShopWindow : GUIMainObject
     {
         GUIMoneyDisplay _gMoney;
         GUIList _gList;
 
-        public HUDPurchaseItems(List<Merchandise> merch)
+        public HUDShopWindow(List<Merchandise> merch)
         {
             _winMain = SetMainWindow();
 
@@ -37,6 +37,10 @@ namespace RiverHollow.GUIComponents.Screens
                 else if (m.MerchType == Merchandise.MerchTypeEnum.WorldObject)
                 {
                     newBox = new PurchaseBox(DataManager.GetWorldObjectByID(m.MerchID), m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE);
+                }
+                else if (m.MerchType == Merchandise.MerchTypeEnum.Actor)
+                {
+                    newBox = new PurchaseBox(DataManager.GetNPCByIndex(m.MerchID), m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE);
                 }
 
                 items.Add(newBox);
@@ -429,6 +433,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         Item _item;
         WorldObject _obj;
+        WorldActor _actor;
 
         public int Cost;
 
@@ -461,6 +466,19 @@ namespace RiverHollow.GUIComponents.Screens
             _gMoney.AnchorToInnerSide(this, SideEnum.Right, ScaleIt(2));
         }
 
+        public PurchaseBox(WorldActor actor, int cost, int mainWidth) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
+        {
+            _actor = actor;
+            _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
+            Cost = cost;
+            _gTextName = new GUIText(actor.Name);
+
+            _gTextName.AnchorToInnerSide(this, SideEnum.Left);
+
+            _gMoney = new GUIMoneyDisplay(Cost);
+            _gMoney.AnchorToInnerSide(this, SideEnum.Right, ScaleIt(2));
+        }
+
         public override void Update(GameTime gTime)
         {
             if (PlayerManager.Money < Cost || (_item != null && !InventoryManager.HasSpaceInInventory(_item.ItemID, _item.Number)))
@@ -482,6 +500,18 @@ namespace RiverHollow.GUIComponents.Screens
                 PlayerManager.TakeMoney(Cost);
                 if (_item != null) { InventoryManager.AddToInventory(DataManager.GetItem(_item.ItemID)); }
                 if(_obj != null) {PlayerManager.AddToStorage(_obj.ID); }
+                if (_actor != null) {
+                    if (_actor.IsActorType(ActorEnum.Mount)) { }
+                    else if (_actor.IsActorType(ActorEnum.Pet)) {
+                        Pet p = (Pet)_actor;
+                        PlayerManager.AddPet(p);
+                        p.SpawnNearPlayer();
+                        if(PlayerManager.World.ActivePet == null)
+                        {
+                            PlayerManager.World.SetPet(p);
+                        }
+                    }
+                }
 
                 rv = true;
             }

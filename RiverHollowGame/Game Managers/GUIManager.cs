@@ -124,7 +124,6 @@ namespace RiverHollow.Game_Managers
         }
         public static bool IsTextWindowOpen() { return _currentGUIScreen.IsTextWindowOpen(); }
 
-
         public static void SetWindowText(TextEntry value, TalkingActor act = null, bool displayDialogueIcon = false)
         {
             _currentGUIScreen.SetWindowText(value, act, displayDialogueIcon);

@@ -581,7 +581,7 @@ namespace RiverHollow.Game_Managers
                 switch (Util.ParseEnum<ActorEnum>(diData["Type"]))
                 {
                     case ActorEnum.Mount:
-                        break;
+                        return new Mount(id, diData);
                     case ActorEnum.Pet:
                         return new Pet(id, diData);
                     case ActorEnum.Spirit:

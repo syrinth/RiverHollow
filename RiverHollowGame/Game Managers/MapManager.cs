@@ -124,6 +124,7 @@ namespace RiverHollow.Game_Managers
                     newPos = entryPoint.FindLinkedPointPosition(travelPoint.Center, c);
                 }
 
+                PlayerManager.World.ActivePet?.ChangeState(Pet.PetStateEnum.Alert);
                 FadeToNewMap(Maps[travelPoint.LinkedMap], newPos);
             }
             else
@@ -234,8 +235,11 @@ namespace RiverHollow.Game_Managers
 
         public static void Update(GameTime gTime)
         {
-            if(!_newMapInfo.Equals(default(NewMapInfo)) && GUIManager.FadingIn)
+            if (!_newMapInfo.Equals(default(NewMapInfo)) && GUIManager.FadingIn)
             {
+                if (PlayerManager.World.ActivePet != null) { CurrentMap.RemoveCharacter(PlayerManager.World.ActivePet); }
+                if (PlayerManager.World.ActiveMount != null) { CurrentMap.RemoveCharacter(PlayerManager.World.ActiveMount); }
+
                 string oldMap = CurrentMap.Name;
                 CurrentMap = _newMapInfo.NextMap;
                 if (_newMapInfo.EnteredBuilding != null)
@@ -251,9 +255,18 @@ namespace RiverHollow.Game_Managers
                 _newMapInfo = default;
 
                 //Enter combat upon entering a map with living monsters
-                if (CurrentMap.Monsters.Count > 0)
+                if (CurrentMap.Monsters.Count > 0) { CombatManager.NewBattle(oldMap); }
+                else
                 {
-                    CombatManager.NewBattle(oldMap);
+                    PlayerManager.World.ActivePet?.SpawnNearPlayer();
+
+                    if (PlayerManager.World.ActiveMount != null){
+                        if (CurrentMap.IsDungeon) {
+                            PlayerManager.World.Dismount();
+                            PlayerManager.World.Position = _newMapInfo.PlayerPosition;
+                        }
+                        else { PlayerManager.World.ActiveMount.SyncToPlayer(); }
+                    }
                 }
             }
 

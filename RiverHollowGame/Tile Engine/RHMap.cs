@@ -866,6 +866,20 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
+        public List<RHTile> FindFreeTiles()
+        {
+            List<RHTile> rv = new List<RHTile>();
+            foreach (RHTile x in _arrTiles)
+            {
+                if (x.Passable() && (x.WorldObject == null || x.WorldObject.Walkable))
+                {
+                    rv.Add(x);
+                }
+            }
+
+            return rv;
+        }
+
         /// <summary>
         /// Spawns resources from the ResourceSpawn points on the map
         /// </summary>
@@ -1054,40 +1068,79 @@ namespace RiverHollow.Tile_Engine
         {
             List<Rectangle> list = new List<Rectangle>();
             Rectangle rEndCollision = new Rectangle((int)(actor.CollisionBox.X + dir.X), (int)(actor.CollisionBox.Y + dir.Y), actor.CollisionBox.Width, actor.CollisionBox.Height);
-
             //The following if-blocks get the tiles that the four corners of the
             //moved CollisionBox will be inside of, based off of the movement direction.
             if(dir.X > 0)
             {
                 AddTile(ref list, rEndCollision.Right, rEndCollision.Top, actor.CurrentMapName);
                 AddTile(ref list, rEndCollision.Right, rEndCollision.Bottom, actor.CurrentMapName);
+                if (rEndCollision.Height > TILE_SIZE)
+                {
+                    foreach(Vector2 v in Util.GetAllPointsInArea(rEndCollision.Right -1, rEndCollision.Top, 1, rEndCollision.Height, TILE_SIZE))
+                    {
+                        AddTile(ref list, (int)v.X, (int)v.Y, actor.CurrentMapName);
+                    }
+                }
             }
             else if(dir.X < 0)
             {
                 AddTile(ref list, rEndCollision.Left, rEndCollision.Top, actor.CurrentMapName);
                 AddTile(ref list, rEndCollision.Left, rEndCollision.Bottom, actor.CurrentMapName);
+                if (rEndCollision.Height > TILE_SIZE)
+                {
+                    foreach (Vector2 v in Util.GetAllPointsInArea(rEndCollision.Left - 1, rEndCollision.Top, 1, rEndCollision.Height, TILE_SIZE))
+                    {
+                        AddTile(ref list, (int)v.X, (int)v.Y, actor.CurrentMapName);
+                    }
+                }
             }
 
             if (dir.Y > 0)
             {
                 AddTile(ref list, rEndCollision.Left, rEndCollision.Bottom, actor.CurrentMapName);
                 AddTile(ref list, rEndCollision.Right, rEndCollision.Bottom, actor.CurrentMapName);
+                if (rEndCollision.Width > TILE_SIZE)
+                {
+                    foreach (Vector2 v in Util.GetAllPointsInArea(rEndCollision.Left, rEndCollision.Bottom - 1, rEndCollision.Width, 1, TILE_SIZE))
+                    {
+                        AddTile(ref list, (int)v.X, (int)v.Y, actor.CurrentMapName);
+                    }
+                }
             }
             else if (dir.Y < 0)
             {
                 AddTile(ref list, rEndCollision.Left, rEndCollision.Top, actor.CurrentMapName);
                 AddTile(ref list, rEndCollision.Right, rEndCollision.Top, actor.CurrentMapName);
+                if (rEndCollision.Width > TILE_SIZE)
+                {
+                    foreach (Vector2 v in Util.GetAllPointsInArea(rEndCollision.Left, rEndCollision.Top - 1, rEndCollision.Width, 1, TILE_SIZE))
+                    {
+                        AddTile(ref list, (int)v.X, (int)v.Y, actor.CurrentMapName);
+                    }
+                }
             }
 
             //Because RHTiles do not contain WorldActors outside of combat, we need to add each
             //WorldActor's CollisionBox to the list, as long as the WorldActor in question is not the moving WorldActor.
             foreach(WorldActor w in _liActors)
             {
-                if (w.OnTheMap && w != actor) { list.Add(w.CollisionBox);}
+                if (w.OnTheMap && w != actor) {
+                    switch (w.ActorType)
+                    {
+                        case ActorEnum.Pet:
+                            break;
+                        case ActorEnum.Mount:
+                            if (!PlayerManager.World.Mounted) { goto default; }
+                            else { break; }
+                        default:
+                            list.Add(w.CollisionBox);
+                            break;
+                    }
+                }
             }
 
             //If the actor is not the Player Character, add the Player Character's CollisionBox to the list as well
-            if(actor != PlayerManager.World  && MapManager.CurrentMap == actor.CurrentMap) {
+            if(actor != PlayerManager.World  && MapManager.CurrentMap == actor.CurrentMap && !actor.IsActorType(ActorEnum.Pet)) {
                 list.Add(PlayerManager.World.CollisionBox);
             }
 
@@ -1103,10 +1156,8 @@ namespace RiverHollow.Tile_Engine
             return tile != null && !tile.Passable() && !list.Contains(tile.Rect);
         }
 
-        private bool ChangeDir(List<Rectangle> possibleCollisions, Rectangle originalRectangle, ref Vector2 dir, string map)
+        private void ChangeDir(List<Rectangle> possibleCollisions, Rectangle originalRectangle, ref Vector2 dir, string map)
         {
-            bool rv = false;
-
             //Because of how objects interact with each other, this check needs to be broken up so that the x and y movement can be
             //calculated seperately. If an object is above you and you move into it at an angle, if you check the collision as one rectangle
             //then the collision nullification will hit the entire damn movement mode.
@@ -1141,15 +1192,13 @@ namespace RiverHollow.Tile_Engine
                     dir.Y += CheckNudgeAllowed(modifier, new Point(newRectangleY.Left, yVal), new Point(newRectangleY.Right, yVal), map);
                 }
 
-                //Because of diagonal movement, it's possible to have no issue on either the x axis or y axis but have a collision
-                //diagonal to the actor. In this case, just mnull out the x movement.
+                //Because of diagonal movement, it's possible to have no issue on either the X axis or Y axis but have a collision
+                //diagonal to the actor. In this case, just null out the X movement.
                 if (dir.X != 0 && dir.Y != 0 && r.Intersects(newRectangleX) && r.Intersects(newRectangleY))
                 {
                     dir.X = 0;
                 }
             }
-
-            return rv;
         }
         private float CheckNudgeAllowed(float modifier, Point first, Point second, string map)
         {
@@ -1207,6 +1256,8 @@ namespace RiverHollow.Tile_Engine
             {
                 if (kvp.Value.Intersects(movingChar) && !kvp.Value.IsDoor && kvp.Value.IsActive)
                 {
+                    if (c.IsActorType(ActorEnum.Pet)) { return false; }
+
                     MapManager.ChangeMaps(c, this.Name, kvp.Value);
                     return true;
 
@@ -1303,6 +1354,12 @@ namespace RiverHollow.Tile_Engine
 
             if (IsPaused()) { return false; }
 
+            if (PlayerManager.World.Mounted)
+            {
+                PlayerManager.World.Dismount();
+                return true;
+            }
+
             RHTile tile = MouseTile;
 
             //Do nothing if no tile could be retrieved
@@ -1318,6 +1375,7 @@ namespace RiverHollow.Tile_Engine
                     //else { MapManager.ChangeMaps(PlayerManager.World, this.Name, obj); }
                     MapManager.ChangeMaps(PlayerManager.World, this.Name, obj);
                     SoundManager.PlayEffect("close_door_1");
+                    return true;
                 }
             }
             else if (tile.GetWorldObject() != null)
@@ -1345,9 +1403,9 @@ namespace RiverHollow.Tile_Engine
 
             foreach (WorldActor c in _liActors)
             {
-                if (PlayerManager.PlayerInRange(c.HoverBox, (int)(TILE_SIZE * 1.5)) && c.HoverContains(mouseLocation) && c.CanTalk && c.OnTheMap)
+                if (PlayerManager.PlayerInRange(c.HoverBox, (int)(TILE_SIZE * 1.5)) && c.HoverContains(mouseLocation) && c.OnTheMap)
                 {
-                    ((TalkingActor)c).Talk();
+                    c.ProcessRightButtonClick();
                     return true;
                 }
             }

@@ -687,7 +687,7 @@ namespace RiverHollow.Items
             _eHazardType = Util.ParseEnum<HazardTypeEnum>(stringData["Subtype"]);
             Damage = int.Parse(stringData["Damage"]);
             Util.AssignValue(ref _bDrawOver, "DrawOver", stringData);
-            _sprite.SetDepthMod(_bDrawOver ? 1 : -999);
+            _sprite.SetLayerDepthMod(_bDrawOver ? 1 : -999);
 
             _iInit = 0;
             if (_eHazardType == HazardTypeEnum.Passive) { Active = true; }

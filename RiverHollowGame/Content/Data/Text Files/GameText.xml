@@ -137,5 +137,13 @@
       <Key>Selection_Requests</Key>
       <Value>[Text:Show Requests][TextVerb:ShowRequests]</Value>
     </Item>
+    <Item>
+      <Key>PetFollow</Key>
+      <Value>[Text:Have {0} follow you?][Selection:YesNo][Trigger:PetFollow]</Value>
+    </Item>
+    <Item>
+      <Key>PetUnfollow</Key>
+      <Value>[Text:Leave {0} here?][Selection:YesNo][Trigger:PetUnfollow]</Value>
+    </Item>
   </Asset>
 </XnaContent>

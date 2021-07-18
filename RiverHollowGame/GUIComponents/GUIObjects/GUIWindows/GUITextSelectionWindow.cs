@@ -250,6 +250,14 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     {
                         ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;
                     }
+                    else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.PetFollow))
+                    {
+                        PlayerManager.World.SetPet(null);
+                    }
+                    else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.PetUnfollow))
+                    {
+                        PlayerManager.World.SetPet((Pet)GameManager.CurrentNPC);
+                    }
                 }
                 else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.No)){
                     if(_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.Donate)) {

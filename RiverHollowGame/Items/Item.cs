@@ -594,7 +594,7 @@ namespace RiverHollow.Items
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _sprite.SetDepthMod(1);
+            _sprite.SetLayerDepthMod(1);
             _sprite.Draw(spriteBatch);
         }
 

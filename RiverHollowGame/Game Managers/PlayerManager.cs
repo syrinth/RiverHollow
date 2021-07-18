@@ -48,6 +48,7 @@ namespace RiverHollow.Game_Managers
 
         public static bool ReadyToSleep = false;
 
+        private static List<Pet> _liPets;
         private static List<ClassedCombatant> _liParty;
         private static Dictionary<int, int> _diStorage;
 
@@ -74,13 +75,16 @@ namespace RiverHollow.Game_Managers
 
         public static void Initialize()
         {
+            _liPets = new List<Pet>();
+
             _diStorage = new Dictionary<int, int>();
             _diTownObjects = new Dictionary<int, int>();
             _diTools = new Dictionary<ToolEnum, Tool>();
-            _liParty = new List<ClassedCombatant>();
+
             TaskLog = new List<Task>();
             World = new PlayerCharacter();
-            _liParty.Add(World);
+            _liParty = new List<ClassedCombatant> { World };
+
             _diBuildings = new Dictionary<int, Building>();
             DIBuildInfo = DataManager.GetBuildInfoList();
         }
@@ -105,10 +109,9 @@ namespace RiverHollow.Game_Managers
                 InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1), true, true);
             }
 
-            WorldActor act = DataManager.GetNPCByIndex(7);
-            act.Position = World.Position;
-            World.SetPet((Pet)act);
-            MapManager.HomeMap.AddCharacter(act);
+            WorldActor act = DataManager.GetNPCByIndex(8);
+            act.Position = PlayerManager.World.Position;
+            MapManager.CurrentMap.AddCharacterImmediately(act);
         }
 
         public static void SetPath(List<RHTile> list)
@@ -127,41 +130,33 @@ namespace RiverHollow.Game_Managers
             if (AllowMovement)
             {
                 KeyboardState ks = Keyboard.GetState();
-                if (InputManager.MovementKeyDown())
+                if (!InputManager.MovementKeyDown())
                 {
-                    World.AccumulateMovement(gTime);
-                }
-                else
-                {
-                    World.ClearAccumulatedMovement();
                     World.DetermineFacing(moveDir);
                 }
 
-                float movement = World.UseMovement();
-                if (movement > 0)
+                if (ks.IsKeyDown(Keys.W)) { moveDir += new Vector2(0, -World.BuffedSpeed); }
+                else if (ks.IsKeyDown(Keys.S)) { moveDir += new Vector2(0, World.BuffedSpeed); }
+
+                if (ks.IsKeyDown(Keys.A)) { moveDir += new Vector2(-World.BuffedSpeed, 0); }
+                else if (ks.IsKeyDown(Keys.D)) { moveDir += new Vector2(World.BuffedSpeed, 0); }
+
+                World.DetermineFacing(moveDir);
+
+                if (moveDir.Length() != 0)
                 {
-                    if (ks.IsKeyDown(Keys.W)) { moveDir += new Vector2(0, -movement); }
-                    else if (ks.IsKeyDown(Keys.S)) { moveDir += new Vector2(0, movement); }
+                    Rectangle testRectX = new Rectangle((int)World.CollisionBox.X + (int)moveDir.X, (int)World.CollisionBox.Y, World.CollisionBox.Width, World.CollisionBox.Height);
+                    Rectangle testRectY = new Rectangle((int)World.CollisionBox.X, (int)World.CollisionBox.Y + (int)moveDir.Y, World.CollisionBox.Width, World.CollisionBox.Height);
 
-                    if (ks.IsKeyDown(Keys.A)) { moveDir += new Vector2(-movement, 0); }
-                    else if (ks.IsKeyDown(Keys.D)) { moveDir += new Vector2(movement, 0); }
-
-                    World.DetermineFacing(moveDir);
-
-                    if (moveDir.Length() != 0)
+                    if (MapManager.CurrentMap.CheckForCollisions(World, testRectX, testRectY, ref moveDir))
                     {
-                        Rectangle testRectX = new Rectangle((int)World.CollisionBox.X + (int)moveDir.X, (int)World.CollisionBox.Y, World.CollisionBox.Width, World.CollisionBox.Height);
-                        Rectangle testRectY = new Rectangle((int)World.CollisionBox.X, (int)World.CollisionBox.Y + (int)moveDir.Y, World.CollisionBox.Width, World.CollisionBox.Height);
-
-                        if (MapManager.CurrentMap.CheckForCollisions(World, testRectX, testRectY, ref moveDir))
-                        {
-                            //Might be technically correct but FEELS wrong
-                            //moveDir.Normalize();
-                            //moveDir *= World.Speed;
-                            World.MoveBy((int)moveDir.X, (int)moveDir.Y);
-                        }
+                        //Might be technically correct but FEELS wrong
+                        //moveDir.Normalize();
+                        //moveDir *= World.Speed;
+                        World.MoveBy((int)moveDir.X, (int)moveDir.Y);
                     }
                 }
+
             }
             else { UpdateTool(gTime); }
 
@@ -601,7 +596,7 @@ namespace RiverHollow.Game_Managers
 
         public static PlayerData SaveData()
         {
-            PlayerData d = new PlayerData()
+            PlayerData data = new PlayerData()
             {
                 name = PlayerManager.Name,
                 money = PlayerManager.Money,
@@ -614,14 +609,41 @@ namespace RiverHollow.Game_Managers
                 adventurerData = World.SaveClassedCharData(),
                 currentClass = World.CharacterClass.ID,
                 Items = new List<ItemData>(),
-                Storage = new List<StorageData>()
+                Storage = new List<StorageData>(),
+                liPets = new List<int>()
             };
 
-            return d;
+            // Initialize the new data values.
+            foreach (Item i in InventoryManager.PlayerInventory)
+            {
+                ItemData itemData = Item.SaveData(i);
+                data.Items.Add(itemData);
+            }
+
+            foreach (KeyValuePair<int, int> kvp in PlayerManager.GetStorageItems())
+            {
+                StorageData storageData = new StorageData
+                {
+                    objID = kvp.Key,
+                    number = kvp.Value
+                };
+                data.Storage.Add(storageData);
+            }
+
+            data.activePet = PlayerManager.World.ActivePet == null ? -1 : PlayerManager.World.ActivePet.ID;
+            foreach (Pet p in _liPets)
+            {
+                data.liPets.Add(p.ID);
+            }
+
+            return data;
         }
 
         public static void LoadData(PlayerData data)
         {
+            //We've already loaded in the player position
+            Vector2 pos = World.Position;
+
             SetName(data.name);
             SetMoney(data.money);
             TotalMoneyEarned = data.totalMoneyEarned;
@@ -636,6 +658,7 @@ namespace RiverHollow.Game_Managers
             World.SetClothes((Clothes)DataManager.GetItem(data.chest.itemID));
 
             World.SetBodyType(data.bodyTypeIndex);
+            World.Position = pos;
 
             for (int i = 0; i < InventoryManager.maxItemRows; i++)
             {
@@ -653,6 +676,17 @@ namespace RiverHollow.Game_Managers
             foreach(StorageData storageData in data.Storage)
             {
                 PlayerManager.AddToStorage(storageData.objID, storageData.number);
+            }
+
+            foreach (int i in data.liPets)
+            {
+                Pet p = (Pet)DataManager.GetNPCByIndex(i);
+                if (p.ID == data.activePet) {
+                    p.SpawnNearPlayer();
+                    World.SetPet(p);
+                }
+                else { p.SpawnInHome(); }
+                AddPet(p);
             }
         }
 
@@ -827,6 +861,11 @@ namespace RiverHollow.Game_Managers
         }
 
         #endregion
+
+        public static void AddPet(Pet actor)
+        {
+            _liPets.Add(actor);
+        }
 
         public static Mailbox PlayerMailbox;
     }

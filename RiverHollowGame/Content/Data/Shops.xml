@@ -97,5 +97,11 @@
         <Item>[Type:WorldObject][ObjectID:13][Cost:500]</Item>
       </Value>
     </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>
+        <Item>[Type:Actor][NPC_ID:7][Cost:500]</Item>
+      </Value>
+    </Item>
   </Asset>
 </XnaContent>

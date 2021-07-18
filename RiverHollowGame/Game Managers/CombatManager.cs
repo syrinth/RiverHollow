@@ -426,6 +426,8 @@ namespace RiverHollow.Game_Managers
             GameManager.ActivateTriggers(MapManager.CurrentMap.Name + MOB_OPEN);
 
             GoToHUDScreen();
+
+            PlayerManager.World.ActivePet?.SpawnNearPlayer();
         }
 
         /// <summary>
@@ -440,6 +442,8 @@ namespace RiverHollow.Game_Managers
             PlayerManager.AllowMovement = true;
             PlayerManager.World.ClearPath();
             GoToHUDScreen();
+
+            PlayerManager.World.ActivePet?.SpawnNearPlayer();
         }
 
         /// <summary>

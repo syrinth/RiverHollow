@@ -12,15 +12,14 @@ namespace RiverHollow.SpriteAnimations
     public class AnimatedSprite
     {
         #region Properties
-        public float LayerDepth => Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100);
+        AnimatedSprite _sprLinkedSprite;
+        public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth - 0.1f) : Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100);
 
         Texture2D _texture;                         // The texture that holds the images for this sprite
         Color _color = Color.White;              // If set to anything other than Color.White, will colorize the sprite with that color.
 
         // Dictionary holding all of the FrameAnimation objects
         Dictionary<string, FrameAnimation> _diFrameAnimations = new Dictionary<string, FrameAnimation>();
-
-        string _sCurrAnim = string.Empty;   // Which FrameAnimation from the dictionary above is playing
 
         // Calculated center of the sprite
         public Vector2 Center => new Vector2(Position.X + Width / 2, Position.Y + Height / 2);
@@ -34,22 +33,11 @@ namespace RiverHollow.SpriteAnimations
         /// corner pixel.
         public Vector2 Position { get; set; } = Vector2.Zero;
 
-        //When false, this
         public bool Drawing { get; set; } = true;
 
         public bool Show = true;
 
         float _fLayerDepthMod;
-
-        public void SetColor(Color c)
-        {
-            _color = c;
-        }
-
-        public void SetDepthMod(float val)
-        {
-            _fLayerDepthMod = val;
-        }
 
         float _fRotationAngle = 0;
         Vector2 _vRotationOrigin = Vector2.Zero;
@@ -61,8 +49,8 @@ namespace RiverHollow.SpriteAnimations
         {
             get
             {
-                if (_sCurrAnim != string.Empty && _diFrameAnimations.ContainsKey(_sCurrAnim))
-                    return _diFrameAnimations[_sCurrAnim];
+                if (CurrentAnimation != string.Empty && _diFrameAnimations.ContainsKey(CurrentAnimation))
+                    return _diFrameAnimations[CurrentAnimation];
                 else
                     return null;
             }
@@ -72,10 +60,7 @@ namespace RiverHollow.SpriteAnimations
         /// The string name of the currently playing animaton.  Setting the animation
         /// resets the CurrentFrame and PlayCount properties to zero.
         ///
-        public string CurrentAnimation
-        {
-            get { return _sCurrAnim; }
-        }
+        public string CurrentAnimation { get; private set; } = string.Empty;
 
         #endregion
 
@@ -89,7 +74,7 @@ namespace RiverHollow.SpriteAnimations
             _texture = sprite._texture;
             FrameCutoff = sprite.FrameCutoff;
             _color = sprite._color;
-            _sCurrAnim = sprite._sCurrAnim;
+            CurrentAnimation = sprite.CurrentAnimation;
             _iScale = sprite._iScale;
 
             Drawing = sprite.Drawing;
@@ -103,6 +88,7 @@ namespace RiverHollow.SpriteAnimations
             Height = sprite.Height;
         }
 
+        #region AddAnimation Helpers
         public void AddAnimation(AnimationEnum verb, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce); }
         public void AddAnimation(VerbEnum verb, DirectionEnum dir, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetActorString(verb, dir), startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce); }
         public void AddAnimation(string animationName, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false)
@@ -115,11 +101,15 @@ namespace RiverHollow.SpriteAnimations
                 PlayAnimation(animationName);
             }
         }
+        #endregion
 
+        #region RemoveAnimation Helpers
         public void RemoveAnimation(AnimationEnum verb) { RemoveAnimation(Util.GetEnumString(verb)); }
         public void RemoveAnimation(VerbEnum verb, DirectionEnum dir) { RemoveAnimation(Util.GetActorString(verb, dir)); }
         private void RemoveAnimation(string animationName) { _diFrameAnimations.Remove(animationName); }
+        #endregion
 
+        #region PlayAnimation Helpers
         public void PlayAnimation(AnimationEnum verb) { PlayAnimation(Util.GetEnumString(verb)); }
         public void PlayAnimation(VerbEnum verb, DirectionEnum dir) { PlayAnimation(Util.GetActorString(verb, dir)); }
         public void PlayAnimation(string verb, DirectionEnum dir) { PlayAnimation(Util.GetActorString(verb, dir)); }
@@ -128,15 +118,33 @@ namespace RiverHollow.SpriteAnimations
             if (_diFrameAnimations.ContainsKey(animate))
             {
                 Drawing = true;
-                _sCurrAnim = animate;
+                CurrentAnimation = animate;
                 Reset();   
             }
         }
+        #endregion
 
+        #region IsCurrentAnimation Helpers
         public bool IsCurrentAnimation(AnimationEnum verb) { return IsCurrentAnimation(Util.GetEnumString(verb)); }
         public bool IsCurrentAnimation(VerbEnum verb, DirectionEnum dir) { return IsCurrentAnimation(Util.GetActorString(verb, dir)); }
         public bool IsCurrentAnimation(string verb, DirectionEnum dir) { return IsCurrentAnimation(Util.GetActorString(verb, dir)); }
         private bool IsCurrentAnimation(string animate) { return CurrentAnimation.Equals(animate); }
+        #endregion
+
+        public void SetColor(Color c)
+        {
+            _color = c;
+        }
+
+        public void SetLayerDepthMod(float val)
+        {
+            _fLayerDepthMod = val;
+        }
+
+        public void SetLinkedSprite(AnimatedSprite sprite)
+        {
+            _sprLinkedSprite = sprite;
+        }
 
         /// <summary>
         /// After ensuring that we have the frame we think we're on call Reset on it
@@ -144,9 +152,9 @@ namespace RiverHollow.SpriteAnimations
         /// </summary>
         public void Reset()
         {
-            if (!string.IsNullOrEmpty(_sCurrAnim))
+            if (!string.IsNullOrEmpty(CurrentAnimation))
             {
-                _diFrameAnimations[_sCurrAnim].FullReset();
+                _diFrameAnimations[CurrentAnimation].FullReset();
             }
         }
 

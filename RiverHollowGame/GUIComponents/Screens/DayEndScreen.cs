@@ -92,6 +92,10 @@ namespace RiverHollow.GUIComponents.Screens
                     SaveManager.Save();
                     GUIManager.BeginFadeOut();
                     PlayerManager.Stamina = PlayerManager.MaxStamina;
+                    foreach(ClassedCombatant actor in PlayerManager.GetParty())
+                    {
+                        actor.ModifyHealth(actor.MaxHP, false);
+                    }
 
                     GameManager.GoToHUDScreen();
                 }

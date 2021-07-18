@@ -5,7 +5,7 @@ namespace RiverHollow.Misc
 {
     public class Merchandise
     {
-        public enum MerchTypeEnum { Item, WorldObject };
+        public enum MerchTypeEnum { Item, WorldObject, Actor };
         public MerchTypeEnum MerchType { get; }
 
         private bool _bLocked = false;
@@ -34,6 +34,9 @@ namespace RiverHollow.Misc
                     break;
                 case MerchTypeEnum.WorldObject:
                     MerchID = int.Parse(stringData["ObjectID"]);
+                    break;
+                case MerchTypeEnum.Actor:
+                    MerchID = int.Parse(stringData["NPC_ID"]);
                     break;
             }
 

@@ -123,6 +123,10 @@
     </Item>
     <Item>
       <Key>Character_26</Key>
+      <Value>[Name:Erron]</Value>
+    </Item>
+    <Item>
+      <Key>Character_27</Key>
       <Value>[Name:Sybil]</Value>
     </Item>
     <Item>
@@ -546,6 +550,10 @@
       <Value>[Name:Pet Slime]</Value>
     </Item>
     <Item>
+      <Key>NPC_8</Key>
+      <Value>[Name:Slime Mount]</Value>
+    </Item>
+    <Item>
       <Key>StatusEffect_0</Key>
       <Value>[Name:]</Value>
     </Item>
@@ -684,6 +692,10 @@
     <Item>
       <Key>Shop_8</Key>
       <Value>[Name:Furniture Shop]</Value>
+    </Item>
+    <Item>
+      <Key>Shop_9</Key>
+      <Value>[Name:Sybil's Menagerie]</Value>
     </Item>
     <Item>
       <Key>Cutscene_0</Key>

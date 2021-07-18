@@ -38,7 +38,7 @@ namespace RiverHollow.Characters
         protected static string _sMerchantFolder = DataManager.FOLDER_ACTOR + @"Merchants\";
         protected static string _sPortraitFolder = DataManager.FOLDER_ACTOR + @"Portraits\";
         protected static string _sNPCFolder = DataManager.FOLDER_ACTOR + @"NPCs\";
-        protected static string _sSpiritFolder = DataManager.FOLDER_ACTOR + @"Spirits\";
+        protected static string _sCreatureFolder = DataManager.FOLDER_ACTOR + @"Creatures\";
 
         protected ActorMovementStateEnum _eMovementState = ActorMovementStateEnum.Idle;
 
@@ -68,7 +68,7 @@ namespace RiverHollow.Characters
         protected int _iBodyWidth = TILE_SIZE;
         public int Width => _iBodyWidth;
         protected int _iBodyHeight = TILE_SIZE * 2;
-        public int Height => _iBodyHeight; 
+        public int Height => _iBodyHeight;
         public int SpriteWidth => _sprBody.Width;
         public int SpriteHeight => _sprBody.Height;
 
@@ -192,7 +192,7 @@ namespace RiverHollow.Characters
             {
                 list.Add(new AnimationData(data[Util.GetEnumString(animation)], animation));
             }
-        } 
+        }
     }
     /// <summary>
     /// The properties and methods for each actor that pertain to existing on and
@@ -216,16 +216,20 @@ namespace RiverHollow.Characters
         /// </summary>
         public override Vector2 Position
         {
-            get {
+            get
+            {
                 return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - (TILE_SIZE * _iSize));
             } //MAR this is fucked up
-            set {
+            set
+            {
                 _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + (TILE_SIZE * _iSize));
             }
         }
 
         public bool FollowingPath => _liTilePath.Count > 0;
         protected List<RHTile> _liTilePath;
+
+        protected bool _bBumpedIntoSomething = false;
         protected double _dEtherealCD;
         protected bool _bIgnoreCollisions;
 
@@ -239,7 +243,7 @@ namespace RiverHollow.Characters
 
         protected bool _bHover;
 
-        float _fBaseSpeed = TILE_SIZE * 9;   //How many tiles/second to move
+        float _fBaseSpeed = 2;
         public float BuffedSpeed => _fBaseSpeed * SpdMult;
         public float SpdMult = NPC_WALK_SPEED;
 
@@ -314,6 +318,8 @@ namespace RiverHollow.Characters
             listAnimations.AddRange(LoadCombatAnimations(data));
             return listAnimations;
         }
+
+        public virtual void ProcessRightButtonClick() { }
 
         /// <summary>
         /// Creates a new Animatedsprite object for the given texture string, and adds
@@ -468,68 +474,39 @@ namespace RiverHollow.Characters
             float deltaX = Math.Abs(target.X - this.Position.X);
             float deltaY = Math.Abs(target.Y - this.Position.Y);
 
-            float moveDist = UseMovement();
-            if (moveDist >= 1)
+            //Determines how much of the needed position we're capable of  in one movement
+            Util.GetMoveSpeed(Position, target, BuffedSpeed, ref direction);
+
+            //If we're following a path and there's more than one tile left, we don't want to cut
+            //short on individual steps, so recalculate based on the next target
+            float length = direction.Length();
+            if (_liTilePath.Count > 1 && length < BuffedSpeed)
             {
-                //Determines how much of the needed position we're capable of  in one movement
-                Util.GetMoveSpeed(Position, target, moveDist, ref direction);
+                _liTilePath.RemoveAt(0);
 
-                //If we're following a path and there's more than one tile left, we don't want to cut
-                //short on individual steps, so recalculate based on the next target
-                float length = direction.Length();
-                if (_liTilePath.Count > 1 && length < moveDist)
+                if (DoorCheck())
                 {
-                    _liTilePath.RemoveAt(0);
-
-                    if (DoorCheck())
-                    {
-                        return;
-                    }
-
-                    //Recalculate for the next target
-                    target = _liTilePath[0].Position;
-                    Util.GetMoveSpeed(Position, target, moveDist, ref direction);
+                    return;
                 }
 
-                //Attempt to move
-                if (!CheckMapForCollisionsAndMove(direction, _bIgnoreCollisions))
-                {
-                    //If we can't move, set a timer to go Ethereal
-                    if (_dEtherealCD == 0) { _dEtherealCD = 5; }
-                }
-
-                //If, after movement, we've reached the given location, zero it.
-                if (_vMoveTo == Position && !CutsceneManager.Playing)
-                {
-                    _vMoveTo = Vector2.Zero;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Determines how much of the movement needs to be given based off of 
-        /// </summary>
-        /// <param name="gTime"></param>
-        public void AccumulateMovement(GameTime gTime)
-        {
-            double percent = gTime.ElapsedGameTime.TotalMilliseconds / 1000;    //The percentage of a whole second in this update frame
-            _dAccumulatedMovement += BuffedSpeed * percent;
-        }
-
-        public float UseMovement()
-        {
-            double wholeNumber = 0;
-            if (_dAccumulatedMovement >= 1)
-            {
-                wholeNumber = Math.Truncate(_dAccumulatedMovement);
-               // _dAccumulatedMovement -= wholeNumber;
-                _dAccumulatedMovement = 0;  //Need to reset to 0 to maintain a constant speed update
+                //Recalculate for the next target
+                target = _liTilePath[0].Position;
+                Util.GetMoveSpeed(Position, target, BuffedSpeed, ref direction);
             }
 
-            return (float)wholeNumber;
-        }
-        public void ClearAccumulatedMovement() {
-            _dAccumulatedMovement = 0;
+            //Attempt to move
+            if (!CheckMapForCollisionsAndMove(direction, _bIgnoreCollisions))
+            {
+                _bBumpedIntoSomething = true;
+                //If we can't move, set a timer to go Ethereal
+                if (_dEtherealCD == 0) { _dEtherealCD = 5; }
+            }
+
+            //If, after movement, we've reached the given location, zero it.
+            if (_vMoveTo == Position && !CutsceneManager.Playing)
+            {
+                _vMoveTo = Vector2.Zero;
+            }
         }
 
         /// <summary>
@@ -564,7 +541,8 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void SetMoveObj(Vector2 vec) {
+        public void SetMoveObj(Vector2 vec)
+        {
             _vMoveTo = vec;
         }
 
@@ -572,7 +550,7 @@ namespace RiverHollow.Characters
         /// Sets the active status of the WorldActor
         /// </summary>
         /// <param name="value">Whether the actor is active or not.</param>
-        public void Activate (bool value)
+        public void Activate(bool value)
         {
             _bOnTheMap = value;
         }
@@ -629,6 +607,11 @@ namespace RiverHollow.Characters
         public virtual TextEntry OpenRequests() { return null; }
 
         public virtual void StopTalking() { ResetActorFace(); }
+
+        public override void ProcessRightButtonClick()
+        {
+            Talk();
+        }
 
         /// <summary>
         /// Used when already talking to an NPC, gets the next dialog tag in the conversation
@@ -775,8 +758,9 @@ namespace RiverHollow.Characters
         /// </summary>
         public void DeQueueActorFace()
         {
-            if(_liActorFaceQueue.Count == 0) { ResetActorFace(); }
-            else {
+            if (_liActorFaceQueue.Count == 0) { ResetActorFace(); }
+            else
+            {
                 _eFaceEnum = _liActorFaceQueue[0];
                 _liActorFaceQueue.RemoveAt(0);
             }
@@ -838,7 +822,7 @@ namespace RiverHollow.Characters
 
         public int CurrentCharge;
         public int DummyCharge;
-        public RHTile BaseTile => _arrTiles[0,0];
+        public RHTile BaseTile => _arrTiles[0, 0];
         protected RHTile[,] _arrTiles;
         public PriorityQueue<RHTile> legalTiles;
 
@@ -991,12 +975,10 @@ namespace RiverHollow.Characters
             {
                 if (_vMoveTo != Vector2.Zero)
                 {
-                    AccumulateMovement(gTime);
                     HandleMove(_vMoveTo);
                 }
                 else if (_liTilePath.Count > 0)
                 {
-                    AccumulateMovement(gTime);
                     if (!DoorCheck())
                     {
                         Vector2 targetPos = _liTilePath[0].Position;
@@ -1026,7 +1008,7 @@ namespace RiverHollow.Characters
                             else if (CombatManager.InCombat)
                             {
                                 CombatManager.CheckTileForActiveHazard(this, newTile);
-                            } 
+                            }
                         }
                         else
                         {
@@ -1153,7 +1135,7 @@ namespace RiverHollow.Characters
                 _iCurrentHP -= (_iCurrentHP - iValue >= 0) ? iValue : _iCurrentHP;
                 PlayAnimationVerb(VerbEnum.Hurt);
 
-                if(this == CombatManager.ActiveCharacter) { _bPause = true; }
+                if (this == CombatManager.ActiveCharacter) { _bPause = true; }
 
                 //If the character goes to 0 hp, give them the KO status and unlink any summons
                 if (_iCurrentHP == 0)
@@ -1337,7 +1319,7 @@ namespace RiverHollow.Characters
             ClearTiles();
 
             RHTile lastTile = newTile;
-            for(int i = 0; i <_iSize; i++)
+            for (int i = 0; i < _iSize; i++)
             {
                 for (int j = 0; j < _iSize; j++)
                 {
@@ -1347,7 +1329,7 @@ namespace RiverHollow.Characters
                 }
 
                 //Reset to the first Tile in the current row and go down one
-                lastTile = _arrTiles[i, 0].GetTileByDirection(DirectionEnum.Down);     
+                lastTile = _arrTiles[i, 0].GetTileByDirection(DirectionEnum.Down);
             }
 
             CombatManager.CheckTileForActiveHazard(this);
@@ -1363,9 +1345,9 @@ namespace RiverHollow.Characters
         {
             List<RHTile> rvList = new List<RHTile>();
 
-            foreach(RHTile t in _arrTiles)
+            foreach (RHTile t in _arrTiles)
             {
-                foreach(RHTile adjTile in t.GetAdjacentTiles())
+                foreach (RHTile adjTile in t.GetAdjacentTiles())
                 {
                     //Do not add the same RHTile twice, nor add a RHTile containing ourself.
                     if (!rvList.Contains(adjTile) && adjTile.Character != this)
@@ -1492,7 +1474,7 @@ namespace RiverHollow.Characters
 
         public virtual List<CombatAction> GetCurrentSpecials()
         {
-             return null;
+            return null;
         }
 
         public virtual bool IsSummon() { return false; }
@@ -1614,7 +1596,7 @@ namespace RiverHollow.Characters
             if (Weapon.IsEmpty()) { Weapon.SetGear((Equipment)GetItem(_class.WeaponID)); }
             if (Armor.IsEmpty()) { Armor.SetGear((Equipment)GetItem(_class.ArmorID)); }
             if (Head.IsEmpty()) { Head.SetGear((Equipment)GetItem(_class.HeadID)); }
-            if (Wrist.IsEmpty()) { Wrist.SetGear((Equipment) GetItem(_class.WristID));}
+            if (Wrist.IsEmpty()) { Wrist.SetGear((Equipment)GetItem(_class.WristID)); }
         }
 
         public void AddXP(int x)
@@ -1737,7 +1719,7 @@ namespace RiverHollow.Characters
             public bool IsEmpty() { return _eGear == null; }
         }
     }
-   
+
     public class TravellingNPC : ClassedCombatant
     {
         protected int _iIndex;
@@ -1818,7 +1800,7 @@ namespace RiverHollow.Characters
 
         public override void OpenShop()
         {
-            GUIManager.OpenMainObject(new HUDPurchaseItems(GameManager.DIShops[_iShopIndex].FindAll(m => m.Unlocked)));
+            GUIManager.OpenMainObject(new HUDShopWindow(GameManager.DIShops[_iShopIndex].FindAll(m => m.Unlocked)));
         }
 
         protected bool RequirementsMet()
@@ -1912,7 +1894,8 @@ namespace RiverHollow.Characters
         List<KeyValuePair<string, PathData>> _liTodayPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
         protected int _iScheduleIndex;
 
-        public Villager() {
+        public Villager()
+        {
             _diCollection = new Dictionary<int, bool>();
         }
 
@@ -1930,7 +1913,7 @@ namespace RiverHollow.Characters
             _sprBody = new AnimatedSprite(n.BodySprite);
         }
 
-        public Villager(int index, Dictionary<string, string> stringData, bool loadanimations = true): this()
+        public Villager(int index, Dictionary<string, string> stringData, bool loadanimations = true) : this()
         {
             _eActorType = ActorEnum.Villager;
             _liRequiredBuildingIDs = new List<int>();
@@ -2037,7 +2020,7 @@ namespace RiverHollow.Characters
                     CanGiveGift = true;
                 }
             }
-            else if(CurrentMap != null)
+            else if (CurrentMap != null)
             {
                 CurrentMap.RemoveCharacter(this);
                 CurrentMapName = string.Empty;
@@ -2053,7 +2036,7 @@ namespace RiverHollow.Characters
         {
             TextEntry rv = null;
 
-            foreach(Task q in PlayerManager.TaskLog)
+            foreach (Task q in PlayerManager.TaskLog)
             {
                 q.AttemptProgress(this);
             }
@@ -2069,7 +2052,8 @@ namespace RiverHollow.Characters
                 {
                     if (_bShopIsOpen) { rv = _diDialogue["ShopOpen"]; }
                     else if (!_bHasTalked) { rv = GetDailyDialogue(); }
-                    else {
+                    else
+                    {
                         rv = _diDialogue["Selection"];
                     }
                 }
@@ -2159,7 +2143,7 @@ namespace RiverHollow.Characters
 
                 string strSpawn = string.Empty;
                 if (IsHomeBuilt() || GetSpawnMapName() == MapManager.HomeMapName) { strSpawn = "NPC_" + _iIndex.ToString("00"); }
-                else if(GameManager.VillagersInTheInn < 3){ strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
+                else if (GameManager.VillagersInTheInn < 3) { strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
 
                 Position = Util.SnapToGrid(map.GetCharacterSpawn(strSpawn));
                 map.AddCharacterImmediately(this);
@@ -2332,7 +2316,7 @@ namespace RiverHollow.Characters
                 {
                     FriendshipPoints += _diCollection[item.ItemID] ? 50 : 20;
                     rv = GetDialogEntry("Collection");
-                    int index = new List<int>(_diCollection.Keys).FindIndex( x => x == item.ItemID);
+                    int index = new List<int>(_diCollection.Keys).FindIndex(x => x == item.ItemID);
 
                     _diCollection[item.ItemID] = true;
                     MapManager.Maps[GetSpawnMapName()].AddCollectionItem(item.ItemID, _iIndex, index);
@@ -2352,7 +2336,8 @@ namespace RiverHollow.Characters
                             rv = GetDialogEntry("MarriageNo");
                         }
                     }
-                    else {
+                    else
+                    {
                         giftGiven = false;
                         rv = GetDialogEntry("MarriageNo");
                     }
@@ -2435,7 +2420,7 @@ namespace RiverHollow.Characters
 
             if (_class != null) { LoadClassedCharData(data.classedData); }
 
-            foreach(string s in data.spokenKeys)
+            foreach (string s in data.spokenKeys)
             {
                 _diDialogue[s].Spoken(this);
             }
@@ -2501,7 +2486,7 @@ namespace RiverHollow.Characters
         {
             base.ImportBasics(index, stringData, loadanimations);
 
-            foreach(string s in Util.FindParams(stringData["RequestIDs"]))
+            foreach (string s in Util.FindParams(stringData["RequestIDs"]))
             {
                 RequestItem request = new RequestItem();
                 string[] split = s.Split('-');
@@ -2608,7 +2593,8 @@ namespace RiverHollow.Characters
             Position = Util.SnapToGrid(GameManager.MarketPosition);
         }
 
-        private struct RequestItem {
+        private struct RequestItem
+        {
             public int ItemID;
             public int Number;
         }
@@ -2634,7 +2620,7 @@ namespace RiverHollow.Characters
             _iNextArrival = data.timeToNextArrival;
             _bArrivedOnce = data.arrivedOnce;
 
-            if(_iNextArrival == 0)
+            if (_iNextArrival == 0)
             {
                 ArriveInTown();
             }
@@ -2671,10 +2657,10 @@ namespace RiverHollow.Characters
             set
             {
                 Vector2 vPos = new Vector2(value.X, value.Y - _sprBody.Height + TILE_SIZE);
-                foreach(AnimatedSprite spr in GetSprites()) { spr.Position = vPos; }
+                foreach (AnimatedSprite spr in GetSprites()) { spr.Position = vPos; }
             }
         }
-        public override Rectangle CollisionBox => new Rectangle((int)Position.X + 2, (int)Position.Y + 2, Width - 4, TILE_SIZE - 4);
+        public override Rectangle CollisionBox => ActiveMount != null ? ActiveMount.CollisionBox : new Rectangle((int)Position.X + 2, (int)Position.Y + 2, Width - 4, TILE_SIZE - 4);
 
         #region Clothing
         public Clothes Hat { get; private set; }
@@ -2685,7 +2671,9 @@ namespace RiverHollow.Characters
         Clothes Feet;
         #endregion
 
-        Pet _actPet;
+        public Pet ActivePet { get; private set; }
+        public Mount ActiveMount { get; private set; }
+        public bool Mounted => ActiveMount != null;
 
         public PlayerCharacter() : base()
         {
@@ -2711,9 +2699,8 @@ namespace RiverHollow.Characters
         {
             base.Draw(spriteBatch, useLayerDepth);
 
-            //float bodyDepth = _sprBody.Position.Y + _sprBody.CurrentFrameAnimation.FrameHeight + (Position.X / 100);
             _sprEyes.Draw(spriteBatch, useLayerDepth);
-            //_sprHair.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
+            _sprHair.Draw(spriteBatch, useLayerDepth);
 
             Body?.Sprite.Draw(spriteBatch, useLayerDepth);
             Hat?.Sprite.Draw(spriteBatch, useLayerDepth);
@@ -2765,12 +2752,13 @@ namespace RiverHollow.Characters
             HairIndex = index;
             //Loads the Sprites for the players hair animations for the class based off of the hair ID
             LoadSpriteAnimations(ref _sprHair, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[CharacterClass.ID]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex));
-            _sprHair.SetDepthMod(HAIR_DEPTH);
+            _sprHair.SetLayerDepthMod(HAIR_DEPTH);
         }
 
         public void MoveBy(int x, int y)
         {
             foreach (AnimatedSprite spr in GetSprites()) { spr.MoveBy(x, y); }
+            ActiveMount?.BodySprite.MoveBy(x, y);
         }
 
         public override void PlayAnimation(AnimationEnum anim)
@@ -2779,6 +2767,8 @@ namespace RiverHollow.Characters
         }
         public override void PlayAnimation(VerbEnum verb, DirectionEnum dir)
         {
+            if(verb == VerbEnum.Walk && ActiveMount != null) { verb = VerbEnum.Idle; }
+
             foreach (AnimatedSprite spr in GetSprites()) { spr.PlayAnimation(verb, dir); }
         }
 
@@ -2807,7 +2797,7 @@ namespace RiverHollow.Characters
                 //MAR AWKWARD
                 c.Sprite.Position = _sprBody.Position;
                 c.Sprite.PlayAnimation(_sprBody.CurrentAnimation);
-                c.Sprite.SetDepthMod(0.004f);
+                c.Sprite.SetLayerDepthMod(0.004f);
             }
         }
 
@@ -2832,8 +2822,34 @@ namespace RiverHollow.Characters
 
         public void SetPet(Pet actor)
         {
-            _actPet = actor;
-            _actPet.SetFollow(true);
+            if (actor == null) { ActivePet.SetFollow(false); }
+
+            ActivePet = actor;
+            ActivePet?.SetFollow(true);
+        }
+
+        public void MountUp(Mount actor)
+        {
+            ActiveMount = actor;
+            SpdMult = 1.5f;
+
+            Position = ActiveMount.BodySprite.Position + new Vector2((ActiveMount.BodySprite.Width - BodySprite.Width) / 2, 8);
+
+            foreach(AnimatedSprite spr in GetSprites())
+            {
+                spr.SetLinkedSprite(ActiveMount.BodySprite);
+            }
+        }
+        public void Dismount()
+        {
+            Position = ActiveMount.BodySprite.Position + new Vector2(TILE_SIZE, 0);
+            ActiveMount = null;
+            SpdMult = NORMAL_SPEED;
+
+            foreach (AnimatedSprite spr in GetSprites())
+            {
+                spr.SetLinkedSprite(null);
+            }
         }
     }
 
@@ -2952,7 +2968,7 @@ namespace RiverHollow.Characters
                 //InventoryManager.AddToInventory(int.Parse(loot[arrayID]));
 
                 //_sText = Util.ProcessText(_sText.Replace("*", "*" + loot[arrayID] + "*"));
-               // GUIManager.OpenTextWindow(_sText, this, true);
+                // GUIManager.OpenTextWindow(_sText, this, true);
             }
             return rv;
         }
@@ -2972,7 +2988,7 @@ namespace RiverHollow.Characters
             }
             set
             {
-                _sprBody.Position = new Vector2(value.X , value.Y - _sprBody.Height + TILE_SIZE);
+                _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + TILE_SIZE);
             }
         }
 
@@ -3001,7 +3017,7 @@ namespace RiverHollow.Characters
             _sprBody.AddAnimation(AnimationEnum.Action_Two, 160, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);
             PlayAnimation(AnimationEnum.ObjectIdle);
 
-            if(GameManager.ShippingGremlin == null) { GameManager.ShippingGremlin = this; }
+            if (GameManager.ShippingGremlin == null) { GameManager.ShippingGremlin = this; }
         }
 
         public override void Update(GameTime gTime)
@@ -3027,8 +3043,7 @@ namespace RiverHollow.Characters
         /// <summary>
         /// When we talk to the ShippingGremlin, lock player movement and then play the open animation
         /// </summary>
-        /// <param name="facePlayer">Whether to face the player, pointless here</param>
-        public override void Talk(bool facePlayer = false)
+        public override void ProcessRightButtonClick()
         {
             PlayerManager.AllowMovement = false;
             _sprBody.PlayAnimation(AnimationEnum.Action_One);
@@ -3070,7 +3085,7 @@ namespace RiverHollow.Characters
             return val;
         }
     }
- 
+
     public class Summon : CombatActor
     {
         public override Vector2 Position
@@ -3439,84 +3454,228 @@ namespace RiverHollow.Characters
         }
     }
 
-    public class Pet : WorldActor
+    public class Pet : TalkingActor
     {
-        const double MOVE_COUNTDOWN = 5;
-        private bool _bFollow = false;
-        private bool _bLeash = false;
+        public enum PetStateEnum { Alert, Idle, Leash, Wander };
+        private PetStateEnum _eCurrentState = PetStateEnum.Wander;
 
-        private double _dMoveCountdown = 0;
+        const double MOVE_COUNTDOWN = 2.5;
+        public int ID { get; } = -1;
+        private bool _bFollow = false;
+        private bool _bIdleCooldown = false;
+
+        private double _dCountdown = 0;
 
         public Pet(int id, Dictionary<string, string> stringData) : base()
         {
+            ID = id;
             _eActorType = ActorEnum.Pet;
 
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(stringData), DataManager.FOLDER_MONSTERS + stringData["Texture"]);
+            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Adventurer", id.ToString("00"));
+            DataManager.GetTextData("NPC", ID, ref _sName, "Name");
+
+            List<AnimationData> liData = new List<AnimationData>();
+            AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
+            AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
+            AddToAnimationsList(ref liData, stringData, VerbEnum.Action1);
+            LoadSpriteAnimations(ref _sprBody, liData, _sCreatureFolder + "NPC_" + ID);
         }
 
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
 
-            if (_bFollow)
+            if (_bBumpedIntoSomething)
             {
-                if(PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE * 8) && !_bLeash) { UpdateIdle(gTime); }
-                else { FollowPlayer(gTime); }
+                _bBumpedIntoSomething = false;
+                SetMoveObj(Vector2.Zero);
+            }
+
+            if (_bFollow && !PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE * 8) && _eCurrentState != PetStateEnum.Leash)
+            {
+                if (!_sprBody.IsCurrentAnimation(VerbEnum.Action1, Facing))
+                {
+                    ChangeState(PetStateEnum.Alert);
+                }
+            }
+
+            switch (_eCurrentState)
+            {
+                case PetStateEnum.Alert:
+                    Alert();
+                    break;
+                case PetStateEnum.Idle:
+                    Idle(gTime);
+                    break;
+                case PetStateEnum.Wander:
+                    Wander(gTime);
+                    break;
+                case PetStateEnum.Leash:
+                    Leash();
+                    break;
             }
         }
 
-        private void UpdateIdle(GameTime gTime)
+        public override void ProcessRightButtonClick()
         {
-            if(_dMoveCountdown < MOVE_COUNTDOWN) { _dMoveCountdown += gTime.ElapsedGameTime.TotalSeconds; }
-            else if(MoveToLocation == Vector2.Zero)
-            {
-                _dMoveCountdown -= MOVE_COUNTDOWN;
+            TextEntry text = DataManager.GetGameTextEntry(_bFollow ? "PetUnfollow" : "PetFollow");
+            text.FormatText(_sName);
+            GUIManager.OpenTextWindow(text, this, true);
+        }
 
-                Vector2 moveTo = Vector2.Zero;
-                int distance = RHRandom.Instance().Next(3) * TILE_SIZE;
-                DirectionEnum dir = (DirectionEnum)RHRandom.Instance().Next(0, 3);
-                switch (dir)
+        private void Alert()
+        {
+            if (_sprBody.PlayedOnce)
+            {
+                ChangeState(PetStateEnum.Leash);
+            }
+        }
+
+        private void Idle(GameTime gTime)
+        {
+            if (_dCountdown < 10 + RHRandom.Instance().Next(5)) { _dCountdown += gTime.ElapsedGameTime.TotalSeconds; }
+            else
+            {
+                if (RHRandom.Instance().RollPercent(50))
                 {
-                    case DirectionEnum.Down:
-                        moveTo = new Vector2(0, distance);
-                        break;
-                    case DirectionEnum.Right:
-                        moveTo = new Vector2(distance, 0);
-                        break;
-                    case DirectionEnum.Up:
-                        moveTo = new Vector2(0, -distance);
-                        break;
-                    case DirectionEnum.Left:
-                        moveTo = new Vector2(-distance, 0);
-                        break;
+                    _bIdleCooldown = true;
+                    ChangeState(PetStateEnum.Wander);
                 }
+            }
+        }
+
+        private void Leash()
+        {
+            Vector2 delta = Position - PlayerManager.World.Position;
+            HandleMove(Position - delta);
+
+            if (PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE))
+            {
+                SpdMult = NPC_WALK_SPEED;
+                ChangeState(PetStateEnum.Wander);
+            }
+        }
+
+        private void Wander(GameTime gTime)
+        {
+            if (_dCountdown < MOVE_COUNTDOWN * (RHRandom.Instance().Next(4) * 0.1)) { _dCountdown += gTime.ElapsedGameTime.TotalSeconds; }
+            else if (MoveToLocation == Vector2.Zero)
+            {
+                _dCountdown -= MOVE_COUNTDOWN;
+
+                if (!_bIdleCooldown && RHRandom.Instance().RollPercent(20))
+                {
+                    ChangeState(PetStateEnum.Idle);
+                    return;
+                }
+
+                _bIdleCooldown = false;
+
+                Vector2 moveTo = new Vector2(RHRandom.Instance().Next(8, 32), RHRandom.Instance().Next(8, 32));
+                if (RHRandom.Instance().Next(1, 2) == 1) { moveTo.X *= -1; }
+                if (RHRandom.Instance().Next(1, 2) == 1) { moveTo.Y *= -1; }
 
                 SetMoveObj(Position + moveTo);
             }
 
             if (MoveToLocation != Vector2.Zero)
             {
-                AccumulateMovement(gTime);
                 HandleMove(_vMoveTo);
             }
         }
 
-        private void FollowPlayer(GameTime gTime)
+        public void ChangeState(PetStateEnum state)
         {
-            if (!_bLeash) { _bLeash = true; }
-            Vector2 delta = Position - PlayerManager.World.Position;
-            AccumulateMovement(gTime);
-            HandleMove(Position - delta);
-
-            if (PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE))
+            _eCurrentState = state;
+            switch (state)
             {
-                _bLeash = false;
+                case PetStateEnum.Alert:
+                    PlayAnimation(VerbEnum.Action1, Facing);
+                    break;
+                case PetStateEnum.Idle:
+                    PlayAnimation(VerbEnum.Idle, Facing);
+                    break;
+                case PetStateEnum.Leash:
+                    ChangeMovement(NORMAL_SPEED);
+                    break;
+                case PetStateEnum.Wander:
+                    ChangeMovement(NPC_WALK_SPEED);
+                    break;
             }
+        }
+
+        private void ChangeMovement(float speed)
+        {
+            SpdMult = speed;
+            PlayAnimation(VerbEnum.Walk, Facing);
+            SetMoveObj(Vector2.Zero);
+            _dCountdown = 0;
         }
 
         public void SetFollow(bool value)
         {
             _bFollow = value;
+        }
+
+        public void SpawnInHome()
+        {
+            if (CurrentMap == null) { MapManager.HomeMap.AddCharacterImmediately(this); }
+            else { MapManager.HomeMap.AddCharacter(this); }
+            Position = Util.GetRandomItem(MapManager.HomeMap.FindFreeTiles()).Position;
+        }
+
+        public void SpawnNearPlayer()
+        {
+            if (CurrentMap == null) { MapManager.CurrentMap.AddCharacterImmediately(this); }
+            else { MapManager.CurrentMap.AddCharacter(this); }
+
+            List<RHTile> validTiles = new List<RHTile>();
+            Point playerLocation = PlayerManager.World.CollisionBox.Location;
+            foreach (Vector2 v in Util.GetAllPointsInArea(playerLocation.X - (3 * TILE_SIZE), playerLocation.Y - (3 * TILE_SIZE), TILE_SIZE * 7, TILE_SIZE * 7, TILE_SIZE))
+            {
+                RHTile t = MapManager.CurrentMap.GetTileByPixelPosition(v);
+                if (t != null && t.Passable() && (t.WorldObject == null || t.WorldObject.Walkable)) { validTiles.Add(t); }
+            }
+
+            Position = Util.GetRandomItem(validTiles).Position;
+
+            ChangeState(PetStateEnum.Wander);
+        }
+    }
+
+    public class Mount : WorldActor
+    {
+        public override Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, TILE_SIZE);
+
+        public int ID { get; } = -1;
+        public Mount(int id, Dictionary<string, string> stringData) : base()
+        {
+            ID = id;
+            _eActorType = ActorEnum.Mount;
+            DataManager.GetTextData("NPC", ID, ref _sName, "Name");
+
+            Util.AssignValue(ref _iBodyWidth, "Width", stringData);
+            Util.AssignValue(ref _iBodyHeight, "Height", stringData);
+
+            List<AnimationData> liData = new List<AnimationData>();
+            AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
+            LoadSpriteAnimations(ref _sprBody, liData, _sCreatureFolder + "NPC_" + ID);
+        }
+
+        public override void ProcessRightButtonClick()
+        {
+            if (!PlayerManager.World.Mounted)
+            {
+                PlayerManager.World.MountUp(this);
+            }
+        }
+
+        public void SyncToPlayer()
+        {
+            AnimatedSprite playerSprite = PlayerManager.World.BodySprite;
+            MapManager.CurrentMap.AddCharacter(this);
+            Vector2 mod = new Vector2((playerSprite.Width - BodySprite.Width) / 2, BodySprite.Height - 8);
+            Position = playerSprite.Position + mod; 
         }
     }
 }

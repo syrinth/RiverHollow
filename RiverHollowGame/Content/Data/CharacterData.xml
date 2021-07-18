@@ -107,7 +107,11 @@
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:2][RequestIDs:2-30|2-30|2-30][ShopData:7]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:8][ArrivalPeriod:2][RequestIDs:2-30|2-30|2-30][ShopData:7]</Value>
+    </Item>
+    <Item>
+      <Key>27</Key>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:14][RequestIDs:2-30|2-30|2-30][ShopData:9]</Value>
     </Item>
   </Asset>
 </XnaContent>

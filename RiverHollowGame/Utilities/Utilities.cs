@@ -492,6 +492,11 @@ namespace RiverHollow.Utilities
             return rv;
         }
 
+        public static T GetRandomItem<T>(List<T> theList)
+        {
+            return theList[RHRandom.Instance().Next(theList.Count - 1)];
+        }
+
         public static DirectionEnum GetOppositeDirection(DirectionEnum value)
         {
             switch (value)
@@ -534,6 +539,11 @@ namespace RiverHollow.Utilities
             int rv = 0;
             rv = base.Next(min, max + 1);
             return rv;
+        }
+
+        public bool RollPercent(int percent)
+        {
+            return percent <= RHRandom.Instance().Next(1, 100);
         }
     }
 }

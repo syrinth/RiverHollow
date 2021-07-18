@@ -35,7 +35,7 @@ namespace RiverHollow.Game_Managers
         #region Game Enums
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, ShowRequests, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Party };
-        public enum TextEntryTriggerEnum { None, UseItem, ConfirmGift, EndDay, Exit, Donate }
+        public enum TextEntryTriggerEnum { None, UseItem, ConfirmGift, EndDay, Exit, Donate, PetFollow, PetUnfollow }
 
         public enum RarityEnum { C, U, R, M };
         public enum WeatherEnum { Sunny, Raining, Snowing };

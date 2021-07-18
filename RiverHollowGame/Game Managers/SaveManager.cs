@@ -151,6 +151,12 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Storage")]
             public List<StorageData> Storage;
 
+            [XmlElement(ElementName = "ActivePet")]
+            public int activePet;
+
+            [XmlArray(ElementName = "Pets")]
+            public List<int> liPets;
+
             [XmlElement(ElementName = "AdventurerData")]
             public ClassedCharData adventurerData;
         }
@@ -617,26 +623,9 @@ namespace RiverHollow.Game_Managers
                 ShopData = new List<ShopData>(),
                 TheMailbox = PlayerManager.PlayerMailbox.SaveData(),
                 optionData = SaveOptions()
-            };
-
-            PlayerData playerData = PlayerManager.SaveData();
-
-            // Initialize the new data values.
-            foreach (Item i in InventoryManager.PlayerInventory)
-            {
-                ItemData itemData = Item.SaveData(i);
-                playerData.Items.Add(itemData);
-            }
-
-            foreach (KeyValuePair<int, int> kvp in PlayerManager.GetStorageItems()) {
-                StorageData storageData = new StorageData
-                {
-                    objID = kvp.Key,
-                    number = kvp.Value
-                };
-                playerData.Storage.Add(storageData);
-            }
-            data.playerData = playerData;
+            };          
+            
+            data.playerData = PlayerManager.SaveData();
 
             foreach (Building b in PlayerManager.BuildingList)
             {
@@ -813,10 +802,10 @@ namespace RiverHollow.Game_Managers
             _iSaveID = dataToLoad.saveID;
             MapManager.CurrentMap = MapManager.Maps[dataToLoad.currentMap];
             PlayerManager.Initialize();
-            PlayerManager.LoadData(dataToLoad.playerData);
             PlayerManager.CurrentMap = MapManager.Maps[dataToLoad.currentMap].Name;
             PlayerManager.World.Position = Util.SnapToGrid(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
             PlayerManager.World.DetermineFacing(new Vector2(0, 1));
+            PlayerManager.LoadData(dataToLoad.playerData);
             LoadOptions(dataToLoad.optionData);
             GameCalendar.LoadCalendar(dataToLoad.Calendar);
             EnvironmentManager.LoadEnvironment(dataToLoad.Environment);
