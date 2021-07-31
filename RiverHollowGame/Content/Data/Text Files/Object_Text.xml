@@ -518,6 +518,10 @@
       <Value>[Name:Flower Shop]</Value>
     </Item>
     <Item>
+      <Key>Building_33</Key>
+      <Value>[Name:Stables]</Value>
+    </Item>
+    <Item>
       <Key>NPC_0</Key>
       <Value>[Name:Henry]</Value>
     </Item>
@@ -552,6 +556,10 @@
     <Item>
       <Key>NPC_8</Key>
       <Value>[Name:Slime Mount]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_9</Key>
+      <Value>[Name:Birb_1]</Value>
     </Item>
     <Item>
       <Key>StatusEffect_0</Key>

@@ -195,7 +195,7 @@ namespace RiverHollow.Items
 
         public virtual bool PlaceOnMap(Vector2 pos, RHMap map)
         {
-            if (map == MapManager.HomeMap) { PlayerManager.AddToTownObjects(_iID); }
+            if (map == MapManager.TownMap) { PlayerManager.AddToTownObjects(this); }
             pos = new Vector2(pos.X - (_iBaseXOffset * TILE_SIZE), pos.Y - (_iBaseYOffset * TILE_SIZE));
             SnapPositionToGrid(pos);
             return map.PlaceWorldObject(this);
@@ -1743,14 +1743,14 @@ namespace RiverHollow.Items
                 public void SetPlant(Plant obj)
                 {
                     if (obj != null) {
-                        PlayerManager.AddToTownObjects(obj.ID);
+                        PlayerManager.AddToTownObjects(obj);
                         if (_objPlant != null && _objPlant.FinishedGrowing())
                         {
                             CurrentMap?.AddLights(_objPlant?.GetLights());
                         }
                     }
                     else if(_objPlant != null) {
-                        PlayerManager.RemoveTownObjects(_objPlant.ID);
+                        PlayerManager.RemoveTownObjects(_objPlant);
                         CurrentMap.RemoveLights(_objPlant.GetLights());
                     }
 

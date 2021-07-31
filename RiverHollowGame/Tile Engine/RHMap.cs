@@ -946,7 +946,6 @@ namespace RiverHollow.Tile_Engine
 
                     if (validTiles.Count == 0)
                     {
-                        int pump = 0;
                         break;
                     }
                 }
@@ -1354,13 +1353,13 @@ namespace RiverHollow.Tile_Engine
 
             if (IsPaused()) { return false; }
 
-            if (PlayerManager.World.Mounted)
+            RHTile tile = MouseTile;
+
+            if (PlayerManager.World.Mounted && (tile.GetTravelPoint() == null || !PlayerManager.World.ActiveMount.CanEnterBuilding(tile.GetTravelPoint().LinkedMap)))
             {
                 PlayerManager.World.Dismount();
                 return true;
             }
-
-            RHTile tile = MouseTile;
 
             //Do nothing if no tile could be retrieved
             if (tile == null) { return rv; }
@@ -1665,12 +1664,12 @@ namespace RiverHollow.Tile_Engine
 
                     switch (toRemove.Type)
                     {
-                        case ObjectTypeEnum.Beehive:
-                        case ObjectTypeEnum.Buildable:
                         case ObjectTypeEnum.Decor:
                             if (((Decor)toRemove).HasDisplay) { ((Decor)toRemove).RemoveDisplayEntity(); }
                             else { goto case ObjectTypeEnum.Wall; }
                             break;
+                        case ObjectTypeEnum.Beehive:
+                        case ObjectTypeEnum.Buildable:
                         case ObjectTypeEnum.Floor:
                         case ObjectTypeEnum.Garden:
                         case ObjectTypeEnum.Wall:
@@ -2326,6 +2325,20 @@ namespace RiverHollow.Tile_Engine
             }
 
             return rvList;
+        }
+
+        public List<RHTile> GetAllTiles(bool passableOnly)
+        {
+            List<RHTile> tileList = new List<RHTile>();
+
+            foreach(RHTile tile in _arrTiles)
+            {
+                if (!passableOnly || tile.Passable())
+                {
+                    tileList.Add(tile);
+                }
+            }
+            return tileList;
         }
 
         internal MapData SaveData()
@@ -3147,7 +3160,7 @@ namespace RiverHollow.Tile_Engine
             CollisionBox = Util.FloatRectangle(obj.Position, obj.Size.Width, obj.Size.Height);
             if (obj.Properties.ContainsKey("Map"))
             {
-                LinkedMap = obj.Properties["Map"] == "Home" ? MapManager.HomeMapName : obj.Properties["Map"];
+                LinkedMap = obj.Properties["Map"] == "Home" ? MapManager.TownMapName : obj.Properties["Map"];
                 IsActive = true;
             }
 

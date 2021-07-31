@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Buildable][Image:0-0]</Value>
+      <Value>[Type:Buildable][Image:192-16][ReqItems:2-1|61-5]</Value>
     </Item>
     <Item>
       <Key>5</Key>

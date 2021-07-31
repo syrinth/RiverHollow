@@ -463,7 +463,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.World.ModifyHealth(1, false);
             GoToHUDScreen();
 
-            MapManager.FadeToNewMap(MapManager.HomeMap, MapManager.HomeMap.GetCharacterSpawn("PlayerSpawn"));
+            MapManager.FadeToNewMap(MapManager.TownMap, MapManager.TownMap.GetCharacterSpawn("PlayerSpawn"));
         }
         #endregion
 

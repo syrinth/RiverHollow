@@ -157,6 +157,9 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Pets")]
             public List<int> liPets;
 
+            [XmlArray(ElementName = "Mounts")]
+            public List<int> liMounts;
+
             [XmlElement(ElementName = "AdventurerData")]
             public ClassedCharData adventurerData;
         }
@@ -805,7 +808,6 @@ namespace RiverHollow.Game_Managers
             PlayerManager.CurrentMap = MapManager.Maps[dataToLoad.currentMap].Name;
             PlayerManager.World.Position = Util.SnapToGrid(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
             PlayerManager.World.DetermineFacing(new Vector2(0, 1));
-            PlayerManager.LoadData(dataToLoad.playerData);
             LoadOptions(dataToLoad.optionData);
             GameCalendar.LoadCalendar(dataToLoad.Calendar);
             EnvironmentManager.LoadEnvironment(dataToLoad.Environment);
@@ -814,7 +816,7 @@ namespace RiverHollow.Game_Managers
             {
                 Building newBuilding = DataManager.GetBuilding(b.iBuildingID);
                 newBuilding.LoadData(b);
-                newBuilding.PlaceOnMap(newBuilding.MapPosition, MapManager.Maps[MapManager.HomeMapName]);
+                newBuilding.PlaceOnMap(newBuilding.MapPosition, MapManager.Maps[MapManager.TownMapName]);
             }
 
             foreach (MapData mapData in dataToLoad.MapData)
@@ -882,6 +884,10 @@ namespace RiverHollow.Game_Managers
                     }
                 }
             }
+
+            PlayerManager.LoadData(dataToLoad.playerData);
+            //After we've loaded everything, spawn the mounts in the Stables
+            PlayerManager.SpawnMounts();
 
             //foreach (BuildInfo b in GameManager.DIBuildInfo.Values)
             //{

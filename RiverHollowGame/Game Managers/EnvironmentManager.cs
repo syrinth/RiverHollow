@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Characters;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
@@ -60,6 +61,18 @@ namespace RiverHollow.Game_Managers
                 for (int i = 0; i < GetEnvironmentalDensity(); i++)
                 {
                     AddNewEnvironmentalEffect();
+                }
+            }
+
+            if (MapManager.CurrentMap.IsOutside)
+            {
+                List<RHTile> validTiles = MapManager.CurrentMap.GetAllTiles(true);
+
+                for (int i = 0; i < 10; i++)
+                {
+                    WorldActor actor = DataManager.GetNPCByIndex(9);
+                    actor.Position = Util.GetRandomItem(validTiles).Position;
+                    map.AddCharacter(actor);
                 }
             }
         }

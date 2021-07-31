@@ -52,6 +52,7 @@ namespace Database_Editor
         const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID,SubObjects,SeedID,HoneyID,LightID";
         const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
         const string SHOPDATA_REF_TAGS = "ItemID,BuildingID,ObjectID,NPC_ID";
+        const string NPC_REF_TAG = "BuildingID";
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
         const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
         const string ACTIONS_REF_TAGS = "StatusEffectID,NPC_ID";
@@ -108,6 +109,7 @@ namespace Database_Editor
             cbCharacterType.SelectedIndex = 0;
 
             cbNPCType.Items.Clear();
+            cbNPCType.Items.Add("Type:" + ActorEnum.Environmental.ToString());
             cbNPCType.Items.Add("Type:" + ActorEnum.Mount.ToString());
             cbNPCType.Items.Add("Type:" + ActorEnum.Pet.ToString());
             cbNPCType.Items.Add("Type:" + ActorEnum.Spirit.ToString());
@@ -175,7 +177,7 @@ namespace Database_Editor
             LoadXMLDictionary(MONSTERS_XML_FILE, MONSTERS_REF_TAGS, TAGS_FOR_MONSTERS);
             LoadXMLDictionary(ACTIONS_XML_FILE, ACTIONS_REF_TAGS, TAGS_FOR_COMBAT_ACTIONS);
             LoadXMLDictionary(BUILDINGS_XML_FILE, BUILDINGS_REF_TAGS, TAGS_FOR_BUILDINGS);
-            LoadXMLDictionary(NPCS_XML_FILE, "", TAGS_FOR_NPCS);
+            LoadXMLDictionary(NPCS_XML_FILE, NPC_REF_TAG, TAGS_FOR_NPCS);
             LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", TAGS_FOR_STATUS_EFFECTS);
             LoadXMLDictionary(LIGHTS_XML_FILE, "", TAGS_FOR_LIGHTS);
             LoadXMLDictionary(DUNGEON_XML_FILE, DUNGEON_REF_TAGS, TAGS_FOR_DUNGEONS);
@@ -949,10 +951,11 @@ namespace Database_Editor
             LoadGenericDataInfo(data, tbNPCName, tbNPCID, dgvNPCTags, tbNPCDescription);
 
             int selectedIndex = 0;
-            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Mount) { selectedIndex = 0; }
-            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Pet) { selectedIndex = 1; }
-            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Spirit) { selectedIndex = 2; }
-            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Summon) { selectedIndex = 3; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Environmental) { selectedIndex = 0; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Mount) { selectedIndex = 1; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Pet) { selectedIndex = 2; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Spirit) { selectedIndex = 3; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Summon) { selectedIndex = 4; }
             cbNPCType.SelectedIndex = selectedIndex;
         }
         private void LoadStatusEffectInfo()

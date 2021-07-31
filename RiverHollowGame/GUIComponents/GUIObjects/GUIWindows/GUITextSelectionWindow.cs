@@ -252,11 +252,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     }
                     else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.PetFollow))
                     {
-                        PlayerManager.World.SetPet(null);
+                        PlayerManager.World.SetPet((Pet)GameManager.CurrentNPC);
                     }
                     else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.PetUnfollow))
                     {
-                        PlayerManager.World.SetPet((Pet)GameManager.CurrentNPC);
+                        PlayerManager.World.SetPet(null);
                     }
                 }
                 else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.No)){

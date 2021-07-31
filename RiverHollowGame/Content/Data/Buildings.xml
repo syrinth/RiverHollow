@@ -133,5 +133,9 @@
       <Key>32</Key>
       <Value>[Texture:Flower_Shop][Dimensions:112-128][BaseOffset:0-4][Base:7-4][Entrance:64-96-16-32][ReqItems:55-5|60-5]</Value>
     </Item>
+    <Item>
+      <Key>33</Key>
+      <Value>[Texture:Stables][Dimensions:128-208][BaseOffset:0-4][Base:8-9][Entrance:48-176-32-32][ReqItems:55-5|60-5][Unlocked]</Value>
+    </Item>
   </Asset>
 </XnaContent>

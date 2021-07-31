@@ -15,6 +15,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.GUIComponents.GUIObjects;
 using static RiverHollow.Items.Buildable;
+using System.Linq;
 
 namespace RiverHollow.Game_Managers
 {
@@ -49,6 +50,7 @@ namespace RiverHollow.Game_Managers
         public static bool ReadyToSleep = false;
 
         private static List<Pet> _liPets;
+        private static List<Mount> _liMounts;
         private static List<ClassedCombatant> _liParty;
         private static Dictionary<int, int> _diStorage;
 
@@ -70,15 +72,16 @@ namespace RiverHollow.Game_Managers
 
         #region Data Collections
         public static Dictionary<int, BuildInfo> DIBuildInfo;
-        private static Dictionary<int, int> _diTownObjects;
+        private static Dictionary<int, List<WorldObject>> _diTownObjects;
         #endregion
 
         public static void Initialize()
         {
             _liPets = new List<Pet>();
+            _liMounts = new List<Mount>();
 
             _diStorage = new Dictionary<int, int>();
-            _diTownObjects = new Dictionary<int, int>();
+            _diTownObjects = new Dictionary<int, List<WorldObject>>();
             _diTools = new Dictionary<ToolEnum, Tool>();
 
             TaskLog = new List<Task>();
@@ -108,10 +111,6 @@ namespace RiverHollow.Game_Managers
                 string[] splitString = s.Split('-');
                 InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1), true, true);
             }
-
-            WorldActor act = DataManager.GetNPCByIndex(8);
-            act.Position = PlayerManager.World.Position;
-            MapManager.CurrentMap.AddCharacterImmediately(act);
         }
 
         public static void SetPath(List<RHTile> list)
@@ -383,15 +382,38 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void AddToTownObjects(int worldObjectID) { _diTownObjects[worldObjectID] = GetNumberTownObjects(worldObjectID) + 1; }
-        public static void RemoveTownObjects(int worldObjectID) { _diTownObjects[worldObjectID] = GetNumberTownObjects(worldObjectID) - 1; }
-        public static int GetNumberTownObjects(int worldObjectID)
+        public static void AddToTownObjects(WorldObject obj) {
+
+            if (!_diTownObjects.ContainsKey(obj.ID)) { _diTownObjects[obj.ID] = new List<WorldObject>(); }
+            if (!_diTownObjects[obj.ID].Contains(obj))
+            {
+                _diTownObjects[obj.ID].Add(obj);
+            }
+        }
+        public static void RemoveTownObjects(WorldObject obj)
+        {
+            if (!_diTownObjects[obj.ID].Contains(obj))
+            {
+                _diTownObjects[obj.ID].Add(obj);
+            }
+        }
+        public static int GetNumberTownObjects(int objID)
         {
             int rv = 0;
 
-            if (_diTownObjects.ContainsKey(worldObjectID))
+            if (_diTownObjects.ContainsKey(objID))
             {
-                rv = _diTownObjects[worldObjectID];
+                rv = _diTownObjects[objID].Count;
+            }
+            return rv;
+        }
+        public static List<WorldObject> GetTownObjectsByID(int objID)
+        {
+            List<WorldObject> rv = new List<WorldObject>();
+
+            if (_diTownObjects.ContainsKey(objID))
+            {
+                rv = _diTownObjects[objID];
             }
             return rv;
         }
@@ -414,6 +436,7 @@ namespace RiverHollow.Game_Managers
         {
             return _diBuildings[id];
         }
+        public static bool IsBuilt(int id) { return _diBuildings.ContainsKey(id); }
         public static int GetNewBuildingID()
         {
             return _diBuildings.Count +1 ;
@@ -584,6 +607,12 @@ namespace RiverHollow.Game_Managers
                 b.Rollover();
             }
 
+            foreach(Pet p in _liPets)
+            {
+                if (World.ActivePet == p) { p.SpawnNearPlayer(); }
+                else { p.SpawnInHome(); }
+            }
+
             PlayerMailbox.Rollover();
             GameManager.VillagersInTheInn = 0;
         }
@@ -610,7 +639,8 @@ namespace RiverHollow.Game_Managers
                 currentClass = World.CharacterClass.ID,
                 Items = new List<ItemData>(),
                 Storage = new List<StorageData>(),
-                liPets = new List<int>()
+                liPets = new List<int>(),
+                liMounts = new List<int>()
             };
 
             // Initialize the new data values.
@@ -634,6 +664,11 @@ namespace RiverHollow.Game_Managers
             foreach (Pet p in _liPets)
             {
                 data.liPets.Add(p.ID);
+            }
+
+            foreach (Mount m in _liMounts)
+            {
+                data.liMounts.Add(m.ID);
             }
 
             return data;
@@ -687,6 +722,12 @@ namespace RiverHollow.Game_Managers
                 }
                 else { p.SpawnInHome(); }
                 AddPet(p);
+            }
+
+            foreach (int i in data.liMounts)
+            {
+                Mount m = (Mount)DataManager.GetNPCByIndex(i);
+                AddMount(m);
             }
         }
 
@@ -862,9 +903,14 @@ namespace RiverHollow.Game_Managers
 
         #endregion
 
-        public static void AddPet(Pet actor)
+        public static void AddPet(Pet actor) { _liPets.Add(actor); }
+        public static void AddMount(Mount actor) { _liMounts.Add(actor); }
+        public static void SpawnMounts()
         {
-            _liPets.Add(actor);
+            foreach(Mount actor in _liMounts)
+            {
+                actor.SpawnInHome();
+            }
         }
 
         public static Mailbox PlayerMailbox;

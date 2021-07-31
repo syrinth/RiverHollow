@@ -580,6 +580,8 @@ namespace RiverHollow.Game_Managers
                 Dictionary<string, string> diData = _diNPCData[id];
                 switch (Util.ParseEnum<ActorEnum>(diData["Type"]))
                 {
+                    case ActorEnum.Environmental:
+                        return new EnvironmentalActor(id, diData);
                     case ActorEnum.Mount:
                         return new Mount(id, diData);
                     case ActorEnum.Pet:
