@@ -253,35 +253,6 @@ namespace RiverHollow.Game_Managers
 
             return adv;
         }
-        public static int GetDuelistsInParty()
-        {
-            return GetClassInParty(5);
-        }
-        public static int GetKnightsInParty()
-        {
-            return GetClassInParty(6);
-        }
-        public static int GetRoguesInParty()
-        {
-            return GetClassInParty(7);
-        }
-        public static int GetBardsInParty()
-        {
-            return GetClassInParty(8);
-        }
-        public static int GetClassInParty(int classID)
-        {
-            int rv = 0;
-            foreach (ClassedCombatant c in _liParty)
-            {
-                if (c.CharacterClass.ID == classID)
-                {
-                    rv++;
-                }
-            }
-
-            return rv;
-        }
 
         /// <summary>
         /// Adds a Task to the Task Log.
@@ -353,6 +324,12 @@ namespace RiverHollow.Game_Managers
         }
 
         #region Town Helpers
+        public static int GetTownScore() {
+            int rv = 0;
+
+            return rv;
+        }
+
         public static Dictionary<int, int> GetStorageItems()
         {
             Dictionary<int, int> rvDictionary = new Dictionary<int, int>();
@@ -417,6 +394,7 @@ namespace RiverHollow.Game_Managers
             }
             return rv;
         }
+        public static IReadOnlyDictionary<int, List<WorldObject>> GetTownObejcts() { return _diTownObjects; }
 
         public static void AddBuilding(Building b)
         {

@@ -522,6 +522,10 @@
       <Value>[Name:Stables]</Value>
     </Item>
     <Item>
+      <Key>Building_34</Key>
+      <Value>[Name:Town Hall]</Value>
+    </Item>
+    <Item>
       <Key>NPC_0</Key>
       <Value>[Name:Henry]</Value>
     </Item>

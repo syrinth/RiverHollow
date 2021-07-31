@@ -3513,3 +3513,20 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Creatures/NPC_9.png
 
+#begin Textures/Buildings/Town_Hall.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/Town_Hall.png
+
+#begin Maps/Town/mapTown_Hall_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapTown_Hall_1.tmx
+

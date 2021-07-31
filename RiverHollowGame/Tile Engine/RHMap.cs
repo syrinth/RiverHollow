@@ -20,6 +20,7 @@ using static RiverHollow.Items.Buildable;
 using System.Linq;
 using static RiverHollow.Items.Buildable.AdjustableObject;
 using RiverHollow.GUIComponents.Screens;
+using RiverHollow.GUIComponents.MainObjects;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -79,6 +80,7 @@ namespace RiverHollow.Tile_Engine
         public Dictionary<string, TravelPoint> DictionaryTravelPoints { get; }
         public Dictionary<string, Vector2> DictionaryCharacterLayer { get; }
         private List<TiledMapObject> _liMapObjects;
+        private List<KeyValuePair<Rectangle, string>> _liClickObjects;
 
         private List<Item> _liItemsToRemove;
         private List<WorldActor> _liActorsToRemove;
@@ -97,6 +99,7 @@ namespace RiverHollow.Tile_Engine
             _liBuildings = new List<Building>();
             _liItems = new List<Item>();
             _liMapObjects = new List<TiledMapObject>();
+            _liClickObjects = new List<KeyValuePair<Rectangle, string>>();
             _liShopData = new List<ShopLocation>();
             _liPlacedWorldObjects = new List<WorldObject>();
             _liLights = new List<Light>();
@@ -528,6 +531,13 @@ namespace RiverHollow.Tile_Engine
                             foreach(Vector2 v in Util.GetAllPointsInArea(mapObject.Position.X, mapObject.Position.Y,mapObject.Size.Width, mapObject.Size.Height, TILE_SIZE))
                             {
                                 GetTileByPixelPosition(v).SetWallTrue();
+                            }
+                        }
+                        else if (mapObject.Name.StartsWith("Display"))
+                        {
+                            foreach (Vector2 v in Util.GetAllPointsInArea(mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height, TILE_SIZE))
+                            {
+                                GetTileByPixelPosition(v).SetClickAction(mapObject.Name);
                             }
                         }
                         else { _liMapObjects.Add(mapObject); }
@@ -1364,32 +1374,7 @@ namespace RiverHollow.Tile_Engine
             //Do nothing if no tile could be retrieved
             if (tile == null) { return rv; }
 
-            if (tile.GetTravelPoint() != null)
-            {
-                TravelPoint obj = tile.GetTravelPoint();
-
-                if (PlayerManager.PlayerInRange(obj.CollisionBox) && !MapManager.ChangingMaps())
-                {
-                    // if (obj.BuildingID > 1) { MapManager.EnterBuilding(obj, PlayerManager.Buildings.Find(x => x.PersonalID == obj.BuildingID)); }
-                    //else { MapManager.ChangeMaps(PlayerManager.World, this.Name, obj); }
-                    MapManager.ChangeMaps(PlayerManager.World, this.Name, obj);
-                    SoundManager.PlayEffect("close_door_1");
-                    return true;
-                }
-            }
-            else if (tile.GetWorldObject() != null)
-            {
-                if (PlayerManager.PlayerInRange(tile.Center.ToPoint()))
-                {
-                    tile.GetWorldObject().ProcessRightClick();
-                    rv = true;
-                }
-            }
-
-            if (tile.ContainsProperty("Save", out string val) && val.Equals("true"))
-            {
-                GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("Save"));
-            }
+            rv = tile.ProcessRightClick();
 
             foreach (ShopLocation shop in _liShopData)
             {
@@ -2625,6 +2610,7 @@ namespace RiverHollow.Tile_Engine
         public Vector2 Center => new Vector2(Position.X + TILE_SIZE/2, Position.Y + TILE_SIZE/2);
         public Rectangle Rect => Util.FloatRectangle(Position, TILE_SIZE, TILE_SIZE);
 
+        string _sClickAction = string.Empty;
         TravelPoint _travelPoint;
         public CombatActor Character { get; private set; }
 
@@ -2639,8 +2625,7 @@ namespace RiverHollow.Tile_Engine
         bool _bArea = false;
         bool _bSelected = false;
         bool _bLegalTile = false;
-        bool _bIsWall = false;
-        public bool IsWall => _bIsWall;
+        public bool IsWall { get; private set; } = false;
 
         public RHTile(int x, int y, string mapName)
         {
@@ -2668,6 +2653,42 @@ namespace RiverHollow.Tile_Engine
             if (WorldObject != null) { WorldObject.Draw(spriteBatch); }
         }
 
+        public bool ProcessRightClick()
+        {
+            bool rv = false;
+
+            if (!string.IsNullOrEmpty(_sClickAction))
+            {
+                if (_sClickAction.Equals("Display_Town")) { GUIManager.OpenMainObject(new TownInfoWindow()); }
+            }
+            if (GetTravelPoint() != null)
+            {
+                if (PlayerManager.PlayerInRange(_travelPoint.CollisionBox) && !MapManager.ChangingMaps())
+                {
+                    // if (obj.BuildingID > 1) { MapManager.EnterBuilding(obj, PlayerManager.Buildings.Find(x => x.PersonalID == obj.BuildingID)); }
+                    //else { MapManager.ChangeMaps(PlayerManager.World, this.Name, obj); }
+                    MapManager.ChangeMaps(PlayerManager.World, MapName, _travelPoint);
+                    SoundManager.PlayEffect("close_door_1");
+                    return true;
+                }
+            }
+            else if (GetWorldObject() != null)
+            {
+                if (PlayerManager.PlayerInRange(Center.ToPoint()))
+                {
+                    GetWorldObject().ProcessRightClick();
+                    rv = true;
+                }
+            }
+
+            if (ContainsProperty("Save", out string val) && val.Equals("true"))
+            {
+                GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("Save"));
+            }
+
+            return rv;
+        }
+
         private bool DisplaySelectedTile()
         {
             return CombatPhaseCheck(CmbtPhaseEnum.ChooseActionTarget) || CombatPhaseCheck(CmbtPhaseEnum.ChooseMoveTarget) || CombatPhaseCheck(CmbtPhaseEnum.MainSelection);
@@ -2675,7 +2696,7 @@ namespace RiverHollow.Tile_Engine
 
         public void SetWallTrue()
         {
-            _bIsWall = true;
+            IsWall = true;
         }
 
         public bool SetFloor(Floor f)
@@ -2813,6 +2834,7 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
+        public void SetClickAction(string str) { _sClickAction = str; }
         public void SetTravelPoint(TravelPoint obj) { _travelPoint = obj; }
         public TravelPoint GetTravelPoint()
         {

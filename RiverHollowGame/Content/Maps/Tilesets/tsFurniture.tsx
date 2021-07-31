@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.4" tiledversion="1.4.1" name="tsFurniture" tilewidth="16" tileheight="16" tilecount="300" columns="20">
+<tileset version="1.5" tiledversion="1.6.0" name="tsFurniture" tilewidth="16" tileheight="16" tilecount="300" columns="20">
  <image source="tsFurniture.png" trans="ffffff" width="320" height="240"/>
  <tile id="60">
   <properties>
@@ -7,6 +7,16 @@
   </properties>
  </tile>
  <tile id="61">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="69">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="70">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>

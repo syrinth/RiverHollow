@@ -21,10 +21,12 @@ namespace RiverHollow.Game_Managers
 
         private static int _iSeasonPrecipDays = 0;
         private static List<EnvironmentalEffect> _liEnvironmentalEffects;
+        private static List<WorldActor> _liEnvironmentalActors;
 
         public static void Initialize()
         {
             _liEnvironmentalEffects = new List<EnvironmentalEffect>();
+            _liEnvironmentalActors = new List<WorldActor>();
         }
 
         public static void Update(GameTime gTime)
@@ -73,6 +75,7 @@ namespace RiverHollow.Game_Managers
                     WorldActor actor = DataManager.GetNPCByIndex(9);
                     actor.Position = Util.GetRandomItem(validTiles).Position;
                     map.AddCharacter(actor);
+                    _liEnvironmentalActors.Add(actor);
                 }
             }
         }
@@ -88,6 +91,10 @@ namespace RiverHollow.Game_Managers
         public static void UnloadEnvironment()
         {
             _liEnvironmentalEffects.Clear();
+            foreach(WorldActor actor in _liEnvironmentalActors)
+            {
+                actor.CurrentMap.RemoveCharacter(actor);
+            }
         }
 
         public static void AddNewEnvironmentalEffect()
