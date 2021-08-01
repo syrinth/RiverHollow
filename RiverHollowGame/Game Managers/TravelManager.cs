@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using RiverHollow.Characters;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading;
 
 namespace RiverHollow.Game_Managers
 {
@@ -16,22 +17,61 @@ namespace RiverHollow.Game_Managers
         private static int _iMaxPath = -1;
         private static WorldActor _actTraveller;
 
+        #region Threading
+        static Thread _thread;
+        static List<Villager> _liPathingRequest;
+
+        /// <summary>
+        /// Nulls the threads
+        /// </summary>
+        /// <param name="pathingThread">Reference to the villager's thread</param>
+        public static void FinishThreading(ref Thread pathingThread)
+        {
+            _thread = null;
+            pathingThread = null;
+        }
+
+        /// <summary>
+        /// Call to register a pathing request with the TravelManager
+        /// </summary>
+        /// <param name="actor">The actor to register to pathfind</param>
+        public static void RequestPathing(Villager actor)
+        {
+            if(_liPathingRequest == null) { _liPathingRequest = new List<Villager>(); }
+            if (!_liPathingRequest.Contains(actor)) { _liPathingRequest.Add(actor); }
+        }
+
+        /// <summary>
+        /// Assuming there are requests to process, and there is not currently
+        /// a thread being worked on, start the villager's CalculatePathThreaded method
+        /// </summary>
+        public static void DequeuePathingRequest()
+        {
+            if (_liPathingRequest != null && _liPathingRequest.Count > 0 && _thread == null)
+            {
+                _thread = _liPathingRequest[0].CalculatePathThreaded();
+                _liPathingRequest.RemoveAt(0);
+            }
+        }
+        #endregion
+
+        #region Travel Log
         public static bool IsDebugEnabled()
         {
             bool rv=false;
             if (DataManager.Config[8]["DebugLogs"].Equals("Enabled"))
             {
-                rv=true;
+                rv = true;
             }
             return rv;
         }
 
-
-        public static void NewTravelLog(string name)
+        public static void NewTravelLog(string logName)
         {
             if (IsDebugEnabled())
             {
-                _swWriter = new StreamWriter(DataManager.Config[8]["InstallDrive"] + @":" + DataManager.Config[8]["DebugPath"] + name + " - TravelManager.txt");
+                string fileName = DataManager.Config[8]["InstallDrive"] + @":" + DataManager.Config[8]["DebugPath"] + logName + " - TravelManager.txt";
+                _swWriter = new StreamWriter(fileName);
             }
         }
 
@@ -39,7 +79,7 @@ namespace RiverHollow.Game_Managers
         {
             if (IsDebugEnabled())
             {
-                _swWriter.Close();
+                _swWriter?.Close();
             }
         }
 
@@ -49,55 +89,14 @@ namespace RiverHollow.Game_Managers
         /// <param name="text"></param>
         public static void WriteToTravelLog(string text)
         {
-            try
+            if (IsDebugEnabled())
             {
-                if (IsDebugEnabled())
-                {
-                    _swWriter.WriteLine(text);
-                }
-            }
-            catch (Exception)
-            {
+                _swWriter?.WriteLine(text);
             }
         }
+        #endregion
 
-        //public static void FindLocation(string currMap, string location)
-        //{
-        //    RHMap map = MapManager.Maps[currMap];
-        //    Dictionary<string, string> mapCameFrom = new Dictionary<string, string>();
-        //    Dictionary<string, double> mapCostSoFar = new Dictionary<string, double>();
-
-        //    var frontier = new PriorityQueue<string>();
-        //    frontier.Enqueue(currMap, 0);
-        //    mapCameFrom[currMap] = currMap;
-        //    mapCostSoFar[currMap] = 0;
-
-        //    while (frontier.Count > 0)
-        //    {
-        //        //Take the Node with the lowest distance
-        //        string testMap = frontier.Dequeue();
-
-        //        //Iterate over each map linked to the node
-        //        foreach(string linkedMap in _diNodes[testMap].GetMaps())
-        //        {
-        //            double newCost = mapCostSoFar[testMap] + _diNodes[testMap].GetRouteLength(mapCameFrom[testMap]);
-        //            //if (!mapCostSoFar.ContainsKey(exit.Value))
-        //            //{
-        //            //    mapCostSoFar[exit.Value] = newCost + pathToExit.Count;
-        //            //    frontier.Enqueue(exit.Value, newCost);
-        //            //    string[] split = null;
-        //            //    if (exit.Value.Contains(":"))
-        //            //    {
-        //            //        split = exit.Value.Split(':');
-        //            //    }
-        //            //    mapCameFrom[exit.Value] = (split == null) ? testMap : testMap + ":" + split[1];
-        //            //    _dictMapPathing[testMapStr + ":" + exit.Value] = pathToExit; // This needd another key for the appropriate exit
-        //            //}
-        //        }
-        //    }
-        //}
-
-        #region Pathfinding
+        #region Pathfinding Parameters
         const int DEFAULT_COST = 100;
         static Dictionary<string, List<RHTile>> _diMapPathing;
         #endregion
@@ -182,8 +181,10 @@ namespace RiverHollow.Game_Managers
         /// <param name="mapName">The map the actor is currently on</param>
         /// <param name="newStart">Reference to the start point. Changes for subsequent pathfinding calulations</param>
         /// <returns></returns>
-        public static List<RHTile> FindPathToOtherMap(string findKey, ref string mapName, ref Vector2 newStart)
+        public static List<RHTile> FindRouteToLocation(string findKey, string mapName, Vector2 newStart, string logName = "")
         {
+            if (!string.IsNullOrEmpty(logName)) { TravelManager.NewTravelLog(logName); }
+
             List<RHTile> _liCompletePath = new List<RHTile>();            //The path from start to finish, between maps
             _diMapPathing = new Dictionary<string, List<RHTile>>();         //Dictionary of all pathing
 
@@ -247,9 +248,12 @@ namespace RiverHollow.Game_Managers
                     //TravelManager Log
                     foreach (List<RHTile> l in liTotalPath)
                     {
-                        WriteToTravelLog("");
-                        WriteToTravelLog("[" + l[0].X + ", " + l[0].Y + "] => [" + l[l.Count()-1].X + ", " + l[l.Count() - 1].Y + "]");
-                        _liCompletePath.AddRange(l);
+                        if (l.Count > 0)
+                        {
+                            WriteToTravelLog("");
+                            WriteToTravelLog("[" + l[0].X + ", " + l[0].Y + "] => [" + l[l.Count() - 1].X + ", " + l[l.Count() - 1].Y + "]");
+                            _liCompletePath.AddRange(l);
+                        }
                     }
 
                     //We found it, so break the fuck out of the loop
@@ -269,6 +273,7 @@ namespace RiverHollow.Game_Managers
                         //If the exit points to a door, then path to the RHTile below the door because the door, itself is impassable
                         pathToVector = doorTile.GetTileByDirection(GameManager.DirectionEnum.Down).Center;
                     }
+
                     //Find the shortest path to the exit in question. We copy the start vector into a new one
                     //so that our start point doesn't get overridden. We do not care about the location of the last
                     //tile in the previous pathfinding instance for this operation.
@@ -289,10 +294,13 @@ namespace RiverHollow.Game_Managers
                             //Setting the backtrack path for the exit map
                             mapCameFrom[exit.Key] = testMap;
                             _diMapPathing[testMapStr + ":" + exit.Value.LinkedMap] = pathToExit; // This needs another key for the appropriate exit
+                            WriteToTravelLog("---" + testMapStr + ":" + exit.Value.LinkedMap+ "---");
                         }
                     }
                 }
             }
+
+            CloseTravelLog();
 
             return _liCompletePath;
         }
@@ -348,7 +356,6 @@ namespace RiverHollow.Game_Managers
                             WriteToTravelLog(print);
                         }
                     }
-                    WriteToTravelLog("---- " + returnList.Count() + " ----");
 
                     break;
                 }

@@ -59,7 +59,7 @@ namespace RiverHollow
             SoundManager.LoadContent(Content);
             DataManager.LoadContent(Content);
             EnvironmentManager.Initialize();
-            GameManager.LoadContent(Content);
+            GameManager.Initialize();
             MapManager.LoadContent(Content, GraphicsDevice);
             MapManager.LoadObjects();
 
@@ -104,12 +104,12 @@ namespace RiverHollow
 
                 SoundManager.Update(gTime);
 
-                if (HarpManager.PlayingMusic)
-                {
-                    HarpManager.Update(gTime);
-                }
+                if (HarpManager.PlayingMusic) { HarpManager.Update(gTime); }
 
                 if (CombatManager.InCombat) { CombatManager.Update(gTime);}
+
+                //If anything is queued up for pathing, handle it
+                TravelManager.DequeuePathingRequest();
 
                 //GUIManager always needs to update, regardless of game state
                 GUIManager.Update(gTime);
@@ -319,7 +319,7 @@ namespace RiverHollow
                 if (v.LivesInTown)
                 {
                     v.MoveToSpawn();
-                    v.CalculatePathing();
+                    v.DetermineValidSchedule();
                 }
             }
 

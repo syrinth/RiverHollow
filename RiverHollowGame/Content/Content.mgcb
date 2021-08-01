@@ -3530,3 +3530,18 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapTown_Hall_1.tmx
 
+#begin Data/Schedules/NPC_08.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Schedules/NPC_08.xml
+
+#begin Data/Schedules/NPC_09.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Schedules/NPC_09.xml
+
+#begin Data/Schedules/NPC_10.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Schedules/NPC_10.xml
+

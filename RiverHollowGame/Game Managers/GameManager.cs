@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
@@ -9,7 +7,6 @@ using RiverHollow.Items;
 using RiverHollow.Misc;
 
 using RiverHollow.GUIComponents.GUIObjects;
-using static RiverHollow.Items.Buildable;
 
 namespace RiverHollow.Game_Managers
 {
@@ -117,7 +114,7 @@ namespace RiverHollow.Game_Managers
         public static int HUDItemRow;
         public static int HUDItemCol;
 
-        public static void LoadContent(ContentManager Content)
+        public static void Initialize()
         {
             MerchantQueue = new List<Merchant>();
             _liMachines = new List<Machine>();
@@ -333,6 +330,12 @@ namespace RiverHollow.Game_Managers
         public static void LeaveTownMode() {
             BuildFromStorage = false;
             _eBuildType = EnumBuildType.None;
+            
+            foreach(Villager v in DataManager.DIVillagers.Values)
+            {
+                v.DetermineValidSchedule();
+                v.RecalculatePath();
+            }
         }
         #endregion
 

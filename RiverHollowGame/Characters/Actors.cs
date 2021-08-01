@@ -11,6 +11,8 @@ using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Threading;
 using static RiverHollow.Game_Managers.DataManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
@@ -1884,6 +1886,8 @@ namespace RiverHollow.Characters
 
         protected Dictionary<int, bool> _diCollection;
 
+        private Thread _pathingThread;
+
         private bool _bCanMarry = false;
         public bool CanBeMarried => _bCanMarry;
         private bool _bMarried = false;
@@ -1891,9 +1895,16 @@ namespace RiverHollow.Characters
         protected bool _bLivesInTown = false;
         public bool LivesInTown => _bLivesInTown;
 
-        protected Dictionary<string, List<Dictionary<string, string>>> _diCompleteSchedule;         //Every day with a list of KVP Time/GoToLocations
-        List<KeyValuePair<string, PathData>> _liTodayPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
-        protected int _iScheduleIndex;
+        int _iNextTimeKeyID = 0;
+
+        //The Data containing the path they are currently on
+        PathData _currentPathData;
+
+        //The complete schedule with all pathing combinations
+        protected Dictionary<string, List<Dictionary<string, string>>> _diCompleteSchedule;
+        private string NextScheduledTime => _diCompleteSchedule[_sScheduleKey][_iNextTimeKeyID]["TimeKey"];
+
+        string _sScheduleKey;
 
         public Villager()
         {
@@ -1920,7 +1931,6 @@ namespace RiverHollow.Characters
             _liRequiredBuildingIDs = new List<int>();
             _diRequiredObjectIDs = new Dictionary<int, int>();
             _diCompleteSchedule = new Dictionary<string, List<Dictionary<string, string>>>();
-            _iScheduleIndex = 0;
 
             ImportBasics(index, stringData, loadanimations);
         }
@@ -1955,7 +1965,10 @@ namespace RiverHollow.Characters
                     List<Dictionary<string, string>> pathingData = new List<Dictionary<string, string>>();
                     foreach (string s in kvp.Value)
                     {
-                        pathingData.Add(TaggedStringToDictionary(s));
+                        Dictionary<string, string> taggedDictionary = TaggedStringToDictionary(s);
+                        string timeKey = taggedDictionary["Hour"] + ":" + taggedDictionary["Minute"];
+                        taggedDictionary["TimeKey"] = timeKey;
+                        pathingData.Add(taggedDictionary);
                     }
                     _diCompleteSchedule.Add(kvp.Key, pathingData);
                 }
@@ -1967,15 +1980,10 @@ namespace RiverHollow.Characters
             //Only follow schedules ATM if they are active and not married
             if (_bOnTheMap && !_bMarried)
             {
-                if (_liTodayPathing != null)
+                //Only start to find a path if we are not currently on one.
+                if (_pathingThread == null && _liTilePath.Count == 0 && _diCompleteSchedule != null && _diCompleteSchedule[_sScheduleKey].Count > _iNextTimeKeyID && NextScheduledTime == GameCalendar.GetTime())
                 {
-                    string currTime = GameCalendar.GetTime();
-                    //_scheduleIndex keeps track of which pathing route we're currently following.
-                    //Running late code to be implemented later
-                    if (_iScheduleIndex < _liTodayPathing.Count && ((_liTodayPathing[_iScheduleIndex].Key == currTime)))// || RunningLate(movementList[_scheduleIndex].Key, currTime)))
-                    {
-                        _liTilePath = _liTodayPathing[_iScheduleIndex++].Value.Path;
-                    }
+                    TravelManager.RequestPathing(this);
                 }
 
                 //Determine whether or not we are currently moving
@@ -1985,12 +1993,12 @@ namespace RiverHollow.Characters
                 //Movement is handled here
                 base.Update(gTime);
 
-                //If we ended out movement during the update, process any directional facting
+                //If we ended out movement during the update, process any directional facing
                 //And animations that may be requested
                 if (stillMoving && _liTilePath.Count == 0)
                 {
-                    string direction = _liTodayPathing[_iScheduleIndex - 1].Value.Direction;
-                    string animation = _liTodayPathing[_iScheduleIndex - 1].Value.Animation;
+                    string direction = _currentPathData.Direction;
+                    string animation = _currentPathData.Animation;
                     if (!string.IsNullOrEmpty(direction))
                     {
                         Facing = Util.ParseEnum<DirectionEnum>(direction);
@@ -2001,6 +2009,8 @@ namespace RiverHollow.Characters
                     {
                         _sprBody.PlayAnimation(animation);
                     }
+
+                    _currentPathData = null;
                 }
             }
         }
@@ -2013,7 +2023,6 @@ namespace RiverHollow.Characters
             {
                 ClearPath();
                 MoveToSpawn();
-                CalculatePathing();
 
                 //Reset on Monday
                 if (GameCalendar.DayOfWeek == 0)
@@ -2153,40 +2162,22 @@ namespace RiverHollow.Characters
         #endregion
 
         #region Pathing Handlers
-        public void CalculatePathing()
+        /// <summary>
+        /// This method determines which schedule key to follow as well as which time key
+        /// to wait for for the next pathing calculation.
+        /// </summary>
+        public void DetermineValidSchedule()
         {
-            string currDay = GameCalendar.GetDayOfWeek();
-            string currSeason = GameCalendar.GetSeason();
-            string currWeather = EnvironmentManager.GetWeatherString();
-            if (_diCompleteSchedule != null && _diCompleteSchedule.Count > 0)
+            if (LivesInTown && _diCompleteSchedule != null)
             {
-                List<Dictionary<string, string>> listPathingForDay = null;
-                #region old
-                //string searchVal = currSeason + currDay + currWeather;
-
-
-                ////Search to see if there exists any pathing instructions for the day.
-                ////If so, set the value of listPathingForDay to the list of times/locations
-                //if (_diCompleteSchedule.ContainsKey(currSeason + currDay + currWeather))
-                //{
-                //    listPathingForDay = _diCompleteSchedule[currSeason + currDay + currWeather];
-                //}
-                //else if (_diCompleteSchedule.ContainsKey(currSeason + currDay))
-                //{
-                //    listPathingForDay = _diCompleteSchedule[currSeason + currDay];
-                //}
-                //else if (_diCompleteSchedule.ContainsKey(currDay))
-                //{
-                //    listPathingForDay = _diCompleteSchedule[currDay];
-                //}
-                #endregion
-
-                //Iterate through each Key in the Schedule and see if the key values are valid.
-                //Lowest index keys are highest priority. Special case keys need to be first.
-                foreach (string s in _diCompleteSchedule.Keys)
+                //Iterate through the schedule keys
+                foreach (string scheduleKey in _diCompleteSchedule.Keys)
                 {
                     bool valid = true;
-                    string[] args = Util.FindParams(s);
+                    string[] args = Util.FindParams(scheduleKey);
+
+                    //For each schedule argument, tryto find a failure. Any failure
+                    //breaks out of the argument check and invalidates the scheduleKey
                     foreach (string arg in args)
                     {
                         string[] split = arg.Split(':');
@@ -2203,73 +2194,80 @@ namespace RiverHollow.Characters
 
                     if (valid)
                     {
-                        listPathingForDay = _diCompleteSchedule[s];
+                        _sScheduleKey = scheduleKey;
+
+                        //We now need to compare the current time against each of the schedule time keys
+                        //We're looking for the next key to act on. 
+                        foreach (Dictionary<string, string> timeKey in _diCompleteSchedule[_sScheduleKey])
+                        {
+                            string currentTime = GameCalendar.GetTime();
+                            if (TimeSpan.Compare(TimeSpan.ParseExact(currentTime, "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None), TimeSpan.ParseExact(timeKey["TimeKey"], "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None)) <= 0)
+                            {
+                                _iNextTimeKeyID = _diCompleteSchedule[_sScheduleKey].IndexOf(timeKey);
+                                break;
+                            }
+                        }
+
                         break;
                     }
-                }
-
-                //If there is pathing instructions for the day, proceed
-                //Key = Time, Value = goto Location
-                if (listPathingForDay != null)
-                {
-                    List<KeyValuePair<string, PathData>> lTimetoTilePath = new List<KeyValuePair<string, PathData>>();
-                    Vector2 start = Position;
-                    string mapName = CurrentMapName;
-
-                    TravelManager.NewTravelLog(_sName);
-                    foreach (Dictionary<string, string> pathingData in listPathingForDay)
-                    {
-                        string timeKey = pathingData["Hour"] + ":" + pathingData["Minute"];
-                        string targetLocation = pathingData["Location"];
-                        string direction = string.Empty;
-                        string animation = string.Empty;
-
-                        Util.AssignValue(ref direction, "Dir", pathingData);
-                        Util.AssignValue(ref animation, "Anim", pathingData);
-
-                        List<RHTile> timePath;
-                        //If the map we're currently on has the target location, pathfind to it.
-                        //Otherwise, we need to pathfind to the map that does first.
-                        if (MapManager.Maps[mapName].DictionaryCharacterLayer.ContainsKey(targetLocation))
-                        {
-                            timePath = TravelManager.FindPathToLocation(ref start, MapManager.Maps[mapName].DictionaryCharacterLayer[targetLocation]);
-                        }
-                        else
-                        {
-                            timePath = TravelManager.FindPathToOtherMap(targetLocation, ref mapName, ref start);
-                        }
-
-                        PathData data = new PathData(timePath, direction, animation);
-                        lTimetoTilePath.Add(new KeyValuePair<string, PathData>(timeKey, data));
-                    }
-                    TravelManager.CloseTravelLog();
-
-                    _liTodayPathing = lTimetoTilePath;
                 }
             }
         }
 
-        public bool RunningLate(string timeToGo, string currTime)
+        /// <summary>
+        /// IF the Villager is in town and is currently on a path, request a new
+        /// pathing calculation.
+        /// </summary>
+        public void RecalculatePath()
         {
-            bool rv = false;
-            string[] toGoSplit = timeToGo.Split(':');
-            string[] curSplit = currTime.Split(':');
-
-            int intTime = 0;
-            int intCurrent = 0;
-            if (toGoSplit.Length > 1 && curSplit.Length > 1)
+            if (LivesInTown && _currentPathData != null)
             {
-                if (int.TryParse(toGoSplit[0], out intTime) && int.TryParse(curSplit[0], out intCurrent) && intTime < intCurrent)
-                {
-                    rv = true;
-                }
-                else if (intTime == intCurrent && int.TryParse(toGoSplit[1], out intTime) && int.TryParse(curSplit[1], out intCurrent) && intTime < intCurrent)
-                {
-                    rv = true;
-                }
+                TravelManager.RequestPathing(this);
             }
+        }
 
-            return rv;
+        /// <summary>
+        /// Slaps CalculatePathinto a Thread. We first clear the _liTilePath so that the
+        /// Villager doesn't keep moving while the pathing is recalculated.
+        /// </summary>
+        /// <returns>Returns the Thread to pass back to the TravelManager to not lose track of it.</returns>
+        public Thread CalculatePathThreaded()
+        {
+            _pathingThread = new Thread(CalculatePath);
+            _pathingThread.Start();
+
+            return _pathingThread;
+        }
+
+        /// <summary>
+        /// This method constructs the PathData and calls out to the TravelManager to
+        /// get the shortest path to the appropriate target
+        /// </summary>
+        private void CalculatePath()
+        {
+            int timeKeyIndex = _currentPathData == null ? _iNextTimeKeyID : _currentPathData.TimeKeyIndex;
+            Dictionary<string, string> pathingData = _diCompleteSchedule[_sScheduleKey][timeKeyIndex];
+
+            RHTile nextTile = _liTilePath.Count > 0 ? _liTilePath[0] : null;
+            Vector2 startPosition = nextTile != null ? nextTile.Position : Position;
+            List<RHTile> timePath = TravelManager.FindRouteToLocation(pathingData["Location"], CurrentMapName, startPosition, _sName);
+
+            string direction = string.Empty;
+            string animation = string.Empty;
+
+            Util.AssignValue(ref direction, "Dir", pathingData);
+            Util.AssignValue(ref animation, "Anim", pathingData);
+            _currentPathData = new PathData(timePath, direction, animation, timeKeyIndex);
+
+            //Keep the next tile in the path in order to keep things consistent
+            if(nextTile != null) {
+                _currentPathData.Path.Insert(0, nextTile);
+            }
+            _liTilePath = _currentPathData.Path;
+
+            //Set the next TimeKey to watch out for
+            _iNextTimeKeyID = timeKeyIndex + 1;
+            TravelManager.FinishThreading(ref _pathingThread);
         }
         #endregion
 
@@ -2417,6 +2415,7 @@ namespace RiverHollow.Characters
             if (_iNextArrival == 0)
             {
                 MoveToSpawn();
+                DetermineValidSchedule();
             }
 
             if (_class != null) { LoadClassedCharData(data.classedData); }
@@ -2441,19 +2440,17 @@ namespace RiverHollow.Characters
         /// </summary>
         private class PathData
         {
-            List<RHTile> _liPathing;
-            string _sDir;
-            string _sAnimationName;
+            public List<RHTile> Path { get; }
+            public string Direction { get; }
+            public string Animation { get; }
+            public int TimeKeyIndex { get; }
 
-            public List<RHTile> Path => _liPathing;
-            public string Direction => _sDir;
-            public string Animation => _sAnimationName;
-
-            public PathData(List<RHTile> path, string direction, string animation)
+            public PathData(List<RHTile> path, string direction, string animation, int timeKeyIndex)
             {
-                _liPathing = path;
-                _sDir = direction;
-                _sAnimationName = animation;
+                Path = path;
+                Direction = direction;
+                Animation = animation;
+                TimeKeyIndex = timeKeyIndex;
             }
         }
     }
