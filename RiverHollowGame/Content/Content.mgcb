@@ -3545,3 +3545,20 @@
 /processor:PassThroughProcessor
 /build:Data/Schedules/NPC_10.xml
 
+#begin Textures/Buildings/Showroom.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/Showroom.png
+
+#begin Maps/Town/mapShowroom_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapShowroom_1.tmx
+

@@ -1981,7 +1981,7 @@ namespace RiverHollow.Characters
             if (_bOnTheMap && !_bMarried)
             {
                 //Only start to find a path if we are not currently on one.
-                if (_pathingThread == null && _liTilePath.Count == 0 && _diCompleteSchedule != null && _diCompleteSchedule[_sScheduleKey].Count > _iNextTimeKeyID && NextScheduledTime == GameCalendar.GetTime())
+                if (_pathingThread == null && _liTilePath.Count == 0 && _diCompleteSchedule != null && _sScheduleKey != null && _diCompleteSchedule[_sScheduleKey].Count > _iNextTimeKeyID && NextScheduledTime == GameCalendar.GetTime())
                 {
                     TravelManager.RequestPathing(this);
                 }

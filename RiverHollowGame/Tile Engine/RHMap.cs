@@ -1705,6 +1705,10 @@ namespace RiverHollow.Tile_Engine
                 toBuild.SnapPositionToGrid(toBuild.CollisionBox.Location);
                 if (toBuild.PlaceOnMap(this))
                 {
+                    if (this == MapManager.TownMap) {
+                        PlayerManager.AddToTownObjects(toBuild);
+                    }
+
                     //Drop the Building from the GameManger
                     GameManager.DropWorldObject();
                     ClearHeldLights();
@@ -1752,6 +1756,11 @@ namespace RiverHollow.Tile_Engine
 
             if (placeObject.PlaceOnMap(this) && (TownModeMoving() || GameManager.BuildFromStorage || PlayerManager.ExpendResources(placeObject.RequiredToMake)))
             {
+                if (this == MapManager.TownMap)
+                {
+                    PlayerManager.AddToTownObjects(placeObject);
+                }
+
                 if (GameManager.BuildFromStorage) { PlayerManager.RemoveFromStorage(placeObject.ID); }
 
                 switch (placeObject.Type)

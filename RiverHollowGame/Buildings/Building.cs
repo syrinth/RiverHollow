@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
@@ -15,12 +14,8 @@ namespace RiverHollow.Buildings
     public class Building : Buildable
     {
         private int _iNPCBuilderID;
-        private int _iEntX;
-        private int _iEntY;
-        private int _iEntWidth;
-        private int _iEntHeight;
+        private Rectangle _rEntrance;
         public int Level { get; private set; } = 1;
-
 
         private Dictionary<int, Dictionary<int, int>> _diUpgradeInfo;
 
@@ -54,17 +49,10 @@ namespace RiverHollow.Buildings
             DataManager.GetTextData("Building", _iID, ref _sDescription, "Description");
 
             //The dimensions of the Building in tiles
-            Util.AssignValues(ref _iSpriteWidth, ref _iSpriteHeight, "Dimensions", stringData);
+            Util.AssignValue(ref _uSize, "Size", stringData);
 
-            Util.AssignValues(ref _iBaseXOffset, ref _iBaseYOffset, "BaseOffset", stringData);
-            Util.AssignValues(ref _iBaseWidth, ref _iBaseHeight, "Base", stringData);
-
-            //The rectangle, in pixels, that forms the entrance to the building
-            string[] ent = stringData["Entrance"].Split('-');
-            _iEntX = int.Parse(ent[0]);
-            _iEntY = int.Parse(ent[1]);
-            _iEntWidth = int.Parse(ent[2]);
-            _iEntHeight = int.Parse(ent[3]);
+            Util.AssignValue(ref _rBase, "Base", stringData);
+            Util.AssignValue(ref _rEntrance, "Entrance", stringData);            
 
             _diUpgradeInfo = new Dictionary<int, Dictionary<int, int>>();
             foreach (string s in new List<string>(stringData.Keys).FindAll(x => x.StartsWith("Upgrade_")))
@@ -121,8 +109,8 @@ namespace RiverHollow.Buildings
             _sprite = new AnimatedSprite(textureName);
             for (int i = 1; i <= MAX_BUILDING_LEVEL; i++)
             {
-                _sprite.AddAnimation(i.ToString(), startX, startY, _iSpriteWidth, _iSpriteHeight);
-                startX += _iSpriteWidth;
+                _sprite.AddAnimation(i.ToString(), startX, startY, _uSize);
+                startX += _uSize.Width;
             }
             _sprite.PlayAnimation("1");
         }
@@ -138,11 +126,11 @@ namespace RiverHollow.Buildings
             base.SnapPositionToGrid(position);
 
             //Determine where the top-left corner of the entrance Rectangle should be
-            int startX = (int)_vMapPosition.X + _iEntX;
-            int startY = (int)_vMapPosition.Y + _iEntY;
+            int startX = (int)_vMapPosition.X + (_rEntrance.X * TILE_SIZE);
+            int startY = (int)_vMapPosition.Y + (_rEntrance.Y * TILE_SIZE);
 
             //Create the entrance and exit rectangles attached to the building
-            TravelBox = new Rectangle(startX, startY, _iEntWidth, _iEntHeight);
+            TravelBox = new Rectangle(startX, startY, _rEntrance.Width * TILE_SIZE, _rEntrance.Height * TILE_SIZE);
         }
 
         public override void Rollover()
@@ -153,7 +141,7 @@ namespace RiverHollow.Buildings
         {
             bool rv = false;
 
-            pos = new Vector2(pos.X - (_iBaseXOffset * TILE_SIZE), pos.Y - (_iBaseYOffset * TILE_SIZE));
+            pos = new Vector2(pos.X - (_rBase.X * TILE_SIZE), pos.Y - (_rBase.Y * TILE_SIZE));
             SnapPositionToGrid(pos);
 
             if (map.TestMapTiles(this, Tiles))

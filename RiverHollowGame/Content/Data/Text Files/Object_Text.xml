@@ -526,6 +526,10 @@
       <Value>[Name:Town Hall]</Value>
     </Item>
     <Item>
+      <Key>Building_35</Key>
+      <Value>[Name:Showroom]</Value>
+    </Item>
+    <Item>
       <Key>NPC_0</Key>
       <Value>[Name:Henry]</Value>
     </Item>

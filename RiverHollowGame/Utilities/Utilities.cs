@@ -137,6 +137,10 @@ namespace RiverHollow.Utilities
             }
         }
 
+        public static Rectangle FloatRectangle(Vector2 pos, Size size)
+        {
+            return FloatRectangle(pos.X, pos.Y, size.Width, size.Height);
+        }
         public static Rectangle FloatRectangle(Vector2 pos, float width, float height)
         {
             return FloatRectangle(pos.X, pos.Y, width, height);
@@ -374,6 +378,14 @@ namespace RiverHollow.Utilities
                 value = float.Parse(dict[key]);
             }
         }
+        public static void AssignValue(ref Size value, string key, Dictionary<string, string> dict)
+        {
+            if (dict.ContainsKey(key))
+            {
+                string[] splitVal = dict[key].Split('-');
+                value = new Size(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
+            }
+        }
         public static void AssignValue(ref Vector2 value, string key, Dictionary<string, string> dict)
         {
             if (dict.ContainsKey(key))
@@ -390,19 +402,16 @@ namespace RiverHollow.Utilities
                 value = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
             }
         }
-        public static bool AssignValues(ref int value1, ref int value2, string key, Dictionary<string, string> dict)
+        public static void AssignValue(ref Rectangle value, string key, Dictionary<string, string> dict)
         {
-            bool rv = false;
             if (dict.ContainsKey(key))
             {
-                string[] dimensions = dict[key].Split('-');
-                value1 = int.Parse(dimensions[0]);
-                value2 = int.Parse(dimensions[1]);
-
-                rv = true;
+                string[] ent = dict[key].Split('-');
+                value.X = int.Parse(ent[0]);
+                value.Y = int.Parse(ent[1]);
+                value.Width = int.Parse(ent[2]);
+                value.Height = int.Parse(ent[3]);
             }
-
-            return rv;
         }
         public static void AssignValue<TEnum>(ref TEnum value, string key, Dictionary<string, string> dict) where TEnum : struct
         {
@@ -423,6 +432,20 @@ namespace RiverHollow.Utilities
                     dictValue[int.Parse(splitData[0])] = int.Parse(splitData[1]);
                 }
             }
+        }
+        public static bool AssignValues(ref int value1, ref int value2, string key, Dictionary<string, string> dict)
+        {
+            bool rv = false;
+            if (dict.ContainsKey(key))
+            {
+                string[] dimensions = dict[key].Split('-');
+                value1 = int.Parse(dimensions[0]);
+                value2 = int.Parse(dimensions[1]);
+
+                rv = true;
+            }
+
+            return rv;
         }
         #endregion
 
@@ -521,6 +544,12 @@ namespace RiverHollow.Utilities
             x = y;
             y = temp;
         }
+        public static void SwitchValues(ref Size x, ref Size y)
+        {
+            Size temp = x;
+            x = y;
+            y = temp;
+        }
     }
 
     public class RHRandom : Random
@@ -546,6 +575,17 @@ namespace RiverHollow.Utilities
         {
             int roll = RHRandom.Instance().Next(1, 100);
             return roll <= percent;
+        }
+    }
+
+    public struct Size
+    {
+        public int Width;
+        public int Height;
+        public Size(int width, int height)
+        {
+            Width = width;
+            Height = height;
         }
     }
 }
