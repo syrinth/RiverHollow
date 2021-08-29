@@ -222,7 +222,7 @@ namespace RiverHollow.Misc
             }
             if (_diTags.ContainsKey("UnlockItemID"))
             {
-                GameManager.DIShops[int.Parse(_diTags["ShopTargetID"])].Find(x => x.MerchID == int.Parse(_diTags["UnlockItemID"])).Unlock();
+                GameManager.DIShops[int.Parse(_diTags["ShopTargetID"])].UnlockMerchandise(int.Parse(_diTags["UnlockItemID"]));
             }
             if (_diTags.ContainsKey("SendMessage"))
             {

@@ -31,11 +31,11 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Pet][Walk:0-0-3-0.15-T][Idle:0-32-3-0.3-T][Action1:0-64-3-0.15-T][ObjectID:4]</Value>
+      <Value>[Type:Pet][Walk:0-0-3-0.15-T][Idle:0-32-3-0.3-T][Action1:0-64-3-0.15-T][ObjectID:4][Value:500]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Mount][Walk:0-0-3-0.15-T][Width:32][Height:48][BuildingID:33]</Value>
+      <Value>[Type:Mount][Walk:0-0-3-0.15-T][Width:32][Height:48][BuildingID:33][Value:500]</Value>
     </Item>
     <Item>
       <Key>9</Key>

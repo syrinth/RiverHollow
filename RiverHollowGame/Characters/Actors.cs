@@ -4,7 +4,7 @@ using RiverHollow.Buildings;
 using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
@@ -1803,7 +1803,7 @@ namespace RiverHollow.Characters
 
         public override void OpenShop()
         {
-            GUIManager.OpenMainObject(new HUDShopWindow(GameManager.DIShops[_iShopIndex].FindAll(m => m.Unlocked)));
+            GUIManager.OpenMainObject(new HUDShopWindow(GameManager.DIShops[_iShopIndex].GetUnlockedMerchandise()));
         }
 
         protected bool RequirementsMet()
@@ -3451,8 +3451,18 @@ namespace RiverHollow.Characters
             }
         }
     }
+    public abstract class BuyableNPC : TalkingActor
+    {
+        int _iValue;
+        public int Value => _iValue;
 
-    public class Pet : TalkingActor
+        public BuyableNPC(Dictionary<string, string> stringData) : base()
+        {
+            Util.AssignValue(ref _iValue, "Value", stringData);
+        }
+    }
+
+    public class Pet : BuyableNPC
     {
         public enum PetStateEnum { Alert, Idle, Leash, Wander };
         private PetStateEnum _eCurrentState = PetStateEnum.Wander;
@@ -3466,7 +3476,7 @@ namespace RiverHollow.Characters
 
         private double _dCountdown = 0;
 
-        public Pet(int id, Dictionary<string, string> stringData) : base()
+        public Pet(int id, Dictionary<string, string> stringData) : base(stringData)
         {
             ID = id;
             _eActorType = ActorEnum.Pet;
@@ -3664,13 +3674,13 @@ namespace RiverHollow.Characters
         }
     }
 
-    public class Mount : WorldActor
+    public class Mount : BuyableNPC
     {
         public override Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, TILE_SIZE);
 
         int _iStableID = -1;
         public int ID { get; } = -1;
-        public Mount(int id, Dictionary<string, string> stringData) : base()
+        public Mount(int id, Dictionary<string, string> stringData) : base(stringData)
         {
             ID = id;
             _eActorType = ActorEnum.Mount;

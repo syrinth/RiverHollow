@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.DataManager;

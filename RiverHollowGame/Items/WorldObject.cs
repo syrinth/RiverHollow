@@ -13,9 +13,9 @@ using System.Collections.Generic;
 using static RiverHollow.Game_Managers.DataManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Items.Buildable.AdjustableObject;
+using static RiverHollow.WorldObjects.Buildable.AdjustableObject;
 
-namespace RiverHollow.Items
+namespace RiverHollow.WorldObjects
 {
     public class WorldObject
     {
@@ -774,6 +774,9 @@ namespace RiverHollow.Items
     /// </summary>
     public class Buildable : WorldObject
     {
+        int _iValue = 0;
+        public int Value => _iValue;
+
         protected Dictionary<int, int> _diReqToMake;
         public Dictionary<int, int> RequiredToMake => _diReqToMake;
 
@@ -791,6 +794,7 @@ namespace RiverHollow.Items
         {
             base.LoadDictionaryData(stringData, loadSprite);
 
+            Util.AssignValue(ref _iValue, "Value", stringData);
             Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
         }
 

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.CombatStuff;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
@@ -14,7 +14,7 @@ using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.GUIComponents.GUIObjects;
-using static RiverHollow.Items.Buildable;
+using static RiverHollow.WorldObjects.Buildable;
 using System.Linq;
 
 namespace RiverHollow.Game_Managers

@@ -78,6 +78,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
                 AddControl(_btnUp);
                 AddControl(_btnDown);
+
+                _btnUp.Show(false);
             }
         }
 
@@ -104,12 +106,24 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public void BtnUpClick()
         {
-            if (_iListPos > 0) { _iListPos--; }
+            if (_iListPos > 0) {
+                _iListPos--;
+                _btnDown.Show(true);
+            }
+
+            if (_iListPos == 0) { _btnUp.Show(false); }
+
             PopulateList();
         }
         public void BtnDownClick()
         {
-            if (_iListPos < _liObjects.Count - _iMaxShownItems) { _iListPos++; }
+            if (_iListPos < _liObjects.Count - _iMaxShownItems) {
+                _iListPos++;
+                _btnUp.Show(true);
+            }
+
+            if (_iListPos == _liObjects.Count - _iMaxShownItems) { _btnDown.Show(false); }
+
             PopulateList();
         }
 

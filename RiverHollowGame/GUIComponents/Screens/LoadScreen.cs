@@ -8,6 +8,7 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using System;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -113,6 +114,15 @@ namespace RiverHollow.GUIComponents.Screens
                 _gTimeStamp.AnchorAndAlignToObject(_gDelete, SideEnum.Left, SideEnum.Bottom);
 
                 _delAction = del;
+            }
+
+            public override void Draw(SpriteBatch spriteBatch)
+            {
+                if (!Show())
+                {
+                    int i = 0;
+                }
+                base.Draw(spriteBatch);
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)

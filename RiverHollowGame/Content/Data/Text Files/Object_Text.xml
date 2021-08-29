@@ -714,6 +714,10 @@
       <Value>[Name:Sybil's Menagerie]</Value>
     </Item>
     <Item>
+      <Key>Shop_10</Key>
+      <Value>[Name:Wagren's Curios]</Value>
+    </Item>
+    <Item>
       <Key>Cutscene_0</Key>
       <Value>[Name:Amanda and Gail]</Value>
     </Item>

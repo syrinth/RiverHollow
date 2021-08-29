@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
-
+using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 
 
-namespace RiverHollow.Items
+namespace RiverHollow.WorldObjects
 {
     public class Item
     {
@@ -60,8 +59,9 @@ namespace RiverHollow.Items
         protected int _iNum;
         public int Number { get => _iNum; }
 
-        protected int _iSellPrice;
-        public int SellPrice => _iSellPrice;
+        protected int _iValue;
+        public int Value => _iValue;
+        public int SellPrice => _iValue / 2;
 
         //What items and in what numebrs are required to make this item
         protected Dictionary<int, int> _diReqToMake;
@@ -92,11 +92,12 @@ namespace RiverHollow.Items
             _eItemType = Util.ParseEnum<ItemEnum>(stringData["Type"]);
 
             //SellPrice
-            Util.AssignValue(ref _iSellPrice, "Sell", stringData);
+            Util.AssignValue(ref _iValue, "Value", stringData);
 
             //Image information
             string[] texIndices = stringData["Image"].Split('-');
             _vSourcePos = new Vector2(int.Parse(texIndices[0]), int.Parse(texIndices[1]));
+            _vSourcePos *= TILE_SIZE;
 
             Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
 

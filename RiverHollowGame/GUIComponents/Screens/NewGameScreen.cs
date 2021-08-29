@@ -4,14 +4,14 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
 using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox.CharacterDisplayBox;
-using static RiverHollow.Items.Clothes;
+using static RiverHollow.WorldObjects.Clothes;
 
 namespace RiverHollow.GUIComponents.Screens
 {

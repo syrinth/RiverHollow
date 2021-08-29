@@ -5,7 +5,7 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
@@ -540,8 +540,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (_item != null && !InventoryManager.HasSpaceInInventory(_item.ItemID, _item.Number)){
                 rv = false;
             }
-
-            if (_actor.IsActorType(ActorEnum.Mount) && !((Mount)_actor).StableBuilt())
+            else if (_actor != null && _actor.IsActorType(ActorEnum.Mount) && !((Mount)_actor).StableBuilt())
             {
                 rv = false;
             }

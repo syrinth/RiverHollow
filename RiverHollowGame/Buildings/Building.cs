@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;

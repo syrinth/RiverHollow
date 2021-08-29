@@ -3,9 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using System.Collections.Generic;
-using static RiverHollow.Items.Buildable.AdjustableObject;
+using static RiverHollow.WorldObjects.Buildable.AdjustableObject;
 
 namespace RiverHollow.GUIComponents.MainObjects
 {

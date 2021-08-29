@@ -9,7 +9,7 @@ using RiverHollow.Buildings;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
 using RiverHollow.Tile_Engine;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 
 using static RiverHollow.Misc.Task;
@@ -675,22 +675,9 @@ namespace RiverHollow.Game_Managers
                 data.BuildingInfoData.Add(b.SaveData());
             }
 
-            foreach(KeyValuePair<int, List<Merchandise>> kvp in GameManager.DIShops)
+            foreach(Shop s in GameManager.DIShops.Values)
             {
-                string value = string.Empty;
-                foreach(Merchandise m in kvp.Value)
-                {
-                    value += m.Unlocked;
-
-                    if(m != kvp.Value[kvp.Value.Count - 1]) { value += "-"; }
-                }
-
-                ShopData sData = new ShopData
-                {
-                    shopID = kvp.Key,
-                    merchUnlockedString = value
-                };
-                data.ShopData.Add(sData);
+                data.ShopData.Add(s.SaveData());
             }
 
             // Convert the object to XML data and put it in the stream.
@@ -875,14 +862,7 @@ namespace RiverHollow.Game_Managers
 
             foreach(ShopData s in dataToLoad.ShopData)
             {
-                string[] split = s.merchUnlockedString.Split('-');
-                for (int i = 0; i < GameManager.DIShops[s.shopID].Count; i++)
-                {
-                    if (i < split.Length && split[i].Equals("True"))
-                    {
-                        GameManager.DIShops[s.shopID][i].Unlock();
-                    }
-                }
+                GameManager.DIShops[s.shopID].UnlockMerchandise(s.merchUnlockedString);
             }
 
             PlayerManager.LoadData(dataToLoad.playerData);

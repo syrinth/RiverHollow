@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 using System;
 using System.Collections.Generic;

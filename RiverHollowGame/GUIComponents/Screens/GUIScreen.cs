@@ -256,7 +256,6 @@ namespace RiverHollow.GUIComponents.Screens
         {
             if (control != null)
             {
-                control.Show(true);
                 _liToAdd.Add(control);
             }
         }

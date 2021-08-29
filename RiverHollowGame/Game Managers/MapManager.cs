@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;

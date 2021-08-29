@@ -72,5 +72,9 @@ I didn't know what to say, so I just stood there, staring at her until she left.
       <Key>Isabelle_1</Key>
       <Value>[Text:$Character_11$ said she was going to try to get a book for me, but it hasn't arrived yet. Do you think it's too soon to ask her about it?][Villager:11]</Value>
     </Item>
+    <Item>
+      <Key>Scared_Of_Me</Key>
+      <Value>[Text:I sometimes get the feeling that some of the others are afraid of me. They hurry away if they see me coming, and won't meet me eyes.]</Value>
+    </Item>
   </Asset>
 </XnaContent>

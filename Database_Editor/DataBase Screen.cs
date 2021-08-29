@@ -78,7 +78,6 @@ namespace Database_Editor
         static string PATH_TO_SCHEDULES = PATH_TO_DATA + @"\Schedules";
 
         static Dictionary<int, List<string>> _diCutscenes;
-        static Dictionary<int, List<XMLData>> _diShops;
         static Dictionary<string, Dictionary<string, List<string>>> _diCharacterSchedules;
         static Dictionary<string, Dictionary<string, Dictionary<string, string>>> _diCharacterDialogue; //File/EntryKey/Tags
         static Dictionary<string, Dictionary<string, Dictionary<string, string>>> _diCutsceneDialogue; //File/EntryKey/Tags
@@ -181,8 +180,9 @@ namespace Database_Editor
             LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", TAGS_FOR_STATUS_EFFECTS);
             LoadXMLDictionary(LIGHTS_XML_FILE, "", TAGS_FOR_LIGHTS);
             LoadXMLDictionary(DUNGEON_XML_FILE, DUNGEON_REF_TAGS, TAGS_FOR_DUNGEONS);
+            LoadXMLDictionary(SHOPS_XML_FILE, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA);
 
-            _diShops = ReadXMLFileToXMLDataListDictionary(SHOPS_XML_FILE, XMLTypeEnum.Shop, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA);
+            //_diShops = ReadXMLFileToXMLDataListDictionary(SHOPS_XML_FILE, XMLTypeEnum.Shop, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA);
             _diCutscenes = ReadXMLFileToIntKeyDictionaryStringList(CUTSCENE_XML_FILE);
 
             LoadWorldObjects();
@@ -255,6 +255,7 @@ namespace Database_Editor
             else if (fileName == STATUS_EFFECTS_XML_FILE) { rv = XMLTypeEnum.StatusEffect; }
             else if (fileName == LIGHTS_XML_FILE) { rv = XMLTypeEnum.Light; }
             else if (fileName == DUNGEON_XML_FILE) { rv = XMLTypeEnum.Dungeon; }
+            else if (fileName == SHOPS_XML_FILE) { rv = XMLTypeEnum.Shop; }
 
             return rv;
         }
@@ -381,7 +382,7 @@ namespace Database_Editor
         }
         private void LoadShopsDataGrid()
         {
-            LoadDictionaryListDatagrid(dgvShops, _diShops, "colShopsID", "colShopsName", "Shops", XMLTypeEnum.Shop);
+            LoadGenericDatagrid(dgvShops, _diBasicXML[SHOPS_XML_FILE], "colShopsID", "colShopsName", "Shops", _diTabIndices["Shops"]);
         }
 
         private void LoadCutsceneDataGrid()
@@ -743,14 +744,14 @@ namespace Database_Editor
                 kvp.Value.ReferencesXMLObject(data);
             }
 
-            //Sweep the shops for a match
-            foreach (KeyValuePair<int, List<XMLData>> kvp in _diShops)
-            {
-                foreach (XMLData testIt in kvp.Value)
-                {
-                    testIt.CheckForItemLink(data);
-                }
-            }
+            ////Sweep the shops for a match
+            //foreach (KeyValuePair<int, List<XMLData>> kvp in _diShops)
+            //{
+            //    foreach (XMLData testIt in kvp.Value)
+            //    {
+            //        testIt.CheckForItemLink(data);
+            //    }
+            //}
         }
 
         private void ChangeIDs(ref List<ItemXMLData> itemDataList, ref List<XMLData> worldObjectDataList)
@@ -1008,13 +1009,16 @@ namespace Database_Editor
         }
         private void LoadShopInfo()
         {
-            tbShopName.Text = GetTextValue(XMLTypeEnum.Shop, _diTabIndices["Shops"], "Name");
+            XMLData data = _diBasicXML[SHOPS_XML_FILE][_diTabIndices["Shops"]];
+            LoadGenericDataInfo(data, tbShopName, tbShopID, dgvShopTags);
 
-            dgvShopTags.Rows.Clear();
-            foreach (XMLData d in _diShops[_diTabIndices["Shops"]])
-            {
-                dgvShopTags.Rows.Add(d.GetTagsString());
-            }
+            //tbShopName.Text = GetTextValue(XMLTypeEnum.Shop, _diTabIndices["Shops"], "Name");
+
+            //dgvShopTags.Rows.Clear();
+            //foreach (XMLData d in _diShops[_diTabIndices["Shops"]])
+            //{
+            //    dgvShopTags.Rows.Add(d.GetTagsString());
+            //}
         }
         #endregion
 
@@ -1257,6 +1261,10 @@ namespace Database_Editor
         {
             SaveXMLDataInfo(_diBasicXML[DUNGEON_XML_FILE], "Dungeons", "Dungeon_", XMLTypeEnum.Dungeon, tbDungeonName, tbDungeonID, null, dgvDungeons, dgvDungeonTags, "colDungeonsID", "colDungeonsName", "", "");
         }
+        private void SaveShopInfo(List<XMLData> liData)
+        {
+            SaveXMLDataInfo(_diBasicXML[SHOPS_XML_FILE], "Shops", "Shop_", XMLTypeEnum.Shop, tbShopName, tbShopID, null, dgvShops, dgvShopTags, "colShopsID", "colShopsName", "", "");
+        }
 
         private void SaveCutsceneInfo()
         {
@@ -1289,31 +1297,6 @@ namespace Database_Editor
             updatedRow.Cells["colCutscenesName"].Value = GetTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name");
         }
 
-        private void SaveShopInfo()
-        {
-            if (_diShops.Count == _diTabIndices["Shops"])
-            {
-                _diShops[_diTabIndices["Shops"]] = new List<XMLData>();
-            }
-
-            List<XMLData> listData = _diShops[_diTabIndices["Shops"]];
-            listData.Clear();
-
-            string tags = string.Empty;
-            foreach (DataGridViewRow r in dgvShopTags.Rows)
-            {
-                if (r.Cells[0].Value != null)
-                {
-                    listData.Add(new XMLData("-1", r.Cells[0].Value.ToString(), "", "", XMLTypeEnum.Shop));
-                }
-            }
-            UpdateTextValue(XMLTypeEnum.Shop, _diTabIndices["Shops"], "Name", tbShopName.Text);
-
-            DataGridViewRow updatedRow = dgvShops.Rows[_diTabIndices["Shops"]];
-
-            updatedRow.Cells["colShopsID"].Value = _diTabIndices["Shops"];
-            updatedRow.Cells["colShopsName"].Value = GetTextValue(XMLTypeEnum.Shop, _diTabIndices["Shops"], "Name");
-        }
         #endregion
 
         private void GenericCancel(List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate del)
@@ -1370,12 +1353,7 @@ namespace Database_Editor
         }
         private void btnShopCancel_Click(object sender, EventArgs e)
         {
-            if (_diShops.Count == _diTabIndices["Shops"])
-            {
-                dgvShops.Rows.RemoveAt(_diTabIndices["Shops"]--);
-                SelectRow(dgvShops, _diTabIndices["Shops"]);
-            }
-            LoadShopInfo();
+            GenericCancel(_diBasicXML[SHOPS_XML_FILE], "Shops", dgvShops, LoadShopInfo);
         }
         private void btnBuildingCancel_Click(object sender, EventArgs e)
         {
@@ -1451,12 +1429,7 @@ namespace Database_Editor
         }
         private void dgvShops_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex > -1)
-            {
-                SaveShopInfo();
-                _diTabIndices["Shops"] = e.RowIndex;
-                LoadShopInfo();
-            }
+            GenericCellClick(e, _diBasicXML[SHOPS_XML_FILE], "Shops", dgvShops, LoadShopInfo, SaveShopInfo);
         }
         private void dgvBuildings_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1557,15 +1530,6 @@ namespace Database_Editor
                 SaveXMLData(_diBasicXML[s], s, sWriter);
             }
 
-            foreach (KeyValuePair<int, List<XMLData>> kvp in _diShops)
-            {
-                foreach (XMLData data in kvp.Value)
-                {
-                    data.StripSpecialCharacter();
-                }
-            }
-            SaveXMLDictionarXMLDataList(_diShops, SHOPS_XML_FILE, XMLTypeEnum.Shop, sWriter);
-
             foreach (string s in _diCharacterDialogue.Keys)
             {
                 SaveXMLDictionary(_diCharacterDialogue[s], s, sWriter);
@@ -1648,7 +1612,7 @@ namespace Database_Editor
             else if (prevPage == tabCtl.TabPages["tabCutscenes"]) { SaveCutsceneInfo(); }
             else if (prevPage == tabCtl.TabPages["tabMonsters"]) { SaveMonsterInfo(_diBasicXML[MONSTERS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabActions"]) { SaveActionInfo(_diBasicXML[ACTIONS_XML_FILE]); }
-            else if (prevPage == tabCtl.TabPages["tabShops"]) { SaveShopInfo(); }
+            else if (prevPage == tabCtl.TabPages["tabShops"]) { SaveShopInfo(_diBasicXML[SHOPS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabBuildings"]) { SaveBuildingInfo(_diBasicXML[BUILDINGS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabNPCs"]) { SaveNPCInfo(_diBasicXML[NPCS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabStatusEffects"]) { SaveStatusEffectInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE]); }
@@ -2470,7 +2434,7 @@ namespace Database_Editor
         }
         private void AddNewShop(object sender, EventArgs e)
         {
-            SaveShopInfo();
+            SaveShopInfo(_diBasicXML[SHOPS_XML_FILE]);
             List<string> defaultTags = new List<string>() { "" };
             AddNewGenericXMLObject(tabCtl.TabPages["tabShops"], "Shops", dgvShops, "colShopsID", "colShopsName", tbShopName, tbShopID, dgvShopTags, "colShopTags", null, null, defaultTags);
         }

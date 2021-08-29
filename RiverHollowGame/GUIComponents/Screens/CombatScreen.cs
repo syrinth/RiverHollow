@@ -9,7 +9,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Tile_Engine;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;

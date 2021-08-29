@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended.Tiled;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
 using System;

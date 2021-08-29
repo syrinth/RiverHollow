@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using RiverHollow.Characters;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 
 using RiverHollow.GUIComponents.GUIObjects;
@@ -86,7 +86,7 @@ namespace RiverHollow.Game_Managers
         private static List<Machine> _liMachines;
 
         public static Dictionary<int, Task> DITasks;
-        public static Dictionary<int, List<Merchandise>> DIShops;
+        public static Dictionary<int, Shop> DIShops;
         #endregion
 
         #region Interaction Objects

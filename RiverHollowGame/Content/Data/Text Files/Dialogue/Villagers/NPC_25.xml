@@ -21,5 +21,9 @@
       <Key>HouseBuilt</Key>
       <Value>[Text][Once][RequiredBuildingID:31][SendMessage:3]</Value>
     </Item>
+    <Item>
+      <Key>Daria|1</Key>
+      <Value>[Text:$Character_6$ is kind of scary, isn't she? She just has this look in her eyes... sometimes I'm afraid she's going to wilt my flowers just by looking at them!][Villager:6]</Value>
+    </Item>
   </Asset>
 </XnaContent>

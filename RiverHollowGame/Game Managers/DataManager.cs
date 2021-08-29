@@ -7,16 +7,16 @@ using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Characters;
 using RiverHollow.Buildings;
 using RiverHollow.CombatStuff;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Items.Buildable;
-using static RiverHollow.Items.TriggerObject;
+using static RiverHollow.WorldObjects.Buildable;
+using static RiverHollow.WorldObjects.TriggerObject;
 using RiverHollow.Misc;
-using static RiverHollow.Items.Buildable.AdjustableObject;
+using static RiverHollow.WorldObjects.Buildable.AdjustableObject;
 using RiverHollow.Tile_Engine;
-using static RiverHollow.Items.Buildable.AdjustableObject.Floor;
+using static RiverHollow.WorldObjects.Buildable.AdjustableObject.Floor;
 
 namespace RiverHollow.Game_Managers
 {
@@ -49,7 +49,7 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<int, List<string>> _diSongs;
         static Dictionary<int, Dictionary<string, string>> _diNPCDialogue;
-        static Dictionary<int, List<Dictionary<string, string>>> _diShops;
+        static Dictionary<int, Shop> _diShops;
 
         static Dictionary<int, Dictionary<string, string>> _diVillagerData;
         public static Dictionary<int, Dictionary<string, string>> DiVillagerData => _diVillagerData;
@@ -113,15 +113,16 @@ namespace RiverHollow.Game_Managers
             LoadBMFonts(Content);
             LoadTextFiles(Content);
             LoadCharacters(Content);
-            LoadShopFile(Content);
             LoadDictionaries(Content);
-            
+
             AddDirectoryTextures(FOLDER_ITEMS, Content);
             AddDirectoryTextures(FOLDER_BUILDINGS, Content);
             AddDirectoryTextures(FOLDER_ENVIRONMENT, Content);
 
             LoadNPCSchedules(Content);
             LoadNPCs();
+
+            LoadShopFile(Content);
 
             _liForest = new List<int>();
             _liMountain = new List<int>();
@@ -293,16 +294,12 @@ namespace RiverHollow.Game_Managers
 
         private static void LoadShopFile(ContentManager Content)
         {
-            Dictionary<int, List<string>> shopFile = Content.Load<Dictionary<int, List<string>>>(@"Data\Shops");
+            Dictionary<int, string> shopFile = Content.Load<Dictionary<int, string>>(@"Data\Shops");
 
-            _diShops = new Dictionary<int, List<Dictionary<string, string>>>();
+            _diShops = new Dictionary<int, Shop>();
 
-            foreach(KeyValuePair<int, List<string>> kvp in  shopFile){
-                _diShops[kvp.Key] = new List<Dictionary<string, string>>();
-                foreach (string s in kvp.Value)
-                {
-                    _diShops[kvp.Key].Add(TaggedStringToDictionary(s));
-                }
+            foreach(KeyValuePair<int, string> kvp in shopFile){
+                _diShops[kvp.Key] = new Shop(kvp.Key, Util.DictionaryFromTaggedString(kvp.Value));
             }
         }
 
@@ -344,6 +341,10 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region GetMethods
+        public static string GetItemValueByID(int id, string key) { return _diItemData[id][key]; }
+        public static string GetWorldObjectValueByID(int id, string key) { return _diWorldObjects[id][key]; }
+        public static string GetNPCValueByID(int id, string key) { return _diNPCData[id][key]; }
+
         public static Light GetLight(int id)
         {
             if (_diLightData.ContainsKey(id))
@@ -380,19 +381,9 @@ namespace RiverHollow.Game_Managers
             return rvList;
         }
 
-        public static Dictionary<int, List<Merchandise>> GetShopInfoList()
+        public static Dictionary<int, Shop> GetShopInfoList()
         {
-            Dictionary<int, List<Merchandise>> rvList = new Dictionary<int, List<Merchandise>>();
-            foreach (KeyValuePair<int, List<Dictionary<string, string>>> kvp in _diShops)
-            {
-                List<Merchandise> liMerch = new List<Merchandise>();
-                foreach(Dictionary<string, string> d in kvp.Value)
-                {
-                    liMerch.Add(new Merchandise(d));
-                }
-                rvList.Add(kvp.Key, liMerch);
-            }
-            return rvList;
+            return _diShops;
         }
 
         public static string GetAdventurerDialogue(int id, string key)
@@ -413,6 +404,7 @@ namespace RiverHollow.Game_Managers
             }
             return null;
         }
+
 
         public static Item GetItem(int id)
         {

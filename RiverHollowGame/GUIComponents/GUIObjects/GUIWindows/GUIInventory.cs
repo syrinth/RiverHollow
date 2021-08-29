@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Items.Buildable;
+using static RiverHollow.WorldObjects.Buildable;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {

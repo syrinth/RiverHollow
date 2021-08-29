@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using RiverHollow.Characters;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 
 namespace RiverHollow.Game_Managers

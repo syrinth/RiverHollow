@@ -10,15 +10,15 @@ using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 using static RiverHollow.RiverHollow;
 using static RiverHollow.Game_Managers.CombatManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Items.Buildable;
+using static RiverHollow.WorldObjects.Buildable;
 using System.Linq;
-using static RiverHollow.Items.Buildable.AdjustableObject;
+using static RiverHollow.WorldObjects.Buildable.AdjustableObject;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.GUIComponents.MainObjects;
 

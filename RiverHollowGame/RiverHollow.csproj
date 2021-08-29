@@ -94,7 +94,7 @@
     <Compile Include="GUIComponents\Screens\NewGameScreen.cs" />
     <Compile Include="GUIComponents\Screens\HUDPurchaseWindows.cs" />
     <Compile Include="Game Managers\InventoryManager.cs" />
-    <Compile Include="Misc\Merchandise.cs" />
+    <Compile Include="Misc\Shop.cs" />
     <Compile Include="Misc\Task.cs" />
     <Compile Include="Misc\TextEntry.cs" />
     <Compile Include="RiverHollow.cs" />

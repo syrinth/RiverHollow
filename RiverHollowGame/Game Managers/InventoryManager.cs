@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Items.Item;
+using static RiverHollow.WorldObjects.Item;
 
 namespace RiverHollow.Game_Managers
 {

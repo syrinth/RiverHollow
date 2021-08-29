@@ -8,7 +8,7 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 
 using static RiverHollow.Characters.Actor;
