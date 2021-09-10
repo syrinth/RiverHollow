@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.Tile_Engine;
@@ -137,7 +138,7 @@ namespace RiverHollow.Utilities
             }
         }
 
-        public static Rectangle FloatRectangle(Vector2 pos, Size size)
+        public static Rectangle FloatRectangle(Vector2 pos, RHSize size)
         {
             return FloatRectangle(pos.X, pos.Y, size.Width, size.Height);
         }
@@ -378,12 +379,12 @@ namespace RiverHollow.Utilities
                 value = float.Parse(dict[key]);
             }
         }
-        public static void AssignValue(ref Size value, string key, Dictionary<string, string> dict)
+        public static void AssignValue(ref RHSize value, string key, Dictionary<string, string> dict)
         {
             if (dict.ContainsKey(key))
             {
                 string[] splitVal = dict[key].Split('-');
-                value = new Size(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
+                value = new RHSize(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
             }
         }
         public static void AssignValue(ref Vector2 value, string key, Dictionary<string, string> dict)
@@ -496,6 +497,10 @@ namespace RiverHollow.Utilities
             }
         }
 
+        public static List<Vector2> GetAllPointsInArea(Vector2 position, Size2 dimensions, float incrementSize = 1)
+        {
+            return GetAllPointsInArea(position.X, position.Y, dimensions.Width, dimensions.Height, incrementSize);
+        }
         public static List<Vector2> GetAllPointsInArea(float startX, float startY, float width, float height, float incrementSize = 1)
         {
             return GetAllPointsInArea((int)startX, (int)startY, (int)width, (int)height);
@@ -544,9 +549,9 @@ namespace RiverHollow.Utilities
             x = y;
             y = temp;
         }
-        public static void SwitchValues(ref Size x, ref Size y)
+        public static void SwitchValues(ref RHSize x, ref RHSize y)
         {
-            Size temp = x;
+            RHSize temp = x;
             x = y;
             y = temp;
         }
@@ -578,11 +583,11 @@ namespace RiverHollow.Utilities
         }
     }
 
-    public struct Size
+    public struct RHSize
     {
         public int Width;
         public int Height;
-        public Size(int width, int height)
+        public RHSize(int width, int height)
         {
             Width = width;
             Height = height;

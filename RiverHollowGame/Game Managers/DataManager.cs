@@ -86,6 +86,7 @@ namespace RiverHollow.Game_Managers
         public static List<int> FloorIDs { get; private set; }
         public static List<int> StructureIDs { get; private set; }
         public static List<int> PlantIDs { get; private set; }
+        public static List<int> WallpaperIDs { get; private set; }
 
         public static Dictionary<int, Dictionary<string, string>> Config;
         #endregion
@@ -101,6 +102,7 @@ namespace RiverHollow.Game_Managers
             FloorIDs = new List<int>();
             StructureIDs = new List<int>();
             PlantIDs = new List<int>();
+            WallpaperIDs = new List<int>();
             _diTextures = new Dictionary<string, Texture2D>();
 
             _diMonsterTraits = Content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
@@ -179,6 +181,9 @@ namespace RiverHollow.Game_Managers
                     break;
                 case ObjectTypeEnum.Plant:
                     PlantIDs.Add(id);
+                    break;
+                case ObjectTypeEnum.Wallpaper:
+                    WallpaperIDs.Add(id);
                     break;
             }
         }
@@ -499,6 +504,8 @@ namespace RiverHollow.Game_Managers
                         return new StructureUpgrader(id, diData);
                     case ObjectTypeEnum.Wall:
                         return new Wall(id, diData);
+                    case ObjectTypeEnum.Wallpaper:
+                        return new Wallpaper(id, diData);
                     case ObjectTypeEnum.WarpPoint:
                         return new WarpPoint(id, diData);
                     case ObjectTypeEnum.WorldObject:

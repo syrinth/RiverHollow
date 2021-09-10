@@ -15,7 +15,7 @@ namespace RiverHollow.GUIComponents.Screens
     class BuildScreen : GUIScreen
     {
         public enum MenuEnum { BuildMenu, EditMenu };
-        public enum BuildTypeEnum { Building, Floor, WorldObject, Storage };
+        public enum BuildTypeEnum { Building, Floor, Wallpaper, WorldObject, Storage };
         const int BTN_PADDING = 10;
 
         private MenuEnum _eCurrentMenu;
@@ -35,15 +35,18 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _eCurrentMenu = MenuEnum.BuildMenu;
             Scry(true);
-            GUIButton buildingsButton = new GUIButton("Buildings", BtnBuildings);
             storageButton = new GUIButton("Storage", BtnStorage);
             storageButton.Enable(PlayerManager.GetStorageItems().Count > 0);
 
             _liBuildMenuObjects = new List<GUIObject>();
             if (MapManager.CurrentMap.IsOutside && MapManager.CurrentMap.IsTown) {
-                _liBuildMenuObjects.Add(buildingsButton);
+                _liBuildMenuObjects.Add(new GUIButton("Buildings", BtnBuildings));
             }
 
+            if (MapManager.CurrentMap.Name.Contains("Manor"))
+            {
+                _liBuildMenuObjects.Add(new GUIButton("Wallpaper", BtnWallpaper));
+            }
             _liBuildMenuObjects.Add(new GUIButton("Structures", BtnStructures));
             _liBuildMenuObjects.Add(new GUIButton("Flooring", BtnFlooring));
             _liBuildMenuObjects.Add(storageButton);
@@ -143,6 +146,13 @@ namespace RiverHollow.GUIComponents.Screens
         public void BtnBuildings()
         {
             _gMenuObject = new HUDConstruction(CloseMenu, BuildTypeEnum.Building);
+            _gMenuObject.CenterOnScreen();
+            GUIManager.OpenMainObject(_gMenuObject);
+        }
+
+        public void BtnWallpaper()
+        {
+            _gMenuObject = new HUDConstruction(CloseMenu, BuildTypeEnum.Wallpaper);
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
         }
@@ -284,6 +294,9 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     case BuildTypeEnum.Floor:
                         GenerateConstructBoxes(DataManager.FloorIDs);
+                        break;
+                    case BuildTypeEnum.Wallpaper:
+                        GenerateConstructBoxes(DataManager.WallpaperIDs);
                         break;
                     case BuildTypeEnum.WorldObject:
                         GenerateConstructBoxes(DataManager.StructureIDs);

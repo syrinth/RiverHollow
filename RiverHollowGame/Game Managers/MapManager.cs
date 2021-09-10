@@ -279,17 +279,20 @@ namespace RiverHollow.Game_Managers
         public static void DrawBase(SpriteBatch spriteBatch)
         {
             CurrentMap.DrawBase(spriteBatch);
+        }
+        public static void DrawGround(SpriteBatch spriteBatch)
+        {
+            CurrentMap.DrawGround(spriteBatch);
             GUICursor.DrawTownBuildObject(spriteBatch);
             GUICursor.DrawPotentialWorldObject(spriteBatch);
-        }
-
-        public static void DrawLights(SpriteBatch spriteBatch)
-        {
-            CurrentMap.DrawLights(spriteBatch);
         }
         public static void DrawUpper(SpriteBatch spriteBatch)
         {
             CurrentMap.DrawUpper(spriteBatch);
+        }
+        public static void DrawLights(SpriteBatch spriteBatch)
+        {
+            CurrentMap.DrawLights(spriteBatch);
         }
 
         public static bool ProcessLeftButtonClick(Point mouseLocation)

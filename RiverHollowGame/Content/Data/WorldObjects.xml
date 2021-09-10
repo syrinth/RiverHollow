@@ -299,87 +299,103 @@
     </Item>
     <Item>
       <Key>74</Key>
-      <Value>[Type:WarpPoint][Image:288-0][Size:2-2][Base:2-1][BaseOffset:0-1]</Value>
+      <Value>[Type:Wallpaper][Image:144-160][ReqItems:0-1]</Value>
     </Item>
     <Item>
       <Key>75</Key>
-      <Value>[Type:WorldObject][Image:288-32][Base:4-3][Size:4-3]</Value>
+      <Value>[Type:Wallpaper][Image:160-160][ReqItems:0-1]</Value>
     </Item>
     <Item>
       <Key>76</Key>
-      <Value>[Type:WorldObject][Image:288-80][Base:1-3][Size:2-3]</Value>
+      <Value>[Type:Wallpaper][Image:176-160][ReqItems:0-1]</Value>
     </Item>
     <Item>
       <Key>77</Key>
-      <Value>[Type:WorldObject][Image:320-80][BaseOffset:1-0][Base:1-3][Size:2-3]</Value>
+      <Value>[Type:WarpPoint][Image:288-0][Size:2-2][Base:2-1][BaseOffset:0-1]</Value>
     </Item>
     <Item>
       <Key>78</Key>
-      <Value>[Type:WorldObject][Image:0-2][Size:1-2][Texture:Textures\texMachines]</Value>
+      <Value>[Type:WorldObject][Image:288-32][Base:4-3][Size:4-3]</Value>
     </Item>
     <Item>
       <Key>79</Key>
-      <Value>[Type:WorldObject][Image:0-80][Tool:Lantern][Hp:5][ReqLvl:1][ItemID:18][Idle:5-0.150][Gathered:7-0.150]</Value>
+      <Value>[Type:WorldObject][Image:288-80][Base:1-3][Size:2-3]</Value>
     </Item>
     <Item>
       <Key>80</Key>
-      <Value>[Type:WorldObject][Image:96-0][ItemID:26][Passable]</Value>
+      <Value>[Type:WorldObject][Image:320-80][BaseOffset:1-0][Base:1-3][Size:2-3]</Value>
     </Item>
     <Item>
       <Key>81</Key>
-      <Value>[Type:WorldObject][Image:48-0]</Value>
+      <Value>[Type:WorldObject][Image:0-2][Size:1-2][Texture:Textures\texMachines]</Value>
     </Item>
     <Item>
       <Key>82</Key>
-      <Value>[Type:WorldObject][Image:64-0][Size:1-2]</Value>
+      <Value>[Type:WorldObject][Image:0-80][Tool:Lantern][Hp:5][ReqLvl:1][ItemID:18][Idle:5-0.150][Gathered:7-0.150]</Value>
     </Item>
     <Item>
       <Key>83</Key>
-      <Value>[Type:WorldObject][Image:80-64][ItemID:4]</Value>
+      <Value>[Type:WorldObject][Image:96-0][ItemID:26][Passable]</Value>
     </Item>
     <Item>
       <Key>84</Key>
-      <Value>[Type:WorldObject][Image:96-16][ItemID:24]</Value>
+      <Value>[Type:WorldObject][Image:48-0]</Value>
     </Item>
     <Item>
       <Key>85</Key>
-      <Value>[Type:WorldObject][Image:80-32][ItemID:25][Passable]</Value>
+      <Value>[Type:WorldObject][Image:64-0][Size:1-2]</Value>
     </Item>
     <Item>
       <Key>86</Key>
-      <Value>[Type:WorldObject][Image:288-160][Size:4-2][Base:4-1][BaseOffset:0-1]</Value>
+      <Value>[Type:WorldObject][Image:80-64][ItemID:4]</Value>
     </Item>
     <Item>
       <Key>87</Key>
-      <Value>[Type:WorldObject][Image:288-128][BaseOffset:0-1][Size:2-2]</Value>
+      <Value>[Type:WorldObject][Image:96-16][ItemID:24]</Value>
     </Item>
     <Item>
       <Key>88</Key>
-      <Value>[Type:WorldObject][Image:320-128][BaseOffset:1-1][Size:2-2]</Value>
+      <Value>[Type:WorldObject][Image:80-32][ItemID:25][Passable]</Value>
     </Item>
     <Item>
       <Key>89</Key>
-      <Value>[Type:WorldObject][Image:256-128][Size:2-5][Base:2-5]</Value>
+      <Value>[Type:WorldObject][Image:288-160][Size:4-2][Base:4-1][BaseOffset:0-1]</Value>
     </Item>
     <Item>
       <Key>90</Key>
-      <Value>[Type:WorldObject][Image:224-160][Size:2-3][Base:2-3]</Value>
+      <Value>[Type:WorldObject][Image:288-128][BaseOffset:0-1][Size:2-2]</Value>
     </Item>
     <Item>
       <Key>91</Key>
-      <Value>[Type:WorldObject][Image:192-176][BaseOffset:0-3][Size:2-4][Base:2-1]</Value>
+      <Value>[Type:WorldObject][Image:320-128][BaseOffset:1-1][Size:2-2]</Value>
     </Item>
     <Item>
       <Key>92</Key>
-      <Value>[Type:WorldObject][Image:288-192][Size:2-5][Base:2-5]</Value>
+      <Value>[Type:WorldObject][Image:256-128][Size:2-5][Base:2-5]</Value>
     </Item>
     <Item>
       <Key>93</Key>
-      <Value>[Type:WorldObject][Image:256-224][Size:2-3][Base:2-3]</Value>
+      <Value>[Type:WorldObject][Image:224-160][Size:2-3][Base:2-3]</Value>
     </Item>
     <Item>
       <Key>94</Key>
+      <Value>[Type:WorldObject][Image:192-176][BaseOffset:0-3][Size:2-4][Base:2-1]</Value>
+    </Item>
+    <Item>
+      <Key>95</Key>
+      <Value>[Type:WorldObject][Image:288-192][Size:2-5][Base:2-5]</Value>
+    </Item>
+    <Item>
+      <Key>96</Key>
+      <Value>[Type:WorldObject][Image:256-224][Size:2-3][Base:2-3]</Value>
+    </Item>
+    <Item>
+      <Key>97</Key>
       <Value>[Type:WorldObject][Image:320-208][BaseOffset:0-3][Size:2-4][Base:2-1]</Value>
+    </Item>
+    <Item>
+      <Key>98</Key>
+      <Value>[Type:WorldObject][Image:0-0]</Value>
     </Item>
   </Asset>
 </XnaContent>

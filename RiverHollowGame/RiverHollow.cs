@@ -201,6 +201,10 @@ namespace RiverHollow
 
                 spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
                 MapManager.DrawBase(spriteBatch);
+                spriteBatch.End();
+
+                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
+                MapManager.DrawGround(spriteBatch);
                 PlayerManager.Draw(spriteBatch);
                 spriteBatch.End();
 

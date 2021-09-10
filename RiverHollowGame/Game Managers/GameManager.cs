@@ -75,7 +75,7 @@ namespace RiverHollow.Game_Managers
         public enum ElementAlignment { Neutral, Vulnerable, Resists };
         public enum ConditionEnum { None, KO, Poisoned, Silenced };
         public enum AdventurerTypeEnum { Magic, Martial };
-        public enum ObjectTypeEnum { WorldObject, Beehive, Buildable, Building, CombatHazard, Container, Decor, Destructible, DungeonObject, Floor, Gatherable, Garden, Machine, Mailbox, Plant, Structure, StructureUpgrader, Wall, WarpPoint };
+        public enum ObjectTypeEnum { WorldObject, Beehive, Buildable, Building, CombatHazard, Container, Decor, Destructible, DungeonObject, Floor, Gatherable, Garden, Machine, Mailbox, Plant, Structure, StructureUpgrader, Wall, Wallpaper, WarpPoint };
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
         #endregion
 

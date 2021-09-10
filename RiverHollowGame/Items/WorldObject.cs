@@ -48,7 +48,7 @@ namespace RiverHollow.WorldObjects
         protected Vector2 _vMapPosition;
         public virtual Vector2 MapPosition => _vMapPosition;
 
-        protected Size _uSize = new Size(1, 1);
+        protected RHSize _uSize = new RHSize(1, 1);
         public int Width => _uSize.Width * TILE_SIZE;
         public int Height => _uSize.Height * TILE_SIZE;
 
@@ -97,7 +97,7 @@ namespace RiverHollow.WorldObjects
             Vector2 baseOffset = Vector2.Zero;
             Util.AssignValue(ref baseOffset, "BaseOffset", stringData);
 
-            Size baseSize = new Size(1, 1);
+            RHSize baseSize = new RHSize(1, 1);
             Util.AssignValue(ref baseSize, "Base", stringData);
 
             _rBase = Util.FloatRectangle(baseOffset, baseSize);
@@ -824,7 +824,7 @@ namespace RiverHollow.WorldObjects
 
             protected int _iRotationBaseOffsetX;
             protected int _iRotationBaseOffsetY;
-            protected Size _uRotationSize;
+            protected RHSize _uRotationSize;
 
             private readonly bool _bDisplaysObject = false;
             public bool CanDisplay => _bDisplaysObject;
@@ -1414,6 +1414,14 @@ namespace RiverHollow.WorldObjects
                     _bReady = true;
                     _sprite.PlayAnimation(AnimationEnum.Action_Finished);
                 }
+            }
+        }
+
+        public class Wallpaper : Buildable
+        {
+            public Wallpaper(int id, Dictionary<string, string> stringData) : base(id, stringData)
+            {
+                _bWallObject = true;
             }
         }
 

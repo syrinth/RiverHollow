@@ -55,10 +55,12 @@ namespace RiverHollow.Tile_Engine
 
         protected RHTile[,] _arrTiles;
         public List<RHTile> TileList => _arrTiles.Cast<RHTile>().ToList();
+        private List<RHTile> _liWallTiles;
+
         protected TiledMapRenderer _renderer;
         protected List<TiledMapTileset> _liTilesets;
-        protected Dictionary<string, TiledMapTileLayer> _diLayers;
-        public Dictionary<string, TiledMapTileLayer> Layers => _diLayers;
+        protected Dictionary<string, List<TiledMapTileLayer>> _diTileLayers;
+        public Dictionary<string, List<TiledMapTileLayer>> Layers => _diTileLayers;
 
         private List<Light> _liLights;
         private List<Light> _liHeldLights;
@@ -91,6 +93,7 @@ namespace RiverHollow.Tile_Engine
         public RHMap() {
             MonsterSpawnPoints = new List<MonsterSpawn>();
             _liResourceSpawnPoints = new List<ResourceSpawn>();
+            _liWallTiles = new List<RHTile>();
             _liTestTiles = new List<RHTile>();
             _liTilesets = new List<TiledMapTileset>();
             _liActors = new List<WorldActor>();
@@ -128,6 +131,8 @@ namespace RiverHollow.Tile_Engine
             _sName = map.Name+"Clone";
             _renderer = map._renderer;
             _arrTiles = map._arrTiles;
+            _liWallTiles = map._liWallTiles;
+            _diTileLayers = map._diTileLayers;
 
             BuildingID = map.BuildingID;
             IsTown = map.IsTown;
@@ -162,10 +167,18 @@ namespace RiverHollow.Tile_Engine
             MapWidthTiles = _map.Width;
             MapHeightTiles = _map.Height;
 
-            _diLayers = new Dictionary<string, TiledMapTileLayer>();
+            _diTileLayers = new Dictionary<string, List<TiledMapTileLayer>>() { ["Base"] = new List<TiledMapTileLayer>(), ["Ground"] = new List<TiledMapTileLayer>() , ["Upper"] = new List<TiledMapTileLayer>() };
             foreach (TiledMapTileLayer l in _map.TileLayers)
             {
-                _diLayers.Add(l.Name, l);
+                if (l.Name.Contains("Base")) { _diTileLayers["Base"].Add(l); }
+                else if (l.Name.Contains("Ground")) { _diTileLayers["Ground"].Add(l); }
+                else if (l.Name.Contains("Upper")) { _diTileLayers["Upper"].Add(l); }
+                else {
+                    if (!_diTileLayers.ContainsKey(l.Name)){
+                        _diTileLayers[l.Name] = new List<TiledMapTileLayer>();
+                    }
+                    _diTileLayers[l.Name].Add(l);
+                }
             }
 
             _arrTiles = new RHTile[MapWidthTiles, MapHeightTiles];
@@ -327,7 +340,25 @@ namespace RiverHollow.Tile_Engine
 
         public void DrawBase(SpriteBatch spriteBatch)
         {
-            SetLayerVisibility(false);
+            SetLayerVisibiltyByName(true, "Base");
+            SetLayerVisibiltyByName(false, "Ground");
+            SetLayerVisibiltyByName(false, "Upper");
+            _renderer.Draw(_map, Camera._transform);
+
+            if (_liWallTiles.Count > 0)
+            {
+                foreach (RHTile t in _liWallTiles)
+                {
+                    t.DrawWallpaper(spriteBatch);
+                }
+            }
+        }
+
+        public void DrawGround(SpriteBatch spriteBatch)
+        {
+            SetLayerVisibiltyByName(false, "Base");
+            SetLayerVisibiltyByName(true, "Ground");
+            SetLayerVisibiltyByName(false, "Upper");
 
             _renderer.Draw(_map, Camera._transform);
 
@@ -390,11 +421,43 @@ namespace RiverHollow.Tile_Engine
                 foreach (RHTile t in _liTestTiles)
                 {
                     bool passable = CanPlaceObject(t, HeldObject);
-                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TILE_SIZE, TILE_SIZE), new Rectangle(288, 128, TILE_SIZE, TILE_SIZE), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
+                    if (!passable || (passable && !HeldObject.CompareType(ObjectTypeEnum.Wallpaper)))
+                    {
+                        spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TILE_SIZE, TILE_SIZE), new Rectangle(288, 128, TILE_SIZE, TILE_SIZE), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
+                    }
                 }
             }
         }
 
+        public void DrawUpper(SpriteBatch spriteBatch)
+        {
+            SetLayerVisibiltyByName(false, "Base");
+            SetLayerVisibiltyByName(false, "Ground");
+            SetLayerVisibiltyByName(true, "Upper");
+            _renderer.Draw(_map, Camera._transform);
+
+            EnvironmentManager.Draw(spriteBatch);
+
+            SetLayerVisibiltyByName(true, "Base");
+            SetLayerVisibiltyByName(true, "Ground");
+            SetLayerVisibiltyByName(false, "Upper");
+        }
+
+        public void SetLayerVisibiltyByName(bool visible, string designation)
+        {
+            foreach(TiledMapTileLayer layer in _diTileLayers[designation])
+            {
+                layer.IsVisible = visible;
+            }
+        }
+
+        public void DrawLights(SpriteBatch spriteBatch)
+        {
+            foreach (Light obj in _liLights) { obj.Draw(spriteBatch); }
+            foreach (Light obj in _liHeldLights) { obj.Draw(spriteBatch); }
+
+            //spriteBatch.Draw(lightMask, new Vector2(PlayerManager.World.CollisionBox.Center.X - lightMask.Width / 2, PlayerManager.World.CollisionBox.Y - lightMask.Height / 2), Color.White);
+        }
         public void AddHeldLights(List<Light> newLights)
         {
             if (newLights != null)
@@ -424,49 +487,6 @@ namespace RiverHollow.Tile_Engine
                 {
                     _liLights.Remove(obj);
                 }
-            }
-        }
-
-        public void DrawLights(SpriteBatch spriteBatch)
-        {
-            foreach (Light obj in _liLights) { obj.Draw(spriteBatch); }
-            foreach (Light obj in _liHeldLights) { obj.Draw(spriteBatch); }
-
-            //spriteBatch.Draw(lightMask, new Vector2(PlayerManager.World.CollisionBox.Center.X - lightMask.Width / 2, PlayerManager.World.CollisionBox.Y - lightMask.Height / 2), Color.White);
-        }
-
-        public void DrawUpper(SpriteBatch spriteBatch)
-        {
-            SetLayerVisibility(true);
-
-            _renderer.Draw(_map, Camera._transform);
-
-            EnvironmentManager.Draw(spriteBatch);
-
-            SetLayerVisibility(false);
-        }
-
-        /// <summary>
-        /// Sets the layer visibility for what will be drawn in a pass.
-        /// </summary>
-        /// <param name="revealUpper">Whether we're drawing the upper layer or not</param>
-        public void SetLayerVisibility(bool revealUpper)
-        {
-            foreach (TiledMapTileLayer l in _map.TileLayers)                            //Iterate over each TileLayer in the map
-            {
-                bool determinant = l.Name.Contains("Upper");
-                if (revealUpper)
-                {
-                    l.IsVisible = determinant;
-                }
-                else { l.IsVisible = !determinant; }
-
-                //Used to switch the tile layer based on the current Season
-                //Currently disabled.
-                //if (l.IsVisible && IsOutside)
-                //{
-                //    l.IsVisible = l.Name.Contains(GameCalendar.GetSeason());
-                //}
             }
         }
 
@@ -528,9 +548,11 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (mapObject.Name.Equals("Wall"))
                         {
-                            foreach(Vector2 v in Util.GetAllPointsInArea(mapObject.Position.X, mapObject.Position.Y,mapObject.Size.Width, mapObject.Size.Height, TILE_SIZE))
+                            foreach(Vector2 v in Util.GetAllPointsInArea(mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height, TILE_SIZE))
                             {
-                                GetTileByPixelPosition(v).SetWallTrue();
+                                RHTile tile = GetTileByPixelPosition(v);
+                                Util.AddUniquelyToList(ref _liWallTiles, tile);
+                                tile.SetWallTrue();
                             }
                         }
                         else if (mapObject.Name.StartsWith("Display"))
@@ -1603,6 +1625,9 @@ namespace RiverHollow.Tile_Engine
                         case ObjectTypeEnum.Floor:
                             if (MouseTile.Flooring == null) { goto case ObjectTypeEnum.Wall; }
                             break;
+                        case ObjectTypeEnum.Wallpaper:
+                            rv = PlaceWallpaper((Wallpaper)toBuild);
+                            break;
                         case ObjectTypeEnum.Beehive:
                         case ObjectTypeEnum.Buildable:
                         case ObjectTypeEnum.Decor:
@@ -1790,6 +1815,32 @@ namespace RiverHollow.Tile_Engine
                 }
 
                 rv = true;
+            }
+
+            return rv;
+        }
+
+        private bool PlaceWallpaper(Wallpaper wallpaperObject)
+        {
+            bool rv = false;
+
+            if (TargetTile.IsWallpaperWall && PlayerManager.ExpendResources(wallpaperObject.RequiredToMake))
+            {
+                rv = true;
+
+                List<RHTile> usedTiles = new List<RHTile>();
+                List<RHTile> wallpaperTiles = new List<RHTile> { TargetTile };
+                while(wallpaperTiles.Count > 0)
+                {
+                    RHTile tile = wallpaperTiles[0];
+                    Wallpaper paper = (Wallpaper)DataManager.GetWorldObjectByID(wallpaperObject.ID);
+                    paper.SnapPositionToGrid(tile.Position);
+                    tile.SetWallpaper(paper);
+                    wallpaperTiles.AddRange(tile.GetAdjacentTiles().FindAll(x => x.IsWallpaperWall && !usedTiles.Contains(x)));
+
+                    wallpaperTiles.Remove(tile);
+                    usedTiles.Add(tile);
+                }
             }
 
             return rv;
@@ -2023,7 +2074,7 @@ namespace RiverHollow.Tile_Engine
             }
             else if (obj.WallObject)
             {
-                rv = (testTile.WorldObject == null && testTile.IsWall);
+                rv = (testTile.WorldObject == null && testTile.IsWallpaperWall);
             }
             else if (!TileContainsActor(testTile) || obj.Walkable)
             {
@@ -2625,6 +2676,7 @@ namespace RiverHollow.Tile_Engine
 
         Dictionary<TiledMapTileLayer, Dictionary<string, string>> _diProps;
 
+        public Wallpaper _objWallpaper;
         public WorldObject WorldObject { get; private set; }
         public WorldObject ShadowObject { get; private set; }
         public CombatHazard HazardObject { get; private set; }
@@ -2634,7 +2686,7 @@ namespace RiverHollow.Tile_Engine
         bool _bArea = false;
         bool _bSelected = false;
         bool _bLegalTile = false;
-        public bool IsWall { get; private set; } = false;
+        public bool IsWallpaperWall { get; private set; } = false;
 
         public RHTile(int x, int y, string mapName)
         {
@@ -2660,6 +2712,10 @@ namespace RiverHollow.Tile_Engine
 
             if (Flooring != null) { Flooring.Draw(spriteBatch); }
             if (WorldObject != null) { WorldObject.Draw(spriteBatch); }
+        }
+        public void DrawWallpaper(SpriteBatch spriteBatch)
+        {
+            _objWallpaper?.Draw(spriteBatch);
         }
 
         public bool ProcessRightClick()
@@ -2705,7 +2761,7 @@ namespace RiverHollow.Tile_Engine
 
         public void SetWallTrue()
         {
-            IsWall = true;
+            IsWallpaperWall = true;
         }
 
         public bool SetFloor(Floor f)
@@ -2722,17 +2778,20 @@ namespace RiverHollow.Tile_Engine
 
         public void SetProperties(RHMap map)
         {
-            foreach (TiledMapTileLayer l in map.Layers.Values)
+            foreach (KeyValuePair<string, List<TiledMapTileLayer>> kvp in map.Layers)
             {
-                if (l.TryGetTile(X, Y, out TiledMapTile? tile) && tile != null)
+                foreach (TiledMapTileLayer l in kvp.Value)
                 {
-                    if (tile.Value.GlobalIdentifier != 0)
+                    if (l.TryGetTile(X, Y, out TiledMapTile? tile) && tile != null)
                     {
-                        _tileExists = true;
-                    }
-                    if (((TiledMapTile)tile).GlobalIdentifier != 0)
-                    {
-                        _diProps.Add(l, map.GetProperties((TiledMapTile)tile));
+                        if (tile.Value.GlobalIdentifier != 0)
+                        {
+                            _tileExists = true;
+                        }
+                        if (((TiledMapTile)tile).GlobalIdentifier != 0)
+                        {
+                            _diProps.Add(l, map.GetProperties((TiledMapTile)tile));
+                        }
                     }
                 }
             }
@@ -2788,7 +2847,7 @@ namespace RiverHollow.Tile_Engine
             {
                 rv = SetFloor((Floor)o);
             }
-            else if ((!o.WallObject && Passable()) || (o.WallObject && IsWall))
+            else if ((!o.WallObject && Passable()) || (o.WallObject && IsWallpaperWall))
             {
                 WorldObject = o;
                 rv = true;
@@ -2798,7 +2857,7 @@ namespace RiverHollow.Tile_Engine
         public bool SetShadowObject(WorldObject o)
         {
             bool rv = false;
-            if ((!o.WallObject && Passable()) || (o.WallObject && IsWall))
+            if ((!o.WallObject && Passable()) || (o.WallObject && IsWallpaperWall))
             {
                 ShadowObject = o;
                 rv = true;
@@ -2813,6 +2872,9 @@ namespace RiverHollow.Tile_Engine
 
             return f;
         }
+
+        public void SetWallpaper(Wallpaper obj) { _objWallpaper = obj; }
+
 
         /// <summary>
         /// Sets the Hazard object for the RHTile
