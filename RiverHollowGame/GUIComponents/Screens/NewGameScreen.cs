@@ -31,6 +31,7 @@ namespace RiverHollow.GUIComponents.Screens
         GUITextInputWindow _nameWindow;
         GUITextInputWindow _townWindow;
 
+        GUICheck _gCheckPregnancy;
         GUICheck _gCheckSkipCutscene;
         GUIButton _gMuteButton;
 
@@ -108,6 +109,9 @@ namespace RiverHollow.GUIComponents.Screens
             _gShirt.AnchorAndAlignToObject(_gHat, SideEnum.Bottom, SideEnum.Left, 10);
             _btnNextShirt = new GUIButton(new Rectangle(288, 96, 32, 32), 32, 32, DataManager.DIALOGUE_TEXTURE, BtnNextShirt);
             _btnNextShirt.AnchorAndAlignToObject(_gShirt, SideEnum.Right, SideEnum.Bottom, 10);
+
+            _gCheckPregnancy = new GUICheck("Pregnancy", false, BtnPregnancy);
+            _gCheckPregnancy.AnchorAndAlignToObject(_gShirt, SideEnum.Bottom, SideEnum.Left, 10);
 
             GUIObject.CreateSpacedRow(ref _liClassBoxes, _window.Height / 2, _window.Position().X, _window.Width, 20);
 
@@ -269,6 +273,10 @@ namespace RiverHollow.GUIComponents.Screens
 
             SyncClothing((Clothes)DataManager.GetItem((_liShirts[_iShirtIndex])), ClothesEnum.Body);
             _playerDisplayBox.Configure();
+        }
+        public void BtnPregnancy()
+        {
+            PlayerManager.World.CanBecomePregnant = _gCheckPregnancy.Checked();
         }
 
         private void SyncClothing(Clothes c, ClothesEnum e)

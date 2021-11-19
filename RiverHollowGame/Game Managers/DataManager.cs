@@ -500,8 +500,6 @@ namespace RiverHollow.Game_Managers
                         return new Plant(id, diData);
                     case ObjectTypeEnum.Structure:
                         return new Structure(id, diData);
-                    case ObjectTypeEnum.StructureUpgrader:
-                        return new StructureUpgrader(id, diData);
                     case ObjectTypeEnum.Wall:
                         return new Wall(id, diData);
                     case ObjectTypeEnum.Wallpaper:
@@ -579,6 +577,8 @@ namespace RiverHollow.Game_Managers
                 Dictionary<string, string> diData = _diNPCData[id];
                 switch (Util.ParseEnum<ActorEnum>(diData["Type"]))
                 {
+                    case ActorEnum.Child:
+                        return new Child(id, diData);
                     case ActorEnum.Environmental:
                         return new EnvironmentalActor(id, diData);
                     case ActorEnum.Mount:

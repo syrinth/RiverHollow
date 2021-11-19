@@ -588,12 +588,11 @@ namespace RiverHollow.Characters
         protected Dictionary<string, TextEntry> _diDialogue;
 
         public static List<int> FriendRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000 };
-        public int FriendshipPoints = 0;
+        public int FriendshipPoints = 1600;
 
         protected bool _bHasTalked;
 
         public bool CanGiveGift = true;
-        public bool CanJoinParty = false;
 
         protected List<string> _liSpokenKeys;
 
@@ -697,7 +696,7 @@ namespace RiverHollow.Characters
             PriorityQueue<TextEntry> keyPool = new PriorityQueue<TextEntry>();
             foreach (TextEntry entry in _diDialogue.Values)
             {
-                if (entry.Valid())
+                if (entry.Valid(this))
                 {
                     keyPool.Enqueue(entry, entry.Priority);
                 }
@@ -1740,7 +1739,8 @@ namespace RiverHollow.Characters
         protected List<int> _liRequiredBuildingIDs;
         protected Dictionary<int, int> _diRequiredObjectIDs;
 
-        public bool Introduced = false;
+        public virtual RelationShipStatusEnum Relationship { get; set; }
+        public bool Introduced => Relationship != RelationShipStatusEnum.None;
         protected bool _bArrivedOnce = false;
 
         protected virtual void ImportBasics(int index, Dictionary<string, string> stringData, bool loadanimations = true)
@@ -1806,7 +1806,7 @@ namespace RiverHollow.Characters
             GUIManager.OpenMainObject(new HUDShopWindow(GameManager.DIShops[_iShopIndex].GetUnlockedMerchandise()));
         }
 
-        protected bool RequirementsMet()
+        protected bool TownRequirementsMet()
         {
             foreach (KeyValuePair<int, int> kvp in _diRequiredObjectIDs)
             {
@@ -1888,9 +1888,27 @@ namespace RiverHollow.Characters
 
         private Thread _pathingThread;
 
+        private bool _bCanBecomePregnant = false;
+        public bool CanBecomePregnant => _bCanBecomePregnant;
+        public bool Pregnant { get; set; }
+        private bool _bCombatant = false;
+        public bool Combatant => _bCombatant;
         private bool _bCanMarry = false;
         public bool CanBeMarried => _bCanMarry;
-        private bool _bMarried = false;
+
+        public override RelationShipStatusEnum Relationship {
+            set
+            {
+                base.Relationship = value;
+                if (Relationship == RelationShipStatusEnum.Married) { PlayerManager.Spouse = this; }
+                else if (Relationship == RelationShipStatusEnum.Engaged)
+                {
+                    PlayerManager.WeddingCountdown = 3;
+                    PlayerManager.Spouse = this;
+                }
+            }
+        }
+        public bool Married => Relationship == RelationShipStatusEnum.Married;
 
         protected bool _bLivesInTown = false;
         public bool LivesInTown => _bLivesInTown;
@@ -1940,8 +1958,8 @@ namespace RiverHollow.Characters
             base.ImportBasics(index, stringData, loadanimations);
 
             Util.AssignValue(ref _bCanMarry, "CanMarry", stringData);
-
-            CanJoinParty = _bCanMarry;
+            Util.AssignValue(ref _bCanBecomePregnant, "CanBecomePregnant", stringData);
+            Util.AssignValue(ref _bCombatant, "Combatant", stringData);
 
             Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
             Util.AssignValue(ref _iTotalMoneyEarnedReq, "TotalMoneyEarnedReq", stringData);
@@ -1978,7 +1996,7 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             //Only follow schedules ATM if they are active and not married
-            if (_bOnTheMap && !_bMarried)
+            if (_bOnTheMap && !Married)
             {
                 //Only start to find a path if we are not currently on one.
                 if (_pathingThread == null && _liTilePath.Count == 0 && _diCompleteSchedule != null && _sScheduleKey != null && _diCompleteSchedule[_sScheduleKey].Count > _iNextTimeKeyID && NextScheduledTime == GameCalendar.GetTime())
@@ -2017,7 +2035,10 @@ namespace RiverHollow.Characters
 
         public override void RollOver()
         {
-            if (RequirementsMet() && CurrentMap != null) { _bLivesInTown = true; }
+            //Determines whether or not the Villager will stay in town
+            if (!_bLivesInTown && TownRequirementsMet() && IsHomeBuilt() && CurrentMap != null) {
+                _bLivesInTown = true;
+            }
 
             if (LivesInTown || HandleTravelTiming())
             {
@@ -2054,7 +2075,7 @@ namespace RiverHollow.Characters
             if (!Introduced)
             {
                 rv = GetDialogEntry("Introduction");
-                Introduced = true;
+                Relationship = RelationShipStatusEnum.Friends;
             }
             else
             {
@@ -2085,29 +2106,6 @@ namespace RiverHollow.Characters
         }
 
         /// <summary>
-        /// Call this method to determine if a Villager has decided to stay in town
-        /// </summary>
-        /// <returns>True if villager wants to stay in town</returns>
-        public bool ShouldIStayInTown()
-        {
-            bool rv = false;
-            if (!LivesInTown)
-            {
-                if (RequirementsMet())
-                {
-                    if (_iDaysToFirstArrival > 0) { _iDaysToFirstArrival--; }
-                    else if (_iDaysToFirstArrival == 0)
-                    {
-                        _bLivesInTown = true;
-                        rv = true;
-                    }
-                }
-            }
-
-            return rv;
-        }
-
-        /// <summary>
         /// Quick call to see if the NPC's home is built. Returns false if they have no assigned home.
         /// </summary>
         protected bool IsHomeBuilt()
@@ -2127,7 +2125,7 @@ namespace RiverHollow.Characters
         {
             string rv = string.Empty;
 
-            if (_bMarried) { rv = PlayerManager.PlayerHome.MapName; }
+            if (Married) { rv = PlayerManager.PlayerHome.MapName; }
             else if (IsHomeBuilt()) { rv = PlayerManager.GetBuildingByID(_iHouseBuildingID).MapName; }
             else if (_iHouseBuildingID != -1) { rv = "mapInn_Upper_1"; }
 
@@ -2152,7 +2150,8 @@ namespace RiverHollow.Characters
                 RHMap map = MapManager.Maps[mapName];
 
                 string strSpawn = string.Empty;
-                if (IsHomeBuilt() || GetSpawnMapName() == MapManager.TownMapName) { strSpawn = "NPC_" + _iIndex.ToString("00"); }
+                if (Married) { strSpawn = "Spouse"; }
+                else if (IsHomeBuilt() || GetSpawnMapName() == MapManager.TownMapName) { strSpawn = "NPC_" + _iIndex.ToString("00"); }
                 else if (GameManager.VillagersInTheInn < 3) { strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
 
                 Position = Util.SnapToGrid(map.GetCharacterSpawn(strSpawn));
@@ -2320,27 +2319,6 @@ namespace RiverHollow.Characters
                     _diCollection[item.ItemID] = true;
                     MapManager.Maps[GetSpawnMapName()].AddCollectionItem(item.ItemID, _iIndex, index);
                 }
-                else if (item.CompareSpecialType(SpecialItemEnum.Marriage))
-                {
-                    if (_bCanMarry)
-                    {
-                        if (FriendshipPoints > 200)
-                        {
-                            _bMarried = true;
-                            rv = GetDialogEntry("MarriageYes");
-                        }
-                        else   //Marriage refused, re-add the item
-                        {
-                            giftGiven = false;
-                            rv = GetDialogEntry("MarriageNo");
-                        }
-                    }
-                    else
-                    {
-                        giftGiven = false;
-                        rv = GetDialogEntry("MarriageNo");
-                    }
-                }
                 else
                 {
                     rv = GetDialogEntry("Gift");
@@ -2360,7 +2338,7 @@ namespace RiverHollow.Characters
         public override TextEntry JoinParty()
         {
             TextEntry rv = null;
-            if (_bMarried || CanJoinParty)
+            if (Combatant)
             {
                 _bOnTheMap = false;
                 PlayerManager.AddToParty(this);
@@ -2382,6 +2360,9 @@ namespace RiverHollow.Characters
             PlayAnimationVerb(VerbEnum.Idle);
         }
 
+        public bool AvailableToDate() { return CanBeMarried && GetFriendshipLevel() >= 6 && Relationship == RelationShipStatusEnum.Friends; }
+        public bool AvailableToMarry() { return CanBeMarried && GetFriendshipLevel() >= 6 && Relationship == RelationShipStatusEnum.Dating; }
+
         public VillagerData SaveData()
         {
             VillagerData npcData = new VillagerData()
@@ -2390,12 +2371,11 @@ namespace RiverHollow.Characters
                 arrived = LivesInTown,
                 arrivalDelay = _iDaysToFirstArrival,
                 nextArrival = _iNextArrival,
-                introduced = Introduced,
                 friendship = FriendshipPoints,
                 collection = new List<bool>(_diCollection.Values),
-                married = _bMarried,
+                relationShipStatus = (int)Relationship,
                 canGiveGift = CanGiveGift,
-                spokenKeys = _liSpokenKeys
+                spokenKeys = _liSpokenKeys,
             };
 
             if (_class != null) { npcData.classedData = SaveClassedCharData(); }
@@ -2404,13 +2384,16 @@ namespace RiverHollow.Characters
         }
         public void LoadData(VillagerData data)
         {
-            Introduced = data.introduced;
             _bLivesInTown = data.arrived;
             _iNextArrival = data.nextArrival;
             _iDaysToFirstArrival = data.arrivalDelay;
             FriendshipPoints = data.friendship;
-            _bMarried = data.married;
             CanGiveGift = data.canGiveGift;
+            Relationship = (RelationShipStatusEnum)data.relationShipStatus;
+            if (Relationship == RelationShipStatusEnum.Engaged || Relationship == RelationShipStatusEnum.Married)
+            {
+                PlayerManager.Spouse = this;
+            }
 
             if (_iNextArrival == 0)
             {
@@ -2499,7 +2482,7 @@ namespace RiverHollow.Characters
         {
             if (!_bOnTheMap)
             {
-                if (RequirementsMet() && HandleTravelTiming())
+                if (TownRequirementsMet() && HandleTravelTiming())
                 {
                     if (!_bArrivedOnce) { GameManager.MerchantQueue.Add(this); }
                     else { GameManager.MerchantQueue.Insert(0, this); }
@@ -2548,7 +2531,7 @@ namespace RiverHollow.Characters
             if (!Introduced)
             {
                 rv = GetDialogEntry("Introduction");
-                Introduced = true;
+                Relationship = RelationShipStatusEnum.Friends;
             }
             else
             {
@@ -2613,7 +2596,7 @@ namespace RiverHollow.Characters
         }
         public void LoadData(MerchantData data)
         {
-            Introduced = data.introduced;
+            Relationship = (RelationShipStatusEnum)data.relationShipStatus;
             _iDaysToFirstArrival = data.arrivalDelay;
             _iNextArrival = data.timeToNextArrival;
             _bArrivedOnce = data.arrivedOnce;
@@ -2640,6 +2623,9 @@ namespace RiverHollow.Characters
         public int HairIndex { get; private set; } = 0;
         public int BodyType { get; private set; } = 1;
         public string BodyTypeStr => BodyType.ToString("00");
+
+        public bool CanBecomePregnant { get; set; }
+        public bool Pregnant { get; set; }
 
         protected override List<AnimatedSprite> GetSprites()
         {
@@ -2685,7 +2671,7 @@ namespace RiverHollow.Characters
 
             //Sets a default class so we can load and display the character to start
             SetClass(DataManager.GetClassByIndex(1));
-            SetClothes((Clothes)DataManager.GetItem(int.Parse(DataManager.Config[6]["ItemID"])));
+           // SetClothes((Clothes)DataManager.GetItem(int.Parse(DataManager.Config[6]["ItemID"])));
 
             _sprBody.SetColor(Color.White);
             _sprHair.SetColor(HairColor);
@@ -2848,6 +2834,259 @@ namespace RiverHollow.Characters
             {
                 spr.SetLinkedSprite(null);
             }
+        }
+    }
+
+    public class Child : TalkingActor
+    {
+        int _iCurrentGrowth = 0;
+        private List<int> _liGrowthPeriods;
+        List<AnimationData> _liData;
+
+        public enum ChildStageEnum { Newborn, Infant, Toddler };
+        private ChildStageEnum _eCurrentStage = ChildStageEnum.Newborn;
+
+        public enum PetStateEnum { Alert, Idle, Leash, Wander };
+        private PetStateEnum _eCurrentState = PetStateEnum.Wander;
+
+        private int _iGatherZoneID;
+
+        const double MOVE_COUNTDOWN = 2.5;
+        public int ID { get; } = -1;
+        private bool _bFollow = false;
+        private bool _bIdleCooldown = false;
+
+        private double _dCountdown = 0;
+
+        public Child(int id, Dictionary<string, string> stringData) : base()
+        {
+            ID = id;
+            _eActorType = ActorEnum.Child;
+
+            _liGrowthPeriods = new List<int>() { 4, 10 };
+
+            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Adventurer", id.ToString("00"));
+            DataManager.GetTextData("NPC", ID, ref _sName, "Name");
+
+            _liData  = new List<AnimationData>();
+            AddToAnimationsList(ref _liData, stringData, VerbEnum.Walk);
+            AddToAnimationsList(ref _liData, stringData, VerbEnum.Idle);
+            AddToAnimationsList(ref _liData, stringData, VerbEnum.Action1);
+            LoadSpriteAnimations(ref _sprBody, _liData, _sCreatureFolder + "NPC_" + ID + "_" + (int)_eCurrentStage);
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+
+            if (_bBumpedIntoSomething)
+            {
+                _bBumpedIntoSomething = false;
+                SetMoveObj(Vector2.Zero);
+            }
+
+            if (_bFollow && !PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE * 8) && _eCurrentState != PetStateEnum.Leash)
+            {
+                if (!_sprBody.IsCurrentAnimation(VerbEnum.Action1, Facing))
+                {
+                    ChangeState(PetStateEnum.Alert);
+                }
+            }
+
+            switch (_eCurrentState)
+            {
+                case PetStateEnum.Alert:
+                    Alert();
+                    break;
+                case PetStateEnum.Idle:
+                    Idle(gTime);
+                    break;
+                case PetStateEnum.Wander:
+                    Wander(gTime);
+                    break;
+                case PetStateEnum.Leash:
+                    Leash();
+                    break;
+            }
+        }
+
+        public void Rollover()
+        {
+            if(_eCurrentStage != ChildStageEnum.Toddler)
+            {
+                _iCurrentGrowth++;
+
+                if (_iCurrentGrowth == _liGrowthPeriods[(int)_eCurrentStage])
+                {
+                    _iCurrentGrowth = 0;
+                    _eCurrentStage = _eCurrentStage + 1;
+
+                    LoadSpriteAnimations(ref _sprBody, _liData, _sCreatureFolder + "NPC_" + ID + "_" + (int)_eCurrentStage);
+                }
+            }
+        }
+
+        public override void ProcessRightButtonClick()
+        {
+            TextEntry text = DataManager.GetGameTextEntry(_bFollow ? "PetUnfollow" : "PetFollow");
+            text.FormatText(_sName);
+            GUIManager.OpenTextWindow(text, this, true);
+        }
+
+        private void Alert()
+        {
+            if (_sprBody.PlayedOnce)
+            {
+                ChangeState(PetStateEnum.Leash);
+            }
+        }
+
+        private void Idle(GameTime gTime)
+        {
+            if (_dCountdown < 10 + RHRandom.Instance().Next(5)) { _dCountdown += gTime.ElapsedGameTime.TotalSeconds; }
+            else
+            {
+                if (RHRandom.Instance().RollPercent(50))
+                {
+                    _dCountdown = 0;
+                    _bIdleCooldown = true;
+                    ChangeState(PetStateEnum.Wander);
+                }
+            }
+        }
+
+        private void Leash()
+        {
+            Vector2 delta = Position - PlayerManager.World.Position;
+            HandleMove(Position - delta);
+
+            if (PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE))
+            {
+                ChangeState(PetStateEnum.Wander);
+            }
+        }
+
+        private void Wander(GameTime gTime)
+        {
+            if (_dCountdown < MOVE_COUNTDOWN + (RHRandom.Instance().Next(4) * 0.25)) { _dCountdown += gTime.ElapsedGameTime.TotalSeconds; }
+            else if (MoveToLocation == Vector2.Zero)
+            {
+                _dCountdown = 0;
+
+                if (!_bIdleCooldown && RHRandom.Instance().RollPercent(20))
+                {
+                    ChangeState(PetStateEnum.Idle);
+                    return;
+                }
+
+                _bIdleCooldown = false;
+
+                Vector2 moveTo = new Vector2(RHRandom.Instance().Next(8, 32), RHRandom.Instance().Next(8, 32));
+                if (RHRandom.Instance().Next(1, 2) == 1) { moveTo.X *= -1; }
+                if (RHRandom.Instance().Next(1, 2) == 1) { moveTo.Y *= -1; }
+
+                SetMoveObj(Position + moveTo);
+            }
+
+            if (MoveToLocation != Vector2.Zero)
+            {
+                HandleMove(_vMoveTo);
+            }
+        }
+
+        public void ChangeState(PetStateEnum state)
+        {
+            _eCurrentState = state;
+            switch (state)
+            {
+                case PetStateEnum.Alert:
+                    PlayAnimation(VerbEnum.Action1, Facing);
+                    break;
+                case PetStateEnum.Idle:
+                    PlayAnimation(VerbEnum.Idle, Facing);
+                    break;
+                case PetStateEnum.Leash:
+                    ChangeMovement(NORMAL_SPEED);
+                    break;
+                case PetStateEnum.Wander:
+                    ChangeMovement(NPC_WALK_SPEED);
+                    break;
+            }
+        }
+
+        private void ChangeMovement(float speed)
+        {
+            SpdMult = speed;
+            PlayAnimation(VerbEnum.Walk, Facing);
+            SetMoveObj(Vector2.Zero);
+            _dCountdown = 0;
+        }
+
+        public void SetFollow(bool value)
+        {
+            _bFollow = value;
+        }
+
+        public void SpawnInHome()
+        {
+            WorldObject obj = Util.GetRandomItem(PlayerManager.GetTownObjectsByID(_iGatherZoneID));
+            if (obj == null)
+            {
+                if (CurrentMap == null) { MapManager.TownMap.AddCharacterImmediately(this); }
+                else { MapManager.TownMap.AddCharacter(this); }
+                Position = Util.GetRandomItem(MapManager.TownMap.FindFreeTiles()).Position;
+            }
+            else
+            {
+                List<RHTile> validTiles = new List<RHTile>();
+                Point objLocation = obj.CollisionBox.Location;
+                foreach (Vector2 v in Util.GetAllPointsInArea(objLocation.X - (3 * TILE_SIZE), objLocation.Y - (3 * TILE_SIZE), TILE_SIZE * 7, TILE_SIZE * 7, TILE_SIZE))
+                {
+                    RHTile t = obj.CurrentMap.GetTileByPixelPosition(v);
+                    if (t != null && t.Passable() && (t.WorldObject == null || t.WorldObject.Walkable)) { validTiles.Add(t); }
+                }
+
+                obj.CurrentMap.AddCharacter(this);
+                Position = Util.GetRandomItem(validTiles).Position;
+
+                ChangeState(PetStateEnum.Wander);
+            }
+        }
+
+        public void SpawnNearPlayer()
+        {
+            if (CurrentMap == null) { MapManager.CurrentMap.AddCharacterImmediately(this); }
+            else { MapManager.CurrentMap.AddCharacter(this); }
+
+            List<RHTile> validTiles = new List<RHTile>();
+            Point playerLocation = PlayerManager.World.CollisionBox.Location;
+            foreach (Vector2 v in Util.GetAllPointsInArea(playerLocation.X - (3 * TILE_SIZE), playerLocation.Y - (3 * TILE_SIZE), TILE_SIZE * 7, TILE_SIZE * 7, TILE_SIZE))
+            {
+                RHTile t = MapManager.CurrentMap.GetTileByPixelPosition(v);
+                if (t != null && t.Passable() && (t.WorldObject == null || t.WorldObject.Walkable)) { validTiles.Add(t); }
+            }
+
+            Position = Util.GetRandomItem(validTiles).Position;
+
+            ChangeState(PetStateEnum.Wander);
+        }
+
+        public ChildData SaveData()
+        {
+            ChildData data = new ChildData()
+            {
+                childID = ID,
+                stageEnum = (int)_eCurrentStage,
+                growthTime = _iCurrentGrowth
+            };
+
+            return data;
+        }
+
+        public void LoadData(ChildData data)
+        {
+            _eCurrentStage = (ChildStageEnum)data.stageEnum;
+            _iCurrentGrowth = data.growthTime;
         }
     }
 
@@ -3530,9 +3769,9 @@ namespace RiverHollow.Characters
 
         public override void ProcessRightButtonClick()
         {
-            TextEntry text = DataManager.GetGameTextEntry(_bFollow ? "PetUnfollow" : "PetFollow");
-            text.FormatText(_sName);
-            GUIManager.OpenTextWindow(text, this, true);
+            //TextEntry text = DataManager.GetGameTextEntry(_bFollow ? "Unfollow" : "PetFollow");
+            //text.FormatText(_sName);
+            //GUIManager.OpenTextWindow(text, this, true);
         }
 
         private void Alert()

@@ -8,6 +8,8 @@ using RiverHollow.WorldObjects;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.Utilities;
+using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.GUIComponents.Screens;
 
 namespace RiverHollow.Buildings
 {
@@ -25,7 +27,7 @@ namespace RiverHollow.Buildings
         private string _sTextureName;
 
         private string _sBuildingMap;
-        public new string MapName => "map" + _sTextureName.Replace(" ", "") + "_1";// + (Level == 0 ? "" : Level.ToString());
+        public new string MapName => "map" + _sTextureName.Replace(" ", "") + "_" + Level.ToString();
 
         public Rectangle SelectionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _sprite.Width, _sprite.Height);
 
@@ -38,6 +40,14 @@ namespace RiverHollow.Buildings
         public Building(int id, Dictionary<string, string> stringData) : base(id)
         {
             ImportBasics(id, stringData);
+        }
+
+        public override void ProcessLeftClick()
+        {
+            if (Level < MAX_BUILDING_LEVEL)
+            {
+                GUIManager.OpenMainObject(new HUDUpgradeWindow(this));
+            }
         }
 
         private void ImportBasics(int id, Dictionary<string, string> stringData)
@@ -110,7 +120,7 @@ namespace RiverHollow.Buildings
             for (int i = 1; i <= MAX_BUILDING_LEVEL; i++)
             {
                 _sprite.AddAnimation(i.ToString(), startX, startY, _uSize);
-                startX += _uSize.Width;
+                startX += _uSize.Width * TILE_SIZE;
             }
             _sprite.PlayAnimation("1");
         }
@@ -131,10 +141,6 @@ namespace RiverHollow.Buildings
 
             //Create the entrance and exit rectangles attached to the building
             TravelBox = new Rectangle(startX, startY, _rEntrance.Width * TILE_SIZE, _rEntrance.Height * TILE_SIZE);
-        }
-
-        public override void Rollover()
-        {
         }
 
         public override bool PlaceOnMap(Vector2 pos, RHMap map)
@@ -161,7 +167,7 @@ namespace RiverHollow.Buildings
 
         public Dictionary<int, int> UpgradeReqs()
         {
-            if (_diUpgradeInfo.Count > 0) { return _diUpgradeInfo[Level + 1]; }
+            if (_diUpgradeInfo.Count > 0 && _diUpgradeInfo.ContainsKey(Level + 1)) { return _diUpgradeInfo[Level + 1]; }
             else { return null; }
         }
 
@@ -176,11 +182,14 @@ namespace RiverHollow.Buildings
         /// </summary>
         public void Upgrade()
         {
+            string initialLevel = MapName;
             if (Level + 1 <= MAX_BUILDING_LEVEL)
             {
                 Level++;
+                _sprite.PlayAnimation(Level.ToString());
             }
 
+            MapManager.Maps[_sBuildingMap].UpdateBuildingEntrance(initialLevel, MapName);
             MapManager.Maps[MapName].UpgradeMap(Level);
 
             //_sprite.PlayAnimation(Level.ToString());
@@ -193,14 +202,6 @@ namespace RiverHollow.Buildings
         public void SetHomeMap(string name)
         {
             _sBuildingMap = name;
-        }
-
-        public string TravelLink()
-        {
-            string rv = string.Empty;
-            rv = MapName;
-
-            return rv;
         }
 
         public BuildingData SaveData()

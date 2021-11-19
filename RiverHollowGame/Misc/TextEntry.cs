@@ -141,7 +141,7 @@ namespace RiverHollow.Misc
         /// </summary>
         /// <param name="act">The Villager we are talking to</param>
         /// <returns>True if all conditions are current active.</returns>
-        public bool Valid(Villager act = null)
+        public bool Valid(TalkingActor act = null)
         {
             bool rv = false;
 
@@ -151,6 +151,26 @@ namespace RiverHollow.Misc
             if (_diTags.ContainsKey("Default")) { rv = true; }
             else
             {
+                if (_diTags.ContainsKey("MaxChildren"))
+                {
+                    if (PlayerManager.Children.Count < int.Parse(_diTags["MaxChildren"])) { rv = true; }
+                    else { return false; }
+                }
+                if (_diTags.ContainsKey("Chance"))
+                {
+                    if (RHRandom.Instance().RollPercent(int.Parse(_diTags["Chance"]))) { rv = true; }
+                    else { return false; }
+                }
+                if (_diTags.ContainsKey("Married"))
+                {
+                    if(((Villager)act).Married) { rv = true; }
+                    else { return false; }
+                }
+                if (_diTags.ContainsKey("NotExpecting"))
+                {
+                    if(PlayerManager.ChildStatus == ExpectingChildEnum.None) { rv = true; }
+                    else { return false; }
+                }
                 if (_diTags.ContainsKey("Weather"))
                 {
                     if (EnvironmentManager.GetWeatherString().Equals(_diTags["Weather"])) { rv = true; }

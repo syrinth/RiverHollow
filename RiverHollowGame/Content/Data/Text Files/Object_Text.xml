@@ -467,7 +467,7 @@
     </Item>
     <Item>
       <Key>Building_20</Key>
-      <Value>[Name:Market]</Value>
+      <Value>[Name:General Store]</Value>
     </Item>
     <Item>
       <Key>Building_21</Key>
@@ -495,7 +495,7 @@
     </Item>
     <Item>
       <Key>Building_27</Key>
-      <Value>[Name:Market]</Value>
+      <Value>[Name:$Name$'s House]</Value>
     </Item>
     <Item>
       <Key>Building_28</Key>
@@ -568,6 +568,10 @@
     <Item>
       <Key>NPC_9</Key>
       <Value>[Name:Birb_1]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_10</Key>
+      <Value>[Name:Child_1]</Value>
     </Item>
     <Item>
       <Key>StatusEffect_0</Key>
@@ -687,7 +691,7 @@
     </Item>
     <Item>
       <Key>Shop_3</Key>
-      <Value>[Name:Grocery]</Value>
+      <Value>[Name:General Store]</Value>
     </Item>
     <Item>
       <Key>Shop_4</Key>
@@ -1751,31 +1755,31 @@
     </Item>
     <Item>
       <Key>WorldObject_71</Key>
-      <Value>[Name:Upgrade Board]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_72</Key>
       <Value>[Name:Stone Wall]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_73</Key>
+      <Key>WorldObject_72</Key>
       <Value>[Name:Wooden Fence]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_74</Key>
+      <Key>WorldObject_73</Key>
       <Value>[Name:Lavender Wallpaper]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_75</Key>
+      <Key>WorldObject_74</Key>
       <Value>[Name:Red Wallpaper]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_76</Key>
+      <Key>WorldObject_75</Key>
       <Value>[Name:Blue Wallpaper]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_77</Key>
+      <Key>WorldObject_76</Key>
       <Value>[Name:Caves Runestone]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_77</Key>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_78</Key>

@@ -25,5 +25,29 @@
       <Key>Daria|1</Key>
       <Value>[Text:$Character_6$ is kind of scary, isn't she? She just has this look in her eyes... sometimes I'm afraid she's going to wilt my flowers just by looking at them!][Villager:6]</Value>
     </Item>
+    <Item>
+      <Key>MarriageYes</Key>
+      <Value>[Text:Really? For me! Oh my... yes. Yes! I'll marry you!]</Value>
+    </Item>
+    <Item>
+      <Key>MarriageNo</Key>
+      <Value>[Text:Oh... $Name$ I'm so sorry but no...]</Value>
+    </Item>
+    <Item>
+      <Key>Goodbye</Key>
+      <Value>[Text:See you later!]</Value>
+    </Item>
+    <Item>
+      <Key>DateYes</Key>
+      <Value>[Text:I was worried it was just me. Yes, I would love to date you, $Name$]</Value>
+    </Item>
+    <Item>
+      <Key>Married_1</Key>
+      <Value>[Text:Hello, Love. How are you this morning? I got up a bit early to water the plants.][Married]</Value>
+    </Item>
+    <Item>
+      <Key>Baby</Key>
+      <Value>[Text:Do you want to have a baby?][Selection:YesNo][Trigger:GetBaby][Married][Priority:50][NotExpecting][Chance:5][MaxChildren:2]</Value>
+    </Item>
   </Asset>
 </XnaContent>

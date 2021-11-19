@@ -287,31 +287,31 @@
     </Item>
     <Item>
       <Key>71</Key>
-      <Value>[Type:StructureUpgrader][Image:176-48]</Value>
-    </Item>
-    <Item>
-      <Key>72</Key>
       <Value>[Type:Wall][Image:0-128][Size:1-2][BaseOffset:0-1][ReqItems:0-1]</Value>
     </Item>
     <Item>
-      <Key>73</Key>
+      <Key>72</Key>
       <Value>[Type:Wall][Image:0-272][Size:1-2][BaseOffset:0-1][ReqItems:2-1|60-2]</Value>
     </Item>
     <Item>
-      <Key>74</Key>
+      <Key>73</Key>
       <Value>[Type:Wallpaper][Image:144-160][ReqItems:0-1]</Value>
     </Item>
     <Item>
-      <Key>75</Key>
+      <Key>74</Key>
       <Value>[Type:Wallpaper][Image:160-160][ReqItems:0-1]</Value>
     </Item>
     <Item>
-      <Key>76</Key>
+      <Key>75</Key>
       <Value>[Type:Wallpaper][Image:176-160][ReqItems:0-1]</Value>
     </Item>
     <Item>
-      <Key>77</Key>
+      <Key>76</Key>
       <Value>[Type:WarpPoint][Image:288-0][Size:2-2][Base:2-1][BaseOffset:0-1]</Value>
+    </Item>
+    <Item>
+      <Key>77</Key>
+      <Value>[Type:WorldObject]</Value>
     </Item>
     <Item>
       <Key>78</Key>

@@ -2279,49 +2279,6 @@ namespace RiverHollow.WorldObjects
         }
     }
 
-    public class StructureUpgrader : WorldObject
-    {
-        int _iStructureID = -1;
-        int _iBuildingID = -1;
-
-        public StructureUpgrader(int id, Dictionary<string, string> stringData) : base (id) {
-            LoadDictionaryData(stringData);
-        }
-
-        public override void ProcessLeftClick()
-        {
-            GUIManager.OpenMainObject(new HUDUpgradeWindow(PlayerManager.GetBuildingByID(_iBuildingID)));
-        }
-
-        public override bool PlaceOnMap(Vector2 pos, RHMap map)
-        {
-            bool rv = false;
-            if (base.PlaceOnMap(pos, map))
-            {
-                rv = true;
-                if (map.BuildingID != -1)
-                {
-                    SetBuildingID(map.BuildingID);
-                }
-            }
-
-            return rv;
-        }
-
-        public void SetBuildingID(int ID)
-        {
-            _iBuildingID = ID;
-            _iStructureID = -1;
-        }
-
-        public void SetStructureId(int ID)
-        {
-            _iStructureID = ID;
-            _iBuildingID = -1;
-        }
-
-    }
-
     public class WarpPoint : WorldObject
     {
         public bool Active { get; private set; } = false;

@@ -145,5 +145,17 @@
       <Key>PetUnfollow</Key>
       <Value>[Text:Leave {0} here?][Selection:YesNo][Trigger:PetUnfollow]</Value>
     </Item>
+    <Item>
+      <Key>Selection_Propose</Key>
+      <Value>[Text:Propose][TextVerb:Propose]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_Date</Key>
+      <Value>[Text:Ask to Date][TextVerb:Date]</Value>
+    </Item>
+    <Item>
+      <Key></Key>
+      <Value>[Text]</Value>
+    </Item>
   </Asset>
 </XnaContent>

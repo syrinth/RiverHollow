@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>ShopOpen</Key>
-      <Value>[Text:Oh, hello $Name$, What can I do for you?]</Value>
+      <Value>[Text:Oh, hello $Name$, What can I do for you?][Selection:Shop]</Value>
     </Item>
     <Item>
       <Key>Gift</Key>

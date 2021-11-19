@@ -334,11 +334,6 @@
   </object>
  </objectgroup>
  <objectgroup id="9" name="MapObject">
-  <object id="35" name="WorldObject" x="145.287" y="81.5742" width="12.8117" height="10.48">
-   <properties>
-    <property name="ObjectID" type="int" value="71"/>
-   </properties>
-  </object>
   <object id="36" name="WorldObject" x="33.481" y="83.942" width="12.8117" height="10.48">
    <properties>
     <property name="ObjectID" type="int" value="49"/>

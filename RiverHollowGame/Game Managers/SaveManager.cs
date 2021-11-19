@@ -154,11 +154,20 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "ActivePet")]
             public int activePet;
 
+            [XmlElement(ElementName = "WeddingCountdown")]
+            public int weddingCountdown;
+
+            [XmlElement(ElementName = "BabyCountdown")]
+            public int babyCountdown;
+
             [XmlArray(ElementName = "Pets")]
             public List<int> liPets;
 
             [XmlArray(ElementName = "Mounts")]
             public List<int> liMounts;
+
+            [XmlArray(ElementName = "Children")]
+            public List<ChildData> liChildren;
 
             [XmlElement(ElementName = "AdventurerData")]
             public ClassedCharData adventurerData;
@@ -319,9 +328,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "NPCID")]
             public int npcID;
 
-            [XmlElement(ElementName = "Introduced")]
-            public bool introduced;
-
             [XmlElement(ElementName = "Arrived")]
             public bool arrived;
 
@@ -337,8 +343,8 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Collection")]
             public List<bool> collection;
 
-            [XmlElement(ElementName = "Married")]
-            public bool married;
+            [XmlElement(ElementName = "Relationship")]
+            public int relationShipStatus;
 
             [XmlElement(ElementName = "CanJoin")]
             public bool canJoinParty;
@@ -351,6 +357,17 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "SpokenKeys")]
             public List<string> spokenKeys;
+        }
+        public struct ChildData
+        {
+            [XmlElement(ElementName = "childID")]
+            public int childID;
+
+            [XmlElement(ElementName = "stageEnum")]
+            public int stageEnum;
+
+            [XmlElement(ElementName = "growthTime")]
+            public int growthTime;
         }
         public struct MerchantData
         {
@@ -371,6 +388,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "SpokenKeys")]
             public List<string> spokenKeys;
+
+            [XmlElement(ElementName = "Relationship")]
+            public int relationShipStatus;
         }
         public struct CollectionData
         {

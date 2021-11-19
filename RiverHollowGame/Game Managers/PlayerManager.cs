@@ -15,7 +15,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.GUIComponents.GUIObjects;
 using static RiverHollow.WorldObjects.Buildable;
-using System.Linq;
+using static RiverHollow.Characters.TravellingNPC;
 
 namespace RiverHollow.Game_Managers
 {
@@ -45,7 +45,7 @@ namespace RiverHollow.Game_Managers
 
         private static Dictionary<int, Building> _diBuildings;
         public static Dictionary<int, Building>.ValueCollection BuildingList => _diBuildings.Values;
-        public static Building PlayerHome => _diBuildings[0];
+        public static Building PlayerHome => _diBuildings[27];
 
         public static bool ReadyToSleep = false;
 
@@ -67,7 +67,20 @@ namespace RiverHollow.Game_Managers
 
         public static bool AllowMovement = true;
 
-        private static Villager _npcSpouse;
+        public static int WeddingCountdown { get; set; } = 0;
+        public static Villager Spouse { get; set; }
+        public static List<Child> Children { get; set; }
+
+        public static int BabyCountdown { get; set; }
+
+        private static ExpectingChildEnum _eChildStatus;
+        public static ExpectingChildEnum ChildStatus {
+            get => _eChildStatus;
+            set {                
+                _eChildStatus = value;
+                BabyCountdown = _eChildStatus == ExpectingChildEnum.None ? 0 : 7;
+            }
+        }
         #endregion
 
         #region Data Collections
@@ -77,6 +90,7 @@ namespace RiverHollow.Game_Managers
 
         public static void Initialize()
         {
+            Children = new List<Child>();
             _liPets = new List<Pet>();
             _liMounts = new List<Mount>();
 
@@ -580,16 +594,37 @@ namespace RiverHollow.Game_Managers
                 _liParty.Add(World);
             }
 
-            foreach (Building b in PlayerManager._diBuildings.Values)
+            if(BabyCountdown > 0)
             {
-                b.Rollover();
+                BabyCountdown--;
+                if (BabyCountdown == 0)
+                {
+                    ChildStatus = ExpectingChildEnum.None;
+                    if (World.Pregnant) { World.Pregnant = false; }
+                    else if (Spouse.Pregnant) { Spouse.Pregnant = false; }
+
+                    Child p = (Child)DataManager.GetNPCByIndex(10);
+                    p.SpawnNearPlayer();
+                    Children.Add(p);
+                }
             }
 
-            foreach(Pet p in _liPets)
+            if (WeddingCountdown > 0)
+            {
+                WeddingCountdown--;
+                if (WeddingCountdown == 0)
+                {
+                    Spouse.Relationship = RelationShipStatusEnum.Married;
+                }
+            }
+
+            foreach (Pet p in _liPets)
             {
                 if (World.ActivePet == p) { p.SpawnNearPlayer(); }
                 else { p.SpawnInHome(); }
             }
+
+            foreach(Child c in Children) { c.Rollover(); }
 
             PlayerMailbox.Rollover();
             GameManager.VillagersInTheInn = 0;
@@ -599,6 +634,18 @@ namespace RiverHollow.Game_Managers
         {
             curr = Stamina;
             max = MaxStamina;
+        }
+
+        public static void DetermineBabyAcquisition()
+        {
+            if (World.CanBecomePregnant == Spouse.CanBecomePregnant) { PlayerManager.ChildStatus = ExpectingChildEnum.Adoption; }
+            else
+            {
+                PlayerManager.ChildStatus = ExpectingChildEnum.Pregnant;
+
+                if (World.CanBecomePregnant) { World.Pregnant = true; }
+                else if (Spouse.CanBecomePregnant) { Spouse.Pregnant = true; }
+            }
         }
 
         public static PlayerData SaveData()
@@ -615,10 +662,13 @@ namespace RiverHollow.Game_Managers
                 chest = Item.SaveData(World.Body),
                 adventurerData = World.SaveClassedCharData(),
                 currentClass = World.CharacterClass.ID,
+                weddingCountdown = WeddingCountdown,
+                babyCountdown = BabyCountdown,
                 Items = new List<ItemData>(),
                 Storage = new List<StorageData>(),
                 liPets = new List<int>(),
-                liMounts = new List<int>()
+                liMounts = new List<int>(),
+                liChildren = new List<ChildData>()
             };
 
             // Initialize the new data values.
@@ -649,28 +699,36 @@ namespace RiverHollow.Game_Managers
                 data.liMounts.Add(m.ID);
             }
 
+            foreach (Child c in Children)
+            {
+                data.liChildren.Add(c.SaveData());
+            }
+
             return data;
         }
 
-        public static void LoadData(PlayerData data)
+        public static void LoadData(PlayerData saveData)
         {
             //We've already loaded in the player position
             Vector2 pos = World.Position;
 
-            SetName(data.name);
-            SetMoney(data.money);
-            TotalMoneyEarned = data.totalMoneyEarned;
+            SetName(saveData.name);
+            SetMoney(saveData.money);
+            TotalMoneyEarned = saveData.totalMoneyEarned;
 
-            World.SetHairColor(data.hairColor);
-            World.SetHairType(data.hairIndex);
+            BabyCountdown = saveData.babyCountdown;
+            WeddingCountdown = saveData.weddingCountdown;
 
-            SetClass(data.currentClass);
-            World.LoadClassedCharData(data.adventurerData);
+            World.SetHairColor(saveData.hairColor);
+            World.SetHairType(saveData.hairIndex);
 
-            World.SetClothes((Clothes)DataManager.GetItem(data.hat.itemID));
-            World.SetClothes((Clothes)DataManager.GetItem(data.chest.itemID));
+            SetClass(saveData.currentClass);
+            World.LoadClassedCharData(saveData.adventurerData);
 
-            World.SetBodyType(data.bodyTypeIndex);
+            World.SetClothes((Clothes)DataManager.GetItem(saveData.hat.itemID));
+            World.SetClothes((Clothes)DataManager.GetItem(saveData.chest.itemID));
+
+            World.SetBodyType(saveData.bodyTypeIndex);
             World.Position = pos;
 
             for (int i = 0; i < InventoryManager.maxItemRows; i++)
@@ -678,7 +736,7 @@ namespace RiverHollow.Game_Managers
                 for (int j = 0; j < InventoryManager.maxItemColumns; j++)
                 {
                     int index = i * InventoryManager.maxItemColumns + j;
-                    ItemData item = data.Items[index];
+                    ItemData item = saveData.Items[index];
                     Item newItem = DataManager.GetItem(item.itemID, item.num);
  
                     if (newItem != null) { newItem.ApplyUniqueData(item.strData); }
@@ -686,15 +744,15 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            foreach(StorageData storageData in data.Storage)
+            foreach(StorageData storageData in saveData.Storage)
             {
                 PlayerManager.AddToStorage(storageData.objID, storageData.number);
             }
 
-            foreach (int i in data.liPets)
+            foreach (int i in saveData.liPets)
             {
                 Pet p = (Pet)DataManager.GetNPCByIndex(i);
-                if (p.ID == data.activePet) {
+                if (p.ID == saveData.activePet) {
                     p.SpawnNearPlayer();
                     World.SetPet(p);
                 }
@@ -702,10 +760,17 @@ namespace RiverHollow.Game_Managers
                 AddPet(p);
             }
 
-            foreach (int i in data.liMounts)
+            foreach (int i in saveData.liMounts)
             {
                 Mount m = (Mount)DataManager.GetNPCByIndex(i);
                 AddMount(m);
+            }
+
+            foreach (ChildData data in saveData.liChildren)
+            {
+                Child m = (Child)DataManager.GetNPCByIndex(data.childID);
+                m.SpawnNearPlayer();
+                AddChild(m);
             }
         }
 
@@ -881,6 +946,7 @@ namespace RiverHollow.Game_Managers
 
         #endregion
 
+        public static void AddChild(Child actor) { Children.Add(actor); }
         public static void AddPet(Pet actor) { _liPets.Add(actor); }
         public static void AddMount(Mount actor) { _liMounts.Add(actor); }
         public static void SpawnMounts()

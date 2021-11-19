@@ -108,6 +108,7 @@ namespace Database_Editor
             cbCharacterType.SelectedIndex = 0;
 
             cbNPCType.Items.Clear();
+            cbNPCType.Items.Add("Type:" + ActorEnum.Child.ToString());
             cbNPCType.Items.Add("Type:" + ActorEnum.Environmental.ToString());
             cbNPCType.Items.Add("Type:" + ActorEnum.Mount.ToString());
             cbNPCType.Items.Add("Type:" + ActorEnum.Pet.ToString());
@@ -952,11 +953,12 @@ namespace Database_Editor
             LoadGenericDataInfo(data, tbNPCName, tbNPCID, dgvNPCTags, tbNPCDescription);
 
             int selectedIndex = 0;
-            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Environmental) { selectedIndex = 0; }
-            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Mount) { selectedIndex = 1; }
-            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Pet) { selectedIndex = 2; }
-            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Spirit) { selectedIndex = 3; }
-            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Summon) { selectedIndex = 4; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Child) { selectedIndex = 0; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Environmental) { selectedIndex = 1; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Mount) { selectedIndex = 2; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Pet) { selectedIndex = 3; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Spirit) { selectedIndex = 4; }
+            if (Util.ParseEnum<ActorEnum>(data.GetTagValue("Type")) == ActorEnum.Summon) { selectedIndex = 5; }
             cbNPCType.SelectedIndex = selectedIndex;
         }
         private void LoadStatusEffectInfo()

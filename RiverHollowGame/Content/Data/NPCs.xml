@@ -41,5 +41,9 @@
       <Key>9</Key>
       <Value>[Type:Environmental][Idle:0-0-1-0.1-T][Action1:0-0-3-0.15-T][Action2:64-0-2-0.15-T]</Value>
     </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Type:Child][Walk:0-0-3-0.15-T][Idle:0-32-3-0.3-T][Action1:0-64-3-0.15-T]</Value>
+    </Item>
   </Asset>
 </XnaContent>

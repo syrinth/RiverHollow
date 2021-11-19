@@ -7,7 +7,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
-
+using static RiverHollow.Characters.TravellingNPC;
 using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
@@ -79,14 +79,19 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         /// </summary>
         private void AddVillagerTalkOptions()
         {
-            if (GameManager.CurrentNPC != null)
+            if (GameManager.CurrentNPC != null && CurrentNPC.IsActorType(ActorEnum.Villager))
             {
-                TalkingActor act = CurrentNPC;
+                Villager v = (Villager)CurrentNPC;
                 List<TextEntry> liCommands = new List<TextEntry> { DataManager.GetGameTextEntry("Selection_Talk") };
 
-                if (act.CanGiveGift) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Gift")); }
-                if (act.CanJoinParty && act.GetFriendshipLevel() >= 2) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Party")); }
+                if (v.CanGiveGift) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Gift")); }
+                if (v.Combatant && v.GetFriendshipLevel() >= 2) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Party")); }
                 if (_textEntry.HasTag("ShipGoods")) { liCommands.Add(DataManager.GetGameTextEntry("Selection_ShipGoods")); }
+                if (v.CanBeMarried)
+                {
+                    if (v.AvailableToDate()) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Date")); }
+                    else if (v.AvailableToMarry() && InventoryManager.HasItemInPlayerInventory(int.Parse(DataManager.Config[16]["ItemID"]), 1)) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Propose")); }
+                }
                 liCommands.Add(DataManager.GetGameTextEntry("Selection_NeverMind"));
 
                 AddOptions(liCommands);
@@ -258,9 +263,15 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     {
                         PlayerManager.World.SetPet(null);
                     }
+                    else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.GetBaby))
+                    {
+                        PlayerManager.DetermineBabyAcquisition();
+                    }
                 }
-                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.No)){
-                    if(_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.Donate)) {
+                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.No))
+                {
+                    if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.Donate))
+                    {
                         ((Villager)GameManager.CurrentNPC).FriendshipPoints += 1000;
                     }
 
@@ -273,6 +284,22 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Buy)) { act.OpenShop(); }
                 else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Talk)) { nextText = act.GetDailyDialogue(); }
                 else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.ShipGoods)) { ((ShippingGremlin)GameManager.CurrentNPC).OpenShipping(); }
+                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Propose))
+                {
+                    if (act.GetFriendshipLevel() >= 8)
+                    {
+                        Villager v = ((Villager)act);
+                        v.Relationship = RelationShipStatusEnum.Engaged;
+
+                        nextText = act.GetDialogEntry("MarriageYes");
+                    }
+                    else { nextText = act.GetDialogEntry("MarriageNo"); }
+                }
+                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Date))
+                {
+                    ((Villager)act).Relationship = RelationShipStatusEnum.Dating;
+                    nextText = act.GetDialogEntry("DateYes");
+                }
             }
             else if (GameManager.CurrentItem != null)
             {

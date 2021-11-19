@@ -1541,7 +1541,7 @@ namespace RiverHollow.GUIComponents.Screens
                         {
                             _gAdventure.SetColor(Color.Gold);
                         }
-                        else { _gAdventure.Alpha(v.CanJoinParty ? 1 : 0.3f); }
+                        else { _gAdventure.Alpha(v.Combatant ? 1 : 0.3f); }
                     }
 
                     Resize();

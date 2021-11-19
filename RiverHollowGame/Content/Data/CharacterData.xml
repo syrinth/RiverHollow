@@ -19,15 +19,15 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:16][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:18][CanMarry][FirstArrival:2][ArrivalPeriod:7]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:16][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:18][CanMarry][FirstArrival:2][ArrivalPeriod:7][CanBecomePregnant]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:17][Collection:0|1|2][Class:4][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:20][CanMarry][FirstArrival:5][ArrivalPeriod:7]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:17][Collection:0|1|2][Class:4][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:20][CanMarry][FirstArrival:5][ArrivalPeriod:7][CanBecomePregnant]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Villager][PortRow:1][Collection:0|1|2][Class:5][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:12][RequiredBuildingID:7][CanMarry][FirstArrival:3][ArrivalPeriod:7]</Value>
+      <Value>[Type:Villager][PortRow:1][Collection:0|1|2][Class:5][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:12][RequiredBuildingID:7][CanMarry][FirstArrival:3][ArrivalPeriod:7][CanBecomePregnant]</Value>
     </Item>
     <Item>
       <Key>7</Key>
@@ -79,7 +79,7 @@
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:26][Collection:7|181][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:12][FirstArrival:1][ArrivalPeriod:6]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:26][Collection:7|181][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:12][FirstArrival:1][ArrivalPeriod:6][ShopData:3]</Value>
     </Item>
     <Item>
       <Key>20</Key>
@@ -103,7 +103,7 @@
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:31][Collection:7|181][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:2][RequiredObjectID:38-5][ShopData:6]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:31][Collection:7|181][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:2][RequiredObjectID:38-5][ShopData:6][CanMarry]</Value>
     </Item>
     <Item>
       <Key>26</Key>
