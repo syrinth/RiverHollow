@@ -52,7 +52,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         /// <param name="m">The Monster that is dropping the Item</param>
         /// <returns>The Item that was dropped</returns>
-        public static Item DropMonsterLoot(Monster m)
+        public static Item DropMonsterLoot(TacticalMonster m)
         {
             Item droppedItem = DataManager.GetItem(m.GetRandomLootItem());
             //Just for testing atm

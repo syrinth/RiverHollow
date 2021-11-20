@@ -288,7 +288,7 @@ namespace RiverHollow.Game_Managers
                                 case EnumCSCommand.Face:
                                     WorldActor n = GetActor(sCommandData[0]);
                                     n.SetWalkingDir((DirectionEnum)HandleDir(sCommandData[1]));
-                                    n.PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                                    n.PlayAnimationVerb(TacticalCombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
                                     bGoToNext = true;
                                     break;
                                 case EnumCSCommand.End:
@@ -433,7 +433,7 @@ namespace RiverHollow.Game_Managers
                     _liToRemove.Add(c);
                 }
                 c.SetMoveObj(Vector2.Zero);
-                c.PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                c.PlayAnimationVerb(TacticalCombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
             }
         }
 

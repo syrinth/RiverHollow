@@ -30,6 +30,8 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Game Enums
+        public enum CombatStyleEnum { Lite, Tactical };
+
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, ShowRequests, Propose, Date, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Party };
         public enum TextEntryTriggerEnum { None, UseItem, ConfirmGift, EndDay, Exit, Donate, PetFollow, PetUnfollow, GetBaby }
@@ -45,6 +47,7 @@ namespace RiverHollow.Game_Managers
         public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };
         public enum VerbEnum { Walk, Idle, Hurt, Critical, Ground, Air, UseTool, Action1, Action2, Action3, Action4, Cast, MakeItem };
         public enum AnimationEnum { None, Spawn, KO, Win, PlayAnimation, Rain, Snow, ObjectIdle, Action_One, Action_Two, Action_Finished };
+        public enum LiteCombatActionEnum { Idle, Cast, Hurt, Attack, Critical, Spawn, KO, Victory };
 
         public enum ToolAnimEnum { Down, Up, Left, Right };
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
@@ -62,14 +65,15 @@ namespace RiverHollow.Game_Managers
         public enum ActorMovementStateEnum { Idle, Walking };
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum TaskTypeEnum { None, GroupSlay, Slay, Fetch, Talk, Build };
-        public enum ActorEnum { Actor, Environmental, Merchant, Monster, Mount, Pet, Child, ShippingGremlin, Spirit, Summon, Villager };
+        public enum ActorEnum { Actor, CombatActor, Environmental, Merchant, Mob, Monster, Mount, Pet, Child, ShippingGremlin, Spirit, Summon, Villager };
         public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade };
         public enum PotencyBonusEnum { None, Conditions, Summon};
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ActionEnum { Action, Item, Spell, MenuItem, MenuSpell, MenuAction, Move, EndTurn };
         public enum SkillTagsEnum { Bonus, Harm, Heal, NPC_ID, Push, Pull, Remove, Retreat, Step, StatusEffectID };
         public enum TargetEnum { Enemy, Ally };
-        public enum AreaTypeEnum { Single, Cross, Ring, Line, Diamond };
+        public enum RangeEnum { Self, Melee, Ranged, Row, Column};
+        public enum AreaTypeEnum { Single, Cross, Ring, Line, Diamond, Rectangle, All };
         public enum ElementEnum { None, Fire, Ice, Lightning };
         public enum AttackTypeEnum { Physical, Magical };
         public enum ElementAlignment { Neutral, Vulnerable, Resists };
@@ -87,7 +91,7 @@ namespace RiverHollow.Game_Managers
         private static List<Spirit> _liSpirits;
         private static List<Machine> _liMachines;
 
-        public static Dictionary<int, Task> DITasks;
+        public static Dictionary<int, RHTask> DITasks;
         public static Dictionary<int, Shop> DIShops;
         #endregion
 
@@ -127,10 +131,10 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadManagedDataLists()
         {
-            DITasks = new Dictionary<int, Task>();
+            DITasks = new Dictionary<int, RHTask>();
             foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.DiTaskData)
             {
-                DITasks.Add(kvp.Key, new Task(kvp.Key, kvp.Value));
+                DITasks.Add(kvp.Key, new RHTask(kvp.Key, kvp.Value));
             }
 
             DIShops = DataManager.GetShopInfoList();

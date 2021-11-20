@@ -775,7 +775,7 @@ namespace RiverHollow.WorldObjects
             {
                 //We're passing in a verb entry of Option_#, need to isolate the int
                 int partyPosition = int.Parse(Util.GetEnumString<TextEntryVerbEnum>(action).Replace("Option_", ""));
-                CombatActor target = PlayerManager.GetParty()[partyPosition];
+                TacticalCombatActor target = PlayerManager.GetTacticalParty()[partyPosition];
 
                 if (Health > 0) { target.ModifyHealth(Health, false); }
                 if (Mana > 0) { target.IncreaseMana(Mana); }

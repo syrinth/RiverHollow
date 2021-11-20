@@ -16,6 +16,8 @@ namespace RiverHollow
     {
         static bool _bExit = false;
 
+        public const CombatStyleEnum COMBAT_STYLE = CombatStyleEnum.Lite;
+
         public GraphicsDeviceManager _graphicsDeviceManager;
         public SpriteBatch spriteBatch;
         public static int ScreenWidth = 1920;
@@ -106,7 +108,7 @@ namespace RiverHollow
 
                 if (HarpManager.PlayingMusic) { HarpManager.Update(gTime); }
 
-                if (CombatManager.InCombat) { CombatManager.Update(gTime);}
+                if (TacticalCombatManager.InCombat) { TacticalCombatManager.Update(gTime);}
 
                 //If anything is queued up for pathing, handle it
                 TravelManager.DequeuePathingRequest();
@@ -168,10 +170,10 @@ namespace RiverHollow
                         //Otherwise, if not in combat, or in combat and game is running, update all maps
                         //This is so that time does not pass outside of combat while decisions are being made
                         //but NPCs and animations will still run
-                        if (CombatManager.InCombat && !IsRunning())
+                        if (TacticalCombatManager.InCombat && !IsRunning())
                         {
                             MapManager.CurrentMap.Update(gTime);
-                            foreach(CombatActor c in PlayerManager.GetParty())
+                            foreach(TacticalCombatActor c in PlayerManager.GetTacticalParty())
                             {
                                 c.Update(gTime);
                             }
@@ -210,7 +212,7 @@ namespace RiverHollow
 
                 spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
                 MapManager.DrawUpper(spriteBatch);
-                CombatManager.DrawUpperCombatLayer(spriteBatch);
+                TacticalCombatManager.DrawUpperCombatLayer(spriteBatch);
                 spriteBatch.End();
             }
             else

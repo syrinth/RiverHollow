@@ -9,7 +9,8 @@ namespace RiverHollow.CombatStuff
 {
     public class StatusEffect
     {
-        public CombatActor Caster;
+        public LiteCombatActor LiteCaster;
+        public TacticalCombatActor TacticalCaster;
         private bool _bDoT;
         public bool DoT => _bDoT;
         private bool _bHoT;
@@ -79,5 +80,8 @@ namespace RiverHollow.CombatStuff
             _bCounter = data.ContainsKey("Counter");
             _bGuard = data.ContainsKey("Guard");
         }
+
+        public void AssignCaster(LiteCombatActor act) { LiteCaster = act; }
+        public void AssignCaster(TacticalCombatActor act) { TacticalCaster = act; }
     }
 }

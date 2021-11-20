@@ -629,7 +629,7 @@ namespace RiverHollow.GUIComponents.Screens
                 base.Update(gTime);
             }
 
-            private void OpenDetailBox(Task q)
+            private void OpenDetailBox(RHTask q)
             {
                 _detailWindow.SetData(q);
                 ShowDetails(true);
@@ -647,8 +647,8 @@ namespace RiverHollow.GUIComponents.Screens
                 GUIWindow _window;
                 GUIText _gName;
                 GUIText _gGoalProgress;
-                public Task TheTask { get; private set; }
-                public delegate void ClickDelegate(Task q);
+                public RHTask TheTask { get; private set; }
+                public delegate void ClickDelegate(RHTask q);
                 private ClickDelegate _delAction;
 
                 public TaskBox(int width, int height, ClickDelegate del)
@@ -691,7 +691,7 @@ namespace RiverHollow.GUIComponents.Screens
                     return _window.Contains(mouse);
                 }
 
-                public void SetTask(Task q)
+                public void SetTask(RHTask q)
                 {
                     TheTask = q;
                     _gName = new GUIText(TheTask.Name);
@@ -715,7 +715,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                 }
 
-                public void SetData(Task q)
+                public void SetData(RHTask q)
                 {
                     Controls.Clear();
                     _name = new GUIText(q.Name);
@@ -742,7 +742,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _charBox.CenterOnScreen();
                 AddControl(_charBox);
 
-                int partySize = PlayerManager.GetParty().Count;
+                int partySize = PlayerManager.GetTacticalParty().Count;
 
                 _map = new PositionMap(SetSelectedCharacter);
                 _map.AnchorAndAlignToObject(_charBox, SideEnum.Bottom, SideEnum.CenterX);
@@ -870,7 +870,7 @@ namespace RiverHollow.GUIComponents.Screens
                     //Iterate over each member of the party and retrieve their starting position.
                     //Assigns the character to the starting position and assigns the current position
                     //to the Player Character's
-                    foreach (ClassedCombatant c in PlayerManager.GetParty())
+                    foreach (ClassedCombatant c in PlayerManager.GetTacticalParty())
                     {
                         Vector2 vec = c.StartPosition;
                         _arrStartPositions[(int)vec.X, (int)vec.Y].SetCharacter(c, (c == _currentCharacter));
@@ -1537,7 +1537,7 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         _gAdventure = new GUIImage(new Rectangle(4, 52, 8, 9), ScaleIt(8), ScaleIt(9), DataManager.DIALOGUE_TEXTURE);
                         _gAdventure.AnchorAndAlignToObject(_gGift, SideEnum.Left, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
-                        if (PlayerManager.GetParty().Contains(v))
+                        if (PlayerManager.GetTacticalParty().Contains(v))
                         {
                             _gAdventure.SetColor(Color.Gold);
                         }

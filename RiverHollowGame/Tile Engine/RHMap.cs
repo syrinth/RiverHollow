@@ -13,7 +13,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 using static RiverHollow.RiverHollow;
-using static RiverHollow.Game_Managers.CombatManager;
+using static RiverHollow.Game_Managers.TacticalCombatManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.WorldObjects.Buildable;
@@ -66,8 +66,9 @@ namespace RiverHollow.Tile_Engine
         private List<Light> _liHeldLights;
         private List<RHTile> _liTestTiles;
         private List<WorldActor> _liActors;
-        public List<Monster> Monsters { get; }
-        private List<Summon> _liSummons;
+        protected List<LiteMob> _liMobs;
+        public List<TacticalMonster> Monsters { get; }
+        private List<TacticalSummon> _liSummons;
         public List<WorldActor> ToAdd;
         private List<Building> _liBuildings;
         private List<WorldObject> _liPlacedWorldObjects;
@@ -98,8 +99,9 @@ namespace RiverHollow.Tile_Engine
             _liTestTiles = new List<RHTile>();
             _liTilesets = new List<TiledMapTileset>();
             _liActors = new List<WorldActor>();
-            Monsters = new List<Monster>();
-            _liSummons = new List<Summon>();
+            _liMobs = new List<LiteMob>();
+            Monsters = new List<TacticalMonster>();
+            _liSummons = new List<TacticalSummon>();
             _liBuildings = new List<Building>();
             _liItems = new List<Item>();
             _liMapObjects = new List<TiledMapObject>();
@@ -265,14 +267,14 @@ namespace RiverHollow.Tile_Engine
 
                 EnvironmentManager.Update(gTime);
 
-                if (CombatManager.InCombat || IsRunning())
+                if (TacticalCombatManager.InCombat || IsRunning())
                 {
-                    foreach (Monster m in Monsters)
+                    foreach (TacticalMonster m in Monsters)
                     {
                         m.Update(gTime);
                     }
 
-                    foreach (Summon s in _liSummons)
+                    foreach (TacticalSummon s in _liSummons)
                     {
                         s.Update(gTime);
                     }
@@ -314,10 +316,10 @@ namespace RiverHollow.Tile_Engine
                 switch (c.ActorType)
                 {
                     case ActorEnum.Monster:
-                        Monsters.Remove((Monster)c);
+                        Monsters.Remove((TacticalMonster)c);
                         break;
                     case ActorEnum.Summon:
-                        _liSummons.Remove((Summon)c);
+                        _liSummons.Remove((TacticalSummon)c);
                         break;
                     default:
                         _liActors.Remove(c);
@@ -368,21 +370,21 @@ namespace RiverHollow.Tile_Engine
 
             _renderer.Draw(_map, Camera._transform);
 
-            if (CombatManager.InCombat)
+            if (TacticalCombatManager.InCombat)
             {
-                if (CombatManager.ActiveCharacter != null && CombatManager.ActiveCharacter.IsActorType(ActorEnum.Villager))
+                if (TacticalCombatManager.ActiveCharacter != null && TacticalCombatManager.ActiveCharacter.IsActorType(ActorEnum.Villager))
                 {
-                    CombatManager.ActiveCharacter.BaseTile?.Draw(spriteBatch);
+                    TacticalCombatManager.ActiveCharacter.BaseTile?.Draw(spriteBatch);
                 }
 
-                foreach (RHTile t in CombatManager.LegalTiles)
+                foreach (RHTile t in TacticalCombatManager.LegalTiles)
                 {
                     t.Draw(spriteBatch);
                 }
 
-                foreach (RHTile t in CombatManager.AreaTiles)
+                foreach (RHTile t in TacticalCombatManager.AreaTiles)
                 {
-                    if (!CombatManager.LegalTiles.Contains(t))
+                    if (!TacticalCombatManager.LegalTiles.Contains(t))
                     {
                         t.Draw(spriteBatch);
                     }
@@ -394,12 +396,17 @@ namespace RiverHollow.Tile_Engine
                 c.Draw(spriteBatch, true);
             }
 
-            foreach (Monster m in Monsters)
+            foreach (LiteMob m in _liMobs)
             {
                 m.Draw(spriteBatch, true);
             }
 
-            foreach (Summon s in _liSummons)
+            foreach (TacticalMonster m in Monsters)
+            {
+                m.Draw(spriteBatch, true);
+            }
+
+            foreach (TacticalSummon s in _liSummons)
             {
                 s.Draw(spriteBatch, true);
             }
@@ -579,6 +586,7 @@ namespace RiverHollow.Tile_Engine
         {
             RHRandom rand = RHRandom.Instance();
             TiledMapProperties props = _map.Properties;
+            List<int> _liMobs = new List<int>();
             List<int> resources = new List<int>();
 
             foreach (TiledMapObject tiledObj in _liMapObjects)
@@ -652,13 +660,13 @@ namespace RiverHollow.Tile_Engine
 
         public void SpawnMapEntities(bool spawnmonsters = true, bool loaded = false)
         {
-            if (spawnmonsters) { SpawnMonsters(); }
+            if (spawnmonsters) { SpawnMobs(); }
             SpawnResources(GetSkipTiles(loaded));
         }
 
         public void ClearMapEntities()
         {
-            foreach (Monster m in Monsters) { RemoveMonster(m); }
+            foreach (TacticalMonster m in Monsters) { RemoveMonster(m); }
             foreach (WorldObject obj in _liPlacedWorldObjects)
             {
                 switch (obj.Type)
@@ -756,7 +764,7 @@ namespace RiverHollow.Tile_Engine
 
             if (!_bModular)
             {
-                SpawnMonsters();
+                SpawnMobs();
             }
 
             CheckSpirits();
@@ -833,10 +841,10 @@ namespace RiverHollow.Tile_Engine
         /// <summary>
         /// Call this to make the MonsterSpawns on the map spawn their monsters
         /// </summary>
-        private void SpawnMonsters()
+        private void SpawnMobs()
         {
             //Remove all mobs from the map
-            foreach (Monster m in Monsters)
+            foreach (TacticalMonster m in Monsters)
             {
                 RemoveMonster(m);
             }
@@ -1052,7 +1060,7 @@ namespace RiverHollow.Tile_Engine
 
         public bool ContainsActor(WorldActor c)
         {
-            return _liActors.Contains(c) || (c.IsActorType(ActorEnum.Monster) && Monsters.Contains((Monster)c));
+            return _liActors.Contains(c) || (c.IsActorType(ActorEnum.Monster) && Monsters.Contains((TacticalMonster)c));
         }
 
         public void ItemPickUpdate()
@@ -1287,7 +1295,7 @@ namespace RiverHollow.Tile_Engine
             {
                 return false;
             }
-            else if (!ignoreCollisions && !(CombatManager.InCombat && c.CurrentMap.IsCombatMap))
+            else if (!ignoreCollisions && !(TacticalCombatManager.InCombat && c.CurrentMap.IsCombatMap))
             {
                 List<Rectangle> list = GetPossibleCollisions(c, dir);
                 ChangeDir(list, c.CollisionBox, ref dir, c.CurrentMapName);
@@ -1483,7 +1491,7 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            if (!PlayerManager.Busy && !CombatManager.InCombat)
+            if (!PlayerManager.Busy && !TacticalCombatManager.InCombat)
             {
                 //Ensure that we have a tile that we clicked on and that the player is close enough to interact with it.
                 TargetTile = MouseTile;
@@ -1898,17 +1906,21 @@ namespace RiverHollow.Tile_Engine
         {
             _liActorsToRemove.Add(c);
         }
-        public void RemoveMonster(Monster m)
+        public void RemoveMonster(TacticalMonster m)
         {
             _liActorsToRemove.Add(m);
         }
-        public void RemoveSummon(Summon s)
+        public void RemoveMob(LiteMob s)
+        {
+            _liActorsToRemove.Add(s);
+        }
+        public void RemoveSummon(TacticalSummon s)
         {
             _liActorsToRemove.Add(s);
         }
         public void CleanupSummons()
         {
-            foreach (Summon s in _liSummons)
+            foreach (TacticalSummon s in _liSummons)
             {
                 s.KO();
             }
@@ -2158,7 +2170,7 @@ namespace RiverHollow.Tile_Engine
                 }
             }
 
-            //Iterate over the WorldObject image in TileSize increments to discover any tiles
+            //Iterate over the WorldObject image in TILE_SIZE increments to discover any tiles
             //that the image overlaps. Add those tiles as Shadow Tiles as long as they're not
             //actual Tiles the object sits on. Also add the Tiles to the objects Shadow Tiles list
             for (int i = (int)o.MapPosition.X; i < o.MapPosition.X + o.Width; i += TILE_SIZE)
@@ -2186,7 +2198,7 @@ namespace RiverHollow.Tile_Engine
             if (MapManager.Maps[c.CurrentMapName].ContainsActor(c))
             {
                 rv = true;
-                if (c.IsActorType(ActorEnum.Monster) && Monsters.Contains((Monster)c)) { Monsters.Remove((Monster)c); }
+                if (c.IsActorType(ActorEnum.Monster) && Monsters.Contains((TacticalMonster)c)) { Monsters.Remove((TacticalMonster)c); }
                 else if (_liActors.Contains(c)) { _liActors.Remove(c); }
             }
 
@@ -2207,7 +2219,7 @@ namespace RiverHollow.Tile_Engine
             {
                 rv = true;
 
-                if (c.IsActorType(ActorEnum.Monster) && !Monsters.Contains((Monster)c)) { Monsters.Add((Monster)c); }
+                if (c.IsActorType(ActorEnum.Monster) && !Monsters.Contains((TacticalMonster)c)) { Monsters.Add((TacticalMonster)c); }
                 else { Util.AddUniquelyToList(ref _liActors, c); }
 
                 c.CurrentMapName = _sName;
@@ -2218,7 +2230,7 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public void AddMonster(Monster m)
+        public void AddMonster(TacticalMonster m)
         {
             bool rv = false;
 
@@ -2244,7 +2256,7 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
-        public void AddMonsterByPosition(Monster m, Vector2 position)
+        public void AddMonsterByPosition(TacticalMonster m, Vector2 position)
         {
             m.CurrentMapName = _sName;
             m.Position = Util.SnapToGrid(position);
@@ -2261,7 +2273,7 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
-        public void AddSummon(Summon obj)
+        public void AddSummon(TacticalSummon obj)
         {
             obj.CurrentMapName = _sName;
             _liSummons.Add(obj);
@@ -2591,7 +2603,7 @@ namespace RiverHollow.Tile_Engine
 
     public class MonsterSpawn : SpawnPoint
     {
-        Monster _monster;
+        TacticalMonster _monster;
         Dictionary<string, Dictionary<RarityEnum, List<int>>> _diMonsterSpawns;
         int _iPrimedMonsterID;
         public bool IsPrimed => _iPrimedMonsterID != -1;
@@ -2648,7 +2660,7 @@ namespace RiverHollow.Tile_Engine
         /// </summary>
         public override void Spawn()
         {
-            if (_iPrimedMonsterID != -1) { _monster = DataManager.GetMonsterByIndex(_iPrimedMonsterID); }
+            if (_iPrimedMonsterID != -1) { _monster = DataManager.GetTacticalMonsterByIndex(_iPrimedMonsterID); }
             else
             {
                 //Find which spawn type we're using
@@ -2663,7 +2675,7 @@ namespace RiverHollow.Tile_Engine
                 RarityEnum rarityKey = Util.RollAgainstRarity(_diMonsterSpawns[key]);
 
                 int spawnArrIndex = (int)RHRandom.Instance().Next(0, _diMonsterSpawns[key][rarityKey].Count - 1);
-                _monster = DataManager.GetMonsterByIndex(_diMonsterSpawns[key][rarityKey][spawnArrIndex]);
+                _monster = DataManager.GetTacticalMonsterByIndex(_diMonsterSpawns[key][rarityKey][spawnArrIndex]);
             }
 
             _monster.SpawnPoint = this;
@@ -2707,7 +2719,7 @@ namespace RiverHollow.Tile_Engine
 
         string _sClickAction = string.Empty;
         TravelPoint _travelPoint;
-        public CombatActor Character { get; private set; }
+        public TacticalCombatActor Character { get; private set; }
 
         Dictionary<TiledMapTileLayer, Dictionary<string, string>> _diProps;
 
@@ -2736,10 +2748,10 @@ namespace RiverHollow.Tile_Engine
         {
             Rectangle dest = new Rectangle((int)Position.X, (int)Position.Y, TILE_SIZE, TILE_SIZE);
 
-            if (CombatManager.InCombat)
+            if (TacticalCombatManager.InCombat)
             {
                 //Only draw one of the tile targetting types
-                if (this == CombatManager.ActiveCharacter?.BaseTile && DisplaySelectedTile()) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(48, 112, 16, 16), Color.White); }
+                if (this == TacticalCombatManager.ActiveCharacter?.BaseTile && DisplaySelectedTile()) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(48, 112, 16, 16), Color.White); }
                 else if (_bSelected) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(16, 112, 16, 16), Color.White); }
                 else if (_bArea) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(32, 112, 16, 16), Color.White); }
                 else if (_bLegalTile) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(0, 112, 16, 16), Color.White); }
@@ -3025,7 +3037,7 @@ namespace RiverHollow.Tile_Engine
         /// Assigns a CombatActor to the RHTile
         /// </summary>
         /// <param name="c">The combatant to set to this tile</param>
-        public void SetCombatant(CombatActor c)
+        public void SetCombatant(TacticalCombatActor c)
         {
             Character = c;
         }
@@ -3206,9 +3218,9 @@ namespace RiverHollow.Tile_Engine
         public bool CanWalkThroughInCombat()
         {
             bool rv = true;
-            if (CombatManager.InCombat)
+            if (TacticalCombatManager.InCombat)
             {
-                rv = Character == null || Character.IsSummon() || CombatManager.OnSameTeam(Character);
+                rv = Character == null || Character.IsSummon() || TacticalCombatManager.OnSameTeam(Character);
             }
             return rv;
         }

@@ -12,7 +12,7 @@ using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 
-using static RiverHollow.Misc.Task;
+using static RiverHollow.Misc.RHTask;
 
 namespace RiverHollow.Game_Managers
 {
@@ -660,12 +660,12 @@ namespace RiverHollow.Game_Managers
                 data.MapData.Add(tileMap.SaveData());
             }
 
-            foreach (Task q in GameManager.DITasks.Values)
+            foreach (RHTask q in GameManager.DITasks.Values)
             {
                 data.PlotTaskData.Add(q.SaveData());
             }
 
-            foreach (Task q in PlayerManager.TaskLog)
+            foreach (RHTask q in PlayerManager.TaskLog)
             {
                 data.TaskLogData.Add(q.SaveData());
             }
@@ -837,12 +837,12 @@ namespace RiverHollow.Game_Managers
 
             foreach (TaskData q in dataToLoad.PlotTaskData)
             {
-                Task plotTask = GameManager.DITasks[q.taskID];
+                RHTask plotTask = GameManager.DITasks[q.taskID];
                 plotTask.LoadData(q);
             }
             foreach (TaskData q in dataToLoad.TaskLogData)
             {
-                Task newTask = new Task();
+                RHTask newTask = new RHTask();
 
                 //We've already loaded plotQuests, no need to redo it
                 if (q.taskID == -1) { newTask.LoadData(q); }

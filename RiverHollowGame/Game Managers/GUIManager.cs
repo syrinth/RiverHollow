@@ -190,7 +190,7 @@ namespace RiverHollow.Game_Managers
                 _eFade = Fade.None;
 
                 //Only unlock movement if not in combat and not in a cutscene
-                if (!CutsceneManager.Playing && !CombatManager.InCombat)
+                if (!CutsceneManager.Playing && !TacticalCombatManager.InCombat)
                 {
                     PlayerManager.AllowMovement = true;
                 }

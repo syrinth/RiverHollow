@@ -64,7 +64,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
         public static void SetCursor(CursorTypeEnum cursorType, Rectangle collisionRect)
         {
-            if (CombatManager.InCombat || GameManager.IsPaused())
+            if (TacticalCombatManager.InCombat || GameManager.IsPaused())
             {
                 cursorType = CursorTypeEnum.Normal;
             }

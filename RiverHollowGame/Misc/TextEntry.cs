@@ -112,7 +112,7 @@ namespace RiverHollow.Misc
                     }
                     else if (specialVal[0].Equals("Task"))
                     {
-                        Task newTask = GameManager.DITasks[val];
+                        RHTask newTask = GameManager.DITasks[val];
                         removeIt = PlayerManager.TaskLog.Contains(newTask) || newTask.ReadyForHandIn || newTask.Finished || !newTask.CanBeGiven();
                     }
 

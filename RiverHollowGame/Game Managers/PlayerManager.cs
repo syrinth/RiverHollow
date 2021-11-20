@@ -23,7 +23,7 @@ namespace RiverHollow.Game_Managers
     {
         #region Properties
         public static bool Busy { get; private set; }
-        public static List<Task> TaskLog { get; private set; }
+        public static List<RHTask> TaskLog { get; private set; }
 
         public static double MaxStamina = 100;
         public static double Stamina = MaxStamina;
@@ -98,7 +98,7 @@ namespace RiverHollow.Game_Managers
             _diTownObjects = new Dictionary<int, List<WorldObject>>();
             _diTools = new Dictionary<ToolEnum, Tool>();
 
-            TaskLog = new List<Task>();
+            TaskLog = new List<RHTask>();
             World = new PlayerCharacter();
             _liParty = new List<ClassedCombatant> { World };
 
@@ -200,7 +200,12 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static List<ClassedCombatant> GetParty()
+        public static List<LiteCombatActor> GetLiteParty()
+        {
+            return _liParty;
+        }
+
+        public static List<ClassedCombatant> GetTacticalParty()
         {
             return _liParty;
         }
@@ -279,7 +284,7 @@ namespace RiverHollow.Game_Managers
         /// Some Tasks may involve the defeat of a Task specific monster. If such a monster exists, spawn it now.
         /// </summary>
         /// <param name="t">The Task to add</param>
-        public static void AddToTaskLog(Task t)
+        public static void AddToTaskLog(RHTask t)
         {
             if (!t.Finished)
             {
@@ -298,7 +303,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void AdvanceTaskProgress(Building b)
         {
-            foreach (Task q in TaskLog)
+            foreach (RHTask q in TaskLog)
             {
                 if (q.AttemptBuildingProgress(b.ID))
                 {
@@ -306,9 +311,9 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
-        public static void AdvanceTaskProgress(Monster m)
+        public static void AdvanceTaskProgress(TacticalMonster m)
         {
-            foreach (Task q in TaskLog)
+            foreach (RHTask q in TaskLog)
             {
                 if (q.AttemptProgress(m))
                 {
@@ -318,7 +323,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void AdvanceTaskProgress(Item i)
         {
-            foreach(Task q in TaskLog)
+            foreach(RHTask q in TaskLog)
             {
                 if (q.AttemptProgress(i))
                 {
@@ -328,7 +333,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void RemoveTaskProgress(Item i)
         {
-            foreach (Task q in TaskLog)
+            foreach (RHTask q in TaskLog)
             {
                 if (q.RemoveProgress(i))
                 {

@@ -13,11 +13,11 @@ using System.Collections.Generic;
 using static RiverHollow.Characters.Actor;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.TravelManager;
-
+using RiverHollow.Misc;
 
 namespace RiverHollow.Game_Managers
 {
-    public static class CombatManager
+    public static class TacticalCombatManager
     {
         private const int MOVE_CHARGE = 40;
         private const int ATTACK_CHARGE = 60;
@@ -30,15 +30,15 @@ namespace RiverHollow.Game_Managers
         public static List<RHTile> AreaTiles { get; private set; }
         public static List<RHTile> TimedHazardTiles { get; private set; }
 
-        public static CombatActor ActiveCharacter;
-        public static List<CombatActor> Monsters { get; private set; }
-        public static List<CombatActor> Party { get; private set; }
-        public static List<Summon> Summons { get; private set; }
+        public static TacticalCombatActor ActiveCharacter;
+        public static List<TacticalCombatActor> Monsters { get; private set; }
+        public static List<TacticalCombatActor> Party { get; private set; }
+        public static List<TacticalSummon> Summons { get; private set; }
 
-        private static CombatScreen _scrCombat;
+        private static TacticalCombatScreen _scrCombat;
         public enum CmbtPhaseEnum { Setup, Charging, Upkeep, MainSelection, ChooseMoveTarget, Moving, ChooseAction, ChooseActionTarget, PerformAction, Victory, DisplayDefeat }//NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayVictory, Lost, PerformAction, EndCombat }
         public static CmbtPhaseEnum CurrentPhase;
-        public static CombatAction SelectedAction;
+        public static TacticalCombatAction SelectedAction;
 
         public static RHTile SelectedTile;          //The tile currently selected by the targetter
 
@@ -50,8 +50,8 @@ namespace RiverHollow.Game_Managers
         public static TurnInfo CurrentTurnInfo;
 
         #region Turn Sequence
-        static List<CombatActor> _liQueuedCharacters;
-        static List<CombatActor> _liChargingCharacters;
+        static List<TacticalCombatActor> _liQueuedCharacters;
+        static List<TacticalCombatActor> _liChargingCharacters;
         #endregion
 
         /// <summary>
@@ -81,19 +81,19 @@ namespace RiverHollow.Game_Managers
 
             Delay = 0;
 
-            Summons = new List<Summon>();
+            Summons = new List<TacticalSummon>();
 
             _liDroppedItems = new List<Item>();
             LegalTiles = new List<RHTile>();
             AreaTiles = new List<RHTile>();
-            Party = new List<CombatActor>();
-            Party.AddRange(PlayerManager.GetParty());
+            Party = new List<TacticalCombatActor>();
+            Party.AddRange(PlayerManager.GetTacticalParty());
 
-            Monsters = new List<CombatActor>();
+            Monsters = new List<TacticalCombatActor>();
             Monsters.AddRange(BattleMap.Monsters);
 
-            _liQueuedCharacters = new List<CombatActor>();
-            _liChargingCharacters = new List<CombatActor>();
+            _liQueuedCharacters = new List<TacticalCombatActor>();
+            _liChargingCharacters = new List<TacticalCombatActor>();
             _liChargingCharacters.AddRange(Party);
             _liChargingCharacters.AddRange(Monsters);
 
@@ -102,12 +102,12 @@ namespace RiverHollow.Game_Managers
 
             TimedHazardTiles = MapManager.CurrentMap.CheckForCombatHazards(CombatHazard.HazardTypeEnum.Timed);
 
-            foreach(CombatActor c in _liChargingCharacters)
+            foreach(TacticalCombatActor c in _liChargingCharacters)
             {
                 c.CurrentCharge = RHRandom.Instance().Next(0, 50);
             }
 
-            foreach (CombatActor c in Monsters)
+            foreach (TacticalCombatActor c in Monsters)
             {
                 c.SetBaseTile(BattleMap.GetTileByPixelPosition(c.Position), true);
             }
@@ -131,12 +131,12 @@ namespace RiverHollow.Game_Managers
             }
 
 
-            _scrCombat = new CombatScreen();
+            _scrCombat = new TacticalCombatScreen();
             GUIManager.SetScreen(_scrCombat);
 
             InCombat = true;
             PlayerManager.AllowMovement = false;
-            PlayerManager.World.PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+            PlayerManager.World.PlayAnimationVerb(TacticalCombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
 
             PlayerManager.World.SetMoveObj(Util.SnapToGrid(PlayerManager.World.BaseTile.Center));
 
@@ -151,7 +151,7 @@ namespace RiverHollow.Game_Managers
                 case CmbtPhaseEnum.Setup:
                     if (PlayerManager.World.Position == PlayerManager.World.BaseTile.Position)
                     {
-                        PlayerManager.World.PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                        PlayerManager.World.PlayAnimationVerb(TacticalCombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
                         ChangePhase(CmbtPhaseEnum.Charging);
                     }
                     break;
@@ -181,7 +181,7 @@ namespace RiverHollow.Game_Managers
                 //Phase for when a new ActiveCharacter is set but before they can do anything
                 case CmbtPhaseEnum.Upkeep:
                     //If the ActiveCharacter has a LinkedSummon, have the summon perform its action first
-                    Summon activeSummon = ActiveCharacter.LinkedSummon;
+                    TacticalSummon activeSummon = ActiveCharacter.LinkedSummon;
                     if (activeSummon != null && !activeSummon.Acted)
                     {
                         activeSummon.Acted = true;
@@ -202,12 +202,12 @@ namespace RiverHollow.Game_Managers
                     }
                     break;
 
-                case CombatManager.CmbtPhaseEnum.ChooseActionTarget:
+                case TacticalCombatManager.CmbtPhaseEnum.ChooseActionTarget:
                     if (ActiveCharacter.Paused) { return; }
                     HandleTargetting();
                     break;
 
-                case CombatManager.CmbtPhaseEnum.ChooseMoveTarget:
+                case TacticalCombatManager.CmbtPhaseEnum.ChooseMoveTarget:
                     if (ActiveCharacter.Paused) { return; }
                     HandleTargetting();
                     break;
@@ -353,7 +353,7 @@ namespace RiverHollow.Game_Managers
             ChangePhase(CmbtPhaseEnum.MainSelection);
             if (ActiveCharacter.IsActorType(ActorEnum.Monster))
             {
-                ((Monster)ActiveCharacter).TakeTurn();
+                ((TacticalMonster)ActiveCharacter).TakeTurn();
             }
             else
             {
@@ -467,7 +467,7 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
-        public static void ProcessActionChoice(CombatAction a)
+        public static void ProcessActionChoice(TacticalCombatAction a)
         {
             a.AssignUser(ActiveCharacter);
             SelectedAction = a;
@@ -491,7 +491,7 @@ namespace RiverHollow.Game_Managers
         /// Called to give the party experience points for killing a monster
         /// </summary>
         /// <param name="m">The monster that has been defeated</param>
-        public static void GiveXP(Monster m)
+        public static void GiveXP(TacticalMonster m)
         {
             //Calculates the total XP based off of the XP multiplier and then add the floating text
             GameManager.TotalExperience = (int)(m.XP * (1 + (double)(EXP_MULTIPLIER_BONUS * _iXPMultiplier++)));
@@ -501,7 +501,7 @@ namespace RiverHollow.Game_Managers
         /// Perform any actions required of the CombatManager on a KO'd Actor.
         /// </summary>
         /// <param name="c">The KO'd Actor</param>
-        public static void RemoveKnockedOutCharacter(CombatActor c)
+        public static void RemoveKnockedOutCharacter(TacticalCombatActor c)
         {
             //If the Actor was a Monster, remove it from the list
             if (Monsters.Contains((c)))
@@ -520,13 +520,13 @@ namespace RiverHollow.Game_Managers
         /// has finished playing it's death animation
         /// </summary>
         /// <param name="c">The defeated Monster</param>
-        public static void MonsterKOAnimFinished(Monster m)
+        public static void MonsterKOAnimFinished(TacticalMonster m)
         {
             PlayerManager.AddMonsterEnergyToQueue(100);
             MapManager.RemoveMonster(m);
 
             Item droppedItem = DropManager.DropMonsterLoot(m);
-            if (CombatManager.InCombat) { _liDroppedItems.Add(droppedItem); }
+            if (TacticalCombatManager.InCombat) { _liDroppedItems.Add(droppedItem); }
             else { droppedItem.AutoPickup = true; }
         }
 
@@ -541,7 +541,7 @@ namespace RiverHollow.Game_Managers
             bool gottaMove = true;
 
             //Step one determine if we are in range of a target
-            foreach (CombatAction c in ActiveCharacter.GetCurrentSpecials())
+            foreach (TacticalCombatAction c in ActiveCharacter.GetCurrentSpecials())
             {
                 if (c.Range == 1)
                 {
@@ -568,7 +568,7 @@ namespace RiverHollow.Game_Managers
                     Vector2 start = ActiveCharacter.BaseTile.Center;
                     Vector2 closest = Vector2.Zero;
 
-                    foreach (CombatActor actor in Party)
+                    foreach (TacticalCombatActor actor in Party)
                     {
                         Vector2 target = actor.BaseTile.Center;
 
@@ -587,7 +587,7 @@ namespace RiverHollow.Game_Managers
 
                     //Need to unset the Combatant from the tile the monster is moving to so that
                     //we can pathfind to it
-                    CombatActor act = SelectedTile.Character;
+                    TacticalCombatActor act = SelectedTile.Character;
                     act.ClearTiles();
 
                     //Determine the pathfinding for the Monster
@@ -619,7 +619,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         private static void EnemyCheckforTargets()
         {
-            foreach (MenuAction action in ActiveCharacter.AbilityList) {
+            foreach (TacticalMenuAction action in ActiveCharacter.AbilityList) {
 
             }
         }
@@ -739,12 +739,12 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         /// <param name="actor"></param>
         /// <returns></returns>
-        public static bool OnSameTeam(CombatActor actor)
+        public static bool OnSameTeam(TacticalCombatActor actor)
         {
             return (!ActiveCharacter.IsActorType(ActorEnum.Monster) && !actor.IsActorType(ActorEnum.Monster)) || (ActiveCharacter.IsActorType(ActorEnum.Monster) && actor.IsActorType(ActorEnum.Monster));
         }
 
-        public static void CheckTileForActiveHazard(CombatActor c)
+        public static void CheckTileForActiveHazard(TacticalCombatActor c)
         {
             List<CombatHazard> activatedHazards = new List<CombatHazard>();
             foreach(RHTile tile in c.GetTileList())
@@ -761,7 +761,7 @@ namespace RiverHollow.Game_Managers
             } 
         }
 
-        public static void CheckTileForActiveHazard(CombatActor c, RHTile t)
+        public static void CheckTileForActiveHazard(TacticalCombatActor c, RHTile t)
         {
             CombatHazard currHazard = t.HazardObject;
             if (currHazard != null)
@@ -811,7 +811,7 @@ namespace RiverHollow.Game_Managers
                temp = temp.GetTileByDirection(DirectionEnum.Down);
             }
 
-            if (temp != null && CombatManager.LegalTiles.Contains(temp) && temp != ActiveCharacter.BaseTile)
+            if (temp != null && TacticalCombatManager.LegalTiles.Contains(temp) && temp != ActiveCharacter.BaseTile)
             {
                 SelectTile(temp);
             }
@@ -820,11 +820,11 @@ namespace RiverHollow.Game_Managers
             {
                 if (CurrentPhase == CmbtPhaseEnum.ChooseMoveTarget)
                 {
-                    CombatManager.SetMoveTarget();
+                    TacticalCombatManager.SetMoveTarget();
                 }
                 else if (CurrentPhase == CmbtPhaseEnum.ChooseActionTarget)
                 {
-                    CombatManager.SelectedAction.UseSkillOnTarget();
+                    TacticalCombatManager.SelectedAction.UseSkillOnTarget();
                 }
             }
         }
@@ -874,9 +874,9 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Turn Handling
-        private static void CombatTick(ref List<CombatActor> charging, ref List<CombatActor> queued, bool dummy = false)
+        private static void CombatTick(ref List<TacticalCombatActor> charging, ref List<TacticalCombatActor> queued, bool dummy = false)
         {
-            List<CombatActor> toQueue = new List<CombatActor>();
+            List<TacticalCombatActor> toQueue = new List<TacticalCombatActor>();
 
             foreach(RHTile t in TimedHazardTiles)
             {
@@ -886,7 +886,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            foreach(CombatActor c in charging)
+            foreach(TacticalCombatActor c in charging)
             {
                 //If Actor is not knocked out, increment the charge, capping to 100
                 if (!c.KnockedOut() || c.CurrentHP > 0)
@@ -899,13 +899,13 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            foreach(CombatActor c in toQueue)
+            foreach(TacticalCombatActor c in toQueue)
             {
                 queued.Add(c);
                 charging.Remove(c);
             }
         }
-        private static void HandleChargeTick(ref int charge, ref List<CombatActor> toQueue, CombatActor c)
+        private static void HandleChargeTick(ref int charge, ref List<TacticalCombatActor> toQueue, TacticalCombatActor c)
         {
             charge += c.StatSpd;
             if (charge >= 100)
@@ -915,11 +915,11 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static List<CombatActor> CalculateTurnOrder(int maxShown)
+        public static List<TacticalCombatActor> CalculateTurnOrder(int maxShown)
         {
-            List<CombatActor> rv = new List<CombatActor>();
-            List<CombatActor> queuedCopy = new List<CombatActor>();
-            List<CombatActor> chargingCopy = new List<CombatActor>();
+            List<TacticalCombatActor> rv = new List<TacticalCombatActor>();
+            List<TacticalCombatActor> queuedCopy = new List<TacticalCombatActor>();
+            List<TacticalCombatActor> chargingCopy = new List<TacticalCombatActor>();
 
             LoadList(ref queuedCopy, _liQueuedCharacters);
             LoadList(ref chargingCopy, _liChargingCharacters);
@@ -928,12 +928,12 @@ namespace RiverHollow.Game_Managers
             if (ActiveCharacter != null)
             {
                 rv.Add(ActiveCharacter);
-                CombatActor c = chargingCopy.Find(x => x.Name == ActiveCharacter.Name);
+                TacticalCombatActor c = chargingCopy.Find(x => x.Name == ActiveCharacter.Name);
                 c.DummyCharge -= (SelectedAction == null) ? c.DummyCharge : ATTACK_CHARGE;
             }
 
             //If there are any queued Actors, add them to the charging list
-            foreach (CombatActor c in queuedCopy)
+            foreach (TacticalCombatActor c in queuedCopy)
             {
                 if (rv.Count < maxShown)
                 {
@@ -953,7 +953,7 @@ namespace RiverHollow.Game_Managers
 
                 //For all entries in the queue add them to the TurnOrder List,
                 //set the Charge to 0, and add to the queue, sorting by Spd
-                foreach (CombatActor c in queuedCopy)
+                foreach (TacticalCombatActor c in queuedCopy)
                 {
                     if (rv.Count < maxShown)
                     {
@@ -969,11 +969,11 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        private static void LoadList(ref List<CombatActor> toFill, List<CombatActor> takeFrom)
+        private static void LoadList(ref List<TacticalCombatActor> toFill, List<TacticalCombatActor> takeFrom)
         {
-            foreach (CombatActor c in takeFrom)
+            foreach (TacticalCombatActor c in takeFrom)
             {
-                CombatActor actor = c;
+                TacticalCombatActor actor = c;
                 actor.DummyCharge = c.CurrentCharge;
                 toFill.Add(actor);
             }
@@ -1019,7 +1019,7 @@ namespace RiverHollow.Game_Managers
             //If the character is a Summon, set the ActiveCharacter back to the linked character
             if (ActiveCharacter.ActorType == ActorEnum.Summon)
             {
-                ActiveCharacter = ((Summon)ActiveCharacter).linkedChar;
+                ActiveCharacter = ((TacticalSummon)ActiveCharacter).linkedChar;
                 //Go into Upkeep phase
                 ChangePhase(CmbtPhaseEnum.Upkeep);
             }

@@ -1,15 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.Tile_Engine;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Utilities
@@ -580,17 +577,6 @@ namespace RiverHollow.Utilities
         {
             int roll = RHRandom.Instance().Next(1, 100);
             return roll <= percent;
-        }
-    }
-
-    public struct RHSize
-    {
-        public int Width;
-        public int Height;
-        public RHSize(int width, int height)
-        {
-            Width = width;
-            Height = height;
         }
     }
 }

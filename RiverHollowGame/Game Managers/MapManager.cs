@@ -99,9 +99,9 @@ namespace RiverHollow.Game_Managers
             //Handling for if the WorldActor is the player character
             if (c == PlayerManager.World)
             {
-                if (CombatManager.InCombat)
+                if (TacticalCombatManager.InCombat)
                 {
-                    CombatManager.EndCombatEscape();
+                    TacticalCombatManager.EndCombatEscape();
                 }
 
                 //If the travel point has no linked map yet and is supposed to generate a level,
@@ -151,7 +151,7 @@ namespace RiverHollow.Game_Managers
             GUIManager.BeginFadeOut();
 
             PlayerManager.World.SetMovementState(ActorMovementStateEnum.Idle);
-            PlayerManager.World.PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+            PlayerManager.World.PlayAnimationVerb(TacticalCombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
             _newMapInfo = new NewMapInfo(newMap, playerPos, b);
         }
 
@@ -255,7 +255,7 @@ namespace RiverHollow.Game_Managers
                 _newMapInfo = default;
 
                 //Enter combat upon entering a map with living monsters
-                if (CurrentMap.Monsters.Count > 0) { CombatManager.NewBattle(oldMap); }
+                if (CurrentMap.Monsters.Count > 0) { TacticalCombatManager.NewBattle(oldMap); }
                 else
                 {
                     PlayerManager.World.ActivePet?.SpawnNearPlayer();
@@ -332,7 +332,11 @@ namespace RiverHollow.Game_Managers
         {
             CurrentMap.RemoveCharacter(c);
         }
-        public static void RemoveSummon(Summon s)
+        public static void RemoveMob(LiteMob m)
+        {
+            CurrentMap.RemoveMob(m);
+        }
+        public static void RemoveSummon(TacticalSummon s)
         {
             CurrentMap.RemoveSummon(s);
         }
@@ -340,7 +344,7 @@ namespace RiverHollow.Game_Managers
         {
             CurrentMap.CleanupSummons();
         }
-        public static void RemoveMonster(Monster m)
+        public static void RemoveMonster(TacticalMonster m)
         {
             CurrentMap.RemoveMonster(m);
         }

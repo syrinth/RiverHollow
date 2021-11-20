@@ -11,7 +11,7 @@ using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Misc
 {
-    public class Task
+    public class RHTask
     {
         public int TaskID { get; private set; }
         private TaskTypeEnum _eTaskType;
@@ -25,7 +25,7 @@ namespace RiverHollow.Misc
         public int RequiredItemAmount { get; private set; }
         public int TargetsAccomplished { get; private set; }
 
-        private Monster _questMob;
+        private TacticalMonster _questMob;
         private Item _targetItem;
         private int _iTargetBuildingID = -1;
         public bool ReadyForHandIn { get; private set; } = false;
@@ -43,7 +43,7 @@ namespace RiverHollow.Misc
         public List<Item> LiRewardItems { get; }
         #endregion
         #region Spawn Mobs
-        Monster _spawnMob;
+        TacticalMonster _spawnMob;
         string _sSpawnMap;
         string _sLocName;
         #endregion
@@ -52,7 +52,7 @@ namespace RiverHollow.Misc
         int _iSeason;
         #endregion
 
-        public Task()
+        public RHTask()
         {
             _iCutsceneID = -1;
             _bFinishOnCompletion = false;
@@ -73,7 +73,7 @@ namespace RiverHollow.Misc
 
             LiRewardItems = new List<Item>();
         }
-        public Task(string name, TaskTypeEnum type, string desc, int target, Monster m, Item i, Villager giver = null) : this()
+        public RHTask(string name, TaskTypeEnum type, string desc, int target, TacticalMonster m, Item i, Villager giver = null) : this()
         {
             _sName = name;
             _eTaskType = type;
@@ -86,7 +86,7 @@ namespace RiverHollow.Misc
             ReadyForHandIn = false;
         }
 
-        public Task(int id, Dictionary<string, string> stringData) : this()
+        public RHTask(int id, Dictionary<string, string> stringData) : this()
         {
             TaskID = id;
             TargetsAccomplished = 0;
@@ -134,7 +134,7 @@ namespace RiverHollow.Misc
                 string[] parse = stringData["SpawnMob"].Split('-');
                 if (parse.Length > 1)
                 {
-                    _spawnMob = DataManager.GetMonsterByIndex(int.Parse(parse[0]));
+                    _spawnMob = DataManager.GetTacticalMonsterByIndex(int.Parse(parse[0]));
                     _sSpawnMap = parse[1];
                     _sLocName = parse[2];
                 }
@@ -166,7 +166,7 @@ namespace RiverHollow.Misc
 
             return rv;
         }
-        public bool AttemptProgress(Monster m)
+        public bool AttemptProgress(TacticalMonster m)
         {
             bool rv = false;
 
@@ -423,7 +423,7 @@ namespace RiverHollow.Misc
             _sDescription = qData.description;
             GoalNPC = qData.goalNPC != -1 ? DataManager.DIVillagers[qData.goalNPC] : null;
             _targetItem = qData.itemID != -1 ? DataManager.GetItem(qData.itemID) : null;
-            _questMob = qData.mobID != -1 ? DataManager.GetMonsterByIndex(qData.mobID) : null;
+            _questMob = qData.mobID != -1 ? DataManager.GetTacticalMonsterByIndex(qData.mobID) : null;
             _iTargetBuildingID = qData.targetBuildingID;
             _iUnlockBuildingID = qData.unlockBuildingID;
             RequiredItemAmount = qData.targetGoal;

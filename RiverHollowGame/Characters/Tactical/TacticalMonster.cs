@@ -10,13 +10,13 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
 
-using static RiverHollow.Game_Managers.CombatManager;
+using static RiverHollow.Game_Managers.TacticalCombatManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.TravelManager;
 
 namespace RiverHollow.Characters
 {
-    public class Monster : CombatActor
+    public class TacticalMonster : TacticalCombatActor
     {
         #region Properties
         #region Traits
@@ -45,11 +45,11 @@ namespace RiverHollow.Characters
         int _iMoveFailures = 0;
 
         List<SpawnConditionEnum> _liSpawnConditions;
-        List<CombatAction> _liCombatActions;
+        List<TacticalCombatAction> _liCombatActions;
 
         #region Turn Logic
         RHTile _selectedTile;
-        CombatAction _chosenAction;
+        TacticalCombatAction _chosenAction;
         enum TurnStepsEnum { Move, Act, EndTurn };
         List<TurnStepsEnum> _liTurnSteps;
 
@@ -60,11 +60,11 @@ namespace RiverHollow.Characters
 
         #endregion
 
-        public Monster(int id, Dictionary<string, string> data)
+        public TacticalMonster(int id, Dictionary<string, string> data)
         {
             SpdMult = NORMAL_SPEED;
             _liLootIDs = new List<int>();
-            _liCombatActions = new List<CombatAction>();
+            _liCombatActions = new List<TacticalCombatAction>();
             _liSpawnConditions = new List<SpawnConditionEnum>();
 
             _eActorType = ActorEnum.Monster;
@@ -116,7 +116,7 @@ namespace RiverHollow.Characters
 
             foreach (string ability in data["Ability"].Split('|'))
             {
-                _liCombatActions.Add((CombatAction)DataManager.GetActionByIndex(int.Parse(ability)));
+                _liCombatActions.Add((TacticalCombatAction)DataManager.GetTacticalActionByIndex(int.Parse(ability)));
             }
 
             if (data.ContainsKey("Trait"))
@@ -160,41 +160,41 @@ namespace RiverHollow.Characters
             {
                 if (_liTurnSteps[0] == TurnStepsEnum.Move)
                 {
-                    if (CombatManager.CurrentTurnInfo.HasMoved)
+                    if (TacticalCombatManager.CurrentTurnInfo.HasMoved)
                     {
                         _liTurnSteps.RemoveAt(0);
                     }
                     else if (!CombatPhaseCheck(CmbtPhaseEnum.Moving))
                     {
-                        CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.Moving);
+                        TacticalCombatManager.ChangePhase(TacticalCombatManager.CmbtPhaseEnum.Moving);
                         SetPath(_liFoundPath);
                     }
                 }
 
                 if (_liTurnSteps[0] == TurnStepsEnum.Act)
                 {
-                    if (CombatManager.CurrentTurnInfo.HasActed)
+                    if (TacticalCombatManager.CurrentTurnInfo.HasActed)
                     {
                         _liTurnSteps.RemoveAt(0);
                     }
                     else if (!CombatPhaseCheck(CmbtPhaseEnum.PerformAction))
                     {
                         DetermineFacing(_chosenAction.TileTargetList[0]);
-                        CombatManager.SelectedAction = _chosenAction;
-                        CombatManager.ActiveCharacter.CurrentMP -= _chosenAction.MPCost;          //Checked before Processing
-                        CombatManager.ChangePhase(CmbtPhaseEnum.PerformAction);
+                        TacticalCombatManager.SelectedAction = _chosenAction;
+                        TacticalCombatManager.ActiveCharacter.CurrentMP -= _chosenAction.MPCost;          //Checked before Processing
+                        TacticalCombatManager.ChangePhase(CmbtPhaseEnum.PerformAction);
                     }
                 }
                 if (_liTurnSteps[0] == TurnStepsEnum.EndTurn)
                 {
-                    CombatManager.EndTurn();
+                    TacticalCombatManager.EndTurn();
                 }
             }
 
             ///When the Monster has finished playing the KO animation, let the CombatManager know so it can do any final actions
             if (IsCurrentAnimation(AnimationEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
             {
-                CombatManager.MonsterKOAnimFinished(this);
+                TacticalCombatManager.MonsterKOAnimFinished(this);
             }
         }
 
@@ -299,7 +299,7 @@ namespace RiverHollow.Characters
                 if (Position.X == _vMoveTo.X && Position.Y == _vMoveTo.Y)
                 {
                     _vMoveTo = Vector2.Zero;
-                    PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                    PlayAnimationVerb(TacticalCombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
                 }
             }
         }
@@ -321,7 +321,7 @@ namespace RiverHollow.Characters
                 {
                     _vMoveTo = Vector2.Zero;
                     _dIdleFor = 4;
-                    PlayAnimationVerb(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                    PlayAnimationVerb(TacticalCombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
                     skip = true;
                 }
 
@@ -386,11 +386,11 @@ namespace RiverHollow.Characters
         {
             base.KO();
             SpawnPoint.ClearSpawn();
-            CombatManager.GiveXP(this);
+            TacticalCombatManager.GiveXP(this);
             GameManager.SlainMonsters.Add(new GUISprite(BodySprite));
         }
 
-        public override List<CombatAction> GetCurrentSpecials()
+        public override List<TacticalCombatAction> GetCurrentSpecials()
         {
             return _liCombatActions;
         }
@@ -411,7 +411,7 @@ namespace RiverHollow.Characters
             _travelMap = TravelManager.FindRangeOfAction(this, _iMoveSpeed, true);
 
             //First, determine which action we would prefer to use
-            foreach (CombatAction testAction in this.GetCurrentSpecials())
+            foreach (TacticalCombatAction testAction in this.GetCurrentSpecials())
             {
                 _liFoundPath = null;
                 _liTurnSteps = new List<TurnStepsEnum>();
@@ -420,11 +420,11 @@ namespace RiverHollow.Characters
                 _chosenAction.AssignUser(this);
 
                 //Determine if the characters we want to act on are on our TravelMap or not.
-                List<CombatActor> activeTargets = new List<CombatActor>();
-                List<CombatActor> distantTargets = new List<CombatActor>();
+                List<TacticalCombatActor> activeTargets = new List<TacticalCombatActor>();
+                List<TacticalCombatActor> distantTargets = new List<TacticalCombatActor>();
 
                 bool skipThisSkill = true;
-                foreach (CombatActor act in (_chosenAction.Target == TargetEnum.Enemy) ? CombatManager.Party : CombatManager.Monsters)
+                foreach (TacticalCombatActor act in (_chosenAction.Target == TargetEnum.Enemy) ? TacticalCombatManager.Party : TacticalCombatManager.Monsters)
                 {
                     if (ShouldTryToUseOnActor(act))
                     {
@@ -480,7 +480,7 @@ namespace RiverHollow.Characters
                         {
                             bool run = false;
                             List<RHTile> partyTiles = new List<RHTile>();
-                            foreach (CombatActor act in CombatManager.Party.FindAll(x => !x.KnockedOut())) {
+                            foreach (TacticalCombatActor act in TacticalCombatManager.Party.FindAll(x => !x.KnockedOut())) {
                                 foreach (RHTile t in GetTileList())
                                 {
                                     if (Util.GetRHTileDelta(t, act.BaseTile) <= 3)
@@ -519,7 +519,7 @@ namespace RiverHollow.Characters
         /// <param name="act">The CombatActor to compare against</param>
         /// <param name="activeTargets">List of targets we can reach</param>
         /// <param name="distantTargets">List of targets we cannot reach</param>
-        private void DetermineRangeToActor(CombatActor act, ref List<CombatActor> activeTargets, ref List<CombatActor> distantTargets)
+        private void DetermineRangeToActor(TacticalCombatActor act, ref List<TacticalCombatActor> activeTargets, ref List<TacticalCombatActor> distantTargets)
         {
             bool found = false;
             foreach (RHTile adjTile in act.GetAdjacentTiles())
@@ -540,7 +540,7 @@ namespace RiverHollow.Characters
         /// </summary>
         /// <param name="actor"></param>
         /// <returns></returns>
-        private bool ShouldTryToUseOnActor(CombatActor actor)
+        private bool ShouldTryToUseOnActor(TacticalCombatActor actor)
         {
             bool rv = true;
 
@@ -564,9 +564,9 @@ namespace RiverHollow.Characters
         /// <param name="possibleTargets">List of targets to loop through</param>
         /// <param name="preferredAction">The action we want to use, pass to the helper</param>
         /// <param name="shortestPath">A reference to a list of RHTiles which will be the shortest path.</param>
-        private void FindShortestPathToActor(List<CombatActor> possibleTargets, ref PathInfo shortestPath)
+        private void FindShortestPathToActor(List<TacticalCombatActor> possibleTargets, ref PathInfo shortestPath)
         {
-            foreach (CombatActor act in possibleTargets)
+            foreach (TacticalCombatActor act in possibleTargets)
             {
                 PathInfo testInfo = ChooseTargetTile(act);
                 if (shortestPath == null || (testInfo != null && (testInfo.Count() < shortestPath.Count() || ChooseBetweenEquals(testInfo.Count(), shortestPath.Count(), 50))))
@@ -585,7 +585,7 @@ namespace RiverHollow.Characters
         /// <param name="targetActor"></param>
         /// <param name="preferredAction"></param>
         /// <returns></returns>
-        private PathInfo ChooseTargetTile(CombatActor targetActor)
+        private PathInfo ChooseTargetTile(TacticalCombatActor targetActor)
         {
             PathInfo pathInfo = new PathInfo();
             int skillRange = _chosenAction.Range;
@@ -743,7 +743,7 @@ namespace RiverHollow.Characters
         /// </summary>
         /// <param name="target">The CombatActor we are trying to cozy up to.</param>
         /// <returns>A List of RHTiles that the Monster's BaseTile could be in to be adjacent</returns>
-        private List<RHTile> FindAdjacentTiles(CombatActor target)
+        private List<RHTile> FindAdjacentTiles(TacticalCombatActor target)
         {
             List<RHTile> rvList = new List<RHTile>();
 

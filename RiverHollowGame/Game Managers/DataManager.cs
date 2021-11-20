@@ -30,6 +30,7 @@ namespace RiverHollow.Game_Managers
         public const string FOLDER_ITEMS = @"Textures\Items\";
         public const string FOLDER_ENVIRONMENT = @"Textures\Environmental\";
         public const string FOLDER_MONSTERS = @"Textures\Actors\Monsters\";
+        public const string FOLDER_MOBS= @"Textures\Actors\Mobs\";
         public const string FOLDER_SUMMONS = @"Textures\Actors\Summons\";
         public const string FOLDER_PLAYER = @"Textures\Actors\Player\";
         public const string FOLDER_TEXTFILES = @"Data\Text Files\";
@@ -74,6 +75,7 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<int, Dictionary<string, string>> _diNPCData;
 
+        static Dictionary<int, Dictionary<string, string>> _diMobs;
         static Dictionary<int, Dictionary<string, string>> _diMonsterData;
         public static Dictionary<int, Villager> DIVillagers { get; private set; }
         public static Dictionary<int, Merchant> DIMerchants { get; private set; }
@@ -144,6 +146,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diNPCData, @"Data\NPCs", Content, null);
             LoadDictionary(ref _diBuildings, @"Data\Buildings", Content, null);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
+            LoadDictionary(ref _diMobs, FOLDER_MOBS, Content, null);
             LoadDictionary(ref _diWorkers, @"Data\Workers", Content, null);
             LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);
             LoadDictionary(ref _diClasses, @"Data\Classes", Content, null);
@@ -588,8 +591,22 @@ namespace RiverHollow.Game_Managers
                     case ActorEnum.Spirit:
                         return new Spirit(diData);
                     case ActorEnum.Summon:
-                        return new Summon(id, diData);
+                        return new TacticalSummon(id, diData);
+                }
+            }
 
+            return null;
+        }
+
+        public static LiteSummon GetSummonByIndex(int id)
+        {
+            if (_diNPCData.ContainsKey(id))
+            {
+                Dictionary<string, string> diData = _diNPCData[id];
+                switch (Util.ParseEnum<ActorEnum>(diData["Type"]))
+                {
+                    case ActorEnum.Summon:
+                        return new LiteSummon(id, diData);
                 }
             }
 
@@ -600,31 +617,79 @@ namespace RiverHollow.Game_Managers
         {
             return _diMonsterTraits[trait];
         }
-        public static Monster GetMonsterByIndex(int id)
-        {
-            Monster m = null;
 
-            if (_diMonsterData.ContainsKey(id))
+        public static LiteMob GetMobByIndex(int id)
+        {
+            LiteMob m = null;
+
+            if (_diMobs.ContainsKey(id))
             {
-                m = new Monster(id, _diMonsterData[id]);
+                m = new LiteMob(id, _diMonsterData[id]);
             }
             return m;
         }
-        public static Monster GetMonster(int id, Vector2 pos)
+        public static LiteMob GetMonster(int id, Vector2 pos)
         {
-            Monster m = GetMonsterByIndex(id);
+            LiteMob m = GetMobByIndex(id);
+            m.Position = pos;
+            return m;
+        }
+        public static LiteMonster GetLiteMonsterByIndex(int id)
+        {
+            LiteMonster m = null;
+
+            if (_diMonsterData.ContainsKey(id))
+            {
+                m = new LiteMonster(id, _diMonsterData[id]);
+            }
+            return m;
+        }
+        public static LiteMonster GetLiteMonsterByIndex(int id, Vector2 pos)
+        {
+            LiteMonster m = GetLiteMonsterByIndex(id);
             m.Position = pos;
             return m;
         }
 
-        public static CombatAction GetActionByIndex(int id)
+        public static TacticalMonster GetTacticalMonsterByIndex(int id)
+        {
+            TacticalMonster m = null;
+
+            if (_diMonsterData.ContainsKey(id))
+            {
+                m = new TacticalMonster(id, _diMonsterData[id]);
+            }
+            return m;
+        }
+        public static TacticalMonster GetTacticalMonsterByIndex(int id, Vector2 pos)
+        {
+            TacticalMonster m = GetTacticalMonsterByIndex(id);
+            m.Position = pos;
+            return m;
+        }
+
+        public static TacticalCombatAction GetTacticalActionByIndex(int id)
         {
             if (id != -1)
             {
                 Dictionary<string, string> liData = _diActions[id];
                 if (liData["Type"] == "Action" || liData["Type"] == "Spell")
                 {
-                    return new CombatAction(id, liData);
+                    return new TacticalCombatAction(id, liData);
+                }
+            }
+
+            return null;
+        }
+
+        public static LiteCombatAction GetLiteActionByIndex(int id)
+        {
+            if (id != -1)
+            {
+                Dictionary<string, string> liData = _diActions[id];
+                if (liData["Type"] == "Action" || liData["Type"] == "Spell")
+                {
+                    return new LiteCombatAction(id, liData);
                 }
             }
 
@@ -772,45 +837,6 @@ namespace RiverHollow.Game_Managers
         public static void AddToMountain(int ID) { _liMountain.Add(ID); }
         public static void AddToNight(int ID) { _liNight.Add(ID); }
 
-        #endregion
-
-        #region Helper Objects
-        public class AnimationData
-        {
-            public int XLocation { get; private set; }
-            public int YLocation { get; private set; }
-            public int Frames { get; private set; }
-            public float FrameSpeed { get; private set; }
-            public bool Directional { get; }
-            public bool PingPong { get; private set; }
-            public bool BackToIdle { get; private set; }
-            public VerbEnum Verb { get; }
-            public AnimationEnum Animation { get; }
-
-            public AnimationData(string value, VerbEnum verb, bool backToIdle, bool directional) : base()
-            {
-                Directional = directional;
-                Verb = verb;
-                BackToIdle = backToIdle;
-                StoreData(value);
-            }
-
-            public AnimationData(string value, AnimationEnum anim)
-            {
-                Animation = anim;
-                StoreData(value);
-            }
-
-            public void StoreData(string value)
-            {
-                string[] splitString = value.Split('-');
-                XLocation = int.Parse(splitString[0]);
-                YLocation = int.Parse(splitString[1]);
-                Frames = int.Parse(splitString[2]);
-                FrameSpeed = float.Parse(splitString[3]);
-                PingPong = splitString[4].Equals("T");
-            }
-        }
         #endregion
     }
 }

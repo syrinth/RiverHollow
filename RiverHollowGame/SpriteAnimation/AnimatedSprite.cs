@@ -89,6 +89,7 @@ namespace RiverHollow.SpriteAnimations
         }
 
         #region AddAnimation Helpers
+        public void AddAnimation(LiteCombatActionEnum verb, int startX, int startY, RHSize size, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, size.Width * TILE_SIZE, size.Height * TILE_SIZE, Frames, FrameLength, pingPong, playsOnce); }
         public void AddAnimation(AnimationEnum verb, int startX, int startY, RHSize size, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, size.Width * TILE_SIZE, size.Height * TILE_SIZE, Frames, FrameLength, pingPong, playsOnce); }
         public void AddAnimation(AnimationEnum verb, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce); }
         public void AddAnimation(VerbEnum verb, DirectionEnum dir, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetActorString(verb, dir), startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce); }
@@ -112,7 +113,7 @@ namespace RiverHollow.SpriteAnimations
         #endregion
 
         #region PlayAnimation Helpers
-        public void PlayAnimation(AnimationEnum verb) { PlayAnimation(Util.GetEnumString(verb)); }
+        public void PlayAnimation<TEnum>(TEnum e) { PlayAnimation(Util.GetEnumString(e)); }
         public void PlayAnimation(VerbEnum verb, DirectionEnum dir) { PlayAnimation(Util.GetActorString(verb, dir)); }
         public void PlayAnimation(string verb, DirectionEnum dir) { PlayAnimation(Util.GetActorString(verb, dir)); }
         public void PlayAnimation(string animate)
@@ -127,7 +128,7 @@ namespace RiverHollow.SpriteAnimations
         #endregion
 
         #region IsCurrentAnimation Helpers
-        public bool IsCurrentAnimation(AnimationEnum verb) { return IsCurrentAnimation(Util.GetEnumString(verb)); }
+        public bool IsCurrentAnimation<TEnum>(TEnum e) { return IsCurrentAnimation(Util.GetEnumString(e)); }
         public bool IsCurrentAnimation(VerbEnum verb, DirectionEnum dir) { return IsCurrentAnimation(Util.GetActorString(verb, dir)); }
         public bool IsCurrentAnimation(string verb, DirectionEnum dir) { return IsCurrentAnimation(Util.GetActorString(verb, dir)); }
         private bool IsCurrentAnimation(string animate) { return CurrentAnimation.Equals(animate); }
@@ -160,6 +161,10 @@ namespace RiverHollow.SpriteAnimations
             }
         }
 
+        public void SetNextAnimation<TEnum>(TEnum first, TEnum next)
+        {
+            SetNextAnimation(Util.GetEnumString(first), Util.GetEnumString(next));
+        }
         public void SetNextAnimation(string first, string next)
         {
             _diFrameAnimations[first].SetNextAnimation(next);

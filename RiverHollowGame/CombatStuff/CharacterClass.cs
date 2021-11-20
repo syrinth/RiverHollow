@@ -58,8 +58,8 @@ namespace RiverHollow.CombatStuff
         public string Name { get => _sName; }
         private string _sDescription;
         public string Description { get => _sDescription; }
-        public List<MenuAction> ActionList;
-        public List<CombatAction> _liSpecialActionsList;
+        public List<TacticalMenuAction> ActionList;
+        public List<TacticalCombatAction> _liSpecialActionsList;
         WeaponEnum _weaponType;
         public WeaponEnum WeaponType => _weaponType;
         ArmorEnum _armorType;
@@ -72,8 +72,8 @@ namespace RiverHollow.CombatStuff
 
         public CharacterClass()
         {
-            ActionList = new List<MenuAction>();
-            _liSpecialActionsList = new List<CombatAction>();
+            ActionList = new List<TacticalMenuAction>();
+            _liSpecialActionsList = new List<TacticalCombatAction>();
 
             _iID = -1;
         }
@@ -102,7 +102,7 @@ namespace RiverHollow.CombatStuff
                 string[] split = stringData["Ability"].Split('|');
                 foreach (string ability in split)
                 {
-                    CombatAction ac = (CombatAction)DataManager.GetActionByIndex(int.Parse(ability));
+                    TacticalCombatAction ac = (TacticalCombatAction)DataManager.GetTacticalActionByIndex(int.Parse(ability));
                     ActionList.Add(ac);
                 }
             }
@@ -112,7 +112,7 @@ namespace RiverHollow.CombatStuff
                 string[] spellSplit = stringData["Spell"].Split('|');
                 foreach (string spell in spellSplit)
                 {
-                    CombatAction ac = (CombatAction)DataManager.GetActionByIndex(int.Parse(spell));
+                    TacticalCombatAction ac = (TacticalCombatAction)DataManager.GetTacticalActionByIndex(int.Parse(spell));
                     _liSpecialActionsList.Add(ac);
                 }
             }
@@ -134,10 +134,10 @@ namespace RiverHollow.CombatStuff
 
 
             //Adds Special, Use Item, Move, and End Turn
-            ActionList.Add(new MenuAction(2, ActionEnum.MenuSpell, new Vector2(1, 0)));
-            ActionList.Add(new MenuAction(1, ActionEnum.MenuItem, new Vector2(2, 0)));
-            ActionList.Add(new MenuAction(0, ActionEnum.Move, new Vector2(3, 0)));
-            ActionList.Add(new MenuAction(3, ActionEnum.EndTurn, new Vector2(4, 0)));
+            ActionList.Add(new TacticalMenuAction(2, ActionEnum.MenuSpell, new Vector2(1, 0)));
+            ActionList.Add(new TacticalMenuAction(1, ActionEnum.MenuItem, new Vector2(2, 0)));
+            ActionList.Add(new TacticalMenuAction(0, ActionEnum.Move, new Vector2(3, 0)));
+            ActionList.Add(new TacticalMenuAction(3, ActionEnum.EndTurn, new Vector2(4, 0)));
         }
 
         private void SetClassAnimation(Dictionary<string, string> stringData, string key, ref int frames, ref float frameLength)

@@ -53,7 +53,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _sprite.Position = Position();
         }
 
-        public virtual void PlayAnimation(AnimationEnum animation) { _sprite.PlayAnimation(animation); }
+        public virtual void PlayAnimation<TEnum>(TEnum e) { _sprite.PlayAnimation(e); }
         public virtual void PlayAnimation(VerbEnum verb, DirectionEnum dir) { _sprite.PlayAnimation(verb, dir); }
 
         public override void SetScale(double x, bool anchorToPos = true)

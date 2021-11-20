@@ -364,7 +364,7 @@ namespace RiverHollow.Game_Managers
                 //prospective new BaseTile, confirm that neighbouring tiles are all valid
                 foreach (var next in current.GetWalkableNeighbours())
                 {
-                    bool nextTileIsLast = CombatManager.InCombat && _iMaxPath != -1 && travelMap[current].CostSoFar == _iMaxPath - 1;
+                    bool nextTileIsLast = TacticalCombatManager.InCombat && _iMaxPath != -1 && travelMap[current].CostSoFar == _iMaxPath - 1;
                     if (TestTileForSize(next, nextTileIsLast))
                     {
                         double newCost = travelMap[current].CostSoFar + GetMovementCost(next);
@@ -411,7 +411,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="range">The range of the skill</param>
         /// <param name="movementParams">Whether or not the skill is movement</param>
         /// <returns></returns>
-        public static TravelMap FindRangeOfAction(CombatActor actor, int range, bool movementParams)
+        public static TravelMap FindRangeOfAction(TacticalCombatActor actor, int range, bool movementParams)
         {
             TravelMap travelMap = new TravelMap(actor.BaseTile);
             var frontier = new PriorityQueue<RHTile>();
@@ -645,7 +645,7 @@ namespace RiverHollow.Game_Managers
 
             //Do not perform any wall buffer checks if we are in combat
             List<RHTile> futureTiles = a.GetWalkableNeighbours();
-            int wallBuffer = CombatManager.InCombat ? 0 : ((futureTiles.Count < 4) ? 10 : 0);
+            int wallBuffer = TacticalCombatManager.InCombat ? 0 : ((futureTiles.Count < 4) ? 10 : 0);
 
             int multiplier = GetMovementCost(a);
 
@@ -662,7 +662,7 @@ namespace RiverHollow.Game_Managers
 
                 //Do not perform any wall buffer checks if we are in combat
                 List<RHTile> futureTiles = a.GetWalkableNeighbours();
-                int wallBuffer = CombatManager.InCombat ? 0 : ((futureTiles.Count < 4) ? 10 : 0);
+                int wallBuffer = TacticalCombatManager.InCombat ? 0 : ((futureTiles.Count < 4) ? 10 : 0);
 
                 int multiplier = GetMovementCost(a);
 
@@ -685,7 +685,7 @@ namespace RiverHollow.Game_Managers
         /// <returns>The default cost for movement</returns>
         private static int GetDefaultCost()
         {
-            if (CombatManager.InCombat && _actTraveller?.CurrentMapName == MapManager.CurrentMap.Name)
+            if (TacticalCombatManager.InCombat && _actTraveller?.CurrentMapName == MapManager.CurrentMap.Name)
             {
                 return 1;
             }

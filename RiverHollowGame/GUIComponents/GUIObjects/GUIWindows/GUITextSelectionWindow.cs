@@ -142,7 +142,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             List<TextEntry> liCommands = new List<TextEntry>();
 
             int i = 0;
-            foreach(ClassedCombatant act in PlayerManager.GetParty())
+            foreach(ClassedCombatant act in PlayerManager.GetTacticalParty())
             {
                 string verb = "Option_" + i++;
                 Dictionary<string, string> stringData = new Dictionary<string, string> { ["Text"] = act.Name, ["TextVerb"] = verb };

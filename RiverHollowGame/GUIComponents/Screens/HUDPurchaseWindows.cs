@@ -218,11 +218,11 @@ namespace RiverHollow.GUIComponents.Screens
     //                _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
 
     //                float newScale = (float)(Scale * 0.75);
-    //                int width = (int)(TileSize * 9 * newScale);
-    //                int height = (int)(TileSize * 11 * newScale);
+    //                int width = (int)(TILE_SIZE * 9 * newScale);
+    //                int height = (int)(TILE_SIZE * 11 * newScale);
     //                _bldgWindow = new GUIWindow(GUIWindow.Window_1, width, height);
     //                _bldgWindow.CenterOnScreen();
-    //                _bldgWindow.PositionSub(new Vector2(_bldgWindow.Width / 2 + TileSize / 2, 0));
+    //                _bldgWindow.PositionSub(new Vector2(_bldgWindow.Width / 2 + TILE_SIZE / 2, 0));
 
     //                _giBuilding = new GUISprite(_bldg.Sprite);
     //                _giBuilding.SetScale(newScale);
@@ -230,7 +230,7 @@ namespace RiverHollow.GUIComponents.Screens
     //                _giBuilding.AlignToObject(_bldgWindow, SideEnum.CenterX);
 
     //                _infoWindow = new GUIWindow(GUIWindow.Window_1, width, height);
-    //                _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TileSize / 2);
+    //                _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TILE_SIZE / 2);
 
     //                _gtName = new GUIText(_bldg.Name);
     //                _gtName.AnchorToInnerSide(_infoWindow, SideEnum.Top);
@@ -252,14 +252,14 @@ namespace RiverHollow.GUIComponents.Screens
     //                _bldgWindow.CenterOnScreen();
 
     //                _infoWindow = new GUIWindow(GUIWindow.Window_1, width, height);
-    //                _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TileSize / 2);
+    //                _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TILE_SIZE / 2);
 
     //                //Placeholderimage
     //                _giBuilding = new GUISprite(new SpriteAnimations.AnimatedSprite(DataManager.FILE_WORLDOBJECTS));
     //                _giBuilding.CenterOnObject(_bldgWindow);
     //            }
 
-    //            Width = _bldgWindow.Width + _infoWindow.Width + TileSize;
+    //            Width = _bldgWindow.Width + _infoWindow.Width + TILE_SIZE;
     //            Height = _bldgWindow.Height;
     //            Position(_bldgWindow.Position());
     //        }

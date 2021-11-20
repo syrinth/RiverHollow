@@ -63,7 +63,7 @@ namespace RiverHollow.WorldObjects
         //The ClickBox is always the Sprite itself
         public Rectangle ClickBox => Util.FloatRectangle(MapPosition, _uSize);
 
-        //Base is always described in # of Tiles so we must multiply by the TileSize
+        //Base is always described in # of Tiles so we must multiply by the TILE_SIZE
         public Rectangle CollisionBox => Util.FloatRectangle(MapPosition.X + (_rBase.X * TILE_SIZE), MapPosition.Y + (_rBase.Y * TILE_SIZE), (_rBase.Width * TILE_SIZE), (_rBase.Height * TILE_SIZE));
 
         protected int _iID;
@@ -331,12 +331,6 @@ namespace RiverHollow.WorldObjects
         }
 
         public virtual bool CanPickUp() { return false; }
-
-        public struct LightInfo
-        {
-            public Light LightObject;
-            public Vector2 Offset;
-        }
     }
 
     public class Destructible : WorldObject
@@ -733,7 +727,7 @@ namespace RiverHollow.WorldObjects
     //        _eObjectType = ObjectTypeEnum.WorldObject;
     //        _wallObject = true;
     //        _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-    //        _sprite.AddAnimation(AnimationEnum.ObjectIdle, 96, 0, TileSize, TileSize);
+    //        _sprite.AddAnimation(AnimationEnum.ObjectIdle, 96, 0, TILE_SIZE, TILE_SIZE);
     //    }
 
     //    public void SetExit(string map)
