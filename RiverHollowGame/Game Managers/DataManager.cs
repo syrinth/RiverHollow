@@ -33,6 +33,7 @@ namespace RiverHollow.Game_Managers
         public const string FOLDER_MOBS= @"Textures\Actors\Mobs\";
         public const string FOLDER_SUMMONS = @"Textures\Actors\Summons\";
         public const string FOLDER_PLAYER = @"Textures\Actors\Player\";
+        public const string FOLDER_PARTY = @"Textures\Actors\PartyMembers\";
         public const string FOLDER_TEXTFILES = @"Data\Text Files\";
         public const string FONT_MAIN = @"Fonts\Font_Main";
         public const string FONT_NUMBER_DISPLAY = @"Fonts\Font_Number_Display";
@@ -146,7 +147,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diNPCData, @"Data\NPCs", Content, null);
             LoadDictionary(ref _diBuildings, @"Data\Buildings", Content, null);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
-            LoadDictionary(ref _diMobs, FOLDER_MOBS, Content, null);
+            LoadDictionary(ref _diMobs, @"Data\Mobs", Content, null);
             LoadDictionary(ref _diWorkers, @"Data\Workers", Content, null);
             LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);
             LoadDictionary(ref _diClasses, @"Data\Classes", Content, null);
@@ -624,7 +625,7 @@ namespace RiverHollow.Game_Managers
 
             if (_diMobs.ContainsKey(id))
             {
-                m = new LiteMob(id, _diMonsterData[id]);
+                m = new LiteMob(id, _diMobs[id]);
             }
             return m;
         }
@@ -687,7 +688,7 @@ namespace RiverHollow.Game_Managers
             if (id != -1)
             {
                 Dictionary<string, string> liData = _diActions[id];
-                if (liData["Type"] == "Action" || liData["Type"] == "Spell")
+                if (liData["Type"] == "Action" || liData["Type"] == "Spell" || liData["Type"] == "Move")
                 {
                     return new LiteCombatAction(id, liData);
                 }

@@ -67,7 +67,7 @@ namespace RiverHollow.Characters
 
                 if (Position.X < 0 || Position.Y < 0)
                 {
-                    CurrentMap.RemoveCharacter(this);
+                    CurrentMap.RemoveActor(this);
                 }
             }
         }

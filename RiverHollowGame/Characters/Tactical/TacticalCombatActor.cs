@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
-using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
@@ -82,7 +81,7 @@ namespace RiverHollow.Characters
         public int ResistStatus => (int)(50 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatRes)))));
 
         protected List<TacticalMenuAction> _liActions;
-        public virtual List<TacticalMenuAction> AbilityList => _liActions;
+        public virtual List<TacticalMenuAction> TacticalAbilityList => _liActions;
 
         protected List<StatusEffect> _liStatusEffects;
         public List<StatusEffect> LiBuffs { get => _liStatusEffects; }

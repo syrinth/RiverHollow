@@ -1,29 +1,31 @@
-﻿using Microsoft.Xna.Framework;
-using RiverHollow.Actors.CombatStuff;
+﻿using RiverHollow.Actors.CombatStuff;
 using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
+using RiverHollow.SpriteAnimations;
+using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Game_Managers.SaveManager;
 
-namespace RiverHollow.Characters
+namespace RiverHollow.Characters.Lite
 {
-    public abstract class ClassedCombatant : TacticalCombatActor
+    public class LitePartyMember : LiteCombatActor
     {
+
         #region Properties
-        public static List<int> LevelRange = new List<int> { 0, 20, 80, 160, 320, 640, 1280, 2560, 5120, 10240 };
+        public override string Name => _world.Name;
+
+        public static List<int> LevelRange = new List<int> { 0, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240 };
+        protected ClassedCombatant _world;
+        public ClassedCombatant World => _world;
 
         protected CharacterClass _class;
-        public CharacterClass CharacterClass => _class;
+        public CharacterClass CharacterClass { get => _class; }
         private int _classLevel;
-        public int ClassLevel => _classLevel;
-
-        private Vector2 _vStartPosition;
-        public Vector2 StartPosition => _vStartPosition;
+        public int ClassLevel { get => _classLevel; }
 
         private int _iXP;
-        public int XP => _iXP;
+        public int XP { get => _iXP; }
 
         public bool Protected;
 
@@ -50,8 +52,8 @@ namespace RiverHollow.Characters
         public int TempStatRes => 10 + _iBuffRes + GetTempGearStat(StatEnum.Res);
         public int TempStatSpd => 10 + _class.StatSpd + _iBuffSpd + GetTempGearStat(StatEnum.Spd);
 
-        public override List<TacticalMenuAction> TacticalAbilityList => _class.TacticalActionList;
-        public List<LiteMenuAction> LiteAbilityList => _class.LiteActionList;
+        public override List<LiteMenuAction> AbilityList { get => _class.LiteActionList; }
+        public override List<LiteCombatAction> SpecialActions { get => _class._liSpecialLiteActionsList; }
 
         public int GetGearAtk()
         {
@@ -62,19 +64,19 @@ namespace RiverHollow.Characters
 
             return rv;
         }
+
         public int GetGearStat(StatEnum stat)
         {
             int rv = 0;
-            if (_liGearSlots != null)
+
+            foreach (GearSlot g in _liGearSlots)
             {
-                foreach (GearSlot g in _liGearSlots)
-                {
-                    rv += g.GetStat(stat);
-                }
+                rv += g.GetStat(stat);
             }
 
             return rv;
         }
+
         public int GetTempGearStat(StatEnum stat)
         {
             int rv = 0;
@@ -86,10 +88,11 @@ namespace RiverHollow.Characters
 
             return rv;
         }
-        #endregion
 
-        public ClassedCombatant() : base()
+        #endregion
+        public LitePartyMember() : base()
         {
+            _eActorType = ActorEnum.PartyMember;
             _classLevel = 1;
 
             _liGearSlots = new List<GearSlot>();
@@ -108,23 +111,48 @@ namespace RiverHollow.Characters
             _liGearSlots.Add(Accessory2);
         }
 
-        public virtual void SetClass(CharacterClass x)
+        public LitePartyMember(ClassedCombatant w) : this()
+        {
+            _world = w;
+        }
+
+        public override void LoadContent(string texture)
+        {
+            _sprBody = new AnimatedSprite(texture);
+            int xCrawl = 0;
+            RHSize frameSize = new RHSize(2, 2);
+            _sprBody.AddAnimation(LiteCombatActionEnum.Idle, xCrawl * TILE_SIZE, 0, frameSize, 2, 0.5f);
+            xCrawl += 2 * frameSize.Width;
+            _sprBody.AddAnimation(LiteCombatActionEnum.Cast, xCrawl * TILE_SIZE, 0, frameSize, 3, 0.4f);
+            xCrawl += 3 * frameSize.Width;
+            _sprBody.AddAnimation(LiteCombatActionEnum.Hurt, xCrawl * TILE_SIZE, 0, frameSize, 1, 0.5f);
+            xCrawl += 1 * frameSize.Width;
+            _sprBody.AddAnimation(LiteCombatActionEnum.Attack, xCrawl * TILE_SIZE, 0, frameSize, 1, 0.3f);
+            xCrawl += 1 * frameSize.Width;
+            _sprBody.AddAnimation(LiteCombatActionEnum.Critical, xCrawl * TILE_SIZE, 0, frameSize, 2, 0.9f);
+            xCrawl += 2 * frameSize.Width;
+            _sprBody.AddAnimation(LiteCombatActionEnum.KO, xCrawl * TILE_SIZE, 0, frameSize, 1, 0.5f);
+            xCrawl += 1 * frameSize.Width;
+            _sprBody.AddAnimation(LiteCombatActionEnum.Victory, xCrawl * TILE_SIZE, 0, frameSize, 2, 0.5f);
+
+            _sprBody.PlayAnimation(LiteCombatActionEnum.Idle);
+            _sprBody.SetScale(LiteCombatManager.CombatScale);
+            _iBodyWidth = frameSize.Width * LiteCombatManager.CombatScale;
+            _iBodyHeight = frameSize.Height * LiteCombatManager.CombatScale;
+        }
+
+        public void SetClass(CharacterClass x)
         {
             _class = x;
             _iCurrentHP = MaxHP;
             _iCurrentMP = MaxMP;
-        }
 
-        /// <summary>
-        /// Assigns the starting gear to the Actor as long as the slots are empty.
-        /// Should never be called when they can be euipped, checks are for safety.
-        /// </summary>
-        public void AssignStartingGear()
-        {
-            if (Weapon.IsEmpty()) { Weapon.SetGear((Equipment)DataManager.GetItem(_class.WeaponID)); }
-            if (Armor.IsEmpty()) { Armor.SetGear((Equipment)DataManager.GetItem(_class.ArmorID)); }
-            if (Head.IsEmpty()) { Head.SetGear((Equipment)DataManager.GetItem(_class.HeadID)); }
-            if (Wrist.IsEmpty()) { Wrist.SetGear((Equipment)DataManager.GetItem(_class.WristID)); }
+            Weapon.SetGear((Equipment)DataManager.GetItem(_class.WeaponID));
+            Armor.SetGear((Equipment)DataManager.GetItem(_class.ArmorID));
+            Head.SetGear((Equipment)DataManager.GetItem(_class.HeadID));
+            Wrist.SetGear((Equipment)DataManager.GetItem(_class.WristID));
+
+            LoadContent(DataManager.FOLDER_PARTY + "Wizard");
         }
 
         public void AddXP(int x)
@@ -139,60 +167,7 @@ namespace RiverHollow.Characters
         public void GetXP(ref double curr, ref double max)
         {
             curr = _iXP;
-            max = ClassedCombatant.LevelRange[this.ClassLevel];
-        }
-
-        #region StartPosition
-        public void IncreaseStartPos()
-        {
-            if (_vStartPosition.Y < 2)
-            {
-                _vStartPosition.Y++;
-            }
-            else
-            {
-                _vStartPosition = new Vector2(_vStartPosition.X++, 0);
-            }
-        }
-
-        public void SetStartPosition(Vector2 pos)
-        {
-            _vStartPosition = pos;
-        }
-        #endregion
-
-        /// <summary>
-        /// Retrieves te list of skills the character has based off of their class
-        /// that is also valid based off of their current level.
-        /// </summary>
-        /// <returns></returns>
-        public override List<TacticalCombatAction> GetCurrentSpecials()
-        {
-            List<TacticalCombatAction> rvList = new List<TacticalCombatAction>();
-
-            rvList.AddRange(_class._liSpecialTacticalActionsList.FindAll(action => action.ReqLevel <= this.ClassLevel));
-
-            return rvList;
-        }
-
-        public ClassedCharData SaveClassedCharData()
-        {
-            ClassedCharData advData = new ClassedCharData
-            {
-                armor = Item.SaveData(Armor.GetItem()),
-                weapon = Item.SaveData(Weapon.GetItem()),
-                level = _classLevel,
-                xp = _iXP
-            };
-
-            return advData;
-        }
-        public void LoadClassedCharData(ClassedCharData data)
-        {
-            Armor.SetGear((Equipment)DataManager.GetItem(data.armor.itemID, data.armor.num));
-            Weapon.SetGear((Equipment)DataManager.GetItem(data.weapon.itemID, data.weapon.num));
-            _classLevel = data.level;
-            _iXP = data.xp;
+            max = LitePartyMember.LevelRange[this.ClassLevel];
         }
 
         /// <summary>
@@ -239,7 +214,6 @@ namespace RiverHollow.Characters
                 return rv;
             }
             public Equipment GetItem() { return _eGear; }
-            public bool IsEmpty() { return _eGear == null; }
         }
     }
 }

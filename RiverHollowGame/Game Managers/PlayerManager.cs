@@ -16,6 +16,7 @@ using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.GUIComponents.GUIObjects;
 using static RiverHollow.WorldObjects.Buildable;
 using static RiverHollow.Characters.TravellingNPC;
+using RiverHollow.Characters.Lite;
 
 namespace RiverHollow.Game_Managers
 {
@@ -39,6 +40,7 @@ namespace RiverHollow.Game_Managers
         }
 
         public static PlayerCharacter World;
+        public static LitePlayerCombatant LiteCombatant;
 
         public static int HitPoints => World.CurrentHP;
         public static int MaxHitPoints  => World.MaxHP;
@@ -51,7 +53,8 @@ namespace RiverHollow.Game_Managers
 
         private static List<Pet> _liPets;
         private static List<Mount> _liMounts;
-        private static List<ClassedCombatant> _liParty;
+        private static List<ClassedCombatant> _liTacticalParty;
+        private static List<LitePartyMember> _liLiteParty;
         private static Dictionary<int, int> _diStorage;
 
         public static string Name;
@@ -100,7 +103,9 @@ namespace RiverHollow.Game_Managers
 
             TaskLog = new List<RHTask>();
             World = new PlayerCharacter();
-            _liParty = new List<ClassedCombatant> { World };
+            LiteCombatant = new LitePlayerCombatant(World);
+            _liTacticalParty = new List<ClassedCombatant> { World };
+            _liLiteParty = new List<LitePartyMember> { LiteCombatant };
 
             _diBuildings = new Dictionary<int, Building>();
             DIBuildInfo = DataManager.GetBuildInfoList();
@@ -200,18 +205,19 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static List<LiteCombatActor> GetLiteParty()
+        public static List<LitePartyMember> GetLiteParty()
         {
-            return _liParty;
+            return _liLiteParty;
         }
 
         public static List<ClassedCombatant> GetTacticalParty()
         {
-            return _liParty;
+            return _liTacticalParty;
         }
+
         public static void AddToParty(ClassedCombatant c)
         {
-            foreach (ClassedCombatant oldChar in _liParty)
+            foreach (ClassedCombatant oldChar in _liTacticalParty)
             {
                 if (oldChar.StartPosition.Equals(c.StartPosition))
                 {
@@ -219,16 +225,39 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            if (!_liParty.Contains(c))
+            if (!_liTacticalParty.Contains(c))
             {
-                _liParty.Add(c);
+                _liTacticalParty.Add(c);
             }
         }
+        public static void AddToParty(LitePartyMember c)
+        {
+            foreach (LitePartyMember oldChar in _liLiteParty)
+            {
+                if (oldChar.StartPosition.Equals(c.StartPosition))
+                {
+                    c.IncreaseStartPos();
+                }
+            }
+
+            if (!_liLiteParty.Contains(c))
+            {
+                _liLiteParty.Add(c);
+            }
+        }
+
         public static void RemoveFromParty(ClassedCombatant c)
         {
-            if (_liParty.Contains(c))
+            if (_liTacticalParty.Contains(c))
             {
-                _liParty.Remove(c);
+                _liTacticalParty.Remove(c);
+            }
+        }
+        public static void RemoveFromParty(LitePartyMember c)
+        {
+            if (_liLiteParty.Contains(c))
+            {
+                _liLiteParty.Remove(c);
             }
         }
 
@@ -566,6 +595,7 @@ namespace RiverHollow.Game_Managers
         {
             CharacterClass combatClass = DataManager.GetClassByIndex(x);
             World.SetClass(combatClass);
+            LiteCombatant.SetClass(combatClass);
         }
 
         public static bool DecreaseStamina(double x)
@@ -595,8 +625,11 @@ namespace RiverHollow.Game_Managers
         {
             if (GameManager.AutoDisband)
             {
-                _liParty.Clear();
-                _liParty.Add(World);
+                _liTacticalParty.Clear();
+                _liTacticalParty.Add(World);
+
+                _liLiteParty.Clear();
+                _liLiteParty.Add(LiteCombatant);
             }
 
             if(BabyCountdown > 0)

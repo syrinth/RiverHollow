@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters;
+using RiverHollow.Characters.Lite;
 using RiverHollow.CombatStuff;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Utilities;
@@ -85,7 +86,7 @@ namespace RiverHollow.Game_Managers
                 c.CurrentCharge = RHRandom.Instance().Next(0, 50);
             }
 
-            //GoToCombat();
+            GoToCombatScreen();
             PlayerManager.DecreaseStamina(3);       //Decrease Stamina once
         }
 
@@ -101,7 +102,7 @@ namespace RiverHollow.Game_Managers
             {
                 if (party[i] != null)
                 {
-                    Vector2 vec = party[i].StartPos;
+                    Vector2 vec = party[i].StartPosition;
                     _combatMap[(int)vec.Y, (int)vec.X].SetCombatant(party[i]);
                 }
             }
@@ -157,6 +158,8 @@ namespace RiverHollow.Game_Managers
                     {
                         Delay = 0.05f;
                         GiveXP();
+                        CurrentMob.Defeat();
+                        MapManager.CurrentMap.RemoveActor(CurrentMob);
                     }
                     else
                     {
@@ -197,7 +200,7 @@ namespace RiverHollow.Game_Managers
             if (toGive > 0)
             {
                 CurrentMob.DrainXP(xpDrain);
-                foreach (CombatAdventurer a in _listParty)
+                foreach (LitePartyMember a in _listParty)
                 {
                     a.AddXP(xpDrain);
                 }
@@ -227,12 +230,12 @@ namespace RiverHollow.Game_Managers
                 rv = true;
                 CurrentPhase = PhaseEnum.DisplayVictory;
                 InventoryManager.InitMobInventory(1, 5);    //Just temp values
-                foreach (CombatAdventurer a in _listParty)
+                foreach (LitePartyMember a in _listParty)
                 {
                     int levl = a.ClassLevel;
                     a.CurrentCharge = 0;
                     //a.AddXP(EarnedXP);
-                    a.PlayAnimation(LiteCombatActionEnum.Victory);
+                    a.Tile.PlayAnimation(LiteCombatActionEnum.Victory);
 
                     //if (levl != a.ClassLevel)
                     //{
@@ -254,16 +257,16 @@ namespace RiverHollow.Game_Managers
         {
             GUIManager.BeginFadeOut();
             //MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
-            MapManager.RemoveMob(_mob);
+            MapManager.RemoveActor(_mob);
             _mob = null;
-            GoToWorldMap();
+            GoToHUDScreen();
         }
 
         public static void EndCombatEscape()
         {
             GUIManager.BeginFadeOut();
             _mob.Stun();
-            GoToWorldMap();
+            GoToHUDScreen();
         }
 
         public static void SetPhaseForTurn()
@@ -392,7 +395,7 @@ namespace RiverHollow.Game_Managers
 
             if (!SelectedAction.SelfOnly())
             {
-                if (!ActiveCharacter.IsMonster())
+                if (!ActiveCharacter.IsActorType(ActorEnum.Monster))
                 {
                     CurrentPhase = PhaseEnum.ChooseTarget;
                 }  //Skips this phase for enemies. They don't "choose" targets
@@ -414,7 +417,6 @@ namespace RiverHollow.Game_Managers
         {
             if (_liMonsters.Contains((c)))
             {
-                c.BodySprite.IsAnimating = false;
                 _liMonsters.Remove(c);
                 _liChargingCharacters.Remove(c);                    //Remove the killed member from the turn order 
                 _liQueuedCharacters.Remove(c);
@@ -440,7 +442,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="tile">The tile to test against</param>
         public static void TestHoverTile(LiteCombatTile tile)
         {
-            if (SelectedAction.LegalTiles.Contains(tile) && (tile.Occupied() || SelectedAction.AreaOfEffect()))
+            if (SelectedAction.LegalTiles.Contains(tile) && (tile.Occupied() || SelectedAction.AreaOfEffect() || (SelectedAction.Compare(ActionEnum.Move) && !tile.Occupied())))
             {
                 tile.Select(true);
             }
@@ -708,7 +710,7 @@ namespace RiverHollow.Game_Managers
         {
             ActiveCharacter.CurrentCharge -= SelectedAction.ChargeCost();
 
-            Summon activeSummon = ActiveCharacter.LinkedSummon;
+            LiteSummon activeSummon = ActiveCharacter.LinkedSummon;
             //If there is no linked summon, or it is a summon, end the turn normally.
 
             if (!EndCombatCheck())
@@ -723,7 +725,7 @@ namespace RiverHollow.Game_Managers
                         SelectedAction.SetUser(ActiveCharacter);
                         SelectedAction.SetTargetTiles(targets);
                     }
-                    else if (activeSummon.TwinCast && SelectedAction.IsSpell() && !SelectedAction.IsSummonSpell() && SelectedAction.CanTwinCast())
+                    else if (activeSummon.TwinCast && SelectedAction.Compare(ActionEnum.Spell) && !SelectedAction.IsSummonSpell() && SelectedAction.CanTwinCast())
                     {
                         ActiveCharacter = activeSummon;
                         SelectedAction.SetUser(activeSummon);
@@ -846,6 +848,17 @@ namespace RiverHollow.Game_Managers
                         }
                     }
                 }
+                else if (Adjacent())
+                {
+                    int col = ActiveCharacter.Tile.Col;
+                    int row = ActiveCharacter.Tile.Row;
+
+                    if (row - 1 >= 0) { _liLegalTiles.Add(_combatMap[row - 1, col]); }
+                    if (row + 1 < MAX_ROW) { _liLegalTiles.Add(_combatMap[row + 1, col]); }
+
+                    if (col - 1 >= 0) { _liLegalTiles.Add(_combatMap[row, col - 1]); }
+                    if (col + 1 < ALLY_FRONT) { _liLegalTiles.Add(_combatMap[row, col + 1]); }
+                }
             }
 
             private void EnemyFrontLineLegal()
@@ -883,12 +896,12 @@ namespace RiverHollow.Game_Managers
                     LiteCombatActor c = LiteCombatManager.ActiveCharacter;
                     if (!c.IsCurrentAnimation(LiteCombatActionEnum.Cast))
                     {
-                        c.PlayAnimation(LiteCombatActionEnum.Cast);
+                        c.Tile.PlayAnimation(LiteCombatActionEnum.Cast);
                         _bDrawItem = true;
                     }
                     else if (c.AnimationPlayedXTimes(3))
                     {
-                        c.PlayAnimation(LiteCombatActionEnum.Idle);
+                        c.Tile.PlayAnimation(LiteCombatActionEnum.Idle);
                         _bDrawItem = false;
                         finished = true;
                     }
@@ -962,8 +975,8 @@ namespace RiverHollow.Game_Managers
                         if (_chosenAction.AreaType != AreaTypeEnum.Single)
                         {
                             //Describes which side of the Battlefield we are targetting
-                            bool monsterSide = (actor.IsCombatAdventurer() && TargetsEnemy()) || (actor.IsMonster() && TargetsAlly());
-                            bool partySide = (actor.IsMonster() && TargetsEnemy()) || (actor.IsCombatAdventurer() && TargetsAlly());
+                            bool monsterSide = (actor.IsActorType(ActorEnum.PartyMember) && TargetsEnemy()) || (actor.IsActorType(ActorEnum.Monster) && TargetsAlly());
+                            bool partySide = (actor.IsActorType(ActorEnum.Monster) && TargetsEnemy()) || (actor.IsActorType(ActorEnum.PartyMember) && TargetsAlly());
 
                             //All we need to do here is select all of the tiles containing the appropriate characters
                             if (_chosenAction.AreaType == AreaTypeEnum.All)
@@ -1002,12 +1015,12 @@ namespace RiverHollow.Game_Managers
                                 }
                                 else if (_chosenAction.AreaType == AreaTypeEnum.Rectangle)
                                 {
-                                    KeyValuePair<int, int> dimensions = _chosenAction.Dimensions;
+                                    RHSize dimensions = _chosenAction.Dimensions;
                                     if (monsterSide)
                                     {
-                                        for (int rows = targetRow; rows < MAX_ROW && rows < targetRow + dimensions.Key; rows++)
+                                        for (int rows = targetRow; rows < MAX_ROW && rows < targetRow + dimensions.Width; rows++)
                                         {
-                                            for (int cols = targetCol; cols < maxCol && cols < targetCol + dimensions.Value; cols++)
+                                            for (int cols = targetCol; cols < maxCol && cols < targetCol + dimensions.Height; cols++)
                                             {
                                                 LiteCombatTile t = _combatMap[rows, cols];
                                                 if (!cbtTile.Contains(t))
@@ -1019,9 +1032,9 @@ namespace RiverHollow.Game_Managers
                                     }
                                     else if (partySide)
                                     {
-                                        for (int rows = targetRow; rows < MAX_ROW && rows < targetRow + dimensions.Key; rows++)
+                                        for (int rows = targetRow; rows < MAX_ROW && rows < targetRow + dimensions.Width; rows++)
                                         {
-                                            for (int cols = targetCol; cols >= minCol && cols > targetCol - dimensions.Value; cols--)
+                                            for (int cols = targetCol; cols >= minCol && cols > targetCol - dimensions.Height; cols--)
                                             {
                                                 LiteCombatTile t = _combatMap[rows, cols];
                                                 if (!cbtTile.Contains(t))
@@ -1067,7 +1080,7 @@ namespace RiverHollow.Game_Managers
 
                 return rv;
             }
-            public bool IsSpell() { return _chosenAction != null && _chosenAction.IsSpell(); }
+            public bool Compare(ActionEnum e) { return _chosenAction != null && _chosenAction.Compare(e); }
             public bool IsSummonSpell() { return _chosenAction != null && _chosenAction.IsSummonSpell(); }
             public bool SelfOnly() { return _chosenAction.Range == RangeEnum.Self; }
             public bool IsMelee() { return _chosenAction.Range == RangeEnum.Melee; }
@@ -1116,6 +1129,14 @@ namespace RiverHollow.Game_Managers
             {
                 bool rv = false;
                 if (_chosenAction != null) { rv = _chosenAction.Range == RangeEnum.Column; }
+                else if (_chosenItem != null) { rv = false; }
+
+                return rv;
+            }
+            public bool Adjacent()
+            {
+                bool rv = false;
+                if (_chosenAction != null) { rv = _chosenAction.Range == RangeEnum.Adjacent; }
                 else if (_chosenItem != null) { rv = false; }
 
                 return rv;

@@ -8,21 +8,18 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters
 {
-    public class LiteCombatActor : Actor
+    public abstract class LiteCombatActor : Actor
     {
         #region Properties
         protected const int MAX_STAT = 99;
         protected string _sUnique;
 
-        public override string Name => String.IsNullOrEmpty(_sUnique) ? _sName : _sName + " " + _sUnique;
-
         private Vector2 _vStartPos;
-        public Vector2 StartPos => _vStartPos;
+        public Vector2 StartPosition => _vStartPos;
 
         protected int _iCurrentHP;
         public int CurrentHP
@@ -107,7 +104,6 @@ namespace RiverHollow.Characters
 
         public LiteCombatActor() : base()
         {
-            _eActorType = ActorEnum.CombatActor;
             _liSpecialActions = new List<LiteCombatAction>();
             _liActions = new List<LiteMenuAction>();
             _liStatusEffects = new List<StatusEffect>();
@@ -145,8 +141,8 @@ namespace RiverHollow.Characters
 
             _sprBody.PlayAnimation(LiteCombatActionEnum.Idle);
             _sprBody.SetScale(LiteCombatManager.CombatScale);
-            _iBodyWidth = _sprBody.Width;
-            _iBodyHeight = _sprBody.Height;
+            _iBodyWidth = frameSize.Width * LiteCombatManager.CombatScale;
+            _iBodyHeight = frameSize.Height * LiteCombatManager.CombatScale;
         }
 
         public override void Update(GameTime theGameTime)

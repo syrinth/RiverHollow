@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
 
@@ -58,8 +59,10 @@ namespace RiverHollow.CombatStuff
         public string Name { get => _sName; }
         private string _sDescription;
         public string Description { get => _sDescription; }
-        public List<TacticalMenuAction> ActionList;
-        public List<TacticalCombatAction> _liSpecialActionsList;
+        public List<LiteMenuAction> LiteActionList;
+        public List<LiteCombatAction> _liSpecialLiteActionsList;
+        public List<TacticalMenuAction> TacticalActionList;
+        public List<TacticalCombatAction> _liSpecialTacticalActionsList;
         WeaponEnum _weaponType;
         public WeaponEnum WeaponType => _weaponType;
         ArmorEnum _armorType;
@@ -72,8 +75,10 @@ namespace RiverHollow.CombatStuff
 
         public CharacterClass()
         {
-            ActionList = new List<TacticalMenuAction>();
-            _liSpecialActionsList = new List<TacticalCombatAction>();
+            LiteActionList = new List<LiteMenuAction>();
+            _liSpecialLiteActionsList = new List<LiteCombatAction>();
+            TacticalActionList = new List<TacticalMenuAction>();
+            _liSpecialTacticalActionsList = new List<TacticalCombatAction>();
 
             _iID = -1;
         }
@@ -103,7 +108,10 @@ namespace RiverHollow.CombatStuff
                 foreach (string ability in split)
                 {
                     TacticalCombatAction ac = (TacticalCombatAction)DataManager.GetTacticalActionByIndex(int.Parse(ability));
-                    ActionList.Add(ac);
+                    TacticalActionList.Add(ac);
+
+                    LiteCombatAction lite = (LiteCombatAction)DataManager.GetLiteActionByIndex(int.Parse(ability));
+                    LiteActionList.Add(lite);
                 }
             }
 
@@ -113,7 +121,10 @@ namespace RiverHollow.CombatStuff
                 foreach (string spell in spellSplit)
                 {
                     TacticalCombatAction ac = (TacticalCombatAction)DataManager.GetTacticalActionByIndex(int.Parse(spell));
-                    _liSpecialActionsList.Add(ac);
+                    _liSpecialTacticalActionsList.Add(ac);
+
+                    LiteCombatAction lite = (LiteCombatAction)DataManager.GetLiteActionByIndex(int.Parse(spell));
+                    _liSpecialLiteActionsList.Add(lite);
                 }
             }
 
@@ -134,10 +145,20 @@ namespace RiverHollow.CombatStuff
 
 
             //Adds Special, Use Item, Move, and End Turn
-            ActionList.Add(new TacticalMenuAction(2, ActionEnum.MenuSpell, new Vector2(1, 0)));
-            ActionList.Add(new TacticalMenuAction(1, ActionEnum.MenuItem, new Vector2(2, 0)));
-            ActionList.Add(new TacticalMenuAction(0, ActionEnum.Move, new Vector2(3, 0)));
-            ActionList.Add(new TacticalMenuAction(3, ActionEnum.EndTurn, new Vector2(4, 0)));
+            if (RiverHollow.COMBAT_STYLE == CombatStyleEnum.Lite)
+            {
+                LiteActionList.Add(new LiteMenuAction(2, ActionEnum.MenuSpell, new Vector2(1, 0)));
+                LiteActionList.Add(new LiteMenuAction(1, ActionEnum.MenuItem, new Vector2(2, 0)));
+                LiteActionList.Add(DataManager.GetLiteActionByIndex(0));
+                LiteActionList.Add(new LiteMenuAction(3, ActionEnum.EndTurn, new Vector2(4, 0)));
+            }
+            else
+            {
+                TacticalActionList.Add(new TacticalMenuAction(2, ActionEnum.MenuSpell, new Vector2(1, 0)));
+                TacticalActionList.Add(new TacticalMenuAction(1, ActionEnum.MenuItem, new Vector2(2, 0)));
+                TacticalActionList.Add(new TacticalMenuAction(0, ActionEnum.Move, new Vector2(3, 0)));
+                TacticalActionList.Add(new TacticalMenuAction(3, ActionEnum.EndTurn, new Vector2(4, 0)));
+            }
         }
 
         private void SetClassAnimation(Dictionary<string, string> stringData, string key, ref int frames, ref float frameLength)

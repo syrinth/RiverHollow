@@ -6,11 +6,7 @@ using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters

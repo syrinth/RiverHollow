@@ -1,12 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
-using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using static RiverHollow.Game_Managers.GameManager;
 
@@ -40,6 +38,8 @@ namespace RiverHollow.Characters
         bool _bLockedOn;
         bool _bLeashed;
         bool _bJump;
+
+        bool _bDefeated = false;
         Vector2 _vJumpTo;
         const double MAX_ALERT = 1;
         double _dAlertTimer;
@@ -71,6 +71,8 @@ namespace RiverHollow.Characters
                 _iXP += mon.XP;
             }
             _iXPToGive = _iXP;
+
+            NewFoV();
         }
 
         //public void LoadContent(string texture)
@@ -130,13 +132,13 @@ namespace RiverHollow.Characters
                 _liMonsters.Add(DataManager.GetLiteMonsterByIndex(mID));
             }
 
-            split = data["Condition"].Split('-');
-            for (int i = 0; i < split.Length; i++)
-            {
-                _liSpawnConditions.Add(Util.ParseEnum<SpawnConditionEnum>(split[i]));
-            }
+            //split = data["Condition"].Split('-');
+            //for (int i = 0; i < split.Length; i++)
+            //{
+            //    _liSpawnConditions.Add(Util.ParseEnum<SpawnConditionEnum>(split[i]));
+            //}
 
-            _bJump = data.ContainsKey("Jump");
+            //_bJump = data.ContainsKey("Jump");
 
             foreach (LiteCombatActor m in _liMonsters)
             {
@@ -151,7 +153,7 @@ namespace RiverHollow.Characters
             }
             _id = id;
 
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), DataManager.FOLDER_MOBS + data["Texture"]);
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(data), DataManager.FOLDER_MONSTERS + data["Texture"]);
             return 0;
         }
 
@@ -309,15 +311,18 @@ namespace RiverHollow.Characters
                     }
 
                     _vMoveTo = Vector2.Zero;
-                    Idle();
+                    PlayAnimationVerb(VerbEnum.Idle);
                 }
             }
 
             if (CollisionBox.Intersects(PlayerManager.World.CollisionBox))
             {
-                _bAlert = false;
-                _bLockedOn = false;
-                LiteCombatManager.NewBattle(this);
+                if (!_bDefeated)
+                {
+                    _bAlert = false;
+                    _bLockedOn = false;
+                    LiteCombatManager.NewBattle(this);
+                }
             }
         }
 
@@ -367,7 +372,7 @@ namespace RiverHollow.Characters
                 {
                     _vMoveTo = Vector2.Zero;
                     _dIdleFor = 4;
-                    Idle();
+                    PlayAnimationVerb(VerbEnum.Idle);
                     skip = true;
                 }
 
@@ -388,7 +393,7 @@ namespace RiverHollow.Characters
 
             if (direction.Length() == 0)
             {
-                Idle();
+                PlayAnimationVerb(VerbEnum.Idle);
             }
             else
             {
@@ -465,6 +470,11 @@ namespace RiverHollow.Characters
         private bool CompareSpawnSeason(SpawnConditionEnum check, SpawnConditionEnum season)
         {
             return check.Equals(season) && !Util.ParseEnum<SpawnConditionEnum>(GameCalendar.GetSeason()).Equals(season);
+        }
+
+        public void Defeat()
+        {
+            _bDefeated = true;
         }
 
         public void Stun()

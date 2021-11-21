@@ -121,7 +121,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
                 if (_actor != null)
                 {
-                    foreach (TacticalMenuAction ca in _actor.AbilityList)
+                    foreach (TacticalMenuAction ca in _actor.TacticalAbilityList)
                     {
                         ActionButton ab = new ActionButton(ca);
                         TacticalMenuAction action = ab.Action;

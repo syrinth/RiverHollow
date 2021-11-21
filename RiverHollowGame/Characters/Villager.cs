@@ -192,7 +192,7 @@ namespace RiverHollow.Characters
             }
             else if (CurrentMap != null)
             {
-                CurrentMap.RemoveCharacter(this);
+                CurrentMap.RemoveActor(this);
                 CurrentMapName = string.Empty;
                 _iNextArrival = _iArrivalPeriod;
             }

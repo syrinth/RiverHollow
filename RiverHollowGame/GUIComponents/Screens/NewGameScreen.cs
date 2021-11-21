@@ -116,7 +116,7 @@ namespace RiverHollow.GUIComponents.Screens
             GUIObject.CreateSpacedRow(ref _liClassBoxes, _window.Height / 2, _window.Position().X, _window.Width, 20);
 
             _gCheckSkipCutscene = new GUICheck("Skip Intro");
-            _gCheckSkipCutscene.SetChecked(false);
+            _gCheckSkipCutscene.SetChecked(true);
             _gCheckSkipCutscene.AnchorToInnerSide(_window, SideEnum.BottomLeft);
         }
 

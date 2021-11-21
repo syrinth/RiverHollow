@@ -7,6 +7,7 @@ using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 
 using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.Game_Managers.GUIObjects;
 
 namespace RiverHollow.Game_Managers
 {
@@ -65,14 +66,14 @@ namespace RiverHollow.Game_Managers
         public enum ActorMovementStateEnum { Idle, Walking };
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum TaskTypeEnum { None, GroupSlay, Slay, Fetch, Talk, Build };
-        public enum ActorEnum { Actor, CombatActor, Environmental, Merchant, Mob, Monster, Mount, Pet, Child, ShippingGremlin, Spirit, Summon, Villager };
+        public enum ActorEnum { Actor, PartyMember, Environmental, Merchant, Mob, Monster, Mount, Pet, Child, ShippingGremlin, Spirit, Summon, Villager };
         public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade };
         public enum PotencyBonusEnum { None, Conditions, Summon};
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ActionEnum { Action, Item, Spell, MenuItem, MenuSpell, MenuAction, Move, EndTurn };
         public enum SkillTagsEnum { Bonus, Harm, Heal, NPC_ID, Push, Pull, Remove, Retreat, Step, StatusEffectID };
         public enum TargetEnum { Enemy, Ally };
-        public enum RangeEnum { Self, Melee, Ranged, Row, Column};
+        public enum RangeEnum { Self, Melee, Ranged, Row, Column, Adjacent};
         public enum AreaTypeEnum { Single, Cross, Ring, Line, Diamond, Rectangle, All };
         public enum ElementEnum { None, Fire, Ice, Lightning };
         public enum AttackTypeEnum { Physical, Magical };
@@ -304,6 +305,13 @@ namespace RiverHollow.Game_Managers
         public static void ShowMap(bool val = true) { _bShowMap = val; }
         public static bool IsMapShown() { return _bShowMap; }
         #endregion
+
+        public static void GoToCombatScreen()
+        {
+            //ShowMap(false);
+            Pause();
+            GUIManager.SetScreen(new LiteCombatScreen());
+        }
 
         public static void GoToHUDScreen()
         {

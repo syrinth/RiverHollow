@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Move]</Value>
+      <Value>[Type:Move][Target:Ally][LiteRange:Adjacent][Icon:3-0][Action:Move][AreaType:Single]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Spell][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Target:Enemy][Range:7][AreaType:Cross][Cost:2][Harm:300][Action:UserCast Direct Apply][Element:Lightning]</Value>
+      <Value>[Type:Spell][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Target:Enemy][Range:7][AreaType:Cross][Cost:2][Harm:300][Action:UserCast Direct Apply][Element:Lightning][LiteRange:Ranged]</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -155,7 +155,7 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:1][AreaType:Single][Harm:100][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:1][AreaType:Single][Harm:100][Action:UserAttack Apply][LiteRange:Melee]</Value>
     </Item>
     <Item>
       <Key>39</Key>
@@ -167,7 +167,7 @@
     </Item>
     <Item>
       <Key>41</Key>
-      <Value>[Type:Action][Animation:LightningSprite-94-160-14-0.07][AnimOffset:41-105][Target:Enemy][Range:4][AreaType:Cross][Harm:60][Action:UserCast Direct Apply][Element:Lightning]</Value>
+      <Value>[Type:Action][Animation:LightningSprite-80-96-9-0.07][AnimOffset:41-105][Target:Enemy][Range:4][AreaType:Cross][Harm:60][Action:UserCast Direct Apply][Element:Lightning][LiteRange:Ranged]</Value>
     </Item>
     <Item>
       <Key>42</Key>

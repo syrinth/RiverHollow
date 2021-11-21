@@ -1,4 +1,5 @@
 ﻿using RiverHollow.Characters;
+using RiverHollow.Characters.Lite;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using System;
@@ -38,7 +39,7 @@ namespace RiverHollow.CombatStuff
         public void SetCombatant(LiteCombatActor c, bool moveCharNow = true)
         {
             _character = c;
-            if (_character != null)
+            if (c != null)
             {
                 if (_character.Tile != null)
                 {
@@ -76,20 +77,20 @@ namespace RiverHollow.CombatStuff
             {
                 if (tile.Occupied() && this.TargetType == tile.TargetType)
                 {
-                    if (tile.Character != this.Character && tile.Character.IsCombatAdventurer() && this.Character.IsCombatAdventurer())
+                    if (tile.Character != this.Character && tile.Character.IsActorType(ActorEnum.PartyMember) && this.Character.IsActorType(ActorEnum.PartyMember))
                     {
                         found = true;
-                        CombatAdventurer adv = (CombatAdventurer)tile.Character;
+                        LitePartyMember adv = (LitePartyMember)tile.Character;
                         adv.Protected = true;
-                        adv = (CombatAdventurer)this.Character;
+                        adv = (LitePartyMember)this.Character;
                         adv.Protected = true;
                     }
                 }
             }
 
-            if (!found && this.Character.IsCombatAdventurer())
+            if (!found && this.Character.IsActorType(ActorEnum.PartyMember))
             {
-                CombatAdventurer adv = (CombatAdventurer)this.Character;
+                LitePartyMember adv = (LitePartyMember)this.Character;
                 adv.Protected = false;
             }
         }

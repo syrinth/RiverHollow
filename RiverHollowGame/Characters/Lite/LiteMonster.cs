@@ -12,6 +12,8 @@ namespace RiverHollow.Characters
 {
     public class LiteMonster : LiteCombatActor
     {
+        public override string Name => String.IsNullOrEmpty(_sUnique) ? _sName : _sName + " " + _sUnique;
+
         public int ID { get; private set; }
         int _iRating;
         int _xp;
@@ -61,7 +63,7 @@ namespace RiverHollow.Characters
 
             if (data.ContainsKey("Trait"))
             {
-                HandleTrait(DataManager.GetMonsterTraitData(data["Trait"]));
+                //HandleTrait(DataManager.GetMonsterTraitData(data["Trait"]));
             }
 
             if (data.ContainsKey("Resist"))
@@ -83,29 +85,29 @@ namespace RiverHollow.Characters
             if (data.ContainsKey("Idle"))
             {
                 string[] split = data["Idle"].Split('-');
-                idle[0] = float.Parse(split[0]);
-                idle[1] = float.Parse(split[1]);
+                idle[0] = float.Parse(split[2]);
+                idle[1] = float.Parse(split[3]);
             }
 
             if (data.ContainsKey("Attack"))
             {
                 string[] split = data["Attack"].Split('-');
-                attack[0] = float.Parse(split[0]);
-                attack[1] = float.Parse(split[1]);
+                attack[0] = float.Parse(split[2]);
+                attack[1] = float.Parse(split[3]);
             }
 
             if (data.ContainsKey("Hurt"))
             {
                 string[] split = data["Hurt"].Split('-');
-                hurt[0] = float.Parse(split[0]);
-                hurt[1] = float.Parse(split[1]);
+                hurt[0] = float.Parse(split[2]);
+                hurt[1] = float.Parse(split[3]);
             }
 
             if (data.ContainsKey("Cast"))
             {
                 string[] split = data["Cast"].Split('-');
-                cast[0] = float.Parse(split[0]);
-                cast[1] = float.Parse(split[1]);
+                cast[0] = float.Parse(split[2]);
+                cast[1] = float.Parse(split[3]);
             }
 
             if (data.ContainsKey("Loot"))
@@ -178,23 +180,23 @@ namespace RiverHollow.Characters
             _sprBody = new AnimatedSprite(texture.Replace(" ", ""));
 
             int xCrawl = 0;
-            RHSize frameSize = new RHSize(_iWidth, _iHeight);
+            RHSize frameSize = new RHSize(_iWidth/TILE_SIZE, _iHeight / TILE_SIZE);
 
-            _sprBody.AddAnimation(LiteCombatActionEnum.Idle, (xCrawl * frameSize.Width), 0, frameSize, (int)idle[0], idle[1]);
-            xCrawl += (int)idle[0];
-            _sprBody.AddAnimation(LiteCombatActionEnum.Attack, (xCrawl * frameSize.Width), 0, frameSize, (int)attack[0], attack[1]);
-            xCrawl += (int)attack[0];
-            _sprBody.AddAnimation(LiteCombatActionEnum.Hurt, (xCrawl * frameSize.Width), 0, frameSize, (int)hurt[0], hurt[1]);
-            xCrawl += (int)hurt[0];
-            _sprBody.AddAnimation(LiteCombatActionEnum.Cast, (xCrawl * frameSize.Width), 0, frameSize, (int)cast[0], cast[1]);
-            xCrawl += (int)cast[0];
+            _sprBody.AddAnimation(LiteCombatActionEnum.Idle, xCrawl * TILE_SIZE, 0, frameSize, (int)idle[0], idle[1]);
+            xCrawl += (int)idle[0] + frameSize.Width;
+            _sprBody.AddAnimation(LiteCombatActionEnum.Attack, xCrawl * TILE_SIZE, 0, frameSize, (int)attack[0], attack[1]);
+            xCrawl += (int)attack[0] + frameSize.Width;
+            _sprBody.AddAnimation(LiteCombatActionEnum.Hurt, xCrawl * TILE_SIZE, 0, frameSize, (int)hurt[0], hurt[1]);
+            xCrawl += (int)hurt[0] + frameSize.Width;
+            _sprBody.AddAnimation(LiteCombatActionEnum.Cast, xCrawl * TILE_SIZE, 0, frameSize, (int)cast[0], cast[1]);
+            xCrawl += (int)cast[0] + frameSize.Width;
 
             _sprBody.AddAnimation(LiteCombatActionEnum.KO, (xCrawl * frameSize.Width), 0, frameSize, 3, 0.2f);
 
             _sprBody.PlayAnimation(LiteCombatActionEnum.Idle);
             _sprBody.SetScale(LiteCombatManager.CombatScale);
-            _iBodyWidth = _sprBody.Width;
-            _iBodyHeight = _sprBody.Height;
+            _iBodyWidth = frameSize.Width * LiteCombatManager.CombatScale;
+            _iBodyHeight = frameSize.Height * LiteCombatManager.CombatScale;
         }
 
         public Item GetLoot()

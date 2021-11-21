@@ -74,7 +74,7 @@ namespace RiverHollow.Game_Managers
                 {
                     WorldActor actor = DataManager.GetNPCByIndex(9);
                     actor.Position = Util.GetRandomItem(validTiles).Position;
-                    map.AddCharacter(actor);
+                    map.AddActor(actor);
                     _liEnvironmentalActors.Add(actor);
                 }
             }
@@ -93,7 +93,7 @@ namespace RiverHollow.Game_Managers
             _liEnvironmentalEffects.Clear();
             foreach(WorldActor actor in _liEnvironmentalActors)
             {
-                actor.CurrentMap.RemoveCharacter(actor);
+                actor.CurrentMap.RemoveActor(actor);
             }
         }
 

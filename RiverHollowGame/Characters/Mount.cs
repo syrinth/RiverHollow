@@ -42,7 +42,7 @@ namespace RiverHollow.Characters
         public void SyncToPlayer()
         {
             AnimatedSprite playerSprite = PlayerManager.World.BodySprite;
-            MapManager.CurrentMap.AddCharacter(this);
+            MapManager.CurrentMap.AddActor(this);
             Vector2 mod = new Vector2((playerSprite.Width - BodySprite.Width) / 2, BodySprite.Height - 8);
             Position = playerSprite.Position + mod;
         }
@@ -50,7 +50,7 @@ namespace RiverHollow.Characters
         public void SpawnInHome()
         {
             RHMap stableMap = MapManager.Maps[PlayerManager.GetBuildingByID(_iStableID).MapName];
-            stableMap.AddCharacter(this);
+            stableMap.AddActor(this);
             Position = Util.GetRandomItem(stableMap.FindFreeTiles()).Position;
         }
 

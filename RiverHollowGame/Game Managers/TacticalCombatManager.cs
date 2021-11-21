@@ -117,10 +117,10 @@ namespace RiverHollow.Game_Managers
             {
                 if (c != PlayerManager.World)
                 {
-                    MapManager.Maps[c.CurrentMapName].RemoveCharacter(c);
+                    MapManager.Maps[c.CurrentMapName].RemoveActor(c);
                     c.Activate(true);
                     c.CurrentMapName = BattleMap.Name;
-                    BattleMap.AddCharacter(c);
+                    BattleMap.AddActor(c);
                     c.SpdMult = NORMAL_SPEED;
                 }
 
@@ -415,10 +415,10 @@ namespace RiverHollow.Game_Managers
 
             foreach (ClassedCombatant c in Party.FindAll(x => x != PlayerManager.World))
             {
-                MapManager.CurrentMap.RemoveCharacter(c);
+                MapManager.CurrentMap.RemoveActor(c);
                 c.Activate(false);
                 c.SpdMult = NPC_WALK_SPEED;
-                BattleMap.RemoveCharacter(c);
+                BattleMap.RemoveActor(c);
             }
 
             PlayerManager.World.PlayAnimation(VerbEnum.Idle, PlayerManager.World.Facing);
@@ -523,7 +523,7 @@ namespace RiverHollow.Game_Managers
         public static void MonsterKOAnimFinished(TacticalMonster m)
         {
             PlayerManager.AddMonsterEnergyToQueue(100);
-            MapManager.RemoveMonster(m);
+            MapManager.RemoveActor(m);
 
             Item droppedItem = DropManager.DropMonsterLoot(m);
             if (TacticalCombatManager.InCombat) { _liDroppedItems.Add(droppedItem); }
@@ -619,7 +619,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         private static void EnemyCheckforTargets()
         {
-            foreach (TacticalMenuAction action in ActiveCharacter.AbilityList) {
+            foreach (TacticalMenuAction action in ActiveCharacter.TacticalAbilityList) {
 
             }
         }

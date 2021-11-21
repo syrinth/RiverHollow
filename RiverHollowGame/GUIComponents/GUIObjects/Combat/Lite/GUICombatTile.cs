@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
-using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects.Combat.Lite;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using System;
 using System.Collections.Generic;
@@ -13,9 +13,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUICombatTile : GUIObject
     {
-        GUIImage _gTargetter;
+        //GUIImage _gTargetter;
         GUIImage _gTile;
-        GUICombatActorInfo _gCombatSprite;
+        GUILiteCombatActorInfo _gCombatSprite;
         public GUISprite CharacterSprite => _gCombatSprite.CharacterSprite;
         public GUISprite CharacterWeaponSprite => _gCombatSprite.CharacterWeaponSprite;
         GUIText _gEffect;
@@ -39,7 +39,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             _gTile = new GUIImage(new Rectangle(128, 0, 32, 32), 32, 32, @"Textures\Dialog");
             _gTile.SetScale(LiteCombatManager.CombatScale);
-            _gTargetter = new GUIImage(new Rectangle(256, 96, 32, 32), 32, 32, @"Textures\Dialog");
+            //_gTargetter = new GUIImage(new Rectangle(256, 96, 32, 32), 32, 32, @"Textures\Dialog");
 
             _liStatus = new List<GUIStatus>();
 
@@ -104,7 +104,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 _gEffect.Draw(spriteBatch);
             }
 
-            if (_mapTile.Selected) { _gTargetter.Draw(spriteBatch); }
+            //if (_mapTile.Selected) { _gTargetter.Draw(spriteBatch); }
         }
 
         public override void Update(GameTime gameTime)
@@ -143,7 +143,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         private void Setup()
         {
-            _gTargetter.AnchorAndAlignToObject(_gTile, SideEnum.Top, SideEnum.CenterX, 30);
+            //_gTargetter.AnchorAndAlignToObject(_gTile, SideEnum.Top, SideEnum.CenterX, 30);
             if (Occupied())
             {
                 _gCombatSprite.Position(GetIdleLocation(_gCombatSprite.CharacterSprite));
@@ -164,7 +164,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (occupied)
             {
-                _gCombatSprite = new GUICombatActorInfo(_mapTile.Character);
+                _gCombatSprite = new GUILiteCombatActorInfo(_mapTile.Character);
                 AddControl(_gCombatSprite);
 
                 _gCombatSprite.Reset();

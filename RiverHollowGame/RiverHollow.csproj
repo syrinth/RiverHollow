@@ -67,6 +67,8 @@
     <Compile Include="Characters\Child.cs" />
     <Compile Include="Characters\ClassedCombatant.cs" />
     <Compile Include="Characters\EnvironmentalActor.cs" />
+    <Compile Include="Characters\Lite\LitePartyMember.cs" />
+    <Compile Include="Characters\Lite\LitePlayerCombatant.cs" />
     <Compile Include="Characters\Merchant.cs" />
     <Compile Include="Characters\Mount.cs" />
     <Compile Include="Characters\Pet.cs" />
@@ -104,6 +106,8 @@
     <Compile Include="Game Managers\TravelManager.cs" />
     <Compile Include="Game Managers\ZoneManager.cs" />
     <Compile Include="GUIComponents\GUIHarp.cs" />
+    <Compile Include="GUIComponents\GUIObjects\Combat\Lite\GUILiteCombatActorInfo.cs" />
+    <Compile Include="GUIComponents\GUIObjects\Combat\Lite\GUILiteTurnOrderDisplay.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Tactical\GUITacticalTurnOrderDisplay.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIActionSelectObject.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Tactical\GUITacticalCombatantInfo.cs" />
@@ -162,6 +166,7 @@
     <Compile Include="SpriteAnimation\FrameAnimation.cs" />
     <Compile Include="SpriteAnimation\AnimatedSprite.cs" />
     <Compile Include="Tile Engine\RHMap.cs" />
+    <Compile Include="Tile Engine\RHTile.cs" />
     <Compile Include="Utilities\Structures.cs" />
     <Compile Include="Utilities\Utilities.cs" />
   </ItemGroup>

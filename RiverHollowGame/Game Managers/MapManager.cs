@@ -133,8 +133,8 @@ namespace RiverHollow.Game_Managers
 
                 c.ClearTileForMapChange();
 
-                Maps[currMap].RemoveCharacter(c);
-                Maps[travelPoint.LinkedMap].AddCharacter(c);
+                Maps[currMap].RemoveActor(c);
+                Maps[travelPoint.LinkedMap].AddActor(c);
                 RHTile newTile = Maps[travelPoint.LinkedMap].GetTileByGridCoords(Util.GetGridCoords(entryPoint.GetMovedCenter()));
                 c.NewMapPosition = newTile.Position;
             }
@@ -237,8 +237,8 @@ namespace RiverHollow.Game_Managers
         {
             if (!_newMapInfo.Equals(default(NewMapInfo)) && GUIManager.FadingIn)
             {
-                if (PlayerManager.World.ActivePet != null) { CurrentMap.RemoveCharacter(PlayerManager.World.ActivePet); }
-                if (PlayerManager.World.ActiveMount != null) { CurrentMap.RemoveCharacter(PlayerManager.World.ActiveMount); }
+                if (PlayerManager.World.ActivePet != null) { CurrentMap.RemoveActor(PlayerManager.World.ActivePet); }
+                if (PlayerManager.World.ActiveMount != null) { CurrentMap.RemoveActor(PlayerManager.World.ActiveMount); }
 
                 string oldMap = CurrentMap.Name;
                 CurrentMap = _newMapInfo.NextMap;
@@ -328,26 +328,16 @@ namespace RiverHollow.Game_Managers
             CurrentMap.RemoveWorldObject(o);
         }
 
-        public static void RemoveCharacter(WorldActor c)
+        public static void RemoveActor(WorldActor c)
         {
-            CurrentMap.RemoveCharacter(c);
+            CurrentMap.RemoveActor(c);
         }
-        public static void RemoveMob(LiteMob m)
-        {
-            CurrentMap.RemoveMob(m);
-        }
-        public static void RemoveSummon(TacticalSummon s)
-        {
-            CurrentMap.RemoveSummon(s);
-        }
+      
         public static void CleanupSummons()
         {
             CurrentMap.CleanupSummons();
         }
-        public static void RemoveMonster(TacticalMonster m)
-        {
-            CurrentMap.RemoveMonster(m);
-        }
+
         public static void DropItemsOnMap(List<Item> items, Vector2 position, bool flyingPop = true)
         {
             CurrentMap.DropItemsOnMap(items, position, flyingPop);

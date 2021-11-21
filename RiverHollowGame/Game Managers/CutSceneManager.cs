@@ -487,7 +487,7 @@ namespace RiverHollow.Game_Managers
                             CurrentMapName = _cutsceneMap.Name,
                             Position = Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(friendData[1]))
                         };
-                        _cutsceneMap.AddCharacter(n);
+                        _cutsceneMap.AddActor(n);
                         _liUsedNPCs.Add(n);
                     }
                 }

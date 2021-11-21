@@ -6,6 +6,7 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects.Combat;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using RiverHollow.Tile_Engine;
@@ -20,7 +21,7 @@ namespace RiverHollow.GUIComponents.Screens
     {
         GUIButton _btnAcceptDefeat;
         GUIActionSelectObject _gActionSelect;
-        TurnOrderDisplay _gTurnOrder;
+        GUITacticalTurnOrderDisplay _gTurnOrder;
         GUITacticalCombatantInfo _gActorInfoPanel;
 
         private Dictionary<FloatingText, bool> _diFTextQueue;
@@ -33,7 +34,7 @@ namespace RiverHollow.GUIComponents.Screens
             _diFTextQueue = new Dictionary<FloatingText, bool>();
             _liFloatingText = new List<FloatingText>();
 
-            _gTurnOrder = new TurnOrderDisplay();
+            _gTurnOrder = new GUITacticalTurnOrderDisplay();
             _gTurnOrder.AnchorToScreen(SideEnum.Top);
             AddControl(_gTurnOrder);
         }

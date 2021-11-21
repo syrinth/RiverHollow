@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Characters;
+using RiverHollow.Characters.Lite;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
@@ -8,7 +9,6 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 
@@ -31,6 +31,8 @@ namespace RiverHollow.CombatStuff
         int _iReqLevel = 0;
         public int ReqLevel => _iReqLevel;
 
+        private RHSize _uSize;
+        public RHSize Dimensions => _uSize;
         public bool Harm { get; private set; }
         public bool Heal { get; private set; }
 
@@ -99,12 +101,13 @@ namespace RiverHollow.CombatStuff
             Util.AssignValue(ref _eElement, "Element", stringData);
             Util.AssignValue(ref _eTarget, "Target", stringData);
             Util.AssignValue(ref _eAreaType, "AreaType", stringData);
-            Util.AssignValue(ref _eRange, "Range", stringData);
+            Util.AssignValue(ref _eRange, "LiteRange", stringData);
             Util.AssignValue(ref _iCritRating, "Crit", stringData);
             Util.AssignValue(ref _iChargeCost, "Charge", stringData);
             Util.AssignValue(ref _iAccuracy, "Accuracy", stringData);
             Util.AssignValue(ref _iMPCost, "Cost", stringData);
             Util.AssignValue(ref _iReqLevel, "Level", stringData);
+            Util.AssignValue(ref _uSize, "Dimensions", stringData);
 
             Util.AssignValue(ref _eUserAnimationVerb, "UserAnimation", stringData);
 
@@ -128,6 +131,7 @@ namespace RiverHollow.CombatStuff
                 AnimatedSprite ActionSprite = new AnimatedSprite(_sAnimation);
                 ActionSprite.AddAnimation(AnimationEnum.PlayAnimation, 0, 0, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed, false, true);
                 ActionSprite.Drawing = false;
+                ActionSprite.SetScale(LiteCombatManager.CombatScale);
 
                 Sprite = new GUISprite(ActionSprite);
             }
@@ -243,7 +247,7 @@ namespace RiverHollow.CombatStuff
                 //Note that this currently does not support enemy summons
                 if (_eBonusType == PotencyBonusEnum.Summon)
                 {
-                    foreach (CombatAdventurer c in LiteCombatManager.Party)
+                    foreach (LitePartyMember c in LiteCombatManager.Party)
                     {
                         if (c.LinkedSummon != null)
                         {
@@ -273,7 +277,7 @@ namespace RiverHollow.CombatStuff
                     }
 
                     //Lot more logic has to go into skills then spells
-                    if (!IsSpell())
+                    if (!Compare(ActionEnum.Spell))
                     {
                         //Roll randomly between 1-100 to determine the chance of hir
                         RHRandom random = RHRandom.Instance();
@@ -396,7 +400,7 @@ namespace RiverHollow.CombatStuff
                         //Apply to all allies of the user
                         if (s.Equals("Allies"))
                         {
-                            if (SkillUser.IsCombatAdventurer())
+                            if (SkillUser.IsActorType(ActorEnum.PartyMember))
                             {
                                 targets.AddRange(LiteCombatManager.Party);
                             }
@@ -409,7 +413,7 @@ namespace RiverHollow.CombatStuff
                         //Apply to all enemies of the user
                         if (s.Equals("Enemies"))
                         {
-                            if (SkillUser.IsCombatAdventurer())
+                            if (SkillUser.IsActorType(ActorEnum.PartyMember))
                             {
                                 targets.AddRange(LiteCombatManager.Monsters);
 
@@ -489,7 +493,7 @@ namespace RiverHollow.CombatStuff
                 {
                     if (strArea == "Every")
                     {
-                        foreach (CombatAdventurer adv in LiteCombatManager.Party)
+                        foreach (LitePartyMember adv in LiteCombatManager.Party)
                         {
                             adv.UnlinkSummon();
                         }
@@ -616,7 +620,7 @@ namespace RiverHollow.CombatStuff
 
             //The meaning of push and pull is dependent on whether or not
             //it's an ally or enemy tile.
-            if (tile.Character.IsCombatAdventurer())
+            if (tile.Character.IsActorType(ActorEnum.PartyMember))
             {
                 if (action == SkillTagsEnum.Push) { rv = LiteCombatManager.GetLeft(tile.GUITile.MapTile); }
                 else if (action == SkillTagsEnum.Pull) { rv = LiteCombatManager.GetRight(tile.GUITile.MapTile); }
@@ -740,11 +744,11 @@ namespace RiverHollow.CombatStuff
                         Sprite.IsAnimating = true;
                         Sprite.AlignToObject(TileTargetList[0].GUITile, SideEnum.Bottom);
                         Sprite.AlignToObject(TileTargetList[0].GUITile, SideEnum.CenterX);
-                        Sprite.MoveBy(new Vector2(_iAnimOffsetX * LiteCombatManager.CombatScale, _iAnimOffsetY * LiteCombatManager.CombatScale));
                     }
                     else if (Sprite != null && Sprite.IsAnimating) { Sprite.Update(gameTime); }
                     else if (Sprite == null || Sprite.PlayedOnce)
                     {
+                        Sprite.Reset();
                         _iCurrentAction++;
                     }
                     break;

@@ -182,7 +182,7 @@ namespace RiverHollow.Characters
             if (obj == null)
             {
                 if (CurrentMap == null) { MapManager.TownMap.AddCharacterImmediately(this); }
-                else { MapManager.TownMap.AddCharacter(this); }
+                else { MapManager.TownMap.AddActor(this); }
                 Position = Util.GetRandomItem(MapManager.TownMap.FindFreeTiles()).Position;
             }
             else
@@ -195,7 +195,7 @@ namespace RiverHollow.Characters
                     if (t != null && t.Passable() && (t.WorldObject == null || t.WorldObject.Walkable)) { validTiles.Add(t); }
                 }
 
-                obj.CurrentMap.AddCharacter(this);
+                obj.CurrentMap.AddActor(this);
                 Position = Util.GetRandomItem(validTiles).Position;
 
                 ChangeState(PetStateEnum.Wander);
@@ -205,7 +205,7 @@ namespace RiverHollow.Characters
         public void SpawnNearPlayer()
         {
             if (CurrentMap == null) { MapManager.CurrentMap.AddCharacterImmediately(this); }
-            else { MapManager.CurrentMap.AddCharacter(this); }
+            else { MapManager.CurrentMap.AddActor(this); }
 
             List<RHTile> validTiles = new List<RHTile>();
             Point playerLocation = PlayerManager.World.CollisionBox.Location;

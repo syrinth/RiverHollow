@@ -23,28 +23,17 @@ namespace RiverHollow.Actors.CombatStuff
         public Vector2 IconGrid => _vIconGrid;
 
         public LiteMenuAction() { }
-        public LiteMenuAction(int id, Dictionary<string, string> stringData)
-        {
-            ImportBasics(stringData, id);
-        }
-
-        protected void ImportBasics(Dictionary<string, string> stringData, int id)
+        public LiteMenuAction(int id, ActionEnum actionType, Vector2 vGrid)
         {
             _iId = id;
+            _eActionType = actionType;
+            _vIconGrid = vGrid;
             DataManager.GetTextData("Action", _iId, ref _sName, "Name");
             DataManager.GetTextData("Action", _iId, ref _sDescription, "Description");
-
-            _eActionType = Util.ParseEnum<ActionEnum>(stringData["Type"]);
-
-            string[] tags = stringData["Icon"].Split('-');
-            _vIconGrid = new Vector2(int.Parse(tags[0]), int.Parse(tags[1]));
         }
 
-        public bool IsMenu() { return _eActionType == ActionEnum.MenuAction; }
-        public bool IsAction() { return _eActionType == ActionEnum.Action; }
-        public bool IsSpell() { return _eActionType == ActionEnum.Spell; }
+        public bool Compare(ActionEnum e) { return _eActionType == e; }
 
-        public bool IsSpecial() { return _eActionType == ActionEnum.MenuSpell; }
-        public bool IsUseItem() { return _eActionType == ActionEnum.MenuItem; }
+        public bool IsMenu() { return Compare(ActionEnum.MenuSpell) || Compare(ActionEnum.MenuItem) || Compare(ActionEnum.MenuAction); }
     }
 }

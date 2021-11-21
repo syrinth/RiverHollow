@@ -67,7 +67,7 @@ namespace RiverHollow.Characters
             ///When the Monster has finished playing the KO animation, let the CombatManager know so it can do any final actions
             if (IsCurrentAnimation(AnimationEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
             {
-                MapManager.RemoveCharacter(this);
+                MapManager.RemoveActor(this);
             }
         }
 
