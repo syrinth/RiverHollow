@@ -78,8 +78,6 @@ namespace RiverHollow
 
             PlayerManager.Initialize();
 
-            MissionManager.Load();
-
             GUICursor.ResetCursor();
            // GameManager.Pause();
             //Set the Main Menu Screen
@@ -107,8 +105,6 @@ namespace RiverHollow
                 SoundManager.Update(gTime);
 
                 if (HarpManager.PlayingMusic) { HarpManager.Update(gTime); }
-
-                if (TacticalCombatManager.InCombat) { TacticalCombatManager.Update(gTime);}
 
                 //If anything is queued up for pathing, handle it
                 TravelManager.DequeuePathingRequest();
@@ -164,26 +160,11 @@ namespace RiverHollow
                     Camera.Update(gTime);
                     GUICursor.UpdateTownBuildObject(gTime);
                     if (CutsceneManager.Playing) { CutsceneManager.Update(gTime); }
-                    else
+                    else if (IsRunning())
                     {
-                        //During combat, if the game is not running, only update the CurrentMap
-                        //Otherwise, if not in combat, or in combat and game is running, update all maps
-                        //This is so that time does not pass outside of combat while decisions are being made
-                        //but NPCs and animations will still run
-                        if (TacticalCombatManager.InCombat && !IsRunning())
-                        {
-                            MapManager.CurrentMap.Update(gTime);
-                            foreach(TacticalCombatActor c in PlayerManager.GetTacticalParty())
-                            {
-                                c.Update(gTime);
-                            }
-                        }
-                        else if (IsRunning())
-                        {
-                            MapManager.Update(gTime);
-                            GameCalendar.Update(gTime);
-                            if (!Scrying()) { PlayerManager.Update(gTime); }
-                        }
+                        MapManager.Update(gTime);
+                        GameCalendar.Update(gTime);
+                        if (!Scrying()) { PlayerManager.Update(gTime); }
                     }
                 }
 
@@ -212,7 +193,6 @@ namespace RiverHollow
 
                 spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
                 MapManager.DrawUpper(spriteBatch);
-                TacticalCombatManager.DrawUpperCombatLayer(spriteBatch);
                 spriteBatch.End();
             }
             else
@@ -276,7 +256,7 @@ namespace RiverHollow
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <param name="playIntro"></param>
-        public static void NewGame(Adventurer a, Adventurer b, bool playIntro)
+        public static void NewGame(bool playIntro)
         {
             PlayerManager.NewPlayer();
             MapManager.PopulateMaps(false);
@@ -329,7 +309,7 @@ namespace RiverHollow
                 }
             }
 
-            Camera.SetObserver(PlayerManager.World);
+            Camera.SetObserver(PlayerManager.PlayerActor);
         }
 
         /// <summary>
@@ -338,7 +318,6 @@ namespace RiverHollow
         public static void Rollover()
         {
             GameManager.RollOver();
-            MissionManager.Rollover();
             PlayerManager.Rollover();
 
             foreach (Villager n in DataManager.DIVillagers.Values) {

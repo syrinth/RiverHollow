@@ -4,14 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.WorldObjects;
+using RiverHollow.Items;
 using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
-using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox.CharacterDisplayBox;
-using static RiverHollow.WorldObjects.Clothes;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -73,7 +71,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             _nameWindow = new GUITextInputWindow("Character Name:", SideEnum.Left);
             _nameWindow.AnchorAndAlignToObject(_townWindow, SideEnum.Bottom, SideEnum.Right );
-            //_nameWindow.SetText("Harold");
+            _nameWindow.SetText("Syrinth");
             _nameWindow.Activate();
 
             _liClassBoxes = new List<GUIObject>();
@@ -92,7 +90,7 @@ namespace RiverHollow.GUIComponents.Screens
             _btnBodyType = new GUIButton(new Rectangle(256, 112, 16, 16), 32, 32, DataManager.DIALOGUE_TEXTURE, BtnNextBodyType);
             _btnBodyType.AnchorAndAlignToObject(_playerDisplayBox, SideEnum.Right, SideEnum.Bottom, 10);
 
-            _btnHairColor = new GUISwatch(PlayerManager.World.HairColor, 16, 32, BtnChooseHairColor);
+            _btnHairColor = new GUISwatch(PlayerManager.PlayerActor.HairColor, 16, 32, BtnChooseHairColor);
             _btnHairColor.AnchorAndAlignToObject(_playerDisplayBox, SideEnum.Bottom, SideEnum.Left);
             _gHair = new GUIImage(new Rectangle(192, 16, 16, 16), 32, 32, DataManager.DIALOGUE_TEXTURE);
             _gHair.AnchorAndAlignToObject(_btnHairColor, SideEnum.Right, SideEnum.Bottom, 10);
@@ -214,13 +212,13 @@ namespace RiverHollow.GUIComponents.Screens
         #region Button Logic
         public void BtnNewGame()
         {
-            PlayerManager.World.SetScale();
+            PlayerManager.PlayerActor.SetScale();
             PlayerManager.SetClass(_csbSelected.ClassID);
-            PlayerManager.World.AssignStartingGear();
+            PlayerManager.PlayerCombatant.AssignStartingGear();
             PlayerManager.SetName(_nameWindow.GetText());
             PlayerManager.SetTownName(_townWindow.GetText());
 
-            RiverHollow.NewGame(DataManager.GetAdventurer(1), DataManager.GetAdventurer(2), !_gCheckSkipCutscene.Checked());
+            RiverHollow.NewGame(!_gCheckSkipCutscene.Checked());
             GameManager.StopTakingInput();
 
         }
@@ -237,7 +235,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 _iCurrBodyType = 1;
             }
-            PlayerManager.World.SetBodyType(_iCurrBodyType);
+            PlayerManager.PlayerActor.SetBodyType(_iCurrBodyType);
 
             _playerDisplayBox.Configure();
         }
@@ -254,7 +252,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (_iHairTypeIndex < _iHairTypeCount - 1) { _iHairTypeIndex++; }
             else { _iHairTypeIndex = 0; }
 
-            PlayerManager.World.SetHairType(_iHairTypeIndex);
+            PlayerManager.PlayerActor.SetHairType(_iHairTypeIndex);
             
             _playerDisplayBox.Configure();
         }
@@ -263,7 +261,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (_iHatIndex < _liHats.Count - 1) { _iHatIndex++; }
             else { _iHatIndex = 0; }
 
-            SyncClothing((Clothes)DataManager.GetItem((_liHats[_iHatIndex])), ClothesEnum.Hat);    
+            SyncClothing((Clothing)DataManager.GetItem((_liHats[_iHatIndex])), ClothingEnum.Hat);    
             _playerDisplayBox.Configure();
         }
         public void BtnNextShirt()
@@ -271,18 +269,18 @@ namespace RiverHollow.GUIComponents.Screens
             if (_iShirtIndex < _liShirts.Count - 1) { _iShirtIndex++; }
             else { _iShirtIndex = 0; }
 
-            SyncClothing((Clothes)DataManager.GetItem((_liShirts[_iShirtIndex])), ClothesEnum.Body);
+            SyncClothing((Clothing)DataManager.GetItem((_liShirts[_iShirtIndex])), ClothingEnum.Body);
             _playerDisplayBox.Configure();
         }
         public void BtnPregnancy()
         {
-            PlayerManager.World.CanBecomePregnant = _gCheckPregnancy.Checked();
+            PlayerManager.PlayerActor.CanBecomePregnant = _gCheckPregnancy.Checked();
         }
 
-        private void SyncClothing(Clothes c, ClothesEnum e)
+        private void SyncClothing(Clothing c, ClothingEnum e)
         {
-            if (c != null) { PlayerManager.World.SetClothes(c); }
-            else { PlayerManager.World.RemoveClothes(e); }
+            if (c != null) { PlayerManager.PlayerActor.SetClothes(c); }
+            else { PlayerManager.PlayerActor.RemoveClothes(e); }
         }
 
         public void BtnAssignClass(ClassSelector obj)
@@ -389,7 +387,7 @@ namespace RiverHollow.GUIComponents.Screens
                 switch (_target)
                 {
                     case PlayerColorEnum.Hair:
-                        PlayerManager.World.SetHairColor(c);
+                        PlayerManager.PlayerActor.SetHairColor(c);
                         break;
                     default:
                         break;

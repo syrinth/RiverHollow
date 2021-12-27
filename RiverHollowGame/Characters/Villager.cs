@@ -1,17 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
+using RiverHollow.Characters.Lite;
+using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
+using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 
@@ -62,6 +61,8 @@ namespace RiverHollow.Characters
 
         string _sScheduleKey;
 
+        public ClassedCombatant CombatVersion { get; private set; }
+
         public Villager()
         {
             _diCollection = new Dictionary<int, bool>();
@@ -103,6 +104,15 @@ namespace RiverHollow.Characters
             Util.AssignValue(ref _iTotalMoneyEarnedReq, "TotalMoneyEarnedReq", stringData);
 
             Util.AssignValue(ref _bLivesInTown, "InTown", stringData);
+
+            CombatVersion = new ClassedCombatant();
+            CombatVersion.SetName(Name);
+            if (stringData.ContainsKey("Class"))
+            {
+                CombatVersion.SetClass(DataManager.GetClassByIndex(int.Parse(stringData["Class"])));
+                CombatVersion.AssignStartingGear();
+            }
+            else { CombatVersion.SetClass(new CharacterClass()); }
 
             if (stringData.ContainsKey("Collection"))
             {
@@ -278,7 +288,7 @@ namespace RiverHollow.Characters
         public override void MoveToSpawn()
         {
             _bOnTheMap = true;
-            PlayerManager.RemoveFromParty(this);
+            PlayerManager.RemoveFromParty(CombatVersion);
 
             string mapName = GetSpawnMapName();
 
@@ -481,7 +491,7 @@ namespace RiverHollow.Characters
             if (Combatant)
             {
                 _bOnTheMap = false;
-                PlayerManager.AddToParty(this);
+                PlayerManager.AddToParty(CombatVersion);
                 rv = GetDialogEntry("JoinPartyYes");
             }
             else
@@ -490,14 +500,6 @@ namespace RiverHollow.Characters
             }
 
             return rv;
-        }
-
-        /// <summary>
-        /// Override for CombatActor's GoToIdle method to prevent checking against stats
-        /// </summary>
-        public override void GoToIdle()
-        {
-            PlayAnimationVerb(VerbEnum.Idle);
         }
 
         public bool AvailableToDate() { return CanBeMarried && GetFriendshipLevel() >= 6 && Relationship == RelationShipStatusEnum.Friends; }
@@ -518,7 +520,7 @@ namespace RiverHollow.Characters
                 spokenKeys = _liSpokenKeys,
             };
 
-            if (_class != null) { npcData.classedData = SaveClassedCharData(); }
+            if (CombatVersion.CharacterClass != null) { npcData.classedData = CombatVersion.SaveClassedCharData(); }
 
             return npcData;
         }
@@ -541,7 +543,7 @@ namespace RiverHollow.Characters
                 DetermineValidSchedule();
             }
 
-            if (_class != null) { LoadClassedCharData(data.classedData); }
+            if (CombatVersion.CharacterClass != null) { CombatVersion.LoadClassedCharData(data.classedData); }
 
             foreach (string s in data.spokenKeys)
             {

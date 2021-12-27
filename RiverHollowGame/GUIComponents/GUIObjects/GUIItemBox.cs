@@ -6,6 +6,7 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Items;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
@@ -81,12 +82,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 }
                 else if (BoxItem.CompareType(ItemEnum.MonsterFood))        //Class Change handler
                 {
-                    if (MapManager.CurrentMap.IsCombatMap)
-                    {
-                        if (MapManager.CurrentMap.PrimedFood != null) { entry = DataManager.GetGameTextEntry("MonsterFood_Duplicate"); }
-                        else { entry.FormatText(DataManager.GetGameTextEntry("MonsterFood_Confirm"), BoxItem.Name); }
-                    }
-                    else { entry = DataManager.GetGameTextEntry("MonsterFood_False"); }
+                    entry = DataManager.GetGameTextEntry("MonsterFood_False");
                 }
                 else if (BoxItem.CompareType(ItemEnum.Tool))
                 {
@@ -187,13 +183,13 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             ItemEnum _itemType;
             ArmorEnum _armorType;
-            ClothesEnum _clothesType;
+            ClothingEnum _clothesType;
             WeaponEnum _weaponType;
 
             #region Getters
             public ItemEnum ItemType => _itemType;
             public ArmorEnum ArmorType => _armorType;
-            public ClothesEnum ClothingType => _clothesType;
+            public ClothingEnum ClothingType => _clothesType;
             public WeaponEnum WeaponType => _weaponType;
             #endregion
 
@@ -210,7 +206,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 _armorType = armorType;
             }
-            public SpecializedBox(ClothesEnum clothesType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Clothes, item, del)
+            public SpecializedBox(ClothingEnum clothesType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Clothes, item, del)
             {
                 _clothesType = clothesType;
             }

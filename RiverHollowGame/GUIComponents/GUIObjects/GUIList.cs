@@ -6,7 +6,7 @@ using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
-    public class GUIList : GUIObject
+    public class List : GUIObject
     {
         //Passes all action handlers to it's sub controls.
         public static int BTNSIZE = ScaledTileSize;
@@ -26,7 +26,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         /// <param name="maxItems">The maximum number of objects that should be displayed in the List at any given time.</param>
         /// <param name="spacing">The amount of space (in px) to set inbetween items in the List.</param>
         /// <param name="maxHeight">The maximum height the GUIList is allowed to take up on the screen. If set, it will override maxItems if necessary.</param>
-        public GUIList(List<GUIObject> objects, int maxItems, int spacing, int maxHeight = 0)
+        public List(List<GUIObject> objects, int maxItems, int spacing, int maxHeight = 0)
         {
             _iMaxShownItems = maxItems;
             _liObjects = objects;

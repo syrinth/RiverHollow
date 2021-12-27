@@ -17,6 +17,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using static RiverHollow.WorldObjects.Buildable;
 using static RiverHollow.Characters.TravellingNPC;
 using RiverHollow.Characters.Lite;
+using RiverHollow.Items;
 
 namespace RiverHollow.Game_Managers
 {
@@ -35,15 +36,15 @@ namespace RiverHollow.Game_Managers
             get { return _currentMap; }
             set {
                 _currentMap = value;
-                World.CurrentMapName = _currentMap;
+                PlayerActor.CurrentMapName = _currentMap;
             }
         }
 
-        public static PlayerCharacter World;
-        public static LitePlayerCombatant LiteCombatant;
+        public static ClassedCombatant PlayerCombatant;
+        public static PlayerCharacter PlayerActor;
 
-        public static int HitPoints => World.CurrentHP;
-        public static int MaxHitPoints  => World.MaxHP;
+        public static int HitPoints => PlayerCombatant.CurrentHP;
+        public static int MaxHitPoints  => PlayerCombatant.MaxHP;
 
         private static Dictionary<int, Building> _diBuildings;
         public static Dictionary<int, Building>.ValueCollection BuildingList => _diBuildings.Values;
@@ -53,8 +54,7 @@ namespace RiverHollow.Game_Managers
 
         private static List<Pet> _liPets;
         private static List<Mount> _liMounts;
-        private static List<ClassedCombatant> _liTacticalParty;
-        private static List<LitePartyMember> _liLiteParty;
+        private static List<ClassedCombatant> _liParty;
         private static Dictionary<int, int> _diStorage;
 
         public static string Name;
@@ -102,10 +102,13 @@ namespace RiverHollow.Game_Managers
             _diTools = new Dictionary<ToolEnum, Tool>();
 
             TaskLog = new List<RHTask>();
-            World = new PlayerCharacter();
-            LiteCombatant = new LitePlayerCombatant(World);
-            _liTacticalParty = new List<ClassedCombatant> { World };
-            _liLiteParty = new List<LitePartyMember> { LiteCombatant };
+            PlayerActor = new PlayerCharacter();
+            PlayerCombatant = new ClassedCombatant();
+
+            //Sets a default class so we can load and display the character to start
+            PlayerCombatant.SetClass(DataManager.GetClassByIndex(1));
+
+            _liParty = new List<ClassedCombatant> { PlayerCombatant };
 
             _diBuildings = new Dictionary<int, Building>();
             DIBuildInfo = DataManager.GetBuildInfoList();
@@ -113,10 +116,10 @@ namespace RiverHollow.Game_Managers
 
         public static void NewPlayer()
         {
-            World.Position = new Vector2(200, 200);
+            PlayerActor.Position = new Vector2(200, 200);
 
             CurrentMap = MapManager.CurrentMap.Name;
-            World.Position = Util.GetMapPositionOfTile(MapManager.SpawnTile);
+            PlayerActor.Position = Util.GetMapPositionOfTile(MapManager.SpawnTile);
 
             AddTesting();
         }
@@ -136,7 +139,7 @@ namespace RiverHollow.Game_Managers
         {
             PlayerManager.AllowMovement = false;
             ReadyToSleep = true;
-            World.SetPath(list);
+            PlayerActor.SetPath(list);
         }
 
         public static void Update(GameTime gTime)
@@ -150,35 +153,35 @@ namespace RiverHollow.Game_Managers
                 KeyboardState ks = Keyboard.GetState();
                 if (!InputManager.MovementKeyDown())
                 {
-                    World.DetermineFacing(moveDir);
+                    PlayerActor.DetermineFacing(moveDir);
                 }
 
-                if (ks.IsKeyDown(Keys.W)) { moveDir += new Vector2(0, -World.BuffedSpeed); }
-                else if (ks.IsKeyDown(Keys.S)) { moveDir += new Vector2(0, World.BuffedSpeed); }
+                if (ks.IsKeyDown(Keys.W)) { moveDir += new Vector2(0, -PlayerActor.BuffedSpeed); }
+                else if (ks.IsKeyDown(Keys.S)) { moveDir += new Vector2(0, PlayerActor.BuffedSpeed); }
 
-                if (ks.IsKeyDown(Keys.A)) { moveDir += new Vector2(-World.BuffedSpeed, 0); }
-                else if (ks.IsKeyDown(Keys.D)) { moveDir += new Vector2(World.BuffedSpeed, 0); }
+                if (ks.IsKeyDown(Keys.A)) { moveDir += new Vector2(-PlayerActor.BuffedSpeed, 0); }
+                else if (ks.IsKeyDown(Keys.D)) { moveDir += new Vector2(PlayerActor.BuffedSpeed, 0); }
 
-                World.DetermineFacing(moveDir);
+                PlayerActor.DetermineFacing(moveDir);
 
                 if (moveDir.Length() != 0)
                 {
-                    Rectangle testRectX = new Rectangle((int)World.CollisionBox.X + (int)moveDir.X, (int)World.CollisionBox.Y, World.CollisionBox.Width, World.CollisionBox.Height);
-                    Rectangle testRectY = new Rectangle((int)World.CollisionBox.X, (int)World.CollisionBox.Y + (int)moveDir.Y, World.CollisionBox.Width, World.CollisionBox.Height);
+                    Rectangle testRectX = new Rectangle((int)PlayerActor.CollisionBox.X + (int)moveDir.X, (int)PlayerActor.CollisionBox.Y, PlayerActor.CollisionBox.Width, PlayerActor.CollisionBox.Height);
+                    Rectangle testRectY = new Rectangle((int)PlayerActor.CollisionBox.X, (int)PlayerActor.CollisionBox.Y + (int)moveDir.Y, PlayerActor.CollisionBox.Width, PlayerActor.CollisionBox.Height);
 
-                    if (MapManager.CurrentMap.CheckForCollisions(World, testRectX, testRectY, ref moveDir))
+                    if (MapManager.CurrentMap.CheckForCollisions(PlayerActor, testRectX, testRectY, ref moveDir))
                     {
                         //Might be technically correct but FEELS wrong
                         //moveDir.Normalize();
                         //moveDir *= World.Speed;
-                        World.MoveBy((int)moveDir.X, (int)moveDir.Y);
+                        PlayerActor.MoveBy((int)moveDir.X, (int)moveDir.Y);
                     }
                 }
 
             }
             else { UpdateTool(gTime); }
 
-            World.Update(gTime);
+            PlayerActor.Update(gTime);
         }
 
         public static void AddByIncrement(ref int queue, ref int addTo)
@@ -200,24 +203,19 @@ namespace RiverHollow.Game_Managers
         {
             if (_currentMap == MapManager.CurrentMap.Name)
             {
-                World.Draw(spriteBatch, true);
+                PlayerActor.Draw(spriteBatch, true);
                 ToolInUse?.Draw(spriteBatch);
             }
         }
 
-        public static List<LitePartyMember> GetLiteParty()
+        public static List<ClassedCombatant> GetParty()
         {
-            return _liLiteParty;
-        }
-
-        public static List<ClassedCombatant> GetTacticalParty()
-        {
-            return _liTacticalParty;
+            return _liParty;
         }
 
         public static void AddToParty(ClassedCombatant c)
         {
-            foreach (ClassedCombatant oldChar in _liTacticalParty)
+            foreach (ClassedCombatant oldChar in _liParty)
             {
                 if (oldChar.StartPosition.Equals(c.StartPosition))
                 {
@@ -225,39 +223,16 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            if (!_liTacticalParty.Contains(c))
+            if (!_liParty.Contains(c))
             {
-                _liTacticalParty.Add(c);
+                _liParty.Add(c);
             }
         }
-        public static void AddToParty(LitePartyMember c)
-        {
-            foreach (LitePartyMember oldChar in _liLiteParty)
-            {
-                if (oldChar.StartPosition.Equals(c.StartPosition))
-                {
-                    c.IncreaseStartPos();
-                }
-            }
-
-            if (!_liLiteParty.Contains(c))
-            {
-                _liLiteParty.Add(c);
-            }
-        }
-
         public static void RemoveFromParty(ClassedCombatant c)
         {
-            if (_liTacticalParty.Contains(c))
+            if (_liParty.Contains(c))
             {
-                _liTacticalParty.Remove(c);
-            }
-        }
-        public static void RemoveFromParty(LitePartyMember c)
-        {
-            if (_liLiteParty.Contains(c))
-            {
-                _liLiteParty.Remove(c);
+                _liParty.Remove(c);
             }
         }
 
@@ -275,31 +250,6 @@ namespace RiverHollow.Game_Managers
             //}
 
             return rv;
-        }
-
-        /// <summary>
-        /// Iterates through every building, searching for the adventurer 
-        /// with the matching PersonalID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public static Adventurer GetWorkerByPersonalID(int id)
-        {
-            Adventurer adv = null;
-
-            //foreach (Building b in Buildings)
-            //{
-            //    foreach(Adventurer w in b.Workers)
-            //    {
-            //        if(w.PersonalID == id)
-            //        {
-            //            adv = w;
-            //            break;
-            //        }
-            //    }
-            //}
-
-            return adv;
         }
 
         /// <summary>
@@ -340,7 +290,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
-        public static void AdvanceTaskProgress(TacticalMonster m)
+        public static void AdvanceTaskProgress(Monster m)
         {
             foreach (RHTask q in TaskLog)
             {
@@ -515,7 +465,7 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            Rectangle playerRect = World.CollisionBox;
+            Rectangle playerRect = PlayerActor.CollisionBox;
             int a = Math.Abs(playerRect.Center.X - centre.X);
             int b = Math.Abs(playerRect.Center.Y - centre.Y);
             int c = (int)Math.Sqrt(a * a + b * b);
@@ -529,7 +479,7 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            Rectangle playerRect = World.GetRectangle();
+            Rectangle playerRect = PlayerActor.GetRectangle();
             int a = Math.Abs(playerRect.Center.X - centre.X);
             int b = Math.Abs(playerRect.Center.Y - centre.Y);
             distance = (int)Math.Sqrt(a * a + b * b);
@@ -543,7 +493,7 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            Rectangle playerRect = World.GetRectangle();
+            Rectangle playerRect = PlayerActor.GetRectangle();
             int a = Math.Abs(playerRect.Center.X - centre.X);
             int b = Math.Abs(playerRect.Center.Y - centre.Y);
             int c = (int)Math.Sqrt(a * a + b * b);
@@ -585,7 +535,8 @@ namespace RiverHollow.Game_Managers
         public static void SetName(string x)
         {
             Name = x;
-            World.SetName(x);
+            PlayerActor.SetName(x);
+            PlayerCombatant.SetName(x);
         }
         public static void SetTownName(string x)
         {
@@ -593,9 +544,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void SetClass(int x)
         {
-            CharacterClass combatClass = DataManager.GetClassByIndex(x);
-            World.SetClass(combatClass);
-            LiteCombatant.SetClass(combatClass);
+            PlayerCombatant.SetClass(DataManager.GetClassByIndex(x));
         }
 
         public static bool DecreaseStamina(double x)
@@ -625,11 +574,8 @@ namespace RiverHollow.Game_Managers
         {
             if (GameManager.AutoDisband)
             {
-                _liTacticalParty.Clear();
-                _liTacticalParty.Add(World);
-
-                _liLiteParty.Clear();
-                _liLiteParty.Add(LiteCombatant);
+                _liParty.Clear();
+                _liParty.Add(PlayerCombatant);
             }
 
             if(BabyCountdown > 0)
@@ -638,7 +584,7 @@ namespace RiverHollow.Game_Managers
                 if (BabyCountdown == 0)
                 {
                     ChildStatus = ExpectingChildEnum.None;
-                    if (World.Pregnant) { World.Pregnant = false; }
+                    if (PlayerActor.Pregnant) { PlayerActor.Pregnant = false; }
                     else if (Spouse.Pregnant) { Spouse.Pregnant = false; }
 
                     Child p = (Child)DataManager.GetNPCByIndex(10);
@@ -658,7 +604,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (Pet p in _liPets)
             {
-                if (World.ActivePet == p) { p.SpawnNearPlayer(); }
+                if (PlayerActor.ActivePet == p) { p.SpawnNearPlayer(); }
                 else { p.SpawnInHome(); }
             }
 
@@ -676,12 +622,12 @@ namespace RiverHollow.Game_Managers
 
         public static void DetermineBabyAcquisition()
         {
-            if (World.CanBecomePregnant == Spouse.CanBecomePregnant) { PlayerManager.ChildStatus = ExpectingChildEnum.Adoption; }
+            if (PlayerActor.CanBecomePregnant == Spouse.CanBecomePregnant) { PlayerManager.ChildStatus = ExpectingChildEnum.Adoption; }
             else
             {
                 PlayerManager.ChildStatus = ExpectingChildEnum.Pregnant;
 
-                if (World.CanBecomePregnant) { World.Pregnant = true; }
+                if (PlayerActor.CanBecomePregnant) { PlayerActor.Pregnant = true; }
                 else if (Spouse.CanBecomePregnant) { Spouse.Pregnant = true; }
             }
         }
@@ -693,13 +639,13 @@ namespace RiverHollow.Game_Managers
                 name = PlayerManager.Name,
                 money = PlayerManager.Money,
                 totalMoneyEarned = PlayerManager.TotalMoneyEarned,
-                bodyTypeIndex = PlayerManager.World.BodyType,
-                hairColor = PlayerManager.World.HairColor,
-                hairIndex = PlayerManager.World.HairIndex,
-                hat = Item.SaveData(World.Hat),
-                chest = Item.SaveData(World.Body),
-                adventurerData = World.SaveClassedCharData(),
-                currentClass = World.CharacterClass.ID,
+                bodyTypeIndex = PlayerManager.PlayerActor.BodyType,
+                hairColor = PlayerManager.PlayerActor.HairColor,
+                hairIndex = PlayerManager.PlayerActor.HairIndex,
+                hat = Item.SaveData(PlayerActor.Hat),
+                chest = Item.SaveData(PlayerActor.Body),
+                adventurerData = PlayerCombatant.SaveClassedCharData(),
+                currentClass = PlayerCombatant.CharacterClass.ID,
                 weddingCountdown = WeddingCountdown,
                 babyCountdown = BabyCountdown,
                 Items = new List<ItemData>(),
@@ -726,7 +672,7 @@ namespace RiverHollow.Game_Managers
                 data.Storage.Add(storageData);
             }
 
-            data.activePet = PlayerManager.World.ActivePet == null ? -1 : PlayerManager.World.ActivePet.ID;
+            data.activePet = PlayerManager.PlayerActor.ActivePet == null ? -1 : PlayerManager.PlayerActor.ActivePet.ID;
             foreach (Pet p in _liPets)
             {
                 data.liPets.Add(p.ID);
@@ -748,7 +694,7 @@ namespace RiverHollow.Game_Managers
         public static void LoadData(PlayerData saveData)
         {
             //We've already loaded in the player position
-            Vector2 pos = World.Position;
+            Vector2 pos = PlayerActor.Position;
 
             SetName(saveData.name);
             SetMoney(saveData.money);
@@ -757,17 +703,17 @@ namespace RiverHollow.Game_Managers
             BabyCountdown = saveData.babyCountdown;
             WeddingCountdown = saveData.weddingCountdown;
 
-            World.SetHairColor(saveData.hairColor);
-            World.SetHairType(saveData.hairIndex);
+            PlayerActor.SetHairColor(saveData.hairColor);
+            PlayerActor.SetHairType(saveData.hairIndex);
 
             SetClass(saveData.currentClass);
-            World.LoadClassedCharData(saveData.adventurerData);
+            PlayerCombatant.LoadClassedCharData(saveData.adventurerData);
 
-            World.SetClothes((Clothes)DataManager.GetItem(saveData.hat.itemID));
-            World.SetClothes((Clothes)DataManager.GetItem(saveData.chest.itemID));
+            PlayerActor.SetClothes((Clothing)DataManager.GetItem(saveData.hat.itemID));
+            PlayerActor.SetClothes((Clothing)DataManager.GetItem(saveData.chest.itemID));
 
-            World.SetBodyType(saveData.bodyTypeIndex);
-            World.Position = pos;
+            PlayerActor.SetBodyType(saveData.bodyTypeIndex);
+            PlayerActor.Position = pos;
 
             for (int i = 0; i < InventoryManager.maxItemRows; i++)
             {
@@ -792,7 +738,7 @@ namespace RiverHollow.Game_Managers
                 Pet p = (Pet)DataManager.GetNPCByIndex(i);
                 if (p.ID == saveData.activePet) {
                     p.SpawnNearPlayer();
-                    World.SetPet(p);
+                    PlayerActor.SetPet(p);
                 }
                 else { p.SpawnInHome(); }
                 AddPet(p);
@@ -846,7 +792,7 @@ namespace RiverHollow.Game_Managers
 
                 RHTile target = MapManager.CurrentMap.TargetTile;
 
-                if (target != null && ToolInUse.ToolAnimation.AnimationVerbFinished(VerbEnum.UseTool, PlayerManager.World.Facing))
+                if (target != null && ToolInUse.ToolAnimation.AnimationVerbFinished(VerbEnum.UseTool, PlayerManager.PlayerActor.Facing))
                 {
                     if (PlayerManager.ToolIsAxe() || PlayerManager.ToolIsPick() || PlayerManager.ToolIsLantern())
                     {
@@ -856,7 +802,7 @@ namespace RiverHollow.Game_Managers
                     {
                         target.DamageObject(PlayerManager.ToolInUse);
 
-                        if(PlayerManager.World.Facing == DirectionEnum.Left || PlayerManager.World.Facing == DirectionEnum.Right)
+                        if(PlayerManager.PlayerActor.Facing == DirectionEnum.Left || PlayerManager.PlayerActor.Facing == DirectionEnum.Right)
                         {
                             target.GetTileByDirection(DirectionEnum.Up).DamageObject(PlayerManager.ToolInUse);
                             target.GetTileByDirection(DirectionEnum.Down).DamageObject(PlayerManager.ToolInUse);
@@ -874,7 +820,7 @@ namespace RiverHollow.Game_Managers
 
                     target = null;
                     PlayerManager.FinishedWithTool();
-                    World.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
+                    PlayerActor.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
                 }
             }
         }
@@ -928,16 +874,16 @@ namespace RiverHollow.Game_Managers
             if (t != null && ToolInUse == null)
             {
                 ToolInUse = t;
-                ToolInUse.Position = new Vector2(World.Position.X - TILE_SIZE, World.Position.Y - (TILE_SIZE * 2));
+                ToolInUse.Position = new Vector2(PlayerActor.Position.X - TILE_SIZE, PlayerActor.Position.Y - (TILE_SIZE * 2));
                 if (ToolInUse != null && !Busy)
                 {
                     if (DecreaseStamina(ToolInUse.StaminaCost))
                     {
-                        PlayerManager.World.DetermineFacing(MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition()));
+                        PlayerManager.PlayerActor.DetermineFacing(MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition()));
                         Busy = true;
                         AllowMovement = false;
-                        PlayerManager.World.PlayAnimationVerb(VerbEnum.UseTool);
-                        ToolInUse.ToolAnimation.PlayAnimation(VerbEnum.UseTool, World.Facing);
+                        PlayerManager.PlayerActor.PlayAnimationVerb(VerbEnum.UseTool);
+                        ToolInUse.ToolAnimation.PlayAnimation(VerbEnum.UseTool, PlayerActor.Facing);
                     }
                     else
                     {

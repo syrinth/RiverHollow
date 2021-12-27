@@ -45,7 +45,7 @@ namespace RiverHollow.Misc
             _dCountDown += gTime.ElapsedGameTime.TotalSeconds;
             if (_dCountDown >= _dVanishAfter)
             {
-                TacticalCombatManager.RemoveFloatingText(this);
+
             }
         }
     }

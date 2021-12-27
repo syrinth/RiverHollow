@@ -104,25 +104,25 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             _liSprites = new List<GUISprite>();
 
-            _sprBody = new GUISprite(PlayerManager.World.BodySprite, overwrite);
-            _sprEyes = new GUISprite(PlayerManager.World.EyeSprite, overwrite);
-            _sprHair = new GUISprite(PlayerManager.World.HairSprite, overwrite);
+            _sprBody = new GUISprite(PlayerManager.PlayerActor.BodySprite, overwrite);
+            _sprEyes = new GUISprite(PlayerManager.PlayerActor.EyeSprite, overwrite);
+            _sprHair = new GUISprite(PlayerManager.PlayerActor.HairSprite, overwrite);
 
             if (_sprBody != null) { _liSprites.Add(_sprBody); }
             if (_sprEyes != null) { _liSprites.Add(_sprEyes); }
             if (_sprHair != null) { _liSprites.Add(_sprHair); }
-            if (PlayerManager.World.Hat != null) {
-                _sprHat = new GUISprite(PlayerManager.World.Hat.Sprite, overwrite);
+            if (PlayerManager.PlayerActor.Hat != null) {
+                _sprHat = new GUISprite(PlayerManager.PlayerActor.Hat.Sprite, overwrite);
                 _liSprites.Add(_sprHat);
             }
-            if (PlayerManager.World.Body != null)
+            if (PlayerManager.PlayerActor.Body != null)
             {
-                _sprChest = new GUISprite(PlayerManager.World.Body.Sprite, overwrite);
+                _sprChest = new GUISprite(PlayerManager.PlayerActor.Body.Sprite, overwrite);
                 _liSprites.Add(_sprChest);
             }
-            if (PlayerManager.World.Legs != null)
+            if (PlayerManager.PlayerActor.Legs != null)
             {
-                _sprLegs = new GUISprite(PlayerManager.World.Legs.Sprite, overwrite);
+                _sprLegs = new GUISprite(PlayerManager.PlayerActor.Legs.Sprite, overwrite);
                 _liSprites.Add(_sprLegs);
             }
 

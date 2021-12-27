@@ -72,7 +72,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         protected Texture2D _texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
         protected Color EnabledColor => _bEnabled ? _cColor : Color.Gray;
         protected bool _bEnabled = true;
-        public bool Enabled => _bEnabled;
+        public bool Enabled => _bEnabled && _bShow;
 
         private bool _bShow = true;
 
@@ -382,6 +382,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         #region Positioning Code
         public enum SideEnum { Bottom, BottomLeft, BottomRight, Center, CenterX, CenterY, Left, Right, Top, TopLeft, TopRight, };
+        public void ScaledMoveBy(int x, int y)
+        {
+            ScaledMoveBy(new Vector2(x, y));
+        }
+        private void ScaledMoveBy(Vector2 dir)
+        {
+            MoveBy(GameManager.ScaleIt((int)dir.X), GameManager.ScaleIt((int)dir.Y));
+        }
         public void MoveBy(Vector2 dir)
         {
             MoveBy(dir.X, dir.Y);

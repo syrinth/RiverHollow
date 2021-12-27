@@ -17,15 +17,14 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
     public class GUILiteCombatActorInfo : GUIObject
     {
         GUICombatTile _gAssignedTile;     //This tile is just a reference
-        LiteCombatActor _actor;
-        GUIStatDisplay _gHP;
-        GUIStatDisplay _gMP;
+        CombatActor _actor;
+        GUIHealthBar _gHP;
         GUILiteCombatActor _gLiteCombatActor;
         public GUISprite CharacterSprite => _gLiteCombatActor.CharacterSprite;
         public GUISprite CharacterWeaponSprite => _gLiteCombatActor.CharacterWeaponSprite;
         public GUICombatTile AssignedTile => _gAssignedTile;
 
-        public GUILiteCombatActorInfo(LiteCombatActor actor)
+        public GUILiteCombatActorInfo(CombatActor actor)
         {
             _actor = actor;
             _gLiteCombatActor = new GUILiteCombatActor(actor.BodySprite);
@@ -36,27 +35,21 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             _gLiteCombatActor.CharacterSprite.Reset();
             _gLiteCombatActor.CharacterWeaponSprite?.Reset();
 
-            _gHP = new GUIStatDisplay(actor.GetHP, Color.Green, 100);
+            _gHP = new GUIHealthBar(actor.CurrentHP, actor.MaxHP);
             _gHP.AnchorAndAlignToObject(_gLiteCombatActor, SideEnum.Bottom, SideEnum.CenterX);
+            _gHP.ScaledMoveBy(0, 1);
             AddControl(_gHP);
 
-            if (actor.MaxMP > 0)
-            {
-                _gMP = new GUIStatDisplay(actor.GetMP, Color.LightBlue, 100);
-                _gMP.AnchorAndAlignToObject(_gHP, SideEnum.Bottom, SideEnum.Left);
-                AddControl(_gMP);
-            }
 
             Width = _gLiteCombatActor.Width;
-            Height = _gMP.Bottom - _gLiteCombatActor.Top;
+            Height = _gLiteCombatActor.Bottom - _gLiteCombatActor.Top;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (LiteCombatManager.CurrentPhase == LiteCombatManager.PhaseEnum.PerformAction && LiteCombatManager.ActiveCharacter == _actor)
+            if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.PerformAction && CombatManager.ActiveCharacter == _actor)
             {
                 _gHP.Show(false);
-                if (_gMP != null) { _gMP.Show(false); }
             }
 
             foreach (GUIObject g in Controls)
@@ -65,17 +58,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             }
 
             _gHP.Show(true);
-            if (_gMP != null) { _gMP.Show(true); }
         }
 
         public void SetWeapon()
         {
             if (_actor.IsActorType(ActorEnum.PartyMember))
             {
-                LitePartyMember adv = (LitePartyMember)_actor;
+                ClassedCombatant adv = (ClassedCombatant)_actor;
                 CharacterClass cClass = adv.CharacterClass;
 
-                AnimatedSprite sprWeaponSprite = new AnimatedSprite(DataManager.FOLDER_ITEMS + "Combat\\Weapons\\" + cClass.WeaponType.ToString() + "\\" + adv.Weapon.GetItem().ItemID);
+                AnimatedSprite sprWeaponSprite = new AnimatedSprite(DataManager.FOLDER_ITEMS + "Combat\\Weapons\\" + cClass.WeaponType.ToString() + "\\" + adv.GetEquipment(EquipmentEnum.Weapon).ItemID);
 
                 int xCrawl = 0;
                 RHSize frameSize = new RHSize(2, 2);
@@ -92,7 +84,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 sprWeaponSprite.AddAnimation(LiteCombatActionEnum.KO, (xCrawl * TILE_SIZE), 0, frameSize, 1, 0.5f);//cClass.KOFrames, cClass.KOFramesLength);
                 xCrawl += 1 * frameSize.Width; //cClass.KOFrames;
                 sprWeaponSprite.AddAnimation(LiteCombatActionEnum.Victory, (xCrawl * TILE_SIZE), 0, frameSize, 2, 0.5f);//cClass.WinFrames, cClass.WinFramesLength);
-                sprWeaponSprite.SetScale(LiteCombatManager.CombatScale);
+                sprWeaponSprite.SetScale(GameManager.CurrentScale);
 
                 _gLiteCombatActor.SetWeapon(sprWeaponSprite);
             }

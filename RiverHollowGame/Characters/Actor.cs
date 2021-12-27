@@ -15,7 +15,7 @@ namespace RiverHollow.Characters
     ///but they have been separated for ease of access
 
     /// <summary>
-    /// The base proprties and methods for each Actor
+    /// The base propreties and methods for each Actor
     /// </summary>
     public abstract class Actor
     {
@@ -28,6 +28,7 @@ namespace RiverHollow.Characters
 
         protected static string _sMerchantFolder = DataManager.FOLDER_ACTOR + @"Merchants\";
         protected static string _sPortraitFolder = DataManager.FOLDER_ACTOR + @"Portraits\";
+        protected static string _sCombatPortraits = DataManager.FOLDER_ACTOR + @"Portraits\CombatPortraits\";
         protected static string _sNPCFolder = DataManager.FOLDER_ACTOR + @"NPCs\";
         protected static string _sCreatureFolder = DataManager.FOLDER_ACTOR + @"Creatures\";
 

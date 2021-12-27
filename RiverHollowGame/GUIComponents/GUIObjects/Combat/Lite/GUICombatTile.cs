@@ -6,7 +6,6 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.Combat.Lite;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using System;
-using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects
@@ -23,8 +22,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public GUISprite SummonSprite => _gSummon;
         GUIText _gSummonEffect;
 
-        List<GUIStatus> _liStatus;
-
         LiteCombatTile _mapTile;
         public LiteCombatTile MapTile => _mapTile;
 
@@ -37,11 +34,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _mapTile.AssignGUITile(this);
            // _fDmg = DataManager.GetFont(@"Fonts\Font");
 
-            _gTile = new GUIImage(new Rectangle(128, 0, 32, 32), 32, 32, @"Textures\Dialog");
-            _gTile.SetScale(LiteCombatManager.CombatScale);
+            _gTile = new GUIImage(new Rectangle(145, 33, 30, 31), 30, 31, DataManager.COMBAT_TEXTURE);
+            _gTile.SetScale(GameManager.CurrentScale);
             //_gTargetter = new GUIImage(new Rectangle(256, 96, 32, 32), 32, 32, @"Textures\Dialog");
-
-            _liStatus = new List<GUIStatus>();
 
             Setup();
 
@@ -51,24 +46,20 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (LiteCombatManager.CurrentPhase == LiteCombatManager.PhaseEnum.ChooseTarget)
+            if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseTarget)
             {
-                _gTile.Alpha(LiteCombatManager.SelectedAction.LegalTiles.Contains(_mapTile) ? 1 : 0.5f);
+                _gTile.Alpha(CombatManager.SelectedAction.LegalTiles.Contains(_mapTile) ? 1 : 0.5f);
             }
             else
             {
                 _gTile.Alpha(1);
             }
 
-            if (LiteCombatManager.CurrentPhase != LiteCombatManager.PhaseEnum.PerformAction && LiteCombatManager.ActiveCharacter != null && LiteCombatManager.ActiveCharacter == _mapTile.Character)
+            if (CombatManager.SelectedAction != null)
             {
-                _gTile.SetColor(Color.Yellow);
+                _gTile.SetColor(CombatManager.SelectedAction.GetEffectedTiles().Contains(MapTile) ? Color.Red : Color.White);
             }
-            else if (LiteCombatManager.SelectedAction != null)
-            {
-                _gTile.SetColor(LiteCombatManager.SelectedAction.GetEffectedTiles().Contains(MapTile) ? Color.Red : Color.White);
-            }
-            else if (LiteCombatManager.SelectedAction == null) { _gTile.SetColor(Color.White); }
+            else if (CombatManager.SelectedAction == null) { _gTile.SetColor(Color.White); }
 
             _gTile.Draw(spriteBatch);
 
@@ -85,18 +76,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 if (_gSummon != null) { _gSummon.Draw(spriteBatch); }
 
                 _gCombatSprite.Draw(spriteBatch);
-
-                if (!(LiteCombatManager.CurrentPhase == LiteCombatManager.PhaseEnum.PerformAction && LiteCombatManager.ActiveCharacter == _mapTile.Character)
-                    && !(_mapTile.Character.IsActorType(ActorEnum.Monster) && _mapTile.Character.IsCurrentAnimation(LiteCombatActionEnum.KO)))
-                {
-                    foreach (GUIStatus stat in _liStatus)
-                    {
-                        if (_mapTile.Character.DiConditions[stat.Status])
-                        {
-                            stat.Draw(spriteBatch);
-                        }
-                    }
-                }
             }
 
             if (_gEffect != null && _iDmgTimer < 40)
@@ -150,13 +129,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
                 _gEffect = new GUIText();
                 _gEffect.AnchorAndAlignToObject(_gCombatSprite, SideEnum.Top, SideEnum.CenterX);
-
-                for (int i = 0; i < _liStatus.Count; i++)
-                {
-                    GUIStatus temp = _liStatus[i];
-                    if (i == 0) { temp.AnchorAndAlignToObject(_gCombatSprite, SideEnum.Bottom, SideEnum.Left); }
-                    else { temp.AnchorAndAlignToObject(_liStatus[i - 1], SideEnum.Right, SideEnum.Bottom); }
-                }
             }
         }
 
@@ -217,26 +189,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _gSummonEffect.SetColor(Color.Red);
         }
 
-        public void ChangeCondition(ConditionEnum c, TargetEnum target)
-        {
-            GUIStatus found = _liStatus.Find(test => test.Status == c);
-            if (target.Equals(TargetEnum.Enemy) && found == null)       //If it targets an enemy, we add it
-            {
-                _liStatus.Add(new GUIStatus(c));
-            }
-            else if (target.Equals(TargetEnum.Ally) && found != null)    //If it targets an ally, we remove it
-            {
-                _liStatus.Remove(found);
-            }
-
-            _liStatus.Sort((x, y) => x.Status.CompareTo(y.Status));
-            for (int i = 0; i < _liStatus.Count; i++)
-            {
-                if (i == 0) { _liStatus[i].AnchorAndAlignToObject(_gCombatSprite, SideEnum.Bottom, SideEnum.Left); }
-                else { _liStatus[i].AnchorAndAlignToObject(_liStatus[i - 1], SideEnum.Right, SideEnum.Bottom); }
-            }
-        }
-
         public bool Occupied()
         {
             return _mapTile.Occupied();
@@ -256,9 +208,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
             bool rv = false;
             if (Contains(mouse))
             {
-                if (LiteCombatManager.PhaseChooseTarget())
+                if (CombatManager.PhaseChooseTarget())
                 {
-                    LiteCombatManager.TestHoverTile(_mapTile);
+                    CombatManager.TestHoverTile(_mapTile);
                     rv = true;
                 }
             }
@@ -288,7 +240,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             temp.AlignToObject(this, SideEnum.CenterX);
             temp.AlignToObject(this, SideEnum.Bottom);
-            temp.MoveBy(0, -(this.Height / 3));
+            temp.ScaledMoveBy(0, -12);
 
             return temp.Position();
         }

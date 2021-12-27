@@ -211,11 +211,11 @@
     </Item>
     <Item>
       <Key>Action_2</Key>
-      <Value>[Name:Use Spell]</Value>
+      <Value>[Name:Flame Burst]</Value>
     </Item>
     <Item>
       <Key>Action_3</Key>
-      <Value>[Name:End Turn]</Value>
+      <Value>[Name:Icy Mist]</Value>
     </Item>
     <Item>
       <Key>Action_4</Key>
@@ -223,7 +223,7 @@
     </Item>
     <Item>
       <Key>Action_5</Key>
-      <Value>[Name:Eldritch Blast]</Value>
+      <Value>[Name:Earthen Crush]</Value>
     </Item>
     <Item>
       <Key>Action_6</Key>
@@ -575,7 +575,7 @@
     </Item>
     <Item>
       <Key>StatusEffect_0</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Defend]</Value>
     </Item>
     <Item>
       <Key>StatusEffect_1</Key>

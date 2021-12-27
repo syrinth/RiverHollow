@@ -34,7 +34,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (_liDataWindows.Count > 0)
             {
-                GUIList _gli = new GUIList(_liDataWindows, 10, 20, RiverHollow.ScreenHeight);
+                List _gli = new List(_liDataWindows, 10, 20, RiverHollow.ScreenHeight);
                 _gli.CenterOnScreen();
                 AddControl(_gli);
                 //GUIObject.CreateSpacedColumn(ref _liDataWindows, RiverHollow.ScreenWidth / 2, 0, RiverHollow.ScreenHeight, 20);

@@ -9,79 +9,54 @@ namespace RiverHollow.CombatStuff
 {
     public class StatusEffect
     {
-        public LiteCombatActor LiteCaster;
-        public TacticalCombatActor TacticalCaster;
-        private bool _bDoT;
-        public bool DoT => _bDoT;
-        private bool _bHoT;
-        public bool HoT => _bHoT;
-        public bool _bSong;
-        public bool Song => _bSong;
-        private int _iID;
+        public CombatActor SkillUser;
+        StatusTypeEnum _eEffectType;
+        public StatusTypeEnum EffectType => _eEffectType;
+        public int ID { get; }
         private string _sName;
         public string Name => _sName;
         int _iPotency;
         public int Potency => _iPotency;
-        public int Duration;
-        private List<KeyValuePair<StatEnum, int>> _liStats;
-        public List<KeyValuePair<StatEnum, int>> StatMods  => _liStats;
-        private int _conditionID;
+        int _iDuration;
+        public int Duration => _iDuration;
+        public List<KeyValuePair<AttributeEnum, int>> AttributeEffects { get; }
+
         private string _sDescription;
         public string Description { get => _sDescription; }
 
-        private bool _bCounter;
-        public bool Counter => _bCounter;
-
-        private bool _bGuard;
-        public bool Guard => _bGuard;
-
         public StatusEffect(int id, Dictionary<string, string> data)
         {
-            _iID = id;
-            DataManager.GetTextData("StatusEffect", _iID, ref _sName, "Name");
-            DataManager.GetTextData("StatusEffect", _iID, ref _sDescription, "Description");
+            ID = id;
+            DataManager.GetTextData("StatusEffect", ID, ref _sName, "Name");
+            DataManager.GetTextData("StatusEffect", ID, ref _sDescription, "Description");
 
-            _liStats = new List<KeyValuePair<StatEnum, int>>();
+            AttributeEffects = new List<KeyValuePair<AttributeEnum, int>>();
             ImportBasics(id, data);
         }
+
         protected void ImportBasics(int id, Dictionary<string, string> data)
         {
-            //This is where we parse for stats effected
-            if (data.ContainsKey("Buff"))
+            Util.AssignValue(ref _iDuration, "Duration", data);
+            Util.AssignValue(ref _iPotency, "Potency", data);
+            Util.AssignValue(ref _eEffectType, "Type", data);
+
+            if (data.ContainsKey("Modify"))
             {
-                string[] splitEffects = data["Buff"].Split(' ');
+                string[] splitEffects = Util.FindParams(data["Modify"]);
                 foreach (string effect in splitEffects)
                 {
-                    string[] statMods = effect.Split('-');
-                    _liStats.Add(new KeyValuePair<StatEnum, int>(Util.ParseEnum<StatEnum>(statMods[0]), int.Parse(statMods[1])));
+                    string[] attributeMod = effect.Split('-');
+                    int value = attributeMod[1] == "Minor" ? 10 : 0;
+                    AttributeEffects.Add(new KeyValuePair<AttributeEnum, int>(Util.ParseEnum<AttributeEnum>(attributeMod[0]), value));
                 }
             }
-
-            if (data.ContainsKey("Debuff"))
-            {
-                string[] splitEffects = data["Debuff"].Split(' ');
-                foreach (string effect in splitEffects)
-                {
-                    string[] statMods = effect.Split('-');
-                    _liStats.Add(new KeyValuePair<StatEnum, int>(Util.ParseEnum<StatEnum>(statMods[0]), -int.Parse(statMods[1])));
-                }
-            }
-
-            if (data.ContainsKey("Potency"))
-            {
-                _iPotency = int.Parse(data["Potency"]);
-            }
-
-            _bHoT = data.ContainsKey("HoT");
-            _bDoT = data.ContainsKey("DoT");
-
-            _bSong = data.ContainsKey("Song");
-
-            _bCounter = data.ContainsKey("Counter");
-            _bGuard = data.ContainsKey("Guard");
         }
 
-        public void AssignCaster(LiteCombatActor act) { LiteCaster = act; }
-        public void AssignCaster(TacticalCombatActor act) { TacticalCaster = act; }
+        public void TickDown()
+        {
+            _iDuration--;
+        }
+
+        public void AssignCaster(CombatActor act) { SkillUser = act; }
     }
 }

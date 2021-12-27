@@ -8,6 +8,7 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens;
+using RiverHollow.Items;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System;
@@ -30,7 +31,6 @@ namespace RiverHollow.Tile_Engine
         private string _sName;
         public string Name { get => _sName.Replace(@"Maps\", ""); } //Fuck off with that path bullshit
 
-        public bool IsCombatMap => MonsterSpawnPoints.Count > 0;
         public string DungeonName { get; private set; } = string.Empty;
         public bool IsDungeon => !string.IsNullOrEmpty(DungeonName);
         public bool IsTown { get; private set; }
@@ -64,13 +64,11 @@ namespace RiverHollow.Tile_Engine
         private List<Light> _liHeldLights;
         private List<RHTile> _liTestTiles;
         private List<WorldActor> _liActors;
-        protected List<LiteMob> _liMobs;
-        public List<TacticalMonster> Monsters { get; }
-        private List<TacticalSummon> _liSummons;
+        protected List<Mob> _liMobs;
         public List<WorldActor> ToAdd;
         private List<Building> _liBuildings;
         private List<WorldObject> _liPlacedWorldObjects;
-        public List<MonsterSpawn> MonsterSpawnPoints { get; private set; }
+       // public List<MonsterSpawn> MonsterSpawnPoints { get; private set; }
         private List<ResourceSpawn> _liResourceSpawnPoints;
         private List<int> _liCutscenes;
         private Dictionary<RarityEnum, List<int>> _diResources;
@@ -91,15 +89,12 @@ namespace RiverHollow.Tile_Engine
 
         public RHMap()
         {
-            MonsterSpawnPoints = new List<MonsterSpawn>();
             _liResourceSpawnPoints = new List<ResourceSpawn>();
             _liWallTiles = new List<RHTile>();
             _liTestTiles = new List<RHTile>();
             _liTilesets = new List<TiledMapTileset>();
             _liActors = new List<WorldActor>();
-            _liMobs = new List<LiteMob>();
-            Monsters = new List<TacticalMonster>();
-            _liSummons = new List<TacticalSummon>();
+            _liMobs = new List<Mob>();
             _liBuildings = new List<Building>();
             _liItems = new List<Item>();
             _liMapObjects = new List<TiledMapObject>();
@@ -265,21 +260,11 @@ namespace RiverHollow.Tile_Engine
 
                 EnvironmentManager.Update(gTime);
 
-                if (TacticalCombatManager.InCombat || IsRunning())
+                if (IsRunning())
                 {
-                    foreach (LiteMob m in _liMobs)
+                    foreach (Mob m in _liMobs)
                     {
                         m.Update(gTime);
-                    }
-
-                    foreach (TacticalMonster m in Monsters)
-                    {
-                        m.Update(gTime);
-                    }
-
-                    foreach (TacticalSummon s in _liSummons)
-                    {
-                        s.Update(gTime);
                     }
                 }
 
@@ -319,13 +304,7 @@ namespace RiverHollow.Tile_Engine
                 switch (c.ActorType)
                 {
                     case ActorEnum.Mob:
-                        _liMobs.Remove((LiteMob)c);
-                        break;
-                    case ActorEnum.Monster:
-                        Monsters.Remove((TacticalMonster)c);
-                        break;
-                    case ActorEnum.Summon:
-                        _liSummons.Remove((TacticalSummon)c);
+                        _liMobs.Remove((Mob)c);
                         break;
                     default:
                         _liActors.Remove(c);
@@ -376,45 +355,14 @@ namespace RiverHollow.Tile_Engine
 
             _renderer.Draw(_map, Camera._transform);
 
-            if (TacticalCombatManager.InCombat)
-            {
-                if (TacticalCombatManager.ActiveCharacter != null && TacticalCombatManager.ActiveCharacter.IsActorType(ActorEnum.Villager))
-                {
-                    TacticalCombatManager.ActiveCharacter.BaseTile?.Draw(spriteBatch);
-                }
-
-                foreach (RHTile t in TacticalCombatManager.LegalTiles)
-                {
-                    t.Draw(spriteBatch);
-                }
-
-                foreach (RHTile t in TacticalCombatManager.AreaTiles)
-                {
-                    if (!TacticalCombatManager.LegalTiles.Contains(t))
-                    {
-                        t.Draw(spriteBatch);
-                    }
-                }
-            }
-
             foreach (WorldActor c in _liActors)
             {
                 c.Draw(spriteBatch, true);
             }
 
-            foreach (LiteMob m in _liMobs)
+            foreach (Mob m in _liMobs)
             {
                 m.Draw(spriteBatch, true);
-            }
-
-            foreach (TacticalMonster m in Monsters)
-            {
-                m.Draw(spriteBatch, true);
-            }
-
-            foreach (TacticalSummon s in _liSummons)
-            {
-                s.Draw(spriteBatch, true);
             }
 
             foreach (Building b in _liBuildings)
@@ -654,11 +602,6 @@ namespace RiverHollow.Tile_Engine
                         _liItems.Add(item);
                     }
                 }
-
-                if (tiledObj.Name.Equals("SpawnPoint"))
-                {
-                    MonsterSpawnPoints.Add(new MonsterSpawn(this, tiledObj));
-                }
             }
 
             SpawnMapEntities();
@@ -668,15 +611,14 @@ namespace RiverHollow.Tile_Engine
         {
             if (spawnEnemies) {
                 if (RiverHollow.COMBAT_STYLE == CombatStyleEnum.Lite) { SpawnMobs(); }
-                else { SpawnMonsters(); }
+                //else { SpawnMonsters(); }
             }
             SpawnResources(GetSkipTiles(loaded));
         }
 
         public void ClearMapEntities()
         {
-            foreach (LiteMob m in _liMobs) { RemoveActor(m); }
-            foreach (TacticalMonster m in Monsters) { RemoveActor(m); }
+            foreach (Mob m in _liMobs) { RemoveActor(m); }
             foreach (WorldObject obj in _liPlacedWorldObjects)
             {
                 switch (obj.Type)
@@ -708,62 +650,28 @@ namespace RiverHollow.Tile_Engine
         {
             List<RHTile> skipTiles = new List<RHTile>();
 
-            if (IsCombatMap)
-            {
-                foreach (BattleStartInfo bInfo in DictionaryBattleStarts.Values)
-                {
-                    foreach (RHTile tile in bInfo.CombatTiles)
-                    {
-                        skipTiles.Add(tile);
-                    }
-                }
-                foreach (TravelPoint tp in DictionaryTravelPoints.Values)
-                {
-                    foreach (RHTile tile in GetTilesFromRectangle(tp.CollisionBox))
-                    {
-                        Util.AddUniquelyToList(ref skipTiles, tile);
+            //if (IsCombatMap)
+            //Z{
+            //    foreach (BattleStartInfo bInfo in DictionaryBattleStarts.Values)
+            //    {
+            //        foreach (RHTile tile in bInfo.CombatTiles)
+            //        {
+            //            skipTiles.Add(tile);
+            //        }
+            //    }
+            //    foreach (TravelPoint tp in DictionaryTravelPoints.Values)
+            //    {
+            //        foreach (RHTile tile in GetTilesFromRectangle(tp.CollisionBox))
+            //        {
+            //            Util.AddUniquelyToList(ref skipTiles, tile);
 
-                        foreach (RHTile neighbour in tile.GetWalkableNeighbours())
-                        {
-                            Util.AddUniquelyToList(ref skipTiles, neighbour);
-                        }
-                    }
-                }
-
-                if (!loaded)
-                {
-                    foreach (MonsterSpawn spawn in MonsterSpawnPoints)
-                    {
-                        foreach (KeyValuePair<string, BattleStartInfo> kvp in DictionaryBattleStarts)
-                        {
-                            Vector2 pos = spawn.Position;
-                            List<RHTile> path = TravelManager.FindPathToLocation(ref pos, kvp.Value.CombatTiles[0, 0].Position, this.Name, false, true);
-                            if (path != null)
-                            {
-                                bool connected = false;
-                                foreach (RHTile tile in path)
-                                {
-                                    if (!skipTiles.Contains(tile))
-                                    {
-                                        foreach (RHTile neighbour in tile.GetWalkableNeighbours())
-                                        {
-                                            if (skipTiles.Contains(neighbour) && !path.Contains(neighbour))
-                                            {
-                                                connected = true;
-                                                break;
-                                            }
-                                        }
-                                        skipTiles.Add(tile);
-                                        if (connected) { break; }
-
-                                    }
-                                }
-                            }
-                        }
-                        skipTiles.Add(GetTileByPixelPosition(spawn.Position));
-                    }
-                }
-            }
+            //            foreach (RHTile neighbour in tile.GetWalkableNeighbours())
+            //            {
+            //                Util.AddUniquelyToList(ref skipTiles, neighbour);
+            //            }
+            //        }
+            //    }
+            //}
 
             return skipTiles;
         }
@@ -774,7 +682,7 @@ namespace RiverHollow.Tile_Engine
 
             if (!_bModular)
             {
-                SpawnMonsters();
+                //SpawnMonsters();
             }
 
             CheckSpirits();
@@ -850,69 +758,69 @@ namespace RiverHollow.Tile_Engine
 
         private void SpawnMobs()
         {
-            LiteMob m = DataManager.GetMobByIndex(0);
+            Mob m = DataManager.GetMobByIndex(0);
             m.Position = new Vector2(100, 100);
             m.CurrentMapName = this.Name;
             _liMobs.Add(m);
         }
 
-        /// <summary>
-        /// Call this to make the MonsterSpawns on the map spawn their monsters
-        /// </summary>
-        private void SpawnMonsters()
-        {
-            //Remove all monsters from the map
-            foreach (TacticalMonster m in Monsters)
-            {
-                RemoveActor(m);
-            }
-            Monsters.Clear();
+        ///// <summary>
+        ///// Call this to make the MonsterSpawns on the map spawn their monsters
+        ///// </summary>
+        //private void SpawnMonsters()
+        //{
+        //    //Remove all monsters from the map
+        //    foreach (TacticalMonster m in Monsters)
+        //    {
+        //        RemoveActor(m);
+        //    }
+        //    Monsters.Clear();
 
-            if (PrimedFood != null)
-            {
-                //Check to see if the spawn points have been set by MonsterFood and
-                //resets any monsters that may already be set to them.
-                foreach (MonsterSpawn spawn in MonsterSpawnPoints)
-                {
-                    if (spawn.IsPrimed)
-                    {
-                        spawn.Spawn();
-                    }
-                    else
-                    {
-                        spawn.ClearSpawn();
-                    }
-                }
-                _liItemsToRemove.Add(PrimedFood);
-                PrimedFood = null;
-            }
-            else
-            {
-                //Copy the spawn points to a list we can safely modify
-                List<MonsterSpawn> spawnCopy = new List<MonsterSpawn>();
-                spawnCopy.AddRange(MonsterSpawnPoints);
+        //    if (PrimedFood != null)
+        //    {
+        //        //Check to see if the spawn points have been set by MonsterFood and
+        //        //resets any monsters that may already be set to them.
+        //        foreach (MonsterSpawn spawn in MonsterSpawnPoints)
+        //        {
+        //            if (spawn.IsPrimed)
+        //            {
+        //                spawn.Spawn();
+        //            }
+        //            else
+        //            {
+        //                spawn.ClearSpawn();
+        //            }
+        //        }
+        //        _liItemsToRemove.Add(PrimedFood);
+        //        PrimedFood = null;
+        //    }
+        //    else
+        //    {
+        //        //Copy the spawn points to a list we can safely modify
+        //        List<MonsterSpawn> spawnCopy = new List<MonsterSpawn>();
+        //        spawnCopy.AddRange(MonsterSpawnPoints);
 
-                //Trigger x number of SpawnPoints
-                for (int i = 0; i < _iActiveSpawnPoints; i++)
-                {
-                    try
-                    {
-                        //Get a random Spawn Point
-                        int point = RHRandom.Instance().Next(0, spawnCopy.Count - 1);
-                        if (!spawnCopy[point].HasSpawned())
-                        {
-                            //Trigger the Spawn point and remove it from the copied list
-                            //so it won't be an option for future spawning.
-                            spawnCopy[point].Spawn();
-                            spawnCopy.RemoveAt(point);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-                }
-            }
-        }
+        //        //Trigger x number of SpawnPoints
+        //        for (int i = 0; i < _iActiveSpawnPoints; i++)
+        //        {
+        //            try
+        //            {
+        //                //Get a random Spawn Point
+        //                int point = RHRandom.Instance().Next(0, spawnCopy.Count - 1);
+        //                if (!spawnCopy[point].HasSpawned())
+        //                {
+        //                    //Trigger the Spawn point and remove it from the copied list
+        //                    //so it won't be an option for future spawning.
+        //                    spawnCopy[point].Spawn();
+        //                    spawnCopy.RemoveAt(point);
+        //                }
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //            }
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// Sets the MonsterFood for the map
@@ -922,24 +830,24 @@ namespace RiverHollow.Tile_Engine
         {
             PrimedFood = f;
 
-            //Copy the spawn points to a list we can safely modify
-            List<MonsterSpawn> spawnCopy = new List<MonsterSpawn>();
-            spawnCopy.AddRange(MonsterSpawnPoints);
+            ////Copy the spawn points to a list we can safely modify
+            //List<MonsterSpawn> spawnCopy = new List<MonsterSpawn>();
+            //spawnCopy.AddRange(MonsterSpawnPoints);
 
-            int spawnNum = PrimedFood.SpawnNumber;
-            //For safety, but this looks like bad design
-            if (spawnNum > spawnCopy.Count) { spawnNum = spawnCopy.Count; }
+            //int spawnNum = PrimedFood.SpawnNumber;
+            ////For safety, but this looks like bad design
+            //if (spawnNum > spawnCopy.Count) { spawnNum = spawnCopy.Count; }
 
-            //Trigger x number of SpawnPoints
-            for (int i = 0; i < spawnNum; i++)
-            {
-                //Get a random Spawn Point
-                int point = RHRandom.Instance().Next(0, spawnCopy.Count - 1);
-                spawnCopy[point].SetSpawn(PrimedFood.SpawnID);
+            ////Trigger x number of SpawnPoints
+            //for (int i = 0; i < spawnNum; i++)
+            //{
+            //    //Get a random Spawn Point
+            //    int point = RHRandom.Instance().Next(0, spawnCopy.Count - 1);
+            //    spawnCopy[point].SetSpawn(PrimedFood.SpawnID);
 
-                //remove it from the copied list so it won't be an option for future spawning.
-                spawnCopy.RemoveAt(point);
-            }
+            //    //remove it from the copied list so it won't be an option for future spawning.
+            //    spawnCopy.RemoveAt(point);
+            //}
         }
 
         public List<RHTile> FindFreeTiles()
@@ -1078,12 +986,12 @@ namespace RiverHollow.Tile_Engine
 
         public bool ContainsActor(WorldActor c)
         {
-            return _liActors.Contains(c) || (c.IsActorType(ActorEnum.Monster) && Monsters.Contains((TacticalMonster)c));
+            return _liActors.Contains(c);//|| (c.IsActorType(ActorEnum.Monster) && Monsters.Contains((TacticalMonster)c));
         }
 
         public void ItemPickUpdate()
         {
-            WorldActor player = PlayerManager.World;
+            WorldActor player = PlayerManager.PlayerActor;
             for (int i = 0; i < _liItems.Count; i++)
             {
                 Item it = _liItems[i];
@@ -1118,7 +1026,7 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            if (checkPlayer && this == PlayerManager.World.CurrentMap && PlayerManager.World.CollisionIntersects(t.Rect)) { rv = true; }
+            if (checkPlayer && this == PlayerManager.PlayerActor.CurrentMap && PlayerManager.PlayerActor.CollisionIntersects(t.Rect)) { rv = true; }
             else
             {
                 foreach (WorldActor act in _liActors)
@@ -1207,7 +1115,7 @@ namespace RiverHollow.Tile_Engine
                         case ActorEnum.Pet:
                             break;
                         case ActorEnum.Mount:
-                            if (!PlayerManager.World.Mounted) { goto default; }
+                            if (!PlayerManager.PlayerActor.Mounted) { goto default; }
                             else { break; }
                         default:
                             list.Add(w.CollisionBox);
@@ -1217,9 +1125,9 @@ namespace RiverHollow.Tile_Engine
             }
 
             //If the actor is not the Player Character, add the Player Character's CollisionBox to the list as well
-            if (actor != PlayerManager.World && MapManager.CurrentMap == actor.CurrentMap && !actor.IsActorType(ActorEnum.Pet))
+            if (actor != PlayerManager.PlayerActor && MapManager.CurrentMap == actor.CurrentMap && !actor.IsActorType(ActorEnum.Pet))
             {
-                list.Add(PlayerManager.World.CollisionBox);
+                list.Add(PlayerManager.PlayerActor.CollisionBox);
             }
 
             return list;
@@ -1313,7 +1221,7 @@ namespace RiverHollow.Tile_Engine
             {
                 return false;
             }
-            else if (!ignoreCollisions && !(TacticalCombatManager.InCombat && c.CurrentMap.IsCombatMap))
+            else if (!ignoreCollisions)
             {
                 List<Rectangle> list = GetPossibleCollisions(c, dir);
                 ChangeDir(list, c.CollisionBox, ref dir, c.CurrentMapName);
@@ -1438,9 +1346,9 @@ namespace RiverHollow.Tile_Engine
 
             RHTile tile = MouseTile;
 
-            if (PlayerManager.World.Mounted && (tile.GetTravelPoint() == null || !PlayerManager.World.ActiveMount.CanEnterBuilding(tile.GetTravelPoint().LinkedMap)))
+            if (PlayerManager.PlayerActor.Mounted && (tile.GetTravelPoint() == null || !PlayerManager.PlayerActor.ActiveMount.CanEnterBuilding(tile.GetTravelPoint().LinkedMap)))
             {
-                PlayerManager.World.Dismount();
+                PlayerManager.PlayerActor.Dismount();
                 return true;
             }
 
@@ -1509,7 +1417,7 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            if (!PlayerManager.Busy && !TacticalCombatManager.InCombat)
+            if (!PlayerManager.Busy)
             {
                 //Ensure that we have a tile that we clicked on and that the player is close enough to interact with it.
                 TargetTile = MouseTile;
@@ -1924,13 +1832,7 @@ namespace RiverHollow.Tile_Engine
         {
             _liActorsToRemove.Add(c);
         }
-        public void CleanupSummons()
-        {
-            foreach (TacticalSummon s in _liSummons)
-            {
-                s.KO();
-            }
-        }
+
         public void DropItemsOnMap(List<Item> items, Vector2 position, bool flyingPop = true)
         {
             foreach (Item i in items)
@@ -2204,7 +2106,7 @@ namespace RiverHollow.Tile_Engine
             if (MapManager.Maps[c.CurrentMapName].ContainsActor(c))
             {
                 rv = true;
-                if (c.IsActorType(ActorEnum.Monster) && Monsters.Contains((TacticalMonster)c)) { Monsters.Remove((TacticalMonster)c); }
+                if (c.IsActorType(ActorEnum.Mob) && _liMobs.Contains((Mob)c)) { _liMobs.Remove((Mob)c); }
                 else if (_liActors.Contains(c)) { _liActors.Remove(c); }
             }
 
@@ -2225,7 +2127,7 @@ namespace RiverHollow.Tile_Engine
             {
                 rv = true;
 
-                if (c.IsActorType(ActorEnum.Monster) && !Monsters.Contains((TacticalMonster)c)) { Monsters.Add((TacticalMonster)c); }
+                if (c.IsActorType(ActorEnum.Mob) && !_liMobs.Contains((Mob)c)) { _liMobs.Add((Mob)c); }
                 else { Util.AddUniquelyToList(ref _liActors, c); }
 
                 c.CurrentMapName = _sName;
@@ -2236,38 +2138,38 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public void AddMonster(TacticalMonster m)
-        {
-            bool rv = false;
+        //public void AddMonster(TacticalMonster m)
+        //{
+        //    bool rv = false;
 
-            RHRandom rand = RHRandom.Instance();
-            Vector2 position = m.Position;
-            position.X = ((int)(position.X / TILE_SIZE)) * TILE_SIZE;
-            position.Y = ((int)(position.Y / TILE_SIZE)) * TILE_SIZE;
+        //    RHRandom rand = RHRandom.Instance();
+        //    Vector2 position = m.Position;
+        //    position.X = ((int)(position.X / TILE_SIZE)) * TILE_SIZE;
+        //    position.Y = ((int)(position.Y / TILE_SIZE)) * TILE_SIZE;
 
-            rv = _arrTiles[((int)position.X / TILE_SIZE), ((int)position.Y / TILE_SIZE)].Passable();
-            if (!rv)
-            {
-                do
-                {
-                    position.X = (int)(rand.Next(1, (MapWidthTiles - 1) * TILE_SIZE) / TILE_SIZE) * TILE_SIZE;
-                    position.Y = (int)(rand.Next(1, (MapHeightTiles - 1) * TILE_SIZE) / TILE_SIZE) * TILE_SIZE;
-                    rv = _arrTiles[((int)position.X / TILE_SIZE), ((int)position.Y / TILE_SIZE)].Passable();
-                } while (!rv);
-            }
+        //    rv = _arrTiles[((int)position.X / TILE_SIZE), ((int)position.Y / TILE_SIZE)].Passable();
+        //    if (!rv)
+        //    {
+        //        do
+        //        {
+        //            position.X = (int)(rand.Next(1, (MapWidthTiles - 1) * TILE_SIZE) / TILE_SIZE) * TILE_SIZE;
+        //            position.Y = (int)(rand.Next(1, (MapHeightTiles - 1) * TILE_SIZE) / TILE_SIZE) * TILE_SIZE;
+        //            rv = _arrTiles[((int)position.X / TILE_SIZE), ((int)position.Y / TILE_SIZE)].Passable();
+        //        } while (!rv);
+        //    }
 
-            if (rv)
-            {
-                AddMonsterByPosition(m, position);
-            }
-        }
+        //    if (rv)
+        //    {
+        //        AddMonsterByPosition(m, position);
+        //    }
+        //}
 
-        public void AddMonsterByPosition(TacticalMonster m, Vector2 position)
+        public void AddMonsterByPosition(Mob m, Vector2 position)
         {
             m.CurrentMapName = _sName;
             m.Position = Util.SnapToGrid(position);
 
-            Monsters.Add(m);
+            _liMobs.Add(m);
         }
 
         public void AddBuilding(Building b)
@@ -2277,12 +2179,6 @@ namespace RiverHollow.Tile_Engine
                 _liBuildings.Add(b);
                 b.SetHomeMap(_sName);
             }
-        }
-
-        public void AddSummon(TacticalSummon obj)
-        {
-            obj.CurrentMapName = _sName;
-            _liSummons.Add(obj);
         }
         #endregion
 
@@ -2607,111 +2503,111 @@ namespace RiverHollow.Tile_Engine
         }
     }
 
-    public class MonsterSpawn : SpawnPoint
-    {
-        TacticalMonster _monster;
-        Dictionary<string, Dictionary<RarityEnum, List<int>>> _diMonsterSpawns;
-        int _iPrimedMonsterID;
-        public bool IsPrimed => _iPrimedMonsterID != -1;
+    //public class MonsterSpawn : SpawnPoint
+    //{
+    //    TacticalMonster _monster;
+    //    Dictionary<string, Dictionary<RarityEnum, List<int>>> _diMonsterSpawns;
+    //    int _iPrimedMonsterID;
+    //    public bool IsPrimed => _iPrimedMonsterID != -1;
 
-        public MonsterSpawn(RHMap map, TiledMapObject obj) : base(map, obj)
-        {
-            _iPrimedMonsterID = -1;
-            _diMonsterSpawns = new Dictionary<string, Dictionary<RarityEnum, List<int>>>();
-            foreach (KeyValuePair<string, string> kvp in obj.Properties)
-            {
-                AssignMonsterIDs(kvp.Key, kvp.Value);
-            }
-        }
+    //    public MonsterSpawn(RHMap map, TiledMapObject obj) : base(map, obj)
+    //    {
+    //        _iPrimedMonsterID = -1;
+    //        _diMonsterSpawns = new Dictionary<string, Dictionary<RarityEnum, List<int>>>();
+    //        foreach (KeyValuePair<string, string> kvp in obj.Properties)
+    //        {
+    //            AssignMonsterIDs(kvp.Key, kvp.Value);
+    //        }
+    //    }
 
-        public void AssignMonsterIDs(string spawnKey, string spawnInfo)
-        {
-            //If the property starts with Spawn, it defines what mobs spawn under what conditions
-            //All, Weather, or Season are supported
-            if (spawnKey.StartsWith("Spawn-"))
-            {
-                //Prune out the word 'Spawn' and keep the other word 
-                string[] split = spawnKey.Split('-');
-                string spawnType = split[1];
+    //    public void AssignMonsterIDs(string spawnKey, string spawnInfo)
+    //    {
+    //        //If the property starts with Spawn, it defines what mobs spawn under what conditions
+    //        //All, Weather, or Season are supported
+    //        if (spawnKey.StartsWith("Spawn-"))
+    //        {
+    //            //Prune out the word 'Spawn' and keep the other word 
+    //            string[] split = spawnKey.Split('-');
+    //            string spawnType = split[1];
 
-                string[] monsterParams = Util.FindParams(spawnInfo);
-                foreach (string s in monsterParams)
-                {
-                    int monsterID = -1;
-                    RarityEnum monsterRarity = RarityEnum.C;
+    //            string[] monsterParams = Util.FindParams(spawnInfo);
+    //            foreach (string s in monsterParams)
+    //            {
+    //                int monsterID = -1;
+    //                RarityEnum monsterRarity = RarityEnum.C;
 
-                    Util.GetRarity(s, ref monsterID, ref monsterRarity);
+    //                Util.GetRarity(s, ref monsterID, ref monsterRarity);
 
-                    //If we haven't added a new dictionary for the spawnType, add one.
-                    if (!_diMonsterSpawns.ContainsKey(spawnType))
-                    {
-                        _diMonsterSpawns[spawnType] = new Dictionary<RarityEnum, List<int>>();
-                    }
+    //                //If we haven't added a new dictionary for the spawnType, add one.
+    //                if (!_diMonsterSpawns.ContainsKey(spawnType))
+    //                {
+    //                    _diMonsterSpawns[spawnType] = new Dictionary<RarityEnum, List<int>>();
+    //                }
 
-                    //If we haven't made a new list for the rarity yet, add one.
-                    if (!_diMonsterSpawns[spawnType].ContainsKey(monsterRarity))
-                    {
-                        _diMonsterSpawns[spawnType][monsterRarity] = new List<int>();
-                    }
+    //                //If we haven't made a new list for the rarity yet, add one.
+    //                if (!_diMonsterSpawns[spawnType].ContainsKey(monsterRarity))
+    //                {
+    //                    _diMonsterSpawns[spawnType][monsterRarity] = new List<int>();
+    //                }
 
-                    //Ad the MonsterID to the SpawnType and Rarity dictionaries
-                    _diMonsterSpawns[spawnType][monsterRarity].Add(monsterID);
-                }
-            }
-        }
+    //                //Ad the MonsterID to the SpawnType and Rarity dictionaries
+    //                _diMonsterSpawns[spawnType][monsterRarity].Add(monsterID);
+    //            }
+    //        }
+    //    }
 
-        /// <summary>
-        /// Tells the Spawn point to spawn a monster by checking it's spawnType and rarity dictionary.
-        /// If there is a primed monster, use that one instead.
-        /// </summary>
-        public override void Spawn()
-        {
-            if (_iPrimedMonsterID != -1) { _monster = DataManager.GetTacticalMonsterByIndex(_iPrimedMonsterID); }
-            else
-            {
-                //Find which spawn type we're using
-                string key = "All";
-                if (!_diMonsterSpawns.ContainsKey("All"))
-                {
-                    if (_diMonsterSpawns.ContainsKey(EnvironmentManager.GetWeatherString())) { key = EnvironmentManager.GetWeatherString(); }
-                    else { key = GameCalendar.GetSeason(); }
-                }
+    //    /// <summary>
+    //    /// Tells the Spawn point to spawn a monster by checking it's spawnType and rarity dictionary.
+    //    /// If there is a primed monster, use that one instead.
+    //    /// </summary>
+    //    public override void Spawn()
+    //    {
+    //        if (_iPrimedMonsterID != -1) { _monster = DataManager.GetTacticalMonsterByIndex(_iPrimedMonsterID); }
+    //        else
+    //        {
+    //            //Find which spawn type we're using
+    //            string key = "All";
+    //            if (!_diMonsterSpawns.ContainsKey("All"))
+    //            {
+    //                if (_diMonsterSpawns.ContainsKey(EnvironmentManager.GetWeatherString())) { key = EnvironmentManager.GetWeatherString(); }
+    //                else { key = GameCalendar.GetSeason(); }
+    //            }
 
-                //Roll against rarity and backtrack until we find one of the rolled type that exists.
-                RarityEnum rarityKey = Util.RollAgainstRarity(_diMonsterSpawns[key]);
+    //            //Roll against rarity and backtrack until we find one of the rolled type that exists.
+    //            RarityEnum rarityKey = Util.RollAgainstRarity(_diMonsterSpawns[key]);
 
-                int spawnArrIndex = (int)RHRandom.Instance().Next(0, _diMonsterSpawns[key][rarityKey].Count - 1);
-                _monster = DataManager.GetTacticalMonsterByIndex(_diMonsterSpawns[key][rarityKey][spawnArrIndex]);
-            }
+    //            int spawnArrIndex = (int)RHRandom.Instance().Next(0, _diMonsterSpawns[key][rarityKey].Count - 1);
+    //            _monster = DataManager.GetTacticalMonsterByIndex(_diMonsterSpawns[key][rarityKey][spawnArrIndex]);
+    //        }
 
-            _monster.SpawnPoint = this;
-            _map.AddMonsterByPosition(_monster, _vPosition);
+    //        _monster.SpawnPoint = this;
+    //        _map.AddMonsterByPosition(_monster, _vPosition);
 
-            if (_iPrimedMonsterID != -1)
-            {
-                _iPrimedMonsterID = -1;
-            }
-        }
+    //        if (_iPrimedMonsterID != -1)
+    //        {
+    //            _iPrimedMonsterID = -1;
+    //        }
+    //    }
 
-        public override bool HasSpawned()
-        {
-            return _monster != null;
-        }
+    //    public override bool HasSpawned()
+    //    {
+    //        return _monster != null;
+    //    }
 
-        /// <summary>
-        /// Sets what the next Monster to be spawned is
-        /// </summary>
-        /// <param name="id"></param>
-        public void SetSpawn(int id)
-        {
-            _iPrimedMonsterID = id;
-        }
+    //    /// <summary>
+    //    /// Sets what the next Monster to be spawned is
+    //    /// </summary>
+    //    /// <param name="id"></param>
+    //    public void SetSpawn(int id)
+    //    {
+    //        _iPrimedMonsterID = id;
+    //    }
 
-        public void ClearSpawn()
-        {
-            _monster = null;
-        }
-    }
+    //    public void ClearSpawn()
+    //    {
+    //        _monster = null;
+    //    }
+    //}
 
     public class ShopLocation
     {

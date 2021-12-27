@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
+using RiverHollow.Items;
 using RiverHollow.WorldObjects;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.WorldObjects.Buildable;
@@ -11,7 +12,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
     {
         protected GUIItemBox[,] _gItemBoxes;
 
-        protected int _iBoxSize = GUIItemBox.RECT_IMG.Width * (int)GameManager.CurrentScale;
+        protected int _iBoxSize = GUIItemBox.RECT_IMG.Width * GameManager.CurrentScale;
 
         protected int _columns;
         protected int _rows;

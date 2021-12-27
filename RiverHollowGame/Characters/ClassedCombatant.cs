@@ -2,117 +2,175 @@
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
-using RiverHollow.WorldObjects;
+using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.Items;
+using RiverHollow.SpriteAnimations;
+using RiverHollow.Utilities;
+using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 
-namespace RiverHollow.Characters
+namespace RiverHollow.Characters.Lite
 {
-    public abstract class ClassedCombatant : TacticalCombatActor
+    public class ClassedCombatant : CombatActor
     {
         #region Properties
-        public static List<int> LevelRange = new List<int> { 0, 20, 80, 160, 320, 640, 1280, 2560, 5120, 10240 };
+
+        public static List<int> LevelRange = new List<int> { 0, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240 };
 
         protected CharacterClass _class;
-        public CharacterClass CharacterClass => _class;
-        private int _classLevel;
-        public int ClassLevel => _classLevel;
+        public CharacterClass CharacterClass { get => _class; }
+        public int ClassLevel { get; private set; }
+        public int XP { get; private set; }
 
-        private Vector2 _vStartPosition;
-        public Vector2 StartPosition => _vStartPosition;
+        protected Dictionary<EquipmentEnum, Equipment> _diGear;
+        protected Dictionary<EquipmentEnum, Equipment> _diGearComparison;
 
-        private int _iXP;
-        public int XP => _iXP;
+        public override List<CombatAction> Actions { get => _class.Actions; }
 
-        public bool Protected;
-
-        public List<GearSlot> _liGearSlots;
-        public GearSlot Weapon;
-        public GearSlot Armor;
-        public GearSlot Head;
-        public GearSlot Wrist;
-        public GearSlot Accessory1;
-        public GearSlot Accessory2;
-
-        public override int Attack => GetGearAtk();
-        public override int StatStr => 10 + _iBuffStr + GetGearStat(StatEnum.Str);
-        public override int StatDef => 10 + _iBuffDef + GetGearStat(StatEnum.Def) + (Protected ? 10 : 0);
-        public override int StatVit => 10 + (_classLevel * _class.StatVit) + GetGearStat(StatEnum.Vit);
-        public override int StatMag => 10 + _iBuffMag + GetGearStat(StatEnum.Mag);
-        public override int StatRes => 10 + _iBuffRes + GetGearStat(StatEnum.Res);
-        public override int StatSpd => 10 + _class.StatSpd + _iBuffSpd + GetGearStat(StatEnum.Spd);
-
-        public int TempStatStr => 10 + _iBuffStr + GetTempGearStat(StatEnum.Str);
-        public int TempStatDef => 10 + _iBuffDef + GetTempGearStat(StatEnum.Def) + (Protected ? 10 : 0);
-        public int TempStatVit => 10 + (_classLevel * _class.StatVit) + GetTempGearStat(StatEnum.Vit);
-        public int TempStatMag => 10 + _iBuffMag + GetTempGearStat(StatEnum.Mag);
-        public int TempStatRes => 10 + _iBuffRes + GetTempGearStat(StatEnum.Res);
-        public int TempStatSpd => 10 + _class.StatSpd + _iBuffSpd + GetTempGearStat(StatEnum.Spd);
-
-        public override List<TacticalMenuAction> TacticalAbilityList => _class.TacticalActionList;
-        public List<LiteMenuAction> LiteAbilityList => _class.LiteActionList;
-
-        public int GetGearAtk()
+        #endregion
+        public ClassedCombatant() : base()
         {
-            int rv = 0;
+            _eActorType = ActorEnum.PartyMember;
+            ClassLevel = 1;
 
-            rv += Weapon.GetStat(StatEnum.Atk);
-            rv += base.Attack;
+            _diGear = new Dictionary<EquipmentEnum, Equipment>();
+            foreach (EquipmentEnum e in Enum.GetValues(typeof(EquipmentEnum))) { _diGear[e] = null; }
 
-            return rv;
+            _diGearComparison = new Dictionary<EquipmentEnum, Equipment>();
+            foreach (EquipmentEnum e in Enum.GetValues(typeof(EquipmentEnum))) { _diGearComparison[e] = null; }
         }
-        public int GetGearStat(StatEnum stat)
+
+        public override void LoadContent(string texture)
+        {
+            _sprBody = new AnimatedSprite(texture);
+            int xCrawl = 0;
+            RHSize frameSize = new RHSize(2, 2);
+            _sprBody.AddAnimation(LiteCombatActionEnum.Idle, xCrawl * TILE_SIZE, 0, frameSize, 2, 0.5f);
+            xCrawl += 2 * frameSize.Width;
+            _sprBody.AddAnimation(LiteCombatActionEnum.Cast, xCrawl * TILE_SIZE, 0, frameSize, 3, 0.4f);
+            xCrawl += 3 * frameSize.Width;
+            _sprBody.AddAnimation(LiteCombatActionEnum.Hurt, xCrawl * TILE_SIZE, 0, frameSize, 1, 0.5f);
+            xCrawl += 1 * frameSize.Width;
+            _sprBody.AddAnimation(LiteCombatActionEnum.Attack, xCrawl * TILE_SIZE, 0, frameSize, 1, 0.3f);
+            xCrawl += 1 * frameSize.Width;
+            _sprBody.AddAnimation(LiteCombatActionEnum.Critical, xCrawl * TILE_SIZE, 0, frameSize, 2, 0.9f);
+            xCrawl += 2 * frameSize.Width;
+            _sprBody.AddAnimation(LiteCombatActionEnum.KO, xCrawl * TILE_SIZE, 0, frameSize, 1, 0.5f);
+            xCrawl += 1 * frameSize.Width;
+            _sprBody.AddAnimation(LiteCombatActionEnum.Victory, xCrawl * TILE_SIZE, 0, frameSize, 2, 0.5f);
+
+            _sprBody.PlayAnimation(LiteCombatActionEnum.Idle);
+            _sprBody.SetScale((int)GameManager.NORMAL_SCALE);
+            _iBodyWidth = frameSize.Width * (int)GameManager.NORMAL_SCALE;
+            _iBodyHeight = frameSize.Height * (int)GameManager.NORMAL_SCALE;
+        }
+
+        public override GUIImage GetIcon()
+        {
+            return new GUIImage(new Rectangle(0, 0, 18, 18), ScaleIt(18), ScaleIt(18), DataManager.GetTexture(_sCombatPortraits + "V_" + (_class.ID +1).ToString("00")));
+
+        }
+        public virtual void SetClass(CharacterClass x)
+        {
+            _class = x;
+            _iCurrentHP = MaxHP;
+
+            //Weapon.SetGear((Equipment)DataManager.GetItem(_class.WeaponID));
+           // Armor.SetGear((Equipment)DataManager.GetItem(_class.ArmorID));
+           // Head.SetGear((Equipment)DataManager.GetItem(_class.HeadID));
+            //Wrist.SetGear((Equipment)DataManager.GetItem(_class.WristID));
+
+            LoadContent(DataManager.FOLDER_PARTY + "Wizard");
+        }
+
+        public void AddXP(int x)
+        {
+            XP += x;
+            if (XP >= LevelRange[ClassLevel])
+            {
+                ClassLevel++;
+            }
+        }
+
+        public void GetXP(ref double curr, ref double max)
+        {
+            curr = XP;
+            max = ClassedCombatant.LevelRange[this.ClassLevel];
+        }
+
+        public override int Attribute(AttributeEnum e)
+        {
+            if (e == AttributeEnum.Damage)
+            {
+                return GearAttribute(e);
+            }
+            else
+            {
+                return 10 + _diAttributes[e] + _class.Attribute(e) + _diEffectedAttributes[e].Value + GearAttribute(e);
+            }
+        }
+
+        public int GearAttribute(AttributeEnum e)
         {
             int rv = 0;
-            if (_liGearSlots != null)
+
+            foreach (Equipment g in _diGear.Values)
             {
-                foreach (GearSlot g in _liGearSlots)
+                if (g != null)
                 {
-                    rv += g.GetStat(stat);
+                    rv += g.Attribute(e);
                 }
             }
 
             return rv;
         }
-        public int GetTempGearStat(StatEnum stat)
+
+        public int TempAttribute(AttributeEnum e)
+        {
+            if (e == AttributeEnum.Damage)
+            {
+                return GearAttrComparison(e);
+            }
+            else
+            {
+                return 10 + _diAttributes[e] + _class.Attribute(e) + _diEffectedAttributes[e].Value + GearAttrComparison(e);
+            }
+        }
+
+        public int GearAttrComparison(AttributeEnum attr)
         {
             int rv = 0;
 
-            foreach (GearSlot g in _liGearSlots)
+            foreach (EquipmentEnum e in Enum.GetValues(typeof(EquipmentEnum)))
             {
-                rv += g.GetTempStat(stat);
+                if (_diGearComparison[e] != null)
+                {
+                    rv = _diGearComparison[e].Attribute(attr);
+                }
+                else if (_diGear[e] != null)
+                {
+                    rv = _diGear[e].Attribute(attr);
+                }
             }
 
             return rv;
         }
-        #endregion
 
-        public ClassedCombatant() : base()
+        public void Unequip(EquipmentEnum e) { _diGear[e] = null; }
+        public void Equip(Equipment e) { _diGear[e.EquipType] = e; }
+        public Equipment GetEquipment(EquipmentEnum e) { return _diGear[e]; }
+
+        public void EquipComparator(Equipment e) { _diGearComparison[e.EquipType] = e; }
+        public Equipment GetEquipmentCompare(EquipmentEnum e) { return _diGearComparison[e]; }
+
+        public void ClearEquipmentCompare()
         {
-            _classLevel = 1;
-
-            _liGearSlots = new List<GearSlot>();
-            Weapon = new GearSlot(EquipmentEnum.Weapon);
-            Armor = new GearSlot(EquipmentEnum.Armor);
-            Head = new GearSlot(EquipmentEnum.Head);
-            Wrist = new GearSlot(EquipmentEnum.Wrist);
-            Accessory1 = new GearSlot(EquipmentEnum.Accessory);
-            Accessory2 = new GearSlot(EquipmentEnum.Accessory);
-
-            _liGearSlots.Add(Weapon);
-            _liGearSlots.Add(Armor);
-            _liGearSlots.Add(Head);
-            _liGearSlots.Add(Wrist);
-            _liGearSlots.Add(Accessory1);
-            _liGearSlots.Add(Accessory2);
-        }
-
-        public virtual void SetClass(CharacterClass x)
-        {
-            _class = x;
-            _iCurrentHP = MaxHP;
-            _iCurrentMP = MaxMP;
+            foreach (EquipmentEnum e in Enum.GetValues(typeof(EquipmentEnum)))
+            {
+                _diGearComparison[e] = null;
+            }
         }
 
         /// <summary>
@@ -121,125 +179,30 @@ namespace RiverHollow.Characters
         /// </summary>
         public void AssignStartingGear()
         {
-            if (Weapon.IsEmpty()) { Weapon.SetGear((Equipment)DataManager.GetItem(_class.WeaponID)); }
-            if (Armor.IsEmpty()) { Armor.SetGear((Equipment)DataManager.GetItem(_class.ArmorID)); }
-            if (Head.IsEmpty()) { Head.SetGear((Equipment)DataManager.GetItem(_class.HeadID)); }
-            if (Wrist.IsEmpty()) { Wrist.SetGear((Equipment)DataManager.GetItem(_class.WristID)); }
-        }
-
-        public void AddXP(int x)
-        {
-            _iXP += x;
-            if (_iXP >= LevelRange[_classLevel])
-            {
-                _classLevel++;
-            }
-        }
-
-        public void GetXP(ref double curr, ref double max)
-        {
-            curr = _iXP;
-            max = ClassedCombatant.LevelRange[this.ClassLevel];
-        }
-
-        #region StartPosition
-        public void IncreaseStartPos()
-        {
-            if (_vStartPosition.Y < 2)
-            {
-                _vStartPosition.Y++;
-            }
-            else
-            {
-                _vStartPosition = new Vector2(_vStartPosition.X++, 0);
-            }
-        }
-
-        public void SetStartPosition(Vector2 pos)
-        {
-            _vStartPosition = pos;
-        }
-        #endregion
-
-        /// <summary>
-        /// Retrieves te list of skills the character has based off of their class
-        /// that is also valid based off of their current level.
-        /// </summary>
-        /// <returns></returns>
-        public override List<TacticalCombatAction> GetCurrentSpecials()
-        {
-            List<TacticalCombatAction> rvList = new List<TacticalCombatAction>();
-
-            rvList.AddRange(_class._liSpecialTacticalActionsList.FindAll(action => action.ReqLevel <= this.ClassLevel));
-
-            return rvList;
+            _diGear[EquipmentEnum.Weapon] = (Equipment)DataManager.GetItem(_class.WeaponID);
+            _diGear[EquipmentEnum.Armor] = (Equipment)DataManager.GetItem(_class.ArmorID);
+            _diGear[EquipmentEnum.Head] = (Equipment)DataManager.GetItem(_class.HeadID);
+            _diGear[EquipmentEnum.Wrist] = (Equipment)DataManager.GetItem(_class.WristID);
         }
 
         public ClassedCharData SaveClassedCharData()
         {
             ClassedCharData advData = new ClassedCharData
             {
-                armor = Item.SaveData(Armor.GetItem()),
-                weapon = Item.SaveData(Weapon.GetItem()),
-                level = _classLevel,
-                xp = _iXP
+                armor = Item.SaveData(_diGear[EquipmentEnum.Armor]),
+                weapon = Item.SaveData(_diGear[EquipmentEnum.Weapon]),
+                level = ClassLevel,
+                xp = XP
             };
 
             return advData;
         }
         public void LoadClassedCharData(ClassedCharData data)
         {
-            Armor.SetGear((Equipment)DataManager.GetItem(data.armor.itemID, data.armor.num));
-            Weapon.SetGear((Equipment)DataManager.GetItem(data.weapon.itemID, data.weapon.num));
-            _classLevel = data.level;
-            _iXP = data.xp;
-        }
-
-        /// <summary>
-        /// Structure that represents the slot for the character.
-        /// Holds both the actual item and a temp item to compare against.
-        /// </summary>
-        public class GearSlot
-        {
-            EquipmentEnum _enumType;
-            Equipment _eGear;
-            Equipment _eTempGear;
-            public GearSlot(EquipmentEnum type)
-            {
-                _enumType = type;
-            }
-
-            public void SetGear(Equipment e) { _eGear = e; }
-            public void SetTemp(Equipment e) { _eTempGear = e; }
-
-            public int GetStat(StatEnum stat)
-            {
-                int rv = 0;
-
-                if (_eGear != null)
-                {
-                    rv += _eGear.GetStat(stat);
-                }
-
-                return rv;
-            }
-            public int GetTempStat(StatEnum stat)
-            {
-                int rv = 0;
-
-                if (_eTempGear != null)
-                {
-                    rv += _eTempGear.GetStat(stat);
-                }
-                else if (_eGear != null)
-                {
-                    rv += _eGear.GetStat(stat);
-                }
-
-                return rv;
-            }
-            public Equipment GetItem() { return _eGear; }
-            public bool IsEmpty() { return _eGear == null; }
+            _diGear[EquipmentEnum.Armor] = (Equipment)DataManager.GetItem(data.armor.itemID);
+            _diGear[EquipmentEnum.Weapon] = (Equipment)DataManager.GetItem(data.weapon.itemID);
+            ClassLevel = data.level;
+            XP = data.xp;
         }
     }
 }

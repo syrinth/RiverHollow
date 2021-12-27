@@ -11,19 +11,19 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:MenuSpell]</Value>
+      <Value>[Type:Action][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Target:Enemy][Range:7][AreaType:Row][Cost:2][Harm:300][Action:UserCast Direct Apply][Element:Fire][LiteRange:Ranged][Icon:0-0][DamageType:Magical][DamageAttribute:Magic]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:EndTurn]</Value>
+      <Value>[Type:Action][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Target:Enemy][Range:7][AreaType:Column][Cost:2][Harm:100][Action:UserCast Direct Apply][Element:Ice][LiteRange:Melee][Icon:1-0][DamageType:Magical][Retreat][DamageAttribute:Magic]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Spell][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Target:Enemy][Range:7][AreaType:Cross][Cost:2][Harm:300][Action:UserCast Direct Apply][Element:Lightning][LiteRange:Ranged]</Value>
+      <Value>[Type:Action][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Target:Enemy][Range:7][AreaType:Square][Cost:2][Harm:500][Action:UserCast Direct Apply][Element:Lightning][LiteRange:Ranged][Icon:2-0][DamageType:Magical][DamageAttribute:Magic]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Spell][Animation:Eldritch_Blast-16-64-7-0.05][AnimOffset:0-48][Target:Enemy][Range:9][AreaType:Single][Cost:5][Harm:300][Action:UserCast Direct Apply]</Value>
+      <Value>[Type:Action][Animation:Eldritch_Blast-16-64-7-0.05][AnimOffset:0-48][Target:Enemy][Range:9][AreaType:Single][Cost:5][Heal:300][Action:UserCast Direct Apply][Icon:3-0][LiteRange:Ranged][DamageType:Magical][Push][DamageAttribute:Magic]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -87,11 +87,11 @@
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:Action][Target:Enemy][Range:5][AreaType:Single][Pull:1][Action:UserCast Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][AreaType:Single][Pull][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Action][Target:Enemy][Range:5][AreaType:Single][Harm:50][Push:1][Step:2][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][AreaType:Single][Harm:50][Push][Step][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>23</Key>
@@ -123,7 +123,7 @@
     </Item>
     <Item>
       <Key>30</Key>
-      <Value>[Type:Action][Target:Enemy][Range:0][AreaType:Single][Action:UserAttack Apply][Harm:100][Retreat:1]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:0][AreaType:Single][Action:UserAttack Apply][Harm:100][Retreat]</Value>
     </Item>
     <Item>
       <Key>31</Key>

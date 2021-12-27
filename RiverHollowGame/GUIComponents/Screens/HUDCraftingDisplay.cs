@@ -8,6 +8,7 @@ using RiverHollow.WorldObjects;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.DataManager;
+using RiverHollow.Items;
 
 namespace RiverHollow.GUIComponents.Screens
 {

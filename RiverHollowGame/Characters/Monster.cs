@@ -1,16 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.Items;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters
 {
-    public class LiteMonster : LiteCombatActor
+    public class Monster : CombatActor
     {
         public override string Name => String.IsNullOrEmpty(_sUnique) ? _sName : _sName + " " + _sUnique;
 
@@ -24,11 +24,9 @@ namespace RiverHollow.Characters
         int _iWidth;
         int _iHeight;
 
-        public override int Attack => 20 + (_iRating * 10);
-
         public override int MaxHP => (int)((((Math.Pow(_iRating, 2)) * 10) + 20) * Math.Pow(Math.Max(1, (double)_iRating / 14), 2));
 
-        public LiteMonster(int id, Dictionary<string, string> data)
+        public Monster(int id, Dictionary<string, string> data)
         {
             _eActorType = ActorEnum.Monster;
             ImportBasics(data, id);
@@ -49,16 +47,17 @@ namespace RiverHollow.Characters
 
             _iRating = int.Parse(data["Lvl"]);
             _xp = _iRating * 10;
-            _iStrength = 1 + _iRating;
-            _iDefense = 8 + (_iRating * 3);
-            _iVitality = 2 * _iRating + 10;
-            _iMagic = 2 * _iRating + 2;
-            _iResistance = 2 * _iRating + 10;
-            _iSpeed = 10;
+            _diAttributes[AttributeEnum.Damage] = 20 + (_iRating * 10);
+            _diAttributes[AttributeEnum.Strength] = 1 + _iRating;
+            _diAttributes[AttributeEnum.Defense] = 8 + (_iRating * 3);
+            _diAttributes[AttributeEnum.MaxHealth] = 2 * _iRating + 10;
+            _diAttributes[AttributeEnum.Magic] = 2 * _iRating + 2;
+            _diAttributes[AttributeEnum.Resistance] = 2 * _iRating + 10;
+            _diAttributes[AttributeEnum.Speed] = 10;
 
             foreach (string ability in data["Ability"].Split('-'))
             {
-                AbilityList.Add(DataManager.GetLiteActionByIndex(int.Parse(ability)));
+                Actions.Add(DataManager.GetCombatActionByIndex(int.Parse(ability)));
             }
 
             if (data.ContainsKey("Trait"))
@@ -118,7 +117,6 @@ namespace RiverHollow.Characters
             LoadContent(DataManager.FOLDER_MONSTERS + data["Texture"], idle, attack, hurt, cast);
 
             _iCurrentHP = MaxHP;
-            _iCurrentMP = MaxMP;
         }
 
         public override void Update(GameTime theGameTime)
@@ -126,8 +124,13 @@ namespace RiverHollow.Characters
             base.Update(theGameTime);
             if (BodySprite.CurrentAnimation == Util.GetEnumString(LiteCombatActionEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
             {
-                LiteCombatManager.Kill(this);
+                CombatManager.Kill(this);
             }
+        }
+
+        public override GUIImage GetIcon()
+        {
+            return new GUIImage(new Rectangle(0, 0, 18, 18), ScaleIt(18), ScaleIt(18), DataManager.GetTexture(_sCombatPortraits + "M_" + ID.ToString("00")));
         }
 
         private void HandleTrait(string traitData)
@@ -136,42 +139,19 @@ namespace RiverHollow.Characters
             foreach (string s in traits)
             {
                 string[] tagType = s.Split(':');
-                if (tagType[0].Equals(Util.GetEnumString(StatEnum.Str)))
-                {
-                    ApplyTrait(ref _iStrength, tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Def)))
-                {
-                    ApplyTrait(ref _iDefense, tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Vit)))
-                {
-                    ApplyTrait(ref _iVitality, tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Mag)))
-                {
-                    ApplyTrait(ref _iMagic, tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Res)))
-                {
-                    ApplyTrait(ref _iResistance, tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Spd)))
-                {
-                    ApplyTrait(ref _iSpeed, tagType[1]);
-                }
+                ApplyTrait(Util.ParseEnum<AttributeEnum>(tagType[0]), tagType[1]);
             }
         }
 
-        private void ApplyTrait(ref int value, string data)
+        private void ApplyTrait(AttributeEnum e, string data)
         {
             if (data.Equals("+"))
             {
-                value = (int)(value * 1.1);
+                _diAttributes[e] = (int)(_diAttributes[e] * 1.1);
             }
             else if (data.Equals("-"))
             {
-                value = (int)(value * 0.9);
+                _diAttributes[e] = (int)(_diAttributes[e] * 0.9);
             }
         }
 
@@ -194,9 +174,9 @@ namespace RiverHollow.Characters
             _sprBody.AddAnimation(LiteCombatActionEnum.KO, (xCrawl * frameSize.Width), 0, frameSize, 3, 0.2f);
 
             _sprBody.PlayAnimation(LiteCombatActionEnum.Idle);
-            _sprBody.SetScale(LiteCombatManager.CombatScale);
-            _iBodyWidth = frameSize.Width * LiteCombatManager.CombatScale;
-            _iBodyHeight = frameSize.Height * LiteCombatManager.CombatScale;
+            _sprBody.SetScale((int)GameManager.NORMAL_SCALE);
+            _iBodyWidth = frameSize.Width * (int)GameManager.NORMAL_SCALE;
+            _iBodyHeight = frameSize.Height * (int)GameManager.NORMAL_SCALE;
         }
 
         public Item GetLoot()

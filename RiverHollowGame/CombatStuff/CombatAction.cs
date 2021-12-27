@@ -14,19 +14,18 @@ using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 
 namespace RiverHollow.CombatStuff
 {
-    public class LiteCombatAction : LiteMenuAction
+    public class CombatAction : LiteMenuAction
     {
         const int moveSpeed = 60;
 
         PotencyBonusEnum _eBonusType;
         ElementEnum _eElement = ElementEnum.None;
-        List<ConditionEnum> _liCondition;
-        public List<ConditionEnum> LiCondition { get => _liCondition; }
+        public ElementEnum Element => _eElement;
         int _iChargeCost;
         public int ChargeCost => _iChargeCost;
         int _iMPCost = 0;
         public int MPCost => _iMPCost;
-        public int Potency { get; private set; }
+        public int Potency { get; private set; } = 0;
 
         int _iReqLevel = 0;
         public int ReqLevel => _iReqLevel;
@@ -38,17 +37,28 @@ namespace RiverHollow.CombatStuff
 
         string _sAnimation;
         VerbEnum _eUserAnimationVerb = VerbEnum.Action1;
+
         TargetEnum _eTarget;
         public TargetEnum Target => _eTarget;
+
         RangeEnum _eRange;
         public RangeEnum Range => _eRange;
+
         AreaTypeEnum _eAreaType;
         public AreaTypeEnum AreaType => _eAreaType;
+
+        AttributeEnum _eDamageAttribute;
+        public AttributeEnum DamageAttribue => _eDamageAttribute;
+
+        DamageTypeEnum _eDamageType;
+        public DamageTypeEnum DamageType => _eDamageType;
         List<String> _liActionTags;
         int _iCurrentAction = 0;
         List<SkillTagsEnum> _liEffects;
         List<LiteStatusEffectData> _liStatusEffects;         //Key = Buff ID, string = Duration/<Tag> <Tag>
 
+        public MovementTypeEnum UserMovement { get; private set; } = MovementTypeEnum.None;
+        public MovementTypeEnum TargetMovement { get; private set; } = MovementTypeEnum.None;
         int _iSummonID;
         public Vector2 SummonStartPosition;
 
@@ -65,13 +75,8 @@ namespace RiverHollow.CombatStuff
         public bool _bCounter;
 
         bool _bPauseActionHandler;
-        LiteCombatActor counteringChar;
+        CombatActor counteringChar;
         LiteSummon counteringSummon;
-
-        int _iPushVal;
-        int _iPullVal;
-        int _iRetreatVal;
-        int _iStepVal;
 
         int _iCritRating;
         int _iAccuracy;
@@ -79,10 +84,9 @@ namespace RiverHollow.CombatStuff
         string _sRemoveString;
 
         public GUISprite Sprite;
-        public LiteCombatAction(int id, Dictionary<string, string> stringData)
+        public CombatAction(int id, Dictionary<string, string> stringData)
         {
             TileTargetList = new List<LiteCombatTile>();
-            _liCondition = new List<ConditionEnum>();
             _liEffects = new List<SkillTagsEnum>();
             _liStatusEffects = new List<LiteStatusEffectData>();
             _liActionTags = new List<string>();
@@ -99,6 +103,8 @@ namespace RiverHollow.CombatStuff
 
             Util.AssignValue(ref _eActionType, "Type", stringData);
             Util.AssignValue(ref _eElement, "Element", stringData);
+            Util.AssignValue(ref _eDamageType, "DamageType", stringData);
+            Util.AssignValue(ref _eDamageAttribute, "DamageAttribute", stringData);
             Util.AssignValue(ref _eTarget, "Target", stringData);
             Util.AssignValue(ref _eAreaType, "AreaType", stringData);
             Util.AssignValue(ref _eRange, "LiteRange", stringData);
@@ -131,7 +137,7 @@ namespace RiverHollow.CombatStuff
                 AnimatedSprite ActionSprite = new AnimatedSprite(_sAnimation);
                 ActionSprite.AddAnimation(AnimationEnum.PlayAnimation, 0, 0, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed, false, true);
                 ActionSprite.Drawing = false;
-                ActionSprite.SetScale(LiteCombatManager.CombatScale);
+                ActionSprite.SetScale(GameManager.CurrentScale);
 
                 Sprite = new GUISprite(ActionSprite);
             }
@@ -153,23 +159,23 @@ namespace RiverHollow.CombatStuff
 
                 if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Push)))
                 {
-                    _iPushVal = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Push)]);
                     _liEffects.Add(SkillTagsEnum.Push);
+                    TargetMovement = MovementTypeEnum.Backward;
                 }
                 if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Pull)))
                 {
-                    _iPullVal = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Pull)]);
                     _liEffects.Add(SkillTagsEnum.Pull);
+                    TargetMovement = MovementTypeEnum.Forward;
                 }
                 if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Step)))
                 {
-                    _iStepVal = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Step)]);
                     _liEffects.Add(SkillTagsEnum.Step);
+                    UserMovement = MovementTypeEnum.Forward;
                 }
                 if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Retreat)))
                 {
-                    _iRetreatVal = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Retreat)]);
                     _liEffects.Add(SkillTagsEnum.Retreat);
+                    UserMovement = MovementTypeEnum.Backward;
                 }
                 if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Remove)))
                 {
@@ -228,7 +234,7 @@ namespace RiverHollow.CombatStuff
         /// </summary>
         public void AnimationSetup()
         {
-            TileTargetList.AddRange(LiteCombatManager.SelectedAction.GetEffectedTiles());
+            TileTargetList.AddRange(CombatManager.SelectedAction.GetEffectedTiles());
         }
 
         /// <summary>
@@ -247,7 +253,7 @@ namespace RiverHollow.CombatStuff
                 //Note that this currently does not support enemy summons
                 if (_eBonusType == PotencyBonusEnum.Summon)
                 {
-                    foreach (LitePartyMember c in LiteCombatManager.Party)
+                    foreach (ClassedCombatant c in CombatManager.Party)
                     {
                         if (c.LinkedSummon != null)
                         {
@@ -265,7 +271,7 @@ namespace RiverHollow.CombatStuff
                 foreach (LiteCombatTile ct in TileTargetList)
                 {
                     LiteCombatTile targetTile = ct;
-                    LiteCombatActor targetActor = ct.Character;
+                    CombatActor targetActor = ct.Character;
                     //If the tile is unoccupied, don't do anything
                     if (targetActor == null) { continue; }
 
@@ -283,7 +289,7 @@ namespace RiverHollow.CombatStuff
                         RHRandom random = RHRandom.Instance();
                         int attackRoll = random.Next(1, 100);
                         attackRoll -= _iAccuracy;                       //Modify the chance to hit by the skill's accuracy. Rolling low is good, so subtract a positive and add a negative
-                        if (attackRoll <= 90 - targetActor.Evasion)    //If the modified attack roll is less than 90 minus the character's evasion, then we hit
+                        if (attackRoll <= 90 - targetActor.Attribute(AttributeEnum.Evasion))    //If the modified attack roll is less than 90 minus the character's evasion, then we hit
                         {
                             int x = targetActor.ProcessAttack(SkillUser, totalPotency, _iCritRating, targetActor.GetAttackElement());
                             targetTile.GUITile.AssignEffect(x, true);
@@ -329,7 +335,7 @@ namespace RiverHollow.CombatStuff
                         //image positions of the guard and its guarded character.
                         if (targetActor.Guard && targetActor.Swapped)
                         {
-                            LiteCombatActor actor = targetActor;
+                            CombatActor actor = targetActor;
                             actor.Swapped = false;
 
                             //Put the GuardTarget back firstin case the guard is a Summon
@@ -369,7 +375,7 @@ namespace RiverHollow.CombatStuff
                 {
                     //Makes a new StatusEffectobject from the data held in the action
                     StatusEffect status = DataManager.GetStatusEffectByIndex(effect.BuffID);
-                    status.Duration = effect.Duration;
+                    //status.Duration = effect.Duration;
                     status.AssignCaster(SkillUser);
 
                     //Search for relevant tags, primarily targetting
@@ -377,7 +383,7 @@ namespace RiverHollow.CombatStuff
                     foreach (string s in tags)
                     {
                         //Handle the targetting of where to send the status effect
-                        List<LiteCombatActor> targets = new List<LiteCombatActor>();
+                        List<CombatActor> targets = new List<CombatActor>();
 
                         //Apply it to self
                         if (s.Equals("Self"))
@@ -390,7 +396,7 @@ namespace RiverHollow.CombatStuff
                         {
                             foreach (LiteCombatTile ct in TileTargetList)
                             {
-                                if (ct.Character != null && !ct.Character.KnockedOut())
+                                if (ct.Character != null && !ct.Character.KnockedOut)
                                 {
                                     targets.Add(ct.Character);
                                 }
@@ -402,11 +408,11 @@ namespace RiverHollow.CombatStuff
                         {
                             if (SkillUser.IsActorType(ActorEnum.PartyMember))
                             {
-                                targets.AddRange(LiteCombatManager.Party);
+                                targets.AddRange(CombatManager.Party);
                             }
                             else
                             {
-                                targets.AddRange(LiteCombatManager.Monsters);
+                                targets.AddRange(CombatManager.Monsters);
                             }
                         }
 
@@ -415,19 +421,19 @@ namespace RiverHollow.CombatStuff
                         {
                             if (SkillUser.IsActorType(ActorEnum.PartyMember))
                             {
-                                targets.AddRange(LiteCombatManager.Monsters);
+                                targets.AddRange(CombatManager.Monsters);
 
                             }
                             else
                             {
-                                targets.AddRange(LiteCombatManager.Party);
+                                targets.AddRange(CombatManager.Party);
                             }
                         }
 
                         //actualyl apply the StatusEffect to the targets
-                        foreach (LiteCombatActor actor in targets)
+                        foreach (CombatActor actor in targets)
                         {
-                            actor.AddStatusEffect(status);
+                            actor.ApplyStatusEffect(status);
                         }
                     }
                 }
@@ -440,7 +446,7 @@ namespace RiverHollow.CombatStuff
                 foreach (LiteCombatTile ct in TileTargetList)
                 {
                     LiteSummon newSummon = DataManager.GetSummonByIndex(_iSummonID);
-                    newSummon.SetStats(SkillUser.StatMag);                //Summon stats are based off the Magic stat
+                    newSummon.SetStats(SkillUser.Attribute(AttributeEnum.Magic));                //Summon stats are based off the Magic stat
                     ct.Character.LinkSummon(newSummon);                 //Links the summon to the character
                     newSummon.linkedChar = ct.Character;                //Links the character to the new summon
                     _bPauseActionHandler = true;
@@ -452,7 +458,7 @@ namespace RiverHollow.CombatStuff
             {
                 foreach (LiteCombatTile ct in TileTargetList)
                 {
-                    if (ct.Character != null && !ct.Character.KnockedOut())
+                    if (ct.Character != null && !ct.Character.KnockedOut)
                     {
                         Push(ct);
                     }
@@ -464,7 +470,7 @@ namespace RiverHollow.CombatStuff
             {
                 foreach (LiteCombatTile ct in TileTargetList)
                 {
-                    if (ct.Character != null && !ct.Character.KnockedOut())
+                    if (ct.Character != null && !ct.Character.KnockedOut)
                     {
                         Pull(ct);
                     }
@@ -493,7 +499,7 @@ namespace RiverHollow.CombatStuff
                 {
                     if (strArea == "Every")
                     {
-                        foreach (LitePartyMember adv in LiteCombatManager.Party)
+                        foreach (ClassedCombatant adv in CombatManager.Party)
                         {
                             adv.UnlinkSummon();
                         }
@@ -513,27 +519,22 @@ namespace RiverHollow.CombatStuff
         private bool Push(LiteCombatTile ct)
         {
             bool rv = false;
-            int i = _iPushVal;
-            while (i > 0)
+            LiteCombatTile test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Push);
+            if (test != null)
             {
-                LiteCombatTile test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Push);
-                if (test != null)
+                if (!test.Occupied())
                 {
-                    if (!test.Occupied())
+                    test.SetCombatant(ct.Character);
+                    ct = test;
+                    rv = true;
+                }
+                else if (test.Occupied())
+                {
+                    if (Push(test))
                     {
                         test.SetCombatant(ct.Character);
-                        ct = test;
-                        rv = true;
-                    }
-                    else if (test.Occupied())
-                    {
-                        if (Push(test))
-                        {
-                            test.SetCombatant(ct.Character);
-                        }
                     }
                 }
-                i--;
             }
 
             return rv;
@@ -542,22 +543,19 @@ namespace RiverHollow.CombatStuff
         private bool Pull(LiteCombatTile ct)
         {
             bool rv = false;
-            int i = _iPullVal;
-            while (i > 0)
+
+            LiteCombatTile test;
+            test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Pull);
+            if (test != null)
             {
-                LiteCombatTile test;
-                test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Pull);
-                if (test != null)
+                if (!test.Occupied())
                 {
-                    if (!test.Occupied())
-                    {
-                        test.SetCombatant(ct.Character);
-                        ct = test;
-                        rv = true;
-                    }
+                    test.SetCombatant(ct.Character);
+                    ct = test;
+                    rv = true;
                 }
-                i--;
             }
+
 
             return rv;
         }
@@ -565,21 +563,17 @@ namespace RiverHollow.CombatStuff
         private bool Step(LiteCombatTile ct)
         {
             bool rv = false;
-            int i = _iStepVal;
-            while (i > 0)
+
+            LiteCombatTile test;
+            test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Step);
+            if (test != null)
             {
-                LiteCombatTile test;
-                test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Step);
-                if (test != null)
+                if (!test.Occupied())
                 {
-                    if (!test.Occupied())
-                    {
-                        test.SetCombatant(ct.Character);
-                        ct = test;
-                        rv = true;
-                    }
+                    test.SetCombatant(ct.Character);
+                    ct = test;
+                    rv = true;
                 }
-                i--;
             }
 
             return rv;
@@ -588,21 +582,16 @@ namespace RiverHollow.CombatStuff
         private bool Retreat(LiteCombatTile ct)
         {
             bool rv = false;
-            int i = _iRetreatVal;
-            while (i > 0)
+            LiteCombatTile test;
+            test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Retreat);
+            if (test != null)
             {
-                LiteCombatTile test;
-                test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Retreat);
-                if (test != null)
+                if (!test.Occupied())
                 {
-                    if (!test.Occupied())
-                    {
-                        test.SetCombatant(ct.Character);
-                        ct = test;
-                        rv = true;
-                    }
+                    test.SetCombatant(ct.Character);
+                    ct = test;
+                    rv = true;
                 }
-                i--;
             }
 
             return rv;
@@ -622,17 +611,17 @@ namespace RiverHollow.CombatStuff
             //it's an ally or enemy tile.
             if (tile.Character.IsActorType(ActorEnum.PartyMember))
             {
-                if (action == SkillTagsEnum.Push) { rv = LiteCombatManager.GetLeft(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Pull) { rv = LiteCombatManager.GetRight(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Retreat) { rv = LiteCombatManager.GetLeft(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Step) { rv = LiteCombatManager.GetRight(tile.GUITile.MapTile); }
+                if (action == SkillTagsEnum.Push) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
+                else if (action == SkillTagsEnum.Pull) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
+                else if (action == SkillTagsEnum.Retreat) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
+                else if (action == SkillTagsEnum.Step) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
             }
             else
             {
-                if (action == SkillTagsEnum.Push) { rv = LiteCombatManager.GetRight(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Pull) { rv = LiteCombatManager.GetLeft(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Retreat) { rv = LiteCombatManager.GetRight(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Step) { rv = LiteCombatManager.GetLeft(tile.GUITile.MapTile); }
+                if (action == SkillTagsEnum.Push) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
+                else if (action == SkillTagsEnum.Pull) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
+                else if (action == SkillTagsEnum.Retreat) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
+                else if (action == SkillTagsEnum.Step) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
             }
 
             return rv;
@@ -652,10 +641,10 @@ namespace RiverHollow.CombatStuff
             {
                 case "Escape":
                     {
-                        int spd = LiteCombatManager.ActiveCharacter.StatSpd;
+                        int spd = CombatManager.ActiveCharacter.Attribute(AttributeEnum.Speed);
                         if (RHRandom.Instance().Next(1, 20) + spd / 2 > 15)
                         {
-                            LiteCombatManager.EndCombatEscape();
+                            CombatManager.EndCombatEscape();
                         }
                         break;
                     }
@@ -683,16 +672,16 @@ namespace RiverHollow.CombatStuff
                 case "UserAttack":
                     foreach (LiteCombatTile tile in TileTargetList)
                     {
-                        List<LiteCombatActor> liPotentialGuards = new List<LiteCombatActor>();
-                        LiteCombatActor original = tile.Character;
+                        List<CombatActor> liPotentialGuards = new List<CombatActor>();
+                        CombatActor original = tile.Character;
 
                         //Only assign a guard to the character if they are not guarding and they have no guard
                         if (original != null && !original.Guard & original.MyGuard == null)
                         {
-                            LiteCombatTile top = LiteCombatManager.GetTop(tile);
+                            LiteCombatTile top = CombatManager.GetTop(tile);
                             if (top != null && top.Character != null && top.Character.Guard) { liPotentialGuards.Add(top.Character); }
 
-                            LiteCombatTile bottom = LiteCombatManager.GetBottom(tile);
+                            LiteCombatTile bottom = CombatManager.GetBottom(tile);
                             if (bottom != null && bottom.Character != null && bottom.Character.Guard) { liPotentialGuards.Add(bottom.Character); }
 
                             LiteSummon summ = tile.Character.LinkedSummon;
@@ -702,7 +691,7 @@ namespace RiverHollow.CombatStuff
                             {
                                 int which = RHRandom.Instance().Next(0, liPotentialGuards.Count - 1);
 
-                                LiteCombatActor guard = liPotentialGuards[which];
+                                CombatActor guard = liPotentialGuards[which];
                                 guard.Swapped = true;
                                 guard.GuardTarget = original;
                                 original.MyGuard = guard;
@@ -784,7 +773,7 @@ namespace RiverHollow.CombatStuff
                                 else if (counteringChar.AnimationPlayedXTimes(1))
                                 {
                                     counteringChar.Tile.PlayAnimation(LiteCombatActionEnum.Idle);
-                                    int x = SkillUser.ProcessAttack(counteringChar, ((LiteCombatAction)DataManager.GetLiteActionByIndex(1)).Potency, _iCritRating, counteringChar.GetAttackElement());
+                                    int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)DataManager.GetCombatActionByIndex(1)).Potency, _iCritRating, counteringChar.GetAttackElement());
                                     SkillUser.Tile.GUITile.AssignEffect(x, true);
                                     counteringChar = null;
                                     _bPauseActionHandler = false;
@@ -800,7 +789,7 @@ namespace RiverHollow.CombatStuff
                                 else if (counteringSummon.AnimationPlayedXTimes(1))
                                 {
                                     counteringSummon.PlayAnimation(LiteCombatActionEnum.Idle);
-                                    int x = SkillUser.ProcessAttack(counteringSummon, ((LiteCombatAction)DataManager.GetLiteActionByIndex(1)).Potency, _iCritRating, counteringSummon.GetAttackElement());
+                                    int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)DataManager.GetCombatActionByIndex(1)).Potency, _iCritRating, counteringSummon.GetAttackElement());
                                     SkillUser.Tile.GUITile.AssignEffect(x, true);
                                     counteringSummon = null;
                                     _bPauseActionHandler = false;
@@ -866,7 +855,7 @@ namespace RiverHollow.CombatStuff
                     {
                         Sprite.IsAnimating = false;
                     }
-                    LiteCombatManager.EndTurn();
+                    CombatManager.EndTurn();
 
                     break;
             }
@@ -877,14 +866,14 @@ namespace RiverHollow.CombatStuff
             Vector2 targetPosition = Vector2.Zero;
             int mod = targetsEnemy ? -1 : 1;
 
-            if (targetsEnemy && TileTargetList[0].GUITile.MapTile.Col - 1 >= LiteCombatManager.ENEMY_FRONT)
+            if (targetsEnemy && TileTargetList[0].GUITile.MapTile.Col - 1 >= CombatManager.ENEMY_FRONT)
             {
-                GUICombatTile target = LiteCombatManager.GetLeft(moveToTile.MapTile).GUITile;
+                GUICombatTile target = CombatManager.GetLeft(moveToTile.MapTile).GUITile;
                 targetPosition = target.GetIdleLocation(sprite);
             }
-            else if (!targetsEnemy && TileTargetList[0].GUITile.MapTile.Col + 1 < LiteCombatManager.ENEMY_FRONT)
+            else if (!targetsEnemy && TileTargetList[0].GUITile.MapTile.Col + 1 < CombatManager.ENEMY_FRONT)
             {
-                GUICombatTile target = LiteCombatManager.GetRight(moveToTile.MapTile).GUITile;
+                GUICombatTile target = CombatManager.GetRight(moveToTile.MapTile).GUITile;
                 targetPosition = target.GetIdleLocation(sprite);
             }
             else

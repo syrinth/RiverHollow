@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
+using RiverHollow.Items;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 
@@ -10,7 +10,7 @@ using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters
 {
-    public class LiteMob : WorldActor
+    public class Mob : WorldActor
     {
         #region Properties
         public override Vector2 Position
@@ -29,8 +29,8 @@ namespace RiverHollow.Characters
         protected int _iLeash = 7;
 
         protected Vector2 _vMoveTo = Vector2.Zero;
-        protected List<LiteCombatActor> _liMonsters;
-        public List<LiteCombatActor> Monsters { get => _liMonsters; }
+        protected List<CombatActor> _liMonsters;
+        public List<CombatActor> Monsters { get => _liMonsters; }
 
         double _dStun;
         int _iMaxRange = TILE_SIZE * 10;
@@ -57,16 +57,16 @@ namespace RiverHollow.Characters
 
         #endregion
 
-        public LiteMob(int id, Dictionary<string, string> data)
+        public Mob(int id, Dictionary<string, string> data)
         {
             _liSpawnConditions = new List<SpawnConditionEnum>();
             _eActorType = ActorEnum.Mob;
-            _liMonsters = new List<LiteCombatActor>();
+            _liMonsters = new List<CombatActor>();
             ImportBasics(data, id);
             //LoadContent(DataManager.FOLDER_MOBS + data["Texture"];);
 
             _iXP = 0;
-            foreach (LiteMonster mon in _liMonsters)
+            foreach (Monster mon in _liMonsters)
             {
                 _iXP += mon.XP;
             }
@@ -140,9 +140,9 @@ namespace RiverHollow.Characters
 
             //_bJump = data.ContainsKey("Jump");
 
-            foreach (LiteCombatActor m in _liMonsters)
+            foreach (CombatActor m in _liMonsters)
             {
-                List<LiteCombatActor> match = _liMonsters.FindAll(x => ((LiteMonster)x).ID == ((LiteMonster)m).ID);
+                List<CombatActor> match = _liMonsters.FindAll(x => ((Monster)x).ID == ((Monster)m).ID);
                 if (match.Count > 1)
                 {
                     for (int i = 0; i < match.Count; i++)
@@ -214,13 +214,13 @@ namespace RiverHollow.Characters
                     {
                         if (_vJumpTo == Vector2.Zero)
                         {
-                            _vJumpTo = PlayerManager.World.Position;
+                            _vJumpTo = PlayerManager.PlayerActor.Position;
                         }
                         _vMoveTo = _vJumpTo;
                     }
                     else
                     {
-                        _vMoveTo = PlayerManager.World.Position;
+                        _vMoveTo = PlayerManager.PlayerActor.Position;
                     }
                 }
                 else if (!BodySprite.CurrentAnimation.StartsWith("Air"))
@@ -315,13 +315,13 @@ namespace RiverHollow.Characters
                 }
             }
 
-            if (CollisionBox.Intersects(PlayerManager.World.CollisionBox))
+            if (CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
             {
                 if (!_bDefeated)
                 {
                     _bAlert = false;
                     _bLockedOn = false;
-                    LiteCombatManager.NewBattle(this);
+                    CombatManager.NewBattle(this);
                 }
             }
         }
@@ -329,7 +329,7 @@ namespace RiverHollow.Characters
         //If mob is not returning to leash point and player in in range
         private void HandlePassivity(GameTime theGameTime)
         {
-            if (!_bLeashed && !_bLockedOn && _FoV.Contains(PlayerManager.World))
+            if (!_bLeashed && !_bLockedOn && _FoV.Contains(PlayerManager.PlayerActor))
             {
                 //If alert if not on, set alert
                 if (!_bAlert)
@@ -490,7 +490,7 @@ namespace RiverHollow.Characters
         {
             List<Item> items = new List<Item>();
 
-            foreach (LiteMonster m in _liMonsters)
+            foreach (Monster m in _liMonsters)
             {
                 items.Add(m.GetLoot());
             }
@@ -525,7 +525,7 @@ namespace RiverHollow.Characters
             Vector2 _vSecond;           //The RightMost of the BottomMost
             DirectionEnum _eDir;
 
-            public FieldOfVision(LiteMob theMob, int maxRange)
+            public FieldOfVision(Mob theMob, int maxRange)
             {
                 int sideRange = TILE_SIZE * 2;
                 _iMaxRange = maxRange;

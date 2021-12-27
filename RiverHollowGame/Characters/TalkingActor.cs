@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
+using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
@@ -81,7 +81,7 @@ namespace RiverHollow.Characters
             //Only do this if they are idle so as to not disturb other animations they may be performing.
             if (facePlayer && BodySprite.CurrentAnimation.StartsWith("Idle"))
             {
-                Point diff = GetRectangle().Center - PlayerManager.World.GetRectangle().Center;
+                Point diff = GetRectangle().Center - PlayerManager.PlayerActor.GetRectangle().Center;
                 if (Math.Abs(diff.X) > Math.Abs(diff.Y))
                 {
                     if (diff.X > 0)  //The player is to the left
@@ -105,7 +105,7 @@ namespace RiverHollow.Characters
                     }
                 }
 
-                PlayAnimationVerb(TacticalCombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                PlayAnimationVerb(VerbEnum.Idle);
             }
         }
 

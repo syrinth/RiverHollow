@@ -5,6 +5,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.MainObjects;
 using RiverHollow.GUIComponents.Screens;
+using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
@@ -407,11 +408,11 @@ namespace RiverHollow.WorldObjects
 
             //Nudge the Object in the direction of the 'attack'
             int xMod = 0, yMod = 0;
-            if (PlayerManager.World.Facing == DirectionEnum.Left) { xMod = -1; }
-            else if (PlayerManager.World.Facing == DirectionEnum.Right) { xMod = 1; }
+            if (PlayerManager.PlayerActor.Facing == DirectionEnum.Left) { xMod = -1; }
+            else if (PlayerManager.PlayerActor.Facing == DirectionEnum.Right) { xMod = 1; }
 
-            if (PlayerManager.World.Facing == DirectionEnum.Up) { yMod = -1; }
-            else if (PlayerManager.World.Facing == DirectionEnum.Down) { yMod = 1; }
+            if (PlayerManager.PlayerActor.Facing == DirectionEnum.Up) { yMod = -1; }
+            else if (PlayerManager.PlayerActor.Facing == DirectionEnum.Down) { yMod = 1; }
             
             _sprite.Position = new Vector2(_sprite.Position.X + xMod, _sprite.Position.Y + yMod);
         }
@@ -573,8 +574,8 @@ namespace RiverHollow.WorldObjects
         {
             if (!_bShaking)
             {
-                if (PlayerManager.World.CollisionBox.Center.X > CollisionBox.Center.X) { dir = DirectionEnum.Left; }
-                else if (PlayerManager.World.CollisionBox.Center.X < CollisionBox.Center.X) { dir = DirectionEnum.Right; }
+                if (PlayerManager.PlayerActor.CollisionBox.Center.X > CollisionBox.Center.X) { dir = DirectionEnum.Left; }
+                else if (PlayerManager.PlayerActor.CollisionBox.Center.X < CollisionBox.Center.X) { dir = DirectionEnum.Right; }
                 _bShaking = true;
             }
         }

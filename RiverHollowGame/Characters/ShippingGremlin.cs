@@ -2,14 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
+using RiverHollow.Items;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters

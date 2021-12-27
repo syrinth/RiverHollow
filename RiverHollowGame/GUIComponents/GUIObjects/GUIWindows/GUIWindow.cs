@@ -11,7 +11,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             public Vector2 SourceVector { get; }
             public int Edge { get; }
-            public int ScaledEdge => Edge * (int)GameManager.CurrentScale;
+            public int ScaledEdge => Edge * GameManager.CurrentScale;
             public int Size { get; }  //The size of the center of the image square
 
             public WindowData(int x, int y, int edge, int size)

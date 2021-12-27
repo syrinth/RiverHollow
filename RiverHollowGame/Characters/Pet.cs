@@ -106,7 +106,7 @@ namespace RiverHollow.Characters
 
         private void Leash()
         {
-            Vector2 delta = Position - PlayerManager.World.Position;
+            Vector2 delta = Position - PlayerManager.PlayerActor.Position;
             HandleMove(Position - delta);
 
             if (PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE))
@@ -208,7 +208,7 @@ namespace RiverHollow.Characters
             else { MapManager.CurrentMap.AddActor(this); }
 
             List<RHTile> validTiles = new List<RHTile>();
-            Point playerLocation = PlayerManager.World.CollisionBox.Location;
+            Point playerLocation = PlayerManager.PlayerActor.CollisionBox.Location;
             foreach (Vector2 v in Util.GetAllPointsInArea(playerLocation.X - (3 * TILE_SIZE), playerLocation.Y - (3 * TILE_SIZE), TILE_SIZE * 7, TILE_SIZE * 7, TILE_SIZE))
             {
                 RHTile t = MapManager.CurrentMap.GetTileByPixelPosition(v);

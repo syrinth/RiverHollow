@@ -8,6 +8,7 @@ using RiverHollow.Misc;
 
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.Items;
 
 namespace RiverHollow.Game_Managers
 {
@@ -20,12 +21,12 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Defined Values
-        public const float NORMAL_SCALE = 4f;
+        public const int NORMAL_SCALE = 4;
         public const float TOOL_ANIM_SPEED = 0.08f;
         public const int MAX_BUILDING_LEVEL = 3;
         public const int TILE_SIZE = 16;
 
-        public static float CurrentScale = NORMAL_SCALE;
+        public static int CurrentScale = NORMAL_SCALE;
         public static int ScaledTileSize => (int)(TILE_SIZE * CurrentScale);
         public static int ScaledPixel => (int)CurrentScale;
         #endregion
@@ -61,29 +62,69 @@ namespace RiverHollow.Game_Managers
         public enum WeaponEnum { None, Spear, Shield, Rapier, Bow, Wand, Knife, Orb, Staff };
         public enum ArmorEnum { None, Cloth, Light, Heavy };
         public enum ArmorSlotEnum { None, Head, Armor, Wrist };
-        public enum ClothesEnum { None, Body, Legs, Hat };
+        public enum ClothingEnum { None, Body, Legs, Hat };
 
         public enum ActorMovementStateEnum { Idle, Walking };
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum TaskTypeEnum { None, GroupSlay, Slay, Fetch, Talk, Build };
         public enum ActorEnum { Actor, PartyMember, Environmental, Merchant, Mob, Monster, Mount, Pet, Child, ShippingGremlin, Spirit, Summon, Villager };
-        public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade };
+        public enum AttributeEnum { Agility, Damage, Defense, Evasion, Magic, MaxHealth, Resistance, Speed, Strength };
         public enum PotencyBonusEnum { None, Conditions, Summon};
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ActionEnum { Action, Item, Spell, MenuItem, MenuSpell, MenuAction, Move, EndTurn };
         public enum SkillTagsEnum { Bonus, Harm, Heal, NPC_ID, Push, Pull, Remove, Retreat, Step, StatusEffectID };
         public enum TargetEnum { Enemy, Ally };
+        public enum DamageTypeEnum { Physical, Magical };
+        public enum MovementTypeEnum { None, Forward, Backward };
         public enum RangeEnum { Self, Melee, Ranged, Row, Column, Adjacent};
-        public enum AreaTypeEnum { Single, Cross, Ring, Line, Diamond, Rectangle, All };
+        public enum AreaTypeEnum { Self, Single, Row, Column, Square, All };
+        public enum StatusTypeEnum { Buff, Debuff, DoT, HoT };
         public enum ElementEnum { None, Fire, Ice, Lightning };
         public enum AttackTypeEnum { Physical, Magical };
         public enum ElementAlignment { Neutral, Vulnerable, Resists };
-        public enum ConditionEnum { None, KO, Poisoned, Silenced };
         public enum AdventurerTypeEnum { Magic, Martial };
         public enum ObjectTypeEnum { WorldObject, Beehive, Buildable, Building, CombatHazard, Container, Decor, Destructible, DungeonObject, Floor, Gatherable, Garden, Machine, Mailbox, Plant, Structure, Wall, Wallpaper, WarpPoint };
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
         public enum ExpectingChildEnum { None, Adoption, Pregnant };
         public enum RelationShipStatusEnum { None, Friends, Dating, Engaged, Married };
+
+        public enum GameIconEnum { None, AreaAll, AreaColumnAlly, AreaColumnEnemy, AreaSelf, AreaSingle, AreaRow, AreaSquare, Agility, BuffArrow, DebuffArrow, Defense, ElementFire, ElementIce, ElementLightning, Evasion, Heal, Magic, MaxHealth, MagicDamage, Melee, MoveLeft, MoveRight, PhysicalDamage, Ranged, Resistance, Speed, Strength, Timer};
+
+        public static GameIconEnum GetGameIconFromAttribute(AttributeEnum e)
+        {
+            GameIconEnum rv = GameIconEnum.None;
+            switch (e)
+            {
+                case AttributeEnum.Agility:
+                    return GameIconEnum.Agility;
+                case AttributeEnum.Defense:
+                    return GameIconEnum.Defense;
+                case AttributeEnum.Evasion:
+                    return GameIconEnum.Evasion;
+                case AttributeEnum.Magic:
+                    return GameIconEnum.Magic;
+                case AttributeEnum.MaxHealth:
+                    return GameIconEnum.MaxHealth;
+                case AttributeEnum.Resistance:
+                    return GameIconEnum.Resistance;
+                case AttributeEnum.Speed:
+                    return GameIconEnum.Speed;
+                case AttributeEnum.Strength:
+                    return GameIconEnum.Strength;
+            }
+
+            return rv;
+        }
+        public static AttributeEnum GetDefenseType(AttributeEnum e)
+        {
+            switch (e)
+            {
+                case AttributeEnum.Magic:
+                    return AttributeEnum.Resistance;
+                default:
+                    return AttributeEnum.Defense;
+            }
+        }
         #endregion
 
         #region Managed Data Lists
@@ -153,7 +194,11 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static int ScaleIt(int val)
         {
-            return (int)(CurrentScale * val);
+            return CurrentScale * val;
+        }
+        public static Vector2 ScaleIt(Vector2 val)
+        {
+            return new Vector2(ScaleIt((int)val.X), ScaleIt((int)val.Y));
         }
 
         #region Machine Handling
@@ -289,7 +334,7 @@ namespace RiverHollow.Game_Managers
         public static bool IsRunning() { return interactionLock == null; }
         #endregion
 
-        public static void SetGameScale(float val)
+        public static void SetGameScale(int val)
         {
             CurrentScale = val;
         }

@@ -1,11 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
-using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
-using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Items;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
@@ -267,50 +266,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         }
 
         public void SetChecked(bool val) { _bChecked = val; }
-    }
-
-    public class GUIStatus : GUIObject
-    {
-        bool _bHover;
-
-        GUIImage _gImage;
-        GUITextWindow _gText;
-        ConditionEnum _status;
-        public ConditionEnum Status => _status;
-
-        public GUIStatus(ConditionEnum status)
-        {
-            _status = status;
-            int startX = 176;
-
-            startX += ((int)status - 2) * TILE_SIZE;
-
-            _gImage = new GUIImage(new Rectangle(startX, 0, TILE_SIZE, TILE_SIZE), TILE_SIZE, TILE_SIZE, DataManager.DIALOGUE_TEXTURE);
-            AddControl(_gImage);
-
-            Width = _gImage.Width;
-            Height = _gImage.Height;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-            RemoveControl(_gText);
-        }
-
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
-
-            if (_gImage.Contains(mouse))
-            {
-                rv = true;
-                _gText = new GUITextWindow(DataManager.GetGameTextEntry(_status.ToString() + " Description"), new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32));
-                AddControl(_gText);
-            }
-
-            return rv;
-        }
     }
 
     public class GUISwatch : GUIImage

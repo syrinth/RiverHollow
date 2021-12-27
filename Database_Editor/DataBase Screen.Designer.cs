@@ -42,6 +42,7 @@
             this.cbItemType = new System.Windows.Forms.ComboBox();
             this.btnItemCancel = new System.Windows.Forms.Button();
             this.dgItemTags = new System.Windows.Forms.DataGridView();
+            this.colItemTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbItemDesc = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -56,6 +57,7 @@
             this.cbWorldObjectType = new System.Windows.Forms.ComboBox();
             this.btnWorldObjectCancel = new System.Windows.Forms.Button();
             this.dgvWorldObjectTags = new System.Windows.Forms.DataGridView();
+            this.colWorldObjectTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label4 = new System.Windows.Forms.Label();
             this.tbWorldObjectID = new System.Windows.Forms.TextBox();
             this.tbWorldObjectName = new System.Windows.Forms.TextBox();
@@ -69,6 +71,7 @@
             this.cbCharacterType = new System.Windows.Forms.ComboBox();
             this.btnCancelCharacter = new System.Windows.Forms.Button();
             this.dgvCharacterTags = new System.Windows.Forms.DataGridView();
+            this.colCharacterTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label3 = new System.Windows.Forms.Label();
             this.tbCharacterID = new System.Windows.Forms.TextBox();
             this.tbCharacterName = new System.Windows.Forms.TextBox();
@@ -81,6 +84,7 @@
             this.label37 = new System.Windows.Forms.Label();
             this.btnClassCancel = new System.Windows.Forms.Button();
             this.dgClassTags = new System.Windows.Forms.DataGridView();
+            this.colClassTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label7 = new System.Windows.Forms.Label();
             this.tbClassID = new System.Windows.Forms.TextBox();
             this.tbClassName = new System.Windows.Forms.TextBox();
@@ -92,6 +96,7 @@
             this.cbTaskType = new System.Windows.Forms.ComboBox();
             this.btnTaskCancel = new System.Windows.Forms.Button();
             this.dgvTaskTags = new System.Windows.Forms.DataGridView();
+            this.colTaskTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbTaskDescription = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -109,6 +114,7 @@
             this.label14 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.dgvCutsceneTags = new System.Windows.Forms.DataGridView();
+            this.colCutsceneTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbCutsceneName = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.dgvCutscenes = new System.Windows.Forms.DataGridView();
@@ -117,6 +123,7 @@
             this.tabMonsters = new System.Windows.Forms.TabPage();
             this.btnMonsterCancel = new System.Windows.Forms.Button();
             this.dgvMonsterTags = new System.Windows.Forms.DataGridView();
+            this.colMonsterTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbMonsterDescription = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
@@ -130,6 +137,7 @@
             this.cbActionType = new System.Windows.Forms.ComboBox();
             this.btnActionCancel = new System.Windows.Forms.Button();
             this.dgvActionTags = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbActionDescription = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
@@ -144,6 +152,7 @@
             this.tbShopID = new System.Windows.Forms.TextBox();
             this.btnShopCancel = new System.Windows.Forms.Button();
             this.dgvShopTags = new System.Windows.Forms.DataGridView();
+            this.colShopTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbShopName = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
             this.dgvShops = new System.Windows.Forms.DataGridView();
@@ -152,6 +161,7 @@
             this.tabBuildings = new System.Windows.Forms.TabPage();
             this.btnBuildingCancel = new System.Windows.Forms.Button();
             this.dgvBuildingTags = new System.Windows.Forms.DataGridView();
+            this.colBuildingTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbBuildingDescription = new System.Windows.Forms.TextBox();
             this.label23 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
@@ -165,6 +175,7 @@
             this.cbNPCType = new System.Windows.Forms.ComboBox();
             this.btnNPCCancel = new System.Windows.Forms.Button();
             this.dgvNPCTags = new System.Windows.Forms.DataGridView();
+            this.colNPCTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbNPCDescription = new System.Windows.Forms.TextBox();
             this.label27 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
@@ -177,6 +188,7 @@
             this.tabStatusEffects = new System.Windows.Forms.TabPage();
             this.btnStatusEffectCancel = new System.Windows.Forms.Button();
             this.dgvStatusEffectTags = new System.Windows.Forms.DataGridView();
+            this.colStatusEffectsTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbStatusEffectDescription = new System.Windows.Forms.TextBox();
             this.label33 = new System.Windows.Forms.Label();
             this.label34 = new System.Windows.Forms.Label();
@@ -193,6 +205,7 @@
             this.label10 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.dgvLightTags = new System.Windows.Forms.DataGridView();
+            this.colLightTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvLights = new System.Windows.Forms.DataGridView();
             this.colLightsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colLightsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -205,23 +218,11 @@
             this.label39 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.dgvDungeonTags = new System.Windows.Forms.DataGridView();
+            this.colDungeonsTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvDungeons = new System.Windows.Forms.DataGridView();
             this.colDungeonsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDungeonsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colItemTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colWorldObjectTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCharacterTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colClassTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTaskTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCutsceneTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colMonsterTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colShopTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colBuildingTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNPCTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colStatusEffectsTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colLightTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDungeonsTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cbStatusEffect = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -408,6 +409,13 @@
             this.dgItemTags.Size = new System.Drawing.Size(464, 251);
             this.dgItemTags.TabIndex = 21;
             // 
+            // colItemTags
+            // 
+            this.colItemTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colItemTags.HeaderText = "Tags";
+            this.colItemTags.Name = "colItemTags";
+            this.colItemTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // tbItemDesc
             // 
             this.tbItemDesc.Location = new System.Drawing.Point(320, 51);
@@ -554,6 +562,13 @@
             this.dgvWorldObjectTags.Size = new System.Drawing.Size(464, 328);
             this.dgvWorldObjectTags.TabIndex = 33;
             // 
+            // colWorldObjectTags
+            // 
+            this.colWorldObjectTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colWorldObjectTags.HeaderText = "Tags";
+            this.colWorldObjectTags.Name = "colWorldObjectTags";
+            this.colWorldObjectTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -697,6 +712,13 @@
             this.dgvCharacterTags.Size = new System.Drawing.Size(464, 328);
             this.dgvCharacterTags.TabIndex = 42;
             // 
+            // colCharacterTags
+            // 
+            this.colCharacterTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCharacterTags.HeaderText = "Tags";
+            this.colCharacterTags.Name = "colCharacterTags";
+            this.colCharacterTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -828,6 +850,13 @@
             this.dgClassTags.Size = new System.Drawing.Size(464, 278);
             this.dgClassTags.TabIndex = 51;
             // 
+            // colClassTags
+            // 
+            this.colClassTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colClassTags.HeaderText = "Tags";
+            this.colClassTags.Name = "colClassTags";
+            this.colClassTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -950,6 +979,13 @@
             this.dgvTaskTags.RowHeadersVisible = false;
             this.dgvTaskTags.Size = new System.Drawing.Size(464, 251);
             this.dgvTaskTags.TabIndex = 33;
+            // 
+            // colTaskTags
+            // 
+            this.colTaskTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colTaskTags.HeaderText = "Tags";
+            this.colTaskTags.Name = "colTaskTags";
+            this.colTaskTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tbTaskDescription
             // 
@@ -1125,6 +1161,13 @@
             this.dgvCutsceneTags.Size = new System.Drawing.Size(464, 278);
             this.dgvCutsceneTags.TabIndex = 33;
             // 
+            // colCutsceneTags
+            // 
+            this.colCutsceneTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCutsceneTags.HeaderText = "Tags";
+            this.colCutsceneTags.Name = "colCutsceneTags";
+            this.colCutsceneTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // tbCutsceneName
             // 
             this.tbCutsceneName.Location = new System.Drawing.Point(361, 6);
@@ -1221,6 +1264,13 @@
             this.dgvMonsterTags.RowHeadersVisible = false;
             this.dgvMonsterTags.Size = new System.Drawing.Size(464, 278);
             this.dgvMonsterTags.TabIndex = 33;
+            // 
+            // colMonsterTags
+            // 
+            this.colMonsterTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colMonsterTags.HeaderText = "Tags";
+            this.colMonsterTags.Name = "colMonsterTags";
+            this.colMonsterTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tbMonsterDescription
             // 
@@ -1366,6 +1416,13 @@
             this.dgvActionTags.RowHeadersVisible = false;
             this.dgvActionTags.Size = new System.Drawing.Size(464, 251);
             this.dgvActionTags.TabIndex = 42;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn3.HeaderText = "Tags";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tbActionDescription
             // 
@@ -1514,6 +1571,13 @@
             this.dgvShopTags.Size = new System.Drawing.Size(464, 355);
             this.dgvShopTags.TabIndex = 57;
             // 
+            // colShopTags
+            // 
+            this.colShopTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colShopTags.HeaderText = "Tags";
+            this.colShopTags.Name = "colShopTags";
+            this.colShopTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // tbShopName
             // 
             this.tbShopName.Location = new System.Drawing.Point(361, 6);
@@ -1611,6 +1675,13 @@
             this.dgvBuildingTags.RowHeadersVisible = false;
             this.dgvBuildingTags.Size = new System.Drawing.Size(464, 278);
             this.dgvBuildingTags.TabIndex = 33;
+            // 
+            // colBuildingTags
+            // 
+            this.colBuildingTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colBuildingTags.HeaderText = "Tags";
+            this.colBuildingTags.Name = "colBuildingTags";
+            this.colBuildingTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tbBuildingDescription
             // 
@@ -1754,6 +1825,13 @@
             this.dgvNPCTags.Size = new System.Drawing.Size(464, 251);
             this.dgvNPCTags.TabIndex = 42;
             // 
+            // colNPCTags
+            // 
+            this.colNPCTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colNPCTags.HeaderText = "Tags";
+            this.colNPCTags.Name = "colNPCTags";
+            this.colNPCTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // tbNPCDescription
             // 
             this.tbNPCDescription.Location = new System.Drawing.Point(320, 51);
@@ -1845,6 +1923,7 @@
             // 
             // tabStatusEffects
             // 
+            this.tabStatusEffects.Controls.Add(this.cbStatusEffect);
             this.tabStatusEffects.Controls.Add(this.btnStatusEffectCancel);
             this.tabStatusEffects.Controls.Add(this.dgvStatusEffectTags);
             this.tabStatusEffects.Controls.Add(this.tbStatusEffectDescription);
@@ -1879,11 +1958,18 @@
             this.dgvStatusEffectTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colStatusEffectsTag});
             this.dgvStatusEffectTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dgvStatusEffectTags.Location = new System.Drawing.Point(320, 110);
+            this.dgvStatusEffectTags.Location = new System.Drawing.Point(320, 137);
             this.dgvStatusEffectTags.Name = "dgvStatusEffectTags";
             this.dgvStatusEffectTags.RowHeadersVisible = false;
-            this.dgvStatusEffectTags.Size = new System.Drawing.Size(464, 278);
+            this.dgvStatusEffectTags.Size = new System.Drawing.Size(464, 251);
             this.dgvStatusEffectTags.TabIndex = 60;
+            // 
+            // colStatusEffectsTag
+            // 
+            this.colStatusEffectsTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colStatusEffectsTag.HeaderText = "Tags";
+            this.colStatusEffectsTag.Name = "colStatusEffectsTag";
+            this.colStatusEffectsTag.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tbStatusEffectDescription
             // 
@@ -2045,6 +2131,13 @@
             this.dgvLightTags.Size = new System.Drawing.Size(464, 355);
             this.dgvLightTags.TabIndex = 27;
             // 
+            // colLightTags
+            // 
+            this.colLightTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colLightTags.HeaderText = "Tags";
+            this.colLightTags.Name = "colLightTags";
+            this.colLightTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // dgvLights
             // 
             this.dgvLights.AllowUserToAddRows = false;
@@ -2176,6 +2269,13 @@
             this.dgvDungeonTags.Size = new System.Drawing.Size(464, 278);
             this.dgvDungeonTags.TabIndex = 63;
             // 
+            // colDungeonsTag
+            // 
+            this.colDungeonsTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colDungeonsTag.HeaderText = "Tags";
+            this.colDungeonsTag.Name = "colDungeonsTag";
+            this.colDungeonsTag.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // dgvDungeons
             // 
             this.dgvDungeons.AllowUserToAddRows = false;
@@ -2216,103 +2316,14 @@
             this.colDungeonsName.ReadOnly = true;
             this.colDungeonsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // colItemTags
+            // cbStatusEffect
             // 
-            this.colItemTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colItemTags.HeaderText = "Tags";
-            this.colItemTags.Name = "colItemTags";
-            this.colItemTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // colWorldObjectTags
-            // 
-            this.colWorldObjectTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colWorldObjectTags.HeaderText = "Tags";
-            this.colWorldObjectTags.Name = "colWorldObjectTags";
-            this.colWorldObjectTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // colCharacterTags
-            // 
-            this.colCharacterTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colCharacterTags.HeaderText = "Tags";
-            this.colCharacterTags.Name = "colCharacterTags";
-            this.colCharacterTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // colClassTags
-            // 
-            this.colClassTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colClassTags.HeaderText = "Tags";
-            this.colClassTags.Name = "colClassTags";
-            this.colClassTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // colTaskTags
-            // 
-            this.colTaskTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colTaskTags.HeaderText = "Tags";
-            this.colTaskTags.Name = "colTaskTags";
-            this.colTaskTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // colCutsceneTags
-            // 
-            this.colCutsceneTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colCutsceneTags.HeaderText = "Tags";
-            this.colCutsceneTags.Name = "colCutsceneTags";
-            this.colCutsceneTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // colMonsterTags
-            // 
-            this.colMonsterTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colMonsterTags.HeaderText = "Tags";
-            this.colMonsterTags.Name = "colMonsterTags";
-            this.colMonsterTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn3.HeaderText = "Tags";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // colShopTags
-            // 
-            this.colShopTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colShopTags.HeaderText = "Tags";
-            this.colShopTags.Name = "colShopTags";
-            this.colShopTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // colBuildingTags
-            // 
-            this.colBuildingTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colBuildingTags.HeaderText = "Tags";
-            this.colBuildingTags.Name = "colBuildingTags";
-            this.colBuildingTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // colNPCTags
-            // 
-            this.colNPCTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colNPCTags.HeaderText = "Tags";
-            this.colNPCTags.Name = "colNPCTags";
-            this.colNPCTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // colStatusEffectsTag
-            // 
-            this.colStatusEffectsTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colStatusEffectsTag.HeaderText = "Tags";
-            this.colStatusEffectsTag.Name = "colStatusEffectsTag";
-            this.colStatusEffectsTag.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // colLightTags
-            // 
-            this.colLightTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colLightTags.HeaderText = "Tags";
-            this.colLightTags.Name = "colLightTags";
-            this.colLightTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // colDungeonsTag
-            // 
-            this.colDungeonsTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colDungeonsTag.HeaderText = "Tags";
-            this.colDungeonsTag.Name = "colDungeonsTag";
-            this.colDungeonsTag.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cbStatusEffect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbStatusEffect.FormattingEnabled = true;
+            this.cbStatusEffect.Location = new System.Drawing.Point(320, 110);
+            this.cbStatusEffect.Name = "cbStatusEffect";
+            this.cbStatusEffect.Size = new System.Drawing.Size(149, 21);
+            this.cbStatusEffect.TabIndex = 62;
             // 
             // FrmDBEditor
             // 
@@ -2582,6 +2593,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatusEffectsTag;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLightTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDungeonsTag;
+        private System.Windows.Forms.ComboBox cbStatusEffect;
     }
 }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters;
+using RiverHollow.Characters.Lite;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
@@ -142,7 +143,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             List<TextEntry> liCommands = new List<TextEntry>();
 
             int i = 0;
-            foreach(ClassedCombatant act in PlayerManager.GetTacticalParty())
+            foreach(ClassedCombatant act in PlayerManager.GetParty())
             {
                 string verb = "Option_" + i++;
                 Dictionary<string, string> stringData = new Dictionary<string, string> { ["Text"] = act.Name, ["TextVerb"] = verb };
@@ -257,11 +258,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     }
                     else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.PetFollow))
                     {
-                        PlayerManager.World.SetPet((Pet)GameManager.CurrentNPC);
+                        PlayerManager.PlayerActor.SetPet((Pet)GameManager.CurrentNPC);
                     }
                     else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.PetUnfollow))
                     {
-                        PlayerManager.World.SetPet(null);
+                        PlayerManager.PlayerActor.SetPet(null);
                     }
                     else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.GetBaby))
                     {
@@ -319,7 +320,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.Exit)) { }
                     else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.EndDay))
                     {
-                        Vector2 pos = PlayerManager.World.CollisionBox.Center.ToVector2();
+                        Vector2 pos = PlayerManager.PlayerActor.CollisionBox.Center.ToVector2();
                         PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
                         GUIManager.SetScreen(new DayEndScreen());
                     }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using RiverHollow.WorldObjects;
+using RiverHollow.Items;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.WorldObjects.Item;
 
 namespace RiverHollow.Game_Managers
 {
@@ -257,7 +256,7 @@ Exit:
         {
             item.AutoPickup = false;
             item.ManualPickup = true;
-            MapManager.CurrentMap.DropItemOnMap(item, PlayerManager.World.Position);
+            MapManager.CurrentMap.DropItemOnMap(item, PlayerManager.PlayerActor.Position);
         }
 
         #region Add Item to Inventory

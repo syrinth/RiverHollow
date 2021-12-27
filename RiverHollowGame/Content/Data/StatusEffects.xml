@@ -3,11 +3,11 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Buff:Def-10]</Value>
+      <Value>[Type:Buff][Modify:Defense-Minor|Resistance-Minor][Duration:5]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Counter]</Value>
+      <Value>[Type:Buff][Counter]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[DoT][Potency:50]</Value>
+      <Value>[Type:Buff][DoT][Potency:50]</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Buff:Str-10][Debuff:Def-10][Counter]</Value>
+      <Value>[Type:Buff][Buff:Str-10][Debuff:Def-10][Counter]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -31,7 +31,7 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Buff:Mag-10][Song]</Value>
+      <Value>[Type:Buff][Buff:Mag-10][Song]</Value>
     </Item>
     <Item>
       <Key>8</Key>

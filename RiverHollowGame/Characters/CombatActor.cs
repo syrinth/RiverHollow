@@ -12,7 +12,7 @@ using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters
 {
-    public abstract class LiteCombatActor : Actor
+    public abstract class CombatActor : Actor
     {
         #region Properties
         protected const int MAX_STAT = 99;
@@ -27,62 +27,27 @@ namespace RiverHollow.Characters
             get { return _iCurrentHP; }
             set { _iCurrentHP = value; }
         }
-        public virtual int MaxHP => 20 + (int)Math.Pow(((double)StatVit / 3), 1.98);
-
-        protected int _iCurrentMP;
-        public int CurrentMP
-        {
-            get { return _iCurrentMP; }
-            set { _iCurrentMP = value; }
-        }
-        public virtual int MaxMP => StatMag * 3;
+        public virtual int MaxHP => 20 + (int)Math.Pow(((double)_diAttributes[AttributeEnum.MaxHealth] / 3), 1.98);
 
         public int CurrentCharge;
         public int DummyCharge;
         public LiteCombatTile Tile;
         public GUICombatTile Location => Tile.GUITile;
 
-        public virtual int Attack => 9;
-
-        protected int _iStrength;
-        public virtual int StatStr => _iStrength + _iBuffStr;
-        protected int _iDefense;
-        public virtual int StatDef => _iDefense + _iBuffDef;
-        protected int _iVitality;
-        public virtual int StatVit => _iVitality + _iBuffVit;
-        protected int _iMagic;
-        public virtual int StatMag => _iMagic + _iBuffMag;
-        protected int _iResistance;
-        public virtual int StatRes => _iResistance + _iBuffRes;
-        protected int _iSpeed;
-        public virtual int StatSpd => _iSpeed + _iBuffSpd;
-
-        protected int _iBuffStr;
-        protected int _iBuffDef;
-        protected int _iBuffVit;
-        protected int _iBuffMag;
-        protected int _iBuffRes;
-        protected int _iBuffSpd;
-        protected int _iBuffCrit;
-        protected int _iBuffEvade;
+        protected Dictionary<AttributeEnum, int> _diAttributes;
+        protected Dictionary<AttributeEnum, AttributeStatusEffect> _diEffectedAttributes;
 
         protected int _iCrit = 10;
-        public int CritRating => _iCrit + _iBuffCrit;
+        public int CritRating => _iCrit;
 
-        public int Evasion => (int)(40 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatSpd))))) + _iBuffEvade;
-        public int ResistStatus => (int)(50 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatRes)))));
+        protected List<CombatAction> _liActions;
+        public virtual List<CombatAction> Actions { get => _liActions; }
 
-        protected List<LiteMenuAction> _liActions;
-        public virtual List<LiteMenuAction> AbilityList { get => _liActions; }
-
-        protected List<LiteCombatAction> _liSpecialActions;
-        public virtual List<LiteCombatAction> SpecialActions { get => _liSpecialActions; }
+        protected List<CombatAction> _liSpecialActions;
+        public virtual List<CombatAction> SpecialActions { get => _liSpecialActions; }
 
         protected List<StatusEffect> _liStatusEffects;
-        public List<StatusEffect> LiBuffs { get => _liStatusEffects; }
-
-        protected Dictionary<ConditionEnum, bool> _diConditions;
-        public Dictionary<ConditionEnum, bool> DiConditions => _diConditions;
+        public List<StatusEffect> StatusEffects { get => _liStatusEffects; }
 
         private ElementEnum _elementAttackEnum;
         protected Dictionary<ElementEnum, ElementAlignment> _diElementalAlignment;
@@ -94,25 +59,25 @@ namespace RiverHollow.Characters
         public bool Counter;
         public bool GoToCounter;
 
-        public LiteCombatActor MyGuard;
-        public LiteCombatActor GuardTarget;
+        public CombatActor MyGuard;
+        public CombatActor GuardTarget;
         protected bool _bGuard;
         public bool Guard => _bGuard;
+        public bool KnockedOut { get; private set; } = false;
 
         public bool Swapped;
         #endregion
 
-        public LiteCombatActor() : base()
+        public CombatActor() : base()
         {
-            _liSpecialActions = new List<LiteCombatAction>();
-            _liActions = new List<LiteMenuAction>();
+            _liSpecialActions = new List<CombatAction>();
+            _liActions = new List<CombatAction>();
             _liStatusEffects = new List<StatusEffect>();
-            _diConditions = new Dictionary<ConditionEnum, bool>
-            {
-                [ConditionEnum.KO] = false,
-                [ConditionEnum.Poisoned] = false,
-                [ConditionEnum.Silenced] = false
-            };
+            _diAttributes = new Dictionary<AttributeEnum, int>();
+            foreach (AttributeEnum e in Enum.GetValues(typeof(AttributeEnum))) { _diAttributes[e] = 0; }
+
+            _diEffectedAttributes = new Dictionary<AttributeEnum, AttributeStatusEffect>();
+            foreach (AttributeEnum e in Enum.GetValues(typeof(AttributeEnum))) { _diEffectedAttributes[e] = new AttributeStatusEffect(); }
 
             _diElementalAlignment = new Dictionary<ElementEnum, ElementAlignment>
             {
@@ -140,9 +105,9 @@ namespace RiverHollow.Characters
             _sprBody.AddAnimation(LiteCombatActionEnum.KO, (xCrawl * frameSize.Width), 0, frameSize, 1, 0.5f);
 
             _sprBody.PlayAnimation(LiteCombatActionEnum.Idle);
-            _sprBody.SetScale(LiteCombatManager.CombatScale);
-            _iBodyWidth = frameSize.Width * LiteCombatManager.CombatScale;
-            _iBodyHeight = frameSize.Height * LiteCombatManager.CombatScale;
+            _sprBody.SetScale((int)GameManager.NORMAL_SCALE);
+            _iBodyWidth = frameSize.Width * (int)GameManager.NORMAL_SCALE;
+            _iBodyHeight = frameSize.Height * (int)GameManager.NORMAL_SCALE;
         }
 
         public override void Update(GameTime theGameTime)
@@ -155,7 +120,7 @@ namespace RiverHollow.Characters
                 else { Tile.PlayAnimation(LiteCombatActionEnum.Idle); }
             }
 
-            if (!_diConditions[ConditionEnum.KO] && IsCurrentAnimation(LiteCombatActionEnum.KO))
+            if (!KnockedOut && IsCurrentAnimation(LiteCombatActionEnum.KO))
             {
                 if (IsCritical()) { Tile.PlayAnimation(LiteCombatActionEnum.Critical); }
                 else { Tile.PlayAnimation(LiteCombatActionEnum.Idle); }
@@ -172,6 +137,41 @@ namespace RiverHollow.Characters
             }
         }
 
+        public virtual void GoToIdle()
+        {
+            if (IsCritical()) { base.PlayAnimation(VerbEnum.Critical); }
+            else { base.PlayAnimation(VerbEnum.Walk); }
+        }
+
+        public virtual GUIImage GetIcon() { return null; }
+
+        public virtual int Attribute(AttributeEnum e)
+        {
+            int rv = 0;
+            if (_diAttributes.ContainsKey(e))
+            {
+                return _diAttributes[e] + _diEffectedAttributes[e].Value;
+            }
+            return rv;
+        }
+        public AttributeStatusEffect GetEffectedAttributeInfo(AttributeEnum e)
+        {
+            return _diEffectedAttributes[e];
+        }
+
+        public void GetDamageRange(out int min, out int max, CombatAction action)
+        {
+            AttributeEnum attribute = action.DamageAttribue;
+            double potencyMod = action.Potency / 100;   //100 potency is considered an average attack
+            double base_damage = Attribute(AttributeEnum.Damage);  //Damage is the most important attribute for raw damage
+            double AttributeMultiplier = Math.Round(1 + ((double)Attribute(attribute) / 4 * Attribute(attribute) / MAX_STAT), 2);
+
+            double dmg = (Math.Max(1, base_damage) * potencyMod * AttributeMultiplier);
+
+            min = (int)(dmg * 0.75);
+            max = (int)(dmg * 1.25);
+        }
+
         /// <summary>
         /// Calculates the damage to be dealt against the actor.
         /// 
@@ -186,24 +186,24 @@ namespace RiverHollow.Characters
         /// <param name="potency">The potency of the attack</param>
         /// <param name="element">any associated element</param>
         /// <returns></returns>
-        public int ProcessAttack(LiteCombatActor attacker, int potency, int critRating, ElementEnum element = ElementEnum.None)
+        public int ProcessAttack(CombatActor attacker, int potency, int critRating, ElementEnum element = ElementEnum.None)
         {
             double compression = 0.8;
             double potencyMod = potency / 100;   //100 potency is considered an average attack
-            double base_attack = attacker.Attack;  //Attack stat is either weapon damage or mod on monster str
-            double StrMult = Math.Round(1 + ((double)attacker.StatStr / 4 * attacker.StatStr / MAX_STAT), 2);
+            double base_attack = attacker.Attribute(AttributeEnum.Damage);  //Attack stat is either weapon damage or mod on monster str
+            double StrMult = Math.Round(1 + ((double)attacker.Attribute(AttributeEnum.Strength) / 4 * attacker.Attribute(AttributeEnum.Strength) / MAX_STAT), 2);
 
-            double dmg = (Math.Max(1, base_attack - StatDef) * compression * StrMult);
+            double dmg = (Math.Max(1, base_attack - Attribute(AttributeEnum.Defense)) * compression * StrMult);
             dmg += ApplyResistances(dmg, element);
 
             if (RHRandom.Instance().Next(1, 100) <= (attacker.CritRating + critRating)) { dmg *= 2; }
 
             return DecreaseHealth(dmg);
         }
-        public int ProcessSpell(LiteCombatActor attacker, int potency, ElementEnum element = ElementEnum.None)
+        public int ProcessSpell(CombatActor attacker, int potency, ElementEnum element = ElementEnum.None)
         {
             double maxDmg = (1 + potency) * 3;
-            double divisor = 1 + (30 * Math.Pow(Math.E, -0.12 * (attacker.StatMag - StatRes) * Math.Round((double)attacker.StatMag / MAX_STAT, 2)));
+            double divisor = 1 + (30 * Math.Pow(Math.E, -0.12 * (attacker.Attribute(AttributeEnum.Magic) - Attribute(AttributeEnum.Resistance)) * Math.Round((double)attacker.Attribute(AttributeEnum.Magic) / MAX_STAT, 2)));
 
             double damage = Math.Round(maxDmg / divisor);
             damage += ApplyResistances(damage, element);
@@ -247,10 +247,10 @@ namespace RiverHollow.Characters
             return modifiedDmg;
         }
 
-        public int ProcessHealingSpell(LiteCombatActor attacker, int potency)
+        public int ProcessHealingSpell(CombatActor attacker, int potency)
         {
             double maxDmg = (1 + potency) * 3;
-            double divisor = 1 + (30 * Math.Pow(Math.E, -0.12 * (attacker.StatMag - StatRes) * Math.Round((double)attacker.StatMag / MAX_STAT, 2)));
+            double divisor = 1 + (30 * Math.Pow(Math.E, -0.12 * (attacker.Attribute(AttributeEnum.Magic) - Attribute(AttributeEnum.Resistance)) * Math.Round((double)attacker.Attribute(AttributeEnum.Magic) / MAX_STAT, 2)));
 
             int damage = (int)Math.Round(maxDmg / divisor);
 
@@ -268,7 +268,7 @@ namespace RiverHollow.Characters
             Tile.PlayAnimation(LiteCombatActionEnum.Hurt);
             if (_iCurrentHP == 0)
             {
-                _diConditions[ConditionEnum.KO] = true;
+                KnockedOut = true;
                 UnlinkSummon();
             }
 
@@ -278,7 +278,7 @@ namespace RiverHollow.Characters
         public int IncreaseHealth(int x)
         {
             int amountHealed = 0;
-            if (!KnockedOut())
+            if (!KnockedOut)
             {
                 amountHealed = x;
                 if (_iCurrentHP + x <= MaxHP)
@@ -295,21 +295,18 @@ namespace RiverHollow.Characters
             return amountHealed;
         }
 
+        /// <summary>
+        /// Removes the KnockedOut condition and sets currentHP to 1
+        /// </summary>
+        public void Recover()
+        {
+            KnockedOut = false;
+            _iCurrentHP = 1;
+        }
+
         public bool IsCritical()
         {
             return (float)CurrentHP / (float)MaxHP <= 0.25;
-        }
-
-        public void IncreaseMana(int x)
-        {
-            if (_iCurrentMP + x <= MaxMP)
-            {
-                _iCurrentMP += x;
-            }
-            else
-            {
-                _iCurrentMP = MaxMP;
-            }
         }
 
         /// <summary>
@@ -322,20 +319,20 @@ namespace RiverHollow.Characters
             List<StatusEffect> toRemove = new List<StatusEffect>();
             foreach (StatusEffect b in _liStatusEffects)
             {
-                if (--b.Duration == 0)
+                b.TickDown();
+                if (b.Duration == 0)
                 {
                     toRemove.Add(b);
-                    RemoveStatusEffect(b);
                 }
                 else
                 {
-                    if (b.DoT)
+                    if (b.EffectType == StatusTypeEnum.DoT)
                     {
-                        this.Tile.GUITile.AssignEffect(ProcessSpell(b.LiteCaster, b.Potency), true);
+                        this.Tile.GUITile.AssignEffect(ProcessSpell(b.SkillUser, b.Potency), true);
                     }
-                    if (b.HoT)
+                    if (b.EffectType == StatusTypeEnum.HoT)
                     {
-                        this.Tile.GUITile.AssignEffect(ProcessHealingSpell(b.LiteCaster, b.Potency), false);
+                        this.Tile.GUITile.AssignEffect(ProcessHealingSpell(b.SkillUser, b.Potency), false);
                     }
                 }
             }
@@ -345,96 +342,54 @@ namespace RiverHollow.Characters
                 _liStatusEffects.Remove(b);
             }
             toRemove.Clear();
+
+            foreach (AttributeEnum e in Enum.GetValues(typeof(AttributeEnum)))
+            {
+                TickDownAttributeEffect(e);
+            }
         }
 
         /// <summary>
         /// Adds the StatusEffect objectto the character's list of status effects.
         /// </summary>
-        /// <param name="b">Effect toadd</param>
-        public void AddStatusEffect(StatusEffect b)
+        /// <param name="effect">Effect toadd</param>
+        public void ApplyStatusEffect(StatusEffect effect)
         {
-            //Only one song allowed at a time so see if there is another
-            //songand,if so, remove it.
-            if (b.Song)
+            if (effect.EffectType == StatusTypeEnum.DoT || effect.EffectType == StatusTypeEnum.HoT)
             {
-                StatusEffect song = _liStatusEffects.Find(status => status.Song);
-                if (song != null)
+                StatusEffect find = _liStatusEffects.Find(status => status.ID == effect.ID);
+                if (find != null)
                 {
-                    RemoveStatusEffect(song);
-                    _liStatusEffects.Remove(song);
+                    _liStatusEffects.Remove(find);
+                }
+                _liStatusEffects.Add(effect);
+            }
+            else
+            {
+                foreach(KeyValuePair<AttributeEnum, int> kvp in effect.AttributeEffects)
+                {
+                    AssignAttributeEffect(kvp.Key, kvp.Value, effect.Duration);
                 }
             }
-
-            //Look to see if the status effect already exists, if so, just
-            //set the duration to be the new duration. No stacking.
-            StatusEffect find = _liStatusEffects.Find(status => status.Name == b.Name);
-            if (find == null) { _liStatusEffects.Add(b); }
-            else { find.Duration = b.Duration; }
-
-            foreach (KeyValuePair<StatEnum, int> kvp in b.StatMods)
-            {
-                HandleStatBuffs(kvp);
-            }
-
-            //If the status effect provides counter, turn counter on.
-            if (b.Counter) { Counter = true; }
-
-            if (b.Guard) { _bGuard = true; }
         }
 
-        /// <summary>
-        /// Removes the status effect from the Actor
-        /// </summary>
-        /// <param name="b"></param>
-        public void RemoveStatusEffect(StatusEffect b)
+        private void AssignAttributeEffect(AttributeEnum e, int value, int duration)
         {
-            foreach (KeyValuePair<StatEnum, int> kvp in b.StatMods)
-            {
-                HandleStatBuffs(kvp, true);
-            }
-
-            if (b.Counter) { Counter = false; }
-            if (b.Guard) { _bGuard = false; }
+            _diEffectedAttributes[e] = new AttributeStatusEffect(value, duration);
         }
 
-        /// <summary>
-        /// Helper to not repeat code for the Stat buffing/debuffing
-        /// 
-        /// Pass in the statmod kvp and an integer representing positive or negative
-        /// and multiply the mod by it. If we are adding, it will remain unchanged, 
-        /// if we are subtracting, the positive value will go negative.
-        /// </summary>
-        /// <param name="kvp">The stat to modifiy and how much</param>
-        /// <param name="negative">Whether or not we need to add or remove the value</param>
-        private void HandleStatBuffs(KeyValuePair<StatEnum, int> kvp, bool negative = false)
+        private void TickDownAttributeEffect(AttributeEnum e)
         {
-            int modifier = negative ? -1 : 1;
-            switch (kvp.Key)
+            AttributeStatusEffect attribute = _diEffectedAttributes[e];
+            if (attribute.Duration > 0)
             {
-                case StatEnum.Str:
-                    _iBuffStr += kvp.Value * modifier;
-                    break;
-                case StatEnum.Def:
-                    _iBuffDef += kvp.Value * modifier;
-                    break;
-                case StatEnum.Vit:
-                    _iBuffVit += kvp.Value * modifier;
-                    break;
-                case StatEnum.Mag:
-                    _iBuffMag += kvp.Value * modifier;
-                    break;
-                case StatEnum.Res:
-                    _iBuffRes += kvp.Value * modifier;
-                    break;
-                case StatEnum.Spd:
-                    _iBuffSpd += kvp.Value * modifier;
-                    break;
-                case StatEnum.Crit:
-                    _iBuffCrit += kvp.Value * modifier;
-                    break;
-                case StatEnum.Evade:
-                    _iBuffEvade += kvp.Value * modifier;
-                    break;
+                attribute.Duration--;
+                if (attribute.Duration == 0)
+                {
+                    attribute.Value = 0;
+                }
+
+                _diEffectedAttributes[e] = attribute;
             }
         }
 
@@ -443,23 +398,11 @@ namespace RiverHollow.Characters
             _linkedSummon = s;
             s.Tile = Tile;
 
-            foreach (KeyValuePair<StatEnum, int> kvp in _linkedSummon.BuffedStats)
-            {
-                this.HandleStatBuffs(kvp, false);
-            }
-
             Tile.GUITile.LinkSummon(s);
         }
 
         public void UnlinkSummon()
         {
-            if (_linkedSummon != null)
-            {
-                foreach (KeyValuePair<StatEnum, int> kvp in _linkedSummon.BuffedStats)
-                {
-                    this.HandleStatBuffs(kvp, true);
-                }
-            }
             Tile.GUITile.LinkSummon(null);
             _linkedSummon = null;
         }
@@ -475,47 +418,14 @@ namespace RiverHollow.Characters
             return e;
         }
 
-        public bool CanCast(int x)
-        {
-            return x <= CurrentMP;
-        }
-
         public void SetUnique(string u)
         {
             _sUnique = u;
         }
 
-        public bool KnockedOut()
-        {
-            return _diConditions[ConditionEnum.KO];
-        }
-
-        public bool Poisoned()
-        {
-            return _diConditions[ConditionEnum.Poisoned];
-        }
-
-        public bool Silenced()
-        {
-            return _diConditions[ConditionEnum.Silenced];
-        }
-
-        public void ChangeConditionStatus(ConditionEnum c, bool setTo)
-        {
-            _diConditions[c] = setTo;
-        }
-
-        public void ClearConditions()
-        {
-            foreach (ConditionEnum condition in Enum.GetValues(typeof(ConditionEnum)))
-            {
-                ChangeConditionStatus(condition, false);
-            }
-        }
-
         public void IncreaseStartPos()
         {
-            if (_vStartPos.Y <LiteCombatManager.MAX_ROW)
+            if (_vStartPos.Y <CombatManager.MAX_ROW)
             {
                 _vStartPos.Y++;
             }
@@ -533,12 +443,6 @@ namespace RiverHollow.Characters
         {
             curr = _iCurrentHP;
             max = MaxHP;
-        }
-
-        public void GetMP(ref double curr, ref double max)
-        {
-            curr = _iCurrentMP;
-            max = MaxMP;
         }
 
         public virtual bool IsSummon() { return false; }

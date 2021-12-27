@@ -9,14 +9,14 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIItemBox;
-using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
-using static RiverHollow.GUIComponents.Screens.HUDMenu.HUDManagement.MgmtWindow;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
+using RiverHollow.GUIComponents.GUIObjects.Combat.Lite;
+using RiverHollow.Items;
+using RiverHollow.Characters.Lite;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -26,8 +26,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         GUIButton _btnSkipCutscene;
         GUIObject _gMenu;
-        GUIStatDisplay _gHealthDisplay;
-        GUIStatDisplay _gStaminaDisplay;
+        GUIOldStatDisplay _gHealthDisplay;
+        GUIOldStatDisplay _gStaminaDisplay;
         GUIMoneyDisplay _gMoney;
         GUIMonsterEnergyDisplay _gEnergy;
         GUIDungeonKeyDisplay _gDungeonKeys;
@@ -41,10 +41,10 @@ namespace RiverHollow.GUIComponents.Screens
         public HUDScreen()
         {
             _liTaskIcons = new List<HUDNewTask>();
-            _gHealthDisplay = new GUIStatDisplay(PlayerManager.World.GetHP, Color.Green);
+            _gHealthDisplay = new GUIOldStatDisplay(PlayerManager.PlayerCombatant.GetHP, Color.Green);
             _gHealthDisplay.AnchorToScreen(this, SideEnum.TopLeft, 10);
             AddControl(_gHealthDisplay);
-            _gStaminaDisplay = new GUIStatDisplay(PlayerManager.GetStamina, Color.Red);
+            _gStaminaDisplay = new GUIOldStatDisplay(PlayerManager.GetStamina, Color.Red);
             _gStaminaDisplay.AnchorAndAlignToObject(_gHealthDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             AddControl(_gStaminaDisplay);
 
@@ -67,6 +67,14 @@ namespace RiverHollow.GUIComponents.Screens
             _gCalendar = new HUDCalendar();
             _gCalendar.AnchorToScreen(SideEnum.TopRight, 10);
             AddControl(_gCalendar);
+
+            List<CombatActor> actors = new List<CombatActor>
+            {
+                DataManager.GetLiteMonsterByIndex(0),
+                PlayerManager.PlayerCombatant,
+                DataManager.GetLiteMonsterByIndex(0),
+                DataManager.GetLiteMonsterByIndex(0)
+            };
         }
 
         public override void Update(GameTime gTime)
@@ -554,7 +562,7 @@ namespace RiverHollow.GUIComponents.Screens
             public static int TASKBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDTaskLog.MAX_SHOWN_TASKS) - (_gWindow.EdgeSize * 2)
             List<GUIObject> _liTasks;
             DetailBox _detailWindow;
-            GUIList _gList;
+            List _gList;
 
             public HUDTaskLog()
             {
@@ -573,7 +581,7 @@ namespace RiverHollow.GUIComponents.Screens
                     _liTasks.Add(q);
                 }
 
-                _gList = new GUIList(_liTasks, MAX_SHOWN_TASKS, TASK_SPACING/*, _gWindow.Height*/);
+                _gList = new List(_liTasks, MAX_SHOWN_TASKS, TASK_SPACING/*, _gWindow.Height*/);
                 _gList.CenterOnObject(_winMain);
 
                 AddControl(_gList);
@@ -738,11 +746,11 @@ namespace RiverHollow.GUIComponents.Screens
 
             public HUDParty()
             {
-                _charBox = new CharacterDetailObject(PlayerManager.World);
+                _charBox = new CharacterDetailObject(PlayerManager.PlayerCombatant);
                 _charBox.CenterOnScreen();
                 AddControl(_charBox);
 
-                int partySize = PlayerManager.GetTacticalParty().Count;
+                int partySize = PlayerManager.GetParty().Count;
 
                 _map = new PositionMap(SetSelectedCharacter);
                 _map.AnchorAndAlignToObject(_charBox, SideEnum.Bottom, SideEnum.CenterX);
@@ -865,20 +873,20 @@ namespace RiverHollow.GUIComponents.Screens
                 /// </summary>
                 public void PopulatePositionMap()
                 {
-                    _currentCharacter = PlayerManager.World;
+                    //_currentCharacter = PlayerManager.World;
 
-                    //Iterate over each member of the party and retrieve their starting position.
-                    //Assigns the character to the starting position and assigns the current position
-                    //to the Player Character's
-                    foreach (ClassedCombatant c in PlayerManager.GetTacticalParty())
-                    {
-                        Vector2 vec = c.StartPosition;
-                        _arrStartPositions[(int)vec.X, (int)vec.Y].SetCharacter(c, (c == _currentCharacter));
-                        if (c == _currentCharacter)
-                        {
-                            _currPosition = _arrStartPositions[(int)vec.X, (int)vec.Y];
-                        }
-                    }
+                    ////Iterate over each member of the party and retrieve their starting position.
+                    ////Assigns the character to the starting position and assigns the current position
+                    ////to the Player Character's
+                    //foreach (ClassedCombatant c in PlayerManager.GetTacticalParty())
+                    //{
+                    //    Vector2 vec = c.StartPosition;
+                    //    _arrStartPositions[(int)vec.X, (int)vec.Y].SetCharacter(c, (c == _currentCharacter));
+                    //    if (c == _currentCharacter)
+                    //    {
+                    //        _currPosition = _arrStartPositions[(int)vec.X, (int)vec.Y];
+                    //    }
+                    //}
                 }
 
                 public override bool ProcessLeftButtonClick(Point mouse)
@@ -903,7 +911,7 @@ namespace RiverHollow.GUIComponents.Screens
                                 rv = true;
                                 _currPosition.SetCharacter(null);
                                 _currPosition = sp;
-                                _currPosition.SetCharacter(_currentCharacter, true);
+                                //_currPosition.SetCharacter(_currentCharacter, true);
                                 _currentCharacter.SetStartPosition(new Vector2(_currPosition.Col, _currPosition.Row));
                             }
                             else
@@ -913,7 +921,7 @@ namespace RiverHollow.GUIComponents.Screens
                                 //Set the currentCharacter to the selected character.
                                 //Call up to the parent object to redisplay data.
                                 _currentCharacter = sp.Character;
-                                _delAction(_currentCharacter);
+                                //_delAction(_currentCharacter);
                                 _currPosition?.PlayAnimation(VerbEnum.Walk, DirectionEnum.Down);
                             }
 
@@ -961,10 +969,10 @@ namespace RiverHollow.GUIComponents.Screens
                     /// <param name="currentCharacter">Whether the character is the current character and should walk</param>
                     public void SetCharacter(ClassedCombatant c, bool currentCharacter = false)
                     {
-                        _character = c;
+                        //_character = c;
                         if (c != null)
                         {
-                            if (c == PlayerManager.World) { _sprite = new GUICharacterSprite(true); }
+                            if (c == PlayerManager.PlayerCombatant) { _sprite = new GUICharacterSprite(true); }
                             else { _sprite = new GUICharacterSprite(c.BodySprite, true); }
 
                             _sprite.SetScale(2);
@@ -1019,7 +1027,7 @@ namespace RiverHollow.GUIComponents.Screens
                 GUIButton _btnSwap;
 
                 GUIText _gName, _gClass, _gLvl, _gStr, _gDef, _gMagic, _gRes, _gSpd;
-                GUIStatDisplay _gBarXP, _gBarHP, _gBarMP;
+                GUIOldStatDisplay _gBarXP, _gBarHP;
 
                 public CharacterDetailObject(ClassedCombatant c)
                 {
@@ -1072,10 +1080,10 @@ namespace RiverHollow.GUIComponents.Screens
                     _gClass = new GUIText("XXXXXXXX");
                     _gClass.AnchorAndAlignToObject(_gName, SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN);
 
-                    _sBoxHead = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Head.GetItem(), FindMatchingItems);
-                    _sBoxArmor = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Armor.GetItem(), FindMatchingItems);
-                    _sBoxWeapon = new SpecializedBox(_character.CharacterClass.WeaponType, _character.Weapon.GetItem(), FindMatchingItems);
-                    _sBoxWrist = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Wrist.GetItem(), FindMatchingItems);
+                    _sBoxHead = new SpecializedBox(_character.CharacterClass.ArmorType, _character.GetEquipment(EquipmentEnum.Head), FindMatchingItems);
+                    _sBoxArmor = new SpecializedBox(_character.CharacterClass.ArmorType, _character.GetEquipment(EquipmentEnum.Armor), FindMatchingItems);
+                    _sBoxWeapon = new SpecializedBox(_character.CharacterClass.WeaponType, _character.GetEquipment(EquipmentEnum.Weapon), FindMatchingItems);
+                    _sBoxWrist = new SpecializedBox(_character.CharacterClass.ArmorType, _character.GetEquipment(EquipmentEnum.Wrist), FindMatchingItems);
 
                     _sBoxArmor.AnchorToInnerSide(WinDisplay, SideEnum.TopRight, SPACING);
                     _sBoxHead.AnchorAndAlignToObject(_sBoxArmor, SideEnum.Left, SideEnum.Top, SPACING);
@@ -1088,7 +1096,7 @@ namespace RiverHollow.GUIComponents.Screens
                     _liGearBoxes.Add(_sBoxWrist);
 
                     int barWidth = _sBoxArmor.DrawRectangle.Right - _sBoxHead.DrawRectangle.Left;
-                    _gBarXP = new GUIStatDisplay(_character.GetXP, Color.Yellow, barWidth);
+                    _gBarXP = new GUIOldStatDisplay(_character.GetXP, Color.Yellow, barWidth);
                     _gBarXP.AnchorToInnerSide(_winName, SideEnum.Right, SPACING);
                     _gBarXP.AlignToObject(_gName, SideEnum.CenterY);
 
@@ -1096,15 +1104,13 @@ namespace RiverHollow.GUIComponents.Screens
                     _gLvl.AnchorAndAlignToObject(_gBarXP, SideEnum.Left, SideEnum.CenterY, SPACING);
                     _gLvl.SetText("LV. " + _character.ClassLevel);
 
-                    _gBarHP = new GUIStatDisplay(_character.GetHP, Color.Green, barWidth);
+                    _gBarHP = new GUIOldStatDisplay(_character.GetHP, Color.Green, barWidth);
                     _gBarHP.AnchorAndAlignToObject(_sBoxHead, SideEnum.Left, SideEnum.Top, SPACING);
-                    _gBarMP = new GUIStatDisplay(_character.GetMP, Color.LightBlue, barWidth);
-                    _gBarMP.AnchorAndAlignToObject(_gBarHP, SideEnum.Bottom, SideEnum.Right, SPACING);
 
-                    if (_character == PlayerManager.World)
+                    if (_character == PlayerManager.PlayerCombatant)
                     {
-                        _sBoxHat = new SpecializedBox(ClothesEnum.Hat, PlayerManager.World.Hat, FindMatchingItems);
-                        _sBoxShirt = new SpecializedBox(ClothesEnum.Body, PlayerManager.World.Body, FindMatchingItems);
+                        _sBoxHat = new SpecializedBox(ClothingEnum.Hat, PlayerManager.PlayerActor.Hat, FindMatchingItems);
+                        _sBoxShirt = new SpecializedBox(ClothingEnum.Body, PlayerManager.PlayerActor.Body, FindMatchingItems);
 
                         //_sBoxHat.AnchorToInnerSide(_winClothes, SideEnum.TopLeft, SPACING);
                         _sBoxShirt.AnchorAndAlignToObject(_sBoxHat, SideEnum.Right, SideEnum.Top, SPACING);
@@ -1143,8 +1149,8 @@ namespace RiverHollow.GUIComponents.Screens
                     bool compareTemp = true;
                     if (tempGear != null)
                     {
-                        if (tempGear.WeaponType != WeaponEnum.None) { _character.Weapon.SetTemp(tempGear); }
-                        else if (tempGear.ArmorType != ArmorEnum.None) { _character.Armor.SetTemp(tempGear); }
+                        if (tempGear.WeaponType != WeaponEnum.None) { _character.EquipComparator(tempGear); }
+                        else if (tempGear.ArmorType != ArmorEnum.None) { _character.EquipComparator(tempGear); }
                         else
                         {
                             compareTemp = false;
@@ -1153,15 +1159,14 @@ namespace RiverHollow.GUIComponents.Screens
                     else
                     {
                         compareTemp = false;
-                        _character.Weapon.SetTemp(null);
-                        _character.Armor.SetTemp(null);
+                        _character.ClearEquipmentCompare();
                     }
 
-                    AssignStatText(_gStr, "Str", _character.StatStr, _character.TempStatStr, compareTemp);
-                    AssignStatText(_gDef, "Def", _character.StatDef, _character.TempStatDef, compareTemp);
-                    AssignStatText(_gMagic, "Mag", _character.StatMag, _character.TempStatMag, compareTemp);
-                    AssignStatText(_gRes, "Res", _character.StatRes, _character.TempStatRes, compareTemp);
-                    AssignStatText(_gSpd, "Spd", _character.StatSpd, _character.TempStatSpd, compareTemp);
+                    AssignStatText(_gStr, "Str", _character.Attribute(AttributeEnum.Strength), _character.TempAttribute(AttributeEnum.Strength), compareTemp);
+                    AssignStatText(_gDef, "Def", _character.Attribute(AttributeEnum.Defense), _character.TempAttribute(AttributeEnum.Defense), compareTemp);
+                    AssignStatText(_gMagic, "Mag", _character.Attribute(AttributeEnum.Magic), _character.TempAttribute(AttributeEnum.Magic), compareTemp);
+                    AssignStatText(_gRes, "Res", _character.Attribute(AttributeEnum.Resistance), _character.TempAttribute(AttributeEnum.Resistance), compareTemp);
+                    AssignStatText(_gSpd, "Spd", _character.Attribute(AttributeEnum.Speed), _character.TempAttribute(AttributeEnum.Speed), compareTemp);
                 }
 
                 private void AssignStatText(GUIText txtStat, string statString, int startStat, int tempStat, bool compareTemp)
@@ -1207,7 +1212,7 @@ namespace RiverHollow.GUIComponents.Screens
                             }
                             else if (_equipWindow.Box.ItemType.Equals(ItemEnum.Clothes))
                             {
-                                PlayerManager.World.SetClothes((Clothes)_equipWindow.SelectedItem);
+                                PlayerManager.PlayerActor.SetClothes((Clothing)_equipWindow.SelectedItem);
 
                             }
 
@@ -1230,7 +1235,7 @@ namespace RiverHollow.GUIComponents.Screens
                                 }
                             }
 
-                            if (!rv && _character == PlayerManager.World)
+                            if (!rv && _character == PlayerManager.PlayerCombatant)
                             {
                                 //foreach (GUIObject c in _winClothes.Controls)
                                 //{
@@ -1261,11 +1266,11 @@ namespace RiverHollow.GUIComponents.Screens
                         {
                             if (box.Contains(mouse) && box.BoxItem != null)
                             {
-                                if (!box.WeaponType.Equals(WeaponEnum.None)) { _character.Weapon = null; }
-                                else if (!box.ArmorType.Equals(ArmorEnum.None)) { _character.Armor = null; }
-                                else if (!box.ClothingType.Equals(ClothesEnum.None))
+                                if (!box.WeaponType.Equals(WeaponEnum.None)) { _character.Unequip(EquipmentEnum.Weapon); }
+                                else if (!box.ArmorType.Equals(ArmorEnum.None)) { _character.Unequip(EquipmentEnum.Armor); }
+                                else if (!box.ClothingType.Equals(ClothingEnum.None))
                                 {
-                                    PlayerManager.World.RemoveClothes(((Clothes)box.BoxItem).ClothesType);
+                                    PlayerManager.PlayerActor.RemoveClothes(((Clothing)box.BoxItem).ClothesType);
                                 }
 
                                 InventoryManager.AddToInventory(box.BoxItem);
@@ -1297,7 +1302,6 @@ namespace RiverHollow.GUIComponents.Screens
 
                         _gBarXP.ProcessHover(mouse);
                         _gBarHP.ProcessHover(mouse);
-                        _gBarMP.ProcessHover(mouse);
                     }
                     return rv;
                 }
@@ -1335,7 +1339,7 @@ namespace RiverHollow.GUIComponents.Screens
                             }
                             else if (boxMatch.ItemType.Equals(ItemEnum.Clothes) && i.CompareType(ItemEnum.Clothes))
                             {
-                                if (boxMatch.ClothingType != ClothesEnum.None && ((Clothes)i).ClothesType == boxMatch.ClothingType)
+                                if (boxMatch.ClothingType != ClothingEnum.None && ((Clothing)i).ClothesType == boxMatch.ClothingType)
                                 {
                                     liItems.Add(i);
                                 }
@@ -1349,8 +1353,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                 private void AssignEquipment(Equipment item)
                 {
-                    if (item.WeaponType != WeaponEnum.None) { _character.Weapon.SetGear(item); }
-                    else if (item.ArmorType != ArmorEnum.None) { _character.Armor.SetGear(item); }
+                    _character.Equip(item);
                 }
             }
 
@@ -1450,7 +1453,7 @@ namespace RiverHollow.GUIComponents.Screens
         public class HUDFriendship : GUIMainObject
         {
             GUIWindow _gWindow;
-            GUIList _villagerList;
+            List _villagerList;
 
             public HUDFriendship()
             {
@@ -1460,7 +1463,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                 foreach (Villager n in DataManager.DIVillagers.Values)
                 {
-                    FriendshipBox f = new FriendshipBox(n, _gWindow.MidWidth() - GUIList.BTNSIZE);
+                    FriendshipBox f = new FriendshipBox(n, _gWindow.MidWidth() - List.BTNSIZE);
 
                     /*if (vList.Count == 0) { f.AnchorToInnerSide(_gWindow, GUIObject.SideEnum.TopLeft); }
                     else
@@ -1471,7 +1474,7 @@ namespace RiverHollow.GUIComponents.Screens
                     vList.Add(f);
                 }
 
-                _villagerList = new GUIList(vList, 10, 4, _gWindow.MidHeight());
+                _villagerList = new List(vList, 10, 4, _gWindow.MidHeight());
                 _villagerList.CenterOnScreen(); //.AnchorToInnerSide(_gWindow, GUIObject.SideEnum.TopLeft);//
                 AddControl(_villagerList);
             }
@@ -1537,7 +1540,7 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         _gAdventure = new GUIImage(new Rectangle(4, 52, 8, 9), ScaleIt(8), ScaleIt(9), DataManager.DIALOGUE_TEXTURE);
                         _gAdventure.AnchorAndAlignToObject(_gGift, SideEnum.Left, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
-                        if (PlayerManager.GetTacticalParty().Contains(v))
+                        if (PlayerManager.GetParty().Contains(v.CombatVersion))
                         {
                             _gAdventure.SetColor(Color.Gold);
                         }
@@ -1566,351 +1569,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
             }
         }
-        public class HUDManagement : GUIMainObject
-        {
-            public enum ActionTypeEnum { View, Buy, Upgrade };
-            public ActionTypeEnum Action { get; private set; }
-            public static int BTN_PADDING = 20;
 
-            MgmtWindow _mgmtWindow;
-
-            List<GUIObject> _liWorkers;
-
-            Adventurer _worker;
-            int _iCost;
-
-            public HUDManagement(ActionTypeEnum action = ActionTypeEnum.View)
-            {
-                Action = action;
-                _liWorkers = new List<GUIObject>();
-
-                _mgmtWindow = new MainBuildingsWin(this);
-                AddControl(_mgmtWindow);
-            }
-
-            public override bool ProcessLeftButtonClick(Point mouse)
-            {
-                bool rv = false;
-
-                foreach (GUIObject g in Controls)
-                {
-                    rv = g.ProcessLeftButtonClick(mouse);
-                    if (rv) { break; }
-                }
-
-                return rv;
-            }
-
-            public override bool ProcessRightButtonClick(Point mouse)
-            {
-                bool rv = false;
-                rv = _mgmtWindow.ProcessRightButtonClick(mouse);
-
-                return rv;
-            }
-
-            public override bool ProcessHover(Point mouse)
-            {
-                bool rv = true;
-
-                rv = _mgmtWindow.ProcessHover(mouse);
-
-                return rv;
-            }
-
-            public override void Draw(SpriteBatch spriteBatch)
-            {
-                base.Draw(spriteBatch);
-            }
-
-            public override void Update(GameTime gTime)
-            {
-                base.Update(gTime);
-            }
-
-            public void HandleBuildingSelection(Building selectedBuilding)
-            {
-                //if (_worker == null)
-                //{
-                //    if (selectedBuilding != null)
-                //    {
-                //        RemoveControl(_mgmtWindow);
-                //        _mgmtWindow = new BuildingDetailsWin(this, selectedBuilding);
-                //        AddControl(_mgmtWindow);
-                //    }
-                //}
-                //else
-                //{
-                //    if (_worker.Building != null)
-                //    {
-                //        _worker.Building.RemoveWorker(_worker);
-                //    }
-
-                //    bool addSuccess = selectedBuilding.AddWorker(_worker);
-
-                //    if (Action == ActionTypeEnum.Buy)
-                //    {
-                //        if (addSuccess)
-                //        {
-                //            PlayerManager.TakeMoney(_iCost);
-                //            //GUIManager.OpenMainObject(new HUDNamingWindow(_worker));
-                //            _worker = null;
-                //        }
-                //        else
-                //        {
-                //            GUIManager.OpenTextWindow("Please choose an empty building.");
-                //        }
-                //    }
-                //    else
-                //    {
-                //        _worker = null;
-                //    }
-                //}
-            }
-
-            public void SetMgmtWindow(MgmtWindow newWin)
-            {
-                RemoveControl(_mgmtWindow);
-                _mgmtWindow = newWin;
-                AddControl(_mgmtWindow);
-            }
-
-            public override bool Contains(Point mouse)
-            {
-                bool rv = false;
-                foreach (GUIObject g in Controls)
-                {
-                    if (g.Contains(mouse))
-                    {
-                        rv = true;
-                        break;
-                    }
-                }
-
-                return rv;
-            }
-
-            public class MgmtWindow : GUIObject
-            {
-                protected GUIWindow _window;
-                protected HUDManagement _parent;
-                protected List<GUIObject> _liButtons;
-
-                private MgmtWindow(HUDManagement s)
-                {
-                    _liButtons = new List<GUIObject>();
-                    Controls = new List<GUIObject>();
-                    _parent = s;
-
-                    _window = new GUIWindow(GUIWindow.Window_1, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
-                    AddControl(_window);
-
-                    AddControl(_window);
-                    Width = _window.Width;
-                    Height = _window.Height;
-
-                    this.CenterOnScreen();
-                }
-
-                public override bool ProcessRightButtonClick(Point mouse)
-                {
-                    bool rv = base.ProcessRightButtonClick(mouse);
-                    return rv;
-                }
-
-                public class MainBuildingsWin : MgmtWindow
-                {
-                    public MainBuildingsWin(HUDManagement s, Adventurer w = null) : base(s)
-                    {
-                        //foreach (Building b in PlayerManager._diBuildings)
-                        //{
-                        //    bool good = false;
-
-                        //    if (_parent.Action == ActionTypeEnum.Upgrade) { good = b.Level < GameManager.MaxBldgLevel; }
-                        //    else if (w == null || b.CanHold(w)) { good = true; }
-
-                        //    if (good)
-                        //    {
-                        //        BuildingBox box = new BuildingBox(b, w != null);
-                        //        _liButtons.Add(box);
-                        //        AddControl(box);
-                        //    }
-                        //}
-
-                        CreateSpacedGrid(ref _liButtons, _window.InnerTopLeft(), _window.MidWidth(), 3);
-                    }
-
-                    public override bool ProcessLeftButtonClick(Point mouse)
-                    {
-                        bool rv = false;
-                        foreach (BuildingBox b in _liButtons)
-                        {
-                            if (b.Contains(mouse))
-                            {
-                                if (_parent.Action == ActionTypeEnum.Upgrade)
-                                {
-                                    //b.Building.StartBuilding(false);
-                                    GUIManager.CloseMainObject();
-                                }
-                                else { _parent.HandleBuildingSelection(b.Building); }
-                                rv = true;
-                                break;
-                            }
-                        }
-
-                        return rv;
-                    }
-
-                    private class BuildingBox : GUIObject
-                    {
-                        bool _bShowWorkers;
-                        GUIButton _btn;
-                        GUIText _gText;
-                        Building _b;
-                        public Building Building => _b;
-
-                        public BuildingBox(Building b, bool showWorkerNum)
-                        {
-                            _b = b;
-                            _bShowWorkers = showWorkerNum;
-
-                            _gText = new GUIText(@"N/A");// b.Workers.Count + @"/" + b.MaxWorkers);
-                            _gText.AnchorAndAlignToObject(_btn, SideEnum.Bottom, SideEnum.CenterX);
-
-                            AddControl(_btn);
-                            AddControl(_gText);
-                            Width = _btn.Width > _gText.Width ? _btn.Width : _gText.Width;
-                            Height = _btn.Height + _gText.Height;
-                        }
-
-                        public override void Draw(SpriteBatch spriteBatch)
-                        {
-                            _btn.Draw(spriteBatch);
-                            if (_bShowWorkers)
-                            {
-                                _gText.Draw(spriteBatch);
-                            }
-                        }
-                    }
-                }
-                public class BuildingDetailsWin : MgmtWindow
-                {
-                    public BuildingDetailsWin(HUDManagement s, Building selectedBuilding) : base(s)
-                    {
-                        //foreach (Adventurer w in selectedBuilding.Workers)
-                        //{
-                        //    WorkerBox btn = new WorkerBox(w);
-                        //    _liButtons.Add(btn);
-                        //    AddControl(btn);
-                        //}
-                        //CreateSpacedGrid(ref _liButtons, _window.InnerTopLeft(), _window.MidWidth(), 3);
-                    }
-
-                    public override bool ProcessLeftButtonClick(Point mouse)
-                    {
-                        bool rv = false;
-                        return rv;
-                    }
-                    public override bool ProcessRightButtonClick(Point mouse)
-                    {
-                        _parent.SetMgmtWindow(new MainBuildingsWin(_parent));
-                        return true;
-                    }
-
-                    private class WorkerBox : GUIObject
-                    {
-                        GUIButton _btn;
-                        Adventurer _w;
-                        public Adventurer Worker => _w;
-                        public WorkerBox(Adventurer w)
-                        {
-                            _w = w;
-                            _btn = new GUIButton(w.Name);
-                            AddControl(_btn);
-
-                            Width = _btn.Width;
-                            Height = _btn.Height;
-                        }
-                    }
-                }
-
-                public class WorkerDetailsWin : MgmtWindow
-                {
-                    GUIButton _btnMove;
-                    Adventurer _character;
-                    GUIText _gName, _actionText, _gClass, _gXP, _gStr, _gDef, _gVit, _gMagic, _gRes, _gSpd;
-                    GUIItemBox _weapon, _armor;
-                    public WorkerDetailsWin(HUDManagement s, Adventurer selectedAdventurer) : base(s)
-                    {
-                        int statSpacing = 10;
-                        _character = selectedAdventurer;
-                        _btnMove = new GUIButton("Move");
-                        _btnMove.AnchorToInnerSide(_window, SideEnum.BottomRight);
-
-                        string nameLen = "";
-                        for (int i = 0; i < GameManager.MAX_NAME_LEN; i++) { nameLen += "X"; }
-
-                        _gName = new GUIText(nameLen);
-                        _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
-                        _gClass = new GUIText("XXXXXXXX 99");
-                        _gClass.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left);
-
-                        _gXP = new GUIText(@"9999/9999");//new GUIText(_character.XP + @"/" + CombatAdventurer.LevelRange[_character.ClassLevel]);
-                        _gXP.AnchorAndAlignToObject(_gClass, SideEnum.Right, SideEnum.Top, 10);
-
-                        _gName.SetText(_character.Name);
-                        _gClass.SetText(_character.CharacterClass.Name + " " + _character.ClassLevel);
-                        _gXP.SetText("Exp:" + _character.XP);
-
-                        _weapon = new GUIItemBox(DataManager.DIALOGUE_TEXTURE, _character.Weapon.GetItem());
-                        _weapon.AnchorToInnerSide(_window, SideEnum.TopRight);
-
-                        _armor = new GUIItemBox(DataManager.DIALOGUE_TEXTURE, _character.Armor.GetItem());
-                        _armor.AnchorAndAlignToObject(_weapon, SideEnum.Left, SideEnum.Bottom);
-
-                        _gStr = new GUIText("Dmg: 999");
-                        _gDef = new GUIText("Def: 999");
-                        _gVit = new GUIText("HP: 999");
-                        _gMagic = new GUIText("Mag: 999");
-                        _gRes = new GUIText("Res: 999");
-                        _gSpd = new GUIText("Spd: 999");
-                        _gMagic.AnchorAndAlignToObject(_gClass, SideEnum.Bottom, SideEnum.Left);
-                        _gDef.AnchorAndAlignToObject(_gMagic, SideEnum.Right, SideEnum.Bottom, statSpacing);
-                        _gStr.AnchorAndAlignToObject(_gDef, SideEnum.Right, SideEnum.Bottom, statSpacing);
-                        _gVit.AnchorAndAlignToObject(_gStr, SideEnum.Right, SideEnum.Bottom, statSpacing);
-                        _gSpd.AnchorAndAlignToObject(_gVit, SideEnum.Right, SideEnum.Bottom, statSpacing);
-                        _gRes.AnchorAndAlignToObject(_gSpd, SideEnum.Right, SideEnum.Bottom, statSpacing);
-
-                        _gStr.SetText("Str: " + _character.StatStr);
-                        _gDef.SetText("Def: " + _character.StatDef);
-                        _gVit.SetText("Vit: " + _character.StatVit);
-                        _gMagic.SetText("Mag: " + _character.StatMag);
-                        _gRes.SetText("Res: " + _character.StatRes);
-                        _gSpd.SetText("Spd: " + _character.StatSpd);
-
-
-                        _actionText = new GUIText(_character.GetStateText());
-                        _actionText.AnchorToInnerSide(_window, SideEnum.BottomLeft);
-                    }
-
-                    public override bool ProcessLeftButtonClick(Point mouse)
-                    {
-                        bool rv = false;
-                        if (_btnMove.Contains(mouse))
-                        {
-                            rv = true;
-                        }
-
-                        return rv;
-                    }
-                    public override bool ProcessRightButtonClick(Point mouse)
-                    {
-                        _parent.SetMgmtWindow(new BuildingDetailsWin(_parent, _character.Building));
-                        return true;
-                    }
-                }
-            }
-        }
         public class HUDOptions : GUIMainObject
         {
             GUICheck _gAutoDisband;
@@ -2092,79 +1751,6 @@ namespace RiverHollow.GUIComponents.Screens
                 }
             }
         }
-
-        public class HUDNamingWindow : GUIMainObject
-        {
-            GUITextInputWindow _gInputWindow;
-            Building _bldg;
-            Adventurer _adv;
-
-            /// <summary>
-            /// Never called outwardly, only for private use
-            /// </summary>
-            private HUDNamingWindow()
-            {
-                _gInputWindow = new GUITextInputWindow();
-                _gInputWindow.SetupNaming();
-                _gInputWindow.Activate();
-
-                Width = _gInputWindow.Width;
-                Height = _gInputWindow.Height;
-                AddControl(_gInputWindow);
-            }
-
-            /// <summary>
-            /// Constructor to name a WorldAdventurer
-            /// </summary>
-            /// <param name="w">WorldAdventurer to name</param>
-            public HUDNamingWindow(Adventurer w) : this()
-            {
-                _adv = w;
-            }
-
-            /// <summary>
-            /// Constructor to name a Building.
-            /// 
-            /// Buildings are allowed to have spaces in their names.
-            /// </summary>
-            /// <param name="b">Building to name</param>
-            public HUDNamingWindow(Building b) : this()
-            {
-                _bldg = b;
-                _gInputWindow.AcceptSpace = true;
-            }
-
-            /// <summary>
-            /// Update function for the window.
-            /// 
-            /// Only setthe name of the component when it is finished taking input
-            /// </summary>
-            /// <param name="gTime"></param>
-            public override void Update(GameTime gTime)
-            {
-                base.Update(gTime);
-                if (_gInputWindow.Finished)
-                {
-                    if (_adv != null)
-                    {
-                        _adv.SetName(_gInputWindow.EnteredText);
-                    }
-
-                    SetGameScale(NORMAL_SCALE);
-                    //We know that this window only gets created under special circumstances, so unset them
-                    RiverHollow.ResetCamera();
-                    GUIManager.CloseMainObject();
-                    GameManager.Unpause();
-                    GameManager.Scry(false);
-                    GameManager.StopTakingInput();
-                }
-            }
-
-            public override bool ProcessRightButtonClick(Point mouse)
-            {
-                return false;
-            }
-        }
     }
 
     public class HUDCalendar : GUIWindow
@@ -2181,524 +1767,6 @@ namespace RiverHollow.GUIComponents.Screens
         public override void Update(GameTime gTime)
         {
             _gText.SetText(GameCalendar.GetCalendarString());
-        }
-    }
-
-    class HUDMissionWindow : GUIMainObject
-    {
-        public static int MAX_SHOWN_MISSIONS = 4;
-
-        int _iTopMission = 0;
-
-        GUIButton _btnUp;
-        GUIButton _btnDown;
-        GUIWindow _gWin;
-        DetailWindow _gDetailWindow;
-        WorkerWindow _gWinWorkers;
-
-        List<MissionBox> _liMissions;
-
-        public HUDMissionWindow()
-        {
-            GameManager.Pause();
-            _gWin = new GUIWindow(GUIWindow.Window_1, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
-            _liMissions = new List<MissionBox>();
-
-            AddControl(_gWin);
-
-            AssignMissionWindows();
-
-            Width = _gWin.Width;
-            Height = _gWin.Height;
-
-            CenterOnScreen();
-
-            if (MissionManager.AvailableMissions.Count > MAX_SHOWN_MISSIONS)
-            {
-                _btnUp = new GUIButton(new Rectangle(272, 96, 16, 16), GUIManager.MINI_BTN_HEIGHT, GUIManager.MINI_BTN_HEIGHT, DataManager.DIALOGUE_TEXTURE, BtnUpClick);
-                _btnDown = new GUIButton(new Rectangle(256, 96, 16, 16), GUIManager.MINI_BTN_HEIGHT, GUIManager.MINI_BTN_HEIGHT, DataManager.DIALOGUE_TEXTURE, BtnDownClick);
-
-                _btnUp.AnchorAndAlignToObject(_gWin, GUIObject.SideEnum.Right, GUIObject.SideEnum.Top);
-                _btnDown.AnchorAndAlignToObject(_gWin, GUIObject.SideEnum.Right, GUIObject.SideEnum.Bottom);
-
-                _btnUp.Enable(false);
-                _btnDown.Enable(false);
-
-                RemoveControl(_btnDown);
-                RemoveControl(_btnUp);
-                _gWin.AddControl(_btnDown);
-                _gWin.AddControl(_btnUp);
-            }
-        }
-
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-
-            if (_gWinWorkers != null)
-            {
-                rv = _gWinWorkers.ProcessLeftButtonClick(mouse);
-            }
-            else if (_gDetailWindow != null)
-            {
-                rv = _gDetailWindow.ProcessLeftButtonClick(mouse);
-            }
-            else
-            {
-                if (_btnDown != null && _btnDown.ProcessLeftButtonClick(mouse))
-                {
-                    rv = true;
-                }
-                else if (_btnUp != null && _btnUp.ProcessLeftButtonClick(mouse))
-                {
-                    rv = true;
-                }
-                else
-                {
-                    foreach (MissionBox box in _liMissions)
-                    {
-                        if (box.ProcessLeftButtonClick(mouse))
-                        {
-                            rv = true;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return rv;
-        }
-        public override bool ProcessRightButtonClick(Point mouse)
-        {
-            bool rv = false;
-
-            if (_gDetailWindow != null)
-            {
-                rv = _gDetailWindow.ProcessRightButtonClick(mouse);
-                if (!rv)
-                {
-                    RemoveControl(_gDetailWindow);
-                    _gDetailWindow = null;
-                    AddControl(_gWin);
-
-                    //set it true here so that higher up calls know that it has been handled
-                    rv = true;
-                }
-            }
-            else
-            {
-                rv = base.ProcessRightButtonClick(mouse);
-                if (!rv)
-                {
-                    MissionManager.ClearMissionAcceptance();
-                }
-            }
-
-            return rv;
-        }
-
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
-
-            if (_gWin.Contains(mouse))
-            {
-                GUICursor.Alpha = 1;
-            }
-
-            return rv;
-        }
-
-        /// <summary>
-        /// Clears and assigns the list of mission boxes based off of the top mission
-        /// and the total number of available missions
-        /// </summary>
-        public void AssignMissionWindows()
-        {
-            _liMissions.Clear();
-            for (int i = _iTopMission; i < _iTopMission + MAX_SHOWN_MISSIONS && i < MissionManager.AvailableMissions.Count; i++)
-            {
-                MissionBox q = new MissionBox(MissionManager.AvailableMissions[i], OpenDetailBox, _gWin.MidWidth(), _gWin.MidHeight() / MAX_SHOWN_MISSIONS);
-
-                if (_liMissions.Count == 0) { q.AnchorToInnerSide(_gWin, SideEnum.TopLeft); }
-                else { q.AnchorAndAlignToObject(_liMissions[_liMissions.Count() - 1], SideEnum.Bottom, SideEnum.Left); }
-
-                _gWin.AddControl(q);
-
-                _liMissions.Add(q);
-            }
-        }
-
-        /// <summary>
-        /// Opens a new window for advanced information on the indicated Mission.
-        /// Inform the Mission Manager which Mission we're looking at, so it can better
-        /// handle the information.
-        /// </summary>
-        /// <param name="m">The selected Mission</param>
-        public void OpenDetailBox(Mission m)
-        {
-            MissionManager.SelectMission(m);
-            _gDetailWindow = new DetailWindow(m, OpenWorkerWindow, AcceptMission);
-            AddControl(_gDetailWindow);
-            RemoveControl(_gWin);
-        }
-
-        /// <summary>
-        /// Opens the WorkerWindow so that we can select from among the workers
-        /// the player has.
-        /// 
-        /// We remove the Detail window so it won't be drawn while the WorkerWindow is open.
-        /// </summary>
-        public void OpenWorkerWindow()
-        {
-            _gWinWorkers = new WorkerWindow(WorkerAssigned);
-            _gWinWorkers.CenterOnScreen();
-            AddControl(_gWinWorkers);
-            RemoveControl(_gDetailWindow);
-        }
-
-        /// <summary>
-        /// Delegate method for the WorkerWindow to handle when a worker
-        /// has been selected from it.
-        /// 
-        /// Close the WorkerWindow, and add the selected worker to the DetailWindow.
-        /// Null out the WorkerWindow, and then check to see if we have enough workers
-        /// to enable the Accept button.
-        /// </summary>
-        /// <param name="adv"></param>
-        public void WorkerAssigned(Adventurer adv)
-        {
-            AddControl(_gDetailWindow);
-            RemoveControl(_gWinWorkers);
-            _gDetailWindow.AssignToBox(adv);
-            _gWinWorkers = null;
-
-            if (MissionManager.MissionReady())
-            {
-                _gDetailWindow.EnableAccept();
-            }
-        }
-
-        /// <summary>
-        /// Delegate method called by the DetailWindow to accept the mission and return 
-        /// the user to the main screen.
-        /// </summary>
-        public void AcceptMission()
-        {
-            MissionManager.AcceptMission();
-            GUIManager.CloseMainObject();
-        }
-
-        /// <summary>
-        /// Moves the topmost displayed mission up one and reassigns the mission boxes
-        /// </summary>
-        public void BtnUpClick()
-        {
-            if (_iTopMission - 1 >= 0)
-            {
-                _iTopMission--;
-
-                AssignMissionWindows();
-            }
-        }
-
-        /// <summary>
-        /// Moves the topmost displayed mission up one and reassigns the mission boxes
-        /// </summary>
-        public void BtnDownClick()
-        {
-            if (_iTopMission + MAX_SHOWN_MISSIONS < MissionManager.AvailableMissions.Count)
-            {
-                _iTopMission++;
-            }
-            AssignMissionWindows();
-        }
-
-        /// <summary>
-        /// Displays the short form details of a mission.
-        /// </summary>
-        public class MissionBox : GUIWindow
-        {
-            Mission _mission;
-            GUIText _gName;
-            GUIMoneyDisplay _gMoney;
-
-            List<GUIItemBox> _liItems;
-
-            public delegate void BoxClickDelegate(Mission m);
-            private BoxClickDelegate _delAction;
-
-            public MissionBox(Mission m, BoxClickDelegate action, int width, int height) : base(GUIWindow.Window_1, width, height)
-            {
-                _mission = m;
-                _delAction = action;
-
-                _gName = new GUIText(m.Name);
-                _liItems = new List<GUIItemBox>();
-                _gMoney = new GUIMoneyDisplay(m.Money);
-
-                _gName.AnchorToInnerSide(this, SideEnum.TopLeft);
-                _gMoney.AnchorToInnerSide(this, SideEnum.Right);
-                _gMoney.AlignToObject(this, SideEnum.CenterY);
-
-                for (int i = 0; i < m.Items.Count(); i++)
-                {
-                    GUIItemBox box = new GUIItemBox(m.Items[i]);
-
-                    if (i == 0) { box.AnchorAndAlignToObject(_gMoney, SideEnum.Left, SideEnum.CenterY); }
-                    else { box.AnchorAndAlignToObject(_liItems[i - 1], SideEnum.Left, SideEnum.Bottom); }
-
-                    _liItems.Add(box);
-                    AddControl(box);
-                }
-            }
-
-            public override bool ProcessLeftButtonClick(Point mouse)
-            {
-                bool rv = false;
-
-                if (this.Contains(mouse))
-                {
-                    rv = true;
-                    _delAction(_mission);
-                }
-
-                return rv;
-            }
-        }
-
-        /// <summary>
-        /// Displays the actual details of the selected mission
-        /// </summary>
-        public class DetailWindow : GUIWindow
-        {
-            GUIButton _btnAccept;
-
-            GUIText _gName;
-            GUIText _gClass;
-            GUIText _gDaysToFinish;
-            GUIText _gDaysUntilExpiry;
-            GUIText _gReqLevel;
-
-            GUIMoneyDisplay _gMoney;
-
-            List<GUIItemBox> _liItems;
-
-            List<CharacterDisplayBox> _liParty;
-
-            CharacterDisplayBox _selected;
-
-            public delegate void BoxClickDelegate();
-            private BoxClickDelegate _delOpen;
-
-            public DetailWindow(Mission m, BoxClickDelegate open, BtnClickDelegate accept) : base(GUIWindow.Window_1, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT)
-            {
-                _liItems = new List<GUIItemBox>();
-                _liParty = new List<CharacterDisplayBox>();
-
-                _delOpen = open;
-
-                _gName = new GUIText(m.Name);
-                _gDaysToFinish = new GUIText("Requires " + m.DaysToComplete + " days");
-                _gDaysUntilExpiry = new GUIText("Expires in " + (m.TotalDaysToExpire - m.DaysExpired) + " days");
-                _gReqLevel = new GUIText("Required Level: " + m.ReqLevel);
-
-                _gMoney = new GUIMoneyDisplay(m.Money);
-
-                _gName.AnchorToInnerSide(this, SideEnum.TopLeft);
-                _gReqLevel.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left);
-                _gDaysToFinish.AnchorAndAlignToObject(_gReqLevel, SideEnum.Bottom, SideEnum.Left);
-
-                if (m.CharClass != null)
-                {
-                    _gClass = new GUIText("Requires " + m.CharClass.Name);
-                    _gClass.AnchorAndAlignToObject(_gDaysToFinish, SideEnum.Bottom, SideEnum.Left);
-                }
-
-                _gDaysUntilExpiry.AnchorToInnerSide(this, SideEnum.BottomLeft);
-                _gMoney.AnchorToInnerSide(this, SideEnum.BottomRight);
-
-                //Adds the GUIItemBoxes to display Mission rewards
-                for (int i = 0; i < m.Items.Count(); i++)
-                {
-                    GUIItemBox box = new GUIItemBox(m.Items[i]);
-
-                    if (i == 0) { box.AnchorAndAlignToObject(_gMoney, SideEnum.Left, SideEnum.Bottom); }
-                    else { box.AnchorAndAlignToObject(_liItems[i - 1], SideEnum.Left, SideEnum.Bottom); }
-
-                    _liItems.Add(box);
-                    AddControl(box);
-                }
-
-                //Adds the CharacterDisplayBox to display assigned Adventurers
-                for (int i = 0; i < m.PartySize; i++)
-                {
-                    CharacterDisplayBox box = new CharacterDisplayBox(null, null);
-                    _liParty.Add(box);
-
-                    if (i == 0) { box.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.Right); }
-                    else { box.AnchorAndAlignToObject(_liParty[i - 1], SideEnum.Left, SideEnum.Top); }
-
-                    AddControl(box);
-                }
-
-                _btnAccept = new GUIButton("Accept", accept);
-                _btnAccept.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.Bottom);
-                _btnAccept.Enable(false);
-                AddControl(_btnAccept);
-
-                CenterOnScreen();
-            }
-
-            /// <summary>
-            /// If a CharacterDisplayBox was clicked, call the delegate to open up
-            /// the worker select window. Otherwise, try to see if the button was clicked.
-            /// </summary>
-            public override bool ProcessLeftButtonClick(Point mouse)
-            {
-                bool rv = false;
-
-                foreach (CharacterDisplayBox box in _liParty)
-                {
-                    if (box.Contains(mouse))
-                    {
-                        _selected = box;
-                        if (_selected.Actor != null)
-                        {
-                            MissionManager.RemoveFromParty(_selected.WorldAdv);
-                            _selected.AssignToBox(null);
-                        }
-                        _delOpen();
-                        rv = true;
-                        break;
-                    }
-                }
-
-                //If we didn't click on a character box, checkif we clicked the button.
-                if (!rv)
-                {
-                    rv = _btnAccept.ProcessLeftButtonClick(mouse);
-                }
-
-                return rv;
-            }
-
-            /// <summary>
-            /// Right clicking on a CharacterDisplayBox will remove the WorldAdventurer
-            /// from the party.
-            /// </summary>
-            /// <param name="mouse"></param>
-            /// <returns></returns>
-            public override bool ProcessRightButtonClick(Point mouse)
-            {
-                bool rv = false;
-
-                foreach (CharacterDisplayBox box in _liParty)
-                {
-                    if (box.Contains(mouse))
-                    {
-                        rv = true;
-                        MissionManager.RemoveFromParty(box.WorldAdv);
-                        box.AssignToBox(null);
-                        break;
-                    }
-                }
-
-                if (!rv)
-                {
-                    MissionManager.ClearMissionAcceptance();
-                }
-
-                return rv;
-            }
-
-            /// <summary>
-            /// Assign the indicated WorldAdventurer to the CharacterDisplayBox
-            /// </summary>
-            public void AssignToBox(Adventurer adv)
-            {
-                _selected.AssignToBox(adv);
-                _selected = null;
-            }
-
-            /// <summary>
-            /// Enables the Accept button
-            /// </summary>
-            public void EnableAccept()
-            {
-                _btnAccept.Enable(true);
-            }
-
-        }
-
-        /// <summary>
-        /// Displays all workers among all buildings.
-        /// </summary>
-        public class WorkerWindow : GUIWindow
-        {
-            List<CharacterDisplayBox> _liWorkers;
-
-            //Delegate method for when it's time to close this window.
-            public delegate void BoxClickDelegate(Adventurer adv);
-            private BoxClickDelegate _delClose;
-
-            /// <summary>
-            /// Constructs a new Worker window by iterating through all the buildings and workers, and adding
-            /// them to the list of workers. Workers that are already Adventuring cannot appear.
-            /// </summary>
-            /// <param name="delClose">Delegate method for the Screen to know what to do when we're done here.</param>
-            public WorkerWindow(BoxClickDelegate delClose) : base(GUIWindow.Window_2, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT)
-            {
-                _delClose = delClose;
-                _liWorkers = new List<CharacterDisplayBox>();
-
-                //Find all the relevant workers and create a CharacterDisplayBox for them
-                //foreach (Building b in PlayerManager._diBuildings)
-                //{
-                //    foreach (Adventurer adv in b.Workers)
-                //    {
-                //        if (adv.AvailableForMissions() && adv.ClassLevel >= MissionManager.SelectedMission.ReqLevel)
-                //        {
-                //            CharacterDisplayBox box = new CharacterDisplayBox(adv, null);
-                //            box.WorldAdv = adv;
-                //            _liWorkers.Add(box);
-                //        }
-                //    }
-                //}
-
-                //Organize all the CharacterDisplayBoxes.
-                for (int i = 0; i < _liWorkers.Count(); i++)
-                {
-                    if (i == 0) { _liWorkers[i].AnchorToInnerSide(this, SideEnum.TopLeft); }
-                    else { _liWorkers[i].AnchorAndAlignToObject(_liWorkers[i - 1], SideEnum.Right, SideEnum.Bottom); }
-
-                    AddControl(_liWorkers[i]);
-                }
-            }
-
-            /// <summary>
-            /// When we select one of the adventurers, add it to the MissionManager party
-            /// and then inform the MissionScreen that we're ready to close.
-            /// </summary>
-            /// <param name="mouse"></param>
-            /// <returns></returns>
-            public override bool ProcessLeftButtonClick(Point mouse)
-            {
-                bool rv = false;
-
-                foreach (CharacterDisplayBox box in _liWorkers)
-                {
-                    if (box.Contains(mouse))
-                    {
-                        rv = true;
-                        MissionManager.AddToParty(box.WorldAdv);
-                        _delClose(box.WorldAdv);
-                        break;
-                    }
-                }
-
-                return rv;
-            }
         }
     }
 

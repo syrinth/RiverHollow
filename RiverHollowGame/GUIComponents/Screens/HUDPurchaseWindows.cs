@@ -9,13 +9,14 @@ using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
+using RiverHollow.Items;
 
 namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDShopWindow : GUIMainObject
     {
         GUIMoneyDisplay _gMoney;
-        GUIList _gList;
+        List _gList;
 
         public HUDShopWindow(List<Merchandise> merch)
         {
@@ -32,15 +33,15 @@ namespace RiverHollow.GUIComponents.Screens
                     Item it = DataManager.GetItem(m.MerchID);
                     it.ApplyUniqueData(m.UniqueData);
 
-                    newBox = new PurchaseBox(it, m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE); 
+                    newBox = new PurchaseBox(it, m.MoneyCost, _winMain.MidWidth() - List.BTNSIZE); 
                 }
                 else if (m.MerchType == Merchandise.MerchTypeEnum.WorldObject)
                 {
-                    newBox = new PurchaseBox(DataManager.GetWorldObjectByID(m.MerchID), m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE);
+                    newBox = new PurchaseBox(DataManager.GetWorldObjectByID(m.MerchID), m.MoneyCost, _winMain.MidWidth() - List.BTNSIZE);
                 }
                 else if (m.MerchType == Merchandise.MerchTypeEnum.Actor)
                 {
-                    newBox = new PurchaseBox(DataManager.GetNPCByIndex(m.MerchID), m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE);
+                    newBox = new PurchaseBox(DataManager.GetNPCByIndex(m.MerchID), m.MoneyCost, _winMain.MidWidth() - List.BTNSIZE);
                 }
 
                 items.Add(newBox);
@@ -50,7 +51,7 @@ namespace RiverHollow.GUIComponents.Screens
                 i++;
             }
 
-            _gList = new GUIList(items, 10, ScaleIt(2), _winMain.MidHeight());
+            _gList = new List(items, 10, ScaleIt(2), _winMain.MidHeight());
             _gList.CenterOnObject(_winMain);
 
             _gMoney = new GUIMoneyDisplay();
@@ -296,133 +297,133 @@ namespace RiverHollow.GUIComponents.Screens
     //    }
     //}
 
-    public class HUDPurchaseWorkers : GUIMainObject
-    {
-        GUIMoneyDisplay _gMoney;
-        GUIText _gName;
-        GUIText _gDescription;
-        GUIMoneyDisplay _gCost;
-        GUIWindow _winWorkers;
-        List<GUIObject> _liWorkers;
-        WorkerBox _currentWorker;
-        GUIButton _btnBuy;
-        GUIItem _gDailyItem;
+    //public class HUDPurchaseWorkers : GUIMainObject
+    //{
+    //    GUIMoneyDisplay _gMoney;
+    //    GUIText _gName;
+    //    GUIText _gDescription;
+    //    GUIMoneyDisplay _gCost;
+    //    GUIWindow _winWorkers;
+    //    List<GUIObject> _liWorkers;
+    //    WorkerBox _currentWorker;
+    //    GUIButton _btnBuy;
+    //    GUIItem _gDailyItem;
 
-        public HUDPurchaseWorkers(List<Merchandise> merch)
-        {
-            Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
+    //    public HUDPurchaseWorkers(List<Merchandise> merch)
+    //    {
+    //        Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
 
-            int minWidth = 64;
-            int minHeight = 64;
-            _winWorkers = new GUIWindow(GUIWindow.Window_1, minWidth, minHeight);
-            _liWorkers = new List<GUIObject>();
+    //        int minWidth = 64;
+    //        int minHeight = 64;
+    //        _winWorkers = new GUIWindow(GUIWindow.Window_1, minWidth, minHeight);
+    //        _liWorkers = new List<GUIObject>();
 
-            foreach (Merchandise m in merch)
-            {
-                //if (m.MerchType == Merchandise.ItemType.Adventurer)
-                //{
-                //    Adventurer w = DataManager.GetAdventurer(m.MerchID);
-                //    WorkerBox wb = new WorkerBox(w, m.MoneyCost);
-                //    _liWorkers.Add(wb);
+    //        foreach (Merchandise m in merch)
+    //        {
+    //            //if (m.MerchType == Merchandise.ItemType.Adventurer)
+    //            //{
+    //            //    Adventurer w = DataManager.GetAdventurer(m.MerchID);
+    //            //    WorkerBox wb = new WorkerBox(w, m.MoneyCost);
+    //            //    _liWorkers.Add(wb);
 
-                //    if (i == 0) { wb.AnchorToInnerSide(_winWorkers, GUIObject.SideEnum.TopLeft); }
-                //    else {wb.AnchorAndAlignToObject(_liWorkers[i - 1], GUIObject.SideEnum.Right, GUIObject.SideEnum.Top, ScaleIt(1)); }
+    //            //    if (i == 0) { wb.AnchorToInnerSide(_winWorkers, GUIObject.SideEnum.TopLeft); }
+    //            //    else {wb.AnchorAndAlignToObject(_liWorkers[i - 1], GUIObject.SideEnum.Right, GUIObject.SideEnum.Top, ScaleIt(1)); }
 
-                //    _winWorkers.AddControl(wb);
-                //    i++;
-                //}
-            }
+    //            //    _winWorkers.AddControl(wb);
+    //            //    i++;
+    //            //}
+    //        }
 
-            _winWorkers.Resize();
+    //        _winWorkers.Resize();
 
-            _winMain = new GUIWindow(GUIWindow.Window_1, _winWorkers.Width, GUIManager.MAIN_COMPONENT_HEIGHT/2);
+    //        _winMain = new GUIWindow(GUIWindow.Window_1, _winWorkers.Width, GUIManager.MAIN_COMPONENT_HEIGHT/2);
             
-            _gMoney = new GUIMoneyDisplay();
-            _winWorkers.AnchorAndAlignToObject(_gMoney, SideEnum.Bottom, SideEnum.Left);
-            _winMain.AnchorAndAlignToObject(_winWorkers, SideEnum.Bottom, SideEnum.Left, ScaleIt(1));
+    //        _gMoney = new GUIMoneyDisplay();
+    //        _winWorkers.AnchorAndAlignToObject(_gMoney, SideEnum.Bottom, SideEnum.Left);
+    //        _winMain.AnchorAndAlignToObject(_winWorkers, SideEnum.Bottom, SideEnum.Left, ScaleIt(1));
 
-            AddControl(_winMain);
-            AddControl(_winWorkers);
-            AddControl(_gMoney);
+    //        AddControl(_winMain);
+    //        AddControl(_winWorkers);
+    //        AddControl(_gMoney);
 
-            _gName = new GUIText();
-            _gName.AnchorToInnerSide(_winMain, SideEnum.TopLeft, ScaleIt(1));
-            _gDescription = new GUIText();
-            _gDescription.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left, ScaleIt(1));
-            _btnBuy = new GUIButton("Buy", PurchaseWorker);
-            _btnBuy.AnchorToInnerSide(_winMain, SideEnum.BottomRight, ScaleIt(1));
+    //        _gName = new GUIText();
+    //        _gName.AnchorToInnerSide(_winMain, SideEnum.TopLeft, ScaleIt(1));
+    //        _gDescription = new GUIText();
+    //        _gDescription.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left, ScaleIt(1));
+    //        _btnBuy = new GUIButton("Buy", PurchaseWorker);
+    //        _btnBuy.AnchorToInnerSide(_winMain, SideEnum.BottomRight, ScaleIt(1));
 
-            Width = _winWorkers.Width;
-            Height = _winMain.Bottom - _gMoney.Top;
+    //        Width = _winWorkers.Width;
+    //        Height = _winMain.Bottom - _gMoney.Top;
 
-            CenterOnScreen();
-        }
+    //        CenterOnScreen();
+    //    }
 
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
+    //    public override bool ProcessHover(Point mouse)
+    //    {
+    //        bool rv = false;
 
-            foreach (WorkerBox wB in _liWorkers)
-            {
-                bool hovering = wB.Contains(mouse);
-                if (wB != _currentWorker)
-                {
-                    wB.Enable(hovering);
+    //        foreach (WorkerBox wB in _liWorkers)
+    //        {
+    //            bool hovering = wB.Contains(mouse);
+    //            if (wB != _currentWorker)
+    //            {
+    //                wB.Enable(hovering);
 
-                    if (hovering)
-                    {
-                        string value = string.Empty;
-                        DataManager.GetTextData("Class", wB.ID, ref value, "Name");
-                        _gName.SetText(value);
+    //                if (hovering)
+    //                {
+    //                    string value = string.Empty;
+    //                    DataManager.GetTextData("Class", wB.ID, ref value, "Name");
+    //                    _gName.SetText(value);
 
-                        DataManager.GetTextData("Class", wB.ID, ref value, "Description");
-                        _gDescription.ParseAndSetText(value, _winMain.MidWidth(), 3, true, false);
+    //                    DataManager.GetTextData("Class", wB.ID, ref value, "Description");
+    //                    _gDescription.ParseAndSetText(value, _winMain.MidWidth(), 3, true, false);
 
-                        _winMain.RemoveControl(_gCost);
-                        _gCost = new GUIMoneyDisplay(wB.Cost);
-                        _gCost.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.Bottom, ScaleIt(1));
+    //                    _winMain.RemoveControl(_gCost);
+    //                    _gCost = new GUIMoneyDisplay(wB.Cost);
+    //                    _gCost.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.Bottom, ScaleIt(1));
 
-                        _winMain.RemoveControl(_gDailyItem);
-                        _gDailyItem = new GUIItem(DataManager.GetItem(DataManager.GetAdventurer(wB.ID).DailyItemID));
-                        _gDailyItem.AnchorToInnerSide(_winMain, SideEnum.BottomLeft, ScaleIt(1));
+    //                    _winMain.RemoveControl(_gDailyItem);
+    //                    _gDailyItem = new GUIItem(DataManager.GetItem(DataManager.GetAdventurer(wB.ID).DailyItemID));
+    //                    _gDailyItem.AnchorToInnerSide(_winMain, SideEnum.BottomLeft, ScaleIt(1));
 
-                        _currentWorker = wB;
-                    }
-                }
-            }
+    //                    _currentWorker = wB;
+    //                }
+    //            }
+    //        }
 
-            return rv;
-        }
+    //        return rv;
+    //    }
 
-        private void PurchaseWorker()
-        {
-            //If all items are found, then remove them.
-            //if (PlayerManager._diBuildings.Count > 0 && PlayerManager.Money >= _currentWorker.Cost)
-            //{
-            //    HUDManagement m = new HUDManagement();
-            //    m.PurchaseWorker(DataManager.GetAdventurer(_currentWorker.ID), _currentWorker.Cost);
-            //    GUIManager.OpenMainObject(m);
-            //}
-        }
-    }
+    //    private void PurchaseWorker()
+    //    {
+    //        //If all items are found, then remove them.
+    //        //if (PlayerManager._diBuildings.Count > 0 && PlayerManager.Money >= _currentWorker.Cost)
+    //        //{
+    //        //    HUDManagement m = new HUDManagement();
+    //        //    m.PurchaseWorker(DataManager.GetAdventurer(_currentWorker.ID), _currentWorker.Cost);
+    //        //    GUIManager.OpenMainObject(m);
+    //        //}
+    //    }
+    //}
 
-    public class WorkerBox : GUIObject
-    {
-        CharacterDisplayBox _workerWindow;
-        public int Cost;
-        public int ID;
+    //public class WorkerBox : GUIObject
+    //{
+    //    CharacterDisplayBox _workerWindow;
+    //    public int Cost;
+    //    public int ID;
 
-        public WorkerBox(Adventurer w, int cost)
-        {
-            Cost = cost;
-            ID = w.WorkerID;
-            _workerWindow = new CharacterDisplayBox(w, null);
-            AddControl(_workerWindow);
+    //    public WorkerBox(Adventurer w, int cost)
+    //    {
+    //        Cost = cost;
+    //        ID = w.WorkerID;
+    //        _workerWindow = new CharacterDisplayBox(w, null);
+    //        AddControl(_workerWindow);
 
-            Width = _workerWindow.Width;
-            Height = _workerWindow.Height;
-        }
-    }
+    //        Width = _workerWindow.Width;
+    //        Height = _workerWindow.Height;
+    //    }
+    //}
 
     public class PurchaseBox : GUIWindow
     {
@@ -513,9 +514,9 @@ namespace RiverHollow.GUIComponents.Screens
                         Pet act = (Pet)_actor;
                         PlayerManager.AddPet(act);
                         act.SpawnNearPlayer();
-                        if(PlayerManager.World.ActivePet == null)
+                        if(PlayerManager.PlayerActor.ActivePet == null)
                         {
-                            PlayerManager.World.SetPet(act);
+                            PlayerManager.PlayerActor.SetPet(act);
                         }
                     }
                 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Characters;
+using RiverHollow.Characters.Lite;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
@@ -28,7 +29,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public class CharacterDisplayBox : NPCDisplayBox
         {
-            public Adventurer WorldAdv;
+            public ClassedCombatant WorldAdv;
             GUISprite _sprite;
             public GUISprite Sprite => _sprite;
 
@@ -42,7 +43,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 Setup();
             }
 
-            public void AssignToBox(Adventurer adv)
+            public void AssignToBox(ClassedCombatant adv)
             {
                 if (adv != null)
                 {
@@ -50,7 +51,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     Actor = adv;
                     _sprite = new GUISprite(adv.BodySprite, true);
 
-                    _sprite.SetScale((int)GameManager.CurrentScale);
+                    _sprite.SetScale(GameManager.CurrentScale);
                     _sprite.CenterOnWindow(this);
                     _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
 
@@ -72,7 +73,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
                 if (Actor != null)
                 {
-                    _sprite.SetScale((int)GameManager.CurrentScale);
+                    _sprite.SetScale(GameManager.CurrentScale);
                     _sprite.CenterOnWindow(this);
                     _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
 
@@ -113,7 +114,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             public PlayerDisplayBox(bool overwrite = false, ClickDelegate action = null) : base(action)
             {
                 _bOverwrite = overwrite;
-                Actor = PlayerManager.World;
+                Actor = PlayerManager.PlayerCombatant;
                 Configure();
             }
 
@@ -128,7 +129,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
                 if (Contains(mouse) && _delAction != null)
                 {
-                    _delAction(PlayerManager.World);
+                    _delAction(PlayerManager.PlayerCombatant);
                     rv = true;
                 }
 
@@ -139,7 +140,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 Controls.Clear();
                 _playerSprite = new GUICharacterSprite(_bOverwrite);
-                _playerSprite.SetScale((int)GameManager.CurrentScale);
+                _playerSprite.SetScale(GameManager.CurrentScale);
                 _playerSprite.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
 
                 Width = _playerSprite.Width + WidthEdges();

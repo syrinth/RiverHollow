@@ -100,6 +100,7 @@ namespace Database_Editor
             InitComboBox<TaskTypeEnum>(cbTaskType);
             InitComboBox<EditableCharacterDataEnum>(cbEditableCharData, false);
             InitComboBox<ActionEnum>(cbActionType);
+            InitComboBox<StatusTypeEnum>(cbStatusEffect);
 
             cbCharacterType.Items.Clear();
             cbCharacterType.Items.Add("Type:" + ActorEnum.Villager.ToString());
@@ -795,7 +796,7 @@ namespace Database_Editor
             {
                 case ItemEnum.Clothes:
                     cbItemSubtype.Visible = true;
-                    foreach (ClothesEnum en in Enum.GetValues(typeof(ClothesEnum)))
+                    foreach (ClothingEnum en in Enum.GetValues(typeof(ClothingEnum)))
                     {
                         cbItemSubtype.Items.Add("Subtype:" + en.ToString());
                     }
@@ -838,7 +839,7 @@ namespace Database_Editor
             switch (e)
             {
                 case ItemEnum.Clothes:
-                    rv = (int)Util.ParseEnum<ClothesEnum>(value);
+                    rv = (int)Util.ParseEnum<ClothingEnum>(value);
                     break;
                 case ItemEnum.Equipment:
                     rv = (int)Util.ParseEnum<EquipmentEnum>(value);
@@ -965,6 +966,7 @@ namespace Database_Editor
         {
             XMLData data = _diBasicXML[STATUS_EFFECTS_XML_FILE][_diTabIndices["StatusEffects"]];
             LoadGenericDataInfo(data, tbStatusEffectName, tbStatusEffectID, dgvStatusEffectTags, tbStatusEffectDescription);
+            cbStatusEffect.SelectedIndex = (int)Util.ParseEnum<StatusTypeEnum>(data.GetTagValue("Type"));
         }
         private void LoadLightInfo()
         {
@@ -1253,7 +1255,7 @@ namespace Database_Editor
         }
         private void SaveStatusEffectInfo(List<XMLData> liData)
         {
-            SaveXMLDataInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", "StatusEffect_", XMLTypeEnum.StatusEffect, tbStatusEffectName, tbStatusEffectID, null, dgvStatusEffects, dgvStatusEffectTags, "colStatusEffectsID", "colStatusEffectsName", "", "", tbStatusEffectDescription);
+            SaveXMLDataInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", "StatusEffect_", XMLTypeEnum.StatusEffect, tbStatusEffectName, tbStatusEffectID, cbStatusEffect, dgvStatusEffects, dgvStatusEffectTags, "colStatusEffectsID", "colStatusEffectsName", "", "", tbStatusEffectDescription);
         }
         private void SaveLightInfo(List<XMLData> liData)
         {

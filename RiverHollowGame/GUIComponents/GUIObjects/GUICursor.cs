@@ -4,8 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 
 using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.WorldObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Items;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
@@ -64,7 +64,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
         public static void SetCursor(CursorTypeEnum cursorType, Rectangle collisionRect)
         {
-            if (TacticalCombatManager.InCombat || GameManager.IsPaused())
+            if (GameManager.IsPaused())
             {
                 cursorType = CursorTypeEnum.Normal;
             }
@@ -140,7 +140,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         /// <param name="spriteBatch"></param>
         public static void DrawPotentialWorldObject(SpriteBatch spriteBatch)
         {
-            if (!Scrying() && !MapManager.CurrentMap.IsCombatMap)
+            if (!Scrying())
             {
                 //WorldObject construct = GameManager.ConstructionObject;
                 //if (construct != null)

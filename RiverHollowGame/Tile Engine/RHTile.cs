@@ -4,15 +4,11 @@ using MonoGame.Extended.Tiled;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.MainObjects;
+using RiverHollow.Items;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Game_Managers.TacticalCombatManager;
 using static RiverHollow.WorldObjects.Buildable;
 using static RiverHollow.WorldObjects.Buildable.AdjustableObject;
 
@@ -30,7 +26,6 @@ namespace RiverHollow.Tile_Engine
 
         string _sClickAction = string.Empty;
         TravelPoint _travelPoint;
-        public TacticalCombatActor Character { get; private set; }
 
         Dictionary<TiledMapTileLayer, Dictionary<string, string>> _diProps;
 
@@ -57,17 +52,6 @@ namespace RiverHollow.Tile_Engine
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle dest = new Rectangle((int)Position.X, (int)Position.Y, TILE_SIZE, TILE_SIZE);
-
-            if (TacticalCombatManager.InCombat)
-            {
-                //Only draw one of the tile targetting types
-                if (this == TacticalCombatManager.ActiveCharacter?.BaseTile && DisplaySelectedTile()) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(48, 112, 16, 16), Color.White); }
-                else if (_bSelected) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(16, 112, 16, 16), Color.White); }
-                else if (_bArea) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(32, 112, 16, 16), Color.White); }
-                else if (_bLegalTile) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(0, 112, 16, 16), Color.White); }
-            }
-
             if (Flooring != null) { Flooring.Draw(spriteBatch); }
             if (WorldObject != null) { WorldObject.Draw(spriteBatch); }
         }
@@ -90,7 +74,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     // if (obj.BuildingID > 1) { MapManager.EnterBuilding(obj, PlayerManager.Buildings.Find(x => x.PersonalID == obj.BuildingID)); }
                     //else { MapManager.ChangeMaps(PlayerManager.World, this.Name, obj); }
-                    MapManager.ChangeMaps(PlayerManager.World, MapName, _travelPoint);
+                    MapManager.ChangeMaps(PlayerManager.PlayerActor, MapName, _travelPoint);
                     SoundManager.PlayEffect("close_door_1");
                     return true;
                 }
@@ -110,11 +94,6 @@ namespace RiverHollow.Tile_Engine
             }
 
             return rv;
-        }
-
-        private bool DisplaySelectedTile()
-        {
-            return CombatPhaseCheck(CmbtPhaseEnum.ChooseActionTarget) || CombatPhaseCheck(CmbtPhaseEnum.ChooseMoveTarget) || CombatPhaseCheck(CmbtPhaseEnum.MainSelection);
         }
 
         public void SetWallTrue()
@@ -337,23 +316,6 @@ namespace RiverHollow.Tile_Engine
         }
 
         /// <summary>
-        /// Returns if the tile has a CombatActor assigned to it. 
-        /// </summary>
-        public bool HasCombatant()
-        {
-            return Character != null;
-        }
-
-        /// <summary>
-        /// Assigns a CombatActor to the RHTile
-        /// </summary>
-        /// <param name="c">The combatant to set to this tile</param>
-        public void SetCombatant(TacticalCombatActor c)
-        {
-            Character = c;
-        }
-
-        /// <summary>
         /// Sets the selected value of the RHTile
         /// </summary>
         /// <param name="val">Whether to set or unset the selected value</param>
@@ -518,22 +480,7 @@ namespace RiverHollow.Tile_Engine
         /// can be assigned to if it returns true.</returns>
         public bool CanWalkThrough()
         {
-            return CanTargetTile() && CanWalkThroughInCombat();
-        }
-
-        /// <summary>
-        /// For use only during Combat to see if can path through.
-        /// Characters can path through tiles occupied by an ally.
-        /// </summary>
-        /// <returns>True if not in combat, or character is null</returns>
-        public bool CanWalkThroughInCombat()
-        {
-            bool rv = true;
-            if (TacticalCombatManager.InCombat)
-            {
-                rv = Character == null || Character.IsSummon() || TacticalCombatManager.OnSameTeam(Character);
-            }
-            return rv;
+            return CanTargetTile();
         }
         #endregion
     }

@@ -670,15 +670,15 @@ namespace RiverHollow.Game_Managers
                 data.TaskLogData.Add(q.SaveData());
             }
 
-            foreach (Mission m in MissionManager.AvailableMissions)
-            {
-                data.AvailableMissions.Add(m.SaveData());
-            }
+            //foreach (Mission m in MissionManager.AvailableMissions)
+            //{
+            //    data.AvailableMissions.Add(m.SaveData());
+            //}
 
-            foreach (Mission m in MissionManager.CurrentMissions)
-            {
-                data.CurrentMissions.Add(m.SaveData());
-            }
+            //foreach (Mission m in MissionManager.CurrentMissions)
+            //{
+            //    data.CurrentMissions.Add(m.SaveData());
+            //}
 
             foreach (Villager n in DataManager.DIVillagers.Values)
             {
@@ -813,8 +813,8 @@ namespace RiverHollow.Game_Managers
             MapManager.CurrentMap = MapManager.Maps[dataToLoad.currentMap];
             PlayerManager.Initialize();
             PlayerManager.CurrentMap = MapManager.Maps[dataToLoad.currentMap].Name;
-            PlayerManager.World.Position = Util.SnapToGrid(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
-            PlayerManager.World.DetermineFacing(new Vector2(0, 1));
+            PlayerManager.PlayerActor.Position = Util.SnapToGrid(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
+            PlayerManager.PlayerActor.DetermineFacing(new Vector2(0, 1));
             LoadOptions(dataToLoad.optionData);
             GameCalendar.LoadCalendar(dataToLoad.Calendar);
             EnvironmentManager.LoadEnvironment(dataToLoad.Environment);
@@ -850,18 +850,18 @@ namespace RiverHollow.Game_Managers
 
                 PlayerManager.AddToTaskLog(newTask);
             }
-            foreach (MissionData m in dataToLoad.CurrentMissions)
-            {
-                Mission newMission = new Mission();
-                newMission.LoadData(m);
-                MissionManager.CurrentMissions.Add(newMission);
-            }
-            foreach (MissionData m in dataToLoad.AvailableMissions)
-            {
-                Mission newMission = new Mission();
-                newMission.LoadData(m);
-                MissionManager.AvailableMissions.Add(newMission);
-            }
+            //foreach (MissionData m in dataToLoad.CurrentMissions)
+            //{
+            //    Mission newMission = new Mission();
+            //    newMission.LoadData(m);
+            //    MissionManager.CurrentMissions.Add(newMission);
+            //}
+            //foreach (MissionData m in dataToLoad.AvailableMissions)
+            //{
+            //    Mission newMission = new Mission();
+            //    newMission.LoadData(m);
+            //    MissionManager.AvailableMissions.Add(newMission);
+            //}
             foreach (VillagerData n in dataToLoad.VillagerData)
             {
                 Villager target = DataManager.DIVillagers[n.npcID];

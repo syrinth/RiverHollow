@@ -24,8 +24,8 @@ namespace RiverHollow.CombatStuff
         bool _bSelected;
         public bool Selected => _bSelected;
 
-        LiteCombatActor _character;
-        public LiteCombatActor Character => _character;
+        CombatActor _character;
+        public CombatActor Character => _character;
         GUICombatTile _gTile;
         public GUICombatTile GUITile => _gTile;
 
@@ -36,7 +36,7 @@ namespace RiverHollow.CombatStuff
             _tileType = tileType;
         }
 
-        public void SetCombatant(LiteCombatActor c, bool moveCharNow = true)
+        public void SetCombatant(CombatActor c, bool moveCharNow = true)
         {
             _character = c;
             if (c != null)
@@ -45,54 +45,10 @@ namespace RiverHollow.CombatStuff
                 {
                     _character.Tile.SetCombatant(null);
                 }
-                if (_character.Tile != null)
-                {
-                    foreach (LiteCombatTile tile in LiteCombatManager.GetAdjacent(_character.Tile))
-                    {
-                        CheckForProtected(tile);
-                    }
-                }
                 _character.Tile = this;
-                CheckForProtected(this);
             }
 
             _gTile.SyncGUIObjects(_character != null);
-            if (_character != null)
-            {
-                foreach (KeyValuePair<ConditionEnum, bool> kvp in _character.DiConditions)
-                {
-                    if (kvp.Value)
-                    {
-                        GUITile.ChangeCondition(kvp.Key, TargetEnum.Enemy);
-                    }
-                }
-            }
-        }
-
-        private void CheckForProtected(LiteCombatTile t)
-        {
-            bool found = false;
-            List<LiteCombatTile> adjacent = LiteCombatManager.GetAdjacent(t);
-            foreach (LiteCombatTile tile in adjacent)
-            {
-                if (tile.Occupied() && this.TargetType == tile.TargetType)
-                {
-                    if (tile.Character != this.Character && tile.Character.IsActorType(ActorEnum.PartyMember) && this.Character.IsActorType(ActorEnum.PartyMember))
-                    {
-                        found = true;
-                        LitePartyMember adv = (LitePartyMember)tile.Character;
-                        adv.Protected = true;
-                        adv = (LitePartyMember)this.Character;
-                        adv.Protected = true;
-                    }
-                }
-            }
-
-            if (!found && this.Character.IsActorType(ActorEnum.PartyMember))
-            {
-                LitePartyMember adv = (LitePartyMember)this.Character;
-                adv.Protected = false;
-            }
         }
 
         public void AssignGUITile(GUICombatTile c)
@@ -109,10 +65,10 @@ namespace RiverHollow.CombatStuff
         {
             _bSelected = val;
 
-            if (_bSelected && LiteCombatManager.SelectedTile != this)
+            if (_bSelected && CombatManager.SelectedTile != this)
             {
-                if (LiteCombatManager.SelectedTile != null) { LiteCombatManager.SelectedTile.Select(false); }
-                LiteCombatManager.SelectedTile = this;
+                if (CombatManager.SelectedTile != null) { CombatManager.SelectedTile.Select(false); }
+                CombatManager.SelectedTile = this;
             }
         }
 

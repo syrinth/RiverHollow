@@ -1,18 +1,13 @@
-﻿using RiverHollow.CombatStuff;
-using RiverHollow.Game_Managers;
+﻿using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters
 {
-    public class TravellingNPC : ClassedCombatant
+    public class TravellingNPC : TalkingActor
     {
         protected int _iIndex;
         public int ID => _iIndex;
@@ -41,13 +36,6 @@ namespace RiverHollow.Characters
 
             _diDialogue = DataManager.GetNPCDialogue(_iIndex);
             DataManager.GetTextData("Character", _iIndex, ref _sName, "Name");
-
-            if (stringData.ContainsKey("Class"))
-            {
-                SetClass(DataManager.GetClassByIndex(int.Parse(stringData["Class"])));
-                AssignStartingGear();
-            }
-            else { SetClass(new CharacterClass()); }
 
             _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Villager", _iIndex.ToString("00"));
 

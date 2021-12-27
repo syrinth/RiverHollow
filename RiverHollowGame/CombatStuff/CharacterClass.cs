@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers;
@@ -13,18 +14,7 @@ namespace RiverHollow.CombatStuff
         int _iID;
         public int ID => _iID;
 
-        private int _statStr;
-        public int StatStr => _statStr;
-        private int _statDef;
-        public int StatDef => _statDef;
-        private int _statVit;
-        public int StatVit => _statVit;
-        private int _statMagic;
-        public int StatMag => _statMagic;
-        private int _statRes;
-        public int StatRes => _statRes;
-        private int _statSpd;
-        public int StatSpd => _statSpd;
+        Dictionary<AttributeEnum, int> _diAttributes;
 
         private int _iIdleFrames;
         public int IdleFrames => _iIdleFrames;
@@ -59,10 +49,8 @@ namespace RiverHollow.CombatStuff
         public string Name { get => _sName; }
         private string _sDescription;
         public string Description { get => _sDescription; }
-        public List<LiteMenuAction> LiteActionList;
-        public List<LiteCombatAction> _liSpecialLiteActionsList;
-        public List<TacticalMenuAction> TacticalActionList;
-        public List<TacticalCombatAction> _liSpecialTacticalActionsList;
+        public List<CombatAction> Actions;
+
         WeaponEnum _weaponType;
         public WeaponEnum WeaponType => _weaponType;
         ArmorEnum _armorType;
@@ -75,10 +63,7 @@ namespace RiverHollow.CombatStuff
 
         public CharacterClass()
         {
-            LiteActionList = new List<LiteMenuAction>();
-            _liSpecialLiteActionsList = new List<LiteCombatAction>();
-            TacticalActionList = new List<TacticalMenuAction>();
-            _liSpecialTacticalActionsList = new List<TacticalCombatAction>();
+            Actions = new List<CombatAction>();
 
             _iID = -1;
         }
@@ -102,29 +87,12 @@ namespace RiverHollow.CombatStuff
             HeadID = int.Parse(stringData["DHead"]);
             WristID = int.Parse(stringData["DWrist"]);
 
-            if (stringData.ContainsKey("Ability"))
+            if (stringData.ContainsKey("Actions"))
             {
-                string[] split = stringData["Ability"].Split('|');
+                string[] split = stringData["Actions"].Split('|');
                 foreach (string ability in split)
                 {
-                    TacticalCombatAction ac = (TacticalCombatAction)DataManager.GetTacticalActionByIndex(int.Parse(ability));
-                    TacticalActionList.Add(ac);
-
-                    LiteCombatAction lite = (LiteCombatAction)DataManager.GetLiteActionByIndex(int.Parse(ability));
-                    LiteActionList.Add(lite);
-                }
-            }
-
-            if (stringData.ContainsKey("Spell"))
-            {
-                string[] spellSplit = stringData["Spell"].Split('|');
-                foreach (string spell in spellSplit)
-                {
-                    TacticalCombatAction ac = (TacticalCombatAction)DataManager.GetTacticalActionByIndex(int.Parse(spell));
-                    _liSpecialTacticalActionsList.Add(ac);
-
-                    LiteCombatAction lite = (LiteCombatAction)DataManager.GetLiteActionByIndex(int.Parse(spell));
-                    _liSpecialLiteActionsList.Add(lite);
+                    Actions.Add(DataManager.GetCombatActionByIndex(int.Parse(ability)));
                 }
             }
 
@@ -143,21 +111,11 @@ namespace RiverHollow.CombatStuff
             SetClassAnimation(stringData, "KO", ref _iKOFrames, ref _fKOFrameLength);
             SetClassAnimation(stringData, "Win", ref _iWinFrames, ref _fWinFrameLength);
 
-
-            //Adds Special, Use Item, Move, and End Turn
-            if (RiverHollow.COMBAT_STYLE == CombatStyleEnum.Lite)
+            _diAttributes = new Dictionary<AttributeEnum, int>();
+            foreach (AttributeEnum e in Enum.GetValues(typeof(AttributeEnum)))
             {
-                LiteActionList.Add(new LiteMenuAction(2, ActionEnum.MenuSpell, new Vector2(1, 0)));
-                LiteActionList.Add(new LiteMenuAction(1, ActionEnum.MenuItem, new Vector2(2, 0)));
-                LiteActionList.Add(DataManager.GetLiteActionByIndex(0));
-                LiteActionList.Add(new LiteMenuAction(3, ActionEnum.EndTurn, new Vector2(4, 0)));
-            }
-            else
-            {
-                TacticalActionList.Add(new TacticalMenuAction(2, ActionEnum.MenuSpell, new Vector2(1, 0)));
-                TacticalActionList.Add(new TacticalMenuAction(1, ActionEnum.MenuItem, new Vector2(2, 0)));
-                TacticalActionList.Add(new TacticalMenuAction(0, ActionEnum.Move, new Vector2(3, 0)));
-                TacticalActionList.Add(new TacticalMenuAction(3, ActionEnum.EndTurn, new Vector2(4, 0)));
+                if (stringData.ContainsKey(Util.GetEnumString(e))) { _diAttributes[e] = int.Parse(stringData[Util.GetEnumString(e)]); }
+                else { _diAttributes[e] = 0; }
             }
         }
 
@@ -169,6 +127,15 @@ namespace RiverHollow.CombatStuff
                 frames = int.Parse(frameSplit[0]);
                 frameLength = float.Parse(frameSplit[1]);
             }
+        }
+
+        public int Attribute(AttributeEnum e) {
+            int rv = 0;
+            if (_diAttributes.ContainsKey(e))
+            {
+                rv = _diAttributes[e];
+            }
+            return rv;
         }
     }
 }

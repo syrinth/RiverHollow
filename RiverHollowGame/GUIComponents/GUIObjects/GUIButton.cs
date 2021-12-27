@@ -4,6 +4,7 @@ using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
+using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIWindows.GUIWindow;
 
 namespace RiverHollow.GUIComponents.GUIObjects
@@ -53,6 +54,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             Setup();
         }
 
+        public GUIButton(Rectangle sourceRect, string texture, BtnClickDelegate del = null) :this(sourceRect, ScaleIt(sourceRect.Width), ScaleIt(sourceRect.Height), texture, del) { }
         public GUIButton(Rectangle sourceRect, int width, int height, string texture, BtnClickDelegate del = null)
         {
             Width = width;

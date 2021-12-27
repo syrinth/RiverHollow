@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using RiverHollow.Characters;
-using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
+using RiverHollow.Items;
 
 namespace RiverHollow.Game_Managers
 {
@@ -52,15 +52,15 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         /// <param name="m">The Monster that is dropping the Item</param>
         /// <returns>The Item that was dropped</returns>
-        public static Item DropMonsterLoot(TacticalMonster m)
+        public static Item DropMonsterLoot(Monster m)
         {
-            Item droppedItem = DataManager.GetItem(m.GetRandomLootItem());
+            Item droppedItem = DataManager.GetItem(m.GetLoot().ItemID);
             //Just for testing atm
             List<Item> it = new List<Item> { droppedItem };
 
             it[0].AutoPickup = false;
 
-            MapManager.DropItemsOnMap(it, Util.SnapToGrid(m.CollisionBox.Center.ToVector2()), false);
+            //MapManager.DropItemsOnMap(it, Util.SnapToGrid(m.CollisionBox.Center.ToVector2()), false);
 
             return droppedItem;
         }

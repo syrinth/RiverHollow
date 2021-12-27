@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Game_Managers;
-using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
 
@@ -66,6 +65,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public GUIText(string text, BitmapFont font) : this(text)
         {
             _font = font;
+            SetDimensions(text);
         }
 
         protected void SetDimensions(string val)

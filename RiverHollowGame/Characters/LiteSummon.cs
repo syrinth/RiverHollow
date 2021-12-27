@@ -8,14 +8,14 @@ using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters
 {
-    public class LiteSummon : LiteCombatActor
+    public class LiteSummon : CombatActor
     {
         ElementEnum _element = ElementEnum.None;
         public ElementEnum Element => _element;
 
         int _iMagStat;
-        List<KeyValuePair<StatEnum, int>> _liBuffedStats;
-        public List<KeyValuePair<StatEnum, int>> BuffedStats => _liBuffedStats;
+        List<KeyValuePair<AttributeEnum, int>> _liBuffedStats;
+        public List<KeyValuePair<AttributeEnum, int>> BuffedStats => _liBuffedStats;
 
         public bool Acted;
         bool _bTwinCast;
@@ -25,11 +25,11 @@ namespace RiverHollow.Characters
         bool _bRegen;
         public bool Regen => _bRegen;
 
-        public LiteCombatActor linkedChar;
+        public CombatActor linkedChar;
 
         public LiteSummon(int id, Dictionary<string, string> stringData)
         {
-            _liBuffedStats = new List<KeyValuePair<StatEnum, int>>();
+            _liBuffedStats = new List<KeyValuePair<AttributeEnum, int>>();
             _bGuard = stringData.ContainsKey("Defensive");
             _bAggressive = stringData.ContainsKey("Aggressive");
             _bTwinCast = stringData.ContainsKey("TwinCast");
@@ -41,11 +41,11 @@ namespace RiverHollow.Characters
                 _element = Util.ParseEnum<ElementEnum>(stringData["Element"]);
             }
 
-            foreach (StatEnum stat in Enum.GetValues(typeof(StatEnum)))
+            foreach (AttributeEnum stat in Enum.GetValues(typeof(AttributeEnum)))
             {
                 if (stringData.ContainsKey(Util.GetEnumString(stat)))
                 {
-                    _liBuffedStats.Add(new KeyValuePair<StatEnum, int>(stat, 0));
+                    _liBuffedStats.Add(new KeyValuePair<AttributeEnum, int>(stat, 0));
                 }
             }
 
@@ -74,16 +74,16 @@ namespace RiverHollow.Characters
         public void SetStats(int magStat)
         {
             _iMagStat = magStat;
-            _iStrength = 2 * magStat + 10;
-            _iDefense = 2 * magStat + 10;
-            _iVitality = (3 * magStat) + 80;
-            _iMagic = 2 * magStat + 10;
-            _iResistance = 2 * magStat + 10;
-            _iSpeed = 10;
+            _diAttributes[AttributeEnum.Strength] = 2 * magStat + 10;
+            _diAttributes[AttributeEnum.Defense] = 2 * magStat + 10;
+            _diAttributes[AttributeEnum.MaxHealth] = (3 * magStat) + 80;
+            _diAttributes[AttributeEnum.Magic] = 2 * magStat + 10;
+            _diAttributes[AttributeEnum.Resistance] = 2 * magStat + 10;
+            _diAttributes[AttributeEnum.Speed] = 10;
 
             for (int i = 0; i < _liBuffedStats.Count; i++)
             {
-                _liBuffedStats[i] = new KeyValuePair<StatEnum, int>(_liBuffedStats[i].Key, magStat / 2);
+                _liBuffedStats[i] = new KeyValuePair<AttributeEnum, int>(_liBuffedStats[i].Key, magStat / 2);
             }
 
             CurrentHP = MaxHP;

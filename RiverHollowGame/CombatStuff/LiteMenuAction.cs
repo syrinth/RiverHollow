@@ -17,7 +17,7 @@ namespace RiverHollow.Actors.CombatStuff
         protected string _sDescription;
         public string Description { get => _sDescription; }
 
-        public LiteCombatActor SkillUser;
+        public CombatActor SkillUser;
 
         protected Vector2 _vIconGrid;
         public Vector2 IconGrid => _vIconGrid;

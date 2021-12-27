@@ -288,7 +288,7 @@ namespace RiverHollow.Game_Managers
                                 case EnumCSCommand.Face:
                                     WorldActor n = GetActor(sCommandData[0]);
                                     n.SetWalkingDir((DirectionEnum)HandleDir(sCommandData[1]));
-                                    n.PlayAnimationVerb(TacticalCombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                                    n.PlayAnimationVerb(VerbEnum.Idle);
                                     bGoToNext = true;
                                     break;
                                 case EnumCSCommand.End:
@@ -347,7 +347,7 @@ namespace RiverHollow.Game_Managers
                 characterID = -1;
             }
 
-            return (characterID == -1 ? (WorldActor)PlayerManager.World : _liUsedNPCs.Find(test => test.ID == characterID));
+            return (characterID == -1 ? (WorldActor)PlayerManager.PlayerActor : _liUsedNPCs.Find(test => test.ID == characterID));
         }
 
         /// <summary>
@@ -433,7 +433,7 @@ namespace RiverHollow.Game_Managers
                     _liToRemove.Add(c);
                 }
                 c.SetMoveObj(Vector2.Zero);
-                c.PlayAnimationVerb(TacticalCombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                c.PlayAnimationVerb(VerbEnum.Idle);
             }
         }
 
@@ -448,7 +448,7 @@ namespace RiverHollow.Game_Managers
             GUIManager.AddSkipCutsceneButton();
 
             _originalMap = MapManager.CurrentMap;
-            _vOriginalPlayerPos = PlayerManager.World.Position;
+            _vOriginalPlayerPos = PlayerManager.PlayerActor.Position;
 
             //Iterates over all of the setup commands
             foreach (string s in _liSetupCommands)
@@ -471,7 +471,7 @@ namespace RiverHollow.Game_Managers
                 {
                     if (tags.Length > 1)
                     {
-                        PlayerManager.World.Position = Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(tags[1]));
+                        PlayerManager.PlayerActor.Position = Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(tags[1]));
                     }
                 }
                 else if (tags[0].Equals("Actors"))
@@ -605,7 +605,7 @@ namespace RiverHollow.Game_Managers
 
             GUIManager.CloseTextWindow();
 
-            PlayerManager.World.SpdMult = Actor.NORMAL_SPEED;
+            PlayerManager.PlayerActor.SpdMult = Actor.NORMAL_SPEED;
             PlayerManager.AllowMovement = true;
             CutsceneManager.Playing = false;
             MapManager.Maps.Remove(_cutsceneMap.Name);

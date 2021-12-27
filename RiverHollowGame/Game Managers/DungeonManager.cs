@@ -133,10 +133,10 @@ namespace RiverHollow.Game_Managers
             {
                 rmInfo.Map.AssignResourceSpawns("20-40", _diDungeonInfo["ObjectID"]);
 
-                foreach (MonsterSpawn spawn in rmInfo.Map.MonsterSpawnPoints)
-                {
-                    spawn.AssignMonsterIDs("Spawn-All", _diDungeonInfo["MonsterID"]);
-                }
+                //foreach (MonsterSpawn spawn in rmInfo.Map.MonsterSpawnPoints)
+                //{
+                //    spawn.AssignMonsterIDs("Spawn-All", _diDungeonInfo["MonsterID"]);
+                //}
 
                 HandleEntrances(rmInfo.Map);
                 rmInfo.Map.SpawnMapEntities(RHRandom.Instance().Next(10) < ENCOUNTER_RATE);
@@ -490,7 +490,7 @@ namespace RiverHollow.Game_Managers
         public void GoToEntrance()
         {
             MapManager.FadeToNewMap(MapManager.Maps[_sEntranceMapName], _vRecallPoint);
-            PlayerManager.World.DetermineFacing(new Vector2(0, 1));
+            PlayerManager.PlayerActor.DetermineFacing(new Vector2(0, 1));
         }
 
         public void AddKey() { NumKeys++; }

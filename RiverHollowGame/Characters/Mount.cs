@@ -33,15 +33,15 @@ namespace RiverHollow.Characters
 
         public override void ProcessRightButtonClick()
         {
-            if (!PlayerManager.World.Mounted)
+            if (!PlayerManager.PlayerActor.Mounted)
             {
-                PlayerManager.World.MountUp(this);
+                PlayerManager.PlayerActor.MountUp(this);
             }
         }
 
         public void SyncToPlayer()
         {
-            AnimatedSprite playerSprite = PlayerManager.World.BodySprite;
+            AnimatedSprite playerSprite = PlayerManager.PlayerActor.BodySprite;
             MapManager.CurrentMap.AddActor(this);
             Vector2 mod = new Vector2((playerSprite.Width - BodySprite.Width) / 2, BodySprite.Height - 8);
             Position = playerSprite.Position + mod;

@@ -15,7 +15,7 @@ namespace RiverHollow.GUIComponents.MainObjects
         public static int TASK_SPACING = 20;
 
         List<GUIObject> _liStructures;
-        GUIList _gList;
+        List _gList;
         Garden _objGarden;
 
         public GardenWindow(Garden targetGarden)
@@ -38,7 +38,7 @@ namespace RiverHollow.GUIComponents.MainObjects
                 }
             }
 
-            _gList = new GUIList(_liStructures, MAX_SHOWN_TASKS, TASK_SPACING);
+            _gList = new List(_liStructures, MAX_SHOWN_TASKS, TASK_SPACING);
             _gList.CenterOnObject(_winMain);
 
             AddControl(_gList);

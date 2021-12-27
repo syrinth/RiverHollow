@@ -16,6 +16,18 @@ namespace RiverHollow.Utilities
         }
     }
 
+    public struct AttributeStatusEffect
+    {
+        public int Duration;
+        public int Value;
+
+        public AttributeStatusEffect(int v, int d)
+        {
+            Value = v;
+            Duration = d;
+        }
+    }
+
     public struct TacticalStatusEffectData
     {
         public int BuffID;

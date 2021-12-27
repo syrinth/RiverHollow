@@ -1,17 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
+using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
-using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters
 {
-    public class PlayerCharacter : ClassedCombatant
+    public class PlayerCharacter : WorldActor
     {
         AnimatedSprite _sprEyes;
         public AnimatedSprite EyeSprite => _sprEyes;
@@ -45,13 +44,14 @@ namespace RiverHollow.Characters
         public override Rectangle CollisionBox => ActiveMount != null ? ActiveMount.CollisionBox : new Rectangle((int)Position.X + 2, (int)Position.Y + 2, Width - 4, TILE_SIZE - 4);
 
         #region Clothing
-        public Clothes Hat { get; private set; }
-        public Clothes Body { get; private set; }
-        Clothes Back;
-        Clothes Hands;
-        public Clothes Legs { get; private set; }
-        Clothes Feet;
+        public Clothing Hat { get; private set; }
+        public Clothing Body { get; private set; }
+        Clothing Back;
+        Clothing Hands;
+        public Clothing Legs { get; private set; }
+        Clothing Feet;
         #endregion
+
 
         public Pet ActivePet { get; private set; }
         public Mount ActiveMount { get; private set; }
@@ -67,9 +67,15 @@ namespace RiverHollow.Characters
 
             _liTilePath = new List<RHTile>();
 
-            //Sets a default class so we can load and display the character to start
-            SetClass(DataManager.GetClassByIndex(1));
             // SetClothes((Clothes)DataManager.GetItem(int.Parse(DataManager.Config[6]["ItemID"])));
+
+            LoadSpriteAnimations(ref _sprBody, LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, BodyTypeStr));
+
+            //Hair type has already been set either by default or by being allocated.
+            SetHairType(HairIndex);
+
+            //Loads the Sprites for the players body for the appropriate class
+            LoadSpriteAnimations(ref _sprEyes, LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER));
 
             _sprBody.SetColor(Color.White);
             _sprHair.SetColor(HairColor);
@@ -92,31 +98,10 @@ namespace RiverHollow.Characters
         private List<AnimationData> LoadPlayerAnimations(Dictionary<string, string> data)
         {
             List<AnimationData> rv;
-            rv = LoadWorldAndCombatAnimations(data);
+            rv = LoadWorldAnimations(data);
 
             AddToAnimationsList(ref rv, data, VerbEnum.UseTool, true, true);
             return rv;
-        }
-
-        /// <summary>
-        /// Override for the ClassedCombatant SetClass methog. Calls the super method and then
-        /// loads the appropriate sprites.
-        /// </summary>
-        /// <param name="x">The class to set</param>
-        /// <param name="assignGear">Whether or not to assign starting gear</param>
-        public override void SetClass(CharacterClass x)
-        {
-            base.SetClass(x);
-
-            //Loads the Sprites for the players body for the appropriate class
-            LoadSpriteAnimations(ref _sprBody, LoadPlayerAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, BodyTypeStr));
-
-            //Hair type has already been set either by default or by being allocated.
-            SetHairType(HairIndex);
-
-            //Loads the Sprites for the players body for the appropriate class
-            LoadSpriteAnimations(ref _sprEyes, LoadPlayerAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER));
-            //_sprEyes.SetDepthMod(EYE_DEPTH);
         }
 
         public void SetColor(AnimatedSprite sprite, Color c)
@@ -133,7 +118,7 @@ namespace RiverHollow.Characters
         {
             HairIndex = index;
             //Loads the Sprites for the players hair animations for the class based off of the hair ID
-            LoadSpriteAnimations(ref _sprHair, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[CharacterClass.ID]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex));
+            LoadSpriteAnimations(ref _sprHair, LoadWorldAndCombatAnimations(DataManager.Config[17]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex));
             _sprHair.SetLayerDepthMod(HAIR_DEPTH);
         }
 
@@ -159,22 +144,22 @@ namespace RiverHollow.Characters
             foreach (AnimatedSprite spr in GetSprites()) { spr.SetScale(scale); }
         }
 
-        public void SetClothes(Clothes c)
+        public void SetClothes(Clothing c)
         {
             if (c != null)
             {
                 string clothingTexture = string.Format(@"Textures\Items\Gear\{0}\{1}", c.ClothesType.ToString(), c.TextureAnimationName);
                 if (!c.GenderNeutral) { clothingTexture += ("_" + BodyTypeStr); }
 
-                LoadSpriteAnimations(ref c.Sprite, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[CharacterClass.ID]), clothingTexture);
+                LoadSpriteAnimations(ref c.Sprite, LoadWorldAndCombatAnimations(DataManager.Config[17]), clothingTexture);
 
-                if (c.SlotMatch(ClothesEnum.Body)) { Body = c; }
-                else if (c.SlotMatch(ClothesEnum.Hat))
+                if (c.SlotMatch(ClothingEnum.Body)) { Body = c; }
+                else if (c.SlotMatch(ClothingEnum.Hat))
                 {
                     _sprHair.FrameCutoff = 9;
                     Hat = c;
                 }
-                else if (c.SlotMatch(ClothesEnum.Legs)) { Legs = c; }
+                else if (c.SlotMatch(ClothingEnum.Legs)) { Legs = c; }
 
                 //MAR AWKWARD
                 c.Sprite.Position = _sprBody.Position;
@@ -183,10 +168,10 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void RemoveClothes(ClothesEnum c)
+        public void RemoveClothes(ClothingEnum c)
         {
-            if (c.Equals(ClothesEnum.Body)) { Body = null; }
-            else if (c.Equals(ClothesEnum.Hat))
+            if (c.Equals(ClothingEnum.Body)) { Body = null; }
+            else if (c.Equals(ClothingEnum.Hat))
             {
                 _sprHair.FrameCutoff = 0;
                 Hat = null;
@@ -196,7 +181,6 @@ namespace RiverHollow.Characters
         public void SetBodyType(int val)
         {
             BodyType = val;
-            SetClass(_class);
             SetClothes(Hat);
             SetClothes(Body);
             SetClothes(Legs);

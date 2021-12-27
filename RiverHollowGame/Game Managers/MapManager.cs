@@ -7,11 +7,11 @@ using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.WorldObjects;
-using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Items;
 
 namespace RiverHollow.Game_Managers
 {
@@ -97,13 +97,8 @@ namespace RiverHollow.Game_Managers
             TravelPoint entryPoint = null;
 
             //Handling for if the WorldActor is the player character
-            if (c == PlayerManager.World)
+            if (c == PlayerManager.PlayerActor)
             {
-                if (TacticalCombatManager.InCombat)
-                {
-                    TacticalCombatManager.EndCombatEscape();
-                }
-
                 //If the travel point has no linked map yet and is supposed to generate a level,
                 //send a message off to the DungeonManager to initialize it
                 if (travelPoint.DungeonInfoID > -1 && string.IsNullOrEmpty(travelPoint.LinkedMap))
@@ -117,14 +112,14 @@ namespace RiverHollow.Game_Managers
                 if (travelPoint.IsDoor)
                 {
                     newPos = entryPoint.GetMovedCenter();
-                    PlayerManager.World.DetermineFacing(new Vector2(0, -1));
+                    PlayerManager.PlayerActor.DetermineFacing(new Vector2(0, -1));
                 }
                 else
                 {
                     newPos = entryPoint.FindLinkedPointPosition(travelPoint.Center, c);
                 }
 
-                PlayerManager.World.ActivePet?.ChangeState(Pet.PetStateEnum.Alert);
+                PlayerManager.PlayerActor.ActivePet?.ChangeState(Pet.PetStateEnum.Alert);
                 FadeToNewMap(Maps[travelPoint.LinkedMap], newPos);
             }
             else
@@ -150,8 +145,8 @@ namespace RiverHollow.Game_Managers
         {
             GUIManager.BeginFadeOut();
 
-            PlayerManager.World.SetMovementState(ActorMovementStateEnum.Idle);
-            PlayerManager.World.PlayAnimationVerb(TacticalCombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+            PlayerManager.PlayerActor.SetMovementState(ActorMovementStateEnum.Idle);
+            PlayerManager.PlayerActor.PlayAnimationVerb(VerbEnum.Idle);
             _newMapInfo = new NewMapInfo(newMap, playerPos, b);
         }
 
@@ -237,8 +232,8 @@ namespace RiverHollow.Game_Managers
         {
             if (!_newMapInfo.Equals(default(NewMapInfo)) && GUIManager.FadingIn)
             {
-                if (PlayerManager.World.ActivePet != null) { CurrentMap.RemoveActor(PlayerManager.World.ActivePet); }
-                if (PlayerManager.World.ActiveMount != null) { CurrentMap.RemoveActor(PlayerManager.World.ActiveMount); }
+                if (PlayerManager.PlayerActor.ActivePet != null) { CurrentMap.RemoveActor(PlayerManager.PlayerActor.ActivePet); }
+                if (PlayerManager.PlayerActor.ActiveMount != null) { CurrentMap.RemoveActor(PlayerManager.PlayerActor.ActiveMount); }
 
                 string oldMap = CurrentMap.Name;
                 CurrentMap = _newMapInfo.NextMap;
@@ -250,23 +245,20 @@ namespace RiverHollow.Game_Managers
                 SoundManager.ChangeMap();
                 CurrentMap.LeaveMap();
                 PlayerManager.CurrentMap = _newMapInfo.NextMap.Name;
-                PlayerManager.World.Position = _newMapInfo.PlayerPosition;
+                PlayerManager.PlayerActor.Position = _newMapInfo.PlayerPosition;
                 CurrentMap.EnterMap();
                 _newMapInfo = default;
 
-                //Enter combat upon entering a map with living monsters
-                if (CurrentMap.Monsters.Count > 0) { TacticalCombatManager.NewBattle(oldMap); }
-                else
-                {
-                    PlayerManager.World.ActivePet?.SpawnNearPlayer();
+                PlayerManager.PlayerActor.ActivePet?.SpawnNearPlayer();
 
-                    if (PlayerManager.World.ActiveMount != null){
-                        if (CurrentMap.IsDungeon) {
-                            PlayerManager.World.Dismount();
-                            PlayerManager.World.Position = _newMapInfo.PlayerPosition;
-                        }
-                        else { PlayerManager.World.ActiveMount.SyncToPlayer(); }
+                if (PlayerManager.PlayerActor.ActiveMount != null)
+                {
+                    if (CurrentMap.IsDungeon)
+                    {
+                        PlayerManager.PlayerActor.Dismount();
+                        PlayerManager.PlayerActor.Position = _newMapInfo.PlayerPosition;
                     }
+                    else { PlayerManager.PlayerActor.ActiveMount.SyncToPlayer(); }
                 }
             }
 
@@ -331,11 +323,6 @@ namespace RiverHollow.Game_Managers
         public static void RemoveActor(WorldActor c)
         {
             CurrentMap.RemoveActor(c);
-        }
-      
-        public static void CleanupSummons()
-        {
-            CurrentMap.CleanupSummons();
         }
 
         public static void DropItemsOnMap(List<Item> items, Vector2 position, bool flyingPop = true)

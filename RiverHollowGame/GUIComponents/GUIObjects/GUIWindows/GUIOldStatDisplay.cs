@@ -5,7 +5,7 @@ using RiverHollow.Game_Managers;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
-    public class GUIStatDisplay : GUIWindow
+    public class GUIOldStatDisplay : GUIWindow
     {
         BitmapFont _font;
 
@@ -19,7 +19,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public delegate void DelegateRetrieveValues(ref double curr, ref double max);
         DelegateRetrieveValues _delAction;
 
-        public GUIStatDisplay(DelegateRetrieveValues del, Color c, int width = 200) : base(DisplayWin, width, GameManager.ScaledTileSize/2)
+        public GUIOldStatDisplay(DelegateRetrieveValues del, Color c, int width = 200) : base(DisplayWin, width, GameManager.ScaledTileSize/2)
         {
             _iMax = 0;
             _iCurr = 0;

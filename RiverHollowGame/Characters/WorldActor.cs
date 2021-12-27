@@ -8,9 +8,6 @@ using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters
@@ -227,7 +224,7 @@ namespace RiverHollow.Characters
 
             if (initialState != _eMovementState || initialFacing != Facing)
             {
-                PlayAnimationVerb((walk || TacticalCombatManager.InCombat) ? VerbEnum.Walk : VerbEnum.Idle);
+                PlayAnimationVerb(walk ? VerbEnum.Walk : VerbEnum.Idle);
             }
         }
 
