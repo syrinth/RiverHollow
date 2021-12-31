@@ -152,7 +152,7 @@ namespace RiverHollow.Characters
             sprite.RemoveAnimation(verb, DirectionEnum.Left);
         }
 
-        public bool IsCurrentAnimation(LiteCombatActionEnum val) { return _sprBody.IsCurrentAnimation(val); }
+        public bool IsCurrentAnimation(CombatActionEnum val) { return _sprBody.IsCurrentAnimation(val); }
         public bool IsCurrentAnimation(AnimationEnum val) { return _sprBody.IsCurrentAnimation(val); }
         public bool IsCurrentAnimation(VerbEnum verb, DirectionEnum dir) { return _sprBody.IsCurrentAnimation(verb, dir); }
         public bool IsAnimating() { return _sprBody.Drawing; }

@@ -59,15 +59,15 @@ namespace RiverHollow.Characters
             int startY = 0;
 
             _sprBody = new AnimatedSprite(@"Textures\Actors\Summons\" + stringData["Texture"]);
-            _sprBody.AddAnimation(LiteCombatActionEnum.Spawn, startX, startY, frameSize, int.Parse(spawn[0]), float.Parse(spawn[1]));
+            _sprBody.AddAnimation(CombatActionEnum.Spawn, startX, startY, frameSize, int.Parse(spawn[0]), float.Parse(spawn[1]));
             startX += int.Parse(spawn[0]) * frameSize.Width;
-            _sprBody.AddAnimation(LiteCombatActionEnum.Idle, startX, startY, frameSize, int.Parse(idle[0]), float.Parse(idle[1]));
+            _sprBody.AddAnimation(CombatActionEnum.Idle, startX, startY, frameSize, int.Parse(idle[0]), float.Parse(idle[1]));
             startX += int.Parse(idle[0]) * frameSize.Width;
-            _sprBody.AddAnimation(LiteCombatActionEnum.Cast, startX, startY, frameSize, int.Parse(cast[0]), float.Parse(cast[1]));
+            _sprBody.AddAnimation(CombatActionEnum.Cast, startX, startY, frameSize, int.Parse(cast[0]), float.Parse(cast[1]));
             startX += int.Parse(cast[0]) * frameSize.Width;
-            _sprBody.AddAnimation(LiteCombatActionEnum.Attack, startX, startY, frameSize, int.Parse(attack[0]), float.Parse(attack[1]));
-            _sprBody.SetNextAnimation(LiteCombatActionEnum.Spawn, LiteCombatActionEnum.Idle);
-            _sprBody.PlayAnimation(LiteCombatActionEnum.Spawn);
+            _sprBody.AddAnimation(CombatActionEnum.Attack, startX, startY, frameSize, int.Parse(attack[0]), float.Parse(attack[1]));
+            _sprBody.SetNextAnimation(CombatActionEnum.Spawn, CombatActionEnum.Idle);
+            _sprBody.PlayAnimation(CombatActionEnum.Spawn);
             _sprBody.SetScale(5);
         }
 
@@ -89,7 +89,7 @@ namespace RiverHollow.Characters
             CurrentHP = MaxHP;
         }
 
-        public override int DecreaseHealth(double value)
+        public override int DecreaseHealth(int value)
         {
             int rv = base.DecreaseHealth(value);
 

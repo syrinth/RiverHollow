@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Actors.CombatStuff;
 using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
@@ -47,21 +46,21 @@ namespace RiverHollow.Characters.Lite
             _sprBody = new AnimatedSprite(texture);
             int xCrawl = 0;
             RHSize frameSize = new RHSize(2, 2);
-            _sprBody.AddAnimation(LiteCombatActionEnum.Idle, xCrawl * TILE_SIZE, 0, frameSize, 2, 0.5f);
+            _sprBody.AddAnimation(CombatActionEnum.Idle, xCrawl * TILE_SIZE, 0, frameSize, 2, 0.5f);
             xCrawl += 2 * frameSize.Width;
-            _sprBody.AddAnimation(LiteCombatActionEnum.Cast, xCrawl * TILE_SIZE, 0, frameSize, 3, 0.4f);
+            _sprBody.AddAnimation(CombatActionEnum.Cast, xCrawl * TILE_SIZE, 0, frameSize, 3, 0.4f);
             xCrawl += 3 * frameSize.Width;
-            _sprBody.AddAnimation(LiteCombatActionEnum.Hurt, xCrawl * TILE_SIZE, 0, frameSize, 1, 0.5f);
+            _sprBody.AddAnimation(CombatActionEnum.Hurt, xCrawl * TILE_SIZE, 0, frameSize, 1, 0.5f);
             xCrawl += 1 * frameSize.Width;
-            _sprBody.AddAnimation(LiteCombatActionEnum.Attack, xCrawl * TILE_SIZE, 0, frameSize, 1, 0.3f);
+            _sprBody.AddAnimation(CombatActionEnum.Attack, xCrawl * TILE_SIZE, 0, frameSize, 1, 0.3f);
             xCrawl += 1 * frameSize.Width;
-            _sprBody.AddAnimation(LiteCombatActionEnum.Critical, xCrawl * TILE_SIZE, 0, frameSize, 2, 0.9f);
+            _sprBody.AddAnimation(CombatActionEnum.Critical, xCrawl * TILE_SIZE, 0, frameSize, 2, 0.9f);
             xCrawl += 2 * frameSize.Width;
-            _sprBody.AddAnimation(LiteCombatActionEnum.KO, xCrawl * TILE_SIZE, 0, frameSize, 1, 0.5f);
+            _sprBody.AddAnimation(CombatActionEnum.KO, xCrawl * TILE_SIZE, 0, frameSize, 1, 0.5f);
             xCrawl += 1 * frameSize.Width;
-            _sprBody.AddAnimation(LiteCombatActionEnum.Victory, xCrawl * TILE_SIZE, 0, frameSize, 2, 0.5f);
+            _sprBody.AddAnimation(CombatActionEnum.Victory, xCrawl * TILE_SIZE, 0, frameSize, 2, 0.5f);
 
-            _sprBody.PlayAnimation(LiteCombatActionEnum.Idle);
+            _sprBody.PlayAnimation(CombatActionEnum.Idle);
             _sprBody.SetScale((int)GameManager.NORMAL_SCALE);
             _iBodyWidth = frameSize.Width * (int)GameManager.NORMAL_SCALE;
             _iBodyHeight = frameSize.Height * (int)GameManager.NORMAL_SCALE;
@@ -75,7 +74,7 @@ namespace RiverHollow.Characters.Lite
         public virtual void SetClass(CharacterClass x)
         {
             _class = x;
-            _iCurrentHP = MaxHP;
+            CurrentHP = MaxHP;
 
             //Weapon.SetGear((Equipment)DataManager.GetItem(_class.WeaponID));
            // Armor.SetGear((Equipment)DataManager.GetItem(_class.ArmorID));

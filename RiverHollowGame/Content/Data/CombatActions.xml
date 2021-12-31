@@ -3,11 +3,11 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Move][Target:Ally][LiteRange:Adjacent][Icon:3-0][Action:Move][AreaType:Single]</Value>
+      <Value>[Type:Move][Target:Ally][LiteRange:Adjacent][Icon:1-8][Action:Move][AreaType:Single]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:MenuItem]</Value>
+      <Value>[Type:Item][Icon:0-8]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -23,15 +23,15 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Action][Animation:Eldritch_Blast-16-64-7-0.05][AnimOffset:0-48][Target:Enemy][Range:9][AreaType:Single][Cost:5][Heal:300][Action:UserCast Direct Apply][Icon:3-0][LiteRange:Ranged][DamageType:Magical][Push][DamageAttribute:Magic]</Value>
+      <Value>[Type:Action][Animation:Eldritch_Blast-16-64-7-0.05][AnimOffset:0-48][Target:Enemy][Range:9][AreaType:Single][Cost:5][Harm:200][Action:UserCast Direct Apply][Icon:3-0][LiteRange:Ranged][DamageType:Magical][Push][DamageAttribute:Magic]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Spell][Animation:Heal-16-49-13-0.07][AnimOffset:0-32][Target:Ally][Range:5][AreaType:Single][Cost:5][Heal:100][Action:UserCast Direct Apply]</Value>
+      <Value>[Type:Action][Animation:Heal-16-49-13-0.07][AnimOffset:0-32][Target:Ally][Range:5][AreaType:Single][Cost:5][Heal:100][Action:UserCast Direct Apply]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][Heal:100][Action:UserCast Direct Apply]</Value>
+      <Value>[Type:Action][Target:Ally][Range:5][AreaType:Single][Cost:5][Heal:100][Action:UserCast Direct Apply]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -39,31 +39,31 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][NPC_ID:6][Action:UserCast Apply]</Value>
+      <Value>[Type:Action][Target:Ally][Range:5][AreaType:Single][Cost:5][NPC_ID:6][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][NPC_ID:2][Action:UserCast Apply]</Value>
+      <Value>[Type:Action][Target:Ally][Range:5][AreaType:Single][Cost:5][NPC_ID:2][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Spell][Target:Ally][Range:6][AreaType:Diamond][Cost:5][NPC_ID:3][Action:UserCast Summon Apply][Heal:120]</Value>
+      <Value>[Type:Action][Target:Ally][Range:6][AreaType:Diamond][Cost:5][NPC_ID:3][Action:UserCast Summon Apply][Heal:120]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][NPC_ID:4][Action:UserCast Apply]</Value>
+      <Value>[Type:Action][Target:Ally][Range:5][AreaType:Single][Cost:5][NPC_ID:4][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Spell][Target:Enemy][Range:6][AreaType:Diamond][Cost:5][NPC_ID:5][Action:UserCast Summon Apply][Harm:120]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:6][AreaType:Diamond][Cost:5][NPC_ID:5][Action:UserCast Summon Apply][Harm:120]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Spell][Target:Enemy][Range:5][AreaType:Single][Cost:5][Remove:Summons-Every][Harm:0][Bonus:Summons-100][Action:UserCast Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][AreaType:Single][Cost:5][Remove:Summons-Every][Harm:0][Bonus:Summons-100][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Spell][Animation:WitchsCurse-30-38-8-0.1][Target:Enemy][Range:5][AreaType:Single][Cost:5][StatusEffectID:3-4-Target][Action:UserCast Direct Apply]</Value>
+      <Value>[Type:Action][Animation:WitchsCurse-30-38-8-0.1][Target:Enemy][Range:5][AreaType:Single][Cost:5][StatusEffectID:3-4-Target][Action:UserCast Direct Apply]</Value>
     </Item>
     <Item>
       <Key>16</Key>
@@ -167,7 +167,7 @@
     </Item>
     <Item>
       <Key>41</Key>
-      <Value>[Type:Action][Animation:LightningSprite-80-96-9-0.07][AnimOffset:41-105][Target:Enemy][Range:4][AreaType:Cross][Harm:60][Action:UserCast Direct Apply][Element:Lightning][LiteRange:Ranged]</Value>
+      <Value>[Type:Action][Animation:LightningSprite-80-96-9-0.07][AnimOffset:41-105][Target:Enemy][Range:4][AreaType:Single][Harm:60][Action:UserCast Direct Apply][Element:Lightning][LiteRange:Ranged]</Value>
     </Item>
     <Item>
       <Key>42</Key>

@@ -16,18 +16,17 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
     /// </summary>
     public class GUILiteCombatActorInfo : GUIObject
     {
-        GUICombatTile _gAssignedTile;     //This tile is just a reference
         CombatActor _actor;
         GUIHealthBar _gHP;
-        GUILiteCombatActor _gLiteCombatActor;
+        GUICombatActor _gLiteCombatActor;
         public GUISprite CharacterSprite => _gLiteCombatActor.CharacterSprite;
         public GUISprite CharacterWeaponSprite => _gLiteCombatActor.CharacterWeaponSprite;
-        public GUICombatTile AssignedTile => _gAssignedTile;
+        public GUICombatTile AssignedTile { get; private set; }
 
         public GUILiteCombatActorInfo(CombatActor actor)
         {
             _actor = actor;
-            _gLiteCombatActor = new GUILiteCombatActor(actor.BodySprite);
+            _gLiteCombatActor = new GUICombatActor(actor.BodySprite);
             AddControl(_gLiteCombatActor);
 
             SetWeapon();
@@ -60,6 +59,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             _gHP.Show(true);
         }
 
+        public void UpdateHealthBar()
+        {
+            _gHP.SetCurrentValue(_actor.CurrentHP);
+        }
+
         public void SetWeapon()
         {
             if (_actor.IsActorType(ActorEnum.PartyMember))
@@ -71,19 +75,19 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 
                 int xCrawl = 0;
                 RHSize frameSize = new RHSize(2, 2);
-                sprWeaponSprite.AddAnimation(LiteCombatActionEnum.Idle, xCrawl, 0, frameSize, 2, 0.5f);// cClass.IdleFrames, cClass.IdleFramesLength);
+                sprWeaponSprite.AddAnimation(CombatActionEnum.Idle, xCrawl, 0, frameSize, 2, 0.5f);// cClass.IdleFrames, cClass.IdleFramesLength);
                 xCrawl += 2 * frameSize.Width; //cClass.IdleFrames;
-                sprWeaponSprite.AddAnimation(LiteCombatActionEnum.Cast, (xCrawl * TILE_SIZE), 0, frameSize, 3, 0.4f);//cClass.CastFrames, cClass.CastFramesLength);
+                sprWeaponSprite.AddAnimation(CombatActionEnum.Cast, (xCrawl * TILE_SIZE), 0, frameSize, 3, 0.4f);//cClass.CastFrames, cClass.CastFramesLength);
                 xCrawl += 3 * frameSize.Width; //cClass.CastFrames;
-                sprWeaponSprite.AddAnimation(LiteCombatActionEnum.Hurt, (xCrawl * TILE_SIZE), 0, frameSize, 1, 0.5f);//cClass.HitFrames, cClass.HitFramesLength);
+                sprWeaponSprite.AddAnimation(CombatActionEnum.Hurt, (xCrawl * TILE_SIZE), 0, frameSize, 1, 0.5f);//cClass.HitFrames, cClass.HitFramesLength);
                 xCrawl += 1 * frameSize.Width; //cClass.HitFrames;
-                sprWeaponSprite.AddAnimation(LiteCombatActionEnum.Attack, (xCrawl * TILE_SIZE), 0, frameSize, 1, 0.3f);//cClass.AttackFrames, cClass.AttackFramesLength);
+                sprWeaponSprite.AddAnimation(CombatActionEnum.Attack, (xCrawl * TILE_SIZE), 0, frameSize, 1, 0.3f);//cClass.AttackFrames, cClass.AttackFramesLength);
                 xCrawl += 1 * frameSize.Width; //cClass.AttackFrames;
-                sprWeaponSprite.AddAnimation(LiteCombatActionEnum.Critical, (xCrawl * TILE_SIZE), 0, frameSize, 2, 0.9f);//cClass.CriticalFrames, cClass.CriticalFramesLength);
+                sprWeaponSprite.AddAnimation(CombatActionEnum.Critical, (xCrawl * TILE_SIZE), 0, frameSize, 2, 0.9f);//cClass.CriticalFrames, cClass.CriticalFramesLength);
                 xCrawl += 2 * frameSize.Width; //cClass.CriticalFrames;
-                sprWeaponSprite.AddAnimation(LiteCombatActionEnum.KO, (xCrawl * TILE_SIZE), 0, frameSize, 1, 0.5f);//cClass.KOFrames, cClass.KOFramesLength);
+                sprWeaponSprite.AddAnimation(CombatActionEnum.KO, (xCrawl * TILE_SIZE), 0, frameSize, 1, 0.5f);//cClass.KOFrames, cClass.KOFramesLength);
                 xCrawl += 1 * frameSize.Width; //cClass.KOFrames;
-                sprWeaponSprite.AddAnimation(LiteCombatActionEnum.Victory, (xCrawl * TILE_SIZE), 0, frameSize, 2, 0.5f);//cClass.WinFrames, cClass.WinFramesLength);
+                sprWeaponSprite.AddAnimation(CombatActionEnum.Victory, (xCrawl * TILE_SIZE), 0, frameSize, 2, 0.5f);//cClass.WinFrames, cClass.WinFramesLength);
                 sprWeaponSprite.SetScale(GameManager.CurrentScale);
 
                 _gLiteCombatActor.SetWeapon(sprWeaponSprite);
@@ -92,7 +96,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 
         public void AssignTile(GUICombatTile tile)
         {
-            _gAssignedTile = tile;
+            AssignedTile = tile;
         }
 
         public void Reset()
@@ -105,20 +109,18 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             _gLiteCombatActor.PlayAnimation(animation);
         }
 
-        private class GUILiteCombatActor : GUIObject
+        private class GUICombatActor : GUIObject
         {
-            GUISprite _gSprite;
-            GUISprite _gSpriteWeapon;
-            public GUISprite CharacterSprite => _gSprite;
-            public GUISprite CharacterWeaponSprite => _gSpriteWeapon;
+            public GUISprite CharacterSprite { get; }
+            public GUISprite CharacterWeaponSprite { get; private set; }
 
-            public GUILiteCombatActor(AnimatedSprite sprite)
+            public GUICombatActor(AnimatedSprite sprite)
             {
-                _gSprite = new GUISprite(sprite);
-                AddControl(_gSprite);
+                CharacterSprite = new GUISprite(sprite);
+                AddControl(CharacterSprite);
 
-                Width = _gSprite.Width;
-                Height = _gSprite.Height;
+                Width = CharacterSprite.Width;
+                Height = CharacterSprite.Height;
             }
 
             public override void Draw(SpriteBatch spriteBatch)
@@ -131,20 +133,20 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 
             public void SetWeapon(AnimatedSprite sprite)
             {
-                _gSpriteWeapon = new GUISprite(sprite);
-                AddControl(_gSpriteWeapon);
+                CharacterWeaponSprite = new GUISprite(sprite);
+                AddControl(CharacterWeaponSprite);
             }
 
             public void Reset()
             {
-                _gSprite.Reset();
-                if (_gSpriteWeapon != null) { _gSpriteWeapon.Reset(); }
+                CharacterSprite.Reset();
+                if (CharacterWeaponSprite != null) { CharacterWeaponSprite.Reset(); }
             }
 
             public void PlayAnimation<TEnum>(TEnum animation)
             {
-                _gSprite.PlayAnimation(animation);
-                if (_gSpriteWeapon != null) { _gSpriteWeapon.PlayAnimation(animation); }
+                CharacterSprite.PlayAnimation(animation);
+                if (CharacterWeaponSprite != null) { CharacterWeaponSprite.PlayAnimation(animation); }
             }
         }
     }

@@ -14,21 +14,20 @@ namespace RiverHollow.GUIComponents.GUIObjects
     {
         //GUIImage _gTargetter;
         GUIImage _gTile;
-        GUILiteCombatActorInfo _gCombatSprite;
-        public GUISprite CharacterSprite => _gCombatSprite.CharacterSprite;
-        public GUISprite CharacterWeaponSprite => _gCombatSprite.CharacterWeaponSprite;
+        GUILiteCombatActorInfo _gActorInfo;
+        public GUISprite CharacterSprite => _gActorInfo.CharacterSprite;
+        public GUISprite CharacterWeaponSprite => _gActorInfo.CharacterWeaponSprite;
         GUIText _gEffect;
-        GUISprite _gSummon;
-        public GUISprite SummonSprite => _gSummon;
+        public GUISprite SummonSprite { get; private set; }
         GUIText _gSummonEffect;
 
-        LiteCombatTile _mapTile;
-        public LiteCombatTile MapTile => _mapTile;
+        CombatTile _mapTile;
+        public CombatTile MapTile => _mapTile;
 
         //SpriteFont _fDmg;
         int _iDmgTimer = 40;
 
-        public GUICombatTile(LiteCombatTile tile)
+        public GUICombatTile(CombatTile tile)
         {
             _mapTile = tile;
             _mapTile.AssignGUITile(this);
@@ -57,7 +56,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             if (CombatManager.SelectedAction != null)
             {
-                _gTile.SetColor(CombatManager.SelectedAction.GetEffectedTiles().Contains(MapTile) ? Color.Red : Color.White);
+                _gTile.SetColor(CombatManager.SelectedAction.GetAffectedTiles().Contains(MapTile) ? Color.Red : Color.White);
             }
             else if (CombatManager.SelectedAction == null) { _gTile.SetColor(Color.White); }
 
@@ -73,9 +72,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (Occupied())
             {
-                if (_gSummon != null) { _gSummon.Draw(spriteBatch); }
+                if (SummonSprite != null) { SummonSprite.Draw(spriteBatch); }
 
-                _gCombatSprite.Draw(spriteBatch);
+                _gActorInfo.Draw(spriteBatch);
             }
 
             if (_gEffect != null && _iDmgTimer < 40)
@@ -90,8 +89,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (Occupied())
             {
-                if (_gSummon != null) { _gSummon.Update(gameTime); }
-                _gCombatSprite.Update(gameTime);
+                if (SummonSprite != null) { SummonSprite.Update(gameTime); }
+                _gActorInfo.Update(gameTime);
             }
 
             if (_gEffect != null)
@@ -108,12 +107,12 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     if (!String.IsNullOrEmpty(_gEffect.Text))
                     {
                         _gEffect.SetText("");
-                        _gEffect.AnchorAndAlignToObject(_gCombatSprite, SideEnum.Top, SideEnum.CenterX);
+                        _gEffect.AnchorAndAlignToObject(_gActorInfo, SideEnum.Top, SideEnum.CenterX);
                     }
                     if (_gSummonEffect != null && !String.IsNullOrEmpty(_gSummonEffect.Text))
                     {
                         _gSummonEffect.SetText("");
-                        _gSummonEffect.AnchorAndAlignToObject(_gCombatSprite, SideEnum.Top, SideEnum.CenterX);
+                        _gSummonEffect.AnchorAndAlignToObject(_gActorInfo, SideEnum.Top, SideEnum.CenterX);
                     }
                 }
                 else { _gEffect = null; }
@@ -125,10 +124,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
             //_gTargetter.AnchorAndAlignToObject(_gTile, SideEnum.Top, SideEnum.CenterX, 30);
             if (Occupied())
             {
-                _gCombatSprite.Position(GetIdleLocation(_gCombatSprite.CharacterSprite));
+                _gActorInfo.Position(GetIdleLocation(_gActorInfo.CharacterSprite));
 
                 _gEffect = new GUIText();
-                _gEffect.AnchorAndAlignToObject(_gCombatSprite, SideEnum.Top, SideEnum.CenterX);
+                _gEffect.AnchorAndAlignToObject(_gActorInfo, SideEnum.Top, SideEnum.CenterX);
             }
         }
 
@@ -136,15 +135,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (occupied)
             {
-                _gCombatSprite = new GUILiteCombatActorInfo(_mapTile.Character);
-                AddControl(_gCombatSprite);
+                _gActorInfo = new GUILiteCombatActorInfo(_mapTile.Character);
+                AddControl(_gActorInfo);
 
-                _gCombatSprite.Reset();
-                _gCombatSprite.PlayAnimation(LiteCombatActionEnum.Idle);
+                _gActorInfo.Reset();
+                _gActorInfo.PlayAnimation(CombatActionEnum.Idle);
             }
             else
             {
-                _gCombatSprite = null;
+                _gActorInfo = null;
             }
             Setup();
         }
@@ -152,14 +151,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (s != null)
             {
-                _gSummon = new GUISprite(s.BodySprite);
-                _gSummon.Position(GetIdleSummonLocation());
+                SummonSprite = new GUISprite(s.BodySprite);
+                SummonSprite.Position(GetIdleSummonLocation());
                 _gSummonEffect = new GUIText();
-                _gSummonEffect.AnchorAndAlignToObject(_gSummon, SideEnum.Top, SideEnum.CenterX);
+                _gSummonEffect.AnchorAndAlignToObject(SummonSprite, SideEnum.Top, SideEnum.CenterX);
             }
             else
             {
-                _gSummon = null;
+                SummonSprite = null;
                 _gSummonEffect = null;
             }
         }
@@ -179,6 +178,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 _iDmgTimer = 0;
                 _gEffect.SetText(x);
                 _gEffect.SetColor(harms ? Color.Red : Color.LightGreen);
+
+                _gActorInfo.UpdateHealthBar();
             }
         }
 
@@ -198,7 +199,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             bool rv = false;
 
-            rv = _gTile.Contains(mouse) || (Occupied() && _gCombatSprite.Contains(mouse));
+            rv = _gTile.Contains(mouse) || (Occupied() && _gActorInfo.Contains(mouse));
 
             return rv;
         }
@@ -227,9 +228,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public Vector2 GetCharacterPosition()
         {
             Vector2 rv = Vector2.Zero;
-            if (_gCombatSprite != null)
+            if (_gActorInfo != null)
             {
-                rv = _gCombatSprite.Position();
+                rv = _gActorInfo.Position();
             }
             return rv;
         }
@@ -252,7 +253,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 GUISprite temp = new GUISprite(_mapTile.Character.LinkedSummon.BodySprite, true);
 
-                temp.AnchorAndAlignToObject(_gCombatSprite, SideEnum.Left, SideEnum.Top);
+                temp.AnchorAndAlignToObject(_gActorInfo, SideEnum.Left, SideEnum.Top);
                 rv = temp.Position();
             }
 
@@ -261,7 +262,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public void PlayAnimation<TEnum>(TEnum animation)
         {
-            _gCombatSprite.PlayAnimation(animation);
+            _gActorInfo.PlayAnimation(animation);
         }
     }
 }

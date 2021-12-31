@@ -16,8 +16,6 @@ namespace RiverHollow
     {
         static bool _bExit = false;
 
-        public const CombatStyleEnum COMBAT_STYLE = CombatStyleEnum.Lite;
-
         public GraphicsDeviceManager _graphicsDeviceManager;
         public SpriteBatch spriteBatch;
         public static int ScreenWidth = 1920;

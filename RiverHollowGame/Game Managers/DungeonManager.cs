@@ -139,7 +139,7 @@ namespace RiverHollow.Game_Managers
                 //}
 
                 HandleEntrances(rmInfo.Map);
-                rmInfo.Map.SpawnMapEntities(RHRandom.Instance().Next(10) < ENCOUNTER_RATE);
+                rmInfo.Map.SpawnMapEntities();
             }
         }
 

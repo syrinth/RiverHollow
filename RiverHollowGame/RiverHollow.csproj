@@ -79,7 +79,6 @@
     <Compile Include="Characters\Monster.cs" />
     <Compile Include="Characters\LiteSummon.cs" />
     <Compile Include="Characters\Mob.cs" />
-    <Compile Include="Characters\Tactical\TacticalMonster.cs" />
     <Compile Include="Characters\Tactical\TacticalSummon.cs" />
     <Compile Include="Characters\TalkingActor.cs" />
     <Compile Include="Characters\TravellingNPC.cs" />
@@ -87,12 +86,10 @@
     <Compile Include="Characters\WorldActor.cs" />
     <Compile Include="CombatStuff\CombatAction.cs" />
     <Compile Include="CombatStuff\LiteCombatTile.cs" />
-    <Compile Include="CombatStuff\LiteMenuAction.cs" />
     <Compile Include="CombatStuff\TacticalCombatAction.cs" />
-    <Compile Include="CombatStuff\TacticalMenuAction.cs" />
     <Compile Include="CombatStuff\StatusEffect.cs" />
     <Compile Include="CombatStuff\CharacterClass.cs" />
-    <Compile Include="Game Managers\LiteCombatManager.cs" />
+    <Compile Include="Game Managers\CombatManager.cs" />
     <Compile Include="Game Managers\TacticalCombatManager.cs" />
     <Compile Include="Game Managers\CutSceneManager.cs" />
     <Compile Include="Game Managers\DungeonManager.cs" />
@@ -107,11 +104,10 @@
     <Compile Include="GUIComponents\GUIHarp.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\GUIHealthBar.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Lite\ActionPanel.cs" />
+    <Compile Include="GUIComponents\GUIObjects\Combat\Lite\ChosenAction.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Lite\GUILiteCombatActorInfo.cs" />
-    <Compile Include="GUIComponents\GUIObjects\Combat\Lite\GUILiteTurnOrderDisplay.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Lite\InfoPanel.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Lite\TurnOrder.cs" />
-    <Compile Include="GUIComponents\GUIObjects\Combat\Tactical\GUITacticalTurnOrderDisplay.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIActionSelectObject.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Tactical\GUITacticalCombatantInfo.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Lite\GUICombatTile.cs" />

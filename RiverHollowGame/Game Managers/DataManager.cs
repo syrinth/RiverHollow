@@ -640,11 +640,7 @@ namespace RiverHollow.Game_Managers
         {
             if (id != -1)
             {
-                Dictionary<string, string> liData = _diActions[id];
-                if (liData["Type"] == "Action" || liData["Type"] == "Spell" || liData["Type"] == "Move")
-                {
-                    return new CombatAction(id, liData);
-                }
+                return new CombatAction(id, _diActions[id]);
             }
 
             return null;

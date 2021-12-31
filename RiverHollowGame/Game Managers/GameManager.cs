@@ -32,8 +32,6 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Game Enums
-        public enum CombatStyleEnum { Lite, Tactical };
-
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, ShowRequests, Propose, Date, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Party };
         public enum TextEntryTriggerEnum { None, UseItem, ConfirmGift, EndDay, Exit, Donate, PetFollow, PetUnfollow, GetBaby }
@@ -49,7 +47,7 @@ namespace RiverHollow.Game_Managers
         public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };
         public enum VerbEnum { Walk, Idle, Hurt, Critical, Ground, Air, UseTool, Action1, Action2, Action3, Action4, Cast, MakeItem };
         public enum AnimationEnum { None, Spawn, KO, Win, PlayAnimation, Rain, Snow, ObjectIdle, Action_One, Action_Two, Action_Finished };
-        public enum LiteCombatActionEnum { Idle, Cast, Hurt, Attack, Critical, Spawn, KO, Victory };
+        public enum CombatActionEnum { Idle, Cast, Hurt, Attack, Critical, Spawn, KO, Victory };
 
         public enum ToolAnimEnum { Down, Up, Left, Right };
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
@@ -71,7 +69,7 @@ namespace RiverHollow.Game_Managers
         public enum AttributeEnum { Agility, Damage, Defense, Evasion, Magic, MaxHealth, Resistance, Speed, Strength };
         public enum PotencyBonusEnum { None, Conditions, Summon};
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
-        public enum ActionEnum { Action, Item, Spell, MenuItem, MenuSpell, MenuAction, Move, EndTurn };
+        public enum ActionEnum { Action, Item, Move };
         public enum SkillTagsEnum { Bonus, Harm, Heal, NPC_ID, Push, Pull, Remove, Retreat, Step, StatusEffectID };
         public enum TargetEnum { Enemy, Ally };
         public enum DamageTypeEnum { Physical, Magical };

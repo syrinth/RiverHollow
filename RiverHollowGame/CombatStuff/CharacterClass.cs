@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
 
@@ -94,6 +92,8 @@ namespace RiverHollow.CombatStuff
                 {
                     Actions.Add(DataManager.GetCombatActionByIndex(int.Parse(ability)));
                 }
+                Actions.Add(DataManager.GetCombatActionByIndex(int.Parse(DataManager.Config[18]["UseItem"])));
+                Actions.Add(DataManager.GetCombatActionByIndex(int.Parse(DataManager.Config[18]["MoveAction"])));
             }
 
             //Doesn't seem to be given anymore?

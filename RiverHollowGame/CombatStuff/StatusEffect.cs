@@ -10,6 +10,9 @@ namespace RiverHollow.CombatStuff
     public class StatusEffect
     {
         public CombatActor SkillUser;
+        AttributeEnum _eDamageAttribute = AttributeEnum.Magic;
+        public AttributeEnum PowerAttribute => _eDamageAttribute;
+
         StatusTypeEnum _eEffectType;
         public StatusTypeEnum EffectType => _eEffectType;
         public int ID { get; }
@@ -39,6 +42,7 @@ namespace RiverHollow.CombatStuff
             Util.AssignValue(ref _iDuration, "Duration", data);
             Util.AssignValue(ref _iPotency, "Potency", data);
             Util.AssignValue(ref _eEffectType, "Type", data);
+            Util.AssignValue(ref _eDamageAttribute, "Attribute", data);
 
             if (data.ContainsKey("Modify"))
             {

@@ -16,8 +16,7 @@ namespace RiverHollow.Characters
 
         public int ID { get; private set; }
         int _iRating;
-        int _xp;
-        public int XP { get => _xp; }
+        public int XP { get; private set; }
         protected Vector2 _moveTo = Vector2.Zero;
         int _iLootID;
 
@@ -46,14 +45,16 @@ namespace RiverHollow.Characters
             _iHeight = int.Parse(data["Height"]);
 
             _iRating = int.Parse(data["Lvl"]);
-            _xp = _iRating * 10;
-            _diAttributes[AttributeEnum.Damage] = 20 + (_iRating * 10);
-            _diAttributes[AttributeEnum.Strength] = 1 + _iRating;
-            _diAttributes[AttributeEnum.Defense] = 8 + (_iRating * 3);
-            _diAttributes[AttributeEnum.MaxHealth] = 2 * _iRating + 10;
-            _diAttributes[AttributeEnum.Magic] = 2 * _iRating + 2;
-            _diAttributes[AttributeEnum.Resistance] = 2 * _iRating + 10;
-            _diAttributes[AttributeEnum.Speed] = 10;
+            XP = _iRating * 10;
+            _diAttributes[AttributeEnum.Damage] = 10 + (_iRating * 10);
+            _diAttributes[AttributeEnum.MaxHealth] = (2 * _iRating) + 10;
+            _diAttributes[AttributeEnum.Strength] = 5 + _iRating;
+            _diAttributes[AttributeEnum.Defense] = 7 + (_iRating * 3);
+            _diAttributes[AttributeEnum.Agility] = 5 + _iRating;
+            _diAttributes[AttributeEnum.Evasion] = 7 + (_iRating * 3);
+            _diAttributes[AttributeEnum.Magic] = 5 + _iRating;
+            _diAttributes[AttributeEnum.Resistance] = 7 + (_iRating * 3);
+            _diAttributes[AttributeEnum.Speed] = 5;
 
             foreach (string ability in data["Ability"].Split('-'))
             {
@@ -116,13 +117,13 @@ namespace RiverHollow.Characters
 
             LoadContent(DataManager.FOLDER_MONSTERS + data["Texture"], idle, attack, hurt, cast);
 
-            _iCurrentHP = MaxHP;
+            CurrentHP = MaxHP;
         }
 
         public override void Update(GameTime theGameTime)
         {
             base.Update(theGameTime);
-            if (BodySprite.CurrentAnimation == Util.GetEnumString(LiteCombatActionEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
+            if (BodySprite.CurrentAnimation == Util.GetEnumString(CombatActionEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
             {
                 CombatManager.Kill(this);
             }
@@ -162,18 +163,18 @@ namespace RiverHollow.Characters
             int xCrawl = 0;
             RHSize frameSize = new RHSize(_iWidth/TILE_SIZE, _iHeight / TILE_SIZE);
 
-            _sprBody.AddAnimation(LiteCombatActionEnum.Idle, xCrawl * TILE_SIZE, 0, frameSize, (int)idle[0], idle[1]);
+            _sprBody.AddAnimation(CombatActionEnum.Idle, xCrawl * TILE_SIZE, 0, frameSize, (int)idle[0], idle[1]);
             xCrawl += (int)idle[0] + frameSize.Width;
-            _sprBody.AddAnimation(LiteCombatActionEnum.Attack, xCrawl * TILE_SIZE, 0, frameSize, (int)attack[0], attack[1]);
+            _sprBody.AddAnimation(CombatActionEnum.Attack, xCrawl * TILE_SIZE, 0, frameSize, (int)attack[0], attack[1]);
             xCrawl += (int)attack[0] + frameSize.Width;
-            _sprBody.AddAnimation(LiteCombatActionEnum.Hurt, xCrawl * TILE_SIZE, 0, frameSize, (int)hurt[0], hurt[1]);
+            _sprBody.AddAnimation(CombatActionEnum.Hurt, xCrawl * TILE_SIZE, 0, frameSize, (int)hurt[0], hurt[1]);
             xCrawl += (int)hurt[0] + frameSize.Width;
-            _sprBody.AddAnimation(LiteCombatActionEnum.Cast, xCrawl * TILE_SIZE, 0, frameSize, (int)cast[0], cast[1]);
+            _sprBody.AddAnimation(CombatActionEnum.Cast, xCrawl * TILE_SIZE, 0, frameSize, (int)cast[0], cast[1]);
             xCrawl += (int)cast[0] + frameSize.Width;
 
-            _sprBody.AddAnimation(LiteCombatActionEnum.KO, (xCrawl * frameSize.Width), 0, frameSize, 3, 0.2f);
+            _sprBody.AddAnimation(CombatActionEnum.KO, (xCrawl * frameSize.Width), 0, frameSize, 3, 0.2f);
 
-            _sprBody.PlayAnimation(LiteCombatActionEnum.Idle);
+            _sprBody.PlayAnimation(CombatActionEnum.Idle);
             _sprBody.SetScale((int)GameManager.NORMAL_SCALE);
             _iBodyWidth = frameSize.Width * (int)GameManager.NORMAL_SCALE;
             _iBodyHeight = frameSize.Height * (int)GameManager.NORMAL_SCALE;

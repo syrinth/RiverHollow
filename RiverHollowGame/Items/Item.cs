@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Characters;
-using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
-using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;

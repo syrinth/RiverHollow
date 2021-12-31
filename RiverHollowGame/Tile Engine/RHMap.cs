@@ -29,27 +29,22 @@ namespace RiverHollow.Tile_Engine
         public int MapHeightTiles = 100;
 
         private string _sName;
-        public string Name { get => _sName.Replace(@"Maps\", ""); } //Fuck off with that path bullshit
+        public string Name => _sName.Replace(@"Maps\", ""); //Fuck off with that path bullshit
 
         public string DungeonName { get; private set; } = string.Empty;
         public bool IsDungeon => !string.IsNullOrEmpty(DungeonName);
-        public bool IsTown { get; private set; }
-        public int BuildingID { get; private set; } = -1;
-        bool _bModular;
-        public bool Modular => _bModular;
-        bool _bOutside;
-        public bool IsOutside => _bOutside;
-        int _iActiveSpawnPoints;
-        public int ActiveSpawnPoints => _iActiveSpawnPoints;
-        private string _sMapType;
-        public string MapType => _sMapType;
+        public bool IsTown => _map.Properties.ContainsKey("Town");
+        public int BuildingID => _map.Properties.ContainsKey("BuildingID") ? int.Parse(_map.Properties["BuildingID"]) : -1;
+        public bool Modular => _map.Properties.ContainsKey("Modular");
+        public bool IsOutside => _map.Properties.ContainsKey("Outside");
+        public string MapType => _map.Properties.ContainsKey("MapType") ? _map.Properties["MapType"] : string.Empty;
         public MonsterFood PrimedFood { get; private set; }
         public RHTile TargetTile { get; private set; } = null;
 
         private RHTile MouseTile => GetMouseOverTile();
 
         protected TiledMap _map;
-        public TiledMap Map { get => _map; }
+        public TiledMap Map => _map;
 
         protected RHTile[,] _arrTiles;
         public List<RHTile> TileList => _arrTiles.Cast<RHTile>().ToList();
@@ -68,7 +63,6 @@ namespace RiverHollow.Tile_Engine
         public List<WorldActor> ToAdd;
         private List<Building> _liBuildings;
         private List<WorldObject> _liPlacedWorldObjects;
-       // public List<MonsterSpawn> MonsterSpawnPoints { get; private set; }
         private List<ResourceSpawn> _liResourceSpawnPoints;
         private List<int> _liCutscenes;
         private Dictionary<RarityEnum, List<int>> _diResources;
@@ -130,20 +124,10 @@ namespace RiverHollow.Tile_Engine
             _liWallTiles = map._liWallTiles;
             _diTileLayers = map._diTileLayers;
 
-            BuildingID = map.BuildingID;
-            IsTown = map.IsTown;
-            _bOutside = map.IsOutside;
-            _sMapType = map.MapType;
-
             if (_map.Properties.ContainsKey("Dungeon"))
             {
                 DungeonName = _map.Properties["Dungeon"];
                 DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], this);
-            }
-
-            if (_map.Properties.ContainsKey("ActiveSpawn"))
-            {
-                int.TryParse(_map.Properties["ActiveSpawn"].ToString(), out _iActiveSpawnPoints);
             }
 
             _liBuildings = map._liBuildings;
@@ -188,19 +172,6 @@ namespace RiverHollow.Tile_Engine
                     _arrTiles[j, i] = new RHTile(j, i, _sName);
                     _arrTiles[j, i].SetProperties(this);
                 }
-            }
-            if (_map.Properties.ContainsKey("BuildingID"))
-            {
-                BuildingID = int.Parse(_map.Properties["BuildingID"]);
-            }
-            IsTown = _map.Properties.ContainsKey("Town");
-            Util.AssignValue(ref _bModular, "Modular", _map.Properties);
-            Util.AssignValue(ref _iActiveSpawnPoints, "ActiveSpawn", _map.Properties);
-            Util.AssignValue(ref _sMapType, "MapType", _map.Properties);
-
-            if (_map.Properties.ContainsKey("Outside"))
-            {
-                bool.TryParse(_map.Properties["Outside"], out _bOutside);
             }
 
             if (_map.Properties.ContainsKey("Dungeon"))
@@ -609,11 +580,8 @@ namespace RiverHollow.Tile_Engine
 
         public void SpawnMapEntities(bool spawnEnemies = true, bool loaded = false)
         {
-            if (spawnEnemies) {
-                if (RiverHollow.COMBAT_STYLE == CombatStyleEnum.Lite) { SpawnMobs(); }
-                //else { SpawnMonsters(); }
-            }
             SpawnResources(GetSkipTiles(loaded));
+            SpawnMobs();
         }
 
         public void ClearMapEntities()
@@ -624,7 +592,7 @@ namespace RiverHollow.Tile_Engine
                 switch (obj.Type)
                 {
                     case ObjectTypeEnum.DungeonObject:
-                        if (_bModular) { goto case ObjectTypeEnum.WorldObject; }
+                        if (Modular) { goto case ObjectTypeEnum.WorldObject; }
                         else { break; }
                     case ObjectTypeEnum.CombatHazard:
                     case ObjectTypeEnum.Destructible:
@@ -680,7 +648,7 @@ namespace RiverHollow.Tile_Engine
         {
             foreach (WorldObject obj in _liPlacedWorldObjects) { obj.Rollover(); }
 
-            if (!_bModular)
+            if (!Modular)
             {
                 //SpawnMonsters();
             }
@@ -758,10 +726,45 @@ namespace RiverHollow.Tile_Engine
 
         private void SpawnMobs()
         {
-            Mob m = DataManager.GetMobByIndex(0);
-            m.Position = new Vector2(100, 100);
-            m.CurrentMapName = this.Name;
-            _liMobs.Add(m);
+            //Skip if there is no mob info
+            if (!_map.Properties.ContainsKey("Mobs")) { return; }
+
+            List<RHTile> validTiles = new List<RHTile>();
+            foreach (RHTile x in _arrTiles)
+            {
+                if (x.Passable())
+                {
+                    validTiles.Add(x);
+                }
+            }
+
+            for (int i = 0; i < _liMobs.Count; i++)
+            {
+                RemoveActor(_liMobs[i]);
+            }
+            _liMobs.Clear();
+
+            string[] mobInfoSplit = Util.FindParams(_map.Properties["Mobs"]);
+            string[] mobRange = mobInfoSplit[0].Split('-');
+
+            //Select how many mobs to create
+            int spawnNumber = mobRange.Length > 1 ? RHRandom.Instance().Next(int.Parse(mobRange[0]), int.Parse(mobRange[1])) : int.Parse(mobRange[0]);
+
+            string[] possibleMobs = mobInfoSplit[1].Split('-');
+
+            //For every mob we have to spawn pick a random mob entity from the list of mobs
+            for (int i = 0; i < spawnNumber; i++)
+            {
+                int mobID = int.Parse(possibleMobs[RHRandom.Instance().Next(0, possibleMobs.Count() - 1)]);
+
+                Mob m = DataManager.GetMobByIndex(mobID);
+                RHTile t = validTiles[RHRandom.Instance().Next(0, validTiles.Count() - 1)];
+                m.Position = t.Position;
+                m.CurrentMapName = this.Name;
+                _liMobs.Add(m);
+
+                validTiles.Remove(t);
+            }
         }
 
         ///// <summary>

@@ -10,6 +10,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 {
     public class InfoPanel : GUIObject
     {
+        int displayedHP;
         CombatActor _actor;
 
         GUISprite _actorSprite;
@@ -33,9 +34,14 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             SetActor(act);
         }
 
-        public bool DisplayingActor(CombatActor act)
+        public bool ShouldRefresh(CombatActor act)
         {
-            return _actor == act;
+            if (act == _actor)
+            {
+                if (displayedHP == act.CurrentHP) { return false; }
+            }
+
+            return true;
         }
 
         public void SetActor(CombatActor actor)
@@ -49,6 +55,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             _actor = actor;
 
             _actorSprite = new GUISprite(_actor.BodySprite, true);
+            _actorSprite.PlayAnimation(actor.IsCritical() ? VerbEnum.Critical : VerbEnum.Idle);
             _actorSprite.Position(Position() + new Vector2(ScaleIt(4), ScaleIt(4)));
             AddControl(_actorSprite);
 
@@ -60,6 +67,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             _gHP.Position(Position() + new Vector2(ScaleIt(42), ScaleIt(18)));
             AddControl(_gHP);
 
+            displayedHP = _actor.CurrentHP;
             _gHPValue = new GUIText(_actor.CurrentHP + @"/" + _actor.MaxHP, DataManager.GetBitMapFont(DataManager.FONT_STAT_DISPLAY));
             _gHPValue.Position(Position() + new Vector2(ScaleIt(53), ScaleIt(19)));
             AddControl(_gHPValue);

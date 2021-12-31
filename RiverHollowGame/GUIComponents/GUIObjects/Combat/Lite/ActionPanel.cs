@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Actors.CombatStuff;
 using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
+using RiverHollow.Items;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 
@@ -9,11 +9,13 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 {
     public class ActionPanel : GUIImage
     {
+        const int USE_ITEM = 4;
         int _iSelectedAction = 0;
 
         GUIText _gActionName;
         GUIImage _gActionReticle;
         GUIImage[] _arrActionImages;
+        CombatInventoryPanel _gInventoryPanel;
 
         List<GUIObject> _liActionIcons;
 
@@ -28,6 +30,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 
         public void PopulateActions()
         {
+            RemoveControl(_gInventoryPanel);
+            _gInventoryPanel = null;
+
             RemoveControl(_gActionReticle);
             foreach (GUIImage g in _arrActionImages)
             {
@@ -37,40 +42,51 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             _arrActionImages = new GUIImage[6];
 
             Vector2 iconPosition = new Vector2(4, 5);
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 6; i++)
             {
-                LiteMenuAction action = CombatManager.ActiveCharacter.Actions[i];
+                if(i == 5){ iconPosition.Y += 21; }
+                CombatAction action = CombatManager.ActiveCharacter.Actions[i];
                 _arrActionImages[i] = new GUIImage(new Rectangle((int)action.IconGrid.X * GameManager.TILE_SIZE, (int)action.IconGrid.Y * GameManager.TILE_SIZE, 16, 16), DataManager.ACTION_ICONS);
                 _arrActionImages[i].Position(Position() + ScaleIt(iconPosition));
                 AddControl(_arrActionImages[i]);
 
-                iconPosition.X += 22;
+                if (i < USE_ITEM) { iconPosition.X += 22; }
             }
-
-            _arrActionImages[4] = new GUIImage(new Rectangle(0, 128, 16, 16), DataManager.ACTION_ICONS);
-            _arrActionImages[4].Position(Position() + ScaleIt(new Vector2(92, 5)));
-            AddControl(_arrActionImages[4]);
-
-            _arrActionImages[5] = new GUIImage(new Rectangle(16, 128, 16, 16), DataManager.ACTION_ICONS);
-            _arrActionImages[5].Position(Position() + ScaleIt(new Vector2(92, 26)));
-            AddControl(_arrActionImages[5]);
 
             _gActionReticle = new GUIImage(new Rectangle(194, 112, 20, 20), DataManager.COMBAT_TEXTURE);
             AddControl(_gActionReticle);
 
-            SetSelectedAction(_iSelectedAction);
+            SetSelectedActionInfo(_iSelectedAction);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            for (int i = 0; i < 6; i++)
+            if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseAction)
             {
-                if (_arrActionImages[i].Contains(mouse))
+                if (_gInventoryPanel == null)
                 {
-                    rv = true;
-                    CombatManager.SetChosenAction(i);
-                    break;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        if (_arrActionImages[i].Contains(mouse))
+                        {
+                            _iSelectedAction = i;
+                            if (_iSelectedAction == USE_ITEM)
+                            {
+                                _gActionName.SetText("");
+                                _gInventoryPanel = new CombatInventoryPanel();
+                                _gInventoryPanel.Position(Position());
+                                AddControl(_gInventoryPanel);
+                            }
+                            else { CombatManager.SetChosenAction(_iSelectedAction); }
+                            rv = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    CombatManager.SetChosenItem(_gInventoryPanel.GetSelectedItem());
                 }
             }
 
@@ -80,22 +96,45 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
         public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
-            for (int i = 0; i < 6; i++)
+            if (_gInventoryPanel == null)
             {
-                if (_arrActionImages[i].Contains(mouse))
+                if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseAction)
                 {
-                    rv = true;
-                    SetSelectedAction(i);
-                    break;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        if (_arrActionImages[i].Contains(mouse))
+                        {
+                            rv = true;
+                            SetSelectedActionInfo(i);
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                rv = _gInventoryPanel.ProcessHover(mouse);
+
+                Consumable it = _gInventoryPanel.GetSelectedItem();
+                if (it != null)
+                {
+                    SetSelectedName(it.Name);
                 }
             }
 
             return rv;
         }
 
-        private void SetSelectedAction(int i)
+        private void SetSelectedName(string name)
         {
             RemoveControl(_gActionName);
+            _gActionName = new GUIText(name);
+            _gActionName.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX);
+            AddControl(_gActionName);
+        }
+
+        private void SetSelectedActionInfo(int i)
+        {
             foreach (GUIObject obj in _liActionIcons) { RemoveControl(obj); }
 
             _liActionIcons = new List<GUIObject>();
@@ -103,17 +142,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             _iSelectedAction = i;
             _gActionReticle.CenterOnObject(_arrActionImages[_iSelectedAction]);
 
-            string textName = string.Empty;
-            if (_iSelectedAction < 4) { textName = CombatManager.ActiveCharacter.Actions[_iSelectedAction].Name; }
-            else if (_iSelectedAction == 4) { textName = "Item"; }
-            else { textName = "Move"; }
+            SetSelectedName(CombatManager.ActiveCharacter.Actions[_iSelectedAction].Name);
 
-            _gActionName = new GUIText(textName);
-            _gActionName.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX);
-            AddControl(_gActionName);
-
-            //4 and 5 are Items and Move
-            if (_iSelectedAction < 4)
+            if (_iSelectedAction < USE_ITEM)
             {
                 GUIObject tempObj = null;
                 CombatAction selectedAction = CombatManager.ActiveCharacter.Actions[_iSelectedAction];
@@ -131,7 +162,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 //Damage Prediction
                 if (selectedAction.Potency > 0)
                 {
-                    CombatManager.ActiveCharacter.GetDamageRange(out int min, out int max, selectedAction);
+                    CombatManager.ActiveCharacter.GetRawPowerRange(out int min, out int max, selectedAction.PowerAttribute, selectedAction.Potency);
 
                     tempObj = new GUIText(string.Format("{0}-{1}", min, max), DataManager.GetBitMapFont(DataManager.FONT_STAT_DISPLAY));
                     tempObj.AnchorAndAlignToObject(_liActionIcons[_liActionIcons.Count - 1], SideEnum.Right, SideEnum.CenterY);
@@ -223,6 +254,91 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 }
 
                 foreach (GUIObject obj in _liActionIcons) { AddControl(obj); }
+            }
+        }
+
+        public void CancelAction()
+        {
+            if (_gInventoryPanel != null)
+            {
+                RemoveControl(_gInventoryPanel);
+                _gInventoryPanel = null;
+
+                SetSelectedActionInfo(_iSelectedAction);
+            }
+        }
+
+        private class CombatInventoryPanel : GUIObject
+        {
+            int _iSelectedItem = 0;
+
+            GUIImage _gPanel;
+            GUIImage _gActionReticle;
+            List<Consumable> _liItems;
+            List<GUIImage> _liImages;
+            List<GUIText> _liNumbers;
+
+            public CombatInventoryPanel()
+            {
+                _gPanel = new GUIImage(new Rectangle(0, 96, 112, 56), DataManager.COMBAT_TEXTURE);
+                AddControl(_gPanel);
+
+                _liItems = InventoryManager.GetConsumables();
+                _liImages = new List<GUIImage>();
+                _liNumbers = new List<GUIText>();
+                for (int i = 0; i < _liItems.Count; i++)
+                {
+                    _liImages.Add(new GUIImage(_liItems[i].SourceRectangle, DataManager.FOLDER_ITEMS + "Consumables"));
+                    _liNumbers.Add(new GUIText(_liItems[i].Number, true, DataManager.FONT_STAT_DISPLAY));
+                }
+
+                Vector2 pos = new Vector2(3, 18);
+                for (int i = 0; i < 12 && i <_liImages.Count; i++)
+                {
+                    AddControl(_liImages[i]);
+                    AddControl(_liNumbers[i]);
+                    _liImages[i].Position(Position() + ScaleIt(pos));
+                    _liNumbers[i].AlignToObject(_liImages[i], SideEnum.Bottom);
+                    _liNumbers[i].AlignToObject(_liImages[i], SideEnum.Right);
+                    _liNumbers[i].ScaledMoveBy(-1, -1);
+
+                    pos.X += 18;
+
+                    if ((i + 1) % 6 == 0)
+                    {
+                        pos.X = 0;
+                        pos.Y += 18;
+                    }
+                }
+
+                _gActionReticle = new GUIImage(new Rectangle(194, 112, 20, 20), DataManager.COMBAT_TEXTURE);
+                _gActionReticle.CenterOnObject(_liImages[_iSelectedItem]);
+                AddControl(_gActionReticle);
+
+                Width = _gPanel.Width;
+                Height = _gPanel.Height;
+            }
+
+            public override bool ProcessHover(Point mouse)
+            {
+                bool rv = false;
+                for (int i = 0; i < 12 && i < _liImages.Count; i++)
+                {
+                    if (_liImages[i].Contains(mouse))
+                    {
+                        rv = true;
+                        _iSelectedItem = i;
+                        _gActionReticle.CenterOnObject(_liImages[_iSelectedItem]);
+                        break;
+                    }
+                }
+
+                return rv;
+            }
+
+            public Consumable GetSelectedItem()
+            {
+                return _liItems[_iSelectedItem];
             }
         }
     }

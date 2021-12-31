@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="77">
  <properties>
-  <property name="ActiveSpawn" type="int" value="3"/>
   <property name="Dungeon" value="Cave"/>
   <property name="MapType" value="Cave"/>
+  <property name="Mobs" value="2-3|0"/>
   <property name="Modular" type="bool" value="true"/>
   <property name="Outside" type="bool" value="false"/>
   <property name="ResourcesMinMax" value="30-60"/>

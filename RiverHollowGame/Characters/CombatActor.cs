@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Actors.CombatStuff;
 using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
@@ -21,17 +20,10 @@ namespace RiverHollow.Characters
         private Vector2 _vStartPos;
         public Vector2 StartPosition => _vStartPos;
 
-        protected int _iCurrentHP;
-        public int CurrentHP
-        {
-            get { return _iCurrentHP; }
-            set { _iCurrentHP = value; }
-        }
+        public int CurrentHP { get; protected set; }
         public virtual int MaxHP => 20 + (int)Math.Pow(((double)_diAttributes[AttributeEnum.MaxHealth] / 3), 1.98);
 
-        public int CurrentCharge;
-        public int DummyCharge;
-        public LiteCombatTile Tile;
+        public CombatTile Tile;
         public GUICombatTile Location => Tile.GUITile;
 
         protected Dictionary<AttributeEnum, int> _diAttributes;
@@ -41,20 +33,18 @@ namespace RiverHollow.Characters
         public int CritRating => _iCrit;
 
         protected List<CombatAction> _liActions;
-        public virtual List<CombatAction> Actions { get => _liActions; }
+        public virtual List<CombatAction> Actions => _liActions;
 
         protected List<CombatAction> _liSpecialActions;
-        public virtual List<CombatAction> SpecialActions { get => _liSpecialActions; }
+        public virtual List<CombatAction> SpecialActions => _liSpecialActions;
 
         protected List<StatusEffect> _liStatusEffects;
-        public List<StatusEffect> StatusEffects { get => _liStatusEffects; }
+        public List<StatusEffect> StatusEffects => _liStatusEffects;
 
         private ElementEnum _elementAttackEnum;
         protected Dictionary<ElementEnum, ElementAlignment> _diElementalAlignment;
         public Dictionary<ElementEnum, ElementAlignment> DiElementalAlignment => _diElementalAlignment;
-
-        private LiteSummon _linkedSummon;
-        public LiteSummon LinkedSummon => _linkedSummon;
+        public LiteSummon LinkedSummon { get; private set; }
 
         public bool Counter;
         public bool GoToCounter;
@@ -92,19 +82,19 @@ namespace RiverHollow.Characters
             _sprBody = new AnimatedSprite(texture.Replace(" ", ""));
             int xCrawl = 0;
             RHSize frameSize = new RHSize(24, 32);
-            _sprBody.AddAnimation(LiteCombatActionEnum.Idle, (xCrawl * frameSize.Width), 0, frameSize, 2, 0.5f);
+            _sprBody.AddAnimation(CombatActionEnum.Idle, (xCrawl * frameSize.Width), 0, frameSize, 2, 0.5f);
             xCrawl += 2;
-            _sprBody.AddAnimation(LiteCombatActionEnum.Cast, (xCrawl * frameSize.Width), 0, frameSize, 2, 0.4f);
+            _sprBody.AddAnimation(CombatActionEnum.Cast, (xCrawl * frameSize.Width), 0, frameSize, 2, 0.4f);
             xCrawl += 2;
-            _sprBody.AddAnimation(LiteCombatActionEnum.Hurt, (xCrawl * frameSize.Width), 0, frameSize, 1, 0.5f);
+            _sprBody.AddAnimation(CombatActionEnum.Hurt, (xCrawl * frameSize.Width), 0, frameSize, 1, 0.5f);
             xCrawl += 1;
-            _sprBody.AddAnimation(LiteCombatActionEnum.Attack, (xCrawl * frameSize.Width), 0, frameSize, 1, 0.3f);
+            _sprBody.AddAnimation(CombatActionEnum.Attack, (xCrawl * frameSize.Width), 0, frameSize, 1, 0.3f);
             xCrawl += 1;
-            _sprBody.AddAnimation(LiteCombatActionEnum.Critical, (xCrawl * frameSize.Width), 0, frameSize, 2, 0.9f);
+            _sprBody.AddAnimation(CombatActionEnum.Critical, (xCrawl * frameSize.Width), 0, frameSize, 2, 0.9f);
             xCrawl += 2;
-            _sprBody.AddAnimation(LiteCombatActionEnum.KO, (xCrawl * frameSize.Width), 0, frameSize, 1, 0.5f);
+            _sprBody.AddAnimation(CombatActionEnum.KO, (xCrawl * frameSize.Width), 0, frameSize, 1, 0.5f);
 
-            _sprBody.PlayAnimation(LiteCombatActionEnum.Idle);
+            _sprBody.PlayAnimation(CombatActionEnum.Idle);
             _sprBody.SetScale((int)GameManager.NORMAL_SCALE);
             _iBodyWidth = frameSize.Width * (int)GameManager.NORMAL_SCALE;
             _iBodyHeight = frameSize.Height * (int)GameManager.NORMAL_SCALE;
@@ -113,27 +103,27 @@ namespace RiverHollow.Characters
         public override void Update(GameTime theGameTime)
         {
             //Finished being hit, determine action
-            if (IsCurrentAnimation(LiteCombatActionEnum.Hurt) && BodySprite.GetPlayCount() >= 1)
+            if (IsCurrentAnimation(CombatActionEnum.Hurt) && BodySprite.GetPlayCount() >= 1)
             {
-                if (CurrentHP == 0) { Tile.PlayAnimation(LiteCombatActionEnum.KO); }
-                else if (IsCritical()) { Tile.PlayAnimation(LiteCombatActionEnum.Critical); }
-                else { Tile.PlayAnimation(LiteCombatActionEnum.Idle); }
+                if (CurrentHP == 0) { Tile.PlayAnimation(CombatActionEnum.KO); }
+                else if (IsCritical()) { Tile.PlayAnimation(CombatActionEnum.Critical); }
+                else { Tile.PlayAnimation(CombatActionEnum.Idle); }
             }
 
-            if (!KnockedOut && IsCurrentAnimation(LiteCombatActionEnum.KO))
+            if (!KnockedOut && IsCurrentAnimation(CombatActionEnum.KO))
             {
-                if (IsCritical()) { Tile.PlayAnimation(LiteCombatActionEnum.Critical); }
-                else { Tile.PlayAnimation(LiteCombatActionEnum.Idle); }
+                if (IsCritical()) { Tile.PlayAnimation(CombatActionEnum.Critical); }
+                else { Tile.PlayAnimation(CombatActionEnum.Idle); }
             }
 
-            if (IsCurrentAnimation(LiteCombatActionEnum.Critical) && !IsCritical())
+            if (IsCurrentAnimation(CombatActionEnum.Critical) && !IsCritical())
             {
-                Tile.PlayAnimation(LiteCombatActionEnum.Idle);
+                Tile.PlayAnimation(CombatActionEnum.Idle);
             }
 
-            if (_linkedSummon != null)
+            if (LinkedSummon != null)
             {
-                _linkedSummon.Update(theGameTime);
+                LinkedSummon.Update(theGameTime);
             }
         }
 
@@ -142,8 +132,13 @@ namespace RiverHollow.Characters
             if (IsCritical()) { base.PlayAnimation(VerbEnum.Critical); }
             else { base.PlayAnimation(VerbEnum.Walk); }
         }
+        public bool IsCritical() { return (CurrentHP / (float)MaxHP) <= 0.25; }
 
+        /// <summary>
+        /// Virtual method to placehold for subclasses
+        /// </summary>
         public virtual GUIImage GetIcon() { return null; }
+        public virtual GUISprite GetSprite(){ return Tile.GUITile.CharacterSprite; }
 
         public virtual int Attribute(AttributeEnum e)
         {
@@ -159,10 +154,56 @@ namespace RiverHollow.Characters
             return _diEffectedAttributes[e];
         }
 
-        public void GetDamageRange(out int min, out int max, CombatAction action)
+        /// <summary>
+        /// Reduces health by the given value. Cannot deal more damage than health exists.
+        /// </summary>
+        public virtual int DecreaseHealth(int value)
         {
-            AttributeEnum attribute = action.DamageAttribue;
-            double potencyMod = action.Potency / 100;   //100 potency is considered an average attack
+            CurrentHP -= (CurrentHP - value >= 0) ? value : CurrentHP;
+            Tile.PlayAnimation(CombatActionEnum.Hurt);
+            if (CurrentHP == 0)
+            {
+                KnockedOut = true;
+                UnlinkSummon();
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// As long as the target is not KnockedOut, recover the given amount of HP up to max
+        /// </summary>
+        public int IncreaseHealth(int x)
+        {
+            int amountHealed = 0;
+            if (!KnockedOut)
+            {
+                amountHealed = x;
+                if (CurrentHP + x <= MaxHP)
+                {
+                    CurrentHP += x;
+                }
+                else
+                {
+                    amountHealed = MaxHP - CurrentHP;
+                    CurrentHP = MaxHP;
+                }
+            }
+
+            return amountHealed;
+        }
+
+        #region Combat Action Handling
+        /// <summary>
+        /// Retrieves the raw, unmodified damage being dealt by this action
+        /// </summary>
+        /// <param name="min">The minimum damage to be dealt</param>
+        /// <param name="max">The maximum damage to be dealt</param>
+        /// <param name="attribute">The Action's Damage Attribute</param>
+        /// <param name="potency">The Potency of the Action</param>
+        public void GetRawPowerRange(out int min, out int max, AttributeEnum attribute, int potency)
+        {
+            double potencyMod = potency / 100.0;   //100 potency is considered an average attack
             double base_damage = Attribute(AttributeEnum.Damage);  //Damage is the most important attribute for raw damage
             double AttributeMultiplier = Math.Round(1 + ((double)Attribute(attribute) / 4 * Attribute(attribute) / MAX_STAT), 2);
 
@@ -173,126 +214,78 @@ namespace RiverHollow.Characters
         }
 
         /// <summary>
-        /// Calculates the damage to be dealt against the actor.
-        /// 
-        /// Run the damage equation against the defender, then apply any 
-        /// relevant elemental resistances.
-        /// 
-        /// Finally, roll against the crit rating. Rolling higher than the 
-        /// rating on a percentile roll means no crit. Crit Rating 10 means
-        /// roll 10 or less
+        /// Using the values from the attacker's GetRawPowerRange, apply defensive modifiers, calculate total damage and take it
         /// </summary>
-        /// <param name="attacker">Who is attacking</param>
-        /// <param name="potency">The potency of the attack</param>
-        /// <param name="element">any associated element</param>
-        /// <returns></returns>
-        public int ProcessAttack(CombatActor attacker, int potency, int critRating, ElementEnum element = ElementEnum.None)
+        /// <returns>The outgoing amount of damage</returns>
+        public int ProcessDamage(CombatActor attacker, AttributeEnum attribute, int potency, int critRating, ElementEnum element = ElementEnum.None)
         {
-            double compression = 0.8;
-            double potencyMod = potency / 100;   //100 potency is considered an average attack
-            double base_attack = attacker.Attribute(AttributeEnum.Damage);  //Attack stat is either weapon damage or mod on monster str
-            double StrMult = Math.Round(1 + ((double)attacker.Attribute(AttributeEnum.Strength) / 4 * attacker.Attribute(AttributeEnum.Strength) / MAX_STAT), 2);
+            attacker.GetRawPowerRange(out int min, out int max, attribute, potency);
 
-            double dmg = (Math.Max(1, base_attack - Attribute(AttributeEnum.Defense)) * compression * StrMult);
-            dmg += ApplyResistances(dmg, element);
+            double dmgDealt = RHRandom.Instance().Next(min, max);
 
-            if (RHRandom.Instance().Next(1, 100) <= (attacker.CritRating + critRating)) { dmg *= 2; }
+            double offensiveAttribute = attacker.Attribute(attribute);
+            double defensiveAttribute = Attribute(GameManager.GetDefenseType(attribute));
 
-            return DecreaseHealth(dmg);
+            //The minimum penetration modifier is 0.2, the maximum is 2
+            double penetrationModifier = Math.Min(Math.Max(0.2, offensiveAttribute / defensiveAttribute), 2);
+            int finalDamage = (int)(dmgDealt * penetrationModifier * ElementalModifiers(element));
+
+            DecreaseHealth(finalDamage);
+
+            return finalDamage;
         }
-        public int ProcessSpell(CombatActor attacker, int potency, ElementEnum element = ElementEnum.None)
-        {
-            double maxDmg = (1 + potency) * 3;
-            double divisor = 1 + (30 * Math.Pow(Math.E, -0.12 * (attacker.Attribute(AttributeEnum.Magic) - Attribute(AttributeEnum.Resistance)) * Math.Round((double)attacker.Attribute(AttributeEnum.Magic) / MAX_STAT, 2)));
 
-            double damage = Math.Round(maxDmg / divisor);
-            damage += ApplyResistances(damage, element);
-
-            return DecreaseHealth(damage);
-        }
-        public double ApplyResistances(double dmg, ElementEnum element = ElementEnum.None)
+        /// <summary>
+        /// Returns a modifier to the damage based on relevent elemental affinities
+        /// </summary>
+        /// <param name="element">The elemental alignment to check against</param>
+        /// <returns>A multiplier for the elemental type.</returns>
+        public double ElementalModifiers(ElementEnum element = ElementEnum.None)
         {
-            double modifiedDmg = 0;
+            double rv = 1;
             if (element != ElementEnum.None)
             {
                 if (MapManager.CurrentMap.IsOutside && EnvironmentManager.IsRaining())
                 {
-                    if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (dmg * 1.2) - dmg; }
-                    else if (element.Equals(ElementEnum.Fire)) { modifiedDmg += (dmg * 0.8) - dmg; }
+                    if (element.Equals(ElementEnum.Lightning)) { rv = 1.2; }
+                    else if (element.Equals(ElementEnum.Fire)) { rv = 0.8; }
                 }
                 else if (MapManager.CurrentMap.IsOutside && EnvironmentManager.IsSnowing())
                 {
-                    if (element.Equals(ElementEnum.Ice)) { modifiedDmg += (dmg * 1.2) - dmg; }
-                    else if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (dmg * 0.8) - dmg; }
+                    if (element.Equals(ElementEnum.Ice)) { rv = 1.2; }
+                    else if (element.Equals(ElementEnum.Lightning)) { rv = 0.8; }
                 }
 
-                if (_linkedSummon != null && _diElementalAlignment[element].Equals(ElementAlignment.Neutral))
+                if (LinkedSummon != null && _diElementalAlignment[element].Equals(ElementAlignment.Neutral))
                 {
-                    if (_linkedSummon.Element.Equals(element))
+                    if (LinkedSummon.Element.Equals(element))
                     {
-                        modifiedDmg += (dmg * 0.8) - dmg;
+                        rv = 0.8;
                     }
                 }
 
                 if (_diElementalAlignment[element].Equals(ElementAlignment.Resists))
                 {
-                    modifiedDmg += (dmg * 0.8) - dmg;
+                    rv = 0.8;
                 }
                 else if (_diElementalAlignment[element].Equals(ElementAlignment.Vulnerable))
                 {
-                    modifiedDmg += (dmg * 1.2) - dmg;
+                    rv = 1.2;
                 }
             }
 
-            return modifiedDmg;
+            return rv;
         }
 
-        public int ProcessHealingSpell(CombatActor attacker, int potency)
+        /// <summary>
+        /// Calculates the amount of healing done by the given action
+        /// </summary>
+        /// <returns>The outgoing amount of healing</returns>
+        public int ProcessHealingAction(CombatActor attacker, AttributeEnum attribute, int potency)
         {
-            double maxDmg = (1 + potency) * 3;
-            double divisor = 1 + (30 * Math.Pow(Math.E, -0.12 * (attacker.Attribute(AttributeEnum.Magic) - Attribute(AttributeEnum.Resistance)) * Math.Round((double)attacker.Attribute(AttributeEnum.Magic) / MAX_STAT, 2)));
+            attacker.GetRawPowerRange(out int min, out int max, attribute, potency);
 
-            int damage = (int)Math.Round(maxDmg / divisor);
-
-            return IncreaseHealth(damage);
-        }
-        public virtual GUISprite GetSprite()
-        {
-            return Tile.GUITile.CharacterSprite;
-        }
-
-        public virtual int DecreaseHealth(double value)
-        {
-            int iValue = (int)Math.Round(value);
-            _iCurrentHP -= (_iCurrentHP - iValue >= 0) ? iValue : _iCurrentHP;
-            Tile.PlayAnimation(LiteCombatActionEnum.Hurt);
-            if (_iCurrentHP == 0)
-            {
-                KnockedOut = true;
-                UnlinkSummon();
-            }
-
-            return iValue;
-        }
-
-        public int IncreaseHealth(int x)
-        {
-            int amountHealed = 0;
-            if (!KnockedOut)
-            {
-                amountHealed = x;
-                if (_iCurrentHP + x <= MaxHP)
-                {
-                    _iCurrentHP += x;
-                }
-                else
-                {
-                    amountHealed = MaxHP - _iCurrentHP;
-                    _iCurrentHP = MaxHP;
-                }
-            }
-
-            return amountHealed;
+            return IncreaseHealth(RHRandom.Instance().Next(min, max));
         }
 
         /// <summary>
@@ -301,14 +294,12 @@ namespace RiverHollow.Characters
         public void Recover()
         {
             KnockedOut = false;
-            _iCurrentHP = 1;
+            CurrentHP = 1;
         }
 
-        public bool IsCritical()
-        {
-            return (float)CurrentHP / (float)MaxHP <= 0.25;
-        }
+        #endregion
 
+        #region StatusEffect Handling
         /// <summary>
         /// Reduce the duration of each status effect on the Actor by one
         /// If the effect's duration reaches 0, remove it, otherwise have it run
@@ -328,11 +319,11 @@ namespace RiverHollow.Characters
                 {
                     if (b.EffectType == StatusTypeEnum.DoT)
                     {
-                        this.Tile.GUITile.AssignEffect(ProcessSpell(b.SkillUser, b.Potency), true);
+                        this.Tile.GUITile.AssignEffect(ProcessDamage(b.SkillUser, b.PowerAttribute, b.Potency, 0), true);
                     }
                     if (b.EffectType == StatusTypeEnum.HoT)
                     {
-                        this.Tile.GUITile.AssignEffect(ProcessHealingSpell(b.SkillUser, b.Potency), false);
+                        this.Tile.GUITile.AssignEffect(ProcessHealingAction(b.SkillUser, b.PowerAttribute, b.Potency), false);
                     }
                 }
             }
@@ -392,10 +383,11 @@ namespace RiverHollow.Characters
                 _diEffectedAttributes[e] = attribute;
             }
         }
+        #endregion
 
         public void LinkSummon(LiteSummon s)
         {
-            _linkedSummon = s;
+            LinkedSummon = s;
             s.Tile = Tile;
 
             Tile.GUITile.LinkSummon(s);
@@ -404,7 +396,7 @@ namespace RiverHollow.Characters
         public void UnlinkSummon()
         {
             Tile.GUITile.LinkSummon(null);
-            _linkedSummon = null;
+            LinkedSummon = null;
         }
 
         public virtual ElementEnum GetAttackElement()
@@ -441,7 +433,7 @@ namespace RiverHollow.Characters
 
         public void GetHP(ref double curr, ref double max)
         {
-            curr = _iCurrentHP;
+            curr = CurrentHP;
             max = MaxHP;
         }
 

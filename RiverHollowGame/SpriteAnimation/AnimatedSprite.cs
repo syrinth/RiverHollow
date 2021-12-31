@@ -89,7 +89,7 @@ namespace RiverHollow.SpriteAnimations
         }
 
         #region AddAnimation Helpers
-        public void AddAnimation(LiteCombatActionEnum verb, int startX, int startY, RHSize size, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, size.Width * TILE_SIZE, size.Height * TILE_SIZE, Frames, FrameLength, pingPong, playsOnce); }
+        public void AddAnimation(CombatActionEnum verb, int startX, int startY, RHSize size, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, size.Width * TILE_SIZE, size.Height * TILE_SIZE, Frames, FrameLength, pingPong, playsOnce); }
         public void AddAnimation(AnimationEnum verb, int startX, int startY, RHSize size, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, size.Width * TILE_SIZE, size.Height * TILE_SIZE, Frames, FrameLength, pingPong, playsOnce); }
         public void AddAnimation(AnimationEnum verb, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce); }
         public void AddAnimation(VerbEnum verb, DirectionEnum dir, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetActorString(verb, dir), startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce); }

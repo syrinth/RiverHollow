@@ -11,61 +11,52 @@ using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.CombatStuff
 {
-    public class LiteCombatTile
+    public class CombatTile
     {
-        TargetEnum _tileType;
-        public TargetEnum TargetType => _tileType;
+        public TargetEnum TargetType { get; }
+        public int Row { get; }
+        public int Column { get; }
+        public bool Selected { get; private set; }
+        public CombatActor Character { get; private set; }
+        public GUICombatTile GUITile { get; private set; }
 
-        int _iRow;
-        public int Row => _iRow;
-        int _iCol;
-        public int Col => _iCol;
-
-        bool _bSelected;
-        public bool Selected => _bSelected;
-
-        CombatActor _character;
-        public CombatActor Character => _character;
-        GUICombatTile _gTile;
-        public GUICombatTile GUITile => _gTile;
-
-        public LiteCombatTile(int row, int col, TargetEnum tileType)
+        public CombatTile(int row, int col, TargetEnum tileType)
         {
-            _iRow = row;
-            _iCol = col;
-            _tileType = tileType;
+            Row = row;
+            Column = col;
+            TargetType = tileType;
         }
 
         public void SetCombatant(CombatActor c, bool moveCharNow = true)
         {
-            _character = c;
+            Character = c;
             if (c != null)
             {
-                if (_character.Tile != null)
+                if (Character.Tile != null)
                 {
-                    _character.Tile.SetCombatant(null);
+                    Character.Tile.SetCombatant(null);
                 }
-                _character.Tile = this;
+                Character.Tile = this;
             }
 
-            _gTile.SyncGUIObjects(_character != null);
+            GUITile.SyncGUIObjects(Character != null);
         }
 
         public void AssignGUITile(GUICombatTile c)
         {
-            _gTile = c;
+            GUITile = c;
         }
 
         public bool Occupied()
         {
-            return _character != null;
+            return Character != null;
         }
 
         public void Select(bool val)
         {
-            _bSelected = val;
+            Selected = val;
 
-            if (_bSelected && CombatManager.SelectedTile != this)
+            if (Selected && CombatManager.SelectedTile != this)
             {
                 if (CombatManager.SelectedTile != null) { CombatManager.SelectedTile.Select(false); }
                 CombatManager.SelectedTile = this;
@@ -74,7 +65,7 @@ namespace RiverHollow.CombatStuff
 
         public void PlayAnimation<TEnum>(TEnum animation)
         {
-            _gTile.PlayAnimation(animation);
+            GUITile.PlayAnimation(animation);
         }
     }
 }

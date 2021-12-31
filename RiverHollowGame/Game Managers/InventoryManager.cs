@@ -495,7 +495,7 @@ Exit:
             return PlayerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
         }
 
-        internal static List<Consumable> GetPlayerCombatItems()
+        internal static List<Consumable> GetConsumables()
         {
             List<Consumable> items = new List<Consumable>();
             for (int i = 0; i < maxItemRows; i++)

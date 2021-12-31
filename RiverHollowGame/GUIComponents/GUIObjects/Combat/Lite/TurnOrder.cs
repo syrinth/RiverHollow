@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using System.Collections.Generic;
@@ -69,6 +68,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 
         public void DisplayNewTurn(IList<CombatActor> actors)
         {
+            for(int i = 0; i < _liActorIcons.Count; i++) { RemoveControl(_liActorIcons[i]); }
+
             _currentTurn.LinkActor(actors[0]);
 
             for (int i = 1; i < actors.Count; i++)
@@ -97,10 +98,28 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             _nextTurn.LinkActor(CombatManager.StartingActor);
         }
 
+        public CombatActor GetHoverActor(Point mouse)
+        {
+            CombatActor rv = null;
+            if (_currentTurn.Contains(mouse)) { return _currentTurn.Actor; }
+            if (_nextTurn.Contains(mouse)) { return _nextTurn.Actor; }
+
+            for (int i =0; i < _liActorIcons.Count; i++)
+            {
+                ActorIcon val = _liActorIcons[i];
+                if (val.Contains(mouse))
+                {
+                    return val.Actor;
+                }
+            }
+
+            return rv;
+        }
+
         private class ActorIcon : GUIObject
         {
             GUIImage _actorIcon;
-            CombatActor _linkedActor;
+            public CombatActor Actor { get; private set; }
 
             readonly ActorIconType _eIconType;
             readonly GUIImage _iconWindow;
@@ -109,44 +128,33 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             {
                 _eIconType = eIconType;
 
-                Width = ScaleIt(18);
                 switch (eIconType)
                 {
                     case ActorIconType.CurrentTurn:
-                        _iconWindow = new GUIImage(new Rectangle(112, 0, 18, 21), ScaleIt(18), ScaleIt(21), DataManager.COMBAT_TEXTURE);
-                        Height = ScaleIt(21);
+                        _iconWindow = new GUIImage(new Rectangle(112, 0, 18, 21), DataManager.COMBAT_TEXTURE);
                         break;
                     case ActorIconType.Monster:
-                        _iconWindow = new GUIImage(new Rectangle(177, 0, 18, 18), ScaleIt(18), ScaleIt(18), DataManager.COMBAT_TEXTURE);
-                        Height = ScaleIt(18);
+                        _iconWindow = new GUIImage(new Rectangle(177, 0, 18, 18), DataManager.COMBAT_TEXTURE);
                         break;
                     case ActorIconType.NextTurn:
-                        _iconWindow = new GUIImage(new Rectangle(177, 19, 18, 23), ScaleIt(18), ScaleIt(23), DataManager.COMBAT_TEXTURE);
-                        Height = ScaleIt(23);
+                        _iconWindow = new GUIImage(new Rectangle(177, 19, 18, 22), DataManager.COMBAT_TEXTURE);
                         break;
                     case ActorIconType.Party:
                         _iconWindow = new GUIImage(new Rectangle(196, 0, 18, 18), ScaleIt(18), ScaleIt(18), DataManager.COMBAT_TEXTURE);
-                        Height = ScaleIt(18);
                         break;
                 }
+
+                Width = _iconWindow.Width;
+                Height = _iconWindow.Height;
 
                 AddControl(_iconWindow);
             }
 
-            public override void Draw(SpriteBatch spriteBatch)
-            {
-                base.Draw(spriteBatch);
-            }
-
-            public override bool ProcessHover(Point mouse)
-            {
-                //TODO: Show icon on matching character
-                return base.ProcessHover(mouse);
-            }
-
             public void LinkActor(CombatActor actor)
             {
-                _linkedActor = actor;
+                RemoveControl(_actorIcon);
+
+                Actor = actor;
                 _actorIcon = actor.GetIcon();
 
                 switch (_eIconType)

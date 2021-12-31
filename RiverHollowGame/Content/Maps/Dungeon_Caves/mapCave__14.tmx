@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="70">
  <properties>
-  <property name="ActiveSpawn" type="int" value="3"/>
   <property name="Dungeon" value="Cave"/>
   <property name="MapType" value="Cave"/>
+  <property name="Mobs" value="2-3|0"/>
   <property name="Modular" type="bool" value="true"/>
   <property name="Outside" type="bool" value="false"/>
   <property name="ResourcesMinMax" value="30-60"/>
@@ -77,25 +77,25 @@
   <object id="51" name="Entrance" x="224" y="268" width="32" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
-	<property name="Modular" type="bool" value="true"/>
+    <property name="Modular" type="bool" value="true"/>
    </properties>
   </object>
   <object id="53" name="Entrance" x="224" y="28" width="32" height="4">
    <properties>
     <property name="EntranceDir" value="Down"/>
-	<property name="Modular" type="bool" value="true"/>
+    <property name="Modular" type="bool" value="true"/>
    </properties>
   </object>
   <object id="54" name="Entrance" x="0" y="128" width="4" height="32">
    <properties>
     <property name="EntranceDir" value="Right"/>
-	<property name="Modular" type="bool" value="true"/>
+    <property name="Modular" type="bool" value="true"/>
    </properties>
   </object>
   <object id="55" name="Entrance" x="476" y="128" width="4" height="32">
    <properties>
     <property name="EntranceDir" value="Left"/>
-	<property name="Modular" type="bool" value="true"/>
+    <property name="Modular" type="bool" value="true"/>
    </properties>
   </object>
  </objectgroup>

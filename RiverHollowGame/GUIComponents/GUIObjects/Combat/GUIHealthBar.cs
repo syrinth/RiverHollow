@@ -47,11 +47,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public void SetCurrentValue(int current)
         {
-            _iCurr = current/2;
+            ClearMiddle();
+            _iCurr = current;
             if(_iCurr > 0)
             {
                 _gFillStart = new GUIImage(new Rectangle(23, 155, 1, 3), DataManager.COMBAT_TEXTURE);
-                _gFillStart.ScaledMoveBy(1, 1);
+                _gFillStart.Position(Position() + GameManager.ScaleIt(new Vector2(1, 1)));
 
                 //Three for either edge of the bar
                 int totalFillableWidth = Width - (3 * GameManager.CurrentScale);
@@ -77,9 +78,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
             else
             {
-                RemoveControl(_gFillStart);
-                RemoveControl(_gFillMiddle);
-                RemoveControl(_gFillEnd);
+                ClearMiddle();
             }
 
         }
@@ -95,6 +94,13 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 rv = true;
             }
             return rv;
+        }
+
+        private void ClearMiddle()
+        {
+            RemoveControl(_gFillStart);
+            RemoveControl(_gFillMiddle);
+            RemoveControl(_gFillEnd);
         }
     }
 }
