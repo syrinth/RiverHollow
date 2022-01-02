@@ -162,24 +162,28 @@
       <Value>[Name:Bard][Description:Singing!]</Value>
     </Item>
     <Item>
+      <Key>Mob_0</Key>
+      <Value>[Name:Mushie_One]</Value>
+    </Item>
+    <Item>
       <Key>Monster_0</Key>
-      <Value>[Name:Mushie]</Value>
+      <Value>[Name:Angry Hive]</Value>
     </Item>
     <Item>
       <Key>Monster_1</Key>
-      <Value>[Name:Bauble]</Value>
+      <Value>[Name:Batty]</Value>
     </Item>
     <Item>
       <Key>Monster_2</Key>
-      <Value>[Name:Fanged Fur]</Value>
+      <Value>[Name:Bauble]</Value>
     </Item>
     <Item>
       <Key>Monster_3</Key>
-      <Value>[Name:Cave Blob]</Value>
+      <Value>[Name:Carnivorous Plant]</Value>
     </Item>
     <Item>
       <Key>Monster_4</Key>
-      <Value>[Name:Batty]</Value>
+      <Value>[Name:Cave Blob]</Value>
     </Item>
     <Item>
       <Key>Monster_5</Key>
@@ -187,19 +191,19 @@
     </Item>
     <Item>
       <Key>Monster_6</Key>
-      <Value>[Name:Angry Hive]</Value>
+      <Value>[Name:Fanged Fur]</Value>
     </Item>
     <Item>
       <Key>Monster_7</Key>
-      <Value>[Name:Mossy Slime]</Value>
-    </Item>
-    <Item>
-      <Key>Monster_8</Key>
       <Value>[Name:Forest Impling]</Value>
     </Item>
     <Item>
+      <Key>Monster_8</Key>
+      <Value>[Name:Mossy Slime]</Value>
+    </Item>
+    <Item>
       <Key>Monster_9</Key>
-      <Value>[Name:Carnivorous Plant]</Value>
+      <Value>[Name:Mushie]</Value>
     </Item>
     <Item>
       <Key>Action_0</Key>

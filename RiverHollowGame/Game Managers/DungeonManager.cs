@@ -139,7 +139,6 @@ namespace RiverHollow.Game_Managers
                 //}
 
                 HandleEntrances(rmInfo.Map);
-                rmInfo.Map.SpawnMapEntities();
             }
         }
 

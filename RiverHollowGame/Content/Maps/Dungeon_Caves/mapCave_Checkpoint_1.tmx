@@ -4,7 +4,6 @@
   <property name="Dungeon" value="Cave"/>
   <property name="GoTo" value="mapCave_Checkpoint_1"/>
   <property name="MapType" value="Cave"/>
-  <property name="Outside" type="bool" value="false"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsWalls_Floors.tsx"/>

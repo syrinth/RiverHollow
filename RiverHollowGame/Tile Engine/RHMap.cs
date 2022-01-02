@@ -38,6 +38,7 @@ namespace RiverHollow.Tile_Engine
         public bool Modular => _map.Properties.ContainsKey("Modular");
         public bool IsOutside => _map.Properties.ContainsKey("Outside");
         public string MapType => _map.Properties.ContainsKey("MapType") ? _map.Properties["MapType"] : string.Empty;
+        bool _bSpawned = false;
         public MonsterFood PrimedFood { get; private set; }
         public RHTile TargetTile { get; private set; } = null;
 
@@ -574,14 +575,16 @@ namespace RiverHollow.Tile_Engine
                     }
                 }
             }
-
-            SpawnMapEntities();
         }
 
-        public void SpawnMapEntities(bool spawnEnemies = true, bool loaded = false)
+        public void SpawnMapEntities()
         {
-            SpawnResources(GetSkipTiles(loaded));
-            SpawnMobs();
+            if (!_bSpawned)
+            {
+                _bSpawned = true;
+                SpawnResources(GetSkipTiles());
+                SpawnMobs();
+            }
         }
 
         public void ClearMapEntities()
@@ -614,7 +617,7 @@ namespace RiverHollow.Tile_Engine
         /// </summary>
         /// <param name="loaded">Whether the map was loaded or not. To avoid double spawning</param>
         /// <returns>A list of tiles to ignore when spawning resources.</returns>
-        private List<RHTile> GetSkipTiles(bool loaded)
+        private List<RHTile> GetSkipTiles()
         {
             List<RHTile> skipTiles = new List<RHTile>();
 
@@ -648,10 +651,7 @@ namespace RiverHollow.Tile_Engine
         {
             foreach (WorldObject obj in _liPlacedWorldObjects) { obj.Rollover(); }
 
-            if (!Modular)
-            {
-                //SpawnMonsters();
-            }
+            _bSpawned = false;
 
             CheckSpirits();
             _liItems.Clear();
@@ -1025,6 +1025,38 @@ namespace RiverHollow.Tile_Engine
         }
 
         #region Collision Code
+        public Vector2 GetFarthestUnblockedPath(Vector2 target, WorldActor traveler) {
+            Vector2 rv = Vector2.Zero;
+
+            Rectangle collisionTest = traveler.CollisionBox;
+            while (true)
+            {
+                Vector2 direction = Vector2.Zero;
+                Util.GetMoveSpeed(collisionTest.Location.ToVector2(), target, traveler.BuffedSpeed, ref direction);
+
+                collisionTest.Location += direction.ToPoint();
+
+                bool passable = true;
+                List<RHTile> collisionTiles = GetTilesFromRectangle(collisionTest);
+                for (int i = 0; i < collisionTiles.Count; i++)
+                {
+                    if (!collisionTiles[i].Passable())
+                    {
+                        passable = false;
+                        break;
+                    }
+                }
+                if (passable) { rv = collisionTest.Location.ToVector2(); }
+
+                if (!passable || collisionTest.X == target.X && collisionTest.Y == target.Y)
+                {
+                    break;
+                }
+            }
+
+            return rv;
+        }
+
         private bool TileContainsActor(RHTile t, bool checkPlayer = true)
         {
             bool rv = false;

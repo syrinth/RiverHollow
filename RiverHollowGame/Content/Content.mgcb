@@ -3695,18 +3695,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/GUI Components/GUI_Combat.png
 
-#begin Textures/Actors/Portraits/CombatPortraits/M_00.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Actors/Portraits/CombatPortraits/M_00.png
-
 #begin Textures/Actors/Portraits/CombatPortraits/V_01.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -3754,4 +3742,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Portraits/CombatPortraits/V_05.png
+
+#begin Textures/Actors/Portraits/CombatPortraits/M_09.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Portraits/CombatPortraits/M_09.png
 

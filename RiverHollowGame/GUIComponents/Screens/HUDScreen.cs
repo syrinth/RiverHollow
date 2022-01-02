@@ -67,14 +67,6 @@ namespace RiverHollow.GUIComponents.Screens
             _gCalendar = new HUDCalendar();
             _gCalendar.AnchorToScreen(SideEnum.TopRight, 10);
             AddControl(_gCalendar);
-
-            List<CombatActor> actors = new List<CombatActor>
-            {
-                DataManager.GetLiteMonsterByIndex(0),
-                PlayerManager.PlayerCombatant,
-                DataManager.GetLiteMonsterByIndex(0),
-                DataManager.GetLiteMonsterByIndex(0)
-            };
         }
 
         public override void Update(GameTime gTime)

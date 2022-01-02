@@ -3,7 +3,6 @@
  <properties>
   <property name="Dungeon" value="Cave"/>
   <property name="MapType" value="Cave"/>
-  <property name="Outside" type="bool" value="false"/>
   <property name="Resources" value="17-C|18-U|19-R"/>
   <property name="ResourcesMinMax" value="80-90"/>
  </properties>

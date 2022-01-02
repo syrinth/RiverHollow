@@ -28,7 +28,6 @@ namespace RiverHollow.Characters
         protected double _dIdleFor;
         protected int _iLeash = 7;
 
-        protected Vector2 _vMoveTo = Vector2.Zero;
         protected List<CombatActor> _liMonsters;
         public List<CombatActor> Monsters { get => _liMonsters; }
 
@@ -48,7 +47,6 @@ namespace RiverHollow.Characters
         FieldOfVision _FoV;
         Vector2 _vLeashPoint;
         float _fLeashRange = TILE_SIZE * 30;
-        int _iMoveFailures = 0;
 
         List<SpawnConditionEnum> _liSpawnConditions;
 
@@ -125,7 +123,10 @@ namespace RiverHollow.Characters
 
         protected int ImportBasics(Dictionary<string, string> data, int id)
         {
-            string[] split = data["Monster"].Split('-');
+            string[] monsterPool = Util.FindParams(data["MonsterID"]);
+            int index = RHRandom.Instance().Next(0, monsterPool.Length -1);
+
+            string[] split = monsterPool[index].Split('-');
             for (int i = 0; i < split.Length; i++)
             {
                 int mID = int.Parse(split[i]);
@@ -294,10 +295,7 @@ namespace RiverHollow.Characters
 
                 Util.GetMoveSpeed(Position, _vMoveTo, BuffedSpeed, ref direction);
                 DetermineFacing(direction);
-                if (!CheckMapForCollisionsAndMove(direction, false))
-                {
-                    _iMoveFailures++;
-                }
+                CheckMapForCollisionsAndMove(direction, false);
                 NewFoV();
 
                 //We have finished moving
@@ -312,6 +310,7 @@ namespace RiverHollow.Characters
 
                     _vMoveTo = Vector2.Zero;
                     PlayAnimationVerb(VerbEnum.Idle);
+                    _dIdleFor = RHRandom.Instance().Next(1, 4);
                 }
             }
 
@@ -357,20 +356,23 @@ namespace RiverHollow.Characters
         }
         private void GetIdleMovementTarget(GameTime theGameTime)
         {
-            if ((_vMoveTo == Vector2.Zero && _dIdleFor <= 0 && !BodySprite.CurrentAnimation.StartsWith("Air")) || _iMoveFailures == 5)
+            if ((_vMoveTo == Vector2.Zero && _dIdleFor <= 0 && !BodySprite.CurrentAnimation.StartsWith("Air")))
             {
-                _iMoveFailures = 0;
-                int howFar = 2;
+                int howFar = 4;
                 bool skip = false;
                 RHRandom r = RHRandom.Instance();
-                int decision = r.Next(1, 5);
-                if (decision == 1) { _vMoveTo = new Vector2(Position.X - r.Next(1, howFar) * TILE_SIZE, Position.Y); }
-                else if (decision == 2) { _vMoveTo = new Vector2(Position.X + r.Next(1, howFar) * TILE_SIZE, Position.Y); }
-                else if (decision == 3) { _vMoveTo = new Vector2(Position.X, Position.Y - r.Next(1, howFar) * TILE_SIZE); }
-                else if (decision == 4) { _vMoveTo = new Vector2(Position.X, Position.Y + r.Next(1, howFar) * TILE_SIZE); }
+                int decision = r.Next(1, 9);
+                if (decision <= 2) { _vMoveTo = CurrentMap.GetFarthestUnblockedPath(new Vector2(Position.X - r.Next(1, howFar) * TILE_SIZE, Position.Y), this); }
+                else if (decision <= 4) { _vMoveTo = CurrentMap.GetFarthestUnblockedPath(new Vector2(Position.X + r.Next(1, howFar) * TILE_SIZE, Position.Y), this); }
+                else if (decision <= 6 ) { _vMoveTo = CurrentMap.GetFarthestUnblockedPath(new Vector2(Position.X, Position.Y - r.Next(1, howFar) * TILE_SIZE), this); }
+                else if (decision <= 8) { _vMoveTo = CurrentMap.GetFarthestUnblockedPath(new Vector2(Position.X, Position.Y + r.Next(1, howFar) * TILE_SIZE), this); }
                 else
                 {
                     _vMoveTo = Vector2.Zero;
+                }
+
+                if (_vMoveTo == Vector2.Zero)
+                {
                     _dIdleFor = 4;
                     PlayAnimationVerb(VerbEnum.Idle);
                     skip = true;

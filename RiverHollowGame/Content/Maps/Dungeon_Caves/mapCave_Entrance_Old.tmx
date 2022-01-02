@@ -4,7 +4,6 @@
   <property name="ActiveSpawn" type="int" value="0"/>
   <property name="Dungeon" value="Cave"/>
   <property name="MapType" value="Cave"/>
-  <property name="Outside" type="bool" value="false"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tsWalls_Floors.tsx"/>
  <tileset firstgid="287" source="../Tilesets/tilesetDungeon.tsx"/>

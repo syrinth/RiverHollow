@@ -4,7 +4,6 @@
   <property name="ActiveSpawn" type="int" value="1"/>
   <property name="Dungeon" value="Cave"/>
   <property name="MapType" value="Cave"/>
-  <property name="Outside" type="bool" value="false"/>
   <property name="Resources" value="17-C|18-R|19-U|22-R"/>
   <property name="ResourcesMinMax" value="50-80"/>
  </properties>

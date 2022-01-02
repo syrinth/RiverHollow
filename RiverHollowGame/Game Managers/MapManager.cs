@@ -119,6 +119,7 @@ namespace RiverHollow.Game_Managers
                     newPos = entryPoint.FindLinkedPointPosition(travelPoint.Center, c);
                 }
 
+                Maps[travelPoint.LinkedMap].SpawnMapEntities();
                 PlayerManager.PlayerActor.ActivePet?.ChangeState(Pet.PetStateEnum.Alert);
                 FadeToNewMap(Maps[travelPoint.LinkedMap], newPos);
             }

@@ -5,7 +5,6 @@
   <property name="MapType" value="Cave"/>
   <property name="Mobs" value="2-3|0"/>
   <property name="Modular" type="bool" value="true"/>
-  <property name="Outside" type="bool" value="false"/>
   <property name="ResourcesMinMax" value="30-60"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
