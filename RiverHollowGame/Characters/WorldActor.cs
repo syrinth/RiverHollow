@@ -64,6 +64,16 @@ namespace RiverHollow.Characters
         protected int _iSize = 1;
         public int Size => _iSize;
 
+        #region Wander Properties
+        protected const double MOVE_COUNTDOWN = 2.5;
+        protected bool _bFollow = false;
+        protected bool _bIdleCooldown = false;
+
+        protected double _dWanderCountdown = 0;
+        protected bool _bCanWander = false;
+        protected NPCStateEnum _eCurrentState = NPCStateEnum.Idle;
+        #endregion
+
         #endregion
 
         public WorldActor() : base()
@@ -312,6 +322,7 @@ namespace RiverHollow.Characters
             if (!CheckMapForCollisionsAndMove(direction, _bIgnoreCollisions))
             {
                 _bBumpedIntoSomething = true;
+
                 //If we can't move, set a timer to go Ethereal
                 if (_dEtherealCD == 0) { _dEtherealCD = 5; }
             }
@@ -384,5 +395,126 @@ namespace RiverHollow.Characters
         {
             _liTilePath.Clear();
         }
+
+        protected void ChangeMovement(float speed)
+        {
+            SpdMult = speed;
+            PlayAnimation(VerbEnum.Walk, Facing);
+            SetMoveObj(Vector2.Zero);
+            _dWanderCountdown = 0;
+        }
+
+        #region Wander Logic
+        public void SetFollow(bool value)
+        {
+            _bFollow = value;
+        }
+
+        protected void ProcessStateEnum(GameTime gTime)
+        {
+            switch (_eCurrentState)
+            {
+                case NPCStateEnum.Alert:
+                    Alert();
+                    break;
+                case NPCStateEnum.Idle:
+                    Idle(gTime);
+                    break;
+                case NPCStateEnum.Wander:
+                    Wander(gTime);
+                    break;
+                case NPCStateEnum.TrackPlayer:
+                    TrackPlayer();
+                    break;
+            }
+        }
+
+        protected void Alert()
+        {
+            if (_sprBody.PlayedOnce)
+            {
+                ChangeState(NPCStateEnum.TrackPlayer);
+            }
+        }
+
+        protected void Idle(GameTime gTime)
+        {
+            if (_dWanderCountdown < 5 + RHRandom.Instance().Next(10)) { _dWanderCountdown += gTime.ElapsedGameTime.TotalSeconds; }
+            else
+            {
+                if (RHRandom.Instance().RollPercent(50))
+                {
+                    _dWanderCountdown = 0;
+                    _bIdleCooldown = true;
+                    ChangeState(NPCStateEnum.Wander);
+                }
+            }
+        }
+
+        protected virtual void TrackPlayer()
+        {
+            Vector2 delta = Position - PlayerManager.PlayerActor.Position;
+            HandleMove(Position - delta);
+
+            if (PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE))
+            {
+                ChangeState(NPCStateEnum.Wander);
+            }
+        }
+
+        protected void Wander(GameTime gTime)
+        {
+            if (_dWanderCountdown < MOVE_COUNTDOWN + (RHRandom.Instance().Next(4) * 0.25)) { _dWanderCountdown += gTime.ElapsedGameTime.TotalSeconds; }
+            else if (MoveToLocation == Vector2.Zero)
+            {
+                Vector2 moveTo = Vector2.Zero;
+                while (moveTo == Vector2.Zero)
+                {
+                    _dWanderCountdown = 0;
+
+                    if (!_bIdleCooldown && RHRandom.Instance().RollPercent(20))
+                    {
+                        ChangeState(NPCStateEnum.Idle);
+                        return;
+                    }
+
+                    _bIdleCooldown = false;
+
+                    moveTo = new Vector2(RHRandom.Instance().Next(8, 32), RHRandom.Instance().Next(8, 32));
+                    if (RHRandom.Instance().Next(1, 2) == 1) { moveTo.X *= -1; }
+                    if (RHRandom.Instance().Next(1, 2) == 1) { moveTo.Y *= -1; }
+
+                    moveTo = CurrentMap.GetFarthestUnblockedPath(Position + moveTo, this);
+                }
+
+                SetMoveObj(moveTo);
+            }
+
+            if (MoveToLocation != Vector2.Zero)
+            {
+                HandleMove(_vMoveTo);
+            }
+        }
+
+        public void ChangeState(NPCStateEnum state)
+        {
+            _eCurrentState = state;
+            switch (state)
+            {
+                case NPCStateEnum.Alert:
+                    PlayAnimation(VerbEnum.Action1, Facing);
+                    break;
+                case NPCStateEnum.Idle:
+                    PlayAnimation(VerbEnum.Idle, Facing);
+                    break;
+                case NPCStateEnum.TrackPlayer:
+                    ChangeMovement(NORMAL_SPEED);
+                    break;
+                case NPCStateEnum.Wander:
+                    ChangeMovement(NPC_WALK_SPEED);
+                    break;
+            }
+        }
+        #endregion
     }
 }

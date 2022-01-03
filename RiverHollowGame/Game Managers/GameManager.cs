@@ -85,6 +85,8 @@ namespace RiverHollow.Game_Managers
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
         public enum ExpectingChildEnum { None, Adoption, Pregnant };
         public enum RelationShipStatusEnum { None, Friends, Dating, Engaged, Married };
+        public enum NPCStateEnum { Alert, Idle, TrackPlayer, Pathing, Wander };
+        public enum ChildStageEnum { Newborn, Infant, Toddler };
 
         public enum GameIconEnum { None, AreaAll, AreaColumnAlly, AreaColumnEnemy, AreaSelf, AreaSingle, AreaRow, AreaSquare, Agility, BuffArrow, DebuffArrow, Defense, ElementFire, ElementIce, ElementLightning, Evasion, Heal, Magic, MaxHealth, MagicDamage, Melee, MoveLeft, MoveRight, PhysicalDamage, Ranged, Resistance, Speed, Strength, Timer};
 

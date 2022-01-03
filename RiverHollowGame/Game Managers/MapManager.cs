@@ -120,7 +120,7 @@ namespace RiverHollow.Game_Managers
                 }
 
                 Maps[travelPoint.LinkedMap].SpawnMapEntities();
-                PlayerManager.PlayerActor.ActivePet?.ChangeState(Pet.PetStateEnum.Alert);
+                PlayerManager.PlayerActor.ActivePet?.ChangeState(NPCStateEnum.Alert);
                 FadeToNewMap(Maps[travelPoint.LinkedMap], newPos);
             }
             else

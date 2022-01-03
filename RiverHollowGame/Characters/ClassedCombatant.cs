@@ -107,7 +107,7 @@ namespace RiverHollow.Characters.Lite
             }
             else
             {
-                return 10 + _diAttributes[e] + _class.Attribute(e) + _diEffectedAttributes[e].Value + GearAttribute(e);
+                return 30 + _diAttributes[e] + _class.Attribute(e) + _diEffectedAttributes[e].Value + GearAttribute(e);
             }
         }
 

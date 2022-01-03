@@ -621,28 +621,20 @@ namespace RiverHollow.Tile_Engine
         {
             List<RHTile> skipTiles = new List<RHTile>();
 
-            //if (IsCombatMap)
-            //Z{
-            //    foreach (BattleStartInfo bInfo in DictionaryBattleStarts.Values)
-            //    {
-            //        foreach (RHTile tile in bInfo.CombatTiles)
-            //        {
-            //            skipTiles.Add(tile);
-            //        }
-            //    }
-            //    foreach (TravelPoint tp in DictionaryTravelPoints.Values)
-            //    {
-            //        foreach (RHTile tile in GetTilesFromRectangle(tp.CollisionBox))
-            //        {
-            //            Util.AddUniquelyToList(ref skipTiles, tile);
+            foreach (TravelPoint tp in DictionaryTravelPoints.Values)
+            {
+                List<RHTile> tiles = GetTilesFromRectangle(tp.CollisionBox);
+                for (int tileIndex = 0; tileIndex < tiles.Count; tileIndex++)
+                {
+                    Util.AddUniquelyToList(ref skipTiles, tiles[tileIndex]);
 
-            //            foreach (RHTile neighbour in tile.GetWalkableNeighbours())
-            //            {
-            //                Util.AddUniquelyToList(ref skipTiles, neighbour);
-            //            }
-            //        }
-            //    }
-            //}
+                    List<RHTile> neighbourList = tiles[tileIndex].GetWalkableNeighbours();
+                    for (int neighbourIndex = 0; neighbourIndex < neighbourList.Count; neighbourIndex++)
+                    {
+                        Util.AddUniquelyToList(ref skipTiles, neighbourList[neighbourIndex]);
+                    }
+                }
+            }
 
             return skipTiles;
         }
@@ -1028,16 +1020,19 @@ namespace RiverHollow.Tile_Engine
         public Vector2 GetFarthestUnblockedPath(Vector2 target, WorldActor traveler) {
             Vector2 rv = Vector2.Zero;
 
-            Rectangle collisionTest = traveler.CollisionBox;
+
+            Vector2 rayPosition = traveler.Position;
             while (true)
             {
                 Vector2 direction = Vector2.Zero;
-                Util.GetMoveSpeed(collisionTest.Location.ToVector2(), target, traveler.BuffedSpeed, ref direction);
+                Util.GetMoveSpeed(rayPosition, target, traveler.BuffedSpeed, ref direction);
 
-                collisionTest.Location += direction.ToPoint();
+                rayPosition += direction;
 
+                //Rectangles use ints for Location, cannot update a Rectangle's Location with floats
+                Rectangle testCollision = Util.FloatRectangle(rayPosition.X, rayPosition.Y, traveler.CollisionBox.Width, traveler.CollisionBox.Height);
                 bool passable = true;
-                List<RHTile> collisionTiles = GetTilesFromRectangle(collisionTest);
+                List<RHTile> collisionTiles = GetTilesFromRectangle(testCollision);
                 for (int i = 0; i < collisionTiles.Count; i++)
                 {
                     if (!collisionTiles[i].Passable())
@@ -1046,9 +1041,9 @@ namespace RiverHollow.Tile_Engine
                         break;
                     }
                 }
-                if (passable) { rv = collisionTest.Location.ToVector2(); }
+                if (passable) { rv = rayPosition; }
 
-                if (!passable || collisionTest.X == target.X && collisionTest.Y == target.Y)
+                if (!passable || rayPosition.X == target.X && rayPosition.Y == target.Y)
                 {
                     break;
                 }
@@ -1189,10 +1184,7 @@ namespace RiverHollow.Tile_Engine
                 Vector2 coords = Util.GetGridCoords(r.Location);
                 if (dir.Y != 0 && r.Intersects(newRectangleY))
                 {
-                    float initY = dir.Y;
-
-                    if (initY > 0) { dir.Y -= Math.Min((newRectangleY.Bottom - r.Top + 1), dir.Y); }
-                    else if (initY < 0) { dir.Y += Math.Max((r.Bottom - newRectangleY.Top + 1), -dir.Y); }
+                    dir.Y = 0;
 
                     //Modifier is to determine if the nudge is positive or negative
                     int modifier = (int)CheckToNudge(newRectangleY.Center.X, r.Center.X, coords.X, coords.Y, "Col");
@@ -1202,9 +1194,7 @@ namespace RiverHollow.Tile_Engine
                 }
                 if (dir.X != 0 && r.Intersects(newRectangleX))
                 {
-                    float initX = dir.X;
-                    if (initX > 0) { dir.X -= Math.Min((newRectangleX.Right - r.Left + 1), dir.X); }
-                    else if (initX < 0) { dir.X += Math.Max((r.Right - newRectangleX.Left + 1), -dir.X); }
+                    dir.X = 0;
 
                     //Modifier is to determine if the nudge is positive or negative
                     int modifier = (int)CheckToNudge(newRectangleY.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");

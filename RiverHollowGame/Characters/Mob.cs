@@ -163,32 +163,28 @@ namespace RiverHollow.Characters
             _FoV = new FieldOfVision(this, _iMaxRange);
         }
 
-        public override void Update(GameTime theGameTime)
+        public override void Update(GameTime gTime)
         {
             //Check if the mob is still stunned
             if (_dStun > 0)
             {
-                _dStun -= theGameTime.ElapsedGameTime.TotalSeconds;
+                _dStun -= gTime.ElapsedGameTime.TotalSeconds;
                 if (_dStun < 0) { _dStun = 0; }
             }
             else
             {
-               //UpdateAlertTimer(theGameTime);
-                UpdateMovement(theGameTime);
+                if (_bBumpedIntoSomething)
+                {
+                    _bBumpedIntoSomething = false;
+                    SetMoveObj(Vector2.Zero);
+                    ChangeState(NPCStateEnum.Idle);
+                }
+
+                ProcessStateEnum(gTime);
+                UpdateMovement(gTime);
             }
 
-            base.Update(theGameTime);
-        }
-
-        private void UpdateAlertTimer(GameTime theGameTime)
-        {
-            //If mob is on alert, but not locked on to
-            //the player, increment the timer.
-            if (_bAlert && !_bLockedOn)
-            {
-                _dAlertTimer += theGameTime.ElapsedGameTime.TotalSeconds;
-               // _sprAlert.Update(theGameTime);
-            }
+            base.Update(gTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool userLayerDepth = false)
@@ -201,9 +197,6 @@ namespace RiverHollow.Characters
         {
             bool move = true;
             Vector2 direction = Vector2.Zero;
-
-            //Handle Leashing and Idle Movement targetting
-            HandlePassivity(theGameTime);
 
             if (_bLockedOn)
             {
@@ -295,7 +288,8 @@ namespace RiverHollow.Characters
 
                 Util.GetMoveSpeed(Position, _vMoveTo, BuffedSpeed, ref direction);
                 DetermineFacing(direction);
-                CheckMapForCollisionsAndMove(direction, false);
+
+                HandleMove(_vMoveTo);
                 NewFoV();
 
                 //We have finished moving
@@ -322,70 +316,6 @@ namespace RiverHollow.Characters
                     _bLockedOn = false;
                     CombatManager.NewBattle(this);
                 }
-            }
-        }
-
-        //If mob is not returning to leash point and player in in range
-        private void HandlePassivity(GameTime theGameTime)
-        {
-            if (!_bLeashed && !_bLockedOn && _FoV.Contains(PlayerManager.PlayerActor))
-            {
-                //If alert if not on, set alert
-                if (!_bAlert)
-                {
-                    _bAlert = true;
-                    _dAlertTimer = 0;
-                }
-
-                if (_dAlertTimer >= MAX_ALERT)
-                {
-                    if (_vLeashPoint == Vector2.Zero) { _vLeashPoint = Position; }
-                    _bLockedOn = true;
-                    _bAlert = false;
-                }
-            }
-            else
-            {
-                if (_bAlert)
-                {
-                    _bAlert = false;
-                    _dAlertTimer = 0;
-                }
-                GetIdleMovementTarget(theGameTime);
-            }
-        }
-        private void GetIdleMovementTarget(GameTime theGameTime)
-        {
-            if ((_vMoveTo == Vector2.Zero && _dIdleFor <= 0 && !BodySprite.CurrentAnimation.StartsWith("Air")))
-            {
-                int howFar = 4;
-                bool skip = false;
-                RHRandom r = RHRandom.Instance();
-                int decision = r.Next(1, 9);
-                if (decision <= 2) { _vMoveTo = CurrentMap.GetFarthestUnblockedPath(new Vector2(Position.X - r.Next(1, howFar) * TILE_SIZE, Position.Y), this); }
-                else if (decision <= 4) { _vMoveTo = CurrentMap.GetFarthestUnblockedPath(new Vector2(Position.X + r.Next(1, howFar) * TILE_SIZE, Position.Y), this); }
-                else if (decision <= 6 ) { _vMoveTo = CurrentMap.GetFarthestUnblockedPath(new Vector2(Position.X, Position.Y - r.Next(1, howFar) * TILE_SIZE), this); }
-                else if (decision <= 8) { _vMoveTo = CurrentMap.GetFarthestUnblockedPath(new Vector2(Position.X, Position.Y + r.Next(1, howFar) * TILE_SIZE), this); }
-                else
-                {
-                    _vMoveTo = Vector2.Zero;
-                }
-
-                if (_vMoveTo == Vector2.Zero)
-                {
-                    _dIdleFor = 4;
-                    PlayAnimationVerb(VerbEnum.Idle);
-                    skip = true;
-                }
-
-                if (!skip)
-                {
-                    DetermineFacing(new Vector2(_vMoveTo.X - Position.X, _vMoveTo.Y - Position.Y));
-                }
-            }
-            else if (_vMoveTo == Vector2.Zero)
-            {
-                _dIdleFor -= theGameTime.ElapsedGameTime.TotalSeconds;
             }
         }
 
