@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Weapon:Wand][Armor:Cloth][Hp:4][Actions:2|3|4|5][DWeap:97][DArmor:122][DHead:125][DWrist:128]</Value>
+      <Value>[Weapon:Wand][Armor:Cloth][Hp:4][Actions:2|3|4|5][DWeap:97][DArmor:122][DHead:125][DWrist:128][Idle:0-0-2-.2-F][Action1:64-0-2-.2-F][Hurt:128-0-3-.2-F][Critical:224-0-2-.2-F][KO:288-0-1-.2-F][Victory:320-0-2-.2-F]</Value>
     </Item>
     <Item>
       <Key>1</Key>

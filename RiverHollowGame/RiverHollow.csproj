@@ -77,7 +77,7 @@
     <Compile Include="Characters\Tactical\TacticalCombatActor.cs" />
     <Compile Include="Characters\CombatActor.cs" />
     <Compile Include="Characters\Monster.cs" />
-    <Compile Include="Characters\LiteSummon.cs" />
+    <Compile Include="Characters\Summon.cs" />
     <Compile Include="Characters\Mob.cs" />
     <Compile Include="Characters\Tactical\TacticalSummon.cs" />
     <Compile Include="Characters\TalkingActor.cs" />
@@ -105,7 +105,7 @@
     <Compile Include="GUIComponents\GUIObjects\Combat\GUIHealthBar.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Lite\ActionPanel.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Lite\ChosenAction.cs" />
-    <Compile Include="GUIComponents\GUIObjects\Combat\Lite\GUILiteCombatActorInfo.cs" />
+    <Compile Include="GUIComponents\GUIObjects\Combat\Lite\GUICombatActorInfo.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Lite\InfoPanel.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Lite\TurnOrder.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIActionSelectObject.cs" />
@@ -120,7 +120,7 @@
     <Compile Include="GUIComponents\MainObjects\TownInfoWindow.cs" />
     <Compile Include="GUIComponents\MainObjects\WarpPointWindow.cs" />
     <Compile Include="GUIComponents\Screens\BuildScreen.cs" />
-    <Compile Include="GUIComponents\GUIObjects\Combat\Lite\LiteCombatScreen.cs" />
+    <Compile Include="GUIComponents\GUIObjects\Combat\Lite\CombatScreen.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Tactical\TacticalCombatScreen.cs" />
     <Compile Include="GUIComponents\Screens\ConfigScreen.cs" />
     <Compile Include="GUIComponents\Screens\LoadScreen.cs" />

@@ -23,8 +23,7 @@ namespace RiverHollow.Characters
             }
         }
 
-        protected int _id;
-        public int ID { get => _id; }
+        public int ID { get; } = -1;
         protected double _dIdleFor;
         protected int _iLeash = 7;
 
@@ -57,10 +56,12 @@ namespace RiverHollow.Characters
 
         public Mob(int id, Dictionary<string, string> data)
         {
+            ID = id;
+
             _liSpawnConditions = new List<SpawnConditionEnum>();
             _eActorType = ActorEnum.Mob;
             _liMonsters = new List<CombatActor>();
-            ImportBasics(data, id);
+            ImportBasics(data);
             //LoadContent(DataManager.FOLDER_MOBS + data["Texture"];);
 
             _iXP = 0;
@@ -121,7 +122,7 @@ namespace RiverHollow.Characters
         //    //_sprAlert.Position = (Position - new Vector2(0, TILE_SIZE));
         //}
 
-        protected int ImportBasics(Dictionary<string, string> data, int id)
+        protected int ImportBasics(Dictionary<string, string> data)
         {
             string[] monsterPool = Util.FindParams(data["MonsterID"]);
             int index = RHRandom.Instance().Next(0, monsterPool.Length -1);
@@ -152,9 +153,8 @@ namespace RiverHollow.Characters
                     }
                 }
             }
-            _id = id;
 
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(data), DataManager.FOLDER_MONSTERS + data["Texture"]);
+            LoadSpriteAnimations(ref _sprBody, Util.LoadWorldAnimations(data), DataManager.FOLDER_MONSTERS + data["Texture"]);
             return 0;
         }
 

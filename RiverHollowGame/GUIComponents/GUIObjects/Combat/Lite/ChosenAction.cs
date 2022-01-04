@@ -137,14 +137,14 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             {
                 bool finished = false;
                 CombatActor c = ActiveCharacter;
-                if (!c.IsCurrentAnimation(CombatActionEnum.Cast))
+                if (!c.IsCurrentAnimation(AnimationEnum.Action1))
                 {
-                    c.Tile.PlayAnimation(CombatActionEnum.Cast);
+                    c.Tile.PlayAnimation(AnimationEnum.Action1);
                     _bDrawItem = true;
                 }
                 else if (c.AnimationPlayedXTimes(3))
                 {
-                    c.Tile.PlayAnimation(CombatActionEnum.Idle);
+                    c.Tile.PlayAnimation(AnimationEnum.Idle);
                     _bDrawItem = false;
                     finished = true;
                 }

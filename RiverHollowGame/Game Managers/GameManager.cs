@@ -45,9 +45,8 @@ namespace RiverHollow.Game_Managers
         public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };
         public enum DirectionEnum { Down, Right, Up, Left };
         public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };
-        public enum VerbEnum { Walk, Idle, Hurt, Critical, Ground, Air, UseTool, Action1, Action2, Action3, Action4, Cast, MakeItem };
-        public enum AnimationEnum { None, Spawn, KO, Win, PlayAnimation, Rain, Snow, ObjectIdle, Action_One, Action_Two, Action_Finished };
-        public enum CombatActionEnum { Idle, Cast, Hurt, Attack, Critical, Spawn, KO, Victory };
+        public enum VerbEnum { Idle, Walk, Ground, Air, UseTool, MakeItem, Alert, Action1, Action2 };
+        public enum AnimationEnum { None, PlayAnimation, Rain, Snow, ObjectIdle, Action_Finished, Idle, Action1, Action2, Action3, Action4, Critical, Hurt, KO, Spawn, Victory };
 
         public enum ToolAnimEnum { Down, Up, Left, Right };
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };

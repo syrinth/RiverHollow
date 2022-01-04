@@ -15,7 +15,7 @@ namespace RiverHollow.CombatStuff
 
         StatusTypeEnum _eEffectType;
         public StatusTypeEnum EffectType => _eEffectType;
-        public int ID { get; }
+        public int ID { get; } = -1;
         private string _sName;
         public string Name => _sName;
         int _iPotency;

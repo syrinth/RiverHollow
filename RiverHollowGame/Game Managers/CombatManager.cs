@@ -174,18 +174,18 @@ namespace RiverHollow.Game_Managers
                     break;
 
                 case PhaseEnum.Upkeep:
-                    LiteSummon activeSummon = ActiveCharacter.LinkedSummon;
+                    Summon activeSummon = ActiveCharacter.LinkedSummon;
                     if (activeSummon == null || !activeSummon.Regen)
                     {
                         SetPhaseForTurn();
                     }
                     else if (activeSummon != null && activeSummon.Regen && activeSummon.BodySprite.CurrentAnimation != "Cast")
                     {
-                        activeSummon.PlayAnimation(CombatActionEnum.Cast);
+                        activeSummon.PlayAnimation(AnimationEnum.Action1);
                     }
                     else if (activeSummon.BodySprite.GetPlayCount() >= 1)
                     {
-                        activeSummon.PlayAnimation(CombatActionEnum.Idle);
+                        activeSummon.PlayAnimation(AnimationEnum.Idle);
                         ActiveCharacter.IncreaseHealth(30);
                         ActiveCharacter.Tile.GUITile.AssignEffect(30, false);
                         SetPhaseForTurn();
@@ -240,7 +240,7 @@ namespace RiverHollow.Game_Managers
                 {
                     int levl = a.ClassLevel;
                     //a.AddXP(EarnedXP);
-                    a.Tile.PlayAnimation(CombatActionEnum.Victory);
+                    a.Tile.PlayAnimation(AnimationEnum.Victory);
 
                     //if (levl != a.ClassLevel)
                     //{
@@ -354,14 +354,18 @@ namespace RiverHollow.Game_Managers
             SelectedAction = new ChosenAction(it);
         }
 
+        public static void RemoveMonster(Monster m)
+        {
+            if (Monsters.Contains((m)))
+            {
+                Monsters.Remove(m);
+            }
+        }
+
         public static void Kill(CombatActor c)
         {
-            if (Monsters.Contains((c)))
-            {
-                Monsters.Remove(c);
-                _liCurrentRound.Remove(c);                    //Remove the killed member from the turn order 
-                _liNextRound.Remove(_liNextRound.Find(x => x.Key == c));
-            }
+            _liCurrentRound.Remove(c);
+            _liNextRound.Remove(_liNextRound.Find(x => x.Key == c));
         }
 
         public static bool IsPartyUp()
@@ -627,7 +631,7 @@ namespace RiverHollow.Game_Managers
         #region Turn Handling
         public static void EndTurn()
         {
-            LiteSummon activeSummon = ActiveCharacter.LinkedSummon;
+            Summon activeSummon = ActiveCharacter.LinkedSummon;
             //If there is no linked summon, or it is a summon, end the turn normally.
 
             if (!EndCombatCheck())

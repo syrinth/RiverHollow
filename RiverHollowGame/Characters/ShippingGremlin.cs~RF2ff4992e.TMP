@@ -28,29 +28,30 @@ namespace RiverHollow.Characters
             }
         }
 
-        public ShippingGremlin(int index, Dictionary<string, string> stringData) : base(index)
+        public ShippingGremlin(int index, Dictionary<string, string> stringData)
         {
             _bLivesInTown = true;
             _liRequiredBuildingIDs = new List<int>();
             _diRequiredObjectIDs = new Dictionary<int, int>();
             _arrInventory = new Item[_iRows, _iCols];
             _eActorType = ActorEnum.ShippingGremlin;
+            _iIndex = index;
             _iBodyWidth = 32;
             _iBodyHeight = 32;
 
-            _diDialogue = DataManager.GetNPCDialogue(ID);
-            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Gremlin", ID.ToString("00"));
+            _diDialogue = DataManager.GetNPCDialogue(_iIndex);
+            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Gremlin", _iIndex.ToString("00"));
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
-            DataManager.GetTextData("Character", ID, ref _sName, "Name");
+            DataManager.GetTextData("Character", _iIndex, ref _sName, "Name");
 
             Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
 
-            _sprBody = new AnimatedSprite(_sNPCFolder + "NPC_" + ID.ToString("00"));
-            _sprBody.AddAnimation(AnimationEnum.ObjectIdle, 0, 0, _iBodyWidth, _iBodyHeight);
-            _sprBody.AddAnimation(AnimationEnum.Action1, 32, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);
-            _sprBody.AddAnimation(AnimationEnum.Action_Finished, 128, 0, _iBodyWidth, _iBodyHeight);
-            _sprBody.AddAnimation(AnimationEnum.Action2, 160, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);
-            PlayAnimation(AnimationEnum.ObjectIdle);
+            _sprBody = new AnimatedSprite(_sNPCFolder + "NPC_" + _iIndex.ToString("00"));
+            _sprBody.AddAnimation(CombatAnimationEnum.ObjectIdle, 0, 0, _iBodyWidth, _iBodyHeight);
+            _sprBody.AddAnimation(CombatAnimationEnum.Action1, 32, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);
+            _sprBody.AddAnimation(CombatAnimationEnum.Action_Finished, 128, 0, _iBodyWidth, _iBodyHeight);
+            _sprBody.AddAnimation(CombatAnimationEnum.Action2, 160, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);
+            PlayAnimation(CombatAnimationEnum.ObjectIdle);
 
             if (GameManager.ShippingGremlin == null) { GameManager.ShippingGremlin = this; }
         }
@@ -58,15 +59,15 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            if (IsCurrentAnimation(AnimationEnum.Action1) && _sprBody.CurrentFrameAnimation.PlayCount == 1)
+            if (IsCurrentAnimation(CombatAnimationEnum.Action1) && _sprBody.CurrentFrameAnimation.PlayCount == 1)
             {
-                PlayAnimation(AnimationEnum.Action_Finished);
+                PlayAnimation(CombatAnimationEnum.Action_Finished);
                 PlayerManager.AllowMovement = true;
                 base.Talk(false);
             }
-            else if (IsCurrentAnimation(AnimationEnum.Action2) && _sprBody.CurrentFrameAnimation.PlayCount == 1)
+            else if (IsCurrentAnimation(CombatAnimationEnum.Action2) && _sprBody.CurrentFrameAnimation.PlayCount == 1)
             {
-                PlayAnimation(AnimationEnum.ObjectIdle);
+                PlayAnimation(CombatAnimationEnum.ObjectIdle);
             }
         }
 
@@ -81,7 +82,7 @@ namespace RiverHollow.Characters
         public override void ProcessRightButtonClick()
         {
             PlayerManager.AllowMovement = false;
-            _sprBody.PlayAnimation(AnimationEnum.Action1);
+            _sprBody.PlayAnimation(CombatAnimationEnum.Action1);
         }
 
         /// <summary>
@@ -90,7 +91,7 @@ namespace RiverHollow.Characters
         public override void StopTalking()
         {
             base.StopTalking();
-            _sprBody.PlayAnimation(AnimationEnum.Action2);
+            _sprBody.PlayAnimation(CombatAnimationEnum.Action2);
         }
 
         public void OpenShipping()

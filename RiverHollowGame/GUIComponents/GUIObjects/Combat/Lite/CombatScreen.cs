@@ -297,6 +297,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             CombatManager.Update(gameTime);
             base.Update(gameTime);
 
+            if (CombatManager.CurrentRoundOrder.Count != _gTurnOrder.CurrentActors)
+            {
+                _gTurnOrder.DisplayNewTurn(CombatManager.CurrentRoundOrder);
+            }
+
             switch (CombatManager.CurrentPhase)
             {
                 case CombatManager.PhaseEnum.EnemyTurn:
@@ -373,7 +378,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     break;
             }
 
-            List<LiteSummon> summons = new List<LiteSummon>();
+            List<Summon> summons = new List<Summon>();
             foreach (CombatActor act in CombatManager.Party)
             {
                 if (act.LinkedSummon != null)

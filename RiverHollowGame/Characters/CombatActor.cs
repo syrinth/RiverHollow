@@ -3,6 +3,7 @@ using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System;
@@ -44,7 +45,7 @@ namespace RiverHollow.Characters
         private ElementEnum _elementAttackEnum;
         protected Dictionary<ElementEnum, ElementAlignment> _diElementalAlignment;
         public Dictionary<ElementEnum, ElementAlignment> DiElementalAlignment => _diElementalAlignment;
-        public LiteSummon LinkedSummon { get; private set; }
+        public Summon LinkedSummon { get; private set; }
 
         public bool Counter;
         public bool GoToCounter;
@@ -77,48 +78,25 @@ namespace RiverHollow.Characters
             };
         }
 
-        public virtual void LoadContent(string texture)
-        {
-            _sprBody = new AnimatedSprite(texture.Replace(" ", ""));
-            int xCrawl = 0;
-            RHSize frameSize = new RHSize(24, 32);
-            _sprBody.AddAnimation(CombatActionEnum.Idle, (xCrawl * frameSize.Width), 0, frameSize, 2, 0.5f);
-            xCrawl += 2;
-            _sprBody.AddAnimation(CombatActionEnum.Cast, (xCrawl * frameSize.Width), 0, frameSize, 2, 0.4f);
-            xCrawl += 2;
-            _sprBody.AddAnimation(CombatActionEnum.Hurt, (xCrawl * frameSize.Width), 0, frameSize, 1, 0.5f);
-            xCrawl += 1;
-            _sprBody.AddAnimation(CombatActionEnum.Attack, (xCrawl * frameSize.Width), 0, frameSize, 1, 0.3f);
-            xCrawl += 1;
-            _sprBody.AddAnimation(CombatActionEnum.Critical, (xCrawl * frameSize.Width), 0, frameSize, 2, 0.9f);
-            xCrawl += 2;
-            _sprBody.AddAnimation(CombatActionEnum.KO, (xCrawl * frameSize.Width), 0, frameSize, 1, 0.5f);
-
-            _sprBody.PlayAnimation(CombatActionEnum.Idle);
-            _sprBody.SetScale((int)GameManager.NORMAL_SCALE);
-            _iBodyWidth = frameSize.Width * (int)GameManager.NORMAL_SCALE;
-            _iBodyHeight = frameSize.Height * (int)GameManager.NORMAL_SCALE;
-        }
-
         public override void Update(GameTime theGameTime)
         {
             //Finished being hit, determine action
-            if (IsCurrentAnimation(CombatActionEnum.Hurt) && BodySprite.GetPlayCount() >= 1)
+            if (IsCurrentAnimation(AnimationEnum.Hurt) && BodySprite.GetPlayCount() >= 1)
             {
-                if (CurrentHP == 0) { Tile.PlayAnimation(CombatActionEnum.KO); }
-                else if (IsCritical()) { Tile.PlayAnimation(CombatActionEnum.Critical); }
-                else { Tile.PlayAnimation(CombatActionEnum.Idle); }
+                if (CurrentHP == 0) { Tile.PlayAnimation(AnimationEnum.KO); }
+                else if (IsCritical()) { Tile.PlayAnimation(AnimationEnum.Critical); }
+                else { Tile.PlayAnimation(AnimationEnum.Idle); }
             }
 
-            if (!KnockedOut && IsCurrentAnimation(CombatActionEnum.KO))
+            if (!KnockedOut && IsCurrentAnimation(AnimationEnum.KO))
             {
-                if (IsCritical()) { Tile.PlayAnimation(CombatActionEnum.Critical); }
-                else { Tile.PlayAnimation(CombatActionEnum.Idle); }
+                if (IsCritical()) { Tile.PlayAnimation(AnimationEnum.Critical); }
+                else { Tile.PlayAnimation(AnimationEnum.Idle); }
             }
 
-            if (IsCurrentAnimation(CombatActionEnum.Critical) && !IsCritical())
+            if (IsCurrentAnimation(AnimationEnum.Critical) && !IsCritical())
             {
-                Tile.PlayAnimation(CombatActionEnum.Idle);
+                Tile.PlayAnimation(AnimationEnum.Idle);
             }
 
             if (LinkedSummon != null)
@@ -127,10 +105,23 @@ namespace RiverHollow.Characters
             }
         }
 
+        protected void LoadSpriteAnimations(ref AnimatedSprite sprite, List<AnimationData> listAnimations, string textureName)
+        {
+            sprite = new AnimatedSprite(textureName);
+
+            foreach (AnimationData data in listAnimations)
+            {
+                sprite.AddAnimation(data.Animation, data.XLocation, data.YLocation, _iBodyWidth, _iBodyHeight, data.Frames, data.FrameSpeed, data.PingPong);
+            }
+
+            PlayAnimation(AnimationEnum.Idle);
+            sprite.SetScale(NORMAL_SCALE);
+        }
+
         public virtual void GoToIdle()
         {
-            if (IsCritical()) { base.PlayAnimation(VerbEnum.Critical); }
-            else { base.PlayAnimation(VerbEnum.Walk); }
+            if (IsCritical()) { base.PlayAnimation(AnimationEnum.Critical); }
+            else { base.PlayAnimation(AnimationEnum.Idle); }
         }
         public bool IsCritical() { return (CurrentHP / (float)MaxHP) <= 0.25; }
 
@@ -160,7 +151,7 @@ namespace RiverHollow.Characters
         public virtual int DecreaseHealth(int value)
         {
             CurrentHP -= (CurrentHP - value >= 0) ? value : CurrentHP;
-            Tile.PlayAnimation(CombatActionEnum.Hurt);
+            Tile.PlayAnimation(AnimationEnum.Hurt);
             if (CurrentHP == 0)
             {
                 KnockedOut = true;
@@ -385,7 +376,7 @@ namespace RiverHollow.Characters
         }
         #endregion
 
-        public void LinkSummon(LiteSummon s)
+        public void LinkSummon(Summon s)
         {
             LinkedSummon = s;
             s.Tile = Tile;

@@ -63,16 +63,16 @@ namespace RiverHollow.Characters
 
         public ClassedCombatant CombatVersion { get; private set; }
 
-        public Villager()
+        public Villager(int id) : base(id)
         {
             _diCollection = new Dictionary<int, bool>();
         }
 
         //Copy Construcor for Cutscenes
-        public Villager(Villager n)
+        public Villager(Villager n) : this(n.ID)
         {
             _eActorType = ActorEnum.Villager;
-            _iIndex = n.ID;
+
             _sName = n.Name;
             _diDialogue = n._diDialogue;
             _sPortrait = n.Portrait;
@@ -82,19 +82,19 @@ namespace RiverHollow.Characters
             _sprBody = new AnimatedSprite(n.BodySprite);
         }
 
-        public Villager(int index, Dictionary<string, string> stringData, bool loadanimations = true) : this()
+        public Villager(int index, Dictionary<string, string> stringData, bool loadanimations = true) : this(index)
         {
             _eActorType = ActorEnum.Villager;
             _liRequiredBuildingIDs = new List<int>();
             _diRequiredObjectIDs = new Dictionary<int, int>();
             _diCompleteSchedule = new Dictionary<string, List<Dictionary<string, string>>>();
 
-            ImportBasics(index, stringData, loadanimations);
+            ImportBasics(stringData, loadanimations);
         }
 
-        protected override void ImportBasics(int index, Dictionary<string, string> stringData, bool loadanimations = true)
+        protected override void ImportBasics(Dictionary<string, string> stringData, bool loadanimations = true)
         {
-            base.ImportBasics(index, stringData, loadanimations);
+            base.ImportBasics(stringData, loadanimations);
 
             Util.AssignValue(ref _bCanMarry, "CanMarry", stringData);
             Util.AssignValue(ref _bCanBecomePregnant, "CanBecomePregnant", stringData);
@@ -123,7 +123,7 @@ namespace RiverHollow.Characters
                 }
             }
 
-            Dictionary<string, List<string>> schedule = DataManager.GetSchedule("NPC_" + _iIndex.ToString("00"));
+            Dictionary<string, List<string>> schedule = DataManager.GetSchedule("NPC_" + ID.ToString("00"));
             if (schedule != null)
             {
                 foreach (KeyValuePair<string, List<string>> kvp in schedule)
@@ -300,7 +300,7 @@ namespace RiverHollow.Characters
 
                 string strSpawn = string.Empty;
                 if (Married) { strSpawn = "Spouse"; }
-                else if (IsHomeBuilt() || GetSpawnMapName() == MapManager.TownMapName) { strSpawn = "NPC_" + _iIndex.ToString("00"); }
+                else if (IsHomeBuilt() || GetSpawnMapName() == MapManager.TownMapName) { strSpawn = "NPC_" + ID.ToString("00"); }
                 else if (GameManager.VillagersInTheInn < 3) { strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
 
                 Position = Util.SnapToGrid(map.GetCharacterSpawn(strSpawn));
@@ -467,7 +467,7 @@ namespace RiverHollow.Characters
                     int index = new List<int>(_diCollection.Keys).FindIndex(x => x == item.ItemID);
 
                     _diCollection[item.ItemID] = true;
-                    MapManager.Maps[GetSpawnMapName()].AddCollectionItem(item.ItemID, _iIndex, index);
+                    MapManager.Maps[GetSpawnMapName()].AddCollectionItem(item.ItemID, ID, index);
                 }
                 else
                 {

@@ -5,6 +5,7 @@ using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
+using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 
@@ -98,9 +99,9 @@ namespace RiverHollow.Characters
         private List<AnimationData> LoadPlayerAnimations(Dictionary<string, string> data)
         {
             List<AnimationData> rv;
-            rv = LoadWorldAnimations(data);
+            rv = Util.LoadWorldAnimations(data);
 
-            AddToAnimationsList(ref rv, data, VerbEnum.UseTool, true, true);
+            Util.AddToAnimationsList(ref rv, data, VerbEnum.UseTool, true, true);
             return rv;
         }
 
@@ -118,7 +119,7 @@ namespace RiverHollow.Characters
         {
             HairIndex = index;
             //Loads the Sprites for the players hair animations for the class based off of the hair ID
-            LoadSpriteAnimations(ref _sprHair, LoadWorldAndCombatAnimations(DataManager.Config[17]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex));
+            LoadSpriteAnimations(ref _sprHair, Util.LoadWorldAnimations(DataManager.Config[17]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex));
             _sprHair.SetLayerDepthMod(HAIR_DEPTH);
         }
 
@@ -151,7 +152,7 @@ namespace RiverHollow.Characters
                 string clothingTexture = string.Format(@"Textures\Items\Gear\{0}\{1}", c.ClothesType.ToString(), c.TextureAnimationName);
                 if (!c.GenderNeutral) { clothingTexture += ("_" + BodyTypeStr); }
 
-                LoadSpriteAnimations(ref c.Sprite, LoadWorldAndCombatAnimations(DataManager.Config[17]), clothingTexture);
+                LoadSpriteAnimations(ref c.Sprite, Util.LoadWorldAnimations(DataManager.Config[17]), clothingTexture);
 
                 if (c.SlotMatch(ClothingEnum.Body)) { Body = c; }
                 else if (c.SlotMatch(ClothingEnum.Hat))

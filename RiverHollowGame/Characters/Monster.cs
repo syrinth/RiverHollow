@@ -2,7 +2,6 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Items;
-using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
@@ -14,35 +13,29 @@ namespace RiverHollow.Characters
     {
         public override string Name => String.IsNullOrEmpty(_sUnique) ? _sName : _sName + " " + _sUnique;
 
-        public int ID { get; private set; }
+        public int ID { get; } = -1;
         int _iRating;
         public int XP { get; private set; }
         protected Vector2 _moveTo = Vector2.Zero;
         int _iLootID;
 
-        int _iWidth;
-        int _iHeight;
-
         public override int MaxHP => (int)((((Math.Pow(_iRating, 2)) * 10) + 20) * Math.Pow(Math.Max(1, (double)_iRating / 14), 2));
 
         public Monster(int id, Dictionary<string, string> data)
         {
+            ID = id;
+
             _eActorType = ActorEnum.Monster;
-            ImportBasics(data, id);
+            ImportBasics(data);
         }
 
-        protected void ImportBasics(Dictionary<string, string> data, int id)
+        protected void ImportBasics(Dictionary<string, string> data)
         {
-            ID = id;
+
             DataManager.GetTextData("Monster", ID, ref _sName, "Name");
 
-            float[] idle = new float[2] { 2, 0.5f };
-            float[] attack = new float[2] { 2, 0.2f };
-            float[] hurt = new float[2] { 1, 0.5f };
-            float[] cast = new float[2] { 2, 0.5f };
-
-            _iWidth = int.Parse(data["Width"]);
-            _iHeight = int.Parse(data["Height"]);
+            Util.AssignValue(ref _iBodyWidth, "Width", data);
+            Util.AssignValue(ref _iBodyHeight, "Height", data);
 
             _iRating = int.Parse(data["Lvl"]);
             XP = _iRating * 10;
@@ -82,40 +75,7 @@ namespace RiverHollow.Characters
                 }
             }
 
-            if (data.ContainsKey("Idle"))
-            {
-                string[] split = data["Idle"].Split('-');
-                idle[0] = float.Parse(split[2]);
-                idle[1] = float.Parse(split[3]);
-            }
-
-            if (data.ContainsKey("Attack"))
-            {
-                string[] split = data["Attack"].Split('-');
-                attack[0] = float.Parse(split[2]);
-                attack[1] = float.Parse(split[3]);
-            }
-
-            if (data.ContainsKey("Hurt"))
-            {
-                string[] split = data["Hurt"].Split('-');
-                hurt[0] = float.Parse(split[2]);
-                hurt[1] = float.Parse(split[3]);
-            }
-
-            if (data.ContainsKey("Cast"))
-            {
-                string[] split = data["Cast"].Split('-');
-                cast[0] = float.Parse(split[2]);
-                cast[1] = float.Parse(split[3]);
-            }
-
-            if (data.ContainsKey("Loot"))
-            {
-                _iLootID = int.Parse(data["Loot"]);
-            }
-
-            LoadContent(DataManager.FOLDER_MONSTERS + data["Texture"], idle, attack, hurt, cast);
+            LoadSpriteAnimations(ref _sprBody, Util.LoadCombatAnimations(data), DataManager.FOLDER_MONSTERS + data["Texture"]);
 
             CurrentHP = MaxHP;
         }
@@ -123,9 +83,10 @@ namespace RiverHollow.Characters
         public override void Update(GameTime theGameTime)
         {
             base.Update(theGameTime);
-            if (BodySprite.CurrentAnimation == Util.GetEnumString(CombatActionEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
+            
+            if (BodySprite.CurrentAnimation == Util.GetEnumString(AnimationEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
             {
-                CombatManager.Kill(this);
+                CombatManager.RemoveMonster(this);
             }
         }
 
@@ -154,30 +115,6 @@ namespace RiverHollow.Characters
             {
                 _diAttributes[e] = (int)(_diAttributes[e] * 0.9);
             }
-        }
-
-        public void LoadContent(string texture, float[] idle, float[] attack, float[] hurt, float[] cast)
-        {
-            _sprBody = new AnimatedSprite(texture.Replace(" ", ""));
-
-            int xCrawl = 0;
-            RHSize frameSize = new RHSize(_iWidth/TILE_SIZE, _iHeight / TILE_SIZE);
-
-            _sprBody.AddAnimation(CombatActionEnum.Idle, xCrawl * TILE_SIZE, 0, frameSize, (int)idle[0], idle[1]);
-            xCrawl += (int)idle[0] + frameSize.Width;
-            _sprBody.AddAnimation(CombatActionEnum.Attack, xCrawl * TILE_SIZE, 0, frameSize, (int)attack[0], attack[1]);
-            xCrawl += (int)attack[0] + frameSize.Width;
-            _sprBody.AddAnimation(CombatActionEnum.Hurt, xCrawl * TILE_SIZE, 0, frameSize, (int)hurt[0], hurt[1]);
-            xCrawl += (int)hurt[0] + frameSize.Width;
-            _sprBody.AddAnimation(CombatActionEnum.Cast, xCrawl * TILE_SIZE, 0, frameSize, (int)cast[0], cast[1]);
-            xCrawl += (int)cast[0] + frameSize.Width;
-
-            _sprBody.AddAnimation(CombatActionEnum.KO, (xCrawl * frameSize.Width), 0, frameSize, 3, 0.2f);
-
-            _sprBody.PlayAnimation(CombatActionEnum.Idle);
-            _sprBody.SetScale((int)GameManager.NORMAL_SCALE);
-            _iBodyWidth = frameSize.Width * (int)GameManager.NORMAL_SCALE;
-            _iBodyHeight = frameSize.Height * (int)GameManager.NORMAL_SCALE;
         }
 
         public Item GetLoot()

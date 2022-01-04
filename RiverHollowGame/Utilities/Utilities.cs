@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using RiverHollow.Game_Managers;
+using RiverHollow.Misc;
 using RiverHollow.Tile_Engine;
 using System;
 using System.Collections.Generic;
@@ -551,6 +552,59 @@ namespace RiverHollow.Utilities
             RHSize temp = x;
             x = y;
             y = temp;
+        }
+
+        public static List<AnimationData> LoadWorldAnimations(Dictionary<string, string> data)
+        {
+            List<AnimationData> listAnimations = new List<AnimationData>();
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Walk);
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Idle);
+            return listAnimations;
+        }
+        public static List<AnimationData> LoadCombatAnimations(Dictionary<string, string> data)
+        {
+            List<AnimationData> listAnimations = new List<AnimationData>();
+
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action1);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action2);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action3);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action4);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Critical);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Hurt);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Idle);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.KO);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Spawn);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Victory);
+
+            return listAnimations;
+        }
+
+        /// <summary>
+        /// Helper method for ImportBasics to compile the list of relevant animations
+        /// </summary>
+        /// <param name="list">List to add to</param>
+        /// <param name="data">Data to read form</param>
+        /// <param name="verb">Verb to add</param>
+        /// <param name="directional">Whether the animation will have a version for each direction</param>
+        /// <param name="backToIdle">Whether the animation transitions to the Idle state after playing</param>
+        /// <param name="playsOnce">Whether the animation should play once then disappear</param>
+        public static void AddToAnimationsList(ref List<AnimationData> list, Dictionary<string, string> data, VerbEnum verb)
+        {
+            AddToAnimationsList(ref list, data, verb, true, false);
+        }
+        public static void AddToAnimationsList(ref List<AnimationData> list, Dictionary<string, string> data, VerbEnum verb, bool directional, bool backToIdle)
+        {
+            if (data.ContainsKey(Util.GetEnumString(verb)))
+            {
+                list.Add(new AnimationData(data[Util.GetEnumString(verb)], verb, backToIdle, directional));
+            }
+        }
+        public static void AddToAnimationsList(ref List<AnimationData> list, Dictionary<string, string> data, AnimationEnum animation)
+        {
+            if (data.ContainsKey(Util.GetEnumString(animation)))
+            {
+                list.Add(new AnimationData(data[Util.GetEnumString(animation)], animation));
+            }
         }
     }
 

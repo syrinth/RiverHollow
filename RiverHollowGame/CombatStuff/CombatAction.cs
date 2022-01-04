@@ -44,7 +44,7 @@ namespace RiverHollow.CombatStuff
         public bool Heal { get; private set; }
 
         string _sAnimation;
-        VerbEnum _eUserAnimationVerb = VerbEnum.Action1;
+        VerbEnum _eUserAnimationVerb = VerbEnum.Alert;
 
         TargetEnum _eTarget;
         public TargetEnum Target => _eTarget;
@@ -84,7 +84,7 @@ namespace RiverHollow.CombatStuff
 
         bool _bPauseActionHandler;
         CombatActor counteringChar;
-        LiteSummon counteringSummon;
+        Summon counteringSummon;
 
         int _iCritRating;
         int _iAccuracy;
@@ -300,7 +300,7 @@ namespace RiverHollow.CombatStuff
 
                         //If the target has a Summon linked to them, and they take
                         //any area damage, hit the Summon as well
-                        LiteSummon summ = targetActor.LinkedSummon;
+                        Summon summ = targetActor.LinkedSummon;
                         if (_eAreaType != AreaTypeEnum.Single && summ != null)
                         {
                             x = summ.ProcessDamage(SkillUser, PowerAttribute, Potency, _iCritRating, targetActor.GetAttackElement());
@@ -350,6 +350,11 @@ namespace RiverHollow.CombatStuff
 
                         actor.GuardTarget.MyGuard = null;
                         actor.GuardTarget = null;
+                    }
+
+                    if(targetActor.CurrentHP == 0)
+                    {
+                        CombatManager.Kill(targetActor);
                     }
                 }
             }
@@ -442,7 +447,7 @@ namespace RiverHollow.CombatStuff
                 //This should only ever be one, butjust in case
                 foreach (CombatTile ct in TileTargetList)
                 {
-                    LiteSummon newSummon = DataManager.GetSummonByIndex(_iSummonID);
+                    Summon newSummon = DataManager.GetSummonByIndex(_iSummonID);
                     newSummon.SetStats(SkillUser.Attribute(AttributeEnum.Magic));                //Summon stats are based off the Magic stat
                     ct.Character.LinkSummon(newSummon);                 //Links the summon to the character
                     newSummon.linkedChar = ct.Character;                //Links the character to the new summon
@@ -652,7 +657,7 @@ namespace RiverHollow.CombatStuff
                         bool targetsEnemy = TileTargetList[0].GUITile.MapTile.TargetType == TargetEnum.Enemy;
 
                         //If we're in Critical HP, start walking first.
-                        if (SkillUser.IsCurrentAnimation(CombatActionEnum.Critical)) { SkillUser.Tile.PlayAnimation(CombatActionEnum.Idle); }
+                        if (SkillUser.IsCurrentAnimation(AnimationEnum.Critical)) { SkillUser.Tile.PlayAnimation(AnimationEnum.Idle); }
 
                         if (MoveSpriteTo(sprite, GetAttackTargetPosition(sprite, targetsEnemy, moveToTile)))
                         {
@@ -681,7 +686,7 @@ namespace RiverHollow.CombatStuff
                             CombatTile bottom = CombatManager.GetBottom(tile);
                             if (bottom != null && bottom.Character != null && bottom.Character.Guard) { liPotentialGuards.Add(bottom.Character); }
 
-                            LiteSummon summ = tile.Character.LinkedSummon;
+                            Summon summ = tile.Character.LinkedSummon;
                             if (summ != null && !summ.Swapped && summ.Guard) { liPotentialGuards.Add(summ); }
 
                             if (liPotentialGuards.Count > 0)
@@ -699,28 +704,28 @@ namespace RiverHollow.CombatStuff
                         }
                     }
 
-                    if (!SkillUser.IsCurrentAnimation(CombatActionEnum.Attack))
+                    if (!SkillUser.IsCurrentAnimation(AnimationEnum.Action1))
                     {
-                        if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(CombatActionEnum.Attack); }
-                        else { SkillUser.Tile.PlayAnimation(CombatActionEnum.Attack); }
+                        if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(AnimationEnum.Action1); }
+                        else { SkillUser.Tile.PlayAnimation(AnimationEnum.Action1); }
                     }
                     else if (SkillUser.AnimationPlayedXTimes(1))
                     {
-                        if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(CombatActionEnum.Idle); }
-                        else { SkillUser.Tile.PlayAnimation(CombatActionEnum.Idle); }
+                        if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(AnimationEnum.Idle); }
+                        else { SkillUser.Tile.PlayAnimation(AnimationEnum.Idle); }
                         _iCurrentAction++;
                     }
                     break;
                 case "UserCast":
-                    if (!SkillUser.IsCurrentAnimation(CombatActionEnum.Cast))
+                    if (!SkillUser.IsCurrentAnimation(AnimationEnum.Action1))
                     {
-                        if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(CombatActionEnum.Cast); }
-                        else { SkillUser.Tile.PlayAnimation(CombatActionEnum.Cast); }
+                        if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(AnimationEnum.Action1); }
+                        else { SkillUser.Tile.PlayAnimation(AnimationEnum.Action1); }
                     }
                     else if (SkillUser.AnimationPlayedXTimes(2))
                     {
-                        if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(CombatActionEnum.Idle); }
-                        else { SkillUser.Tile.PlayAnimation(CombatActionEnum.Idle); }
+                        if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(AnimationEnum.Idle); }
+                        else { SkillUser.Tile.PlayAnimation(AnimationEnum.Idle); }
                         _iCurrentAction++;
                     }
                     break;
@@ -763,13 +768,13 @@ namespace RiverHollow.CombatStuff
                         {
                             if (counteringChar != null)
                             {
-                                if (!counteringChar.IsCurrentAnimation(CombatActionEnum.Attack))
+                                if (!counteringChar.IsCurrentAnimation(AnimationEnum.Action1))
                                 {
-                                    counteringChar.Tile.PlayAnimation(CombatActionEnum.Attack);
+                                    counteringChar.Tile.PlayAnimation(AnimationEnum.Action1);
                                 }
                                 else if (counteringChar.AnimationPlayedXTimes(1))
                                 {
-                                    counteringChar.Tile.PlayAnimation(CombatActionEnum.Idle);
+                                    counteringChar.Tile.PlayAnimation(AnimationEnum.Idle);
                                     CombatAction attackAction = DataManager.GetCombatActionByIndex(1);
                                     int x = SkillUser.ProcessDamage(counteringChar, attackAction.PowerAttribute, attackAction.Potency, _iCritRating, counteringChar.GetAttackElement());
                                     SkillUser.Tile.GUITile.AssignEffect(x, true);
@@ -780,13 +785,13 @@ namespace RiverHollow.CombatStuff
                             }
                             else if (counteringSummon != null)
                             {
-                                if (!counteringSummon.IsCurrentAnimation(CombatActionEnum.Attack))
+                                if (!counteringSummon.IsCurrentAnimation(AnimationEnum.Action1))
                                 {
-                                    counteringSummon.PlayAnimation(CombatActionEnum.Attack);
+                                    counteringSummon.PlayAnimation(AnimationEnum.Action1);
                                 }
                                 else if (counteringSummon.AnimationPlayedXTimes(1))
                                 {
-                                    counteringSummon.PlayAnimation(CombatActionEnum.Idle);
+                                    counteringSummon.PlayAnimation(AnimationEnum.Idle);
                                     CombatAction attackAction = DataManager.GetCombatActionByIndex(1);
                                     int x = SkillUser.ProcessDamage(counteringSummon, attackAction.PowerAttribute, attackAction.Potency, _iCritRating, counteringSummon.GetAttackElement());
                                     SkillUser.Tile.GUITile.AssignEffect(x, true);
@@ -810,8 +815,8 @@ namespace RiverHollow.CombatStuff
                         //If we're in Critical HP, go back down.
                         if (SkillUser.IsCritical())
                         {
-                            if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(CombatActionEnum.Critical); }
-                            else { SkillUser.Tile.PlayAnimation(CombatActionEnum.Critical); }
+                            if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(AnimationEnum.Critical); }
+                            else { SkillUser.Tile.PlayAnimation(AnimationEnum.Critical); }
                         }
                         _iCurrentAction++;
                     }

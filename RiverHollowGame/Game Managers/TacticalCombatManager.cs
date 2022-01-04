@@ -389,7 +389,7 @@
 //                foreach (ClassedCombatant a in Party)
 //                {
 //                    a.CurrentCharge = 0;
-//                    a.PlayAnimation(AnimationEnum.Win);
+//                    a.PlayAnimation(CombatAnimationEnum.Win);
 //                }
 
 //            }

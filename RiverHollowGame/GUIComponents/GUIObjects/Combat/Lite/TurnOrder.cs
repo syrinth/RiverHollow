@@ -15,6 +15,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
         readonly ActorIcon _nextTurn;
         readonly ActorIcon _currentTurn;
 
+        public int CurrentActors { get; private set; }
+
         public TurnOrder(IList<CombatActor> TurnOrder)
         {
             _currentTurn = new ActorIcon(ActorIconType.CurrentTurn);
@@ -68,7 +70,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 
         public void DisplayNewTurn(IList<CombatActor> actors)
         {
-            for(int i = 0; i < _liActorIcons.Count; i++) { RemoveControl(_liActorIcons[i]); }
+            CurrentActors = actors.Count;
+
+            for (int i = 0; i < _liActorIcons.Count; i++) { RemoveControl(_liActorIcons[i]); }
+            _liActorIcons.Clear();
 
             _currentTurn.LinkActor(actors[0]);
 

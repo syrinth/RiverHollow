@@ -41,7 +41,7 @@ namespace RiverHollow.Characters
             _iBodyWidth = TILE_SIZE;
             _iBodyHeight = TILE_SIZE + 2;
             List<AnimationData> liData = new List<AnimationData>();
-            AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
+            Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
             LoadSpriteAnimations(ref _sprBody, liData, _sNPCFolder + "Spirit_" + _iID);
         }
 

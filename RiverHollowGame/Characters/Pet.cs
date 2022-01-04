@@ -26,9 +26,9 @@ namespace RiverHollow.Characters
             Util.AssignValue(ref _iGatherZoneID, "ObjectID", stringData);
 
             List<AnimationData> liData = new List<AnimationData>();
-            AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
-            AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
-            AddToAnimationsList(ref liData, stringData, VerbEnum.Action1);
+            Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
+            Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
+            Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Action1);
             LoadSpriteAnimations(ref _sprBody, liData, _sCreatureFolder + "NPC_" + ID);
         }
 

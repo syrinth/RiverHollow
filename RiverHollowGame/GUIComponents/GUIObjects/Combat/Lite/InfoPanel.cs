@@ -55,7 +55,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             _actor = actor;
 
             _actorSprite = new GUISprite(_actor.BodySprite, true);
-            _actorSprite.PlayAnimation(actor.IsCritical() ? VerbEnum.Critical : VerbEnum.Idle);
+            _actorSprite.PlayAnimation(actor.IsCritical() ? AnimationEnum.Critical : AnimationEnum.Idle);
             _actorSprite.Position(Position() + new Vector2(ScaleIt(4), ScaleIt(4)));
             AddControl(_actorSprite);
 

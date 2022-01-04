@@ -86,7 +86,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diActions;
 
         static Dictionary<int, Dictionary<string, string>> _diClasses;
-        public static Dictionary<int, Dictionary<string, string>> DIClasses => _diClasses;
         static Dictionary<string, Dictionary<string, List<string>>> _diSchedule;
 
         public static List<int> FloorIDs { get; private set; }
@@ -583,7 +582,7 @@ namespace RiverHollow.Game_Managers
             return null;
         }
 
-        public static LiteSummon GetSummonByIndex(int id)
+        public static Summon GetSummonByIndex(int id)
         {
             if (_diNPCData.ContainsKey(id))
             {
@@ -591,7 +590,7 @@ namespace RiverHollow.Game_Managers
                 switch (Util.ParseEnum<ActorEnum>(diData["Type"]))
                 {
                     case ActorEnum.Summon:
-                        return new LiteSummon(id, diData);
+                        return new Summon(id, diData);
                 }
             }
 
@@ -655,23 +654,13 @@ namespace RiverHollow.Game_Managers
             return b;
         }
 
-        public static void GetClassText(int id, ref string name, ref string desc)
-        {
-            string val = "Class " + id;
-            name = _diGameText[val].Split('/')[0];
-            desc = _diGameText[val].Split('/')[1];
-        }
-        public static int GetClassCount()
-        {
-            return _diClasses.Count;
-        }
+        public static Dictionary<string, string> GetClassDataByID(int id) { return _diClasses[id]; }
         public static CharacterClass GetClassByIndex(int id)
         {
             CharacterClass c = null;
             if (id != -1)
             {
-                Dictionary<string, string> liData = _diClasses[id];
-                c = new CharacterClass(id, liData);
+                c = new CharacterClass(id, _diClasses[id]);
             }
             return c;
         }

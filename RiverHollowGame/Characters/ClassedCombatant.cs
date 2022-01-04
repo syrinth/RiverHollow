@@ -3,7 +3,6 @@ using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Items;
-using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
@@ -33,37 +32,14 @@ namespace RiverHollow.Characters.Lite
         {
             _eActorType = ActorEnum.PartyMember;
             ClassLevel = 1;
+            _iBodyWidth = 32;
+            _iBodyHeight = 32;
 
             _diGear = new Dictionary<EquipmentEnum, Equipment>();
             foreach (EquipmentEnum e in Enum.GetValues(typeof(EquipmentEnum))) { _diGear[e] = null; }
 
             _diGearComparison = new Dictionary<EquipmentEnum, Equipment>();
             foreach (EquipmentEnum e in Enum.GetValues(typeof(EquipmentEnum))) { _diGearComparison[e] = null; }
-        }
-
-        public override void LoadContent(string texture)
-        {
-            _sprBody = new AnimatedSprite(texture);
-            int xCrawl = 0;
-            RHSize frameSize = new RHSize(2, 2);
-            _sprBody.AddAnimation(CombatActionEnum.Idle, xCrawl * TILE_SIZE, 0, frameSize, 2, 0.5f);
-            xCrawl += 2 * frameSize.Width;
-            _sprBody.AddAnimation(CombatActionEnum.Cast, xCrawl * TILE_SIZE, 0, frameSize, 3, 0.4f);
-            xCrawl += 3 * frameSize.Width;
-            _sprBody.AddAnimation(CombatActionEnum.Hurt, xCrawl * TILE_SIZE, 0, frameSize, 1, 0.5f);
-            xCrawl += 1 * frameSize.Width;
-            _sprBody.AddAnimation(CombatActionEnum.Attack, xCrawl * TILE_SIZE, 0, frameSize, 1, 0.3f);
-            xCrawl += 1 * frameSize.Width;
-            _sprBody.AddAnimation(CombatActionEnum.Critical, xCrawl * TILE_SIZE, 0, frameSize, 2, 0.9f);
-            xCrawl += 2 * frameSize.Width;
-            _sprBody.AddAnimation(CombatActionEnum.KO, xCrawl * TILE_SIZE, 0, frameSize, 1, 0.5f);
-            xCrawl += 1 * frameSize.Width;
-            _sprBody.AddAnimation(CombatActionEnum.Victory, xCrawl * TILE_SIZE, 0, frameSize, 2, 0.5f);
-
-            _sprBody.PlayAnimation(CombatActionEnum.Idle);
-            _sprBody.SetScale((int)GameManager.NORMAL_SCALE);
-            _iBodyWidth = frameSize.Width * (int)GameManager.NORMAL_SCALE;
-            _iBodyHeight = frameSize.Height * (int)GameManager.NORMAL_SCALE;
         }
 
         public override GUIImage GetIcon()
@@ -75,13 +51,10 @@ namespace RiverHollow.Characters.Lite
         {
             _class = x;
             CurrentHP = MaxHP;
-
-            //Weapon.SetGear((Equipment)DataManager.GetItem(_class.WeaponID));
-           // Armor.SetGear((Equipment)DataManager.GetItem(_class.ArmorID));
-           // Head.SetGear((Equipment)DataManager.GetItem(_class.HeadID));
-            //Wrist.SetGear((Equipment)DataManager.GetItem(_class.WristID));
-
-            LoadContent(DataManager.FOLDER_PARTY + "Wizard");
+            if (x.ID != -1)
+            {
+                LoadSpriteAnimations(ref _sprBody, Util.LoadCombatAnimations(x.ClassStringData), DataManager.FOLDER_PARTY + "Wizard");
+            }
         }
 
         public void AddXP(int x)
@@ -107,7 +80,7 @@ namespace RiverHollow.Characters.Lite
             }
             else
             {
-                return 30 + _diAttributes[e] + _class.Attribute(e) + _diEffectedAttributes[e].Value + GearAttribute(e);
+                return 10 + _diAttributes[e] + _class.Attribute(e) + _diEffectedAttributes[e].Value + GearAttribute(e);
             }
         }
 

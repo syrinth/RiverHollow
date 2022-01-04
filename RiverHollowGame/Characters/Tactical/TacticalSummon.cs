@@ -65,7 +65,7 @@
 //            base.Update(gTime);
 
 //            ///When the Monster has finished playing the KO animation, let the CombatManager know so it can do any final actions
-//            if (IsCurrentAnimation(AnimationEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
+//            if (IsCurrentAnimation(CombatAnimationEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
 //            {
 //                MapManager.RemoveActor(this);
 //            }

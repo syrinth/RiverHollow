@@ -152,41 +152,12 @@ namespace RiverHollow.Characters
             sprite.RemoveAnimation(verb, DirectionEnum.Left);
         }
 
-        public bool IsCurrentAnimation(CombatActionEnum val) { return _sprBody.IsCurrentAnimation(val); }
         public bool IsCurrentAnimation(AnimationEnum val) { return _sprBody.IsCurrentAnimation(val); }
         public bool IsCurrentAnimation(VerbEnum verb, DirectionEnum dir) { return _sprBody.IsCurrentAnimation(verb, dir); }
         public bool IsAnimating() { return _sprBody.Drawing; }
         public bool AnimationPlayedXTimes(int x) { return _sprBody.GetPlayCount() >= x; }
 
         public bool IsActorType(ActorEnum act) { return _eActorType == act; }
-
-        /// <summary>
-        /// Helper method for ImportBasics to compile the list of relevant animations
-        /// </summary>
-        /// <param name="list">List to add to</param>
-        /// <param name="data">Data to read form</param>
-        /// <param name="verb">Verb to add</param>
-        /// <param name="directional">Whether the animation will have a version for each direction</param>
-        /// <param name="backToIdle">Whether the animation transitions to the Idle state after playing</param>
-        /// <param name="playsOnce">Whether the animation should play once then disappear</param>
-        protected void AddToAnimationsList(ref List<AnimationData> list, Dictionary<string, string> data, VerbEnum verb)
-        {
-            AddToAnimationsList(ref list, data, verb, true, false);
-        }
-        protected void AddToAnimationsList(ref List<AnimationData> list, Dictionary<string, string> data, VerbEnum verb, bool directional, bool backToIdle)
-        {
-            if (data.ContainsKey(Util.GetEnumString(verb)))
-            {
-                list.Add(new AnimationData(data[Util.GetEnumString(verb)], verb, backToIdle, directional));
-            }
-        }
-        protected void AddToAnimationsList(ref List<AnimationData> list, Dictionary<string, string> data, AnimationEnum animation)
-        {
-            if (data.ContainsKey(Util.GetEnumString(animation)))
-            {
-                list.Add(new AnimationData(data[Util.GetEnumString(animation)], animation));
-            }
-        }
     }
     /// <summary>
     /// The properties and methods for each actor that pertain to existing on and

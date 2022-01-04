@@ -14,7 +14,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
     {
         //GUIImage _gTargetter;
         GUIImage _gTile;
-        GUILiteCombatActorInfo _gActorInfo;
+        GUICombatActorInfo _gActorInfo;
         public GUISprite CharacterSprite => _gActorInfo.CharacterSprite;
         public GUISprite CharacterWeaponSprite => _gActorInfo.CharacterWeaponSprite;
         GUIText _gEffect;
@@ -135,11 +135,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (occupied)
             {
-                _gActorInfo = new GUILiteCombatActorInfo(_mapTile.Character);
+                _gActorInfo = new GUICombatActorInfo(_mapTile.Character);
                 AddControl(_gActorInfo);
 
                 _gActorInfo.Reset();
-                _gActorInfo.PlayAnimation(CombatActionEnum.Idle);
+                _gActorInfo.PlayAnimation(AnimationEnum.Idle);
             }
             else
             {
@@ -147,7 +147,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
             Setup();
         }
-        public void LinkSummon(LiteSummon s)
+        public void LinkSummon(Summon s)
         {
             if (s != null)
             {

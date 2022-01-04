@@ -26,9 +26,9 @@ namespace RiverHollow.Characters
             DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 
             List<AnimationData> liData = new List<AnimationData>();
-            AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
-            AddToAnimationsList(ref liData, stringData, VerbEnum.Action1);
-            AddToAnimationsList(ref liData, stringData, VerbEnum.Action2);
+            Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
+            Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Action1);
+            Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Action2);
             LoadSpriteAnimations(ref _sprBody, liData, _sCreatureFolder + "NPC_" + ID);
 
             Facing = DirectionEnum.Down;

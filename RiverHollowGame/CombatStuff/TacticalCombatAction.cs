@@ -212,7 +212,7 @@
 //                _fFrameSpeed = float.Parse(parse[i++]);
 
 //                ActionSprite = new AnimatedSprite(_sAnimation);
-//                ActionSprite.AddAnimation(AnimationEnum.PlayAnimation, 0, 0, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed, false, true);
+//                ActionSprite.AddAnimation(CombatAnimationEnum.PlayAnimation, 0, 0, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed, false, true);
 //                ActionSprite.Drawing = false;
 //            }
 
@@ -728,7 +728,7 @@
 //                    {
 //                        if (!ActionSprite.Drawing)
 //                        {
-//                            ActionSprite.PlayAnimation(AnimationEnum.PlayAnimation);
+//                            ActionSprite.PlayAnimation(CombatAnimationEnum.PlayAnimation);
 //                            ActionSprite.Position = TileTargetList[0].Position;
 //                            ActionSprite.Position -= new Vector2(_iAnimOffsetX, _iAnimOffsetY);
 //                        }
@@ -736,7 +736,7 @@
 //                        {
 //                            ActionSprite.Update(gTime);
 
-//                            if (ActionSprite.AnimationFinished(AnimationEnum.PlayAnimation))
+//                            if (ActionSprite.AnimationFinished(CombatAnimationEnum.PlayAnimation))
 //                            {
 //                                ActionSprite.Reset();
 //                                _iCurrentAction++;
@@ -756,7 +756,7 @@
 //                        newSummon.SetStats(_cmbtActionUser.StatMag);                //Summon stats are based off the Magic stat
 //                        _cmbtActionUser.LinkSummon(newSummon);                      //Links the summon to the character
 //                        newSummon.SetBaseTile(TileTargetList[0], true);
-//                        newSummon.PlayAnimation(AnimationEnum.Spawn);
+//                        newSummon.PlayAnimation(CombatAnimationEnum.Spawn);
 //                        newSummon.BodySprite.SetNextAnimation("Spawn", "WalkDown");
 //                        MapManager.CurrentMap.AddSummon(newSummon);
 //                    }

@@ -190,7 +190,7 @@
 //            }
 
 //            ///Stand back up after the KO status has been removed
-//            if (!_diConditions[ConditionEnum.KO] && IsCurrentAnimation(AnimationEnum.KO))
+//            if (!_diConditions[ConditionEnum.KO] && IsCurrentAnimation(CombatAnimationEnum.KO))
 //            {
 //                GoToIdle();
 //            }
@@ -257,7 +257,7 @@
 //        public virtual void KO()
 //        {
 //            TacticalCombatManager.RemoveKnockedOutCharacter(this);
-//            PlayAnimation(AnimationEnum.KO);
+//            PlayAnimation(CombatAnimationEnum.KO);
 //        }
 
 //        /// <summary>

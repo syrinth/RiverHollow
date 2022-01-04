@@ -689,7 +689,7 @@ namespace RiverHollow.WorldObjects
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
         {
             base.LoadSprite(stringData, textureName);
-            _sprite.AddAnimation(AnimationEnum.Action_One, _pImagePos.X + TILE_SIZE, _pImagePos.Y, _uSize);
+            _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + TILE_SIZE, _pImagePos.Y, _uSize);
         }
 
         public bool Charge() {
@@ -709,7 +709,7 @@ namespace RiverHollow.WorldObjects
         private void Activate(bool value)
         {
             Active = value;
-            _sprite.PlayAnimation(value ? AnimationEnum.Action_One : AnimationEnum.ObjectIdle);
+            _sprite.PlayAnimation(value ? AnimationEnum.Action1 : AnimationEnum.ObjectIdle);
         }
 
         public bool SubtypeMatch(HazardTypeEnum cmp)
@@ -728,7 +728,7 @@ namespace RiverHollow.WorldObjects
     //        _eObjectType = ObjectTypeEnum.WorldObject;
     //        _wallObject = true;
     //        _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-    //        _sprite.AddAnimation(AnimationEnum.ObjectIdle, 96, 0, TILE_SIZE, TILE_SIZE);
+    //        _sprite.AddAnimation(CombatAnimationEnum.ObjectIdle, 96, 0, TILE_SIZE, TILE_SIZE);
     //    }
 
     //    public void SetExit(string map)
@@ -1918,7 +1918,7 @@ namespace RiverHollow.WorldObjects
         //        SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition, this);
         //        _dProcessedTime = 0;
         //        _iCurrentlyMaking = -1;
-        //        _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
+        //        _sprite.PlayAnimation(CombatAnimationEnum.ObjectIdle);
         //    }
         //}
 
@@ -1945,7 +1945,7 @@ namespace RiverHollow.WorldObjects
                 PlayerManager.DecreaseStamina(1 - mod);
 
                 //_iCurrentlyMaking = itemToCraft.ItemID;
-                //_sprite.PlayAnimation(AnimationEnum.PlayAnimation);
+                //_sprite.PlayAnimation(CombatAnimationEnum.PlayAnimation);
 
                 InventoryManager.AddToInventory(itemToCraft.ItemID);
                 if (!string.IsNullOrEmpty(_sEffectWorking))
@@ -2009,7 +2009,7 @@ namespace RiverHollow.WorldObjects
             _dProcessedTime = mac.processedTime;
             _iCurrentlyMaking = mac.currentItemID;
 
-            // if (CurrentlyProcessing != null) { _sprite.PlayAnimation(AnimationEnum.ObjectIdle); }
+            // if (CurrentlyProcessing != null) { _sprite.PlayAnimation(CombatAnimationEnum.ObjectIdle); }
         }
     }
 
@@ -2145,7 +2145,7 @@ namespace RiverHollow.WorldObjects
 
                 if (_iItemKeyID == -1)
                 {
-                    _sprite.AddAnimation(AnimationEnum.Action_One, _pImagePos.X + Width, _pImagePos.Y, _uSize);
+                    _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Width, _pImagePos.Y, _uSize);
                 }
             }
 
@@ -2195,7 +2195,7 @@ namespace RiverHollow.WorldObjects
                 if(CanTrigger())
                 {
                     _bHasBeenTriggered = true;
-                    _sprite.PlayAnimation(AnimationEnum.Action_One);
+                    _sprite.PlayAnimation(AnimationEnum.Action1);
                     GameManager.ActivateTriggers(_sOutTrigger);
                 }
             }
@@ -2282,7 +2282,7 @@ namespace RiverHollow.WorldObjects
         public WarpPoint(int id, Dictionary<string, string> stringData) : base(id)
         {
             LoadDictionaryData(stringData);
-            _sprite.AddAnimation(AnimationEnum.Action_One, _pImagePos.X + (TILE_SIZE * 2), _pImagePos.Y, _uSize);
+            _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + (TILE_SIZE * 2), _pImagePos.Y, _uSize);
         }
 
         public override bool PlaceOnMap(Vector2 pos, RHMap map)
@@ -2299,7 +2299,7 @@ namespace RiverHollow.WorldObjects
             if (!Active)
             {
                 Active = true;
-                _sprite.PlayAnimation(AnimationEnum.Action_One);
+                _sprite.PlayAnimation(AnimationEnum.Action1);
             }
             else
             {
@@ -2325,7 +2325,7 @@ namespace RiverHollow.WorldObjects
             SnapPositionToGrid(new Vector2(warpPt.x, warpPt.y));
             Active = warpPt.active;
 
-            if (Active) { _sprite.PlayAnimation(AnimationEnum.Action_One); }
+            if (Active) { _sprite.PlayAnimation(AnimationEnum.Action1); }
         }
     }
 

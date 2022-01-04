@@ -3,12 +3,11 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters
 {
-    public class LiteSummon : CombatActor
+    public class Summon : CombatActor
     {
         ElementEnum _element = ElementEnum.None;
         public ElementEnum Element => _element;
@@ -27,47 +26,35 @@ namespace RiverHollow.Characters
 
         public CombatActor linkedChar;
 
-        public LiteSummon(int id, Dictionary<string, string> stringData)
+        public Summon(int id, Dictionary<string, string> data)
         {
             _liBuffedStats = new List<KeyValuePair<AttributeEnum, int>>();
-            _bGuard = stringData.ContainsKey("Defensive");
-            _bAggressive = stringData.ContainsKey("Aggressive");
-            _bTwinCast = stringData.ContainsKey("TwinCast");
-            _bRegen = stringData.ContainsKey("Regen");
-            Counter = stringData.ContainsKey("Counter");
+            _bGuard = data.ContainsKey("Defensive");
+            _bAggressive = data.ContainsKey("Aggressive");
+            _bTwinCast = data.ContainsKey("TwinCast");
+            _bRegen = data.ContainsKey("Regen");
+            Counter = data.ContainsKey("Counter");
 
-            if (stringData.ContainsKey("Element"))
+            if (data.ContainsKey("Element"))
             {
-                _element = Util.ParseEnum<ElementEnum>(stringData["Element"]);
+                _element = Util.ParseEnum<ElementEnum>(data["Element"]);
             }
 
             foreach (AttributeEnum stat in Enum.GetValues(typeof(AttributeEnum)))
             {
-                if (stringData.ContainsKey(Util.GetEnumString(stat)))
+                if (data.ContainsKey(Util.GetEnumString(stat)))
                 {
                     _liBuffedStats.Add(new KeyValuePair<AttributeEnum, int>(stat, 0));
                 }
             }
 
-            string[] spawn = stringData["Spawn"].Split('-');
-            string[] idle = stringData["Idle"].Split('-');
-            string[] cast = stringData["Cast"].Split('-');
-            string[] attack = stringData["Attack"].Split('-');
+            Util.AssignValue(ref _iBodyWidth, "Width", data);
+            Util.AssignValue(ref _iBodyHeight, "Height", data);
 
-            RHSize frameSize = new RHSize(16, 16);
-            int startX = 0;
-            int startY = 0;
+            LoadSpriteAnimations(ref _sprBody, Util.LoadCombatAnimations(data), data["Texture"]);
 
-            _sprBody = new AnimatedSprite(@"Textures\Actors\Summons\" + stringData["Texture"]);
-            _sprBody.AddAnimation(CombatActionEnum.Spawn, startX, startY, frameSize, int.Parse(spawn[0]), float.Parse(spawn[1]));
-            startX += int.Parse(spawn[0]) * frameSize.Width;
-            _sprBody.AddAnimation(CombatActionEnum.Idle, startX, startY, frameSize, int.Parse(idle[0]), float.Parse(idle[1]));
-            startX += int.Parse(idle[0]) * frameSize.Width;
-            _sprBody.AddAnimation(CombatActionEnum.Cast, startX, startY, frameSize, int.Parse(cast[0]), float.Parse(cast[1]));
-            startX += int.Parse(cast[0]) * frameSize.Width;
-            _sprBody.AddAnimation(CombatActionEnum.Attack, startX, startY, frameSize, int.Parse(attack[0]), float.Parse(attack[1]));
-            _sprBody.SetNextAnimation(CombatActionEnum.Spawn, CombatActionEnum.Idle);
-            _sprBody.PlayAnimation(CombatActionEnum.Spawn);
+            _sprBody.SetNextAnimation(AnimationEnum.Spawn, AnimationEnum.Idle);
+            _sprBody.PlayAnimation(AnimationEnum.Spawn);
             _sprBody.SetScale(5);
         }
 

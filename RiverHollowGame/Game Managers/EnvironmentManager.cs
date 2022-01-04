@@ -193,9 +193,9 @@ namespace RiverHollow.Game_Managers
             {
                 _iFallDistance = RHRandom.Instance().Next(50, 100);
                 _sprBody = new AnimatedSprite(DataManager.FOLDER_ENVIRONMENT + "Rain");
-                _sprBody.AddAnimation(AnimationEnum.Action_One, 0, 0, TILE_SIZE, TILE_SIZE * 2);
+                _sprBody.AddAnimation(AnimationEnum.Action1, 0, 0, TILE_SIZE, TILE_SIZE * 2);
                 _sprBody.AddAnimation(AnimationEnum.Action_Finished, TILE_SIZE, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.1f, false, true);
-                _sprBody.PlayAnimation(AnimationEnum.Action_One);
+                _sprBody.PlayAnimation(AnimationEnum.Action1);
 
                 int top = (0 - 400);
                 int bottom = (mapWidth * TILE_SIZE) + _iFallDistance;
@@ -208,11 +208,11 @@ namespace RiverHollow.Game_Managers
 
             public override void Update(GameTime gTime)
             {
-                if (_sprBody.IsCurrentAnimation(AnimationEnum.Action_One))
+                if (_sprBody.IsCurrentAnimation(AnimationEnum.Action1))
                 {
                     Vector2 landingPos = _sprBody.Position + new Vector2(0, TILE_SIZE);
                     RHTile landingTile = MapManager.CurrentMap.GetTileByPixelPosition(landingPos);
-                    //if (landingTile == null) { _sprBody.PlayAnimation(AnimationEnum.Action_Finished); }//_sprBody.Drawing = false; }
+                    //if (landingTile == null) { _sprBody.PlayAnimation(CombatAnimationEnum.Action_Finished); }//_sprBody.Drawing = false; }
                     if (_iFallDistance <= 0 && (landingTile == null || landingTile.WorldObject == null || landingTile.WorldObject.CompareType(ObjectTypeEnum.Structure)))
                     {
                         _sprBody.PlayAnimation(AnimationEnum.Action_Finished);
@@ -242,8 +242,8 @@ namespace RiverHollow.Game_Managers
                 float frameLength = RHRandom.Instance().Next(3, 5) / 10f;
                 _iMaxHeight = mapHeight * ScaledTileSize;
                 _sprBody = new AnimatedSprite(DataManager.FOLDER_ENVIRONMENT + "Snow");
-                _sprBody.AddAnimation(AnimationEnum.Action_One, 0, 0, TILE_SIZE, TILE_SIZE, 3, frameLength, true);
-                _sprBody.PlayAnimation(AnimationEnum.Action_One);
+                _sprBody.AddAnimation(AnimationEnum.Action1, 0, 0, TILE_SIZE, TILE_SIZE, 3, frameLength, true);
+                _sprBody.PlayAnimation(AnimationEnum.Action1);
 
                 Vector2 pos = new Vector2(RHRandom.Instance().Next(0, mapWidth * ScaledTileSize), RHRandom.Instance().Next(0, mapHeight * ScaledTileSize));
                 _sprBody.Position = pos;

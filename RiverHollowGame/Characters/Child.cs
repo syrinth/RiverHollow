@@ -39,9 +39,9 @@ namespace RiverHollow.Characters
             DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 
             _liData = new List<AnimationData>();
-            AddToAnimationsList(ref _liData, stringData, VerbEnum.Walk);
-            AddToAnimationsList(ref _liData, stringData, VerbEnum.Idle);
-            AddToAnimationsList(ref _liData, stringData, VerbEnum.Action1);
+            Util.AddToAnimationsList(ref _liData, stringData, VerbEnum.Walk);
+            Util.AddToAnimationsList(ref _liData, stringData, VerbEnum.Idle);
+            Util.AddToAnimationsList(ref _liData, stringData, VerbEnum.Alert);
             LoadSpriteAnimations(ref _sprBody, _liData, _sCreatureFolder + "NPC_" + ID + "_" + (int)_eCurrentStage);
         }
 
@@ -58,7 +58,7 @@ namespace RiverHollow.Characters
 
             if (_bFollow && !PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE * 8) && _eCurrentState != NPCStateEnum.TrackPlayer)
             {
-                if (!_sprBody.IsCurrentAnimation(VerbEnum.Action1, Facing))
+                if (!_sprBody.IsCurrentAnimation(VerbEnum.Alert, Facing))
                 {
                     ChangeState(NPCStateEnum.Alert);
                 }

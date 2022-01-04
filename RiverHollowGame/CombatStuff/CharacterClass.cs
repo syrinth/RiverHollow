@@ -9,44 +9,14 @@ namespace RiverHollow.CombatStuff
 {
     public class CharacterClass
     {
-        int _iID;
-        public int ID => _iID;
+        public int ID { get; } = -1;
 
         Dictionary<AttributeEnum, int> _diAttributes;
 
-        private int _iIdleFrames;
-        public int IdleFrames => _iIdleFrames;
-        private float _fIdleFrameLength;
-        public float IdleFramesLength => _fIdleFrameLength;
-        private int _iCastFrames;
-        public int CastFrames => _iCastFrames;
-        private float _fCastFrameLength;
-        public float CastFramesLength => _fCastFrameLength;
-        private int _iHitFrames;
-        public int HitFrames => _iHitFrames;
-        private float _fHitFrameLength;
-        public float HitFramesLength => _fHitFrameLength;
-        private int _iAttackFrames;
-        public int AttackFrames => _iAttackFrames;
-        private float _fAttackFrameLength;
-        public float AttackFramesLength => _fAttackFrameLength;
-        private int _iCriticalFrames;
-        public int CriticalFrames => _iCriticalFrames;
-        private float _fCriticalFrameLength;
-        public float CriticalFramesLength => _fCriticalFrameLength;
-        private int _iKOFrames;
-        public int KOFrames => _iKOFrames;
-        private float _fKOFrameLength;
-        public float KOFramesLength => _fKOFrameLength;
-        private int _iWinFrames;
-        public int WinFrames => _iWinFrames;
-        private float _fWinFrameLength;
-        public float WinFramesLength => _fWinFrameLength;
-
         private string _sName;
-        public string Name { get => _sName; }
+        public string Name => _sName;
         private string _sDescription;
-        public string Description { get => _sDescription; }
+        public string Description => _sDescription;
         public List<CombatAction> Actions;
 
         WeaponEnum _weaponType;
@@ -59,23 +29,21 @@ namespace RiverHollow.CombatStuff
         public int HeadID;
         public int WristID;
 
-        public CharacterClass()
+        public Dictionary<string, string> ClassStringData => DataManager.GetClassDataByID(ID);
+
+        public CharacterClass() { }
+        public CharacterClass(int id, Dictionary<string, string> stringData)
         {
+            ID = id;
+
             Actions = new List<CombatAction>();
-
-            _iID = -1;
+            ImportBasics(stringData);
         }
 
-        public CharacterClass(int id, Dictionary<string, string> stringData) : this()
+        protected void ImportBasics(Dictionary<string, string> stringData)
         {
-            ImportBasics(id, stringData);
-        }
-
-        protected void ImportBasics(int id, Dictionary<string, string> stringData)
-        {
-            _iID = id;
-            DataManager.GetTextData("Class", _iID, ref _sName, "Name");
-            DataManager.GetTextData("Class", _iID, ref _sDescription, "Description");
+            DataManager.GetTextData("Class", ID, ref _sName, "Name");
+            DataManager.GetTextData("Class", ID, ref _sDescription, "Description");
 
             Util.AssignValue(ref _weaponType, "Weapon", stringData);
             Util.AssignValue(ref _armorType, "Armor", stringData);
@@ -96,36 +64,11 @@ namespace RiverHollow.CombatStuff
                 Actions.Add(DataManager.GetCombatActionByIndex(int.Parse(DataManager.Config[18]["MoveAction"])));
             }
 
-            //Doesn't seem to be given anymore?
-            //_statStr = int.Parse(stringData["Dmg"]);
-            //_statDef = int.Parse(stringData[Util.GetEnumString(StatEnum.Def)]);
-            //_statVit = int.Parse(stringData["Hp"]);
-            //_statMagic = int.Parse(stringData[Util.GetEnumString(StatEnum.Mag)]);
-            //_statSpd = int.Parse(stringData[Util.GetEnumString(StatEnum.Spd)]);
-
-            SetClassAnimation(stringData, "Idle", ref _iIdleFrames, ref _fIdleFrameLength);
-            SetClassAnimation(stringData, "Cast", ref _iCastFrames, ref _fCastFrameLength);
-            SetClassAnimation(stringData, "Hit", ref _iHitFrames, ref _fHitFrameLength);
-            SetClassAnimation(stringData, "Attack", ref _iAttackFrames, ref _fAttackFrameLength);
-            SetClassAnimation(stringData, "Crit", ref _iCriticalFrames, ref _fCriticalFrameLength);
-            SetClassAnimation(stringData, "KO", ref _iKOFrames, ref _fKOFrameLength);
-            SetClassAnimation(stringData, "Win", ref _iWinFrames, ref _fWinFrameLength);
-
             _diAttributes = new Dictionary<AttributeEnum, int>();
             foreach (AttributeEnum e in Enum.GetValues(typeof(AttributeEnum)))
             {
                 if (stringData.ContainsKey(Util.GetEnumString(e))) { _diAttributes[e] = int.Parse(stringData[Util.GetEnumString(e)]); }
                 else { _diAttributes[e] = 0; }
-            }
-        }
-
-        private void SetClassAnimation(Dictionary<string, string> stringData, string key, ref int frames, ref float frameLength)
-        {
-            if (stringData.ContainsKey(key))
-            {
-                string[] frameSplit = stringData[key].Split('-');
-                frames = int.Parse(frameSplit[0]);
-                frameLength = float.Parse(frameSplit[1]);
             }
         }
 

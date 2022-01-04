@@ -19,7 +19,7 @@ namespace RiverHollow.Characters
         public Dictionary<Item, bool> DiChosenItems;
         private bool _bRequestsComplete = false;
 
-        public Merchant(int index, Dictionary<string, string> stringData, bool loadanimations = true)
+        public Merchant(int index, Dictionary<string, string> stringData, bool loadanimations = true) : base(index)
         {
             _eActorType = ActorEnum.Merchant;
 
@@ -28,15 +28,15 @@ namespace RiverHollow.Characters
 
             _liRequestItems = new List<RequestItem>();
             DiChosenItems = new Dictionary<Item, bool>();
-            ImportBasics(index, stringData, loadanimations);
+            ImportBasics(stringData, loadanimations);
 
             _bOnTheMap = false;
             _bShopIsOpen = true;
         }
 
-        protected override void ImportBasics(int index, Dictionary<string, string> stringData, bool loadanimations = true)
+        protected override void ImportBasics(Dictionary<string, string> stringData, bool loadanimations = true)
         {
-            base.ImportBasics(index, stringData, loadanimations);
+            base.ImportBasics(stringData, loadanimations);
 
             foreach (string s in Util.FindParams(stringData["RequestIDs"]))
             {

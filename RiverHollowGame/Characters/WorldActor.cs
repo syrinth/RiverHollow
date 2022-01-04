@@ -114,35 +114,6 @@ namespace RiverHollow.Characters
             }
         }
 
-        protected List<AnimationData> LoadWorldAnimations(Dictionary<string, string> data)
-        {
-            List<AnimationData> listAnimations = new List<AnimationData>();
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.Walk);
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.Idle);
-            return listAnimations;
-        }
-        protected List<AnimationData> LoadCombatAnimations(Dictionary<string, string> data)
-        {
-            List<AnimationData> listAnimations = new List<AnimationData>();
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.Action1);
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.Action2);
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.Action3);
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.Action4);
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.Hurt);
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.Critical);
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.Cast);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.KO);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Spawn);
-            return listAnimations;
-        }
-        protected List<AnimationData> LoadWorldAndCombatAnimations(Dictionary<string, string> data)
-        {
-            List<AnimationData> listAnimations = new List<AnimationData>();
-            listAnimations.AddRange(LoadWorldAnimations(data));
-            listAnimations.AddRange(LoadCombatAnimations(data));
-            return listAnimations;
-        }
-
         public virtual void ProcessRightButtonClick() { }
 
         /// <summary>
@@ -502,7 +473,7 @@ namespace RiverHollow.Characters
             switch (state)
             {
                 case NPCStateEnum.Alert:
-                    PlayAnimation(VerbEnum.Action1, Facing);
+                    PlayAnimation(VerbEnum.Alert, Facing);
                     break;
                 case NPCStateEnum.Idle:
                     PlayAnimation(VerbEnum.Idle, Facing);

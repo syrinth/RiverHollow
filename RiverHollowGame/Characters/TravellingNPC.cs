@@ -7,10 +7,9 @@ using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters
 {
-    public class TravellingNPC : TalkingActor
+    public abstract class TravellingNPC : TalkingActor
     {
-        protected int _iIndex;
-        public int ID => _iIndex;
+        public int ID { get; } = -1;
 
         protected int _iTotalMoneyEarnedReq = -1;
 
@@ -28,16 +27,19 @@ namespace RiverHollow.Characters
         public bool Introduced => Relationship != RelationShipStatusEnum.None;
         protected bool _bArrivedOnce = false;
 
-        protected virtual void ImportBasics(int index, Dictionary<string, string> stringData, bool loadanimations = true)
+        public TravellingNPC(int id)
         {
-            _iIndex = index;
+            ID = id;
+        }
 
+        protected virtual void ImportBasics(Dictionary<string, string> stringData, bool loadanimations = true)
+        {
             Util.AssignValue(ref _bHover, "Hover", stringData);
 
-            _diDialogue = DataManager.GetNPCDialogue(_iIndex);
-            DataManager.GetTextData("Character", _iIndex, ref _sName, "Name");
+            _diDialogue = DataManager.GetNPCDialogue(ID);
+            DataManager.GetTextData("Character", ID, ref _sName, "Name");
 
-            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Villager", _iIndex.ToString("00"));
+            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Villager", ID.ToString("00"));
 
             if (stringData.ContainsKey("RequiredBuildingID"))
             {
@@ -63,10 +65,10 @@ namespace RiverHollow.Characters
             if (loadanimations)
             {
                 List<AnimationData> liAnimationData;
-                if (stringData.ContainsKey("Class")) { liAnimationData = LoadWorldAndCombatAnimations(stringData); }
-                else { liAnimationData = LoadWorldAnimations(stringData); }
+                if (stringData.ContainsKey("Class")) { liAnimationData = Util.LoadWorldAnimations(stringData); }
+                else { liAnimationData = Util.LoadWorldAnimations(stringData); }
 
-                LoadSpriteAnimations(ref _sprBody, liAnimationData, _sNPCFolder + "NPC_" + _iIndex.ToString("00"));
+                LoadSpriteAnimations(ref _sprBody, liAnimationData, _sNPCFolder + "NPC_" + ID.ToString("00"));
                 PlayAnimationVerb(VerbEnum.Idle);
             }
 

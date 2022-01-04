@@ -5,8 +5,10 @@ using RiverHollow.Characters.Lite;
 using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
+using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
@@ -14,7 +16,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
     /// <summary>
     /// This class represents a combat actor, as well as the display information for them
     /// </summary>
-    public class GUILiteCombatActorInfo : GUIObject
+    public class GUICombatActorInfo : GUIObject
     {
         CombatActor _actor;
         GUIHealthBar _gHP;
@@ -23,7 +25,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
         public GUISprite CharacterWeaponSprite => _gLiteCombatActor.CharacterWeaponSprite;
         public GUICombatTile AssignedTile { get; private set; }
 
-        public GUILiteCombatActorInfo(CombatActor actor)
+        public GUICombatActorInfo(CombatActor actor)
         {
             _actor = actor;
             _gLiteCombatActor = new GUICombatActor(actor.BodySprite);
@@ -46,7 +48,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.PerformAction && CombatManager.ActiveCharacter == _actor)
+            if (_actor.CurrentHP == 0 || (CombatManager.CurrentPhase == CombatManager.PhaseEnum.PerformAction && CombatManager.ActiveCharacter == _actor))
             {
                 _gHP.Show(false);
             }
@@ -71,27 +73,25 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 ClassedCombatant adv = (ClassedCombatant)_actor;
                 CharacterClass cClass = adv.CharacterClass;
 
-                AnimatedSprite sprWeaponSprite = new AnimatedSprite(DataManager.FOLDER_ITEMS + "Combat\\Weapons\\" + cClass.WeaponType.ToString() + "\\" + adv.GetEquipment(EquipmentEnum.Weapon).ItemID);
-
-                int xCrawl = 0;
-                RHSize frameSize = new RHSize(2, 2);
-                sprWeaponSprite.AddAnimation(CombatActionEnum.Idle, xCrawl, 0, frameSize, 2, 0.5f);// cClass.IdleFrames, cClass.IdleFramesLength);
-                xCrawl += 2 * frameSize.Width; //cClass.IdleFrames;
-                sprWeaponSprite.AddAnimation(CombatActionEnum.Cast, (xCrawl * TILE_SIZE), 0, frameSize, 3, 0.4f);//cClass.CastFrames, cClass.CastFramesLength);
-                xCrawl += 3 * frameSize.Width; //cClass.CastFrames;
-                sprWeaponSprite.AddAnimation(CombatActionEnum.Hurt, (xCrawl * TILE_SIZE), 0, frameSize, 1, 0.5f);//cClass.HitFrames, cClass.HitFramesLength);
-                xCrawl += 1 * frameSize.Width; //cClass.HitFrames;
-                sprWeaponSprite.AddAnimation(CombatActionEnum.Attack, (xCrawl * TILE_SIZE), 0, frameSize, 1, 0.3f);//cClass.AttackFrames, cClass.AttackFramesLength);
-                xCrawl += 1 * frameSize.Width; //cClass.AttackFrames;
-                sprWeaponSprite.AddAnimation(CombatActionEnum.Critical, (xCrawl * TILE_SIZE), 0, frameSize, 2, 0.9f);//cClass.CriticalFrames, cClass.CriticalFramesLength);
-                xCrawl += 2 * frameSize.Width; //cClass.CriticalFrames;
-                sprWeaponSprite.AddAnimation(CombatActionEnum.KO, (xCrawl * TILE_SIZE), 0, frameSize, 1, 0.5f);//cClass.KOFrames, cClass.KOFramesLength);
-                xCrawl += 1 * frameSize.Width; //cClass.KOFrames;
-                sprWeaponSprite.AddAnimation(CombatActionEnum.Victory, (xCrawl * TILE_SIZE), 0, frameSize, 2, 0.5f);//cClass.WinFrames, cClass.WinFramesLength);
-                sprWeaponSprite.SetScale(GameManager.CurrentScale);
+                string textureName = DataManager.FOLDER_ITEMS + "Combat\\Weapons\\" + cClass.WeaponType.ToString() + "\\" + adv.GetEquipment(EquipmentEnum.Weapon).ItemID;
+                AnimatedSprite sprWeaponSprite = null;
+                LoadSpriteAnimations(ref sprWeaponSprite, Util.LoadCombatAnimations(cClass.ClassStringData), textureName);
 
                 _gLiteCombatActor.SetWeapon(sprWeaponSprite);
             }
+        }
+
+        protected void LoadSpriteAnimations(ref AnimatedSprite sprite, List<AnimationData> listAnimations, string textureName)
+        {
+            sprite = new AnimatedSprite(textureName);
+
+            foreach (AnimationData data in listAnimations)
+            {
+                sprite.AddAnimation(data.Animation, data.XLocation, data.YLocation, _actor.Width, _actor.Height, data.Frames, data.FrameSpeed, data.PingPong);
+            }
+
+            PlayAnimation(AnimationEnum.Idle);
+            sprite.SetScale(NORMAL_SCALE);
         }
 
         public void AssignTile(GUICombatTile tile)
