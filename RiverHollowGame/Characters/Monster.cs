@@ -19,7 +19,7 @@ namespace RiverHollow.Characters
         protected Vector2 _moveTo = Vector2.Zero;
         int _iLootID;
 
-        public override int MaxHP => (int)((((Math.Pow(_iRating, 2)) * 10) + 20) * Math.Pow(Math.Max(1, (double)_iRating / 14), 2));
+        public override int MaxHP => Attribute(AttributeEnum.Vitality) * 2 + (int)Math.Pow(_iRating, 2.65);
 
         public Monster(int id, Dictionary<string, string> data)
         {
@@ -39,14 +39,16 @@ namespace RiverHollow.Characters
 
             _iRating = int.Parse(data["Lvl"]);
             XP = _iRating * 10;
-            _diAttributes[AttributeEnum.Damage] = 10 + (_iRating * 10);
-            _diAttributes[AttributeEnum.MaxHealth] = (2 * _iRating) + 10;
-            _diAttributes[AttributeEnum.Strength] = 5 + _iRating;
-            _diAttributes[AttributeEnum.Defense] = 7 + (_iRating * 3);
-            _diAttributes[AttributeEnum.Agility] = 5 + _iRating;
-            _diAttributes[AttributeEnum.Evasion] = 7 + (_iRating * 3);
-            _diAttributes[AttributeEnum.Magic] = 5 + _iRating;
-            _diAttributes[AttributeEnum.Resistance] = 7 + (_iRating * 3);
+            _diAttributes[AttributeEnum.Damage] = 5 + (_iRating * 10);
+            _diAttributes[AttributeEnum.Vitality] = 5 + (_iRating * 5);
+
+            _diAttributes[AttributeEnum.Strength] = 10 + (_iRating * 5);
+            _diAttributes[AttributeEnum.Agility] = 10 + (_iRating * 5);
+            _diAttributes[AttributeEnum.Magic] = 10 + (_iRating * 5);
+
+            _diAttributes[AttributeEnum.Defense] = 5 + (_iRating * 5);
+            _diAttributes[AttributeEnum.Resistance] = 5 + (_iRating * 5);
+            _diAttributes[AttributeEnum.Evasion] = 5;
             _diAttributes[AttributeEnum.Speed] = 5;
 
             foreach (string ability in data["Ability"].Split('-'))

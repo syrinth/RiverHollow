@@ -55,17 +55,17 @@ namespace RiverHollow.Game_Managers
         public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, Clothes, MonsterFood, Blueprint, Special };
         public enum ToolEnum { None, Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return, Scythe };
         public enum SpecialItemEnum { None, Marriage, Class, Map, DungeonKey, Task };
-        public enum EquipmentEnum { Armor, Weapon, Accessory, Head, Wrist };
+        public enum GearTypeEnum { Accessory, Body, Head, Weapon };
         public enum WeaponEnum { None, Spear, Shield, Rapier, Bow, Wand, Knife, Orb, Staff };
-        public enum ArmorEnum { None, Cloth, Light, Heavy };
-        public enum ArmorSlotEnum { None, Head, Armor, Wrist };
+        public enum ArmorTypeEnum { None, Cloth, Light, Heavy };
         public enum ClothingEnum { None, Body, Legs, Hat };
 
         public enum ActorMovementStateEnum { Idle, Walking };
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum TaskTypeEnum { None, GroupSlay, Slay, Fetch, Talk, Build };
         public enum ActorEnum { Actor, PartyMember, Environmental, Merchant, Mob, Monster, Mount, Pet, Child, ShippingGremlin, Spirit, Summon, Villager };
-        public enum AttributeEnum { Agility, Damage, Defense, Evasion, Magic, MaxHealth, Resistance, Speed, Strength };
+        public enum AttributeEnum { Agility, Damage, Defense, Evasion, Magic, Vitality, Resistance, Speed, Strength };
+        public enum AttributeBonusEnum { Minor, Moderate, Major };
         public enum PotencyBonusEnum { None, Conditions, Summon};
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ActionEnum { Action, Item, Move };
@@ -102,7 +102,7 @@ namespace RiverHollow.Game_Managers
                     return GameIconEnum.Evasion;
                 case AttributeEnum.Magic:
                     return GameIconEnum.Magic;
-                case AttributeEnum.MaxHealth:
+                case AttributeEnum.Vitality:
                     return GameIconEnum.MaxHealth;
                 case AttributeEnum.Resistance:
                     return GameIconEnum.Resistance;

@@ -22,7 +22,7 @@ namespace RiverHollow.Characters
         public Vector2 StartPosition => _vStartPos;
 
         public int CurrentHP { get; protected set; }
-        public virtual int MaxHP => 20 + (int)Math.Pow(((double)_diAttributes[AttributeEnum.MaxHealth] / 3), 1.98);
+        public virtual int MaxHP => 20 + (int)Math.Pow(Attribute(AttributeEnum.Vitality) / 3, 1.98);
 
         public CombatTile Tile;
         public GUICombatTile Location => Tile.GUITile;
@@ -198,10 +198,10 @@ namespace RiverHollow.Characters
             double base_damage = Attribute(AttributeEnum.Damage);  //Damage is the most important attribute for raw damage
             double AttributeMultiplier = Math.Round(1 + ((double)Attribute(attribute) / 4 * Attribute(attribute) / MAX_STAT), 2);
 
-            double dmg = (Math.Max(1, base_damage) * potencyMod * AttributeMultiplier);
+            double damage = base_damage * potencyMod * AttributeMultiplier;
 
-            min = (int)(dmg * 0.75);
-            max = (int)(dmg * 1.25);
+            min = (int)(damage * 0.75);
+            max = (int)(damage * 1.25);
         }
 
         /// <summary>
@@ -426,6 +426,11 @@ namespace RiverHollow.Characters
         {
             curr = CurrentHP;
             max = MaxHP;
+        }
+
+        public int GetEvasionChance()
+        {
+            return (40 * Attribute(AttributeEnum.Evasion)) / (Attribute(AttributeEnum.Evasion) + 40); ;
         }
 
         public virtual bool IsSummon() { return false; }

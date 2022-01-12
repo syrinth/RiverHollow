@@ -73,7 +73,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 ClassedCombatant adv = (ClassedCombatant)_actor;
                 CharacterClass cClass = adv.CharacterClass;
 
-                string textureName = DataManager.FOLDER_ITEMS + "Combat\\Weapons\\" + cClass.WeaponType.ToString() + "\\" + adv.GetEquipment(EquipmentEnum.Weapon).ItemID;
+                string textureName = DataManager.FOLDER_ITEMS + "Combat\\Weapons\\" + cClass.WeaponType.ToString() + "\\" + adv.GetEquipment(GearTypeEnum.Weapon).ItemID;
                 AnimatedSprite sprWeaponSprite = null;
                 LoadSpriteAnimations(ref sprWeaponSprite, Util.LoadCombatAnimations(cClass.ClassStringData), textureName);
 

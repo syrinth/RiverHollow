@@ -55,7 +55,7 @@ namespace RiverHollow.CombatStuff
         AreaTypeEnum _eAreaType;
         public AreaTypeEnum AreaType => _eAreaType;
 
-        AttributeEnum _ePowerAttribute;
+        AttributeEnum _ePowerAttribute = AttributeEnum.Strength;
         public AttributeEnum PowerAttribute => _ePowerAttribute;
 
         DamageTypeEnum _eDamageType;
@@ -293,7 +293,7 @@ namespace RiverHollow.CombatStuff
                     RHRandom random = RHRandom.Instance();
                     int attackRoll = random.Next(1, 100);
                     attackRoll -= _iAccuracy;                       //Modify the chance to hit by the skill's accuracy. Rolling low is good, so subtract a positive and add a negative
-                    if (attackRoll <= 90 - targetActor.Attribute(AttributeEnum.Evasion))    //If the modified attack roll is less than 90 minus the character's evasion, then we hit
+                    if (attackRoll <= 100 - targetActor.GetEvasionChance())    //If the modified attack roll is less than 100 minus the character's evasion, then we hit
                     {
                         int x = targetActor.ProcessDamage(SkillUser, PowerAttribute, Potency, _iCritRating, targetActor.GetAttackElement());
                         targetTile.GUITile.AssignEffect(x, true);

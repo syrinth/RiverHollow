@@ -35,7 +35,7 @@ namespace Database_Editor
         #endregion
 
         #region Tags
-        const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,ItemID,GoalItem,ItemReward,Collection,Makes,Processes,DWeap,DArmor,DHead,DWrist,RequestIDs,SeedID,HoneyID";
+        const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,ItemID,GoalItem,ItemReward,Collection,Makes,Processes,GearID,RequestIDs,SeedID,HoneyID";
         const string TAGS_FOR_WORLD_OBJECTS = "ObjectID,Wall,Floor,Resources,Place,SubObjects,RequiredObjectID,EntranceID";
         const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         const string TAGS_FOR_CLASSES = "Class";
@@ -52,7 +52,7 @@ namespace Database_Editor
         const string TASK_REF_TAGS = "GoalItem,ItemReward,BuildingID,BuildingRewardID";
         const string CHARACTER_REF_TAGS = "Collection,Class,ShopData,HouseID,RequiredBuildingID,RequiredObjectID,RequestIDs";
         const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID,SubObjects,SeedID,HoneyID,LightID";
-        const string CLASSES_REF_TAGS = "DWeap,DArmor,DHead,DWrist,Ability,Spell";
+        const string CLASSES_REF_TAGS = "GearID,Ability,Spell";
         const string SHOPDATA_REF_TAGS = "ItemID,BuildingID,ObjectID,NPC_ID";
         const string NPC_REF_TAG = "BuildingID";
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
@@ -832,7 +832,7 @@ namespace Database_Editor
                     break;
                 case ItemEnum.Equipment:
                     cbItemSubtype.Visible = true;
-                    foreach (EquipmentEnum en in Enum.GetValues(typeof(EquipmentEnum)))
+                    foreach (GearTypeEnum en in Enum.GetValues(typeof(GearTypeEnum)))
                     {
                         cbItemSubtype.Items.Add("Subtype:" + en.ToString());
                     }
@@ -871,7 +871,7 @@ namespace Database_Editor
                     rv = (int)Util.ParseEnum<ClothingEnum>(value);
                     break;
                 case ItemEnum.Equipment:
-                    rv = (int)Util.ParseEnum<EquipmentEnum>(value);
+                    rv = (int)Util.ParseEnum<GearTypeEnum>(value);
                     break;
                 case ItemEnum.Special:
                     rv = (int)Util.ParseEnum<SpecialItemEnum>(value);

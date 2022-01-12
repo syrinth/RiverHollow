@@ -11,8 +11,6 @@ namespace RiverHollow.CombatStuff
     {
         public int ID { get; } = -1;
 
-        Dictionary<AttributeEnum, int> _diAttributes;
-
         private string _sName;
         public string Name => _sName;
         private string _sDescription;
@@ -21,13 +19,16 @@ namespace RiverHollow.CombatStuff
 
         WeaponEnum _weaponType;
         public WeaponEnum WeaponType => _weaponType;
-        ArmorEnum _armorType;
-        public ArmorEnum ArmorType => _armorType;
+        ArmorTypeEnum _armorType;
+        public ArmorTypeEnum ArmorType => _armorType;
+
+        int _iSpeedAttribute;
+        public int SpeedAttribute => _iSpeedAttribute;
 
         public int WeaponID;
         public int ArmorID;
         public int HeadID;
-        public int WristID;
+        public int AccessoryID;
 
         public Dictionary<string, string> ClassStringData => DataManager.GetClassDataByID(ID);
 
@@ -48,10 +49,13 @@ namespace RiverHollow.CombatStuff
             Util.AssignValue(ref _weaponType, "Weapon", stringData);
             Util.AssignValue(ref _armorType, "Armor", stringData);
 
-            WeaponID = int.Parse(stringData["DWeap"]);
-            ArmorID = int.Parse(stringData["DArmor"]);
-            HeadID = int.Parse(stringData["DHead"]);
-            WristID = int.Parse(stringData["DWrist"]);
+            Util.AssignValue(ref _iSpeedAttribute, "Speed", stringData);
+
+            string[] gearsplit = Util.FindParams(stringData["GearID"]);
+            WeaponID = int.Parse(gearsplit[0]);
+            ArmorID = int.Parse(gearsplit[1]);
+            HeadID = int.Parse(gearsplit[2]);
+            AccessoryID = int.Parse(gearsplit[3]);
 
             if (stringData.ContainsKey("Actions"))
             {
@@ -63,22 +67,6 @@ namespace RiverHollow.CombatStuff
                 Actions.Add(DataManager.GetCombatActionByIndex(int.Parse(DataManager.Config[18]["UseItem"])));
                 Actions.Add(DataManager.GetCombatActionByIndex(int.Parse(DataManager.Config[18]["MoveAction"])));
             }
-
-            _diAttributes = new Dictionary<AttributeEnum, int>();
-            foreach (AttributeEnum e in Enum.GetValues(typeof(AttributeEnum)))
-            {
-                if (stringData.ContainsKey(Util.GetEnumString(e))) { _diAttributes[e] = int.Parse(stringData[Util.GetEnumString(e)]); }
-                else { _diAttributes[e] = 0; }
-            }
-        }
-
-        public int Attribute(AttributeEnum e) {
-            int rv = 0;
-            if (_diAttributes.ContainsKey(e))
-            {
-                rv = _diAttributes[e];
-            }
-            return rv;
         }
     }
 }

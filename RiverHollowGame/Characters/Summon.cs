@@ -63,7 +63,7 @@ namespace RiverHollow.Characters
             _iMagStat = magStat;
             _diAttributes[AttributeEnum.Strength] = 2 * magStat + 10;
             _diAttributes[AttributeEnum.Defense] = 2 * magStat + 10;
-            _diAttributes[AttributeEnum.MaxHealth] = (3 * magStat) + 80;
+            _diAttributes[AttributeEnum.Vitality] = (3 * magStat) + 80;
             _diAttributes[AttributeEnum.Magic] = 2 * magStat + 10;
             _diAttributes[AttributeEnum.Resistance] = 2 * magStat + 10;
             _diAttributes[AttributeEnum.Speed] = 10;

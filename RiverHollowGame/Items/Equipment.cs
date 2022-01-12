@@ -8,10 +8,13 @@ namespace RiverHollow.Items
 {
     public class Equipment : Item
     {
-        public EquipmentEnum EquipType;
+        const int HEAVY_ATTRIBUTE = 4;
+        const int LIGHT_ATTRIBUTE = 3;
+        const int WEAPON_DAMAGE_ATTRIBUTE = 5;
+
+        public GearTypeEnum GearType;
         public WeaponEnum WeaponType { get; }
-        public ArmorEnum ArmorType { get; }
-        public ArmorSlotEnum ArmorSlot { get; }
+        public ArmorTypeEnum ArmorType { get; }
 
         int _iTier;
         protected Dictionary<AttributeEnum, int> _diAttributes;
@@ -21,23 +24,23 @@ namespace RiverHollow.Items
             ImportBasics(stringData, id, 1);
 
             //EType
-            EquipType = Util.ParseEnum<EquipmentEnum>(stringData["Subtype"]);
+            GearType = Util.ParseEnum<GearTypeEnum>(stringData["Subtype"]);
 
-            if (EquipType.Equals(EquipmentEnum.Armor)) { _texTexture = DataManager.GetTexture(@"Textures\Items\armor"); }
-            else if (EquipType.Equals(EquipmentEnum.Weapon)) { _texTexture = DataManager.GetTexture(@"Textures\Items\weapons"); }
-            else if (EquipType.Equals(EquipmentEnum.Accessory)) { _texTexture = DataManager.GetTexture(@"Textures\Items\Accessories"); }
+            switch (GearType)
+            {
+                case GearTypeEnum.Weapon:
+                    _texTexture = DataManager.GetTexture(@"Textures\Items\Weapons");
+                    break;
+                default:
+                    _texTexture = DataManager.GetTexture(@"Textures\Items\Gear");
+                    break;
+            }
 
             //ESub
             if (stringData.ContainsKey("ESub"))
             {
-                if (EquipType == EquipmentEnum.Armor) { ArmorType = Util.ParseEnum<ArmorEnum>(stringData["ESub"]); }
-                else if (EquipType == EquipmentEnum.Weapon) { WeaponType = Util.ParseEnum<WeaponEnum>(stringData["ESub"]); }
-            }
-
-            if (EquipType == EquipmentEnum.Armor)
-            {
-                //Armor Slot
-                ArmorSlot = Util.ParseEnum<ArmorSlotEnum>(stringData["ASlot"]);
+                if (GearType == GearTypeEnum.Body) { ArmorType = Util.ParseEnum<ArmorTypeEnum>(stringData["ESub"]); }
+                else if (GearType == GearTypeEnum.Weapon) { WeaponType = Util.ParseEnum<WeaponEnum>(stringData["ESub"]); }
             }
 
             //Attributes
@@ -46,33 +49,35 @@ namespace RiverHollow.Items
             _diAttributes = new Dictionary<AttributeEnum, int>();
             foreach (AttributeEnum e in Enum.GetValues(typeof(AttributeEnum)))
             {
-                if (stringData.ContainsKey(Util.GetEnumString(e))) { _diAttributes[e] = GetItemTierData(_iTier, stringData[Util.GetEnumString(e)]); }
+                if (stringData.ContainsKey(Util.GetEnumString(e))) { _diAttributes[e] = GetItemTierData(e, Util.ParseEnum<AttributeBonusEnum>(stringData[Util.GetEnumString(e)])); }
                 else { _diAttributes[e] = 0; }
             }
         }
 
-
-        private int GetItemTierData(int tier, string modifier, bool isStat = true)
+        //body 4 3 3
+        private int GetItemTierData(AttributeEnum attribute, AttributeBonusEnum modifier)
         {
-            int DivideBy = isStat ? 4 : 1; //If it's not a stat,it's localize on oneitem, don't divide.
-            double rv = 0;
+            int rv = 0;
+            int subtractBy = 0;
+            if(modifier == AttributeBonusEnum.Minor) { subtractBy = 2; }
+            else if (modifier == AttributeBonusEnum.Moderate) { subtractBy = 1; }
 
-            if (modifier.Equals("Minor"))
+            switch (GearType)
             {
-                rv = tier * (double)6 / DivideBy;
-            }
-            else if (modifier.Equals("Moderate"))
-            {
-                rv = tier * (double)8 / DivideBy;
-            }
-            else if (modifier.Equals("Major"))
-            {
-                rv = tier * (double)10 / DivideBy;
+                case GearTypeEnum.Body:
+                    rv = HEAVY_ATTRIBUTE;
+                    break;
+                case GearTypeEnum.Accessory:
+                case GearTypeEnum.Head:
+                    rv = LIGHT_ATTRIBUTE;
+                    break;
+                case GearTypeEnum.Weapon:
+                    if (attribute == AttributeEnum.Damage) { rv = WEAPON_DAMAGE_ATTRIBUTE; }
+                    else { rv = LIGHT_ATTRIBUTE; }
+                    break;
             }
 
-            if (rv % 2 > 0) { rv++; }
-
-            return (int)rv;
+            return _iTier * (rv - subtractBy);
         }
 
         /// <summary>

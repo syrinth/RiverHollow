@@ -22,8 +22,8 @@ namespace RiverHollow.Characters.Lite
         public int ClassLevel { get; private set; }
         public int XP { get; private set; }
 
-        protected Dictionary<EquipmentEnum, Equipment> _diGear;
-        protected Dictionary<EquipmentEnum, Equipment> _diGearComparison;
+        protected Dictionary<GearTypeEnum, Equipment> _diGear;
+        protected Dictionary<GearTypeEnum, Equipment> _diGearComparison;
 
         public override List<CombatAction> Actions { get => _class.Actions; }
 
@@ -35,11 +35,18 @@ namespace RiverHollow.Characters.Lite
             _iBodyWidth = 32;
             _iBodyHeight = 32;
 
-            _diGear = new Dictionary<EquipmentEnum, Equipment>();
-            foreach (EquipmentEnum e in Enum.GetValues(typeof(EquipmentEnum))) { _diGear[e] = null; }
+            _diGear = new Dictionary<GearTypeEnum, Equipment>();
+            foreach (GearTypeEnum e in Enum.GetValues(typeof(GearTypeEnum))) { _diGear[e] = null; }
 
-            _diGearComparison = new Dictionary<EquipmentEnum, Equipment>();
-            foreach (EquipmentEnum e in Enum.GetValues(typeof(EquipmentEnum))) { _diGearComparison[e] = null; }
+            _diGearComparison = new Dictionary<GearTypeEnum, Equipment>();
+            foreach (GearTypeEnum e in Enum.GetValues(typeof(GearTypeEnum))) { _diGearComparison[e] = null; }
+
+            _diAttributes = new Dictionary<AttributeEnum, int>();
+            foreach (AttributeEnum e in Enum.GetValues(typeof(AttributeEnum)))
+            {
+                if (e == AttributeEnum.Damage) { _diAttributes[e] = 5; }
+                else { _diAttributes[e] = 10; }
+            }
         }
 
         public override GUIImage GetIcon()
@@ -55,6 +62,9 @@ namespace RiverHollow.Characters.Lite
             {
                 LoadSpriteAnimations(ref _sprBody, Util.LoadCombatAnimations(x.ClassStringData), DataManager.FOLDER_PARTY + "Wizard");
             }
+            
+            //Each class has a defined speed attribute
+            _diAttributes[AttributeEnum.Speed] = x.SpeedAttribute;
         }
 
         public void AddXP(int x)
@@ -80,7 +90,7 @@ namespace RiverHollow.Characters.Lite
             }
             else
             {
-                return 10 + _diAttributes[e] + _class.Attribute(e) + _diEffectedAttributes[e].Value + GearAttribute(e);
+                return _diAttributes[e] + _diEffectedAttributes[e].Value + GearAttribute(e);
             }
         }
 
@@ -107,7 +117,7 @@ namespace RiverHollow.Characters.Lite
             }
             else
             {
-                return 10 + _diAttributes[e] + _class.Attribute(e) + _diEffectedAttributes[e].Value + GearAttrComparison(e);
+                return _diAttributes[e] + _diEffectedAttributes[e].Value + GearAttrComparison(e);
             }
         }
 
@@ -115,7 +125,7 @@ namespace RiverHollow.Characters.Lite
         {
             int rv = 0;
 
-            foreach (EquipmentEnum e in Enum.GetValues(typeof(EquipmentEnum)))
+            foreach (GearTypeEnum e in Enum.GetValues(typeof(GearTypeEnum)))
             {
                 if (_diGearComparison[e] != null)
                 {
@@ -130,16 +140,16 @@ namespace RiverHollow.Characters.Lite
             return rv;
         }
 
-        public void Unequip(EquipmentEnum e) { _diGear[e] = null; }
-        public void Equip(Equipment e) { _diGear[e.EquipType] = e; }
-        public Equipment GetEquipment(EquipmentEnum e) { return _diGear[e]; }
+        public void Unequip(GearTypeEnum e) { _diGear[e] = null; }
+        public void Equip(Equipment e) { _diGear[e.GearType] = e; }
+        public Equipment GetEquipment(GearTypeEnum e) { return _diGear[e]; }
 
-        public void EquipComparator(Equipment e) { _diGearComparison[e.EquipType] = e; }
-        public Equipment GetEquipmentCompare(EquipmentEnum e) { return _diGearComparison[e]; }
+        public void EquipComparator(Equipment e) { _diGearComparison[e.GearType] = e; }
+        public Equipment GetEquipmentCompare(GearTypeEnum e) { return _diGearComparison[e]; }
 
         public void ClearEquipmentCompare()
         {
-            foreach (EquipmentEnum e in Enum.GetValues(typeof(EquipmentEnum)))
+            foreach (GearTypeEnum e in Enum.GetValues(typeof(GearTypeEnum)))
             {
                 _diGearComparison[e] = null;
             }
@@ -151,18 +161,18 @@ namespace RiverHollow.Characters.Lite
         /// </summary>
         public void AssignStartingGear()
         {
-            _diGear[EquipmentEnum.Weapon] = (Equipment)DataManager.GetItem(_class.WeaponID);
-            _diGear[EquipmentEnum.Armor] = (Equipment)DataManager.GetItem(_class.ArmorID);
-            _diGear[EquipmentEnum.Head] = (Equipment)DataManager.GetItem(_class.HeadID);
-            _diGear[EquipmentEnum.Wrist] = (Equipment)DataManager.GetItem(_class.WristID);
+            _diGear[GearTypeEnum.Weapon] = (Equipment)DataManager.GetItem(_class.WeaponID);
+            _diGear[GearTypeEnum.Body] = (Equipment)DataManager.GetItem(_class.ArmorID);
+            _diGear[GearTypeEnum.Head] = (Equipment)DataManager.GetItem(_class.HeadID);
+            _diGear[GearTypeEnum.Accessory] = (Equipment)DataManager.GetItem(_class.AccessoryID);
         }
 
         public ClassedCharData SaveClassedCharData()
         {
             ClassedCharData advData = new ClassedCharData
             {
-                armor = Item.SaveData(_diGear[EquipmentEnum.Armor]),
-                weapon = Item.SaveData(_diGear[EquipmentEnum.Weapon]),
+                armor = Item.SaveData(_diGear[GearTypeEnum.Body]),
+                weapon = Item.SaveData(_diGear[GearTypeEnum.Weapon]),
                 level = ClassLevel,
                 xp = XP
             };
@@ -171,8 +181,8 @@ namespace RiverHollow.Characters.Lite
         }
         public void LoadClassedCharData(ClassedCharData data)
         {
-            _diGear[EquipmentEnum.Armor] = (Equipment)DataManager.GetItem(data.armor.itemID);
-            _diGear[EquipmentEnum.Weapon] = (Equipment)DataManager.GetItem(data.weapon.itemID);
+            _diGear[GearTypeEnum.Body] = (Equipment)DataManager.GetItem(data.armor.itemID);
+            _diGear[GearTypeEnum.Weapon] = (Equipment)DataManager.GetItem(data.weapon.itemID);
             ClassLevel = data.level;
             XP = data.xp;
         }

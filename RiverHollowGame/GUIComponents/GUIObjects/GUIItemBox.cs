@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Items;
@@ -182,13 +181,13 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public class SpecializedBox : GUIItemBox
         {
             ItemEnum _itemType;
-            ArmorEnum _armorType;
+            ArmorTypeEnum _armorType;
             ClothingEnum _clothesType;
             WeaponEnum _weaponType;
 
             #region Getters
             public ItemEnum ItemType => _itemType;
-            public ArmorEnum ArmorType => _armorType;
+            public ArmorTypeEnum ArmorType => _armorType;
             public ClothingEnum ClothingType => _clothesType;
             public WeaponEnum WeaponType => _weaponType;
             #endregion
@@ -202,7 +201,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 _itemType = itemType;
                 _delOpenItemWindow = del;
             }
-            public SpecializedBox(ArmorEnum armorType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Equipment, item, del)
+            public SpecializedBox(ArmorTypeEnum armorType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Equipment, item, del)
             {
                 _armorType = armorType;
             }

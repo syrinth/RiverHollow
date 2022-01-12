@@ -393,7 +393,7 @@
  <objectgroup id="9" name="MapObject">
   <object id="11" name="Item" x="621.5" y="343.499" width="10" height="7.33333">
    <properties>
-    <property name="ItemID" type="int" value="135"/>
+    <property name="ItemID" type="int" value="136"/>
    </properties>
   </object>
   <object id="17" name="Wall" x="130.334" y="131.667" width="202.333" height="36.6666"/>
