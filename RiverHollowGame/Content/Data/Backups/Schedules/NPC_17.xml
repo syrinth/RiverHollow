@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, List[string]]">
+    <Item>
+      <Key>Built:18</Key>
+      <Value>
+        <Item>[Hour:7][Minute:30][Location:Magic_Shop][Dir:Down]</Item>
+        <Item>[Hour:16][Minute:30][Location:NPC_17][Dir:Down]</Item>
+      </Value>
+    </Item>
+  </Asset>
+</XnaContent>

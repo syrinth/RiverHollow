@@ -74,7 +74,7 @@ namespace Database_Editor
         static string PATH_TO_CONTENT = string.Format(@"{0}\..\..\..\..\RiverHollow\RiverHollowGame\Content", System.Environment.CurrentDirectory);
         static string PATH_TO_MAPS = PATH_TO_CONTENT + @"\Maps";
         static string PATH_TO_DATA = PATH_TO_CONTENT + @"\Data";
-        static string PATH_TO_BACKUP = PATH_TO_CONTENT + @"\Data\Backups\";
+        static string PATH_TO_BACKUP = PATH_TO_CONTENT + @"\Data\Backups";
         static string PATH_TO_TEXT_FILES = PATH_TO_DATA + @"\Text Files";
         static string PATH_TO_DIALOGUE = PATH_TO_TEXT_FILES + @"\Dialogue";
         static string PATH_TO_VILLAGER_DIALOGUE = PATH_TO_DIALOGUE + @"\Villagers";
@@ -1659,27 +1659,33 @@ namespace Database_Editor
             _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
         }
 
-        private void BackupFiles(string directory)
+        private void BackupFiles(string directory, string targetFolder)
         {
             foreach (string s in Directory.GetFiles(directory))
             {
-                string newFileName = PATH_TO_BACKUP + Path.GetFileName(s);
-                if (File.Exists(newFileName))
+                string targetDirectoryPath = PATH_TO_DATA + @"\" + targetFolder;
+                if (!File.Exists(targetDirectoryPath))
                 {
+                    Directory.CreateDirectory(targetDirectoryPath);
+                }
+
+                string newFileName = targetDirectoryPath + @"\" + Path.GetFileName(s);
+                if (File.Exists(newFileName)) {
                     File.Delete(newFileName);
                 }
-                File.Move(s, newFileName);
+
+                File.Copy(s, newFileName);
             }
         }
         private void Backup()
         {
-            BackupFiles(PATH_TO_DATA);
+            BackupFiles(PATH_TO_DATA, "Backups");
 
             foreach (string s in Directory.GetDirectories(PATH_TO_DATA))
             {
                 if(s != PATH_TO_BACKUP)
                 {
-                    BackupFiles(s);
+                    BackupFiles(s, @"Backups\\" + Path.GetFileName(s));
                 }
             }
         }

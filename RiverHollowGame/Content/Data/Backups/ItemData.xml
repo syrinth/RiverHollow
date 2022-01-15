@@ -59,7 +59,7 @@
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Resource][Image:7-4][Value:20]</Value>
+      <Value>[Type:Resource][Image:7-4][Value:100]</Value>
     </Item>
     <Item>
       <Key>15</Key>
@@ -123,7 +123,7 @@
     </Item>
     <Item>
       <Key>30</Key>
-      <Value>[Type:Resource][Image:8-4][Value:50]</Value>
+      <Value>[Type:Resource][Image:8-4][Value:20]</Value>
     </Item>
     <Item>
       <Key>31</Key>

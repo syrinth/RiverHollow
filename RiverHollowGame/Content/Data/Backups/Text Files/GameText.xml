@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <Item>
+      <Key>FoodConfirm</Key>
+      <Value>[Text:Really eat the {0}?][Selection:YesNo][Trigger:UseItem]</Value>
+    </Item>
+    <Item>
+      <Key>GiftConfirm</Key>
+      <Value>[Text:Give {0} to {1}?][Selection:YesNo][Trigger:ConfirmGift]</Value>
+    </Item>
+    <Item>
+      <Key>ItemConfirm</Key>
+      <Value>[Text:Use {0} on who?][Selection:Party][Trigger:UseItem]</Value>
+    </Item>
+    <Item>
+      <Key>ClassItemConfirm</Key>
+      <Value>[Text:Really use the {0}?][Selection:YesNo][Trigger:UseItem]</Value>
+    </Item>
+    <Item>
+      <Key>AdventurerTree</Key>
+      <Value>[Text:...{{Talk-Talk|Join Party-Party}}]</Value>
+    </Item>
+    <Item>
+      <Key>Save</Key>
+      <Value>[Text:Save and end the day?][Selection:YesNo][Trigger:EndDay]</Value>
+    </Item>
+    <Item>
+      <Key>ReallyExit</Key>
+      <Value>[Text:Are you sure?][Selection:YesNo][Trigger:Exit]</Value>
+    </Item>
+    <Item>
+      <Key>Rune_of_Return_Use</Key>
+      <Value>[Text:Use the {0} to the dungeon entrance?][Selection:YesNo][Trigger:UseItem]</Value>
+    </Item>
+    <Item>
+      <Key>Rune_of_Return_Empty</Key>
+      <Value>[Text:The {0}'s energy is spent.]</Value>
+    </Item>
+    <Item>
+      <Key>Rune_of_Return_No_Dungeon</Key>
+      <Value>[Text:The rune cannot work here.]</Value>
+    </Item>
+    <Item>
+      <Key>Key_Door</Key>
+      <Value>[Text:The door is locked. You will need a key to open it.]</Value>
+    </Item>
+    <Item>
+      <Key>Item_Door</Key>
+      <Value>[Text:A strangely shaped keyhole is embedded in the door {{Attempt to Open-OpenDoor|Never Mind-Cancel}}]</Value>
+    </Item>
+    <Item>
+      <Key>Item_Door_Open</Key>
+      <Value>[Text:As you place the item into the keyhole, it vanishes, becoming one with the door!]</Value>
+    </Item>
+    <Item>
+      <Key>Item_Door_Close</Key>
+      <Value>[Text:No matter how hard you try, it seems like that item won't fit here.]</Value>
+    </Item>
+    <Item>
+      <Key>Trigger_Door</Key>
+      <Value>[Text:You see no visible means of opening this door. There must be a hidden switch or something.]</Value>
+    </Item>
+    <Item>
+      <Key>MonsterFood_Confirm</Key>
+      <Value>[Text:Set out the {0} here?][Selection:YesNo][Trigger:UseItem]</Value>
+    </Item>
+    <Item>
+      <Key>MonsterFood_Yes</Key>
+      <Value>[Text:You place the {0} on the ground.]</Value>
+    </Item>
+    <Item>
+      <Key>MonsterFood_False</Key>
+      <Value>[Text:You see no monster tracks here, better use it somewhere else.]</Value>
+    </Item>
+    <Item>
+      <Key>MonsterFood_Duplicate</Key>
+      <Value>[Text:Tantalizing food has already been placed.]</Value>
+    </Item>
+    <Item>
+      <Key>Pedestal_Ruby</Key>
+      <Value>[Text:A shining red gem.]</Value>
+    </Item>
+    <Item>
+      <Key>Pedestal_Emerald</Key>
+      <Value>[Text:A shining red gem.]</Value>
+    </Item>
+    <Item>
+      <Key>Defeat</Key>
+      <Value>[Text:You have been defeated.]</Value>
+    </Item>
+    <Item>
+      <Key>New_Villager</Key>
+      <Value>[Text:A New Villager has arrived in town.]</Value>
+    </Item>
+    <Item>
+      <Key>New_Villagers</Key>
+      <Value>[Text:New Villagers have arrived in town.]</Value>
+    </Item>
+    <Item>
+      <Key>Upgrade 1</Key>
+      <Value>[Text:Tavern/A place where people can gather]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_Talk</Key>
+      <Value>[Text:Talk][TextVerb:Talk]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_Gift</Key>
+      <Value>[Text:Gift][TextVerb:Gift]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_Party</Key>
+      <Value>[Text:Join Party][TextVerb:Party]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_NeverMind</Key>
+      <Value>[Text:Never Mind][TextVerb:Cancel]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_ShipGoods</Key>
+      <Value>[Text:Ship Goods][TextVerb:ShipGoods]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_Yes</Key>
+      <Value>[Text:Yes][TextVerb:Yes]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_No</Key>
+      <Value>[Text:No][TextVerb:Cancel]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_Buy</Key>
+      <Value>[Text:Buy Items][TextVerb:Buy]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_Requests</Key>
+      <Value>[Text:Show Requests][TextVerb:ShowRequests]</Value>
+    </Item>
+    <Item>
+      <Key>PetFollow</Key>
+      <Value>[Text:Have {0} follow you?][Selection:YesNo][Trigger:PetFollow]</Value>
+    </Item>
+    <Item>
+      <Key>PetUnfollow</Key>
+      <Value>[Text:Leave {0} here?][Selection:YesNo][Trigger:PetUnfollow]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_Propose</Key>
+      <Value>[Text:Propose][TextVerb:Propose]</Value>
+    </Item>
+    <Item>
+      <Key>Selection_Date</Key>
+      <Value>[Text:Ask to Date][TextVerb:Date]</Value>
+    </Item>
+    <Item>
+      <Key></Key>
+      <Value>[Text]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

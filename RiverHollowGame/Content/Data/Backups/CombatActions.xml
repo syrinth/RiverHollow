@@ -11,19 +11,19 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Action][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Target:Enemy][Range:7][AreaType:Row][Cost:2][Harm:80][Action:UserCast Direct Apply][Element:Fire][LiteRange:Ranged][Icon:0-0][DamageType:Magical][DamageAttribute:Magic]</Value>
+      <Value>[Type:Action][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Target:Enemy][Range:7][AreaType:Row][Cost:2][Harm:100][Action:UserCast Direct Apply][Element:Fire][LiteRange:Ranged][Icon:0-0][DamageType:Magical][DamageAttribute:Magic]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Action][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Target:Enemy][Range:7][AreaType:Column][Cost:2][Harm:50][Action:UserCast Direct Apply][Element:Ice][LiteRange:Melee][Icon:1-0][DamageType:Magical][Move:Left][DamageAttribute:Magic]</Value>
+      <Value>[Type:Action][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Target:Enemy][Range:7][AreaType:Column][Cost:2][Harm:100][Action:UserCast Direct Apply][Element:Ice][LiteRange:Melee][Icon:1-0][DamageType:Magical][Retreat][DamageAttribute:Magic]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Action][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Target:Enemy][Range:7][AreaType:Square][Cost:2][Harm:100][Action:UserCast Direct Apply][Element:Lightning][LiteRange:Ranged][Icon:2-0][DamageType:Magical][DamageAttribute:Magic][Move:Right]</Value>
+      <Value>[Type:Action][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Target:Enemy][Range:7][AreaType:Square][Cost:2][Harm:150][Action:UserCast Direct Apply][Element:Lightning][LiteRange:Ranged][Icon:2-0][DamageType:Magical][DamageAttribute:Magic]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Action][Animation:Eldritch_Blast-16-64-7-0.05][AnimOffset:0-48][Target:Enemy][Range:9][AreaType:Single][Cost:5][Harm:120][Action:UserCast Direct Apply][Icon:3-0][LiteRange:Ranged][DamageType:Magical][Displace:Up][DamageAttribute:Magic]</Value>
+      <Value>[Type:Action][Animation:Eldritch_Blast-16-64-7-0.05][AnimOffset:0-48][Target:Enemy][Range:9][AreaType:Single][Cost:5][Harm:100][Action:UserCast Direct Apply][Icon:3-0][LiteRange:Ranged][DamageType:Magical][Push][DamageAttribute:Magic]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -119,7 +119,7 @@
     </Item>
     <Item>
       <Key>29</Key>
-      <Value>[Type:Action][Target:Enemy][Range:5][AreaType:Single][Harm:90][Retreat][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][AreaType:Single][Harm:90][Retreat-1][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>30</Key>
@@ -167,7 +167,7 @@
     </Item>
     <Item>
       <Key>41</Key>
-      <Value>[Type:Action][Animation:LightningSprite-80-96-9-0.07][AnimOffset:41-105][Target:Enemy][Range:4][AreaType:Single][Harm:90][Action:UserCast Direct Apply][Element:Lightning][LiteRange:Ranged][DamageAttribute:Magic][Move:Left]</Value>
+      <Value>[Type:Action][Animation:LightningSprite-80-96-9-0.07][AnimOffset:41-105][Target:Enemy][Range:4][AreaType:Single][Harm:60][Action:UserCast Direct Apply][Element:Lightning][LiteRange:Ranged][DamageAttribute:Magic]</Value>
     </Item>
     <Item>
       <Key>42</Key>
@@ -184,10 +184,6 @@
     <Item>
       <Key>45</Key>
       <Value>[Type:Action][Animation:HiveAttack-16-16-4-0.1][Target:Enemy][Range:7][AreaType:Single][Harm:100][Action:UserAttack Direct Apply]</Value>
-    </Item>
-    <Item>
-      <Key>46</Key>
-      <Value>[Type:Action][Animation:LightningSprite-80-96-9-0.07][AnimOffset:41-105][Target:Enemy][Range:4][AreaType:Single][Harm:90][Action:UserCast Direct Apply][Element:Lightning][LiteRange:Ranged][DamageAttribute:Magic][Move:Right]</Value>
     </Item>
   </Asset>
 </XnaContent>
