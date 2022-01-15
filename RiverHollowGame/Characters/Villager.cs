@@ -519,8 +519,8 @@ namespace RiverHollow.Characters
                 canGiveGift = CanGiveGift,
                 spokenKeys = _liSpokenKeys,
             };
-
-            if (CombatVersion.CharacterClass != null) { npcData.classedData = CombatVersion.SaveClassedCharData(); }
+            
+            if (CombatVersion!= null && CombatVersion.CharacterClass != null) { npcData.classedData = CombatVersion.SaveClassedCharData(); }
 
             return npcData;
         }
@@ -543,7 +543,7 @@ namespace RiverHollow.Characters
                 DetermineValidSchedule();
             }
 
-            if (CombatVersion.CharacterClass != null) { CombatVersion.LoadClassedCharData(data.classedData); }
+            if (CombatVersion != null && CombatVersion.CharacterClass != null) { CombatVersion.LoadClassedCharData(data.classedData); }
 
             foreach (string s in data.spokenKeys)
             {

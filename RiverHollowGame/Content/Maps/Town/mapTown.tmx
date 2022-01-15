@@ -284,7 +284,7 @@
   </object>
   <object id="72" name="Building" x="433.5" y="418.242" width="86.8864" height="44.3031">
    <properties>
-    <property name="BuildingID" type="int" value="23"/>
+    <property name="BuildingID" type="int" value="24"/>
    </properties>
   </object>
  </objectgroup>

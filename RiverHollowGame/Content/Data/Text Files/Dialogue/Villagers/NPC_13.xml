@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>[Text:Hey. $Name$ right? $Character_11$ told us you were moving in soon. I'm $Character_13$ $Character_14$'s husband. I make and seel furniture if you ever have need any,]</Value>
+      <Value>[Text:Lorum Ipsum]</Value>
     </Item>
     <Item>
       <Key>1</Key>

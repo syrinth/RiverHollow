@@ -193,7 +193,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         }
         public void SetText(string text)
         {
+            _iCurr = text.Length;
             _gText.SetText(text);
+            _gMarker.Position(_gText.Position());
         }
 
         public void HideCursor()

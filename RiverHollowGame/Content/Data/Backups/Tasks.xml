@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Build][GoalNPC:14][BuildingID:7]</Value>
+      <Value>[Type:Build][GoalNPC:14][BuildingID:35]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Build][GoalNPC:14][BuildingID:8][ItemReward:23-10|27-10]</Value>
+      <Value>[Type:Build][GoalNPC:14][BuildingID:29][ItemReward:23-10|27-10]</Value>
     </Item>
   </Asset>
 </XnaContent>

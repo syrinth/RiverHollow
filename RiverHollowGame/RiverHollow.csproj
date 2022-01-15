@@ -62,10 +62,8 @@
     <Compile Include="Buildings\Building.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Characters\Actor.cs" />
-    <Compile Include="Characters\Tactical\TacticalAdventurer.cs" />
     <Compile Include="Characters\BuyableNPC.cs" />
     <Compile Include="Characters\Child.cs" />
-    <Compile Include="Characters\Tactical\TacticalClassedCombatant.cs" />
     <Compile Include="Characters\EnvironmentalActor.cs" />
     <Compile Include="Characters\ClassedCombatant.cs" />
     <Compile Include="Characters\Merchant.cs" />
@@ -74,12 +72,10 @@
     <Compile Include="Characters\PlayerCharacter.cs" />
     <Compile Include="Characters\ShippingGremlin.cs" />
     <Compile Include="Characters\Spirit.cs" />
-    <Compile Include="Characters\Tactical\TacticalCombatActor.cs" />
     <Compile Include="Characters\CombatActor.cs" />
     <Compile Include="Characters\Monster.cs" />
     <Compile Include="Characters\Summon.cs" />
     <Compile Include="Characters\Mob.cs" />
-    <Compile Include="Characters\Tactical\TacticalSummon.cs" />
     <Compile Include="Characters\TalkingActor.cs" />
     <Compile Include="Characters\TravellingNPC.cs" />
     <Compile Include="Characters\Villager.cs" />

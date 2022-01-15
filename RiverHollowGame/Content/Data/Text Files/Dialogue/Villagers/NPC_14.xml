@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>[Text:Hi there, $Character_14$'s my name and I'm the mason here in town. You're moving into the abandoned Manor right? Come get me when you're ready to start renovating. I also sell building materials if you find yourself short.]</Value>
+      <Value>[Text:Hey. $Name$ right? Glad you made it. I'm $Character_14$, and I'm here to help you with building the town itself. We really need a workshop if we're going to do anything. Here's some materials I brought with me. Be careful with how you use them, this is all I brought.][UnlockBuildingID:35][ItemID:55-5|60-5][Task:0]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -26,10 +26,10 @@
       <Value>[Text:Hey.][Selection:VillageTalk]</Value>
     </Item>
     <Item>
-      <Key>Task_3_End</Key>
-      <Value>[Text:Has the $Building_8$ been built already?
-Great work! Here, I found a few odds and ends when I was setting up and thought they might be useful for you.
-Just brew up some potions and put them in the bin so we can ship them to a nearby city. We're going to need a lot of money if we're going to get this town up and running!][Face:Happy][SendMessage:0]</Value>
+      <Key>Task_0_End</Key>
+      <Value>[Text:Already done? Great work. With the $Building_35$ built, we can make bricks and planks. It's kind of hard to build a town without them, you know.
+
+Here, I drew up some plans for a house for you. You should get that built before nightfall, better to have your own space.][Face:Happy][UnlockBuildingID:22]</Value>
     </Item>
     <Item>
       <Key>Architect</Key>

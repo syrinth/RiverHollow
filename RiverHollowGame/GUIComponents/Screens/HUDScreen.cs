@@ -1833,8 +1833,8 @@ namespace RiverHollow.GUIComponents.Screens
 
             _merchant = m;
 
-            GUIText text = new GUIText(requestText.FormattedText);
-            text.SetText(text.ParseText(requestText.FormattedText, _winMain.MidWidth(), 3, true)[0]);
+            GUIText text = new GUIText(requestText.GetFormattedText());
+            text.SetText(text.ParseText(requestText.GetFormattedText(), _winMain.MidWidth(), 3, true)[0]);
             text.AnchorToInnerSide(_winMain, SideEnum.Top);
 
             int edgeSpacing = ScaledTileSize;

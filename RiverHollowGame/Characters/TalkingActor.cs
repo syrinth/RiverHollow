@@ -131,7 +131,7 @@ namespace RiverHollow.Characters
             PriorityQueue<TextEntry> keyPool = new PriorityQueue<TextEntry>();
             foreach (TextEntry entry in _diDialogue.Values)
             {
-                if (entry.Valid(this))
+                if (entry.Validate(this))
                 {
                     keyPool.Enqueue(entry, entry.Priority);
                 }

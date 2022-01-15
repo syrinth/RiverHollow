@@ -207,7 +207,6 @@ namespace RiverHollow.Buildings
         private string DetermineMapName()
         {
             string rv = "map" + _sTextureName;
-            //private string LevelAppend => Level > 1 ? "_" + Level.ToString() : "";
 
             if(Level > 1)
             {

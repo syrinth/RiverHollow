@@ -3343,11 +3343,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/House_Player.png
 
-#begin Maps/Town/mapHouse_Player_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_Player_1.tmx
-
 #begin Maps/Town/mapHouse_Player_2.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -3721,4 +3716,14 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapWeaver.tmx
+
+#begin Maps/Town/mapHouse_Player.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_Player.tmx
+
+#begin Maps/Town/mapWorkshop.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapWorkshop.tmx
 

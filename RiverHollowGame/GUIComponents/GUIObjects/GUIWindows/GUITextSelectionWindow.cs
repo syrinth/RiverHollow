@@ -52,7 +52,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         /// </summary>
         private void ConstructSelectionMenu()
         {
-            _sStatement = _textEntry.FormattedText;
+            _sStatement = _textEntry.GetFormattedText();
             switch (_textEntry.SelectionType)
             {
                 case GameManager.TextEntrySelectionEnum.VillageTalk:
@@ -380,7 +380,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             public SelectionData(TextEntry textEntry, string fontName = DataManager.FONT_MAIN)
             {
                 SelectionEntry = textEntry;
-                _gText = new GUIText(textEntry.FormattedText, true, fontName);
+                _gText = new GUIText(textEntry.GetFormattedText(), true, fontName);
             }
         }
 

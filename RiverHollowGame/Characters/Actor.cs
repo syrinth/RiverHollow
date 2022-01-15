@@ -40,7 +40,7 @@ namespace RiverHollow.Characters
         public DirectionEnum Facing = DirectionEnum.Down;
 
         protected string _sName;
-        public virtual string Name { get => _sName; }
+        public virtual string Name => _sName;
 
         protected AnimatedSprite _sprBody;
         public AnimatedSprite BodySprite => _sprBody;

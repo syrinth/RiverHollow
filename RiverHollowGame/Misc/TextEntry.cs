@@ -28,7 +28,6 @@ namespace RiverHollow.Misc
 
         public string NextEntry => _diTags.ContainsKey("NextEntry") ? _diTags["NextEntry"] : string.Empty;
         private string _sText;
-        public string FormattedText { get; private set; }
         double _dPriority = 100;
         public double Priority => _dPriority;
 
@@ -47,7 +46,6 @@ namespace RiverHollow.Misc
         public TextEntry(string text)
         {
             _sText = text;
-            FormattedText = _sText;
         }
 
         public TextEntry(string key, Dictionary<string, string> stringData)
@@ -61,8 +59,11 @@ namespace RiverHollow.Misc
             Util.AssignValue(ref _eSelectionType, "Selection", stringData);
             Util.AssignValue(ref _eGameTrigger, "Trigger", stringData);
             Util.AssignValue(ref _eVerb, "TextVerb", stringData);
+        }
 
-            FormattedText = Util.ProcessText(_sText);
+        public string GetFormattedText()
+        {
+            return Util.ProcessText(_sText);
         }
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace RiverHollow.Misc
         /// <param name="list">List of variables to format</param>
         public void FormatText(params object[] list)
         {
-            FormattedText = string.Format(_sText, list);
+            _sText = string.Format(_sText, list);
         }
 
         /// <summary>
@@ -141,7 +142,7 @@ namespace RiverHollow.Misc
         /// </summary>
         /// <param name="act">The Villager we are talking to</param>
         /// <returns>True if all conditions are current active.</returns>
-        public bool Valid(TalkingActor act = null)
+        public bool Validate(TalkingActor act = null)
         {
             bool rv = false;
 
@@ -189,6 +190,15 @@ namespace RiverHollow.Misc
                         if (int.TryParse(args[1], out int NPCID) && int.TryParse(args[2], out int tempLevel) && DataManager.DIVillagers[NPCID].GetFriendshipLevel() > tempLevel) { rv = true; }
                         else { return false; }
                     }
+                }
+                if (_diTags.ContainsKey("CompletedTaskID"))
+                {
+                    foreach (string i in _diTags["CompletedTaskID"].Split('-'))
+                    {
+                        if (!GameManager.DITasks[int.Parse(i)].Finished) { return false; }
+                    }
+
+                    rv = true;
                 }
                 if (_diTags.ContainsKey("RequiredBuildingID"))
                 {
@@ -239,6 +249,15 @@ namespace RiverHollow.Misc
             if (_diTags.ContainsKey("UnlockBuildingID"))
             {
                 PlayerManager.DIBuildInfo[int.Parse(_diTags["UnlockBuildingID"])].Unlock();
+            }
+            if (_diTags.ContainsKey("ItemID"))
+            {
+                string[] itemSplit = Util.FindParams(_diTags["ItemID"]);
+                for (int i = 0; i < itemSplit.Length; i++)
+                {
+                    string[] split = Util.FindArguments(itemSplit[i]);
+                    InventoryManager.AddToInventory(int.Parse(split[0]), int.Parse(split[1]));
+                }
             }
             if (_diTags.ContainsKey("UnlockItemID"))
             {

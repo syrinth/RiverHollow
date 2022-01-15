@@ -247,6 +247,10 @@ namespace RiverHollow.Utilities
         {
             return data.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
         }
+        public static string[] FindArguments(string data)
+        {
+            return data.Split(new string[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
+        }
 
         public static String NumToString(int number, bool isCaps)
         {
