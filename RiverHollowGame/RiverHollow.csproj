@@ -86,7 +86,6 @@
     <Compile Include="Characters\WorldActor.cs" />
     <Compile Include="CombatStuff\CombatAction.cs" />
     <Compile Include="CombatStuff\LiteCombatTile.cs" />
-    <Compile Include="CombatStuff\TacticalCombatAction.cs" />
     <Compile Include="CombatStuff\StatusEffect.cs" />
     <Compile Include="CombatStuff\CharacterClass.cs" />
     <Compile Include="Game Managers\CombatManager.cs" />
@@ -117,6 +116,7 @@
     <Compile Include="GUIComponents\GUIObjects\GUIMisc.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUISprite.cs" />
     <Compile Include="GUIComponents\MainObjects\GardenWindow.cs" />
+    <Compile Include="GUIComponents\MainObjects\PartyMemberPanel.cs" />
     <Compile Include="GUIComponents\MainObjects\TownInfoWindow.cs" />
     <Compile Include="GUIComponents\MainObjects\WarpPointWindow.cs" />
     <Compile Include="GUIComponents\Screens\BuildScreen.cs" />

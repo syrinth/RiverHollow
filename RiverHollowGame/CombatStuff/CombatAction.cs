@@ -65,8 +65,8 @@ namespace RiverHollow.CombatStuff
         List<SkillTagsEnum> _liEffects;
         List<LiteStatusEffectData> _liStatusEffects;         //Key = Buff ID, string = Duration/<Tag> <Tag>
 
-        public MovementTypeEnum UserMovement { get; private set; } = MovementTypeEnum.None;
-        public MovementTypeEnum TargetMovement { get; private set; } = MovementTypeEnum.None;
+        public DirectionEnum UserMovement { get; private set; } = DirectionEnum.None;
+        public DirectionEnum TargetMovement { get; private set; } = DirectionEnum.None;
         int _iSummonID;
         public Vector2 SummonStartPosition;
 
@@ -163,25 +163,15 @@ namespace RiverHollow.CombatStuff
                     _liEffects.Add(SkillTagsEnum.Heal);
                 }
 
-                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Push)))
+                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Displace)))
                 {
-                    _liEffects.Add(SkillTagsEnum.Push);
-                    TargetMovement = MovementTypeEnum.Backward;
+                    _liEffects.Add(SkillTagsEnum.Displace);
+                    TargetMovement = Util.ParseEnum<DirectionEnum>(stringData[Util.GetEnumString(SkillTagsEnum.Displace)]);
                 }
-                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Pull)))
+                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Move)))
                 {
-                    _liEffects.Add(SkillTagsEnum.Pull);
-                    TargetMovement = MovementTypeEnum.Forward;
-                }
-                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Step)))
-                {
-                    _liEffects.Add(SkillTagsEnum.Step);
-                    UserMovement = MovementTypeEnum.Forward;
-                }
-                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Retreat)))
-                {
-                    _liEffects.Add(SkillTagsEnum.Retreat);
-                    UserMovement = MovementTypeEnum.Backward;
+                    _liEffects.Add(SkillTagsEnum.Move);
+                    UserMovement = Util.ParseEnum<DirectionEnum>(stringData[Util.GetEnumString(SkillTagsEnum.Move)]);
                 }
                 if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Remove)))
                 {
@@ -456,39 +446,21 @@ namespace RiverHollow.CombatStuff
             }
 
             //Handler to push back the target
-            if (_liEffects.Contains(SkillTagsEnum.Push))
+            if (_liEffects.Contains(SkillTagsEnum.Displace))
             {
                 foreach (CombatTile ct in TileTargetList)
                 {
                     if (ct.Character != null && !ct.Character.KnockedOut)
                     {
-                        Push(ct);
+                        MoveActor(ct, TargetMovement, true);
                     }
                 }
             }
 
-            //Handler to pull the target forwards
-            if (_liEffects.Contains(SkillTagsEnum.Pull))
+            //Handler to push back the target
+            if (_liEffects.Contains(SkillTagsEnum.Move))
             {
-                foreach (CombatTile ct in TileTargetList)
-                {
-                    if (ct.Character != null && !ct.Character.KnockedOut)
-                    {
-                        Pull(ct);
-                    }
-                }
-            }
-
-            //Handler for the SkillUser to retreat
-            if (_liEffects.Contains(SkillTagsEnum.Retreat))
-            {
-                Retreat(SkillUser.Tile);
-            }
-
-            //Handler for the SkillUser to move forwrd
-            if (_liEffects.Contains(SkillTagsEnum.Step))
-            {
-                Step(SkillUser.Tile);
+                MoveActor(SkillUser.Tile, UserMovement, false);
             }
 
             //Handler for when the action removes things
@@ -511,123 +483,47 @@ namespace RiverHollow.CombatStuff
         }
 
         #region Combat Action Movement
-        /// <summary>
-        /// Attempts to reassign the occupant of the targeted tile to the
-        /// tile right behind it. If there is an occupant of that tile, push
-        /// themback too if possible.
-        /// </summary>
-        /// <param name="ct">Tile to push backf rom</param>
-        /// <returns>True if the target was successfully pushed</returns>
-        private bool Push(CombatTile ct)
+        private bool MoveActor(CombatTile targetTile, DirectionEnum dir, bool chainMove)
         {
             bool rv = false;
-            CombatTile test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Push);
-            if (test != null)
+
+            CombatTile newTile = null;
+            switch (dir)
             {
-                if (!test.Occupied())
+                case DirectionEnum.Down:
+                    newTile = CombatManager.GetBottom(targetTile.GUITile.MapTile);
+                    break;
+                case DirectionEnum.Left:
+                    newTile = CombatManager.GetLeft(targetTile.GUITile.MapTile);
+                    break;
+                case DirectionEnum.Right:
+                    newTile = CombatManager.GetRight(targetTile.GUITile.MapTile);
+                    break;
+                case DirectionEnum.Up:
+                    newTile = CombatManager.GetTop(targetTile.GUITile.MapTile);
+                    break;
+            }
+
+            if (newTile != null)
+            {
+                if (!newTile.Occupied())
                 {
-                    test.SetCombatant(ct.Character);
-                    ct = test;
+                    newTile.SetCombatant(targetTile.Character);
                     rv = true;
                 }
-                else if (test.Occupied())
+                else if (newTile.Occupied())
                 {
-                    if (Push(test))
-                    {
-                        test.SetCombatant(ct.Character);
+                    if (chainMove && MoveActor(newTile, dir, chainMove)) { newTile.SetCombatant(targetTile.Character); }
+                    else {
+                        CombatActor original = newTile.Character;
+                        newTile.SetCombatant(targetTile.Character);
+                        targetTile.SetCombatant(original);
                     }
                 }
             }
 
             return rv;
-        }
-
-        private bool Pull(CombatTile ct)
-        {
-            bool rv = false;
-
-            CombatTile test;
-            test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Pull);
-            if (test != null)
-            {
-                if (!test.Occupied())
-                {
-                    test.SetCombatant(ct.Character);
-                    ct = test;
-                    rv = true;
-                }
-            }
-
-
-            return rv;
-        }
-
-        private bool Step(CombatTile ct)
-        {
-            bool rv = false;
-
-            CombatTile test;
-            test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Step);
-            if (test != null)
-            {
-                if (!test.Occupied())
-                {
-                    test.SetCombatant(ct.Character);
-                    ct = test;
-                    rv = true;
-                }
-            }
-
-            return rv;
-        }
-
-        private bool Retreat(CombatTile ct)
-        {
-            bool rv = false;
-            CombatTile test;
-            test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Retreat);
-            if (test != null)
-            {
-                if (!test.Occupied())
-                {
-                    test.SetCombatant(ct.Character);
-                    ct = test;
-                    rv = true;
-                }
-            }
-
-            return rv;
-        }
-
-        /// <summary>
-        /// Figures out the next tile in the given direction of the movement tag
-        /// </summary>
-        /// <param name="tile">The tile to move from</param>
-        /// <param name="action">The skill tag describing the movement type</param>
-        /// <returns></returns>
-        private CombatTile DetermineMovementTile(CombatTile tile, SkillTagsEnum action)
-        {
-            CombatTile rv = null;
-
-            //The meaning of push and pull is dependent on whether or not
-            //it's an ally or enemy tile.
-            if (tile.Character.IsActorType(ActorEnum.PartyMember))
-            {
-                if (action == SkillTagsEnum.Push) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Pull) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Retreat) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Step) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
-            }
-            else
-            {
-                if (action == SkillTagsEnum.Push) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Pull) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Retreat) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Step) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
-            }
-
-            return rv;
-        }
+        }  
         #endregion
 
         /// <summary>

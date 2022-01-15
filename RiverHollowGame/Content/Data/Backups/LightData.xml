@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[Texture:lightmask][Idle:3-0.2][Dimensions:128-128]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Texture:lightmask1][Idle:1-1][Dimensions:256-256]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Texture:WindowLight][Idle:1-1][Dimensions:30-40]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Texture:SmallWindowLight][Idle:1-1][Dimensions:22-24]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Texture:WindowInnLarge][Idle:1-1][Dimensions:38-40]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Texture:WindowInnCircle][Idle:1-1][Dimensions:40-40]</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Texture:GlowLight][Idle:1-1][Dimensions:256-256]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

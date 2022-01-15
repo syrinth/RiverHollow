@@ -17,6 +17,8 @@ namespace RiverHollow.CombatStuff
         public string Description => _sDescription;
         public List<CombatAction> Actions;
 
+        AttributeEnum _eKeyAttribute;
+        public AttributeEnum KeyAttribute => _eKeyAttribute;
         WeaponEnum _weaponType;
         public WeaponEnum WeaponType => _weaponType;
         ArmorTypeEnum _armorType;
@@ -50,6 +52,7 @@ namespace RiverHollow.CombatStuff
             Util.AssignValue(ref _armorType, "Armor", stringData);
 
             Util.AssignValue(ref _iSpeedAttribute, "Speed", stringData);
+            Util.AssignValue(ref _eKeyAttribute, "KeyAttribute", stringData);
 
             string[] gearsplit = Util.FindParams(stringData["GearID"]);
             WeaponID = int.Parse(gearsplit[0]);

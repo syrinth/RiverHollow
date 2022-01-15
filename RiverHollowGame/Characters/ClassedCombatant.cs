@@ -20,7 +20,8 @@ namespace RiverHollow.Characters.Lite
         protected CharacterClass _class;
         public CharacterClass CharacterClass { get => _class; }
         public int ClassLevel { get; private set; }
-        public int XP { get; private set; }
+        public int CurrentXP { get; private set; }
+        public AttributeEnum KeyAttribute => _class.KeyAttribute;
 
         protected Dictionary<GearTypeEnum, Equipment> _diGear;
         protected Dictionary<GearTypeEnum, Equipment> _diGearComparison;
@@ -57,7 +58,6 @@ namespace RiverHollow.Characters.Lite
         public virtual void SetClass(CharacterClass x)
         {
             _class = x;
-            CurrentHP = MaxHP;
             if (x.ID != -1)
             {
                 LoadSpriteAnimations(ref _sprBody, Util.LoadCombatAnimations(x.ClassStringData), DataManager.FOLDER_PARTY + "Wizard");
@@ -69,8 +69,8 @@ namespace RiverHollow.Characters.Lite
 
         public void AddXP(int x)
         {
-            XP += x;
-            if (XP >= LevelRange[ClassLevel])
+            CurrentXP += x;
+            if (CurrentXP >= LevelRange[ClassLevel])
             {
                 ClassLevel++;
             }
@@ -78,20 +78,13 @@ namespace RiverHollow.Characters.Lite
 
         public void GetXP(ref double curr, ref double max)
         {
-            curr = XP;
+            curr = CurrentXP;
             max = ClassedCombatant.LevelRange[this.ClassLevel];
         }
 
         public override int Attribute(AttributeEnum e)
         {
-            if (e == AttributeEnum.Damage)
-            {
-                return GearAttribute(e);
-            }
-            else
-            {
-                return _diAttributes[e] + _diEffectedAttributes[e].Value + GearAttribute(e);
-            }
+            return _diAttributes[e] + _diEffectedAttributes[e].Value + GearAttribute(e);
         }
 
         public int GearAttribute(AttributeEnum e)
@@ -141,7 +134,13 @@ namespace RiverHollow.Characters.Lite
         }
 
         public void Unequip(GearTypeEnum e) { _diGear[e] = null; }
-        public void Equip(Equipment e) { _diGear[e.GearType] = e; }
+        public void Equip(Equipment e) {
+            int initialHP = MaxHP;
+            _diGear[e.GearType] = e;
+
+            if (initialHP < MaxHP) { CurrentHP += MaxHP - initialHP; }
+            else if (initialHP > MaxHP) { CurrentHP = MaxHP; }
+        }
         public Equipment GetEquipment(GearTypeEnum e) { return _diGear[e]; }
 
         public void EquipComparator(Equipment e) { _diGearComparison[e.GearType] = e; }
@@ -165,6 +164,8 @@ namespace RiverHollow.Characters.Lite
             _diGear[GearTypeEnum.Body] = (Equipment)DataManager.GetItem(_class.ArmorID);
             _diGear[GearTypeEnum.Head] = (Equipment)DataManager.GetItem(_class.HeadID);
             _diGear[GearTypeEnum.Accessory] = (Equipment)DataManager.GetItem(_class.AccessoryID);
+
+            CurrentHP = MaxHP;
         }
 
         public ClassedCharData SaveClassedCharData()
@@ -174,7 +175,7 @@ namespace RiverHollow.Characters.Lite
                 armor = Item.SaveData(_diGear[GearTypeEnum.Body]),
                 weapon = Item.SaveData(_diGear[GearTypeEnum.Weapon]),
                 level = ClassLevel,
-                xp = XP
+                xp = CurrentXP
             };
 
             return advData;
@@ -184,7 +185,7 @@ namespace RiverHollow.Characters.Lite
             _diGear[GearTypeEnum.Body] = (Equipment)DataManager.GetItem(data.armor.itemID);
             _diGear[GearTypeEnum.Weapon] = (Equipment)DataManager.GetItem(data.weapon.itemID);
             ClassLevel = data.level;
-            XP = data.xp;
+            CurrentXP = data.xp;
         }
     }
 }

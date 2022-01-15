@@ -32,7 +32,7 @@ namespace RiverHollow.CombatStuff
             Character = c;
             if (c != null)
             {
-                if (Character.Tile != null)
+                if (Character.Tile != null && Character.Tile.Character == c)
                 {
                     Character.Tile.SetCombatant(null);
                 }

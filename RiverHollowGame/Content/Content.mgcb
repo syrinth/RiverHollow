@@ -2252,31 +2252,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/MagicShop.png
 
-#begin Maps/Town/mapApothecary_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapApothecary_1.tmx
-
-#begin Maps/Town/mapArchitect_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapArchitect_1.tmx
-
-#begin Maps/Town/mapCarpenter_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapCarpenter_1.tmx
-
-#begin Maps/Town/mapGeneralStore.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapGeneralStore.tmx
-
-#begin Maps/Town/mapGeneralStore_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapGeneralStore_1.tmx
-
 #begin Maps/Town/mapGuildhouse.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -2287,160 +2262,20 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapHospital.tmx
 
-#begin Maps/Town/mapHouseNPC1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouseNPC1.tmx
-
-#begin Maps/Town/mapHouse_14_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_14_1.tmx
-
-#begin Maps/Town/mapHouse_16_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_16_1.tmx
-
-#begin Maps/Town/mapHouse_18_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_18_1.tmx
-
-#begin Maps/Town/mapHouse_19_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_19_1.tmx
-
-#begin Maps/Town/mapHouse_20_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_20_1.tmx
-
-#begin Maps/Town/mapHouse_2_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_2_1.tmx
-
-#begin Maps/Town/mapHouse_3_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_3_1.tmx
-
-#begin Maps/Town/mapHouse_4_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_4_1.tmx
-
-#begin Maps/Town/mapHouse_5_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_5_1.tmx
-
-#begin Maps/Town/mapHouse_6_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_6_1.tmx
-
-#begin Maps/Town/mapHouse_7_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_7_1.tmx
-
 #begin Maps/Town/mapHouse_Template.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapHouse_Template.tmx
-
-#begin Maps/Town/mapInn_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapInn_1.tmx
-
-#begin Maps/Town/mapInn_Upper_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapInn_Upper_1.tmx
-
-#begin Maps/Town/mapLumberMill_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapLumberMill_1.tmx
-
-#begin Maps/Town/mapMagicShop_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapMagicShop_1.tmx
-
-#begin Maps/Town/mapManorGrounds.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapManorGrounds.tmx
-
-#begin Maps/Town/mapManor_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapManor_1.tmx
-
-#begin Maps/Town/mapManor_Basement_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapManor_Basement_1.tmx
-
-#begin Maps/Town/mapMarket_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapMarket_1.tmx
-
-#begin Maps/Town/mapMayorsHouse.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapMayorsHouse.tmx
-
-#begin Maps/Town/mapPotionHut_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapPotionHut_1.tmx
-
-#begin Maps/Town/mapStoneMason_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapStoneMason_1.tmx
-
-#begin Maps/Town/mapTower_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapTower_1.tmx
-
-#begin Maps/Town/mapTower_2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapTower_2.tmx
-
-#begin Maps/Town/mapTower_3.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapTower_3.tmx
 
 #begin Maps/Town/mapTown.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapTown.tmx
 
-#begin Maps/Town/mapHouse_1_17_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_1_17_1.tmx
-
 #begin Data/Schedules/NPC_17.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Schedules/NPC_17.xml
-
-#begin Maps/Town/mapHouse_11_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_11_1.tmx
 
 #begin Sound/Stock/Effects/thump3.mp3
 /importer:Mp3Importer
@@ -2596,11 +2431,6 @@
 /processorParam:Quality=Best
 /build:Sound/Stock/Effects/Cauldron.wav
 
-#begin Maps/Town/mapSmithy_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapSmithy_1.tmx
-
 #begin Textures/Buildings/Smithy.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2612,11 +2442,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/Smithy.png
-
-#begin Maps/Town/mapWeaver_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapWeaver_1.tmx
 
 #begin Textures/Buildings/Weaver.png
 /importer:TextureImporter
@@ -3317,16 +3142,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/House_25.png
 
-#begin Maps/Town/mapFlower_Shop_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapFlower_Shop_1.tmx
-
-#begin Maps/Town/mapHouse_25_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_25_1.tmx
-
 #begin Data/Schedules/NPC_25.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -3448,11 +3263,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/Stables.png
 
-#begin Maps/Town/mapStables_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapStables_1.tmx
-
 #begin Textures/Actors/Creatures/NPC_9.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -3476,11 +3286,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/Town_Hall.png
-
-#begin Maps/Town/mapTown_Hall_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapTown_Hall_1.tmx
 
 #begin Data/Schedules/NPC_08.xml
 /importer:XmlImporter
@@ -3508,11 +3313,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/Showroom.png
-
-#begin Maps/Town/mapShowroom_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapShowroom_1.tmx
 
 #begin Textures/Buildings/GeneralStore.png
 /importer:TextureImporter
@@ -3754,4 +3554,171 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Items/Weapons.png
+
+#begin Textures/Buildings/Workshop.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/Workshop.png
+
+#begin Maps/Town/mapApothecary.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapApothecary.tmx
+
+#begin Maps/Town/mapArchitect.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapArchitect.tmx
+
+#begin Maps/Town/mapCarpenter.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapCarpenter.tmx
+
+#begin Maps/Town/mapFlower_Shop.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapFlower_Shop.tmx
+
+#begin Maps/Town/mapGeneralStore.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapGeneralStore.tmx
+
+#begin Maps/Town/mapHouse_1_17.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_1_17.tmx
+
+#begin Maps/Town/mapHouse_11.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_11.tmx
+
+#begin Maps/Town/mapHouse_14.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_14.tmx
+
+#begin Maps/Town/mapHouse_16.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_16.tmx
+
+#begin Maps/Town/mapHouse_18.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_18.tmx
+
+#begin Maps/Town/mapHouse_19.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_19.tmx
+
+#begin Maps/Town/mapHouse_2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_2.tmx
+
+#begin Maps/Town/mapHouse_20.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_20.tmx
+
+#begin Maps/Town/mapHouse_25.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_25.tmx
+
+#begin Maps/Town/mapHouse_3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_3.tmx
+
+#begin Maps/Town/mapHouse_4.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_4.tmx
+
+#begin Maps/Town/mapHouse_5.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_5.tmx
+
+#begin Maps/Town/mapHouse_7.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_7.tmx
+
+#begin Maps/Town/mapHouse_6.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_6.tmx
+
+#begin Maps/Town/mapInn.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapInn.tmx
+
+#begin Maps/Town/mapLumberMill.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapLumberMill.tmx
+
+#begin Maps/Town/mapMagicShop.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapMagicShop.tmx
+
+#begin Maps/Town/mapManor.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapManor.tmx
+
+#begin Maps/Town/mapManor_Basement.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapManor_Basement.tmx
+
+#begin Maps/Town/mapPotionHut.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapPotionHut.tmx
+
+#begin Maps/Town/mapShowroom.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapShowroom.tmx
+
+#begin Maps/Town/mapSmithy.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapSmithy.tmx
+
+#begin Maps/Town/mapStables.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapStables.tmx
+
+#begin Maps/Town/mapStoneMason.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapStoneMason.tmx
+
+#begin Maps/Town/mapTown_Hall.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapTown_Hall.tmx
+
+#begin Maps/Town/mapWeaver.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapWeaver.tmx
 

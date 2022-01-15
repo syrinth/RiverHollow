@@ -276,7 +276,7 @@ namespace RiverHollow.Characters
 
             if (Married) { rv = PlayerManager.PlayerHome.MapName; }
             else if (IsHomeBuilt()) { rv = PlayerManager.GetBuildingByID(_iHouseBuildingID).MapName; }
-            else if (_iHouseBuildingID != -1) { rv = "mapInn_Upper_1"; }
+            else if (_iHouseBuildingID != -1) { rv = "mapInn"; }
 
             return rv;
         }

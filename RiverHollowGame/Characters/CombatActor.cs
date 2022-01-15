@@ -196,9 +196,9 @@ namespace RiverHollow.Characters
         {
             double potencyMod = potency / 100.0;   //100 potency is considered an average attack
             double base_damage = Attribute(AttributeEnum.Damage);  //Damage is the most important attribute for raw damage
-            double AttributeMultiplier = Math.Round(1 + ((double)Attribute(attribute) / 4 * Attribute(attribute) / MAX_STAT), 2);
+            double AttributeMultiplier = Math.Round(0.8 + ((double)Attribute(attribute) / 6 * Attribute(attribute) / MAX_STAT), 2);
 
-            double damage = base_damage * potencyMod * AttributeMultiplier;
+            double damage = base_damage * potencyMod * AttributeMultiplier * 0.5;
 
             min = (int)(damage * 0.75);
             max = (int)(damage * 1.25);

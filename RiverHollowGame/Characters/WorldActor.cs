@@ -451,9 +451,23 @@ namespace RiverHollow.Characters
 
                     _bIdleCooldown = false;
 
-                    moveTo = new Vector2(RHRandom.Instance().Next(8, 32), RHRandom.Instance().Next(8, 32));
-                    if (RHRandom.Instance().Next(1, 2) == 1) { moveTo.X *= -1; }
-                    if (RHRandom.Instance().Next(1, 2) == 1) { moveTo.Y *= -1; }
+                    bool moveX = RHRandom.Instance().Next(0, 1) == 0;
+
+                    if (moveX) {
+                        moveTo = new Vector2(RHRandom.Instance().Next(8, 32), 0);
+                        if (RHRandom.Instance().Next(1, 2) == 1) {
+                            moveTo.X *= -1;
+                        }
+                    }
+                    else {
+                        moveTo = new Vector2(0, RHRandom.Instance().Next(8, 32));
+                        if (RHRandom.Instance().Next(1, 2) == 1) {
+                            moveTo.Y *= -1;
+                        }
+                    }
+
+                    
+                    
 
                     moveTo = CurrentMap.GetFarthestUnblockedPath(Position + moveTo, this);
                 }

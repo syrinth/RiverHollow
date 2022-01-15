@@ -211,10 +211,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 _liActionIcons.Add(tempObj);
 
                 //Icon for User Movement
-                if (selectedAction.UserMovement != MovementTypeEnum.None)
+                if (selectedAction.UserMovement != DirectionEnum.None)
                 {
-                    if (selectedAction.UserMovement == MovementTypeEnum.Forward) { tempObj = DataManager.GetIcon(GameIconEnum.MoveRight); }
-                    else if (selectedAction.UserMovement == MovementTypeEnum.Backward) { tempObj = DataManager.GetIcon(GameIconEnum.MoveLeft); }
+                    if (selectedAction.UserMovement == DirectionEnum.Right) { tempObj = DataManager.GetIcon(GameIconEnum.MoveRight); }
+                    else if (selectedAction.UserMovement == DirectionEnum.Left) { tempObj = DataManager.GetIcon(GameIconEnum.MoveLeft); }
+                    else if (selectedAction.UserMovement == DirectionEnum.Up) { tempObj = DataManager.GetIcon(GameIconEnum.MoveUp); }
+                    else if (selectedAction.UserMovement == DirectionEnum.Down) { tempObj = DataManager.GetIcon(GameIconEnum.MoveDown); }
                     tempObj.SetColor(Color.Green);
 
                     tempObj.AnchorAndAlignToObject(_liActionIcons[_liActionIcons.Count - 1], SideEnum.Right, SideEnum.CenterY);
@@ -223,10 +225,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 }
 
                 //Icon for Target Movement
-                if (selectedAction.TargetMovement != MovementTypeEnum.None)
+                if (selectedAction.TargetMovement != DirectionEnum.None)
                 {
-                    if (selectedAction.TargetMovement == MovementTypeEnum.Forward) { tempObj = DataManager.GetIcon(GameIconEnum.MoveLeft); }
-                    else if (selectedAction.TargetMovement == MovementTypeEnum.Backward) { tempObj = DataManager.GetIcon(GameIconEnum.MoveRight); }
+                    if (selectedAction.TargetMovement == DirectionEnum.Left) { tempObj = DataManager.GetIcon(GameIconEnum.MoveLeft); }
+                    else if (selectedAction.TargetMovement == DirectionEnum.Right) { tempObj = DataManager.GetIcon(GameIconEnum.MoveRight); }
+                    else if (selectedAction.TargetMovement == DirectionEnum.Up) { tempObj = DataManager.GetIcon(GameIconEnum.MoveUp); }
+                    else if (selectedAction.TargetMovement == DirectionEnum.Down) { tempObj = DataManager.GetIcon(GameIconEnum.MoveDown); }
                     tempObj.SetColor(Color.Red);
 
                     tempObj.AnchorAndAlignToObject(_liActionIcons[_liActionIcons.Count - 1], SideEnum.Right, SideEnum.CenterY);

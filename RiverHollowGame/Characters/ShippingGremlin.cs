@@ -30,7 +30,7 @@ namespace RiverHollow.Characters
 
         public ShippingGremlin(int index, Dictionary<string, string> stringData) : base(index)
         {
-            _bLivesInTown = true;
+            //_bLivesInTown = true;
             _liRequiredBuildingIDs = new List<int>();
             _diRequiredObjectIDs = new Dictionary<int, int>();
             _arrInventory = new Item[_iRows, _iCols];

@@ -55,8 +55,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gTurnOrder = new TurnOrder(CombatManager.CurrentRoundOrder);
             AddControl(_gTurnOrder);
 
-            PlayerManager.PlayerCombatant.ApplyStatusEffect(DataManager.GetStatusEffectByIndex(0));
-
             //Create the Active Character Info Panel
             _gActiveCharacterInfo = new InfoPanel(CombatManager.ActiveCharacter);
             _gActiveCharacterInfo.AnchorToScreen(SideEnum.BottomLeft);

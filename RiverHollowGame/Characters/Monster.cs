@@ -17,7 +17,7 @@ namespace RiverHollow.Characters
         int _iRating;
         public int XP { get; private set; }
         protected Vector2 _moveTo = Vector2.Zero;
-        int _iLootID;
+        Dictionary<RarityEnum, List<int>> _diLoot;
 
         public override int MaxHP => Attribute(AttributeEnum.Vitality) * 2 + (int)Math.Pow(_iRating, 2.65);
 
@@ -39,7 +39,7 @@ namespace RiverHollow.Characters
 
             _iRating = int.Parse(data["Lvl"]);
             XP = _iRating * 10;
-            _diAttributes[AttributeEnum.Damage] = 5 + (_iRating * 10);
+            _diAttributes[AttributeEnum.Damage] = 5 + (_iRating * 5);
             _diAttributes[AttributeEnum.Vitality] = 5 + (_iRating * 5);
 
             _diAttributes[AttributeEnum.Strength] = 10 + (_iRating * 5);
@@ -51,7 +51,7 @@ namespace RiverHollow.Characters
             _diAttributes[AttributeEnum.Evasion] = 5;
             _diAttributes[AttributeEnum.Speed] = 5;
 
-            foreach (string ability in data["Ability"].Split('-'))
+            foreach (string ability in data["Ability"].Split('|'))
             {
                 Actions.Add(DataManager.GetCombatActionByIndex(int.Parse(ability)));
             }
@@ -74,6 +74,25 @@ namespace RiverHollow.Characters
                 foreach (string elem in data["Vuln"].Split('-'))
                 {
                     _diElementalAlignment[Util.ParseEnum<ElementEnum>(elem)] = ElementAlignment.Vulnerable;
+                }
+            }
+
+            _diLoot = new Dictionary<RarityEnum, List<int>>();
+            if (data.ContainsKey("Loot"))
+            {
+                string[] lootInfo = Util.FindParams(data["Loot"]);
+                foreach (string s in lootInfo)
+                {
+                    int resourceID = -1;
+                    RarityEnum rarity = RarityEnum.C;
+                    Util.GetRarity(s, ref resourceID, ref rarity);
+
+                    if (!_diLoot.ContainsKey(rarity))
+                    {
+                        _diLoot[rarity] = new List<int>();
+                    }
+
+                    _diLoot[rarity].Add(resourceID);
                 }
             }
 
@@ -121,7 +140,12 @@ namespace RiverHollow.Characters
 
         public Item GetLoot()
         {
-            return DataManager.GetItem(_iLootID);
+            Item rv = null;
+
+            RarityEnum rarityKey = Util.RollAgainstRarity(_diLoot);
+            rv = DataManager.GetItem(_diLoot[rarityKey][RHRandom.Instance().Next(0, _diLoot[rarityKey].Count - 1)]);
+
+            return rv;
         }
     }
 }

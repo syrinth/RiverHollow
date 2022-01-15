@@ -180,17 +180,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public class SpecializedBox : GUIItemBox
         {
-            ItemEnum _itemType;
-            ArmorTypeEnum _armorType;
-            ClothingEnum _clothesType;
-            WeaponEnum _weaponType;
-
-            #region Getters
-            public ItemEnum ItemType => _itemType;
-            public ArmorTypeEnum ArmorType => _armorType;
-            public ClothingEnum ClothingType => _clothesType;
-            public WeaponEnum WeaponType => _weaponType;
-            #endregion
+            public ItemEnum ItemType { get; }
+            public ArmorTypeEnum ArmorType { get; }
+            public ClothingEnum ClothingType { get; }
+            public WeaponEnum WeaponType { get; }
 
             public delegate void OpenItemWindow(SpecializedBox itemBox);
             private OpenItemWindow _delOpenItemWindow;
@@ -198,20 +191,20 @@ namespace RiverHollow.GUIComponents.GUIObjects
             public SpecializedBox(ItemEnum itemType, Item item = null, OpenItemWindow del = null) : base()
             {
                 SetItem(item);
-                _itemType = itemType;
+                ItemType = itemType;
                 _delOpenItemWindow = del;
             }
             public SpecializedBox(ArmorTypeEnum armorType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Equipment, item, del)
             {
-                _armorType = armorType;
+                ArmorType = armorType;
             }
             public SpecializedBox(ClothingEnum clothesType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Clothes, item, del)
             {
-                _clothesType = clothesType;
+                ClothingType = clothesType;
             }
             public SpecializedBox(WeaponEnum weaponType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Equipment, item, del)
             {
-                _weaponType = weaponType;
+                WeaponType = weaponType;
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)

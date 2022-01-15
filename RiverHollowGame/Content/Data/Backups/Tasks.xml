@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[Type:Build][GoalNPC:14][BuildingID:23]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Type:Fetch][GoalItem:136-1][Activate:0][Immediate][Cutscene:2][HideGoal]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Type:Talk][GoalNPC:16]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Type:Build][GoalNPC:14][BuildingID:28][ItemReward:23-10|27-10]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

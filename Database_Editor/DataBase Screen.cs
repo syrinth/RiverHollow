@@ -74,6 +74,7 @@ namespace Database_Editor
         static string PATH_TO_CONTENT = string.Format(@"{0}\..\..\..\..\RiverHollow\RiverHollowGame\Content", System.Environment.CurrentDirectory);
         static string PATH_TO_MAPS = PATH_TO_CONTENT + @"\Maps";
         static string PATH_TO_DATA = PATH_TO_CONTENT + @"\Data";
+        static string PATH_TO_BACKUP = PATH_TO_CONTENT + @"\Data\Backups\";
         static string PATH_TO_TEXT_FILES = PATH_TO_DATA + @"\Text Files";
         static string PATH_TO_DIALOGUE = PATH_TO_TEXT_FILES + @"\Dialogue";
         static string PATH_TO_VILLAGER_DIALOGUE = PATH_TO_DIALOGUE + @"\Villagers";
@@ -1149,7 +1150,6 @@ namespace Database_Editor
             }
             data.ChangeID(int.Parse(tbID.Text), false);
 
-
             DataGridViewRow updatedRow = baseGridView.Rows[_diTabIndices[tabIndex]];
 
             updatedRow.Cells[colID].Value = data.ID;
@@ -1541,6 +1541,7 @@ namespace Database_Editor
 
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Backup();
             AutoSave();
             StreamWriter sWriter = PrepareXMLFile(OBJECT_TEXT_XML_FILE, "Dictionary[string, string]");
 
@@ -1574,6 +1575,8 @@ namespace Database_Editor
 
             //Sort the following Dictionaries by name
             List<XMLData> listToSort = _diBasicXML[MONSTERS_XML_FILE];
+            SortDictionaryByName(ref listToSort);
+            listToSort = _diBasicXML[BUILDINGS_XML_FILE];
             SortDictionaryByName(ref listToSort);
 
             foreach (string s in _diBasicXML.Keys)
@@ -1654,6 +1657,31 @@ namespace Database_Editor
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeons"]) { dgvDungeons.Focus(); }
 
             _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
+        }
+
+        private void BackupFiles(string directory)
+        {
+            foreach (string s in Directory.GetFiles(directory))
+            {
+                string newFileName = PATH_TO_BACKUP + Path.GetFileName(s);
+                if (File.Exists(newFileName))
+                {
+                    File.Delete(newFileName);
+                }
+                File.Move(s, newFileName);
+            }
+        }
+        private void Backup()
+        {
+            BackupFiles(PATH_TO_DATA);
+
+            foreach (string s in Directory.GetDirectories(PATH_TO_DATA))
+            {
+                if(s != PATH_TO_BACKUP)
+                {
+                    BackupFiles(s);
+                }
+            }
         }
 
         private void AutoSave()

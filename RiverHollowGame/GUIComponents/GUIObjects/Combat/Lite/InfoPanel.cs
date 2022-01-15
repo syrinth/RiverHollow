@@ -17,16 +17,15 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
         GUIText _gName;
         GUIText _gHPValue;
 
-        GUIImage _gHP;
-        GUIImage _gPanel;
+        GUIImage _gHPIcon;
         StatusPanel _gStatusPanel;
 
         public InfoPanel() {
-            _gPanel = new GUIImage(new Rectangle(0, 0, 112, 43), DataManager.COMBAT_TEXTURE);
-            AddControl(_gPanel);
+            GUIImage panel = new GUIImage(new Rectangle(0, 0, 112, 43), DataManager.COMBAT_TEXTURE);
+            AddControl(panel);
 
-            Width = _gPanel.Width;
-            Height = _gPanel.Height;
+            Width = panel.Width;
+            Height = panel.Height;
         }
 
         public InfoPanel(CombatActor act) : this()
@@ -48,7 +47,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
         {
             RemoveControl(_actorSprite);
             RemoveControl(_gName);
-            RemoveControl(_gHP);
+            RemoveControl(_gHPIcon);
             RemoveControl(_gHPValue);
             RemoveControl(_gStatusPanel);
 
@@ -63,9 +62,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             _gName.Position(Position() + new Vector2(ScaleIt(41), ScaleIt(2)));
             AddControl(_gName);
 
-            _gHP = DataManager.GetIcon(GameIconEnum.MaxHealth);
-            _gHP.Position(Position() + new Vector2(ScaleIt(42), ScaleIt(18)));
-            AddControl(_gHP);
+            _gHPIcon = DataManager.GetIcon(GameIconEnum.MaxHealth);
+            _gHPIcon.Position(Position() + new Vector2(ScaleIt(42), ScaleIt(18)));
+            AddControl(_gHPIcon);
 
             displayedHP = _actor.CurrentHP;
             _gHPValue = new GUIText(_actor.CurrentHP + @"/" + _actor.MaxHP, DataManager.GetBitMapFont(DataManager.FONT_STAT_DISPLAY));

@@ -65,7 +65,7 @@ namespace RiverHollow.Game_Managers
 
             Delay = 0;
             CurrentMob = m;
-            Monsters = CurrentMob.Monsters;
+            Monsters = new List<CombatActor>(CurrentMob.Monsters);
 
             Party = new List<CombatActor>();
             Party.AddRange(PlayerManager.GetParty());
@@ -261,7 +261,11 @@ namespace RiverHollow.Game_Managers
         public static void EndCombatVictory()
         {
             GUIManager.BeginFadeOut();
-            //MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
+            List<Item> droppedItems = CurrentMob.GetLoot();
+            for (int i =0; i < droppedItems.Count; i++)
+            {
+                InventoryManager.AddToInventory(droppedItems[i]);
+            }
             MapManager.RemoveActor(CurrentMob);
             CurrentMob = null;
             GoToHUDScreen();
@@ -276,7 +280,12 @@ namespace RiverHollow.Game_Managers
 
         public static void SetPhaseForTurn()
         {
-            if (Monsters.Contains(ActiveCharacter))
+            //This one shouldn't be happening but looks like it is.
+            if(ActiveCharacter.CurrentHP == 0)
+            {
+                EndTurn();
+            }
+            else if (Monsters.Contains(ActiveCharacter))
             {
                 CurrentPhase = PhaseEnum.EnemyTurn;
                 EnemyTakeTurn();
@@ -366,6 +375,7 @@ namespace RiverHollow.Game_Managers
         {
             _liCurrentRound.Remove(c);
             _liNextRound.Remove(_liNextRound.Find(x => x.Key == c));
+
         }
 
         public static bool IsPartyUp()
@@ -667,7 +677,7 @@ namespace RiverHollow.Game_Managers
 
         private static void TurnOver()
         {
-            SelectedAction.Clear();
+            SelectedAction?.Clear();
 
             if (CurrentPhase != PhaseEnum.EndCombat)
             {

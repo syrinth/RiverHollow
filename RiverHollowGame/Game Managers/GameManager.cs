@@ -43,12 +43,11 @@ namespace RiverHollow.Game_Managers
 
         public enum SeasonEnum { None, Spring, Summer, Fall, Winter };
         public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };
-        public enum DirectionEnum { Down, Right, Up, Left };
+        public enum DirectionEnum { None, Down, Right, Up, Left };
         public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };
         public enum VerbEnum { Idle, Walk, Ground, Air, UseTool, MakeItem, Alert, Action1, Action2 };
         public enum AnimationEnum { None, PlayAnimation, Rain, Snow, ObjectIdle, Action_Finished, Idle, Action1, Action2, Action3, Action4, Critical, Hurt, KO, Spawn, Victory };
 
-        public enum ToolAnimEnum { Down, Up, Left, Right };
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
@@ -69,10 +68,9 @@ namespace RiverHollow.Game_Managers
         public enum PotencyBonusEnum { None, Conditions, Summon};
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ActionEnum { Action, Item, Move };
-        public enum SkillTagsEnum { Bonus, Harm, Heal, NPC_ID, Push, Pull, Remove, Retreat, Step, StatusEffectID };
+        public enum SkillTagsEnum { Bonus, Harm, Heal, NPC_ID, Displace, Move, Remove, StatusEffectID };
         public enum TargetEnum { Enemy, Ally };
         public enum DamageTypeEnum { Physical, Magical };
-        public enum MovementTypeEnum { None, Forward, Backward };
         public enum RangeEnum { Self, Melee, Ranged, Row, Column, Adjacent};
         public enum AreaTypeEnum { Self, Single, Row, Column, Square, All };
         public enum StatusTypeEnum { Buff, Debuff, DoT, HoT };
@@ -87,7 +85,7 @@ namespace RiverHollow.Game_Managers
         public enum NPCStateEnum { Alert, Idle, TrackPlayer, Pathing, Wander };
         public enum ChildStageEnum { Newborn, Infant, Toddler };
 
-        public enum GameIconEnum { None, AreaAll, AreaColumnAlly, AreaColumnEnemy, AreaSelf, AreaSingle, AreaRow, AreaSquare, Agility, BuffArrow, DebuffArrow, Defense, ElementFire, ElementIce, ElementLightning, Evasion, Heal, Magic, MaxHealth, MagicDamage, Melee, MoveLeft, MoveRight, PhysicalDamage, Ranged, Resistance, Speed, Strength, Timer};
+        public enum GameIconEnum { None, AreaAll, AreaColumnAlly, AreaColumnEnemy, AreaSelf, AreaSingle, AreaRow, AreaSquare, Agility, BuffArrow, DebuffArrow, Defense, ElementFire, ElementIce, ElementLightning, Evasion, Experience, Heal, Magic, MaxHealth, MagicDamage, Melee, MoveDown, MoveLeft, MoveRight, MoveUp, PhysicalDamage, Ranged, Resistance, Speed, Strength, Timer};
 
         public static GameIconEnum GetGameIconFromAttribute(AttributeEnum e)
         {

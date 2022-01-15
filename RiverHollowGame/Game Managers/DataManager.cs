@@ -768,6 +768,9 @@ namespace RiverHollow.Game_Managers
                 case GameIconEnum.Evasion:
                     rv = new GUIImage(new Rectangle(120, 88, 8, 7), COMBAT_TEXTURE);
                     break;
+                case GameIconEnum.Experience:
+                    rv = new GUIImage(new Rectangle(211, 96, 8, 8), COMBAT_TEXTURE);
+                    break;
                 case GameIconEnum.Heal:
                     rv = new GUIImage(new Rectangle(211, 87, 8, 8), COMBAT_TEXTURE);
                     break;
@@ -783,11 +786,17 @@ namespace RiverHollow.Game_Managers
                 case GameIconEnum.Melee:
                     rv = new GUIImage(new Rectangle(199, 55, 9, 9), COMBAT_TEXTURE);
                     break;
+                case GameIconEnum.MoveDown:
+                    rv = new GUIImage(new Rectangle(214, 56, 9, 8), COMBAT_TEXTURE);
+                    break;
                 case GameIconEnum.MoveLeft:
                     rv = new GUIImage(new Rectangle(128, 64, 8, 9), COMBAT_TEXTURE);
                     break;
                 case GameIconEnum.MoveRight:
                     rv = new GUIImage(new Rectangle(136, 64, 8, 9), COMBAT_TEXTURE);
+                    break;
+                case GameIconEnum.MoveUp:
+                    rv = new GUIImage(new Rectangle(214, 48, 9, 8), COMBAT_TEXTURE);
                     break;
                 case GameIconEnum.PhysicalDamage:
                     rv = new GUIImage(new Rectangle(193, 87, 8, 8), COMBAT_TEXTURE);

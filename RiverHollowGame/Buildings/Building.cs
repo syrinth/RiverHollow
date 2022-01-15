@@ -27,7 +27,7 @@ namespace RiverHollow.Buildings
         private string _sTextureName;
 
         private string _sBuildingMap;
-        public new string MapName => "map" + _sTextureName.Replace(" ", "") + "_" + Level.ToString();
+        public new string MapName => DetermineMapName();
 
         public Rectangle SelectionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _sprite.Width, _sprite.Height);
 
@@ -62,7 +62,7 @@ namespace RiverHollow.Buildings
             Util.AssignValue(ref _uSize, "Size", stringData);
 
             Util.AssignValue(ref _rBase, "Base", stringData);
-            Util.AssignValue(ref _rEntrance, "Entrance", stringData);            
+            Util.AssignValue(ref _rEntrance, "Entrance", stringData);
 
             _diUpgradeInfo = new Dictionary<int, Dictionary<int, int>>();
             foreach (string s in new List<string>(stringData.Keys).FindAll(x => x.StartsWith("Upgrade_")))
@@ -156,7 +156,7 @@ namespace RiverHollow.Buildings
                 map.AssignMapTiles(this, Tiles);
                 map.CreateBuildingEntrance(this);
                 map.AddBuilding(this);
-                
+
                 SyncLightPositions();
                 map.AddLights(GetLights());
                 PlayerManager.AddBuilding(this);
@@ -202,6 +202,23 @@ namespace RiverHollow.Buildings
         public void SetHomeMap(string name)
         {
             _sBuildingMap = name;
+        }
+
+        private string DetermineMapName()
+        {
+            string rv = "map" + _sTextureName;
+            //private string LevelAppend => Level > 1 ? "_" + Level.ToString() : "";
+
+            if(Level > 1)
+            {
+                string append = "_" + Level.ToString();
+                if(MapManager.Maps.ContainsKey(rv + append))
+                {
+                    rv = rv + append;
+                }
+            }
+
+            return rv;
         }
 
         public BuildingData SaveData()
