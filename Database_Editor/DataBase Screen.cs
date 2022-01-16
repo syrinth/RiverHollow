@@ -87,8 +87,8 @@ namespace Database_Editor
         static Dictionary<string, Dictionary<string, List<string>>> _diCharacterSchedules;
         static Dictionary<string, List<XMLData>> _diCharacterDialogue;
         static Dictionary<string, Dictionary<string, Dictionary<string, string>>> _diCutsceneDialogue; //File/EntryKey/Tags
-        static List<XMLData> _diMailbox;
-        static List<XMLData> _diGameText; 
+        static List<XMLData> _liMailbox;
+        static List<XMLData> _liGameText; 
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
         static Dictionary<ItemEnum, List<ItemXMLData>> _diItems;
         static Dictionary<string, List<XMLData>> _diBasicXML;
@@ -165,8 +165,8 @@ namespace Database_Editor
 
             LoadDialogueDictionary(PATH_TO_CUTSCENE_DIALOGUE, "Cutscene_", ref _diCutsceneDialogue);
 
-            _diGameText = LoadXMLList(PATH_TO_TEXT_FILES + @"\GameText.xml", DIALOGUE_REF_TAGS, "");
-            _diMailbox = LoadXMLList(PATH_TO_TEXT_FILES + @"\Mailbox_Text.xml", DIALOGUE_REF_TAGS, "");
+            _liGameText = LoadXMLList(PATH_TO_TEXT_FILES + @"\GameText.xml", DIALOGUE_REF_TAGS, "");
+            _liMailbox = LoadXMLList(PATH_TO_TEXT_FILES + @"\Mailbox_Text.xml", DIALOGUE_REF_TAGS, "");
 
             _diCharacterSchedules = new Dictionary<string, Dictionary<string, List<string>>>();
             foreach (string s in Directory.GetFiles(PATH_TO_SCHEDULES))
@@ -694,14 +694,9 @@ namespace Database_Editor
                 {
                     _liItemData[j].CheckForObjectLink(theData);
                 }
-
-                foreach (string s in _diBasicXML.Keys)
-                {
-                    foreach (XMLData testIt in _diBasicXML[s])
-                    {
-                        testIt.CheckForObjectLink(theData);
-                    }
-                }
+                FindLinkedXMLObjects(theData, _liMailbox);
+                FindLinkedXMLObjectsInDictionary(theData, _diBasicXML);
+                FindLinkedXMLObjectsInDictionary(theData, _diCharacterDialogue);
 
                 //Compare ItemData against the WorldObjectData
 
@@ -717,29 +712,18 @@ namespace Database_Editor
                     theData.CheckForObjectLink(testIt);
                 }
 
-                FindLinkedXMLObjectsHelper(theData);
+                FindLinkedTMXObjects(theData);
             }
 
             foreach (XMLData theData in _liWorldObjects)
-            { 
-                foreach (XMLData testIt in _liWorldObjects)
-                {
-                    if(testIt != theData)
-                    {
-                        testIt.CheckForObjectLink(theData);
-                    }
-                }
+            {
+                FindLinkedXMLObjects(theData, _liMailbox);
+                FindLinkedXMLObjects(theData, _liWorldObjects);
 
-                //Find any files that reference the ObjectID
-                foreach (string s in _diBasicXML.Keys)
-                {
-                    foreach (XMLData testIt in _diBasicXML[s])
-                    {
-                        testIt.CheckForObjectLink(theData);
-                    }
-                }
+                FindLinkedXMLObjectsInDictionary(theData, _diBasicXML);
+                FindLinkedXMLObjectsInDictionary(theData, _diCharacterDialogue);
 
-                FindLinkedXMLObjectsHelper(theData);
+                FindLinkedTMXObjects(theData);
             }
 
             foreach (string baseFile in _diBasicXML.Keys)
@@ -751,34 +735,41 @@ namespace Database_Editor
                     {
                         if (!baseFile.Equals(comparatorFile))
                         {
-                            foreach (XMLData testIt in _diBasicXML[comparatorFile])
-                            {
-                                testIt.CheckForObjectLink(theData);
-                            }
+                            FindLinkedXMLObjects(theData, _diBasicXML[comparatorFile]);
                         }
                     }
 
-                    FindLinkedXMLObjectsHelper(theData);
+                    FindLinkedXMLObjects(theData, _liMailbox);
+                    FindLinkedXMLObjectsInDictionary(theData, _diCharacterDialogue);
+
+                    FindLinkedTMXObjects(theData);
                 }
             }
         }
-
-        private void FindLinkedXMLObjectsHelper(XMLData data)
+        private void FindLinkedXMLObjectsInDictionary(XMLData theData, Dictionary<string, List<XMLData>> dictionaryData)
+        {
+            foreach (string s in dictionaryData.Keys)
+            {
+                FindLinkedXMLObjects(theData, dictionaryData[s]);
+            }
+        }
+        private void FindLinkedXMLObjects(XMLData theData, List<XMLData> dataList)
+        {
+            foreach (XMLData testIt in dataList)
+            {
+                if (testIt != theData)
+                {
+                    testIt.CheckForObjectLink(theData);
+                }
+            }
+        }
+        private void FindLinkedTMXObjects(XMLData data)
         {
             //Find any maps that reference the ItemID
             foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
             {
                 kvp.Value.ReferencesXMLObject(data);
             }
-
-            ////Sweep the shops for a match
-            //foreach (KeyValuePair<int, List<XMLData>> kvp in _diShops)
-            //{
-            //    foreach (XMLData testIt in kvp.Value)
-            //    {
-            //        testIt.CheckForItemLink(data);
-            //    }
-            //}
         }
 
         private void ChangeIDs(ref List<ItemXMLData> itemDataList, ref List<XMLData> worldObjectDataList)
@@ -2594,20 +2585,20 @@ namespace Database_Editor
         {
             FormCharExtraData frm = null;
 
-            frm = new FormCharExtraData("Dialogue", _diGameText);
+            frm = new FormCharExtraData("Dialogue", _liGameText);
             frm.ShowDialog();
 
-            _diGameText = frm.StringData;
+            _liGameText = frm.StringData;
         }
 
         private void mailboxMessagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormCharExtraData frm = null;
 
-            frm = new FormCharExtraData("Dialogue", _diMailbox);
+            frm = new FormCharExtraData("Dialogue", _liMailbox);
             frm.ShowDialog();
 
-            _diMailbox = frm.StringData;
+            _liMailbox = frm.StringData;
         }
     }
 }
