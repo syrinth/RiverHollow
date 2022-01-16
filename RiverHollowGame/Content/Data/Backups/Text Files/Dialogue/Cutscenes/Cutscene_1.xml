@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <Item>
+      <Key>IntroText</Key>
+      <Value>[Text:The road has been your companion for days. Stretching on endlessely as you leave your old life behind, searching for a place that could use someone of your talents. All around you, you leave behind the remnants of a war-torn land, until at last you arrive here. A small valley, all but hidden from the last war. River Hollow.]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Text:Ah! You must be $Name!$ I'm $Character_14$, it's good to meet you. So, what do you think of the place? I know it's not much, but it's a start no?]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Text:So you're a potion maker, right? I haven't gotten around to setting it up yet, so you should clear some space and set up a $Building_8$ for yourself. The $Building_9$ is just to the North East there to refine some of this $Item_2$ into $Item_60$]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Text:Beyond that, the surrounding area has lots of resources you should be able to use in your potions, so you should definitely get acquainted with the surrounding area.]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Text:There's a cave to the East of town. It should be a good place for gathering mushrooms, ore and gemstones.
+The forest to the West of town can probably supply you with herbs and other plants, but I don't really know what's important.
+Be careful if you go exploring though, there's monsters around.]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Text:Once you sell some potions, come check out my shop. I'm working on some new building designs to help improve the town!]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

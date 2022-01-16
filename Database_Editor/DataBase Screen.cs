@@ -50,7 +50,7 @@ namespace Database_Editor
         const string TAGS_FOR_TASKS = "TaskID";
 
         const string ITEM_REF_TAGS = "ReqItems,Place";
-        const string TASK_REF_TAGS = "GoalItem,ItemReward,BuildingID,BuildingRewardID";
+        const string TASK_REF_TAGS = "GoalItem,ItemReward,BuildingID,UnlockBuildingID";
         const string CHARACTER_REF_TAGS = "Collection,Class,ShopData,HouseID,RequiredBuildingID,RequiredObjectID,RequestIDs";
         const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID,SubObjects,SeedID,HoneyID,LightID";
         const string CLASSES_REF_TAGS = "GearID,Ability,Spell";
@@ -678,6 +678,7 @@ namespace Database_Editor
             }
         }
 
+        #region Find Linked Objects
         /// <summary>
         /// This iterates through all the ItemData entries and compares them against
         /// the other objects, ensuring that eachobject knows about any object that
@@ -771,6 +772,7 @@ namespace Database_Editor
                 kvp.Value.ReferencesXMLObject(data);
             }
         }
+        #endregion
 
         private void ChangeIDs(ref List<ItemXMLData> itemDataList, ref List<XMLData> worldObjectDataList)
         {
@@ -1664,34 +1666,30 @@ namespace Database_Editor
             _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
         }
 
-        private void BackupFiles(string directory, string targetFolder)
-        {
-            foreach (string s in Directory.GetFiles(directory))
-            {
-                string targetDirectoryPath = PATH_TO_DATA + @"\" + targetFolder;
-                if (!File.Exists(targetDirectoryPath))
-                {
-                    Directory.CreateDirectory(targetDirectoryPath);
-                }
-
-                string newFileName = targetDirectoryPath + @"\" + Path.GetFileName(s);
-                if (File.Exists(newFileName)) {
-                    File.Delete(newFileName);
-                }
-
-                File.Copy(s, newFileName);
-            }
-        }
         private void Backup()
         {
-            BackupFiles(PATH_TO_DATA, "Backups");
-
-            foreach (string s in Directory.GetDirectories(PATH_TO_DATA))
+            Backup(PATH_TO_DATA, PATH_TO_DATA + @"\Backups");
+        }
+        private static void Backup(string root, string dest)
+        {
+            foreach (var directory in Directory.GetDirectories(root))
             {
-                if(s != PATH_TO_BACKUP)
+                if (directory != PATH_TO_DATA + @"\Backups")
                 {
-                    BackupFiles(s, @"Backups\\" + Path.GetFileName(s));
+                    string dirName = Path.GetFileName(directory);
+                    if (!Directory.Exists(Path.Combine(dest, dirName)))
+                    {
+                        Directory.CreateDirectory(Path.Combine(dest, dirName));
+                    }
+                    Backup(directory, Path.Combine(dest, dirName));
                 }
+            }
+
+            foreach (var file in Directory.GetFiles(root))
+            {
+                string destFile = Path.Combine(dest, Path.GetFileName(file));
+                if (File.Exists(destFile)) { File.Delete(destFile); }
+                File.Copy(file, destFile);
             }
         }
 

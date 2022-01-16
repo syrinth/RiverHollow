@@ -213,7 +213,17 @@ namespace RiverHollow.Game_Managers
         private static void LoadTextFiles(ContentManager Content)
         {
             LoadDictionary(ref _diObjectText, FOLDER_TEXTFILES + "Object_Text", Content);
-            _diGameText = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + "GameText");
+
+            _diGameText = new Dictionary<string, string>();
+            Dictionary<string, string> rawTextInfo = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + "GameText");
+            Dictionary<string, string> newDialogue = new Dictionary<string, string>();
+            foreach (string dialogueTags in rawTextInfo.Values)
+            {
+                Dictionary<string, string> tags = Util.DictionaryFromTaggedString(dialogueTags);
+                string newKey = tags["Name"];
+                tags.Remove("Name");
+                _diGameText[newKey] = Util.StringFromTaggedDictionary(tags);
+            }
 
             _diSongs = Content.Load<Dictionary<int, List<string>>>(@"Data\Songs");
             
@@ -230,20 +240,18 @@ namespace RiverHollow.Game_Managers
                     {
                         fileName = s;
                         Util.ParseContentFile(ref fileName);
-                        _diNPCDialogue.Add(file, Content.Load<Dictionary<string, string>>(fileName));
+                        Dictionary<int, string> rawInfo = Content.Load<Dictionary<int, string>>(fileName);
+                        newDialogue = new Dictionary<string, string>();
+                        foreach (string dialogueTags in rawInfo.Values)
+                        {
+                            Dictionary<string, string> tags = Util.DictionaryFromTaggedString(dialogueTags);
+                            string newKey = tags["Name"];
+                            tags.Remove("Name");
+                            newDialogue[newKey] = Util.StringFromTaggedDictionary(tags);
+                        }
+                        _diNPCDialogue.Add(file, newDialogue);
                     }
                 }
-                //else if (s.Contains("Adventurer_")) {
-                //    fileName = Path.GetFileName(s).Replace("Adventurer_", "").Split('.')[0];
-
-                //    int file = -1;
-                //    if (int.TryParse(fileName, out file))
-                //    {
-                //        fileName = s;
-                //        Util.ParseContentFile(ref fileName);
-                //        _diAdventurerDialogue.Add(file, Content.Load<Dictionary<string, string>>(fileName));
-                //    }
-                //}
             }
         }
         private static void LoadCharacters(ContentManager Content)

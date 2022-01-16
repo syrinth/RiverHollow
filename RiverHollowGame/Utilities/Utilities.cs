@@ -221,6 +221,20 @@ namespace RiverHollow.Utilities
             return verb + Util.GetEnumString(direction);
         }
 
+        public static string StringFromTaggedDictionary(Dictionary<string, string> dictionary)
+        {
+            string rv = string.Empty;
+            foreach (KeyValuePair<string, string> kvp in dictionary)
+            {
+                string value = string.Empty;
+                if (!string.IsNullOrEmpty(kvp.Value))
+                {
+                    value = ":" + kvp.Value;
+                }
+                rv += "[" + kvp.Key + value + "]";
+            }
+            return rv;
+        }
         public static Dictionary<string, string> DictionaryFromTaggedString(string taggedString)
         {
             Dictionary<string, string> dss = new Dictionary<string, string>();

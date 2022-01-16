@@ -170,12 +170,7 @@ namespace Database_Editor
         {
             DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
 
-            string oldKey = row.Cells["colCharExtraID"].Value.ToString();
-            //if (_diStringData.ContainsKey(oldKey))
-            //{
-            //    _diStringData.Remove(oldKey);
-            //}
-
+            _diStringData[_iIndex].ClearTagInfo();
             _diStringData[_iIndex].SetTagInfo("Name", tbCharExtraDataName.Text);
             _diStringData[_iIndex].SetTagInfo("Text", tbCharExtraDataInfo.Text);
 

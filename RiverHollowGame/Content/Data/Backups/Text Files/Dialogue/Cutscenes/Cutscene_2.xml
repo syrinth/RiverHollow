@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <Item>
+      <Key>IntroText</Key>
+      <Value>[Text:Something about the old harp calls to you. Idly, you strum your fingers along the strings, and a soft series of notes echoes through the long deserted Manor.]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Text:...]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Text:Is that... the harp?]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Text:! You've come home! Master! Oh, I had begun to think this day would never come. The Manor has a master again at last! I'm $Name$,the spirit of the manor, and it is my utmost pleasure to have one of your line to serve once more!]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

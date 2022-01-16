@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <Item>
+      <Key>1</Key>
+      <Value>[Text:Need something hexed?]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Text:There's something in the swamp...]</Value>
+    </Item>
+    <Item>
+      <Key>JoinParty</Key>
+      <Value>[Text:I've got just the trick for you.]</Value>
+    </Item>
+    <Item>
+      <Key>Selection</Key>
+      <Value>[Text:What do you want?{Talk-Talk|Join Party-Party}]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

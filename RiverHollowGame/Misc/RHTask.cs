@@ -144,7 +144,7 @@ namespace RiverHollow.Misc
 
             Util.AssignValue(ref _iRewardMoney, "Money", stringData);
             Util.AssignValue(ref _iTargetBuildingID, "BuildingID", stringData);
-            Util.AssignValue(ref _iUnlockBuildingID, "BuildingRewardID", stringData);
+            Util.AssignValue(ref _iUnlockBuildingID, "UnlockBuildingID", stringData);
 
             Util.AssignValue(ref _iDay, "Day", stringData);
             Util.AssignValue(ref _iSeason, "Season", stringData);
