@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
-  <Asset Type="Dictionary[string, string]">
+  <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>Introduction</Key>
-      <Value>[Text:Hey. $Name$ right? Glad you made it. I'm $Character_14$, and I'm here to help you with building the town itself. We really need a workshop if we're going to do anything. Here's some materials I brought with me. Be careful with how you use them, this is all I brought.][UnlockBuildingID:35][ItemID:55-5|60-5][Task:0]</Value>
+      <Key>0</Key>
+      <Value>[Text:Hey. $Name$ right? Glad you made it. I'm $Character_14$, and I'm here to help you with building the town itself. We really need a workshop if we're going to do anything. Here's some materials I brought with me. Be careful with how you use them, this is all I brought.][UnlockBuildingID:35][ItemID:55-5|60-5][Task:0][Name:Introduction][TaskID:0]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Hey there, $Name$,hope you're feeling well today!][Default]</Value>
+      <Value>[Text:Hey there, $Name$,hope you're feeling well today!][Default][Name]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:Hey, $Name$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.][Default]</Value>
+      <Value>[Text:Hey, $Name$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.][Default][Name]</Value>
     </Item>
     <Item>
-      <Key>ShopOpen</Key>
-      <Value>[Text:Oh, hello $Name$, What can I do for you?][Selection:Shop]</Value>
+      <Key>3</Key>
+      <Value>[Text:Oh, hello $Name$, What can I do for you?][Selection:Shop][Name:ShopOpen]</Value>
     </Item>
     <Item>
-      <Key>Gift</Key>
-      <Value>[Text:Wow! Thanks!]</Value>
+      <Key>4</Key>
+      <Value>[Text:Wow! Thanks!][Name:Gift]</Value>
     </Item>
     <Item>
-      <Key>Selection</Key>
-      <Value>[Text:Hey.][Selection:VillageTalk]</Value>
+      <Key>5</Key>
+      <Value>[Text:Hey.][Selection:VillageTalk][Name:Selection]</Value>
     </Item>
     <Item>
-      <Key>Task_0_End</Key>
+      <Key>6</Key>
       <Value>[Text:Already done? Great work. With the $Building_35$ built, we can make bricks and planks. It's kind of hard to build a town without them, you know.
 
-Here, I drew up some plans for a house for you. You should get that built before nightfall, better to have your own space.][Face:Happy][UnlockBuildingID:22]</Value>
+Here, I drew up some plans for a house for you. You should get that built before nightfall, better to have your own space.][Face:Happy][UnlockBuildingID:22][Name:Task_0_End]</Value>
     </Item>
     <Item>
-      <Key>Architect</Key>
-      <Value>[Text:$Name$! I'm glad to see you. So, I've been thinking... I've just about finished witht he plans I brought with me. If I'm going to design any more buildings, I'm going to need a place to work.  Could you build this for me?][Once][Priority:50][RequiredBuildingID:8][UnlockBuildingID:6]</Value>
+      <Key>7</Key>
+      <Value>[Text:$Name$! I'm glad to see you. So, I've been thinking... I've just about finished witht he plans I brought with me. If I'm going to design any more buildings, I'm going to need a place to work.  Could you build this for me?][Once][Priority:50][RequiredBuildingID:8][UnlockBuildingID:6][Name:Architect]</Value>
     </Item>
   </Asset>
 </XnaContent>

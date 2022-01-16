@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
-  <Asset Type="Dictionary[string, string]">
+  <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>Introduction</Key>
-      <Value>[Text:Hey, I need a house if you could.][UnlockBuildingID:17]</Value>
+      <Key>0</Key>
+      <Value>[Text:Hey, I need a house if you could.][UnlockBuildingID:17][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -14,32 +14,32 @@
       <Value>[Text:You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.][Default]</Value>
     </Item>
     <Item>
-      <Key>Gift</Key>
-      <Value>[Text:Oh, that's surprising. Thank you.]</Value>
+      <Key>3</Key>
+      <Value>[Text:Oh, that's surprising. Thank you.][Name:Gift]</Value>
     </Item>
     <Item>
-      <Key>Collection</Key>
-      <Value>[Text:Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?]</Value>
+      <Key>4</Key>
+      <Value>[Text:Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?][Name:Collection]</Value>
     </Item>
     <Item>
-      <Key>Selection</Key>
-      <Value>[Text:Hello, what can I do for you?][Selection:VillageTalk]</Value>
+      <Key>5</Key>
+      <Value>[Text:Hello, what can I do for you?][Selection:VillageTalk][Name:Selection]</Value>
     </Item>
     <Item>
-      <Key>JoinPartyYes</Key>
-      <Value>[Text:Certainly, I'd like to see what we can accomplish together.]</Value>
+      <Key>6</Key>
+      <Value>[Text:Certainly, I'd like to see what we can accomplish together.][Name:JoinPartyYes]</Value>
     </Item>
     <Item>
-      <Key>JoinPartyNo</Key>
-      <Value>[Text:Sorry,I'm very busy today. Maybe in a few days I can go with you again.]</Value>
+      <Key>7</Key>
+      <Value>[Text:Sorry,I'm very busy today. Maybe in a few days I can go with you again.][Name:JoinPartyNo]</Value>
     </Item>
     <Item>
-      <Key>MarriageYes</Key>
-      <Value>[Text:Yes I will marry you!]</Value>
+      <Key>8</Key>
+      <Value>[Text:Yes I will marry you!][Name:MarriageYes]</Value>
     </Item>
     <Item>
-      <Key>MarriageNo</Key>
-      <Value>[Text:Oh... I'm sorry but. No.]</Value>
+      <Key>9</Key>
+      <Value>[Text:Oh... I'm sorry but. No.][Name:MarriageNo]</Value>
     </Item>
   </Asset>
 </XnaContent>

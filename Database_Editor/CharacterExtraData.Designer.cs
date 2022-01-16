@@ -30,18 +30,19 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCharExtraData));
             this.dgvCharExtraData = new System.Windows.Forms.DataGridView();
-            this.colCharExtraID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbCharExtraDataInfo = new System.Windows.Forms.TextBox();
             this.tbCharExtraDataName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnAddNew = new System.Windows.Forms.Button();
-            this.dgvEditTags = new System.Windows.Forms.DataGridView();
+            this.dgvExtraTags = new System.Windows.Forms.DataGridView();
             this.colTaskTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
+            this.colCharExtraID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCharExtraName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCharExtraData)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvEditTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvExtraTags)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvCharExtraData
@@ -52,7 +53,8 @@
             this.dgvCharExtraData.AllowUserToResizeRows = false;
             this.dgvCharExtraData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCharExtraData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colCharExtraID});
+            this.colCharExtraID,
+            this.colCharExtraName});
             this.dgvCharExtraData.Location = new System.Drawing.Point(12, 12);
             this.dgvCharExtraData.MultiSelect = false;
             this.dgvCharExtraData.Name = "dgvCharExtraData";
@@ -62,15 +64,6 @@
             this.dgvCharExtraData.Size = new System.Drawing.Size(308, 397);
             this.dgvCharExtraData.TabIndex = 15;
             this.dgvCharExtraData.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCharExtraData_CellClick);
-            // 
-            // colCharExtraID
-            // 
-            this.colCharExtraID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colCharExtraID.FillWeight = 90F;
-            this.colCharExtraID.HeaderText = "Name";
-            this.colCharExtraID.Name = "colCharExtraID";
-            this.colCharExtraID.ReadOnly = true;
-            this.colCharExtraID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tbCharExtraDataInfo
             // 
@@ -118,14 +111,14 @@
             // 
             // dgvEditTags
             // 
-            this.dgvEditTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvEditTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvExtraTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvExtraTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colTaskTags});
-            this.dgvEditTags.Location = new System.Drawing.Point(329, 174);
-            this.dgvEditTags.Name = "dgvEditTags";
-            this.dgvEditTags.RowHeadersVisible = false;
-            this.dgvEditTags.Size = new System.Drawing.Size(459, 206);
-            this.dgvEditTags.TabIndex = 46;
+            this.dgvExtraTags.Location = new System.Drawing.Point(329, 174);
+            this.dgvExtraTags.Name = "dgvEditTags";
+            this.dgvExtraTags.RowHeadersVisible = false;
+            this.dgvExtraTags.Size = new System.Drawing.Size(459, 206);
+            this.dgvExtraTags.TabIndex = 46;
             // 
             // colTaskTags
             // 
@@ -152,6 +145,24 @@
             this.btnRemove.Text = "Remove";
             this.btnRemove.UseVisualStyleBackColor = true;
             // 
+            // colCharExtraID
+            // 
+            this.colCharExtraID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colCharExtraID.FillWeight = 10F;
+            this.colCharExtraID.HeaderText = "ID";
+            this.colCharExtraID.Name = "colCharExtraID";
+            this.colCharExtraID.ReadOnly = true;
+            this.colCharExtraID.Width = 31;
+            // 
+            // colCharExtraName
+            // 
+            this.colCharExtraName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCharExtraName.FillWeight = 90F;
+            this.colCharExtraName.HeaderText = "Name";
+            this.colCharExtraName.Name = "colCharExtraName";
+            this.colCharExtraName.ReadOnly = true;
+            this.colCharExtraName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // FormCharExtraData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -159,7 +170,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.dgvEditTags);
+            this.Controls.Add(this.dgvExtraTags);
             this.Controls.Add(this.btnAddNew);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbCharExtraDataName);
@@ -171,7 +182,7 @@
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormCharExtraData_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dgvCharExtraData)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvEditTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvExtraTags)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -185,10 +196,11 @@
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnAddNew;
-        private System.Windows.Forms.DataGridView dgvEditTags;
+        private System.Windows.Forms.DataGridView dgvExtraTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTaskTags;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCharExtraID;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnRemove;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCharExtraID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCharExtraName;
     }
 }

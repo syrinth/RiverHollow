@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
-  <Asset Type="Dictionary[string, string]">
+  <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>Introduction</Key>
-      <Value>[Text:Hi! Welcome to the Blue Hare Inn. I'm $Character_10$. I hope the road wasn't too bad to get here.]</Value>
+      <Key>0</Key>
+      <Value>[Text:Hi! Welcome to the Blue Hare Inn. I'm $Character_10$. I hope the road wasn't too bad to get here.][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -14,36 +14,36 @@
       <Value>[Text:You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.][Default]</Value>
     </Item>
     <Item>
-      <Key>Gift</Key>
-      <Value>[Text:Oh, that's surprising. Thank you.]</Value>
+      <Key>3</Key>
+      <Value>[Text:Oh, that's surprising. Thank you.][Name:Gift]</Value>
     </Item>
     <Item>
-      <Key>Collection</Key>
-      <Value>[Text:Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?]</Value>
+      <Key>4</Key>
+      <Value>[Text:Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?][Name:Collection]</Value>
     </Item>
     <Item>
-      <Key>Selection</Key>
-      <Value>[Text:Hello, what can I do for you?][Selection:VillageTalk]</Value>
+      <Key>5</Key>
+      <Value>[Text:Hello, what can I do for you?][Selection:VillageTalk][Name:Selection]</Value>
     </Item>
     <Item>
-      <Key>Snowing|1</Key>
-      <Value>[Text:Nice to see you hon, we don't get too many customers on cold days like this. Why don't you treat yourself to something warm at the bar?][Weather:Snowing]</Value>
+      <Key>6</Key>
+      <Value>[Text:Nice to see you hon, we don't get too many customers on cold days like this. Why don't you treat yourself to something warm at the bar?][Weather:Snowing][Name:Snowing|1]</Value>
     </Item>
     <Item>
-      <Key>Snowing|2</Key>
-      <Value>[Text:Sometimes, days like these remind me of when $Character_9$ and I first met. It was the dead of winter and he'd just come into the tavern I was performing at, bundled up in his coat. There was something about him that caught my eye immediately.][Weather:Snowing]</Value>
+      <Key>7</Key>
+      <Value>[Text:Sometimes, days like these remind me of when $Character_9$ and I first met. It was the dead of winter and he'd just come into the tavern I was performing at, bundled up in his coat. There was something about him that caught my eye immediately.][Weather:Snowing][Name:Snowing|2]</Value>
     </Item>
     <Item>
-      <Key>Rain|1</Key>
-      <Value>[Text:You know, I kind of love the rain now that I'm not on the road anymore. I hated it back then though. Now? It's nice to be warm inside and watch it fall.][Weather:Raining]</Value>
+      <Key>8</Key>
+      <Value>[Text:You know, I kind of love the rain now that I'm not on the road anymore. I hated it back then though. Now? It's nice to be warm inside and watch it fall.][Weather:Raining][Name:Rain|1]</Value>
     </Item>
     <Item>
-      <Key>Rain|2</Key>
-      <Value>[Text:Huh, rain? Guess we're not going to have too many customers tonight, huh?][Weather:Raining]</Value>
+      <Key>9</Key>
+      <Value>[Text:Huh, rain? Guess we're not going to have too many customers tonight, huh?][Weather:Raining][Name:Rain|2]</Value>
     </Item>
     <Item>
-      <Key>Dialogue|3</Key>
-      <Value>[Text:Best be careful if you're gonna go exploring hon, I was out on the edge of the forest the other day, just minding my own business when I saw something creeping around. I didn't get a good look at it, but it didn't seem like a good idea to stick around.]</Value>
+      <Key>10</Key>
+      <Value>[Text:Best be careful if you're gonna go exploring hon, I was out on the edge of the forest the other day, just minding my own business when I saw something creeping around. I didn't get a good look at it, but it didn't seem like a good idea to stick around.][Name:Dialogue|3]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
-  <Asset Type="Dictionary[string, string]">
+  <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>Introduction</Key>
-      <Value>[Text:Hey, name's $Character_7$. I heard that you might be needing some extra hands to help withsome of the monsters around here. All I ask is that you build me a place to live. Doesn't need to be anything fancy. There is no way I'm moving back in with dad.][UnlockBuildingID:19]</Value>
+      <Key>0</Key>
+      <Value>[Text:Hey, name's $Character_7$. I heard that you might be needing some extra hands to help withsome of the monsters around here. All I ask is that you build me a place to live. Doesn't need to be anything fancy. There is no way I'm moving back in with dad.][UnlockBuildingID:19][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -14,36 +14,36 @@
       <Value>[Text:I've taken down thirty monsters this week. How about you?][Default]</Value>
     </Item>
     <Item>
-      <Key>Gift</Key>
-      <Value>[Text:A gift eh? You sure you don't just want something?]</Value>
+      <Key>3</Key>
+      <Value>[Text:A gift eh? You sure you don't just want something?][Name:Gift]</Value>
     </Item>
     <Item>
-      <Key>Collection</Key>
-      <Value>[Text:You can't be serious. You're giving this to me? I've been looking for this! Thank you.]</Value>
+      <Key>4</Key>
+      <Value>[Text:You can't be serious. You're giving this to me? I've been looking for this! Thank you.][Name:Collection]</Value>
     </Item>
     <Item>
-      <Key>Selection</Key>
-      <Value>[Text:Hello, what can I do for you?][Selection:VillageTalk]</Value>
+      <Key>5</Key>
+      <Value>[Text:Hello, what can I do for you?][Selection:VillageTalk][Name:Selection]</Value>
     </Item>
     <Item>
-      <Key>JoinPartyYes</Key>
-      <Value>[Text:Certainly, I'd like to see what we can accomplish together.]</Value>
+      <Key>6</Key>
+      <Value>[Text:Certainly, I'd like to see what we can accomplish together.][Name:JoinPartyYes]</Value>
     </Item>
     <Item>
-      <Key>JoinPartyNo</Key>
-      <Value>[Text:Sorry,I'm very busy today. Maybe in a few days I can go with you again.]</Value>
+      <Key>7</Key>
+      <Value>[Text:Sorry,I'm very busy today. Maybe in a few days I can go with you again.][Name:JoinPartyNo]</Value>
     </Item>
     <Item>
-      <Key>MarriageYes</Key>
-      <Value>[Text:Yes I will marry you!]</Value>
+      <Key>8</Key>
+      <Value>[Text:Yes I will marry you!][Name:MarriageYes]</Value>
     </Item>
     <Item>
-      <Key>MarriageNo</Key>
-      <Value>[Text:Oh... I'm sorry but. No.]</Value>
+      <Key>9</Key>
+      <Value>[Text:Oh... I'm sorry but. No.][Name:MarriageNo]</Value>
     </Item>
     <Item>
-      <Key>Raining|1</Key>
-      <Value>[Text:What are you doing skulking about in the rain? Not up to now good are you?][Weather:Raining]</Value>
+      <Key>10</Key>
+      <Value>[Text:What are you doing skulking about in the rain? Not up to now good are you?][Weather:Raining][Name:Raining|1]</Value>
     </Item>
   </Asset>
 </XnaContent>

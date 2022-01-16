@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
-  <Asset Type="Dictionary[string, string]">
+  <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>Introduction</Key>
+      <Key>0</Key>
       <Value>[Text:Oh thank Heavens! Have you seen a girl named $Character_5$? She's about this tall, short brown hair and has a permanent scowl?
 You have?! Thank you! So this is where she ran off to is it? My name is $Character_18$, I'm her aunt and guardian. She gave me the slip a week ago.
-I'd be grateful if you could build me a house.][UnlockBuildingID:30]</Value>
+I'd be grateful if you could build me a house.][UnlockBuildingID:30][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -16,16 +16,16 @@ I'd be grateful if you could build me a house.][UnlockBuildingID:30]</Value>
       <Value>[Text:Hello, $Name$. Could you talk to $1$ for me by any chance? I worry about her, always pushing herself so hard.][Default]</Value>
     </Item>
     <Item>
-      <Key>Gift</Key>
-      <Value>[Text:For me? Oh, $Name$, you shouldn't have.]</Value>
+      <Key>3</Key>
+      <Value>[Text:For me? Oh, $Name$, you shouldn't have.][Name:Gift]</Value>
     </Item>
     <Item>
-      <Key>Selection</Key>
-      <Value>[Text:Oh, hello. ][Selection:VillageTalk]</Value>
+      <Key>4</Key>
+      <Value>[Text:Oh, hello. ][Selection:VillageTalk][Name:Selection]</Value>
     </Item>
     <Item>
-      <Key>Tailor request</Key>
-      <Value>[Text:Well, if I'm to stay here i suppose I'll need to find a way to earn my keep. I'm not too bad witha needle and thread. I'm sure $Character_14$ could design a shop for me or something.][Default][Priority:50][Once][ShopTargetID:2][UnlockItemID:139]</Value>
+      <Key>5</Key>
+      <Value>[Text:Well, if I'm to stay here i suppose I'll need to find a way to earn my keep. I'm not too bad witha needle and thread. I'm sure $Character_14$ could design a shop for me or something.][Default][Priority:50][Once][ShopTargetID:2][UnlockItemID:139][Name:Tailor request]</Value>
     </Item>
   </Asset>
 </XnaContent>

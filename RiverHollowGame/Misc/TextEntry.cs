@@ -242,7 +242,7 @@ namespace RiverHollow.Misc
         /// <param name="act">The TalkingActor we're talking to</param>
         public void HandlePostWindowActions(TalkingActor act = null)
         {
-            if (_diTags.ContainsKey("Task"))
+            if (_diTags.ContainsKey("TaskID"))
             {
                 PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(_diTags["Task"])]);
             }

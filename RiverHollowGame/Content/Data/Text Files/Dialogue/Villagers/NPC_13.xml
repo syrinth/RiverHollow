@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
-  <Asset Type="Dictionary[string, string]">
+  <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>Introduction</Key>
-      <Value>[Text:Lorum Ipsum]</Value>
+      <Key>0</Key>
+      <Value>[Text:Lorum Ipsum][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -14,34 +14,34 @@
       <Value>[Text:Hey, $Name$. You ever have one of those days where you just feel like you can't do anything right? Yeah. Hope your day is going better at least.][Default]</Value>
     </Item>
     <Item>
-      <Key>ShopOpen</Key>
-      <Value>[Text:Oh, hello $Name$, What can I do for you?]</Value>
+      <Key>3</Key>
+      <Value>[Text:Oh, hello $Name$, What can I do for you?][Name:ShopOpen]</Value>
     </Item>
     <Item>
-      <Key>Gift</Key>
-      <Value>[Text:What? I haven't done anything to deserve this. Thank you.]</Value>
+      <Key>4</Key>
+      <Value>[Text:What? I haven't done anything to deserve this. Thank you.][Name:Gift]</Value>
     </Item>
     <Item>
-      <Key>Selection</Key>
-      <Value>[Text:Hey.][Selection:VillageTalk]</Value>
+      <Key>5</Key>
+      <Value>[Text:Hey.][Selection:VillageTalk][Name:Selection]</Value>
     </Item>
     <Item>
-      <Key>Maintenance</Key>
-      <Value>[Text:What do you want to do?]</Value>
+      <Key>6</Key>
+      <Value>[Text:What do you want to do?][Name:Maintenance]</Value>
     </Item>
     <Item>
-      <Key>Collection</Key>
+      <Key>7</Key>
       <Value>[Text:This is!? No. how did you get this? I don't... I can't...
 Really?
-Thank you so much!]</Value>
+Thank you so much!][Name:Collection]</Value>
     </Item>
     <Item>
-      <Key>Raining|1</Key>
-      <Value>[Text:My mother used to tell me stories of monsters that came out when it was raining. I know she just made them up but, sometimes, I can't help but wonder, you know?][Weather:Raining]</Value>
+      <Key>8</Key>
+      <Value>[Text:My mother used to tell me stories of monsters that came out when it was raining. I know she just made them up but, sometimes, I can't help but wonder, you know?][Weather:Raining][Name:Raining|1]</Value>
     </Item>
     <Item>
-      <Key>Snowing|1</Key>
-      <Value>[Text:Brr, I hope you've got some warm clothing on today. I always make $Character_14$ a cup of tea on days like this.][Weather:Snowing]</Value>
+      <Key>9</Key>
+      <Value>[Text:Brr, I hope you've got some warm clothing on today. I always make $Character_14$ a cup of tea on days like this.][Weather:Snowing][Name:Snowing|1]</Value>
     </Item>
   </Asset>
 </XnaContent>

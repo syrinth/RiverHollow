@@ -2,160 +2,156 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, string]">
     <Item>
-      <Key>FoodConfirm</Key>
-      <Value>[Text:Really eat the {0}?][Selection:YesNo][Trigger:UseItem]</Value>
+      <Key>0</Key>
+      <Value>[Name:FoodConfirm][Text:Really eat the {0}?][Selection:YesNo][Trigger:UseItem]</Value>
     </Item>
     <Item>
-      <Key>GiftConfirm</Key>
-      <Value>[Text:Give {0} to {1}?][Selection:YesNo][Trigger:ConfirmGift]</Value>
+      <Key>1</Key>
+      <Value>[Name:GiftConfirm][Text:Give {0} to {1}?][Selection:YesNo][Trigger:ConfirmGift]</Value>
     </Item>
     <Item>
-      <Key>ItemConfirm</Key>
-      <Value>[Text:Use {0} on who?][Selection:Party][Trigger:UseItem]</Value>
+      <Key>2</Key>
+      <Value>[Name:ItemConfirm][Text:Use {0} on who?][Selection:Party][Trigger:UseItem]</Value>
     </Item>
     <Item>
-      <Key>ClassItemConfirm</Key>
-      <Value>[Text:Really use the {0}?][Selection:YesNo][Trigger:UseItem]</Value>
+      <Key>3</Key>
+      <Value>[Name:ClassItemConfirm][Text:Really use the {0}?][Selection:YesNo][Trigger:UseItem]</Value>
     </Item>
     <Item>
-      <Key>AdventurerTree</Key>
-      <Value>[Text:...{{Talk-Talk|Join Party-Party}}]</Value>
+      <Key>4</Key>
+      <Value>[Name:AdventurerTree][Text:...{{Talk-Talk|Join Party-Party}}]</Value>
     </Item>
     <Item>
-      <Key>Save</Key>
-      <Value>[Text:Save and end the day?][Selection:YesNo][Trigger:EndDay]</Value>
+      <Key>5</Key>
+      <Value>[Name:Save][Text:Save and end the day?][Selection:YesNo][Trigger:EndDay]</Value>
     </Item>
     <Item>
-      <Key>ReallyExit</Key>
-      <Value>[Text:Are you sure?][Selection:YesNo][Trigger:Exit]</Value>
+      <Key>6</Key>
+      <Value>[Name:ReallyExit][Text:Are you sure?][Selection:YesNo][Trigger:Exit]</Value>
     </Item>
     <Item>
-      <Key>Rune_of_Return_Use</Key>
-      <Value>[Text:Use the {0} to the dungeon entrance?][Selection:YesNo][Trigger:UseItem]</Value>
+      <Key>7</Key>
+      <Value>[Name:Rune_of_Return_Use][Text:Use the {0} to the dungeon entrance?][Selection:YesNo][Trigger:UseItem]</Value>
     </Item>
     <Item>
-      <Key>Rune_of_Return_Empty</Key>
-      <Value>[Text:The {0}'s energy is spent.]</Value>
+      <Key>8</Key>
+      <Value>[Name:Rune_of_Return_Empty][Text:The {0}'s energy is spent.]</Value>
     </Item>
     <Item>
-      <Key>Rune_of_Return_No_Dungeon</Key>
-      <Value>[Text:The rune cannot work here.]</Value>
+      <Key>9</Key>
+      <Value>[Name:Rune_of_Return_No_Dungeon][Text:The rune cannot work here.]</Value>
     </Item>
     <Item>
-      <Key>Key_Door</Key>
-      <Value>[Text:The door is locked. You will need a key to open it.]</Value>
+      <Key>10</Key>
+      <Value>[Name:Key_Door][Text:The door is locked. You will need a key to open it.]</Value>
     </Item>
     <Item>
-      <Key>Item_Door</Key>
-      <Value>[Text:A strangely shaped keyhole is embedded in the door {{Attempt to Open-OpenDoor|Never Mind-Cancel}}]</Value>
+      <Key>11</Key>
+      <Value>[Name:Item_Door][Text:A strangely shaped keyhole is embedded in the door {{Attempt to Open-OpenDoor|Never Mind-Cancel}}]</Value>
     </Item>
     <Item>
-      <Key>Item_Door_Open</Key>
-      <Value>[Text:As you place the item into the keyhole, it vanishes, becoming one with the door!]</Value>
+      <Key>12</Key>
+      <Value>[Name:Item_Door_Ope][Text:As you place the item into the keyhole, it vanishes, becoming one with the door!]</Value>
     </Item>
     <Item>
-      <Key>Item_Door_Close</Key>
-      <Value>[Text:No matter how hard you try, it seems like that item won't fit here.]</Value>
+      <Key>13</Key>
+      <Value>[Name:Item_Door_Close][Text:No matter how hard you try, it seems like that item won't fit here.]</Value>
     </Item>
     <Item>
-      <Key>Trigger_Door</Key>
-      <Value>[Text:You see no visible means of opening this door. There must be a hidden switch or something.]</Value>
+      <Key>14</Key>
+      <Value>[Name:Trigger_Door][Text:You see no visible means of opening this door. There must be a hidden switch or something.]</Value>
     </Item>
     <Item>
-      <Key>MonsterFood_Confirm</Key>
-      <Value>[Text:Set out the {0} here?][Selection:YesNo][Trigger:UseItem]</Value>
+      <Key>15</Key>
+      <Value>[Name:MonsterFood_Confirm][Text:Set out the {0} here?][Selection:YesNo][Trigger:UseItem]</Value>
     </Item>
     <Item>
-      <Key>MonsterFood_Yes</Key>
-      <Value>[Text:You place the {0} on the ground.]</Value>
+      <Key>16</Key>
+      <Value>[Name:MonsterFood_Yes][Text:You place the {0} on the ground.]</Value>
     </Item>
     <Item>
-      <Key>MonsterFood_False</Key>
-      <Value>[Text:You see no monster tracks here, better use it somewhere else.]</Value>
+      <Key>17</Key>
+      <Value>[Name:MonsterFood_False][Text:You see no monster tracks here, better use it somewhere else.]</Value>
     </Item>
     <Item>
-      <Key>MonsterFood_Duplicate</Key>
-      <Value>[Text:Tantalizing food has already been placed.]</Value>
+      <Key>18</Key>
+      <Value>[Name:MonsterFood_Duplicate][Text:Tantalizing food has already been placed.]</Value>
     </Item>
     <Item>
-      <Key>Pedestal_Ruby</Key>
-      <Value>[Text:A shining red gem.]</Value>
+      <Key>19</Key>
+      <Value>[Name:Pedestal_Ruby][Text:A shining red gem.]</Value>
     </Item>
     <Item>
-      <Key>Pedestal_Emerald</Key>
-      <Value>[Text:A shining red gem.]</Value>
+      <Key>20</Key>
+      <Value>[Name:Pedestal_Emerald][Text:A shining red gem.]</Value>
     </Item>
     <Item>
-      <Key>Defeat</Key>
-      <Value>[Text:You have been defeated.]</Value>
+      <Key>21</Key>
+      <Value>[Name:Defeat][Text:You have been defeated.]</Value>
     </Item>
     <Item>
-      <Key>New_Villager</Key>
-      <Value>[Text:A New Villager has arrived in town.]</Value>
+      <Key>22</Key>
+      <Value>[Name:New_Villager][Text:A New Villager has arrived in town.]</Value>
     </Item>
     <Item>
-      <Key>New_Villagers</Key>
-      <Value>[Text:New Villagers have arrived in town.]</Value>
+      <Key>23</Key>
+      <Value>[Name:New_Villagers][Text:New Villagers have arrived in town.]</Value>
     </Item>
     <Item>
-      <Key>Upgrade 1</Key>
-      <Value>[Text:Tavern/A place where people can gather]</Value>
+      <Key>24</Key>
+      <Value>[Name:Upgrade 1][Text:Tavern/A place where people can gather]</Value>
     </Item>
     <Item>
-      <Key>Selection_Talk</Key>
-      <Value>[Text:Talk][TextVerb:Talk]</Value>
+      <Key>25</Key>
+      <Value>[Name:Selection_Talk][Text:Talk][TextVerb:Talk]</Value>
     </Item>
     <Item>
-      <Key>Selection_Gift</Key>
-      <Value>[Text:Gift][TextVerb:Gift]</Value>
+      <Key>26</Key>
+      <Value>[Name:Selection_Gift][Text:Gift][TextVerb:Gift]</Value>
     </Item>
     <Item>
-      <Key>Selection_Party</Key>
-      <Value>[Text:Join Party][TextVerb:Party]</Value>
+      <Key>27</Key>
+      <Value>[Name:Selection_Party][Text:Join Party][TextVerb:Party]</Value>
     </Item>
     <Item>
-      <Key>Selection_NeverMind</Key>
-      <Value>[Text:Never Mind][TextVerb:Cancel]</Value>
+      <Key>28</Key>
+      <Value>[Name:Selection_NeverMind][Text:Never Mind][TextVerb:Cancel]</Value>
     </Item>
     <Item>
-      <Key>Selection_ShipGoods</Key>
-      <Value>[Text:Ship Goods][TextVerb:ShipGoods]</Value>
+      <Key>29</Key>
+      <Value>[Name:Selection_ShipGoods][Text:Ship Goods][TextVerb:ShipGoods]</Value>
     </Item>
     <Item>
-      <Key>Selection_Yes</Key>
-      <Value>[Text:Yes][TextVerb:Yes]</Value>
+      <Key>30</Key>
+      <Value>[Name:Selection_Yes][Text:Yes][TextVerb:Yes]</Value>
     </Item>
     <Item>
-      <Key>Selection_No</Key>
-      <Value>[Text:No][TextVerb:Cancel]</Value>
+      <Key>31</Key>
+      <Value>[Name:Selection_N][Text:No][TextVerb:Cancel]</Value>
     </Item>
     <Item>
-      <Key>Selection_Buy</Key>
-      <Value>[Text:Buy Items][TextVerb:Buy]</Value>
+      <Key>32</Key>
+      <Value>[Name:Selection_Buy][Text:Buy Items][TextVerb:Buy]</Value>
     </Item>
     <Item>
-      <Key>Selection_Requests</Key>
-      <Value>[Text:Show Requests][TextVerb:ShowRequests]</Value>
+      <Key>33</Key>
+      <Value>[Name:Selection_Requests][Text:Show Requests][TextVerb:ShowRequests]</Value>
     </Item>
     <Item>
-      <Key>PetFollow</Key>
-      <Value>[Text:Have {0} follow you?][Selection:YesNo][Trigger:PetFollow]</Value>
+      <Key>34</Key>
+      <Value>[Name:PetFollow][Text:Have {0} follow you?][Selection:YesNo][Trigger:PetFollow]</Value>
     </Item>
     <Item>
-      <Key>PetUnfollow</Key>
-      <Value>[Text:Leave {0} here?][Selection:YesNo][Trigger:PetUnfollow]</Value>
+      <Key>35</Key>
+      <Value>[Name:PetUnfollow][Text:Leave {0} here?][Selection:YesNo][Trigger:PetUnfollow]</Value>
     </Item>
     <Item>
-      <Key>Selection_Propose</Key>
-      <Value>[Text:Propose][TextVerb:Propose]</Value>
+      <Key>36</Key>
+      <Value>[Name:Selection_Propose][Text:Propose][TextVerb:Propose]</Value>
     </Item>
     <Item>
-      <Key>Selection_Date</Key>
-      <Value>[Text:Ask to Date][TextVerb:Date]</Value>
-    </Item>
-    <Item>
-      <Key></Key>
-      <Value>[Text]</Value>
+      <Key>37</Key>
+      <Value>[Name:Selection_Date][Text:Ask to Date][TextVerb:Date]</Value>
     </Item>
   </Asset>
 </XnaContent>

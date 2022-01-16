@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
-  <Asset Type="Dictionary[string, string]">
+  <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>Introduction</Key>
-      <Value>[Text:Hi. My name is $Character_15$. You just came to town right? I've never left the town before, what's it like?]</Value>
+      <Key>0</Key>
+      <Value>[Text:Hi. My name is $Character_15$. You just came to town right? I've never left the town before, what's it like?][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -14,20 +14,20 @@
       <Value>[Text:Hey, $Name$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.][Default]</Value>
     </Item>
     <Item>
-      <Key>ShopOpen</Key>
-      <Value>[Text:Oh, hello $Name$, What can I do for you?]</Value>
+      <Key>3</Key>
+      <Value>[Text:Oh, hello $Name$, What can I do for you?][Name:ShopOpen]</Value>
     </Item>
     <Item>
-      <Key>Gift</Key>
-      <Value>[Text:Wow! Thanks!]</Value>
+      <Key>4</Key>
+      <Value>[Text:Wow! Thanks!][Name:Gift]</Value>
     </Item>
     <Item>
-      <Key>Selection</Key>
-      <Value>[Text:Hey.][Selection:VillageTalk]</Value>
+      <Key>5</Key>
+      <Value>[Text:Hey.][Selection:VillageTalk][Name:Selection]</Value>
     </Item>
     <Item>
-      <Key>Maintenance</Key>
-      <Value>[Text:What do you want to do?]</Value>
+      <Key>6</Key>
+      <Value>[Text:What do you want to do?][Name:Maintenance]</Value>
     </Item>
   </Asset>
 </XnaContent>

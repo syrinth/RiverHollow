@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
-  <Asset Type="Dictionary[string, string]">
+  <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>Introduction</Key>
-      <Value>[Text:Finally. It's nice to speak to someone who can help me. I'm $Character_4$, nice to meet you, etcetera. Be a dear and arrange me someplace to stay will you? My research has been stalled for long enough.][UnlockBuildingID:16]</Value>
+      <Key>0</Key>
+      <Value>[Text:Finally. It's nice to speak to someone who can help me. I'm $Character_4$, nice to meet you, etcetera. Be a dear and arrange me someplace to stay will you? My research has been stalled for long enough.][UnlockBuildingID:16][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -14,67 +14,67 @@
       <Value>[Text:Oh, hello. I guess I have a moment. My latest experiment hasn't proven fruitful.][Default]</Value>
     </Item>
     <Item>
-      <Key>Gift</Key>
-      <Value>[Text:For me? Oh no, you shouldn't have!]</Value>
+      <Key>3</Key>
+      <Value>[Text:For me? Oh no, you shouldn't have!][Name:Gift]</Value>
     </Item>
     <Item>
-      <Key>Collection</Key>
-      <Value>[Text:You got this for me? I... thank you. really, this will be invaluable to my research.]</Value>
+      <Key>4</Key>
+      <Value>[Text:You got this for me? I... thank you. really, this will be invaluable to my research.][Name:Collection]</Value>
     </Item>
     <Item>
-      <Key>Selection</Key>
-      <Value>[Text:Hey, $Name$, what do you need?][Selection:VillageTalk]</Value>
+      <Key>5</Key>
+      <Value>[Text:Hey, $Name$, what do you need?][Selection:VillageTalk][Name:Selection]</Value>
     </Item>
     <Item>
-      <Key>JoinPartyYes</Key>
-      <Value>[Text:Are you sure? I guess I can join you for an adventure today.]</Value>
+      <Key>6</Key>
+      <Value>[Text:Are you sure? I guess I can join you for an adventure today.][Name:JoinPartyYes]</Value>
     </Item>
     <Item>
-      <Key>JoinPartyNo</Key>
-      <Value>[Text:Sorry... I've got things to do today. Maybe later?]</Value>
+      <Key>7</Key>
+      <Value>[Text:Sorry... I've got things to do today. Maybe later?][Name:JoinPartyNo]</Value>
     </Item>
     <Item>
-      <Key>MarriageYes</Key>
-      <Value>[Text:Yes I will marry you!]</Value>
+      <Key>8</Key>
+      <Value>[Text:Yes I will marry you!][Name:MarriageYes]</Value>
     </Item>
     <Item>
-      <Key>MarriageNo</Key>
-      <Value>[Text:Oh... I'm sorry but... No.]</Value>
+      <Key>9</Key>
+      <Value>[Text:Oh... I'm sorry but... No.][Name:MarriageNo]</Value>
     </Item>
     <Item>
-      <Key>Raining|1</Key>
-      <Value>[Text:I hate weather like this. It just serves to delay my research.][Weather:Raining]</Value>
+      <Key>10</Key>
+      <Value>[Text:I hate weather like this. It just serves to delay my research.][Weather:Raining][Name:Raining|1]</Value>
     </Item>
     <Item>
-      <Key>Raining|2</Key>
-      <Value>[Text:Hm. I'm thinking I might take a walk. I despise the rain, but there are several species of flowers I'm interested in that only bloom in the rain.][Weather:Raining]</Value>
+      <Key>11</Key>
+      <Value>[Text:Hm. I'm thinking I might take a walk. I despise the rain, but there are several species of flowers I'm interested in that only bloom in the rain.][Weather:Raining][Name:Raining|2]</Value>
     </Item>
     <Item>
-      <Key>Emmanuel_1</Key>
+      <Key>12</Key>
       <Value>[Text:I love my brother, but he can be so frustratingly vain sometimes. I was trying to tell him about my latest magical discovery and do you know what he said to me afterwards?
 "Do you think this new pin goes with my robes."
-I swear, he doesn't listen to a word I say.][Villager:3]</Value>
+I swear, he doesn't listen to a word I say.][Villager:3][Name:Emmanuel_1]</Value>
     </Item>
     <Item>
-      <Key>Daria_1</Key>
+      <Key>13</Key>
       <Value>[Text:$Name$, you know $Character_6$ right? Do you have any idea why she asked me to arm wrestle the other day?
-I didn't know what to say, so I just stood there, staring at her until she left.][Villager:6]</Value>
+I didn't know what to say, so I just stood there, staring at her until she left.][Villager:6][Name:Daria_1]</Value>
     </Item>
     <Item>
-      <Key>Griselda_1</Key>
-      <Value>[Text:I tried to talk with $Character_17$ the other day but she just blew me off. She said she had no time for me! Can you believe that!][Villager:17]</Value>
+      <Key>14</Key>
+      <Value>[Text:I tried to talk with $Character_17$ the other day but she just blew me off. She said she had no time for me! Can you believe that!][Villager:17][Name:Griselda_1]</Value>
     </Item>
     <Item>
-      <Key>Michael_1</Key>
-      <Value>[Text:You know, $Character_2$ is a lot more knowledgeable than he looks, once you get him to stop babbling and talk straight.][Villager:2]</Value>
+      <Key>15</Key>
+      <Value>[Text:You know, $Character_2$ is a lot more knowledgeable than he looks, once you get him to stop babbling and talk straight.][Villager:2][Name:Michael_1]</Value>
     </Item>
     <Item>
-      <Key>Isabelle_1</Key>
-      <Value>[Text:$Character_11$ said she was going to try to get a book for me, but it hasn't arrived yet. Do you think it's too soon to ask her about it?][Villager:11]</Value>
+      <Key>16</Key>
+      <Value>[Text:$Character_11$ said she was going to try to get a book for me, but it hasn't arrived yet. Do you think it's too soon to ask her about it?][Villager:11][Name:Isabelle_1]</Value>
     </Item>
     <Item>
-      <Key>Scared_Of_Me</Key>
-      <Value>[Text:I sometimes get the feeling that some of the others are afraid of me. They hurry away if they see me coming, and won't meet me eyes.]</Value>
+      <Key>17</Key>
+      <Value>[Text:I sometimes get the feeling that some of the others are afraid of me. They hurry away if they see me coming, and won't meet me eyes.][Name:Scared_Of_Me]</Value>
     </Item>
   </Asset>
 </XnaContent>
