@@ -112,6 +112,8 @@ namespace RiverHollow.Characters
                     }
                 }
             }
+
+            HandleMove(_vMoveTo);
         }
 
         public virtual void ProcessRightButtonClick() { }
@@ -264,44 +266,47 @@ namespace RiverHollow.Characters
         /// <param name="target">The target location on the world map to move to</param>
         protected void HandleMove(Vector2 target)
         {
-            //Determines the distance that needs to be traveled from the current position to the target
-            Vector2 direction = Vector2.Zero;
-            float deltaX = Math.Abs(target.X - this.Position.X);
-            float deltaY = Math.Abs(target.Y - this.Position.Y);
-
-            //Determines how much of the needed position we're capable of  in one movement
-            Util.GetMoveSpeed(Position, target, BuffedSpeed, ref direction);
-
-            //If we're following a path and there's more than one tile left, we don't want to cut
-            //short on individual steps, so recalculate based on the next target
-            float length = direction.Length();
-            if (_liTilePath.Count > 1 && length < BuffedSpeed)
+            if (target != Vector2.Zero)
             {
-                _liTilePath.RemoveAt(0);
+                //Determines the distance that needs to be traveled from the current position to the target
+                Vector2 direction = Vector2.Zero;
+                float deltaX = Math.Abs(target.X - this.Position.X);
+                float deltaY = Math.Abs(target.Y - this.Position.Y);
 
-                if (DoorCheck())
+                //Determines how much of the needed position we're capable of  in one movement
+                Util.GetMoveSpeed(Position, target, BuffedSpeed, ref direction);
+
+                //If we're following a path and there's more than one tile left, we don't want to cut
+                //short on individual steps, so recalculate based on the next target
+                float length = direction.Length();
+                if (_liTilePath.Count > 1 && length < BuffedSpeed)
                 {
-                    return;
+                    _liTilePath.RemoveAt(0);
+
+                    if (DoorCheck())
+                    {
+                        return;
+                    }
+
+                    //Recalculate for the next target
+                    target = _liTilePath[0].Position;
+                    Util.GetMoveSpeed(Position, target, BuffedSpeed, ref direction);
                 }
 
-                //Recalculate for the next target
-                target = _liTilePath[0].Position;
-                Util.GetMoveSpeed(Position, target, BuffedSpeed, ref direction);
-            }
+                //Attempt to move
+                if (!CheckMapForCollisionsAndMove(direction, _bIgnoreCollisions))
+                {
+                    _bBumpedIntoSomething = true;
 
-            //Attempt to move
-            if (!CheckMapForCollisionsAndMove(direction, _bIgnoreCollisions))
-            {
-                _bBumpedIntoSomething = true;
+                    //If we can't move, set a timer to go Ethereal
+                    if (_dEtherealCD == 0) { _dEtherealCD = 5; }
+                }
 
-                //If we can't move, set a timer to go Ethereal
-                if (_dEtherealCD == 0) { _dEtherealCD = 5; }
-            }
-
-            //If, after movement, we've reached the given location, zero it.
-            if (_vMoveTo == Position && !CutsceneManager.Playing)
-            {
-                _vMoveTo = Vector2.Zero;
+                //If, after movement, we've reached the given location, zero it.
+                if (_vMoveTo == Position && !CutsceneManager.Playing)
+                {
+                    _vMoveTo = Vector2.Zero;
+                }
             }
         }
 

@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Fetch][GoalItem:136-1][Activate:0][Immediate][Cutscene:2][HideGoal]</Value>
+      <Value>[Type:BuildStructure][GoalNPC:19][RequiredObjectID:70]</Value>
     </Item>
     <Item>
       <Key>2</Key>

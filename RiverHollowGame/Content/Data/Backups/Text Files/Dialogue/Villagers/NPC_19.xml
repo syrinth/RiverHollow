@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Well hello there! The name's $Character_19$. Merchant by trade, and I'm ready to get to work. If we're going to accomplish anything here, we're going to need a shop. First though, you had better talk to $Character_14$. He says we need a $Building_35$ before we can do anything else.][Name:Introduction]</Value>
+      <Value>[Name:Introduction][Text:Well hello there! The name's $Character_19$. Merchant by trade, and I'm ready to get to work. If we're going to accomplish anything here, we're going to need a shop. First though, you had better talk to $Character_14$. He says we need a $Building_35$ before we can do anything else.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -19,27 +19,34 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Text:Thank you!][Name:Gift]</Value>
+      <Value>[Name:Gift][Text:Thank you!]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Text:Well now, what can I do for you?][Selection:VillageTalk][Name:Selection]</Value>
+      <Value>[Name:Selection][Text:Well now, what can I do for you?][Selection:VillageTalk]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Text:What are you doing running around today? On a day like this, you should be inside where it's warm and dry.][Weather:Raining][Name:Raining|1]</Value>
+      <Value>[Name:Raining|1][Text:What are you doing running around today? On a day like this, you should be inside where it's warm and dry.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Text:My father used to tell me stories about nature spirits when I was a lad. Apparently some of them like to play in the rain. I fancy I can sometimes hear one, but I've never seen one with my own eyes.][Weather:Raining][Name:Raining|2]</Value>
+      <Value>[Name:Raining|2][Text:My father used to tell me stories about nature spirits when I was a lad. Apparently some of them like to play in the rain. I fancy I can sometimes hear one, but I've never seen one with my own eyes.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Text:Ah! Good to see you again, I see that you've got the $Building_35$ up and running so now it's time to set up that shop. You just set one up for me, and I'll see to it that we can start getting in supplies.][Priority:50][CompletedTaskID:0][UnlockBuildingID:21][Name:General_Store_Request]</Value>
+      <Value>[Name:General_Store_Request][Text:Ah! Good to see you again, I see that you've got the $Building_35$ up and running so now it's time to set up that shop. You just set one up for me, and I'll see to it that we can start getting in supplies.][Priority:50][CompletedTaskID:0][UnlockBuildingID:21]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Text][UnlockBuildingID:22][Name:Stor]</Value>
+      <Value>[Name:Market][Text:So, I've been thinking...
+With the store all set up, we've got some goods available and that's great, but that's just the start. We can't stop there, oh no.
+Merchants often wander the roads, buying and selling goods and there is a fortune to be made from them! By setting up a $WorldObject_70$, we'll give them a place to display their wares and sell them ours.
+Never forget, commerce is the lifeblood of a town, my friend. It might not seem like it now, but we'll need a lot of money if we're to grow this town.][Priority:50][TaskID:1][UnlockWorldObjectID:70][CompletedTaskID:0][RequiredBuildingID:21]</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Name:Task_1_End][Text:The $WorldObject_70$ is finished? Excellent job, I can't wait to see what all the Merchants will bring.]</Value>
     </Item>
   </Asset>
 </XnaContent>

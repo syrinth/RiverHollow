@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="15" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="39">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="15" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="40">
  <properties>
   <property name="Building" type="bool" value="true"/>
+  <property name="Cutscenes" value="2"/>
   <property name="MapType" value="Town"/>
  </properties>
  <tileset firstgid="1" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="484" columns="22">
@@ -344,5 +345,11 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="Character Layer"/>
+ <objectgroup id="5" name="Character Layer">
+  <object id="39" name="Workshop_NPC" x="114.371" y="162.785" width="10.4707" height="9.5823">
+   <properties>
+    <property name="ObjectID" type="int" value="52"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

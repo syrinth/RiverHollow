@@ -59,14 +59,11 @@ namespace RiverHollow
             SoundManager.LoadContent(Content);
             DataManager.LoadContent(Content);
             EnvironmentManager.Initialize();
-            GameManager.Initialize();
             MapManager.LoadContent(Content, GraphicsDevice);
-            MapManager.LoadObjects();
 
             GUIManager.LoadContent();
 
             CutsceneManager.LoadContent(Content);
-            GameManager.LoadManagedDataLists();
 
             var pp = GraphicsDevice.PresentationParameters;
             _renderLights = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
@@ -75,6 +72,12 @@ namespace RiverHollow
             _effectLights = Content.Load<Effect>(@"Effects\lighteffect");
 
             PlayerManager.Initialize();
+
+            //Done here for the WorldObjects that need to be unlocked
+            DataManager.SecondaryLoad(Content);
+            GameManager.Initialize();
+            GameManager.LoadManagedDataLists();
+            MapManager.LoadObjects();
 
             GUICursor.ResetCursor();
            // GameManager.Pause();
@@ -270,8 +273,8 @@ namespace RiverHollow
             GoToHUDScreen();
             GameCalendar.NewCalendar();
 
-            CutsceneManager.TriggerCutscene(1);
-            if (!playIntro) { CutsceneManager.SkipCutscene(); }
+            //CutsceneManager.TriggerCutscene(1);
+            //if (!playIntro) { CutsceneManager.SkipCutscene(); }
 
             StartGame();
         }

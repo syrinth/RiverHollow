@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
-  <Asset Type="Dictionary[string, string]">
+  <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>1</Key>
       <Value>[Text:Oh, hello $Name$. Sorry, I didn't see you there, lost in my thoughts... It happens, you know, when you get old. You have so much time in the past and some days all you can do is stop and think about what you've done...]</Value>

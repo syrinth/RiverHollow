@@ -293,13 +293,13 @@ namespace RiverHollow.GUIComponents.Screens
                 switch (objType)
                 {
                     case BuildTypeEnum.Floor:
-                        GenerateConstructBoxes(DataManager.FloorIDs);
+                        GenerateConstructBoxes(PlayerManager.GetCraftingList(ObjectTypeEnum.Floor));
                         break;
                     case BuildTypeEnum.Wallpaper:
-                        GenerateConstructBoxes(DataManager.WallpaperIDs);
+                        GenerateConstructBoxes(PlayerManager.GetCraftingList(ObjectTypeEnum.Wallpaper));
                         break;
                     case BuildTypeEnum.WorldObject:
-                        GenerateConstructBoxes(DataManager.StructureIDs);
+                        GenerateConstructBoxes(PlayerManager.GetCraftingList(ObjectTypeEnum.Structure));
                         break;
                     case BuildTypeEnum.Storage:
                         GenerateConstructBoxes(PlayerManager.GetStorageItems());

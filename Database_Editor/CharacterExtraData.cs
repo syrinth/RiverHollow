@@ -11,8 +11,8 @@ namespace Database_Editor
         enum DataMode { Dialogue, Schedule };
         DataMode _eDataMode;
         int _iIndex = 0;
-        List<XMLData> _diStringData;
-        public List<XMLData> StringData => _diStringData;
+        List<XMLData> _liStringData;
+        public List<XMLData> StringData => _liStringData;
 
         Dictionary<string, List<string>> _diListData;
         public Dictionary<string, List<string>> ListData => _diListData;
@@ -20,7 +20,7 @@ namespace Database_Editor
         {
             InitializeComponent();
 
-            _diStringData = diCharacterData;
+            _liStringData = diCharacterData;
             this.Text = value;
             LoadDataGridViewString();
 
@@ -44,7 +44,7 @@ namespace Database_Editor
         {
             int index = 0;
             dgvCharExtraData.Rows.Clear();
-            foreach (XMLData value in _diStringData)
+            foreach (XMLData value in _liStringData)
             {
                 dgvCharExtraData.Rows.Add();
                 DataGridViewRow row = dgvCharExtraData.Rows[index++];
@@ -54,7 +54,7 @@ namespace Database_Editor
             }
 
             SelectRow(dgvCharExtraData, _iIndex);
-            LoadDataInfo(_diStringData[_iIndex]);
+            LoadDataInfo(_liStringData[_iIndex]);
         }
         private void LoadDataGridViewList()
         {
@@ -90,7 +90,9 @@ namespace Database_Editor
             {
                 if (!s.StartsWith("Type") && !s.StartsWith("Name"))
                 {
-                    dgvExtraTags.Rows.Add(s);
+                    string[] split = s.Split(':');
+                    if (s.StartsWith("Text") && split.Length > 1) { tbCharExtraDataInfo.Text = split[1]; }
+                    else { dgvExtraTags.Rows.Add(s); }
                 }
             }
         }
@@ -115,7 +117,7 @@ namespace Database_Editor
                     SaveDictionaryData();
 
                     _iIndex = e.RowIndex;
-                    LoadDataInfo(_diStringData[_iIndex]);
+                    LoadDataInfo(_liStringData[_iIndex]);
                 }
                 else if (_eDataMode == DataMode.Schedule)
                 {
@@ -135,7 +137,7 @@ namespace Database_Editor
             dgvCharExtraData.Rows.Add();
             SelectRow(dgvCharExtraData, _iIndex);
 
-            string newID = (_iIndex + 1).ToString();
+            string newID = (_iIndex).ToString();
             DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
             row.Cells["colCharExtraID"].Value = newID;
 
@@ -170,9 +172,18 @@ namespace Database_Editor
         {
             DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
 
-            _diStringData[_iIndex].ClearTagInfo();
-            _diStringData[_iIndex].SetTagInfo("Name", tbCharExtraDataName.Text);
-            _diStringData[_iIndex].SetTagInfo("Text", tbCharExtraDataInfo.Text);
+            XMLData data = null;
+            if (_iIndex == _liStringData.Count)
+            {
+                data = new XMLData(_iIndex.ToString(), new Dictionary<string, string>(), FrmDBEditor.TEXTFILE_REF_TAGS, "", XMLTypeEnum.TextFile);
+                _liStringData.Add(data);
+            }
+            else { data = _liStringData[_iIndex]; }
+
+            data.ClearTagInfo();
+            data.SetTextData(tbCharExtraDataName.Text);
+            data.SetTagInfo("Name", tbCharExtraDataName.Text);
+            data.SetTagInfo("Text", tbCharExtraDataInfo.Text);
 
             foreach (DataGridViewRow r in dgvExtraTags.Rows)
             {
@@ -180,7 +191,7 @@ namespace Database_Editor
                 {
                     string[] tagInfo = r.Cells[0].Value.ToString().Split(':');
 
-                    _diStringData[_iIndex].SetTagInfo(tagInfo[0], tagInfo.Length > 1 ? tagInfo[1] : string.Empty);
+                    data.SetTagInfo(tagInfo[0], tagInfo.Length > 1 ? tagInfo[1] : string.Empty);
                 }
             }
             row.Cells["colCharExtraName"].Value = tbCharExtraDataName.Text;

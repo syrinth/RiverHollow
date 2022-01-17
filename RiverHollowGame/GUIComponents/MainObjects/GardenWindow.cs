@@ -5,6 +5,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
+using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.WorldObjects.Buildable.AdjustableObject;
 
 namespace RiverHollow.GUIComponents.MainObjects
@@ -25,7 +26,7 @@ namespace RiverHollow.GUIComponents.MainObjects
 
             _liStructures = new List<GUIObject>();
 
-            foreach (int i in DataManager.PlantIDs)
+            foreach (int i in PlayerManager.GetCraftingList(ObjectTypeEnum.Plant))
             {
                 ConstructBox box = new ConstructBox(ChoosePlant);
                 Plant obj = (Plant)DataManager.GetWorldObjectByID(i);

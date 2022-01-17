@@ -27,6 +27,7 @@ namespace RiverHollow.Misc
 
         private Monster _questMonster;
         private Item _targetItem;
+        private int _iTargetWorldObjectID = -1;
         private int _iTargetBuildingID = -1;
         public bool ReadyForHandIn { get; private set; } = false;
         public bool Finished { get; private set; }
@@ -143,6 +144,7 @@ namespace RiverHollow.Misc
             if (stringData.ContainsKey("GoalNPC")) { GoalNPC = DataManager.DIVillagers[int.Parse(stringData["GoalNPC"])]; }
 
             Util.AssignValue(ref _iRewardMoney, "Money", stringData);
+            Util.AssignValue(ref _iTargetWorldObjectID, "RequiredObjectID", stringData);
             Util.AssignValue(ref _iTargetBuildingID, "BuildingID", stringData);
             Util.AssignValue(ref _iUnlockBuildingID, "UnlockBuildingID", stringData);
 
@@ -323,6 +325,11 @@ namespace RiverHollow.Misc
                         break;
                     case TaskTypeEnum.Build:
                         rv = "Build " + PlayerManager.DIBuildInfo[_iTargetBuildingID].Name;
+                        break;
+                    case TaskTypeEnum.BuildStructure:
+                        string objName = string.Empty;
+                        DataManager.GetTextData("WorldObject", _iTargetWorldObjectID, ref objName, "Name");
+                        rv = "Build " + objName;
                         break;
                     case TaskTypeEnum.Talk:
                         rv = "Speak to " + GoalNPC.Name;

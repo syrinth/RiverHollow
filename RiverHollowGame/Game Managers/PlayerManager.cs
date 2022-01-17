@@ -46,6 +46,8 @@ namespace RiverHollow.Game_Managers
         public static int HitPoints => PlayerCombatant.CurrentHP;
         public static int MaxHitPoints  => PlayerCombatant.MaxHP;
 
+        private static Dictionary<ObjectTypeEnum, List<int>> _diCrafting;
+
         private static Dictionary<int, Building> _diBuildings;
         public static Dictionary<int, Building>.ValueCollection BuildingList => _diBuildings.Values;
         public static Building PlayerHome => _diBuildings[27];
@@ -93,6 +95,14 @@ namespace RiverHollow.Game_Managers
 
         public static void Initialize()
         {
+            _diCrafting = new Dictionary<ObjectTypeEnum, List<int>>
+            {
+                [ObjectTypeEnum.Floor] = new List<int>(),
+                [ObjectTypeEnum.Structure] = new List<int>(),
+                [ObjectTypeEnum.Plant] = new List<int>(),
+                [ObjectTypeEnum.Wall] = new List<int>()
+            };
+
             Children = new List<Child>();
             _liPets = new List<Pet>();
             _liMounts = new List<Mount>();
@@ -116,8 +126,6 @@ namespace RiverHollow.Game_Managers
 
         public static void NewPlayer()
         {
-            PlayerActor.Position = new Vector2(200, 200);
-
             CurrentMap = MapManager.CurrentMap.Name;
             PlayerActor.Position = Util.GetMapPositionOfTile(MapManager.SpawnTile);
 
@@ -320,6 +328,43 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
+
+        #region Crafting Dictionary
+        public static List<int> GetCraftingList(ObjectTypeEnum e)
+        {
+            return _diCrafting[e];
+        }
+        public static void AddToCraftingDictionary(int id)
+        {
+            WorldObject obj = DataManager.GetWorldObjectByID(id);
+            ObjectTypeEnum e = obj.Type;
+            switch (obj.Type)
+            {
+                case ObjectTypeEnum.Floor:
+                    e = ObjectTypeEnum.Floor;
+                    break;
+                case ObjectTypeEnum.Beehive:
+                case ObjectTypeEnum.Buildable:
+                case ObjectTypeEnum.Container:
+                case ObjectTypeEnum.Garden:
+                case ObjectTypeEnum.Structure:
+                case ObjectTypeEnum.Wall:
+                    e = ObjectTypeEnum.Structure;
+                    break;
+                case ObjectTypeEnum.Plant:
+                    e = ObjectTypeEnum.Plant;
+                    break;
+                case ObjectTypeEnum.Wallpaper:
+                    e = ObjectTypeEnum.Wallpaper;
+                    break;
+            }
+
+            if (!_diCrafting[e].Contains(id))
+            {
+                _diCrafting[e].Add(id);
+            }
+        }
+        #endregion
 
         #region Town Helpers
         public static int GetTownScore() {
@@ -651,8 +696,9 @@ namespace RiverHollow.Game_Managers
                 Items = new List<ItemData>(),
                 Storage = new List<StorageData>(),
                 liPets = new List<int>(),
-                liMounts = new List<int>(),
-                liChildren = new List<ChildData>()
+                MountList = new List<int>(),
+                ChildList = new List<ChildData>(),
+                CraftingList = new List<int>()
             };
 
             // Initialize the new data values.
@@ -680,12 +726,17 @@ namespace RiverHollow.Game_Managers
 
             foreach (Mount m in _liMounts)
             {
-                data.liMounts.Add(m.ID);
+                data.MountList.Add(m.ID);
             }
 
             foreach (Child c in Children)
             {
-                data.liChildren.Add(c.SaveData());
+                data.ChildList.Add(c.SaveData());
+            }
+
+            foreach(List<int> craftList in _diCrafting.Values)
+            {
+                data.CraftingList.AddRange(craftList);
             }
 
             return data;
@@ -744,17 +795,22 @@ namespace RiverHollow.Game_Managers
                 AddPet(p);
             }
 
-            foreach (int i in saveData.liMounts)
+            foreach (int i in saveData.MountList)
             {
                 Mount m = (Mount)DataManager.GetNPCByIndex(i);
                 AddMount(m);
             }
 
-            foreach (ChildData data in saveData.liChildren)
+            foreach (ChildData data in saveData.ChildList)
             {
                 Child m = (Child)DataManager.GetNPCByIndex(data.childID);
                 m.SpawnNearPlayer();
                 AddChild(m);
+            }
+
+            foreach (int i in saveData.CraftingList)
+            {
+                AddToCraftingDictionary(i);
             }
         }
 
@@ -882,7 +938,7 @@ namespace RiverHollow.Game_Managers
                         PlayerManager.PlayerActor.DetermineFacing(MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition()));
                         Busy = true;
                         AllowMovement = false;
-                        PlayerManager.PlayerActor.PlayAnimationVerb(VerbEnum.UseTool);
+                        PlayerManager.PlayerActor.PlayAnimationVerb(VerbEnum.Idle);
                         ToolInUse.ToolAnimation.PlayAnimation(VerbEnum.UseTool, PlayerActor.Facing);
                     }
                     else

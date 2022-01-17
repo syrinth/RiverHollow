@@ -244,7 +244,11 @@ namespace RiverHollow.Misc
         {
             if (_diTags.ContainsKey("TaskID"))
             {
-                PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(_diTags["Task"])]);
+                PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(_diTags["TaskID"])]);
+            }
+            if (_diTags.ContainsKey("UnlockWorldObjectID"))
+            {
+                PlayerManager.AddToCraftingDictionary(int.Parse(_diTags["UnlockWorldObjectID"]));
             }
             if (_diTags.ContainsKey("UnlockBuildingID"))
             {

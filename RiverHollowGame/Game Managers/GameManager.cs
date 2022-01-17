@@ -61,7 +61,7 @@ namespace RiverHollow.Game_Managers
 
         public enum ActorMovementStateEnum { Idle, Walking };
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
-        public enum TaskTypeEnum { None, GroupSlay, Slay, Fetch, Talk, Build };
+        public enum TaskTypeEnum { None, GroupSlay, Slay, Fetch, Talk, Build, BuildStructure };
         public enum ActorEnum { Actor, PartyMember, Environmental, Merchant, Mob, Monster, Mount, Pet, Child, ShippingGremlin, Spirit, Summon, Villager };
         public enum AttributeEnum { Agility, Damage, Defense, Evasion, Magic, Vitality, Resistance, Speed, Strength };
         public enum AttributeBonusEnum { Minor, Moderate, Major };

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
-  <Asset Type="Dictionary[string, string]">
+  <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>IntroText</Key>
+      <Key>0</Key>
       <Value>[Text:The road has been your companion for days. Stretching on endlessely as you leave your old life behind, searching for a place that could use someone of your talents. All around you, you leave behind the remnants of a war-torn land, until at last you arrive here. A small valley, all but hidden from the last war. River Hollow.]</Value>
     </Item>
     <Item>

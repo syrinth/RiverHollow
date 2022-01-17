@@ -164,13 +164,16 @@ namespace RiverHollow.Game_Managers
             public List<int> liPets;
 
             [XmlArray(ElementName = "Mounts")]
-            public List<int> liMounts;
+            public List<int> MountList;
 
             [XmlArray(ElementName = "Children")]
-            public List<ChildData> liChildren;
+            public List<ChildData> ChildList;
 
             [XmlElement(ElementName = "AdventurerData")]
             public ClassedCharData adventurerData;
+
+            [XmlArray(ElementName = "CraftingDictionary")]
+            public List<int> CraftingList;
         }
         public struct StorageData
         {

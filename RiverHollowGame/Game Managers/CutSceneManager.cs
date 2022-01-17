@@ -34,16 +34,46 @@ namespace RiverHollow.Game_Managers
                 string fileName = s;
                 Util.ParseContentFile(ref fileName);
                 int fileID = int.Parse(Path.GetFileName(fileName).Replace("Cutscene_", "").Split('.')[0]);
-                Dictionary<string, string> dss = Content.Load<Dictionary<string, string>>(fileName);
+                Dictionary<int, string> dss = Content.Load<Dictionary<int, string>>(fileName);
 
                 Dictionary<string, TextEntry> entryDictionary = new Dictionary<string, TextEntry>();
-                foreach (KeyValuePair<string, string> kvp in dss)
+                foreach (KeyValuePair<int, string> kvp in dss)
                 {
-                    entryDictionary[kvp.Key] = new TextEntry(kvp.Key, Util.DictionaryFromTaggedString(kvp.Value));
+                    entryDictionary[kvp.Key.ToString()] = new TextEntry(kvp.Key.ToString(), Util.DictionaryFromTaggedString(kvp.Value));
                 }
 
                 _diAllCutsceneDialogue[fileID] = entryDictionary;
             }
+
+            ///
+            //_diNPCDialogue = new Dictionary<int, Dictionary<string, string>>();
+            //foreach (string s in Directory.GetFiles(@"Content\" + FOLDER_TEXTFILES + @"Dialogue\Villagers"))
+            //{
+            //    string fileName = string.Empty;
+
+            //    if (s.Contains("NPC_"))
+            //    {
+            //        fileName = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0];
+
+            //        int file = -1;
+            //        if (int.TryParse(fileName, out file))
+            //        {
+            //            fileName = s;
+            //            Util.ParseContentFile(ref fileName);
+            //            Dictionary<int, string> rawInfo = Content.Load<Dictionary<int, string>>(fileName);
+            //            newDialogue = new Dictionary<string, string>();
+            //            foreach (string dialogueTags in rawInfo.Values)
+            //            {
+            //                Dictionary<string, string> tags = Util.DictionaryFromTaggedString(dialogueTags);
+            //                string newKey = tags["Name"];
+            //                tags.Remove("Name");
+            //                newDialogue[newKey] = Util.StringFromTaggedDictionary(tags);
+            //            }
+            //            _diNPCDialogue.Add(file, newDialogue);
+            //        }
+            //    }
+            //}
+            ///
 
             Dictionary<int, List<string>> rawData = Content.Load<Dictionary<int, List<string>>>(@"Data\CutScenes");
             foreach (KeyValuePair<int, List<string>> kvp in rawData)
@@ -139,6 +169,7 @@ namespace RiverHollow.Game_Managers
         RHMap _originalMap;
         Vector2 _vOriginalPlayerPos;
         RHMap _cutsceneMap;
+        bool _bEnterTrigger = false;
         int _iMinTime = -1;                                         //The earliest the cutscene can be triggered
         int _iMaxTime = -1;                                         //The latest the cutscene can be triggered
         int _iCurrentCommand;
@@ -181,18 +212,22 @@ namespace RiverHollow.Game_Managers
                 //Parsing for important data
                 if (tags[0].Equals("Time"))
                 {
-                    string[] time = tags[1].Split(' ');
+                    string[] time = tags[1].Split('-');
                     _iMinTime = int.Parse(time[0]);
                     _iMaxTime = int.Parse(time[1]);
                 }
                 else if (tags[0].Equals("Friends"))
                 {
-                    string[] friend = tags[1].Split(' ');
+                    string[] friend = tags[1].Split('|');
                     foreach (string f in friend)
                     {
                         string[] friendData = f.Split('-');
                         _liReqFriendship.Add(new KeyValuePair<int, int>(int.Parse(friendData[0]), int.Parse(friendData[1])));
                     }
+                }
+                else if (tags[0].Equals("Enter"))
+                {
+                    _bEnterTrigger = true;
                 }
             }
 
@@ -204,7 +239,7 @@ namespace RiverHollow.Game_Managers
             foreach (string s in commands)
             {
                 string[] tags = s.Split(':');
-                _liCommands.Add(new CutSceneCommand(Util.ParseEnum<EnumCSCommand>(tags[0]), (tags.Length > 1 ? tags[1].Split(' ') : null)));
+                _liCommands.Add(new CutSceneCommand(Util.ParseEnum<EnumCSCommand>(tags[0]), (tags.Length > 1 ? tags[1].Split('|') : null)));
             }
             _liCommands.Add(new CutSceneCommand(EnumCSCommand.End));
         }
@@ -271,7 +306,7 @@ namespace RiverHollow.Game_Managers
                                     break;
                                 case EnumCSCommand.Move:
                                     _bWaitForMove = true;
-                                    AssignMovement(sCommandData[0], int.Parse(sCommandData[1]), HandleDir(sCommandData[2]));
+                                    AssignMovement(sCommandData[0], int.Parse(sCommandData[1]), Util.ParseEnum<DirectionEnum>(sCommandData[2]));
                                     break;
                                 case EnumCSCommand.Wait:
                                     _dTimer = double.Parse(sCommandData[0]);
@@ -287,7 +322,7 @@ namespace RiverHollow.Game_Managers
                                     break;
                                 case EnumCSCommand.Face:
                                     WorldActor n = GetActor(sCommandData[0]);
-                                    n.SetWalkingDir((DirectionEnum)HandleDir(sCommandData[1]));
+                                    n.SetWalkingDir(Util.ParseEnum<DirectionEnum>(sCommandData[1]));
                                     n.PlayAnimationVerb(VerbEnum.Idle);
                                     bGoToNext = true;
                                     break;
@@ -366,22 +401,6 @@ namespace RiverHollow.Game_Managers
         }
 
         /// <summary>
-        /// Converts the string to an int directional value
-        /// </summary>
-        /// <param name="str">The directional string to convert</param>
-        /// <returns>The int directional value</returns>
-        private int HandleDir(string str)
-        {
-            int rv = -1;
-            if (str.Contains("Up")) { rv = 0; }
-            else if (str.Contains("Down")) { rv = 1; }
-            else if (str.Contains("Right")) { rv = 2; }
-            else if (str.Contains("Left")) { rv = 3; }
-
-            return rv;
-        }
-
-        /// <summary>
         /// Tells the WorldActor to movethe given number of tiles and adds them
         /// to thelist of moving NPCs.
         /// 0-Up 1-Down 2-Right 3-Left
@@ -389,7 +408,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="characterID">The Id of the NPC we're actingo n</param>
         /// <param name="numSquares">How many squares to move</param>
         /// <param name="dir">The directional to move in</param>
-        private void AssignMovement(string characterID, int numSquares, int dir)
+        private void AssignMovement(string characterID, int numSquares, DirectionEnum dir)
         {
             WorldActor c = GetActor(characterID);
             if (c.MoveToLocation == Vector2.Zero)
@@ -397,16 +416,16 @@ namespace RiverHollow.Game_Managers
                 Vector2 vec = Vector2.Zero;
                 switch (dir)
                 {
-                    case 0:
+                    case DirectionEnum.Up:
                         vec = new Vector2(0, -numSquares * TILE_SIZE);
                         break;
-                    case 1:
+                    case DirectionEnum.Down:
                         vec = new Vector2(0, numSquares * TILE_SIZE);
                         break;
-                    case 2:
+                    case DirectionEnum.Right:
                         vec = new Vector2(numSquares * TILE_SIZE, 0);
                         break;
-                    case 3:
+                    case DirectionEnum.Left:
                         vec = new Vector2(-numSquares * TILE_SIZE, 0);
                         break;
 
@@ -478,7 +497,7 @@ namespace RiverHollow.Game_Managers
                 {
                     //Find all the NPCs that are going to be used in this Cutscene,
                     //and add them to the Clone map at the given positions.
-                    string[] friend = tags[1].Split(' ');
+                    string[] friend = tags[1].Split('|');
                     foreach (string f in friend)
                     {
                         string[] friendData = f.Split('-');
@@ -495,7 +514,7 @@ namespace RiverHollow.Game_Managers
                 {
                     //Find all the NPC IDs for the NPCs that will start deactivated
                     //and then deactivate them.
-                    string[] friends = tags[1].Split(' ');
+                    string[] friends = tags[1].Split('|');
                     foreach (string npcIDs in friends)
                     {
                         foreach (Villager v in _liUsedNPCs)
@@ -516,7 +535,15 @@ namespace RiverHollow.Game_Managers
         /// <returns>True if the Cutscene should be triggered.</returns>
         public bool CanBeTriggered()
         {
-            return !_bTriggered && InTimeWindow() && FriendshipReqs();
+            return !_bTriggered && (InTimeWindow() && FriendshipReqs());
+        }
+        
+        /// <summary>
+        /// If this flag is set to true, the trigger for this cutscene is just entering the map
+        /// </summary>
+        private bool EnterTrigger()
+        {
+            return _bEnterTrigger;
         }
 
         /// <summary>

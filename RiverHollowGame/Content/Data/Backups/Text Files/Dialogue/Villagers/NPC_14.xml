@@ -7,19 +7,19 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Hey there, $Name$,hope you're feeling well today!][Default][Name:1]</Value>
+      <Value>[Name:1][Text:Hey there, $Name$,hope you're feeling well today!][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:Hey, $Name$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.][Default][Name:2]</Value>
+      <Value>[Name:2][Text:Hey, $Name$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.][Default]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Text:Oh, hello $Name$, What can I do for you?][Selection:Shop][Name:ShopOpen]</Value>
+      <Value>[Name:ShopOpen][Text:Oh, hello $Name$, What can I do for you?][Selection:Shop]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Text:Wow! Thanks!][Name:Gift]</Value>
+      <Value>[Name:Gift][Text:Wow! Thanks!]</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -33,7 +33,7 @@ Here, I drew up some plans for a house for you. You should get that built before
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Text:$Name$! I'm glad to see you. So, I've been thinking... I've just about finished witht he plans I brought with me. If I'm going to design any more buildings, I'm going to need a place to work.  Could you build this for me?][Once][Priority:50][RequiredBuildingID:8][UnlockBuildingID:6][Name:Architect]</Value>
+      <Value>[Name:Architect][Text:$Name$! I'm glad to see you. So, I've been thinking... I've just about finished witht he plans I brought with me. If I'm going to design any more buildings, I'm going to need a place to work.  Could you build this for me?][Once][Priority:50][RequiredBuildingID:8][UnlockBuildingID:6]</Value>
     </Item>
   </Asset>
 </XnaContent>

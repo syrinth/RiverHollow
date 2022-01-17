@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
-  <Asset Type="Dictionary[string, string]">
+  <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>IntroText</Key>
-      <Value>[Text:Something about the old harp calls to you. Idly, you strum your fingers along the strings, and a soft series of notes echoes through the long deserted Manor.]</Value>
+      <Key>0</Key>
+      <Value>[Name][Text:So, welcome to the $Building_35$. This is, to be honest, the heart of any growing city, we wouldn't be anywhere without it.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:...]</Value>
+      <Value>[Name][Text:Over here is the stonecutting table. You can use this to make Bricks out of Stone.]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:Is that... the harp?]</Value>
+      <Value>[Name][Text:And over here is the Saw Mill, where Lumber becomes Planks.]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Text:! You've come home! Master! Oh, I had begun to think this day would never come. The Manor has a master again at last! I'm $Name$,the spirit of the manor, and it is my utmost pleasure to have one of your line to serve once more!]</Value>
+      <Value>[Name][Text:Understand? Great, I'll help out when I can, and you'll be able to buy basic materials from me at the counter when I have them.]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -188,7 +188,7 @@ namespace RiverHollow.Tile_Engine
 
             if (_map.Properties.ContainsKey("Cutscenes"))
             {
-                string[] split = _map.Properties["Cutscenes"].Split(' ');
+                string[] split = _map.Properties["Cutscenes"].Split('|');
                 foreach (string cutsceneID in split)
                 {
                     _liCutscenes.Add(int.Parse(cutsceneID));

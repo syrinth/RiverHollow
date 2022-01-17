@@ -12,7 +12,7 @@ namespace Database_Editor
     public partial class FrmDBEditor : Form
     {
         private enum EditableCharacterDataEnum { Dialogue, Schedule };
-        public enum XMLTypeEnum { None, Task, Character, Class, Building, WorldObject, Item, Mob, Monster, Action, Shop, NPC, StatusEffect, Cutscene, Light, Dungeon, Dialogue };
+        public enum XMLTypeEnum { None, Task, Character, Class, Building, WorldObject, Item, Mob, Monster, Action, Shop, NPC, StatusEffect, Cutscene, Light, Dungeon, TextFile };
         #region XML Files
         string ACTIONS_XML_FILE = PATH_TO_DATA + @"\CombatActions.xml";
         string BUILDINGS_XML_FILE = PATH_TO_DATA + @"\Buildings.xml";
@@ -50,7 +50,7 @@ namespace Database_Editor
         const string TAGS_FOR_TASKS = "TaskID";
 
         const string ITEM_REF_TAGS = "ReqItems,Place";
-        const string TASK_REF_TAGS = "GoalItem,ItemReward,BuildingID,UnlockBuildingID";
+        const string TASK_REF_TAGS = "GoalItem,ItemReward,BuildingID,UnlockBuildingID,RequiredObjectID";
         const string CHARACTER_REF_TAGS = "Collection,Class,ShopData,HouseID,RequiredBuildingID,RequiredObjectID,RequestIDs";
         const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID,SubObjects,SeedID,HoneyID,LightID";
         const string CLASSES_REF_TAGS = "GearID,Ability,Spell";
@@ -62,7 +62,8 @@ namespace Database_Editor
         const string ACTIONS_REF_TAGS = "StatusEffectID,NPC_ID";
         const string BUILDINGS_REF_TAGS = "ReqItems,LightID";
         const string DUNGEON_REF_TAGS = "ObjectID,MonsterID,EntranceID";
-        const string DIALOGUE_REF_TAGS = "ItemID,UnlockBuildingID,UnlockItemID,TargetShopID,TaskID";
+        public static string TEXTFILE_REF_TAGS = "ItemID,UnlockBuildingID,UnlockItemID,TargetShopID,TaskID";
+        const string CUTSCENE_REF_TAGS = "";
 
         const string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,NPCID";
         #endregion
@@ -86,7 +87,7 @@ namespace Database_Editor
         static Dictionary<int, List<string>> _diCutscenes;
         static Dictionary<string, Dictionary<string, List<string>>> _diCharacterSchedules;
         static Dictionary<string, List<XMLData>> _diCharacterDialogue;
-        static Dictionary<string, Dictionary<string, Dictionary<string, string>>> _diCutsceneDialogue; //File/EntryKey/Tags
+        static Dictionary<string, List<XMLData>> _diCutsceneDialogue;
         static List<XMLData> _liMailbox;
         static List<XMLData> _liGameText; 
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
@@ -160,13 +161,18 @@ namespace Database_Editor
             string[] dialogueFiles = Directory.GetFiles(PATH_TO_VILLAGER_DIALOGUE);
             for (int i = 0; i < dialogueFiles.Length; i++)
             {
-                LoadXMLDictionary(dialogueFiles[i], DIALOGUE_REF_TAGS, "", ref _diCharacterDialogue);
+                LoadXMLDictionary(dialogueFiles[i], TEXTFILE_REF_TAGS, "", ref _diCharacterDialogue);
             }
 
-            LoadDialogueDictionary(PATH_TO_CUTSCENE_DIALOGUE, "Cutscene_", ref _diCutsceneDialogue);
+            _diCutsceneDialogue = new Dictionary<string, List<XMLData>>();
+            dialogueFiles = Directory.GetFiles(PATH_TO_CUTSCENE_DIALOGUE);
+            for (int i = 0; i < dialogueFiles.Length; i++)
+            {
+                LoadXMLDictionary(dialogueFiles[i], CUTSCENE_REF_TAGS, "", ref _diCutsceneDialogue);
+            }
 
-            _liGameText = LoadXMLList(PATH_TO_TEXT_FILES + @"\GameText.xml", DIALOGUE_REF_TAGS, "");
-            _liMailbox = LoadXMLList(PATH_TO_TEXT_FILES + @"\Mailbox_Text.xml", DIALOGUE_REF_TAGS, "");
+            _liGameText = LoadXMLList(PATH_TO_TEXT_FILES + @"\GameText.xml", TEXTFILE_REF_TAGS, "");
+            _liMailbox = LoadXMLList(PATH_TO_TEXT_FILES + @"\Mailbox_Text.xml", TEXTFILE_REF_TAGS, "");
 
             _diCharacterSchedules = new Dictionary<string, Dictionary<string, List<string>>>();
             foreach (string s in Directory.GetFiles(PATH_TO_SCHEDULES))
@@ -275,7 +281,7 @@ namespace Database_Editor
             else if (fileName == LIGHTS_XML_FILE) { rv = XMLTypeEnum.Light; }
             else if (fileName == DUNGEON_XML_FILE) { rv = XMLTypeEnum.Dungeon; }
             else if (fileName == SHOPS_XML_FILE) { rv = XMLTypeEnum.Shop; }
-            else if (fileName.Contains("Text Files")) { rv = XMLTypeEnum.Dialogue; }
+            else if (fileName.Contains("Text Files")) { rv = XMLTypeEnum.TextFile; }
 
             return rv;
         }
@@ -1105,19 +1111,13 @@ namespace Database_Editor
 
             if (!_diCutsceneDialogue.ContainsKey(cutSceneFileName))
             {
-                _diCutsceneDialogue[cutSceneFileName] = new Dictionary<string, Dictionary<string, string>>()
-                {
-                    ["0"] = new Dictionary<string, string>()
-                    {
-                        ["Text"] = ""
-                    }
-                };
+                _diCutsceneDialogue[cutSceneFileName] = new List<XMLData>();
             }
 
-            //FormCharExtraData frm = new FormCharExtraData("Cutscene Dialogue", _diCutsceneDialogue[cutSceneFileName]);
-            //frm.ShowDialog();
+            FormCharExtraData frm = new FormCharExtraData("Cutscene Dialogue", _diCutsceneDialogue[cutSceneFileName]);
+            frm.ShowDialog();
 
-            //_diCutsceneDialogue[cutSceneFileName] = frm.StringData;
+            _diCutsceneDialogue[cutSceneFileName] = frm.StringData;
         }
 
         #region SaveInfo
@@ -1584,11 +1584,7 @@ namespace Database_Editor
 
             SaveXMLDataDictionary(_diBasicXML, sWriter);
             SaveXMLDataDictionary(_diCharacterDialogue, sWriter);
-
-            foreach (string s in _diCutsceneDialogue.Keys)
-            {
-                SaveXMLDictionary(_diCutsceneDialogue[s], s, sWriter);
-            }
+            SaveXMLDataDictionary(_diCutsceneDialogue, sWriter);
 
             //SaveXMLDataDictionary(_diGameText, sWriter);
             //SaveXMLDataDictionary(_diMailbox, sWriter);
@@ -1840,7 +1836,7 @@ namespace Database_Editor
 
                 WriteXMLEntry(dataFile, string.Format("      <Key>{0}</Key>", data.ID), string.Format("      <Value>{0}</Value>", data.GetTagsString()));
 
-                if (!fileName.Contains("Config") && type != XMLTypeEnum.Dialogue)
+                if (!fileName.Contains("Config") && type != XMLTypeEnum.TextFile)
                 {
                     string value = string.Format("[Name:{0}]", data.Name);
                     if (!string.IsNullOrEmpty(data.Description)) { value += string.Format("[Description:{0}]", data.Description); }
@@ -1929,7 +1925,7 @@ namespace Database_Editor
                 _liTagsThatReferToMe = new List<string>(tagsThatReferToMe.Split(','));
 
                 string textID = Util.GetEnumString(xmlType) + "_" + id;
-                if (xmlType == XMLTypeEnum.Dialogue)
+                if (xmlType == XMLTypeEnum.TextFile)
                 {
                     if (stringData.ContainsKey("Name"))
                     {

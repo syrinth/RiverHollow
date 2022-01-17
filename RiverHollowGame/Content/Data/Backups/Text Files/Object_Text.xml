@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>Task_1</Key>
-      <Value>[Name:Search the Manor][Description:Search the ruinsof the Manor for anything useful]</Value>
+      <Value>[Name:Build a $WorldObject_70$][Description:$Character_19$ want you to build a $WorldObject_70$]</Value>
     </Item>
     <Item>
       <Key>Task_2</Key>
@@ -735,7 +735,7 @@
     </Item>
     <Item>
       <Key>Cutscene_2</Key>
-      <Value>[Name:Harp]</Value>
+      <Value>[Name:Workshop]</Value>
     </Item>
     <Item>
       <Key>Cutscene_3</Key>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
-  <Asset Type="Dictionary[string, string]">
+  <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>1</Key>
       <Value>[Text:$1$... I wish you'd listen to me. You push yourself too hard.]</Value>

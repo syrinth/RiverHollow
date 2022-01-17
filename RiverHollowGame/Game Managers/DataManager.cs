@@ -88,11 +88,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diClasses;
         static Dictionary<string, Dictionary<string, List<string>>> _diSchedule;
 
-        public static List<int> FloorIDs { get; private set; }
-        public static List<int> StructureIDs { get; private set; }
-        public static List<int> PlantIDs { get; private set; }
-        public static List<int> WallpaperIDs { get; private set; }
-
         public static Dictionary<int, Dictionary<string, string>> Config;
         #endregion
 
@@ -104,10 +99,6 @@ namespace RiverHollow.Game_Managers
         public static void LoadContent(ContentManager Content)
         {
             //Allocate Dictionaries
-            FloorIDs = new List<int>();
-            StructureIDs = new List<int>();
-            PlantIDs = new List<int>();
-            WallpaperIDs = new List<int>();
             _diTextures = new Dictionary<string, Texture2D>();
 
             _diMonsterTraits = Content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
@@ -130,8 +121,6 @@ namespace RiverHollow.Game_Managers
             LoadNPCSchedules(Content);
             LoadNPCs();
 
-            LoadShopFile(Content);
-
             _liForest = new List<int>();
             _liMountain = new List<int>();
             _liNight = new List<int>();
@@ -143,7 +132,6 @@ namespace RiverHollow.Game_Managers
         {
             LoadDictionary(ref _diPlayerAnimationData, @"Data\PlayerClassAnimationConfig", Content, null);
             LoadDictionary(ref _diItemData, @"Data\ItemData", Content, null);
-            LoadDictionary(ref _diWorldObjects, @"Data\WorldObjects", Content, LoadWorldObjectsDoWork);
             LoadDictionary(ref _diActions, @"Data\CombatActions", Content, null);
             LoadDictionary(ref _diVillagerData, @"Data\CharacterData", Content, null);
             LoadDictionary(ref _diMonsterData, @"Data\Monsters", Content, null);
@@ -158,6 +146,12 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diLightData, @"Data\LightData", Content, null);
             LoadDictionary(ref _diDungeonData, @"Data\DungeonData", Content, null);
         }
+        public static void SecondaryLoad(ContentManager Content)
+        {
+            LoadDictionary(ref _diWorldObjects, @"Data\WorldObjects", Content, LoadWorldObjectsDoWork);
+            LoadShopFile(Content);
+        }
+
         private static void LoadDictionary(ref Dictionary<int, Dictionary<string, string>> dictionaryAddTo, string dataFile, ContentManager Content, LoadDictionaryWorkDelegate workDelegate)
         {
             dictionaryAddTo = new Dictionary<int, Dictionary<string, string>>();
@@ -173,25 +167,9 @@ namespace RiverHollow.Game_Managers
 
         private static void LoadWorldObjectsDoWork(int id, Dictionary<string, string> taggedDictionary)
         {
-            ObjectTypeEnum type = Util.ParseEnum<ObjectTypeEnum>(taggedDictionary["Type"]);
-            switch (type)
+            if (taggedDictionary.ContainsKey("Unlocked"))
             {
-                case ObjectTypeEnum.Floor:
-                    FloorIDs.Add(id);
-                    break;
-                case ObjectTypeEnum.Beehive:
-                case ObjectTypeEnum.Buildable:
-                case ObjectTypeEnum.Container:
-                case ObjectTypeEnum.Garden:
-                case ObjectTypeEnum.Wall:
-                    StructureIDs.Add(id);
-                    break;
-                case ObjectTypeEnum.Plant:
-                    PlantIDs.Add(id);
-                    break;
-                case ObjectTypeEnum.Wallpaper:
-                    WallpaperIDs.Add(id);
-                    break;
+                PlayerManager.AddToCraftingDictionary(id);
             }
         }
 
