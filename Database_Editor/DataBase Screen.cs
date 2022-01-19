@@ -35,7 +35,7 @@ namespace Database_Editor
         #endregion
 
         #region Tags
-        const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,ItemID,GoalItem,ItemReward,Collection,Makes,Processes,GearID,RequestIDs,SeedID,HoneyID,UnlockItemID";
+        const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,ItemID,GoalItem,ItemRewardID,Collection,Makes,Processes,GearID,RequestIDs,SeedID,HoneyID,UnlockItemID";
         const string TAGS_FOR_WORLD_OBJECTS = "ObjectID,Wall,Floor,Resources,Place,SubObjects,RequiredObjectID,EntranceID";
         const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         const string TAGS_FOR_CLASSES = "Class";
@@ -50,7 +50,7 @@ namespace Database_Editor
         const string TAGS_FOR_TASKS = "TaskID";
 
         const string ITEM_REF_TAGS = "ReqItems,Place";
-        const string TASK_REF_TAGS = "GoalItem,ItemReward,BuildingID,UnlockBuildingID,RequiredObjectID";
+        const string TASK_REF_TAGS = "GoalItem,ItemRewardID,BuildingID,UnlockBuildingID,RequiredObjectID";
         const string CHARACTER_REF_TAGS = "Collection,Class,ShopData,HouseID,RequiredBuildingID,RequiredObjectID,RequestIDs";
         const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID,SubObjects,SeedID,HoneyID,LightID";
         const string CLASSES_REF_TAGS = "GearID,Ability,Spell";
@@ -154,7 +154,6 @@ namespace Database_Editor
                     }
                 }
             }
-
             
             _diItems = new Dictionary<ItemEnum, List<ItemXMLData>>();
             _diCharacterDialogue = new Dictionary<string, List<XMLData>>();

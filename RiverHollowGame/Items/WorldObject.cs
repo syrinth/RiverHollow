@@ -1108,7 +1108,8 @@ namespace RiverHollow.WorldObjects
         public class Structure : Buildable
         {
             List<SubObjectInfo> _liSubObjectInfo;
-            Vector2 _vecSpecialCoords = Vector2.Zero;
+            readonly Vector2 _vecSpecialCoords = Vector2.Zero;
+            public Vector2 SpecialCoords => _vecSpecialCoords;
             public Structure(int id, Dictionary<string, string> stringData) : base (id, stringData)
             {
                 _liSubObjectInfo = new List<SubObjectInfo>();
@@ -1135,7 +1136,6 @@ namespace RiverHollow.WorldObjects
                     rv = true;
                     if (_iID == int.Parse(DataManager.Config[15]["ObjectID"]))
                     {
-                        GameManager.MarketPosition = new Vector2(pos.X + _vecSpecialCoords.X, pos.Y + _vecSpecialCoords.Y);
                         foreach (Merchant m in DIMerchants.Values)
                         {
                             if (m.OnTheMap)

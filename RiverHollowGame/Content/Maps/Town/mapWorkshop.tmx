@@ -2,7 +2,6 @@
 <map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="15" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="40">
  <properties>
   <property name="Building" type="bool" value="true"/>
-  <property name="Cutscenes" value="2"/>
   <property name="MapType" value="Town"/>
  </properties>
  <tileset firstgid="1" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="484" columns="22">

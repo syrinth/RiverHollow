@@ -124,6 +124,7 @@
     <Compile Include="GUIComponents\Screens\NewGameScreen.cs" />
     <Compile Include="GUIComponents\Screens\HUDPurchaseWindows.cs" />
     <Compile Include="Game Managers\InventoryManager.cs" />
+    <Compile Include="Items\Blueprint.cs" />
     <Compile Include="Items\Clothes.cs" />
     <Compile Include="Items\Consumable.cs" />
     <Compile Include="Items\Equipment.cs" />

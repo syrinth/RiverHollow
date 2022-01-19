@@ -14,7 +14,7 @@ namespace RiverHollow.GUIComponents.MainObjects
             text.AnchorToInnerSide(_winMain, SideEnum.Top);
 
             int plants = 0;
-            foreach (KeyValuePair<int, List<WorldObject>> kvp in PlayerManager.GetTownObejcts())
+            foreach (KeyValuePair<int, List<WorldObject>> kvp in PlayerManager.GetTownObjects())
             {
                 switch (kvp.Value[0].Type)
                 {

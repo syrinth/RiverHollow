@@ -325,7 +325,10 @@ namespace RiverHollow
                 n.RollOver();
             }
             foreach (Merchant m in DataManager.DIMerchants.Values) {
-                m.RollOver();
+                if (PlayerManager.GetNumberTownObjects(int.Parse(DataManager.Config[15]["ObjectID"])) > 0)
+                {
+                    m.RollOver();
+                }
             }
 
             if (GameManager.MerchantQueue.Count > 0)

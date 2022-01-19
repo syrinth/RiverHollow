@@ -243,7 +243,6 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Held Objects
-        public static Vector2 MarketPosition = new Vector2(-1, -1);
         static Item _heldItem;
         public static Item HeldItem { get => _heldItem; }
         static WorldObject _heldWorldObject;

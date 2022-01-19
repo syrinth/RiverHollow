@@ -691,7 +691,7 @@
     </Item>
     <Item>
       <Key>172</Key>
-      <Value>[Type:Blueprint][Image:0-0][Unlocks:32][Value:1000]</Value>
+      <Value>[Type:Blueprint][Image:0-0][ItemID:1|7|37]</Value>
     </Item>
     <Item>
       <Key>173</Key>

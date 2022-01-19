@@ -1,6 +1,5 @@
 ﻿using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
-using RiverHollow.WorldObjects;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
@@ -25,6 +24,7 @@ namespace RiverHollow.Misc
         public int RequiredItemAmount { get; private set; }
         public int TargetsAccomplished { get; private set; }
 
+        private int _iGoalBuilding;
         private Monster _questMonster;
         private Item _targetItem;
         private int _iTargetWorldObjectID = -1;
@@ -105,14 +105,14 @@ namespace RiverHollow.Misc
                 RequiredItemAmount = int.Parse(info[1]);
             }
 
-            if (stringData.ContainsKey("ItemReward"))
+            if (stringData.ContainsKey("ItemRewardID"))
             {
-                string[] items = Util.FindParams(stringData["ItemReward"]);
-                if (items.Length > 1)
+                string[] items = Util.FindParams(stringData["ItemRewardID"]);
+                if (items.Length > 0)
                 {
                     foreach (string itemInfo in items)
                     {
-                        string[] parse = itemInfo.Split('-');
+                        string[] parse = Util.FindParams(itemInfo);
                         Item it = DataManager.GetItem(int.Parse(parse[0]), parse.Length > 1 ? int.Parse(parse[1]) : 1);
                         if (parse.Length == 3) { it.ApplyUniqueData(parse[2]); }
                         LiRewardItems.Add(it);
@@ -141,7 +141,11 @@ namespace RiverHollow.Misc
                 }
             }
 
-            if (stringData.ContainsKey("GoalNPC")) { GoalNPC = DataManager.DIVillagers[int.Parse(stringData["GoalNPC"])]; }
+            if (stringData.ContainsKey("GoalNPC")) {
+                GoalNPC = DataManager.DIVillagers[int.Parse(stringData["GoalNPC"])];
+            }
+
+            Util.AssignValue(ref _iGoalBuilding, "GoalBuildingID", stringData);
 
             Util.AssignValue(ref _iRewardMoney, "Money", stringData);
             Util.AssignValue(ref _iTargetWorldObjectID, "RequiredObjectID", stringData);
@@ -153,7 +157,7 @@ namespace RiverHollow.Misc
 
             Util.AssignValue(ref _bFinishOnCompletion, "Immediate", stringData);
             Util.AssignValue(ref _iActivateID, "Activate", stringData);
-            Util.AssignValue(ref _iCutsceneID, "Cutscene", stringData);
+            Util.AssignValue(ref _iCutsceneID, "CutsceneID", stringData);
             Util.AssignValue(ref _bHiddenGoal, "HideGoal", stringData);
         }
 
@@ -204,6 +208,17 @@ namespace RiverHollow.Misc
 
             return rv;
         }
+        public bool TaskProgressEnterBuilding(int i)
+        {
+            bool rv = false;
+
+            if(_iGoalBuilding == i)
+            {
+                FinishTask();
+            }
+
+            return rv;
+        }
 
         public void IncrementProgress(int num)
         {
@@ -216,8 +231,7 @@ namespace RiverHollow.Misc
                     ReadyForHandIn = true;
                     if (_bFinishOnCompletion)
                     {
-                        string questCompleteText = string.Empty;
-                        FinishTask(ref questCompleteText);
+                        FinishTask();
                     }
                 }
             }
@@ -244,42 +258,55 @@ namespace RiverHollow.Misc
                 map.AddMonsterByPosition(_spawnMob, map.DictionaryCharacterLayer[_sLocName]);
             }
         }
+
         public void FinishTask(ref string questCompleteText)
+        {
+            questCompleteText = "Task_" + TaskID + "_End";
+            FinishTask();
+        }
+
+        private void FinishTask()
         {
             Finished = true;
 
-            if (GoalNPC != null)
-            {
-                questCompleteText = "Task_" + TaskID + "_End";
-            }
-
-            foreach (Item i in LiRewardItems)
-            {
-                InventoryManager.AddToInventory(i);
-            }
-            PlayerManager.AddMoney(_iRewardMoney);
-
-            if (FriendTarget.Equals("Giver"))
-            {
-                GoalNPC.FriendshipPoints += _iFriendPoints;
-            }
-
-            if(_iUnlockBuildingID != -1)
-            {
-                PlayerManager.DIBuildInfo[_iUnlockBuildingID].Unlock();
-            }
-
-            if (_iActivateID > -1)
-            {
-                DataManager.DIVillagers[_iActivateID].Activate(true);
-            }
-
-            PlayerManager.TaskLog.Remove(this);
-            GUIManager.NewTaskIcon(true);
-
+            //If a cutscene will play defer the actual End of the Task until the Cutscene ends
             if (_iCutsceneID != -1)
             {
-                CutsceneManager.TriggerCutscene(_iCutsceneID);
+                CutsceneManager.TriggerCutscene(_iCutsceneID, this);
+            }
+            else
+            {
+                EndTask();
+            }
+        }
+
+        public void EndTask()
+        {
+            if (Finished)
+            {
+                foreach (Item i in LiRewardItems)
+                {
+                    InventoryManager.AddToInventory(i);
+                }
+                PlayerManager.AddMoney(_iRewardMoney);
+
+                if (FriendTarget.Equals("Giver"))
+                {
+                    GoalNPC.FriendshipPoints += _iFriendPoints;
+                }
+
+                if (_iUnlockBuildingID != -1)
+                {
+                    PlayerManager.DIBuildInfo[_iUnlockBuildingID].Unlock();
+                }
+
+                if (_iActivateID > -1)
+                {
+                    DataManager.DIVillagers[_iActivateID].Activate(true);
+                }
+
+                PlayerManager.TaskLog.Remove(this);
+                GUIManager.NewAlertIcon("Task Complete");
             }
         }
 
@@ -309,7 +336,16 @@ namespace RiverHollow.Misc
             string rv = string.Empty;
 
             if (_bHiddenGoal) { rv = "???"; }
-            else if (ReadyForHandIn) { rv = "Speak to " + GoalNPC.Name; }
+            else if (ReadyForHandIn) {
+                if (GoalNPC != null)
+                {
+                    rv = "Speak to " + GoalNPC.Name;
+                    if (_iGoalBuilding != -1)
+                    {
+                        rv += " at the " + PlayerManager.DIBuildInfo[_iGoalBuilding].Name;
+                    }
+                }
+            }
             else
             {
                 switch (_eTaskType)

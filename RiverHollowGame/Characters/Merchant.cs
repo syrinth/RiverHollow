@@ -1,11 +1,14 @@
-﻿using RiverHollow.Game_Managers;
+﻿using Microsoft.Xna.Framework;
+using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
+using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
+using static RiverHollow.WorldObjects.Buildable;
 
 namespace RiverHollow.Characters
 {
@@ -142,7 +145,8 @@ namespace RiverHollow.Characters
             CurrentMapName = MapManager.TownMapName;
             MapManager.Maps[CurrentMapName].AddCharacterImmediately(this);
 
-            Position = Util.SnapToGrid(GameManager.MarketPosition);
+            Structure market = (Structure)PlayerManager.GetTownObjectsByID(int.Parse(DataManager.Config[15]["ObjectID"]))[0];
+            Position = Util.SnapToGrid(new Vector2(market.MapPosition.X + market.SpecialCoords.X, market.MapPosition.Y + market.SpecialCoords.Y));
         }
 
         private struct RequestItem

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,7 +13,6 @@ using RiverHollow.Misc;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIItemBox;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
-using RiverHollow.GUIComponents.GUIObjects.Combat.Lite;
 using RiverHollow.Items;
 using RiverHollow.Characters.Lite;
 
@@ -22,7 +20,7 @@ namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDScreen : GUIScreen
     {
-        List<HUDNewTask> _liTaskIcons;
+        List<HUDNewAlert> _liTaskIcons;
 
         GUIButton _btnSkipCutscene;
         GUIObject _gMenu;
@@ -40,7 +38,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public HUDScreen()
         {
-            _liTaskIcons = new List<HUDNewTask>();
+            _liTaskIcons = new List<HUDNewAlert>();
             _gHealthDisplay = new GUIOldStatDisplay(PlayerManager.PlayerCombatant.GetHP, Color.Green);
             _gHealthDisplay.AnchorToScreen(this, SideEnum.TopLeft, 10);
             AddControl(_gHealthDisplay);
@@ -187,17 +185,17 @@ namespace RiverHollow.GUIComponents.Screens
         }
         #endregion
 
-        public override void NewTaskIcon(bool complete)
+        public override void NewAlertIcon(string text)
         {
-            HUDNewTask newTask = new HUDNewTask(complete, RemoveTaskIcon);
+            HUDNewAlert newAlert = new HUDNewAlert(text, RemoveTaskIcon);
 
-            if (_liTaskIcons.Count == 0) { newTask.AnchorToScreen(SideEnum.Right, 12); }
-            else { newTask.AnchorAndAlignToObject(_liTaskIcons[_liTaskIcons.Count - 1], SideEnum.Top, SideEnum.Left, ScaleIt(1)); }
+            if (_liTaskIcons.Count == 0) { newAlert.AnchorToScreen(SideEnum.Right, 12); }
+            else { newAlert.AnchorAndAlignToObject(_liTaskIcons[_liTaskIcons.Count - 1], SideEnum.Top, SideEnum.Right, ScaleIt(1)); }
 
-            _liTaskIcons.Add(newTask);
-            AddControl(newTask);
+            _liTaskIcons.Add(newAlert);
+            AddControl(newAlert);
         }
-        private void RemoveTaskIcon(HUDNewTask q)
+        private void RemoveTaskIcon(HUDNewAlert q)
         {
             _liTaskIcons.Remove(q);
             RemoveControl(q);
@@ -1905,19 +1903,19 @@ namespace RiverHollow.GUIComponents.Screens
         }
     }
 
-    class HUDNewTask : GUIObject
+    class HUDNewAlert : GUIObject
     {
         double _dTimer = 0;
         GUIImage _gMarker;
         GUIText _gText;
 
-        public delegate void RemoveDelegate(HUDNewTask q);
+        public delegate void RemoveDelegate(HUDNewAlert q);
         private RemoveDelegate _delAction;
-        public HUDNewTask(bool questComplete, RemoveDelegate del)
+        public HUDNewAlert(string text, RemoveDelegate del)
         {
             _delAction = del;
             _gMarker = new GUIImage(new Rectangle(48, 80, 16, 16), ScaleIt(16), ScaleIt(16), DataManager.DIALOGUE_TEXTURE);
-            _gText = new GUIText(questComplete ? "Task Complete" : "New Task");
+            _gText = new GUIText(text);
 
             _gText.AnchorAndAlignToObject(_gMarker, SideEnum.Right, SideEnum.CenterY, ScaleIt(1));
             AddControl(_gMarker);

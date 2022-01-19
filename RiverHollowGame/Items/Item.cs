@@ -355,28 +355,6 @@ namespace RiverHollow.Items
         }
     }
 
-    public class Blueprint : Item
-    {
-        private readonly int _iUnlocks;
-        public Blueprint(int id, Dictionary<string, string> stringData)
-        {
-            ImportBasics(stringData, id, 1);
-
-            Util.AssignValue(ref _iUnlocks, "Unlocks", stringData);
-
-            _bStacks = false;
-            _texTexture = DataManager.GetTexture(@"Textures\items");
-        }
-
-        /// <summary>
-        /// When called, unlocks the buildingID
-        /// </summary>
-        public void UnlockBuilding()
-        {
-            PlayerManager.DIBuildInfo[_iUnlocks].Unlock();
-        }
-    }
-
     public class AdventureMap : Item
     {
         private int _difficulty;

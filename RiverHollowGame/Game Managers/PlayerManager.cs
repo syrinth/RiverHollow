@@ -285,7 +285,7 @@ namespace RiverHollow.Game_Managers
                 t.SpawnTaskMobs();
                 TaskLog.Add(t);
 
-                GUIManager.NewTaskIcon();
+                GUIManager.NewAlertIcon("New Task");
             }
         }
         public static void AdvanceTaskProgress(Building b)
@@ -315,6 +315,19 @@ namespace RiverHollow.Game_Managers
                 if (q.AttemptProgress(i))
                 {
                     break;
+                }
+            }
+        }
+        public static void TaskProgressEnterBuilding(int buildingID)
+        {
+            if (buildingID != -1)
+            {
+                foreach (RHTask q in TaskLog)
+                {
+                    if (q.TaskProgressEnterBuilding(buildingID))
+                    {
+                        break;
+                    }
                 }
             }
         }
@@ -362,6 +375,8 @@ namespace RiverHollow.Game_Managers
             if (!_diCrafting[e].Contains(id))
             {
                 _diCrafting[e].Add(id);
+
+                GUIManager.NewAlertIcon("Unlocked: " + obj.Name);
             }
         }
         #endregion
@@ -402,12 +417,32 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void AddToTownObjects(WorldObject obj) {
-
-            if (!_diTownObjects.ContainsKey(obj.ID)) { _diTownObjects[obj.ID] = new List<WorldObject>(); }
-            if (!_diTownObjects[obj.ID].Contains(obj))
+        public static void AddToTownObjects(WorldObject obj)
+        {
+            bool buildable = false;
+            switch (obj.Type)
             {
-                _diTownObjects[obj.ID].Add(obj);
+                case ObjectTypeEnum.Building:
+                case ObjectTypeEnum.Mailbox:
+                case ObjectTypeEnum.Structure:
+                case ObjectTypeEnum.Floor:
+                case ObjectTypeEnum.Wallpaper:
+                case ObjectTypeEnum.Beehive:
+                case ObjectTypeEnum.Buildable:
+                case ObjectTypeEnum.Decor:
+                case ObjectTypeEnum.Garden:
+                case ObjectTypeEnum.Wall:
+                    buildable = true;
+                    break;
+            }
+
+            if (buildable)
+            {
+                if (!_diTownObjects.ContainsKey(obj.ID)) { _diTownObjects[obj.ID] = new List<WorldObject>(); }
+                if (!_diTownObjects[obj.ID].Contains(obj))
+                {
+                    _diTownObjects[obj.ID].Add(obj);
+                }
             }
         }
         public static void RemoveTownObjects(WorldObject obj)
@@ -437,7 +472,7 @@ namespace RiverHollow.Game_Managers
             }
             return rv;
         }
-        public static IReadOnlyDictionary<int, List<WorldObject>> GetTownObejcts() { return _diTownObjects; }
+        public static IReadOnlyDictionary<int, List<WorldObject>> GetTownObjects() { return _diTownObjects; }
 
         public static void AddBuilding(Building b)
         {
@@ -465,6 +500,7 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region PlayerInRange
+
         public static bool PlayerInRange(Rectangle rect)
         {
             int hypotenuse = (int)Math.Sqrt(TILE_SIZE * TILE_SIZE + TILE_SIZE * TILE_SIZE);

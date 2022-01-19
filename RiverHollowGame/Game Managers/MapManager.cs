@@ -121,7 +121,7 @@ namespace RiverHollow.Game_Managers
 
                 Maps[travelPoint.LinkedMap].SpawnMapEntities();
                 PlayerManager.PlayerActor.ActivePet?.ChangeState(NPCStateEnum.Alert);
-                FadeToNewMap(Maps[travelPoint.LinkedMap], newPos);
+                FadeToNewMap(Maps[travelPoint.LinkedMap], newPos, travelPoint.TargetBuilding);
             }
             else
             {
@@ -154,21 +154,6 @@ namespace RiverHollow.Game_Managers
         public static bool ChangingMaps()
         {
             return !_newMapInfo.Equals(default(NewMapInfo));
-        }
-
-        public static void EnterBuilding(TravelPoint doorLoc, Building b)
-        {
-            TravelPoint tPoint = null;
-
-            foreach (string s in Maps[b.MapName].DictionaryTravelPoints.Keys)
-            {
-                if (s.Equals(PlayerManager.CurrentMap))
-                {
-                    tPoint = Maps[b.MapName].DictionaryTravelPoints[s];
-                }
-            }
-
-            FadeToNewMap(Maps[b.MapName], tPoint.GetMovedCenter(), b);
         }
 
         public static void BackToPlayer()
@@ -238,16 +223,19 @@ namespace RiverHollow.Game_Managers
 
                 string oldMap = CurrentMap.Name;
                 CurrentMap = _newMapInfo.NextMap;
-                if (_newMapInfo.EnteredBuilding != null)
-                {
-                    CurrentMap.LoadBuilding(_newMapInfo.EnteredBuilding);
-                }
 
                 SoundManager.ChangeMap();
                 CurrentMap.LeaveMap();
                 PlayerManager.CurrentMap = _newMapInfo.NextMap.Name;
                 PlayerManager.PlayerActor.Position = _newMapInfo.PlayerPosition;
                 CurrentMap.EnterMap();
+
+                if (_newMapInfo.EnteredBuilding != null)
+                {
+                    //CurrentMap.LoadBuilding(_newMapInfo.EnteredBuilding);
+                    PlayerManager.TaskProgressEnterBuilding(_newMapInfo.EnteredBuilding.ID);
+                }
+
                 _newMapInfo = default;
 
                 PlayerManager.PlayerActor.ActivePet?.SpawnNearPlayer();

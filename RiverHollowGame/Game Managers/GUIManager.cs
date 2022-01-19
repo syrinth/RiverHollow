@@ -197,8 +197,8 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void NewTaskIcon(bool questComplete = false) {
-            _currentGUIScreen.NewTaskIcon(questComplete);
+        public static void NewAlertIcon(string text) {
+            _currentGUIScreen.NewAlertIcon(text);
         }
 
         public static void AddSkipCutsceneButton()

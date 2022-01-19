@@ -2419,7 +2419,9 @@ namespace RiverHollow.Tile_Engine
         {
             foreach (WorldObjectData w in mData.worldObjects)
             {
-                DataManager.CreateAndPlaceNewWorldObject(w.worldObjectID, new Vector2(w.x, w.y), this);
+                WorldObject obj = DataManager.GetWorldObjectByID(w.worldObjectID);
+                obj?.PlaceOnMap(new Vector2(w.x, w.y), this);
+                if (obj != null && this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
 
             foreach (DecorData d in mData.decor)
@@ -2427,18 +2429,21 @@ namespace RiverHollow.Tile_Engine
                 Decor obj = (Decor)DataManager.GetWorldObjectByID(d.ID);
                 obj.LoadData(d);
                 obj.PlaceOnMap(this);
+                if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
             foreach (ContainerData c in mData.containers)
             {
-                Container con = (Container)DataManager.GetWorldObjectByID(c.containerID);
-                con.LoadData(c);
-                con.PlaceOnMap(this);
+                Container obj = (Container)DataManager.GetWorldObjectByID(c.containerID);
+                obj.LoadData(c);
+                obj.PlaceOnMap(this);
+                if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
             foreach (MachineData mac in mData.machines)
             {
-                Machine theMachine = (Machine)DataManager.GetWorldObjectByID(mac.ID);
-                theMachine.LoadData(mac);
-                theMachine.PlaceOnMap(this);
+                Machine obj = (Machine)DataManager.GetWorldObjectByID(mac.ID);
+                obj.LoadData(mac);
+                obj.PlaceOnMap(this);
+                if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
             foreach (PlantData plantData in mData.plants)
             {
@@ -2448,21 +2453,24 @@ namespace RiverHollow.Tile_Engine
             }
             foreach (GardenData gardenData in mData.gardens)
             {
-                Garden g = (Garden)DataManager.GetWorldObjectByID(gardenData.ID);
-                g.LoadData(gardenData);
-                g.PlaceOnMap(this);
+                Garden obj = (Garden)DataManager.GetWorldObjectByID(gardenData.ID);
+                obj.LoadData(gardenData);
+                obj.PlaceOnMap(this);
+                if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
             foreach (BeehiveData data in mData.beehives)
             {
                 Beehive obj = (Beehive)DataManager.GetWorldObjectByID(data.ID);
                 obj.LoadData(data);
                 obj.PlaceOnMap(this);
+                if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
             foreach (WarpPointData warpData in mData.warpPoints)
             {
-                WarpPoint w = (WarpPoint)DataManager.GetWorldObjectByID(warpData.ID);
-                w.LoadData(warpData);
-                w.PlaceOnMap(this);
+                WarpPoint obj = (WarpPoint)DataManager.GetWorldObjectByID(warpData.ID);
+                obj.LoadData(warpData);
+                obj.PlaceOnMap(this);
+                if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
         }
     }
@@ -2680,13 +2688,14 @@ namespace RiverHollow.Tile_Engine
 
     public class TravelPoint
     {
-        private Building _objBuilding;
+        public Building TargetBuilding { get; private set; }
         public Rectangle CollisionBox { get; private set; }
         public Point Location => CollisionBox.Location;
         string _sMapName;
 
         private string _sLinkedMapName = string.Empty;
-        public string LinkedMap => (_objBuilding != null ? _objBuilding.MapName : _sLinkedMapName);
+        public int LinkedBuildingID => TargetBuilding != null ? TargetBuilding.ID : -1;
+        public string LinkedMap => (TargetBuilding != null ? TargetBuilding.MapName : _sLinkedMapName);
         public Vector2 Center => CollisionBox.Center.ToVector2();
         public bool IsDoor { get; private set; }
         public bool IsActive { get; private set; } = false;
@@ -2723,7 +2732,7 @@ namespace RiverHollow.Tile_Engine
         }
         public TravelPoint(Building b, string mapName, int buildingID)
         {
-            _objBuilding = b;
+            TargetBuilding = b;
             _sMapName = mapName;
             CollisionBox = b.TravelBox;
             _eEntranceDir = DirectionEnum.Down;

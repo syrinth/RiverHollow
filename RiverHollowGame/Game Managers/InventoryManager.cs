@@ -300,7 +300,8 @@ Exit:
             }
             else if (itemToAdd.CompareType(ItemEnum.Blueprint))
             {
-                ((Blueprint)itemToAdd).UnlockBuilding();
+                ((Blueprint)itemToAdd).UnlockCraftables();
+                ((Blueprint)itemToAdd).UnlockBuildings();
                 return true;
             }
             else if (itemToAdd.CompareType(ItemEnum.Tool))

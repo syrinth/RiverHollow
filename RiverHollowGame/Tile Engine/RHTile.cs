@@ -72,8 +72,6 @@ namespace RiverHollow.Tile_Engine
             {
                 if (PlayerManager.PlayerInRange(_travelPoint.CollisionBox) && !MapManager.ChangingMaps())
                 {
-                    // if (obj.BuildingID > 1) { MapManager.EnterBuilding(obj, PlayerManager.Buildings.Find(x => x.PersonalID == obj.BuildingID)); }
-                    //else { MapManager.ChangeMaps(PlayerManager.World, this.Name, obj); }
                     MapManager.ChangeMaps(PlayerManager.PlayerActor, MapName, _travelPoint);
                     SoundManager.PlayEffect("close_door_1");
                     return true;

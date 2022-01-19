@@ -45,36 +45,6 @@ namespace RiverHollow.Game_Managers
                 _diAllCutsceneDialogue[fileID] = entryDictionary;
             }
 
-            ///
-            //_diNPCDialogue = new Dictionary<int, Dictionary<string, string>>();
-            //foreach (string s in Directory.GetFiles(@"Content\" + FOLDER_TEXTFILES + @"Dialogue\Villagers"))
-            //{
-            //    string fileName = string.Empty;
-
-            //    if (s.Contains("NPC_"))
-            //    {
-            //        fileName = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0];
-
-            //        int file = -1;
-            //        if (int.TryParse(fileName, out file))
-            //        {
-            //            fileName = s;
-            //            Util.ParseContentFile(ref fileName);
-            //            Dictionary<int, string> rawInfo = Content.Load<Dictionary<int, string>>(fileName);
-            //            newDialogue = new Dictionary<string, string>();
-            //            foreach (string dialogueTags in rawInfo.Values)
-            //            {
-            //                Dictionary<string, string> tags = Util.DictionaryFromTaggedString(dialogueTags);
-            //                string newKey = tags["Name"];
-            //                tags.Remove("Name");
-            //                newDialogue[newKey] = Util.StringFromTaggedDictionary(tags);
-            //            }
-            //            _diNPCDialogue.Add(file, newDialogue);
-            //        }
-            //    }
-            //}
-            ///
-
             Dictionary<int, List<string>> rawData = Content.Load<Dictionary<int, List<string>>>(@"Data\CutScenes");
             foreach (KeyValuePair<int, List<string>> kvp in rawData)
             {
@@ -95,10 +65,10 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void TriggerCutscene(int id)
+        public static void TriggerCutscene(int id, RHTask triggerTask = null)
         {
             _currentCutscene = _diCutscenes[id];
-            _currentCutscene.Setup();
+            _currentCutscene.Setup(triggerTask);
             Playing = true;
         }
 
@@ -169,7 +139,7 @@ namespace RiverHollow.Game_Managers
         RHMap _originalMap;
         Vector2 _vOriginalPlayerPos;
         RHMap _cutsceneMap;
-        bool _bEnterTrigger = false;
+        int _iTaskID = -1;
         int _iMinTime = -1;                                         //The earliest the cutscene can be triggered
         int _iMaxTime = -1;                                         //The latest the cutscene can be triggered
         int _iCurrentCommand;
@@ -179,6 +149,7 @@ namespace RiverHollow.Game_Managers
         List<string> _liSetupCommands;
         bool _bTriggered;
         bool _bWaitForMove;
+        RHTask _triggerTask;
 
         List<WorldActor> _liMoving;
         List<WorldActor> _liToRemove;
@@ -225,9 +196,9 @@ namespace RiverHollow.Game_Managers
                         _liReqFriendship.Add(new KeyValuePair<int, int>(int.Parse(friendData[0]), int.Parse(friendData[1])));
                     }
                 }
-                else if (tags[0].Equals("Enter"))
+                else if (tags[0].Equals("TaskID"))
                 {
-                    _bEnterTrigger = true;
+                    _iTaskID = int.Parse(tags[1]);
                 }
             }
 
@@ -459,8 +430,9 @@ namespace RiverHollow.Game_Managers
         /// <summary>
         /// Sets up the Cutscene for playingbased off it's datas
         /// </summary>
-        public void Setup()
+        public void Setup(RHTask triggerTask = null)
         {
+            _triggerTask = triggerTask;
             //Stop the player from moving
             PlayerManager.AllowMovement = false;
 
@@ -535,15 +507,18 @@ namespace RiverHollow.Game_Managers
         /// <returns>True if the Cutscene should be triggered.</returns>
         public bool CanBeTriggered()
         {
-            return !_bTriggered && (InTimeWindow() && FriendshipReqs());
+            return !_bTriggered && OnTask() && InTimeWindow() && FriendshipReqs();
         }
         
-        /// <summary>
-        /// If this flag is set to true, the trigger for this cutscene is just entering the map
-        /// </summary>
-        private bool EnterTrigger()
+        private bool OnTask()
         {
-            return _bEnterTrigger;
+            if (_iTaskID == -1)
+            {
+                return true;
+            }
+            else {
+                return PlayerManager.TaskLog.Contains(DITasks[_iTaskID]);
+            }
         }
 
         /// <summary>
@@ -590,7 +565,6 @@ namespace RiverHollow.Game_Managers
 
         public void Skip()
         {
-            EndCutscene();
             CutsceneManager.UnsetCurrentCutscene();
 
             for(int i = _iCurrentCommand; i < _liCommands.Count; i++){
@@ -624,6 +598,8 @@ namespace RiverHollow.Game_Managers
             }
 
             GUIManager.ClearBackgroundImage();
+
+            EndCutscene();
         }
 
         private void EndCutscene()
@@ -638,6 +614,8 @@ namespace RiverHollow.Game_Managers
             MapManager.Maps.Remove(_cutsceneMap.Name);
             MapManager.FadeToNewMap(_originalMap, _vOriginalPlayerPos);
             GUIManager.RemoveSkipCutsceneButton();
+
+            _triggerTask?.EndTask();
         }
     }
 }

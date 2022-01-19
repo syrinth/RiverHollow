@@ -853,18 +853,7 @@ namespace RiverHollow.Game_Managers
 
                 PlayerManager.AddToTaskLog(newTask);
             }
-            //foreach (MissionData m in dataToLoad.CurrentMissions)
-            //{
-            //    Mission newMission = new Mission();
-            //    newMission.LoadData(m);
-            //    MissionManager.CurrentMissions.Add(newMission);
-            //}
-            //foreach (MissionData m in dataToLoad.AvailableMissions)
-            //{
-            //    Mission newMission = new Mission();
-            //    newMission.LoadData(m);
-            //    MissionManager.AvailableMissions.Add(newMission);
-            //}
+
             foreach (VillagerData n in dataToLoad.VillagerData)
             {
                 Villager target = DataManager.DIVillagers[n.npcID];
@@ -889,28 +878,10 @@ namespace RiverHollow.Game_Managers
             }
 
             PlayerManager.LoadData(dataToLoad.playerData);
+
             //After we've loaded everything, spawn the mounts in the Stables
             PlayerManager.SpawnMounts();
-
-            //foreach (BuildInfo b in GameManager.DIBuildInfo.Values)
-            //{
-            //    data.BuildingInfoData.Add(b.SaveData());
-            //}
-
-            //string value = string.Empty;
-            //foreach (Merchandise m in kvp.Value)
-            //{
-            //    value += m.Unlocked;
-
-            //    if (m != kvp.Value[kvp.Value.Count - 1]) { value += "-"; }
-            //}
-
-            //ShopData sData = new ShopData
-            //{
-            //    shopID = kvp.Key,
-            //    merchStatusString = value
-            //};
-            //data.ShopData.Add(sData);
+            
         }
         #endregion
 
