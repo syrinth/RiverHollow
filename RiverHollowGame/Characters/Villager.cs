@@ -414,6 +414,11 @@ namespace RiverHollow.Characters
             }
             _liTilePath = _currentPathData.Path;
 
+            if (_liTilePath != null)
+            {
+                SetMoveObj(_liTilePath[0].Position);
+            }
+
             //Set the next TimeKey to watch out for
             _iNextTimeKeyID = timeKeyIndex + 1;
             TravelManager.FinishThreading(ref _pathingThread);

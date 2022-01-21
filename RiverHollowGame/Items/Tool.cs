@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
+using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
@@ -86,6 +88,32 @@ namespace RiverHollow.Items
         {
             _sprite.SetLayerDepthMod(1);
             _sprite.Draw(spriteBatch);
+        }
+
+        public override void ItemBeingUsed()
+        {
+            if (ToolType == GameManager.ToolEnum.Harp)
+            {
+                Spirit s = MapManager.CurrentMap.FindSpirit();
+                if (s != null)
+                {
+                    HarpManager.NewSong(s);
+                }
+            }
+            else if (ToolType == GameManager.ToolEnum.Return)
+            {
+                TextEntry entry = null;
+                if (DungeonManager.CurrentDungeon != null)
+                {
+                    if (HasCharges()) { entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_Use"), Name); }
+                    else { entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_Empty"), Name); }
+                }
+                else
+                {
+                    entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_No_Dungeon"), Name);
+                }
+                ConfirmItemUse(entry);
+            }
         }
 
         public override void UseItem(TextEntryVerbEnum action)

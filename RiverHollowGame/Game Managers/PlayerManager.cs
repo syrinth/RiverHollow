@@ -347,7 +347,7 @@ namespace RiverHollow.Game_Managers
         {
             return _diCrafting[e];
         }
-        public static void AddToCraftingDictionary(int id)
+        public static void AddToCraftingDictionary(int id, bool displayAlert = true)
         {
             WorldObject obj = DataManager.GetWorldObjectByID(id);
             ObjectTypeEnum e = obj.Type;
@@ -375,9 +375,21 @@ namespace RiverHollow.Game_Managers
             if (!_diCrafting[e].Contains(id))
             {
                 _diCrafting[e].Add(id);
-
-                GUIManager.NewAlertIcon("Unlocked: " + obj.Name);
             }
+
+            if (displayAlert)
+            {
+                GUIManager.NewAlertIcon("New Blueprint Unlocked");
+            }
+        }
+        public static void AddToCraftingDictionary(int[] unlocks)
+        {
+            for (int i = 0; i < unlocks.Length; i++)
+            {
+                AddToCraftingDictionary(unlocks[i], false);
+            }
+
+            GUIManager.NewAlertIcon("New " + (unlocks.Length > 1 ? "Blueprints" : "Blueprint") + " Unlocked");
         }
         #endregion
 
@@ -846,7 +858,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (int i in saveData.CraftingList)
             {
-                AddToCraftingDictionary(i);
+                AddToCraftingDictionary(i, false);
             }
         }
 

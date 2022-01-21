@@ -1469,22 +1469,6 @@ namespace RiverHollow.Tile_Engine
                                 rv = true;
                             }
                         }
-
-                        //Handles interacting with NPCs
-                        foreach (WorldActor c in _liActors)
-                        {
-                            if (c.IsActorType(ActorEnum.Villager) || c.IsActorType(ActorEnum.ShippingGremlin))
-                            {
-                                Villager n = (Villager)c;
-                                if (n.CanGiveGift && InventoryManager.GetCurrentItem() != null &&
-                                    n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
-                                    InventoryManager.GetCurrentItem().Giftable())
-                                {
-                                    n.Gift(InventoryManager.GetCurrentItem());
-                                    rv = true;
-                                }
-                            }
-                        }
                     }
                 }
             }

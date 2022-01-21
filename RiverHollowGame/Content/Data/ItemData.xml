@@ -11,7 +11,7 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Resource][Image:1-0][Value:10]</Value>
+      <Value>[Type:Resource][Image:1-0][Value:5]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -691,11 +691,11 @@
     </Item>
     <Item>
       <Key>172</Key>
-      <Value>[Type:Blueprint][Image:0-0][ItemID:1|7|37]</Value>
+      <Value>[Type:Blueprint][Image:0-12][ItemID:1|7|37][BuildingID:22]</Value>
     </Item>
     <Item>
       <Key>173</Key>
-      <Value>[Type:Blueprint][Image:0-0][Unlocks:18][Value:1000]</Value>
+      <Value>[Type:Blueprint][Image:1-12][ItemID:38][Value:500]</Value>
     </Item>
     <Item>
       <Key>174</Key>

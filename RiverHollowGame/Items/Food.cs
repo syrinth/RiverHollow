@@ -1,4 +1,5 @@
 ﻿using RiverHollow.Game_Managers;
+using RiverHollow.Misc;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 
@@ -30,6 +31,13 @@ namespace RiverHollow.Items
             rv = rv.Trim();
 
             return rv;
+        }
+
+        public override void ItemBeingUsed()
+        {
+            TextEntry entry = DataManager.GetGameTextEntry("FoodConfirm");
+            entry.FormatText(entry, Name);
+            ConfirmItemUse(entry);
         }
 
         public override void UseItem(TextEntryVerbEnum action)

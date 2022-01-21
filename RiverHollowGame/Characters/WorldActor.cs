@@ -289,8 +289,8 @@ namespace RiverHollow.Characters
                     }
 
                     //Recalculate for the next target
-                    target = _liTilePath[0].Position;
-                    Util.GetMoveSpeed(Position, target, BuffedSpeed, ref direction);
+                    _vMoveTo = _liTilePath[0].Position;
+                    Util.GetMoveSpeed(Position, _vMoveTo, BuffedSpeed, ref direction);
                 }
 
                 //Attempt to move
@@ -470,9 +470,6 @@ namespace RiverHollow.Characters
                             moveTo.Y *= -1;
                         }
                     }
-
-                    
-                    
 
                     moveTo = CurrentMap.GetFarthestUnblockedPath(Position + moveTo, this);
                 }

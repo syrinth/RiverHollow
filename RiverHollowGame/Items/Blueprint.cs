@@ -1,43 +1,52 @@
 ﻿using RiverHollow.Game_Managers;
+using RiverHollow.Misc;
 using RiverHollow.Utilities;
+using System;
 using System.Collections.Generic;
 
 namespace RiverHollow.Items
 {
     public class Blueprint : Item
     {
-        private readonly string[] _arrItemUnlocks;
+        private readonly int[] _arrItemUnlocks;
         private readonly string[] _arrBuildingUnlocks;
         public Blueprint(int id, Dictionary<string, string> stringData)
         {
             ImportBasics(stringData, id, 1);
 
-            if (stringData.ContainsKey("ItemID")) { _arrItemUnlocks = Util.FindParams(stringData["ItemID"]); }
+            if (stringData.ContainsKey("ItemID")) { _arrItemUnlocks = Array.ConvertAll(Util.FindParams(stringData["ItemID"]), s => int.Parse(s)); ; }
             if (stringData.ContainsKey("BuildingID")) { _arrBuildingUnlocks = Util.FindParams(stringData["BuildingID"]); }
 
+            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Resources");
+
             _bStacks = false;
-            _texTexture = DataManager.GetTexture(@"Textures\items");
         }
 
-        /// <summary>
-        /// When called, unlocks all World Objects as craftable
-        /// </summary>
-        public void UnlockCraftables()
+        public override void ItemBeingUsed()
         {
-            for (int i = 0; i < _arrItemUnlocks.Length; i++)
-            {
-                PlayerManager.AddToCraftingDictionary(int.Parse(_arrItemUnlocks[i]));
-            }
+            TextEntry entry = DataManager.GetGameTextEntry("Read_Book");
+            entry.FormatText(Name);
+            ConfirmItemUse(entry);
         }
 
-        /// <summary>
-        /// When called, unlocks all World Objects as craftable
-        /// </summary>
-        public void UnlockBuildings()
+        public override void UseItem(GameManager.TextEntryVerbEnum action)
         {
-            for (int i = 0; i < _arrItemUnlocks.Length; i++)
+            if (action == GameManager.TextEntryVerbEnum.Yes)
             {
-                PlayerManager.DIBuildInfo[int.Parse(_arrBuildingUnlocks[i])].Unlock();
+                if (_arrItemUnlocks != null)
+                {
+                    PlayerManager.AddToCraftingDictionary(_arrItemUnlocks);
+                }
+
+                if (_arrBuildingUnlocks != null)
+                {
+                    for (int i = 0; i < _arrBuildingUnlocks.Length; i++)
+                    {
+                        PlayerManager.DIBuildInfo[int.Parse(_arrBuildingUnlocks[i])].Unlock();
+                    }
+                }
+
+                Remove(1);
             }
         }
     }

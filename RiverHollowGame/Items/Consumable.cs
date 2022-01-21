@@ -1,6 +1,7 @@
 ﻿using RiverHollow.Characters;
 using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
+using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
@@ -46,6 +47,14 @@ namespace RiverHollow.Items
             rv = rv.Trim();
 
             return rv;
+        }
+
+        public override void ItemBeingUsed()
+        {
+            TextEntry entry = DataManager.GetGameTextEntry("ItemConfirm");
+            entry.FormatText(Name);
+
+            ConfirmItemUse(entry);
         }
 
         public override void UseItem(TextEntryVerbEnum action)

@@ -606,13 +606,9 @@ namespace RiverHollow.GUIComponents.Screens
             public override bool ProcessHover(Point mouse)
             {
                 bool rv = true;
-                foreach (TaskBox c in _liTasks)
+                if (_detailWindow.Show())
                 {
-                    rv = c.ProcessHover(mouse);
-                    if (rv)
-                    {
-                        break;
-                    }
+                    rv = _detailWindow.ProcessHover(mouse);
                 }
                 return rv;
             }
@@ -723,11 +719,21 @@ namespace RiverHollow.GUIComponents.Screens
                     _desc.ParseAndSetText(q.Description, MidWidth(), 3, true);
                     _desc.AnchorAndAlignToObject(_name, SideEnum.Bottom, SideEnum.Left, _name.CharHeight);
 
+                    List<GUIObject> boxes = new List<GUIObject>();
+                    for (int i = 0; i < q.LiRewardItems.Count; i++)
+                    {
+                        GUIItemBox newBox = new GUIItemBox(DataManager.DIALOGUE_TEXTURE, q.LiRewardItems[i], true);
+                        boxes.Add(newBox);
+
+                        if(i == 0) { newBox.AnchorAndAlignToObject(_desc, SideEnum.Bottom, SideEnum.Left); }
+                        else { newBox.AnchorAndAlignToObject(boxes[i-1], SideEnum.Right, SideEnum.Top); }
+                        AddControl(newBox);
+                    }
+
                     _progress = new GUIText(q.GetProgressString());
                     _progress.AnchorToInnerSide(this, SideEnum.BottomRight);
                 }
             }
-
         }
         public class HUDParty : GUIMainObject
         {
@@ -1851,7 +1857,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                 if (!InventoryManager.HasItemInPlayerInventory(kvp.Key.ItemID, kvp.Key.Number)) { box.SetColor(Color.Red); }
 
-                GUIMoneyDisplay money = new GUIMoneyDisplay(kvp.Key.Value * 5 * kvp.Key.Number);
+                GUIMoneyDisplay money = new GUIMoneyDisplay(kvp.Key.Value * 2 * kvp.Key.Number);
                 money.AnchorAndAlignToObject(box, SideEnum.Bottom, SideEnum.CenterX, 10);
 
                 _liRequestedItemBoxes.Add(box);
@@ -1875,7 +1881,7 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         _merchant.DiChosenItems[gib.BoxItem] = true;
                         InventoryManager.RemoveItemsFromInventory(gib.BoxItem.ItemID, gib.BoxItem.Number);
-                        PlayerManager.AddMoney(gib.BoxItem.Value * 5* gib.BoxItem.Number);
+                        PlayerManager.AddMoney(gib.BoxItem.Value * 2 * gib.BoxItem.Number);
                         gib.Enable(false);
                         gib.SetColor(Color.Gray);
                         givenRequests++;

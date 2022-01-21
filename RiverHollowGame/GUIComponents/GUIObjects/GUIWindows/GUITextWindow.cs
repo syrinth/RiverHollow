@@ -72,9 +72,13 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             SyncText(_textEntry.GetFormattedText());
 
             string totalVal = string.Empty;
-            foreach(string s in _liTextPages)
+            for(int i = 0; i < _liTextPages.Count; i++)
             {
-                totalVal += s;
+                totalVal += _liTextPages[i];
+                if (i < _liTextPages.Count - 1)
+                {
+                    totalVal += System.Environment.NewLine;
+                }
             }
             _giText.SetText(totalVal);
             Position(position);

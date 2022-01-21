@@ -127,7 +127,7 @@
     </Item>
     <Item>
       <Key>31</Key>
-      <Value>[Name:Selection_N][Text:No][TextVerb:Cancel]</Value>
+      <Value>[Name:Selection_No][Text:No][TextVerb:Cancel]</Value>
     </Item>
     <Item>
       <Key>32</Key>
@@ -152,6 +152,10 @@
     <Item>
       <Key>37</Key>
       <Value>[Name:Selection_Date][Text:Ask to Date][TextVerb:Date]</Value>
+    </Item>
+    <Item>
+      <Key>38</Key>
+      <Value>[Name:Read_Book][Text:Read {0}?][Selection:YesNo][Trigger:UseItem]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -169,7 +169,7 @@ namespace RiverHollow.Game_Managers
         {
             if (taggedDictionary.ContainsKey("Unlocked"))
             {
-                PlayerManager.AddToCraftingDictionary(id);
+                PlayerManager.AddToCraftingDictionary(id, false);
             }
         }
 

@@ -1431,11 +1431,11 @@
     </Item>
     <Item>
       <Key>Item_172</Key>
-      <Value>[Name:Apprentice City Planning][Description:]</Value>
+      <Value>[Name:Apprentice City Planning][Description:A loose collection of notes describing how to craft some basic town amenities.]</Value>
     </Item>
     <Item>
       <Key>Item_173</Key>
-      <Value>[Name:$Building_18$ Blueprint][Description:]</Value>
+      <Value>[Name:Basic Gardening][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_174</Key>

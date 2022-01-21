@@ -298,12 +298,6 @@ Exit:
                 DungeonManager.AddDungeonKey();
                 return true;
             }
-            else if (itemToAdd.CompareType(ItemEnum.Blueprint))
-            {
-                ((Blueprint)itemToAdd).UnlockCraftables();
-                ((Blueprint)itemToAdd).UnlockBuildings();
-                return true;
-            }
             else if (itemToAdd.CompareType(ItemEnum.Tool))
             {
                 PlayerManager.AddTool((Tool)itemToAdd);

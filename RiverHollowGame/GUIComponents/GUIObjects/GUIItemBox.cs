@@ -53,14 +53,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 _gSelected.Draw(spriteBatch);
             }
-
-            _guiItem?.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            if (BoxItem != null && BoxItem.Number == 0) { SetItem(null); }
+            if (BoxItem != null && BoxItem.Number == 0) {
+                SetItem(null);
+            }
             _guiItem?.Update(gTime);
         }
 
@@ -70,55 +70,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             if (Contains(mouse))
             {
                 rv = true;
-                TextEntry entry = null;
-                if (BoxItem.CompareType(ItemEnum.Food))                  //Text has a {0} parameter so Item.Name fills it out
-                {
-                    entry.FormatText(DataManager.GetGameTextEntry("FoodConfirm"), BoxItem.Name);
-                }
-                else if (BoxItem.CompareSpecialType(SpecialItemEnum.Class))        //Class Change handler
-                {
-                    entry = DataManager.GetGameTextEntry("ClassItemConfirm");
-                }
-                else if (BoxItem.CompareType(ItemEnum.MonsterFood))        //Class Change handler
-                {
-                    entry = DataManager.GetGameTextEntry("MonsterFood_False");
-                }
-                else if (BoxItem.CompareType(ItemEnum.Tool))
-                {
-                    Tool t = (Tool)BoxItem;
-                    if (t.ToolType == GameManager.ToolEnum.Harp)
-                    {
-                        Spirit s = MapManager.CurrentMap.FindSpirit();
-                        if (s != null)
-                        {
-                            HarpManager.NewSong(s);
-                        }
-                    }
-                    else if (t.ToolType == GameManager.ToolEnum.Return)
-                    {
-                        if (DungeonManager.CurrentDungeon != null)
-                        {
-                            if (t.HasCharges()) { entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_Use"), BoxItem.Name); }
-                            else { entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_Empty"), BoxItem.Name); }
-                        }
-                        else
-                        {
-                            entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_No_Dungeon"), BoxItem.Name);
-                        }
-                    }
-                }
-                else if (BoxItem.CompareType(ItemEnum.Consumable))       //If the item is a Consumable, construct the selection options from the party
-                {
-                    entry = DataManager.GetGameTextEntry("ItemConfirm");
-                    entry.FormatText(BoxItem.Name);
-                }
-
-                //If we have a text string after handling, set the active item and open a new textWindow
-                if (entry != null)
-                {
-                    GUIManager.OpenTextWindow(entry, false);
-                    GameManager.CurrentItem = BoxItem;
-                }
+                BoxItem.ItemBeingUsed();                
             }
 
             return rv;
@@ -149,6 +101,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
             else
             {
+                RemoveControl(_guiItem);
                 _guiItem = null;
             }
         }
