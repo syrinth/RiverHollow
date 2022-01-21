@@ -552,7 +552,7 @@ namespace RiverHollow.GUIComponents.Screens
             public static int TASKBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDTaskLog.MAX_SHOWN_TASKS) - (_gWindow.EdgeSize * 2)
             List<GUIObject> _liTasks;
             DetailBox _detailWindow;
-            List _gList;
+            GUIList _gList;
 
             public HUDTaskLog()
             {
@@ -571,7 +571,7 @@ namespace RiverHollow.GUIComponents.Screens
                     _liTasks.Add(q);
                 }
 
-                _gList = new List(_liTasks, MAX_SHOWN_TASKS, TASK_SPACING/*, _gWindow.Height*/);
+                _gList = new GUIList(_liTasks, MAX_SHOWN_TASKS, TASK_SPACING/*, _gWindow.Height*/);
                 _gList.CenterOnObject(_winMain);
 
                 AddControl(_gList);
@@ -1449,7 +1449,7 @@ namespace RiverHollow.GUIComponents.Screens
         public class HUDFriendship : GUIMainObject
         {
             GUIWindow _gWindow;
-            List _villagerList;
+            GUIList _villagerList;
 
             public HUDFriendship()
             {
@@ -1459,7 +1459,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                 foreach (Villager n in DataManager.DIVillagers.Values)
                 {
-                    FriendshipBox f = new FriendshipBox(n, _gWindow.MidWidth() - List.BTNSIZE);
+                    FriendshipBox f = new FriendshipBox(n, _gWindow.MidWidth() - GUIList.BTNSIZE);
 
                     /*if (vList.Count == 0) { f.AnchorToInnerSide(_gWindow, GUIObject.SideEnum.TopLeft); }
                     else
@@ -1470,7 +1470,7 @@ namespace RiverHollow.GUIComponents.Screens
                     vList.Add(f);
                 }
 
-                _villagerList = new List(vList, 10, 4, _gWindow.MidHeight());
+                _villagerList = new GUIList(vList, 10, 4, _gWindow.MidHeight());
                 _villagerList.CenterOnScreen(); //.AnchorToInnerSide(_gWindow, GUIObject.SideEnum.TopLeft);//
                 AddControl(_villagerList);
             }

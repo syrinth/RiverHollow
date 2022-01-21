@@ -78,6 +78,8 @@ namespace RiverHollow.Game_Managers
 
         public static int BabyCountdown { get; set; }
 
+        private static List<int> _liUniqueItemsBought;
+
         private static ExpectingChildEnum _eChildStatus;
         public static ExpectingChildEnum ChildStatus {
             get => _eChildStatus;
@@ -109,6 +111,7 @@ namespace RiverHollow.Game_Managers
 
             _diStorage = new Dictionary<int, int>();
             _diTownObjects = new Dictionary<int, List<WorldObject>>();
+            _liUniqueItemsBought = new List<int>();
             _diTools = new Dictionary<ToolEnum, Tool>();
 
             TaskLog = new List<RHTask>();
@@ -725,6 +728,15 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        public static void AddToUniqueBoughtItems(int id)
+        {
+            Util.AddUniquelyToList(ref _liUniqueItemsBought, id);
+        }
+        public static bool AlreadyBoughtUniqueItem(int id)
+        {
+            return _liUniqueItemsBought.Contains(id);
+        }
+
         public static PlayerData SaveData()
         {
             PlayerData data = new PlayerData()
@@ -785,6 +797,12 @@ namespace RiverHollow.Game_Managers
             foreach(List<int> craftList in _diCrafting.Values)
             {
                 data.CraftingList.AddRange(craftList);
+            }
+
+            for (int i = 0; i < _liUniqueItemsBought.Count; i++)
+            {
+                if (i == 0) { data.UniqueItemsBought = _liUniqueItemsBought[i].ToString(); }
+                else { data.UniqueItemsBought += "|" + _liUniqueItemsBought[i].ToString(); }
             }
 
             return data;
@@ -859,6 +877,15 @@ namespace RiverHollow.Game_Managers
             foreach (int i in saveData.CraftingList)
             {
                 AddToCraftingDictionary(i, false);
+            }
+
+            if (saveData.UniqueItemsBought != null)
+            {
+                string[] uniqueSplit = Util.FindParams(saveData.UniqueItemsBought);
+                for (int i = 0; i < uniqueSplit.Length; i++)
+                {
+                    _liUniqueItemsBought.Add(int.Parse(uniqueSplit[i]));
+                }
             }
         }
 

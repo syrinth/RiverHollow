@@ -6,7 +6,7 @@ using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
-    public class List : GUIObject
+    public class GUIList : GUIObject
     {
         //Passes all action handlers to it's sub controls.
         public static int BTNSIZE = ScaledTileSize;
@@ -17,7 +17,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         GUIButton _btnUp;
         GUIButton _btnDown;
-        List<GUIObject> _liObjects;
+        public List<GUIObject> Objects { get; }
 
         /// <summary>
         /// The constructor for GUIList. GUILists will display a subset of an array of GUIObjects and allow for scrolling if necessary.
@@ -26,15 +26,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
         /// <param name="maxItems">The maximum number of objects that should be displayed in the List at any given time.</param>
         /// <param name="spacing">The amount of space (in px) to set inbetween items in the List.</param>
         /// <param name="maxHeight">The maximum height the GUIList is allowed to take up on the screen. If set, it will override maxItems if necessary.</param>
-        public List(List<GUIObject> objects, int maxItems, int spacing, int maxHeight = 0)
+        public GUIList(List<GUIObject> objects, int maxItems, int spacing, int maxHeight = 0)
         {
             _iMaxShownItems = maxItems;
-            _liObjects = objects;
+            Objects = objects;
             _iSpacing = spacing;
 
             int mostWidth = 0;
             int mostHeight = 0;
-            foreach (GUIObject o in _liObjects)
+            foreach (GUIObject o in Objects)
             {
                 if (o.Height > mostHeight)
                 {
@@ -87,7 +87,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             GUIObject rv = null;
 
-            foreach(GUIObject obj in _liObjects)
+            foreach(GUIObject obj in Objects)
             {
                 if (obj.Contains(mouse))
                 {
@@ -101,7 +101,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public List<GUIObject> GetEntries()
         {
-            return _liObjects;
+            return Objects;
         }
 
         public void BtnUpClick()
@@ -117,12 +117,12 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
         public void BtnDownClick()
         {
-            if (_iListPos < _liObjects.Count - _iMaxShownItems) {
+            if (_iListPos < Objects.Count - _iMaxShownItems) {
                 _iListPos++;
                 _btnUp.Show(true);
             }
 
-            if (_iListPos == _liObjects.Count - _iMaxShownItems) { _btnDown.Show(false); }
+            if (_iListPos == Objects.Count - _iMaxShownItems) { _btnDown.Show(false); }
 
             PopulateList();
         }
@@ -135,14 +135,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             Vector2 position = GetAnchorToInnerSide(this, GUIObject.SideEnum.Top);
 
-            foreach (GUIObject o in _liObjects)
+            foreach (GUIObject o in Objects)
             {
                 o.Show(false);
             }
 
-            for (int s = _iListPos; s < _iListPos + _iMaxShownItems && s < _liObjects.Count; s++)
+            for (int s = _iListPos; s < _iListPos + _iMaxShownItems && s < Objects.Count; s++)
             {
-                GUIObject o = _liObjects[s];
+                GUIObject o = Objects[s];
 
                 o.Position(position);
                 position.Y += o.Height + _iSpacing;

@@ -160,6 +160,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "BabyCountdown")]
             public int babyCountdown;
 
+            [XmlElement(ElementName = "UniqueItemsBought")]
+            public string UniqueItemsBought;
+
             [XmlArray(ElementName = "Pets")]
             public List<int> liPets;
 

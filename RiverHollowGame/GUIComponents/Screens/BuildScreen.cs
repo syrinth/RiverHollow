@@ -277,7 +277,7 @@ namespace RiverHollow.GUIComponents.Screens
             public static int MAX_SHOWN_TASKS = 4;
             public static int TASK_SPACING = 20;
             List<GUIObject> _liStructures;
-            List _gList;
+            GUIList _gList;
             BuildTypeEnum _eObjectBuildType;
 
             private CloseMenuDelegate _closeMenu;
@@ -317,7 +317,7 @@ namespace RiverHollow.GUIComponents.Screens
                         break;
                 }
 
-                _gList = new List(_liStructures, MAX_SHOWN_TASKS, TASK_SPACING/*, _gWindow.Height*/);
+                _gList = new GUIList(_liStructures, MAX_SHOWN_TASKS, TASK_SPACING/*, _gWindow.Height*/);
                 _gList.CenterOnObject(_winMain);
 
                 AddControl(_gList);

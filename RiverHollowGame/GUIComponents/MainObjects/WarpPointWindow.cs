@@ -15,7 +15,7 @@ namespace RiverHollow.GUIComponents.MainObjects
 
         WarpPoint _currWarpPoint;
 
-        List _gList;
+        GUIList _gList;
         List<GUIObject> _liStructures;        
 
         public WarpPointWindow(WarpPoint obj)
@@ -33,7 +33,7 @@ namespace RiverHollow.GUIComponents.MainObjects
                 }
             }
 
-            _gList = new List(_liStructures, MAX_SHOWN_TASKS, TASK_SPACING);
+            _gList = new GUIList(_liStructures, MAX_SHOWN_TASKS, TASK_SPACING);
             _gList.CenterOnObject(_winMain);
 
             AddControl(_gList);
