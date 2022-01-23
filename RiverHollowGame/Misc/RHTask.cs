@@ -24,10 +24,11 @@ namespace RiverHollow.Misc
         public int RequiredItemAmount { get; private set; }
         public int TargetsAccomplished { get; private set; }
 
-        private int _iGoalBuilding;
+        private int _iGoalBuilding = -1;
         private Monster _questMonster;
         private Item _targetItem;
         private int _iTargetWorldObjectID = -1;
+        private int _iTargetWorldObjNum = -1;
         private int _iTargetBuildingID = -1;
         public bool ReadyForHandIn { get; private set; } = false;
         public bool Finished { get; private set; }
@@ -148,9 +149,15 @@ namespace RiverHollow.Misc
             Util.AssignValue(ref _iGoalBuilding, "GoalBuildingID", stringData);
 
             Util.AssignValue(ref _iRewardMoney, "Money", stringData);
-            Util.AssignValue(ref _iTargetWorldObjectID, "RequiredObjectID", stringData);
             Util.AssignValue(ref _iTargetBuildingID, "BuildingID", stringData);
             Util.AssignValue(ref _iUnlockBuildingID, "UnlockBuildingID", stringData);
+
+            if (stringData.ContainsKey("RequiredObjectID"))
+            {
+                string[] split = Util.FindParams(stringData["RequiredObjectID"]);
+                _iTargetWorldObjectID = int.Parse(split[0]);
+                _iTargetWorldObjNum = split.Length == 2 ? int.Parse(split[1]) : 1;
+            }
 
             Util.AssignValue(ref _iDay, "Day", stringData);
             Util.AssignValue(ref _iSeason, "Season", stringData);
@@ -215,6 +222,19 @@ namespace RiverHollow.Misc
             if(_iGoalBuilding == i)
             {
                 FinishTask();
+            }
+
+            return rv;
+        }
+
+        public bool AttemptStructureBuildProgress(int i)
+        {
+            bool rv = false;
+
+            if (_eTaskType == TaskTypeEnum.BuildStructure && i == _iTargetWorldObjectID)
+            {
+                rv = true;
+                ReadyForHandIn = PlayerManager.GetNumberTownObjects(_iTargetWorldObjectID) == _iTargetWorldObjNum;
             }
 
             return rv;
@@ -365,7 +385,8 @@ namespace RiverHollow.Misc
                     case TaskTypeEnum.BuildStructure:
                         string objName = string.Empty;
                         DataManager.GetTextData("WorldObject", _iTargetWorldObjectID, ref objName, "Name");
-                        rv = "Build " + objName;
+                        if (_iTargetWorldObjNum > 1) { rv = "Build " + _iTargetWorldObjNum.ToString() + objName + "s"; }
+                        else { rv = "Build " + objName; }
                         break;
                     case TaskTypeEnum.Talk:
                         rv = "Speak to " + GoalNPC.Name;

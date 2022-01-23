@@ -208,8 +208,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         GUIImage _gUnchecked;
         GUIImage _gChecked;
         GUIText _gText;
-        protected BtnClickDelegate _delAction;
-        public GUICheck(string text, bool isChecked = false, BtnClickDelegate del = null)
+        protected ClickDelegate _delAction;
+        public GUICheck(string text, bool isChecked = false, ClickDelegate del = null)
         {
             int squareSize = TILE_SIZE * 2;
             _bChecked = isChecked;
@@ -270,16 +270,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
     public class GUISwatch : GUIImage
     {
-        private BtnClickDelegate _delAction;
+        private ClickDelegate _delAction;
         public Color SwatchColor => _cColor;
 
-        public GUISwatch(Color c, BtnClickDelegate del = null) : base(new Rectangle(0, 80, TILE_SIZE, TILE_SIZE), 8, 16, DataManager.DIALOGUE_TEXTURE)
+        public GUISwatch(Color c, ClickDelegate del = null) : base(new Rectangle(0, 80, TILE_SIZE, TILE_SIZE), 8, 16, DataManager.DIALOGUE_TEXTURE)
         {
             _cColor = c;
             _delAction = del;
         }
 
-        public GUISwatch(Color c, int width, int height, BtnClickDelegate del = null) : base(new Rectangle(0, 80, TILE_SIZE, TILE_SIZE), width, height, DataManager.DIALOGUE_TEXTURE)
+        public GUISwatch(Color c, int width, int height, ClickDelegate del = null) : base(new Rectangle(0, 80, TILE_SIZE, TILE_SIZE), width, height, DataManager.DIALOGUE_TEXTURE)
         {
             _cColor = c;
             _delAction = del;

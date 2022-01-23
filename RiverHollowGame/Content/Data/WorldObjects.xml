@@ -283,7 +283,7 @@
     </Item>
     <Item>
       <Key>70</Key>
-      <Value>[Type:Structure][Image:0-160][Size:5-5][ReqItems:66-15][Base:5-5][SpecialCoords:33-33][SubObjects:17-0-0]</Value>
+      <Value>[Type:Structure][Image:0-160][Size:5-5][ReqItems:66-15][Base:5-5][SpecialCoords:33-33][SubObjects:17-0-0][Unique]</Value>
     </Item>
     <Item>
       <Key>71</Key>

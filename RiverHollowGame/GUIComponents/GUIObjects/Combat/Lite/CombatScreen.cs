@@ -435,7 +435,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             bool _bDisplayItems;
 
-            public GUIPostCombatDisplay(BtnClickDelegate closeDelegate)
+            public GUIPostCombatDisplay(ClickDelegate closeDelegate)
             {
                 _bDisplayItems = false;
                 _arrCharXP = new GUIOldStatDisplay[4];

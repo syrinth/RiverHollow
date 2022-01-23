@@ -718,25 +718,6 @@ namespace RiverHollow.WorldObjects
         }
     }
 
-    //public class Staircase : WorldObject
-    //{
-    //    protected string _toMap;
-    //    public string ToMap { get => _toMap; }
-
-    //    public Staircase(int id, Vector2 pos, int width, int height) : base(id, pos, width, height)
-    //    {
-    //        _eObjectType = ObjectTypeEnum.WorldObject;
-    //        _wallObject = true;
-    //        _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-    //        _sprite.AddAnimation(CombatAnimationEnum.ObjectIdle, 96, 0, TILE_SIZE, TILE_SIZE);
-    //    }
-
-    //    public void SetExit(string map)
-    //    {
-    //        _toMap = map;
-    //    }
-    //}
-
     public class Gatherable : WorldObject
     {
         int _iItemID;
@@ -778,10 +759,14 @@ namespace RiverHollow.WorldObjects
         public bool OutsideOnly { get; private set; } = false;
         protected bool _bSelected = false;
 
+        public bool Unique { get; protected set; }
+
         protected Buildable(int id) : base(id) { }
 
         public Buildable(int id, Dictionary<string, string> stringData) : base(id) {
             _rBase.Y = _uSize.Height - BaseHeight;
+
+            if (stringData.ContainsKey("Unique")) { Unique = true; }
             LoadDictionaryData(stringData);
         }
 
@@ -803,7 +788,11 @@ namespace RiverHollow.WorldObjects
 
         public bool CanBuild()
         {
-            return !OutsideOnly || (OutsideOnly && MapManager.CurrentMap.IsOutside);
+            if (Unique && PlayerManager.GetNumberTownObjects(ID) != 0) {
+                return false;
+            }
+
+            return !OutsideOnly || (OutsideOnly && MapManager.CurrentMap.IsOutside) ;
         }
 
         public class Decor : Buildable

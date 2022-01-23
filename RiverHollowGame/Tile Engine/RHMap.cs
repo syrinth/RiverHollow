@@ -1712,6 +1712,7 @@ namespace RiverHollow.Tile_Engine
                     if (TownModeBuild())
                     {
                         if (GameManager.BuildFromStorage) { PlayerManager.RemoveFromStorage(toBuild.ID); }
+                        if (!toBuild.CompareType(ObjectTypeEnum.Building)) { PlayerManager.AdvanceTaskProgress(toBuild); }
 
                         LeaveTownMode();
                         FinishBuilding();

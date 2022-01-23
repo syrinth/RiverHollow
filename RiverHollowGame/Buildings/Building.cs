@@ -39,6 +39,7 @@ namespace RiverHollow.Buildings
 
         public Building(int id, Dictionary<string, string> stringData) : base(id)
         {
+            Unique = true;
             ImportBasics(id, stringData);
         }
 

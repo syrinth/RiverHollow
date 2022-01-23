@@ -25,23 +25,23 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         protected bool _bFadeOnDisable = true;
         
-        protected BtnClickDelegate _delAction;
+        protected ClickDelegate _delAction;
 
         internal static WindowData BaseBtn = new WindowData(96, 0, 2, 12);
 
-        public GUIButton(string text, BtnClickDelegate del = null)
+        public GUIButton(string text, ClickDelegate del = null)
         {
             _gWindow = new GUIWindow(BaseBtn, BTN_WIDTH, BTN_HEIGHT);
             LoadWindowButton(text, BTN_WIDTH, BTN_HEIGHT, del);
         }
 
-        public GUIButton(string text, int width, int height, BtnClickDelegate del = null)
+        public GUIButton(string text, int width, int height, ClickDelegate del = null)
         {
             _gWindow = new GUIWindow(BaseBtn, width, height);
             LoadWindowButton(text, width, height, del);
         }
 
-        public void LoadWindowButton(string text, int width, int height, BtnClickDelegate del)
+        public void LoadWindowButton(string text, int width, int height, ClickDelegate del)
         {
             Width = width;
             Height = height;
@@ -54,8 +54,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
             Setup();
         }
 
-        public GUIButton(Rectangle sourceRect, string texture, BtnClickDelegate del = null) :this(sourceRect, ScaleIt(sourceRect.Width), ScaleIt(sourceRect.Height), texture, del) { }
-        public GUIButton(Rectangle sourceRect, int width, int height, string texture, BtnClickDelegate del = null)
+        public GUIButton(Rectangle sourceRect, string texture, ClickDelegate del = null) :this(sourceRect, ScaleIt(sourceRect.Width), ScaleIt(sourceRect.Height), texture, del) { }
+        public GUIButton(Rectangle sourceRect, int width, int height, string texture, ClickDelegate del = null)
         {
             Width = width;
             Height = height;
@@ -108,7 +108,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
-        public void SetDelegate(BtnClickDelegate del)
+        public void SetDelegate(ClickDelegate del)
         {
             _delAction = del;
         }

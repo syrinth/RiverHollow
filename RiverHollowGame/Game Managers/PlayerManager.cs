@@ -291,6 +291,16 @@ namespace RiverHollow.Game_Managers
                 GUIManager.NewAlertIcon("New Task");
             }
         }
+        public static void AdvanceTaskProgress(WorldObject obj)
+        {
+            foreach (RHTask q in TaskLog)
+            {
+                if (q.AttemptStructureBuildProgress(obj.ID))
+                {
+                    break;
+                }
+            }
+        }
         public static void AdvanceTaskProgress(Building b)
         {
             foreach (RHTask q in TaskLog)
@@ -350,8 +360,10 @@ namespace RiverHollow.Game_Managers
         {
             return _diCrafting[e];
         }
-        public static void AddToCraftingDictionary(int id, bool displayAlert = true)
+        public static bool  AddToCraftingDictionary(int id, bool displayAlert = true)
         {
+            bool rv = false;
+
             WorldObject obj = DataManager.GetWorldObjectByID(id);
             ObjectTypeEnum e = obj.Type;
             switch (obj.Type)
@@ -377,22 +389,29 @@ namespace RiverHollow.Game_Managers
 
             if (!_diCrafting[e].Contains(id))
             {
+                rv = true;
                 _diCrafting[e].Add(id);
+
+                if (displayAlert)
+                {
+                    GUIManager.NewAlertIcon("New Blueprint Unlocked");
+                }
+            }
+
+            return rv;
+        }
+        public static void AddToCraftingDictionary(int[] unlocks)
+        {
+            bool displayAlert = false;
+            for (int i = 0; i < unlocks.Length; i++)
+            {
+                displayAlert = AddToCraftingDictionary(unlocks[i], false);
             }
 
             if (displayAlert)
             {
-                GUIManager.NewAlertIcon("New Blueprint Unlocked");
+                GUIManager.NewAlertIcon("New " + (unlocks.Length > 1 ? "Blueprints" : "Blueprint") + " Unlocked");
             }
-        }
-        public static void AddToCraftingDictionary(int[] unlocks)
-        {
-            for (int i = 0; i < unlocks.Length; i++)
-            {
-                AddToCraftingDictionary(unlocks[i], false);
-            }
-
-            GUIManager.NewAlertIcon("New " + (unlocks.Length > 1 ? "Blueprints" : "Blueprint") + " Unlocked");
         }
         #endregion
 

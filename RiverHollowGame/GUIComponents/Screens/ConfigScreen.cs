@@ -184,7 +184,7 @@ namespace RiverHollow.GUIComponents.Screens
             int _iY;
             public int TileY => _iY;
 
-            public GUISpawnButton(string name, string map, string x, string y, BtnClickDelegate del) : base (name, del)
+            public GUISpawnButton(string name, string map, string x, string y, ClickDelegate del) : base (name, del)
             {
                 _sMapName = map;
                 _iX = int.Parse(x);

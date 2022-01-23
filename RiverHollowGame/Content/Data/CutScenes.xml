@@ -4,8 +4,8 @@
     <Item>
       <Key>0</Key>
       <Value>
-        <Item>[Time:6-16]</Item>
-        <Item>[Map:mapHouseNPC1][Player:Entrance][Actors:5-1CS0|18-8CS0]</Item>
+        <Item></Item>
+        <Item>[Map:mapConnection_02][Player:Entrance][Actors:8-CS0][Deactivate:8][Mob:0-CS0_Mob]</Item>
         <Item>[Speak:18-1][Speak:5-2][Move:5-3-Down][Face:5-Left][Speak:18-3][Face:5-Right][Speak:5-4][Face:5-Down][Speak:5-5]</Item>
       </Value>
     </Item>

@@ -32,7 +32,10 @@ namespace RiverHollow.GUIComponents.Screens
         }
 
         private void ShowDisplay()
-        { 
+        {
+            _winMain.Controls.Clear();
+            RemoveControl(_gList);
+
             List<GUIObject> items = new List<GUIObject>();
 
             int i = 0;
@@ -46,17 +49,17 @@ namespace RiverHollow.GUIComponents.Screens
                         Item it = DataManager.GetItem(m.MerchID);
                         it.ApplyUniqueData(m.UniqueData);
 
-                        newBox = new PurchaseBox(it, m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE);
+                        newBox = new PurchaseBox(it, m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE, ShowDisplay);
                     }
                     else { continue; }
                 }
                 else if (m.MerchType == Merchandise.MerchTypeEnum.WorldObject)
                 {
-                    newBox = new PurchaseBox(DataManager.GetWorldObjectByID(m.MerchID), m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE);
+                    newBox = new PurchaseBox(DataManager.GetWorldObjectByID(m.MerchID), m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE, ShowDisplay);
                 }
                 else if (m.MerchType == Merchandise.MerchTypeEnum.Actor)
                 {
-                    newBox = new PurchaseBox(DataManager.GetNPCByIndex(m.MerchID), m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE);
+                    newBox = new PurchaseBox(DataManager.GetNPCByIndex(m.MerchID), m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE, ShowDisplay);
                 }
 
                 items.Add(newBox);
@@ -70,57 +73,6 @@ namespace RiverHollow.GUIComponents.Screens
             _gList.CenterOnObject(_winMain);
 
             AddControl(_gList);
-        }
-
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-            for (int i = 0; i < _gList.Objects.Count; i++)
-            {
-                PurchaseBox pBox = (PurchaseBox)_gList.Objects[i];
-                if (pBox.CanBuy && PlayerManager.Money >= pBox.Cost)
-                {
-                    PlayerManager.TakeMoney(pBox.Cost);
-                    if (pBox.ShopItem != null) { PurchaseItem(pBox.ShopItem.ItemID); }
-                    if (pBox.WorldObject != null) { PlayerManager.AddToStorage(pBox.WorldObject.ID); }
-                    if (pBox.Actor != null)
-                    {
-                        if (pBox.Actor.IsActorType(ActorEnum.Mount))
-                        {
-                            Mount act = (Mount)pBox.Actor;
-                            PlayerManager.AddMount(act);
-                            act.SpawnInHome();
-                        }
-                        else if (pBox.Actor.IsActorType(ActorEnum.Pet))
-                        {
-                            Pet act = (Pet)pBox.Actor;
-                            PlayerManager.AddPet(act);
-                            act.SpawnNearPlayer();
-                            if (PlayerManager.PlayerActor.ActivePet == null)
-                            {
-                                PlayerManager.PlayerActor.SetPet(act);
-                            }
-                        }
-                    }
-
-                    rv = true;
-                }
-            }
-
-            return rv;
-        }
-
-        private void PurchaseItem(int itemID)
-        {
-            Item purchase = DataManager.GetItem(itemID);
-            if (purchase.CompareType(ItemEnum.Blueprint))
-            {
-                PlayerManager.AddToUniqueBoughtItems(itemID);
-                _winMain.Controls.Clear();
-                RemoveControl(_gList);
-                ShowDisplay();
-            }
-            InventoryManager.AddToInventory(purchase);
         }
     }
 
@@ -138,8 +90,11 @@ namespace RiverHollow.GUIComponents.Screens
         public int Cost { get; }
         public bool CanBuy { get; private set; }
 
-        public PurchaseBox(Item i, int cost, int mainWidth) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
+        ClickDelegate _action;
+
+        public PurchaseBox(Item i, int cost, int mainWidth, ClickDelegate action) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
         {
+            _action = action;
             _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
             Cost = cost;
             ShopItem = i;
@@ -154,8 +109,9 @@ namespace RiverHollow.GUIComponents.Screens
             _gMoney.AnchorToInnerSide(this, SideEnum.Right, ScaleIt(2));
         }
 
-        public PurchaseBox(WorldObject obj, int cost, int mainWidth) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
+        public PurchaseBox(WorldObject obj, int cost, int mainWidth, ClickDelegate action) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
         {
+            _action = action;
             WorldObject = obj;
             _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
             Cost = cost;
@@ -167,8 +123,9 @@ namespace RiverHollow.GUIComponents.Screens
             _gMoney.AnchorToInnerSide(this, SideEnum.Right, ScaleIt(2));
         }
 
-        public PurchaseBox(WorldActor actor, int cost, int mainWidth) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
+        public PurchaseBox(WorldActor actor, int cost, int mainWidth, ClickDelegate action) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
         {
+            _action = action;
             Actor = actor;
             _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
             Cost = cost;
@@ -194,6 +151,41 @@ namespace RiverHollow.GUIComponents.Screens
             }
         }
 
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+
+            if (CanBuy && PlayerManager.Money >= Cost)
+            {
+                PlayerManager.TakeMoney(Cost);
+                if (ShopItem != null) { PurchaseItem(ShopItem.ItemID); }
+                if (WorldObject != null) { PlayerManager.AddToStorage(WorldObject.ID); }
+                if (Actor != null)
+                {
+                    if (Actor.IsActorType(ActorEnum.Mount))
+                    {
+                        Mount act = (Mount)Actor;
+                        PlayerManager.AddMount(act);
+                        act.SpawnInHome();
+                    }
+                    else if (Actor.IsActorType(ActorEnum.Pet))
+                    {
+                        Pet act = (Pet)Actor;
+                        PlayerManager.AddPet(act);
+                        act.SpawnNearPlayer();
+                        if (PlayerManager.PlayerActor.ActivePet == null)
+                        {
+                            PlayerManager.PlayerActor.SetPet(act);
+                        }
+                    }
+                }
+
+                rv = true;
+            }
+
+            return rv;
+        }
+
         public override bool ProcessHover(Point mouse)
         {
             Enable(Contains(mouse) && CanBuyMerch());
@@ -201,7 +193,17 @@ namespace RiverHollow.GUIComponents.Screens
             //Return false here to not skip any other ProcessHovers that are coming
             return false;
         }
-       
+
+        private void PurchaseItem(int itemID)
+        {
+            Item purchase = DataManager.GetItem(itemID);
+            if (purchase.CompareType(ItemEnum.Blueprint))
+            {
+                PlayerManager.AddToUniqueBoughtItems(itemID);
+                _action();
+            }
+            InventoryManager.AddToInventory(purchase);
+        }
 
         private bool CanBuyMerch()
         {

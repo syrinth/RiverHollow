@@ -16,7 +16,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         private List<GUIObject> ToRemove;
         internal List<GUIObject> Controls;
 
-        public delegate void BtnClickDelegate();
+        public delegate void ClickDelegate();
 
         GUIWindow _parentControl;
         public GUIWindow ParentWindow

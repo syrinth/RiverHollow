@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="50">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="52">
  <properties>
   <property name="MapType" value="Town"/>
   <property name="Outside" type="bool" value="true"/>
@@ -82,13 +82,9 @@
     <property name="Map" value="mapTown"/>
    </properties>
   </object>
+  <object id="50" name="CS0" x="224.182" y="268" width="15.2727" height="4"/>
+  <object id="51" name="CS0_Mob" x="208.364" y="114" width="15.2727" height="11.6667"/>
  </objectgroup>
- <objectgroup id="5" name="MapObject">
-  <object id="40" name="ResourceSpawn" x="96.2798" y="54.0405" width="124.333" height="96.333">
-   <properties>
-    <property name="Resources" value="17"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="5" name="MapObject"/>
  <objectgroup id="6" name="Character"/>
 </map>

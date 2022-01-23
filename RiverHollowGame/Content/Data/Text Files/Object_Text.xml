@@ -727,7 +727,7 @@
     </Item>
     <Item>
       <Key>Cutscene_0</Key>
-      <Value>[Name:Amanda and Gail]</Value>
+      <Value>[Name:Combat]</Value>
     </Item>
     <Item>
       <Key>Cutscene_1</Key>
@@ -1431,7 +1431,7 @@
     </Item>
     <Item>
       <Key>Item_172</Key>
-      <Value>[Name:Apprentice City Planning][Description:A loose collection of notes describing how to craft some basic town amenities.]</Value>
+      <Value>[Name:Basic Town Plans][Description:A loose collection of notes describing how to craft some basic town amenities.]</Value>
     </Item>
     <Item>
       <Key>Item_173</Key>

@@ -279,7 +279,7 @@ namespace RiverHollow.Characters
                 //If we're following a path and there's more than one tile left, we don't want to cut
                 //short on individual steps, so recalculate based on the next target
                 float length = direction.Length();
-                if (_liTilePath.Count > 1 && length < BuffedSpeed)
+                if (_liTilePath.Count > 1 && length <= BuffedSpeed)
                 {
                     _liTilePath.RemoveAt(0);
 
