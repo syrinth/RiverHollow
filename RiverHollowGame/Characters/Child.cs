@@ -30,19 +30,19 @@ namespace RiverHollow.Characters
         public Child(int id, Dictionary<string, string> stringData) : base()
         {
             ID = id;
-            _eActorType = ActorEnum.Child;
+            _eActorType = WorldActorTypeEnum.Child;
             _bCanWander = true;
 
             _liGrowthPeriods = new List<int>() { 4, 10 };
 
-            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Adventurer", id.ToString("00"));
+            _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Adventurer", id.ToString("00"));
             DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 
             _liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref _liData, stringData, VerbEnum.Walk);
             Util.AddToAnimationsList(ref _liData, stringData, VerbEnum.Idle);
             Util.AddToAnimationsList(ref _liData, stringData, VerbEnum.Alert);
-            LoadSpriteAnimations(ref _sprBody, _liData, _sCreatureFolder + "NPC_" + ID + "_" + (int)_eCurrentStage);
+            LoadSpriteAnimations(ref _sprBody, _liData, DataManager.NPC_FOLDER + "NPC_" + ID + "_" + (int)_eCurrentStage);
         }
 
         public override void Update(GameTime gTime)
@@ -78,7 +78,7 @@ namespace RiverHollow.Characters
                     _iCurrentGrowth = 0;
                     _eCurrentStage = _eCurrentStage + 1;
 
-                    LoadSpriteAnimations(ref _sprBody, _liData, _sCreatureFolder + "NPC_" + ID + "_" + (int)_eCurrentStage);
+                    LoadSpriteAnimations(ref _sprBody, _liData, DataManager.NPC_FOLDER + "NPC_" + ID + "_" + (int)_eCurrentStage);
                 }
             }
         }

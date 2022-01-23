@@ -26,17 +26,6 @@ namespace RiverHollow.Characters
         protected const float EYE_DEPTH = 0.001f;
         protected const float HAIR_DEPTH = 0.003f;
 
-        protected static string _sMerchantFolder = DataManager.FOLDER_ACTOR + @"Merchants\";
-        protected static string _sPortraitFolder = DataManager.FOLDER_ACTOR + @"Portraits\";
-        protected static string _sCombatPortraits = DataManager.FOLDER_ACTOR + @"Portraits\CombatPortraits\";
-        protected static string _sNPCFolder = DataManager.FOLDER_ACTOR + @"NPCs\";
-        protected static string _sCreatureFolder = DataManager.FOLDER_ACTOR + @"Creatures\";
-
-        protected ActorMovementStateEnum _eMovementState = ActorMovementStateEnum.Idle;
-
-        protected ActorEnum _eActorType = ActorEnum.Actor;
-        public ActorEnum ActorType => _eActorType;
-
         public DirectionEnum Facing = DirectionEnum.Down;
 
         protected string _sName;
@@ -156,8 +145,6 @@ namespace RiverHollow.Characters
         public bool IsCurrentAnimation(VerbEnum verb, DirectionEnum dir) { return _sprBody.IsCurrentAnimation(verb, dir); }
         public bool IsAnimating() { return _sprBody.Drawing; }
         public bool AnimationPlayedXTimes(int x) { return _sprBody.GetPlayCount() >= x; }
-
-        public bool IsActorType(ActorEnum act) { return _eActorType == act; }
     }
     /// <summary>
     /// The properties and methods for each actor that pertain to existing on and

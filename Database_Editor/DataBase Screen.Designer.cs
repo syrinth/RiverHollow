@@ -1690,7 +1690,6 @@
             this.btnNPCCancel.TabIndex = 43;
             this.btnNPCCancel.Text = "Cancel";
             this.btnNPCCancel.UseVisualStyleBackColor = true;
-            this.btnNPCCancel.Click += new System.EventHandler(this.btnNPCCancel_Click);
             // 
             // dgvNPCTags
             // 
@@ -1781,7 +1780,6 @@
             this.dgvNPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvNPCs.Size = new System.Drawing.Size(308, 411);
             this.dgvNPCs.TabIndex = 35;
-            this.dgvNPCs.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvNPCs_CellClick);
             // 
             // colNPCsID
             // 
@@ -2400,7 +2398,6 @@
             this.dgvMobs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvMobs.Size = new System.Drawing.Size(306, 379);
             this.dgvMobs.TabIndex = 36;
-            this.dgvMobs.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMobs_CellClick);
             // 
             // label30
             // 

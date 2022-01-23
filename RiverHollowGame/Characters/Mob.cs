@@ -59,7 +59,7 @@ namespace RiverHollow.Characters
             ID = id;
 
             _liSpawnConditions = new List<SpawnConditionEnum>();
-            _eActorType = ActorEnum.Mob;
+            _eActorType = WorldActorTypeEnum.Mob;
             _liMonsters = new List<CombatActor>();
             ImportBasics(data);
             //LoadContent(DataManager.FOLDER_MOBS + data["Texture"];);

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="94">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="70">
  <properties>
   <property name="Dungeon" value="Cave"/>
   <property name="MapType" value="Cave"/>
-  <property name="Mobs" value="2-3|0"/>
+  <property name="Mobs" value="2-3|32"/>
   <property name="Modular" type="bool" value="true"/>
   <property name="ResourcesMinMax" value="30-60"/>
  </properties>
@@ -11,18 +11,18 @@
  <tileset firstgid="626" source="../Tilesets/tsWalls_Floors.tsx"/>
  <layer id="19" name="Base" width="30" height="17">
   <data encoding="csv">
-699,699,699,699,699,699,699,699,699,699,699,699,699,773,773,773,773,699,699,699,699,699,699,699,699,699,699,699,699,699,
-699,699,699,699,699,699,699,699,699,699,699,699,699,773,818,819,773,699,699,699,699,699,699,699,699,699,699,699,699,699,
+699,699,699,699,699,699,699,699,699,699,699,699,699,773,773,773,773,773,773,773,773,699,699,699,699,699,699,699,699,699,
+699,699,699,699,699,699,699,699,699,699,699,699,699,773,818,819,773,773,773,773,773,699,699,699,699,699,699,699,699,699,
 699,773,773,773,773,773,773,773,773,773,773,773,773,773,840,841,773,773,773,773,773,773,773,773,773,773,773,773,773,699,
 699,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,699,
 699,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,699,
-699,773,773,773,773,773,773,773,773,773,773,773,773,727,727,727,727,773,773,773,773,773,773,773,773,773,773,773,773,699,
-773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,773,773,773,773,773,773,773,773,773,773,773,
-773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,773,773,773,773,773,773,773,773,773,773,773,
-773,773,773,773,773,773,773,773,773,773,773,773,773,727,727,727,727,773,773,773,773,773,773,773,773,773,773,773,773,773,
-773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,773,773,773,773,773,773,773,773,773,773,773,
-773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,773,773,773,773,773,773,773,773,773,773,773,
-699,773,773,773,773,773,773,773,773,773,773,773,773,727,727,727,727,773,773,773,773,773,773,773,773,773,773,773,773,699,
+699,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,727,727,727,727,773,773,773,773,773,773,773,773,773,699,
+773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,773,773,773,727,773,773,773,773,773,773,773,773,773,773,
+773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,773,773,773,727,773,773,773,773,773,773,773,773,773,773,
+773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,727,727,727,727,773,773,773,773,773,773,773,773,773,773,
+773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,773,773,773,727,773,773,773,773,773,773,773,773,773,773,
+773,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,773,773,773,727,773,773,773,773,773,773,773,773,773,773,
+699,773,773,773,773,773,773,773,773,773,773,773,773,727,773,773,727,727,727,727,773,773,773,773,773,773,773,773,773,699,
 699,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,699,
 699,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,699,
 699,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,699,
@@ -99,31 +99,31 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="84" name="SpawnPoint" x="98.1152" y="69.1204" width="10" height="8.5"/>
-  <object id="85" name="SpawnPoint" x="194.091" y="100.451" width="10" height="8.5"/>
-  <object id="86" name="SpawnPoint" x="403.494" y="69.517" width="10" height="8.5"/>
-  <object id="87" name="SpawnPoint" x="50.1271" y="228.552" width="10" height="8.5"/>
-  <object id="88" name="SpawnPoint" x="417.374" y="211.499" width="10" height="8.5"/>
-  <object id="89" name="SpawnPoint" x="337.659" y="132.179" width="10" height="8.5"/>
-  <object id="90" name="BlockObject" x="212.402" y="3.62539" width="55.625" height="9.75">
+  <object id="60" name="SpawnPoint" x="98.5116" y="52.0667" width="10" height="8.5"/>
+  <object id="61" name="SpawnPoint" x="227.802" y="115.125" width="10" height="8.5"/>
+  <object id="62" name="SpawnPoint" x="403.891" y="52.4633" width="10" height="8.5"/>
+  <object id="63" name="SpawnPoint" x="50.5235" y="211.498" width="10" height="8.5"/>
+  <object id="64" name="SpawnPoint" x="417.771" y="194.445" width="10" height="8.5"/>
+  <object id="65" name="SpawnPoint" x="338.056" y="115.125" width="10" height="8.5"/>
+  <object id="66" name="BlockObject" x="210.816" y="4.41858" width="55.625" height="9.75">
    <properties>
     <property name="Dir" value="Up"/>
     <property name="Open" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="91" name="BlockObject" x="210.217" y="243.202" width="55.625" height="9.75">
+  <object id="67" name="BlockObject" x="210.217" y="243.202" width="55.625" height="9.75">
    <properties>
     <property name="Dir" value="Down"/>
     <property name="Open" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="92" name="BlockObject" x="2.65189" y="98.1254" width="26.75" height="74">
+  <object id="68" name="BlockObject" x="1.06551" y="98.9186" width="26.75" height="74">
    <properties>
     <property name="Dir" value="Left"/>
     <property name="Open" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="93" name="BlockObject" x="453.652" y="99.6254" width="26.75" height="74">
+  <object id="69" name="BlockObject" x="452.066" y="100.419" width="26.75" height="74">
    <properties>
     <property name="Dir" value="Right"/>
     <property name="Open" type="bool" value="false"/>
@@ -131,25 +131,25 @@
   </object>
  </objectgroup>
  <objectgroup id="6" name="Character">
-  <object id="56" name="CombatStart" x="66.1068" y="129.489" width="10.5" height="11.25">
+  <object id="56" name="CombatStart" x="65.3136" y="129.885" width="10.5" height="11.25">
    <properties>
     <property name="Dir" value="Right"/>
     <property name="Position" value="NE"/>
    </properties>
   </object>
-  <object id="57" name="CombatStart" x="210.986" y="195.359" width="10.5" height="11.25">
+  <object id="57" name="CombatStart" x="210.193" y="195.755" width="10.5" height="11.25">
    <properties>
     <property name="Dir" value="Up"/>
     <property name="Position" value="NW"/>
    </properties>
   </object>
-  <object id="58" name="CombatStart" x="257.723" y="66.2491" width="10.5" height="11.25">
+  <object id="58" name="CombatStart" x="256.93" y="66.6457" width="10.5" height="11.25">
    <properties>
     <property name="Dir" value="Down"/>
     <property name="Position" value="SE"/>
    </properties>
   </object>
-  <object id="59" name="CombatStart" x="400.101" y="161.432" width="10.5" height="11.25">
+  <object id="59" name="CombatStart" x="399.308" y="161.828" width="10.5" height="11.25">
    <properties>
     <property name="Dir" value="Left"/>
     <property name="Position" value="SW"/>

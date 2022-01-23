@@ -8,17 +8,17 @@ using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters
 {
-    public class EnvironmentalActor : WorldActor
+    public class Critter : WorldActor
     {
         private bool _bFlee = false;
         private double _dNextPlay = 0;
         private double _dCountdown = 0;
         public int ID { get; } = -1;
 
-        public EnvironmentalActor(int id, Dictionary<string, string> stringData)
+        public Critter(int id, Dictionary<string, string> stringData)
         {
             ID = id;
-            _eActorType = ActorEnum.Mount;
+            _eActorType = WorldActorTypeEnum.Critter;
             _bIgnoreCollisions = true;
             _dNextPlay = 1 + SetRandom(4, 0.5);
             _iBodyHeight = TILE_SIZE;
@@ -29,7 +29,7 @@ namespace RiverHollow.Characters
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Action1);
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Action2);
-            LoadSpriteAnimations(ref _sprBody, liData, _sCreatureFolder + "NPC_" + ID);
+            LoadSpriteAnimations(ref _sprBody, liData, NPC_FOLDER + "NPC_" + ID);
 
             Facing = DirectionEnum.Down;
             PlayAnimation(VerbEnum.Idle);

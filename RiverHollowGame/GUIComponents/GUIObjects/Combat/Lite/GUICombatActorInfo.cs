@@ -68,7 +68,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 
         public void SetWeapon()
         {
-            if (_actor.IsActorType(ActorEnum.PartyMember))
+            if (_actor.IsActorType(CombatActorTypeEnum.PartyMember))
             {
                 ClassedCombatant adv = (ClassedCombatant)_actor;
                 CharacterClass cClass = adv.CharacterClass;

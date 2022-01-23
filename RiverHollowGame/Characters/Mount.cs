@@ -18,7 +18,7 @@ namespace RiverHollow.Characters
         public Mount(int id, Dictionary<string, string> stringData) : base(stringData)
         {
             ID = id;
-            _eActorType = ActorEnum.Mount;
+            _eActorType = WorldActorTypeEnum.Mount;
             DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 
             Util.AssignValue(ref _iBodyWidth, "Width", stringData);
@@ -28,7 +28,7 @@ namespace RiverHollow.Characters
 
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
-            LoadSpriteAnimations(ref _sprBody, liData, _sCreatureFolder + "NPC_" + ID);
+            LoadSpriteAnimations(ref _sprBody, liData, DataManager.NPC_FOLDER + "NPC_" + ID);
         }
 
         public override void ProcessRightButtonClick()

@@ -59,7 +59,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
                 else if (m.MerchType == Merchandise.MerchTypeEnum.Actor)
                 {
-                    newBox = new PurchaseBox(DataManager.GetNPCByIndex(m.MerchID), m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE, ShowDisplay);
+                    //newBox = new PurchaseBox(DataManager.GetNPCByIndex(m.MerchID), m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE, ShowDisplay);
                 }
 
                 items.Add(newBox);
@@ -162,13 +162,13 @@ namespace RiverHollow.GUIComponents.Screens
                 if (WorldObject != null) { PlayerManager.AddToStorage(WorldObject.ID); }
                 if (Actor != null)
                 {
-                    if (Actor.IsActorType(ActorEnum.Mount))
+                    if (Actor.IsActorType(WorldActorTypeEnum.Mount))
                     {
                         Mount act = (Mount)Actor;
                         PlayerManager.AddMount(act);
                         act.SpawnInHome();
                     }
-                    else if (Actor.IsActorType(ActorEnum.Pet))
+                    else if (Actor.IsActorType(WorldActorTypeEnum.Pet))
                     {
                         Pet act = (Pet)Actor;
                         PlayerManager.AddPet(act);
@@ -211,7 +211,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (ShopItem != null && !InventoryManager.HasSpaceInInventory(ShopItem.ItemID, ShopItem.Number)){
                 rv = false;
             }
-            else if (Actor != null && Actor.IsActorType(ActorEnum.Mount) && !((Mount)Actor).StableBuilt())
+            else if (Actor != null && Actor.IsActorType(WorldActorTypeEnum.Mount) && !((Mount)Actor).StableBuilt())
             {
                 rv = false;
             }

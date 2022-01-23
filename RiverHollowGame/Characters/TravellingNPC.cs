@@ -37,9 +37,9 @@ namespace RiverHollow.Characters
             Util.AssignValue(ref _bHover, "Hover", stringData);
 
             _diDialogue = DataManager.GetNPCDialogue(ID);
-            DataManager.GetTextData("Character", ID, ref _sName, "Name");
+            DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 
-            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Villager", ID.ToString("00"));
+            _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Villager", ID.ToString("00"));
 
             if (stringData.ContainsKey("RequiredBuildingID"))
             {
@@ -68,7 +68,7 @@ namespace RiverHollow.Characters
                 if (stringData.ContainsKey("Class")) { liAnimationData = Util.LoadWorldAnimations(stringData); }
                 else { liAnimationData = Util.LoadWorldAnimations(stringData); }
 
-                LoadSpriteAnimations(ref _sprBody, liAnimationData, _sNPCFolder + "NPC_" + ID.ToString("00"));
+                LoadSpriteAnimations(ref _sprBody, liAnimationData, DataManager.NPC_FOLDER + "NPC_" + ID.ToString("00"));
                 PlayAnimationVerb(VerbEnum.Idle);
             }
 

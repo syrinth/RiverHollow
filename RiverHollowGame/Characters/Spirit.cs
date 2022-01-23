@@ -25,7 +25,7 @@ namespace RiverHollow.Characters
 
         public Spirit(Dictionary<string, string> stringData) : base()
         {
-            _eActorType = ActorEnum.Spirit;
+            _eActorType = WorldActorTypeEnum.Spirit;
             _fVisibility = MIN_VISIBILITY;
 
             Util.AssignValue(ref _sName, "Name", stringData);
@@ -34,7 +34,7 @@ namespace RiverHollow.Characters
             Util.AssignValue(ref _sCondition, "Condition", stringData);
             Util.AssignValue(ref _sAwakenTrigger, "AwakenTrigger", stringData);
 
-            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Spirit", _iID.ToString("00"));
+            _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Spirit", _iID.ToString("00"));
 
             _bOnTheMap = false;
 
@@ -42,7 +42,7 @@ namespace RiverHollow.Characters
             _iBodyHeight = TILE_SIZE + 2;
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
-            LoadSpriteAnimations(ref _sprBody, liData, _sNPCFolder + "Spirit_" + _iID);
+            LoadSpriteAnimations(ref _sprBody, liData, DataManager.NPC_FOLDER + "Spirit_" + _iID);
         }
 
         public override void Update(GameTime gTime)

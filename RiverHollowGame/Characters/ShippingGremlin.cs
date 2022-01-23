@@ -34,18 +34,18 @@ namespace RiverHollow.Characters
             _liRequiredBuildingIDs = new List<int>();
             _diRequiredObjectIDs = new Dictionary<int, int>();
             _arrInventory = new Item[_iRows, _iCols];
-            _eActorType = ActorEnum.ShippingGremlin;
+            _eActorType = WorldActorTypeEnum.ShippingGremlin;
             _iBodyWidth = 32;
             _iBodyHeight = 32;
 
             _diDialogue = DataManager.GetNPCDialogue(ID);
-            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Gremlin", ID.ToString("00"));
+            _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Gremlin", ID.ToString("00"));
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
-            DataManager.GetTextData("Character", ID, ref _sName, "Name");
+            DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 
             Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
 
-            _sprBody = new AnimatedSprite(_sNPCFolder + "NPC_" + ID.ToString("00"));
+            _sprBody = new AnimatedSprite(DataManager.NPC_FOLDER + "NPC_" + ID.ToString("00"));
             _sprBody.AddAnimation(AnimationEnum.ObjectIdle, 0, 0, _iBodyWidth, _iBodyHeight);
             _sprBody.AddAnimation(AnimationEnum.Action1, 32, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);
             _sprBody.AddAnimation(AnimationEnum.Action_Finished, 128, 0, _iBodyWidth, _iBodyHeight);

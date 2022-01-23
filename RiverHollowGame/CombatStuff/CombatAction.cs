@@ -398,7 +398,7 @@ namespace RiverHollow.CombatStuff
                         //Apply to all allies of the user
                         if (s.Equals("Allies"))
                         {
-                            if (SkillUser.IsActorType(ActorEnum.PartyMember))
+                            if (SkillUser.IsActorType(CombatActorTypeEnum.PartyMember))
                             {
                                 targets.AddRange(CombatManager.Party);
                             }
@@ -411,7 +411,7 @@ namespace RiverHollow.CombatStuff
                         //Apply to all enemies of the user
                         if (s.Equals("Enemies"))
                         {
-                            if (SkillUser.IsActorType(ActorEnum.PartyMember))
+                            if (SkillUser.IsActorType(CombatActorTypeEnum.PartyMember))
                             {
                                 targets.AddRange(CombatManager.Monsters);
 
@@ -437,11 +437,11 @@ namespace RiverHollow.CombatStuff
                 //This should only ever be one, butjust in case
                 foreach (CombatTile ct in TileTargetList)
                 {
-                    Summon newSummon = DataManager.GetSummonByIndex(_iSummonID);
-                    newSummon.SetStats(SkillUser.Attribute(AttributeEnum.Magic));                //Summon stats are based off the Magic stat
-                    ct.Character.LinkSummon(newSummon);                 //Links the summon to the character
-                    newSummon.linkedChar = ct.Character;                //Links the character to the new summon
-                    _bPauseActionHandler = true;
+                    //Summon newSummon = DataManager.GetSummonByIndex(_iSummonID);
+                    //newSummon.SetStats(SkillUser.Attribute(AttributeEnum.Magic));                //Summon stats are based off the Magic stat
+                    //ct.Character.LinkSummon(newSummon);                 //Links the summon to the character
+                    //newSummon.linkedChar = ct.Character;                //Links the character to the new summon
+                    //_bPauseActionHandler = true;
                 }
             }
 

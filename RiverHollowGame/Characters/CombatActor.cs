@@ -15,6 +15,8 @@ namespace RiverHollow.Characters
     public abstract class CombatActor : Actor
     {
         #region Properties
+        protected CombatActorTypeEnum _eActorType;
+
         protected const int MAX_STAT = 99;
         protected string _sUnique;
 
@@ -434,5 +436,7 @@ namespace RiverHollow.Characters
         }
 
         public virtual bool IsSummon() { return false; }
+
+        public bool IsActorType(CombatActorTypeEnum act) { return _eActorType == act; }
     }
 }

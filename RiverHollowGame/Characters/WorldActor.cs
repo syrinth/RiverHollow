@@ -15,6 +15,11 @@ namespace RiverHollow.Characters
     public abstract class WorldActor : Actor
     {
         #region Properties
+        protected ActorMovementStateEnum _eMovementState = ActorMovementStateEnum.Idle;
+
+        protected WorldActorTypeEnum _eActorType = WorldActorTypeEnum.Actor;
+        public WorldActorTypeEnum ActorType => _eActorType;
+
         protected Vector2 _vMoveTo;
         public Vector2 MoveToLocation => _vMoveTo;
         public string CurrentMapName;
@@ -483,6 +488,7 @@ namespace RiverHollow.Characters
             }
         }
 
+        public bool IsActorType(WorldActorTypeEnum act) { return _eActorType == act; }
         public void ChangeState(NPCStateEnum state)
         {
             _eCurrentState = state;

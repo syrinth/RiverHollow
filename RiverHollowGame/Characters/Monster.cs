@@ -25,7 +25,7 @@ namespace RiverHollow.Characters
         {
             ID = id;
 
-            _eActorType = ActorEnum.Monster;
+            _eActorType = CombatActorTypeEnum.Monster;
             ImportBasics(data);
         }
 
@@ -113,7 +113,7 @@ namespace RiverHollow.Characters
 
         public override GUIImage GetIcon()
         {
-            return new GUIImage(new Rectangle(0, 0, 18, 18), ScaleIt(18), ScaleIt(18), DataManager.GetTexture(_sCombatPortraits + "M_" + ID.ToString("00")));
+            return new GUIImage(new Rectangle(0, 0, 18, 18), ScaleIt(18), ScaleIt(18), DataManager.GetTexture(DataManager.COMBAT_PORTRAITS + "M_" + ID.ToString("00")));
         }
 
         private void HandleTrait(string traitData)

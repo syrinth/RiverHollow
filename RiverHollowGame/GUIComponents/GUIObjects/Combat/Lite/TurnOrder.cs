@@ -79,7 +79,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 
             for (int i = 1; i < actors.Count; i++)
             {
-                ActorIconType iconType = (actors[i].IsActorType(ActorEnum.Monster) ? ActorIconType.Monster : ActorIconType.Party);
+                ActorIconType iconType = (actors[i].IsActorType(CombatActorTypeEnum.Monster) ? ActorIconType.Monster : ActorIconType.Party);
 
                 ActorIcon newIcon = new ActorIcon(iconType);
                 newIcon.LinkActor(actors[i]);

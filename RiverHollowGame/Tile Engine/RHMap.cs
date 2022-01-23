@@ -275,7 +275,7 @@ namespace RiverHollow.Tile_Engine
             {
                 switch (c.ActorType)
                 {
-                    case ActorEnum.Mob:
+                    case WorldActorTypeEnum.Mob:
                         _liMobs.Remove((Mob)c);
                         break;
                     default:
@@ -749,7 +749,7 @@ namespace RiverHollow.Tile_Engine
             {
                 int mobID = int.Parse(possibleMobs[RHRandom.Instance().Next(0, possibleMobs.Count() - 1)]);
 
-                Mob m = DataManager.GetMobByIndex(mobID);
+                Mob m = DataManager.CreateMob(mobID);
                 RHTile t = validTiles[RHRandom.Instance().Next(0, validTiles.Count() - 1)];
                 m.Position = t.Position;
                 m.CurrentMapName = this.Name;
@@ -957,7 +957,7 @@ namespace RiverHollow.Tile_Engine
         {
             foreach (WorldActor c in _liActors)
             {
-                if (c.IsActorType(ActorEnum.Spirit))
+                if (c.IsActorType(WorldActorTypeEnum.Spirit))
                 {
                     ((Spirit)c).CheckCondition();
                 }
@@ -968,9 +968,9 @@ namespace RiverHollow.Tile_Engine
         {
             Spirit rv = null;
 
-            foreach (Actor a in _liActors)
+            foreach (WorldActor a in _liActors)
             {
-                if (a.IsActorType(ActorEnum.Spirit) && PlayerManager.PlayerInRange(a.Position.ToPoint(), 500))
+                if (a.IsActorType(WorldActorTypeEnum.Spirit) && PlayerManager.PlayerInRange(a.Position.ToPoint(), 500))
                 {
                     rv = (Spirit)a;
                 }
@@ -1142,9 +1142,9 @@ namespace RiverHollow.Tile_Engine
                 {
                     switch (w.ActorType)
                     {
-                        case ActorEnum.Pet:
+                        case WorldActorTypeEnum.Pet:
                             break;
-                        case ActorEnum.Mount:
+                        case WorldActorTypeEnum.Mount:
                             if (!PlayerManager.PlayerActor.Mounted) { goto default; }
                             else { break; }
                         default:
@@ -1155,7 +1155,7 @@ namespace RiverHollow.Tile_Engine
             }
 
             //If the actor is not the Player Character, add the Player Character's CollisionBox to the list as well
-            if (actor != PlayerManager.PlayerActor && MapManager.CurrentMap == actor.CurrentMap && !actor.IsActorType(ActorEnum.Pet))
+            if (actor != PlayerManager.PlayerActor && MapManager.CurrentMap == actor.CurrentMap && !actor.IsActorType(WorldActorTypeEnum.Pet))
             {
                 list.Add(PlayerManager.PlayerActor.CollisionBox);
             }
@@ -1268,7 +1268,7 @@ namespace RiverHollow.Tile_Engine
             {
                 if (kvp.Value.Intersects(movingChar) && !kvp.Value.IsDoor && kvp.Value.IsActive)
                 {
-                    if (c.IsActorType(ActorEnum.Pet)) { return false; }
+                    if (c.IsActorType(WorldActorTypeEnum.Pet)) { return false; }
 
                     MapManager.ChangeMaps(c, this.Name, kvp.Value);
                     return true;
@@ -1536,10 +1536,10 @@ namespace RiverHollow.Tile_Engine
                     {
                         switch (c.ActorType)
                         {
-                            case ActorEnum.Merchant:
-                            case ActorEnum.ShippingGremlin:
-                            case ActorEnum.Spirit:
-                            case ActorEnum.Villager:
+                            case WorldActorTypeEnum.Merchant:
+                            case WorldActorTypeEnum.ShippingGremlin:
+                            case WorldActorTypeEnum.Spirit:
+                            case WorldActorTypeEnum.Villager:
                                 GUICursor.SetCursor(GUICursor.CursorTypeEnum.Talk, c.HoverBox);
                                 found = true;
                                 break;
@@ -2116,7 +2116,7 @@ namespace RiverHollow.Tile_Engine
             if (MapManager.Maps[c.CurrentMapName].ContainsActor(c))
             {
                 rv = true;
-                if (c.IsActorType(ActorEnum.Mob) && _liMobs.Contains((Mob)c)) { _liMobs.Remove((Mob)c); }
+                if (c.IsActorType(WorldActorTypeEnum.Mob) && _liMobs.Contains((Mob)c)) { _liMobs.Remove((Mob)c); }
                 else if (_liActors.Contains(c)) { _liActors.Remove(c); }
             }
 
@@ -2137,7 +2137,7 @@ namespace RiverHollow.Tile_Engine
             {
                 rv = true;
 
-                if (c.IsActorType(ActorEnum.Mob) && !_liMobs.Contains((Mob)c)) { _liMobs.Add((Mob)c); }
+                if (c.IsActorType(WorldActorTypeEnum.Mob) && !_liMobs.Contains((Mob)c)) { _liMobs.Add((Mob)c); }
                 else { Util.AddUniquelyToList(ref _liActors, c); }
 
                 c.CurrentMapName = _sName;

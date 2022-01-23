@@ -24,14 +24,19 @@ namespace RiverHollow.Game_Managers
     public static class DataManager
     {
         #region Constants
+        public const string FOLDER_ACTOR = @"Textures\Actors\";
+
+        public const string NPC_FOLDER = FOLDER_ACTOR + @"NPCs\";
+        public const string PORTRAIT_FOLDER = FOLDER_ACTOR + @"Portraits\";
+        public const string COMBAT_PORTRAITS = FOLDER_ACTOR + @"Portraits\CombatPortraits\";
+
         public const string FILE_WORLDOBJECTS = @"Textures\worldObjects";
         public const string FILE_FLOORING = @"Textures\texFlooring";
-        public const string FOLDER_ACTOR = @"Textures\Actors\";
+
         public const string FOLDER_BUILDINGS = @"Textures\Buildings\";
         public const string FOLDER_ITEMS = @"Textures\Items\";
         public const string FOLDER_ENVIRONMENT = @"Textures\Environmental\";
         public const string FOLDER_MONSTERS = @"Textures\Actors\Monsters\";
-        public const string FOLDER_MOBS= @"Textures\Actors\Mobs\";
         public const string FOLDER_SUMMONS = @"Textures\Actors\Summons\";
         public const string FOLDER_PLAYER = @"Textures\Actors\Player\";
         public const string FOLDER_PARTY = @"Textures\Actors\PartyMembers\";
@@ -56,8 +61,8 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diNPCDialogue;
         static Dictionary<int, Shop> _diShops;
 
-        static Dictionary<int, Dictionary<string, string>> _diVillagerData;
-        public static Dictionary<int, Dictionary<string, string>> DiVillagerData => _diVillagerData;
+        static Dictionary<int, Dictionary<string, string>> _diNPCData;
+        public static Dictionary<int, Dictionary<string, string>> DiVillagerData => _diNPCData;
         static Dictionary<int, Dictionary<string, string>> _diPlayerAnimationData;
         public static Dictionary<int, Dictionary<string, string>> PlayerCombatAnimationData => _diPlayerAnimationData;
 
@@ -77,9 +82,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diTaskData;
         public static Dictionary<int, Dictionary<string, string>> DiTaskData => _diTaskData;
 
-        static Dictionary<int, Dictionary<string, string>> _diNPCData;
-
-        static Dictionary<int, Dictionary<string, string>> _diMobs;
         static Dictionary<int, Dictionary<string, string>> _diMonsterData;
         public static Dictionary<int, Villager> DIVillagers { get; private set; }
         public static Dictionary<int, Merchant> DIMerchants { get; private set; }
@@ -119,7 +121,7 @@ namespace RiverHollow.Game_Managers
             AddDirectoryTextures(FOLDER_ENVIRONMENT, Content);
 
             LoadNPCSchedules(Content);
-            LoadNPCs();
+            LoadActiveNPCs();
 
             _liForest = new List<int>();
             _liMountain = new List<int>();
@@ -133,12 +135,10 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diPlayerAnimationData, @"Data\PlayerClassAnimationConfig", Content, null);
             LoadDictionary(ref _diItemData, @"Data\ItemData", Content, null);
             LoadDictionary(ref _diActions, @"Data\CombatActions", Content, null);
-            LoadDictionary(ref _diVillagerData, @"Data\CharacterData", Content, null);
+            LoadDictionary(ref _diNPCData, @"Data\CharacterData", Content, null);
             LoadDictionary(ref _diMonsterData, @"Data\Monsters", Content, null);
-            LoadDictionary(ref _diNPCData, @"Data\NPCs", Content, null);
             LoadDictionary(ref _diBuildings, @"Data\Buildings", Content, null);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
-            LoadDictionary(ref _diMobs, @"Data\Mobs", Content, null);
             LoadDictionary(ref _diWorkers, @"Data\Workers", Content, null);
             LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);
             LoadDictionary(ref _diClasses, @"Data\Classes", Content, null);
@@ -303,13 +303,13 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        private static void LoadNPCs()
+        private static void LoadActiveNPCs()
         {
             DIMerchants = new Dictionary<int, Merchant>();
             DIVillagers = new Dictionary<int, Villager>();
-            foreach (KeyValuePair<int, Dictionary<string, string>> npcData in _diVillagerData)
+            foreach (KeyValuePair<int, Dictionary<string, string>> npcData in _diNPCData)
             {
-                Dictionary<string, string> diData = _diVillagerData[npcData.Key];
+                Dictionary<string, string> diData = _diNPCData[npcData.Key];
                 switch (diData["Type"])
                 {
                     case "ShippingGremlin":
@@ -545,65 +545,82 @@ namespace RiverHollow.Game_Managers
             return DIVillagers[i].Name;
         }
 
-        public static WorldActor GetNPCByIndex(int id)
-        {
-            if (_diNPCData.ContainsKey(id))
-            {
-                Dictionary<string, string> diData = _diNPCData[id];
-                switch (Util.ParseEnum<ActorEnum>(diData["Type"]))
-                {
-                    case ActorEnum.Child:
-                        return new Child(id, diData);
-                    case ActorEnum.Environmental:
-                        return new EnvironmentalActor(id, diData);
-                    case ActorEnum.Mount:
-                        return new Mount(id, diData);
-                    case ActorEnum.Pet:
-                        return new Pet(id, diData);
-                    case ActorEnum.Spirit:
-                        return new Spirit(diData);
-                }
-            }
-
-            return null;
-        }
-
-        public static Summon GetSummonByIndex(int id)
-        {
-            if (_diNPCData.ContainsKey(id))
-            {
-                Dictionary<string, string> diData = _diNPCData[id];
-                switch (Util.ParseEnum<ActorEnum>(diData["Type"]))
-                {
-                    case ActorEnum.Summon:
-                        return new Summon(id, diData);
-                }
-            }
-
-            return null;
-        }
-
         public static string GetMonsterTraitData(string trait)
         {
             return _diMonsterTraits[trait];
         }
 
-        public static Mob GetMobByIndex(int id)
+        private static WorldActor CreateNPCByIndex(int id)
         {
-            Mob m = null;
-
-            if (_diMobs.ContainsKey(id))
+            if (id != -1 && _diItemData.ContainsKey(id))
             {
-                m = new Mob(id, _diMobs[id]);
+                Dictionary<string, string> diData = _diNPCData[id];
+                switch (Util.ParseEnum<WorldActorTypeEnum>(diData["Type"]))
+                {
+                    case WorldActorTypeEnum.Child:
+                        return new Child(id, diData);
+                    case WorldActorTypeEnum.Critter:
+                        return new Critter(id, diData);
+                    case WorldActorTypeEnum.Mob:
+                        return new Mob(id, diData);
+                    case WorldActorTypeEnum.Mount:
+                        return new Mount(id, diData);
+                    case WorldActorTypeEnum.Pet:
+                        return new Pet(id, diData);
+                    case WorldActorTypeEnum.ShippingGremlin:
+                        return new ShippingGremlin(id, diData);
+                    case WorldActorTypeEnum.Spirit:
+                        return new Spirit(diData);
+                }
             }
-            return m;
+            return null;
         }
-        public static Mob GetMonster(int id, Vector2 pos)
+        public static Mob CreateMob(int id)
         {
-            Mob m = GetMobByIndex(id);
-            m.Position = pos;
-            return m;
+            WorldActor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Mob))
+            {
+                rv = null;
+            }
+            return (Mob)rv;
         }
+        public static Child CreateChild(int id)
+        {
+            WorldActor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Child))
+            {
+                rv = null;
+            }
+            return (Child)rv;
+        }
+        public static Mount CreateMount(int id)
+        {
+            WorldActor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Child))
+            {
+                rv = null;
+            }
+            return (Mount)rv;
+        }
+        public static Pet CreatePet(int id)
+        {
+            WorldActor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Child))
+            {
+                rv = null;
+            }
+            return (Pet)rv;
+        }
+        public static Critter CreateCritter(int id)
+        {
+            WorldActor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Critter))
+            {
+                rv = null;
+            }
+            return (Critter)rv;
+        }
+
         public static Monster GetLiteMonsterByIndex(int id)
         {
             Monster m = null;

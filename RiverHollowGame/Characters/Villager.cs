@@ -71,7 +71,7 @@ namespace RiverHollow.Characters
         //Copy Construcor for Cutscenes
         public Villager(Villager n) : this(n.ID)
         {
-            _eActorType = ActorEnum.Villager;
+            _eActorType = WorldActorTypeEnum.Villager;
 
             _sName = n.Name;
             _diDialogue = n._diDialogue;
@@ -84,7 +84,7 @@ namespace RiverHollow.Characters
 
         public Villager(int index, Dictionary<string, string> stringData, bool loadanimations = true) : this(index)
         {
-            _eActorType = ActorEnum.Villager;
+            _eActorType = WorldActorTypeEnum.Villager;
             _liRequiredBuildingIDs = new List<int>();
             _diRequiredObjectIDs = new Dictionary<int, int>();
             _diCompleteSchedule = new Dictionary<string, List<Dictionary<string, string>>>();

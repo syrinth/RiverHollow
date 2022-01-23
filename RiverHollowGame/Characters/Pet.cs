@@ -17,10 +17,10 @@ namespace RiverHollow.Characters
         public Pet(int id, Dictionary<string, string> stringData) : base(stringData)
         {
             ID = id;
-            _eActorType = ActorEnum.Pet;
+            _eActorType = WorldActorTypeEnum.Pet;
             _bCanWander = true;
 
-            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Adventurer", id.ToString("00"));
+            _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Adventurer", id.ToString("00"));
             DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 
             Util.AssignValue(ref _iGatherZoneID, "ObjectID", stringData);
@@ -29,7 +29,7 @@ namespace RiverHollow.Characters
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Action1);
-            LoadSpriteAnimations(ref _sprBody, liData, _sCreatureFolder + "NPC_" + ID);
+            LoadSpriteAnimations(ref _sprBody, liData, DataManager.NPC_FOLDER + "NPC_" + ID);
         }
 
         public override void Update(GameTime gTime)

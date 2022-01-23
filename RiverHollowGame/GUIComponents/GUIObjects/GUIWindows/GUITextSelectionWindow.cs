@@ -80,7 +80,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         /// </summary>
         private void AddVillagerTalkOptions()
         {
-            if (GameManager.CurrentNPC != null && CurrentNPC.IsActorType(ActorEnum.Villager))
+            if (GameManager.CurrentNPC != null && CurrentNPC.IsActorType(WorldActorTypeEnum.Villager))
             {
                 Villager v = (Villager)CurrentNPC;
                 List<TextEntry> liCommands = new List<TextEntry> { DataManager.GetGameTextEntry("Selection_Talk") };
@@ -277,7 +277,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     }
 
                     //Just pop this here for now
-                    if (act.IsActorType(ActorEnum.ShippingGremlin)) { act.PlayAnimation(AnimationEnum.Action2); }
+                    if (act.IsActorType(WorldActorTypeEnum.ShippingGremlin)) { act.PlayAnimation(AnimationEnum.Action2); }
                 }
                 else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Gift)) { GUIManager.OpenMainObject(new HUDInventoryDisplay(DisplayTypeEnum.Gift)); }
                 else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Party)) { nextText = act.JoinParty(); }

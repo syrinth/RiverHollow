@@ -702,7 +702,7 @@ namespace RiverHollow.Game_Managers
                     if (PlayerActor.Pregnant) { PlayerActor.Pregnant = false; }
                     else if (Spouse.Pregnant) { Spouse.Pregnant = false; }
 
-                    Child p = (Child)DataManager.GetNPCByIndex(10);
+                    Child p = DataManager.CreateChild(10);
                     p.SpawnNearPlayer();
                     Children.Add(p);
                 }
@@ -871,7 +871,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (int i in saveData.liPets)
             {
-                Pet p = (Pet)DataManager.GetNPCByIndex(i);
+                Pet p = DataManager.CreatePet(i);
                 if (p.ID == saveData.activePet) {
                     p.SpawnNearPlayer();
                     PlayerActor.SetPet(p);
@@ -882,13 +882,13 @@ namespace RiverHollow.Game_Managers
 
             foreach (int i in saveData.MountList)
             {
-                Mount m = (Mount)DataManager.GetNPCByIndex(i);
+                Mount m = DataManager.CreateMount(i);
                 AddMount(m);
             }
 
             foreach (ChildData data in saveData.ChildList)
             {
-                Child m = (Child)DataManager.GetNPCByIndex(data.childID);
+                Child m = DataManager.CreateChild(data.childID);
                 m.SpawnNearPlayer();
                 AddChild(m);
             }

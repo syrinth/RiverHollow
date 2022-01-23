@@ -31,7 +31,7 @@ namespace RiverHollow.Characters.Lite
         #endregion
         public ClassedCombatant() : base()
         {
-            _eActorType = ActorEnum.PartyMember;
+            _eActorType = CombatActorTypeEnum.PartyMember;
             ClassLevel = 1;
             _iBodyWidth = 32;
             _iBodyHeight = 32;
@@ -52,7 +52,7 @@ namespace RiverHollow.Characters.Lite
 
         public override GUIImage GetIcon()
         {
-            return new GUIImage(new Rectangle(0, 0, 18, 18), ScaleIt(18), ScaleIt(18), DataManager.GetTexture(_sCombatPortraits + "V_" + (_class.ID +1).ToString("00")));
+            return new GUIImage(new Rectangle(0, 0, 18, 18), ScaleIt(18), ScaleIt(18), DataManager.GetTexture(DataManager.COMBAT_PORTRAITS + "V_" + (_class.ID +1).ToString("00")));
 
         }
         public virtual void SetClass(CharacterClass x)

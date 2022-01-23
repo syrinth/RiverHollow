@@ -64,7 +64,7 @@
     <Compile Include="Characters\Actor.cs" />
     <Compile Include="Characters\BuyableNPC.cs" />
     <Compile Include="Characters\Child.cs" />
-    <Compile Include="Characters\EnvironmentalActor.cs" />
+    <Compile Include="Characters\Critter.cs" />
     <Compile Include="Characters\ClassedCombatant.cs" />
     <Compile Include="Characters\Merchant.cs" />
     <Compile Include="Characters\Mount.cs" />
@@ -205,7 +205,9 @@
     <Content Include="RiverHollow_Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="Content\Content.mgcb" />
+    <MonoGameContentReference Include="Content\Content.mgcb">
+      <SubType>Designer</SubType>
+    </MonoGameContentReference>
     <None Include="app.config" />
     <None Include="app.manifest" />
     <None Include="packages.config" />

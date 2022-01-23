@@ -136,7 +136,7 @@ namespace RiverHollow.Misc
                 string[] parse = stringData["SpawnMob"].Split('-');
                 if (parse.Length > 1)
                 {
-                    _spawnMob = DataManager.GetMobByIndex(int.Parse(parse[0]));
+                    _spawnMob = DataManager.CreateMob(int.Parse(parse[0]));
                     _sSpawnMap = parse[1];
                     _sLocName = parse[2];
                 }
