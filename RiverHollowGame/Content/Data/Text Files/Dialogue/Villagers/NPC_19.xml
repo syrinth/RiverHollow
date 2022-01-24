@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name:Introduction][Text:Well hello there! The name's $Character_19$. Merchant by trade, and I'm ready to get to work. If we're going to accomplish anything here, we're going to need a shop. First though, you had better talk to $Character_14$. He says we need a $Building_35$ before we can do anything else.]</Value>
+      <Value>[Name:Introduction][Text:Well hello there! The name's $Character_19$. Merchant by trade, and I'm ready to get to work. If we're going to accomplish anything here, we're going to need a shop. First though, you had better talk to $Character_14$. He says we need a $WorldObject_40$ before we can do anything else.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Text:Oh, hello $Name$, What can I do for you?][Selection:Shop][Name:ShopOpen]</Value>
+      <Value>[Name:ShopOpen][Text:Oh, hello $Name$, What can I do for you?][Selection:Shop]</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -35,14 +35,14 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Name:General_Store_Request][Text:Ah! Good to see you again, I see that you've got the $Building_35$ up and running so now it's time to set up that shop. You just set one up for me, and I'll see to it that we can start getting in supplies.][Priority:50][CompletedTaskID:0][UnlockBuildingID:21]</Value>
+      <Value>[Name:General_Store_Request][Text:Ah! Good to see you again, I see that you've got the $WorldObject_40$ up and running so now it's time to set up that shop. You just set one up for me, and I'll see to it that we can start getting in supplies.][Priority:50][CompletedTaskID:0][UnlockObjectID:26]</Value>
     </Item>
     <Item>
       <Key>9</Key>
       <Value>[Name:Market][Text:So, I've been thinking...
 With the store all set up, we've got some goods available and that's great, but that's just the start. We can't stop there, oh no.
-Merchants often wander the roads, buying and selling goods and there is a fortune to be made from them! By setting up a $WorldObject_70$, we'll give them a place to display their wares and sell them ours.
-Never forget, commerce is the lifeblood of a town, my friend. It might not seem like it now, but we'll need a lot of money if we're to grow this town.][Priority:50][TaskID:1][UnlockWorldObjectID:70][CompletedTaskID:0][RequiredBuildingID:21]</Value>
+Merchants often wander the roads, buying and selling goods and there is a fortune to be made from them! By setting up a $WorldObject_106$, we'll give them a place to display their wares and sell them ours.
+Never forget, commerce is the lifeblood of a town, my friend. It might not seem like it now, but we'll need a lot of money if we're to grow this town.][Priority:50][TaskID:1][UnlockObjectID:106][CompletedTaskID:0][RequiredObjectID:26]</Value>
     </Item>
     <Item>
       <Key>10</Key>

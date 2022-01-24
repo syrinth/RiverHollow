@@ -96,14 +96,6 @@ namespace RiverHollow.Characters
                 }
             }
 
-            foreach (int i in _liRequiredBuildingIDs)
-            {
-                if (!PlayerManager.DIBuildInfo[i].Built)
-                {
-                    return false;
-                }
-            }
-
             //If there is a Money Earned Requirement and we have not reached it, fail the test
             if (_iTotalMoneyEarnedReq != -1 && _iTotalMoneyEarnedReq < PlayerManager.TotalMoneyEarned)
             {

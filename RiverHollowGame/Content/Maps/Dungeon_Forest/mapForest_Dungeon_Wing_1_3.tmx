@@ -111,12 +111,12 @@
   </object>
   <object id="39" name="ResourceSpawn" x="50.667" y="80.501" width="332" height="75.4997">
    <properties>
-    <property name="Resources" value="17"/>
+    <property name="Resources" value="53"/>
    </properties>
   </object>
   <object id="41" name="ResourceSpawn" x="224.501" y="176.917" width="219" height="76.4997">
    <properties>
-    <property name="Resources" value="17"/>
+    <property name="Resources" value="53"/>
    </properties>
   </object>
  </objectgroup>

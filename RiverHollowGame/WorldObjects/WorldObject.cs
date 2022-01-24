@@ -756,7 +756,7 @@ namespace RiverHollow.WorldObjects
         protected Dictionary<int, int> _diReqToMake;
         public Dictionary<int, int> RequiredToMake => _diReqToMake;
 
-        public bool OutsideOnly { get; private set; } = false;
+        public bool OutsideOnly { get; protected set; } = false;
         protected bool _bSelected = false;
 
         public bool Unique { get; protected set; }
@@ -1089,7 +1089,7 @@ namespace RiverHollow.WorldObjects
                 SnapPositionToGrid(new Vector2(data.x, data.y));
                 RotateToDirection(data.dir);
 
-                if(data.objDisplayID != -1) { SetDisplayObject((Decor)DataManager.GetWorldObjectByID(data.objDisplayID)); }
+                if(data.objDisplayID != -1) { SetDisplayObject((Decor)DataManager.CreateWorldObjectByID(data.objDisplayID)); }
                 if(data.itemDisplayID != -1) { SetDisplayItem(DataManager.GetItem(data.itemDisplayID)); }
             }
         }
@@ -1136,7 +1136,7 @@ namespace RiverHollow.WorldObjects
 
                     foreach (SubObjectInfo info in _liSubObjectInfo)
                     {
-                        WorldObject obj = DataManager.GetWorldObjectByID(info.ObjectID);
+                        WorldObject obj = DataManager.CreateWorldObjectByID(info.ObjectID);
                         RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Vector2(pos.X + info.Position.X, pos.Y + info.Position.Y));
                         targetTile.RemoveWorldObject();
                         obj.PlaceOnMap(targetTile.Position, MapManager.Maps[MapName]);
@@ -1810,7 +1810,7 @@ namespace RiverHollow.WorldObjects
 
                     if (garden.plantData.ID != -1)
                     {
-                        _objPlant = (Plant)DataManager.GetWorldObjectByID(garden.plantData.ID);
+                        _objPlant = (Plant)DataManager.CreateWorldObjectByID(garden.plantData.ID);
                         _objPlant.LoadData(garden.plantData);
 
                         SetPlant(_objPlant);

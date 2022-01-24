@@ -24,7 +24,7 @@ namespace RiverHollow.GUIComponents.MainObjects
                 }
             }
 
-            Anchor(ref text, "Buildings: " + PlayerManager.BuildingList.Count);
+            Anchor(ref text, "Buildings: 0");// + PlayerManager.BuildingList.Count);
             Anchor(ref text, "Plants: " + plants);
         }
 

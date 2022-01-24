@@ -15,7 +15,6 @@ namespace Database_Editor
         public enum XMLTypeEnum { None, Task, NPC, Class, Building, WorldObject, Item, Monster, Action, Shop, StatusEffect, Cutscene, Light, Dungeon, TextFile };
         #region XML Files
         string ACTIONS_XML_FILE = PATH_TO_DATA + @"\CombatActions.xml";
-        string BUILDINGS_XML_FILE = PATH_TO_DATA + @"\Buildings.xml";
         string CLASSES_XML_FILE = PATH_TO_DATA + @"\Classes.xml";
         string NPC_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
         string CONFIG_XML_FILE = PATH_TO_DATA + @"\Config.xml";
@@ -34,30 +33,28 @@ namespace Database_Editor
 
         #region Tags
         const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,ItemID,GoalItem,ItemRewardID,Collection,Makes,Processes,GearID,RequestIDs,SeedID,HoneyID,UnlockItemID";
-        const string TAGS_FOR_WORLD_OBJECTS = "ObjectID,Wall,Floor,Resources,Place,SubObjects,RequiredObjectID,EntranceID";
+        const string TAGS_FOR_WORLD_OBJECTS = "BuildingID,HouseID,RequiredBuildingID,UnlockObjectID,ObjectID,Wall,Floor,Resources,Place,SubObjects,TargetObjectID,RequiredObjectID,EntranceID";
         const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         const string TAGS_FOR_CLASSES = "Class";
         const string TAGS_FOR_SHOPDATA = "ShopData,TargetShopID";
         const string TAGS_FOR_CHARACTERS = "NPC_ID,MobID";
         const string TAGS_FOR_STATUS_EFFECTS = "StatusEffectID";
         const string TAGS_FOR_LIGHTS = "LightID";
-        const string TAGS_FOR_BUILDINGS = "BuildingID,HouseID,RequiredBuildingID,UnlockBuildingID";
         const string TAGS_FOR_MONSTERS = "MonsterID";
         const string TAGS_FOR_DUNGEONS = "DungeonID";
         const string TAGS_FOR_TASKS = "TaskID";
 
         const string ITEM_REF_TAGS = "ReqItems,Place";
-        const string TASK_REF_TAGS = "GoalItem,ItemRewardID,BuildingID,UnlockBuildingID,RequiredObjectID";
+        const string TASK_REF_TAGS = "GoalItem,ItemRewardID,BuildingID,UnlockBuildingID,TargetObjectID,RequiredObjectID";
         const string CHARACTER_REF_TAGS = "BuildingID,Collection,Class,MonsterID,ShopData,HouseID,RequiredBuildingID,RequiredObjectID,RequestIDs";
-        const string WORLD_OBJECT_REF_TAGS = "Makes,Processes,ItemID,SubObjects,SeedID,HoneyID,LightID";
+        const string WORLD_OBJECT_REF_TAGS = "ReqItems,LightID,Makes,Processes,ItemID,SubObjects,SeedID,HoneyID,LightID";
         const string CLASSES_REF_TAGS = "GearID,Ability,Spell";
         const string SHOPDATA_REF_TAGS = "ItemID,BuildingID,ObjectID,NPC_ID";
         const string CONFIG_REF_TAG = "ItemID,ObjectID";
         const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
         const string ACTIONS_REF_TAGS = "StatusEffectID,NPC_ID";
-        const string BUILDINGS_REF_TAGS = "ReqItems,LightID";
         const string DUNGEON_REF_TAGS = "ObjectID,MonsterID,EntranceID";
-        public static string TEXTFILE_REF_TAGS = "ItemID,UnlockBuildingID,UnlockItemID,TargetShopID,TaskID";
+        public static string TEXTFILE_REF_TAGS = "ItemID,UnlockObjectID,UnlockItemID,TargetShopID,TaskID";
         const string CUTSCENE_REF_TAGS = "";
 
         const string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,NPCID";
@@ -106,14 +103,6 @@ namespace Database_Editor
 
             cbCharacterType.Items.Clear();
             InitComboBox(cbCharacterType, true, new List<WorldActorTypeEnum>() { WorldActorTypeEnum.Actor});
-
-            cbNPCType.Items.Clear();
-            cbNPCType.Items.Add("Type:" + WorldActorTypeEnum.Child.ToString());
-            cbNPCType.Items.Add("Type:" + WorldActorTypeEnum.Critter.ToString());
-            cbNPCType.Items.Add("Type:" + WorldActorTypeEnum.Mount.ToString());
-            cbNPCType.Items.Add("Type:" + WorldActorTypeEnum.Pet.ToString());
-            cbNPCType.Items.Add("Type:" + WorldActorTypeEnum.Spirit.ToString());
-            cbNPCType.Items.Add("Type:" + WorldActorTypeEnum.Summon.ToString());
 
             _diTabIndices = new Dictionary<string, int>()
             {
@@ -187,7 +176,6 @@ namespace Database_Editor
             LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_REF_TAG, "", ref _diBasicXML);
             LoadXMLDictionary(MONSTERS_XML_FILE, MONSTERS_REF_TAGS, TAGS_FOR_MONSTERS, ref _diBasicXML);
             LoadXMLDictionary(ACTIONS_XML_FILE, ACTIONS_REF_TAGS, TAGS_FOR_COMBAT_ACTIONS, ref _diBasicXML);
-            LoadXMLDictionary(BUILDINGS_XML_FILE, BUILDINGS_REF_TAGS, TAGS_FOR_BUILDINGS, ref _diBasicXML);
             LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", TAGS_FOR_STATUS_EFFECTS, ref _diBasicXML);
             LoadXMLDictionary(LIGHTS_XML_FILE, "", TAGS_FOR_LIGHTS, ref _diBasicXML);
             LoadXMLDictionary(DUNGEON_XML_FILE, DUNGEON_REF_TAGS, TAGS_FOR_DUNGEONS, ref _diBasicXML);
@@ -214,7 +202,6 @@ namespace Database_Editor
             LoadTaskDataGrid();
             LoadMonsterDataGrid();
             LoadActionDataGrid();
-            LoadBuildingDataGrid();
             LoadStatusEffectDataGrid();
             LoadLightDataGrid();
             LoadCutsceneDataGrid();
@@ -233,7 +220,6 @@ namespace Database_Editor
             LoadMonsterInfo();
             LoadActionInfo();
             LoadShopInfo();
-            LoadBuildingInfo();
             LoadStatusEffectInfo();
             LoadLightInfo();
             LoadDungeonInfo();
@@ -262,7 +248,6 @@ namespace Database_Editor
             else if (fileName == WORLD_OBJECTS_DATA_XML_FILE) { rv = XMLTypeEnum.WorldObject; }
             else if (fileName == MONSTERS_XML_FILE) { rv = XMLTypeEnum.Monster; }
             else if (fileName == ACTIONS_XML_FILE) { rv = XMLTypeEnum.Action; }
-            else if (fileName == BUILDINGS_XML_FILE) { rv = XMLTypeEnum.Building; }
             else if (fileName == STATUS_EFFECTS_XML_FILE) { rv = XMLTypeEnum.StatusEffect; }
             else if (fileName == LIGHTS_XML_FILE) { rv = XMLTypeEnum.Light; }
             else if (fileName == DUNGEON_XML_FILE) { rv = XMLTypeEnum.Dungeon; }
@@ -355,10 +340,6 @@ namespace Database_Editor
         private void LoadActionDataGrid()
         {
             LoadGenericDatagrid(dgvActions, _diBasicXML[ACTIONS_XML_FILE], "colActionsID", "colActionsName", "Actions", _diTabIndices["Actions"]);
-        }
-        private void LoadBuildingDataGrid()
-        {
-            LoadGenericDatagrid(dgvBuildings, _diBasicXML[BUILDINGS_XML_FILE], "colBuildingsID", "colBuildingsName", "Buildings", _diTabIndices["Buildings"]);
         }
         private void LoadStatusEffectDataGrid()
         {
@@ -982,11 +963,6 @@ namespace Database_Editor
             LoadGenericDataInfo(data, tbActionName, tbActionID, dgvActionTags, tbActionDescription);
             cbActionType.SelectedIndex = (int)Util.ParseEnum<ActionEnum>(data.GetTagValue("Type"));
         }
-        private void LoadBuildingInfo()
-        {
-            XMLData data = _diBasicXML[BUILDINGS_XML_FILE][_diTabIndices["Buildings"]];
-            LoadGenericDataInfo(data, tbBuildingName, tbBuildingID, dgvBuildingTags, tbBuildingDescription);
-        }
         private void LoadStatusEffectInfo()
         {
             XMLData data = _diBasicXML[STATUS_EFFECTS_XML_FILE][_diTabIndices["StatusEffects"]];
@@ -1263,10 +1239,6 @@ namespace Database_Editor
         {
             SaveXMLDataInfo(_diBasicXML[ACTIONS_XML_FILE], "Actions", XMLTypeEnum.Action, tbActionName, tbActionID, cbActionType, dgvActions, dgvActionTags, "colActionsID", "colActionsName", "", TAGS_FOR_COMBAT_ACTIONS, tbActionDescription);
         }
-        private void SaveBuildingInfo(List<XMLData> liData)
-        {
-            SaveXMLDataInfo(_diBasicXML[BUILDINGS_XML_FILE], "Buildings", XMLTypeEnum.Building, tbBuildingName, tbBuildingID, null, dgvBuildings, dgvBuildingTags, "colBuildingsID", "colBuildingsName", "", "", tbBuildingDescription);
-        }
         private void SaveStatusEffectInfo(List<XMLData> liData)
         {
             SaveXMLDataInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", XMLTypeEnum.StatusEffect, tbStatusEffectName, tbStatusEffectID, cbStatusEffect, dgvStatusEffects, dgvStatusEffectTags, "colStatusEffectsID", "colStatusEffectsName", "", "", tbStatusEffectDescription);
@@ -1373,10 +1345,6 @@ namespace Database_Editor
         {
             GenericCancel(_diBasicXML[SHOPS_XML_FILE], "Shops", dgvShops, LoadShopInfo);
         }
-        private void btnBuildingCancel_Click(object sender, EventArgs e)
-        {
-            GenericCancel(_diBasicXML[BUILDINGS_XML_FILE], "Buildings", dgvBuildings, LoadBuildingInfo);
-        }
         private void btnStatusEffectCancel_Click(object sender, EventArgs e)
         {
             GenericCancel(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", dgvStatusEffects, LoadStatusEffectInfo);
@@ -1444,10 +1412,6 @@ namespace Database_Editor
         private void dgvShops_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             GenericCellClick(e, _diBasicXML[SHOPS_XML_FILE], "Shops", dgvShops, LoadShopInfo, SaveShopInfo);
-        }
-        private void dgvBuildings_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            GenericCellClick(e, _diBasicXML[BUILDINGS_XML_FILE], "Buildings", dgvBuildings, LoadBuildingInfo, SaveBuildingInfo);
         }
         private void dgvStatusEffects_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1534,8 +1498,6 @@ namespace Database_Editor
             //Sort the following Dictionaries by name
             List<XMLData> listToSort = _diBasicXML[MONSTERS_XML_FILE];
             SortDictionaryByName(ref listToSort);
-            listToSort = _diBasicXML[BUILDINGS_XML_FILE];
-            SortDictionaryByName(ref listToSort);
             listToSort = _diBasicXML[NPC_XML_FILE];
             SortDictionaryByType(ref listToSort);
 
@@ -1601,20 +1563,18 @@ namespace Database_Editor
         {
             AutoSave();
 
-            if (tabCtl.SelectedTab == tabCtl.TabPages["tabWorldObjects"]) { dgvWorldObjects.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItems"]) { dgvItems.Focus(); }
+            if (tabCtl.SelectedTab == tabCtl.TabPages["tabActions"]) { dgvActions.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCharacters"]) { dgvCharacters.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabClasses"]) { dgvClasses.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabTasks"]) { dgvTasks.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscenes"]) { dgvCutscenes.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabEnemies"]) { dgvMobs.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabActions"]) { dgvActions.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabShops"]) { dgvShops.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabBuildings"]) { dgvBuildings.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabNPCs"]) { dgvNPCs.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabStatusEffects"]) { dgvStatusEffects.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabLights"]) { dgvLights.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeons"]) { dgvDungeons.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItems"]) { dgvItems.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabLights"]) { dgvLights.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabMonsters"]) { dgvMonsters.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabShops"]) { dgvShops.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabStatusEffects"]) { dgvStatusEffects.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabTasks"]) { dgvTasks.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabWorldObjects"]) { dgvWorldObjects.Focus(); }
 
             _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
         }
@@ -1649,19 +1609,19 @@ namespace Database_Editor
         private void AutoSave()
         {
             TabPage prevPage = tabCtl.TabPages[_diTabIndices["PreviousTab"]];
-            if (prevPage == tabCtl.TabPages["tabWorldObjects"]) { SaveWorldObjectInfo(_liWorldObjects); }
-            else if (prevPage == tabCtl.TabPages["tabItems"]) { SaveItemInfo(); }
+
+            if (prevPage == tabCtl.TabPages["tabActions"]) { SaveActionInfo(_diBasicXML[ACTIONS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabCharacters"]) { SaveCharacterInfo(_diBasicXML[NPC_XML_FILE]); }
-            else if (prevPage == tabCtl.TabPages["tabClasses"]) { SaveClassInfo(_diBasicXML[CLASSES_XML_FILE]); }
-            else if (prevPage == tabCtl.TabPages["tabTasks"]) { SaveTaskInfo(_diBasicXML[TASK_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabClasses"]) { SaveClassInfo(_diBasicXML[CLASSES_XML_FILE]); }        
             else if (prevPage == tabCtl.TabPages["tabCutscenes"]) { SaveCutsceneInfo(); }
-            else if (prevPage == tabCtl.TabPages["tabEnemies"]) { SaveMonsterInfo(_diBasicXML[MONSTERS_XML_FILE]); }
-            else if (prevPage == tabCtl.TabPages["tabActions"]) { SaveActionInfo(_diBasicXML[ACTIONS_XML_FILE]); }
-            else if (prevPage == tabCtl.TabPages["tabShops"]) { SaveShopInfo(_diBasicXML[SHOPS_XML_FILE]); }
-            else if (prevPage == tabCtl.TabPages["tabBuildings"]) { SaveBuildingInfo(_diBasicXML[BUILDINGS_XML_FILE]); }
-            else if (prevPage == tabCtl.TabPages["tabStatusEffects"]) { SaveStatusEffectInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabDungeons"]) { SaveDungeonInfo(_diBasicXML[DUNGEON_XML_FILE]); }            
+            else if (prevPage == tabCtl.TabPages["tabItems"]) { SaveItemInfo(); }
             else if (prevPage == tabCtl.TabPages["tabLights"]) { SaveLightInfo(_diBasicXML[LIGHTS_XML_FILE]); }
-            else if (prevPage == tabCtl.TabPages["tabDungeons"]) { SaveDungeonInfo(_diBasicXML[DUNGEON_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabMonsters"]) { SaveMonsterInfo(_diBasicXML[MONSTERS_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabShops"]) { SaveShopInfo(_diBasicXML[SHOPS_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabStatusEffects"]) { SaveStatusEffectInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabTasks"]) { SaveTaskInfo(_diBasicXML[TASK_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabWorldObjects"]) { SaveWorldObjectInfo(_liWorldObjects); }
         }
         #endregion
 
@@ -2403,17 +2363,15 @@ namespace Database_Editor
 
                 foreach (string s in Enum.GetNames(typeof(ObjectTypeEnum)))
                 {
-                    if (!s.Equals("Building") && !s.Equals("Earth"))
+                    if (!s.Equals("Earth"))
                     {
                         AddContextMenuItem(s, dgvWorldObjectsContextMenuClick, false);
                     }
                 }
             }
-            else if(dgv == dgvMobs) { AddContextMenuItem("Add New", AddNewMonster, false); }
             else if (dgv == dgvMonsters) { AddContextMenuItem("Add New", AddNewMonster, false); }
             else if (dgv == dgvTasks) { AddContextMenuItem("Add New", AddNewTask, false); }
             else if (dgv == dgvActions) { AddContextMenuItem("Add New", AddNewAction, false); }
-            else if (dgv == dgvBuildings) { AddContextMenuItem("Add New", AddNewBuilding, false); }
             else if (dgv == dgvCutscenes) { AddContextMenuItem("Add New", AddNewCutscene, false); }
             else if (dgv == dgvCharacters) {
                 AddContextMenuItem("Add New", AddNewCharacter, true);
@@ -2491,12 +2449,6 @@ namespace Database_Editor
             SaveMonsterInfo(_diBasicXML[MONSTERS_XML_FILE]);
             List<string> defaultTags = new List<string>() { "Texture:", "Condition:", "Lvl", "Ability:", "Loot:", "Trait:", "Walk:0-0-3-0.15-T", "Action1:0-0-3-0.15-T", "Cast:0-0-3-0.15-T", "Hurt:0-0-3-0.15-T", "Critical:0-0-3-0.15-T", "KO:0-0-3-0.15-T" };
             AddNewGenericXMLObject("Monsters", dgvMonsters, "colMonstersID", "colMonstersName", tbMonsterName, tbMonsterID, dgvMonsterTags, "colMonsterTags", null, tbMonsterDescription, defaultTags);
-        }
-        private void AddNewBuilding(object sender, EventArgs e)
-        {
-            SaveBuildingInfo(_diBasicXML[BUILDINGS_XML_FILE]);
-            List<string> defaultTags = new List<string>() { "Texture:", "Dimensions:", "Base:", "Entrance:", "ReqItems:"};
-            AddNewGenericXMLObject("Buildings", dgvBuildings, "colBuildingsID", "colBuildingsName", tbBuildingName, tbBuildingID, dgvBuildingTags, "colBuildingTags", null, tbBuildingDescription, defaultTags);
         }
         private void AddNewCutscene(object sender, EventArgs e)
         {

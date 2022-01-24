@@ -305,15 +305,7 @@ namespace RiverHollow.GUIComponents.Screens
                         GenerateConstructBoxes(PlayerManager.GetStorageItems());
                         break;
                     case BuildTypeEnum.Building:
-                        foreach (BuildInfo b in PlayerManager.DIBuildInfo.Values)
-                        {
-                            if (b.Unlocked && !b.Built)
-                            {
-                                ConstructBox box = new ConstructBox(ConstructWorldObject);
-                                box.SetConstructionInfo(b.ID, b.Name, b.RequiredToMake);
-                                _liStructures.Add(box);
-                            }
-                        }
+                        GenerateConstructBoxes(PlayerManager.GetCraftingList(ObjectTypeEnum.Building));
                         break;
                 }
 
@@ -331,7 +323,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 foreach (int i in idList)
                 {
-                    Buildable obj = (Buildable)DataManager.GetWorldObjectByID(i);
+                    Buildable obj = (Buildable)DataManager.CreateWorldObjectByID(i);
                     if (obj.RequiredToMake.Count > 0 && obj.CanBuild())
                     {
                         ConstructBox box = new ConstructBox(ConstructWorldObject);
@@ -350,7 +342,7 @@ namespace RiverHollow.GUIComponents.Screens
                 foreach (KeyValuePair<int, int> kvp in dictionary)
                 {
                     ConstructBox box = new ConstructBox(ConstructStorageObject);
-                    Buildable obj = (Buildable)DataManager.GetWorldObjectByID(kvp.Key);
+                    Buildable obj = (Buildable)DataManager.CreateWorldObjectByID(kvp.Key);
                     box.SetConstructionInfo(kvp.Key, obj.Name, kvp.Value);
                     _liStructures.Add(box);
                 }
@@ -381,12 +373,12 @@ namespace RiverHollow.GUIComponents.Screens
                 Dictionary<int, int> requiredToMake;
                 if (_eObjectBuildType == BuildTypeEnum.Building)
                 {
-                    obj = DataManager.GetBuilding(objID);
-                    requiredToMake = PlayerManager.DIBuildInfo[objID].RequiredToMake;
+                    obj = (Buildable)DataManager.CreateWorldObjectByID(objID);
+                    requiredToMake = obj.RequiredToMake;
                 }
                 else
                 {
-                    obj = (Buildable)DataManager.GetWorldObjectByID(objID);
+                    obj = (Buildable)DataManager.CreateWorldObjectByID(objID);
                     requiredToMake = obj.RequiredToMake;
                 }
 
@@ -404,7 +396,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             public void ConstructStorageObject(int objID)
             {
-                Buildable obj = (Buildable)DataManager.GetWorldObjectByID(objID);
+                Buildable obj = (Buildable)DataManager.CreateWorldObjectByID(objID);
 
                 GameManager.EnterTownModeBuild(true);
                 GameManager.PickUpWorldObject(obj);

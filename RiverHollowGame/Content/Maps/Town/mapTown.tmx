@@ -279,12 +279,12 @@
  <objectgroup id="9" name="MapObject">
   <object id="71" name="WorldObject" x="417.03" y="451.521" width="14.94" height="10.8948">
    <properties>
-    <property name="ObjectID" type="int" value="55"/>
+    <property name="ObjectID" type="int" value="91"/>
    </properties>
   </object>
   <object id="72" name="Building" x="433.5" y="418.242" width="86.8864" height="44.3031">
    <properties>
-    <property name="BuildingID" type="int" value="24"/>
+    <property name="BuildingID" type="int" value="29"/>
    </properties>
   </object>
  </objectgroup>

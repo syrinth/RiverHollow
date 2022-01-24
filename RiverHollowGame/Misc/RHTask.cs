@@ -24,12 +24,11 @@ namespace RiverHollow.Misc
         public int RequiredItemAmount { get; private set; }
         public int TargetsAccomplished { get; private set; }
 
-        private int _iGoalBuilding = -1;
+        private int _iBuildingEndID = -1;
         private Monster _questMonster;
         private Item _targetItem;
-        private int _iTargetWorldObjectID = -1;
+        private int _iTargetObjectID = -1;
         private int _iTargetWorldObjNum = -1;
-        private int _iTargetBuildingID = -1;
         public bool ReadyForHandIn { get; private set; } = false;
         public bool Finished { get; private set; }
 
@@ -37,7 +36,7 @@ namespace RiverHollow.Misc
         int _iActivateID;
         bool _bHiddenGoal;
         #region Rewards
-        private int _iUnlockBuildingID = -1;
+        private int _iUnlockObjectID = -1;
         private int _iRewardMoney = 0;
         private int _iFriendPoints = 0;
         public string FriendTarget { get; }
@@ -146,16 +145,15 @@ namespace RiverHollow.Misc
                 GoalNPC = DataManager.DIVillagers[int.Parse(stringData["GoalNPC"])];
             }
 
-            Util.AssignValue(ref _iGoalBuilding, "GoalBuildingID", stringData);
+            Util.AssignValue(ref _iBuildingEndID, "EndBuildingID", stringData);
 
             Util.AssignValue(ref _iRewardMoney, "Money", stringData);
-            Util.AssignValue(ref _iTargetBuildingID, "BuildingID", stringData);
-            Util.AssignValue(ref _iUnlockBuildingID, "UnlockBuildingID", stringData);
+            Util.AssignValue(ref _iUnlockObjectID, "UnlockBuildingID", stringData);
 
-            if (stringData.ContainsKey("RequiredObjectID"))
+            if (stringData.ContainsKey("TargetObjectID"))
             {
-                string[] split = Util.FindParams(stringData["RequiredObjectID"]);
-                _iTargetWorldObjectID = int.Parse(split[0]);
+                string[] split = Util.FindParams(stringData["TargetObjectID"]);
+                _iTargetObjectID = int.Parse(split[0]);
                 _iTargetWorldObjNum = split.Length == 2 ? int.Parse(split[1]) : 1;
             }
 
@@ -203,23 +201,11 @@ namespace RiverHollow.Misc
 
             return rv;
         }
-        public bool AttemptBuildingProgress(int i)
-        {
-            bool rv = false;
-
-            if (_eTaskType == TaskTypeEnum.Build && i == _iTargetBuildingID)
-            {
-                rv = true;
-                ReadyForHandIn = true;
-            }
-
-            return rv;
-        }
         public bool TaskProgressEnterBuilding(int i)
         {
             bool rv = false;
 
-            if(_iGoalBuilding == i)
+            if(_iBuildingEndID == i)
             {
                 FinishTask();
             }
@@ -231,10 +217,10 @@ namespace RiverHollow.Misc
         {
             bool rv = false;
 
-            if (_eTaskType == TaskTypeEnum.BuildStructure && i == _iTargetWorldObjectID)
+            if (_eTaskType == TaskTypeEnum.Build && i == _iTargetObjectID)
             {
                 rv = true;
-                ReadyForHandIn = PlayerManager.GetNumberTownObjects(_iTargetWorldObjectID) == _iTargetWorldObjNum;
+                ReadyForHandIn = PlayerManager.GetNumberTownObjects(_iTargetObjectID) == _iTargetWorldObjNum;
             }
 
             return rv;
@@ -315,9 +301,9 @@ namespace RiverHollow.Misc
                     GoalNPC.FriendshipPoints += _iFriendPoints;
                 }
 
-                if (_iUnlockBuildingID != -1)
+                if (_iUnlockObjectID != -1)
                 {
-                    PlayerManager.DIBuildInfo[_iUnlockBuildingID].Unlock();
+                    PlayerManager.AddToCraftingDictionary(_iUnlockObjectID);
                 }
 
                 if (_iActivateID > -1)
@@ -360,9 +346,11 @@ namespace RiverHollow.Misc
                 if (GoalNPC != null)
                 {
                     rv = "Speak to " + GoalNPC.Name;
-                    if (_iGoalBuilding != -1)
+                    if (_iBuildingEndID != -1)
                     {
-                        rv += " at the " + PlayerManager.DIBuildInfo[_iGoalBuilding].Name;
+                        string name = string.Empty;
+                        DataManager.GetTextData("WorldObject", _iBuildingEndID, ref name, "Name");
+                        rv += " at the " + name;
                     }
                 }
             }
@@ -380,11 +368,8 @@ namespace RiverHollow.Misc
                         rv = _questMonster.Name + " Defeated: " + TargetsAccomplished + "/" + RequiredItemAmount;
                         break;
                     case TaskTypeEnum.Build:
-                        rv = "Build " + PlayerManager.DIBuildInfo[_iTargetBuildingID].Name;
-                        break;
-                    case TaskTypeEnum.BuildStructure:
                         string objName = string.Empty;
-                        DataManager.GetTextData("WorldObject", _iTargetWorldObjectID, ref objName, "Name");
+                        DataManager.GetTextData("WorldObject", _iTargetObjectID, ref objName, "Name");
                         if (_iTargetWorldObjNum > 1) { rv = "Build " + _iTargetWorldObjNum.ToString() + objName + "s"; }
                         else { rv = "Build " + objName; }
                         break;
@@ -424,7 +409,7 @@ namespace RiverHollow.Misc
             public int monsterID;
 
             [XmlElement(ElementName = "TaskBuilding")]
-            public int targetBuildingID;
+            public int targetWorldObjectID;
 
             [XmlElement(ElementName = "TargetGoal")]
             public int targetGoal;
@@ -462,8 +447,8 @@ namespace RiverHollow.Misc
                 goalNPC = GoalNPC != null ? GoalNPC.ID : -1,
                 itemID = _targetItem != null ? _targetItem.ItemID : -1,
                 monsterID = _questMonster != null ? _questMonster.ID : -1,
-                targetBuildingID = _iTargetBuildingID,
-                unlockBuildingID = _iUnlockBuildingID,
+                targetWorldObjectID = _iTargetObjectID,
+                unlockBuildingID = _iUnlockObjectID,
                 targetGoal = RequiredItemAmount, 
                 hiddenGoal = _bHiddenGoal,
                 accomplished = TargetsAccomplished, 
@@ -488,8 +473,8 @@ namespace RiverHollow.Misc
             GoalNPC = qData.goalNPC != -1 ? DataManager.DIVillagers[qData.goalNPC] : null;
             _targetItem = qData.itemID != -1 ? DataManager.GetItem(qData.itemID) : null;
             _questMonster = qData.monsterID != -1 ? DataManager.GetLiteMonsterByIndex(qData.monsterID) : null;
-            _iTargetBuildingID = qData.targetBuildingID;
-            _iUnlockBuildingID = qData.unlockBuildingID;
+            _iTargetObjectID = qData.targetWorldObjectID;
+            _iUnlockObjectID = qData.unlockBuildingID;
             RequiredItemAmount = qData.targetGoal;
             _bHiddenGoal = qData.hiddenGoal;
             TargetsAccomplished = qData.accomplished;

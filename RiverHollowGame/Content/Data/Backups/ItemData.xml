@@ -303,15 +303,15 @@
     </Item>
     <Item>
       <Key>75</Key>
-      <Value>[Type:Resource][Image:9-8][Value:3][Stacks][Place:59]</Value>
+      <Value>[Type:Resource][Image:9-8][Value:3][Stacks][Place:95]</Value>
     </Item>
     <Item>
       <Key>76</Key>
-      <Value>[Type:Resource][Image:2-2][Value:3][Stacks][Place:60]</Value>
+      <Value>[Type:Resource][Image:2-2][Value:3][Stacks][Place:96]</Value>
     </Item>
     <Item>
       <Key>77</Key>
-      <Value>[Type:Resource][Image:3-2][Value:1500][Stacks][Place:61]</Value>
+      <Value>[Type:Resource][Image:3-2][Value:1500][Stacks][Place:97]</Value>
     </Item>
     <Item>
       <Key>78</Key>
@@ -691,11 +691,11 @@
     </Item>
     <Item>
       <Key>172</Key>
-      <Value>[Type:Blueprint][Image:0-12][ItemID:1|7|37][BuildingID:22]</Value>
+      <Value>[Type:Blueprint][Image:0-12][ObjectID:1|27|73|107]</Value>
     </Item>
     <Item>
       <Key>173</Key>
-      <Value>[Type:Blueprint][Image:1-12][ItemID:38][Value:500]</Value>
+      <Value>[Type:Blueprint][Image:1-12][ItemID:74][Value:500]</Value>
     </Item>
     <Item>
       <Key>174</Key>

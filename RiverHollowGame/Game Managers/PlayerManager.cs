@@ -48,9 +48,7 @@ namespace RiverHollow.Game_Managers
 
         private static Dictionary<ObjectTypeEnum, List<int>> _diCrafting;
 
-        private static Dictionary<int, Building> _diBuildings;
-        public static Dictionary<int, Building>.ValueCollection BuildingList => _diBuildings.Values;
-        public static Building PlayerHome => _diBuildings[27];
+        public static Building PlayerHome => (Building)GetTownObjectsByID(27)[0];
 
         public static bool ReadyToSleep = false;
 
@@ -91,7 +89,6 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Data Collections
-        public static Dictionary<int, BuildInfo> DIBuildInfo;
         private static Dictionary<int, List<WorldObject>> _diTownObjects;
         #endregion
 
@@ -99,6 +96,7 @@ namespace RiverHollow.Game_Managers
         {
             _diCrafting = new Dictionary<ObjectTypeEnum, List<int>>
             {
+                [ObjectTypeEnum.Building] = new List<int>(),
                 [ObjectTypeEnum.Floor] = new List<int>(),
                 [ObjectTypeEnum.Structure] = new List<int>(),
                 [ObjectTypeEnum.Plant] = new List<int>(),
@@ -122,9 +120,6 @@ namespace RiverHollow.Game_Managers
             PlayerCombatant.SetClass(DataManager.GetClassByIndex(1));
 
             _liParty = new List<ClassedCombatant> { PlayerCombatant };
-
-            _diBuildings = new Dictionary<int, Building>();
-            DIBuildInfo = DataManager.GetBuildInfoList();
         }
 
         public static void NewPlayer()
@@ -279,10 +274,9 @@ namespace RiverHollow.Game_Managers
             if (!t.Finished)
             {
                 foreach (Item i in InventoryManager.PlayerInventory) { if (i != null) { t.AttemptProgress(i); } }
-                foreach(BuildInfo bi in PlayerManager.DIBuildInfo.Values) {
-                    if (bi.Built) {
-                        t.AttemptBuildingProgress(bi.ID);
-                    }
+                foreach (int k in PlayerManager.GetTownObjects().Keys)
+                {
+                    t.AttemptStructureBuildProgress(k);
                 }
 
                 t.SpawnTaskMobs();
@@ -296,16 +290,6 @@ namespace RiverHollow.Game_Managers
             foreach (RHTask q in TaskLog)
             {
                 if (q.AttemptStructureBuildProgress(obj.ID))
-                {
-                    break;
-                }
-            }
-        }
-        public static void AdvanceTaskProgress(Building b)
-        {
-            foreach (RHTask q in TaskLog)
-            {
-                if (q.AttemptBuildingProgress(b.ID))
                 {
                     break;
                 }
@@ -354,6 +338,10 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
+        public static bool HasTaskID(int taskID)
+        {
+            return TaskLog.Find(t => t.TaskID == taskID) != null;
+        }
 
         #region Crafting Dictionary
         public static List<int> GetCraftingList(ObjectTypeEnum e)
@@ -364,10 +352,13 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            WorldObject obj = DataManager.GetWorldObjectByID(id);
+            WorldObject obj = DataManager.CreateWorldObjectByID(id);
             ObjectTypeEnum e = obj.Type;
             switch (obj.Type)
             {
+                case ObjectTypeEnum.Building:
+                    e = ObjectTypeEnum.Building;
+                    break;
                 case ObjectTypeEnum.Floor:
                     e = ObjectTypeEnum.Floor;
                     break;
@@ -496,6 +487,10 @@ namespace RiverHollow.Game_Managers
             }
             return rv;
         }
+        public static bool TownObjectBuilt(int objID)
+        {
+            return GetNumberTownObjects(objID) > 0;
+        }
         public static List<WorldObject> GetTownObjectsByID(int objID)
         {
             List<WorldObject> rv = new List<WorldObject>();
@@ -506,31 +501,21 @@ namespace RiverHollow.Game_Managers
             }
             return rv;
         }
-        public static IReadOnlyDictionary<int, List<WorldObject>> GetTownObjects() { return _diTownObjects; }
-
-        public static void AddBuilding(Building b)
+        public static Building GetBuildingByID(int objID)
         {
-            if (!_diBuildings.ContainsKey(b.ID))
+            Building rv = null;
+            if (TownObjectBuilt(objID))
             {
-                _diBuildings.Add(b.ID, b);
+                WorldObject obj = GetTownObjectsByID(objID)[0];
+                if (obj.CompareType(ObjectTypeEnum.Building))
+                {
+                    rv = (Building)obj;
+                }
             }
-            PlayerManager.DIBuildInfo[b.ID].Built = true;
 
-            AdvanceTaskProgress(b);
+            return rv;
         }
-        public static void RemoveBuilding(Building b)
-        {
-           // Buildings.Remove(b);
-        }
-        public static Building GetBuildingByID(int id)
-        {
-            return _diBuildings[id];
-        }
-        public static bool IsBuilt(int id) { return _diBuildings.ContainsKey(id); }
-        public static int GetNewBuildingID()
-        {
-            return _diBuildings.Count +1 ;
-        }
+        public static IReadOnlyDictionary<int, List<WorldObject>> GetTownObjects() { return _diTownObjects; }
         #endregion
 
         #region PlayerInRange

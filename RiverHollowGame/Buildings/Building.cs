@@ -40,6 +40,7 @@ namespace RiverHollow.Buildings
         public Building(int id, Dictionary<string, string> stringData) : base(id)
         {
             Unique = true;
+            OutsideOnly = true;
             ImportBasics(id, stringData);
         }
 
@@ -56,8 +57,8 @@ namespace RiverHollow.Buildings
             _iID = id;
             _eObjectType = ObjectTypeEnum.Building;
 
-            DataManager.GetTextData("Building", _iID, ref _sName, "Name");
-            DataManager.GetTextData("Building", _iID, ref _sDescription, "Description");
+            DataManager.GetTextData("WorldObject", _iID, ref _sName, "Name");
+            DataManager.GetTextData("WorldObject", _iID, ref _sDescription, "Description");
 
             //The dimensions of the Building in tiles
             Util.AssignValue(ref _uSize, "Size", stringData);
@@ -160,7 +161,6 @@ namespace RiverHollow.Buildings
 
                 SyncLightPositions();
                 map.AddLights(GetLights());
-                PlayerManager.AddBuilding(this);
             }
 
             return rv;

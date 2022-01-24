@@ -55,7 +55,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
                 else if (m.MerchType == Merchandise.MerchTypeEnum.WorldObject)
                 {
-                    newBox = new PurchaseBox(DataManager.GetWorldObjectByID(m.MerchID), m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE, ShowDisplay);
+                    newBox = new PurchaseBox(DataManager.CreateWorldObjectByID(m.MerchID), m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE, ShowDisplay);
                 }
                 else if (m.MerchType == Merchandise.MerchTypeEnum.Actor)
                 {

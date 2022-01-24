@@ -135,18 +135,18 @@
  <objectgroup id="5" name="MapObject">
   <object id="39" name="ResourceSpawn" x="146.908" y="79.6677" width="299.758" height="140.991">
    <properties>
-    <property name="Resources" value="17"/>
+    <property name="Resources" value="53"/>
    </properties>
   </object>
   <object id="41" name="ResourceSpawn" x="111.501" y="367.584" width="332.666" height="136.833">
    <properties>
-    <property name="Resources" value="17"/>
+    <property name="Resources" value="53"/>
    </properties>
   </object>
   <object id="48" name="DungeonObject" x="289.667" y="47" width="32" height="32">
    <properties>
     <property name="MatchTrigger" value="Trigger_2"/>
-    <property name="ObjectID" type="int" value="33"/>
+    <property name="ObjectID" type="int" value="69"/>
     <property name="TriggerNumber" type="int" value="1"/>
    </properties>
   </object>

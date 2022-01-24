@@ -465,7 +465,7 @@ namespace RiverHollow.Items
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "StaticObjects");
             _bStacks = stringData.ContainsKey("Stacks");
 
-            _worldObj = (Buildable)DataManager.GetWorldObjectByID(int.Parse(stringData["Place"]));
+            _worldObj = (Buildable)DataManager.CreateWorldObjectByID(int.Parse(stringData["Place"]));
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -496,7 +496,7 @@ namespace RiverHollow.Items
             bool rv = base.Remove(x);
 
             //Create a new worldObj for any instances of the item that remains
-            _worldObj = (Buildable)DataManager.GetWorldObjectByID(_worldObj.ID);
+            _worldObj = (Buildable)DataManager.CreateWorldObjectByID(_worldObj.ID);
 
             return rv;
         }

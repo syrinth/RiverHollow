@@ -92,9 +92,6 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "MerchantData")]
             public List<MerchantData> MerchantData;
 
-            [XmlArray(ElementName = "BuildingInfoData")]
-            public List<BuildInfoData> BuildingInfoData;
-
             [XmlArray(ElementName = "ShopIData")]
             public List<ShopData> ShopData;
 
@@ -648,18 +645,12 @@ namespace RiverHollow.Game_Managers
                 AvailableMissions = new List<MissionData>(),
                 VillagerData = new List<VillagerData>(),
                 MerchantData = new List<MerchantData>(),
-                BuildingInfoData = new List<BuildInfoData>(),
                 ShopData = new List<ShopData>(),
                 TheMailbox = PlayerManager.PlayerMailbox.SaveData(),
                 optionData = SaveOptions()
             };          
             
             data.playerData = PlayerManager.SaveData();
-
-            foreach (Building b in PlayerManager.BuildingList)
-            {
-                data.Buildings.Add(b.SaveData());
-            }
 
             foreach (RHMap tileMap in MapManager.Maps.Values)
             {
@@ -694,11 +685,6 @@ namespace RiverHollow.Game_Managers
             foreach (Merchant m in DataManager.DIMerchants.Values)
             {
                 data.MerchantData.Add(m.SaveData());
-            }
-
-            foreach (BuildInfo b in PlayerManager.DIBuildInfo.Values)
-            {
-                data.BuildingInfoData.Add(b.SaveData());
             }
 
             foreach(Shop s in GameManager.DIShops.Values)
@@ -825,12 +811,6 @@ namespace RiverHollow.Game_Managers
             GameCalendar.LoadCalendar(dataToLoad.Calendar);
             EnvironmentManager.LoadEnvironment(dataToLoad.Environment);
             PlayerManager.LoadToolData(dataToLoad.Tools);
-            foreach (BuildingData b in dataToLoad.Buildings)
-            {
-                Building newBuilding = DataManager.GetBuilding(b.iBuildingID);
-                newBuilding.LoadData(b);
-                newBuilding.PlaceOnMap(newBuilding.MapPosition, MapManager.Maps[MapManager.TownMapName]);
-            }
 
             foreach (MapData mapData in dataToLoad.MapData)
             {
@@ -867,12 +847,6 @@ namespace RiverHollow.Game_Managers
             {
                 Merchant target = DataManager.DIMerchants[n.npcID];
                 target.LoadData(n);
-            }
-
-            foreach (BuildInfoData n in dataToLoad.BuildingInfoData)
-            {
-                PlayerManager.DIBuildInfo[n.id].Built = n.built;
-                if (n.unlocked) { PlayerManager.DIBuildInfo[n.id].Unlock(); }
             }
 
             foreach(ShopData s in dataToLoad.ShopData)

@@ -399,15 +399,15 @@ namespace RiverHollow.Game_Managers
         {
             if (bool.Parse(entranceObject.Properties["Open"]))
             {
-                WorldObject obj = DataManager.GetWorldObjectByID(openID1);
+                WorldObject obj = DataManager.CreateWorldObjectByID(openID1);
                 obj.PlaceOnMap(firstObj, map);
 
-                obj = DataManager.GetWorldObjectByID(openID2);
+                obj = DataManager.CreateWorldObjectByID(openID2);
                 obj.PlaceOnMap(secondObj, map);
             }
             else
             {
-                WorldObject obj = DataManager.GetWorldObjectByID(closedID);
+                WorldObject obj = DataManager.CreateWorldObjectByID(closedID);
                 obj.PlaceOnMap(closedObject, map);
             }
         }

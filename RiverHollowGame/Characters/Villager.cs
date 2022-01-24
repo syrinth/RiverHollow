@@ -259,7 +259,7 @@ namespace RiverHollow.Characters
         /// </summary>
         protected bool IsHomeBuilt()
         {
-            return _iHouseBuildingID != -1 && PlayerManager.DIBuildInfo[_iHouseBuildingID].Built;
+            return _iHouseBuildingID != -1 && PlayerManager.TownObjectBuilt(_iHouseBuildingID);
         }
 
         /// <summary>
@@ -275,7 +275,7 @@ namespace RiverHollow.Characters
             string rv = string.Empty;
 
             if (Married) { rv = PlayerManager.PlayerHome.MapName; }
-            else if (IsHomeBuilt()) { rv = PlayerManager.GetBuildingByID(_iHouseBuildingID).MapName; }
+            else if (IsHomeBuilt()) { rv = PlayerManager.GetBuildingByID(_iHouseBuildingID)?.MapName; }
             else if (_iHouseBuildingID != -1) { rv = "mapInn"; }
 
             return rv;
@@ -331,8 +331,7 @@ namespace RiverHollow.Characters
                         string[] split = arg.Split(':');
                         if (split[0].Equals("Built"))
                         {
-                            int buildingID = int.Parse(split[1]);
-                            if (!PlayerManager.DIBuildInfo[buildingID].Built)
+                            if (!PlayerManager.TownObjectBuilt(int.Parse(split[1])))
                             {
                                 valid = false;
                                 break;

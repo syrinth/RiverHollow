@@ -8,14 +8,12 @@ namespace RiverHollow.Items
 {
     public class Blueprint : Item
     {
-        private readonly int[] _arrItemUnlocks;
-        private readonly string[] _arrBuildingUnlocks;
+        private readonly int[] _arrCraftingUnlocks;
         public Blueprint(int id, Dictionary<string, string> stringData)
         {
             ImportBasics(stringData, id, 1);
 
-            if (stringData.ContainsKey("ItemID")) { _arrItemUnlocks = Array.ConvertAll(Util.FindParams(stringData["ItemID"]), s => int.Parse(s)); ; }
-            if (stringData.ContainsKey("BuildingID")) { _arrBuildingUnlocks = Util.FindParams(stringData["BuildingID"]); }
+            if (stringData.ContainsKey("ObjectID")) { _arrCraftingUnlocks = Array.ConvertAll(Util.FindParams(stringData["ObjectID"]), s => int.Parse(s)); ; }
 
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Resources");
 
@@ -33,17 +31,9 @@ namespace RiverHollow.Items
         {
             if (action == GameManager.TextEntryVerbEnum.Yes)
             {
-                if (_arrItemUnlocks != null)
+                if (_arrCraftingUnlocks != null)
                 {
-                    PlayerManager.AddToCraftingDictionary(_arrItemUnlocks);
-                }
-
-                if (_arrBuildingUnlocks != null)
-                {
-                    for (int i = 0; i < _arrBuildingUnlocks.Length; i++)
-                    {
-                        PlayerManager.DIBuildInfo[int.Parse(_arrBuildingUnlocks[i])].Unlock();
-                    }
+                    PlayerManager.AddToCraftingDictionary(_arrCraftingUnlocks);
                 }
 
                 Remove(1);

@@ -113,22 +113,22 @@
  <objectgroup id="52" name="MapObject">
   <object id="7" name="ResourceSpawn" x="162.584" y="83.5835" width="120.583" height="105.666">
    <properties>
-    <property name="Resources" value="17"/>
+    <property name="Resources" value="53"/>
    </properties>
   </object>
   <object id="19" name="ResourceSpawn" x="209.167" y="202.25" width="26.6663" height="127.5">
    <properties>
-    <property name="Resources" value="17"/>
+    <property name="Resources" value="53"/>
    </properties>
   </object>
   <object id="29" name="ResourceSpawn" x="178.167" y="338.75" width="88.6663" height="28.5">
    <properties>
-    <property name="Resources" value="17"/>
+    <property name="Resources" value="53"/>
    </properties>
   </object>
   <object id="37" name="DungeonObject" x="208" y="48" width="32" height="32">
    <properties>
-    <property name="ObjectID" type="int" value="33"/>
+    <property name="ObjectID" type="int" value="69"/>
     <property name="Trigger" value="TriggerHitF"/>
    </properties>
   </object>

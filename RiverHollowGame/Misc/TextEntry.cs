@@ -164,12 +164,12 @@ namespace RiverHollow.Misc
                 }
                 if (_diTags.ContainsKey("Married"))
                 {
-                    if(((Villager)act).Married) { rv = true; }
+                    if (((Villager)act).Married) { rv = true; }
                     else { return false; }
                 }
                 if (_diTags.ContainsKey("NotExpecting"))
                 {
-                    if(PlayerManager.ChildStatus == ExpectingChildEnum.None) { rv = true; }
+                    if (PlayerManager.ChildStatus == ExpectingChildEnum.None) { rv = true; }
                     else { return false; }
                 }
                 if (_diTags.ContainsKey("Weather"))
@@ -200,11 +200,11 @@ namespace RiverHollow.Misc
 
                     rv = true;
                 }
-                if (_diTags.ContainsKey("RequiredBuildingID"))
+                if (_diTags.ContainsKey("RequiredObjectID"))
                 {
-                    foreach (string i in _diTags["RequiredBuildingID"].Split('-'))
+                    foreach (string i in _diTags["RequiredObjectID"].Split('-'))
                     {
-                        if (!PlayerManager.DIBuildInfo[int.Parse(i)].Built) { return false; }
+                        if (!PlayerManager.TownObjectBuilt(int.Parse(i))) { return false; }
                     }
 
                     rv = true;
@@ -217,6 +217,11 @@ namespace RiverHollow.Misc
                     }
 
                     rv = true;
+                }
+                if (_diTags.ContainsKey("TaskID"))
+                {
+                    int taskID = int.Parse(_diTags["TaskID"]);
+                    rv = !PlayerManager.HasTaskID(taskID) && !GameManager.DITasks[taskID].Finished;
                 }
             }
 
@@ -246,13 +251,9 @@ namespace RiverHollow.Misc
             {
                 PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(_diTags["TaskID"])]);
             }
-            if (_diTags.ContainsKey("UnlockWorldObjectID"))
+            if (_diTags.ContainsKey("UnlockObjectID"))
             {
-                PlayerManager.AddToCraftingDictionary(int.Parse(_diTags["UnlockWorldObjectID"]));
-            }
-            if (_diTags.ContainsKey("UnlockBuildingID"))
-            {
-                PlayerManager.DIBuildInfo[int.Parse(_diTags["UnlockBuildingID"])].Unlock();
+                PlayerManager.AddToCraftingDictionary(int.Parse(_diTags["UnlockObjectID"]));
             }
             if (_diTags.ContainsKey("ItemID"))
             {

@@ -29,7 +29,7 @@ namespace RiverHollow.GUIComponents.MainObjects
             foreach (int i in PlayerManager.GetCraftingList(ObjectTypeEnum.Plant))
             {
                 ConstructBox box = new ConstructBox(ChoosePlant);
-                Plant obj = (Plant)DataManager.GetWorldObjectByID(i);
+                Plant obj = (Plant)DataManager.CreateWorldObjectByID(i);
 
                 if (obj.InSeason())
                 {
@@ -65,7 +65,7 @@ namespace RiverHollow.GUIComponents.MainObjects
 
         public void ChoosePlant(int objID)
         {
-            Plant obj = (Plant)DataManager.GetWorldObjectByID(objID);
+            Plant obj = (Plant)DataManager.CreateWorldObjectByID(objID);
 
             if (InventoryManager.HasItemInPlayerInventory(obj.SeedID, 1))
             {

@@ -203,7 +203,7 @@ namespace RiverHollow.Game_Managers
             for (int i = 0; i < numToPlace; i++)
             {
                 RHTile targetTile = possibleTiles[rand.Next(0, possibleTiles.Count - 1)];
-                WorldObject obj = DataManager.GetWorldObjectByID(ID);
+                WorldObject obj = DataManager.CreateWorldObjectByID(ID);
                 obj.PlaceOnMap(targetTile.Position, MapManager.Maps[TownMapName]);
                 if (obj.CompareType(ObjectTypeEnum.Plant))
                 {

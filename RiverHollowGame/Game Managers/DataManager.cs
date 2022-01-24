@@ -69,7 +69,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
         static Dictionary<string, string> _diMailboxMessages;
 
-        static Dictionary<int, Dictionary<string, string>> _diBuildings;
         static Dictionary<int, Dictionary<string, string>> _diItemData;
 
         static Dictionary<int, Dictionary<string, string>> _diDungeonData;
@@ -137,7 +136,6 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diActions, @"Data\CombatActions", Content, null);
             LoadDictionary(ref _diNPCData, @"Data\CharacterData", Content, null);
             LoadDictionary(ref _diMonsterData, @"Data\Monsters", Content, null);
-            LoadDictionary(ref _diBuildings, @"Data\Buildings", Content, null);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
             LoadDictionary(ref _diWorkers, @"Data\Workers", Content, null);
             LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);
@@ -363,24 +361,6 @@ namespace RiverHollow.Game_Managers
             return null;
         }
 
-        public static Building GetBuilding(int id)
-        {
-            if (_diBuildings.ContainsKey(id))
-            {
-                return new Building(id, _diBuildings[id]);
-            }
-            return null;
-        }
-        public static Dictionary<int, BuildInfo> GetBuildInfoList()
-        {
-            Dictionary<int, BuildInfo> rvList = new Dictionary<int, BuildInfo>();
-            foreach(KeyValuePair<int, Dictionary<string, string>> kvp in _diBuildings)
-            {
-                rvList.Add(kvp.Key, new BuildInfo(kvp.Key, _diBuildings[kvp.Key]));
-            }
-            return rvList;
-        }
-
         public static Dictionary<int, Shop> GetShopInfoList()
         {
             return _diShops;
@@ -441,7 +421,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         /// <param name="id">The ID of the WorldObject</param>
         /// <returns>The WorldObject if it was successfully created, null otherwise</returns>
-        public static WorldObject GetWorldObjectByID(int id)
+        public static WorldObject CreateWorldObjectByID(int id)
         {
             if (id != -1 && _diWorldObjects.ContainsKey(id))
             {
@@ -452,6 +432,8 @@ namespace RiverHollow.Game_Managers
                         return new Beehive(id, diData);
                     case ObjectTypeEnum.Buildable:
                         return new Buildable(id, diData);
+                    case ObjectTypeEnum.Building:
+                        return new Building(id, diData);
                     case ObjectTypeEnum.CombatHazard:
                         return new CombatHazard(id, diData);
                     case ObjectTypeEnum.Container:
@@ -502,7 +484,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="map">The map the WorldObject is to be put on</param>
         public static void CreateAndPlaceNewWorldObject(int id, Vector2 pos, RHMap map)
         {
-            GetWorldObjectByID(id)?.PlaceOnMap(pos, map);
+            CreateWorldObjectByID(id)?.PlaceOnMap(pos, map);
         }
 
         public static Dictionary<string, string> GetWorldObjectData(int id)

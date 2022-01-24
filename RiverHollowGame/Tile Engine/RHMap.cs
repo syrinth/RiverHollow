@@ -545,7 +545,7 @@ namespace RiverHollow.Tile_Engine
                     }
                     else if (tiledObj.Name.Equals("Chest"))
                     {
-                        Container c = (Container)DataManager.GetWorldObjectByID(190);
+                        Container c = (Container)DataManager.CreateWorldObjectByID(190);
                         if (c.PlaceOnMap(tiledObj.Position, this))
                         {
 
@@ -560,9 +560,10 @@ namespace RiverHollow.Tile_Engine
                     }
                     else if (tiledObj.Name.Equals("Building") && !loaded)
                     {
-                        Building building = DataManager.GetBuilding(int.Parse(tiledObj.Properties["BuildingID"]));
+                        Building building = (Building)DataManager.CreateWorldObjectByID(int.Parse(tiledObj.Properties["BuildingID"]));
                         building.SnapPositionToGrid(tiledObj.Position);
                         building.PlaceOnMap(building.MapPosition, this);
+                        PlayerManager.AddToTownObjects(building);
                     }
                     else if (tiledObj.Name.Equals("Item"))
                     {
@@ -891,7 +892,7 @@ namespace RiverHollow.Tile_Engine
                         objectIsValid = true;
                         RarityEnum rarityKey = Util.RollAgainstRarity(_diResources);
 
-                        WorldObject wObj = DataManager.GetWorldObjectByID(_diResources[rarityKey][RHRandom.Instance().Next(0, _diResources[rarityKey].Count - 1)]);
+                        WorldObject wObj = DataManager.CreateWorldObjectByID(_diResources[rarityKey][RHRandom.Instance().Next(0, _diResources[rarityKey].Count - 1)]);
                         wObj.SnapPositionToGrid(new Vector2(targetTile.Position.X, targetTile.Position.Y));
 
                         if (wObj.CompareType(ObjectTypeEnum.Plant))
@@ -1740,7 +1741,7 @@ namespace RiverHollow.Tile_Engine
             if (TownModeMoving()) { placeObject = templateObject; }
             else
             {
-                placeObject = (Buildable)DataManager.GetWorldObjectByID(templateObject.ID);
+                placeObject = (Buildable)DataManager.CreateWorldObjectByID(templateObject.ID);
                 if (templateObject.CompareType(ObjectTypeEnum.Decor))
                 {
                     ((Decor)placeObject).RotateToDirection(((Decor)templateObject).Facing);
@@ -1804,7 +1805,7 @@ namespace RiverHollow.Tile_Engine
                 while (wallpaperTiles.Count > 0)
                 {
                     RHTile tile = wallpaperTiles[0];
-                    Wallpaper paper = (Wallpaper)DataManager.GetWorldObjectByID(wallpaperObject.ID);
+                    Wallpaper paper = (Wallpaper)DataManager.CreateWorldObjectByID(wallpaperObject.ID);
                     paper.SnapPositionToGrid(tile.Position);
                     tile.SetWallpaper(paper);
                     wallpaperTiles.AddRange(tile.GetAdjacentTiles().FindAll(x => x.IsWallpaperWall && !usedTiles.Contains(x)));
@@ -1923,34 +1924,6 @@ namespace RiverHollow.Tile_Engine
             targetObj.RemoveSelfFromTiles();
             RemoveLights(targetObj.GetLights());
             AddHeldLights(targetObj.GetLights());
-        }
-
-        public bool RemoveBuilding(Point mouseLocation)
-        {
-            bool rv = false;
-            Building bldg = null;
-            foreach (Building b in _liBuildings)
-            {
-                if (b.Contains(mouseLocation))
-                {
-                    SetGameScale(NORMAL_SCALE);
-                    bldg = b;
-                    b.RemoveSelfFromTiles();
-                    DictionaryTravelPoints.Remove(b.MapName);
-                    PlayerManager.RemoveBuilding(b);
-                    LeaveTownMode();
-                    Unpause();
-                    Scry(false);
-                    ResetCamera();
-                }
-            }
-            if (bldg != null)
-            {
-                rv = true;
-                _liBuildings.Remove(bldg);
-            }
-
-            return rv;
         }
 
         public bool PlaceWorldObject(WorldObject o)
@@ -2404,55 +2377,55 @@ namespace RiverHollow.Tile_Engine
         {
             foreach (WorldObjectData w in mData.worldObjects)
             {
-                WorldObject obj = DataManager.GetWorldObjectByID(w.worldObjectID);
+                WorldObject obj = DataManager.CreateWorldObjectByID(w.worldObjectID);
                 obj?.PlaceOnMap(new Vector2(w.x, w.y), this);
                 if (obj != null && this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
 
             foreach (DecorData d in mData.decor)
             {
-                Decor obj = (Decor)DataManager.GetWorldObjectByID(d.ID);
+                Decor obj = (Decor)DataManager.CreateWorldObjectByID(d.ID);
                 obj.LoadData(d);
                 obj.PlaceOnMap(this);
                 if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
             foreach (ContainerData c in mData.containers)
             {
-                Container obj = (Container)DataManager.GetWorldObjectByID(c.containerID);
+                Container obj = (Container)DataManager.CreateWorldObjectByID(c.containerID);
                 obj.LoadData(c);
                 obj.PlaceOnMap(this);
                 if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
             foreach (MachineData mac in mData.machines)
             {
-                Machine obj = (Machine)DataManager.GetWorldObjectByID(mac.ID);
+                Machine obj = (Machine)DataManager.CreateWorldObjectByID(mac.ID);
                 obj.LoadData(mac);
                 obj.PlaceOnMap(this);
                 if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
             foreach (PlantData plantData in mData.plants)
             {
-                Plant plant = (Plant)DataManager.GetWorldObjectByID(plantData.ID);
+                Plant plant = (Plant)DataManager.CreateWorldObjectByID(plantData.ID);
                 plant.LoadData(plantData);
                 plant.PlaceOnMap(this);
             }
             foreach (GardenData gardenData in mData.gardens)
             {
-                Garden obj = (Garden)DataManager.GetWorldObjectByID(gardenData.ID);
+                Garden obj = (Garden)DataManager.CreateWorldObjectByID(gardenData.ID);
                 obj.LoadData(gardenData);
                 obj.PlaceOnMap(this);
                 if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
             foreach (BeehiveData data in mData.beehives)
             {
-                Beehive obj = (Beehive)DataManager.GetWorldObjectByID(data.ID);
+                Beehive obj = (Beehive)DataManager.CreateWorldObjectByID(data.ID);
                 obj.LoadData(data);
                 obj.PlaceOnMap(this);
                 if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
             foreach (WarpPointData warpData in mData.warpPoints)
             {
-                WarpPoint obj = (WarpPoint)DataManager.GetWorldObjectByID(warpData.ID);
+                WarpPoint obj = (WarpPoint)DataManager.CreateWorldObjectByID(warpData.ID);
                 obj.LoadData(warpData);
                 obj.PlaceOnMap(this);
                 if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
@@ -2505,7 +2478,7 @@ namespace RiverHollow.Tile_Engine
             int xPoint = RHRandom.Instance().Next((int)(_vPosition.X), (int)(_vPosition.X + _iWidth));
             int yPoint = RHRandom.Instance().Next((int)(_vPosition.Y), (int)(_vPosition.Y + _iHeight));
 
-            WorldObject wObj = DataManager.GetWorldObjectByID(_liPossibleResources[RHRandom.Instance().Next(0, _liPossibleResources.Count - 1)]);
+            WorldObject wObj = DataManager.CreateWorldObjectByID(_liPossibleResources[RHRandom.Instance().Next(0, _liPossibleResources.Count - 1)]);
 
             if (wObj.CompareType(ObjectTypeEnum.Plant))
             {

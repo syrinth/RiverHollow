@@ -7,87 +7,87 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Villager][PortRow:1][Collection:0|1|2][Class:0][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:29][HouseID:3][CanMarry][FirstArrival:6][ArrivalPeriod:7]</Value>
+      <Value>[Type:Villager][PortRow:1][Collection:0|1|2][Class:0][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:65][HouseID:3][CanMarry][FirstArrival:6][ArrivalPeriod:7]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:6][Collection:0|1|2][Class:1][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:14][CanMarry][FirstArrival:1][ArrivalPeriod:7]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:42][Collection:0|1|2][Class:1][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:50][CanMarry][FirstArrival:1][ArrivalPeriod:7]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:9][Collection:0|1|2][Class:2][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:17][CanMarry][FirstArrival:7][ArrivalPeriod:7]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:45][Collection:0|1|2][Class:2][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:53][CanMarry][FirstArrival:7][ArrivalPeriod:7]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:10][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:27][CanMarry][FirstArrival:2][ArrivalPeriod:7][CanBecomePregnant]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:46][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:63][CanMarry][FirstArrival:2][ArrivalPeriod:7][CanBecomePregnant]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:11][Collection:0|1|2][Class:4][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:21][CanMarry][FirstArrival:5][ArrivalPeriod:7][CanBecomePregnant]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:47][Collection:0|1|2][Class:4][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:57][CanMarry][FirstArrival:5][ArrivalPeriod:7][CanBecomePregnant]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Villager][PortRow:1][Collection:0|1|2][Class:5][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:12][RequiredBuildingID:24][CanMarry][FirstArrival:3][ArrivalPeriod:7][CanBecomePregnant]</Value>
+      <Value>[Type:Villager][PortRow:1][Collection:0|1|2][Class:5][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:48][RequiredBuildingID:60][CanMarry][FirstArrival:3][ArrivalPeriod:7][CanBecomePregnant]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:13][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:15][CanMarry][FirstArrival:4][ArrivalPeriod:7]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:49][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:51][CanMarry][FirstArrival:4][ArrivalPeriod:7]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:24][Collection:0|1|2][Class:7][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][InTown][CanMarry]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:60][Collection:0|1|2][Class:7][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][InTown][CanMarry]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:24][Collection:7|163][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:7|163][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:24][Collection:7|163][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:7|163][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:0][Collection:7|163][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:21][FirstArrival:5][ArrivalPeriod:5]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:0][Collection:7|163][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:57][FirstArrival:5][ArrivalPeriod:5]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:0][Collection:7|163][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:21][FirstArrival:5][ArrivalPeriod:5]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:0][Collection:7|163][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:57][FirstArrival:5][ArrivalPeriod:5]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:1][Collection:5|6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:15][TotalMoneyEarnedReq:1000][ShopData:8]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:40][Collection:5|6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:51][TotalMoneyEarnedReq:1000][ShopData:8]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:1][Collection:7|182][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][ShopData:2]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:40][Collection:7|182][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][ShopData:2]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:1][Collection:7|182][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:15][TotalMoneyEarnedReq:1000]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:1][Collection:7|182][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:51][TotalMoneyEarnedReq:1000]</Value>
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:2][Collection:7|182][ShopData:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:31][FirstArrival:6][ArrivalPeriod:4]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:2][Collection:7|182][ShopData:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:67][FirstArrival:6][ArrivalPeriod:4]</Value>
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:3][Collection:7|182][ShopData:0][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:29][FirstArrival:6][ArrivalPeriod:7]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:3][Collection:7|182][ShopData:0][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:65][FirstArrival:6][ArrivalPeriod:7]</Value>
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:4][Collection:7|182][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:11][FirstArrival:3][ArrivalPeriod:10]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:4][Collection:7|182][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:47][FirstArrival:3][ArrivalPeriod:10]</Value>
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:21][Collection:7|182][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][ShopData:3]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:26][Collection:7|182][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][ShopData:3]</Value>
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7|182][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:29][FirstArrival:20][ArrivalPeriod:4]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:43][Collection:7|182][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:65][FirstArrival:20][ArrivalPeriod:4]</Value>
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:8][Collection:7|182][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:2][RequiredObjectID:37-5][ShopData:6][CanMarry]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:44][Collection:7|182][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:2][RequiredObjectID:73-5][ShopData:6][CanMarry]</Value>
     </Item>
     <Item>
       <Key>22</Key>
@@ -119,7 +119,7 @@
     </Item>
     <Item>
       <Key>29</Key>
-      <Value>[Type:ShippingGremlin][PortRow:3][HouseID:21][InTown]</Value>
+      <Value>[Type:ShippingGremlin][PortRow:3][HouseID:57][InTown]</Value>
     </Item>
     <Item>
       <Key>30</Key>
@@ -127,7 +127,7 @@
     </Item>
     <Item>
       <Key>31</Key>
-      <Value>[Type:Mount][Walk:0-0-3-0.15-T][Width:32][Height:48][BuildingID:32][Value:500]</Value>
+      <Value>[Type:Mount][Walk:0-0-3-0.15-T][Width:32][Height:48][BuildingID:68][Value:500]</Value>
     </Item>
     <Item>
       <Key>32</Key>
