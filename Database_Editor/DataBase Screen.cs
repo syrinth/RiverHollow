@@ -1,80 +1,25 @@
-﻿using RiverHollow.Game_Managers;
+﻿using Database_Editor.Classes;
+using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using static Database_Editor.Classes.Constants;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace Database_Editor
 {
     public partial class FrmDBEditor : Form
     {
-        private enum EditableCharacterDataEnum { Dialogue, Schedule };
-        public enum XMLTypeEnum { None, Task, NPC, Class, Building, WorldObject, Item, Monster, Action, Shop, StatusEffect, Cutscene, Light, Dungeon, TextFile };
-        #region XML Files
-        string ACTIONS_XML_FILE = PATH_TO_DATA + @"\CombatActions.xml";
-        string CLASSES_XML_FILE = PATH_TO_DATA + @"\Classes.xml";
-        string NPC_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
-        string CONFIG_XML_FILE = PATH_TO_DATA + @"\Config.xml";
-        string CUTSCENE_XML_FILE = PATH_TO_DATA + @"\CutScenes.xml";
-        string DUNGEON_XML_FILE = PATH_TO_DATA + @"\DungeonData.xml";
-        string ITEM_DATA_XML_FILE = PATH_TO_DATA + @"\ItemData.xml";
-        string LIGHTS_XML_FILE = PATH_TO_DATA + @"\LightData.xml";
-        string MONSTERS_XML_FILE = PATH_TO_DATA + @"\Monsters.xml";
-        string SHOPS_XML_FILE = PATH_TO_DATA + @"\Shops.xml";
-        string STATUS_EFFECTS_XML_FILE = PATH_TO_DATA + @"\StatusEffects.xml";
-        string TASK_XML_FILE = PATH_TO_DATA + @"\Tasks.xml";
-        string WORLD_OBJECTS_DATA_XML_FILE = PATH_TO_DATA + @"\WorldObjects.xml";
-
-        string OBJECT_TEXT_XML_FILE = PATH_TO_TEXT_FILES + @"\Object_Text.xml";
-        #endregion
-
-        #region Tags
-        const string TAGS_FOR_ITEMS = "ItemKeyID,ReqItems,ItemID,GoalItem,ItemRewardID,Collection,Makes,Processes,GearID,RequestIDs,SeedID,HoneyID,UnlockItemID";
-        const string TAGS_FOR_WORLD_OBJECTS = "BuildingID,HouseID,RequiredBuildingID,UnlockObjectID,ObjectID,Wall,Floor,Resources,Place,SubObjects,TargetObjectID,RequiredObjectID,EntranceID";
-        const string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
-        const string TAGS_FOR_CLASSES = "Class";
-        const string TAGS_FOR_SHOPDATA = "ShopData,TargetShopID";
-        const string TAGS_FOR_CHARACTERS = "NPC_ID,MobID";
-        const string TAGS_FOR_STATUS_EFFECTS = "StatusEffectID";
-        const string TAGS_FOR_LIGHTS = "LightID";
-        const string TAGS_FOR_MONSTERS = "MonsterID";
-        const string TAGS_FOR_DUNGEONS = "DungeonID";
-        const string TAGS_FOR_TASKS = "TaskID";
-
-        const string ITEM_REF_TAGS = "ReqItems,Place";
-        const string TASK_REF_TAGS = "GoalItem,ItemRewardID,BuildingID,UnlockBuildingID,TargetObjectID,RequiredObjectID";
-        const string CHARACTER_REF_TAGS = "BuildingID,Collection,Class,MonsterID,ShopData,HouseID,RequiredBuildingID,RequiredObjectID,RequestIDs";
-        const string WORLD_OBJECT_REF_TAGS = "ReqItems,LightID,Makes,Processes,ItemID,SubObjects,SeedID,HoneyID,LightID";
-        const string CLASSES_REF_TAGS = "GearID,Ability,Spell";
-        const string SHOPDATA_REF_TAGS = "ItemID,BuildingID,ObjectID,NPC_ID";
-        const string CONFIG_REF_TAG = "ItemID,ObjectID";
-        const string MONSTERS_REF_TAGS = "Loot,Ability,Spell";
-        const string ACTIONS_REF_TAGS = "StatusEffectID,NPC_ID";
-        const string DUNGEON_REF_TAGS = "ObjectID,MonsterID,EntranceID";
-        public static string TEXTFILE_REF_TAGS = "ItemID,UnlockObjectID,UnlockItemID,TargetShopID,TaskID";
-        const string CUTSCENE_REF_TAGS = "";
-
-        const string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,NPCID";
-        #endregion
+        
 
         List<ItemXMLData> _liItemData;
         List<XMLData> _liWorldObjects;
 
         Dictionary<string, int> _diTabIndices;
         private int _iNextCurrID = -1;
-        public static string SPECIAL_CHARACTER = "^";
-        static string PATH_TO_CONTENT = string.Format(@"{0}\..\..\..\..\RiverHollow\RiverHollowGame\Content", System.Environment.CurrentDirectory);
-        static string PATH_TO_MAPS = PATH_TO_CONTENT + @"\Maps";
-        static string PATH_TO_DATA = PATH_TO_CONTENT + @"\Data";
-        static string PATH_TO_BACKUP = PATH_TO_CONTENT + @"\Data\Backups";
-        static string PATH_TO_TEXT_FILES = PATH_TO_DATA + @"\Text Files";
-        static string PATH_TO_DIALOGUE = PATH_TO_TEXT_FILES + @"\Dialogue";
-        static string PATH_TO_VILLAGER_DIALOGUE = PATH_TO_DIALOGUE + @"\Villagers";
-        static string PATH_TO_CUTSCENE_DIALOGUE = PATH_TO_DIALOGUE + @"\Cutscenes";
-        static string PATH_TO_SCHEDULES = PATH_TO_DATA + @"\Schedules";
 
         static Dictionary<int, List<string>> _diCutscenes;
         static Dictionary<string, Dictionary<string, List<string>>> _diCharacterSchedules;
@@ -446,7 +391,7 @@ namespace Database_Editor
                             {
                                 dataIndex++;
                                 XMLTypeEnum identifier = Util.ParseEnum<XMLTypeEnum>(DataManager.TaggedStringToDictionary(n1.InnerText)["Type"]);
-                                XMLData data = new XMLData(dataIndex.ToString(), n1.InnerText, refTags, tagsThatRefertoMe, identifier);
+                                XMLData data = new XMLData(dataIndex.ToString(), n1.InnerText, refTags, tagsThatRefertoMe, identifier, ref _diObjectText);
                                 tagList.Add(data);
                             }
                         }
@@ -591,7 +536,7 @@ namespace Database_Editor
             List<XMLData> data = new List<XMLData>();
             foreach (KeyValuePair<string, Dictionary<string, string>> kvp in ReadTaggedXMLFile(fileName))
             {
-                data.Add(new XMLData(kvp.Key, kvp.Value, tagsReferenced, tagsThatReferenceMe, FileNameToXMLType(fileName)));
+                data.Add(new XMLData(kvp.Key, kvp.Value, tagsReferenced, tagsThatReferenceMe, FileNameToXMLType(fileName), ref _diObjectText));
             }
             return data;
         }
@@ -616,7 +561,7 @@ namespace Database_Editor
                     Dictionary<string, string> stringData = worldObjectDictionary[strID];
                     if (stringData != null)
                     {
-                        _liWorldObjects.Add(new XMLData(strID, stringData, WORLD_OBJECT_REF_TAGS, TAGS_FOR_WORLD_OBJECTS, XMLTypeEnum.WorldObject));
+                        _liWorldObjects.Add(new XMLData(strID, stringData, WORLD_OBJECT_REF_TAGS, TAGS_FOR_WORLD_OBJECTS, XMLTypeEnum.WorldObject, ref _diObjectText));
                     }
                 }
                 else { break; }
@@ -636,7 +581,7 @@ namespace Database_Editor
                     Dictionary<string, string> stringData = itemDictionary[strID];
                     if (stringData != null)
                     {
-                        _liItemData.Add(new ItemXMLData(strID, stringData, ITEM_REF_TAGS, TAGS_FOR_ITEMS));
+                        _liItemData.Add(new ItemXMLData(strID, stringData, ITEM_REF_TAGS, TAGS_FOR_ITEMS, ref _diObjectText));
                     }
                 }
                 else { break; }
@@ -1040,7 +985,7 @@ namespace Database_Editor
                     _diCharacterDialogue[key] = new List<XMLData>();
                 }
 
-                frm = new FormCharExtraData("Dialogue", _diCharacterDialogue[key]);
+                frm = new FormCharExtraData("Dialogue", _diCharacterDialogue[key], ref _diObjectText);
                 frm.ShowDialog();
 
                 _diCharacterDialogue[key] = frm.StringData;
@@ -1069,7 +1014,7 @@ namespace Database_Editor
                 _diCutsceneDialogue[cutSceneFileName] = new List<XMLData>();
             }
 
-            FormCharExtraData frm = new FormCharExtraData("Cutscene Dialogue", _diCutsceneDialogue[cutSceneFileName]);
+            FormCharExtraData frm = new FormCharExtraData("Cutscene Dialogue", _diCutsceneDialogue[cutSceneFileName], ref _diObjectText);
             frm.ShowDialog();
 
             _diCutsceneDialogue[cutSceneFileName] = frm.StringData;
@@ -1081,7 +1026,7 @@ namespace Database_Editor
             XMLData data = null;
             if (liData.Count == _diTabIndices[tabIndex])
             {
-                data = new XMLData(tbID.Text, new Dictionary<string, string>(), tagsReferenced, tagsThatReferenceMe, xmlType);
+                data = new XMLData(tbID.Text, new Dictionary<string, string>(), tagsReferenced, tagsThatReferenceMe, xmlType, ref _diObjectText);
                 liData.Add(data);
             }
             else { data = liData[int.Parse(tbID.Text)]; }
@@ -1150,7 +1095,7 @@ namespace Database_Editor
                     }
                 }
 
-                data = new ItemXMLData(tbItemID.Text, tags, ITEM_REF_TAGS, TAGS_FOR_ITEMS);
+                data = new ItemXMLData(tbItemID.Text, tags, ITEM_REF_TAGS, TAGS_FOR_ITEMS, ref _diObjectText);
                 _liItemData.Add(data);
             }
             else
@@ -1795,547 +1740,9 @@ namespace Database_Editor
         #endregion
 
         #region Classes
-        public class XMLData
-        {
-            protected struct LinkedItem
-            {
-                public TMXData MapData;
-                public XMLData ItemData;
-                public string LinkedTag;
+       
 
-                public LinkedItem(XMLData data, string tag)
-                {
-                    MapData = null;
-                    ItemData = data;
-                    LinkedTag = tag;
-                }
-                public LinkedItem(TMXData data, string tag)
-                {
-                    MapData = data;
-                    ItemData = null;
-                    LinkedTag = tag;
-                }
-            }
-            protected string _sName;
-            public string Name => _sName;
-            protected string _sDescription;
-            public string Description => _sDescription;
-            protected XMLTypeEnum _eXMLType;
-            protected int _iID;
-            public int ID => _iID;
-            protected List<string> _liTagsReferenced;
-            protected List<string> _liTagsThatReferToMe;
-            public List<string> TagsThatReferToMe => _liTagsThatReferToMe;
-            protected List<LinkedItem> _liLinkedItems;
-            protected List<LinkedItem> _liLinkedMaps;
-            protected Dictionary<string, string> _diTags;
-
-            public XMLData(string id, Dictionary<string, string> stringData, string tagsReferenced, string tagsThatReferToMe, XMLTypeEnum xmlType)
-            {
-                _liLinkedMaps = new List<LinkedItem>();
-                _liLinkedItems = new List<LinkedItem>();
-                _liTagsReferenced = new List<string>(tagsReferenced.Split(','));
-                _liTagsThatReferToMe = new List<string>(tagsThatReferToMe.Split(','));
-
-                string textID = Util.GetEnumString(xmlType) + "_" + id;
-                if (xmlType == XMLTypeEnum.TextFile)
-                {
-                    if (stringData.ContainsKey("Name"))
-                    {
-                        _sName = stringData["Name"];
-                    }
-                }
-                else if (xmlType != XMLTypeEnum.None)
-                {
-                    if (_diObjectText.ContainsKey(textID))
-                    {
-                        _sName = _diObjectText[textID]["Name"];
-
-                        if (_diObjectText[textID].ContainsKey("Description"))
-                        {
-                            _sDescription = _diObjectText[textID]["Description"];
-                        }
-                    }
-                }
-
-                _iID = int.Parse(id);
-                _diTags = stringData;
-
-                _eXMLType = xmlType;
-            }
-            public XMLData(string id, string stringData, string tagsReferenced, string tagsThatReferToMe, XMLTypeEnum xmlType) : this(id, DataManager.TaggedStringToDictionary(stringData), tagsReferenced, tagsThatReferToMe, xmlType) { }
-
-            public string GetStringValue(string value)
-            {
-                return _diTags[value];
-            }
-
-            public string GetTagsString()
-            {
-                string rv = string.Empty;
-
-                foreach (KeyValuePair<string, string> kvp in _diTags)
-                {
-                    rv += "[" + kvp.Key + (string.IsNullOrEmpty(kvp.Value) ? "" : ":" + kvp.Value) + "]";
-                }
-
-                return rv;
-            }
-
-            public string GetTagValue(string key)
-            {
-                if (_diTags.ContainsKey(key)) { return _diTags[key]; }
-                else { return string.Empty; }
-            }
-            public void SetTextData(string name)
-            {
-                _sName = name;
-            }
-            public void SetTextData(string name, string desc)
-            {
-                _sName = name;
-                _sDescription = desc;
-            }
-            public void SetTagInfo(string key, string value)
-            {
-                _diTags[key] = value;
-            }
-            public void AppendToTag(string key, string value)
-            {
-                _diTags[key] += "|" + value;
-            }
-            public void ClearTagInfo()
-            {
-                _diTags.Clear();
-            }
-
-            /// <summary>
-            /// Checks the tags to see if there are any references to the given ID
-            /// among the relevant tags.
-            /// </summary>
-            /// <param name="id">The ID to look for</param>
-            /// <returns>True if there is at least one match</returns>
-            public void CheckForObjectLink(XMLData testData)
-            {
-                foreach (string s in _liTagsReferenced)
-                {
-                    if (testData._liTagsThatReferToMe.Contains(s))
-                    {
-                        if(CheckTagForID(s, testData.ID))
-                        {
-                            testData.AddLinkedObject(this, s);
-                        }
-                    }
-                }
-            }
-
-            /// <summary>
-            /// Call this to check the given tag for the given ID. This method is to
-            /// be used for any entry that has multiples of the same type of thing in it
-            /// that are delineated by a '|'. For example, a tag for the multiple things a Machine
-            /// can make
-            /// </summary>
-            /// <param name="tag">Tag to look at</param>
-            /// <param name="id">The ID to look for</param>
-            /// <param name="val">Reference to the success or this and other checks</param>
-            /// <returns>True if a match exists</returns>
-            private bool CheckTagForID(string tag, int id)
-            {
-                bool rv = false;
-
-                //If we don't have the key, don't proceed
-                if (_diTags.ContainsKey(tag))
-                {
-                    //Isolate every group of entries that are delineated by the '|'
-                    string[] split = Util.FindParams(_diTags[tag]);
-                    foreach (string s in split)
-                    {
-                        //The first entry is always the object, split by the '-', find it and compare
-                        string[] splitData = s.Split('-');
-
-                        if (_eXMLType == XMLTypeEnum.NPC && tag == "MonsterID")
-                        {
-                            for (int i=0; i < splitData.Length; i++)
-                            {
-                                if (int.Parse(splitData[i]) == id)
-                                {
-                                    rv = true;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (int.Parse(splitData[0]) == id)
-                            {
-                                rv = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                return rv;
-            }
-
-            /// <summary>
-            /// Method to change the ID of the data from one value to another.
-            /// 
-            /// After changing, it's important to iterate over all the linked entries
-            /// and tell them to replace the old ID with the new one.
-            /// </summary>
-            /// <param name="newID"></param>
-            public virtual void ChangeID(int newID, bool item = true)
-            {
-                if (_iID != newID)
-                {
-                    int oldID = _iID;
-                    _iID = newID;
-
-                    foreach (LinkedItem d in _liLinkedItems)
-                    {
-                        XMLData data = d.ItemData;
-                        data.ReplaceLinkedIDs(oldID, _iID, d.LinkedTag);
-                    }
-
-                    foreach (LinkedItem d in _liLinkedMaps)
-                    {
-                        TMXData data = d.MapData;
-                        data.ReplaceID(oldID, newID, d.LinkedTag);
-                    }
-                }
-            }
-
-            /// <summary>
-            /// Iterates through the relevant tags to replace any instances of the 
-            /// old ID with the new ID.
-            /// </summary>
-            /// <param name="oldID">The old ID that has now changed</param>
-            /// <param name="newID">The new ID to reference</param>
-            /// <param name="tag">The specific tag to replace</param>
-            public void ReplaceLinkedIDs(int oldID, int newID, string tag)
-            {
-                ReplaceID(tag, oldID, newID);
-            }
-
-            /// <summary>
-            /// Call this to check the given tag for the given ID.
-            /// 
-            /// Replace any instances of the old ID that are found with the new ID
-            /// /// </summary>
-            /// <param name="tag">Tag to look at</param>
-            /// <param name="oldID">The ID to look for</param>
-            /// <param name="newID">The ID to replace the olf one with</param>
-            public void ReplaceID(string tag, int oldID, int newID)
-            {
-                //If we don't have the key, don't proceed
-                if (_diTags.ContainsKey(tag))
-                {
-                    //Isolate every group of entries that are delineated by the '|'
-                    string[] split = Util.FindParams(_diTags[tag]);
-                    _diTags[tag] = string.Empty;
-                    for (int i = 0; i < split.Length; i++)
-                    {
-                        //The first entry is always the item, split by the '-', find it and compare
-                        //If the value matches, replace the split string id with the newID surrounded by
-                        //the special character. The special character prevents subsequent changes from
-                        //overwriting this change.
-                        string[] splitData = split[i].Split('-');
-
-                        if (_eXMLType == XMLTypeEnum.NPC && tag == "MonsterID")
-                        {
-                            for (int j = 0; j < splitData.Length; j++)
-                            {
-                                if (splitData[j] == oldID.ToString())
-                                {
-                                    splitData[j] = SPECIAL_CHARACTER + newID.ToString() + SPECIAL_CHARACTER;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (splitData[0] == oldID.ToString())
-                            {
-                                splitData[0] = SPECIAL_CHARACTER + newID.ToString() + SPECIAL_CHARACTER;
-                            }
-                        }
-
-                        //Iterate over any linked values and concatenate them to re-add them to the entry
-                        for (int j = 0; j < splitData.Length; j++)
-                        {
-                            _diTags[tag] += splitData[j];
-
-                            //If there is a linked value, add a '-' and continue
-                            if (j < splitData.Length - 1)
-                            {
-                                _diTags[tag] += "-";
-                            }
-                        }
-
-                        //There may or may not be any additional values, if there are more coming, add the '|'
-                        if (i < split.Length - 1)
-                        {
-                            _diTags[tag] += "|";
-                        }
-                    }
-                }
-            }
-
-            /// <summary>
-            /// Adds the given XMLData to the LinkedITems list.
-            /// 
-            /// Do nto do this if the list already contains it or if the
-            /// XMLData is this entry.
-            /// </summary>
-            /// <param name="d">The linked entry to add</param>
-            public void AddLinkedObject(XMLData d, string tag)
-            {
-                if (this != d)
-                {
-                    _liLinkedItems.Add(new LinkedItem(d, tag));
-                }
-            }
-            public void AddLinkedMap(TMXData d, string tag)
-            {
-                _liLinkedMaps.Add(new LinkedItem(d, tag));
-            }
-
-            /// <summary>
-            /// Iterates through each tag and remove all instances of the special character
-            /// </summary>
-            public void StripSpecialCharacter()
-            {
-                foreach (string s in new List<string>(_diTags.Keys))
-                {
-                    if (_diTags[s].Contains(SPECIAL_CHARACTER))
-                    {
-                        string val = _diTags[s];
-                        _diTags[s] = val.Replace(SPECIAL_CHARACTER, "");
-                    }
-                }
-            }
-        }
-        public class ItemXMLData : XMLData
-        {
-            ItemEnum _eType;
-            public ItemEnum ItemType => _eType;
-
-            public ItemXMLData(string id, Dictionary<string, string> stringData, string tagsReferenced, string tagsThatReferenceMe) : base(id, stringData, tagsReferenced, tagsThatReferenceMe, XMLTypeEnum.Item)
-            {
-                _eType = Util.ParseEnum<ItemEnum>(_diTags["Type"]);
-                string textID = "Item_" + id;
-            }
-
-            public void SetItemType(ItemEnum e)
-            {
-                _eType = e;
-            }
-        }
-        public class TMXData
-        {
-            List<string> _liAllLines;
-            public List<string> AllLines => _liAllLines;
-            public TMXData(string fileName)
-            {
-                _liAllLines = new List<string>();
-
-                string line;
-                string fullPathToFile = string.Format(@"{0}\..\..\..\..\Content\Maps\{1}", System.Environment.CurrentDirectory, fileName);
-                System.IO.StreamReader file = new System.IO.StreamReader(fileName);
-                while ((line = file.ReadLine()) != null)
-                {
-                    _liAllLines.Add(line);
-                }
-
-                file.Close();
-            }
-
-            /// <summary>
-            /// Call to determine if the TMX file refers to the referenced id in a given tag.
-            /// Needs to be careful here because maps can refer to multiple things, so the tag
-            /// input is very important to be coordinated with what ovbject type is being passed in
-            /// </summary>
-            /// <param name="data">The XML data file to compare against</param>
-            /// <returns></returns>
-            public void ReferencesXMLObject(XMLData data)
-            {
-                //Read through each line
-                for (int i = 0; i < _liAllLines.Count; i++)
-                {
-                    string s = _liAllLines[i];
-                    if (s.Contains("<property name"))
-                    {
-                        int indexOfOpenBrace = s.IndexOf("<");
-
-                        string[] propertyParams = s.Substring(indexOfOpenBrace).Split(' ');    //Find all the entries of the property tag
-                        string propertyName = string.Empty;
-                        string propertyValue = string.Empty;
-
-                        //Which index is the value entry
-                        GetNameAndValue(ref propertyName, ref propertyValue, propertyParams);
-
-                        //We're going to loop through every tag we've been told to search for
-                        List<string> referencedTags = new List<string>(MAP_REF_TAGS.Split(','));
-                        foreach (string refTag in referencedTags)
-                        {
-                            if (data.TagsThatReferToMe.Contains(refTag))
-                            {
-                                if (propertyName.Equals(refTag))
-                                {
-                                    //Split the values in the property value by the '|' delimeter 
-                                    string[] splitValues = Util.FindParams(propertyValue);
-                                    foreach (string spVal in splitValues)
-                                    {
-                                        string[] splitArgs = spVal.Split('-');
-                                        //Do we have a match? return true
-                                        if (splitArgs[0] == data.ID.ToString())
-                                        {
-                                            data.AddLinkedMap(this, refTag);
-                                        }
-                                    }
-                                }
-                            }
-                        }   
-                    }
-                }
-            }
-
-            /// <summary>
-            /// Call this to check the given tag for the given ID.
-            /// 
-            /// Replace any instances of the old ID that are found with the new ID
-            /// /// </summary>
-            /// <param name="tag">Tags to look at, delmitited by ','</param>
-            /// <param name="oldID">The ID to look for</param>
-            /// <param name="newID">The ID to replace the olf one with</param>
-            public void ReplaceID(int oldID, int newID, string tag)
-            {
-                //Read through every  line of the file
-                for (int i = 0; i < _liAllLines.Count; i++)
-                {
-                    string s = _liAllLines[i];
-
-                    //If the line is a property line, we need to read it
-                    if (s.Contains("<property name"))
-                    {
-                        int indexOfOpenBrace = s.IndexOf("<");
-                        string buffer = s.Substring(0, indexOfOpenBrace);       //Save this to preserve however many spaces are at the beginning of the line
-                        string newValue = "value=\"";                           //The start of a value tag
-
-                        string[] propertyParams = s.Substring(indexOfOpenBrace).Split(' ');    //Find all the entries of the property tag
-                        string propertyName = string.Empty;
-                        string propertyValue = string.Empty;
-
-                        //Which index is the value entry
-                        int valueIndex = GetNameAndValue(ref propertyName, ref propertyValue, propertyParams);
-
-                        bool found = false;
-
-                        //We're going to loop through every tag we've been told to search for
-
-                        if (propertyName.Equals(tag))
-                        {
-                            //Split the values in the property value by the '|' delimeter 
-                            string[] splitValues = Util.FindParams(propertyValue);
-                            for (int j = 0; j < splitValues.Length; j++)
-                            {
-                                string[] splitArgs = splitValues[j].Split('-');
-                                //If we found a match, set the flag to true and overwrite the value of this string
-                                if (splitArgs[0] == oldID.ToString())
-                                {
-                                    found = true;
-                                    splitArgs[0] = SPECIAL_CHARACTER + newID.ToString() + SPECIAL_CHARACTER;
-                                }
-
-                                //Concatenate it to the newValue
-                                newValue += splitArgs[0];
-
-                                //If there are more entries coming, add the '|' back
-                                if (splitArgs.Length > 1)
-                                {
-                                    for (int k = 1; k < splitArgs.Length; k++)
-                                    {
-                                        newValue = newValue + "-" + splitArgs[k];
-                                    }
-                                }
-
-                                //If there are more entries coming, add the '|' back
-                                if (j < splitValues.Length - 1)
-                                {
-                                    newValue += "|";
-                                }
-                            }
-
-                            //Close the quote
-                            newValue += "\"";
-                        }
-
-                        //Put the buffer back at the beginning of the line
-                        _liAllLines[i] = buffer;
-                        for (int j = 0; j < propertyParams.Length; j++)
-                        {
-                            //Either write the params as we get them, or sub in the dummy value, value is always
-                            //last so we needto close the tag.
-                            if (j == valueIndex && found) { _liAllLines[i] += newValue + "/>"; }
-                            else { _liAllLines[i] += propertyParams[j]; }
-
-                            //If there's another entry coming, put a space there
-                            if (j < propertyParams.Length - 1)
-                            {
-                                _liAllLines[i] += " ";
-                            }
-                        }
-                    }
-                }
-            }
-
-            /// <summary>
-            /// This method will iterate through an array of property parameters and retrieve
-            /// the value of the name and the value param.
-            /// </summary>
-            /// <param name="propertyName">ref to the propertyName string</param>
-            /// <param name="propertyValue">ref to the propertyValue string</param>
-            /// <param name="propertyParams">The propery param arrays</param>
-            /// <returns>The index of the value parameter</returns>
-            private int GetNameAndValue(ref string propertyName, ref string propertyValue, string[] propertyParams)
-            {
-                int rv = -1;
-                //Iterate over the property parameters and collect the name of the property and its value
-                for (int j = 0; j < propertyParams.Length; j++)
-                {
-                    if (propertyParams[j].Contains("="))
-                    {
-                        string[] splitParam = propertyParams[j].Split('=');
-                        string pName = splitParam[0].Replace("\"", "");
-                        string pValue = splitParam[1].Replace("\"", "").Replace("/", "").Replace(">", "");
-
-                        if (pName.Equals("name")) { propertyName = pValue; }
-                        else if (pName.Equals("value"))
-                        {
-                            rv = j;
-                            propertyValue = pValue;
-                        }
-                    }
-                }
-
-                return rv;
-            }
-
-            /// <summary>
-            /// Iterates through each line and remove all instances of the special character
-            /// </summary>
-            public void StripSpecialCharacter()
-            {
-                for (int i = 0; i < _liAllLines.Count; i++)
-                {
-                    string s = _liAllLines[i];
-                    if (s.Contains(SPECIAL_CHARACTER))
-                    {
-                        string val = s;
-                        _liAllLines[i] = val.Replace(SPECIAL_CHARACTER, "");
-                    }
-                }
-            }
-        }
+        
 
         #endregion
 
@@ -2490,7 +1897,7 @@ namespace Database_Editor
         {
             FormCharExtraData frm = null;
 
-            frm = new FormCharExtraData("Dialogue", _liGameText);
+            frm = new FormCharExtraData("Dialogue", _liGameText, ref _diObjectText);
             frm.ShowDialog();
 
             _liGameText = frm.StringData;
@@ -2500,7 +1907,7 @@ namespace Database_Editor
         {
             FormCharExtraData frm = null;
 
-            frm = new FormCharExtraData("Dialogue", _liMailbox);
+            frm = new FormCharExtraData("Dialogue", _liMailbox, ref _diObjectText);
             frm.ShowDialog();
 
             _liMailbox = frm.StringData;

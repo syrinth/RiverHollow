@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Database_Editor.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using static Database_Editor.FrmDBEditor;
+using static Database_Editor.Classes.Constants;
 
 namespace Database_Editor
 {
@@ -11,16 +12,16 @@ namespace Database_Editor
         enum DataMode { Dialogue, Schedule };
         DataMode _eDataMode;
         int _iIndex = 0;
-        List<XMLData> _liStringData;
-        public List<XMLData> StringData => _liStringData;
-
-        Dictionary<string, List<string>> _diListData;
-        public Dictionary<string, List<string>> ListData => _diListData;
-        public FormCharExtraData(string value, List<XMLData> diCharacterData)
+        public List<XMLData> StringData { get; }
+        public Dictionary<string, List<string>> ListData { get; }
+        Dictionary<string, Dictionary<string, string>> ObjectTextDicitonary;
+        public FormCharExtraData(string value, List<XMLData> diCharacterData, ref Dictionary<string, Dictionary<string, string>> _diObjectText)
         {
             InitializeComponent();
 
-            _liStringData = diCharacterData;
+            ObjectTextDicitonary = _diObjectText;
+
+            StringData = diCharacterData;
             this.Text = value;
             LoadDataGridViewString();
 
@@ -32,7 +33,7 @@ namespace Database_Editor
         {
             InitializeComponent();
 
-            _diListData = diCharacterData;
+            ListData = diCharacterData;
             this.Text = value;
             LoadDataGridViewList();
 
@@ -44,7 +45,7 @@ namespace Database_Editor
         {
             int index = 0;
             dgvCharExtraData.Rows.Clear();
-            foreach (XMLData value in _liStringData)
+            foreach (XMLData value in StringData)
             {
                 dgvCharExtraData.Rows.Add();
                 DataGridViewRow row = dgvCharExtraData.Rows[index++];
@@ -54,13 +55,13 @@ namespace Database_Editor
             }
 
             SelectRow(dgvCharExtraData, _iIndex);
-            LoadDataInfo(_liStringData[_iIndex]);
+            LoadDataInfo(StringData[_iIndex]);
         }
         private void LoadDataGridViewList()
         {
             int index = 0;
             dgvCharExtraData.Rows.Clear();
-            foreach (KeyValuePair<string, List<string>> kvp in _diListData)
+            foreach (KeyValuePair<string, List<string>> kvp in ListData)
             {
                 dgvCharExtraData.Rows.Add();
                 DataGridViewRow row = dgvCharExtraData.Rows[index];
@@ -102,7 +103,7 @@ namespace Database_Editor
             tbCharExtraDataName.Text = keyValue;
 
             dgvExtraTags.Rows.Clear();
-            foreach (string s in _diListData[keyValue])
+            foreach (string s in ListData[keyValue])
             {
                 dgvExtraTags.Rows.Add(s);
             }
@@ -117,7 +118,7 @@ namespace Database_Editor
                     SaveDictionaryData();
 
                     _iIndex = e.RowIndex;
-                    LoadDataInfo(_liStringData[_iIndex]);
+                    LoadDataInfo(StringData[_iIndex]);
                 }
                 else if (_eDataMode == DataMode.Schedule)
                 {
@@ -173,12 +174,12 @@ namespace Database_Editor
             DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
 
             XMLData data = null;
-            if (_iIndex == _liStringData.Count)
+            if (_iIndex == StringData.Count)
             {
-                data = new XMLData(_iIndex.ToString(), new Dictionary<string, string>(), FrmDBEditor.TEXTFILE_REF_TAGS, "", XMLTypeEnum.TextFile);
-                _liStringData.Add(data);
+                data = new XMLData(_iIndex.ToString(), new Dictionary<string, string>(), Constants.TEXTFILE_REF_TAGS, "", XMLTypeEnum.TextFile, ref ObjectTextDicitonary);
+                StringData.Add(data);
             }
-            else { data = _liStringData[_iIndex]; }
+            else { data = StringData[_iIndex]; }
 
             data.ClearTagInfo();
             data.SetTextData(tbCharExtraDataName.Text);
@@ -198,7 +199,7 @@ namespace Database_Editor
         }
         private void SaveListData()
         {
-            _diListData.Remove(_diListData.ElementAt(_iIndex).Key);
+            ListData.Remove(ListData.ElementAt(_iIndex).Key);
 
             List<string> listInfo = new List<string>();
             foreach (DataGridViewRow r in dgvExtraTags.Rows)
@@ -208,7 +209,7 @@ namespace Database_Editor
                     listInfo.Add(r.Cells[0].Value.ToString());
                 }
             }
-            _diListData[tbCharExtraDataName.Text] = listInfo;
+            ListData[tbCharExtraDataName.Text] = listInfo;
             DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
             row.Cells["colCharExtraName"].Value = tbCharExtraDataName.Text;
         }
