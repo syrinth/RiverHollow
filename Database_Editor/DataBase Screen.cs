@@ -13,8 +13,6 @@ namespace Database_Editor
 {
     public partial class FrmDBEditor : Form
     {
-        
-
         List<ItemXMLData> _liItemData;
         List<XMLData> _liWorldObjects;
 
@@ -1408,6 +1406,70 @@ namespace Database_Editor
 
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            SaveAll();
+        }
+
+        private void SaveXMLDataDictionary(Dictionary<string, List<XMLData>> dictionaryData, StreamWriter sWriter)
+        {
+            foreach (string s in dictionaryData.Keys)
+            {
+                foreach (XMLData data in dictionaryData[s])
+                {
+                    data.StripSpecialCharacter();
+                }
+                SaveXMLData(dictionaryData[s], s, sWriter);
+            }
+        }
+
+        private void tabCtl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AutoSave();
+
+            if (tabCtl.SelectedTab == tabCtl.TabPages["tabActions"]) { dgvActions.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCharacters"]) { dgvCharacters.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabClasses"]) { dgvClasses.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscenes"]) { dgvCutscenes.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeons"]) { dgvDungeons.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItems"]) { dgvItems.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabLights"]) { dgvLights.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabMonsters"]) { dgvMonsters.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabShops"]) { dgvShops.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabStatusEffects"]) { dgvStatusEffects.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabTasks"]) { dgvTasks.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabWorldObjects"]) { dgvWorldObjects.Focus(); }
+
+            _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
+        }
+
+        private void Backup()
+        {
+            Backup(PATH_TO_DATA, PATH_TO_DATA + @"\Backups");
+        }
+        private static void Backup(string root, string dest)
+        {
+            foreach (var directory in Directory.GetDirectories(root))
+            {
+                if (directory != PATH_TO_DATA + @"\Backups")
+                {
+                    string dirName = Path.GetFileName(directory);
+                    if (!Directory.Exists(Path.Combine(dest, dirName)))
+                    {
+                        Directory.CreateDirectory(Path.Combine(dest, dirName));
+                    }
+                    Backup(directory, Path.Combine(dest, dirName));
+                }
+            }
+
+            foreach (var file in Directory.GetFiles(root))
+            {
+                string destFile = Path.Combine(dest, Path.GetFileName(file));
+                if (File.Exists(destFile)) { File.Delete(destFile); }
+                File.Copy(file, destFile);
+            }
+        }
+
+        private void SaveAll()
+        {
             Backup();
             AutoSave();
             StreamWriter sWriter = PrepareXMLFile(OBJECT_TEXT_XML_FILE, "Dictionary[string, string]");
@@ -1421,7 +1483,7 @@ namespace Database_Editor
             _liWorldObjects.Sort((x, y) =>
             {
                 var typeComp = x.GetTagValue("Type").CompareTo(y.GetTagValue("Type"));
-                if (typeComp == 0) { return x.ID.CompareTo(y.ID); }
+                if (typeComp == 0) { return x.Name.CompareTo(y.Name); }
                 else { return typeComp; }
             });
             List<ItemXMLData> itemDataList = new List<ItemXMLData>();
@@ -1492,65 +1554,6 @@ namespace Database_Editor
             LoadAllInfoPanels();
         }
 
-        private void SaveXMLDataDictionary(Dictionary<string, List<XMLData>> dictionaryData, StreamWriter sWriter)
-        {
-            foreach (string s in dictionaryData.Keys)
-            {
-                foreach (XMLData data in dictionaryData[s])
-                {
-                    data.StripSpecialCharacter();
-                }
-                SaveXMLData(dictionaryData[s], s, sWriter);
-            }
-        }
-
-        private void tabCtl_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            AutoSave();
-
-            if (tabCtl.SelectedTab == tabCtl.TabPages["tabActions"]) { dgvActions.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCharacters"]) { dgvCharacters.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabClasses"]) { dgvClasses.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscenes"]) { dgvCutscenes.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeons"]) { dgvDungeons.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItems"]) { dgvItems.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabLights"]) { dgvLights.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabMonsters"]) { dgvMonsters.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabShops"]) { dgvShops.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabStatusEffects"]) { dgvStatusEffects.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabTasks"]) { dgvTasks.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabWorldObjects"]) { dgvWorldObjects.Focus(); }
-
-            _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
-        }
-
-        private void Backup()
-        {
-            Backup(PATH_TO_DATA, PATH_TO_DATA + @"\Backups");
-        }
-        private static void Backup(string root, string dest)
-        {
-            foreach (var directory in Directory.GetDirectories(root))
-            {
-                if (directory != PATH_TO_DATA + @"\Backups")
-                {
-                    string dirName = Path.GetFileName(directory);
-                    if (!Directory.Exists(Path.Combine(dest, dirName)))
-                    {
-                        Directory.CreateDirectory(Path.Combine(dest, dirName));
-                    }
-                    Backup(directory, Path.Combine(dest, dirName));
-                }
-            }
-
-            foreach (var file in Directory.GetFiles(root))
-            {
-                string destFile = Path.Combine(dest, Path.GetFileName(file));
-                if (File.Exists(destFile)) { File.Delete(destFile); }
-                File.Copy(file, destFile);
-            }
-        }
-
         private void AutoSave()
         {
             TabPage prevPage = tabCtl.TabPages[_diTabIndices["PreviousTab"]];
@@ -1585,33 +1588,6 @@ namespace Database_Editor
             dataFile.WriteLine("  </Asset>");
             dataFile.WriteLine("</XnaContent>");
             dataFile.Close();
-        }
-
-        public void SaveXMLDictionarXMLDataList(Dictionary<int, List<XMLData>> dataList, string fileName, XMLTypeEnum xmlType, StreamWriter sWriter)
-        {
-            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[int, List[string]]");
-
-            foreach (KeyValuePair<int, List<XMLData>> kvp in dataList)
-            {
-                string key = string.Format("      <Key>{0}</Key>", kvp.Key);
-                string value = "      <Value>" + System.Environment.NewLine;
-                string item = string.Empty;
-                foreach (XMLData s in kvp.Value)
-                {
-                    value += string.Format("        <Item>{0}</Item>{1}", s.GetTagsString(), System.Environment.NewLine);
-                }
-                value += "      </Value>";
-                WriteXMLEntry(dataFile, key, value);
-
-                string name = GetTextValue(xmlType, kvp.Key, "Name");
-                string description = GetTextValue(xmlType, kvp.Key, "Description");
-
-                string textValue = string.Format("[Name:{0}]", name);
-                if (!string.IsNullOrEmpty(description)) { value += string.Format("[Description:{0}]", description); }
-                WriteXMLEntry(sWriter, string.Format("      <Key>{0}</Key>", Util.GetEnumString(xmlType) + "_" + kvp.Key), string.Format("      <Value>{0}</Value>", textValue));
-            }
-
-            CloseStreamWriter(ref dataFile);
         }
 
         public void SaveXMLDictionaryIntKeyList(Dictionary<int, List<string>> dataList, string fileName, XMLTypeEnum xmlType, StreamWriter sWriter)
@@ -1689,7 +1665,7 @@ namespace Database_Editor
                 XMLTypeEnum type = FileNameToXMLType(fileName);
                 if (type != XMLTypeEnum.None)
                 {
-                    id = Util.GetEnumString(type) + "_" + data.ID.ToString();
+                    id = data.GetObjectTextID();
                 }
 
                 WriteXMLEntry(dataFile, string.Format("      <Key>{0}</Key>", data.ID), string.Format("      <Value>{0}</Value>", data.GetTagsString()));
@@ -1737,13 +1713,6 @@ namespace Database_Editor
 
             dataFile.Close();
         }
-        #endregion
-
-        #region Classes
-       
-
-        
-
         #endregion
 
         #region Context Menu Methods

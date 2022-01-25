@@ -36,14 +36,16 @@ namespace Database_Editor.Classes
         protected List<string> _liTagsReferenced;
         protected List<string> _liTagsThatReferToMe;
         public List<string> TagsThatReferToMe => _liTagsThatReferToMe;
-        protected List<LinkedObject> _liLinkedItems;
+        protected List<LinkedObject> _liLinkedObjects;
+        protected List<LinkedObject> _liLinkedTextObjects;
         protected List<LinkedObject> _liLinkedMaps;
         protected Dictionary<string, string> _diTags;
 
         public XMLData(string id, Dictionary<string, string> stringData, string tagsReferenced, string tagsThatReferToMe, XMLTypeEnum xmlType, ref Dictionary<string, Dictionary<string, string>> objectData)
         {
             _liLinkedMaps = new List<LinkedObject>();
-            _liLinkedItems = new List<LinkedObject>();
+            _liLinkedObjects = new List<LinkedObject>();
+            _liLinkedTextObjects = new List<LinkedObject>();
             _liTagsReferenced = new List<string>(tagsReferenced.Split(','));
             _liTagsThatReferToMe = new List<string>(tagsThatReferToMe.Split(','));
 
@@ -139,6 +141,21 @@ namespace Database_Editor.Classes
             }
 
             //Search text and name entries
+            if (_diTags.ContainsKey("Text"))
+            {
+                if (_diTags["Text"].Contains(LOOKUP_CHARACTER + testData.GetObjectTextID() + LOOKUP_CHARACTER))
+                {
+                    testData.AddLinkedTextEntry(this, "Text");
+                }
+            }
+
+            if (_diTags.ContainsKey("Name"))
+            {
+                if (_diTags["Name"].Contains(LOOKUP_CHARACTER + testData.GetObjectTextID() + LOOKUP_CHARACTER))
+                {
+                    testData.AddLinkedTextEntry(this, "Name");
+                }
+            }
         }
 
         /// <summary>
@@ -203,7 +220,7 @@ namespace Database_Editor.Classes
                 int oldID = _iID;
                 _iID = newID;
 
-                foreach (LinkedObject d in _liLinkedItems)
+                foreach (LinkedObject d in _liLinkedObjects)
                 {
                     XMLData data = d.ObjectData;
                     data.ReplaceLinkedIDs(oldID, _iID, d.LinkedTag);
@@ -214,6 +231,21 @@ namespace Database_Editor.Classes
                     TMXData data = d.MapData;
                     data.ReplaceID(oldID, newID, d.LinkedTag);
                 }
+
+                foreach(LinkedObject d in _liLinkedTextObjects)
+                {
+                    XMLData data = d.ObjectData;
+                    data.ReplaceTextIDValue(oldID, newID, d.LinkedTag, _eXMLType);
+                }
+            }
+        }
+
+        public void ReplaceTextIDValue(int oldID, int newID, string tag, XMLTypeEnum xmlType)
+        {
+            //If we don't have the key, don't proceed
+            if (_diTags.ContainsKey(tag))
+            {
+                _diTags[tag] = _diTags[tag].Replace(LOOKUP_CHARACTER + ConstructObjectTextID(xmlType, oldID) + LOOKUP_CHARACTER, LOOKUP_CHARACTER + SPECIAL_CHARACTER + ConstructObjectTextID(xmlType, newID) + SPECIAL_CHARACTER + LOOKUP_CHARACTER);
             }
         }
 
@@ -303,12 +335,20 @@ namespace Database_Editor.Classes
         {
             if (this != d)
             {
-                _liLinkedItems.Add(new LinkedObject(d, tag));
+                _liLinkedObjects.Add(new LinkedObject(d, tag));
             }
         }
         public void AddLinkedMap(TMXData d, string tag)
         {
             _liLinkedMaps.Add(new LinkedObject(d, tag));
+        }
+
+        public void AddLinkedTextEntry(XMLData d, string tag)
+        {
+            if (this != d)
+            {
+                _liLinkedTextObjects.Add(new LinkedObject(d, tag));
+            }
         }
 
         /// <summary>
@@ -324,6 +364,16 @@ namespace Database_Editor.Classes
                     _diTags[s] = val.Replace(SPECIAL_CHARACTER, "");
                 }
             }
+        }
+
+        public string GetObjectTextID()
+        {
+            return ConstructObjectTextID(_eXMLType, ID);
+        }
+
+        public static string ConstructObjectTextID(XMLTypeEnum xmlType, int ID)
+        {
+            return Util.GetEnumString(xmlType) + "_" + ID.ToString();
         }
     }
 }

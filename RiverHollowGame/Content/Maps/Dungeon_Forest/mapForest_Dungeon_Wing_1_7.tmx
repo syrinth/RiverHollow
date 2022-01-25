@@ -84,12 +84,12 @@
  <objectgroup id="5" name="MapObject">
   <object id="40" name="ResourceSpawn" x="33.5001" y="96.4173" width="124.333" height="109.833">
    <properties>
-    <property name="Resources" value="53"/>
+    <property name="Resources" value="62"/>
    </properties>
   </object>
   <object id="41" name="ResourceSpawn" x="36.5007" y="211.584" width="264.333" height="41.833">
    <properties>
-    <property name="Resources" value="53"/>
+    <property name="Resources" value="62"/>
    </properties>
   </object>
   <object id="47" name="DungeonObject" x="272.01" y="176.01" width="32" height="32">

@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Finally. It's nice to speak to someone who can help me. I'm $Character_4$, nice to meet you, etcetera. Be a dear and arrange me someplace to stay will you? My research has been stalled for long enough.][UnlockBuildingID:52][Name:Introduction]</Value>
+      <Value>[Text:Finally. It's nice to speak to someone who can help me. I'm $NPC_4$, nice to meet you, etcetera. Be a dear and arrange me someplace to stay will you? My research has been stalled for long enough.][UnlockBuildingID:52][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -57,20 +57,20 @@ I swear, he doesn't listen to a word I say.][Villager:3][Name:Emmanuel_1]</Value
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Text:$Name$, you know $Character_6$ right? Do you have any idea why she asked me to arm wrestle the other day?
+      <Value>[Text:$Name$, you know $NPC_6$ right? Do you have any idea why she asked me to arm wrestle the other day?
 I didn't know what to say, so I just stood there, staring at her until she left.][Villager:6][Name:Daria_1]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Text:I tried to talk with $Character_17$ the other day but she just blew me off. She said she had no time for me! Can you believe that!][Villager:17][Name:Griselda_1]</Value>
+      <Value>[Text:I tried to talk with $NPC_17$ the other day but she just blew me off. She said she had no time for me! Can you believe that!][Villager:17][Name:Griselda_1]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Text:You know, $Character_2$ is a lot more knowledgeable than he looks, once you get him to stop babbling and talk straight.][Villager:2][Name:Michael_1]</Value>
+      <Value>[Text:You know, $NPC_2$ is a lot more knowledgeable than he looks, once you get him to stop babbling and talk straight.][Villager:2][Name:Michael_1]</Value>
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Text:$Character_11$ said she was going to try to get a book for me, but it hasn't arrived yet. Do you think it's too soon to ask her about it?][Villager:11][Name:Isabelle_1]</Value>
+      <Value>[Text:$NPC_11$ said she was going to try to get a book for me, but it hasn't arrived yet. Do you think it's too soon to ask her about it?][Villager:11][Name:Isabelle_1]</Value>
     </Item>
     <Item>
       <Key>17</Key>

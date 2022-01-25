@@ -55,7 +55,7 @@
   <ItemGroup>
     <Compile Include="Classes\ItemXMLData.cs" />
     <Compile Include="Classes\TMXData.cs" />
-    <Compile Include="Constants.cs" />
+    <Compile Include="Classes\Constants.cs" />
     <Compile Include="Classes\XMLData.cs" />
     <Compile Include="DataBase Screen.cs">
       <SubType>Form</SubType>

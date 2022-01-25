@@ -41,7 +41,7 @@ Thank you so much!][Name:Collection]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Text:Brr, I hope you've got some warm clothing on today. I always make $Character_14$ a cup of tea on days like this.][Weather:Snowing][Name:Snowing|1]</Value>
+      <Value>[Text:Brr, I hope you've got some warm clothing on today. I always make $NPC_14$ a cup of tea on days like this.][Weather:Snowing][Name:Snowing|1]</Value>
     </Item>
   </Asset>
 </XnaContent>

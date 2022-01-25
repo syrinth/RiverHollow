@@ -44,7 +44,7 @@ Could you fix me up a place to live please? I'm afraid that I'm stuck here with 
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Text:This town has it's quaint charm but... I miss the city. I can't wait until $Character_4$ and I have finished our business here.][Name:Dialogue|3]</Value>
+      <Value>[Text:This town has it's quaint charm but... I miss the city. I can't wait until $NPC_4$ and I have finished our business here.][Name:Dialogue|3]</Value>
     </Item>
     <Item>
       <Key>11</Key>

@@ -6,6 +6,7 @@
         public enum XMLTypeEnum { None, Task, NPC, Class, Building, WorldObject, Item, Monster, Action, Shop, StatusEffect, Cutscene, Light, Dungeon, TextFile };
 
         public static readonly string SPECIAL_CHARACTER = "^";
+        public static readonly string LOOKUP_CHARACTER = "$";
         public static readonly string PATH_TO_CONTENT = string.Format(@"{0}\..\..\..\..\RiverHollow\RiverHollowGame\Content", System.Environment.CurrentDirectory);
         public static readonly string PATH_TO_MAPS = PATH_TO_CONTENT + @"\Maps";
         public static readonly string PATH_TO_DATA = PATH_TO_CONTENT + @"\Data";

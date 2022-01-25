@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name:Introduction][Text:Hey. $Name$ right? Glad you made it. I'm $Character_14$, and I'm here to help you with building the town itself. We really need a workshop if we're going to do anything. Here's some materials I brought with me. Be careful with how you use them, this is all I brought.][UnlockObjectID:40][ItemID:55-5|60-5][Task:0][TaskID:0]</Value>
+      <Value>[Name:Introduction][Text:Hey. $Name$ right? Glad you made it. I'm $NPC_14$, and I'm here to help you with building the town itself. We really need a $WorldObject_40$ if we're going to do anything. Here's some materials I brought with me. Be careful with how you use them, this is all I brought.][UnlockObjectID:40][ItemID:55-5|60-5][Task:0][TaskID:0]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -27,7 +27,7 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Name:Task_0_End][Text:Already done? Great work. With the $Building_35$ built, we can make bricks and planks. It's kind of hard to build a town without them, you know.
+      <Value>[Name:Task_0_End][Text:Already done? Great work. With the $WorldObject_40$ built, we can make bricks and planks. It's kind of hard to build a town without them, you know.
 
 Here, I drew up some plans for a house for you. You should get that built before nightfall, better to have your own space.][Face:Happy][UnlockBuildingID:27]</Value>
     </Item>

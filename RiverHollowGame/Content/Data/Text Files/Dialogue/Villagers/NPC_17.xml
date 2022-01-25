@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Greetings, young one. I am $Character_17$, a purveyor of magic and enchantments. My daughter and I heard about $Town$ and thought we should visit. A charming place, if lacking in amenities. Build us a house, and I'll see what can be done here.][UnlockBuildingID:49][Name:Introduction]</Value>
+      <Value>[Text:Greetings, young one. I am $NPC_17$, a purveyor of magic and enchantments. My daughter and I heard about $Town$ and thought we should visit. A charming place, if lacking in amenities. Build us a house, and I'll see what can be done here.][UnlockBuildingID:49][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -41,11 +41,11 @@ Here. It's not much, just a few odds and ends I had laying around but it should 
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Text:Hm, snowing outside is it? $Character_1$ loves the snow, but I can't stand it. I'll leave trudging through the snow to you younger ones and stay inside, thank you very much.][Weather:Snowing][Name:Snow|1]</Value>
+      <Value>[Text:Hm, snowing outside is it? $NPC_1$ loves the snow, but I can't stand it. I'll leave trudging through the snow to you younger ones and stay inside, thank you very much.][Weather:Snowing][Name:Snow|1]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Text:Keep your eyes peeled for the mushrooms that live in the forest. Their caps are useful for a lot of things, but they have an innate affinity for magic. Young $Character_8$ got a nasty shock from one a few years back.][Name:Dialogue|3]</Value>
+      <Value>[Text:Keep your eyes peeled for the mushrooms that live in the forest. Their caps are useful for a lot of things, but they have an innate affinity for magic. Young $NPC_8$ got a nasty shock from one a few years back.][Name:Dialogue|3]</Value>
     </Item>
     <Item>
       <Key>11</Key>

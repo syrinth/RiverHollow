@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Hi! Welcome to the Blue Hare Inn. I'm $Character_10$. I hope the road wasn't too bad to get here.][Name:Introduction]</Value>
+      <Value>[Text:Hi! Welcome to the Blue Hare Inn. I'm $NPC_10$. I hope the road wasn't too bad to get here.][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -31,7 +31,7 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Text:Sometimes, days like these remind me of when $Character_9$ and I first met. It was the dead of winter and he'd just come into the tavern I was performing at, bundled up in his coat. There was something about him that caught my eye immediately.][Weather:Snowing][Name:Snowing|2]</Value>
+      <Value>[Text:Sometimes, days like these remind me of when $NPC_9$ and I first met. It was the dead of winter and he'd just come into the tavern I was performing at, bundled up in his coat. There was something about him that caught my eye immediately.][Weather:Snowing][Name:Snowing|2]</Value>
     </Item>
     <Item>
       <Key>8</Key>

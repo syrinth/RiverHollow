@@ -340,14 +340,14 @@
   </object>
   <object id="38" name="WorldObject" x="176.814" y="96.9972" width="14.1071" height="13.5823">
    <properties>
-    <property name="ObjectID" type="int" value="88"/>
+    <property name="ObjectID" type="int" value="86"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
   <object id="39" name="Workshop_NPC" x="114.371" y="162.785" width="10.4707" height="9.5823">
    <properties>
-    <property name="ObjectID" type="int" value="88"/>
+    <property name="ObjectID" type="int" value="86"/>
    </properties>
   </object>
  </objectgroup>

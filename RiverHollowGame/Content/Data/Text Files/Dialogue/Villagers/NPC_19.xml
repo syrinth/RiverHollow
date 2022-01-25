@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name:Introduction][Text:Well hello there! The name's $Character_19$. Merchant by trade, and I'm ready to get to work. If we're going to accomplish anything here, we're going to need a shop. First though, you had better talk to $Character_14$. He says we need a $WorldObject_40$ before we can do anything else.]</Value>
+      <Value>[Name:Introduction][Text:Well hello there! The name's $NPC_19$. Merchant by trade, and I'm ready to get to work. If we're going to accomplish anything here, we're going to need a shop. First though, you had better talk to $NPC_14$. He says we need a $WorldObject_40$ before we can do anything else.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -46,7 +46,7 @@ Never forget, commerce is the lifeblood of a town, my friend. It might not seem 
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Name:Task_1_End][Text:The $WorldObject_70$ is finished? Excellent job, I can't wait to see what all the Merchants will bring.]</Value>
+      <Value>[Name:Task_1_End][Text:The $WorldObject_71$ is finished? Excellent job, I can't wait to see what all the Merchants will bring.]</Value>
     </Item>
   </Asset>
 </XnaContent>
