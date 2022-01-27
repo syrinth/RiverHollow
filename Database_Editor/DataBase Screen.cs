@@ -652,6 +652,8 @@ namespace Database_Editor
                     FindLinkedXMLObjectsInDictionary(theData, _diCharacterDialogue);
 
                     FindLinkedTMXObjects(theData);
+
+                    FindLinkedCutscenes(theData, ref _diCutscenes);
                 }
             }
         }
@@ -678,6 +680,26 @@ namespace Database_Editor
             foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
             {
                 kvp.Value.ReferencesXMLObject(data);
+            }
+        }
+        private void FindLinkedCutscenes(XMLData theData, ref Dictionary<int, List<string>> dictionaryData)
+        {
+            foreach (KeyValuePair<int, List<string>> kvp in dictionaryData)
+            {
+                bool weDone = false;
+                foreach(string s in kvp.Value)
+                {
+                    foreach (string tag in theData.TagsThatReferToMe)
+                    {
+                        if(s.Contains(tag + ":"+ theData.ID + "-") || s.Contains(tag + ":" + theData.ID + "]"))
+                        {
+                            theData.AddLinkedCutscene(dictionaryData[kvp.Key]);
+                            weDone = true;
+                            break;
+                        }
+                    }
+                    if (weDone) { break; }
+                }
             }
         }
         #endregion
@@ -711,7 +733,7 @@ namespace Database_Editor
             xmlDataDictionary.Sort((x, y) =>
             {
                 var typeComp = y.GetTagValue("Type").CompareTo(x.GetTagValue("Type"));
-                if (typeComp == 0) { return x.ID.CompareTo(y.ID); }
+                if (typeComp == 0) { return x.Name.CompareTo(y.Name); }
                 else { return typeComp; }
             });
 
@@ -1520,6 +1542,14 @@ namespace Database_Editor
             foreach (string s in _diCharacterSchedules.Keys)
             {
                 SaveXMLDictionaryList(_diCharacterSchedules[s], s, sWriter, "string");
+            }
+
+            for (int i = 0; i < _diCutscenes.Count; i++)
+            {
+                for (int j = 0; j < _diCutscenes[i].Count; j++)
+                {
+                    _diCutscenes[i][j] = _diCutscenes[i][j].Replace(SPECIAL_CHARACTER, "");
+                }
             }
 
             SaveXMLDictionaryIntKeyList(_diCutscenes, CUTSCENE_XML_FILE, XMLTypeEnum.Cutscene, sWriter);

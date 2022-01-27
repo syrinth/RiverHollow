@@ -3,7 +3,9 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Hi. My name is $NPC_20$. You just came to town right? I've never left the town before, what's it like?][Name:Introduction]</Value>
+      <Value>[Text:a b c d e f g h i j k l m n o p q r s t u v w x y z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+
+I like Pandas, how about you?][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -28,6 +30,14 @@
     <Item>
       <Key>6</Key>
       <Value>[Text:What do you want to do?][Name:Maintenance]</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>[Text:I'm awake! Hello master, how are you?][Name:Quest2End]</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>[Text:This is a test ][Name:Testing]</Value>
     </Item>
   </Asset>
 </XnaContent>

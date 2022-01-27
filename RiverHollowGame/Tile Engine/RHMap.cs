@@ -70,7 +70,6 @@ namespace RiverHollow.Tile_Engine
         private string _sResourceMinMax;
         protected List<Item> _liItems;
         protected List<ShopLocation> _liShopData;
-        public Dictionary<string, BattleStartInfo> DictionaryBattleStarts { get; }
         public Dictionary<string, TravelPoint> DictionaryTravelPoints { get; }
         public Dictionary<string, Vector2> DictionaryCharacterLayer { get; }
         private List<TiledMapObject> _liMapObjects;
@@ -101,7 +100,6 @@ namespace RiverHollow.Tile_Engine
             _liCutscenes = new List<int>();
             _diResources = new Dictionary<RarityEnum, List<int>>();
 
-            DictionaryBattleStarts = new Dictionary<string, BattleStartInfo>();
             DictionaryTravelPoints = new Dictionary<string, TravelPoint>();
             DictionaryCharacterLayer = new Dictionary<string, Vector2>();
 
@@ -457,12 +455,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     foreach (TiledMapObject obj in ol.Objects)
                     {
-                        if (obj.Name.Equals("CombatStart"))
-                        {
-                            BattleStartInfo battleInfo = new BattleStartInfo(obj, this);
-                            DictionaryBattleStarts[battleInfo.LinkedMap] = battleInfo;
-                        }
-                        else if (obj.Name.Equals("Shop"))
+                        if (obj.Name.Equals("Shop"))
                         {
                             _liShopData.Add(new ShopLocation(_sName, obj));
                         }
@@ -476,9 +469,9 @@ namespace RiverHollow.Tile_Engine
                             GameManager.AddSpirit(s);
                             _liActors.Add(s);
                         }
-                        else
+                        else if (obj.Properties.ContainsKey("NPC_ID"))
                         {
-                            DictionaryCharacterLayer.Add(obj.Name, obj.Position);
+                            DictionaryCharacterLayer.Add("NPC_" + obj.Properties["NPC_ID"], obj.Position);
                         }
                     }
                 }
@@ -2785,83 +2778,6 @@ namespace RiverHollow.Tile_Engine
                 {
                     IsActive = false;
                 }
-            }
-        }
-    }
-
-    public class BattleStartInfo
-    {
-        public RHTile[,] CombatTiles { get; }
-        public string LinkedMap { get; private set; } = string.Empty;
-        public bool Modular { get; } = false;
-
-        public DirectionEnum Dir { get; }
-
-        public BattleStartInfo(TiledMapObject obj, RHMap currentMap)
-        {
-            if (obj.Properties.ContainsKey("Map")) { LinkedMap = obj.Properties["Map"]; }
-            else if (obj.Properties.ContainsKey("Dir"))
-            {
-                LinkedMap = obj.Properties["Dir"];
-                Dir = Util.ParseEnum<DirectionEnum>(obj.Properties["Dir"]);
-                Modular = true;
-            }
-
-            CombatTiles = new RHTile[3, 3];
-
-            string entrance = obj.Properties.ContainsKey("Map") ? obj.Properties["Map"] : obj.Properties["Dir"];
-
-            DirectionEnum sidle = DirectionEnum.Right;
-            DirectionEnum change = DirectionEnum.Down;
-
-            string startPoint = obj.Properties["Position"];
-            if (startPoint == "NW")
-            {
-                sidle = DirectionEnum.Right;
-                change = DirectionEnum.Down;
-            }
-            else if (startPoint == "NE")
-            {
-                sidle = DirectionEnum.Down;
-                change = DirectionEnum.Left;
-            }
-            else if (startPoint == "SE")
-            {
-                sidle = DirectionEnum.Left;
-                change = DirectionEnum.Up;
-            }
-            else if (startPoint == "SW")
-            {
-                sidle = DirectionEnum.Up;
-                change = DirectionEnum.Right;
-            }
-
-            CombatTiles[0, 0] = currentMap.GetTileByPixelPosition(obj.Position);
-            CombatTiles[1, 0] = CombatTiles[0, 0].GetTileByDirection(sidle);
-            CombatTiles[2, 0] = CombatTiles[1, 0].GetTileByDirection(sidle);
-
-            CombatTiles[0, 1] = CombatTiles[0, 0].GetTileByDirection(change);
-            CombatTiles[1, 1] = CombatTiles[0, 1].GetTileByDirection(sidle);
-            CombatTiles[2, 1] = CombatTiles[1, 1].GetTileByDirection(sidle);
-
-            CombatTiles[0, 2] = CombatTiles[0, 1].GetTileByDirection(change);
-            CombatTiles[1, 2] = CombatTiles[0, 2].GetTileByDirection(sidle);
-            CombatTiles[2, 2] = CombatTiles[1, 2].GetTileByDirection(sidle);
-        }
-
-        public void AssignLinkedMap(string newMap)
-        {
-            if (Modular)
-            {
-                LinkedMap = newMap;
-            }
-        }
-
-        public void Reset()
-        {
-            if (Modular)
-            {
-                LinkedMap = Util.GetEnumString(Dir);
             }
         }
     }

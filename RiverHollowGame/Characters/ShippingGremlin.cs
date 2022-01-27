@@ -38,7 +38,7 @@ namespace RiverHollow.Characters
             _iBodyWidth = 32;
             _iBodyHeight = 32;
 
-            _diDialogue = DataManager.GetNPCDialogue(ID);
+            _diDialogue = DataManager.GetNPCDialogue(stringData["Key"]);
             _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Gremlin", ID.ToString("00"));
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
             DataManager.GetTextData("NPC", ID, ref _sName, "Name");

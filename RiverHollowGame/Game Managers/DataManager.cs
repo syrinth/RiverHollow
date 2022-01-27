@@ -58,7 +58,7 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, string> _diMonsterTraits;
 
         static Dictionary<int, List<string>> _diSongs;
-        static Dictionary<int, Dictionary<string, string>> _diNPCDialogue;
+        static Dictionary<string, Dictionary<string, string>> _diNPCDialogue;
         static Dictionary<int, Shop> _diShops;
 
         static Dictionary<int, Dictionary<string, string>> _diNPCData;
@@ -203,30 +203,26 @@ namespace RiverHollow.Game_Managers
 
             _diSongs = Content.Load<Dictionary<int, List<string>>>(@"Data\Songs");
             
-            _diNPCDialogue = new Dictionary<int, Dictionary<string, string>>();
+            _diNPCDialogue = new Dictionary<string, Dictionary<string, string>>();
             foreach (string s in Directory.GetFiles(@"Content\" + FOLDER_TEXTFILES + @"Dialogue\Villagers"))
             {
-                string fileName = string.Empty;
+                string fileName = s;
 
-                if (s.Contains("NPC_")) {
-                    fileName = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0];
+                if (s.Contains("NPC_"))
+                {
+                    string key = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0];
 
-                    int file = -1;
-                    if (int.TryParse(fileName, out file))
+                    Util.ParseContentFile(ref fileName);
+                    Dictionary<int, string> rawInfo = Content.Load<Dictionary<int, string>>(fileName);
+                    newDialogue = new Dictionary<string, string>();
+                    foreach (string dialogueTags in rawInfo.Values)
                     {
-                        fileName = s;
-                        Util.ParseContentFile(ref fileName);
-                        Dictionary<int, string> rawInfo = Content.Load<Dictionary<int, string>>(fileName);
-                        newDialogue = new Dictionary<string, string>();
-                        foreach (string dialogueTags in rawInfo.Values)
-                        {
-                            Dictionary<string, string> tags = Util.DictionaryFromTaggedString(dialogueTags);
-                            string newKey = tags["Name"];
-                            tags.Remove("Name");
-                            newDialogue[newKey] = Util.StringFromTaggedDictionary(tags);
-                        }
-                        _diNPCDialogue.Add(file, newDialogue);
+                        Dictionary<string, string> tags = Util.DictionaryFromTaggedString(dialogueTags);
+                        string newKey = tags["Name"];
+                        tags.Remove("Name");
+                        newDialogue[newKey] = Util.StringFromTaggedDictionary(tags);
                     }
+                    _diNPCDialogue.Add(key, newDialogue);
                 }
             }
         }
@@ -826,13 +822,13 @@ namespace RiverHollow.Game_Managers
         {
             return new TextEntry(messageID, Util.DictionaryFromTaggedString(_diMailboxMessages[messageID]));
         }
-        public static Dictionary<string, TextEntry> GetNPCDialogue(int id)
+        public static Dictionary<string, TextEntry> GetNPCDialogue(string key)
         {
             Dictionary<string, TextEntry> rv = new Dictionary<string, TextEntry>();
 
-            if (_diNPCDialogue.ContainsKey(id))
+            if (_diNPCDialogue.ContainsKey(key))
             {
-                foreach(KeyValuePair<string, string> kvp in _diNPCDialogue[id])
+                foreach(KeyValuePair<string, string> kvp in _diNPCDialogue[key])
                 {
                     rv[kvp.Key] = new TextEntry(kvp.Key, Util.DictionaryFromTaggedString(kvp.Value));
                 }

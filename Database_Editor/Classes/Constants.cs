@@ -1,4 +1,6 @@
-﻿namespace Database_Editor.Classes
+﻿using System.Collections.Generic;
+
+namespace Database_Editor.Classes
 {
     public static class Constants
     {
@@ -41,7 +43,7 @@
         public static readonly string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         public static readonly string TAGS_FOR_CLASSES = "Class";
         public static readonly string TAGS_FOR_SHOPDATA = "ShopData,TargetShopID";
-        public static readonly string TAGS_FOR_CHARACTERS = "NPC_ID,MobID";
+        public static readonly string TAGS_FOR_CHARACTERS = "NPC_ID,MobID,Actors,Move,Face,Speak,Speed,Activate,Deactivate";
         public static readonly string TAGS_FOR_STATUS_EFFECTS = "StatusEffectID";
         public static readonly string TAGS_FOR_LIGHTS = "LightID";
         public static readonly string TAGS_FOR_MONSTERS = "MonsterID";

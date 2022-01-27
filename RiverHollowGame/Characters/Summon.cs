@@ -1,5 +1,4 @@
 ﻿using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;

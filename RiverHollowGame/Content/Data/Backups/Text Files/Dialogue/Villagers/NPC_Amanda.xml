@@ -3,23 +3,23 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Hey, name's $NPC_1$. I heard that you might be needing some extra hands to help withsome of the monsters around here. All I ask is that you build me a place to live. Doesn't need to be anything fancy. There is no way I'm moving back in with dad.][UnlockBuildingID:55][Name:Introduction]</Value>
+      <Value>[Text:Hey, I need a house if you could.][UnlockBuildingID:53][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Have I told you about the time I took down a $Monster_4$ in a single shot?][Default][Name:1]</Value>
+      <Value>[Text:Hello $Name$. I hope you're well today.][Default][Name:1]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:I've taken down thirty monsters this week. How about you?][Default][Name:2]</Value>
+      <Value>[Text:You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.][Default][Name:2]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Text:A gift eh? You sure you don't just want something?][Name:Gift]</Value>
+      <Value>[Text:Oh, that's surprising. Thank you.][Name:Gift]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Text:You can't be serious. You're giving this to me? I've been looking for this! Thank you.][Name:Collection]</Value>
+      <Value>[Text:Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?][Name:Collection]</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -40,10 +40,6 @@
     <Item>
       <Key>9</Key>
       <Value>[Text:Oh... I'm sorry but. No.][Name:MarriageNo]</Value>
-    </Item>
-    <Item>
-      <Key>10</Key>
-      <Value>[Text:What are you doing skulking about in the rain? Not up to now good are you?][Weather:Raining][Name:Raining|1]</Value>
     </Item>
   </Asset>
 </XnaContent>

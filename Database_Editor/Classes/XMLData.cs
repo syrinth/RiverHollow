@@ -39,6 +39,7 @@ namespace Database_Editor.Classes
         protected List<LinkedObject> _liLinkedObjects;
         protected List<LinkedObject> _liLinkedTextObjects;
         protected List<LinkedObject> _liLinkedMaps;
+        protected List<List<string>> _liLinkedCutsceneData;
         protected Dictionary<string, string> _diTags;
 
         public XMLData(string id, Dictionary<string, string> stringData, string tagsReferenced, string tagsThatReferToMe, XMLTypeEnum xmlType, ref Dictionary<string, Dictionary<string, string>> objectData)
@@ -46,6 +47,7 @@ namespace Database_Editor.Classes
             _liLinkedMaps = new List<LinkedObject>();
             _liLinkedObjects = new List<LinkedObject>();
             _liLinkedTextObjects = new List<LinkedObject>();
+            _liLinkedCutsceneData = new List<List<string>>();
             _liTagsReferenced = new List<string>(tagsReferenced.Split(','));
             _liTagsThatReferToMe = new List<string>(tagsThatReferToMe.Split(','));
 
@@ -237,6 +239,24 @@ namespace Database_Editor.Classes
                     XMLData data = d.ObjectData;
                     data.ReplaceTextIDValue(oldID, newID, d.LinkedTag, _eXMLType);
                 }
+
+                for (int i = 0; i < _liLinkedCutsceneData.Count; i++) 
+                {
+                    for (int j = 0; j < _liLinkedCutsceneData[i].Count; j++)
+                    {
+                        foreach (string tag in TagsThatReferToMe)
+                        {
+                            if (_liLinkedCutsceneData[i][j].Contains(tag + ":" + oldID + "-"))
+                            {
+                                _liLinkedCutsceneData[i][j] = _liLinkedCutsceneData[i][j].Replace(tag + ":" + oldID + "-", tag + ":" + SPECIAL_CHARACTER + newID + SPECIAL_CHARACTER + "-");
+                            }
+                            else if (_liLinkedCutsceneData[i][j].Contains(tag + ":" + oldID + "]"))
+                            {
+                                _liLinkedCutsceneData[i][j] = _liLinkedCutsceneData[i][j].Replace(tag + ":" + oldID + "]", tag + ":" + SPECIAL_CHARACTER + newID + SPECIAL_CHARACTER + "]");
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -342,13 +362,16 @@ namespace Database_Editor.Classes
         {
             _liLinkedMaps.Add(new LinkedObject(d, tag));
         }
-
         public void AddLinkedTextEntry(XMLData d, string tag)
         {
             if (this != d)
             {
                 _liLinkedTextObjects.Add(new LinkedObject(d, tag));
             }
+        }
+        public void AddLinkedCutscene(List<string> cutsceneData)
+        {
+            Util.AddUniquelyToList(ref _liLinkedCutsceneData, cutsceneData);
         }
 
         /// <summary>

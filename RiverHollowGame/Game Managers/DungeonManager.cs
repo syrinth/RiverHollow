@@ -321,24 +321,6 @@ namespace RiverHollow.Game_Managers
             map2.DictionaryTravelPoints.Remove(Util.GetEnumString(oppDir));
             map2.DictionaryTravelPoints[linkedPoint.LinkedMap] = linkedPoint;
 
-            //Connect the battle start object locations
-            BattleStartInfo bInfo;
-            if (map1.DictionaryBattleStarts.Count > 0)
-            {
-                bInfo = map1.DictionaryBattleStarts[Util.GetEnumString(movementDir)];
-                map1.DictionaryBattleStarts.Remove(Util.GetEnumString(movementDir));
-                bInfo.AssignLinkedMap(map2.Name);
-                map1.DictionaryBattleStarts[map2.Name] = bInfo;
-            }
-
-            if (map2.DictionaryBattleStarts.Count > 0)
-            {
-                bInfo = map2.DictionaryBattleStarts[Util.GetEnumString(oppDir)];
-                map2.DictionaryBattleStarts.Remove(Util.GetEnumString(oppDir));
-                bInfo.AssignLinkedMap(map1.Name);
-                map2.DictionaryBattleStarts[map1.Name] = bInfo;
-            }
-
             //Set the relevant blockerObject Open value to true
             if (map1.GetMapObjectByTagAndValue("Dir", Util.GetEnumString(oppDir)) != null)
             {
@@ -441,19 +423,6 @@ namespace RiverHollow.Game_Managers
 
                         m.DictionaryTravelPoints.Remove(kvp.Key);
                         m.DictionaryTravelPoints[Util.GetEnumString(pt.Dir)] = pt;
-                    }
-                }
-
-                Dictionary<string, BattleStartInfo> battleCpy = new Dictionary<string, BattleStartInfo>(m.DictionaryBattleStarts);
-                foreach (KeyValuePair<string, BattleStartInfo> kvp in battleCpy)
-                {
-                    if (kvp.Value.Modular)
-                    {
-                        BattleStartInfo bInfo = m.DictionaryBattleStarts[kvp.Key];
-                        bInfo.Reset();
-
-                        m.DictionaryBattleStarts.Remove(kvp.Key);
-                        m.DictionaryBattleStarts[Util.GetEnumString(bInfo.Dir)] = bInfo;
                     }
                 }
 

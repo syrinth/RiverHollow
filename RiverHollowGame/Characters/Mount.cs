@@ -28,7 +28,7 @@ namespace RiverHollow.Characters
 
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
-            LoadSpriteAnimations(ref _sprBody, liData, DataManager.NPC_FOLDER + "NPC_" + ID);
+            LoadSpriteAnimations(ref _sprBody, liData, DataManager.NPC_FOLDER + "NPC_" + stringData["Key"]);
         }
 
         public override void ProcessRightButtonClick()

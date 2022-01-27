@@ -19,47 +19,47 @@
     </Item>
     <Item>
       <Key>NPC_0</Key>
-      <Value>[Name:Manor Spirit]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_1</Key>
-      <Value>[Name:Lucia]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_2</Key>
-      <Value>[Name:Michael]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_3</Key>
-      <Value>[Name:Emmanuel]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_4</Key>
-      <Value>[Name:Fran]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_5</Key>
       <Value>[Name:Amanda]</Value>
     </Item>
     <Item>
-      <Key>NPC_6</Key>
-      <Value>[Name:Daria]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_7</Key>
+      <Key>NPC_1</Key>
       <Value>[Name:Ander]</Value>
     </Item>
     <Item>
-      <Key>NPC_8</Key>
+      <Key>NPC_2</Key>
       <Value>[Name:Damien]</Value>
     </Item>
     <Item>
+      <Key>NPC_3</Key>
+      <Value>[Name:Daria]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_4</Key>
+      <Value>[Name:Eldra]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_5</Key>
+      <Value>[Name:Emmanuel]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_6</Key>
+      <Value>[Name:Eric]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_7</Key>
+      <Value>[Name:Fran]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_8</Key>
+      <Value>[Name:Gail]</Value>
+    </Item>
+    <Item>
       <Key>NPC_9</Key>
-      <Value>[Name:Mark]</Value>
+      <Value>[Name:Griselda]</Value>
     </Item>
     <Item>
       <Key>NPC_10</Key>
-      <Value>[Name:Penelope]</Value>
+      <Value>[Name:Harrison]</Value>
     </Item>
     <Item>
       <Key>NPC_11</Key>
@@ -67,114 +67,94 @@
     </Item>
     <Item>
       <Key>NPC_12</Key>
-      <Value>[Name:Leanne]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_13</Key>
-      <Value>[Name:Eric]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_14</Key>
-      <Value>[Name:Kyle]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_15</Key>
-      <Value>[Name:Sammy]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_16</Key>
-      <Value>[Name:Eldra]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_17</Key>
-      <Value>[Name:Griselda]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_18</Key>
-      <Value>[Name:Gail]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_19</Key>
-      <Value>[Name:Harrison]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_20</Key>
-      <Value>[Name:Yulia]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_21</Key>
       <Value>[Name:Jase]</Value>
     </Item>
     <Item>
+      <Key>NPC_13</Key>
+      <Value>[Name:Kyle]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_14</Key>
+      <Value>[Name:Leanne]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_15</Key>
+      <Value>[Name:Lucia]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_16</Key>
+      <Value>[Name:Manor Spirit]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_17</Key>
+      <Value>[Name:Mark]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_18</Key>
+      <Value>[Name:Michael]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_19</Key>
+      <Value>[Name:Penelope]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_20</Key>
+      <Value>[Name:Sammy]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_21</Key>
+      <Value>[Name:Yulia]</Value>
+    </Item>
+    <Item>
       <Key>NPC_22</Key>
-      <Value>[Name:]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_23</Key>
-      <Value>[Name:]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_24</Key>
-      <Value>[Name:]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_25</Key>
-      <Value>[Name:]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_26</Key>
-      <Value>[Name:]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_27</Key>
-      <Value>[Name:Henry]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_28</Key>
       <Value>[Name:Felicia]</Value>
     </Item>
     <Item>
-      <Key>NPC_29</Key>
+      <Key>NPC_23</Key>
+      <Value>[Name:Henry]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_24</Key>
       <Value>[Name:Shipping Gremlin]</Value>
     </Item>
     <Item>
-      <Key>NPC_30</Key>
+      <Key>NPC_25</Key>
       <Value>[Name:Slime Pet]</Value>
     </Item>
     <Item>
-      <Key>NPC_31</Key>
+      <Key>NPC_26</Key>
       <Value>[Name:Slime Mount]</Value>
     </Item>
     <Item>
-      <Key>NPC_32</Key>
+      <Key>NPC_27</Key>
       <Value>[Name:Mossy_Slime]</Value>
     </Item>
     <Item>
-      <Key>NPC_33</Key>
-      <Value>[Name:Wagren]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_34</Key>
+      <Key>NPC_28</Key>
       <Value>[Name:Abeline]</Value>
     </Item>
     <Item>
-      <Key>NPC_35</Key>
-      <Value>[Name:Magda]</Value>
-    </Item>
-    <Item>
-      <Key>NPC_36</Key>
+      <Key>NPC_29</Key>
       <Value>[Name:Erron]</Value>
     </Item>
     <Item>
-      <Key>NPC_37</Key>
+      <Key>NPC_30</Key>
+      <Value>[Name:Magda]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_31</Key>
       <Value>[Name:Sybil]</Value>
     </Item>
     <Item>
-      <Key>NPC_38</Key>
+      <Key>NPC_32</Key>
+      <Value>[Name:Wagren]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_33</Key>
       <Value>[Name:Birb_1]</Value>
     </Item>
     <Item>
-      <Key>NPC_39</Key>
+      <Key>NPC_34</Key>
       <Value>[Name:Child_1]</Value>
     </Item>
     <Item>
@@ -1339,7 +1319,7 @@
     </Item>
     <Item>
       <Key>WorldObject_1</Key>
-      <Value>[Name:Torch]</Value>
+      <Value>[Name:Glowing Orb]</Value>
     </Item>
     <Item>
       <Key>WorldObject_2</Key>
@@ -1347,11 +1327,11 @@
     </Item>
     <Item>
       <Key>WorldObject_3</Key>
-      <Value>[Name:Glowing Orb]</Value>
+      <Value>[Name:Pet House]</Value>
     </Item>
     <Item>
       <Key>WorldObject_4</Key>
-      <Value>[Name:Pet House]</Value>
+      <Value>[Name:Torch]</Value>
     </Item>
     <Item>
       <Key>WorldObject_5</Key>
@@ -1499,11 +1479,11 @@
     </Item>
     <Item>
       <Key>WorldObject_41</Key>
-      <Value>[Name:Poison Tile]</Value>
+      <Value>[Name:Floor Spikes]</Value>
     </Item>
     <Item>
       <Key>WorldObject_42</Key>
-      <Value>[Name:Floor Spikes]</Value>
+      <Value>[Name:Poison Tile]</Value>
     </Item>
     <Item>
       <Key>WorldObject_43</Key>
@@ -1511,19 +1491,19 @@
     </Item>
     <Item>
       <Key>WorldObject_44</Key>
-      <Value>[Name:End Table]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_45</Key>
       <Value>[Name:Desk]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_45</Key>
+      <Value>[Name:End Table]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_46</Key>
-      <Value>[Name:Potted Rose]</Value>
+      <Value>[Name:Painting]</Value>
     </Item>
     <Item>
       <Key>WorldObject_47</Key>
-      <Value>[Name:Painting]</Value>
+      <Value>[Name:Potted Rose]</Value>
     </Item>
     <Item>
       <Key>WorldObject_48</Key>
@@ -1531,27 +1511,27 @@
     </Item>
     <Item>
       <Key>WorldObject_49</Key>
-      <Value>[Name:Wooden Table]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_50</Key>
       <Value>[Name:Wooden Stool]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_50</Key>
+      <Value>[Name:Wooden Table]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_51</Key>
-      <Value>[Name:Tree]</Value>
+      <Value>[Name:Amber Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_52</Key>
-      <Value>[Name:Darkwood Tree]</Value>
+      <Value>[Name:Amethyst Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_53</Key>
-      <Value>[Name:Rock]</Value>
+      <Value>[Name:Big Rock]</Value>
     </Item>
     <Item>
       <Key>WorldObject_54</Key>
-      <Value>[Name:Big Rock]</Value>
+      <Value>[Name:Clay Mound]</Value>
     </Item>
     <Item>
       <Key>WorldObject_55</Key>
@@ -1559,55 +1539,55 @@
     </Item>
     <Item>
       <Key>WorldObject_56</Key>
-      <Value>[Name:Diamond Node]</Value>
+      <Value>[Name:Darkwood Tree]</Value>
     </Item>
     <Item>
       <Key>WorldObject_57</Key>
-      <Value>[Name:Emerald Node]</Value>
+      <Value>[Name:Diamond Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_58</Key>
-      <Value>[Name:Ruby Node]</Value>
+      <Value>[Name:Emerald Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_59</Key>
-      <Value>[Name:Sapphire Node]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_60</Key>
-      <Value>[Name:Opal Node]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_61</Key>
-      <Value>[Name:Jet Node]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_62</Key>
-      <Value>[Name:Amber Node]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_63</Key>
       <Value>[Name:Jade Node]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_60</Key>
+      <Value>[Name:Jet Node]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_61</Key>
+      <Value>[Name:Opal Node]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_62</Key>
+      <Value>[Name:Rock]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_63</Key>
+      <Value>[Name:Ruby Node]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_64</Key>
-      <Value>[Name:Amethyst Node]</Value>
+      <Value>[Name:Sapphire Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_65</Key>
-      <Value>[Name:Topaz Node]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_66</Key>
       <Value>[Name:Stump]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_66</Key>
+      <Value>[Name:Topaz Node]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_67</Key>
-      <Value>[Name:Clay Mound]</Value>
+      <Value>[Name:Tree]</Value>
     </Item>
     <Item>
       <Key>WorldObject_68</Key>
-      <Value>[Name:Push-Trigger]</Value>
+      <Value>[Name:Dungeon Door_Down1]</Value>
     </Item>
     <Item>
       <Key>WorldObject_69</Key>
@@ -1615,15 +1595,15 @@
     </Item>
     <Item>
       <Key>WorldObject_70</Key>
-      <Value>[Name:Interaction Trigger]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_71</Key>
       <Value>[Name:Dungeon Side Door]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_71</Key>
+      <Value>[Name:Interaction Trigger]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_72</Key>
-      <Value>[Name:Dungeon Door_Down1]</Value>
+      <Value>[Name:Push-Trigger]</Value>
     </Item>
     <Item>
       <Key>WorldObject_73</Key>
@@ -1635,7 +1615,7 @@
     </Item>
     <Item>
       <Key>WorldObject_75</Key>
-      <Value>[Name:Mushroom]</Value>
+      <Value>[Name:Aether Shroom]</Value>
     </Item>
     <Item>
       <Key>WorldObject_76</Key>
@@ -1643,43 +1623,43 @@
     </Item>
     <Item>
       <Key>WorldObject_77</Key>
-      <Value>[Name:Aether Shroom]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_78</Key>
-      <Value>[Name:Vision Shroom]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_79</Key>
       <Value>[Name:Dream Root]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_80</Key>
+      <Key>WorldObject_78</Key>
+      <Value>[Name:Mushroom]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_79</Key>
       <Value>[Name:Vampire Plant]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_81</Key>
-      <Value>[Name:Forge]</Value>
+      <Key>WorldObject_80</Key>
+      <Value>[Name:Vision Shroom]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_82</Key>
+      <Key>WorldObject_81</Key>
       <Value>[Name:Anvil]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_83</Key>
+      <Key>WorldObject_82</Key>
       <Value>[Name:Cauldron]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_84</Key>
-      <Value>[Name:Work Bench]</Value>
+      <Key>WorldObject_83</Key>
+      <Value>[Name:Forge]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_85</Key>
+      <Key>WorldObject_84</Key>
       <Value>[Name:Grindstone]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_86</Key>
+      <Key>WorldObject_85</Key>
       <Value>[Name:Loom]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_86</Key>
+      <Value>[Name:SawMill]</Value>
     </Item>
     <Item>
       <Key>WorldObject_87</Key>
@@ -1687,15 +1667,15 @@
     </Item>
     <Item>
       <Key>WorldObject_88</Key>
-      <Value>[Name:SawMill]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_89</Key>
       <Value>[Name:Tannery]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_90</Key>
+      <Key>WorldObject_89</Key>
       <Value>[Name:Windblossom]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_90</Key>
+      <Value>[Name:Work Bench]</Value>
     </Item>
     <Item>
       <Key>WorldObject_91</Key>
@@ -1703,7 +1683,7 @@
     </Item>
     <Item>
       <Key>WorldObject_92</Key>
-      <Value>[Name:Spirean]</Value>
+      <Value>[Name:Black Iris]</Value>
     </Item>
     <Item>
       <Key>WorldObject_93</Key>
@@ -1715,15 +1695,15 @@
     </Item>
     <Item>
       <Key>WorldObject_95</Key>
-      <Value>[Name:Silver Seed Plant]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_96</Key>
       <Value>[Name:Carrot Plant]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_96</Key>
+      <Value>[Name:Glow Flower]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_97</Key>
-      <Value>[Name:Slime Berry Plant]</Value>
+      <Value>[Name:Grass]</Value>
     </Item>
     <Item>
       <Key>WorldObject_98</Key>
@@ -1731,23 +1711,23 @@
     </Item>
     <Item>
       <Key>WorldObject_99</Key>
-      <Value>[Name:Grass]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_100</Key>
-      <Value>[Name:Glow Flower]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_101</Key>
-      <Value>[Name:Black Iris]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_102</Key>
       <Value>[Name:Mage's Cup]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_103</Key>
+      <Key>WorldObject_100</Key>
       <Value>[Name:Piff-Puff]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_101</Key>
+      <Value>[Name:Silver Seed Plant]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_102</Key>
+      <Value>[Name:Slime Berry Plant]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_103</Key>
+      <Value>[Name:Spirean]</Value>
     </Item>
     <Item>
       <Key>WorldObject_104</Key>
@@ -1771,15 +1751,15 @@
     </Item>
     <Item>
       <Key>WorldObject_109</Key>
-      <Value>[Name:Lavender Wallpaper]</Value>
+      <Value>[Name:Blue Wallpaper]</Value>
     </Item>
     <Item>
       <Key>WorldObject_110</Key>
-      <Value>[Name:Red Wallpaper]</Value>
+      <Value>[Name:Lavender Wallpaper]</Value>
     </Item>
     <Item>
       <Key>WorldObject_111</Key>
-      <Value>[Name:Blue Wallpaper]</Value>
+      <Value>[Name:Red Wallpaper]</Value>
     </Item>
     <Item>
       <Key>WorldObject_112</Key>
@@ -1791,87 +1771,87 @@
     </Item>
     <Item>
       <Key>WorldObject_114</Key>
-      <Value>[Name:Cave_Up_Closed]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_115</Key>
-      <Value>[Name:Cave_Up_Open_1]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_116</Key>
-      <Value>[Name:Cave_Up_Open_2]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_117</Key>
-      <Value>[Name:Class Changer]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_118</Key>
-      <Value>[Name:Echo of Joy]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_119</Key>
-      <Value>[Name:Cotton]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_120</Key>
-      <Value>[Name:Staircase]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_121</Key>
-      <Value>[Name:Door_Up]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_122</Key>
-      <Value>[Name:Peat]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_123</Key>
-      <Value>[Name:Lavender]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_124</Key>
-      <Value>[Name:Flax]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_125</Key>
       <Value>[Name:Cave_Down_Closed]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_126</Key>
+      <Key>WorldObject_116</Key>
       <Value>[Name:Cave_Down_Open_1]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_127</Key>
+      <Key>WorldObject_117</Key>
       <Value>[Name:Cave_Down_Open_2]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_128</Key>
+      <Key>WorldObject_118</Key>
       <Value>[Name:Cave_Left_Closed]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_129</Key>
+      <Key>WorldObject_119</Key>
       <Value>[Name:Cave_Left_Open_1]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_130</Key>
+      <Key>WorldObject_120</Key>
       <Value>[Name:Cave_Left_Open_2]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_131</Key>
+      <Key>WorldObject_121</Key>
       <Value>[Name:Cave_Right_Closed]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_132</Key>
+      <Key>WorldObject_122</Key>
       <Value>[Name:Cave_Right_Open_1]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_133</Key>
+      <Key>WorldObject_123</Key>
       <Value>[Name:Cave_Right_Open_2]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_124</Key>
+      <Value>[Name:Cave_Up_Closed]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_125</Key>
+      <Value>[Name:Cave_Up_Open_1]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_126</Key>
+      <Value>[Name:Cave_Up_Open_2]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_127</Key>
+      <Value>[Name:Class Changer]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_128</Key>
+      <Value>[Name:Cotton]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_129</Key>
+      <Value>[Name:Door_Up]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_130</Key>
+      <Value>[Name:Echo of Joy]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_131</Key>
+      <Value>[Name:Flax]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_132</Key>
+      <Value>[Name:Lavender]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_133</Key>
+      <Value>[Name:Peat]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_134</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Staircase]</Value>
     </Item>
   </Asset>
 </XnaContent>
