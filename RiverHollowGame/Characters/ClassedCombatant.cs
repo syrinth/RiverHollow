@@ -29,12 +29,10 @@ namespace RiverHollow.Characters.Lite
         public override List<CombatAction> Actions { get => _class.Actions; }
 
         #endregion
-        public ClassedCombatant() : base()
+        public ClassedCombatant()
         {
             _eActorType = CombatActorTypeEnum.PartyMember;
             ClassLevel = 1;
-            _iBodyWidth = 32;
-            _iBodyHeight = 32;
 
             _diGear = new Dictionary<GearTypeEnum, Equipment>();
             foreach (GearTypeEnum e in Enum.GetValues(typeof(GearTypeEnum))) { _diGear[e] = null; }
@@ -52,15 +50,15 @@ namespace RiverHollow.Characters.Lite
 
         public override GUIImage GetIcon()
         {
-            return new GUIImage(new Rectangle(0, 0, 18, 18), ScaleIt(18), ScaleIt(18), DataManager.GetTexture(DataManager.COMBAT_PORTRAITS + "V_" + (_class.ID +1).ToString("00")));
-
+            if (this == PlayerManager.PlayerCombatant) { return new GUIImage(new Rectangle(0, 0, 18, 18), ScaleIt(18), ScaleIt(18), DataManager.GetTexture(DataManager.COMBAT_PORTRAITS + "Player_Icon")); }
+            else { return new GUIImage(new Rectangle(0, 0, 18, 18), ScaleIt(18), ScaleIt(18), DataManager.GetTexture(DataManager.COMBAT_PORTRAITS + "V_" + _class.ID.ToString("00"))); }
         }
         public virtual void SetClass(CharacterClass x)
         {
             _class = x;
             if (x.ID != -1)
             {
-                LoadSpriteAnimations(ref _sprBody, Util.LoadCombatAnimations(x.ClassStringData), DataManager.FOLDER_PARTY + "Wizard");
+                LoadSpriteAnimations(ref _sprBody, Util.LoadCombatAnimations(x.ClassStringData), DataManager.FOLDER_PARTY + "Class_" + _class.ID.ToString("00"));
             }
             
             //Each class has a defined speed attribute

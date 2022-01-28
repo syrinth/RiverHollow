@@ -72,7 +72,7 @@ namespace RiverHollow.Game_Managers
 
                 for (int i = 0; i < 10; i++)
                 {
-                    Critter actor = DataManager.CreateCritter(38);
+                    Critter actor = DataManager.CreateCritter(33);
                     actor.Position = Util.GetRandomItem(validTiles).Position;
                     map.AddActor(actor);
                     _liCritters.Add(actor);

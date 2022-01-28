@@ -156,8 +156,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 }
                 else if (selectedAction.Heal) { tempObj = DataManager.GetIcon(GameIconEnum.Heal); }
 
-                tempObj.Position(Position() + ScaleIt(new Vector2(7, 29)));
-                _liActionIcons.Add(tempObj);
+                if (tempObj != null)
+                {
+                    tempObj.Position(Position() + ScaleIt(new Vector2(7, 29)));
+                    _liActionIcons.Add(tempObj);
+                }
 
                 //Damage Prediction
                 if (selectedAction.Potency > 0)
@@ -170,6 +173,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                     _liActionIcons.Add(tempObj);
                 }
 
+
+                //TODO: Need to handle display of actions that do not do damage.
 
                 //Icon for Range
                 if (selectedAction.Range == RangeEnum.Melee) { tempObj = DataManager.GetIcon(GameIconEnum.Melee); }

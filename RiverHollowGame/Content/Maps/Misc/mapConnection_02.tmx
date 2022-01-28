@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="52">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="55">
  <properties>
+  <property name="Cutscenes" value="0"/>
   <property name="MapType" value="Town"/>
   <property name="Outside" type="bool" value="true"/>
   <property name="ResourcesMinMax" value="30-60"/>
@@ -82,9 +83,11 @@
     <property name="Map" value="mapTown"/>
    </properties>
   </object>
-  <object id="50" name="CS0" x="224.182" y="268" width="15.2727" height="4"/>
-  <object id="51" name="CS0_Mob" x="208.364" y="114" width="15.2727" height="11.6667"/>
  </objectgroup>
  <objectgroup id="5" name="MapObject"/>
- <objectgroup id="6" name="Character"/>
+ <objectgroup id="6" name="Character">
+  <object id="52" name="CS0" x="225.273" y="268" width="15.2727" height="4"/>
+  <object id="53" name="CS0_Mob" x="209.455" y="114" width="15.2727" height="11.6667"/>
+  <object id="54" name="CS0_Entrance" x="457.864" y="140.667" width="15.2727" height="11.6667"/>
+ </objectgroup>
 </map>

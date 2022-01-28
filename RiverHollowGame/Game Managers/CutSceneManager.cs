@@ -107,7 +107,7 @@ namespace RiverHollow.Game_Managers
     public class Cutscene
     {
         #region CutScene Commandinformation
-        enum EnumCSCommand { Activate, Speak, Move, Face, Wait, End, Task, Speed, Text, Background, RemoveBackground };
+        enum EnumCSCommand { Activate, Speak, Move, Face, Wait, End, Task, Speed, Text, Background, RemoveBackground, Join, Combat };
 
         /// <summary>
         /// A class to hold the information for a CutSceneCommand step
@@ -135,6 +135,7 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
+        Mob queuedMob;
         int _iID;
         RHMap _originalMap;
         Vector2 _vOriginalPlayerPos;
@@ -143,7 +144,7 @@ namespace RiverHollow.Game_Managers
         int _iMinTime = -1;                                         //The earliest the cutscene can be triggered
         int _iMaxTime = -1;                                         //The latest the cutscene can be triggered
         int _iCurrentCommand;
-        List<Villager> _liUsedNPCs;                                 //The list of NPCs that take part in the cutscene.
+        List<WorldActor> _liUsedNPCs;                                 //The list of NPCs that take part in the cutscene.
         List<KeyValuePair<int, int>> _liReqFriendship;              //The list of required Friendships to trigger the cutscene, key is NPC index
         List<CutSceneCommand> _liCommands;                          //The sequence of commands to follow for the cutscene
         List<string> _liSetupCommands;
@@ -168,7 +169,7 @@ namespace RiverHollow.Game_Managers
             _bWaitForMove = false;
             _iCurrentCommand = 0;
 
-            _liUsedNPCs = new List<Villager>();
+            _liUsedNPCs = new List<WorldActor>();
             _liCommands = new List<CutSceneCommand>();
             _liReqFriendship = new List<KeyValuePair<int, int>>();
             _liSetupCommands = new List<string>();
@@ -247,7 +248,7 @@ namespace RiverHollow.Game_Managers
                             {
                                 case EnumCSCommand.Activate:
                                     npcID = GetNPCData(sCommandData[0]);
-                                    Villager a = _liUsedNPCs.Find(test => test.ID == npcID);
+                                    WorldActor a = _liUsedNPCs.Find(test => test.ID == npcID);
                                     if(a != null)
                                     {
                                         a.Activate(true);
@@ -258,7 +259,7 @@ namespace RiverHollow.Game_Managers
                                     npcID = GetNPCData(sCommandData[0]);
                                     if (npcID != -1)    //Player should never be talking
                                     {
-                                        Villager v = _liUsedNPCs.Find(test => test.ID == npcID);
+                                        Villager v = (Villager)_liUsedNPCs.Find(test => test.ID == npcID);
                                         v.TalkCutscene(CutsceneManager.GetDialogue(_iID, sCommandData[1]));
                                         bGoToNext = true;
                                     }
@@ -295,6 +296,20 @@ namespace RiverHollow.Game_Managers
                                     WorldActor n = GetActor(sCommandData[0]);
                                     n.SetWalkingDir(Util.ParseEnum<DirectionEnum>(sCommandData[1]));
                                     n.PlayAnimationVerb(VerbEnum.Idle);
+                                    bGoToNext = true;
+                                    break;
+                                case EnumCSCommand.Join:
+                                    {
+                                        Villager v = (Villager)GetActor(sCommandData[0]);
+                                        if (v.Combatant)
+                                        {
+                                            PlayerManager.AddToParty(v.CombatVersion);
+                                        }
+                                        bGoToNext = true;
+                                    }
+                                    break;
+                                case EnumCSCommand.Combat:
+                                    queuedMob = DataManager.CreateMob(int.Parse(sCommandData[0]));
                                     bGoToNext = true;
                                     break;
                                 case EnumCSCommand.End:
@@ -473,13 +488,14 @@ namespace RiverHollow.Game_Managers
                     foreach (string f in friend)
                     {
                         string[] friendData = f.Split('-');
-                        Villager n = new Villager(DataManager.DIVillagers[int.Parse(friendData[0])])
-                        {
-                            CurrentMapName = _cutsceneMap.Name,
-                            Position = Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(friendData[1]))
-                        };
-                        _cutsceneMap.AddActor(n);
-                        _liUsedNPCs.Add(n);
+                        WorldActor act = null;
+                        if (DataManager.DIVillagers.ContainsKey(int.Parse(friendData[0]))) { act = DataManager.DIVillagers[int.Parse(friendData[0])]; }
+                        else { act = DataManager.CreateNPCByIndex(int.Parse(friendData[0])); }
+                        act.CurrentMapName = _cutsceneMap.Name;
+                        act.Position = Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(friendData[1]));
+
+                        _cutsceneMap.AddActor(act);
+                        _liUsedNPCs.Add(act);
                     }
                 }
                 else if (tags[0].Equals("Deactivate"))
@@ -489,7 +505,7 @@ namespace RiverHollow.Game_Managers
                     string[] friends = tags[1].Split('|');
                     foreach (string npcIDs in friends)
                     {
-                        foreach (Villager v in _liUsedNPCs)
+                        foreach (WorldActor v in _liUsedNPCs)
                         {
                             if (v.ID == int.Parse(npcIDs))
                             {
@@ -583,11 +599,23 @@ namespace RiverHollow.Game_Managers
                         }
                         else if (currentCommand.Command == EnumCSCommand.Activate)
                         {
-                            Villager a = _liUsedNPCs.Find(test => test.ID == GetNPCData(sCommandData[0]));
+                            WorldActor a = _liUsedNPCs.Find(test => test.ID == GetNPCData(sCommandData[0]));
                             if (a != null)
                             {
                                 a.Activate(true);
                             }
+                        }
+                        else if (currentCommand.Command == EnumCSCommand.Join)
+                        {
+                            Villager v = (Villager)GetActor(sCommandData[0]);
+                            if (v.Combatant)
+                            {
+                                PlayerManager.AddToParty(v.CombatVersion);
+                            }
+                        }
+                        else if (currentCommand.Command == EnumCSCommand.Combat)
+                        {
+                            queuedMob = DataManager.CreateMob(int.Parse(sCommandData[0]));
                         }
                     }
 
@@ -616,6 +644,10 @@ namespace RiverHollow.Game_Managers
             GUIManager.RemoveSkipCutsceneButton();
 
             _triggerTask?.EndTask();
+            if(queuedMob != null)
+            {
+                CombatManager.NewBattle(queuedMob);
+            }
         }
     }
 }

@@ -133,7 +133,7 @@ namespace RiverHollow.Game_Managers
         {
             LoadDictionary(ref _diPlayerAnimationData, @"Data\PlayerClassAnimationConfig", Content, null);
             LoadDictionary(ref _diItemData, @"Data\ItemData", Content, null);
-            LoadDictionary(ref _diActions, @"Data\CombatActions", Content, null);
+            LoadDictionary(ref _diActions, @"Data\Combat_Actions", Content, null);
             LoadDictionary(ref _diNPCData, @"Data\CharacterData", Content, null);
             LoadDictionary(ref _diMonsterData, @"Data\Monsters", Content, null);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
@@ -528,7 +528,7 @@ namespace RiverHollow.Game_Managers
             return _diMonsterTraits[trait];
         }
 
-        private static WorldActor CreateNPCByIndex(int id)
+        public static WorldActor CreateNPCByIndex(int id)
         {
             if (id != -1 && _diItemData.ContainsKey(id))
             {
@@ -669,6 +669,10 @@ namespace RiverHollow.Game_Managers
             if(_diTextures.ContainsKey(texture))
             {
                 rv = _diTextures[texture];
+            }
+            else
+            {
+                int j = 0;
             }
 
             return rv;

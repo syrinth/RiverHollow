@@ -322,7 +322,7 @@ namespace RiverHollow.Utilities
             return newPos;
         }
 
-        public static string GetPortraitLocation(string path, string callingfunction, string num)
+        public static string GetPortraitLocation(string path, string callingfunction, string key)
         {
             string cf = "";
             switch(callingfunction)
@@ -341,7 +341,7 @@ namespace RiverHollow.Utilities
                     break;
             }
 
-            string rv = $"{path}{cf}{num}";
+            string rv = $"{path}{cf}_{key}";
 
             Texture2D text = DataManager.GetTexture(rv);
 
@@ -583,15 +583,15 @@ namespace RiverHollow.Utilities
         {
             List<AnimationData> listAnimations = new List<AnimationData>();
 
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Spawn);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Idle);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action1);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action2);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action3);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action4);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Critical);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.Hurt);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Idle);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Critical);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.KO);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Spawn);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.Victory);
 
             return listAnimations;

@@ -11,7 +11,7 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:61][Collection:0|1|2][Class:7][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][InTown][CanMarry][Key:Damien]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:61][Collection:0|1|2][Class:7][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][CanMarry][Key:Damien]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -71,7 +71,7 @@
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:7|163][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][Key_Mark]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:7|163][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][Key:Mark]</Value>
     </Item>
     <Item>
       <Key>18</Key>
@@ -135,7 +135,7 @@
     </Item>
     <Item>
       <Key>33</Key>
-      <Value>[Type:Critter][Idle:0-0-1-0.1-T][Action1:0-0-3-0.15-T][Action2:64-0-2-0.15-T]</Value>
+      <Value>[Type:Critter][Idle:0-0-1-0.1-T][Action1:0-0-3-0.15-T][Action2:64-0-2-0.15-T][Key:Birb_1]</Value>
     </Item>
     <Item>
       <Key>34</Key>

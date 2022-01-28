@@ -27,8 +27,7 @@ namespace RiverHollow.Characters
         private bool _bCanBecomePregnant = false;
         public bool CanBecomePregnant => _bCanBecomePregnant;
         public bool Pregnant { get; set; }
-        private bool _bCombatant = false;
-        public bool Combatant => _bCombatant;
+        public bool Combatant { get; private set; } = false;
         private bool _bCanMarry = false;
         public bool CanBeMarried => _bCanMarry;
 
@@ -72,6 +71,8 @@ namespace RiverHollow.Characters
         public Villager(Villager n) : this(n.ID)
         {
             _eActorType = WorldActorTypeEnum.Villager;
+            Combatant = n.Combatant;
+            CombatVersion = n.CombatVersion;
 
             _sName = n.Name;
             _diDialogue = n._diDialogue;
@@ -98,7 +99,6 @@ namespace RiverHollow.Characters
 
             Util.AssignValue(ref _bCanMarry, "CanMarry", stringData);
             Util.AssignValue(ref _bCanBecomePregnant, "CanBecomePregnant", stringData);
-            Util.AssignValue(ref _bCombatant, "Combatant", stringData);
 
             Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
             Util.AssignValue(ref _iTotalMoneyEarnedReq, "TotalMoneyEarnedReq", stringData);
@@ -109,6 +109,7 @@ namespace RiverHollow.Characters
             CombatVersion.SetName(Name);
             if (stringData.ContainsKey("Class"))
             {
+                Combatant = true;
                 CombatVersion.SetClass(DataManager.GetClassByIndex(int.Parse(stringData["Class"])));
                 CombatVersion.AssignStartingGear();
             }

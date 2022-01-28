@@ -14,10 +14,8 @@ namespace RiverHollow.Characters
         public override Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, TILE_SIZE);
 
         int _iStableID = -1;
-        public int ID { get; } = -1;
-        public Mount(int id, Dictionary<string, string> stringData) : base(stringData)
+        public Mount(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            ID = id;
             _eActorType = WorldActorTypeEnum.Mount;
             DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 

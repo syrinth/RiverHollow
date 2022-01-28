@@ -31,7 +31,6 @@ namespace RiverHollow.Characters
 
         protected void ImportBasics(Dictionary<string, string> data)
         {
-
             DataManager.GetTextData("Monster", ID, ref _sName, "Name");
 
             Util.AssignValue(ref _iBodyWidth, "Width", data);

@@ -99,7 +99,7 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="72" name="SpawnPoint" x="100.098" y="70.3101" width="10" height="8.5"/>
+  <object id="72" name="SpawnPoint" x="99.7014" y="69.5169" width="10" height="8.5"/>
   <object id="73" name="SpawnPoint" x="227.405" y="101.64" width="10" height="8.5"/>
   <object id="74" name="SpawnPoint" x="405.477" y="70.7067" width="10" height="8.5"/>
   <object id="75" name="SpawnPoint" x="52.1101" y="229.741" width="10" height="8.5"/>
@@ -130,30 +130,5 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="6" name="Character">
-  <object id="56" name="CombatStart" x="65.3136" y="129.489" width="10.5" height="11.25">
-   <properties>
-    <property name="Dir" value="Right"/>
-    <property name="Position" value="NE"/>
-   </properties>
-  </object>
-  <object id="57" name="CombatStart" x="210.193" y="195.359" width="10.5" height="11.25">
-   <properties>
-    <property name="Dir" value="Up"/>
-    <property name="Position" value="NW"/>
-   </properties>
-  </object>
-  <object id="58" name="CombatStart" x="256.93" y="66.2491" width="10.5" height="11.25">
-   <properties>
-    <property name="Dir" value="Down"/>
-    <property name="Position" value="SE"/>
-   </properties>
-  </object>
-  <object id="59" name="CombatStart" x="399.308" y="161.432" width="10.5" height="11.25">
-   <properties>
-    <property name="Dir" value="Left"/>
-    <property name="Position" value="SW"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="6" name="Character"/>
 </map>

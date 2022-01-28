@@ -230,12 +230,9 @@ namespace RiverHollow.Tile_Engine
 
                 EnvironmentManager.Update(gTime);
 
-                if (IsRunning())
+                foreach (Mob m in _liMobs)
                 {
-                    foreach (Mob m in _liMobs)
-                    {
-                        m.Update(gTime);
-                    }
+                    m.Update(gTime);
                 }
 
                 foreach (Item i in _liItems)
@@ -243,7 +240,7 @@ namespace RiverHollow.Tile_Engine
                     ((Item)i).Update(gTime);
                 }
             }
-
+        
             foreach (WorldObject obj in _liObjectsToRemove)
             {
                 _liPlacedWorldObjects.Remove(obj);
@@ -469,9 +466,16 @@ namespace RiverHollow.Tile_Engine
                             GameManager.AddSpirit(s);
                             _liActors.Add(s);
                         }
-                        else if (obj.Properties.ContainsKey("NPC_ID"))
+                        else if (obj.Name.Equals("NPC"))
                         {
-                            DictionaryCharacterLayer.Add("NPC_" + obj.Properties["NPC_ID"], obj.Position);
+                            if (obj.Properties.ContainsKey("NPC_ID"))
+                            {
+                                DictionaryCharacterLayer.Add("NPC_" + obj.Properties["NPC_ID"], obj.Position);
+                            }
+                        }
+                        else
+                        {
+                            DictionaryCharacterLayer.Add(obj.Name, obj.Position);
                         }
                     }
                 }

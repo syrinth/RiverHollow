@@ -9,8 +9,6 @@ namespace RiverHollow.Characters
 {
     public abstract class TravellingNPC : TalkingActor
     {
-        public int ID { get; } = -1;
-
         protected int _iTotalMoneyEarnedReq = -1;
 
         protected int _iDaysToFirstArrival = 0;
@@ -27,10 +25,7 @@ namespace RiverHollow.Characters
         public bool Introduced => Relationship != RelationShipStatusEnum.None;
         protected bool _bArrivedOnce = false;
 
-        public TravellingNPC(int id)
-        {
-            ID = id;
-        }
+        public TravellingNPC(int id) : base(id) { }
 
         protected virtual void ImportBasics(Dictionary<string, string> stringData, bool loadanimations = true)
         {
@@ -39,7 +34,7 @@ namespace RiverHollow.Characters
             _diDialogue = DataManager.GetNPCDialogue(stringData["Key"]);
             DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 
-            _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Villager", ID.ToString("00"));
+            _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Villager", stringData["Key"]);
 
             if (stringData.ContainsKey("RequiredBuildingID"))
             {

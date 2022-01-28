@@ -27,7 +27,7 @@ namespace RiverHollow.Characters
 
         private double _dCountdown = 0;
 
-        public Child(int id, Dictionary<string, string> stringData) : base()
+        public Child(int id, Dictionary<string, string> stringData) : base(id)
         {
             ID = id;
             _eActorType = WorldActorTypeEnum.Child;
@@ -35,7 +35,7 @@ namespace RiverHollow.Characters
 
             _liGrowthPeriods = new List<int>() { 4, 10 };
 
-            _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Adventurer", id.ToString("00"));
+            _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Adventurer", stringData["Key"]);
             DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 
             _liData = new List<AnimationData>();

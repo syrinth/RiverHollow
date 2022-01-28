@@ -1848,7 +1848,8 @@ namespace Database_Editor
         private void AddNewAction(object sender, EventArgs e)
         {
             SaveTaskInfo(_diBasicXML[ACTIONS_XML_FILE]);
-            AddNewGenericXMLObject("Actions", dgvActions, "colActionsID", "colActionsName", tbActionName, tbActionID, dgvActionTags, "colActionTags", cbActionType, tbActionDescription);
+            List<string> defaultTags = new List<string>() { "Icon:", "DamageAttribute:", "DamageType:", "Target:", "Range:", "AreaType:", "Harm:100", "Action:", "Animation:", "AnimOffset:"};
+            AddNewGenericXMLObject("Actions", dgvActions, "colActionsID", "colActionsName", tbActionName, tbActionID, dgvActionTags, "colActionTags", cbActionType, tbActionDescription, defaultTags);
         }
         private void AddNewMonster(object sender, EventArgs e)
         {

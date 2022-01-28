@@ -23,7 +23,6 @@ namespace RiverHollow.Characters
             }
         }
 
-        public int ID { get; } = -1;
         protected double _dIdleFor;
         protected int _iLeash = 7;
 
@@ -54,10 +53,8 @@ namespace RiverHollow.Characters
 
         #endregion
 
-        public Mob(int id, Dictionary<string, string> data)
+        public Mob(int id, Dictionary<string, string> data) : base(id)
         {
-            ID = id;
-
             _liSpawnConditions = new List<SpawnConditionEnum>();
             _eActorType = WorldActorTypeEnum.Mob;
             _liMonsters = new List<CombatActor>();
@@ -165,26 +162,29 @@ namespace RiverHollow.Characters
 
         public override void Update(GameTime gTime)
         {
-            //Check if the mob is still stunned
-            if (_dStun > 0)
-            {
-                _dStun -= gTime.ElapsedGameTime.TotalSeconds;
-                if (_dStun < 0) { _dStun = 0; }
-            }
-            else
-            {
-                if (_bBumpedIntoSomething)
-                {
-                    _bBumpedIntoSomething = false;
-                    SetMoveObj(Vector2.Zero);
-                    ChangeState(NPCStateEnum.Idle);
-                }
-
-                ProcessStateEnum(gTime);
-                UpdateMovement(gTime);
-            }
-
             base.Update(gTime);
+
+            if (!CutsceneManager.Playing && IsRunning())
+            {
+                //Check if the mob is still stunned
+                if (_dStun > 0)
+                {
+                    _dStun -= gTime.ElapsedGameTime.TotalSeconds;
+                    if (_dStun < 0) { _dStun = 0; }
+                }
+                else
+                {
+                    if (_bBumpedIntoSomething)
+                    {
+                        _bBumpedIntoSomething = false;
+                        SetMoveObj(Vector2.Zero);
+                        ChangeState(NPCStateEnum.Idle);
+                    }
+
+                    ProcessStateEnum(gTime);
+                    UpdateMovement(gTime);
+                }
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool userLayerDepth = false)

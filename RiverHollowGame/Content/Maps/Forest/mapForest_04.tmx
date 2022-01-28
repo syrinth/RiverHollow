@@ -94,18 +94,5 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="6" name="Character">
-  <object id="49" name="CombatStart" x="65.7453" y="114.24" width="10.5" height="11.25">
-   <properties>
-    <property name="Map" value="mapForest_03"/>
-    <property name="Position" value="NE"/>
-   </properties>
-  </object>
-  <object id="50" name="CombatStart" x="211.079" y="194.573" width="10.5" height="11.25">
-   <properties>
-    <property name="Map" value="mapForest_08"/>
-    <property name="Position" value="NW"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="6" name="Character"/>
 </map>

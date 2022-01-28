@@ -78,6 +78,9 @@ namespace RiverHollow.Characters
                 [ElementEnum.Ice] = ElementAlignment.Neutral,
                 [ElementEnum.Lightning] = ElementAlignment.Neutral
             };
+
+            _iBodyHeight = 32;
+            _iBodyWidth = 32;
         }
 
         public override void Update(GameTime theGameTime)
@@ -111,9 +114,11 @@ namespace RiverHollow.Characters
         {
             sprite = new AnimatedSprite(textureName);
 
+            int xLocation = 0;
             foreach (AnimationData data in listAnimations)
             {
-                sprite.AddAnimation(data.Animation, data.XLocation, data.YLocation, _iBodyWidth, _iBodyHeight, data.Frames, data.FrameSpeed, data.PingPong);
+                sprite.AddAnimation(data.Animation, xLocation, 0, _iBodyWidth, _iBodyHeight, data.Frames, data.FrameSpeed, data.PingPong);
+                xLocation += data.Frames * _iBodyWidth;
             }
 
             PlayAnimation(AnimationEnum.Idle);

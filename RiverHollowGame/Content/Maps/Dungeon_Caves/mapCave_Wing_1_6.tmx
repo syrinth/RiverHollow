@@ -176,18 +176,5 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="6" name="Character">
-  <object id="72" name="CombatStart" x="116.167" y="84.8958" width="9" height="8">
-   <properties>
-    <property name="Map" value="mapCave_Wing_1_5"/>
-    <property name="Position" value="SE"/>
-   </properties>
-  </object>
-  <object id="73" name="CombatStart" x="514.667" y="225.975" width="10.5" height="11.25">
-   <properties>
-    <property name="Map" value="mapCave_Wing_1_7"/>
-    <property name="Position" value="NW"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="6" name="Character"/>
 </map>

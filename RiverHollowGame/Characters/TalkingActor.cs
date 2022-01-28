@@ -31,6 +31,13 @@ namespace RiverHollow.Characters
 
         protected List<string> _liSpokenKeys;
 
+        public TalkingActor(int id) : base(id)
+        {
+            _bCanTalk = true;
+            _liActorFaceQueue = new List<ActorFaceEnum>();
+            _liSpokenKeys = new List<string>();
+        }
+
         public TalkingActor() : base()
         {
             _bCanTalk = true;

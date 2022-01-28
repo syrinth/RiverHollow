@@ -115,7 +115,7 @@ namespace RiverHollow.CombatStuff
             Util.AssignValue(ref _ePowerAttribute, "DamageAttribute", stringData);
             Util.AssignValue(ref _eTarget, "Target", stringData);
             Util.AssignValue(ref _eAreaType, "AreaType", stringData);
-            Util.AssignValue(ref _eRange, "LiteRange", stringData);
+            Util.AssignValue(ref _eRange, "Range", stringData);
             Util.AssignValue(ref _iCritRating, "Crit", stringData);
             Util.AssignValue(ref _iAccuracy, "Accuracy", stringData);
             Util.AssignValue(ref _iReqLevel, "Level", stringData);

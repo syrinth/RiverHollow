@@ -20,7 +20,7 @@ namespace Database_Editor.Classes
         public static readonly string PATH_TO_SCHEDULES = PATH_TO_DATA + @"\Schedules";
 
         #region XML Files
-        public static readonly string ACTIONS_XML_FILE = PATH_TO_DATA + @"\CombatActions.xml";
+        public static readonly string ACTIONS_XML_FILE = PATH_TO_DATA + @"\Combat_Actions.xml";
         public static readonly string CLASSES_XML_FILE = PATH_TO_DATA + @"\Classes.xml";
         public static readonly string NPC_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
         public static readonly string CONFIG_XML_FILE = PATH_TO_DATA + @"\Config.xml";
@@ -43,7 +43,7 @@ namespace Database_Editor.Classes
         public static readonly string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         public static readonly string TAGS_FOR_CLASSES = "Class";
         public static readonly string TAGS_FOR_SHOPDATA = "ShopData,TargetShopID";
-        public static readonly string TAGS_FOR_CHARACTERS = "NPC_ID,MobID,Actors,Move,Face,Speak,Speed,Activate,Deactivate";
+        public static readonly string TAGS_FOR_CHARACTERS = "NPC_ID,MobID,Actors,Move,Face,Speak,Speed,Activate,Deactivate,Join,Combat";
         public static readonly string TAGS_FOR_STATUS_EFFECTS = "StatusEffectID";
         public static readonly string TAGS_FOR_LIGHTS = "LightID";
         public static readonly string TAGS_FOR_MONSTERS = "MonsterID";

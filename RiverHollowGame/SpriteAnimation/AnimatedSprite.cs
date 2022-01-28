@@ -67,6 +67,11 @@ namespace RiverHollow.SpriteAnimations
         public AnimatedSprite(string Texture, bool combatSprite = false)
         {
             _texture = DataManager.GetTexture(Texture);
+
+            if(_texture == null)
+            {
+                int i = 0;
+            }
         }
 
         public AnimatedSprite(AnimatedSprite sprite)

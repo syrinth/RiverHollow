@@ -130,30 +130,5 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="6" name="Character">
-  <object id="56" name="CombatStart" x="65.3136" y="129.092" width="10.5" height="11.25">
-   <properties>
-    <property name="Dir" value="Right"/>
-    <property name="Position" value="NE"/>
-   </properties>
-  </object>
-  <object id="57" name="CombatStart" x="210.193" y="194.962" width="10.5" height="11.25">
-   <properties>
-    <property name="Dir" value="Up"/>
-    <property name="Position" value="NW"/>
-   </properties>
-  </object>
-  <object id="58" name="CombatStart" x="256.93" y="65.8525" width="10.5" height="11.25">
-   <properties>
-    <property name="Dir" value="Down"/>
-    <property name="Position" value="SE"/>
-   </properties>
-  </object>
-  <object id="59" name="CombatStart" x="399.308" y="161.035" width="10.5" height="11.25">
-   <properties>
-    <property name="Dir" value="Left"/>
-    <property name="Position" value="SW"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="6" name="Character"/>
 </map>

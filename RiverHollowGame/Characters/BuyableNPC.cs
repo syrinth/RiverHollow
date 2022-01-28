@@ -8,7 +8,7 @@ namespace RiverHollow.Characters
         int _iValue;
         public int Value => _iValue;
 
-        public BuyableNPC(Dictionary<string, string> stringData) : base()
+        public BuyableNPC(int id, Dictionary<string, string> stringData) : base(id)
         {
             Util.AssignValue(ref _iValue, "Value", stringData);
         }

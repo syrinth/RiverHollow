@@ -31,11 +31,20 @@ namespace RiverHollow.Misc
         public void StoreData(string value)
         {
             string[] splitString = value.Split('-');
-            XLocation = int.Parse(splitString[0]);
-            YLocation = int.Parse(splitString[1]);
-            Frames = int.Parse(splitString[2]);
-            FrameSpeed = float.Parse(splitString[3]);
-            PingPong = splitString[4].Equals("T");
+            if (splitString.Length == 5)
+            {
+                XLocation = int.Parse(splitString[0]);
+                YLocation = int.Parse(splitString[1]);
+                Frames = int.Parse(splitString[2]);
+                FrameSpeed = float.Parse(splitString[3]);
+                PingPong = splitString[4].Equals("T");
+            }
+            else if(splitString.Length == 3)
+            {
+                Frames = int.Parse(splitString[0]);
+                FrameSpeed = float.Parse(splitString[1]);
+                PingPong = splitString[2].Equals("T");
+            }
         }
     }
 }

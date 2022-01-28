@@ -3,11 +3,11 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>1</Key>
-      <Value>[Text:$1$... I wish you'd listen to me. You push yourself too hard.]</Value>
+      <Value>[Name:First][Text:It's not good for monsters to be this close to your town.]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:No. No I don't. I've told you before, I need to train. I need to be as ready as I can.]</Value>
+      <Value>[Name:Engage][Text:You look like you know what you're doing. Care to join me in taking this thing down?]</Value>
     </Item>
     <Item>
       <Key>3</Key>

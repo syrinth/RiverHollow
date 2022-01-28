@@ -15,6 +15,9 @@ namespace RiverHollow.Characters
     public abstract class WorldActor : Actor
     {
         #region Properties
+
+        public int ID { get; } = -1;
+
         protected ActorMovementStateEnum _eMovementState = ActorMovementStateEnum.Idle;
 
         protected WorldActorTypeEnum _eActorType = WorldActorTypeEnum.Actor;
@@ -89,6 +92,16 @@ namespace RiverHollow.Characters
             _liTilePath = new List<RHTile>();
         }
 
+        public WorldActor(int id) : base()
+        {
+            ID = id;
+
+            _iBodyWidth = TILE_SIZE;
+            _iBodyHeight = HUMAN_HEIGHT;
+
+            _liTilePath = new List<RHTile>();
+        }
+
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             if (_bOnTheMap)
@@ -100,25 +113,28 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            if (_dEtherealCD != 0)
+            if (IsRunning())
             {
-                _dEtherealCD -= gTime.ElapsedGameTime.TotalSeconds;
-                if (_dEtherealCD <= 0)
+                if (_dEtherealCD != 0)
                 {
-                    if (!_bIgnoreCollisions)
+                    _dEtherealCD -= gTime.ElapsedGameTime.TotalSeconds;
+                    if (_dEtherealCD <= 0)
                     {
-                        _dEtherealCD = 5;
-                        _bIgnoreCollisions = true;
-                    }
-                    else
-                    {
-                        _dEtherealCD = 0;
-                        _bIgnoreCollisions = false;
+                        if (!_bIgnoreCollisions)
+                        {
+                            _dEtherealCD = 5;
+                            _bIgnoreCollisions = true;
+                        }
+                        else
+                        {
+                            _dEtherealCD = 0;
+                            _bIgnoreCollisions = false;
+                        }
                     }
                 }
-            }
 
-            HandleMove(_vMoveTo);
+                HandleMove(_vMoveTo);
+            }
         }
 
         public virtual void ProcessRightButtonClick() { }

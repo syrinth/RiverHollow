@@ -12,15 +12,13 @@ namespace RiverHollow.Characters
     public class Pet : BuyableNPC
     {
         private int _iGatherZoneID;
-        public int ID { get; } = -1;
 
-        public Pet(int id, Dictionary<string, string> stringData) : base(stringData)
+        public Pet(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            ID = id;
             _eActorType = WorldActorTypeEnum.Pet;
             _bCanWander = true;
 
-            _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Adventurer", id.ToString("00"));
+            _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Adventurer", stringData["Key"]);
             DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 
             Util.AssignValue(ref _iGatherZoneID, "ObjectID", stringData);

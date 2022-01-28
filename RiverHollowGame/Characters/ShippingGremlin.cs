@@ -28,7 +28,7 @@ namespace RiverHollow.Characters
             }
         }
 
-        public ShippingGremlin(int index, Dictionary<string, string> stringData) : base(index)
+        public ShippingGremlin(int id, Dictionary<string, string> stringData) : base(id)
         {
             //_bLivesInTown = true;
             _liRequiredBuildingIDs = new List<int>();
@@ -39,7 +39,7 @@ namespace RiverHollow.Characters
             _iBodyHeight = 32;
 
             _diDialogue = DataManager.GetNPCDialogue(stringData["Key"]);
-            _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Gremlin", ID.ToString("00"));
+            _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Gremlin", stringData["Key"]);
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
             DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 
