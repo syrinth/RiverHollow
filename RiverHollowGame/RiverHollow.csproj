@@ -160,6 +160,7 @@
     <Compile Include="GUIComponents\GUIObjects\GUICursor.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIObject.cs" />
     <Compile Include="Items\Item.cs" />
+    <Compile Include="Utilities\Enums.cs" />
     <Compile Include="WorldObjects\WorldObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

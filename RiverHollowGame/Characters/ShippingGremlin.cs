@@ -7,6 +7,7 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
@@ -95,7 +96,7 @@ namespace RiverHollow.Characters
 
         public void OpenShipping()
         {
-            GUIManager.OpenMainObject(new HUDInventoryDisplay(_arrInventory, GameManager.DisplayTypeEnum.Ship));
+            GUIManager.OpenMainObject(new HUDInventoryDisplay(_arrInventory, DisplayTypeEnum.Ship));
         }
 
         /// <summary>

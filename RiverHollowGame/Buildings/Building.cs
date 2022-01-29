@@ -10,6 +10,7 @@ using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIComponents.Screens;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Buildings
 {

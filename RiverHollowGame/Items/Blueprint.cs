@@ -3,6 +3,7 @@ using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Items
 {
@@ -27,9 +28,9 @@ namespace RiverHollow.Items
             ConfirmItemUse(entry);
         }
 
-        public override void UseItem(GameManager.TextEntryVerbEnum action)
+        public override void UseItem(TextEntryVerbEnum action)
         {
-            if (action == GameManager.TextEntryVerbEnum.Yes)
+            if (action == TextEntryVerbEnum.Yes)
             {
                 if (_arrCraftingUnlocks != null)
                 {

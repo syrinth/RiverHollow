@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.WorldObjects;
-using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 using static RiverHollow.WorldObjects.Buildable;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
@@ -98,7 +98,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             else
             {
                 Item clickedItem = IsItemThere(mouse);
-                if (GameManager.CurrentInventoryDisplay == GameManager.DisplayTypeEnum.Gift)
+                if (GameManager.CurrentInventoryDisplay == DisplayTypeEnum.Gift)
                 {
                     if (clickedItem != null && clickedItem.Giftable())
                     {

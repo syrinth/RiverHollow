@@ -6,7 +6,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.Combat.Lite;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using System;
-using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {

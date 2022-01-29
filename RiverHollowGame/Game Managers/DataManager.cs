@@ -18,6 +18,7 @@ using static RiverHollow.WorldObjects.Buildable.AdjustableObject;
 using RiverHollow.Tile_Engine;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Items;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {
@@ -738,7 +739,7 @@ namespace RiverHollow.Game_Managers
                 case GameIconEnum.DebuffArrow:
                     rv = new GUIImage(new Rectangle(195, 74, 10, 6), COMBAT_TEXTURE);
                     break;
-                case GameIconEnum.Defense:
+                case GameIconEnum.Defence:
                     rv = new GUIImage(new Rectangle(136, 87, 8, 9), COMBAT_TEXTURE);
                     break;
                 case GameIconEnum.ElementFire:

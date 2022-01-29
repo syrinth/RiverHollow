@@ -3,6 +3,7 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 {

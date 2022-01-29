@@ -4,9 +4,9 @@ using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.Items;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Misc
 {

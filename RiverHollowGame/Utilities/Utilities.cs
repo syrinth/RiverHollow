@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Utilities
 {

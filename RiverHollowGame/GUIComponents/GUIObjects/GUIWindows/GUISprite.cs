@@ -3,8 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.SpriteAnimations;
-
-using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {

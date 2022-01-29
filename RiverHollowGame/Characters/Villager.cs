@@ -11,8 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {

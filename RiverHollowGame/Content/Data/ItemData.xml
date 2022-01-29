@@ -487,27 +487,27 @@
     </Item>
     <Item>
       <Key>121</Key>
-      <Value>[Type:Equipment][Subtype:Weapon][Image:0-7][Value:1000][ESub:Rapier][Tier:1][Atk:Moderate][Str:Moderate]</Value>
+      <Value>[Type:Equipment][Subtype:Weapon][Image:0-7][Value:1000][ESub:Rapier][Tier:1][Damage:Moderate][Agility:Major][Evasion:Minor]</Value>
     </Item>
     <Item>
       <Key>122</Key>
-      <Value>[Type:Equipment][Subtype:Body][Image:0-0][Value:1000][ESub:Cloth][ASlot:Armor][Tier:1][Defense:Minor][Magic:Major][Resistance:Major][Vitality:Moderate][ReqItems:7-3]</Value>
+      <Value>[Type:Equipment][Subtype:Body][Image:0-0][Value:1000][ESub:Cloth][ASlot:Armor][Tier:1][Defence:Minor][Magic:Major][Resistance:Major][Vitality:Moderate][ReqItems:7-3]</Value>
     </Item>
     <Item>
       <Key>123</Key>
-      <Value>[Type:Equipment][Subtype:Armor][Image:0-1][Value:1000][ESub:Light][ASlot:Armor][Tier:1][Def:Moderate][Str:Major]</Value>
+      <Value>[Type:Equipment][Subtype:Accessory][Image:0-1][Value:1000][ESub:Light][ASlot:Armor][Tier:1][Agility:Major][Defence:Moderate][Resistance:Minor][Vitality:Major]</Value>
     </Item>
     <Item>
       <Key>124</Key>
-      <Value>[Type:Equipment][Subtype:Armor][Image:0-2][Value:1000][ESub:Heavy][ASlot:Armor][Tier:1][Def:Major][Str:Moderate]</Value>
+      <Value>[Type:Equipment][Subtype:Accessory][Image:0-2][Value:1000][ESub:Heavy][ASlot:Armor][Tier:1][Def:Major][Str:Moderate]</Value>
     </Item>
     <Item>
       <Key>125</Key>
-      <Value>[Type:Equipment][Subtype:Head][Image:0-3][Value:1000][ESub:Cloth][ASlot:Head][Tier:1][Defense:Minor][Magic:Major][Resistance:Major][Vitality:Minor]</Value>
+      <Value>[Type:Equipment][Subtype:Head][Image:0-3][Value:1000][ESub:Cloth][ASlot:Head][Tier:1][Defence:Minor][Magic:Major][Resistance:Major][Vitality:Minor]</Value>
     </Item>
     <Item>
       <Key>126</Key>
-      <Value>[Type:Equipment][Subtype:Accessory][Image:0-6][Value:1000][ESub:Light][ASlot:Head][Tier:1][Def:Moderate][Str:Major]</Value>
+      <Value>[Type:Equipment][Subtype:Accessory][Image:0-6][Value:1000][ESub:Light][ASlot:Head][Tier:1][Agility:Major][Defence:Moderate][Resistance:Minor][Vitality:Moderate]</Value>
     </Item>
     <Item>
       <Key>127</Key>
@@ -515,11 +515,11 @@
     </Item>
     <Item>
       <Key>128</Key>
-      <Value>[Type:Equipment][Subtype:Armor][Image:0-6][Value:1000][ESub:None][ASlot:Wrist][Tier:1][Def:Major][Str:Minor]</Value>
+      <Value>[Type:Equipment][Subtype:Accessory][Image:0-6][Value:1000][ESub:None][ASlot:Wrist][Tier:1][Agility:Moderate][Strength:Moderate][Defence:Major]</Value>
     </Item>
     <Item>
       <Key>129</Key>
-      <Value>[Type:Equipment][Subtype:Accessory][Image:0-4][Value:1000][Tier:1][Def:Major][Str:Minor]</Value>
+      <Value>[Type:Equipment][Subtype:Accessory][Image:0-4][Value:1000][Tier:1][Def:Major][Str:Minor][Vitality:Minor]</Value>
     </Item>
     <Item>
       <Key>130</Key>

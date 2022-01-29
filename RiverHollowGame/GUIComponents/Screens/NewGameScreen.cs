@@ -10,6 +10,7 @@ using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
 {

@@ -7,7 +7,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using static Database_Editor.Classes.Constants;
-using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace Database_Editor
 {

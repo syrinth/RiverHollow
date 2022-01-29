@@ -9,6 +9,7 @@ using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
@@ -222,7 +223,7 @@ namespace RiverHollow.Characters
             double dmgDealt = RHRandom.Instance().Next(min, max);
 
             double offensiveAttribute = attacker.Attribute(attribute);
-            double defensiveAttribute = Attribute(GameManager.GetDefenseType(attribute));
+            double defensiveAttribute = Attribute(GameManager.GetDefenceType(attribute));
 
             //The minimum penetration modifier is 0.2, the maximum is 2
             double penetrationModifier = Math.Min(Math.Max(0.2, offensiveAttribute / defensiveAttribute), 2);

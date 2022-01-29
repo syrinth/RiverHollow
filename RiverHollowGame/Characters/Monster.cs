@@ -6,6 +6,7 @@ using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
@@ -45,7 +46,7 @@ namespace RiverHollow.Characters
             _diAttributes[AttributeEnum.Agility] = 10 + (_iRating * 5);
             _diAttributes[AttributeEnum.Magic] = 10 + (_iRating * 5);
 
-            _diAttributes[AttributeEnum.Defense] = 5 + (_iRating * 5);
+            _diAttributes[AttributeEnum.Defence] = 5 + (_iRating * 5);
             _diAttributes[AttributeEnum.Resistance] = 5 + (_iRating * 5);
             _diAttributes[AttributeEnum.Evasion] = 5;
             _diAttributes[AttributeEnum.Speed] = 5;

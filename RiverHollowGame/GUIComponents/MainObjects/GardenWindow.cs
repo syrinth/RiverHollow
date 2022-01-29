@@ -6,6 +6,7 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 using static RiverHollow.WorldObjects.Buildable.AdjustableObject;
 
 namespace RiverHollow.GUIComponents.MainObjects

@@ -12,6 +12,7 @@ using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {

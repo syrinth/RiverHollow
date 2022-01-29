@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Characters;
 using RiverHollow.Characters.Lite;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {

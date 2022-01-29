@@ -18,6 +18,7 @@ using System.Linq;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.RiverHollow;
+using static RiverHollow.Utilities.Enums;
 using static RiverHollow.WorldObjects.Buildable;
 using static RiverHollow.WorldObjects.Buildable.AdjustableObject;
 

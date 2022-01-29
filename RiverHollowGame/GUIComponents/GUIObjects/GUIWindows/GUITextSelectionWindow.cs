@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters;
@@ -7,9 +6,9 @@ using RiverHollow.Characters.Lite;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
-using RiverHollow.Utilities;
-using static RiverHollow.Characters.TravellingNPC;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
+
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUITextSelectionWindow : GUITextWindow
@@ -55,19 +54,19 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _sStatement = _textEntry.GetFormattedText();
             switch (_textEntry.SelectionType)
             {
-                case GameManager.TextEntrySelectionEnum.VillageTalk:
+                case TextEntrySelectionEnum.VillageTalk:
                     AddVillagerTalkOptions();
                     break;
-                case GameManager.TextEntrySelectionEnum.MerchantTalk:
+                case TextEntrySelectionEnum.MerchantTalk:
                     AddMerchantTalkOptions();
                     break;
-                case GameManager.TextEntrySelectionEnum.YesNo:
+                case TextEntrySelectionEnum.YesNo:
                     AddYesNoOptions();
                     break;
-                case GameManager.TextEntrySelectionEnum.Shop:
+                case TextEntrySelectionEnum.Shop:
                     AddShopOptions();
                     break;
-                case GameManager.TextEntrySelectionEnum.Party:
+                case TextEntrySelectionEnum.Party:
                     AddPartyOptions();
                     break;
                 default:

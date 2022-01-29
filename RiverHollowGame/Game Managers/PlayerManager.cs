@@ -18,6 +18,7 @@ using static RiverHollow.WorldObjects.Buildable;
 using static RiverHollow.Characters.TravellingNPC;
 using RiverHollow.Characters.Lite;
 using RiverHollow.Items;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {

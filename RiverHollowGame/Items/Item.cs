@@ -7,6 +7,7 @@ using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Items
 {

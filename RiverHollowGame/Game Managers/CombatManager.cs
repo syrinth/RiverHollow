@@ -10,6 +10,7 @@ using System.Linq;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.GUIComponents.GUIObjects.Combat.Lite;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {

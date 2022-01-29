@@ -6,6 +6,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.SpriteAnimations
 {

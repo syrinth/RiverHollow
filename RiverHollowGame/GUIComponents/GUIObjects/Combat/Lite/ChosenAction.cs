@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using static RiverHollow.Game_Managers.CombatManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 {
@@ -45,10 +46,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             }
         }
 
-        public ChosenAction(CombatAction ca)
+        public ChosenAction(CombatAction obj)
         {
             User = ActiveCharacter;
-            _chosenAction = ca;
+            _chosenAction = obj;
             Name = _chosenAction.Name;
 
             _chosenAction.SkillUser = ActiveCharacter;
@@ -110,6 +111,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 
                 if (col - 1 >= 0) { LegalTiles.Add(GetTileFromMap(row, col - 1)); }
                 if (col + 1 < ALLY_FRONT) { LegalTiles.Add(GetTileFromMap(row, col + 1)); }
+            }
+
+            if(obj.Compare(ActionEnum.Move))
+            {
+                LegalTiles.RemoveAll(x => x.Occupied());
             }
         }
 

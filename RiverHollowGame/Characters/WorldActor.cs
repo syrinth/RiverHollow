@@ -9,6 +9,7 @@ using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {

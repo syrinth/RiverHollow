@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {
@@ -271,7 +272,7 @@ namespace RiverHollow.Game_Managers
                         RHTile doorTile = theTestMap.GetTileByGridCoords(gridCoords);
 
                         //If the exit points to a door, then path to the RHTile below the door because the door, itself is impassable
-                        pathToVector = doorTile.GetTileByDirection(GameManager.DirectionEnum.Down).Center;
+                        pathToVector = doorTile.GetTileByDirection(DirectionEnum.Down).Center;
                     }
 
                     //Find the shortest path to the exit in question. We copy the start vector into a new one
@@ -334,7 +335,7 @@ namespace RiverHollow.Game_Managers
                     //Check to see if we stop just before a door
                     if (addDoor)
                     {
-                        endTile = current.GetTileByDirection(GameManager.DirectionEnum.Up);
+                        endTile = current.GetTileByDirection(DirectionEnum.Up);
                         //Cost doesn't matter at this point so just make it 0
                         travelMap.Store(endTile, current, travelMap[current].CostSoFar + GetMovementCost(endTile));
                     }
@@ -395,10 +396,10 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            if (current.GetTileByDirection(GameManager.DirectionEnum.Up) == last && current.GetTileByDirection(GameManager.DirectionEnum.Down) == next) { rv = true; }
-            if (current.GetTileByDirection(GameManager.DirectionEnum.Left) == last && current.GetTileByDirection(GameManager.DirectionEnum.Right) == next) { rv = true; }
-            if (current.GetTileByDirection(GameManager.DirectionEnum.Down) == last && current.GetTileByDirection(GameManager.DirectionEnum.Up) == next) { rv = true; }
-            if (current.GetTileByDirection(GameManager.DirectionEnum.Right) == last && current.GetTileByDirection(GameManager.DirectionEnum.Left) == next) { rv = true; }
+            if (current.GetTileByDirection(DirectionEnum.Up) == last && current.GetTileByDirection(DirectionEnum.Down) == next) { rv = true; }
+            if (current.GetTileByDirection(DirectionEnum.Left) == last && current.GetTileByDirection(DirectionEnum.Right) == next) { rv = true; }
+            if (current.GetTileByDirection(DirectionEnum.Down) == last && current.GetTileByDirection(DirectionEnum.Up) == next) { rv = true; }
+            if (current.GetTileByDirection(DirectionEnum.Right) == last && current.GetTileByDirection(DirectionEnum.Left) == next) { rv = true; }
 
             return rv;
         }
@@ -628,11 +629,11 @@ namespace RiverHollow.Game_Managers
                         return false;
                     }
 
-                    lastTile = lastTile?.GetTileByDirection(GameManager.DirectionEnum.Right);
+                    lastTile = lastTile?.GetTileByDirection(DirectionEnum.Right);
                 }
 
                 //Reset to the first Tile in the current row and go down one
-                lastTile = rowTile.GetTileByDirection(GameManager.DirectionEnum.Down);
+                lastTile = rowTile.GetTileByDirection(DirectionEnum.Down);
             }
 
             return true;

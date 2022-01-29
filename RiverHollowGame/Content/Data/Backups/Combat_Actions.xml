@@ -123,7 +123,7 @@
     </Item>
     <Item>
       <Key>30</Key>
-      <Value>[Type:Action][Icon:0-7][DamageAttribute:Agility][DamageType:Physical][Target:Enemy][Range:Melee][AreaType:Single][Harm:100][Action:UserAttack Apply][Move:Right]</Value>
+      <Value>[Type:Action][Icon:0-7][DamageAttribute:Agility][DamageType:Physical][Target:Enemy][Range:Melee][AreaType:Single][Harm:100][Action:UserAttack Apply][Move:Up]</Value>
     </Item>
     <Item>
       <Key>31</Key>

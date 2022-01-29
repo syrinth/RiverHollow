@@ -7,6 +7,7 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Items
 {
@@ -92,7 +93,7 @@ namespace RiverHollow.Items
 
         public override void ItemBeingUsed()
         {
-            if (ToolType == GameManager.ToolEnum.Harp)
+            if (ToolType == ToolEnum.Harp)
             {
                 Spirit s = MapManager.CurrentMap.FindSpirit();
                 if (s != null)
@@ -100,7 +101,7 @@ namespace RiverHollow.Items
                     HarpManager.NewSong(s);
                 }
             }
-            else if (ToolType == GameManager.ToolEnum.Return)
+            else if (ToolType == ToolEnum.Return)
             {
                 TextEntry entry = null;
                 if (DungeonManager.CurrentDungeon != null)

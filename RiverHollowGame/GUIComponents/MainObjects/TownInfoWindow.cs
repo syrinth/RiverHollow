@@ -2,6 +2,7 @@
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.MainObjects
 {
@@ -18,7 +19,7 @@ namespace RiverHollow.GUIComponents.MainObjects
             {
                 switch (kvp.Value[0].Type)
                 {
-                    case GameManager.ObjectTypeEnum.Plant:
+                    case ObjectTypeEnum.Plant:
                         plants += kvp.Value.Count;
                         break;
                 }

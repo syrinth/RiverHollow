@@ -3,10 +3,10 @@ using MonoGame.Extended.Tiled;
 using RiverHollow.WorldObjects;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {

@@ -4,6 +4,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 {
@@ -156,11 +157,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 }
                 else if (selectedAction.Heal) { tempObj = DataManager.GetIcon(GameIconEnum.Heal); }
 
-                if (tempObj != null)
-                {
-                    tempObj.Position(Position() + ScaleIt(new Vector2(7, 29)));
-                    _liActionIcons.Add(tempObj);
-                }
+                PositionIcon(tempObj);
 
                 //Damage Prediction
                 if (selectedAction.Potency > 0)
@@ -180,9 +177,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 if (selectedAction.Range == RangeEnum.Melee) { tempObj = DataManager.GetIcon(GameIconEnum.Melee); }
                 else if (selectedAction.Range == RangeEnum.Ranged) { tempObj = DataManager.GetIcon(GameIconEnum.Ranged); }
 
-                tempObj.AnchorAndAlignToObject(_liActionIcons[_liActionIcons.Count-1], SideEnum.Right, SideEnum.CenterY);
-                tempObj.ScaledMoveBy(2, 0);
-                _liActionIcons.Add(tempObj);
+                PositionIcon(tempObj);
 
                 //Icon for Area of Effect
                 switch (selectedAction.AreaType)
@@ -211,9 +206,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 if (selectedAction.IsHelpful()) { tempObj.SetColor(Color.Green); }
                 else { tempObj.SetColor(Color.Red); }
 
-                tempObj.AnchorAndAlignToObject(_liActionIcons[_liActionIcons.Count - 1], SideEnum.Right, SideEnum.CenterY);
-                tempObj.ScaledMoveBy(2, 0);
-                _liActionIcons.Add(tempObj);
+                PositionIcon(tempObj);
 
                 //Icon for User Movement
                 if (selectedAction.UserMovement != DirectionEnum.None)
@@ -224,9 +217,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                     else if (selectedAction.UserMovement == DirectionEnum.Down) { tempObj = DataManager.GetIcon(GameIconEnum.MoveDown); }
                     tempObj.SetColor(Color.Green);
 
-                    tempObj.AnchorAndAlignToObject(_liActionIcons[_liActionIcons.Count - 1], SideEnum.Right, SideEnum.CenterY);
-                    tempObj.ScaledMoveBy(2, 0);
-                    _liActionIcons.Add(tempObj);
+                    PositionIcon(tempObj);
                 }
 
                 //Icon for Target Movement
@@ -238,9 +229,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                     else if (selectedAction.TargetMovement == DirectionEnum.Down) { tempObj = DataManager.GetIcon(GameIconEnum.MoveDown); }
                     tempObj.SetColor(Color.Red);
 
-                    tempObj.AnchorAndAlignToObject(_liActionIcons[_liActionIcons.Count - 1], SideEnum.Right, SideEnum.CenterY);
-                    tempObj.ScaledMoveBy(2, 0);
-                    _liActionIcons.Add(tempObj);
+                    PositionIcon(tempObj);
                 }
 
                 //Icon for Elemental Alignment
@@ -257,12 +246,27 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                             tempObj = DataManager.GetIcon(GameIconEnum.ElementLightning);
                             break;
                     }
-                    tempObj.AnchorAndAlignToObject(_gActionName, SideEnum.Right, SideEnum.CenterY);
-                    tempObj.ScaledMoveBy(2, 0);
-                    _liActionIcons.Add(tempObj);
+                    PositionIcon(tempObj);
                 }
 
                 foreach (GUIObject obj in _liActionIcons) { AddControl(obj); }
+            }
+        }
+
+        private void PositionIcon(GUIObject obj)
+        {
+            if (obj != null)
+            {
+                if (_liActionIcons.Count == 0)
+                {
+                    obj.Position(Position() + ScaleIt(new Vector2(7, 29)));
+                }
+                else
+                {
+                    obj.AnchorAndAlignToObject(_liActionIcons[_liActionIcons.Count - 1], SideEnum.Right, SideEnum.CenterY);
+                    obj.ScaledMoveBy(2, 0);
+                }
+                _liActionIcons.Add(obj);
             }
         }
 

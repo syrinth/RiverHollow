@@ -2,7 +2,7 @@
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
@@ -61,7 +61,7 @@ namespace RiverHollow.Characters
         {
             _iMagStat = magStat;
             _diAttributes[AttributeEnum.Strength] = 2 * magStat + 10;
-            _diAttributes[AttributeEnum.Defense] = 2 * magStat + 10;
+            _diAttributes[AttributeEnum.Defence] = 2 * magStat + 10;
             _diAttributes[AttributeEnum.Vitality] = (3 * magStat) + 80;
             _diAttributes[AttributeEnum.Magic] = 2 * magStat + 10;
             _diAttributes[AttributeEnum.Resistance] = 2 * magStat + 10;

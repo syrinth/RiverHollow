@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {
@@ -12,30 +13,30 @@ namespace RiverHollow.Game_Managers
 
         public static void Initialize()
         {
-            _ziForest = new ZoneInfo(GameManager.ZoneEnum.Forest);
-            _ziMountain = new ZoneInfo(GameManager.ZoneEnum.Mountain);
-            _ziField = new ZoneInfo(GameManager.ZoneEnum.Field);
-            _ziSwamp = new ZoneInfo(GameManager.ZoneEnum.Swamp);
-            _ziTown = new ZoneInfo(GameManager.ZoneEnum.Town);
+            _ziForest = new ZoneInfo(ZoneEnum.Forest);
+            _ziMountain = new ZoneInfo(ZoneEnum.Mountain);
+            _ziField = new ZoneInfo(ZoneEnum.Field);
+            _ziSwamp = new ZoneInfo(ZoneEnum.Swamp);
+            _ziTown = new ZoneInfo(ZoneEnum.Town);
         }
 
-        public static void AddMap(GameManager.ZoneEnum zone, string mapName)
+        public static void AddMap(ZoneEnum zone, string mapName)
         {
             switch (zone)
             {
-                case GameManager.ZoneEnum.Field:
+                case ZoneEnum.Field:
                     _ziField.AddMap(mapName);
                     break;
-                case GameManager.ZoneEnum.Forest:
+                case ZoneEnum.Forest:
                     _ziForest.AddMap(mapName);
                     break;
-                case GameManager.ZoneEnum.Mountain:
+                case ZoneEnum.Mountain:
                     _ziMountain.AddMap(mapName);
                     break;
-                case GameManager.ZoneEnum.Swamp:
+                case ZoneEnum.Swamp:
                     _ziSwamp.AddMap(mapName);
                     break;
-                case GameManager.ZoneEnum.Town:
+                case ZoneEnum.Town:
                     _ziTown.AddMap(mapName);
                     break;
             }
@@ -46,10 +47,10 @@ namespace RiverHollow.Game_Managers
     {
         int _iZoneLevel;
         public int ZoneLevel => _iZoneLevel;
-        GameManager.ZoneEnum _eZone;
+        ZoneEnum _eZone;
         List<string> _liMaps;
 
-        public ZoneInfo(GameManager.ZoneEnum zone)
+        public ZoneInfo(ZoneEnum zone)
         {
             _iZoneLevel = 1;
             _eZone = zone;

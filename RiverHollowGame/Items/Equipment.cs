@@ -2,7 +2,7 @@
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Items
 {
@@ -90,7 +90,7 @@ namespace RiverHollow.Items
             //rv += System.Environment.NewLine;
             //if (Damage > 0) { rv += " Attack: +" + Damage + " "; }
             //if (Strength > 0) { rv += " Str: +" + Strength + " "; }
-            //if (Defense > 0) { rv += " Def: +" + Defense + " "; }
+            //if (Defence > 0) { rv += " Def: +" + Defence + " "; }
             //if (Magic > 0) { rv += " Mag: +" + Magic + " "; }
             //if (Resistance > 0) { rv += " Res: +" + Resistance + " "; }
             //if (Speed > 0) { rv += " Spd: +" + Speed + " "; }

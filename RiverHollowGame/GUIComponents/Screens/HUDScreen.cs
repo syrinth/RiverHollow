@@ -15,6 +15,7 @@ using static RiverHollow.GUIComponents.GUIObjects.GUIItemBox;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using RiverHollow.Items;
 using RiverHollow.Characters.Lite;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -1159,7 +1160,7 @@ namespace RiverHollow.GUIComponents.Screens
                     }
 
                     AssignStatText(_gStr, "Str", _character.Attribute(AttributeEnum.Strength), _character.TempAttribute(AttributeEnum.Strength), compareTemp);
-                    AssignStatText(_gDef, "Def", _character.Attribute(AttributeEnum.Defense), _character.TempAttribute(AttributeEnum.Defense), compareTemp);
+                    AssignStatText(_gDef, "Def", _character.Attribute(AttributeEnum.Defence), _character.TempAttribute(AttributeEnum.Defence), compareTemp);
                     AssignStatText(_gMagic, "Mag", _character.Attribute(AttributeEnum.Magic), _character.TempAttribute(AttributeEnum.Magic), compareTemp);
                     AssignStatText(_gRes, "Res", _character.Attribute(AttributeEnum.Resistance), _character.TempAttribute(AttributeEnum.Resistance), compareTemp);
                     AssignStatText(_gSpd, "Spd", _character.Attribute(AttributeEnum.Speed), _character.TempAttribute(AttributeEnum.Speed), compareTemp);

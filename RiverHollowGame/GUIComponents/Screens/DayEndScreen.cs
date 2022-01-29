@@ -7,6 +7,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -129,7 +130,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                         _liMonsters.Add(spr);
 
-                        spr.PlayAnimation(GameManager.VerbEnum.Walk, GameManager.DirectionEnum.Down);
+                        spr.PlayAnimation(VerbEnum.Walk, DirectionEnum.Down);
 
                         AddControl(spr);
 
@@ -173,7 +174,7 @@ namespace RiverHollow.GUIComponents.Screens
             _bPopped = true;
             foreach (GUISprite spr in _liMonsters)
             {
-                spr.PlayAnimation(GameManager.AnimationEnum.KO);
+                spr.PlayAnimation(AnimationEnum.KO);
             }
 
             _btnOK.Enable(false);

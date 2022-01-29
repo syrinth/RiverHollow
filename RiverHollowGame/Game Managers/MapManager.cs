@@ -9,9 +9,8 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.WorldObjects;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
-
-using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Items;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {

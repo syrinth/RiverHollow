@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using RiverHollow.Items;
-using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {
