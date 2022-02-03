@@ -8,7 +8,6 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.Utilities.Enums;
 
@@ -64,7 +63,7 @@ namespace RiverHollow.CombatStuff
         List<String> _liActionTags;
         int _iCurrentAction = 0;
         List<SkillTagsEnum> _liEffects;
-        List<LiteStatusEffectData> _liStatusEffects;         //Key = Buff ID, string = Duration/<Tag> <Tag>
+        public StatusEffect StatusEffect { get; private set; }
 
         public DirectionEnum UserMovement { get; private set; } = DirectionEnum.None;
         public DirectionEnum TargetMovement { get; private set; } = DirectionEnum.None;
@@ -98,7 +97,6 @@ namespace RiverHollow.CombatStuff
         {
             TileTargetList = new List<CombatTile>();
             _liEffects = new List<SkillTagsEnum>();
-            _liStatusEffects = new List<LiteStatusEffectData>();
             _liActionTags = new List<string>();
 
             ImportBasics(id, stringData);
@@ -182,11 +180,8 @@ namespace RiverHollow.CombatStuff
 
                 if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.StatusEffectID)))
                 {
-                    string[] parse = stringData[Util.GetEnumString(SkillTagsEnum.StatusEffectID)].Split('-');
-
-                    LiteStatusEffectData statEffect = new LiteStatusEffectData() { BuffID = int.Parse(parse[0]), Duration = int.Parse(parse[1]), Tags = parse[2] };
-                    statEffect.Sprite = Sprite;
-                    _liStatusEffects.Add(statEffect);
+                    int statusIndex = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.StatusEffectID)]);
+                    StatusEffect = DataManager.GetStatusEffectByIndex(statusIndex);
                     _liEffects.Add(SkillTagsEnum.StatusEffectID);
                 }
 
@@ -364,71 +359,14 @@ namespace RiverHollow.CombatStuff
             //Handles when the action applies status effects
             if (_liEffects.Contains(SkillTagsEnum.StatusEffectID))
             {
-                foreach (LiteStatusEffectData effect in _liStatusEffects)
+                foreach (CombatTile ct in TileTargetList)
                 {
                     //Makes a new StatusEffectobject from the data held in the action
-                    StatusEffect status = DataManager.GetStatusEffectByIndex(effect.BuffID);
+                    StatusEffect status = DataManager.GetStatusEffectByIndex(StatusEffect.ID);
                     //status.Duration = effect.Duration;
                     status.AssignCaster(SkillUser);
 
-                    //Search for relevant tags, primarily targetting
-                    string[] tags = effect.Tags.Split(' ');
-                    foreach (string s in tags)
-                    {
-                        //Handle the targetting of where to send the status effect
-                        List<CombatActor> targets = new List<CombatActor>();
-
-                        //Apply it to self
-                        if (s.Equals("Self"))
-                        {
-                            targets.Add(SkillUser);
-                        }
-
-                        //Apply to all targets of the skill
-                        if (s.Equals("Target"))
-                        {
-                            foreach (CombatTile ct in TileTargetList)
-                            {
-                                if (ct.Character != null && !ct.Character.KnockedOut)
-                                {
-                                    targets.Add(ct.Character);
-                                }
-                            }
-                        }
-
-                        //Apply to all allies of the user
-                        if (s.Equals("Allies"))
-                        {
-                            if (SkillUser.IsActorType(CombatActorTypeEnum.PartyMember))
-                            {
-                                targets.AddRange(CombatManager.Party);
-                            }
-                            else
-                            {
-                                targets.AddRange(CombatManager.Monsters);
-                            }
-                        }
-
-                        //Apply to all enemies of the user
-                        if (s.Equals("Enemies"))
-                        {
-                            if (SkillUser.IsActorType(CombatActorTypeEnum.PartyMember))
-                            {
-                                targets.AddRange(CombatManager.Monsters);
-
-                            }
-                            else
-                            {
-                                targets.AddRange(CombatManager.Party);
-                            }
-                        }
-
-                        //actualyl apply the StatusEffect to the targets
-                        foreach (CombatActor actor in targets)
-                        {
-                            actor.ApplyStatusEffect(status);
-                        }
-                    }
+                    ct.Character.ApplyStatusEffect(status);
                 }
             }
 

@@ -10,6 +10,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
+using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 
 namespace RiverHollow.Game_Managers
 {
@@ -295,11 +296,11 @@ namespace RiverHollow.Game_Managers
         public static bool IsMapShown() { return _bShowMap; }
         #endregion
 
-        public static void GoToCombatScreen()
+        public static void GoToCombatScreen(EmptyDelegate combatSwitch)
         {
             //ShowMap(false);
             Pause();
-            GUIManager.SetScreen(new LiteCombatScreen());
+            GUIManager.SetScreen(new CombatScreen(combatSwitch));
         }
 
         public static void GoToHUDScreen()

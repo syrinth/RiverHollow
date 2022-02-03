@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using RiverHollow.Characters;
 using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
@@ -19,6 +21,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
         CombatInventoryPanel _gInventoryPanel;
 
         List<GUIObject> _liActionIcons;
+        CombatActor _hoverTarget;
 
         public ActionPanel() : base(new Rectangle(0, 48, 112, 47), DataManager.COMBAT_TEXTURE)
         {
@@ -162,20 +165,21 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 //Damage Prediction
                 if (selectedAction.Potency > 0)
                 {
-                    CombatManager.ActiveCharacter.GetRawPowerRange(out int min, out int max, selectedAction.PowerAttribute, selectedAction.Potency);
+                    int min, max;
+                    if (_hoverTarget == null) { CombatManager.ActiveCharacter.GetRawDamageRange(out min, out max, selectedAction.PowerAttribute, selectedAction.Potency); }
+                    else { _hoverTarget.GetActualDamageRange(out min, out max, CombatManager.ActiveCharacter, selectedAction.PowerAttribute, selectedAction.Potency, selectedAction.Element); }
 
                     tempObj = new GUIText(string.Format("{0}-{1}", min, max), DataManager.GetBitMapFont(DataManager.FONT_STAT_DISPLAY));
-                    tempObj.AnchorAndAlignToObject(_liActionIcons[_liActionIcons.Count - 1], SideEnum.Right, SideEnum.CenterY);
-                    tempObj.ScaledMoveBy(2, 0);
+                    PositionIcon(tempObj);
                     _liActionIcons.Add(tempObj);
                 }
 
-
-                //TODO: Need to handle display of actions that do not do damage.
-
                 //Icon for Range
-                if (selectedAction.Range == RangeEnum.Melee) { tempObj = DataManager.GetIcon(GameIconEnum.Melee); }
-                else if (selectedAction.Range == RangeEnum.Ranged) { tempObj = DataManager.GetIcon(GameIconEnum.Ranged); }
+                if (selectedAction.AreaType != AreaTypeEnum.All)
+                {
+                    if (selectedAction.Range == RangeEnum.Melee) { tempObj = DataManager.GetIcon(GameIconEnum.Melee); }
+                    else if (selectedAction.Range == RangeEnum.Ranged) { tempObj = DataManager.GetIcon(GameIconEnum.Ranged); }
+                }
 
                 PositionIcon(tempObj);
 
@@ -231,6 +235,35 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 
                     PositionIcon(tempObj);
                 }
+                
+                //Display Status Effects
+                if(selectedAction.StatusEffect != null)
+                {
+                    if (selectedAction.StatusEffect.EffectType == StatusTypeEnum.Buff || selectedAction.StatusEffect.EffectType == StatusTypeEnum.Debuff)
+                    {
+                        foreach (KeyValuePair<AttributeEnum, string> kvp in selectedAction.StatusEffect.AffectedAttributes)
+                        {
+                            tempObj = new GUIEffectDetailIcon(kvp.Key, selectedAction.StatusEffect.EffectType);
+                            PositionIcon(tempObj);
+                        }
+                        tempObj = new GUIText(selectedAction.StatusEffect.Duration.ToString(), DataManager.GetBitMapFont(DataManager.FONT_STAT_DISPLAY));
+                        PositionIcon(tempObj);
+
+                        tempObj = DataManager.GetIcon(GameIconEnum.Timer);
+                        PositionIcon(tempObj, 1);
+                    }
+                    else if (selectedAction.StatusEffect.EffectType == StatusTypeEnum.DoT)
+                    {
+                        tempObj = DataManager.GetIcon(GameIconEnum.MagicDamage);
+                        PositionIcon(tempObj);
+
+                        tempObj = new GUIText(selectedAction.StatusEffect.Duration.ToString(), DataManager.GetBitMapFont(DataManager.FONT_STAT_DISPLAY));
+                        PositionIcon(tempObj);
+
+                        tempObj = DataManager.GetIcon(GameIconEnum.Timer);
+                        PositionIcon(tempObj, 1);
+                    }
+                }
 
                 //Icon for Elemental Alignment
                 if (selectedAction.Element != ElementEnum.None) {
@@ -246,14 +279,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                             tempObj = DataManager.GetIcon(GameIconEnum.ElementLightning);
                             break;
                     }
-                    PositionIcon(tempObj);
+                    tempObj.AnchorAndAlignToObject(_gActionName, SideEnum.Right, SideEnum.CenterY);
+                    tempObj.ScaledMoveBy(2, 0);
+                    _liActionIcons.Add(tempObj);
                 }
 
                 foreach (GUIObject obj in _liActionIcons) { AddControl(obj); }
             }
         }
 
-        private void PositionIcon(GUIObject obj)
+        private void PositionIcon(GUIObject obj, int space = 2)
         {
             if (obj != null)
             {
@@ -264,14 +299,21 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 else
                 {
                     obj.AnchorAndAlignToObject(_liActionIcons[_liActionIcons.Count - 1], SideEnum.Right, SideEnum.CenterY);
-                    obj.ScaledMoveBy(2, 0);
+                    obj.ScaledMoveBy(space, 0);
                 }
                 _liActionIcons.Add(obj);
             }
         }
 
+        public void DamageUpdate(CombatActor newTarget)
+        {
+            _hoverTarget = newTarget;
+            SetSelectedActionInfo(_iSelectedAction);
+        }
+
         public void CancelAction()
         {
+            ClearHoverTarget();
             if (_gInventoryPanel != null)
             {
                 RemoveControl(_gInventoryPanel);
@@ -279,6 +321,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 
                 SetSelectedActionInfo(_iSelectedAction);
             }
+        }
+
+        public void ClearHoverTarget()
+        {
+            _hoverTarget = null;
         }
 
         private class CombatInventoryPanel : GUIObject

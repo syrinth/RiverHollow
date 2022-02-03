@@ -467,7 +467,7 @@
     </Item>
     <Item>
       <Key>116</Key>
-      <Value>[Type:Equipment][Subtype:Weapon][Image:0-3][Value:1000][ESub:Knife][Tier:1][Atk:Moderate][Mag:Major]</Value>
+      <Value>[Type:Equipment][Subtype:Weapon][Image:0-3][Value:1000][ESub:Knife][Tier:1][Damage:Moderate][Mag:Major][Magic:Minor][Resistance:Moderate]</Value>
     </Item>
     <Item>
       <Key>117</Key>

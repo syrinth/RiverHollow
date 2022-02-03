@@ -713,7 +713,7 @@ namespace RiverHollow.Game_Managers
                     rv = new GUIImage(new Rectangle(112, 80, 8, 9), COMBAT_TEXTURE);
                     break;
                 case GameIconEnum.AreaAll:
-                    rv = new GUIImage(new Rectangle(145, 65, 13, 10), COMBAT_TEXTURE);
+                    rv = new GUIImage(new Rectangle(144, 64, 9, 9), COMBAT_TEXTURE);
                     break;
                 case GameIconEnum.AreaColumnAlly:
                     rv = new GUIImage(new Rectangle(113, 61, 6, 10), COMBAT_TEXTURE);
@@ -764,7 +764,7 @@ namespace RiverHollow.Game_Managers
                     rv = new GUIImage(new Rectangle(179, 103, 10, 9), COMBAT_TEXTURE);
                     break;
                 case GameIconEnum.Magic:
-                    rv = new GUIImage(new Rectangle(144, 80, 9, 7), COMBAT_TEXTURE);
+                    rv = new GUIImage(new Rectangle(144, 80, 9, 8), COMBAT_TEXTURE);
                     break;
                 case GameIconEnum.MagicDamage:
                     rv = new GUIImage(new Rectangle(202, 87, 8, 8), COMBAT_TEXTURE);

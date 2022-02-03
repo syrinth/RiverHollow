@@ -40,9 +40,9 @@
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ActionEnum { Action, Item, Move };
         public enum SkillTagsEnum { Bonus, Harm, Heal, NPC_ID, Displace, Move, Remove, StatusEffectID };
-        public enum TargetEnum { Enemy, Ally };
+        public enum TargetEnum { Enemy, Ally, Self };
         public enum DamageTypeEnum { Physical, Magical };
-        public enum RangeEnum { Self, Melee, Ranged, Row, Column, Adjacent };
+        public enum RangeEnum { Melee, Ranged, Row, Column, Adjacent };
         public enum AreaTypeEnum { Self, Single, Row, Column, Square, All };
         public enum StatusTypeEnum { Buff, Debuff, DoT, HoT };
         public enum ElementEnum { None, Fire, Ice, Lightning };

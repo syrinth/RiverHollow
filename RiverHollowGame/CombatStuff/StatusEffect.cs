@@ -17,15 +17,15 @@ namespace RiverHollow.CombatStuff
         StatusTypeEnum _eEffectType;
         public StatusTypeEnum EffectType => _eEffectType;
         public int ID { get; } = -1;
-        private string _sName;
+        private readonly string _sName;
         public string Name => _sName;
-        int _iPotency;
+        int _iPotency = -1;
         public int Potency => _iPotency;
         int _iDuration;
         public int Duration => _iDuration;
-        public List<KeyValuePair<AttributeEnum, int>> AttributeEffects { get; }
+        public List<KeyValuePair<AttributeEnum, string>> AffectedAttributes { get; }
 
-        private string _sDescription;
+        private readonly string _sDescription;
         public string Description { get => _sDescription; }
 
         public StatusEffect(int id, Dictionary<string, string> data)
@@ -34,7 +34,7 @@ namespace RiverHollow.CombatStuff
             DataManager.GetTextData("StatusEffect", ID, ref _sName, "Name");
             DataManager.GetTextData("StatusEffect", ID, ref _sDescription, "Description");
 
-            AttributeEffects = new List<KeyValuePair<AttributeEnum, int>>();
+            AffectedAttributes = new List<KeyValuePair<AttributeEnum, string>>();
             ImportBasics(id, data);
         }
 
@@ -51,8 +51,7 @@ namespace RiverHollow.CombatStuff
                 foreach (string effect in splitEffects)
                 {
                     string[] attributeMod = effect.Split('-');
-                    int value = attributeMod[1] == "Minor" ? 10 : 0;
-                    AttributeEffects.Add(new KeyValuePair<AttributeEnum, int>(Util.ParseEnum<AttributeEnum>(attributeMod[0]), value));
+                    AffectedAttributes.Add(new KeyValuePair<AttributeEnum, string>(Util.ParseEnum<AttributeEnum>(attributeMod[0]), attributeMod[1]));
                 }
             }
         }

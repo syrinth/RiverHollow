@@ -91,9 +91,9 @@ namespace RiverHollow.GUIComponents.Screens
         public int Cost { get; }
         public bool CanBuy { get; private set; }
 
-        ClickDelegate _action;
+        EmptyDelegate _action;
 
-        public PurchaseBox(Item i, int cost, int mainWidth, ClickDelegate action) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
+        public PurchaseBox(Item i, int cost, int mainWidth, EmptyDelegate action) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
         {
             _action = action;
             _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
@@ -110,7 +110,7 @@ namespace RiverHollow.GUIComponents.Screens
             _gMoney.AnchorToInnerSide(this, SideEnum.Right, ScaleIt(2));
         }
 
-        public PurchaseBox(WorldObject obj, int cost, int mainWidth, ClickDelegate action) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
+        public PurchaseBox(WorldObject obj, int cost, int mainWidth, EmptyDelegate action) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
         {
             _action = action;
             WorldObject = obj;
@@ -124,7 +124,7 @@ namespace RiverHollow.GUIComponents.Screens
             _gMoney.AnchorToInnerSide(this, SideEnum.Right, ScaleIt(2));
         }
 
-        public PurchaseBox(WorldActor actor, int cost, int mainWidth, ClickDelegate action) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
+        public PurchaseBox(WorldActor actor, int cost, int mainWidth, EmptyDelegate action) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
         {
             _action = action;
             Actor = actor;

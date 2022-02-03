@@ -16,7 +16,7 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
-    public class LiteCombatScreen : GUIScreen
+    public class CombatScreen : GUIScreen
     {
         GUICombatTile[,] _arrAllies;
         GUICombatTile[,] _arrEnemies;
@@ -35,8 +35,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         ActionPanel _gActionPanel;
 
-        public LiteCombatScreen()
+        EmptyDelegate _switch;
+
+        public CombatScreen(EmptyDelegate combatSwitch)
         {
+            _switch = combatSwitch;
             _gBackgroundImage = new GUIImage(new Rectangle(0, 0, 480, 270), DataManager.GUI_COMPONENTS + @"\Combat_Background_Forest");
             AddControl(_gBackgroundImage);
 
@@ -150,6 +153,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         break;
 
                     case CombatManager.PhaseEnum.ChooseTarget:
+                        _gActionPanel.ClearHoverTarget();
                         CombatManager.SelectedAction.SetSkillTarget();
                         break;
                     case CombatManager.PhaseEnum.DisplayVictory:
@@ -285,16 +289,21 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 if (rv) { break; }
                 rv = p.CheckForTarget(GUICursor.Position.ToPoint());
+
+                if (rv)
+                {
+                    _gActionPanel.DamageUpdate(p.MapTile.Character);
+                }
             }
 
             return rv;
         }
 
-        //First, call the update for the CombatManager
         public override void Update(GameTime gameTime)
         {
-            CombatManager.Update(gameTime);
             base.Update(gameTime);
+
+            if (!CombatManager.CombatStarted) { _switch(); }
 
             if (CombatManager.CurrentRoundOrder.Count != _gTurnOrder.CurrentActors)
             {
@@ -303,63 +312,58 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             switch (CombatManager.CurrentPhase)
             {
-                case CombatManager.PhaseEnum.EnemyTurn:
-                    _gTurnOrder.DisplayNewTurn(CombatManager.CurrentRoundOrder);
-                    ShowHUDObjects(false);
-                    _gActiveIndicator.CenterOnObject(CombatManager.ActiveCharacter.Tile.GUITile);
-                    CombatManager.SelectedAction.SetSkillTarget();
-                    break;
-
                 case CombatManager.PhaseEnum.NewTurn:
                     _gTurnOrder.DisplayNewTurn(CombatManager.CurrentRoundOrder);
+                    _gActiveIndicator.CenterOnObject(CombatManager.ActiveCharacter.Tile.GUITile);
+                    break;
+                case CombatManager.PhaseEnum.Upkeep:
+                    break;
+                case CombatManager.PhaseEnum.ChooseAction:
                     ShowHUDObjects(true);
                     _gActiveCharacterInfo.SetActor(CombatManager.ActiveCharacter);
-                    _gActiveIndicator.CenterOnObject(CombatManager.ActiveCharacter.Tile.GUITile);
-
-                    CombatManager.SelectedAction = null;
-                    CombatManager.CurrentPhase = CombatManager.PhaseEnum.ChooseAction;
                     break;
-
                 case CombatManager.PhaseEnum.ChooseTarget:
-                    CombatManager.HandleKeyboardTargetting();
-
                     //Cancel out of selections made if escape is hit
                     if (InputManager.CheckPressedKey(Keys.Escape))
                     {
                         CancelAction();
                     }
                     break;
-
                 case CombatManager.PhaseEnum.DisplayAttack:
                     //_gActionSelect.SetCharacter(null);
-                    CombatManager.CurrentPhase = CombatManager.PhaseEnum.PerformAction;
-                    if (!string.IsNullOrEmpty(CombatManager.Text))
-                    {
-                        //if (_gActionTextWindow == null)
-                        //{
-                        //    _gActionTextWindow = new GUITextWindow(LiteCombatManager.Text, 0.5);
-                        //    _gActionTextWindow.CenterOnScreen();
-                        //    AddControl(_gActionTextWindow);
-                        //}
-                        //else
-                        //{
-                        //    _gActionTextWindow.Update(gameTime);
-                        //    if (_gActionTextWindow.Duration <= 0)
-                        //    {
-                        //        RemoveControl(_gActionTextWindow);
-                        //        _gActionTextWindow = null;
-                        //        LiteCombatManager.CurrentPhase = LiteCombatManager.PhaseEnum.PerformAction;
-                        //    }
-                        //}
-                    }
+
+                    //if (!string.IsNullOrEmpty(CombatManager.Text))
+                    //{
+                    //    //if (_gActionTextWindow == null)
+                    //    //{
+                    //    //    _gActionTextWindow = new GUITextWindow(LiteCombatManager.Text, 0.5);
+                    //    //    _gActionTextWindow.CenterOnScreen();
+                    //    //    AddControl(_gActionTextWindow);
+                    //    //}
+                    //    //else
+                    //    //{
+                    //    //    _gActionTextWindow.Update(gameTime);
+                    //    //    if (_gActionTextWindow.Duration <= 0)
+                    //    //    {
+                    //    //        RemoveControl(_gActionTextWindow);
+                    //    //        _gActionTextWindow = null;
+                    //    //        LiteCombatManager.CurrentPhase = LiteCombatManager.PhaseEnum.PerformAction;
+                    //    //    }
+                    //    //}
+                    //}
                     break;
-
                 case CombatManager.PhaseEnum.PerformAction:
-                    if (CombatManager.SelectedAction != null)
-                    {
-                        CombatManager.SelectedAction.PerformAction(gameTime);
-                    }
+                case CombatManager.PhaseEnum.EnemyTurn:
+                    _gTurnOrder.DisplayNewTurn(CombatManager.CurrentRoundOrder);
+                    ShowHUDObjects(false);
+                    _gActiveIndicator.CenterOnObject(CombatManager.ActiveCharacter.Tile.GUITile);
 
+                    break;
+                case CombatManager.PhaseEnum.EndCombat:
+                case CombatManager.PhaseEnum.Defeat:
+                    //GUITextWindow window = new GUITextWindow("Defeated");
+                    //window.CenterOnScreen();
+                    //AddControl(window);
                     break;
                 case CombatManager.PhaseEnum.DisplayVictory:
                     if (_gPostScreen == null)
@@ -369,11 +373,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         _gPostScreen.CenterOnScreen();
                     }
 
-                    break;
-                case CombatManager.PhaseEnum.Defeat:
-                    //GUITextWindow window = new GUITextWindow("Defeated");
-                    //window.CenterOnScreen();
-                    //AddControl(window);
                     break;
             }
 
@@ -436,7 +435,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             bool _bDisplayItems;
 
-            public GUIPostCombatDisplay(ClickDelegate closeDelegate)
+            public GUIPostCombatDisplay(EmptyDelegate closeDelegate)
             {
                 _bDisplayItems = false;
                 _arrCharXP = new GUIOldStatDisplay[4];

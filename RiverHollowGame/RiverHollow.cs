@@ -113,6 +113,8 @@ namespace RiverHollow
                 //GUIManager always needs to update, regardless of game state
                 GUIManager.Update(gTime);
 
+                CombatManager.Update(gTime);
+
                 Point mousePoint = Mouse.GetState().Position;
                 Vector3 translate = Camera._transform.Translation;
 

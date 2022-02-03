@@ -54,7 +54,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 _gTile.Alpha(1);
             }
 
-            if (CombatManager.SelectedAction != null)
+            if (CombatManager.SelectedAction != null && !CombatManager.ActiveCharacter.IsActorType(CombatActorTypeEnum.Monster))
             {
                 _gTile.SetColor(CombatManager.SelectedAction.GetAffectedTiles().Contains(MapTile) ? Color.Red : Color.White);
             }

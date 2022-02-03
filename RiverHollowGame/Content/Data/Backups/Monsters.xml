@@ -39,7 +39,7 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Texture:Mushie][Condition:Forest-Summer][Jump][Lvl:1][Ability:34|35][Loot:23-C][Trait:Coward][Idle:4-.2-T][Action1:3-.2-F][Hurt:2-.2-F][Critical:2-.2-F][KO:3-.15-F]</Value>
+      <Value>[Texture:Mushie][Condition:Forest-Summer][Jump][Lvl:1][Ability:34|35][Loot:23-C][Trait:Coward][Idle:4-.2-T][Action1:3-.2-F][Hurt:1-.2-F][Critical:2-.2-F][KO:3-.15-F]</Value>
     </Item>
   </Asset>
 </XnaContent>

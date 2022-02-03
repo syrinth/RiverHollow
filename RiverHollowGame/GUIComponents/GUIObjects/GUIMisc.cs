@@ -5,6 +5,8 @@ using RiverHollow.Misc;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Items;
+using RiverHollow.CombatStuff;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
@@ -25,6 +27,34 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
     {
         public GUIDungeonKey() : base(new Rectangle(20, 18, 8, 12), ScaleIt(8), ScaleIt(12), DataManager.DIALOGUE_TEXTURE)
         {
+        }
+    }
+
+    public class GUIEffectDetailIcon : GUIObject
+    {
+        public GUIEffectDetailIcon(AttributeEnum attribute, StatusTypeEnum effect)
+        {
+            GUIImage attributeIcon = DataManager.GetIcon(GameManager.GetGameIconFromAttribute(attribute));
+            GUIImage arrow = null;
+
+            if (effect == StatusTypeEnum.Buff)
+            {
+                arrow = DataManager.GetIcon(GameIconEnum.BuffArrow);
+                attributeIcon.AnchorAndAlignToObject(arrow, SideEnum.Bottom, SideEnum.CenterX);
+                attributeIcon.ScaledMoveBy(0, -3);
+                Height = attributeIcon.Bottom - arrow.Top;
+            }
+            else if (effect == StatusTypeEnum.Debuff)
+            {
+                arrow = DataManager.GetIcon(GameIconEnum.DebuffArrow);
+                arrow.AnchorAndAlignToObject(attributeIcon, SideEnum.Bottom, SideEnum.CenterX);
+                arrow.ScaledMoveBy(0, -3);
+                Height = arrow.Bottom - attributeIcon.Top;
+            }
+
+            AddControl(arrow);
+            AddControl(attributeIcon);
+            Width = arrow.Width;
         }
     }
 
@@ -208,8 +238,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         GUIImage _gUnchecked;
         GUIImage _gChecked;
         GUIText _gText;
-        protected ClickDelegate _delAction;
-        public GUICheck(string text, bool isChecked = false, ClickDelegate del = null)
+        protected EmptyDelegate _delAction;
+        public GUICheck(string text, bool isChecked = false, EmptyDelegate del = null)
         {
             int squareSize = TILE_SIZE * 2;
             _bChecked = isChecked;
@@ -270,16 +300,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
     public class GUISwatch : GUIImage
     {
-        private ClickDelegate _delAction;
+        private EmptyDelegate _delAction;
         public Color SwatchColor => _cColor;
 
-        public GUISwatch(Color c, ClickDelegate del = null) : base(new Rectangle(0, 80, TILE_SIZE, TILE_SIZE), 8, 16, DataManager.DIALOGUE_TEXTURE)
+        public GUISwatch(Color c, EmptyDelegate del = null) : base(new Rectangle(0, 80, TILE_SIZE, TILE_SIZE), 8, 16, DataManager.DIALOGUE_TEXTURE)
         {
             _cColor = c;
             _delAction = del;
         }
 
-        public GUISwatch(Color c, int width, int height, ClickDelegate del = null) : base(new Rectangle(0, 80, TILE_SIZE, TILE_SIZE), width, height, DataManager.DIALOGUE_TEXTURE)
+        public GUISwatch(Color c, int width, int height, EmptyDelegate del = null) : base(new Rectangle(0, 80, TILE_SIZE, TILE_SIZE), width, height, DataManager.DIALOGUE_TEXTURE)
         {
             _cColor = c;
             _delAction = del;

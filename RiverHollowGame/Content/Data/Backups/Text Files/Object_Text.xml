@@ -255,111 +255,111 @@
     </Item>
     <Item>
       <Key>Action_6</Key>
-      <Value>[Name:Healer_1]</Value>
+      <Value>[Name:Heavy Strike]</Value>
     </Item>
     <Item>
       <Key>Action_7</Key>
-      <Value>[Name:Healer_2]</Value>
+      <Value>[Name:Burst]</Value>
     </Item>
     <Item>
       <Key>Action_8</Key>
-      <Value>[Name:Healer_3]</Value>
+      <Value>[Name:Warding]</Value>
     </Item>
     <Item>
       <Key>Action_9</Key>
-      <Value>[Name:Healer_4]</Value>
+      <Value>[Name:Vigor]</Value>
     </Item>
     <Item>
       <Key>Action_10</Key>
-      <Value>[Name:Summoner_1]</Value>
+      <Value>[Name:Call Fire]</Value>
     </Item>
     <Item>
       <Key>Action_11</Key>
-      <Value>[Name:Summoner_2]</Value>
+      <Value>[Name:Call Lightning]</Value>
     </Item>
     <Item>
       <Key>Action_12</Key>
-      <Value>[Name:Summoner_3]</Value>
+      <Value>[Name:Call Ice]</Value>
     </Item>
     <Item>
       <Key>Action_13</Key>
-      <Value>[Name:Summoner_4]</Value>
+      <Value>[Name:Call Earth]</Value>
     </Item>
     <Item>
       <Key>Action_14</Key>
-      <Value>[Name:Witch_1]</Value>
+      <Value>[Name:Charmed Blade]</Value>
     </Item>
     <Item>
       <Key>Action_15</Key>
-      <Value>[Name:Witch_2]</Value>
+      <Value>[Name:Witch's Curse]</Value>
     </Item>
     <Item>
       <Key>Action_16</Key>
-      <Value>[Name:Witch_3]</Value>
+      <Value>[Name:Weakness]</Value>
     </Item>
     <Item>
       <Key>Action_17</Key>
-      <Value>[Name:Witch_4]</Value>
+      <Value>[Name:Slow]</Value>
     </Item>
     <Item>
       <Key>Action_18</Key>
-      <Value>[Name:Lancer_1]</Value>
+      <Value>[Name:Thrust]</Value>
     </Item>
     <Item>
       <Key>Action_19</Key>
-      <Value>[Name:Lancer_2]</Value>
+      <Value>[Name:Pierce]</Value>
     </Item>
     <Item>
       <Key>Action_20</Key>
-      <Value>[Name:Lancer_3]</Value>
+      <Value>[Name:Triple Strike]</Value>
     </Item>
     <Item>
       <Key>Action_21</Key>
-      <Value>[Name:Lancer_4]</Value>
+      <Value>[Name:Focus]</Value>
     </Item>
     <Item>
       <Key>Action_22</Key>
-      <Value>[Name:Knight_1]</Value>
+      <Value>[Name:Bash]</Value>
     </Item>
     <Item>
       <Key>Action_23</Key>
-      <Value>[Name:Knight_2]</Value>
+      <Value>[Name:Charge]</Value>
     </Item>
     <Item>
       <Key>Action_24</Key>
-      <Value>[Name:Knight_3]</Value>
+      <Value>[Name:Goad]</Value>
     </Item>
     <Item>
       <Key>Action_25</Key>
-      <Value>[Name:Knight_4]</Value>
+      <Value>[Name:Brace]</Value>
     </Item>
     <Item>
       <Key>Action_26</Key>
-      <Value>[Name:Scout_1]</Value>
+      <Value>[Name:Aimed Shot]</Value>
     </Item>
     <Item>
       <Key>Action_27</Key>
-      <Value>[Name:Scout_2]</Value>
+      <Value>[Name:Hail of Arrows]</Value>
     </Item>
     <Item>
       <Key>Action_28</Key>
-      <Value>[Name:Scout_3]</Value>
+      <Value>[Name:Piercing Shot]</Value>
     </Item>
     <Item>
       <Key>Action_29</Key>
-      <Value>[Name:Scout_4]</Value>
+      <Value>[Name:Swiftness]</Value>
     </Item>
     <Item>
       <Key>Action_30</Key>
-      <Value>[Name:Reparte]</Value>
+      <Value>[Name:Singing Strike]</Value>
     </Item>
     <Item>
       <Key>Action_31</Key>
-      <Value>[Name:Song of Magic]</Value>
+      <Value>[Name:Song of Might]</Value>
     </Item>
     <Item>
       <Key>Action_32</Key>
-      <Value>[Name:Captivating Melody]</Value>
+      <Value>[Name:Mesmerizing Melody]</Value>
     </Item>
     <Item>
       <Key>Action_33</Key>
@@ -379,19 +379,19 @@
     </Item>
     <Item>
       <Key>StatusEffect_1</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Song of Might]</Value>
     </Item>
     <Item>
       <Key>StatusEffect_2</Key>
-      <Value>[Name:]</Value>
-    </Item>
-    <Item>
-      <Key>StatusEffect_3</Key>
       <Value>[Name:Witch's Curse]</Value>
     </Item>
     <Item>
+      <Key>StatusEffect_3</Key>
+      <Value>[Name:Weakness]</Value>
+    </Item>
+    <Item>
       <Key>StatusEffect_4</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Slow]</Value>
     </Item>
     <Item>
       <Key>StatusEffect_5</Key>

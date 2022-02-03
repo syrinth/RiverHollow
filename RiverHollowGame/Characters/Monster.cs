@@ -39,7 +39,7 @@ namespace RiverHollow.Characters
 
             _iRating = int.Parse(data["Lvl"]);
             XP = _iRating * 10;
-            _diAttributes[AttributeEnum.Damage] = 5 + (_iRating * 5);
+            _diAttributes[AttributeEnum.Damage] = 10 + (_iRating * 10);
             _diAttributes[AttributeEnum.Vitality] = 5 + (_iRating * 5);
 
             _diAttributes[AttributeEnum.Strength] = 10 + (_iRating * 5);

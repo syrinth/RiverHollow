@@ -83,98 +83,112 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 
         private class StatusPanel : GUIObject
         {
+            const int REFRESH_RATE = 3;
+            GUIImage _gTimer;
             GUIImage _gPanel;
+            List<StatusPanelEffectIcon> _liStatusIcons;
+            StatusPanelEffectIcon[] _arrVisibleIcons;
 
-            List<StatusIcon> _liStatusIcons;
-
-            StatusIcon[] _arrVisibleIcons;
+            int _iStatusIndex = 0;
+            double _dTimer = 0;
             public StatusPanel(List<StatusEffect> effects)
             {
-                _arrVisibleIcons = new StatusIcon[3];
+                _arrVisibleIcons = new StatusPanelEffectIcon[3];
 
-                _liStatusIcons = new List<StatusIcon>();
+                _liStatusIcons = new List<StatusPanelEffectIcon>();
                 _gPanel = new GUIImage(new Rectangle(112, 96, 66, 16), DataManager.COMBAT_TEXTURE);
                 AddControl(_gPanel);
 
                 Width = _gPanel.Width;
                 Height = _gPanel.Height;
 
-                GUIImage temp = DataManager.GetIcon(GameIconEnum.Timer);
-                temp.ScaledMoveBy(4, 5);
-                AddControl(temp);
-
+                _gTimer = DataManager.GetIcon(GameIconEnum.Timer);
+                _gTimer.ScaledMoveBy(4, 5);
+                AddControl(_gTimer);
 
                 foreach(StatusEffect e in effects)
                 {
-                    foreach(KeyValuePair<AttributeEnum, int> kvp in e.AttributeEffects)
-                    { 
+                    foreach(KeyValuePair<AttributeEnum, string> kvp in e.AffectedAttributes)
+                    {
                         //There exists a StatusIcon already that is 
-                        if(_liStatusIcons.Find(x => x.Type == e.EffectType && x.Attribute == kvp.Key) != null)
-                        {
+                        //if(_liStatusIcons.Find(x => x.Type == e.EffectType && x.Attribute == kvp.Key) != null)
+                        //{
 
-                        }
+                        //}
 
-                        StatusIcon newIcon = new StatusIcon(e.EffectType, kvp.Key, e.Duration);
-                        _liStatusIcons.Add(newIcon);
+                        _liStatusIcons.Add(new StatusPanelEffectIcon(new GUIEffectDetailIcon(kvp.Key, e.EffectType), e.Duration));
+                    }
+
+                    if(e.Potency != -1)
+                    {
+                        _liStatusIcons.Add(new StatusPanelEffectIcon(DataManager.GetIcon(GameIconEnum.MagicDamage), e.Duration));
+                    }
+                }
+
+                PlaceIcons();
+            }
+
+            public override void Update(GameTime gTime)
+            {
+                base.Update(gTime);
+
+                if(_liStatusIcons.Count > 3)
+                {
+                    _dTimer += gTime.ElapsedGameTime.TotalSeconds;
+                    if(_dTimer >= REFRESH_RATE)
+                    {
+                        _dTimer = 0;
+
+                        if (_liStatusIcons.Count >= _iStatusIndex + 3) { _iStatusIndex += 3; }
+                        else { _iStatusIndex = 0; }
+                        
+                        PlaceIcons();
                     }
                 }
             }
 
-            private class StatusIcon : GUIObject
+            private void PlaceIcons()
             {
-                public StatusTypeEnum Type { get; private set; }
-                public AttributeEnum Attribute { get; private set; }
-                public int Duration { get; private set; }
-                GUIText _gDuration;
-                GUIImage _gArrow;
-                GUIImage _gIcon;
+                foreach(GUIObject obj in _arrVisibleIcons) { RemoveControl(obj); }
 
-                public StatusIcon(StatusTypeEnum e, AttributeEnum attribute, int duration)
+                int visibleIndex = 0;
+                for (int i = _iStatusIndex; i < _iStatusIndex + 3 && i < _liStatusIcons.Count; i++)
                 {
-                    Type = e;
-                    Attribute = attribute;
-                    Duration = duration;
+                    _arrVisibleIcons[visibleIndex] = _liStatusIcons[i];
+                    PositionIcon(_liStatusIcons[i], visibleIndex++);
+                    AddControl(_liStatusIcons[i]);
 
-                    switch (e)
-                    {
-                        case StatusTypeEnum.Buff:
-                            _gArrow = DataManager.GetIcon(GameIconEnum.BuffArrow);
-                            _gIcon = DataManager.GetIcon(GetGameIconFromAttribute(attribute));
-                            _gIcon.AnchorAndAlignToObject(_gArrow, SideEnum.Bottom, SideEnum.CenterX);
-                            _gIcon.MoveBy(new Vector2(0, -(_gIcon.Height/2)));
-
-                            _gDuration = new GUIText(duration.ToString(), DataManager.GetBitMapFont(DataManager.FONT_STAT_DISPLAY));
-                            _gDuration.ScaledMoveBy(11, 3);
-
-                            Height = _gIcon.Bottom - _gArrow.Top;
-                            Width = _gDuration.Right - _gArrow.Left;
-
-                            AddControl(_gArrow);
-                            AddControl(_gDuration);
-                            break;
-                        case StatusTypeEnum.Debuff:
-                            _gArrow = DataManager.GetIcon(GameIconEnum.DebuffArrow);
-                            _gIcon = DataManager.GetIcon(GetGameIconFromAttribute(attribute));
-
-                            _gArrow.AnchorAndAlignToObject(_gIcon, SideEnum.Bottom, SideEnum.CenterX);
-                            _gDuration.ScaledMoveBy(11, 3);
-
-                            Height = _gArrow.Bottom - _gIcon.Top;
-                            Width = _gDuration.Right - _gArrow.Left;
-
-                            AddControl(_gArrow);
-                            AddControl(_gDuration);
-                            break;
-                        case StatusTypeEnum.DoT:
-                            _gIcon = DataManager.GetIcon(GameIconEnum.PhysicalDamage);
-                            break;
-                        case StatusTypeEnum.HoT:
-                            _gIcon = DataManager.GetIcon(GameIconEnum.Heal);
-                            break;
-                    }
-
-                    AddControl(_gIcon);
                 }
+            }
+
+            private void PositionIcon(GUIObject newIcon, int index)
+            {
+                if (index == 0)
+                {
+                    newIcon.AnchorAndAlignToObject(_gTimer, SideEnum.Right, SideEnum.CenterY);
+                    newIcon.ScaledMoveBy(2, 0);
+                }
+                else
+                {
+                    newIcon.AnchorAndAlignToObject(_arrVisibleIcons[index-1], SideEnum.Right, SideEnum.CenterY);
+                    newIcon.ScaledMoveBy(1, 0);
+                }
+            }
+        }
+
+        private class StatusPanelEffectIcon : GUIObject
+        {
+            public StatusPanelEffectIcon(GUIObject obj, int Duration)
+            {
+                AddControl(obj);
+
+                GUIText duration = new GUIText(Duration.ToString(), DataManager.GetBitMapFont(DataManager.FONT_STAT_DISPLAY));
+                duration.AnchorAndAlignToObject(obj, SideEnum.Right, SideEnum.CenterY);
+                duration.ScaledMoveBy(1, 0);
+                AddControl(duration);
+
+                Width = duration.Right - obj.Left;
+                Height = obj.Height;
             }
         }
     }

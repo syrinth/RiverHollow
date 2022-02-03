@@ -22,7 +22,7 @@ namespace RiverHollow.Game_Managers
 
         public static bool PlayerTurn => Party.Contains(ActiveCharacter);
 
-        public enum PhaseEnum { Upkeep, NewTurn, EnemyTurn, ChooseAction, ChooseTarget, Defeat, DisplayAttack, DisplayVictory, PerformAction, EndCombat }
+        public enum PhaseEnum { NewTurn, Upkeep, EnemyTurn, ChooseAction, ChooseTarget, Defeat, DisplayAttack, DisplayVictory, PerformAction, EndCombat }
         public static PhaseEnum CurrentPhase;
         public static ChosenAction SelectedAction;
         public static CombatTile TargetTile { get; private set; }
@@ -48,6 +48,8 @@ namespace RiverHollow.Game_Managers
         public static readonly int ENEMY_FRONT = 4;
 
         static CombatTile[,] _combatMap;
+
+        public static bool CombatStarted = false;
         #endregion
 
         public static void NewBattle(Mob m)
@@ -77,8 +79,13 @@ namespace RiverHollow.Game_Managers
             RollForNextRound();
             GoToNextRound();
 
-            GoToCombatScreen();
+            GoToCombatScreen(InCombat);
             PlayerManager.DecreaseStamina(3);       //Decrease Stamina once
+        }
+
+        private static void InCombat()
+        {
+            CombatStarted = true;
         }
 
         private static void RollForNextRound()
@@ -98,9 +105,7 @@ namespace RiverHollow.Game_Managers
         }
 
         public static void GoToNextRound()
-        {
-            CurrentPhase = PhaseEnum.Upkeep;
-
+        { 
             for (int i = 0; i < _liNextRound.Count; i++)
             {
                 _liCurrentRound.Add(_liNextRound[i].Key);
@@ -143,6 +148,8 @@ namespace RiverHollow.Game_Managers
 
         public static void Update(GameTime gameTime)
         {
+            if (!CombatStarted) { return; }
+
             foreach (CombatTile ct in _combatMap)
             {
                 if (ct.Occupied())
@@ -160,6 +167,55 @@ namespace RiverHollow.Game_Managers
 
             switch (CurrentPhase)
             {
+                case PhaseEnum.NewTurn:
+                    SelectedAction = null;
+                    CurrentPhase = PhaseEnum.Upkeep;
+                    break;
+                case PhaseEnum.Upkeep:
+                    if (Monsters.Contains(ActiveCharacter))
+                    {
+                        CurrentPhase = PhaseEnum.EnemyTurn;
+                    }
+                    else if (Party.Contains(ActiveCharacter))
+                    {
+                        CurrentPhase = PhaseEnum.ChooseAction;
+                    }
+
+                    //Summon activeSummon = ActiveCharacter.LinkedSummon;
+                    //if (activeSummon == null || !activeSummon.Regen)
+                    //{
+                    //    SetPhaseForTurn();
+                    //}
+                    //else if (activeSummon != null && activeSummon.Regen && activeSummon.BodySprite.CurrentAnimation != "Cast")
+                    //{
+                    //    activeSummon.PlayAnimation(AnimationEnum.Action1);
+                    //}
+                    //else if (activeSummon.BodySprite.GetPlayCount() >= 1)
+                    //{
+                    //    activeSummon.PlayAnimation(AnimationEnum.Idle);
+                    //    ActiveCharacter.IncreaseHealth(30);
+                    //    ActiveCharacter.Tile.GUITile.AssignEffect(30, false);
+                    //    SetPhaseForTurn();
+                    //}
+                    break;
+                case PhaseEnum.ChooseAction:
+                    break;
+                case PhaseEnum.ChooseTarget:
+                    HandleKeyboardTargetting();
+                    break;
+                case PhaseEnum.DisplayAttack:
+                    CurrentPhase = PhaseEnum.PerformAction;
+                    break;
+                case PhaseEnum.PerformAction:
+                    SelectedAction?.PerformAction(gameTime);
+                    break;
+                case PhaseEnum.EnemyTurn:
+                    EnemyTakeTurn();
+                    SelectedAction.SetSkillTarget();
+                    break;
+                case PhaseEnum.EndCombat:
+                case PhaseEnum.Defeat:
+                    break;
                 case PhaseEnum.DisplayVictory:
                     if (Delay <= 0)
                     {
@@ -173,27 +229,6 @@ namespace RiverHollow.Game_Managers
                         Delay -= gameTime.ElapsedGameTime.TotalSeconds;
                     }
                     break;
-
-                case PhaseEnum.Upkeep:
-                    Summon activeSummon = ActiveCharacter.LinkedSummon;
-                    if (activeSummon == null || !activeSummon.Regen)
-                    {
-                        SetPhaseForTurn();
-                    }
-                    else if (activeSummon != null && activeSummon.Regen && activeSummon.BodySprite.CurrentAnimation != "Cast")
-                    {
-                        activeSummon.PlayAnimation(AnimationEnum.Action1);
-                    }
-                    else if (activeSummon.BodySprite.GetPlayCount() >= 1)
-                    {
-                        activeSummon.PlayAnimation(AnimationEnum.Idle);
-                        ActiveCharacter.IncreaseHealth(30);
-                        ActiveCharacter.Tile.GUITile.AssignEffect(30, false);
-                        SetPhaseForTurn();
-                    }
-
-                    break;
-
             }
         }
 
@@ -261,6 +296,7 @@ namespace RiverHollow.Game_Managers
 
         public static void EndCombatVictory()
         {
+            CombatStarted = false;
             GUIManager.BeginFadeOut();
             List<Item> droppedItems = CurrentMob.GetLoot();
             for (int i =0; i < droppedItems.Count; i++)
@@ -274,24 +310,10 @@ namespace RiverHollow.Game_Managers
 
         public static void EndCombatEscape()
         {
+            CombatStarted = false;
             GUIManager.BeginFadeOut();
             CurrentMob.Stun();
             GoToHUDScreen();
-        }
-
-        public static void SetPhaseForTurn()
-        {
-            //This one shouldn't be happening but looks like it is.
-            if(ActiveCharacter.CurrentHP == 0)
-            {
-                EndTurn();
-            }
-            else if (Monsters.Contains(ActiveCharacter))
-            {
-                CurrentPhase = PhaseEnum.EnemyTurn;
-                EnemyTakeTurn();
-            }
-            else if (Party.Contains(ActiveCharacter)) { CurrentPhase = PhaseEnum.NewTurn; }
         }
 
         //For now, when the enemy takes their turn, have them select a random party member
@@ -678,6 +700,8 @@ namespace RiverHollow.Game_Managers
 
         private static void TurnOver()
         {
+            ActiveCharacter.TickStatusEffects();
+
             SelectedAction?.Clear();
 
             if (CurrentPhase != PhaseEnum.EndCombat)
@@ -691,7 +715,12 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            SetPhaseForTurn();
+            if (ActiveCharacter.CurrentHP == 0)
+            {
+                EndTurn();
+            }
+
+            CurrentPhase = PhaseEnum.NewTurn;
         }
         #endregion
 

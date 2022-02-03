@@ -6,7 +6,6 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.CombatManager;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.Utilities.Enums;
 
@@ -318,7 +317,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
         }
         public bool Compare(ActionEnum e) { return _chosenAction != null && _chosenAction.Compare(e); }
         public bool IsSummonSpell() { return _chosenAction != null && _chosenAction.IsSummonSpell(); }
-        public bool SelfOnly() { return _chosenAction.Range == RangeEnum.Self; }
+        public bool SelfOnly() { return _chosenAction.Target == TargetEnum.Self; }
         public bool IsMelee() { return _chosenAction.Range == RangeEnum.Melee; }
         public bool IsRanged() { return _chosenAction.Range == RangeEnum.Ranged; }
         public bool SingleTarget()

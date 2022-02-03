@@ -193,6 +193,14 @@ namespace RiverHollow.Characters
         }
 
         #region Combat Action Handling
+
+        private int GetRawDamage(int baseDamage, int attribute, int potency)
+        {
+            double potencyMod = potency / 100.0;   //100 potency is considered an average attack
+            double AttributeMultiplier = 0.2 + ((double)attribute / 6 * attribute / MAX_STAT);
+
+            return (int)(baseDamage * potencyMod * AttributeMultiplier);
+        }
         /// <summary>
         /// Retrieves the raw, unmodified damage being dealt by this action
         /// </summary>
@@ -200,16 +208,35 @@ namespace RiverHollow.Characters
         /// <param name="max">The maximum damage to be dealt</param>
         /// <param name="attribute">The Action's Damage Attribute</param>
         /// <param name="potency">The Potency of the Action</param>
-        public void GetRawPowerRange(out int min, out int max, AttributeEnum attribute, int potency)
+        public void GetRawDamageRange(out int min, out int max, AttributeEnum attribute, int potency)
         {
-            double potencyMod = potency / 100.0;   //100 potency is considered an average attack
-            double base_damage = Attribute(AttributeEnum.Damage);  //Damage is the most important attribute for raw damage
-            double AttributeMultiplier = Math.Round(0.8 + ((double)Attribute(attribute) / 6 * Attribute(attribute) / MAX_STAT), 2);
+            double rawDamage = GetRawDamage(Attribute(AttributeEnum.Damage), Attribute(attribute), potency);
 
-            double damage = base_damage * potencyMod * AttributeMultiplier * 0.5;
+            min = (int)(rawDamage * 0.75);
+            max = (int)(rawDamage * 1.25);
+        }
 
-            min = (int)(damage * 0.75);
-            max = (int)(damage * 1.25);
+        public void GetActualDamageRange(out int min, out int max, CombatActor attacker, AttributeEnum attribute, int potency, ElementEnum element = ElementEnum.None)
+        {
+            double rawDamage = GetRawDamage(attacker.Attribute(AttributeEnum.Damage), attacker.Attribute(attribute), potency);
+
+            double offensiveAttribute = attacker.Attribute(attribute);
+            double defensiveAttribute = Attribute(GameManager.GetDefenceType(attribute));
+
+            double maxPen = 2;
+            double minPen = 0.29;
+
+            double penDelta = offensiveAttribute / defensiveAttribute;
+            double penMinMax = (maxPen - minPen) / minPen;
+            double sigmaValue = Math.Exp(-0.9 * penDelta);
+
+            double penetrationModifier = maxPen / (1 + (penMinMax * sigmaValue));
+
+            min = (int)(rawDamage * 0.75);
+            max = (int)(rawDamage * 1.25);
+
+            min = (int)(min * penetrationModifier * ElementalModifiers(element));
+            max = (int)(max * penetrationModifier * ElementalModifiers(element));
         }
 
         /// <summary>
@@ -218,20 +245,13 @@ namespace RiverHollow.Characters
         /// <returns>The outgoing amount of damage</returns>
         public int ProcessDamage(CombatActor attacker, AttributeEnum attribute, int potency, int critRating, ElementEnum element = ElementEnum.None)
         {
-            attacker.GetRawPowerRange(out int min, out int max, attribute, potency);
+            GetActualDamageRange(out int min, out int max, attacker, attribute, potency, element);
 
-            double dmgDealt = RHRandom.Instance().Next(min, max);
+            int dmgDealt = RHRandom.Instance().Next(min, max);
 
-            double offensiveAttribute = attacker.Attribute(attribute);
-            double defensiveAttribute = Attribute(GameManager.GetDefenceType(attribute));
+            DecreaseHealth(dmgDealt);
 
-            //The minimum penetration modifier is 0.2, the maximum is 2
-            double penetrationModifier = Math.Min(Math.Max(0.2, offensiveAttribute / defensiveAttribute), 2);
-            int finalDamage = (int)(dmgDealt * penetrationModifier * ElementalModifiers(element));
-
-            DecreaseHealth(finalDamage);
-
-            return finalDamage;
+            return dmgDealt;
         }
 
         /// <summary>
@@ -282,7 +302,7 @@ namespace RiverHollow.Characters
         /// <returns>The outgoing amount of healing</returns>
         public int ProcessHealingAction(CombatActor attacker, AttributeEnum attribute, int potency)
         {
-            attacker.GetRawPowerRange(out int min, out int max, attribute, potency);
+            attacker.GetRawDamageRange(out int min, out int max, attribute, potency);
 
             return IncreaseHealth(RHRandom.Instance().Next(min, max));
         }
@@ -356,16 +376,23 @@ namespace RiverHollow.Characters
             }
             else
             {
-                foreach(KeyValuePair<AttributeEnum, int> kvp in effect.AttributeEffects)
+                foreach(KeyValuePair<AttributeEnum, string> kvp in effect.AffectedAttributes)
                 {
-                    AssignAttributeEffect(kvp.Key, kvp.Value, effect.Duration);
+                    AssignAttributeEffect(kvp.Key, kvp.Value, effect.Duration, effect.EffectType);
                 }
+                _liStatusEffects.Add(effect);
             }
         }
 
-        private void AssignAttributeEffect(AttributeEnum e, int value, int duration)
+        private void AssignAttributeEffect(AttributeEnum e, string value, int duration, StatusTypeEnum effectType)
         {
-            _diEffectedAttributes[e] = new AttributeStatusEffect(value, duration);
+            int modValue = (int)(Attribute(e) * 0.1);
+            if (effectType == StatusTypeEnum.Debuff)
+            {
+                modValue *= -1;
+            }
+
+            _diEffectedAttributes[e] = new AttributeStatusEffect(modValue, duration);
         }
 
         private void TickDownAttributeEffect(AttributeEnum e)
@@ -438,7 +465,7 @@ namespace RiverHollow.Characters
 
         public int GetEvasionChance()
         {
-            return (40 * Attribute(AttributeEnum.Evasion)) / (Attribute(AttributeEnum.Evasion) + 40); ;
+            return (40 * Attribute(AttributeEnum.Evasion)) / (Attribute(AttributeEnum.Evasion) + 40);
         }
 
         public virtual bool IsSummon() { return false; }

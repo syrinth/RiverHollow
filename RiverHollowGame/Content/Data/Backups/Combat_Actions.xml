@@ -27,111 +27,111 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:0-1][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:1-1][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:2-1][DamageAttribute:Magic][DamageType:Magical][Target:Ally][Range:Ranged][AreaType:Row][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:3-1][DamageAttribute:Magic][DamageType:Magical][Target:Ally][Range:Ranged][AreaType:All][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:0-2][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:1-2][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:2-2][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:3-2][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:0-3][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Melee][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:1-3][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:50][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][StatusEffectID:2]</Value>
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:2-3][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Melee][AreaType:Single][Harm:60][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][StatusEffectID:3]</Value>
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:3-3][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Square][Harm:60][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][StatusEffectID:4]</Value>
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:0-4][DamageAttribute:Strength][DamageType:Physical][Target:Enemy][Range:Melee][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:1-4][DamageAttribute:Strength][DamageType:Physical][Target:Enemy][Range:Melee][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:2-4][DamageAttribute:Strength][DamageType:Physical][Target:Enemy][Range:Melee][AreaType:Row][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:3-4][DamageAttribute:Strength][DamageType:Physical][Target:Enemy][Range:Melee][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:0-5][DamageAttribute:Strength][DamageType:Physical][Target:Enemy][Range:Melee][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>23</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:1-5][DamageAttribute:Strength][DamageType:Physical][Target:Enemy][Range:Melee][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>24</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:2-5][DamageAttribute:Strength][DamageType:Physical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:3-5][DamageAttribute:Strength][DamageType:Physical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:0-6][DamageAttribute:Agility][DamageType:Physical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>27</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:1-6][DamageAttribute:Agility][DamageType:Physical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>28</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:2-6][DamageAttribute:Agility][DamageType:Physical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>29</Key>
-      <Value>[Type:Action][Icon:3-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:3-6][DamageAttribute:Agility][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>30</Key>
-      <Value>[Type:Action][Icon:0-7][DamageAttribute:Agility][DamageType:Physical][Target:Enemy][Range:Melee][AreaType:Single][Harm:100][Action:UserAttack Apply][Move:Up]</Value>
+      <Value>[Type:Action][Icon:0-7][DamageAttribute:Agility][DamageType:Physical][Target:Enemy][Range:Melee][AreaType:Single][Harm:100][Action:UserAttack Apply][Move:Right]</Value>
     </Item>
     <Item>
       <Key>31</Key>
-      <Value>[Type:Action][Icon:1-7][Target:Ally][Range:Ranged][AreaType:All]</Value>
+      <Value>[Type:Action][Icon:1-7][Target:Ally][Range:Ranged][AreaType:All][Action:UserCast Apply][StatusEffectID:1]</Value>
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Action][Icon:2-7][DamageAttribute:Agility][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Column][Harm:60][Action:UserCast Apply][Displace:Left]</Value>
+      <Value>[Type:Action][Icon:2-7][DamageAttribute:Agility][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Row][Harm:60][Action:UserCast Apply][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>33</Key>

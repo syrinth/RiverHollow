@@ -565,18 +565,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Items/Gear/Weapons/Bow/660.png
 
-#begin Textures/Items/Gear/Weapons/Knife/630.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Items/Gear/Weapons/Knife/630.png
-
 #begin Textures/Items/Gear/Weapons/Orb/620.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -3903,4 +3891,16 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Combat_Actions.xml
+
+#begin Textures/Items/Gear/Weapons/Knife/116.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Items/Gear/Weapons/Knife/116.png
 

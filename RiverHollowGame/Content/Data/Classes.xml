@@ -31,7 +31,7 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Weapon:Rapier][Armor:Light][Actions:30|31|32|33][Speed:4][GearID:121|123|126|128][Idle:4-.4-F][Action1:2-.4-F][Hurt:1-.4-F][Critical:2-.4-F][KO:1-.4-F][Victory:2-.4-F]</Value>
+      <Value>[Weapon:Rapier][Armor:Light][Actions:30|31|32|33][Speed:7][GearID:121|123|126|128][Idle:4-.4-F][Action1:2-.4-F][Hurt:1-.4-F][Critical:2-.4-F][KO:1-.4-F][Victory:2-.4-F]</Value>
     </Item>
   </Asset>
 </XnaContent>

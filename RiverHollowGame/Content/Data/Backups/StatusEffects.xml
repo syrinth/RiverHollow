@@ -7,19 +7,19 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Buff][Counter]</Value>
+      <Value>[Type:Buff][Modify:Agility-Minor|Magic-Minor|Strength-Minor][Duration:3]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Buff:Int-10]</Value>
+      <Value>[Type:DoT][Potency:50][Duration:5]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Buff][DoT][Potency:50]</Value>
+      <Value>[Type:Debuff][Modify:Defence-Minor|Resistance-Minor][Duration:3]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Buff:Mag-10]</Value>
+      <Value>[Type:Debuff][Modify:Evasion-Minor|Speed-Minor][Duration:3]</Value>
     </Item>
     <Item>
       <Key>5</Key>
