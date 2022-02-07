@@ -31,6 +31,16 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="18">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="19">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="26">
   <properties>
    <property name="CanDig" type="bool" value="true"/>
@@ -73,6 +83,16 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="40">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="41">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="56">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
@@ -99,6 +119,16 @@
   </properties>
  </tile>
  <tile id="61">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="65">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="66">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
@@ -153,6 +183,21 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="90">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="91">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="93">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="94">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
@@ -188,6 +233,26 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="115">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="116">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="118">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="119">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="129" probability="0.001"/>
  <tile id="131" probability="0.001"/>
  <tile id="134">
@@ -210,7 +275,22 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="144">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="157" probability="0.1"/>
+ <tile id="168">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="169">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="181">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
@@ -720,6 +800,45 @@
    <wangcolor name="CaveDirt" color="#b4a8ff" tile="435" probability="1"/>
    <wangcolor name="CaveDarkEarth" color="#8e7848" tile="539" probability="1"/>
    <wangcolor name="Moss" color="#0000ff" tile="-1" probability="1"/>
+   <wangcolor name="Grass" color="#ff7700" tile="-1" probability="1"/>
+   <wangcolor name="DarkGrass" color="#00e9ff" tile="-1" probability="1"/>
+   <wangcolor name="Dirt Road" color="#ff00d8" tile="-1" probability="1"/>
+   <wangtile tileid="0" wangid="0,6,0,4,0,6,0,6"/>
+   <wangtile tileid="1" wangid="0,6,0,4,0,4,0,6"/>
+   <wangtile tileid="2" wangid="0,6,0,6,0,4,0,6"/>
+   <wangtile tileid="3" wangid="0,4,0,6,0,4,0,4"/>
+   <wangtile tileid="4" wangid="0,4,0,6,0,6,0,4"/>
+   <wangtile tileid="5" wangid="0,4,0,4,0,6,0,4"/>
+   <wangtile tileid="25" wangid="0,4,0,4,0,6,0,6"/>
+   <wangtile tileid="26" wangid="0,4,0,4,0,4,0,4"/>
+   <wangtile tileid="27" wangid="0,6,0,6,0,4,0,4"/>
+   <wangtile tileid="28" wangid="0,6,0,6,0,4,0,4"/>
+   <wangtile tileid="29" wangid="0,6,0,6,0,6,0,6"/>
+   <wangtile tileid="30" wangid="0,4,0,4,0,6,0,6"/>
+   <wangtile tileid="50" wangid="0,4,0,6,0,6,0,6"/>
+   <wangtile tileid="51" wangid="0,4,0,6,0,6,0,4"/>
+   <wangtile tileid="52" wangid="0,6,0,6,0,6,0,4"/>
+   <wangtile tileid="53" wangid="0,6,0,4,0,4,0,4"/>
+   <wangtile tileid="54" wangid="0,6,0,4,0,4,0,6"/>
+   <wangtile tileid="55" wangid="0,4,0,4,0,4,0,6"/>
+   <wangtile tileid="100" wangid="0,4,0,5,0,4,0,4"/>
+   <wangtile tileid="101" wangid="0,4,0,5,0,5,0,4"/>
+   <wangtile tileid="102" wangid="0,4,0,4,0,5,0,4"/>
+   <wangtile tileid="103" wangid="0,5,0,4,0,5,0,5"/>
+   <wangtile tileid="104" wangid="0,5,0,4,0,4,0,5"/>
+   <wangtile tileid="105" wangid="0,5,0,5,0,4,0,5"/>
+   <wangtile tileid="125" wangid="0,5,0,5,0,4,0,4"/>
+   <wangtile tileid="126" wangid="0,5,0,5,0,5,0,5"/>
+   <wangtile tileid="127" wangid="0,4,0,4,0,5,0,5"/>
+   <wangtile tileid="128" wangid="0,4,0,4,0,5,0,5"/>
+   <wangtile tileid="129" wangid="0,4,0,4,0,4,0,4"/>
+   <wangtile tileid="130" wangid="0,5,0,5,0,4,0,4"/>
+   <wangtile tileid="150" wangid="0,5,0,4,0,4,0,4"/>
+   <wangtile tileid="151" wangid="0,5,0,4,0,4,0,5"/>
+   <wangtile tileid="152" wangid="0,4,0,4,0,4,0,5"/>
+   <wangtile tileid="153" wangid="0,4,0,5,0,5,0,5"/>
+   <wangtile tileid="154" wangid="0,4,0,5,0,5,0,4"/>
+   <wangtile tileid="155" wangid="0,5,0,5,0,5,0,4"/>
    <wangtile tileid="509" wangid="0,1,0,3,0,1,0,1"/>
    <wangtile tileid="510" wangid="0,1,0,1,0,3,0,1"/>
    <wangtile tileid="511" wangid="0,3,0,1,0,3,0,3"/>

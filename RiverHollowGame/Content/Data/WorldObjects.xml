@@ -79,7 +79,7 @@
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Type:Building][Texture:Apothecary][Size:7-8][Base:0-4-7-4][Entrance:3-6-1-2][ReqItems:55-5|60-5]</Value>
+      <Value>[Type:Building][Texture:Apothecary][Size:7-8][Base:1-5-5-3][Entrance:3-6-1-2][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>20</Key>
@@ -215,7 +215,7 @@
     </Item>
     <Item>
       <Key>53</Key>
-      <Value>[Type:Destructible][Image:32-32][Size:2-2][Height:32][Tool:Pick][Hp:5][ReqLvl:1][ItemID:0-5][Base:2-2]</Value>
+      <Value>[Type:Destructible][Image:32-32][Size:2-2][Height:32][Tool:Pick][Hp:20][ReqLvl:2][ItemID:0-5][Base:2-2]</Value>
     </Item>
     <Item>
       <Key>54</Key>
@@ -263,7 +263,7 @@
     </Item>
     <Item>
       <Key>65</Key>
-      <Value>[Type:Destructible][Image:176-96][Size:2-2][Tool:Axe][Hp:5][ReqLvl:1][ItemID:2-5][Base:2-2]</Value>
+      <Value>[Type:Destructible][Image:176-96][Size:2-2][Tool:Axe][Hp:20][ReqLvl:2][ItemID:2-5][Base:2-2]</Value>
     </Item>
     <Item>
       <Key>66</Key>
@@ -271,7 +271,7 @@
     </Item>
     <Item>
       <Key>67</Key>
-      <Value>[Type:Destructible][Tree][Texture:Textures\tree][Image:0-0][Size:3-5][Hp:3][ReqLvl:1][ItemID:2-7][Base:1-1][BaseShift:1]</Value>
+      <Value>[Type:Destructible][Tree][Texture:Textures\tree][Image:0-0][Size:3-5][Hp:10][ReqLvl:1][ItemID:2-7][Base:1-1][BaseShift:1]</Value>
     </Item>
     <Item>
       <Key>68</Key>

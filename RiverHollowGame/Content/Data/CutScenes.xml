@@ -22,7 +22,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapWorkshop][Player][Actors:13-Workshop_NPC][Deactivate:13]</Item>
-        <Item>[Speed:Player-0.5|14-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:13][Move:13-4-Up][Face:Player-Up][Face:13-Down][Speak:13-0][Face:13-Left][Speak:13-1][Face:13-Right][Speak:13-2][Face:13-Down][Speak:13-3][Move:13-4-Down]</Item>
+        <Item>[Speed:Player-0.5|13-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:13][Move:13-4-Up][Face:Player-Up][Face:13-Down][Speak:13-0][Face:13-Left][Speak:13-1][Face:13-Right][Speak:13-2][Face:13-Down][Speak:13-3][Move:13-4-Down]</Item>
       </Value>
     </Item>
     <Item>

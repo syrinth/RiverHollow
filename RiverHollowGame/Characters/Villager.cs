@@ -18,6 +18,7 @@ namespace RiverHollow.Characters
 {
     public class Villager : TravellingNPC
     {
+        protected string _sStartMap;
         protected int _iHouseBuildingID = -1;
 
         protected Dictionary<int, bool> _diCollection;
@@ -48,6 +49,7 @@ namespace RiverHollow.Characters
 
         protected bool _bLivesInTown = false;
         public bool LivesInTown => _bLivesInTown;
+        public bool SpawnOnTheMap => !string.IsNullOrEmpty(_sStartMap) || _bLivesInTown;
 
         int _iNextTimeKeyID = 0;
 
@@ -96,6 +98,8 @@ namespace RiverHollow.Characters
         protected override void ImportBasics(Dictionary<string, string> stringData, bool loadanimations = true)
         {
             base.ImportBasics(stringData, loadanimations);
+
+            Util.AssignValue(ref _sStartMap, "StartMap", stringData);
 
             Util.AssignValue(ref _bCanMarry, "CanMarry", stringData);
             Util.AssignValue(ref _bCanBecomePregnant, "CanBecomePregnant", stringData);
@@ -190,7 +194,7 @@ namespace RiverHollow.Characters
                 _bLivesInTown = true;
             }
 
-            if (LivesInTown || HandleTravelTiming())
+            if (LivesInTown || HandleTravelTiming() || !string.IsNullOrEmpty(_sStartMap))
             {
                 ClearPath();
                 MoveToSpawn();
@@ -277,6 +281,8 @@ namespace RiverHollow.Characters
 
             if (Married) { rv = PlayerManager.PlayerHome.MapName; }
             else if (IsHomeBuilt()) { rv = PlayerManager.GetBuildingByID(_iHouseBuildingID)?.MapName; }
+            else if (!string.IsNullOrEmpty(_sStartMap)) {
+                rv = _sStartMap; }
             else if (_iHouseBuildingID != -1) { rv = "mapInn"; }
 
             return rv;
@@ -289,7 +295,6 @@ namespace RiverHollow.Characters
         public override void MoveToSpawn()
         {
             _bOnTheMap = true;
-            PlayerManager.RemoveFromParty(CombatVersion);
 
             string mapName = GetSpawnMapName();
 
@@ -301,7 +306,7 @@ namespace RiverHollow.Characters
 
                 string strSpawn = string.Empty;
                 if (Married) { strSpawn = "Spouse"; }
-                else if (IsHomeBuilt() || GetSpawnMapName() == MapManager.TownMapName) { strSpawn = "NPC_" + ID.ToString("00"); }
+                else if (IsHomeBuilt() || GetSpawnMapName() == MapManager.TownMapName || !string.IsNullOrEmpty(_sStartMap)) {strSpawn = "NPC_" + ID.ToString("00"); }
                 else if (GameManager.VillagersInTheInn < 3) { strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
 
                 Position = Util.SnapToGrid(map.GetCharacterSpawn(strSpawn));
@@ -542,7 +547,7 @@ namespace RiverHollow.Characters
                 PlayerManager.Spouse = this;
             }
 
-            if (_iNextArrival == 0)
+            if (_iNextArrival == 0 || !string.IsNullOrEmpty(_sStartMap))
             {
                 MoveToSpawn();
                 DetermineValidSchedule();

@@ -87,7 +87,7 @@
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:Action][Icon:3-4][DamageAttribute:Strength][DamageType:Physical][Target:Enemy][Range:Melee][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:3-4][DamageAttribute:Strength][DamageType:Physical][Target:Self][Range:Melee][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>22</Key>
@@ -103,7 +103,7 @@
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Action][Icon:3-5][DamageAttribute:Strength][DamageType:Physical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:3-5][DamageAttribute:Strength][DamageType:Physical][Target:Self][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>26</Key>
@@ -119,7 +119,7 @@
     </Item>
     <Item>
       <Key>29</Key>
-      <Value>[Type:Action][Icon:3-6][DamageAttribute:Agility][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
+      <Value>[Type:Action][Icon:3-6][DamageAttribute:Agility][DamageType:Magical][Target:Self][Range:Ranged][AreaType:Single][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:0-48][Displace:Up]</Value>
     </Item>
     <Item>
       <Key>30</Key>

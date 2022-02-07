@@ -10,8 +10,6 @@ using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
-using static RiverHollow.WorldObjects.Buildable;
-using static RiverHollow.WorldObjects.Buildable.AdjustableObject;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -291,12 +289,7 @@ namespace RiverHollow.Tile_Engine
             bool rv = false;
             if (WorldObject != null && WorldObject.IsDestructible())
             {
-                Destructible d = (Destructible)WorldObject;
-                if (d.NeededTool == toolUsed.ToolType)
-                {
-                    SoundManager.PlayEffectAtLoc(toolUsed.SoundEffect, MapName, Center, toolUsed);
-                    d.DealDamage(toolUsed.ToolLevel);
-                }
+                ((Destructible)WorldObject).DealDamage(toolUsed);
             }
 
             return rv;

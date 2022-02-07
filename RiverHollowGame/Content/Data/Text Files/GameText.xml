@@ -157,5 +157,13 @@
       <Key>38</Key>
       <Value>[Name:Read_Book][Text:Read {0}?][Selection:YesNo][Trigger:UseItem]</Value>
     </Item>
+	<Item>
+      <Key>39</Key>
+      <Value>[Name:Wrong_Tool][Text:Wrong Tool!]</Value>
+    </Item>
+		<Item>
+      <Key>40</Key>
+      <Value>[Name:Weak_Tool][Text:Your tool isn't strong enough!]</Value>
+    </Item>
   </Asset>
 </XnaContent>

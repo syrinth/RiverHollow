@@ -19,8 +19,6 @@ using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.RiverHollow;
 using static RiverHollow.Utilities.Enums;
-using static RiverHollow.WorldObjects.Buildable;
-using static RiverHollow.WorldObjects.Buildable.AdjustableObject;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -565,12 +563,7 @@ namespace RiverHollow.Tile_Engine
                     }
                     else if (tiledObj.Name.Equals("Item"))
                     {
-                        Item item = DataManager.GetItem(int.Parse(tiledObj.Properties["ItemID"]));
-                        item.AutoPickup = false;
-                        item.ManualPickup = true;
-                        item.OnTheMap = true;
-                        item.Position = Util.SnapToGrid(tiledObj.Position);
-                        _liItems.Add(item);
+                        new Gatherable(int.Parse(tiledObj.Properties["ItemID"])).PlaceOnMap(tiledObj.Position, this);
                     }
                 }
             }

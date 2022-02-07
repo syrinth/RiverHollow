@@ -3904,3 +3904,8 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Items/Gear/Weapons/Knife/116.png
 
+#begin Maps/Forest/map_YuliaCottage.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Forest/map_YuliaCottage.tmx
+

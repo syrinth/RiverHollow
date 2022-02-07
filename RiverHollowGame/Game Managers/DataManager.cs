@@ -9,12 +9,7 @@ using RiverHollow.Buildings;
 using RiverHollow.CombatStuff;
 using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
-
-using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.WorldObjects.Buildable;
-using static RiverHollow.WorldObjects.TriggerObject;
 using RiverHollow.Misc;
-using static RiverHollow.WorldObjects.Buildable.AdjustableObject;
 using RiverHollow.Tile_Engine;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Items;

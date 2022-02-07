@@ -305,7 +305,7 @@ namespace RiverHollow
             //Places NPCs on the map
             foreach (Villager v in DataManager.DIVillagers.Values)
             {
-                if (v.LivesInTown)
+                if (v.SpawnOnTheMap)
                 {
                     v.MoveToSpawn();
                     v.DetermineValidSchedule();

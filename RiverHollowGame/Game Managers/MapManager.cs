@@ -182,17 +182,14 @@ namespace RiverHollow.Game_Managers
                 int treeID = int.Parse(DataManager.Config[3]["ObjectID"]);
                 int grassID = int.Parse(DataManager.Config[11]["ObjectID"]);
                 int stumpID = int.Parse(DataManager.Config[12]["ObjectID"]);
-                int clayID = int.Parse(DataManager.Config[13]["ObjectID"]);
 
                 List <RHTile> possibleTiles = Maps[MapManager.TownMapName].TileList;
                 possibleTiles.RemoveAll(x => !x.Passable() || x.Flooring != null);
 
-                PopulateHomeMapHelper(ref possibleTiles, bigRockID, 10);
-                PopulateHomeMapHelper(ref possibleTiles, rockID, 49);
-                PopulateHomeMapHelper(ref possibleTiles, clayID, 50);
-                PopulateHomeMapHelper(ref possibleTiles, treeID, 99);
+                PopulateHomeMapHelper(ref possibleTiles, bigRockID, 5);
+                PopulateHomeMapHelper(ref possibleTiles, rockID, 50);
+                PopulateHomeMapHelper(ref possibleTiles, treeID, 50);
                 PopulateHomeMapHelper(ref possibleTiles, stumpID, 10);
-                PopulateHomeMapHelper(ref possibleTiles, grassID, 1000);
             }
         }
 

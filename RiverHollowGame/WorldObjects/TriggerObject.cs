@@ -1,0 +1,129 @@
+﻿using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Items;
+using RiverHollow.Utilities;
+using System.Collections.Generic;
+using static RiverHollow.Utilities.Enums;
+
+namespace RiverHollow.WorldObjects
+{
+    public abstract class TriggerObject : WorldObject
+    {
+        #region constants
+        protected const string MATCH_TRIGGER = "MatchTrigger";
+        protected const string TRIGGER_NUMBER = "TriggerNumber";
+        protected const string ITEM_KEY_ID = "ItemKeyID";
+        protected const string OUT_TRIGGER = "OutTrigger";
+        #endregion
+
+        enum DungeonObjectType { Trigger, Door };
+        readonly DungeonObjectType _eSubType;
+        protected readonly string _sOutTrigger;   //What trigger response is sent
+        protected string _sMatchTrigger; //What, if anything, the object responds to
+        protected int _iTriggerNumber = 1;
+        protected int _iTriggersLeft = 1;
+        protected bool _bVisible = true;
+        readonly protected int _iItemKeyID = -1;
+        protected bool _bHasBeenTriggered = false;
+
+        protected TriggerObject(int id, Dictionary<string, string> stringData) : base(id)
+        {
+            LoadDictionaryData(stringData);
+            _eObjectType = ObjectTypeEnum.DungeonObject;
+            _eSubType = Util.ParseEnum<DungeonObjectType>(stringData["Subtype"]);
+
+            Util.AssignValue(ref _sOutTrigger, OUT_TRIGGER, stringData);
+            Util.AssignValue(ref _sMatchTrigger, MATCH_TRIGGER, stringData);
+            Util.AssignValue(ref _iTriggerNumber, TRIGGER_NUMBER, stringData);
+            Util.AssignValue(ref _iItemKeyID, ITEM_KEY_ID, stringData);
+
+            _iTriggersLeft = _iTriggerNumber;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (_bVisible)
+            {
+                base.Draw(spriteBatch);
+            }
+        }
+
+        /// <summary>
+        /// This method is called when something attempts to trigger it
+        /// </summary>
+        /// <param name="name">The name of the trigger</param>
+        public virtual void AttemptToTrigger(string name) { }
+
+        /// <summary>
+        /// Call to see if the object will be triggered by the sent trigger
+        /// </summary>
+        /// <param name="triggerName">The trigger name to match against the response trigger</param>
+        /// <returns>True if theo object can trigger</returns>
+        protected bool CanTrigger(string triggerName)
+        {
+            bool rv = false;
+            if (triggerName == _sMatchTrigger)
+            {
+                rv = CanTrigger();
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Call to see if the object can trigger. Only valid if the object hasn't been triggered
+        /// and the object hasno more remaining trigger numbers to wait on
+        /// </summary>
+        /// <returns>True if the object can trigger</returns>
+        protected bool CanTrigger()
+        {
+            bool rv = false;
+            if (!_bHasBeenTriggered && UpdateTriggerNumber())
+            {
+                rv = true;
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// This method is called to trigger the object and make it send its trigger
+        /// </summary>
+        public virtual void FireTrigger() { }
+
+        /// <summary>
+        /// Call this to reset the DungeonObject to its original state.
+        /// </summary>
+        public virtual void Reset() { }
+
+        /// <summary>
+        /// Given an item type, check it against the key for the DungeonObject
+        /// </summary>
+        /// <param name="item">The Item to check against</param>
+        /// <returns>True if the item is the key</returns>
+        public bool CheckForKey(Item item)
+        {
+            bool rv = false;
+            if (_iItemKeyID == item.ItemID)
+            {
+                rv = true;
+                item.Remove(1);
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// This checks whether or not the object should trigger
+        /// </summary>
+        /// <returns>Returns true if the object can trigger</returns>
+        private bool UpdateTriggerNumber()
+        {
+            if (_iTriggersLeft > 0)
+            {
+                _iTriggersLeft--;
+            }
+
+            return _iTriggersLeft == 0;
+        }
+    }
+}
