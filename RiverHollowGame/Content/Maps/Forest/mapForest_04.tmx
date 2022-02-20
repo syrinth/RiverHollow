@@ -77,22 +77,6 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="MapObject">
-  <object id="40" name="ResourceSpawn" x="96.2798" y="54.0405" width="124.333" height="96.333">
-   <properties>
-    <property name="Resources" value="62"/>
-   </properties>
-  </object>
-  <object id="51" name="SpawnPoint" x="339" y="82.4167" width="10" height="8.5">
-   <properties>
-    <property name="Spawn-All" value="4-C"/>
-   </properties>
-  </object>
-  <object id="52" name="SpawnPoint" x="339" y="196.417" width="10" height="8.5">
-   <properties>
-    <property name="Spawn-All" value="4-C"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="5" name="MapObject"/>
  <objectgroup id="6" name="Character"/>
 </map>

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended.Tiled;
 using RiverHollow.WorldObjects;
-using RiverHollow.Tile_Engine;
+using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 using System.Linq;
@@ -131,7 +131,6 @@ namespace RiverHollow.Game_Managers
             //then handle the entrances, and spawn themap entities.
             foreach (RoomInfo rmInfo in mapsInUse)
             {
-                rmInfo.Map.AssignResourceSpawns("20-40", _diDungeonInfo["ObjectID"]);
 
                 //foreach (MonsterSpawn spawn in rmInfo.Map.MonsterSpawnPoints)
                 //{

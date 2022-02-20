@@ -303,15 +303,15 @@
     </Item>
     <Item>
       <Key>75</Key>
-      <Value>[Type:Resource][Image:9-8][Value:3][Stacks][Place:101]</Value>
+      <Value>[Type:Resource][Image:9-8][Value:3][Stacks][Place:102]</Value>
     </Item>
     <Item>
       <Key>76</Key>
-      <Value>[Type:Resource][Image:2-2][Value:3][Stacks][Place:95]</Value>
+      <Value>[Type:Resource][Image:2-2][Value:3][Stacks][Place:96]</Value>
     </Item>
     <Item>
       <Key>77</Key>
-      <Value>[Type:Resource][Image:3-2][Value:1500][Stacks][Place:102]</Value>
+      <Value>[Type:Resource][Image:3-2][Value:1500][Stacks][Place:103]</Value>
     </Item>
     <Item>
       <Key>78</Key>
@@ -643,98 +643,106 @@
     </Item>
     <Item>
       <Key>160</Key>
-      <Value>[Type:Consumable][Image:1-2][Value:3000][CombatType:Helpful][Status:KO][Hp:1]</Value>
+      <Value>[Type:Food][Image:4-2][Value:5][Stam:5][HP:2]</Value>
     </Item>
     <Item>
       <Key>161</Key>
-      <Value>[Type:Consumable][Image:1-2][Value:3000][CombatType:Helpful][Status:Poisoned]</Value>
+      <Value>[Type:Food][Image:5-2][Value:10][Stam:15][HP:4]</Value>
     </Item>
     <Item>
       <Key>162</Key>
-      <Value>[Type:Consumable][Image:1-2][Value:3000][CombatType:Harmful][Status:Poisoned]</Value>
+      <Value>[Type:Consumable][Image:1-2][Value:3000][CombatType:Helpful][Status:KO][Hp:1]</Value>
     </Item>
     <Item>
       <Key>163</Key>
-      <Value>[Type:Consumable][Image:1-0][Value:50][CombatType:Helpful][Hp:10][ReqItems:56-1|57-1]</Value>
+      <Value>[Type:Consumable][Image:1-2][Value:3000][CombatType:Helpful][Status:Poisoned]</Value>
     </Item>
     <Item>
       <Key>164</Key>
-      <Value>[Type:Consumable][Image:1-1][Value:100][CombatType:Helpful][Mana:20][ReqItems:5-1|22-3]</Value>
+      <Value>[Type:Consumable][Image:1-2][Value:3000][CombatType:Harmful][Status:Poisoned]</Value>
     </Item>
     <Item>
       <Key>165</Key>
-      <Value>[Type:Consumable][Image:5-0][Value:3000][CombatType:Helpful][StatusEffect:5-10][ReqItems:23-4]</Value>
+      <Value>[Type:Consumable][Image:1-0][Value:50][CombatType:Helpful][Hp:10][ReqItems:56-1|57-1]</Value>
     </Item>
     <Item>
       <Key>166</Key>
-      <Value>[Type:Clothes][Subtype:Body][Image:7-0][ReqItems:2-10|0-5][TexName:400][Row:1]</Value>
+      <Value>[Type:Consumable][Image:1-1][Value:100][CombatType:Helpful][Mana:20][ReqItems:5-1|22-3]</Value>
     </Item>
     <Item>
       <Key>167</Key>
-      <Value>[Type:Clothes][Subtype:Body][Image:7-0][ReqItems:2-10|0-5][TexName:400][Row:1]</Value>
+      <Value>[Type:Consumable][Image:5-0][Value:3000][CombatType:Helpful][StatusEffect:5-10][ReqItems:23-4]</Value>
     </Item>
     <Item>
       <Key>168</Key>
-      <Value>[Type:Clothes][Subtype:Hat][Image:0-4][Value:0][Row:0][TexName:400]</Value>
+      <Value>[Type:Clothes][Subtype:Body][Image:7-0][ReqItems:2-10|0-5][TexName:400][Row:1]</Value>
     </Item>
     <Item>
       <Key>169</Key>
-      <Value>[Type:Clothes][Subtype:Body][Image:1-4][Value:0][Row:1][TexName:401]</Value>
+      <Value>[Type:Clothes][Subtype:Body][Image:7-0][ReqItems:2-10|0-5][TexName:400][Row:1]</Value>
     </Item>
     <Item>
       <Key>170</Key>
-      <Value>[Type:Clothes][Subtype:Legs][Image:2-4][Value:0][Row:2][TexName:404]</Value>
+      <Value>[Type:Clothes][Subtype:Hat][Image:0-4][Value:0][Row:0][TexName:400]</Value>
     </Item>
     <Item>
       <Key>171</Key>
-      <Value>[Type:MonsterFood][Image:3-4][Value:0][Spawn:3-4]</Value>
+      <Value>[Type:Clothes][Subtype:Body][Image:1-4][Value:0][Row:1][TexName:401]</Value>
     </Item>
     <Item>
       <Key>172</Key>
-      <Value>[Type:Blueprint][Image:0-12][ObjectID:1|27|73|107]</Value>
+      <Value>[Type:Clothes][Subtype:Legs][Image:2-4][Value:0][Row:2][TexName:404]</Value>
     </Item>
     <Item>
       <Key>173</Key>
-      <Value>[Type:Blueprint][Image:1-12][ItemID:74][Value:500]</Value>
+      <Value>[Type:MonsterFood][Image:3-4][Value:0][Spawn:3-4]</Value>
     </Item>
     <Item>
       <Key>174</Key>
-      <Value>[Type:Blueprint][Image:0-0][Unlocks:24][Value:1000]</Value>
+      <Value>[Type:Blueprint][Image:0-12][ObjectID:1|27|74|108]</Value>
     </Item>
     <Item>
       <Key>175</Key>
-      <Value>[Type:Blueprint][Image:0-0][Unlocks:20][Value:1000]</Value>
+      <Value>[Type:Blueprint][Image:1-12][ObjectID:75][Value:500]</Value>
     </Item>
     <Item>
       <Key>176</Key>
-      <Value>[Type:Blueprint][Image:0-0][Unlocks:22][Value:1000]</Value>
+      <Value>[Type:Blueprint][Image:0-0][Unlocks:24][Value:1000]</Value>
     </Item>
     <Item>
       <Key>177</Key>
-      <Value>[Type:Blueprint][Image:0-0][Unlocks:21][Value:1000]</Value>
+      <Value>[Type:Blueprint][Image:0-0][Unlocks:20][Value:1000]</Value>
     </Item>
     <Item>
       <Key>178</Key>
-      <Value>[Type:Blueprint][Image:0-0][Unlocks:25][Value:1000]</Value>
+      <Value>[Type:Blueprint][Image:0-0][Unlocks:22][Value:1000]</Value>
     </Item>
     <Item>
       <Key>179</Key>
-      <Value>[Type:Special][Image:0-5][Value:0]</Value>
+      <Value>[Type:Blueprint][Image:0-0][Unlocks:21][Value:1000]</Value>
     </Item>
     <Item>
       <Key>180</Key>
-      <Value>[Type:Special][Subtype:Map][Image:5-1]</Value>
+      <Value>[Type:Blueprint][Image:0-0][Unlocks:25][Value:1000]</Value>
     </Item>
     <Item>
       <Key>181</Key>
-      <Value>[Type:Special][Subtype:Marriage][Image:2-3][Value:2000]</Value>
+      <Value>[Type:Special][Image:0-5][Value:0]</Value>
     </Item>
     <Item>
       <Key>182</Key>
-      <Value>[Type:Special][Subtype:Class][Image:0-2]</Value>
+      <Value>[Type:Special][Subtype:Map][Image:5-1]</Value>
     </Item>
     <Item>
       <Key>183</Key>
+      <Value>[Type:Special][Subtype:Marriage][Image:2-3][Value:2000]</Value>
+    </Item>
+    <Item>
+      <Key>184</Key>
+      <Value>[Type:Special][Subtype:Class][Image:0-2]</Value>
+    </Item>
+    <Item>
+      <Key>185</Key>
       <Value>[Type:Special][Subtype:DungeonKey][Image:2-3][Value:0]</Value>
     </Item>
   </Asset>

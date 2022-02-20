@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using RiverHollow.Game_Managers;
+﻿using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
@@ -11,6 +10,7 @@ namespace RiverHollow.WorldObjects
     public class Gatherable : WorldObject
     {
         readonly int _iItemID;
+        public int ItemdID => _iItemID;
 
         public Gatherable(int itemID) : base(-1)
         {
@@ -32,6 +32,7 @@ namespace RiverHollow.WorldObjects
 
         public void Gather()
         {
+            CurrentMap.AlertSpawnPoint(this);
             InventoryManager.AddToInventory(DataManager.GetItem(_iItemID));
             MapManager.RemoveWorldObject(this);
             RemoveSelfFromTiles();

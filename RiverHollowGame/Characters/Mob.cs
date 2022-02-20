@@ -152,7 +152,7 @@ namespace RiverHollow.Characters
                 }
             }
 
-            LoadSpriteAnimations(ref _sprBody, Util.LoadWorldAnimations(data), DataManager.FOLDER_MONSTERS + data["Texture"]);
+            LoadSpriteAnimations(ref _sprBody, Util.LoadWorldAnimations(data), DataManager.FOLDER_MOBS + data["Texture"]);
             return 0;
         }
 

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
-using RiverHollow.Tile_Engine;
+using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;

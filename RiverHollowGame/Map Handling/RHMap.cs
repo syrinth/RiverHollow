@@ -20,7 +20,7 @@ using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.RiverHollow;
 using static RiverHollow.Utilities.Enums;
 
-namespace RiverHollow.Tile_Engine
+namespace RiverHollow.Map_Handling
 {
     public class RHMap
     {
@@ -63,10 +63,10 @@ namespace RiverHollow.Tile_Engine
         public List<WorldActor> ToAdd;
         private List<Building> _liBuildings;
         private List<WorldObject> _liPlacedWorldObjects;
-        private List<ResourceSpawn> _liResourceSpawnPoints;
+        private List<ResourceSpawn> _liResourceSpawns;
+        private List<MobSpawn> _liMobSpawns;
         private List<int> _liCutscenes;
         private Dictionary<RarityEnum, List<int>> _diResources;
-        private string _sResourceMinMax;
         protected List<Item> _liItems;
         protected List<ShopLocation> _liShopData;
         public Dictionary<string, TravelPoint> DictionaryTravelPoints { get; }
@@ -82,7 +82,8 @@ namespace RiverHollow.Tile_Engine
 
         public RHMap()
         {
-            _liResourceSpawnPoints = new List<ResourceSpawn>();
+            _liResourceSpawns = new List<ResourceSpawn>();
+            _liMobSpawns = new List<MobSpawn>();
             _liWallTiles = new List<RHTile>();
             _liTestTiles = new List<RHTile>();
             _liTilesets = new List<TiledMapTileset>();
@@ -178,11 +179,6 @@ namespace RiverHollow.Tile_Engine
                 DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], this);
             }
 
-            if (_map.Properties.ContainsKey("Resources"))
-            {
-                AssignResourceSpawns(_map.Properties["ResourcesMinMax"], _map.Properties["Resources"]);
-            }
-
             if (_map.Properties.ContainsKey("Cutscenes"))
             {
                 string[] split = _map.Properties["Cutscenes"].Split('|');
@@ -193,25 +189,6 @@ namespace RiverHollow.Tile_Engine
             }
 
             _renderer = new TiledMapRenderer(GraphicsDevice);
-        }
-
-        public void AssignResourceSpawns(string resourceMinMax, string resourceString)
-        {
-            _sResourceMinMax = resourceMinMax;
-            string[] spawnResources = Util.FindParams(resourceString);
-            foreach (string s in spawnResources)
-            {
-                int resourceID = -1;
-                RarityEnum rarity = RarityEnum.C;
-                Util.GetRarity(s, ref resourceID, ref rarity);
-
-                if (!_diResources.ContainsKey(rarity))
-                {
-                    _diResources[rarity] = new List<int>();
-                }
-
-                _diResources[rarity].Add(resourceID);
-            }
         }
 
         public void Update(GameTime gTime)
@@ -484,7 +461,7 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (mapObject.Name.Equals("Wall"))
                         {
-                            foreach (Vector2 v in Util.GetAllPointsInArea(mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height, TILE_SIZE))
+                            foreach (Vector2 v in Util.GetAllPointsInArea(mapObject.Position, mapObject.Size, TILE_SIZE))
                             {
                                 RHTile tile = GetTileByPixelPosition(v);
                                 Util.AddUniquelyToList(ref _liWallTiles, tile);
@@ -493,11 +470,16 @@ namespace RiverHollow.Tile_Engine
                         }
                         else if (mapObject.Name.StartsWith("Display"))
                         {
-                            foreach (Vector2 v in Util.GetAllPointsInArea(mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height, TILE_SIZE))
+                            foreach (Vector2 v in Util.GetAllPointsInArea(mapObject.Position, mapObject.Size, TILE_SIZE))
                             {
                                 GetTileByPixelPosition(v).SetClickAction(mapObject.Name);
                             }
                         }
+                        else if (mapObject.Name.StartsWith("Resource"))
+                        {
+                            _liResourceSpawns.Add(new ResourceSpawn(this, mapObject));
+                        }
+                        else if (mapObject.Name.StartsWith("Mob")) { _liMobSpawns.Add(new MobSpawn(this, mapObject)); }
                         else { _liMapObjects.Add(mapObject); }
                     }
                 }
@@ -517,9 +499,9 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (tiledObj.Name.Equals("DungeonObject"))
                     {
-                        TriggerObject d = DataManager.GetDungeonObject(tiledObj.Properties, Util.SnapToGrid(tiledObj.Position));
+                        TriggerObject d = DataManager.GetDungeonObject(tiledObj.Properties);
 
-                        d.PlaceOnMap(this);
+                        d.PlaceOnMap(Util.SnapToGrid(tiledObj.Position), this);
                         GameManager.AddTrigger(d);
                     }
                     else if (tiledObj.Name.Equals("WorldObject"))
@@ -574,180 +556,52 @@ namespace RiverHollow.Tile_Engine
             if (!_bSpawned)
             {
                 _bSpawned = true;
-                SpawnResources(GetSkipTiles());
+                SpawnResources();
                 SpawnMobs();
             }
         }
 
-        public void ClearMapEntities()
+        private void SpawnResources()
         {
-            foreach (Mob m in _liMobs) { RemoveActor(m); }
-            foreach (WorldObject obj in _liPlacedWorldObjects)
+            for (int i = 0; i < _liResourceSpawns.Count; i++)
             {
-                switch (obj.Type)
-                {
-                    case ObjectTypeEnum.DungeonObject:
-                        if (Modular) { goto case ObjectTypeEnum.WorldObject; }
-                        else { break; }
-                    case ObjectTypeEnum.CombatHazard:
-                    case ObjectTypeEnum.Destructible:
-                    case ObjectTypeEnum.Gatherable:
-                    case ObjectTypeEnum.Plant:
-                    case ObjectTypeEnum.WorldObject:
-                        RemoveWorldObject(obj);
-                        break;
-                }
+                _liResourceSpawns[i].Spawn();
             }
-        }
-
-        /// <summary>
-        /// Call to retrieve a list of RHTiles that cannot be used to spawn resources on. These tiles
-        /// are chosen due to proximity to monster spawn points, combat start tiles, and travel points.
-        /// 
-        /// Additionally, it ensures that there exists a path between each monster spawn point and each
-        /// potential player combat start area
-        /// </summary>
-        /// <param name="loaded">Whether the map was loaded or not. To avoid double spawning</param>
-        /// <returns>A list of tiles to ignore when spawning resources.</returns>
-        private List<RHTile> GetSkipTiles()
-        {
-            List<RHTile> skipTiles = new List<RHTile>();
-
-            foreach (TravelPoint tp in DictionaryTravelPoints.Values)
-            {
-                List<RHTile> tiles = GetTilesFromRectangle(tp.CollisionBox);
-                for (int tileIndex = 0; tileIndex < tiles.Count; tileIndex++)
-                {
-                    Util.AddUniquelyToList(ref skipTiles, tiles[tileIndex]);
-
-                    List<RHTile> neighbourList = tiles[tileIndex].GetWalkableNeighbours();
-                    for (int neighbourIndex = 0; neighbourIndex < neighbourList.Count; neighbourIndex++)
-                    {
-                        Util.AddUniquelyToList(ref skipTiles, neighbourList[neighbourIndex]);
-                    }
-                }
-            }
-
-            return skipTiles;
-        }
-
-        public void Rollover()
-        {
-            foreach (WorldObject obj in _liPlacedWorldObjects) { obj.Rollover(); }
-
-            _bSpawned = false;
-
-            CheckSpirits();
-            _liItems.Clear();
-        }
-
-        /// <summary>
-        /// Creates the TravelPoint object necessary for the given Building
-        /// and calls CreateDoor to add the travel info to the correct RHTiles
-        /// </summary>
-        /// <param name="b">The building to create the door for</param>
-        public void CreateBuildingEntrance(Building b)
-        {
-            TravelPoint buildPoint = new TravelPoint(b, this.Name, b.ID);
-            DictionaryTravelPoints.Add(b.MapName, buildPoint); //TODO: FIX THIS
-            CreateDoor(buildPoint, b.TravelBox.X, b.TravelBox.Y, b.TravelBox.Width, b.TravelBox.Height);
-        }
-
-        public void UpdateBuildingEntrance(string initialMapName, string newMapName)
-        {
-            if (DictionaryTravelPoints.ContainsKey(initialMapName))
-            {
-                TravelPoint pt = DictionaryTravelPoints[initialMapName];
-                DictionaryTravelPoints.Remove(initialMapName);
-                DictionaryTravelPoints[newMapName] = pt;
-            }
-        }
-
-        /// <summary>
-        /// Using the provided information, assign the given TravelPoint to
-        /// the appropriate RHTiles.
-        /// </summary>
-        /// <param name="trvlPt">The TravelPoint to assign</param>
-        /// <param name="rectX">The starting x position</param>
-        /// <param name="rectY">The starting y position</param>
-        /// <param name="width">The Width</param>
-        /// <param name="height">The Height</param>
-        public void CreateDoor(TravelPoint trvlPt, float rectX, float rectY, float width, float height)
-        {
-            foreach (Vector2 vec in Util.GetAllPointsInArea(rectX, rectY, width, height, TILE_SIZE))
-            {
-                RHTile t = GetTileByPixelPosition(vec);
-                if (t != null)
-                {
-                    t.SetTravelPoint(trvlPt);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Removes the doorway attached to the building.
-        /// 
-        /// Iterates over all tiles described by the TravelPoint and
-        /// clears the relevant Tile's TravelPoint object.
-        /// </summary>
-        /// <param name="b">The building to remove the door of</param>
-        public void RemoveDoor(Building b)
-        {
-            string mapName = b.MapName;
-            TravelPoint pt = DictionaryTravelPoints[mapName];
-
-            foreach (Vector2 vec in Util.GetAllPointsInArea(pt.Location.X, pt.Location.Y, pt.CollisionBox.Width, pt.CollisionBox.Height, TILE_SIZE))
-            {
-                RHTile t = GetTileByPixelPosition(vec);
-                if (t != null)
-                {
-                    t.SetTravelPoint(null);
-                }
-            }
-
-            DictionaryTravelPoints.Remove(mapName);
         }
 
         private void SpawnMobs()
         {
-            //Skip if there is no mob info
-            if (!_map.Properties.ContainsKey("Mobs")) { return; }
-
-            List<RHTile> validTiles = new List<RHTile>();
-            foreach (RHTile x in _arrTiles)
-            {
-                if (x.Passable())
+            if (Map.Properties.ContainsKey("Mobs")){
+                for (int i = 0; i < _liMobs.Count; i++)
                 {
-                    validTiles.Add(x);
+                    RemoveActor(_liMobs[i]);
+                }
+                _liMobs.Clear();
+
+                string[] mobRange = Map.Properties["Mobs"].Split('-');
+                int roll = RHRandom.Instance().Next(int.Parse(mobRange[0]), int.Parse(mobRange[1]));
+
+                List<SpawnPoint> spawnCopy = new List<SpawnPoint>();
+                spawnCopy.AddRange(_liMobSpawns);
+
+                for (int spawnNum = 0; spawnNum < roll; spawnNum++)
+                {
+                    int index = RHRandom.Instance().Next(0, spawnCopy.Count - 1);
+
+                    spawnCopy[index].Spawn();
+                    spawnCopy.RemoveAt(index);
                 }
             }
+        }
 
-            for (int i = 0; i < _liMobs.Count; i++)
+        public void AlertSpawnPoint(WorldObject obj)
+        {
+            for (int i = 0; i < _liResourceSpawns.Count; i++)
             {
-                RemoveActor(_liMobs[i]);
-            }
-            _liMobs.Clear();
-
-            string[] mobInfoSplit = Util.FindParams(_map.Properties["Mobs"]);
-            string[] mobRange = mobInfoSplit[0].Split('-');
-
-            //Select how many mobs to create
-            int spawnNumber = mobRange.Length > 1 ? RHRandom.Instance().Next(int.Parse(mobRange[0]), int.Parse(mobRange[1])) : int.Parse(mobRange[0]);
-
-            string[] possibleMobs = mobInfoSplit[1].Split('-');
-
-            //For every mob we have to spawn pick a random mob entity from the list of mobs
-            for (int i = 0; i < spawnNumber; i++)
-            {
-                int mobID = int.Parse(possibleMobs[RHRandom.Instance().Next(0, possibleMobs.Count() - 1)]);
-
-                Mob m = DataManager.CreateMob(mobID);
-                RHTile t = validTiles[RHRandom.Instance().Next(0, validTiles.Count() - 1)];
-                m.Position = t.Position;
-                m.CurrentMapName = this.Name;
-                _liMobs.Add(m);
-
-                validTiles.Remove(t);
+                if (_liResourceSpawns[i].AlertSpawnPoint(obj))
+                {
+                    break;
+                }
             }
         }
 
@@ -837,6 +691,136 @@ namespace RiverHollow.Tile_Engine
             //}
         }
 
+        public void ClearMapEntities()
+        {
+            foreach (Mob m in _liMobs) { RemoveActor(m); }
+            foreach (WorldObject obj in _liPlacedWorldObjects)
+            {
+                switch (obj.Type)
+                {
+                    case ObjectTypeEnum.DungeonObject:
+                        if (Modular) { goto case ObjectTypeEnum.WorldObject; }
+                        else { break; }
+                    case ObjectTypeEnum.CombatHazard:
+                    case ObjectTypeEnum.Destructible:
+                    case ObjectTypeEnum.Gatherable:
+                    case ObjectTypeEnum.Plant:
+                    case ObjectTypeEnum.WorldObject:
+                        RemoveWorldObject(obj);
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Call to retrieve a list of RHTiles that cannot be used to spawn resources on. These tiles
+        /// are chosen due to proximity to monster spawn points, combat start tiles, and travel points.
+        /// 
+        /// Additionally, it ensures that there exists a path between each monster spawn point and each
+        /// potential player combat start area
+        /// </summary>
+        /// <param name="loaded">Whether the map was loaded or not. To avoid double spawning</param>
+        /// <returns>A list of tiles to ignore when spawning resources.</returns>
+        private List<RHTile> GetSkipTiles()
+        {
+            List<RHTile> skipTiles = new List<RHTile>();
+
+            foreach (TravelPoint tp in DictionaryTravelPoints.Values)
+            {
+                List<RHTile> tiles = GetTilesFromRectangle(tp.CollisionBox);
+                for (int tileIndex = 0; tileIndex < tiles.Count; tileIndex++)
+                {
+                    Util.AddUniquelyToList(ref skipTiles, tiles[tileIndex]);
+
+                    List<RHTile> neighbourList = tiles[tileIndex].GetWalkableNeighbours();
+                    for (int neighbourIndex = 0; neighbourIndex < neighbourList.Count; neighbourIndex++)
+                    {
+                        Util.AddUniquelyToList(ref skipTiles, neighbourList[neighbourIndex]);
+                    }
+                }
+            }
+
+            return skipTiles;
+        }
+
+        public void Rollover()
+        {
+            for (int i = 0; i < _liPlacedWorldObjects.Count; i++) { _liPlacedWorldObjects[i].Rollover(); }
+            for (int i = 0; i < _liResourceSpawns.Count; i++) { _liResourceSpawns[i].Rollover(); }
+
+            _bSpawned = false;
+
+            CheckSpirits();
+            _liItems.Clear();
+        }
+
+        /// <summary>
+        /// Creates the TravelPoint object necessary for the given Building
+        /// and calls CreateDoor to add the travel info to the correct RHTiles
+        /// </summary>
+        /// <param name="b">The building to create the door for</param>
+        public void CreateBuildingEntrance(Building b)
+        {
+            TravelPoint buildPoint = new TravelPoint(b, this.Name, b.ID);
+            DictionaryTravelPoints.Add(b.MapName, buildPoint); //TODO: FIX THIS
+            CreateDoor(buildPoint, b.TravelBox.X, b.TravelBox.Y, b.TravelBox.Width, b.TravelBox.Height);
+        }
+
+        public void UpdateBuildingEntrance(string initialMapName, string newMapName)
+        {
+            if (DictionaryTravelPoints.ContainsKey(initialMapName))
+            {
+                TravelPoint pt = DictionaryTravelPoints[initialMapName];
+                DictionaryTravelPoints.Remove(initialMapName);
+                DictionaryTravelPoints[newMapName] = pt;
+            }
+        }
+
+        /// <summary>
+        /// Using the provided information, assign the given TravelPoint to
+        /// the appropriate RHTiles.
+        /// </summary>
+        /// <param name="trvlPt">The TravelPoint to assign</param>
+        /// <param name="rectX">The starting x position</param>
+        /// <param name="rectY">The starting y position</param>
+        /// <param name="width">The Width</param>
+        /// <param name="height">The Height</param>
+        public void CreateDoor(TravelPoint trvlPt, float rectX, float rectY, float width, float height)
+        {
+            foreach (Vector2 vec in Util.GetAllPointsInArea((int)rectX, (int)rectY, (int)width, (int)height, TILE_SIZE))
+            {
+                RHTile t = GetTileByPixelPosition(vec);
+                if (t != null)
+                {
+                    t.SetTravelPoint(trvlPt);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes the doorway attached to the building.
+        /// 
+        /// Iterates over all tiles described by the TravelPoint and
+        /// clears the relevant Tile's TravelPoint object.
+        /// </summary>
+        /// <param name="b">The building to remove the door of</param>
+        public void RemoveDoor(Building b)
+        {
+            string mapName = b.MapName;
+            TravelPoint pt = DictionaryTravelPoints[mapName];
+
+            foreach (Vector2 vec in Util.GetAllPointsInArea(pt.Location.X, pt.Location.Y, pt.CollisionBox.Width, pt.CollisionBox.Height, TILE_SIZE))
+            {
+                RHTile t = GetTileByPixelPosition(vec);
+                if (t != null)
+                {
+                    t.SetTravelPoint(null);
+                }
+            }
+
+            DictionaryTravelPoints.Remove(mapName);
+        }
+
         public List<RHTile> FindFreeTiles()
         {
             List<RHTile> rv = new List<RHTile>();
@@ -849,79 +833,6 @@ namespace RiverHollow.Tile_Engine
             }
 
             return rv;
-        }
-
-        /// <summary>
-        /// Spawns resources from the ResourceSpawn points on the map
-        /// </summary>
-        private void SpawnResources(List<RHTile> skipTiles)
-        {
-            List<RHTile> validTiles = new List<RHTile>();
-            List<RHTile> usedTiles = new List<RHTile>();
-            foreach (RHTile x in _arrTiles)
-            {
-                if (!skipTiles.Contains(x) && x.Passable())
-                {
-                    validTiles.Add(x);
-                }
-            }
-
-            if (_diResources.Count > 0 && validTiles.Count > 0)
-            {
-                string[] val = _sResourceMinMax.Split('-');
-                int spawnNumber = RHRandom.Instance().Next(int.Parse(val[0]), int.Parse(val[1]));
-
-                for (int i = 0; i < spawnNumber; i++)
-                {
-                    //from the array as it gets filled so that we bounce less.
-                    RHTile targetTile = validTiles[RHRandom.Instance().Next(0, validTiles.Count - 1)];
-
-                    //If the object could not be placed, keep trying until you find one that can be
-                    bool objectIsValid = true;
-                    do
-                    {
-                        objectIsValid = true;
-                        RarityEnum rarityKey = Util.RollAgainstRarity(_diResources);
-
-                        WorldObject wObj = DataManager.CreateWorldObjectByID(_diResources[rarityKey][RHRandom.Instance().Next(0, _diResources[rarityKey].Count - 1)]);
-                        wObj.SnapPositionToGrid(new Vector2(targetTile.Position.X, targetTile.Position.Y));
-
-                        if (wObj.CompareType(ObjectTypeEnum.Plant))
-                        {
-                            ((Plant)wObj).FinishGrowth();
-                        }
-
-                        wObj.PlaceOnMap(this);
-
-                        //If the object is larger than one tile, we need to ensure it can actually fit ont he tile(s) we've placed it
-                        if (wObj.CollisionBox.Width > TILE_SIZE || wObj.CollisionBox.Height > TILE_SIZE)
-                        {
-                            foreach (RHTile t in wObj.Tiles)
-                            {
-                                if (!validTiles.Contains(t) || usedTiles.Contains(t))
-                                {
-                                    objectIsValid = false;
-                                    wObj.RemoveSelfFromTiles();
-                                    RemoveWorldObject(wObj);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    while (!objectIsValid);
-
-                    //Remove the targetTile once it has been properly used
-                    validTiles.Remove(targetTile);
-
-                    //Keep track of which tiles were used
-                    usedTiles.Add(targetTile);
-
-                    if (validTiles.Count == 0)
-                    {
-                        break;
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -2420,362 +2331,6 @@ namespace RiverHollow.Tile_Engine
                 obj.LoadData(warpData);
                 obj.PlaceOnMap(this);
                 if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
-            }
-        }
-    }
-
-    public abstract class SpawnPoint
-    {
-        protected RHMap _map;
-        protected Vector2 _vPosition;
-        public Vector2 Position => _vPosition;
-
-        protected SpawnPoint(RHMap map, TiledMapObject obj)
-        {
-            _map = map;
-            _vPosition = map.GetTileByGridCoords(Util.GetGridCoords(obj.Position)).Center;
-        }
-
-        public virtual void Spawn() { }
-        public virtual bool HasSpawned() { return false; }
-    }
-
-    public class ResourceSpawn : SpawnPoint
-    {
-        int _iWidth;
-        int _iHeight;
-        public int Size => _iWidth * _iHeight;
-        List<int> _liPossibleResources;
-        //List<WorldObject> _liResources;
-        public ResourceSpawn(RHMap map, TiledMapObject obj) : base(map, obj)
-        {
-            _liPossibleResources = new List<int>();
-            _iWidth = (int)obj.Size.Width;
-            _iHeight = (int)obj.Size.Height;
-            if (obj.Properties.ContainsKey("Resources"))
-            {
-                string[] spawnResources = Util.FindParams(obj.Properties["Resources"]);
-                foreach (string s in spawnResources)
-                {
-                    _liPossibleResources.Add(int.Parse(s));
-                }
-            }
-        }
-
-        public override void Spawn()
-        {
-            //ToDo //Give ResourceSpawns an internal array corresponding to the size and remove objects
-            //from the array as it gets filled so that we bounce less.
-            int xPoint = RHRandom.Instance().Next((int)(_vPosition.X), (int)(_vPosition.X + _iWidth));
-            int yPoint = RHRandom.Instance().Next((int)(_vPosition.Y), (int)(_vPosition.Y + _iHeight));
-
-            WorldObject wObj = DataManager.CreateWorldObjectByID(_liPossibleResources[RHRandom.Instance().Next(0, _liPossibleResources.Count - 1)]);
-
-            if (wObj.CompareType(ObjectTypeEnum.Plant))
-            {
-                ((Plant)wObj).FinishGrowth();
-            }
-
-            wObj.PlaceOnMap(new Vector2(xPoint, yPoint), _map);
-        }
-
-        public override bool HasSpawned()
-        {
-            return true;//_monster != null;
-        }
-    }
-
-    //public class MonsterSpawn : SpawnPoint
-    //{
-    //    TacticalMonster _monster;
-    //    Dictionary<string, Dictionary<RarityEnum, List<int>>> _diMonsterSpawns;
-    //    int _iPrimedMonsterID;
-    //    public bool IsPrimed => _iPrimedMonsterID != -1;
-
-    //    public MonsterSpawn(RHMap map, TiledMapObject obj) : base(map, obj)
-    //    {
-    //        _iPrimedMonsterID = -1;
-    //        _diMonsterSpawns = new Dictionary<string, Dictionary<RarityEnum, List<int>>>();
-    //        foreach (KeyValuePair<string, string> kvp in obj.Properties)
-    //        {
-    //            AssignMonsterIDs(kvp.Key, kvp.Value);
-    //        }
-    //    }
-
-    //    public void AssignMonsterIDs(string spawnKey, string spawnInfo)
-    //    {
-    //        //If the property starts with Spawn, it defines what mobs spawn under what conditions
-    //        //All, Weather, or Season are supported
-    //        if (spawnKey.StartsWith("Spawn-"))
-    //        {
-    //            //Prune out the word 'Spawn' and keep the other word 
-    //            string[] split = spawnKey.Split('-');
-    //            string spawnType = split[1];
-
-    //            string[] monsterParams = Util.FindParams(spawnInfo);
-    //            foreach (string s in monsterParams)
-    //            {
-    //                int monsterID = -1;
-    //                RarityEnum monsterRarity = RarityEnum.C;
-
-    //                Util.GetRarity(s, ref monsterID, ref monsterRarity);
-
-    //                //If we haven't added a new dictionary for the spawnType, add one.
-    //                if (!_diMonsterSpawns.ContainsKey(spawnType))
-    //                {
-    //                    _diMonsterSpawns[spawnType] = new Dictionary<RarityEnum, List<int>>();
-    //                }
-
-    //                //If we haven't made a new list for the rarity yet, add one.
-    //                if (!_diMonsterSpawns[spawnType].ContainsKey(monsterRarity))
-    //                {
-    //                    _diMonsterSpawns[spawnType][monsterRarity] = new List<int>();
-    //                }
-
-    //                //Ad the MonsterID to the SpawnType and Rarity dictionaries
-    //                _diMonsterSpawns[spawnType][monsterRarity].Add(monsterID);
-    //            }
-    //        }
-    //    }
-
-    //    /// <summary>
-    //    /// Tells the Spawn point to spawn a monster by checking it's spawnType and rarity dictionary.
-    //    /// If there is a primed monster, use that one instead.
-    //    /// </summary>
-    //    public override void Spawn()
-    //    {
-    //        if (_iPrimedMonsterID != -1) { _monster = DataManager.GetTacticalMonsterByIndex(_iPrimedMonsterID); }
-    //        else
-    //        {
-    //            //Find which spawn type we're using
-    //            string key = "All";
-    //            if (!_diMonsterSpawns.ContainsKey("All"))
-    //            {
-    //                if (_diMonsterSpawns.ContainsKey(EnvironmentManager.GetWeatherString())) { key = EnvironmentManager.GetWeatherString(); }
-    //                else { key = GameCalendar.GetSeason(); }
-    //            }
-
-    //            //Roll against rarity and backtrack until we find one of the rolled type that exists.
-    //            RarityEnum rarityKey = Util.RollAgainstRarity(_diMonsterSpawns[key]);
-
-    //            int spawnArrIndex = (int)RHRandom.Instance().Next(0, _diMonsterSpawns[key][rarityKey].Count - 1);
-    //            _monster = DataManager.GetTacticalMonsterByIndex(_diMonsterSpawns[key][rarityKey][spawnArrIndex]);
-    //        }
-
-    //        _monster.SpawnPoint = this;
-    //        _map.AddMonsterByPosition(_monster, _vPosition);
-
-    //        if (_iPrimedMonsterID != -1)
-    //        {
-    //            _iPrimedMonsterID = -1;
-    //        }
-    //    }
-
-    //    public override bool HasSpawned()
-    //    {
-    //        return _monster != null;
-    //    }
-
-    //    /// <summary>
-    //    /// Sets what the next Monster to be spawned is
-    //    /// </summary>
-    //    /// <param name="id"></param>
-    //    public void SetSpawn(int id)
-    //    {
-    //        _iPrimedMonsterID = id;
-    //    }
-
-    //    public void ClearSpawn()
-    //    {
-    //        _monster = null;
-    //    }
-    //}
-
-    public class ShopLocation
-    {
-        string _sMap;
-        int _iShopID;
-        Rectangle _rCLick;
-        int _iShopX;
-        int _iShopY;
-        public ShopLocation(string map, TiledMapObject shopObj)
-        {
-            _sMap = map;
-            _rCLick = Util.FloatRectangle(shopObj.Position, shopObj.Size.Width, shopObj.Size.Height);
-            _iShopID = int.Parse(shopObj.Properties["Owner"]);
-            _iShopX = int.Parse(shopObj.Properties["ShopKeepX"]);
-            _iShopY = int.Parse(shopObj.Properties["ShopKeepY"]);
-        }
-
-        internal bool Contains(Point mouseLocation)
-        {
-            return _rCLick.Contains(mouseLocation);
-        }
-
-        internal bool IsOpen()
-        {
-            bool rv = false;
-
-            if (DataManager.DIVillagers[_iShopID].CurrentMapName == _sMap)
-            {
-                if (MapManager.RetrieveTile(_iShopX, _iShopY).Contains(DataManager.DIVillagers[_iShopID]))
-                {
-                    rv = true;
-                }
-            }
-
-            return rv;
-        }
-
-        internal void Talk()
-        {
-            (DataManager.DIVillagers[_iShopID]).SetShopOpenStatus(true);
-            (DataManager.DIVillagers[_iShopID]).Talk();
-            (DataManager.DIVillagers[_iShopID]).SetShopOpenStatus(false);
-        }
-    }
-
-    public class TravelPoint
-    {
-        public Building TargetBuilding { get; private set; }
-        public Rectangle CollisionBox { get; private set; }
-        public Point Location => CollisionBox.Location;
-        string _sMapName;
-
-        private string _sLinkedMapName = string.Empty;
-        public int LinkedBuildingID => TargetBuilding != null ? TargetBuilding.ID : -1;
-        public string LinkedMap => (TargetBuilding != null ? TargetBuilding.MapName : _sLinkedMapName);
-        public Vector2 Center => CollisionBox.Center.ToVector2();
-        public bool IsDoor { get; private set; }
-        public bool IsActive { get; private set; } = false;
-
-        private bool _bModular = false;
-        public bool Modular => _bModular;
-
-        private int _iDungeonInfoID = -1;
-        public int DungeonInfoID => _iDungeonInfoID;
-
-        private string _sGoToMap;
-        public string GoToMap => _sGoToMap;
-
-        DirectionEnum _eEntranceDir;
-        public DirectionEnum Dir => _eEntranceDir;
-
-        public TravelPoint(TiledMapObject obj, string mapName)
-        {
-            _sMapName = mapName;
-            CollisionBox = Util.FloatRectangle(obj.Position, obj.Size.Width, obj.Size.Height);
-            if (obj.Properties.ContainsKey("Map"))
-            {
-                _sLinkedMapName = obj.Properties["Map"] == "Home" ? MapManager.TownMapName : obj.Properties["Map"];
-                IsActive = true;
-            }
-
-            Util.AssignValue(ref _eEntranceDir, "EntranceDir", obj.Properties);
-            Util.AssignValue(ref _iDungeonInfoID, "DungeonID", obj.Properties);
-            Util.AssignValue(ref _sGoToMap, "GoTo", obj.Properties);
-            Util.AssignValue(ref _bModular, "Modular", obj.Properties);
-
-            if (_iDungeonInfoID > -1) { IsActive = true; }
-
-        }
-        public TravelPoint(Building b, string mapName, int buildingID)
-        {
-            TargetBuilding = b;
-            _sMapName = mapName;
-            CollisionBox = b.TravelBox;
-            _eEntranceDir = DirectionEnum.Down;
-            IsDoor = true;
-            IsActive = true;
-        }
-
-        public bool Intersects(Rectangle value)
-        {
-            return CollisionBox.Intersects(value);
-        }
-
-        /// <summary>
-        /// USe to determine the exit point of the TravelObject based on the distance of the Actor to the
-        /// linked TravelObject they interacted with
-        /// </summary>
-        /// <param name="oldPointCenter">The center of the previous TravelPoint</param>
-        /// <param name="c">The moving Actor</param>
-        /// <returns></returns>
-        public Vector2 FindLinkedPointPosition(Vector2 oldPointCenter, WorldActor c)
-        {
-            //Find the difference between the position of the center of the actor's collisionBox
-            //and the TravelPoint that the actor interacted with.
-            Point actorCollisionCenter = c.CollisionBox.Center;
-            Vector2 vDiff = actorCollisionCenter.ToVector2() - oldPointCenter;
-
-            //If we move Left/Right, ignore the X axis, Up/Down, ignore the Y axis then just set
-            //the difference in the relevant axis to the difference between the centers of those two boxes
-            switch (_eEntranceDir)
-            {
-                case DirectionEnum.Left:
-                    vDiff.X = -1 * (CollisionBox.Width / 2 + c.CollisionBox.Width / 2);
-                    break;
-                case DirectionEnum.Right:
-                    vDiff.X = (CollisionBox.Width / 2 + c.CollisionBox.Width / 2);
-                    break;
-                case DirectionEnum.Up:
-                    vDiff.Y = -1 * (CollisionBox.Height / 2 + c.CollisionBox.Height / 2);
-                    break;
-                case DirectionEnum.Down:
-                    vDiff.Y = (CollisionBox.Height / 2 + c.CollisionBox.Height / 2);
-                    break;
-            }
-
-            //Add the diff to the center of the current TravelPoint
-            Vector2 rv = new Vector2(Center.X + vDiff.X, Center.Y + vDiff.Y);
-
-            //Get the difference between the Position of the character and the center of their collision box
-            rv += c.Position - actorCollisionCenter.ToVector2();
-
-            return rv;
-        }
-
-        public void SetDoor()
-        {
-            IsDoor = true;
-        }
-
-        /// <summary>
-        /// Finds the center point ofthe TravelPoint and returns the RHTile the center point
-        /// resides on.
-        /// 
-        /// This method is primarily/mostly used for NPC pathfinding to TravelPoints
-        /// </summary>
-        /// <returns></returns>
-        public Vector2 GetCenterTilePosition()
-        {
-            return CollisionBox.Center.ToVector2();
-        }
-
-        public Vector2 GetMovedCenter()
-        {
-            RHTile rv = MapManager.Maps[_sMapName].GetTileByPixelPosition(GetCenterTilePosition());
-            return rv.GetTileByDirection(_eEntranceDir).Position;
-        }
-
-        public void AssignLinkedMap(string mapName)
-        {
-            if (_bModular)
-            {
-                _sLinkedMapName = mapName;
-                IsActive = true;
-            }
-        }
-
-        public void Reset()
-        {
-            if (_bModular)
-            {
-                _sLinkedMapName = string.Empty;
-                if (MapManager.Maps[_sMapName].Modular)
-                {
-                    IsActive = false;
-                }
             }
         }
     }

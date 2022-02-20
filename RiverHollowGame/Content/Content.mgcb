@@ -935,18 +935,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Monsters/Bauble.png
 
-#begin Textures/Actors/Monsters/MagicMushroom.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Actors/Monsters/MagicMushroom.png
-
 #begin Maps/Forest/mapForest_01.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -1403,18 +1391,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Text Files/Object_Text.xml
-
-#begin Textures/Actors/Monsters/Batty.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Actors/Monsters/Batty.png
 
 #begin Maps/Dungeon_Forest/mapForest_Dungeon_1.tmx
 /importer:TiledMapImporter
@@ -2408,18 +2384,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Schedules/NPC_25.xml
-
-#begin Textures/Actors/Monsters/Mossy_Slime.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Actors/Monsters/Mossy_Slime.png
 
 #begin Textures/Actors/Monsters/Forest_Impling.png
 /importer:TextureImporter
@@ -3908,4 +3872,52 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Forest/map_YuliaCottage.tmx
+
+#begin Textures/Actors/NPCs/NPC_Nevar.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/NPC_Nevar.png
+
+#begin Textures/Actors/Mobs/Batty.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Mobs/Batty.png
+
+#begin Textures/Actors/Mobs/Malice.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Mobs/Malice.png
+
+#begin Textures/Actors/Mobs/Mossy_Slime.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Mobs/Mossy_Slime.png
 

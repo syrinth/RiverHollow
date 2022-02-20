@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.SpriteAnimations;
-using RiverHollow.Tile_Engine;
+using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
@@ -73,7 +73,7 @@ namespace RiverHollow.Game_Managers
 
                 for (int i = 0; i < 10; i++)
                 {
-                    Critter actor = DataManager.CreateCritter(33);
+                    Critter actor = DataManager.CreateCritter(34);
                     actor.Position = Util.GetRandomItem(validTiles).Position;
                     map.AddActor(actor);
                     _liCritters.Add(actor);

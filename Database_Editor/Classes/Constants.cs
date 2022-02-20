@@ -63,7 +63,7 @@ namespace Database_Editor.Classes
         public static readonly string TEXTFILE_REF_TAGS = "ItemID,UnlockObjectID,UnlockItemID,TargetShopID,TaskID";
         public static readonly string CUTSCENE_REF_TAGS = "";
 
-        public static readonly string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,NPCID";
+        public static readonly string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,NPC_ID.MobID";
         #endregion
     }
 }

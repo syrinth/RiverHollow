@@ -5,8 +5,8 @@
       <Key>0</Key>
       <Value>
         <Item></Item>
-        <Item>[Map:mapConnection_02][Player][Actors:2-CS0|27-CS0_Mob][Deactivate:2]</Item>
-        <Item>[Speak:2-1][Activate:2][Move:2-5-Up][Speak:2-2][Join:2][Combat:27]</Item>
+        <Item>[Map:mapConnection_02][Player][Actors:2-CS0|28-CS0_Mob][Deactivate:2]</Item>
+        <Item>[Speak:2-1][Activate:2][Move:2-5-Up][Speak:2-2][Join:2][Combat:28]</Item>
       </Value>
     </Item>
     <Item>

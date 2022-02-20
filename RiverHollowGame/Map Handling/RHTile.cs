@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
-namespace RiverHollow.Tile_Engine
+namespace RiverHollow.Map_Handling
 {
     public class RHTile
     {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="32" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="48">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="32" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="48">
  <properties>
   <property name="Dungeon" value="Forest"/>
   <property name="Outside" type="bool" value="false"/>
@@ -123,24 +123,9 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="39" name="ResourceSpawn" x="32.167" y="87.501" width="79.666" height="356.833">
-   <properties>
-    <property name="Resources" value="62"/>
-   </properties>
-  </object>
-  <object id="40" name="ResourceSpawn" x="117.167" y="84.584" width="120" height="104.333">
-   <properties>
-    <property name="Resources" value="62"/>
-   </properties>
-  </object>
-  <object id="41" name="ResourceSpawn" x="118.834" y="366.584" width="275.666" height="81.4997">
-   <properties>
-    <property name="Resources" value="62"/>
-   </properties>
-  </object>
   <object id="47" name="Item" x="404" y="147.333" width="9.33333" height="6.66667">
    <properties>
-    <property name="ItemID" type="int" value="181"/>
+    <property name="ItemID" type="int" value="183"/>
    </properties>
   </object>
  </objectgroup>

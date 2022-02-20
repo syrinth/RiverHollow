@@ -511,36 +511,5 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="MapObjec">
-  <object id="16" name="ResourceSpawn" x="575" y="1368" width="62.6667" height="64.3333">
-   <properties>
-    <property name="Resources" value="79|4"/>
-   </properties>
-  </object>
-  <object id="18" name="ResourceSpawn" x="554.333" y="1527.33" width="112.333" height="111">
-   <properties>
-    <property name="Resources" value="70|106"/>
-   </properties>
-  </object>
-  <object id="20" name="ResourceSpawn" x="1380.67" y="858.5" width="97.3334" height="195">
-   <properties>
-    <property name="Resources" value="67|94|62"/>
-   </properties>
-  </object>
-  <object id="23" name="ResourceSpawn" x="764.667" y="1126.5" width="284" height="123">
-   <properties>
-    <property name="ResourcesMinMax" value="30-50"/>
-   </properties>
-  </object>
-  <object id="24" name="ResourceSpawn" x="195.333" y="87.8333" width="297.333" height="228.333">
-   <properties>
-    <property name="Resources" value="106|43|3"/>
-   </properties>
-  </object>
-  <object id="28" name="ResourceSpawn" x="1150.67" y="1778.67" width="193.333" height="157.333">
-   <properties>
-    <property name="Resources" value="73"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="5" name="MapObjec"/>
 </map>

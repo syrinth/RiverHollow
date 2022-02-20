@@ -106,27 +106,27 @@
  <objectgroup id="3" name="MapObject">
   <object id="6" name="WorldObject" x="321.886" y="370.333" width="11.75" height="9.5">
    <properties>
-    <property name="ObjectID" type="int" value="67"/>
+    <property name="ObjectID" type="int" value="68"/>
    </properties>
   </object>
   <object id="7" name="WorldObject" x="273.875" y="403.5" width="11.75" height="9.5">
    <properties>
-    <property name="ObjectID" type="int" value="67"/>
+    <property name="ObjectID" type="int" value="68"/>
    </properties>
   </object>
   <object id="8" name="WorldObject" x="258.375" y="342.5" width="11.75" height="9.5">
    <properties>
-    <property name="ObjectID" type="int" value="67"/>
+    <property name="ObjectID" type="int" value="68"/>
    </properties>
   </object>
   <object id="9" name="WorldObject" x="145.125" y="370.75" width="11.75" height="9.5">
    <properties>
-    <property name="ObjectID" type="int" value="67"/>
+    <property name="ObjectID" type="int" value="68"/>
    </properties>
   </object>
   <object id="10" name="WorldObject" x="227.625" y="132.25" width="11.75" height="9.5">
    <properties>
-    <property name="ObjectID" type="int" value="67"/>
+    <property name="ObjectID" type="int" value="68"/>
    </properties>
   </object>
  </objectgroup>

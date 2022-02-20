@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.SpriteAnimations;
-using RiverHollow.Tile_Engine;
+using RiverHollow.Map_Handling;
 using RiverHollow.WorldObjects;
 
 using static RiverHollow.Game_Managers.GameManager;

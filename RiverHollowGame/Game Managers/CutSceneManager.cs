@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using RiverHollow.Characters;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Misc;
-using RiverHollow.Tile_Engine;
+using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
@@ -490,7 +490,7 @@ namespace RiverHollow.Game_Managers
                     {
                         string[] friendData = f.Split('-');
                         WorldActor act = null;
-                        if (DataManager.DIVillagers.ContainsKey(int.Parse(friendData[0]))) { act = DataManager.DIVillagers[int.Parse(friendData[0])]; }
+                        if (DataManager.DIVillagers.ContainsKey(int.Parse(friendData[0]))) { act = new Villager(DataManager.DIVillagers[int.Parse(friendData[0])]); }
                         else { act = DataManager.CreateNPCByIndex(int.Parse(friendData[0])); }
                         act.CurrentMapName = _cutsceneMap.Name;
                         act.Position = Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(friendData[1]));
@@ -608,7 +608,7 @@ namespace RiverHollow.Game_Managers
                         }
                         else if (currentCommand.Command == EnumCSCommand.Join)
                         {
-                            Villager v = (Villager)GetActor(sCommandData[0]);
+                            Villager v = DataManager.DIVillagers[int.Parse(sCommandData[0])];
                             if (v.Combatant)
                             {
                                 PlayerManager.AddToParty(v.CombatVersion);
@@ -624,6 +624,12 @@ namespace RiverHollow.Game_Managers
                     //current commands actionPerformed to true so it's not processed again
                     currentCommand.ActionPerformed = true;
                 }
+            }
+
+            foreach(WorldActor act in _liUsedNPCs)
+            {
+                act.ClearPath();
+                act.SetMoveObj(Vector2.Zero);
             }
 
             GUIManager.ClearBackgroundImage();

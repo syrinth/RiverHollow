@@ -41,12 +41,12 @@
       <Key>9</Key>
       <Value>[Name:Market][Text:So, I've been thinking...
 With the store all set up, we've got some goods available and that's great, but that's just the start. We can't stop there, oh no.
-Merchants often wander the roads, buying and selling goods and there is a fortune to be made from them! By setting up a $WorldObject_106$, we'll give them a place to display their wares and sell them ours.
-Never forget, commerce is the lifeblood of a town, my friend. It might not seem like it now, but we'll need a lot of money if we're to grow this town.][Priority:50][TaskID:1][UnlockObjectID:106][CompletedTaskID:0][RequiredObjectID:26]</Value>
+Merchants often wander the roads, buying and selling goods and there is a fortune to be made from them! By setting up a $WorldObject_107$, we'll give them a place to display their wares and sell them ours.
+Never forget, commerce is the lifeblood of a town, my friend. It might not seem like it now, but we'll need a lot of money if we're to grow this town.][Priority:50][TaskID:1][UnlockObjectID:107][CompletedTaskID:0][RequiredObjectID:26]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Name:Task_1_End][Text:The $WorldObject_71$ is finished? Excellent job, I can't wait to see what all the Merchants will bring.]</Value>
+      <Value>[Name:Task_1_End][Text:The $WorldObject_72$ is finished? Excellent job, I can't wait to see what all the Merchants will bring.]</Value>
     </Item>
   </Asset>
 </XnaContent>

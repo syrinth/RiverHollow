@@ -84,15 +84,10 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="40" name="ResourceSpawn" x="37.3455" y="49.3258" width="124.333" height="96.333">
-   <properties>
-    <property name="Resources" value="62"/>
-   </properties>
-  </object>
   <object id="51" name="DungeonObject" x="224" y="16" width="32" height="32">
    <properties>
     <property name="MatchTrigger" value="Forest_Entrance_Open"/>
-    <property name="ObjectID" type="int" value="69"/>
+    <property name="ObjectID" type="int" value="70"/>
     <property name="OutTrigger" value="Forest_Entrance_Opened"/>
     <property name="TriggerNumber" type="int" value="2"/>
    </properties>
@@ -101,7 +96,7 @@
    <properties>
     <property name="ItemKeyID" type="int" value="43"/>
     <property name="MatchTrigger" value="VALID_ITEM"/>
-    <property name="ObjectID" type="int" value="71"/>
+    <property name="ObjectID" type="int" value="72"/>
     <property name="OutTrigger" value="Forest_Entrance_Open"/>
    </properties>
   </object>
@@ -109,7 +104,7 @@
    <properties>
     <property name="ItemKeyID" type="int" value="44"/>
     <property name="MatchTrigger" value="VALID_ITEM"/>
-    <property name="ObjectID" type="int" value="71"/>
+    <property name="ObjectID" type="int" value="72"/>
     <property name="OutTrigger" value="Forest_Entrance_Open"/>
    </properties>
   </object>

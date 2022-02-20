@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="46">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="46">
  <properties>
   <property name="ActiveSpawn" type="int" value="1"/>
   <property name="Dungeon" value="Forest"/>
@@ -87,38 +87,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="MapObject">
-  <object id="36" name="SpawnPoint" x="164.833" y="166.417" width="10" height="8.5">
-   <properties>
-    <property name="Spawn-All" value="4-C"/>
-   </properties>
-  </object>
-  <object id="37" name="SpawnPoint" x="417.5" y="86.417" width="10" height="8.5">
-   <properties>
-    <property name="Spawn-All" value="4-C"/>
-   </properties>
-  </object>
-  <object id="38" name="SpawnPoint" x="242" y="195.75" width="10" height="8.5">
-   <properties>
-    <property name="Spawn-All" value="4-C"/>
-   </properties>
-  </object>
-  <object id="39" name="ResourceSpawn" x="159.667" y="81.001" width="217.666" height="75.4997">
-   <properties>
-    <property name="Resources" value="62"/>
-   </properties>
-  </object>
-  <object id="40" name="ResourceSpawn" x="36.1668" y="161.084" width="106.333" height="85.833">
-   <properties>
-    <property name="Resources" value="62"/>
-   </properties>
-  </object>
-  <object id="41" name="ResourceSpawn" x="275.834" y="211.584" width="166.333" height="41.833">
-   <properties>
-    <property name="Resources" value="62"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="5" name="MapObject"/>
  <objectgroup id="6" name="Character">
   <object id="42" name="CombatStart" x="386.305" y="164.627" width="10.4901" height="8.9907">
    <properties>

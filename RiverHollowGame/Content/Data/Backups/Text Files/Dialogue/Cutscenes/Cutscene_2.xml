@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name][Text:So, welcome to the $Building_35$. This is, to be honest, the heart of any growing city, we wouldn't be anywhere without it.]</Value>
+      <Value>[Name][Text:So, welcome to the $WorldObject_35$. This is, to be honest, the heart of any growing city, we wouldn't be anywhere without it.]</Value>
     </Item>
     <Item>
       <Key>1</Key>

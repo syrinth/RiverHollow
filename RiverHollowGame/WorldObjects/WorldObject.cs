@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.SpriteAnimations;
-using RiverHollow.Tile_Engine;
+using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
@@ -163,7 +163,14 @@ namespace RiverHollow.WorldObjects
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             if (_bDrawUnder) { _sprite.Draw(spriteBatch, 1); }
-            else { _sprite.Draw(spriteBatch); }
+            else {
+                float alpha = 1f;
+                if(new Rectangle((int)Sprite.Position.X, (int)Sprite.Position.Y, Sprite.Width, Sprite.Height).Contains(PlayerManager.PlayerActor.CollisionBox.Center))
+                {
+                    alpha = 0.7f;
+                }
+                _sprite.Draw(spriteBatch, true, alpha);
+            }
         }
 
         public virtual void ProcessLeftClick() { }

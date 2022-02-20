@@ -81,6 +81,7 @@ namespace RiverHollow.Game_Managers
 
             GoToCombatScreen(InCombat);
             PlayerManager.DecreaseStamina(3);       //Decrease Stamina once
+            CurrentPhase = PhaseEnum.NewTurn;
         }
 
         private static void InCombat()

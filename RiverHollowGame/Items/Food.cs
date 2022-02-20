@@ -37,7 +37,7 @@ namespace RiverHollow.Items
         public override void ItemBeingUsed()
         {
             TextEntry entry = DataManager.GetGameTextEntry("FoodConfirm");
-            entry.FormatText(entry, Name);
+            entry.FormatText(Name);
             ConfirmItemUse(entry);
         }
 

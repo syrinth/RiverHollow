@@ -335,19 +335,19 @@
  <objectgroup id="9" name="MapObject">
   <object id="37" name="WorldObject" x="32.5468" y="96.9427" width="14.1071" height="13.5823">
    <properties>
-    <property name="ObjectID" type="int" value="87"/>
+    <property name="ObjectID" type="int" value="88"/>
    </properties>
   </object>
   <object id="38" name="WorldObject" x="176.814" y="96.9972" width="14.1071" height="13.5823">
    <properties>
-    <property name="ObjectID" type="int" value="86"/>
+    <property name="ObjectID" type="int" value="87"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
   <object id="39" name="Workshop_NPC" x="114.371" y="162.785" width="10.4707" height="9.5823">
    <properties>
-    <property name="ObjectID" type="int" value="86"/>
+    <property name="ObjectID" type="int" value="87"/>
    </properties>
   </object>
  </objectgroup>

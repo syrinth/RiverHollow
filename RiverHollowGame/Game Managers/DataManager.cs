@@ -10,7 +10,7 @@ using RiverHollow.CombatStuff;
 using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 using RiverHollow.Misc;
-using RiverHollow.Tile_Engine;
+using RiverHollow.Map_Handling;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
@@ -33,6 +33,7 @@ namespace RiverHollow.Game_Managers
         public const string FOLDER_ITEMS = @"Textures\Items\";
         public const string FOLDER_ENVIRONMENT = @"Textures\Environmental\";
         public const string FOLDER_MONSTERS = @"Textures\Actors\Monsters\";
+        public const string FOLDER_MOBS = @"Textures\Actors\Mobs\";
         public const string FOLDER_SUMMONS = @"Textures\Actors\Summons\";
         public const string FOLDER_PLAYER = @"Textures\Actors\Player\";
         public const string FOLDER_PARTY = @"Textures\Actors\PartyMembers\";
@@ -485,7 +486,7 @@ namespace RiverHollow.Game_Managers
             else { return null; }
         }
 
-        public static TriggerObject GetDungeonObject(Dictionary<string, string> data, Vector2 pos)
+        public static TriggerObject GetDungeonObject(Dictionary<string, string> data)
         {
             int id = int.Parse(data["ObjectID"]);
             if (id != -1 && _diWorldObjects.ContainsKey(id))

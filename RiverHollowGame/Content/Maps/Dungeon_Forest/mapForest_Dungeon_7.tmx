@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="19" height="26" tilewidth="16" tileheight="16" infinite="0" nextlayerid="53" nextobjectid="47">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="19" height="26" tilewidth="16" tileheight="16" infinite="0" nextlayerid="53" nextobjectid="47">
  <properties>
   <property name="ActiveSpawn" type="int" value="1"/>
   <property name="Dungeon" value="Forest"/>
@@ -118,52 +118,22 @@
   </object>
  </objectgroup>
  <objectgroup id="52" name="MapObject">
-  <object id="7" name="ResourceSpawn" x="87.584" y="90.0835" width="148.083" height="100.666">
-   <properties>
-    <property name="Resources" value="62"/>
-   </properties>
-  </object>
-  <object id="29" name="ResourceSpawn" x="104.167" y="309.75" width="115.166" height="28.5">
-   <properties>
-    <property name="Resources" value="62"/>
-   </properties>
-  </object>
-  <object id="35" name="SpawnPoint" x="51" y="66.25" width="10" height="8.5">
-   <properties>
-    <property name="Spawn-All" value="4-C"/>
-   </properties>
-  </object>
-  <object id="36" name="SpawnPoint" x="49" y="196.25" width="10" height="8.5">
-   <properties>
-    <property name="Spawn-All" value="4-C"/>
-   </properties>
-  </object>
-  <object id="37" name="SpawnPoint" x="274" y="67.75" width="10" height="8.5">
-   <properties>
-    <property name="Spawn-All" value="4-C"/>
-   </properties>
-  </object>
-  <object id="39" name="SpawnPoint" x="258.5" y="207.75" width="10" height="8.5">
-   <properties>
-    <property name="Spawn-All" value="4-C"/>
-   </properties>
-  </object>
   <object id="42" name="DungeonObject" x="151" y="357" width="12" height="11">
    <properties>
-    <property name="ObjectID" type="int" value="72"/>
+    <property name="ObjectID" type="int" value="73"/>
     <property name="Trigger" value="TriggerHitF"/>
    </properties>
   </object>
   <object id="45" name="DungeonObject" x="144.005" y="271.997" width="16" height="32">
    <properties>
     <property name="MatchTrigger" value="MOBS"/>
-    <property name="ObjectID" type="int" value="72"/>
+    <property name="ObjectID" type="int" value="73"/>
    </properties>
   </object>
   <object id="46" name="DungeonObject" x="160.005" y="271.997" width="16" height="32">
    <properties>
     <property name="MatchTrigger" value="MOBS"/>
-    <property name="ObjectID" type="int" value="72"/>
+    <property name="ObjectID" type="int" value="73"/>
    </properties>
   </object>
  </objectgroup>

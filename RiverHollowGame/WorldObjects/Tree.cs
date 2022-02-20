@@ -10,7 +10,7 @@ namespace RiverHollow.WorldObjects
             _eToolType = ToolEnum.Axe;
             LoadDictionaryData(stringData);
             _rBase.X = 1;
-            _rBase.Y = 4;
+            _rBase.Y = 3;
         }
     }
 }

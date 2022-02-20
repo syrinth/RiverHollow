@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="52">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="52">
  <properties>
   <property name="ActiveSpawn" type="int" value="1"/>
   <property name="Dungeon" value="Forest"/>
@@ -82,39 +82,9 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="39" name="ResourceSpawn" x="303.667" y="78.501" width="112.166" height="77.4997">
-   <properties>
-    <property name="Resources" value="62"/>
-   </properties>
-  </object>
-  <object id="40" name="ResourceSpawn" x="64.1668" y="80.084" width="126.333" height="78.833">
-   <properties>
-    <property name="Resources" value="62"/>
-   </properties>
-  </object>
-  <object id="41" name="ResourceSpawn" x="273.667" y="177.584" width="108.333" height="78.6663">
-   <properties>
-    <property name="Resources" value="62"/>
-   </properties>
-  </object>
-  <object id="46" name="SpawnPoint" x="82" y="212.25" width="10" height="8.5">
-   <properties>
-    <property name="Spawn-All" value="4-C"/>
-   </properties>
-  </object>
-  <object id="47" name="SpawnPoint" x="386" y="197.25" width="10" height="8.5">
-   <properties>
-    <property name="Spawn-All" value="4-C"/>
-   </properties>
-  </object>
-  <object id="48" name="SpawnPoint" x="273.5" y="115.75" width="10" height="8.5">
-   <properties>
-    <property name="Spawn-All" value="4-C"/>
-   </properties>
-  </object>
   <object id="49" name="DungeonObject" x="224" y="96" width="16" height="16">
    <properties>
-    <property name="ObjectID" type="int" value="72"/>
+    <property name="ObjectID" type="int" value="73"/>
     <property name="OutTrigger" value="Trigger_1"/>
    </properties>
   </object>

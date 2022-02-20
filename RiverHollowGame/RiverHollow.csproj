@@ -130,6 +130,9 @@
     <Compile Include="Items\Equipment.cs" />
     <Compile Include="Items\Food.cs" />
     <Compile Include="Items\Tool.cs" />
+    <Compile Include="Map Handling\ShopLocation.cs" />
+    <Compile Include="Map Handling\SpawnPoint.cs" />
+    <Compile Include="Map Handling\TravelPoint.cs" />
     <Compile Include="Misc\AnimationData.cs" />
     <Compile Include="Misc\FloatingText.cs" />
     <Compile Include="Misc\Shop.cs" />
@@ -189,8 +192,8 @@
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIInventory.cs" />
     <Compile Include="SpriteAnimation\FrameAnimation.cs" />
     <Compile Include="SpriteAnimation\AnimatedSprite.cs" />
-    <Compile Include="Tile Engine\RHMap.cs" />
-    <Compile Include="Tile Engine\RHTile.cs" />
+    <Compile Include="Map Handling\RHMap.cs" />
+    <Compile Include="Map Handling\RHTile.cs" />
     <Compile Include="Utilities\Structures.cs" />
     <Compile Include="Utilities\Utilities.cs" />
   </ItemGroup>

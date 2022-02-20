@@ -3,67 +3,67 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:46][Collection:0|1|2][Class:4][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:58][CanMarry][FirstArrival:5][ArrivalPeriod:7][CanBecomePregnant][Key:Amanda]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:46][Collection:0|1|2][Class:4][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:59][CanMarry][FirstArrival:5][ArrivalPeriod:7][CanBecomePregnant][Key:Amanda]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:50][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:67][CanMarry][FirstArrival:4][ArrivalPeriod:7][Key:Ander]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:50][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:68][CanMarry][FirstArrival:4][ArrivalPeriod:7][Key:Ander]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:61][Collection:0|1|2][Class:7][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][CanMarry][Key:Damien]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:62][Collection:0|1|2][Class:7][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][CanMarry][Key:Damien]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Villager][PortRow:1][Collection:0|1|2][Class:5][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:48][RequiredBuildingID:61][CanMarry][FirstArrival:3][ArrivalPeriod:7][CanBecomePregnant][Key:Daria]</Value>
+      <Value>[Type:Villager][PortRow:1][Collection:0|1|2][Class:5][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:48][RequiredBuildingID:62][CanMarry][FirstArrival:3][ArrivalPeriod:7][CanBecomePregnant][Key:Daria]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:2][Collection:7|182][ShopData:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:54][FirstArrival:6][ArrivalPeriod:4][Key:Eldra]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:2][Collection:7|184][ShopData:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:55][FirstArrival:6][ArrivalPeriod:4][Key:Eldra]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:44][Collection:0|1|2][Class:2][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:62][CanMarry][FirstArrival:7][ArrivalPeriod:7][Key:Emmanuel]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:44][Collection:0|1|2][Class:2][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:63][CanMarry][FirstArrival:7][ArrivalPeriod:7][Key:Emmanuel]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:40][Collection:5|6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:67][TotalMoneyEarnedReq:1000][ShopData:8][Key:Eric]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:40][Collection:5|6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:68][TotalMoneyEarnedReq:1000][ShopData:8][Key:Eric]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:47][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:59][CanMarry][FirstArrival:2][ArrivalPeriod:7][CanBecomePregnant][Key:Fran]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:47][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:60][CanMarry][FirstArrival:2][ArrivalPeriod:7][CanBecomePregnant][Key:Fran]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:3][Collection:7|182][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:46][FirstArrival:3][ArrivalPeriod:10][Key:Gail]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:3][Collection:7|184][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:46][FirstArrival:3][ArrivalPeriod:10][Key:Gail]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:1][Collection:7|182][ShopData:0][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:66][FirstArrival:6][ArrivalPeriod:7][Key:Griselda]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:1][Collection:7|184][ShopData:0][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:67][FirstArrival:6][ArrivalPeriod:7][Key:Griselda]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:26][Collection:7|182][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][ShopData:3][Key:Harrison]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:26][Collection:7|184][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][ShopData:3][Key:Harrison]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:0][Collection:7|163][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:58][FirstArrival:5][ArrivalPeriod:5][Key:Isabelle]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:0][Collection:7|165][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:59][FirstArrival:5][ArrivalPeriod:5][Key:Isabelle]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:45][Collection:7|182][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:2][RequiredObjectID:73-5][ShopData:6][CanMarry][Key:Jase]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:45][Collection:7|184][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:2][RequiredObjectID:74-5][ShopData:6][CanMarry][Key:Jase]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:40][Collection:7|182][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][ShopData:2][Key:Kyle]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:40][Collection:7|184][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][ShopData:2][Key:Kyle]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:0][Collection:7|163][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:58][FirstArrival:5][ArrivalPeriod:5][Key:Leanne]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:0][Collection:7|165][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:59][FirstArrival:5][ArrivalPeriod:5][Key:Leanne]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Villager][PortRow:1][Collection:0|1|2][Class:0][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:66][HouseID:1][CanMarry][FirstArrival:6][ArrivalPeriod:7][Key:Lucia]</Value>
+      <Value>[Type:Villager][PortRow:1][Collection:0|1|2][Class:0][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:67][HouseID:1][CanMarry][FirstArrival:6][ArrivalPeriod:7][Key:Lucia]</Value>
     </Item>
     <Item>
       <Key>16</Key>
@@ -71,7 +71,7 @@
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:7|163][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][Key:Mark]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:7|165][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][Key:Mark]</Value>
     </Item>
     <Item>
       <Key>18</Key>
@@ -79,19 +79,19 @@
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:7|163][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][Key:Penelope]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:29][Collection:7|165][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:0][ArrivalPeriod:0][Key:Nevar]</Value>
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:4][Collection:7|182][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:67][TotalMoneyEarnedReq:1000][Key:Sammy]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:7|165][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][Key:Penelope]</Value>
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:19][Collection:7|182][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:66][FirstArrival:20][ArrivalPeriod:4][Key:Yulia][StartMap:map_YuliaCottage]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:4][Collection:7|184][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:68][TotalMoneyEarnedReq:1000][Key:Sammy]</Value>
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Spirit][Idle:0-0-2-.5-T]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:19][Collection:7|184][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:67][FirstArrival:20][ArrivalPeriod:4][Key:Yulia][StartMap:mapConnection_02]</Value>
     </Item>
     <Item>
       <Key>23</Key>
@@ -99,46 +99,54 @@
     </Item>
     <Item>
       <Key>24</Key>
-      <Value>[Type:ShippingGremlin][PortRow:3][HouseID:58][InTown][Key:Shipping_Gremlin]</Value>
+      <Value>[Type:Spirit][Idle:0-0-2-.5-T]</Value>
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Pet][Walk:0-0-3-0.15-T][Idle:0-32-3-0.3-T][Action1:0-64-3-0.15-T][ObjectID:4][Value:500]</Value>
+      <Value>[Type:ShippingGremlin][PortRow:3][HouseID:59][InTown][Key:Shipping_Gremlin]</Value>
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Mount][Walk:0-0-3-0.15-T][Width:32][Height:48][BuildingID:72][Value:500]</Value>
+      <Value>[Type:Pet][Walk:0-0-3-0.15-T][Idle:0-32-3-0.3-T][Action1:0-64-3-0.15-T][ObjectID:4][Value:500]</Value>
     </Item>
     <Item>
       <Key>27</Key>
-      <Value>[Type:Mob][Texture:Mossy_Slime][MonsterID:9|9-9|9-9-9][Walk:0-0-3-.2-T][Idle:0-0-3-.2-T]</Value>
+      <Value>[Type:Mount][Walk:0-0-3-0.15-T][Width:32][Height:48][BuildingID:73][Value:500]</Value>
     </Item>
     <Item>
       <Key>28</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:6][ArrivalPeriod:7][RequestIDs:145|156|164][RequiredObjectID:0-1][ShopData:4][Key:Abeline]</Value>
+      <Value>[Type:Mob][Texture:Mossy_Slime][MonsterID:9|9-9|9-9-9][Walk:0-0-3-.2-T][Idle:0-0-3-.2-T]</Value>
     </Item>
     <Item>
       <Key>29</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:8][ArrivalPeriod:2][RequestIDs:2-30|2-30|2-30][ShopData:7][Key:Erron]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:6][ArrivalPeriod:7][RequestIDs:145|156|166][RequiredObjectID:0-1][ShopData:4][Key:Abeline]</Value>
     </Item>
     <Item>
       <Key>30</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:10][ArrivalPeriod:4][RequestIDs:79|89|90|91|92|93|94|95|96][ShopData:5][Key:Magda]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:8][ArrivalPeriod:2][RequestIDs:2-30|2-30|2-30][ShopData:7][Key:Erron]</Value>
     </Item>
     <Item>
       <Key>31</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:14][RequestIDs:2-30|2-30|2-30][ShopData:9][Key:Sybil]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:10][ArrivalPeriod:4][RequestIDs:79|89|90|91|92|93|94|95|96][ShopData:5][Key:Magda]</Value>
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:4][ArrivalPeriod:4][RequestIDs:58|68|71|163|164][Key:Wagren]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:14][RequestIDs:2-30|2-30|2-30][ShopData:9][Key:Sybil]</Value>
     </Item>
     <Item>
       <Key>33</Key>
-      <Value>[Type:Critter][Idle:0-0-1-0.1-T][Action1:0-0-3-0.15-T][Action2:64-0-2-0.15-T][Key:Birb_1]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:4][ArrivalPeriod:4][RequestIDs:58|68|71|165|166][Key:Wagren]</Value>
     </Item>
     <Item>
       <Key>34</Key>
+      <Value>[Type:Critter][Idle:0-0-1-0.1-T][Action1:0-0-3-0.15-T][Action2:64-0-2-0.15-T][Key:Birb_1]</Value>
+    </Item>
+    <Item>
+      <Key>35</Key>
+      <Value>[Type:Critter][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:0][ArrivalPeriod:0]</Value>
+    </Item>
+    <Item>
+      <Key>36</Key>
       <Value>[Type:Child][Walk:0-0-3-0.15-T][Idle:0-32-3-0.3-T][Action1:0-64-3-0.15-T]</Value>
     </Item>
   </Asset>

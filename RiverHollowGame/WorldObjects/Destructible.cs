@@ -83,6 +83,7 @@ namespace RiverHollow.WorldObjects
                         _sprite.PlayAnimation(AnimationEnum.KO);
 
                         MapManager.DropItemsOnMap(GetDroppedItems(), CollisionBox.Location.ToVector2());
+                        CurrentMap.AlertSpawnPoint(this);
                     }
                 }
 

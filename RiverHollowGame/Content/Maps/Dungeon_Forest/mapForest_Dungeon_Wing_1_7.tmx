@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="50">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="50">
  <properties>
   <property name="ActiveSpawn" type="int" value="0"/>
   <property name="Dungeon" value="Forest"/>
@@ -82,26 +82,16 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="40" name="ResourceSpawn" x="33.5001" y="96.4173" width="124.333" height="109.833">
-   <properties>
-    <property name="Resources" value="62"/>
-   </properties>
-  </object>
-  <object id="41" name="ResourceSpawn" x="36.5007" y="211.584" width="264.333" height="41.833">
-   <properties>
-    <property name="Resources" value="62"/>
-   </properties>
-  </object>
   <object id="47" name="DungeonObject" x="272.01" y="176.01" width="32" height="32">
    <properties>
     <property name="MatchTrigger" value="Trigger_2"/>
-    <property name="ObjectID" type="int" value="69"/>
+    <property name="ObjectID" type="int" value="70"/>
     <property name="TriggerNumber" type="int" value="1"/>
    </properties>
   </object>
   <object id="49" name="Item" x="243.083" y="100.917" width="9.33333" height="6.66667">
    <properties>
-    <property name="ItemID" type="int" value="181"/>
+    <property name="ItemID" type="int" value="183"/>
    </properties>
   </object>
  </objectgroup>

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using RiverHollow.Game_Managers;
 using RiverHollow.Misc;
-using RiverHollow.Tile_Engine;
+using RiverHollow.Map_Handling;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -479,7 +479,10 @@ namespace RiverHollow.Utilities
             //Monster info is written like ID-Rarity|ID-Rarity etc
             string[] info = value.Split('-');
             ID = int.Parse(info[0]);
-            rarity = ParseEnum<RarityEnum>(info[1]);
+            if (info.Length > 1)
+            {
+                rarity = ParseEnum<RarityEnum>(info[1]);
+            }
         }
 
         /// <summary>
@@ -487,7 +490,7 @@ namespace RiverHollow.Utilities
         /// </summary>
         /// <param name="dictionary">The dictionary to check against the rarities</param>
         /// <returns>The highest valid rarity</returns>
-        public static RarityEnum RollAgainstRarity(Dictionary<RarityEnum, List<int>> dictionary)
+        public static RarityEnum RollAgainstRarity<T>(Dictionary<RarityEnum, List<T>> dictionary)
         {
             RarityEnum rv = RarityEnum.C;
 
@@ -514,14 +517,11 @@ namespace RiverHollow.Utilities
             }
         }
 
-        public static List<Vector2> GetAllPointsInArea(Vector2 position, Size2 dimensions, float incrementSize = 1)
+        public static List<Vector2> GetAllPointsInArea(Vector2 position, Size2 dimensions, int incrementSize = 1)
         {
-            return GetAllPointsInArea(position.X, position.Y, dimensions.Width, dimensions.Height, incrementSize);
+            return GetAllPointsInArea((int)position.X, (int)position.Y, (int)dimensions.Width, (int)dimensions.Height, incrementSize);
         }
-        public static List<Vector2> GetAllPointsInArea(float startX, float startY, float width, float height, float incrementSize = 1)
-        {
-            return GetAllPointsInArea((int)startX, (int)startY, (int)width, (int)height);
-        }
+
         public static List<Vector2> GetAllPointsInArea(int startX, int startY, int width, int height, int incrementSize = 1)
         {
             List<Vector2> rv = new List<Vector2>();
@@ -576,8 +576,8 @@ namespace RiverHollow.Utilities
         public static List<AnimationData> LoadWorldAnimations(Dictionary<string, string> data)
         {
             List<AnimationData> listAnimations = new List<AnimationData>();
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.Walk);
             AddToAnimationsList(ref listAnimations, data, VerbEnum.Idle);
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Walk);
             return listAnimations;
         }
         public static List<AnimationData> LoadCombatAnimations(Dictionary<string, string> data)

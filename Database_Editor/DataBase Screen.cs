@@ -995,7 +995,7 @@ namespace Database_Editor
         #region EventHandlers
         private void btnDialogue_Click(object sender, EventArgs e)
         {
-            string npcKey = @"\NPC_" + _diBasicXML[NPC_XML_FILE][_diTabIndices["Characters"]].ID.ToString("00") + ".xml";
+            string npcKey = @"\NPC_" + _diBasicXML[NPC_XML_FILE][_diTabIndices["Characters"]].GetTagValue("Key") + ".xml";
             FormCharExtraData frm = null;
             if (cbEditableCharData.SelectedItem.ToString() == "Dialogue")
             {
