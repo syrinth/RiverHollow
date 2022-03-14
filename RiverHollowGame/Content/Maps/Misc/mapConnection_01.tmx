@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="51">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="51">
  <properties>
   <property name="MapType" value="Town"/>
   <property name="Outside" type="bool" value="true"/>
@@ -74,12 +74,6 @@
    <properties>
     <property name="EntranceDir" value="Right"/>
     <property name="Map" value="mapTown"/>
-   </properties>
-  </object>
-  <object id="50" name="Entrance" x="224" y="0" width="32" height="4">
-   <properties>
-    <property name="EntranceDir" value="Down"/>
-    <property name="Map" value="mapCave_Entrance"/>
    </properties>
   </object>
  </objectgroup>

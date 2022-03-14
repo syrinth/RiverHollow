@@ -106,12 +106,12 @@ namespace RiverHollow.Items
                 TextEntry entry = null;
                 if (DungeonManager.CurrentDungeon != null)
                 {
-                    if (HasCharges()) { entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_Use"), Name); }
-                    else { entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_Empty"), Name); }
+                    if (HasCharges()) { entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_Use"), Name()); }
+                    else { entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_Empty"), Name()); }
                 }
                 else
                 {
-                    entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_No_Dungeon"), Name);
+                    entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_No_Dungeon"), Name());
                 }
                 ConfirmItemUse(entry);
             }

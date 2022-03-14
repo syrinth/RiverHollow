@@ -223,7 +223,6 @@ namespace RiverHollow.Game_Managers
                         Delay = 0.05f;
                         GiveXP();
                         CurrentMob.Defeat();
-                        MapManager.CurrentMap.RemoveActor(CurrentMob);
                     }
                     else
                     {
@@ -377,7 +376,7 @@ namespace RiverHollow.Game_Managers
             else
             {
                 CurrentPhase = PhaseEnum.DisplayAttack;
-                Text = SelectedAction.Name;
+                Text = SelectedAction.Name();
             }
         }
 

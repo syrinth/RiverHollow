@@ -59,7 +59,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             _actorSprite.Position(Position() + new Vector2(ScaleIt(4), ScaleIt(4)));
             AddControl(_actorSprite);
 
-            _gName = new GUIText(_actor.Name);
+            _gName = new GUIText(_actor.Name());
             _gName.Position(Position() + new Vector2(ScaleIt(41), ScaleIt(2)));
             AddControl(_gName);
 

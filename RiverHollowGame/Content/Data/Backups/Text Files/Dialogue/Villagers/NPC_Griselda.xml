@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Greetings, young one. I am $NPC_9$, a purveyor of magic and enchantments. My daughter and I heard about $Town$ and thought we should visit. A charming place, if lacking in amenities. Build us a house, and I'll see what can be done here.][UnlockBuildingID:49][Name:Introduction]</Value>
+      <Value>[Text:Greetings, young one. I am $NPC_10$, a purveyor of magic and enchantments. My daughter and I heard about $Town$ and thought we should visit. A charming place, if lacking in amenities. Build us a house, and I'll see what can be done here.][UnlockBuildingID:49][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -41,7 +41,7 @@ Here. It's not much, just a few odds and ends I had laying around but it should 
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Text:Hm, snowing outside is it? $NPC_15$ loves the snow, but I can't stand it. I'll leave trudging through the snow to you younger ones and stay inside, thank you very much.][Weather:Snowing][Name:Snow|1]</Value>
+      <Value>[Text:Hm, snowing outside is it? $NPC_16$ loves the snow, but I can't stand it. I'll leave trudging through the snow to you younger ones and stay inside, thank you very much.][Weather:Snowing][Name:Snow|1]</Value>
     </Item>
     <Item>
       <Key>10</Key>

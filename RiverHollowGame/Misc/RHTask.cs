@@ -14,10 +14,8 @@ namespace RiverHollow.Misc
     {
         public int TaskID { get; private set; }
         private TaskTypeEnum _eTaskType;
-        private string _sName;
-        public string Name => _sName;
-        private string _sDescription;
-        public string Description => _sDescription;
+        public string Name => DataManager.GetTextData("Task", TaskID, "Name");
+        public string Description => DataManager.GetTextData("Task", TaskID, "Description");
         public Villager GoalNPC { get; private set; }
 
         int _iCutsceneID;
@@ -61,8 +59,6 @@ namespace RiverHollow.Misc
             TaskID = -1;
             _iSeason = -1;
             _iDay = -1;
-            _sName = string.Empty;
-            _sDescription = string.Empty;
             FriendTarget = string.Empty;
             GoalNPC = null;
             _targetItem = null;
@@ -76,9 +72,7 @@ namespace RiverHollow.Misc
         }
         public RHTask(string name, TaskTypeEnum type, string desc, int target, Monster m, Item i, Villager giver = null) : this()
         {
-            _sName = name;
             _eTaskType = type;
-            _sDescription = desc;
             GoalNPC = giver;
             RequiredItemAmount = target;
             _questMonster = m;
@@ -92,9 +86,6 @@ namespace RiverHollow.Misc
             TaskID = id;
             TargetsAccomplished = 0;
             LiRewardItems = new List<Item>();
-
-            DataManager.GetTextData("Task", TaskID, ref _sName, "Name");
-            DataManager.GetTextData("Task", TaskID, ref _sDescription, "Description");
 
             _eTaskType = Util.ParseEnum<TaskTypeEnum>(stringData["Type"]);
 
@@ -345,11 +336,11 @@ namespace RiverHollow.Misc
             else if (ReadyForHandIn) {
                 if (GoalNPC != null)
                 {
-                    rv = "Speak to " + GoalNPC.Name;
+                    rv = "Speak to " + GoalNPC.Name();
                     if (_iBuildingEndID != -1)
                     {
                         string name = string.Empty;
-                        DataManager.GetTextData("WorldObject", _iBuildingEndID, ref name, "Name");
+                        name = DataManager.GetTextData("WorldObject", _iBuildingEndID, "Name");
                         rv += " at the " + name;
                     }
                 }
@@ -359,22 +350,22 @@ namespace RiverHollow.Misc
                 switch (_eTaskType)
                 {
                     case TaskTypeEnum.Fetch:
-                        rv = _targetItem.Name + " Found: " + TargetsAccomplished + "/" + RequiredItemAmount;
+                        rv = _targetItem.Name() + " Found: " + TargetsAccomplished + "/" + RequiredItemAmount;
                         break;
                     case TaskTypeEnum.GroupSlay:
-                        rv = _questMonster.Name + " Defeated: " + TargetsAccomplished + "/" + RequiredItemAmount;
+                        rv = _questMonster.Name() + " Defeated: " + TargetsAccomplished + "/" + RequiredItemAmount;
                         break;
                     case TaskTypeEnum.Slay:
-                        rv = _questMonster.Name + " Defeated: " + TargetsAccomplished + "/" + RequiredItemAmount;
+                        rv = _questMonster.Name() + " Defeated: " + TargetsAccomplished + "/" + RequiredItemAmount;
                         break;
                     case TaskTypeEnum.Build:
-                        string objName = string.Empty;
-                        DataManager.GetTextData("WorldObject", _iTargetObjectID, ref objName, "Name");
+                        string objName = DataManager.GetTextData("WorldObject", _iTargetObjectID, "Name");
+
                         if (_iTargetWorldObjNum > 1) { rv = "Build " + _iTargetWorldObjNum.ToString() + objName + "s"; }
                         else { rv = "Build " + objName; }
                         break;
                     case TaskTypeEnum.Talk:
-                        rv = "Speak to " + GoalNPC.Name;
+                        rv = "Speak to " + GoalNPC.Name();
                         break;
                 }
             }
@@ -389,12 +380,6 @@ namespace RiverHollow.Misc
 
             [XmlElement(ElementName = "TaskID")]
             public int taskID;
-
-            [XmlElement(ElementName = "Name")]
-            public string name;
-
-            [XmlElement(ElementName = "Description")]
-            public string description;
 
             [XmlElement(ElementName = "RewardText")]
             public string rewardText;
@@ -442,8 +427,6 @@ namespace RiverHollow.Misc
             {
                 questType = _eTaskType,
                 taskID = TaskID,
-                name = _sName,
-                description = _sDescription,
                 goalNPC = GoalNPC != null ? GoalNPC.ID : -1,
                 itemID = _targetItem != null ? _targetItem.ItemID : -1,
                 monsterID = _questMonster != null ? _questMonster.ID : -1,
@@ -468,8 +451,6 @@ namespace RiverHollow.Misc
         {
             _eTaskType = qData.questType;
             TaskID = qData.taskID;
-            _sName = qData.name;
-            _sDescription = qData.description;
             GoalNPC = qData.goalNPC != -1 ? DataManager.DIVillagers[qData.goalNPC] : null;
             _targetItem = qData.itemID != -1 ? DataManager.GetItem(qData.itemID) : null;
             _questMonster = qData.monsterID != -1 ? DataManager.GetLiteMonsterByIndex(qData.monsterID) : null;

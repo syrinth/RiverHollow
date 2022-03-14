@@ -438,7 +438,7 @@ namespace RiverHollow.Characters
 
         public void SetUnique(string u)
         {
-            _sUnique = u;
+            _sUnique = " " +  u;
         }
 
         public void IncreaseStartPos()

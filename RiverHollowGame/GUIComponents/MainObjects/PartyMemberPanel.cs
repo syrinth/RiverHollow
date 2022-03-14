@@ -35,7 +35,7 @@ namespace RiverHollow.GUIComponents.MainObjects
             _actorSprite.Position(Position() + new Vector2(ScaleIt(4), ScaleIt(4)));
             AddControl(_actorSprite);
 
-            _gName = new GUIText(_partyMember.Name);
+            _gName = new GUIText(_partyMember.Name());
             _gName.Position(Position() + new Vector2(ScaleIt(41), ScaleIt(2)));
             AddControl(_gName);
 
@@ -441,8 +441,8 @@ namespace RiverHollow.GUIComponents.MainObjects
                 _gRes.AnchorAndAlignToObject(_gMagic, SideEnum.Bottom, SideEnum.Left, SPACING);
                 _gSpd.AnchorAndAlignToObject(_gRes, SideEnum.Bottom, SideEnum.Left, SPACING);
 
-                _gName.SetText(_character.Name);
-                _gClass.SetText(_character.CharacterClass.Name);
+                _gName.SetText(_character.Name());
+                _gClass.SetText(_character.CharacterClass.Name());
 
                 DisplayStatText();
 

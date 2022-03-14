@@ -326,7 +326,7 @@ namespace RiverHollow.GUIComponents.Screens
                     if (obj.RequiredToMake.Count > 0 && obj.CanBuild())
                     {
                         ConstructBox box = new ConstructBox(ConstructWorldObject);
-                        box.SetConstructionInfo(i, obj.Name, obj.RequiredToMake);
+                        box.SetConstructionInfo(i, obj.Name(), obj.RequiredToMake);
                         _liStructures.Add(box);
                     }
                 }
@@ -342,7 +342,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     ConstructBox box = new ConstructBox(ConstructStorageObject);
                     Buildable obj = (Buildable)DataManager.CreateWorldObjectByID(kvp.Key);
-                    box.SetConstructionInfo(kvp.Key, obj.Name, kvp.Value);
+                    box.SetConstructionInfo(kvp.Key, obj.Name(), kvp.Value);
                     _liStructures.Add(box);
                 }
             }

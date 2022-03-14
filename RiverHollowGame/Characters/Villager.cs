@@ -76,7 +76,6 @@ namespace RiverHollow.Characters
             Combatant = n.Combatant;
             CombatVersion = n.CombatVersion;
 
-            _sName = n.Name;
             _diDialogue = n._diDialogue;
             _sPortrait = n.Portrait;
 
@@ -110,7 +109,7 @@ namespace RiverHollow.Characters
             Util.AssignValue(ref _bLivesInTown, "InTown", stringData);
 
             CombatVersion = new ClassedCombatant();
-            CombatVersion.SetName(Name);
+            //CombatVersion.SetName(Name);
             if (stringData.ContainsKey("Class"))
             {
                 Combatant = true;
@@ -128,7 +127,7 @@ namespace RiverHollow.Characters
                 }
             }
 
-            Dictionary<string, List<string>> schedule = DataManager.GetSchedule("NPC_" + ID.ToString("00"));
+            Dictionary<string, List<string>> schedule = DataManager.GetSchedule("NPC_" + stringData["Key"]);
             if (schedule != null)
             {
                 foreach (KeyValuePair<string, List<string>> kvp in schedule)
@@ -179,6 +178,11 @@ namespace RiverHollow.Characters
                     if (!string.IsNullOrEmpty(animation))
                     {
                         _sprBody.PlayAnimation(animation);
+                    }
+
+                    if (_currentPathData.Wander)
+                    {
+                        _bCanWander = true;
                     }
 
                     _currentPathData = null;
@@ -306,7 +310,7 @@ namespace RiverHollow.Characters
 
                 string strSpawn = string.Empty;
                 if (Married) { strSpawn = "Spouse"; }
-                else if (IsHomeBuilt() || GetSpawnMapName() == MapManager.TownMapName || !string.IsNullOrEmpty(_sStartMap)) {strSpawn = "NPC_" + ID.ToString("00"); }
+                else if (IsHomeBuilt() || GetSpawnMapName() == MapManager.TownMapName || !string.IsNullOrEmpty(_sStartMap)) {strSpawn = "NPC_" + ID.ToString(); }
                 else if (GameManager.VillagersInTheInn < 3) { strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
 
                 Position = Util.SnapToGrid(map.GetCharacterSpawn(strSpawn));
@@ -322,7 +326,7 @@ namespace RiverHollow.Characters
         /// </summary>
         public void DetermineValidSchedule()
         {
-            if (LivesInTown && _diCompleteSchedule != null)
+            if ((LivesInTown  || !string.IsNullOrEmpty(_sStartMap)) && _diCompleteSchedule != null)
             {
                 //Iterate through the schedule keys
                 foreach (string scheduleKey in _diCompleteSchedule.Keys)
@@ -403,14 +407,14 @@ namespace RiverHollow.Characters
 
             RHTile nextTile = _liTilePath.Count > 0 ? _liTilePath[0] : null;
             Vector2 startPosition = nextTile != null ? nextTile.Position : Position;
-            List<RHTile> timePath = TravelManager.FindRouteToLocation(pathingData["Location"], CurrentMapName, startPosition, _sName);
+            List<RHTile> timePath = TravelManager.FindRouteToLocation(pathingData["Location"], CurrentMapName, startPosition, Name());
 
             string direction = string.Empty;
             string animation = string.Empty;
 
             Util.AssignValue(ref direction, "Dir", pathingData);
             Util.AssignValue(ref animation, "Anim", pathingData);
-            _currentPathData = new PathData(timePath, direction, animation, timeKeyIndex);
+            _currentPathData = new PathData(timePath, direction, animation, timeKeyIndex, pathingData.ContainsKey("Wander"));
 
             //Keep the next tile in the path in order to keep things consistent
             if (nextTile != null)
@@ -579,8 +583,9 @@ namespace RiverHollow.Characters
             public string Direction { get; }
             public string Animation { get; }
             public int TimeKeyIndex { get; }
+            public bool Wander { get; }
 
-            public PathData(List<RHTile> path, string direction, string animation, int timeKeyIndex)
+            public PathData(List<RHTile> path, string direction, string animation, int timeKeyIndex, bool wander = false)
             {
                 Path = path;
                 Direction = direction;

@@ -17,7 +17,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
         private CombatAction _chosenAction;
         public List<CombatTile> LegalTiles { get; }
         public CombatActor User;
-        public string Name { get; }
 
         bool _bDrawItem;
 
@@ -25,7 +24,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
         {
             User = ActiveCharacter;
             _chosenItem = it;
-            Name = _chosenItem.Name;
             LegalTiles = new List<CombatTile>();
 
             //Only the adjacent tiles are legal
@@ -49,7 +47,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
         {
             User = ActiveCharacter;
             _chosenAction = obj;
-            Name = _chosenAction.Name;
 
             _chosenAction.SkillUser = ActiveCharacter;
 
@@ -135,6 +132,20 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             }
         }
 
+        public string Name()
+        {
+            if(_chosenAction != null)
+            {
+                return _chosenAction.Name();
+            }
+            if (_chosenItem != null)
+            {
+               return _chosenItem.Name();
+            }
+
+            return string.Empty;
+        }
+
         public void PerformAction(GameTime gameTime)
         {
             if (_chosenAction != null) { _chosenAction.HandlePhase(gameTime); }
@@ -184,11 +195,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             if (_chosenAction != null)
             {
                 _chosenAction.AnimationSetup();
-                Text = SelectedAction.Name;
+                Text = SelectedAction.Name();
             }
             else if (_chosenItem != null)
             {
-                Text = SelectedAction.Name;
+                Text = SelectedAction.Name();
             }
             CurrentPhase = PhaseEnum.DisplayAttack;
             ClearSelectedTile();

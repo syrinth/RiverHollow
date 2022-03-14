@@ -3,7 +3,6 @@ using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
@@ -33,7 +32,6 @@ namespace RiverHollow.Characters
             Util.AssignValue(ref _bHover, "Hover", stringData);
 
             _diDialogue = DataManager.GetNPCDialogue(stringData["Key"]);
-            DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 
             _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Villager", stringData["Key"]);
 
@@ -60,9 +58,7 @@ namespace RiverHollow.Characters
 
             if (loadanimations)
             {
-                List<AnimationData> liAnimationData;
-                if (stringData.ContainsKey("Class")) { liAnimationData = Util.LoadWorldAnimations(stringData); }
-                else { liAnimationData = Util.LoadWorldAnimations(stringData); }
+                List<AnimationData> liAnimationData = Util.LoadWorldAnimations(stringData);
 
                 LoadSpriteAnimations(ref _sprBody, liAnimationData, DataManager.NPC_FOLDER + "NPC_" + stringData["Key"]);
                 PlayAnimationVerb(VerbEnum.Idle);

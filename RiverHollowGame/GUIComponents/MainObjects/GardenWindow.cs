@@ -32,7 +32,7 @@ namespace RiverHollow.GUIComponents.MainObjects
                 if (obj.InSeason())
                 {
                     Dictionary<int, int> toMake = new Dictionary<int, int> { [obj.SeedID] = 1 };
-                    box.SetConstructionInfo(i, obj.Name, toMake);
+                    box.SetConstructionInfo(i, obj.Name(), toMake);
                     _liStructures.Add(box);
                 }
             }

@@ -101,7 +101,7 @@ namespace RiverHollow.GUIComponents.Screens
             ShopItem = i;
             _giItem = new GUIImage(ShopItem.SourceRectangle, ScaledTileSize, ScaledTileSize, ShopItem.Texture);
             _giItem.SetColor(i.ItemColor);
-            _gTextName = new GUIText(ShopItem.Name);
+            _gTextName = new GUIText(ShopItem.Name());
 
             _giItem.AnchorToInnerSide(this, SideEnum.Left);
             _gTextName.AnchorAndAlignToObject(_giItem, SideEnum.Right, SideEnum.CenterY);
@@ -116,7 +116,7 @@ namespace RiverHollow.GUIComponents.Screens
             WorldObject = obj;
             _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
             Cost = cost;
-            _gTextName = new GUIText(obj.Name);
+            _gTextName = new GUIText(obj.Name());
 
             _gTextName.AnchorToInnerSide(this, SideEnum.Left);
 
@@ -130,7 +130,7 @@ namespace RiverHollow.GUIComponents.Screens
             Actor = actor;
             _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
             Cost = cost;
-            _gTextName = new GUIText(actor.Name);
+            _gTextName = new GUIText(actor.Name());
 
             _gTextName.AnchorToInnerSide(this, SideEnum.Left);
 

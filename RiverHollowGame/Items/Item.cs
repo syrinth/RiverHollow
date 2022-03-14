@@ -25,8 +25,6 @@ namespace RiverHollow.Items
 
         protected double _dWidth = 16;
         protected double _dHeight = 16;
-        protected string _sName;
-        public string Name => _sName;
 
         protected Texture2D _texTexture;
         public Texture2D Texture => _texTexture;
@@ -46,8 +44,6 @@ namespace RiverHollow.Items
         public bool AutoPickup { get => _bAutoPickup; set => _bAutoPickup = value; }
         protected bool _bManualPickup = false;
         public bool ManualPickup { get => _bManualPickup; set => _bManualPickup = value; }
-
-        protected string _sDescription;
 
         protected int _iColTexSize = TILE_SIZE;
         protected int _iRowTexSize = TILE_SIZE;
@@ -84,9 +80,6 @@ namespace RiverHollow.Items
             _iNum = num;
             _iItemID = id;
 
-            DataManager.GetTextData("Item", _iItemID, ref _sName, "Name");
-            DataManager.GetTextData("Item", _iItemID, ref _sDescription, "Description");
-
             //Item Type
             _eItemType = Util.ParseEnum<ItemEnum>(stringData["Type"]);
 
@@ -112,9 +105,7 @@ namespace RiverHollow.Items
             _iItemID = item.ItemID;
             _eItemType = item.ItemType;
             _vSourcePos = item._vSourcePos;
-            _sName = item.Name;
             _texTexture = item.Texture;
-            _sDescription = item._sDescription;
             _iNum = item.Number;
             _bStacks = item.DoesItStack;
         }
@@ -155,9 +146,13 @@ namespace RiverHollow.Items
             }
         }
 
-        public virtual string GetDescription()
+        public virtual string Name()
         {
-            return _sName + System.Environment.NewLine + _sDescription;
+            return DataManager.GetTextData("Item", _iItemID, "Name");
+        }
+        public virtual string Description()
+        {
+            return Name() + System.Environment.NewLine + DataManager.GetTextData("Item", _iItemID, "Description");
         }
 
         public void Pop(Vector2 pos)
@@ -381,9 +376,9 @@ namespace RiverHollow.Items
             _texTexture = DataManager.GetTexture(@"Textures\items");
         }
 
-        public override string GetDescription()
+        public override string Description()
         {
-            string rv = base.GetDescription();
+            string rv = base.Description();
             rv += System.Environment.NewLine;
             rv += "Difficulty: " + _difficulty;
 
@@ -520,10 +515,6 @@ namespace RiverHollow.Items
         public void SetClassChange(int i)
         {
             _iClassID = i;
-
-            string n = DataManager.GetClassByIndex(_iClassID).Name;
-            _sName += n;
-            _sDescription += n;
 
             switch (_iClassID)
             {

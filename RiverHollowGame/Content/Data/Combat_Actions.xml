@@ -145,5 +145,13 @@
       <Key>35</Key>
       <Value>[Type:Action][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Square][Harm:80][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Element:Lightning][Move:Right]</Value>
     </Item>
+    <Item>
+      <Key>36</Key>
+      <Value>[Type:Action][DamageAttribute:Strength][DamageType:Physical][Target:Enemy][Range:Melee][AreaType:Single][Harm:100][Action:UserAttack Apply]</Value>
+    </Item>
+    <Item>
+      <Key>37</Key>
+      <Value>[Type:Action][DamageAttribute:Strength][DamageType:Physical][Target:Enemy][Range:Melee][AreaType:Single][Harm:100][Action:UserAttack Apply]</Value>
+    </Item>
   </Asset>
 </XnaContent>

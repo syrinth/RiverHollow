@@ -23,9 +23,9 @@ namespace RiverHollow.Items
             _bStacks = true;
         }
 
-        public override string GetDescription()
+        public override string Description()
         {
-            string rv = base.GetDescription();
+            string rv = base.Description();
             rv += System.Environment.NewLine;
             if (Health > 0) { rv += "Health: +" + Health + " "; }
             if (Stamina > 0) { rv += "Stamina: +" + Stamina + " "; }
@@ -37,7 +37,7 @@ namespace RiverHollow.Items
         public override void ItemBeingUsed()
         {
             TextEntry entry = DataManager.GetGameTextEntry("FoodConfirm");
-            entry.FormatText(Name);
+            entry.FormatText(Name());
             ConfirmItemUse(entry);
         }
 

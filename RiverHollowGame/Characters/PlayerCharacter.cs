@@ -61,7 +61,7 @@ namespace RiverHollow.Characters
 
         public PlayerCharacter() : base()
         {
-            _sName = PlayerManager.Name;
+            //_sName = PlayerManager.Name;
             _iBodyWidth = TILE_SIZE;
             _iBodyHeight = HUMAN_HEIGHT;
 
@@ -90,7 +90,7 @@ namespace RiverHollow.Characters
             base.Draw(spriteBatch, useLayerDepth);
 
             _sprEyes.Draw(spriteBatch, useLayerDepth);
-            //_sprHair.Draw(spriteBatch, useLayerDepth);
+            _sprHair.Draw(spriteBatch, useLayerDepth);
 
             Body?.Sprite.Draw(spriteBatch, useLayerDepth);
             Hat?.Sprite.Draw(spriteBatch, useLayerDepth);

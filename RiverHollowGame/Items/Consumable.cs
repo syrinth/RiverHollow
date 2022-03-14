@@ -38,9 +38,9 @@ namespace RiverHollow.Items
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Consumables");
         }
 
-        public override string GetDescription()
+        public override string Description()
         {
-            string rv = base.GetDescription();
+            string rv = base.Description();
             rv += System.Environment.NewLine;
             if (Recover) { rv += "Ends Knocked Out"; }
             if (Health > 0) { rv += "Health: +" + Health + " "; }
@@ -53,7 +53,7 @@ namespace RiverHollow.Items
         public override void ItemBeingUsed()
         {
             TextEntry entry = DataManager.GetGameTextEntry("ItemConfirm");
-            entry.FormatText(Name);
+            entry.FormatText(Name());
 
             ConfirmItemUse(entry);
         }

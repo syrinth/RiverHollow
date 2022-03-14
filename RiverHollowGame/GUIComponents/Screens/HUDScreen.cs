@@ -1127,8 +1127,8 @@ namespace RiverHollow.GUIComponents.Screens
                     _gRes.AnchorAndAlignToObject(_gMagic, SideEnum.Bottom, SideEnum.Left, SPACING);
                     _gSpd.AnchorAndAlignToObject(_gRes, SideEnum.Bottom, SideEnum.Left, SPACING);
 
-                    _gName.SetText(_character.Name);
-                    _gClass.SetText(_character.CharacterClass.Name);
+                    _gName.SetText(_character.Name());
+                    _gClass.SetText(_character.CharacterClass.Name());
 
                     DisplayStatText();
 
@@ -1526,7 +1526,7 @@ namespace RiverHollow.GUIComponents.Screens
                         if (j == 0) { _liFriendship[j].AnchorAndAlignToObject(_gTextName, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN); }
                         else { _liFriendship[j].AnchorAndAlignToObject(_liFriendship[j - 1], SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN); }
                     }
-                    _gTextName.SetText(v.Name);
+                    _gTextName.SetText(v.Name());
 
                     _gGift = new GUIImage(new Rectangle(19, 52, 10, 8), ScaleIt(10), ScaleIt(8), DataManager.DIALOGUE_TEXTURE);
                     _gGift.AnchorToInnerSide(this, SideEnum.Right);
@@ -1776,7 +1776,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             _bldg = b;
 
-            GUIText name = new GUIText(_bldg.Name + ", Level " + _bldg.Level);
+            GUIText name = new GUIText(_bldg.Name() + ", Level " + _bldg.Level);
             name.AnchorToInnerSide(_winMain, SideEnum.Top);
 
             GUIButton btn = new GUIButton("Upgrade", Upgrade);

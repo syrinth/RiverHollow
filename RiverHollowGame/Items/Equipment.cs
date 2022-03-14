@@ -84,9 +84,9 @@ namespace RiverHollow.Items
         /// Appends the stats of the equipment to the item description
         /// </summary>
         /// <returns></returns>
-        public override string GetDescription()
+        public override string Description()
         {
-            string rv = base.GetDescription();
+            string rv = base.Description();
             //rv += System.Environment.NewLine;
             //if (Damage > 0) { rv += " Attack: +" + Damage + " "; }
             //if (Strength > 0) { rv += " Str: +" + Strength + " "; }

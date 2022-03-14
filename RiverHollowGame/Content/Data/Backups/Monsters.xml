@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Texture:Batty][Lvl:1][Ability:42][Walk:0-0-4-.11-F][Action1:0-32-4-.11-F][Hurt:0-64-3-.11-F][Critical:0-96-4-.11-F][KO:192-64-3-.15-F][Loot:56][MoveSpeed:7]</Value>
+      <Value>[Texture:Batty][Condition:Forest-Summer][Lvl:1][Ability:37][Loot:56][Idle:4-.11-F][Critical:4-.2-F][Hurt:1-.11-F][Action1:6-.15-F][KO:3-.15-F]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -35,11 +35,11 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Texture:Mossy_Slime][Condition:Forest-Summer][Lvl:1][Ability:38][Loot:77|78|80|81|82|83|85|86|87|88][Walk:0-0-3-0.15-T][Action1:0-32-3-0.15-T][Cast:0-64-3-0.15-T][Hurt:0-96-3-0.15-T][Critical:0-128-3-0.15-T][KO:0-160-3-0.15-T]</Value>
+      <Value>[Texture:Mossy_Slime][Condition:Forest-Summer][Lvl:1][Ability:36][Loot:23-C][Idle:3-.2-T][Critical:2-.3-F][Hurt:3-.1-F][Action1:6-.1-F][KO:3-.15-F][Trait:Coward]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Texture:Mushie][Condition:Forest-Summer][Jump][Lvl:1][Ability:34|35][Loot:23-C][Trait:Coward][Idle:4-.2-T][Action1:3-.2-F][Hurt:1-.2-F][Critical:2-.2-F][KO:3-.15-F]</Value>
+      <Value>[Texture:Mushie][Condition:Forest-Summer][Lvl:1][Ability:34|35][Loot:23-C][Idle:4-.2-T][Critical:2-.2-F][Hurt:1-.2-F][Action1:3-.2-F][KO:3-.15-F][Trait:Coward][Jump]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -5,31 +5,31 @@
       <Key>0</Key>
       <Value>
         <Item></Item>
-        <Item>[Map:mapConnection_02][Player][Actors:2-CS0|27-CS0_Mob][Deactivate:2]</Item>
-        <Item>[Speak:2-1][Activate:2][Move:2-5-Up][Speak:2-2][Join:2][Combat:28]</Item>
+        <Item>[Map:mapWoods][Player][Actors:2-CS0|29-CS0_Mob][Deactivate:2]</Item>
+        <Item>[Speak:2-1][Activate:2][Move:2-10-Up][Move:2-5-Right][Speak:2-2][Join:2][Move:2-4-Right|Player-7-Left][Combat:30]</Item>
       </Value>
     </Item>
     <Item>
       <Key>1</Key>
       <Value>
         <Item></Item>
-        <Item>[Map:mapTown][Player:PlayerSpawn][Actors:13-CS1Spawn|21-NPC_21]</Item>
-        <Item>[Background:Textures\Valley][Text:IntroText][RemoveBackground][Face:13-Up|Player-Up][Speed:Player-0.5|14-0.2][Speak:13-1][Move:13-3-Up|Player-3-Up][Speak:13-2][Face:13-Left|Player-Right][Speak:13-3][Wait:0.5][Move:11-1-Down][Wait:1][Face:13-Left][Speak:13-4][Wait:1][Speak:13-5][Move:13-5-Down][Speed:Player-1][TaskID:3]</Item>
+        <Item>[Map:mapTown][Player:PlayerSpawn][Actors:14-CS1Spawn|21-NPC_21]</Item>
+        <Item>[Background:Textures\Valley][Text:IntroText][RemoveBackground][Face:14-Up|Player-Up][Speed:Player-0.5|14-0.2][Speak:14-1][Move:14-3-Up|Player-3-Up][Speak:14-2][Face:14-Left|Player-Right][Speak:14-3][Wait:0.5][Move:12-1-Down][Wait:1][Face:14-Left][Speak:14-4][Wait:1][Speak:14-5][Move:14-5-Down][Speed:Player-1][TaskID:3]</Item>
       </Value>
     </Item>
     <Item>
       <Key>2</Key>
       <Value>
         <Item></Item>
-        <Item>[Map:mapWorkshop][Player][Actors:13-Workshop_NPC][Deactivate:13]</Item>
-        <Item>[Speed:Player-0.5|13-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:13][Move:13-4-Up][Face:Player-Up][Face:13-Down][Speak:13-0][Face:13-Left][Speak:13-1][Face:13-Right][Speak:13-2][Face:13-Down][Speak:13-3][Move:13-4-Down]</Item>
+        <Item>[Map:mapWorkshop][Player][Actors:14-Workshop_NPC][Deactivate:14]</Item>
+        <Item>[Speed:Player-0.5|14-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:14][Move:14-4-Up][Face:Player-Up][Face:14-Down][Speak:14-0][Face:14-Left][Speak:14-1][Face:14-Right][Speak:14-2][Face:14-Down][Speak:14-3][Move:14-4-Down]</Item>
       </Value>
     </Item>
     <Item>
       <Key>3</Key>
       <Value>
         <Item></Item>
-        <Item>[Map][Player][Actors:16-NPC_00][Deactivate:16]</Item>
+        <Item>[Map][Player][Actors:17-NPC_00][Deactivate:17]</Item>
         <Item>[Text:IntroText]</Item>
       </Value>
     </Item>

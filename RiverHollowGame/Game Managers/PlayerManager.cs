@@ -636,8 +636,8 @@ namespace RiverHollow.Game_Managers
         public static void SetName(string x)
         {
             Name = x;
-            PlayerActor.SetName(x);
-            PlayerCombatant.SetName(x);
+            //PlayerActor.SetName(x);
+            //PlayerCombatant.SetName(x);
         }
         public static void SetTownName(string x)
         {

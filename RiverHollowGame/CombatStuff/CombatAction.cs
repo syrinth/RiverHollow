@@ -18,10 +18,6 @@ namespace RiverHollow.CombatStuff
         protected int _iId;
 
         protected ActionEnum _eActionType;
-        protected string _sName;
-        public string Name { get => _sName; }
-        protected string _sDescription;
-        public string Description { get => _sDescription; }
 
         public CombatActor SkillUser;
 
@@ -105,8 +101,6 @@ namespace RiverHollow.CombatStuff
         protected void ImportBasics(int id, Dictionary<string, string> stringData)
         {
             _iId = id;
-            DataManager.GetTextData("Action", _iId, ref _sName, "Name");
-            DataManager.GetTextData("Action", _iId, ref _sDescription, "Description");
 
             Util.AssignValue(ref _eActionType, "Type", stringData);
             Util.AssignValue(ref _eElement, "Element", stringData);
@@ -218,6 +212,15 @@ namespace RiverHollow.CombatStuff
                 _iAnimOffsetX = int.Parse(parse[0]);
                 _iAnimOffsetY = int.Parse(parse[1]);
             }
+        }
+
+        public string Name()
+        {
+            return DataManager.GetTextData("Action", _iId, "Name");
+        }
+        public string Description()
+        {
+            return DataManager.GetTextData("Action", _iId, "Description");
         }
 
         /// <summary>
@@ -547,7 +550,7 @@ namespace RiverHollow.CombatStuff
                     else if (SkillUser.AnimationPlayedXTimes(1))
                     {
                         if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(AnimationEnum.Idle); }
-                        else { SkillUser.Tile.PlayAnimation(AnimationEnum.Idle); }
+                        else { SkillUser.GoToIdle(); }
                         _iCurrentAction++;
                     }
                     break;
@@ -560,7 +563,7 @@ namespace RiverHollow.CombatStuff
                     else if (SkillUser.AnimationPlayedXTimes(2))
                     {
                         if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(AnimationEnum.Idle); }
-                        else { SkillUser.Tile.PlayAnimation(AnimationEnum.Idle); }
+                        else { SkillUser.GoToIdle(); }
                         _iCurrentAction++;
                     }
                     break;

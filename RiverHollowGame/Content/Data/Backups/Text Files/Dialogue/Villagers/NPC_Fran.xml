@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Finally. It's nice to speak to someone who can help me. I'm $NPC_7$, nice to meet you, etcetera. Be a dear and arrange me someplace to stay will you? My research has been stalled for long enough.][UnlockBuildingID:52][Name:Introduction]</Value>
+      <Value>[Text:Finally. It's nice to speak to someone who can help me. I'm $NPC_8$, nice to meet you, etcetera. Be a dear and arrange me someplace to stay will you? My research has been stalled for long enough.][UnlockBuildingID:52][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -62,15 +62,15 @@ I didn't know what to say, so I just stood there, staring at her until she left.
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Text:I tried to talk with $NPC_9$ the other day but she just blew me off. She said she had no time for me! Can you believe that!][Villager:17][Name:Griselda_1]</Value>
+      <Value>[Text:I tried to talk with $NPC_10$ the other day but she just blew me off. She said she had no time for me! Can you believe that!][Villager:17][Name:Griselda_1]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Text:You know, $NPC_18$ is a lot more knowledgeable than he looks, once you get him to stop babbling and talk straight.][Villager:2][Name:Michael_1]</Value>
+      <Value>[Text:You know, $NPC_19$ is a lot more knowledgeable than he looks, once you get him to stop babbling and talk straight.][Villager:2][Name:Michael_1]</Value>
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Text:$NPC_11$ said she was going to try to get a book for me, but it hasn't arrived yet. Do you think it's too soon to ask her about it?][Villager:11][Name:Isabelle_1]</Value>
+      <Value>[Text:$NPC_12$ said she was going to try to get a book for me, but it hasn't arrived yet. Do you think it's too soon to ask her about it?][Villager:11][Name:Isabelle_1]</Value>
     </Item>
     <Item>
       <Key>17</Key>

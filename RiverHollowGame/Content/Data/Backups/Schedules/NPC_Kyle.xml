@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, List[string]]">
+    <Item>
+      <Key>Monday</Key>
+      <Value>
+      </Value>
+    </Item>
+    <Item>
+      <Key>Built_6</Key>
+      <Value>
+      </Value>
+    </Item>
+    <Item>
+      <Key>Default</Key>
+      <Value>
+      </Value>
+    </Item>
+  </Asset>
+</XnaContent>

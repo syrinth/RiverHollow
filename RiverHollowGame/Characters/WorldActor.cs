@@ -20,6 +20,7 @@ namespace RiverHollow.Characters
         public int ID { get; } = -1;
 
         protected ActorMovementStateEnum _eMovementState = ActorMovementStateEnum.Idle;
+        public ActorMovementStateEnum MovementState => _eMovementState;
 
         protected WorldActorTypeEnum _eActorType = WorldActorTypeEnum.Actor;
         public WorldActorTypeEnum ActorType => _eActorType;
@@ -66,7 +67,7 @@ namespace RiverHollow.Characters
 
         protected bool _bHover;
 
-        float _fBaseSpeed = 2;
+        protected float _fBaseSpeed = 2;
         public float BuffedSpeed => _fBaseSpeed * SpdMult;
         public float SpdMult = NPC_WALK_SPEED;
 
@@ -139,6 +140,11 @@ namespace RiverHollow.Characters
         }
 
         public virtual void ProcessRightButtonClick() { }
+
+        public override string Name()
+        {
+            return DataManager.GetTextData("NPC", ID, "Name");
+        }
 
         /// <summary>
         /// Creates a new Animatedsprite object for the given texture string, and adds
@@ -225,7 +231,10 @@ namespace RiverHollow.Characters
                     }
                 }
             }
-            else { SetMovementState(ActorMovementStateEnum.Idle); }
+            else if (_eMovementState != ActorMovementStateEnum.Idle)
+            {
+                SetMovementState(ActorMovementStateEnum.Idle);
+            }
 
             if (initialState != _eMovementState || initialFacing != Facing)
             {
@@ -301,7 +310,7 @@ namespace RiverHollow.Characters
                 //If we're following a path and there's more than one tile left, we don't want to cut
                 //short on individual steps, so recalculate based on the next target
                 float length = direction.Length();
-                if (_liTilePath.Count > 1 && length <= BuffedSpeed)
+                if (_liTilePath.Count > 1 && length < BuffedSpeed)
                 {
                     _liTilePath.RemoveAt(0);
 
@@ -328,6 +337,10 @@ namespace RiverHollow.Characters
                 if (_vMoveTo == Position && !CutsceneManager.Playing)
                 {
                     _vMoveTo = Vector2.Zero;
+                    if (_liTilePath.Count > 0)
+                    {
+                        _liTilePath.RemoveAt(0);
+                    }
                 }
             }
         }
@@ -335,7 +348,7 @@ namespace RiverHollow.Characters
         /// <summary>
         /// This method checks to see whether the next RHTile is a door and handles it.
         /// </summary>
-        /// <returns>True if the next RHTIle is a door</returns>
+        /// <returns>True if the next RHTIle is a door</returns>sssssssss
         protected bool DoorCheck()
         {
             bool rv = false;

@@ -12,8 +12,6 @@ namespace RiverHollow.Characters
 {
     public class Monster : CombatActor
     {
-        public override string Name => String.IsNullOrEmpty(_sUnique) ? _sName : _sName + " " + _sUnique;
-
         public int ID { get; } = -1;
         int _iRating;
         public int XP { get; private set; }
@@ -32,8 +30,6 @@ namespace RiverHollow.Characters
 
         protected void ImportBasics(Dictionary<string, string> data)
         {
-            DataManager.GetTextData("Monster", ID, ref _sName, "Name");
-
             Util.AssignValue(ref _iBodyWidth, "Width", data);
             Util.AssignValue(ref _iBodyHeight, "Height", data);
 
@@ -109,6 +105,11 @@ namespace RiverHollow.Characters
             {
                 CombatManager.RemoveMonster(this);
             }
+        }
+
+        public override string Name()
+        {
+            return DataManager.GetTextData("Monster", ID, "Name") + _sUnique;
         }
 
         public override GUIImage GetIcon()

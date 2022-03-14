@@ -264,6 +264,7 @@ namespace RiverHollow.Game_Managers
                 //Iterate over the exits in the map we're testing and pathfind to them from the starting location
                 foreach (KeyValuePair<string, TravelPoint> exit in theTestMap.DictionaryTravelPoints)
                 {
+                    if (exit.Value.Modular) { continue; }
                     TravelPoint exitPoint = exit.Value;
                     Vector2 pathToVector = exitPoint.GetCenterTilePosition();
                     if (exitPoint.IsDoor)
@@ -278,7 +279,7 @@ namespace RiverHollow.Game_Managers
                     //Find the shortest path to the exit in question. We copy the start vector into a new one
                     //so that our start point doesn't get overridden. We do not care about the location of the last
                     //tile in the previous pathfinding instance for this operation.
-                    Vector2 startVector = new Vector2(start.X, start.Y);  
+                    Vector2 startVector = new Vector2(start.X, start.Y);
                     List<RHTile> pathToExit = FindPathToLocation(ref startVector, pathToVector, testMapStr, exitPoint.IsDoor);
                     if (pathToExit != null)
                     {
@@ -286,7 +287,7 @@ namespace RiverHollow.Game_Managers
                         //length of the found path, to the current cost to travel to the test map and,
                         //if the map isn't in the dictionary, or the newCost to arrive there is less than
                         //the old cost, we need to change the value to the new shortest path.
-                        double newCost = mapCostSoFar[testMapStr] + pathToExit.Count;       
+                        double newCost = mapCostSoFar[testMapStr] + pathToExit.Count;
                         if (!mapCostSoFar.ContainsKey(exit.Key) || newCost < mapCostSoFar[exit.Key])
                         {
                             mapCostSoFar[exit.Key] = newCost;         //Set the map cost to the new cost to arrive
@@ -295,7 +296,7 @@ namespace RiverHollow.Game_Managers
                             //Setting the backtrack path for the exit map
                             mapCameFrom[exit.Key] = testMap;
                             _diMapPathing[testMapStr + ":" + exit.Value.LinkedMap] = pathToExit; // This needs another key for the appropriate exit
-                            WriteToTravelLog("---" + testMapStr + ":" + exit.Value.LinkedMap+ "---");
+                            WriteToTravelLog("---" + testMapStr + ":" + exit.Value.LinkedMap + "---");
                         }
                     }
                 }

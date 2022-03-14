@@ -62,10 +62,12 @@ namespace RiverHollow.WorldObjects
 
         protected int _iID;
         public int ID  => _iID;
-
-        protected string _sName;
-        public string Name => _sName;
         #endregion
+
+        public virtual string Name()
+        {
+            return DataManager.GetTextData("WorldObject", _iID, "Name");
+        }
 
         protected WorldObject(int id)
         {
@@ -73,11 +75,6 @@ namespace RiverHollow.WorldObjects
 
             _iID = id;
             _bWallObject = false;
-
-            if (id != -1)
-            {
-                DataManager.GetTextData("WorldObject", _iID, ref _sName, "Name");
-            }
         }
 
         public WorldObject(int id, Dictionary<string, string> stringData) : this(id)

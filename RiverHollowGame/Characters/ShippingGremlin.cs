@@ -42,7 +42,6 @@ namespace RiverHollow.Characters
             _diDialogue = DataManager.GetNPCDialogue(stringData["Key"]);
             _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Gremlin", stringData["Key"]);
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
-            DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 
             Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
 

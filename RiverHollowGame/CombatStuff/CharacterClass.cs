@@ -9,10 +9,6 @@ namespace RiverHollow.CombatStuff
     {
         public int ID { get; } = -1;
 
-        private string _sName;
-        public string Name => _sName;
-        private string _sDescription;
-        public string Description => _sDescription;
         public List<CombatAction> Actions;
 
         AttributeEnum _eKeyAttribute;
@@ -43,9 +39,6 @@ namespace RiverHollow.CombatStuff
 
         protected void ImportBasics(Dictionary<string, string> stringData)
         {
-            DataManager.GetTextData("Class", ID, ref _sName, "Name");
-            DataManager.GetTextData("Class", ID, ref _sDescription, "Description");
-
             Util.AssignValue(ref _weaponType, "Weapon", stringData);
             Util.AssignValue(ref _armorType, "Armor", stringData);
 
@@ -68,6 +61,16 @@ namespace RiverHollow.CombatStuff
                 Actions.Add(DataManager.GetCombatActionByIndex(int.Parse(DataManager.Config[18]["UseItem"])));
                 Actions.Add(DataManager.GetCombatActionByIndex(int.Parse(DataManager.Config[18]["MoveAction"])));
             }
+        }
+
+        public string Name()
+        {
+            return DataManager.GetTextData("Class", ID, "Name");
+        }
+
+        public string Description()
+        {
+            return DataManager.GetTextData("Class", ID, "Description");
         }
     }
 }

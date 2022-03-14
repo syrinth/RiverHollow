@@ -71,7 +71,7 @@
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Idle:0-0-1-.15-T][Walk:64-0-3-.15-T][Action1:256-0-2-.15-F][Cast:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F][UseTool:0-32-5-.08-F]</Value>
+      <Value>[Idle:0-0-1-.15-T][Walk:64-0-8-.1-F][Action1:256-0-2-.15-F][Cast:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F][UseTool:0-32-5-.08-F]</Value>
     </Item>
     <Item>
       <Key>18</Key>

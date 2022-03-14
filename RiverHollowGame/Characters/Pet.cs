@@ -20,7 +20,6 @@ namespace RiverHollow.Characters
             _bCanWander = true;
 
             _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Adventurer", stringData["Key"]);
-            DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 
             Util.AssignValue(ref _iGatherZoneID, "ObjectID", stringData);
 

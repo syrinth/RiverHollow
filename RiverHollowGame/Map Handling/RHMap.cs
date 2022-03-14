@@ -2254,7 +2254,6 @@ namespace RiverHollow.Map_Handling
                     case ObjectTypeEnum.Machine:
                         mapData.machines.Add(((Machine)wObj).SaveData());
                         break;
-
                     case ObjectTypeEnum.Plant:
                         mapData.plants.Add(((Plant)wObj).SaveData());
                         break;

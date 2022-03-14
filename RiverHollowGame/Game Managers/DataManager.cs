@@ -517,7 +517,7 @@ namespace RiverHollow.Game_Managers
 
         public static string GetCharacterNameByIndex(int i)
         {
-            return DIVillagers[i].Name;
+            return DIVillagers[i].Name();
         }
 
         public static string GetMonsterTraitData(string trait)
@@ -842,17 +842,18 @@ namespace RiverHollow.Game_Managers
         {
             return _diObjectText.ContainsKey(identifier);
         }
-        public static void GetTextData(string identifier, int id, ref string value, string key)
+        public static string GetTextData(string identifier, int id, string key)
         {
-            string textKey = identifier + "_" + id;
-            GetTextData(textKey, ref value, key);
+            return GetTextData(identifier + "_" + id, key);
         }
-        public static void GetTextData(string textKey, ref string value, string key)
+        public static string GetTextData(string textKey, string key)
         {
-            if (_diObjectText[textKey].ContainsKey(key)) { value = _diObjectText[textKey][key]; }
-            else { value = string.Empty; }
+            string value = string.Empty;
+            if (_diObjectText[textKey].ContainsKey(key)) {
+                value = _diObjectText[textKey][key];
+            }
 
-            value = Util.ProcessText(value);
+            return Util.ProcessText(value);
         }
         #endregion
         #endregion

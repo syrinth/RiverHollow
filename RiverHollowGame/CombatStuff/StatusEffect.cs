@@ -31,8 +31,8 @@ namespace RiverHollow.CombatStuff
         public StatusEffect(int id, Dictionary<string, string> data)
         {
             ID = id;
-            DataManager.GetTextData("StatusEffect", ID, ref _sName, "Name");
-            DataManager.GetTextData("StatusEffect", ID, ref _sDescription, "Description");
+            _sName = DataManager.GetTextData("StatusEffect", ID, "Name");
+            _sDescription = DataManager.GetTextData("StatusEffect", ID, "Description");
 
             AffectedAttributes = new List<KeyValuePair<AttributeEnum, string>>();
             ImportBasics(id, data);

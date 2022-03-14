@@ -21,8 +21,7 @@ namespace RiverHollow.Buildings
 
         private Dictionary<int, Dictionary<int, int>> _diUpgradeInfo;
 
-        private string _sDescription;
-        public string Description => _sDescription;
+        public string Description => DataManager.GetTextData("WorldObject", _iID, "Description");
 
         private string _sTextureName;
 
@@ -56,9 +55,6 @@ namespace RiverHollow.Buildings
         {
             _iID = id;
             _eObjectType = ObjectTypeEnum.Building;
-
-            DataManager.GetTextData("WorldObject", _iID, ref _sName, "Name");
-            DataManager.GetTextData("WorldObject", _iID, ref _sDescription, "Description");
 
             //The dimensions of the Building in tiles
             Util.AssignValue(ref _uSize, "Size", stringData);
@@ -249,9 +245,6 @@ namespace RiverHollow.Buildings
         private Dictionary<int, int> _diReqToMake;
         public Dictionary<int, int> RequiredToMake => _diReqToMake;
 
-        private string _sName;
-        public string Name => _sName;
-
         private string _sDescription;
         public string Description => _sDescription;
 
@@ -266,12 +259,16 @@ namespace RiverHollow.Buildings
         {
             _iID = id;
 
-            DataManager.GetTextData("Building", _iID, ref _sName, "Name");
-            DataManager.GetTextData("Building", _iID, ref _sDescription, "Description");
+            _sDescription = DataManager.GetTextData("Building", _iID, "Description");
 
             Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
 
             Util.AssignValue(ref _bUnlocked, "Unlocked", stringData);
+        }
+
+        public string Name()
+        {
+            return DataManager.GetTextData("Building", _iID, "Name");
         }
 
         public BuildInfoData SaveData()

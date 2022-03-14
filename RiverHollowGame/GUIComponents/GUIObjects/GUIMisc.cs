@@ -373,7 +373,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             bool rv = false;
             if (Contains(mouse))
             {
-                GUIManager.OpenHoverWindow(new GUITextWindow(new TextEntry(ItemObject.GetDescription()), new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32)), this);
+                GUIManager.OpenHoverWindow(new GUITextWindow(new TextEntry(ItemObject.Description()), new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32)), this);
                 rv = true;
             }
             return rv;

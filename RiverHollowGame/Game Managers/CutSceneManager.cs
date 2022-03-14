@@ -434,6 +434,7 @@ namespace RiverHollow.Game_Managers
         {
             if (c.Position == c.MoveToLocation)
             {
+                c.SetMovementState(ActorMovementStateEnum.Idle);
                 if (!_liToRemove.Contains(c))
                 {
                     _liToRemove.Add(c);
@@ -616,7 +617,7 @@ namespace RiverHollow.Game_Managers
                         }
                         else if (currentCommand.Command == EnumCSCommand.Combat)
                         {
-                            queuedMob = DataManager.CreateMob(int.Parse(sCommandData[0]));
+                            queuedMob = (Mob)_liUsedNPCs.Find(x => x.ID == int.Parse(sCommandData[0]));
                         }
                     }
 
@@ -653,6 +654,9 @@ namespace RiverHollow.Game_Managers
             _triggerTask?.EndTask();
             if(queuedMob != null)
             {
+                string realMapName = _cutsceneMap.Name.Replace("Clone", "");
+                queuedMob.CurrentMapName = realMapName;
+                MapManager.Maps[realMapName].AddActor(queuedMob);
                 CombatManager.NewBattle(queuedMob);
             }
         }

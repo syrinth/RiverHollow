@@ -24,7 +24,7 @@ namespace RiverHollow.Items
         public override void ItemBeingUsed()
         {
             TextEntry entry = DataManager.GetGameTextEntry("Read_Book");
-            entry.FormatText(Name);
+            entry.FormatText(Name());
             ConfirmItemUse(entry);
         }
 

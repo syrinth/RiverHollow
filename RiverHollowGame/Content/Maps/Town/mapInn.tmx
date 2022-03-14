@@ -405,12 +405,12 @@
  <objectgroup id="5" name="Character">
   <object id="4" name="NPC" x="50.333" y="70" width="9" height="8">
    <properties>
-    <property name="NPC_ID" type="int" value="17"/>
+    <property name="NPC_ID" type="int" value="18"/>
    </properties>
   </object>
   <object id="5" name="NPC" x="211.75" y="85.5" width="9" height="8">
    <properties>
-    <property name="NPC_ID" type="int" value="20"/>
+    <property name="NPC_ID" type="int" value="21"/>
    </properties>
   </object>
   <object id="6" name="NPC_Wait_1" x="160.866" y="130.768" width="12.375" height="11.4375"/>

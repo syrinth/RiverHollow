@@ -55,7 +55,7 @@ namespace RiverHollow.GUIComponents.Screens
                 if(GameManager.CurrentNPC != null && GameManager.CurrentItem != null && GameManager.CurrentInventoryDisplay == DisplayTypeEnum.Gift)
                 {
                     TextEntry entry = DataManager.GetGameTextEntry("GiftConfirm");
-                    entry.FormatText(GameManager.CurrentItem.Name, GameManager.CurrentNPC.Name);
+                    entry.FormatText(GameManager.CurrentItem.Name(), GameManager.CurrentNPC.Name());
                     GUIManager.OpenTextWindow(entry, GameManager.CurrentNPC);
                 }
             }

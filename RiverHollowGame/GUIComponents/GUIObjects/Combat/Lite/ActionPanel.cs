@@ -122,7 +122,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 Consumable it = _gInventoryPanel.GetSelectedItem();
                 if (it != null)
                 {
-                    SetSelectedName(it.Name);
+                    SetSelectedName(it.Name());
                 }
             }
 
@@ -146,7 +146,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             _iSelectedAction = i;
             _gActionReticle.CenterOnObject(_arrActionImages[_iSelectedAction]);
 
-            SetSelectedName(CombatManager.ActiveCharacter.Actions[_iSelectedAction].Name);
+            SetSelectedName(CombatManager.ActiveCharacter.Actions[_iSelectedAction].Name());
 
             if (_iSelectedAction < USE_ITEM)
             {

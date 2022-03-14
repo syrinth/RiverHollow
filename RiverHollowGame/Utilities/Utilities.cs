@@ -167,7 +167,7 @@ namespace RiverHollow.Utilities
                     else if (value == "Town") { value = PlayerManager.TownName; }
                     else if (DataManager.TextDataHasKey(value))
                     {
-                        DataManager.GetTextData(value, ref value, "Name");
+                        value = DataManager.GetTextData(value, "Name");
                     }
 
                     rv += value;
@@ -586,12 +586,12 @@ namespace RiverHollow.Utilities
 
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.Spawn);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.Idle);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Critical);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Hurt);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action1);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action2);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action3);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action4);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Hurt);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Critical);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.KO);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.Victory);
 

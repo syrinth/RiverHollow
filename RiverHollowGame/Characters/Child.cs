@@ -37,7 +37,6 @@ namespace RiverHollow.Characters
             _liGrowthPeriods = new List<int>() { 4, 10 };
 
             _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Adventurer", stringData["Key"]);
-            DataManager.GetTextData("NPC", ID, ref _sName, "Name");
 
             _liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref _liData, stringData, VerbEnum.Walk);
@@ -87,7 +86,7 @@ namespace RiverHollow.Characters
         public override void ProcessRightButtonClick()
         {
             TextEntry text = DataManager.GetGameTextEntry(_bFollow ? "PetUnfollow" : "PetFollow");
-            text.FormatText(_sName);
+            text.FormatText(Name());
             GUIManager.OpenTextWindow(text, this, true);
         }
 

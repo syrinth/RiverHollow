@@ -59,6 +59,8 @@ namespace RiverHollow.Characters
             _liSpawnConditions = new List<SpawnConditionEnum>();
             _eActorType = WorldActorTypeEnum.Mob;
             _liMonsters = new List<CombatActor>();
+
+            _fBaseSpeed = 1;
             ImportBasics(data);
             //LoadContent(DataManager.FOLDER_MOBS + data["Texture"];);
 
@@ -408,6 +410,7 @@ namespace RiverHollow.Characters
         public void Defeat()
         {
             _bDefeated = true;
+            CurrentMap.RemoveActor(this);
         }
 
         public void Stun()

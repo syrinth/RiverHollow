@@ -158,7 +158,7 @@ namespace RiverHollow.WorldObjects
             if (base.PlaceOnMap(pos, map))
             {
                 rv = true;
-                GameManager.AddMachine(this, Name);
+                GameManager.AddMachine(this, Name());
 
                 if (map.BuildingID != -1)
                 {

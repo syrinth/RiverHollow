@@ -22,8 +22,6 @@ namespace RiverHollow.Characters
             _dNextPlay = 1 + SetRandom(4, 0.5);
             _iBodyHeight = TILE_SIZE;
 
-            DataManager.GetTextData("NPC", ID, ref _sName, "Name");
-
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Action1);

@@ -899,18 +899,6 @@
 /processor:PassThroughProcessor
 /build:Data/CharacterData.xml
 
-#begin Textures/Actors/Monsters/BigBlob.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Actors/Monsters/BigBlob.png
-
 #begin Textures/ActionEffects/Heal.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1120,11 +1108,6 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapConnection_01.tmx
-
-#begin Maps/Misc/mapConnection_02.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Misc/mapConnection_02.tmx
 
 #begin Maps/Tilesets/tsWalls_Floors.png
 /importer:TextureImporter
@@ -1733,11 +1716,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/House_14.png
 
-#begin Data/Schedules/NPC_14.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Schedules/NPC_14.xml
-
 #begin Textures/Buildings/Architect.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2344,18 +2322,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/ActionEffects/HiveAttack.png
 
-#begin Textures/Actors/Monsters/AngryHive.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Actors/Monsters/AngryHive.png
-
 #begin Textures/Buildings/Flower_Shop.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2384,30 +2350,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Schedules/NPC_25.xml
-
-#begin Textures/Actors/Monsters/Forest_Impling.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Actors/Monsters/Forest_Impling.png
-
-#begin Textures/Actors/Monsters/Carnivorous_Plant.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Actors/Monsters/Carnivorous_Plant.png
 
 #begin Data/Schedules/NPC_13.xml
 /importer:XmlImporter
@@ -3920,4 +3862,94 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Mobs/Mossy_Slime.png
+
+#begin Textures/Actors/Monsters/Mossy_Slime.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Monsters/Mossy_Slime.png
+
+#begin Textures/Actors/Portraits/CombatPortraits/M_08.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Portraits/CombatPortraits/M_08.png
+
+#begin Textures/Actors/Portraits/CombatPortraits/M_01.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Portraits/CombatPortraits/M_01.png
+
+#begin Textures/Actors/Monsters/Batty.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Monsters/Batty.png
+
+#begin Maps/Misc/mapWoods.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapWoods.tmx
+
+#begin Maps/Misc/mapFoothills.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapFoothills.tmx
+
+#begin Maps/Misc/mapForest.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapForest.tmx
+
+#begin Textures/Actors/NPCs/NPC_Dwarf.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/NPC_Dwarf.png
+
+#begin Data/Schedules/NPC_Dwarf.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Schedules/NPC_Dwarf.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_Dwarf.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_Dwarf.xml
+
+#begin Data/Schedules/NPC_Kyle.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Schedules/NPC_Kyle.xml
 
