@@ -38,6 +38,7 @@ namespace RiverHollow.Game_Managers
         public const string FOLDER_PLAYER = @"Textures\Actors\Player\";
         public const string FOLDER_PARTY = @"Textures\Actors\PartyMembers\";
         public const string FOLDER_TEXTFILES = @"Data\Text Files\";
+        public const string FONT_NEW = @"Fonts\Font_New\Font_New";
         public const string FONT_MAIN = @"Fonts\Font_Main";
         public const string FONT_NUMBER_DISPLAY = @"Fonts\Font_Number_Display";
         public const string FONT_STAT_DISPLAY = @"Fonts\Font_Stat_Display";
@@ -71,8 +72,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diDungeonData;
         static Dictionary<int, Dictionary<string, string>> _diLightData;
         static Dictionary<int, Dictionary<string, string>> _diStatusEffects;
-        static Dictionary<int, Dictionary<string, string>> _diWorkers;
-        public static Dictionary<int, Dictionary<string, string>> DIWorkers => _diWorkers;
         static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
 
         static Dictionary<int, Dictionary<string, string>> _diTaskData;
@@ -134,7 +133,6 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diNPCData, @"Data\CharacterData", Content, null);
             LoadDictionary(ref _diMonsterData, @"Data\Monsters", Content, null);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
-            LoadDictionary(ref _diWorkers, @"Data\Workers", Content, null);
             LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);
             LoadDictionary(ref _diClasses, @"Data\Classes", Content, null);
             LoadDictionary(ref Config, @"Data\Config", Content, null);
@@ -269,11 +267,11 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-
         private static void LoadBMFonts(ContentManager Content)
         {
             _diBMFonts = new Dictionary<string, BitmapFont>();
             AddBMFont(@"Fonts\FontBattle", Content);
+            AddBMFont(FONT_NEW, Content);
             AddBMFont(FONT_MAIN, Content);
             AddBMFont(FONT_NUMBER_DISPLAY, Content);
             AddBMFont(FONT_STAT_DISPLAY, Content);
@@ -372,7 +370,7 @@ namespace RiverHollow.Game_Managers
                 {
                     case ItemEnum.Blueprint:
                         return new Blueprint(id, diData);
-                    case ItemEnum.Clothes:
+                    case ItemEnum.Clothing:
                         return new Clothing(id, diData); 
                     case ItemEnum.Consumable:
                         return new Consumable(id, diData, num);
@@ -510,9 +508,9 @@ namespace RiverHollow.Game_Managers
             return null;
         }
 
-        public static int GetWorkerNum()
+        public static int NumberOfClasses()
         {
-            return _diWorkers.Count;
+            return _diClasses.Count;
         }
 
         public static string GetCharacterNameByIndex(int i)

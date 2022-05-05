@@ -225,7 +225,7 @@ namespace RiverHollow.Characters
         {
             TextEntry rv = null;
 
-            foreach (RHTask q in PlayerManager.TaskLog)
+            foreach (RHTask q in TaskManager.TaskLog)
             {
                 q.AttemptProgress(this);
             }
@@ -235,18 +235,21 @@ namespace RiverHollow.Characters
                 rv = GetDialogEntry("Introduction");
                 Relationship = RelationShipStatusEnum.Friends;
             }
-            else
+            else if (!CheckTaskLog(ref rv))
             {
-                if (!CheckTaskLog(ref rv))
-                {
-                    if (_bShopIsOpen) { rv = _diDialogue["ShopOpen"]; }
-                    else if (!_bHasTalked) { rv = GetDailyDialogue(); }
-                    else
-                    {
-                        rv = _diDialogue["Selection"];
-                    }
+                if (_assignedTask != null) {
+                    _assignedTask.TaskIsTalking();
+                    rv = _diDialogue[_assignedTask.StartTaskDialogue];
                 }
+                else if (_bShopIsOpen) { rv = _diDialogue["ShopOpen"]; }
+                else if (!_bHasTalked) { rv = GetDailyDialogue(); }
+                else
+                {
+                    rv = _diDialogue["Selection"];
+                }
+
             }
+
             return rv;
         }
 
@@ -450,14 +453,14 @@ namespace RiverHollow.Characters
         {
             bool rv = false;
 
-            foreach (RHTask t in PlayerManager.TaskLog)
+            foreach (RHTask t in TaskManager.TaskLog)
             {
                 if (t.ReadyForHandIn && t.GoalNPC == this)
                 {
                     string taskCompleteKey = string.Empty;
-                    t.FinishTask(ref taskCompleteKey);
+                    t.TurnInTask();
 
-                    taskEntry = _diDialogue[taskCompleteKey];
+                    taskEntry = _diDialogue[t.EndTaskDialogue];
 
                     rv = true;
                     break;

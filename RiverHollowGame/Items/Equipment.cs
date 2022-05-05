@@ -39,7 +39,7 @@ namespace RiverHollow.Items
             //ESub
             if (stringData.ContainsKey("ESub"))
             {
-                if (GearType == GearTypeEnum.Body) { ArmorType = Util.ParseEnum<ArmorTypeEnum>(stringData["ESub"]); }
+                if (GearType == GearTypeEnum.Chest) { ArmorType = Util.ParseEnum<ArmorTypeEnum>(stringData["ESub"]); }
                 else if (GearType == GearTypeEnum.Weapon) { WeaponType = Util.ParseEnum<WeaponEnum>(stringData["ESub"]); }
             }
 
@@ -64,7 +64,7 @@ namespace RiverHollow.Items
 
             switch (GearType)
             {
-                case GearTypeEnum.Body:
+                case GearTypeEnum.Chest:
                     rv = HEAVY_ATTRIBUTE;
                     break;
                 case GearTypeEnum.Accessory:

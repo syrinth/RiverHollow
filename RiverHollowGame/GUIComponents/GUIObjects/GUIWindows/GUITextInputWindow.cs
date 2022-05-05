@@ -9,8 +9,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUITextInputWindow : GUITextWindow
     {
-        SideEnum _textLoc;
-        protected GUIText _gStatement;
         protected GUIText _gText;
         protected GUIMarker _gMarker;
 
@@ -28,66 +26,20 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextInputWindow(int maxLength = -1) : base()
         {
-            GameManager.TakeInput();
-
-            _gMarker = new GUIMarker();
             _iCurr = 0;
             _iMaxLength = maxLength != -1 ? maxLength : GameManager.MAX_NAME_LEN;
 
-            _bTakeInput = false;
-        }
+            _gText = new GUIText("");
+            _gMarker = new GUIMarker();
 
-        public GUITextInputWindow(string statement, SideEnum textLoc, int maxLength = -1) : this (maxLength)
-        {
-            StatementSetup(statement, textLoc);
-            _textLoc = textLoc;
-        }
-
-       public void SetupNaming()
-        {
-            _textLoc = SideEnum.Top;
-            StatementSetup("Enter Name:  ");
-            Width = Math.Max(_gStatement.Width, _gStatement.CharWidth * 10);
-            Resize(false);
-
-            CenterOnScreen();
-        }
-
-        private void StatementSetup(string text, SideEnum textLoc = SideEnum.Top)
-        {
-            _gStatement = new GUIText(text);
-
-            if (textLoc == SideEnum.Top)
-            {
-                Width = Math.Max(_gStatement.Width, _gStatement.CharWidth * 10);
-                Height = _gStatement.Height*2;
-            }
-            else if (textLoc == SideEnum.Left)
-            {
-                Width = _gStatement.Width + _gStatement.CharWidth * 10;
-                Height = _gStatement.Height;
-            }
-
-            _gStatement.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
-            _gStatement.SetColor(Color.White);
-
-            _gText = new GUIText();
-            _gStatement.SetColor(Color.White);
-
-            if (textLoc == SideEnum.Top)
-            {
-                _gText.AnchorAndAlignToObject(_gStatement, SideEnum.Bottom, SideEnum.Left);
-            }
-            else if (textLoc == SideEnum.Left)
-            {
-                _gText.AnchorAndAlignToObject(_gStatement, SideEnum.Right, SideEnum.Bottom, 10);
-            }
+            _gText.AnchorToInnerSide(this, SideEnum.TopLeft);
             _gMarker.Position(_gText.Position());
-            
+
             AddControl(_gText);
             AddControl(_gMarker);
 
-            Resize(false);
+            Width = GameManager.ScaleIt(80);
+            Height = GameManager.ScaleIt(21);
         }
 
         public override void Update(GameTime gTime)
@@ -140,11 +92,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                                     }
                                 }
 
-                                _gMarker.Position(_gText.Position());
-                                if (_gText.Text.Length > 0)
-                                {
-                                    _gMarker.PositionAdd(new Vector2(_gText.MeasureString(_iCurr).X, 0));
-                                }
+                                UpdateMarkerPosition();
                             }
                         }
                     }
@@ -195,7 +143,17 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             _iCurr = text.Length;
             _gText.SetText(text);
+            UpdateMarkerPosition();
+        }
+
+        public void UpdateMarkerPosition()
+        {
+            _gText.AnchorToInnerSide(this, SideEnum.Top);
             _gMarker.Position(_gText.Position());
+            if (_gText.Text.Length > 0)
+            {
+                _gMarker.PositionAdd(new Vector2(_gText.MeasureString(_iCurr).X, 0));
+            }
         }
 
         public void HideCursor()

@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Buildings;
 using RiverHollow.Characters;
-using RiverHollow.CombatStuff;
 using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 using RiverHollow.Map_Handling;
@@ -14,8 +13,6 @@ using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.GUIComponents.GUIObjects;
-using static RiverHollow.WorldObjects.Buildable;
-using static RiverHollow.Characters.TravellingNPC;
 using RiverHollow.Characters.Lite;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
@@ -26,7 +23,6 @@ namespace RiverHollow.Game_Managers
     {
         #region Properties
         public static bool Busy { get; private set; }
-        public static List<RHTask> TaskLog { get; private set; }
 
         public static double MaxStamina = 100;
         public static double Stamina = MaxStamina;
@@ -113,7 +109,6 @@ namespace RiverHollow.Game_Managers
             _liUniqueItemsBought = new List<int>();
             _diTools = new Dictionary<ToolEnum, Tool>();
 
-            TaskLog = new List<RHTask>();
             PlayerActor = new PlayerCharacter();
             PlayerCombatant = new ClassedCombatant();
 
@@ -257,91 +252,6 @@ namespace RiverHollow.Game_Managers
             //}
 
             return rv;
-        }
-
-        /// <summary>
-        /// Adds a Task to the Task Log.
-        /// 
-        /// First we guard against adding any Task that has been Finished. It should never
-        /// happen, but just to be sure.
-        /// 
-        /// Upon adding a Task to the Task Log, we should see if the Task is complete/nearly complete.
-        /// 
-        /// Some Tasks may involve the defeat of a Task specific monster. If such a monster exists, spawn it now.
-        /// </summary>
-        /// <param name="t">The Task to add</param>
-        public static void AddToTaskLog(RHTask t)
-        {
-            if (!t.Finished)
-            {
-                foreach (Item i in InventoryManager.PlayerInventory) { if (i != null) { t.AttemptProgress(i); } }
-                foreach (int k in PlayerManager.GetTownObjects().Keys)
-                {
-                    t.AttemptStructureBuildProgress(k);
-                }
-
-                t.SpawnTaskMobs();
-                TaskLog.Add(t);
-
-                GUIManager.NewAlertIcon("New Task");
-            }
-        }
-        public static void AdvanceTaskProgress(WorldObject obj)
-        {
-            foreach (RHTask q in TaskLog)
-            {
-                if (q.AttemptStructureBuildProgress(obj.ID))
-                {
-                    break;
-                }
-            }
-        }
-        public static void AdvanceTaskProgress(Monster m)
-        {
-            foreach (RHTask q in TaskLog)
-            {
-                if (q.AttemptProgress(m))
-                {
-                    break;
-                }
-            }
-        }
-        public static void AdvanceTaskProgress(Item i)
-        {
-            foreach(RHTask q in TaskLog)
-            {
-                if (q.AttemptProgress(i))
-                {
-                    break;
-                }
-            }
-        }
-        public static void TaskProgressEnterBuilding(int buildingID)
-        {
-            if (buildingID != -1)
-            {
-                foreach (RHTask q in TaskLog)
-                {
-                    if (q.TaskProgressEnterBuilding(buildingID))
-                    {
-                        break;
-                    }
-                }
-            }
-        }
-        public static void RemoveTaskProgress(Item i)
-        {
-            foreach (RHTask q in TaskLog)
-            {
-                if (q.RemoveProgress(i))
-                {
-                    break;
-                }
-            }
-        }
-        public static bool HasTaskID(int taskID)
-        {
-            return TaskLog.Find(t => t.TaskID == taskID) != null;
         }
 
         #region Crafting Dictionary
@@ -753,7 +663,7 @@ namespace RiverHollow.Game_Managers
                 hairColor = PlayerManager.PlayerActor.HairColor,
                 hairIndex = PlayerManager.PlayerActor.HairIndex,
                 hat = Item.SaveData(PlayerActor.Hat),
-                chest = Item.SaveData(PlayerActor.Body),
+                chest = Item.SaveData(PlayerActor.Chest),
                 adventurerData = PlayerCombatant.SaveClassedCharData(),
                 currentClass = PlayerCombatant.CharacterClass.ID,
                 weddingCountdown = WeddingCountdown,

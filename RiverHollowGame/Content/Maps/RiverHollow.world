@@ -1,0 +1,41 @@
+{
+    "maps": [
+        {
+            "fileName": "Town/mapTown.tmx",
+            "height": 1280,
+            "width": 1280,
+            "x": 0,
+            "y": 0
+        },
+        {
+            "fileName": "Misc/mapNewWoods.tmx",
+            "height": 2016,
+            "width": 2000,
+            "x": -2000,
+            "y": -736
+        },
+        {
+            "fileName": "Misc/mapNewFoothills.tmx",
+            "height": 1024,
+            "width": 1280,
+            "x": 0,
+            "y": -1024
+        },
+        {
+            "fileName": "Misc/mapSwamp.tmx",
+            "height": 1280,
+            "width": 1920,
+            "x": -640,
+            "y": 1280
+        },
+        {
+            "fileName": "Misc/mapEast.tmx",
+            "height": 1280,
+            "width": 1280,
+            "x": 1280,
+            "y": 0
+        }
+    ],
+    "onlyShowAdjacentMaps": false,
+    "type": "world"
+}

@@ -44,7 +44,7 @@ namespace RiverHollow.Map_Handling
         internal void Talk()
         {
             (DataManager.DIVillagers[_iShopID]).SetShopOpenStatus(true);
-            (DataManager.DIVillagers[_iShopID]).Talk();
+            (DataManager.DIVillagers[_iShopID]).StartConversation();
             (DataManager.DIVillagers[_iShopID]).SetShopOpenStatus(false);
         }
     }

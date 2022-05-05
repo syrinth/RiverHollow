@@ -4,7 +4,7 @@
   <property name="ActiveSpawn" type="int" value="3"/>
   <property name="Dungeon" value="Cave"/>
   <property name="MapType" value="Cave"/>
-  <property name="Resources" value="55-C|53-C|56-U|76-R|78-M|80-U"/>
+  <property name="Resources" value="55-C|53-C|56-U|77-R|79-M|81-U"/>
   <property name="ResourcesMinMax" value="50-75"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetDungeon.tsx"/>

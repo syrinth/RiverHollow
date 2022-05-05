@@ -68,9 +68,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         protected Rectangle _sourceRect;
 
-        protected Color _cColor = Color.White;
+        protected Color _Color = Color.White;
+        public Color ObjColor => _Color;
         protected Texture2D _texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
-        protected Color EnabledColor => _bEnabled ? _cColor : Color.Gray;
+        protected Color EnabledColor => _bEnabled ? _Color : Color.Gray;
         protected bool _bEnabled = true;
         public bool Enabled => _bEnabled && _bShow;
 
@@ -138,7 +139,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public virtual void SetColor(Color c)
         {
-            _cColor = c;
+            _Color = c;
         }
 
         public static Vector2 PosFromCenter(Vector2 center, int width, int height)
@@ -350,6 +351,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 g.MemberOf = this;
             }
         }
+        public void CleanControls()
+        {
+            List<GUIObject> ControlCopy = new List<GUIObject>(Controls);
+            for(int i = 0; i < ControlCopy.Count; i++)
+            {
+                RemoveControl(ControlCopy[i]);
+            }
+        }
         public virtual void RemoveControl(GUIObject control)
         {
             if (control != null && Controls.Contains(control))
@@ -478,22 +487,22 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
-        internal void AnchorAndAlignToObject(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, int spacing = 0)
+        internal void AnchorAndAlignToObject(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, int spacing = 0, bool addToWindow = true)
         {
-            AnchorToObject(focus, sidePlacement, spacing);
-            AlignToObject(focus, sideToAlign);
+            AnchorToObject(focus, sidePlacement, spacing, addToWindow);
+            AlignToObject(focus, sideToAlign, addToWindow);
         }
-        internal Vector2 GetAnchorAndAlignToObject(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, int spacing = 0)
+        internal Vector2 GetAnchorAndAlignToObject(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, int spacing = 0, bool addToWindow = true)
         {
             GUIObject g = new GUIObject(this);
-            g.AnchorToObject(focus, sidePlacement, spacing);
-            g.AlignToObject(focus, sideToAlign);
+            g.AnchorToObject(focus, sidePlacement, spacing, addToWindow);
+            g.AlignToObject(focus, sideToAlign, addToWindow);
 
             return g.Position();
         }
-        internal void AnchorToObject(GUIObject focus, SideEnum sidePlacement, int spacing = 0)
+        internal void AnchorToObject(GUIObject focus, SideEnum sidePlacement, int spacing = 0, bool addToWindow = true)
         {
-            if (focus.ParentWindow != null) { focus.ParentWindow.AddControl(this); }
+            if (focus.ParentWindow != null && addToWindow) { focus.ParentWindow.AddControl(this); }
 
             Vector2 position = focus.Position();
             switch (sidePlacement)

@@ -43,7 +43,7 @@ namespace Database_Editor.Classes
         public static readonly string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         public static readonly string TAGS_FOR_CLASSES = "Class";
         public static readonly string TAGS_FOR_SHOPDATA = "ShopData,TargetShopID";
-        public static readonly string TAGS_FOR_CHARACTERS = "NPC_ID,MobID,Actors,Move,Face,Speak,Speed,Activate,Deactivate,Join,Combat";
+        public static readonly string TAGS_FOR_CHARACTERS = "NPC_ID,MobID,Actors,Move,Face,Speak,Speed,Activate,Deactivate,Join,Combat,StartNPC,GoalNPC";
         public static readonly string TAGS_FOR_STATUS_EFFECTS = "StatusEffectID";
         public static readonly string TAGS_FOR_LIGHTS = "LightID";
         public static readonly string TAGS_FOR_MONSTERS = "MonsterID";
@@ -51,7 +51,7 @@ namespace Database_Editor.Classes
         public static readonly string TAGS_FOR_TASKS = "TaskID";
 
         public static readonly string ITEM_REF_TAGS = "ReqItems,Place";
-        public static readonly string TASK_REF_TAGS = "GoalItem,ItemRewardID,BuildingID,UnlockBuildingID,TargetObjectID,RequiredObjectID";
+        public static readonly string TASK_REF_TAGS = "GoalItem,ItemRewardID,BuildingID,UnlockBuildingID,TargetObjectID,RequiredObjectID,StartNPC,GoalNPC";
         public static readonly string CHARACTER_REF_TAGS = "BuildingID,Collection,Class,MobID,MonsterID,ShopData,HouseID,RequiredBuildingID,RequiredObjectID,RequestIDs";
         public static readonly string WORLD_OBJECT_REF_TAGS = "ReqItems,LightID,Makes,Processes,ItemID,SubObjects,SeedID,HoneyID,LightID";
         public static readonly string CLASSES_REF_TAGS = "GearID,Ability,Spell";
@@ -61,7 +61,7 @@ namespace Database_Editor.Classes
         public static readonly string ACTIONS_REF_TAGS = "StatusEffectID,NPC_ID";
         public static readonly string DUNGEON_REF_TAGS = "ObjectID,MonsterID,EntranceID";
         public static readonly string TEXTFILE_REF_TAGS = "ItemID,UnlockObjectID,UnlockItemID,TargetShopID,TaskID";
-        public static readonly string CUTSCENE_REF_TAGS = "";
+        public static readonly string CUTSCENE_REF_TAGS = "Actors,Move,Face,Speak,Speed,Activate,Deactivate,Join,Combat";
 
         public static readonly string MAP_REF_TAGS = "ItemKeyID,ItemID,Resources,ObjectID,NPC_ID,MobID";
         #endregion

@@ -19,6 +19,7 @@ namespace RiverHollow.Characters
         AnimatedSprite _sprHair;
         public AnimatedSprite HairSprite => _sprHair;
         public Color HairColor { get; private set; } = Color.White;
+        public Color EyeColor { get; private set; } = Color.White;
         public int HairIndex { get; private set; } = 0;
         public int BodyType { get; private set; } = 1;
         public string BodyTypeStr => BodyType.ToString("00");
@@ -26,9 +27,9 @@ namespace RiverHollow.Characters
         public bool CanBecomePregnant { get; set; }
         public bool Pregnant { get; set; }
 
-        protected override List<AnimatedSprite> GetSprites()
+        public override List<AnimatedSprite> GetSprites()
         {
-            List<AnimatedSprite> liRv = new List<AnimatedSprite>() { _sprBody, _sprEyes, _sprHair, Body?.Sprite, Hat?.Sprite, Legs?.Sprite };
+            List<AnimatedSprite> liRv = new List<AnimatedSprite>() { _sprBody, _sprEyes, _sprHair, Chest?.Sprite, Hat?.Sprite, Legs?.Sprite };
             liRv.RemoveAll(x => x == null);
             return liRv;
         }
@@ -47,7 +48,7 @@ namespace RiverHollow.Characters
 
         #region Clothing
         public Clothing Hat { get; private set; }
-        public Clothing Body { get; private set; }
+        public Clothing Chest { get; private set; }
         Clothing Back;
         Clothing Hands;
         public Clothing Legs { get; private set; }
@@ -66,6 +67,7 @@ namespace RiverHollow.Characters
             _iBodyHeight = HUMAN_HEIGHT;
 
             HairColor = Color.Red;
+            EyeColor = Color.Blue;
 
             _liTilePath = new List<RHTile>();
 
@@ -81,6 +83,7 @@ namespace RiverHollow.Characters
 
             _sprBody.SetColor(Color.White);
             _sprHair.SetColor(HairColor);
+            _sprEyes.SetColor(EyeColor);
 
             SpdMult = NORMAL_SPEED;
         }
@@ -92,7 +95,7 @@ namespace RiverHollow.Characters
             _sprEyes.Draw(spriteBatch, useLayerDepth);
             _sprHair.Draw(spriteBatch, useLayerDepth);
 
-            Body?.Sprite.Draw(spriteBatch, useLayerDepth);
+            Chest?.Sprite.Draw(spriteBatch, useLayerDepth);
             Hat?.Sprite.Draw(spriteBatch, useLayerDepth);
             Legs?.Sprite.Draw(spriteBatch, useLayerDepth);
         }
@@ -116,12 +119,19 @@ namespace RiverHollow.Characters
             HairColor = c;
             SetColor(_sprHair, c);
         }
-        public void SetHairType(int index)
+
+        public void SetEyeColor(Color c)
         {
+            EyeColor = c;
+            SetColor(_sprEyes, c);
+        }
+        public void SetHairType(int index)
+        { 
             HairIndex = index;
             //Loads the Sprites for the players hair animations for the class based off of the hair ID
             LoadSpriteAnimations(ref _sprHair, Util.LoadWorldAnimations(DataManager.Config[17]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex));
             _sprHair.SetLayerDepthMod(HAIR_DEPTH);
+            _sprHair.SetColor(HairColor);
         }
 
         public void MoveBy(int x, int y)
@@ -133,12 +143,14 @@ namespace RiverHollow.Characters
         public override void PlayAnimation<TEnum>(TEnum anim)
         {
             foreach (AnimatedSprite spr in GetSprites()) { spr.PlayAnimation(anim); }
+            Chest?.Sprite.PlayAnimation(anim);
         }
         public override void PlayAnimation(VerbEnum verb, DirectionEnum dir)
         {
             if (verb == VerbEnum.Walk && ActiveMount != null) { verb = VerbEnum.Idle; }
 
             foreach (AnimatedSprite spr in GetSprites()) { spr.PlayAnimation(verb, dir); }
+            Chest?.Sprite.PlayAnimation(verb, dir);
         }
 
         public void SetScale(int scale = 1)
@@ -150,12 +162,12 @@ namespace RiverHollow.Characters
         {
             if (c != null)
             {
-                string clothingTexture = string.Format(@"Textures\Items\Gear\{0}\{1}", c.ClothesType.ToString(), c.TextureAnimationName);
+                string clothingTexture = string.Format(@"Textures\Items\Clothing\{0}\{1}", c.ClothesType.ToString(), c.TextureKey);
                 if (!c.GenderNeutral) { clothingTexture += ("_" + BodyTypeStr); }
 
                 LoadSpriteAnimations(ref c.Sprite, Util.LoadWorldAnimations(DataManager.Config[17]), clothingTexture);
 
-                if (c.SlotMatch(ClothingEnum.Body)) { Body = c; }
+                if (c.SlotMatch(ClothingEnum.Chest)) { Chest = c; }
                 else if (c.SlotMatch(ClothingEnum.Hat))
                 {
                     _sprHair.FrameCutoff = 9;
@@ -172,7 +184,7 @@ namespace RiverHollow.Characters
 
         public void RemoveClothes(ClothingEnum c)
         {
-            if (c.Equals(ClothingEnum.Body)) { Body = null; }
+            if (c.Equals(ClothingEnum.Chest)) { Chest = null; }
             else if (c.Equals(ClothingEnum.Hat))
             {
                 _sprHair.FrameCutoff = 0;
@@ -184,7 +196,7 @@ namespace RiverHollow.Characters
         {
             BodyType = val;
             SetClothes(Hat);
-            SetClothes(Body);
+            SetClothes(Chest);
             SetClothes(Legs);
         }
 

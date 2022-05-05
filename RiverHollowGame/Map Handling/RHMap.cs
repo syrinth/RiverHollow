@@ -1615,7 +1615,7 @@ namespace RiverHollow.Map_Handling
                     if (TownModeBuild())
                     {
                         if (GameManager.BuildFromStorage) { PlayerManager.RemoveFromStorage(toBuild.ID); }
-                        if (!toBuild.CompareType(ObjectTypeEnum.Building)) { PlayerManager.AdvanceTaskProgress(toBuild); }
+                        if (!toBuild.CompareType(ObjectTypeEnum.Building)) { TaskManager.AdvanceTaskProgress(toBuild); }
 
                         LeaveTownMode();
                         FinishBuilding();

@@ -62,7 +62,7 @@ namespace RiverHollow.Characters
             {
                 PlayAnimation(AnimationEnum.Action_Finished);
                 PlayerManager.AllowMovement = true;
-                base.Talk(false);
+                base.StartConversation(false);
             }
             else if (IsCurrentAnimation(AnimationEnum.Action2) && _sprBody.CurrentFrameAnimation.PlayCount == 1)
             {

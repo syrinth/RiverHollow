@@ -376,7 +376,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             public TextEntry SelectionEntry { get; private set; }
 
-            public SelectionData(TextEntry textEntry, string fontName = DataManager.FONT_MAIN)
+            public SelectionData(TextEntry textEntry, string fontName = DataManager.FONT_NEW)
             {
                 SelectionEntry = textEntry;
                 _gText = new GUIText(textEntry.GetFormattedText(), true, fontName);

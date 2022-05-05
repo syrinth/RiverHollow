@@ -78,8 +78,6 @@ namespace RiverHollow.Game_Managers
         private static List<TriggerObject> _liTriggerObjects;
         private static List<Spirit> _liSpirits;
         private static List<Machine> _liMachines;
-
-        public static Dictionary<int, RHTask> DITasks;
         public static Dictionary<int, Shop> DIShops;
         #endregion
 
@@ -119,12 +117,6 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadManagedDataLists()
         {
-            DITasks = new Dictionary<int, RHTask>();
-            foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.DiTaskData)
-            {
-                DITasks.Add(kvp.Key, new RHTask(kvp.Key, kvp.Value));
-            }
-
             DIShops = DataManager.GetShopInfoList();
         }
 

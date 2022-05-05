@@ -74,11 +74,8 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Maps")]
             public List<MapData> MapData;
 
-            [XmlArray(ElementName = "PlotTasks")]
-            public List<TaskData> PlotTaskData;
-
-            [XmlArray(ElementName = "TaskLog")]
-            public List<TaskData> TaskLogData;
+            [XmlArray(ElementName = "TaskInfo")]
+            public List<TaskData> TaskInfo;
 
             [XmlArray(ElementName = "CurrentMissions")]
             public List<MissionData> CurrentMissions;
@@ -639,8 +636,7 @@ namespace RiverHollow.Game_Managers
                 Tools = PlayerManager.SaveToolData(),
                 Buildings = new List<BuildingData>(),
                 MapData = new List<MapData>(),
-                PlotTaskData = new List<TaskData>(),
-                TaskLogData = new List<TaskData>(),
+                TaskInfo = new List<TaskData>(),
                 CurrentMissions = new List<MissionData>(),
                 AvailableMissions = new List<MissionData>(),
                 VillagerData = new List<VillagerData>(),
@@ -657,15 +653,7 @@ namespace RiverHollow.Game_Managers
                 data.MapData.Add(tileMap.SaveData());
             }
 
-            foreach (RHTask q in GameManager.DITasks.Values)
-            {
-                data.PlotTaskData.Add(q.SaveData());
-            }
-
-            foreach (RHTask q in PlayerManager.TaskLog)
-            {
-                data.TaskLogData.Add(q.SaveData());
-            }
+            data.TaskInfo = TaskManager.SaveTaskData();
 
             //foreach (Mission m in MissionManager.AvailableMissions)
             //{
@@ -821,21 +809,7 @@ namespace RiverHollow.Game_Managers
             //Needs to be here because the Mailbox is a worldobject
             PlayerManager.PlayerMailbox.LoadData(dataToLoad.TheMailbox);
 
-            foreach (TaskData q in dataToLoad.PlotTaskData)
-            {
-                RHTask plotTask = GameManager.DITasks[q.taskID];
-                plotTask.LoadData(q);
-            }
-            foreach (TaskData q in dataToLoad.TaskLogData)
-            {
-                RHTask newTask = new RHTask();
-
-                //We've already loaded plotQuests, no need to redo it
-                if (q.taskID == -1) { newTask.LoadData(q); }
-                else { newTask = GameManager.DITasks[q.taskID]; }
-
-                PlayerManager.AddToTaskLog(newTask);
-            }
+            TaskManager.LoadTaskData(dataToLoad.TaskInfo);
 
             foreach (VillagerData n in dataToLoad.VillagerData)
             {

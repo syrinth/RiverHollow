@@ -336,7 +336,7 @@ Exit:
                 //Only perform this check if we are adding to the playerInventory
                 if (inventory == PlayerInventory)
                 {
-                    PlayerManager.AdvanceTaskProgress(itemToAdd);
+                    TaskManager.AdvanceTaskProgress(itemToAdd);
 
                     if (!noDisplay)
                     {
@@ -397,7 +397,7 @@ Exit:
                     }
                     if (inventory == PlayerInventory)
                     {
-                        PlayerManager.AdvanceTaskProgress(item);
+                        TaskManager.AdvanceTaskProgress(item);
                     }
                     rv = true;
                 }
@@ -428,7 +428,7 @@ Exit:
         {
             if (inventory == PlayerInventory)
             {
-                PlayerManager.RemoveTaskProgress(inventory[row, column]);
+                TaskManager.RemoveTaskProgress(inventory[row, column]);
             }
 
             inventory[row, column] = null;
@@ -470,7 +470,7 @@ Exit:
                         {
                             if (PlayerInventory[i, j] != null)
                             {
-                                PlayerManager.RemoveTaskProgress(inventory[i, j]);
+                                TaskManager.RemoveTaskProgress(inventory[i, j]);
                             }
                         }
                         //null the item and exit

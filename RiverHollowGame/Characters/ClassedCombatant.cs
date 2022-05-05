@@ -160,7 +160,7 @@ namespace RiverHollow.Characters.Lite
         public void AssignStartingGear()
         {
             _diGear[GearTypeEnum.Weapon] = (Equipment)DataManager.GetItem(_class.WeaponID);
-            _diGear[GearTypeEnum.Body] = (Equipment)DataManager.GetItem(_class.ArmorID);
+            _diGear[GearTypeEnum.Chest] = (Equipment)DataManager.GetItem(_class.ArmorID);
             _diGear[GearTypeEnum.Head] = (Equipment)DataManager.GetItem(_class.HeadID);
             _diGear[GearTypeEnum.Accessory] = (Equipment)DataManager.GetItem(_class.AccessoryID);
 
@@ -171,7 +171,7 @@ namespace RiverHollow.Characters.Lite
         {
             ClassedCharData advData = new ClassedCharData
             {
-                armor = Item.SaveData(_diGear[GearTypeEnum.Body]),
+                armor = Item.SaveData(_diGear[GearTypeEnum.Chest]),
                 weapon = Item.SaveData(_diGear[GearTypeEnum.Weapon]),
                 level = ClassLevel,
                 xp = CurrentXP
@@ -181,7 +181,7 @@ namespace RiverHollow.Characters.Lite
         }
         public void LoadClassedCharData(ClassedCharData data)
         {
-            _diGear[GearTypeEnum.Body] = (Equipment)DataManager.GetItem(data.armor.itemID);
+            _diGear[GearTypeEnum.Chest] = (Equipment)DataManager.GetItem(data.armor.itemID);
             _diGear[GearTypeEnum.Weapon] = (Equipment)DataManager.GetItem(data.weapon.itemID);
             ClassLevel = data.level;
             CurrentXP = data.xp;

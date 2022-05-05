@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Misc;
+using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
@@ -26,6 +28,7 @@ namespace RiverHollow.Characters
         public int FriendshipPoints = 1600;
 
         protected bool _bHasTalked;
+        protected RHTask _assignedTask;
 
         public bool CanGiveGift = true;
 
@@ -45,16 +48,56 @@ namespace RiverHollow.Characters
             _liSpokenKeys = new List<string>();
         }
 
+        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
+        {
+            base.Draw(spriteBatch, useLayerDepth);
+            if (_bOnTheMap && _assignedTask?.TaskState == TaskStateEnum.Assigned)
+            {
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)Position.X, (int)Position.Y - 32, 16, 16), new Rectangle(224, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, 99999999);
+            }
+        }
+
+        public bool AssignTask(RHTask task)
+        {
+            bool rv = false;
+
+            if (_assignedTask == null)
+            {
+                rv = true;
+                _assignedTask = task;
+            }
+
+            return rv;
+        }
+
         public virtual TextEntry Gift(Item item) { return null; }
         public virtual TextEntry JoinParty() { return null; }
         public virtual void OpenShop() { }
         public virtual TextEntry OpenRequests() { return null; }
 
-        public virtual void StopTalking() { ResetActorFace(); }
+        public virtual void StopTalking() {
+            ResetActorFace();
+
+            if(_assignedTask?.TaskState == TaskStateEnum.Talking)
+            {
+                _assignedTask.AddTaskToLog();
+                _assignedTask = null;
+            }
+        }
 
         public override void ProcessRightButtonClick()
         {
-            Talk();
+            StartConversation();
+        }
+
+        /// <summary>
+        ///  Retrieves any opening text, processes it, then opens a text window
+        /// </summary>
+        /// <param name="facePlayer">Whether the NPC should face the player. Mainly used to avoid messing up a cutscene</param>
+        public virtual void StartConversation(bool facePlayer = true)
+        {
+            FacePlayer(true);
+            GUIManager.OpenTextWindow(GetOpeningText(), this, true, true);
         }
 
         /// <summary>
@@ -62,7 +105,7 @@ namespace RiverHollow.Characters
         /// and opens a new window for it.
         /// </summary>
         /// <param name="dialogTag">The dialog tag to talk with</param>
-        public void Talk(string dialogTag)
+        public void ContinueConversation(string dialogTag)
         {
             TextEntry text = null;
             if (_diDialogue.ContainsKey(dialogTag))
@@ -71,49 +114,6 @@ namespace RiverHollow.Characters
             }
 
             GUIManager.OpenTextWindow(text, this, true, true);
-        }
-
-        /// <summary>
-        ///  Retrieves any opening text, processes it, then opens a text window
-        /// </summary>
-        /// <param name="facePlayer">Whether the NPC should face the player. Mainly used to avoid messing up a cutscene</param>
-        public virtual void Talk(bool facePlayer = true)
-        {
-            FacePlayer(true);
-            GUIManager.OpenTextWindow(GetOpeningText(), this, true, true);
-        }
-        protected void FacePlayer(bool facePlayer)
-        {
-            //Determine the position based off of where the player is and then have the NPC face the player
-            //Only do this if they are idle so as to not disturb other animations they may be performing.
-            if (facePlayer && BodySprite.CurrentAnimation.StartsWith("Idle"))
-            {
-                Point diff = GetRectangle().Center - PlayerManager.PlayerActor.GetRectangle().Center;
-                if (Math.Abs(diff.X) > Math.Abs(diff.Y))
-                {
-                    if (diff.X > 0)  //The player is to the left
-                    {
-                        Facing = DirectionEnum.Left;
-                    }
-                    else
-                    {
-                        Facing = DirectionEnum.Right;
-                    }
-                }
-                else
-                {
-                    if (diff.Y > 0)  //The player is above
-                    {
-                        Facing = DirectionEnum.Up;
-                    }
-                    else
-                    {
-                        Facing = DirectionEnum.Down;
-                    }
-                }
-
-                PlayAnimationVerb(VerbEnum.Idle);
-            }
         }
 
         public void TalkCutscene(TextEntry cutsceneEntry)

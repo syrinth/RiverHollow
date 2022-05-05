@@ -150,7 +150,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 ArmorType = armorType;
             }
-            public SpecializedBox(ClothingEnum clothesType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Clothes, item, del)
+            public SpecializedBox(ClothingEnum clothesType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Clothing, item, del)
             {
                 ClothingType = clothesType;
             }

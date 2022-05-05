@@ -6,7 +6,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapWoods][Player][Actors:2-CS0|29-CS0_Mob][Deactivate:2]</Item>
-        <Item>[Speak:2-1][Activate:2][Move:2-10-Up][Move:2-5-Right][Speak:2-2][Join:2][Move:2-4-Right|Player-7-Left][Combat:30]</Item>
+        <Item>[Speak:2-1][Activate:2][Move:2-9-Up][Move:2-7-Right][Speak:2-2][Join:2][Move:2-2-Right|Player-7-Left][Combat:29]</Item>
       </Value>
     </Item>
     <Item>

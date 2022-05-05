@@ -303,15 +303,15 @@
     </Item>
     <Item>
       <Key>75</Key>
-      <Value>[Type:Resource][Image:9-8][Value:3][Stacks][Place:102]</Value>
+      <Value>[Type:Resource][Image:9-8][Value:3][Stacks][Place:103]</Value>
     </Item>
     <Item>
       <Key>76</Key>
-      <Value>[Type:Resource][Image:2-2][Value:3][Stacks][Place:96]</Value>
+      <Value>[Type:Resource][Image:2-2][Value:3][Stacks][Place:97]</Value>
     </Item>
     <Item>
       <Key>77</Key>
-      <Value>[Type:Resource][Image:3-2][Value:1500][Stacks][Place:103]</Value>
+      <Value>[Type:Resource][Image:3-2][Value:1500][Stacks][Place:104]</Value>
     </Item>
     <Item>
       <Key>78</Key>
@@ -491,7 +491,7 @@
     </Item>
     <Item>
       <Key>122</Key>
-      <Value>[Type:Equipment][Subtype:Body][Image:0-0][Value:1000][ESub:Cloth][ASlot:Armor][Tier:1][Defence:Minor][Magic:Major][Resistance:Major][Vitality:Moderate][ReqItems:7-3]</Value>
+      <Value>[Type:Equipment][Subtype:Chest][Image:0-0][Value:1000][ESub:Cloth][ASlot:Armor][Tier:1][Defence:Minor][Magic:Major][Resistance:Major][Vitality:Moderate][ReqItems:7-3]</Value>
     </Item>
     <Item>
       <Key>123</Key>
@@ -675,23 +675,23 @@
     </Item>
     <Item>
       <Key>168</Key>
-      <Value>[Type:Clothes][Subtype:Body][Image:7-0][ReqItems:2-10|0-5][TexName:400][Row:1]</Value>
+      <Value>[Type:Clothing][Subtype:Chest][Image:0-0][ReqItems:2-10|0-5][Key:Blue_Tunic][Row:1]</Value>
     </Item>
     <Item>
       <Key>169</Key>
-      <Value>[Type:Clothes][Subtype:Body][Image:7-0][ReqItems:2-10|0-5][TexName:400][Row:1]</Value>
+      <Value>[Type:Clothing][Subtype:Chest][Image:7-0][ReqItems:2-10|0-5][TexName:400][Row:1]</Value>
     </Item>
     <Item>
       <Key>170</Key>
-      <Value>[Type:Clothes][Subtype:Hat][Image:0-4][Value:0][Row:0][TexName:400]</Value>
+      <Value>[Type:Clothing][Subtype:Hat][Image:0-4][Value:0][Row:0][TexName:400]</Value>
     </Item>
     <Item>
       <Key>171</Key>
-      <Value>[Type:Clothes][Subtype:Body][Image:1-4][Value:0][Row:1][TexName:401]</Value>
+      <Value>[Type:Clothing][Subtype:Chest][Image:1-4][Value:0][Row:1][TexName:401]</Value>
     </Item>
     <Item>
       <Key>172</Key>
-      <Value>[Type:Clothes][Subtype:Legs][Image:2-4][Value:0][Row:2][TexName:404]</Value>
+      <Value>[Type:Clothing][Subtype:Legs][Image:2-4][Value:0][Row:2][TexName:404]</Value>
     </Item>
     <Item>
       <Key>173</Key>

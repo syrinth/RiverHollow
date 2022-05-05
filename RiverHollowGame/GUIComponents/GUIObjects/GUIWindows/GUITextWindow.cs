@@ -42,7 +42,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextWindow() : base()
         {
-            _giText = new GUIText();
+            _giText = new GUIText("", true, DataManager.FONT_MAIN);
             _liTextPages = new List<string>();
             _iCharWidth = _giText.CharWidth;
             _iCharHeight = _giText.CharHeight;
@@ -83,21 +83,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _giText.SetText(totalVal);
             Position(position);
 
-            _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
-            Resize();
-        }
-
-        //Temporary TextWindow that just shows up briefly and is disposed of later.
-        //MAR this should probably be deleted.
-        public GUITextWindow(TextEntry text, double duration) : this()
-        {
-            _textEntry = text;
-            _textEntry.HandlePreWindowActions();
-            SyncText(_textEntry.GetFormattedText());
-            Duration = duration;
-
-            Height = _iCharHeight;
-            Width = (int)_giText.TextSize.X;
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
             Resize();
         }

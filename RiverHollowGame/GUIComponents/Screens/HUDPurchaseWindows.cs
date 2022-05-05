@@ -96,7 +96,7 @@ namespace RiverHollow.GUIComponents.Screens
         public PurchaseBox(Item i, int cost, int mainWidth, EmptyDelegate action) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
         {
             _action = action;
-            _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
+            _font = DataManager.GetBitMapFont(DataManager.FONT_NEW);
             Cost = cost;
             ShopItem = i;
             _giItem = new GUIImage(ShopItem.SourceRectangle, ScaledTileSize, ScaledTileSize, ShopItem.Texture);
@@ -114,7 +114,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _action = action;
             WorldObject = obj;
-            _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
+            _font = DataManager.GetBitMapFont(DataManager.FONT_NEW);
             Cost = cost;
             _gTextName = new GUIText(obj.Name());
 
@@ -128,7 +128,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _action = action;
             Actor = actor;
-            _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
+            _font = DataManager.GetBitMapFont(DataManager.FONT_NEW);
             Cost = cost;
             _gTextName = new GUIText(actor.Name());
 

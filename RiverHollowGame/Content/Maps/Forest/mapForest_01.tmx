@@ -96,7 +96,7 @@
    <properties>
     <property name="ItemKeyID" type="int" value="43"/>
     <property name="MatchTrigger" value="VALID_ITEM"/>
-    <property name="ObjectID" type="int" value="72"/>
+    <property name="ObjectID" type="int" value="73"/>
     <property name="OutTrigger" value="Forest_Entrance_Open"/>
    </properties>
   </object>
@@ -104,7 +104,7 @@
    <properties>
     <property name="ItemKeyID" type="int" value="44"/>
     <property name="MatchTrigger" value="VALID_ITEM"/>
-    <property name="ObjectID" type="int" value="72"/>
+    <property name="ObjectID" type="int" value="73"/>
     <property name="OutTrigger" value="Forest_Entrance_Open"/>
    </properties>
   </object>

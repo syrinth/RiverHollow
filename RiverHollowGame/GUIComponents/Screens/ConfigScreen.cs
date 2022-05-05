@@ -226,18 +226,18 @@ namespace RiverHollow.GUIComponents.Screens
 
                 _delAction = action;
 
-                _gName = new GUITextInputWindow("Name:", SideEnum.Left, 10);
-                _gName.AnchorToInnerSide(_winMain, SideEnum.TopLeft);
-                _gMap = new GUITextInputWindow("MapName:", SideEnum.Left, 60);
-                _gMap.AllowAll = true;
-                _gMap.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left);
-                _gX = new GUITextInputWindow("X:", SideEnum.Left, 3);
-                _gX.AllowAll = true;
-                _gX.AnchorAndAlignToObject(_gMap, SideEnum.Bottom, SideEnum.Left);
-                _gY = new GUITextInputWindow("Y:", SideEnum.Left, 3);
-                _gY.AllowAll = true;
-                _gY.AnchorAndAlignToObject(_gX, SideEnum.Bottom, SideEnum.Left);
-                _gName.AllowAll = true;
+                //_gName = new GUITextInputWindow("Name:", SideEnum.Left, 10);
+                //_gName.AnchorToInnerSide(_winMain, SideEnum.TopLeft);
+                //_gMap = new GUITextInputWindow("MapName:", SideEnum.Left, 60);
+                //_gMap.AllowAll = true;
+                //_gMap.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left);
+                //_gX = new GUITextInputWindow("X:", SideEnum.Left, 3);
+                //_gX.AllowAll = true;
+                //_gX.AnchorAndAlignToObject(_gMap, SideEnum.Bottom, SideEnum.Left);
+                //_gY = new GUITextInputWindow("Y:", SideEnum.Left, 3);
+                //_gY.AllowAll = true;
+                //_gY.AnchorAndAlignToObject(_gX, SideEnum.Bottom, SideEnum.Left);
+                //_gName.AllowAll = true;
 
                 _btnSave = new GUIButton("Save", BtnSave);
                 _btnSave.AnchorToInnerSide(_winMain, SideEnum.BottomRight);

@@ -79,6 +79,8 @@ namespace RiverHollow
             GameManager.LoadManagedDataLists();
             MapManager.LoadObjects();
 
+            TaskManager.Initialize();
+
             GUICursor.ResetCursor();
            // GameManager.Pause();
             //Set the Main Menu Screen

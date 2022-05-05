@@ -111,11 +111,6 @@ namespace RiverHollow.Misc
                     {
                         removeIt = act.FriendshipPoints < val;
                     }
-                    else if (specialVal[0].Equals("Task"))
-                    {
-                        RHTask newTask = GameManager.DITasks[val];
-                        removeIt = PlayerManager.TaskLog.Contains(newTask) || newTask.ReadyForHandIn || newTask.Finished || !newTask.CanBeGiven();
-                    }
 
                     s = s.Remove(s.IndexOf(specialParse[0]) - 1, specialParse[0].Length + 2);
                 }
@@ -191,15 +186,6 @@ namespace RiverHollow.Misc
                         else { return false; }
                     }
                 }
-                if (_diTags.ContainsKey("CompletedTaskID"))
-                {
-                    foreach (string i in _diTags["CompletedTaskID"].Split('-'))
-                    {
-                        if (!GameManager.DITasks[int.Parse(i)].Finished) { return false; }
-                    }
-
-                    rv = true;
-                }
                 if (_diTags.ContainsKey("RequiredObjectID"))
                 {
                     foreach (string i in _diTags["RequiredObjectID"].Split('-'))
@@ -217,11 +203,6 @@ namespace RiverHollow.Misc
                     }
 
                     rv = true;
-                }
-                if (_diTags.ContainsKey("TaskID"))
-                {
-                    int taskID = int.Parse(_diTags["TaskID"]);
-                    rv = !PlayerManager.HasTaskID(taskID) && !GameManager.DITasks[taskID].Finished;
                 }
             }
 
@@ -247,10 +228,6 @@ namespace RiverHollow.Misc
         /// <param name="act">The TalkingActor we're talking to</param>
         public void HandlePostWindowActions(TalkingActor act = null)
         {
-            if (_diTags.ContainsKey("TaskID"))
-            {
-                PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(_diTags["TaskID"])]);
-            }
             if (_diTags.ContainsKey("UnlockObjectID"))
             {
                 PlayerManager.AddToCraftingDictionary(int.Parse(_diTags["UnlockObjectID"]));

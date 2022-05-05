@@ -349,7 +349,7 @@ namespace RiverHollow.GUIComponents.MainObjects
                 //_winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
 
                 _character = c;
-                _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
+                _font = DataManager.GetBitMapFont(DataManager.FONT_NEW);
 
                 _liGearBoxes = new List<SpecializedBox>();
                 Load();
@@ -392,7 +392,7 @@ namespace RiverHollow.GUIComponents.MainObjects
                 _gClass.AnchorAndAlignToObject(_gName, SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN);
 
                 _sBoxHead = new SpecializedBox(_character.CharacterClass.ArmorType, _character.GetEquipment(GearTypeEnum.Head), FindMatchingItems);
-                _sBoxArmor = new SpecializedBox(_character.CharacterClass.ArmorType, _character.GetEquipment(GearTypeEnum.Body), FindMatchingItems);
+                _sBoxArmor = new SpecializedBox(_character.CharacterClass.ArmorType, _character.GetEquipment(GearTypeEnum.Chest), FindMatchingItems);
                 _sBoxWeapon = new SpecializedBox(_character.CharacterClass.WeaponType, _character.GetEquipment(GearTypeEnum.Weapon), FindMatchingItems);
                 _sBoxAccessory = new SpecializedBox(_character.CharacterClass.ArmorType, _character.GetEquipment(GearTypeEnum.Accessory), FindMatchingItems);
 
@@ -421,7 +421,7 @@ namespace RiverHollow.GUIComponents.MainObjects
                 if (_character == PlayerManager.PlayerCombatant)
                 {
                     _sBoxHat = new SpecializedBox(ClothingEnum.Hat, PlayerManager.PlayerActor.Hat, FindMatchingItems);
-                    _sBoxShirt = new SpecializedBox(ClothingEnum.Body, PlayerManager.PlayerActor.Body, FindMatchingItems);
+                    _sBoxShirt = new SpecializedBox(ClothingEnum.Chest, PlayerManager.PlayerActor.Chest, FindMatchingItems);
 
                     //_sBoxHat.AnchorToInnerSide(_winClothes, SideEnum.TopLeft, SPACING);
                     _sBoxShirt.AnchorAndAlignToObject(_sBoxHat, SideEnum.Right, SideEnum.Top, SPACING);
@@ -521,7 +521,7 @@ namespace RiverHollow.GUIComponents.MainObjects
                         {
                             AssignEquipment((Equipment)_equipWindow.SelectedItem);
                         }
-                        else if (_equipWindow.Box.ItemType.Equals(ItemEnum.Clothes))
+                        else if (_equipWindow.Box.ItemType.Equals(ItemEnum.Clothing))
                         {
                             PlayerManager.PlayerActor.SetClothes((Clothing)_equipWindow.SelectedItem);
 
@@ -578,7 +578,7 @@ namespace RiverHollow.GUIComponents.MainObjects
                         if (box.Contains(mouse) && box.BoxItem != null)
                         {
                             if (!box.WeaponType.Equals(WeaponEnum.None)) { _character.Unequip(GearTypeEnum.Weapon); }
-                            else if (!box.ArmorType.Equals(ArmorTypeEnum.None)) { _character.Unequip(GearTypeEnum.Body); }
+                            else if (!box.ArmorType.Equals(ArmorTypeEnum.None)) { _character.Unequip(GearTypeEnum.Chest); }
                             else if (!box.ClothingType.Equals(ClothingEnum.None))
                             {
                                 PlayerManager.PlayerActor.RemoveClothes(((Clothing)box.BoxItem).ClothesType);
@@ -648,7 +648,7 @@ namespace RiverHollow.GUIComponents.MainObjects
                                 liItems.Add(i);
                             }
                         }
-                        else if (boxMatch.ItemType.Equals(ItemEnum.Clothes) && i.CompareType(ItemEnum.Clothes))
+                        else if (boxMatch.ItemType.Equals(ItemEnum.Clothing) && i.CompareType(ItemEnum.Clothing))
                         {
                             if (boxMatch.ClothingType != ClothingEnum.None && ((Clothing)i).ClothesType == boxMatch.ClothingType)
                             {

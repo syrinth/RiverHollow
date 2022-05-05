@@ -285,7 +285,7 @@ namespace RiverHollow.Game_Managers
                                     _dTimer = double.Parse(sCommandData[0]);
                                     break;
                                 case EnumCSCommand.Task:
-                                    PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(sCommandData[0])]);
+                                    TaskManager.AddToTaskLog(int.Parse(sCommandData[0]));
                                     bGoToNext = true;
                                     break;
                                 case EnumCSCommand.Speed:
@@ -535,7 +535,9 @@ namespace RiverHollow.Game_Managers
                 return true;
             }
             else {
-                return PlayerManager.TaskLog.Contains(DITasks[_iTaskID]);
+                return false;
+                //MAR
+                //return PlayerManager.TaskLog.Contains(DITasks[_iTaskID]);
             }
         }
 
@@ -594,10 +596,11 @@ namespace RiverHollow.Game_Managers
                         string[] sCommandData = s.Split('-');   //split the data into segments
                         if (currentCommand.Command == EnumCSCommand.Task)
                         {
-                            foreach (string questID in sCommandData)
-                            {
-                                PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(questID)]);
-                            }
+                            //MAR
+                            //foreach (string questID in sCommandData)
+                            //{
+                            //    PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(questID)]);
+                            //}
                         }
                         else if (currentCommand.Command == EnumCSCommand.Activate)
                         {

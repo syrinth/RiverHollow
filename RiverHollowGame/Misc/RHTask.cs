@@ -7,16 +7,26 @@ using System.Xml.Serialization;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
+using System;
 
 namespace RiverHollow.Misc
 {
     public class RHTask
     {
         public int TaskID { get; private set; }
-        private TaskTypeEnum _eTaskType;
         public string Name => DataManager.GetTextData("Task", TaskID, "Name");
         public string Description => DataManager.GetTextData("Task", TaskID, "Description");
-        public Villager GoalNPC { get; private set; }
+        public string StartTaskDialogue => "Task_" + TaskID + "_Start";
+        public string EndTaskDialogue => "Task_" + TaskID + "_End";
+
+        private TaskTypeEnum _eTaskType;
+        public TaskStateEnum TaskState { get; private set; } = TaskStateEnum.Waiting;
+
+        public TalkingActor StartNPC { get; private set; }
+        public TalkingActor GoalNPC { get; private set; }
+
+        private Dictionary<TaskTriggerEnum, string> _diAssignationTriggers;
+        private List<int> _liTasksToTrigger;
 
         int _iCutsceneID;
         public int RequiredItemAmount { get; private set; }
@@ -28,7 +38,7 @@ namespace RiverHollow.Misc
         private int _iTargetObjectID = -1;
         private int _iTargetWorldObjNum = -1;
         public bool ReadyForHandIn { get; private set; } = false;
-        public bool Finished { get; private set; }
+        
 
         bool _bFinishOnCompletion;
         int _iActivateID;
@@ -51,7 +61,7 @@ namespace RiverHollow.Misc
         int _iSeason;
         #endregion
 
-        public RHTask()
+        private RHTask()
         {
             _iCutsceneID = -1;
             _bFinishOnCompletion = false;
@@ -60,16 +70,20 @@ namespace RiverHollow.Misc
             _iSeason = -1;
             _iDay = -1;
             FriendTarget = string.Empty;
+            StartNPC = null;
             GoalNPC = null;
             _targetItem = null;
             _questMonster = null;
             RequiredItemAmount = -1;
             TargetsAccomplished = -1;
             ReadyForHandIn = false;
-            Finished = false;
 
             LiRewardItems = new List<Item>();
+
+            _liTasksToTrigger = new List<int>();
+            _diAssignationTriggers = new Dictionary<TaskTriggerEnum, string>();
         }
+
         public RHTask(string name, TaskTypeEnum type, string desc, int target, Monster m, Item i, Villager giver = null) : this()
         {
             _eTaskType = type;
@@ -88,6 +102,35 @@ namespace RiverHollow.Misc
             LiRewardItems = new List<Item>();
 
             _eTaskType = Util.ParseEnum<TaskTypeEnum>(stringData["Type"]);
+
+            if (stringData.ContainsKey("StartNPC"))
+            {
+                StartNPC = DataManager.DIVillagers[int.Parse(stringData["StartNPC"])];
+            }
+
+            if (stringData.ContainsKey("GoalNPC"))
+            {
+                GoalNPC = DataManager.DIVillagers[int.Parse(stringData["GoalNPC"])];
+            }
+
+            if (stringData.ContainsKey("AssignTrigger"))
+            {
+                string[] triggers = Util.FindParams(stringData["AssignTrigger"]);
+                for (int i = 0; i < triggers.Length; i++)
+                {
+                    string[] args = Util.FindArguments(triggers[i]);
+                    _diAssignationTriggers[Util.ParseEnum<TaskTriggerEnum>(args[0])] = args.Length == 1 ? string.Empty : args[1];
+                }
+            }
+
+            if (stringData.ContainsKey("TriggerTask"))
+            {
+                string[] tasks = Util.FindParams(stringData["TriggerTask"]);
+                for (int i = 0; i < tasks.Length; i++)
+                {
+                    _liTasksToTrigger.Add(int.Parse(tasks[i]));
+                }
+            }
 
             if (stringData.ContainsKey("GoalItem"))
             {
@@ -132,10 +175,6 @@ namespace RiverHollow.Misc
                 }
             }
 
-            if (stringData.ContainsKey("GoalNPC")) {
-                GoalNPC = DataManager.DIVillagers[int.Parse(stringData["GoalNPC"])];
-            }
-
             Util.AssignValue(ref _iBuildingEndID, "EndBuildingID", stringData);
 
             Util.AssignValue(ref _iRewardMoney, "Money", stringData);
@@ -155,6 +194,72 @@ namespace RiverHollow.Misc
             Util.AssignValue(ref _iActivateID, "Activate", stringData);
             Util.AssignValue(ref _iCutsceneID, "CutsceneID", stringData);
             Util.AssignValue(ref _bHiddenGoal, "HideGoal", stringData);
+        }
+
+        public bool ReadyForAssignation()
+        {
+            if (_diAssignationTriggers.Count == 0) { return false; }
+
+            int checksum = 0;
+            foreach (TaskTriggerEnum trigger in Enum.GetValues(typeof(TaskTriggerEnum)))
+            {
+                if (!_diAssignationTriggers.ContainsKey(trigger)) { continue; }
+
+                switch (trigger)
+                {
+                    case TaskTriggerEnum.Building:
+                        break;
+                    case TaskTriggerEnum.FriendLevel:
+                        break;
+                    case TaskTriggerEnum.GameStart:
+                        checksum++;
+                        break;
+                    case TaskTriggerEnum.Task:
+                        if (TaskManager.TaskCompleted(int.Parse(_diAssignationTriggers[trigger])))
+                        {
+                            checksum++;
+                        }
+                        break;
+                }
+            }
+
+            return checksum == _diAssignationTriggers.Count;
+        }
+
+        public void AssignTaskToNPC()
+        {
+            if (TaskState == TaskStateEnum.Waiting && ReadyForAssignation())
+            {
+                TaskState = TaskStateEnum.Assigned;
+                StartNPC.AssignTask(this);
+            }
+        }
+
+        /// <summary>
+        /// Adds a Task to the Task Log.
+        /// 
+        /// First we guard against adding any Task that has been Finished. It should never
+        /// happen, but just to be sure.
+        /// 
+        /// Upon adding a Task to the Task Log, we should see if the Task is complete/nearly complete.
+        /// 
+        /// Some Tasks may involve the defeat of a Task specific monster. If such a monster exists, spawn it now.
+        /// </summary>
+        public void AddTaskToLog()
+        {
+            if (TaskState == TaskStateEnum.Talking)
+            {
+                TaskState = TaskStateEnum.TaskLog;
+                foreach (Item i in InventoryManager.PlayerInventory) { if (i != null) { AttemptProgress(i); } }
+                foreach (int k in PlayerManager.GetTownObjects().Keys)
+                {
+                    AttemptStructureBuildProgress(k);
+                }
+
+                SpawnTaskMobs();
+
+                GUIManager.NewAlertIcon("New Task");
+            }
         }
 
         public bool AttemptProgress(Villager a)
@@ -198,7 +303,7 @@ namespace RiverHollow.Misc
 
             if(_iBuildingEndID == i)
             {
-                FinishTask();
+                TurnInTask();
             }
 
             return rv;
@@ -228,7 +333,7 @@ namespace RiverHollow.Misc
                     ReadyForHandIn = true;
                     if (_bFinishOnCompletion)
                     {
-                        FinishTask();
+                        TurnInTask();
                     }
                 }
             }
@@ -256,15 +361,17 @@ namespace RiverHollow.Misc
             }
         }
 
-        public void FinishTask(ref string questCompleteText)
+        public void TaskIsTalking()
         {
-            questCompleteText = "Task_" + TaskID + "_End";
-            FinishTask();
+            if (TaskState == TaskStateEnum.Assigned)
+            {
+                TaskState = TaskStateEnum.Talking;
+            }
         }
 
-        private void FinishTask()
+        public void TurnInTask()
         {
-            Finished = true;
+            TaskState = TaskStateEnum.Completed;
 
             //If a cutscene will play defer the actual End of the Task until the Cutscene ends
             if (_iCutsceneID != -1)
@@ -279,8 +386,10 @@ namespace RiverHollow.Misc
 
         public void EndTask()
         {
-            if (Finished)
+            if (TaskState == TaskStateEnum.Completed)
             {
+                _liTasksToTrigger.ForEach(o => TaskManager.AssignTaskByID(o));
+
                 foreach (Item i in LiRewardItems)
                 {
                     InventoryManager.AddToInventory(i);
@@ -302,30 +411,9 @@ namespace RiverHollow.Misc
                     DataManager.DIVillagers[_iActivateID].Activate(true);
                 }
 
-                PlayerManager.TaskLog.Remove(this);
+                TaskManager.TaskLog.Remove(this);
                 GUIManager.NewAlertIcon("Task Complete");
             }
-        }
-
-        public bool CanBeGiven() {
-            bool rv = true;
-
-            if (_iSeason > -1)
-            {
-                if (_iSeason != GameCalendar.CurrentSeason)
-                {
-                    rv = false;
-                }
-            }
-            if (_iDay > -1)
-            {
-                if (_iDay == GameCalendar.CurrentDay)
-                {
-                    rv = false;
-                }
-            }
-
-            return rv;
         }
 
         public string GetProgressString()
@@ -378,6 +466,9 @@ namespace RiverHollow.Misc
             [XmlElement(ElementName = "TaskType")]
             public TaskTypeEnum questType;
 
+            [XmlElement(ElementName = "TaskState")]
+            public TaskStateEnum taskState;
+
             [XmlElement(ElementName = "TaskID")]
             public int taskID;
 
@@ -404,9 +495,6 @@ namespace RiverHollow.Misc
 
             [XmlElement(ElementName = "ReadyForHandIn")]
             public bool readyForHandIn;
-
-            [XmlElement(ElementName = "Finished")]
-            public bool finished;
 
             [XmlElement(ElementName = "HiddenGoal")]
             public bool hiddenGoal;
@@ -436,7 +524,7 @@ namespace RiverHollow.Misc
                 hiddenGoal = _bHiddenGoal,
                 accomplished = TargetsAccomplished, 
                 readyForHandIn = ReadyForHandIn,
-                finished = Finished
+                taskState = TaskState
             };
 
             qData.Items = new List<ItemData>();
@@ -460,7 +548,7 @@ namespace RiverHollow.Misc
             _bHiddenGoal = qData.hiddenGoal;
             TargetsAccomplished = qData.accomplished;
             ReadyForHandIn = qData.readyForHandIn;
-            Finished = qData.finished;
+            TaskState = qData.taskState;
 
             foreach (ItemData i in qData.Items)
             {

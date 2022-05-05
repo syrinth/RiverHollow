@@ -229,7 +229,7 @@ namespace RiverHollow.Game_Managers
                 if (_newMapInfo.EnteredBuilding != null)
                 {
                     //CurrentMap.LoadBuilding(_newMapInfo.EnteredBuilding);
-                    PlayerManager.TaskProgressEnterBuilding(_newMapInfo.EnteredBuilding.ID);
+                    TaskManager.TaskProgressEnterBuilding(_newMapInfo.EnteredBuilding.ID);
                 }
 
                 _newMapInfo = default;

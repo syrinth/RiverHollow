@@ -192,6 +192,40 @@ namespace RiverHollow.Characters
             _sprBody.PlayAnimation(VerbEnum.Walk, Facing);
         }
 
+        protected void FacePlayer(bool facePlayer)
+        {
+            //Determine the position based off of where the player is and then have the NPC face the player
+            //Only do this if they are idle so as to not disturb other animations they may be performing.
+            if (facePlayer && BodySprite.CurrentAnimation.StartsWith("Idle"))
+            {
+                Point diff = GetRectangle().Center - PlayerManager.PlayerActor.GetRectangle().Center;
+                if (Math.Abs(diff.X) > Math.Abs(diff.Y))
+                {
+                    if (diff.X > 0)  //The player is to the left
+                    {
+                        Facing = DirectionEnum.Left;
+                    }
+                    else
+                    {
+                        Facing = DirectionEnum.Right;
+                    }
+                }
+                else
+                {
+                    if (diff.Y > 0)  //The player is above
+                    {
+                        Facing = DirectionEnum.Up;
+                    }
+                    else
+                    {
+                        Facing = DirectionEnum.Down;
+                    }
+                }
+
+                PlayAnimationVerb(VerbEnum.Idle);
+            }
+        }
+
         public void DetermineFacing(RHTile tile)
         {
             DetermineFacing(new Vector2(tile.Position.X - Position.X, tile.Position.Y - Position.Y));

@@ -22,17 +22,16 @@
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
-        public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, Clothes, MonsterFood, Blueprint, Special };
+        public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, Clothing, MonsterFood, Blueprint, Special };
         public enum ToolEnum { None, Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return, Scythe };
         public enum SpecialItemEnum { None, Marriage, Class, Map, DungeonKey, Task };
-        public enum GearTypeEnum { Accessory, Body, Head, Weapon };
+        public enum GearTypeEnum { Accessory, Chest, Head, Weapon };
         public enum WeaponEnum { None, Spear, Shield, Rapier, Bow, Wand, Knife, Orb, Staff };
         public enum ArmorTypeEnum { None, Cloth, Light, Heavy };
-        public enum ClothingEnum { None, Body, Legs, Hat };
+        public enum ClothingEnum { None, Chest, Legs, Hat };
 
         public enum ActorMovementStateEnum { Idle, Walking };
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
-        public enum TaskTypeEnum { None, GroupSlay, Slay, Fetch, Talk, Build };
         public enum WorldActorTypeEnum { Actor, Child, Critter, Merchant, Mob, Mount, Pet, ShippingGremlin, Spirit, Villager };
         public enum CombatActorTypeEnum { Monster, PartyMember };
         public enum AttributeEnum { Agility, Damage, Defence, Evasion, Magic, Vitality, Resistance, Speed, Strength };
@@ -56,6 +55,11 @@
         public enum RelationShipStatusEnum { None, Friends, Dating, Engaged, Married };
         public enum NPCStateEnum { Alert, Idle, TrackPlayer, Pathing, Wander };
         public enum ChildStageEnum { Newborn, Infant, Toddler };
+
+       
+        public enum TaskStateEnum { Waiting, Assigned, Talking, TaskLog, Completed };
+        public enum TaskTriggerEnum { GameStart, FriendLevel, Building, Task };
+        public enum TaskTypeEnum { None, GroupSlay, Slay, Fetch, Talk, Build };
 
         public enum GameIconEnum { None, AreaAll, AreaColumnAlly, AreaColumnEnemy, AreaSelf, AreaSingle, AreaRow, AreaSquare, Agility, BuffArrow, DebuffArrow, Defence, ElementFire, ElementIce, ElementLightning, Evasion, Experience, Heal, Magic, MaxHealth, MagicDamage, Melee, MoveDown, MoveLeft, MoveRight, MoveUp, PhysicalDamage, Ranged, Resistance, Speed, Strength, Timer };
     }

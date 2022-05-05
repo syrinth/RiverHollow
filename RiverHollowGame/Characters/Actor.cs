@@ -76,7 +76,7 @@ namespace RiverHollow.Characters
             return string.Empty;
         }
 
-        protected virtual List<AnimatedSprite> GetSprites()
+        public virtual List<AnimatedSprite> GetSprites()
         {
             List<AnimatedSprite> liRv = new List<AnimatedSprite>() { _sprBody };
             return liRv;

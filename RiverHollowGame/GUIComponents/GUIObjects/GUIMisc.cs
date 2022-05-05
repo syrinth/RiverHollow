@@ -301,17 +301,17 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
     public class GUISwatch : GUIImage
     {
         private EmptyDelegate _delAction;
-        public Color SwatchColor => _cColor;
+        public Color SwatchColor => _Color;
 
         public GUISwatch(Color c, EmptyDelegate del = null) : base(new Rectangle(0, 80, TILE_SIZE, TILE_SIZE), 8, 16, DataManager.DIALOGUE_TEXTURE)
         {
-            _cColor = c;
+            _Color = c;
             _delAction = del;
         }
 
         public GUISwatch(Color c, int width, int height, EmptyDelegate del = null) : base(new Rectangle(0, 80, TILE_SIZE, TILE_SIZE), width, height, DataManager.DIALOGUE_TEXTURE)
         {
-            _cColor = c;
+            _Color = c;
             _delAction = del;
         }
 

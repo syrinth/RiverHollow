@@ -94,6 +94,7 @@
     <Compile Include="Game Managers\MissionManager.cs" />
     <Compile Include="Game Managers\SaveManager.cs" />
     <Compile Include="Game Managers\SoundManager.cs" />
+    <Compile Include="Game Managers\TaskManager.cs" />
     <Compile Include="Game Managers\TravelManager.cs" />
     <Compile Include="Game Managers\ZoneManager.cs" />
     <Compile Include="GUIComponents\GUIHarp.cs" />
@@ -107,7 +108,7 @@
     <Compile Include="GUIComponents\GUIObjects\Combat\Tactical\GUITacticalCombatantInfo.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Lite\GUICombatTile.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIList.cs" />
-    <Compile Include="GUIComponents\GUIObjects\GUICharacterDisplayBox.cs" />
+    <Compile Include="GUIComponents\GUIObjects\ActorDisplayBox.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIText.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIMisc.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUISprite.cs" />
@@ -120,12 +121,11 @@
     <Compile Include="GUIComponents\GUIObjects\Combat\Tactical\TacticalCombatScreen.cs" />
     <Compile Include="GUIComponents\Screens\ConfigScreen.cs" />
     <Compile Include="GUIComponents\Screens\LoadScreen.cs" />
-    <Compile Include="GUIComponents\Screens\MissionScreen.cs" />
     <Compile Include="GUIComponents\Screens\NewGameScreen.cs" />
     <Compile Include="GUIComponents\Screens\HUDPurchaseWindows.cs" />
     <Compile Include="Game Managers\InventoryManager.cs" />
     <Compile Include="Items\Blueprint.cs" />
-    <Compile Include="Items\Clothes.cs" />
+    <Compile Include="Items\Clothing.cs" />
     <Compile Include="Items\Consumable.cs" />
     <Compile Include="Items\Equipment.cs" />
     <Compile Include="Items\Food.cs" />

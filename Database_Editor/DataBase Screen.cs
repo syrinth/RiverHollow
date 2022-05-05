@@ -776,7 +776,7 @@ namespace Database_Editor
             ItemEnum itemType = Util.ParseEnum<ItemEnum>(cbItemType.SelectedItem.ToString().Split(':')[1]);
             switch (itemType)
             {
-                case ItemEnum.Clothes:
+                case ItemEnum.Clothing:
                     cbItemSubtype.Visible = true;
                     foreach (ClothingEnum en in Enum.GetValues(typeof(ClothingEnum)))
                     {
@@ -820,7 +820,7 @@ namespace Database_Editor
             int rv = 0;
             switch (e)
             {
-                case ItemEnum.Clothes:
+                case ItemEnum.Clothing:
                     rv = (int)Util.ParseEnum<ClothingEnum>(value);
                     break;
                 case ItemEnum.Equipment:

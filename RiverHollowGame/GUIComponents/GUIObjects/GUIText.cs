@@ -43,13 +43,13 @@ namespace RiverHollow.GUIComponents.GUIObjects
             PrintAll = printAll;
             _sText = "";
             _sFullText = _sText;
-            _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
+            _font = DataManager.GetBitMapFont(DataManager.FONT_NEW);
             SetDimensions("X");
         }
 
-        public GUIText(int val, bool printAll = true, string f = DataManager.FONT_MAIN) : this(val.ToString(), printAll, f){}
+        public GUIText(int val, bool printAll = true, string f = DataManager.FONT_NEW) : this(val.ToString(), printAll, f){}
 
-        public GUIText(string text, bool printAll = true, string f = DataManager.FONT_MAIN) : this()
+        public GUIText(string text, bool printAll = true, string f = DataManager.FONT_NEW) : this()
         {
             _font = DataManager.GetBitMapFont(f);
             PrintAll = printAll;
@@ -79,7 +79,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (!string.IsNullOrEmpty(_sText) && Show())
             {
-                spriteBatch.DrawString(_font, _sText, Position(), _cColor * Alpha());
+                spriteBatch.DrawString(_font, _sText, Position(), _Color * Alpha());
             }
         }
 

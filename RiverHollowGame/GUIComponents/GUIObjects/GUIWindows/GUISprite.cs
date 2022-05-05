@@ -114,9 +114,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 _sprHat = new GUISprite(PlayerManager.PlayerActor.Hat.Sprite, overwrite);
                 _liSprites.Add(_sprHat);
             }
-            if (PlayerManager.PlayerActor.Body != null)
+            if (PlayerManager.PlayerActor.Chest != null)
             {
-                _sprChest = new GUISprite(PlayerManager.PlayerActor.Body.Sprite, overwrite);
+                _sprChest = new GUISprite(PlayerManager.PlayerActor.Chest.Sprite, overwrite);
                 _liSprites.Add(_sprChest);
             }
             if (PlayerManager.PlayerActor.Legs != null)
