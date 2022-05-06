@@ -3,15 +3,15 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Build][StartNPC:14][GoalNPC:14][AssignTrigger:GameStart][TriggerTask:1][TargetObjectID:40][ItemRewardID:174][EndBuildingID:40][CutsceneID:2]</Value>
+      <Value>[Type:Build][StartNPC:14][GoalNPC:14][AssignTrigger:GameStart][TriggerTask:2][EndBuildingID:40][CutsceneID:2][TargetObjectID:40][ItemRewardID:174]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Build][StartNPC:11][GoalNPC:11][AssignTrigger:Task-0][TargetObjectID:108]</Value>
+      <Value>[Type:Build][StartNPC:11][GoalNPC:11][AssignTrigger:Task-2][TargetObjectID:108]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Talk][GoalNPC:16]</Value>
+      <Value>[Type:Build][StartNPC:11][GoalNPC:11][AssignTrigger:Task-0][TargetObjectID:26]</Value>
     </Item>
     <Item>
       <Key>3</Key>

@@ -323,6 +323,7 @@ namespace RiverHollow
         public static void Rollover()
         {
             GameManager.RollOver();
+            TaskManager.Rollover();
             PlayerManager.Rollover();
 
             foreach (Villager n in DataManager.DIVillagers.Values) {
