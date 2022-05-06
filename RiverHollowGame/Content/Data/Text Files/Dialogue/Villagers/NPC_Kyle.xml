@@ -25,7 +25,7 @@
       <Key>5</Key>
       <Value>[Name:Selection][Text:Hey.][Selection:VillageTalk]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>6</Key>
       <Value>[Name:Task_0_Start][Text:We really need a $WorldObject_40$ if we're going to do anything. Here's some materials I brought with me. Be careful with how you use them, this is all I brought.][UnlockObjectID:40][ItemID:55-5|60-5]</Value>
     </Item>

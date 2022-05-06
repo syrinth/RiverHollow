@@ -1940,11 +1940,7 @@ namespace RiverHollow.Map_Handling
 
             if (!_liPlacedWorldObjects.Contains(o))
             {
-                //Adds the object to the list of player objects unless it is a Building
-                if (!o.CompareType(ObjectTypeEnum.Building))
-                {
-                    _liPlacedWorldObjects.Add(o);
-                }
+                _liPlacedWorldObjects.Add(o);
             }
 
             if (o.CompareType(ObjectTypeEnum.CombatHazard))
