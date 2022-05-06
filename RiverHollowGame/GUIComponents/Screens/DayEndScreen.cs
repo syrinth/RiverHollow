@@ -41,15 +41,13 @@ namespace RiverHollow.GUIComponents.Screens
             foreach (GUISprite spr in GameManager.SlainMonsters) { TileCheck(spr, ref _iRows); }
             _iTotalTiles = 0;
 
-            //foreach(Villager v in DataManager.DiNPC.Values)
-            //{
-            //    if (v.ShouldIStayInTown())
-            //    {
-            //        _iNewVillagers++;
-            //    }
-            //}
+            foreach (Villager v in DataManager.DIVillagers.Values)
+            {
+                v.JustMovedIn();
+            }
 
             GameManager.ShippingGremlin.SellAll();
+            PlayerManager.AddMoney(PlayerManager.CalculateTaxes());
 
             //string results = String.Format("Gold: {0}\nExperience: {1}", GameManager.ShippingGremlin.SellAll(), GameManager.TotalExperience);
 

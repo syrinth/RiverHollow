@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.WorldObjects;
-using RiverHollow.Misc;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 
@@ -427,6 +426,20 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
         public static IReadOnlyDictionary<int, List<WorldObject>> GetTownObjects() { return _diTownObjects; }
+
+        public static int CalculateTaxes()
+        {
+            int rv = 0;
+
+            foreach (Villager n in DataManager.DIVillagers.Values)
+            {
+                if (n.LivesInTown) {
+                    rv += 25 * (int)n.GetSatisfaction();
+                }
+            }
+
+            return rv;
+        }
         #endregion
 
         #region PlayerInRange

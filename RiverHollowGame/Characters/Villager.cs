@@ -47,9 +47,9 @@ namespace RiverHollow.Characters
         }
         public bool Married => RelationshipState == RelationShipStatusEnum.Married;
 
-        protected bool _bLivesInTown = false;
-        public bool LivesInTown => _bLivesInTown;
-        public bool SpawnOnTheMap => !string.IsNullOrEmpty(_sStartMap) || _bLivesInTown;
+        private VillagerSpawnStatus _eSpawnStatus = VillagerSpawnStatus.OffMap;
+        public bool LivesInTown => _eSpawnStatus == VillagerSpawnStatus.HasHome;
+        public bool SpawnOnTheMap => _eSpawnStatus != VillagerSpawnStatus.OffMap;
 
         int _iNextTimeKeyID = 0;
 
@@ -106,7 +106,8 @@ namespace RiverHollow.Characters
             Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
             Util.AssignValue(ref _iTotalMoneyEarnedReq, "TotalMoneyEarnedReq", stringData);
 
-            Util.AssignValue(ref _bLivesInTown, "InTown", stringData);
+            if (stringData.ContainsKey("AtInn")) { _eSpawnStatus = VillagerSpawnStatus.WaitAtInn; }
+            if (!string.IsNullOrEmpty(_sStartMap)) { _eSpawnStatus = VillagerSpawnStatus.NonTownMap; }
 
             CombatVersion = new ClassedCombatant();
             //CombatVersion.SetName(Name);
@@ -192,28 +193,23 @@ namespace RiverHollow.Characters
 
         public override void RollOver()
         {
-            //Determines whether or not the Villager will stay in town
-            if (!_bLivesInTown && TownRequirementsMet() && IsHomeBuilt() && CurrentMap != null)
+            if (GameCalendar.DayOfWeek == 0)
             {
-                _bLivesInTown = true;
+                CanGiveGift = true;
             }
 
-            if (LivesInTown || HandleTravelTiming() || !string.IsNullOrEmpty(_sStartMap))
+            HandleTravelTiming();
+
+            if (_eSpawnStatus == VillagerSpawnStatus.OffMap)
+            {
+                CurrentMap?.RemoveActor(this);
+                CurrentMapName = string.Empty;
+                _iNextArrival = _iArrivalPeriod;
+            }
+            else
             {
                 ClearPath();
                 MoveToSpawn();
-
-                //Reset on Monday
-                if (GameCalendar.DayOfWeek == 0)
-                {
-                    CanGiveGift = true;
-                }
-            }
-            else if (CurrentMap != null)
-            {
-                CurrentMap.RemoveActor(this);
-                CurrentMapName = string.Empty;
-                _iNextArrival = _iArrivalPeriod;
             }
         }
 
@@ -258,9 +254,10 @@ namespace RiverHollow.Characters
         {
             bool rv = false;
 
-            if (!_bLivesInTown)
+            if (_eSpawnStatus == VillagerSpawnStatus.VisitInn || _eSpawnStatus == VillagerSpawnStatus.OffMap)
             {
                 rv = base.HandleTravelTiming();
+                _eSpawnStatus =  rv ? VillagerSpawnStatus.VisitInn : VillagerSpawnStatus.OffMap;
             }
 
             return rv;
@@ -269,10 +266,23 @@ namespace RiverHollow.Characters
         /// <summary>
         /// Quick call to see if the NPC's home is built. Returns false if they have no assigned home.
         /// </summary>
-        protected bool IsHomeBuilt()
+        public bool JustMovedIn()
         {
-            return _iHouseBuildingID != -1 && PlayerManager.TownObjectBuilt(_iHouseBuildingID);
+            switch (_eSpawnStatus)
+            {
+                case VillagerSpawnStatus.VisitInn:
+                case VillagerSpawnStatus.WaitAtInn:
+                    if (TownRequirementsMet() && _iHouseBuildingID != -1 && PlayerManager.TownObjectBuilt(_iHouseBuildingID))
+                    {
+                        _eSpawnStatus = VillagerSpawnStatus.HasHome;
+                        return true;
+                    }
+                    break;
+            }
+
+            return false;
         }
+
 
         /// <summary>
         /// Call to return the name of the map the Villager should return to on Rollover.
@@ -284,15 +294,25 @@ namespace RiverHollow.Characters
         /// <returns>The string name of the map to put the NPC on</returns>
         protected string GetSpawnMapName()
         {
-            string rv = string.Empty;
-
-            if (Married) { rv = PlayerManager.PlayerHome.MapName; }
-            else if (IsHomeBuilt()) { rv = PlayerManager.GetBuildingByID(_iHouseBuildingID)?.MapName; }
-            else if (!string.IsNullOrEmpty(_sStartMap)) {
-                rv = _sStartMap; }
-            else if (_iHouseBuildingID != -1) { rv = "mapInn"; }
-
-            return rv;
+            string strSpawn = string.Empty;
+            if (Married)
+            {
+                return PlayerManager.PlayerHome.MapName;
+            }
+            else
+            {
+                switch (_eSpawnStatus)
+                {
+                    case VillagerSpawnStatus.VisitInn:
+                    case VillagerSpawnStatus.WaitAtInn:
+                        return "mapInn";
+                    case VillagerSpawnStatus.HasHome:
+                        return PlayerManager.GetBuildingByID(_iHouseBuildingID)?.MapName;
+                    case VillagerSpawnStatus.NonTownMap:
+                        return _sStartMap;
+                }
+            }
+            return strSpawn;
         }
 
         /// <summary>
@@ -312,9 +332,25 @@ namespace RiverHollow.Characters
                 RHMap map = MapManager.Maps[mapName];
 
                 string strSpawn = string.Empty;
-                if (Married) { strSpawn = "Spouse"; }
-                else if (IsHomeBuilt() || GetSpawnMapName() == MapManager.TownMapName || !string.IsNullOrEmpty(_sStartMap)) {strSpawn = "NPC_" + ID.ToString(); }
-                else if (GameManager.VillagersInTheInn < 3) { strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn; }
+                if (Married)
+                {
+                    strSpawn = "Spouse";
+                }
+                else
+                {
+                    switch (_eSpawnStatus)
+                    {
+                        case VillagerSpawnStatus.VisitInn:
+                        case VillagerSpawnStatus.WaitAtInn:
+                            strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn;
+                            break;
+                        case VillagerSpawnStatus.HasHome:
+                        case VillagerSpawnStatus.NonTownMap:
+                            strSpawn = "NPC_" + ID.ToString();
+                            break;
+
+                    }
+                }
 
                 Position = Util.SnapToGrid(map.GetCharacterSpawn(strSpawn));
                 map.AddCharacterImmediately(this);
@@ -519,6 +555,11 @@ namespace RiverHollow.Characters
             return rv;
         }
 
+        public SatisfactionStateEnum GetSatisfaction()
+        {
+            return SatisfactionStateEnum.Neutral;
+        }
+
         public bool AvailableToDate() { return CanBeMarried && GetFriendshipLevel() >= 6 && RelationshipState == RelationShipStatusEnum.Friends; }
         public bool AvailableToMarry() { return CanBeMarried && GetFriendshipLevel() >= 6 && RelationshipState == RelationShipStatusEnum.Dating; }
 
@@ -527,7 +568,7 @@ namespace RiverHollow.Characters
             VillagerData npcData = new VillagerData()
             {
                 npcID = ID,
-                arrived = LivesInTown,
+                spawnStatus = (int)_eSpawnStatus,
                 arrivalDelay = _iDaysToFirstArrival,
                 nextArrival = _iNextArrival,
                 friendshipPoints = FriendshipPoints,
@@ -543,7 +584,7 @@ namespace RiverHollow.Characters
         }
         public void LoadData(VillagerData data)
         {
-            _bLivesInTown = data.arrived;
+            _eSpawnStatus = (VillagerSpawnStatus)data.spawnStatus;
             _iNextArrival = data.nextArrival;
             _iDaysToFirstArrival = data.arrivalDelay;
             FriendshipPoints = data.friendshipPoints;

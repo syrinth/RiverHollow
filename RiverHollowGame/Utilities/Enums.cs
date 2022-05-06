@@ -53,6 +53,8 @@
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
         public enum ExpectingChildEnum { None, Adoption, Pregnant };
         public enum RelationShipStatusEnum { None, Friends, Dating, Engaged, Married };
+        public enum VillagerSpawnStatus { OffMap, WaitAtInn, VisitInn, HasHome, NonTownMap };
+        public enum SatisfactionStateEnum { Miserable, Sad, Neutral, Pleased, Happy, Ecastatic };
         public enum NPCStateEnum { Alert, Idle, TrackPlayer, Pathing, Wander };
         public enum ChildStageEnum { Newborn, Infant, Toddler };
 

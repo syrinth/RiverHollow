@@ -50,7 +50,7 @@ Never forget, commerce is the lifeblood of a town, my friend. It might not seem 
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Name:Task_2_End][Text:Great job!]</Value>
+      <Value>[Name:Task_2_End][Text:Great job! If you come back tomorrow, I think I'll have some more work for you to do.]</Value>
     </Item>
   </Asset>
 </XnaContent>

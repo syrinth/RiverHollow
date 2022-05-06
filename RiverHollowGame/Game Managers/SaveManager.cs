@@ -327,8 +327,8 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "NPCID")]
             public int npcID;
 
-            [XmlElement(ElementName = "Arrived")]
-            public bool arrived;
+            [XmlElement(ElementName = "SpawnStatus")]
+            public int spawnStatus;
 
             [XmlElement(ElementName = "ArrivalDelay")]
             public int arrivalDelay;

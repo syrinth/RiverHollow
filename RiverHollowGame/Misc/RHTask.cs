@@ -464,10 +464,10 @@ namespace RiverHollow.Misc
         public struct TaskData
         {
             [XmlElement(ElementName = "TaskType")]
-            public TaskTypeEnum questType;
+            public int questType;
 
             [XmlElement(ElementName = "TaskState")]
-            public TaskStateEnum taskState;
+            public int taskState;
 
             [XmlElement(ElementName = "TaskID")]
             public int taskID;
@@ -513,7 +513,7 @@ namespace RiverHollow.Misc
         {
             TaskData qData = new TaskData
             {
-                questType = _eTaskType,
+                questType = (int)_eTaskType,
                 taskID = TaskID,
                 goalNPC = GoalNPC != null ? GoalNPC.ID : -1,
                 itemID = _targetItem != null ? _targetItem.ItemID : -1,
@@ -524,7 +524,7 @@ namespace RiverHollow.Misc
                 hiddenGoal = _bHiddenGoal,
                 accomplished = TargetsAccomplished, 
                 readyForHandIn = ReadyForHandIn,
-                taskState = TaskState
+                taskState = (int)TaskState
             };
 
             qData.Items = new List<ItemData>();
@@ -537,7 +537,7 @@ namespace RiverHollow.Misc
         }
         public void LoadData(TaskData qData)
         {
-            _eTaskType = qData.questType;
+            _eTaskType = (TaskTypeEnum)qData.questType;
             TaskID = qData.taskID;
             GoalNPC = qData.goalNPC != -1 ? DataManager.DIVillagers[qData.goalNPC] : null;
             _targetItem = qData.itemID != -1 ? DataManager.GetItem(qData.itemID) : null;
@@ -548,7 +548,7 @@ namespace RiverHollow.Misc
             _bHiddenGoal = qData.hiddenGoal;
             TargetsAccomplished = qData.accomplished;
             ReadyForHandIn = qData.readyForHandIn;
-            TaskState = qData.taskState;
+            TaskState = (TaskStateEnum)qData.taskState;
 
             if(TaskState == TaskStateEnum.Assigned)
             {

@@ -47,7 +47,7 @@
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:26][Collection:7|184][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][ShopData:3][Key:Harrison]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:26][Collection:7|184][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][AtInn][ShopData:3][Key:Harrison]</Value>
     </Item>
     <Item>
       <Key>12</Key>
@@ -59,7 +59,7 @@
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:40][Collection:7|184][Idle:0-0-1-0-T][Walk:64-0-8-.11-F][InTown][ShopData:2][Key:Kyle]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:40][Collection:7|184][Idle:0-0-1-0-T][Walk:64-0-8-.11-F][AtInn][ShopData:2][Key:Kyle]</Value>
     </Item>
     <Item>
       <Key>15</Key>
@@ -75,7 +75,7 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:7|165][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][Key:Mark]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:7|165][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Mark][AtInn]</Value>
     </Item>
     <Item>
       <Key>19</Key>
@@ -83,11 +83,11 @@
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:29][Collection:7|165][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:0][ArrivalPeriod:0][Key:Nevar]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:9][Collection:7|165][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:0][ArrivalPeriod:0][Key:Nevar]</Value>
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:7|165][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][InTown][Key:Penelope]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:7|165][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Penelope][AtInn]</Value>
     </Item>
     <Item>
       <Key>22</Key>
