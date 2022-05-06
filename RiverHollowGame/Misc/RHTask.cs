@@ -228,7 +228,7 @@ namespace RiverHollow.Misc
 
         public void AssignTaskToNPC()
         {
-            if (TaskState == TaskStateEnum.Waiting && ReadyForAssignation())
+            if ((TaskState == TaskStateEnum.Waiting || TaskState == TaskStateEnum.Assigned) && ReadyForAssignation())
             {
                 TaskState = TaskStateEnum.Assigned;
                 StartNPC.AssignTask(this);
@@ -549,6 +549,11 @@ namespace RiverHollow.Misc
             TargetsAccomplished = qData.accomplished;
             ReadyForHandIn = qData.readyForHandIn;
             TaskState = qData.taskState;
+
+            if(TaskState == TaskStateEnum.Assigned)
+            {
+               AssignTaskToNPC();
+            }
 
             foreach (ItemData i in qData.Items)
             {

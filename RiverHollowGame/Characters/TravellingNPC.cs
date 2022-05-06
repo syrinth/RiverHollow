@@ -21,8 +21,8 @@ namespace RiverHollow.Characters
         protected List<int> _liRequiredBuildingIDs;
         protected Dictionary<int, int> _diRequiredObjectIDs;
 
-        public virtual RelationShipStatusEnum Relationship { get; set; }
-        public bool Introduced => Relationship != RelationShipStatusEnum.None;
+        public virtual RelationShipStatusEnum RelationshipState { get; set; }
+        public bool Introduced => RelationshipState != RelationShipStatusEnum.None;
         protected bool _bArrivedOnce = false;
 
         public TravellingNPC(int id) : base(id) { }

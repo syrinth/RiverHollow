@@ -609,7 +609,7 @@ namespace RiverHollow.Game_Managers
                 WeddingCountdown--;
                 if (WeddingCountdown == 0)
                 {
-                    Spouse.Relationship = RelationShipStatusEnum.Married;
+                    Spouse.RelationshipState = RelationShipStatusEnum.Married;
                 }
             }
 

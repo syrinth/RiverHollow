@@ -32,20 +32,20 @@ namespace RiverHollow.Characters
         private bool _bCanMarry = false;
         public bool CanBeMarried => _bCanMarry;
 
-        public override RelationShipStatusEnum Relationship
+        public override RelationShipStatusEnum RelationshipState
         {
             set
             {
-                base.Relationship = value;
-                if (Relationship == RelationShipStatusEnum.Married) { PlayerManager.Spouse = this; }
-                else if (Relationship == RelationShipStatusEnum.Engaged)
+                base.RelationshipState = value;
+                if (RelationshipState == RelationShipStatusEnum.Married) { PlayerManager.Spouse = this; }
+                else if (RelationshipState == RelationShipStatusEnum.Engaged)
                 {
                     PlayerManager.WeddingCountdown = 3;
                     PlayerManager.Spouse = this;
                 }
             }
         }
-        public bool Married => Relationship == RelationShipStatusEnum.Married;
+        public bool Married => RelationshipState == RelationShipStatusEnum.Married;
 
         protected bool _bLivesInTown = false;
         public bool LivesInTown => _bLivesInTown;
@@ -233,7 +233,7 @@ namespace RiverHollow.Characters
             if (!Introduced)
             {
                 rv = GetDialogEntry("Introduction");
-                Relationship = RelationShipStatusEnum.Friends;
+                RelationshipState = RelationShipStatusEnum.Friends;
             }
             else if (!CheckTaskLog(ref rv))
             {
@@ -519,8 +519,8 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        public bool AvailableToDate() { return CanBeMarried && GetFriendshipLevel() >= 6 && Relationship == RelationShipStatusEnum.Friends; }
-        public bool AvailableToMarry() { return CanBeMarried && GetFriendshipLevel() >= 6 && Relationship == RelationShipStatusEnum.Dating; }
+        public bool AvailableToDate() { return CanBeMarried && GetFriendshipLevel() >= 6 && RelationshipState == RelationShipStatusEnum.Friends; }
+        public bool AvailableToMarry() { return CanBeMarried && GetFriendshipLevel() >= 6 && RelationshipState == RelationShipStatusEnum.Dating; }
 
         public VillagerData SaveData()
         {
@@ -530,9 +530,9 @@ namespace RiverHollow.Characters
                 arrived = LivesInTown,
                 arrivalDelay = _iDaysToFirstArrival,
                 nextArrival = _iNextArrival,
-                friendship = FriendshipPoints,
+                friendshipPoints = FriendshipPoints,
                 collection = new List<bool>(_diCollection.Values),
-                relationShipStatus = (int)Relationship,
+                relationShipStatus = (int)RelationshipState,
                 canGiveGift = CanGiveGift,
                 spokenKeys = _liSpokenKeys,
             };
@@ -546,10 +546,10 @@ namespace RiverHollow.Characters
             _bLivesInTown = data.arrived;
             _iNextArrival = data.nextArrival;
             _iDaysToFirstArrival = data.arrivalDelay;
-            FriendshipPoints = data.friendship;
+            FriendshipPoints = data.friendshipPoints;
             CanGiveGift = data.canGiveGift;
-            Relationship = (RelationShipStatusEnum)data.relationShipStatus;
-            if (Relationship == RelationShipStatusEnum.Engaged || Relationship == RelationShipStatusEnum.Married)
+            RelationshipState = (RelationShipStatusEnum)data.relationShipStatus;
+            if (RelationshipState == RelationShipStatusEnum.Engaged || RelationshipState == RelationShipStatusEnum.Married)
             {
                 PlayerManager.Spouse = this;
             }

@@ -5,14 +5,13 @@ using System.Text;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using RiverHollow.Characters;
-using RiverHollow.Buildings;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
 using RiverHollow.Map_Handling;
-using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 
 using static RiverHollow.Misc.RHTask;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {
@@ -338,7 +337,7 @@ namespace RiverHollow.Game_Managers
             public int nextArrival;
 
             [XmlElement(ElementName = "Friendship")]
-            public int friendship;
+            public int friendshipPoints;
 
             [XmlArray(ElementName = "Collection")]
             public List<bool> collection;

@@ -106,7 +106,7 @@ namespace RiverHollow.Characters
             if (!Introduced)
             {
                 rv = GetDialogEntry("Introduction");
-                Relationship = RelationShipStatusEnum.Friends;
+                RelationshipState = RelationShipStatusEnum.Friends;
             }
             else
             {
@@ -172,7 +172,7 @@ namespace RiverHollow.Characters
         }
         public void LoadData(MerchantData data)
         {
-            Relationship = (RelationShipStatusEnum)data.relationShipStatus;
+            RelationshipState = (RelationShipStatusEnum)data.relationShipStatus;
             _iDaysToFirstArrival = data.arrivalDelay;
             _iNextArrival = data.timeToNextArrival;
             _bArrivedOnce = data.arrivedOnce;

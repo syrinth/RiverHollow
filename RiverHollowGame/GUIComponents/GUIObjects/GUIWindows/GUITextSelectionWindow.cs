@@ -289,7 +289,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     if (act.GetFriendshipLevel() >= 8)
                     {
                         Villager v = ((Villager)act);
-                        v.Relationship = RelationShipStatusEnum.Engaged;
+                        v.RelationshipState = RelationShipStatusEnum.Engaged;
 
                         nextText = act.GetDialogEntry("MarriageYes");
                     }
@@ -297,7 +297,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 }
                 else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Date))
                 {
-                    ((Villager)act).Relationship = RelationShipStatusEnum.Dating;
+                    ((Villager)act).RelationshipState = RelationShipStatusEnum.Dating;
                     nextText = act.GetDialogEntry("DateYes");
                 }
             }
