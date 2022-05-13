@@ -18,8 +18,8 @@ namespace RiverHollow.Characters
         protected bool _bShopIsOpen = false;
         protected int _iShopIndex = -1;
 
-        protected List<int> _liRequiredBuildingIDs;
         protected Dictionary<int, int> _diRequiredObjectIDs;
+        protected int _iRequiredVillagerNumber = -1;
 
         public virtual RelationShipStatusEnum RelationshipState { get; set; }
         public bool Introduced => RelationshipState != RelationShipStatusEnum.None;
@@ -35,15 +35,6 @@ namespace RiverHollow.Characters
 
             _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Villager", stringData["Key"]);
 
-            if (stringData.ContainsKey("RequiredBuildingID"))
-            {
-                string[] args = Util.FindParams(stringData["RequiredBuildingID"]);
-                foreach (string i in args)
-                {
-                    _liRequiredBuildingIDs.Add(int.Parse(i));
-                }
-            }
-
             if (stringData.ContainsKey("RequiredObjectID"))
             {
                 string[] args = Util.FindParams(stringData["RequiredObjectID"]);
@@ -53,6 +44,7 @@ namespace RiverHollow.Characters
                     _diRequiredObjectIDs[int.Parse(split[0])] = int.Parse(split[1]);
                 }
             }
+            Util.AssignValue(ref _iRequiredVillagerNumber, "RequiredVillagerNumber", stringData);
 
             Util.AssignValue(ref _iShopIndex, "ShopData", stringData);
 
@@ -83,6 +75,20 @@ namespace RiverHollow.Characters
             foreach (KeyValuePair<int, int> kvp in _diRequiredObjectIDs)
             {
                 if (PlayerManager.GetNumberTownObjects(kvp.Key) < kvp.Value)
+                {
+                    return false;
+                }
+            }
+
+            if(_iRequiredVillagerNumber != -1)
+            {
+                int livesintown = 0;
+                foreach(Villager v in DataManager.DIVillagers.Values)
+                {
+                    if (v.LivesInTown) { livesintown++; }
+                }
+
+                if(livesintown < _iRequiredVillagerNumber)
                 {
                     return false;
                 }

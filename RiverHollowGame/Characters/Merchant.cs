@@ -27,7 +27,6 @@ namespace RiverHollow.Characters
         {
             _eActorType = WorldActorTypeEnum.Merchant;
 
-            _liRequiredBuildingIDs = new List<int>();
             _diRequiredObjectIDs = new Dictionary<int, int>();
 
             _liRequestItems = new List<RequestItem>();

@@ -77,5 +77,9 @@
       <Key>18</Key>
       <Value>[MoveAction:0][UseItem:1]</Value>
     </Item>
+    <Item>
+      <Key>19</Key>
+      <Value>[ObjectID:39]</Value>
+    </Item>
   </Asset>
 </XnaContent>

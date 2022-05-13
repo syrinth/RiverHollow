@@ -27,35 +27,35 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Building][Texture:House_14][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86|3-80-86]</Value>
-    </Item>
-    <Item>
-      <Key>7</Key>
       <Value>[Type:Building][Texture:House_6][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
-      <Key>8</Key>
+      <Key>7</Key>
       <Value>[Type:Building][Texture:House_1_17][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
-      <Key>9</Key>
+      <Key>8</Key>
       <Value>[Type:Building][Texture:House_18][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
-      <Key>10</Key>
+      <Key>9</Key>
       <Value>[Type:Building][Texture:House_19][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
-      <Key>11</Key>
+      <Key>10</Key>
       <Value>[Type:Building][Texture:House_2][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
-      <Key>12</Key>
+      <Key>11</Key>
       <Value>[Type:Building][Texture:House_20][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
-      <Key>13</Key>
+      <Key>12</Key>
       <Value>[Type:Building][Texture:House_25][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>[Type:Building][Texture:House_14][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86|3-80-86]</Value>
     </Item>
     <Item>
       <Key>14</Key>
@@ -67,15 +67,15 @@
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Building][Texture:House_5][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
-    </Item>
-    <Item>
-      <Key>17</Key>
       <Value>[Type:Building][Texture:House_6][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
-      <Key>18</Key>
+      <Key>17</Key>
       <Value>[Type:Building][Texture:House_7][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
+    </Item>
+    <Item>
+      <Key>18</Key>
+      <Value>[Type:Building][Texture:House_5][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>19</Key>

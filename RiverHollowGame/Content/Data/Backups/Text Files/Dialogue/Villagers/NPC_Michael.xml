@@ -3,8 +3,8 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Um, hi! $NPC_19$, I mean,my name is $NPC_19$. It's nice to meet you. I heard that you've opened an $Building_24$?
-I'd love to help out. I've been looking for a place to practice my skills, I'm still learning, you see...][UnlockBuildingID:50][Name:Introduction]</Value>
+      <Value>[Name:Introduction][Text:Um, hi! $NPC_19$, I mean,my name is $NPC_19$. It's nice to meet you. I heard that you've opened an $Building_24$?
+I'd love to help out. I've been looking for a place to practice my skills, I'm still learning, you see...][UnlockObjectID:9]</Value>
     </Item>
     <Item>
       <Key>1</Key>

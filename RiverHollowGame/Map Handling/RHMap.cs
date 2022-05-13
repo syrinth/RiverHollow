@@ -1935,8 +1935,7 @@ namespace RiverHollow.Map_Handling
         /// <param name="tiles">The list of tiles to add to the object</param>
         public void AssignMapTiles(WorldObject o, List<RHTile> tiles)
         {
-            //Call AddRange to ensure that it has the actual tiles, and isn't just a copy of the list
-            o.Tiles.AddRange(tiles);
+            tiles.FindAll(t => !o.Tiles.Contains(t)).ForEach(t => o.Tiles.Add(t));
 
             if (!_liPlacedWorldObjects.Contains(o))
             {
@@ -2168,7 +2167,7 @@ namespace RiverHollow.Map_Handling
                 RHTile tile = GetTileByGridCoords(vec);
                 if (tile != null)
                 {
-                    if (Util.GetRHTileDelta(startTile, tile) <= 7)
+                    if (Util.GetRHTileDelta(startTile, tile) <= range)
                     {
                         rv.Add(tile);
                     }
@@ -2187,9 +2186,9 @@ namespace RiverHollow.Map_Handling
         {
             List<RHTile> rvList = new List<RHTile>();
 
-            for (int y = obj.Top; y <= obj.Top + obj.Height; y += TILE_SIZE)
+            for (int y = obj.Top; y < obj.Top + obj.Height; y += TILE_SIZE)
             {
-                for (int x = obj.Left; x <= obj.Left + obj.Width; x += TILE_SIZE)
+                for (int x = obj.Left; x < obj.Left + obj.Width; x += TILE_SIZE)
                 {
                     RHTile tile = GetTileByPixelPosition(new Point(x, y));
                     if (!rvList.Contains(tile))

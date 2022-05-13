@@ -32,7 +32,6 @@ namespace RiverHollow.Characters
         public ShippingGremlin(int id, Dictionary<string, string> stringData) : base(id)
         {
             //_bLivesInTown = true;
-            _liRequiredBuildingIDs = new List<int>();
             _diRequiredObjectIDs = new Dictionary<int, int>();
             _arrInventory = new Item[_iRows, _iCols];
             _eActorType = WorldActorTypeEnum.ShippingGremlin;

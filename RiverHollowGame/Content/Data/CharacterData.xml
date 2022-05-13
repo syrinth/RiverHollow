@@ -15,11 +15,11 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Villager][PortRow:1][Collection:0|1|2][Class:5][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:48][RequiredBuildingID:62][CanMarry][FirstArrival:3][ArrivalPeriod:7][CanBecomePregnant][Key:Daria]</Value>
+      <Value>[Type:Villager][PortRow:1][Collection:0|1|2][Class:5][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:14][RequiredVillagerNumber:8][CanMarry][FirstArrival:3][ArrivalPeriod:7][CanBecomePregnant][Key:Daria]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:9][Collection:7|184][Idle:0-0-1-0-T][Walk:64-0-8-.12-F][RequiredBuildingID:67][FirstArrival:20][ArrivalPeriod:4][Key:Dwarf][StartMap:mapCave_Entrance]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:8][Collection:7|184][Idle:0-0-1-0-T][Walk:64-0-8-.12-F][RequiredBuildingID:67][Key:Dwarf][StartMap:mapCave_Entrance]</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -35,11 +35,11 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:47][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:60][CanMarry][FirstArrival:2][ArrivalPeriod:7][CanBecomePregnant][Key:Fran]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:18][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:60][CanMarry][FirstArrival:2][ArrivalPeriod:7][CanBecomePregnant][Key:Fran]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:3][Collection:7|184][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:46][FirstArrival:3][ArrivalPeriod:10][Key:Gail]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:22][Collection:7|184][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:46][FirstArrival:3][ArrivalPeriod:10][Key:Gail]</Value>
     </Item>
     <Item>
       <Key>10</Key>
@@ -51,7 +51,7 @@
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:0][Collection:7|165][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:59][FirstArrival:5][ArrivalPeriod:5][Key:Isabelle]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:39][Collection:7|165][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredVillagerNumber:9][FirstArrival:5][ArrivalPeriod:5][Key:Isabelle]</Value>
     </Item>
     <Item>
       <Key>13</Key>
@@ -79,11 +79,11 @@
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:41][Collection:0|1|2][Class:1][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:49][CanMarry][FirstArrival:1][ArrivalPeriod:7][Key:Michael]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:9][Collection:0|1|2][Class:1][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:49][CanMarry][FirstArrival:1][ArrivalPeriod:7][Key:Michael]</Value>
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:9][Collection:7|165][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:0][ArrivalPeriod:0][Key:Nevar]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:8][Collection:7|165][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:0][ArrivalPeriod:0][Key:Nevar]</Value>
     </Item>
     <Item>
       <Key>21</Key>
@@ -95,7 +95,7 @@
     </Item>
     <Item>
       <Key>23</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:19][Collection:7|184][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:67][FirstArrival:20][ArrivalPeriod:4][Key:Yulia][StartMap:mapWoods]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:19][Collection:7|184][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:67][Key:Yulia][StartMap:mapWoods]</Value>
     </Item>
     <Item>
       <Key>24</Key>

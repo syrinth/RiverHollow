@@ -65,7 +65,7 @@ namespace RiverHollow.Map_Handling
 
             if (!string.IsNullOrEmpty(_sClickAction))
             {
-                if (_sClickAction.Equals("Display_Town")) { GUIManager.OpenMainObject(new TownInfoWindow()); }
+                if (_sClickAction.Equals("Town_Display")) { GUIManager.OpenMainObject(new TownInfoWindow()); }
             }
             if (GetTravelPoint() != null)
             {

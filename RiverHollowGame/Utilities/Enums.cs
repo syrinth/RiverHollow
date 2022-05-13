@@ -57,11 +57,12 @@
         public enum SatisfactionStateEnum { Miserable, Sad, Neutral, Pleased, Happy, Ecastatic };
         public enum NPCStateEnum { Alert, Idle, TrackPlayer, Pathing, Wander };
         public enum ChildStageEnum { Newborn, Infant, Toddler };
-
        
         public enum TaskStateEnum { Waiting, Assigned, Talking, TaskLog, Completed };
         public enum TaskTriggerEnum { GameStart, FriendLevel, Building, Task };
         public enum TaskTypeEnum { None, GroupSlay, Slay, Fetch, Talk, Build };
+
+        public enum VillagerRequestEnum { Close, Far, TownWide };
 
         public enum GameIconEnum { None, AreaAll, AreaColumnAlly, AreaColumnEnemy, AreaSelf, AreaSingle, AreaRow, AreaSquare, Agility, BuffArrow, DebuffArrow, Defence, ElementFire, ElementIce, ElementLightning, Evasion, Experience, Heal, Magic, MaxHealth, MagicDamage, Melee, MoveDown, MoveLeft, MoveRight, MoveUp, PhysicalDamage, Ranged, Resistance, Speed, Strength, Timer };
     }

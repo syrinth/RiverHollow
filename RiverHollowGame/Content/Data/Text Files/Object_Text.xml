@@ -1331,35 +1331,35 @@
     </Item>
     <Item>
       <Key>WorldObject_6</Key>
-      <Value>[Name:$Character_14$s House]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_7</Key>
       <Value>[Name:$Character_16$s House]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_8</Key>
+      <Key>WorldObject_7</Key>
       <Value>[Name:$Character_17$s House]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_9</Key>
+      <Key>WorldObject_8</Key>
       <Value>[Name:$Character_18$s House]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_10</Key>
+      <Key>WorldObject_9</Key>
       <Value>[Name:$Character_19$s House]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_11</Key>
+      <Key>WorldObject_10</Key>
       <Value>[Name:$Character_2$s House]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_12</Key>
+      <Key>WorldObject_11</Key>
       <Value>[Name:$Character_20$s House]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_13</Key>
+      <Key>WorldObject_12</Key>
       <Value>[Name:$Character_25$'s House]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_13</Key>
+      <Value>[Name:$Character_3$s House]</Value>
     </Item>
     <Item>
       <Key>WorldObject_14</Key>
@@ -1371,15 +1371,15 @@
     </Item>
     <Item>
       <Key>WorldObject_16</Key>
-      <Value>[Name:$Character_5$s House]</Value>
-    </Item>
-    <Item>
-      <Key>WorldObject_17</Key>
       <Value>[Name:$Character_6$s House]</Value>
     </Item>
     <Item>
-      <Key>WorldObject_18</Key>
+      <Key>WorldObject_17</Key>
       <Value>[Name:$Character_7$s House]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_18</Key>
+      <Value>[Name:$Character_8$s House]</Value>
     </Item>
     <Item>
       <Key>WorldObject_19</Key>

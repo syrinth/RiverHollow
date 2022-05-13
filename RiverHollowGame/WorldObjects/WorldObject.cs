@@ -221,10 +221,7 @@ namespace RiverHollow.WorldObjects
         /// <param name="t">The Tile to add to the list of known RHTiles</param>
         public void AddTile(RHTile t)
         {
-            if (!Tiles.Contains(t))
-            {
-                Tiles.Add(t);
-            }
+            Util.AddUniquelyToList(ref Tiles, t);
         }
 
         /// <summary>

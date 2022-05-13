@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Threading;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
+using RiverHollow.WorldObjects;
 
 namespace RiverHollow.Characters
 {
@@ -51,6 +52,8 @@ namespace RiverHollow.Characters
         public bool LivesInTown => _eSpawnStatus == VillagerSpawnStatus.HasHome;
         public bool SpawnOnTheMap => _eSpawnStatus != VillagerSpawnStatus.OffMap;
 
+        List<Request> _liHousingRequests;
+
         int _iNextTimeKeyID = 0;
 
         //The Data containing the path they are currently on
@@ -87,7 +90,7 @@ namespace RiverHollow.Characters
         public Villager(int index, Dictionary<string, string> stringData, bool loadanimations = true) : this(index)
         {
             _eActorType = WorldActorTypeEnum.Villager;
-            _liRequiredBuildingIDs = new List<int>();
+            _liHousingRequests = new List<Request>();
             _diRequiredObjectIDs = new Dictionary<int, int>();
             _diCompleteSchedule = new Dictionary<string, List<Dictionary<string, string>>>();
 
@@ -198,7 +201,10 @@ namespace RiverHollow.Characters
                 CanGiveGift = true;
             }
 
-            HandleTravelTiming();
+            if (TownRequirementsMet())
+            {
+                HandleTravelTiming();
+            }
 
             if (_eSpawnStatus == VillagerSpawnStatus.OffMap)
             {
@@ -462,7 +468,7 @@ namespace RiverHollow.Characters
             }
             _liTilePath = _currentPathData.Path;
 
-            if (_liTilePath != null)
+            if (_liTilePath?.Count > 0)
             {
                 SetMoveObj(_liTilePath[0].Position);
             }
@@ -557,7 +563,22 @@ namespace RiverHollow.Characters
 
         public SatisfactionStateEnum GetSatisfaction()
         {
-            return SatisfactionStateEnum.Neutral;
+            if(!PlayerManager.TownObjectBuilt(int.Parse(DataManager.Config[19]["ObjectID"]))){
+                return SatisfactionStateEnum.Neutral;
+            }
+
+            int points = 40;
+            foreach (Request r in _liHousingRequests)
+            {
+                points += r.ConditionsMet(_iHouseBuildingID);
+            }
+
+            if (points <= 10) { return SatisfactionStateEnum.Miserable; }
+            else if (points >= 10 && points < 40) { return SatisfactionStateEnum.Sad; }
+            else if (points >= 40 && points < 50) { return SatisfactionStateEnum.Neutral; }
+            else if (points >= 50 && points < 70) { return SatisfactionStateEnum.Pleased; }
+            else if (points >= 70 && points < 90) { return SatisfactionStateEnum.Happy; }
+            else { return SatisfactionStateEnum.Ecastatic; }
         }
 
         public bool AvailableToDate() { return CanBeMarried && GetFriendshipLevel() >= 6 && RelationshipState == RelationShipStatusEnum.Friends; }
@@ -635,6 +656,70 @@ namespace RiverHollow.Characters
                 Direction = direction;
                 Animation = animation;
                 TimeKeyIndex = timeKeyIndex;
+            }
+        }
+
+        private class Request
+        {
+            public VillagerRequestEnum RequestRange { get; }
+            public int ObjectID { get; }
+            public int Number { get; }
+            public bool Completed { get; set; } = false;
+
+            public Request(VillagerRequestEnum e, int objID, int num = 1)
+            {
+                RequestRange = e;
+                ObjectID = objID;
+                Number = num;
+            }
+
+            public int ConditionsMet(int houseID)
+            {
+                if (PlayerManager.GetNumberTownObjects(ObjectID) < Number) { return 0; }
+
+                RHMap houseMap = PlayerManager.GetTownObjectsByID(houseID)[0].CurrentMap;
+                List<RHTile> validTiles = new List<RHTile>();
+                List<RHTile> houseTiles = houseMap.GetTilesFromRectangle(PlayerManager.GetTownObjectsByID(houseID)[0].CollisionBox);
+
+                for (int i = 0; i < houseTiles.Count; i++) {
+                    foreach (RHTile t in houseMap.GetAllTilesInRange(houseTiles[i], 10))
+                    {
+                        Util.AddUniquelyToList(ref validTiles, t);
+                    }
+                }
+            
+                int numAtCorrectRange = 0;
+                for (int i = 0; i < PlayerManager.GetTownObjectsByID(ObjectID).Count; i++)
+                {
+                    WorldObject obj = PlayerManager.GetTownObjectsByID(ObjectID)[i];
+                    List<RHTile> objTiles = houseMap.GetTilesFromRectangle(obj.CollisionBox);
+
+                    List<RHTile> inRange = objTiles.FindAll(o => validTiles.Contains(o));
+                    switch (RequestRange)
+                    {
+                        case VillagerRequestEnum.Close:
+                            if (inRange.Count != 0)
+                            {
+                                numAtCorrectRange++;
+                            }
+                            break;
+                        case VillagerRequestEnum.Far:
+                            if (inRange.Count != 0)
+                            {
+                                return -10;
+                            }
+                            break;
+                        case VillagerRequestEnum.TownWide:
+                            numAtCorrectRange++;
+                            break;
+                    }
+                }
+
+                if (numAtCorrectRange == PlayerManager.GetNumberTownObjects(ObjectID))
+                {
+                    return 10;
+                }
+                else { return 0; }
             }
         }
     }

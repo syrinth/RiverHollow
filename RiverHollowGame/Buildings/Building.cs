@@ -148,10 +148,11 @@ namespace RiverHollow.Buildings
             pos = new Vector2(pos.X - (_rBase.X * TILE_SIZE), pos.Y - (_rBase.Y * TILE_SIZE));
             SnapPositionToGrid(pos);
 
-            if (map.TestMapTiles(this, Tiles))
+            List<RHTile> tiles = new List<RHTile>();
+            if (map.TestMapTiles(this, tiles))
             {
                 rv = true;
-                map.AssignMapTiles(this, Tiles);
+                map.AssignMapTiles(this, tiles);
                 map.CreateBuildingEntrance(this);
                 map.AddBuilding(this);
 
