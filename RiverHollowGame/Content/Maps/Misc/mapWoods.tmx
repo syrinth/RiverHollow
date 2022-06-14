@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="56" height="74" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="163">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="56" height="74" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="186">
  <properties>
   <property name="Cutscenes" value="0"/>
   <property name="ItemID" value="160-C|161-R"/>
   <property name="MapType" value="Town"/>
+  <property name="Mobs" value="2-4"/>
   <property name="Outside" type="bool" value="true"/>
   <property name="ResourceNumber" value="5"/>
  </properties>
@@ -257,13 +258,128 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="MapObject"/>
+ <objectgroup id="5" name="MapObject">
+  <object id="163" name="Resource" x="89.2498" y="240.583" width="788.834" height="900.667">
+   <properties>
+    <property name="Number" value="300"/>
+    <property name="ObjectID" value="63-C|54-C"/>
+   </properties>
+  </object>
+  <object id="167" name="Mob" x="182" y="296" width="62.6667" height="56">
+   <properties>
+    <property name="MobID" value="32-C|33-C"/>
+   </properties>
+  </object>
+  <object id="168" name="Mob" x="592.667" y="214.667" width="62.6667" height="56">
+   <properties>
+    <property name="MobID" value="32-C|33-C"/>
+   </properties>
+  </object>
+  <object id="169" name="Mob" x="482" y="542.667" width="62.6667" height="56">
+   <properties>
+    <property name="MobID" value="32-C|33-C"/>
+   </properties>
+  </object>
+  <object id="170" name="Mob" x="126" y="560" width="62.6667" height="56">
+   <properties>
+    <property name="MobID" value="32-C|33-C"/>
+   </properties>
+  </object>
+  <object id="171" name="WorldObject" x="451.558" y="213.953" width="23" height="25.75">
+   <properties>
+    <property name="ObjectID" type="int" value="66"/>
+   </properties>
+  </object>
+  <object id="172" name="WorldObject" x="467.191" y="243.881" width="23" height="25.75">
+   <properties>
+    <property name="ObjectID" type="int" value="66"/>
+   </properties>
+  </object>
+  <object id="173" name="Resource" x="577.625" y="482.25" width="11.75" height="9.5">
+   <properties>
+    <property name="Number" value="1"/>
+    <property name="ObjectID" type="int" value="68"/>
+   </properties>
+  </object>
+  <object id="174" name="Resource" x="434.125" y="579.25" width="11.75" height="9.5">
+   <properties>
+    <property name="Number" value="1"/>
+    <property name="ObjectID" type="int" value="68"/>
+   </properties>
+  </object>
+  <object id="175" name="Resource" x="308.125" y="389.75" width="11.75" height="9.5">
+   <properties>
+    <property name="Number" value="1"/>
+    <property name="ObjectID" type="int" value="68"/>
+   </properties>
+  </object>
+  <object id="176" name="Resource" x="293.125" y="451.25" width="11.75" height="9.5">
+   <properties>
+    <property name="Number" value="1"/>
+    <property name="ObjectID" type="int" value="68"/>
+   </properties>
+  </object>
+  <object id="177" name="Resource" x="338.625" y="197.25" width="11.75" height="9.5">
+   <properties>
+    <property name="Number" value="1"/>
+    <property name="ObjectID" type="int" value="68"/>
+   </properties>
+  </object>
+  <object id="178" name="Resource" x="194.625" y="258.25" width="11.75" height="9.5">
+   <properties>
+    <property name="Number" value="1"/>
+    <property name="ObjectID" type="int" value="68"/>
+   </properties>
+  </object>
+  <object id="179" name="Resource" x="130.125" y="628.75" width="11.75" height="9.5">
+   <properties>
+    <property name="Number" value="1"/>
+    <property name="ObjectID" type="int" value="68"/>
+   </properties>
+  </object>
+  <object id="180" name="Resource" x="657.625" y="868.75" width="11.75" height="9.5">
+   <properties>
+    <property name="Number" value="1"/>
+    <property name="ObjectID" type="int" value="68"/>
+   </properties>
+  </object>
+  <object id="181" name="Resource" x="608.125" y="884.75" width="11.75" height="9.5">
+   <properties>
+    <property name="Number" value="1"/>
+    <property name="ObjectID" type="int" value="68"/>
+   </properties>
+  </object>
+  <object id="182" name="Resource" x="642.625" y="929.75" width="11.75" height="9.5">
+   <properties>
+    <property name="Number" value="1"/>
+    <property name="ObjectID" type="int" value="68"/>
+   </properties>
+  </object>
+  <object id="183" name="Resource" x="562.125" y="1014.25" width="11.75" height="9.5">
+   <properties>
+    <property name="Number" value="1"/>
+    <property name="ObjectID" type="int" value="68"/>
+   </properties>
+  </object>
+  <object id="184" name="Resource" x="465.625" y="1029.25" width="11.75" height="9.5">
+   <properties>
+    <property name="Number" value="1"/>
+    <property name="ObjectID" type="int" value="68"/>
+   </properties>
+  </object>
+  <object id="185" name="Resource" x="449.625" y="1060.75" width="11.75" height="9.5">
+   <properties>
+    <property name="Number" value="1"/>
+    <property name="ObjectID" type="int" value="68"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup id="6" name="Character">
-  <object id="52" name="CS0" x="590.95" y="636.318" width="15.2727" height="4"/>
+  <object id="52" name="CS0" x="595.263" y="610.505" width="10.0852" height="8.6875"/>
   <object id="53" name="CS0_Mob" x="752.45" y="483" width="15.2727" height="11.6667"/>
   <object id="144" name="NPC" x="516" y="932.413" width="9" height="8">
    <properties>
-    <property name="NPC_ID" type="int" value="23"/>
+    <property name="NPC_ID" type="int" value="26"/>
    </properties>
   </object>
  </objectgroup>

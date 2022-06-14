@@ -67,110 +67,122 @@
     </Item>
     <Item>
       <Key>NPC_12</Key>
-      <Value>[Name:Isabelle]</Value>
+      <Value>[Name:Helen]</Value>
     </Item>
     <Item>
       <Key>NPC_13</Key>
-      <Value>[Name:Jase]</Value>
+      <Value>[Name:Isabelle]</Value>
     </Item>
     <Item>
       <Key>NPC_14</Key>
-      <Value>[Name:Kyle]</Value>
+      <Value>[Name:Jase]</Value>
     </Item>
     <Item>
       <Key>NPC_15</Key>
-      <Value>[Name:Leanne]</Value>
+      <Value>[Name:June]</Value>
     </Item>
     <Item>
       <Key>NPC_16</Key>
-      <Value>[Name:Lucia]</Value>
+      <Value>[Name:Kyle]</Value>
     </Item>
     <Item>
       <Key>NPC_17</Key>
-      <Value>[Name:Manor Spirit]</Value>
+      <Value>[Name:Leanne]</Value>
     </Item>
     <Item>
       <Key>NPC_18</Key>
-      <Value>[Name:Mark]</Value>
+      <Value>[Name:Lucia]</Value>
     </Item>
     <Item>
       <Key>NPC_19</Key>
-      <Value>[Name:Michael]</Value>
+      <Value>[Name:Manor Spirit]</Value>
     </Item>
     <Item>
       <Key>NPC_20</Key>
-      <Value>[Name:Nevar]</Value>
+      <Value>[Name:Mark]</Value>
     </Item>
     <Item>
       <Key>NPC_21</Key>
-      <Value>[Name:Penelope]</Value>
+      <Value>[Name:Michael]</Value>
     </Item>
     <Item>
       <Key>NPC_22</Key>
-      <Value>[Name:Sammy]</Value>
+      <Value>[Name:Nevar]</Value>
     </Item>
     <Item>
       <Key>NPC_23</Key>
-      <Value>[Name:Yulia]</Value>
+      <Value>[Name:Octavia]</Value>
     </Item>
     <Item>
       <Key>NPC_24</Key>
-      <Value>[Name:Felicia]</Value>
+      <Value>[Name:Penelope]</Value>
     </Item>
     <Item>
       <Key>NPC_25</Key>
-      <Value>[Name:Henry]</Value>
+      <Value>[Name:Sammy]</Value>
     </Item>
     <Item>
       <Key>NPC_26</Key>
-      <Value>[Name:Shipping Gremlin]</Value>
+      <Value>[Name:Yulia]</Value>
     </Item>
     <Item>
       <Key>NPC_27</Key>
-      <Value>[Name:Slime Pet]</Value>
+      <Value>[Name:Felicia]</Value>
     </Item>
     <Item>
       <Key>NPC_28</Key>
-      <Value>[Name:Slime Mount]</Value>
+      <Value>[Name:Henry]</Value>
     </Item>
     <Item>
       <Key>NPC_29</Key>
-      <Value>[Name:Batty]</Value>
+      <Value>[Name:Shipping Gremlin]</Value>
     </Item>
     <Item>
       <Key>NPC_30</Key>
-      <Value>[Name:Mossy_Slime]</Value>
+      <Value>[Name:Slime Pet]</Value>
     </Item>
     <Item>
       <Key>NPC_31</Key>
-      <Value>[Name:Abeline]</Value>
+      <Value>[Name:Slime Mount]</Value>
     </Item>
     <Item>
       <Key>NPC_32</Key>
-      <Value>[Name:Erron]</Value>
+      <Value>[Name:Batty]</Value>
     </Item>
     <Item>
       <Key>NPC_33</Key>
-      <Value>[Name:Magda]</Value>
+      <Value>[Name:Mossy_Slime]</Value>
     </Item>
     <Item>
       <Key>NPC_34</Key>
-      <Value>[Name:Sybil]</Value>
+      <Value>[Name:Abeline]</Value>
     </Item>
     <Item>
       <Key>NPC_35</Key>
-      <Value>[Name:Wagren]</Value>
+      <Value>[Name:Erron]</Value>
     </Item>
     <Item>
       <Key>NPC_36</Key>
-      <Value>[Name:Birb_1]</Value>
+      <Value>[Name:Magda]</Value>
     </Item>
     <Item>
       <Key>NPC_37</Key>
-      <Value>[Name:Squirrel]</Value>
+      <Value>[Name:Sybil]</Value>
     </Item>
     <Item>
       <Key>NPC_38</Key>
+      <Value>[Name:Wagren]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_39</Key>
+      <Value>[Name:Birb_1]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_40</Key>
+      <Value>[Name:Squirrel]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_41</Key>
       <Value>[Name:Child_1]</Value>
     </Item>
     <Item>

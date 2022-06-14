@@ -11,15 +11,15 @@ namespace RiverHollow.Characters
     {
         protected int _iTotalMoneyEarnedReq = -1;
 
-        protected int _iDaysToFirstArrival = 0;
-        protected int _iArrivalPeriod = 0;
+        protected int _iArrivalPeriod = -1;
         protected int _iNextArrival = -1;
 
         protected bool _bShopIsOpen = false;
         protected int _iShopIndex = -1;
 
         protected Dictionary<int, int> _diRequiredObjectIDs;
-        protected int _iRequiredVillagerNumber = -1;
+        protected int _iRequiredPopulation = -1;
+        protected int _iRequiredVillagerID = -1;
 
         public virtual RelationShipStatusEnum RelationshipState { get; set; }
         public bool Introduced => RelationshipState != RelationShipStatusEnum.None;
@@ -44,7 +44,8 @@ namespace RiverHollow.Characters
                     _diRequiredObjectIDs[int.Parse(split[0])] = int.Parse(split[1]);
                 }
             }
-            Util.AssignValue(ref _iRequiredVillagerNumber, "RequiredVillagerNumber", stringData);
+            Util.AssignValue(ref _iRequiredPopulation, "RequiredPopulation", stringData);
+            Util.AssignValue(ref _iRequiredVillagerID, "RequiredVillager", stringData);
 
             Util.AssignValue(ref _iShopIndex, "ShopData", stringData);
 
@@ -59,8 +60,11 @@ namespace RiverHollow.Characters
             _bOnTheMap = !stringData.ContainsKey("Inactive");
 
 
-            Util.AssignValue(ref _iDaysToFirstArrival, "FirstArrival", stringData);
+            int arrivalDelay = -1;
+            Util.AssignValue(ref arrivalDelay, "FirstArrival", stringData);
             Util.AssignValue(ref _iArrivalPeriod, "ArrivalPeriod", stringData);
+
+            _iNextArrival = arrivalDelay;
         }
 
         public virtual void RollOver() { }
@@ -80,7 +84,7 @@ namespace RiverHollow.Characters
                 }
             }
 
-            if(_iRequiredVillagerNumber != -1)
+            if(_iRequiredPopulation != -1)
             {
                 int livesintown = 0;
                 foreach(Villager v in DataManager.DIVillagers.Values)
@@ -88,7 +92,14 @@ namespace RiverHollow.Characters
                     if (v.LivesInTown) { livesintown++; }
                 }
 
-                if(livesintown < _iRequiredVillagerNumber)
+                if(livesintown < _iRequiredPopulation)
+                {
+                    return false;
+                }
+            }
+            if (_iRequiredVillagerID != -1)
+            {
+                if (!DataManager.DIVillagers[_iRequiredVillagerID].LivesInTown)
                 {
                     return false;
                 }
@@ -113,11 +124,7 @@ namespace RiverHollow.Characters
         {
             bool rv = false;
 
-            if (_iDaysToFirstArrival > 0)
-            {
-                rv = TravelTimingHelper(ref _iDaysToFirstArrival);
-            }
-            else if (_iNextArrival > 0)
+            if (_iNextArrival > 0)
             {
                 rv = TravelTimingHelper(ref _iNextArrival);
             }

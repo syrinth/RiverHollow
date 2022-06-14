@@ -434,7 +434,7 @@ namespace RiverHollow.Game_Managers
             foreach (Villager n in DataManager.DIVillagers.Values)
             {
                 if (n.LivesInTown) {
-                    rv += 25 * (int)n.GetSatisfaction();
+                    rv += n.GetTaxes();
                 }
             }
 
@@ -594,14 +594,16 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        public static void MoveToSpawn()
+        {
+            MapManager.CurrentMap = MapManager.Maps[PlayerManager.GetSpawnMap()];
+            CurrentMap = MapManager.Maps[PlayerManager.GetSpawnMap()].Name;
+            PlayerActor.Position = Util.SnapToGrid(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
+            PlayerActor.DetermineFacing(new Vector2(0, 1));
+        }
+
         public static void Rollover()
         {
-            if (GameManager.AutoDisband)
-            {
-                _liParty.Clear();
-                _liParty.Add(PlayerCombatant);
-            }
-
             if(BabyCountdown > 0)
             {
                 BabyCountdown--;
@@ -636,6 +638,20 @@ namespace RiverHollow.Game_Managers
 
             PlayerMailbox.Rollover();
             GameManager.VillagersInTheInn = 0;
+
+            MoveToSpawn();
+        }
+
+        public static string GetSpawnMap()
+        {
+            string rv = "mapInn";
+            Building playerHome = GetBuildingByID(int.Parse(DataManager.Config[21]["ObjectID"]));
+            if (playerHome != null)
+            {
+                rv = playerHome.MapName;
+            }
+
+            return rv;
         }
 
         public static void GetStamina(ref double curr, ref double max)

@@ -1569,7 +1569,6 @@ namespace RiverHollow.GUIComponents.Screens
 
         public class HUDOptions : GUIMainObject
         {
-            GUICheck _gAutoDisband;
             GUICheck _gHideMiniInventory;
             GUIButton _btnSave;
 
@@ -1584,11 +1583,8 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 _winMain = SetMainWindow();
 
-                _gAutoDisband = new GUICheck("Auto-Disband", GameManager.AutoDisband);
-                _gAutoDisband.AnchorToInnerSide(_winMain, SideEnum.TopLeft, 8);
-
                 _gHideMiniInventory = new GUICheck("Hide Mini Inventory", GameManager.HideMiniInventory);
-                _gHideMiniInventory.AnchorAndAlignToObject(_gAutoDisband, SideEnum.Bottom, SideEnum.Left, 8);
+                _gHideMiniInventory.AnchorToInnerSide(_winMain, SideEnum.TopLeft, 8);
 
                 _gSoundSettings = new GUIText("Sound Settings");
                 _gSoundSettings.AnchorAndAlignToObject(_gHideMiniInventory, SideEnum.Bottom, SideEnum.Left, 32);
@@ -1665,7 +1661,6 @@ namespace RiverHollow.GUIComponents.Screens
             }
             public void BtnSave()
             {
-                GameManager.AutoDisband = _gAutoDisband.Checked();
                 GameManager.HideMiniInventory = _gHideMiniInventory.Checked();
                 GUIManager.CloseMainObject();
             }

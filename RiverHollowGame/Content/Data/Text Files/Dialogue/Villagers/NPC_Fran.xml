@@ -66,11 +66,11 @@ I didn't know what to say, so I just stood there, staring at her until she left.
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Text:You know, $NPC_19$ is a lot more knowledgeable than he looks, once you get him to stop babbling and talk straight.][Villager:2][Name:Michael_1]</Value>
+      <Value>[Text:You know, $NPC_21$ is a lot more knowledgeable than he looks, once you get him to stop babbling and talk straight.][Villager:2][Name:Michael_1]</Value>
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Text:$NPC_12$ said she was going to try to get a book for me, but it hasn't arrived yet. Do you think it's too soon to ask her about it?][Villager:11][Name:Isabelle_1]</Value>
+      <Value>[Text:$NPC_13$ said she was going to try to get a book for me, but it hasn't arrived yet. Do you think it's too soon to ask her about it?][Villager:11][Name:Isabelle_1]</Value>
     </Item>
     <Item>
       <Key>17</Key>

@@ -81,5 +81,9 @@
       <Key>19</Key>
       <Value>[ObjectID:39]</Value>
     </Item>
+    <Item>
+      <Key>20</Key>
+      <Value>[NPC_ID:39]</Value>
+    </Item>
   </Asset>
 </XnaContent>

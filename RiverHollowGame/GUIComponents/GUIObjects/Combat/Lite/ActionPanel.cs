@@ -75,7 +75,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                         if (_arrActionImages[i].Contains(mouse))
                         {
                             _iSelectedAction = i;
-                            if (_iSelectedAction == USE_ITEM)
+                            if (_iSelectedAction == USE_ITEM && InventoryManager.GetConsumables().Count > 0)
                             {
                                 _gActionName.SetText("");
                                 _gInventoryPanel = new CombatInventoryPanel();

@@ -25,7 +25,7 @@ I'd be grateful if you could build me a house.][UnlockObjectID:22]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Text:Well, if I'm to stay here i suppose I'll need to find a way to earn my keep. I'm not too bad witha needle and thread. I'm sure $NPC_14$ could design a shop for me or something.][Default][Priority:50][Once][ShopTargetID:2][UnlockItemID:139][Name:Tailor request]</Value>
+      <Value>[Text:Well, if I'm to stay here i suppose I'll need to find a way to earn my keep. I'm not too bad witha needle and thread. I'm sure $NPC_16$ could design a shop for me or something.][Default][Priority:50][Once][ShopTargetID:2][UnlockItemID:139][Name:Tailor request]</Value>
     </Item>
   </Asset>
 </XnaContent>

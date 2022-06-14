@@ -160,7 +160,6 @@ namespace RiverHollow.Characters
             MerchantData npcData = new MerchantData()
             {
                 npcID = ID,
-                arrivalDelay = _iDaysToFirstArrival,
                 timeToNextArrival = _iNextArrival,
                 introduced = Introduced,
                 spokenKeys = _liSpokenKeys,
@@ -172,7 +171,6 @@ namespace RiverHollow.Characters
         public void LoadData(MerchantData data)
         {
             RelationshipState = (RelationShipStatusEnum)data.relationShipStatus;
-            _iDaysToFirstArrival = data.arrivalDelay;
             _iNextArrival = data.timeToNextArrival;
             _bArrivedOnce = data.arrivedOnce;
 

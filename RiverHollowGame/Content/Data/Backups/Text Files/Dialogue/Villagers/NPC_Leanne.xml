@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Ah! I was wondering when I'd hear from you. $NPC_12$  told me you'd be arriving soon. I'm $NPC_15$, the village blacksmith. Not what you were expecting from the mayor's wife I bet, am I? If you need anything hammered out, you come visit me at my forge, alright?][Name:Introduction]</Value>
+      <Value>[Text:Ah! I was wondering when I'd hear from you. $NPC_13$  told me you'd be arriving soon. I'm $NPC_17$, the village blacksmith. Not what you were expecting from the mayor's wife I bet, am I? If you need anything hammered out, you come visit me at my forge, alright?][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -27,11 +27,11 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Text:Weather like this makes my bones ache. I hope $NPC_12$ has a bath running for me tonight.][Weather:Raining][Name:Raining|1]</Value>
+      <Value>[Text:Weather like this makes my bones ache. I hope $NPC_13$ has a bath running for me tonight.][Weather:Raining][Name:Raining|1]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Text:The best part of the winter for me is looking out at the falling snow from the heat of my forge. Sometimes, I go out and just run around to cool off. $NPC_12$ says flopping down in the snow to make snow angels is undignified, but I've never let dignity stop me from having fun before!][Weather:Snowing][Name:Snowing|1]</Value>
+      <Value>[Text:The best part of the winter for me is looking out at the falling snow from the heat of my forge. Sometimes, I go out and just run around to cool off. $NPC_13$ says flopping down in the snow to make snow angels is undignified, but I've never let dignity stop me from having fun before!][Weather:Snowing][Name:Snowing|1]</Value>
     </Item>
     <Item>
       <Key>8</Key>

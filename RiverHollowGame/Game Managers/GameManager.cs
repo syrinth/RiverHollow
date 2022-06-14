@@ -95,7 +95,6 @@ namespace RiverHollow.Game_Managers
         public static int TotalExperience = 0;
         public static List<GUISprite> SlainMonsters;
 
-        public static bool AutoDisband;
         public static bool HideMiniInventory = true;
 
         public static TalkingActor CurrentNPC => interactionLock?.CurrentActor;

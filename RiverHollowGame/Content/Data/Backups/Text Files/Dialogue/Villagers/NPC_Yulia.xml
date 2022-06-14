@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:... Oh? Hello dear, it's so nice to see a friendly face. I've been traveling for some time, you see. I'm $NPC_23$ a traveling healer. I hate to be a bother, but is there any chance you could make room for me here? I think it's time for me to get some rest for the first time in a while.][UnlockBuildingID:65][Name:Introduction]</Value>
+      <Value>[Text:... Oh? Hello dear, it's so nice to see a friendly face. I've been traveling for some time, you see. I'm $NPC_26$ a traveling healer. I hate to be a bother, but is there any chance you could make room for me here? I think it's time for me to get some rest for the first time in a while.][UnlockBuildingID:65][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>

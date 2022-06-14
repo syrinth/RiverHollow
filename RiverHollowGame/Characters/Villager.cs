@@ -26,6 +26,7 @@ namespace RiverHollow.Characters
 
         private Thread _pathingThread;
 
+        private int _iTaxMultiplier = 1;
         private bool _bCanBecomePregnant = false;
         public bool CanBecomePregnant => _bCanBecomePregnant;
         public bool Pregnant { get; set; }
@@ -102,6 +103,8 @@ namespace RiverHollow.Characters
             base.ImportBasics(stringData, loadanimations);
 
             Util.AssignValue(ref _sStartMap, "StartMap", stringData);
+
+            Util.AssignValue(ref _iTaxMultiplier, "TaxValue", stringData);
 
             Util.AssignValue(ref _bCanMarry, "CanMarry", stringData);
             Util.AssignValue(ref _bCanBecomePregnant, "CanBecomePregnant", stringData);
@@ -561,6 +564,11 @@ namespace RiverHollow.Characters
             return rv;
         }
 
+        public int GetTaxes()
+        {
+            return 25 * (int)GetSatisfaction() * _iTaxMultiplier;
+        }
+
         public SatisfactionStateEnum GetSatisfaction()
         {
             if(!PlayerManager.TownObjectBuilt(int.Parse(DataManager.Config[19]["ObjectID"]))){
@@ -590,7 +598,6 @@ namespace RiverHollow.Characters
             {
                 npcID = ID,
                 spawnStatus = (int)_eSpawnStatus,
-                arrivalDelay = _iDaysToFirstArrival,
                 nextArrival = _iNextArrival,
                 friendshipPoints = FriendshipPoints,
                 collection = new List<bool>(_diCollection.Values),
@@ -607,7 +614,6 @@ namespace RiverHollow.Characters
         {
             _eSpawnStatus = (VillagerSpawnStatus)data.spawnStatus;
             _iNextArrival = data.nextArrival;
-            _iDaysToFirstArrival = data.arrivalDelay;
             FriendshipPoints = data.friendshipPoints;
             CanGiveGift = data.canGiveGift;
             RelationshipState = (RelationShipStatusEnum)data.relationShipStatus;

@@ -205,7 +205,7 @@
  <objectgroup id="5" name="MapObject">
   <object id="62" name="Mob" x="57.6683" y="310.5" width="62.6667" height="56">
    <properties>
-    <property name="MobID" value="29-C|30-C"/>
+    <property name="MobID" value="32-C|33-C"/>
    </properties>
   </object>
   <object id="63" name="Resource" x="234.998" y="283.333" width="124" height="124">
@@ -232,12 +232,12 @@
   </object>
   <object id="69" name="Mob" x="511.333" y="174.667" width="62.6667" height="56">
    <properties>
-    <property name="MobID" value="29-C|30-C"/>
+    <property name="MobID" value="32-C|33-C"/>
    </properties>
   </object>
   <object id="70" name="Mob" x="675.333" y="692" width="62.6667" height="56">
    <properties>
-    <property name="MobID" value="29-C|30-C"/>
+    <property name="MobID" value="32-C|33-C"/>
    </properties>
   </object>
   <object id="74" name="Item" x="529.667" y="628.5" width="12.6667" height="7.5">

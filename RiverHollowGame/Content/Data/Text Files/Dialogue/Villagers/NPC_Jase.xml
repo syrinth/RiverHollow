@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Eek! Eh... hello! New house person, yes? Me $NPC_13$. Place things here with me, yes, I sell for you at night while you sleeps. Mutually beneficial!][Name:Introduction]</Value>
+      <Value>[Text:Eek! Eh... hello! New house person, yes? Me $NPC_14$. Place things here with me, yes, I sell for you at night while you sleeps. Mutually beneficial!][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -20,7 +20,7 @@ Do you want to come inside bin? $21$ can scootch over.][Weather:Raining][Name:Ra
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Text:Hello, hello! How can meek, humble $NPC_13$ be helping you?][Selection:VillageTalk][ShipGoods][Name:Selection]</Value>
+      <Value>[Text:Hello, hello! How can meek, humble $NPC_14$ be helping you?][Selection:VillageTalk][ShipGoods][Name:Selection]</Value>
     </Item>
     <Item>
       <Key>5</Key>

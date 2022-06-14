@@ -55,9 +55,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Options")]
             public OptionsData optionData;
 
-            [XmlElement(ElementName = "CurrentMap")]
-            public string currentMap;
-
             [XmlElement(ElementName = "Calendar")]
             public CalendarData Calendar;
 
@@ -97,9 +94,6 @@ namespace RiverHollow.Game_Managers
         }
         public struct OptionsData
         {
-            [XmlElement(ElementName = "AutoDisband")]
-            public bool autoDisband;
-
             [XmlElement(ElementName = "HideMiniInventory")]
             public bool hideMiniInventory;
 
@@ -330,9 +324,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "SpawnStatus")]
             public int spawnStatus;
 
-            [XmlElement(ElementName = "ArrivalDelay")]
-            public int arrivalDelay;
-
             [XmlElement(ElementName = "NextArrival")]
             public int nextArrival;
 
@@ -375,9 +366,6 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "Introduced")]
             public bool introduced;
-
-            [XmlElement(ElementName = "ArrivalDelay")]
-            public int arrivalDelay;
 
             [XmlElement(ElementName = "NextArrival")]
             public int timeToNextArrival;
@@ -629,7 +617,6 @@ namespace RiverHollow.Game_Managers
             SaveData data = new SaveData()
             {
                 saveID = GetSaveID(),
-                currentMap = PlayerManager.CurrentMap,
                 Calendar = GameCalendar.SaveCalendar(),
                 Environment = EnvironmentManager.SaveEnvironment(),
                 Tools = PlayerManager.SaveToolData(),
@@ -721,7 +708,6 @@ namespace RiverHollow.Game_Managers
         {
             OptionsData data = new OptionsData
             {
-                autoDisband = GameManager.AutoDisband,
                 hideMiniInventory = GameManager.HideMiniInventory,
                 musicVolume = SoundManager.MusicVolume,
                 effectVolume = SoundManager.EffectVolume,
@@ -731,7 +717,6 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadOptions(OptionsData data)
         {
-            GameManager.AutoDisband = data.autoDisband;
             GameManager.HideMiniInventory = data.hideMiniInventory;
             SoundManager.SetEffectVolume(data.effectVolume);
             SoundManager.SetMusicVolume(data.musicVolume);
@@ -789,11 +774,8 @@ namespace RiverHollow.Game_Managers
             SaveData dataToLoad = LoadData(filePath);
 
             _iSaveID = dataToLoad.saveID;
-            MapManager.CurrentMap = MapManager.Maps[dataToLoad.currentMap];
             PlayerManager.Initialize();
-            PlayerManager.CurrentMap = MapManager.Maps[dataToLoad.currentMap].Name;
-            PlayerManager.PlayerActor.Position = Util.SnapToGrid(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
-            PlayerManager.PlayerActor.DetermineFacing(new Vector2(0, 1));
+            PlayerManager.MoveToSpawn();
             LoadOptions(dataToLoad.optionData);
             GameCalendar.LoadCalendar(dataToLoad.Calendar);
             EnvironmentManager.LoadEnvironment(dataToLoad.Environment);

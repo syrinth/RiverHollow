@@ -41,7 +41,7 @@ Here. It's not much, just a few odds and ends I had laying around but it should 
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Text:Hm, snowing outside is it? $NPC_16$ loves the snow, but I can't stand it. I'll leave trudging through the snow to you younger ones and stay inside, thank you very much.][Weather:Snowing][Name:Snow|1]</Value>
+      <Value>[Text:Hm, snowing outside is it? $NPC_18$ loves the snow, but I can't stand it. I'll leave trudging through the snow to you younger ones and stay inside, thank you very much.][Weather:Snowing][Name:Snow|1]</Value>
     </Item>
     <Item>
       <Key>10</Key>

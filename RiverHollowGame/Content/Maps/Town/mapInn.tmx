@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="9">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="10">
  <tileset firstgid="1" source="../Tilesets/tilesetHouses.tsx"/>
  <tileset firstgid="521" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="484" columns="22">
   <image source="../Tilesets/tsWalls_Floors.png" trans="ffffff" width="352" height="353"/>
@@ -405,17 +405,18 @@
  <objectgroup id="5" name="Character">
   <object id="4" name="NPC" x="50.333" y="70" width="9" height="8">
    <properties>
-    <property name="NPC_ID" type="int" value="18"/>
+    <property name="NPC_ID" type="int" value="20"/>
    </properties>
   </object>
   <object id="5" name="NPC" x="211.75" y="85.5" width="9" height="8">
    <properties>
-    <property name="NPC_ID" type="int" value="21"/>
+    <property name="NPC_ID" type="int" value="24"/>
    </properties>
   </object>
   <object id="6" name="NPC_Wait_1" x="160.866" y="130.768" width="12.375" height="11.4375"/>
   <object id="7" name="NPC_Wait_2" x="193.093" y="113.128" width="12.375" height="11.4375"/>
   <object id="8" name="NPC_Wait_3" x="226.093" y="130.461" width="12.375" height="11.4375"/>
+  <object id="9" name="PlayerSpawn" x="147.455" y="68.2424" width="8" height="5.33333"/>
  </objectgroup>
  <objectgroup id="4" name="Travel">
   <object id="1" name="Entrance" x="48" y="188" width="16" height="4">

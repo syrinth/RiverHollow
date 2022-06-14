@@ -133,7 +133,7 @@
  <objectgroup id="2" name="Character">
   <object id="4" name="NPC" x="194.955" y="228.182" width="9" height="8">
    <properties>
-    <property name="NPC_ID" type="int" value="22"/>
+    <property name="NPC_ID" type="int" value="25"/>
    </properties>
   </object>
  </objectgroup>
