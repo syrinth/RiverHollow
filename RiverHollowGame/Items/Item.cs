@@ -226,7 +226,7 @@ namespace RiverHollow.Items
             if (entry != null)
             {
                 GUIManager.OpenTextWindow(entry, false);
-                GameManager.CurrentItem = this;
+                SetSelectedItem(null);
             }
         }
         public virtual void ItemBeingUsed() { }

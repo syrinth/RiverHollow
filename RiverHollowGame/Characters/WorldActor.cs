@@ -115,7 +115,7 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            if (IsRunning())
+            if (!GamePaused())
             {
                 if (_dEtherealCD != 0)
                 {

@@ -34,8 +34,6 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Game Enums
-        
-
         public static GameIconEnum GetGameIconFromAttribute(AttributeEnum e)
         {
             GameIconEnum rv = GameIconEnum.None;
@@ -82,10 +80,11 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Interaction Objects
-        public static Merchandise CurrentMerch;
-        public static Item CurrentItem;
-        public static Spirit CurrentSpirit;
-        public static WorldObject CurrentWorldObject;
+        public static TalkingActor CurrentNPC { get; private set; }
+        public static Merchandise CurrentMerch { get; private set; }
+        public static Item CurrentItem { get; private set; }
+        public static Spirit CurrentSpirit { get; private set; }
+        public static WorldObject CurrentWorldObject { get; private set; }
         #endregion
 
         #region Game State Values
@@ -97,9 +96,10 @@ namespace RiverHollow.Game_Managers
 
         public static bool HideMiniInventory = true;
 
-        public static TalkingActor CurrentNPC => interactionLock?.CurrentActor;
         public static ShippingGremlin ShippingGremlin;
         public static DisplayTypeEnum CurrentInventoryDisplay;
+
+        public static GameScreenEnum CurrentScreen;
         #endregion
 
         public static int HUDItemRow;
@@ -119,10 +119,23 @@ namespace RiverHollow.Game_Managers
             DIShops = DataManager.GetShopInfoList();
         }
 
+        public static void SetCurrentNPC(TalkingActor npc)
+        { 
+             CurrentNPC = npc;
+        }
+        public static void SetSelectedItem(Item i)
+        {
+            CurrentItem = i;
+        }
+
+        public static void SetSelectedWorldObject(WorldObject o)
+        {
+            CurrentWorldObject = o;
+        }
         public static void ClearGMObjects()
         {
-            CurrentWorldObject = null;
-            CurrentItem = null;
+            SetSelectedWorldObject(null);
+            SetSelectedItem(null);
             CurrentSpirit = null;
         }
 
@@ -247,27 +260,24 @@ namespace RiverHollow.Game_Managers
         public static bool TakingInput() { return _bTakeInput; }
         #endregion
 
-        #region Running
-        private static InteractionLock interactionLock;
-        public static void Pause()
-        {
-            Pause(null);
-        }
-        public static void Pause(TalkingActor act) {
-            GUICursor.ResetCursor();
-            if (interactionLock == null) { interactionLock = new InteractionLock(act); }
-            else { interactionLock.AddLock(); }
-        }
-        public static void Unpause() {
-            if(interactionLock != null && interactionLock.RemoveLock())
+        #region Running     
+        public static bool GamePaused() {
+            bool rv = false;
+            switch (CurrentScreen)
             {
-                ClearGMObjects();
-                CurrentNPC?.StopTalking();
-                interactionLock = null;
+                case GameScreenEnum.Combat:
+                case GameScreenEnum.Info:
+                    rv = true;
+                    break;
+                case GameScreenEnum.World:
+                    if (GUIManager.IsTextWindowOpen()) { rv = true; }
+                    else if(GUIManager.IsMainObjectOpen()) { rv = true; }
+                    else if (GUIManager.IsMenuOpen()) { rv = true; }
+                    break;
             }
+
+            return rv;
         }
-        public static bool IsPaused() { return interactionLock != null; }
-        public static bool IsRunning() { return interactionLock == null; }
         #endregion
 
         public static void SetGameScale(int val)
@@ -289,15 +299,12 @@ namespace RiverHollow.Game_Managers
 
         public static void GoToCombatScreen(EmptyDelegate combatSwitch)
         {
-            //ShowMap(false);
-            Pause();
             GUIManager.SetScreen(new CombatScreen(combatSwitch));
         }
 
         public static void GoToHUDScreen()
         {
             GUIManager.SetScreen(new HUDScreen());
-            Unpause();
             ShowMap();
         }
 
@@ -333,33 +340,5 @@ namespace RiverHollow.Game_Managers
             }
         }
         #endregion
-
-        private class InteractionLock
-        {
-            int _iLocks = 0;
-            public TalkingActor CurrentActor { get; }
-            public InteractionLock(TalkingActor act = null)
-            {
-                CurrentActor = act;
-                _iLocks = 1;
-            }
-
-            public void AddLock()
-            {
-                _iLocks++;
-            }
-
-            public bool RemoveLock()
-            {
-                bool rv = false;
-
-                if(--_iLocks == 0)
-                {
-                    rv = true;
-                }
-
-                return rv;
-            }
-        }
     }
 }

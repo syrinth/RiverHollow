@@ -257,7 +257,7 @@ namespace RiverHollow.Map_Handling
 
             _liActorsToRemove.Clear();
 
-            if (IsRunning())
+            if (!GamePaused())
             {
                 foreach (WorldActor c in _liActors)
                 {
@@ -326,7 +326,7 @@ namespace RiverHollow.Map_Handling
                 i.Draw(spriteBatch);
             }
 
-            if (HeldObject != null && (GameManager.IsRunning() || Scrying()))
+            if (HeldObject != null && (!GameManager.GamePaused() || Scrying()))
             {
                 foreach (RHTile t in _liTestTiles)
                 {
@@ -1270,7 +1270,7 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = false;
 
-            if (IsPaused()) { return false; }
+            if (GamePaused()) { return false; }
 
             RHTile tile = MouseTile;
 
@@ -1328,7 +1328,6 @@ namespace RiverHollow.Map_Handling
                 SetGameScale(NORMAL_SCALE);
                 GameManager.DropWorldObject();
                 LeaveTownMode();
-                Unpause();
                 Scry(false);
                 ResetCamera();
             }
@@ -1356,7 +1355,7 @@ namespace RiverHollow.Map_Handling
                 }
                 else
                 {
-                    if (IsPaused()) { return false; }
+                    if (GamePaused()) { return false; }
 
                     if (TargetTile != null)
                     {

@@ -110,6 +110,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (_guiHoverWindow != null) { _guiHoverWindow.Draw(spriteBatch); }
         }
 
+        public virtual bool IsMenuOpen() { return false; }
         public virtual void OpenMenu() { }
         public virtual void CloseMenu() { }
 
@@ -162,8 +163,13 @@ namespace RiverHollow.GUIComponents.Screens
         /// <param name="open">Whether or not to display an open animation</param>
         public virtual void OpenTextWindow(TextEntry text, TalkingActor talker = null, bool open = true, bool displayDialogueIcon = false)
         {
+            GUICursor.ResetCursor();
             CloseTextWindow();
-            GameManager.Pause(talker);
+
+            if (talker != null)
+            {
+                GameManager.SetCurrentNPC(talker);
+            }
 
             if (text.Selection) { _guiTextWindow = new GUITextSelectionWindow(text, open); }
             else { _guiTextWindow = new GUITextWindow(text, open, displayDialogueIcon); }
@@ -173,25 +179,26 @@ namespace RiverHollow.GUIComponents.Screens
         public virtual bool CloseTextWindow()
         {
             bool rv = false;
-            GameManager.Unpause();
-            _guiTextWindow?.ClosingWindow();
-            RemoveControl(_guiTextWindow);
-            GameManager.CurrentItem = null;
-            _guiTextWindow = null;
-            rv = true;
+            if (_guiTextWindow != null)
+            {
+                _guiTextWindow.ClosingWindow();
+                RemoveControl(_guiTextWindow);
+                _guiTextWindow = null;
+                rv = true;
+            }
 
             return rv;
         }
         public bool IsTextWindowOpen() { return _guiTextWindow != null; }
         #endregion
 
-        public void SetWindowText(TextEntry value, TalkingActor act, bool displayDialogueIcon)
+        public void SetWindowText(TextEntry value, bool displayDialogueIcon)
         {
             if(_guiTextWindow != null)
             {
                 if (_guiTextWindow.IsSelectionBox())
                 {
-                    OpenTextWindow(value, act, false, displayDialogueIcon);
+                    OpenTextWindow(value, GameManager.CurrentNPC, false, displayDialogueIcon);
                 }
                 else
                 {
@@ -220,10 +227,9 @@ namespace RiverHollow.GUIComponents.Screens
         }
 
         #region Main Object Control
+        public bool IsMainObjectOpen() { return _gMainObject != null; }
         public virtual void OpenMainObject(GUIMainObject o)
         {
-            //Send a Pause request
-            GameManager.Pause();
             CloseMainObject();
             _gMainObject = o;
             AddControl(_gMainObject);
@@ -232,8 +238,6 @@ namespace RiverHollow.GUIComponents.Screens
         {
             if (_gMainObject != null)
             {
-                //Send an Unpause request
-                GameManager.Unpause();
                 RemoveControl(_gMainObject);
                 _gMainObject = null;
                 CloseHoverWindow();

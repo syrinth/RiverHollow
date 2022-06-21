@@ -161,7 +161,6 @@ namespace RiverHollow.GUIComponents.Screens
             if (!_winCraftables.Contains(mouse))
             {
                 GUIManager.CloseMainObject();
-                GameManager.Unpause();
                 rv = true;
             }
             return rv;
@@ -216,7 +215,6 @@ namespace RiverHollow.GUIComponents.Screens
         private void Finished()
         {
             GUIManager.CloseMainObject();
-            GameManager.Unpause();
         }
     }
 }

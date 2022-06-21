@@ -54,7 +54,7 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public override void ProcessRightClick()
         {
-            GameManager.CurrentWorldObject = this;
+            GameManager.SetSelectedWorldObject(this);
             if (_bKeyDoor)
             {
                 if (DungeonManager.DungeonKeys() > 0)

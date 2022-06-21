@@ -10,6 +10,7 @@
         public enum RarityEnum { C, U, R, M };
         public enum WeatherEnum { Sunny, Raining, Snowing };
 
+        public enum GameScreenEnum { Info, Combat, World };
         public enum DisplayTypeEnum { Inventory, Gift, Ship };
 
         public enum SeasonEnum { None, Spring, Summer, Fall, Winter };

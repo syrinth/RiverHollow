@@ -101,6 +101,7 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
+        public static bool IsMenuOpen() { return _currentGUIScreen.IsMenuOpen(); }
         public static void OpenMenu() { _currentGUIScreen.OpenMenu(); }
         public static void CloseMenu() { _currentGUIScreen.CloseMenu(); }
 
@@ -112,11 +113,11 @@ namespace RiverHollow.Game_Managers
         /// <param name="open">Whether or not to play the animation for an opening window.</param>
         public static void OpenTextWindow(string textEntryKey, bool open = true)
         {
-            OpenTextWindow(DataManager.GetGameTextEntry(textEntryKey), null, open);
+            OpenTextWindow(DataManager.GetGameTextEntry(textEntryKey), open);
         }
-        public static void OpenTextWindow(TextEntry text, bool open = true)
+        public static void OpenTextWindow(TextEntry text, bool open = true, bool displayDialogueIcon = false)
         {
-            OpenTextWindow(text, null, open);
+            _currentGUIScreen.OpenTextWindow(text, open, displayDialogueIcon);
         }
         public static void OpenTextWindow(TextEntry text, TalkingActor talker, bool open = true, bool displayDialogueIcon = false)
         {
@@ -128,9 +129,9 @@ namespace RiverHollow.Game_Managers
         }
         public static bool IsTextWindowOpen() { return _currentGUIScreen.IsTextWindowOpen(); }
 
-        public static void SetWindowText(TextEntry value, TalkingActor act = null, bool displayDialogueIcon = false)
+        public static void SetWindowText(TextEntry value, bool displayDialogueIcon = false)
         {
-            _currentGUIScreen.SetWindowText(value, act, displayDialogueIcon);
+            _currentGUIScreen.SetWindowText(value, displayDialogueIcon);
         }
 
         public static void CloseHoverWindow() {
@@ -152,6 +153,7 @@ namespace RiverHollow.Game_Managers
         }
 
         #region MainObject Control
+        public static bool IsMainObjectOpen() { return _currentGUIScreen.IsMainObjectOpen(); }
         public static void OpenMainObject(GUIMainObject o) { _currentGUIScreen.OpenMainObject(o); }
         public static void CloseMainObject() { _currentGUIScreen.CloseMainObject(); }
         #endregion

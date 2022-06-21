@@ -39,6 +39,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         public HUDScreen()
         {
+            GameManager.CurrentScreen = GameScreenEnum.World;
+
             _liTaskIcons = new List<HUDNewAlert>();
             _gHealthDisplay = new GUIOldStatDisplay(PlayerManager.PlayerCombatant.GetHP, Color.Green);
             _gHealthDisplay.AnchorToScreen(this, SideEnum.TopLeft, 10);
@@ -117,11 +119,6 @@ namespace RiverHollow.GUIComponents.Screens
                     if (_gMenu == null) { OpenMenu(); }
                     else { CloseMenu(); }
                 }
-                if (InputManager.CheckPressedKey(Keys.P))
-                {
-                    if (IsPaused()) { Pause(); }
-                    else { Unpause(); }
-                }
             }
         }
 
@@ -154,11 +151,6 @@ namespace RiverHollow.GUIComponents.Screens
             base.OpenTextWindow(text, open, displayDialogueIcon);
             _gInventory.Show(false);
         }
-        public override void OpenTextWindow(TextEntry text, TalkingActor talker, bool open = true, bool displayDialogueIcon = false)
-        {
-            base.OpenTextWindow(text, talker, open, displayDialogueIcon);
-            _gInventory.Show(false);
-        }
         public override bool CloseTextWindow()
         {
             bool rv = base.CloseTextWindow();
@@ -168,12 +160,11 @@ namespace RiverHollow.GUIComponents.Screens
         #endregion
 
         #region Menu
-        public bool IsMenuOpen() { return _gMenu != null; }
+        public override bool IsMenuOpen() { return _gMenu != null; }
         public override void OpenMenu()
         {
             _gMenu = new HUDMenu(CloseMenu);
             AddControl(_gMenu);
-            GameManager.Pause();
         }
         public override void CloseMenu()
         {
@@ -181,7 +172,6 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 RemoveControl(_gMenu);
                 _gMenu = null;
-                GameManager.Unpause();
             }
         }
         #endregion
@@ -349,7 +339,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             bool rv = false;
 
-            if (GameManager.IsRunning() && Contains(mouse))
+            if (!GameManager.GamePaused() && Contains(mouse))
             {
                 rv = true;
 
@@ -374,7 +364,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             bool rv = false;
 
-            if (GameManager.IsRunning() && Contains(mouse))
+            if (!GameManager.GamePaused() && Contains(mouse))
             {
                 rv = true;
 
@@ -394,7 +384,7 @@ namespace RiverHollow.GUIComponents.Screens
         public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
-            if (GameManager.IsRunning())
+            if (!GameManager.GamePaused())
             {
                 if (Contains(mouse) && Alpha() != 1)
                 {

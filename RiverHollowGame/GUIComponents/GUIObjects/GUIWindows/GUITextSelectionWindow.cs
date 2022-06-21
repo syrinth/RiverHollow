@@ -241,93 +241,100 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             TextEntry chosenAction = _diOptions[_iKeySelection].SelectionEntry;
             TextEntry nextText = null;
 
-            if(GameManager.CurrentNPC != null)
+            TalkingActor act = GameManager.CurrentNPC;
+            switch (chosenAction.TextVerb)
             {
-                TalkingActor act = GameManager.CurrentNPC;
-                if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Yes))
-                {
-                    if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.ConfirmGift))
+                case TextEntryVerbEnum.Buy:
+                    act?.OpenShop();
+                    break;
+                case TextEntryVerbEnum.Date:
+                    if (act != null)
                     {
-                        nextText = act.Gift(GameManager.CurrentItem);
-                        GUIManager.CloseMainObject();
+                        ((Villager)act).RelationshipState = RelationShipStatusEnum.Dating;
+                        nextText = act.GetDialogEntry("DateYes");
                     }
-                    else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.Donate))
+                    break;
+                case TextEntryVerbEnum.Gift:
+                    GUIManager.OpenMainObject(new HUDInventoryDisplay(DisplayTypeEnum.Gift));
+                    break;
+                case TextEntryVerbEnum.No:
+                    switch (_textEntry.GameTrigger)
                     {
-                        ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;
-                    }
-                    else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.PetFollow))
-                    {
-                        PlayerManager.PlayerActor.SetPet((Pet)GameManager.CurrentNPC);
-                    }
-                    else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.PetUnfollow))
-                    {
-                        PlayerManager.PlayerActor.SetPet(null);
-                    }
-                    else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.GetBaby))
-                    {
-                        PlayerManager.DetermineBabyAcquisition();
-                    }
-                }
-                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.No))
-                {
-                    if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.Donate))
-                    {
-                        ((Villager)GameManager.CurrentNPC).FriendshipPoints += 1000;
+                        case TextEntryTriggerEnum.Donate:
+                            ((Villager)GameManager.CurrentNPC).FriendshipPoints += 1000;
+                            break;
+                        case TextEntryTriggerEnum.ConfirmGift:
+                        case TextEntryTriggerEnum.UseItem:
+                            GameManager.SetSelectedItem(null);
+                            break;
                     }
 
                     //Just pop this here for now
-                    if (act.IsActorType(WorldActorTypeEnum.ShippingGremlin)) { act.PlayAnimation(AnimationEnum.Action2); }
-                }
-                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Gift)) { GUIManager.OpenMainObject(new HUDInventoryDisplay(DisplayTypeEnum.Gift)); }
-                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Party)) { nextText = act.JoinParty(); }
-                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.ShowRequests)) { nextText = act.OpenRequests(); }
-                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Buy)) { act.OpenShop(); }
-                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Talk)) { nextText = act.GetDailyDialogue(); }
-                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.ShipGoods)) { ((ShippingGremlin)GameManager.CurrentNPC).OpenShipping(); }
-                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Propose))
-                {
-                    if (act.GetFriendshipLevel() >= 8)
+                    if (act != null && act.IsActorType(WorldActorTypeEnum.ShippingGremlin))
+                    {
+                        act.PlayAnimation(AnimationEnum.Action2);
+                    }
+                    break;
+                case TextEntryVerbEnum.Party:
+                    nextText = act?.JoinParty();
+                    break;
+                case TextEntryVerbEnum.Propose:
+                    if (act != null && act.GetFriendshipLevel() >= 8)
                     {
                         Villager v = ((Villager)act);
                         v.RelationshipState = RelationShipStatusEnum.Engaged;
 
                         nextText = act.GetDialogEntry("MarriageYes");
                     }
-                    else { nextText = act.GetDialogEntry("MarriageNo"); }
-                }
-                else if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Date))
-                {
-                    ((Villager)act).RelationshipState = RelationShipStatusEnum.Dating;
-                    nextText = act.GetDialogEntry("DateYes");
-                }
-            }
-            else if (GameManager.CurrentItem != null)
-            {
-                //Valid verbs to continue are "yes" or "option_#"
-                if (!chosenAction.TextVerb.Equals(TextEntryVerbEnum.No))
-                {
-                    if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.UseItem))
+                    else { nextText = act?.GetDialogEntry("MarriageNo"); }
+                    break;
+                case TextEntryVerbEnum.ShipGoods:
+                    ((ShippingGremlin)GameManager.CurrentNPC).OpenShipping();
+                    break;
+                case TextEntryVerbEnum.ShowRequests:
+                    nextText = act?.OpenRequests();
+                    break;
+                case TextEntryVerbEnum.Talk:
+                    nextText = act?.GetDailyDialogue();
+                    break;
+                case TextEntryVerbEnum.Yes:
+                    switch (_textEntry.GameTrigger)
                     {
-                        GameManager.CurrentItem.UseItem(chosenAction.TextVerb);
+                        case TextEntryTriggerEnum.GetBaby:
+                            PlayerManager.DetermineBabyAcquisition();
+                            break;
+                        case TextEntryTriggerEnum.ConfirmGift:
+                            nextText = act?.Gift(GameManager.CurrentItem);
+                            GUIManager.CloseMainObject();
+                            GameManager.SetSelectedItem(null);
+                            break;
+                        case TextEntryTriggerEnum.Donate:
+                            ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;
+                            break;
+                        case TextEntryTriggerEnum.EndDay:
+                            Vector2 pos = PlayerManager.PlayerActor.CollisionBox.Center.ToVector2();
+                            PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
+                            GUIManager.SetScreen(new DayEndScreen());
+                            break;
+                        case TextEntryTriggerEnum.Exit:
+                            break;
+                        case TextEntryTriggerEnum.PetFollow:
+                            PlayerManager.PlayerActor.SetPet((Pet)GameManager.CurrentNPC);
+                            break;
+                        case TextEntryTriggerEnum.PetUnfollow:
+                            PlayerManager.PlayerActor.SetPet(null);
+                            break;
+                        case TextEntryTriggerEnum.UseItem:
+                            GameManager.CurrentItem.UseItem(chosenAction.TextVerb);
+                            GameManager.SetSelectedItem(null);
+                            break;
+
                     }
-                }
-            }
-            else
-            {
-                if (chosenAction.TextVerb.Equals(TextEntryVerbEnum.Yes))
-                {
-                    if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.Exit)) { }
-                    else if (_textEntry.GameTrigger.Equals(TextEntryTriggerEnum.EndDay))
-                    {
-                        Vector2 pos = PlayerManager.PlayerActor.CollisionBox.Center.ToVector2();
-                        PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
-                        GUIManager.SetScreen(new DayEndScreen());
-                    }
-                }
+                    break;
             }
 
             if (nextText == null) { GUIManager.CloseTextWindow(); }
-            else { GUIManager.SetWindowText(nextText, GameManager.CurrentNPC, true); }
+            else { GUIManager.SetWindowText(nextText, true); }
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

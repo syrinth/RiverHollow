@@ -4,6 +4,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Utilities;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -12,6 +13,8 @@ namespace RiverHollow.GUIComponents.Screens
         GUIObject _gObject;
         public DataScreen()
         {
+            GameManager.CurrentScreen = GameScreenEnum.Info;
+
             _gObject = new Menu(RemoveControl, AddControl);
             AddControl(_gObject);
         }

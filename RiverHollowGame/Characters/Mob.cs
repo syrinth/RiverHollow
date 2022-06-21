@@ -167,7 +167,7 @@ namespace RiverHollow.Characters
         {
             base.Update(gTime);
 
-            if (!CutsceneManager.Playing && IsRunning())
+            if (!CutsceneManager.Playing && !GamePaused())
             {
                 //Check if the mob is still stunned
                 if (_dStun > 0)

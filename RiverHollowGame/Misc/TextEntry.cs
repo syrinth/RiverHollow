@@ -40,12 +40,14 @@ namespace RiverHollow.Misc
         public TextEntry()
         {
             _sText = "No Text Assigned.";
+            _diTags = new Dictionary<string, string>();
         }
 
         //This should be used as little as possible.
-        public TextEntry(string text)
+        public TextEntry(string text) : this()
         {
             _sText = text;
+            _diTags = new Dictionary<string, string>();
         }
 
         public TextEntry(string key, Dictionary<string, string> stringData)
@@ -226,7 +228,7 @@ namespace RiverHollow.Misc
         /// This method is called as a GUITextWindow is being closed. Perform any special actions that need to be done here.
         /// </summary>
         /// <param name="act">The TalkingActor we're talking to</param>
-        public void HandlePostWindowActions(TalkingActor act = null)
+        public void HandlePostWindowActions()
         {
             if (_diTags.ContainsKey("UnlockObjectID"))
             {

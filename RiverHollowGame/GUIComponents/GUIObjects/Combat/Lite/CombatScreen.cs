@@ -39,6 +39,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public CombatScreen(EmptyDelegate combatSwitch)
         {
+            GameManager.CurrentScreen = GameScreenEnum.Combat;
+
             _switch = combatSwitch;
             _gBackgroundImage = new GUIImage(new Rectangle(0, 0, 480, 270), DataManager.GUI_COMPONENTS + @"\Combat_Background_Forest");
             AddControl(_gBackgroundImage);

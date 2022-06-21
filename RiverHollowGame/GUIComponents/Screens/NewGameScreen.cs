@@ -44,6 +44,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         public NewGameScreen()
         {
+            GameManager.CurrentScreen = GameScreenEnum.Info;
+
             //AssignClothes(ref _liHats, Util.FindParams(DataManager.Config[4]["ItemID"]));
             AssignClothes(ref _liShirts, Util.FindParams(DataManager.Config[5]["ItemID"]));
 

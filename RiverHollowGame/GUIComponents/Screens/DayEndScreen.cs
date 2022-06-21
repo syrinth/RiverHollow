@@ -30,6 +30,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         public DayEndScreen()
         {
+            GameManager.CurrentScreen = GameScreenEnum.Info;
+
             _bPopped = false;
             _bNextRow = true;
             _liMonsters = new List<GUISprite>();

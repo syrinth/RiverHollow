@@ -74,7 +74,7 @@ namespace RiverHollow.WorldObjects
             //Currently, only display Decor objects can be interacted with.
             if (CanDisplay)
             {
-                GameManager.CurrentWorldObject = this;
+                GameManager.SetSelectedWorldObject(this);
                 GUIManager.OpenMainObject(new HUDInventoryDisplay());
             }
         }

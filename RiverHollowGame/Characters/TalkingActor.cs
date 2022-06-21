@@ -76,6 +76,7 @@ namespace RiverHollow.Characters
         public virtual TextEntry OpenRequests() { return null; }
 
         public virtual void StopTalking() {
+            GameManager.SetCurrentNPC(null);
             ResetActorFace();
 
             if(_assignedTask?.TaskState == TaskStateEnum.Talking)
@@ -156,7 +157,7 @@ namespace RiverHollow.Characters
         /// <returns>The processed string text for the entry </returns>
         public virtual TextEntry GetDialogEntry(string entry)
         {
-            TextEntry rv = null;
+            TextEntry rv = new TextEntry(entry);
 
             if (_diDialogue.ContainsKey(entry))
             {

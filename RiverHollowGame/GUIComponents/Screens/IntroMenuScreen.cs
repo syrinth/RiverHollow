@@ -4,6 +4,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -17,6 +18,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         public IntroMenuScreen()
         {
+            GameManager.CurrentScreen = GameScreenEnum.Info;
+
             _btnNewGame = new GUIButton("New Game", BtnNewGame);
             _btnLoadGame = new GUIButton("Load Game", BtnLoadGame);
             _btnExit = new GUIButton("Exit Game", BtnExit);

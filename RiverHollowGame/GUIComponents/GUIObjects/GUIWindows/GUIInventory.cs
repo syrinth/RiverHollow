@@ -104,7 +104,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     {
                         rv = true;
                         //Do not pick the item up, instead assign it.
-                        GameManager.CurrentItem = clickedItem;
+                        GameManager.SetSelectedItem(clickedItem);
+                        
                     }
                 }
                 else if (GameManager.CurrentWorldObject != null)

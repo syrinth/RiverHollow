@@ -32,6 +32,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         public BuildScreen()
         {
+            GameManager.CurrentScreen = GameScreenEnum.Info;
+
             _eCurrentMenu = MenuEnum.BuildMenu;
             Scry(true);
             storageButton = new GUIButton("Storage", BtnStorage);
@@ -245,7 +247,11 @@ namespace RiverHollow.GUIComponents.Screens
                     break;
             }            
         }
-    
+
+        public override bool IsMenuOpen()
+        {
+            return true;
+        }
         public override void OpenMenu()
         {
             switch (_eCurrentMenu)

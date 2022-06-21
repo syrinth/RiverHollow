@@ -127,7 +127,7 @@ namespace RiverHollow
                         //GUI does NOT use Camera translations
                         mousePoint.X = (int)((mousePoint.X - translate.X) / CurrentScale);
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / CurrentScale);
-                        if (IsRunning() || Scrying())
+                        if (!GamePaused() || Scrying())
                         {
                             MapManager.ProcessRightButtonClick(mousePoint);
                         }
@@ -139,7 +139,7 @@ namespace RiverHollow
                     {
                         mousePoint.X = (int)((mousePoint.X - translate.X) / CurrentScale);
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / CurrentScale);
-                        if (IsRunning() || Scrying())
+                        if (!GamePaused() || Scrying())
                         {
                             MapManager.ProcessLeftButtonClick(mousePoint);
                         }
@@ -151,7 +151,7 @@ namespace RiverHollow
                     {
                         mousePoint.X = (int)((mousePoint.X - translate.X) / CurrentScale);
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / CurrentScale);
-                        if (IsRunning() || Scrying())
+                        if (!GamePaused() || Scrying())
                         {
                             MapManager.ProcessHover(mousePoint);
                         }
@@ -165,7 +165,7 @@ namespace RiverHollow
                     Camera.Update(gTime);
                     GUICursor.UpdateTownBuildObject(gTime);
                     if (CutsceneManager.Playing) { CutsceneManager.Update(gTime); }
-                    else if (IsRunning())
+                    else if (!GamePaused())
                     {
                         MapManager.Update(gTime);
                         GameCalendar.Update(gTime);

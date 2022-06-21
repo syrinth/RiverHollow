@@ -9,6 +9,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -20,6 +21,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         public LoadScreen()
         {
+            GameManager.CurrentScreen = GameScreenEnum.Info;
+
             _btnBack = new GUIButton("Back", BtnBack);
             _liDataWindows = new List<GUIObject>();
             _liData = SaveManager.LoadFiles();
