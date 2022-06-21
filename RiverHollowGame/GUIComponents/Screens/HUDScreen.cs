@@ -112,7 +112,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         protected override void HandleInput()
         {
-            if (!TakingInput())
+            if (!TakingInput() && !CutsceneManager.Playing)
             {
                 if (InputManager.CheckPressedKey(Keys.Escape))
                 {

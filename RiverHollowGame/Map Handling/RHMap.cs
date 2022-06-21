@@ -1344,7 +1344,7 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = false;
 
-            if (!PlayerManager.Busy)
+            if (!PlayerManager.Busy && !CutsceneManager.Playing)
             {
                 //Ensure that we have a tile that we clicked on and that the player is close enough to interact with it.
                 TargetTile = MouseTile;
