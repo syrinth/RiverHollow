@@ -355,11 +355,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     //}
                     break;
                 case CombatManager.PhaseEnum.PerformAction:
+                    break;
                 case CombatManager.PhaseEnum.EnemyTurn:
                     _gTurnOrder.DisplayNewTurn(CombatManager.CurrentRoundOrder);
                     ShowHUDObjects(false);
                     _gActiveIndicator.CenterOnObject(CombatManager.ActiveCharacter.Tile.GUITile);
-
                     break;
                 case CombatManager.PhaseEnum.EndCombat:
                 case CombatManager.PhaseEnum.Defeat:
@@ -408,9 +408,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         private void ShowHUDObjects(bool value)
         {
-            _gActiveCharacterInfo.Show(value);
-            _btnEscape.Show(value);
-            DisplayActionPanel();
+            if (_gActiveCharacterInfo.Visible != value) {
+                _gActiveCharacterInfo.Show(value);
+                _btnEscape.Show(value);
+                DisplayActionPanel();
+            }
         }
         private void DisplayActionPanel()
         {

@@ -52,6 +52,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 CombatAction action = CombatManager.ActiveCharacter.Actions[i];
                 _arrActionImages[i] = new GUIImage(new Rectangle((int)action.IconGrid.X * GameManager.TILE_SIZE, (int)action.IconGrid.Y * GameManager.TILE_SIZE, 16, 16), DataManager.ACTION_ICONS);
                 _arrActionImages[i].Position(Position() + ScaleIt(iconPosition));
+                if (i == USE_ITEM && InventoryManager.GetConsumables().Count == 0)
+                {
+                    _arrActionImages[i].Enable(false);
+                }
                 AddControl(_arrActionImages[i]);
 
                 if (i < USE_ITEM) { iconPosition.X += 22; }
@@ -72,10 +76,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
                 {
                     for (int i = 0; i < 6; i++)
                     {
-                        if (_arrActionImages[i].Contains(mouse))
+                        if (_arrActionImages[i].Contains(mouse) && _arrActionImages[i].Enabled)
                         {
                             _iSelectedAction = i;
-                            if (_iSelectedAction == USE_ITEM && InventoryManager.GetConsumables().Count > 0)
+                            if (_iSelectedAction == USE_ITEM)
                             {
                                 _gActionName.SetText("");
                                 _gInventoryPanel = new CombatInventoryPanel();
