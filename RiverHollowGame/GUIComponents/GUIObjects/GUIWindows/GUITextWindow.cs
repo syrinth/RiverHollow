@@ -140,7 +140,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         protected void DisplayCharacterPortrait()
         {
-            if (GameManager.CurrentNPC != null)
+            if (GameManager.CurrentNPC != null && _textEntry.SelectionType != Utilities.Enums.TextEntrySelectionEnum.YesNo)
             {
                 RemoveControl(_giPortrait);
                 TalkingActor talker = GameManager.CurrentNPC;
