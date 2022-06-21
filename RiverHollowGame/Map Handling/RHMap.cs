@@ -1045,6 +1045,7 @@ namespace RiverHollow.Map_Handling
                 {
                     switch (w.ActorType)
                     {
+                        case WorldActorTypeEnum.Critter:
                         case WorldActorTypeEnum.Pet:
                             break;
                         case WorldActorTypeEnum.Mount:

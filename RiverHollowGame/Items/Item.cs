@@ -226,10 +226,9 @@ namespace RiverHollow.Items
             if (entry != null)
             {
                 GUIManager.OpenTextWindow(entry, false);
-                SetSelectedItem(null);
             }
         }
-        public virtual void ItemBeingUsed() { }
+        public virtual void ItemBeingUsed() { GameManager.SetSelectedItem(this); }
         public virtual void UseItem(TextEntryVerbEnum action) { }
 
         public virtual void ApplyUniqueData(string str) { }
@@ -433,6 +432,7 @@ namespace RiverHollow.Items
 
         public override void ItemBeingUsed()
         {
+            base.ItemBeingUsed();
             ConfirmItemUse(DataManager.GetGameTextEntry("MonsterFood_False"));
         }
 
@@ -535,6 +535,7 @@ namespace RiverHollow.Items
 
         public override void ItemBeingUsed()
         {
+            base.ItemBeingUsed();
             ConfirmItemUse(DataManager.GetGameTextEntry("ClassItemConfirm"));
         }
 

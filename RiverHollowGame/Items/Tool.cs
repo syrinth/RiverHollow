@@ -93,6 +93,7 @@ namespace RiverHollow.Items
 
         public override void ItemBeingUsed()
         {
+            base.ItemBeingUsed();
             if (ToolType == ToolEnum.Harp)
             {
                 Spirit s = MapManager.CurrentMap.FindSpirit();

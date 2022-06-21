@@ -52,6 +52,7 @@ namespace RiverHollow.Items
 
         public override void ItemBeingUsed()
         {
+            base.ItemBeingUsed();
             TextEntry entry = DataManager.GetGameTextEntry("ItemConfirm");
             entry.FormatText(Name());
 
