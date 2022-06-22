@@ -259,9 +259,17 @@ namespace RiverHollow.GUIComponents.Screens
                 case MenuEnum.BuildMenu:
                     AddControls(_liBuildMenuObjects);
                     storageButton.Enable(PlayerManager.GetStorageItems().Count > 0);
+                    for (int i = 0; i < _liBuildMenuObjects.Count; i++)
+                    {
+                        _liBuildMenuObjects[i].Show(true);
+                    }
                     break;
                 case MenuEnum.EditMenu:
                     AddControls(_liEditMenuObjects);
+                    for (int i = 0; i < _liEditMenuObjects.Count; i++)
+                    {
+                        _liEditMenuObjects[i].Show(true);
+                    }
                     break;
             }
             
