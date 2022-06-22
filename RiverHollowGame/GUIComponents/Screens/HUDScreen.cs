@@ -1910,37 +1910,35 @@ namespace RiverHollow.GUIComponents.Screens
         }
     }
 
-    class HUDNewAlert : GUIObject
+    class HUDNewAlert : GUIWindow
     {
-        double _dTimer = 0;
         GUIImage _gMarker;
         GUIText _gText;
 
         public delegate void RemoveDelegate(HUDNewAlert q);
         private RemoveDelegate _delAction;
-        public HUDNewAlert(string text, RemoveDelegate del)
+        public HUDNewAlert(string text, RemoveDelegate del) : base(Window_1, 10, 10)
         {
             _delAction = del;
-            _gMarker = new GUIImage(new Rectangle(48, 80, 16, 16), ScaleIt(16), ScaleIt(16), DataManager.DIALOGUE_TEXTURE);
+            _gMarker = new GUIImage(new Rectangle(54, 83, 4, 10), ScaleIt(4), ScaleIt(10), DataManager.DIALOGUE_TEXTURE);
             _gText = new GUIText(text);
 
+            _gMarker.AnchorToInnerSide(this, SideEnum.TopLeft);
             _gText.AnchorAndAlignToObject(_gMarker, SideEnum.Right, SideEnum.CenterY, ScaleIt(1));
             AddControl(_gMarker);
             AddControl(_gText);
 
-            Width = _gText.Right - _gMarker.Left;
-            Height = _gMarker.Height;
+            Resize();
         }
 
         public override void Update(GameTime gTime)
         {
-            _dTimer += gTime.ElapsedGameTime.TotalSeconds;
-
-            if (_dTimer > 3) { _delAction(this); }
+            if (Alpha() <= 0) {
+                _delAction(this); }
             else
             {
                 MoveBy(new Vector2(0, -1));
-                Alpha(Alpha() - 0.01f);
+                Alpha(Alpha() - 0.005f);
             }
         }
     }
