@@ -116,8 +116,15 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 if (InputManager.CheckPressedKey(Keys.Escape))
                 {
-                    if (_gMenu == null) { OpenMenu(); }
-                    else { CloseMenu(); }
+                    if (_gMainObject != null)
+                    {
+                        CloseMainObject();
+                    }
+                    else
+                    {
+                        if (_gMenu == null) { OpenMenu(); }
+                        else { CloseMenu(); }
+                    }
                 }
             }
         }
@@ -402,7 +409,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public void RowUp()
         {
-            if (GameManager.HUDItemRow < InventoryManager.maxItemRows - 1)
+            if (GameManager.HUDItemRow < PlayerManager.BackpackLevel - 1)
             {
                 GameManager.HUDItemRow++;
             }
@@ -501,7 +508,15 @@ namespace RiverHollow.GUIComponents.Screens
         }
         public void BtnInventory()
         {
-            _gMenuObject = new HUDInventoryDisplay();
+            Item[,] toolBox = new Item[1, 6];
+            toolBox[0, 0] = PlayerManager.RetrieveTool(ToolEnum.Axe);
+            toolBox[0, 1] = PlayerManager.RetrieveTool(ToolEnum.Pick);
+            toolBox[0, 2] = PlayerManager.RetrieveTool(ToolEnum.WateringCan);
+            toolBox[0, 3] = PlayerManager.RetrieveTool(ToolEnum.Scythe);
+            toolBox[0, 4] = PlayerManager.RetrieveTool(ToolEnum.Harp);
+            toolBox[0, 5] = PlayerManager.RetrieveTool(ToolEnum.Backpack);
+
+            _gMenuObject = new HUDInventoryDisplay(toolBox, DisplayTypeEnum.Inventory, true);
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
         }

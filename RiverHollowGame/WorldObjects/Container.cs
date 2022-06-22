@@ -4,6 +4,7 @@ using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.SaveManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.WorldObjects
 {
@@ -23,7 +24,7 @@ namespace RiverHollow.WorldObjects
 
         public override void ProcessRightClick()
         {
-            GUIManager.OpenMainObject(new HUDInventoryDisplay(Inventory));
+            GUIManager.OpenMainObject(new HUDInventoryDisplay(Inventory, DisplayTypeEnum.Inventory));
         }
 
         internal ContainerData SaveData()

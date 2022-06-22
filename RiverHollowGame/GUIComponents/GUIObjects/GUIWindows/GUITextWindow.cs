@@ -42,7 +42,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextWindow() : base()
         {
-            _giText = new GUIText("", true, DataManager.FONT_MAIN);
+            _giText = new GUIText("", true, DataManager.FONT_NEW);
             _liTextPages = new List<string>();
             _iCharWidth = _giText.CharWidth;
             _iCharHeight = _giText.CharHeight;

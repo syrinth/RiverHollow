@@ -7,8 +7,9 @@ namespace RiverHollow.Game_Managers
     static class InventoryManager
     {
         #region Properties
-        public static int maxItemColumns = 10;
+        public static bool LockedInventory = false;
         public static int maxItemRows = 4;
+        public static int maxItemColumns = 10;
         public static Item[,] PlayerInventory { get; private set; }
         private static Item[,] _arrExtraInventory;
 
@@ -22,7 +23,20 @@ namespace RiverHollow.Game_Managers
         public static void InitPlayerInventory()
         {
             AddedItemList = new List<Item>();
-            PlayerInventory = new Item[maxItemRows, maxItemColumns];
+
+            Item[,] temp = PlayerInventory;
+            PlayerInventory = new Item[PlayerManager.BackpackLevel, maxItemColumns];
+
+            if(temp != null)
+            {
+                for (int x = 0; x < PlayerManager.BackpackLevel && x < temp.GetLength(0); x++)
+                {
+                    for (int y = 0; y < maxItemColumns; y++)
+                    {
+                        PlayerInventory[x, y] = temp[x, y];
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -280,7 +294,7 @@ Exit:
         /// <returns>True if successful</returns>
         public static bool AddToInventory(Item itemToAdd, bool playerInventory = true, bool noDisplay = false)
         {
-            return AddToInventory(itemToAdd, GetInventory(playerInventory), noDisplay);
+            return AddToInventory(itemToAdd, GetInventory(playerInventory), playerInventory, noDisplay);
         }
 
         /// <summary>
@@ -289,18 +303,12 @@ Exit:
         /// <param name="itemToAdd">The Item object to add</param>
         /// <param name="inventory">The Inventory to act on</param>
         /// <returns></returns>
-        private static bool AddToInventory(Item itemToAdd, Item[,] inventory, bool noDisplay = false)
+        private static bool AddToInventory(Item itemToAdd, Item[,] inventory, bool playerInventory = true, bool noDisplay = false)
         {
             bool rv = false;
 
-            if (itemToAdd.CompareType(ItemEnum.Special) && itemToAdd.CompareSpecialType(SpecialItemEnum.DungeonKey))
+            if (InventoryAddCheck(playerInventory, itemToAdd))
             {
-                DungeonManager.AddDungeonKey();
-                return true;
-            }
-            else if (itemToAdd.CompareType(ItemEnum.Tool))
-            {
-                PlayerManager.AddTool((Tool)itemToAdd);
                 return true;
             }
 
@@ -364,7 +372,7 @@ Exit:
         /// </summary>
         public static bool AddItemToInventorySpot(Item item, int row, int column, bool playerInventory = true)
         {
-            return AddItemToInventorySpot(item, row, column, GetInventory(playerInventory));
+            return AddItemToInventorySpot(item, row, column, GetInventory(playerInventory), playerInventory);
         }
         /// <summary>
         /// Adds an item to a specified inventory location
@@ -374,13 +382,18 @@ Exit:
         /// <param name="column">The column to add it to</param>
         /// <param name="inventory">Which inventory to add the item to</param>
         /// <returns></returns>
-        private static bool AddItemToInventorySpot(Item item, int row, int column, Item[,] inventory)
+        private static bool AddItemToInventorySpot(Item item, int row, int column, Item[,] inventory, bool playerInventory = true)
         {
             bool rv = false;
 
             //Ensure that the item is not null, we do not place null =.
             if (item != null)
             {
+                if (InventoryAddCheck(playerInventory, item))
+                {
+                    return true;
+                }
+
                 if (inventory[row, column] == null)
                 {
                     if (item.CompareType(ItemEnum.Equipment))
@@ -485,6 +498,26 @@ Exit:
         }
         #endregion
 
+        private static bool InventoryAddCheck(bool playerInventory, Item itemToAdd)
+        {
+            bool rv = false;
+            if (playerInventory)
+            {
+                if (itemToAdd.CompareType(ItemEnum.Special) && itemToAdd.CompareSpecialType(SpecialItemEnum.DungeonKey))
+                {
+                    DungeonManager.AddDungeonKey();
+                    rv = true;
+                }
+                else if (itemToAdd.CompareType(ItemEnum.Tool))
+                {
+                    PlayerManager.AddTool((Tool)itemToAdd);
+                    rv = true;
+                }
+            }
+
+            return rv;
+        }
+
         public static Item GetCurrentItem()
         {
             return PlayerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
@@ -493,7 +526,7 @@ Exit:
         internal static List<Consumable> GetConsumables()
         {
             List<Consumable> items = new List<Consumable>();
-            for (int i = 0; i < maxItemRows; i++)
+            for (int i = 0; i < PlayerManager.BackpackLevel; i++)
             {
                 for (int j = 0; j < maxItemColumns; j++)
                 {
@@ -508,7 +541,7 @@ Exit:
 
         internal static bool ManagingExtraInventory()
         {
-            return _arrExtraInventory != null;
+            return !LockedInventory && _arrExtraInventory != null;
         }
 
         public static Item GetItemFromLocation(int row, int column, bool PlayerInventory = true)

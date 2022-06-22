@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Beehive][Image:112-160][Size:1-2][BaseOffset:0-1][ItemID:156][Period:5][ReqItems:60-4|84-3]</Value>
+      <Value>[Type:Beehive][Image:112-160][Size:1-2][BaseOffset:0-1][ItemID:158][Period:5][ReqItems:60-4|84-3]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -339,7 +339,7 @@
     </Item>
     <Item>
       <Key>84</Key>
-      <Value>[Type:Machine][Image:0-256][Work:4-0.3][Size:3-3][Makes:165-0|166-0|58-0][Base:3-2][BaseOffset:0-1][WorkEffect:Cauldron]</Value>
+      <Value>[Type:Machine][Image:0-256][Work:4-0.3][Size:3-3][Makes:167-0|168-0|58-0][Base:3-2][BaseOffset:0-1][WorkEffect:Cauldron]</Value>
     </Item>
     <Item>
       <Key>85</Key>
@@ -347,7 +347,7 @@
     </Item>
     <Item>
       <Key>86</Key>
-      <Value>[Type:Machine][Image:48-256][Work:3-0.15][Size:2-3][Makes:167-2][Base:2-2]</Value>
+      <Value>[Type:Machine][Image:48-256][Work:3-0.15][Size:2-3][Makes:169-2][Base:2-2]</Value>
     </Item>
     <Item>
       <Key>87</Key>
@@ -371,7 +371,7 @@
     </Item>
     <Item>
       <Key>92</Key>
-      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Size:2-2][Makes:72-1|71-1|155-1|154-1|73-1|78-1|83-1][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Size:2-2][Makes:72-1|71-1|157-1|156-1|73-1|78-1|83-1][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>93</Key>
@@ -379,23 +379,23 @@
     </Item>
     <Item>
       <Key>94</Key>
-      <Value>[Type:Plant][Image:192-304][Size:1-2][SeedID:85][ItemID:92][TrNum:4][TrTime:1-1-1][HoneyID:157][Season:Summer]</Value>
+      <Value>[Type:Plant][Image:192-304][Size:1-2][SeedID:85][ItemID:92][TrNum:4][TrTime:1-1-1][HoneyID:159][Season:Summer]</Value>
     </Item>
     <Item>
       <Key>95</Key>
-      <Value>[Type:Plant][Image:0-304][Size:1-2][SeedID:86][ItemID:94][TrNum:4][TrTime:1-1-1][HoneyID:143][Season:Summer]</Value>
+      <Value>[Type:Plant][Image:0-304][Size:1-2][SeedID:86][ItemID:94][TrNum:4][TrTime:1-1-1][HoneyID:145][Season:Summer]</Value>
     </Item>
     <Item>
       <Key>96</Key>
-      <Value>[Type:Plant][Image:64-304][Size:1-2][SeedID:88][ItemID:91][TrNum:4][TrTime:1-1-1][HoneyID:142][Season:Summer]</Value>
+      <Value>[Type:Plant][Image:64-304][Size:1-2][SeedID:88][ItemID:91][TrNum:4][TrTime:1-1-1][HoneyID:144][Season:Summer]</Value>
     </Item>
     <Item>
       <Key>97</Key>
-      <Value>[Type:Plant][Image:192-16][Size:1-2][ItemID:150][TrNum:4][TrTime:1-2-3]</Value>
+      <Value>[Type:Plant][Image:192-16][Size:1-2][ItemID:152][TrNum:4][TrTime:1-2-3]</Value>
     </Item>
     <Item>
       <Key>98</Key>
-      <Value>[Type:Plant][Image:128-208][Size:1-2][SeedID:78][ItemID:79][TrNum:4][TrTime:1-1-1][HoneyID:145][LightID:3-8-16][Season:Fall]</Value>
+      <Value>[Type:Plant][Image:128-208][Size:1-2][SeedID:78][ItemID:79][TrNum:4][TrTime:1-1-1][HoneyID:147][LightID:3-8-16][Season:Fall]</Value>
     </Item>
     <Item>
       <Key>99</Key>
@@ -407,11 +407,11 @@
     </Item>
     <Item>
       <Key>101</Key>
-      <Value>[Type:Plant][Image:256-272][Size:1-2][SeedID:80][ItemID:95][TrNum:4][TrTime:1-1-1][HoneyID:158][Season:Spring]</Value>
+      <Value>[Type:Plant][Image:256-272][Size:1-2][SeedID:80][ItemID:95][TrNum:4][TrTime:1-1-1][HoneyID:160][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>102</Key>
-      <Value>[Type:Plant][Image:128-336][Size:1-2][SeedID:82][ItemID:93][TrNum:4][TrTime:1-1-1][HoneyID:141][Season:Spring]</Value>
+      <Value>[Type:Plant][Image:128-336][Size:1-2][SeedID:82][ItemID:93][TrNum:4][TrTime:1-1-1][HoneyID:143][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>103</Key>
@@ -419,19 +419,19 @@
     </Item>
     <Item>
       <Key>104</Key>
-      <Value>[Type:Plant][Image:192-48][Size:1-2][ItemID:173][TrNum:4][TrTime:1-1-1]</Value>
+      <Value>[Type:Plant][Image:192-48][Size:1-2][ItemID:175][TrNum:4][TrTime:1-1-1]</Value>
     </Item>
     <Item>
       <Key>105</Key>
-      <Value>[Type:Plant][Image:64-336][Size:1-2][SeedID:83][ItemID:89][TrNum:4][TrTime:1-1-1][HoneyID:159][Season:Fall]</Value>
+      <Value>[Type:Plant][Image:64-336][Size:1-2][SeedID:83][ItemID:89][TrNum:4][TrTime:1-1-1][HoneyID:161][Season:Fall]</Value>
     </Item>
     <Item>
       <Key>106</Key>
-      <Value>[Type:Plant][Image:0-336][Size:1-2][SeedID:81][ItemID:90][TrNum:4][TrTime:1-1-1][HoneyID:144][Season:Fall]</Value>
+      <Value>[Type:Plant][Image:0-336][Size:1-2][SeedID:81][ItemID:90][TrNum:4][TrTime:1-1-1][HoneyID:146][Season:Fall]</Value>
     </Item>
     <Item>
       <Key>107</Key>
-      <Value>[Type:Plant][Image:128-304][Size:1-2][SeedID:87][ItemID:96][TrNum:4][TrTime:1-1-1][HoneyID:140][Season:Spring]</Value>
+      <Value>[Type:Plant][Image:128-304][Size:1-2][SeedID:87][ItemID:96][TrNum:4][TrTime:1-1-1][HoneyID:142][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>108</Key>

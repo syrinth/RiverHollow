@@ -2,7 +2,7 @@
 <map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="58" height="57" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="76">
  <properties>
   <property name="Cutscenes" value="0"/>
-  <property name="ItemID" value="160-C|161-R"/>
+  <property name="ItemID" value="162-C|163-R"/>
   <property name="MapType" value="Town"/>
   <property name="Mobs" value="1-2"/>
   <property name="Outside" type="bool" value="true"/>
@@ -224,7 +224,7 @@
   </object>
   <object id="67" name="DungeonObject" x="640.754" y="97.0417" width="13.75" height="14">
    <properties>
-    <property name="ItemKeyID" type="int" value="161"/>
+    <property name="ItemKeyID" type="int" value="163"/>
     <property name="MatchTrigger" value="VALID_ITEM"/>
     <property name="ObjectID" type="int" value="73"/>
     <property name="OutTrigger" value="Forest_Entrance_Open"/>
@@ -242,7 +242,7 @@
   </object>
   <object id="74" name="Item" x="529.667" y="628.5" width="12.6667" height="7.5">
    <properties>
-    <property name="ItemID" value="161"/>
+    <property name="ItemID" value="163"/>
    </properties>
   </object>
  </objectgroup>

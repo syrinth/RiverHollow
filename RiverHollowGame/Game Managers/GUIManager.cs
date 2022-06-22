@@ -15,7 +15,7 @@ namespace RiverHollow.Game_Managers
         enum Fade { None, Out, In};
         static Fade _eFade;
 
-        public static int STANDARD_MARGIN = 1;
+        public static int STANDARD_MARGIN = 4;
         public static int MINI_BTN_HEIGHT = ScaledTileSize;
         public static int MINI_BTN_WIDTH = 168;
 
@@ -243,6 +243,11 @@ namespace RiverHollow.Game_Managers
             this.CenterOnScreen();
 
             return win;
+        }
+
+        public virtual void CloseMainWindow()
+        {
+
         }
     }
 }

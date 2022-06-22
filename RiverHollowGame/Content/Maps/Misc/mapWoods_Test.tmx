@@ -2,7 +2,7 @@
 <map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="56" height="74" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="186">
  <properties>
   <property name="Cutscenes" value="0"/>
-  <property name="ItemID" value="160-C|161-R"/>
+  <property name="ItemID" value="162-C|163-R"/>
   <property name="MapType" value="Town"/>
   <property name="Mobs" value="2-4"/>
   <property name="Outside" type="bool" value="true"/>

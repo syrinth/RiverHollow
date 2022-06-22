@@ -523,12 +523,12 @@ namespace RiverHollow.Map_Handling
                     }
                     else if (tiledObj.Name.Equals("Chest"))
                     {
-                        Container c = (Container)DataManager.CreateWorldObjectByID(190);
+                        Container c = (Container)DataManager.CreateWorldObjectByID(int.Parse(tiledObj.Properties["ObjectID"]));
                         if (c.PlaceOnMap(tiledObj.Position, this))
                         {
 
                             InventoryManager.InitContainerInventory(c.Inventory);
-                            string[] holdSplit = tiledObj.Properties["Holding"].Split('/');
+                            string[] holdSplit = Util.FindParams(tiledObj.Properties["Holding"]);
                             foreach (string s in holdSplit)
                             {
                                 InventoryManager.AddToInventory(int.Parse(s), 1, false);

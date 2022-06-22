@@ -2419,11 +2419,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/GeneralStore.png
 
-#begin Data/Schedules/NPC_19.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Schedules/NPC_19.xml
-
 #begin Textures/Buildings/House_Player.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -4061,4 +4056,9 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/Boutique.png
+
+#begin Data/Schedules/NPC_Harrison.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Schedules/NPC_Harrison.xml
 

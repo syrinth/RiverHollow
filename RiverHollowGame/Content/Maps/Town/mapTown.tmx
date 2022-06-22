@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="95">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="96">
  <properties>
   <property name="MapType" value="Town"/>
   <property name="Outside" type="bool" value="true"/>
@@ -283,9 +283,10 @@
   </object>
  </objectgroup>
  <objectgroup id="9" name="MapObject">
-  <object id="71" name="WorldObject" x="417.53" y="435.521" width="12.69" height="10.2698">
+  <object id="71" name="Chest" x="370.53" y="437.021" width="12.69" height="10.2698">
    <properties>
-    <property name="ObjectID" type="int" value="93"/>
+    <property name="Holding" value="37"/>
+    <property name="ObjectID" type="int" value="43"/>
    </properties>
   </object>
   <object id="72" name="Building" x="434" y="402.242" width="74.2197" height="44.3031">
@@ -301,6 +302,11 @@
   <object id="94" name="Floor" x="466.53" y="449.803" width="9.19" height="13.3948">
    <properties>
     <property name="ObjectID" type="int" value="75"/>
+   </properties>
+  </object>
+  <object id="95" name="WorldObject" x="421.155" y="433.365" width="12.69" height="10.2698">
+   <properties>
+    <property name="ObjectID" type="int" value="93"/>
    </properties>
   </object>
  </objectgroup>

@@ -335,7 +335,7 @@
   <object id="16" name="General_Store" x="50.2008" y="68.6059" width="12.1696" height="11.2477"/>
   <object id="17" name="Shop" x="48.3348" y="70.8689" width="15.7378" height="24.585">
    <properties>
-    <property name="Owner" value="19"/>
+    <property name="NPC_ID" value="19"/>
     <property name="ShopKeepX" type="int" value="3"/>
     <property name="ShopKeepY" type="int" value="4"/>
    </properties>

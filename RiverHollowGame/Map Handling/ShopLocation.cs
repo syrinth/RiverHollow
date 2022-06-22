@@ -16,7 +16,7 @@ namespace RiverHollow.Map_Handling
         {
             _sMap = map;
             _rCLick = Util.FloatRectangle(shopObj.Position, shopObj.Size.Width, shopObj.Size.Height);
-            _iShopID = int.Parse(shopObj.Properties["Owner"]);
+            _iShopID = int.Parse(shopObj.Properties["NPC_ID"]);
             _iShopX = int.Parse(shopObj.Properties["ShopKeepX"]);
             _iShopY = int.Parse(shopObj.Properties["ShopKeepY"]);
         }

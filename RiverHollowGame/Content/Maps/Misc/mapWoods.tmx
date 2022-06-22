@@ -2,7 +2,7 @@
 <map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="86" height="98" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="162">
  <properties>
   <property name="Cutscenes" value="0"/>
-  <property name="ItemID" value="160-C|161-R"/>
+  <property name="ItemID" value="162-C|163-R"/>
   <property name="MapType" value="Town"/>
   <property name="Mobs" value="5-10"/>
   <property name="Outside" type="bool" value="true"/>
@@ -499,7 +499,7 @@
   </object>
   <object id="115" name="Resource" x="70" y="241.5" width="124" height="119.5">
    <properties>
-    <property name="ItemID" value="160-C|161-R"/>
+    <property name="ItemID" value="162-C|163-R"/>
     <property name="Number" value="5"/>
     <property name="ObjectID" value="63-R|66-R"/>
    </properties>
@@ -548,7 +548,7 @@
   </object>
   <object id="123" name="Resource" x="308.333" y="1078" width="71.6667" height="66">
    <properties>
-    <property name="ItemID" value="160-C-161-R"/>
+    <property name="ItemID" value="162-C-161-R"/>
     <property name="Number" value="5"/>
     <property name="ObjectID" value="63-R|66-R"/>
    </properties>
@@ -664,7 +664,7 @@
   </object>
   <object id="151" name="DungeonObject" x="112.534" y="96.921" width="14.6364" height="13.6364">
    <properties>
-    <property name="ItemKeyID" type="int" value="160"/>
+    <property name="ItemKeyID" type="int" value="162"/>
     <property name="MatchTrigger" value="VALID_ITEM"/>
     <property name="ObjectID" type="int" value="73"/>
     <property name="OutTrigger" value="Forest_Entrance_Open"/>
@@ -672,7 +672,7 @@
   </object>
   <object id="152" name="DungeonObject" x="176.792" y="97.417" width="13.75" height="14">
    <properties>
-    <property name="ItemKeyID" type="int" value="161"/>
+    <property name="ItemKeyID" type="int" value="163"/>
     <property name="MatchTrigger" value="VALID_ITEM"/>
     <property name="ObjectID" type="int" value="73"/>
     <property name="OutTrigger" value="Forest_Entrance_Open"/>

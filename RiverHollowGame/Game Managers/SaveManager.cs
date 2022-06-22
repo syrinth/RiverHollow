@@ -563,6 +563,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "ScytheID")]
             public int scytheID;
+
+            [XmlElement(ElementName = "BackpackID")]
+            public int backpackID;
         }
 
         public struct MissionData
@@ -774,12 +777,11 @@ namespace RiverHollow.Game_Managers
             SaveData dataToLoad = LoadData(filePath);
 
             _iSaveID = dataToLoad.saveID;
-            PlayerManager.Initialize();
-            PlayerManager.MoveToSpawn();
+
             LoadOptions(dataToLoad.optionData);
             GameCalendar.LoadCalendar(dataToLoad.Calendar);
             EnvironmentManager.LoadEnvironment(dataToLoad.Environment);
-            PlayerManager.LoadToolData(dataToLoad.Tools);
+            PlayerManager.Initialize();
 
             foreach (MapData mapData in dataToLoad.MapData)
             {
@@ -787,6 +789,8 @@ namespace RiverHollow.Game_Managers
                 map.LoadData(mapData);
             }
 
+            PlayerManager.MoveToSpawn();
+            PlayerManager.LoadToolData(dataToLoad.Tools);
             //Needs to be here because the Mailbox is a worldobject
             PlayerManager.PlayerMailbox.LoadData(dataToLoad.TheMailbox);
 

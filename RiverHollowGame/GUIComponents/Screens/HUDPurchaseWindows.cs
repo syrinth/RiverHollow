@@ -75,6 +75,11 @@ namespace RiverHollow.GUIComponents.Screens
 
             AddControl(_gList);
         }
+
+        public override void CloseMainWindow()
+        {
+            GameManager.CurrentNPC?.StopTalking();
+        }
     }
 
     internal class PurchaseBox : GUIWindow
@@ -198,7 +203,7 @@ namespace RiverHollow.GUIComponents.Screens
         private void PurchaseItem(int itemID)
         {
             Item purchase = DataManager.GetItem(itemID);
-            if (purchase.CompareType(ItemEnum.Blueprint))
+            if (purchase.CompareType(ItemEnum.Blueprint) || purchase.CompareType(ItemEnum.Tool))
             {
                 PlayerManager.AddToUniqueBoughtItems(itemID);
                 _action();

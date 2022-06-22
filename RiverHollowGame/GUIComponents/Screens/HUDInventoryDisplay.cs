@@ -5,16 +5,19 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDInventoryDisplay : GUIMainObject
     {
         GUIInventory _inventory;
-        GUIInventory _container;
+        GUIInventory _altInventory;
 
         public HUDInventoryDisplay(DisplayTypeEnum display = DisplayTypeEnum.Inventory)
         {
+            InventoryManager.LockedInventory = false;
+
             InventoryManager.ClearExtraInventory();
             GameManager.CurrentInventoryDisplay = display;
             _inventory = new GUIInventory(true);
@@ -24,22 +27,22 @@ namespace RiverHollow.GUIComponents.Screens
             CenterOnScreen();
         }
 
-        public HUDInventoryDisplay(Item[,] inventory, DisplayTypeEnum display = DisplayTypeEnum.Inventory)
+        public HUDInventoryDisplay(Item[,] inventory, DisplayTypeEnum display, bool lockExtraInventory = false)
         {
+            InventoryManager.LockedInventory = lockExtraInventory;
+
             InventoryManager.ClearExtraInventory();
             InventoryManager.InitContainerInventory(inventory);
             GameManager.CurrentInventoryDisplay = display;
-            _container = new GUIInventory();
+            _altInventory = new GUIInventory();
             _inventory = new GUIInventory(true);
 
-            _inventory.Setup();
-            _container.Setup();
-            _container.AnchorAndAlignToObject(_inventory, SideEnum.Top, SideEnum.CenterX);           
+            _altInventory.AnchorAndAlignToObject(_inventory, SideEnum.Top, SideEnum.CenterX, GUIManager.STANDARD_MARGIN);           
 
-            SetY(_container.Top);
+            SetY(_altInventory.Top);
 
             AddControl(_inventory);
-            AddControl(_container);
+            AddControl(_altInventory);
 
             DetermineSize();
             CenterOnScreen();
@@ -59,9 +62,12 @@ namespace RiverHollow.GUIComponents.Screens
                     GUIManager.OpenTextWindow(entry);
                 }
             }
-            else if (_container != null && _container.Contains(mouse))
+            else if (_altInventory != null && _altInventory.Contains(mouse))
             {
-                _container.ProcessLeftButtonClick(mouse);
+                if (!InventoryManager.LockedInventory)
+                {
+                    _altInventory.ProcessLeftButtonClick(mouse);
+                }
                 rv = true;
             }
             else
@@ -79,6 +85,7 @@ namespace RiverHollow.GUIComponents.Screens
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
+
             if (_inventory.Contains(mouse))
             {
                 rv = _inventory.ProcessRightButtonClick(mouse);
@@ -87,9 +94,9 @@ namespace RiverHollow.GUIComponents.Screens
                     Close();
                 }
             }
-            else if (_container != null && _container.DrawRectangle.Contains(mouse))
+            else if (_altInventory != null && _altInventory.DrawRectangle.Contains(mouse) && !InventoryManager.LockedInventory)
             {
-                rv = _container.ProcessRightButtonClick(mouse);
+                rv = _altInventory.ProcessRightButtonClick(mouse);
             }
             else
             {
@@ -106,6 +113,10 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 rv = false;
             }
+            if (!_altInventory.ProcessHover(mouse))
+            {
+                rv = false;
+            }
             return rv;
         }
 
@@ -116,7 +127,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         private void Close()
         {
-            if (GameManager.HeldItem != null && _container != null)
+            if (GameManager.HeldItem != null && _altInventory != null)
             {
                 InventoryManager.AddToInventory(GameManager.HeldItem);
                 GameManager.DropItem();

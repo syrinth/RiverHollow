@@ -21,12 +21,14 @@ namespace RiverHollow.Items
             _bStacks = false;
         }
 
-        public override void ItemBeingUsed()
+        public override bool ItemBeingUsed()
         {
-            base.ItemBeingUsed();
+            GameManager.SetSelectedItem(this);
             TextEntry entry = DataManager.GetGameTextEntry("Read_Book");
             entry.FormatText(Name());
             ConfirmItemUse(entry);
+
+            return true;
         }
 
         public override void UseItem(TextEntryVerbEnum action)

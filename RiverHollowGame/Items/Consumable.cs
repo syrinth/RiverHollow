@@ -50,13 +50,14 @@ namespace RiverHollow.Items
             return rv;
         }
 
-        public override void ItemBeingUsed()
+        public override bool ItemBeingUsed()
         {
-            base.ItemBeingUsed();
+            GameManager.SetSelectedItem(this);
             TextEntry entry = DataManager.GetGameTextEntry("ItemConfirm");
             entry.FormatText(Name());
-
             ConfirmItemUse(entry);
+
+            return true;
         }
 
         public override void UseItem(TextEntryVerbEnum action)

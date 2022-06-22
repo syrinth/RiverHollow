@@ -238,6 +238,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             if (_gMainObject != null)
             {
+                _gMainObject.CloseMainWindow();
                 RemoveControl(_gMainObject);
                 _gMainObject = null;
                 CloseHoverWindow();

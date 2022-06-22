@@ -91,9 +91,9 @@ namespace RiverHollow.Items
             _sprite.Draw(spriteBatch);
         }
 
-        public override void ItemBeingUsed()
+        public override bool ItemBeingUsed()
         {
-            base.ItemBeingUsed();
+            GameManager.SetSelectedItem(this);
             if (ToolType == ToolEnum.Harp)
             {
                 Spirit s = MapManager.CurrentMap.FindSpirit();
@@ -116,6 +116,8 @@ namespace RiverHollow.Items
                 }
                 ConfirmItemUse(entry);
             }
+
+            return true;
         }
 
         public override void UseItem(TextEntryVerbEnum action)

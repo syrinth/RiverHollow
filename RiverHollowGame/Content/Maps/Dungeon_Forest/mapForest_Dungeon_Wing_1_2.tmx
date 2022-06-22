@@ -125,7 +125,7 @@
  <objectgroup id="5" name="MapObject">
   <object id="47" name="Item" x="404" y="147.333" width="9.33333" height="6.66667">
    <properties>
-    <property name="ItemID" type="int" value="183"/>
+    <property name="ItemID" type="int" value="185"/>
    </properties>
   </object>
  </objectgroup>

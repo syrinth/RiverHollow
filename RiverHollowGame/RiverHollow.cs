@@ -43,7 +43,6 @@ namespace RiverHollow
         {
             // TODO: Add your initialization logic here
             Camera.SetViewport(GraphicsDevice.Viewport);
-            InventoryManager.InitPlayerInventory();
             ZoneManager.Initialize();
             GameManager.ShowMap();
 
@@ -72,6 +71,7 @@ namespace RiverHollow
             _effectLights = Content.Load<Effect>(@"Effects\lighteffect");
 
             PlayerManager.Initialize();
+            InventoryManager.InitPlayerInventory();
 
             //Done here for the WorldObjects that need to be unlocked
             DataManager.SecondaryLoad(Content);

@@ -10,8 +10,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUIItemBox : GUIImage
     {
-        public static Rectangle RECT_IMG = new Rectangle(254, 14, 20, 20);
-        static Rectangle RECT_SELECT_IMG = new Rectangle(286, 14, 20, 20);
+        public static Rectangle SHADED_RECT_IMG = new Rectangle(240, 16, 16, 16);
+        public static Rectangle RECT_IMG = new Rectangle(256, 16, 16, 16);
+        static Rectangle RECT_SELECT_IMG = new Rectangle(272, 16, 16, 16);
         public Item BoxItem => _guiItem?.ItemObject;
         GUIItem _guiItem;
 
@@ -19,15 +20,13 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         GUIImage _gSelected = new GUIImage(RECT_SELECT_IMG, ScaleIt(RECT_SELECT_IMG.Width), ScaleIt(RECT_SELECT_IMG.Height), DataManager.DIALOGUE_TEXTURE);
 
-        bool _bSelected;
+        bool _bSelected = false;
         public int Columns { get; }
         public int Rows { get; }
 
         public GUIItemBox(Item it = null) : base(RECT_IMG, ScaleIt(RECT_IMG.Width), ScaleIt(RECT_IMG.Height), DataManager.DIALOGUE_TEXTURE)
         {
             SetItem(it);
-
-            AddControl(_gSelected);
         }
 
         public GUIItemBox(int row, int col, string texture, Item item) : base(RECT_IMG, ScaleIt(RECT_IMG.Width), ScaleIt(RECT_IMG.Height), texture)
@@ -36,13 +35,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
             
             Columns = col;
             Rows = row;
-
-            AddControl(_gSelected);
         }
 
         public GUIItemBox(string texture, Item item, bool crafting = false) : this(0, 0, texture, item)
         {
-            AddControl(_gSelected);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -68,8 +64,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             bool rv = false;
             if (Contains(mouse))
             {
-                rv = true;
-                BoxItem.ItemBeingUsed();                
+                rv = BoxItem.ItemBeingUsed();
             }
 
             return rv;

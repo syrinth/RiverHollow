@@ -35,7 +35,7 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Text:Hey there, any chance of building us a place to work? I need a $Building_21$ if I'm to get any real work done around here!][Default][Once][ShopTargetID:2][UnlockItemID:140][Priority:50][Name:Forge_Request]</Value>
+      <Value>[Text:Hey there, any chance of building us a place to work? I need a $Building_21$ if I'm to get any real work done around here!][Default][Once][ShopTargetID:2][UnlockItemID:142][Priority:50][Name:Forge_Request]</Value>
     </Item>
   </Asset>
 </XnaContent>

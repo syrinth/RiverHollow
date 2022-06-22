@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="24">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="24">
  <properties>
   <property name="Manor" type="bool" value="true"/>
   <property name="Production" type="bool" value="false"/>
  </properties>
- <tileset firstgid="1" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="286" columns="22">
-  <image source="../Tilesets/tsWalls_Floors.png" trans="ffffff" width="352" height="209"/>
+ <tileset firstgid="1" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="484" columns="22">
+  <image source="../Tilesets/tsWalls_Floors.png" trans="ffffff" width="352" height="353"/>
   <tile id="9">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
@@ -272,8 +272,8 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="287" source="../Tilesets/tsFurniture.tsx"/>
- <tileset firstgid="587" source="../Tilesets/tilesetHouses.tsx"/>
+ <tileset firstgid="485" source="../Tilesets/tsFurniture.tsx"/>
+ <tileset firstgid="785" source="../Tilesets/tilesetHouses.tsx"/>
  <layer id="6" name="Base Layer" width="15" height="18">
   <data encoding="csv">
 74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,
@@ -306,7 +306,7 @@
 136,93,93,93,93,93,93,93,93,93,93,93,93,93,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
-136,1029,1063,1030,1031,1032,0,0,0,0,0,0,0,0,137,
+136,1227,1261,1228,1229,1230,0,0,0,0,0,0,0,0,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
@@ -327,7 +327,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1057,1037,1005,1005,1058,0,0,0,0,0,0,0,0,0,
+0,1255,1235,1203,1203,1256,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -353,7 +353,7 @@
   <object id="16" name="Magic_Shop" x="33.8958" y="116.448" width="12.375" height="11.4375"/>
   <object id="23" name="Shop" x="31.9983" y="118.75" width="16.0034" height="25">
    <properties>
-    <property name="Owner" value="17"/>
+    <property name="NPC_ID" value="17"/>
     <property name="ShopKeepX" type="int" value="2"/>
     <property name="ShopKeepY" type="int" value="7"/>
    </properties>

@@ -2,7 +2,7 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, List[string]]">
     <Item>
-      <Key>Built:21</Key>
+      <Key>Built:26</Key>
       <Value>
         <Item>[Hour:6][Minute:15][Location:General_Store][Dir:Down]</Item>
       </Value>

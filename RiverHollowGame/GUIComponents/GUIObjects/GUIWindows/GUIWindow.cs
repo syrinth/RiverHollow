@@ -25,7 +25,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             public int HeightEdges() { return ScaledEdge * 2; }
         };
         internal static WindowData Window_1 = new WindowData(128, 64, 6, 4);
-        internal static WindowData Window_2 = new WindowData(170, 58, 6, 16);
+        internal static WindowData Window_2 = new WindowData(144, 64, 6, 4);
         internal static WindowData GreyWin = new WindowData(206, 62, 2, 16);
         internal static WindowData DisplayWin = new WindowData(48, 32, 1, 14);
         internal static WindowData WoodenPanel = new WindowData(128, 32, 3, 10);

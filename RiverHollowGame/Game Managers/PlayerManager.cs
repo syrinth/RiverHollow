@@ -773,10 +773,11 @@ namespace RiverHollow.Game_Managers
             PlayerActor.SetClothes((Clothing)DataManager.GetItem(saveData.hat.itemID));
             PlayerActor.SetClothes((Clothing)DataManager.GetItem(saveData.chest.itemID));
 
+            PlayerCombatant.IncreaseHealth(PlayerCombatant.MaxHP);
             PlayerActor.SetBodyType(saveData.bodyTypeIndex);
             PlayerActor.Position = pos;
 
-            for (int i = 0; i < InventoryManager.maxItemRows; i++)
+            for (int i = 0; i < PlayerManager.BackpackLevel; i++)
             {
                 for (int j = 0; j < InventoryManager.maxItemColumns; j++)
                 {
@@ -857,6 +858,8 @@ namespace RiverHollow.Game_Managers
 
         #region Tool Management
         public static Tool ToolInUse;
+        public static int BackpackLevel => PlayerManager.RetrieveTool(ToolEnum.Backpack) != null ? PlayerManager.RetrieveTool(ToolEnum.Backpack).ToolLevel : 1;
+
         private static Dictionary<ToolEnum, Tool> _diTools;
 
         private static void UpdateTool(GameTime gTime)
@@ -913,6 +916,11 @@ namespace RiverHollow.Game_Managers
             if(CompareTools(newTool))
             {
                 _diTools[newTool.ToolType] = newTool;
+
+                if(newTool.ToolType == ToolEnum.Backpack)
+                {
+                    InventoryManager.InitPlayerInventory();
+                }
             }
         }
 
@@ -992,6 +1000,7 @@ namespace RiverHollow.Game_Managers
                 pickID = _diTools[ToolEnum.Pick].ItemID,
                 axeID = _diTools[ToolEnum.Axe].ItemID,
                 scytheID = _diTools[ToolEnum.Scythe].ItemID,
+                backpackID = _diTools[ToolEnum.Backpack].ItemID
             };
 
             return d;
@@ -1001,6 +1010,7 @@ namespace RiverHollow.Game_Managers
             _diTools[ToolEnum.Pick] = (Tool)DataManager.GetItem(d.pickID);
             _diTools[ToolEnum.Axe] = (Tool)DataManager.GetItem(d.axeID);
             _diTools[ToolEnum.Scythe] = (Tool)DataManager.GetItem(d.scytheID);
+            _diTools[ToolEnum.Backpack] = (Tool)DataManager.GetItem(d.backpackID);
         }
 
         #endregion
