@@ -722,7 +722,7 @@ namespace RiverHollow.GUIComponents.Screens
                     _name.AnchorToInnerSide(this, SideEnum.TopLeft);
 
                     _desc = new GUIText();
-                    _desc.ParseAndSetText(q.Description, MidWidth(), 3, true);
+                    _desc.ParseAndSetText(q.Description, InnerWidth(), 3, true);
                     _desc.AnchorAndAlignToObject(_name, SideEnum.Bottom, SideEnum.Left, _name.CharHeight);
 
                     List<GUIObject> boxes = new List<GUIObject>();
@@ -1033,8 +1033,8 @@ namespace RiverHollow.GUIComponents.Screens
 
                 public CharacterDetailObject(ClassedCombatant c)
                 {
-                    _winName = new GUIWindow(GUIWindow.Window_1, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.Window_1.Edge * 2), 10);
-                    WinDisplay = new GUIWindow(GUIWindow.Window_1, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.Window_1.Edge * 2), (GUIManager.MAIN_COMPONENT_HEIGHT / 4) - (GUIWindow.Window_1.Edge * 2));
+                    _winName = new GUIWindow(GUIWindow.Window_1, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.Window_1.WidthEdges()), 10);
+                    WinDisplay = new GUIWindow(GUIWindow.Window_1, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.Window_1.WidthEdges()), (GUIManager.MAIN_COMPONENT_HEIGHT / 4) - (GUIWindow.Window_1.HeightEdges()));
                     WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left);
                     //_winClothes = new GUIWindow(GUIWindow.RedWin, 10, 10);
                     //_winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
@@ -1465,7 +1465,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                 foreach (Villager n in DataManager.DIVillagers.Values)
                 {
-                    FriendshipBox f = new FriendshipBox(n, _gWindow.MidWidth() - GUIList.BTNSIZE);
+                    FriendshipBox f = new FriendshipBox(n, _gWindow.InnerWidth() - GUIList.BTNSIZE);
 
                     /*if (vList.Count == 0) { f.AnchorToInnerSide(_gWindow, GUIObject.SideEnum.TopLeft); }
                     else
@@ -1476,7 +1476,7 @@ namespace RiverHollow.GUIComponents.Screens
                     vList.Add(f);
                 }
 
-                _villagerList = new GUIList(vList, 10, 4, _gWindow.MidHeight());
+                _villagerList = new GUIList(vList, 10, 4, _gWindow.InnerHeight());
                 _villagerList.CenterOnScreen(); //.AnchorToInnerSide(_gWindow, GUIObject.SideEnum.TopLeft);//
                 AddControl(_villagerList);
             }
@@ -1839,11 +1839,11 @@ namespace RiverHollow.GUIComponents.Screens
             _merchant = m;
 
             GUIText text = new GUIText(requestText.GetFormattedText());
-            text.SetText(text.ParseText(requestText.GetFormattedText(), _winMain.MidWidth(), 3, true)[0]);
+            text.SetText(text.ParseText(requestText.GetFormattedText(), _winMain.InnerWidth(), 3, true)[0]);
             text.AnchorToInnerSide(_winMain, SideEnum.Top);
 
             int edgeSpacing = ScaledTileSize;
-            int spacing = (_winMain.MidWidth() - (edgeSpacing * 2) - (ScaleIt(RECT_IMG.Width) * 3)) / 2;
+            int spacing = (_winMain.InnerWidth() - (edgeSpacing * 2) - (ScaleIt(RECT_IMG.Width) * 3)) / 2;
             _liRequestedItemBoxes = new List<GUIItemBox>();
             foreach (KeyValuePair<Item, bool> kvp in _merchant.DiChosenItems)
             {

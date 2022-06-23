@@ -47,7 +47,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             ConfigureInfo();
 
-            _winExtra = new GUIWindow(GUIWindow.Window_1, _winMain.Width, ScaleIt(GUIWindow.Window_1.Edge * 2) + ScaleIt(TILE_SIZE));
+            _winExtra = new GUIWindow(GUIWindow.Window_1, _winMain.Width, ScaleIt(GUIWindow.Window_1.HeightEdges()) + ScaleIt(TILE_SIZE));
             _btnFinished = new GUIButton("Done", Finished);
             _btnFinished.CenterOnObject(_winExtra);
             _winExtra.AddControl(_btnFinished);
@@ -100,7 +100,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             //Create a grid for the recipes to be dispplayed in
-            CreateSpacedGrid(ref boxes, _winCraftables.InnerTopLeft() + new Vector2(GUIManager.STANDARD_MARGIN, GUIManager.STANDARD_MARGIN), _winCraftables.MidWidth() - 2 * GUIManager.STANDARD_MARGIN, _columns);
+            CreateSpacedGrid(ref boxes, _winCraftables.InnerTopLeft() + new Vector2(GUIManager.STANDARD_MARGIN, GUIManager.STANDARD_MARGIN), _winCraftables.InnerWidth() - 2 * GUIManager.STANDARD_MARGIN, _columns);
 
             //Create a new array of the appropriate size, then assign all of the boxes to the array
             //and turn off number draw as well as addingthem to the Controls
@@ -194,7 +194,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                             _gName.SetText(chosenItem.Name());
                             
-                            _gDescription.SetText(_gDescription.ParseText(chosenItem.Description(), _winMain.MidWidth(), 5)[0]);
+                            _gDescription.SetText(_gDescription.ParseText(chosenItem.Description(), _winMain.InnerWidth(), 5)[0]);
 
                             ConfigureInfo();
                         }

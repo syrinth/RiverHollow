@@ -49,7 +49,7 @@ namespace RiverHollow.GUIComponents.Screens
             //AssignClothes(ref _liHats, Util.FindParams(DataManager.Config[4]["ItemID"]));
             AssignClothes(ref _liShirts, Util.FindParams(DataManager.Config[5]["ItemID"]));
 
-            int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.Window_2.Edge;
+            int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.Window_2.WidthEdges();
 
             GUIImage background = new GUIImage(new Rectangle(0, 0, 480, 270), DataManager.GUI_COMPONENTS + @"\Newgame_Background");
             AddControl(background);

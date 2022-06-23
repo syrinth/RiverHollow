@@ -27,7 +27,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         
         protected EmptyDelegate _delAction;
 
-        internal static WindowData BaseBtn = new WindowData(96, 0, 2, 12);
+        internal static WindowData BaseBtn = new WindowData(96, 0, 2, 2, 2, 2, 12);
 
         public GUIButton(string text, EmptyDelegate del = null)
         {

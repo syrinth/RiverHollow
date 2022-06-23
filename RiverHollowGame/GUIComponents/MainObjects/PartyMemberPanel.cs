@@ -342,8 +342,8 @@ namespace RiverHollow.GUIComponents.MainObjects
 
             public CharacterDetailObject(ClassedCombatant c)
             {
-                _winName = new GUIWindow(GUIWindow.Window_1, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.Window_1.Edge * 2), 10);
-                WinDisplay = new GUIWindow(GUIWindow.Window_1, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.Window_1.Edge * 2), (GUIManager.MAIN_COMPONENT_HEIGHT / 4) - (GUIWindow.Window_1.Edge * 2));
+                _winName = new GUIWindow(GUIWindow.Window_1, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.Window_1.WidthEdges()), 10);
+                WinDisplay = new GUIWindow(GUIWindow.Window_1, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.Window_1.WidthEdges()), (GUIManager.MAIN_COMPONENT_HEIGHT / 4) - (GUIWindow.Window_1.HeightEdges()));
                 WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left);
                 //_winClothes = new GUIWindow(GUIWindow.RedWin, 10, 10);
                 //_winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);

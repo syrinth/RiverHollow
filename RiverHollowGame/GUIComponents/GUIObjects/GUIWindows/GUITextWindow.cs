@@ -118,7 +118,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         protected void SyncText(string text, bool printAll = false)
         {
-            _liTextPages = _giText.ParseText(text, MidWidth(), MAX_ROWS, printAll);
+            _liTextPages = _giText.ParseText(text, InnerWidth(), MAX_ROWS, printAll);
             if (_giText.PrintAll) { _giText.SetText(_liTextPages[0]); }
             else { _giText.ResetText(_liTextPages[0]); }
         }
@@ -317,7 +317,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         protected void SetWidthMax(int val, int maxWidth)
         {
-            val += (_winData.Edge * 2);
+            val += (_winData.WidthEdges());
             Width = val > maxWidth ? maxWidth : val;
         }
 

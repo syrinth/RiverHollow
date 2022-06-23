@@ -10,9 +10,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUIItemBox : GUIImage
     {
-        public static Rectangle SHADED_RECT_IMG = new Rectangle(240, 16, 16, 16);
-        public static Rectangle RECT_IMG = new Rectangle(256, 16, 16, 16);
-        static Rectangle RECT_SELECT_IMG = new Rectangle(272, 16, 16, 16);
+        public static Rectangle RECT_IMG = new Rectangle(240, 0, 20, 20);
+        static Rectangle RECT_SELECT_IMG = new Rectangle(260, 0, 20, 20);
         public Item BoxItem => _guiItem?.ItemObject;
         GUIItem _guiItem;
 

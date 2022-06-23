@@ -50,13 +50,13 @@ namespace RiverHollow.GUIComponents.Screens
                         Item it = DataManager.GetItem(m.MerchID);
                         it.ApplyUniqueData(m.UniqueData);
 
-                        newBox = new PurchaseBox(it, m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE, ShowDisplay);
+                        newBox = new PurchaseBox(it, m.MoneyCost, _winMain.InnerWidth() - GUIList.BTNSIZE, ShowDisplay);
                     }
                     else { continue; }
                 }
                 else if (m.MerchType == Merchandise.MerchTypeEnum.WorldObject)
                 {
-                    newBox = new PurchaseBox(DataManager.CreateWorldObjectByID(m.MerchID), m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE, ShowDisplay);
+                    newBox = new PurchaseBox(DataManager.CreateWorldObjectByID(m.MerchID), m.MoneyCost, _winMain.InnerWidth() - GUIList.BTNSIZE, ShowDisplay);
                 }
                 else if (m.MerchType == Merchandise.MerchTypeEnum.Actor)
                 {
@@ -70,7 +70,7 @@ namespace RiverHollow.GUIComponents.Screens
                 i++;
             }
 
-            _gList = new GUIList(items, 10, ScaleIt(2), _winMain.MidHeight());
+            _gList = new GUIList(items, 10, ScaleIt(2), _winMain.InnerHeight());
             _gList.CenterOnObject(_winMain);
 
             AddControl(_gList);
