@@ -27,6 +27,19 @@ namespace RiverHollow.WorldObjects
             GUIManager.OpenMainObject(new HUDInventoryDisplay(Inventory, DisplayTypeEnum.Inventory));
         }
 
+        public bool HasItem()
+        {
+            bool rv = false;
+            foreach (Item i in Inventory)
+            {
+                if(i != null)
+                {
+                    rv = true;
+                }
+            }
+            return rv;
+        }
+
         internal ContainerData SaveData()
         {
             ContainerData containerData = new ContainerData

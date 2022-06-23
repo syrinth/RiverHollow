@@ -199,12 +199,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             //Use _container != null to get the status of the inverse of whichever we are clicking on
                             if (InventoryManager.HasSpaceInInventory(i.BoxItem.ItemID, i.BoxItem.Number, ref row, ref col, !_bPlayerInventory))
                             {
-                                GameManager.GrabItem(TakeItem(mouse));
+                                Item clickedItem = TakeItem(mouse);
                                 //If the GUI represents a Container, move the Item to the PlayerInventory
                                 //else, move the Item to the Container's inventory
-                                InventoryManager.AddItemToInventorySpot(i.BoxItem, row, col, !_bPlayerInventory);
-                                GameManager.DropItem();
-
+                                InventoryManager.AddItemToInventorySpot(clickedItem, row, col, !_bPlayerInventory);
                             }
 
                             rv = true;
@@ -318,6 +316,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
                     if (!takeHalf)
                     {
+                        box.SetItem(null);
                         InventoryManager.RemoveItemFromInventorySpot(box.Rows, box.Columns, _bPlayerInventory);
                     }
 

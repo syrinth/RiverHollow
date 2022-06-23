@@ -209,6 +209,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
 
+            if (!CombatManager.PlayerTurn) { return false; }
+
             bool showHoverCharacterInfo = false;
             if (_gActionPanel.Enabled)
             {
@@ -317,12 +319,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 case CombatManager.PhaseEnum.NewTurn:
                     _gTurnOrder.DisplayNewTurn(CombatManager.CurrentRoundOrder);
                     _gActiveIndicator.CenterOnObject(CombatManager.ActiveCharacter.Tile.GUITile);
-                    break;
-                case CombatManager.PhaseEnum.Upkeep:
-                    break;
-                case CombatManager.PhaseEnum.ChooseAction:
                     ShowHUDObjects(true);
                     _gActiveCharacterInfo.SetActor(CombatManager.ActiveCharacter);
+                    if (!CombatManager.PlayerTurn) { _gHoverCharacterInfo.Show(false); }
+                    break;
+                case CombatManager.PhaseEnum.Upkeep:
+                case CombatManager.PhaseEnum.ChooseAction:
                     break;
                 case CombatManager.PhaseEnum.ChooseTarget:
                     //Cancel out of selections made if escape is hit
@@ -408,11 +410,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         private void ShowHUDObjects(bool value)
         {
-            if (_gActiveCharacterInfo.Visible != value) {
-                _gActiveCharacterInfo.Show(value);
-                _btnEscape.Show(value);
-                DisplayActionPanel();
-            }
+            _gActiveCharacterInfo.Show(value);
+            _btnEscape.Show(value);
+            DisplayActionPanel();
         }
         private void DisplayActionPanel()
         {

@@ -364,6 +364,7 @@ namespace RiverHollow.Game_Managers
                 case ObjectTypeEnum.Wallpaper:
                 case ObjectTypeEnum.Beehive:
                 case ObjectTypeEnum.Buildable:
+                case ObjectTypeEnum.Container:
                 case ObjectTypeEnum.Decor:
                 case ObjectTypeEnum.Garden:
                 case ObjectTypeEnum.Wall:

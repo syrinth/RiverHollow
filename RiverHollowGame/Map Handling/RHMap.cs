@@ -1502,6 +1502,7 @@ namespace RiverHollow.Map_Handling
                             break;
                         case ObjectTypeEnum.Beehive:
                         case ObjectTypeEnum.Buildable:
+                        case ObjectTypeEnum.Container:
                         case ObjectTypeEnum.Decor:
                         case ObjectTypeEnum.Garden:
                         case ObjectTypeEnum.Wall:
@@ -1524,6 +1525,7 @@ namespace RiverHollow.Map_Handling
                                     goto case ObjectTypeEnum.Structure;
                                 case ObjectTypeEnum.Beehive:
                                 case ObjectTypeEnum.Buildable:
+                                case ObjectTypeEnum.Container:
                                 case ObjectTypeEnum.Decor:
                                 case ObjectTypeEnum.Floor:
                                 case ObjectTypeEnum.Garden:
@@ -1552,6 +1554,9 @@ namespace RiverHollow.Map_Handling
                             break;
                         case ObjectTypeEnum.Beehive:
                         case ObjectTypeEnum.Buildable:
+                        case ObjectTypeEnum.Container:
+                            if (((Container)toRemove).HasItem()) { break; }
+                            else { goto case ObjectTypeEnum.Wall; }
                         case ObjectTypeEnum.Floor:
                         case ObjectTypeEnum.Garden:
                         case ObjectTypeEnum.Wall:

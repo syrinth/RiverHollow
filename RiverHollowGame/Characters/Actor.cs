@@ -143,11 +143,6 @@ namespace RiverHollow.Characters
         public bool IsCurrentAnimation(VerbEnum verb, DirectionEnum dir) { return _sprBody.IsCurrentAnimation(verb, dir); }
         public bool IsAnimating() { return _sprBody.Drawing; }
         public bool AnimationPlayedXTimes(int x) { return _sprBody.GetPlayCount() >= x; }
-    }
-    /// <summary>
-    /// The properties and methods for each actor that pertain to existing on and
-    /// interacting with the WorldMap itself
-    /// </summary>
-    
+    }    
     #endregion 
 }

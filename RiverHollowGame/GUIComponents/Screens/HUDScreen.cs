@@ -170,6 +170,7 @@ namespace RiverHollow.GUIComponents.Screens
         public override bool IsMenuOpen() { return _gMenu != null; }
         public override void OpenMenu()
         {
+            GUICursor.ResetCursor();
             _gMenu = new HUDMenu(CloseMenu);
             AddControl(_gMenu);
         }
@@ -1759,6 +1760,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             _gText.AnchorToInnerSide(this, SideEnum.TopLeft);
             Resize();
+            Height = GameManager.ScaleIt(21);
         }
 
         public override void Update(GameTime gTime)

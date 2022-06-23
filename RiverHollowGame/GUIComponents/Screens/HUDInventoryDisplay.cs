@@ -113,7 +113,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 rv = false;
             }
-            if (!_altInventory.ProcessHover(mouse))
+            if (_altInventory != null && !_altInventory.ProcessHover(mouse))
             {
                 rv = false;
             }
