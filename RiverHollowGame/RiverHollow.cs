@@ -215,7 +215,7 @@ namespace RiverHollow
             //lighting effect. Since we will be drawing on the _renderMain, the effectsfile.
             //testMask is the name of the texture contained in the _effectLights file.
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
-            if (IsMapShown() && LightingActive())
+            if (IsMapShown() && EnvironmentManager.LightingActive())
             {
                 _effectLights.Parameters["lightMask"].SetValue(_renderLights);
                 _effectLights.CurrentTechnique.Passes[0].Apply();
@@ -232,7 +232,7 @@ namespace RiverHollow
 
         private void DrawLighting()
         {
-            if (LightingActive())
+            if (EnvironmentManager.LightingActive())
             {
                 GraphicsDevice.SetRenderTarget(_renderLights);
                 GraphicsDevice.Clear(EnvironmentManager.GetAmbientLight());
@@ -242,11 +242,6 @@ namespace RiverHollow
                 spriteBatch.End();
                 GraphicsDevice.SetRenderTarget(null);
             }
-        }
-
-        private bool LightingActive()
-        {
-            return GameCalendar.CurrentHour >= 18 && MapManager.CurrentMap.IsOutside;
         }
 
         public static void ResetCamera()

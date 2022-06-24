@@ -29,5 +29,29 @@
       <Key>6</Key>
       <Value>[Texture:GlowLight][Idle:1-1][Dimensions:256-256]</Value>
     </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>[Texture:PlayerLight_0][Idle:1-1][Dimensions:40-40]</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>[Texture:PlayerLight_1][Idle:1-1][Dimensions:80-80]</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Texture][Idle:1-1][Dimensions]</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Texture][Idle:1-1][Dimensions]</Value>
+    </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>[Texture][Idle:1-1][Dimensions]</Value>
+    </Item>
+    <Item>
+      <Key>12</Key>
+      <Value>[Texture][Idle:1-1][Dimensions]</Value>
+    </Item>
   </Asset>
 </XnaContent>

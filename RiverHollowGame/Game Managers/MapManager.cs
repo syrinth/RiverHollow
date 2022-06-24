@@ -270,6 +270,7 @@ namespace RiverHollow.Game_Managers
         public static void DrawLights(SpriteBatch spriteBatch)
         {
             CurrentMap.DrawLights(spriteBatch);
+            PlayerManager.DrawLight(spriteBatch);
         }
 
         public static bool ProcessLeftButtonClick(Point mouseLocation)

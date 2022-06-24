@@ -209,6 +209,11 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        public static void DrawLight(SpriteBatch spriteBatch)
+        {
+            PlayerActor.DrawLight(spriteBatch);
+        }
+
         public static List<ClassedCombatant> GetParty()
         {
             return _liParty;
@@ -860,6 +865,7 @@ namespace RiverHollow.Game_Managers
         #region Tool Management
         public static Tool ToolInUse;
         public static int BackpackLevel => PlayerManager.RetrieveTool(ToolEnum.Backpack) != null ? PlayerManager.RetrieveTool(ToolEnum.Backpack).ToolLevel : 1;
+        public static int LanternLevel => PlayerManager.RetrieveTool(ToolEnum.Lantern) != null ? PlayerManager.RetrieveTool(ToolEnum.Lantern).ToolLevel : 0;
 
         private static Dictionary<ToolEnum, Tool> _diTools;
 
@@ -914,13 +920,17 @@ namespace RiverHollow.Game_Managers
         /// <param name="newTool">The prospective new tool</param>
         public static void AddTool(Tool newTool)
         {
-            if(CompareTools(newTool))
+            if(newTool != null && CompareTools(newTool))
             {
                 _diTools[newTool.ToolType] = newTool;
 
                 if(newTool.ToolType == ToolEnum.Backpack)
                 {
                     InventoryManager.InitPlayerInventory();
+                }
+                if(newTool.ToolType == ToolEnum.Lantern)
+                {
+                    PlayerActor.NewLantern();
                 }
             }
         }
@@ -998,20 +1008,24 @@ namespace RiverHollow.Game_Managers
         {
             ToolData d = new ToolData()
             {
-                pickID = _diTools[ToolEnum.Pick].ItemID,
-                axeID = _diTools[ToolEnum.Axe].ItemID,
-                scytheID = _diTools[ToolEnum.Scythe].ItemID,
-                backpackID = _diTools[ToolEnum.Backpack].ItemID
+                pickID = RetrieveTool(ToolEnum.Pick) != null ? RetrieveTool(ToolEnum.Pick).ItemID : -1,
+                axeID = RetrieveTool(ToolEnum.Axe) != null ? RetrieveTool(ToolEnum.Axe).ItemID : -1,
+                scytheID = RetrieveTool(ToolEnum.Scythe) != null ? RetrieveTool(ToolEnum.Scythe).ItemID : -1,
+                wateringCanID = RetrieveTool(ToolEnum.WateringCan) != null ? RetrieveTool(ToolEnum.WateringCan).ItemID : -1,
+                backpackID = RetrieveTool(ToolEnum.Backpack) != null ? RetrieveTool(ToolEnum.Backpack).ItemID : -1,
+                lanternID = RetrieveTool(ToolEnum.Lantern) != null ? RetrieveTool(ToolEnum.Lantern).ItemID : -1,
             };
 
             return d;
         }
         public static void LoadToolData(ToolData d)
         {
-            _diTools[ToolEnum.Pick] = (Tool)DataManager.GetItem(d.pickID);
-            _diTools[ToolEnum.Axe] = (Tool)DataManager.GetItem(d.axeID);
-            _diTools[ToolEnum.Scythe] = (Tool)DataManager.GetItem(d.scytheID);
-            _diTools[ToolEnum.Backpack] = (Tool)DataManager.GetItem(d.backpackID);
+            AddTool((Tool)DataManager.GetItem(d.pickID));
+            AddTool((Tool)DataManager.GetItem(d.axeID));
+            AddTool((Tool)DataManager.GetItem(d.scytheID));
+            AddTool((Tool)DataManager.GetItem(d.backpackID));
+            AddTool((Tool)DataManager.GetItem(d.wateringCanID));
+            AddTool((Tool)DataManager.GetItem(d.lanternID));
         }
 
         #endregion

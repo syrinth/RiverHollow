@@ -9,6 +9,7 @@ using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
+using RiverHollow.WorldObjects;
 
 namespace RiverHollow.Characters
 {
@@ -55,6 +56,7 @@ namespace RiverHollow.Characters
         Clothing Feet;
         #endregion
 
+        Light _lightSource;
 
         public Pet ActivePet { get; private set; }
         public Mount ActiveMount { get; private set; }
@@ -85,9 +87,16 @@ namespace RiverHollow.Characters
             _sprHair.SetColor(HairColor);
             _sprEyes.SetColor(EyeColor);
 
+            _lightSource = DataManager.GetLight(7);
+
             SpdMult = NORMAL_SPEED;
         }
 
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+            _lightSource.Position = _sprBody.Position - new Vector2((_lightSource.Width - _sprBody.Width) / 2, (_lightSource.Height - _sprBody.Height) / 2);
+        }
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             base.Draw(spriteBatch, useLayerDepth);
@@ -98,6 +107,15 @@ namespace RiverHollow.Characters
             Chest?.Sprite.Draw(spriteBatch, useLayerDepth);
             Hat?.Sprite.Draw(spriteBatch, useLayerDepth);
             Legs?.Sprite.Draw(spriteBatch, useLayerDepth);
+        }
+
+        public void NewLantern()
+        {
+            _lightSource = DataManager.GetLight(7 + PlayerManager.LanternLevel);
+        }
+        public void DrawLight(SpriteBatch spriteBatch)
+        {
+            _lightSource.Draw(spriteBatch);
         }
 
         private List<AnimationData> LoadPlayerAnimations(Dictionary<string, string> data)

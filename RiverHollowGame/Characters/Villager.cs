@@ -406,7 +406,9 @@ namespace RiverHollow.Characters
                         foreach (Dictionary<string, string> timeKey in _diCompleteSchedule[_sScheduleKey])
                         {
                             string currentTime = GameCalendar.GetTime();
-                            if (TimeSpan.Compare(TimeSpan.ParseExact(currentTime, "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None), TimeSpan.ParseExact(timeKey["TimeKey"], "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None)) <= 0)
+                            TimeSpan currTimeSpan = TimeSpan.ParseExact(currentTime, "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None);
+                            TimeSpan keyTime = TimeSpan.ParseExact(timeKey["TimeKey"], "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None);
+                            if (TimeSpan.Compare(currTimeSpan, keyTime) <= 0)
                             {
                                 _iNextTimeKeyID = _diCompleteSchedule[_sScheduleKey].IndexOf(timeKey);
                                 break;
@@ -566,7 +568,7 @@ namespace RiverHollow.Characters
 
         public int GetTaxes()
         {
-            return 25 * (int)GetSatisfaction() * _iTaxMultiplier;
+            return 250 * (int)GetSatisfaction() * _iTaxMultiplier;
         }
 
         public SatisfactionStateEnum GetSatisfaction()
@@ -622,7 +624,7 @@ namespace RiverHollow.Characters
                 PlayerManager.Spouse = this;
             }
 
-            if (_iNextArrival == 0 || !string.IsNullOrEmpty(_sStartMap))
+            if (_iNextArrival <= 0 || !string.IsNullOrEmpty(_sStartMap))
             {
                 MoveToSpawn();
                 DetermineValidSchedule();

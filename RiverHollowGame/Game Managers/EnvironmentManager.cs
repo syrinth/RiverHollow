@@ -114,6 +114,11 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        public static bool LightingActive()
+        {
+            return MapManager.CurrentMap.Lighting < 1 || GameCalendar.CurrentHour >= 18 && MapManager.CurrentMap.IsOutside;
+        }
+
         /// <summary>
         /// Using the time of day, calculate how dark it should be
         /// </summary>
@@ -121,9 +126,15 @@ namespace RiverHollow.Game_Managers
         public static Color GetAmbientLight()
         {
             Color rv = Color.White;
-            float totalMinutes = 180;
-            float timeModifier = GameCalendar.CurrentMin + ((GameCalendar.CurrentHour - 18f) * 60f);  //Total number of minutes since 6 P.M.
-            float darkPercent = Math.Min(0.9f, timeModifier / totalMinutes);
+
+            float darkPercent = MapManager.CurrentMap.Lighting;
+
+            if (MapManager.CurrentMap.Lighting == 1)
+            {
+                float totalMinutes = 180;
+                float timeModifier = GameCalendar.CurrentMin + ((GameCalendar.CurrentHour - 18f) * 60f);  //Total number of minutes since 6 P.M.
+                darkPercent = Math.Min(0.9f, timeModifier / totalMinutes);
+            }
 
             //Subtract the percent of darkness we currently have from the max then subtract
             // it from the max value of 255 to find our relative number. Since new Color takes

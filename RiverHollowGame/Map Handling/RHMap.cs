@@ -36,6 +36,7 @@ namespace RiverHollow.Map_Handling
         public int BuildingID => _map.Properties.ContainsKey("BuildingID") ? int.Parse(_map.Properties["BuildingID"]) : -1;
         public bool Modular => _map.Properties.ContainsKey("Modular");
         public bool IsOutside => _map.Properties.ContainsKey("Outside");
+        public float Lighting => _map.Properties.ContainsKey("Lighting") ? float.Parse(_map.Properties["Lighting"]) : 1;
         public string MapType => _map.Properties.ContainsKey("MapType") ? _map.Properties["MapType"] : string.Empty;
         bool _bSpawned = false;
         public MonsterFood PrimedFood { get; private set; }

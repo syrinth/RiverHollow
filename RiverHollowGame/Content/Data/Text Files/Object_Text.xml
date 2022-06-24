@@ -510,6 +510,30 @@
       <Value>[Name:GlowLight]</Value>
     </Item>
     <Item>
+      <Key>Light_7</Key>
+      <Value>[Name:PlayerLight]</Value>
+    </Item>
+    <Item>
+      <Key>Light_8</Key>
+      <Value>[Name:PlayerLantern_1]</Value>
+    </Item>
+    <Item>
+      <Key>Light_9</Key>
+      <Value>[Name:PlayerLantern_2]</Value>
+    </Item>
+    <Item>
+      <Key>Light_10</Key>
+      <Value>[Name:PlayerLantern_3]</Value>
+    </Item>
+    <Item>
+      <Key>Light_11</Key>
+      <Value>[Name:PlayerLantern_4]</Value>
+    </Item>
+    <Item>
+      <Key>Light_12</Key>
+      <Value>[Name:PlayerLantern_5]</Value>
+    </Item>
+    <Item>
       <Key>Dungeon_0</Key>
       <Value>[Name:Cave]</Value>
     </Item>
@@ -1123,7 +1147,7 @@
     </Item>
     <Item>
       <Key>Item_137</Key>
-      <Value>[Name:Lantern][Description:Used to call forth the energy of spent emotions]</Value>
+      <Value>[Name:Lantern][Description:Casts a dim light in dark places.]</Value>
     </Item>
     <Item>
       <Key>Item_138</Key>
