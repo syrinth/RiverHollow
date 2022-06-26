@@ -10,16 +10,17 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
-    public class Pet : BuyableNPC
+    public class Pet : TalkingActor
     {
         private int _iGatherZoneID;
 
-        public Pet(int id, Dictionary<string, string> stringData) : base(id, stringData)
+        public Pet(int id, Dictionary<string, string> stringData) : base(id)
         {
+            _fBaseSpeed = 1;
             _eActorType = WorldActorTypeEnum.Pet;
             _bCanWander = true;
 
-            _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Adventurer", stringData["Key"]);
+            //_sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Adventurer", stringData["Key"]);
 
             Util.AssignValue(ref _iGatherZoneID, "ObjectID", stringData);
 

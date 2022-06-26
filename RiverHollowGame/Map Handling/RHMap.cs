@@ -9,6 +9,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
+using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System;
@@ -69,11 +70,12 @@ namespace RiverHollow.Map_Handling
         private List<int> _liCutscenes;
         private Dictionary<RarityEnum, List<int>> _diResources;
         protected List<Item> _liItems;
-        protected List<ShopLocation> _liShopData;
         public Dictionary<string, TravelPoint> DictionaryTravelPoints { get; }
         public Dictionary<string, Vector2> DictionaryCharacterLayer { get; }
         private List<TiledMapObject> _liMapObjects;
         private List<KeyValuePair<Rectangle, string>> _liClickObjects;
+        private int _iShopID = -1;
+        public Shop TheShop => (_iShopID > -1) ? GameManager.DIShops[_iShopID] : null;
 
         private List<Item> _liItemsToRemove;
         private List<WorldActor> _liActorsToRemove;
@@ -94,7 +96,7 @@ namespace RiverHollow.Map_Handling
             _liItems = new List<Item>();
             _liMapObjects = new List<TiledMapObject>();
             _liClickObjects = new List<KeyValuePair<Rectangle, string>>();
-            _liShopData = new List<ShopLocation>();
+
             _liPlacedWorldObjects = new List<WorldObject>();
             _liLights = new List<Light>();
             _liHeldLights = new List<Light>();
@@ -174,6 +176,10 @@ namespace RiverHollow.Map_Handling
                 }
             }
 
+            if (_map.Properties.ContainsKey("Shop"))
+            {
+                _iShopID = int.Parse(_map.Properties["Shop"]);
+            }
             if (_map.Properties.ContainsKey("Dungeon"))
             {
                 DungeonName = _map.Properties["Dungeon"];
@@ -216,6 +222,8 @@ namespace RiverHollow.Map_Handling
                 {
                     ((Item)i).Update(gTime);
                 }
+
+                TheShop?.Update();
             }
         
             foreach (WorldObject obj in _liObjectsToRemove)
@@ -327,6 +335,14 @@ namespace RiverHollow.Map_Handling
                 i.Draw(spriteBatch);
             }
 
+            if (TheShop != null)
+            {
+                foreach (ShopItemSpot itemSpot in TheShop.ItemSpots)
+                {
+                    itemSpot.Draw(spriteBatch);
+                }
+            }
+
             if (HeldObject != null && (!GameManager.GamePaused() || Scrying()))
             {
                 foreach (RHTile t in _liTestTiles)
@@ -334,7 +350,7 @@ namespace RiverHollow.Map_Handling
                     bool passable = CanPlaceObject(t, HeldObject);
                     if (!passable || (passable && !HeldObject.CompareType(ObjectTypeEnum.Wallpaper)))
                     {
-                        spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TILE_SIZE, TILE_SIZE), new Rectangle(288, 128, TILE_SIZE, TILE_SIZE), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
+                        spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TILE_SIZE, TILE_SIZE), new Rectangle(288, 128, TILE_SIZE, TILE_SIZE), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, GameManager.MAX_LAYER_DEPTH);
                     }
                 }
             }
@@ -429,9 +445,9 @@ namespace RiverHollow.Map_Handling
                 {
                     foreach (TiledMapObject obj in ol.Objects)
                     {
-                        if (obj.Name.Equals("Shop"))
+                        if (obj.Name.Equals("ShopItem"))
                         {
-                            _liShopData.Add(new ShopLocation(_sName, obj));
+                            TheShop.AddItemSpot(new ShopItemSpot(this.Name, obj.Position, obj.Size.Width, obj.Size.Height));
                         }
                         else if (obj.Name.Equals("Spirit"))
                         {
@@ -746,6 +762,8 @@ namespace RiverHollow.Map_Handling
 
         public void Rollover()
         {
+            TheShop?.PlaceStock();
+
             for (int i = 0; i < _liPlacedWorldObjects.Count; i++) { _liPlacedWorldObjects[i].Rollover(); }
             for (int i = 0; i < _liResourceSpawns.Count; i++) { _liResourceSpawns[i].Rollover(); }
 
@@ -1287,14 +1305,7 @@ namespace RiverHollow.Map_Handling
 
             rv = tile.ProcessRightClick();
 
-            foreach (ShopLocation shop in _liShopData)
-            {
-                if (shop.Contains(mouseLocation) && shop.IsOpen())
-                {
-                    shop.Talk();
-                    return true;
-                }
-            }
+            TheShop?.Interact(this, mouseLocation);
 
             foreach (WorldActor c in _liActors)
             {
@@ -2332,6 +2343,8 @@ namespace RiverHollow.Map_Handling
                 obj.PlaceOnMap(this);
                 if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
+
+            TheShop?.PlaceStock();
         }
     }
 }

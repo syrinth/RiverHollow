@@ -308,7 +308,7 @@ Exit:
         {
             bool rv = false;
 
-            if (InventoryAddCheck(playerInventory, itemToAdd))
+            if (playerInventory && itemToAdd.AddToInventoryTrigger())
             {
                 return true;
             }
@@ -390,7 +390,7 @@ Exit:
             //Ensure that the item is not null, we do not place null =.
             if (item != null)
             {
-                if (InventoryAddCheck(playerInventory, item))
+                if (playerInventory && item.AddToInventoryTrigger())
                 {
                     return true;
                 }
@@ -498,26 +498,6 @@ Exit:
             return;
         }
         #endregion
-
-        private static bool InventoryAddCheck(bool playerInventory, Item itemToAdd)
-        {
-            bool rv = false;
-            if (playerInventory)
-            {
-                if (itemToAdd.CompareType(ItemEnum.Special) && itemToAdd.CompareSpecialType(SpecialItemEnum.DungeonKey))
-                {
-                    DungeonManager.AddDungeonKey();
-                    rv = true;
-                }
-                else if (itemToAdd.CompareType(ItemEnum.Tool))
-                {
-                    PlayerManager.AddTool((Tool)itemToAdd);
-                    rv = true;
-                }
-            }
-
-            return rv;
-        }
 
         public static Item GetCurrentItem()
         {

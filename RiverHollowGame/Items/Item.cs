@@ -134,7 +134,7 @@ namespace RiverHollow.Items
             }
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox, bool LayerDepth = false, float forcedLayerDepth = 99999, float alpha = 1f)
+        public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox, bool LayerDepth = false, float forcedLayerDepth = GameManager.MAX_LAYER_DEPTH, float alpha = 1f)
         {
             if (LayerDepth)
             {
@@ -220,6 +220,8 @@ namespace RiverHollow.Items
 
             return rv;
         }
+
+        public virtual bool AddToInventoryTrigger() { return false; }
 
         protected void ConfirmItemUse(TextEntry entry)
         {
@@ -408,6 +410,12 @@ namespace RiverHollow.Items
             _iNum = 1;
             _bStacks = false;
             _texTexture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
+        }
+
+        public override bool AddToInventoryTrigger()
+        {
+            DungeonManager.AddDungeonKey();
+            return true;
         }
     }
 

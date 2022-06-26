@@ -380,6 +380,8 @@ namespace RiverHollow.Game_Managers
                         return new Food(id, diData, num);
                     case ItemEnum.MonsterFood:
                         return new MonsterFood(id, diData, num);
+                    case ItemEnum.NPCToken:
+                        return new NPCToken(id, diData);
                     case ItemEnum.Resource:
                         return new Item(id, diData, num);
                     case ItemEnum.Special:
@@ -569,7 +571,7 @@ namespace RiverHollow.Game_Managers
         public static Mount CreateMount(int id)
         {
             WorldActor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Child))
+            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Mount))
             {
                 rv = null;
             }
@@ -578,7 +580,7 @@ namespace RiverHollow.Game_Managers
         public static Pet CreatePet(int id)
         {
             WorldActor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Child))
+            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Pet))
             {
                 rv = null;
             }

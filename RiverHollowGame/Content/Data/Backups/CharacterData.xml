@@ -19,11 +19,11 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:8][Collection:7|186][Idle:0-0-1-0-T][Walk:64-0-8-.12-F][Key:Dwarf][StartMap:mapCave_Entrance]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:8][Collection:7|187][Idle:0-0-1-0-T][Walk:64-0-8-.12-F][Key:Dwarf][StartMap:mapCave_Entrance]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:2][Collection:7|186][ShopData:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][FirstArrival:-1][ArrivalPeriod:-1][Key:Eldra]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:2][Collection:7|187][ShopData:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][FirstArrival:-1][ArrivalPeriod:-1][Key:Eldra]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -39,15 +39,15 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:22][Collection:7|186][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredVillager:3][FirstArrival:7][Key:Gail]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:22][Collection:7|187][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredVillager:3][FirstArrival:7][Key:Gail]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:1][Collection:7|186][ShopData:0][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:67][FirstArrival:10][ArrivalPeriod:8][Key:Griselda]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:1][Collection:7|187][ShopData:0][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:67][FirstArrival:10][ArrivalPeriod:8][Key:Griselda]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:26][Collection:7|186][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][AtInn][ShopData:3][Key:Harrison]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:26][Collection:7|187][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][AtInn][ShopData:3][Key:Harrison]</Value>
     </Item>
     <Item>
       <Key>12</Key>
@@ -59,7 +59,7 @@
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:45][Collection:7|186][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:2][RequiredObjectID:75-5][ShopData:6][CanMarry][Key:Jase]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:45][Collection:7|187][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:2][RequiredObjectID:75-5][ShopData:6][CanMarry][Key:Jase]</Value>
     </Item>
     <Item>
       <Key>15</Key>
@@ -67,7 +67,7 @@
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:40][Collection:7|186][Idle:0-0-1-0-T][Walk:64-0-8-.11-F][AtInn][ShopData:2][Key:Kyle]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:40][Collection:7|187][Idle:0-0-1-0-T][Walk:64-0-8-.11-F][AtInn][ShopData:2][Key:Kyle]</Value>
     </Item>
     <Item>
       <Key>17</Key>
@@ -103,11 +103,11 @@
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:4][Collection:7|186][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:68][TotalMoneyEarnedReq:1000][Key:Sammy]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:4][Collection:7|187][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:68][TotalMoneyEarnedReq:1000][Key:Sammy]</Value>
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:19][Collection:7|186][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:67][Key:Yulia][StartMap:mapWoods]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:19][Collection:7|187][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:67][Key:Yulia][StartMap:mapWoods]</Value>
     </Item>
     <Item>
       <Key>27</Key>
@@ -123,7 +123,7 @@
     </Item>
     <Item>
       <Key>30</Key>
-      <Value>[Type:Pet][Walk:0-0-3-0.15-T][Idle:0-32-3-0.3-T][Action1:0-64-3-0.15-T][ObjectID:4][Value:500]</Value>
+      <Value>[Type:Pet][Walk:0-0-3-0.3-T][Idle:0-32-3-0.3-T][Action1:0-64-3-0.5-T][ObjectID:4][Value:500][Key:Pet_Slime]</Value>
     </Item>
     <Item>
       <Key>31</Key>

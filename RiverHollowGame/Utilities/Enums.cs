@@ -4,7 +4,7 @@
     {
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, ShowRequests, Propose, Date, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Party };
-        public enum TextEntryTriggerEnum { None, UseItem, ConfirmGift, EndDay, Exit, Donate, PetFollow, PetUnfollow, GetBaby }
+        public enum TextEntryTriggerEnum { None, UseItem, ConfirmGift, ConfirmPurchase, EndDay, Exit, Donate, PetFollow, PetUnfollow, GetBaby }
 
         public enum SpawnTypeEnum { Item, Object, Mob };
         public enum RarityEnum { C, U, R, M };
@@ -23,13 +23,14 @@
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
-        public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, Clothing, MonsterFood, Blueprint, Special };
+        public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, Clothing, MonsterFood, NPCToken, Blueprint, Special };
         public enum ToolEnum { None, Backpack, Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return, Scythe };
         public enum SpecialItemEnum { None, Marriage, Class, Map, DungeonKey, Task };
         public enum GearTypeEnum { Accessory, Chest, Head, Weapon };
         public enum WeaponEnum { None, Spear, Shield, Rapier, Bow, Wand, Knife, Orb, Staff };
         public enum ArmorTypeEnum { None, Cloth, Light, Heavy };
         public enum ClothingEnum { None, Chest, Legs, Hat };
+        public enum NPCTokenTypeEnum { Mount, Pet };
 
         public enum ActorMovementStateEnum { Idle, Walking };
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };

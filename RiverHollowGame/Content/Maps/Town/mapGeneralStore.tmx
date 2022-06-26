@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="14" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="19">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="14" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="39">
  <properties>
   <property name="Building" type="bool" value="true"/>
   <property name="MapType" value="Town"/>
+  <property name="Shop" type="int" value="3"/>
  </properties>
  <tileset firstgid="1" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="484" columns="22">
   <image source="../Tilesets/tsWalls_Floors.png" trans="ffffff" width="352" height="353"/>
@@ -294,14 +295,14 @@
   <data encoding="csv">
 249,224,225,225,225,225,225,225,225,225,225,225,226,250,
 223,246,247,247,247,247,247,247,247,247,247,247,248,222,
-223,268,269,269,269,269,269,269,1271,1272,1273,269,270,222,
-223,290,291,291,291,291,291,291,1297,1298,1299,291,292,222,
+223,268,269,269,269,269,1271,1272,1273,269,0,0,270,222,
+223,290,291,291,291,291,1297,1298,1299,291,291,291,292,222,
 223,0,0,0,0,0,0,0,0,0,0,0,0,222,
-223,1228,1228,1229,1228,1230,0,0,0,0,0,0,0,222,
+223,1228,1228,1229,1228,1230,0,0,0,1300,1301,1302,1303,222,
 223,1285,0,0,0,0,0,0,0,0,0,0,0,222,
+223,0,0,0,0,0,0,0,0,1300,1301,1302,1303,222,
 223,0,0,0,0,0,0,0,0,0,0,0,0,222,
-223,0,0,0,0,0,0,0,0,0,0,0,0,222,
-223,0,0,0,0,0,0,0,0,0,0,0,0,222,
+223,1300,1303,0,0,0,0,0,0,1300,1301,1302,1303,222,
 293,0,0,0,0,0,0,0,0,0,0,0,0,294,
 0,0,227,0,229,0,0,0,0,0,0,0,0,0
 </data>
@@ -312,11 +313,11 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1202,1202,1203,1202,1256,0,0,0,0,0,0,0,0,
+0,1202,1202,1203,1202,1256,0,0,0,1274,1275,1276,1277,0,
 0,1259,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,1274,1275,1276,1277,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1274,1277,0,0,0,0,0,0,1274,1275,1276,1277,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,230,201,0,200,230,230,230,230,230,230,230,230,0,
 0,0,0,228,0,0,0,0,0,0,0,0,0,0
@@ -330,16 +331,39 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="9" name="MapObject"/>
- <objectgroup id="5" name="Character Layer">
-  <object id="16" name="General_Store" x="50.2008" y="68.6059" width="12.1696" height="11.2477"/>
-  <object id="17" name="Shop" x="48.3348" y="70.8689" width="15.7378" height="24.585">
+ <objectgroup id="9" name="MapObject">
+  <object id="35" name="WorldObject" x="16" y="144" width="32" height="16">
    <properties>
-    <property name="NPC_ID" value="11"/>
-    <property name="ShopKeepX" type="int" value="3"/>
-    <property name="ShopKeepY" type="int" value="4"/>
+    <property name="ObjectID" type="int" value="136"/>
    </properties>
   </object>
-  <object id="18" name="NPC_11" x="147.292" y="67.5417" width="8.75" height="10.25"/>
+  <object id="36" name="WorldObject" x="144" y="144" width="64" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="138"/>
+   </properties>
+  </object>
+  <object id="37" name="WorldObject" x="144" y="112" width="64" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="138"/>
+   </properties>
+  </object>
+  <object id="38" name="WorldObject" x="160" y="80" width="48" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="137"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="5" name="Character Layer">
+  <object id="16" name="General_Store" x="50.2008" y="68.6059" width="12.1696" height="11.2477"/>
+  <object id="18" name="NPC_11" x="115.292" y="65.875" width="8.75" height="10.25"/>
+  <object id="19" name="ShopItem" x="24" y="131" width="16" height="29"/>
+  <object id="20" name="ShopItem" x="150" y="131" width="16" height="29"/>
+  <object id="21" name="ShopItem" x="168" y="131" width="16" height="29"/>
+  <object id="22" name="ShopItem" x="186" y="131" width="16" height="29"/>
+  <object id="23" name="ShopItem" x="150" y="99" width="16" height="29"/>
+  <object id="24" name="ShopItem" x="168" y="99" width="16" height="29"/>
+  <object id="25" name="ShopItem" x="186" y="99" width="16" height="29"/>
+  <object id="27" name="ShopItem" x="168" y="67" width="16" height="29"/>
+  <object id="28" name="ShopItem" x="186" y="67" width="16" height="29"/>
  </objectgroup>
 </map>

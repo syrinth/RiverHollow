@@ -205,7 +205,7 @@ namespace RiverHollow.Game_Managers
             if (_currentMap == MapManager.CurrentMap.Name)
             {
                 PlayerActor.Draw(spriteBatch, true);
-                ToolInUse?.Draw(spriteBatch);
+                ToolInUse?.DrawToolAnimation(spriteBatch);
             }
         }
 
@@ -509,7 +509,7 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            Rectangle playerRect = PlayerActor.GetRectangle();
+            Rectangle playerRect = PlayerActor.CollisionBox;
             int a = Math.Abs(playerRect.Center.X - centre.X);
             int b = Math.Abs(playerRect.Center.Y - centre.Y);
             distance = (int)Math.Sqrt(a * a + b * b);

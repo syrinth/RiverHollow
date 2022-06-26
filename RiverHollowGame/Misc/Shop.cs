@@ -1,21 +1,32 @@
-﻿using RiverHollow.Game_Managers;
+﻿using Microsoft.Xna.Framework;
+using RiverHollow.Game_Managers;
+using RiverHollow.Items;
+using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.SaveManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Misc
 {
     public class Shop
     {
+        public int ShopkeeperID { get; private set; }
         int _iShopID;
-        string _sName;
-        public string Name => _sName;
+        List<ShopItemSpot> _liShopItemSpots;
+        public IList<ShopItemSpot> ItemSpots => _liShopItemSpots.AsReadOnly();
         Dictionary<int, Merchandise> _diMerchandise;
         public int Count => _diMerchandise.Count;
 
         public Shop(int id, Dictionary<string, string> stringDictionary)
         {
             _iShopID = id;
+            _liShopItemSpots = new List<ShopItemSpot>();
+
+            if (stringDictionary.ContainsKey("Shopkeeper"))
+            {
+                ShopkeeperID = int.Parse(stringDictionary["Shopkeeper"]);
+            }
 
             _diMerchandise = new Dictionary<int, Merchandise>();
             if (stringDictionary.ContainsKey("ItemID"))
@@ -32,13 +43,83 @@ namespace RiverHollow.Misc
                     _diMerchandise[int.Parse(s)] = (new Merchandise(Merchandise.MerchTypeEnum.WorldObject, s));
                 }
             }
-            if (stringDictionary.ContainsKey("NPC_ID"))
+        }
+
+        public void Update()
+        {
+            int closestDistance = 999;
+            ShopItemSpot closest = null;
+            foreach(ShopItemSpot spot in _liShopItemSpots)
             {
-                foreach (string s in Util.FindParams(stringDictionary["NPC_ID"]))
+                spot.ShowPrice = false;
+                int distance = 0;
+                if(PlayerManager.PlayerInRangeGetDist(spot.Box.Center, GameManager.TILE_SIZE * 2, ref distance))
                 {
-                    string[] data = s.Split('-');
-                    _diMerchandise[int.Parse(s)] = (new Merchandise(Merchandise.MerchTypeEnum.Actor, s));
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closest = spot;
+                    }
                 }
+            }
+
+            if (closest != null)
+            {
+                closest.ShowPrice = true;
+            }
+        }
+
+        public bool Interact(RHMap map, Point mouseLocation)
+        {
+            foreach (ShopItemSpot itemSpot in _liShopItemSpots)
+            {
+                if (itemSpot.Contains(mouseLocation) && PlayerManager.PlayerInRange(itemSpot.Box.Center, GameManager.TILE_SIZE * 2))
+                {
+                    if (map.ContainsActor(DataManager.DIVillagers[ShopkeeperID]))
+                    {
+                        itemSpot.Buy();
+                        return true;
+                    }
+                    else { GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("BuyMerch_NoShopkeep")); }
+                }
+            }
+
+            return false;
+        }
+
+        public void Purchase(Item buyMe)
+        {
+            if (PlayerManager.Money >= buyMe.Value)
+            {
+                PlayerManager.TakeMoney(buyMe.Value);
+                if (buyMe.CompareType(ItemEnum.Blueprint) || buyMe.CompareType(ItemEnum.Tool) || buyMe.CompareType(ItemEnum.NPCToken))
+                {
+                    PlayerManager.AddToUniqueBoughtItems(buyMe.ItemID);
+                    _liShopItemSpots.Find(x => x.MerchID == buyMe.ItemID).SetMerchandise(null);
+                }
+                InventoryManager.AddToInventory(buyMe);
+            }
+        }
+
+        public void AddItemSpot(ShopItemSpot spot)
+        {
+            _liShopItemSpots.Add(spot);
+        }
+
+        public void PlaceStock()
+        {
+            int index = 0;
+            _liShopItemSpots.ForEach(x => x.SetMerchandise(null));
+
+            foreach (KeyValuePair<int, Merchandise> kvp in _diMerchandise)
+            {
+                if (PlayerManager.AlreadyBoughtUniqueItem(kvp.Value.MerchID)) { continue; }
+
+                if (index < _liShopItemSpots.Count)
+                {
+                    _liShopItemSpots[index++].SetMerchandise(kvp.Value);
+                }
+                else { break; }
             }
         }
 
@@ -98,7 +179,7 @@ namespace RiverHollow.Misc
 
     public class Merchandise
     {
-        public enum MerchTypeEnum { Item, WorldObject, Actor };
+        public enum MerchTypeEnum { Item, WorldObject };
         public MerchTypeEnum MerchType { get; }
 
         private bool _bLocked = false;
@@ -130,9 +211,6 @@ namespace RiverHollow.Misc
                     break;
                 case MerchTypeEnum.WorldObject:
                     _iCost = int.Parse(DataManager.GetWorldObjectValueByID(MerchID, "Value"));
-                    break;
-                case MerchTypeEnum.Actor:
-                    _iCost = int.Parse(DataManager.GetNPCValueByID(MerchID, "Value"));
                     break;
             }
         }

@@ -34,7 +34,6 @@ namespace RiverHollow.Characters
             ImportBasics(stringData, loadanimations);
 
             _bOnTheMap = false;
-            _bShopIsOpen = true;
         }
 
         protected override void ImportBasics(Dictionary<string, string> stringData, bool loadanimations = true)

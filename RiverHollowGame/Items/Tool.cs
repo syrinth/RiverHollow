@@ -85,10 +85,16 @@ namespace RiverHollow.Items
             _sprite.Update(gTime);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public void DrawToolAnimation(SpriteBatch spriteBatch)
         {
             _sprite.SetLayerDepthMod(1);
             _sprite.Draw(spriteBatch);
+        }
+
+        public override bool AddToInventoryTrigger()
+        {
+            PlayerManager.AddTool(this);
+            return true;
         }
 
         public override bool ItemBeingUsed()

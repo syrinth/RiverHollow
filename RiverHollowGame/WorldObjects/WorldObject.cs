@@ -162,12 +162,16 @@ namespace RiverHollow.WorldObjects
             if (_bDrawUnder) { _sprite.Draw(spriteBatch, 1); }
             else {
                 float alpha = 1f;
-                if(new Rectangle((int)Sprite.Position.X, (int)Sprite.Position.Y, Sprite.Width, Sprite.Height).Contains(PlayerManager.PlayerActor.CollisionBox.Center))
+                if(((BaseHeight + 1) * TILE_SIZE < Height) && new Rectangle((int)Sprite.Position.X, (int)Sprite.Position.Y, Sprite.Width, Sprite.Height).Contains(PlayerManager.PlayerActor.CollisionBox.Center))
                 {
                     alpha = 0.7f;
                 }
                 _sprite.Draw(spriteBatch, true, alpha);
             }
+        }
+        public virtual void DrawItem(SpriteBatch spriteBatch, Item i)
+        {
+            i.Draw(spriteBatch, new Rectangle((int)(i.Position.X), (int)(i.Position.Y), TILE_SIZE, TILE_SIZE), true, _sprite.LayerDepth + 1);
         }
 
         public virtual void ProcessLeftClick() { }

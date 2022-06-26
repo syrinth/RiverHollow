@@ -14,9 +14,6 @@ namespace RiverHollow.Characters
         protected int _iArrivalPeriod = -1;
         protected int _iNextArrival = -1;
 
-        protected bool _bShopIsOpen = false;
-        protected int _iShopIndex = -1;
-
         protected Dictionary<int, int> _diRequiredObjectIDs;
         protected int _iRequiredPopulation = -1;
         protected int _iRequiredVillagerID = -1;
@@ -47,8 +44,6 @@ namespace RiverHollow.Characters
             Util.AssignValue(ref _iRequiredPopulation, "RequiredPopulation", stringData);
             Util.AssignValue(ref _iRequiredVillagerID, "RequiredVillager", stringData);
 
-            Util.AssignValue(ref _iShopIndex, "ShopData", stringData);
-
             if (loadanimations)
             {
                 List<AnimationData> liAnimationData = Util.LoadWorldAnimations(stringData);
@@ -71,7 +66,7 @@ namespace RiverHollow.Characters
 
         public override void OpenShop()
         {
-            GUIManager.OpenMainObject(new HUDShopWindow(GameManager.DIShops[_iShopIndex].GetUnlockedMerchandise()));
+            GUIManager.OpenMainObject(new HUDShopWindow(CurrentMap.TheShop.GetUnlockedMerchandise()));
         }
 
         protected bool TownRequirementsMet()

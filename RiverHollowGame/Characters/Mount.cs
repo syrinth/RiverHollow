@@ -10,12 +10,12 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
-    public class Mount : BuyableNPC
+    public class Mount : TalkingActor
     {
         public override Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, TILE_SIZE);
 
         int _iStableID = -1;
-        public Mount(int id, Dictionary<string, string> stringData) : base(id, stringData)
+        public Mount(int id, Dictionary<string, string> stringData) : base(id)
         {
             _eActorType = WorldActorTypeEnum.Mount;
 

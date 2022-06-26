@@ -27,6 +27,7 @@ namespace RiverHollow.Game_Managers
         public const float TOOL_ANIM_SPEED = 0.08f;
         public const int MAX_BUILDING_LEVEL = 3;
         public const int TILE_SIZE = 16;
+        public const int MAX_LAYER_DEPTH = 999999;
 
         public static int CurrentScale = NORMAL_SCALE;
         public static int ScaledTileSize => (int)(TILE_SIZE * CurrentScale);

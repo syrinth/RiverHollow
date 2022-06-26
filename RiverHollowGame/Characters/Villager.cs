@@ -246,7 +246,7 @@ namespace RiverHollow.Characters
                     _assignedTask.TaskIsTalking();
                     rv = _diDialogue[_assignedTask.StartTaskDialogue];
                 }
-                else if (_bShopIsOpen) { rv = _diDialogue["ShopOpen"]; }
+                else if (CurrentMap.TheShop != null && CurrentMap.TheShop.ShopkeeperID == ID) { rv = _diDialogue["ShopOpen"]; }
                 else if (!_bHasTalked) { rv = GetDailyDialogue(); }
                 else
                 {
@@ -483,18 +483,6 @@ namespace RiverHollow.Characters
             TravelManager.FinishThreading(ref _pathingThread);
         }
         #endregion
-
-        /// <summary>
-        /// Flags the Villager that the shop open status is changing, as long as the Villager has Shop Data
-        /// </summary>
-        /// <param name="val">Whether the shop is open or closed</param>
-        public void SetShopOpenStatus(bool val)
-        {
-            if (_iShopIndex != -1)
-            {
-                _bShopIsOpen = true;
-            }
-        }
 
         protected bool CheckTaskLog(ref TextEntry taskEntry)
         {

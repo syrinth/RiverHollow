@@ -547,6 +547,18 @@
     </Item>
     <Item>
       <Key>136</Key>
+      <Value>[Type:WorldObject][Image:192-336][Size:2-2][BaseOffset:0-1][Base:2-1]</Value>
+    </Item>
+    <Item>
+      <Key>137</Key>
+      <Value>[Type:WorldObject][Image:224-336][Size:3-2][BaseOffset:0-1][Base:3-1]</Value>
+    </Item>
+    <Item>
+      <Key>138</Key>
+      <Value>[Type:WorldObject][Image:272-336][Size:4-2][BaseOffset:0-1][Base:4-1]</Value>
+    </Item>
+    <Item>
+      <Key>139</Key>
       <Value>[Type:WorldObject][Image:48-0]</Value>
     </Item>
   </Asset>

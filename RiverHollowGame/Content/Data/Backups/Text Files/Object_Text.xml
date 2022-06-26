@@ -1303,50 +1303,54 @@
     </Item>
     <Item>
       <Key>Item_176</Key>
-      <Value>[Name:Basic Town Plans][Description:A loose collection of notes describing how to craft some basic town amenities.]</Value>
+      <Value>[Name:PetSlime][Description:It's a Slimy pet!]</Value>
     </Item>
     <Item>
       <Key>Item_177</Key>
-      <Value>[Name:Basic Gardening][Description:A book detailing the construction of several structures used for gardening.]</Value>
+      <Value>[Name:Basic Town Plans][Description:A loose collection of notes describing how to craft some basic town amenities.]</Value>
     </Item>
     <Item>
       <Key>Item_178</Key>
-      <Value>[Name:$Building_24$ Blueprint][Description:]</Value>
+      <Value>[Name:Basic Gardening][Description:A book detailing the construction of several structures used for gardening.]</Value>
     </Item>
     <Item>
       <Key>Item_179</Key>
-      <Value>[Name:$Building_20$ Blueprint][Description:]</Value>
+      <Value>[Name:$Building_24$ Blueprint][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_180</Key>
-      <Value>[Name:$Building_22$ Blueprint][Description:]</Value>
+      <Value>[Name:$Building_20$ Blueprint][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_181</Key>
-      <Value>[Name:$Building_21$ Blueprint][Description:]</Value>
+      <Value>[Name:$Building_22$ Blueprint][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_182</Key>
-      <Value>[Name:$Building_25$ Blueprint][Description:]</Value>
+      <Value>[Name:$Building_21$ Blueprint][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_183</Key>
-      <Value>[Name:Griselda's Orb][Description:General Use]</Value>
+      <Value>[Name:$Building_25$ Blueprint][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_184</Key>
-      <Value>[Name:Adventure Map][Description:Off to find adventures!]</Value>
+      <Value>[Name:Griselda's Orb][Description:General Use]</Value>
     </Item>
     <Item>
       <Key>Item_185</Key>
-      <Value>[Name:Mask of Marriage][Description:A mask used by the people of River hollow to proess their love to one another.]</Value>
+      <Value>[Name:Adventure Map][Description:Off to find adventures!]</Value>
     </Item>
     <Item>
       <Key>Item_186</Key>
-      <Value>[Name:Essence of ][Description:Become a ]</Value>
+      <Value>[Name:Mask of Marriage][Description:A mask used by the people of River hollow to proess their love to one another.]</Value>
     </Item>
     <Item>
       <Key>Item_187</Key>
+      <Value>[Name:Essence of ][Description:Become a ]</Value>
+    </Item>
+    <Item>
+      <Key>Item_188</Key>
       <Value>[Name:Dungeon Key][Description:A key that unlocks a dungeon door.]</Value>
     </Item>
     <Item>
@@ -1895,6 +1899,18 @@
     </Item>
     <Item>
       <Key>WorldObject_136</Key>
+      <Value>[Name:ShopTable1]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_137</Key>
+      <Value>[Name:ShopTable2]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_138</Key>
+      <Value>[Name:ShopTable3]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_139</Key>
       <Value>[Name:Staircase]</Value>
     </Item>
   </Asset>

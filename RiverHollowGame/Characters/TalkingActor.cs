@@ -53,7 +53,7 @@ namespace RiverHollow.Characters
             base.Draw(spriteBatch, useLayerDepth);
             if (_bOnTheMap && _assignedTask?.TaskState == TaskStateEnum.Assigned)
             {
-                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)Position.X, (int)Position.Y - 32, 16, 16), new Rectangle(224, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, 99999999);
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)Position.X, (int)Position.Y - 32, 16, 16), new Rectangle(224, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, GameManager.MAX_LAYER_DEPTH);
             }
         }
 

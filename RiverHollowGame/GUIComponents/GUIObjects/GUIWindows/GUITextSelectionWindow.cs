@@ -264,6 +264,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             ((Villager)GameManager.CurrentNPC).FriendshipPoints += 1000;
                             break;
                         case TextEntryTriggerEnum.ConfirmGift:
+                        case TextEntryTriggerEnum.ConfirmPurchase:
                         case TextEntryTriggerEnum.UseItem:
                             GameManager.SetSelectedItem(null);
                             break;
@@ -307,6 +308,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             nextText = act?.Gift(GameManager.CurrentItem);
                             GUIManager.CloseMainObject();
                             GameManager.SetSelectedItem(null);
+                            break;
+                        case TextEntryTriggerEnum.ConfirmPurchase:
+                            MapManager.CurrentMap.TheShop.Purchase(GameManager.CurrentItem);
                             break;
                         case TextEntryTriggerEnum.Donate:
                             ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;

@@ -190,7 +190,7 @@ namespace RiverHollow.Game_Managers
         public virtual void Update(GameTime gTime) { }
         public void Draw(SpriteBatch spriteBatch)
         {
-            _sprBody.Draw(spriteBatch, 999999999);
+            _sprBody.Draw(spriteBatch, GameManager.MAX_LAYER_DEPTH);
         }
 
         public virtual bool IsFinished()

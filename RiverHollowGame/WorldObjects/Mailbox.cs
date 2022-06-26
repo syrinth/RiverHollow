@@ -33,7 +33,7 @@ namespace RiverHollow.WorldObjects
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            _alertSprite?.Draw(spriteBatch, 99999);
+            _alertSprite?.Draw(spriteBatch, GameManager.MAX_LAYER_DEPTH);
         }
 
         public override void ProcessRightClick()

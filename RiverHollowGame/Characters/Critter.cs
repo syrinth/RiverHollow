@@ -58,7 +58,7 @@ namespace RiverHollow.Characters
             else
             {
                 if (_dCountdown < 1) { _dCountdown += gTime.ElapsedGameTime.TotalSeconds; }
-                else { _sprBody.SetLayerDepthMod(9999); }
+                else { _sprBody.SetLayerDepthMod(GameManager.MAX_LAYER_DEPTH); }
 
                 Position += new Vector2(-2, -2);
 

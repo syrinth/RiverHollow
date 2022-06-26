@@ -788,6 +788,7 @@ namespace RiverHollow.Game_Managers
             GameCalendar.LoadCalendar(dataToLoad.Calendar);
             EnvironmentManager.LoadEnvironment(dataToLoad.Environment);
             PlayerManager.Initialize();
+            PlayerManager.LoadData(dataToLoad.playerData);
 
             foreach (MapData mapData in dataToLoad.MapData)
             {
@@ -818,8 +819,6 @@ namespace RiverHollow.Game_Managers
             {
                 GameManager.DIShops[s.shopID].UnlockMerchandise(s.merchUnlockedString);
             }
-
-            PlayerManager.LoadData(dataToLoad.playerData);
 
             //After we've loaded everything, spawn the mounts in the Stables
             PlayerManager.SpawnMounts();

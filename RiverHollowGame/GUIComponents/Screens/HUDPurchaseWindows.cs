@@ -58,10 +58,6 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     newBox = new PurchaseBox(DataManager.CreateWorldObjectByID(m.MerchID), m.MoneyCost, _winMain.InnerWidth() - GUIList.BTNSIZE, ShowDisplay);
                 }
-                else if (m.MerchType == Merchandise.MerchTypeEnum.Actor)
-                {
-                    //newBox = new PurchaseBox(DataManager.GetNPCByIndex(m.MerchID), m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE, ShowDisplay);
-                }
 
                 items.Add(newBox);
 
@@ -168,22 +164,22 @@ namespace RiverHollow.GUIComponents.Screens
                 if (WorldObject != null) { PlayerManager.AddToStorage(WorldObject.ID); }
                 if (Actor != null)
                 {
-                    if (Actor.IsActorType(WorldActorTypeEnum.Mount))
-                    {
-                        Mount act = (Mount)Actor;
-                        PlayerManager.AddMount(act);
-                        act.SpawnInHome();
-                    }
-                    else if (Actor.IsActorType(WorldActorTypeEnum.Pet))
-                    {
-                        Pet act = (Pet)Actor;
-                        PlayerManager.AddPet(act);
-                        act.SpawnNearPlayer();
-                        if (PlayerManager.PlayerActor.ActivePet == null)
-                        {
-                            PlayerManager.PlayerActor.SetPet(act);
-                        }
-                    }
+                    //if (Actor.IsActorType(WorldActorTypeEnum.Mount))
+                    //{
+                    //    Mount act = (Mount)Actor;
+                    //    PlayerManager.AddMount(act);
+                    //    act.SpawnInHome();
+                    //}
+                    //else if (Actor.IsActorType(WorldActorTypeEnum.Pet))
+                    //{
+                    //    Pet act = (Pet)Actor;
+                    //    PlayerManager.AddPet(act);
+                    //    act.SpawnNearPlayer();
+                    //    if (PlayerManager.PlayerActor.ActivePet == null)
+                    //    {
+                    //        PlayerManager.PlayerActor.SetPet(act);
+                    //    }
+                    //}
                 }
 
                 rv = true;
@@ -203,7 +199,7 @@ namespace RiverHollow.GUIComponents.Screens
         private void PurchaseItem(int itemID)
         {
             Item purchase = DataManager.GetItem(itemID);
-            if (purchase.CompareType(ItemEnum.Blueprint) || purchase.CompareType(ItemEnum.Tool))
+            if (purchase.CompareType(ItemEnum.Blueprint) || purchase.CompareType(ItemEnum.Tool) || purchase.CompareType(ItemEnum.NPCToken))
             {
                 PlayerManager.AddToUniqueBoughtItems(itemID);
                 _action();

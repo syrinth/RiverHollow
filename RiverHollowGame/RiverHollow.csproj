@@ -62,7 +62,6 @@
     <Compile Include="Buildings\Building.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Characters\Actor.cs" />
-    <Compile Include="Characters\BuyableNPC.cs" />
     <Compile Include="Characters\Child.cs" />
     <Compile Include="Characters\Critter.cs" />
     <Compile Include="Characters\ClassedCombatant.cs" />
@@ -129,8 +128,9 @@
     <Compile Include="Items\Consumable.cs" />
     <Compile Include="Items\Equipment.cs" />
     <Compile Include="Items\Food.cs" />
+    <Compile Include="Items\NPCToken.cs" />
     <Compile Include="Items\Tool.cs" />
-    <Compile Include="Map Handling\ShopLocation.cs" />
+    <Compile Include="Map Handling\ShopItemSpot.cs" />
     <Compile Include="Map Handling\SpawnPoint.cs" />
     <Compile Include="Map Handling\TravelPoint.cs" />
     <Compile Include="Misc\AnimationData.cs" />

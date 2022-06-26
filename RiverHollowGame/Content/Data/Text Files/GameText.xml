@@ -161,9 +161,21 @@
       <Key>39</Key>
       <Value>[Name:Wrong_Tool][Text:Wrong Tool!]</Value>
     </Item>
-		<Item>
+	<Item>
       <Key>40</Key>
       <Value>[Name:Weak_Tool][Text:Your tool isn't strong enough!]</Value>
+    </Item>
+	<Item>
+      <Key>41</Key>
+      <Value>[Name:BuyMerch_Confirm][Text:Purchase {0} for {1}?][Selection:YesNo][Trigger:ConfirmPurchase]</Value>
+    </Item>
+	<Item>
+      <Key>42</Key>
+      <Value>[Name:BuyMerch_NoShopkeep][Text:There's no one here to take your money...]</Value>
+    </Item>
+	<Item>
+      <Key>43</Key>
+      <Value>[Name:BuyMerch_NoMoney][Text:You can't afford that.]</Value>
     </Item>
   </Asset>
 </XnaContent>
