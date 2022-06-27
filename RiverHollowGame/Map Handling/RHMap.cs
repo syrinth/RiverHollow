@@ -222,8 +222,6 @@ namespace RiverHollow.Map_Handling
                 {
                     ((Item)i).Update(gTime);
                 }
-
-                TheShop?.Update();
             }
         
             foreach (WorldObject obj in _liObjectsToRemove)

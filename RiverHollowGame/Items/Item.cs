@@ -56,6 +56,7 @@ namespace RiverHollow.Items
 
         protected int _iValue;
         public int Value => _iValue;
+        public int TotalValue => _iValue * _iNum;
         public int SellPrice => _iValue / 2;
 
         //What items and in what numebrs are required to make this item
@@ -238,6 +239,19 @@ namespace RiverHollow.Items
 
         public void SetColor(Color c) { _c = c; }
 
+        public bool IsUnique()
+        {
+            bool rv = false;
+            switch (_eItemType)
+            {
+                case ItemEnum.Blueprint:
+                case ItemEnum.NPCToken:
+                case ItemEnum.Tool:
+                    rv = true;
+                    break;
+            }
+            return rv;
+        }
         public bool CompareType(ItemEnum type) { return _eItemType == type; }
         public bool CompareSpecialType(SpecialItemEnum type) { return _eSpecialItem == type; }
 

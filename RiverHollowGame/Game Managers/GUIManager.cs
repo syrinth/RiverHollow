@@ -134,12 +134,13 @@ namespace RiverHollow.Game_Managers
             _currentGUIScreen.SetWindowText(value, displayDialogueIcon);
         }
 
+        public static bool IsHoverWindowOpen() { return _currentGUIScreen.IsHoverWindowOpen(); }
         public static void CloseHoverWindow() {
             _currentGUIScreen.CloseHoverWindow();
         }
-        public static void OpenHoverWindow(GUITextWindow hoverWindow, GUIObject hoverObject)
+        public static void OpenHoverWindow(GUITextWindow hoverWindow, Rectangle area, bool guiObject)
         {
-            _currentGUIScreen.OpenHoverWindow(hoverWindow, hoverObject);
+            _currentGUIScreen.OpenHoverWindow(hoverWindow, area, guiObject);
         }
 
         public static void AssignBackgroundImage(GUIImage newImage)

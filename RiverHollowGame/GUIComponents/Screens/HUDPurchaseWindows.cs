@@ -198,13 +198,13 @@ namespace RiverHollow.GUIComponents.Screens
 
         private void PurchaseItem(int itemID)
         {
-            Item purchase = DataManager.GetItem(itemID);
-            if (purchase.CompareType(ItemEnum.Blueprint) || purchase.CompareType(ItemEnum.Tool) || purchase.CompareType(ItemEnum.NPCToken))
+            Item purchaseItem = DataManager.GetItem(itemID);
+            if (purchaseItem.IsUnique())
             {
                 PlayerManager.AddToUniqueBoughtItems(itemID);
                 _action();
             }
-            InventoryManager.AddToInventory(purchase);
+            InventoryManager.AddToInventory(purchaseItem);
         }
 
         private bool CanBuyMerch()

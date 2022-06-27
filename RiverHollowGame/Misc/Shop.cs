@@ -45,30 +45,6 @@ namespace RiverHollow.Misc
             }
         }
 
-        public void Update()
-        {
-            int closestDistance = 999;
-            ShopItemSpot closest = null;
-            foreach(ShopItemSpot spot in _liShopItemSpots)
-            {
-                spot.ShowPrice = false;
-                int distance = 0;
-                if(PlayerManager.PlayerInRangeGetDist(spot.Box.Center, GameManager.TILE_SIZE * 2, ref distance))
-                {
-                    if (distance < closestDistance)
-                    {
-                        closestDistance = distance;
-                        closest = spot;
-                    }
-                }
-            }
-
-            if (closest != null)
-            {
-                closest.ShowPrice = true;
-            }
-        }
-
         public bool Interact(RHMap map, Point mouseLocation)
         {
             foreach (ShopItemSpot itemSpot in _liShopItemSpots)
@@ -87,17 +63,17 @@ namespace RiverHollow.Misc
             return false;
         }
 
-        public void Purchase(Item buyMe)
+        public void Purchase(Item purchaseItem)
         {
-            if (PlayerManager.Money >= buyMe.Value)
+            if (PlayerManager.Money >= purchaseItem.Value)
             {
-                PlayerManager.TakeMoney(buyMe.Value);
-                if (buyMe.CompareType(ItemEnum.Blueprint) || buyMe.CompareType(ItemEnum.Tool) || buyMe.CompareType(ItemEnum.NPCToken))
+                PlayerManager.TakeMoney(purchaseItem.Value);
+                if (purchaseItem.IsUnique())
                 {
-                    PlayerManager.AddToUniqueBoughtItems(buyMe.ItemID);
-                    _liShopItemSpots.Find(x => x.MerchID == buyMe.ItemID).SetMerchandise(null);
+                    PlayerManager.AddToUniqueBoughtItems(purchaseItem.ItemID);
+                    _liShopItemSpots.Find(x => x.MerchID == purchaseItem.ItemID).SetMerchandise(null);
                 }
-                InventoryManager.AddToInventory(buyMe);
+                InventoryManager.AddToInventory(purchaseItem);
             }
         }
 

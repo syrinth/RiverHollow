@@ -7,6 +7,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Items;
 using RiverHollow.CombatStuff;
 using static RiverHollow.Utilities.Enums;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
@@ -373,7 +374,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             bool rv = false;
             if (Contains(mouse))
             {
-                GUIManager.OpenHoverWindow(new GUITextWindow(new TextEntry(ItemObject.Description()), new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32)), this);
+                if (!GUIManager.IsHoverWindowOpen())
+                {
+                    GUITextWindow win = new GUITextWindow(new TextEntry(ItemObject.Description()), new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32));
+                    GUIManager.OpenHoverWindow(win, Util.FloatRectangle(Position(), Width, Height), true);
+                }
                 rv = true;
             }
             return rv;

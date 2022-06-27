@@ -83,6 +83,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _giText.SetText(totalVal);
             Position(position);
 
+            _giText.PrintAll = true;
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
             Resize();
         }

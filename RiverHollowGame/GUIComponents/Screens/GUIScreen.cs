@@ -16,7 +16,8 @@ namespace RiverHollow.GUIComponents.Screens
         GUIImage _guiBackgroundImg;
         protected GUITextWindow _guiTextWindow;
         protected GUITextWindow _guiHoverWindow;
-        GUIObject _guiHoverObject;
+        Rectangle _rHoverArea;
+        bool _bGUIObject;
         protected GUITextSelectionWindow _gSelectionWindow;
         List<GUIObject> _liToRemove;
         List<GUIObject> _liToAdd;
@@ -91,7 +92,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (_guiTextWindow != null) { _guiTextWindow.Update(gTime); }
 
-            if (_guiHoverObject != null && !_guiHoverObject.Contains(GUICursor.Position.ToPoint())) {
+            if (_rHoverArea != Rectangle.Empty && !_rHoverArea.Contains(_bGUIObject ? GUICursor.Position.ToPoint() : GUICursor.GetWorldMousePosition().ToPoint())) {
                 CloseHoverWindow();
             }
         }
@@ -135,14 +136,15 @@ namespace RiverHollow.GUIComponents.Screens
         public virtual void CloseHoverWindow() {
             RemoveControl(_guiHoverWindow);
             _guiHoverWindow = null;
-            _guiHoverObject = null;
+            _rHoverArea = Rectangle.Empty;
         }
         public bool IsHoverWindowOpen() { return _guiHoverWindow != null; }
-        public virtual void OpenHoverWindow(GUITextWindow hoverWindow, GUIObject hoverObject)
+        public virtual void OpenHoverWindow(GUITextWindow hoverWindow, Rectangle area, bool guiObject)
         {
             CloseHoverWindow();
             _guiHoverWindow = hoverWindow;
-            _guiHoverObject = hoverObject;
+            _rHoverArea = area;
+            _bGUIObject = guiObject;
             AddControl(_guiHoverWindow);
         }
         #endregion
