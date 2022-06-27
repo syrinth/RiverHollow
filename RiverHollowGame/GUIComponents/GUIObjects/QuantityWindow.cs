@@ -71,7 +71,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             GameManager.CurrentItem.Add(_iNum - 1);
             TextEntry entry = DataManager.GetGameTextEntry("BuyMerch_Confirm");
-            entry.FormatText(GameManager.CurrentItem.Name(), GameManager.CurrentItem.TotalValue);
+            entry.FormatText(string.Format(GameManager.CurrentItem.Name() + " x"+ GameManager.CurrentItem.Number), GameManager.CurrentItem.TotalValue);
             GUIManager.OpenTextWindow(entry);
         }
     }

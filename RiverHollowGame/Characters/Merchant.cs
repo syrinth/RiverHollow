@@ -2,6 +2,7 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
+using RiverHollow.Map_Handling;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
@@ -22,6 +23,8 @@ namespace RiverHollow.Characters
         List<RequestItem> _liRequestItems;
         public Dictionary<Item, bool> DiChosenItems;
         private bool _bRequestsComplete = false;
+        public int _iShopID = -1;
+        public int ShopID => _iShopID;
 
         public Merchant(int index, Dictionary<string, string> stringData, bool loadanimations = true) : base(index)
         {
@@ -39,6 +42,8 @@ namespace RiverHollow.Characters
         protected override void ImportBasics(Dictionary<string, string> stringData, bool loadanimations = true)
         {
             base.ImportBasics(stringData, loadanimations);
+
+            Util.AssignValue(ref _iShopID, "ShopData", stringData);
 
             foreach (string s in Util.FindParams(stringData["RequestIDs"]))
             {
@@ -66,6 +71,7 @@ namespace RiverHollow.Characters
                 _bOnTheMap = false;
                 _iNextArrival = _iArrivalPeriod;
                 CurrentMap?.RemoveCharacterImmediately(this);
+                DIShops[_iShopID].ClearItemSpots();
             }
         }
 
@@ -86,9 +92,6 @@ namespace RiverHollow.Characters
                 DiChosenItems[it] = false;
                 copy.RemoveAt(chosenValue);
             }
-
-            //ClearPath();
-            //CalculatePathing();
 
             CanGiveGift = true;
         }
@@ -146,6 +149,14 @@ namespace RiverHollow.Characters
 
             Structure market = (Structure)PlayerManager.GetTownObjectsByID(int.Parse(DataManager.Config[15]["ObjectID"]))[0];
             Position = Util.SnapToGrid(new Vector2(market.MapPosition.X + market.SpecialCoords.X, market.MapPosition.Y + market.SpecialCoords.Y));
+
+            Shop marketShop = DIShops[_iShopID];
+            foreach (Structure.SubObjectInfo info in market.ObjectInfo)
+            {
+                marketShop.AddItemSpot(new ShopItemSpot(CurrentMapName, market.MapPosition + info.Position + new Vector2(8, -13)));
+            }
+
+            marketShop.PlaceStock(true);
         }
 
         private struct RequestItem

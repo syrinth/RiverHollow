@@ -760,7 +760,7 @@ namespace RiverHollow.Map_Handling
 
         public void Rollover()
         {
-            TheShop?.PlaceStock();
+            TheShop?.PlaceStock(false);
 
             for (int i = 0; i < _liPlacedWorldObjects.Count; i++) { _liPlacedWorldObjects[i].Rollover(); }
             for (int i = 0; i < _liResourceSpawns.Count; i++) { _liResourceSpawns[i].Rollover(); }
@@ -2003,6 +2003,11 @@ namespace RiverHollow.Map_Handling
                 rv = true;
                 if (c.IsActorType(WorldActorTypeEnum.Mob) && _liMobs.Contains((Mob)c)) { _liMobs.Remove((Mob)c); }
                 else if (_liActors.Contains(c)) { _liActors.Remove(c); }
+
+                if (c.IsActorType(WorldActorTypeEnum.Merchant))
+                {
+                    _iShopID = -1;
+                }
             }
 
             return rv;
@@ -2028,6 +2033,11 @@ namespace RiverHollow.Map_Handling
                 c.CurrentMapName = _sName;
                 c.Position = c.NewMapPosition == Vector2.Zero ? c.Position : c.NewMapPosition;
                 c.NewMapPosition = Vector2.Zero;
+
+                if (c.IsActorType(WorldActorTypeEnum.Merchant))
+                {
+                    _iShopID = ((Merchant)c).ShopID;
+                }
             }
 
             return rv;
@@ -2342,7 +2352,7 @@ namespace RiverHollow.Map_Handling
                 if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
 
-            TheShop?.PlaceStock();
+            TheShop?.PlaceStock(false);
         }
     }
 }

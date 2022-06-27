@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Build][StartNPC:16][GoalNPC:16][AssignTrigger:GameStart][TriggerTask:2][EndBuildingID:40][CutsceneID:2][TargetObjectID:40][ItemRewardID:177]</Value>
+      <Value>[Type:Build][StartNPC:16][GoalNPC:16][AssignTrigger:GameStart][TriggerTask:2][EndBuildingID:40][CutsceneID:2][TargetObjectID:40][ItemRewardID:178]</Value>
     </Item>
     <Item>
       <Key>1</Key>

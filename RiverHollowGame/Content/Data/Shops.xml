@@ -15,11 +15,11 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[ItemID:176|178|186|141|137|6|7|8|106][Shopkeeper:11]</Value>
+      <Value>[ItemID:179|187|141|137|6|7|8|106][Shopkeeper:11]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[ItemID:78|80|81|82|83|84|85|86|87|88]</Value>
+      <Value>[ItemID:78|80|81|82|83|84|85|86|87|88][Shopkeeper:34]</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -39,7 +39,7 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[NPC_ID:30|31]</Value>
+      <Value>[ItemID:176|177][Shopkeeper:37]</Value>
     </Item>
     <Item>
       <Key>10</Key>

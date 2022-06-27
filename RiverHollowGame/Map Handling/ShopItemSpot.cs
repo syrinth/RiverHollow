@@ -19,10 +19,10 @@ namespace RiverHollow.Map_Handling
         Vector2 _vPos;
         Merchandise _merch;
         Item merchItem;
-        public int MerchID => _merch.MerchID;
+        public int MerchID => _merch != null ? _merch.MerchID : -1;
         public Rectangle Box { get; private set; }
 
-        public ShopItemSpot(string mapName, Vector2 position, float width, float height)
+        public ShopItemSpot(string mapName, Vector2 position, float width = GameManager.TILE_SIZE, float height = GameManager.TILE_SIZE * 2)
         {
             _sMapName = mapName;
             _vPos = new Vector2((int)position.X, (int)position.Y);
@@ -86,6 +86,7 @@ namespace RiverHollow.Map_Handling
             {
                 if (PlayerManager.Money >= merchItem.Value)
                 {
+                    GUIManager.CloseHoverWindow();
                     if (!merchItem.DoesItStack)
                     {
                         GameManager.SetSelectedItem(DataManager.GetItem(merchItem.ItemID));

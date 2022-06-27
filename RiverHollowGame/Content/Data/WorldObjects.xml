@@ -435,7 +435,7 @@
     </Item>
     <Item>
       <Key>108</Key>
-      <Value>[Type:Structure][Image:0-160][Size:5-5][ReqItems:66-15][Base:5-5][SpecialCoords:33-33][SubObjects:63-0-0][Unique]</Value>
+      <Value>[Type:Structure][Image:0-160][Size:5-5][ReqItems:66-15][Base:5-5][SpecialCoords:33-33][SubObjects:136-0-0|136-48-0|136-0-64|136-48-64][Unique]</Value>
     </Item>
     <Item>
       <Key>109</Key>

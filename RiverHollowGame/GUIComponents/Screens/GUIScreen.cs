@@ -47,7 +47,10 @@ namespace RiverHollow.GUIComponents.Screens
 
             foreach (GUIObject g in Controls)
             {
-                rv = g.ProcessRightButtonClick(mouse);
+                if (g != _guiHoverWindow)
+                {
+                    rv = g.ProcessRightButtonClick(mouse);
+                }
 
                 if (rv) { break; }
             }

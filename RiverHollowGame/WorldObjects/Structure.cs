@@ -10,6 +10,8 @@ namespace RiverHollow.WorldObjects
     public class Structure : Buildable
     {
         List<SubObjectInfo> _liSubObjectInfo;
+        public IList<SubObjectInfo> ObjectInfo => _liSubObjectInfo.AsReadOnly();
+
         readonly Vector2 _vecSpecialCoords = Vector2.Zero;
         public Vector2 SpecialCoords => _vecSpecialCoords;
         public Structure(int id, Dictionary<string, string> stringData) : base(id, stringData)
@@ -52,7 +54,12 @@ namespace RiverHollow.WorldObjects
                 {
                     WorldObject obj = DataManager.CreateWorldObjectByID(info.ObjectID);
                     RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Vector2(pos.X + info.Position.X, pos.Y + info.Position.Y));
-                    targetTile.RemoveWorldObject();
+                    RHTile temp = targetTile;
+                    for (int i = 0; i < obj.CollisionBox.Width / 16; i++)
+                    {
+                        temp.RemoveWorldObject();
+                        temp = temp.GetTileByDirection(Enums.DirectionEnum.Right); 
+                    }
                     obj.PlaceOnMap(targetTile.Position, MapManager.Maps[MapName]);
                 }
             }
@@ -74,7 +81,7 @@ namespace RiverHollow.WorldObjects
             base.RemoveSelfFromTiles();
         }
 
-        private struct SubObjectInfo
+        public struct SubObjectInfo
         {
             public int ObjectID;
             public Vector2 Position;

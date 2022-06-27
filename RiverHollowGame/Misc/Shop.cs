@@ -4,6 +4,7 @@ using RiverHollow.Items;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
+using System.Linq;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -51,7 +52,8 @@ namespace RiverHollow.Misc
             {
                 if (itemSpot.Contains(mouseLocation) && PlayerManager.PlayerInRange(itemSpot.Box.Center, GameManager.TILE_SIZE * 2))
                 {
-                    if (map.ContainsActor(DataManager.DIVillagers[ShopkeeperID]))
+                    if (DataManager.DIVillagers.ContainsKey(ShopkeeperID) && map.ContainsActor(DataManager.DIVillagers[ShopkeeperID]) ||
+                        DataManager.DIMerchants.ContainsKey(ShopkeeperID) && map.ContainsActor(DataManager.DIMerchants[ShopkeeperID]))
                     {
                         itemSpot.Buy();
                         return true;
@@ -81,21 +83,25 @@ namespace RiverHollow.Misc
         {
             _liShopItemSpots.Add(spot);
         }
-
-        public void PlaceStock()
+        public void ClearItemSpots()
         {
-            int index = 0;
+            _liShopItemSpots.Clear();
+        }
+
+        public void PlaceStock(bool randomize)
+        {
             _liShopItemSpots.ForEach(x => x.SetMerchandise(null));
 
-            foreach (KeyValuePair<int, Merchandise> kvp in _diMerchandise)
+            List<Merchandise> merchList = Enumerable.ToList(_diMerchandise.Values);
+            int totalMerch = merchList.Count;
+            for (int i = 0; i < _liShopItemSpots.Count && i < totalMerch; i++)
             {
-                if (PlayerManager.AlreadyBoughtUniqueItem(kvp.Value.MerchID)) { continue; }
-
-                if (index < _liShopItemSpots.Count)
-                {
-                    _liShopItemSpots[index++].SetMerchandise(kvp.Value);
+                if (randomize) {
+                    int index = RHRandom.Instance().Next(merchList.Count);
+                    _liShopItemSpots[i].SetMerchandise(merchList[index]);
+                    merchList.RemoveAt(index);
                 }
-                else { break; }
+                else { _liShopItemSpots[i].SetMerchandise(merchList[i]); }
             }
         }
 
