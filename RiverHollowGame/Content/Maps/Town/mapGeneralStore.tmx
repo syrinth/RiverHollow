@@ -363,7 +363,7 @@
   <object id="23" name="ShopItem" x="150" y="99" width="16" height="29"/>
   <object id="24" name="ShopItem" x="168" y="99" width="16" height="29"/>
   <object id="25" name="ShopItem" x="186" y="99" width="16" height="29"/>
-  <object id="27" name="ShopItem" x="168" y="67" width="16" height="29"/>
+  <object id="27" name="ShopItem" x="166" y="67" width="16" height="29"/>
   <object id="28" name="ShopItem" x="186" y="67" width="16" height="29"/>
  </objectgroup>
 </map>

@@ -67,9 +67,9 @@ namespace RiverHollow.Misc
 
         public void Purchase(Item purchaseItem)
         {
-            if (PlayerManager.Money >= purchaseItem.Value)
+            if (PlayerManager.Money >= purchaseItem.TotalValue)
             {
-                PlayerManager.TakeMoney(purchaseItem.Value);
+                PlayerManager.TakeMoney(purchaseItem.TotalValue);
                 if (purchaseItem.IsUnique())
                 {
                     PlayerManager.AddToUniqueBoughtItems(purchaseItem.ItemID);

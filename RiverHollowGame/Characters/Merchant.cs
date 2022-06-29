@@ -20,6 +20,7 @@ namespace RiverHollow.Characters
     /// </summary>
     public class Merchant : TravellingNPC
     {
+        bool _bJustArrived = true;
         List<RequestItem> _liRequestItems;
         public Dictionary<Item, bool> DiChosenItems;
         private bool _bRequestsComplete = false;
@@ -77,8 +78,10 @@ namespace RiverHollow.Characters
 
         public void ArriveInTown()
         {
-            MoveToSpawn();
+            _bJustArrived = true;
             _bArrivedOnce = true;
+
+            MoveToSpawn();
 
             DiChosenItems.Clear();
             List<RequestItem> copy = new List<RequestItem>(_liRequestItems);
@@ -151,12 +154,15 @@ namespace RiverHollow.Characters
             Position = Util.SnapToGrid(new Vector2(market.MapPosition.X + market.SpecialCoords.X, market.MapPosition.Y + market.SpecialCoords.Y));
 
             Shop marketShop = DIShops[_iShopID];
+            marketShop.ClearItemSpots();
             foreach (Structure.SubObjectInfo info in market.ObjectInfo)
             {
                 marketShop.AddItemSpot(new ShopItemSpot(CurrentMapName, market.MapPosition + info.Position + new Vector2(8, -13)));
             }
 
-            marketShop.PlaceStock(true);
+            marketShop.PlaceStock(_bJustArrived);
+
+            _bJustArrived = false;
         }
 
         private struct RequestItem

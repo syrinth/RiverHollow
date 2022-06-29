@@ -435,7 +435,7 @@
     </Item>
     <Item>
       <Key>108</Key>
-      <Value>[Type:Structure][Image:0-160][Size:5-5][ReqItems:66-15][Base:5-5][SpecialCoords:33-33][SubObjects:136-0-0|136-48-0|136-0-64|136-48-64][Unique]</Value>
+      <Value>[Type:Structure][Image:176-400][Size:7-7][ReqItems:66-15][Base:7-7][SpecialCoords:48-48][SubObjects:136-16-16|136-64-16|136-16-80|136-64-80][Unique]</Value>
     </Item>
     <Item>
       <Key>109</Key>
@@ -555,7 +555,7 @@
     </Item>
     <Item>
       <Key>138</Key>
-      <Value>[Type:WorldObject][Image:272-336][Size:4-2][BaseOffset:0-1][Base:4-1]</Value>
+      <Value>[Type:WorldObject][Image:208-368][Size:4-2][BaseOffset:0-1][Base:4-1]</Value>
     </Item>
     <Item>
       <Key>139</Key>

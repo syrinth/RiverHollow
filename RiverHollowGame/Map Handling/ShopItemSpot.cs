@@ -51,7 +51,7 @@ namespace RiverHollow.Map_Handling
                 List<RHTile> t = MapManager.Maps[_sMapName].GetTilesFromRectangle(Box);
                 if (t.Count == 2)
                 {
-                    t[1].WorldObject.DrawItem(spritebatch, merchItem);
+                    t[1].WorldObject?.DrawItem(spritebatch, merchItem);
                 }
                 else {
                     merchItem.Draw(spritebatch);
