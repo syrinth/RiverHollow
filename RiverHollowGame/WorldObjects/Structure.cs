@@ -77,6 +77,17 @@ namespace RiverHollow.WorldObjects
                     targetTile.WorldObject.Sprite.Drawing = false;
                     MapManager.Maps[MapName].RemoveWorldObject(targetTile.WorldObject);
                 }
+
+                if (_iID == int.Parse(DataManager.Config[15]["ObjectID"]))
+                {
+                    foreach (Merchant m in DataManager.DIMerchants.Values)
+                    {
+                        if (m.OnTheMap)
+                        {
+                            m.Position = new Vector2(-99, 99);
+                        }
+                    }
+                }
             }
             base.RemoveSelfFromTiles();
         }

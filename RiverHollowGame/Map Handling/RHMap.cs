@@ -1926,7 +1926,7 @@ namespace RiverHollow.Map_Handling
             {
                 rv = (testTile.WorldObject == null && testTile.IsWallpaperWall);
             }
-            else if (!TileContainsActor(testTile) || obj.Walkable)
+            else if (!TileContainsActor(testTile) || obj.CompareType(ObjectTypeEnum.Floor))
             {
                 if (testTile.CanPlaceOnTabletop(obj) || (testTile.Passable() && testTile.WorldObject == null))
                 {
