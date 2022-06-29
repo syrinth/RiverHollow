@@ -14,10 +14,11 @@ namespace RiverHollow.Misc
     {
         public int ShopkeeperID { get; private set; }
         int _iShopID;
+        string _sRandomIndices = string.Empty;
         List<ShopItemSpot> _liShopItemSpots;
         public IList<ShopItemSpot> ItemSpots => _liShopItemSpots.AsReadOnly();
-        Dictionary<int, Merchandise> _diMerchandise;
-        public int Count => _diMerchandise.Count;
+        List<Merchandise> _liMerchandise;
+        public int Count => _liMerchandise.Count;
 
         public Shop(int id, Dictionary<string, string> stringDictionary)
         {
@@ -29,19 +30,19 @@ namespace RiverHollow.Misc
                 ShopkeeperID = int.Parse(stringDictionary["Shopkeeper"]);
             }
 
-            _diMerchandise = new Dictionary<int, Merchandise>();
+            _liMerchandise = new List<Merchandise>();
             if (stringDictionary.ContainsKey("ItemID"))
             {
                 foreach (string s in Util.FindParams(stringDictionary["ItemID"]))
                 {
-                    _diMerchandise[int.Parse(s)] = (new Merchandise(Merchandise.MerchTypeEnum.Item, s));
+                    _liMerchandise.Add(new Merchandise(Merchandise.MerchTypeEnum.Item, s));
                 }
             }
             if (stringDictionary.ContainsKey("ObjectID"))
             {
                 foreach (string s in Util.FindParams(stringDictionary["ObjectID"]))
                 {
-                    _diMerchandise[int.Parse(s)] = (new Merchandise(Merchandise.MerchTypeEnum.WorldObject, s));
+                    _liMerchandise.Add(new Merchandise(Merchandise.MerchTypeEnum.WorldObject, s));
                 }
             }
         }
@@ -88,27 +89,51 @@ namespace RiverHollow.Misc
             _liShopItemSpots.Clear();
         }
 
+        public void ClearRandom()
+        {
+            _sRandomIndices = string.Empty;
+        }
+        public void Randomize()
+        {
+            if (string.IsNullOrEmpty(_sRandomIndices))
+            {
+                int totalMerch = _liMerchandise.Count;
+
+                List<int> indices = new List<int>();
+                for (int i = 0; i < totalMerch; i++) { indices.Add(i); }
+
+                for (int i = 0; i < _liShopItemSpots.Count && i < totalMerch; i++)
+                {
+                    int index = RHRandom.Instance().Next(indices.Count);
+                    _sRandomIndices += indices[index] + "|";
+                    indices.RemoveAt(index);
+                }
+
+                _sRandomIndices = _sRandomIndices.Remove(_sRandomIndices.Length - 1);
+            }
+        }
+
         public void PlaceStock(bool randomize)
         {
             _liShopItemSpots.ForEach(x => x.SetMerchandise(null));
 
-            List<Merchandise> merchList = Enumerable.ToList(_diMerchandise.Values);
-            int totalMerch = merchList.Count;
+            string[] random = Util.FindParams(_sRandomIndices);
+
+            int totalMerch = _liMerchandise.Count;
             for (int i = 0; i < _liShopItemSpots.Count && i < totalMerch; i++)
             {
-                if (randomize) {
-                    int index = RHRandom.Instance().Next(merchList.Count);
-                    _liShopItemSpots[i].SetMerchandise(merchList[index]);
-                    merchList.RemoveAt(index);
+                if (randomize && !string.IsNullOrEmpty(_sRandomIndices)) {
+                    Merchandise m = _liMerchandise[int.Parse(random[i])];
+                    _liShopItemSpots[i].SetMerchandise(m);
                 }
-                else { _liShopItemSpots[i].SetMerchandise(merchList[i]); }
+                else { _liShopItemSpots[i].SetMerchandise(_liMerchandise[i]); }
             }
         }
 
         public List<Merchandise> GetUnlockedMerchandise()
         {
             List<Merchandise> rv = new List<Merchandise>();
-            foreach (Merchandise m in _diMerchandise.Values)
+            foreach (Merchandise m in _liMerchandise)
             {
                 if (m.Unlocked) { rv.Add(m); }
             }
@@ -118,20 +143,22 @@ namespace RiverHollow.Misc
 
         public void UnlockMerchandise(int merchID)
         {
-            if (_diMerchandise.ContainsKey(merchID))
+            Merchandise m = _liMerchandise.Find(x => x.MerchID == merchID);
+            if (m != null)
             {
-                _diMerchandise[merchID].Unlock();
+                m.Unlock();
             }
         }
 
         public void UnlockMerchandise(string unlockedMerchandise)
         {
             string[] split = unlockedMerchandise.Split('-');
-            for (int i = 0; i < _diMerchandise.Count; i++)
+            for (int i = 0; i < _liMerchandise.Count; i++)
             {
-                if (i < split.Length && split[i].Equals("True") && _diMerchandise.ContainsKey(i))
+                Merchandise m = _liMerchandise.Find(x => x.MerchID == i);
+                if (i < split.Length && split[i].Equals("True") && m != null)
                 {
-                    _diMerchandise[i].Unlock();
+                    m.Unlock();
                 }
             }
         }
@@ -140,11 +167,11 @@ namespace RiverHollow.Misc
         {
             string value = string.Empty;
             int index = 0;
-            foreach (Merchandise m in _diMerchandise.Values)
+            foreach (Merchandise m in _liMerchandise)
             {
                 value += m.Unlocked;
 
-                if (index < _diMerchandise.Values.Count - 1) {
+                if (index < _liMerchandise.Count - 1) {
                     index++;
                     value += "-";
                 }
@@ -153,9 +180,16 @@ namespace RiverHollow.Misc
             ShopData sData = new ShopData
             {
                 shopID = _iShopID,
-                merchUnlockedString = value
+                merchUnlockedString = value,
+                randomized = _sRandomIndices
             };
             return sData;
+        }
+
+        public void LoadData(ShopData data)
+        {
+            UnlockMerchandise(data.merchUnlockedString);
+            _sRandomIndices = data.randomized;
         }
     }
 

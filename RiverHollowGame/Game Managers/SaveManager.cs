@@ -552,6 +552,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "LockedItems")]
             public string merchUnlockedString;
+
+            [XmlElement(ElementName = "Randomized")]
+            public string randomized;
         }
         public struct ToolData
         {
@@ -809,15 +812,17 @@ namespace RiverHollow.Game_Managers
                 target.LoadData(n);
             }
 
+            for (int i = 0; i < dataToLoad.ShopData.Count; i++)
+            {
+                Shop s = GameManager.DIShops[i];
+                s.LoadData(dataToLoad.ShopData[i]);
+
+            }
+
             foreach (MerchantData n in dataToLoad.MerchantData)
             {
                 Merchant target = DataManager.DIMerchants[n.npcID];
                 target.LoadData(n);
-            }
-
-            foreach(ShopData s in dataToLoad.ShopData)
-            {
-                GameManager.DIShops[s.shopID].UnlockMerchandise(s.merchUnlockedString);
             }
 
             //After we've loaded everything, spawn the mounts in the Stables
