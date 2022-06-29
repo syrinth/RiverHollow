@@ -760,7 +760,10 @@ namespace RiverHollow.Map_Handling
 
         public void Rollover()
         {
-            TheShop?.PlaceStock(false);
+            if (this != MapManager.TownMap)
+            {
+                TheShop?.PlaceStock(false);
+            }
 
             for (int i = 0; i < _liPlacedWorldObjects.Count; i++) { _liPlacedWorldObjects[i].Rollover(); }
             for (int i = 0; i < _liResourceSpawns.Count; i++) { _liResourceSpawns[i].Rollover(); }
