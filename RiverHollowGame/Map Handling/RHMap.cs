@@ -760,7 +760,7 @@ namespace RiverHollow.Map_Handling
 
         public void Rollover()
         {
-            if (this != MapManager.TownMap)
+            if (this != MapManager.TownMap && PlayerManager.TownObjectBuilt(BuildingID))
             {
                 TheShop?.PlaceStock(false);
             }
@@ -2355,7 +2355,10 @@ namespace RiverHollow.Map_Handling
                 if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
 
-            TheShop?.PlaceStock(false);
+            if (PlayerManager.TownObjectBuilt(BuildingID))
+            {
+                TheShop?.PlaceStock(false);
+            }
         }
     }
 }

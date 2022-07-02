@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="14" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="39">
  <properties>
-  <property name="Building" type="bool" value="true"/>
+  <property name="BuildingID" type="int" value="26"/>
   <property name="MapType" value="Town"/>
   <property name="Shop" type="int" value="3"/>
  </properties>
