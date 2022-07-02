@@ -2354,11 +2354,6 @@ namespace RiverHollow.Map_Handling
                 obj.PlaceOnMap(this);
                 if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
-
-            if (PlayerManager.TownObjectBuilt(BuildingID))
-            {
-                TheShop?.PlaceStock(false);
-            }
         }
     }
 }

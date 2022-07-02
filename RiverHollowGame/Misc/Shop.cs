@@ -14,6 +14,7 @@ namespace RiverHollow.Misc
     {
         public int ShopkeeperID { get; private set; }
         int _iShopID;
+        int _iShopBuildingID = -1;
         string _sRandomIndices = string.Empty;
         List<ShopItemSpot> _liShopItemSpots;
         public IList<ShopItemSpot> ItemSpots => _liShopItemSpots.AsReadOnly();
@@ -24,6 +25,8 @@ namespace RiverHollow.Misc
         {
             _iShopID = id;
             _liShopItemSpots = new List<ShopItemSpot>();
+
+            Util.AssignValue(ref _iShopBuildingID, "BuildingID", stringDictionary);
 
             if (stringDictionary.ContainsKey("Shopkeeper"))
             {
@@ -190,6 +193,11 @@ namespace RiverHollow.Misc
         {
             UnlockMerchandise(data.merchUnlockedString);
             _sRandomIndices = data.randomized;
+
+            if (_iShopBuildingID != -1 && PlayerManager.TownObjectBuilt(_iShopBuildingID))
+            {
+                PlaceStock(false);
+            }
         }
     }
 

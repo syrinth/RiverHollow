@@ -122,11 +122,19 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadTaskData(List<TaskData> list)
         {
-            for(int i=0; i< list.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
                 _liTasks[i].LoadData(list[i]);
             }
-            
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (_liTasks[i].TaskState == TaskStateEnum.Assigned)
+                {
+                    _liTasks[i].AssignTaskToNPC();
+                }
+            }
+
             //ToDo Code for new/custom tasks
         }
     }

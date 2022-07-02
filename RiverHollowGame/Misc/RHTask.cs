@@ -550,11 +550,6 @@ namespace RiverHollow.Misc
             ReadyForHandIn = qData.readyForHandIn;
             TaskState = (TaskStateEnum)qData.taskState;
 
-            if(TaskState == TaskStateEnum.Assigned)
-            {
-               AssignTaskToNPC();
-            }
-
             foreach (ItemData i in qData.Items)
             {
                 Item newItem = DataManager.GetItem(i.itemID, i.num);
