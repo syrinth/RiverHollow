@@ -64,7 +64,7 @@ namespace RiverHollow.Characters
                 }
             }
 
-            ProcessStateEnum(gTime);
+            ProcessStateEnum(gTime, true);
         }
 
         public void Rollover()

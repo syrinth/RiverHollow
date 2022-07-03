@@ -125,7 +125,8 @@ namespace RiverHollow.Misc
             int totalMerch = _liMerchandise.Count;
             for (int i = 0; i < _liShopItemSpots.Count && i < totalMerch; i++)
             {
-                if (randomize && !string.IsNullOrEmpty(_sRandomIndices)) {
+                if (randomize && !string.IsNullOrEmpty(_sRandomIndices))
+                {
                     Merchandise m = _liMerchandise[int.Parse(random[i])];
                     _liShopItemSpots[i].SetMerchandise(m);
                 }
@@ -174,7 +175,8 @@ namespace RiverHollow.Misc
             {
                 value += m.Unlocked;
 
-                if (index < _liMerchandise.Count - 1) {
+                if (index < _liMerchandise.Count - 1)
+                {
                     index++;
                     value += "-";
                 }
@@ -222,7 +224,7 @@ namespace RiverHollow.Misc
             string[] data = merchData.Split('-');
             MerchID = int.Parse(data[0]);
 
-            if(data.Length > 1)
+            if (data.Length > 1)
             {
                 if (data[1].Equals("Unique")) { UniqueData = data[1]; }
                 else if (data[1].Equals("Locked")) { _bLocked = true; }

@@ -467,6 +467,18 @@ namespace RiverHollow.Utilities
         }
         #endregion
 
+        public static double GetDistance(Point pOne, Point pTwo) { return GetDistance(pOne.ToVector2(), pTwo.ToVector2()); }
+        public static double GetDistance(Vector2 vOne, Vector2 vTwo)
+        {
+            double rv = 0;
+
+            double a = Math.Abs(vOne.X - vTwo.X);
+            double b = Math.Abs(vOne.Y - vTwo.Y);
+            rv = Math.Sqrt(a * a + b * b);
+
+            return rv;
+        }
+
         /// <summary>
         /// Takes in a parameter and returns the ID and the attached rarity.
         /// Will always be 'ID-Rarity'

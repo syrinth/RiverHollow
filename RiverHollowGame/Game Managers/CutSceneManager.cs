@@ -10,6 +10,8 @@ using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
+using System.Linq;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Game_Managers
 {
@@ -103,6 +105,25 @@ namespace RiverHollow.Game_Managers
         {
             _currentCutscene = null;
         }
+
+        public static List<CutsceneData> SaveCutscenes()
+        {
+            List<CutsceneData> rv = new List<CutsceneData>();
+            foreach (Cutscene c in _diCutscenes.Values.ToList())
+            {
+                rv.Add(c.SaveData());
+            }
+
+            return rv;
+        }
+
+        public static void LoadCutscenes(List<CutsceneData> dataList)
+        {
+            for (int i = 0; i < dataList.Count; i++)
+            {
+                _diCutscenes[i].LoadData(dataList[i]);
+            }
+        }
     }
 
     public class Cutscene
@@ -159,7 +180,7 @@ namespace RiverHollow.Game_Managers
         double _dTimer;
 
         /// <summary>
-        /// Constructor for a Cutsceneo bject
+        /// Constructor for a Cutscene object
         /// </summary>
         /// <param name="id">The Cutscene's global ID</param>
         /// <param name="strData">The list of data associated with it</param>
@@ -663,5 +684,16 @@ namespace RiverHollow.Game_Managers
                 CombatManager.NewBattle(queuedMob);
             }
         }
+
+        public CutsceneData SaveData()
+        {
+            return new CutsceneData() { Played = _bTriggered };
+        }
+
+        public void LoadData(CutsceneData data)
+        {
+            _bTriggered = data.Played;
+        }
+
     }
 }

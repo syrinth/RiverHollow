@@ -246,7 +246,7 @@ namespace RiverHollow.Map_Handling
             return _travelPoint;
         }
 
-        public bool Contains(Villager n)
+        public bool Contains(WorldActor n)
         {
             bool rv = false;
 

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
+using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
@@ -33,8 +34,6 @@ namespace RiverHollow.Characters
         double _dStun;
         int _iMaxRange = TILE_SIZE * 10;
         bool _bAlert;
-        bool _bLockedOn;
-        bool _bLeashed;
         bool _bJump;
 
         bool _bDefeated = false;
@@ -62,7 +61,7 @@ namespace RiverHollow.Characters
 
             _fBaseSpeed = 1;
             ImportBasics(data);
-            //LoadContent(DataManager.FOLDER_MOBS + data["Texture"];);
+
 
             _iXP = 0;
             foreach (Monster mon in _liMonsters)
@@ -73,54 +72,6 @@ namespace RiverHollow.Characters
 
             NewFoV();
         }
-
-        //public void LoadContent(string texture)
-        //{
-        //    _sprBody = new AnimatedSprite(texture);
-
-        //    if (!_bJump)
-        //    {
-        //        _sprBody.AddAnimation(WActorBaseAnim.IdleDown, 0, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
-        //        _sprBody.AddAnimation(WActorWalkAnim.WalkDown, 0, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
-        //        _sprBody.AddAnimation(WActorBaseAnim.IdleUp, 64, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
-        //        _sprBody.AddAnimation(WActorWalkAnim.WalkUp, 64, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
-        //        _sprBody.AddAnimation(WActorBaseAnim.IdleLeft, 128, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
-        //        _sprBody.AddAnimation(WActorWalkAnim.WalkLeft, 128, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
-        //        _sprBody.AddAnimation(WActorBaseAnim.IdleRight, 192, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
-        //        _sprBody.AddAnimation(WActorWalkAnim.WalkRight, 192, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
-        //        _sprBody.PlayAnimation(WActorWalkAnim.WalkDown);
-        //    }
-        //    #region Jumping Code
-        //    else
-        //    {
-        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleDown, 0, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundDown, 0, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.AirDown, 32, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-
-        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleUp, 64, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundUp, 64, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.AirUp, 96, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-
-        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleLeft, 128, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundLeft, 128, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.AirLeft, 160, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-
-        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleRight, 192, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundRight, 192, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.AirRight, 224, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.SetCurrentAnimation(WActorBaseAnim.IdleDown);
-        //    }
-        //    #endregion
-        //    Facing = DirectionEnum.Down;
-
-        //    _iBodyWidth = _sprBody.Width;
-        //    _iBodyHeight = _sprBody.Height;
-
-        //    //_sprAlert = new AnimatedSprite(@"Textures\Dialog");
-        //    //_sprAlert.AddAnimation(GenAnimEnum.Play, 64, 64, 16, 16, 3, 0.2f, true);
-        //    //_sprAlert.PlayAnimation(GenAnimEnum.Play);
-        //    //_sprAlert.Position = (Position - new Vector2(0, TILE_SIZE));
-        //}
 
         protected int ImportBasics(Dictionary<string, string> data)
         {
@@ -177,15 +128,53 @@ namespace RiverHollow.Characters
                 }
                 else
                 {
-                    if (_bBumpedIntoSomething)
+                    switch (_eCurrentState)
                     {
-                        _bBumpedIntoSomething = false;
-                        SetMoveObj(Vector2.Zero);
-                        ChangeState(NPCStateEnum.Idle);
+                        case NPCStateEnum.Wander:
+                            if (_bBumpedIntoSomething)
+                            {
+                                _bBumpedIntoSomething = false;
+                                SetMoveObj(Vector2.Zero);
+                                ChangeState(NPCStateEnum.Idle);
+                                break;
+                            }
+                            else {
+                                goto case NPCStateEnum.Idle;
+                            }
+                        case NPCStateEnum.Idle:
+                            if (PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE * 8))
+                            {
+                                ChangeState(NPCStateEnum.TrackPlayer);
+                                _vLeashPoint = new Vector2(CollisionBox.Left, CollisionBox.Top);
+                            }
+                            break;
+                        case NPCStateEnum.TrackPlayer:
+                            int distance = (int)Util.GetDistance(Position, _vLeashPoint);
+
+                            if (distance > TILE_SIZE * 25)
+                            {
+                                ChangeState(NPCStateEnum.Leashing);
+                            }
+                            break;
+                        case NPCStateEnum.Leashing:
+                            if(Position == _vLeashPoint)
+                            {
+                                ChangeState(NPCStateEnum.Wander);
+                            }
+                            break;
+
                     }
 
-                    ProcessStateEnum(gTime);
-                    UpdateMovement(gTime);
+                    ProcessStateEnum(gTime, false);
+                    if (CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
+                    {
+                        if (!_bDefeated)
+                        {
+                            _bAlert = false;
+                            CombatManager.NewBattle(this);
+                            _liTilePath.Clear();
+                        }
+                    }
                 }
             }
         }
@@ -194,132 +183,6 @@ namespace RiverHollow.Characters
         {
             base.Draw(spriteBatch, userLayerDepth);
             //if (_bAlert) { _sprAlert.Draw(spriteBatch, userLayerDepth); }
-        }
-
-        private void UpdateMovement(GameTime theGameTime)
-        {
-            bool move = true;
-            Vector2 direction = Vector2.Zero;
-
-            if (_bLockedOn)
-            {
-                if (Math.Abs(_vLeashPoint.X - Position.X) <= _fLeashRange && Math.Abs(_vLeashPoint.Y - Position.Y) <= _fLeashRange)
-                {
-                    _vMoveTo = Vector2.Zero;
-
-                    if (_bJump)
-                    {
-                        if (_vJumpTo == Vector2.Zero)
-                        {
-                            _vJumpTo = PlayerManager.PlayerActor.Position;
-                        }
-                        _vMoveTo = _vJumpTo;
-                    }
-                    else
-                    {
-                        _vMoveTo = PlayerManager.PlayerActor.Position;
-                    }
-                }
-                else if (!BodySprite.CurrentAnimation.StartsWith("Air"))
-                {
-                    _bLeashed = true;
-                    _bLockedOn = false;
-                    _vMoveTo = _vLeashPoint;
-                    DetermineFacing(new Vector2(_vMoveTo.X - Position.X, _vMoveTo.Y - Position.Y));
-                }
-            }
-
-            #region Jumping Code
-            //if (_bJump)
-            //{
-            //    if (_vMoveTo != Vector2.Zero && BodySprite.CurrentAnimation.StartsWith("Idle"))
-            //    {
-            //        move = false;
-
-            //        string animation = "";
-            //        switch (Facing)
-            //        {
-            //            case DirectionEnum.Down:
-            //                animation = Util.GetEnumString(WActorJumpAnim.GroundDown);
-            //                break;
-            //            case DirectionEnum.Up:
-            //                animation = Util.GetEnumString(WActorJumpAnim.GroundUp);
-            //                break;
-            //            case DirectionEnum.Left:
-            //                animation = Util.GetEnumString(WActorJumpAnim.GroundLeft);
-            //                break;
-            //            case DirectionEnum.Right:
-            //                animation = Util.GetEnumString(WActorJumpAnim.GroundRight);
-            //                break;
-            //        }
-
-            //        PlayAnimation(animation);
-            //    }
-            //    else if (BodySprite.CurrentAnimation.StartsWith("Ground") && BodySprite.CurrentFrameAnimation.PlayCount < 1)
-            //    {
-            //        move = false;
-            //    }
-            //    else if (!BodySprite.CurrentAnimation.StartsWith("Idle") && BodySprite.CurrentFrameAnimation.PlayCount >= 1)
-            //    {
-            //        bool jumping = BodySprite.CurrentAnimation.StartsWith("Air");
-            //        string animation = "";
-            //        switch (Facing)
-            //        {
-            //            case DirectionEnum.Down:
-            //                animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundDown) : Util.GetEnumString(WActorJumpAnim.AirDown);
-            //                break;
-            //            case DirectionEnum.Up:
-            //                animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundUp) : Util.GetEnumString(WActorJumpAnim.AirUp); ;
-            //                break;
-            //            case DirectionEnum.Left:
-            //                animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundLeft) : Util.GetEnumString(WActorJumpAnim.AirLeft); ;
-            //                break;
-            //            case DirectionEnum.Right:
-            //                animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundRight) : Util.GetEnumString(WActorJumpAnim.AirRight); ;
-            //                break;
-            //        }
-            //        _vJumpTo = Vector2.Zero;
-            //        PlayAnimation(animation);
-            //    }
-            //}
-            #endregion
-
-            if (move && _vMoveTo != Vector2.Zero)
-            {
-                float deltaX = Math.Abs(_vMoveTo.X - this.Position.X);
-                float deltaY = Math.Abs(_vMoveTo.Y - this.Position.Y);
-
-                Util.GetMoveSpeed(Position, _vMoveTo, BuffedSpeed, ref direction);
-                DetermineFacing(direction);
-
-                HandleMove(_vMoveTo);
-                NewFoV();
-
-                //We have finished moving
-                if (Position.X == _vMoveTo.X && Position.Y == _vMoveTo.Y)
-                {
-                    //If we were peashing back to our start point unset it.
-                    if (_bLeashed && _vMoveTo == _vLeashPoint)
-                    {
-                        _vLeashPoint = Vector2.Zero;
-                        _bLeashed = false;
-                    }
-
-                    _vMoveTo = Vector2.Zero;
-                    PlayAnimationVerb(VerbEnum.Idle);
-                    _dIdleFor = RHRandom.Instance().Next(1, 4);
-                }
-            }
-
-            if (CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
-            {
-                if (!_bDefeated)
-                {
-                    _bAlert = false;
-                    _bLockedOn = false;
-                    CombatManager.NewBattle(this);
-                }
-            }
         }
 
         public override void DetermineFacing(Vector2 direction)
@@ -454,6 +317,24 @@ namespace RiverHollow.Characters
             _iXPToGive -= Math.Min(v, _iXPToGive);
         }
 
+        protected override void CalculatePath()
+        {
+            Vector2 startPosition = CollisionBox.Center.ToVector2();
+            Vector2 target = _eCurrentState == NPCStateEnum.TrackPlayer ? PlayerManager.PlayerActor.CollisionBox.Center.ToVector2() : _vLeashPoint;
+            _liTilePath = TravelManager.FindPathToLocation(ref startPosition, target);
+
+            if(_liTilePath == null)
+            {
+                _liTilePath = new List<RHTile>();
+            }
+            else if (_liTilePath?.Count > 0 && _liTilePath.Count < 30)
+            {
+                SetMoveObj(_liTilePath[0].Position);
+            }
+
+            TravelManager.FinishThreading(ref _pathingThread);
+        }
+
         private class FieldOfVision
         {
             int _iMaxRange;
@@ -528,5 +409,168 @@ namespace RiverHollow.Characters
                 return rv;
             }
         }
+
+
+        #region Jumping Code
+        //private void UpdateMovement(GameTime theGameTime)
+        //{
+        //    bool move = true;
+        //    Vector2 direction = Vector2.Zero;
+
+
+        //    if (Math.Abs(_vLeashPoint.X - Position.X) <= _fLeashRange && Math.Abs(_vLeashPoint.Y - Position.Y) <= _fLeashRange)
+        //    {
+        //        _vMoveTo = Vector2.Zero;
+
+        //        if (_bJump)
+        //        {
+        //            if (_vJumpTo == Vector2.Zero)
+        //            {
+        //                _vJumpTo = PlayerManager.PlayerActor.Position;
+        //            }
+        //            _vMoveTo = _vJumpTo;
+        //        }
+        //        else
+        //        {
+        //            _vMoveTo = PlayerManager.PlayerActor.Position;
+        //        }
+        //    }
+        //    else if (!BodySprite.CurrentAnimation.StartsWith("Air"))
+        //    {
+        //        _bLeashed = true;
+        //        _vMoveTo = _vLeashPoint;
+        //        DetermineFacing(new Vector2(_vMoveTo.X - Position.X, _vMoveTo.Y - Position.Y));
+        //    }
+
+        //    if (move && _vMoveTo != Vector2.Zero)
+        //    {
+        //        float deltaX = Math.Abs(_vMoveTo.X - this.Position.X);
+        //        float deltaY = Math.Abs(_vMoveTo.Y - this.Position.Y);
+
+        //        Util.GetMoveSpeed(Position, _vMoveTo, BuffedSpeed, ref direction);
+        //        DetermineFacing(direction);
+
+        //        HandleMove(_vMoveTo);
+        //        NewFoV();
+
+        //        //We have finished moving
+        //        if (Position.X == _vMoveTo.X && Position.Y == _vMoveTo.Y)
+        //        {
+        //            //If we were peashing back to our start point unset it.
+        //            if (_bLeashed && _vMoveTo == _vLeashPoint)
+        //            {
+        //                _vLeashPoint = Vector2.Zero;
+        //                _bLeashed = false;
+        //            }
+
+        //            _vMoveTo = Vector2.Zero;
+        //            PlayAnimationVerb(VerbEnum.Idle);
+        //            _dIdleFor = RHRandom.Instance().Next(1, 4);
+        //        }
+        //    }
+        //}
+
+        //if (_bJump)
+        //{
+        //    if (_vMoveTo != Vector2.Zero && BodySprite.CurrentAnimation.StartsWith("Idle"))
+        //    {
+        //        move = false;
+
+        //        string animation = "";
+        //        switch (Facing)
+        //        {
+        //            case DirectionEnum.Down:
+        //                animation = Util.GetEnumString(WActorJumpAnim.GroundDown);
+        //                break;
+        //            case DirectionEnum.Up:
+        //                animation = Util.GetEnumString(WActorJumpAnim.GroundUp);
+        //                break;
+        //            case DirectionEnum.Left:
+        //                animation = Util.GetEnumString(WActorJumpAnim.GroundLeft);
+        //                break;
+        //            case DirectionEnum.Right:
+        //                animation = Util.GetEnumString(WActorJumpAnim.GroundRight);
+        //                break;
+        //        }
+
+        //        PlayAnimation(animation);
+        //    }
+        //    else if (BodySprite.CurrentAnimation.StartsWith("Ground") && BodySprite.CurrentFrameAnimation.PlayCount < 1)
+        //    {
+        //        move = false;
+        //    }
+        //    else if (!BodySprite.CurrentAnimation.StartsWith("Idle") && BodySprite.CurrentFrameAnimation.PlayCount >= 1)
+        //    {
+        //        bool jumping = BodySprite.CurrentAnimation.StartsWith("Air");
+        //        string animation = "";
+        //        switch (Facing)
+        //        {
+        //            case DirectionEnum.Down:
+        //                animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundDown) : Util.GetEnumString(WActorJumpAnim.AirDown);
+        //                break;
+        //            case DirectionEnum.Up:
+        //                animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundUp) : Util.GetEnumString(WActorJumpAnim.AirUp); ;
+        //                break;
+        //            case DirectionEnum.Left:
+        //                animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundLeft) : Util.GetEnumString(WActorJumpAnim.AirLeft); ;
+        //                break;
+        //            case DirectionEnum.Right:
+        //                animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundRight) : Util.GetEnumString(WActorJumpAnim.AirRight); ;
+        //                break;
+        //        }
+        //        _vJumpTo = Vector2.Zero;
+        //        PlayAnimation(animation);
+        //    }
+        //}
+
+        //LoadContent(DataManager.FOLDER_MOBS + data["Texture"];);
+        //public void LoadContent(string texture)
+        //{
+        //    _sprBody = new AnimatedSprite(texture);
+
+        //    if (!_bJump)
+        //    {
+        //        _sprBody.AddAnimation(WActorBaseAnim.IdleDown, 0, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.AddAnimation(WActorWalkAnim.WalkDown, 0, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.AddAnimation(WActorBaseAnim.IdleUp, 64, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.AddAnimation(WActorWalkAnim.WalkUp, 64, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.AddAnimation(WActorBaseAnim.IdleLeft, 128, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.AddAnimation(WActorWalkAnim.WalkLeft, 128, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.AddAnimation(WActorBaseAnim.IdleRight, 192, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.AddAnimation(WActorWalkAnim.WalkRight, 192, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.PlayAnimation(WActorWalkAnim.WalkDown);
+        //    }
+        //    #region Jumping Code
+        //    else
+        //    {
+        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleDown, 0, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundDown, 0, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.AirDown, 32, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+
+        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleUp, 64, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundUp, 64, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.AirUp, 96, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+
+        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleLeft, 128, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundLeft, 128, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.AirLeft, 160, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+
+        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleRight, 192, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundRight, 192, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.AirRight, 224, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.SetCurrentAnimation(WActorBaseAnim.IdleDown);
+        //    }
+        //    #endregion
+        //    Facing = DirectionEnum.Down;
+
+        //    _iBodyWidth = _sprBody.Width;
+        //    _iBodyHeight = _sprBody.Height;
+
+        //    //_sprAlert = new AnimatedSprite(@"Textures\Dialog");
+        //    //_sprAlert.AddAnimation(GenAnimEnum.Play, 64, 64, 16, 16, 3, 0.2f, true);
+        //    //_sprAlert.PlayAnimation(GenAnimEnum.Play);
+        //    //_sprAlert.Position = (Position - new Vector2(0, TILE_SIZE));
+        //} 
+        #endregion
     }
 }

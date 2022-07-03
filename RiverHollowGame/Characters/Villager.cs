@@ -24,8 +24,6 @@ namespace RiverHollow.Characters
 
         protected Dictionary<int, bool> _diCollection;
 
-        private Thread _pathingThread;
-
         private int _iTaxMultiplier = 1;
         private bool _bCanBecomePregnant = false;
         public bool CanBecomePregnant => _bCanBecomePregnant;
@@ -434,23 +432,10 @@ namespace RiverHollow.Characters
         }
 
         /// <summary>
-        /// Slaps CalculatePathinto a Thread. We first clear the _liTilePath so that the
-        /// Villager doesn't keep moving while the pathing is recalculated.
-        /// </summary>
-        /// <returns>Returns the Thread to pass back to the TravelManager to not lose track of it.</returns>
-        public Thread CalculatePathThreaded()
-        {
-            _pathingThread = new Thread(CalculatePath);
-            _pathingThread.Start();
-
-            return _pathingThread;
-        }
-
-        /// <summary>
         /// This method constructs the PathData and calls out to the TravelManager to
         /// get the shortest path to the appropriate target
         /// </summary>
-        private void CalculatePath()
+        protected override void CalculatePath()
         {
             int timeKeyIndex = _currentPathData == null ? _iNextTimeKeyID : _currentPathData.TimeKeyIndex;
             Dictionary<string, string> pathingData = _diCompleteSchedule[_sScheduleKey][timeKeyIndex];

@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
+using System.Threading;
 
 namespace RiverHollow.Characters
 {
@@ -49,6 +50,8 @@ namespace RiverHollow.Characters
                 _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + (TILE_SIZE * _iSize));
             }
         }
+
+        protected Thread _pathingThread;
 
         public bool FollowingPath => _liTilePath.Count > 0;
         protected List<RHTile> _liTilePath;
@@ -325,6 +328,16 @@ namespace RiverHollow.Characters
             return rv;
         }
 
+        public Thread CalculatePathThreaded()
+        {
+            _pathingThread = new Thread(CalculatePath);
+            _pathingThread.Start();
+
+            return _pathingThread;
+        }
+
+        protected virtual void CalculatePath() {}
+
         /// <summary>
         /// Attempts to move the Actor to the indicated location
         /// </summary>
@@ -364,16 +377,19 @@ namespace RiverHollow.Characters
                     _bBumpedIntoSomething = true;
 
                     //If we can't move, set a timer to go Ethereal
-                    if (_dEtherealCD == 0) { _dEtherealCD = 5; }
+                    if (_dEtherealCD == 0) {
+                        _dEtherealCD = 5;
+                    }
                 }
 
                 //If, after movement, we've reached the given location, zero it.
                 if (_vMoveTo == Position && !CutsceneManager.Playing)
                 {
-                    _vMoveTo = Vector2.Zero;
+                    
                     if (_liTilePath.Count > 0)
                     {
                         _liTilePath.RemoveAt(0);
+                        _vMoveTo = _liTilePath.Count > 0 ? _liTilePath[0].Position : Vector2.Zero;
                     }
                 }
             }
@@ -455,7 +471,7 @@ namespace RiverHollow.Characters
             _bFollow = value;
         }
 
-        protected void ProcessStateEnum(GameTime gTime)
+        protected void ProcessStateEnum(GameTime gTime, bool getInRange)
         {
             switch (_eCurrentState)
             {
@@ -469,7 +485,10 @@ namespace RiverHollow.Characters
                     Wander(gTime);
                     break;
                 case NPCStateEnum.TrackPlayer:
-                    TrackPlayer();
+                    TrackPlayer(getInRange);
+                    break;
+                case NPCStateEnum.Leashing:
+                    TravelManager.RequestPathing(this);
                     break;
             }
         }
@@ -496,14 +515,12 @@ namespace RiverHollow.Characters
             }
         }
 
-        protected virtual void TrackPlayer()
+        protected void TrackPlayer(bool getInRange)
         {
-            Vector2 delta = Position - PlayerManager.PlayerActor.Position;
-            HandleMove(Position - delta);
-
-            if (PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE))
+            if (_liTilePath.Find(x => x.Contains(PlayerManager.PlayerActor)) == null)
             {
-                ChangeState(NPCStateEnum.Wander);
+                TravelManager.RequestPathing(this);
+                HandleMove(_vMoveTo);
             }
         }
 

@@ -88,6 +88,9 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "ShopIData")]
             public List<ShopData> ShopData;
 
+            [XmlArray(ElementName = "CutsceneData")]
+            public List<CutsceneData> CSData;
+
             [XmlElement(ElementName = "Mailbox")]
             public MailboxData TheMailbox;
 
@@ -576,7 +579,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "LanternID")]
             public int lanternID;
         }
-
         public struct MissionData
         {
             [XmlElement(ElementName = "Name")]
@@ -612,6 +614,11 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Adventurers")]
             public List<int> ListAdventurerIDs;
         }
+        public struct CutsceneData
+        {
+            [XmlElement(ElementName = "Played")]
+            public bool Played;
+        }
         #endregion
 
         public static long GetSaveID()
@@ -640,6 +647,7 @@ namespace RiverHollow.Game_Managers
                 VillagerData = new List<VillagerData>(),
                 MerchantData = new List<MerchantData>(),
                 ShopData = new List<ShopData>(),
+                CSData = new List<CutsceneData>(),
                 TheMailbox = PlayerManager.PlayerMailbox.SaveData(),
                 optionData = SaveOptions()
             };          
@@ -677,6 +685,8 @@ namespace RiverHollow.Game_Managers
             {
                 data.ShopData.Add(s.SaveData());
             }
+
+            data.CSData = CutsceneManager.SaveCutscenes();
 
             // Convert the object to XML data and put it in the stream.
             XmlSerializer serializer = new XmlSerializer(typeof(SaveData));
@@ -824,6 +834,8 @@ namespace RiverHollow.Game_Managers
                 Merchant target = DataManager.DIMerchants[n.npcID];
                 target.LoadData(n);
             }
+
+            CutsceneManager.LoadCutscenes(dataToLoad.CSData);
 
             //After we've loaded everything, spawn the mounts in the Stables
             PlayerManager.SpawnMounts();

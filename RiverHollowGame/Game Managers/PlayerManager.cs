@@ -496,11 +496,9 @@ namespace RiverHollow.Game_Managers
             bool rv = false;
 
             Rectangle playerRect = PlayerActor.CollisionBox;
-            int a = Math.Abs(playerRect.Center.X - centre.X);
-            int b = Math.Abs(playerRect.Center.Y - centre.Y);
-            int c = (int)Math.Sqrt(a * a + b * b);
+            int distance = (int)Util.GetDistance(playerRect.Center, centre);
 
-            rv = c <= range;
+            rv = distance <= range;
 
             return rv;
         }
@@ -510,9 +508,7 @@ namespace RiverHollow.Game_Managers
             bool rv = false;
 
             Rectangle playerRect = PlayerActor.CollisionBox;
-            int a = Math.Abs(playerRect.Center.X - centre.X);
-            int b = Math.Abs(playerRect.Center.Y - centre.Y);
-            distance = (int)Math.Sqrt(a * a + b * b);
+            distance = (int)Util.GetDistance(playerRect.Center, centre);
 
             rv = distance <= range;
 

@@ -20,7 +20,7 @@ namespace RiverHollow.Game_Managers
 
         #region Threading
         static Thread _thread;
-        static List<Villager> _liPathingRequest;
+        static List<WorldActor> _liPathingRequest;
 
         /// <summary>
         /// Nulls the threads
@@ -36,9 +36,9 @@ namespace RiverHollow.Game_Managers
         /// Call to register a pathing request with the TravelManager
         /// </summary>
         /// <param name="actor">The actor to register to pathfind</param>
-        public static void RequestPathing(Villager actor)
+        public static void RequestPathing(WorldActor actor)
         {
-            if(_liPathingRequest == null) { _liPathingRequest = new List<Villager>(); }
+            if(_liPathingRequest == null) { _liPathingRequest = new List<WorldActor>(); }
             if (!_liPathingRequest.Contains(actor)) { _liPathingRequest.Add(actor); }
         }
 
