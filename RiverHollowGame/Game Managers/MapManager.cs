@@ -217,6 +217,7 @@ namespace RiverHollow.Game_Managers
                 if (PlayerManager.PlayerActor.ActivePet != null) { CurrentMap.RemoveActor(PlayerManager.PlayerActor.ActivePet); }
                 if (PlayerManager.PlayerActor.ActiveMount != null) { CurrentMap.RemoveActor(PlayerManager.PlayerActor.ActiveMount); }
 
+                MapManager.CurrentMap.ResetMobPositioning();
                 string oldMap = CurrentMap.Name;
                 CurrentMap = _newMapInfo.NextMap;
 

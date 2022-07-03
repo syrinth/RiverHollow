@@ -357,7 +357,7 @@ namespace RiverHollow.Misc
             if (_spawnMob != null)
             {
                 RHMap map = MapManager.Maps[_sSpawnMap];
-                map.AddMonsterByPosition(_spawnMob, map.DictionaryCharacterLayer[_sLocName]);
+                map.AddMobByPosition(_spawnMob, map.DictionaryCharacterLayer[_sLocName]);
             }
         }
 

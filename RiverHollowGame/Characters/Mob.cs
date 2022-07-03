@@ -335,6 +335,16 @@ namespace RiverHollow.Characters
             TravelManager.FinishThreading(ref _pathingThread);
         }
 
+        public void ResetPathing()
+        {
+            if(_eCurrentState == NPCStateEnum.TrackPlayer)
+            {
+                ChangeState(NPCStateEnum.Idle);
+                Position = _vLeashPoint;
+                _liTilePath.Clear();
+            }
+        }
+
         private class FieldOfVision
         {
             int _iMaxRange;

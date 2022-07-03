@@ -609,6 +609,11 @@ namespace RiverHollow.Map_Handling
             }
         }
 
+        public void ResetMobPositioning()
+        {
+            _liMobs.ForEach(x => x.ResetPathing());
+        }
+
         public void AlertSpawnPoint(WorldObject obj)
         {
             for (int i = 0; i < _liResourceSpawns.Count; i++)
@@ -2072,7 +2077,7 @@ namespace RiverHollow.Map_Handling
         //    }
         //}
 
-        public void AddMonsterByPosition(Mob m, Vector2 position)
+        public void AddMobByPosition(Mob m, Vector2 position)
         {
             m.CurrentMapName = _sName;
             m.Position = Util.SnapToGrid(position);

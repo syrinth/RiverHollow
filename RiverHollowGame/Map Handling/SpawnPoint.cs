@@ -243,7 +243,7 @@ namespace RiverHollow.Map_Handling
 
             Mob m = DataManager.CreateMob(_diSpawnData[rarityKey][roll].ID);
             RHTile t = validTiles[RHRandom.Instance().Next(0, validTiles.Count - 1)];
-            _map.AddMonsterByPosition(m, t.Position);
+            _map.AddMobByPosition(m, t.Position);
         }
     }
 }
