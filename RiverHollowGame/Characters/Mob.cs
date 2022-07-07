@@ -172,6 +172,7 @@ namespace RiverHollow.Characters
                         {
                             _bAlert = false;
                             CombatManager.NewBattle(this);
+                            _vMoveTo = Vector2.Zero;
                             _liTilePath.Clear();
                         }
                     }
@@ -319,17 +320,19 @@ namespace RiverHollow.Characters
 
         protected override void CalculatePath()
         {
-            Vector2 startPosition = CollisionBox.Center.ToVector2();
+            Vector2 startPosition = Position;
             Vector2 target = _eCurrentState == NPCStateEnum.TrackPlayer ? PlayerManager.PlayerActor.CollisionBox.Center.ToVector2() : _vLeashPoint;
-            _liTilePath = TravelManager.FindPathToLocation(ref startPosition, target);
+            //RHTile lastTile = _liTilePath.Count > 0 ? _liTilePath[0] : null;
+            _liTilePath = TravelManager.FindPathToLocation(ref startPosition, target, null, false, false);
 
-            if(_liTilePath == null)
+            if (_liTilePath?.Count > 0 && _liTilePath?.Count < 30)
+            {
+            //    if (lastTile != null) { _liTilePath.Insert(0, lastTile); }
+                SetMoveObj(_liTilePath[0].Position);
+            }
+            else
             {
                 _liTilePath = new List<RHTile>();
-            }
-            else if (_liTilePath?.Count > 0 && _liTilePath.Count < 30)
-            {
-                SetMoveObj(_liTilePath[0].Position);
             }
 
             TravelManager.FinishThreading(ref _pathingThread);
@@ -342,6 +345,8 @@ namespace RiverHollow.Characters
                 ChangeState(NPCStateEnum.Idle);
                 Position = _vLeashPoint;
                 _liTilePath.Clear();
+                _vMoveTo = Vector2.Zero;
+                _vLeashPoint = Vector2.Zero;
             }
         }
 

@@ -313,7 +313,7 @@ namespace RiverHollow.Game_Managers
             List<RHTile> rvList = FindPathToLocation(ref start, target, mapName);
             return rvList;
         }
-        public static List<RHTile> FindPathToLocation(ref Vector2 start, Vector2 target, string mapName = null, bool addDoor = false, bool meander = false)
+        public static List<RHTile> FindPathToLocation(ref Vector2 start, Vector2 target, string mapName = null, bool addDoor = false, bool avoidWalls = true, bool meander = false)
         {
             WriteToTravelLog(System.Environment.NewLine + "+++ " + mapName + " -- [" + (int)start.X/16 + ", " + (int)start.Y / 16 + "] == > [ " + (int)target.X / 16 + ", " + (int)target.Y / 16 + " ] +++");
             
@@ -381,7 +381,7 @@ namespace RiverHollow.Game_Managers
                         {
                             if (IsTileInLine(current, travelMap[current].CameFrom, next)) { newCost--; }
 
-                            double priority = newCost + HeuristicToTile(next, goalNode);
+                            double priority = newCost + HeuristicToTile(next, goalNode, avoidWalls);
                             
                             frontier.Enqueue(next, priority);
                             travelMap.Store(next, current, newCost);
@@ -640,14 +640,13 @@ namespace RiverHollow.Game_Managers
             return true;
         }
 
-        private static double HeuristicToTile(RHTile a, RHTile b)
+        private static double HeuristicToTile(RHTile a, RHTile b, bool avoidWalls = true)
         {
             int total = 0;
             int distance = (Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y));
 
             //Do not perform any wall buffer checks if we are in combat
-            List<RHTile> futureTiles = a.GetWalkableNeighbours();
-            int wallBuffer = (futureTiles.Count < 4) ? 10 : 0;
+            int wallBuffer = avoidWalls ? 10 : 0;
 
             int multiplier = GetMovementCost(a);
 

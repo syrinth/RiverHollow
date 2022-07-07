@@ -316,7 +316,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="Travel">
+ <objectgroup id="4" name="Travel" visible="0">
   <object id="153" name="Entrance" x="128" y="0" width="64" height="4">
    <properties>
     <property name="EntranceDir" value="Down"/>
@@ -330,7 +330,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="MapObject">
+ <objectgroup id="5" name="MapObject" visible="0">
   <object id="80" name="Mob" x="560.334" y="718.334" width="60.3334" height="56">
    <properties>
     <property name="MobID" value="32-C|33-C"/>
@@ -679,7 +679,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="6" name="Character">
+ <objectgroup id="6" name="Character" visible="0">
   <object id="52" name="CS0" x="1076.4" y="615.227" width="5.72725" height="4.72727"/>
   <object id="53" name="CS0_Mob" x="1232.45" y="483" width="15.2727" height="11.6667"/>
   <object id="144" name="NPC" x="308" y="1363.33" width="9" height="8">

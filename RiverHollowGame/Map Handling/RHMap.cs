@@ -1101,13 +1101,13 @@ namespace RiverHollow.Map_Handling
             return tile != null && !tile.Passable() && !list.Contains(tile.Rect);
         }
 
-        private void ChangeDir(List<Rectangle> possibleCollisions, Rectangle originalRectangle, ref Vector2 dir, string map)
+        private void ChangeDir(WorldActor act,  List<Rectangle> possibleCollisions, ref Vector2 dir)
         {
             //Because of how objects interact with each other, this check needs to be broken up so that the x and y movement can be
             //calculated seperately. If an object is above you and you move into it at an angle, if you check the collision as one rectangle
             //then the collision nullification will hit the entire damn movement mode.
-            Rectangle newRectangleX = new Rectangle((int)(originalRectangle.X + dir.X), (int)(originalRectangle.Y), originalRectangle.Width, originalRectangle.Height);
-            Rectangle newRectangleY = new Rectangle((int)(originalRectangle.X), (int)(originalRectangle.Y + dir.Y), originalRectangle.Width, originalRectangle.Height);
+            Rectangle newRectangleX = new Rectangle((int)(act.CollisionBox.X + dir.X), (int)(act.CollisionBox.Y), act.CollisionBox.Width, act.CollisionBox.Height);
+            Rectangle newRectangleY = new Rectangle((int)(act.CollisionBox.X), (int)(act.CollisionBox.Y + dir.Y), act.CollisionBox.Width, act.CollisionBox.Height);
             foreach (Rectangle r in possibleCollisions)
             {
                 Vector2 coords = Util.GetGridCoords(r.Location);
@@ -1119,7 +1119,10 @@ namespace RiverHollow.Map_Handling
                     int modifier = (int)CheckToNudge(newRectangleY.Center.X, r.Center.X, coords.X, coords.Y, "Col");
                     int xVal = (int)(modifier > 0 ? newRectangleX.Right : newRectangleX.Left) + modifier;               //Constructs the new rectangle based on the mod
 
-                    dir.X += CheckNudgeAllowed(modifier, new Point(xVal, newRectangleY.Top), new Point(xVal, newRectangleY.Bottom), map);
+                    if (dir.X == 0)
+                    {
+                        dir.X += CheckNudgeAllowed(modifier, new Point(xVal, newRectangleY.Top), new Point(xVal, newRectangleY.Bottom), act.CurrentMapName);
+                    }
                 }
                 if (dir.X != 0 && r.Intersects(newRectangleX))
                 {
@@ -1129,7 +1132,10 @@ namespace RiverHollow.Map_Handling
                     int modifier = (int)CheckToNudge(newRectangleY.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
                     int yVal = (int)(modifier > 0 ? newRectangleX.Bottom : newRectangleX.Top) + modifier;               //Constructs the new rectangle based on the mod
 
-                    dir.Y += CheckNudgeAllowed(modifier, new Point(newRectangleY.Left, yVal), new Point(newRectangleY.Right, yVal), map);
+                    if (dir.Y == 0)
+                    {
+                        dir.Y += CheckNudgeAllowed(modifier, new Point(newRectangleY.Left, yVal), new Point(newRectangleY.Right, yVal), act.CurrentMapName);
+                    }
                 }
 
                 //Because of diagonal movement, it's possible to have no issue on either the X axis or Y axis but have a collision
@@ -1178,7 +1184,7 @@ namespace RiverHollow.Map_Handling
             else if (!ignoreCollisions)
             {
                 List<Rectangle> list = GetPossibleCollisions(c, dir);
-                ChangeDir(list, c.CollisionBox, ref dir, c.CurrentMapName);
+                ChangeDir(c, list, ref dir);
             }
 
             return rv;

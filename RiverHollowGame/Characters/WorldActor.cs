@@ -57,7 +57,6 @@ namespace RiverHollow.Characters
         protected List<RHTile> _liTilePath;
 
         protected bool _bBumpedIntoSomething = false;
-        protected double _dEtherealCD;
         protected bool _bIgnoreCollisions;
 
         protected double _dCooldown = 0;
@@ -120,24 +119,6 @@ namespace RiverHollow.Characters
             base.Update(gTime);
             if (!GamePaused())
             {
-                if (_dEtherealCD != 0)
-                {
-                    _dEtherealCD -= gTime.ElapsedGameTime.TotalSeconds;
-                    if (_dEtherealCD <= 0)
-                    {
-                        if (!_bIgnoreCollisions)
-                        {
-                            _dEtherealCD = 5;
-                            _bIgnoreCollisions = true;
-                        }
-                        else
-                        {
-                            _dEtherealCD = 0;
-                            _bIgnoreCollisions = false;
-                        }
-                    }
-                }
-
                 HandleMove(_vMoveTo);
             }
         }
@@ -310,7 +291,7 @@ namespace RiverHollow.Characters
         /// <param name="direction">The direction to move the Actor in pixels</param>
         /// <param name="ignoreCollisions">Whether or not we are to ignore collisions</param>
         /// <returns></returns>
-        protected bool CheckMapForCollisionsAndMove(Vector2 direction, bool ignoreCollisions = false)
+        protected bool CheckMapForCollisionsAndMove(Vector2 direction)
         {
             bool rv = false;
             //Create the X and Y rectangles to test for collisions
@@ -318,7 +299,7 @@ namespace RiverHollow.Characters
             Rectangle testRectY = Util.FloatRectangle(Position.X, Position.Y + direction.Y, CollisionBox.Width, CollisionBox.Height);
 
             //Check for collisions against the map and, if none are detected, move. Do not move if the direction Vector2 is Zero
-            if (CurrentMap.CheckForCollisions(this, testRectX, testRectY, ref direction, ignoreCollisions) && direction != Vector2.Zero)
+            if (CurrentMap.CheckForCollisions(this, testRectX, testRectY, ref direction) && direction != Vector2.Zero)
             {
                 DetermineFacing(direction);
                 Position += new Vector2(direction.X, direction.Y);
@@ -372,13 +353,16 @@ namespace RiverHollow.Characters
                 }
 
                 //Attempt to move
-                if (!CheckMapForCollisionsAndMove(direction, _bIgnoreCollisions))
+                if (!CheckMapForCollisionsAndMove(direction))
                 {
-                    _bBumpedIntoSomething = true;
-
-                    //If we can't move, set a timer to go Ethereal
-                    if (_dEtherealCD == 0) {
-                        _dEtherealCD = 5;
+                    if (_eActorType == WorldActorTypeEnum.Mob && _eCurrentState == NPCStateEnum.TrackPlayer)
+                    {
+                        Position = MapManager.CurrentMap.GetTileByPixelPosition(CollisionBox.Center).Position;
+                        CalculatePath();
+                    }
+                    else
+                    {
+                        _bBumpedIntoSomething = true;
                     }
                 }
 
@@ -520,7 +504,6 @@ namespace RiverHollow.Characters
             if (_liTilePath.Find(x => x.Contains(PlayerManager.PlayerActor)) == null)
             {
                 TravelManager.RequestPathing(this);
-                HandleMove(_vMoveTo);
             }
         }
 
