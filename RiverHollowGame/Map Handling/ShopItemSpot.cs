@@ -48,7 +48,7 @@ namespace RiverHollow.Map_Handling
                     }
                 }
 
-                List<RHTile> t = MapManager.Maps[_sMapName].GetTilesFromRectangle(Box);
+                List<RHTile> t = MapManager.Maps[_sMapName].GetTilesFromGridAlignedRectangle(Box);
                 if (t.Count == 2)
                 {
                     t[1].WorldObject?.DrawItem(spritebatch, merchItem);

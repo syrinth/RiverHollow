@@ -52,7 +52,7 @@ namespace RiverHollow.Characters
             if (_bBumpedIntoSomething)
             {
                 _bBumpedIntoSomething = false;
-                SetMoveObj(Vector2.Zero);
+                MoveToLocation = Vector2.Zero;
                 ChangeState(NPCStateEnum.Idle);
             }
 

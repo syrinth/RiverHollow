@@ -708,6 +708,15 @@ namespace RiverHollow.Game_Managers
 
                 while (current != this[current].CameFrom)
                 {
+                    RHTile lastTile = rvList.Count > 0 ? rvList[rvList.Count - 1] : null;
+
+                    if(lastTile != null && ((lastTile.X == current.X && current.X == this[current].CameFrom.X) ||
+                        (lastTile.Y == current.Y && current.Y == this[current].CameFrom.Y)))
+                    {
+                        current = this[current].CameFrom;
+                        continue;
+                    }
+
                     rvList.Add(current);
                     current = this[current].CameFrom;
                 }

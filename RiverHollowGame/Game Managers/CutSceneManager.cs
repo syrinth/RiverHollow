@@ -438,7 +438,7 @@ namespace RiverHollow.Game_Managers
                         break;
 
                 }
-                c.SetMoveObj(c.Position + vec);
+                c.MoveToLocation = c.Position + vec;
                 if (!_liMoving.Contains(c))
                 {
                     _liMoving.Add(c);
@@ -460,7 +460,7 @@ namespace RiverHollow.Game_Managers
                 {
                     _liToRemove.Add(c);
                 }
-                c.SetMoveObj(Vector2.Zero);
+                c.MoveToLocation = Vector2.Zero;
                 c.PlayAnimationVerb(VerbEnum.Idle);
             }
         }
@@ -654,7 +654,7 @@ namespace RiverHollow.Game_Managers
             foreach(WorldActor act in _liUsedNPCs)
             {
                 act.ClearPath();
-                act.SetMoveObj(Vector2.Zero);
+                act.MoveToLocation = Vector2.Zero;
             }
 
             GUIManager.ClearBackgroundImage();

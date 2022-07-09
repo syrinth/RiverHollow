@@ -26,8 +26,16 @@ namespace RiverHollow.Characters
         protected WorldActorTypeEnum _eActorType = WorldActorTypeEnum.Actor;
         public WorldActorTypeEnum ActorType => _eActorType;
 
-        protected Vector2 _vMoveTo;
-        public Vector2 MoveToLocation => _vMoveTo;
+        private Vector2 _vMoveTo;
+        public Vector2 MoveToLocation
+        {
+            get { return _vMoveTo; }
+            set
+            {
+                _vMoveTo = value;
+            }
+        }
+
         public string CurrentMapName;
         public RHMap CurrentMap => (!string.IsNullOrEmpty(CurrentMapName) ? MapManager.Maps[CurrentMapName] : null);
         public Vector2 NewMapPosition;
@@ -119,7 +127,7 @@ namespace RiverHollow.Characters
             base.Update(gTime);
             if (!GamePaused())
             {
-                HandleMove(_vMoveTo);
+                HandleMove();
             }
         }
 
@@ -294,6 +302,7 @@ namespace RiverHollow.Characters
         protected bool CheckMapForCollisionsAndMove(Vector2 direction)
         {
             bool rv = false;
+
             //Create the X and Y rectangles to test for collisions
             Rectangle testRectX = Util.FloatRectangle(Position.X + direction.X, Position.Y, CollisionBox.Width, CollisionBox.Height);
             Rectangle testRectY = Util.FloatRectangle(Position.X, Position.Y + direction.Y, CollisionBox.Width, CollisionBox.Height);
@@ -323,57 +332,43 @@ namespace RiverHollow.Characters
         /// Attempts to move the Actor to the indicated location
         /// </summary>
         /// <param name="target">The target location on the world map to move to</param>
-        protected void HandleMove(Vector2 target)
+        protected void HandleMove()
         {
-            if (target != Vector2.Zero)
+            if (MoveToLocation != Vector2.Zero)
             {
                 //Determines the distance that needs to be traveled from the current position to the target
                 Vector2 direction = Vector2.Zero;
-                float deltaX = Math.Abs(target.X - this.Position.X);
-                float deltaY = Math.Abs(target.Y - this.Position.Y);
+                float deltaX = Math.Abs(MoveToLocation.X - this.Position.X);
+                float deltaY = Math.Abs(MoveToLocation.Y - this.Position.Y);
 
                 //Determines how much of the needed position we're capable of  in one movement
-                Util.GetMoveSpeed(Position, target, BuffedSpeed, ref direction);
+                Util.GetMoveSpeed(Position, MoveToLocation, BuffedSpeed, ref direction);
 
                 //If we're following a path and there's more than one tile left, we don't want to cut
                 //short on individual steps, so recalculate based on the next target
                 float length = direction.Length();
                 if (_liTilePath.Count > 1 && length < BuffedSpeed)
                 {
-                    _liTilePath.RemoveAt(0);
-
                     if (DoorCheck())
                     {
                         return;
                     }
-
-                    //Recalculate for the next target
-                    _vMoveTo = _liTilePath[0].Position;
-                    Util.GetMoveSpeed(Position, _vMoveTo, BuffedSpeed, ref direction);
                 }
 
                 //Attempt to move
                 if (!CheckMapForCollisionsAndMove(direction))
                 {
-                    if (_eActorType == WorldActorTypeEnum.Mob && _eCurrentState == NPCStateEnum.TrackPlayer)
-                    {
-                        Position = MapManager.CurrentMap.GetTileByPixelPosition(CollisionBox.Center).Position;
-                        CalculatePath();
-                    }
-                    else
-                    {
-                        _bBumpedIntoSomething = true;
-                    }
+                    _bBumpedIntoSomething = true;
                 }
 
                 //If, after movement, we've reached the given location, zero it.
-                if (_vMoveTo == Position && !CutsceneManager.Playing)
+                if (MoveToLocation == Position && !CutsceneManager.Playing)
                 {
                     
                     if (_liTilePath.Count > 0)
                     {
                         _liTilePath.RemoveAt(0);
-                        _vMoveTo = _liTilePath.Count > 0 ? _liTilePath[0].Position : Vector2.Zero;
+                        MoveToLocation = _liTilePath.Count > 0 ? _liTilePath[0].Position : Vector2.Zero;
                     }
                 }
             }
@@ -411,11 +406,6 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void SetMoveObj(Vector2 vec)
-        {
-            _vMoveTo = vec;
-        }
-
         /// <summary>
         /// Sets the active status of the WorldActor
         /// </summary>
@@ -445,7 +435,7 @@ namespace RiverHollow.Characters
         {
             SpdMult = speed;
             PlayAnimation(VerbEnum.Walk, Facing);
-            SetMoveObj(Vector2.Zero);
+            MoveToLocation = Vector2.Zero;
             _dWanderCountdown = 0;
         }
 
@@ -543,12 +533,12 @@ namespace RiverHollow.Characters
                     moveTo = CurrentMap.GetFarthestUnblockedPath(Position + moveTo, this);
                 }
 
-                SetMoveObj(moveTo);
+                MoveToLocation = moveTo;
             }
 
             if (MoveToLocation != Vector2.Zero)
             {
-                HandleMove(_vMoveTo);
+                HandleMove();
             }
         }
 

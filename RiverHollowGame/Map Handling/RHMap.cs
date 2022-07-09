@@ -747,7 +747,7 @@ namespace RiverHollow.Map_Handling
 
             foreach (TravelPoint tp in DictionaryTravelPoints.Values)
             {
-                List<RHTile> tiles = GetTilesFromRectangle(tp.CollisionBox);
+                List<RHTile> tiles = GetTilesFromGridAlignedRectangle(tp.CollisionBox);
                 for (int tileIndex = 0; tileIndex < tiles.Count; tileIndex++)
                 {
                     Util.AddUniquelyToList(ref skipTiles, tiles[tileIndex]);
@@ -960,7 +960,7 @@ namespace RiverHollow.Map_Handling
                 //Rectangles use ints for Location, cannot update a Rectangle's Location with floats
                 Rectangle testCollision = Util.FloatRectangle(rayPosition.X, rayPosition.Y, traveler.CollisionBox.Width, traveler.CollisionBox.Height);
                 bool passable = true;
-                List<RHTile> collisionTiles = GetTilesFromRectangle(testCollision);
+                List<RHTile> collisionTiles = GetTilesFromGridAlignedRectangle(testCollision);
                 for (int i = 0; i < collisionTiles.Count; i++)
                 {
                     if (!collisionTiles[i].Passable())
@@ -1084,7 +1084,7 @@ namespace RiverHollow.Map_Handling
             }
 
             //If the actor is not the Player Character, add the Player Character's CollisionBox to the list as well
-            if (actor != PlayerManager.PlayerActor && MapManager.CurrentMap == actor.CurrentMap && !actor.IsActorType(WorldActorTypeEnum.Pet))
+            if (actor != PlayerManager.PlayerActor && MapManager.CurrentMap == actor.CurrentMap && !actor.IsActorType(WorldActorTypeEnum.Pet) && !actor.IsActorType(WorldActorTypeEnum.Mob))
             {
                 list.Add(PlayerManager.PlayerActor.CollisionBox);
             }
@@ -1103,11 +1103,13 @@ namespace RiverHollow.Map_Handling
 
         private void ChangeDir(WorldActor act,  List<Rectangle> possibleCollisions, ref Vector2 dir)
         {
+            Vector2 CollisionBoxFloat = act == PlayerManager.PlayerActor ? act.CollisionBox.Location.ToVector2() : act.Position;
+
             //Because of how objects interact with each other, this check needs to be broken up so that the x and y movement can be
             //calculated seperately. If an object is above you and you move into it at an angle, if you check the collision as one rectangle
             //then the collision nullification will hit the entire damn movement mode.
-            Rectangle newRectangleX = new Rectangle((int)(act.CollisionBox.X + dir.X), (int)(act.CollisionBox.Y), act.CollisionBox.Width, act.CollisionBox.Height);
-            Rectangle newRectangleY = new Rectangle((int)(act.CollisionBox.X), (int)(act.CollisionBox.Y + dir.Y), act.CollisionBox.Width, act.CollisionBox.Height);
+            Rectangle newRectangleX = new Rectangle((int)(CollisionBoxFloat.X + dir.X), (int)(CollisionBoxFloat.Y), act.CollisionBox.Width, act.CollisionBox.Height);
+            Rectangle newRectangleY = new Rectangle((int)(CollisionBoxFloat.X), (int)(CollisionBoxFloat.Y + dir.Y), act.CollisionBox.Width, act.CollisionBox.Height);
             foreach (Rectangle r in possibleCollisions)
             {
                 Vector2 coords = Util.GetGridCoords(r.Location);
@@ -1119,7 +1121,7 @@ namespace RiverHollow.Map_Handling
                     int modifier = (int)CheckToNudge(newRectangleY.Center.X, r.Center.X, coords.X, coords.Y, "Col");
                     int xVal = (int)(modifier > 0 ? newRectangleX.Right : newRectangleX.Left) + modifier;               //Constructs the new rectangle based on the mod
 
-                    if (dir.X == 0)
+                    if (dir.X == 0 && modifier != 0)
                     {
                         dir.X += CheckNudgeAllowed(modifier, new Point(xVal, newRectangleY.Top), new Point(xVal, newRectangleY.Bottom), act.CurrentMapName);
                     }
@@ -1132,7 +1134,7 @@ namespace RiverHollow.Map_Handling
                     int modifier = (int)CheckToNudge(newRectangleY.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
                     int yVal = (int)(modifier > 0 ? newRectangleX.Bottom : newRectangleX.Top) + modifier;               //Constructs the new rectangle based on the mod
 
-                    if (dir.Y == 0)
+                    if (dir.Y == 0 && modifier != 0)
                     {
                         dir.Y += CheckNudgeAllowed(modifier, new Point(newRectangleY.Left, yVal), new Point(newRectangleY.Right, yVal), act.CurrentMapName);
                     }
@@ -2221,7 +2223,7 @@ namespace RiverHollow.Map_Handling
         /// </summary>
         /// <param name="obj">The Rectangle to check against</param>
         /// <returns>A list of all RHTiles that exist in the Rectangle</returns>
-        public List<RHTile> GetTilesFromRectangle(Rectangle obj)
+        public List<RHTile> GetTilesFromGridAlignedRectangle(Rectangle obj)
         {
             List<RHTile> rvList = new List<RHTile>();
 

@@ -134,7 +134,7 @@ namespace RiverHollow.Characters
                             if (_bBumpedIntoSomething)
                             {
                                 _bBumpedIntoSomething = false;
-                                SetMoveObj(Vector2.Zero);
+                                MoveToLocation = Vector2.Zero;
                                 ChangeState(NPCStateEnum.Idle);
                                 break;
                             }
@@ -172,7 +172,7 @@ namespace RiverHollow.Characters
                         {
                             _bAlert = false;
                             CombatManager.NewBattle(this);
-                            _vMoveTo = Vector2.Zero;
+                            MoveToLocation = Vector2.Zero;
                             _liTilePath.Clear();
                         }
                     }
@@ -327,8 +327,7 @@ namespace RiverHollow.Characters
 
             if (_liTilePath?.Count > 0 && _liTilePath?.Count < 30)
             {
-            //    if (lastTile != null) { _liTilePath.Insert(0, lastTile); }
-                SetMoveObj(_liTilePath[0].Position);
+                MoveToLocation = _liTilePath[0].Position;
             }
             else
             {
@@ -345,7 +344,7 @@ namespace RiverHollow.Characters
                 ChangeState(NPCStateEnum.Idle);
                 Position = _vLeashPoint;
                 _liTilePath.Clear();
-                _vMoveTo = Vector2.Zero;
+                MoveToLocation = Vector2.Zero;
                 _vLeashPoint = Vector2.Zero;
             }
         }
