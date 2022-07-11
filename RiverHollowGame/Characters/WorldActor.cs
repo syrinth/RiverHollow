@@ -25,16 +25,7 @@ namespace RiverHollow.Characters
 
         protected WorldActorTypeEnum _eActorType = WorldActorTypeEnum.Actor;
         public WorldActorTypeEnum ActorType => _eActorType;
-
-        private Vector2 _vMoveTo;
-        public Vector2 MoveToLocation
-        {
-            get { return _vMoveTo; }
-            set
-            {
-                _vMoveTo = value;
-            }
-        }
+        public Vector2 MoveToLocation { get; set; }
 
         public string CurrentMapName;
         public RHMap CurrentMap => (!string.IsNullOrEmpty(CurrentMapName) ? MapManager.Maps[CurrentMapName] : null);
@@ -51,11 +42,11 @@ namespace RiverHollow.Characters
         {
             get
             {
-                return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - (TILE_SIZE * _iSize));
+                return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TILE_SIZE);
             } //MAR this is fucked up
             set
             {
-                _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + (TILE_SIZE * _iSize));
+                _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + TILE_SIZE);
             }
         }
 
@@ -80,9 +71,6 @@ namespace RiverHollow.Characters
         protected float _fBaseSpeed = 2;
         public float BuffedSpeed => _fBaseSpeed * SpdMult;
         public float SpdMult = NPC_WALK_SPEED;
-
-        protected int _iSize = 1;
-        public int Size => _iSize;
 
         #region Wander Properties
         protected const double MOVE_COUNTDOWN = 2.5;
@@ -403,6 +391,7 @@ namespace RiverHollow.Characters
             while (_liTilePath.Count > 0 && _liTilePath[0].MapName == CurrentMapName)
             {
                 _liTilePath.RemoveAt(0);
+                MoveToLocation = _liTilePath[0].Position;
             }
         }
 

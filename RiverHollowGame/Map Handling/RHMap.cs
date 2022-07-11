@@ -1103,13 +1103,11 @@ namespace RiverHollow.Map_Handling
 
         private void ChangeDir(WorldActor act,  List<Rectangle> possibleCollisions, ref Vector2 dir)
         {
-            Vector2 CollisionBoxFloat = act == PlayerManager.PlayerActor ? act.CollisionBox.Location.ToVector2() : act.Position;
-
             //Because of how objects interact with each other, this check needs to be broken up so that the x and y movement can be
             //calculated seperately. If an object is above you and you move into it at an angle, if you check the collision as one rectangle
             //then the collision nullification will hit the entire damn movement mode.
-            Rectangle newRectangleX = new Rectangle((int)(CollisionBoxFloat.X + dir.X), (int)(CollisionBoxFloat.Y), act.CollisionBox.Width, act.CollisionBox.Height);
-            Rectangle newRectangleY = new Rectangle((int)(CollisionBoxFloat.X), (int)(CollisionBoxFloat.Y + dir.Y), act.CollisionBox.Width, act.CollisionBox.Height);
+            Rectangle newRectangleX = new Rectangle((int)(act.Position.X + dir.X), (int)(act.Position.Y), act.CollisionBox.Width, act.CollisionBox.Height);
+            Rectangle newRectangleY = new Rectangle((int)(act.Position.X), (int)(act.Position.Y + dir.Y), act.CollisionBox.Width, act.CollisionBox.Height);
             foreach (Rectangle r in possibleCollisions)
             {
                 Vector2 coords = Util.GetGridCoords(r.Location);

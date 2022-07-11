@@ -15,16 +15,6 @@ namespace RiverHollow.Characters
     public class Mob : WorldActor
     {
         #region Properties
-        public override Vector2 Position
-        {
-            get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TILE_SIZE); } //MAR this is fucked up
-            set
-            {
-                _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + TILE_SIZE);
-                //_sprAlert.Position = _sprBody.Position - new Vector2(0, TILE_SIZE);
-            }
-        }
-
         protected double _dIdleFor;
         protected int _iLeash = 7;
 

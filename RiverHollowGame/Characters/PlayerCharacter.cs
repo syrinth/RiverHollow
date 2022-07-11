@@ -35,17 +35,17 @@ namespace RiverHollow.Characters
             return liRv;
         }
 
-        public Vector2 BodyPosition => _sprBody.Position;
+        private readonly Vector2 PosAdjustment = new Vector2(2, 2);
         public override Vector2 Position
         {
-            get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TILE_SIZE); }
+            get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TILE_SIZE) + PosAdjustment; }
             set
             {
                 Vector2 vPos = new Vector2(value.X, value.Y - _sprBody.Height + TILE_SIZE);
                 foreach (AnimatedSprite spr in GetSprites()) { spr.Position = vPos; }
             }
         }
-        public override Rectangle CollisionBox => ActiveMount != null ? ActiveMount.CollisionBox : new Rectangle((int)Position.X + 2, (int)Position.Y + 2, Width - 4, TILE_SIZE - 4);
+        public override Rectangle CollisionBox => ActiveMount != null ? ActiveMount.CollisionBox : new Rectangle((int)Position.X, (int)Position.Y, Width - 4, TILE_SIZE - 4);
 
         #region Clothing
         public Clothing Hat { get; private set; }
