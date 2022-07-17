@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="96">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="97">
  <properties>
   <property name="MapType" value="Town"/>
   <property name="Outside" type="bool" value="true"/>
@@ -307,6 +307,11 @@
   <object id="95" name="WorldObject" x="420.405" y="437.115" width="8.065" height="6.5198">
    <properties>
     <property name="ObjectID" type="int" value="93"/>
+   </properties>
+  </object>
+  <object id="96" name="NPC" x="516.227" y="453.091" width="9" height="8">
+   <properties>
+    <property name="NPC_ID" type="int" value="29"/>
    </properties>
   </object>
  </objectgroup>

@@ -1106,8 +1106,8 @@ namespace RiverHollow.Map_Handling
             //Because of how objects interact with each other, this check needs to be broken up so that the x and y movement can be
             //calculated seperately. If an object is above you and you move into it at an angle, if you check the collision as one rectangle
             //then the collision nullification will hit the entire damn movement mode.
-            Rectangle newRectangleX = new Rectangle((int)(act.Position.X + dir.X), (int)(act.Position.Y), act.CollisionBox.Width, act.CollisionBox.Height);
-            Rectangle newRectangleY = new Rectangle((int)(act.Position.X), (int)(act.Position.Y + dir.Y), act.CollisionBox.Width, act.CollisionBox.Height);
+            Rectangle newRectangleX = Util.FloatRectangle(act.CollisionBoxPosition.X + dir.X, act.CollisionBoxPosition.Y, act.CollisionBox.Width, act.CollisionBox.Height);
+            Rectangle newRectangleY = Util.FloatRectangle(act.CollisionBoxPosition.X, act.CollisionBoxPosition.Y + dir.Y, act.CollisionBox.Width, act.CollisionBox.Height);
             foreach (Rectangle r in possibleCollisions)
             {
                 Vector2 coords = Util.GetGridCoords(r.Location);
@@ -1129,7 +1129,7 @@ namespace RiverHollow.Map_Handling
                     dir.X = 0;
 
                     //Modifier is to determine if the nudge is positive or negative
-                    int modifier = (int)CheckToNudge(newRectangleY.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
+                    int modifier = (int)CheckToNudge(newRectangleX.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
                     int yVal = (int)(modifier > 0 ? newRectangleX.Bottom : newRectangleX.Top) + modifier;               //Constructs the new rectangle based on the mod
 
                     if (dir.Y == 0 && modifier != 0)
@@ -1235,7 +1235,7 @@ namespace RiverHollow.Map_Handling
             }
             else if (centerDelta < 0)
             {
-                RHTile testTile = GetTileByGridCoords((int)(varCol - (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0)));
+                RHTile testTile = GetTileByGridCoords((int)(varCol - (v.Equals("Col") ? 1 : 0)), (int)(varRow - (v.Equals("Row") ? 1 : 0)));
                 if (testTile != null && testTile.Passable()) { rv = -1; }
             }
 

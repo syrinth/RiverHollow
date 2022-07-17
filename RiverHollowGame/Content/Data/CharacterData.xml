@@ -119,7 +119,7 @@
     </Item>
     <Item>
       <Key>29</Key>
-      <Value>[Type:ShippingGremlin][PortRow:3][HouseID:59][InTown][Key:Shipping_Gremlin]</Value>
+      <Value>[Type:ShippingGremlin][PortRow:3][HouseID:59][InTown][Key:Shipping_Gremlin][StartMap:mapTown]</Value>
     </Item>
     <Item>
       <Key>30</Key>

@@ -60,6 +60,7 @@ namespace RiverHollow.Characters
 
         protected double _dCooldown = 0;
 
+        public virtual Vector2 CollisionBoxPosition => Position;
         public virtual Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, TILE_SIZE);
         public virtual Rectangle HoverBox => new Rectangle((int)Position.X, (int)Position.Y - TILE_SIZE, Width, Height);
 
@@ -352,11 +353,13 @@ namespace RiverHollow.Characters
                 //If, after movement, we've reached the given location, zero it.
                 if (MoveToLocation == Position && !CutsceneManager.Playing)
                 {
-                    
+                    MoveToLocation = Vector2.Zero;
                     if (_liTilePath.Count > 0)
                     {
                         _liTilePath.RemoveAt(0);
-                        MoveToLocation = _liTilePath.Count > 0 ? _liTilePath[0].Position : Vector2.Zero;
+                        if (_liTilePath.Count > 0) {
+                            MoveToLocation = _liTilePath[0].Position;
+                        }
                     }
                 }
             }

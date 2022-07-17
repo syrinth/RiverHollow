@@ -35,17 +35,19 @@ namespace RiverHollow.Characters
             return liRv;
         }
 
-        private readonly Vector2 PosAdjustment = new Vector2(2, 2);
+        private int HeightMod => _sprBody.Height - TILE_SIZE;
         public override Vector2 Position
         {
-            get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TILE_SIZE) + PosAdjustment; }
+            get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + HeightMod); }
             set
             {
-                Vector2 vPos = new Vector2(value.X, value.Y - _sprBody.Height + TILE_SIZE);
+                Vector2 vPos = new Vector2(value.X, value.Y - HeightMod);
                 foreach (AnimatedSprite spr in GetSprites()) { spr.Position = vPos; }
             }
         }
-        public override Rectangle CollisionBox => ActiveMount != null ? ActiveMount.CollisionBox : new Rectangle((int)Position.X, (int)Position.Y, Width - 4, TILE_SIZE - 4);
+
+        public override Vector2 CollisionBoxPosition => Position + new Vector2(2, 2);
+        public override Rectangle CollisionBox => ActiveMount != null ? ActiveMount.CollisionBox : new Rectangle((int)CollisionBoxPosition.X, (int)CollisionBoxPosition.Y, Width - 4, TILE_SIZE - 4);
 
         #region Clothing
         public Clothing Hat { get; private set; }
@@ -150,12 +152,6 @@ namespace RiverHollow.Characters
             LoadSpriteAnimations(ref _sprHair, Util.LoadWorldAnimations(DataManager.Config[17]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex));
             _sprHair.SetLayerDepthMod(HAIR_DEPTH);
             _sprHair.SetColor(HairColor);
-        }
-
-        public void MoveBy(int x, int y)
-        {
-            foreach (AnimatedSprite spr in GetSprites()) { spr.MoveBy(x, y); }
-            ActiveMount?.BodySprite.MoveBy(x, y);
         }
 
         public override void PlayAnimation<TEnum>(TEnum anim)

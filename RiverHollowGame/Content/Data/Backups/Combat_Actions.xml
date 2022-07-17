@@ -11,7 +11,7 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Action][Icon:0-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Row][Harm:90][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Element:Fire]</Value>
+      <Value>[Type:Action][Icon:0-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Row][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Element:Fire]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Action][Icon:2-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Square][Harm:75][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Element:Lightning]</Value>
+      <Value>[Type:Action][Icon:2-0][DamageAttribute:Magic][DamageType:Magical][Target:Enemy][Range:Ranged][AreaType:Square][Harm:100][Action:UserCast Direct Apply][Animation:LightningSprite-80-96-9-0.07][AnimOffset:32-64][Element:Lightning]</Value>
     </Item>
     <Item>
       <Key>5</Key>

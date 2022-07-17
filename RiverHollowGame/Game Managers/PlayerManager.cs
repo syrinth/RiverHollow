@@ -172,10 +172,7 @@ namespace RiverHollow.Game_Managers
 
                     if (MapManager.CurrentMap.CheckForCollisions(PlayerActor, testRectX, testRectY, ref moveDir))
                     {
-                        //Might be technically correct but FEELS wrong
-                        //moveDir.Normalize();
-                        //moveDir *= World.Speed;
-                        PlayerActor.MoveBy((int)moveDir.X, (int)moveDir.Y);
+                        PlayerActor.Position = PlayerActor.Position + moveDir;
                     }
                 }
 

@@ -35,6 +35,7 @@ namespace RiverHollow.Characters
             _diRequiredObjectIDs = new Dictionary<int, int>();
             _arrInventory = new Item[_iRows, _iCols];
             _eActorType = WorldActorTypeEnum.ShippingGremlin;
+            _eSpawnStatus = VillagerSpawnStatus.NonTownMap;
             _iBodyWidth = 32;
             _iBodyHeight = 32;
 
@@ -42,9 +43,11 @@ namespace RiverHollow.Characters
             _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Gremlin", stringData["Key"]);
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
 
+            Util.AssignValue(ref _sStartMap, "StartMap", stringData);
             Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
 
-            _sprBody = new AnimatedSprite(DataManager.NPC_FOLDER + "NPC_" + ID.ToString("00"));
+            _sprBody = new AnimatedSprite(DataManager.NPC_FOLDER + "NPC_" + stringData["Key"]);
+            
             _sprBody.AddAnimation(AnimationEnum.ObjectIdle, 0, 0, _iBodyWidth, _iBodyHeight);
             _sprBody.AddAnimation(AnimationEnum.Action1, 32, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);
             _sprBody.AddAnimation(AnimationEnum.Action_Finished, 128, 0, _iBodyWidth, _iBodyHeight);

@@ -327,6 +327,7 @@ namespace RiverHollow.Game_Managers
                                         {
                                             PlayerManager.AddToParty(v.CombatVersion);
                                         }
+                                        v.SendToTown();
                                         bGoToNext = true;
                                     }
                                     break;
@@ -638,6 +639,7 @@ namespace RiverHollow.Game_Managers
                             {
                                 PlayerManager.AddToParty(v.CombatVersion);
                             }
+                            v.SendToTown();
                         }
                         else if (currentCommand.Command == EnumCSCommand.Combat)
                         {

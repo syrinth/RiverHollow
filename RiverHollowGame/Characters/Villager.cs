@@ -47,7 +47,7 @@ namespace RiverHollow.Characters
         }
         public bool Married => RelationshipState == RelationShipStatusEnum.Married;
 
-        private VillagerSpawnStatus _eSpawnStatus = VillagerSpawnStatus.OffMap;
+        protected VillagerSpawnStatus _eSpawnStatus = VillagerSpawnStatus.OffMap;
         public bool LivesInTown => _eSpawnStatus == VillagerSpawnStatus.HasHome;
         public bool SpawnOnTheMap => _eSpawnStatus != VillagerSpawnStatus.OffMap;
 
@@ -257,6 +257,11 @@ namespace RiverHollow.Characters
         }
 
         #region Travel Methods
+        public void SendToTown()
+        {
+            _eSpawnStatus = VillagerSpawnStatus.WaitAtInn;
+            MoveToSpawn();
+        }
         public override bool HandleTravelTiming()
         {
             bool rv = false;

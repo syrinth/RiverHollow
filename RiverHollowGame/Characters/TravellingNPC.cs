@@ -117,7 +117,7 @@ namespace RiverHollow.Characters
         /// <returns></returns>
         public virtual bool HandleTravelTiming()
         {
-            bool rv = false;
+            bool rv = _iNextArrival == -1;
 
             if (_iNextArrival > 0)
             {
