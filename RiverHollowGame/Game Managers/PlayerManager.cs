@@ -636,7 +636,6 @@ namespace RiverHollow.Game_Managers
             foreach(Child c in Children) { c.Rollover(); }
 
             PlayerMailbox.Rollover();
-            GameManager.VillagersInTheInn = 0;
 
             MoveToSpawn();
         }

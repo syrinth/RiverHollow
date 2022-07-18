@@ -350,6 +350,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "SpokenKeys")]
             public List<string> spokenKeys;
+
+            [XmlElement(ElementName = "InnPosition")]
+            public int innPosition;
         }
         public struct ChildData
         {

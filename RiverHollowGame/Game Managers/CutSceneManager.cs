@@ -673,6 +673,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.PlayerActor.SpdMult = Actor.NORMAL_SPEED;
             PlayerManager.AllowMovement = true;
             CutsceneManager.Playing = false;
+            PlayerManager.PlayerActor.MoveToLocation = Vector2.Zero;
             MapManager.Maps.Remove(_cutsceneMap.Name);
             MapManager.FadeToNewMap(_originalMap, _vOriginalPlayerPos);
             GUIManager.RemoveSkipCutsceneButton();

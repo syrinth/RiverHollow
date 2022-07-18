@@ -73,6 +73,7 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Managed Data Lists
+        private static Villager[] InnPositions;
         public static List<Merchant> MerchantQueue;
         private static List<TriggerObject> _liTriggerObjects;
         private static List<Spirit> _liSpirits;
@@ -89,7 +90,6 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Game State Values
-        public static int VillagersInTheInn = 0;
         public static int MAX_NAME_LEN = 10;
 
         public static int TotalExperience = 0;
@@ -108,6 +108,7 @@ namespace RiverHollow.Game_Managers
 
         public static void Initialize()
         {
+            InnPositions = new Villager[3];
             MerchantQueue = new List<Merchant>();
             _liMachines = new List<Machine>();
             _liSpirits = new List<Spirit>();
@@ -167,6 +168,89 @@ namespace RiverHollow.Game_Managers
             foreach (Machine m in _liMachines)
             {
                 m.Rollover();
+            }
+        }
+        #endregion
+
+        #region Inn Handling
+        public static void ClearInn()
+        {
+            for (int i = 0; i < InnPositions.Length; i++)
+            {
+                InnPositions[i] = null;
+            }
+        }
+        public static List<Villager> GetInnGuests()
+        {
+            List<Villager> rv = new List<Villager>();
+            for (int i = 0; i < InnPositions.Length; i++)
+            {
+                if(InnPositions[i] != null)
+                {
+                    rv.Add(InnPositions[i]);
+                }
+            }
+
+            return rv;
+        }
+        public static int GetInnPosition(Villager v){
+            for (int i = 0; i < InnPositions.Length; i++)
+            {
+                if(InnPositions[i]== v)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+        public static bool RoomAtTheInn() {
+            bool rv = false;
+            for (int i = 0; i < InnPositions.Length; i++)
+            {
+                if (InnPositions[i] == null)
+                {
+                    rv = true;
+                    break;
+                }
+            }
+
+            return rv;
+        }
+        public static void AssignToPosition(Villager v, int i)
+        {
+            if(i > -1 && i < InnPositions.Length && InnPositions[i] == null)
+            {
+                InnPositions[i] = v;
+            }
+        }
+        public static bool AddToInnQueue(Villager v)
+        {
+            bool rv = false;
+
+            if (GetInnPosition(v) == -1)
+            {
+                for (int i = 0; i < InnPositions.Length; i++)
+                {
+                    if (InnPositions[i] == null)
+                    {
+                        InnPositions[i] = v;
+                        rv = true;
+                        break;
+                    }
+                }
+            }
+
+            return rv;
+        }
+        public static void RemoveFromInnQueue(Villager v)
+        {
+            for (int i = 0; i < InnPositions.Length; i++)
+            {
+                if (InnPositions[i] == v)
+                {
+                    InnPositions[i] = null;
+                }
             }
         }
         #endregion

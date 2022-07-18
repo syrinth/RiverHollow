@@ -413,9 +413,9 @@
     <property name="NPC_ID" type="int" value="24"/>
    </properties>
   </object>
-  <object id="6" name="NPC_Wait_1" x="160.866" y="130.768" width="12.375" height="11.4375"/>
-  <object id="7" name="NPC_Wait_2" x="193.093" y="113.128" width="12.375" height="11.4375"/>
-  <object id="8" name="NPC_Wait_3" x="226.093" y="130.461" width="12.375" height="11.4375"/>
+  <object id="6" name="NPC_Wait_0" x="160.866" y="130.768" width="12.375" height="11.4375"/>
+  <object id="7" name="NPC_Wait_1" x="193.093" y="113.128" width="12.375" height="11.4375"/>
+  <object id="8" name="NPC_Wait_2" x="226.093" y="130.461" width="12.375" height="11.4375"/>
   <object id="9" name="PlayerSpawn" x="147.455" y="68.2424" width="8" height="5.33333"/>
  </objectgroup>
  <objectgroup id="4" name="Travel">

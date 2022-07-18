@@ -110,8 +110,12 @@ namespace RiverHollow.Characters
             Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
             Util.AssignValue(ref _iTotalMoneyEarnedReq, "TotalMoneyEarnedReq", stringData);
 
-            if (stringData.ContainsKey("AtInn")) { _eSpawnStatus = VillagerSpawnStatus.WaitAtInn; }
-            if (!string.IsNullOrEmpty(_sStartMap)) { _eSpawnStatus = VillagerSpawnStatus.NonTownMap; }
+            if (stringData.ContainsKey("AtInn")) {
+                _eSpawnStatus = VillagerSpawnStatus.WaitAtInn;
+                GameManager.AddToInnQueue(this);
+            }
+            else if (stringData.ContainsKey("InTown")) { _eSpawnStatus = VillagerSpawnStatus.HasHome; }
+            else if (!string.IsNullOrEmpty(_sStartMap)) { _eSpawnStatus = VillagerSpawnStatus.NonTownMap; }
 
             CombatVersion = new ClassedCombatant();
             //CombatVersion.SetName(Name);
@@ -207,16 +211,35 @@ namespace RiverHollow.Characters
                 HandleTravelTiming();
             }
 
-            if (_eSpawnStatus == VillagerSpawnStatus.OffMap)
+            switch (_eSpawnStatus)
             {
-                CurrentMap?.RemoveActor(this);
-                CurrentMapName = string.Empty;
-                _iNextArrival = _iArrivalPeriod;
-            }
-            else
-            {
-                ClearPath();
-                MoveToSpawn();
+                case VillagerSpawnStatus.OffMap:
+                    CurrentMap?.RemoveActor(this);
+                    CurrentMapName = string.Empty;
+                    _iNextArrival = _iArrivalPeriod;
+                    GameManager.RemoveFromInnQueue(this);
+                    break;
+                case VillagerSpawnStatus.HasHome:
+                    GameManager.RemoveFromInnQueue(this);
+                    goto default;
+                case VillagerSpawnStatus.VisitInn:
+                case VillagerSpawnStatus.WaitAtInn:
+                    if (GameManager.GetInnPosition(this) == -1) {
+                        if (!GameManager.RoomAtTheInn())
+                        {
+                            _iNextArrival = 1;
+                            _eSpawnStatus = VillagerSpawnStatus.OffMap;
+                        }
+                        else
+                        {
+                            GameManager.AddToInnQueue(this);
+                        }
+                    }
+                    goto default;
+                default:
+                    ClearPath();
+                    MoveToSpawn();
+                    break;
             }
         }
 
@@ -260,6 +283,7 @@ namespace RiverHollow.Characters
         public void SendToTown()
         {
             _eSpawnStatus = VillagerSpawnStatus.WaitAtInn;
+            GameManager.AddToInnQueue(this);
             MoveToSpawn();
         }
         public override bool HandleTravelTiming()
@@ -354,7 +378,7 @@ namespace RiverHollow.Characters
                     {
                         case VillagerSpawnStatus.VisitInn:
                         case VillagerSpawnStatus.WaitAtInn:
-                            strSpawn = "NPC_Wait_" + ++GameManager.VillagersInTheInn;
+                            strSpawn = "NPC_Wait_" + GameManager.GetInnPosition(this);
                             break;
                         case VillagerSpawnStatus.HasHome:
                         case VillagerSpawnStatus.NonTownMap:
@@ -584,6 +608,7 @@ namespace RiverHollow.Characters
                 relationShipStatus = (int)RelationshipState,
                 canGiveGift = CanGiveGift,
                 spokenKeys = _liSpokenKeys,
+                innPosition = GameManager.GetInnPosition(this),
             };
             
             if (CombatVersion!= null && CombatVersion.CharacterClass != null) { npcData.classedData = CombatVersion.SaveClassedCharData(); }
@@ -592,6 +617,7 @@ namespace RiverHollow.Characters
         }
         public void LoadData(VillagerData data)
         {
+            GameManager.AssignToPosition(this, data.innPosition);
             _eSpawnStatus = (VillagerSpawnStatus)data.spawnStatus;
             _iNextArrival = data.nextArrival;
             FriendshipPoints = data.friendshipPoints;

@@ -5,6 +5,7 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens;
+using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow
@@ -53,6 +54,7 @@ namespace RiverHollow
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            GameManager.Initialize();
             DungeonManager.Instantiate();
             InputManager.Load();
             SoundManager.LoadContent(Content);
@@ -75,7 +77,6 @@ namespace RiverHollow
 
             //Done here for the WorldObjects that need to be unlocked
             DataManager.SecondaryLoad(Content);
-            GameManager.Initialize();
             GameManager.LoadManagedDataLists();
             MapManager.LoadObjects();
 
@@ -285,6 +286,7 @@ namespace RiverHollow
         /// <param name="savefile"></param>
         public static void LoadGame(string savefile)
         {
+            GameManager.ClearInn();
             SaveManager.Load(savefile);
             MapManager.PopulateMaps(true);
 
@@ -323,8 +325,16 @@ namespace RiverHollow
             TaskManager.Rollover();
             PlayerManager.Rollover();
 
-            foreach (Villager n in DataManager.DIVillagers.Values) {
+            List<Villager> innguests = GameManager.GetInnGuests();
+            foreach (Villager n in innguests)
+            {
                 n.RollOver();
+            }
+            foreach (Villager n in DataManager.DIVillagers.Values) {
+                if (!innguests.Contains(n))
+                {
+                    n.RollOver();
+                }
             }
             foreach (Merchant m in DataManager.DIMerchants.Values) {
                 if (PlayerManager.GetNumberTownObjects(int.Parse(DataManager.Config[15]["ObjectID"])) > 0)
