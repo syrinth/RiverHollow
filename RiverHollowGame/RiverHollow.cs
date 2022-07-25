@@ -22,7 +22,6 @@ namespace RiverHollow
         public static int ScreenWidth = 1920;
         public static int ScreenHeight = 1080;
 
-        public static Texture2D lightMask;
         public static Effect _effectLights;
         static RenderTarget2D _renderLights;
         static RenderTarget2D _renderMain;
@@ -69,7 +68,6 @@ namespace RiverHollow
             var pp = GraphicsDevice.PresentationParameters;
             _renderLights = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
             _renderMain = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
-            lightMask = DataManager.GetTexture(@"Textures\lightmask");
             _effectLights = Content.Load<Effect>(@"Effects\lighteffect");
 
             PlayerManager.Initialize();

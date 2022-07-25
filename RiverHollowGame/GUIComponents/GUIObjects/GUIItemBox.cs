@@ -23,6 +23,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public int Columns { get; }
         public int Rows { get; }
 
+        public GUIItemBox(Rectangle r): base(r, ScaleIt(r.Width), ScaleIt(r.Height), DataManager.COMBAT_TEXTURE) { }
+
         public GUIItemBox(Item it = null) : base(RECT_IMG, ScaleIt(RECT_IMG.Width), ScaleIt(RECT_IMG.Height), DataManager.DIALOGUE_TEXTURE)
         {
             SetItem(it);
@@ -127,6 +129,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public class SpecializedBox : GUIItemBox
         {
             public ItemEnum ItemType { get; }
+            public GearTypeEnum GearType { get; }
             public ArmorTypeEnum ArmorType { get; }
             public ClothingEnum ClothingType { get; }
             public WeaponEnum WeaponType { get; }
@@ -134,23 +137,28 @@ namespace RiverHollow.GUIComponents.GUIObjects
             public delegate void OpenItemWindow(SpecializedBox itemBox);
             private OpenItemWindow _delOpenItemWindow;
 
-            public SpecializedBox(ItemEnum itemType, Item item = null, OpenItemWindow del = null) : base()
+            public SpecializedBox(ItemEnum itemType, Item item = null, OpenItemWindow del = null) : base(new Rectangle(156, 160, 20, 20))
             {
                 SetItem(item);
                 ItemType = itemType;
                 _delOpenItemWindow = del;
             }
-            public SpecializedBox(ArmorTypeEnum armorType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Equipment, item, del)
+
+            public SpecializedBox(WeaponEnum weaponType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Equipment, item, del)
             {
+                GearType = GearTypeEnum.Weapon;
+                WeaponType = weaponType;
+            }
+
+            public SpecializedBox(ArmorTypeEnum armorType, GearTypeEnum gearType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Equipment, item, del)
+            {
+                GearType = gearType;
                 ArmorType = armorType;
             }
+
             public SpecializedBox(ClothingEnum clothesType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Clothing, item, del)
             {
                 ClothingType = clothesType;
-            }
-            public SpecializedBox(WeaponEnum weaponType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Equipment, item, del)
-            {
-                WeaponType = weaponType;
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)

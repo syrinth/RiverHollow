@@ -47,10 +47,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             foreach (GUIObject g in Controls)
             {
-                if (g != _guiHoverWindow)
-                {
-                    rv = g.ProcessRightButtonClick(mouse);
-                }
+                rv = g.ProcessRightButtonClick(mouse);
 
                 if (rv) { break; }
             }
@@ -144,6 +141,8 @@ namespace RiverHollow.GUIComponents.Screens
         public bool IsHoverWindowOpen() { return _guiHoverWindow != null; }
         public virtual void OpenHoverWindow(GUITextWindow hoverWindow, Rectangle area, bool guiObject)
         {
+            hoverWindow.ProcessClicks = false;
+
             CloseHoverWindow();
             _guiHoverWindow = hoverWindow;
             _rHoverArea = area;

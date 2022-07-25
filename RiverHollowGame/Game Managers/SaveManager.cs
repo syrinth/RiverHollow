@@ -272,11 +272,17 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Level")]
             public int level;
 
+            [XmlElement(ElementName = "Weapon")]
+            public ItemData weapon;
+
             [XmlElement(ElementName = "Armor")]
             public ItemData armor;
 
-            [XmlElement(ElementName = "Weapon")]
-            public ItemData weapon;
+            [XmlElement(ElementName = "Head")]
+            public ItemData head;
+
+            [XmlElement(ElementName = "Accessory")]
+            public ItemData accessory;
         }
         public struct ItemData
         {

@@ -97,6 +97,7 @@
     <Compile Include="Game Managers\TravelManager.cs" />
     <Compile Include="Game Managers\ZoneManager.cs" />
     <Compile Include="GUIComponents\GUIHarp.cs" />
+    <Compile Include="GUIComponents\GUIObjects\Combat\GUICombatActor.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\GUIHealthBar.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Lite\ActionPanel.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Lite\ChosenAction.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="GUIComponents\GUIObjects\ActorDisplayBox.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIText.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIMisc.cs" />
+    <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIItemDescriptionWindow.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUISprite.cs" />
     <Compile Include="GUIComponents\GUIObjects\QuantityWindow.cs" />
     <Compile Include="GUIComponents\MainObjects\GardenWindow.cs" />
@@ -120,6 +122,10 @@
     <Compile Include="GUIComponents\GUIObjects\Combat\Lite\CombatScreen.cs" />
     <Compile Include="GUIComponents\GUIObjects\Combat\Tactical\TacticalCombatScreen.cs" />
     <Compile Include="GUIComponents\Screens\ConfigScreen.cs" />
+    <Compile Include="GUIComponents\Screens\HUDScreens\HUDFriendship.cs" />
+    <Compile Include="GUIComponents\Screens\HUDScreens\HUDOptions.cs" />
+    <Compile Include="GUIComponents\Screens\HUDScreens\HUDParty.cs" />
+    <Compile Include="GUIComponents\Screens\HUDScreens\HUDTaskLog.cs" />
     <Compile Include="GUIComponents\Screens\LoadScreen.cs" />
     <Compile Include="GUIComponents\Screens\NewGameScreen.cs" />
     <Compile Include="GUIComponents\Screens\HUDPurchaseWindows.cs" />

@@ -448,9 +448,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _gXPToGive.CenterOnObject(_gWin);
                 _gXPToGive.AnchorToInnerSide(_gWin, SideEnum.Top);
 
-                for (int i = 0; i < PlayerManager.GetParty().Count; i++)
+                for (int i = 0; i < PlayerManager.GetParty().Length; i++)
                 {
                     ClassedCombatant adv = PlayerManager.GetParty()[i];
+                    if(adv == null) {  continue; }
                     _arrCharXP[i] = new GUIOldStatDisplay(adv.GetXP, Color.Yellow);
 
                     if (i == 0) { _arrCharXP[i].AnchorToInnerSide(_gWin, SideEnum.BottomLeft); }

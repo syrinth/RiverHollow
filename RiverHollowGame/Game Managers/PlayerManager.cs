@@ -50,7 +50,7 @@ namespace RiverHollow.Game_Managers
 
         private static List<Pet> _liPets;
         private static List<Mount> _liMounts;
-        private static List<ClassedCombatant> _liParty;
+        private static ClassedCombatant[] _arrParty;
         private static Dictionary<int, int> _diStorage;
 
         public static string Name;
@@ -114,7 +114,7 @@ namespace RiverHollow.Game_Managers
             //Sets a default class so we can load and display the character to start
             PlayerCombatant.SetClass(DataManager.GetClassByIndex(1));
 
-            _liParty = new List<ClassedCombatant> { PlayerCombatant };
+            _arrParty = new ClassedCombatant[4] { PlayerCombatant, null, null, null};
         }
 
         public static void NewPlayer()
@@ -211,31 +211,31 @@ namespace RiverHollow.Game_Managers
             PlayerActor.DrawLight(spriteBatch);
         }
 
-        public static List<ClassedCombatant> GetParty()
+        public static ClassedCombatant[] GetParty()
         {
-            return _liParty;
+            return _arrParty;
         }
 
         public static void AddToParty(ClassedCombatant c)
         {
-            foreach (ClassedCombatant oldChar in _liParty)
+            if (Array.Find(_arrParty, x => x == c) == null)
             {
-                if (oldChar.StartPosition.Equals(c.StartPosition))
+                foreach (ClassedCombatant oldChar in _arrParty)
                 {
-                    c.IncreaseStartPos();
+                    if (oldChar != null && oldChar.StartPosition.Equals(c.StartPosition))
+                    {
+                        c.IncreaseStartPos();
+                    }
                 }
-            }
 
-            if (!_liParty.Contains(c))
-            {
-                _liParty.Add(c);
+                _arrParty[Array.IndexOf(_arrParty, null)] = c;
             }
         }
         public static void RemoveFromParty(ClassedCombatant c)
         {
-            if (_liParty.Contains(c))
+            if (Array.Find(_arrParty, x => x == c) != null)
             {
-                _liParty.Remove(c);
+                _arrParty[Array.IndexOf(_arrParty, c)] = null;
             }
         }
 
@@ -558,8 +558,6 @@ namespace RiverHollow.Game_Managers
         public static void SetName(string x)
         {
             Name = x;
-            //PlayerActor.SetName(x);
-            //PlayerCombatant.SetName(x);
         }
         public static void SetTownName(string x)
         {
@@ -568,6 +566,7 @@ namespace RiverHollow.Game_Managers
         public static void SetClass(int x)
         {
             PlayerCombatant.SetClass(DataManager.GetClassByIndex(x));
+            PlayerCombatant.SetName(Name);
         }
 
         public static bool DecreaseStamina(double x)

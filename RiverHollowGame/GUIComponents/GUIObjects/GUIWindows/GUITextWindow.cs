@@ -10,10 +10,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUITextWindow : GUIWindow
     {
+        public bool ProcessClicks = true;
+
         GUIImage _gNext;
         protected GUIText _giText;
         protected GUIImage _giPortrait;
-        List<string> _liTextPages;
+        protected List<string> _liTextPages;
 
         public double Duration;
 
@@ -205,12 +207,14 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
-           return HandleButtonClick();
+            if (ProcessClicks) { return HandleButtonClick(); }
+            else { return false; }
         }
 
         public override bool ProcessRightButtonClick(Point mouse)
         {
-            return HandleButtonClick();
+            if (ProcessClicks) { return HandleButtonClick(); }
+            else { return false; }
         }
 
         private bool HandleButtonClick()

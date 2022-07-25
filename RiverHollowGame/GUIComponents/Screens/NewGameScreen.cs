@@ -265,9 +265,9 @@ namespace RiverHollow.GUIComponents.Screens
         public void BtnNewGame()
         {
             PlayerManager.PlayerActor.SetScale();
+            PlayerManager.SetName(_nameWindow.GetText());
             PlayerManager.SetClass(_csbSelected.ClassID);
             PlayerManager.PlayerCombatant.AssignStartingGear();
-            PlayerManager.SetName(_nameWindow.GetText());
             PlayerManager.SetTownName(_townWindow.GetText());
 
             RiverHollow.NewGame(!_gCheckSkipCutscene.Checked());

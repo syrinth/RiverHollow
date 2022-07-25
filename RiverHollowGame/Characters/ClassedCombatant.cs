@@ -16,6 +16,7 @@ namespace RiverHollow.Characters.Lite
     {
         #region Properties
 
+        string _sName;
         public static List<int> LevelRange = new List<int> { 0, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240 };
 
         protected CharacterClass _class;
@@ -37,9 +38,11 @@ namespace RiverHollow.Characters.Lite
 
             _diGear = new Dictionary<GearTypeEnum, Equipment>();
             foreach (GearTypeEnum e in Enum.GetValues(typeof(GearTypeEnum))) { _diGear[e] = null; }
+            _diGear.Remove(GearTypeEnum.None);
 
             _diGearComparison = new Dictionary<GearTypeEnum, Equipment>();
             foreach (GearTypeEnum e in Enum.GetValues(typeof(GearTypeEnum))) { _diGearComparison[e] = null; }
+            _diGearComparison.Remove(GearTypeEnum.None);
 
             _diAttributes = new Dictionary<AttributeEnum, int>();
             foreach (AttributeEnum e in Enum.GetValues(typeof(AttributeEnum)))
@@ -75,6 +78,11 @@ namespace RiverHollow.Characters.Lite
             }
         }
 
+        public int NextLevelAt()
+        {
+            return LevelRange[ClassLevel];
+        }
+
         public void GetXP(ref double curr, ref double max)
         {
             curr = CurrentXP;
@@ -84,6 +92,18 @@ namespace RiverHollow.Characters.Lite
         public override int Attribute(AttributeEnum e)
         {
             return _diAttributes[e] + _diEffectedAttributes[e].Value + GearAttribute(e);
+        }
+
+        public int AttributeTemp(AttributeEnum e)
+        {
+            if (e == AttributeEnum.Damage)
+            {
+                return GearAttrComparison(e);
+            }
+            else
+            {
+                return _diAttributes[e] + _diEffectedAttributes[e].Value + GearAttrComparison(e);
+            }
         }
 
         public int GearAttribute(AttributeEnum e)
@@ -101,44 +121,40 @@ namespace RiverHollow.Characters.Lite
             return rv;
         }
 
-        public int TempAttribute(AttributeEnum e)
-        {
-            if (e == AttributeEnum.Damage)
-            {
-                return GearAttrComparison(e);
-            }
-            else
-            {
-                return _diAttributes[e] + _diEffectedAttributes[e].Value + GearAttrComparison(e);
-            }
-        }
-
         public int GearAttrComparison(AttributeEnum attr)
         {
             int rv = 0;
 
             foreach (GearTypeEnum e in Enum.GetValues(typeof(GearTypeEnum)))
             {
+                if(e == GearTypeEnum.None) { continue; }
+
                 if (_diGearComparison[e] != null)
                 {
-                    rv = _diGearComparison[e].Attribute(attr);
+                    rv += _diGearComparison[e].Attribute(attr);
                 }
                 else if (_diGear[e] != null)
                 {
-                    rv = _diGear[e].Attribute(attr);
+                    rv += _diGear[e].Attribute(attr);
                 }
             }
 
             return rv;
         }
 
-        public void Unequip(GearTypeEnum e) { _diGear[e] = null; }
+        public void Unequip(GearTypeEnum e) {
+            int initialHP = MaxHP;
+            _diGear[e] = null;
+
+            if (initialHP > MaxHP) { CurrentHP = MaxHP; }
+        }
         public void Equip(Equipment e) {
+            if(e == null) { return; }
+
             int initialHP = MaxHP;
             _diGear[e.GearType] = e;
 
-            if (initialHP < MaxHP) { CurrentHP += MaxHP - initialHP; }
-            else if (initialHP > MaxHP) { CurrentHP = MaxHP; }
+            if (initialHP > MaxHP) { CurrentHP = MaxHP; }
         }
         public Equipment GetEquipment(GearTypeEnum e) { return _diGear[e]; }
 
@@ -151,6 +167,15 @@ namespace RiverHollow.Characters.Lite
             {
                 _diGearComparison[e] = null;
             }
+        }
+
+        public void SetName(string str)
+        {
+            _sName = str;
+        }
+        public override string Name()
+        {
+            return _sName;
         }
 
         /// <summary>
@@ -171,8 +196,10 @@ namespace RiverHollow.Characters.Lite
         {
             ClassedCharData advData = new ClassedCharData
             {
-                armor = Item.SaveData(_diGear[GearTypeEnum.Chest]),
                 weapon = Item.SaveData(_diGear[GearTypeEnum.Weapon]),
+                armor = Item.SaveData(_diGear[GearTypeEnum.Chest]),
+                head = Item.SaveData(_diGear[GearTypeEnum.Head]),
+                accessory = Item.SaveData(_diGear[GearTypeEnum.Accessory]),
                 level = ClassLevel,
                 xp = CurrentXP
             };
@@ -181,8 +208,11 @@ namespace RiverHollow.Characters.Lite
         }
         public void LoadClassedCharData(ClassedCharData data)
         {
-            _diGear[GearTypeEnum.Chest] = (Equipment)DataManager.GetItem(data.armor.itemID);
-            _diGear[GearTypeEnum.Weapon] = (Equipment)DataManager.GetItem(data.weapon.itemID);
+            Equip((Equipment)DataManager.GetItem(data.weapon.itemID));
+            Equip((Equipment)DataManager.GetItem(data.armor.itemID));
+            Equip((Equipment)DataManager.GetItem(data.head.itemID));
+            Equip((Equipment)DataManager.GetItem(data.accessory.itemID));
+
             ClassLevel = data.level;
             CurrentXP = data.xp;
         }

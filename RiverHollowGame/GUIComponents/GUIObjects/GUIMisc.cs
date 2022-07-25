@@ -1,11 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
-using RiverHollow.Misc;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Items;
-using RiverHollow.CombatStuff;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.Utilities;
 
@@ -28,6 +26,56 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
     {
         public GUIDungeonKey() : base(new Rectangle(20, 18, 8, 12), ScaleIt(8), ScaleIt(12), DataManager.DIALOGUE_TEXTURE)
         {
+        }
+    }
+
+    public class GUIAttributeIcon : GUIObject
+    {
+        AttributeEnum _eAttribute;
+        GUIImage _gIcon;
+        GUIText _gText;
+        public GUIAttributeIcon(AttributeEnum attribute, string value, int spacing = 1)
+        {
+            _eAttribute = attribute;
+            _gIcon = DataManager.GetIcon(GameManager.GetGameIconFromAttribute(attribute));
+
+            _gText = new GUIText(value, true, DataManager.FONT_STAT_DISPLAY);
+            _gText.AnchorAndAlignToObject(_gIcon, SideEnum.Right, SideEnum.CenterY, ScaleIt(spacing));
+            AddControl(_gIcon);
+            AddControl(_gText);
+
+            Width = _gText.Right - _gIcon.Left;
+            Height = _gIcon.Height;
+        }
+
+        public GUIAttributeIcon(AttributeEnum attribute, int value, int spacing = 1) : this(attribute, value.ToString(), spacing) { }
+
+        public void SetText(int val)
+        {
+            SetText(val.ToString());
+        }
+        public void SetText(string str)
+        {
+            _gText.SetText(str);
+            Width = _gText.Right - _gIcon.Left;
+        }
+
+        public override void SetColor(Color c)
+        {
+            _gText.SetColor(c);
+        }
+
+        public override bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+            if (Contains(mouse))
+            {
+                rv = true;
+
+                GUITextWindow win = new GUITextWindow(DataManager.GetGameTextEntry("Desc_" + _eAttribute.ToString()), new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32));
+                GUIManager.OpenHoverWindow(win, DrawRectangle, true);
+            }
+            return rv;
         }
     }
 
@@ -376,7 +424,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 if (!GUIManager.IsHoverWindowOpen())
                 {
-                    GUITextWindow win = new GUITextWindow(new TextEntry(ItemObject.Description()), new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32));
+                    GUIItemDescriptionWindow win = new GUIItemDescriptionWindow(ItemObject, new Vector2(DrawRectangle.Left, DrawRectangle.Bottom));
                     GUIManager.OpenHoverWindow(win, Util.FloatRectangle(Position(), Width, Height), true);
                 }
                 rv = true;

@@ -395,19 +395,19 @@
     </Item>
     <Item>
       <Key>98</Key>
-      <Value>[Type:Equipment][Subtype:Weapon][Image:2-0][Value:1500][ESub:Wand][Tier:3][Atk:Minor][Mag:Major][ReqItems:38-2|45-1]</Value>
+      <Value>[Type:Equipment][Subtype:Weapon][Image:2-0][Value:1500][ESub:Wand][Tier:3][Damage:Minor][Magic:Major][ReqItems:38-2|45-1]</Value>
     </Item>
     <Item>
       <Key>99</Key>
-      <Value>[Type:Equipment][Subtype:Weapon][Image:4-0][Value:1500][ESub:Wand][Tier:5][Atk:Minor][Mag:Major][ReqItems:38-2|45-1]</Value>
+      <Value>[Type:Equipment][Subtype:Weapon][Image:4-0][Value:1500][ESub:Wand][Tier:5][Damage:Minor][Magic:Major][ReqItems:38-2|45-1]</Value>
     </Item>
     <Item>
       <Key>100</Key>
-      <Value>[Type:Equipment][Subtype:Weapon][Image:8-0][Value:1500][ESub:Wand][Tier:9][Atk:Minor][Mag:Major][ReqItems:51-3|0-3]</Value>
+      <Value>[Type:Equipment][Subtype:Weapon][Image:8-0][Value:1500][ESub:Wand][Tier:9][Damage:Minor][Magic:Major][ReqItems:51-3|0-3]</Value>
     </Item>
     <Item>
       <Key>101</Key>
-      <Value>[Type:Equipment][Subtype:Weapon][Image:9-0][Value:1500][ESub:Wand][Tier:10][Atk:Minor][Mag:Major][ReqItems:42-4|41-4]</Value>
+      <Value>[Type:Equipment][Subtype:Weapon][Image:9-0][Value:1500][ESub:Wand][Tier:10][Damage:Minor][Magic:Major][ReqItems:42-4|41-4]</Value>
     </Item>
     <Item>
       <Key>102</Key>
@@ -527,7 +527,7 @@
     </Item>
     <Item>
       <Key>131</Key>
-      <Value>[Type:Equipment][Subtype:Accessory][Image:0-5][Value:1000][Tier:1][Def:Minor][Magic:Moderate][Resistance:Moderate][Vitality:Minor]</Value>
+      <Value>[Type:Equipment][Subtype:Accessory][Image:0-5][Value:1000][Tier:1][Defence:Minor][Magic:Moderate][Resistance:Moderate][Vitality:Minor]</Value>
     </Item>
     <Item>
       <Key>132</Key>

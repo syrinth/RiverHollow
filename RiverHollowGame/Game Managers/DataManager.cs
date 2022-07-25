@@ -736,7 +736,7 @@ namespace RiverHollow.Game_Managers
                     rv = new GUIImage(new Rectangle(195, 74, 10, 6), COMBAT_TEXTURE);
                     break;
                 case GameIconEnum.Defence:
-                    rv = new GUIImage(new Rectangle(136, 87, 8, 9), COMBAT_TEXTURE);
+                    rv = new GUIImage(new Rectangle(136, 87, 8, 8), COMBAT_TEXTURE);
                     break;
                 case GameIconEnum.ElementFire:
                     rv = new GUIImage(new Rectangle(185, 80, 7, 9), COMBAT_TEXTURE);

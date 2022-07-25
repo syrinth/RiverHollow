@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.GUIComponents.GUIObjects.Combat.Lite;
 using static RiverHollow.Utilities.Enums;
+using System;
 
 namespace RiverHollow.Game_Managers
 {
@@ -71,7 +72,7 @@ namespace RiverHollow.Game_Managers
             Monsters = new List<CombatActor>(CurrentMob.Monsters);
 
             Party = new List<CombatActor>();
-            Party.AddRange(PlayerManager.GetParty());
+            Party.AddRange(Array.FindAll(PlayerManager.GetParty(), x => x != null));
 
             _liCurrentRound = new List<CombatActor>();
             _liNextRound = new List<KeyValuePair<CombatActor, int>>();

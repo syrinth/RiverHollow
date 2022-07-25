@@ -42,7 +42,7 @@ namespace RiverHollow.Map_Handling
 
                     if (!GUIManager.IsHoverWindowOpen())
                     {
-                        GUITextWindow win = new GUITextWindow(new TextEntry(merchItem.Description()), Vector2.Zero);
+                        GUIItemDescriptionWindow win = new GUIItemDescriptionWindow(merchItem, Vector2.Zero);
                         win.AnchorToScreen(SideEnum.BottomRight);
                         GUIManager.OpenHoverWindow(win, Box, false);
                     }

@@ -25,7 +25,7 @@ namespace RiverHollow.Characters
         public Vector2 StartPosition => _vStartPos;
 
         public int CurrentHP { get; protected set; }
-        public virtual int MaxHP => 20 + (int)Math.Pow(Attribute(AttributeEnum.Vitality) / 3, 1.98);
+        public virtual int MaxHP => 20 + HPFromVitality(Attribute(AttributeEnum.Vitality));
 
         public CombatTile Tile;
         public GUICombatTile Location => Tile.GUITile;
@@ -151,6 +151,11 @@ namespace RiverHollow.Characters
         public AttributeStatusEffect GetEffectedAttributeInfo(AttributeEnum e)
         {
             return _diEffectedAttributes[e];
+        }
+
+        public int HPFromVitality(int val)
+        {
+            return (int)Math.Pow(val / 3, 1.98);
         }
 
         /// <summary>

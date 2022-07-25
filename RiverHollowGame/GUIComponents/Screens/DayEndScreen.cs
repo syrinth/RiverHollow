@@ -95,7 +95,7 @@ namespace RiverHollow.GUIComponents.Screens
                     PlayerManager.Stamina = PlayerManager.MaxStamina;
                     foreach(CombatActor actor in PlayerManager.GetParty())
                     {
-                        actor.IncreaseHealth(actor.MaxHP);
+                        actor?.IncreaseHealth(actor.MaxHP);
                     }
 
                     GameManager.GoToHUDScreen();

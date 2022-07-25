@@ -124,6 +124,7 @@ namespace RiverHollow.Characters
                 Combatant = true;
                 CombatVersion.SetClass(DataManager.GetClassByIndex(int.Parse(stringData["Class"])));
                 CombatVersion.AssignStartingGear();
+                CombatVersion.SetName(Name());
             }
             else { CombatVersion.SetClass(new CharacterClass()); }
 
@@ -241,6 +242,8 @@ namespace RiverHollow.Characters
                     MoveToSpawn();
                     break;
             }
+
+            JoinPartyCheck();
         }
 
         /// <summary>
@@ -568,6 +571,21 @@ namespace RiverHollow.Characters
             return rv;
         }
 
+        public void JoinPartyCheck()
+        {
+            if (RelationshipState != RelationShipStatusEnum.None)
+            {
+                switch (_eSpawnStatus)
+                {
+                    case VillagerSpawnStatus.HasHome:
+                    case VillagerSpawnStatus.VisitInn:
+                    case VillagerSpawnStatus.WaitAtInn:
+                        JoinParty();
+                        break;
+                }
+            }
+        }
+
         public int GetTaxes()
         {
             return 250 * (int)GetSatisfaction() * _iTaxMultiplier;
@@ -634,7 +652,10 @@ namespace RiverHollow.Characters
                 DetermineValidSchedule();
             }
 
-            if (CombatVersion != null && CombatVersion.CharacterClass != null) { CombatVersion.LoadClassedCharData(data.classedData); }
+            if (CombatVersion != null && CombatVersion.CharacterClass != null) {
+                CombatVersion.LoadClassedCharData(data.classedData);
+                JoinPartyCheck();
+            }
 
             foreach (string s in data.spokenKeys)
             {
