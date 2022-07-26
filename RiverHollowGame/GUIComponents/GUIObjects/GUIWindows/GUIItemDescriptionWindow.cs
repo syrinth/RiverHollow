@@ -34,7 +34,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 GUIAttributeIcon icon = new GUIAttributeIcon(e, eq.Attribute(e).ToString("00"));
 
                 if (icons.Count == 0) { icon.AnchorAndAlignToObject(_giText, SideEnum.Bottom, SideEnum.Left, ScaleIt(2)); }
-                else { icon.AnchorAndAlignToObject(icons[icons.Count-1], SideEnum.Right, SideEnum.Top, ScaleIt(4)); }
+                else { icon.AnchorAndAlignToObject(icons[icons.Count-1], SideEnum.Right, SideEnum.CenterY, ScaleIt(4)); }
 
                 icons.Add(icon);
 

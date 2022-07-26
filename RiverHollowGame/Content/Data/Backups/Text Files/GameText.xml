@@ -177,5 +177,41 @@
       <Key>43</Key>
       <Value>[Name:BuyMerch_NoMoney][Text:You can't afford that.]</Value>
     </Item>
+	<Item>
+      <Key>44</Key>
+      <Value>[Name:Desc_Agility][Text:Agilty \n Increases the damage of speed based characters.]</Value>
+    </Item>
+	<Item>
+      <Key>45</Key>
+      <Value>[Name:Desc_Damage][Text:Damage]</Value>
+    </Item>
+	<Item>
+      <Key>46</Key>
+      <Value>[Name:Desc_Defence][Text:Defence \n Reduces the damage taken by physical attacks.]</Value>
+    </Item>
+	<Item>
+      <Key>47</Key>
+      <Value>[Name:Desc_Evasion][Text:Evasion \n Increases your chance to avoid being hit.]</Value>
+    </Item>
+	<Item>
+      <Key>48</Key>
+      <Value>[Name:Desc_Magic][Text:Magic \n Increases the damage of magical characters.]</Value>
+    </Item>
+	<Item>
+      <Key>49</Key>
+      <Value>[Name:Desc_Vitality][Vitality \n Increases your maximum hit points.]</Value>
+    </Item>
+	<Item>
+      <Key>50</Key>
+      <Value>[Name:Desc_Resistance][Text:Resistance \n Reduces the damage taken by magical attacks.]</Value>
+    </Item>
+	<Item>
+      <Key>51</Key>
+      <Value>[Name:Desc_Speed][Text:Speed \n Increases your chance of going higher in the turn order.</Value>
+    </Item>
+	<Item>
+      <Key>52</Key>
+      <Value>[Name:Desc_Strength][Text:Strength \n Increases the damage of strength based characters.]</Value>
+    </Item>
   </Asset>
 </XnaContent>

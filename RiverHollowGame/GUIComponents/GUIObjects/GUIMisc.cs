@@ -71,9 +71,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             if (Contains(mouse))
             {
                 rv = true;
-
-                GUITextWindow win = new GUITextWindow(DataManager.GetGameTextEntry("Desc_" + _eAttribute.ToString()), new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32));
-                GUIManager.OpenHoverWindow(win, DrawRectangle, true);
+                if (_eAttribute != AttributeEnum.Vitality)
+                {
+                    GUITextWindow win = new GUITextWindow(DataManager.GetGameTextEntry("Desc_" + _eAttribute.ToString()), new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32));
+                    GUIManager.OpenHoverWindow(win, DrawRectangle, true);
+                }
             }
             return rv;
         }

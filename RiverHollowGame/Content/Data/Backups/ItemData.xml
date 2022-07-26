@@ -527,7 +527,7 @@
     </Item>
     <Item>
       <Key>131</Key>
-      <Value>[Type:Equipment][Subtype:Accessory][Image:0-5][Value:1000][Tier:1][Def:Minor][Magic:Moderate][Resistance:Moderate][Vitality:Minor]</Value>
+      <Value>[Type:Equipment][Subtype:Accessory][Image:0-5][Value:1000][Tier:1][Defence:Minor][Magic:Moderate][Resistance:Moderate][Vitality:Minor]</Value>
     </Item>
     <Item>
       <Key>132</Key>

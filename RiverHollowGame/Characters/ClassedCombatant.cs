@@ -91,7 +91,14 @@ namespace RiverHollow.Characters.Lite
 
         public override int Attribute(AttributeEnum e)
         {
-            return _diAttributes[e] + _diEffectedAttributes[e].Value + GearAttribute(e);
+            if (e == AttributeEnum.Vitality)
+            {
+                return _diAttributes[e] + GearAttribute(e) + _diEffectedAttributes[e].Value;
+            }
+            else
+            {
+                return Math.Min(99, _diAttributes[e] + GearAttribute(e)) + _diEffectedAttributes[e].Value;
+            }
         }
 
         public int AttributeTemp(AttributeEnum e)
@@ -102,7 +109,7 @@ namespace RiverHollow.Characters.Lite
             }
             else
             {
-                return _diAttributes[e] + _diEffectedAttributes[e].Value + GearAttrComparison(e);
+                return _diAttributes[e] + GearAttrComparison(e);
             }
         }
 

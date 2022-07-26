@@ -36,7 +36,7 @@
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum WorldActorTypeEnum { Actor, Child, Critter, Merchant, Mob, Mount, Pet, ShippingGremlin, Spirit, Villager };
         public enum CombatActorTypeEnum { Monster, PartyMember };
-        public enum AttributeEnum { Agility, Damage, Defence, Evasion, Magic, Vitality, Resistance, Speed, Strength };
+        public enum AttributeEnum { Vitality, Agility, Magic, Strength, Defence, Resistance, Evasion, Speed, Damage};
         public enum AttributeBonusEnum { Minor, Moderate, Major };
         public enum PotencyBonusEnum { None, Conditions, Summon };
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };

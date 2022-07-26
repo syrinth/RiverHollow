@@ -76,8 +76,7 @@ namespace RiverHollow.Items
                     else { rv = LIGHT_ATTRIBUTE; }
                     break;
             }
-
-            return _iTier * (rv - subtractBy);
+            return _iTier * (rv - subtractBy) * (attribute == AttributeEnum.Vitality ? 9 : 1);
         }
 
         /// <summary>

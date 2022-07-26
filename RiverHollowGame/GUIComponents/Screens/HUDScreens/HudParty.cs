@@ -112,7 +112,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
             SpecializedBox _sBoxShirt;
             SpecializedBox _sBoxHat;
 
-            GUIText _gVitality;
             Dictionary<AttributeEnum, GUIAttributeIcon> _diIcons;
 
             public CharacterDetailObject(ClassedCombatant c, EmptyDelegate action)
@@ -144,15 +143,11 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                     gText.ScaledMoveBy(144, 5);
                     AddControl(gText);
 
-                    GUIImage temp = DataManager.GetIcon(GameIconEnum.MaxHealth);
-                    temp.ScaledMoveBy(42, 18);
-                    AddControl(temp);
+                    _diIcons[AttributeEnum.Vitality] = new GUIAttributeIcon(AttributeEnum.Vitality, c.CurrentHP + "/" + c.MaxHP);
+                    _diIcons[AttributeEnum.Vitality].ScaledMoveBy(42, 18);
+                    AddControl(_diIcons[AttributeEnum.Vitality]);
 
-                    _gVitality = new GUIText(c.CurrentHP + "/" + c.MaxHP, true, DataManager.FONT_STAT_DISPLAY);
-                    _gVitality.AnchorAndAlignToObject(temp, SideEnum.Right, SideEnum.CenterY, ScaleIt(1));
-                    AddControl(_gVitality);
-
-                    temp = DataManager.GetIcon(GameIconEnum.Experience);
+                    GUIImage temp = DataManager.GetIcon(GameIconEnum.Experience);
                     temp.ScaledMoveBy(116, 18);
                     AddControl(temp);
 
@@ -377,18 +372,31 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                     _actor.ClearEquipmentCompare();
                 }
 
-                AssignStatText(_diIcons[_actor.KeyAttribute], _actor.Attribute(_actor.KeyAttribute), _actor.AttributeTemp(_actor.KeyAttribute), compareTemp);
-                AssignStatText(_diIcons[AttributeEnum.Defence], _actor.Attribute(AttributeEnum.Defence), _actor.AttributeTemp(AttributeEnum.Defence), compareTemp);
-                AssignStatText(_diIcons[AttributeEnum.Resistance], _actor.Attribute(AttributeEnum.Resistance), _actor.AttributeTemp(AttributeEnum.Resistance), compareTemp);
-                AssignStatText(_diIcons[AttributeEnum.Evasion], _actor.Attribute(AttributeEnum.Evasion), _actor.AttributeTemp(AttributeEnum.Evasion), compareTemp);
-                AssignStatText(_diIcons[AttributeEnum.Speed], _actor.Attribute(AttributeEnum.Speed), _actor.AttributeTemp(AttributeEnum.Speed), compareTemp);
-
-                _gVitality.SetText(_actor.CurrentHP + "/" + _actor.MaxHP);
+                AssignStatText(_actor.KeyAttribute, compareTemp);
+                AssignStatText(AttributeEnum.Defence, compareTemp);
+                AssignStatText(AttributeEnum.Resistance, compareTemp);
+                AssignStatText(AttributeEnum.Evasion, compareTemp);
+                AssignStatText(AttributeEnum.Speed, compareTemp);
+                AssignStatText(AttributeEnum.Vitality, compareTemp);
             }
 
-            private void AssignStatText(GUIAttributeIcon attrIcon, int startStat, int tempStat, bool compareTemp)
+            private void AssignStatText(AttributeEnum attribute, bool compareTemp)
             {
-                attrIcon.SetText(compareTemp ? tempStat : startStat);
+                GUIAttributeIcon attrIcon = _diIcons[attribute];
+                int startStat = _actor.Attribute(attribute);
+                int tempStat = _actor.AttributeTemp(attribute);
+
+                if (attribute == AttributeEnum.Vitality)
+                {
+                    int displayedMax = compareTemp ? tempStat : startStat;
+                    int displayedCurrent = _actor.CurrentHP > displayedMax ? displayedMax : _actor.CurrentHP;
+                    attrIcon.SetText(displayedCurrent + "/" + displayedMax);
+                }
+                else
+                {
+                    attrIcon.SetText(compareTemp ? tempStat : startStat);
+                }
+
                 if (!compareTemp) { attrIcon.SetColor(Color.White); }
                 else
                 {
