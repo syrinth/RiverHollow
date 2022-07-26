@@ -115,7 +115,6 @@
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUISprite.cs" />
     <Compile Include="GUIComponents\GUIObjects\QuantityWindow.cs" />
     <Compile Include="GUIComponents\MainObjects\GardenWindow.cs" />
-    <Compile Include="GUIComponents\MainObjects\PartyMemberPanel.cs" />
     <Compile Include="GUIComponents\MainObjects\TownInfoWindow.cs" />
     <Compile Include="GUIComponents\MainObjects\WarpPointWindow.cs" />
     <Compile Include="GUIComponents\Screens\BuildScreen.cs" />

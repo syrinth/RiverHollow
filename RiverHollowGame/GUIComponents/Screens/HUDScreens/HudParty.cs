@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using static RiverHollow.GUIComponents.GUIObjects.GUIItemBox;
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.GameManager;
-using MonoGame.Extended.BitmapFonts;
+using System;
 
 namespace RiverHollow.GUIComponents.Screens.HUDScreens
 {
@@ -19,9 +19,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
         public HUDParty()
         {
             _arrPartyMembers = new CharacterDetailObject[4];
-            for (int i=0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
-                _arrPartyMembers[i] = new CharacterDetailObject(PlayerManager.GetParty()[i]);
+                _arrPartyMembers[i] = new CharacterDetailObject(PlayerManager.GetParty()[i], RefreshMaps);
                 AddControl(_arrPartyMembers[i]);
 
                 switch (i)
@@ -84,11 +84,21 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
             }
         }
 
+        public void RefreshMaps()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                _arrPartyMembers[i]?.RefreshPositionMap();
+            }
+        }
+
         public class CharacterDetailObject : GUIObject
         {
+            EmptyDelegate _delAction;
             EquipWindow _equipWindow;
+            PositionMap _gPositionMap;
 
-            ClassedCombatant _character;
+            ClassedCombatant _actor;
             GUISprite _actorSprite;
 
             List<SpecializedBox> _liGearBoxes;
@@ -105,18 +115,19 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
             GUIText _gVitality;
             Dictionary<AttributeEnum, GUIAttributeIcon> _diIcons;
 
-            public CharacterDetailObject(ClassedCombatant c)
+            public CharacterDetailObject(ClassedCombatant c, EmptyDelegate action)
             {
+                _delAction = action;
                 _diIcons = new Dictionary<AttributeEnum, GUIAttributeIcon>();
 
-                GUIImage panel = new GUIImage(new Rectangle(0, 160, 155, 66), DataManager.COMBAT_TEXTURE);
+                GUIImage panel = new GUIImage(new Rectangle(0, 160, 155, 80), DataManager.COMBAT_TEXTURE);
                 AddControl(panel);
 
                 if (c != null)
                 {
-                    _character = c;
+                    _actor = c;
 
-                    _actorSprite = new GUISprite(_character.BodySprite, true);
+                    _actorSprite = new GUISprite(_actor.BodySprite, true);
                     _actorSprite.PlayAnimation(c.IsCritical() ? AnimationEnum.Critical : AnimationEnum.Idle);
                     _actorSprite.ScaledMoveBy(4, 4);
                     AddControl(_actorSprite);
@@ -150,24 +161,28 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                     AddControl(gText);
 
                     _diIcons[c.CharacterClass.KeyAttribute] = new GUIAttributeIcon(c.CharacterClass.KeyAttribute, c.Attribute(c.CharacterClass.KeyAttribute));
-                    _diIcons[c.CharacterClass.KeyAttribute].ScaledMoveBy(5, 47);
+                    _diIcons[c.CharacterClass.KeyAttribute].ScaledMoveBy(46, 36);
                     AddControl(_diIcons[c.CharacterClass.KeyAttribute]);
 
+                    _diIcons[AttributeEnum.Speed] = new GUIAttributeIcon(AttributeEnum.Speed, c.Attribute(AttributeEnum.Speed));
+                    _diIcons[AttributeEnum.Speed].ScaledMoveBy(46, 48);
+                    AddControl(_diIcons[AttributeEnum.Speed]);
+
                     _diIcons[AttributeEnum.Defence] = new GUIAttributeIcon(AttributeEnum.Defence, c.Attribute(AttributeEnum.Defence));
-                    _diIcons[AttributeEnum.Defence].ScaledMoveBy(47, 32);
+                    _diIcons[AttributeEnum.Defence].ScaledMoveBy(86, 36);
                     AddControl(_diIcons[AttributeEnum.Defence]);
 
                     _diIcons[AttributeEnum.Resistance] = new GUIAttributeIcon(AttributeEnum.Resistance, c.Attribute(AttributeEnum.Resistance));
-                    _diIcons[AttributeEnum.Resistance].ScaledMoveBy(47, 41);
+                    _diIcons[AttributeEnum.Resistance].ScaledMoveBy(86, 49);
                     AddControl(_diIcons[AttributeEnum.Resistance]);
 
                     _diIcons[AttributeEnum.Evasion] = new GUIAttributeIcon(AttributeEnum.Evasion, c.Attribute(AttributeEnum.Evasion));
-                    _diIcons[AttributeEnum.Evasion].ScaledMoveBy(47, 50);
+                    _diIcons[AttributeEnum.Evasion].ScaledMoveBy(86, 62);
                     AddControl(_diIcons[AttributeEnum.Evasion]);
 
-                    _diIcons[AttributeEnum.Speed] = new GUIAttributeIcon(AttributeEnum.Speed, c.Attribute(AttributeEnum.Speed));
-                    _diIcons[AttributeEnum.Speed].ScaledMoveBy(130, 52);
-                    AddControl(_diIcons[AttributeEnum.Speed]);
+                    _gPositionMap = new PositionMap(_actor, _delAction);
+                    _gPositionMap.ScaledMoveBy(6, 46);
+                    AddControl(_gPositionMap);
 
                     //_gLiteCombatActor.CharacterSprite.Reset();
                     //_gLiteCombatActor.CharacterWeaponSprite?.Reset();
@@ -191,7 +206,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
             public override bool ProcessLeftButtonClick(Point mouse)
             {
                 bool rv = false;
-                if (_character != null)
+                if (_actor != null)
                 {
                     if (_equipWindow.HasEntries() && _equipWindow.ProcessLeftButtonClick(mouse))
                     {
@@ -200,7 +215,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                         _equipWindow.Box.SetItem(_equipWindow.SelectedItem);
                         if (_equipWindow.Box.ItemType.Equals(ItemEnum.Equipment))
                         {
-                            _character.Equip((Equipment)_equipWindow.SelectedItem);
+                            _actor.Equip((Equipment)_equipWindow.SelectedItem);
                         }
                         else if (_equipWindow.Box.ItemType.Equals(ItemEnum.Clothing))
                         {
@@ -225,6 +240,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                                 break;
                             }
                         }
+
+                        rv = _gPositionMap.ProcessLeftButtonClick(mouse);
                     }
                 }
                 return rv;
@@ -251,8 +268,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                             {
                                 GUIManager.CloseHoverWindow();
 
-                                if (!box.WeaponType.Equals(WeaponEnum.None)) { _character.Unequip(GearTypeEnum.Weapon); }
-                                else if (!box.GearType.Equals(GearTypeEnum.None)) { _character.Unequip(((Equipment)box.BoxItem).GearType); }
+                                if (!box.WeaponType.Equals(WeaponEnum.None)) { _actor.Unequip(GearTypeEnum.Weapon); }
+                                else if (!box.GearType.Equals(GearTypeEnum.None)) { _actor.Unequip(((Equipment)box.BoxItem).GearType); }
                                 else if (!box.ClothingType.Equals(ClothingEnum.None))
                                 {
                                     PlayerManager.PlayerActor.RemoveClothes(((Clothing)box.BoxItem).ClothesType);
@@ -307,14 +324,14 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
             {
                 _liGearBoxes.Clear();
 
-                _sBoxWeapon = new SpecializedBox(_character.CharacterClass.WeaponType, _character.GetEquipment(GearTypeEnum.Weapon), FindMatchingItems);
-                _sBoxArmor = new SpecializedBox(_character.CharacterClass.ArmorType, GearTypeEnum.Chest, _character.GetEquipment(GearTypeEnum.Chest), FindMatchingItems);
-                _sBoxHead = new SpecializedBox(_character.CharacterClass.ArmorType, GearTypeEnum.Head, _character.GetEquipment(GearTypeEnum.Head), FindMatchingItems);
-                _sBoxAccessory = new SpecializedBox(ArmorTypeEnum.None, GearTypeEnum.Accessory, _character.GetEquipment(GearTypeEnum.Accessory), FindMatchingItems);
+                _sBoxWeapon = new SpecializedBox(_actor.CharacterClass.WeaponType, _actor.GetEquipment(GearTypeEnum.Weapon), FindMatchingItems);
+                _sBoxArmor = new SpecializedBox(_actor.CharacterClass.ArmorType, GearTypeEnum.Chest, _actor.GetEquipment(GearTypeEnum.Chest), FindMatchingItems);
+                _sBoxHead = new SpecializedBox(_actor.CharacterClass.ArmorType, GearTypeEnum.Head, _actor.GetEquipment(GearTypeEnum.Head), FindMatchingItems);
+                _sBoxAccessory = new SpecializedBox(ArmorTypeEnum.None, GearTypeEnum.Accessory, _actor.GetEquipment(GearTypeEnum.Accessory), FindMatchingItems);
 
-                _sBoxWeapon.ScaledMoveBy(67, 32);
+                _sBoxWeapon.ScaledMoveBy(109, 32);
                 _sBoxArmor.AnchorAndAlignToObject(_sBoxWeapon, SideEnum.Right, SideEnum.Top, ScaleIt(1));
-                _sBoxHead.AnchorAndAlignToObject(_sBoxArmor, SideEnum.Right, SideEnum.Top, ScaleIt(1));
+                _sBoxHead.AnchorAndAlignToObject(_sBoxWeapon, SideEnum.Bottom, SideEnum.Left, ScaleIt(1));
                 _sBoxAccessory.AnchorAndAlignToObject(_sBoxHead, SideEnum.Right, SideEnum.Top, ScaleIt(1));
 
                 _liGearBoxes.Add(_sBoxWeapon);
@@ -351,22 +368,22 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                 bool compareTemp = true;
                 if (tempGear != null)
                 {
-                    if (tempGear.WeaponType != WeaponEnum.None) { _character.EquipComparator(tempGear); }
-                    else { _character.EquipComparator(tempGear); }
+                    if (tempGear.WeaponType != WeaponEnum.None) { _actor.EquipComparator(tempGear); }
+                    else { _actor.EquipComparator(tempGear); }
                 }
                 else
                 {
                     compareTemp = false;
-                    _character.ClearEquipmentCompare();
+                    _actor.ClearEquipmentCompare();
                 }
 
-                AssignStatText(_diIcons[_character.KeyAttribute], _character.Attribute(_character.KeyAttribute), _character.AttributeTemp(_character.KeyAttribute), compareTemp);
-                AssignStatText(_diIcons[AttributeEnum.Defence], _character.Attribute(AttributeEnum.Defence), _character.AttributeTemp(AttributeEnum.Defence), compareTemp);
-                AssignStatText(_diIcons[AttributeEnum.Resistance], _character.Attribute(AttributeEnum.Resistance), _character.AttributeTemp(AttributeEnum.Resistance), compareTemp);
-                AssignStatText(_diIcons[AttributeEnum.Evasion], _character.Attribute(AttributeEnum.Evasion), _character.AttributeTemp(AttributeEnum.Evasion), compareTemp);
-                AssignStatText(_diIcons[AttributeEnum.Speed], _character.Attribute(AttributeEnum.Speed), _character.AttributeTemp(AttributeEnum.Speed), compareTemp);
+                AssignStatText(_diIcons[_actor.KeyAttribute], _actor.Attribute(_actor.KeyAttribute), _actor.AttributeTemp(_actor.KeyAttribute), compareTemp);
+                AssignStatText(_diIcons[AttributeEnum.Defence], _actor.Attribute(AttributeEnum.Defence), _actor.AttributeTemp(AttributeEnum.Defence), compareTemp);
+                AssignStatText(_diIcons[AttributeEnum.Resistance], _actor.Attribute(AttributeEnum.Resistance), _actor.AttributeTemp(AttributeEnum.Resistance), compareTemp);
+                AssignStatText(_diIcons[AttributeEnum.Evasion], _actor.Attribute(AttributeEnum.Evasion), _actor.AttributeTemp(AttributeEnum.Evasion), compareTemp);
+                AssignStatText(_diIcons[AttributeEnum.Speed], _actor.Attribute(AttributeEnum.Speed), _actor.AttributeTemp(AttributeEnum.Speed), compareTemp);
 
-                _gVitality.SetText(_character.CurrentHP + "/" + _character.MaxHP);
+                _gVitality.SetText(_actor.CurrentHP + "/" + _actor.MaxHP);
             }
 
             private void AssignStatText(GUIAttributeIcon attrIcon, int startStat, int tempStat, bool compareTemp)
@@ -421,6 +438,11 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                     _equipWindow.Load(boxMatch, liItems, DisplayAttributeText);
                     _equipWindow.AnchorAndAlignToObject(boxMatch, SideEnum.Right, SideEnum.CenterY);
                 }
+            }
+
+            public void RefreshPositionMap()
+            {
+                _gPositionMap?.RefreshMap();
             }
         }
 
@@ -518,189 +540,113 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
         }
     }
 
-    //private class PositionMap : GUIWindow
-    //{
-    //    ClassedCombatant _currentCharacter;
-    //    StartPosition _currPosition;
-    //    StartPosition[,] _arrStartPositions;
+    public class PositionMap : GUIObject
+    {
+        EmptyDelegate _delAction;
+        ClassedCombatant _actor;
+        PositionObject[,] _arrPlayerTiles;
 
-    //    public delegate void ClickDelegate(ClassedCombatant selectedCharacter);
-    //    private ClickDelegate _delAction;
+        public PositionMap(ClassedCombatant c, EmptyDelegate action)
+        {
+            _actor = c;
+            _delAction = action;
 
-    //    public PositionMap(ClickDelegate del) : base(Window_2, 16, 16)
-    //    {
-    //        _delAction = del;
+            int rows = CombatManager.MAX_ROW;
+            int cols = CombatManager.MAX_COLUMN / 2;
+            _arrPlayerTiles = new PositionObject[rows, cols];
 
-    //        //Actual entries will be one higher since we go to 0 inclusive
-    //        int maxColIndex = 2;
-    //        int maxRowIndex = 2;
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < cols; col++)
+                {
+                    PositionObject obj = new PositionObject(row, col, _actor, _delAction);
+                    _arrPlayerTiles[row, col] = obj;
+                    AddControl(obj);
 
-    //        int spacing = 10;
-    //        _arrStartPositions = new StartPosition[maxColIndex + 1, maxRowIndex + 1]; //increment by one as stated above
-    //        for (int cols = maxColIndex; cols >= 0; cols--)
-    //        {
-    //            for (int rows = maxRowIndex; rows >= 0; rows--)
-    //            {
-    //                StartPosition pos = new StartPosition(cols, rows);
-    //                _arrStartPositions[cols, rows] = pos;
-    //                if (cols == maxColIndex && rows == maxRowIndex)
-    //                {
-    //                    pos.AnchorToInnerSide(this, SideEnum.TopLeft, spacing);
-    //                }
-    //                else if (cols == maxColIndex)
-    //                {
-    //                    pos.AnchorAndAlignToObject(_arrStartPositions[maxColIndex, rows + 1], SideEnum.Bottom, SideEnum.Left, spacing);
-    //                }
-    //                else
-    //                {
-    //                    pos.AnchorAndAlignToObject(_arrStartPositions[cols + 1, rows], SideEnum.Right, SideEnum.Bottom, spacing);
-    //                }
-    //            }
-    //        }
+                    ColorizeMapObject(row, col, _arrPlayerTiles[row, col]);
 
-    //        PopulatePositionMap();
+                    if (col == 0 && row == 0)
+                    {
+                        continue;
+                    }
+                    if (col == 0 && row > 0)
+                    {
+                        obj.AnchorAndAlignToObject(_arrPlayerTiles[row - 1, col], SideEnum.Bottom, SideEnum.Left, ScaleIt(1));
+                    }
+                    else
+                    {
+                        obj.AnchorAndAlignToObject(_arrPlayerTiles[row, col - 1], SideEnum.Right, SideEnum.Top, ScaleIt(1));
+                    }
+                }
+            }
+        }
 
-    //        this.Resize();
-    //    }
+        public void RefreshMap()
+        {
+            int rows = CombatManager.MAX_ROW;
+            int cols = CombatManager.MAX_COLUMN / 2;
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < cols; col++)
+                {
+                    ColorizeMapObject(row, col, _arrPlayerTiles[row, col]);
+                }
+            }
+        }
 
-    //    public override void Update(GameTime gTime)
-    //    {
-    //        base.Update(gTime);
-    //    }
+        private void ColorizeMapObject(int row, int col, PositionObject obj)
+        {
+            for (int i = 0; i < PlayerManager.GetParty().Length; i++)
+            {
+                ClassedCombatant temp = PlayerManager.GetParty()[i];
+                if (temp != null && temp.StartPosition.X == col && temp.StartPosition.Y == row)
+                {
+                    if (temp == _actor) { obj.SetColor(Color.Green); }
+                    else { obj.SetColor(Color.Gray); }
+                    break;
+                }
+                else
+                {
+                    obj.SetColor(Color.White);
+                }
+            }
+        }
 
-    //    /// <summary>
-    //    /// Populates the PositionMap with the initial starting positions of the party
-    //    /// </summary>
-    //    public void PopulatePositionMap()
-    //    {
-    //        //_currentCharacter = PlayerManager.World;
+        class PositionObject : GUIImage
+        {
+            ClassedCombatant _actor;
+            protected EmptyDelegate _delAction;
+            public readonly int X;
+            public readonly int Y;
 
-    //        ////Iterate over each member of the party and retrieve their starting position.
-    //        ////Assigns the character to the starting position and assigns the current position
-    //        ////to the Player Character's
-    //        //foreach (ClassedCombatant c in PlayerManager.GetTacticalParty())
-    //        //{
-    //        //    Vector2 vec = c.StartPosition;
-    //        //    _arrStartPositions[(int)vec.X, (int)vec.Y].SetCharacter(c, (c == _currentCharacter));
-    //        //    if (c == _currentCharacter)
-    //        //    {
-    //        //        _currPosition = _arrStartPositions[(int)vec.X, (int)vec.Y];
-    //        //    }
-    //        //}
-    //    }
+            public PositionObject(int x, int y, ClassedCombatant actor, EmptyDelegate action) : base(new Rectangle(156, 181, 8, 8), DataManager.COMBAT_TEXTURE)
+            {
+                _actor = actor;
+                _delAction = action;
+                X = x;
+                Y = y;
+            }
 
-    //    public override bool ProcessLeftButtonClick(Point mouse)
-    //    {
-    //        bool rv = false;
+            public override bool ProcessLeftButtonClick(Point mouse)
+            {
+                bool rv = false;
+                if (Contains(mouse))
+                {
+                    rv = true;
 
-    //        if (Contains(mouse))
-    //        {
-    //            rv = true;
-    //        }
+                    Vector2 start = _actor.StartPosition;
+                    Vector2 myPosition = new Vector2(Y, X);
+                    ClassedCombatant occupant = Array.Find(PlayerManager.GetParty(), x => x?.StartPosition == myPosition);
+                    if(occupant != null)
+                    {
+                        occupant.SetStartPosition(start);
+                    }
+                    _actor.SetStartPosition(myPosition);
 
-    //        foreach (StartPosition sp in _arrStartPositions)
-    //        {
-    //            //If we have clicked on a StartPosition
-    //            if (sp.Contains(mouse))
-    //            {
-    //                //If the StartPosition is not occupied set the currentPosition to null
-    //                //then set it to the clicked StartPosition and assign the current Character.
-    //                //Finally, reset the characters internal start position vector.
-    //                if (!sp.Occupied())
-    //                {
-    //                    rv = true;
-    //                    _currPosition.SetCharacter(null);
-    //                    _currPosition = sp;
-    //                    //_currPosition.SetCharacter(_currentCharacter, true);
-    //                    _currentCharacter.SetStartPosition(new Vector2(_currPosition.Col, _currPosition.Row));
-    //                }
-    //                else
-    //                {
-    //                    _currPosition?.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
-    //                    _currPosition = sp;
-    //                    //Set the currentCharacter to the selected character.
-    //                    //Call up to the parent object to redisplay data.
-    //                    _currentCharacter = sp.Character;
-    //                    //_delAction(_currentCharacter);
-    //                    _currPosition?.PlayAnimation(VerbEnum.Walk, DirectionEnum.Down);
-    //                }
-
-    //                break;
-    //            }
-    //        }
-
-    //        return rv;
-    //    }
-
-    //    private class StartPosition : GUIImage
-    //    {
-    //        ClassedCombatant _character;
-    //        public ClassedCombatant Character => _character;
-    //        int _iCol;
-    //        int _iRow;
-    //        public int Col => _iCol;
-    //        public int Row => _iRow;
-
-    //        private GUICharacterSprite _sprite;
-    //        public StartPosition(int col, int row) : base(new Rectangle(0, 112, 16, 16), TILE_SIZE, TILE_SIZE, DataManager.FILE_WORLDOBJECTS)
-    //        {
-    //            _iCol = col;
-    //            _iRow = row;
-
-    //            SetScale(CurrentScale);
-    //        }
-
-    //        public override void Draw(SpriteBatch spriteBatch)
-    //        {
-    //            base.Draw(spriteBatch);
-    //            if (_sprite != null)
-    //            {
-    //                _sprite.Draw(spriteBatch);
-    //            }
-    //        }
-
-    //        /// <summary>
-    //        /// Assigns the character that the StartPosition is referring to.
-    //        /// 
-    //        /// Configures the Sprite and Adds it to the Controls ifthere is a character.
-    //        /// Removes it if not.
-    //        /// </summary>
-    //        /// <param name="c">The Character to assign to the StartPosition</param>
-    //        /// <param name="currentCharacter">Whether the character is the current character and should walk</param>
-    //        public void SetCharacter(ClassedCombatant c, bool currentCharacter = false)
-    //        {
-    //            //_character = c;
-    //            if (c != null)
-    //            {
-    //                if (c == PlayerManager.PlayerCombatant) { _sprite = new GUICharacterSprite(true); }
-    //                else { _sprite = new GUICharacterSprite(c.BodySprite, true); }
-
-    //                _sprite.SetScale(2);
-    //                _sprite.CenterOnObject(this);
-    //                _sprite.MoveBy(new Vector2(0, -(this.Width / 4)));
-
-    //                if (currentCharacter) { _sprite.PlayAnimation(VerbEnum.Walk, DirectionEnum.Down); }
-    //                else { _sprite.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down); }
-    //                AddControl(_sprite);
-    //            }
-    //            else
-    //            {
-    //                RemoveControl(_sprite);
-    //                _sprite = null;
-    //            }
-    //        }
-
-    //        public bool Occupied() { return _character != null; }
-
-    //        /// <summary>
-    //        /// Wrapper for the PositionMap to call down to the Sprite directly
-    //        /// </summary>
-    //        /// <typeparam name="TEnum">Template for any enum type</typeparam>
-    //        /// <param name="animation">The animation enum to play</param>
-    //        public void PlayAnimation(VerbEnum verb, DirectionEnum dir)
-    //        {
-    //            _sprite.PlayAnimation(verb, dir);
-    //        }
-    //    }
-    //}
+                    _delAction();
+                }
+                return rv;
+            }
+        }
+    }
 }

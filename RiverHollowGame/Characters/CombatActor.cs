@@ -25,7 +25,7 @@ namespace RiverHollow.Characters
         public Vector2 StartPosition => _vStartPos;
 
         public int CurrentHP { get; protected set; }
-        public virtual int MaxHP => 20 + HPFromVitality(Attribute(AttributeEnum.Vitality));
+        public virtual int MaxHP => HPFromVitality(Attribute(AttributeEnum.Vitality));
 
         public CombatTile Tile;
         public GUICombatTile Location => Tile.GUITile;
@@ -155,7 +155,7 @@ namespace RiverHollow.Characters
 
         public int HPFromVitality(int val)
         {
-            return (int)Math.Pow(val / 3, 1.98);
+            return 3 * val + (int)Math.Pow(val / 2, 1.7);
         }
 
         /// <summary>
@@ -448,7 +448,7 @@ namespace RiverHollow.Characters
 
         public void IncreaseStartPos()
         {
-            if (_vStartPos.Y <CombatManager.MAX_ROW)
+            if (_vStartPos.Y < CombatManager.MAX_ROW)
             {
                 _vStartPos.Y++;
             }
