@@ -36,7 +36,7 @@
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum WorldActorTypeEnum { Actor, Child, Critter, Merchant, Mob, Mount, Pet, ShippingGremlin, Spirit, Villager };
         public enum CombatActorTypeEnum { Monster, PartyMember };
-        public enum AttributeEnum { Vitality, Agility, Magic, Strength, Defence, Resistance, Evasion, Speed, Damage};
+        public enum AttributeEnum { Damage, Vitality, Agility, Magic, Strength, Defence, Resistance, Evasion, Speed };
         public enum AttributeBonusEnum { Minor, Moderate, Major };
         public enum PotencyBonusEnum { None, Conditions, Summon };
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
@@ -66,6 +66,6 @@
 
         public enum VillagerRequestEnum { Close, Far, TownWide };
 
-        public enum GameIconEnum { None, AreaAll, AreaColumnAlly, AreaColumnEnemy, AreaSelf, AreaSingle, AreaRow, AreaSquare, Agility, BuffArrow, DebuffArrow, Defence, ElementFire, ElementIce, ElementLightning, Evasion, Experience, Heal, Magic, MaxHealth, MagicDamage, Melee, MoveDown, MoveLeft, MoveRight, MoveUp, PhysicalDamage, Ranged, Resistance, Speed, Strength, Timer };
+        public enum GameIconEnum { None, AreaAll, AreaColumnAlly, AreaColumnEnemy, AreaSelf, AreaSingle, AreaRow, AreaSquare, Agility, BuffArrow, Damage, DebuffArrow, Defence, ElementFire, ElementIce, ElementLightning, Evasion, Experience, Heal, Magic, MaxHealth, MagicDamage, Melee, MoveDown, MoveLeft, MoveRight, MoveUp, PhysicalDamage, Ranged, Resistance, Speed, Strength, Timer };
     }
 }

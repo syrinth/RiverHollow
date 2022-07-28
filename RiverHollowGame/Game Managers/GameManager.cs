@@ -42,6 +42,8 @@ namespace RiverHollow.Game_Managers
             {
                 case AttributeEnum.Agility:
                     return GameIconEnum.Agility;
+                case AttributeEnum.Damage:
+                    return GameIconEnum.Damage;
                 case AttributeEnum.Defence:
                     return GameIconEnum.Defence;
                 case AttributeEnum.Evasion:
@@ -90,7 +92,7 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Game State Values
-        public static int MAX_NAME_LEN = 10;
+        public static int MAX_NAME_LEN = 8;
 
         public static int TotalExperience = 0;
         public static List<GUISprite> SlainMonsters;

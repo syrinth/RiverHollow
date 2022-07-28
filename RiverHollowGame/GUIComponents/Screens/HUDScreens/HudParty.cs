@@ -155,25 +155,16 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                     gText.AnchorAndAlignToObject(temp, SideEnum.Right, SideEnum.CenterY, ScaleIt(1));
                     AddControl(gText);
 
-                    _diIcons[c.CharacterClass.KeyAttribute] = new GUIAttributeIcon(c.CharacterClass.KeyAttribute, c.Attribute(c.CharacterClass.KeyAttribute));
-                    _diIcons[c.CharacterClass.KeyAttribute].ScaledMoveBy(46, 36);
-                    AddControl(_diIcons[c.CharacterClass.KeyAttribute]);
+                    CreateNewAttributeIcon(AttributeEnum.Damage, 44, 32);
+                    CreateNewAttributeIcon(AttributeEnum.Speed, 86, 32);
 
-                    _diIcons[AttributeEnum.Speed] = new GUIAttributeIcon(AttributeEnum.Speed, c.Attribute(AttributeEnum.Speed));
-                    _diIcons[AttributeEnum.Speed].ScaledMoveBy(46, 48);
-                    AddControl(_diIcons[AttributeEnum.Speed]);
+                    CreateNewAttributeIcon(AttributeEnum.Strength, 44, 47);
+                    CreateNewAttributeIcon(AttributeEnum.Magic, 65, 47);
+                    CreateNewAttributeIcon(AttributeEnum.Agility, 87, 46);
 
-                    _diIcons[AttributeEnum.Defence] = new GUIAttributeIcon(AttributeEnum.Defence, c.Attribute(AttributeEnum.Defence));
-                    _diIcons[AttributeEnum.Defence].ScaledMoveBy(86, 36);
-                    AddControl(_diIcons[AttributeEnum.Defence]);
-
-                    _diIcons[AttributeEnum.Resistance] = new GUIAttributeIcon(AttributeEnum.Resistance, c.Attribute(AttributeEnum.Resistance));
-                    _diIcons[AttributeEnum.Resistance].ScaledMoveBy(86, 49);
-                    AddControl(_diIcons[AttributeEnum.Resistance]);
-
-                    _diIcons[AttributeEnum.Evasion] = new GUIAttributeIcon(AttributeEnum.Evasion, c.Attribute(AttributeEnum.Evasion));
-                    _diIcons[AttributeEnum.Evasion].ScaledMoveBy(86, 62);
-                    AddControl(_diIcons[AttributeEnum.Evasion]);
+                    CreateNewAttributeIcon(AttributeEnum.Defence, 44, 61);
+                    CreateNewAttributeIcon(AttributeEnum.Resistance, 66, 61);
+                    CreateNewAttributeIcon(AttributeEnum.Evasion, 87, 61);
 
                     _gPositionMap = new PositionMap(_actor, _delAction);
                     _gPositionMap.ScaledMoveBy(6, 46);
@@ -188,6 +179,13 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
 
                 Width = panel.Width;
                 Height = panel.Height;
+            }
+
+            private void CreateNewAttributeIcon(AttributeEnum attr, int x, int y)
+            {
+                _diIcons[attr] = new GUIAttributeIcon(attr, _actor.Attribute(attr));
+                _diIcons[attr].ScaledMoveBy(x, y);
+                AddControl(_diIcons[attr]);
             }
 
             public void DrawEntries(SpriteBatch spriteBatch)
@@ -372,11 +370,17 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                     _actor.ClearEquipmentCompare();
                 }
 
-                AssignStatText(_actor.KeyAttribute, compareTemp);
+                AssignStatText(AttributeEnum.Damage, compareTemp);
+                AssignStatText(AttributeEnum.Speed, compareTemp);
+
+                AssignStatText(AttributeEnum.Strength, compareTemp);
+                AssignStatText(AttributeEnum.Magic, compareTemp);
+                AssignStatText(AttributeEnum.Agility, compareTemp);
+
                 AssignStatText(AttributeEnum.Defence, compareTemp);
                 AssignStatText(AttributeEnum.Resistance, compareTemp);
                 AssignStatText(AttributeEnum.Evasion, compareTemp);
-                AssignStatText(AttributeEnum.Speed, compareTemp);
+
                 AssignStatText(AttributeEnum.Vitality, compareTemp);
             }
 

@@ -735,6 +735,9 @@ namespace RiverHollow.Game_Managers
                 case GameIconEnum.DebuffArrow:
                     rv = new GUIImage(new Rectangle(195, 74, 10, 6), COMBAT_TEXTURE);
                     break;
+                case GameIconEnum.Damage:
+                    rv = new GUIImage(new Rectangle(193, 96, 8, 8), COMBAT_TEXTURE);
+                    break;
                 case GameIconEnum.Defence:
                     rv = new GUIImage(new Rectangle(136, 87, 8, 8), COMBAT_TEXTURE);
                     break;

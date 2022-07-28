@@ -73,7 +73,7 @@ namespace RiverHollow.Items
                     break;
                 case GearTypeEnum.Weapon:
                     if (attribute == AttributeEnum.Damage) { rv = WEAPON_DAMAGE_ATTRIBUTE; }
-                    else { rv = LIGHT_ATTRIBUTE; }
+                    else { rv = HEAVY_ATTRIBUTE; }
                     break;
             }
             return _iTier * (rv - subtractBy) * (attribute == AttributeEnum.Vitality ? 9 : 1);

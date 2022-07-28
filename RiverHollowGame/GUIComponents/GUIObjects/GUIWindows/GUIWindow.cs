@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
 
+using static RiverHollow.Game_Managers.GameManager;
+
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUIWindow : GUIObject
@@ -75,20 +77,20 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             return rv;
         }
 
-        public virtual void Resize(bool shrink = true)
+        public virtual void Resize(bool shrink = true, int scaledEdge = 0)
         {
             bool xGrew = false;
             bool yGrew = false;
             foreach(GUIObject g in Controls)
             {
-                if (g.DrawRectangle.Right > InnerRectangle().Right) {
-                    Width += g.DrawRectangle.Right - InnerRectangle().Right;
+                if (g.DrawRectangle.Right + ScaleIt(scaledEdge) > InnerRectangle().Right) {
+                    Width += g.DrawRectangle.Right - InnerRectangle().Right + ScaleIt(scaledEdge);
                     xGrew = true;
                 }
                 else if (!xGrew && shrink && g.DrawRectangle.Right < InnerRectangle().Right) { Width -= InnerRectangle().Right - g.DrawRectangle.Right; }
 
-                if (g.DrawRectangle.Bottom > InnerRectangle().Bottom) {
-                    Height += g.DrawRectangle.Bottom - InnerRectangle().Bottom;
+                if (g.DrawRectangle.Bottom + ScaleIt(scaledEdge) > InnerRectangle().Bottom) {
+                    Height += g.DrawRectangle.Bottom - InnerRectangle().Bottom + ScaleIt(scaledEdge);
                     yGrew = true;
                 }
                 else if (!yGrew && shrink && g.DrawRectangle.Bottom < InnerRectangle().Bottom) { Height -= InnerRectangle().Bottom - g.DrawRectangle.Bottom; }

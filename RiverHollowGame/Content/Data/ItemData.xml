@@ -411,7 +411,7 @@
     </Item>
     <Item>
       <Key>102</Key>
-      <Value>[Type:Equipment][Subtype:Weapon][Image:0-1][Value:1000][ESub:Staff][Tier:1][Atk:Moderate][Mag:Major][ReqItems:0-10]</Value>
+      <Value>[Type:Equipment][Subtype:Weapon][Image:0-1][Value:1000][ESub:Staff][Tier:1][Magic:Major][Vitality:Moderate][Defence:Minor][ReqItems:0-10]</Value>
     </Item>
     <Item>
       <Key>103</Key>
