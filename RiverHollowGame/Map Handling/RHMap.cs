@@ -542,7 +542,7 @@ namespace RiverHollow.Map_Handling
                         if (c.PlaceOnMap(tiledObj.Position, this))
                         {
 
-                            InventoryManager.InitContainerInventory(c.Inventory);
+                            InventoryManager.InitExtraInventory(c.Inventory);
                             string[] holdSplit = Util.FindParams(tiledObj.Properties["Holding"]);
                             foreach (string s in holdSplit)
                             {

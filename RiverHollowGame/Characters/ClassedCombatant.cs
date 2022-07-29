@@ -103,14 +103,7 @@ namespace RiverHollow.Characters.Lite
 
         public int AttributeTemp(AttributeEnum e)
         {
-            if (e == AttributeEnum.Damage)
-            {
-                return GearAttrComparison(e);
-            }
-            else
-            {
-                return _diAttributes[e] + GearAttrComparison(e);
-            }
+            return _diAttributes[e] + GearAttrComparison(e);
         }
 
         public int GearAttribute(AttributeEnum e)

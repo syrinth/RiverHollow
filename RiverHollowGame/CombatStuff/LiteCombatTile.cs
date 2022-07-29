@@ -68,5 +68,10 @@ namespace RiverHollow.CombatStuff
         {
             GUITile.PlayAnimation(animation);
         }
+
+        public void LevelUp()
+        {
+            GUITile.LevelledUp();
+        }
     }
 }

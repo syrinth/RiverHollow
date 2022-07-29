@@ -32,7 +32,7 @@ namespace RiverHollow.GUIComponents.Screens
             InventoryManager.LockedInventory = lockExtraInventory;
 
             InventoryManager.ClearExtraInventory();
-            InventoryManager.InitContainerInventory(inventory);
+            InventoryManager.InitExtraInventory(inventory);
             GameManager.CurrentInventoryDisplay = display;
             _altInventory = new GUIInventory();
             _inventory = new GUIInventory(true);

@@ -39,7 +39,7 @@ namespace RiverHollow.Characters
         List<SpawnConditionEnum> _liSpawnConditions;
 
         int _iXP;
-        int _iXPToGive;
+        public int XP { get; private set; }
 
         #endregion
 
@@ -58,7 +58,7 @@ namespace RiverHollow.Characters
             {
                 _iXP += mon.XP;
             }
-            _iXPToGive = _iXP;
+            XP = _iXP;
 
             NewFoV();
         }
@@ -276,15 +276,24 @@ namespace RiverHollow.Characters
         /// Gets all the items that the Monsters drop. Each monster gives one item
         /// </summary>
         /// <returns>The list of items to be given to the player</returns>
-        public List<Item> GetLoot()
+        public Item[,] GetLoot()
         {
             List<Item> items = new List<Item>();
-
-            foreach (Monster m in _liMonsters)
+            foreach(Monster m in _liMonsters)
             {
-                items.Add(m.GetLoot());
+                Item newItem = m.GetLoot();
+                int index = items.FindIndex(x => x.ItemID == newItem.ItemID);
+
+                if (index != -1) { items[index].Add(newItem.Number); }
+                else { items.Add(newItem); }
             }
-            return items;
+
+            Item[,] rv = new Item[1, items.Count];
+            for (int i = 0; i < items.Count; i++)
+            {
+                rv[0, i] = items[i];
+            }
+            return rv;
         }
 
         /// <summary>
@@ -294,7 +303,7 @@ namespace RiverHollow.Characters
         /// <param name="totalXP">The total amount of XP to give</param>
         public void GetXP(ref double xpLeftToGive, ref double totalXP)
         {
-            xpLeftToGive = _iXPToGive;
+            xpLeftToGive = XP;
             totalXP = _iXP;
         }
 
@@ -305,7 +314,7 @@ namespace RiverHollow.Characters
         /// <param name="v"></param>
         public void DrainXP(int v)
         {
-            _iXPToGive -= Math.Min(v, _iXPToGive);
+            XP -= Math.Min(v, XP);
         }
 
         protected override void CalculatePath()

@@ -70,7 +70,7 @@ namespace RiverHollow.WorldObjects
                     Item newItem = DataManager.GetItem(item.itemID, item.num);
                     if (newItem != null) { newItem.ApplyUniqueData(item.strData); }
 
-                    InventoryManager.InitContainerInventory(this.Inventory);
+                    InventoryManager.InitExtraInventory(this.Inventory);
                     InventoryManager.AddItemToInventorySpot(newItem, i, j, false);
                     InventoryManager.ClearExtraInventory();
                 }

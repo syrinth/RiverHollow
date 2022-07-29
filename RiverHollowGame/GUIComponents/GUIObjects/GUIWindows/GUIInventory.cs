@@ -9,7 +9,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUIInventory : GUIWindow
     {
-        protected GUIItemBox[,] _gItemBoxes;
+        protected GUIItemBox[,] _arrItemBoxes;
 
         protected int _iBoxSize = GUIItemBox.RECT_IMG.Width * GameManager.CurrentScale;
 
@@ -30,7 +30,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             //If it's the player inventory, we need to show the max and then grey them out, otherwise show the real number of rows
             int rows = PlayerInventory ? InventoryManager.maxItemRows : _rows;
 
-            _gItemBoxes = new GUIItemBox[_rows, _columns];
+            _arrItemBoxes = new GUIItemBox[_rows, _columns];
             Width = WidthEdges() + (_columns * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_columns + 1));
             Height = HeightEdges() + (rows * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (rows + 1));
             Setup(PlayerInventory);
@@ -44,7 +44,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    _gItemBoxes[i,j].SetItem(InventoryManager.GetItemFromLocation(i, j, _bPlayerInventory));
+                    _arrItemBoxes[i,j].SetItem(InventoryManager.GetItemFromLocation(i, j, _bPlayerInventory));
+                    _arrItemBoxes[i, j].Update(gTime);
                 }
             }
         }
@@ -60,13 +61,13 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    _gItemBoxes[i, j] = new GUIItemBox(i, j, DataManager.DIALOGUE_TEXTURE, null);
+                    _arrItemBoxes[i, j] = new GUIItemBox(i, j, DataManager.DIALOGUE_TEXTURE, null);
 
-                    if (i == 0 && j == 0) { _gItemBoxes[i, j].AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN); }
-                    else if (j == 0) { _gItemBoxes[i, j].AnchorAndAlignToObject(_gItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
-                    else { _gItemBoxes[i, j].AnchorAndAlignToObject(_gItemBoxes[i, j - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
+                    if (i == 0 && j == 0) { _arrItemBoxes[i, j].AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN); }
+                    else if (j == 0) { _arrItemBoxes[i, j].AnchorAndAlignToObject(_arrItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
+                    else { _arrItemBoxes[i, j].AnchorAndAlignToObject(_arrItemBoxes[i, j - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
 
-                    AddControl(_gItemBoxes[i, j]);
+                    AddControl(_arrItemBoxes[i, j]);
                 }
             }
 
@@ -82,7 +83,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         temp[i, j] = new GUIImage(GUIItemBox.RECT_IMG, GameManager.ScaleIt(GUIItemBox.RECT_IMG.Width), GameManager.ScaleIt(GUIItemBox.RECT_IMG.Height), DataManager.DIALOGUE_TEXTURE);
                         temp[i, j].Enable(false);
 
-                        if (i == 0 && j == 0) { temp[i, j].AnchorAndAlignToObject(_gItemBoxes[PlayerManager.BackpackLevel - 1, 0], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
+                        if (i == 0 && j == 0) { temp[i, j].AnchorAndAlignToObject(_arrItemBoxes[PlayerManager.BackpackLevel - 1, 0], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
                         else if (j == 0) { temp[i, j].AnchorAndAlignToObject(temp[i - 1, j], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
                         else { temp[i, j].AnchorAndAlignToObject(temp[i, j - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
 
@@ -232,7 +233,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             bool rv = false;
             if (!GUIManager.IsTextWindowOpen())
             {
-                foreach (GUIItemBox i in _gItemBoxes)
+                foreach (GUIItemBox i in _arrItemBoxes)
                 {
                     if (i.ProcessHover(mouse))
                     {
@@ -250,7 +251,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    if (_gItemBoxes[i, j].Contains(mouse) && _gItemBoxes[i, j].BoxItem != null)
+                    if (_arrItemBoxes[i, j].Contains(mouse) && _arrItemBoxes[i, j].BoxItem != null)
                     {
                         rv = new Vector2(i, j);
                         goto Exit;
@@ -265,7 +266,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             GUIItemBox rv = null;
 
-            foreach (GUIItemBox box in _gItemBoxes)
+            foreach (GUIItemBox box in _arrItemBoxes)
             {
                 if (box.Contains(mouse) && box.BoxItem != null)
                 {
@@ -281,7 +282,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             Item rv = null;
 
-            foreach(GUIItemBox box in _gItemBoxes)
+            foreach(GUIItemBox box in _arrItemBoxes)
             {
                 if(box.Contains(mouse) && box.BoxItem != null)
                 {
@@ -297,7 +298,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             Item rv = null;
 
-            foreach (GUIItemBox box in _gItemBoxes)
+            foreach (GUIItemBox box in _arrItemBoxes)
             {
                 if (box.Contains(mouse) && box.BoxItem != null)
                 {
@@ -344,7 +345,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     {
                         for (int j = 0; j < _columns; j++)
                         {
-                            if (_gItemBoxes[i, j].Contains(mouse) && (Force || _gItemBoxes[i, j].BoxItem == null))
+                            if (_arrItemBoxes[i, j].Contains(mouse) && (Force || _arrItemBoxes[i, j].BoxItem == null))
                             {
                                 rv = InventoryManager.AddItemToInventorySpot(item, i, j, _bPlayerInventory);
                                 goto Exit;

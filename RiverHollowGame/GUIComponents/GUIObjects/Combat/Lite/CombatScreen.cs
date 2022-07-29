@@ -7,6 +7,8 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.Combat.Lite;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIComponents.Screens;
+using RiverHollow.Items;
+using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
@@ -23,7 +25,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUITextWindow _gActionTextWindow;
         GUIImage _gActionEffect;
 
-        GUIPostCombatDisplay _gPostScreen;
+        PostCombatDisplay _gPostCombatDisplay;
 
         GUIImage _gBackgroundImage;
         GUIButton _btnEscape;
@@ -139,170 +141,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
         #endregion
 
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-
-            if (CombatManager.Party.Contains(CombatManager.ActiveCharacter))
-            {
-                _btnEscape.ProcessLeftButtonClick(mouse);
-
-                //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
-                switch (CombatManager.CurrentPhase)
-                {
-                    case CombatManager.PhaseEnum.ChooseAction:
-                        rv = _gActionPanel.ProcessLeftButtonClick(mouse);
-                        break;
-
-                    case CombatManager.PhaseEnum.ChooseTarget:
-                        _gActionPanel.ClearHoverTarget();
-                        CombatManager.SelectedAction.SetSkillTarget();
-                        break;
-                    case CombatManager.PhaseEnum.DisplayVictory:
-                        rv = _gPostScreen.ProcessLeftButtonClick(mouse);
-                        break;
-                    case CombatManager.PhaseEnum.Defeat:
-                        GUIManager.BeginFadeOut(true);
-                        GoToHUDScreen();
-                        MapManager.CurrentMap = MapManager.Maps["mapHospital"];
-                        PlayerManager.CurrentMap = "mapHospital";
-                        PlayerManager.PlayerActor.Position = Util.SnapToGrid(MapManager.CurrentMap.DictionaryCharacterLayer["playerSpawn"]);
-
-                        foreach (ClassedCombatant c in PlayerManager.GetParty())
-                        {
-                            if (c.KnockedOut)
-                            {
-                                c.Recover();
-                            }
-                        }
-
-                        break;
-                }
-            }
-
-            return rv;
-        }
-
-        public override bool ProcessRightButtonClick(Point mouse)
-        {
-            bool rv = true;
-            if (CombatManager.CanCancel())
-            {
-                CancelAction();
-            }
-            return rv;
-        }
-
-        internal void CancelAction()
-        {
-            CombatManager.ClearSelectedTile();
-            CombatManager.SelectedAction = null;
-            _gActionPanel.CancelAction();
-
-            if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseTarget)
-            {
-                CombatManager.CurrentPhase = CombatManager.PhaseEnum.ChooseAction;
-            }
-        }
-
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
-
-            if (!CombatManager.PlayerTurn) { return false; }
-
-            bool showHoverCharacterInfo = false;
-            if (_gActionPanel.Enabled)
-            {
-                rv = _gActionPanel.ProcessHover(mouse);
-            }
-
-            if (!rv && CombatManager.PhaseChooseTarget())
-            {
-                rv = HandleHoverTargeting();
-            }
-
-            if (!rv)
-            {
-                CombatActor hoverTarget = _gTurnOrder.GetHoverActor(mouse);
-                if (hoverTarget != null)
-                {
-                    rv = true;
-                    showHoverCharacterInfo = true;
-                    _gHoverCharacterInfo.SetActor(hoverTarget);
-                }
-            }
-
-            bool loop = true;
-            GUICombatTile[,] array = _arrAllies;
-            while (loop)
-            {
-                foreach (GUICombatTile t in array)
-                {
-                    if (t.Contains(mouse) && t.Occupied())
-                    {
-                        showHoverCharacterInfo = true;
-                        if (_gHoverCharacterInfo.ShouldRefresh(t.MapTile.Character))
-                        {
-                            _gHoverCharacterInfo.SetActor(t.MapTile.Character);
-                        }
-                    }
-
-                    rv = t.ProcessHover(mouse);
-                    if (rv)
-                    {
-                        goto Exit;
-                    }
-                }
-                if (array != _arrEnemies) { array = _arrEnemies; }
-                else { loop = false; }
-            }
-
-            Exit:
-
-            _gHoverCharacterInfo.Show(showHoverCharacterInfo);
-            if (_gPostScreen != null)
-            {
-                _gPostScreen.ProcessHover(mouse);
-            }
-
-
-            return rv;
-        }
-
-        internal bool HandleHoverTargeting()
-        {
-            bool rv = false;
-
-            if (CombatManager.SelectedAction.TargetsEnemy())
-            {
-                rv = HoverTargetHelper(_arrEnemies);
-            }
-            else if (CombatManager.SelectedAction.TargetsAlly())
-            {
-                rv = HoverTargetHelper(_arrAllies);
-            }
-
-            return rv;
-        }
-
-        internal bool HoverTargetHelper(GUICombatTile[,] array)
-        {
-            bool rv = false;
-            foreach (GUICombatTile p in array)
-            {
-                if (rv) { break; }
-                rv = p.CheckForTarget(GUICursor.Position.ToPoint());
-
-                if (rv)
-                {
-                    _gActionPanel.DamageUpdate(p.MapTile.Character);
-                }
-            }
-
-            return rv;
-        }
-
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -370,13 +208,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     //AddControl(window);
                     break;
                 case CombatManager.PhaseEnum.DisplayVictory:
-                    if (_gPostScreen == null)
+                    _gActiveIndicator.Show(false);
+                    if (_gPostCombatDisplay == null)
                     {
-                        InventoryManager.InitMobInventory(1, 5);
-                        _gPostScreen = new GUIPostCombatDisplay(ClosePostCombatDisplay);
-                        _gPostScreen.CenterOnScreen();
+                        _gPostCombatDisplay = new PostCombatDisplay();
+                        AddControl(_gPostCombatDisplay);
                     }
-
+                    _gPostCombatDisplay?.Update(gameTime);
                     break;
             }
 
@@ -402,10 +240,182 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             //Draw here instead of leaving it to the controls because the
             //characters will get drawnon top of it otherwise.
-            if (_gPostScreen != null)
+
+            _gPostCombatDisplay?.Draw(spriteBatch);
+
+            _guiHoverWindow?.Draw(spriteBatch);
+        }
+
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+
+            if (CombatManager.Party.Contains(CombatManager.ActiveCharacter))
             {
-                _gPostScreen.Draw(spriteBatch);
+                _btnEscape.ProcessLeftButtonClick(mouse);
+
+                //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
+                switch (CombatManager.CurrentPhase)
+                {
+                    case CombatManager.PhaseEnum.ChooseAction:
+                        rv = _gActionPanel.ProcessLeftButtonClick(mouse);
+                        break;
+
+                    case CombatManager.PhaseEnum.ChooseTarget:
+                        _gActionPanel.ClearHoverTarget();
+                        CombatManager.SelectedAction.SetSkillTarget();
+                        break;
+                    case CombatManager.PhaseEnum.DisplayVictory:
+                        if (_gPostCombatDisplay != null) {
+                            rv = _gPostCombatDisplay.ProcessLeftButtonClick(mouse);
+                        }
+                        break;
+                    case CombatManager.PhaseEnum.Defeat:
+                        GUIManager.BeginFadeOut(true);
+                        GoToHUDScreen();
+                        MapManager.CurrentMap = MapManager.Maps["mapHospital"];
+                        PlayerManager.CurrentMap = "mapHospital";
+                        PlayerManager.PlayerActor.Position = Util.SnapToGrid(MapManager.CurrentMap.DictionaryCharacterLayer["playerSpawn"]);
+
+                        foreach (ClassedCombatant c in PlayerManager.GetParty())
+                        {
+                            if (c.KnockedOut)
+                            {
+                                c.Recover();
+                            }
+                        }
+
+                        break;
+                }
             }
+
+            return rv;
+        }
+
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            bool rv = true;
+            if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.DisplayVictory && _gPostCombatDisplay != null)
+            {
+                rv = _gPostCombatDisplay.ProcessRightButtonClick(mouse);
+
+            }
+
+            if (CombatManager.CanCancel())
+            {
+                CancelAction();
+            }
+            return rv;
+        }
+
+        public override bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+
+            if (_gPostCombatDisplay != null)
+            {
+                rv = _gPostCombatDisplay.ProcessHover(mouse);
+            }
+
+            if (!CombatManager.PlayerTurn) { return false; }
+
+            bool showHoverCharacterInfo = false;
+            if (_gActionPanel.Enabled)
+            {
+                rv = _gActionPanel.ProcessHover(mouse);
+            }
+
+            if (!rv && CombatManager.PhaseChooseTarget())
+            {
+                rv = HandleHoverTargeting();
+            }
+
+            if (!rv)
+            {
+                CombatActor hoverTarget = _gTurnOrder.GetHoverActor(mouse);
+                if (hoverTarget != null)
+                {
+                    rv = true;
+                    showHoverCharacterInfo = true;
+                    _gHoverCharacterInfo.SetActor(hoverTarget);
+                }
+            }
+
+            bool loop = true;
+            GUICombatTile[,] array = _arrAllies;
+            while (loop)
+            {
+                foreach (GUICombatTile t in array)
+                {
+                    if (t.Contains(mouse) && t.Occupied())
+                    {
+                        showHoverCharacterInfo = true;
+                        if (_gHoverCharacterInfo.ShouldRefresh(t.MapTile.Character))
+                        {
+                            _gHoverCharacterInfo.SetActor(t.MapTile.Character);
+                        }
+                    }
+
+                    rv = t.ProcessHover(mouse);
+                    if (rv)
+                    {
+                        goto Exit;
+                    }
+                }
+                if (array != _arrEnemies) { array = _arrEnemies; }
+                else { loop = false; }
+            }
+
+            Exit:
+
+            _gHoverCharacterInfo.Show(showHoverCharacterInfo);
+
+            return rv;
+        }
+
+        internal void CancelAction()
+        {
+            CombatManager.ClearSelectedTile();
+            CombatManager.SelectedAction = null;
+            _gActionPanel.CancelAction();
+
+            if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseTarget)
+            {
+                CombatManager.CurrentPhase = CombatManager.PhaseEnum.ChooseAction;
+            }
+        }
+
+        internal bool HandleHoverTargeting()
+        {
+            bool rv = false;
+
+            if (CombatManager.SelectedAction.TargetsEnemy())
+            {
+                rv = HoverTargetHelper(_arrEnemies);
+            }
+            else if (CombatManager.SelectedAction.TargetsAlly())
+            {
+                rv = HoverTargetHelper(_arrAllies);
+            }
+
+            return rv;
+        }
+
+        internal bool HoverTargetHelper(GUICombatTile[,] array)
+        {
+            bool rv = false;
+            foreach (GUICombatTile p in array)
+            {
+                if (rv) { break; }
+                rv = p.CheckForTarget(GUICursor.Position.ToPoint());
+
+                if (rv)
+                {
+                    _gActionPanel.DamageUpdate(p.MapTile.Character);
+                }
+            }
+
+            return rv;
         }
 
         private void ShowHUDObjects(bool value)
@@ -424,75 +434,115 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        private void ClosePostCombatDisplay()
+        private class PostCombatDisplay : GUIObject
         {
-            _gPostScreen = null;
-            CombatManager.EndCombatVictory();
-        }
+            public enum DisplayStageEnum { ShowXP, ItemLootAll, ItemInventory };
+            DisplayStageEnum _eCurrentStage = DisplayStageEnum.ShowXP;
 
-        private class GUIPostCombatDisplay : GUIObject
-        {
-            GUIButton _btnClose;
-            GUIWindow _gWin;
-            GUIOldStatDisplay _gXPToGive;
-            GUIOldStatDisplay[] _arrCharXP;
+            GUITextWindow _gCombatText;
+            GUIObject _gLoot;
 
-            bool _bDisplayItems;
-
-            public GUIPostCombatDisplay(EmptyDelegate closeDelegate)
+            public PostCombatDisplay()
             {
-                _bDisplayItems = false;
-                _arrCharXP = new GUIOldStatDisplay[4];
-                _gWin = new GUIWindow(GUIWindow.Window_1, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
-                _gXPToGive = new GUIOldStatDisplay(CombatManager.CurrentMob.GetXP, Color.Yellow);
-                _gXPToGive.CenterOnObject(_gWin);
-                _gXPToGive.AnchorToInnerSide(_gWin, SideEnum.Top);
-
-                for (int i = 0; i < PlayerManager.GetParty().Length; i++)
-                {
-                    ClassedCombatant adv = PlayerManager.GetParty()[i];
-                    if(adv == null) {  continue; }
-                    _arrCharXP[i] = new GUIOldStatDisplay(adv.GetXP, Color.Yellow);
-
-                    if (i == 0) { _arrCharXP[i].AnchorToInnerSide(_gWin, SideEnum.BottomLeft); }
-                    else { _arrCharXP[i].AnchorAndAlignToObject(_arrCharXP[i - 1], SideEnum.Right, SideEnum.Bottom); }
-
-                    _gWin.AddControl(_arrCharXP[i]);
-                }
-
-                _btnClose = new GUIButton("Close", closeDelegate);
-
-                Width = _gWin.Width;
-                Height = _gWin.Height;
-                AddControl(_gWin);
+                _gCombatText = new GUITextWindow(new TextEntry("Gained " + CombatManager.CurrentMob.XP.ToString() + " XP"), Vector2.Zero);
+                _gCombatText.CenterOnScreen();
+                AddControl(_gCombatText);
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)
             {
                 bool rv = false;
-                if (!_bDisplayItems)
-                {
-                    _bDisplayItems = true;
-                    RemoveControl(_gWin);
 
-                    //_gItemManager = new GUIInventoriesDisplay();
-                    //_btnClose.AnchorAndAlignToObject(_gItemManager, SideEnum.Right, SideEnum.Bottom);
-                    //AddControl(_gItemManager);
-                    _btnClose.CenterOnScreen();
-                    AddControl(_btnClose);
-                }
-                else
+                switch (_eCurrentStage)
                 {
-                    //rv = _gItemManager.ProcessLeftButtonClick(mouse);
-                    if (!rv)
-                    {
-                        rv = _btnClose.ProcessLeftButtonClick(mouse);
-                    }
+                    case DisplayStageEnum.ShowXP:
+                        rv = true;
+                        RemoveControl(_gCombatText);
+                        CreateLootWindow();
+                        break;
+                    case DisplayStageEnum.ItemLootAll:
+                        rv = true;
+                        AssignItemsToInventory();
+                        CombatManager.EndCombatVictory();
+                        break;
+                    case DisplayStageEnum.ItemInventory:
+                        rv = _gLoot.ProcessLeftButtonClick(mouse);
+                        break;
                 }
 
                 return rv;
             }
 
+            public override bool ProcessRightButtonClick(Point mouse)
+            {
+                bool rv = false;
+
+                switch (_eCurrentStage)
+                {
+                    case DisplayStageEnum.ShowXP:
+                        rv = true;
+                        RemoveControl(_gCombatText);
+                        CreateLootWindow();
+                        break;
+                    case DisplayStageEnum.ItemLootAll:
+                        rv = true;
+                        AssignItemsToInventory();
+                        CombatManager.EndCombatVictory();
+                        break;
+                    case DisplayStageEnum.ItemInventory:
+                        rv = _gLoot.ProcessRightButtonClick(mouse);
+                        if (!rv)
+                        {
+                            AssignItemsToInventory();
+                            CombatManager.EndCombatVictory();
+                            rv = true;
+                        }
+                        break;
+                }
+
+                return rv;
+            }
+
+            private void CreateLootWindow()
+            {
+                Item[,] loot = CombatManager.CurrentMob.GetLoot();
+
+                bool canFit = true;
+                foreach (Item i in loot)
+                {
+                    if (!InventoryManager.HasSpaceInInventory(i.ItemID, i.Number))
+                    {
+                        canFit = false;
+                        break;
+                    }
+                }
+
+                if (canFit)
+                {
+                    _eCurrentStage = DisplayStageEnum.ItemLootAll;
+                    InventoryManager.InitExtraInventory(loot);
+                    _gLoot = new GUIInventory(false);
+                }
+                else
+                {
+                    _eCurrentStage = DisplayStageEnum.ItemInventory;
+                    _gLoot = new HUDInventoryDisplay(loot, DisplayTypeEnum.Inventory);
+                }
+                _gLoot.CenterOnScreen();
+                AddControl(_gLoot);
+
+                _gCombatText = new GUITextWindow(new TextEntry("Found Items"), Vector2.Zero);
+                _gCombatText.AnchorAndAlignToObject(_gLoot, SideEnum.Top, SideEnum.CenterX, ScaleIt(1));
+                AddControl(_gCombatText);
+            }
+
+            private void AssignItemsToInventory()
+            {
+                foreach (Item i in InventoryManager.ExtraInventory)
+                {
+                    InventoryManager.AddToInventory(i);
+                }
+            }
         }
     }
 }

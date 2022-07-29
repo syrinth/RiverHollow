@@ -7,6 +7,9 @@ using RiverHollow.GUIComponents.GUIObjects.Combat.Lite;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using System;
 using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.SpriteAnimations;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
@@ -21,11 +24,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public GUISprite SummonSprite { get; private set; }
         GUIText _gSummonEffect;
 
+        GUISprite _gLevelIcon;
+
         CombatTile _mapTile;
         public CombatTile MapTile => _mapTile;
 
         //SpriteFont _fDmg;
         int _iDmgTimer = 40;
+        int _iLvlTimer = 3;
 
         public GUICombatTile(CombatTile tile)
         {
@@ -82,6 +88,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 _gEffect.Draw(spriteBatch);
             }
 
+            _gLevelIcon?.Draw(spriteBatch);
+
             //if (_mapTile.Selected) { _gTargetter.Draw(spriteBatch); }
         }
 
@@ -116,6 +124,18 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     }
                 }
                 else { _gEffect = null; }
+            }
+
+            if(_gLevelIcon != null)
+            {
+                _gLevelIcon.Update(gameTime);
+                if (_iLvlTimer == 0) {
+                    _iLvlTimer = 3;
+                    _gLevelIcon.ScaledMoveBy(0, 1);
+                }
+                else {
+                    _iLvlTimer -= gameTime.ElapsedGameTime.Seconds;
+                }
             }
         }
 
@@ -263,6 +283,16 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public void PlayAnimation<TEnum>(TEnum animation)
         {
             _gActorInfo.PlayAnimation(animation);
+        }
+
+        public void LevelledUp()
+        {
+            AnimatedSprite spr = new AnimatedSprite(DataManager.COMBAT_TEXTURE);
+            spr.AddAnimation(AnimationEnum.PlayAnimation, 192, 159, 16, 17, 2, 0.6f);
+            spr.PlayAnimation(AnimationEnum.PlayAnimation);
+            spr.SetScale(NORMAL_SCALE);
+            _gLevelIcon = new GUISprite(spr);
+            _gLevelIcon.AnchorAndAlignToObject(CharacterSprite, SideEnum.Top, SideEnum.CenterX, ScaleIt(1));
         }
     }
 }

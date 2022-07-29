@@ -11,7 +11,7 @@ namespace RiverHollow.Game_Managers
         public static int maxItemRows = 4;
         public static int maxItemColumns = 10;
         public static Item[,] PlayerInventory { get; private set; }
-        private static Item[,] _arrExtraInventory;
+        public static Item[,] ExtraInventory { get; private set; }
 
         public static List<Item> AddedItemList;
         #endregion
@@ -39,30 +39,14 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        /// <summary>
-        /// Called at end of combat, to initialize the mob inventory for the drops
-        /// </summary>
-        /// <param name="x">Number of rows</param>
-        /// <param name="y">Number of columns</param>
-        public static void InitMobInventory(int rows, int cols)
+        public static void InitExtraInventory(Item[,] inventory)
         {
-            _arrExtraInventory = new Item[rows, cols];
-            //List<Item> items = CombatManager.CurrentMob.GetLoot();
-
-            //foreach(Item i in items)
-            //{
-            //    AddToInventory(i, false);
-            //}
-        }
-
-        public static void InitContainerInventory(Item[,] inventory)
-        {
-            _arrExtraInventory = inventory;
+            ExtraInventory = inventory;
         }
 
         public static void ClearExtraInventory()
         {
-            _arrExtraInventory = null;
+            ExtraInventory = null;
         }
 
         #region Helpers
@@ -71,7 +55,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         private static Item[,] GetInventory(bool PlayerInventory)
         {
-            return (PlayerInventory ? InventoryManager.PlayerInventory : _arrExtraInventory);
+            return (PlayerInventory ? InventoryManager.PlayerInventory : ExtraInventory);
         }
 
         /// <summary>
@@ -308,6 +292,11 @@ Exit:
         {
             bool rv = false;
 
+            if(itemToAdd == null)
+            {
+                return false;
+            }
+
             if (playerInventory && itemToAdd.AddToInventoryTrigger())
             {
                 return true;
@@ -522,7 +511,7 @@ Exit:
 
         internal static bool ManagingExtraInventory()
         {
-            return !LockedInventory && _arrExtraInventory != null;
+            return !LockedInventory && ExtraInventory != null;
         }
 
         public static Item GetItemFromLocation(int row, int column, bool PlayerInventory = true)

@@ -107,8 +107,8 @@ namespace RiverHollow.GUIComponents.Screens
                 g.Draw(spriteBatch);
             }
 
-            if (_guiTextWindow != null) { _guiTextWindow.Draw(spriteBatch); }
-            if (_guiHoverWindow != null) { _guiHoverWindow.Draw(spriteBatch); }
+            _guiTextWindow?.Draw(spriteBatch);
+            _guiHoverWindow?.Draw(spriteBatch);
         }
 
         public virtual bool IsMenuOpen() { return false; }

@@ -222,7 +222,7 @@ namespace RiverHollow.Game_Managers
                     if (Delay <= 0)
                     {
                         Delay = 0.05f;
-                        GiveXP();
+                        //GiveXP();
                         CurrentMob.Defeat();
                     }
                     else
@@ -272,19 +272,19 @@ namespace RiverHollow.Game_Managers
             {
                 rv = true;
                 CurrentPhase = PhaseEnum.DisplayVictory;
-                InventoryManager.InitMobInventory(1, 5);    //Just temp values
+
+                int totalXP = CurrentMob.XP;
                 foreach (ClassedCombatant a in Party)
                 {
                     int levl = a.ClassLevel;
-                    //a.AddXP(EarnedXP);
+                    a.AddXP(totalXP);
                     a.Tile.PlayAnimation(AnimationEnum.Victory);
 
-                    //if (levl != a.ClassLevel)
-                    //{
-                    //    LiLevels.Add(a.Name + " Level Up!");
-                    //}
+                    if (levl != a.ClassLevel)
+                    {
+                        a.Tile.LevelUp();
+                    }
                 }
-                //MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
             }
             else if (!IsPartyUp())
             {
@@ -299,11 +299,6 @@ namespace RiverHollow.Game_Managers
         {
             CombatStarted = false;
             GUIManager.BeginFadeOut();
-            List<Item> droppedItems = CurrentMob.GetLoot();
-            for (int i =0; i < droppedItems.Count; i++)
-            {
-                InventoryManager.AddToInventory(droppedItems[i]);
-            }
             MapManager.RemoveActor(CurrentMob);
             CurrentMob = null;
             GoToHUDScreen();
