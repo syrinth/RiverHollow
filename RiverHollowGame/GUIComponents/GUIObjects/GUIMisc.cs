@@ -9,22 +9,9 @@ using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
-    public class GUICoin : GUIImage
-    {
-        public GUICoin() : base(new Rectangle(4, 36, 8, 9), ScaleIt(8), ScaleIt(9), DataManager.DIALOGUE_TEXTURE)
-        {
-        }
-    }
     public class GUIMonsterEnergy : GUIImage
     {
         public GUIMonsterEnergy() : base(new Rectangle(4, 20, 8 , 8), ScaleIt(8), ScaleIt(8), DataManager.DIALOGUE_TEXTURE)
-        {
-        }
-    }
-
-    public class GUIDungeonKey : GUIImage
-    {
-        public GUIDungeonKey() : base(new Rectangle(20, 18, 8, 12), ScaleIt(8), ScaleIt(12), DataManager.DIALOGUE_TEXTURE)
         {
         }
     }
@@ -112,7 +99,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
     public class GUIMoneyDisplay : GUIObject
     {
         GUIText _gTextMoney;
-        GUICoin _gCoin;
+        GUIImage _gCoin;
         bool _bIsPlayerMoney;
         bool _bCoinOnRight;
 
@@ -137,7 +124,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         private void Setup()
         {
-            _gCoin = new GUICoin();
+            _gCoin = DataManager.GetIcon(GameIconEnum.Coin);
 
             if (_bCoinOnRight)
             {
@@ -243,7 +230,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
     public class GUIDungeonKeyDisplay : GUIObject
     {
         GUIText _gKeysText;
-        GUIDungeonKey _gKeys;
+        GUIImage _gKeys;
 
         //Player Monster Energy Display
         public GUIDungeonKeyDisplay()
@@ -254,7 +241,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         private void Setup()
         {
-            _gKeys = new GUIDungeonKey();
+            _gKeys = DataManager.GetIcon(GameIconEnum.Key);
 
             _gKeysText.AnchorAndAlignToObject(_gKeys, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
 

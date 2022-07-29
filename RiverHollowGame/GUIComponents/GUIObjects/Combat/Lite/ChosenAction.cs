@@ -146,9 +146,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             return string.Empty;
         }
 
-        public void PerformAction(GameTime gameTime)
+        public void PerformAction(GameTime gTime)
         {
-            if (_chosenAction != null) { _chosenAction.HandlePhase(gameTime); }
+            if (_chosenAction != null) { _chosenAction.HandlePhase(gTime); }
             else if (_chosenItem != null)
             {
                 bool finished = false;

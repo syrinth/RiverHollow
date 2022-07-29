@@ -141,9 +141,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
         #endregion
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
-            base.Update(gameTime);
+            base.Update(gTime);
 
             if (!CombatManager.CombatStarted) { _switch(); }
 
@@ -214,7 +214,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         _gPostCombatDisplay = new PostCombatDisplay();
                         AddControl(_gPostCombatDisplay);
                     }
-                    _gPostCombatDisplay?.Update(gameTime);
+                    _gPostCombatDisplay?.Update(gTime);
                     break;
             }
 

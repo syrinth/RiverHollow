@@ -55,7 +55,7 @@ namespace RiverHollow.Game_Managers
 
         }
 
-        public static void Update(GameTime gameTime)
+        public static void Update(GameTime gTime)
         {
             if (_eQueuePhase == QueuePhase.Down)
             {

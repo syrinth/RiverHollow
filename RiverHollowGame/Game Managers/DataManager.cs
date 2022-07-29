@@ -732,6 +732,9 @@ namespace RiverHollow.Game_Managers
                 case GameIconEnum.BuffArrow:
                     rv = new GUIImage(new Rectangle(195, 64, 10, 6), COMBAT_TEXTURE);
                     break;
+                case GameIconEnum.Coin:
+                    rv = new GUIImage(new Rectangle(0, 32, 16, 16), DIALOGUE_TEXTURE);
+                    break;
                 case GameIconEnum.DebuffArrow:
                     rv = new GUIImage(new Rectangle(195, 74, 10, 6), COMBAT_TEXTURE);
                     break;
@@ -758,6 +761,9 @@ namespace RiverHollow.Game_Managers
                     break;
                 case GameIconEnum.Heal:
                     rv = new GUIImage(new Rectangle(211, 87, 8, 8), COMBAT_TEXTURE);
+                    break;
+                case GameIconEnum.Key:
+                    rv = new GUIImage(new Rectangle(16, 16, 16, 16), DIALOGUE_TEXTURE);
                     break;
                 case GameIconEnum.MaxHealth:
                     rv = new GUIImage(new Rectangle(179, 103, 10, 9), COMBAT_TEXTURE);

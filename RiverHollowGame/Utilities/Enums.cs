@@ -66,6 +66,6 @@
 
         public enum VillagerRequestEnum { Close, Far, TownWide };
 
-        public enum GameIconEnum { None, AreaAll, AreaColumnAlly, AreaColumnEnemy, AreaSelf, AreaSingle, AreaRow, AreaSquare, Agility, BuffArrow, Damage, DebuffArrow, Defence, ElementFire, ElementIce, ElementLightning, Evasion, Experience, Heal, Magic, MaxHealth, MagicDamage, Melee, MoveDown, MoveLeft, MoveRight, MoveUp, PhysicalDamage, Ranged, Resistance, Speed, Strength, Timer };
+        public enum GameIconEnum { None, AreaAll, AreaColumnAlly, AreaColumnEnemy, AreaSelf, AreaSingle, AreaRow, AreaSquare, Agility, BuffArrow, Coin, Damage, DebuffArrow, Defence, ElementFire, ElementIce, ElementLightning, Evasion, Experience, Heal, Key, Magic, MaxHealth, MagicDamage, Melee, MoveDown, MoveLeft, MoveRight, MoveUp, PhysicalDamage, Ranged, Resistance, Speed, Strength, Timer };
     }
 }

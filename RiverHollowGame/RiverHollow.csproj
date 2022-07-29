@@ -170,6 +170,7 @@
     <Compile Include="GUIComponents\GUIObjects\GUIObject.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Utilities\Enums.cs" />
+    <Compile Include="Utilities\RHTimer.cs" />
     <Compile Include="WorldObjects\AdjustableObject.cs" />
     <Compile Include="WorldObjects\Beehive.cs" />
     <Compile Include="WorldObjects\Buildable.cs" />

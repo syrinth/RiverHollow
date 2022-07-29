@@ -93,12 +93,12 @@ namespace RiverHollow.GUIComponents.GUIObjects
             //if (_mapTile.Selected) { _gTargetter.Draw(spriteBatch); }
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
             if (Occupied())
             {
-                if (SummonSprite != null) { SummonSprite.Update(gameTime); }
-                _gActorInfo.Update(gameTime);
+                if (SummonSprite != null) { SummonSprite.Update(gTime); }
+                _gActorInfo.Update(gTime);
             }
 
             if (_gEffect != null)
@@ -128,13 +128,13 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             if(_gLevelIcon != null)
             {
-                _gLevelIcon.Update(gameTime);
+                _gLevelIcon.Update(gTime);
                 if (_iLvlTimer == 0) {
                     _iLvlTimer = 3;
                     _gLevelIcon.ScaledMoveBy(0, 1);
                 }
                 else {
-                    _iLvlTimer -= gameTime.ElapsedGameTime.Seconds;
+                    _iLvlTimer -= gTime.ElapsedGameTime.Seconds;
                 }
             }
         }

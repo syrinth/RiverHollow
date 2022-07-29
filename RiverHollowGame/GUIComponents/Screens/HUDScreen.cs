@@ -28,7 +28,6 @@ namespace RiverHollow.GUIComponents.Screens
         GUIOldStatDisplay _gHealthDisplay;
         GUIOldStatDisplay _gStaminaDisplay;
         GUIMoneyDisplay _gMoney;
-        GUIMonsterEnergyDisplay _gEnergy;
         GUIDungeonKeyDisplay _gDungeonKeys;
 
         HUDMiniInventory _gInventory;
@@ -49,16 +48,16 @@ namespace RiverHollow.GUIComponents.Screens
             _gStaminaDisplay.AnchorAndAlignToObject(_gHealthDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             AddControl(_gStaminaDisplay);
 
+            GUIWindow win = new GUIWindow(GUIWindow.Window_1, ScaleIt(48), ScaleIt(26));
+            
             _gMoney = new GUIMoneyDisplay();
-            _gMoney.AnchorAndAlignToObject(_gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
-            AddControl(_gMoney);
-
-            _gEnergy = new GUIMonsterEnergyDisplay();
-            _gEnergy.AnchorAndAlignToObject(_gMoney, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
-            AddControl(_gEnergy);
+            _gMoney.AnchorToInnerSide(win, SideEnum.TopLeft);
+            //win.Resize(false, ScaleIt(1));
+            win.AnchorAndAlignToObject(_gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, ScaleIt(2));
+            AddControl(win);
 
             _gDungeonKeys = new GUIDungeonKeyDisplay();
-            _gDungeonKeys.AnchorAndAlignToObject(_gEnergy, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
+            _gDungeonKeys.AnchorAndAlignToObject(win, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             AddControl(_gDungeonKeys);
 
             _gInventory = new HUDMiniInventory();

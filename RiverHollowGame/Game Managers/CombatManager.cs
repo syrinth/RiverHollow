@@ -148,7 +148,7 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void Update(GameTime gameTime)
+        public static void Update(GameTime gTime)
         {
             if (!CombatStarted) { return; }
 
@@ -162,7 +162,7 @@ namespace RiverHollow.Game_Managers
                     }
                     else
                     {
-                        ct.Character.Update(gameTime);
+                        ct.Character.Update(gTime);
                     }
                 }
             }
@@ -209,7 +209,7 @@ namespace RiverHollow.Game_Managers
                     CurrentPhase = PhaseEnum.PerformAction;
                     break;
                 case PhaseEnum.PerformAction:
-                    SelectedAction?.PerformAction(gameTime);
+                    SelectedAction?.PerformAction(gTime);
                     break;
                 case PhaseEnum.EnemyTurn:
                     EnemyTakeTurn();
@@ -227,7 +227,7 @@ namespace RiverHollow.Game_Managers
                     }
                     else
                     {
-                        Delay -= gameTime.ElapsedGameTime.TotalSeconds;
+                        Delay -= gTime.ElapsedGameTime.TotalSeconds;
                     }
                     break;
             }

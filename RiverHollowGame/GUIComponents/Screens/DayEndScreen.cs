@@ -1,183 +1,446 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Misc;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Utilities;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace RiverHollow.GUIComponents.Screens
 {
     public class DayEndScreen : GUIScreen
     {
+        private enum DayEndPhaseEnum { SpawnVillagers, VillagersWait, NextDay };
+        DayEndPhaseEnum _eCurrentPhase;
         const int MAX_TILES = 15;
-        const double MAX_POP_TIME = 1.0;
+        const double MAX_POP_TIME = 4.0;
+        const double DAY_DISPLAY_PAUSE = 2;
+        readonly Vector2 _pGridOffset = new Vector2(96, 112);
+
+        RHTimer _timer;
+
+        GUIImage _gBackgroundImage;
+        GUIText _gText;
+        GUIWindow _gWindow;
 
         GUIButton _btnOK;
-        GUITextWindow _gResults;
-        double _dPopTime;
-        double _dElapsedTime;
-        int _iRows;
-        int _iCurrRow;
-        int _iTotalTiles;
-        List<GUISprite> _liMonsters;
+        GUIButton _btnExit;
+        List<Villager> _liVillagers;
+        List<Vector2> _liPoints;
+        List<GUIImage> _liCoins;
 
-        bool _bPopped;
-        bool _bNextRow;
+        int _iCurrentVillager = 0;
+        int _iTotalTaxes = 0;
+        int _iTotalDisplayedTaxes = 0;
+
+        int _iVillagerTax = 0;
+        int _iVillagerTaxIncrement = 0;
+        bool _bPopAll;
 
         public DayEndScreen()
         {
-            GameManager.CurrentScreen = GameScreenEnum.Info;
-
-            _bPopped = false;
-            _bNextRow = true;
-            _liMonsters = new List<GUISprite>();
-
             //Stop showing the WorldMap
             GameManager.ShowMap(false);
+            GameManager.CurrentScreen = GameScreenEnum.Info;
 
-            //Determine how many total rows we will need
-            foreach (GUISprite spr in GameManager.SlainMonsters) { TileCheck(spr, ref _iRows); }
-            _iTotalTiles = 0;
+            _liCoins = new List<GUIImage>();
+            _liPoints = new List<Vector2>();
+
+            int loops = 0;
+            for (int row = 0; row < 7 * TILE_SIZE; row += (TILE_SIZE))
+            {
+                for (int column = (loops % 2 == 0) ? 0 : (TILE_SIZE); column < 18 * TILE_SIZE; column += (TILE_SIZE * 2))
+                {
+                    _liPoints.Add(new Vector2(ScaleIt((int)_pGridOffset.X + column), ScaleIt((int)_pGridOffset.Y + row)));
+                }
+                loops++;
+            }
+            _liVillagers = new List<Villager>();
+
+            _gBackgroundImage = new GUIImage(new Rectangle(0, 0, 480, 270), DataManager.GUI_COMPONENTS + @"\Combat_Background_Forest");
+            AddControl(_gBackgroundImage);
 
             foreach (Villager v in DataManager.DIVillagers.Values)
             {
                 v.JustMovedIn();
+
+                //if (v.LivesInTown)
+                {
+                    Villager copy = new Villager(v);
+                    copy.Activate(false);
+                    copy.BodySprite.SetScale(CurrentScale);
+                    _liVillagers.Add(copy);
+                }
             }
 
             GameManager.ShippingGremlin.SellAll();
-            PlayerManager.AddMoney(PlayerManager.CalculateTaxes());
 
-            //string results = String.Format("Gold: {0}\nExperience: {1}", GameManager.ShippingGremlin.SellAll(), GameManager.TotalExperience);
+            _gWindow = new GUIWindow(GUIWindow.Window_1, ScaleIt(76), ScaleIt(28));
+            GUIImage gCoin = DataManager.GetIcon(GameIconEnum.Coin);
+            _gWindow.AddControl(gCoin);
 
-            ////Give the XP to the party
-            //foreach (ClassedCombatant c in PlayerManager.GetParty())
-            //{
-            //    int startLevel = c.ClassLevel;
-            //    c.AddXP(GameManager.TotalExperience);
+            gCoin.ScaledMoveBy(7, 6);
+            _gWindow.ScaledMoveBy(200, 214);
+            AddControl(_gWindow);
 
-            //    if (c.ClassLevel > startLevel)
-            //    {
-            //        results += String.Format("\n{0} Level Up!", c.Name);
-            //    }
-            //}
+            _gText = new GUIText(_iTotalTaxes);
+            _gText.AnchorAndAlignToObject(gCoin, SideEnum.Right, SideEnum.CenterY, ScaleIt(1));
+            _gWindow.AddControl(_gText);
 
-            _btnOK = new GUIButton("OK", BtnOK);
-            _btnOK.AnchorToScreen(SideEnum.Bottom, GUIManager.STANDARD_MARGIN);
-            AddControl(_btnOK);
-
-            _gResults = new GUITextWindow(new TextEntry("Day Over"));
-            _gResults.AnchorAndAlignToObject(_btnOK, SideEnum.Top, SideEnum.CenterX, GUIManager.STANDARD_MARGIN);
-            AddControl(_gResults);
-
-            //Determine how fast to spawn each Monster image based off of how 
-            //many there are and the total time we want it to take
-            _dPopTime = MAX_POP_TIME / GameManager.SlainMonsters.Count;
+            _timer = new RHTimer(MAX_POP_TIME / _liVillagers.Count);
         }
 
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
 
-            //If we're popping the monsters, wait until the animation has played once and then
-            //proceed to the next day
-
-            if (_bPopped) {
-                if (_liMonsters.Count == 0 || _liMonsters[0].PlayCount > 0)
-                {
-                    GameCalendar.NextDay();
-                    RiverHollow.Rollover();
-                    SaveManager.Save();
-                    GUIManager.BeginFadeOut();
-                    PlayerManager.Stamina = PlayerManager.MaxStamina;
-                    foreach(CombatActor actor in PlayerManager.GetParty())
-                    {
-                        actor?.IncreaseHealth(actor.MaxHP);
-                    }
-
-                    GameManager.GoToHUDScreen();
-                }
-            }
-            else
+            switch (_eCurrentPhase)
             {
-                _dElapsedTime += gTime.ElapsedGameTime.TotalSeconds;
-
-                //Determine how many should spawn in this update. It's unlikely
-                //to ever be more than 1, but it is possible.
-                double NumberToSpawn = _dElapsedTime / _dPopTime;
-
-                for (int i = 0; i < (int)NumberToSpawn; i++)
-                {
-                    _dElapsedTime = 0;
-                    if (GameManager.SlainMonsters.Count > 0)
+                case DayEndPhaseEnum.SpawnVillagers:
+                    SpawnVillagers(gTime);
+                    goto case DayEndPhaseEnum.VillagersWait;
+                case DayEndPhaseEnum.VillagersWait:
+                    UpdateMoney();
+                    break;
+                case DayEndPhaseEnum.NextDay:
+                    _gText.Update(gTime);
+                    _timer.Update(gTime);
+                    if(_timer.Finished())
                     {
-                        GUISprite spr = GameManager.SlainMonsters[0];
-
-                        //If we're going to another row, set the flag
-                        if(TileCheck(spr, ref _iCurrRow)) { _bNextRow = true; }
-
-                        spr.SetScale(GameManager.CurrentScale);
-
-                        if (_bNextRow) {
-                            _bNextRow = false;
-                            spr.AnchorAndAlignToObject(_gResults, SideEnum.Top, SideEnum.Left, (int)((_iRows - _iCurrRow) * GameManager.TILE_SIZE * GameManager.CurrentScale)); }
-                        else {
-                            spr.AnchorAndAlignToObject(_liMonsters[_liMonsters.Count - 1], SideEnum.Right, SideEnum.Bottom);
-                        }
-
-                        _liMonsters.Add(spr);
-
-                        spr.PlayAnimation(VerbEnum.Walk, DirectionEnum.Down);
-
-                        AddControl(spr);
-
-                        //Remoe the Monster we just spawned from the list
-                        GameManager.SlainMonsters.RemoveAt(0);
+                        NextDay();
                     }
-                }
+                    break;
             }
         }
 
-        /// <summary>
-        /// Used to determine whether another row needs to be added based off of the width
-        /// of the given GUISprite.
-        /// </summary>
-        /// <param name="spr">The sprite we are working on</param>
-        /// <param name="toIncrement">The integer tracking the number of rows</param>
-        /// <returns></returns>
-        private bool TileCheck(GUISprite spr, ref int toIncrement)
+        private void SpawnVillagers(GameTime gTime)
+        {
+            if (_timer.Finished())
+            {
+                do
+                {
+                    Villager v = _liVillagers[_iCurrentVillager];
+                    int index = RHRandom.Instance().Next(_liPoints.Count);
+                    v.Position = _liPoints[index];
+                    v.Activate(true);
+
+                    _liPoints.RemoveAt(index);
+
+                    GUIImage coin = DataManager.GetIcon(GameIconEnum.Coin);
+                    coin.Position(v.BodySprite.Position);
+                    coin.ScaledMoveBy(0, -TILE_SIZE);
+                    _liCoins.Add(coin);
+
+                    _iCurrentVillager++;
+                    _timer.Reset();
+
+                    _iVillagerTax = v.GetTaxes();
+                    _iVillagerTaxIncrement = (int)(_iVillagerTax / (_timer.TimerSpeed / 0.02f));
+
+                    _iTotalTaxes += _iVillagerTax;
+
+                    if (_iCurrentVillager == _liVillagers.Count)
+                    {
+                        _eCurrentPhase = DayEndPhaseEnum.VillagersWait;
+                        _btnOK = new GUIButton("OK", BtnOK);
+                        _btnOK.AnchorAndAlignToObject(_gWindow, SideEnum.Bottom, SideEnum.CenterX, ScaleIt(1));
+                        AddControl(_btnOK);
+
+                        _btnExit = new GUIButton("Exit Game", BtnExit);
+                        _btnExit.AnchorToScreen(SideEnum.BottomLeft, ScaleIt(2));
+                        AddControl(_btnExit);
+
+                        _iTotalDisplayedTaxes = _iTotalTaxes;
+                        _gText.SetText(_iTotalDisplayedTaxes);
+                    }
+                }
+                while (_bPopAll && _eCurrentPhase == DayEndPhaseEnum.SpawnVillagers);
+            }
+            else
+            {
+                _timer.Update(gTime);
+            }
+        }
+        private void UpdateMoney()
+        {
+            foreach (GUIImage c in _liCoins)
+            {
+                c.Alpha(c.Alpha() - (_bPopAll ? 0.005f : 0.02f));
+            }
+
+            if (_iVillagerTax > 0 && _iTotalDisplayedTaxes < _iTotalTaxes)
+            {
+                if (_iTotalTaxes > _iTotalDisplayedTaxes + _iVillagerTaxIncrement)
+                {
+                    _iTotalDisplayedTaxes += _iVillagerTaxIncrement;
+                }
+                else
+                {
+                    _iTotalDisplayedTaxes += _iTotalTaxes - _iTotalDisplayedTaxes;
+                }
+
+                _gText.SetText(_iTotalDisplayedTaxes);
+            }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            switch (_eCurrentPhase)
+            {
+                case DayEndPhaseEnum.SpawnVillagers:
+                case DayEndPhaseEnum.VillagersWait:
+                    _gBackgroundImage.Draw(spriteBatch);
+                    foreach (Villager v in _liVillagers)
+                    {
+                        v.Draw(spriteBatch);
+                    }
+
+                    foreach (GUIImage c in _liCoins)
+                    {
+                        c.Draw(spriteBatch);
+                    }
+
+                    _gWindow.Draw(spriteBatch);
+                    _btnOK?.Draw(spriteBatch);
+                    _btnExit?.Draw(spriteBatch);
+                    break;
+                case DayEndPhaseEnum.NextDay:
+                    _gWindow.Draw(spriteBatch);
+                    break;
+            }
+        }
+
+        public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-
-            _iTotalTiles += (spr.Width / GameManager.TILE_SIZE);
-            if (_iTotalTiles > MAX_TILES)
+            if (_eCurrentPhase == DayEndPhaseEnum.SpawnVillagers)
             {
                 rv = true;
-                _iTotalTiles = (spr.Width / GameManager.TILE_SIZE);
-                toIncrement++;
+                _bPopAll = true;
+            }
+            else
+            {
+                rv = _btnOK.ProcessLeftButtonClick(mouse) || _btnExit.ProcessLeftButtonClick(mouse);
             }
 
             return rv;
         }
 
-        /// <summary>
-        /// Button handler to trigger going to the next day
-        /// </summary>
-        public void BtnOK()
+        public override bool ProcessRightButtonClick(Point mouse)
         {
-            //Clear here in case they weren't done spawning when button was pressed
-            GameManager.SlainMonsters.Clear();
+            _bPopAll = true;
 
-            _bPopped = true;
-            foreach (GUISprite spr in _liMonsters)
+            return true;
+        }
+
+        private void BtnOK()
+        {
+            GameCalendar.NextDay();
+            _timer = new RHTimer(DAY_DISPLAY_PAUSE);
+            _eCurrentPhase = DayEndPhaseEnum.NextDay;
+            _gWindow = new GUIWindow(GUIWindow.Window_1, 8, 8);
+            _gText = new GUIText("Day " + GameCalendar.CurrentDay, false);
+            _gText.AnchorToInnerSide(_gWindow, SideEnum.TopLeft);
+            _gWindow.Resize();
+
+            _gWindow.CenterOnScreen();
+        }
+
+        private void BtnExit()
+        {
+            RiverHollow.PrepExit();
+        }
+
+        private void NextDay()
+        {
+            PlayerManager.AddMoney(_iTotalTaxes);
+            GameCalendar.NextDay();
+            RiverHollow.Rollover();
+            SaveManager.Save();
+            GUIManager.BeginFadeOut();
+            PlayerManager.Stamina = PlayerManager.MaxStamina;
+            foreach (CombatActor actor in PlayerManager.GetParty())
             {
-                spr.PlayAnimation(AnimationEnum.KO);
+                actor?.IncreaseHealth(actor.MaxHP);
             }
 
-            _btnOK.Enable(false);
+            GameManager.GoToHUDScreen();
         }
     }
+
+    //Monster Stuff
+
+    //public class DayEndScreen : GUIScreen
+    //{
+    //    const int MAX_TILES = 15;
+    //    const double MAX_POP_TIME = 1.0;
+
+    //    GUIButton _btnOK;
+    //    GUITextWindow _gResults;
+    //    double _dPopTime;
+    //    double _dElapsedTime;
+    //    int _iRows;
+    //    int _iCurrRow;
+    //    int _iTotalTiles;
+    //    List<GUISprite> _liMonsters;
+
+    //    bool _bPopped;
+    //    bool _bNextRow;
+
+    //    public DayEndScreen()
+    //    {
+    //        GameManager.CurrentScreen = GameScreenEnum.Info;
+
+    //        _bPopped = false;
+    //        _bNextRow = true;
+    //        _liMonsters = new List<GUISprite>();
+
+    //        //Stop showing the WorldMap
+    //        GameManager.ShowMap(false);
+
+    //        //Determine how many total rows we will need
+    //        foreach (GUISprite spr in GameManager.SlainMonsters) { TileCheck(spr, ref _iRows); }
+    //        _iTotalTiles = 0;
+
+    //        foreach (Villager v in DataManager.DIVillagers.Values)
+    //        {
+    //            v.JustMovedIn();
+    //        }
+
+    //        GameManager.ShippingGremlin.SellAll();
+    //        PlayerManager.AddMoney(PlayerManager.CalculateTaxes());
+
+    //        //string results = String.Format("Gold: {0}\nExperience: {1}", GameManager.ShippingGremlin.SellAll(), GameManager.TotalExperience);
+
+    //        ////Give the XP to the party
+    //        //foreach (ClassedCombatant c in PlayerManager.GetParty())
+    //        //{
+    //        //    int startLevel = c.ClassLevel;
+    //        //    c.AddXP(GameManager.TotalExperience);
+
+    //        //    if (c.ClassLevel > startLevel)
+    //        //    {
+    //        //        results += String.Format("\n{0} Level Up!", c.Name);
+    //        //    }
+    //        //}
+
+    //        _btnOK = new GUIButton("OK", BtnOK);
+    //        _btnOK.AnchorToScreen(SideEnum.Bottom, GUIManager.STANDARD_MARGIN);
+    //        AddControl(_btnOK);
+
+    //        _gResults = new GUITextWindow(new TextEntry("Day Over"));
+    //        _gResults.AnchorAndAlignToObject(_btnOK, SideEnum.Top, SideEnum.CenterX, GUIManager.STANDARD_MARGIN);
+    //        AddControl(_gResults);
+
+    //        //Determine how fast to spawn each Monster image based off of how 
+    //        //many there are and the total time we want it to take
+    //        _dPopTime = MAX_POP_TIME / GameManager.SlainMonsters.Count;
+    //    }
+
+    //    public override void Update(GameTime gTime)
+    //    {
+    //        base.Update(gTime);
+
+    //        //If we're popping the monsters, wait until the animation has played once and then
+    //        //proceed to the next day
+
+    //        if (_bPopped) {
+    //            if (_liMonsters.Count == 0 || _liMonsters[0].PlayCount > 0)
+    //            {
+    //                GameCalendar.NextDay();
+    //                RiverHollow.Rollover();
+    //                SaveManager.Save();
+    //                GUIManager.BeginFadeOut();
+    //                PlayerManager.Stamina = PlayerManager.MaxStamina;
+    //                foreach(CombatActor actor in PlayerManager.GetParty())
+    //                {
+    //                    actor?.IncreaseHealth(actor.MaxHP);
+    //                }
+
+    //                GameManager.GoToHUDScreen();
+    //            }
+    //        }
+    //        else
+    //        {
+    //            _dElapsedTime += gTime.ElapsedGameTime.TotalSeconds;
+
+    //            //Determine how many should spawn in this update. It's unlikely
+    //            //to ever be more than 1, but it is possible.
+    //            double NumberToSpawn = _dElapsedTime / _dPopTime;
+
+    //            for (int i = 0; i < (int)NumberToSpawn; i++)
+    //            {
+    //                _dElapsedTime = 0;
+    //                if (GameManager.SlainMonsters.Count > 0)
+    //                {
+    //                    GUISprite spr = GameManager.SlainMonsters[0];
+
+    //                    //If we're going to another row, set the flag
+    //                    if(TileCheck(spr, ref _iCurrRow)) { _bNextRow = true; }
+
+    //                    spr.SetScale(GameManager.CurrentScale);
+
+    //                    if (_bNextRow) {
+    //                        _bNextRow = false;
+    //                        spr.AnchorAndAlignToObject(_gResults, SideEnum.Top, SideEnum.Left, (int)((_iRows - _iCurrRow) * GameManager.TILE_SIZE * GameManager.CurrentScale)); }
+    //                    else {
+    //                        spr.AnchorAndAlignToObject(_liMonsters[_liMonsters.Count - 1], SideEnum.Right, SideEnum.Bottom);
+    //                    }
+
+    //                    _liMonsters.Add(spr);
+
+    //                    spr.PlayAnimation(VerbEnum.Walk, DirectionEnum.Down);
+
+    //                    AddControl(spr);
+
+    //                    //Remoe the Monster we just spawned from the list
+    //                    GameManager.SlainMonsters.RemoveAt(0);
+    //                }
+    //            }
+    //        }
+    //    }
+
+    //    /// <summary>
+    //    /// Used to determine whether another row needs to be added based off of the width
+    //    /// of the given GUISprite.
+    //    /// </summary>
+    //    /// <param name="spr">The sprite we are working on</param>
+    //    /// <param name="toIncrement">The integer tracking the number of rows</param>
+    //    /// <returns></returns>
+    //    private bool TileCheck(GUISprite spr, ref int toIncrement)
+    //    {
+    //        bool rv = false;
+
+    //        _iTotalTiles += (spr.Width / GameManager.TILE_SIZE);
+    //        if (_iTotalTiles > MAX_TILES)
+    //        {
+    //            rv = true;
+    //            _iTotalTiles = (spr.Width / GameManager.TILE_SIZE);
+    //            toIncrement++;
+    //        }
+
+    //        return rv;
+    //    }
+
+    //    /// <summary>
+    //    /// Button handler to trigger going to the next day
+    //    /// </summary>
+    //    public void BtnOK()
+    //    {
+    //        //Clear here in case they weren't done spawning when button was pressed
+    //        GameManager.SlainMonsters.Clear();
+
+    //        _bPopped = true;
+    //        foreach (GUISprite spr in _liMonsters)
+    //        {
+    //            spr.PlayAnimation(AnimationEnum.KO);
+    //        }
+
+    //        _btnOK.Enable(false);
+    //    }
+    //}
 }
