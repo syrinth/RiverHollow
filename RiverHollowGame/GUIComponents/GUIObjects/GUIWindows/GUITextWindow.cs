@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.Misc;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
@@ -17,8 +18,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         protected GUIImage _giPortrait;
         protected List<string> _liTextPages;
 
-        public double Duration;
-
         protected const int MAX_ROWS = 7;
 
         #region Parsing
@@ -28,11 +27,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         protected int _iCharWidth;
 
         protected bool _bOpening = false;
-        protected double _dOpenTimer;
         protected double _dStartScale = 0.05;
         protected double _dOpenScale = 0.1;
-        protected double _dTimer = 0.004;
         protected bool _bGoneOver = true;
+
+        protected RHTimer _timer;
         #endregion
 
         #region Display
@@ -104,7 +103,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             if (openUp)
             {
                 _bOpening = true;
-                _dOpenTimer = _dTimer;
+                _timer = new RHTimer(Constants.GUI_WINDOW_OPEN_SPEED);
                 SetScale(_dStartScale, false);
             }
             else
@@ -168,8 +167,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 {
                     _gNext.Update(gTime);
                 }
-
-                // if (Duration > 0) { Duration -= gTime.ElapsedGameTime.TotalSeconds; }
 
                 _giText.Update(gTime);
 
@@ -242,11 +239,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         protected void HandleOpening(GameTime gTime)
         {
-            _dOpenTimer -= gTime.ElapsedGameTime.TotalSeconds;
-            if (_dOpenTimer <= 0)
+            _timer.TickDown(gTime);
+            if (_timer.Finished())
             {
                 _dStartScale += _dOpenScale;
-                if(_dStartScale >= 1)
+                if (_dStartScale >= 1)
                 {
                     if (_bGoneOver)
                     {
@@ -263,7 +260,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 else
                 {
                     SetScale(Math.Min(1, _dStartScale), false);
-                    _dOpenTimer = _dTimer;
+                    _timer.Reset();
                 }
             }
         }

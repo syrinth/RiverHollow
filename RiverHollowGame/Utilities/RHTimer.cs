@@ -5,30 +5,46 @@ namespace RiverHollow.Utilities
     public class RHTimer
     {
         public double TimerSpeed { get; }
-        double _dCountdown;
+        public double TimeLeft { get; set; }
+        bool _bStopped = false;
 
-        public RHTimer(double time)
+        public RHTimer(double time, bool stopped = false)
         {
             TimerSpeed = time;
-            _dCountdown = time;
+            TimeLeft = time;
+            _bStopped = stopped;
         }
 
-        public void Update(GameTime gTime)
+        public void TickDown(GameTime gTime)
         {
-            if(TimerSpeed > 0)
+            if(!_bStopped && TimerSpeed > 0)
             {
-                _dCountdown -= gTime.ElapsedGameTime.TotalSeconds;
+                TimeLeft -= gTime.ElapsedGameTime.TotalSeconds;
             }
         }
 
-        public void Reset()
+        public void TickDown(double time)
         {
-            _dCountdown = TimerSpeed;
+            if (!_bStopped && TimerSpeed > 0)
+            {
+                TimeLeft -= time;
+            }
+        }
+
+        public void Reset(double newTimer = -1)
+        {
+            TimeLeft = (newTimer == -1 ? TimerSpeed : newTimer);
+            _bStopped = false;
         }
 
         public bool Finished()
         {
-            return _dCountdown <= 0;
+            return _bStopped || TimeLeft <= 0;
+        }
+
+        public void Stop()
+        {
+            _bStopped = true;
         }
     }
 }

@@ -12,14 +12,13 @@ namespace RiverHollow.Characters
     public class Critter : WorldActor
     {
         private bool _bFlee = false;
-        private double _dNextPlay = 0;
-        private double _dCountdown = 0;
+        private RHTimer _animationTimer;
 
         public Critter(int id, Dictionary<string, string> stringData) : base(id)
         {
             _eActorType = WorldActorTypeEnum.Critter;
             _bIgnoreCollisions = true;
-            _dNextPlay = 1 + SetRandom(4, 0.5);
+            _animationTimer = new RHTimer(1 + SetRandom(4, 0.5));
             _iBodyHeight = TILE_SIZE;
 
             List<AnimationData> liData = new List<AnimationData>();
@@ -39,26 +38,28 @@ namespace RiverHollow.Characters
             base.Update(gTime);
             if (!_bFlee)
             {
-                if (_dCountdown < _dNextPlay) { _dCountdown += gTime.ElapsedGameTime.TotalSeconds; }
-                else
+                _animationTimer.TickDown(gTime);
+                if(_animationTimer.Finished())
                 {
-                    _dNextPlay = 1 + SetRandom(4, 0.5);
-                    _dCountdown = 0;
+                    _animationTimer.Reset(1 + SetRandom(4, 0.5));
                     PlayAnimation(VerbEnum.Action1);
                 }
 
                 if (PlayerManager.PlayerInRange(_sprBody.Center, 80))
                 {
                     _bFlee = true;
-                    _dCountdown = 0;
+                    _animationTimer.Stop();
 
                     PlayAnimation(VerbEnum.Action2);
                 }
             }
             else
             {
-                if (_dCountdown < 1) { _dCountdown += gTime.ElapsedGameTime.TotalSeconds; }
-                else { _sprBody.SetLayerDepthMod(GameManager.MAX_LAYER_DEPTH); }
+                _animationTimer.TickDown(gTime);
+                if (_animationTimer.Finished())
+                {
+                    _sprBody.SetLayerDepthMod(GameManager.MAX_LAYER_DEPTH);
+                }
 
                 Position += new Vector2(-2, -2);
 

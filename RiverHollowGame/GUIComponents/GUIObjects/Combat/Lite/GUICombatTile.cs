@@ -20,7 +20,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         GUICombatActorInfo _gActorInfo;
         public GUISprite CharacterSprite => _gActorInfo.CharacterSprite;
         public GUISprite CharacterWeaponSprite => _gActorInfo.CharacterWeaponSprite;
-        GUIText _gEffect;
+        GUIText _gFloatingText;
         public GUISprite SummonSprite { get; private set; }
         GUIText _gSummonEffect;
 
@@ -30,20 +30,21 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public CombatTile MapTile => _mapTile;
 
         //SpriteFont _fDmg;
-        int _iDmgTimer = 40;
-        int _iLvlTimer = 3;
+        RHTimer _timer;
 
         public GUICombatTile(CombatTile tile)
         {
             _mapTile = tile;
             _mapTile.AssignGUITile(this);
-           // _fDmg = DataManager.GetFont(@"Fonts\Font");
+            // _fDmg = DataManager.GetFont(@"Fonts\Font");
 
             _gTile = new GUIImage(new Rectangle(145, 33, 30, 31), 30, 31, DataManager.COMBAT_TEXTURE);
             _gTile.SetScale(GameManager.CurrentScale);
             //_gTargetter = new GUIImage(new Rectangle(256, 96, 32, 32), 32, 32, @"Textures\Dialog");
 
             Setup();
+
+            _timer = new RHTimer(Constants.COMBAT_DAMAGE_FLOAT_TIMER, true);
 
             Width = _gTile.Width;
             Height = _gTile.Height;
@@ -68,7 +69,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             _gTile.Draw(spriteBatch);
 
-            if (_gSummonEffect != null && _iDmgTimer < 40)
+            if (_gSummonEffect != null && !_timer.Finished())
             {
                 _gSummonEffect.Draw(spriteBatch);
             }
@@ -83,9 +84,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 _gActorInfo.Draw(spriteBatch);
             }
 
-            if (_gEffect != null && _iDmgTimer < 40)
+            if (_gFloatingText != null && !_timer.Finished())
             {
-                _gEffect.Draw(spriteBatch);
+                _gFloatingText.Draw(spriteBatch);
             }
 
             _gLevelIcon?.Draw(spriteBatch);
@@ -101,41 +102,38 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 _gActorInfo.Update(gTime);
             }
 
-            if (_gEffect != null)
+            if (_gFloatingText != null)
             {
-                if (_iDmgTimer < 40)
+                _timer.TickDown(gTime);
+                if (!_timer.Finished())
                 {
-                    _gEffect.MoveBy(0, -1);
-                    _iDmgTimer++;
+                    _gFloatingText.MoveBy(0, -1);
 
                     if (_gSummonEffect != null) { _gSummonEffect.MoveBy(0, -1); }
                 }
-                else if (Occupied())
+                else
                 {
-                    if (!String.IsNullOrEmpty(_gEffect.Text))
+                    _timer.Stop();
+                    if (Occupied())
                     {
-                        _gEffect.SetText("");
-                        _gEffect.AnchorAndAlignToObject(_gActorInfo, SideEnum.Top, SideEnum.CenterX);
+                        if (!String.IsNullOrEmpty(_gFloatingText.Text))
+                        {
+                            _gFloatingText.SetText("");
+                            _gFloatingText.AnchorAndAlignToObject(_gActorInfo, SideEnum.Top, SideEnum.CenterX);
+                        }
+                        if (_gSummonEffect != null && !String.IsNullOrEmpty(_gSummonEffect.Text))
+                        {
+                            _gSummonEffect.SetText("");
+                            _gSummonEffect.AnchorAndAlignToObject(_gActorInfo, SideEnum.Top, SideEnum.CenterX);
+                        }
                     }
-                    if (_gSummonEffect != null && !String.IsNullOrEmpty(_gSummonEffect.Text))
-                    {
-                        _gSummonEffect.SetText("");
-                        _gSummonEffect.AnchorAndAlignToObject(_gActorInfo, SideEnum.Top, SideEnum.CenterX);
-                    }
+                    else { _gFloatingText = null; }
                 }
-                else { _gEffect = null; }
             }
 
-            if(_gLevelIcon != null)
+            if (_gLevelIcon != null)
             {
                 _gLevelIcon.Update(gTime);
-                if (_iLvlTimer == 0) {
-                    _iLvlTimer = 3;
-                    _gLevelIcon.ScaledMoveBy(0, 1);
-                }
-                else {
-                    _iLvlTimer -= gTime.ElapsedGameTime.Seconds;
-                }
             }
         }
 
@@ -146,8 +144,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 _gActorInfo.Position(GetIdleLocation(_gActorInfo.CharacterSprite));
 
-                _gEffect = new GUIText();
-                _gEffect.AnchorAndAlignToObject(_gActorInfo, SideEnum.Top, SideEnum.CenterX);
+                _gFloatingText = new GUIText();
+                _gFloatingText.AnchorAndAlignToObject(_gActorInfo, SideEnum.Top, SideEnum.CenterX);
             }
         }
 
@@ -195,9 +193,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
             else
             {
-                _iDmgTimer = 0;
-                _gEffect.SetText(x);
-                _gEffect.SetColor(harms ? Color.Red : Color.LightGreen);
+                _timer.Reset();
+                _gFloatingText.SetText(x);
+                _gFloatingText.SetColor(harms ? Color.Red : Color.LightGreen);
 
                 _gActorInfo.UpdateHealthBar();
             }
@@ -205,7 +203,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public void AssignEffectToSummon(string x)
         {
-            _iDmgTimer = 0;
+            _timer.Reset();
             _gSummonEffect.SetText(x);
             _gSummonEffect.SetColor(Color.Red);
         }

@@ -444,7 +444,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             public PostCombatDisplay()
             {
-                _gCombatText = new GUITextWindow(new TextEntry("Gained " + CombatManager.CurrentMob.XP.ToString() + " XP"), Vector2.Zero);
+                TextEntry entry = DataManager.GetGameTextEntry("Combat_Label_XP");
+                entry.FormatText(CombatManager.CurrentMob.XP.ToString());
+                _gCombatText = new GUITextWindow(entry, Vector2.Zero);
                 _gCombatText.CenterOnScreen();
                 AddControl(_gCombatText);
             }
@@ -531,7 +533,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _gLoot.CenterOnScreen();
                 AddControl(_gLoot);
 
-                _gCombatText = new GUITextWindow(new TextEntry("Found Items"), Vector2.Zero);
+                _gCombatText = new GUITextWindow(DataManager.GetGameTextEntry("Combat_Label_Items"), Vector2.Zero);
                 _gCombatText.AnchorAndAlignToObject(_gLoot, SideEnum.Top, SideEnum.CenterX, ScaleIt(1));
                 AddControl(_gCombatText);
             }

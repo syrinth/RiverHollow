@@ -83,33 +83,33 @@ namespace RiverHollow.GUIComponents.Screens
             _nameWindow.SetText("Syrinth");
 
             //Create the Body Picker
-            OptionLabel bodyLabel = new OptionLabel("Body", ChangeHairType, ChangeHairColor, AssignColorPicker, Color.White);
+            OptionLabel bodyLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Body").GetFormattedText(), ChangeHairType, ChangeHairColor, AssignColorPicker, Color.White);
             bodyLabel.AnchorAndAlignToObject(_nameWindow, SideEnum.Bottom, SideEnum.Left);
             bodyLabel.ScaledMoveBy(5, 4);
             _window.AddControl(bodyLabel);
 
-            OptionLabel hairLabel = new OptionLabel("Hair", ChangeHairType, ChangeHairColor, AssignColorPicker, PlayerManager.PlayerActor.HairColor);
+            OptionLabel hairLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Hair").GetFormattedText(), ChangeHairType, ChangeHairColor, AssignColorPicker, PlayerManager.PlayerActor.HairColor);
             hairLabel.AnchorAndAlignToObject(bodyLabel, SideEnum.Bottom, SideEnum.Left, ScaleIt(3));
             _window.AddControl(hairLabel);
 
-            OptionLabel eyeLabel = new OptionLabel("Eyes", null, ChangeEyeColor, AssignColorPicker, PlayerManager.PlayerActor.EyeColor);
+            OptionLabel eyeLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Eyes").GetFormattedText(), null, ChangeEyeColor, AssignColorPicker, PlayerManager.PlayerActor.EyeColor);
             eyeLabel.AnchorAndAlignToObject(hairLabel, SideEnum.Bottom, SideEnum.Left, ScaleIt(3));
             _window.AddControl(eyeLabel);
 
-            OptionLabel shirtLabel = new OptionLabel("Shirt", ChangeHairType, null, null, Color.White);
+            OptionLabel shirtLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Shirt").GetFormattedText(), ChangeHairType, null, null, Color.White);
             shirtLabel.AnchorAndAlignToObject(hairLabel, SideEnum.Bottom, SideEnum.Right, ScaleIt(27));
             _window.AddControl(shirtLabel);
 
-            OptionLabel pantsLabel = new OptionLabel("Pants", ChangeHairType, null, null, Color.White);
+            OptionLabel pantsLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Pants").GetFormattedText(), ChangeHairType, null, null, Color.White);
             pantsLabel.AnchorAndAlignToObject(shirtLabel, SideEnum.Bottom, SideEnum.Right, ScaleIt(3));
             _window.AddControl(pantsLabel);
 
-            OptionLabel shoesLabel = new OptionLabel("Shoes", ChangeHairType, null, null, Color.White);
+            OptionLabel shoesLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Shoes").GetFormattedText(), ChangeHairType, null, null, Color.White);
             shoesLabel.AnchorAndAlignToObject(pantsLabel, SideEnum.Bottom, SideEnum.Right, ScaleIt(3));
             _window.AddControl(shoesLabel);
 
             //Create the Character Name Window
-            GUIText townLabel = new GUIText("Town Name");
+            GUIText townLabel = new GUIText(DataManager.GetGameTextEntry("Label_Town").GetFormattedText());
             townLabel.Position(_window.Position());
             townLabel.ScaledMoveBy(127, 5);
             _window.AddControl(townLabel);
@@ -118,7 +118,7 @@ namespace RiverHollow.GUIComponents.Screens
             _townWindow.AnchorAndAlignToObject(townLabel, SideEnum.Bottom, SideEnum.CenterX, ScaleIt(3));
             _townWindow.SetText("River Hollow");
 
-            GUIText classLabel = new GUIText("Class");
+            GUIText classLabel = new GUIText(DataManager.GetGameTextEntry("Label_Class").GetFormattedText());
             classLabel.AnchorAndAlignToObject(_townWindow, SideEnum.Bottom, SideEnum.CenterX, ScaleIt(4));
             _window.AddControl(classLabel);
 

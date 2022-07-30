@@ -71,8 +71,11 @@ namespace RiverHollow.Characters
                 _bOnTheMap = false;
                 _iNextArrival = _iArrivalPeriod;
                 CurrentMap?.RemoveCharacterImmediately(this);
-                DIShops[_iShopID].ClearItemSpots();
-                DIShops[_iShopID].ClearRandom();
+                if (_iShopID != -1)
+                {
+                    DIShops[_iShopID].ClearItemSpots();
+                    DIShops[_iShopID].ClearRandom();
+                }
             }
         }
 
@@ -152,14 +155,17 @@ namespace RiverHollow.Characters
             Structure market = (Structure)PlayerManager.GetTownObjectsByID(int.Parse(DataManager.Config[15]["ObjectID"]))[0];
             Position = Util.SnapToGrid(new Vector2(market.MapPosition.X + market.SpecialCoords.X, market.MapPosition.Y + market.SpecialCoords.Y));
 
-            Shop marketShop = DIShops[_iShopID];
-            marketShop.ClearItemSpots();
-            foreach (Structure.SubObjectInfo info in market.ObjectInfo)
+            if (_iShopID != -1)
             {
-                marketShop.AddItemSpot(new ShopItemSpot(CurrentMapName, market.MapPosition + info.Position + new Vector2(8, -13)));
+                Shop marketShop = DIShops[_iShopID];
+                marketShop.ClearItemSpots();
+                foreach (Structure.SubObjectInfo info in market.ObjectInfo)
+                {
+                    marketShop.AddItemSpot(new ShopItemSpot(CurrentMapName, market.MapPosition + info.Position + new Vector2(8, -13)));
+                }
+                DIShops[ShopID].Randomize();
+                marketShop.PlaceStock(true);
             }
-            DIShops[ShopID].Randomize();
-            marketShop.PlaceStock(true);
         }
 
         private struct RequestItem

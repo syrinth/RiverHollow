@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
@@ -163,24 +164,24 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         protected class GUIMarker : GUIText
         {
-            readonly double DBL_FLASH_RATE = 0.5;
+            
 
             bool _bShow;
-            double _dRefresh;
+            RHTimer _timer;
 
             public GUIMarker()
             {
                 _sText = "|";
                 SetDimensions(_sText);
-                _dRefresh = DBL_FLASH_RATE;
+                _timer = new RHTimer(Constants.GUI_TEXT_MARKER_FLASH_RATE);
             }
 
             public override void Update(GameTime gTime)
             {
-                _dRefresh -= gTime.ElapsedGameTime.TotalSeconds;
-                if (_dRefresh <= 0)
+                _timer.TickDown(gTime);
+                if (_timer.Finished())
                 {
-                    _dRefresh = DBL_FLASH_RATE;
+                    _timer.Reset();
                     _bShow = !_bShow;
                 }
             }

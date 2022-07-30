@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Game_Managers;
+using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
 
@@ -30,7 +31,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
         #region Parsing and Display
         double _dTextTimer = 0;
         double _dTypedTextLen;
-        const double TEXT_DELAY = 0.06;
         protected int _iMaxRows = 3;
 
         public bool PrintAll = false;
@@ -162,7 +162,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 {
                     if (_dTypedTextLen < _sFullText.Length)
                     {
-                        if (_dTextTimer < TEXT_DELAY)
+                        if (_dTextTimer < Constants.GUI_TEXT_DELAY)
                         {
                             _dTextTimer += gTime.ElapsedGameTime.TotalSeconds;
                         }

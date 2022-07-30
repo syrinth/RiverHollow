@@ -34,7 +34,7 @@ namespace RiverHollow.GUIComponents.Screens
         HUDCalendar _gCalendar;
         GUIItemBox _addedItem;
 
-        double _dTimer;
+        double _dAlphaTimer;
 
         public HUDScreen()
         {
@@ -80,7 +80,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 _addedItem = new GUIItemBox(InventoryManager.AddedItemList[0]);
                 _addedItem.AnchorToScreen(SideEnum.BottomRight, 12);
-                _dTimer = 1;
+                _dAlphaTimer = 1;
                 AddControl(_addedItem);
                 InventoryManager.AddedItemList.Remove(InventoryManager.AddedItemList[0]);
             }
@@ -93,13 +93,13 @@ namespace RiverHollow.GUIComponents.Screens
                     _addedItem.BoxItem.Add(InventoryManager.AddedItemList[0].Number);
                     InventoryManager.AddedItemList.Remove(InventoryManager.AddedItemList[0]);
 
-                    _dTimer = 1;
+                    _dAlphaTimer = 1;
                     _addedItem.SetAlpha(1);
                 }
                 else if (_addedItem != null && _addedItem.Alpha() > 0)  //Otherwise, if there is a display and the Alpha isn't yet 0, decrease the Alpha
                 {
-                    _dTimer -= gTime.ElapsedGameTime.TotalSeconds;
-                    _addedItem.SetAlpha((float)_dTimer);
+                    _dAlphaTimer -= gTime.ElapsedGameTime.TotalSeconds;
+                    _addedItem.SetAlpha((float)_dAlphaTimer);
                 }
                 else if (_addedItem != null)    //If we get here, there is a display, and the Alpha has reached 0, so remove it.
                 {

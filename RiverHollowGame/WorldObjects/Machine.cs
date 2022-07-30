@@ -17,7 +17,7 @@ namespace RiverHollow.WorldObjects
 
         protected int _iContainingBuildingID = -1;
 
-        protected double _dProcessedTime = 0;
+        protected RHTimer _timer;
         int _iCurrentlyMaking = -1;
 
         protected int _iWorkingFrames = 2;
@@ -70,7 +70,7 @@ namespace RiverHollow.WorldObjects
             {
                 _sprite.Update(gTime);
 
-                _dProcessedTime += gTime.ElapsedGameTime.TotalSeconds;
+                _timer?.TickDown(gTime);
                 // CheckFinishedCrafting();
             }
         }
@@ -143,7 +143,7 @@ namespace RiverHollow.WorldObjects
         {
             if (_bWorking)
             {
-                _dProcessedTime += GameCalendar.GetMinutesToNextMorning();
+                _timer.TickDown(GameCalendar.GetMinutesToNextMorning());
                 //CheckFinishedCrafting();
 
                 _bWorking = false;
@@ -176,7 +176,7 @@ namespace RiverHollow.WorldObjects
                 ID = this.ID,
                 x = (int)this.MapPosition.X,
                 y = (int)this.MapPosition.Y,
-                processedTime = this._dProcessedTime,
+                processedTime = this._timer.TimerSpeed,
                 currentItemID = _iCurrentlyMaking
             };
 
@@ -186,7 +186,7 @@ namespace RiverHollow.WorldObjects
         {
             _iID = mac.ID;
             SnapPositionToGrid(new Vector2(mac.x, mac.y));
-            _dProcessedTime = mac.processedTime;
+            _timer = new RHTimer(mac.processedTime);
             _iCurrentlyMaking = mac.currentItemID;
 
             // if (CurrentlyProcessing != null) { _sprite.PlayAnimation(CombatAnimationEnum.ObjectIdle); }

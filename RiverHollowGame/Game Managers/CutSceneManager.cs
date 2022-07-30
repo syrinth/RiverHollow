@@ -177,7 +177,7 @@ namespace RiverHollow.Game_Managers
         List<WorldActor> _liMoving;
         List<WorldActor> _liToRemove;
 
-        double _dTimer;
+        RHTimer _timer;
 
         /// <summary>
         /// Constructor for a Cutscene object
@@ -245,16 +245,10 @@ namespace RiverHollow.Game_Managers
         public void Update(GameTime gTime)
         {
             //If the Wait command has been called, we need to count down to zero
-            if (_dTimer > 0)
+            _timer?.TickDown(gTime);
+            if(_timer == null || _timer.Finished())
             {
-                _dTimer -= gTime.ElapsedGameTime.TotalSeconds;
-                if (_dTimer <= 0) {
-                    _iCurrentCommand++;
-                    _dTimer = 0;
-                }
-            }
-            else
-            {
+                _timer = null;
                 //If someone is currently talking, do NOT process additional tags
                 if (!GUIManager.IsTextWindowOpen())                 
                 {
@@ -303,7 +297,7 @@ namespace RiverHollow.Game_Managers
                                     AssignMovement(sCommandData[0], int.Parse(sCommandData[1]), Util.ParseEnum<DirectionEnum>(sCommandData[2]));
                                     break;
                                 case EnumCSCommand.Wait:
-                                    _dTimer = double.Parse(sCommandData[0]);
+                                    _timer = new RHTimer(double.Parse(sCommandData[0]));
                                     break;
                                 case EnumCSCommand.Task:
                                     TaskManager.AddToTaskLog(int.Parse(sCommandData[0]));

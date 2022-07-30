@@ -8,10 +8,9 @@ using RiverHollow.Characters;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
 using RiverHollow.Map_Handling;
-using RiverHollow.Utilities;
 
+using System.Threading;
 using static RiverHollow.Misc.RHTask;
-using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {
@@ -20,6 +19,9 @@ namespace RiverHollow.Game_Managers
         static string INFO_FILE_NAME = "SaveInfo";
         public static string RIVER_HOLLOW_SAVES = "Save Games";
         static long _iSaveID = -1;
+
+        private static bool _bSaving = false;
+        static Thread _thrSave;
 
         #region Save/Load
         #region structs
@@ -629,6 +631,33 @@ namespace RiverHollow.Game_Managers
             public bool Played;
         }
         #endregion
+
+        public static void StartSaveThread()
+        {
+            _thrSave = new Thread(SaveAtEndOfDay);
+            _thrSave.Start();
+        }
+
+        private static void SaveAtEndOfDay()
+        {
+            _bSaving = true;
+            GameCalendar.NextDay();
+            PlayerManager.AddMoney(PlayerManager.CalculateTaxes());
+            RiverHollow.Rollover();
+            SaveManager.Save();
+            PlayerManager.Stamina = PlayerManager.MaxStamina;
+            foreach (CombatActor actor in PlayerManager.GetParty())
+            {
+                actor?.IncreaseHealth(actor.MaxHP);
+            }
+
+            _bSaving = false;
+        }
+
+        public static bool SaveFinished()
+        {
+            return _bSaving;
+        }
 
         public static long GetSaveID()
         {

@@ -15,7 +15,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class EnvironmentManager
     {
-        static int MIN_PRECIPITATION_DAYS = 6;
+        
 
         static AnimationEnum[] ListWeather = { AnimationEnum.None, AnimationEnum.Rain, AnimationEnum.Snow }; //Thunderstorm?
         static WeatherEnum _eCurrentWeather = WeatherEnum.Sunny;
@@ -148,7 +148,7 @@ namespace RiverHollow.Game_Managers
         public static void RollForWeatherEffects()
         {
             int roll = RHRandom.Instance().Next(1, 5);
-            if (roll > 2 || (_iSeasonPrecipDays < MIN_PRECIPITATION_DAYS && GameCalendar.CurrentDay + _iSeasonPrecipDays - 1 == GameCalendar.DAYS_IN_MONTH))
+            if (roll > 2 || (_iSeasonPrecipDays < Constants.GAME_MINIMUM_DAYS_OF_PRECIPITATION && GameCalendar.CurrentDay + _iSeasonPrecipDays - 1 == Constants.CALENDAR_DAYS_IN_MONTH))
             {
                 _iSeasonPrecipDays++;
                 if (GameCalendar.CurrentSeason == 0) { _eCurrentWeather = WeatherEnum.Raining; }

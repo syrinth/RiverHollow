@@ -3,6 +3,7 @@ using RiverHollow.Characters;
 using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
@@ -83,16 +84,17 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 
         private class StatusPanel : GUIObject
         {
-            const int REFRESH_RATE = 3;
+            
             GUIImage _gTimer;
             GUIImage _gPanel;
             List<StatusPanelEffectIcon> _liStatusIcons;
             StatusPanelEffectIcon[] _arrVisibleIcons;
 
             int _iStatusIndex = 0;
-            double _dTimer = 0;
+            RHTimer _timer;
             public StatusPanel(List<StatusEffect> effects)
             {
+                _timer = new RHTimer(Constants.COMBAT_STATUS_REFRESH_RATE);
                 _arrVisibleIcons = new StatusPanelEffectIcon[3];
 
                 _liStatusIcons = new List<StatusPanelEffectIcon>();
@@ -134,10 +136,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
 
                 if(_liStatusIcons.Count > 3)
                 {
-                    _dTimer += gTime.ElapsedGameTime.TotalSeconds;
-                    if(_dTimer >= REFRESH_RATE)
+                    _timer.TickDown(gTime);
+                    if (_timer.Finished())
                     {
-                        _dTimer = 0;
+                        _timer.Reset();
 
                         if (_liStatusIcons.Count >= _iStatusIndex + 3) { _iStatusIndex += 3; }
                         else { _iStatusIndex = 0; }

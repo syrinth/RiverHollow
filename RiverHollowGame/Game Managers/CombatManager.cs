@@ -28,7 +28,6 @@ namespace RiverHollow.Game_Managers
         public static ChosenAction SelectedAction;
         public static CombatTile TargetTile { get; private set; }
 
-        public static double Delay;
         public static string Text;
 
         #region Turn Order Info
@@ -67,7 +66,6 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            Delay = 0;
             CurrentMob = m;
             Monsters = new List<CombatActor>(CurrentMob.Monsters);
 
@@ -219,16 +217,7 @@ namespace RiverHollow.Game_Managers
                 case PhaseEnum.Defeat:
                     break;
                 case PhaseEnum.DisplayVictory:
-                    if (Delay <= 0)
-                    {
-                        Delay = 0.05f;
-                        //GiveXP();
-                        CurrentMob.Defeat();
-                    }
-                    else
-                    {
-                        Delay -= gTime.ElapsedGameTime.TotalSeconds;
-                    }
+                    CurrentMob.Defeat();
                     break;
             }
         }

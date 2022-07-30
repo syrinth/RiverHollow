@@ -9,18 +9,20 @@ using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Utilities;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Misc;
 
 namespace RiverHollow.GUIComponents.Screens
 {
     public class DayEndScreen : GUIScreen
     {
-        private enum DayEndPhaseEnum { SpawnVillagers, VillagersWait, NextDay };
-        DayEndPhaseEnum _eCurrentPhase;
+        private enum DayEndPhaseEnum { StartSave, SaveFinished, SpawnVillagers, VillagersWait, NextDay };
+        DayEndPhaseEnum _eCurrentPhase = DayEndPhaseEnum.StartSave;
         const int MAX_TILES = 15;
         const double MAX_POP_TIME = 4.0;
         const double DAY_DISPLAY_PAUSE = 2;
         readonly Vector2 _pGridOffset = new Vector2(96, 112);
 
+        double _dPopTime = 0;
         RHTimer _timer;
 
         GUIImage _gBackgroundImage;
@@ -46,6 +48,7 @@ namespace RiverHollow.GUIComponents.Screens
             //Stop showing the WorldMap
             GameManager.ShowMap(false);
             GameManager.CurrentScreen = GameScreenEnum.Info;
+            GameManager.ShippingGremlin.SellAll();
 
             _liCoins = new List<GUIImage>();
             _liPoints = new List<Vector2>();
@@ -68,7 +71,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 v.JustMovedIn();
 
-                //if (v.LivesInTown)
+                if (v.LivesInTown)
                 {
                     Villager copy = new Villager(v);
                     copy.Activate(false);
@@ -77,21 +80,13 @@ namespace RiverHollow.GUIComponents.Screens
                 }
             }
 
-            GameManager.ShippingGremlin.SellAll();
+            _gWindow = new GUIWindow(GUIWindow.Window_1, ScaleIt(8), ScaleIt(8));
+            _gText = new GUIText(DataManager.GetGameTextEntry("Label_Saving_Start").GetFormattedText(), false);
+            _gText.AnchorToInnerSide(_gWindow, SideEnum.TopLeft);
+            _gWindow.Resize();
+            _gWindow.CenterOnScreen();
 
-            _gWindow = new GUIWindow(GUIWindow.Window_1, ScaleIt(76), ScaleIt(28));
-            GUIImage gCoin = DataManager.GetIcon(GameIconEnum.Coin);
-            _gWindow.AddControl(gCoin);
-
-            gCoin.ScaledMoveBy(7, 6);
-            _gWindow.ScaledMoveBy(200, 214);
-            AddControl(_gWindow);
-
-            _gText = new GUIText(_iTotalTaxes);
-            _gText.AnchorAndAlignToObject(gCoin, SideEnum.Right, SideEnum.CenterY, ScaleIt(1));
-            _gWindow.AddControl(_gText);
-
-            _timer = new RHTimer(MAX_POP_TIME / _liVillagers.Count);
+            SaveManager.StartSaveThread();
         }
 
         public override void Update(GameTime gTime)
@@ -100,6 +95,27 @@ namespace RiverHollow.GUIComponents.Screens
 
             switch (_eCurrentPhase)
             {
+                case DayEndPhaseEnum.StartSave:
+                    _gText.Update(gTime);
+                    if (_gText.Done && _timer == null) {_timer = new RHTimer(1); }
+                    _timer?.TickDown(gTime);
+
+                    if (SaveManager.SaveFinished() && _timer != null && _timer.Finished())
+                    {
+                        _eCurrentPhase = DayEndPhaseEnum.SaveFinished;
+                        _gText.SetText(DataManager.GetGameTextEntry("Label_Saving_Finished").GetFormattedText());
+                        _timer.Reset(2);
+                    }
+                    break;
+                case DayEndPhaseEnum.SaveFinished:
+                    _gText.Update(gTime);
+                    _timer.TickDown(gTime);
+                    if (_timer.Finished())
+                    {
+                        StartVillagerSpawn();
+                    }
+
+                    break;
                 case DayEndPhaseEnum.SpawnVillagers:
                     SpawnVillagers(gTime);
                     goto case DayEndPhaseEnum.VillagersWait;
@@ -108,10 +124,11 @@ namespace RiverHollow.GUIComponents.Screens
                     break;
                 case DayEndPhaseEnum.NextDay:
                     _gText.Update(gTime);
-                    _timer.Update(gTime);
+                    _timer.TickDown(gTime);
                     if(_timer.Finished())
                     {
-                        NextDay();
+                        GUIManager.BeginFadeOut();
+                        GameManager.GoToHUDScreen();
                     }
                     break;
             }
@@ -119,6 +136,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         private void SpawnVillagers(GameTime gTime)
         {
+            _timer.TickDown(gTime);
             if (_timer.Finished())
             {
                 do
@@ -136,7 +154,7 @@ namespace RiverHollow.GUIComponents.Screens
                     _liCoins.Add(coin);
 
                     _iCurrentVillager++;
-                    _timer.Reset();
+                    _timer.Reset(MAX_POP_TIME / _liVillagers.Count);
 
                     _iVillagerTax = v.GetTaxes();
                     _iVillagerTaxIncrement = (int)(_iVillagerTax / (_timer.TimerSpeed / 0.02f));
@@ -159,10 +177,6 @@ namespace RiverHollow.GUIComponents.Screens
                     }
                 }
                 while (_bPopAll && _eCurrentPhase == DayEndPhaseEnum.SpawnVillagers);
-            }
-            else
-            {
-                _timer.Update(gTime);
             }
         }
         private void UpdateMoney()
@@ -208,6 +222,8 @@ namespace RiverHollow.GUIComponents.Screens
                     _btnOK?.Draw(spriteBatch);
                     _btnExit?.Draw(spriteBatch);
                     break;
+                case DayEndPhaseEnum.StartSave:
+                case DayEndPhaseEnum.SaveFinished:
                 case DayEndPhaseEnum.NextDay:
                     _gWindow.Draw(spriteBatch);
                     break;
@@ -217,14 +233,15 @@ namespace RiverHollow.GUIComponents.Screens
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_eCurrentPhase == DayEndPhaseEnum.SpawnVillagers)
+            switch (_eCurrentPhase)
             {
-                rv = true;
-                _bPopAll = true;
-            }
-            else
-            {
-                rv = _btnOK.ProcessLeftButtonClick(mouse) || _btnExit.ProcessLeftButtonClick(mouse);
+                case DayEndPhaseEnum.SpawnVillagers:
+                    rv = true;
+                    _bPopAll = true;
+                    break;
+                case DayEndPhaseEnum.VillagersWait:
+                    rv = _btnOK.ProcessLeftButtonClick(mouse) || _btnExit.ProcessLeftButtonClick(mouse);
+                    break;
             }
 
             return rv;
@@ -239,11 +256,13 @@ namespace RiverHollow.GUIComponents.Screens
 
         private void BtnOK()
         {
-            GameCalendar.NextDay();
             _timer = new RHTimer(DAY_DISPLAY_PAUSE);
             _eCurrentPhase = DayEndPhaseEnum.NextDay;
             _gWindow = new GUIWindow(GUIWindow.Window_1, 8, 8);
-            _gText = new GUIText("Day " + GameCalendar.CurrentDay, false);
+
+            TextEntry entry = DataManager.GetGameTextEntry("Day_End");
+            entry.FormatText(GameCalendar.CurrentDay, GameCalendar.GetCurrentSeason());
+            _gText = new GUIText(entry.GetFormattedText(), false);
             _gText.AnchorToInnerSide(_gWindow, SideEnum.TopLeft);
             _gWindow.Resize();
 
@@ -255,20 +274,22 @@ namespace RiverHollow.GUIComponents.Screens
             RiverHollow.PrepExit();
         }
 
-        private void NextDay()
+        private void StartVillagerSpawn()
         {
-            PlayerManager.AddMoney(_iTotalTaxes);
-            GameCalendar.NextDay();
-            RiverHollow.Rollover();
-            SaveManager.Save();
-            GUIManager.BeginFadeOut();
-            PlayerManager.Stamina = PlayerManager.MaxStamina;
-            foreach (CombatActor actor in PlayerManager.GetParty())
-            {
-                actor?.IncreaseHealth(actor.MaxHP);
-            }
+            _timer.Reset(0.01);
+            _eCurrentPhase = DayEndPhaseEnum.SpawnVillagers;
 
-            GameManager.GoToHUDScreen();
+            _gWindow = new GUIWindow(GUIWindow.Window_1, ScaleIt(76), ScaleIt(28));
+            GUIImage gCoin = DataManager.GetIcon(GameIconEnum.Coin);
+            _gWindow.AddControl(gCoin);
+
+            gCoin.ScaledMoveBy(7, 6);
+            _gWindow.ScaledMoveBy(200, 214);
+            AddControl(_gWindow);
+
+            _gText = new GUIText(_iTotalTaxes);
+            _gText.AnchorAndAlignToObject(gCoin, SideEnum.Right, SideEnum.CenterY, ScaleIt(1));
+            _gWindow.AddControl(_gText);
         }
     }
 

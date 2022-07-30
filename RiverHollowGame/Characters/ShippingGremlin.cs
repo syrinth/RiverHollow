@@ -11,7 +11,7 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
-    public class ShippingGremlin : Villager
+    public class ShippingGremlin : TalkingActor
     {
         private int _iRows = 4;
         private int _iCols = 10;
@@ -32,10 +32,10 @@ namespace RiverHollow.Characters
         public ShippingGremlin(int id, Dictionary<string, string> stringData) : base(id)
         {
             //_bLivesInTown = true;
-            _diRequiredObjectIDs = new Dictionary<int, int>();
+            //_diRequiredObjectIDs = new Dictionary<int, int>();
             _arrInventory = new Item[_iRows, _iCols];
             _eActorType = WorldActorTypeEnum.ShippingGremlin;
-            _eSpawnStatus = VillagerSpawnStatus.NonTownMap;
+            //_eSpawnStatus = VillagerSpawnStatus.NonTownMap;
             _iBodyWidth = 32;
             _iBodyHeight = 32;
 
@@ -43,8 +43,8 @@ namespace RiverHollow.Characters
             _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Gremlin", stringData["Key"]);
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
 
-            Util.AssignValue(ref _sStartMap, "StartMap", stringData);
-            Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
+           // Util.AssignValue(ref _sStartMap, "StartMap", stringData);
+           // Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
 
             _sprBody = new AnimatedSprite(DataManager.NPC_FOLDER + "NPC_" + stringData["Key"]);
             

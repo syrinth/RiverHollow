@@ -303,7 +303,7 @@ namespace RiverHollow.Game_Managers
                 {
                     case "ShippingGremlin":
                         GameManager.ShippingGremlin = new ShippingGremlin(npcData.Key, diData);
-                        DIVillagers.Add(npcData.Key, GameManager.ShippingGremlin);
+                        //DIVillagers.Add(npcData.Key, GameManager.ShippingGremlin);
                         break;
                     case "Merchant":
                         DIMerchants.Add(npcData.Key, new Merchant(npcData.Key, diData));

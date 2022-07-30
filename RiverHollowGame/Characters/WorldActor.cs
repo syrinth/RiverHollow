@@ -74,11 +74,10 @@ namespace RiverHollow.Characters
         public float SpdMult = NPC_WALK_SPEED;
 
         #region Wander Properties
-        protected const double MOVE_COUNTDOWN = 2.5;
+        RHTimer _movementTimer;
         protected bool _bFollow = false;
         protected bool _bIdleCooldown = false;
 
-        protected double _dWanderCountdown = 0;
         protected bool _bCanWander = false;
         protected NPCStateEnum _eCurrentState = NPCStateEnum.Idle;
         #endregion
@@ -101,6 +100,7 @@ namespace RiverHollow.Characters
             _iBodyHeight = HUMAN_HEIGHT;
 
             _liTilePath = new List<RHTile>();
+            _movementTimer = new RHTimer(Constants.WANDER_COUNTDOWN);
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -315,7 +315,7 @@ namespace RiverHollow.Characters
             return _pathingThread;
         }
 
-        protected virtual void CalculatePath() {}
+        protected virtual void CalculatePath() { }
 
         /// <summary>
         /// Attempts to move the Actor to the indicated location
@@ -357,7 +357,8 @@ namespace RiverHollow.Characters
                     if (_liTilePath.Count > 0)
                     {
                         _liTilePath.RemoveAt(0);
-                        if (_liTilePath.Count > 0) {
+                        if (_liTilePath.Count > 0)
+                        {
                             MoveToLocation = _liTilePath[0].Position;
                         }
                     }
@@ -428,7 +429,7 @@ namespace RiverHollow.Characters
             SpdMult = speed;
             PlayAnimation(VerbEnum.Walk, Facing);
             MoveToLocation = Vector2.Zero;
-            _dWanderCountdown = 0;
+            _movementTimer.Reset(Constants.WANDER_COUNTDOWN);
         }
 
         #region Wander Logic
@@ -469,12 +470,12 @@ namespace RiverHollow.Characters
 
         protected void Idle(GameTime gTime)
         {
-            if (_dWanderCountdown < 5 + RHRandom.Instance().Next(10)) { _dWanderCountdown += gTime.ElapsedGameTime.TotalSeconds; }
-            else
+            _movementTimer.TickDown(gTime);
+            if (_movementTimer.Finished())
             {
                 if (RHRandom.Instance().RollPercent(50))
                 {
-                    _dWanderCountdown = 0;
+                    _movementTimer.Reset(Constants.WANDER_COUNTDOWN + RHRandom.Instance().Next(10));
                     _bIdleCooldown = true;
                     ChangeState(NPCStateEnum.Wander);
                 }
@@ -491,13 +492,13 @@ namespace RiverHollow.Characters
 
         protected void Wander(GameTime gTime)
         {
-            if (_dWanderCountdown < MOVE_COUNTDOWN + (RHRandom.Instance().Next(4) * 0.25)) { _dWanderCountdown += gTime.ElapsedGameTime.TotalSeconds; }
-            else if (MoveToLocation == Vector2.Zero)
+            _movementTimer.TickDown(gTime);
+            if (_movementTimer.Finished() && MoveToLocation == Vector2.Zero)
             {
                 Vector2 moveTo = Vector2.Zero;
                 while (moveTo == Vector2.Zero)
                 {
-                    _dWanderCountdown = 0;
+                    _movementTimer.Reset(Constants.WANDER_COUNTDOWN + RHRandom.Instance().Next(4) * 0.25);
 
                     if (!_bIdleCooldown && RHRandom.Instance().RollPercent(20))
                     {
@@ -509,15 +510,19 @@ namespace RiverHollow.Characters
 
                     bool moveX = RHRandom.Instance().Next(0, 1) == 0;
 
-                    if (moveX) {
+                    if (moveX)
+                    {
                         moveTo = new Vector2(RHRandom.Instance().Next(8, 32), 0);
-                        if (RHRandom.Instance().Next(1, 2) == 1) {
+                        if (RHRandom.Instance().Next(1, 2) == 1)
+                        {
                             moveTo.X *= -1;
                         }
                     }
-                    else {
+                    else
+                    {
                         moveTo = new Vector2(0, RHRandom.Instance().Next(8, 32));
-                        if (RHRandom.Instance().Next(1, 2) == 1) {
+                        if (RHRandom.Instance().Next(1, 2) == 1)
+                        {
                             moveTo.Y *= -1;
                         }
                     }

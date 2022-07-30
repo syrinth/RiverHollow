@@ -1,17 +1,13 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using RiverHollow.GUIComponents.Screens;
+using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Game_Managers
 {
     public static class GameCalendar
     {
-        public const int DAYS_IN_MONTH = 28;
-        const int MINUTES_PER_SECOND = 1;
-        const int NEW_DAY_HOUR = 6;
-        const int NEW_DAY_MIN = 0;
-
         //One day goes from 6 AM - 2 AM => 20 hours
         //Each hour should be one minute
         //Every 10 minutes is 10 seconds real time.
@@ -27,7 +23,7 @@ namespace RiverHollow.Game_Managers
         private static int _iBedHour = 0;
         private static int _iBedMinute = 0;
 
-        static double _dLastUpdateinSeconds;
+        static RHTimer _timer;
 
         static bool _bHasNightFallen;
 
@@ -36,25 +32,25 @@ namespace RiverHollow.Game_Managers
             DayOfWeek = 0;
             CurrentDay = 1;
             CurrentSeason = 0;
-            CurrentHour = NEW_DAY_HOUR;
-            CurrentMin = NEW_DAY_MIN;
+            CurrentHour = Constants.CALENDAR_NEW_DAY_HOUR;
+            CurrentMin = Constants.CALENDAR_NEW_DAY_MIN;
             _bHasNightFallen = false;
 
-            _dLastUpdateinSeconds = 0;
+            _timer = new RHTimer(Constants.CALENDAR_MINUTES_PER_SECOND);
 
             MapManager.CheckSpirits();
         }
 
         public static void Update(GameTime gTime)
         {
-            _dLastUpdateinSeconds += gTime.ElapsedGameTime.TotalSeconds;
+            _timer.TickDown(gTime);
             if(CurrentHour == 26)
             {
                 GUIManager.SetScreen(new DayEndScreen());
             }
-            if (_dLastUpdateinSeconds >= 1)
+            if (_timer.Finished())
             {
-                _dLastUpdateinSeconds = 0;
+                _timer.Reset();
                 IncrementMinutes();
             }
 
@@ -79,7 +75,7 @@ namespace RiverHollow.Game_Managers
             }
             else
             {
-                CurrentMin += MINUTES_PER_SECOND;
+                CurrentMin += Constants.CALENDAR_MINUTES_PER_SECOND;
             }
         }
 
@@ -121,12 +117,12 @@ namespace RiverHollow.Game_Managers
             _iBedMinute = CurrentMin;
 
             _bHasNightFallen = false;
-            CurrentHour = NEW_DAY_HOUR;
-            CurrentMin = NEW_DAY_MIN;
+            CurrentHour = Constants.CALENDAR_NEW_DAY_HOUR;
+            CurrentMin = Constants.CALENDAR_NEW_DAY_MIN;
             if(DayOfWeek < ListDays.Length - 1) { DayOfWeek++; }
             else { DayOfWeek = 0; }
 
-            if(CurrentDay == DAYS_IN_MONTH)
+            if(CurrentDay == Constants.CALENDAR_DAYS_IN_MONTH)
             {
                 CurrentDay = 1;
                 if (CurrentSeason == 3) { CurrentSeason = 0; }
@@ -152,6 +148,11 @@ namespace RiverHollow.Game_Managers
             return ListDays[DayOfWeek];
         }
 
+        public static string GetCurrentSeason()
+        {
+            return ListSeasons[CurrentSeason];
+        }
+
         public static string GetSeason(int val)
         {
             return ListSeasons[val];
@@ -174,20 +175,22 @@ namespace RiverHollow.Game_Managers
             int hoursLeftUntilMidnight = 24 > _iBedHour ? (24 - _iBedHour) : 0;
             int minutesToNextHour = 60 - _iBedMinute;
 
-            rv = (hoursLeftUntilMidnight + NEW_DAY_HOUR) * 60 + minutesToNextHour;
+            rv = (hoursLeftUntilMidnight + Constants.CALENDAR_NEW_DAY_HOUR) * 60 + minutesToNextHour;
 
-            return rv * MINUTES_PER_SECOND;
+            return rv * Constants.CALENDAR_MINUTES_PER_SECOND;
         }
 
         public static void LoadCalendar(CalendarData d)
         {
+            _timer = new RHTimer(Constants.CALENDAR_MINUTES_PER_SECOND);
+
             CurrentDay = d.dayOfMonth;
             DayOfWeek = d.dayOfWeek;
             CurrentSeason = d.currSeason;
             _bHasNightFallen = false;
 
-            CurrentHour = NEW_DAY_HOUR;
-            CurrentMin = NEW_DAY_MIN;
+            CurrentHour = Constants.CALENDAR_NEW_DAY_HOUR;
+            CurrentMin = Constants.CALENDAR_NEW_DAY_MIN;
         }
 
         public static CalendarData SaveCalendar()

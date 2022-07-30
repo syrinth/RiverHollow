@@ -15,13 +15,14 @@ namespace RiverHollow.Characters
     public class Mob : WorldActor
     {
         #region Properties
+        
         protected double _dIdleFor;
         protected int _iLeash = 7;
 
         protected List<CombatActor> _liMonsters;
         public List<CombatActor> Monsters { get => _liMonsters; }
 
-        double _dStun;
+        RHTimer _stunTimer;
         int _iMaxRange = TILE_SIZE * 10;
         bool _bAlert;
         bool _bJump;
@@ -110,11 +111,15 @@ namespace RiverHollow.Characters
 
             if (!CutsceneManager.Playing && !GamePaused())
             {
+                bool stunned = _stunTimer != null;
                 //Check if the mob is still stunned
-                if (_dStun > 0)
+                if (stunned)
                 {
-                    _dStun -= gTime.ElapsedGameTime.TotalSeconds;
-                    if (_dStun < 0) { _dStun = 0; }
+                    _stunTimer.TickDown(gTime);
+                    if (_stunTimer.Finished())
+                    {
+                        _stunTimer = null;
+                    }
                 }
                 else
                 {
@@ -269,7 +274,7 @@ namespace RiverHollow.Characters
 
         public void Stun()
         {
-            _dStun = 5.0f;
+            _stunTimer = new RHTimer(Constants.MOB_STUN_TIME);
         }
 
         /// <summary>

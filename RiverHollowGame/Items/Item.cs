@@ -289,7 +289,7 @@ namespace RiverHollow.Items
             Vector2 _vStartPosition;
             public bool Finished { get; private set; } = false;
 
-            double _dTimer = 0.2;
+            RHTimer _timer;
             double _dPauseTimer = 0.1;
             float _fXOffset = 0;
             readonly bool _bGoLeft = false;
@@ -312,7 +312,7 @@ namespace RiverHollow.Items
                 double timerChange = r.Next(0, 9);
                 timerChange *= 0.01;
                 if (r.Next(0, 1) == 1) { timerChange *= -1; }
-                _dTimer += timerChange;
+                _timer = new RHTimer(Constants.GAME_ITEM_BOUNCE_SPEED + timerChange);
 
                 _vStartPosition = pos;
                 _vPosition = pos;
@@ -320,7 +320,7 @@ namespace RiverHollow.Items
 
             public Parabola(Vector2 pos, double curveDegree, double curveWidth, bool goingLeft)
             {
-                _dTimer = 0.2f;
+                _timer = new RHTimer(Constants.GAME_ITEM_BOUNCE_SPEED);
                 _bBounce = false;
                 _vStartPosition = pos;
                 _vPosition = pos;
@@ -331,13 +331,12 @@ namespace RiverHollow.Items
 
             public void Update(GameTime gTime)
             {
-                _dTimer -= gTime.ElapsedGameTime.TotalSeconds;
-
-                if (_dTimer <= 0)
+                _timer.TickDown(gTime);
+                if (_timer.Finished())
                 {
                     if (_bBounce || (_bBounce && subBounce != null))
                     {
-                        if(subBounce == null)
+                        if (subBounce == null)
                         {
                             subBounce = new Parabola(_vPosition, _dCurveDegree + 0.04, _dCurveWidth + (_bGoLeft ? 1.5 : -1.5), _bGoLeft);
                         }
