@@ -15,8 +15,7 @@ namespace RiverHollow.WorldObjects
         protected const string OUT_TRIGGER = "OutTrigger";
         #endregion
 
-        enum DungeonObjectType { Trigger, Door };
-        readonly DungeonObjectType _eSubType;
+        readonly TriggerObjectEnum _eSubType;
         protected readonly string _sOutTrigger;   //What trigger response is sent
         protected string _sMatchTrigger; //What, if anything, the object responds to
         protected int _iTriggerNumber = 1;
@@ -29,7 +28,7 @@ namespace RiverHollow.WorldObjects
         {
             LoadDictionaryData(stringData);
             _eObjectType = ObjectTypeEnum.DungeonObject;
-            _eSubType = Util.ParseEnum<DungeonObjectType>(stringData["Subtype"]);
+            _eSubType = Util.ParseEnum<TriggerObjectEnum>(stringData["Subtype"]);
 
             Util.AssignValue(ref _sOutTrigger, OUT_TRIGGER, stringData);
             Util.AssignValue(ref _sMatchTrigger, MATCH_TRIGGER, stringData);
@@ -61,7 +60,8 @@ namespace RiverHollow.WorldObjects
         protected bool CanTrigger(string triggerName)
         {
             bool rv = false;
-            if (triggerName == _sMatchTrigger)
+
+            if (triggerName == _sMatchTrigger && (triggerName != Constants.TRIGGER_MOB_OPEN || CurrentMap.AllMobsDefeated()))
             {
                 rv = CanTrigger();
             }

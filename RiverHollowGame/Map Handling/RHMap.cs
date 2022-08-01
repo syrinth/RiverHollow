@@ -132,7 +132,7 @@ namespace RiverHollow.Map_Handling
             if (_map.Properties.ContainsKey("Dungeon"))
             {
                 DungeonName = _map.Properties["Dungeon"];
-                DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], this);
+                DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], _map.Properties.ContainsKey("Procedural"), this);
             }
 
             _liBuildings = map._liBuildings;
@@ -186,7 +186,7 @@ namespace RiverHollow.Map_Handling
             if (_map.Properties.ContainsKey("Dungeon"))
             {
                 DungeonName = _map.Properties["Dungeon"];
-                DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], this);
+                DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], _map.Properties.ContainsKey("Procedural"), this);
             }
 
             if (_map.Properties.ContainsKey("Cutscenes"))
@@ -286,13 +286,13 @@ namespace RiverHollow.Map_Handling
 
         public void DrawBelowBase(SpriteBatch spriteBatch)
         {
-            if (MapBelow != string.Empty && MapBelow != PlayerManager.CurrentMap) {
+            if (MapBelowValid()) {
                 MapManager.Maps[MapBelow].DrawBase(spriteBatch);
             }
         }
         public void DrawAboveBase(SpriteBatch spriteBatch)
         {
-            if (MapAbove != string.Empty && MapAbove != PlayerManager.CurrentMap) {
+            if (MapAboveValid()) {
                 MapManager.Maps[MapAbove].DrawBase(spriteBatch);
             }
         }
@@ -313,14 +313,14 @@ namespace RiverHollow.Map_Handling
         }
 
         public void DrawBelowGround(SpriteBatch spriteBatch) {
-            if (MapBelow != string.Empty && MapBelow != PlayerManager.CurrentMap)
+            if (MapBelowValid())
             {
                 MapManager.Maps[MapBelow].DrawGround(spriteBatch);
             }
         }
         public void DrawAboveGround(SpriteBatch spriteBatch)
         {
-            if (MapAbove != string.Empty && MapAbove != PlayerManager.CurrentMap)
+            if (MapAboveValid())
             {
                 MapManager.Maps[MapAbove].DrawGround(spriteBatch);
             }
@@ -384,14 +384,14 @@ namespace RiverHollow.Map_Handling
 
         public void DrawBelowUpper(SpriteBatch spriteBatch)
         {
-            if (MapBelow != string.Empty && MapBelow != PlayerManager.CurrentMap)
+            if (MapBelowValid())
             {
                 MapManager.Maps[MapBelow].DrawUpper(spriteBatch);
             }
         }
         public void DrawAboveUpper(SpriteBatch spriteBatch)
         {
-            if (MapAbove != string.Empty && MapAbove != PlayerManager.CurrentMap)
+            if (MapAboveValid())
             {
                 MapManager.Maps[MapAbove].DrawUpper(spriteBatch);
             }
@@ -554,12 +554,13 @@ namespace RiverHollow.Map_Handling
             {
                 if (!loaded)
                 {
-                    if (tiledObj.Name.Equals("DungeonObject"))
+                    if (tiledObj.Name.Equals("TriggerObject"))
                     {
                         TriggerObject d = DataManager.GetDungeonObject(tiledObj.Properties);
-
                         d.PlaceOnMap(Util.SnapToGrid(tiledObj.Position), this);
-                        GameManager.AddTrigger(d);
+
+                        if (IsDungeon) { DungeonManager.AddTriggerObject(DungeonName, d); }
+                        else { GameManager.AddTriggerObject(d); }
                     }
                     else if (tiledObj.Name.Equals("WorldObject"))
                     {
@@ -608,10 +609,15 @@ namespace RiverHollow.Map_Handling
             }
         }
 
-        public void SpawnMapEntities()
+        public void SpawnMapEntities(bool spawnAboveAndBelow = true)
         {
             if (!_bSpawned)
             {
+                if (spawnAboveAndBelow)
+                {
+                    if (MapAboveValid()) { MapManager.Maps[MapAbove].SpawnMapEntities(false); }
+                    if (MapBelowValid()) { MapManager.Maps[MapBelow].SpawnMapEntities(false); }
+                }
                 _bSpawned = true;
                 SpawnResources();
                 SpawnMobs();
@@ -649,6 +655,11 @@ namespace RiverHollow.Map_Handling
                     spawnCopy.RemoveAt(index);
                 }
             }
+        }
+
+        public bool AllMobsDefeated()
+        {
+            return _liMobs.Count - _liActorsToRemove.FindAll(x => x.ActorType == WorldActorTypeEnum.Mob).Count <= 0;
         }
 
         public void ResetMobPositioning()
@@ -1814,7 +1825,7 @@ namespace RiverHollow.Map_Handling
         }
         public void RemoveActor(WorldActor c)
         {
-            _liActorsToRemove.Add(c);
+            Util.AddUniquelyToList(ref _liActorsToRemove, c);
         }
 
         public void DropItemsOnMap(List<Item> items, Vector2 position, bool flyingPop = true)
@@ -2294,6 +2305,16 @@ namespace RiverHollow.Map_Handling
                 }
             }
             return tileList;
+        }
+
+        public bool MapAboveValid()
+        {
+            return !string.IsNullOrEmpty(MapAbove) && MapAbove != MapManager.CurrentMap.Name;
+        }
+
+        public bool MapBelowValid()
+        {
+            return !string.IsNullOrEmpty(MapBelow) && MapBelow != MapManager.CurrentMap.Name;
         }
 
         internal MapData SaveData()

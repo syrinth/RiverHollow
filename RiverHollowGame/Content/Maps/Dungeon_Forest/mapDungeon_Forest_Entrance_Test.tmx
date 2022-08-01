@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="35" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="9">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="35" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="10">
  <properties>
   <property name="Dungeon" value="Forest"/>
   <property name="MapBelow" value="mapDungeon_Forest_Entrance"/>
   <property name="MapType" value="Forest"/>
+  <property name="Mobs" value="1-1"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/stock_dungeon_walls.tsx"/>
  <tileset firstgid="369" source="../Tilesets/stock_dungeon_floor.tsx"/>
@@ -31,13 +32,16 @@
 </data>
  </layer>
  <layer id="2" name="Ground" width="35" height="18">
+  <properties>
+   <property name="Mobs" value="5-10"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,48,95,95,95,95,95,95,95,95,95,121,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,71,118,118,118,118,118,118,118,118,118,119,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,71,141,141,141,141,141,141,141,141,141,142,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,102,0,0,0,0,0,0,0,0,0,401,401,401,401,401,401,401,401,401,401,401,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,127,0,0,0,0,0,0,0,0,0,401,401,401,401,401,401,401,401,401,401,401,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,127,0,0,0,0,0,0,0,0,0,401,405,405,405,405,405,405,405,405,401,401,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,127,405,405,405,405,405,405,405,405,405,405,405,405,405,405,405,405,405,405,405,405,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -75,6 +79,12 @@
 </data>
  </layer>
  <objectgroup id="4" name="Travel"/>
- <objectgroup id="5" name="MapObject"/>
+ <objectgroup id="5" name="MapObject">
+  <object id="9" name="Mob" x="340.167" y="53.5" width="44.6667" height="32">
+   <properties>
+    <property name="MobID" value="32-C|33-C"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup id="6" name="Character"/>
 </map>

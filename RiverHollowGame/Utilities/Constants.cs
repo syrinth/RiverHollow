@@ -20,7 +20,7 @@
         public const int CALENDAR_NEW_DAY_HOUR = 6;
         public const int CALENDAR_NEW_DAY_MIN = 0;
 
-        public const string TRIGGER_MOB_OPEN = "MOBS";
+        public const string TRIGGER_MOB_OPEN = "MOB";
         public const string TRIGGER_ITEM_OPEN = "VALID_ITEM";
         public const string TRIGGER_KEY_OPEN = "KEY_USED";
     }

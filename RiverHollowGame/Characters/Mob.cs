@@ -27,7 +27,7 @@ namespace RiverHollow.Characters
         bool _bAlert;
         bool _bJump;
 
-        bool _bDefeated = false;
+        public bool Defeated { get; private set; } = false;
         Vector2 _vJumpTo;
         const double MAX_ALERT = 1;
         double _dAlertTimer;
@@ -137,7 +137,7 @@ namespace RiverHollow.Characters
                                 goto case NPCStateEnum.Idle;
                             }
                         case NPCStateEnum.Idle:
-                            if (PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE * 8))
+                            if (CurrentMap == MapManager.CurrentMap && PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE * 8))
                             {
                                 ChangeState(NPCStateEnum.TrackPlayer);
                                 _vLeashPoint = new Vector2(CollisionBox.Left, CollisionBox.Top);
@@ -163,7 +163,7 @@ namespace RiverHollow.Characters
                     ProcessStateEnum(gTime, false);
                     if (CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
                     {
-                        if (!_bDefeated)
+                        if (!Defeated)
                         {
                             _bAlert = false;
                             CombatManager.NewBattle(this);
@@ -268,7 +268,7 @@ namespace RiverHollow.Characters
 
         public void Defeat()
         {
-            _bDefeated = true;
+            Defeated = true;
             CurrentMap.RemoveActor(this);
         }
 

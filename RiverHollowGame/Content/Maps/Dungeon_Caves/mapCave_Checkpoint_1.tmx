@@ -89,7 +89,7 @@
  <objectgroup id="5" name="MapObject">
   <object id="53" name="WorldObject" x="146.53" y="148.022" width="26.6067" height="9.8948">
    <properties>
-    <property name="ObjectID" type="int" value="114"/>
+    <property name="ObjectID" type="int" value="116"/>
    </properties>
   </object>
  </objectgroup>

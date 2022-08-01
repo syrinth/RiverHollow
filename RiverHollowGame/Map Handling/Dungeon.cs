@@ -1,17 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.WorldObjects;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RiverHollow.Map_Handling
 {
     public class Dungeon
     {
-        
+        protected List<string> _liMapNames;
+        protected List<TriggerObject> _liTriggerObjects;
         protected string _sEntranceMapName;
         protected Vector2 _vRecallPoint;
         public int NumKeys { get; private set; }
@@ -23,18 +20,26 @@ namespace RiverHollow.Map_Handling
 
         public Dungeon(string name)
         {
-            _liWarpPoints = new List<WarpPoint>();
             Name = name;
+
+            _liMapNames = new List<string>();
+            _liWarpPoints = new List<WarpPoint>();
+            _liTriggerObjects = new List<TriggerObject>();
         }
 
-        public void LoadDungeon(string currentMap)
+        public virtual void AddMap(RHMap map)
         {
-            //_diDungeonInfo =
+            _liMapNames.Add(map.Name);
         }
 
         public void AddWarpPoint(WarpPoint obj)
         {
             _liWarpPoints.Add(obj);
+        }
+
+        public void AddTriggerObject(TriggerObject obj)
+        {
+            _liTriggerObjects.Add(obj);
         }
 
         public void GoToEntrance()
@@ -46,8 +51,12 @@ namespace RiverHollow.Map_Handling
         public void AddKey() { NumKeys++; }
         public void UseKey() { NumKeys--; }
 
-
-
-
+        public void ActivateTrigger(string triggerName)
+        {
+            foreach (TriggerObject obj in _liTriggerObjects)
+            {
+                obj.AttemptToTrigger(triggerName);
+            }
+        }
     }
 }

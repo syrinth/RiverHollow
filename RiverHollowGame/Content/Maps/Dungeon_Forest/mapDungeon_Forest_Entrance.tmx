@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="35" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="8">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="35" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="13">
  <properties>
   <property name="Dungeon" value="Forest"/>
-  <property name="MapAbove" value="mapDungeon_Forest_Entrance_Test"/>
+  <property name="MapAbove" value=""/>
   <property name="MapType" value="Forest"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/stock_dungeon_walls.tsx"/>
@@ -32,27 +32,27 @@
  </layer>
  <layer id="2" name="Ground" width="35" height="18">
   <data encoding="csv">
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,51,309,313,66,67,68,120,95,95,50,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,71,118,336,89,90,91,117,118,118,73,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,48,49,95,95,95,95,95,95,95,96,141,141,112,113,114,140,141,141,73,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,51,309,313,95,95,95,95,95,95,50,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,71,118,336,89,0,0,117,118,118,73,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,48,49,95,95,95,95,95,95,95,96,141,141,112,0,0,140,141,141,73,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,71,118,118,118,118,118,118,118,118,119,0,0,0,0,0,0,0,0,73,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,73,141,141,141,141,141,141,141,141,142,0,0,0,0,0,0,0,0,96,0,
-0,51,309,310,313,66,67,68,120,95,95,95,95,95,95,96,136,136,136,136,136,136,136,136,136,0,0,0,0,0,0,0,0,73,0,
-0,71,118,118,336,89,90,91,117,118,118,118,118,118,118,119,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,96,0,
-0,71,141,141,141,112,113,114,140,141,141,141,141,141,141,142,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,73,0,
+0,51,309,310,313,95,95,95,95,95,95,95,95,95,95,96,136,136,136,136,136,136,136,136,136,0,0,0,0,0,0,0,0,73,0,
+0,71,118,118,336,89,0,0,117,118,118,118,118,118,118,119,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,96,0,
+0,71,141,141,141,112,0,0,140,141,141,141,141,141,141,142,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,73,0,
 0,71,271,271,271,136,136,136,136,136,136,136,136,136,136,136,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,73,0,
 0,71,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,73,0,
 0,71,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,51,95,95,95,95,95,95,95,95,95,96,0,
 0,94,95,95,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,71,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,73,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,73,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,73,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,73,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,94,95,95,95,95,95,50,0,0,104,0,0,0,0,0,0,0,0,0,73,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,71,790,791,71,0,0,0,0,0,0,0,0,0,73,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,94,95,95,95,95,95,50,0,0,0,0,0,0,0,0,0,0,0,0,73,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,71,790,791,104,0,0,0,0,0,0,0,0,0,73,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,96,814,815,94,95,95,95,95,95,95,95,95,95,96,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="3" name="Upper" width="35" height="18" visible="0">
+ <layer id="3" name="Upper" width="35" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -81,11 +81,37 @@
     <property name="Map" value="mapWoods"/>
    </properties>
   </object>
+  <object id="8" name="Entrance" x="448" y="16" width="32" height="4">
+   <properties>
+    <property name="EntranceDir" value="Down"/>
+    <property name="Map" value="mapDungeon_Forest_2"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
   <object id="5" name="WorldObject" x="291.364" y="179.386" width="26.6067" height="9.8948">
    <properties>
-    <property name="ObjectID" type="int" value="114"/>
+    <property name="ObjectID" type="int" value="116"/>
+   </properties>
+  </object>
+  <object id="10" name="TriggerObject" x="96.6932" y="116.379" width="30.75" height="10.7045">
+   <properties>
+    <property name="MatchTrigger" value="Dungeon_1"/>
+    <property name="OutTrigger" value=""/>
+    <property name="TriggerNumber" type="int" value="1"/>
+    <property name="TriggerType" value="TriggerDoor"/>
+   </properties>
+  </object>
+  <object id="11" name="Chest" x="257.947" y="83.3026" width="10.3567" height="9.3948">
+   <properties>
+    <property name="Holding" value="189"/>
+    <property name="ObjectID" type="int" value="43"/>
+   </properties>
+  </object>
+  <object id="12" name="TriggerObject" x="448.547" y="36.0814" width="30.75" height="11.3201">
+   <properties>
+    <property name="KeyDoor" type="bool" value="true"/>
+    <property name="TriggerType" value="KeyDoor"/>
    </properties>
   </object>
  </objectgroup>

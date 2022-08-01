@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Build][StartNPC:11][GoalNPC:11][AssignTrigger:Task-2][TargetObjectID:108]</Value>
+      <Value>[Type:Build][StartNPC:11][GoalNPC:11][AssignTrigger:Task-2][TargetObjectID:110]</Value>
     </Item>
     <Item>
       <Key>2</Key>

@@ -10,6 +10,8 @@
         public enum RarityEnum { C, U, R, M };
         public enum WeatherEnum { Sunny, Raining, Snowing };
 
+        public enum TriggerObjectEnum { Trigger, KeyDoor, MobDoor, TriggerDoor };
+
         public enum GameScreenEnum { Info, Combat, World };
         public enum DisplayTypeEnum { Inventory, Gift, Ship };
 

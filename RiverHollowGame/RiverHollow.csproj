@@ -181,7 +181,7 @@
     <Compile Include="WorldObjects\Container.cs" />
     <Compile Include="WorldObjects\Decor.cs" />
     <Compile Include="WorldObjects\Destructible.cs" />
-    <Compile Include="WorldObjects\Door.cs" />
+    <Compile Include="WorldObjects\TriggerDoor.cs" />
     <Compile Include="WorldObjects\Floor.cs" />
     <Compile Include="WorldObjects\Garden.cs" />
     <Compile Include="WorldObjects\Gatherable.cs" />

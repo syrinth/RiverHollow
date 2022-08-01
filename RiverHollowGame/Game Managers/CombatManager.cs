@@ -217,7 +217,10 @@ namespace RiverHollow.Game_Managers
                 case PhaseEnum.Defeat:
                     break;
                 case PhaseEnum.DisplayVictory:
-                    CurrentMob.Defeat();
+                    if (!CurrentMob.Defeated)
+                    {
+                        CurrentMob.Defeat();
+                    }
                     break;
             }
         }
@@ -289,6 +292,7 @@ namespace RiverHollow.Game_Managers
             CombatStarted = false;
             GUIManager.BeginFadeOut();
             MapManager.RemoveActor(CurrentMob);
+            DungeonManager.ActivateTrigger(Constants.TRIGGER_MOB_OPEN);
             CurrentMob = null;
             GoToHUDScreen();
         }

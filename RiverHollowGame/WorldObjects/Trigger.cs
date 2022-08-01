@@ -74,7 +74,9 @@ namespace RiverHollow.WorldObjects
             {
                 _bHasBeenTriggered = true;
                 _sprite.PlayAnimation(AnimationEnum.Action1);
-                GameManager.ActivateTriggers(_sOutTrigger);
+
+                if (CurrentMap.IsDungeon){ DungeonManager.ActivateTrigger(_sOutTrigger); }
+                else { GameManager.ActivateTriggers(_sOutTrigger); }
             }
         }
     }

@@ -13,11 +13,11 @@ namespace RiverHollow.Game_Managers
     public static class DungeonManager
     {
         public static Dungeon CurrentDungeon => (_diDungeons.ContainsKey(MapManager.CurrentMap.DungeonName) ? _diDungeons[MapManager.CurrentMap.DungeonName] : null);
-        private static Dictionary<string, ProceduralDungeon> _diDungeons;
+        private static Dictionary<string, Dungeon> _diDungeons;
 
         public static void Instantiate()
         {
-            _diDungeons = new Dictionary<string, ProceduralDungeon>();
+            _diDungeons = new Dictionary<string, Dungeon>();
         }
 
         public static void ResetDungeons()
@@ -34,19 +34,24 @@ namespace RiverHollow.Game_Managers
             GUIManager.CloseMainObject();
         }
 
-        public static void AddMapToDungeon(string dungeonName, RHMap map) {
+        public static void AddMapToDungeon(string dungeonName, bool procedural, RHMap map) {
             if (!_diDungeons.ContainsKey(dungeonName))
             {
-                _diDungeons[dungeonName] = new ProceduralDungeon(dungeonName);
+                if (procedural) { _diDungeons[dungeonName] = new ProceduralDungeon(dungeonName); }
+                else { _diDungeons[dungeonName] = new Dungeon(dungeonName); }
             }
 
             _diDungeons[dungeonName].AddMap(map);
         }
-
+        public static void AddTriggerObject(string dungeonName, TriggerObject obj)
+        {
+            _diDungeons[dungeonName].AddTriggerObject(obj);
+        }
         public static void AddWarpPoint(WarpPoint obj, string dungeon)
         {
             _diDungeons[dungeon].AddWarpPoint(obj);
         }
+
         public static void AddDungeonKey() { CurrentDungeon.AddKey(); }
         public static void UseDungeonKey() { CurrentDungeon.UseKey(); }
         public static int DungeonKeys()
@@ -61,9 +66,18 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
+        public static void ActivateTrigger(string triggerName)
+        {
+            ActivateTrigger(MapManager.CurrentMap.DungeonName, triggerName);
+        }
+        public static void ActivateTrigger(string dungeonName, string triggerName)
+        {
+            _diDungeons[dungeonName]?.ActivateTrigger(triggerName);
+        }
+
         public static void InitializeProceduralDungeon(string dungeonName, string currentMap, TravelPoint pt)
         {
-            _diDungeons[dungeonName].InitializeDungeon(currentMap, pt);
+            ((ProceduralDungeon)_diDungeons[dungeonName]).InitializeDungeon(currentMap, pt);
         }
     }
 }

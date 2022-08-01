@@ -258,7 +258,7 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Trigger Handling
-        public static void AddTrigger(TriggerObject t)
+        public static void AddTriggerObject(TriggerObject t)
         {
             _liTriggerObjects.Add(t);
         }

@@ -213,5 +213,57 @@
       <Key>52</Key>
       <Value>[Name:Desc_Strength][Text:Strength \n Increases the damage of strength based characters.]</Value>
     </Item>
+	<Item>
+      <Key>53</Key>
+      <Value>[Name:Day_End][Text:Day {0}, of {1}]</Value>
+    </Item>
+	<Item>
+      <Key>54</Key>
+      <Value>[Name:Combat_Label_Items][Text:Found Items]</Value>
+    </Item>
+	<Item>
+      <Key>55</Key>
+      <Value>[Name:Label_Town][Text:Town Name]</Value>
+    </Item>
+	<Item>
+      <Key>56</Key>
+      <Value>[Name:Label_Body][Text:Body]</Value>
+    </Item>
+	<Item>
+      <Key>57</Key>
+      <Value>[Name:Label_Hair][Text:Hair]</Value>
+    </Item>
+	<Item>
+      <Key>58</Key>
+      <Value>[Name:Label_Eyes][Text:Eyes]</Value>
+    </Item>
+	<Item>
+      <Key>59</Key>
+      <Value>[Name:Label_Shirt][Text:Shirt]</Value>
+    </Item>
+	<Item>
+      <Key>60</Key>
+      <Value>[Name:Label_Pants][Text:Pants]</Value>
+    </Item>
+	<Item>
+      <Key>61</Key>
+      <Value>[Name:Label_Shoes][Text:Shoes]</Value>
+    </Item>
+	<Item>
+      <Key>62</Key>
+      <Value>[Name:Label_Class][Text:Class]</Value>
+    </Item>
+	<Item>
+      <Key>63</Key>
+      <Value>[Name:Combat_Label_XP][Text:Gained {0} XP]</Value>
+    </Item>
+	<Item>
+      <Key>64</Key>
+      <Value>[Name:Label_Saving_Start][Text:Saving Game...]</Value>
+    </Item>
+	<Item>
+      <Key>65</Key>
+      <Value>[Name:Label_Saving_Finished][Text:Game Saved]</Value>
+    </Item>
   </Asset>
 </XnaContent>

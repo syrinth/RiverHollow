@@ -663,7 +663,7 @@
   <object id="150" name="DungeonObject" x="64.5" y="114.834" width="30.75" height="30">
    <properties>
     <property name="MatchTrigger" value="Forest_Entrance_Open"/>
-    <property name="ObjectID" type="int" value="70"/>
+    <property name="ObjectID" type="int" value="76"/>
     <property name="OutTrigger" value="Forest_Entrance_Opened"/>
     <property name="TriggerNumber" type="int" value="2"/>
    </properties>
@@ -672,7 +672,7 @@
    <properties>
     <property name="ItemKeyID" type="int" value="162"/>
     <property name="MatchTrigger" value="VALID_ITEM"/>
-    <property name="ObjectID" type="int" value="73"/>
+    <property name="ObjectID" type="int" value="72"/>
     <property name="OutTrigger" value="Forest_Entrance_Open"/>
    </properties>
   </object>
@@ -680,7 +680,7 @@
    <properties>
     <property name="ItemKeyID" type="int" value="163"/>
     <property name="MatchTrigger" value="VALID_ITEM"/>
-    <property name="ObjectID" type="int" value="73"/>
+    <property name="ObjectID" type="int" value="72"/>
     <property name="OutTrigger" value="Forest_Entrance_Open"/>
    </properties>
   </object>

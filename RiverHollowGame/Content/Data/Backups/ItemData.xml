@@ -303,15 +303,15 @@
     </Item>
     <Item>
       <Key>75</Key>
-      <Value>[Type:Resource][Image:9-8][Value:3][Stacks][Place:103]</Value>
+      <Value>[Type:Resource][Image:9-8][Value:3][Stacks][Place:105]</Value>
     </Item>
     <Item>
       <Key>76</Key>
-      <Value>[Type:Resource][Image:2-2][Value:3][Stacks][Place:97]</Value>
+      <Value>[Type:Resource][Image:2-2][Value:3][Stacks][Place:99]</Value>
     </Item>
     <Item>
       <Key>77</Key>
-      <Value>[Type:Resource][Image:3-2][Value:1500][Stacks][Place:104]</Value>
+      <Value>[Type:Resource][Image:3-2][Value:1500][Stacks][Place:106]</Value>
     </Item>
     <Item>
       <Key>78</Key>
@@ -411,7 +411,7 @@
     </Item>
     <Item>
       <Key>102</Key>
-      <Value>[Type:Equipment][Subtype:Weapon][Image:0-1][Value:1000][ESub:Staff][Tier:1][Atk:Moderate][Mag:Major][ReqItems:0-10]</Value>
+      <Value>[Type:Equipment][Subtype:Weapon][Image:0-1][Value:1000][ESub:Staff][Tier:1][Magic:Major][Vitality:Moderate][Defence:Minor][ReqItems:0-10]</Value>
     </Item>
     <Item>
       <Key>103</Key>
@@ -743,7 +743,7 @@
     </Item>
     <Item>
       <Key>185</Key>
-      <Value>[Type:Special][Image:0-5][Value:0]</Value>
+      <Value>[Type:Special][Subtype:None][Image:0-5][Value:0]</Value>
     </Item>
     <Item>
       <Key>186</Key>
@@ -759,7 +759,7 @@
     </Item>
     <Item>
       <Key>189</Key>
-      <Value>[Type:Special][Subtype:DungeonKey][Image:2-3][Value:0]</Value>
+      <Value>[Type:Special][Subtype:DungeonKey][Image:1-1][Value:0]</Value>
     </Item>
   </Asset>
 </XnaContent>

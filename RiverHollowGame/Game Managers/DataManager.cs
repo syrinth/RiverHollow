@@ -488,7 +488,24 @@ namespace RiverHollow.Game_Managers
 
         public static TriggerObject GetDungeonObject(Dictionary<string, string> data)
         {
-            int id = int.Parse(data["ObjectID"]);
+            int id = -1;
+
+            switch (Util.ParseEnum<TriggerObjectEnum>(data["TriggerType"]))
+            {
+                case TriggerObjectEnum.Trigger:
+                    id = int.Parse(Config[24]["ObjectID"]);
+                    break;
+                case TriggerObjectEnum.KeyDoor:
+                    id = int.Parse(Config[21]["ObjectID"]);
+                    break;
+                case TriggerObjectEnum.MobDoor:
+                    id = int.Parse(Config[22]["ObjectID"]);
+                    break;
+                case TriggerObjectEnum.TriggerDoor:
+                    id = int.Parse(Config[23]["ObjectID"]);
+                    break;
+            }
+
             if (id != -1 && _diWorldObjects.ContainsKey(id))
             {
                 Dictionary<string, string> liData = new Dictionary<string, string>(_diWorldObjects[id]);
@@ -499,11 +516,16 @@ namespace RiverHollow.Game_Managers
                     }
                 }
 
-                if (liData["Subtype"].Contains("Door")){
-                    return new Door(id, liData);
-                }
-                else if (liData["Subtype"].Equals("Trigger")){
-                    return new Trigger(id, liData);
+                switch (Util.ParseEnum<TriggerObjectEnum>(liData["TriggerType"]))
+                {
+                    case TriggerObjectEnum.Trigger:
+                        return new Trigger(id, liData);
+                    case TriggerObjectEnum.KeyDoor:
+                        return new KeyDoor(id, liData);
+                    case TriggerObjectEnum.MobDoor:
+                        return new MobDoor(id, liData);
+                    case TriggerObjectEnum.TriggerDoor:
+                        return new TriggerDoor(id, liData);
                 }
             }
 

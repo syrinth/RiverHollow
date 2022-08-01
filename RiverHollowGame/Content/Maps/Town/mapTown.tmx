@@ -296,17 +296,17 @@
   </object>
   <object id="92" name="Floor" x="6.03" y="467.553" width="471.44" height="10.8948">
    <properties>
-    <property name="ObjectID" type="int" value="75"/>
+    <property name="ObjectID" type="int" value="77"/>
    </properties>
   </object>
   <object id="94" name="Floor" x="466.53" y="449.803" width="9.19" height="13.3948">
    <properties>
-    <property name="ObjectID" type="int" value="75"/>
+    <property name="ObjectID" type="int" value="77"/>
    </properties>
   </object>
   <object id="95" name="WorldObject" x="420.405" y="437.115" width="8.065" height="6.5198">
    <properties>
-    <property name="ObjectID" type="int" value="93"/>
+    <property name="ObjectID" type="int" value="95"/>
    </properties>
   </object>
   <object id="96" name="NPC" x="516.227" y="453.091" width="9" height="8">

@@ -72,7 +72,7 @@ namespace RiverHollow.Map_Handling
             }
         }
 
-        public void AddMap(RHMap map)
+        public override void AddMap(RHMap map)
         {
             RoomInfo rmInfo = new RoomInfo(map);
 
