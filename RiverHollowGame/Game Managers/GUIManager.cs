@@ -27,6 +27,7 @@ namespace RiverHollow.Game_Managers
         private static bool _bFadeSlow = false;
         public static bool Fading  => _eFade != Fade.None;
         public static bool FadingIn => _eFade == Fade.In;
+        public static bool NotFading => _eFade == Fade.None;
 
         public static void LoadContent()
         {
