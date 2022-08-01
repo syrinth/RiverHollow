@@ -186,6 +186,15 @@ namespace RiverHollow
                 GraphicsDevice.SetRenderTarget(_renderMain);
                 GraphicsDevice.Clear(Color.Transparent);
 
+                if (!string.IsNullOrEmpty(MapManager.CurrentMap.MapBelow))
+                {
+                    spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
+                    MapManager.DrawBelowBase(spriteBatch);
+                    MapManager.DrawBelowGround(spriteBatch);
+                    MapManager.DrawBelowUpper(spriteBatch);
+                    spriteBatch.End();
+                }
+
                 spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
                 MapManager.DrawBase(spriteBatch);
                 spriteBatch.End();
@@ -198,6 +207,15 @@ namespace RiverHollow
                 spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
                 MapManager.DrawUpper(spriteBatch);
                 spriteBatch.End();
+
+                if (!string.IsNullOrEmpty(MapManager.CurrentMap.MapAbove))
+                {
+                    spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
+                    MapManager.DrawAboveBase(spriteBatch);
+                    MapManager.DrawAboveGround(spriteBatch);
+                    MapManager.DrawAboveUpper(spriteBatch);
+                    spriteBatch.End();
+                }
             }
             else
             {

@@ -654,7 +654,7 @@ namespace RiverHollow.Game_Managers
             _bSaving = false;
         }
 
-        public static bool SaveFinished()
+        public static bool Saving()
         {
             return _bSaving;
         }

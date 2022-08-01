@@ -254,7 +254,7 @@
   <object id="162" name="Entrance" x="240" y="220" width="32" height="4">
    <properties>
     <property name="EntranceDir" value="Down"/>
-    <property name="Map" value="mapDungeon1"/>
+    <property name="Map" value="mapDungeon_Forest_Entrance"/>
    </properties>
   </object>
  </objectgroup>

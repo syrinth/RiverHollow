@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="86" height="98" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="162">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="86" height="98" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="163">
  <properties>
   <property name="Cutscenes" value="0"/>
   <property name="ItemID" value="162-C|163-R"/>
@@ -329,6 +329,12 @@
     <property name="Map" value="mapTown"/>
    </properties>
   </object>
+  <object id="162" name="Entrance" x="144" y="59.4545" width="31.6364" height="4">
+   <properties>
+    <property name="EntranceDir" value="Down"/>
+    <property name="Map" value="mapDungeon_Forest_Entrance"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
   <object id="80" name="Mob" x="560.334" y="718.334" width="60.3334" height="56">
@@ -654,7 +660,7 @@
     <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
-  <object id="150" name="DungeonObject" x="144.5" y="65.3337" width="30.75" height="30">
+  <object id="150" name="DungeonObject" x="64.5" y="114.834" width="30.75" height="30">
    <properties>
     <property name="MatchTrigger" value="Forest_Entrance_Open"/>
     <property name="ObjectID" type="int" value="70"/>

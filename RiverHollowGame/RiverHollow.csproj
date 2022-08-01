@@ -59,7 +59,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Buildings\Building.cs" />
+    <Compile Include="WorldObjects\Building.cs" />
+    <Compile Include="Map Handling\Dungeon.cs" />
+    <Compile Include="Map Handling\ProceduralDungeon.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Characters\Actor.cs" />
     <Compile Include="Characters\Child.cs" />

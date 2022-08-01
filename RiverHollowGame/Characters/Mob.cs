@@ -324,6 +324,11 @@ namespace RiverHollow.Characters
 
         protected override void CalculatePath()
         {
+            if (PlayerManager.CurrentMap != CurrentMapName)
+            {
+                return;
+            }
+
             Vector2 startPosition = Position;
             Vector2 target = _eCurrentState == NPCStateEnum.TrackPlayer ? PlayerManager.PlayerActor.CollisionBox.Center.ToVector2() : _vLeashPoint;
             //RHTile lastTile = _liTilePath.Count > 0 ? _liTilePath[0] : null;

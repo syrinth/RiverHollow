@@ -26,6 +26,8 @@ namespace RiverHollow.Map_Handling
         public Vector2 Center => CollisionBox.Center.ToVector2();
         public bool IsDoor { get; private set; }
         public bool IsActive { get; private set; } = false;
+        private bool _bNoMove;
+        public bool NoMove => _bNoMove;
 
         private bool _bModular = false;
         public bool Modular => _bModular;
@@ -53,6 +55,7 @@ namespace RiverHollow.Map_Handling
             Util.AssignValue(ref _iDungeonInfoID, "DungeonID", obj.Properties);
             Util.AssignValue(ref _sGoToMap, "GoTo", obj.Properties);
             Util.AssignValue(ref _bModular, "Modular", obj.Properties);
+            Util.AssignValue(ref _bNoMove, "NoMove", obj.Properties);
 
             if (_iDungeonInfoID > -1) { IsActive = true; }
 

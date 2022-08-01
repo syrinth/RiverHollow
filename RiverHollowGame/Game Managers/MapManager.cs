@@ -102,7 +102,7 @@ namespace RiverHollow.Game_Managers
                 //send a message off to the DungeonManager to initialize it
                 if (travelPoint.DungeonInfoID > -1 && string.IsNullOrEmpty(travelPoint.LinkedMap))
                 {
-                    DungeonManager.InitializeDungeon(MapManager.CurrentMap.DungeonName, MapManager.CurrentMap.Name, travelPoint);
+                    DungeonManager.InitializeProceduralDungeon(MapManager.CurrentMap.DungeonName, MapManager.CurrentMap.Name, travelPoint);
                 }
 
                 entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
@@ -112,6 +112,10 @@ namespace RiverHollow.Game_Managers
                 {
                     newPos = entryPoint.GetMovedCenter();
                     PlayerManager.PlayerActor.DetermineFacing(new Vector2(0, -1));
+                }
+                else if (travelPoint.NoMove)
+                {
+                    newPos = c.Position;
                 }
                 else
                 {
@@ -143,7 +147,10 @@ namespace RiverHollow.Game_Managers
         /// <param name="playerPos">The position of the player</param>
         public static void FadeToNewMap(RHMap newMap, Vector2 playerPos, Building b = null)
         {
-            GUIManager.BeginFadeOut();
+            if (newMap.Name != CurrentMap.MapAbove && newMap.Name != CurrentMap.MapBelow)
+            {
+                GUIManager.BeginFadeOut();
+            }
 
             PlayerManager.PlayerActor.SetMovementState(ActorMovementStateEnum.Idle);
             PlayerManager.PlayerActor.PlayAnimationVerb(VerbEnum.Idle);
@@ -212,7 +219,7 @@ namespace RiverHollow.Game_Managers
 
         public static void Update(GameTime gTime)
         {
-            if (!_newMapInfo.Equals(default(NewMapInfo)) && GUIManager.FadingIn)
+            if (!_newMapInfo.Equals(default(NewMapInfo)) && (GUIManager.FadingIn || GUIManager.NotFading))
             {
                 if (PlayerManager.PlayerActor.ActivePet != null) { CurrentMap.RemoveActor(PlayerManager.PlayerActor.ActivePet); }
                 if (PlayerManager.PlayerActor.ActiveMount != null) { CurrentMap.RemoveActor(PlayerManager.PlayerActor.ActiveMount); }
@@ -254,9 +261,26 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        public static void DrawBelowBase(SpriteBatch spriteBatch)
+        {
+            CurrentMap.DrawBelowBase(spriteBatch);
+        }
+        public static void DrawAboveBase(SpriteBatch spriteBatch)
+        {
+            CurrentMap.DrawAboveBase(spriteBatch);
+        }
         public static void DrawBase(SpriteBatch spriteBatch)
         {
             CurrentMap.DrawBase(spriteBatch);
+        }
+
+        public static void DrawBelowGround(SpriteBatch spriteBatch)
+        {
+            CurrentMap.DrawBelowGround(spriteBatch);
+        }
+        public static void DrawAboveGround(SpriteBatch spriteBatch)
+        {
+            CurrentMap.DrawAboveGround(spriteBatch);
         }
         public static void DrawGround(SpriteBatch spriteBatch)
         {
@@ -264,10 +288,20 @@ namespace RiverHollow.Game_Managers
             GUICursor.DrawTownBuildObject(spriteBatch);
             GUICursor.DrawPotentialWorldObject(spriteBatch);
         }
+
+        public static void DrawBelowUpper(SpriteBatch spriteBatch)
+        {
+            CurrentMap.DrawBelowUpper(spriteBatch);
+        }
+        public static void DrawAboveUpper(SpriteBatch spriteBatch)
+        {
+            CurrentMap.DrawAboveUpper(spriteBatch);
+        }
         public static void DrawUpper(SpriteBatch spriteBatch)
         {
             CurrentMap.DrawUpper(spriteBatch);
         }
+
         public static void DrawLights(SpriteBatch spriteBatch)
         {
             CurrentMap.DrawLights(spriteBatch);

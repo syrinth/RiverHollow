@@ -15,7 +15,6 @@ namespace RiverHollow.Map_Handling
 {
     public class RHTile
     {
-        bool _tileExists;
         public string MapName { get; }
         public int X { get; }
         public int Y { get; }
@@ -118,10 +117,6 @@ namespace RiverHollow.Map_Handling
                 {
                     if (l.TryGetTile(X, Y, out TiledMapTile? tile) && tile != null)
                     {
-                        if (tile.Value.GlobalIdentifier != 0)
-                        {
-                            _tileExists = true;
-                        }
                         if (((TiledMapTile)tile).GlobalIdentifier != 0)
                         {
                             _diProps.Add(l, map.GetProperties((TiledMapTile)tile));
@@ -422,15 +417,12 @@ namespace RiverHollow.Map_Handling
         /// <returns>True if the tile is not itself locked down</returns>
         public bool Passable()
         {
-            bool rv = _tileExists && (WorldObject == null || WorldObject.Walkable);
-            if (_tileExists)
+            bool rv = WorldObject == null || WorldObject.Walkable;
+            foreach (TiledMapTileLayer l in _diProps.Keys)
             {
-                foreach (TiledMapTileLayer l in _diProps.Keys)
+                if (l.IsVisible && !l.Name.Contains("Upper") && ContainsProperty(l, "Impassable", out string val) && val.Equals("true"))
                 {
-                    if (l.IsVisible && !l.Name.Contains("Upper") && ContainsProperty(l, "Impassable", out string val) && val.Equals("true"))
-                    {
-                        rv = false;
-                    }
+                    rv = false;
                 }
             }
 

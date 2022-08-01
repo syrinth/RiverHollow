@@ -31,6 +31,9 @@ namespace RiverHollow.Map_Handling
         private string _sName;
         public string Name => _sName.Replace(@"Maps\", ""); //Fuck off with that path bullshit
 
+        public string MapBelow => (_map.Properties.ContainsKey("MapBelow") ? _map.Properties["MapBelow"] : string.Empty);
+        public string MapAbove => _map.Properties.ContainsKey("MapAbove") ? _map.Properties["MapAbove"] : string.Empty;
+
         public string DungeonName { get; private set; } = string.Empty;
         public bool IsDungeon => !string.IsNullOrEmpty(DungeonName);
         public bool IsTown => _map.Properties.ContainsKey("Town");
@@ -207,7 +210,7 @@ namespace RiverHollow.Map_Handling
                 return;
             }
 
-            if (this == MapManager.CurrentMap)
+            if (this == MapManager.CurrentMap || this.Name == MapManager.CurrentMap.MapAbove || this.Name == MapManager.CurrentMap.MapBelow)
             {
                 _renderer.Update(_map, gTime);
 
@@ -281,6 +284,18 @@ namespace RiverHollow.Map_Handling
             _liItemsToRemove.Clear();
         }
 
+        public void DrawBelowBase(SpriteBatch spriteBatch)
+        {
+            if (MapBelow != string.Empty && MapBelow != PlayerManager.CurrentMap) {
+                MapManager.Maps[MapBelow].DrawBase(spriteBatch);
+            }
+        }
+        public void DrawAboveBase(SpriteBatch spriteBatch)
+        {
+            if (MapAbove != string.Empty && MapAbove != PlayerManager.CurrentMap) {
+                MapManager.Maps[MapAbove].DrawBase(spriteBatch);
+            }
+        }
         public void DrawBase(SpriteBatch spriteBatch)
         {
             SetLayerVisibiltyByName(true, "Base");
@@ -294,9 +309,22 @@ namespace RiverHollow.Map_Handling
                 {
                     t.DrawWallpaper(spriteBatch);
                 }
-            }
+            }            
         }
 
+        public void DrawBelowGround(SpriteBatch spriteBatch) {
+            if (MapBelow != string.Empty && MapBelow != PlayerManager.CurrentMap)
+            {
+                MapManager.Maps[MapBelow].DrawGround(spriteBatch);
+            }
+        }
+        public void DrawAboveGround(SpriteBatch spriteBatch)
+        {
+            if (MapAbove != string.Empty && MapAbove != PlayerManager.CurrentMap)
+            {
+                MapManager.Maps[MapAbove].DrawGround(spriteBatch);
+            }
+        }
         public void DrawGround(SpriteBatch spriteBatch)
         {
             SetLayerVisibiltyByName(false, "Base");
@@ -354,6 +382,20 @@ namespace RiverHollow.Map_Handling
             }
         }
 
+        public void DrawBelowUpper(SpriteBatch spriteBatch)
+        {
+            if (MapBelow != string.Empty && MapBelow != PlayerManager.CurrentMap)
+            {
+                MapManager.Maps[MapBelow].DrawUpper(spriteBatch);
+            }
+        }
+        public void DrawAboveUpper(SpriteBatch spriteBatch)
+        {
+            if (MapAbove != string.Empty && MapAbove != PlayerManager.CurrentMap)
+            {
+                MapManager.Maps[MapAbove].DrawUpper(spriteBatch);
+            }
+        }
         public void DrawUpper(SpriteBatch spriteBatch)
         {
             SetLayerVisibiltyByName(false, "Base");
