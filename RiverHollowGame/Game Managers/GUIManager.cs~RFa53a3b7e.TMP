@@ -7,7 +7,6 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Misc;
-using RiverHollow.Utilities;
 
 namespace RiverHollow.Game_Managers
 {

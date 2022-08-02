@@ -22,7 +22,7 @@ namespace RiverHollow.Map_Handling
         public int MerchID => _merch != null ? _merch.MerchID : -1;
         public Rectangle Box { get; private set; }
 
-        public ShopItemSpot(string mapName, Vector2 position, float width = GameManager.TILE_SIZE, float height = GameManager.TILE_SIZE * 2)
+        public ShopItemSpot(string mapName, Vector2 position, float width = Constants.TILE_SIZE, float height = Constants.TILE_SIZE * 2)
         {
             _sMapName = mapName;
             _vPos = new Vector2((int)position.X, (int)position.Y);
@@ -38,7 +38,7 @@ namespace RiverHollow.Map_Handling
                     BitmapFont font = DataManager.GetBitMapFont(@"Fonts\FontBattle");
                     Size2 size = font.MeasureString(merchItem.Value.ToString());
                     float delta = size.Width - Box.Width;
-                    spritebatch.DrawString(font, merchItem.Value.ToString(), _vPos + new Vector2(-delta / 2, -8), Color.White, GameManager.MAX_LAYER_DEPTH);
+                    spritebatch.DrawString(font, merchItem.Value.ToString(), _vPos + new Vector2(-delta / 2, -8), Color.White, Constants.MAX_LAYER_DEPTH);
 
                     if (!GUIManager.IsHoverWindowOpen())
                     {

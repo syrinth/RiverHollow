@@ -1,5 +1,6 @@
 ﻿using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
+using RiverHollow.Utilities;
 using System.Collections.Generic;
 
 using static RiverHollow.Game_Managers.GameManager;
@@ -61,7 +62,7 @@ namespace RiverHollow.WorldObjects
     {
         public MobDoor(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            _sMatchTrigger = GameManager.MOB_OPEN;
+            _sMatchTrigger = Constants.TRIGGER_MOB_OPEN;
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace RiverHollow.WorldObjects
             if (stringData.ContainsKey("KeyDoor"))
             {
                 _bKeyDoor = true;
-                _sMatchTrigger = GameManager.KEY_OPEN;
+                _sMatchTrigger = Constants.TRIGGER_KEY_OPEN;
             }
         }
 
@@ -98,7 +99,7 @@ namespace RiverHollow.WorldObjects
                 if (DungeonManager.DungeonKeys() > 0)
                 {
                     DungeonManager.UseDungeonKey();
-                    AttemptToTrigger(KEY_OPEN);
+                    AttemptToTrigger(Constants.TRIGGER_KEY_OPEN);
                 }
                 else
                 {

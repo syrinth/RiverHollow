@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 
@@ -59,7 +60,7 @@ namespace RiverHollow.GUIComponents.MainObjects
 
         public void ChooseWarpPoint(WarpPoint obj)
         {
-            MapManager.FadeToNewMap(obj.CurrentMap, obj.CollisionBox.Location.ToVector2() + new Vector2(0, GameManager.TILE_SIZE));
+            MapManager.FadeToNewMap(obj.CurrentMap, obj.CollisionBox.Location.ToVector2() + new Vector2(0, Constants.TILE_SIZE));
 
             GUIManager.CloseMainObject();
         }

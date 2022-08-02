@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.WorldObjects
 {
@@ -33,7 +34,7 @@ namespace RiverHollow.WorldObjects
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            _alertSprite?.Draw(spriteBatch, GameManager.MAX_LAYER_DEPTH);
+            _alertSprite?.Draw(spriteBatch, Constants.MAX_LAYER_DEPTH);
         }
 
         public override void ProcessRightClick()
@@ -73,8 +74,8 @@ namespace RiverHollow.WorldObjects
             if (_liCurrentMessages.Count > 0)
             {
                 _alertSprite = new AnimatedSprite(DataManager.DIALOGUE_TEXTURE);
-                _alertSprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 64, TILE_SIZE, TILE_SIZE, 3, 0.150f, true);
-                _alertSprite.Position = new Vector2(_vMapPosition.X, _vMapPosition.Y - TILE_SIZE);
+                _alertSprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 64, Constants.TILE_SIZE, Constants.TILE_SIZE, 3, 0.150f, true);
+                _alertSprite.Position = new Vector2(_vMapPosition.X, _vMapPosition.Y - Constants.TILE_SIZE);
             }
         }
 

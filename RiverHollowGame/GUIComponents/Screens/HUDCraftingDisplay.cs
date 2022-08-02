@@ -9,6 +9,7 @@ using RiverHollow.WorldObjects;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.DataManager;
 using RiverHollow.Items;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -47,7 +48,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             ConfigureInfo();
 
-            _winExtra = new GUIWindow(GUIWindow.Window_1, _winMain.Width, ScaleIt(GUIWindow.Window_1.HeightEdges()) + ScaleIt(TILE_SIZE));
+            _winExtra = new GUIWindow(GUIWindow.Window_1, _winMain.Width, ScaleIt(GUIWindow.Window_1.HeightEdges()) + ScaleIt(Constants.TILE_SIZE));
             _btnFinished = new GUIButton("Done", Finished);
             _btnFinished.CenterOnObject(_winExtra);
             _winExtra.AddControl(_btnFinished);

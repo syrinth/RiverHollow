@@ -43,8 +43,8 @@ namespace RiverHollow.WorldObjects
         public virtual Vector2 MapPosition => _vMapPosition;
 
         protected RHSize _uSize = new RHSize(1, 1);
-        public int Width => _uSize.Width * TILE_SIZE;
-        public int Height => _uSize.Height * TILE_SIZE;
+        public int Width => _uSize.Width * Constants.TILE_SIZE;
+        public int Height => _uSize.Height * Constants.TILE_SIZE;
 
         public int BaseWidth => _rBase.Width;
         public int BaseHeight => _rBase.Height;
@@ -57,8 +57,8 @@ namespace RiverHollow.WorldObjects
         //The ClickBox is always the Sprite itself
         public Rectangle ClickBox => Util.FloatRectangle(MapPosition, _uSize);
 
-        //Base is always described in # of Tiles so we must multiply by the TILE_SIZE
-        public Rectangle CollisionBox => Util.FloatRectangle(MapPosition.X + (_rBase.X * TILE_SIZE), MapPosition.Y + (_rBase.Y * TILE_SIZE), (_rBase.Width * TILE_SIZE), (_rBase.Height * TILE_SIZE));
+        //Base is always described in # of Tiles so we must multiply by the Constants.TILE_SIZE
+        public Rectangle CollisionBox => Util.FloatRectangle(MapPosition.X + (_rBase.X * Constants.TILE_SIZE), MapPosition.Y + (_rBase.Y * Constants.TILE_SIZE), (_rBase.Width * Constants.TILE_SIZE), (_rBase.Height * Constants.TILE_SIZE));
 
         protected int _iID;
         public int ID  => _iID;
@@ -162,7 +162,7 @@ namespace RiverHollow.WorldObjects
             if (_bDrawUnder) { _sprite.Draw(spriteBatch, 1); }
             else {
                 float alpha = 1f;
-                if(((BaseHeight + 1) * TILE_SIZE < Height) && new Rectangle((int)Sprite.Position.X, (int)Sprite.Position.Y, Sprite.Width, Sprite.Height).Contains(PlayerManager.PlayerActor.CollisionBox.Center))
+                if(((BaseHeight + 1) * Constants.TILE_SIZE < Height) && new Rectangle((int)Sprite.Position.X, (int)Sprite.Position.Y, Sprite.Width, Sprite.Height).Contains(PlayerManager.PlayerActor.CollisionBox.Center))
                 {
                     alpha = 0.7f;
                 }
@@ -171,7 +171,7 @@ namespace RiverHollow.WorldObjects
         }
         public virtual void DrawItem(SpriteBatch spriteBatch, Item i)
         {
-            i.Draw(spriteBatch, new Rectangle((int)(i.Position.X), (int)(i.Position.Y), TILE_SIZE, TILE_SIZE), true, _sprite.LayerDepth + 1);
+            i.Draw(spriteBatch, new Rectangle((int)(i.Position.X), (int)(i.Position.Y), Constants.TILE_SIZE, Constants.TILE_SIZE), true, _sprite.LayerDepth + 1);
         }
 
         public virtual void ProcessLeftClick() { }
@@ -199,7 +199,7 @@ namespace RiverHollow.WorldObjects
 
         public virtual bool PlaceOnMap(Vector2 pos, RHMap map)
         {
-            pos = new Vector2(pos.X - (_rBase.X * TILE_SIZE), pos.Y - (_rBase.Y * TILE_SIZE));
+            pos = new Vector2(pos.X - (_rBase.X * Constants.TILE_SIZE), pos.Y - (_rBase.Y * Constants.TILE_SIZE));
             SnapPositionToGrid(pos);
             return map.PlaceWorldObject(this);
         }
@@ -250,11 +250,11 @@ namespace RiverHollow.WorldObjects
         /// <param name="mousePosition">The current mousePosition</param>
         public void SetPickupOffset(Vector2 mousePosition)
         {
-            int xOffset = (Width > TILE_SIZE) ? (int)(mousePosition.X - _sprite.Position.X) : 0;
-            int yOffset = (Height > TILE_SIZE) ? (int)(mousePosition.Y - _sprite.Position.Y) : 0;
+            int xOffset = (Width > Constants.TILE_SIZE) ? (int)(mousePosition.X - _sprite.Position.X) : 0;
+            int yOffset = (Height > Constants.TILE_SIZE) ? (int)(mousePosition.Y - _sprite.Position.Y) : 0;
 
-            xOffset = (xOffset / TILE_SIZE) * TILE_SIZE;
-            yOffset = (yOffset / TILE_SIZE) * TILE_SIZE;
+            xOffset = (xOffset / Constants.TILE_SIZE) * Constants.TILE_SIZE;
+            yOffset = (yOffset / Constants.TILE_SIZE) * Constants.TILE_SIZE;
             PickupOffset = new Vector2(xOffset, yOffset);
             
         }
@@ -267,8 +267,8 @@ namespace RiverHollow.WorldObjects
         {
             int xOffset = (_rBase.Width > 1) ? (_rBase.Width - 1) / 2 : 0;
             int yOffset = (_rBase.Height > 1) ? (_rBase.Height -1) / 2 : 0;
-            PickupOffset = new Vector2((_rBase.X + xOffset) * TILE_SIZE, (_rBase.Y + yOffset) * TILE_SIZE);
-            PickupOffset = (PickupOffset / TILE_SIZE) * TILE_SIZE;
+            PickupOffset = new Vector2((_rBase.X + xOffset) * Constants.TILE_SIZE, (_rBase.Y + yOffset) * Constants.TILE_SIZE);
+            PickupOffset = (PickupOffset / Constants.TILE_SIZE) * Constants.TILE_SIZE;
         }
 
         public List<Item> GetDroppedItems()

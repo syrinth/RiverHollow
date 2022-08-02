@@ -51,7 +51,7 @@ namespace RiverHollow.Items
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Tools");
 
             _iColTexSize = 128;
-            _iRowTexSize = TILE_SIZE;
+            _iRowTexSize = Constants.TILE_SIZE;
 
             _sprite = new AnimatedSprite(@"Textures\Items\ToolAnimations");
 
@@ -63,18 +63,18 @@ namespace RiverHollow.Items
             }
 
             int toolFrames = 5;
-            int toolWidth = TILE_SIZE * 3;
-            int toolHeight = TILE_SIZE * 4;
+            int toolWidth = Constants.TILE_SIZE * 3;
+            int toolHeight = Constants.TILE_SIZE * 4;
             int xCrawl = 0;
             int crawlIncrement = toolWidth * toolFrames;
 
-            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Down, (int)animationPosition.X, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED, false, true);
+            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Down, (int)animationPosition.X, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, Constants.TOOL_ANIM_SPEED, false, true);
             xCrawl += crawlIncrement;
-            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Right, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED, false, true);
+            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Right, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, Constants.TOOL_ANIM_SPEED, false, true);
             xCrawl += crawlIncrement;
-            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Up, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED, false, true);
+            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Up, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, Constants.TOOL_ANIM_SPEED, false, true);
             xCrawl += crawlIncrement;
-            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Left, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, TOOL_ANIM_SPEED, false, true);
+            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Left, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, Constants.TOOL_ANIM_SPEED, false, true);
             xCrawl += crawlIncrement;
 
             _sprite.Drawing = false;

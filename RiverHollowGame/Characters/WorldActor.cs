@@ -42,11 +42,11 @@ namespace RiverHollow.Characters
         {
             get
             {
-                return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TILE_SIZE);
+                return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - Constants.TILE_SIZE);
             } //MAR this is fucked up
             set
             {
-                _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + TILE_SIZE);
+                _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + Constants.TILE_SIZE);
             }
         }
 
@@ -61,8 +61,8 @@ namespace RiverHollow.Characters
         protected double _dCooldown = 0;
 
         public virtual Vector2 CollisionBoxPosition => Position;
-        public virtual Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, TILE_SIZE);
-        public virtual Rectangle HoverBox => new Rectangle((int)Position.X, (int)Position.Y - TILE_SIZE, Width, Height);
+        public virtual Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, Constants.TILE_SIZE);
+        public virtual Rectangle HoverBox => new Rectangle((int)Position.X, (int)Position.Y - Constants.TILE_SIZE, Width, Height);
 
         protected bool _bOnTheMap = true;
         public virtual bool OnTheMap => _bOnTheMap;
@@ -71,7 +71,7 @@ namespace RiverHollow.Characters
 
         protected float _fBaseSpeed = 2;
         public float BuffedSpeed => _fBaseSpeed * SpdMult;
-        public float SpdMult = NPC_WALK_SPEED;
+        public float SpdMult = Constants.NPC_WALK_SPEED;
 
         #region Wander Properties
         RHTimer _movementTimer;
@@ -86,8 +86,8 @@ namespace RiverHollow.Characters
 
         public WorldActor() : base()
         {
-            _iBodyWidth = TILE_SIZE;
-            _iBodyHeight = HUMAN_HEIGHT;
+            _iBodyWidth = Constants.TILE_SIZE;
+            _iBodyHeight = Constants.HUMAN_HEIGHT;
 
             _liTilePath = new List<RHTile>();
         }
@@ -96,8 +96,8 @@ namespace RiverHollow.Characters
         {
             ID = id;
 
-            _iBodyWidth = TILE_SIZE;
-            _iBodyHeight = HUMAN_HEIGHT;
+            _iBodyWidth = Constants.TILE_SIZE;
+            _iBodyHeight = Constants.HUMAN_HEIGHT;
 
             _liTilePath = new List<RHTile>();
             _movementTimer = new RHTimer(Constants.WANDER_COUNTDOWN);
@@ -552,10 +552,10 @@ namespace RiverHollow.Characters
                     PlayAnimation(VerbEnum.Idle, Facing);
                     break;
                 case NPCStateEnum.TrackPlayer:
-                    ChangeMovement(NORMAL_SPEED);
+                    ChangeMovement(Constants.NORMAL_SPEED);
                     break;
                 case NPCStateEnum.Wander:
-                    ChangeMovement(NPC_WALK_SPEED);
+                    ChangeMovement(Constants.NPC_WALK_SPEED);
                     break;
             }
         }

@@ -6,6 +6,7 @@ using RiverHollow.Game_Managers;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
@@ -40,7 +41,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, TILE_SIZE * 2, TILE_SIZE * 2);
+            Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, Constants.TILE_SIZE * 2, Constants.TILE_SIZE * 2);
 
             if (_eCursorType == CursorTypeEnum.Normal) { Alpha = 1; }
             else { Alpha = (PlayerManager.PlayerInRange(_rCollisionRectangle)) ? 1 : 0.5f; }

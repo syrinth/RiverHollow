@@ -467,7 +467,7 @@
 
 //                GUIImage _gItem;
 
-//                public ActionButton(TacticalMenuAction action) : base(new Rectangle((int)action.IconGrid.X * TILE_SIZE, (int)action.IconGrid.Y * TILE_SIZE, TILE_SIZE, TILE_SIZE), TILE_SIZE, TILE_SIZE, @"Textures\texCmbtActions")
+//                public ActionButton(TacticalMenuAction action) : base(new Rectangle((int)action.IconGrid.X * Constants.TILE_SIZE, (int)action.IconGrid.Y * Constants.TILE_SIZE, Constants.TILE_SIZE, Constants.TILE_SIZE), Constants.TILE_SIZE, Constants.TILE_SIZE, @"Textures\texCmbtActions")
 //                {
 //                    _action = action;
 //                    SetScale(GameManager.CurrentScale);

@@ -23,7 +23,7 @@ namespace RiverHollow.Characters
         public List<CombatActor> Monsters { get => _liMonsters; }
 
         RHTimer _stunTimer;
-        int _iMaxRange = TILE_SIZE * 10;
+        int _iMaxRange = Constants.TILE_SIZE * 10;
         bool _bAlert;
         bool _bJump;
 
@@ -35,7 +35,7 @@ namespace RiverHollow.Characters
 
         FieldOfVision _FoV;
         Vector2 _vLeashPoint;
-        float _fLeashRange = TILE_SIZE * 30;
+        float _fLeashRange = Constants.TILE_SIZE * 30;
 
         List<SpawnConditionEnum> _liSpawnConditions;
 
@@ -137,7 +137,7 @@ namespace RiverHollow.Characters
                                 goto case NPCStateEnum.Idle;
                             }
                         case NPCStateEnum.Idle:
-                            if (CurrentMap == MapManager.CurrentMap && PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE * 8))
+                            if (CurrentMap == MapManager.CurrentMap && PlayerManager.PlayerInRange(CollisionBox.Center, Constants.TILE_SIZE * 8))
                             {
                                 ChangeState(NPCStateEnum.TrackPlayer);
                                 _vLeashPoint = new Vector2(CollisionBox.Left, CollisionBox.Top);
@@ -146,7 +146,7 @@ namespace RiverHollow.Characters
                         case NPCStateEnum.TrackPlayer:
                             int distance = (int)Util.GetDistance(Position, _vLeashPoint);
 
-                            if (distance > TILE_SIZE * 25)
+                            if (distance > Constants.TILE_SIZE * 25)
                             {
                                 ChangeState(NPCStateEnum.Leashing);
                             }
@@ -367,7 +367,7 @@ namespace RiverHollow.Characters
 
             public FieldOfVision(Mob theMob, int maxRange)
             {
-                int sideRange = TILE_SIZE * 2;
+                int sideRange = Constants.TILE_SIZE * 2;
                 _iMaxRange = maxRange;
                 _eDir = theMob.Facing;
                 if (_eDir == DirectionEnum.Up || _eDir == DirectionEnum.Down)
@@ -553,34 +553,34 @@ namespace RiverHollow.Characters
 
         //    if (!_bJump)
         //    {
-        //        _sprBody.AddAnimation(WActorBaseAnim.IdleDown, 0, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
-        //        _sprBody.AddAnimation(WActorWalkAnim.WalkDown, 0, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
-        //        _sprBody.AddAnimation(WActorBaseAnim.IdleUp, 64, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
-        //        _sprBody.AddAnimation(WActorWalkAnim.WalkUp, 64, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
-        //        _sprBody.AddAnimation(WActorBaseAnim.IdleLeft, 128, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
-        //        _sprBody.AddAnimation(WActorWalkAnim.WalkLeft, 128, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
-        //        _sprBody.AddAnimation(WActorBaseAnim.IdleRight, 192, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
-        //        _sprBody.AddAnimation(WActorWalkAnim.WalkRight, 192, 0, TILE_SIZE, TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.AddAnimation(WActorBaseAnim.IdleDown, 0, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.AddAnimation(WActorWalkAnim.WalkDown, 0, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.AddAnimation(WActorBaseAnim.IdleUp, 64, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.AddAnimation(WActorWalkAnim.WalkUp, 64, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.AddAnimation(WActorBaseAnim.IdleLeft, 128, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.AddAnimation(WActorWalkAnim.WalkLeft, 128, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.AddAnimation(WActorBaseAnim.IdleRight, 192, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 4, 0.2f);
+        //        _sprBody.AddAnimation(WActorWalkAnim.WalkRight, 192, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 4, 0.2f);
         //        _sprBody.PlayAnimation(WActorWalkAnim.WalkDown);
         //    }
         //    #region Jumping Code
         //    else
         //    {
-        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleDown, 0, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundDown, 0, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.AirDown, 32, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleDown, 0, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundDown, 0, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.AirDown, 32, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 2, 0.2f);
 
-        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleUp, 64, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundUp, 64, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.AirUp, 96, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleUp, 64, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundUp, 64, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.AirUp, 96, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 2, 0.2f);
 
-        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleLeft, 128, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundLeft, 128, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.AirLeft, 160, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleLeft, 128, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundLeft, 128, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.AirLeft, 160, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 2, 0.2f);
 
-        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleRight, 192, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundRight, 192, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
-        //        //_sprBody.AddAnimation(WActorJumpAnim.AirRight, 224, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorBaseAnim.IdleRight, 192, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.GroundRight, 192, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 2, 0.2f);
+        //        //_sprBody.AddAnimation(WActorJumpAnim.AirRight, 224, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 2, 0.2f);
         //        //_sprBody.SetCurrentAnimation(WActorBaseAnim.IdleDown);
         //    }
         //    #endregion
@@ -592,7 +592,7 @@ namespace RiverHollow.Characters
         //    //_sprAlert = new AnimatedSprite(@"Textures\Dialog");
         //    //_sprAlert.AddAnimation(GenAnimEnum.Play, 64, 64, 16, 16, 3, 0.2f, true);
         //    //_sprAlert.PlayAnimation(GenAnimEnum.Play);
-        //    //_sprAlert.Position = (Position - new Vector2(0, TILE_SIZE));
+        //    //_sprAlert.Position = (Position - new Vector2(0, Constants.TILE_SIZE));
         //} 
         #endregion
     }

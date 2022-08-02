@@ -10,6 +10,7 @@ using static RiverHollow.Game_Managers.SaveManager;
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using static RiverHollow.Utilities.Enums;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -106,7 +107,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _gName.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
                 AddControl(_gName);
 
-                _gDelete = new GUIButton(new Rectangle(64, 48, TILE_SIZE, TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE, BtnDelete);
+                _gDelete = new GUIButton(new Rectangle(64, 48, Constants.TILE_SIZE, Constants.TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE, BtnDelete);
                 Height = (int)stringsize.Y + _gDelete.Height + HeightEdges();
                 _gDelete.AnchorToInnerSide(this, SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
 

@@ -42,7 +42,7 @@
 //                AddControl(gMP);
 //            }
 
-//            Width = TILE_SIZE;
+//            Width = Constants.TILE_SIZE;
 //            Height = _gSprite.Height;
 //            Resize();
 //            gName.SetText(actor.Name);

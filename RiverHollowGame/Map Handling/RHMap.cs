@@ -376,7 +376,7 @@ namespace RiverHollow.Map_Handling
                     bool passable = CanPlaceObject(t, HeldObject);
                     if (!passable || (passable && !HeldObject.CompareType(ObjectTypeEnum.Wallpaper)))
                     {
-                        spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TILE_SIZE, TILE_SIZE), new Rectangle(288, 128, TILE_SIZE, TILE_SIZE), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, GameManager.MAX_LAYER_DEPTH);
+                        spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), new Rectangle(288, 128, Constants.TILE_SIZE, Constants.TILE_SIZE), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                     }
                 }
             }
@@ -518,7 +518,7 @@ namespace RiverHollow.Map_Handling
                     {
                         if (mapObject.Name.Equals("Wall"))
                         {
-                            foreach (Vector2 v in Util.GetAllPointsInArea(mapObject.Position, mapObject.Size, TILE_SIZE))
+                            foreach (Vector2 v in Util.GetAllPointsInArea(mapObject.Position, mapObject.Size, Constants.TILE_SIZE))
                             {
                                 RHTile tile = GetTileByPixelPosition(v);
                                 Util.AddUniquelyToList(ref _liWallTiles, tile);
@@ -527,7 +527,7 @@ namespace RiverHollow.Map_Handling
                         }
                         else if (mapObject.Name.StartsWith("Display"))
                         {
-                            foreach (Vector2 v in Util.GetAllPointsInArea(mapObject.Position, mapObject.Size, TILE_SIZE))
+                            foreach (Vector2 v in Util.GetAllPointsInArea(mapObject.Position, mapObject.Size, Constants.TILE_SIZE))
                             {
                                 GetTileByPixelPosition(v).SetClickAction(mapObject.Name);
                             }
@@ -571,9 +571,9 @@ namespace RiverHollow.Map_Handling
                     }
                     else if (tiledObj.Name.Equals("Floor"))
                     {
-                        for (int y = (int)tiledObj.Position.Y; y < (int)tiledObj.Position.Y + tiledObj.Size.Height; y += TILE_SIZE)
+                        for (int y = (int)tiledObj.Position.Y; y < (int)tiledObj.Position.Y + tiledObj.Size.Height; y += Constants.TILE_SIZE)
                         {
-                            for (int x = (int)tiledObj.Position.X; x < (int)tiledObj.Position.X + tiledObj.Size.Width; x += TILE_SIZE)
+                            for (int x = (int)tiledObj.Position.X; x < (int)tiledObj.Position.X + tiledObj.Size.Width; x += Constants.TILE_SIZE)
                             {
                                 DataManager.CreateAndPlaceNewWorldObject(int.Parse(tiledObj.Properties["ObjectID"]), new Vector2(x, y), this);
                             }
@@ -865,7 +865,7 @@ namespace RiverHollow.Map_Handling
         /// <param name="height">The Height</param>
         public void CreateDoor(TravelPoint trvlPt, float rectX, float rectY, float width, float height)
         {
-            foreach (Vector2 vec in Util.GetAllPointsInArea((int)rectX, (int)rectY, (int)width, (int)height, TILE_SIZE))
+            foreach (Vector2 vec in Util.GetAllPointsInArea((int)rectX, (int)rectY, (int)width, (int)height, Constants.TILE_SIZE))
             {
                 RHTile t = GetTileByPixelPosition(vec);
                 if (t != null)
@@ -887,7 +887,7 @@ namespace RiverHollow.Map_Handling
             string mapName = b.MapName;
             TravelPoint pt = DictionaryTravelPoints[mapName];
 
-            foreach (Vector2 vec in Util.GetAllPointsInArea(pt.Location.X, pt.Location.Y, pt.CollisionBox.Width, pt.CollisionBox.Height, TILE_SIZE))
+            foreach (Vector2 vec in Util.GetAllPointsInArea(pt.Location.X, pt.Location.Y, pt.CollisionBox.Width, pt.CollisionBox.Height, Constants.TILE_SIZE))
             {
                 RHTile t = GetTileByPixelPosition(vec);
                 if (t != null)
@@ -1069,9 +1069,9 @@ namespace RiverHollow.Map_Handling
             {
                 AddTile(ref list, rEndCollision.Right, rEndCollision.Top, actor.CurrentMapName);
                 AddTile(ref list, rEndCollision.Right, rEndCollision.Bottom, actor.CurrentMapName);
-                if (rEndCollision.Height > TILE_SIZE)
+                if (rEndCollision.Height > Constants.TILE_SIZE)
                 {
-                    foreach (Vector2 v in Util.GetAllPointsInArea(rEndCollision.Right - 1, rEndCollision.Top, 1, rEndCollision.Height, TILE_SIZE))
+                    foreach (Vector2 v in Util.GetAllPointsInArea(rEndCollision.Right - 1, rEndCollision.Top, 1, rEndCollision.Height, Constants.TILE_SIZE))
                     {
                         AddTile(ref list, (int)v.X, (int)v.Y, actor.CurrentMapName);
                     }
@@ -1081,9 +1081,9 @@ namespace RiverHollow.Map_Handling
             {
                 AddTile(ref list, rEndCollision.Left, rEndCollision.Top, actor.CurrentMapName);
                 AddTile(ref list, rEndCollision.Left, rEndCollision.Bottom, actor.CurrentMapName);
-                if (rEndCollision.Height > TILE_SIZE)
+                if (rEndCollision.Height > Constants.TILE_SIZE)
                 {
-                    foreach (Vector2 v in Util.GetAllPointsInArea(rEndCollision.Left - 1, rEndCollision.Top, 1, rEndCollision.Height, TILE_SIZE))
+                    foreach (Vector2 v in Util.GetAllPointsInArea(rEndCollision.Left - 1, rEndCollision.Top, 1, rEndCollision.Height, Constants.TILE_SIZE))
                     {
                         AddTile(ref list, (int)v.X, (int)v.Y, actor.CurrentMapName);
                     }
@@ -1094,9 +1094,9 @@ namespace RiverHollow.Map_Handling
             {
                 AddTile(ref list, rEndCollision.Left, rEndCollision.Bottom, actor.CurrentMapName);
                 AddTile(ref list, rEndCollision.Right, rEndCollision.Bottom, actor.CurrentMapName);
-                if (rEndCollision.Width > TILE_SIZE)
+                if (rEndCollision.Width > Constants.TILE_SIZE)
                 {
-                    foreach (Vector2 v in Util.GetAllPointsInArea(rEndCollision.Left, rEndCollision.Bottom - 1, rEndCollision.Width, 1, TILE_SIZE))
+                    foreach (Vector2 v in Util.GetAllPointsInArea(rEndCollision.Left, rEndCollision.Bottom - 1, rEndCollision.Width, 1, Constants.TILE_SIZE))
                     {
                         AddTile(ref list, (int)v.X, (int)v.Y, actor.CurrentMapName);
                     }
@@ -1106,9 +1106,9 @@ namespace RiverHollow.Map_Handling
             {
                 AddTile(ref list, rEndCollision.Left, rEndCollision.Top, actor.CurrentMapName);
                 AddTile(ref list, rEndCollision.Right, rEndCollision.Top, actor.CurrentMapName);
-                if (rEndCollision.Width > TILE_SIZE)
+                if (rEndCollision.Width > Constants.TILE_SIZE)
                 {
-                    foreach (Vector2 v in Util.GetAllPointsInArea(rEndCollision.Left, rEndCollision.Top - 1, rEndCollision.Width, 1, TILE_SIZE))
+                    foreach (Vector2 v in Util.GetAllPointsInArea(rEndCollision.Left, rEndCollision.Top - 1, rEndCollision.Width, 1, Constants.TILE_SIZE))
                     {
                         AddTile(ref list, (int)v.X, (int)v.Y, actor.CurrentMapName);
                     }
@@ -1374,7 +1374,7 @@ namespace RiverHollow.Map_Handling
 
             foreach (WorldActor c in _liActors)
             {
-                if (PlayerManager.PlayerInRange(c.HoverBox, (int)(TILE_SIZE * 1.5)) && c.HoverContains(mouseLocation) && c.OnTheMap)
+                if (PlayerManager.PlayerInRange(c.HoverBox, (int)(Constants.TILE_SIZE * 1.5)) && c.HoverContains(mouseLocation) && c.OnTheMap)
                 {
                     c.ProcessRightButtonClick();
                     return true;
@@ -1403,7 +1403,7 @@ namespace RiverHollow.Map_Handling
 
             if (Scrying())
             {
-                SetGameScale(NORMAL_SCALE);
+                SetGameScale(Constants.NORMAL_SCALE);
                 GameManager.DropWorldObject();
                 LeaveTownMode();
                 Scry(false);
@@ -1807,7 +1807,7 @@ namespace RiverHollow.Map_Handling
 
         public void FinishBuilding()
         {
-            SetGameScale(NORMAL_SCALE);
+            SetGameScale(Constants.NORMAL_SCALE);
 
             //Re-open the Building Menu
             GUIManager.OpenMenu();
@@ -1936,19 +1936,19 @@ namespace RiverHollow.Map_Handling
             bool rv = true;
             collisionTiles.Clear();
             Vector2 position = obj.CollisionBox.Location.ToVector2();
-            position.X = ((int)(position.X / TILE_SIZE)) * TILE_SIZE;
-            position.Y = ((int)(position.Y / TILE_SIZE)) * TILE_SIZE;
+            position.X = ((int)(position.X / Constants.TILE_SIZE)) * Constants.TILE_SIZE;
+            position.Y = ((int)(position.Y / Constants.TILE_SIZE)) * Constants.TILE_SIZE;
 
-            int colColumns = obj.CollisionBox.Width / TILE_SIZE;
-            int colRows = obj.CollisionBox.Height / TILE_SIZE;
+            int colColumns = obj.CollisionBox.Width / Constants.TILE_SIZE;
+            int colRows = obj.CollisionBox.Height / Constants.TILE_SIZE;
 
             //This is used to get all the tiles based off the collisonbox size
             for (int i = 0; i < colRows; i++)
             {
                 for (int j = 0; j < colColumns; j++)
                 {
-                    int x = Math.Min((obj.CollisionBox.Left + (j * TILE_SIZE)) / TILE_SIZE, MapWidthTiles - 1);
-                    int y = Math.Min((obj.CollisionBox.Top + (i * TILE_SIZE)) / TILE_SIZE, MapHeightTiles - 1);
+                    int x = Math.Min((obj.CollisionBox.Left + (j * Constants.TILE_SIZE)) / Constants.TILE_SIZE, MapWidthTiles - 1);
+                    int y = Math.Min((obj.CollisionBox.Top + (i * Constants.TILE_SIZE)) / Constants.TILE_SIZE, MapHeightTiles - 1);
                     if (x < 0 || x > this.MapWidthTiles || y < 0 || y > this.MapHeightTiles)
                     {
                         rv = false;
@@ -2030,12 +2030,12 @@ namespace RiverHollow.Map_Handling
                 t.SetObject(o);
             }
 
-            //Iterate over the WorldObject image in TILE_SIZE increments to discover any tiles
+            //Iterate over the WorldObject image in Constants.TILE_SIZE increments to discover any tiles
             //that the image overlaps. Add those tiles as Shadow Tiles as long as they're not
             //actual Tiles the object sits on. Also add the Tiles to the objects Shadow Tiles list
-            for (int i = (int)o.MapPosition.X; i < o.MapPosition.X + o.Width; i += TILE_SIZE)
+            for (int i = (int)o.MapPosition.X; i < o.MapPosition.X + o.Width; i += Constants.TILE_SIZE)
             {
-                for (int j = (int)o.MapPosition.Y; j < o.MapPosition.Y + o.Height; j += TILE_SIZE)
+                for (int j = (int)o.MapPosition.Y; j < o.MapPosition.Y + o.Height; j += Constants.TILE_SIZE)
                 {
                     RHTile t = GetTileByGridCoords(Util.GetGridCoords(i, j));
                     if (t != null && !o.Tiles.Contains(t))
@@ -2106,17 +2106,17 @@ namespace RiverHollow.Map_Handling
 
         //    RHRandom rand = RHRandom.Instance();
         //    Vector2 position = m.Position;
-        //    position.X = ((int)(position.X / TILE_SIZE)) * TILE_SIZE;
-        //    position.Y = ((int)(position.Y / TILE_SIZE)) * TILE_SIZE;
+        //    position.X = ((int)(position.X / Constants.TILE_SIZE)) * Constants.TILE_SIZE;
+        //    position.Y = ((int)(position.Y / Constants.TILE_SIZE)) * Constants.TILE_SIZE;
 
-        //    rv = _arrTiles[((int)position.X / TILE_SIZE), ((int)position.Y / TILE_SIZE)].Passable();
+        //    rv = _arrTiles[((int)position.X / Constants.TILE_SIZE), ((int)position.Y / Constants.TILE_SIZE)].Passable();
         //    if (!rv)
         //    {
         //        do
         //        {
-        //            position.X = (int)(rand.Next(1, (MapWidthTiles - 1) * TILE_SIZE) / TILE_SIZE) * TILE_SIZE;
-        //            position.Y = (int)(rand.Next(1, (MapHeightTiles - 1) * TILE_SIZE) / TILE_SIZE) * TILE_SIZE;
-        //            rv = _arrTiles[((int)position.X / TILE_SIZE), ((int)position.Y / TILE_SIZE)].Passable();
+        //            position.X = (int)(rand.Next(1, (MapWidthTiles - 1) * Constants.TILE_SIZE) / Constants.TILE_SIZE) * Constants.TILE_SIZE;
+        //            position.Y = (int)(rand.Next(1, (MapHeightTiles - 1) * Constants.TILE_SIZE) / Constants.TILE_SIZE) * Constants.TILE_SIZE;
+        //            rv = _arrTiles[((int)position.X / Constants.TILE_SIZE), ((int)position.Y / Constants.TILE_SIZE)].Passable();
         //        } while (!rv);
         //    }
 
@@ -2197,10 +2197,10 @@ namespace RiverHollow.Map_Handling
         }
         public RHTile GetTileByPixelPosition(int x, int y)
         {
-            if (x >= MapWidthTiles * TILE_SIZE || x < 0) { return null; }
-            if (y >= MapHeightTiles * TILE_SIZE || y < 0) { return null; }
+            if (x >= MapWidthTiles * Constants.TILE_SIZE || x < 0) { return null; }
+            if (y >= MapHeightTiles * Constants.TILE_SIZE || y < 0) { return null; }
 
-            return _arrTiles[x / TILE_SIZE, y / TILE_SIZE];
+            return _arrTiles[x / Constants.TILE_SIZE, y / Constants.TILE_SIZE];
         }
 
         public RHTile GetTileByGridCoords(Point targetLoc)
@@ -2254,9 +2254,9 @@ namespace RiverHollow.Map_Handling
         {
             List<RHTile> rvList = new List<RHTile>();
 
-            for (int y = obj.Top; y < obj.Top + obj.Height; y += TILE_SIZE)
+            for (int y = obj.Top; y < obj.Top + obj.Height; y += Constants.TILE_SIZE)
             {
-                for (int x = obj.Left; x < obj.Left + obj.Width; x += TILE_SIZE)
+                for (int x = obj.Left; x < obj.Left + obj.Width; x += Constants.TILE_SIZE)
                 {
                     RHTile tile = GetTileByPixelPosition(new Point(x, y));
                     if (!rvList.Contains(tile))

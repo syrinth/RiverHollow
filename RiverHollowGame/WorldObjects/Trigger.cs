@@ -32,7 +32,7 @@ namespace RiverHollow.WorldObjects
             if (_item != null)
             {
                 float visibility = _bHasBeenTriggered ? 1f : 0.25f;
-                _item.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X), (int)(_vMapPosition.Y - 6), TILE_SIZE, TILE_SIZE), true, _sprite.LayerDepth + 1, visibility);
+                _item.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X), (int)(_vMapPosition.Y - 6), Constants.TILE_SIZE, Constants.TILE_SIZE), true, _sprite.LayerDepth + 1, visibility);
             }
         }
 

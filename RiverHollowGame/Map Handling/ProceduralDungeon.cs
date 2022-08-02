@@ -299,7 +299,7 @@ namespace RiverHollow.Map_Handling
                         CreateEntranceObject(blocker, map, int.Parse(strsplit[0]), int.Parse(strsplit[1]), int.Parse(strsplit[2]), blocker.Position, pos, blocker.Position);
                         break;
                     case DirectionEnum.Down:
-                        pos = blocker.Position + new Vector2(0, GameManager.TILE_SIZE);
+                        pos = blocker.Position + new Vector2(0, Constants.TILE_SIZE);
                         CreateEntranceObject(blocker, map, int.Parse(strsplit[3]), int.Parse(strsplit[4]), int.Parse(strsplit[5]), pos, new Vector2(pos.X + blocker.Size.Width, pos.Y), pos);
                         break;
                     case DirectionEnum.Left:

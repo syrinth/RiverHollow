@@ -56,7 +56,7 @@ namespace RiverHollow.Characters
                 ChangeState(NPCStateEnum.Idle);
             }
 
-            if (_bFollow && !PlayerManager.PlayerInRange(CollisionBox.Center, TILE_SIZE * 8) && _eCurrentState != NPCStateEnum.TrackPlayer)
+            if (_bFollow && !PlayerManager.PlayerInRange(CollisionBox.Center, Constants.TILE_SIZE * 8) && _eCurrentState != NPCStateEnum.TrackPlayer)
             {
                 if (!_sprBody.IsCurrentAnimation(VerbEnum.Alert, Facing))
                 {
@@ -103,7 +103,7 @@ namespace RiverHollow.Characters
             {
                 List<RHTile> validTiles = new List<RHTile>();
                 Point objLocation = obj.CollisionBox.Location;
-                foreach (Vector2 v in Util.GetAllPointsInArea(objLocation.X - (3 * TILE_SIZE), objLocation.Y - (3 * TILE_SIZE), TILE_SIZE * 7, TILE_SIZE * 7, TILE_SIZE))
+                foreach (Vector2 v in Util.GetAllPointsInArea(objLocation.X - (3 * Constants.TILE_SIZE), objLocation.Y - (3 * Constants.TILE_SIZE), Constants.TILE_SIZE * 7, Constants.TILE_SIZE * 7, Constants.TILE_SIZE))
                 {
                     RHTile t = obj.CurrentMap.GetTileByPixelPosition(v);
                     if (t != null && t.Passable() && (t.WorldObject == null || t.WorldObject.Walkable)) { validTiles.Add(t); }
@@ -123,7 +123,7 @@ namespace RiverHollow.Characters
 
             List<RHTile> validTiles = new List<RHTile>();
             Point playerLocation = PlayerManager.PlayerActor.CollisionBox.Location;
-            foreach (Vector2 v in Util.GetAllPointsInArea(playerLocation.X - (3 * TILE_SIZE), playerLocation.Y - (3 * TILE_SIZE), TILE_SIZE * 7, TILE_SIZE * 7, TILE_SIZE))
+            foreach (Vector2 v in Util.GetAllPointsInArea(playerLocation.X - (3 * Constants.TILE_SIZE), playerLocation.Y - (3 * Constants.TILE_SIZE), Constants.TILE_SIZE * 7, Constants.TILE_SIZE * 7, Constants.TILE_SIZE))
             {
                 RHTile t = MapManager.CurrentMap.GetTileByPixelPosition(v);
                 if (t != null && t.Passable() && (t.WorldObject == null || t.WorldObject.Walkable)) { validTiles.Add(t); }

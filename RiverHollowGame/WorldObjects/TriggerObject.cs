@@ -8,13 +8,6 @@ namespace RiverHollow.WorldObjects
 {
     public abstract class TriggerObject : WorldObject
     {
-        #region constants
-        protected const string MATCH_TRIGGER = "MatchTrigger";
-        protected const string TRIGGER_NUMBER = "TriggerNumber";
-        protected const string ITEM_KEY_ID = "ItemKeyID";
-        protected const string OUT_TRIGGER = "OutTrigger";
-        #endregion
-
         readonly TriggerObjectEnum _eSubType;
         protected readonly string _sOutTrigger;   //What trigger response is sent
         protected string _sMatchTrigger; //What, if anything, the object responds to
@@ -30,10 +23,10 @@ namespace RiverHollow.WorldObjects
             _eObjectType = ObjectTypeEnum.DungeonObject;
             _eSubType = Util.ParseEnum<TriggerObjectEnum>(stringData["Subtype"]);
 
-            Util.AssignValue(ref _sOutTrigger, OUT_TRIGGER, stringData);
-            Util.AssignValue(ref _sMatchTrigger, MATCH_TRIGGER, stringData);
-            Util.AssignValue(ref _iTriggerNumber, TRIGGER_NUMBER, stringData);
-            Util.AssignValue(ref _iItemKeyID, ITEM_KEY_ID, stringData);
+            Util.AssignValue(ref _sOutTrigger, "OutTrigger", stringData);
+            Util.AssignValue(ref _sMatchTrigger, "MatchTrigger", stringData);
+            Util.AssignValue(ref _iTriggerNumber, "TriggerNumber", stringData);
+            Util.AssignValue(ref _iItemKeyID, "ItemKeyID", stringData);
 
             _iTriggersLeft = _iTriggerNumber;
         }

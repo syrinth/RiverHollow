@@ -481,7 +481,7 @@ namespace RiverHollow.Game_Managers
 
         public static bool PlayerInRange(Rectangle rect)
         {
-            int hypotenuse = (int)Math.Sqrt(TILE_SIZE * TILE_SIZE + TILE_SIZE * TILE_SIZE);
+            int hypotenuse = (int)Math.Sqrt(Constants.TILE_SIZE * Constants.TILE_SIZE + Constants.TILE_SIZE * Constants.TILE_SIZE);
             return PlayerInRange(rect, hypotenuse);
         }
         public static bool PlayerInRange(Rectangle rect, int range)
@@ -509,7 +509,7 @@ namespace RiverHollow.Game_Managers
 
         public static bool PlayerInRange(Point centre)
         {
-            int hypotenuse = (int)Math.Sqrt(TILE_SIZE*TILE_SIZE + TILE_SIZE*TILE_SIZE);
+            int hypotenuse = (int)Math.Sqrt(Constants.TILE_SIZE* Constants.TILE_SIZE + Constants.TILE_SIZE* Constants.TILE_SIZE);
             return PlayerInRange(centre, hypotenuse);
         }
         public static bool PlayerInRange(Vector2 centre, int range)
@@ -991,7 +991,7 @@ namespace RiverHollow.Game_Managers
             if (t != null && ToolInUse == null)
             {
                 ToolInUse = t;
-                ToolInUse.Position = new Vector2(PlayerActor.Position.X - TILE_SIZE, PlayerActor.Position.Y - (TILE_SIZE * 2));
+                ToolInUse.Position = new Vector2(PlayerActor.Position.X - Constants.TILE_SIZE, PlayerActor.Position.Y - (Constants.TILE_SIZE * 2));
                 if (ToolInUse != null && !Busy)
                 {
                     if (DecreaseStamina(ToolInUse.StaminaCost))

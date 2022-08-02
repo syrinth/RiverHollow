@@ -16,6 +16,7 @@ using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.GUIComponents.Screens.HUDScreens;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -223,7 +224,7 @@ namespace RiverHollow.GUIComponents.Screens
         float _fItemFade = 1.0f;
         const float FADE_OUT = 0.1f;
 
-        public HUDMiniInventory() : base(GUIWindow.Window_2, TILE_SIZE, TILE_SIZE)
+        public HUDMiniInventory() : base(GUIWindow.Window_2, Constants.TILE_SIZE, Constants.TILE_SIZE)
         {
             _btnChangeRow = new GUIButton(new Rectangle(256, 96, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, RowUp);
             _btnChangeRow.FadeOnDisable(false);

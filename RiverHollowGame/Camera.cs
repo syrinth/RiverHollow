@@ -55,10 +55,10 @@ namespace RiverHollow
             if (target.Y <= (RiverHollow.ScreenHeight / 2)) { target.Y = (RiverHollow.ScreenHeight / 2); }
             else if (target.Y >= MapManager.CurrentMap.GetMapHeightInScaledPixels() - (RiverHollow.ScreenHeight / 2)) { target.Y = MapManager.CurrentMap.GetMapHeightInScaledPixels() - (RiverHollow.ScreenHeight / 2); }
 
-            if (MapManager.CurrentMap.GetMapWidthInScaledPixels() / TILE_SIZE <= Math.Ceiling((double)RiverHollow.ScreenWidth / TILE_SIZE)) { target.X = (MapManager.CurrentMap.GetMapWidthInScaledPixels() / 2); }
+            if (MapManager.CurrentMap.GetMapWidthInScaledPixels() / Constants.TILE_SIZE <= Math.Ceiling((double)RiverHollow.ScreenWidth / Constants.TILE_SIZE)) { target.X = (MapManager.CurrentMap.GetMapWidthInScaledPixels() / 2); }
 
-            double val = Math.Ceiling((double)RiverHollow.ScreenHeight / TILE_SIZE);
-            if (MapManager.CurrentMap.GetMapHeightInScaledPixels() / TILE_SIZE <= val) { target.Y = (MapManager.CurrentMap.GetMapHeightInScaledPixels() / 2); }
+            double val = Math.Ceiling((double)RiverHollow.ScreenHeight / Constants.TILE_SIZE);
+            if (MapManager.CurrentMap.GetMapHeightInScaledPixels() / Constants.TILE_SIZE <= val) { target.Y = (MapManager.CurrentMap.GetMapHeightInScaledPixels() / 2); }
 
             if (!Scrying())
             {

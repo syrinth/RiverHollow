@@ -49,7 +49,7 @@ namespace RiverHollow.Map_Handling
         protected List<RHTile> TilesInArea(bool onlyValid)
         {
             List<RHTile> validTiles = new List<RHTile>();
-            foreach (Vector2 v in Util.GetAllPointsInArea(_vPosition, _szDimensions, TILE_SIZE))
+            foreach (Vector2 v in Util.GetAllPointsInArea(_vPosition, _szDimensions, Constants.TILE_SIZE))
             {
                 RHTile tile = _map.GetTileByPixelPosition(v);
                 if (!onlyValid || tile.Passable())
@@ -156,7 +156,7 @@ namespace RiverHollow.Map_Handling
                         wObj.PlaceOnMap(_map);
 
                         //If the object is larger than one tile, we need to ensure it can actually fit on the tile(s) we've placed it
-                        if (wObj.CollisionBox.Width > TILE_SIZE || wObj.CollisionBox.Height > TILE_SIZE)
+                        if (wObj.CollisionBox.Width > Constants.TILE_SIZE || wObj.CollisionBox.Height > Constants.TILE_SIZE)
                         {
                             foreach (RHTile t in wObj.Tiles)
                             {

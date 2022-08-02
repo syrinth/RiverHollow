@@ -21,11 +21,11 @@ namespace RiverHollow.Characters
         {
             get
             {
-                return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TILE_SIZE);
+                return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - Constants.TILE_SIZE);
             }
             set
             {
-                _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + TILE_SIZE);
+                _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + Constants.TILE_SIZE);
             }
         }
 

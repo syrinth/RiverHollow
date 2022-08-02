@@ -62,7 +62,7 @@ namespace RiverHollow.WorldObjects
             for (int j = 0; j < _iMaxStates - 1; j++)
             {
                 _diTransitionTimes.Add(j, int.Parse(dayStr[j]));
-                _sprite.AddAnimation((j + 1).ToString(), _pImagePos.X + (TILE_SIZE * (j + 1)), _pImagePos.Y, _uSize);
+                _sprite.AddAnimation((j + 1).ToString(), _pImagePos.X + (Constants.TILE_SIZE * (j + 1)), _pImagePos.Y, _uSize);
             }
             _iDaysLeft = _diTransitionTimes[0];
 
@@ -72,7 +72,7 @@ namespace RiverHollow.WorldObjects
                 _sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), _uSize, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
             }
 
-            _sprite.SetRotationOrigin(new Vector2((_uSize.Width * TILE_SIZE) / 2, (_uSize.Height * TILE_SIZE) - 1));    //Subtract one to keep it in the bounds of the rectangle
+            _sprite.SetRotationOrigin(new Vector2((_uSize.Width * Constants.TILE_SIZE) / 2, (_uSize.Height * Constants.TILE_SIZE) - 1));    //Subtract one to keep it in the bounds of the rectangle
         }
 
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
@@ -81,7 +81,7 @@ namespace RiverHollow.WorldObjects
             _sprite.AddAnimation(0.ToString(), (int)_pImagePos.X, (int)_pImagePos.Y, _uSize);
             for (int j = 1; j < _diTransitionTimes.Count + 1; j++)
             {
-                _sprite.AddAnimation(j.ToString(), (int)_pImagePos.X + (TILE_SIZE * j), (int)_pImagePos.Y, _uSize);
+                _sprite.AddAnimation(j.ToString(), (int)_pImagePos.X + (Constants.TILE_SIZE * j), (int)_pImagePos.Y, _uSize);
             }
         }
 

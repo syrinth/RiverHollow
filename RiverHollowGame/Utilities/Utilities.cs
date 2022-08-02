@@ -48,8 +48,8 @@ namespace RiverHollow.Utilities
         public static Vector2 SnapToGrid(Vector2 p)
         {
             Vector2 newVec = Vector2.Zero;
-            newVec.X = ((int)(p.X / TILE_SIZE)) * TILE_SIZE;
-            newVec.Y = ((int)(p.Y / TILE_SIZE)) * TILE_SIZE;
+            newVec.X = ((int)(p.X / Constants.TILE_SIZE)) * Constants.TILE_SIZE;
+            newVec.Y = ((int)(p.Y / Constants.TILE_SIZE)) * Constants.TILE_SIZE;
 
             return newVec;
         }
@@ -63,8 +63,8 @@ namespace RiverHollow.Utilities
         public static Vector2 GetMapPositionOfTile(Vector2 tile)
         {
             Vector2 newVec = Vector2.Zero;
-            newVec.X = tile.X * TILE_SIZE;
-            newVec.Y = tile.Y  * TILE_SIZE;
+            newVec.X = tile.X * Constants.TILE_SIZE;
+            newVec.Y = tile.Y  * Constants.TILE_SIZE;
 
             return newVec;
         }
@@ -84,7 +84,7 @@ namespace RiverHollow.Utilities
         }
         public static Vector2 GetGridCoords(Vector2 vec)
         {
-            Vector2 rv = new Vector2(vec.X / TILE_SIZE, vec.Y / TILE_SIZE);
+            Vector2 rv = new Vector2(vec.X / Constants.TILE_SIZE, vec.Y / Constants.TILE_SIZE);
             return rv;
         }
         #endregion

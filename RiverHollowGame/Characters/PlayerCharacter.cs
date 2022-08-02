@@ -35,7 +35,7 @@ namespace RiverHollow.Characters
             return liRv;
         }
 
-        private int HeightMod => _sprBody.Height - TILE_SIZE;
+        private int HeightMod => _sprBody.Height - Constants.TILE_SIZE;
         public override Vector2 Position
         {
             get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + HeightMod); }
@@ -47,7 +47,7 @@ namespace RiverHollow.Characters
         }
 
         public override Vector2 CollisionBoxPosition => Position + new Vector2(2, 2);
-        public override Rectangle CollisionBox => ActiveMount != null ? ActiveMount.CollisionBox : new Rectangle((int)CollisionBoxPosition.X, (int)CollisionBoxPosition.Y, Width - 4, TILE_SIZE - 4);
+        public override Rectangle CollisionBox => ActiveMount != null ? ActiveMount.CollisionBox : new Rectangle((int)CollisionBoxPosition.X, (int)CollisionBoxPosition.Y, Width - 4, Constants.TILE_SIZE - 4);
 
         #region Clothing
         public Clothing Hat { get; private set; }
@@ -67,8 +67,8 @@ namespace RiverHollow.Characters
         public PlayerCharacter() : base()
         {
             //_sName = PlayerManager.Name;
-            _iBodyWidth = TILE_SIZE;
-            _iBodyHeight = HUMAN_HEIGHT;
+            _iBodyWidth = Constants.TILE_SIZE;
+            _iBodyHeight = Constants.HUMAN_HEIGHT;
 
             HairColor = Color.Red;
             EyeColor = Color.Blue;
@@ -91,7 +91,7 @@ namespace RiverHollow.Characters
 
             _lightSource = DataManager.GetLight(7);
 
-            SpdMult = NORMAL_SPEED;
+            SpdMult = Constants.NORMAL_SPEED;
         }
 
         public override void Update(GameTime gTime)
@@ -150,7 +150,7 @@ namespace RiverHollow.Characters
             HairIndex = index;
             //Loads the Sprites for the players hair animations for the class based off of the hair ID
             LoadSpriteAnimations(ref _sprHair, Util.LoadWorldAnimations(DataManager.Config[17]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex));
-            _sprHair.SetLayerDepthMod(HAIR_DEPTH);
+            _sprHair.SetLayerDepthMod(Constants.HAIR_DEPTH);
             _sprHair.SetColor(HairColor);
         }
 
@@ -236,9 +236,9 @@ namespace RiverHollow.Characters
         }
         public void Dismount()
         {
-            Position = ActiveMount.BodySprite.Position + new Vector2(TILE_SIZE, 0);
+            Position = ActiveMount.BodySprite.Position + new Vector2(Constants.TILE_SIZE, 0);
             ActiveMount = null;
-            SpdMult = NORMAL_SPEED;
+            SpdMult = Constants.NORMAL_SPEED;
 
             foreach (AnimatedSprite spr in GetSprites())
             {

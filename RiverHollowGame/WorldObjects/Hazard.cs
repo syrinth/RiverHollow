@@ -60,7 +60,7 @@ namespace RiverHollow.WorldObjects
 
             if (_eHazardType != HazardTypeEnum.Passive)
             {
-                _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + TILE_SIZE, _pImagePos.Y, _uSize);
+                _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _uSize);
             }
         }
 

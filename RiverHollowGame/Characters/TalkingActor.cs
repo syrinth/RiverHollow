@@ -14,9 +14,6 @@ namespace RiverHollow.Characters
 {
     public abstract class TalkingActor : WorldActor
     {
-        protected const int PortraitWidth = 160;
-        protected const int PortraitHeight = 192;
-
         protected ActorFaceEnum _eFaceEnum;
         protected List<ActorFaceEnum> _liActorFaceQueue;
         protected string _sPortrait;
@@ -53,7 +50,7 @@ namespace RiverHollow.Characters
             base.Draw(spriteBatch, useLayerDepth);
             if (_bOnTheMap && _assignedTask?.TaskState == TaskStateEnum.Assigned)
             {
-                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)Position.X, (int)Position.Y - 32, 16, 16), new Rectangle(224, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, GameManager.MAX_LAYER_DEPTH);
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)Position.X, (int)Position.Y - 32, 16, 16), new Rectangle(224, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
             }
         }
 

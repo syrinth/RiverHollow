@@ -4,6 +4,7 @@ using RiverHollow.Characters;
 using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
+using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.CombatManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
@@ -119,7 +120,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
         {
             if (_bDrawItem && _chosenItem != null)     //We want to draw the item above the character's head
             {
-                int size = GameManager.TILE_SIZE * GameManager.CurrentScale;
+                int size = Constants.TILE_SIZE * GameManager.CurrentScale;
                 GUIImage gItem = new GUIImage(_chosenItem.SourceRectangle, size, size, _chosenItem.Texture);
                 CombatActor c = ActiveCharacter;
 

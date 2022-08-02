@@ -420,16 +420,16 @@ namespace RiverHollow.Game_Managers
                 switch (dir)
                 {
                     case DirectionEnum.Up:
-                        vec = new Vector2(0, -numSquares * TILE_SIZE);
+                        vec = new Vector2(0, -numSquares * Constants.TILE_SIZE);
                         break;
                     case DirectionEnum.Down:
-                        vec = new Vector2(0, numSquares * TILE_SIZE);
+                        vec = new Vector2(0, numSquares * Constants.TILE_SIZE);
                         break;
                     case DirectionEnum.Right:
-                        vec = new Vector2(numSquares * TILE_SIZE, 0);
+                        vec = new Vector2(numSquares * Constants.TILE_SIZE, 0);
                         break;
                     case DirectionEnum.Left:
-                        vec = new Vector2(-numSquares * TILE_SIZE, 0);
+                        vec = new Vector2(-numSquares * Constants.TILE_SIZE, 0);
                         break;
 
                 }
@@ -664,7 +664,7 @@ namespace RiverHollow.Game_Managers
 
             GUIManager.CloseTextWindow();
 
-            PlayerManager.PlayerActor.SpdMult = Actor.NORMAL_SPEED;
+            PlayerManager.PlayerActor.SpdMult = Constants.NORMAL_SPEED;
             PlayerManager.AllowMovement = true;
             CutsceneManager.Playing = false;
             PlayerManager.PlayerActor.MoveToLocation = Vector2.Zero;

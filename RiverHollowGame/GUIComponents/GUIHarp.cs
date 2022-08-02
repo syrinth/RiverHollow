@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-
+using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents
@@ -74,7 +74,7 @@ namespace RiverHollow.GUIComponents
 
         public class GUIMusicNote : GUIImage
         {
-            public GUIMusicNote() : base(new Rectangle(0, 0, TILE_SIZE, TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE)
+            public GUIMusicNote() : base(new Rectangle(0, 0, Constants.TILE_SIZE, Constants.TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE)
             {
 
             }

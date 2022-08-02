@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
+using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using static RiverHollow.Utilities.Enums;
 
@@ -142,7 +143,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         {
                             if (((TriggerObject)GameManager.CurrentWorldObject).CheckForKey(clickedItem))
                             {
-                                ((TriggerObject)GameManager.CurrentWorldObject).AttemptToTrigger(GameManager.ITEM_OPEN);
+                                ((TriggerObject)GameManager.CurrentWorldObject).AttemptToTrigger(Constants.TRIGGER_ITEM_OPEN);
                                 GUIManager.CloseMainObject();
                             }
                         }

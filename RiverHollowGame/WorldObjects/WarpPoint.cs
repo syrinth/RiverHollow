@@ -5,7 +5,7 @@ using RiverHollow.Map_Handling;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
-using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.WorldObjects
 {
@@ -17,7 +17,7 @@ namespace RiverHollow.WorldObjects
         public WarpPoint(int id, Dictionary<string, string> stringData) : base(id)
         {
             LoadDictionaryData(stringData);
-            _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + (TILE_SIZE * 2), _pImagePos.Y, _uSize);
+            _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + (Constants.TILE_SIZE * 2), _pImagePos.Y, _uSize);
         }
 
         public override bool PlaceOnMap(Vector2 pos, RHMap map)

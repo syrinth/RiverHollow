@@ -47,7 +47,7 @@ namespace RiverHollow.Map_Handling
             CollisionBox = Util.FloatRectangle(obj.Position, obj.Size.Width, obj.Size.Height);
             if (obj.Properties.ContainsKey("Map"))
             {
-                _sLinkedMapName = obj.Properties["Map"] == "Home" ? MapManager.TownMapName : obj.Properties["Map"];
+                _sLinkedMapName = obj.Properties["Map"] == "Home" ? Constants.TOWN_MAP_NAME : obj.Properties["Map"];
                 IsActive = true;
             }
 

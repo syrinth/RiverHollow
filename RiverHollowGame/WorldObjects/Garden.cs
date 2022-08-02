@@ -8,6 +8,7 @@ using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.GUIComponents.MainObjects;
 using static RiverHollow.Game_Managers.SaveManager;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.WorldObjects
 {
@@ -25,10 +26,10 @@ namespace RiverHollow.WorldObjects
             LoadDictionaryData(stringData, false);
 
             LoadAdjustableSprite(ref _sprite, DataManager.FILE_WORLDOBJECTS);
-            _pImagePos.Y += TILE_SIZE;
+            _pImagePos.Y += Constants.TILE_SIZE;
 
             LoadAdjustableSprite(ref _sprWatered, DataManager.FILE_WORLDOBJECTS);
-            _pImagePos.Y -= TILE_SIZE;
+            _pImagePos.Y -= Constants.TILE_SIZE;
 
             WaterGardenBed(EnvironmentManager.IsRaining());
         }
@@ -69,7 +70,7 @@ namespace RiverHollow.WorldObjects
 
             if (_objPlant != null)
             {
-                _objPlant?.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objPlant.Sprite.Height - TILE_SIZE)));
+                _objPlant?.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objPlant.Sprite.Height - Constants.TILE_SIZE)));
                 _objPlant?.SyncLightPositions();
 
                 if (_objPlant.FinishedGrowing())
@@ -122,7 +123,7 @@ namespace RiverHollow.WorldObjects
 
             _objPlant = obj;
             _objPlant?.SetGarden(this);
-            _objPlant?.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objPlant.Sprite.Height - TILE_SIZE)));
+            _objPlant?.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objPlant.Sprite.Height - Constants.TILE_SIZE)));
             _objPlant?.SyncLightPositions();
         }
         public Plant GetPlant() { return _objPlant; }
@@ -135,7 +136,7 @@ namespace RiverHollow.WorldObjects
         {
             base.SnapPositionToGrid(position);
             _sprWatered.Position = _vMapPosition;
-            _objPlant?.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objPlant.Sprite.Height - TILE_SIZE)));
+            _objPlant?.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objPlant.Sprite.Height - Constants.TILE_SIZE)));
         }
 
         public override void Rollover()

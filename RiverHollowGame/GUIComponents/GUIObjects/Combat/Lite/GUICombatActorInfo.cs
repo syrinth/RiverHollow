@@ -91,7 +91,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             }
 
             PlayAnimation(AnimationEnum.Idle);
-            sprite.SetScale(NORMAL_SCALE);
+            sprite.SetScale(Constants.NORMAL_SCALE);
         }
 
         public void AssignTile(GUICombatTile tile)

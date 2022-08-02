@@ -54,9 +54,9 @@ namespace RiverHollow.GUIComponents.Screens
             _liPoints = new List<Vector2>();
 
             int loops = 0;
-            for (int row = 0; row < 7 * TILE_SIZE; row += (TILE_SIZE))
+            for (int row = 0; row < 7 * Constants.TILE_SIZE; row += (Constants.TILE_SIZE))
             {
-                for (int column = (loops % 2 == 0) ? 0 : (TILE_SIZE); column < 18 * TILE_SIZE; column += (TILE_SIZE * 2))
+                for (int column = (loops % 2 == 0) ? 0 : (Constants.TILE_SIZE); column < 18 * Constants.TILE_SIZE; column += (Constants.TILE_SIZE * 2))
                 {
                     _liPoints.Add(new Vector2(ScaleIt((int)_pGridOffset.X + column), ScaleIt((int)_pGridOffset.Y + row)));
                 }
@@ -150,7 +150,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                     GUIImage coin = DataManager.GetIcon(GameIconEnum.Coin);
                     coin.Position(v.BodySprite.Position);
-                    coin.ScaledMoveBy(0, -TILE_SIZE);
+                    coin.ScaledMoveBy(0, -Constants.TILE_SIZE);
                     _liCoins.Add(coin);
 
                     _iCurrentVillager++;
@@ -407,7 +407,7 @@ namespace RiverHollow.GUIComponents.Screens
 
     //                    if (_bNextRow) {
     //                        _bNextRow = false;
-    //                        spr.AnchorAndAlignToObject(_gResults, SideEnum.Top, SideEnum.Left, (int)((_iRows - _iCurrRow) * GameManager.TILE_SIZE * GameManager.CurrentScale)); }
+    //                        spr.AnchorAndAlignToObject(_gResults, SideEnum.Top, SideEnum.Left, (int)((_iRows - _iCurrRow) * Constants.TILE_SIZE * GameManager.CurrentScale)); }
     //                    else {
     //                        spr.AnchorAndAlignToObject(_liMonsters[_liMonsters.Count - 1], SideEnum.Right, SideEnum.Bottom);
     //                    }
@@ -436,11 +436,11 @@ namespace RiverHollow.GUIComponents.Screens
     //    {
     //        bool rv = false;
 
-    //        _iTotalTiles += (spr.Width / GameManager.TILE_SIZE);
+    //        _iTotalTiles += (spr.Width / Constants.TILE_SIZE);
     //        if (_iTotalTiles > MAX_TILES)
     //        {
     //            rv = true;
-    //            _iTotalTiles = (spr.Width / GameManager.TILE_SIZE);
+    //            _iTotalTiles = (spr.Width / Constants.TILE_SIZE);
     //            toIncrement++;
     //        }
 

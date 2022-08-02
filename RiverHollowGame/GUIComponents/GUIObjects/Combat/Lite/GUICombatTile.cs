@@ -288,7 +288,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             AnimatedSprite spr = new AnimatedSprite(DataManager.COMBAT_TEXTURE);
             spr.AddAnimation(AnimationEnum.PlayAnimation, 192, 159, 16, 17, 2, 0.6f);
             spr.PlayAnimation(AnimationEnum.PlayAnimation);
-            spr.SetScale(NORMAL_SCALE);
+            spr.SetScale(Constants.NORMAL_SCALE);
             _gLevelIcon = new GUISprite(spr);
             _gLevelIcon.AnchorAndAlignToObject(CharacterSprite, SideEnum.Top, SideEnum.CenterX, ScaleIt(1));
         }

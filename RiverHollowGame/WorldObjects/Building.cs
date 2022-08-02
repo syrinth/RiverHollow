@@ -45,7 +45,7 @@ namespace RiverHollow.Buildings
 
         public override void ProcessLeftClick()
         {
-            if (Level < MAX_BUILDING_LEVEL)
+            if (Level < Constants.MAX_BUILDING_LEVEL)
             {
                 GUIManager.OpenMainObject(new HUDUpgradeWindow(this));
             }
@@ -115,10 +115,10 @@ namespace RiverHollow.Buildings
             int startY = 0;
 
             _sprite = new AnimatedSprite(textureName);
-            for (int i = 1; i <= MAX_BUILDING_LEVEL; i++)
+            for (int i = 1; i <= Constants.MAX_BUILDING_LEVEL; i++)
             {
                 _sprite.AddAnimation(i.ToString(), startX, startY, _uSize);
-                startX += _uSize.Width * TILE_SIZE;
+                startX += _uSize.Width * Constants.TILE_SIZE;
             }
             _sprite.PlayAnimation("1");
         }
@@ -134,18 +134,18 @@ namespace RiverHollow.Buildings
             base.SnapPositionToGrid(position);
 
             //Determine where the top-left corner of the entrance Rectangle should be
-            int startX = (int)_vMapPosition.X + (_rEntrance.X * TILE_SIZE);
-            int startY = (int)_vMapPosition.Y + (_rEntrance.Y * TILE_SIZE);
+            int startX = (int)_vMapPosition.X + (_rEntrance.X * Constants.TILE_SIZE);
+            int startY = (int)_vMapPosition.Y + (_rEntrance.Y * Constants.TILE_SIZE);
 
             //Create the entrance and exit rectangles attached to the building
-            TravelBox = new Rectangle(startX, startY, _rEntrance.Width * TILE_SIZE, _rEntrance.Height * TILE_SIZE);
+            TravelBox = new Rectangle(startX, startY, _rEntrance.Width * Constants.TILE_SIZE, _rEntrance.Height * Constants.TILE_SIZE);
         }
 
         public override bool PlaceOnMap(Vector2 pos, RHMap map)
         {
             bool rv = false;
 
-            pos = new Vector2(pos.X - (_rBase.X * TILE_SIZE), pos.Y - (_rBase.Y * TILE_SIZE));
+            pos = new Vector2(pos.X - (_rBase.X * Constants.TILE_SIZE), pos.Y - (_rBase.Y * Constants.TILE_SIZE));
             SnapPositionToGrid(pos);
 
             List<RHTile> tiles = new List<RHTile>();
@@ -181,7 +181,7 @@ namespace RiverHollow.Buildings
         public void Upgrade()
         {
             string initialLevel = MapName;
-            if (Level + 1 <= MAX_BUILDING_LEVEL)
+            if (Level + 1 <= Constants.MAX_BUILDING_LEVEL)
             {
                 Level++;
                 _sprite.PlayAnimation(Level.ToString());

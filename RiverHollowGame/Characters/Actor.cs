@@ -20,13 +20,6 @@ namespace RiverHollow.Characters
     /// </summary>
     public abstract class Actor
     {
-        public const float NORMAL_SPEED = 1f;
-        public const float NPC_WALK_SPEED = 0.6f;
-
-        protected const int HUMAN_HEIGHT = (TILE_SIZE * 2) + 2;
-        protected const float EYE_DEPTH = 0.001f;
-        protected const float HAIR_DEPTH = 0.003f;
-
         public DirectionEnum Facing = DirectionEnum.Down;
 
         protected AnimatedSprite _sprBody;
@@ -44,9 +37,9 @@ namespace RiverHollow.Characters
             return new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
         }
 
-        protected int _iBodyWidth = TILE_SIZE;
+        protected int _iBodyWidth = Constants.TILE_SIZE;
         public int Width => _iBodyWidth;
-        protected int _iBodyHeight = TILE_SIZE * 2;
+        protected int _iBodyHeight = Constants.TILE_SIZE * 2;
         public int Height => _iBodyHeight;
         public int SpriteWidth => _sprBody.Width;
         public int SpriteHeight => _sprBody.Height;

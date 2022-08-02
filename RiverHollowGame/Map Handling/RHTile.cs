@@ -18,9 +18,9 @@ namespace RiverHollow.Map_Handling
         public string MapName { get; }
         public int X { get; }
         public int Y { get; }
-        public Vector2 Position => new Vector2(X * TILE_SIZE, Y * TILE_SIZE);
-        public Vector2 Center => new Vector2(Position.X + TILE_SIZE / 2, Position.Y + TILE_SIZE / 2);
-        public Rectangle Rect => Util.FloatRectangle(Position, TILE_SIZE, TILE_SIZE);
+        public Vector2 Position => new Vector2(X * Constants.TILE_SIZE, Y * Constants.TILE_SIZE);
+        public Vector2 Center => new Vector2(Position.X + Constants.TILE_SIZE / 2, Position.Y + Constants.TILE_SIZE / 2);
+        public Rectangle Rect => Util.FloatRectangle(Position, Constants.TILE_SIZE, Constants.TILE_SIZE);
 
         string _sClickAction = string.Empty;
         TravelPoint _travelPoint;

@@ -34,7 +34,7 @@ namespace RiverHollow.Items
         protected Vector2 _vPosition;
         public virtual Vector2 Position { get => _vPosition; set => _vPosition = value; }
 
-        public virtual Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, TILE_SIZE, TILE_SIZE); }
+        public virtual Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, Constants.TILE_SIZE, Constants.TILE_SIZE); }
         public Rectangle SourceRectangle { get => new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight); }
 
         protected bool _bOnMap;
@@ -45,8 +45,8 @@ namespace RiverHollow.Items
         protected bool _bManualPickup = false;
         public bool ManualPickup { get => _bManualPickup; set => _bManualPickup = value; }
 
-        protected int _iColTexSize = TILE_SIZE;
-        protected int _iRowTexSize = TILE_SIZE;
+        protected int _iColTexSize = Constants.TILE_SIZE;
+        protected int _iRowTexSize = Constants.TILE_SIZE;
         private Parabola _movement;
         protected bool _bStacks;
         public bool DoesItStack => _bStacks;
@@ -90,7 +90,7 @@ namespace RiverHollow.Items
             //Image information
             string[] texIndices = stringData["Image"].Split('-');
             _vSourcePos = new Vector2(int.Parse(texIndices[0]), int.Parse(texIndices[1]));
-            _vSourcePos *= TILE_SIZE;
+            _vSourcePos *= Constants.TILE_SIZE;
 
             Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
 
@@ -135,7 +135,7 @@ namespace RiverHollow.Items
             }
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox, bool LayerDepth = false, float forcedLayerDepth = GameManager.MAX_LAYER_DEPTH, float alpha = 1f)
+        public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox, bool LayerDepth = false, float forcedLayerDepth = Constants.MAX_LAYER_DEPTH, float alpha = 1f)
         {
             if (LayerDepth)
             {
@@ -312,7 +312,7 @@ namespace RiverHollow.Items
                 double timerChange = r.Next(0, 9);
                 timerChange *= 0.01;
                 if (r.Next(0, 1) == 1) { timerChange *= -1; }
-                _timer = new RHTimer(Constants.GAME_ITEM_BOUNCE_SPEED + timerChange);
+                _timer = new RHTimer(Constants.ITEM_BOUNCE_SPEED + timerChange);
 
                 _vStartPosition = pos;
                 _vPosition = pos;
@@ -320,7 +320,7 @@ namespace RiverHollow.Items
 
             public Parabola(Vector2 pos, double curveDegree, double curveWidth, bool goingLeft)
             {
-                _timer = new RHTimer(Constants.GAME_ITEM_BOUNCE_SPEED);
+                _timer = new RHTimer(Constants.ITEM_BOUNCE_SPEED);
                 _bBounce = false;
                 _vStartPosition = pos;
                 _vPosition = pos;

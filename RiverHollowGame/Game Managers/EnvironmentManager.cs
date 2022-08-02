@@ -148,7 +148,7 @@ namespace RiverHollow.Game_Managers
         public static void RollForWeatherEffects()
         {
             int roll = RHRandom.Instance().Next(1, 5);
-            if (roll > 2 || (_iSeasonPrecipDays < Constants.GAME_MINIMUM_DAYS_OF_PRECIPITATION && GameCalendar.CurrentDay + _iSeasonPrecipDays - 1 == Constants.CALENDAR_DAYS_IN_MONTH))
+            if (roll > 2 || (_iSeasonPrecipDays < Constants.MINIMUM_DAYS_OF_PRECIPITATION && GameCalendar.CurrentDay + _iSeasonPrecipDays - 1 == Constants.CALENDAR_DAYS_IN_MONTH))
             {
                 _iSeasonPrecipDays++;
                 if (GameCalendar.CurrentSeason == 0) { _eCurrentWeather = WeatherEnum.Raining; }
@@ -190,7 +190,7 @@ namespace RiverHollow.Game_Managers
         public virtual void Update(GameTime gTime) { }
         public void Draw(SpriteBatch spriteBatch)
         {
-            _sprBody.Draw(spriteBatch, GameManager.MAX_LAYER_DEPTH);
+            _sprBody.Draw(spriteBatch, Constants.MAX_LAYER_DEPTH);
         }
 
         public virtual bool IsFinished()
@@ -205,15 +205,15 @@ namespace RiverHollow.Game_Managers
             {
                 _iFallDistance = RHRandom.Instance().Next(50, 100);
                 _sprBody = new AnimatedSprite(DataManager.FOLDER_ENVIRONMENT + "Rain");
-                _sprBody.AddAnimation(AnimationEnum.Action1, 0, 0, TILE_SIZE, TILE_SIZE * 2);
-                _sprBody.AddAnimation(AnimationEnum.Action_Finished, TILE_SIZE, 0, TILE_SIZE, TILE_SIZE * 2, 2, 0.1f, false, true);
+                _sprBody.AddAnimation(AnimationEnum.Action1, 0, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2);
+                _sprBody.AddAnimation(AnimationEnum.Action_Finished, Constants.TILE_SIZE, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 2, 0.1f, false, true);
                 _sprBody.PlayAnimation(AnimationEnum.Action1);
 
                 int top = (0 - 400);
-                int bottom = (mapWidth * TILE_SIZE) + _iFallDistance;
+                int bottom = (mapWidth * Constants.TILE_SIZE) + _iFallDistance;
                 int left = (0 - _iFallDistance);
-                int right = (mapWidth * TILE_SIZE) + _iFallDistance;
-                Vector2 pos = new Vector2(RHRandom.Instance().Next(0, (mapWidth * TILE_SIZE) + 300), RHRandom.Instance().Next(-400, mapHeight*TILE_SIZE));
+                int right = (mapWidth * Constants.TILE_SIZE) + _iFallDistance;
+                Vector2 pos = new Vector2(RHRandom.Instance().Next(0, (mapWidth * Constants.TILE_SIZE) + 300), RHRandom.Instance().Next(-400, mapHeight * Constants.TILE_SIZE));
                 //Vector2 pos = new Vector2(300, -300);
                 _sprBody.Position = pos;
             }
@@ -222,7 +222,7 @@ namespace RiverHollow.Game_Managers
             {
                 if (_sprBody.IsCurrentAnimation(AnimationEnum.Action1))
                 {
-                    Vector2 landingPos = _sprBody.Position + new Vector2(0, TILE_SIZE);
+                    Vector2 landingPos = _sprBody.Position + new Vector2(0, Constants.TILE_SIZE);
                     RHTile landingTile = MapManager.CurrentMap.GetTileByPixelPosition(landingPos);
                     //if (landingTile == null) { _sprBody.PlayAnimation(CombatAnimationEnum.Action_Finished); }//_sprBody.Drawing = false; }
                     if (_iFallDistance <= 0 && (landingTile == null || landingTile.WorldObject == null || landingTile.WorldObject.CompareType(ObjectTypeEnum.Structure)))
@@ -254,7 +254,7 @@ namespace RiverHollow.Game_Managers
                 float frameLength = RHRandom.Instance().Next(3, 5) / 10f;
                 _iMaxHeight = mapHeight * ScaledTileSize;
                 _sprBody = new AnimatedSprite(DataManager.FOLDER_ENVIRONMENT + "Snow");
-                _sprBody.AddAnimation(AnimationEnum.Action1, 0, 0, TILE_SIZE, TILE_SIZE, 3, frameLength, true);
+                _sprBody.AddAnimation(AnimationEnum.Action1, 0, 0, Constants.TILE_SIZE, Constants.TILE_SIZE, 3, frameLength, true);
                 _sprBody.PlayAnimation(AnimationEnum.Action1);
 
                 Vector2 pos = new Vector2(RHRandom.Instance().Next(0, mapWidth * ScaledTileSize), RHRandom.Instance().Next(0, mapHeight * ScaledTileSize));

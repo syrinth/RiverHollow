@@ -27,7 +27,7 @@ namespace RiverHollow.Misc
 
             Position.X += spriteWidth / 2; //get the center
             Position.X += rand.Next(-8, 8); //displace the x position
-            Position.Y -= rand.Next(0, TILE_SIZE / 2); //Subtract this number to go 'up' the screen
+            Position.Y -= rand.Next(0, Constants.TILE_SIZE / 2); //Subtract this number to go 'up' the screen
         }
 
         public void Draw(SpriteBatch spriteBatch)

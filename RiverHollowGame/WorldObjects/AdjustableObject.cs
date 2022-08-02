@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.WorldObjects
 {
@@ -29,21 +30,21 @@ namespace RiverHollow.WorldObjects
         {
             spr = new AnimatedSprite(textureName);
             spr.AddAnimation("None", (int)_pImagePos.X, (int)_pImagePos.Y, _uSize);
-            spr.AddAnimation("NS", (int)_pImagePos.X + TILE_SIZE, (int)_pImagePos.Y, _uSize);
-            spr.AddAnimation("EW", (int)_pImagePos.X + TILE_SIZE * 2, (int)_pImagePos.Y, _uSize);
-            spr.AddAnimation("SW", (int)_pImagePos.X + TILE_SIZE * 3, (int)_pImagePos.Y, _uSize);
-            spr.AddAnimation("NW", (int)_pImagePos.X + TILE_SIZE * 4, (int)_pImagePos.Y, _uSize);
-            spr.AddAnimation("NE", (int)_pImagePos.X + TILE_SIZE * 5, (int)_pImagePos.Y, _uSize);
-            spr.AddAnimation("SE", (int)_pImagePos.X + TILE_SIZE * 6, (int)_pImagePos.Y, _uSize);
-            spr.AddAnimation("NSE", (int)_pImagePos.X + TILE_SIZE * 7, (int)_pImagePos.Y, _uSize);
-            spr.AddAnimation("NSW", (int)_pImagePos.X + TILE_SIZE * 8, (int)_pImagePos.Y, _uSize);
-            spr.AddAnimation("NEW", (int)_pImagePos.X + TILE_SIZE * 9, (int)_pImagePos.Y, _uSize);
-            spr.AddAnimation("SEW", (int)_pImagePos.X + TILE_SIZE * 10, (int)_pImagePos.Y, _uSize);
-            spr.AddAnimation("NSEW", (int)_pImagePos.X + TILE_SIZE * 11, (int)_pImagePos.Y, _uSize);
-            spr.AddAnimation("W", (int)_pImagePos.X + TILE_SIZE * 12, (int)_pImagePos.Y, _uSize);
-            spr.AddAnimation("E", (int)_pImagePos.X + TILE_SIZE * 13, (int)_pImagePos.Y, _uSize);
-            spr.AddAnimation("S", (int)_pImagePos.X + TILE_SIZE * 14, (int)_pImagePos.Y, _uSize);
-            spr.AddAnimation("N", (int)_pImagePos.X + TILE_SIZE * 15, (int)_pImagePos.Y, _uSize);
+            spr.AddAnimation("NS", (int)_pImagePos.X + Constants.TILE_SIZE, (int)_pImagePos.Y, _uSize);
+            spr.AddAnimation("EW", (int)_pImagePos.X + Constants.TILE_SIZE * 2, (int)_pImagePos.Y, _uSize);
+            spr.AddAnimation("SW", (int)_pImagePos.X + Constants.TILE_SIZE * 3, (int)_pImagePos.Y, _uSize);
+            spr.AddAnimation("NW", (int)_pImagePos.X + Constants.TILE_SIZE * 4, (int)_pImagePos.Y, _uSize);
+            spr.AddAnimation("NE", (int)_pImagePos.X + Constants.TILE_SIZE * 5, (int)_pImagePos.Y, _uSize);
+            spr.AddAnimation("SE", (int)_pImagePos.X + Constants.TILE_SIZE * 6, (int)_pImagePos.Y, _uSize);
+            spr.AddAnimation("NSE", (int)_pImagePos.X + Constants.TILE_SIZE * 7, (int)_pImagePos.Y, _uSize);
+            spr.AddAnimation("NSW", (int)_pImagePos.X + Constants.TILE_SIZE * 8, (int)_pImagePos.Y, _uSize);
+            spr.AddAnimation("NEW", (int)_pImagePos.X + Constants.TILE_SIZE * 9, (int)_pImagePos.Y, _uSize);
+            spr.AddAnimation("SEW", (int)_pImagePos.X + Constants.TILE_SIZE * 10, (int)_pImagePos.Y, _uSize);
+            spr.AddAnimation("NSEW", (int)_pImagePos.X + Constants.TILE_SIZE * 11, (int)_pImagePos.Y, _uSize);
+            spr.AddAnimation("W", (int)_pImagePos.X + Constants.TILE_SIZE * 12, (int)_pImagePos.Y, _uSize);
+            spr.AddAnimation("E", (int)_pImagePos.X + Constants.TILE_SIZE * 13, (int)_pImagePos.Y, _uSize);
+            spr.AddAnimation("S", (int)_pImagePos.X + Constants.TILE_SIZE * 14, (int)_pImagePos.Y, _uSize);
+            spr.AddAnimation("N", (int)_pImagePos.X + Constants.TILE_SIZE * 15, (int)_pImagePos.Y, _uSize);
         }
 
         public override bool PlaceOnMap(Vector2 pos, RHMap map)

@@ -4,6 +4,7 @@ using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
+using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
@@ -50,7 +51,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.Combat.Lite
             {
                 if(i == 5){ iconPosition.Y += 21; }
                 CombatAction action = CombatManager.ActiveCharacter.Actions[i];
-                _arrActionImages[i] = new GUIImage(new Rectangle((int)action.IconGrid.X * GameManager.TILE_SIZE, (int)action.IconGrid.Y * GameManager.TILE_SIZE, 16, 16), DataManager.ACTION_ICONS);
+                _arrActionImages[i] = new GUIImage(new Rectangle((int)action.IconGrid.X * Constants.TILE_SIZE, (int)action.IconGrid.Y * Constants.TILE_SIZE, 16, 16), DataManager.ACTION_ICONS);
                 _arrActionImages[i].Position(Position() + ScaleIt(iconPosition));
                 if (i == USE_ITEM && InventoryManager.GetConsumables().Count == 0)
                 {

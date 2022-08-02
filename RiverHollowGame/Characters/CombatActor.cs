@@ -123,7 +123,7 @@ namespace RiverHollow.Characters
             }
 
             PlayAnimation(AnimationEnum.Idle);
-            sprite.SetScale(NORMAL_SCALE);
+            sprite.SetScale(Constants.NORMAL_SCALE);
         }
 
         public virtual void GoToIdle()

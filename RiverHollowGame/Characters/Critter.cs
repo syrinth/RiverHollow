@@ -19,7 +19,7 @@ namespace RiverHollow.Characters
             _eActorType = WorldActorTypeEnum.Critter;
             _bIgnoreCollisions = true;
             _animationTimer = new RHTimer(1 + SetRandom(4, 0.5));
-            _iBodyHeight = TILE_SIZE;
+            _iBodyHeight = Constants.TILE_SIZE;
 
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
@@ -58,7 +58,7 @@ namespace RiverHollow.Characters
                 _animationTimer.TickDown(gTime);
                 if (_animationTimer.Finished())
                 {
-                    _sprBody.SetLayerDepthMod(GameManager.MAX_LAYER_DEPTH);
+                    _sprBody.SetLayerDepthMod(Constants.MAX_LAYER_DEPTH);
                 }
 
                 Position += new Vector2(-2, -2);

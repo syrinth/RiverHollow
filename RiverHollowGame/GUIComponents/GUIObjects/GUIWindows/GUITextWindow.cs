@@ -302,11 +302,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 if (_iCurrText < _liTextPages.Count - 1)
                 {
-                    _gNext = new GUIImage(new Rectangle(288, 64, GameManager.TILE_SIZE, GameManager.TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
+                    _gNext = new GUIImage(new Rectangle(288, 64, Constants.TILE_SIZE, Constants.TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
                 }
                 else
                 {
-                    _gNext = new GUIImage(new Rectangle(304, 64, GameManager.TILE_SIZE, GameManager.TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
+                    _gNext = new GUIImage(new Rectangle(304, 64, Constants.TILE_SIZE, Constants.TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
                 }
                 _gNext.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.Bottom);
             }

@@ -62,7 +62,7 @@ namespace RiverHollow.WorldObjects
             {
                 //Because Items don't exist directly on the map, we only need to tell it where to draw itself here
                 _itemDisplay.SetColor(_bSelected ? Color.Green : Color.White);
-                _itemDisplay.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X + _vDisplayOffset.X), (int)(_vMapPosition.Y + _vDisplayOffset.Y), TILE_SIZE, TILE_SIZE), true, _sprite.LayerDepth + 1);
+                _itemDisplay.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X + _vDisplayOffset.X), (int)(_vMapPosition.Y + _vDisplayOffset.Y), Constants.TILE_SIZE, Constants.TILE_SIZE), true, _sprite.LayerDepth + 1);
             }
         }
 
@@ -287,7 +287,7 @@ namespace RiverHollow.WorldObjects
         {
             if (_objDisplay != null)
             {
-                _objDisplay.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objDisplay.Sprite.Height - TILE_SIZE)));
+                _objDisplay.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objDisplay.Sprite.Height - Constants.TILE_SIZE)));
                 _objDisplay._vMapPosition += _vDisplayOffset;
                 _objDisplay.SetSpritePos(_objDisplay._vMapPosition);
             }

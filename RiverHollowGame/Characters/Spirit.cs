@@ -38,8 +38,8 @@ namespace RiverHollow.Characters
 
             _bOnTheMap = false;
 
-            _iBodyWidth = TILE_SIZE;
-            _iBodyHeight = TILE_SIZE + 2;
+            _iBodyWidth = Constants.TILE_SIZE;
+            _iBodyHeight = Constants.TILE_SIZE + 2;
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
             LoadSpriteAnimations(ref _sprBody, liData, DataManager.NPC_FOLDER + "Spirit_" + _iID);
@@ -55,7 +55,7 @@ namespace RiverHollow.Characters
                 //    base.Update(gTime);
                 //    if (!Triggered)
                 //    {
-                //        int max = TILE_SIZE * 13;
+                //        int max = Constants.TILE_SIZE * 13;
                 //        int dist = 0;
                 //        if (PlayerManager.CurrentMap == CurrentMapName && PlayerManager.PlayerInRangeGetDist(_spriteBody.Center.ToPoint(), max, ref dist))
                 //        {

@@ -42,7 +42,7 @@ namespace RiverHollow.WorldObjects
             if (loadSprite && stringData.ContainsKey("DestructionAnim"))
             {
                 string[] splitString = stringData["DestructionAnim"].Split('-');
-                _sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), TILE_SIZE, TILE_SIZE, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
+                _sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), Constants.TILE_SIZE, Constants.TILE_SIZE, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
             }
         }
 

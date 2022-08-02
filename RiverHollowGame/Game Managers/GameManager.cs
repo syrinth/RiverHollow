@@ -11,26 +11,15 @@ using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.Game_Managers
 {
     public static class GameManager
     {
-        #region const strings for triggers
-        public const string MOB_OPEN = "MOBS";
-        public const string ITEM_OPEN = "VALID_ITEM";
-        public const string KEY_OPEN = "KEY_USED";
-        #endregion
-
         #region Defined Values
-        public const int NORMAL_SCALE = 4;
-        public const float TOOL_ANIM_SPEED = 0.08f;
-        public const int MAX_BUILDING_LEVEL = 3;
-        public const int TILE_SIZE = 16;
-        public const int MAX_LAYER_DEPTH = 999999;
-
-        public static int CurrentScale = NORMAL_SCALE;
-        public static int ScaledTileSize => (int)(TILE_SIZE * CurrentScale);
+        public static int CurrentScale = Constants.NORMAL_SCALE;
+        public static int ScaledTileSize => (int)(Constants.TILE_SIZE * CurrentScale);
         public static int ScaledPixel => (int)CurrentScale;
         #endregion
 

@@ -149,7 +149,7 @@ namespace RiverHollow.Characters
         {
             _bOnTheMap = true;
 
-            CurrentMapName = MapManager.TownMapName;
+            CurrentMapName = Constants.TOWN_MAP_NAME;
             MapManager.Maps[CurrentMapName].AddCharacterImmediately(this);
 
             Structure market = (Structure)PlayerManager.GetTownObjectsByID(int.Parse(DataManager.Config[15]["ObjectID"]))[0];
