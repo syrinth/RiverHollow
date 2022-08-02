@@ -75,9 +75,9 @@ namespace RiverHollow.Characters
             CurrentHP = MaxHP;
         }
 
-        public override int DecreaseHealth(int value)
+        public override int DealDamage(int value)
         {
-            int rv = base.DecreaseHealth(value);
+            int rv = base.DealDamage(value);
 
             if (CurrentHP == 0)
             {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="28" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="14">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="28" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="15">
  <properties>
   <property name="Dungeon" value="Forest"/>
   <property name="MapType" value="Forest"/>
@@ -123,6 +123,14 @@
    </properties>
   </object>
   <object id="13" name="TriggerObject" x="209.875" y="178.875" width="11.875" height="9.09091">
+   <properties>
+    <property name="MatchTrigger" value=""/>
+    <property name="OutTrigger" value="Dungeon_1"/>
+    <property name="TriggerNumber" type="int" value="1"/>
+    <property name="TriggerType" value="Trigger"/>
+   </properties>
+  </object>
+  <object id="14" name="TriggerObject" x="58.8125" y="220.955" width="11.875" height="9.09091">
    <properties>
     <property name="MatchTrigger" value=""/>
     <property name="OutTrigger" value="Dungeon_1"/>

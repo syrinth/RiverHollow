@@ -2,6 +2,7 @@
 {
     static class Constants
     {
+        public const int GAME_PLAYER_INVULN_TIME = 1;
         public const double MOB_STUN_TIME = 5;
         public const double WANDER_COUNTDOWN = 2.5;
 

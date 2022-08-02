@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="35" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="13">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="35" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="16">
  <properties>
   <property name="Dungeon" value="Forest"/>
   <property name="MapAbove" value=""/>
@@ -105,13 +105,23 @@
   <object id="11" name="Chest" x="257.947" y="83.3026" width="10.3567" height="9.3948">
    <properties>
     <property name="Holding" value="189"/>
-    <property name="ObjectID" type="int" value="43"/>
+    <property name="ObjectID" type="int" value="41"/>
    </properties>
   </object>
   <object id="12" name="TriggerObject" x="448.547" y="36.0814" width="30.75" height="11.3201">
    <properties>
     <property name="KeyDoor" type="bool" value="true"/>
     <property name="TriggerType" value="KeyDoor"/>
+   </properties>
+  </object>
+  <object id="14" name="WorldObject" x="355.492" y="98.791" width="10.4476" height="9.8948">
+   <properties>
+    <property name="ObjectID" type="int" value="84"/>
+   </properties>
+  </object>
+  <object id="15" name="WorldObject" x="465.401" y="114.553" width="9.19761" height="9.8948">
+   <properties>
+    <property name="ObjectID" type="int" value="83"/>
    </properties>
   </object>
  </objectgroup>

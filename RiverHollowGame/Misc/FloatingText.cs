@@ -13,9 +13,6 @@ namespace RiverHollow.Misc
         Vector2 Position;
         protected BitmapFont _font;
         protected Color _cTextColor;
-        const double VANISH_AFTER_DEF = 1.0;
-        double _dVanishAfter;
-        double _dCountDown = 0;
         protected string _sText;
 
         public FloatingText(Vector2 position, int spriteWidth, string text, Color c)
@@ -27,7 +24,6 @@ namespace RiverHollow.Misc
             _cTextColor = c;
 
             Position = position;
-            _dVanishAfter = VANISH_AFTER_DEF - (0.05 * (double)rand.Next(0, 5));
 
             Position.X += spriteWidth / 2; //get the center
             Position.X += rand.Next(-8, 8); //displace the x position
@@ -36,17 +32,12 @@ namespace RiverHollow.Misc
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(_font, _sText, Position, _cTextColor, Position.Y, null);
+            spriteBatch.DrawString(_font, _sText, Position, _cTextColor, 999999, null);
         }
 
         public void Update(GameTime gTime)
         {
             Position += new Vector2(0, -0.5f);
-            _dCountDown += gTime.ElapsedGameTime.TotalSeconds;
-            if (_dCountDown >= _dVanishAfter)
-            {
-
-            }
         }
     }
 }

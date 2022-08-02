@@ -774,7 +774,7 @@ namespace RiverHollow.Map_Handling
                     case ObjectTypeEnum.DungeonObject:
                         if (Modular) { goto case ObjectTypeEnum.WorldObject; }
                         else { break; }
-                    case ObjectTypeEnum.CombatHazard:
+                    case ObjectTypeEnum.Hazard:
                     case ObjectTypeEnum.Destructible:
                     case ObjectTypeEnum.Gatherable:
                     case ObjectTypeEnum.Plant:
@@ -2024,20 +2024,10 @@ namespace RiverHollow.Map_Handling
                 _liPlacedWorldObjects.Add(o);
             }
 
-            if (o.CompareType(ObjectTypeEnum.CombatHazard))
+            //Sets the WorldObject to each RHTile
+            foreach (RHTile t in tiles)
             {
-                foreach (RHTile t in tiles)
-                {
-                    t.SetHazard((CombatHazard)o);
-                }
-            }
-            else
-            {
-                //Sets the WorldObject to each RHTile
-                foreach (RHTile t in tiles)
-                {
-                    t.SetObject(o);
-                }
+                t.SetObject(o);
             }
 
             //Iterate over the WorldObject image in TILE_SIZE increments to discover any tiles
@@ -2171,20 +2161,6 @@ namespace RiverHollow.Map_Handling
         public int GetMapHeightInScaledPixels()
         {
             return MapHeightTiles * ScaledTileSize;
-        }
-
-        public List<RHTile> CheckForCombatHazards(CombatHazard.HazardTypeEnum e)
-        {
-            List<RHTile> liRv = new List<RHTile>();
-            foreach (RHTile t in _arrTiles)
-            {
-                if (t.HazardObject != null && t.HazardObject.SubtypeMatch(e))
-                {
-                    liRv.Add(t);
-                }
-            }
-
-            return liRv;
         }
 
         public void LeaveMap()

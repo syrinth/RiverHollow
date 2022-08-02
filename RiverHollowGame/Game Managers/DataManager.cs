@@ -427,8 +427,8 @@ namespace RiverHollow.Game_Managers
                         return new Buildable(id, diData);
                     case ObjectTypeEnum.Building:
                         return new Building(id, diData);
-                    case ObjectTypeEnum.CombatHazard:
-                        return new CombatHazard(id, diData);
+                    case ObjectTypeEnum.Hazard:
+                        return new Hazard(id, diData);
                     case ObjectTypeEnum.Container:
                         return new Container(id, diData);
                     case ObjectTypeEnum.Decor:

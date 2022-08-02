@@ -385,79 +385,79 @@
   <object id="58" name="Resource" x="1090.38" y="530.749" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="92" name="Resource" x="1042.12" y="499.917" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="93" name="Resource" x="962.458" y="549.25" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="94" name="Resource" x="1202.13" y="323.25" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="95" name="Resource" x="1250.46" y="354.417" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="96" name="Resource" x="1186.13" y="354.25" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="97" name="Resource" x="1217.63" y="420.25" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="98" name="Resource" x="1235.13" y="385.25" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="99" name="Resource" x="1219.13" y="788.25" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="100" name="Resource" x="1154.63" y="820.75" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="101" name="Resource" x="1155.13" y="773.75" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="102" name="Resource" x="1121.13" y="849.75" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="72" name="Resource" x="930" y="422" width="124" height="124">
    <properties>
     <property name="Number" value="10-25"/>
-    <property name="ObjectID" value="63-C|54-C"/>
+    <property name="ObjectID" value="61-C|52-C"/>
    </properties>
   </object>
   <object id="107" name="Mob" x="472.667" y="428" width="134.167" height="172">
@@ -488,182 +488,182 @@
   <object id="112" name="Resource" x="743.333" y="288.667" width="124" height="124">
    <properties>
     <property name="Number" value="10-25"/>
-    <property name="ObjectID" value="63-C|54-C"/>
+    <property name="ObjectID" value="61-C|52-C"/>
    </properties>
   </object>
   <object id="113" name="Resource" x="390" y="743.333" width="124" height="124">
    <properties>
     <property name="Number" value="20"/>
-    <property name="ObjectID" value="63-C|54-C"/>
+    <property name="ObjectID" value="61-C|52-C"/>
    </properties>
   </object>
   <object id="114" name="Resource" x="39" y="678" width="176.833" height="210">
    <properties>
     <property name="Number" value="30"/>
-    <property name="ObjectID" value="63-C|54-C"/>
+    <property name="ObjectID" value="61-C|52-C"/>
    </properties>
   </object>
   <object id="115" name="Resource" x="70" y="241.5" width="124" height="119.5">
    <properties>
     <property name="ItemID" value="162-C|163-R"/>
     <property name="Number" value="5"/>
-    <property name="ObjectID" value="63-R|66-R"/>
+    <property name="ObjectID" value="61-R|64-R"/>
    </properties>
   </object>
   <object id="116" name="Resource" x="247.917" y="293.666" width="322.167" height="276.667">
    <properties>
     <property name="Number" value="25-45"/>
-    <property name="ObjectID" value="63-C|54-C"/>
+    <property name="ObjectID" value="61-C|52-C"/>
    </properties>
   </object>
   <object id="117" name="Resource" x="529.292" y="643.083" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="118" name="Resource" x="753.625" y="548.25" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="119" name="Resource" x="546.292" y="611.083" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="120" name="Resource" x="609.792" y="452.583" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="121" name="Resource" x="769.958" y="454.083" width="11.75" height="9.5">
    <properties>
     <property name="Number" value="1"/>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="122" name="Resource" x="565.417" y="560.5" width="394.667" height="220">
    <properties>
     <property name="Number" value="20-30"/>
-    <property name="ObjectID" value="63-C|54-C"/>
+    <property name="ObjectID" value="61-C|52-C"/>
    </properties>
   </object>
   <object id="123" name="Resource" x="308.333" y="1078" width="71.6667" height="66">
    <properties>
     <property name="ItemID" value="162-C-161-R"/>
     <property name="Number" value="5"/>
-    <property name="ObjectID" value="63-R|66-R"/>
+    <property name="ObjectID" value="61-R|64-R"/>
    </properties>
   </object>
   <object id="124" name="Resource" x="292.25" y="886" width="57.25" height="107.5">
    <properties>
     <property name="Number" value="10"/>
-    <property name="ObjectID" value="63-C|54-C"/>
+    <property name="ObjectID" value="61-C|52-C"/>
    </properties>
   </object>
   <object id="125" name="WorldObject" x="227.117" y="675.197" width="23" height="25.75">
    <properties>
-    <property name="ObjectID" type="int" value="66"/>
+    <property name="ObjectID" type="int" value="64"/>
    </properties>
   </object>
   <object id="131" name="WorldObject" x="243.5" y="707.125" width="23" height="25.75">
    <properties>
-    <property name="ObjectID" type="int" value="66"/>
+    <property name="ObjectID" type="int" value="64"/>
    </properties>
   </object>
   <object id="132" name="WorldObject" x="198.318" y="547.125" width="23" height="25.75">
    <properties>
-    <property name="ObjectID" type="int" value="66"/>
+    <property name="ObjectID" type="int" value="64"/>
    </properties>
   </object>
   <object id="133" name="WorldObject" x="68.5" y="371.625" width="23" height="25.75">
    <properties>
-    <property name="ObjectID" type="int" value="66"/>
+    <property name="ObjectID" type="int" value="64"/>
    </properties>
   </object>
   <object id="134" name="WorldObject" x="340.167" y="261.792" width="23" height="25.75">
    <properties>
-    <property name="ObjectID" type="int" value="66"/>
+    <property name="ObjectID" type="int" value="64"/>
    </properties>
   </object>
   <object id="135" name="WorldObject" x="1107.5" y="770.125" width="23" height="25.75">
    <properties>
-    <property name="ObjectID" type="int" value="66"/>
+    <property name="ObjectID" type="int" value="64"/>
    </properties>
   </object>
   <object id="136" name="WorldObject" x="691.955" y="386.034" width="23" height="25.75">
    <properties>
-    <property name="ObjectID" type="int" value="66"/>
+    <property name="ObjectID" type="int" value="64"/>
    </properties>
   </object>
   <object id="137" name="WorldObject" x="660.318" y="402.761" width="23" height="25.75">
    <properties>
-    <property name="ObjectID" type="int" value="66"/>
+    <property name="ObjectID" type="int" value="64"/>
    </properties>
   </object>
   <object id="138" name="WorldObject" x="434.505" y="1345.71" width="11.75" height="9.5">
    <properties>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="139" name="WorldObject" x="483.995" y="1363.88" width="11.75" height="9.5">
    <properties>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="157" name="WorldObject" x="369.995" y="1393.88" width="11.75" height="9.5">
    <properties>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="140" name="WorldObject" x="465.661" y="1311.71" width="11.75" height="9.5">
    <properties>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="156" name="WorldObject" x="383.661" y="1300.71" width="11.75" height="9.5">
    <properties>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="141" name="WorldObject" x="338.244" y="1475.63" width="11.75" height="9.5">
    <properties>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="155" name="WorldObject" x="238.744" y="1458.63" width="11.75" height="9.5">
    <properties>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="142" name="WorldObject" x="227.244" y="1027.63" width="11.75" height="9.5">
    <properties>
-    <property name="ObjectID" type="int" value="68"/>
+    <property name="ObjectID" type="int" value="66"/>
    </properties>
   </object>
   <object id="146" name="WorldObject" x="153.5" y="575.625" width="23" height="25.75">
    <properties>
-    <property name="ObjectID" type="int" value="66"/>
+    <property name="ObjectID" type="int" value="64"/>
    </properties>
   </object>
   <object id="148" name="WorldObject" x="1236.5" y="995.375" width="23" height="25.75">
    <properties>
-    <property name="ObjectID" type="int" value="66"/>
+    <property name="ObjectID" type="int" value="64"/>
    </properties>
   </object>
   <object id="149" name="WorldObject" x="1076.5" y="1044.38" width="23" height="25.75">
    <properties>
-    <property name="ObjectID" type="int" value="66"/>
+    <property name="ObjectID" type="int" value="64"/>
    </properties>
   </object>
   <object id="150" name="DungeonObject" x="64.5" y="114.834" width="30.75" height="30">
    <properties>
     <property name="MatchTrigger" value="Forest_Entrance_Open"/>
-    <property name="ObjectID" type="int" value="76"/>
+    <property name="ObjectID" type="int" value="74"/>
     <property name="OutTrigger" value="Forest_Entrance_Opened"/>
     <property name="TriggerNumber" type="int" value="2"/>
    </properties>
@@ -672,7 +672,7 @@
    <properties>
     <property name="ItemKeyID" type="int" value="162"/>
     <property name="MatchTrigger" value="VALID_ITEM"/>
-    <property name="ObjectID" type="int" value="72"/>
+    <property name="ObjectID" type="int" value="70"/>
     <property name="OutTrigger" value="Forest_Entrance_Open"/>
    </properties>
   </object>
@@ -680,7 +680,7 @@
    <properties>
     <property name="ItemKeyID" type="int" value="163"/>
     <property name="MatchTrigger" value="VALID_ITEM"/>
-    <property name="ObjectID" type="int" value="72"/>
+    <property name="ObjectID" type="int" value="70"/>
     <property name="OutTrigger" value="Forest_Entrance_Open"/>
    </properties>
   </object>

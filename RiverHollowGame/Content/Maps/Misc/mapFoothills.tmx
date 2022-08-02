@@ -283,12 +283,12 @@
  <objectgroup id="9" name="MapObject">
   <object id="94" name="WorldObject" x="725.576" y="997.38" width="21.5" height="21.75">
    <properties>
-    <property name="ObjectID" type="int" value="53"/>
+    <property name="ObjectID" type="int" value="51"/>
    </properties>
   </object>
   <object id="95" name="WorldObject" x="645.591" y="1141.88" width="21" height="22.25">
    <properties>
-    <property name="ObjectID" type="int" value="53"/>
+    <property name="ObjectID" type="int" value="51"/>
    </properties>
   </object>
  </objectgroup>

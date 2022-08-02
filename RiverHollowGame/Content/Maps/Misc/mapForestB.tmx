@@ -285,13 +285,13 @@
   <object id="63" name="Resource" x="234.998" y="651.333" width="124" height="124">
    <properties>
     <property name="Number" value="10-25"/>
-    <property name="ObjectID" value="63-C|54-C"/>
+    <property name="ObjectID" value="61-C|52-C"/>
    </properties>
   </object>
   <object id="65" name="DungeonObject" x="608.462" y="432.958" width="30.75" height="30">
    <properties>
     <property name="MatchTrigger" value="Forest_Entrance_Open"/>
-    <property name="ObjectID" type="int" value="76"/>
+    <property name="ObjectID" type="int" value="74"/>
     <property name="OutTrigger" value="Forest_Entrance_Opened"/>
     <property name="TriggerNumber" type="int" value="1"/>
    </properties>
@@ -300,7 +300,7 @@
    <properties>
     <property name="ItemKeyID" type="int" value="163"/>
     <property name="MatchTrigger" value="VALID_ITEM"/>
-    <property name="ObjectID" type="int" value="72"/>
+    <property name="ObjectID" type="int" value="70"/>
     <property name="OutTrigger" value="Forest_Entrance_Open"/>
    </properties>
   </object>

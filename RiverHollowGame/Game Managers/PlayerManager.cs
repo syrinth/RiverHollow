@@ -15,6 +15,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Characters.Lite;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
+using RiverHollow.Misc;
 
 namespace RiverHollow.Game_Managers
 {
@@ -49,6 +50,7 @@ namespace RiverHollow.Game_Managers
         public static bool ReadyToSleep = false;
 
         private static List<Pet> _liPets;
+
         private static List<Mount> _liMounts;
         private static ClassedCombatant[] _arrParty;
         private static Dictionary<int, int> _diStorage;
@@ -82,6 +84,9 @@ namespace RiverHollow.Game_Managers
                 BabyCountdown = _eChildStatus == ExpectingChildEnum.None ? 0 : 7;
             }
         }
+
+        static RHTimer _damageTimer;
+        static FloatingText _hazardDamage;
         #endregion
 
         #region Data Collections
@@ -125,24 +130,6 @@ namespace RiverHollow.Game_Managers
             AddTesting();
         }
 
-        public static void AddTesting()
-        {
-            Dictionary<string, string> diTesting = DataManager.Config[0];
-            string[] splitItemValues = Util.FindParams(diTesting["ItemID"]);
-            foreach (string s in splitItemValues)
-            {
-                string[] splitString = s.Split('-');
-                InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1), true, true);
-            }
-        }
-
-        public static void SetPath(List<RHTile> list)
-        {
-            PlayerManager.AllowMovement = false;
-            ReadyToSleep = true;
-            PlayerActor.SetPath(list);
-        }
-
         public static void Update(GameTime gTime)
         {
             Vector2 moveDir = Vector2.Zero;
@@ -180,6 +167,51 @@ namespace RiverHollow.Game_Managers
             else { UpdateTool(gTime); }
 
             PlayerActor.Update(gTime);
+
+            if(_damageTimer != null)
+            {
+                _damageTimer.TickDown(gTime);
+                if (_damageTimer.Finished())
+                {
+                    _damageTimer = null;
+                    _hazardDamage = null;
+                }
+            }
+
+            _hazardDamage?.Update(gTime);
+        }
+
+        public static void Draw(SpriteBatch spriteBatch)
+        {
+            if (_currentMap == MapManager.CurrentMap.Name)
+            {
+                PlayerActor.Draw(spriteBatch, true);
+                ToolInUse?.DrawToolAnimation(spriteBatch);
+                _hazardDamage?.Draw(spriteBatch);
+            }
+        }
+
+        public static void DrawLight(SpriteBatch spriteBatch)
+        {
+            PlayerActor.DrawLight(spriteBatch);
+        }
+
+        public static void AddTesting()
+        {
+            Dictionary<string, string> diTesting = DataManager.Config[0];
+            string[] splitItemValues = Util.FindParams(diTesting["ItemID"]);
+            foreach (string s in splitItemValues)
+            {
+                string[] splitString = s.Split('-');
+                InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1), true, true);
+            }
+        }
+
+        public static void SetPath(List<RHTile> list)
+        {
+            PlayerManager.AllowMovement = false;
+            ReadyToSleep = true;
+            PlayerActor.SetPath(list);
         }
 
         public static void AddByIncrement(ref int queue, ref int addTo)
@@ -195,20 +227,6 @@ namespace RiverHollow.Game_Managers
                 queue -= toGive;
                 addTo += toGive;
             }
-        }
-
-        public static void Draw(SpriteBatch spriteBatch)
-        {
-            if (_currentMap == MapManager.CurrentMap.Name)
-            {
-                PlayerActor.Draw(spriteBatch, true);
-                ToolInUse?.DrawToolAnimation(spriteBatch);
-            }
-        }
-
-        public static void DrawLight(SpriteBatch spriteBatch)
-        {
-            PlayerActor.DrawLight(spriteBatch);
         }
 
         public static ClassedCombatant[] GetParty()
@@ -236,6 +254,20 @@ namespace RiverHollow.Game_Managers
             if (Array.Find(_arrParty, x => x == c) != null)
             {
                 _arrParty[Array.IndexOf(_arrParty, c)] = null;
+            }
+        }
+
+        public static void HazardHarmParty(int damage)
+        {
+            if(_damageTimer == null) {
+                _damageTimer = new RHTimer(Constants.GAME_PLAYER_INVULN_TIME);
+
+                foreach(ClassedCombatant act in GetParty())
+                {
+                    act?.DecreaseHealth(damage);
+                }
+
+                _hazardDamage = new FloatingText(PlayerActor.Position, PlayerActor.BodySprite.Width, damage.ToString(), Color.Red);
             }
         }
 

@@ -156,9 +156,9 @@ namespace RiverHollow.Characters
         /// <summary>
         /// Reduces health by the given value. Cannot deal more damage than health exists.
         /// </summary>
-        public virtual int DecreaseHealth(int value)
+        public virtual int DealDamage(int value)
         {
-            CurrentHP -= (CurrentHP - value >= 0) ? value : CurrentHP;
+            
             Tile.PlayAnimation(AnimationEnum.Hurt);
             if (CurrentHP == 0)
             {
@@ -167,6 +167,11 @@ namespace RiverHollow.Characters
             }
 
             return value;
+        }
+
+        public void DecreaseHealth(int value)
+        {
+            CurrentHP -= (CurrentHP - value >= 0) ? value : CurrentHP;
         }
 
         /// <summary>
@@ -249,7 +254,7 @@ namespace RiverHollow.Characters
 
             int dmgDealt = RHRandom.Instance().Next(min, max);
 
-            DecreaseHealth(dmgDealt);
+            DealDamage(dmgDealt);
 
             return dmgDealt;
         }

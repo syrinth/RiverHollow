@@ -177,7 +177,7 @@
     <Compile Include="WorldObjects\AdjustableObject.cs" />
     <Compile Include="WorldObjects\Beehive.cs" />
     <Compile Include="WorldObjects\Buildable.cs" />
-    <Compile Include="WorldObjects\CombatHazard.cs" />
+    <Compile Include="WorldObjects\Hazard.cs" />
     <Compile Include="WorldObjects\Container.cs" />
     <Compile Include="WorldObjects\Decor.cs" />
     <Compile Include="WorldObjects\Destructible.cs" />

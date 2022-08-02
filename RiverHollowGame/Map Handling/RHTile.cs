@@ -30,7 +30,6 @@ namespace RiverHollow.Map_Handling
         public Wallpaper _objWallpaper;
         public WorldObject WorldObject { get; private set; }
         public WorldObject ShadowObject { get; private set; }
-        public CombatHazard HazardObject { get; private set; }
         public Floor Flooring { get; private set; }
         public bool IsRoad { get; private set; }
 
@@ -203,16 +202,6 @@ namespace RiverHollow.Map_Handling
         }
 
         public void SetWallpaper(Wallpaper obj) { _objWallpaper = obj; }
-
-
-        /// <summary>
-        /// Sets the Hazard object for the RHTile
-        /// </summary>
-        /// <param name="h">The Hazard object to set.</param>
-        public void SetHazard(CombatHazard h)
-        {
-            HazardObject = h;
-        }
 
         /// <summary>
         /// Determines whether or not the tile is a valid target for being dug.

@@ -286,7 +286,7 @@
   <object id="71" name="Chest" x="370.53" y="437.021" width="12.69" height="10.2698">
    <properties>
     <property name="Holding" value="37"/>
-    <property name="ObjectID" type="int" value="43"/>
+    <property name="ObjectID" type="int" value="41"/>
    </properties>
   </object>
   <object id="72" name="Building" x="434" y="402.242" width="74.2197" height="44.3031">
@@ -296,12 +296,12 @@
   </object>
   <object id="92" name="Floor" x="6.03" y="467.553" width="471.44" height="10.8948">
    <properties>
-    <property name="ObjectID" type="int" value="77"/>
+    <property name="ObjectID" type="int" value="75"/>
    </properties>
   </object>
   <object id="94" name="Floor" x="466.53" y="449.803" width="9.19" height="13.3948">
    <properties>
-    <property name="ObjectID" type="int" value="77"/>
+    <property name="ObjectID" type="int" value="75"/>
    </properties>
   </object>
   <object id="95" name="WorldObject" x="420.405" y="437.115" width="8.065" height="6.5198">

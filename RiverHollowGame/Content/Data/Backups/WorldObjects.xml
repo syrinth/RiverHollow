@@ -167,179 +167,179 @@
     </Item>
     <Item>
       <Key>41</Key>
-      <Value>[Type:CombatHazard][Subtype:Timed][Image:48-96][Damage:10][DrawOver]</Value>
-    </Item>
-    <Item>
-      <Key>42</Key>
-      <Value>[Type:CombatHazard][Subtype:Passive][Image:32-96][Damage:2][DrawOver]</Value>
-    </Item>
-    <Item>
-      <Key>43</Key>
       <Value>[Type:Container][Image:0-16][Rows:1][Cols:8][ReqItems:2-10]</Value>
     </Item>
     <Item>
-      <Key>44</Key>
+      <Key>42</Key>
       <Value>[Type:Decor][Image:0-416][BaseOffset:0-1][Base:2-1][Size:2-2][Rotation:FourWay][RotationBaseOffset:0-1][RotationSize:1-3][Display][DisplayOffset:8-0][RotatedDisplayOffset:0-8][Value:500]</Value>
     </Item>
     <Item>
-      <Key>45</Key>
+      <Key>43</Key>
       <Value>[Type:Decor][Image:0-384][BaseOffset:0-1][Size:1-2][Rotation:FourWay][Display][Value:500]</Value>
     </Item>
     <Item>
-      <Key>46</Key>
+      <Key>44</Key>
       <Value>[Type:Decor][Image:80-384][WallObject][Value:500]</Value>
     </Item>
     <Item>
-      <Key>47</Key>
+      <Key>45</Key>
       <Value>[Type:Decor][Image:64-384][BaseOffset:0-1][Size:1-2][CanBeDisplayed][Value:500]</Value>
     </Item>
     <Item>
-      <Key>48</Key>
+      <Key>46</Key>
       <Value>[Type:Decor][Image:80-464][BaseOffset:0-1][Size:1-2][Rotation:FourWay][Value:500]</Value>
     </Item>
     <Item>
-      <Key>49</Key>
+      <Key>47</Key>
       <Value>[Type:Decor][Image:0-448][Value:500]</Value>
     </Item>
     <Item>
-      <Key>50</Key>
+      <Key>48</Key>
       <Value>[Type:Decor][Image:96-416][BaseOffset:0-1][Base:3-2][Size:2-2][Rotation:TwoWay][RotationBaseOffset:0-1][RotationSize:2-4][Display][DisplayOffset:17-12][RotatedDisplayOffset:6-16][Value:500]</Value>
     </Item>
     <Item>
-      <Key>51</Key>
+      <Key>49</Key>
       <Value>[Type:Destructible][Image:112-64][Tool:Pick][Hp:10][ReqLvl:1][ItemID:48]</Value>
     </Item>
     <Item>
-      <Key>52</Key>
+      <Key>50</Key>
       <Value>[Type:Destructible][Image:144-64][Tool:Pick][Hp:5][ReqLvl:1][ItemID:50]</Value>
     </Item>
     <Item>
-      <Key>53</Key>
+      <Key>51</Key>
       <Value>[Type:Destructible][Image:32-32][Size:2-2][Height:32][Tool:Pick][Hp:20][ReqLvl:2][ItemID:0-5][Base:2-2]</Value>
     </Item>
     <Item>
-      <Key>54</Key>
+      <Key>52</Key>
       <Value>[Type:Destructible][Image:0-48][Tool:Axe][Hp:1][ReqLvl:1][ItemID:2-1][DestructionAnim:208-0-3-0.1]</Value>
     </Item>
     <Item>
-      <Key>55</Key>
+      <Key>53</Key>
       <Value>[Type:Destructible][Image:48-16][Tool:Pick][Hp:1][ReqLvl:1][ItemID:66-1][DestructionAnim:208-0-3-0.1]</Value>
     </Item>
     <Item>
-      <Key>56</Key>
+      <Key>54</Key>
       <Value>[Type:Destructible][Image:0-32][Tool:Pick][Hp:2][ReqLvl:1][ItemID:32]</Value>
     </Item>
     <Item>
-      <Key>57</Key>
+      <Key>55</Key>
       <Value>[Type:Destructible][Tree][Texture:Textures\DarkWoodTree][Image:0-0][Size:3-5][Hp:5][ReqLvl:2][ItemID:6-8]</Value>
     </Item>
     <Item>
-      <Key>58</Key>
+      <Key>56</Key>
       <Value>[Type:Destructible][Image:96-48][Tool:Pick][Hp:10][ReqLvl:1][ItemID:42-1]</Value>
     </Item>
     <Item>
-      <Key>59</Key>
+      <Key>57</Key>
       <Value>[Type:Destructible][Image:112-48][Tool:Pick][Hp:10][ReqLvl:1][ItemID:43]</Value>
     </Item>
     <Item>
-      <Key>60</Key>
+      <Key>58</Key>
       <Value>[Type:Destructible][Image:128-64][Tool:Pick][Hp:10][ReqLvl:1][ItemID:49]</Value>
     </Item>
     <Item>
-      <Key>61</Key>
+      <Key>59</Key>
       <Value>[Type:Destructible][Image:96-64][Tool:Pick][Hp:10][ReqLvl:1][ItemID:47]</Value>
     </Item>
     <Item>
-      <Key>62</Key>
+      <Key>60</Key>
       <Value>[Type:Destructible][Image:160-48][Tool:Pick][Hp:10][ReqLvl:1][ItemID:46]</Value>
     </Item>
     <Item>
-      <Key>63</Key>
+      <Key>61</Key>
       <Value>[Type:Destructible][Image:0-0][Tool:Pick][Hp:1][ReqLvl:1][ItemID:0-1][DestructionAnim:208-0-3-0.1]</Value>
     </Item>
     <Item>
-      <Key>64</Key>
+      <Key>62</Key>
       <Value>[Type:Destructible][Image:128-48][Tool:Pick][Hp:10][ReqLvl:1][ItemID:44]</Value>
     </Item>
     <Item>
-      <Key>65</Key>
+      <Key>63</Key>
       <Value>[Type:Destructible][Image:144-48][Tool:Pick][Hp:10][ReqLvl:1][ItemID:45]</Value>
     </Item>
     <Item>
-      <Key>66</Key>
+      <Key>64</Key>
       <Value>[Type:Destructible][Image:176-96][Size:2-2][Tool:Axe][Hp:20][ReqLvl:2][ItemID:2-5][Base:2-2]</Value>
     </Item>
     <Item>
-      <Key>67</Key>
+      <Key>65</Key>
       <Value>[Type:Destructible][Image:160-64][Tool:Pick][Hp:5][ReqLvl:1][ItemID:51]</Value>
     </Item>
     <Item>
-      <Key>68</Key>
+      <Key>66</Key>
       <Value>[Type:Destructible][Tree][Texture:Textures\tree][Image:0-0][Size:3-4][Hp:10][ReqLvl:1][ItemID:2-7][Base:1-1][BaseShift:1]</Value>
     </Item>
     <Item>
-      <Key>69</Key>
+      <Key>67</Key>
       <Value>[Type:DungeonObject][Image:144-96][Size:2-1][Base:2-1][Subtype:TriggerDoor]</Value>
     </Item>
     <Item>
-      <Key>70</Key>
+      <Key>68</Key>
       <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:256-80][Size:1-3][Base:1-2]</Value>
     </Item>
     <Item>
-      <Key>71</Key>
+      <Key>69</Key>
       <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:0-544][Size:3-6][Base:1-2][BaseOffset:0-1]</Value>
     </Item>
     <Item>
-      <Key>72</Key>
+      <Key>70</Key>
       <Value>[Type:DungeonObject][Subtype:Trigger][Image:144-16]</Value>
     </Item>
     <Item>
-      <Key>73</Key>
+      <Key>71</Key>
       <Value>[Type:DungeonObject][Subtype:KeyDoor][Image:32-544][Size:2-2][Base:2-1]</Value>
     </Item>
     <Item>
-      <Key>74</Key>
-      <Value>[Type:DungeonObject][Subtype:MobDoor][Image:48-544][Size:2-2][Base:2-1]</Value>
+      <Key>72</Key>
+      <Value>[Type:DungeonObject][Subtype:MobDoor][Image:64-544][Size:2-2][Base:2-1]</Value>
     </Item>
     <Item>
-      <Key>75</Key>
+      <Key>73</Key>
       <Value>[Type:DungeonObject][Subtype:Trigger][Image:144-16][SoundEffect:grinding_stone]</Value>
     </Item>
     <Item>
-      <Key>76</Key>
+      <Key>74</Key>
       <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:0-544][Size:2-2][Base:2-1]</Value>
     </Item>
     <Item>
-      <Key>77</Key>
+      <Key>75</Key>
       <Value>[Type:Floor][Image:0-32][ReqItems:0-1]</Value>
     </Item>
     <Item>
-      <Key>78</Key>
+      <Key>76</Key>
       <Value>[Type:Garden][Image:0-240][ReqItems:66-5]</Value>
     </Item>
     <Item>
-      <Key>79</Key>
+      <Key>77</Key>
       <Value>[Type:Gatherable][Image:192-80][ItemID:63]</Value>
     </Item>
     <Item>
-      <Key>80</Key>
+      <Key>78</Key>
       <Value>[Type:Gatherable][Image:112-16][Size:1-2][ItemID:27][Passable]</Value>
     </Item>
     <Item>
-      <Key>81</Key>
+      <Key>79</Key>
       <Value>[Type:Gatherable][Image:96-32][ItemID:65]</Value>
     </Item>
     <Item>
-      <Key>82</Key>
+      <Key>80</Key>
       <Value>[Type:Gatherable][Image:80-48][ItemID:23]</Value>
     </Item>
     <Item>
-      <Key>83</Key>
+      <Key>81</Key>
       <Value>[Type:Gatherable][Image:256-0][Size:1-2][ItemID:74][BaseOffset:0-1]</Value>
     </Item>
     <Item>
-      <Key>84</Key>
+      <Key>82</Key>
       <Value>[Type:Gatherable][Image:208-80][ItemID:64]</Value>
+    </Item>
+    <Item>
+      <Key>83</Key>
+      <Value>[Type:Hazard][Subtype:Timed][Image:48-96][Damage:10][Timer:1][Walkable]</Value>
+    </Item>
+    <Item>
+      <Key>84</Key>
+      <Value>[Type:Hazard][Subtype:Passive][Image:80-96][Damage:2][DrawOver]</Value>
     </Item>
     <Item>
       <Key>85</Key>
