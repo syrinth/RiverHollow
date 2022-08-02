@@ -348,6 +348,10 @@ namespace RiverHollow.Characters
                 if (!CheckMapForCollisionsAndMove(direction))
                 {
                     _bBumpedIntoSomething = true;
+                    if( this == PlayerManager.PlayerActor)
+                    {
+                        PlayerManager.ClearDamagedMovement();
+                    }
                 }
 
                 //If, after movement, we've reached the given location, zero it.

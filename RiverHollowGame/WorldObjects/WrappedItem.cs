@@ -7,12 +7,12 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.WorldObjects
 {
-    public class Gatherable : WorldObject
+    public class WrappedItem : WorldObject
     {
         readonly int _iItemID;
         public int ItemdID => _iItemID;
 
-        public Gatherable(int itemID) : base(-1)
+        public WrappedItem(int itemID) : base(-1)
         {
             _iItemID = itemID;
 
@@ -21,7 +21,7 @@ namespace RiverHollow.WorldObjects
             _sprite.AddAnimation(AnimationEnum.ObjectIdle, wrappedItem.SourceRectangle.Left, wrappedItem.SourceRectangle.Top, _uSize);
         }
 
-        public Gatherable(int id, Dictionary<string, string> stringData) : base(id)
+        public WrappedItem(int id, Dictionary<string, string> stringData) : base(id)
         {
             Util.AssignValue(ref _iItemID, "ItemID", stringData);
             LoadDictionaryData(stringData);

@@ -184,7 +184,7 @@
     <Compile Include="WorldObjects\TriggerDoor.cs" />
     <Compile Include="WorldObjects\Floor.cs" />
     <Compile Include="WorldObjects\Garden.cs" />
-    <Compile Include="WorldObjects\Gatherable.cs" />
+    <Compile Include="WorldObjects\WrappedItem.cs" />
     <Compile Include="WorldObjects\Light.cs" />
     <Compile Include="WorldObjects\Machine.cs" />
     <Compile Include="WorldObjects\Mailbox.cs" />

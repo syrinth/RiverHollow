@@ -584,7 +584,6 @@ namespace RiverHollow.Map_Handling
                         Container c = (Container)DataManager.CreateWorldObjectByID(int.Parse(tiledObj.Properties["ObjectID"]));
                         if (c.PlaceOnMap(tiledObj.Position, this))
                         {
-
                             InventoryManager.InitExtraInventory(c.Inventory);
                             string[] holdSplit = Util.FindParams(tiledObj.Properties["Holding"]);
                             foreach (string s in holdSplit)
@@ -603,7 +602,7 @@ namespace RiverHollow.Map_Handling
                     }
                     else if (tiledObj.Name.Equals("Item"))
                     {
-                        new Gatherable(int.Parse(tiledObj.Properties["ItemID"])).PlaceOnMap(tiledObj.Position, this);
+                        new WrappedItem(int.Parse(tiledObj.Properties["ItemID"])).PlaceOnMap(tiledObj.Position, this);
                     }
                 }
             }

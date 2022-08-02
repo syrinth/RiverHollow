@@ -141,7 +141,7 @@ namespace RiverHollow.Map_Handling
 
                     if (sData.Type == SpawnTypeEnum.Item)
                     {
-                        new Gatherable(sData.ID).PlaceOnMap(targetTile.Position, _map);
+                        new WrappedItem(sData.ID).PlaceOnMap(targetTile.Position, _map);
                     }
                     else
                     {
@@ -199,7 +199,7 @@ namespace RiverHollow.Map_Handling
                         for (int j = 0; j < _diSpawnData[e].Count; j++)
                         {
                             SpawnData data = _diSpawnData[e][j];
-                            if ((obj.ID != -1 && obj.ID == data.ID) || (obj.ID == -1 && ((Gatherable)obj).ItemdID == data.ID))
+                            if ((obj.ID != -1 && obj.ID == data.ID) || (obj.ID == -1 && ((WrappedItem)obj).ItemdID == data.ID))
                             {
                                 if (_iRespawnCountdown == 0) { _iRespawnCountdown = 3; }
                                 _iCurrent--;

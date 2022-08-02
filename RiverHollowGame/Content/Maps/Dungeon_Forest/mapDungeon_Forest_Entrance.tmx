@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="35" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="16">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="35" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="21">
  <properties>
   <property name="Dungeon" value="Forest"/>
   <property name="MapAbove" value=""/>
@@ -102,10 +102,9 @@
     <property name="TriggerType" value="TriggerDoor"/>
    </properties>
   </object>
-  <object id="11" name="Chest" x="257.947" y="83.3026" width="10.3567" height="9.3948">
+  <object id="11" name="Item" x="257.947" y="83.3026" width="10.3567" height="9.3948">
    <properties>
-    <property name="Holding" value="189"/>
-    <property name="ObjectID" type="int" value="41"/>
+    <property name="ItemID" value="189"/>
    </properties>
   </object>
   <object id="12" name="TriggerObject" x="448.547" y="36.0814" width="30.75" height="11.3201">
@@ -119,7 +118,32 @@
     <property name="ObjectID" type="int" value="84"/>
    </properties>
   </object>
-  <object id="15" name="WorldObject" x="465.401" y="114.553" width="9.19761" height="9.8948">
+  <object id="15" name="WorldObject" x="434.901" y="50.553" width="9.19761" height="9.8948">
+   <properties>
+    <property name="ObjectID" type="int" value="83"/>
+   </properties>
+  </object>
+  <object id="16" name="WorldObject" x="434.901" y="69.0526" width="9.19761" height="9.8948">
+   <properties>
+    <property name="ObjectID" type="int" value="83"/>
+   </properties>
+  </object>
+  <object id="17" name="WorldObject" x="483.901" y="50.5526" width="9.19761" height="9.8948">
+   <properties>
+    <property name="ObjectID" type="int" value="83"/>
+   </properties>
+  </object>
+  <object id="18" name="WorldObject" x="451.401" y="68.3026" width="9.19761" height="9.8948">
+   <properties>
+    <property name="ObjectID" type="int" value="83"/>
+   </properties>
+  </object>
+  <object id="19" name="WorldObject" x="466.651" y="67.8026" width="9.19761" height="9.8948">
+   <properties>
+    <property name="ObjectID" type="int" value="83"/>
+   </properties>
+  </object>
+  <object id="20" name="WorldObject" x="484.401" y="68.5526" width="9.19761" height="9.8948">
    <properties>
     <property name="ObjectID" type="int" value="83"/>
    </properties>

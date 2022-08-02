@@ -32,7 +32,7 @@ namespace RiverHollow.Misc
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(_font, _sText, Position, _cTextColor, 999999, null);
+            spriteBatch.DrawString(_font, _sText, Position, _cTextColor, Constants.MAX_LAYER_DEPTH, null);
         }
 
         public void Update(GameTime gTime)

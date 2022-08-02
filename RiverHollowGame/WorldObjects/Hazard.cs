@@ -50,7 +50,7 @@ namespace RiverHollow.WorldObjects
 
             if (Active && Tiles.Find(x => x.Contains(PlayerManager.PlayerActor)) != null)
             {
-                PlayerManager.HazardHarmParty(Damage);
+                PlayerManager.HazardHarmParty(Damage, CollisionBox.Center);
             }
         }
 

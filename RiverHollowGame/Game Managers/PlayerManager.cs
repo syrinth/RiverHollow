@@ -162,7 +162,6 @@ namespace RiverHollow.Game_Managers
                         PlayerActor.Position = PlayerActor.Position + moveDir;
                     }
                 }
-
             }
             else { UpdateTool(gTime); }
 
@@ -175,7 +174,13 @@ namespace RiverHollow.Game_Managers
                 {
                     _damageTimer = null;
                     _hazardDamage = null;
+                    ClearDamagedMovement();
                 }
+            }
+
+            if (_damageTimer != null && PlayerActor.MoveToLocation == Vector2.Zero)
+            {
+                ClearDamagedMovement();
             }
 
             _hazardDamage?.Update(gTime);
@@ -257,7 +262,7 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void HazardHarmParty(int damage)
+        public static void HazardHarmParty(int damage, Point sourceCenter)
         {
             if(_damageTimer == null) {
                 _damageTimer = new RHTimer(Constants.GAME_PLAYER_INVULN_TIME);
@@ -268,6 +273,19 @@ namespace RiverHollow.Game_Managers
                 }
 
                 _hazardDamage = new FloatingText(PlayerActor.Position, PlayerActor.BodySprite.Width, damage.ToString(), Color.Red);
+                AllowMovement = false;
+                PlayerActor.MoveToLocation = PlayerActor.Position + (5 * (PlayerActor.CollisionBox.Center - sourceCenter).ToVector2());
+                PlayerActor.SpdMult = 2;
+            }
+        }
+        public static void ClearDamagedMovement()
+        {
+            if (_damageTimer != null)
+            {
+                _damageTimer = null;
+                AllowMovement = true;
+                PlayerActor.SpdMult = Constants.NORMAL_SPEED;
+                PlayerActor.MoveToLocation = Vector2.Zero;
             }
         }
 

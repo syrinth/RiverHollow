@@ -441,7 +441,7 @@ namespace RiverHollow.Game_Managers
                     case ObjectTypeEnum.Garden:
                         return new Garden(id, diData);
                     case ObjectTypeEnum.Gatherable:
-                        return new Gatherable(id, diData);
+                        return new WrappedItem(id, diData);
                     case ObjectTypeEnum.Machine:
                         return new Machine(id, diData);
                     case ObjectTypeEnum.Mailbox:
