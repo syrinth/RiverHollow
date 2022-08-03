@@ -403,7 +403,7 @@ namespace RiverHollow.Game_Managers
             }
             return null;
         }
-        public static Dictionary<string,string> GetItemStringData(int id)
+        public static Dictionary<string,string> GetItemDictionaryData(int id)
         {
             if (_diItemData.ContainsKey(id)) { return _diItemData[id]; }
             else { return null; }
@@ -414,50 +414,74 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         /// <param name="id">The ID of the WorldObject</param>
         /// <returns>The WorldObject if it was successfully created, null otherwise</returns>
-        public static WorldObject CreateWorldObjectByID(int id)
+        public static WorldObject CreateWorldObjectByID(int id, Dictionary<string, string> args = null)
         {
             if (id != -1 && _diWorldObjects.ContainsKey(id))
             {
-                Dictionary<string, string> diData = _diWorldObjects[id];
-                switch (Util.ParseEnum<ObjectTypeEnum>(diData["Type"]))
+                Dictionary<string, string> data = new Dictionary<string, string>(_diWorldObjects[id]);
+                if (args != null)
+                {
+                    foreach (KeyValuePair<string, string> kvp in args)
+                    {
+                        if (!data.ContainsKey(kvp.Key))
+                        {
+                            data.Add(kvp.Key, kvp.Value);
+                        }
+                    }
+                }
+
+                switch (Util.ParseEnum<ObjectTypeEnum>(data["Type"]))
                 {
                     case ObjectTypeEnum.Beehive:
-                        return new Beehive(id, diData);
+                        return new Beehive(id, data);
                     case ObjectTypeEnum.Buildable:
-                        return new Buildable(id, diData);
+                        return new Buildable(id, data);
                     case ObjectTypeEnum.Building:
-                        return new Building(id, diData);
+                        return new Building(id, data);
                     case ObjectTypeEnum.Hazard:
-                        return new Hazard(id, diData);
+                        return new Hazard(id, data);
                     case ObjectTypeEnum.Container:
-                        return new Container(id, diData);
+                        return new Container(id, data);
                     case ObjectTypeEnum.Decor:
-                        return new Decor(id, diData);
+                        return new Decor(id, data);
                     case ObjectTypeEnum.Destructible:
-                        if (diData.ContainsKey("Tree")) { return new Tree(id, diData); }
-                        else { return new Destructible(id, diData); }
+                        if (data.ContainsKey("Tree")) { return new Tree(id, data); }
+                        else { return new Destructible(id, data); }
+                    case ObjectTypeEnum.DungeonObject:
+                        switch (Util.ParseEnum<TriggerObjectEnum>(data["TriggerType"]))
+                        {
+                            case TriggerObjectEnum.Trigger:
+                                return new Trigger(id, data);
+                            case TriggerObjectEnum.KeyDoor:
+                                return new KeyDoor(id, data);
+                            case TriggerObjectEnum.MobDoor:
+                                return new MobDoor(id, data);
+                            case TriggerObjectEnum.TriggerDoor:
+                                return new TriggerDoor(id, data);
+                        }
+                        break;
                     case ObjectTypeEnum.Floor:
-                        return new Floor(id, diData);
+                        return new Floor(id, data);
                     case ObjectTypeEnum.Garden:
-                        return new Garden(id, diData);
+                        return new Garden(id, data);
                     case ObjectTypeEnum.Gatherable:
-                        return new WrappedItem(id, diData);
+                        return new WrappedItem(id, data);
                     case ObjectTypeEnum.Machine:
-                        return new Machine(id, diData);
+                        return new Machine(id, data);
                     case ObjectTypeEnum.Mailbox:
-                        return new Mailbox(id, diData);
+                        return new Mailbox(id, data);
                     case ObjectTypeEnum.Plant:
-                        return new Plant(id, diData);
+                        return new Plant(id, data);
                     case ObjectTypeEnum.Structure:
-                        return new Structure(id, diData);
+                        return new Structure(id, data);
                     case ObjectTypeEnum.Wall:
-                        return new Wall(id, diData);
+                        return new Wall(id, data);
                     case ObjectTypeEnum.Wallpaper:
-                        return new Wallpaper(id, diData);
+                        return new Wallpaper(id, data);
                     case ObjectTypeEnum.WarpPoint:
-                        return new WarpPoint(id, diData);
+                        return new WarpPoint(id, data);
                     case ObjectTypeEnum.WorldObject:
-                        return new WorldObject(id, diData);
+                        return new WorldObject(id, data);
                 }
             }
 
@@ -484,52 +508,6 @@ namespace RiverHollow.Game_Managers
         {
             if (_diWorldObjects.ContainsKey(id)) { return _diWorldObjects[id]; }
             else { return null; }
-        }
-
-        public static TriggerObject GetDungeonObject(Dictionary<string, string> data)
-        {
-            int id = -1;
-
-            switch (Util.ParseEnum<TriggerObjectEnum>(data["TriggerType"]))
-            {
-                case TriggerObjectEnum.Trigger:
-                    id = int.Parse(Config[24]["ObjectID"]);
-                    break;
-                case TriggerObjectEnum.KeyDoor:
-                    id = int.Parse(Config[21]["ObjectID"]);
-                    break;
-                case TriggerObjectEnum.MobDoor:
-                    id = int.Parse(Config[22]["ObjectID"]);
-                    break;
-                case TriggerObjectEnum.TriggerDoor:
-                    id = int.Parse(Config[23]["ObjectID"]);
-                    break;
-            }
-
-            if (id != -1 && _diWorldObjects.ContainsKey(id))
-            {
-                Dictionary<string, string> liData = new Dictionary<string, string>(_diWorldObjects[id]);
-                foreach(KeyValuePair<string, string> kvp in data) {
-                    if (!liData.ContainsKey(kvp.Key))
-                    {
-                        liData.Add(kvp.Key, kvp.Value);
-                    }
-                }
-
-                switch (Util.ParseEnum<TriggerObjectEnum>(liData["TriggerType"]))
-                {
-                    case TriggerObjectEnum.Trigger:
-                        return new Trigger(id, liData);
-                    case TriggerObjectEnum.KeyDoor:
-                        return new KeyDoor(id, liData);
-                    case TriggerObjectEnum.MobDoor:
-                        return new MobDoor(id, liData);
-                    case TriggerObjectEnum.TriggerDoor:
-                        return new TriggerDoor(id, liData);
-                }
-            }
-
-            return null;
         }
 
         public static int NumberOfClasses()

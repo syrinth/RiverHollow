@@ -85,21 +85,5 @@
       <Key>20</Key>
       <Value>[NPC_ID:39]</Value>
     </Item>
-    <Item>
-      <Key>21</Key>
-      <Value>[ObjectID:71]</Value>
-    </Item>
-    <Item>
-      <Key>22</Key>
-      <Value>[ObjectID:72]</Value>
-    </Item>
-    <Item>
-      <Key>23</Key>
-      <Value>[ObjectID:74]</Value>
-    </Item>
-    <Item>
-      <Key>24</Key>
-      <Value>[ObjectID:73]</Value>
-    </Item>
   </Asset>
 </XnaContent>

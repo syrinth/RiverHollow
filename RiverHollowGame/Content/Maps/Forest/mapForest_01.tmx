@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="62">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="62">
  <properties>
   <property name="Outside" type="bool" value="false"/>
   <property name="RecallPoint" value="236,68"/>
@@ -83,32 +83,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="MapObject">
-  <object id="51" name="DungeonObject" x="224" y="16" width="32" height="32">
-   <properties>
-    <property name="MatchTrigger" value="Forest_Entrance_Open"/>
-    <property name="ObjectID" type="int" value="74"/>
-    <property name="OutTrigger" value="Forest_Entrance_Opened"/>
-    <property name="TriggerNumber" type="int" value="2"/>
-   </properties>
-  </object>
-  <object id="53" name="DungeonObject" x="176" y="48" width="16" height="16">
-   <properties>
-    <property name="ItemKeyID" type="int" value="43"/>
-    <property name="MatchTrigger" value="VALID_ITEM"/>
-    <property name="ObjectID" type="int" value="70"/>
-    <property name="OutTrigger" value="Forest_Entrance_Open"/>
-   </properties>
-  </object>
-  <object id="54" name="DungeonObject" x="288" y="48" width="16" height="16">
-   <properties>
-    <property name="ItemKeyID" type="int" value="44"/>
-    <property name="MatchTrigger" value="VALID_ITEM"/>
-    <property name="ObjectID" type="int" value="70"/>
-    <property name="OutTrigger" value="Forest_Entrance_Open"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="5" name="MapObject"/>
  <objectgroup id="6" name="Character">
   <object id="59" name="Spirit" x="416" y="112" width="16" height="16">
    <properties>

@@ -214,22 +214,6 @@
     <property name="ObjectID" value="61-C|52-C"/>
    </properties>
   </object>
-  <object id="65" name="DungeonObject" x="608.462" y="64.9583" width="30.75" height="30">
-   <properties>
-    <property name="MatchTrigger" value="Forest_Entrance_Open"/>
-    <property name="ObjectID" type="int" value="74"/>
-    <property name="OutTrigger" value="Forest_Entrance_Opened"/>
-    <property name="TriggerNumber" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="67" name="DungeonObject" x="640.754" y="97.0417" width="13.75" height="14">
-   <properties>
-    <property name="ItemKeyID" type="int" value="163"/>
-    <property name="MatchTrigger" value="VALID_ITEM"/>
-    <property name="ObjectID" type="int" value="70"/>
-    <property name="OutTrigger" value="Forest_Entrance_Open"/>
-   </properties>
-  </object>
   <object id="69" name="Mob" x="511.333" y="174.667" width="62.6667" height="56">
    <properties>
     <property name="MobID" value="32-C|33-C"/>

@@ -554,55 +554,24 @@ namespace RiverHollow.Map_Handling
             {
                 if (!loaded)
                 {
-                    if (tiledObj.Name.Equals("TriggerObject"))
+                    int objWidth = Constants.TILE_SIZE;
+                    int objHeight = Constants.TILE_SIZE;
+                    for (int y = (int)tiledObj.Position.Y; y < (int)tiledObj.Position.Y + tiledObj.Size.Height; y += objWidth)
                     {
-                        TriggerObject d = DataManager.GetDungeonObject(tiledObj.Properties);
-                        d.PlaceOnMap(Util.SnapToGrid(tiledObj.Position), this);
-
-                        if (IsDungeon) { DungeonManager.AddTriggerObject(DungeonName, d); }
-                        else { GameManager.AddTriggerObject(d); }
-                    }
-                    else if (tiledObj.Name.Equals("WorldObject"))
-                    {
-                        if (!tiledObj.Properties.ContainsKey("UpgradeLevel"))
+                        for (int x = (int)tiledObj.Position.X; x < (int)tiledObj.Position.X + tiledObj.Size.Width; x += objHeight)
                         {
-                            DataManager.CreateAndPlaceNewWorldObject(int.Parse(tiledObj.Properties["ObjectID"]), tiledObj.Position, this);
-                        }
-                    }
-                    else if (tiledObj.Name.Equals("Floor"))
-                    {
-                        for (int y = (int)tiledObj.Position.Y; y < (int)tiledObj.Position.Y + tiledObj.Size.Height; y += Constants.TILE_SIZE)
-                        {
-                            for (int x = (int)tiledObj.Position.X; x < (int)tiledObj.Position.X + tiledObj.Size.Width; x += Constants.TILE_SIZE)
+                            if (tiledObj.Properties.ContainsKey("ObjectID"))
                             {
-                                DataManager.CreateAndPlaceNewWorldObject(int.Parse(tiledObj.Properties["ObjectID"]), new Vector2(x, y), this);
+                                WorldObject obj = DataManager.CreateWorldObjectByID(int.Parse(tiledObj.Properties["ObjectID"]), tiledObj.Properties);
+                                obj.PlaceOnMap(new Vector2(x, y), this);
+                                objWidth = obj.BaseWidth * Constants.TILE_SIZE;
+                                objHeight = obj.BaseHeight * Constants.TILE_SIZE;
+                            }
+                            else if (tiledObj.Properties.ContainsKey("ItemID"))
+                            {
+                                new WrappedItem(int.Parse(tiledObj.Properties["ItemID"])).PlaceOnMap(tiledObj.Position, this);
                             }
                         }
-                    }
-                    else if (tiledObj.Name.Equals("Chest"))
-                    {
-                        Container c = (Container)DataManager.CreateWorldObjectByID(int.Parse(tiledObj.Properties["ObjectID"]));
-                        if (c.PlaceOnMap(tiledObj.Position, this))
-                        {
-                            InventoryManager.InitExtraInventory(c.Inventory);
-                            string[] holdSplit = Util.FindParams(tiledObj.Properties["Holding"]);
-                            foreach (string s in holdSplit)
-                            {
-                                InventoryManager.AddToInventory(int.Parse(s), 1, false);
-                            }
-                            InventoryManager.ClearExtraInventory();
-                        }
-                    }
-                    else if (tiledObj.Name.Equals("Building") && !loaded)
-                    {
-                        Building building = (Building)DataManager.CreateWorldObjectByID(int.Parse(tiledObj.Properties["BuildingID"]));
-                        building.SnapPositionToGrid(tiledObj.Position);
-                        building.PlaceOnMap(building.MapPosition, this);
-                        PlayerManager.AddToTownObjects(building);
-                    }
-                    else if (tiledObj.Name.Equals("Item"))
-                    {
-                        new WrappedItem(int.Parse(tiledObj.Properties["ItemID"])).PlaceOnMap(tiledObj.Position, this);
                     }
                 }
             }

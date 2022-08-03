@@ -1,5 +1,8 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Game_Managers;
 using RiverHollow.Items;
+using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
@@ -37,6 +40,18 @@ namespace RiverHollow.WorldObjects
             {
                 base.Draw(spriteBatch);
             }
+        }
+
+        public override bool PlaceOnMap(Vector2 pos, RHMap map)
+        {
+            bool rv = base.PlaceOnMap(pos, map);
+            if (rv)
+            {
+                if (map.IsDungeon) { DungeonManager.AddTriggerObject(map.DungeonName, this); }
+                else { GameManager.AddTriggerObject(this); }
+            }
+
+            return rv;
         }
 
         /// <summary>

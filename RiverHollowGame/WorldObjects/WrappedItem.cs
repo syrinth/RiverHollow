@@ -1,4 +1,5 @@
-﻿using RiverHollow.Game_Managers;
+﻿using Microsoft.Xna.Framework;
+using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
@@ -18,7 +19,13 @@ namespace RiverHollow.WorldObjects
 
             Item wrappedItem = DataManager.GetItem(itemID);
             _sprite = new AnimatedSprite(wrappedItem.Texture.Name);
-            _sprite.AddAnimation(AnimationEnum.ObjectIdle, wrappedItem.SourceRectangle.Left, wrappedItem.SourceRectangle.Top, _uSize);
+            if (DataManager.GetItemDictionaryData(itemID).ContainsKey("WrappedImage"))
+            {
+                string[] split = Util.FindArguments(DataManager.GetItemDictionaryData(itemID)["WrappedImage"]);
+                _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, int.Parse(split[0]), int.Parse(split[1]), _uSize);
+            }
+            else { _sprite.AddAnimation(AnimationEnum.ObjectIdle, wrappedItem.SourceRectangle.Left, wrappedItem.SourceRectangle.Top, _uSize); }
         }
 
         public WrappedItem(int id, Dictionary<string, string> stringData) : base(id)

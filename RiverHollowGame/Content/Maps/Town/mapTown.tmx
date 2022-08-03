@@ -285,13 +285,13 @@
  <objectgroup id="9" name="MapObject">
   <object id="71" name="Chest" x="370.53" y="437.021" width="12.69" height="10.2698">
    <properties>
-    <property name="Holding" value="37"/>
+    <property name="ItemID" value="37"/>
     <property name="ObjectID" type="int" value="41"/>
    </properties>
   </object>
-  <object id="72" name="Building" x="434" y="402.242" width="74.2197" height="44.3031">
+  <object id="72" name="Building" x="434" y="402.242" width="75.3106" height="44.3031">
    <properties>
-    <property name="BuildingID" type="int" value="29"/>
+    <property name="ObjectID" type="int" value="29"/>
    </properties>
   </object>
   <object id="92" name="Floor" x="6.03" y="467.553" width="471.44" height="10.8948">

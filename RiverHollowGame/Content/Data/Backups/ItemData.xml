@@ -759,7 +759,7 @@
     </Item>
     <Item>
       <Key>189</Key>
-      <Value>[Type:Special][Subtype:DungeonKey][Image:1-1][Value:0]</Value>
+      <Value>[Type:Special][Subtype:DungeonKey][Image:1-1][WrappedImage:0-16]</Value>
     </Item>
   </Asset>
 </XnaContent>

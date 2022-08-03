@@ -104,9 +104,10 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="7" name="TriggerObject" x="64.8333" y="34.5417" width="30.75" height="12.75">
+  <object id="7" name="Mob Door" x="64.8333" y="34.5417" width="30.75" height="12.75">
    <properties>
     <property name="MatchTrigger" value="MOB"/>
+    <property name="ObjectID" type="int" value="72"/>
     <property name="OutTrigger" value=""/>
     <property name="TriggerNumber" type="int" value="1"/>
     <property name="TriggerType" value="MobDoor"/>
@@ -122,17 +123,10 @@
     <property name="MobID" value="32-C|33-C"/>
    </properties>
   </object>
-  <object id="13" name="TriggerObject" x="209.875" y="178.875" width="11.875" height="9.09091">
+  <object id="13" name="Trigger 1" x="209.875" y="178.875" width="11.875" height="9.09091">
    <properties>
     <property name="MatchTrigger" value=""/>
-    <property name="OutTrigger" value="Dungeon_1"/>
-    <property name="TriggerNumber" type="int" value="1"/>
-    <property name="TriggerType" value="Trigger"/>
-   </properties>
-  </object>
-  <object id="14" name="TriggerObject" x="58.8125" y="220.955" width="11.875" height="9.09091">
-   <properties>
-    <property name="MatchTrigger" value=""/>
+    <property name="ObjectID" type="int" value="73"/>
     <property name="OutTrigger" value="Dungeon_1"/>
     <property name="TriggerNumber" type="int" value="1"/>
     <property name="TriggerType" value="Trigger"/>

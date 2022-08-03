@@ -158,7 +158,6 @@ namespace RiverHollow.Characters
         /// </summary>
         public virtual int DealDamage(int value)
         {
-            
             Tile.PlayAnimation(AnimationEnum.Hurt);
             if (CurrentHP == 0)
             {

@@ -96,14 +96,6 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="47" name="DungeonObject" x="224.188" y="272.25" width="31.6563" height="15.75">
-   <properties>
-    <property name="MatchTrigger" value="Cave_Wing_1_Switch_1"/>
-    <property name="ObjectID" type="int" value="67"/>
-    <property name="OutTrigger" value=""/>
-    <property name="TriggerNumber" type="int" value="1"/>
-   </properties>
-  </object>
   <object id="50" name="SpawnPoint" x="99" y="148.417" width="10" height="8.5">
    <properties>
     <property name="Spawn-All" value="0-U|4-C"/>

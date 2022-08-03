@@ -172,8 +172,8 @@ namespace RiverHollow.Game_Managers
                 _damageTimer.TickDown(gTime);
                 if (_damageTimer.Finished())
                 {
-                    _damageTimer = null;
                     _hazardDamage = null;
+                    _damageTimer = null;
                     ClearDamagedMovement();
                 }
             }
@@ -280,13 +280,9 @@ namespace RiverHollow.Game_Managers
         }
         public static void ClearDamagedMovement()
         {
-            if (_damageTimer != null)
-            {
-                _damageTimer = null;
-                AllowMovement = true;
-                PlayerActor.SpdMult = Constants.NORMAL_SPEED;
-                PlayerActor.MoveToLocation = Vector2.Zero;
-            }
+            AllowMovement = true;
+            PlayerActor.SpdMult = Constants.NORMAL_SPEED;
+            PlayerActor.MoveToLocation = Vector2.Zero;
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
+using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
@@ -20,6 +21,14 @@ namespace RiverHollow.WorldObjects
             Columns = int.Parse(stringData["Cols"]);
 
             Inventory = new Item[Rows, Columns];
+
+            InventoryManager.InitExtraInventory(Inventory);
+            string[] holdSplit = Util.FindParams(stringData["ItemID"]);
+            foreach (string s in holdSplit)
+            {
+                InventoryManager.AddToInventory(int.Parse(s), 1, false);
+            }
+            InventoryManager.ClearExtraInventory();
         }
 
         public override void ProcessRightClick()

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="51">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="51">
  <properties>
   <property name="Outside" type="bool" value="false"/>
   <property name="ResourcesMinMax" value="30-60"/>
@@ -94,13 +94,6 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="MapObject">
-  <object id="49" name="DungeonObject" x="16" y="112" width="16" height="48">
-   <properties>
-    <property name="ObjectID" type="int" value="68"/>
-    <property name="MatchTrigger" value="Trigger_Forest_2"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="5" name="MapObject"/>
  <objectgroup id="6" name="Character"/>
 </map>
