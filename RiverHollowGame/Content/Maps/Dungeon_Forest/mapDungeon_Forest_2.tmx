@@ -104,26 +104,18 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="7" name="Mob Door" x="64.8333" y="34.5417" width="30.75" height="12.75">
-   <properties>
-    <property name="MatchTrigger" value="MOB"/>
-    <property name="ObjectID" type="int" value="72"/>
-    <property name="OutTrigger" value=""/>
-    <property name="TriggerNumber" type="int" value="1"/>
-    <property name="TriggerType" value="MobDoor"/>
-   </properties>
-  </object>
-  <object id="11" name="Mob" x="50.9982" y="96.3335" width="62.6667" height="56">
+  <object id="7" template="../Templates/Mob Door.tx" x="64" y="32"/>
+  <object id="11" name="Mob" x="48" y="96" width="64" height="64">
    <properties>
     <property name="MobID" value="32-C|33-C"/>
    </properties>
   </object>
-  <object id="12" name="Mob" x="336.335" y="128.166" width="62.6667" height="56">
+  <object id="12" name="Mob" x="320" y="128" width="64" height="64">
    <properties>
     <property name="MobID" value="32-C|33-C"/>
    </properties>
   </object>
-  <object id="13" name="Trigger 1" x="209.875" y="178.875" width="11.875" height="9.09091">
+  <object id="13" name="Trigger 1" x="208" y="176" width="16" height="16">
    <properties>
     <property name="MatchTrigger" value=""/>
     <property name="ObjectID" type="int" value="73"/>

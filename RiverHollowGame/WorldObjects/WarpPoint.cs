@@ -17,7 +17,7 @@ namespace RiverHollow.WorldObjects
         public WarpPoint(int id, Dictionary<string, string> stringData) : base(id)
         {
             LoadDictionaryData(stringData);
-            _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + (Constants.TILE_SIZE * 2), _pImagePos.Y, _uSize);
+            _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _uSize);
         }
 
         public override bool PlaceOnMap(Vector2 pos, RHMap map)

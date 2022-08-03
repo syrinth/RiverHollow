@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+ <object name="Spiked Ball" width="16" height="16">
+  <properties>
+   <property name="Move" value="Right"/>
+   <property name="ObjectID" type="int" value="84"/>
+  </properties>
+ </object>
+</template>

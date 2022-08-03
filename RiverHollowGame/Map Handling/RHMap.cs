@@ -533,7 +533,7 @@ namespace RiverHollow.Map_Handling
                         {
                             _liResourceSpawns.Add(new ResourceSpawn(this, mapObject));
                         }
-                        else if (mapObject.Name.StartsWith("Mob")) { _liMobSpawns.Add(new MobSpawn(this, mapObject)); }
+                        else if (mapObject.Name.Equals("Mob")) { _liMobSpawns.Add(new MobSpawn(this, mapObject)); }
                         else { _liMapObjects.Add(mapObject); }
                     }
                 }

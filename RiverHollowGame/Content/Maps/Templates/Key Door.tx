@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+ <object name="Key Door" width="31.5" height="15.3201">
+  <properties>
+   <property name="KeyDoor" type="bool" value="true"/>
+   <property name="ObjectID" type="int" value="71"/>
+   <property name="TriggerType" value="KeyDoor"/>
+  </properties>
+ </object>
+</template>

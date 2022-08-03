@@ -335,7 +335,7 @@
     </Item>
     <Item>
       <Key>83</Key>
-      <Value>[Type:Hazard][Subtype:Timed][Image:48-96][Damage:10][Timer:1]</Value>
+      <Value>[Type:Hazard][Subtype:Timed][Image:48-96][Damage:10]</Value>
     </Item>
     <Item>
       <Key>84</Key>

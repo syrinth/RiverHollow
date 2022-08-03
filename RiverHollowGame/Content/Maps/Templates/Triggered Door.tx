@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+ <object name="Triggered Door 1" width="32" height="16">
+  <properties>
+   <property name="MatchTrigger" value="Dungeon_1"/>
+   <property name="ObjectID" type="int" value="74"/>
+   <property name="OutTrigger" value=""/>
+   <property name="TriggerNumber" type="int" value="1"/>
+   <property name="TriggerType" value="TriggerDoor"/>
+  </properties>
+ </object>
+</template>

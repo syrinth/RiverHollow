@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="35" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="23">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="35" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="35">
  <properties>
   <property name="Dungeon" value="Forest"/>
   <property name="MapAbove" value=""/>
@@ -75,7 +75,7 @@
 </data>
  </layer>
  <objectgroup id="4" name="Travel">
-  <object id="3" name="Entrance" x="176" y="260" width="32" height="4">
+  <object id="3" name="Entrance" x="176" y="256" width="32" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
     <property name="Map" value="mapWoods"/>
@@ -89,12 +89,12 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="5" name="WorldObject" x="291.364" y="179.386" width="26.6067" height="9.8948">
+  <object id="5" name="WorldObject" x="256" y="176" width="16" height="16">
    <properties>
     <property name="ObjectID" type="int" value="116"/>
    </properties>
   </object>
-  <object id="10" name="Triggered Door 1" x="96.6932" y="116.379" width="30.75" height="10.7045">
+  <object id="10" name="Triggered Door 1" x="96" y="112" width="32" height="16">
    <properties>
     <property name="MatchTrigger" value="Dungeon_1"/>
     <property name="ObjectID" type="int" value="74"/>
@@ -103,25 +103,25 @@
     <property name="TriggerType" value="TriggerDoor"/>
    </properties>
   </object>
-  <object id="11" name="Key" x="226.53" y="132.219" width="10.3567" height="9.3948">
+  <object id="11" name="Key" x="224" y="128" width="16" height="16">
    <properties>
     <property name="ItemID" value="189"/>
    </properties>
   </object>
-  <object id="12" name="Key Door" x="448.547" y="36.0814" width="30.75" height="11.3201">
+  <object id="12" name="Key Door" x="448" y="32" width="32" height="16">
    <properties>
     <property name="KeyDoor" type="bool" value="true"/>
     <property name="ObjectID" type="int" value="71"/>
     <property name="TriggerType" value="KeyDoor"/>
    </properties>
   </object>
-  <object id="14" name="WorldObject" x="258.007" y="84.2986" width="11.4476" height="40.6448">
+  <object id="14" name="Spiked Ball" x="256" y="80" width="16" height="48">
    <properties>
     <property name="Move" value="Right"/>
     <property name="ObjectID" type="int" value="84"/>
    </properties>
   </object>
-  <object id="15" name="Spikes" x="434.901" y="50.553" width="58.2658" height="27.3493">
+  <object id="15" name="Spikes" x="432" y="48" width="64" height="32">
    <properties>
     <property name="ObjectID" type="int" value="83"/>
     <property name="Timer" type="float" value="1"/>

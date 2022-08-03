@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+ <object name="Mob Door" width="32" height="16">
+  <properties>
+   <property name="MatchTrigger" value="MOB"/>
+   <property name="ObjectID" type="int" value="72"/>
+   <property name="OutTrigger" value=""/>
+   <property name="TriggerNumber" type="int" value="1"/>
+   <property name="TriggerType" value="MobDoor"/>
+  </properties>
+ </object>
+</template>
