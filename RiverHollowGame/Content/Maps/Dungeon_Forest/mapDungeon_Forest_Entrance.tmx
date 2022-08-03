@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="35" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="22">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="35" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="23">
  <properties>
   <property name="Dungeon" value="Forest"/>
   <property name="MapAbove" value=""/>
@@ -43,13 +43,13 @@
 0,71,271,271,271,136,136,136,136,136,136,136,136,136,136,136,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,73,0,
 0,71,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,73,0,
 0,71,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,51,95,95,95,95,95,95,95,95,95,96,0,
-0,94,95,95,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,71,0,0,0,0,0,0,0,0,0,0,0,
+0,94,95,95,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,71,118,118,118,118,118,118,118,118,118,118,0,
 0,0,0,0,73,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,73,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,73,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,73,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,94,95,95,95,95,95,50,0,0,0,0,0,0,0,0,0,0,0,0,73,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,71,790,791,104,0,0,0,0,0,0,0,0,0,73,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,96,814,815,94,95,95,95,95,95,95,95,95,95,96,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,118,118,118,118,118,118,118,118,118,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <layer id="3" name="Upper" width="35" height="18">
@@ -103,7 +103,7 @@
     <property name="TriggerType" value="TriggerDoor"/>
    </properties>
   </object>
-  <object id="11" name="Key" x="274.28" y="114.969" width="10.3567" height="9.3948">
+  <object id="11" name="Key" x="226.53" y="132.219" width="10.3567" height="9.3948">
    <properties>
     <property name="ItemID" value="189"/>
    </properties>
@@ -115,15 +115,16 @@
     <property name="TriggerType" value="KeyDoor"/>
    </properties>
   </object>
-  <object id="14" name="WorldObject" x="259.007" y="83.5486" width="138.448" height="9.8948">
+  <object id="14" name="WorldObject" x="258.007" y="84.2986" width="11.4476" height="40.6448">
    <properties>
+    <property name="Move" value="Right"/>
     <property name="ObjectID" type="int" value="84"/>
    </properties>
   </object>
-  <object id="15" name="Spikes" x="434.901" y="50.553" width="59.0158" height="27.3493">
+  <object id="15" name="Spikes" x="434.901" y="50.553" width="58.2658" height="27.3493">
    <properties>
     <property name="ObjectID" type="int" value="83"/>
-    <property name="Timer" type="int" value="1"/>
+    <property name="Timer" type="float" value="1"/>
    </properties>
   </object>
  </objectgroup>

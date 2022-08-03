@@ -2,8 +2,10 @@
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
-using static RiverHollow.Game_Managers.GameManager;
 using Microsoft.Xna.Framework;
+using RiverHollow.Map_Handling;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace RiverHollow.WorldObjects
 {
@@ -16,6 +18,8 @@ namespace RiverHollow.WorldObjects
         public int Damage { get; }
         public bool Active { get; private set; }
         RHTimer _timer;
+
+        DirectionEnum _eMoveDir = DirectionEnum.None;
 
         public Hazard(int id, Dictionary<string, string> stringData) : base(id)
         {
@@ -32,8 +36,18 @@ namespace RiverHollow.WorldObjects
 
             if(_eHazardType == HazardTypeEnum.Timed)
             {
-                _timer = new RHTimer(int.Parse(stringData["Timer"]));
+                _timer = new RHTimer(float.Parse(stringData["Timer"]));
             }
+
+            if (stringData.ContainsKey("Move"))
+            {
+                _eMoveDir = Util.ParseEnum<DirectionEnum>(stringData["Move"]);
+            }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gTime)
@@ -47,8 +61,42 @@ namespace RiverHollow.WorldObjects
                     Activate(!Active);
                 }
             }
+            if(_eMoveDir != DirectionEnum.None)
+            {
+                RHTile currentTile = CurrentMap.GetTileByPixelPosition(CollisionBox.Center);
+                RHTile nextTile = currentTile.GetTileByDirection(_eMoveDir);
+                float deltaX = Math.Abs((nextTile.Center - CollisionBox.Center.ToVector2()).X);
+                float deltaY = Math.Abs((nextTile.Center - CollisionBox.Center.ToVector2()).Y);
 
-            if (Active && Tiles.Find(x => x.Contains(PlayerManager.PlayerActor)) != null)
+                if (!nextTile.Passable() && deltaX < Constants.TILE_SIZE + 2 && deltaY < Constants.TILE_SIZE + 2)
+                {
+                    _eMoveDir = Util.GetOppositeDirection(_eMoveDir);
+                }
+                else
+                {
+                    switch (_eMoveDir)
+                    {
+                        case DirectionEnum.Down:
+                            _sprite.Position += new Vector2(0, 2);
+                            _vMapPosition += new Vector2(0, 2);
+                            break;
+                        case DirectionEnum.Left:
+                            _sprite.Position += new Vector2(-2, 0);
+                            _vMapPosition += new Vector2(-2, 0);
+                            break;
+                        case DirectionEnum.Up:
+                            _sprite.Position += new Vector2(0, -2);
+                            _vMapPosition += new Vector2(0, -2);
+                            break;
+                        case DirectionEnum.Right:
+                            _sprite.Position += new Vector2(2, 0);
+                            _vMapPosition += new Vector2(2, 0);
+                            break;
+                    }
+                }
+            }
+
+            if (Active && CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
             {
                 PlayerManager.HazardHarmParty(Damage, CollisionBox.Center);
             }
@@ -62,6 +110,18 @@ namespace RiverHollow.WorldObjects
             {
                 _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _uSize);
             }
+        }
+
+        public override bool PlaceOnMap(Vector2 pos, RHMap map)
+        {
+            bool rv = base.PlaceOnMap(pos, map);
+
+            if(_eMoveDir != DirectionEnum.None)
+            {
+                RemoveSelfFromTiles();
+            }
+
+            return rv;
         }
 
         private void Activate(bool value)

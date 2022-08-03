@@ -350,10 +350,7 @@ namespace RiverHollow.Map_Handling
 
             foreach (WorldObject obj in _liPlacedWorldObjects)
             {
-                if (obj.Tiles.Count > 0)
-                {
-                    obj.Draw(spriteBatch);
-                }
+                obj.Draw(spriteBatch);
             }
 
             foreach (Item i in _liItems)
@@ -1981,35 +1978,35 @@ namespace RiverHollow.Map_Handling
         /// be added, and set those as well. Shadow Tiles are tiles that the image is on
         /// a part of, but is not technically sitting on.
         /// </summary>
-        /// <param name="o">The object to add</param>
+        /// <param name="obj">The object to add</param>
         /// <param name="tiles">The list of tiles to add to the object</param>
-        public void AssignMapTiles(WorldObject o, List<RHTile> tiles)
+        public void AssignMapTiles(WorldObject obj, List<RHTile> tiles)
         {
-            tiles.FindAll(t => !o.Tiles.Contains(t)).ForEach(t => o.Tiles.Add(t));
+            tiles.FindAll(t => !obj.Tiles.Contains(t)).ForEach(t => obj.Tiles.Add(t));
 
-            if (!_liPlacedWorldObjects.Contains(o))
+            if (!_liPlacedWorldObjects.Contains(obj))
             {
-                _liPlacedWorldObjects.Add(o);
+                _liPlacedWorldObjects.Add(obj);
             }
 
             //Sets the WorldObject to each RHTile
             foreach (RHTile t in tiles)
             {
-                t.SetObject(o);
+                t.SetObject(obj);
             }
 
             //Iterate over the WorldObject image in Constants.TILE_SIZE increments to discover any tiles
             //that the image overlaps. Add those tiles as Shadow Tiles as long as they're not
             //actual Tiles the object sits on. Also add the Tiles to the objects Shadow Tiles list
-            for (int i = (int)o.MapPosition.X; i < o.MapPosition.X + o.Width; i += Constants.TILE_SIZE)
+            for (int i = (int)obj.MapPosition.X; i < obj.MapPosition.X + obj.Width; i += Constants.TILE_SIZE)
             {
-                for (int j = (int)o.MapPosition.Y; j < o.MapPosition.Y + o.Height; j += Constants.TILE_SIZE)
+                for (int j = (int)obj.MapPosition.Y; j < obj.MapPosition.Y + obj.Height; j += Constants.TILE_SIZE)
                 {
                     RHTile t = GetTileByGridCoords(Util.GetGridCoords(i, j));
-                    if (t != null && !o.Tiles.Contains(t))
+                    if (t != null && !obj.Tiles.Contains(t))
                     {
-                        t.SetShadowObject(o);
-                        o.AddTile(t);
+                        t.SetShadowObject(obj);
+                        obj.AddTile(t);
                     }
                 }
             }

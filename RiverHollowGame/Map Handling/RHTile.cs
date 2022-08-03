@@ -47,11 +47,6 @@ namespace RiverHollow.Map_Handling
             _diProps = new Dictionary<TiledMapTileLayer, Dictionary<string, string>>();
         }
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            if (Flooring != null) { Flooring.Draw(spriteBatch); }
-            if (WorldObject != null) { WorldObject.Draw(spriteBatch); }
-        }
         public void DrawWallpaper(SpriteBatch spriteBatch)
         {
             _objWallpaper?.Draw(spriteBatch);

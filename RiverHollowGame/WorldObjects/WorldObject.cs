@@ -24,8 +24,8 @@ namespace RiverHollow.WorldObjects
 
         protected bool AssignedToTiles => Tiles.Count > 0;
 
-        protected string MapName => AssignedToTiles ? Tiles[0].MapName : string.Empty;
-        public RHMap CurrentMap => AssignedToTiles ? MapManager.Maps[Tiles[0].MapName] : null;
+        protected string MapName { get; set; }
+        public RHMap CurrentMap => MapManager.Maps[MapName];
 
         protected bool _bWalkable = false;
         public bool Walkable => _bWalkable;
@@ -199,9 +199,16 @@ namespace RiverHollow.WorldObjects
 
         public virtual bool PlaceOnMap(Vector2 pos, RHMap map)
         {
+            bool rv = false;
             pos = new Vector2(pos.X - (_rBase.X * Constants.TILE_SIZE), pos.Y - (_rBase.Y * Constants.TILE_SIZE));
             SnapPositionToGrid(pos);
-            return map.PlaceWorldObject(this);
+            rv = map.PlaceWorldObject(this);
+            if (rv)
+            {
+                MapName = map.Name;
+            }
+
+            return rv;
         }
 
         protected void SetSpritePos(Vector2 position)
