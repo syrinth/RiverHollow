@@ -15,8 +15,6 @@ namespace RiverHollow.Game_Managers
 {
     public static class EnvironmentManager
     {
-        
-
         static AnimationEnum[] ListWeather = { AnimationEnum.None, AnimationEnum.Rain, AnimationEnum.Snow }; //Thunderstorm?
         static WeatherEnum _eCurrentWeather = WeatherEnum.Sunny;
 

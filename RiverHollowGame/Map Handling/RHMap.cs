@@ -233,7 +233,12 @@ namespace RiverHollow.Map_Handling
             }
             _liObjectsToRemove.Clear();
 
-            foreach (WorldObject obj in _liPlacedWorldObjects) { obj.Update(gTime); }
+            foreach (WorldObject obj in _liPlacedWorldObjects) {
+                if (this == MapManager.CurrentMap || obj.CompareType(ObjectTypeEnum.Machine))
+                {
+                    obj.Update(gTime);
+                }
+            }
 
             if (ToAdd.Count > 0)
             {
