@@ -10,7 +10,7 @@
         public enum RarityEnum { C, U, R, M };
         public enum WeatherEnum { Sunny, Raining, Snowing };
 
-        public enum TriggerObjectEnum { Trigger, KeyDoor, MobDoor, TriggerDoor };
+        public enum TriggerObjectEnum { ColorBlocker, ColorSwitch, Trigger, KeyDoor, MobDoor, TriggerDoor };
         public enum HazardTypeEnum { Passive, Timed, Triggered };
 
         public enum GameScreenEnum { Info, Combat, World };
@@ -70,5 +70,7 @@
         public enum VillagerRequestEnum { Close, Far, TownWide };
 
         public enum GameIconEnum { None, AreaAll, AreaColumnAlly, AreaColumnEnemy, AreaSelf, AreaSingle, AreaRow, AreaSquare, Agility, BuffArrow, Coin, Damage, DebuffArrow, Defence, ElementFire, ElementIce, ElementLightning, Evasion, Experience, Heal, Key, Magic, MaxHealth, MagicDamage, Melee, MoveDown, MoveLeft, MoveRight, MoveUp, PhysicalDamage, Ranged, Resistance, Speed, Strength, Timer };
+
+        public enum ColorStateEnum { None, Blue, Red };
     }
 }

@@ -14,6 +14,7 @@ using RiverHollow.Map_Handling;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
+using RiverHollow.WorldObjects.Trigger_Objects;
 
 namespace RiverHollow.Game_Managers
 {
@@ -448,8 +449,12 @@ namespace RiverHollow.Game_Managers
                         if (data.ContainsKey("Tree")) { return new Tree(id, data); }
                         else { return new Destructible(id, data); }
                     case ObjectTypeEnum.DungeonObject:
-                        switch (Util.ParseEnum<TriggerObjectEnum>(data["TriggerType"]))
+                        switch (Util.ParseEnum<TriggerObjectEnum>(data["Subtype"]))
                         {
+                            case TriggerObjectEnum.ColorBlocker:
+                                return new ColorBlocker(id, data);
+                            case TriggerObjectEnum.ColorSwitch:
+                                return new ColorSwitch(id, data);
                             case TriggerObjectEnum.Trigger:
                                 return new Trigger(id, data);
                             case TriggerObjectEnum.KeyDoor:

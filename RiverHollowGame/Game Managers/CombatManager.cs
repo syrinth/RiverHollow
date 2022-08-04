@@ -292,7 +292,6 @@ namespace RiverHollow.Game_Managers
             CombatStarted = false;
             GUIManager.BeginFadeOut();
             MapManager.RemoveActor(CurrentMob);
-            DungeonManager.ActivateTrigger(Constants.TRIGGER_MOB_OPEN);
             CurrentMob = null;
             GoToHUDScreen();
         }

@@ -20,7 +20,7 @@ namespace RiverHollow.WorldObjects
         /// <param name="name"></param>
         public override void AttemptToTrigger(string name)
         {
-            if (CanTrigger(name))
+            if (TriggerMatches(name))
             {
                 if (!string.IsNullOrEmpty(_sOutTrigger))
                 {

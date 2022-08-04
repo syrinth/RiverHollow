@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="28" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="15">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="28" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="15">
  <properties>
   <property name="Dungeon" value="Forest"/>
   <property name="MapType" value="Forest"/>
@@ -104,7 +104,11 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="7" template="../Templates/Mob Door.tx" x="64" y="32"/>
+  <object id="7" name="Mob Door" x="64" y="32" width="32" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="74"/>
+   </properties>
+  </object>
   <object id="11" name="Mob" x="48" y="96" width="64" height="64">
    <properties>
     <property name="MobID" value="32-C|33-C"/>
@@ -118,10 +122,9 @@
   <object id="13" name="Trigger 1" x="208" y="176" width="16" height="16">
    <properties>
     <property name="MatchTrigger" value=""/>
-    <property name="ObjectID" type="int" value="73"/>
+    <property name="ObjectID" type="int" value="75"/>
     <property name="OutTrigger" value="Dungeon_1"/>
     <property name="TriggerNumber" type="int" value="1"/>
-    <property name="TriggerType" value="Trigger"/>
    </properties>
   </object>
  </objectgroup>

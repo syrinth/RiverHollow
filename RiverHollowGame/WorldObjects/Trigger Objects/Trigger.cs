@@ -5,7 +5,6 @@ using RiverHollow.Items;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
-using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.GUIComponents.Screens;
 
 namespace RiverHollow.WorldObjects
@@ -62,7 +61,7 @@ namespace RiverHollow.WorldObjects
 
         public override void AttemptToTrigger(string name)
         {
-            if (CanTrigger(name))
+            if (TriggerMatches(name))
             {
                 FireTrigger();
             }

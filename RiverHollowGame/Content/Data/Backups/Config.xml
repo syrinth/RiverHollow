@@ -7,15 +7,15 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[ObjectID:61]</Value>
+      <Value>[ObjectID:60]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[ObjectID:51]</Value>
+      <Value>[ObjectID:50]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[ObjectID:66]</Value>
+      <Value>[ObjectID:65]</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -43,19 +43,19 @@
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[ObjectID:41]</Value>
+      <Value>[ObjectID:40]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[ObjectID:101]</Value>
+      <Value>[ObjectID:103]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[ObjectID:64]</Value>
+      <Value>[ObjectID:63]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[ObjectID:53]</Value>
+      <Value>[ObjectID:52]</Value>
     </Item>
     <Item>
       <Key>14</Key>
@@ -63,7 +63,7 @@
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[ObjectID:110]</Value>
+      <Value>[ObjectID:112]</Value>
     </Item>
     <Item>
       <Key>16</Key>
@@ -79,11 +79,15 @@
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[ObjectID:39]</Value>
+      <Value>[ObjectID:38]</Value>
     </Item>
     <Item>
       <Key>20</Key>
       <Value>[NPC_ID:39]</Value>
+    </Item>
+    <Item>
+      <Key>21</Key>
+      <Value>[ObjectID:27]</Value>
     </Item>
   </Asset>
 </XnaContent>

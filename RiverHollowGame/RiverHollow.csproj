@@ -177,11 +177,14 @@
     <Compile Include="WorldObjects\AdjustableObject.cs" />
     <Compile Include="WorldObjects\Beehive.cs" />
     <Compile Include="WorldObjects\Buildable.cs" />
+    <Compile Include="WorldObjects\Trigger Objects\ColorBlocker.cs" />
     <Compile Include="WorldObjects\Hazard.cs" />
     <Compile Include="WorldObjects\Container.cs" />
     <Compile Include="WorldObjects\Decor.cs" />
     <Compile Include="WorldObjects\Destructible.cs" />
-    <Compile Include="WorldObjects\TriggerDoor.cs" />
+    <Compile Include="WorldObjects\Trigger Objects\ColorSwitch.cs" />
+    <Compile Include="WorldObjects\Trigger Objects\Switch.cs" />
+    <Compile Include="WorldObjects\Trigger Objects\TriggerDoor.cs" />
     <Compile Include="WorldObjects\Floor.cs" />
     <Compile Include="WorldObjects\Garden.cs" />
     <Compile Include="WorldObjects\WrappedItem.cs" />
@@ -191,8 +194,8 @@
     <Compile Include="WorldObjects\Plant.cs" />
     <Compile Include="WorldObjects\Structure.cs" />
     <Compile Include="WorldObjects\Tree.cs" />
-    <Compile Include="WorldObjects\Trigger.cs" />
-    <Compile Include="WorldObjects\TriggerObject.cs" />
+    <Compile Include="WorldObjects\Trigger Objects\Trigger.cs" />
+    <Compile Include="WorldObjects\Trigger Objects\TriggerObject.cs" />
     <Compile Include="WorldObjects\Wall.cs" />
     <Compile Include="WorldObjects\Wallpaper.cs" />
     <Compile Include="WorldObjects\WarpPoint.cs" />

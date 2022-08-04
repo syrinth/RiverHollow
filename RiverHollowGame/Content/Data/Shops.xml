@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[ItemID:179|187|141|137|6|7|8|106][Shopkeeper:11][BuildingID:26]</Value>
+      <Value>[ItemID:179|187|141|137|6|7|8|106][Shopkeeper:11][BuildingID:25]</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -31,11 +31,11 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[ObjectID:43|42|45|44|46|48|47]</Value>
+      <Value>[ObjectID:42|41|44|43|45|47|46]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[ObjectID:43|42|45|44|46|48|47]</Value>
+      <Value>[ObjectID:42|41|44|43|45|47|46]</Value>
     </Item>
     <Item>
       <Key>9</Key>

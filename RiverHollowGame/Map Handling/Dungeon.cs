@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
+using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Map_Handling
 {
@@ -15,6 +17,8 @@ namespace RiverHollow.Map_Handling
         public string Name { get; private set; }
         protected List<WarpPoint> _liWarpPoints;
         public IList<WarpPoint> WarpPoints { get { return _liWarpPoints.AsReadOnly(); } }
+
+        ColorStateEnum _eCurrentColorState;
 
         protected Dictionary<string, string> _diDungeonInfo;
 
@@ -30,6 +34,11 @@ namespace RiverHollow.Map_Handling
         public virtual void AddMap(RHMap map)
         {
             _liMapNames.Add(map.Name);
+
+            if (map.GetMapProperties().ContainsKey("Color"))
+            {
+                _eCurrentColorState = Util.ParseEnum<ColorStateEnum>(map.GetMapProperties()["Color"]);
+            }
         }
 
         public void AddWarpPoint(WarpPoint obj)

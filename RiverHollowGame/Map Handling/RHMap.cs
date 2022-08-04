@@ -258,6 +258,10 @@ namespace RiverHollow.Map_Handling
                 {
                     case WorldActorTypeEnum.Mob:
                         _liMobs.Remove((Mob)c);
+                        if (_liMobs.Count == 0)
+                        {
+                            DungeonManager.ActivateTrigger(Constants.TRIGGER_MOB_OPEN);
+                        }
                         break;
                     default:
                         _liActors.Remove(c);

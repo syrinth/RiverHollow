@@ -45,11 +45,6 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
-
         public override void Update(GameTime gTime)
         {
             if (_eHazardType == HazardTypeEnum.Timed)

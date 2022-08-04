@@ -65,11 +65,11 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         /// <param name="triggerName">The trigger name to match against the response trigger</param>
         /// <returns>True if theo object can trigger</returns>
-        protected bool CanTrigger(string triggerName)
+        protected bool TriggerMatches(string triggerName)
         {
             bool rv = false;
 
-            if (triggerName == _sMatchTrigger && (triggerName != Constants.TRIGGER_MOB_OPEN || CurrentMap.AllMobsDefeated()))
+            if (triggerName == _sMatchTrigger)
             {
                 rv = CanTrigger();
             }
