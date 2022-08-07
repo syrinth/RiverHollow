@@ -30,6 +30,8 @@ namespace Database_Editor
         static Dictionary<string, List<XMLData>> _diBasicXML;
         Dictionary<string, TMXData> _diMapData;
 
+        string _strFilter = "All";
+
         delegate void VoidDelegate();
         delegate void XMLListDataDelegate(List<XMLData> Data);
 
@@ -226,14 +228,15 @@ namespace Database_Editor
         {
             dgv.Rows.Clear();
             int index = 0;
+            _strFilter = filter;
             for (int i = 0; i < data.Count; i++)
             {
-                if (filter == "All" || data[i].GetTagValue("Type").ToString().Equals(filter))
+                if (_strFilter == "All" || data[i].GetTagValue("Type").ToString().Equals(_strFilter))
                 {
                     dgv.Rows.Add();
                     DataGridViewRow row = dgv.Rows[index++];
 
-                    row.Cells[colID].Value = data[i].ID;
+                    //row.Cells[colID].Value = data[i].ID;
                     row.Cells[colName].Value = data[i].Name;
                 }
             }
@@ -245,6 +248,7 @@ namespace Database_Editor
         {
             dgvItems.Rows.Clear();
             int index = 0;
+            _strFilter = filter;
             for (int i = 0; i < _liItemData.Count; i++)
             {
                 if (filter == "All" || _liItemData[i].ItemType.ToString().Equals(filter))
@@ -252,7 +256,7 @@ namespace Database_Editor
                     dgvItems.Rows.Add();
                     DataGridViewRow row = dgvItems.Rows[index++];
 
-                    row.Cells["colItemID"].Value = _liItemData[i].ID;
+                    //row.Cells["colItemID"].Value = _liItemData[i].ID;
                     row.Cells["colItemName"].Value = _liItemData[i].Name;
                 }
             }
@@ -305,7 +309,7 @@ namespace Database_Editor
                 dgv.Rows.Add();
 
                 DataGridViewRow row = dgv.Rows[kvp.Key];
-                row.Cells[colID].Value = kvp.Key;
+                //row.Cells[colID].Value = kvp.Key;
                 row.Cells[colName].Value = GetTextValue(xmlType, kvp.Key, "Name");
             }
 
@@ -325,7 +329,7 @@ namespace Database_Editor
                 dgvCutscenes.Rows.Add();
 
                 DataGridViewRow row = dgvCutscenes.Rows[kvp.Key];
-                row.Cells["colCutscenesID"].Value = kvp.Key;
+                //row.Cells["colCutscenesID"].Value = kvp.Key;
                 row.Cells["colCutscenesName"].Value = GetTextValue(XMLTypeEnum.Cutscene, kvp.Key, "Name");
             }
 
@@ -870,9 +874,11 @@ namespace Database_Editor
         private void LoadItemInfo()
         {
             DataGridViewRow r = dgvItems.SelectedRows[0];
-            string cellValue = r.Cells["colItemID"].Value.ToString();
 
-            ItemXMLData data = _liItemData[int.Parse(cellValue)];
+            ItemXMLData data = null;
+            if (_strFilter == "All") { data = _liItemData[r.Index]; }
+            else { data = _liItemData.FindAll(x => x.ItemType.ToString().Equals(_strFilter))[r.Index]; }
+
             tbItemName.Text = data.Name;
             tbItemDesc.Text = data.Description;
             tbItemID.Text = data.ID.ToString();
@@ -897,8 +903,10 @@ namespace Database_Editor
         private void LoadWorldObjectInfo()
         {
             DataGridViewRow r = dgvWorldObjects.SelectedRows[0];
-            string cellValue = r.Cells["colWorldObjectsID"].Value.ToString();
-            XMLData data = _liWorldObjects[int.Parse(cellValue)];
+            XMLData data = null;
+            if (_strFilter == "All") { data = _liWorldObjects[r.Index]; }
+            else { data = _liWorldObjects.FindAll(x => x.GetTagValue("Type").ToString().Equals(_strFilter))[r.Index]; }
+
             LoadGenericDataInfo(data, tbWorldObjectName, tbWorldObjectID, dgvWorldObjectTags);
             cbWorldObjectType.SelectedIndex = (int)Util.ParseEnum<ObjectTypeEnum>(data.GetTagValue("Type"));
         }
@@ -1085,7 +1093,7 @@ namespace Database_Editor
 
             DataGridViewRow updatedRow = baseGridView.Rows[_diTabIndices[tabIndex]];
 
-            updatedRow.Cells[colID].Value = data.ID;
+            //updatedRow.Cells[colID].Value = data.ID;
             updatedRow.Cells[colName].Value = data.Name;
         }
 
@@ -1186,7 +1194,7 @@ namespace Database_Editor
             {
                 DataGridViewRow updatedRow = dgvItems.Rows[_diTabIndices["Items"]];
 
-                updatedRow.Cells["colItemID"].Value = data.ID;
+                //updatedRow.Cells["colItemID"].Value = data.ID;
                 updatedRow.Cells["colItemName"].Value = data.Name;
             }
         }
@@ -1258,7 +1266,7 @@ namespace Database_Editor
 
             DataGridViewRow updatedRow = dgvCutscenes.Rows[_diTabIndices["Cutscenes"]];
 
-            updatedRow.Cells["colCutscenesID"].Value = _diTabIndices["Cutscenes"];
+            //updatedRow.Cells["colCutscenesID"].Value = _diTabIndices["Cutscenes"];
             updatedRow.Cells["colCutscenesName"].Value = GetTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name");
         }
 
@@ -1408,7 +1416,7 @@ namespace Database_Editor
             SelectRow(dg, _diTabIndices[tabIndex]);
 
             DataGridViewRow row = dg.Rows[_diTabIndices[tabIndex]];
-            row.Cells[colID].Value = _diTabIndices[tabIndex];
+            //row.Cells[colID].Value = _diTabIndices[tabIndex];
             row.Cells[colName].Value = "";
 
             tbName.Text = "";
@@ -1438,7 +1446,12 @@ namespace Database_Editor
 
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveAll();
+            SaveAll(false);
+        }
+
+        private void sortAndSaveToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SaveAll(true);
         }
 
         private void SaveXMLDataDictionary(Dictionary<string, List<XMLData>> dictionaryData, StreamWriter sWriter)
@@ -1500,45 +1513,55 @@ namespace Database_Editor
             }
         }
 
-        private void SaveAll()
+        private void SaveAll(bool SortIDs)
         {
             Backup();
             AutoSave();
             StreamWriter sWriter = PrepareXMLFile(OBJECT_TEXT_XML_FILE, "Dictionary[string, string]");
 
-            _liItemData.Sort((x, y) =>
-            {
-                var typeComp = x.ItemType.CompareTo(y.ItemType);
-                if (typeComp == 0) { return x.ID.CompareTo(y.ID); }
-                else { return typeComp; }
-            });
-            _liWorldObjects.Sort((x, y) =>
-            {
-                var typeComp = x.GetTagValue("Type").CompareTo(y.GetTagValue("Type"));
-                if (typeComp == 0) { return x.Name.CompareTo(y.Name); }
-                else { return typeComp; }
-            });
             List<ItemXMLData> itemDataList = new List<ItemXMLData>();
             List<XMLData> worldObjectDataList = new List<XMLData>();
-            ChangeIDs(ref itemDataList, ref worldObjectDataList);
 
-            //Strip the special case character from the Item files
-            foreach (ItemXMLData data in _liItemData)
+            if (SortIDs)
             {
-                if (data != null) { data.StripSpecialCharacter(); }
-            }
+                _liItemData.Sort((x, y) =>
+                {
+                    var typeComp = x.ItemType.CompareTo(y.ItemType);
+                    if (typeComp == 0) { return x.ID.CompareTo(y.ID); }
+                    else { return typeComp; }
+                });
+                _liWorldObjects.Sort((x, y) =>
+                {
+                    var typeComp = x.GetTagValue("Type").CompareTo(y.GetTagValue("Type"));
+                    if (typeComp == 0) { return x.Name.CompareTo(y.Name); }
+                    else { return typeComp; }
+                });
 
-            //Strip the special case character from the WorldObject files
-            foreach (XMLData data in _liWorldObjects)
+                ChangeIDs(ref itemDataList, ref worldObjectDataList);
+
+                //Strip the special case character from the Item files
+                foreach (ItemXMLData data in _liItemData)
+                {
+                    if (data != null) { data.StripSpecialCharacter(); }
+                }
+
+                //Strip the special case character from the WorldObject files
+                foreach (XMLData data in _liWorldObjects)
+                {
+                    data.StripSpecialCharacter();
+                }
+
+                //Sort the following Dictionaries by name
+                List<XMLData> listToSort = _diBasicXML[MONSTERS_XML_FILE];
+                SortDictionaryByName(ref listToSort);
+                listToSort = _diBasicXML[NPC_XML_FILE];
+                SortDictionaryByType(ref listToSort);
+            }
+            else
             {
-                data.StripSpecialCharacter();
+                itemDataList = _liItemData;
+                worldObjectDataList = _liWorldObjects;
             }
-
-            //Sort the following Dictionaries by name
-            List<XMLData> listToSort = _diBasicXML[MONSTERS_XML_FILE];
-            SortDictionaryByName(ref listToSort);
-            listToSort = _diBasicXML[NPC_XML_FILE];
-            SortDictionaryByType(ref listToSort);
 
             SaveXMLDataDictionary(_diBasicXML, sWriter);
             SaveXMLDataDictionary(_diCharacterDialogue, sWriter);
