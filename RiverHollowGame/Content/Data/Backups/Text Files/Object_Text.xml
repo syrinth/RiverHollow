@@ -1358,6 +1358,10 @@
       <Value>[Name:Dungeon Key][Description:A key that unlocks a dungeon door.]</Value>
     </Item>
     <Item>
+      <Key>Item_190</Key>
+      <Value>[Name:Yulia's Recipes][Description:]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_0</Key>
       <Value>[Name:Beehive]</Value>
     </Item>

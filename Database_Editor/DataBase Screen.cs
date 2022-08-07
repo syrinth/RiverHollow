@@ -30,7 +30,8 @@ namespace Database_Editor
         static Dictionary<string, List<XMLData>> _diBasicXML;
         Dictionary<string, TMXData> _diMapData;
 
-        string _strFilter = "All";
+        string _itemFilter = "All";
+        string _worldObjFilter = "All";
 
         delegate void VoidDelegate();
         delegate void XMLListDataDelegate(List<XMLData> Data);
@@ -228,10 +229,10 @@ namespace Database_Editor
         {
             dgv.Rows.Clear();
             int index = 0;
-            _strFilter = filter;
+            _worldObjFilter = filter;
             for (int i = 0; i < data.Count; i++)
             {
-                if (_strFilter == "All" || data[i].GetTagValue("Type").ToString().Equals(_strFilter))
+                if (_worldObjFilter == "All" || data[i].GetTagValue("Type").ToString().Equals(_worldObjFilter))
                 {
                     dgv.Rows.Add();
                     DataGridViewRow row = dgv.Rows[index++];
@@ -248,10 +249,10 @@ namespace Database_Editor
         {
             dgvItems.Rows.Clear();
             int index = 0;
-            _strFilter = filter;
+            _itemFilter = filter;
             for (int i = 0; i < _liItemData.Count; i++)
             {
-                if (filter == "All" || _liItemData[i].ItemType.ToString().Equals(filter))
+                if (filter == "All" || _liItemData[i].ItemType.ToString().Equals(_itemFilter))
                 {
                     dgvItems.Rows.Add();
                     DataGridViewRow row = dgvItems.Rows[index++];
@@ -876,8 +877,8 @@ namespace Database_Editor
             DataGridViewRow r = dgvItems.SelectedRows[0];
 
             ItemXMLData data = null;
-            if (_strFilter == "All") { data = _liItemData[r.Index]; }
-            else { data = _liItemData.FindAll(x => x.ItemType.ToString().Equals(_strFilter))[r.Index]; }
+            if (_itemFilter == "All") { data = _liItemData[r.Index]; }
+            else { data = _liItemData.FindAll(x => x.ItemType.ToString().Equals(_itemFilter))[r.Index]; }
 
             tbItemName.Text = data.Name;
             tbItemDesc.Text = data.Description;
@@ -904,8 +905,8 @@ namespace Database_Editor
         {
             DataGridViewRow r = dgvWorldObjects.SelectedRows[0];
             XMLData data = null;
-            if (_strFilter == "All") { data = _liWorldObjects[r.Index]; }
-            else { data = _liWorldObjects.FindAll(x => x.GetTagValue("Type").ToString().Equals(_strFilter))[r.Index]; }
+            if (_worldObjFilter == "All") { data = _liWorldObjects[r.Index]; }
+            else { data = _liWorldObjects.FindAll(x => x.GetTagValue("Type").ToString().Equals(_worldObjFilter))[r.Index]; }
 
             LoadGenericDataInfo(data, tbWorldObjectName, tbWorldObjectID, dgvWorldObjectTags);
             cbWorldObjectType.SelectedIndex = (int)Util.ParseEnum<ObjectTypeEnum>(data.GetTagValue("Type"));

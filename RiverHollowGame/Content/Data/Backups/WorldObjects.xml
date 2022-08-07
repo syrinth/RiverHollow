@@ -107,11 +107,11 @@
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Building][Texture:Home][Size:7-8][Base:0-4-7-4][Entrance:56-97-16-32]</Value>
+      <Value>[Type:Building][Texture:House_Player][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86|3-80-86][Upgrade_1:55-10|60-10][Upgrade_2:55-20|60-20][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>27</Key>
-      <Value>[Type:Building][Texture:House_Player][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86|3-80-86][Upgrade_1:55-10|60-10][Upgrade_2:55-20|60-20][ReqItems:55-5|60-5]</Value>
+      <Value>[Type:Building][Texture:Home][Size:7-8][Base:0-4-7-4][Entrance:56-97-16-32]</Value>
     </Item>
     <Item>
       <Key>28</Key>
@@ -267,11 +267,11 @@
     </Item>
     <Item>
       <Key>66</Key>
-      <Value>[Type:DungeonObject][Image:320-0][Subtype:ColorBlocker]</Value>
+      <Value>[Type:DungeonObject][Image:320-0][Subtype:ColorBlocker][Color:Blue]</Value>
     </Item>
     <Item>
       <Key>67</Key>
-      <Value>[Type:DungeonObject][Image:0-0]</Value>
+      <Value>[Type:DungeonObject][Image:320-16][Subtype:ColorBlocker][Color:Red]</Value>
     </Item>
     <Item>
       <Key>68</Key>
