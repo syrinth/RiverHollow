@@ -1062,6 +1062,7 @@ namespace Database_Editor
         #region SaveInfo
         private void SaveXMLDataInfo(List<XMLData> liData, string tabIndex, XMLTypeEnum xmlType, TextBox tbName, TextBox tbID, ComboBox cb, DataGridView baseGridView, DataGridView dgTags, string colID, string colName, string tagsReferenced, string tagsThatReferenceMe, TextBox tbDescription = null)
         {
+            UpdateStatus("Saving " + tabIndex);
             XMLData data = null;
             if (liData.Count == _diTabIndices[tabIndex])
             {
@@ -1100,6 +1101,7 @@ namespace Database_Editor
 
         private void SaveItemInfo()
         {
+            UpdateStatus("Saving Items");
             ItemXMLData data = null;
             if (_liItemData.Count == _diTabIndices["Items"])
             {
@@ -1242,6 +1244,7 @@ namespace Database_Editor
 
         private void SaveCutsceneInfo()
         {
+            UpdateStatus("Saving Cutscenes");
             List<string> listData;
             if (!_diCutscenes.ContainsKey(_diTabIndices["Cutscenes"]))
             {
@@ -1447,11 +1450,13 @@ namespace Database_Editor
 
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            fileToolStripMenuItem.DropDown.Close();
             SaveAll(false);
         }
 
         private void sortAndSaveToolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            fileToolStripMenuItem.DropDown.Close();
             SaveAll(true);
         }
 
@@ -1525,6 +1530,7 @@ namespace Database_Editor
 
             if (SortIDs)
             {
+                UpdateStatus("Sorting Started...");
                 _liItemData.Sort((x, y) =>
                 {
                     var typeComp = x.ItemType.CompareTo(y.ItemType);
@@ -1564,6 +1570,7 @@ namespace Database_Editor
                 worldObjectDataList = _liWorldObjects;
             }
 
+            UpdateStatus("Saving...");
             SaveXMLDataDictionary(_diBasicXML, sWriter);
             SaveXMLDataDictionary(_diCharacterDialogue, sWriter);
             SaveXMLDataDictionary(_diCutsceneDialogue, sWriter);
@@ -1616,6 +1623,13 @@ namespace Database_Editor
 
             LoadDataGrids();
             LoadAllInfoPanels();
+
+            UpdateStatus("Save Complete.");
+        }
+
+        private void UpdateStatus(string status)
+        {
+            tbStatus.Text = status;
         }
 
         private void AutoSave()

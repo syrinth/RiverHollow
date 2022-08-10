@@ -240,7 +240,7 @@ namespace RiverHollow.Misc
                 for (int i = 0; i < itemSplit.Length; i++)
                 {
                     string[] split = Util.FindArguments(itemSplit[i]);
-                    InventoryManager.AddToInventory(int.Parse(split[0]), int.Parse(split[1]));
+                    InventoryManager.AddToInventory(int.Parse(split[0]), split.Length == 1 ? 1 : int.Parse(split[1]));
                 }
             }
             if (_diTags.ContainsKey("UnlockItemID"))

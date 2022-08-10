@@ -31,7 +31,7 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[SpawnMap:mapDungeon_Forest_Entrance-15-12][Maps:mapInn-3-10|Forest8-mapForest_08-17-6|Forest1-mapForest_01-18-7|Forest4-mapForest_04-20-20|Forest6-mapForest_06-19-9|Dungeon-mapForest_Dungeon_1-16-20|DungeonEnd-mapForest_Dungeon_Wing_1_12-10-19|Mushroom-mapCave_Wing_1_2-15-22|Caves-mapCave_Entrance-4-19]</Value>
+      <Value>[SpawnMap:mapInn-3-10][Maps:mapDungeon_Forest_Entrance-15-12|Forest8-mapForest_08-17-6|Forest1-mapForest_01-18-7|Forest4-mapForest_04-20-20|Forest6-mapForest_06-19-9|Dungeon-mapForest_Dungeon_1-16-20|DungeonEnd-mapForest_Dungeon_Wing_1_12-10-19|Mushroom-mapCave_Wing_1_2-15-22|Caves-mapCave_Entrance-4-19]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -71,7 +71,7 @@
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Idle:0-0-1-.15-T][Walk:64-0-8-.1-F][Action1:256-0-2-.15-F][Cast:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F][UseTool:0-32-5-.08-F]</Value>
+      <Value>[Idle:0-0-1-.15-T][Walk:64-0-8-.06-F][Action1:256-0-2-.15-F][Cast:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F][UseTool:0-32-5-.08-F]</Value>
     </Item>
     <Item>
       <Key>18</Key>

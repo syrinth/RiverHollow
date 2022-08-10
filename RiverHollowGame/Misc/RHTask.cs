@@ -136,7 +136,7 @@ namespace RiverHollow.Misc
             {
                 string[] info = stringData["GoalItem"].Split('-');
                 _targetItem = DataManager.GetItem(int.Parse(info[0]));
-                RequiredItemAmount = int.Parse(info[1]);
+                RequiredItemAmount = info.Length == 1 ? 1 : int.Parse(info[1]);
             }
 
             if (stringData.ContainsKey("ItemRewardID"))
@@ -409,6 +409,11 @@ namespace RiverHollow.Misc
                 if (_iActivateID > -1)
                 {
                     DataManager.DIVillagers[_iActivateID].Activate(true);
+                }
+
+                if (DataManager.TaskData[TaskID].ContainsKey("SendToTown"))
+                {
+                    ((Villager)GoalNPC).SendToTown();
                 }
 
                 TaskManager.TaskLog.Remove(this);

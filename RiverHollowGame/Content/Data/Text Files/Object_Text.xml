@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>Task_3</Key>
-      <Value>[Name:Potion Compensation][Description:$Character_14$ want you to build a $Building_8$]</Value>
+      <Value>[Name:Recipes for $NPC_26$][Description:$NPC_26$ wants you to retrieve her book of recipes from the Forest Temple.]</Value>
     </Item>
     <Item>
       <Key>NPC_0</Key>

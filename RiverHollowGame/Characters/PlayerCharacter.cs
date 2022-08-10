@@ -102,12 +102,12 @@ namespace RiverHollow.Characters
         {
             base.Draw(spriteBatch, useLayerDepth);
 
-            _sprEyes.Draw(spriteBatch, useLayerDepth);
-            _sprHair.Draw(spriteBatch, useLayerDepth);
+            //_sprEyes.Draw(spriteBatch, useLayerDepth);
+            //_sprHair.Draw(spriteBatch, useLayerDepth);
 
-            Chest?.Sprite.Draw(spriteBatch, useLayerDepth);
-            Hat?.Sprite.Draw(spriteBatch, useLayerDepth);
-            Legs?.Sprite.Draw(spriteBatch, useLayerDepth);
+            //Chest?.Sprite.Draw(spriteBatch, useLayerDepth);
+            //Hat?.Sprite.Draw(spriteBatch, useLayerDepth);
+            //Legs?.Sprite.Draw(spriteBatch, useLayerDepth);
         }
 
         public void NewLantern()

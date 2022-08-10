@@ -76,7 +76,7 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
 
         static Dictionary<int, Dictionary<string, string>> _diTaskData;
-        public static Dictionary<int, Dictionary<string, string>> DiTaskData => _diTaskData;
+        public static IReadOnlyDictionary<int, Dictionary<string, string>> TaskData => _diTaskData;
 
         static Dictionary<int, Dictionary<string, string>> _diMonsterData;
         public static Dictionary<int, Villager> DIVillagers { get; private set; }

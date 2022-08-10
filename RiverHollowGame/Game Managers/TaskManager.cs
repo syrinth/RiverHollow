@@ -19,7 +19,7 @@ namespace RiverHollow.Game_Managers
         public static void Initialize()
         {
             _liTasks = new List<RHTask>();
-            foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.DiTaskData)
+            foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.TaskData)
             {
                 _liTasks.Add(new RHTask(kvp.Key, kvp.Value));
             }

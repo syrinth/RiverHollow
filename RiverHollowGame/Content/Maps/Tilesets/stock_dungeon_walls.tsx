@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.8" tiledversion="1.8.2" name="stock_dungeon_walls" tilewidth="16" tileheight="16" tilecount="368" columns="23">
- <image source="walls.png" trans="ffffff" width="368" height="256"/>
+<tileset version="1.9" tiledversion="1.9.0" name="stock_dungeon_walls" tilewidth="16" tileheight="16" tilecount="483" columns="23">
+ <image source="walls.png" trans="ffffff" width="368" height="336"/>
  <tile id="36">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
