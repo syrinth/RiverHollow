@@ -20,7 +20,7 @@
         public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };
         public enum DirectionEnum { None, Down, Right, Up, Left };
         public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };
-        public enum VerbEnum { Idle, Walk, Ground, Air, UseTool, MakeItem, Alert, Action1, Action2 };
+        public enum VerbEnum { Idle, Walk, GrabIdle, Pull, Push, Ground, Air, UseTool, MakeItem, Alert, Action1, Action2 };
         public enum AnimationEnum { None, PlayAnimation, Rain, Snow, ObjectIdle, Action_Finished, Idle, Action1, Action2, Action3, Action4, Critical, Hurt, KO, Spawn, Victory };
 
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
@@ -35,7 +35,7 @@
         public enum ClothingEnum { None, Chest, Legs, Hat };
         public enum NPCTokenTypeEnum { Mount, Pet };
 
-        public enum ActorMovementStateEnum { Idle, Walking };
+        public enum ActorStateEnum { Climb, Grab, Swim, Walk };
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum WorldActorTypeEnum { Actor, Child, Critter, Merchant, Mob, Mount, Pet, ShippingGremlin, Spirit, Villager };
         public enum CombatActorTypeEnum { Monster, PartyMember };

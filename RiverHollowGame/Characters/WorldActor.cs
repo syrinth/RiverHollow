@@ -20,17 +20,17 @@ namespace RiverHollow.Characters
 
         public int ID { get; } = -1;
 
-        protected ActorMovementStateEnum _eMovementState = ActorMovementStateEnum.Idle;
-        public ActorMovementStateEnum MovementState => _eMovementState;
+        public bool Moving { get; set; } = false;
+        public DirectionEnum Facing = DirectionEnum.Down;
+        public ActorStateEnum State { get; protected set; } = ActorStateEnum.Walk;
 
         protected WorldActorTypeEnum _eActorType = WorldActorTypeEnum.Actor;
         public WorldActorTypeEnum ActorType => _eActorType;
-        public Vector2 MoveToLocation { get; set; }
+        public Vector2 MoveToLocation { get; private set; }
 
         public string CurrentMapName;
         public RHMap CurrentMap => (!string.IsNullOrEmpty(CurrentMapName) ? MapManager.Maps[CurrentMapName] : null);
         public Vector2 NewMapPosition;
-        public Point CharCenter => GetRectangle().Center;
 
         /// <summary>
         /// For World Actors, the Position is the top-left corner of the Actor's bounding box. Because the bounding
@@ -69,7 +69,7 @@ namespace RiverHollow.Characters
 
         protected bool _bHover;
 
-        protected float _fBaseSpeed = 2;
+        protected float _fBaseSpeed = 1f;
         public float BuffedSpeed => _fBaseSpeed * SpdMult;
         public float SpdMult = Constants.NPC_WALK_SPEED;
 
@@ -167,19 +167,13 @@ namespace RiverHollow.Characters
             return CollisionBox.Intersects(rect);
         }
 
-        public void SetWalkingDir(DirectionEnum d)
-        {
-            Facing = d;
-            _sprBody.PlayAnimation(VerbEnum.Walk, Facing);
-        }
-
         protected void FacePlayer(bool facePlayer)
         {
             //Determine the position based off of where the player is and then have the NPC face the player
             //Only do this if they are idle so as to not disturb other animations they may be performing.
             if (facePlayer && BodySprite.CurrentAnimation.StartsWith("Idle"))
             {
-                Point diff = GetRectangle().Center - PlayerManager.PlayerActor.GetRectangle().Center;
+                Vector2 diff = Center - PlayerManager.PlayerActor.Center;
                 if (Math.Abs(diff.X) > Math.Abs(diff.Y))
                 {
                     if (diff.X > 0)  //The player is to the left
@@ -211,55 +205,55 @@ namespace RiverHollow.Characters
         {
             DetermineFacing(new Vector2(tile.Position.X - Position.X, tile.Position.Y - Position.Y));
         }
-        public virtual void DetermineFacing(Vector2 direction)
+        public void DetermineFacing(Vector2 direction)
         {
-            bool walk = false;
+            DirectionEnum newFacing = Util.GetDirectionFromPosition(direction);
+            if (newFacing != DirectionEnum.None) {
+                Facing = newFacing;
+            }
+        }
+        public virtual void DetermineAnimationState(Vector2 direction)
+        {
+            bool initiallyMoving = Moving;
+            Moving = direction.Length() != 0;
 
-            DirectionEnum initialFacing = Facing;
-            ActorMovementStateEnum initialState = _eMovementState;
-            if (direction.Length() != 0)
+            switch (State)
             {
-                SetMovementState(ActorMovementStateEnum.Walking);
-                walk = true;
-                if (Math.Abs((int)direction.X) > Math.Abs((int)direction.Y))
-                {
-                    if (direction.X > 0) { Facing = DirectionEnum.Right; }
-                    else if (direction.X < 0) { Facing = DirectionEnum.Left; }
-                }
-                else
-                {
-                    if (direction.Y > 0) { Facing = DirectionEnum.Down; }
-                    else if (direction.Y < 0) { Facing = DirectionEnum.Up; }
-                }
-
-                List<RHTile> cornerTiles = new List<RHTile>();
-                cornerTiles.Add(CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Top)).ToPoint()));
-                cornerTiles.Add(CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Top)).ToPoint()));
-                cornerTiles.Add(CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Bottom)).ToPoint()));
-                cornerTiles.Add(CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Bottom)).ToPoint()));
-                foreach (RHTile tile in cornerTiles)
-                {
-                    if (tile != null && tile.WorldObject != null && tile.WorldObject.CompareType(ObjectTypeEnum.Plant))
+                case ActorStateEnum.Climb:
+                    break;
+                case ActorStateEnum.Grab:
+                    if (Moving)
                     {
-                        Plant f = (Plant)tile.WorldObject;
-                        f.Shake();
+                        DirectionEnum moveDir = Util.GetDirectionFromPosition(direction);
+                        if(moveDir == Facing) { PlayAnimationVerb(VerbEnum.Push); }
+                        else if(moveDir == Util.GetOppositeDirection(Facing)) { PlayAnimationVerb(VerbEnum.Pull); }
                     }
-                }
-            }
-            else if (_eMovementState != ActorMovementStateEnum.Idle)
-            {
-                SetMovementState(ActorMovementStateEnum.Idle);
-            }
-
-            if (initialState != _eMovementState || initialFacing != Facing)
-            {
-                PlayAnimationVerb(walk ? VerbEnum.Walk : VerbEnum.Idle);
+                    else { PlayAnimationVerb(VerbEnum.GrabIdle); }
+                    break;
+                case ActorStateEnum.Swim:
+                    break;
+                case ActorStateEnum.Walk:
+                    PlayAnimationVerb(Moving ? VerbEnum.Walk : VerbEnum.Idle);
+                    break;
             }
         }
 
-        public void SetMovementState(ActorMovementStateEnum e)
+        public void SetState(ActorStateEnum e) {
+            State = e; }
+        public void SetWalkingDir(DirectionEnum d)
         {
-            _eMovementState = e;
+            Facing = d;
+            _sprBody.PlayAnimation(VerbEnum.Walk, Facing);
+        }
+
+        public void SetMoveTo(Vector2 v, bool update = true)
+        {
+            MoveToLocation = v;
+            if (update)
+            {
+                DetermineFacing(v);
+                DetermineAnimationState(v);
+            }
         }
 
         /// <summary>
@@ -299,7 +293,7 @@ namespace RiverHollow.Characters
             //Check for collisions against the map and, if none are detected, move. Do not move if the direction Vector2 is Zero
             if (CurrentMap.CheckForCollisions(this, testRectX, testRectY, ref direction) && direction != Vector2.Zero)
             {
-                DetermineFacing(direction);
+                DetermineAnimationState(direction);
                 Position += new Vector2(direction.X, direction.Y);
                 rv = true;
             }
@@ -354,16 +348,23 @@ namespace RiverHollow.Characters
                     }
                 }
 
+                if (this == PlayerManager.PlayerActor && PlayerManager.GrabbedObject != null)
+                {
+                    Vector2 moveBy = Vector2.Zero;
+                    Util.GetMoveSpeed(PlayerManager.GrabbedObject.MapPosition, PlayerManager.MoveObjectToPosition, BuffedSpeed, ref moveBy);
+                    PlayerManager.GrabbedObject.MoveBy(moveBy);
+                }
+
                 //If, after movement, we've reached the given location, zero it.
                 if (MoveToLocation == Position && !CutsceneManager.Playing)
                 {
-                    MoveToLocation = Vector2.Zero;
+                    SetMoveTo(Vector2.Zero);
                     if (_liTilePath.Count > 0)
                     {
                         _liTilePath.RemoveAt(0);
                         if (_liTilePath.Count > 0)
                         {
-                            MoveToLocation = _liTilePath[0].Position;
+                            SetMoveTo(_liTilePath[0].Position);
                         }
                     }
                 }
@@ -399,7 +400,7 @@ namespace RiverHollow.Characters
             while (_liTilePath.Count > 0 && _liTilePath[0].MapName == CurrentMapName)
             {
                 _liTilePath.RemoveAt(0);
-                MoveToLocation = _liTilePath[0].Position;
+                SetMoveTo(_liTilePath[0].Position);
             }
         }
 
@@ -431,8 +432,8 @@ namespace RiverHollow.Characters
         protected void ChangeMovement(float speed)
         {
             SpdMult = speed;
+            SetMoveTo(Vector2.Zero);
             PlayAnimation(VerbEnum.Walk, Facing);
-            MoveToLocation = Vector2.Zero;
             _movementTimer.Reset(Constants.WANDER_COUNTDOWN);
         }
 
@@ -534,7 +535,7 @@ namespace RiverHollow.Characters
                     moveTo = CurrentMap.GetFarthestUnblockedPath(Position + moveTo, this);
                 }
 
-                MoveToLocation = moveTo;
+                SetMoveTo(moveTo);
             }
 
             if (MoveToLocation != Vector2.Zero)

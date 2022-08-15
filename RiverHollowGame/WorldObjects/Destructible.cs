@@ -63,7 +63,7 @@ namespace RiverHollow.WorldObjects
         {
             if (_iHP > 0)
             {
-                PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool));
+               // PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool));
             }
         }
 

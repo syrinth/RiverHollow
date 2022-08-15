@@ -433,7 +433,7 @@ namespace RiverHollow.Game_Managers
                         break;
 
                 }
-                c.MoveToLocation = c.Position + vec;
+                c.SetMoveTo(c.Position + vec);
                 if (!_liMoving.Contains(c))
                 {
                     _liMoving.Add(c);
@@ -450,13 +450,11 @@ namespace RiverHollow.Game_Managers
         {
             if (c.Position == c.MoveToLocation)
             {
-                c.SetMovementState(ActorMovementStateEnum.Idle);
                 if (!_liToRemove.Contains(c))
                 {
                     _liToRemove.Add(c);
                 }
-                c.MoveToLocation = Vector2.Zero;
-                c.PlayAnimationVerb(VerbEnum.Idle);
+                c.SetMoveTo(Vector2.Zero);
             }
         }
 
@@ -650,7 +648,7 @@ namespace RiverHollow.Game_Managers
             foreach(WorldActor act in _liUsedNPCs)
             {
                 act.ClearPath();
-                act.MoveToLocation = Vector2.Zero;
+                act.SetMoveTo(Vector2.Zero);
             }
 
             GUIManager.ClearBackgroundImage();
@@ -667,7 +665,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.PlayerActor.SpdMult = Constants.NORMAL_SPEED;
             PlayerManager.AllowMovement = true;
             CutsceneManager.Playing = false;
-            PlayerManager.PlayerActor.MoveToLocation = Vector2.Zero;
+            PlayerManager.PlayerActor.SetMoveTo(Vector2.Zero);
             MapManager.Maps.Remove(_cutsceneMap.Name);
             MapManager.FadeToNewMap(_originalMap, _vOriginalPlayerPos);
             GUIManager.RemoveSkipCutsceneButton();

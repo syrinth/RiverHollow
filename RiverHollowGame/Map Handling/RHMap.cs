@@ -1409,10 +1409,18 @@ namespace RiverHollow.Map_Handling
                 {
                     if (GamePaused()) { return false; }
 
+                    
                     if (TargetTile != null)
                     {
-                        if (PlayerManager.PlayerInRange(TargetTile.Center.ToPoint()))
+                        if (PlayerManager.PlayerInRange(TargetTile.Center.ToPoint(), Constants.TILE_SIZE))
                         {
+                            if (!TargetTile.Passable())
+                            {
+                                PlayerManager.PlayerActor.Position = Util.SnapToGrid(PlayerManager.PlayerActor.CollisionBox.Center.ToVector2());
+                                PlayerManager.PlayerActor.DetermineFacing(TargetTile);
+                                PlayerManager.PlayerActor.SetState(ActorStateEnum.Grab);
+                                PlayerManager.GrabbedObject = TargetTile.WorldObject;
+                            }
                             //Retrieves any object associated with the tile, this will include
                             //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
                             //as being on the tile.

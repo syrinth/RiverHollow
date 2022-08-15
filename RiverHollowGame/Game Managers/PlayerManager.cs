@@ -8,14 +8,13 @@ using RiverHollow.Characters;
 using RiverHollow.WorldObjects;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
-
-using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Characters.Lite;
 using RiverHollow.Items;
-using static RiverHollow.Utilities.Enums;
 using RiverHollow.Misc;
+
+using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Game_Managers
 {
@@ -45,6 +44,9 @@ namespace RiverHollow.Game_Managers
 
         private static Dictionary<ObjectTypeEnum, List<int>> _diCrafting;
 
+        private static DirectionEnum _eHorizontal = DirectionEnum.None;
+        private static DirectionEnum _eVertical = DirectionEnum.None;
+
         public static Building PlayerHome => (Building)GetTownObjectsByID(27)[0];
 
         public static bool ReadyToSleep = false;
@@ -61,12 +63,10 @@ namespace RiverHollow.Game_Managers
         public static int TotalMoneyEarned { get; private set; } = 0;
         public static int Money { get; private set; } = 0;
 
-        private static int _iMonsterEnergy = 0;
-        public static int MonsterEnergy => _iMonsterEnergy;
-
-        private static int _iMonsterEnergyQueue;
-
         public static bool AllowMovement = true;
+
+        public static WorldObject GrabbedObject;
+        public static Vector2 MoveObjectToPosition;
 
         public static int WeddingCountdown { get; set; } = 0;
         public static Villager Spouse { get; set; }
@@ -132,42 +132,80 @@ namespace RiverHollow.Game_Managers
 
         public static void Update(GameTime gTime)
         {
-            Vector2 moveDir = Vector2.Zero;
-
-            AddByIncrement(ref _iMonsterEnergyQueue, ref _iMonsterEnergy);
+            UpdateTool(gTime);
 
             if (AllowMovement)
             {
-                KeyboardState ks = Keyboard.GetState();
-                if (!InputManager.MovementKeyDown())
+                bool stop = InputManager.IsKeyDown(Keys.D);
+                Vector2 newMovement = Vector2.Zero;
+                MovementHelper(ref _eHorizontal, ref newMovement, true, Keys.A, DirectionEnum.Left, Keys.D, DirectionEnum.Right);
+                MovementHelper(ref _eVertical, ref newMovement, false, Keys.W, DirectionEnum.Up, Keys.S, DirectionEnum.Down);
+
+                //Only change facing if the current Facing is not a direction we're moving in
+                if (PlayerActor.Facing != _eHorizontal && PlayerActor.Facing != _eVertical && PlayerActor.State != ActorStateEnum.Grab)
                 {
-                    PlayerActor.DetermineFacing(moveDir);
+                    PlayerActor.DetermineFacing(newMovement);
                 }
+                PlayerActor.DetermineAnimationState(newMovement);
 
-                if (ks.IsKeyDown(Keys.W)) { moveDir += new Vector2(0, -PlayerActor.BuffedSpeed); }
-                else if (ks.IsKeyDown(Keys.S)) { moveDir += new Vector2(0, PlayerActor.BuffedSpeed); }
-
-                if (ks.IsKeyDown(Keys.A)) { moveDir += new Vector2(-PlayerActor.BuffedSpeed, 0); }
-                else if (ks.IsKeyDown(Keys.D)) { moveDir += new Vector2(PlayerActor.BuffedSpeed, 0); }
-
-                PlayerActor.DetermineFacing(moveDir);
-
-                if (moveDir.Length() != 0)
+                if(PlayerActor.State == ActorStateEnum.Grab)
                 {
-                    Rectangle testRectX = new Rectangle((int)PlayerActor.CollisionBox.X + (int)moveDir.X, (int)PlayerActor.CollisionBox.Y, PlayerActor.CollisionBox.Width, PlayerActor.CollisionBox.Height);
-                    Rectangle testRectY = new Rectangle((int)PlayerActor.CollisionBox.X, (int)PlayerActor.CollisionBox.Y + (int)moveDir.Y, PlayerActor.CollisionBox.Width, PlayerActor.CollisionBox.Height);
-
-                    if (MapManager.CurrentMap.CheckForCollisions(PlayerActor, testRectX, testRectY, ref moveDir))
+                    if (GrabbedObject != null && GrabbedObject.Movable && newMovement != Vector2.Zero)
                     {
-                        PlayerActor.Position = PlayerActor.Position + moveDir;
+                        DirectionEnum moveDir = Util.GetDirectionFromPosition(newMovement);
+                        int mult = 0;
+                        if (moveDir == PlayerActor.Facing) { mult = 1; }
+                        else if (moveDir == Util.GetOppositeDirection(PlayerActor.Facing)) { mult = -1; }
+
+                        Vector2 moveToMod = Vector2.Zero;
+                        switch (PlayerActor.Facing)
+                        {
+                            case DirectionEnum.Down:
+                                moveToMod.Y += Constants.TILE_SIZE * mult;
+                                break;
+                            case DirectionEnum.Left:
+                                moveToMod.X -= Constants.TILE_SIZE * mult;
+                                break;
+                            case DirectionEnum.Up:
+                                moveToMod.Y -= Constants.TILE_SIZE * mult;
+                                break;
+                            case DirectionEnum.Right:
+                                moveToMod.X += Constants.TILE_SIZE * mult;
+                                break;
+                        }
+
+                        if (MapManager.CurrentMap.GetTileByPixelPosition(GrabbedObject.MapPosition + moveToMod).Passable())
+                        {
+                            MoveObjectToPosition = GrabbedObject.MapPosition + moveToMod;
+
+                            AllowMovement = false;
+                            PlayerActor.SetMoveTo(PlayerActor.Position + moveToMod, false);
+                            PlayerActor.SpdMult = Constants.PUSH_SPEED;
+                            GrabbedObject.RemoveSelfFromTiles();
+                        }
+                    }
+                }
+                else if (newMovement.Length() != 0)
+                {
+                    Rectangle testRectX = new Rectangle((int)PlayerActor.CollisionBox.X + (int)newMovement.X, (int)PlayerActor.CollisionBox.Y, PlayerActor.CollisionBox.Width, PlayerActor.CollisionBox.Height);
+                    Rectangle testRectY = new Rectangle((int)PlayerActor.CollisionBox.X, (int)PlayerActor.CollisionBox.Y + (int)newMovement.Y, PlayerActor.CollisionBox.Width, PlayerActor.CollisionBox.Height);
+
+                    if (MapManager.CurrentMap.CheckForCollisions(PlayerActor, testRectX, testRectY, ref newMovement))
+                    {
+                        PlayerActor.Position = PlayerActor.Position + newMovement;
                     }
                 }
             }
-            else { UpdateTool(gTime); }
+            else if (PlayerActor.State == ActorStateEnum.Grab && PlayerActor.MoveToLocation == Vector2.Zero && GrabbedObject != null)
+            {
+                AllowMovement = true;
+                PlayerActor.SpdMult = Constants.NORMAL_SPEED;
+                GrabbedObject.PlaceOnMap(MapManager.CurrentMap);
+            }
 
             PlayerActor.Update(gTime);
 
-            if(_damageTimer != null)
+            if (_damageTimer != null)
             {
                 _damageTimer.TickDown(gTime);
                 if (_damageTimer.Finished())
@@ -184,6 +222,42 @@ namespace RiverHollow.Game_Managers
             }
 
             _hazardDamage?.Update(gTime);
+        }
+
+        private static void MovementHelper(ref DirectionEnum mainEnum, ref Vector2 v, bool horizontal, Keys key1, DirectionEnum dir1, Keys key2, DirectionEnum dir2)
+        {
+            if (mainEnum == DirectionEnum.None)
+            {
+                if (InputManager.IsKeyDown(key1))
+                {
+                    mainEnum = dir1;
+                }
+                else if (InputManager.IsKeyDown(key2))
+                {
+                    mainEnum = dir2;
+                }
+            }
+            else
+            {
+                if (!InputManager.IsKeyDown(key1) && mainEnum == dir1)
+                {
+                    mainEnum = DirectionEnum.None;
+                }
+                if (!InputManager.IsKeyDown(key2) && mainEnum == dir2)
+                {
+                    mainEnum = DirectionEnum.None;
+                }
+            }
+
+            if (mainEnum != DirectionEnum.None)
+            {
+                float value = 0;
+                if (mainEnum == dir1) { value = -PlayerActor.BuffedSpeed; }
+                else if (mainEnum == dir2) { value = PlayerActor.BuffedSpeed; }
+
+                if (horizontal) { v.X = value; }
+                else { v.Y = value; }
+            }
         }
 
         public static void Draw(SpriteBatch spriteBatch)
@@ -217,21 +291,6 @@ namespace RiverHollow.Game_Managers
             PlayerManager.AllowMovement = false;
             ReadyToSleep = true;
             PlayerActor.SetPath(list);
-        }
-
-        public static void AddByIncrement(ref int queue, ref int addTo)
-        {
-            if (queue > 0)
-            {
-                int cap = 5;
-                int toGive = 0;
-
-                if (queue <= cap) { toGive = _iMonsterEnergyQueue; }
-                else { toGive = cap; }
-
-                queue -= toGive;
-                addTo += toGive;
-            }
         }
 
         public static ClassedCombatant[] GetParty()
@@ -274,7 +333,7 @@ namespace RiverHollow.Game_Managers
 
                 _hazardDamage = new FloatingText(PlayerActor.Position, PlayerActor.BodySprite.Width, damage.ToString(), Color.Red);
                 AllowMovement = false;
-                PlayerActor.MoveToLocation = PlayerActor.Position + (5 * (PlayerActor.CollisionBox.Center - sourceCenter).ToVector2());
+                PlayerActor.SetMoveTo(PlayerActor.Position + (5 * (PlayerActor.CollisionBox.Center - sourceCenter).ToVector2()));
                 PlayerActor.SpdMult = 2;
             }
         }
@@ -282,7 +341,7 @@ namespace RiverHollow.Game_Managers
         {
             AllowMovement = true;
             PlayerActor.SpdMult = Constants.NORMAL_SPEED;
-            PlayerActor.MoveToLocation = Vector2.Zero;
+            PlayerActor.SetMoveTo(Vector2.Zero);
         }
 
         /// <summary>
@@ -562,7 +621,7 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            Rectangle playerRect = PlayerActor.GetRectangle();
+            Rectangle playerRect = PlayerActor.CollisionBox;
             int a = Math.Abs(playerRect.Center.X - centre.X);
             int b = Math.Abs(playerRect.Center.Y - centre.Y);
             int c = (int)Math.Sqrt(a * a + b * b);
@@ -643,7 +702,7 @@ namespace RiverHollow.Game_Managers
             MapManager.CurrentMap = MapManager.Maps[PlayerManager.GetSpawnMap()];
             CurrentMap = MapManager.Maps[PlayerManager.GetSpawnMap()].Name;
             PlayerActor.Position = Util.SnapToGrid(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
-            PlayerActor.DetermineFacing(new Vector2(0, 1));
+            PlayerActor.DetermineAnimationState(new Vector2(0, 1));
         }
 
         public static void Rollover()
@@ -877,28 +936,6 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        /// <summary>
-        /// Adds the indicated amount of energy to the Player
-        /// </summary>
-        public static void AddMonsterEnergyToQueue(int i)
-        {
-            _iMonsterEnergyQueue += i;
-        }
-
-        /// <summary>
-        /// Removes the indicated amount of energy from the Player if they have it
-        /// </summary>
-        public static bool RemoveMonsterEnergy(int i)
-        {
-            bool rv = false;
-            if (_iMonsterEnergy >= i)
-            {
-                rv = true;
-                _iMonsterEnergy += i;
-            }
-            return rv;
-        }
-
         #region Tool Management
         public static Tool ToolInUse;
         public static int BackpackLevel => PlayerManager.RetrieveTool(ToolEnum.Backpack) != null ? PlayerManager.RetrieveTool(ToolEnum.Backpack).ToolLevel : 1;
@@ -1079,5 +1116,21 @@ namespace RiverHollow.Game_Managers
         }
 
         public static Mailbox PlayerMailbox;
+
+        //private struct MovementDir
+        //{
+        //    public bool Moving;
+        //    private DirectionEnum _eDirection;
+        //    public DirectionEnum Direction
+        //    {
+        //        get { return _eDirection; }
+        //        set
+        //        {
+        //            if (value == DirectionEnum.None) { Moving = false; }
+        //            else { Moving = true; }
+        //            _eDirection = value;
+        //        }
+        //    }
+        //}
     }
 }

@@ -8,6 +8,7 @@ using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
+using System;
 
 namespace RiverHollow.WorldObjects
 {
@@ -27,6 +28,7 @@ namespace RiverHollow.WorldObjects
         protected string MapName { get; set; }
         public RHMap CurrentMap => MapManager.Maps[MapName];
 
+        public bool Movable => DataManager.GetWorldObjectData(ID).ContainsKey("Movable");
         protected bool _bWalkable = false;
         public bool Walkable => _bWalkable;
         protected bool _bWallObject;
@@ -209,6 +211,11 @@ namespace RiverHollow.WorldObjects
             }
 
             return rv;
+        }
+
+        public void MoveBy(Vector2 direction)
+        {
+            _vMapPosition += direction;
         }
 
         protected void SetSpritePos(Vector2 position)

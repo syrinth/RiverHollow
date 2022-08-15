@@ -1,23 +1,19 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Input;
 
 namespace RiverHollow.Game_Managers
 {
     public static class InputManager
     {
-        private static Dictionary<Keys, bool> _diKeyDown;
-        public static Dictionary<Keys, bool> KeyDownDictionary => _diKeyDown;
+        public static Dictionary<Keys, bool> KeyDownDictionary { get; private set; }
 
         public static void Load()
         {
-            _diKeyDown = new Dictionary<Keys, bool>();
+            KeyDownDictionary = new Dictionary<Keys, bool>();
             foreach (var k in Enum.GetValues(typeof(Keys)))
             {
-                _diKeyDown.Add((Keys)k, false);
+                KeyDownDictionary.Add((Keys)k, false);
             }
         }
 
@@ -28,26 +24,16 @@ namespace RiverHollow.Game_Managers
             KeyboardState keyboardState = Keyboard.GetState();
             bool keyDownThisFrame = (keyboardState.IsKeyDown(key));
 
-            if (!_diKeyDown[key] && keyDownThisFrame)
+            if (!KeyDownDictionary[key] && keyDownThisFrame)
             {
                 rv = true;
             }
-            _diKeyDown[key] = keyDownThisFrame;
+            KeyDownDictionary[key] = keyDownThisFrame;
 
             return rv;
         }
 
-        /// <summary>
-        /// Checks to see if any keys mapped to movement are pressed
-        /// </summary>
-        /// <returns>True if at least one key is being pressed</returns>
-        public static bool MovementKeyDown()
-        {
-            KeyboardState ks = Keyboard.GetState();
-            return ks.IsKeyDown(Keys.W) || ks.IsKeyDown(Keys.S) || ks.IsKeyDown(Keys.A) || ks.IsKeyDown(Keys.D);
-        }
-
-        public static bool IsKeyHeld(Keys key)
+        public static bool IsKeyDown(Keys key)
         {
             KeyboardState keyboardState = Keyboard.GetState();
             return keyboardState.IsKeyDown(key);
@@ -81,7 +67,5 @@ namespace RiverHollow.Game_Managers
         private static bool IsNumber(Keys k) { return k >= Keys.D0 && k <= Keys.D9; }
         private static bool IsShift(Keys k) { return k == Keys.LeftShift || k == Keys.RightShift; }
         private static bool ShiftDown() { return Keyboard.GetState().IsKeyDown(Keys.LeftShift) || Keyboard.GetState().IsKeyDown(Keys.RightShift); }
-
-
     }
 }

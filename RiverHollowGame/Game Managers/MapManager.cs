@@ -110,7 +110,7 @@ namespace RiverHollow.Game_Managers
                 if (travelPoint.IsDoor)
                 {
                     newPos = entryPoint.GetMovedCenter();
-                    PlayerManager.PlayerActor.DetermineFacing(new Vector2(0, -1));
+                    PlayerManager.PlayerActor.DetermineAnimationState(new Vector2(0, -1));
                 }
                 else if (travelPoint.NoMove)
                 {
@@ -151,8 +151,7 @@ namespace RiverHollow.Game_Managers
                 GUIManager.BeginFadeOut();
             }
 
-            PlayerManager.PlayerActor.SetMovementState(ActorMovementStateEnum.Idle);
-            PlayerManager.PlayerActor.PlayAnimationVerb(VerbEnum.Idle);
+            PlayerManager.PlayerActor.DetermineAnimationState(Vector2.Zero);
             _newMapInfo = new NewMapInfo(newMap, playerPos, b);
         }
 

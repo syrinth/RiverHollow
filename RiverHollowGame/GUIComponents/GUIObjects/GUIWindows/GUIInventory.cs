@@ -156,7 +156,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 else
                 {
                     rv = true;
-                    bool takeHalf = InputManager.IsKeyHeld(Keys.LeftShift) || InputManager.IsKeyHeld(Keys.RightShift);
+                    bool takeHalf = InputManager.IsKeyDown(Keys.LeftShift) || InputManager.IsKeyDown(Keys.RightShift);
                     rv = GameManager.GrabItem(TakeItem(mouse, takeHalf));
                 }
             }

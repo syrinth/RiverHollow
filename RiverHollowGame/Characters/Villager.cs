@@ -492,7 +492,7 @@ namespace RiverHollow.Characters
 
             if (_liTilePath?.Count > 0)
             {
-                MoveToLocation = _liTilePath[0].Position;
+                SetMoveTo(_liTilePath[0].Position);
             }
 
             //Set the next TimeKey to watch out for

@@ -306,6 +306,10 @@ namespace RiverHollow.Utilities
         {
             return Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
         }
+        public static float GetDelta(Vector2 a, Vector2 b)
+        {
+            return Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
+        }
 
         /// <summary>
         /// Uses the Camera's Translation Matrix to translate the given RHMap position
@@ -585,6 +589,16 @@ namespace RiverHollow.Utilities
             y = temp;
         }
 
+        public static List<AnimationData> LoadPlayerAnimations(Dictionary<string, string> data)
+        {
+            List<AnimationData> listAnimations = LoadWorldAnimations(data);
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.GrabIdle);
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Pull);
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Push);
+
+            return listAnimations;
+        }
+
         public static List<AnimationData> LoadWorldAnimations(Dictionary<string, string> data)
         {
             List<AnimationData> listAnimations = new List<AnimationData>();
@@ -636,6 +650,23 @@ namespace RiverHollow.Utilities
             {
                 list.Add(new AnimationData(data[Util.GetEnumString(animation)], animation));
             }
+        }
+
+        public static DirectionEnum GetDirectionFromPosition(Vector2 direction)
+        {
+            DirectionEnum rv = DirectionEnum.None;
+            if (Math.Abs(direction.X) > Math.Abs(direction.Y))
+            {
+                if (direction.X > 0) { rv = DirectionEnum.Right; }
+                else if (direction.X < 0) { rv = DirectionEnum.Left; }
+            }
+            else
+            {
+                if (direction.Y > 0) { rv = DirectionEnum.Down; }
+                else if (direction.Y < 0) { rv = DirectionEnum.Up; }
+            }
+
+            return rv;
         }
     }
 

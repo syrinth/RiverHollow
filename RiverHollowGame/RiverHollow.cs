@@ -5,8 +5,10 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens;
+using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow
 {
@@ -142,6 +144,13 @@ namespace RiverHollow
                         {
                             MapManager.ProcessLeftButtonClick(mousePoint);
                         }
+                    }
+                }
+                else if (ms.LeftButton == ButtonState.Released && GUICursor.LastMouseState.LeftButton == ButtonState.Pressed)
+                {
+                    if (PlayerManager.PlayerActor.State == ActorStateEnum.Grab && PlayerManager.AllowMovement)
+                    {
+                        PlayerManager.PlayerActor.SetState(ActorStateEnum.Walk);
                     }
                 }
                 else

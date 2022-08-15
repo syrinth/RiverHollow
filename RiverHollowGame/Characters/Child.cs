@@ -52,8 +52,8 @@ namespace RiverHollow.Characters
             if (_bBumpedIntoSomething)
             {
                 _bBumpedIntoSomething = false;
-                MoveToLocation = Vector2.Zero;
                 ChangeState(NPCStateEnum.Idle);
+                SetMoveTo(Vector2.Zero);
             }
 
             if (_bFollow && !PlayerManager.PlayerInRange(CollisionBox.Center, Constants.TILE_SIZE * 8) && _eCurrentState != NPCStateEnum.TrackPlayer)

@@ -20,8 +20,6 @@ namespace RiverHollow.Characters
     /// </summary>
     public abstract class Actor
     {
-        public DirectionEnum Facing = DirectionEnum.Down;
-
         protected AnimatedSprite _sprBody;
         public AnimatedSprite BodySprite => _sprBody;
 
@@ -31,11 +29,6 @@ namespace RiverHollow.Characters
             set { _sprBody.Position = value; }
         }
         public virtual Vector2 Center => _sprBody.Center;
-
-        public Rectangle GetRectangle()
-        {
-            return new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
-        }
 
         protected int _iBodyWidth = Constants.TILE_SIZE;
         public int Width => _iBodyWidth;
@@ -76,7 +69,6 @@ namespace RiverHollow.Characters
         }
 
         public virtual void PlayAnimation<TEnum>(TEnum e) { _sprBody.PlayAnimation(e); }
-        public virtual void PlayAnimation(VerbEnum verb) { PlayAnimation(verb, Facing); }
         public virtual void PlayAnimation(VerbEnum verb, DirectionEnum dir) { _sprBody.PlayAnimation(verb, dir); }
         public virtual void PlayAnimation(string verb, DirectionEnum dir) { _sprBody.PlayAnimation(verb, dir); }
 

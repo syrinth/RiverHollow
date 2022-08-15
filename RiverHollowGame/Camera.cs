@@ -29,7 +29,7 @@ namespace RiverHollow
 
         public static void Update(GameTime gTime)
         {
-            Vector2 target = Scrying() ? _vObserver : _actObserver.CharCenter.ToVector2() * CurrentScale;
+            Vector2 target = Scrying() ? _vObserver : _actObserver.BodySprite.Center * CurrentScale;
 
             //If Scrying is turned on and we are not taking input, process input commands to move the camera
             if (!TakingInput() && Scrying())
@@ -42,7 +42,7 @@ namespace RiverHollow
                 if (ks.IsKeyDown(Keys.A)) { target += new Vector2(-speed, 0); }
                 else if (ks.IsKeyDown(Keys.D)) { target += new Vector2(speed, 0); }
 
-                if(GUICursor.Position.Y == 0) { target += new Vector2(0, -speed); }
+                if (GUICursor.Position.Y == 0) { target += new Vector2(0, -speed); }
                 else if (GUICursor.Position.Y == RiverHollow.ScreenHeight - 1) { target += new Vector2(0, speed); }
 
                 if (GUICursor.Position.X <= 0) { target += new Vector2(-speed, 0); }
@@ -60,23 +60,19 @@ namespace RiverHollow
             double val = Math.Ceiling((double)RiverHollow.ScreenHeight / Constants.TILE_SIZE);
             if (MapManager.CurrentMap.GetMapHeightInScaledPixels() / Constants.TILE_SIZE <= val) { target.Y = (MapManager.CurrentMap.GetMapHeightInScaledPixels() / 2); }
 
-            if (!Scrying())
+            //We are moving to the target
+            if (!Scrying() && _bTrackToTarget)
             {
-                //We are moving to the target
-                if (_bTrackToTarget)
-                {
-                    Vector2 direction = Vector2.Zero;
-                    Util.GetMoveSpeed(_vObserver, target, 18, ref direction);
-                    _vObserver += direction;
+                Vector2 direction = Vector2.Zero;
+                Util.GetMoveSpeed(_vObserver, target, 18, ref direction);
+                _vObserver += direction;
 
-                    if (_vObserver == target) { _bTrackToTarget = false; }
-                }
-                else //We need to snap to the target
-                {
-                    _vObserver = target;
-                }
+                if (_vObserver == target) { _bTrackToTarget = false; }
             }
-            else { _vObserver = target; }
+            else //We need to snap to the target
+            {
+                _vObserver = target;
+            }
 
             _vCenter = new Vector2(_vObserver.X - (RiverHollow.ScreenWidth / 2), _vObserver.Y - (RiverHollow.ScreenHeight / 2));
             _transform = Matrix.CreateScale(new Vector3(CurrentScale, CurrentScale, 0)) * Matrix.CreateTranslation(new Vector3(-_vCenter.X, -_vCenter.Y, 0));
@@ -96,7 +92,7 @@ namespace RiverHollow
 
         public static void ResetObserver()
         {
-            _vObserver = _actObserver.CharCenter.ToVector2();
+            _vObserver = _actObserver.Center;
         }
 
         public static bool IsMoving()

@@ -32,7 +32,8 @@
         public const string TRIGGER_ITEM_OPEN = "VALID_ITEM";
         public const string TRIGGER_KEY_OPEN = "KEY_USED";
 
-        public const float NORMAL_SPEED = 1f;
+        public const float NORMAL_SPEED = 1.2f;
+        public const float PUSH_SPEED = 0.5f;
         public const float NPC_WALK_SPEED = 0.6f;
 
         public const int HUMAN_HEIGHT = (TILE_SIZE * 2) + 2;

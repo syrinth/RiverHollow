@@ -129,8 +129,8 @@ namespace RiverHollow.Characters
                             if (_bBumpedIntoSomething)
                             {
                                 _bBumpedIntoSomething = false;
-                                MoveToLocation = Vector2.Zero;
                                 ChangeState(NPCStateEnum.Idle);
+                                SetMoveTo(Vector2.Zero);
                                 break;
                             }
                             else {
@@ -167,7 +167,7 @@ namespace RiverHollow.Characters
                         {
                             _bAlert = false;
                             CombatManager.NewBattle(this);
-                            MoveToLocation = Vector2.Zero;
+                            SetMoveTo(Vector2.Zero);
                             _liTilePath.Clear();
                         }
                     }
@@ -181,7 +181,7 @@ namespace RiverHollow.Characters
             //if (_bAlert) { _sprAlert.Draw(spriteBatch, userLayerDepth); }
         }
 
-        public override void DetermineFacing(Vector2 direction)
+        public override void DetermineAnimationState(Vector2 direction)
         {
             string animation = string.Empty;
 
@@ -336,7 +336,7 @@ namespace RiverHollow.Characters
 
             if (_liTilePath?.Count > 0 && _liTilePath?.Count < 30)
             {
-                MoveToLocation = _liTilePath[0].Position;
+                SetMoveTo(_liTilePath[0].Position);
             }
             else
             {
@@ -353,7 +353,7 @@ namespace RiverHollow.Characters
                 ChangeState(NPCStateEnum.Idle);
                 Position = _vLeashPoint;
                 _liTilePath.Clear();
-                MoveToLocation = Vector2.Zero;
+                SetMoveTo(Vector2.Zero);
                 _vLeashPoint = Vector2.Zero;
             }
         }
