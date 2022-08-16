@@ -62,6 +62,7 @@ namespace RiverHollow.Characters
 
         public virtual Vector2 CollisionBoxPosition => Position;
         public virtual Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, Constants.TILE_SIZE);
+        public Point CollisionCenter => CollisionBox.Center;
         public virtual Rectangle HoverBox => new Rectangle((int)Position.X, (int)Position.Y - Constants.TILE_SIZE, Width, Height);
 
         protected bool _bOnTheMap = true;
@@ -246,7 +247,7 @@ namespace RiverHollow.Characters
             _sprBody.PlayAnimation(VerbEnum.Walk, Facing);
         }
 
-        public void SetMoveTo(Vector2 v, bool update = true)
+        public virtual void SetMoveTo(Vector2 v, bool update = true)
         {
             MoveToLocation = v;
             if (update)
@@ -315,7 +316,7 @@ namespace RiverHollow.Characters
         /// Attempts to move the Actor to the indicated location
         /// </summary>
         /// <param name="target">The target location on the world map to move to</param>
-        protected void HandleMove()
+        protected virtual void HandleMove()
         {
             if (MoveToLocation != Vector2.Zero)
             {
@@ -346,13 +347,6 @@ namespace RiverHollow.Characters
                     {
                         PlayerManager.ClearDamagedMovement();
                     }
-                }
-
-                if (this == PlayerManager.PlayerActor && PlayerManager.GrabbedObject != null)
-                {
-                    Vector2 moveBy = Vector2.Zero;
-                    Util.GetMoveSpeed(PlayerManager.GrabbedObject.MapPosition, PlayerManager.MoveObjectToPosition, BuffedSpeed, ref moveBy);
-                    PlayerManager.GrabbedObject.MoveBy(moveBy);
                 }
 
                 //If, after movement, we've reached the given location, zero it.

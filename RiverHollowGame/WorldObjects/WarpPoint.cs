@@ -20,7 +20,7 @@ namespace RiverHollow.WorldObjects
             _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _uSize);
         }
 
-        public override bool PlaceOnMap(Vector2 pos, RHMap map)
+        public override bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
         {
             bool rv = base.PlaceOnMap(pos, map);
             _sDungeonName = map.DungeonName;

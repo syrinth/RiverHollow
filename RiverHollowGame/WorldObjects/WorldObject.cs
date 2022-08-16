@@ -28,7 +28,12 @@ namespace RiverHollow.WorldObjects
         protected string MapName { get; set; }
         public RHMap CurrentMap => MapManager.Maps[MapName];
 
-        public bool Movable => DataManager.GetWorldObjectData(ID).ContainsKey("Movable");
+        private bool _bMovable = false;
+        private DirectionEnum _eShoveDirection = DirectionEnum.None;
+        private DirectionEnum _ePullDirection = DirectionEnum.None;
+        private bool _bMoveOnce = false;
+        private bool _bHasMoved = false;
+
         protected bool _bWalkable = false;
         public bool Walkable => _bWalkable;
         protected bool _bWallObject;
@@ -60,7 +65,9 @@ namespace RiverHollow.WorldObjects
         public Rectangle ClickBox => Util.FloatRectangle(MapPosition, _uSize);
 
         //Base is always described in # of Tiles so we must multiply by the Constants.TILE_SIZE
+        public Vector2 CollisionPosition => new Vector2(MapPosition.X + (_rBase.X * Constants.TILE_SIZE), MapPosition.Y + (_rBase.Y * Constants.TILE_SIZE));
         public Rectangle CollisionBox => Util.FloatRectangle(MapPosition.X + (_rBase.X * Constants.TILE_SIZE), MapPosition.Y + (_rBase.Y * Constants.TILE_SIZE), (_rBase.Width * Constants.TILE_SIZE), (_rBase.Height * Constants.TILE_SIZE));
+        public Point CollisionCenter => CollisionBox.Center;
 
         protected int _iID;
         public int ID  => _iID;
@@ -100,6 +107,10 @@ namespace RiverHollow.WorldObjects
 
             Util.AssignValue(ref _eObjectType, "Type", stringData);
             Util.AssignValue(ref _bWallObject, "WallObject", stringData);
+
+            Util.AssignValue(ref _bMovable, "Movable", stringData);
+            Util.AssignValue(ref _bMoveOnce, "MoveOnce", stringData);
+            Util.AssignValue(ref _eShoveDirection, "ShoveDirection", stringData);
 
             if (stringData.ContainsKey("LightID"))
             {
@@ -164,7 +175,7 @@ namespace RiverHollow.WorldObjects
             if (_bDrawUnder) { _sprite.Draw(spriteBatch, 1); }
             else {
                 float alpha = 1f;
-                if(((BaseHeight + 1) * Constants.TILE_SIZE < Height) && new Rectangle((int)Sprite.Position.X, (int)Sprite.Position.Y, Sprite.Width, Sprite.Height).Contains(PlayerManager.PlayerActor.CollisionBox.Center))
+                if(((BaseHeight + 1) * Constants.TILE_SIZE < Height) && new Rectangle((int)Sprite.Position.X, (int)Sprite.Position.Y, Sprite.Width, Sprite.Height).Contains(PlayerManager.PlayerActor.CollisionCenter))
                 {
                     alpha = 0.7f;
                 }
@@ -191,31 +202,26 @@ namespace RiverHollow.WorldObjects
             return CollisionBox.Contains(m);
         }
 
-        public virtual bool PlaceOnMap(RHMap map)
+        public virtual bool PlaceOnMap(RHMap map, bool ignoreActors = false)
         {
-            bool rv = PlaceOnMap(this.MapPosition, map);
+            bool rv = PlaceOnMap(this.MapPosition, map, ignoreActors);
             map.AddLights(GetLights());
             SyncLightPositions();
             return rv;
         }
 
-        public virtual bool PlaceOnMap(Vector2 pos, RHMap map)
+        public virtual bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
         {
             bool rv = false;
             pos = new Vector2(pos.X - (_rBase.X * Constants.TILE_SIZE), pos.Y - (_rBase.Y * Constants.TILE_SIZE));
             SnapPositionToGrid(pos);
-            rv = map.PlaceWorldObject(this);
+            rv = map.PlaceWorldObject(this, ignoreActors);
             if (rv)
             {
                 MapName = map.Name;
             }
 
             return rv;
-        }
-
-        public void MoveBy(Vector2 direction)
-        {
-            _vMapPosition += direction;
         }
 
         protected void SetSpritePos(Vector2 position)
@@ -347,5 +353,42 @@ namespace RiverHollow.WorldObjects
         }
 
         public virtual bool CanPickUp() { return false; }
+
+        public void InitiateMove(Vector2 newMovement)
+        {
+            DirectionEnum moveDir = Util.GetDirectionFromPosition(newMovement);
+            bool canMove = _bMovable && (!_bMoveOnce || (_bMoveOnce && !_bHasMoved));
+            bool goingBackwards = moveDir == Util.GetOppositeDirection(PlayerManager.PlayerActor.Facing);
+            bool shoveMatches = !goingBackwards && _eShoveDirection == PlayerManager.PlayerActor.Facing;
+            bool pullMatches = goingBackwards && _ePullDirection == Util.GetOppositeDirection(PlayerManager.PlayerActor.Facing);
+
+            if (_eShoveDirection == DirectionEnum.None || shoveMatches || pullMatches)
+            {
+                if (canMove && (newMovement != Vector2.Zero && moveDir == PlayerManager.PlayerActor.Facing || goingBackwards))
+                {
+                    RHTile nextObjectTile = CurrentMap.GetTileByPixelPosition(CollisionPosition);
+                    RHTile checkTile = nextObjectTile;
+                    do
+                    {
+                        checkTile = checkTile.GetTileByDirection(moveDir);
+                    } while (checkTile.WorldObject == this);
+                    RHTile nextPlayerTile = MapManager.CurrentMap.GetTileByPixelPosition(PlayerManager.PlayerActor.CollisionCenter).GetTileByDirection(moveDir);
+
+                    if (checkTile == null) { return; }
+                    else if (goingBackwards && nextPlayerTile == null) { return; }
+
+                    if ((!goingBackwards && checkTile.Passable()) || (goingBackwards && (nextPlayerTile.WorldObject == this || nextPlayerTile.Passable())))
+                    {
+                        _bHasMoved = true;
+                        PlayerManager.HandleGrabMovement(nextObjectTile.GetTileByDirection(moveDir), nextPlayerTile);
+                    }
+                }
+            }
+        }
+        public void MoveBy(Vector2 direction)
+        {
+            _vMapPosition += direction;
+            _sprite.Position += direction;
+        }
     }
 }

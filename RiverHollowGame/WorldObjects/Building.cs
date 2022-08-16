@@ -141,7 +141,7 @@ namespace RiverHollow.Buildings
             TravelBox = new Rectangle(startX, startY, _rEntrance.Width * Constants.TILE_SIZE, _rEntrance.Height * Constants.TILE_SIZE);
         }
 
-        public override bool PlaceOnMap(Vector2 pos, RHMap map)
+        public override bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
         {
             bool rv = false;
 

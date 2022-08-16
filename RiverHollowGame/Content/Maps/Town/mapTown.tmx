@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="97">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="100">
  <properties>
   <property name="MapType" value="Town"/>
   <property name="Outside" type="bool" value="true"/>
@@ -260,7 +260,7 @@
 </data>
  </layer>
  <objectgroup id="6" name="Character">
-  <object id="66" name="CS1Spawn" x="468.583" y="471.083" width="7.16667" height="6.5"/>
+  <object id="66" name="CS1Spawn" x="464" y="464" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="7" name="Travel">
   <object id="34" name="Entrance" x="1276" y="560" width="4" height="48">
@@ -283,35 +283,41 @@
   </object>
  </objectgroup>
  <objectgroup id="9" name="MapObject">
-  <object id="71" name="Chest" x="370.53" y="437.021" width="12.69" height="10.2698">
+  <object id="71" name="Chest" x="368" y="432" width="16" height="16">
    <properties>
     <property name="ItemID" value="37"/>
     <property name="ObjectID" type="int" value="40"/>
    </properties>
   </object>
-  <object id="72" name="Building" x="434" y="402.242" width="75.3106" height="44.3031">
+  <object id="72" name="Building" x="432" y="400" width="80" height="48">
    <properties>
     <property name="ObjectID" type="int" value="28"/>
    </properties>
   </object>
-  <object id="92" name="Floor" x="6.03" y="467.553" width="471.44" height="10.8948">
+  <object id="92" name="Floor" x="0" y="464" width="480" height="16">
    <properties>
     <property name="ObjectID" type="int" value="77"/>
    </properties>
   </object>
-  <object id="94" name="Floor" x="466.53" y="449.803" width="9.19" height="13.3948">
+  <object id="94" name="Floor" x="464" y="448" width="16" height="16">
    <properties>
     <property name="ObjectID" type="int" value="77"/>
    </properties>
   </object>
-  <object id="95" name="WorldObject" x="420.405" y="437.115" width="8.065" height="6.5198">
+  <object id="95" name="WorldObject" x="416" y="432" width="16" height="16">
    <properties>
     <property name="ObjectID" type="int" value="97"/>
    </properties>
   </object>
-  <object id="96" name="NPC" x="516.227" y="453.091" width="9" height="8">
+  <object id="96" name="NPC" x="512" y="448" width="16" height="16">
    <properties>
     <property name="NPC_ID" type="int" value="29"/>
+   </properties>
+  </object>
+  <object id="97" name="Big Rock" x="368" y="480" width="32" height="32">
+   <properties>
+    <property name="Movable" type="bool" value="true"/>
+    <property name="ObjectID" type="int" value="50"/>
    </properties>
   </object>
  </objectgroup>

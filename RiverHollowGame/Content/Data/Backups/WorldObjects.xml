@@ -203,7 +203,7 @@
     </Item>
     <Item>
       <Key>50</Key>
-      <Value>[Type:Destructible][Image:32-32][Size:2-2][Height:32][Tool:Pick][Hp:20][ReqLvl:2][ItemID:0-5][Base:2-2]</Value>
+      <Value>[Type:Destructible][Image:32-32][Size:2-2][Height:32][Tool:Pick][Hp:20][ReqLvl:2][ItemID:0-5][Base:2-2][Movable]</Value>
     </Item>
     <Item>
       <Key>51</Key>
@@ -243,7 +243,7 @@
     </Item>
     <Item>
       <Key>60</Key>
-      <Value>[Type:Destructible][Image:0-0][Tool:Pick][Hp:1][ReqLvl:1][ItemID:0-1][DestructionAnim:208-0-3-0.1]</Value>
+      <Value>[Type:Destructible][Image:0-0][Tool:Pick][Hp:1][ReqLvl:1][ItemID:0-1][DestructionAnim:208-0-3-0.1][Movable]</Value>
     </Item>
     <Item>
       <Key>61</Key>
@@ -576,6 +576,10 @@
     <Item>
       <Key>143</Key>
       <Value>[Type:WorldObject][Image:48-0]</Value>
+    </Item>
+    <Item>
+      <Key>144</Key>
+      <Value>[Type:WorldObject][Image:352-16][Size:1-2][BaseOffset:0-1]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -146,13 +146,6 @@ namespace RiverHollow
                         }
                     }
                 }
-                else if (ms.LeftButton == ButtonState.Released && GUICursor.LastMouseState.LeftButton == ButtonState.Pressed)
-                {
-                    if (PlayerManager.PlayerActor.State == ActorStateEnum.Grab && PlayerManager.AllowMovement)
-                    {
-                        PlayerManager.PlayerActor.SetState(ActorStateEnum.Walk);
-                    }
-                }
                 else
                 {
                     if (!GUIManager.ProcessHover(mousePoint))

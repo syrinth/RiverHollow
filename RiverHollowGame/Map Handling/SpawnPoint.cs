@@ -189,7 +189,7 @@ namespace RiverHollow.Map_Handling
         public bool AlertSpawnPoint(WorldObject obj)
         {
             Rectangle area = new Rectangle((int)_vPosition.X, (int)_vPosition.Y, (int)_szDimensions.Width, (int)_szDimensions.Height);
-            if (area.Contains(obj.CollisionBox.Center))
+            if (area.Contains(obj.CollisionCenter))
             {
                 for (int i = 0; i < Enum.GetValues(typeof(RarityEnum)).Length; i++)
                 {

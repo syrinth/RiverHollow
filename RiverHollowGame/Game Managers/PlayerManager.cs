@@ -133,6 +133,11 @@ namespace RiverHollow.Game_Managers
         public static void Update(GameTime gTime)
         {
             UpdateTool(gTime);
+            
+            if (Mouse.GetState().LeftButton == ButtonState.Released && PlayerActor.State == ActorStateEnum.Grab && AllowMovement)
+            {
+                ReleaseTile();
+            }
 
             if (AllowMovement)
             {
@@ -148,44 +153,8 @@ namespace RiverHollow.Game_Managers
                 }
                 PlayerActor.DetermineAnimationState(newMovement);
 
-                if(PlayerActor.State == ActorStateEnum.Grab)
-                {
-                    if (GrabbedObject != null && GrabbedObject.Movable && newMovement != Vector2.Zero)
-                    {
-                        DirectionEnum moveDir = Util.GetDirectionFromPosition(newMovement);
-                        int mult = 0;
-                        if (moveDir == PlayerActor.Facing) { mult = 1; }
-                        else if (moveDir == Util.GetOppositeDirection(PlayerActor.Facing)) { mult = -1; }
-
-                        Vector2 moveToMod = Vector2.Zero;
-                        switch (PlayerActor.Facing)
-                        {
-                            case DirectionEnum.Down:
-                                moveToMod.Y += Constants.TILE_SIZE * mult;
-                                break;
-                            case DirectionEnum.Left:
-                                moveToMod.X -= Constants.TILE_SIZE * mult;
-                                break;
-                            case DirectionEnum.Up:
-                                moveToMod.Y -= Constants.TILE_SIZE * mult;
-                                break;
-                            case DirectionEnum.Right:
-                                moveToMod.X += Constants.TILE_SIZE * mult;
-                                break;
-                        }
-
-                        if (MapManager.CurrentMap.GetTileByPixelPosition(GrabbedObject.MapPosition + moveToMod).Passable())
-                        {
-                            MoveObjectToPosition = GrabbedObject.MapPosition + moveToMod;
-
-                            AllowMovement = false;
-                            PlayerActor.SetMoveTo(PlayerActor.Position + moveToMod, false);
-                            PlayerActor.SpdMult = Constants.PUSH_SPEED;
-                            GrabbedObject.RemoveSelfFromTiles();
-                        }
-                    }
-                }
-                else if (newMovement.Length() != 0)
+                if(PlayerActor.State == ActorStateEnum.Grab && newMovement != Vector2.Zero) { GrabbedObject.InitiateMove(newMovement); }
+                else if (newMovement != Vector2.Zero)
                 {
                     Rectangle testRectX = new Rectangle((int)PlayerActor.CollisionBox.X + (int)newMovement.X, (int)PlayerActor.CollisionBox.Y, PlayerActor.CollisionBox.Width, PlayerActor.CollisionBox.Height);
                     Rectangle testRectY = new Rectangle((int)PlayerActor.CollisionBox.X, (int)PlayerActor.CollisionBox.Y + (int)newMovement.Y, PlayerActor.CollisionBox.Width, PlayerActor.CollisionBox.Height);
@@ -198,9 +167,7 @@ namespace RiverHollow.Game_Managers
             }
             else if (PlayerActor.State == ActorStateEnum.Grab && PlayerActor.MoveToLocation == Vector2.Zero && GrabbedObject != null)
             {
-                AllowMovement = true;
-                PlayerActor.SpdMult = Constants.NORMAL_SPEED;
-                GrabbedObject.PlaceOnMap(MapManager.CurrentMap);
+                FinishedMovingObject();
             }
 
             PlayerActor.Update(gTime);
@@ -333,7 +300,7 @@ namespace RiverHollow.Game_Managers
 
                 _hazardDamage = new FloatingText(PlayerActor.Position, PlayerActor.BodySprite.Width, damage.ToString(), Color.Red);
                 AllowMovement = false;
-                PlayerActor.SetMoveTo(PlayerActor.Position + (5 * (PlayerActor.CollisionBox.Center - sourceCenter).ToVector2()));
+                PlayerActor.SetMoveTo(PlayerActor.Position + (5 * (PlayerActor.CollisionCenter - sourceCenter).ToVector2()));
                 PlayerActor.SpdMult = 2;
             }
         }
@@ -597,8 +564,7 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            Rectangle playerRect = PlayerActor.CollisionBox;
-            int distance = (int)Util.GetDistance(playerRect.Center, centre);
+            int distance = (int)Util.GetDistance(PlayerActor.CollisionCenter, centre);
 
             rv = distance <= range;
 
@@ -935,6 +901,61 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
+
+        public static bool StillMoving()
+        {
+            switch (PlayerActor.Facing)
+            {
+                case DirectionEnum.Down:
+                    return InputManager.IsKeyDown(Keys.S);
+                case DirectionEnum.Left:
+                    return InputManager.IsKeyDown(Keys.A);
+                case DirectionEnum.Right:
+                    return InputManager.IsKeyDown(Keys.D);
+                case DirectionEnum.Up:
+                    return InputManager.IsKeyDown(Keys.W);
+
+            }
+            return false;
+        }
+
+        #region Grabbing Objects
+        public static void GrabTile(RHTile t)
+        {
+            GrabbedObject = t.WorldObject;
+
+            PlayerActor.Position = Util.SnapToGrid(PlayerActor.CollisionCenter.ToVector2());
+            PlayerActor.DetermineFacing(t);
+            PlayerActor.SetState(ActorStateEnum.Grab);
+        }
+        public static void ReleaseTile()
+        {
+            if (PlayerActor.State == ActorStateEnum.Grab)
+            {
+                //Safety for if we hit a map change while holding a tile
+                if (GrabbedObject?.Tiles.Count == 0) { GrabbedObject.PlaceOnMap(MoveObjectToPosition, GrabbedObject.CurrentMap, true); }
+
+                GrabbedObject = null;
+                PlayerActor.SetState(ActorStateEnum.Walk);
+                MoveObjectToPosition = Vector2.Zero;
+            }
+        }
+        public static void HandleGrabMovement(RHTile nextObjectTile, RHTile nextPlayerTile)
+        {
+            MoveObjectToPosition = nextObjectTile.Position;
+
+            AllowMovement = false;
+            PlayerActor.SetMoveTo(nextPlayerTile.Position, false);
+            PlayerActor.SpdMult = Constants.PUSH_SPEED;
+            GrabbedObject.RemoveSelfFromTiles();
+        }
+        private static void FinishedMovingObject()
+        {
+            AllowMovement = true;
+            PlayerActor.SpdMult = Constants.NORMAL_SPEED;
+            GrabbedObject.PlaceOnMap(MoveObjectToPosition, GrabbedObject.CurrentMap, true);
+        }
+        #endregion
 
         #region Tool Management
         public static Tool ToolInUse;

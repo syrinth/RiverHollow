@@ -429,7 +429,7 @@ namespace RiverHollow.Map_Handling
             foreach (Light obj in _liLights) { obj.Draw(spriteBatch); }
             foreach (Light obj in _liHeldLights) { obj.Draw(spriteBatch); }
 
-            //spriteBatch.Draw(lightMask, new Vector2(PlayerManager.World.CollisionBox.Center.X - lightMask.Width / 2, PlayerManager.World.CollisionBox.Y - lightMask.Height / 2), Color.White);
+            //spriteBatch.Draw(lightMask, new Vector2(PlayerManager.World.CollisionCenter.X - lightMask.Width / 2, PlayerManager.World.CollisionBox.Y - lightMask.Height / 2), Color.White);
         }
         public void AddHeldLights(List<Light> newLights)
         {
@@ -1409,18 +1409,15 @@ namespace RiverHollow.Map_Handling
                 {
                     if (GamePaused()) { return false; }
 
-                    
-                    if (TargetTile != null)
+
+                    if (TargetTile != null && TargetTile.PlayerIsAdjacent())
                     {
-                        if (PlayerManager.PlayerInRange(TargetTile.Center.ToPoint(), Constants.TILE_SIZE))
+                        if (!TargetTile.Passable())
                         {
-                            if (!TargetTile.Passable())
-                            {
-                                PlayerManager.PlayerActor.Position = Util.SnapToGrid(PlayerManager.PlayerActor.CollisionBox.Center.ToVector2());
-                                PlayerManager.PlayerActor.DetermineFacing(TargetTile);
-                                PlayerManager.PlayerActor.SetState(ActorStateEnum.Grab);
-                                PlayerManager.GrabbedObject = TargetTile.WorldObject;
-                            }
+                            PlayerManager.GrabTile(TargetTile);
+                        }
+                        else
+                        {
                             //Retrieves any object associated with the tile, this will include
                             //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
                             //as being on the tile.
@@ -1892,12 +1889,12 @@ namespace RiverHollow.Map_Handling
             AddHeldLights(targetObj.GetLights());
         }
 
-        public bool PlaceWorldObject(WorldObject o)
+        public bool PlaceWorldObject(WorldObject o, bool ignoreActors = false)
         {
             bool rv = false;
 
             List<RHTile> tiles = new List<RHTile>();
-            if (TestMapTiles(o, tiles))
+            if (TestMapTiles(o, tiles, ignoreActors))
             {
                 AssignMapTiles(o, tiles);
                 rv = true;
@@ -1913,7 +1910,7 @@ namespace RiverHollow.Map_Handling
         /// <param name="obj">The WorldObject to test</param>
         /// <param name="collisionTiles">The Tiles on the map that are in the object's CollisionBox</param>
         /// <returns></returns>
-        public bool TestMapTiles(WorldObject obj, List<RHTile> collisionTiles)
+        public bool TestMapTiles(WorldObject obj, List<RHTile> collisionTiles, bool ignoreActors = false)
         {
             bool rv = true;
             collisionTiles.Clear();
@@ -1938,7 +1935,7 @@ namespace RiverHollow.Map_Handling
                     }
 
                     RHTile tempTile = _arrTiles[x, y];
-                    if (CanPlaceObject(tempTile, obj))
+                    if (CanPlaceObject(tempTile, obj, ignoreActors))
                     {
                         collisionTiles.Add(tempTile);
                     }
@@ -1959,7 +1956,7 @@ namespace RiverHollow.Map_Handling
         /// <param name="testTile">The RHtile to test</param>
         /// <param name="obj">The WorldObject we want to place</param>
         /// <returns></returns>
-        private bool CanPlaceObject(RHTile testTile, WorldObject obj)
+        private bool CanPlaceObject(RHTile testTile, WorldObject obj, bool ignoreActors = false)
         {
             bool rv = false;
             //We can place flooring anywhere there isn't flooring as long as the base tile is passable.
@@ -1975,7 +1972,7 @@ namespace RiverHollow.Map_Handling
             {
                 rv = (testTile.WorldObject == null && testTile.IsWallpaperWall);
             }
-            else if (!TileContainsActor(testTile) || obj.CompareType(ObjectTypeEnum.Floor))
+            else if (obj.CompareType(ObjectTypeEnum.Floor) || ignoreActors || !TileContainsActor(testTile))
             {
                 if (testTile.CanPlaceOnTabletop(obj) || (testTile.Passable() && testTile.WorldObject == null))
                 {

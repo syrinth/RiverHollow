@@ -110,6 +110,18 @@ namespace RiverHollow.Characters
             //Legs?.Sprite.Draw(spriteBatch, useLayerDepth);
         }
 
+        protected override void HandleMove()
+        {
+            base.HandleMove();
+
+            if (PlayerManager.GrabbedObject != null && PlayerManager.MoveObjectToPosition != Vector2.Zero && PlayerManager.GrabbedObject.MapPosition != PlayerManager.MoveObjectToPosition)
+            {
+                Vector2 moveBy = Vector2.Zero;
+                Util.GetMoveSpeed(PlayerManager.GrabbedObject.CollisionPosition, PlayerManager.MoveObjectToPosition, BuffedSpeed, ref moveBy);
+                PlayerManager.GrabbedObject.MoveBy(moveBy);
+            }
+        }
+
         public void NewLantern()
         {
             _lightSource = DataManager.GetLight(7 + PlayerManager.LanternLevel);
@@ -243,6 +255,14 @@ namespace RiverHollow.Characters
             {
                 spr.SetLinkedSprite(null);
             }
+        }
+
+        public override void SetMoveTo(Vector2 v, bool update = true)
+        {
+            if (State == ActorStateEnum.Grab && PlayerManager.StillMoving()){
+                update = false;
+            }
+            base.SetMoveTo(v, update);
         }
     }
 }

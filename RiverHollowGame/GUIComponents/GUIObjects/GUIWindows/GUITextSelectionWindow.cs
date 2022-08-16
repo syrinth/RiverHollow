@@ -316,7 +316,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;
                             break;
                         case TextEntryTriggerEnum.EndDay:
-                            Vector2 pos = PlayerManager.PlayerActor.CollisionBox.Center.ToVector2();
+                            Vector2 pos = PlayerManager.PlayerActor.CollisionCenter.ToVector2();
                             PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
                             GUIManager.SetScreen(new DayEndScreen());
                             break;

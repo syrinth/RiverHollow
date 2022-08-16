@@ -86,7 +86,7 @@ namespace RiverHollow.Map_Handling
         {
             //Find the difference between the position of the center of the actor's collisionBox
             //and the TravelPoint that the actor interacted with.
-            Point actorCollisionCenter = c.CollisionBox.Center;
+            Point actorCollisionCenter = c.CollisionCenter;
             Vector2 vDiff = actorCollisionCenter.ToVector2() - oldPointCenter;
 
             //If we move Left/Right, ignore the X axis, Up/Down, ignore the Y axis then just set

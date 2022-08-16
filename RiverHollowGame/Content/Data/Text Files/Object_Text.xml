@@ -1937,5 +1937,9 @@
       <Key>WorldObject_143</Key>
       <Value>[Name:Staircase]</Value>
     </Item>
+    <Item>
+      <Key>WorldObject_144</Key>
+      <Value>[Name:Ice Block]</Value>
+    </Item>
   </Asset>
 </XnaContent>

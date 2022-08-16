@@ -99,7 +99,7 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         /// <param name="map">The map to place the object on</param>
         /// <returns></returns>
-        public override bool PlaceOnMap(RHMap map)
+        public override bool PlaceOnMap(RHMap map, bool ignoreActors = false)
         {
             bool rv = false;
 

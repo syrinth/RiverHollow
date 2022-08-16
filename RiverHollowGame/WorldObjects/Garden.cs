@@ -64,7 +64,7 @@ namespace RiverHollow.WorldObjects
             _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
         }
 
-        public override bool PlaceOnMap(Vector2 pos, RHMap map)
+        public override bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
         {
             bool rv = base.PlaceOnMap(pos, map);
 

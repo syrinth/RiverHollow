@@ -58,10 +58,10 @@ namespace RiverHollow.WorldObjects
             }
             if(_eMoveDir != DirectionEnum.None)
             {
-                RHTile currentTile = CurrentMap.GetTileByPixelPosition(CollisionBox.Center);
+                RHTile currentTile = CurrentMap.GetTileByPixelPosition(CollisionCenter);
                 RHTile nextTile = currentTile.GetTileByDirection(_eMoveDir);
-                float deltaX = Math.Abs((nextTile.Center - CollisionBox.Center.ToVector2()).X);
-                float deltaY = Math.Abs((nextTile.Center - CollisionBox.Center.ToVector2()).Y);
+                float deltaX = Math.Abs((nextTile.Center - CollisionCenter.ToVector2()).X);
+                float deltaY = Math.Abs((nextTile.Center - CollisionCenter.ToVector2()).Y);
 
                 if (!nextTile.Passable() && deltaX < Constants.TILE_SIZE + 2 && deltaY < Constants.TILE_SIZE + 2)
                 {
@@ -93,7 +93,7 @@ namespace RiverHollow.WorldObjects
 
             if (Active && CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
             {
-                PlayerManager.HazardHarmParty(Damage, CollisionBox.Center);
+                PlayerManager.HazardHarmParty(Damage, CollisionCenter);
             }
         }
 
@@ -107,7 +107,7 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        public override bool PlaceOnMap(Vector2 pos, RHMap map)
+        public override bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
         {
             bool rv = base.PlaceOnMap(pos, map);
 

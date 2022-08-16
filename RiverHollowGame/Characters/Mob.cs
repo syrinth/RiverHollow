@@ -137,7 +137,7 @@ namespace RiverHollow.Characters
                                 goto case NPCStateEnum.Idle;
                             }
                         case NPCStateEnum.Idle:
-                            if (CurrentMap == MapManager.CurrentMap && PlayerManager.PlayerInRange(CollisionBox.Center, Constants.TILE_SIZE * 8))
+                            if (CurrentMap == MapManager.CurrentMap && PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 8))
                             {
                                 ChangeState(NPCStateEnum.TrackPlayer);
                                 _vLeashPoint = new Vector2(CollisionBox.Left, CollisionBox.Top);
@@ -330,7 +330,7 @@ namespace RiverHollow.Characters
             }
 
             Vector2 startPosition = Position;
-            Vector2 target = _eCurrentState == NPCStateEnum.TrackPlayer ? PlayerManager.PlayerActor.CollisionBox.Center.ToVector2() : _vLeashPoint;
+            Vector2 target = _eCurrentState == NPCStateEnum.TrackPlayer ? PlayerManager.PlayerActor.CollisionCenter.ToVector2() : _vLeashPoint;
             //RHTile lastTile = _liTilePath.Count > 0 ? _liTilePath[0] : null;
             _liTilePath = TravelManager.FindPathToLocation(ref startPosition, target, null, false, false);
 
@@ -391,7 +391,7 @@ namespace RiverHollow.Characters
             public bool Contains(WorldActor actor)
             {
                 bool rv = false;
-                Vector2 center = actor.CollisionBox.Center.ToVector2();
+                Vector2 center = actor.CollisionCenter.ToVector2();
 
                 Vector2 firstFoV = _vFirst;
                 Vector2 secondFoV = _vSecond;

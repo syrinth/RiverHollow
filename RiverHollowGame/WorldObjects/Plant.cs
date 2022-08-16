@@ -167,8 +167,8 @@ namespace RiverHollow.WorldObjects
         {
             if (!_bShaking)
             {
-                if (PlayerManager.PlayerActor.CollisionBox.Center.X > CollisionBox.Center.X) { dir = DirectionEnum.Left; }
-                else if (PlayerManager.PlayerActor.CollisionBox.Center.X < CollisionBox.Center.X) { dir = DirectionEnum.Right; }
+                if (PlayerManager.PlayerActor.CollisionCenter.X > CollisionCenter.X) { dir = DirectionEnum.Left; }
+                else if (PlayerManager.PlayerActor.CollisionCenter.X < CollisionCenter.X) { dir = DirectionEnum.Right; }
                 _bShaking = true;
             }
         }

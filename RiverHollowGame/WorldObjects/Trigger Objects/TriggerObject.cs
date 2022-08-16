@@ -42,7 +42,7 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        public override bool PlaceOnMap(Vector2 pos, RHMap map)
+        public override bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
         {
             bool rv = base.PlaceOnMap(pos, map);
             if (rv)

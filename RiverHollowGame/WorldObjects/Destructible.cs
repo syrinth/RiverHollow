@@ -49,7 +49,6 @@ namespace RiverHollow.WorldObjects
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            if (_sprite.Position != _vMapPosition) { _sprite.Position = _vMapPosition; }
             if (_iHP <= 0)
             {
                 if (!_sprite.ContainsAnimation(AnimationEnum.KO) || _sprite.AnimationFinished(AnimationEnum.KO))
@@ -71,7 +70,7 @@ namespace RiverHollow.WorldObjects
         {
             if (NeededTool == toolUsed.ToolType && toolUsed.ToolLevel >= NeededToolLevel)
             {
-                SoundManager.PlayEffectAtLoc(toolUsed.SoundEffect, MapName, CollisionBox.Center.ToVector2(), toolUsed);
+                SoundManager.PlayEffectAtLoc(toolUsed.SoundEffect, MapName, CollisionCenter.ToVector2(), toolUsed);
 
                 if (_iHP > 0)
                 {

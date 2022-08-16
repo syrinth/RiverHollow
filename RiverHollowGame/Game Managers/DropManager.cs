@@ -60,7 +60,7 @@ namespace RiverHollow.Game_Managers
 
             it[0].AutoPickup = false;
 
-            //MapManager.DropItemsOnMap(it, Util.SnapToGrid(m.CollisionBox.Center.ToVector2()), false);
+            //MapManager.DropItemsOnMap(it, Util.SnapToGrid(m.CollisionCenter.ToVector2()), false);
 
             return droppedItem;
         }

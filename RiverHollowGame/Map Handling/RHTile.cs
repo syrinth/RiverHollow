@@ -229,7 +229,7 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = false;
 
-            rv = Rect.Contains(n.CollisionBox.Center);
+            rv = Rect.Contains(n.CollisionCenter);
 
             return rv;
         }
@@ -317,6 +317,11 @@ namespace RiverHollow.Map_Handling
         private RHMap MyMap()
         {
             return MapManager.Maps[MapName];
+        }
+
+        public bool PlayerIsAdjacent()
+        {
+            return PlayerManager.PlayerInRange(Center.ToPoint(), Constants.TILE_SIZE) && GetWalkableNeighbours().Find(x => x.Rect.Contains(PlayerManager.PlayerActor.CollisionCenter)) != null;
         }
 
         public List<RHTile> GetWalkableNeighbours()

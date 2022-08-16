@@ -124,6 +124,8 @@ namespace RiverHollow.Game_Managers
                 Maps[travelPoint.LinkedMap].SpawnMapEntities();
                 PlayerManager.PlayerActor.ActivePet?.ChangeState(NPCStateEnum.Alert);
                 FadeToNewMap(Maps[travelPoint.LinkedMap], newPos, travelPoint.TargetBuilding);
+
+                PlayerManager.ReleaseTile();
             }
             else
             {
@@ -222,7 +224,7 @@ namespace RiverHollow.Game_Managers
                 if (PlayerManager.PlayerActor.ActivePet != null) { CurrentMap.RemoveActor(PlayerManager.PlayerActor.ActivePet); }
                 if (PlayerManager.PlayerActor.ActiveMount != null) { CurrentMap.RemoveActor(PlayerManager.PlayerActor.ActiveMount); }
 
-                MapManager.CurrentMap.ResetMobPositioning();
+                CurrentMap.ResetMobPositioning();
                 string oldMap = CurrentMap.Name;
                 CurrentMap = _newMapInfo.NextMap;
 

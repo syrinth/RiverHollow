@@ -42,7 +42,7 @@ namespace RiverHollow.Characters
                 SetMoveTo(Vector2.Zero);
             }
 
-            if (_bFollow && !PlayerManager.PlayerInRange(CollisionBox.Center, Constants.TILE_SIZE * 8) && _eCurrentState != NPCStateEnum.TrackPlayer)
+            if (_bFollow && !PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 8) && _eCurrentState != NPCStateEnum.TrackPlayer)
             {
                 if (!_sprBody.IsCurrentAnimation(VerbEnum.Action1, Facing))
                 {
