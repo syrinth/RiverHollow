@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="35" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="40">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="35" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="42">
  <properties>
   <property name="Dungeon" value="Forest"/>
   <property name="MapAbove" value=""/>
@@ -94,7 +94,7 @@
     <property name="ObjectID" type="int" value="118"/>
    </properties>
   </object>
-  <object id="10" name="Triggered Door 1" x="96" y="112" width="32" height="16">
+  <object id="10" name="Triggered Door 1" x="48" y="144" width="32" height="16">
    <properties>
     <property name="MatchTrigger" value="Dungeon_1"/>
     <property name="ObjectID" type="int" value="76"/>
@@ -148,6 +148,19 @@
   <object id="39" name="Color Blocker" x="288" y="208" width="80" height="16">
    <properties>
     <property name="ObjectID" type="int" value="66"/>
+   </properties>
+  </object>
+  <object id="40" name="Floor Switch" x="112" y="176" width="16" height="16">
+   <properties>
+    <property name="HoldDown" type="bool" value="true"/>
+    <property name="ObjectID" type="int" value="145"/>
+    <property name="OutTrigger" value="Dungeon_1"/>
+   </properties>
+  </object>
+  <object id="41" name="WorldObject" x="144" y="176" width="16" height="16">
+   <properties>
+    <property name="Movable" type="bool" value="true"/>
+    <property name="ObjectID" type="int" value="144"/>
    </properties>
   </object>
  </objectgroup>

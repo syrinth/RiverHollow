@@ -31,7 +31,7 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[SpawnMap:mapInn-3-10][Maps:mapDungeon_Forest_Entrance-15-12|Forest8-mapForest_08-17-6|Forest1-mapForest_01-18-7|Forest4-mapForest_04-20-20|Forest6-mapForest_06-19-9|Dungeon-mapForest_Dungeon_1-16-20|DungeonEnd-mapForest_Dungeon_Wing_1_12-10-19|Mushroom-mapCave_Wing_1_2-15-22|Caves-mapCave_Entrance-4-19]</Value>
+      <Value>[SpawnMap:mapDungeon_Forest_Entrance-15-12][Maps:mapInn-3-10|Forest8-mapForest_08-17-6|Forest1-mapForest_01-18-7|Forest4-mapForest_04-20-20|Forest6-mapForest_06-19-9|Dungeon-mapForest_Dungeon_1-16-20|DungeonEnd-mapForest_Dungeon_Wing_1_12-10-19|Mushroom-mapCave_Wing_1_2-15-22|Caves-mapCave_Entrance-4-19]</Value>
     </Item>
     <Item>
       <Key>8</Key>

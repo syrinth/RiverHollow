@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RiverHollow.Utilities;
+using System.Collections.Generic;
 
 namespace RiverHollow.WorldObjects
 {
@@ -6,7 +7,7 @@ namespace RiverHollow.WorldObjects
     {
         public Wallpaper(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            _bWallObject = true;
+            _ePlacement = Enums.ObjectPlacementEnum.Wall;
         }
     }
 }

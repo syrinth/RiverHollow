@@ -10,7 +10,7 @@
         public enum RarityEnum { C, U, R, M };
         public enum WeatherEnum { Sunny, Raining, Snowing };
 
-        public enum TriggerObjectEnum { ColorBlocker, ColorSwitch, Trigger, KeyDoor, MobDoor, TriggerDoor };
+        public enum TriggerObjectEnum { ColorBlocker, ColorSwitch, FloorSwitch, Trigger, KeyDoor, MobDoor, TriggerDoor };
         public enum HazardTypeEnum { Passive, Timed, Triggered };
 
         public enum GameScreenEnum { Info, Combat, World };
@@ -54,6 +54,7 @@
         public enum AttackTypeEnum { Physical, Magical };
         public enum ElementAlignment { Neutral, Vulnerable, Resists };
         public enum AdventurerTypeEnum { Magic, Martial };
+        public enum ObjectPlacementEnum { Ground, Floor, Wall };
         public enum ObjectTypeEnum { WorldObject, Beehive, Buildable, Building, Hazard, Container, Decor, Destructible, DungeonObject, Floor, Gatherable, Garden, Machine, Mailbox, Plant, Structure, Wall, Wallpaper, WarpPoint };
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
         public enum ExpectingChildEnum { None, Adoption, Pregnant };

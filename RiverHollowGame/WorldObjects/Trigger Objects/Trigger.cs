@@ -69,14 +69,30 @@ namespace RiverHollow.WorldObjects
 
         public override void FireTrigger()
         {
-            if (CanTrigger())
+            if (!_bHasBeenTriggered)
             {
-                _bHasBeenTriggered = true;
-                _sprite.PlayAnimation(AnimationEnum.Action1);
-
-                if (CurrentMap.IsDungeon){ DungeonManager.ActivateTrigger(_sOutTrigger); }
-                else { GameManager.ActivateTriggers(_sOutTrigger); }
+                Activate();
             }
+            else
+            {
+                Reset();
+            }
+            
+
+            if (CurrentMap.IsDungeon) { DungeonManager.ActivateTrigger(_sOutTrigger); }
+            else { GameManager.ActivateTriggers(_sOutTrigger); }
+        }
+
+        protected void Activate()
+        {
+            _bHasBeenTriggered = true;
+            _sprite.PlayAnimation(AnimationEnum.Action1);
+        }
+
+        public override void Reset()
+        {
+            _bHasBeenTriggered = false;
+            _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
         }
     }
 }

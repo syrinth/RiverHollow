@@ -30,7 +30,7 @@ namespace RiverHollow.Map_Handling
         public Wallpaper _objWallpaper;
         public WorldObject WorldObject { get; private set; }
         public WorldObject ShadowObject { get; private set; }
-        public Floor Flooring { get; private set; }
+        public WorldObject Flooring { get; private set; }
         public bool IsRoad { get; private set; }
 
         bool _bArea = false;
@@ -91,13 +91,13 @@ namespace RiverHollow.Map_Handling
             IsWallpaperWall = true;
         }
 
-        public bool SetFloor(Floor f)
+        public bool SetFloorObject(WorldObject obj)
         {
             bool rv = false;
             if (Flooring == null)
             {
                 rv = true;
-                Flooring = f;
+                Flooring = obj;
             }
 
             return rv;
@@ -166,11 +166,11 @@ namespace RiverHollow.Map_Handling
         public bool SetObject(WorldObject o)
         {
             bool rv = false;
-            if (o.CompareType(ObjectTypeEnum.Floor))
+            if (o.FlooringObject())
             {
-                rv = SetFloor((Floor)o);
+                rv = SetFloorObject(o);
             }
-            else if ((!o.WallObject && Passable()) || (o.WallObject && IsWallpaperWall))
+            else if ((!o.WallObject() && Passable()) || (o.WallObject() && IsWallpaperWall))
             {
                 WorldObject = o;
                 rv = true;
@@ -180,16 +180,16 @@ namespace RiverHollow.Map_Handling
         public bool SetShadowObject(WorldObject o)
         {
             bool rv = false;
-            if ((!o.WallObject && Passable()) || (o.WallObject && IsWallpaperWall))
+            if ((!o.WallObject() && Passable()) || (o.WallObject() && IsWallpaperWall))
             {
                 ShadowObject = o;
                 rv = true;
             }
             return rv;
         }
-        public Floor GetFloorObject()
+        public WorldObject GetFloorObject()
         {
-            Floor f = null;
+            WorldObject f = null;
 
             if (Flooring != null) { f = Flooring; }
 

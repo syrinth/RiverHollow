@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Map_Handling;
+using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
@@ -19,6 +20,7 @@ namespace RiverHollow.WorldObjects
             LoadAdjustableSprite(ref _sprite, DataManager.FILE_FLOORING);
 
             _eObjectType = ObjectTypeEnum.Floor;
+            _ePlacement = ObjectPlacementEnum.Floor;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -38,7 +40,9 @@ namespace RiverHollow.WorldObjects
 
             if (tile != null)
             {
-                obj = tile.GetFloorObject();
+                WorldObject floorObj = tile.GetFloorObject();
+                if (floorObj != null && floorObj.CompareType(ObjectTypeEnum.Floor)) { obj = (Floor)floorObj; }
+
                 if (obj != null && obj.Type == Type)
                 {
                     rv = true;

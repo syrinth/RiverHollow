@@ -581,5 +581,9 @@
       <Key>144</Key>
       <Value>[Type:WorldObject][Image:352-16][Size:1-2][BaseOffset:0-1]</Value>
     </Item>
+    <Item>
+      <Key>145</Key>
+      <Value>[Type:DungeonObject][Image:352-48][Subtype:FloorSwitch]</Value>
+    </Item>
   </Asset>
 </XnaContent>

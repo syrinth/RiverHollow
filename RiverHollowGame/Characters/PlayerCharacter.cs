@@ -114,7 +114,7 @@ namespace RiverHollow.Characters
         {
             base.HandleMove();
 
-            if (PlayerManager.GrabbedObject != null && PlayerManager.MoveObjectToPosition != Vector2.Zero && PlayerManager.GrabbedObject.MapPosition != PlayerManager.MoveObjectToPosition)
+            if (PlayerManager.GrabbedObject != null && PlayerManager.MoveObjectToPosition != Vector2.Zero && PlayerManager.GrabbedObject.CollisionPosition != PlayerManager.MoveObjectToPosition)
             {
                 Vector2 moveBy = Vector2.Zero;
                 Util.GetMoveSpeed(PlayerManager.GrabbedObject.CollisionPosition, PlayerManager.MoveObjectToPosition, BuffedSpeed, ref moveBy);

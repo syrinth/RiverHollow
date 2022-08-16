@@ -203,7 +203,7 @@
     </Item>
     <Item>
       <Key>50</Key>
-      <Value>[Type:Destructible][Image:32-32][Size:2-2][Height:32][Tool:Pick][Hp:20][ReqLvl:2][ItemID:0-5][Base:2-2][Movable]</Value>
+      <Value>[Type:Destructible][Image:32-32][Size:2-2][Height:32][Tool:Pick][Hp:20][ReqLvl:2][ItemID:0-5][Base:2-2]</Value>
     </Item>
     <Item>
       <Key>51</Key>

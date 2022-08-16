@@ -463,6 +463,8 @@ namespace RiverHollow.Game_Managers
                                 return new MobDoor(id, data);
                             case TriggerObjectEnum.TriggerDoor:
                                 return new TriggerDoor(id, data);
+                            case TriggerObjectEnum.FloorSwitch:
+                                return new FloorSwitch(id, data);
                         }
                         break;
                     case ObjectTypeEnum.Floor:

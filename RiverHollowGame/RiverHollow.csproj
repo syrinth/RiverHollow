@@ -183,6 +183,7 @@
     <Compile Include="WorldObjects\Decor.cs" />
     <Compile Include="WorldObjects\Destructible.cs" />
     <Compile Include="WorldObjects\Trigger Objects\ColorSwitch.cs" />
+    <Compile Include="WorldObjects\Trigger Objects\FloorSwitch.cs" />
     <Compile Include="WorldObjects\Trigger Objects\Switch.cs" />
     <Compile Include="WorldObjects\Trigger Objects\TriggerDoor.cs" />
     <Compile Include="WorldObjects\Floor.cs" />

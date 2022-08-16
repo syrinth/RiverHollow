@@ -71,23 +71,7 @@ namespace RiverHollow.WorldObjects
 
             if (triggerName == _sMatchTrigger)
             {
-                rv = CanTrigger();
-            }
-
-            return rv;
-        }
-
-        /// <summary>
-        /// Call to see if the object can trigger. Only valid if the object hasn't been triggered
-        /// and the object hasno more remaining trigger numbers to wait on
-        /// </summary>
-        /// <returns>True if the object can trigger</returns>
-        protected bool CanTrigger()
-        {
-            bool rv = false;
-            if (!_bHasBeenTriggered && UpdateTriggerNumber())
-            {
-                rv = true;
+                rv = UpdateTriggerNumber();
             }
 
             return rv;
@@ -124,7 +108,7 @@ namespace RiverHollow.WorldObjects
         /// This checks whether or not the object should trigger
         /// </summary>
         /// <returns>Returns true if the object can trigger</returns>
-        private bool UpdateTriggerNumber()
+        protected bool UpdateTriggerNumber()
         {
             if (_iTriggersLeft > 0)
             {

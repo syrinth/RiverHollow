@@ -23,8 +23,6 @@ namespace RiverHollow.WorldObjects
         {
             LoadDictionaryData(stringData, loadSprite);
 
-            _bWallObject = false;
-
             if (stringData.ContainsKey("ItemID"))
             {
                 string[] split = stringData["ItemID"].Split('-');

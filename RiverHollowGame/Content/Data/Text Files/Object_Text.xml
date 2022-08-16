@@ -1941,5 +1941,9 @@
       <Key>WorldObject_144</Key>
       <Value>[Name:Ice Block]</Value>
     </Item>
+    <Item>
+      <Key>WorldObject_145</Key>
+      <Value>[Name:Floor Switch]</Value>
+    </Item>
   </Asset>
 </XnaContent>

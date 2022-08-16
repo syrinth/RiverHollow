@@ -36,8 +36,7 @@ namespace RiverHollow.WorldObjects
 
         protected bool _bWalkable = false;
         public bool Walkable => _bWalkable;
-        protected bool _bWallObject;
-        public bool WallObject => _bWallObject;
+        protected ObjectPlacementEnum _ePlacement;
 
         protected KeyValuePair<int, int> _kvpDrop; //itemID, # of items dropped
 
@@ -83,7 +82,6 @@ namespace RiverHollow.WorldObjects
             Tiles = new List<RHTile>();
 
             _iID = id;
-            _bWallObject = false;
         }
 
         public WorldObject(int id, Dictionary<string, string> stringData) : this(id)
@@ -106,7 +104,7 @@ namespace RiverHollow.WorldObjects
             _rBase = Util.FloatRectangle(baseOffset, baseSize);
 
             Util.AssignValue(ref _eObjectType, "Type", stringData);
-            Util.AssignValue(ref _bWallObject, "WallObject", stringData);
+            Util.AssignValue(ref _ePlacement, "Placement", stringData);
 
             Util.AssignValue(ref _bMovable, "Movable", stringData);
             Util.AssignValue(ref _bMoveOnce, "MoveOnce", stringData);
@@ -351,6 +349,9 @@ namespace RiverHollow.WorldObjects
 
             return rv;
         }
+
+        public bool WallObject() { return _ePlacement == ObjectPlacementEnum.Wall; }
+        public bool FlooringObject() { return _ePlacement == ObjectPlacementEnum.Floor; }
 
         public virtual bool CanPickUp() { return false; }
 

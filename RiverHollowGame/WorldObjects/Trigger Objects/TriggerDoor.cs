@@ -22,14 +22,28 @@ namespace RiverHollow.WorldObjects
         {
             if (TriggerMatches(name))
             {
-                if (!string.IsNullOrEmpty(_sOutTrigger))
+                if (!_bHasBeenTriggered)
                 {
-                    if (CurrentMap.IsDungeon) { DungeonManager.ActivateTrigger(_sOutTrigger); }
-                    else { GameManager.ActivateTriggers(_sOutTrigger); }
+                    if (!string.IsNullOrEmpty(_sOutTrigger))
+                    {
+                        if (CurrentMap.IsDungeon) { DungeonManager.ActivateTrigger(_sOutTrigger); }
+                        else { GameManager.ActivateTriggers(_sOutTrigger); }
+                    }
+                    _bHasBeenTriggered = true;
+                    _bWalkable = true;
+                    _bVisible = false;
                 }
-                _bHasBeenTriggered = true;
-                _bWalkable = true;
-                _bVisible = false;
+                else
+                {
+                    if (!string.IsNullOrEmpty(_sOutTrigger))
+                    {
+                        if (CurrentMap.IsDungeon) { DungeonManager.ActivateTrigger(_sOutTrigger); }
+                        else { GameManager.ActivateTriggers(_sOutTrigger); }
+                    }
+                    _bHasBeenTriggered = false;
+                    _bWalkable = false;
+                    _bVisible = true;
+                }
             }
         }
 

@@ -1968,7 +1968,7 @@ namespace RiverHollow.Map_Handling
                     rv = true;
                 }
             }
-            else if (obj.WallObject)
+            else if (obj.WallObject())
             {
                 rv = (testTile.WorldObject == null && testTile.IsWallpaperWall);
             }

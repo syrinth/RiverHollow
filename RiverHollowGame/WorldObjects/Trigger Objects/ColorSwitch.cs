@@ -27,7 +27,7 @@ namespace RiverHollow.WorldObjects.Trigger_Objects
 
         public override void FireTrigger()
         {
-            if (CanTrigger())
+            if (UpdateTriggerNumber())
             {
                 FlipColor();
 
