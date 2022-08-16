@@ -9,7 +9,7 @@ namespace RiverHollow.WorldObjects.Trigger_Objects
     class FloorSwitch : Trigger
     {
         private bool _bHoldDown = false;
-        private WorldObject _objOnMe;
+        private WorldObject _trackedObject;
 
         public FloorSwitch(int id, Dictionary<string, string> dataString) : base(id, dataString) {
             _bDrawUnder = true;
@@ -47,8 +47,21 @@ namespace RiverHollow.WorldObjects.Trigger_Objects
 
         private bool HeldDown()
         {
-            if (_objOnMe == null) { _objOnMe = Tiles[0].WorldObject; }
-            return CollisionBox.Contains(PlayerManager.PlayerActor.CollisionCenter) || (_objOnMe != null && CollisionBox.Contains(_objOnMe.CollisionCenter));
+            //We normally will be pushing objects onto switches, but we might create an object directly on top of one, which needs to be tracked as well.
+            if (_trackedObject == null)
+            {
+                if (PlayerManager.GrabbedObject != null)
+                {
+                    _trackedObject = PlayerManager.GrabbedObject;
+                }
+                else
+                {
+                    _trackedObject = Tiles[0].WorldObject;
+                }
+            }
+            else if (!CollisionBox.Contains(_trackedObject.CollisionCenter)) { _trackedObject = null; }
+
+            return CollisionBox.Contains(PlayerManager.PlayerActor.CollisionCenter) || (_trackedObject != null && CollisionBox.Contains(_trackedObject.CollisionCenter));
         }
 
         public override void ProcessLeftClick() { }
