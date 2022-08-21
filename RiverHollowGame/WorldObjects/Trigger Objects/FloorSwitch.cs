@@ -8,6 +8,7 @@ namespace RiverHollow.WorldObjects.Trigger_Objects
 {
     class FloorSwitch : Trigger
     {
+        private bool _bOnlyOnce = false;
         private bool _bHoldDown = false;
         private WorldObject _trackedObject;
 
@@ -18,11 +19,14 @@ namespace RiverHollow.WorldObjects.Trigger_Objects
             _ePlacement = ObjectPlacementEnum.Floor;
 
             Util.AssignValue(ref _bHoldDown, "HoldDown", dataString);
+            Util.AssignValue(ref _bOnlyOnce, "OnlyOnce", dataString);
         }
 
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
+
+            if(_bHasBeenTriggered && _bOnlyOnce) { return; }
 
             if (_bHoldDown)
             {
