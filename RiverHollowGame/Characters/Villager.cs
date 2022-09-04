@@ -712,7 +712,7 @@ namespace RiverHollow.Characters
 
                 RHMap houseMap = PlayerManager.GetTownObjectsByID(houseID)[0].CurrentMap;
                 List<RHTile> validTiles = new List<RHTile>();
-                List<RHTile> houseTiles = houseMap.GetTilesFromGridAlignedRectangle(PlayerManager.GetTownObjectsByID(houseID)[0].CollisionBox);
+                List<RHTile> houseTiles = houseMap.GetTilesFromRectangleExcludeEdgePoints(PlayerManager.GetTownObjectsByID(houseID)[0].CollisionBox);
 
                 for (int i = 0; i < houseTiles.Count; i++) {
                     foreach (RHTile t in houseMap.GetAllTilesInRange(houseTiles[i], 10))
@@ -725,7 +725,7 @@ namespace RiverHollow.Characters
                 for (int i = 0; i < PlayerManager.GetTownObjectsByID(ObjectID).Count; i++)
                 {
                     WorldObject obj = PlayerManager.GetTownObjectsByID(ObjectID)[i];
-                    List<RHTile> objTiles = houseMap.GetTilesFromGridAlignedRectangle(obj.CollisionBox);
+                    List<RHTile> objTiles = houseMap.GetTilesFromRectangleExcludeEdgePoints(obj.CollisionBox);
 
                     List<RHTile> inRange = objTiles.FindAll(o => validTiles.Contains(o));
                     switch (RequestRange)

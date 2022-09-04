@@ -416,23 +416,8 @@ namespace RiverHollow.Game_Managers
             WorldActor c = GetActor(characterID);
             if (c.MoveToLocation == Vector2.Zero)
             {
-                Vector2 vec = Vector2.Zero;
-                switch (dir)
-                {
-                    case DirectionEnum.Up:
-                        vec = new Vector2(0, -numSquares * Constants.TILE_SIZE);
-                        break;
-                    case DirectionEnum.Down:
-                        vec = new Vector2(0, numSquares * Constants.TILE_SIZE);
-                        break;
-                    case DirectionEnum.Right:
-                        vec = new Vector2(numSquares * Constants.TILE_SIZE, 0);
-                        break;
-                    case DirectionEnum.Left:
-                        vec = new Vector2(-numSquares * Constants.TILE_SIZE, 0);
-                        break;
-
-                }
+                Vector2 vec = Util.GetVectorFromDirection(dir) * numSquares * Constants.TILE_SIZE;
+                
                 c.SetMoveTo(c.Position + vec);
                 if (!_liMoving.Contains(c))
                 {

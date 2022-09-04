@@ -11,19 +11,16 @@ namespace RiverHollow.GUIComponents.GUIObjects
     public class GUIItemBox : GUIImage
     {
         public static Rectangle RECT_IMG = new Rectangle(240, 0, 20, 20);
-        static Rectangle RECT_SELECT_IMG = new Rectangle(260, 0, 20, 20);
         public Item BoxItem => _guiItem?.ItemObject;
         GUIItem _guiItem;
 
         public bool DrawNum = true;
 
-        GUIImage _gSelected = new GUIImage(RECT_SELECT_IMG, ScaleIt(RECT_SELECT_IMG.Width), ScaleIt(RECT_SELECT_IMG.Height), DataManager.DIALOGUE_TEXTURE);
-
         bool _bSelected = false;
         public int Columns { get; }
         public int Rows { get; }
 
-        public GUIItemBox(Rectangle r): base(r, ScaleIt(r.Width), ScaleIt(r.Height), DataManager.COMBAT_TEXTURE) { }
+        public GUIItemBox(Rectangle r) : base(r, ScaleIt(r.Width), ScaleIt(r.Height), DataManager.COMBAT_TEXTURE) { }
 
         public GUIItemBox(Item it = null) : base(RECT_IMG, ScaleIt(RECT_IMG.Width), ScaleIt(RECT_IMG.Height), DataManager.DIALOGUE_TEXTURE)
         {
@@ -40,15 +37,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public GUIItemBox(string texture, Item item, bool crafting = false) : this(0, 0, texture, item)
         {
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-            if (_bSelected)
-            {
-                _gSelected.Draw(spriteBatch);
-            }
         }
 
         public override void Update(GameTime gTime)
@@ -106,18 +94,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _guiItem?.SetColor(c);
         }
 
-        public void Select(bool val)
-        {
-            _bSelected = val;
-        }
-
         public void SetAlpha(float val)
         {
             Alpha(val);
-            if (_gSelected != null)
-            {
-                _gSelected.Alpha(val);
-            }
             SetItemAlpha(val);
         }
         public void SetItemAlpha(float val)

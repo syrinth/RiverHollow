@@ -21,6 +21,7 @@ namespace RiverHollow.Items
             _bStacks = false;
         }
 
+        public override bool HasUse() { return true; }
         public override bool ItemBeingUsed()
         {
             GameManager.SetSelectedItem(this);

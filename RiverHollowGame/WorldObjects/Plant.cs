@@ -136,7 +136,7 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public void Harvest()
         {
-            if (NeededTool != ToolEnum.None) { PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool)); }
+            if (NeededTool != ToolEnum.None) { }// PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool)); }
             else
             {
                 Item it = null;

@@ -112,7 +112,7 @@ namespace RiverHollow.Map_Handling
                     //Do a string empty check to ensure that we don't overwrite a connected map
                     if (RHRandom.Instance().Next(1, 100) <= chancePerEntrance && string.IsNullOrEmpty(pt.LinkedMap))
                     {
-                        Vector2 newCoords = roomCoordinates + GetDirectionCoordinates(pt.Dir);
+                        Vector2 newCoords = roomCoordinates + Util.GetVectorFromDirection(pt.Dir);
                         if (AreCoordinatesValid(newCoords))
                         {
                             pointsToConnect.Add(pt);
@@ -126,7 +126,7 @@ namespace RiverHollow.Map_Handling
 
                     //Update the coordinates of the new room, relative to the coordinates of the room it is now attached to.
                     //This will overwrite if a room gets attached to multiple times, but they should all be in sync
-                    Vector2 newCoords = roomCoordinates + GetDirectionCoordinates(pt.Dir);
+                    Vector2 newCoords = roomCoordinates + Util.GetVectorFromDirection(pt.Dir);
                     if (dungeonMap[(int)newCoords.X, (int)newCoords.Y] != null) { room = dungeonMap[(int)newCoords.X, (int)newCoords.Y]; }
                     else
                     {
@@ -184,7 +184,7 @@ namespace RiverHollow.Map_Handling
                 TravelPoint point = rmInfo.Map.DictionaryTravelPoints.Values.ToList().Find(x => x.Dir == dirToConnectTo && x.LinkedMap == string.Empty);
 
                 //Ensure that the corresponding DungeonRoom location isn't occupied
-                Vector2 targetCoords = rmInfo.Coordinates + GetDirectionCoordinates(Util.GetOppositeDirection(dirToConnectTo));
+                Vector2 targetCoords = rmInfo.Coordinates + Util.GetVectorFromDirection(Util.GetOppositeDirection(dirToConnectTo));
                 if (point != null && AreCoordinatesValid(targetCoords) && arrDungeonMap[(int)targetCoords.X, (int)targetCoords.Y] != null)
                 {
                     ConnectMaps(terminalMap, rmInfo.Map, Util.GetOppositeDirection(dirToConnectTo));
@@ -206,33 +206,6 @@ namespace RiverHollow.Map_Handling
         private bool AreCoordinatesValid(Vector2 coordinates)
         {
             return coordinates.X > 0 && coordinates.X < DUNGEON_SIZE && coordinates.Y > 0 && coordinates.Y < DUNGEON_SIZE;
-        }
-
-        /// <summary>
-        /// Determines the Vector2 description of the direction
-        /// </summary>
-        /// <param name="dir">The DirectionEnum to translate</param>
-        /// <returns>TYhe Normalized Vector2</returns>
-        private Vector2 GetDirectionCoordinates(DirectionEnum dir)
-        {
-            Vector2 rv = Vector2.Zero;
-            switch (dir)
-            {
-                case DirectionEnum.Down:
-                    rv = new Vector2(0, 1);
-                    break;
-                case DirectionEnum.Up:
-                    rv = new Vector2(0, -1);
-                    break;
-                case DirectionEnum.Left:
-                    rv = new Vector2(-1, 0);
-                    break;
-                case DirectionEnum.Right:
-                    rv = new Vector2(1, 0);
-                    break;
-            }
-
-            return rv;
         }
 
         /// <summary>

@@ -59,6 +59,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GUIComponents\Screens\HUDScreens\HUDMiniInventory.cs" />
+    <Compile Include="Items\CapeOfBlinking.cs" />
+    <Compile Include="Items\IceStaff.cs" />
     <Compile Include="WorldObjects\Building.cs" />
     <Compile Include="Map Handling\Dungeon.cs" />
     <Compile Include="Map Handling\ProceduralDungeon.cs" />

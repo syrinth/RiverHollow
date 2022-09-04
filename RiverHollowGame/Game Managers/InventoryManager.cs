@@ -351,6 +351,7 @@ Exit:
             if (!rv && !itemToAdd.ManualPickup)
             {
                 DropItemOnMap(itemToAdd);
+                //Todo mail Tools to player
             }
             return rv;
         }

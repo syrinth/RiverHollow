@@ -4,7 +4,6 @@ using RiverHollow.Items;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
-using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.WorldObjects
 {
@@ -47,6 +46,9 @@ namespace RiverHollow.WorldObjects
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
+
+            //Destructibles move when hit, so reset position
+            _sprite.Position = _vMapPosition;
             if (_iHP <= 0)
             {
                 if (!_sprite.ContainsAnimation(AnimationEnum.KO) || _sprite.AnimationFinished(AnimationEnum.KO))

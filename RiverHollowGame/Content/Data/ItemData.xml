@@ -765,5 +765,13 @@
       <Key>190</Key>
       <Value>[Type:Special][Subtype:Task][Image:2-12]</Value>
     </Item>
+    <Item>
+      <Key>191</Key>
+      <Value>[Type:Tool][Subtype:StaffOfIce][Image:0-9]</Value>
+    </Item>
+    <Item>
+      <Key>192</Key>
+      <Value>[Type:Tool][Subtype:CapeOfBlinking][Image:0-10]</Value>
+    </Item>
   </Asset>
 </XnaContent>

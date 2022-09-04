@@ -774,7 +774,7 @@ namespace RiverHollow.Map_Handling
 
             foreach (TravelPoint tp in DictionaryTravelPoints.Values)
             {
-                List<RHTile> tiles = GetTilesFromGridAlignedRectangle(tp.CollisionBox);
+                List<RHTile> tiles = GetTilesFromRectangleExcludeEdgePoints(tp.CollisionBox);
                 for (int tileIndex = 0; tileIndex < tiles.Count; tileIndex++)
                 {
                     Util.AddUniquelyToList(ref skipTiles, tiles[tileIndex]);
@@ -987,7 +987,7 @@ namespace RiverHollow.Map_Handling
                 //Rectangles use ints for Location, cannot update a Rectangle's Location with floats
                 Rectangle testCollision = Util.FloatRectangle(rayPosition.X, rayPosition.Y, traveler.CollisionBox.Width, traveler.CollisionBox.Height);
                 bool passable = true;
-                List<RHTile> collisionTiles = GetTilesFromGridAlignedRectangle(testCollision);
+                List<RHTile> collisionTiles = GetTilesFromRectangleExcludeEdgePoints(testCollision);
                 for (int i = 0; i < collisionTiles.Count; i++)
                 {
                     if (!collisionTiles[i].Passable())
@@ -1409,23 +1409,36 @@ namespace RiverHollow.Map_Handling
                 {
                     if (GamePaused()) { return false; }
 
+                    Item i = InventoryManager.GetCurrentItem();
 
-                    if (TargetTile != null && TargetTile.PlayerIsAdjacent())
+                    if (i.HasUse())
                     {
-                        if (!TargetTile.Passable())
+                        PlayerManager.PlayerActor.DetermineFacing(MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition()));
+
+                        RHTile playerTile = GetTileByPixelPosition(PlayerManager.PlayerActor.CollisionCenter);
+                        TargetTile = playerTile.GetTileByDirection(PlayerManager.PlayerActor.Facing);
+
+                        i.ItemBeingUsed();
+                    }
+                    else
+                    {
+                        if (TargetTile != null && TargetTile.PlayerIsAdjacent())
                         {
-                            PlayerManager.GrabTile(TargetTile);
-                        }
-                        else
-                        {
-                            //Retrieves any object associated with the tile, this will include
-                            //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
-                            //as being on the tile.
-                            WorldObject obj = TargetTile.GetWorldObject(false);
-                            if (obj != null)
+                            if (!TargetTile.Passable())
                             {
-                                obj.ProcessLeftClick();
-                                rv = true;
+                                PlayerManager.GrabTile(TargetTile);
+                            }
+                            else
+                            {
+                                //Retrieves any object associated with the tile, this will include
+                                //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
+                                //as being on the tile.
+                                WorldObject obj = TargetTile.GetWorldObject(false);
+                                if (obj != null)
+                                {
+                                    obj.ProcessLeftClick();
+                                    rv = true;
+                                }
                             }
                         }
                     }
@@ -2229,7 +2242,7 @@ namespace RiverHollow.Map_Handling
         /// </summary>
         /// <param name="obj">The Rectangle to check against</param>
         /// <returns>A list of all RHTiles that exist in the Rectangle</returns>
-        public List<RHTile> GetTilesFromGridAlignedRectangle(Rectangle obj)
+        public List<RHTile> GetTilesFromRectangleExcludeEdgePoints(Rectangle obj)
         {
             List<RHTile> rvList = new List<RHTile>();
 

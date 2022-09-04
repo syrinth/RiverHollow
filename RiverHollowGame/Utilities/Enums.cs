@@ -27,7 +27,7 @@
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
         public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, Clothing, MonsterFood, NPCToken, Blueprint, Special };
-        public enum ToolEnum { None, Backpack, Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return, Scythe };
+        public enum ToolEnum { None, Backpack, CapeOfBlinking, Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return, Scythe, StaffOfIce };
         public enum SpecialItemEnum { None, Marriage, Class, Map, DungeonKey, Task };
         public enum GearTypeEnum { None, Accessory, Chest, Head, Weapon };
         public enum WeaponEnum { None, Spear, Shield, Rapier, Bow, Wand, Knife, Orb, Staff };

@@ -7,6 +7,7 @@
         public const double GAME_PLAYER_INVULN_TIME = 0.5;
         public const double MOB_STUN_TIME = 5;
         public const double WANDER_COUNTDOWN = 2.5;
+        public const double PUSH_COOLDOWN = 0.1;
 
         public const double COMBAT_DAMAGE_FLOAT_TIMER = 0.55;
         public const double COMBAT_STATUS_REFRESH_RATE = 3;

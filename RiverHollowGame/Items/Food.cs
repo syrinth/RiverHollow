@@ -34,6 +34,7 @@ namespace RiverHollow.Items
             return rv;
         }
 
+        public override bool HasUse() { return true; }
         public override bool ItemBeingUsed()
         {
             GameManager.SetSelectedItem(this);

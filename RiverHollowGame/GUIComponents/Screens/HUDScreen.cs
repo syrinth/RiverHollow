@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
@@ -16,7 +14,6 @@ using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.GUIComponents.Screens.HUDScreens;
-using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -62,8 +59,8 @@ namespace RiverHollow.GUIComponents.Screens
             AddControl(_gDungeonKeys);
 
             _gInventory = new HUDMiniInventory();
-            _gInventory.AnchorToScreen(SideEnum.Bottom);
-            //AddControl(_gInventory);
+            _gInventory.AnchorToScreen(SideEnum.Bottom, ScaleIt(2));
+            AddControl(_gInventory);
 
             _gCalendar = new HUDCalendar();
             _gCalendar.AnchorToScreen(SideEnum.TopRight, 10);
@@ -126,6 +123,8 @@ namespace RiverHollow.GUIComponents.Screens
                         else { CloseMenu(); }
                     }
                 }
+
+                if (InputManager.CheckPressedKey(Keys.D1)) { }
             }
         }
 
@@ -212,227 +211,6 @@ namespace RiverHollow.GUIComponents.Screens
         }
     }
 
-    public class HUDMiniInventory : GUIWindow
-    {
-        List<GUIItemBox> _liItems;
-        GUIButton _btnChangeRow;
-
-        bool _bFadeOutBar = true;
-        bool _bFadeItemsOut;
-        bool _bFadeItemsIn;
-        float _fBarFade;
-        float _fItemFade = 1.0f;
-        const float FADE_OUT = 0.1f;
-
-        public HUDMiniInventory() : base(GUIWindow.Window_2, Constants.TILE_SIZE, Constants.TILE_SIZE)
-        {
-            _btnChangeRow = new GUIButton(new Rectangle(256, 96, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, RowUp);
-            _btnChangeRow.FadeOnDisable(false);
-            _liItems = new List<GUIItemBox>();
-
-            for (int i = 0; i < InventoryManager.maxItemColumns; i++)
-            {
-                GUIItemBox ib = new GUIItemBox(InventoryManager.PlayerInventory[GameManager.HUDItemRow, i]);
-                _liItems.Add(ib);
-
-                if (i == 0) { ib.AnchorToInnerSide(this, SideEnum.TopLeft); }
-                else { ib.AnchorAndAlignToObject(_liItems[i - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
-
-                ib.SetAlpha(_fBarFade);
-            }
-
-            _liItems[GameManager.HUDItemCol].Select(true);
-            Resize();
-
-            _btnChangeRow.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.CenterY);
-            AddControl(_btnChangeRow);
-
-            _fBarFade = GameManager.HideMiniInventory ? FADE_OUT : 1.0f;
-            Alpha(_fBarFade);
-        }
-
-        public override void Update(GameTime gTime)
-        {
-            if (Show())
-            {
-                base.Update(gTime);
-                float startFade = _fBarFade;
-                if (_bFadeOutBar && GameManager.HideMiniInventory)
-                {
-                    if (_fBarFade - FADE_OUT > FADE_OUT) { _fBarFade -= FADE_OUT; }
-                    else
-                    {
-                        _fBarFade = FADE_OUT;
-                    }
-                }
-                else
-                {
-                    if (_fBarFade < 1)
-                    {
-                        _fBarFade += FADE_OUT;
-                    }
-
-                    UpdateItemFade(gTime);
-
-                }
-                if (startFade != _fBarFade)
-                {
-                    Alpha(_fBarFade);
-
-                    foreach (GUIItemBox gib in _liItems)
-                    {
-                        gib.SetAlpha(Alpha());
-                    }
-                    _btnChangeRow.Alpha(Alpha());
-                }
-            }
-
-            for (int i = 0; i < _liItems.Count; i++)
-            {
-                _liItems[i].SetItem(InventoryManager.PlayerInventory[GameManager.HUDItemRow, i]);
-                _liItems[i].SetAlpha(Alpha());
-            }
-        }
-
-        /// <summary>
-        /// Handles the fading in and out of Items for when we switch rows
-        /// </summary>
-        /// <param name="gTime"></param>
-        private void UpdateItemFade(GameTime gTime)
-        {
-            if (_bFadeItemsOut)
-            {
-                float currFade = _fItemFade;
-                if (currFade - FADE_OUT > FADE_OUT)
-                {
-                    _fItemFade -= FADE_OUT;
-                    foreach (GUIItemBox gib in _liItems)
-                    {
-                        gib.SetItemAlpha(_fItemFade);
-                    }
-                }
-                else
-                {
-                    currFade = FADE_OUT;
-                    _bFadeItemsOut = false;
-                    _bFadeItemsIn = true;
-                    SyncItems();
-                }
-            }
-            if (_bFadeItemsIn)
-            {
-                float currFade = _fItemFade;
-                if (currFade < 1)
-                {
-                    _fItemFade += FADE_OUT;
-                }
-                else
-                {
-                    _bFadeItemsIn = false;
-                }
-
-                foreach (GUIItemBox gib in _liItems)
-                {
-                    gib.SetItemAlpha(_fItemFade);
-                }
-            }
-        }
-
-        public override bool Contains(Point mouse)
-        {
-            return base.Contains(mouse) || _btnChangeRow.Contains(mouse);
-        }
-
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-
-            if (!GameManager.GamePaused() && Contains(mouse))
-            {
-                rv = true;
-
-                foreach (GUIItemBox gib in _liItems)
-                {
-                    if (gib.Contains(mouse))
-                    {
-                        _liItems[GameManager.HUDItemCol].Select(false);
-                        GameManager.HUDItemCol = _liItems.IndexOf(gib);
-                        _liItems[GameManager.HUDItemCol].Select(true);
-                        break;
-                    }
-                }
-
-                _btnChangeRow.ProcessLeftButtonClick(mouse);
-            }
-
-            return rv;
-        }
-
-        public override bool ProcessRightButtonClick(Point mouse)
-        {
-            bool rv = false;
-
-            if (!GameManager.GamePaused() && Contains(mouse))
-            {
-                rv = true;
-
-                foreach (GUIItemBox gib in _liItems)
-                {
-                    rv = gib.ProcessRightButtonClick(mouse);
-                    if (rv)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            return rv;
-        }
-
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
-            if (!GameManager.GamePaused())
-            {
-                if (Contains(mouse) && Alpha() != 1)
-                {
-                    rv = true;
-                    _bFadeOutBar = false;
-                }
-                else if (!Contains(mouse) && GameManager.HideMiniInventory && Alpha() != 0.1f)
-                {
-                    _bFadeOutBar = true;
-                }
-            }
-
-            return rv;
-        }
-
-        public void RowUp()
-        {
-            if (GameManager.HUDItemRow < PlayerManager.BackpackLevel - 1)
-            {
-                GameManager.HUDItemRow++;
-            }
-            else
-            {
-                GameManager.HUDItemRow = 0;
-            }
-
-            _bFadeItemsOut = true;
-            _bFadeItemsIn = false;
-        }
-
-        public void SyncItems()
-        {
-            for (int i = 0; i < _liItems.Count; i++)
-            {
-                GUIItemBox ib = _liItems[i];
-                ib.SetItem(InventoryManager.PlayerInventory[GameManager.HUDItemRow, i]);
-            }
-        }
-    }
-
     public class HUDMenu : GUIObject
     {
         const int BTN_PADDING = 10;
@@ -509,16 +287,17 @@ namespace RiverHollow.GUIComponents.Screens
         }
         public void BtnInventory()
         {
-            Item[,] toolBox = new Item[1, 7];
-            toolBox[0, 0] = PlayerManager.RetrieveTool(ToolEnum.Axe);
-            toolBox[0, 1] = PlayerManager.RetrieveTool(ToolEnum.Pick);
-            toolBox[0, 2] = PlayerManager.RetrieveTool(ToolEnum.WateringCan);
-            toolBox[0, 3] = PlayerManager.RetrieveTool(ToolEnum.Scythe);
-            toolBox[0, 4] = PlayerManager.RetrieveTool(ToolEnum.Lantern);
-            toolBox[0, 5] = PlayerManager.RetrieveTool(ToolEnum.Harp);
-            toolBox[0, 6] = PlayerManager.RetrieveTool(ToolEnum.Backpack);
+            Item[,] toolBox = new Item[1, 1];
+            //toolBox[0, 0] = PlayerManager.RetrieveTool(ToolEnum.Axe);
+            //toolBox[0, 1] = PlayerManager.RetrieveTool(ToolEnum.Pick);
+            //toolBox[0, 2] = PlayerManager.RetrieveTool(ToolEnum.WateringCan);
+            //toolBox[0, 3] = PlayerManager.RetrieveTool(ToolEnum.Scythe);
+            //toolBox[0, 4] = PlayerManager.RetrieveTool(ToolEnum.Lantern);
+            //toolBox[0, 5] = PlayerManager.RetrieveTool(ToolEnum.Harp);
+            toolBox[0, 0] = PlayerManager.RetrieveTool(ToolEnum.Backpack);
 
             _gMenuObject = new HUDInventoryDisplay(toolBox, DisplayTypeEnum.Inventory, true);
+            //_gMenuObject = new HUDInventoryDisplay();
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
         }

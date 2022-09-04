@@ -1362,6 +1362,14 @@
       <Value>[Name:Yulia's Recipes][Description:]</Value>
     </Item>
     <Item>
+      <Key>Item_191</Key>
+      <Value>[Name:Staff of Ice][Description:]</Value>
+    </Item>
+    <Item>
+      <Key>Item_192</Key>
+      <Value>[Name:Cape of Blink][Description:]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_0</Key>
       <Value>[Name:Beehive]</Value>
     </Item>

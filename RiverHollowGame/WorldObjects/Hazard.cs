@@ -69,25 +69,9 @@ namespace RiverHollow.WorldObjects
                 }
                 else
                 {
-                    switch (_eMoveDir)
-                    {
-                        case DirectionEnum.Down:
-                            _sprite.Position += new Vector2(0, 2);
-                            _vMapPosition += new Vector2(0, 2);
-                            break;
-                        case DirectionEnum.Left:
-                            _sprite.Position += new Vector2(-2, 0);
-                            _vMapPosition += new Vector2(-2, 0);
-                            break;
-                        case DirectionEnum.Up:
-                            _sprite.Position += new Vector2(0, -2);
-                            _vMapPosition += new Vector2(0, -2);
-                            break;
-                        case DirectionEnum.Right:
-                            _sprite.Position += new Vector2(2, 0);
-                            _vMapPosition += new Vector2(2, 0);
-                            break;
-                    }
+                    Vector2 vec = Util.GetVectorFromDirection(_eMoveDir);
+                    _sprite.Position += vec * 2;
+                    _vMapPosition += vec * 2;
                 }
             }
 

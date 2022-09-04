@@ -668,6 +668,22 @@ namespace RiverHollow.Utilities
 
             return rv;
         }
+        public static Vector2 GetVectorFromDirection(DirectionEnum e)
+        {
+            switch (e)
+            {
+                case DirectionEnum.Down:
+                    return new Vector2(0, 1);
+                case DirectionEnum.Left:
+                    return new Vector2(-1, 0);
+                case DirectionEnum.Right:
+                    return new Vector2(1, 0);
+                case DirectionEnum.Up:
+                    return new Vector2(0, -1);
+                default:
+                    return Vector2.Zero;
+            }
+        }
     }
 
     public class RHRandom : Random

@@ -6,7 +6,6 @@ using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Items
@@ -93,10 +92,15 @@ namespace RiverHollow.Items
 
         public override bool AddToInventoryTrigger()
         {
-            PlayerManager.AddTool(this);
-            return true;
+            if (ToolType == ToolEnum.Backpack)
+            {
+                PlayerManager.AddTool(this);
+                return true;
+            }
+            else { return false; }
         }
 
+        public override bool HasUse() { return true; }
         public override bool ItemBeingUsed()
         {
             GameManager.SetSelectedItem(this);
@@ -121,6 +125,10 @@ namespace RiverHollow.Items
                     entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_No_Dungeon"), Name());
                 }
                 ConfirmItemUse(entry);
+            }
+            else
+            {
+                PlayerManager.SetTool(this);
             }
 
             return true;

@@ -399,7 +399,15 @@ namespace RiverHollow.Game_Managers
                         }
                         break;
                     case ItemEnum.Tool:
-                        return new Tool(id, diData);
+                        switch (Util.ParseEnum<ToolEnum>(diData["Subtype"]))
+                        {
+                            case ToolEnum.StaffOfIce:
+                                return new IceStaff(id, diData);
+                            case ToolEnum.CapeOfBlinking:
+                                return new CapeOfBlinking(id, diData);
+                            default:
+                                return new Tool(id, diData);
+                        }
                 }
             }
             return null;

@@ -232,6 +232,7 @@ namespace RiverHollow.Items
             }
         }
         public virtual bool ItemBeingUsed() { return false; }
+        public virtual bool HasUse() { return false; }
         public virtual void UseItem(TextEntryVerbEnum action) { }
 
         public virtual void ApplyUniqueData(string str) { }
