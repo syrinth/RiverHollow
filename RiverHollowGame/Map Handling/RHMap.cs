@@ -1411,7 +1411,7 @@ namespace RiverHollow.Map_Handling
 
                     Item i = InventoryManager.GetCurrentItem();
 
-                    if (i.HasUse())
+                    if (i != null && i.HasUse())
                     {
                         PlayerManager.PlayerActor.DetermineFacing(MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition()));
 
@@ -1424,21 +1424,19 @@ namespace RiverHollow.Map_Handling
                     {
                         if (TargetTile != null && TargetTile.PlayerIsAdjacent())
                         {
-                            if (!TargetTile.Passable())
+                            //Retrieves any object associated with the tile, this will include
+                            //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
+                            //as being on the tile.
+                            WorldObject obj = TargetTile.GetWorldObject(false);
+                            if (obj != null)
+                            {
+                                obj.ProcessLeftClick();
+                                rv = true;
+                            }
+
+                            if(!rv && !TargetTile.Passable())
                             {
                                 PlayerManager.GrabTile(TargetTile);
-                            }
-                            else
-                            {
-                                //Retrieves any object associated with the tile, this will include
-                                //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
-                                //as being on the tile.
-                                WorldObject obj = TargetTile.GetWorldObject(false);
-                                if (obj != null)
-                                {
-                                    obj.ProcessLeftClick();
-                                    rv = true;
-                                }
                             }
                         }
                     }
@@ -2290,50 +2288,14 @@ namespace RiverHollow.Map_Handling
             MapData mapData = new MapData
             {
                 mapName = this.Name,
-                worldObjects = new List<WorldObjectData>(),
-                decor = new List<DecorData>(),
-                containers = new List<ContainerData>(),
-                machines = new List<MachineData>(),
-                plants = new List<PlantData>(),
-                gardens = new List<GardenData>(),
-                beehives = new List<BeehiveData>(),
-                warpPoints = new List<WarpPointData>()
+                worldObjects = new List<WorldObjectData>()
             };
 
-            foreach (WorldObject wObj in _liPlacedWorldObjects)
+            if (!IsDungeon)
             {
-                switch (wObj.Type)
+                foreach (WorldObject wObj in _liPlacedWorldObjects)
                 {
-                    case ObjectTypeEnum.Beehive:
-                        mapData.beehives.Add(((Beehive)wObj).SaveData());
-                        break;
-                    case ObjectTypeEnum.Decor:
-                        mapData.decor.Add(((Decor)wObj).SaveData());
-                        break;
-                    case ObjectTypeEnum.Container:
-                        mapData.containers.Add(((Container)wObj).SaveData());
-                        break;
-                    case ObjectTypeEnum.Garden:
-                        mapData.gardens.Add(((Garden)wObj).SaveData());
-                        break;
-                    case ObjectTypeEnum.Machine:
-                        mapData.machines.Add(((Machine)wObj).SaveData());
-                        break;
-                    case ObjectTypeEnum.Plant:
-                        mapData.plants.Add(((Plant)wObj).SaveData());
-                        break;
-                    case ObjectTypeEnum.WarpPoint:
-                        mapData.warpPoints.Add(((WarpPoint)wObj).SaveData());
-                        break;
-                    default:
-                        WorldObjectData d = new WorldObjectData
-                        {
-                            worldObjectID = wObj.ID,
-                            x = (int)wObj.CollisionBox.X,
-                            y = (int)wObj.CollisionBox.Y
-                        };
-                        mapData.worldObjects.Add(d);
-                        break;
+                    mapData.worldObjects.Add(wObj.SaveData());
                 }
             }
 
@@ -2341,60 +2303,18 @@ namespace RiverHollow.Map_Handling
         }
         internal void LoadData(MapData mData)
         {
-            foreach (WorldObjectData w in mData.worldObjects)
+            foreach (WorldObjectData data in mData.worldObjects)
             {
-                WorldObject obj = DataManager.CreateWorldObjectByID(w.worldObjectID);
-                obj?.PlaceOnMap(new Vector2(w.x, w.y), this);
-                if (obj != null && this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
-            }
+                WorldObject obj = DataManager.CreateWorldObjectByID(data.ID);
+                if (obj != null)
+                {
+                    obj.LoadData(data);
+                    obj.PlaceOnMap(this);
+                    if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
+                }
 
-            foreach (DecorData d in mData.decor)
-            {
-                Decor obj = (Decor)DataManager.CreateWorldObjectByID(d.ID);
-                obj.LoadData(d);
-                obj.PlaceOnMap(this);
-                if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
-            }
-            foreach (ContainerData c in mData.containers)
-            {
-                Container obj = (Container)DataManager.CreateWorldObjectByID(c.containerID);
-                obj.LoadData(c);
-                obj.PlaceOnMap(this);
-                if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
-            }
-            foreach (MachineData mac in mData.machines)
-            {
-                Machine obj = (Machine)DataManager.CreateWorldObjectByID(mac.ID);
-                obj.LoadData(mac);
-                obj.PlaceOnMap(this);
-                if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
-            }
-            foreach (PlantData plantData in mData.plants)
-            {
-                Plant plant = (Plant)DataManager.CreateWorldObjectByID(plantData.ID);
-                plant.LoadData(plantData);
-                plant.PlaceOnMap(this);
-            }
-            foreach (GardenData gardenData in mData.gardens)
-            {
-                Garden obj = (Garden)DataManager.CreateWorldObjectByID(gardenData.ID);
-                obj.LoadData(gardenData);
-                obj.PlaceOnMap(this);
-                if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
-            }
-            foreach (BeehiveData data in mData.beehives)
-            {
-                Beehive obj = (Beehive)DataManager.CreateWorldObjectByID(data.ID);
-                obj.LoadData(data);
-                obj.PlaceOnMap(this);
-                if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
-            }
-            foreach (WarpPointData warpData in mData.warpPoints)
-            {
-                WarpPoint obj = (WarpPoint)DataManager.CreateWorldObjectByID(warpData.ID);
-                obj.LoadData(warpData);
-                obj.PlaceOnMap(this);
-                if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
+                //obj?.PlaceOnMap(new Vector2(w.x, w.y), this);
+                //if (obj != null && this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
             }
         }
     }

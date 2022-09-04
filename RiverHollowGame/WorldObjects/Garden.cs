@@ -165,30 +165,39 @@ namespace RiverHollow.WorldObjects
 
         }
 
-        public GardenData SaveData()
+        public override WorldObjectData SaveData()
         {
-            GardenData g = new GardenData
-            {
-                ID = this.ID,
-                x = (int)this.MapPosition.X,
-                y = (int)this.MapPosition.Y
-            };
+            WorldObjectData data = base.SaveData();
 
-            if (_objPlant != null) { g.plantData = _objPlant.SaveData(); }
-            else { g.plantData = new PlantData { ID = -1 }; };
+            if (_objPlant != null) {
+                WorldObjectData pData = _objPlant.SaveData();
+                string str = string.Empty;
+                str += pData.ID + "-";
+                str += pData.X + "-";
+                str += pData.Y + "-";
+                str += pData.stringData;
+                data.stringData += str + "|";
+            }
+            else { data.stringData = string.Empty; };
 
-            return g;
+            return data;
         }
 
-        public void LoadData(GardenData garden)
+        public override void LoadData(WorldObjectData data)
         {
-            _iID = garden.ID;
-            SnapPositionToGrid(new Vector2(garden.x, garden.y));
+            base.LoadData(data);
 
-            if (garden.plantData.ID != -1)
+            if (!string.IsNullOrEmpty(data.stringData))
             {
-                _objPlant = (Plant)DataManager.CreateWorldObjectByID(garden.plantData.ID);
-                _objPlant.LoadData(garden.plantData);
+                string[] strData = Util.FindArguments(data.stringData);
+                WorldObjectData pData = new WorldObjectData();
+                pData.ID = int.Parse(strData[0]);
+                pData.X = int.Parse(strData[1]);
+                pData.Y = int.Parse(strData[2]);
+                pData.stringData = strData[3];
+
+                _objPlant = (Plant)DataManager.CreateWorldObjectByID(pData.ID);
+                _objPlant.LoadData(pData);
 
                 SetPlant(_objPlant);
             }

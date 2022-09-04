@@ -8,7 +8,6 @@ using RiverHollow.Characters;
 using RiverHollow.WorldObjects;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
-using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Characters.Lite;
 using RiverHollow.Items;
 using RiverHollow.Misc;

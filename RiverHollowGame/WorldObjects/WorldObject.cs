@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 using System;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.WorldObjects
 {
@@ -391,5 +392,24 @@ namespace RiverHollow.WorldObjects
             _vMapPosition += direction;
             _sprite.Position += direction;
         }
+
+        #region Save Handlers
+        public virtual WorldObjectData SaveData()
+        {
+            WorldObjectData data = new WorldObjectData
+            {
+                ID = ID,
+                X = CollisionBox.X,
+                Y = CollisionBox.Y
+            };
+
+            return data;
+        }
+        public virtual void LoadData(WorldObjectData data)
+        {
+            _iID = data.ID;
+            SnapPositionToGrid(new Vector2(data.X, data.Y));
+        }
+        #endregion
     }
 }

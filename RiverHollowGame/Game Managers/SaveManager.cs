@@ -1,15 +1,14 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using RiverHollow.Characters;
+using RiverHollow.GUIComponents.Screens;
+using RiverHollow.Map_Handling;
+using RiverHollow.Misc;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Xml.Serialization;
-using Microsoft.Xna.Framework;
-using RiverHollow.Characters;
-using RiverHollow.GUIComponents.Screens;
-using RiverHollow.Misc;
-using RiverHollow.Map_Handling;
-
 using System.Threading;
+using System.Xml.Serialization;
 using static RiverHollow.Misc.RHTask;
 
 namespace RiverHollow.Game_Managers
@@ -304,28 +303,6 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "WorldObjects")]
             public List<WorldObjectData> worldObjects;
-
-            [XmlArray(ElementName = "Buildables")]
-            public List<DecorData> decor;
-
-            [XmlArray(ElementName = "Containers")]
-            public List<ContainerData> containers;
-
-            [XmlArray(ElementName = "Machines")]
-            public List<MachineData> machines;
-
-            [XmlArray(ElementName = "Plants")]
-            public List<PlantData> plants;
-
-            [XmlArray(ElementName = "Gardens")]
-            public List<GardenData> gardens;
-
-            [XmlArray(ElementName = "Beehives")]
-            public List<BeehiveData> beehives;
-
-            [XmlArray(ElementName = "WarpPoints")]
-            public List<WarpPointData> warpPoints;
-
         }
         public struct VillagerData
         {
@@ -401,37 +378,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Given")]
             public bool given;
         }
-        public struct WorldObjectData
-        {
-            [XmlElement(ElementName = "WorldObjectID")]
-            public int worldObjectID;
-
-            [XmlElement(ElementName = "X")]
-            public int x;
-
-            [XmlElement(ElementName = "Y")]
-            public int y;
-        }
-        public struct DecorData
-        {
-            [XmlElement(ElementName = "WorldObjectID")]
-            public int ID;
-
-            [XmlElement(ElementName = "X")]
-            public int x;
-
-            [XmlElement(ElementName = "Y")]
-            public int y;
-
-            [XmlElement(ElementName = "Facing")]
-            public int dir;
-
-            [XmlElement(ElementName = "ObjDisplayID")]
-            public int objDisplayID;
-
-            [XmlElement(ElementName = "ItemDisplayID")]
-            public int itemDisplayID;
-        }
         public struct RHTileData
         {
             [XmlElement(ElementName = "X")]
@@ -443,122 +389,21 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "WorldObject")]
             public WorldObjectData worldObject;
         }
-        public struct PlantData
+        public struct WorldObjectData
         {
-            [XmlElement(ElementName = "PlantID")]
+            [XmlElement(ElementName = "WorldObjectID")]
             public int ID;
 
             [XmlElement(ElementName = "X")]
-            public int x;
+            public int X;
 
             [XmlElement(ElementName = "Y")]
-            public int y;
+            public int Y;
 
-            [XmlElement(ElementName = "currentState")]
-            public int currentState;
-
-            [XmlElement(ElementName = "daysLeft")]
-            public int daysLeft;
+            [XmlElement(ElementName = "TypeData")]
+            public string stringData;
         }
-        public struct ContainerData
-        {
-            [XmlElement(ElementName = "ContainerID")]
-            public int containerID;
 
-            [XmlElement(ElementName = "X")]
-            public int x;
-
-            [XmlElement(ElementName = "Y")]
-            public int y;
-
-            [XmlElement(ElementName = "Rows")]
-            public int rows;
-
-            [XmlElement(ElementName = "Columns")]
-            public int cols;
-
-            [XmlArray(ElementName = "Items")]
-            public List<ItemData> Items;
-        }
-        public struct MachineData
-        {
-            [XmlElement(ElementName = "MachineID")]
-            public int ID;
-
-            [XmlElement(ElementName = "X")]
-            public int x;
-
-            [XmlElement(ElementName = "Y")]
-            public int y;
-
-            [XmlElement(ElementName = "ProcessedTime")]
-            public double processedTime;
-
-            [XmlElement(ElementName = "ProcessingItemID")]
-            public int currentItemID;
-
-            [XmlElement(ElementName = "HeldItemID")]
-            public int heldItemID;
-        }
-        public struct WarpPointData
-        {
-            [XmlElement(ElementName = "WarpPointID")]
-            public int ID;
-
-            [XmlElement(ElementName = "X")]
-            public int x;
-
-            [XmlElement(ElementName = "Y")]
-            public int y;
-
-            [XmlElement(ElementName = "Active")]
-            public bool active;
-        }
-        public struct FloorData
-        {
-            [XmlElement(ElementName = "FloorID")]
-            public int ID;
-
-            [XmlElement(ElementName = "X")]
-            public int x;
-
-            [XmlElement(ElementName = "Y")]
-            public int y;
-        }
-        public struct GardenData
-        {
-            [XmlElement(ElementName = "GardenID")]
-            public int ID;
-
-            [XmlElement(ElementName = "X")]
-            public int x;
-
-            [XmlElement(ElementName = "Y")]
-            public int y;
-
-            [XmlElement(ElementName = "Plantdata")]
-            public PlantData plantData;
-        }
-        public struct BeehiveData
-        {
-            [XmlElement(ElementName = "BeehiveID")]
-            public int ID;
-
-            [XmlElement(ElementName = "X")]
-            public int x;
-
-            [XmlElement(ElementName = "Y")]
-            public int y;
-
-            [XmlElement(ElementName = "TimeLeft")]
-            public int timeLeft;
-
-            [XmlElement(ElementName = "Ready")]
-            public bool ready;
-
-            [XmlElement(ElementName = "HoneyType")]
-            public int honeyType;
-        }
         public struct ShopData
         {
             [XmlElement(ElementName = "ShopID")]

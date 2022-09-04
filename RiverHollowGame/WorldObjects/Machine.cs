@@ -169,25 +169,21 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
-        public MachineData SaveData()
+        public override WorldObjectData SaveData()
         {
-            MachineData m = new MachineData
-            {
-                ID = this.ID,
-                x = (int)this.MapPosition.X,
-                y = (int)this.MapPosition.Y,
-                processedTime = this._timer.TimerSpeed,
-                currentItemID = _iCurrentlyMaking
-            };
+            WorldObjectData data = base.SaveData();
+            data.stringData += (_timer != null ? _timer.TimerSpeed.ToString() : "null") + "|";
+            data.stringData += _iCurrentlyMaking;
 
-            return m;
+            return data;
         }
-        public void LoadData(MachineData mac)
+        public override void LoadData(WorldObjectData data)
         {
-            _iID = mac.ID;
-            SnapPositionToGrid(new Vector2(mac.x, mac.y));
-            _timer = new RHTimer(mac.processedTime);
-            _iCurrentlyMaking = mac.currentItemID;
+            base.LoadData(data);
+            string[] strData = Util.FindParams(data.stringData);
+
+            if (!strData[0].Equals("null")) { _timer = new RHTimer(int.Parse(strData[0])); }
+            _iCurrentlyMaking = int.Parse(strData[1]);
 
             // if (CurrentlyProcessing != null) { _sprite.PlayAnimation(CombatAnimationEnum.ObjectIdle); }
         }

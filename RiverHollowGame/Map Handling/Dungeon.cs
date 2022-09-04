@@ -67,5 +67,7 @@ namespace RiverHollow.Map_Handling
                 obj.AttemptToTrigger(triggerName);
             }
         }
+
+        public virtual void ResetDungeon() { }
     }
 }

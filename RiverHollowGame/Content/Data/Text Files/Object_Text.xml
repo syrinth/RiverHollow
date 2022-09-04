@@ -3,15 +3,15 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Task_0</Key>
-      <Value>[Name:Build a $WorldObject_40$][Description:$NPC_14$ want you to build a $WorldObject_40$]</Value>
+      <Value>[Name:Build a $WorldObject_39$][Description:$NPC_16$ want you to build a $WorldObject_39$]</Value>
     </Item>
     <Item>
       <Key>Task_1</Key>
-      <Value>[Name:Build a $WorldObject_108$][Description:$NPC_11$ want you to build a $WorldObject_108$]</Value>
+      <Value>[Name:Build a $WorldObject_112$][Description:$NPC_11$ want you to build a $WorldObject_112$]</Value>
     </Item>
     <Item>
       <Key>Task_2</Key>
-      <Value>[Name:Build a $WorldObject_26$][Description:$NPC_11$ want you to build a $WorldObject_26$]</Value>
+      <Value>[Name:Build a $WorldObject_25$][Description:$NPC_11$ want you to build a $WorldObject_25$]</Value>
     </Item>
     <Item>
       <Key>Task_3</Key>

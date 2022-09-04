@@ -293,28 +293,27 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        internal DecorData SaveData()
+        public override WorldObjectData SaveData()
         {
-            DecorData data = new DecorData
-            {
-                ID = _iID,
-                x = CollisionBox.X,
-                y = CollisionBox.Y,
-                dir = (int)_eFacingDir,
-                objDisplayID = _objDisplay == null ? -1 : _objDisplay.ID,
-                itemDisplayID = _itemDisplay == null ? -1 : _itemDisplay.ItemID,
-            };
+            WorldObjectData data = base.SaveData();
+            data.stringData += (int)_eFacingDir;
+            data.stringData += (_objDisplay == null ? -1 : _objDisplay.ID);
+            data.stringData += (_itemDisplay == null ? -1 : _itemDisplay.ItemID);
 
             return data;
         }
 
-        internal void LoadData(DecorData data)
+        public override void LoadData(WorldObjectData data)
         {
-            SnapPositionToGrid(new Vector2(data.x, data.y));
-            RotateToDirection(data.dir);
+            base.LoadData(data);
+            string[] strData = Util.FindParams(data.stringData);
+            RotateToDirection(Util.ParseEnum<DirectionEnum>(strData[0]));
 
-            if (data.objDisplayID != -1) { SetDisplayObject((Decor)DataManager.CreateWorldObjectByID(data.objDisplayID)); }
-            if (data.itemDisplayID != -1) { SetDisplayItem(DataManager.GetItem(data.itemDisplayID)); }
+            int objDisplayID = int.Parse(strData[1]);
+            int itemDisplayID = int.Parse(strData[2]);
+
+            if (objDisplayID != -1) { SetDisplayObject((Decor)DataManager.CreateWorldObjectByID(objDisplayID)); }
+            if (itemDisplayID != -1) { SetDisplayItem(DataManager.GetItem(itemDisplayID)); }
         }
     }
 }

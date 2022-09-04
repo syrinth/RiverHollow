@@ -22,7 +22,7 @@ namespace RiverHollow.Game_Managers
 
         public static void ResetDungeons()
         {
-            foreach(ProceduralDungeon d in _diDungeons.Values)
+            foreach(Dungeon d in _diDungeons.Values)
             {
                 d.ResetDungeon();
             }

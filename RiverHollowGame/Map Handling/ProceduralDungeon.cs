@@ -327,7 +327,7 @@ namespace RiverHollow.Map_Handling
             return rv;
         }
 
-        public void ResetDungeon()
+        public override void ResetDungeon()
         {
             foreach (RoomInfo map in _liMapInfo)
             {

@@ -100,7 +100,7 @@ namespace RiverHollow.GUIComponents.Screens
                     if (_gText.Done && _timer == null) {_timer = new RHTimer(1); }
                     _timer?.TickDown(gTime);
 
-                    if (SaveManager.Saving() && _timer != null && _timer.Finished())
+                    if (!SaveManager.Saving() && _timer != null && _timer.Finished())
                     {
                         _eCurrentPhase = DayEndPhaseEnum.SaveFinished;
                         _gText.SetText(DataManager.GetGameTextEntry("Label_Saving_Finished").GetFormattedText());

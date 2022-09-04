@@ -51,22 +51,5 @@ namespace RiverHollow.WorldObjects
 
             return rv;
         }
-
-        internal FloorData SaveData()
-        {
-            FloorData floorData = new FloorData
-            {
-                ID = _iID,
-                x = (int)MapPosition.X,
-                y = (int)MapPosition.Y
-            };
-
-            return floorData;
-        }
-        internal void LoadData(FloorData data)
-        {
-            _iID = data.ID;
-            SnapPositionToGrid(new Vector2(data.x, data.y));
-        }
     }
 }

@@ -771,7 +771,7 @@
     </Item>
     <Item>
       <Key>192</Key>
-      <Value>[Type:Tool][Subtype:None][Image:0-0]</Value>
+      <Value>[Type:Tool][Subtype:CapeOfBlinking][Image:0-10]</Value>
     </Item>
   </Asset>
 </XnaContent>

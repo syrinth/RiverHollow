@@ -221,25 +221,21 @@ namespace RiverHollow.WorldObjects
             _objGarden = g;
         }
 
-        internal PlantData SaveData()
+        public override WorldObjectData SaveData()
         {
-            PlantData plantData = new PlantData
-            {
-                ID = _iID,
-                x = CollisionBox.X,
-                y = CollisionBox.Y,
-                currentState = _iCurrentState,
-                daysLeft = _iDaysLeft
-            };
+            WorldObjectData data = base.SaveData();
+            data.stringData += _iCurrentState + "|";
+            data.stringData += _iDaysLeft;
 
-            return plantData;
+            return data;
         }
 
-        internal void LoadData(PlantData data)
+        public override void LoadData(WorldObjectData data)
         {
-            SnapPositionToGrid(new Vector2(data.x, data.y));
-            _iCurrentState = data.currentState;
-            _iDaysLeft = data.daysLeft;
+            base.LoadData(data);
+            string[] strData = Util.FindParams(data.stringData);
+            _iCurrentState = int.Parse(strData[0]);
+            _iDaysLeft = int.Parse(strData[1]);
 
             _sprite.PlayAnimation(_iCurrentState.ToString());
         }

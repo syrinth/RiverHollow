@@ -42,23 +42,17 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        public WarpPointData SaveData()
+        public override WorldObjectData SaveData()
         {
-            WarpPointData w = new WarpPointData
-            {
-                ID = this.ID,
-                x = (int)this.CollisionBox.X,
-                y = (int)this.CollisionBox.Y,
-                active = this.Active
-            };
+            WorldObjectData data = base.SaveData();
+            data.stringData += Active;
 
-            return w;
+            return data;
         }
-        public void LoadData(WarpPointData warpPt)
+        public override void LoadData(WorldObjectData data)
         {
-            _iID = warpPt.ID;
-            SnapPositionToGrid(new Vector2(warpPt.x, warpPt.y));
-            Active = warpPt.active;
+            base.LoadData(data);
+            Active = bool.Parse(data.stringData);
 
             if (Active) { _sprite.PlayAnimation(AnimationEnum.Action1); }
         }

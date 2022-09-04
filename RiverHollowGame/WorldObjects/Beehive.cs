@@ -2,10 +2,9 @@
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
-using static RiverHollow.Game_Managers.GameManager;
 using Microsoft.Xna.Framework;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.WorldObjects
 {
@@ -67,27 +66,23 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        public BeehiveData SaveData()
+        public override WorldObjectData SaveData()
         {
-            BeehiveData data = new BeehiveData
-            {
-                ID = this.ID,
-                x = (int)this.CollisionBox.X,
-                y = (int)this.CollisionBox.Y,
-                timeLeft = this._iDaysToHoney,
-                ready = this._bReady,
-                honeyType = _bReady ? _iHoneyToGather : -1
-            };
+            WorldObjectData data = base.SaveData();
+            data.stringData += _bReady + "|";
+            data.stringData += _iDaysToHoney + "|";
+            data.stringData += (_bReady ? _iHoneyToGather : -1);
 
             return data;
         }
-        public void LoadData(BeehiveData data)
+        public override void LoadData(WorldObjectData data)
         {
-            _iID = data.ID;
-            SnapPositionToGrid(new Vector2(data.x, data.y));
-            _bReady = data.ready;
-            _iDaysToHoney = data.timeLeft;
-            _iHoneyToGather = data.honeyType;
+            base.LoadData(data);
+            string[] strData = Util.FindParams(data.stringData);
+
+            _bReady = bool.Parse(strData[0]);
+            _iDaysToHoney = int.Parse(strData[1]);
+            _iHoneyToGather = int.Parse(strData[2]);
 
             if (_iHoneyToGather != -1)
             {

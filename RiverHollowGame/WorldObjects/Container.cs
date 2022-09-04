@@ -23,10 +23,13 @@ namespace RiverHollow.WorldObjects
             Inventory = new Item[Rows, Columns];
 
             InventoryManager.InitExtraInventory(Inventory);
-            string[] holdSplit = Util.FindParams(stringData["ItemID"]);
-            foreach (string s in holdSplit)
+            if (stringData.ContainsKey("ItemID"))
             {
-                InventoryManager.AddToInventory(int.Parse(s), 1, false);
+                string[] holdSplit = Util.FindParams(stringData["ItemID"]);
+                foreach (string s in holdSplit)
+                {
+                    InventoryManager.AddToInventory(int.Parse(s), 1, false);
+                }
             }
             InventoryManager.ClearExtraInventory();
         }
@@ -49,35 +52,33 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
-        internal ContainerData SaveData()
+        public override WorldObjectData SaveData()
         {
-            ContainerData containerData = new ContainerData
-            {
-                containerID = this.ID,
-                rows = Rows,
-                cols = Columns,
-                x = (int)this.MapPosition.X,
-                y = (int)this.MapPosition.Y
-            };
+            WorldObjectData data = base.SaveData();
 
-            containerData.Items = new List<ItemData>();
             foreach (Item i in (this.Inventory))
             {
                 ItemData itemData = Item.SaveData(i);
-                containerData.Items.Add(itemData);
+                string strData = string.Empty;
+                strData += itemData.itemID + "-";
+                strData += itemData.num + "-";
+                strData += itemData.strData;
+                data.stringData += strData + "|";
             }
-            return containerData;
+            return data;
         }
-        internal void LoadData(ContainerData data)
+        public override void LoadData(WorldObjectData data)
         {
-            SnapPositionToGrid(new Vector2(data.x, data.y));
+            base.LoadData(data);
+
+            string[] strData = Util.FindParams(data.stringData);
             for (int i = 0; i < Rows; i++)
             {
                 for (int j = 0; j < Columns; j++)
                 {
-                    ItemData item = data.Items[i * InventoryManager.maxItemRows + j];
-                    Item newItem = DataManager.GetItem(item.itemID, item.num);
-                    if (newItem != null) { newItem.ApplyUniqueData(item.strData); }
+                    string[] itemData = Util.FindArguments(strData[i * InventoryManager.maxItemRows + j]);
+                    Item newItem = DataManager.GetItem(int.Parse(itemData[0]), int.Parse(itemData[1]));
+                    if (newItem != null && itemData.Length > 2) { newItem.ApplyUniqueData(itemData[2]); }
 
                     InventoryManager.InitExtraInventory(this.Inventory);
                     InventoryManager.AddItemToInventorySpot(newItem, i, j, false);
