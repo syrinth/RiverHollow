@@ -34,9 +34,10 @@ namespace RiverHollow.WorldObjects
             InventoryManager.ClearExtraInventory();
         }
 
-        public override void ProcessRightClick()
+        public override bool ProcessRightClick()
         {
             GUIManager.OpenMainObject(new HUDInventoryDisplay(Inventory, DisplayTypeEnum.Inventory));
+            return true;
         }
 
         public bool HasItem()

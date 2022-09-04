@@ -383,8 +383,8 @@ namespace RiverHollow.Game_Managers
                         return new MonsterFood(id, diData, num);
                     case ItemEnum.NPCToken:
                         return new NPCToken(id, diData);
-                    case ItemEnum.Resource:
-                        return new Item(id, diData, num);
+                    case ItemEnum.Seed:
+                        return new Seed(id, diData, num);
                     case ItemEnum.Special:
                         switch (diData["Subtype"])
                         {
@@ -408,9 +408,16 @@ namespace RiverHollow.Game_Managers
                             default:
                                 return new Tool(id, diData);
                         }
+                    default:
+                        return new Item(id, diData, num);
                 }
             }
             return null;
+        }
+        public static string GetItemDictionaryKey(int id, string key)
+        {
+            if (_diItemData.ContainsKey(id)) { return _diItemData[id][key]; }
+            else { return string.Empty; }
         }
         public static Dictionary<string,string> GetItemDictionaryData(int id)
         {

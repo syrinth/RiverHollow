@@ -75,15 +75,20 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        public override void ProcessLeftClick() { ClickProcess(); }
-        public override void ProcessRightClick() { ClickProcess(); }
+        public override bool ProcessLeftClick() { return ClickProcess(); }
+        public override bool ProcessRightClick() { return ClickProcess(); }
 
-        private void ClickProcess()
+        private bool ClickProcess()
         {
+            bool rv = false;
+
             if (!MakingSomething())
             {
+                rv = true;
                 GUIManager.OpenMainObject(new HUDCraftingDisplay(this));
             }
+
+            return rv;
         }
 
         /// <summary>

@@ -83,22 +83,29 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
-        public override void ProcessLeftClick() { HandleGarden(); }
+        public override bool ProcessLeftClick() { return HandleGarden(); }
+
+        public override bool CanPickUp() { return _objPlant != null && _objPlant.FinishedGrowing(); }
 
         /// <summary>
         /// Handles for when the Garden is clicked on to perform
         /// the work that needs to get done
         /// </summary>
-        private void HandleGarden()
+        private bool HandleGarden()
         {
-            //If no plant, open the Garden window
-            if (_objPlant == null) { GUIManager.OpenMainObject(new GardenWindow(this)); }
-            else
+            bool rv = false;
+            //If the plant is finished growing, harvest it. Otherwise, water it.
+            if (_objPlant != null && _objPlant.FinishedGrowing())
             {
-                //If the plant is finished growing, harvest it. Otherwise, water it.
-                if (_objPlant.FinishedGrowing()) { _objPlant.ProcessLeftClick(); }
-                else if (!_bWatered) { WaterGardenBed(true); }
+                rv = _objPlant.ProcessLeftClick();
             }
+            else if (!_bWatered)
+            {
+                rv = true;
+                WaterGardenBed(true);
+            }
+
+            return rv;
         }
 
         /// <summary>
@@ -109,7 +116,6 @@ namespace RiverHollow.WorldObjects
         {
             if (obj != null)
             {
-                PlayerManager.AddToTownObjects(obj);
                 if (_objPlant != null && _objPlant.FinishedGrowing())
                 {
                     CurrentMap?.AddLights(_objPlant?.GetLights());
@@ -117,7 +123,6 @@ namespace RiverHollow.WorldObjects
             }
             else if (_objPlant != null)
             {
-                PlayerManager.RemoveTownObjects(_objPlant);
                 CurrentMap.RemoveLights(_objPlant.GetLights());
             }
 
@@ -162,7 +167,6 @@ namespace RiverHollow.WorldObjects
         {
             if (_objPlant != null) { _objPlant.SyncLightPositions(); }
             else { base.SyncLightPositions(); }
-
         }
 
         public override WorldObjectData SaveData()
@@ -190,11 +194,13 @@ namespace RiverHollow.WorldObjects
             if (!string.IsNullOrEmpty(data.stringData))
             {
                 string[] strData = Util.FindArguments(data.stringData);
-                WorldObjectData pData = new WorldObjectData();
-                pData.ID = int.Parse(strData[0]);
-                pData.X = int.Parse(strData[1]);
-                pData.Y = int.Parse(strData[2]);
-                pData.stringData = strData[3];
+                WorldObjectData pData = new WorldObjectData
+                {
+                    ID = int.Parse(strData[0]),
+                    X = int.Parse(strData[1]),
+                    Y = int.Parse(strData[2]),
+                    stringData = strData[3]
+                };
 
                 _objPlant = (Plant)DataManager.CreateWorldObjectByID(pData.ID);
                 _objPlant.LoadData(pData);

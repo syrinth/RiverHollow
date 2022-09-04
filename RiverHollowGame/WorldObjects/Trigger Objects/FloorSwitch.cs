@@ -67,8 +67,5 @@ namespace RiverHollow.WorldObjects.Trigger_Objects
 
             return CollisionBox.Contains(PlayerManager.PlayerActor.CollisionCenter) || (_trackedObject != null && CollisionBox.Contains(_trackedObject.CollisionCenter));
         }
-
-        public override void ProcessLeftClick() { }
-        public override void ProcessRightClick() { }
     }
 }

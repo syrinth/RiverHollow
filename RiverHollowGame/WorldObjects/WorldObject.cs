@@ -26,8 +26,8 @@ namespace RiverHollow.WorldObjects
 
         protected bool AssignedToTiles => Tiles.Count > 0;
 
-        protected string MapName { get; set; }
-        public RHMap CurrentMap => MapManager.Maps[MapName];
+        protected string MapName { get; set; } = string.Empty;
+        public RHMap CurrentMap => MapManager.Maps.ContainsKey(MapName) ? MapManager.Maps[MapName] : null;
 
         private bool _bMovable = false;
         private DirectionEnum _eShoveDirection = DirectionEnum.None;
@@ -186,8 +186,8 @@ namespace RiverHollow.WorldObjects
             i.Draw(spriteBatch, new Rectangle((int)(i.Position.X), (int)(i.Position.Y), Constants.TILE_SIZE, Constants.TILE_SIZE), true, _sprite.LayerDepth + 1);
         }
 
-        public virtual void ProcessLeftClick() { }
-        public virtual void ProcessRightClick() { }
+        public virtual bool ProcessLeftClick() { return false; }
+        public virtual bool ProcessRightClick() { return false; }
 
         public virtual void Rollover() { }
 

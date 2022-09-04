@@ -62,6 +62,7 @@
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDMiniInventory.cs" />
     <Compile Include="Items\CapeOfBlinking.cs" />
     <Compile Include="Items\IceStaff.cs" />
+    <Compile Include="Items\Seed.cs" />
     <Compile Include="WorldObjects\Building.cs" />
     <Compile Include="Map Handling\Dungeon.cs" />
     <Compile Include="Map Handling\ProceduralDungeon.cs" />
@@ -119,7 +120,6 @@
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIItemDescriptionWindow.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUISprite.cs" />
     <Compile Include="GUIComponents\GUIObjects\QuantityWindow.cs" />
-    <Compile Include="GUIComponents\MainObjects\GardenWindow.cs" />
     <Compile Include="GUIComponents\MainObjects\TownInfoWindow.cs" />
     <Compile Include="GUIComponents\MainObjects\WarpPointWindow.cs" />
     <Compile Include="GUIComponents\Screens\BuildScreen.cs" />

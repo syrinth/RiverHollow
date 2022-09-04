@@ -58,12 +58,16 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        public override void ProcessLeftClick()
+        public override bool ProcessLeftClick()
         {
+            bool rv = false;
+
             if (_iHP > 0)
             {
                // PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool));
             }
+
+            return rv;
         }
 
         public void DealDamage(Tool toolUsed)

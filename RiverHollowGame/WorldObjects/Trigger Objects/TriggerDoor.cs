@@ -66,9 +66,10 @@ namespace RiverHollow.WorldObjects
         /// Handles the response from whent he player attempts to Interact with the Door object.
         /// Primarily just handles the output for the doors and the type of triggers required to use it.
         /// </summary>
-        public override void ProcessRightClick()
+        public override bool ProcessRightClick()
         {
             GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("Trigger_Door"));
+            return true;
         }
     }
 
@@ -83,9 +84,10 @@ namespace RiverHollow.WorldObjects
         /// Handles the response from whent he player attempts to Interact with the Door object.
         /// Primarily just handles the output for the doors and the type of triggers required to use it.
         /// </summary>
-        public override void ProcessRightClick()
+        public override bool ProcessRightClick()
         {
             GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("Trigger_Door"));
+            return true;
         }
     }
 
@@ -105,25 +107,32 @@ namespace RiverHollow.WorldObjects
         /// Handles the response from whent he player attempts to Interact with the Door object.
         /// Primarily just handles the output for the doors and the type of triggers required to use it.
         /// </summary>
-        public override void ProcessRightClick()
+        public override bool ProcessRightClick()
         {
+            bool rv = false;
+
             GameManager.SetSelectedWorldObject(this);
             if (_bKeyDoor)
             {
                 if (DungeonManager.DungeonKeys() > 0)
                 {
+                    rv = true;
                     DungeonManager.UseDungeonKey();
                     AttemptToTrigger(Constants.TRIGGER_KEY_OPEN);
                 }
                 else
                 {
+                    rv = true;
                     GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("Key_Door"));
                 }
             }
             else if (_iItemKeyID != -1)
             {
+                rv = true;
                 GUIManager.OpenMainObject(new HUDInventoryDisplay());
             }
+
+            return rv;
         }
     }
 }

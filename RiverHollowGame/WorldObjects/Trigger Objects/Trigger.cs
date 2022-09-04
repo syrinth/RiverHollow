@@ -40,8 +40,9 @@ namespace RiverHollow.WorldObjects
         /// 
         /// If it's already triggered, do nothing.
         /// </summary>
-        public override void ProcessRightClick()
+        public override bool ProcessRightClick()
         {
+            bool rv = false;
             GameManager.SetSelectedWorldObject(this);
 
             if (!_bHasBeenTriggered)
@@ -49,14 +50,18 @@ namespace RiverHollow.WorldObjects
                 //If there's an itemKeyID, display appropriate text
                 if (_iItemKeyID != -1)
                 {
+                    rv = true;
                     GUIManager.OpenMainObject(new HUDInventoryDisplay());
                 }
                 else
                 {
+                    rv = true;
                     SoundManager.PlayEffectAtLoc(_sSoundEffect, MapName, MapPosition, this);
                     FireTrigger();
                 }
             }
+
+            return rv;
         }
 
         public override void AttemptToTrigger(string name)

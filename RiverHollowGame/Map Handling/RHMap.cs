@@ -1430,8 +1430,7 @@ namespace RiverHollow.Map_Handling
                             WorldObject obj = TargetTile.GetWorldObject(false);
                             if (obj != null)
                             {
-                                obj.ProcessLeftClick();
-                                rv = true;
+                                rv = obj.ProcessLeftClick();
                             }
 
                             if(!rv && !TargetTile.Passable())

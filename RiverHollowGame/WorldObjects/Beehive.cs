@@ -25,16 +25,21 @@ namespace RiverHollow.WorldObjects
             _iDaysToHoney = _iPeriod;
         }
 
-        public override void ProcessRightClick()
+        public override bool ProcessRightClick()
         {
+            bool rv = false;
+
             if (_bReady)
             {
+                rv = true;
                 InventoryManager.AddToInventory(_iHoneyToGather);
                 _bReady = false;
                 _iDaysToHoney = _iPeriod;
                 _iHoneyToGather = -1;
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
             }
+
+            return rv;
         }
 
         public override void Rollover()

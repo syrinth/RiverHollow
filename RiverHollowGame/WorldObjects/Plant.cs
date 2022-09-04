@@ -119,12 +119,17 @@ namespace RiverHollow.WorldObjects
             base.Update(gTime);
         }
 
-        public override void ProcessLeftClick()
+        public override bool ProcessLeftClick()
         {
+            bool rv = false;
+
             if (FinishedGrowing() && _iHP > 0)
             {
                 Harvest();
+                rv = true;
             }
+
+            return rv;
         }
         //public override void ProcessRightClick() { Harvest(); }
 

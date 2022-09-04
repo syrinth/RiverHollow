@@ -37,9 +37,9 @@ namespace RiverHollow.WorldObjects
             _alertSprite?.Draw(spriteBatch, Constants.MAX_LAYER_DEPTH);
         }
 
-        public override void ProcessRightClick()
+        public override bool ProcessRightClick()
         {
-            TakeMessage();
+            return TakeMessage();
         }
 
         public void SendMessage(string messageID)
@@ -47,10 +47,13 @@ namespace RiverHollow.WorldObjects
             _liSentMessages.Add(messageID);
         }
 
-        public void TakeMessage()
+        public bool TakeMessage()
         {
+            bool rv = false;
+
             if (_liCurrentMessages.Count > 0)
             {
+                rv = true;
                 TextEntry tEntry = DataManager.GetMailboxMessage(_liCurrentMessages[0]);
                 _liCurrentMessages.RemoveAt(0);
 
@@ -61,6 +64,8 @@ namespace RiverHollow.WorldObjects
 
                 GUIManager.OpenTextWindow(tEntry);
             }
+
+            return rv;
         }
 
         public override void Rollover()

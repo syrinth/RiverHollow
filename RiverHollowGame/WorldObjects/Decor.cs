@@ -69,14 +69,19 @@ namespace RiverHollow.WorldObjects
         /// <summary>
         /// Handler for when a Decor object hasbeen right-clicked
         /// </summary>
-        public override void ProcessRightClick()
+        public override bool ProcessRightClick()
         {
+            bool rv = false;
+
             //Currently, only display Decor objects can be interacted with.
             if (CanDisplay)
             {
+                rv = true;
                 GameManager.SetSelectedWorldObject(this);
                 GUIManager.OpenMainObject(new HUDInventoryDisplay());
             }
+
+            return rv;
         }
 
         /// <summary>

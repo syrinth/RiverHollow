@@ -29,17 +29,22 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
-        public override void ProcessRightClick()
+        public override bool ProcessRightClick()
         {
+            bool rv = false;
             if (!Active)
             {
+                rv = true;
                 Active = true;
                 _sprite.PlayAnimation(AnimationEnum.Action1);
             }
             else
             {
+                rv = true;
                 GUIManager.OpenMainObject(new WarpPointWindow(this));
             }
+
+            return rv;
         }
 
         public override WorldObjectData SaveData()

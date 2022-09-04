@@ -43,12 +43,17 @@ namespace RiverHollow.Buildings
             ImportBasics(id, stringData);
         }
 
-        public override void ProcessLeftClick()
+        public override bool ProcessLeftClick()
         {
+            bool rv = false;
+
             if (Level < Constants.MAX_BUILDING_LEVEL)
             {
+                rv = true;
                 GUIManager.OpenMainObject(new HUDUpgradeWindow(this));
             }
+
+            return rv;
         }
 
         private void ImportBasics(int id, Dictionary<string, string> stringData)

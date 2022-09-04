@@ -303,19 +303,19 @@
     </Item>
     <Item>
       <Key>75</Key>
-      <Value>[Type:Resource][Image:9-8][Value:3][Stacks][Place:107]</Value>
+      <Value>[Type:Seed][Image:9-8][Value:3][ObjectID:107][Season:Summer]</Value>
     </Item>
     <Item>
       <Key>76</Key>
-      <Value>[Type:Resource][Image:2-2][Value:3][Stacks][Place:101]</Value>
+      <Value>[Type:Seed][Image:2-2][Value:3][ObjectID:101][Season:Fall]</Value>
     </Item>
     <Item>
       <Key>77</Key>
-      <Value>[Type:Resource][Image:3-2][Value:1500][Stacks][Place:108]</Value>
+      <Value>[Type:Seed][Image:3-2][Value:1500][ObjectID:108][Season:Fall]</Value>
     </Item>
     <Item>
       <Key>78</Key>
-      <Value>[Type:Resource][Image:5-9][Value:700]</Value>
+      <Value>[Type:Seed][Image:5-9][Value:700][ObjectID:102][Season:Fall]</Value>
     </Item>
     <Item>
       <Key>79</Key>
@@ -323,19 +323,19 @@
     </Item>
     <Item>
       <Key>80</Key>
-      <Value>[Type:Resource][Image:8-9][Value:500]</Value>
+      <Value>[Type:Seed][Image:8-9][Value:500][ObjectID:105][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>81</Key>
-      <Value>[Type:Resource][Image:3-9][Value:500]</Value>
+      <Value>[Type:Seed][Image:3-9][Value:500][ObjectID:110][Season:Fall]</Value>
     </Item>
     <Item>
       <Key>82</Key>
-      <Value>[Type:Resource][Image:4-9][Value:500]</Value>
+      <Value>[Type:Seed][Image:4-9][Value:500][ObjectID:106][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>83</Key>
-      <Value>[Type:Resource][Image:6-9][Value:500]</Value>
+      <Value>[Type:Seed][Image:6-9][Value:500][ObjectID:109][Season:Fall]</Value>
     </Item>
     <Item>
       <Key>84</Key>
@@ -343,19 +343,19 @@
     </Item>
     <Item>
       <Key>85</Key>
-      <Value>[Type:Resource][Image:7-9][Value:500]</Value>
+      <Value>[Type:Seed][Image:7-9][Value:500][ObjectID:98][Season:Summer]</Value>
     </Item>
     <Item>
       <Key>86</Key>
-      <Value>[Type:Resource][Image:9-9][Value:500]</Value>
+      <Value>[Type:Seed][Image:9-9][Value:500][ObjectID:99][Season:Summer]</Value>
     </Item>
     <Item>
       <Key>87</Key>
-      <Value>[Type:Resource][Image:9-10][Value:500]</Value>
+      <Value>[Type:Seed][Image:9-10][Value:500][ObjectID:111][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>88</Key>
-      <Value>[Type:Resource][Image:8-10][Value:500]</Value>
+      <Value>[Type:Seed][Image:8-10][Value:500][ObjectID:100][Season:Summer]</Value>
     </Item>
     <Item>
       <Key>89</Key>

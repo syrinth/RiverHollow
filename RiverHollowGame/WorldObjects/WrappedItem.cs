@@ -34,15 +34,17 @@ namespace RiverHollow.WorldObjects
             LoadDictionaryData(stringData);
         }
 
-        public override void ProcessLeftClick() { Gather(); }
-        public override void ProcessRightClick() { Gather(); }
+        public override bool ProcessLeftClick() { return Gather(); }
+        public override bool ProcessRightClick() { return Gather(); }
 
-        public void Gather()
+        public bool Gather()
         {
             CurrentMap.AlertSpawnPoint(this);
             InventoryManager.AddToInventory(DataManager.GetItem(_iItemID));
             MapManager.RemoveWorldObject(this);
             RemoveSelfFromTiles();
+
+            return true;
         }
 
         public override bool CanPickUp()
