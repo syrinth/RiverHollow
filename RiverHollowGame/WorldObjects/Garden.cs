@@ -180,7 +180,7 @@ namespace RiverHollow.WorldObjects
                 str += pData.X + "-";
                 str += pData.Y + "-";
                 str += pData.stringData;
-                data.stringData += str + "|";
+                data.stringData += str;
             }
             else { data.stringData = string.Empty; };
 
