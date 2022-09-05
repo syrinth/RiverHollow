@@ -7,7 +7,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 {
     class QuantityWindow : GUIMainObject
     {
-        int MAX_VALUE => PlayerManager.Money / GameManager.CurrentItem.Value;
+        int MAX_VALUE => (GameManager.CurrentItem != null ? PlayerManager.Money / GameManager.CurrentItem.Value : 0);
         int _iNum;
         GUIText _gText;
         GUIButton _btnUp;
@@ -69,11 +69,18 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public void ProceedToPurchase()
         {
-            GameManager.CurrentItem.Add(_iNum - 1);
-            TextEntry entry = DataManager.GetGameTextEntry("BuyMerch_Confirm");
-            entry.FormatText(string.Format(GameManager.CurrentItem.Name() + " x"+ GameManager.CurrentItem.Number), GameManager.CurrentItem.TotalValue);
-            GUIManager.CloseMainObject();
-            GUIManager.OpenTextWindow(entry);
+            if (InventoryManager.HasSpaceInInventory(GameManager.CurrentItem.ItemID, _iNum))
+            {
+                GameManager.CurrentItem.Add(_iNum - 1);
+                TextEntry entry = DataManager.GetGameTextEntry("BuyMerch_Confirm");
+                entry.FormatText(string.Format(GameManager.CurrentItem.Name() + " x" + GameManager.CurrentItem.Number), GameManager.CurrentItem.TotalValue);
+                GUIManager.CloseMainObject();
+                GUIManager.OpenTextWindow(entry);
+            }
+            else
+            {
+                GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("BuyMerch_NoSpace"));
+            }
         }
     }
 }

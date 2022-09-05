@@ -84,7 +84,15 @@ namespace RiverHollow.Map_Handling
         {
             if (merchItem != null)
             {
-                if (PlayerManager.Money >= merchItem.Value)
+                if (PlayerManager.Money < merchItem.Value)
+                {
+                    GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("BuyMerch_NoMoney"));
+                }
+                else if (!InventoryManager.HasSpaceInInventory(merchItem.ItemID, 1))
+                {
+                    GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("BuyMerch_NoSpace"));
+                }
+                else
                 {
                     GUIManager.CloseHoverWindow();
                     if (!merchItem.DoesItStack)
@@ -99,10 +107,6 @@ namespace RiverHollow.Map_Handling
                         GameManager.SetSelectedItem(DataManager.GetItem(merchItem.ItemID));
                         GUIManager.OpenMainObject(new QuantityWindow());
                     }
-                }
-                else
-                {
-                    GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("BuyMerch_NoMoney"));
                 }
             }
         }
