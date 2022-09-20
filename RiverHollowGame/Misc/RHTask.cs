@@ -316,7 +316,7 @@ namespace RiverHollow.Misc
             if (_eTaskType == TaskTypeEnum.Build && i == _iTargetObjectID)
             {
                 rv = true;
-                ReadyForHandIn = PlayerManager.GetNumberTownObjects(_iTargetObjectID) == _iTargetWorldObjNum;
+                SetReadyForHandIn(PlayerManager.GetNumberTownObjects(_iTargetObjectID) == _iTargetWorldObjNum);
             }
 
             return rv;
@@ -330,11 +330,7 @@ namespace RiverHollow.Misc
                 if (TargetsAccomplished >= RequiredItemAmount)
                 {
                     TargetsAccomplished = RequiredItemAmount;
-                    ReadyForHandIn = true;
-                    if (_bFinishOnCompletion)
-                    {
-                        TurnInTask();
-                    }
+                    SetReadyForHandIn(true);
                 }
             }
         }
@@ -347,6 +343,11 @@ namespace RiverHollow.Misc
                 {
                     TargetsAccomplished--;
                     rv = true;
+                }
+
+                if(TargetsAccomplished < RequiredItemAmount)
+                {
+                    SetReadyForHandIn(false);
                 }
             }
             return rv;
@@ -366,6 +367,20 @@ namespace RiverHollow.Misc
             if (TaskState == TaskStateEnum.Assigned)
             {
                 TaskState = TaskStateEnum.Talking;
+            }
+        }
+
+        private void SetReadyForHandIn(bool value)
+        {
+            ReadyForHandIn = value;
+
+            if (GoalNPC != null && _iBuildingEndID == -1)
+            {
+                GoalNPC.ModifyTaskGoalValue(value ? 1 : -1);
+            }
+            if (value && _bFinishOnCompletion)
+            {
+                TurnInTask();
             }
         }
 
@@ -554,6 +569,11 @@ namespace RiverHollow.Misc
             TargetsAccomplished = qData.accomplished;
             ReadyForHandIn = qData.readyForHandIn;
             TaskState = (TaskStateEnum)qData.taskState;
+
+            if (ReadyForHandIn)
+            {
+                SetReadyForHandIn(true);
+            }
 
             foreach (ItemData i in qData.Items)
             {

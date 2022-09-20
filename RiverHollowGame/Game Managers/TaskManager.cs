@@ -23,8 +23,6 @@ namespace RiverHollow.Game_Managers
             {
                 _liTasks.Add(new RHTask(kvp.Key, kvp.Value));
             }
-
-            _liTasks.ForEach(o => o.AssignTaskToNPC());
         }
 
         public static void Rollover()
@@ -32,6 +30,10 @@ namespace RiverHollow.Game_Managers
             _liTasks.ForEach(o => o.AssignTaskToNPC());
         }
 
+        public static void AssignTasks()
+        {
+            _liTasks.ForEach(o => o.AssignTaskToNPC());
+        }
         public static void AssignTaskByID(int taskID)
         {
             _liTasks.Find(x => x.TaskID == taskID).AssignTaskToNPC();
@@ -127,13 +129,7 @@ namespace RiverHollow.Game_Managers
                 _liTasks[i].LoadData(list[i]);
             }
 
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (_liTasks[i].TaskState == TaskStateEnum.Assigned)
-                {
-                    _liTasks[i].AssignTaskToNPC();
-                }
-            }
+            AssignTasks();
 
             //ToDo Code for new/custom tasks
         }

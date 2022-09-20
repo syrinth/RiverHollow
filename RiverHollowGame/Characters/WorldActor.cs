@@ -239,8 +239,7 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void SetState(ActorStateEnum e) {
-            State = e; }
+        public void SetState(ActorStateEnum e) { State = e; }
         public void SetWalkingDir(DirectionEnum d)
         {
             Facing = d;
@@ -252,8 +251,8 @@ namespace RiverHollow.Characters
             MoveToLocation = v;
             if (update)
             {
-                DetermineFacing(v);
-                DetermineAnimationState(v);
+                DetermineFacing(v - Position);
+                DetermineAnimationState(v - Position);
             }
         }
 

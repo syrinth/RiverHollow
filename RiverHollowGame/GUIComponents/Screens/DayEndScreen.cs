@@ -76,6 +76,7 @@ namespace RiverHollow.GUIComponents.Screens
                     Villager copy = new Villager(v);
                     copy.Activate(false);
                     copy.BodySprite.SetScale(CurrentScale);
+                    copy.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
                     _liVillagers.Add(copy);
                 }
             }

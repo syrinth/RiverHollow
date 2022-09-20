@@ -265,5 +265,9 @@
       <Key>65</Key>
       <Value>[Name:Label_Saving_Finished][Text:Game Saved]</Value>
     </Item>
+	<Item>
+      <Key>66</Key>
+      <Value>[Name:BuyMerch_NoSpace][Text:Your inventory is full.]</Value>
+    </Item>
   </Asset>
 </XnaContent>

@@ -314,11 +314,5 @@
     <property name="NPC_ID" type="int" value="29"/>
    </properties>
   </object>
-  <object id="97" name="Big Rock" x="368" y="480" width="32" height="32">
-   <properties>
-    <property name="Movable" type="bool" value="true"/>
-    <property name="ObjectID" type="int" value="50"/>
-   </properties>
-  </object>
  </objectgroup>
 </map>

@@ -514,6 +514,7 @@ namespace RiverHollow.Characters
 
                     taskEntry = _diDialogue[t.EndTaskDialogue];
 
+                    ModifyTaskGoalValue(-1);
                     rv = true;
                     break;
                 }

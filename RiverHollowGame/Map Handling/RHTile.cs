@@ -64,6 +64,7 @@ namespace RiverHollow.Map_Handling
             {
                 if (PlayerManager.PlayerInRange(_travelPoint.CollisionBox) && !MapManager.ChangingMaps())
                 {
+                    PlayerManager.PlayerActor.Facing = DirectionEnum.Up;
                     MapManager.ChangeMaps(PlayerManager.PlayerActor, MapName, _travelPoint);
                     SoundManager.PlayEffect("close_door_1");
                     return true;

@@ -633,7 +633,7 @@ namespace RiverHollow.Game_Managers
             foreach(WorldActor act in _liUsedNPCs)
             {
                 act.ClearPath();
-                act.SetMoveTo(Vector2.Zero);
+                act.SetMoveTo(Vector2.Zero, false);
             }
 
             GUIManager.ClearBackgroundImage();

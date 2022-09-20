@@ -243,7 +243,7 @@
     </Item>
     <Item>
       <Key>60</Key>
-      <Value>[Type:Destructible][Image:0-0][Tool:Pick][Hp:1][ReqLvl:1][ItemID:0-1][DestructionAnim:208-0-3-0.1][Movable]</Value>
+      <Value>[Type:Destructible][Image:0-0][Tool:Pick][Hp:1][ReqLvl:1][ItemID:0-1][DestructionAnim:208-0-3-0.1]</Value>
     </Item>
     <Item>
       <Key>61</Key>

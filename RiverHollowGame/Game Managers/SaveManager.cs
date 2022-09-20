@@ -681,6 +681,7 @@ namespace RiverHollow.Game_Managers
             _iSaveID = dataToLoad.saveID;
 
             LoadOptions(dataToLoad.optionData);
+            TaskManager.LoadTaskData(dataToLoad.TaskInfo);
             GameCalendar.LoadCalendar(dataToLoad.Calendar);
             EnvironmentManager.LoadEnvironment(dataToLoad.Environment);
             PlayerManager.Initialize();
@@ -696,8 +697,6 @@ namespace RiverHollow.Game_Managers
             PlayerManager.LoadToolData(dataToLoad.Tools);
             //Needs to be here because the Mailbox is a worldobject
             PlayerManager.PlayerMailbox.LoadData(dataToLoad.TheMailbox);
-
-            TaskManager.LoadTaskData(dataToLoad.TaskInfo);
 
             foreach (VillagerData n in dataToLoad.VillagerData)
             {

@@ -25,6 +25,7 @@ namespace RiverHollow.Characters
         public int FriendshipPoints = 1600;
 
         protected bool _bHasTalked;
+        protected int _iTaskGoals = 0;
         protected RHTask _assignedTask;
 
         public bool CanGiveGift = true;
@@ -48,9 +49,16 @@ namespace RiverHollow.Characters
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             base.Draw(spriteBatch, useLayerDepth);
-            if (_bOnTheMap && _assignedTask?.TaskState == TaskStateEnum.Assigned)
+            if (_bOnTheMap)
             {
-                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)Position.X, (int)Position.Y - 32, 16, 16), new Rectangle(224, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
+                if (_iTaskGoals > 0)
+                {
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)Position.X, (int)Position.Y - 32, 16, 16), new Rectangle(208, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
+                }
+                if (_assignedTask?.TaskState == TaskStateEnum.Assigned)
+                {
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)Position.X, (int)Position.Y - 32, 16, 16), new Rectangle(224, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
+                }
             }
         }
 
@@ -65,6 +73,11 @@ namespace RiverHollow.Characters
             }
 
             return rv;
+        }
+
+        public void ModifyTaskGoalValue(int val)
+        {
+            _iTaskGoals += val;
         }
 
         public virtual TextEntry Gift(Item item) { return null; }

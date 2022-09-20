@@ -54,7 +54,7 @@ namespace RiverHollow.Map_Handling
         public void GoToEntrance()
         {
             MapManager.FadeToNewMap(MapManager.Maps[_sEntranceMapName], _vRecallPoint);
-            PlayerManager.PlayerActor.DetermineAnimationState(new Vector2(0, 1));
+            PlayerManager.PlayerActor.Facing = DirectionEnum.Down;
         }
 
         public void AddKey() { NumKeys++; }

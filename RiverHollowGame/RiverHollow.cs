@@ -317,6 +317,7 @@ namespace RiverHollow
         /// </summary>
         private static void StartGame()
         {
+            TaskManager.AssignTasks();
             SoundManager.PlayBackgroundMusic();
 
             //Places NPCs on the map
