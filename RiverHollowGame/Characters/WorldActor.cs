@@ -351,7 +351,7 @@ namespace RiverHollow.Characters
                 //If, after movement, we've reached the given location, zero it.
                 if (MoveToLocation == Position && !CutsceneManager.Playing)
                 {
-                    SetMoveTo(Vector2.Zero);
+                    SetMoveTo(Vector2.Zero, false);
                     if (_liTilePath.Count > 0)
                     {
                         _liTilePath.RemoveAt(0);
