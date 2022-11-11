@@ -396,6 +396,8 @@ namespace RiverHollow.Game_Managers
                                 return new AdventureMap(id, diData, num);
                             case "DungeonKey":
                                 return new DungeonKey(id, diData);
+                            default:
+                                return new Item(id, diData, num);
                         }
                         break;
                     case ItemEnum.Tool:

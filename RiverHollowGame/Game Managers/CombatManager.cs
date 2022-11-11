@@ -54,6 +54,8 @@ namespace RiverHollow.Game_Managers
 
         public static void NewBattle(Mob m)
         {
+            PlayerManager.FinishedWithTool();
+
             SelectedAction = null;
             SelectedTile = null;
 

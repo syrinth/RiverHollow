@@ -4168,3 +4168,13 @@
 /processor:TiledMapProcessor
 /build:Maps/Dungeon_Forest/mapDungeon_Forest_Try.tmx
 
+#begin Maps/Misc/mapWoods_Small.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapWoods_Small.tmx
+
+#begin Maps/Dungeon_Forest/mapForestShrine_Small.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Forest/mapForestShrine_Small.tmx
+

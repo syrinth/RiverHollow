@@ -72,7 +72,10 @@ namespace RiverHollow.Game_Managers
         }
         public static void ActivateTrigger(string dungeonName, string triggerName)
         {
-            _diDungeons[dungeonName]?.ActivateTrigger(triggerName);
+            if (!string.IsNullOrEmpty(MapManager.CurrentMap.DungeonName))
+            {
+                _diDungeons[dungeonName]?.ActivateTrigger(triggerName);
+            }
         }
 
         public static void InitializeProceduralDungeon(string dungeonName, string currentMap, TravelPoint pt)

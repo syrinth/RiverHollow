@@ -5,7 +5,7 @@
       <Key>0</Key>
       <Value>
         <Item></Item>
-        <Item>[Map:mapWoods][Player][Actors:2-CS0|32-CS0_Mob][Deactivate:2]</Item>
+        <Item>[Map:mapWoods_Small][Player][Actors:2-CS0|32-CS0_Mob][Deactivate:2]</Item>
         <Item>[Speak:2-1][Activate:2][Move:2-9-Up][Move:2-7-Right][Speak:2-2][Join:2][Move:2-2-Right|Player-7-Left][Combat:32]</Item>
       </Value>
     </Item>

@@ -252,7 +252,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             if (CombatManager.Party.Contains(CombatManager.ActiveCharacter))
             {
-                _btnEscape.ProcessLeftButtonClick(mouse);
+                if (_btnEscape.ProcessLeftButtonClick(mouse))
+                {
+                    return true;
+                }
 
                 //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
                 switch (CombatManager.CurrentPhase)

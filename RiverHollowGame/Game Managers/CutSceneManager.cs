@@ -439,7 +439,7 @@ namespace RiverHollow.Game_Managers
                 {
                     _liToRemove.Add(c);
                 }
-                c.SetMoveTo(Vector2.Zero);
+                c.SetMoveTo(Vector2.Zero, false);
             }
         }
 
