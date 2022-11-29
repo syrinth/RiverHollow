@@ -534,6 +534,14 @@
       <Value>[Name:PlayerLantern_5]</Value>
     </Item>
     <Item>
+      <Key>Upgrade_0</Key>
+      <Value>[Name:Basic Sales]</Value>
+    </Item>
+    <Item>
+      <Key>Upgrade_1</Key>
+      <Value>[Name:Advanced Sales]</Value>
+    </Item>
+    <Item>
       <Key>Dungeon_0</Key>
       <Value>[Name:Cave]</Value>
     </Item>

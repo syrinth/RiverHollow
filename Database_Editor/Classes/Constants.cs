@@ -5,7 +5,7 @@ namespace Database_Editor.Classes
     public static class Constants
     {
         public enum EditableCharacterDataEnum { Dialogue, Schedule };
-        public enum XMLTypeEnum { None, Task, NPC, Class, Building, WorldObject, Item, Monster, Action, Shop, StatusEffect, Cutscene, Light, Dungeon, TextFile };
+        public enum XMLTypeEnum { None, Task, NPC, Class, Building, WorldObject, Item, Monster, Action, Shop, StatusEffect, Cutscene, Light, Dungeon, Upgrade, TextFile };
 
         public static readonly string SPECIAL_CHARACTER = "^";
         public static readonly string LOOKUP_CHARACTER = "$";
@@ -28,6 +28,7 @@ namespace Database_Editor.Classes
         public static readonly string DUNGEON_XML_FILE = PATH_TO_DATA + @"\DungeonData.xml";
         public static readonly string ITEM_DATA_XML_FILE = PATH_TO_DATA + @"\ItemData.xml";
         public static readonly string LIGHTS_XML_FILE = PATH_TO_DATA + @"\LightData.xml";
+        public static readonly string UPGRADES_XML_FILE = PATH_TO_DATA + @"\Upgrades.xml";
         public static readonly string MONSTERS_XML_FILE = PATH_TO_DATA + @"\Monsters.xml";
         public static readonly string SHOPS_XML_FILE = PATH_TO_DATA + @"\Shops.xml";
         public static readonly string STATUS_EFFECTS_XML_FILE = PATH_TO_DATA + @"\StatusEffects.xml";
@@ -46,6 +47,7 @@ namespace Database_Editor.Classes
         public static readonly string TAGS_FOR_CHARACTERS = "NPC_ID,Shopkeeper,MobID,Actors,Move,Face,Speak,Speed,Activate,Deactivate,Join,Combat,StartNPC,GoalNPC";
         public static readonly string TAGS_FOR_STATUS_EFFECTS = "StatusEffectID";
         public static readonly string TAGS_FOR_LIGHTS = "LightID";
+        public static readonly string TAGS_FOR_UPGRADES = "UpgradeID";
         public static readonly string TAGS_FOR_MONSTERS = "MonsterID";
         public static readonly string TAGS_FOR_DUNGEONS = "DungeonID";
         public static readonly string TAGS_FOR_TASKS = "TaskID";

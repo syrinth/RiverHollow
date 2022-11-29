@@ -63,6 +63,7 @@
     <Compile Include="Items\CapeOfBlinking.cs" />
     <Compile Include="Items\IceStaff.cs" />
     <Compile Include="Items\Seed.cs" />
+    <Compile Include="Misc\Upgrade.cs" />
     <Compile Include="WorldObjects\Building.cs" />
     <Compile Include="Map Handling\Dungeon.cs" />
     <Compile Include="Map Handling\ProceduralDungeon.cs" />

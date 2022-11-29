@@ -13,7 +13,9 @@ using static RiverHollow.GUIComponents.GUIObjects.GUIItemBox;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Utilities.Constants;
 using RiverHollow.GUIComponents.Screens.HUDScreens;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -352,49 +354,72 @@ namespace RiverHollow.GUIComponents.Screens
     class HUDUpgradeWindow : GUIMainObject
     {
         Building _bldg;
+
         public HUDUpgradeWindow(Building b)
         {
             _winMain = SetMainWindow();
 
             _bldg = b;
 
-            GUIText name = new GUIText(_bldg.Name() + ", Level " + _bldg.Level);
+            GUIText name = new GUIText(_bldg.Name());
             name.AnchorToInnerSide(_winMain, SideEnum.Top);
 
             GUIButton btn = new GUIButton("Upgrade", Upgrade);
             btn.AnchorToInnerSide(_winMain, SideEnum.Bottom);
 
-            if (_bldg.UpgradeReqs() != null)
+            List<GUIImage> images = new List<GUIImage>();
+            string[] upgrades = _bldg.GetAllUpgrades();
+            for(int i = 0; i < upgrades.Length; i++)
             {
-                Color textColor = Color.White;
-                if (!InventoryManager.HasSufficientItems(_bldg.UpgradeReqs()))
+                Upgrade up = DataManager.GetUpgrade(int.Parse(upgrades[i]));
+
+                GUIImage img = new GUIImage(new Rectangle(up.Icon, new Point(TILE_SIZE, TILE_SIZE)), DataManager.UPGRADE_ICONS);
+
+                if (i == 0)
                 {
-                    textColor = Color.Red;
-                    btn.Enable(false);
+                    img.AnchorToInnerSide(_winMain, SideEnum.Left, ScaledPixel);
+                    img.AnchorToObject(name, SideEnum.Bottom, ScaledPixel, ScaledPixel);
+                }
+                else {
+                    img.AnchorAndAlignToObject(images[i - 1], SideEnum.Right, SideEnum.Bottom);
                 }
 
-                List<GUIItemBox> list = new List<GUIItemBox>();
-                foreach (KeyValuePair<int, int> kvp in _bldg.UpgradeReqs())
-                {
-                    GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
+                AddControl(img);
+                images.Add(img);
 
-                    if (list.Count == 0) { box.AnchorToInnerSide(_winMain, SideEnum.Left); }
-                    else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Right, SideEnum.Bottom); }
-
-                    if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value)) { box.SetColor(Color.Red); }
-
-                    list.Add(box);
-                }
             }
+
+            //if (_bldg.UpgradeReqs() != null)
+            //{
+            //    Color textColor = Color.White;
+            //    if (!InventoryManager.HasSufficientItems(_bldg.UpgradeReqs()))
+            //    {
+            //        textColor = Color.Red;
+            //        btn.Enable(false);
+            //    }
+
+            //    List<GUIItemBox> list = new List<GUIItemBox>();
+            //    foreach (KeyValuePair<int, int> kvp in _bldg.UpgradeReqs())
+            //    {
+            //        GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
+
+            //        if (list.Count == 0) { box.AnchorToInnerSide(_winMain, SideEnum.Left); }
+            //        else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Right, SideEnum.Bottom); }
+
+            //        if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value)) { box.SetColor(Color.Red); }
+
+            //        list.Add(box);
+            //    }
+            //}
 
             AddControl(name);
         }
 
         private void Upgrade()
         {
-            if (PlayerManager.ExpendResources(_bldg.UpgradeReqs())) { 
-                _bldg.Upgrade();
-            }
+           // if (PlayerManager.ExpendResources(_bldg.UpgradeReqs())) { 
+           //     _bldg.Upgrade();
+           // }
         }
 
         public override bool ProcessRightButtonClick(Point mouse)

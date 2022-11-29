@@ -814,7 +814,7 @@ namespace RiverHollow.Map_Handling
         public void CreateBuildingEntrance(Building b)
         {
             TravelPoint buildPoint = new TravelPoint(b, this.Name, b.ID);
-            DictionaryTravelPoints.Add(b.MapName, buildPoint); //TODO: FIX THIS
+            DictionaryTravelPoints.Add(b.BuildingMapName, buildPoint); //TODO: FIX THIS
             CreateDoor(buildPoint, b.TravelBox.X, b.TravelBox.Y, b.TravelBox.Width, b.TravelBox.Height);
         }
 
@@ -858,7 +858,7 @@ namespace RiverHollow.Map_Handling
         /// <param name="b">The building to remove the door of</param>
         public void RemoveDoor(Building b)
         {
-            string mapName = b.MapName;
+            string mapName = b.BuildingMapName;
             TravelPoint pt = DictionaryTravelPoints[mapName];
 
             foreach (Vector2 vec in Util.GetAllPointsInArea(pt.Location.X, pt.Location.Y, pt.CollisionBox.Width, pt.CollisionBox.Height, Constants.TILE_SIZE))

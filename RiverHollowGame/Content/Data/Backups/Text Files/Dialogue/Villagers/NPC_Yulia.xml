@@ -54,5 +54,9 @@ If you could build me such a place, that would make an old woman very happy.][Sh
 	  Thank you so much!
 	  It ran North, to the Forest Temple. You'll need to make an offering at the door to get it open, so make sure you find a $Item_162$. I've got some $Item_142$ that I've been saving, but you'll need it as well, so here. Good luck, and be careful!][Name:Task_3_Start][ItemID:142]</Value>
     </Item>
+    <Item>
+      <Key>12</Key>
+      <Value>[Text:That's it! Thank you so much!][Name:Task_3_End]</Value>
+    </Item>
   </Asset>
 </XnaContent>

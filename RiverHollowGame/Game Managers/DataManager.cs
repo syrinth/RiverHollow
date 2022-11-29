@@ -45,6 +45,7 @@ namespace RiverHollow.Game_Managers
         public const string FONT_STAT_DISPLAY = @"Fonts\Font_Stat_Display";
 
         public const string DIALOGUE_TEXTURE = @"Textures\Dialog";
+        public const string UPGRADE_ICONS = GUI_COMPONENTS + @"\GUI_Upgrade_Icons";
         public const string GUI_COMPONENTS = @"Textures\GUI Components";
         public const string COMBAT_TEXTURE = GUI_COMPONENTS + @"\GUI_Combat";
         public const string ACTION_ICONS = GUI_COMPONENTS + @"\GUI_Action_Icons";
@@ -72,6 +73,7 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<int, Dictionary<string, string>> _diDungeonData;
         static Dictionary<int, Dictionary<string, string>> _diLightData;
+        static Dictionary<int, Dictionary<string, string>> _diUpgradeData;
         static Dictionary<int, Dictionary<string, string>> _diStatusEffects;
         static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
 
@@ -138,6 +140,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diClasses, @"Data\Classes", Content, null);
             LoadDictionary(ref Config, @"Data\Config", Content, null);
             LoadDictionary(ref _diLightData, @"Data\LightData", Content, null);
+            LoadDictionary(ref _diUpgradeData, @"Data\Upgrades", Content, null);
             LoadDictionary(ref _diDungeonData, @"Data\DungeonData", Content, null);
         }
         public static void SecondaryLoad(ContentManager Content)
@@ -331,10 +334,53 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region GetMethods
-        public static string GetItemValueByID(int id, string key) { return _diItemData[id][key]; }
-        public static string GetWorldObjectValueByID(int id, string key) { return _diWorldObjects[id][key]; }
-        public static string GetNPCValueByID(int id, string key) { return _diNPCData[id][key]; }
+        public static string GetDataValueByIDKey(int id, string key, DataType type)
+        {
+            switch (type)
+            {
+                case DataType.Action:
+                    if (_diActions[id].ContainsKey(key)) { return _diActions[id][key]; }
+                    break;
+                case DataType.Character:
+                    if (_diActions[id].ContainsKey(key)) { return _diActions[id][key]; }
+                    break;
+                case DataType.Class:
+                    if (_diClasses[id].ContainsKey(key)) { return _diClasses[id][key]; }
+                    break;
+                case DataType.Item:
+                    if (_diItemData[id].ContainsKey(key)) { return _diItemData[id][key]; }
+                    break;
+                case DataType.Light:
+                    if (_diLightData[id].ContainsKey(key)) { return _diLightData[id][key]; }
+                    break;
+                case DataType.Monster:
+                    if (_diMonsterData[id].ContainsKey(key)) { return _diMonsterData[id][key]; }
+                    break;
+                case DataType.StatusEffect:
+                    if (_diStatusEffects[id].ContainsKey(key)) { return _diStatusEffects[id][key]; }
+                    break;
+                case DataType.Task:
+                    if (_diTaskData[id].ContainsKey(key)) { return _diTaskData[id][key]; }
+                    break;
+                case DataType.Upgrade:
+                    if (_diUpgradeData[id].ContainsKey(key)) { return _diUpgradeData[id][key]; }
+                    break;
+                case DataType.WorldObject:
+                    if (_diWorldObjects[id].ContainsKey(key)) { return _diWorldObjects[id][key]; }
+                    break;
+            }
 
+            return string.Empty;
+        }
+
+        public static Upgrade GetUpgrade(int id)
+        {
+            if (_diUpgradeData.ContainsKey(id))
+            {
+                return new Upgrade(id);
+            }
+            return null;
+        }
         public static Light GetLight(int id)
         {
             if (_diLightData.ContainsKey(id))

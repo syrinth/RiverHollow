@@ -39,7 +39,7 @@ namespace RiverHollow.WorldObjects
             if (base.PlaceOnMap(pos, map))
             {
                 rv = true;
-                if (_iID == int.Parse(DataManager.Config[15]["ObjectID"]))
+                if (ID == int.Parse(DataManager.Config[15]["ObjectID"]))
                 {
                     foreach (Merchant m in DataManager.DIMerchants.Values)
                     {
@@ -78,7 +78,7 @@ namespace RiverHollow.WorldObjects
                     MapManager.Maps[MapName].RemoveWorldObject(targetTile.WorldObject);
                 }
 
-                if (_iID == int.Parse(DataManager.Config[15]["ObjectID"]))
+                if (ID == int.Parse(DataManager.Config[15]["ObjectID"]))
                 {
                     foreach (Merchant m in DataManager.DIMerchants.Values)
                     {

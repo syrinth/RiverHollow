@@ -123,11 +123,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/AbilityAnimations.png
 
-#begin Data/TownUpgrades.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/TownUpgrades.xml
-
 #begin Sound/Stock/Effects/126426__cabeeno-rossley__timer-ends-time-up.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -4177,4 +4172,21 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Dungeon_Forest/mapForestShrine_Small.tmx
+
+#begin Data/Upgrades.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Upgrades.xml
+
+#begin Textures/GUI Components/GUI_Upgrade_Icons.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/GUI Components/GUI_Upgrade_Icons.png
 

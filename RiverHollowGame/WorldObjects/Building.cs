@@ -4,8 +4,6 @@ using RiverHollow.Game_Managers;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Map_Handling;
 using RiverHollow.WorldObjects;
-
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.Utilities;
 using RiverHollow.GUIComponents.Screens;
@@ -17,49 +15,26 @@ namespace RiverHollow.Buildings
     {
         private int _iNPCBuilderID;
         private Rectangle _rEntrance;
-        public int Level { get; private set; } = 1;
 
-        private Dictionary<int, Dictionary<int, int>> _diUpgradeInfo;
+        public List<int> CompletedUpgrades { get; private set; }
 
-        public string Description => DataManager.GetTextData("WorldObject", _iID, "Description");
+        public string Description => DataManager.GetTextData("WorldObject", ID, "Description");
 
-        private string _sTextureName;
-
-        private string _sBuildingMap;
-        public new string MapName => DetermineMapName();
+        public string BuildingMapName => "map" + DataManager.GetDataValueByIDKey(ID, "Texture", DataType.WorldObject);
 
         public Rectangle SelectionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _sprite.Width, _sprite.Height);
 
         public Rectangle TravelBox { get; private set; }
 
-        public Vector2 BuildFromPosition { get; private set; }
-
         public Container BuildingChest { get; set; }
 
         public Building(int id, Dictionary<string, string> stringData) : base(id)
         {
+            ID = id;
+            _eObjectType = ObjectTypeEnum.Building;
+
             Unique = true;
             OutsideOnly = true;
-            ImportBasics(id, stringData);
-        }
-
-        public override bool ProcessLeftClick()
-        {
-            bool rv = false;
-
-            if (Level < Constants.MAX_BUILDING_LEVEL)
-            {
-                rv = true;
-                GUIManager.OpenMainObject(new HUDUpgradeWindow(this));
-            }
-
-            return rv;
-        }
-
-        private void ImportBasics(int id, Dictionary<string, string> stringData)
-        {
-            _iID = id;
-            _eObjectType = ObjectTypeEnum.Building;
 
             //The dimensions of the Building in tiles
             Util.AssignValue(ref _uSize, "Size", stringData);
@@ -67,31 +42,8 @@ namespace RiverHollow.Buildings
             Util.AssignValue(ref _rBase, "Base", stringData);
             Util.AssignValue(ref _rEntrance, "Entrance", stringData);
 
-            _diUpgradeInfo = new Dictionary<int, Dictionary<int, int>>();
-            foreach (string s in new List<string>(stringData.Keys).FindAll(x => x.StartsWith("Upgrade_")))
-            {
-                int upgradeLevel = int.Parse(s.Substring(s.IndexOf("_") + 1));
-                string val = stringData[s];
-
-                Dictionary<int, int> reqs = new Dictionary<int, int>();
-                foreach (string arg in Util.FindParams(val))
-                {
-                    string[] split = arg.Split('-');
-                    reqs[int.Parse(split[0])] = int.Parse(split[1]);
-                }
-
-                //Upgrade 1 is actually Level 2, so increment
-                _diUpgradeInfo[upgradeLevel + 1] = reqs;
-            }
-
             Util.AssignValue(ref _iNPCBuilderID, "Builder", stringData);
             Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
-
-            //Sets the position from which the Mason will spawn tobuild the building
-            if (stringData.ContainsKey("BuildSpot")) {
-                string[] split = stringData["BuildSpot"].Split('-');
-                BuildFromPosition = new Vector2(int.Parse(split[0]), int.Parse(split[1]));
-            }
 
             if (stringData.ContainsKey("LightID"))
             {
@@ -110,8 +62,13 @@ namespace RiverHollow.Buildings
                 }
             }
 
-            Util.AssignValue(ref _sTextureName, "Texture", stringData);
-            LoadSprite(stringData, DataManager.FOLDER_BUILDINGS + _sTextureName);
+            LoadSprite(stringData, DataManager.FOLDER_BUILDINGS + DataManager.GetDataValueByIDKey(ID, "Texture", DataType.WorldObject));
+        }
+
+        public override bool ProcessLeftClick()
+        {
+            GUIManager.OpenMainObject(new HUDUpgradeWindow(this));
+            return true;
         }
 
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\worldObjects")
@@ -158,8 +115,8 @@ namespace RiverHollow.Buildings
             {
                 rv = true;
                 map.AssignMapTiles(this, tiles);
-                map.CreateBuildingEntrance(this);
                 map.AddBuilding(this);
+                map.CreateBuildingEntrance(this);
 
                 SyncLightPositions();
                 map.AddLights(GetLights());
@@ -170,34 +127,9 @@ namespace RiverHollow.Buildings
             return rv;
         }
 
-        public Dictionary<int, int> UpgradeReqs()
+        public string[] GetAllUpgrades()
         {
-            if (_diUpgradeInfo.Count > 0 && _diUpgradeInfo.ContainsKey(Level + 1)) { return _diUpgradeInfo[Level + 1]; }
-            else { return null; }
-        }
-
-        /// <summary>
-        /// Increases the building level as long as it will not exceed the Building's max level.
-        /// 
-        /// If we are coming off of a level 0 building, we need to clean up the walls that we placed
-        /// during construction and actually set the building to the tiles, as well as creating the
-        /// entryway so the building map can be accessed.
-        /// 
-        /// Once we've finished upgrading the building, unset the Mason's build target.
-        /// </summary>
-        public void Upgrade()
-        {
-            string initialLevel = MapName;
-            if (Level + 1 <= Constants.MAX_BUILDING_LEVEL)
-            {
-                Level++;
-                _sprite.PlayAnimation(Level.ToString());
-            }
-
-            MapManager.Maps[_sBuildingMap].UpdateBuildingEntrance(initialLevel, MapName);
-            MapManager.Maps[MapName].UpgradeMap(Level);
-
-            //_sprite.PlayAnimation(Level.ToString());
+            return Util.FindArguments(DataManager.GetDataValueByIDKey(ID, "UpgradeID", DataType.WorldObject));
         }
 
         /// <summary>
@@ -206,41 +138,19 @@ namespace RiverHollow.Buildings
         /// <param name="name"></param>
         public void SetHomeMap(string name)
         {
-            _sBuildingMap = name;
+            MapName = name;
         }
 
-        private string DetermineMapName()
+        public override WorldObjectData SaveData()
         {
-            string rv = "map" + _sTextureName;
+            WorldObjectData data = base.SaveData();
+           // data.stringData = ;
 
-            if(Level > 1)
-            {
-                string append = "_" + Level.ToString();
-                if(MapManager.Maps.ContainsKey(rv + append))
-                {
-                    rv = rv + append;
-                }
-            }
-
-            return rv;
+            return data;
         }
-
-        public BuildingData SaveData()
+        public override void LoadData(WorldObjectData data)
         {
-            BuildingData buildingData = new BuildingData
-            {
-                iBldgLevel = this.Level,
-                iBuildingID = this.ID,
-                iPosX = (int)this.CollisionBox.X,
-                iPosY = (int)this.CollisionBox.Y,
-            };
-
-            return buildingData;
-        }
-        public void LoadData(BuildingData data)
-        {
-            SnapPositionToGrid(new Vector2(data.iPosX, data.iPosY));
-            Level = data.iBldgLevel;
+            base.LoadData(data);
         }
     }
 

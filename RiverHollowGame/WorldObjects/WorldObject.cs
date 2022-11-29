@@ -26,7 +26,7 @@ namespace RiverHollow.WorldObjects
 
         protected bool AssignedToTiles => Tiles.Count > 0;
 
-        protected string MapName { get; set; } = string.Empty;
+        public string MapName { get; protected set; } = string.Empty;
         public RHMap CurrentMap => MapManager.Maps.ContainsKey(MapName) ? MapManager.Maps[MapName] : null;
 
         private bool _bMovable = false;
@@ -69,20 +69,19 @@ namespace RiverHollow.WorldObjects
         public Rectangle CollisionBox => Util.FloatRectangle(MapPosition.X + (_rBase.X * Constants.TILE_SIZE), MapPosition.Y + (_rBase.Y * Constants.TILE_SIZE), (_rBase.Width * Constants.TILE_SIZE), (_rBase.Height * Constants.TILE_SIZE));
         public Point CollisionCenter => CollisionBox.Center;
 
-        protected int _iID;
-        public int ID  => _iID;
+        public int ID { get; protected set; }
         #endregion
 
         public virtual string Name()
         {
-            return DataManager.GetTextData("WorldObject", _iID, "Name");
+            return DataManager.GetTextData("WorldObject", ID, "Name");
         }
 
         protected WorldObject(int id)
         {
             Tiles = new List<RHTile>();
 
-            _iID = id;
+            ID = id;
         }
 
         public WorldObject(int id, Dictionary<string, string> stringData) : this(id)
@@ -407,7 +406,7 @@ namespace RiverHollow.WorldObjects
         }
         public virtual void LoadData(WorldObjectData data)
         {
-            _iID = data.ID;
+            ID = data.ID;
             SnapPositionToGrid(new Vector2(data.X, data.Y));
         }
         #endregion

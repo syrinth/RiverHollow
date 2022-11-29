@@ -107,7 +107,7 @@
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:18][Collection:7|188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:64][Key:Yulia][StartMap:mapWoods]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:18][Collection:7|188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:64][Key:Yulia][StartMap:map_YuliaCottage]</Value>
     </Item>
     <Item>
       <Key>27</Key>

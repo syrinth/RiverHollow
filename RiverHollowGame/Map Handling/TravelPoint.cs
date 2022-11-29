@@ -22,7 +22,7 @@ namespace RiverHollow.Map_Handling
 
         private string _sLinkedMapName = string.Empty;
         public int LinkedBuildingID => TargetBuilding != null ? TargetBuilding.ID : -1;
-        public string LinkedMap => (TargetBuilding != null ? TargetBuilding.MapName : _sLinkedMapName);
+        public string LinkedMap => (TargetBuilding != null ? TargetBuilding.BuildingMapName : _sLinkedMapName);
         public Vector2 Center => CollisionBox.Center.ToVector2();
         public bool IsDoor { get; private set; }
         public bool IsActive { get; private set; } = false;

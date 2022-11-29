@@ -65,9 +65,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Tools")]
             public ToolData Tools;
 
-            [XmlArray(ElementName = "Buildings")]
-            public List<BuildingData> Buildings;
-
             [XmlArray(ElementName = "Maps")]
             public List<MapData> MapData;
 
@@ -196,29 +193,6 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "currSeasonPrecipDays")]
             public int currSeasonPrecipDays;
-        }
-        public struct BuildingData
-        {
-            [XmlElement(ElementName = "name")]
-            public string sName;
-
-            [XmlElement(ElementName = "positionX")]
-            public int iPosX;
-
-            [XmlElement(ElementName = "positionY")]
-            public int iPosY;
-
-            [XmlElement(ElementName = "BuildingID")]
-            public int iBuildingID;
-
-            [XmlElement(ElementName = "PersonalID")]
-            public int iPersonalID;
-
-            [XmlElement(ElementName = "BldgLvl")]
-            public int iBldgLevel;
-
-            [XmlElement(ElementName = "UpgradeTime")]
-            public int iUpgradeTimer;
         }
         public struct BuildInfoData
         {
@@ -522,7 +496,6 @@ namespace RiverHollow.Game_Managers
                 Calendar = GameCalendar.SaveCalendar(),
                 Environment = EnvironmentManager.SaveEnvironment(),
                 Tools = PlayerManager.SaveToolData(),
-                Buildings = new List<BuildingData>(),
                 MapData = new List<MapData>(),
                 TaskInfo = new List<TaskData>(),
                 CurrentMissions = new List<MissionData>(),

@@ -471,6 +471,20 @@ namespace RiverHollow.Utilities
         }
         #endregion
 
+        #region ParseValues
+        public static Point ParsePoint(string value)
+        {
+            Point rv = Point.Zero;
+            string[] splitVal = value.Split('-');
+            if (splitVal.Length == 2)
+            {
+                rv = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
+            }
+
+            return rv;
+        }
+        #endregion
+
         public static double GetDistance(Point pOne, Point pTwo) { return GetDistance(pOne.ToVector2(), pTwo.ToVector2()); }
         public static double GetDistance(Vector2 vOne, Vector2 vTwo)
         {

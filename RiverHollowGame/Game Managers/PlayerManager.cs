@@ -722,7 +722,7 @@ namespace RiverHollow.Game_Managers
             Building playerHome = GetBuildingByID(int.Parse(DataManager.Config[21]["ObjectID"]));
             if (playerHome != null)
             {
-                rv = playerHome.MapName;
+                rv = playerHome.BuildingMapName;
             }
 
             return rv;
@@ -849,7 +849,6 @@ namespace RiverHollow.Game_Managers
 
             PlayerCombatant.IncreaseHealth(PlayerCombatant.MaxHP);
             PlayerActor.SetBodyType(saveData.bodyTypeIndex);
-            PlayerActor.Position = pos;
 
             for (int i = 0; i < PlayerManager.BackpackLevel; i++)
             {

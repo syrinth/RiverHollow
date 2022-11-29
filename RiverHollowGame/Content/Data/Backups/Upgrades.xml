@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[Cost:200][ItemID:60-10][Profit:15]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Cost:300][ItemID:60-10][Profit:15]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

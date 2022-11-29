@@ -336,7 +336,7 @@ namespace RiverHollow.Characters
             string strSpawn = string.Empty;
             if (Married)
             {
-                return PlayerManager.PlayerHome.MapName;
+                return PlayerManager.PlayerHome.BuildingMapName;
             }
             else
             {
@@ -346,7 +346,7 @@ namespace RiverHollow.Characters
                     case VillagerSpawnStatus.WaitAtInn:
                         return "mapInn";
                     case VillagerSpawnStatus.HasHome:
-                        return PlayerManager.GetBuildingByID(_iHouseBuildingID)?.MapName;
+                        return PlayerManager.GetBuildingByID(_iHouseBuildingID)?.BuildingMapName;
                     case VillagerSpawnStatus.NonTownMap:
                         return _sStartMap;
                 }

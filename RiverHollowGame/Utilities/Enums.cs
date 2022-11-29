@@ -2,6 +2,8 @@
 {
     public static class Enums
     {
+        public enum DataType { Action, Character, Class, Item, Light, Monster, StatusEffect, Task, WorldObject, Upgrade };
+
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, ShowRequests, Propose, Date, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Party };
         public enum TextEntryTriggerEnum { None, UseItem, ConfirmGift, ConfirmPurchase, EndDay, Exit, Donate, PetFollow, PetUnfollow, GetBaby }
