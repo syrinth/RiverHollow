@@ -557,6 +557,46 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             return g.Position();
         }
+        internal void AnchorToObjectInnerSide(GUIObject obj, SideEnum sidePlacement, int spacing = 0)
+        {
+            switch (sidePlacement)
+            {
+                case SideEnum.Bottom:
+                    this.SetY(obj.Bottom - this.Height - spacing);
+                    this.AlignToObject(obj, SideEnum.CenterX);
+                    break;
+                case SideEnum.Left:
+                    this.SetX(obj.Left + spacing);
+                    this.AlignToObject(obj, SideEnum.CenterY);
+                    break;
+                case SideEnum.Right:
+                    this.SetX(obj.Right - this.Width - spacing);
+                    this.AlignToObject(obj, SideEnum.CenterY);
+                    break;
+                case SideEnum.Top:
+                    this.SetY(obj.Top + spacing);
+                    this.AlignToObject(obj, SideEnum.CenterX);
+                    break;
+                case SideEnum.BottomLeft:
+                    this.SetY(obj.Bottom - this.Height - spacing);
+                    this.SetX(obj.Left + spacing);
+                    break;
+                case SideEnum.BottomRight:
+                    this.SetY(obj.Bottom - this.Height - spacing);
+                    this.SetX(obj.Right - this.Width - spacing);
+                    break;
+                case SideEnum.TopLeft:
+                    this.SetY(obj.Top + spacing);
+                    this.SetX(obj.Left + spacing);
+                    break;
+                case SideEnum.TopRight:
+                    this.SetY(obj.Top + spacing);
+                    this.SetX(obj.Right - this.Width - spacing);
+                    break;
+                default:
+                    break;
+            }
+        }
         internal void AnchorToInnerSide(GUIWindow window, SideEnum sidePlacement, int spacing = 0)
         {
             window.AddControl(this);

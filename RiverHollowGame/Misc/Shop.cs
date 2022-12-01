@@ -233,10 +233,10 @@ namespace RiverHollow.Misc
             switch (MerchType)
             {
                 case MerchTypeEnum.Item:
-                    _iCost = int.Parse(DataManager.GetDataValueByIDKey(MerchID, "Value", DataType.Item));
+                    _iCost = int.Parse(DataManager.GetStringByIDKey(MerchID, "Value", DataType.Item));
                     break;
                 case MerchTypeEnum.WorldObject:
-                    _iCost = int.Parse(DataManager.GetDataValueByIDKey(MerchID, "Value", DataType.WorldObject));
+                    _iCost = int.Parse(DataManager.GetStringByIDKey(MerchID, "Value", DataType.WorldObject));
                     break;
             }
         }

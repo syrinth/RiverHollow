@@ -6,8 +6,10 @@ using RiverHollow.Map_Handling;
 using RiverHollow.WorldObjects;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.Utilities;
-using RiverHollow.GUIComponents.Screens;
 using static RiverHollow.Utilities.Enums;
+using RiverHollow.Misc;
+using System.Linq;
+using RiverHollow.GUIComponents.Screens.HUDScreens;
 
 namespace RiverHollow.Buildings
 {
@@ -16,11 +18,11 @@ namespace RiverHollow.Buildings
         private int _iNPCBuilderID;
         private Rectangle _rEntrance;
 
-        public List<int> CompletedUpgrades { get; private set; }
+        public int Level { get; private set; } = 1;
 
         public string Description => DataManager.GetTextData("WorldObject", ID, "Description");
 
-        public string BuildingMapName => "map" + DataManager.GetDataValueByIDKey(ID, "Texture", DataType.WorldObject);
+        public string BuildingMapName => "map" + DataManager.GetStringByIDKey(ID, "Texture", DataType.WorldObject);
 
         public Rectangle SelectionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _sprite.Width, _sprite.Height);
 
@@ -62,12 +64,12 @@ namespace RiverHollow.Buildings
                 }
             }
 
-            LoadSprite(stringData, DataManager.FOLDER_BUILDINGS + DataManager.GetDataValueByIDKey(ID, "Texture", DataType.WorldObject));
+            LoadSprite(stringData, DataManager.FOLDER_BUILDINGS + DataManager.GetStringByIDKey(ID, "Texture", DataType.WorldObject));
         }
 
         public override bool ProcessLeftClick()
         {
-            GUIManager.OpenMainObject(new HUDUpgradeWindow(this));
+            GUIManager.OpenMainObject(new HUDBuildingUpgrade(this));
             return true;
         }
 
@@ -77,7 +79,8 @@ namespace RiverHollow.Buildings
             int startY = 0;
 
             _sprite = new AnimatedSprite(textureName);
-            for (int i = 1; i <= Constants.MAX_BUILDING_LEVEL; i++)
+            int maxLevel = GetAllUpgrades().Length > 0 ? GetAllUpgrades().Length : 1;
+            for (int i = 1; i <= maxLevel; i++)
             {
                 _sprite.AddAnimation(i.ToString(), startX, startY, _uSize);
                 startX += _uSize.Width * Constants.TILE_SIZE;
@@ -116,6 +119,7 @@ namespace RiverHollow.Buildings
                 rv = true;
                 map.AssignMapTiles(this, tiles);
                 map.AddBuilding(this);
+                MapName = map.Name;
                 map.CreateBuildingEntrance(this);
 
                 SyncLightPositions();
@@ -127,30 +131,63 @@ namespace RiverHollow.Buildings
             return rv;
         }
 
-        public string[] GetAllUpgrades()
+        #region Upgrade Handlers
+        public bool MaxLevel()
         {
-            return Util.FindArguments(DataManager.GetDataValueByIDKey(ID, "UpgradeID", DataType.WorldObject));
+            return Level <= GetAllUpgrades().Length;
+        }
+        public Upgrade[] GetAllUpgrades()
+        {
+            int[] upgradeIDs = Util.FindIntArguments(DataManager.GetStringByIDKey(ID, "UpgradeID", DataType.WorldObject));
+            Upgrade[] allUpgrades = new Upgrade[upgradeIDs.Length];
+            for (int i = 0; i < upgradeIDs.Length; i++)
+            {
+                allUpgrades[i] = new Upgrade(upgradeIDs[i]);
+            }
+
+            return allUpgrades;
+        }
+        public Upgrade[] GetUnlockedUpgrades()
+        {
+            return GetAllUpgrades().Take(Level - 1).ToArray();
         }
 
-        /// <summary>
-        /// Sets the name of the map the building lives on
-        /// </summary>
-        /// <param name="name"></param>
-        public void SetHomeMap(string name)
+        public Dictionary<int, int> UpgradeReqs()
         {
-            MapName = name;
-        }
+            Upgrade[] upgrades = GetAllUpgrades();
+            if (!MaxLevel())
+            {
+                return upgrades[Level - 1].UpgradeRequirements;
+            }
 
+            return null;
+        }
+        public void Upgrade()
+        {
+            string initialLevel = MapName;
+            if (MaxLevel())
+            {
+                Level++;
+            //    _sprite.PlayAnimation(Level.ToString());
+            }
+
+            MapManager.Maps[BuildingMapName].UpdateBuildingEntrance(initialLevel, MapName);
+            MapManager.Maps[MapName].UpgradeMap(Level);
+
+            //_sprite.PlayAnimation(Level.ToString());
+        }
+        #endregion
         public override WorldObjectData SaveData()
         {
             WorldObjectData data = base.SaveData();
-           // data.stringData = ;
+            data.stringData = Level.ToString();
 
             return data;
         }
         public override void LoadData(WorldObjectData data)
         {
             base.LoadData(data);
+            Level = Util.ParseInt(data.stringData);
         }
     }
 

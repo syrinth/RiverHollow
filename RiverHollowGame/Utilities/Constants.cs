@@ -18,7 +18,6 @@
 
         public const int MINIMUM_DAYS_OF_PRECIPITATION = 6;
         public const int NORMAL_SCALE = 4;
-        public const int MAX_BUILDING_LEVEL = 3;
         public const int TILE_SIZE = 16;
         public const int MAX_LAYER_DEPTH = 999999;
         public const float TOOL_ANIM_SPEED = 0.08f;

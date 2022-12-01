@@ -60,6 +60,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDMiniInventory.cs" />
+    <Compile Include="GUIComponents\Screens\HUDScreens\HUDUpgrade.cs" />
     <Compile Include="Items\CapeOfBlinking.cs" />
     <Compile Include="Items\IceStaff.cs" />
     <Compile Include="Items\Seed.cs" />

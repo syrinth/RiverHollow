@@ -607,6 +607,11 @@ namespace RiverHollow.Game_Managers
         public static bool ExpendResources(Dictionary<int, int> requiredItems)
         {
             bool rv = false;
+            if (requiredItems == null)
+            {
+                return false;
+            }
+
             if (InventoryManager.HasSufficientItems(requiredItems))
             {
                 rv = true;

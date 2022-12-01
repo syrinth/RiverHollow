@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
-using RiverHollow.Utilities;
+using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Misc
@@ -8,9 +8,11 @@ namespace RiverHollow.Misc
     public class Upgrade
     {
         public int ID { get; private set; }
-        public int Cost => int.Parse(DataManager.GetDataValueByIDKey(ID, "Cost", DataType.Upgrade));
-        public Point Icon => Util.ParsePoint(DataManager.GetDataValueByIDKey(ID, "Icon", DataType.Upgrade));
+        public int Cost => DataManager.GetIntByIDKey(ID, "Cost", DataType.Upgrade);
+        public Point Icon => DataManager.PointFromLookup(ID, "Icon", DataType.Upgrade);
+        public Dictionary<int, int> UpgradeRequirements => DataManager.IntDictionaryFromLookup(ID, "ItemID", DataType.Upgrade);
 
+        public int Profit => DataManager.GetIntByIDKey(ID, "Profit", DataType.Upgrade);
 
         public Upgrade(int id)
         {

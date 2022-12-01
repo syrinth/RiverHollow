@@ -266,6 +266,10 @@ namespace RiverHollow.Utilities
         {
             return data.Split(new string[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
         }
+        public static int[] FindIntArguments(string data)
+        {
+            return FindArguments(data).Select(Int32.Parse)?.ToArray();
+        }
 
         public static String NumToString(int number, bool isCaps)
         {
@@ -472,13 +476,25 @@ namespace RiverHollow.Utilities
         #endregion
 
         #region ParseValues
-        public static Point ParsePoint(string value)
+        public static Point ParsePoint(string str)
         {
             Point rv = Point.Zero;
-            string[] splitVal = value.Split('-');
-            if (splitVal.Length == 2)
+
+            string[] splitVal = str.Split('-');
+            if (str.Length == 2)
             {
                 rv = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
+            }
+
+            return rv;
+        }
+        public static int ParseInt(string str)
+        {
+            int rv = -1;
+
+            if(!int.TryParse(str, out rv))
+            {
+                rv = -1;
             }
 
             return rv;

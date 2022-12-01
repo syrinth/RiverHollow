@@ -49,6 +49,7 @@ namespace RiverHollow.Game_Managers
         public const string GUI_COMPONENTS = @"Textures\GUI Components";
         public const string COMBAT_TEXTURE = GUI_COMPONENTS + @"\GUI_Combat";
         public const string ACTION_ICONS = GUI_COMPONENTS + @"\GUI_Action_Icons";
+        public const string HUD_COMPONENTS = GUI_COMPONENTS + @"\GUI_HUD_Components";
         #endregion
 
         #region Dictionaries
@@ -333,8 +334,12 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
-        #region GetMethods
-        public static string GetDataValueByIDKey(int id, string key, DataType type)
+        #region Lookup Methods
+        public static int GetIntByIDKey(int id, string key, DataType type)
+        {
+            return Util.ParseInt(GetStringByIDKey(id, key, type));
+        }
+        public static string GetStringByIDKey(int id, string key, DataType type)
         {
             switch (type)
             {
@@ -373,6 +378,37 @@ namespace RiverHollow.Game_Managers
             return string.Empty;
         }
 
+        public static Point PointFromLookup(int id, string key, DataType type)
+        {
+            Point rv = Point.Zero;
+            string value = GetStringByIDKey(id, key, type);
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                rv = Util.ParsePoint(value);
+            }
+
+            return rv;
+        }
+        public static Dictionary<int, int> IntDictionaryFromLookup(int id, string key, DataType type)
+        {
+            Dictionary<int, int> dictValue = new Dictionary<int, int>();
+            string value = GetStringByIDKey(id, key, type);
+            if (!string.IsNullOrEmpty(value))
+            {
+                //Split by "|" for each set
+                string[] split = Util.FindParams(value);
+                foreach (string s in split)
+                {
+                    string[] splitData = s.Split('-');
+                    dictValue[Util.ParseInt(splitData[0])] = Util.ParseInt(splitData[1]);
+                }
+            }
+            return dictValue;
+        }
+        #endregion
+
+        #region GetMethods
         public static Upgrade GetUpgrade(int id)
         {
             if (_diUpgradeData.ContainsKey(id))

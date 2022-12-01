@@ -8,6 +8,7 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens;
+using RiverHollow.GUIComponents.Screens.HUDScreens;
 using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
@@ -1651,7 +1652,7 @@ namespace RiverHollow.Map_Handling
 
                     if (obj.CompareType(ObjectTypeEnum.Building))
                     {
-                        GUIManager.OpenMainObject(new HUDUpgradeWindow((Building)obj));
+                        GUIManager.OpenMainObject(new HUDBuildingUpgrade((Building)obj));
                     }
                 }
             }
@@ -2128,7 +2129,6 @@ namespace RiverHollow.Map_Handling
             if (!_liBuildings.Contains(b))
             {
                 _liBuildings.Add(b);
-                b.SetHomeMap(_sName);
             }
         }
         #endregion
