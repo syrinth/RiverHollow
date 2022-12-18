@@ -59,12 +59,8 @@ namespace RiverHollow.WorldObjects
 
             foreach (Item i in (this.Inventory))
             {
-                ItemData itemData = Item.SaveData(i);
-                string strData = string.Empty;
-                strData += itemData.itemID + "-";
-                strData += itemData.num + "-";
-                strData += itemData.strData;
-                data.stringData += strData + "|";
+                if (i == null) { data.stringData += "|null"; }
+                else { data.stringData += "|" + Item.SaveItemToString(i); }
             }
             return data;
         }
@@ -77,13 +73,16 @@ namespace RiverHollow.WorldObjects
             {
                 for (int j = 0; j < Columns; j++)
                 {
-                    string[] itemData = Util.FindArguments(strData[i * InventoryManager.maxItemRows + j]);
-                    Item newItem = DataManager.GetItem(int.Parse(itemData[0]), int.Parse(itemData[1]));
-                    if (newItem != null && itemData.Length > 2) { newItem.ApplyUniqueData(itemData[2]); }
+                    if (!string.Equals(strData[i * InventoryManager.maxItemRows + j], "null"))
+                    {
+                        string[] itemData = Util.FindArguments(strData[i * InventoryManager.maxItemRows + j]);
+                        Item newItem = DataManager.GetItem(int.Parse(itemData[0]), int.Parse(itemData[1]));
+                        if (newItem != null && itemData.Length > 2) { newItem.ApplyUniqueData(itemData[2]); }
 
-                    InventoryManager.InitExtraInventory(this.Inventory);
-                    InventoryManager.AddItemToInventorySpot(newItem, i, j, false);
-                    InventoryManager.ClearExtraInventory();
+                        InventoryManager.InitExtraInventory(this.Inventory);
+                        InventoryManager.AddItemToInventorySpot(newItem, i, j, false);
+                        InventoryManager.ClearExtraInventory();
+                    }
                 }
             }
         }

@@ -10,6 +10,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 using System;
 using static RiverHollow.Game_Managers.SaveManager;
+using RiverHollow.GUIComponents.Screens;
 
 namespace RiverHollow.WorldObjects
 {
@@ -186,7 +187,14 @@ namespace RiverHollow.WorldObjects
         }
 
         public virtual bool ProcessLeftClick() { return false; }
-        public virtual bool ProcessRightClick() { return false; }
+        public virtual bool ProcessRightClick() {
+            bool rv = false;
+            if (DataManager.GetBoolByIDKey(ID, "OpenStock", DataType.WorldObject) && GameManager.CurrentBuilding != null){
+                rv = true;
+                GUIManager.OpenMainObject(new HUDInventoryDisplay(GameManager.CurrentBuilding.Inventory, DisplayTypeEnum.Inventory));
+            }
+            return rv;
+        }
 
         public virtual void Rollover() { }
 
@@ -357,7 +365,7 @@ namespace RiverHollow.WorldObjects
 
         public void InitiateMove(Vector2 newMovement)
         {
-            DirectionEnum moveDir = Util.GetDirectionFromPosition(newMovement);
+            DirectionEnum moveDir = Util.GetDirectionFromNormalVector(newMovement);
             bool canMove = _bMovable && (!_bMoveOnce || (_bMoveOnce && !_bHasMoved));
             bool goingBackwards = moveDir == Util.GetOppositeDirection(PlayerManager.PlayerActor.Facing);
             bool shoveMatches = !goingBackwards && _eShoveDirection == PlayerManager.PlayerActor.Facing;

@@ -3,11 +3,11 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Cost:200][ItemID:60-10][Profit:15]</Value>
+      <Value>[Icon:0-0][Cost:200][ItemID:60-10][Profit:15]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Cost:300][ItemID:60-10][Profit:15]</Value>
+      <Value>[Icon:16-0][Cost:300][ItemID:60-10][Profit:15]</Value>
     </Item>
   </Asset>
 </XnaContent>

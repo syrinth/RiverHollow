@@ -18,6 +18,7 @@ namespace RiverHollow.Items
         public ItemEnum ItemType => _eItemType;
         protected SpecialItemEnum _eSpecialItem;
         public SpecialItemEnum SpecialItemType => _eSpecialItem;
+        public StoreTypeEnum StoreType => DataManager.GetEnumByIDKey<StoreTypeEnum>(_iItemID, "StoreType", DataType.Item);
         protected int _iItemID;
         public int ItemID => _iItemID;
         protected Color _c = Color.White;
@@ -192,7 +193,7 @@ namespace RiverHollow.Items
                 InventoryManager.AddToInventory(_iItemID, leftOver, playerInventory);
             }
         }
-        public virtual bool Remove(int x)
+        public virtual bool Remove(int x, bool playerInventory = true)
         {
             bool rv = false;
             if (x <= _iNum)
@@ -202,7 +203,7 @@ namespace RiverHollow.Items
                 if (_iNum == 0)
                 {
                     if(GameManager.HeldItem == this) { GameManager.DropItem(); }
-                    InventoryManager.RemoveItemFromInventory(this);
+                    InventoryManager.RemoveItemFromInventory(this, playerInventory);
                 }
             }
             return rv;
@@ -256,6 +257,19 @@ namespace RiverHollow.Items
         public bool CompareType(ItemEnum type) { return _eItemType == type; }
         public bool CompareSpecialType(SpecialItemEnum type) { return _eSpecialItem == type; }
 
+        public static string SaveItemToString(Item i)
+        {
+            string rv = string.Empty;
+            ItemData data = SaveData(i);
+
+            string strData = string.Empty;
+            strData += data.itemID + "-";
+            strData += data.num + "-";
+            strData += data.strData;
+            rv += strData;
+
+            return rv;
+        }
         public static ItemData SaveData(Item i)
         {
             if (i == null)
@@ -265,7 +279,7 @@ namespace RiverHollow.Items
                     itemID = -1,
                     num = 0,
                     strData = ""
-                }; 
+                };
             }
             else { return i.SaveData(); }
         }
@@ -511,7 +525,7 @@ namespace RiverHollow.Items
         /// </summary>
         /// <param name="x">The number to remove</param>
         /// <returns>True if item was successfully removed</returns>
-        public override bool Remove(int x)
+        public override bool Remove(int x, bool playerInventory = true)
         {
             bool rv = base.Remove(x);
 

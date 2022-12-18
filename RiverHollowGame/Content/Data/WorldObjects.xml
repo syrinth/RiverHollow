@@ -103,7 +103,7 @@
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Building][Texture:GeneralStore][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86|3-80-86][ReqItems:55-5|60-5][UpgradeID:0-1]</Value>
+      <Value>[Type:Building][Texture:GeneralStore][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86|3-80-86][ReqItems:55-5|60-5][UpgradeID:0-1][StoreType:General]</Value>
     </Item>
     <Item>
       <Key>26</Key>
@@ -127,7 +127,7 @@
     </Item>
     <Item>
       <Key>31</Key>
-      <Value>[Type:Building][Texture:MagicShop][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
+      <Value>[Type:Building][Texture:MagicShop][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5][StoreType:Magic]</Value>
     </Item>
     <Item>
       <Key>32</Key>
@@ -584,6 +584,10 @@
     <Item>
       <Key>145</Key>
       <Value>[Type:DungeonObject][Image:352-48][Subtype:FloorSwitch]</Value>
+    </Item>
+    <Item>
+      <Key>146</Key>
+      <Value>[Type:WorldObject][Image:0-16][OpenStock][StoreType:General]</Value>
     </Item>
   </Asset>
 </XnaContent>

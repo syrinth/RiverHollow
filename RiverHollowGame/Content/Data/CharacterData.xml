@@ -139,11 +139,11 @@
     </Item>
     <Item>
       <Key>34</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:7][RequestIDs:147|158|168][RequiredObjectID][ShopData:4][Key:Abeline]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:4][ArrivalPeriod:7][RequestIDs:147|158|168][RequiredObjectID][ShopData:4][Key:Abeline]</Value>
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:10][ArrivalPeriod:2][RequestIDs:2-30|2-30|2-30][ShopData:7][Key:Erron]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:12][ArrivalPeriod:2][RequestIDs:2-30|2-30|2-30][ShopData:7][Key:Erron]</Value>
     </Item>
     <Item>
       <Key>36</Key>
@@ -155,7 +155,7 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:4][ArrivalPeriod:4][RequestIDs:58|68|71|167|168][Key:Wagren]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:4][RequestIDs:58|68|71|167|168][ShopData:10][Key:Wagren]</Value>
     </Item>
     <Item>
       <Key>39</Key>

@@ -9,6 +9,7 @@ using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.WorldObjects;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Characters
 {
@@ -138,6 +139,12 @@ namespace RiverHollow.Characters
 
             Util.AddToAnimationsList(ref rv, data, VerbEnum.UseTool, true, true);
             return rv;
+        }
+
+        public void FaceMouse()
+        {
+            Vector2 mousePosition = GUICursor.GetWorldMousePosition();
+            DetermineFacing(mousePosition - Position);
         }
 
         public void SetColor(AnimatedSprite sprite, Color c)

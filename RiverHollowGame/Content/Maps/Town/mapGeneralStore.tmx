@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="14" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="39">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="14" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="41">
  <properties>
-  <property name="BuildingID" type="int" value="26"/>
+  <property name="BuildingID" type="int" value="25"/>
   <property name="MapType" value="Town"/>
   <property name="Shop" type="int" value="3"/>
  </properties>
@@ -299,7 +299,7 @@
 223,290,291,291,291,291,1297,1298,1299,291,291,291,292,222,
 223,0,0,0,0,0,0,0,0,0,0,0,0,222,
 223,1228,1228,1229,1228,1230,0,0,0,1300,1301,1302,1303,222,
-223,1285,0,0,0,0,0,0,0,0,0,0,0,222,
+223,0,0,0,0,0,0,0,0,0,0,0,0,222,
 223,0,0,0,0,0,0,0,0,1300,1301,1302,1303,222,
 223,0,0,0,0,0,0,0,0,0,0,0,0,222,
 223,1300,1303,0,0,0,0,0,0,1300,1301,1302,1303,222,
@@ -314,7 +314,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,1202,1202,1203,1202,1256,0,0,0,1274,1275,1276,1277,0,
-0,1259,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,1274,1275,1276,1277,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,1274,1277,0,0,0,0,0,0,1274,1275,1276,1277,0,
@@ -350,6 +350,11 @@
   <object id="38" name="WorldObject" x="160" y="80" width="48" height="16">
    <properties>
     <property name="ObjectID" type="int" value="141"/>
+   </properties>
+  </object>
+  <object id="40" name="WorldObject" x="16" y="96" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="146"/>
    </properties>
   </object>
  </objectgroup>

@@ -39,5 +39,7 @@
         public const int HUMAN_HEIGHT = (TILE_SIZE * 2) + 2;
         public const float EYE_DEPTH = 0.001f;
         public const float HAIR_DEPTH = 0.003f;
+
+        public const int BUILDING_STOCK_SIZE = 3;
     }
 }

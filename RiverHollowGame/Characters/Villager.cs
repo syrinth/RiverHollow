@@ -10,10 +10,10 @@ using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Threading;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.WorldObjects;
+using RiverHollow.Buildings;
 
 namespace RiverHollow.Characters
 {
@@ -66,6 +66,8 @@ namespace RiverHollow.Characters
 
         public ClassedCombatant CombatVersion { get; private set; }
 
+        public int Income { get; private set; }
+
         public Villager(int id) : base(id)
         {
             _diCollection = new Dictionary<int, bool>();
@@ -84,6 +86,7 @@ namespace RiverHollow.Characters
             _iBodyWidth = n._sprBody.Width;
             _iBodyHeight = n._sprBody.Height;
             _sprBody = new AnimatedSprite(n.BodySprite);
+            Income = n.Income;
         }
 
         public Villager(int index, Dictionary<string, string> stringData, bool loadanimations = true) : this(index)
@@ -222,6 +225,7 @@ namespace RiverHollow.Characters
                     break;
                 case VillagerSpawnStatus.HasHome:
                     GameManager.RemoveFromInnQueue(this);
+                    Income = CalculateIncome();
                     goto default;
                 case VillagerSpawnStatus.VisitInn:
                 case VillagerSpawnStatus.WaitAtInn:
@@ -587,9 +591,19 @@ namespace RiverHollow.Characters
             }
         }
 
-        public int GetTaxes()
+        private int CalculateIncome()
         {
-            return 250 * (int)GetSatisfaction() * _iTaxMultiplier;
+            int baseIncome = 10;
+
+            Building b = PlayerManager.GetBuildingByID(_iHouseBuildingID);
+            int buildingIncome = b != null ? b.CalculateIncome() : 0;
+
+            return (baseIncome + buildingIncome) * (int)GetSatisfaction() * _iTaxMultiplier;
+        }
+
+        public void ClearIncome()
+        {
+            Income = 0;
         }
 
         public SatisfactionStateEnum GetSatisfaction()

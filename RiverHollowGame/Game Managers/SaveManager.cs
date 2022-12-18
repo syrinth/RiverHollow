@@ -461,8 +461,8 @@ namespace RiverHollow.Game_Managers
         {
             _bSaving = true;
             GameCalendar.NextDay();
-            PlayerManager.AddMoney(PlayerManager.CalculateTaxes());
             RiverHollow.Rollover();
+            PlayerManager.AddMoney(PlayerManager.CalculateIncome());
             SaveManager.Save();
             PlayerManager.Stamina = PlayerManager.MaxStamina;
             foreach (CombatActor actor in PlayerManager.GetParty())

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 using System.Threading;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Characters
 {
@@ -202,13 +203,9 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void DetermineFacing(RHTile tile)
-        {
-            DetermineFacing(new Vector2(tile.Position.X - Position.X, tile.Position.Y - Position.Y));
-        }
         public void DetermineFacing(Vector2 direction)
         {
-            DirectionEnum newFacing = Util.GetDirectionFromPosition(direction);
+            DirectionEnum newFacing = Util.GetDirectionFromNormalVector(direction);
             if (newFacing != DirectionEnum.None) {
                 Facing = newFacing;
             }
@@ -225,7 +222,7 @@ namespace RiverHollow.Characters
                 case ActorStateEnum.Grab:
                     if (Moving)
                     {
-                        DirectionEnum moveDir = Util.GetDirectionFromPosition(direction);
+                        DirectionEnum moveDir = Util.GetDirectionFromNormalVector(direction);
                         if(moveDir == Facing) { PlayAnimationVerb(VerbEnum.Push); }
                         else if(moveDir == Util.GetOppositeDirection(Facing)) { PlayAnimationVerb(VerbEnum.Pull); }
                     }

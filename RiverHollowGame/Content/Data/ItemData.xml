@@ -773,5 +773,9 @@
       <Key>192</Key>
       <Value>[Type:Tool][Subtype:CapeOfBlinking][Image:0-10]</Value>
     </Item>
+    <Item>
+      <Key>193</Key>
+      <Value>[Type:Resource][Image:7-10][Value:20][StoreType:General]</Value>
+    </Item>
   </Asset>
 </XnaContent>

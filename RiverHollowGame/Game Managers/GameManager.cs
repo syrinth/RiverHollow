@@ -12,6 +12,7 @@ using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using RiverHollow.Utilities;
+using RiverHollow.Buildings;
 
 namespace RiverHollow.Game_Managers
 {
@@ -78,6 +79,7 @@ namespace RiverHollow.Game_Managers
         public static Item CurrentItem { get; private set; }
         public static Spirit CurrentSpirit { get; private set; }
         public static WorldObject CurrentWorldObject { get; private set; }
+        public static Building CurrentBuilding { get; set; }
         #endregion
 
         #region Game State Values

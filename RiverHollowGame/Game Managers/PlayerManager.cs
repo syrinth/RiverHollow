@@ -14,6 +14,7 @@ using RiverHollow.Misc;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers
 {
@@ -508,14 +509,14 @@ namespace RiverHollow.Game_Managers
         }
         public static IReadOnlyDictionary<int, List<WorldObject>> GetTownObjects() { return _diTownObjects; }
 
-        public static int CalculateTaxes()
+        public static int CalculateIncome()
         {
             int rv = 0;
 
             foreach (Villager n in DataManager.DIVillagers.Values)
             {
                 if (n.LivesInTown) {
-                    rv += n.GetTaxes();
+                    rv += n.Income;
                 }
             }
 
@@ -914,12 +915,13 @@ namespace RiverHollow.Game_Managers
 
         public static List<RHTile> GetTiles()
         {
-            List<RHTile> rv = new List<RHTile>();
-
-            rv.Add(MapManager.CurrentMap.GetTileByPixelPosition(new Vector2(PlayerActor.CollisionBox.Left, PlayerActor.CollisionBox.Top)));
-            rv.Add(MapManager.CurrentMap.GetTileByPixelPosition(new Vector2(PlayerActor.CollisionBox.Right, PlayerActor.CollisionBox.Top)));
-            rv.Add(MapManager.CurrentMap.GetTileByPixelPosition(new Vector2(PlayerActor.CollisionBox.Left, PlayerActor.CollisionBox.Bottom)));
-            rv.Add(MapManager.CurrentMap.GetTileByPixelPosition(new Vector2(PlayerActor.CollisionBox.Right, PlayerActor.CollisionBox.Bottom)));
+            List<RHTile> rv = new List<RHTile>
+            {
+                MapManager.CurrentMap.GetTileByPixelPosition(new Vector2(PlayerActor.CollisionBox.Left, PlayerActor.CollisionBox.Top)),
+                MapManager.CurrentMap.GetTileByPixelPosition(new Vector2(PlayerActor.CollisionBox.Right, PlayerActor.CollisionBox.Top)),
+                MapManager.CurrentMap.GetTileByPixelPosition(new Vector2(PlayerActor.CollisionBox.Left, PlayerActor.CollisionBox.Bottom)),
+                MapManager.CurrentMap.GetTileByPixelPosition(new Vector2(PlayerActor.CollisionBox.Right, PlayerActor.CollisionBox.Bottom))
+            };
 
 
             return rv;
@@ -947,7 +949,7 @@ namespace RiverHollow.Game_Managers
             GrabbedObject = t.WorldObject;
 
             PlayerActor.Position = Util.SnapToGrid(PlayerActor.CollisionCenter.ToVector2());
-            PlayerActor.DetermineFacing(t);
+            PlayerActor.FaceMouse();
             PlayerActor.SetState(ActorStateEnum.Grab);
         }
         public static void ReleaseTile()

@@ -10,14 +10,19 @@ using static RiverHollow.Utilities.Enums;
 using RiverHollow.Misc;
 using System.Linq;
 using RiverHollow.GUIComponents.Screens.HUDScreens;
+using RiverHollow.Items;
 
 namespace RiverHollow.Buildings
 {
     public class Building : Buildable
     {
+        public StoreTypeEnum StoreType => DataManager.GetEnumByIDKey<StoreTypeEnum>(ID, "StoreType", DataType.WorldObject);
+
         private int _iNPCBuilderID;
         private Rectangle _rEntrance;
+        public Item[,] Inventory { get; }
 
+        public int Income { get; private set; } = 1;
         public int Level { get; private set; } = 1;
 
         public string Description => DataManager.GetTextData("WorldObject", ID, "Description");
@@ -28,12 +33,12 @@ namespace RiverHollow.Buildings
 
         public Rectangle TravelBox { get; private set; }
 
-        public Container BuildingChest { get; set; }
-
         public Building(int id, Dictionary<string, string> stringData) : base(id)
         {
             ID = id;
             _eObjectType = ObjectTypeEnum.Building;
+
+            Inventory = new Item[Constants.BUILDING_STOCK_SIZE, Constants.BUILDING_STOCK_SIZE];
 
             Unique = true;
             OutsideOnly = true;
@@ -131,6 +136,59 @@ namespace RiverHollow.Buildings
             return rv;
         }
 
+        public int CalculateIncome()
+        {
+            int rv = 0;
+
+            InventoryManager.InitExtraInventory(Inventory);
+            List<Item> items = new List<Item>();
+            for (int row = 0; row < Constants.BUILDING_STOCK_SIZE; row++)
+            {
+                for (int column = 0; column < Constants.BUILDING_STOCK_SIZE; column++)
+                {
+                    Item i = Inventory[row, column];
+                    if (i != null)
+                    {
+                        if (i.StoreType == StoreType)
+                        {
+                            items.Add(i);
+                        }
+                    }
+                }
+            }
+
+            if (items.Count > 0)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    Item chosenItem = items[RHRandom.Instance().Next(0, items.Count - 1)];
+                    if (chosenItem.Remove(1, false))
+                    {
+                        rv += chosenItem.Value;
+                    }
+                }
+
+                int profit = 0;
+                Upgrade[] unlockedUpgrades = GetUnlockedUpgrades();
+                for (int i = 0; i < unlockedUpgrades.Length; i++)
+                {
+                    if (unlockedUpgrades[i].Profit != -1)
+                    {
+                        profit += unlockedUpgrades[i].Profit;
+                    }
+                }
+
+                if (profit > 0)
+                {
+                    rv += rv * profit / 100;
+                }
+            }
+
+            InventoryManager.ClearExtraInventory();
+
+            return rv;
+        }
+
         #region Upgrade Handlers
         public bool MaxLevel()
         {
@@ -182,12 +240,37 @@ namespace RiverHollow.Buildings
             WorldObjectData data = base.SaveData();
             data.stringData = Level.ToString();
 
+            foreach (Item i in (this.Inventory))
+            {
+                if (i == null) { data.stringData += "|null"; }
+                else { data.stringData += "|" + Item.SaveItemToString(i); }
+            }
+
             return data;
         }
         public override void LoadData(WorldObjectData data)
         {
             base.LoadData(data);
-            Level = Util.ParseInt(data.stringData);
+            string[] strData = Util.FindParams(data.stringData);
+
+            Level = Util.ParseInt(strData[0]);
+
+            int index = 1;
+            if (strData.Length > 1)
+            {
+                for (int row = 0; row < Constants.BUILDING_STOCK_SIZE; row++)
+                {
+                    for (int column = 0; column < Constants.BUILDING_STOCK_SIZE; column++)
+                    {
+                        if (!string.Equals(strData[index], "null"))
+                        {
+                            string[] itemData = Util.FindArguments(strData[index]);
+                            Inventory[column, row] = DataManager.GetItem(int.Parse(itemData[0]), int.Parse(itemData[1]));
+                        }
+                        index++;
+                    }
+                }
+            }
         }
     }
 

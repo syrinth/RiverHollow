@@ -682,7 +682,7 @@ namespace RiverHollow.Utilities
             }
         }
 
-        public static DirectionEnum GetDirectionFromPosition(Vector2 direction)
+        public static DirectionEnum GetDirectionFromNormalVector(Vector2 direction)
         {
             DirectionEnum rv = DirectionEnum.None;
             if (Math.Abs(direction.X) > Math.Abs(direction.Y))

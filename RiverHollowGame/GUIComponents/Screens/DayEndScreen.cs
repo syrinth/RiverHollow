@@ -37,10 +37,10 @@ namespace RiverHollow.GUIComponents.Screens
 
         int _iCurrentVillager = 0;
         int _iTotalTaxes = 0;
-        int _iTotalDisplayedTaxes = 0;
+        double _dTotalDisplayedTaxes = 0;
 
         int _iVillagerTax = 0;
-        int _iVillagerTaxIncrement = 0;
+        double _dVillagerTaxIncrement = 0;
         bool _bPopAll;
 
         public DayEndScreen()
@@ -66,20 +66,6 @@ namespace RiverHollow.GUIComponents.Screens
 
             _gBackgroundImage = new GUIImage(new Rectangle(0, 0, 480, 270), DataManager.GUI_COMPONENTS + @"\Combat_Background_Forest");
             AddControl(_gBackgroundImage);
-
-            foreach (Villager v in DataManager.DIVillagers.Values)
-            {
-                v.JustMovedIn();
-
-                if (v.LivesInTown)
-                {
-                    Villager copy = new Villager(v);
-                    copy.Activate(false);
-                    copy.BodySprite.SetScale(CurrentScale);
-                    copy.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
-                    _liVillagers.Add(copy);
-                }
-            }
 
             _gWindow = new GUIWindow(GUIWindow.Window_1, ScaleIt(8), ScaleIt(8));
             _gText = new GUIText(DataManager.GetGameTextEntry("Label_Saving_Start").GetFormattedText(), false);
@@ -113,6 +99,20 @@ namespace RiverHollow.GUIComponents.Screens
                     _timer.TickDown(gTime);
                     if (_timer.Finished())
                     {
+                        foreach (Villager v in DataManager.DIVillagers.Values)
+                        {
+                            v.JustMovedIn();
+
+                            if (v.LivesInTown)
+                            {
+                                Villager copy = new Villager(v);
+                                copy.Activate(false);
+                                copy.BodySprite.SetScale(CurrentScale);
+                                copy.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
+                                _liVillagers.Add(copy);
+                            }
+                        }
+
                         StartVillagerSpawn();
                     }
 
@@ -157,8 +157,8 @@ namespace RiverHollow.GUIComponents.Screens
                     _iCurrentVillager++;
                     _timer.Reset(MAX_POP_TIME / _liVillagers.Count);
 
-                    _iVillagerTax = v.GetTaxes();
-                    _iVillagerTaxIncrement = (int)(_iVillagerTax / (_timer.TimerSpeed / 0.02f));
+                    _iVillagerTax = v.Income;
+                    _dVillagerTaxIncrement = _iVillagerTax / (_timer.TimerSpeed / 0.02);
 
                     _iTotalTaxes += _iVillagerTax;
 
@@ -173,8 +173,8 @@ namespace RiverHollow.GUIComponents.Screens
                         _btnExit.AnchorToScreen(SideEnum.BottomLeft, ScaleIt(2));
                         AddControl(_btnExit);
 
-                        _iTotalDisplayedTaxes = _iTotalTaxes;
-                        _gText.SetText(_iTotalDisplayedTaxes);
+                        _dTotalDisplayedTaxes = _iTotalTaxes;
+                        _gText.SetText((int)_dTotalDisplayedTaxes);
                     }
                 }
                 while (_bPopAll && _eCurrentPhase == DayEndPhaseEnum.SpawnVillagers);
@@ -187,18 +187,18 @@ namespace RiverHollow.GUIComponents.Screens
                 c.Alpha(c.Alpha() - (_bPopAll ? 0.005f : 0.02f));
             }
 
-            if (_iVillagerTax > 0 && _iTotalDisplayedTaxes < _iTotalTaxes)
+            if (_iVillagerTax > 0 && _dTotalDisplayedTaxes < _iTotalTaxes)
             {
-                if (_iTotalTaxes > _iTotalDisplayedTaxes + _iVillagerTaxIncrement)
+                if (_iTotalTaxes > _dTotalDisplayedTaxes + _dVillagerTaxIncrement)
                 {
-                    _iTotalDisplayedTaxes += _iVillagerTaxIncrement;
+                    _dTotalDisplayedTaxes += _dVillagerTaxIncrement;
                 }
                 else
                 {
-                    _iTotalDisplayedTaxes += _iTotalTaxes - _iTotalDisplayedTaxes;
+                    _dTotalDisplayedTaxes += _iTotalTaxes - _dTotalDisplayedTaxes;
                 }
 
-                _gText.SetText(_iTotalDisplayedTaxes);
+                _gText.SetText((int)_dTotalDisplayedTaxes);
             }
         }
 

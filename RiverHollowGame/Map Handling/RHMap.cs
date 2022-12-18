@@ -1414,7 +1414,7 @@ namespace RiverHollow.Map_Handling
 
                     if (i != null && i.HasUse())
                     {
-                        PlayerManager.PlayerActor.DetermineFacing(MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition()));
+                        PlayerManager.PlayerActor.FaceMouse();
 
                         RHTile playerTile = GetTileByPixelPosition(PlayerManager.PlayerActor.CollisionCenter);
                         TargetTile = playerTile.GetTileByDirection(PlayerManager.PlayerActor.Facing);
@@ -1835,21 +1835,6 @@ namespace RiverHollow.Map_Handling
             _liItems.Add(item);
         }
 
-        /// <summary>
-        /// When we enter a Building, we may need to load up whatever has been saved to the Building.
-        /// This is because non unique buildings like Arcane Tower, Barracks, etc all use the same map,
-        /// but different specific buildings will have different content.
-        /// 
-        /// If the building is Unique, do not modify the map at all as everything in it will
-        /// be saved to the map itself.
-        /// </summary>
-        /// <param name="b">The building to load</param>
-        public void LoadBuilding(Building b)
-        {
-            ClearWorkers();
-            AddBuildingObjectsToMap(b);
-        }
-
         public void LayerVisible(string name, bool val)
         {
             foreach (TiledMapTileLayer layer in _map.TileLayers)
@@ -1863,25 +1848,6 @@ namespace RiverHollow.Map_Handling
         }
 
         #region Adders
-        public void AddBuildingObjectsToMap(Building b)
-        {
-            ReadOnlyCollection<TiledMapObjectLayer> entrLayer = _map.ObjectLayers;
-            foreach (TiledMapObjectLayer ol in entrLayer)
-            {
-                if (ol.Name == "MapObject Layer")
-                {
-                    foreach (TiledMapObject mapObject in ol.Objects)
-                    {
-                        if (mapObject.Name.Contains("BuildingChest"))
-                        {
-                            b.BuildingChest.SnapPositionToGrid(mapObject.Position);
-                            b.BuildingChest.PlaceOnMap(this);
-                        }
-                    }
-                }
-            }
-        }
-
         /// <summary>
         /// Look at the tile the mouse is over and, if the tile has an object present,
         /// pick it up.

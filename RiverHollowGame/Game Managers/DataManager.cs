@@ -335,6 +335,10 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Lookup Methods
+        public static TEnum GetEnumByIDKey<TEnum>(int id, string key, DataType type) where TEnum : struct
+        {
+            return Util.ParseEnum<TEnum>(GetStringByIDKey(id, key, type));
+        }
         public static int GetIntByIDKey(int id, string key, DataType type)
         {
             return Util.ParseInt(GetStringByIDKey(id, key, type));
@@ -376,6 +380,44 @@ namespace RiverHollow.Game_Managers
             }
 
             return string.Empty;
+        }
+        public static bool GetBoolByIDKey(int id, string key, DataType type)
+        {
+            switch (type)
+            {
+                case DataType.Action:
+                    if (_diActions[id].ContainsKey(key)) { return _diActions[id].ContainsKey(key); }
+                    break;
+                case DataType.Character:
+                    if (_diActions[id].ContainsKey(key)) { return _diActions[id].ContainsKey(key); }
+                    break;
+                case DataType.Class:
+                    if (_diClasses[id].ContainsKey(key)) { return _diClasses[id].ContainsKey(key); }
+                    break;
+                case DataType.Item:
+                    if (_diItemData[id].ContainsKey(key)) { return _diItemData[id].ContainsKey(key); }
+                    break;
+                case DataType.Light:
+                    if (_diLightData[id].ContainsKey(key)) { return _diLightData[id].ContainsKey(key); }
+                    break;
+                case DataType.Monster:
+                    if (_diMonsterData[id].ContainsKey(key)) { return _diMonsterData[id].ContainsKey(key); }
+                    break;
+                case DataType.StatusEffect:
+                    if (_diStatusEffects[id].ContainsKey(key)) { return _diStatusEffects[id].ContainsKey(key); }
+                    break;
+                case DataType.Task:
+                    if (_diTaskData[id].ContainsKey(key)) { return _diTaskData[id].ContainsKey(key); }
+                    break;
+                case DataType.Upgrade:
+                    if (_diUpgradeData[id].ContainsKey(key)) { return _diUpgradeData[id].ContainsKey(key); }
+                    break;
+                case DataType.WorldObject:
+                    if (_diWorldObjects[id].ContainsKey(key)) { return _diWorldObjects[id].ContainsKey(key); }
+                    break;
+            }
+
+            return false;
         }
 
         public static Point PointFromLookup(int id, string key, DataType type)
