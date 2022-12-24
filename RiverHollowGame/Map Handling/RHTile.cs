@@ -322,13 +322,13 @@ namespace RiverHollow.Map_Handling
 
         public bool PlayerIsAdjacent()
         {
-            return PlayerManager.PlayerInRange(Center.ToPoint(), Constants.TILE_SIZE) && GetWalkableNeighbours().Find(x => x.Rect.Contains(PlayerManager.PlayerActor.CollisionCenter)) != null;
+            return PlayerManager.PlayerInRange(Center.ToPoint(), Constants.TILE_SIZE) && GetWalkableNeighbours(true).Find(x => x.Rect.Contains(PlayerManager.PlayerActor.CollisionCenter)) != null;
         }
 
-        public List<RHTile> GetWalkableNeighbours()
+        public List<RHTile> GetWalkableNeighbours(bool getDiagonal = false)
         {
             List<RHTile> rvList = new List<RHTile>();
-            foreach (RHTile tile in GetAdjacentTiles())
+            foreach (RHTile tile in GetAdjacentTiles(getDiagonal))
             {
                 if (tile != null && tile.CanWalkThrough())
                 {
@@ -343,7 +343,7 @@ namespace RiverHollow.Map_Handling
         /// Returns a list of all RHTiles adjacent to this tile
         /// </summary>
         /// <returns></returns>
-        public List<RHTile> GetAdjacentTiles()
+        public List<RHTile> GetAdjacentTiles(bool getDiagonal = false)
         {
             List<RHTile> adj = new List<RHTile>();
 
@@ -356,6 +356,18 @@ namespace RiverHollow.Map_Handling
             if (temp != null) { adj.Add(temp); }
             temp = GetTileByDirection(DirectionEnum.Right);
             if (temp != null) { adj.Add(temp); }
+
+            if (getDiagonal)
+            {
+                temp = GetTileByDirection(DirectionEnum.Down).GetTileByDirection(DirectionEnum.Left);
+                if (temp != null) { adj.Add(temp); }
+                temp = GetTileByDirection(DirectionEnum.Down).GetTileByDirection(DirectionEnum.Right);
+                if (temp != null) { adj.Add(temp); }
+                temp = GetTileByDirection(DirectionEnum.Up).GetTileByDirection(DirectionEnum.Left);
+                if (temp != null) { adj.Add(temp); }
+                temp = GetTileByDirection(DirectionEnum.Up).GetTileByDirection(DirectionEnum.Right);
+                if (temp != null) { adj.Add(temp); }
+            }
 
             return adj;
         }

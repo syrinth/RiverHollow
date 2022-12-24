@@ -16,7 +16,7 @@ namespace RiverHollow.Buildings
 {
     public class Building : Buildable
     {
-        public StoreTypeEnum StoreType => DataManager.GetEnumByIDKey<StoreTypeEnum>(ID, "StoreType", DataType.WorldObject);
+        public ShopSellTypeEnum StoreType => DataManager.GetEnumByIDKey<ShopSellTypeEnum>(ID, "ShopSells", DataType.WorldObject);
 
         private int _iNPCBuilderID;
         private Rectangle _rEntrance;

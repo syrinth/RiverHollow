@@ -141,12 +141,6 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        public void FaceMouse()
-        {
-            Vector2 mousePosition = GUICursor.GetWorldMousePosition();
-            DetermineFacing(mousePosition - Position);
-        }
-
         public void SetColor(AnimatedSprite sprite, Color c)
         {
             sprite.SetColor(c);

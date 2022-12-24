@@ -1414,7 +1414,7 @@ namespace RiverHollow.Map_Handling
 
                     if (i != null && i.HasUse())
                     {
-                        PlayerManager.PlayerActor.FaceMouse();
+                        PlayerManager.PlayerActor.DetermineFacing(MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition()));
 
                         RHTile playerTile = GetTileByPixelPosition(PlayerManager.PlayerActor.CollisionCenter);
                         TargetTile = playerTile.GetTileByDirection(PlayerManager.PlayerActor.Facing);

@@ -1459,11 +1459,11 @@
     </Item>
     <Item>
       <Key>WorldObject_19</Key>
-      <Value>[Name:Architect's]</Value>
+      <Value>[Name:Jeweller's]</Value>
     </Item>
     <Item>
       <Key>WorldObject_20</Key>
-      <Value>[Name:Barracks]</Value>
+      <Value>[Name:Stone Mason's]</Value>
     </Item>
     <Item>
       <Key>WorldObject_21</Key>
@@ -1491,7 +1491,7 @@
     </Item>
     <Item>
       <Key>WorldObject_27</Key>
-      <Value>[Name:Empty Building]</Value>
+      <Value>[Name:Coop]</Value>
     </Item>
     <Item>
       <Key>WorldObject_28</Key>
@@ -1515,7 +1515,7 @@
     </Item>
     <Item>
       <Key>WorldObject_33</Key>
-      <Value>[Name:Potion Hut]</Value>
+      <Value>[Name:Bakery]</Value>
     </Item>
     <Item>
       <Key>WorldObject_34</Key>

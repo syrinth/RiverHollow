@@ -203,6 +203,14 @@ namespace RiverHollow.Characters
             }
         }
 
+        public void DetermineFacing(RHTile tile)
+        {
+            if (tile != null)
+            {
+                DetermineFacing(new Vector2(tile.Position.X - Position.X, tile.Position.Y - Position.Y));
+            }
+        }
+
         public void DetermineFacing(Vector2 direction)
         {
             DirectionEnum newFacing = Util.GetDirectionFromNormalVector(direction);

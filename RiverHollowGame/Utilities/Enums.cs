@@ -28,7 +28,7 @@
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
-        public enum StoreTypeEnum { None, Boutique, General, Magic };
+        public enum ShopSellTypeEnum { None, Wheat, Textile, General, Magic, Herbs, Ore, Gems };
         public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, Clothing, MonsterFood, NPCToken, Blueprint, Seed, Special };
         public enum ToolEnum { None, Backpack, CapeOfBlinking, Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return, Scythe, StaffOfIce };
         public enum SpecialItemEnum { None, Marriage, Class, Map, DungeonKey, Task };

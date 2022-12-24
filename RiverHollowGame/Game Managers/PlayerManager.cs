@@ -949,7 +949,7 @@ namespace RiverHollow.Game_Managers
             GrabbedObject = t.WorldObject;
 
             PlayerActor.Position = Util.SnapToGrid(PlayerActor.CollisionCenter.ToVector2());
-            PlayerActor.FaceMouse();
+            PlayerActor.DetermineFacing(t);
             PlayerActor.SetState(ActorStateEnum.Grab);
         }
         public static void ReleaseTile()
