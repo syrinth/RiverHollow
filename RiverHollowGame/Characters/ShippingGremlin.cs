@@ -46,7 +46,7 @@ namespace RiverHollow.Characters
            // Util.AssignValue(ref _sStartMap, "StartMap", stringData);
            // Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
 
-            _sprBody = new AnimatedSprite(DataManager.NPC_FOLDER + "NPC_" + stringData["Key"]);
+            _sprBody = new AnimatedSprite(SpriteName());
             
             _sprBody.AddAnimation(AnimationEnum.ObjectIdle, 0, 0, _iBodyWidth, _iBodyHeight);
             _sprBody.AddAnimation(AnimationEnum.Action1, 32, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);

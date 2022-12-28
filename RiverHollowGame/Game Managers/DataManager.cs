@@ -63,7 +63,7 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Shop> _diShops;
 
         static Dictionary<int, Dictionary<string, string>> _diNPCData;
-        public static Dictionary<int, Dictionary<string, string>> DiVillagerData => _diNPCData;
+        public static Dictionary<int, Dictionary<string, string>> NPCData => _diNPCData;
         static Dictionary<int, Dictionary<string, string>> _diPlayerAnimationData;
         public static Dictionary<int, Dictionary<string, string>> PlayerCombatAnimationData => _diPlayerAnimationData;
 
@@ -351,7 +351,7 @@ namespace RiverHollow.Game_Managers
                     if (_diActions[id].ContainsKey(key)) { return _diActions[id][key]; }
                     break;
                 case DataType.Character:
-                    if (_diActions[id].ContainsKey(key)) { return _diActions[id][key]; }
+                    if (_diNPCData[id].ContainsKey(key)) { return _diNPCData[id][key]; }
                     break;
                 case DataType.Class:
                     if (_diClasses[id].ContainsKey(key)) { return _diClasses[id][key]; }
@@ -510,20 +510,7 @@ namespace RiverHollow.Game_Managers
                     case ItemEnum.Seed:
                         return new Seed(id, diData, num);
                     case ItemEnum.Special:
-                        switch (diData["Subtype"])
-                        {
-                            case "Class":
-                                return new ClassItem(id, diData, num);
-                            case "Marriage":
-                                return new MarriageItem(id, diData);
-                            case "Map":
-                                return new AdventureMap(id, diData, num);
-                            case "DungeonKey":
-                                return new DungeonKey(id, diData);
-                            default:
-                                return new Item(id, diData, num);
-                        }
-                        break;
+                        return new Special(id, diData);
                     case ItemEnum.Tool:
                         switch (Util.ParseEnum<ToolEnum>(diData["Subtype"]))
                         {

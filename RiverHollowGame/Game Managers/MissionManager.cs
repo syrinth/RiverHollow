@@ -359,7 +359,7 @@
 //            _liItems.Clear();
 //            foreach (ItemData id in data.Items)
 //            {
-//                _liItems.Add(DataManager.GetItem(id.itemID, id.num));
+//                _liItems.Add(DataManager.GetItem(id.ID, id.num));
 //            }
 
 //            List<Adventurer> advList = new List<Adventurer>();

@@ -1129,12 +1129,12 @@ namespace RiverHollow.Game_Managers
         {
             ToolData d = new ToolData()
             {
-                pickID = RetrieveTool(ToolEnum.Pick) != null ? RetrieveTool(ToolEnum.Pick).ItemID : -1,
-                axeID = RetrieveTool(ToolEnum.Axe) != null ? RetrieveTool(ToolEnum.Axe).ItemID : -1,
-                scytheID = RetrieveTool(ToolEnum.Scythe) != null ? RetrieveTool(ToolEnum.Scythe).ItemID : -1,
-                wateringCanID = RetrieveTool(ToolEnum.WateringCan) != null ? RetrieveTool(ToolEnum.WateringCan).ItemID : -1,
-                backpackID = RetrieveTool(ToolEnum.Backpack) != null ? RetrieveTool(ToolEnum.Backpack).ItemID : -1,
-                lanternID = RetrieveTool(ToolEnum.Lantern) != null ? RetrieveTool(ToolEnum.Lantern).ItemID : -1,
+                pickID = RetrieveTool(ToolEnum.Pick) != null ? RetrieveTool(ToolEnum.Pick).ID : -1,
+                axeID = RetrieveTool(ToolEnum.Axe) != null ? RetrieveTool(ToolEnum.Axe).ID : -1,
+                scytheID = RetrieveTool(ToolEnum.Scythe) != null ? RetrieveTool(ToolEnum.Scythe).ID : -1,
+                wateringCanID = RetrieveTool(ToolEnum.WateringCan) != null ? RetrieveTool(ToolEnum.WateringCan).ID : -1,
+                backpackID = RetrieveTool(ToolEnum.Backpack) != null ? RetrieveTool(ToolEnum.Backpack).ID : -1,
+                lanternID = RetrieveTool(ToolEnum.Lantern) != null ? RetrieveTool(ToolEnum.Lantern).ID : -1,
             };
 
             return d;

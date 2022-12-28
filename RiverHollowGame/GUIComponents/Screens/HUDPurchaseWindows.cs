@@ -160,7 +160,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (CanBuy && PlayerManager.Money >= Cost)
             {
                 PlayerManager.TakeMoney(Cost);
-                if (ShopItem != null) { PurchaseItem(ShopItem.ItemID); }
+                if (ShopItem != null) { PurchaseItem(ShopItem.ID); }
                 if (WorldObject != null) { PlayerManager.AddToStorage(WorldObject.ID); }
                 if (Actor != null)
                 {
@@ -196,12 +196,12 @@ namespace RiverHollow.GUIComponents.Screens
             return false;
         }
 
-        private void PurchaseItem(int itemID)
+        private void PurchaseItem(int ID)
         {
-            Item purchaseItem = DataManager.GetItem(itemID);
+            Item purchaseItem = DataManager.GetItem(ID);
             if (purchaseItem.IsUnique())
             {
-                PlayerManager.AddToUniqueBoughtItems(itemID);
+                PlayerManager.AddToUniqueBoughtItems(ID);
                 _action();
             }
             InventoryManager.AddToInventory(purchaseItem);
@@ -210,7 +210,7 @@ namespace RiverHollow.GUIComponents.Screens
         private bool CanBuyMerch()
         {
             bool rv = true;
-            if (ShopItem != null && !InventoryManager.HasSpaceInInventory(ShopItem.ItemID, ShopItem.Number)){
+            if (ShopItem != null && !InventoryManager.HasSpaceInInventory(ShopItem.ID, ShopItem.Number)){
                 rv = false;
             }
             else if (Actor != null && Actor.IsActorType(WorldActorTypeEnum.Mount) && !((Mount)Actor).StableBuilt())

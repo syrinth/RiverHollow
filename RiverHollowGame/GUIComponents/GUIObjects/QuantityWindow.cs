@@ -69,7 +69,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public void ProceedToPurchase()
         {
-            if (InventoryManager.HasSpaceInInventory(GameManager.CurrentItem.ItemID, _iNum))
+            if (InventoryManager.HasSpaceInInventory(GameManager.CurrentItem.ID, _iNum))
             {
                 GameManager.CurrentItem.Add(_iNum - 1);
                 TextEntry entry = DataManager.GetGameTextEntry("BuyMerch_Confirm");

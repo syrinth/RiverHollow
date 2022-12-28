@@ -177,12 +177,12 @@ namespace RiverHollow.GUIComponents.Screens
                     if (gIB != null && gIB.Contains(mouse))
                     {
                         Item chosenItem = gIB.BoxItem;
-                        if (chosenItem.ItemID != _iSelectedItemID)
+                        if (chosenItem.ID != _iSelectedItemID)
                         {
                             foreach (GUIItem r in _liRequiredItems) { _winMain.RemoveControl(r); }
 
                             _liRequiredItems.Clear();
-                            _iSelectedItemID = chosenItem.ItemID;
+                            _iSelectedItemID = chosenItem.ID;
                             foreach (KeyValuePair<int, int> kvp in chosenItem.GetRequiredItems())
                             {
                                 GUIItem newItem = new GUIItem(DataManager.GetItem(kvp.Key, kvp.Value));

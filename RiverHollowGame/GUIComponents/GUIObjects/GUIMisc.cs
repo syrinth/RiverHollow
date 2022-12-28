@@ -335,7 +335,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public override void Draw(SpriteBatch spriteBatch)
         {
             _gImg.Draw(spriteBatch);
-            if (ItemObject.DoesItStack && _gText != null) {
+            if (ItemObject.Stacks() && _gText != null) {
                 _gText.Draw(spriteBatch);
             }
         }

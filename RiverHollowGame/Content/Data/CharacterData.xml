@@ -169,5 +169,13 @@
       <Key>41</Key>
       <Value>[Type:Child][Walk:0-0-3-0.15-T][Idle:0-32-3-0.3-T][Action1:0-64-3-0.15-T]</Value>
     </Item>
+    <Item>
+      <Key>42</Key>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Kevin]</Value>
+    </Item>
+    <Item>
+      <Key>43</Key>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][StartMap:mapGrove]</Value>
+    </Item>
   </Asset>
 </XnaContent>

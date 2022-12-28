@@ -1,5 +1,4 @@
 ﻿using RiverHollow.Game_Managers;
-using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
@@ -21,7 +20,7 @@ namespace RiverHollow.Items
                 Garden garden = (Garden)obj;
                 if (garden.GetPlant() == null)
                 {
-                    Plant p = (Plant)DataManager.CreateWorldObjectByID(int.Parse(DataManager.GetItemDictionaryKey(_iItemID, "ObjectID")));
+                    Plant p = (Plant)DataManager.CreateWorldObjectByID(int.Parse(DataManager.GetItemDictionaryKey(ID, "ObjectID")));
                     garden.SetPlant(p);
                     Remove(1);
                     rv = true;
@@ -32,7 +31,7 @@ namespace RiverHollow.Items
         }
 
         public bool InSeason() {
-            string mySeason = DataManager.GetItemDictionaryKey(_iItemID, "Season");
+            string mySeason = DataManager.GetItemDictionaryKey(ID, "Season");
             return mySeason.Equals(GameCalendar.GetSeason(GameCalendar.CurrentSeason));
         }
     }

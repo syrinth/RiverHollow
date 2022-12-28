@@ -515,7 +515,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 bool canFit = true;
                 foreach (Item i in loot)
                 {
-                    if (!InventoryManager.HasSpaceInInventory(i.ItemID, i.Number))
+                    if (!InventoryManager.HasSpaceInInventory(i.ID, i.Number))
                     {
                         canFit = false;
                         break;

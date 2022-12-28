@@ -127,7 +127,7 @@ namespace RiverHollow.Game_Managers
                             //If there is an item there, check to see if it has the same ID, can stack,
                             //and if the number we want to add is less than the max item stack. Once we find a matching stack
                             //we need to exit, we are done.
-                            if (testItem.ItemID == itemID && testItem.DoesItStack && testItem.Number + num < 999)
+                            if (testItem.ID == itemID && testItem.Stacks() && testItem.Number + num < 999)
                             {
                                 rv = true;
                                 validRow = i;
@@ -176,7 +176,7 @@ namespace RiverHollow.Game_Managers
                     for (int j = 0; j < maxColumns; j++)
                     {
                         Item testItem = inventory[i, j];
-                        if (testItem != null && testItem.ItemID == itemID)
+                        if (testItem != null && testItem.ID == itemID)
                         {
                             leftToFind -= testItem.Number;
                             if (leftToFind <= 0)
@@ -224,7 +224,7 @@ Exit:
                 {
                     if (done) { break; }
                     Item testItem = inventory[i, j];
-                    if (testItem != null && testItem.ItemID == itemID)
+                    if (testItem != null && testItem.ID == itemID)
                     {
                         int temp = testItem.Number;
                         if (testItem.Number >= leftToRemove)
@@ -305,7 +305,7 @@ Exit:
             int validRow = -1;
             int validCol = -1;
             //First,confirm that the inventory has space to proceed
-            if (HasSpaceInInventory(itemToAdd.ItemID, itemToAdd.Number, inventory, ref validRow, ref validCol))
+            if (HasSpaceInInventory(itemToAdd.ID, itemToAdd.Number, inventory, ref validRow, ref validCol))
             {
                 //If there is no item there, assign it, otherwise increment it.
                 if(inventory[validRow, validCol] == null){
@@ -407,7 +407,7 @@ Exit:
                 }
                 else
                 {
-                    if (inventory[row, column].ItemID == item.ItemID && inventory[row, column].DoesItStack && 999 >= (inventory[row, column].Number + item.Number))
+                    if (inventory[row, column].ID == item.ID && inventory[row, column].Stacks() && 999 >= (inventory[row, column].Number + item.Number))
                     {
                         inventory[row, column].Add(item.Number, inventory == PlayerInventory);
                         rv = true;

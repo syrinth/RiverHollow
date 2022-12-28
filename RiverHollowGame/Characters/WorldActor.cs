@@ -129,6 +129,11 @@ namespace RiverHollow.Characters
             return DataManager.GetTextData("NPC", ID, "Name");
         }
 
+        protected string SpriteName()
+        {
+            return DataManager.NPC_FOLDER + DataManager.GetStringByIDKey(ID, "Key", DataType.Character);
+        }
+
         /// <summary>
         /// Creates a new Animatedsprite object for the given texture string, and adds
         /// all of the given animations to the new AnimatedSprite

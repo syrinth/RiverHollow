@@ -19,10 +19,8 @@ namespace RiverHollow.Items
         int _iTier;
         protected Dictionary<AttributeEnum, int> _diAttributes;
 
-        public Equipment(int id, Dictionary<string, string> stringData)
+        public Equipment(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
         {
-            ImportBasics(stringData, id, 1);
-
             //EType
             GearType = Util.ParseEnum<GearTypeEnum>(stringData["Subtype"]);
 

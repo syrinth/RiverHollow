@@ -288,18 +288,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Items/Food.png
 
-#begin Textures/Items/Resources.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Items/Resources.png
-
 #begin Textures/Items/StaticObjects.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -452,18 +440,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Items/ToolAnimations.png
-
-#begin Textures/Items/Tools.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Items/Tools.png
 
 #begin Effects/lighteffect.fx
 /importer:EffectImporter
@@ -2333,7 +2309,7 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapWorkshop.tmx
 
-#begin Textures/Actors/NPCs/NPC_28.png
+#begin Textures/Actors/NPCs/28.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2343,7 +2319,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_28.png
+/build:Textures/Actors/NPCs/28.png
 
 #begin Textures/Actors/NPCs/Adventurer_1.png
 /importer:TextureImporter
@@ -2432,7 +2408,7 @@
 /processor:TiledMapProcessor
 /build:Maps/Dungeon_Caves/mapCave_12.tmx
 
-#begin Textures/Actors/NPCs/NPC_Manor_Spirit.png
+#begin Textures/Actors/NPCs/Manor_Spirit.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2442,7 +2418,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Manor_Spirit.png
+/build:Textures/Actors/NPCs/Manor_Spirit.png
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Manor_Spirit.xml
 /importer:XmlImporter
@@ -2454,7 +2430,7 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Lucia.xml
 
-#begin Textures/Actors/NPCs/NPC_Lucia.png
+#begin Textures/Actors/NPCs/Lucia.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2464,9 +2440,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Lucia.png
+/build:Textures/Actors/NPCs/Lucia.png
 
-#begin Textures/Actors/NPCs/NPC_Michael.png
+#begin Textures/Actors/NPCs/Michael.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2476,7 +2452,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Michael.png
+/build:Textures/Actors/NPCs/Michael.png
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Michael.xml
 /importer:XmlImporter
@@ -2488,7 +2464,7 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Emmanuel.xml
 
-#begin Textures/Actors/NPCs/NPC_Emmanuel.png
+#begin Textures/Actors/NPCs/Emmanuel.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2498,9 +2474,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Emmanuel.png
+/build:Textures/Actors/NPCs/Emmanuel.png
 
-#begin Textures/Actors/NPCs/NPC_Fran.png
+#begin Textures/Actors/NPCs/Fran.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2510,7 +2486,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Fran.png
+/build:Textures/Actors/NPCs/Fran.png
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Fran.xml
 /importer:XmlImporter
@@ -2522,7 +2498,7 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Amanda.xml
 
-#begin Textures/Actors/NPCs/NPC_Amanda.png
+#begin Textures/Actors/NPCs/Amanda.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2532,9 +2508,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Amanda.png
+/build:Textures/Actors/NPCs/Amanda.png
 
-#begin Textures/Actors/NPCs/NPC_Daria.png
+#begin Textures/Actors/NPCs/Daria.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2544,7 +2520,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Daria.png
+/build:Textures/Actors/NPCs/Daria.png
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Daria.xml
 /importer:XmlImporter
@@ -2556,7 +2532,7 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Ander.xml
 
-#begin Textures/Actors/NPCs/NPC_Ander.png
+#begin Textures/Actors/NPCs/Ander.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2566,9 +2542,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Ander.png
+/build:Textures/Actors/NPCs/Ander.png
 
-#begin Textures/Actors/NPCs/NPC_Damien.png
+#begin Textures/Actors/NPCs/Damien.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2578,7 +2554,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Damien.png
+/build:Textures/Actors/NPCs/Damien.png
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Damien.xml
 /importer:XmlImporter
@@ -2590,7 +2566,7 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Mark.xml
 
-#begin Textures/Actors/NPCs/NPC_Mark.png
+#begin Textures/Actors/NPCs/Mark.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2600,9 +2576,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Mark.png
+/build:Textures/Actors/NPCs/Mark.png
 
-#begin Textures/Actors/NPCs/NPC_Penelope.png
+#begin Textures/Actors/NPCs/Penelope.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2612,7 +2588,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Penelope.png
+/build:Textures/Actors/NPCs/Penelope.png
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Penelope.xml
 /importer:XmlImporter
@@ -2624,7 +2600,7 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Isabelle.xml
 
-#begin Textures/Actors/NPCs/NPC_Isabelle.png
+#begin Textures/Actors/NPCs/Isabelle.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2634,9 +2610,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Isabelle.png
+/build:Textures/Actors/NPCs/Isabelle.png
 
-#begin Textures/Actors/NPCs/NPC_Leanne.png
+#begin Textures/Actors/NPCs/Leanne.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2646,7 +2622,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Leanne.png
+/build:Textures/Actors/NPCs/Leanne.png
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Leanne.xml
 /importer:XmlImporter
@@ -2658,7 +2634,7 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Eric.xml
 
-#begin Textures/Actors/NPCs/NPC_Eric.png
+#begin Textures/Actors/NPCs/Eric.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2668,9 +2644,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Eric.png
+/build:Textures/Actors/NPCs/Eric.png
 
-#begin Textures/Actors/NPCs/NPC_Kyle.png
+#begin Textures/Actors/NPCs/Kyle.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2680,7 +2656,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Kyle.png
+/build:Textures/Actors/NPCs/Kyle.png
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Kyle.xml
 /importer:XmlImporter
@@ -2692,7 +2668,7 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Sammy.xml
 
-#begin Textures/Actors/NPCs/NPC_Sammy.png
+#begin Textures/Actors/NPCs/Sammy.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2702,14 +2678,14 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Sammy.png
+/build:Textures/Actors/NPCs/Sammy.png
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Eldra.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Eldra.xml
 
-#begin Textures/Actors/NPCs/NPC_Eldra.png
+#begin Textures/Actors/NPCs/Eldra.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2719,9 +2695,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Eldra.png
+/build:Textures/Actors/NPCs/Eldra.png
 
-#begin Textures/Actors/NPCs/NPC_Griselda.png
+#begin Textures/Actors/NPCs/Griselda.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2731,7 +2707,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Griselda.png
+/build:Textures/Actors/NPCs/Griselda.png
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Griselda.xml
 /importer:XmlImporter
@@ -2743,7 +2719,7 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Gail.xml
 
-#begin Textures/Actors/NPCs/NPC_Gail.png
+#begin Textures/Actors/NPCs/Gail.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2753,9 +2729,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Gail.png
+/build:Textures/Actors/NPCs/Gail.png
 
-#begin Textures/Actors/NPCs/NPC_Harrison.png
+#begin Textures/Actors/NPCs/Harrison.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2765,7 +2741,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Harrison.png
+/build:Textures/Actors/NPCs/Harrison.png
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Harrison.xml
 /importer:XmlImporter
@@ -2777,7 +2753,7 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Yulia.xml
 
-#begin Textures/Actors/NPCs/NPC_Yulia.png
+#begin Textures/Actors/NPCs/Yulia.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2787,9 +2763,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Yulia.png
+/build:Textures/Actors/NPCs/Yulia.png
 
-#begin Textures/Actors/NPCs/NPC_Jase.png
+#begin Textures/Actors/NPCs/Jase.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2799,14 +2775,14 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Jase.png
+/build:Textures/Actors/NPCs/Jase.png
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Jase.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Jase.xml
 
-#begin Textures/Actors/NPCs/NPC_Magda.png
+#begin Textures/Actors/NPCs/Magda.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2816,9 +2792,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Magda.png
+/build:Textures/Actors/NPCs/Magda.png
 
-#begin Textures/Actors/NPCs/NPC_Abeline.png
+#begin Textures/Actors/NPCs/Abeline.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2828,9 +2804,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Abeline.png
+/build:Textures/Actors/NPCs/Abeline.png
 
-#begin Textures/Actors/NPCs/NPC_Erron.png
+#begin Textures/Actors/NPCs/Erron.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2840,9 +2816,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Erron.png
+/build:Textures/Actors/NPCs/Erron.png
 
-#begin Textures/Actors/NPCs/NPC_Sybil.png
+#begin Textures/Actors/NPCs/Sybil.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2852,9 +2828,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Sybil.png
+/build:Textures/Actors/NPCs/Sybil.png
 
-#begin Textures/Actors/NPCs/NPC_Shipping_Gremlin.png
+#begin Textures/Actors/NPCs/Shipping_Gremlin.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2864,9 +2840,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Shipping_Gremlin.png
+/build:Textures/Actors/NPCs/Shipping_Gremlin.png
 
-#begin Textures/Actors/NPCs/NPC_Pet_Slime.png
+#begin Textures/Actors/NPCs/Pet_Slime.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2876,9 +2852,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Pet_Slime.png
+/build:Textures/Actors/NPCs/Pet_Slime.png
 
-#begin Textures/Actors/NPCs/NPC_Giant_Slime.png
+#begin Textures/Actors/NPCs/Giant_Slime.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2888,9 +2864,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Giant_Slime.png
+/build:Textures/Actors/NPCs/Giant_Slime.png
 
-#begin Textures/Actors/NPCs/NPC_Wagren.png
+#begin Textures/Actors/NPCs/Wagren.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2900,9 +2876,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Wagren.png
+/build:Textures/Actors/NPCs/Wagren.png
 
-#begin Textures/Actors/NPCs/NPC_Birb_1.png
+#begin Textures/Actors/NPCs/Birb_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2912,7 +2888,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Birb_1.png
+/build:Textures/Actors/NPCs/Birb_1.png
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Abeline.xml
 /importer:XmlImporter
@@ -3429,7 +3405,7 @@
 /processor:TiledMapProcessor
 /build:Maps/Forest/map_YuliaCottage.tmx
 
-#begin Textures/Actors/NPCs/NPC_Nevar.png
+#begin Textures/Actors/NPCs/Nevar.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -3439,7 +3415,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Nevar.png
+/build:Textures/Actors/NPCs/Nevar.png
 
 #begin Textures/Actors/Mobs/Batty.png
 /importer:TextureImporter
@@ -3540,7 +3516,7 @@
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapForest.tmx
 
-#begin Textures/Actors/NPCs/NPC_Dwarf.png
+#begin Textures/Actors/NPCs/Dwarf.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -3550,7 +3526,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Dwarf.png
+/build:Textures/Actors/NPCs/Dwarf.png
 
 #begin Data/Schedules/NPC_Dwarf.xml
 /importer:XmlImporter
@@ -3705,7 +3681,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Environmental/PlayerLight_1.png
 
-#begin Textures/Actors/NPCs/NPC_Helen.png
+#begin Textures/Actors/NPCs/Helen.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -3715,7 +3691,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Helen.png
+/build:Textures/Actors/NPCs/Helen.png
 
 #begin Textures/Actors/Portraits/V_Dwarf.png
 /importer:TextureImporter
@@ -3789,7 +3765,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Portraits/V_Manor_Spirit.png
 
-#begin Textures/Actors/NPCs/NPC_June.png
+#begin Textures/Actors/NPCs/June.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -3799,7 +3775,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_June.png
+/build:Textures/Actors/NPCs/June.png
 
 #begin Textures/Actors/Portraits/V_Nevar.png
 /importer:TextureImporter
@@ -3825,7 +3801,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Portraits/V_Octavia.png
 
-#begin Textures/Actors/NPCs/NPC_Octavia.png
+#begin Textures/Actors/NPCs/Octavia.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -3835,7 +3811,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/NPC_Octavia.png
+/build:Textures/Actors/NPCs/Octavia.png
 
 #begin Textures/Items/Gear/Weapons/Staff/102.png
 /importer:TextureImporter
@@ -3949,4 +3925,57 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/GUI Components/GUI_HUD_Components.png
+
+#begin Maps/Forest/mapGrove.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Forest/mapGrove.tmx
+
+#begin Textures/Actors/NPCs/Ulm.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/Ulm.png
+
+#begin Textures/Items/Resources.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Items/Resources.png
+
+#begin Textures/Items/Tools.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Items/Tools.png
+
+#begin Textures/Items/Special.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Items/Special.png
 

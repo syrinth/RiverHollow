@@ -946,7 +946,7 @@ namespace RiverHollow.Map_Handling
             for (int i = 0; i < _liItems.Count; i++)
             {
                 Item it = _liItems[i];
-                if (InventoryManager.HasSpaceInInventory(it.ItemID, it.Number))
+                if (InventoryManager.HasSpaceInInventory(it.ID, it.Number))
                 {
                     if (it.OnTheMap && it.AutoPickup)
                     {
@@ -969,7 +969,7 @@ namespace RiverHollow.Map_Handling
         public void AddItemToPlayerInventory(Item it)
         {
             _liItemsToRemove.Add(it);
-            InventoryManager.AddToInventory(DataManager.GetItem(it.ItemID, it.Number));
+            InventoryManager.AddToInventory(DataManager.GetItem(it.ID, it.Number));
         }
 
         #region Collision Code

@@ -289,7 +289,7 @@ namespace RiverHollow.Misc
         {
             bool rv = false;
 
-            if (_targetItem != null && _targetItem.ItemID == i.ItemID)
+            if (_targetItem != null && _targetItem.ID == i.ID)
             {
                 rv = true;
                 IncrementProgress(i.Number);
@@ -337,7 +337,7 @@ namespace RiverHollow.Misc
         public bool RemoveProgress(Item i)
         {
             bool rv = false;
-            if (i != null && _targetItem != null && _targetItem.ItemID == ((Item)i).ItemID)
+            if (i != null && _targetItem != null && _targetItem.ID == ((Item)i).ID)
             {
                 if (TargetsAccomplished > 0)
                 {
@@ -536,7 +536,7 @@ namespace RiverHollow.Misc
                 questType = (int)_eTaskType,
                 taskID = TaskID,
                 goalNPC = GoalNPC != null ? GoalNPC.ID : -1,
-                itemID = _targetItem != null ? _targetItem.ItemID : -1,
+                itemID = _targetItem != null ? _targetItem.ID : -1,
                 monsterID = _questMonster != null ? _questMonster.ID : -1,
                 targetWorldObjectID = _iTargetObjectID,
                 unlockBuildingID = _iUnlockObjectID,

@@ -54,7 +54,7 @@ namespace RiverHollow.Game_Managers
         /// <returns>The Item that was dropped</returns>
         public static Item DropMonsterLoot(Monster m)
         {
-            Item droppedItem = DataManager.GetItem(m.GetLoot().ItemID);
+            Item droppedItem = DataManager.GetItem(m.GetLoot().ID);
             //Just for testing atm
             List<Item> it = new List<Item> { droppedItem };
 

@@ -95,7 +95,7 @@ namespace RiverHollow.WorldObjects
         public bool CheckForKey(Item item)
         {
             bool rv = false;
-            if (_iItemKeyID == item.ItemID)
+            if (_iItemKeyID == item.ID)
             {
                 rv = true;
                 item.Remove(1);

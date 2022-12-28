@@ -10,15 +10,11 @@ namespace RiverHollow.Items
     public class Blueprint : Item
     {
         private readonly int[] _arrCraftingUnlocks;
-        public Blueprint(int id, Dictionary<string, string> stringData)
+        public Blueprint(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
         {
-            ImportBasics(stringData, id, 1);
-
             if (stringData.ContainsKey("ObjectID")) { _arrCraftingUnlocks = Array.ConvertAll(Util.FindParams(stringData["ObjectID"]), s => int.Parse(s)); ; }
 
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Resources");
-
-            _bStacks = false;
         }
 
         public override bool HasUse() { return true; }

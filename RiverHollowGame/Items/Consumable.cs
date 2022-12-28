@@ -19,10 +19,8 @@ namespace RiverHollow.Items
 
         public bool Helpful;
 
-        public Consumable(int id, Dictionary<string, string> stringData, int num)
+        public Consumable(int id, Dictionary<string, string> stringData, int num) : base(id, stringData, num)
         {
-            ImportBasics(stringData, id, num);
-
             Helpful = stringData["CombatType"].Equals("Helpful");
             if (stringData.ContainsKey("Recover")) { Recover = true; }
             if (stringData.ContainsKey("Hp")) { Health = int.Parse(stringData["Hp"]); }
@@ -34,7 +32,6 @@ namespace RiverHollow.Items
                 _iStatusDuration = int.Parse(strBuffer[1]);
             }
 
-            _bStacks = true;
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Consumables");
         }
 

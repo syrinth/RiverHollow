@@ -11,16 +11,12 @@ namespace RiverHollow.Items
         public int Stamina { get; }
         public int Health { get; }
 
-        public Food(int id, Dictionary<string, string> stringData, int num)
+        public Food(int id, Dictionary<string, string> stringData, int num) : base(id, stringData, num)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Food");
 
-            ImportBasics(stringData, id, num);
-
             if (stringData.ContainsKey("Stam")) { Stamina = int.Parse(stringData["Stam"]); }
             if (stringData.ContainsKey("Hp")) { Health = int.Parse(stringData["Hp"]); }
-
-            _bStacks = true;
         }
 
         public override string Description()

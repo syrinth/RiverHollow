@@ -119,14 +119,14 @@ namespace RiverHollow.WorldObjects
         /// <param name="itemToCraft">The Item object to craft</param>
         public void AttemptToCraftChosenItem(Item itemToCraft)
         {
-            if (InventoryManager.HasSpaceInInventory(itemToCraft.ItemID, 1) && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
+            if (InventoryManager.HasSpaceInInventory(itemToCraft.ID, 1) && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
             {
                 PlayerManager.DecreaseStamina(1);
 
-                //_iCurrentlyMaking = itemToCraft.ItemID;
+                //_iCurrentlyMaking = itemToCraft.ID;
                 //_sprite.PlayAnimation(CombatAnimationEnum.PlayAnimation);
 
-                InventoryManager.AddToInventory(itemToCraft.ItemID);
+                InventoryManager.AddToInventory(itemToCraft.ID);
                 if (!string.IsNullOrEmpty(_sEffectWorking))
                 {
                     SoundManager.PlayEffect(_sEffectWorking);

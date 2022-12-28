@@ -35,10 +35,8 @@ namespace RiverHollow.Items
             }
         }
 
-        public Tool(int id, Dictionary<string, string> stringData)
+        public Tool(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
         {
-            ImportBasics(stringData, id, 1);
-
             ToolType = Util.ParseEnum<ToolEnum>(stringData["Subtype"]);
 
             _iCharges = 0;

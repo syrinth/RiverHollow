@@ -251,8 +251,8 @@ namespace RiverHollow.WorldObjects
         {
             if (StoreDisplayEntity())
             {
-                _itemDisplay = DataManager.GetItem(it.ItemID);
-                InventoryManager.RemoveItemsFromInventory(it.ItemID, 1);
+                _itemDisplay = DataManager.GetItem(it.ID);
+                InventoryManager.RemoveItemsFromInventory(it.ID, 1);
                 GUIManager.CloseMainObject();
             }
         }
@@ -269,7 +269,7 @@ namespace RiverHollow.WorldObjects
             bool rv = true;
             if (_itemDisplay != null)
             {
-                if (InventoryManager.HasSpaceInInventory(_itemDisplay.ItemID, 1))
+                if (InventoryManager.HasSpaceInInventory(_itemDisplay.ID, 1))
                 {
                     InventoryManager.AddToInventory(_itemDisplay);
                     _itemDisplay = null;
@@ -303,7 +303,7 @@ namespace RiverHollow.WorldObjects
             WorldObjectData data = base.SaveData();
             data.stringData += (int)_eFacingDir;
             data.stringData += (_objDisplay == null ? -1 : _objDisplay.ID);
-            data.stringData += (_itemDisplay == null ? -1 : _itemDisplay.ItemID);
+            data.stringData += (_itemDisplay == null ? -1 : _itemDisplay.ID);
 
             return data;
         }

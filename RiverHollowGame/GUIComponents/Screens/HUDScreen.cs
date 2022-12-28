@@ -85,7 +85,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 //If there are more items to add, there is currently an ItemPickup Display and the next Item to add is the same as the one being displayed
                 //Remove it fromt he list of items to show added, add the current number tot he display, and refresh the display.
-                if (InventoryManager.AddedItemList.Count > 0 && _addedItem != null && InventoryManager.AddedItemList[0].ItemID == _addedItem.BoxItem.ItemID)
+                if (InventoryManager.AddedItemList.Count > 0 && _addedItem != null && InventoryManager.AddedItemList[0].ID == _addedItem.BoxItem.ID)
                 {
                     _addedItem.BoxItem.Add(InventoryManager.AddedItemList[0].Number);
                     InventoryManager.AddedItemList.Remove(InventoryManager.AddedItemList[0]);
@@ -376,7 +376,7 @@ namespace RiverHollow.GUIComponents.Screens
                 if (_liRequestedItemBoxes.Count == 0) { box.AnchorToInnerSide(_winMain, SideEnum.Left, edgeSpacing); }
                 else { box.AnchorAndAlignToObject(_liRequestedItemBoxes[_liRequestedItemBoxes.Count - 1], SideEnum.Right, SideEnum.Bottom, spacing); }
 
-                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key.ItemID, kvp.Key.Number)) { box.SetColor(Color.Red); }
+                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key.ID, kvp.Key.Number)) { box.SetColor(Color.Red); }
 
                 GUIMoneyDisplay money = new GUIMoneyDisplay(kvp.Key.Value * 2 * kvp.Key.Number);
                 money.AnchorAndAlignToObject(box, SideEnum.Bottom, SideEnum.CenterX, 10);
@@ -398,10 +398,10 @@ namespace RiverHollow.GUIComponents.Screens
                 if (!gib.Enabled) { givenRequests++; }
                 else if (gib.Contains(mouse))
                 {
-                    if (InventoryManager.HasItemInPlayerInventory(gib.BoxItem.ItemID, gib.BoxItem.Number))
+                    if (InventoryManager.HasItemInPlayerInventory(gib.BoxItem.ID, gib.BoxItem.Number))
                     {
                         _merchant.DiChosenItems[gib.BoxItem] = true;
-                        InventoryManager.RemoveItemsFromInventory(gib.BoxItem.ItemID, gib.BoxItem.Number);
+                        InventoryManager.RemoveItemsFromInventory(gib.BoxItem.ID, gib.BoxItem.Number);
                         PlayerManager.AddMoney(gib.BoxItem.Value * 2 * gib.BoxItem.Number);
                         gib.Enable(false);
                         gib.SetColor(Color.Gray);
@@ -411,7 +411,7 @@ namespace RiverHollow.GUIComponents.Screens
                         //In case the Merchant is asking for the same item multipe times, refresh the color on the request boxes
                         foreach(GUIItemBox obj in _liRequestedItemBoxes)
                         {
-                            if (obj.Enabled && !InventoryManager.HasItemInPlayerInventory(obj.BoxItem.ItemID, obj.BoxItem.Number)) { obj.SetColor(Color.Red); }
+                            if (obj.Enabled && !InventoryManager.HasItemInPlayerInventory(obj.BoxItem.ID, obj.BoxItem.Number)) { obj.SetColor(Color.Red); }
                         }
                     }
 

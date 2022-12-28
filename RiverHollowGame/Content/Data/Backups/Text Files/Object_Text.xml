@@ -186,6 +186,14 @@
       <Value>[Name:Child_1]</Value>
     </Item>
     <Item>
+      <Key>NPC_42</Key>
+      <Value>[Name:Kevin]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_43</Key>
+      <Value>[Name:Ulm]</Value>
+    </Item>
+    <Item>
       <Key>Class_0</Key>
       <Value>[Name:Wizard][Description:Practitioners of the arcane arts, wizards excel at  handling a multitude of foes.]</Value>
     </Item>
@@ -1347,7 +1355,7 @@
     </Item>
     <Item>
       <Key>Item_185</Key>
-      <Value>[Name:Griselda's Orb][Description:General Use]</Value>
+      <Value>[Name:Cauldron][Description:A Cauldron used for brewing potions]</Value>
     </Item>
     <Item>
       <Key>Item_186</Key>

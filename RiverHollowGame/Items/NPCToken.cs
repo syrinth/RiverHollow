@@ -12,15 +12,12 @@ namespace RiverHollow.Items
     {
         NPCTokenTypeEnum _eTokenType;
         int _iNPCID;
-        public NPCToken(int id, Dictionary<string, string> stringData)
+        public NPCToken(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
         {
-            ImportBasics(stringData, id, 1);
-
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Resources");
+
             Util.AssignValue(ref _eTokenType, "Subtype", stringData);
             Util.AssignValue(ref _iNPCID, "NPC_ID", stringData);
-
-            _bStacks = false;
         }
 
         public override bool AddToInventoryTrigger()

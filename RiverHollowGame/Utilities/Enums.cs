@@ -31,7 +31,6 @@
         public enum ShopSellTypeEnum { None, Wheat, Textile, General, Magic, Herbs, Ore, Gems };
         public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, Clothing, MonsterFood, NPCToken, Blueprint, Seed, Special };
         public enum ToolEnum { None, Backpack, CapeOfBlinking, Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return, Scythe, StaffOfIce };
-        public enum SpecialItemEnum { None, Marriage, Class, Map, DungeonKey, Task };
         public enum GearTypeEnum { None, Accessory, Chest, Head, Weapon };
         public enum WeaponEnum { None, Spear, Shield, Rapier, Bow, Wand, Knife, Orb, Staff };
         public enum ArmorTypeEnum { None, Cloth, Light, Heavy };

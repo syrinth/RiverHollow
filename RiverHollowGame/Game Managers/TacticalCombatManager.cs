@@ -227,7 +227,7 @@
 
 //                            foreach (Item tileItem in tileItems)
 //                            {
-//                                if (tileItem != null && InventoryManager.HasSpaceInInventory(tileItem.ItemID, tileItem.Number))
+//                                if (tileItem != null && InventoryManager.HasSpaceInInventory(tileItem.ID, tileItem.Number))
 //                                {
 //                                    BattleMap.AddItemToPlayerInventory(tileItem);
 //                                }

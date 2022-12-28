@@ -48,7 +48,7 @@ namespace RiverHollow.Characters
             {
                 List<AnimationData> liAnimationData = Util.LoadWorldAnimations(stringData);
 
-                LoadSpriteAnimations(ref _sprBody, liAnimationData, DataManager.NPC_FOLDER + "NPC_" + stringData["Key"]);
+                LoadSpriteAnimations(ref _sprBody, liAnimationData, SpriteName());
                 PlayAnimationVerb(VerbEnum.Idle);
             }
 

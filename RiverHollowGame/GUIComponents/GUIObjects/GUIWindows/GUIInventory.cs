@@ -103,7 +103,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 Item toSwitch = IsItemThere(mouse);
                 if (toSwitch != null)
                 {
-                    if (GameManager.HeldItem.ItemID == toSwitch.ItemID)
+                    if (GameManager.HeldItem.ID == toSwitch.ID)
                     {
                         toSwitch.Add(1);
                         GameManager.DropItem();
@@ -199,7 +199,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             int col = 0;
 
                             //Use _container != null to get the status of the inverse of whichever we are clicking on
-                            if (InventoryManager.HasSpaceInInventory(i.BoxItem.ItemID, i.BoxItem.Number, ref row, ref col, !_bPlayerInventory))
+                            if (InventoryManager.HasSpaceInInventory(i.BoxItem.ID, i.BoxItem.Number, ref row, ref col, !_bPlayerInventory))
                             {
                                 Item clickedItem = TakeItem(mouse);
                                 //If the GUI represents a Container, move the Item to the PlayerInventory
@@ -304,12 +304,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 if (box.Contains(mouse) && box.BoxItem != null)
                 {
                     Item chosenItem = box.BoxItem;
-                    if (takeHalf && chosenItem.DoesItStack)
+                    if (takeHalf && chosenItem.Stacks())
                     {
                         int num = chosenItem.Number;
                         num = num / 2;
                         chosenItem.Remove(num);
-                        rv = DataManager.GetItem(chosenItem.ItemID, num);
+                        rv = DataManager.GetItem(chosenItem.ID, num);
                     }
                     else
                     {

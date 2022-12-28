@@ -5,7 +5,6 @@ using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -42,7 +41,7 @@ namespace RiverHollow.Characters
             Util.AddToAnimationsList(ref _liData, stringData, VerbEnum.Walk);
             Util.AddToAnimationsList(ref _liData, stringData, VerbEnum.Idle);
             Util.AddToAnimationsList(ref _liData, stringData, VerbEnum.Alert);
-            LoadSpriteAnimations(ref _sprBody, _liData, DataManager.NPC_FOLDER + "NPC_" + ID + "_" + (int)_eCurrentStage);
+            LoadSpriteAnimations(ref _sprBody, _liData, SpriteName() + "_" + (int)_eCurrentStage);
         }
 
         public override void Update(GameTime gTime)
@@ -78,7 +77,7 @@ namespace RiverHollow.Characters
                     _iCurrentGrowth = 0;
                     _eCurrentStage = _eCurrentStage + 1;
 
-                    LoadSpriteAnimations(ref _sprBody, _liData, DataManager.NPC_FOLDER + "NPC_" + ID + "_" + (int)_eCurrentStage);
+                    LoadSpriteAnimations(ref _sprBody, _liData, SpriteName() + "_" + (int)_eCurrentStage);
                 }
             }
         }

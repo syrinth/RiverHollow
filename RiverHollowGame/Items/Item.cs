@@ -16,11 +16,8 @@ namespace RiverHollow.Items
         #region properties
         protected ItemEnum _eItemType;
         public ItemEnum ItemType => _eItemType;
-        protected SpecialItemEnum _eSpecialItem;
-        public SpecialItemEnum SpecialItemType => _eSpecialItem;
-        public ShopSellTypeEnum StoreType => DataManager.GetEnumByIDKey<ShopSellTypeEnum>(_iItemID, "StoreType", DataType.Item);
-        protected int _iItemID;
-        public int ItemID => _iItemID;
+        public ShopSellTypeEnum StoreType => DataManager.GetEnumByIDKey<ShopSellTypeEnum>(ID, "StoreType", DataType.Item);
+        public int ID { get; } = -1;
         protected Color _c = Color.White;
         public Color ItemColor => _c;
 
@@ -49,16 +46,13 @@ namespace RiverHollow.Items
         protected int _iColTexSize = Constants.TILE_SIZE;
         protected int _iRowTexSize = Constants.TILE_SIZE;
         private Parabola _movement;
-        protected bool _bStacks;
-        public bool DoesItStack => _bStacks;
 
         protected int _iNum;
         public int Number { get => _iNum; }
 
-        protected int _iValue;
-        public int Value => _iValue;
-        public int TotalValue => _iValue * _iNum;
-        public int SellPrice => _iValue / 2;
+        public int Value => DataManager.GetIntByIDKey(ID, "Value", DataType.Item);
+        public int TotalValue => Value * _iNum;
+        public int SellPrice => Value / 2;
 
         //What items and in what numebrs are required to make this item
         protected Dictionary<int, int> _diReqToMake;
@@ -71,22 +65,11 @@ namespace RiverHollow.Items
 
         public Item(int id, Dictionary<string, string> stringData, int num)
         {
-            ImportBasics(stringData, id, num);
-
-            _bStacks = true;
-            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Resources");
-        }
-
-        protected void ImportBasics(Dictionary<string, string> stringData, int id, int num)
-        {
             _iNum = num;
-            _iItemID = id;
+            ID = id;
 
             //Item Type
             _eItemType = Util.ParseEnum<ItemEnum>(stringData["Type"]);
-
-            //SellPrice
-            Util.AssignValue(ref _iValue, "Value", stringData);
 
             //Image information
             string[] texIndices = stringData["Image"].Split('-');
@@ -100,16 +83,18 @@ namespace RiverHollow.Items
                 string[] splitData = stringData["RefinesInto"].Split('-');
                 _kvpRefinesInto = new KeyValuePair<int, int>(int.Parse(splitData[0]), int.Parse(splitData[1]));
             }
+
+            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Resources");
         }
+
         //Copy Constructor
         public Item(Item item)
         {
-            _iItemID = item.ItemID;
+            ID = item.ID;
             _eItemType = item.ItemType;
             _vSourcePos = item._vSourcePos;
             _texTexture = item.Texture;
             _iNum = item.Number;
-            _bStacks = item.DoesItStack;
         }
 
         public virtual void Update(GameTime gTime)
@@ -150,11 +135,11 @@ namespace RiverHollow.Items
 
         public virtual string Name()
         {
-            return DataManager.GetTextData("Item", _iItemID, "Name");
+            return DataManager.GetTextData("Item", ID, "Name");
         }
         public virtual string Description()
         {
-            return Name() + System.Environment.NewLine + DataManager.GetTextData("Item", _iItemID, "Description");
+            return Name() + System.Environment.NewLine + DataManager.GetTextData("Item", ID, "Description");
         }
 
         public void Pop(Vector2 pos)
@@ -190,7 +175,7 @@ namespace RiverHollow.Items
                 int leftOver = _iNum + number - 999;
                 _iNum = 999;
 
-                InventoryManager.AddToInventory(_iItemID, leftOver, playerInventory);
+                InventoryManager.AddToInventory(ID, leftOver, playerInventory);
             }
         }
         public virtual bool Remove(int x, bool playerInventory = true)
@@ -214,15 +199,6 @@ namespace RiverHollow.Items
             return _diReqToMake;
         }
 
-        public bool Giftable()
-        {
-            bool rv = false;
-
-            rv = !(CompareType(ItemEnum.Tool) || CompareType(ItemEnum.Special));
-
-            return rv;
-        }
-
         public virtual bool AddToInventoryTrigger() { return false; }
 
         protected void ConfirmItemUse(TextEntry entry)
@@ -241,6 +217,29 @@ namespace RiverHollow.Items
 
         public void SetColor(Color c) { _c = c; }
 
+        public bool Stacks()
+        {
+            switch (_eItemType)
+            {
+                case ItemEnum.Blueprint:
+                case ItemEnum.Clothing:
+                case ItemEnum.Equipment:
+                case ItemEnum.NPCToken:
+                case ItemEnum.Special:
+                case ItemEnum.Tool:
+                    return false;
+                default:
+                    return true;
+            }
+        }
+        public bool Giftable()
+        {
+            bool rv = false;
+
+            rv = !(CompareType(ItemEnum.Tool) || CompareType(ItemEnum.Special));
+
+            return rv;
+        }
         public bool IsUnique()
         {
             bool rv = false;
@@ -255,7 +254,6 @@ namespace RiverHollow.Items
             return rv;
         }
         public bool CompareType(ItemEnum type) { return _eItemType == type; }
-        public bool CompareSpecialType(SpecialItemEnum type) { return _eSpecialItem == type; }
 
         public static string SaveItemToString(Item i)
         {
@@ -287,7 +285,7 @@ namespace RiverHollow.Items
         {
             ItemData itemData = new ItemData
             {
-                itemID = ItemID,
+                itemID = ID,
                 num = Number,
                 strData = GetUniqueData()
             };
@@ -390,63 +388,6 @@ namespace RiverHollow.Items
         }
     }
 
-    public class AdventureMap : Item
-    {
-        private int _difficulty;
-        public int Difficulty { get => _difficulty; }
-        public AdventureMap(int id, Dictionary<string, string> stringData, int num)
-        {
-            ImportBasics(stringData, id, num);
-            _eItemType = ItemEnum.Special;
-            _eSpecialItem = SpecialItemEnum.Map;
-            _difficulty = RHRandom.Instance().Next(4, 5);
-
-            _bStacks = false;
-            _texTexture = DataManager.GetTexture(@"Textures\items");
-        }
-
-        public override string Description()
-        {
-            string rv = base.Description();
-            rv += System.Environment.NewLine;
-            rv += "Difficulty: " + _difficulty;
-
-            return rv;
-        }
-    }
-
-    public class MarriageItem : Item
-    {
-        public MarriageItem(int id, Dictionary<string, string> stringData)
-        {
-            ImportBasics(stringData, id, 1);
-            _eItemType = ItemEnum.Special;
-            _eSpecialItem = SpecialItemEnum.Marriage;
-            _iNum = 1;
-            _bStacks = false;
-            _texTexture = DataManager.GetTexture(@"Textures\items");
-        }
-    }
-
-    public class DungeonKey : Item
-    {
-        public DungeonKey(int id, Dictionary<string, string> stringData)
-        {
-            ImportBasics(stringData, id, 1);
-            _eItemType = ItemEnum.Special;
-            _eSpecialItem = SpecialItemEnum.DungeonKey;
-            _iNum = 1;
-            _bStacks = false;
-            _texTexture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
-        }
-
-        public override bool AddToInventoryTrigger()
-        {
-            DungeonManager.AddDungeonKey();
-            return true;
-        }
-    }
-
     public class MonsterFood : Item
     {
         int _iSpawnNum;
@@ -454,11 +395,8 @@ namespace RiverHollow.Items
         int _iSpawnID;
         public int SpawnID => _iSpawnID;
 
-        public MonsterFood(int id, Dictionary<string, string> stringData, int num)
+        public MonsterFood(int id, Dictionary<string, string> stringData, int num) : base(id, stringData, num)
         {
-            _bStacks = true;
-            ImportBasics(stringData, id, num);
-
             string[] splitData = stringData["Spawn"].Split('-');
             _iSpawnNum = int.Parse(splitData[0]);
             _iSpawnID = int.Parse(splitData[1]);
@@ -485,118 +423,6 @@ namespace RiverHollow.Items
                 Remove(1);
                 ClearGMObjects();
             }
-        }
-    }
-
-    public class StaticItem : Item
-    {
-        Buildable _worldObj;
-
-        public StaticItem() { }
-        public StaticItem(int id, Dictionary<string, string> stringData, int num = 1)
-        {
-            ImportBasics(stringData, id, num);
-            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "StaticObjects");
-            _bStacks = stringData.ContainsKey("Stacks");
-
-            _worldObj = (Buildable)DataManager.CreateWorldObjectByID(int.Parse(stringData["Place"]));
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
-
-        public Buildable GetWorldItem()
-        {
-            return _worldObj;
-        }
-
-        public void SetWorldObjectCoords(Vector2 vec)
-        {
-            _worldObj.SnapPositionToGrid(vec);
-        }
-
-        /// <summary>
-        /// Overrides the base Item remove method because StaticItem items have the
-        /// WorldItem objects within them for drawing purposes. If we don't make a new one
-        /// then any items that stack, like Walls, have all of their items attached
-        /// to onlt the one worldObj
-        /// </summary>
-        /// <param name="x">The number to remove</param>
-        /// <returns>True if item was successfully removed</returns>
-        public override bool Remove(int x, bool playerInventory = true)
-        {
-            bool rv = base.Remove(x);
-
-            //Create a new worldObj for any instances of the item that remains
-            _worldObj = (Buildable)DataManager.CreateWorldObjectByID(_worldObj.ID);
-
-            return rv;
-        }
-    }
-
-    public class ClassItem : Item
-    {
-        private int _iClassID;
-
-        public ClassItem(int id, Dictionary<string, string> stringData, int num)
-        {
-            ImportBasics(stringData, id, num);
-            _eItemType = ItemEnum.Special;
-            _eSpecialItem = SpecialItemEnum.Class;
-
-            _bStacks = false;
-            _texTexture = DataManager.GetTexture(@"Textures\items");
-        }
-
-        public void SetClassChange(int i)
-        {
-            _iClassID = i;
-
-            switch (_iClassID)
-            {
-                case 1:
-                    _c = Color.Cyan;
-                    break;
-                case 2:
-                    _c = Color.LightGray;
-                    break;
-                case 3:
-                    _c = Color.Blue;
-                    break;
-                case 4:
-                    _c = Color.Yellow;
-                    break;
-            }
-        }
-
-        public override bool ItemBeingUsed()
-        {
-            GameManager.SetSelectedItem(this);
-            ConfirmItemUse(DataManager.GetGameTextEntry("ClassItemConfirm"));
-
-            return true;
-        }
-
-        public override void UseItem(TextEntryVerbEnum action)
-        {
-            if (Number > 0)
-            {
-                Remove(1);
-                PlayerManager.SetClass(_iClassID);
-            }
-            ClearGMObjects();
-        }
-
-        public override void ApplyUniqueData(string str)
-        {
-            SetClassChange(int.Parse(str));
-        }
-
-        public override string GetUniqueData()
-        {
-            return _iClassID.ToString();
         }
     }
 }

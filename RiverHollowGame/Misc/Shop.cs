@@ -76,8 +76,8 @@ namespace RiverHollow.Misc
                 PlayerManager.TakeMoney(purchaseItem.TotalValue);
                 if (purchaseItem.IsUnique())
                 {
-                    PlayerManager.AddToUniqueBoughtItems(purchaseItem.ItemID);
-                    _liShopItemSpots.Find(x => x.MerchID == purchaseItem.ItemID).SetMerchandise(null);
+                    PlayerManager.AddToUniqueBoughtItems(purchaseItem.ID);
+                    _liShopItemSpots.Find(x => x.MerchID == purchaseItem.ID).SetMerchandise(null);
                 }
                 InventoryManager.AddToInventory(purchaseItem);
             }

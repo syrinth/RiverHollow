@@ -25,7 +25,7 @@ namespace RiverHollow.Characters
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Action1);
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Action2);
-            LoadSpriteAnimations(ref _sprBody, liData, NPC_FOLDER + "NPC_" + stringData["Key"]);
+            LoadSpriteAnimations(ref _sprBody, liData, SpriteName());
 
             Facing = DirectionEnum.Down;
             PlayAnimation(VerbEnum.Idle);

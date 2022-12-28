@@ -49,7 +49,7 @@ namespace RiverHollow.Characters
             {
                 RequestItem request = new RequestItem();
                 string[] split = s.Split('-');
-                request.ItemID = int.Parse(split[0]);
+                request.ID = int.Parse(split[0]);
                 request.Number = (split.Length > 1) ? int.Parse(split[1]) : 1;
 
                 _liRequestItems.Add(request);
@@ -92,7 +92,7 @@ namespace RiverHollow.Characters
                 int chosenValue = RHRandom.Instance().Next(0, copy.Count - 1);
 
                 RequestItem request = copy[chosenValue];
-                Item it = DataManager.GetItem(request.ItemID, request.Number);
+                Item it = DataManager.GetItem(request.ID, request.Number);
 
                 DiChosenItems[it] = false;
                 copy.RemoveAt(chosenValue);
@@ -170,7 +170,7 @@ namespace RiverHollow.Characters
 
         private struct RequestItem
         {
-            public int ItemID;
+            public int ID;
             public int Number;
         }
 

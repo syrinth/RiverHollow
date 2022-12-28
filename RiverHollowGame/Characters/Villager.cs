@@ -534,14 +534,14 @@ namespace RiverHollow.Characters
             bool giftGiven = true;
             if (item != null)
             {
-                if (_diCollection.ContainsKey(item.ItemID))
+                if (_diCollection.ContainsKey(item.ID))
                 {
-                    FriendshipPoints += _diCollection[item.ItemID] ? 50 : 20;
+                    FriendshipPoints += _diCollection[item.ID] ? 50 : 20;
                     rv = GetDialogEntry("Collection");
-                    int index = new List<int>(_diCollection.Keys).FindIndex(x => x == item.ItemID);
+                    int index = new List<int>(_diCollection.Keys).FindIndex(x => x == item.ID);
 
-                    _diCollection[item.ItemID] = true;
-                    MapManager.Maps[GetSpawnMapName()].AddCollectionItem(item.ItemID, ID, index);
+                    _diCollection[item.ID] = true;
+                    MapManager.Maps[GetSpawnMapName()].AddCollectionItem(item.ID, ID, index);
                 }
                 else
                 {

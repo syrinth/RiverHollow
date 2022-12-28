@@ -287,7 +287,7 @@ namespace RiverHollow.Characters
             foreach(Monster m in _liMonsters)
             {
                 Item newItem = m.GetLoot();
-                int index = items.FindIndex(x => x.ItemID == newItem.ItemID);
+                int index = items.FindIndex(x => x.ID == newItem.ID);
 
                 if (index != -1) { items[index].Add(newItem.Number); }
                 else { items.Add(newItem); }
