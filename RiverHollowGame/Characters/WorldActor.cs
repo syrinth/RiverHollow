@@ -69,7 +69,7 @@ namespace RiverHollow.Characters
         protected bool _bOnTheMap = true;
         public virtual bool OnTheMap => _bOnTheMap;
 
-        protected bool _bHover;
+        protected bool _bHover => DataManager.GetBoolByIDKey(ID, "Hover", DataType.Character);
 
         protected float _fBaseSpeed = 1f;
         public float BuffedSpeed => _fBaseSpeed * SpdMult;

@@ -35,11 +35,6 @@ namespace RiverHollow.CombatStuff
             _sDescription = DataManager.GetTextData("StatusEffect", ID, "Description");
 
             AffectedAttributes = new List<KeyValuePair<AttributeEnum, string>>();
-            ImportBasics(id, data);
-        }
-
-        protected void ImportBasics(int id, Dictionary<string, string> data)
-        {
             Util.AssignValue(ref _iDuration, "Duration", data);
             Util.AssignValue(ref _iPotency, "Potency", data);
             Util.AssignValue(ref _eEffectType, "Type", data);

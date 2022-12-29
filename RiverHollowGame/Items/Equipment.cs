@@ -12,18 +12,15 @@ namespace RiverHollow.Items
         const int LIGHT_ATTRIBUTE = 3;
         const int WEAPON_DAMAGE_ATTRIBUTE = 5;
 
-        public GearTypeEnum GearType;
+        public GearTypeEnum GearType => DataManager.GetEnumByIDKey<GearTypeEnum>(ID, "Subtype", DataType.Item);
         public WeaponEnum WeaponType { get; }
         public ArmorTypeEnum ArmorType { get; }
 
-        int _iTier;
+        int Tier => DataManager.GetIntByIDKey(ID, "Tier", DataType.Item);
         protected Dictionary<AttributeEnum, int> _diAttributes;
 
         public Equipment(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
         {
-            //EType
-            GearType = Util.ParseEnum<GearTypeEnum>(stringData["Subtype"]);
-
             switch (GearType)
             {
                 case GearTypeEnum.Weapon:
@@ -42,7 +39,6 @@ namespace RiverHollow.Items
             }
 
             //Attributes
-            _iTier = int.Parse(stringData["Tier"]);
 
             _diAttributes = new Dictionary<AttributeEnum, int>();
             foreach (AttributeEnum e in Enum.GetValues(typeof(AttributeEnum)))
@@ -74,7 +70,7 @@ namespace RiverHollow.Items
                     else { rv = HEAVY_ATTRIBUTE; }
                     break;
             }
-            return _iTier * (rv - subtractBy) * (attribute == AttributeEnum.Vitality ? 9 : 1);
+            return Tier * (rv - subtractBy) * (attribute == AttributeEnum.Vitality ? 9 : 1);
         }
 
         /// <summary>

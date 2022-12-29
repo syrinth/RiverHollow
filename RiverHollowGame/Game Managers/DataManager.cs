@@ -339,9 +339,12 @@ namespace RiverHollow.Game_Managers
         {
             return Util.ParseEnum<TEnum>(GetStringByIDKey(id, key, type));
         }
-        public static int GetIntByIDKey(int id, string key, DataType type)
+        public static int GetIntByIDKey(int id, string key, DataType type, int defaultValue = -1)
         {
-            return Util.ParseInt(GetStringByIDKey(id, key, type));
+            string rv = GetStringByIDKey(id, key, type);
+
+            if (!string.IsNullOrEmpty(rv)) { return Util.ParseInt(rv); }
+            else { return defaultValue; }
         }
         public static string GetStringByIDKey(int id, string key, DataType type)
         {

@@ -11,20 +11,15 @@ namespace RiverHollow.Items
 {
     public class Consumable : Item
     {
-        public bool Recover { get; private set; }
-        public int Health { get; private set; }
-        public int Mana { get; private set; }
+        public bool Helpful => DataManager.GetStringByIDKey(ID, "CombatType", DataType.Item).Equals("Helpful");
+        public bool Recover => DataManager.GetBoolByIDKey(ID, "Recover", DataType.Item);
+        public int Health => DataManager.GetIntByIDKey(ID, "Hp", DataType.Item);
+        public int Mana => DataManager.GetIntByIDKey(ID, "Mana", DataType.Item);
         private StatusEffect _statusEffect;
         private int _iStatusDuration;
 
-        public bool Helpful;
-
         public Consumable(int id, Dictionary<string, string> stringData, int num) : base(id, stringData, num)
         {
-            Helpful = stringData["CombatType"].Equals("Helpful");
-            if (stringData.ContainsKey("Recover")) { Recover = true; }
-            if (stringData.ContainsKey("Hp")) { Health = int.Parse(stringData["Hp"]); }
-            if (stringData.ContainsKey("Mana")) { Mana = int.Parse(stringData["Mana"]); }
             if (stringData.ContainsKey("StatusEffect"))
             {
                 string[] strBuffer = stringData["StatusEffect"].Split('-');

@@ -8,15 +8,12 @@ namespace RiverHollow.Items
 {
     public class Food : Item
     {
-        public int Stamina { get; }
-        public int Health { get; }
+        public int Stamina => DataManager.GetIntByIDKey(ID, "Stam", DataType.Item);
+        public int Health => DataManager.GetIntByIDKey(ID, "Hp", DataType.Item);
 
         public Food(int id, Dictionary<string, string> stringData, int num) : base(id, stringData, num)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Food");
-
-            if (stringData.ContainsKey("Stam")) { Stamina = int.Parse(stringData["Stam"]); }
-            if (stringData.ContainsKey("Hp")) { Health = int.Parse(stringData["Hp"]); }
         }
 
         public override string Description()

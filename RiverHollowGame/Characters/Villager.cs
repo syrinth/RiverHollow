@@ -19,18 +19,17 @@ namespace RiverHollow.Characters
 {
     public class Villager : TravellingNPC
     {
-        protected string _sStartMap;
-        protected int _iHouseBuildingID = -1;
+        public string StartMap => DataManager.GetStringByIDKey(ID, "StartMap", DataType.Character);
+        public int HouseID => DataManager.GetIntByIDKey(ID, "HouseID", DataType.Character, 1);
+        public bool Marriable => DataManager.GetBoolByIDKey(ID, "CanMarry", DataType.Character);
+        public bool CanBecomePregnant => DataManager.GetBoolByIDKey(ID, "CanBecomePregnant", DataType.Character);
+        private int TaxMultiplier => DataManager.GetIntByIDKey(ID, "TaxValue", DataType.Character, 1);
 
         protected Dictionary<int, bool> _diCollection;
-
-        private int _iTaxMultiplier = 1;
-        private bool _bCanBecomePregnant = false;
-        public bool CanBecomePregnant => _bCanBecomePregnant;
+        
         public bool Pregnant { get; set; }
         public bool Combatant { get; private set; } = false;
-        private bool _bCanMarry = false;
-        public bool CanBeMarried => _bCanMarry;
+        public bool CanBeMarried => Marriable;
 
         public override RelationShipStatusEnum RelationshipState
         {
@@ -68,14 +67,11 @@ namespace RiverHollow.Characters
 
         public int Income { get; private set; }
 
-        public Villager(int id) : base(id)
+        //Copy Constructor for Cutscenes
+        public Villager(Villager n) : base(n.ID, new Dictionary<string, string>())
         {
             _diCollection = new Dictionary<int, bool>();
-        }
 
-        //Copy Construcor for Cutscenes
-        public Villager(Villager n) : this(n.ID)
-        {
             _eActorType = WorldActorTypeEnum.Villager;
             Combatant = n.Combatant;
             CombatVersion = n.CombatVersion;
@@ -89,36 +85,21 @@ namespace RiverHollow.Characters
             Income = n.Income;
         }
 
-        public Villager(int index, Dictionary<string, string> stringData, bool loadanimations = true) : this(index)
+        public Villager(int index, Dictionary<string, string> stringData, bool loadanimations = true) : base(index, stringData, loadanimations)
         {
             _eActorType = WorldActorTypeEnum.Villager;
             _liHousingRequests = new List<Request>();
+            _diCollection = new Dictionary<int, bool>();
             _diRequiredObjectIDs = new Dictionary<int, int>();
             _diCompleteSchedule = new Dictionary<string, List<Dictionary<string, string>>>();
 
-            ImportBasics(stringData, loadanimations);
-        }
-
-        protected override void ImportBasics(Dictionary<string, string> stringData, bool loadanimations = true)
-        {
-            base.ImportBasics(stringData, loadanimations);
-
-            Util.AssignValue(ref _sStartMap, "StartMap", stringData);
-
-            Util.AssignValue(ref _iTaxMultiplier, "TaxValue", stringData);
-
-            Util.AssignValue(ref _bCanMarry, "CanMarry", stringData);
-            Util.AssignValue(ref _bCanBecomePregnant, "CanBecomePregnant", stringData);
-
-            Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
-            Util.AssignValue(ref _iTotalMoneyEarnedReq, "TotalMoneyEarnedReq", stringData);
-
-            if (stringData.ContainsKey("AtInn")) {
+            if (stringData.ContainsKey("AtInn"))
+            {
                 _eSpawnStatus = VillagerSpawnStatus.WaitAtInn;
                 GameManager.AddToInnQueue(this);
             }
             else if (stringData.ContainsKey("InTown")) { _eSpawnStatus = VillagerSpawnStatus.HasHome; }
-            else if (!string.IsNullOrEmpty(_sStartMap)) { _eSpawnStatus = VillagerSpawnStatus.NonTownMap; }
+            else if (!string.IsNullOrEmpty(StartMap)) { _eSpawnStatus = VillagerSpawnStatus.NonTownMap; }
 
             CombatVersion = new ClassedCombatant();
             //CombatVersion.SetName(Name);
@@ -220,7 +201,7 @@ namespace RiverHollow.Characters
                 case VillagerSpawnStatus.OffMap:
                     CurrentMap?.RemoveActor(this);
                     CurrentMapName = string.Empty;
-                    _iNextArrival = _iArrivalPeriod;
+                    _iNextArrival = ArrivalPeriod;
                     GameManager.RemoveFromInnQueue(this);
                     break;
                 case VillagerSpawnStatus.HasHome:
@@ -315,7 +296,7 @@ namespace RiverHollow.Characters
             {
                 case VillagerSpawnStatus.VisitInn:
                 case VillagerSpawnStatus.WaitAtInn:
-                    if (TownRequirementsMet() && _iHouseBuildingID != -1 && PlayerManager.TownObjectBuilt(_iHouseBuildingID))
+                    if (TownRequirementsMet() && HouseID != -1 && PlayerManager.TownObjectBuilt(HouseID))
                     {
                         _eSpawnStatus = VillagerSpawnStatus.HasHome;
                         return true;
@@ -350,9 +331,9 @@ namespace RiverHollow.Characters
                     case VillagerSpawnStatus.WaitAtInn:
                         return "mapInn";
                     case VillagerSpawnStatus.HasHome:
-                        return PlayerManager.GetBuildingByID(_iHouseBuildingID)?.BuildingMapName;
+                        return PlayerManager.GetBuildingByID(HouseID)?.BuildingMapName;
                     case VillagerSpawnStatus.NonTownMap:
-                        return _sStartMap;
+                        return StartMap;
                 }
             }
             return strSpawn;
@@ -408,7 +389,7 @@ namespace RiverHollow.Characters
         /// </summary>
         public void DetermineValidSchedule()
         {
-            if ((LivesInTown  || !string.IsNullOrEmpty(_sStartMap)) && _diCompleteSchedule != null)
+            if ((LivesInTown  || !string.IsNullOrEmpty(StartMap)) && _diCompleteSchedule != null)
             {
                 //Iterate through the schedule keys
                 foreach (string scheduleKey in _diCompleteSchedule.Keys)
@@ -595,10 +576,10 @@ namespace RiverHollow.Characters
         {
             int baseIncome = 10;
 
-            Building b = PlayerManager.GetBuildingByID(_iHouseBuildingID);
+            Building b = PlayerManager.GetBuildingByID(HouseID);
             int buildingIncome = b != null ? b.CalculateIncome() : 0;
 
-            return (baseIncome + buildingIncome) * (int)GetSatisfaction() * _iTaxMultiplier;
+            return (baseIncome + buildingIncome) * (int)GetSatisfaction() * TaxMultiplier;
         }
 
         public void ClearIncome()
@@ -615,7 +596,7 @@ namespace RiverHollow.Characters
             int points = 40;
             foreach (Request r in _liHousingRequests)
             {
-                points += r.ConditionsMet(_iHouseBuildingID);
+                points += r.ConditionsMet(HouseID);
             }
 
             if (points <= 10) { return SatisfactionStateEnum.Miserable; }
@@ -661,7 +642,7 @@ namespace RiverHollow.Characters
                 PlayerManager.Spouse = this;
             }
 
-            if (_iNextArrival <= 0 || !string.IsNullOrEmpty(_sStartMap))
+            if (_iNextArrival <= 0 || !string.IsNullOrEmpty(StartMap))
             {
                 MoveToSpawn();
                 DetermineValidSchedule();

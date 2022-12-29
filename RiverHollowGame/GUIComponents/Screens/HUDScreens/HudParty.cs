@@ -265,7 +265,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                                 else if (!box.GearType.Equals(GearTypeEnum.None)) { _actor.Unequip(((Equipment)box.BoxItem).GearType); }
                                 else if (!box.ClothingType.Equals(ClothingEnum.None))
                                 {
-                                    PlayerManager.PlayerActor.RemoveClothes(((Clothing)box.BoxItem).ClothesType);
+                                    PlayerManager.PlayerActor.RemoveClothes(((Clothing)box.BoxItem).ClothingType);
                                 }
 
                                 DisplayAttributeText();
@@ -435,7 +435,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                         }
                         else if (boxMatch.ItemType.Equals(ItemEnum.Clothing) && i.CompareType(ItemEnum.Clothing))
                         {
-                            if (boxMatch.ClothingType != ClothingEnum.None && ((Clothing)i).ClothesType == boxMatch.ClothingType)
+                            if (boxMatch.ClothingType != ClothingEnum.None && ((Clothing)i).ClothingType == boxMatch.ClothingType)
                             {
                                 liItems.Add(i);
                             }

@@ -655,7 +655,7 @@ namespace RiverHollow.Utilities
         }
 
         /// <summary>
-        /// Helper method for ImportBasics to compile the list of relevant animations
+        /// Helper method for Constructors to compile the list of relevant animations
         /// </summary>
         /// <param name="list">List to add to</param>
         /// <param name="data">Data to read form</param>

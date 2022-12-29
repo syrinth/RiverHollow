@@ -50,10 +50,6 @@ namespace RiverHollow.Characters
             _eActorType = WorldActorTypeEnum.Mob;
             _liMonsters = new List<CombatActor>();
 
-            _fBaseSpeed = 1;
-            ImportBasics(data);
-
-
             _iXP = 0;
             foreach (Monster mon in _liMonsters)
             {
@@ -62,12 +58,10 @@ namespace RiverHollow.Characters
             XP = _iXP;
 
             NewFoV();
-        }
 
-        protected int ImportBasics(Dictionary<string, string> data)
-        {
+            _fBaseSpeed = 1;
             string[] monsterPool = Util.FindParams(data["MonsterID"]);
-            int index = RHRandom.Instance().Next(0, monsterPool.Length -1);
+            int index = RHRandom.Instance().Next(0, monsterPool.Length - 1);
 
             string[] split = monsterPool[index].Split('-');
             for (int i = 0; i < split.Length; i++)
@@ -97,7 +91,6 @@ namespace RiverHollow.Characters
             }
 
             LoadSpriteAnimations(ref _sprBody, Util.LoadWorldAnimations(data), DataManager.FOLDER_MOBS + data["Texture"]);
-            return 0;
         }
 
         public void NewFoV()

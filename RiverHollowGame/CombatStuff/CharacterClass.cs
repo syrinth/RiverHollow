@@ -34,11 +34,6 @@ namespace RiverHollow.CombatStuff
             ID = id;
 
             Actions = new List<CombatAction>();
-            ImportBasics(stringData);
-        }
-
-        protected void ImportBasics(Dictionary<string, string> stringData)
-        {
             Util.AssignValue(ref _weaponType, "Weapon", stringData);
             Util.AssignValue(ref _armorType, "Armor", stringData);
 

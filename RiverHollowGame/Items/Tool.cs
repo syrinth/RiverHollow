@@ -12,16 +12,12 @@ namespace RiverHollow.Items
 {
     public class Tool : Item
     {
-        public ToolEnum ToolType;
-        protected int _iStaminaCost;
-        public int StaminaCost => _iStaminaCost;
-        protected int _iToolLevel;
-        public int ToolLevel => _iToolLevel;
+        public ToolEnum ToolType => DataManager.GetEnumByIDKey<ToolEnum>(ID, "Subtype", DataType.Item);
+        public int StaminaCost => DataManager.GetIntByIDKey(ID, "Stam", DataType.Item);
+        public int ToolLevel => DataManager.GetIntByIDKey(ID, "Level", DataType.Item);
+        private int _iCharges = 0;
 
-        private string _sSoundEffect;
-        public string SoundEffect => _sSoundEffect;
-
-        private int _iCharges;
+        public string SoundEffect => DataManager.GetStringByIDKey(ID, "SoundEffect", DataType.Item);
 
         protected AnimatedSprite _sprite;
         public AnimatedSprite ToolAnimation { get => _sprite; }
@@ -37,14 +33,6 @@ namespace RiverHollow.Items
 
         public Tool(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
         {
-            ToolType = Util.ParseEnum<ToolEnum>(stringData["Subtype"]);
-
-            _iCharges = 0;
-            Util.AssignValue(ref _iToolLevel, "Level", stringData);
-            Util.AssignValue(ref _iStaminaCost, "Stam", stringData);
-            Util.AssignValue(ref _iCharges, "Charges", stringData);
-            Util.AssignValue(ref _sSoundEffect, "SoundEffect", stringData);
-
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Tools");
 
             _iColTexSize = 128;

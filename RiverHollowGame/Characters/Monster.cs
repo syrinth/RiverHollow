@@ -25,11 +25,6 @@ namespace RiverHollow.Characters
             ID = id;
 
             _eActorType = CombatActorTypeEnum.Monster;
-            ImportBasics(data);
-        }
-
-        protected void ImportBasics(Dictionary<string, string> data)
-        {
             Util.AssignValue(ref _iBodyWidth, "Width", data);
             Util.AssignValue(ref _iBodyHeight, "Height", data);
 

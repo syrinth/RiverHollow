@@ -5,24 +5,21 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
     public class Mount : TalkingActor
     {
+        private int StableID => DataManager.GetIntByIDKey(ID, "BuildingID", DataType.Character);
         public override Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, Constants.TILE_SIZE);
 
-        int _iStableID = -1;
         public Mount(int id, Dictionary<string, string> stringData) : base(id)
         {
             _eActorType = WorldActorTypeEnum.Mount;
 
             Util.AssignValue(ref _iBodyWidth, "Width", stringData);
             Util.AssignValue(ref _iBodyHeight, "Height", stringData);
-
-            Util.AssignValue(ref _iStableID, "BuildingID", stringData);
 
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
@@ -47,7 +44,7 @@ namespace RiverHollow.Characters
 
         public void SpawnInHome()
         {
-            RHMap stableMap = MapManager.Maps[PlayerManager.GetBuildingByID(_iStableID)?.BuildingMapName];
+            RHMap stableMap = MapManager.Maps[PlayerManager.GetBuildingByID(StableID)?.BuildingMapName];
             stableMap.AddActor(this);
             Position = Util.GetRandomItem(stableMap.FindFreeTiles()).Position;
         }
@@ -56,7 +53,7 @@ namespace RiverHollow.Characters
         {
             bool rv = false;
 
-            RHMap stableMap = MapManager.Maps[PlayerManager.GetBuildingByID(_iStableID)?.BuildingMapName];
+            RHMap stableMap = MapManager.Maps[PlayerManager.GetBuildingByID(StableID)?.BuildingMapName];
             if (mapName.Equals(stableMap.Name))
             {
                 rv = true;
@@ -64,6 +61,6 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        public bool StableBuilt() { return PlayerManager.TownObjectBuilt(_iStableID); }
+        public bool StableBuilt() { return PlayerManager.TownObjectBuilt(StableID); }
     }
 }

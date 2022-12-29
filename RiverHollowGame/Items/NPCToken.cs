@@ -10,27 +10,25 @@ namespace RiverHollow.Items
 {
     public class NPCToken : Item
     {
-        NPCTokenTypeEnum _eTokenType;
-        int _iNPCID;
+        private NPCTokenTypeEnum TokenType => DataManager.GetEnumByIDKey<NPCTokenTypeEnum>(ID, "Subtype", DataType.Item);
+        private int NPCID => DataManager.GetIntByIDKey(ID, "NPC_ID", DataType.Item);
+
         public NPCToken(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Resources");
-
-            Util.AssignValue(ref _eTokenType, "Subtype", stringData);
-            Util.AssignValue(ref _iNPCID, "NPC_ID", stringData);
         }
 
         public override bool AddToInventoryTrigger()
         {
-            if (_eTokenType == NPCTokenTypeEnum.Mount)
+            if (TokenType == NPCTokenTypeEnum.Mount)
             {
-                Mount act = DataManager.CreateMount(_iNPCID);
+                Mount act = DataManager.CreateMount(NPCID);
                 PlayerManager.AddMount(act);
                 act.SpawnInHome();
             }
-            else if (_eTokenType == NPCTokenTypeEnum.Pet)
+            else if (TokenType == NPCTokenTypeEnum.Pet)
             {
-                Pet act = DataManager.CreatePet(_iNPCID);
+                Pet act = DataManager.CreatePet(NPCID);
                 PlayerManager.AddPet(act);
                 act.SpawnNearPlayer();
                 if (PlayerManager.PlayerActor.ActivePet == null)

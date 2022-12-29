@@ -12,7 +12,7 @@ namespace RiverHollow.Characters
 {
     public class Pet : TalkingActor
     {
-        private int _iGatherZoneID;
+        private int GatherZoneID => DataManager.GetIntByIDKey(ID, "ObjectID", DataType.Character);
 
         public Pet(int id, Dictionary<string, string> stringData) : base(id)
         {
@@ -21,8 +21,6 @@ namespace RiverHollow.Characters
             _bCanWander = true;
 
             //_sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Adventurer", stringData["Key"]);
-
-            Util.AssignValue(ref _iGatherZoneID, "ObjectID", stringData);
 
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
@@ -62,7 +60,7 @@ namespace RiverHollow.Characters
 
         public void SpawnInHome()
         {
-            WorldObject obj = Util.GetRandomItem(PlayerManager.GetTownObjectsByID(_iGatherZoneID));
+            WorldObject obj = Util.GetRandomItem(PlayerManager.GetTownObjectsByID(GatherZoneID));
             if (obj == null)
             {
                 if (CurrentMap == null) { MapManager.TownMap.AddCharacterImmediately(this); }

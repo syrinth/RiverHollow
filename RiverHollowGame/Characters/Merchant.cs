@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
-using static RiverHollow.WorldObjects.Buildable;
 
 namespace RiverHollow.Characters
 {
@@ -26,7 +25,7 @@ namespace RiverHollow.Characters
         public int _iShopID = -1;
         public int ShopID => _iShopID;
 
-        public Merchant(int index, Dictionary<string, string> stringData, bool loadanimations = true) : base(index)
+        public Merchant(int index, Dictionary<string, string> stringData, bool loadanimations = true) : base(index, stringData, loadanimations)
         {
             _eActorType = WorldActorTypeEnum.Merchant;
 
@@ -34,14 +33,8 @@ namespace RiverHollow.Characters
 
             _liRequestItems = new List<RequestItem>();
             DiChosenItems = new Dictionary<Item, bool>();
-            ImportBasics(stringData, loadanimations);
 
             _bOnTheMap = false;
-        }
-
-        protected override void ImportBasics(Dictionary<string, string> stringData, bool loadanimations = true)
-        {
-            base.ImportBasics(stringData, loadanimations);
 
             Util.AssignValue(ref _iShopID, "ShopData", stringData);
 
@@ -69,7 +62,7 @@ namespace RiverHollow.Characters
             else
             {
                 _bOnTheMap = false;
-                _iNextArrival = _iArrivalPeriod;
+                _iNextArrival = ArrivalPeriod;
                 CurrentMap?.RemoveCharacterImmediately(this);
                 if (_iShopID != -1)
                 {

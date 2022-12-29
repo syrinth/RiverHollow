@@ -9,25 +9,21 @@ namespace RiverHollow.Characters
 {
     public abstract class TravellingNPC : TalkingActor
     {
-        protected int _iTotalMoneyEarnedReq = -1;
-
-        protected int _iArrivalPeriod = -1;
         protected int _iNextArrival = -1;
+        protected int ArrivalPeriod => DataManager.GetIntByIDKey(ID, "ArrivalPeriod", DataType.Character);
+        protected int TotalMoneyEarnedNeeded => DataManager.GetIntByIDKey(ID, "TotalMoneyEarnedReq", DataType.Character);
 
         protected Dictionary<int, int> _diRequiredObjectIDs;
-        protected int _iRequiredPopulation = -1;
-        protected int _iRequiredVillagerID = -1;
+        protected int RequiredPopulation => DataManager.GetIntByIDKey(ID, "RequiredPopulation", DataType.Character);
+        protected int RequiredVillagerID => DataManager.GetIntByIDKey(ID, "RequiredVillager", DataType.Character);
 
         public virtual RelationShipStatusEnum RelationshipState { get; set; }
         public bool Introduced => RelationshipState != RelationShipStatusEnum.None;
         protected bool _bArrivedOnce = false;
 
-        public TravellingNPC(int id) : base(id) { }
-
-        protected virtual void ImportBasics(Dictionary<string, string> stringData, bool loadanimations = true)
+        public TravellingNPC(int index, Dictionary<string, string> stringData, bool loadanimations = true) : base(index)
         {
-            Util.AssignValue(ref _bHover, "Hover", stringData);
-
+            _diRequiredObjectIDs = new Dictionary<int, int>();
             _diDialogue = DataManager.GetNPCDialogue(stringData["Key"]);
 
             _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Villager", stringData["Key"]);
@@ -41,8 +37,6 @@ namespace RiverHollow.Characters
                     _diRequiredObjectIDs[int.Parse(split[0])] = int.Parse(split[1]);
                 }
             }
-            Util.AssignValue(ref _iRequiredPopulation, "RequiredPopulation", stringData);
-            Util.AssignValue(ref _iRequiredVillagerID, "RequiredVillager", stringData);
 
             if (loadanimations)
             {
@@ -57,7 +51,6 @@ namespace RiverHollow.Characters
 
             int arrivalDelay = -1;
             Util.AssignValue(ref arrivalDelay, "FirstArrival", stringData);
-            Util.AssignValue(ref _iArrivalPeriod, "ArrivalPeriod", stringData);
 
             _iNextArrival = arrivalDelay;
         }
@@ -79,7 +72,7 @@ namespace RiverHollow.Characters
                 }
             }
 
-            if(_iRequiredPopulation != -1)
+            if(RequiredPopulation != -1)
             {
                 int livesintown = 0;
                 foreach(Villager v in DataManager.DIVillagers.Values)
@@ -87,21 +80,21 @@ namespace RiverHollow.Characters
                     if (v.LivesInTown) { livesintown++; }
                 }
 
-                if(livesintown < _iRequiredPopulation)
+                if(livesintown < RequiredPopulation)
                 {
                     return false;
                 }
             }
-            if (_iRequiredVillagerID != -1)
+            if (RequiredVillagerID != -1)
             {
-                if (!DataManager.DIVillagers[_iRequiredVillagerID].LivesInTown)
+                if (!DataManager.DIVillagers[RequiredVillagerID].LivesInTown)
                 {
                     return false;
                 }
             }
 
             //If there is a Money Earned Requirement and we have not reached it, fail the test
-            if (_iTotalMoneyEarnedReq != -1 && _iTotalMoneyEarnedReq < PlayerManager.TotalMoneyEarned)
+            if (TotalMoneyEarnedNeeded != -1 && TotalMoneyEarnedNeeded < PlayerManager.TotalMoneyEarned)
             {
                 return false;
             }

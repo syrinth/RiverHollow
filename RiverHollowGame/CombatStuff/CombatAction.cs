@@ -95,11 +95,6 @@ namespace RiverHollow.CombatStuff
             _liEffects = new List<SkillTagsEnum>();
             _liActionTags = new List<string>();
 
-            ImportBasics(id, stringData);
-        }
-
-        protected void ImportBasics(int id, Dictionary<string, string> stringData)
-        {
             _iId = id;
 
             Util.AssignValue(ref _eActionType, "Type", stringData);

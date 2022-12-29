@@ -188,7 +188,7 @@ namespace RiverHollow.Characters
         {
             if (c != null)
             {
-                string clothingTexture = string.Format(@"Textures\Items\Clothing\{0}\{1}", c.ClothesType.ToString(), c.TextureKey);
+                string clothingTexture = string.Format(@"Textures\Items\Clothing\{0}\{1}", c.ClothingType.ToString(), c.TextureKey);
                 if (!c.GenderNeutral) { clothingTexture += ("_" + BodyTypeStr); }
 
                 LoadSpriteAnimations(ref c.Sprite, Util.LoadPlayerAnimations(DataManager.Config[17]), clothingTexture);
