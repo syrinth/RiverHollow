@@ -15,11 +15,11 @@
     </Item>
     <Item>
       <Key>Task_3</Key>
-      <Value>[Name:Recipes for $NPC_26$][Description:$NPC_26$ wants you to retrieve her book of recipes from the Forest Temple.]</Value>
+      <Value>[Name:$NPC_43$ needs an ankle][Description:$NPC_43$ needs you to get her some $Item_162$ for her twisted ankle.]</Value>
     </Item>
     <Item>
       <Key>Task_4</Key>
-      <Value>[Name:$WorldObject_18$][Description:$NPC_43$ is offering her servies to the town, all you need to do is build her a place to settle downand sell her wares.]</Value>
+      <Value>[Name:$WorldObject_18$ Now][Description:$NPC_43$ is offering her services to the town, all you need to do is build her a place to settle downand sell her wares.]</Value>
     </Item>
     <Item>
       <Key>NPC_0</Key>

@@ -67,24 +67,6 @@ namespace RiverHollow.Characters
 
         public int Income { get; private set; }
 
-        //Copy Constructor for Cutscenes
-        public Villager(Villager n) : base(n.ID, new Dictionary<string, string>())
-        {
-            _diCollection = new Dictionary<int, bool>();
-
-            _eActorType = WorldActorTypeEnum.Villager;
-            Combatant = n.Combatant;
-            CombatVersion = n.CombatVersion;
-
-            _diDialogue = n._diDialogue;
-            _sPortrait = n.Portrait;
-
-            _iBodyWidth = n._sprBody.Width;
-            _iBodyHeight = n._sprBody.Height;
-            _sprBody = new AnimatedSprite(n.BodySprite);
-            Income = n.Income;
-        }
-
         public Villager(int index, Dictionary<string, string> stringData, bool loadanimations = true) : base(index, stringData, loadanimations)
         {
             _eActorType = WorldActorTypeEnum.Villager;

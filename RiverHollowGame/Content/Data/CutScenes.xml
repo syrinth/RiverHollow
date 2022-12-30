@@ -29,7 +29,7 @@
       <Key>3</Key>
       <Value>
         <Item></Item>
-        <Item>[Map:mapApothecary][Player][Actors:43-Cutscene_Entrance][Deactivate:19]</Item>
+        <Item>[Map:mapApothecary][Player][Actors:43-Cutscene_Entrance][Deactivate:43]</Item>
         <Item>[Speed:Player-0.5|43-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:43][Move:43-4-Up][Face:Player-Up][Face:43-Down][Speak:43-0]</Item>
       </Value>
     </Item>

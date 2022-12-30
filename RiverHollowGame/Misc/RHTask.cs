@@ -400,6 +400,11 @@ namespace RiverHollow.Misc
         {
             TaskState = TaskStateEnum.Completed;
 
+            if (_targetItem != null && _targetItem.ID > -1)
+            {
+                InventoryManager.RemoveItemsFromInventory(_targetItem.ID, RequiredItemAmount);
+            }
+
             //If a cutscene will play defer the actual End of the Task until the Cutscene ends
             if (_iCutsceneID != -1)
             {

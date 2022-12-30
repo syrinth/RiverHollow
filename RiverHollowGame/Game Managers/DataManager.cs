@@ -392,7 +392,7 @@ namespace RiverHollow.Game_Managers
                     if (_diActions[id].ContainsKey(key)) { return _diActions[id].ContainsKey(key); }
                     break;
                 case DataType.Character:
-                    if (_diActions[id].ContainsKey(key)) { return _diActions[id].ContainsKey(key); }
+                    if (_diNPCData[id].ContainsKey(key)) { return _diNPCData[id].ContainsKey(key); }
                     break;
                 case DataType.Class:
                     if (_diClasses[id].ContainsKey(key)) { return _diClasses[id].ContainsKey(key); }

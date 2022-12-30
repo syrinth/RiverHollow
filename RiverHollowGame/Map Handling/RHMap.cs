@@ -140,6 +140,7 @@ namespace RiverHollow.Map_Handling
             _liPlacedWorldObjects = map._liPlacedWorldObjects;
             _liLights = map._liLights;
             _liHeldLights = map._liHeldLights;
+            _iShopID = map._iShopID;
 
             MapWidthTiles = _map.Width;
             MapHeightTiles = _map.Height;

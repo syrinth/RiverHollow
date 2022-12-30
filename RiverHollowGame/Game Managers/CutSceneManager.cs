@@ -490,7 +490,10 @@ namespace RiverHollow.Game_Managers
                     {
                         string[] friendData = f.Split('-');
                         WorldActor act = null;
-                        if (DataManager.DIVillagers.ContainsKey(int.Parse(friendData[0]))) { act = new Villager(DataManager.DIVillagers[int.Parse(friendData[0])]); }
+                        if (DataManager.DIVillagers.ContainsKey(int.Parse(friendData[0]))) {
+                            int npcID = int.Parse(friendData[0]);
+                            act = new Villager(npcID, DataManager.NPCData[npcID]);
+                        }
                         else { act = DataManager.CreateNPCByIndex(int.Parse(friendData[0])); }
                         act.CurrentMapName = _cutsceneMap.Name;
                         act.Position = Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(friendData[1]));
