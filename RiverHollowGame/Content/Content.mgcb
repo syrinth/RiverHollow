@@ -909,11 +909,6 @@
 /processor:TiledMapProcessor
 /build:Maps/Forest/mapForest_15.tmx
 
-#begin Maps/Forest/mapForest_16.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_16.tmx
-
 #begin Maps/Tilesets/tilesetHouses.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1887,11 +1882,6 @@
 /processor:TiledMapProcessor
 /build:Maps/Dungeon_Caves/mapCave_15.tmx
 
-#begin Maps/Dungeon_Caves/mapCave_16.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_16.tmx
-
 #begin Maps/Dungeon_Caves/mapCave_17.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -2183,11 +2173,6 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapHouse_14.tmx
-
-#begin Maps/Town/mapHouse_16.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_16.tmx
 
 #begin Maps/Town/mapHouse_18.tmx
 /importer:TiledMapImporter
@@ -3388,18 +3373,6 @@
 /processor:PassThroughProcessor
 /build:Data/Combat_Actions.xml
 
-#begin Textures/Items/Gear/Weapons/Knife/116.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Items/Gear/Weapons/Knife/116.png
-
 #begin Maps/Forest/map_YuliaCottage.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -3978,4 +3951,96 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Items/Special.png
+
+#begin Textures/Items/Blueprints.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Items/Blueprints.png
+
+#begin Textures/Items/Clothing.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Items/Clothing.png
+
+#begin Textures/Items/Tokens.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Items/Tokens.png
+
+#begin Textures/Items/Seeds.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Items/Seeds.png
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_Ulm.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_Ulm.xml
+
+#begin Textures/Actors/Portraits/V_Ulm.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Portraits/V_Ulm.png
+
+#begin Maps/Dungeon_Caves/mapCave_16.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeon_Caves/mapCave_16.tmx
+
+#begin Maps/Town/mapHouse_16.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapHouse_16.tmx
+
+#begin Textures/Items/Gear/Weapons/Knife/116.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Items/Gear/Weapons/Knife/116.png
+
+#begin Maps/Forest/mapForest_16.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Forest/mapForest_16.tmx
 

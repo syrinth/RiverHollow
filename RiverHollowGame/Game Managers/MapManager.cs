@@ -225,11 +225,12 @@ namespace RiverHollow.Game_Managers
                 if (PlayerManager.PlayerActor.ActiveMount != null) { CurrentMap.RemoveActor(PlayerManager.PlayerActor.ActiveMount); }
 
                 CurrentMap.ResetMobPositioning();
+                CurrentMap.LeaveMap();
+                TaskManager.AssignDelayedTasks();
                 string oldMap = CurrentMap.Name;
                 CurrentMap = _newMapInfo.NextMap;
 
                 SoundManager.ChangeMap();
-                CurrentMap.LeaveMap();
                 PlayerManager.CurrentMap = _newMapInfo.NextMap.Name;
                 PlayerManager.PlayerActor.Position = _newMapInfo.PlayerPosition;
                 CurrentMap.EnterMap();

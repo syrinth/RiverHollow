@@ -26,7 +26,7 @@ namespace RiverHollow.Misc
         public TalkingActor GoalNPC { get; private set; }
 
         private Dictionary<TaskTriggerEnum, string> _diAssignationTriggers;
-        private List<int> _liTasksToTrigger;
+        private List<KeyValuePair<int, bool>> _liTasksToTrigger;
 
         int _iCutsceneID;
         public int RequiredItemAmount { get; private set; }
@@ -80,7 +80,7 @@ namespace RiverHollow.Misc
 
             LiRewardItems = new List<Item>();
 
-            _liTasksToTrigger = new List<int>();
+            _liTasksToTrigger = new List<KeyValuePair<int, bool>>();
             _diAssignationTriggers = new Dictionary<TaskTriggerEnum, string>();
         }
 
@@ -112,6 +112,10 @@ namespace RiverHollow.Misc
             {
                 GoalNPC = DataManager.DIVillagers[int.Parse(stringData["GoalNPC"])];
             }
+            else
+            {
+                GoalNPC = StartNPC;
+            }
 
             if (stringData.ContainsKey("AssignTrigger"))
             {
@@ -128,7 +132,15 @@ namespace RiverHollow.Misc
                 string[] tasks = Util.FindParams(stringData["TriggerTask"]);
                 for (int i = 0; i < tasks.Length; i++)
                 {
-                    _liTasksToTrigger.Add(int.Parse(tasks[i]));
+                    string[] split = tasks[i].Split('-');
+                    if (split.Length == 1)
+                    {
+                        _liTasksToTrigger.Add(new KeyValuePair<int, bool>(int.Parse(split[0]), false));
+                    }
+                    else
+                    {
+                        _liTasksToTrigger.Add(new KeyValuePair<int, bool>(int.Parse(split[0]), true));
+                    }
                 }
             }
 
@@ -403,7 +415,11 @@ namespace RiverHollow.Misc
         {
             if (TaskState == TaskStateEnum.Completed)
             {
-                _liTasksToTrigger.ForEach(o => TaskManager.AssignTaskByID(o));
+                for (int i = 0; i < _liTasksToTrigger.Count; i++)
+                {
+                    if (!_liTasksToTrigger[i].Value){ TaskManager.AssignTaskByID(_liTasksToTrigger[i].Key); }
+                    else { TaskManager.AddDelayedTask(_liTasksToTrigger[i].Key); }
+                }
 
                 foreach (Item i in LiRewardItems)
                 {
@@ -428,7 +444,7 @@ namespace RiverHollow.Misc
 
                 if (DataManager.TaskData[TaskID].ContainsKey("SendToTown"))
                 {
-                    ((Villager)GoalNPC).SendToTown();
+                    ((Villager)GoalNPC).QueueSendToTown();
                 }
 
                 TaskManager.TaskLog.Remove(this);

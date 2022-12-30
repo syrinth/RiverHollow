@@ -10,6 +10,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class TaskManager
     {
+        private static List<RHTask> _liDelayedTasks;
         private static List<RHTask> _liTasks;
         public static List<RHTask> TaskLog
         {
@@ -19,6 +20,7 @@ namespace RiverHollow.Game_Managers
         public static void Initialize()
         {
             _liTasks = new List<RHTask>();
+            _liDelayedTasks = new List<RHTask>();
             foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.TaskData)
             {
                 _liTasks.Add(new RHTask(kvp.Key, kvp.Value));
@@ -52,6 +54,18 @@ namespace RiverHollow.Game_Managers
         {
             TaskLog.Add(t);
         }
+
+        public static void AddDelayedTask(int taskID)
+        {
+            _liDelayedTasks.Add(_liTasks.Find(x => x.TaskID == taskID));
+        }
+
+        public static void AssignDelayedTasks()
+        {
+            _liDelayedTasks.ForEach(x => x.AssignTaskToNPC());
+            _liDelayedTasks.Clear();
+        }
+
 
         public static void AdvanceTaskProgress(WorldObject obj)
         {

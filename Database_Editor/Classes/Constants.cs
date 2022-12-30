@@ -12,7 +12,7 @@ namespace Database_Editor.Classes
         public static readonly string PATH_TO_CONTENT = string.Format(@"{0}\..\..\..\..\RiverHollow\RiverHollowGame\Content", System.Environment.CurrentDirectory);
         public static readonly string PATH_TO_MAPS = PATH_TO_CONTENT + @"\Maps";
         public static readonly string PATH_TO_DATA = PATH_TO_CONTENT + @"\Data";
-        public static readonly string PATH_TO_BACKUP = PATH_TO_CONTENT + @"\Data\Backups";
+        public static readonly string PATH_TO_BACKUP = @"E:\Programming\RiverHollow Backups";
         public static readonly string PATH_TO_TEXT_FILES = PATH_TO_DATA + @"\Text Files";
         public static readonly string PATH_TO_DIALOGUE = PATH_TO_TEXT_FILES + @"\Dialogue";
         public static readonly string PATH_TO_VILLAGER_DIALOGUE = PATH_TO_DIALOGUE + @"\Villagers";

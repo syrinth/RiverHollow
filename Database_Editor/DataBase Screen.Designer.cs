@@ -185,17 +185,19 @@
             this.label5 = new System.Windows.Forms.Label();
             this.dgvWorldObjects = new System.Windows.Forms.DataGridView();
             this.colWorldObjectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tbStatus = new System.Windows.Forms.TextBox();
             this.tabUpgrades = new System.Windows.Forms.TabPage();
-            this.dgvUpgrades = new System.Windows.Forms.DataGridView();
             this.btnUpgradeCancel = new System.Windows.Forms.Button();
             this.dgvUpgradeTags = new System.Windows.Forms.DataGridView();
+            this.colUpgradeTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label23 = new System.Windows.Forms.Label();
             this.tbUpgradeID = new System.Windows.Forms.TextBox();
             this.tbUpgradeName = new System.Windows.Forms.TextBox();
             this.label25 = new System.Windows.Forms.Label();
+            this.dgvUpgrades = new System.Windows.Forms.DataGridView();
             this.colUpgradesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colUpgradeTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tbStatus = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.tbCutsceneID = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabActions.SuspendLayout();
@@ -235,8 +237,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjectTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjects)).BeginInit();
             this.tabUpgrades.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvUpgrades)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUpgradeTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUpgrades)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -738,6 +740,8 @@
             // 
             // tabCutscenes
             // 
+            this.tabCutscenes.Controls.Add(this.label26);
+            this.tabCutscenes.Controls.Add(this.tbCutsceneID);
             this.tabCutscenes.Controls.Add(this.btnEditCutsceneDialogue);
             this.tabCutscenes.Controls.Add(this.tbCutsceneDetails);
             this.tabCutscenes.Controls.Add(this.label17);
@@ -1883,15 +1887,6 @@
             this.colWorldObjectsName.ReadOnly = true;
             this.colWorldObjectsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tbStatus
-            // 
-            this.tbStatus.Enabled = false;
-            this.tbStatus.Location = new System.Drawing.Point(12, 484);
-            this.tbStatus.Name = "tbStatus";
-            this.tbStatus.ReadOnly = true;
-            this.tbStatus.Size = new System.Drawing.Size(794, 20);
-            this.tbStatus.TabIndex = 13;
-            // 
             // tabUpgrades
             // 
             this.tabUpgrades.Controls.Add(this.btnUpgradeCancel);
@@ -1907,26 +1902,6 @@
             this.tabUpgrades.TabIndex = 17;
             this.tabUpgrades.Text = "Upgrades";
             this.tabUpgrades.UseVisualStyleBackColor = true;
-            // 
-            // dgvUpgrades
-            // 
-            this.dgvUpgrades.AllowUserToAddRows = false;
-            this.dgvUpgrades.AllowUserToDeleteRows = false;
-            this.dgvUpgrades.AllowUserToResizeColumns = false;
-            this.dgvUpgrades.AllowUserToResizeRows = false;
-            this.dgvUpgrades.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvUpgrades.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colUpgradesName});
-            this.dgvUpgrades.ContextMenuStrip = this.contextMenu;
-            this.dgvUpgrades.Location = new System.Drawing.Point(6, 6);
-            this.dgvUpgrades.MultiSelect = false;
-            this.dgvUpgrades.Name = "dgvUpgrades";
-            this.dgvUpgrades.ReadOnly = true;
-            this.dgvUpgrades.RowHeadersVisible = false;
-            this.dgvUpgrades.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvUpgrades.Size = new System.Drawing.Size(308, 411);
-            this.dgvUpgrades.TabIndex = 27;
-            this.dgvUpgrades.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUpgrades_CellClick);
             // 
             // btnUpgradeCancel
             // 
@@ -1950,6 +1925,13 @@
             this.dgvUpgradeTags.RowHeadersVisible = false;
             this.dgvUpgradeTags.Size = new System.Drawing.Size(464, 356);
             this.dgvUpgradeTags.TabIndex = 41;
+            // 
+            // colUpgradeTags
+            // 
+            this.colUpgradeTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colUpgradeTags.HeaderText = "Tags";
+            this.colUpgradeTags.Name = "colUpgradeTags";
+            this.colUpgradeTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // label23
             // 
@@ -1983,6 +1965,26 @@
             this.label25.TabIndex = 37;
             this.label25.Text = "Name:";
             // 
+            // dgvUpgrades
+            // 
+            this.dgvUpgrades.AllowUserToAddRows = false;
+            this.dgvUpgrades.AllowUserToDeleteRows = false;
+            this.dgvUpgrades.AllowUserToResizeColumns = false;
+            this.dgvUpgrades.AllowUserToResizeRows = false;
+            this.dgvUpgrades.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvUpgrades.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colUpgradesName});
+            this.dgvUpgrades.ContextMenuStrip = this.contextMenu;
+            this.dgvUpgrades.Location = new System.Drawing.Point(6, 6);
+            this.dgvUpgrades.MultiSelect = false;
+            this.dgvUpgrades.Name = "dgvUpgrades";
+            this.dgvUpgrades.ReadOnly = true;
+            this.dgvUpgrades.RowHeadersVisible = false;
+            this.dgvUpgrades.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvUpgrades.Size = new System.Drawing.Size(308, 411);
+            this.dgvUpgrades.TabIndex = 27;
+            this.dgvUpgrades.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUpgrades_CellClick);
+            // 
             // colUpgradesName
             // 
             this.colUpgradesName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
@@ -1992,12 +1994,30 @@
             this.colUpgradesName.ReadOnly = true;
             this.colUpgradesName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // colUpgradeTags
+            // tbStatus
             // 
-            this.colUpgradeTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colUpgradeTags.HeaderText = "Tags";
-            this.colUpgradeTags.Name = "colUpgradeTags";
-            this.colUpgradeTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.tbStatus.Enabled = false;
+            this.tbStatus.Location = new System.Drawing.Point(12, 484);
+            this.tbStatus.Name = "tbStatus";
+            this.tbStatus.ReadOnly = true;
+            this.tbStatus.Size = new System.Drawing.Size(794, 20);
+            this.tbStatus.TabIndex = 13;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(714, 9);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(21, 13);
+            this.label26.TabIndex = 58;
+            this.label26.Text = "ID:";
+            // 
+            // tbCutsceneID
+            // 
+            this.tbCutsceneID.Location = new System.Drawing.Point(741, 6);
+            this.tbCutsceneID.Name = "tbCutsceneID";
+            this.tbCutsceneID.Size = new System.Drawing.Size(43, 20);
+            this.tbCutsceneID.TabIndex = 57;
             // 
             // FrmDBEditor
             // 
@@ -2064,8 +2084,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjects)).EndInit();
             this.tabUpgrades.ResumeLayout(false);
             this.tabUpgrades.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvUpgrades)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUpgradeTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUpgrades)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2238,6 +2258,8 @@
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.DataGridViewTextBoxColumn colUpgradesName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colUpgradeTags;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.TextBox tbCutsceneID;
     }
 }
 

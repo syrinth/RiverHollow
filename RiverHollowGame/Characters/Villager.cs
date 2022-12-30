@@ -268,11 +268,18 @@ namespace RiverHollow.Characters
         }
 
         #region Travel Methods
+        public void QueueSendToTown()
+        {
+            _eSpawnStatus = VillagerSpawnStatus.SendingToInn;
+        }
         public void SendToTown()
         {
-            _eSpawnStatus = VillagerSpawnStatus.WaitAtInn;
-            GameManager.AddToInnQueue(this);
-            MoveToSpawn();
+            if (_eSpawnStatus == VillagerSpawnStatus.SendingToInn)
+            {
+                _eSpawnStatus = VillagerSpawnStatus.WaitAtInn;
+                GameManager.AddToInnQueue(this);
+                MoveToSpawn();
+            }
         }
         public override bool HandleTravelTiming()
         {

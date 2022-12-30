@@ -14,7 +14,7 @@ namespace RiverHollow.Items
         {
             if (stringData.ContainsKey("ObjectID")) { _arrCraftingUnlocks = Array.ConvertAll(Util.FindParams(stringData["ObjectID"]), s => int.Parse(s)); ; }
 
-            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Resources");
+            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Blueprints");
         }
 
         public override bool HasUse() { return true; }

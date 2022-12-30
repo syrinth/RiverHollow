@@ -2121,6 +2121,15 @@ namespace RiverHollow.Map_Handling
         public void LeaveMap()
         {
             EnvironmentManager.UnloadEnvironment();
+            List<WorldActor> copy = new List<WorldActor>(_liActors);
+            for (int i = 0; i < copy.Count; i++)
+            {
+                if (copy[i].IsActorType(WorldActorTypeEnum.Villager))
+                {
+                    Villager v = (Villager)copy[i];
+                    v.SendToTown();
+                }
+            }
         }
 
         public void EnterMap()

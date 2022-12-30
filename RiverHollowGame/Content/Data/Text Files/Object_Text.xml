@@ -18,6 +18,10 @@
       <Value>[Name:Recipes for $NPC_26$][Description:$NPC_26$ wants you to retrieve her book of recipes from the Forest Temple.]</Value>
     </Item>
     <Item>
+      <Key>Task_4</Key>
+      <Value>[Name:$WorldObject_18$][Description:$NPC_43$ is offering her servies to the town, all you need to do is build her a place to settle downand sell her wares.]</Value>
+    </Item>
+    <Item>
       <Key>NPC_0</Key>
       <Value>[Name:Amanda]</Value>
     </Item>
@@ -598,6 +602,10 @@
       <Value>[Name:Wagren's Curios]</Value>
     </Item>
     <Item>
+      <Key>Shop_11</Key>
+      <Value>[Name:Apothecary]</Value>
+    </Item>
+    <Item>
       <Key>Cutscene_0</Key>
       <Value>[Name:Combat_Intro]</Value>
     </Item>
@@ -611,7 +619,7 @@
     </Item>
     <Item>
       <Key>Cutscene_3</Key>
-      <Value>[Name:Griselda]</Value>
+      <Value>[Name:Apothecary]</Value>
     </Item>
     <Item>
       <Key>Item_0</Key>

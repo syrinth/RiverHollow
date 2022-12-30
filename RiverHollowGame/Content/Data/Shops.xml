@@ -45,5 +45,9 @@
       <Key>10</Key>
       <Value>[ItemID:193][Shopkeeper:38]</Value>
     </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>[ItemID:167][Shopkeeper:43]</Value>
+    </Item>
   </Asset>
 </XnaContent>

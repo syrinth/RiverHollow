@@ -987,6 +987,7 @@ namespace Database_Editor
             List<string> listData = _diCutscenes[_diTabIndices["Cutscenes"]];
 
             tbCutsceneName.Text = GetTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name");
+            tbCutsceneID.Text = _diTabIndices["Cutscenes"].ToString();
             tbCutsceneTriggers.Text = listData[0];
             tbCutsceneDetails.Text = listData[1];
 
@@ -1506,13 +1507,13 @@ namespace Database_Editor
 
         private void Backup()
         {
-            Backup(PATH_TO_DATA, PATH_TO_DATA + @"\Backups");
+            Backup(PATH_TO_DATA, PATH_TO_BACKUP);
         }
         private static void Backup(string root, string dest)
         {
             foreach (var directory in Directory.GetDirectories(root))
             {
-                if (directory != PATH_TO_DATA + @"\Backups")
+                if (directory != PATH_TO_BACKUP)
                 {
                     string dirName = Path.GetFileName(directory);
                     if (!Directory.Exists(Path.Combine(dest, dirName)))
@@ -1954,7 +1955,7 @@ namespace Database_Editor
         private void AddNewShop(object sender, EventArgs e)
         {
             SaveShopInfo();
-            List<string> defaultTags = new List<string>() { "" };
+            List<string> defaultTags = new List<string>() { "ItemID:", "Shopkeeper:" };
             AddNewGenericXMLObject("Shops", dgvShops, "colShopsID", "colShopsName", tbShopName, tbShopID, dgvShopTags, "colShopTags", null, null, defaultTags);
         }
         #endregion

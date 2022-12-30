@@ -1,8 +1,5 @@
 ﻿using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
-using RiverHollow.Misc;
-using RiverHollow.Utilities;
-using System;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 
@@ -15,7 +12,7 @@ namespace RiverHollow.Items
 
         public NPCToken(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
         {
-            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Resources");
+            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Tokens");
         }
 
         public override bool AddToInventoryTrigger()

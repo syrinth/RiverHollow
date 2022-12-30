@@ -7,7 +7,10 @@ namespace RiverHollow.Items
 {
     public class Seed : Item
     {
-        public Seed(int id, Dictionary<string, string> stringData, int num) : base(id, stringData, num) { }
+        public Seed(int id, Dictionary<string, string> stringData, int num) : base(id, stringData, num)
+        {
+            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Seeds");
+        }
 
         public override bool HasUse() { return true; }
 

@@ -2,24 +2,9 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>1</Key>
-      <Value>[Text:Oh, hello $Name$. Sorry, I didn't see you there, lost in my thoughts... It happens, you know, when you get old. You have so much time in the past and some days all you can do is stop and think about what you've done...]</Value>
-    </Item>
-    <Item>
-      <Key>2</Key>
-      <Value>[Text:...]</Value>
-    </Item>
-    <Item>
-      <Key>3</Key>
-      <Value>[Text:I've been here, in River Hollow, for years now. I came during the war, seeking refuge and the kind people of the town opened their hearts to me.]</Value>
-    </Item>
-    <Item>
-      <Key>4</Key>
-      <Value>[Text:Long ago, back during the great war, I was a court mage for a nobleman whose name is now thought to be synonymous with cruelty. He was a good man once, or so I thought. The war though, it began to change him, twist him. It was as if some inner demon was driving him onwards, always seeking more power... more land. In his name I did many things, too terrible to mention. But one day, he asked the unthinkable of me.]</Value>
-    </Item>
-    <Item>
-      <Key>5</Key>
-      <Value>[Text:Knowing that refusal would result in imprisonment, I fled. In the middle of the night, I set my workshop ablaze and ran, never looking back.]</Value>
+      <Key>0</Key>
+      <Value>[Name][Text:Hmm, bit cozy but I suppose it'll do, as long as I'm here anyway.
+	  That's all for now. You keep me supplied with herbs, and I'll make enough potions and unguents to make our merchant friends happy.]</Value>
     </Item>
   </Asset>
 </XnaContent>
