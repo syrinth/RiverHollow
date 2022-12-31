@@ -126,7 +126,7 @@ namespace RiverHollow.WorldObjects
                 //_iCurrentlyMaking = itemToCraft.ID;
                 //_sprite.PlayAnimation(CombatAnimationEnum.PlayAnimation);
 
-                InventoryManager.AddToInventory(itemToCraft.ID);
+                InventoryManager.AddToInventory(itemToCraft.ID, itemToCraft.Number);
                 if (!string.IsNullOrEmpty(_sEffectWorking))
                 {
                     SoundManager.PlayEffect(_sEffectWorking);

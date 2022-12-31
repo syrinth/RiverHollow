@@ -7,7 +7,6 @@ using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.GUIComponents.Screens;
 using RiverHollow.GUIComponents.Screens.HUDScreens;
 using RiverHollow.Items;
 using RiverHollow.Misc;
@@ -1802,11 +1801,6 @@ namespace RiverHollow.Map_Handling
 
             //Re-open the Building Menu
             GUIManager.OpenMenu();
-        }
-
-        public void ClearWorkers()
-        {
-            _liActors.Clear();
         }
 
         public void RemoveWorldObject(WorldObject o)

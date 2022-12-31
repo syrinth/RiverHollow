@@ -105,7 +105,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 {
                     if (GameManager.HeldItem.ID == toSwitch.ID)
                     {
-                        toSwitch.Add(1);
+                        toSwitch.Add(GameManager.HeldItem.Number);
                         GameManager.DropItem();
                     }
                     else

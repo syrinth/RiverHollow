@@ -120,7 +120,6 @@ namespace RiverHollow.Game_Managers
                             rv = true;
                             validRow = i;
                             validCol = j;
-                            goto Exit;
                         }
                         else if(testItem != null)
                         {

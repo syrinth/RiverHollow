@@ -40,7 +40,7 @@ namespace RiverHollow.Characters
                 if(_animationTimer.Finished())
                 {
                     _animationTimer.Reset(1 + SetRandom(4, 0.5));
-                    PlayAnimation(VerbEnum.Action1);
+                    PlayAnimation(VerbEnum.Action1, Facing);
                 }
 
                 if (PlayerManager.PlayerInRange(_sprBody.Center, 80))
@@ -48,7 +48,7 @@ namespace RiverHollow.Characters
                     _bFlee = true;
                     _animationTimer.Stop();
 
-                    PlayAnimation(VerbEnum.Action2);
+                    PlayAnimation(VerbEnum.Action2, Facing);
                 }
             }
             else

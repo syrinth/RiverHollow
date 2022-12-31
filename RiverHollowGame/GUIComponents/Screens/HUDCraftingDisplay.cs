@@ -10,6 +10,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.DataManager;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -97,10 +98,11 @@ namespace RiverHollow.GUIComponents.Screens
             List<GUIObject> boxes = new List<GUIObject>();
             foreach (int id in canMake)
             {
-                boxes.Add(new GUIItemBox(DataManager.DIALOGUE_TEXTURE, GetItem(id), true));
+                Item craftItem = GetItem(id, DataManager.GetIntByIDKey(id, "CraftAmount", DataType.Item, 1));
+                boxes.Add(new GUIItemBox(DataManager.DIALOGUE_TEXTURE, craftItem, true));
             }
 
-            //Create a grid for the recipes to be dispplayed in
+            //Create a grid for the recipes to be displayed in
             CreateSpacedGrid(ref boxes, _winCraftables.InnerTopLeft() + new Vector2(GUIManager.STANDARD_MARGIN, GUIManager.STANDARD_MARGIN), _winCraftables.InnerWidth() - 2 * GUIManager.STANDARD_MARGIN, _columns);
 
             //Create a new array of the appropriate size, then assign all of the boxes to the array
@@ -109,7 +111,7 @@ namespace RiverHollow.GUIComponents.Screens
             foreach (GUIObject g in boxes)
             {
                 GUIItemBox box = (GUIItemBox)g;
-                box.DrawNum = false;
+                box.DrawNum = box.BoxItem.Number > 1;
                 _arrDisplay[i, j] = box;
                 i++;
                 if (i == _columns)

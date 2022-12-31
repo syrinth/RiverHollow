@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
@@ -54,7 +53,7 @@ namespace RiverHollow.Items
         public int TotalValue => Value * _iNum;
         public int SellPrice => Value / 2;
 
-        //What items and in what numebrs are required to make this item
+        //What items and in what numbers are required to make this item
         protected Dictionary<int, int> _diReqToMake;
 
         //Wahat this item refines into and how  many are required
