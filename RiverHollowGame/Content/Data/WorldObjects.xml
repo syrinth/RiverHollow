@@ -263,7 +263,7 @@
     </Item>
     <Item>
       <Key>65</Key>
-      <Value>[Type:Destructible][Tree][Texture:Textures\tree][Image:0-0][Size:3-4][Hp:10][ReqLvl:1][ItemID:2-7][Base:1-1][BaseShift:1]</Value>
+      <Value>[Type:Destructible][Tree][Texture:Textures\tree][Image:0-0][Size:3-4][Hp:8][ReqLvl:1][ItemID:2-10][Base:1-1][BaseShift:1]</Value>
     </Item>
     <Item>
       <Key>66</Key>
@@ -451,7 +451,7 @@
     </Item>
     <Item>
       <Key>112</Key>
-      <Value>[Type:Structure][Image:176-400][Size:7-7][ReqItems:66-15][Base:7-7][SpecialCoords:48-48][SubObjects:140-16-16|140-64-16|140-16-80|140-64-80][Unique]</Value>
+      <Value>[Type:Structure][Image:176-400][Size:7-7][ReqItems:55-5|60-10][Base:7-7][SpecialCoords:48-48][SubObjects:140-16-16|140-64-16|140-16-80|140-64-80][Unique]</Value>
     </Item>
     <Item>
       <Key>113</Key>

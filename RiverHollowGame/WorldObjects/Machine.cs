@@ -121,7 +121,7 @@ namespace RiverHollow.WorldObjects
         {
             if (InventoryManager.HasSpaceInInventory(itemToCraft.ID, 1) && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
             {
-                PlayerManager.DecreaseStamina(1);
+                PlayerManager.DecreaseStamina(Constants.ACTION_COST);
 
                 //_iCurrentlyMaking = itemToCraft.ID;
                 //_sprite.PlayAnimation(CombatAnimationEnum.PlayAnimation);

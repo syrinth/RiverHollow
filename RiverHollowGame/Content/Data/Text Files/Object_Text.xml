@@ -3,23 +3,23 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Task_0</Key>
-      <Value>[Name:Build a $WorldObject_39$][Description:$NPC_16$ want you to build a $WorldObject_39$]</Value>
+      <Value>[Name:Build a $WorldObject_112$][Description:$NPC_16$ want you to build a $WorldObject_112$]</Value>
     </Item>
     <Item>
       <Key>Task_1</Key>
-      <Value>[Name:Build a $WorldObject_112$][Description:$NPC_11$ want you to build a $WorldObject_112$]</Value>
-    </Item>
-    <Item>
-      <Key>Task_2</Key>
-      <Value>[Name:Build a $WorldObject_25$][Description:$NPC_11$ want you to build a $WorldObject_25$]</Value>
-    </Item>
-    <Item>
-      <Key>Task_3</Key>
       <Value>[Name:$NPC_43$ needs an ankle][Description:$NPC_43$ needs you to get her some $Item_162$ for her twisted ankle.]</Value>
     </Item>
     <Item>
-      <Key>Task_4</Key>
+      <Key>Task_2</Key>
       <Value>[Name:$WorldObject_18$ Now][Description:$NPC_43$ is offering her services to the town, all you need to do is build her a place to settle downand sell her wares.]</Value>
+    </Item>
+    <Item>
+      <Key>Task_3</Key>
+      <Value>[Name:]</Value>
+    </Item>
+    <Item>
+      <Key>Task_4</Key>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>NPC_0</Key>
@@ -1471,7 +1471,7 @@
     </Item>
     <Item>
       <Key>WorldObject_18</Key>
-      <Value>[Name:Apothecary]</Value>
+      <Value>[Name:$NPC_43$'s Apothecary]</Value>
     </Item>
     <Item>
       <Key>WorldObject_19</Key>
@@ -1479,7 +1479,7 @@
     </Item>
     <Item>
       <Key>WorldObject_20</Key>
-      <Value>[Name:Stone Mason's]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_21</Key>
@@ -1499,7 +1499,7 @@
     </Item>
     <Item>
       <Key>WorldObject_25</Key>
-      <Value>[Name:General Store]</Value>
+      <Value>[Name:Specialties Shop]</Value>
     </Item>
     <Item>
       <Key>WorldObject_26</Key>
@@ -1519,7 +1519,7 @@
     </Item>
     <Item>
       <Key>WorldObject_30</Key>
-      <Value>[Name:Lumber Mill]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_31</Key>

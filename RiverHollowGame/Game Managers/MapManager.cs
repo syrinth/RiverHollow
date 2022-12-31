@@ -32,7 +32,6 @@ namespace RiverHollow.Game_Managers
         public static RHMap TownMap => Maps[Constants.TOWN_MAP_NAME];
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
-        public static string SpawnMap { get; private set; }
         public static Vector2 SpawnTile { get; private set; }
         public static Dictionary<string, RHMap> Maps { get; private set; }
 
@@ -51,8 +50,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            string[] defaultInfo = DataManager.Config[7]["SpawnMap"].Split('-');
-            SetSpawnMap(defaultInfo[0], int.Parse(defaultInfo[1]), int.Parse(defaultInfo[2]));
+            CurrentMap = Maps[Constants.PLAYER_HOME_NAME];
         }
         public static void LoadObjects()
         {
@@ -60,17 +58,6 @@ namespace RiverHollow.Game_Managers
             {
                 m.LoadMapObjects();
             }
-        }
-
-        /// <summary>
-        /// Sets the map that the player character will spawn on at" the start of thegame
-        /// </summary>
-        /// <param name="map">The name of the map</param>
-        public static void SetSpawnMap(string map, int x, int y)
-        {
-            SpawnMap = map;
-            CurrentMap = Maps[MapManager.SpawnMap];
-            SpawnTile = new Vector2(x, y);
         }
 
         public static void AddMap(string mapToAdd, ContentManager Content, GraphicsDevice GraphicsDevice)

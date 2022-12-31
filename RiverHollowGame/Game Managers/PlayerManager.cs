@@ -14,7 +14,6 @@ using RiverHollow.Misc;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
-using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers
 {
@@ -23,9 +22,8 @@ namespace RiverHollow.Game_Managers
         #region Properties
         public static bool Busy { get; private set; }
 
-        public static double MaxStamina = 100;
+        public static double MaxStamina = Constants.PLAYER_STARTING_STAMINE;
         public static double Stamina = MaxStamina;
-        public static int _iBuildingID = -1;
         private static string _currentMap;
         public static string CurrentMap
         {
@@ -125,9 +123,7 @@ namespace RiverHollow.Game_Managers
 
         public static void NewPlayer()
         {
-            CurrentMap = MapManager.CurrentMap.Name;
-            PlayerActor.Position = Util.GetMapPositionOfTile(MapManager.SpawnTile);
-
+            MoveToSpawn();
             AddTesting();
         }
 
@@ -677,9 +673,9 @@ namespace RiverHollow.Game_Managers
 
         public static void MoveToSpawn()
         {
-            MapManager.CurrentMap = MapManager.Maps[PlayerManager.GetSpawnMap()];
-            CurrentMap = MapManager.Maps[PlayerManager.GetSpawnMap()].Name;
-            PlayerActor.Position = Util.SnapToGrid(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
+            MapManager.CurrentMap = MapManager.Maps[Constants.PLAYER_HOME_NAME];
+            CurrentMap = MapManager.CurrentMap.Name;
+            PlayerActor.Position = Util.SnapToGrid(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn"));
             PlayerActor.DetermineAnimationState(new Vector2(0, 1));
         }
 
@@ -720,18 +716,6 @@ namespace RiverHollow.Game_Managers
             PlayerMailbox.Rollover();
 
             MoveToSpawn();
-        }
-
-        public static string GetSpawnMap()
-        {
-            string rv = "mapInn";
-            Building playerHome = GetBuildingByID(int.Parse(DataManager.Config[21]["ObjectID"]));
-            if (playerHome != null)
-            {
-                rv = playerHome.BuildingMapName;
-            }
-
-            return rv;
         }
 
         public static void GetStamina(ref double curr, ref double max)

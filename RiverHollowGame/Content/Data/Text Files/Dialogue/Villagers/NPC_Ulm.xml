@@ -30,17 +30,17 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Text: Y'see, I twisted my ankle when I was scarpering from some thugs the other day. It would be real sweet of you to find me three $Item_432$, that should patch me up for now.][Name:Task_3_Start]</Value>
+      <Value>[Text: Y'see, I twisted my ankle when I was scarpering from some thugs the other day. It would be real sweet of you to find me three $Item_432$, that should patch me up for now.][Name:Task_1_Start]</Value>
     </Item>
     <Item>
       <Key>7</Key>
       <Value>[Text:Is that $Item_162$ I smell?
-	  Knew I could count on you, Bigjob. Now let me just... Ah! Much better. So I believe you said something about a town yes? I'll see you there, and we can talk business!][Name:Task_3_End]</Value>
+	  Knew I could count on you, Bigjob. Now let me just... Ah! Much better. So I believe you said something about a town yes? I'll see you there, and we can talk business!][Name:Task_1_End]</Value>
     </Item>
     <Item>
       <Key>8</Key>
       <Value>[Text:You call this a town? More like a sad clump of buildings if you ask me...
-	  Lucky for you, I am an expert Apothecary. You build me a nice little home to call my own, and I'll see to it that the merchants have more than enough potions and unguents to keep them coming.][Name:Task_4_Start][UnlockObjectID:18]</Value>
+	  Lucky for you, I am an expert Apothecary. You build me a nice little home to call my own, and I'll see to it that the merchants have more than enough potions and unguents to keep them coming.][Name:Task_2_Start][UnlockObjectID:18]</Value>
     </Item>
   </Asset>
 </XnaContent>

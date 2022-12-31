@@ -531,19 +531,19 @@
     </Item>
     <Item>
       <Key>132</Key>
-      <Value>[Type:Tool][Subtype:Pick][Image:0-0][Stam:1][Level:1][AnimationPosition:0-0][SoundEffect:pickaxe]</Value>
+      <Value>[Type:Tool][Subtype:Pick][Image:0-0][Stam:2][Level:1][AnimationPosition:0-0][SoundEffect:pickaxe]</Value>
     </Item>
     <Item>
       <Key>133</Key>
-      <Value>[Type:Tool][Subtype:Axe][Image:0-1][Stam:1][Level:1][AnimationPosition:0-4][SoundEffect:axe]</Value>
+      <Value>[Type:Tool][Subtype:Axe][Image:0-1][Stam:2][Level:1][AnimationPosition:0-4][SoundEffect:axe]</Value>
     </Item>
     <Item>
       <Key>134</Key>
-      <Value>[Type:Tool][Subtype:Shovel][Image:0-2][Stam:1][Level:1]</Value>
+      <Value>[Type:Tool][Subtype:Shovel][Image:0-2][Stam:2][Level:1]</Value>
     </Item>
     <Item>
       <Key>135</Key>
-      <Value>[Type:Tool][Subtype:WateringCan][Image:0-3][Stam:1][Level:1]</Value>
+      <Value>[Type:Tool][Subtype:WateringCan][Image:0-3][Stam:2][Level:1]</Value>
     </Item>
     <Item>
       <Key>136</Key>

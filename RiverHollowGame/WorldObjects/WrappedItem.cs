@@ -39,6 +39,7 @@ namespace RiverHollow.WorldObjects
 
         public bool Gather()
         {
+            PlayerManager.DecreaseStamina(Constants.ACTION_COST / 2);
             CurrentMap.AlertSpawnPoint(this);
             InventoryManager.AddToInventory(DataManager.GetItem(_iItemID));
             MapManager.RemoveWorldObject(this);

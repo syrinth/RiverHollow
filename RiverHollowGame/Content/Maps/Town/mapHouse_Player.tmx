@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="41">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="41">
  <properties>
   <property name="Building" type="bool" value="true"/>
   <property name="MapType" value="Town"/>
@@ -348,10 +348,9 @@
   </object>
  </objectgroup>
  <objectgroup id="9" name="MapObject">
-  <object id="40" name="Wall" x="21.6002" y="51.1695" width="198.656" height="34.3333"/>
+  <object id="40" name="Wall" x="16" y="48" width="208" height="48"/>
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
-  <object id="37" name="PlayerSpawn" x="132.177" y="118.12" width="8" height="5.33333"/>
-  <object id="38" name="NPC_00" x="49.5016" y="97.2161" width="12.375" height="11.4375"/>
+  <object id="37" name="PlayerSpawn" x="200" y="112" width="16" height="16"/>
  </objectgroup>
 </map>

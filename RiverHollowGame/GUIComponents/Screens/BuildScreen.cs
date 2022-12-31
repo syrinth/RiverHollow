@@ -44,7 +44,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _liBuildMenuObjects.Add(new GUIButton("Buildings", BtnBuildings));
             }
 
-            if (MapManager.CurrentMap.Name.Contains("Manor"))
+            if (MapManager.CurrentMap.Name.Contains("House_Player"))
             {
                 _liBuildMenuObjects.Add(new GUIButton("Wallpaper", BtnWallpaper));
             }

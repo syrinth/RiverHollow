@@ -350,6 +350,6 @@
     <property name="ObjectID" type="int" value="92"/>
    </properties>
   </object>
-  <object id="41" name="NPC_16" x="115.292" y="81.875" width="8.75" height="10.25"/>
+  <object id="41" name="NPC_16" x="112" y="80" width="16" height="16"/>
  </objectgroup>
 </map>

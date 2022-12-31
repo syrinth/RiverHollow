@@ -147,7 +147,7 @@ namespace RiverHollow.WorldObjects
                 Item it = null;
                 if (FinishedGrowing())
                 {
-                    PlayerManager.DecreaseStamina(1);
+                    PlayerManager.DecreaseStamina(Constants.ACTION_COST);
                     it = DataManager.GetItem(_iResourceID);
                     if (_bPopItem)
                     {

@@ -3,6 +3,8 @@
     static class Constants
     {
         public const string TOWN_MAP_NAME = "mapTown";
+        public const string PLAYER_HOME_NAME = "mapHouse_Player";
+        public const float PLAYER_STARTING_STAMINE = 200f;
 
         public const double GAME_PLAYER_INVULN_TIME = 0.5;
         public const double MOB_STUN_TIME = 5;
@@ -35,6 +37,8 @@
         public const float NORMAL_SPEED = 1.5f;
         public const float PUSH_SPEED = 0.5f;
         public const float NPC_WALK_SPEED = 0.6f;
+
+        public const int ACTION_COST = 2;
 
         public const int HUMAN_HEIGHT = (TILE_SIZE * 2) + 2;
         public const float EYE_DEPTH = 0.001f;

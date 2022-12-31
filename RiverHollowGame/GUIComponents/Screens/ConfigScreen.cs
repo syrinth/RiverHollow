@@ -135,13 +135,13 @@ namespace RiverHollow.GUIComponents.Screens
         {
             foreach(GUISpawnButton b in _liButtons)
             {
-                bool match = MapManager.SpawnMap == b.MapName;
-                b.Enable(!match);
+               // bool match = MapManager.SpawnMap == b.MapName;
+                //b.Enable(!match);
 
-                if (match)
-                {
-                    targetSpawnData = new SpawnData(b.MapName, b.TileX, b.TileY);
-                }
+                //if (match)
+                //{
+                //    targetSpawnData = new SpawnData(b.MapName, b.TileX, b.TileY);
+                //}
             }
         }
 
@@ -204,7 +204,7 @@ namespace RiverHollow.GUIComponents.Screens
                 bool rv = false;
                 if (Contains(mouse))
                 {
-                    MapManager.SetSpawnMap(_sMapName, _iX, _iY);
+                    //MapManager.SetSpawnMap(_sMapName, _iX, _iY);
                     _delAction();
                 }
 

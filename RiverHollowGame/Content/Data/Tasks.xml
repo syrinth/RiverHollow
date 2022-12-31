@@ -3,23 +3,23 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Build][StartNPC:16][AssignTrigger:GameStart][TargetObjectID:39][EndBuildingID:39][ItemRewardID:178][CutsceneID:2][TriggerTask:2]</Value>
+      <Value>[Type:Build][StartNPC:16][AssignTrigger:GameStart][TargetObjectID:112][ItemRewardID:178]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Build][StartNPC:11][AssignTrigger:Task-2][TargetObjectID:112]</Value>
+      <Value>[Type:Fetch][StartNPC:43][AssignTrigger:GameStart][SendToTown][GoalItem:162-4][TriggerTask:2-Delayed]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Build][StartNPC:11][AssignTrigger:Task-0][TargetObjectID:25]</Value>
+      <Value>[Type:Build][StartNPC:43][AssignTrigger:Task-1][TargetObjectID:18][EndBuildingID:18][CutsceneID:3]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Fetch][StartNPC:43][AssignTrigger:GameStart][SendToTown][GoalItem:162-4][TriggerTask:4-Delayed]</Value>
+      <Value>[Type:Fetch]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Build][StartNPC:43][AssignTrigger:Task-3][TargetObjectID:18][EndBuildingID:18][CutsceneID:3]</Value>
+      <Value>[Type:Build]</Value>
     </Item>
   </Asset>
 </XnaContent>

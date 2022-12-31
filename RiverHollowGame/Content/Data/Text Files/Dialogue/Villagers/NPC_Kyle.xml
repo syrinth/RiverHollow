@@ -27,13 +27,13 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Name:Task_0_Start][Text:We really need a $WorldObject_39$ if we're going to do anything. Here's some materials I brought with me. Be careful with how you use them, this is all I brought.][UnlockObjectID:39][ItemID:55-5|60-5]</Value>
+      <Value>[Name:Task_0_Start][Text:We have to build a $WorldObject_112$ so that visiting merchants will have a place to trade goods. Choose a spot, and let me know when you're done, OK?][UnlockObjectID:112]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Name:Task_0_End][Text:Already done? Great work. With the $WorldObject_39$ built, we can make bricks and planks. It's kind of hard to build a town without them, you know.
-
-Here, I drew up some plans for a house for you. You should get that built before nightfall, better to have your own space.][Face:Happy][UnlockBuildingID:27]</Value>
+      <Value>[Name:Task_0_End][Text:Is the $WorldObject_112$ finished? Great! I think a merchant is set to come tomorrow, but I don't think we have anything to sell him... Check the woods to the West, yeah?
+	  I'm sure you can find herbs, and berries or something that he'd take money for.
+	  Oh, and before I forget, here. Take a look through these notes when you have a minute.][Face:Happy]</Value>
     </Item>
     <Item>
       <Key>8</Key>
