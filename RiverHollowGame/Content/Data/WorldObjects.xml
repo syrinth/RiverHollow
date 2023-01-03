@@ -163,7 +163,7 @@
     </Item>
     <Item>
       <Key>40</Key>
-      <Value>[Type:Container][Image:0-16][Rows:1][Cols:8][ReqItems:2-10]</Value>
+      <Value>[Type:Container][Image:0-16][Rows:1][Cols:8][ReqItems:2-10][Opens]</Value>
     </Item>
     <Item>
       <Key>41</Key>
@@ -355,7 +355,7 @@
     </Item>
     <Item>
       <Key>88</Key>
-      <Value>[Type:Machine][Image:0-256][Work:4-0.3][Size:3-3][Makes:167-0|168-0|58-0][Base:3-2][BaseOffset:0-1][WorkEffect:Cauldron]</Value>
+      <Value>[Type:Machine][Image:0-256][Work:4-0.3][Size:3-3][Makes:167-0|168-0|58-0][Base:3-2][BaseOffset:0-1][WorkEffect:Cauldron][Daily]</Value>
     </Item>
     <Item>
       <Key>89</Key>

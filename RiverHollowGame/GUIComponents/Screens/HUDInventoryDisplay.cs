@@ -5,14 +5,14 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
-using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.Characters;
 
 namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDInventoryDisplay : GUIMainObject
     {
-        GUIInventory _inventory;
-        GUIInventory _altInventory;
+        GUIInventoryWindow _inventory;
+        GUIInventoryWindow _altInventory;
 
         public HUDInventoryDisplay(DisplayTypeEnum display = DisplayTypeEnum.Inventory)
         {
@@ -20,7 +20,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             InventoryManager.ClearExtraInventory();
             GameManager.CurrentInventoryDisplay = display;
-            _inventory = new GUIInventory(true);
+            _inventory = new GUIInventoryWindow(true);
             AddControl(_inventory);
 
             DetermineSize();
@@ -34,8 +34,8 @@ namespace RiverHollow.GUIComponents.Screens
             InventoryManager.ClearExtraInventory();
             InventoryManager.InitExtraInventory(inventory);
             GameManager.CurrentInventoryDisplay = display;
-            _altInventory = new GUIInventory();
-            _inventory = new GUIInventory(true);
+            _altInventory = new GUIInventoryWindow();
+            _inventory = new GUIInventoryWindow(true);
 
             _altInventory.AnchorAndAlignToObject(_inventory, SideEnum.Top, SideEnum.CenterX, GUIManager.STANDARD_MARGIN);           
 

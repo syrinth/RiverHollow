@@ -183,9 +183,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
 
                 foreach (GUIItemBox gib in _liItems)
                 {
-                    rv = gib.ProcessRightButtonClick(mouse);
-                    if (rv)
+                    if (gib.Contains(mouse) && gib.BoxItem != null)
                     {
+                        rv = gib.BoxItem.ItemBeingUsed();
                         break;
                     }
                 }

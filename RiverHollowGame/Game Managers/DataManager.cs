@@ -485,6 +485,10 @@ namespace RiverHollow.Game_Managers
             return _diShops;
         }
 
+        public static Item CraftItem(int id)
+        {
+            return GetItem(id, GetIntByIDKey(id, "CraftAmount", DataType.Item, 1));
+        }
         public static Item GetItem(int id)
         {
             return GetItem(id, 1);

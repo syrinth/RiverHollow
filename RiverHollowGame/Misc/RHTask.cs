@@ -591,7 +591,7 @@ namespace RiverHollow.Misc
             ReadyForHandIn = qData.readyForHandIn;
             TaskState = (TaskStateEnum)qData.taskState;
 
-            if (ReadyForHandIn)
+            if (ReadyForHandIn && TaskState != TaskStateEnum.Completed)
             {
                 SetReadyForHandIn(true);
             }

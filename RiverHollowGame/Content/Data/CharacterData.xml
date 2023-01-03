@@ -79,7 +79,7 @@
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Type:Villager][PortRow:1][HomeMap:mapManor_1][Collection:0|1|2][Hover][Inactive][Idle:0-0-3-.3-T][Walk:0-0-3-.3-T][InTown][Key:Manor_Spirit]</Value>
+      <Value>[Type:Villager][PortRow:1][HomeMap:mapManor_1][Collection:0|1|2][Hover][Inactive][Idle:0-0-3-.3-T][Walk:0-0-3-.3-T][Key:Manor_Spirit]</Value>
     </Item>
     <Item>
       <Key>20</Key>
@@ -155,7 +155,7 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:4][RequestIDs:58|68|71|167|168][ShopData:10][Key:Wagren]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:4][RequestIDs:58|68|71|167|168][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
     </Item>
     <Item>
       <Key>39</Key>
@@ -175,7 +175,7 @@
     </Item>
     <Item>
       <Key>43</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][StartMap:mapGrove]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][StartMap:mapGrove][HouseID:18]</Value>
     </Item>
   </Asset>
 </XnaContent>

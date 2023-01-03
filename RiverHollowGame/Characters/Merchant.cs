@@ -19,9 +19,11 @@ namespace RiverHollow.Characters
     /// </summary>
     public class Merchant : TravellingNPC
     {
+        MerchType Needs => DataManager.GetEnumByIDKey<MerchType>(ID, "Needs", DataType.Character);
+        MerchType Wants => DataManager.GetEnumByIDKey<MerchType>(ID, "Wants", DataType.Character);
+
         List<RequestItem> _liRequestItems;
-        public Dictionary<Item, bool> DiChosenItems;
-        private bool _bRequestsComplete = false;
+        public Item[] ChosenRequests;
         public int _iShopID = -1;
         public int ShopID => _iShopID;
 
@@ -32,7 +34,7 @@ namespace RiverHollow.Characters
             _diRequiredObjectIDs = new Dictionary<int, int>();
 
             _liRequestItems = new List<RequestItem>();
-            DiChosenItems = new Dictionary<Item, bool>();
+            ChosenRequests = new Item[3];
 
             _bOnTheMap = false;
 
@@ -78,7 +80,7 @@ namespace RiverHollow.Characters
 
             MoveToSpawn();
 
-            DiChosenItems.Clear();
+            ChosenRequests = new Item[3];
             List<RequestItem> copy = new List<RequestItem>(_liRequestItems);
             for (int i = 0; i < 3; i++)
             {
@@ -87,7 +89,7 @@ namespace RiverHollow.Characters
                 RequestItem request = copy[chosenValue];
                 Item it = DataManager.GetItem(request.ID, request.Number);
 
-                DiChosenItems[it] = false;
+                ChosenRequests[i] = it;
                 copy.RemoveAt(chosenValue);
             }
 
@@ -119,23 +121,53 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        public override TextEntry OpenRequests()
+        public override void OpenMerchantWindow()
         {
-            TextEntry rv = null;
-
-            if (!_bRequestsComplete) { GUIManager.OpenMainObject(new HUDRequestWindow(_diDialogue["Requests"], this)); }
-            else { rv = _diDialogue["RequestsComplete"]; }
-
-            return rv;
+            GUIManager.OpenMainObject(new HUDMerchantWindow(this));
         }
 
-        /// <summary>
-        /// Set the FinishedRequest flag to true.
-        /// Ensures that we do not display the requests list after.
-        /// </summary>
-        public void FinishRequests()
+        public int EvaluateItem(Item it)
         {
-            _bRequestsComplete = true;
+            Color c = Color.Black;
+            return EvaluateItem(it, ref c);
+            
+        }
+        public int EvaluateItem(Item it, ref Color c)
+        {
+            if (it == null || it.MerchType == MerchType.None)
+            {
+                return 0;
+            }
+
+            int offer = it.Value > 0 ? it.Value : 0;
+
+            bool requested = false;
+            for (int i = 0; i < 3; i++)
+            {
+                if(ChosenRequests[i].ID == it.ID)
+                {
+                    c = Color.Purple;
+                    requested = true;
+                    offer *= 2;
+                    break;
+                }
+            }
+
+            if (!requested)
+            {
+                if (it.MerchType == Needs)
+                {
+                    c = Color.Blue;
+                    offer = (int)(offer * 1.5);
+                }
+                else if (it.MerchType == Wants)
+                {
+                    c = Color.Green;
+                    offer = (int)(offer * 1.2);
+                }
+            }
+
+            return offer * it.Number;
         }
 
         public override void MoveToSpawn()

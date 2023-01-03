@@ -912,7 +912,10 @@ namespace Database_Editor
         }
         private void LoadCharacterInfo()
         {
-            XMLData data = _diBasicXML[NPC_XML_FILE][_diTabIndices["Characters"]];
+            DataGridViewRow r = dgvCharacters.SelectedRows[0];
+            XMLData data = null;
+            if (_worldObjFilter == "All") { data = _diBasicXML[NPC_XML_FILE][_diTabIndices["Characters"]]; }
+            else { data = _diBasicXML[NPC_XML_FILE].FindAll(x => x.GetTagValue("Type").ToString().Equals(_worldObjFilter))[r.Index]; }
             LoadGenericDataInfo(data, tbCharacterName, tbCharacterID, dgvCharacterTags);
 
             for (int i = 0; i < cbCharacterType.Items.Count; i++)
@@ -1320,7 +1323,7 @@ namespace Database_Editor
         {
             GenericCancel(_diBasicXML[TASK_XML_FILE], "Tasks", dgvTasks, LoadTaskInfo);
         }
-        private void btnCutsceneCancel_Click(object sednder, EventArgs e)
+        private void btnCutsceneCancel_Click(object sender, EventArgs e)
         {
             if (_diCutscenes.Count == _diTabIndices["Cutscenes"])
             {
@@ -1896,7 +1899,8 @@ namespace Database_Editor
         private void AddNewItem(object sender, EventArgs e)
         {
             SaveItemInfo();
-            AddNewGenericXMLObject("Items", dgvItems, "colItemID", "colItemName", tbItemName, tbItemID, dgItemTags, "colItemTags", cbItemType, tbItemDesc, new List<string>() { "Image:0-0" });
+            List<string> defaultTags = new List<string>() { "Image:", "MerchType:None", "Value:" };
+            AddNewGenericXMLObject("Items", dgvItems, "colItemID", "colItemName", tbItemName, tbItemID, dgItemTags, "colItemTags", cbItemType, tbItemDesc, defaultTags);
         }
         private void AddNewWorldObject(object sender, EventArgs e)
         {

@@ -3,51 +3,23 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Hi, I'm $NPC_41$, it's nice to meet you. Nice town you have here. Could use some more plants though I think eh?][UnlockBuildingID:67][Name:Introduction]</Value>
+      <Value>[Text:Hello! Hello! I am $NPC_38$, merchant and wizard extraordinaire!][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:What can I do?][Selection:Shop][Name:ShopOpen]</Value>
+      <Value>[Text:Ah! I'm hoping you can help me. I'm looking for the following items!][Name:Requests]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:Hey.][Selection:VillageTalk][Name:Selection]</Value>
+      <Value>[Text:Aha! Welcome! How can I help you today?][Selection:MerchantTalk][Name:Selection]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Text:I love plants, there's nothing more fascinating to me than watching them grow.][Default][Name:3]</Value>
+      <Value>[Text:I may be used to life on the road, but I'm always happy to arrive in a nice place such as this!][Default][Name:3]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Text][Once][RequiredBuildingID:31][SendMessage:3][Name:HouseBuilt]</Value>
-    </Item>
-    <Item>
-      <Key>5</Key>
-      <Value>[Text:$NPC_3$ is kind of scary, isn't she? She just has this look in her eyes... sometimes I'm afraid she's going to wilt my flowers just by looking at them!][Villager:6][Name:Daria|1]</Value>
-    </Item>
-    <Item>
-      <Key>6</Key>
-      <Value>[Text:Really? For me! Oh my... yes. Yes! I'll marry you!][Name:MarriageYes]</Value>
-    </Item>
-    <Item>
-      <Key>7</Key>
-      <Value>[Text:Oh... $Name$ I'm so sorry but no...][Name:MarriageNo]</Value>
-    </Item>
-    <Item>
-      <Key>8</Key>
-      <Value>[Text:See you later!][Name:Goodbye]</Value>
-    </Item>
-    <Item>
-      <Key>9</Key>
-      <Value>[Text:I was worried it was just me. Yes, I would love to date you, $Name$][Name:DateYes]</Value>
-    </Item>
-    <Item>
-      <Key>10</Key>
-      <Value>[Text:Hello, Love. How are you this morning? I got up a bit early to water the plants.][Married][Name:Married_1]</Value>
-    </Item>
-    <Item>
-      <Key>11</Key>
-      <Value>[Text:Do you want to have a baby?][Selection:YesNo][Trigger:GetBaby][Married][Priority:50][NotExpecting][Chance:5][MaxChildren:2][Name:Baby]</Value>
+      <Value>[Text:You've helped me enough for now!][Name:RequestsComplete]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -4,7 +4,7 @@
     {
         public enum DataType { Action, Character, Class, Item, Light, Monster, StatusEffect, Task, WorldObject, Upgrade };
 
-        public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, ShowRequests, Propose, Date, Option_0, Option_1, Option_2, Option_3 };
+        public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, Sell, Propose, Date, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Party };
         public enum TextEntryTriggerEnum { None, UseItem, ConfirmGift, ConfirmPurchase, EndDay, Exit, Donate, PetFollow, PetUnfollow, GetBaby }
 
@@ -28,7 +28,7 @@
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
-        public enum ShopSellTypeEnum { None, Wheat, Textile, General, Magic, Herbs, Ore, Gems };
+        public enum MerchType { None, Gem, Herb, Magic, Medicine, Ore, Textile, Wheat };
         public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, Clothing, MonsterFood, NPCToken, Blueprint, Seed, Special };
         public enum ToolEnum { None, Backpack, CapeOfBlinking, Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return, Scythe, StaffOfIce };
         public enum GearTypeEnum { None, Accessory, Chest, Head, Weapon };

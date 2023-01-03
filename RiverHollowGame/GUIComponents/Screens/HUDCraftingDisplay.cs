@@ -10,7 +10,6 @@ using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.DataManager;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
-using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -86,7 +85,6 @@ namespace RiverHollow.GUIComponents.Screens
             //If there are less recipes than max columns, we only have one row, othwerise weneed to figure out how many times the columns get divided into the total number
             _rows = (canMake.Count < _iMaxColumns) ? 1 : (int)(Math.Round(((double)(canMake.Count + _columns - 1) / (double)_columns)));
 
-
             //Determine how big the creation window needs to be
             int creationWidth = (GUIWindow.Window_1.WidthEdges()) + (_columns * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_columns + 1));
             int creationHeight = (GUIWindow.Window_1.HeightEdges()) + (_rows * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_rows + 1));
@@ -98,8 +96,7 @@ namespace RiverHollow.GUIComponents.Screens
             List<GUIObject> boxes = new List<GUIObject>();
             foreach (int id in canMake)
             {
-                Item craftItem = GetItem(id, DataManager.GetIntByIDKey(id, "CraftAmount", DataType.Item, 1));
-                boxes.Add(new GUIItemBox(DataManager.DIALOGUE_TEXTURE, craftItem, true));
+                boxes.Add(new GUIItemBox(DataManager.DIALOGUE_TEXTURE, DataManager.CraftItem(id), true));
             }
 
             //Create a grid for the recipes to be displayed in
@@ -111,7 +108,7 @@ namespace RiverHollow.GUIComponents.Screens
             foreach (GUIObject g in boxes)
             {
                 GUIItemBox box = (GUIItemBox)g;
-                box.DrawNum = box.BoxItem.Number > 1;
+                box.DrawNumber(box.BoxItem.Number > 1);
                 _arrDisplay[i, j] = box;
                 i++;
                 if (i == _columns)

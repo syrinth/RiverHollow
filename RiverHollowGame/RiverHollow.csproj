@@ -80,6 +80,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GUIComponents\Screens\HUDScreens\HUDMerchantWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDMiniInventory.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDUpgrade.cs" />
     <Compile Include="Items\CapeOfBlinking.cs" />

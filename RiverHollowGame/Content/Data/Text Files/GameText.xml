@@ -269,5 +269,9 @@
       <Key>66</Key>
       <Value>[Name:BuyMerch_NoSpace][Text:Your inventory is full.]</Value>
     </Item>
+	<Item>
+      <Key>67</Key>
+      <Value>[Name:Selection_Sell][Text:Sell][TextVerb:Sell]</Value>
+    </Item>
   </Asset>
 </XnaContent>

@@ -203,6 +203,11 @@ namespace RiverHollow.WorldObjects
             return CollisionBox.Intersects(r);
         }
 
+        public bool WideOnTop()
+        {
+            return BaseWidth < Width / Constants.TILE_SIZE;
+        }
+
         public virtual bool Contains(Point m)
         {
             return CollisionBox.Contains(m);

@@ -16,7 +16,7 @@ namespace RiverHollow.Buildings
 {
     public class Building : Buildable
     {
-        public ShopSellTypeEnum StoreType => DataManager.GetEnumByIDKey<ShopSellTypeEnum>(ID, "ShopSells", DataType.WorldObject);
+        public MerchType StoreType => DataManager.GetEnumByIDKey<MerchType>(ID, "ShopSells", DataType.WorldObject);
 
         private int _iNPCBuilderID;
         private Rectangle _rEntrance;
@@ -149,7 +149,7 @@ namespace RiverHollow.Buildings
                     Item i = Inventory[row, column];
                     if (i != null)
                     {
-                        if (i.StoreType == StoreType)
+                        if (i.MerchType == StoreType)
                         {
                             items.Add(i);
                         }
@@ -187,6 +187,13 @@ namespace RiverHollow.Buildings
             InventoryManager.ClearExtraInventory();
 
             return rv;
+        }
+
+        public void AddToStock(Item i)
+        {
+            InventoryManager.InitExtraInventory(Inventory);
+            InventoryManager.AddToInventory(i, false);
+            InventoryManager.ClearExtraInventory();
         }
 
         #region Upgrade Handlers

@@ -159,31 +159,24 @@ namespace RiverHollow.Game_Managers
             CurrentMap = Maps[newMap];
         }
 
-        public static void PopulateMaps(bool loaded)
+        public static void PopulateMaps(bool gameStart)
         {
-            foreach(RHMap map in Maps.Values)
+            foreach (RHMap map in Maps.Values)
             {
-                map.PopulateMap(loaded);
+                map.PopulateMap(gameStart);
             }
-            int mapWidth = Maps[Constants.TOWN_MAP_NAME].MapWidthTiles;
-            int mapHeight = Maps[Constants.TOWN_MAP_NAME].MapHeightTiles;
-            RHRandom rand = RHRandom.Instance();
 
-            if (!loaded)
+            if (gameStart)
             {
                 int rockID = int.Parse(DataManager.Config[1]["ObjectID"]);
-                int bigRockID = int.Parse(DataManager.Config[2]["ObjectID"]);
                 int treeID = int.Parse(DataManager.Config[3]["ObjectID"]);
                 int grassID = int.Parse(DataManager.Config[11]["ObjectID"]);
-                int stumpID = int.Parse(DataManager.Config[12]["ObjectID"]);
 
-                List <RHTile> possibleTiles = Maps[Constants.TOWN_MAP_NAME].TileList;
+                List<RHTile> possibleTiles = Maps[Constants.TOWN_MAP_NAME].TileList;
                 possibleTiles.RemoveAll(x => !x.Passable() || x.Flooring != null);
 
-                PopulateHomeMapHelper(ref possibleTiles, bigRockID, 5);
                 PopulateHomeMapHelper(ref possibleTiles, rockID, 50);
                 PopulateHomeMapHelper(ref possibleTiles, treeID, 50);
-                PopulateHomeMapHelper(ref possibleTiles, stumpID, 10);
             }
         }
 

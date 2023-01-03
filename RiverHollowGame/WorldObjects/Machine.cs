@@ -8,6 +8,7 @@ using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
+using RiverHollow.Buildings;
 
 namespace RiverHollow.WorldObjects
 {
@@ -15,16 +16,16 @@ namespace RiverHollow.WorldObjects
     {
         readonly string _sEffectWorking = "";
 
-        protected int _iContainingBuildingID = -1;
-
-        protected RHTimer _timer;
         int _iCurrentlyMaking = -1;
+        private bool CraftDaily => DataManager.GetBoolByIDKey(ID, "Daily", DataType.WorldObject);
 
+        protected int _iDaysLeft = 0;
         protected int _iWorkingFrames = 2;
         protected float _fFrameSpeed = 0.3f;
 
         public Dictionary<int, int> CraftingDictionary { get; }
-        private bool _bWorking = false;
+
+        public bool MakingSomething() { return _iCurrentlyMaking != -1; }
 
         public Machine(int id, Dictionary<string, string> stringData) : base(id)
         {
@@ -66,12 +67,31 @@ namespace RiverHollow.WorldObjects
 
         public override void Update(GameTime gTime)
         {
-            if (_iCurrentlyMaking != -1)       //Crafting Handling
+            if (MakingSomething())       //Crafting Handling
             {
                 _sprite.Update(gTime);
+            }
+        }
 
-                _timer?.TickDown(gTime);
-                // CheckFinishedCrafting();
+        /// <summary>
+        /// Override method for Rollover. Shouldn't matter since item crafting should take no time
+        /// but for future proofing we'll have this here.
+        /// </summary>
+        public override void Rollover()
+        {
+            if (MakingSomething())
+            {
+                _iDaysLeft--;
+                if (_iDaysLeft == 0)
+                {
+                    if(CurrentMap.BuildingID != -1)
+                    {
+                        Building b = PlayerManager.GetBuildingByID(CurrentMap.BuildingID);
+                        b.AddToStock(DataManager.CraftItem(_iCurrentlyMaking));
+                    }
+
+                    _iCurrentlyMaking = -1;
+                }
             }
         }
 
@@ -86,6 +106,53 @@ namespace RiverHollow.WorldObjects
             {
                 rv = true;
                 GUIManager.OpenMainObject(new HUDCraftingDisplay(this));
+            }
+
+            return rv;
+        }
+
+
+        /// <summary>
+        /// Called by the HUDCraftingMenu to craft the selected item.
+        /// 
+        /// Ensure that the Player has enough space in their inventory for the item
+        /// as well as they have the required items to make it.
+        /// 
+        /// Perform the Crafting steps and add the item to the inventory.
+        /// </summary>
+        /// <param name="itemToCraft">The Item object to craft</param>
+        public void AttemptToCraftChosenItem(Item itemToCraft)
+        {
+            if (InventoryManager.HasSpaceInInventory(itemToCraft.ID, 1) && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
+            {
+                if (!CraftDaily)
+                {
+                    PlayerManager.DecreaseStamina(Constants.ACTION_COST);
+                    InventoryManager.AddToInventory(itemToCraft.ID, itemToCraft.Number);
+                }
+                else
+                {
+                    _iCurrentlyMaking = itemToCraft.ID;
+                    _iDaysLeft = DataManager.GetIntByIDKey(_iCurrentlyMaking, "CraftTime", DataType.Item);
+                    GUIManager.CloseMainObject();
+                }
+                //_sprite.PlayAnimation(CombatAnimationEnum.PlayAnimation);
+
+                
+                if (!string.IsNullOrEmpty(_sEffectWorking))
+                {
+                    SoundManager.PlayEffect(_sEffectWorking);
+                }
+            }
+        }
+
+        public override bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
+        {
+            bool rv = false;
+            if (base.PlaceOnMap(pos, map))
+            {
+                rv = true;
+                GameManager.AddMachine(this, Name());
             }
 
             return rv;
@@ -107,71 +174,10 @@ namespace RiverHollow.WorldObjects
         //    }
         //}
 
-
-        /// <summary>
-        /// Called by the HUDCraftingMenu to craft the selected item.
-        /// 
-        /// Ensure that the Player has enough space in their inventory for the item
-        /// as well as they have the required items to make it.
-        /// 
-        /// Perform the Crafting steps and add the item to the inventory.
-        /// </summary>
-        /// <param name="itemToCraft">The Item object to craft</param>
-        public void AttemptToCraftChosenItem(Item itemToCraft)
-        {
-            if (InventoryManager.HasSpaceInInventory(itemToCraft.ID, 1) && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
-            {
-                PlayerManager.DecreaseStamina(Constants.ACTION_COST);
-
-                //_iCurrentlyMaking = itemToCraft.ID;
-                //_sprite.PlayAnimation(CombatAnimationEnum.PlayAnimation);
-
-                InventoryManager.AddToInventory(itemToCraft.ID, itemToCraft.Number);
-                if (!string.IsNullOrEmpty(_sEffectWorking))
-                {
-                    SoundManager.PlayEffect(_sEffectWorking);
-                }
-            }
-        }
-
-        /// <summary>
-        /// OVerride method for Rollover. Shouldn't matter since item crafting should take no time
-        /// but for future proofing we'll have this here.
-        /// </summary>
-        public override void Rollover()
-        {
-            if (_bWorking)
-            {
-                _timer.TickDown(GameCalendar.GetMinutesToNextMorning());
-                //CheckFinishedCrafting();
-
-                _bWorking = false;
-            }
-        }
-
-        public bool MakingSomething() { return _iCurrentlyMaking != -1; }
-
-        public override bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
-        {
-            bool rv = false;
-            if (base.PlaceOnMap(pos, map))
-            {
-                rv = true;
-                GameManager.AddMachine(this, Name());
-
-                if (map.BuildingID != -1)
-                {
-                    _iContainingBuildingID = map.BuildingID;
-                }
-            }
-
-            return rv;
-        }
-
         public override WorldObjectData SaveData()
         {
             WorldObjectData data = base.SaveData();
-            data.stringData += (_timer != null ? _timer.TimerSpeed.ToString() : "null") + "|";
+            data.stringData += _iDaysLeft + "|";
             data.stringData += _iCurrentlyMaking;
 
             return data;
@@ -181,10 +187,8 @@ namespace RiverHollow.WorldObjects
             base.LoadData(data);
             string[] strData = Util.FindParams(data.stringData);
 
-            if (!strData[0].Equals("null")) { _timer = new RHTimer(int.Parse(strData[0])); }
+            _iDaysLeft = int.Parse(strData[0]);
             _iCurrentlyMaking = int.Parse(strData[1]);
-
-            // if (CurrentlyProcessing != null) { _sprite.PlayAnimation(CombatAnimationEnum.ObjectIdle); }
         }
     }
 }

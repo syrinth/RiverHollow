@@ -651,7 +651,7 @@
     </Item>
     <Item>
       <Key>162</Key>
-      <Value>[Type:Food][Image:4-2][Value:5][Stam:5][HP:2]</Value>
+      <Value>[Type:Food][Image:4-2][MerchType:Herb][Value:5]</Value>
     </Item>
     <Item>
       <Key>163</Key>
@@ -671,7 +671,7 @@
     </Item>
     <Item>
       <Key>167</Key>
-      <Value>[Type:Consumable][Image:1-0][Value:50][CombatType:Helpful][Hp:10][ReqItems:56-1|57-1]</Value>
+      <Value>[Type:Consumable][Image:1-0][MerchType:Medicine][Value:50][ReqItems:162-2][CraftTime:1][CombatType:Helpful][Hp:10]</Value>
     </Item>
     <Item>
       <Key>168</Key>
@@ -775,7 +775,7 @@
     </Item>
     <Item>
       <Key>193</Key>
-      <Value>[Type:Resource][Image:7-10][Value:20][StoreType:General]</Value>
+      <Value>[Type:Resource][Image:7-10][Value:20][MerchType:None]</Value>
     </Item>
   </Asset>
 </XnaContent>

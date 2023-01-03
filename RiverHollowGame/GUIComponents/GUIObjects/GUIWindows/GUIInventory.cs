@@ -8,42 +8,43 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
-    public class GUIInventory : GUIWindow
+    public class GUIInventory : GUIObject
     {
         protected GUIItemBox[,] _arrItemBoxes;
 
-        protected int _iBoxSize = GUIItemBox.RECT_IMG.Width * GameManager.CurrentScale;
+        protected int BoxSize => GameManager.ScaleIt(GUIItemBox.RECT_IMG.Width);
 
-        protected int _columns;
-        protected int _rows;
+        protected int _iColumns;
+        protected int _iRows;
 
         bool _bPlayerInventory;
 
         public GUIInventory(bool PlayerInventory = false)
         {
             Position(Vector2.Zero);
-            _winData = GUIWindow.Window_2;
+            
             _bPlayerInventory = PlayerInventory;
 
             //Retrieve the dimensions of the Inventory we're working on from the InventoryManager
-            InventoryManager.GetDimensions(ref _rows, ref _columns, _bPlayerInventory);
+            InventoryManager.GetDimensions(ref _iRows, ref _iColumns, _bPlayerInventory);
 
             //If it's the player inventory, we need to show the max and then grey them out, otherwise show the real number of rows
-            int rows = PlayerInventory ? InventoryManager.maxItemRows : _rows;
+            int rows = PlayerInventory ? InventoryManager.maxItemRows : _iRows;
 
-            _arrItemBoxes = new GUIItemBox[_rows, _columns];
-            Width = WidthEdges() + (_columns * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_columns + 1));
-            Height = HeightEdges() + (rows * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (rows + 1));
+            _arrItemBoxes = new GUIItemBox[_iRows, _iColumns];
+            
             Setup(PlayerInventory);
 
             _texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
+            Width = (_iColumns * BoxSize) + (GUIManager.STANDARD_MARGIN * (_iColumns + 1));
+            Height = (rows * BoxSize) + (GUIManager.STANDARD_MARGIN * (rows + 1));
         }
 
         public override void Update(GameTime gTime)
         {
-            for (int i = 0; i < _rows; i++)
+            for (int i = 0; i < _iRows; i++)
             {
-                for (int j = 0; j < _columns; j++)
+                for (int j = 0; j < _iColumns; j++)
                 {
                     _arrItemBoxes[i,j].SetItem(InventoryManager.GetItemFromLocation(i, j, _bPlayerInventory));
                     _arrItemBoxes[i, j].Update(gTime);
@@ -55,16 +56,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         /// Centers the gui object on the screen, then initializes
         /// the ItemBox array and positions them appropriately.
         /// </summary>
-        public void Setup(bool playerInventory)
+        private void Setup(bool playerInventory)
         {
-            int delta = InventoryManager.maxItemRows - _rows;
-            for (int i = 0; i < _rows; i++)
+            int delta = InventoryManager.maxItemRows - _iRows;
+            for (int i = 0; i < _iRows; i++)
             {
-                for (int j = 0; j < _columns; j++)
+                for (int j = 0; j < _iColumns; j++)
                 {
                     _arrItemBoxes[i, j] = new GUIItemBox(i, j, DataManager.DIALOGUE_TEXTURE, null);
 
-                    if (i == 0 && j == 0) { _arrItemBoxes[i, j].AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN); }
+                    if (i == 0 && j == 0) { }
                     else if (j == 0) { _arrItemBoxes[i, j].AnchorAndAlignToObject(_arrItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
                     else { _arrItemBoxes[i, j].AnchorAndAlignToObject(_arrItemBoxes[i, j - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
 
@@ -79,7 +80,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 GUIImage[,] temp = new GUIImage[delta, InventoryManager.maxItemColumns];
                 for (int i = 0; i < rowDelta; i++)
                 {
-                    for (int j = 0; j < _columns; j++)
+                    for (int j = 0; j < _iColumns; j++)
                     {
                         temp[i, j] = new GUIImage(GUIItemBox.RECT_IMG, GameManager.ScaleIt(GUIItemBox.RECT_IMG.Width), GameManager.ScaleIt(GUIItemBox.RECT_IMG.Height), DataManager.DIALOGUE_TEXTURE);
                         temp[i, j].Enable(false);
@@ -162,8 +163,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
 
             //Close any hover windows that may be open
-            if (rv) { GUIManager.CloseHoverWindow(); }
-
+            if (rv && IsItemThere(mouse) == null) { GUIManager.CloseHoverWindow(); }
 
             return rv;
         }
@@ -188,7 +188,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     //pass the handler to the GUIItemBox and have it handle the item click
                     if (!InventoryManager.ManagingExtraInventory())
                     {
-                        rv = i.ProcessRightButtonClick(mouse);
+                        rv = i.BoxItem.ItemBeingUsed();
                     }
                     else  //We are managing an additional Inventory
                     {
@@ -198,13 +198,26 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             int row = 0;
                             int col = 0;
 
+                            Item singleItem = null;
+                            bool takeHalf = InputManager.IsKeyDown(Keys.LeftShift) || InputManager.IsKeyDown(Keys.RightShift);
+                            if (!takeHalf && this._arrItemBoxes.Length != 1 && InventoryManager.ExtraInventory.Length == 1 && InventoryManager.ExtraInventory[0, 0] != null)
+                            {
+                                singleItem = InventoryManager.ExtraInventory[0, 0];
+                                InventoryManager.RemoveItemFromInventorySpot(0, 0, false);
+                            }
+
                             //Use _container != null to get the status of the inverse of whichever we are clicking on
                             if (InventoryManager.HasSpaceInInventory(i.BoxItem.ID, i.BoxItem.Number, ref row, ref col, !_bPlayerInventory))
                             {
-                                Item clickedItem = TakeItem(mouse);
+                                Item clickedItem = TakeItem(mouse, takeHalf);
                                 //If the GUI represents a Container, move the Item to the PlayerInventory
                                 //else, move the Item to the Container's inventory
                                 InventoryManager.AddItemToInventorySpot(clickedItem, row, col, !_bPlayerInventory);
+
+                                if(singleItem != null)
+                                {
+                                    InventoryManager.AddToInventory(singleItem.ID, singleItem.Number, _bPlayerInventory, true);
+                                }
                             }
 
                             rv = true;
@@ -219,7 +232,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
 
             //Close any hover windows that may be open
-            if (rv) { GUIManager.CloseHoverWindow(); }
+            if (rv && IsItemThere(mouse) == null) { GUIManager.CloseHoverWindow(); }
 
             return rv;
         }
@@ -248,9 +261,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         private Vector2 GetItemVector(Point mouse)
         {
             Vector2 rv = new Vector2(-1, -1);
-            for (int i = 0; i < _rows; i++)
+            for (int i = 0; i < _iRows; i++)
             {
-                for (int j = 0; j < _columns; j++)
+                for (int j = 0; j < _iColumns; j++)
                 {
                     if (_arrItemBoxes[i, j].Contains(mouse) && _arrItemBoxes[i, j].BoxItem != null)
                     {
@@ -295,7 +308,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             return rv;
         }
 
-        public Item TakeItem(Point mouse, bool takeHalf = false)
+        private Item TakeItem(Point mouse, bool takeHalf = false)
         {
             Item rv = null;
 
@@ -329,7 +342,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             return rv;
         }
 
-        public bool GiveItem(Item item)
+        private bool GiveItem(Item item)
         {
             return GiveItem(item, false);
         }
@@ -342,9 +355,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 Point mouse = new Point(Mouse.GetState().Position.X, Mouse.GetState().Position.Y);
                 if (_drawRect.Contains(mouse))
                 {
-                    for (int i = 0; i < _rows; i++)
+                    for (int i = 0; i < _iRows; i++)
                     {
-                        for (int j = 0; j < _columns; j++)
+                        for (int j = 0; j < _iColumns; j++)
                         {
                             if (_arrItemBoxes[i, j].Contains(mouse) && (Force || _arrItemBoxes[i, j].BoxItem == null))
                             {
@@ -358,6 +371,22 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 Exit:
 
             return rv;
+        }
+    }
+
+    public class GUIInventoryWindow : GUIWindow
+    {
+        GUIInventory _inventory;
+        public GUIInventoryWindow(bool PlayerInventory = false)
+        {
+            _winData = GUIWindow.Window_2;
+
+            _inventory = new GUIInventory(PlayerInventory);
+            _inventory.ScaledMoveBy(7, 6);
+            AddControl(_inventory);
+
+            Width = WidthEdges() + _inventory.Width;
+            Height = HeightEdges() + _inventory.Height;
         }
     }
 }

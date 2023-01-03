@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
@@ -14,9 +13,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public Item BoxItem => _guiItem?.ItemObject;
         GUIItem _guiItem;
 
-        public bool DrawNum = true;
-
-        bool _bSelected = false;
         public int Columns { get; }
         public int Rows { get; }
 
@@ -48,17 +44,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _guiItem?.Update(gTime);
         }
 
-        public override bool ProcessRightButtonClick(Point mouse)
-        {
-            bool rv = false;
-            if (Contains(mouse))
-            {
-                rv = BoxItem.ItemBeingUsed();
-            }
-
-            return rv;
-        }
-
         public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
@@ -76,6 +61,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 if (_guiItem == null || (_guiItem != null && _guiItem.ItemObject != it))
                 {
+                    RemoveControl(_guiItem);
                     _guiItem = new GUIItem(it);
                     _guiItem.CenterOnObject(this);
                     if (GameManager.CurrentInventoryDisplay == DisplayTypeEnum.Gift && !it.Giftable()) { _guiItem.Alpha(0.5f); }
@@ -92,6 +78,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public override void SetColor(Color c)
         {
             _guiItem?.SetColor(c);
+        }
+
+        public void DrawNumber(bool val)
+        {
+            _guiItem.DrawNumber = val;
         }
 
         public void SetAlpha(float val)

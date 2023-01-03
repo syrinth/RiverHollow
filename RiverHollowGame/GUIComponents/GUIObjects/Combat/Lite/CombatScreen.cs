@@ -526,7 +526,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     _eCurrentStage = DisplayStageEnum.ItemLootAll;
                     InventoryManager.InitExtraInventory(loot);
-                    _gLoot = new GUIInventory(false);
+                    _gLoot = new GUIInventoryWindow(false);
                 }
                 else
                 {

@@ -351,6 +351,6 @@
   <object id="40" name="Wall" x="16" y="48" width="208" height="48"/>
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
-  <object id="37" name="PlayerSpawn" x="200" y="112" width="16" height="16"/>
+  <object id="37" name="PlayerSpawn" x="176" y="112" width="16" height="16"/>
  </objectgroup>
 </map>

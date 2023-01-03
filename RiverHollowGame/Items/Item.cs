@@ -15,7 +15,7 @@ namespace RiverHollow.Items
         #region properties
         protected ItemEnum _eItemType;
         public ItemEnum ItemType => _eItemType;
-        public ShopSellTypeEnum StoreType => DataManager.GetEnumByIDKey<ShopSellTypeEnum>(ID, "StoreType", DataType.Item);
+        public MerchType MerchType => DataManager.GetEnumByIDKey<MerchType>(ID, "MerchType", DataType.Item);
         public int ID { get; } = -1;
         protected Color _c = Color.White;
         public Color ItemColor => _c;

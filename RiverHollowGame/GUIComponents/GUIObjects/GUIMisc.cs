@@ -305,6 +305,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public Item ItemObject {get;}
         GUIImage _gImg;
         GUIText _gText;
+        public bool DrawNumber = true;
 
         public GUIItem(Item it)
         {
@@ -313,6 +314,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _gImg.SetScale(CurrentScale);
 
             _gText = new GUIText(ItemObject.Number.ToString(), true, DataManager.FONT_NUMBER_DISPLAY);
+            _gText.SetColor(Color.White);
 
             _gText.AlignToObject(_gImg, SideEnum.Right);
             _gText.AlignToObject(_gImg, SideEnum.Bottom);
@@ -335,7 +337,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public override void Draw(SpriteBatch spriteBatch)
         {
             _gImg.Draw(spriteBatch);
-            if (ItemObject.Stacks() && _gText != null) {
+            if (ItemObject.Stacks() && _gText != null && DrawNumber) {
                 _gText.Draw(spriteBatch);
             }
         }

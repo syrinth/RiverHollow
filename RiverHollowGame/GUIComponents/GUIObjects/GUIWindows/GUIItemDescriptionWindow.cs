@@ -45,8 +45,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
                 AddControl(icon);
             }
-
-
         }
     }
 }

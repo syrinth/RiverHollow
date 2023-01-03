@@ -278,10 +278,10 @@ namespace RiverHollow
         public static void NewGame(bool playIntro)
         {
             PlayerManager.NewPlayer();
-            MapManager.PopulateMaps(false);
+            MapManager.PopulateMaps(true);
 
            // PlayerManager._diBuildings[0].AddWorker(a);
-            //PlayerManager._diBuildings[0].AddWorker(b);
+           //PlayerManager._diBuildings[0].AddWorker(b);
 
             //PlayerManager.AddToParty(a);
             //PlayerManager.AddToParty(b);
@@ -306,7 +306,7 @@ namespace RiverHollow
         {
             GameManager.ClearInn();
             SaveManager.Load(savefile);
-            MapManager.PopulateMaps(true);
+            MapManager.PopulateMaps(false);
 
             GoToHUDScreen();
             StartGame();

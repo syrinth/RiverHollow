@@ -40,6 +40,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public GUIText(bool printAll = true)
         {
+            _Color = Color.Black;
             PrintAll = printAll;
             _sText = "";
             _sFullText = _sText;

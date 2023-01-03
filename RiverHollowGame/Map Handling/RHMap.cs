@@ -550,7 +550,7 @@ namespace RiverHollow.Map_Handling
             }
         }
 
-        public void PopulateMap(bool loaded = false)
+        public void PopulateMap(bool gameStart)
         {
             RHRandom rand = RHRandom.Instance();
             TiledMapProperties props = _map.Properties;
@@ -559,7 +559,7 @@ namespace RiverHollow.Map_Handling
 
             foreach (TiledMapObject tiledObj in _liMapObjects)
             {
-                if (!loaded)
+                if (gameStart || !tiledObj.Properties.ContainsKey("DoNotLoad"))
                 {
                     int objWidth = Constants.TILE_SIZE;
                     int objHeight = Constants.TILE_SIZE;
@@ -1944,11 +1944,24 @@ namespace RiverHollow.Map_Handling
             {
                 rv = (testTile.WorldObject == null && testTile.IsWallpaperWall);
             }
-            else if (obj.CompareType(ObjectTypeEnum.Floor) || ignoreActors || !TileContainsActor(testTile))
+            else if (ignoreActors || !TileContainsActor(testTile))
             {
                 if (testTile.CanPlaceOnTabletop(obj) || (testTile.Passable() && testTile.WorldObject == null))
                 {
                     rv = true;
+                }
+            }
+
+            if (obj.WideOnTop())
+            {
+                List<RHTile> arr = testTile.GetAdjacentTiles(true);
+                for(int i =0; i < arr.Count; i++)
+                {
+                    if(DataManager.GetBoolByIDKey(obj.ID, "Tree", DataType.WorldObject) && (!arr[i].TileIsPassable()) || (arr[i].WorldObject != null && arr[i].WorldObject.WideOnTop()))
+                    {
+                        rv = false;
+                        break;
+                    }
                 }
             }
 
