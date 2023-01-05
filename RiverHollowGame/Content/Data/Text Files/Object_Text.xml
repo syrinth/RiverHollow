@@ -847,19 +847,19 @@
     </Item>
     <Item>
       <Key>Item_56</Key>
-      <Value>[Name:$Monster_4$ Wing][Description:A small wing left behind by a $Monster_4$.]</Value>
+      <Value>[Name:Bat Wing][Description:Particularly useful in enchantments, also taste great with a bit of salt.]</Value>
     </Item>
     <Item>
       <Key>Item_57</Key>
-      <Value>[Name:Potion Reagents][Description:A pouch containing various herbs used in the fundamentals of potion making.]</Value>
+      <Value>[Name:Calming Draught][Description:Take a deep breath and chug!]</Value>
     </Item>
     <Item>
       <Key>Item_58</Key>
-      <Value>[Name:Dreamless Potion][Description:This potion is used to give a quiet's night rest, preventing both dreams and nightmares from disturbing your slumber]</Value>
+      <Value>[Name:Dreamless Potion][Description:Dreamless sleep guaranteed!]</Value>
     </Item>
     <Item>
       <Key>Item_59</Key>
-      <Value>[Name:Beard Hair][Description:A tuft of hair from an enchanted beard.]</Value>
+      <Value>[Name:Beard][Description:A pinch of powdered lizard scales.]</Value>
     </Item>
     <Item>
       <Key>Item_60</Key>
@@ -1383,7 +1383,7 @@
     </Item>
     <Item>
       <Key>Item_190</Key>
-      <Value>[Name:Yulia's Recipes][Description:]</Value>
+      <Value>[Name:Ornate Ledger][Description:]</Value>
     </Item>
     <Item>
       <Key>Item_191</Key>

@@ -227,15 +227,15 @@
     </Item>
     <Item>
       <Key>56</Key>
-      <Value>[Type:Resource][Image:9-3][Value:5]</Value>
+      <Value>[Type:Resource][Image:9-3][Value:20]</Value>
     </Item>
     <Item>
       <Key>57</Key>
-      <Value>[Type:Resource][Image:1-6][Value:20]</Value>
+      <Value>[Type:Resource][Image:1-6][MerchType:Medicine][Value:150][ReqItems:163-2|71-1]</Value>
     </Item>
     <Item>
       <Key>58</Key>
-      <Value>[Type:Resource][Image:2-6][ReqItems:27-1|23-1][Value:100]</Value>
+      <Value>[Type:Resource][Image:2-6][MerchType:Medicine][Value:100][ReqItems:56-1|162-2]</Value>
     </Item>
     <Item>
       <Key>59</Key>
@@ -287,7 +287,7 @@
     </Item>
     <Item>
       <Key>71</Key>
-      <Value>[Type:Resource][Image:6-8][Value:50]</Value>
+      <Value>[Type:Resource][Image:6-8][Value:20]</Value>
     </Item>
     <Item>
       <Key>72</Key>
@@ -651,11 +651,11 @@
     </Item>
     <Item>
       <Key>162</Key>
-      <Value>[Type:Food][Image:4-2][MerchType:Herb][Value:5]</Value>
+      <Value>[Type:Resource][Image:6-7][MerchType:Herb][Value:10]</Value>
     </Item>
     <Item>
       <Key>163</Key>
-      <Value>[Type:Food][Image:5-2][Value:10][Stam:15][HP:4]</Value>
+      <Value>[Type:Food][Image:5-2][MerchType:Herb][Value:30][Stam:10]</Value>
     </Item>
     <Item>
       <Key>164</Key>
@@ -671,7 +671,7 @@
     </Item>
     <Item>
       <Key>167</Key>
-      <Value>[Type:Consumable][Image:1-0][MerchType:Medicine][Value:50][ReqItems:162-2][CraftTime:1][CombatType:Helpful][Hp:10]</Value>
+      <Value>[Type:Consumable][Image:1-0][MerchType:Medicine][Value:50][ReqItems:162-2][CombatType:Helpful][Hp:10]</Value>
     </Item>
     <Item>
       <Key>168</Key>
@@ -763,7 +763,7 @@
     </Item>
     <Item>
       <Key>190</Key>
-      <Value>[Type:Special][Image:2-12]</Value>
+      <Value>[Type:Special][Image:3-0][Value:1500]</Value>
     </Item>
     <Item>
       <Key>191</Key>

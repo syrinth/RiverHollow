@@ -36,9 +36,9 @@ namespace RiverHollow.Map_Handling
                 if (!GameManager.GamePaused() &&  Box.Contains(GUICursor.GetWorldMousePosition()))
                 {
                     BitmapFont font = DataManager.GetBitMapFont(@"Fonts\FontBattle");
-                    Size2 size = font.MeasureString(merchItem.Value.ToString());
+                    Size2 size = font.MeasureString(merchItem.BuyPrice.ToString());
                     float delta = size.Width - Box.Width;
-                    spritebatch.DrawString(font, merchItem.Value.ToString(), _vPos + new Vector2(-delta / 2, -8), Color.White, Constants.MAX_LAYER_DEPTH);
+                    spritebatch.DrawString(font, merchItem.BuyPrice.ToString(), _vPos + new Vector2(-delta / 2, -8), Color.White, Constants.MAX_LAYER_DEPTH);
 
                     if (!GUIManager.IsHoverWindowOpen())
                     {
@@ -84,7 +84,7 @@ namespace RiverHollow.Map_Handling
         {
             if (merchItem != null)
             {
-                if (PlayerManager.Money < merchItem.Value)
+                if (PlayerManager.Money < merchItem.BuyPrice)
                 {
                     GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("BuyMerch_NoMoney"));
                 }
@@ -99,7 +99,7 @@ namespace RiverHollow.Map_Handling
                     {
                         GameManager.SetSelectedItem(DataManager.GetItem(merchItem.ID));
                         TextEntry entry = DataManager.GetGameTextEntry("BuyMerch_Confirm");
-                        entry.FormatText(merchItem.Name(), merchItem.TotalValue);
+                        entry.FormatText(merchItem.Name(), merchItem.TotalBuyValue);
                         GUIManager.OpenTextWindow(entry);
                     }
                     else

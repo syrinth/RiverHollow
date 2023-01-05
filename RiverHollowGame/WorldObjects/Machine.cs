@@ -133,7 +133,7 @@ namespace RiverHollow.WorldObjects
                 else
                 {
                     _iCurrentlyMaking = itemToCraft.ID;
-                    _iDaysLeft = DataManager.GetIntByIDKey(_iCurrentlyMaking, "CraftTime", DataType.Item);
+                    _iDaysLeft = DataManager.GetIntByIDKey(_iCurrentlyMaking, "CraftTime", DataType.Item, 1);
                     GUIManager.CloseMainObject();
                 }
                 //_sprite.PlayAnimation(CombatAnimationEnum.PlayAnimation);

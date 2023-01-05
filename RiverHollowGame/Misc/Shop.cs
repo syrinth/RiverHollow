@@ -71,9 +71,9 @@ namespace RiverHollow.Misc
 
         public void Purchase(Item purchaseItem)
         {
-            if (PlayerManager.Money >= purchaseItem.TotalValue)
+            if (PlayerManager.Money >= purchaseItem.TotalBuyValue)
             {
-                PlayerManager.TakeMoney(purchaseItem.TotalValue);
+                PlayerManager.TakeMoney(purchaseItem.TotalBuyValue);
                 if (purchaseItem.IsUnique())
                 {
                     PlayerManager.AddToUniqueBoughtItems(purchaseItem.ID);
@@ -125,7 +125,7 @@ namespace RiverHollow.Misc
             int totalMerch = _liMerchandise.Count;
             for (int i = 0; i < _liShopItemSpots.Count && i < totalMerch; i++)
             {
-                if (randomize && !string.IsNullOrEmpty(_sRandomIndices))
+                if (randomize && !string.IsNullOrEmpty(_sRandomIndices) && random.Length > i)
                 {
                     Merchandise m = _liMerchandise[int.Parse(random[i])];
                     _liShopItemSpots[i].SetMerchandise(m);

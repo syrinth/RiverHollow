@@ -50,8 +50,10 @@ namespace RiverHollow.Items
         public int Number { get => _iNum; }
 
         public int Value => DataManager.GetIntByIDKey(ID, "Value", DataType.Item);
-        public int TotalValue => Value * _iNum;
-        public int SellPrice => Value / 2;
+        public int TotalSellValue => Value * _iNum;
+
+        public int BuyPrice => Value * 2;
+        public int TotalBuyValue => BuyPrice * _iNum;
 
         //What items and in what numbers are required to make this item
         protected Dictionary<int, int> _diReqToMake;
