@@ -262,6 +262,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             return _vPos;
         }
+        public virtual void Position(GUIObject obj)
+        {
+            Position(obj.Position());
+        }
         /// <summary>
         /// Set the location of this GUIObject to the indicated value.
         /// 

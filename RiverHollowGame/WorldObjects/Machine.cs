@@ -16,16 +16,17 @@ namespace RiverHollow.WorldObjects
     {
         readonly string _sEffectWorking = "";
 
-        int _iCurrentlyMaking = -1;
-        private bool CraftDaily => DataManager.GetBoolByIDKey(ID, "Daily", DataType.WorldObject);
+        public int CurrentlyMaking { get; private set; } = -1;
+        public bool CraftDaily => DataManager.GetBoolByIDKey(ID, "Daily", DataType.WorldObject);
 
         protected int _iDaysLeft = 0;
         protected int _iWorkingFrames = 2;
         protected float _fFrameSpeed = 0.3f;
 
-        public Dictionary<int, int> CraftingDictionary { get; }
+        public int Capacity => DataManager.GetIntByIDKey(ID, "Capacity", DataType.WorldObject, 1);
+        public List<int> CraftingList { get; }
 
-        public bool MakingSomething() { return _iCurrentlyMaking != -1; }
+        public bool MakingSomething() { return CurrentlyMaking != -1; }
 
         public Machine(int id, Dictionary<string, string> stringData) : base(id)
         {
@@ -38,16 +39,14 @@ namespace RiverHollow.WorldObjects
 
             Util.AssignValue(ref _sEffectWorking, "WorkEffect", stringData);
 
-            CraftingDictionary = new Dictionary<int, int>();
+            CraftingList = new List<int>();
             if (stringData.ContainsKey("Makes"))
             {
                 //Read in what items the machine can make
-                string[] processes = Util.FindParams(stringData["Makes"]);
-                foreach (string recipe in processes)
+                string[] split = Util.FindParams(stringData["Makes"]);
+                for (int i = 0; i < split.Length; i++)
                 {
-                    //Each entry is in written like ID-NumDays
-                    string[] pieces = recipe.Split('-');
-                    CraftingDictionary.Add(int.Parse(pieces[0]), int.Parse(pieces[1]));
+                    CraftingList.Add(int.Parse(split[i]));
                 }
             }
 
@@ -87,10 +86,10 @@ namespace RiverHollow.WorldObjects
                     if(CurrentMap.BuildingID != -1)
                     {
                         Building b = PlayerManager.GetBuildingByID(CurrentMap.BuildingID);
-                        b.AddToStock(DataManager.CraftItem(_iCurrentlyMaking));
+                        b.AddToStock(DataManager.CraftItem(CurrentlyMaking));
                     }
 
-                    _iCurrentlyMaking = -1;
+                    CurrentlyMaking = -1;
                 }
             }
         }
@@ -100,15 +99,9 @@ namespace RiverHollow.WorldObjects
 
         private bool ClickProcess()
         {
-            bool rv = false;
+            GUIManager.OpenMainObject(new HUDCraftingDisplay(this));
 
-            if (!MakingSomething())
-            {
-                rv = true;
-                GUIManager.OpenMainObject(new HUDCraftingDisplay(this));
-            }
-
-            return rv;
+            return true;
         }
 
 
@@ -132,9 +125,8 @@ namespace RiverHollow.WorldObjects
                 }
                 else
                 {
-                    _iCurrentlyMaking = itemToCraft.ID;
-                    _iDaysLeft = DataManager.GetIntByIDKey(_iCurrentlyMaking, "CraftTime", DataType.Item, 1);
-                    GUIManager.CloseMainObject();
+                    CurrentlyMaking = itemToCraft.ID;
+                    _iDaysLeft = DataManager.GetIntByIDKey(CurrentlyMaking, "CraftTime", DataType.Item, 1);
                 }
                 //_sprite.PlayAnimation(CombatAnimationEnum.PlayAnimation);
 
@@ -178,7 +170,7 @@ namespace RiverHollow.WorldObjects
         {
             WorldObjectData data = base.SaveData();
             data.stringData += _iDaysLeft + "|";
-            data.stringData += _iCurrentlyMaking;
+            data.stringData += CurrentlyMaking;
 
             return data;
         }
@@ -188,7 +180,7 @@ namespace RiverHollow.WorldObjects
             string[] strData = Util.FindParams(data.stringData);
 
             _iDaysLeft = int.Parse(strData[0]);
-            _iCurrentlyMaking = int.Parse(strData[1]);
+            CurrentlyMaking = int.Parse(strData[1]);
         }
     }
 }

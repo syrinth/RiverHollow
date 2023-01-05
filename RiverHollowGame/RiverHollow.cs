@@ -306,8 +306,8 @@ namespace RiverHollow
         {
             GameManager.ClearInn();
             SaveManager.Load(savefile);
-            MapManager.PopulateMaps(false);
             
+            MapManager.PopulateMaps(false);
 
             GoToHUDScreen();
             StartGame();

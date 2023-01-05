@@ -351,31 +351,31 @@
     </Item>
     <Item>
       <Key>87</Key>
-      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Size:2-2][Makes:97-0][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Size:2-2][Makes:97][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>88</Key>
-      <Value>[Type:Machine][Image:0-256][Work:4-0.3][Size:3-3][Makes:167-0|168-0|57-0|58-0][Base:3-2][BaseOffset:0-1][WorkEffect:Cauldron][Daily]</Value>
+      <Value>[Type:Machine][Image:0-256][Work:4-0.3][Size:3-3][Makes:167|168|57|58][Base:3-2][BaseOffset:0-1][WorkEffect:Cauldron][Daily]</Value>
     </Item>
     <Item>
       <Key>89</Key>
-      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Size:1-2][Makes:37-0|38-0|39-0|40-0|41-0][WorkEffect:stove_fire]</Value>
+      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Size:1-2][Makes:37|38|39|40|41][WorkEffect:stove_fire]</Value>
     </Item>
     <Item>
       <Key>90</Key>
-      <Value>[Type:Machine][Image:48-256][Work:3-0.15][Size:2-3][Makes:169-2][Base:2-2]</Value>
+      <Value>[Type:Machine][Image:48-256][Work:3-0.15][Size:2-3][Makes:169][Base:2-2]</Value>
     </Item>
     <Item>
       <Key>91</Key>
-      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Size:2-2][Makes:3-0|7-0|52-0|53-0|122-0][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Size:2-2][Makes:3|7|52|53|122][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>92</Key>
-      <Value>[Type:Machine][Image:0-224][MachineType:Processor][Size:2-2][Makes:60-0][Base:2-2][WorkAnimation:2-0.1]</Value>
+      <Value>[Type:Machine][Image:0-224][MachineType:Processor][Size:2-2][Makes:60][Base:2-2][WorkAnimation:2-0.1]</Value>
     </Item>
     <Item>
       <Key>93</Key>
-      <Value>[Type:Machine][Image:0-192][Makes:55-0|68-0][Size:2-2][Base:2-2][WorkAnimation:2-0.1]</Value>
+      <Value>[Type:Machine][Image:0-192][Makes:55|68][Size:2-2][Base:2-2][WorkAnimation:2-0.1]</Value>
     </Item>
     <Item>
       <Key>94</Key>
@@ -387,7 +387,7 @@
     </Item>
     <Item>
       <Key>96</Key>
-      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Size:2-2][Makes:72-1|71-1|157-1|156-1|73-1|78-1|83-1][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Size:2-2][Makes:72|71|157|156|73|78|83][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>97</Key>

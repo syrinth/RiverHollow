@@ -7,7 +7,6 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.WorldObjects;
 
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Game_Managers.DataManager;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 
@@ -15,50 +14,35 @@ namespace RiverHollow.GUIComponents.Screens
 {
     class HUDCraftingDisplay : GUIMainObject
     {
-        int _iBoxSize = GUIItemBox.RECT_IMG.Width * (int)GameManager.CurrentScale;
-        const int _iMaxColumns = 5;
+        private GUIImage _gSelection;
+        private GUIImage _gComponents;
+        private GUIWindow _winMaking;
 
-        Machine _craftMachine;
-        private GUIWindow _winCraftables;
-        private GUIWindow _winExtra;
-        private GUIButton _btnFinished;
-        protected GUIItemBox[,] _arrDisplay;
-
-        private List<GUIItem> _liRequiredItems;
         private GUIText _gName;
-        private GUIText _gDescription;
+        private GUIButton _btnBuild;
+        private GUIButton _btnLeft;
+        private GUIButton _btnRight;
+        private GUIItemBox[] _arrRecipes;
+        private List<GUIItemBox> _liRequiredItems;
+        private GUIItemBox[] _arrMaking;
+
+        private Machine _objMachine;
 
         private int _iSelectedItemID = -1;
 
-        private int _rows;
-        private int _columns;
-
-        public HUDCraftingDisplay(Machine crafter)
+        public HUDCraftingDisplay(Machine m)
         {
-            _winMain = SetMainWindow();
-            _winMain.Height = _winMain.Height / 2;
-
-            _liRequiredItems = new List<GUIItem>();
-            _craftMachine = crafter;
+            _liRequiredItems = new List<GUIItemBox>();
+            _objMachine = m;
             _gName = new GUIText("");
-            _gDescription = new GUIText("");
 
-            Setup(crafter.CraftingDictionary);
-            AddControl(_winCraftables);
+            Setup(m.CraftingList);
 
-            ConfigureInfo();
-
-            _winExtra = new GUIWindow(GUIWindow.Window_1, _winMain.Width, ScaleIt(GUIWindow.Window_1.HeightEdges()) + ScaleIt(Constants.TILE_SIZE));
-            _btnFinished = new GUIButton("Done", Finished);
-            _btnFinished.CenterOnObject(_winExtra);
-            _winExtra.AddControl(_btnFinished);
-
-            _winCraftables.AnchorAndAlignToObject(_winMain, SideEnum.Top, SideEnum.CenterX);
-            _winExtra.AnchorAndAlignToObject(_winMain, SideEnum.Bottom, SideEnum.CenterX);
+            UpdateInfo(DataManager.CraftItem(_iSelectedItemID));
 
             DetermineSize();
 
-            AddControl(_winExtra);
+            //AddControl(_winExtra);
             Position();
         }
 
@@ -67,98 +51,129 @@ namespace RiverHollow.GUIComponents.Screens
         /// and creates the appropriate boxes forthem
         /// </summary>
         /// <param name="recipes"></param>
-        public void Setup(Dictionary<int, int> recipes)
+        public void Setup(List<int> recipes)
         {
-            List<int> canMake = new List<int>();
-            foreach (int id in recipes.Keys)
+            int recipeNumber = Math.Min(recipes.Count, Constants.MAX_RECIPE_DISPLAY);
+            _arrRecipes = new GUIItemBox[recipeNumber];
+            _winMain = new GUIWindow(GUIWindow.Window_1, 10, 10);
+
+            for (int i = 0; i < recipeNumber; i++)
             {
-                //Ensure that either the creation of the item is enabled by a crafter or that the player knows the recipe themselves
-                if (_craftMachine != null)
+                Item recipe = DataManager.CraftItem(recipes[i]);
+                GUIItemBox newBox = new GUIItemBox(recipe);
+                newBox.DrawNumber(recipe.Number > 1);
+                if (i == 0)
                 {
-                    canMake.Add(id);
+                    _iSelectedItemID = recipe.ID;
+                    newBox.AnchorToInnerSide(_winMain, SideEnum.TopLeft, ScaleIt(1));
                 }
-            }
+                else { newBox.AnchorAndAlignToObject(_arrRecipes[i - 1], SideEnum.Right, SideEnum.Top, ScaleIt(2)); }
 
-            //Dynamically determines the number of columns that will be created, based off of the number of items able to be made
-            _columns = (canMake.Count < _iMaxColumns) ? canMake.Count : _iMaxColumns;
-
-            //If there are less recipes than max columns, we only have one row, othwerise weneed to figure out how many times the columns get divided into the total number
-            _rows = (canMake.Count < _iMaxColumns) ? 1 : (int)(Math.Round(((double)(canMake.Count + _columns - 1) / (double)_columns)));
-
-            //Determine how big the creation window needs to be
-            int creationWidth = (GUIWindow.Window_1.WidthEdges()) + (_columns * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_columns + 1));
-            int creationHeight = (GUIWindow.Window_1.HeightEdges()) + (_rows * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_rows + 1));
-
-            //Create the creation window
-            _winCraftables = new GUIWindow(GUIWindow.Window_1, creationWidth, creationHeight);
-
-            int i = 0; int j = 0;
-            List<GUIObject> boxes = new List<GUIObject>();
-            foreach (int id in canMake)
-            {
-                boxes.Add(new GUIItemBox(DataManager.DIALOGUE_TEXTURE, DataManager.CraftItem(id), true));
-            }
-
-            //Create a grid for the recipes to be displayed in
-            CreateSpacedGrid(ref boxes, _winCraftables.InnerTopLeft() + new Vector2(GUIManager.STANDARD_MARGIN, GUIManager.STANDARD_MARGIN), _winCraftables.InnerWidth() - 2 * GUIManager.STANDARD_MARGIN, _columns);
-
-            //Create a new array of the appropriate size, then assign all of the boxes to the array
-            //and turn off number draw as well as addingthem to the Controls
-            _arrDisplay = new GUIItemBox[_columns, _rows];
-            foreach (GUIObject g in boxes)
-            {
-                GUIItemBox box = (GUIItemBox)g;
-                box.DrawNumber(box.BoxItem.Number > 1);
-                _arrDisplay[i, j] = box;
-                i++;
-                if (i == _columns)
+                if (!InventoryManager.HasSufficientItems(recipe.GetRequiredItems()))
                 {
-                    i = 0;
-                    j++;
+                    newBox.Enable(false);
                 }
 
-                _winCraftables.AddControl(g);
+                _arrRecipes[i] = newBox;
             }
-        }
 
-        public void ConfigureInfo()
-        {
-            _gName.AnchorToInnerSide(_winMain, SideEnum.TopLeft, ScaleIt(1));
-            _gDescription.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left);
+            _gSelection = new GUIImage(new Rectangle(260, 0, 20, 20), DataManager.DIALOGUE_TEXTURE);
+            _gSelection.CenterOnObject(_arrRecipes[0]);
+            _winMain.AddControl(_gSelection);
 
-            for(int i=0; i <_liRequiredItems.Count; i++)
+            int widthBetween = (recipeNumber - 1) * ScaleIt(2);
+            _winMain.Width = (recipeNumber * _arrRecipes[0].Width) + _winMain.WidthEdges() + ScaleIt(2) + widthBetween;
+            _winMain.Height = _arrRecipes[0].Height + _winMain.HeightEdges() + ScaleIt(2);
+            AddControl(_winMain);
+
+            _gComponents = new GUIImage(new Rectangle(192, 0, 160, 71), DataManager.HUD_COMPONENTS);
+            _winMain.MoveBy(new Vector2((_gComponents.Width - _winMain.Width) / 2, 0));
+            _gComponents.AnchorAndAlignToObject(_winMain, SideEnum.Bottom, SideEnum.CenterX, ScaleIt(2));
+            _gComponents.AddControl(_gName);
+
+            _btnBuild = new GUIButton("Build", BtnBuild);
+            _btnBuild.Position(_gComponents);
+            _btnBuild.AlignToObject(_gComponents, SideEnum.CenterX);
+            _btnBuild.ScaledMoveBy(0, 49);
+
+            _gComponents.AddControl(_btnBuild);
+
+            AddControl(_gComponents);
+
+            // Making Window
+            _winMaking = new GUIWindow(GUIWindow.Window_1, 10, 10);
+            _arrMaking = new GUIItemBox[_objMachine.Capacity];
+            for (int i = 0; i < _arrMaking.Length; i++)
             {
-                GUIItem req = _liRequiredItems[i];
-                if (i == 0) { req.AnchorToInnerSide(_winMain, SideEnum.BottomLeft, 10); }
-                else { req.AnchorAndAlignToObject(_liRequiredItems[i - 1], SideEnum.Right, SideEnum.Bottom); }
+                if (_objMachine.CurrentlyMaking == -1) { _arrMaking[i] = new GUIItemBox(); }
+                else { _arrMaking[i] = new GUIItemBox(DataManager.CraftItem(_objMachine.CurrentlyMaking)); }
+
+                if (i == 0) { _arrMaking[i].AnchorToInnerSide(_winMaking, SideEnum.TopLeft, ScaleIt(1)); }
+                else { _arrMaking[i].AnchorAndAlignToObject(_arrMaking[i - 1], SideEnum.Right, SideEnum.Top, ScaleIt(2)); }
+
             }
+
+            widthBetween = (_objMachine.Capacity - 1) * ScaleIt(2);
+            _winMaking.Width = (_objMachine.Capacity * _arrRecipes[0].Width) + _winMain.WidthEdges() + ScaleIt(2) + widthBetween;
+            _winMaking.Height = _arrRecipes[0].Height + _winMain.HeightEdges() + ScaleIt(2);
+
+            _winMaking.AnchorAndAlignToObject(_gComponents, SideEnum.Bottom, SideEnum.CenterX, ScaleIt(2));
+            AddControl(_winMaking);
+
+            if (!_objMachine.CraftDaily)
+            {
+                _winMaking.Show(false);
+            }
+
+            Width = _gComponents.Width;
+            Height = _winMaking.Bottom - _winMain.Top;
+
+            CenterOnScreen();
+
+            _btnLeft = new GUIButton(new Rectangle(163, 43, 10, 12), DataManager.HUD_COMPONENTS, ShiftLeft);
+            _btnLeft.AnchorAndAlignToObject(_winMain, SideEnum.Left, SideEnum.CenterY);
+            AddControl(_btnLeft);
+
+            _btnRight = new GUIButton(new Rectangle(173, 43, 10, 12), DataManager.HUD_COMPONENTS, ShiftRight);
+            _btnRight.AnchorAndAlignToObject(_winMain, SideEnum.Right, SideEnum.CenterY);
+            AddControl(_btnRight);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_winCraftables.Contains(mouse))
+
+            if (_winMain.Contains(mouse))
             {
-                foreach (GUIItemBox gIB in _arrDisplay)
+                rv = true;
+
+                for (int i = 0; i < _arrRecipes.Length; i++)
                 {
-                    if (gIB != null && gIB.Contains(mouse))
+                    if (_arrRecipes[i].Contains(mouse))
                     {
-                        _craftMachine?.AttemptToCraftChosenItem(gIB.BoxItem);
+                        if (_arrRecipes[i].BoxItem.ID != _iSelectedItemID)
+                        {
+                            _gSelection.CenterOnObject(_arrRecipes[i]);
+                            UpdateInfo(_arrRecipes[i].BoxItem);
+
+                            break;
+                        }
                     }
                 }
-                rv = true;
             }
-            else if (_winExtra.Contains(mouse))
+            else if (_gComponents.Contains(mouse))
             {
-                _winExtra.ProcessLeftButtonClick(mouse);
                 rv = true;
+                _btnBuild.ProcessLeftButtonClick(mouse);
             }
+            else if (_winMaking.Contains(mouse)) { rv = true; }
+
             return rv;
         }
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
-            if (!_winCraftables.Contains(mouse))
+            if (!_gComponents.Contains(mouse) && !_winMain.Contains(mouse) && !_winMaking.Contains(mouse))
             {
                 GUIManager.CloseMainObject();
                 rv = true;
@@ -169,52 +184,120 @@ namespace RiverHollow.GUIComponents.Screens
         public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
-            if (_winCraftables.Contains(mouse))
-            {
-                foreach (GUIItemBox gIB in _arrDisplay)
-                {
-                    if (gIB != null && gIB.Contains(mouse))
-                    {
-                        Item chosenItem = gIB.BoxItem;
-                        if (chosenItem.ID != _iSelectedItemID)
-                        {
-                            foreach (GUIItem r in _liRequiredItems) { _winMain.RemoveControl(r); }
+            //if (_winCraftables.Contains(mouse))
+            //{
+            //    foreach (GUIItemBox gIB in _arrDisplay)
+            //    {
+            //        if (gIB != null && gIB.Contains(mouse))
+            //        {
+            //            Item chosenItem = gIB.BoxItem;
+            //            if (chosenItem.ID != _iSelectedItemID)
+            //            {
+            //                foreach (GUIItem r in _liRequiredItems) { _winMain.RemoveControl(r); }
 
-                            _liRequiredItems.Clear();
-                            _iSelectedItemID = chosenItem.ID;
-                            foreach (KeyValuePair<int, int> kvp in chosenItem.GetRequiredItems())
-                            {
-                                GUIItem newItem = new GUIItem(DataManager.GetItem(kvp.Key, kvp.Value));
-                                if(!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
-                                {
-                                    newItem.SetColor(Color.Red);
-                                }
-                                _liRequiredItems.Add(newItem);
-                            }
+            //                _liRequiredItems.Clear();
+            //                _iSelectedItemID = chosenItem.ID;
+            //                foreach (KeyValuePair<int, int> kvp in chosenItem.GetRequiredItems())
+            //                {
+            //                    GUIItem newItem = new GUIItem(DataManager.GetItem(kvp.Key, kvp.Value));
+            //                    if(!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
+            //                    {
+            //                        newItem.SetColor(Color.Red);
+            //                    }
+            //                    _liRequiredItems.Add(newItem);
+            //                }
 
-                            _gName.SetText(chosenItem.Name());
+            //                _gName.SetText(chosenItem.Name());
                             
-                            _gDescription.SetText(_gDescription.ParseText(chosenItem.Description(), _winMain.InnerWidth(), 5)[0]);
+            //                _gDescription.SetText(_gDescription.ParseText(chosenItem.Description(), _winMain.InnerWidth(), 5)[0]);
 
-                            ConfigureInfo();
-                        }
-                    }
-                }
-            }
-            else
-            {
-                foreach (GUIItem r in _liRequiredItems)
-                {
-                    r.ProcessHover(mouse);
-                }
-            }
+            //                ConfigureInfo();
+            //            }
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    foreach (GUIItem r in _liRequiredItems)
+            //    {
+            //        r.ProcessHover(mouse);
+            //    }
+            //}
 
             return rv;
         }
 
-        private void Finished()
+        private void BtnBuild()
         {
-            GUIManager.CloseMainObject();
+            Item craft = DataManager.CraftItem(_iSelectedItemID);
+            _objMachine?.AttemptToCraftChosenItem(craft);
+
+            if (_objMachine.CraftDaily)
+            {
+                for (int i = 0; i < _arrMaking.Length; i++)
+                {
+                    _arrMaking[i].SetItem(DataManager.CraftItem(_objMachine.CurrentlyMaking));
+                }
+            }
+
+            UpdateInfo(craft);
+        }
+        private void ShiftLeft()
+        {
+
+        }
+
+        private void ShiftRight()
+        {
+
+        }
+
+        private void UpdateInfo(Item chosenItem)
+        {
+            for (int i = 0; i < _arrRecipes.Length; i++)
+            {
+                _arrRecipes[i].Enable(InventoryManager.HasSufficientItems(_arrRecipes[i].BoxItem.GetRequiredItems()) && !_objMachine.MakingSomething());
+            }
+
+            for (int j = 0; j < _liRequiredItems.Count; j++)
+            {
+                _gComponents.RemoveControl(_liRequiredItems[j]);
+            }
+
+            _liRequiredItems.Clear();
+            _iSelectedItemID = chosenItem.ID;
+            foreach (KeyValuePair<int, int> kvp in chosenItem.GetRequiredItems())
+            {
+                GUIItemBox newItem = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
+                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
+                {
+                    newItem.SetColor(Color.Red);
+                }
+                _liRequiredItems.Add(newItem);
+            }
+
+            _gName.SetText(chosenItem.Name());
+            _gName.Position(_gComponents.Position());// AnchorToInnerSide(_winMain, SideEnum.TopLeft, ScaleIt(1));
+            _gName.ScaledMoveBy(0, 6);
+            _gName.AlignToObject(_gComponents, SideEnum.CenterX);
+
+            int totalReqWidth = (_liRequiredItems.Count * _liRequiredItems[0].Width) + (_liRequiredItems.Count - 1 * ScaleIt(2));
+            int firstPosition = (_gComponents.Width / 2) - (totalReqWidth / 2);
+            for (int i = 0; i < _liRequiredItems.Count; i++)
+            {
+                if (i == 0)
+                {
+                    _liRequiredItems[i].Position(_gComponents.Position());
+                    _liRequiredItems[i].MoveBy(firstPosition, ScaleIt(24));
+                }
+                else
+                {
+                    _liRequiredItems[i].AnchorAndAlignToObject(_liRequiredItems[i - 1], SideEnum.Right, SideEnum.Top, ScaleIt(2));
+                }
+                _gComponents.AddControl(_liRequiredItems[i]);
+            }
+
+            _btnBuild.Enable(InventoryManager.HasSufficientItems(chosenItem.GetRequiredItems()) && !_objMachine.MakingSomething());
         }
     }
 }

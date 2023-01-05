@@ -127,6 +127,7 @@ namespace RiverHollow.GUIComponents.Screens
                     if(_timer.Finished())
                     {
                         GUIManager.BeginFadeOut();
+                        PlayerManager.PlayerActor.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
                         GameManager.GoToHUDScreen();
                     }
                     break;

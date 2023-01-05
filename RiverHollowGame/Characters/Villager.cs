@@ -232,6 +232,7 @@ namespace RiverHollow.Characters
             {
                 rv = GetDialogEntry("Introduction");
                 RelationshipState = RelationShipStatusEnum.Friends;
+                _bHasTalked = true;
             }
             else if (!CheckTaskLog(ref rv))
             {
