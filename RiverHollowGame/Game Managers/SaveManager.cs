@@ -343,6 +343,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "Relationship")]
             public int relationShipStatus;
+
+            [XmlElement(ElementName = "Requests")]
+            public string requestString;
         }
         public struct CollectionData
         {

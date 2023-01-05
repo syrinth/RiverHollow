@@ -45,5 +45,6 @@
         public const float HAIR_DEPTH = 0.003f;
 
         public const int BUILDING_STOCK_SIZE = 3;
+        public const int MERCHANT_REQUEST_NUM = 3;
     }
 }

@@ -62,20 +62,16 @@ namespace RiverHollow.Game_Managers
 
         public static void IncrementMinutes()
         {
-            if (CurrentMin  > 59)
+            CurrentMin += Constants.CALENDAR_MINUTES_PER_SECOND;
+            if (CurrentMin > 59)
             {
                 CurrentMin = 0;
-                CurrentHour++;
-
-                if (!_bHasNightFallen && IsNight())
-                {
-                    _bHasNightFallen = true;
-                    MapManager.CheckSpirits();
-                }
             }
-            else
+
+            if (!_bHasNightFallen && IsNight())
             {
-                CurrentMin += Constants.CALENDAR_MINUTES_PER_SECOND;
+                _bHasNightFallen = true;
+                MapManager.CheckSpirits();
             }
         }
 

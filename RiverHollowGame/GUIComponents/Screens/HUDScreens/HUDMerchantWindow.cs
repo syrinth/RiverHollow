@@ -5,6 +5,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
+using RiverHollow.Utilities;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
@@ -34,9 +35,9 @@ namespace RiverHollow.GUIComponents.Screens
             _gMerchantWindow.AddControl(spr);
 
             GUIItemBox[] boxes = new GUIItemBox[3];
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < Constants.MERCHANT_REQUEST_NUM; i++)
             {
-                boxes[i] = new GUIItemBox(_merchant.ChosenRequests[i]);
+                boxes[i] = new GUIItemBox(DataManager.GetItem(_merchant.ChosenRequests[i]));
                 boxes[i].DrawNumber(false);
                 if (i == 0) { boxes[i].ScaledMoveBy(32, 20); }
                 else { boxes[i].AnchorAndAlignToObject(boxes[i - 1], SideEnum.Right, SideEnum.Top, GameManager.ScaleIt(5)); }

@@ -23,7 +23,7 @@ namespace RiverHollow.Characters
         MerchType Wants => DataManager.GetEnumByIDKey<MerchType>(ID, "Wants", DataType.Character);
 
         List<RequestItem> _liRequestItems;
-        public Item[] ChosenRequests;
+        public int[] ChosenRequests;
         public int _iShopID = -1;
         public int ShopID => _iShopID;
 
@@ -34,7 +34,7 @@ namespace RiverHollow.Characters
             _diRequiredObjectIDs = new Dictionary<int, int>();
 
             _liRequestItems = new List<RequestItem>();
-            ChosenRequests = new Item[3];
+            ChosenRequests = new int[3] { -1, -1, -1 };
 
             _bOnTheMap = false;
 
@@ -55,14 +55,38 @@ namespace RiverHollow.Characters
         {
             if (!_bOnTheMap)
             {
-                if (TownRequirementsMet() && HandleTravelTiming())
+                if (TownRequirementsMet())
                 {
-                    if (!_bArrivedOnce) { GameManager.MerchantQueue.Add(this); }
-                    else { GameManager.MerchantQueue.Insert(0, this); }
+                    if (ChosenRequests[0] == -1)
+                    {
+                        //When the Merchant is ready to come to town, determine requests
+                        List<RequestItem> copy = new List<RequestItem>(_liRequestItems);
+                        for (int i = 0; i < Constants.MERCHANT_REQUEST_NUM; i++)
+                        {
+                            int chosenValue = RHRandom.Instance().Next(0, copy.Count - 1);
+
+                            RequestItem request = copy[chosenValue];
+                            Item it = DataManager.GetItem(request.ID, request.Number);
+
+                            ChosenRequests[i] = request.ID;
+                            copy.RemoveAt(chosenValue);
+                        }
+                    }
+
+                    if (HandleTravelTiming())
+                    {
+                        if (!_bArrivedOnce) { GameManager.MerchantQueue.Add(this); }
+                        else { GameManager.MerchantQueue.Insert(0, this); }
+                    }
                 }
             }
             else
             {
+                for (int i = 0; i < Constants.MERCHANT_REQUEST_NUM; i++)
+                {
+                    ChosenRequests[i] = -1;
+                }
+
                 _bOnTheMap = false;
                 _iNextArrival = ArrivalPeriod;
                 CurrentMap?.RemoveCharacterImmediately(this);
@@ -80,19 +104,6 @@ namespace RiverHollow.Characters
 
             MoveToSpawn();
 
-            ChosenRequests = new Item[3];
-            List<RequestItem> copy = new List<RequestItem>(_liRequestItems);
-            for (int i = 0; i < 3; i++)
-            {
-                int chosenValue = RHRandom.Instance().Next(0, copy.Count - 1);
-
-                RequestItem request = copy[chosenValue];
-                Item it = DataManager.GetItem(request.ID, request.Number);
-
-                ChosenRequests[i] = it;
-                copy.RemoveAt(chosenValue);
-            }
-
             CanGiveGift = true;
         }
 
@@ -108,6 +119,7 @@ namespace RiverHollow.Characters
             {
                 rv = GetDialogEntry("Introduction");
                 RelationshipState = RelationShipStatusEnum.Friends;
+                _bHasTalked = true;
             }
             else
             {
@@ -142,9 +154,9 @@ namespace RiverHollow.Characters
             int offer = it.Value > 0 ? it.Value : 0;
 
             bool requested = false;
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < Constants.MERCHANT_REQUEST_NUM; i++)
             {
-                if(ChosenRequests[i].ID == it.ID)
+                if(ChosenRequests[i] == it.ID)
                 {
                     c = Color.Purple;
                     requested = true;
@@ -207,7 +219,8 @@ namespace RiverHollow.Characters
                 timeToNextArrival = _iNextArrival,
                 introduced = Introduced,
                 spokenKeys = _liSpokenKeys,
-                arrivedOnce = _bArrivedOnce
+                arrivedOnce = _bArrivedOnce,
+                requestString = string.Join("|", ChosenRequests)
             };
 
             return npcData;
@@ -217,6 +230,12 @@ namespace RiverHollow.Characters
             RelationshipState = (RelationShipStatusEnum)data.relationShipStatus;
             _iNextArrival = data.timeToNextArrival;
             _bArrivedOnce = data.arrivedOnce;
+
+            string[] split = Util.FindParams(data.requestString);
+            for(int i = 0; i < Constants.MERCHANT_REQUEST_NUM; i++)
+            {
+                ChosenRequests[i] = int.Parse(split[i]);
+            }
 
             if (_iNextArrival == 0)
             {

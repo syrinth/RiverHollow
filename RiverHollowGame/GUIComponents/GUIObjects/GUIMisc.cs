@@ -412,7 +412,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             _iBuildID = id;
 
-            Color textColor = Color.White;
+            Color textColor = Color.Black;
             if (!InventoryManager.HasSufficientItems(requiredToMake))
             {
                 textColor = Color.Red;
