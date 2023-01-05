@@ -30,6 +30,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _gFill = new GUIImage(new Rectangle(65, 33, 14, 14), Width - WidthEdges(), Height - HeightEdges(), DataManager.DIALOGUE_TEXTURE);
             _gFill.AnchorToInnerSide(this, SideEnum.TopLeft);
             _gText = new GUIText("", _font);
+            _gText.SetColor(Color.White);
 
             SetColor(c);
             _gFill.SetColor(c);

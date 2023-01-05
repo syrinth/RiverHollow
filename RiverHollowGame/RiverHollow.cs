@@ -307,6 +307,7 @@ namespace RiverHollow
             GameManager.ClearInn();
             SaveManager.Load(savefile);
             MapManager.PopulateMaps(false);
+            
 
             GoToHUDScreen();
             StartGame();
@@ -323,7 +324,7 @@ namespace RiverHollow
             //Places NPCs on the map
             foreach (Villager v in DataManager.DIVillagers.Values)
             {
-                v.JustMovedIn();
+                v.TryMoveIn();
 
                 if (v.SpawnOnTheMap)
                 {

@@ -793,18 +793,22 @@ namespace RiverHollow.Map_Handling
 
         public void Rollover()
         {
-            if (this != MapManager.TownMap && PlayerManager.TownObjectBuilt(BuildingID))
-            {
-                TheShop?.PlaceStock(false);
-            }
-
             for (int i = 0; i < _liPlacedWorldObjects.Count; i++) { _liPlacedWorldObjects[i].Rollover(); }
             for (int i = 0; i < _liResourceSpawns.Count; i++) { _liResourceSpawns[i].Rollover(); }
 
             _bSpawned = false;
 
+            StockShop();
             CheckSpirits();
             _liItems.Clear();
+        }
+
+        public void StockShop()
+        {
+            if (this != MapManager.TownMap && PlayerManager.TownObjectBuilt(BuildingID))
+            {
+                TheShop?.PlaceStock(false);
+            }
         }
 
         /// <summary>

@@ -192,7 +192,8 @@ namespace RiverHollow.Characters
                     goto default;
                 case VillagerSpawnStatus.VisitInn:
                 case VillagerSpawnStatus.WaitAtInn:
-                    if (GameManager.GetInnPosition(this) == -1) {
+                    if (!TryMoveIn() && GameManager.GetInnPosition(this) == -1)
+                    {
                         if (!GameManager.RoomAtTheInn())
                         {
                             _iNextArrival = 1;
@@ -203,6 +204,7 @@ namespace RiverHollow.Characters
                             GameManager.AddToInnQueue(this);
                         }
                     }
+                    
                     goto default;
                 default:
                     ClearPath();
@@ -277,23 +279,18 @@ namespace RiverHollow.Characters
         }
 
         /// <summary>
-        /// Quick call to see if the NPC's home is built. Returns false if they have no assigned home.
+        /// Quick call to see if the NPC's home is built.
         /// </summary>
-        public bool JustMovedIn()
+        public bool TryMoveIn()
         {
-            switch (_eSpawnStatus)
+            bool rv = false;
+            if (TownRequirementsMet() && HouseID != -1 && PlayerManager.TownObjectBuilt(HouseID))
             {
-                case VillagerSpawnStatus.VisitInn:
-                case VillagerSpawnStatus.WaitAtInn:
-                    if (TownRequirementsMet() && HouseID != -1 && PlayerManager.TownObjectBuilt(HouseID))
-                    {
-                        _eSpawnStatus = VillagerSpawnStatus.HasHome;
-                        return true;
-                    }
-                    break;
+                rv = true;
+                _eSpawnStatus = VillagerSpawnStatus.HasHome;
             }
 
-            return false;
+            return rv;
         }
 
 

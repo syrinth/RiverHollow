@@ -164,6 +164,7 @@ namespace RiverHollow.Game_Managers
             foreach (RHMap map in Maps.Values)
             {
                 map.PopulateMap(gameStart);
+                map.StockShop();
             }
 
             if (gameStart)
@@ -213,7 +214,6 @@ namespace RiverHollow.Game_Managers
                 SoundManager.ChangeMap();
                 PlayerManager.CurrentMap = _newMapInfo.NextMap.Name;
                 PlayerManager.PlayerActor.Position = _newMapInfo.PlayerPosition;
-                CurrentMap.EnterMap();
 
                 if (_newMapInfo.EnteredBuilding != null)
                 {
@@ -225,6 +225,7 @@ namespace RiverHollow.Game_Managers
                 {
                     GameManager.CurrentBuilding = null;
                 }
+                CurrentMap.EnterMap();
 
                 _newMapInfo = default;
 

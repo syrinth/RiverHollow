@@ -101,8 +101,6 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         foreach (Villager v in DataManager.DIVillagers.Values)
                         {
-                            v.JustMovedIn();
-
                             if (v.LivesInTown)
                             {
                                 Villager copy = new Villager(v.ID, DataManager.NPCData[v.ID]);

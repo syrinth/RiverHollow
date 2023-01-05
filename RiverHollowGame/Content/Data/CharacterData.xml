@@ -31,7 +31,7 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:39][Collection:5|6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:65][TotalMoneyEarnedReq:5000][ShopData:8][Key:Eric]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:8][Collection:5|6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:65][TotalMoneyEarnedReq:5000][ShopData:8][Key:Eric]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -99,7 +99,7 @@
     </Item>
     <Item>
       <Key>24</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:28][Collection:7|167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Penelope]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:8][Collection:7|167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Penelope]</Value>
     </Item>
     <Item>
       <Key>25</Key>

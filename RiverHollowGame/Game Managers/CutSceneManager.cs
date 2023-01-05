@@ -655,7 +655,7 @@ namespace RiverHollow.Game_Managers
             CutsceneManager.Playing = false;
             PlayerManager.PlayerActor.SetMoveTo(Vector2.Zero);
             MapManager.Maps.Remove(_cutsceneMap.Name);
-            MapManager.FadeToNewMap(_originalMap, _vOriginalPlayerPos);
+            MapManager.FadeToNewMap(_originalMap, _vOriginalPlayerPos, GameManager.CurrentBuilding);
             GUIManager.RemoveSkipCutsceneButton();
 
             _triggerTask?.EndTask();
