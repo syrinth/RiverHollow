@@ -29,6 +29,7 @@ namespace RiverHollow.GUIComponents.Screens
         private Machine _objMachine;
 
         private int _iSelectedItemID = -1;
+        private int _iRecipeListStart = 0;
 
         public HUDCraftingDisplay(Machine m)
         {
@@ -77,7 +78,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _arrRecipes[i] = newBox;
             }
 
-            _gSelection = new GUIImage(new Rectangle(260, 0, 20, 20), DataManager.DIALOGUE_TEXTURE);
+            _gSelection = new GUIImage(new Rectangle(163, 20, 20, 20), DataManager.HUD_COMPONENTS);
             _gSelection.CenterOnObject(_arrRecipes[0]);
             _winMain.AddControl(_gSelection);
 
@@ -103,10 +104,10 @@ namespace RiverHollow.GUIComponents.Screens
             // Making Window
             _winMaking = new GUIWindow(GUIWindow.Window_1, 10, 10);
             _arrMaking = new GUIItemBox[_objMachine.Capacity];
-            for (int i = 0; i < _arrMaking.Length; i++)
+            for (int i = 0; i < _objMachine.Capacity; i++)
             {
-                if (_objMachine.CurrentlyMaking == -1) { _arrMaking[i] = new GUIItemBox(); }
-                else { _arrMaking[i] = new GUIItemBox(DataManager.CraftItem(_objMachine.CurrentlyMaking)); }
+                if (_objMachine.CraftingSlots[i].ID == -1) { _arrMaking[i] = new GUIItemBox(); }
+                else { _arrMaking[i] = new GUIItemBox(DataManager.CraftItem(_objMachine.CraftingSlots[i].ID)); }
 
                 if (i == 0) { _arrMaking[i].AnchorToInnerSide(_winMaking, SideEnum.TopLeft, ScaleIt(1)); }
                 else { _arrMaking[i].AnchorAndAlignToObject(_arrMaking[i - 1], SideEnum.Right, SideEnum.Top, ScaleIt(2)); }
@@ -130,12 +131,15 @@ namespace RiverHollow.GUIComponents.Screens
 
             CenterOnScreen();
 
+            bool overflow = recipes.Count > Constants.MAX_RECIPE_DISPLAY;
             _btnLeft = new GUIButton(new Rectangle(163, 43, 10, 12), DataManager.HUD_COMPONENTS, ShiftLeft);
             _btnLeft.AnchorAndAlignToObject(_winMain, SideEnum.Left, SideEnum.CenterY);
+            _btnLeft.Enable(false);
             AddControl(_btnLeft);
 
             _btnRight = new GUIButton(new Rectangle(173, 43, 10, 12), DataManager.HUD_COMPONENTS, ShiftRight);
             _btnRight.AnchorAndAlignToObject(_winMain, SideEnum.Right, SideEnum.CenterY);
+            _btnRight.Enable(overflow);
             AddControl(_btnRight);
         }
 
@@ -151,7 +155,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     if (_arrRecipes[i].Contains(mouse))
                     {
-                        if (_arrRecipes[i].BoxItem.ID != _iSelectedItemID)
+                        if (_arrRecipes[i].BoxItem != null && _arrRecipes[i].BoxItem.ID != _iSelectedItemID)
                         {
                             _gSelection.CenterOnObject(_arrRecipes[i]);
                             UpdateInfo(_arrRecipes[i].BoxItem);
@@ -165,6 +169,10 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 rv = true;
                 _btnBuild.ProcessLeftButtonClick(mouse);
+            }
+            else if (_btnLeft.ProcessLeftButtonClick(mouse) || _btnRight.ProcessLeftButtonClick(mouse))
+            {
+                rv = true;
             }
             else if (_winMaking.Contains(mouse)) { rv = true; }
 
@@ -236,7 +244,11 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 for (int i = 0; i < _arrMaking.Length; i++)
                 {
-                    _arrMaking[i].SetItem(DataManager.CraftItem(_objMachine.CurrentlyMaking));
+                    if (_arrMaking[i].BoxItem == null)
+                    {
+                        _arrMaking[i].SetItem(DataManager.CraftItem(_objMachine.CraftingSlots[i].ID));
+                        break;
+                    }
                 }
             }
 
@@ -244,19 +256,33 @@ namespace RiverHollow.GUIComponents.Screens
         }
         private void ShiftLeft()
         {
+            _iRecipeListStart -= Constants.MAX_RECIPE_DISPLAY;
+            _btnLeft.Enable(_iRecipeListStart > 0);
+            _btnRight.Enable(true);
 
+            _gSelection.CenterOnObject(_arrRecipes[0]);
+            UpdateInfo(DataManager.CraftItem(_objMachine.CraftingList[_iRecipeListStart]));
         }
 
         private void ShiftRight()
         {
+            _iRecipeListStart += Constants.MAX_RECIPE_DISPLAY;
+            _btnRight.Enable(_iRecipeListStart + Constants.MAX_RECIPE_DISPLAY <= _arrRecipes.Length);
+            _btnLeft.Enable(true);
 
+            _gSelection.CenterOnObject(_arrRecipes[0]);
+            UpdateInfo(DataManager.CraftItem(_objMachine.CraftingList[_iRecipeListStart]));
         }
 
         private void UpdateInfo(Item chosenItem)
         {
             for (int i = 0; i < _arrRecipes.Length; i++)
             {
-                _arrRecipes[i].Enable(InventoryManager.HasSufficientItems(_arrRecipes[i].BoxItem.GetRequiredItems()) && !_objMachine.MakingSomething());
+                int index = i + _iRecipeListStart;
+                if (i + _iRecipeListStart < _objMachine.CraftingList.Count) { _arrRecipes[i].SetItem(DataManager.CraftItem(_objMachine.CraftingList[index])); }
+                else { _arrRecipes[i].SetItem(null); }
+
+                _arrRecipes[i].Enable(_arrRecipes[i].BoxItem != null && InventoryManager.HasSufficientItems(_arrRecipes[i].BoxItem.GetRequiredItems()) && !_objMachine.CapacityFull());
             }
 
             for (int j = 0; j < _liRequiredItems.Count; j++)
@@ -269,6 +295,7 @@ namespace RiverHollow.GUIComponents.Screens
             foreach (KeyValuePair<int, int> kvp in chosenItem.GetRequiredItems())
             {
                 GUIItemBox newItem = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
+                newItem.CompareNumToPlayer();
                 if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
                 {
                     newItem.SetColor(Color.Red);
@@ -297,7 +324,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _gComponents.AddControl(_liRequiredItems[i]);
             }
 
-            _btnBuild.Enable(InventoryManager.HasSufficientItems(chosenItem.GetRequiredItems()) && !_objMachine.MakingSomething());
+            _btnBuild.Enable(InventoryManager.HasSufficientItems(chosenItem.GetRequiredItems()) && !_objMachine.CapacityFull());
         }
     }
 }

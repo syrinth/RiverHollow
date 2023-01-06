@@ -306,6 +306,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         GUIImage _gImg;
         GUIText _gText;
         public bool DrawNumber = true;
+        public bool CompareNumToPlayer = false;
 
         public GUIItem(Item it)
         {
@@ -328,10 +329,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public override void Update(GameTime gTime)
         {
-            _gText?.SetText(ItemObject.Number.ToString());
-
-            _gText.AlignToObject(_gImg, SideEnum.Right);
-            _gText.AlignToObject(_gImg, SideEnum.Bottom);
+            if (!CompareNumToPlayer)
+            {
+                _gText?.SetText(ItemObject.Number.ToString());
+                _gText.AlignToObject(_gImg, SideEnum.Right);
+                _gText.AlignToObject(_gImg, SideEnum.Bottom);
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -360,6 +363,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public override void SetColor(Color c)
         {
             _gText.SetColor(c);
+        }
+
+        public void SetCompareNumToPlayer()
+        {
+            CompareNumToPlayer = true;
+
+            int playerNum = InventoryManager.GetNumberInInventory(ItemObject.ID);
+            _gText.SetText(string.Format("{0}/{1}", playerNum, ItemObject.Number));
+            _gText.AlignToObject(_gImg, SideEnum.Right);
+            _gText.AlignToObject(_gImg, SideEnum.Bottom);
         }
     }
 

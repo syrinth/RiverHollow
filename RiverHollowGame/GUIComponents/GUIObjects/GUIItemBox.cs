@@ -85,6 +85,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _guiItem.DrawNumber = val;
         }
 
+        public void CompareNumToPlayer()
+        {
+            _guiItem.SetCompareNumToPlayer();
+        }
+
         public void SetAlpha(float val)
         {
             Alpha(val);

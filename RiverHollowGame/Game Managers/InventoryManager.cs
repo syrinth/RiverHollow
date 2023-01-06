@@ -146,6 +146,35 @@ namespace RiverHollow.Game_Managers
         /// <summary>
         /// Helper to redirect to the Players Inventory
         /// </summary>
+        public static int GetNumberInInventory(int itemID)
+        {
+            int rv = 0;
+
+            int maxRows = 0;
+            int maxColumns = 0;
+            GetDimensions(PlayerInventory, ref maxRows, ref maxColumns);
+
+            if (itemID != -1)
+            {
+                for (int i = 0; i < maxRows; i++)
+                {
+                    for (int j = 0; j < maxColumns; j++)
+                    {
+                        Item testItem = PlayerInventory[i, j];
+                        if (testItem != null && testItem.ID == itemID)
+                        {
+                            rv += testItem.Number;
+                        }
+                    }
+                }
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Helper to redirect to the Players Inventory
+        /// </summary>
         public static bool HasItemInPlayerInventory(int itemID, int x)
         {
             return HasItemInInventory(itemID, x, PlayerInventory);
@@ -159,7 +188,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="number">The number to find</param>
         /// <param name="inventory">Inventory to search</param>
         /// <returns></returns>
-        public static bool HasItemInInventory(int itemID, int number, Item [,] inventory)
+        private static bool HasItemInInventory(int itemID, int number, Item [,] inventory)
         {
             bool rv = false;
 

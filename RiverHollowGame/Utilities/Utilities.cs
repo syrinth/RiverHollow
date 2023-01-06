@@ -501,6 +501,25 @@ namespace RiverHollow.Utilities
         }
         #endregion
 
+        #region StringParseHelpers
+        public static string SaveInt(int val)
+        {
+            return val > -1 ? val.ToString() : Constants.STRING_NULL;
+        }
+
+        public static int LoadInt(string val)
+        {
+            int rv = -1;
+
+            if (!val.Equals(Constants.STRING_NULL))
+            {
+                rv = int.Parse(val);
+            }
+
+            return rv;
+        }
+        #endregion
+
         public static double GetDistance(Point pOne, Point pTwo) { return GetDistance(pOne.ToVector2(), pTwo.ToVector2()); }
         public static double GetDistance(Vector2 vOne, Vector2 vTwo)
         {

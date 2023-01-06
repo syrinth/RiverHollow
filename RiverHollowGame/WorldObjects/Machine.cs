@@ -6,9 +6,10 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Utilities.Enums;
 using RiverHollow.Buildings;
+
+using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.WorldObjects
 {
@@ -16,17 +17,14 @@ namespace RiverHollow.WorldObjects
     {
         readonly string _sEffectWorking = "";
 
-        public int CurrentlyMaking { get; private set; } = -1;
+        public Recipe[] CraftingSlots { get; private set; }
         public bool CraftDaily => DataManager.GetBoolByIDKey(ID, "Daily", DataType.WorldObject);
 
-        protected int _iDaysLeft = 0;
         protected int _iWorkingFrames = 2;
         protected float _fFrameSpeed = 0.3f;
 
         public int Capacity => DataManager.GetIntByIDKey(ID, "Capacity", DataType.WorldObject, 1);
         public List<int> CraftingList { get; }
-
-        public bool MakingSomething() { return CurrentlyMaking != -1; }
 
         public Machine(int id, Dictionary<string, string> stringData) : base(id)
         {
@@ -51,6 +49,16 @@ namespace RiverHollow.WorldObjects
             }
 
             LoadDictionaryData(stringData);
+
+            CraftingSlots = new Recipe[Capacity];
+            for (int i = 0; i < Capacity; i++)
+            {
+                CraftingSlots[i] = new Recipe
+                {
+                    ID = -1,
+                    CraftTime = 0
+                };
+            }
         }
 
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\texMachines")
@@ -66,7 +74,7 @@ namespace RiverHollow.WorldObjects
 
         public override void Update(GameTime gTime)
         {
-            if (MakingSomething())       //Crafting Handling
+            if (MakingSomething())
             {
                 _sprite.Update(gTime);
             }
@@ -80,16 +88,19 @@ namespace RiverHollow.WorldObjects
         {
             if (MakingSomething())
             {
-                _iDaysLeft--;
-                if (_iDaysLeft == 0)
+                for (int i = 0; i < Capacity; i++)
                 {
-                    if(CurrentMap.BuildingID != -1)
+                    CraftingSlots[i].CraftTime--;
+                    if (CraftingSlots[i].CraftTime == 0)
                     {
-                        Building b = PlayerManager.GetBuildingByID(CurrentMap.BuildingID);
-                        b.AddToStock(DataManager.CraftItem(CurrentlyMaking));
-                    }
+                        if (CurrentMap.BuildingID != -1)
+                        {
+                            Building b = PlayerManager.GetBuildingByID(CurrentMap.BuildingID);
+                            b.AddToStock(DataManager.CraftItem(CraftingSlots[i].ID));
+                        }
 
-                    CurrentlyMaking = -1;
+                        CraftingSlots[i].ID = -1;
+                    }
                 }
             }
         }
@@ -102,6 +113,36 @@ namespace RiverHollow.WorldObjects
             GUIManager.OpenMainObject(new HUDCraftingDisplay(this));
 
             return true;
+        }
+
+        public bool MakingSomething()
+        {
+            bool rv = false;
+            for (int i = 0; i < Capacity; i++)
+            {
+                if (CraftingSlots[i].ID != -1)
+                {
+                    rv = true;
+                    break;
+                }
+            }
+
+            return rv;
+        }
+
+        public bool CapacityFull()
+        {
+            bool rv = true;
+            for (int i = 0; i < Capacity; i++)
+            {
+                if (CraftingSlots[i].ID == -1)
+                {
+                    rv = false;
+                    break;
+                }
+            }
+
+            return rv;
         }
 
 
@@ -125,8 +166,15 @@ namespace RiverHollow.WorldObjects
                 }
                 else
                 {
-                    CurrentlyMaking = itemToCraft.ID;
-                    _iDaysLeft = DataManager.GetIntByIDKey(CurrentlyMaking, "CraftTime", DataType.Item, 1);
+                    for (int i = 0; i < Capacity; i++)
+                    {
+                        if (CraftingSlots[i].ID == -1)
+                        {
+                            CraftingSlots[i].ID = itemToCraft.ID;
+                            CraftingSlots[i].CraftTime = DataManager.GetIntByIDKey(CraftingSlots[i].ID, "CraftTime", DataType.Item, 1);
+                            break;
+                        }
+                    }
                 }
                 //_sprite.PlayAnimation(CombatAnimationEnum.PlayAnimation);
 
@@ -150,27 +198,14 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
-        /// <summary>
-        /// Not currently used
-        /// </summary>
-        //private void CheckFinishedCrafting()
-        //{
-        //    if (_iCurrentlyMaking != -1 && _dProcessedTime >= CraftingDictionary[_iCurrentlyMaking])
-        //    {
-        //        InventoryManager.AddToInventory(_iCurrentlyMaking);
-        //        SoundManager.StopEffect(this);
-        //        SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition, this);
-        //        _dProcessedTime = 0;
-        //        _iCurrentlyMaking = -1;
-        //        _sprite.PlayAnimation(CombatAnimationEnum.ObjectIdle);
-        //    }
-        //}
-
         public override WorldObjectData SaveData()
         {
             WorldObjectData data = base.SaveData();
-            data.stringData += _iDaysLeft + "|";
-            data.stringData += CurrentlyMaking;
+            for (int i = 0; i < Capacity; i++)
+            {
+                data.stringData += Util.SaveInt(CraftingSlots[i].ID) + "-" + CraftingSlots[i].CraftTime + "|";
+            }
+            data.stringData =  data.stringData.TrimEnd('|');
 
             return data;
         }
@@ -179,8 +214,20 @@ namespace RiverHollow.WorldObjects
             base.LoadData(data);
             string[] strData = Util.FindParams(data.stringData);
 
-            _iDaysLeft = int.Parse(strData[0]);
-            CurrentlyMaking = int.Parse(strData[1]);
+            for (int i = 0; i < strData.Length; i++)
+            {
+                if (i >= Capacity) { break; } 
+
+                string[] split = Util.FindArguments(strData[i]);
+                CraftingSlots[i].ID = Util.LoadInt(split[0]);
+                CraftingSlots[i].CraftTime = int.Parse(split[1]);
+            }
+        }
+
+        public struct Recipe
+        {
+            public int ID;
+            public int CraftTime;
         }
     }
 }
