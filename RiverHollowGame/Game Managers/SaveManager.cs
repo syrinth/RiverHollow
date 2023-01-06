@@ -83,6 +83,9 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "MerchantData")]
             public List<MerchantData> MerchantData;
 
+            [XmlArray(ElementName = "MerchantQueue")]
+            public List<int> MerchantQueue;
+
             [XmlArray(ElementName = "ShopIData")]
             public List<ShopData> ShopData;
 
@@ -505,6 +508,7 @@ namespace RiverHollow.Game_Managers
                 AvailableMissions = new List<MissionData>(),
                 VillagerData = new List<VillagerData>(),
                 MerchantData = new List<MerchantData>(),
+                MerchantQueue = new List<int>(),
                 ShopData = new List<ShopData>(),
                 CSData = new List<CutsceneData>(),
                 TheMailbox = PlayerManager.PlayerMailbox.SaveData(),
@@ -538,6 +542,11 @@ namespace RiverHollow.Game_Managers
             foreach (Merchant m in DataManager.DIMerchants.Values)
             {
                 data.MerchantData.Add(m.SaveData());
+            }
+
+            foreach(Merchant m in GameManager.MerchantQueue)
+            {
+                data.MerchantQueue.Add(m.ID);
             }
 
             foreach(Shop s in GameManager.DIShops.Values)
@@ -692,6 +701,13 @@ namespace RiverHollow.Game_Managers
                 Merchant target = DataManager.DIMerchants[n.npcID];
                 target.LoadData(n);
             }
+
+            for (int i = 0; i < dataToLoad.MerchantQueue.Count; i++)
+            {
+                GameManager.MerchantQueue.Add(DataManager.DIMerchants[dataToLoad.MerchantQueue[i]]);
+            }
+
+            GameManager.MoveMerchants();
 
             CutsceneManager.LoadCutscenes(dataToLoad.CSData);
 

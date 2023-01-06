@@ -237,11 +237,6 @@ namespace RiverHollow.Characters
                 ChosenRequests[i] = int.Parse(split[i]);
             }
 
-            if (_iNextArrival == 0)
-            {
-                ArriveInTown();
-            }
-
             foreach (string s in data.spokenKeys)
             {
                 _diDialogue[s].Spoken(this);

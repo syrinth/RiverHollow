@@ -146,7 +146,7 @@ namespace RiverHollow.Game_Managers
             return new Vector2(ScaleIt((int)val.X), ScaleIt((int)val.Y));
         }
 
-        #region Machine Handling
+        #region Special Handling
         public static void AddMachine(Machine m, string mapName)
         {
             _liMachines.Add(m);
@@ -161,6 +161,16 @@ namespace RiverHollow.Game_Managers
             foreach (Machine m in _liMachines)
             {
                 m.Rollover();
+            }
+        }
+
+        public static void MoveMerchants()
+        {
+            if (MerchantQueue.Count > 0)
+            {
+                Merchant chosenMerchant = MerchantQueue[0];
+                chosenMerchant.ArriveInTown();
+                MerchantQueue.Remove(chosenMerchant);
             }
         }
         #endregion
