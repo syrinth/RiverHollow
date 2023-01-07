@@ -75,13 +75,10 @@ namespace RiverHollow.Characters
             _diRequiredObjectIDs = new Dictionary<int, int>();
             _diCompleteSchedule = new Dictionary<string, List<Dictionary<string, string>>>();
 
-            if (stringData.ContainsKey("AtInn"))
+            if (!string.IsNullOrEmpty(StartMap))
             {
-                _eSpawnStatus = VillagerSpawnStatus.WaitAtInn;
-                GameManager.AddToInnQueue(this);
+                _eSpawnStatus = VillagerSpawnStatus.NonTownMap;
             }
-            else if (stringData.ContainsKey("InTown")) { _eSpawnStatus = VillagerSpawnStatus.HasHome; }
-            else if (!string.IsNullOrEmpty(StartMap)) { _eSpawnStatus = VillagerSpawnStatus.NonTownMap; }
 
             CombatVersion = new ClassedCombatant();
             //CombatVersion.SetName(Name);
@@ -184,26 +181,15 @@ namespace RiverHollow.Characters
                     CurrentMap?.RemoveActor(this);
                     CurrentMapName = string.Empty;
                     _iNextArrival = ArrivalPeriod;
-                    GameManager.RemoveFromInnQueue(this);
                     break;
+                case VillagerSpawnStatus.SendingToInn:
+                    SendToTown();
+                    goto default;
                 case VillagerSpawnStatus.HasHome:
-                    GameManager.RemoveFromInnQueue(this);
                     Income = CalculateIncome();
                     goto default;
                 case VillagerSpawnStatus.VisitInn:
                 case VillagerSpawnStatus.WaitAtInn:
-                    if (!TryMoveIn() && GameManager.GetInnPosition(this) == -1)
-                    {
-                        if (!GameManager.RoomAtTheInn())
-                        {
-                            _iNextArrival = 1;
-                            _eSpawnStatus = VillagerSpawnStatus.OffMap;
-                        }
-                        else
-                        {
-                            GameManager.AddToInnQueue(this);
-                        }
-                    }
                     
                     goto default;
                 default:
@@ -262,7 +248,6 @@ namespace RiverHollow.Characters
             if (_eSpawnStatus == VillagerSpawnStatus.SendingToInn)
             {
                 _eSpawnStatus = VillagerSpawnStatus.WaitAtInn;
-                GameManager.AddToInnQueue(this);
                 MoveToSpawn();
             }
         }
@@ -319,6 +304,7 @@ namespace RiverHollow.Characters
                         return "mapInn";
                     case VillagerSpawnStatus.HasHome:
                         return PlayerManager.GetBuildingByID(HouseID)?.BuildingMapName;
+                    case VillagerSpawnStatus.SendingToInn:
                     case VillagerSpawnStatus.NonTownMap:
                         return StartMap;
                 }
@@ -353,17 +339,29 @@ namespace RiverHollow.Characters
                     {
                         case VillagerSpawnStatus.VisitInn:
                         case VillagerSpawnStatus.WaitAtInn:
-                            strSpawn = "NPC_Wait_" + GameManager.GetInnPosition(this);
+                            Vector2 position = map.DictionaryCharacterLayer["InnFloor"];
+                            List<RHTile> tiles = map.GetTilesFromRectangleExcludeEdgePoints(new Rectangle((int)position.X, (int)position.Y, 8 * Constants.TILE_SIZE, 6 * Constants.TILE_SIZE));
+                            do
+                            {
+                                RHTile tile = tiles[RHRandom.Instance().Next(tiles.Count)];
+                                if (tile.TileIsPassable() && !map.TileContainsActor(tile))
+                                {
+                                    Position = tile.Position;
+                                    break;
+                                }
+                                else { tiles.Remove(tile); }
+
+                            } while (tiles.Count > 0);
                             break;
                         case VillagerSpawnStatus.HasHome:
                         case VillagerSpawnStatus.NonTownMap:
-                            strSpawn = "NPC_" + ID.ToString();
+                            Position = Util.SnapToGrid(map.GetCharacterSpawn("NPC_" + ID.ToString()));
                             break;
 
                     }
                 }
 
-                Position = Util.SnapToGrid(map.GetCharacterSpawn(strSpawn));
+                
                 map.AddCharacterImmediately(this);
             }
         }
@@ -609,7 +607,6 @@ namespace RiverHollow.Characters
                 relationShipStatus = (int)RelationshipState,
                 canGiveGift = CanGiveGift,
                 spokenKeys = _liSpokenKeys,
-                innPosition = GameManager.GetInnPosition(this),
             };
             
             if (CombatVersion!= null && CombatVersion.CharacterClass != null) { npcData.classedData = CombatVersion.SaveClassedCharData(); }
@@ -618,7 +615,6 @@ namespace RiverHollow.Characters
         }
         public void LoadData(VillagerData data)
         {
-            GameManager.AssignToPosition(this, data.innPosition);
             _eSpawnStatus = (VillagerSpawnStatus)data.spawnStatus;
             _iNextArrival = data.nextArrival;
             FriendshipPoints = data.friendshipPoints;

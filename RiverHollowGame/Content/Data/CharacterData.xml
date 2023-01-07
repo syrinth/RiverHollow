@@ -63,11 +63,11 @@
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:0][ArrivalPeriod:0][TaxValue:5][Key:June]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:0][TaxValue:5][Key:June]</Value>
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:39][Collection:7|188][Idle:0-0-1-0-T][Walk:64-0-8-.11-F][AtInn][ShopData:2][Key:Kyle]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:39][Collection:7|188][Idle:0-0-1-0-T][Walk:64-0-8-.11-F][ShopData:2][Key:Kyle]</Value>
     </Item>
     <Item>
       <Key>17</Key>
@@ -83,7 +83,7 @@
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:28][Collection:7|167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Mark][InTown]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:28][Collection:7|167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Mark]</Value>
     </Item>
     <Item>
       <Key>21</Key>

@@ -1012,7 +1012,7 @@ namespace RiverHollow.Map_Handling
             return rv;
         }
 
-        private bool TileContainsActor(RHTile t, bool checkPlayer = true)
+        public bool TileContainsActor(RHTile t, bool checkPlayer = true)
         {
             bool rv = false;
 

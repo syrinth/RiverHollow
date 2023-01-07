@@ -3,6 +3,7 @@ using RiverHollow.Characters;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Map_Handling;
 using RiverHollow.Misc;
+using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -312,9 +313,6 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "SpokenKeys")]
             public List<string> spokenKeys;
-
-            [XmlElement(ElementName = "InnPosition")]
-            public int innPosition;
         }
         public struct ChildData
         {

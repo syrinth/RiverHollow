@@ -298,13 +298,12 @@ namespace RiverHollow
         }
 
         /// <summary>
-        /// Reads data fromt he indicated save file and loads the info to
+        /// Reads data from the indicated save file and loads the info to
         /// already previously loaded objects.
         /// </summary>
         /// <param name="savefile"></param>
         public static void LoadGame(string savefile)
         {
-            GameManager.ClearInn();
             SaveManager.Load(savefile);
             
             MapManager.PopulateMaps(false);
@@ -345,16 +344,9 @@ namespace RiverHollow
             TaskManager.Rollover();
             PlayerManager.Rollover();
 
-            List<Villager> innguests = GameManager.GetInnGuests();
-            foreach (Villager n in innguests)
+            foreach (Villager n in DataManager.DIVillagers.Values)
             {
                 n.RollOver();
-            }
-            foreach (Villager n in DataManager.DIVillagers.Values) {
-                if (!innguests.Contains(n))
-                {
-                    n.RollOver();
-                }
             }
             foreach (Merchant m in DataManager.DIMerchants.Values) {
                 if (PlayerManager.GetNumberTownObjects(int.Parse(DataManager.Config[15]["ObjectID"])) > 0)
