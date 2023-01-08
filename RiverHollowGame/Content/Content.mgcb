@@ -4044,3 +4044,13 @@
 /processor:TiledMapProcessor
 /build:Maps/Forest/mapForest_16.tmx
 
+#begin Maps/Misc/mapCave_Small.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapCave_Small.tmx
+
+#begin Maps/Misc/mapFoothills_Small.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapFoothills_Small.tmx
+
