@@ -7,7 +7,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 {
     class QuantityWindow : GUIMainObject
     {
-        int MAX_VALUE => (GameManager.CurrentItem != null ? PlayerManager.Money / GameManager.CurrentItem.Value : 0);
+        int MAX_VALUE => (GameManager.CurrentItem != null ? PlayerManager.Money / GameManager.CurrentItem.BuyPrice : 0);
         int _iNum;
         GUIText _gText;
         GUIButton _btnUp;
@@ -20,19 +20,19 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             _iNum = GameManager.CurrentItem.Number;
 
-            _btnUp = new GUIButton(new Rectangle(128, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Increment);
-            _btnUp.Position(Position());
-            _btnUp.ScaledMoveBy(8, 7);
-            AddControl(_btnUp);
+            _btnDown = new GUIButton(new Rectangle(128, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Decrement);
+            _btnDown.Position(Position());
+            _btnDown.ScaledMoveBy(8, 7);
+            AddControl(_btnDown);
 
             _gText = new GUIText(_iNum.ToString("000"));
-            _gText.AnchorAndAlignToObject(_btnUp, SideEnum.Right, SideEnum.CenterY, GameManager.ScaleIt(1));
+            _gText.AnchorAndAlignToObject(_btnDown, SideEnum.Right, SideEnum.CenterY, GameManager.ScaleIt(1));
             AddControl(_gText);
 
-            _btnDown = new GUIButton(new Rectangle(137, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Decrement);
-            _btnDown.Position(Position());
-            _btnDown.ScaledMoveBy(29, 7);
-            AddControl(_btnDown);
+            _btnUp = new GUIButton(new Rectangle(137, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Increment);
+            _btnUp.Position(Position());
+            _btnUp.ScaledMoveBy(29, 7);
+            AddControl(_btnUp);
 
             _btnOk = new GUIButton(new Rectangle(130, 55, 11, 9), DataManager.DIALOGUE_TEXTURE, ProceedToPurchase);
             _btnOk.Position(Position());
