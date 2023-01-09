@@ -15,7 +15,7 @@ namespace RiverHollow.Misc
         public int ShopkeeperID { get; private set; }
         int _iShopID;
         int _iShopBuildingID = -1;
-        string _sRandomIndices = string.Empty;
+        public string RandomIndices { get; private set; } = string.Empty;
         List<ShopItemSpot> _liShopItemSpots;
         public IList<ShopItemSpot> ItemSpots => _liShopItemSpots.AsReadOnly();
         List<Merchandise> _liMerchandise;
@@ -94,11 +94,11 @@ namespace RiverHollow.Misc
 
         public void ClearRandom()
         {
-            _sRandomIndices = string.Empty;
+            RandomIndices = string.Empty;
         }
         public void Randomize()
         {
-            if (string.IsNullOrEmpty(_sRandomIndices))
+            if (string.IsNullOrEmpty(RandomIndices))
             {
                 int totalMerch = _liMerchandise.Count;
 
@@ -108,11 +108,11 @@ namespace RiverHollow.Misc
                 for (int i = 0; i < _liShopItemSpots.Count && i < totalMerch; i++)
                 {
                     int index = RHRandom.Instance().Next(indices.Count);
-                    _sRandomIndices += indices[index] + "|";
+                    RandomIndices += indices[index] + "|";
                     indices.RemoveAt(index);
                 }
 
-                _sRandomIndices = _sRandomIndices.Remove(_sRandomIndices.Length - 1);
+                RandomIndices = RandomIndices.Remove(RandomIndices.Length - 1);
             }
         }
 
@@ -120,12 +120,12 @@ namespace RiverHollow.Misc
         {
             _liShopItemSpots.ForEach(x => x.SetMerchandise(null));
 
-            string[] random = Util.FindParams(_sRandomIndices);
+            string[] random = Util.FindParams(RandomIndices);
 
             int totalMerch = _liMerchandise.Count;
             for (int i = 0; i < _liShopItemSpots.Count && i < totalMerch; i++)
             {
-                if (randomize && !string.IsNullOrEmpty(_sRandomIndices) && random.Length > i)
+                if (randomize && !string.IsNullOrEmpty(RandomIndices) && random.Length > i)
                 {
                     Merchandise m = _liMerchandise[int.Parse(random[i])];
                     _liShopItemSpots[i].SetMerchandise(m);
@@ -186,7 +186,7 @@ namespace RiverHollow.Misc
             {
                 shopID = _iShopID,
                 merchUnlockedString = value,
-                randomized = _sRandomIndices
+                randomized = RandomIndices
             };
             return sData;
         }
@@ -194,7 +194,7 @@ namespace RiverHollow.Misc
         public void LoadData(ShopData data)
         {
             UnlockMerchandise(data.merchUnlockedString);
-            _sRandomIndices = data.randomized;
+            RandomIndices = data.randomized;
 
             if (_iShopBuildingID != -1 && PlayerManager.TownObjectBuilt(_iShopBuildingID))
             {

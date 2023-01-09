@@ -20,7 +20,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             _iNum = GameManager.CurrentItem.Number;
 
-            _btnDown = new GUIButton(new Rectangle(128, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Decrement);
+            _btnDown = new GUIButton(new Rectangle(137, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Decrement);
             _btnDown.Position(Position());
             _btnDown.ScaledMoveBy(8, 7);
             AddControl(_btnDown);
@@ -29,7 +29,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _gText.AnchorAndAlignToObject(_btnDown, SideEnum.Right, SideEnum.CenterY, GameManager.ScaleIt(1));
             AddControl(_gText);
 
-            _btnUp = new GUIButton(new Rectangle(137, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Increment);
+            _btnUp = new GUIButton(new Rectangle(128, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Increment);
             _btnUp.Position(Position());
             _btnUp.ScaledMoveBy(29, 7);
             AddControl(_btnUp);

@@ -264,21 +264,27 @@ namespace RiverHollow.Characters
             return rv;
         }
 
+
+        public void VillagerMapHandling()
+        {
+            TryMoveIn();
+
+            if (SpawnOnTheMap)
+            {
+                MoveToSpawn();
+                DetermineValidSchedule();
+            }
+        }
         /// <summary>
         /// Quick call to see if the NPC's home is built.
         /// </summary>
-        public bool TryMoveIn()
+        public void TryMoveIn()
         {
-            bool rv = false;
             if (TownRequirementsMet() && HouseID != -1 && PlayerManager.TownObjectBuilt(HouseID))
             {
-                rv = true;
                 _eSpawnStatus = VillagerSpawnStatus.HasHome;
             }
-
-            return rv;
         }
-
 
         /// <summary>
         /// Call to return the name of the map the Villager should return to on Rollover.

@@ -323,13 +323,7 @@ namespace RiverHollow
             //Places NPCs on the map
             foreach (Villager v in DataManager.DIVillagers.Values)
             {
-                v.TryMoveIn();
-
-                if (v.SpawnOnTheMap)
-                {
-                    v.MoveToSpawn();
-                    v.DetermineValidSchedule();
-                }
+                v.VillagerMapHandling();
             }
 
             Camera.SetObserver(PlayerManager.PlayerActor);
@@ -344,9 +338,9 @@ namespace RiverHollow
             TaskManager.Rollover();
             PlayerManager.Rollover();
 
-            foreach (Villager n in DataManager.DIVillagers.Values)
+            foreach (Villager v in DataManager.DIVillagers.Values)
             {
-                n.RollOver();
+                v.VillagerMapHandling();
             }
             foreach (Merchant m in DataManager.DIMerchants.Values) {
                 if (PlayerManager.GetNumberTownObjects(int.Parse(DataManager.Config[15]["ObjectID"])) > 0)
