@@ -159,12 +159,11 @@ namespace RiverHollow.WorldObjects
         {
             if (InventoryManager.HasSpaceInInventory(itemToCraft.ID, 1) && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
             {
-                if (!CraftDaily)
+                if (!CraftDaily && PlayerManager.DecreaseStamina(Constants.ACTION_COST / 2))
                 {
-                    PlayerManager.DecreaseStamina(Constants.ACTION_COST);
                     InventoryManager.AddToInventory(itemToCraft.ID, itemToCraft.Number);
                 }
-                else
+                else if (CraftDaily)
                 {
                     for (int i = 0; i < Capacity; i++)
                     {
