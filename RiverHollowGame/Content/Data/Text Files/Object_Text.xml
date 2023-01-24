@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>Task_3</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:$WorldObject_35$ for the people]</Value>
     </Item>
     <Item>
       <Key>Task_4</Key>
@@ -620,6 +620,10 @@
     <Item>
       <Key>Cutscene_3</Key>
       <Value>[Name:Apothecary]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_4</Key>
+      <Value>[Name:Smithy]</Value>
     </Item>
     <Item>
       <Key>Item_0</Key>
@@ -1375,7 +1379,7 @@
     </Item>
     <Item>
       <Key>Item_188</Key>
-      <Value>[Name:Essence of ][Description:Become a ]</Value>
+      <Value>[Name:Anvil][Description:Become a ]</Value>
     </Item>
     <Item>
       <Key>Item_189</Key>
@@ -1396,6 +1400,10 @@
     <Item>
       <Key>Item_193</Key>
       <Value>[Name:Sundries][Description:]</Value>
+    </Item>
+    <Item>
+      <Key>Item_194</Key>
+      <Value>[Name:Copper Ring][Description:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_0</Key>

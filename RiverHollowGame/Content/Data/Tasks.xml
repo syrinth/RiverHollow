@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Fetch]</Value>
+      <Value>[Type:Fetch][StartNPC:4][AssignTrigger:GameStart][TargetObjectID:18][EndBuildingID:35][CutsceneID:4]</Value>
     </Item>
     <Item>
       <Key>4</Key>

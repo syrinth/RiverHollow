@@ -455,7 +455,7 @@ namespace RiverHollow.Utilities
                 foreach (string s in split)
                 {
                     string[] splitData = s.Split('-');
-                    dictValue[int.Parse(splitData[0])] = int.Parse(splitData[1]);
+                    dictValue[int.Parse(splitData[0])] = splitData.Length > 1 ? int.Parse(splitData[1]) : 1;
                 }
             }
         }

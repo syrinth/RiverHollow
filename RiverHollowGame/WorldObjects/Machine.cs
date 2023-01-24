@@ -157,31 +157,35 @@ namespace RiverHollow.WorldObjects
         /// <param name="itemToCraft">The Item object to craft</param>
         public void AttemptToCraftChosenItem(Item itemToCraft)
         {
-            if (InventoryManager.HasSpaceInInventory(itemToCraft.ID, 1) && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
+            bool success = false;
+            if (CraftDaily)
             {
-                if (!CraftDaily && PlayerManager.DecreaseStamina(Constants.ACTION_COST / 2))
+                for (int i = 0; i < Capacity; i++)
                 {
-                    InventoryManager.AddToInventory(itemToCraft.ID, itemToCraft.Number);
-                }
-                else if (CraftDaily)
-                {
-                    for (int i = 0; i < Capacity; i++)
+                    if (CraftingSlots[i].ID == -1)
                     {
-                        if (CraftingSlots[i].ID == -1)
+                        if (PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
                         {
+                            success = true;
                             CraftingSlots[i].ID = itemToCraft.ID;
                             CraftingSlots[i].CraftTime = DataManager.GetIntByIDKey(CraftingSlots[i].ID, "CraftTime", DataType.Item, 1);
-                            break;
                         }
+                        break;
                     }
                 }
-                //_sprite.PlayAnimation(CombatAnimationEnum.PlayAnimation);
+            }
+            else if (InventoryManager.HasSpaceInInventory(itemToCraft.ID, 1)
+                && PlayerManager.Stamina >= Constants.ACTION_COST / 2 
+                && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
+            {
+                success = true;
+                PlayerManager.DecreaseStamina(Constants.ACTION_COST / 2);
+                InventoryManager.AddToInventory(itemToCraft.ID, itemToCraft.Number);
+            }
 
-                
-                if (!string.IsNullOrEmpty(_sEffectWorking))
-                {
-                    SoundManager.PlayEffect(_sEffectWorking);
-                }
+            if (success && !string.IsNullOrEmpty(_sEffectWorking))
+            {
+                SoundManager.PlayEffect(_sEffectWorking);
             }
         }
 

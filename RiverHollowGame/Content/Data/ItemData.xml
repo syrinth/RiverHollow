@@ -251,7 +251,7 @@
     </Item>
     <Item>
       <Key>62</Key>
-      <Value>[Type:Resource][Image:6-6][Value:5]</Value>
+      <Value>[Type:Resource][Image:6-6][ReqItems:2-1]</Value>
     </Item>
     <Item>
       <Key>63</Key>
@@ -755,7 +755,7 @@
     </Item>
     <Item>
       <Key>188</Key>
-      <Value>[Type:Special][Image:0-2]</Value>
+      <Value>[Type:Special][Image:0-2][Value:350]</Value>
     </Item>
     <Item>
       <Key>189</Key>
@@ -776,6 +776,10 @@
     <Item>
       <Key>193</Key>
       <Value>[Type:Resource][Image:7-10][Value:20][MerchType:None]</Value>
+    </Item>
+    <Item>
+      <Key>194</Key>
+      <Value>[Type:Resource][Image:3-9][MerchType:Metalwork][Value:200][ReqItems:37-2]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -33,5 +33,13 @@
         <Item>[Speed:Player-0.5|43-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:43][Move:43-4-Up][Face:Player-Up][Face:43-Down][Speak:43-0]</Item>
       </Value>
     </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>
+        <Item></Item>
+        <Item>[Map:mapSmithy][Player][Actors:4-Cutscene_Entrance][Deactivate:4]</Item>
+        <Item>[Apothecary][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:4][Move:4-4-Up][Face:Player-Up][Face:4-Down][Speak:4-0]</Item>
+      </Value>
+    </Item>
   </Asset>
 </XnaContent>

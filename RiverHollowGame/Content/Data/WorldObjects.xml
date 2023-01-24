@@ -143,7 +143,7 @@
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Type:Building][Texture:Smithy][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5][Subtype:Ore]</Value>
+      <Value>[Type:Building][Texture:Smithy][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20|188][Subtype:Ore]</Value>
     </Item>
     <Item>
       <Key>36</Key>
@@ -351,15 +351,15 @@
     </Item>
     <Item>
       <Key>87</Key>
-      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Size:2-2][Makes:97][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-32][Size:2-2][Makes:194][Base:2-1][Daily]</Value>
     </Item>
     <Item>
       <Key>88</Key>
-      <Value>[Type:Machine][Image:0-256][Work:4-0.3][Size:3-3][Makes:167|168|57|58][Base:3-2][BaseOffset:0-1][WorkEffect:Cauldron][Daily]</Value>
+      <Value>[Type:Machine][Image:0-256][Size:3-3][Makes:167|168|57|58][Base:3-2][BaseOffset:0-1][WorkEffect:Cauldron][Daily]</Value>
     </Item>
     <Item>
       <Key>89</Key>
-      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Size:1-2][Makes:37|38|39|40|41][WorkEffect:stove_fire]</Value>
+      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Size:1-2][Makes:62|37|38][WorkEffect:stove_fire]</Value>
     </Item>
     <Item>
       <Key>90</Key>

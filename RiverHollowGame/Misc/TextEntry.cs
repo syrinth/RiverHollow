@@ -3,6 +3,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Misc
@@ -250,6 +251,10 @@ namespace RiverHollow.Misc
             if (_diTags.ContainsKey("SendMessage"))
             {
                 PlayerManager.PlayerMailbox.SendMessage(_diTags["SendMessage"]);
+            }
+            if (_diTags.ContainsKey("SendToTown"))
+            {
+                ((Villager)GameManager.CurrentNPC).QueueSendToTown();
             }
         }
 

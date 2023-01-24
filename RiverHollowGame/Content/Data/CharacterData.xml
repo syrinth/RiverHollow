@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:8][Collection:7|188][Idle:0-0-1-0-T][Walk:64-0-8-.12-F][Key:Dwarf][StartMap:mapCave_Entrance]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:35][Collection:7|188][Idle:0-0-1-0-T][Walk:64-0-8-.12-F][Key:Dwarf][StartMap:mapDwarfCave_Small]</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -155,7 +155,7 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:4][RequestIDs:58|68|71|167|168][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:2][ArrivalPeriod:4][RequestIDs:58|68|71|167|168][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
     </Item>
     <Item>
       <Key>39</Key>

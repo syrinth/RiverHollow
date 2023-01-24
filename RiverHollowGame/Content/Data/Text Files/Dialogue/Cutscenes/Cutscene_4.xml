@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[Name][Text:Hmm, bit cozy but I suppose it'll do, as long as I'm here anyway.
+	  That's all for now. You keep me supplied with herbs, and I'll make enough potions and unguents to make our merchant friends happy.]</Value>
+    </Item>
+  </Asset>
+</XnaContent>
