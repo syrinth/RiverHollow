@@ -4,8 +4,10 @@ namespace Database_Editor.Classes
 {
     public static class Constants
     {
-        public enum EditableCharacterDataEnum { Dialogue, Schedule };
+        public enum EditableNPCDataEnum { Dialogue, Schedule };
         public enum XMLTypeEnum { None, Task, NPC, Class, Building, WorldObject, Item, Monster, Action, Shop, StatusEffect, Cutscene, Light, Dungeon, Upgrade, TextFile };
+
+        public enum ComponentTypeEnum { TextBoxName, TextBoxID, TextBoxDescription, DataGrid, DataGridTags, TabIndex, ColumnId, ColumnName, ColumnTags, ComboBoxType };
 
         public static readonly string SPECIAL_CHARACTER = "^";
         public static readonly string LOOKUP_CHARACTER = "$";
@@ -22,7 +24,7 @@ namespace Database_Editor.Classes
         #region XML Files
         public static readonly string ACTIONS_XML_FILE = PATH_TO_DATA + @"\Combat_Actions.xml";
         public static readonly string CLASSES_XML_FILE = PATH_TO_DATA + @"\Classes.xml";
-        public static readonly string NPC_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
+        public static readonly string NPC_XML_FILE = PATH_TO_DATA + @"\NPCData.xml";
         public static readonly string CONFIG_XML_FILE = PATH_TO_DATA + @"\Config.xml";
         public static readonly string CUTSCENE_XML_FILE = PATH_TO_DATA + @"\CutScenes.xml";
         public static readonly string DUNGEON_XML_FILE = PATH_TO_DATA + @"\DungeonData.xml";
@@ -44,7 +46,7 @@ namespace Database_Editor.Classes
         public static readonly string TAGS_FOR_COMBAT_ACTIONS = "Ability,Spell";
         public static readonly string TAGS_FOR_CLASSES = "Class";
         public static readonly string TAGS_FOR_SHOPDATA = "ShopData,TargetShopID";
-        public static readonly string TAGS_FOR_CHARACTERS = "NPC_ID,Shopkeeper,MobID,Actors,Move,Face,Speak,Speed,Activate,Deactivate,Join,Combat,StartNPC,GoalNPC";
+        public static readonly string TAGS_FOR_NPCS = "NPC_ID,Shopkeeper,MobID,Actors,Move,Face,Speak,Speed,Activate,Deactivate,Join,Combat,StartNPC,GoalNPC";
         public static readonly string TAGS_FOR_STATUS_EFFECTS = "StatusEffectID";
         public static readonly string TAGS_FOR_LIGHTS = "LightID";
         public static readonly string TAGS_FOR_UPGRADES = "UpgradeID";
@@ -54,7 +56,7 @@ namespace Database_Editor.Classes
 
         public static readonly string ITEM_REF_TAGS = "ReqItems,Place";
         public static readonly string TASK_REF_TAGS = "GoalItem,ItemRewardID,BuildingID,UnlockBuildingID,TargetObjectID,RequiredObjectID,StartNPC,GoalNPC";
-        public static readonly string CHARACTER_REF_TAGS = "BuildingID,Collection,Class,MobID,MonsterID,ShopData,HouseID,RequiredBuildingID,RequiredObjectID,RequestIDs";
+        public static readonly string NPC_REF_TAGS = "BuildingID,Collection,Class,MobID,MonsterID,ShopData,HouseID,RequiredBuildingID,RequiredObjectID,RequestIDs";
         public static readonly string WORLD_OBJECT_REF_TAGS = "ReqItems,LightID,Makes,Processes,ItemID,SubObjects,SeedID,HoneyID,LightID";
         public static readonly string CLASSES_REF_TAGS = "GearID,Ability,Spell";
         public static readonly string SHOPDATA_REF_TAGS = "ItemID,BuildingID,ObjectID,NPC_ID";

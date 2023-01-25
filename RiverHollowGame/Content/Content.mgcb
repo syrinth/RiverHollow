@@ -19,11 +19,6 @@
 /processor:PassThroughProcessor
 /build:Data/Buildings.xml
 
-#begin Data/CharacterData.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/CharacterData.xml
-
 #begin Data/Classes.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -68,6 +63,11 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/MonsterTraitTable.xml
+
+#begin Data/NPCData.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/NPCData.xml
 
 #begin Data/PlayerClassAnimationConfig.xml
 /importer:XmlImporter

@@ -15,13 +15,13 @@ namespace Database_Editor
         public List<XMLData> StringData { get; }
         public Dictionary<string, List<string>> ListData { get; }
         Dictionary<string, Dictionary<string, string>> ObjectTextDicitonary;
-        public FormCharExtraData(string value, List<XMLData> diCharacterData, ref Dictionary<string, Dictionary<string, string>> _diObjectText)
+        public FormCharExtraData(string value, List<XMLData> diNPCData, ref Dictionary<string, Dictionary<string, string>> _diObjectText)
         {
             InitializeComponent();
 
             ObjectTextDicitonary = _diObjectText;
 
-            StringData = diCharacterData;
+            StringData = diNPCData;
             this.Text = value;
             LoadDataGridViewString();
 
@@ -29,11 +29,11 @@ namespace Database_Editor
             _eDataMode = DataMode.Dialogue;
         }
 
-        public FormCharExtraData(string value, Dictionary<string, List<string>> diCharacterData)
+        public FormCharExtraData(string value, Dictionary<string, List<string>> diNPCData)
         {
             InitializeComponent();
 
-            ListData = diCharacterData;
+            ListData = diNPCData;
             this.Text = value;
             LoadDataGridViewList();
 

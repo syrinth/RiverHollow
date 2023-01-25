@@ -3,16 +3,16 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Thanks for the hand, I've been trapped here for a week and let me tell you I am sick of it. You got a camp around here somewhere?
-	  A town you say? Well, that sounds like a much better sight than these walls. I'll meet you there after I pack.][SendToTown][Name:Introduction]</Value>
+      <Value>[Name:Introduction][Text:Thanks for the hand, I've been trapped here for a week and let me tell you I am sick of it. You got a camp around here somewhere?
+	  A town you say? Well, that sounds like a much better sight than these walls. I'll meet you there after I pack.][SendToTown]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:$Name$, don't you ever slow down? Take it easy.][Default][Name:1]</Value>
+      <Value>[Name:1][Text:$Name$, don't you ever slow down? Take it easy.][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:$Name$? You look stressed. Please don't push yourself and make sure you're getting enough sleep. a few years back I tried six hours a night and let me tell you what a mistake that was.][Default][Name:2]</Value>
+      <Value>[Name:2][Text:$Name$? You look stressed. Please don't push yourself and make sure you're getting enough sleep. a few years back I tried six hours a night and let me tell you what a mistake that was.][Default]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -24,11 +24,11 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Text:Hello, what can I do for you?][Selection:VillageTalk][Name:Selection]</Value>
+      <Value>[Name:Selection][Text:Hello, what can I do for you?][Selection:VillageTalk]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Text:Certainly, I'd like to see what we can accomplish together.][Name:JoinPartyYes]</Value>
+      <Value>[Name:JoinPartyYes][Text:Certainly, I'd like to see what we can accomplish.]</Value>
     </Item>
     <Item>
       <Key>7</Key>

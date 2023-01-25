@@ -38,7 +38,7 @@
             this.gameTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mailboxMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabCtl = new System.Windows.Forms.TabControl();
-            this.tabActions = new System.Windows.Forms.TabPage();
+            this.tabAction = new System.Windows.Forms.TabPage();
             this.cbActionType = new System.Windows.Forms.ComboBox();
             this.btnActionCancel = new System.Windows.Forms.Button();
             this.dgvActionTags = new System.Windows.Forms.DataGridView();
@@ -52,24 +52,24 @@
             this.dgvActions = new System.Windows.Forms.DataGridView();
             this.colActionsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.tabCharacters = new System.Windows.Forms.TabPage();
+            this.tabNPC = new System.Windows.Forms.TabPage();
             this.cbEditableCharData = new System.Windows.Forms.ComboBox();
             this.btnEdit = new System.Windows.Forms.Button();
-            this.cbCharacterType = new System.Windows.Forms.ComboBox();
-            this.btnCancelCharacter = new System.Windows.Forms.Button();
-            this.dgvCharacterTags = new System.Windows.Forms.DataGridView();
-            this.colCharacterTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cbNPCType = new System.Windows.Forms.ComboBox();
+            this.btnCancelNPC = new System.Windows.Forms.Button();
+            this.dgvNPCTags = new System.Windows.Forms.DataGridView();
+            this.colNPCTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label3 = new System.Windows.Forms.Label();
-            this.tbCharacterID = new System.Windows.Forms.TextBox();
-            this.tbCharacterName = new System.Windows.Forms.TextBox();
+            this.tbNPCID = new System.Windows.Forms.TextBox();
+            this.tbNPCName = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.dgvCharacters = new System.Windows.Forms.DataGridView();
-            this.colCharactersName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabClasses = new System.Windows.Forms.TabPage();
+            this.dgvNPCs = new System.Windows.Forms.DataGridView();
+            this.colNPCsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabClass = new System.Windows.Forms.TabPage();
             this.tbClassDescription = new System.Windows.Forms.TextBox();
             this.label37 = new System.Windows.Forms.Label();
             this.btnClassCancel = new System.Windows.Forms.Button();
-            this.dgClassTags = new System.Windows.Forms.DataGridView();
+            this.dgvClassTags = new System.Windows.Forms.DataGridView();
             this.colClassTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label7 = new System.Windows.Forms.Label();
             this.tbClassID = new System.Windows.Forms.TextBox();
@@ -77,7 +77,9 @@
             this.label8 = new System.Windows.Forms.Label();
             this.dgvClasses = new System.Windows.Forms.DataGridView();
             this.colClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabCutscenes = new System.Windows.Forms.TabPage();
+            this.tabCutscene = new System.Windows.Forms.TabPage();
+            this.label26 = new System.Windows.Forms.Label();
+            this.tbCutsceneID = new System.Windows.Forms.TextBox();
             this.btnEditCutsceneDialogue = new System.Windows.Forms.Button();
             this.tbCutsceneDetails = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
@@ -90,7 +92,7 @@
             this.label16 = new System.Windows.Forms.Label();
             this.dgvCutscenes = new System.Windows.Forms.DataGridView();
             this.colCutscenesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabDungeons = new System.Windows.Forms.TabPage();
+            this.tabDungeon = new System.Windows.Forms.TabPage();
             this.tbDungeonDescription = new System.Windows.Forms.TextBox();
             this.label40 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
@@ -116,7 +118,7 @@
             this.lblName = new System.Windows.Forms.Label();
             this.dgvItems = new System.Windows.Forms.DataGridView();
             this.colItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabLights = new System.Windows.Forms.TabPage();
+            this.tabLight = new System.Windows.Forms.TabPage();
             this.label9 = new System.Windows.Forms.Label();
             this.tbLightID = new System.Windows.Forms.TextBox();
             this.tbLightName = new System.Windows.Forms.TextBox();
@@ -126,7 +128,7 @@
             this.colLightTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvLights = new System.Windows.Forms.DataGridView();
             this.colLightsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabMonsters = new System.Windows.Forms.TabPage();
+            this.tabMonster = new System.Windows.Forms.TabPage();
             this.btnMonsterCancel = new System.Windows.Forms.Button();
             this.dgvMonsterTags = new System.Windows.Forms.DataGridView();
             this.colMonsterTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -138,7 +140,7 @@
             this.label19 = new System.Windows.Forms.Label();
             this.dgvMonsters = new System.Windows.Forms.DataGridView();
             this.colMonstersName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabShops = new System.Windows.Forms.TabPage();
+            this.tabShop = new System.Windows.Forms.TabPage();
             this.label36 = new System.Windows.Forms.Label();
             this.tbShopID = new System.Windows.Forms.TextBox();
             this.btnShopCancel = new System.Windows.Forms.Button();
@@ -148,7 +150,7 @@
             this.label24 = new System.Windows.Forms.Label();
             this.dgvShops = new System.Windows.Forms.DataGridView();
             this.colShopsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabStatusEffects = new System.Windows.Forms.TabPage();
+            this.tabStatusEffect = new System.Windows.Forms.TabPage();
             this.cbStatusEffect = new System.Windows.Forms.ComboBox();
             this.btnStatusEffectCancel = new System.Windows.Forms.Button();
             this.dgvStatusEffectTags = new System.Windows.Forms.DataGridView();
@@ -161,7 +163,7 @@
             this.label35 = new System.Windows.Forms.Label();
             this.dgvStatusEffects = new System.Windows.Forms.DataGridView();
             this.colStatusEffectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabTasks = new System.Windows.Forms.TabPage();
+            this.tabTask = new System.Windows.Forms.TabPage();
             this.cbTaskType = new System.Windows.Forms.ComboBox();
             this.btnTaskCancel = new System.Windows.Forms.Button();
             this.dgvTaskTags = new System.Windows.Forms.DataGridView();
@@ -174,7 +176,7 @@
             this.label13 = new System.Windows.Forms.Label();
             this.dgvTasks = new System.Windows.Forms.DataGridView();
             this.colTasksName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabWorldObjects = new System.Windows.Forms.TabPage();
+            this.tabWorldObject = new System.Windows.Forms.TabPage();
             this.cbWorldObjectType = new System.Windows.Forms.ComboBox();
             this.btnWorldObjectCancel = new System.Windows.Forms.Button();
             this.dgvWorldObjectTags = new System.Windows.Forms.DataGridView();
@@ -185,7 +187,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.dgvWorldObjects = new System.Windows.Forms.DataGridView();
             this.colWorldObjectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabUpgrades = new System.Windows.Forms.TabPage();
+            this.tabUpgrade = new System.Windows.Forms.TabPage();
             this.btnUpgradeCancel = new System.Windows.Forms.Button();
             this.dgvUpgradeTags = new System.Windows.Forms.DataGridView();
             this.colUpgradeTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -196,47 +198,45 @@
             this.dgvUpgrades = new System.Windows.Forms.DataGridView();
             this.colUpgradesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbStatus = new System.Windows.Forms.TextBox();
-            this.label26 = new System.Windows.Forms.Label();
-            this.tbCutsceneID = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
-            this.tabActions.SuspendLayout();
+            this.tabAction.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActionTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActions)).BeginInit();
-            this.tabCharacters.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCharacterTags)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCharacters)).BeginInit();
-            this.tabClasses.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgClassTags)).BeginInit();
+            this.tabNPC.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvNPCTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvNPCs)).BeginInit();
+            this.tabClass.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvClassTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvClasses)).BeginInit();
-            this.tabCutscenes.SuspendLayout();
+            this.tabCutscene.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCutsceneTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCutscenes)).BeginInit();
-            this.tabDungeons.SuspendLayout();
+            this.tabDungeon.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDungeonTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDungeons)).BeginInit();
             this.tabItems.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItemTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvItems)).BeginInit();
-            this.tabLights.SuspendLayout();
+            this.tabLight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLightTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLights)).BeginInit();
-            this.tabMonsters.SuspendLayout();
+            this.tabMonster.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMonsterTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMonsters)).BeginInit();
-            this.tabShops.SuspendLayout();
+            this.tabShop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvShopTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvShops)).BeginInit();
-            this.tabStatusEffects.SuspendLayout();
+            this.tabStatusEffect.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffectTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffects)).BeginInit();
-            this.tabTasks.SuspendLayout();
+            this.tabTask.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTaskTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTasks)).BeginInit();
-            this.tabWorldObjects.SuspendLayout();
+            this.tabWorldObject.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjectTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjects)).BeginInit();
-            this.tabUpgrades.SuspendLayout();
+            this.tabUpgrade.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUpgradeTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUpgrades)).BeginInit();
             this.SuspendLayout();
@@ -265,7 +265,7 @@
             this.saveToFileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.sortAndSaveToolStripMenuItem1});
             this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
-            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.saveToFileToolStripMenuItem.Text = "Save To File";
             this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
             // 
@@ -282,20 +282,20 @@
             this.gameTextToolStripMenuItem,
             this.mailboxMessagesToolStripMenuItem});
             this.textToolStripMenuItem.Name = "textToolStripMenuItem";
-            this.textToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.textToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
             this.textToolStripMenuItem.Text = "Text";
             // 
             // gameTextToolStripMenuItem
             // 
             this.gameTextToolStripMenuItem.Name = "gameTextToolStripMenuItem";
-            this.gameTextToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.gameTextToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.gameTextToolStripMenuItem.Text = "Game Text";
             this.gameTextToolStripMenuItem.Click += new System.EventHandler(this.gameTextToolStripMenuItem_Click);
             // 
             // mailboxMessagesToolStripMenuItem
             // 
             this.mailboxMessagesToolStripMenuItem.Name = "mailboxMessagesToolStripMenuItem";
-            this.mailboxMessagesToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.mailboxMessagesToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.mailboxMessagesToolStripMenuItem.Text = "Mailbox Messages";
             this.mailboxMessagesToolStripMenuItem.Click += new System.EventHandler(this.mailboxMessagesToolStripMenuItem_Click);
             // 
@@ -303,19 +303,19 @@
             // 
             this.tabCtl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabCtl.Controls.Add(this.tabActions);
-            this.tabCtl.Controls.Add(this.tabCharacters);
-            this.tabCtl.Controls.Add(this.tabClasses);
-            this.tabCtl.Controls.Add(this.tabCutscenes);
-            this.tabCtl.Controls.Add(this.tabDungeons);
+            this.tabCtl.Controls.Add(this.tabAction);
+            this.tabCtl.Controls.Add(this.tabNPC);
+            this.tabCtl.Controls.Add(this.tabClass);
+            this.tabCtl.Controls.Add(this.tabCutscene);
+            this.tabCtl.Controls.Add(this.tabDungeon);
             this.tabCtl.Controls.Add(this.tabItems);
-            this.tabCtl.Controls.Add(this.tabLights);
-            this.tabCtl.Controls.Add(this.tabMonsters);
-            this.tabCtl.Controls.Add(this.tabShops);
-            this.tabCtl.Controls.Add(this.tabStatusEffects);
-            this.tabCtl.Controls.Add(this.tabTasks);
-            this.tabCtl.Controls.Add(this.tabWorldObjects);
-            this.tabCtl.Controls.Add(this.tabUpgrades);
+            this.tabCtl.Controls.Add(this.tabLight);
+            this.tabCtl.Controls.Add(this.tabMonster);
+            this.tabCtl.Controls.Add(this.tabShop);
+            this.tabCtl.Controls.Add(this.tabStatusEffect);
+            this.tabCtl.Controls.Add(this.tabTask);
+            this.tabCtl.Controls.Add(this.tabWorldObject);
+            this.tabCtl.Controls.Add(this.tabUpgrade);
             this.tabCtl.Location = new System.Drawing.Point(12, 27);
             this.tabCtl.Name = "tabCtl";
             this.tabCtl.SelectedIndex = 0;
@@ -323,24 +323,24 @@
             this.tabCtl.TabIndex = 12;
             this.tabCtl.SelectedIndexChanged += new System.EventHandler(this.tabCtl_SelectedIndexChanged);
             // 
-            // tabActions
+            // tabAction
             // 
-            this.tabActions.Controls.Add(this.cbActionType);
-            this.tabActions.Controls.Add(this.btnActionCancel);
-            this.tabActions.Controls.Add(this.dgvActionTags);
-            this.tabActions.Controls.Add(this.tbActionDescription);
-            this.tabActions.Controls.Add(this.label20);
-            this.tabActions.Controls.Add(this.label21);
-            this.tabActions.Controls.Add(this.tbActionID);
-            this.tabActions.Controls.Add(this.tbActionName);
-            this.tabActions.Controls.Add(this.label22);
-            this.tabActions.Controls.Add(this.dgvActions);
-            this.tabActions.Location = new System.Drawing.Point(4, 22);
-            this.tabActions.Name = "tabActions";
-            this.tabActions.Size = new System.Drawing.Size(790, 425);
-            this.tabActions.TabIndex = 8;
-            this.tabActions.Text = "Actions";
-            this.tabActions.UseVisualStyleBackColor = true;
+            this.tabAction.Controls.Add(this.cbActionType);
+            this.tabAction.Controls.Add(this.btnActionCancel);
+            this.tabAction.Controls.Add(this.dgvActionTags);
+            this.tabAction.Controls.Add(this.tbActionDescription);
+            this.tabAction.Controls.Add(this.label20);
+            this.tabAction.Controls.Add(this.label21);
+            this.tabAction.Controls.Add(this.tbActionID);
+            this.tabAction.Controls.Add(this.tbActionName);
+            this.tabAction.Controls.Add(this.label22);
+            this.tabAction.Controls.Add(this.dgvActions);
+            this.tabAction.Location = new System.Drawing.Point(4, 22);
+            this.tabAction.Name = "tabAction";
+            this.tabAction.Size = new System.Drawing.Size(790, 425);
+            this.tabAction.TabIndex = 8;
+            this.tabAction.Text = "Actions";
+            this.tabAction.UseVisualStyleBackColor = true;
             // 
             // cbActionType
             // 
@@ -472,24 +472,24 @@
             this.contextMenu.Size = new System.Drawing.Size(61, 4);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
-            // tabCharacters
+            // tabNPC
             // 
-            this.tabCharacters.Controls.Add(this.cbEditableCharData);
-            this.tabCharacters.Controls.Add(this.btnEdit);
-            this.tabCharacters.Controls.Add(this.cbCharacterType);
-            this.tabCharacters.Controls.Add(this.btnCancelCharacter);
-            this.tabCharacters.Controls.Add(this.dgvCharacterTags);
-            this.tabCharacters.Controls.Add(this.label3);
-            this.tabCharacters.Controls.Add(this.tbCharacterID);
-            this.tabCharacters.Controls.Add(this.tbCharacterName);
-            this.tabCharacters.Controls.Add(this.label6);
-            this.tabCharacters.Controls.Add(this.dgvCharacters);
-            this.tabCharacters.Location = new System.Drawing.Point(4, 22);
-            this.tabCharacters.Name = "tabCharacters";
-            this.tabCharacters.Size = new System.Drawing.Size(790, 425);
-            this.tabCharacters.TabIndex = 2;
-            this.tabCharacters.Text = "Characters";
-            this.tabCharacters.UseVisualStyleBackColor = true;
+            this.tabNPC.Controls.Add(this.cbEditableCharData);
+            this.tabNPC.Controls.Add(this.btnEdit);
+            this.tabNPC.Controls.Add(this.cbNPCType);
+            this.tabNPC.Controls.Add(this.btnCancelNPC);
+            this.tabNPC.Controls.Add(this.dgvNPCTags);
+            this.tabNPC.Controls.Add(this.label3);
+            this.tabNPC.Controls.Add(this.tbNPCID);
+            this.tabNPC.Controls.Add(this.tbNPCName);
+            this.tabNPC.Controls.Add(this.label6);
+            this.tabNPC.Controls.Add(this.dgvNPCs);
+            this.tabNPC.Location = new System.Drawing.Point(4, 22);
+            this.tabNPC.Name = "tabNPC";
+            this.tabNPC.Size = new System.Drawing.Size(790, 425);
+            this.tabNPC.TabIndex = 2;
+            this.tabNPC.Text = "NPCs";
+            this.tabNPC.UseVisualStyleBackColor = true;
             // 
             // cbEditableCharData
             // 
@@ -510,45 +510,45 @@
             this.btnEdit.UseVisualStyleBackColor = true;
             this.btnEdit.Click += new System.EventHandler(this.btnDialogue_Click);
             // 
-            // cbCharacterType
+            // cbNPCType
             // 
-            this.cbCharacterType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbCharacterType.FormattingEnabled = true;
-            this.cbCharacterType.Location = new System.Drawing.Point(320, 33);
-            this.cbCharacterType.Name = "cbCharacterType";
-            this.cbCharacterType.Size = new System.Drawing.Size(149, 21);
-            this.cbCharacterType.TabIndex = 45;
+            this.cbNPCType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbNPCType.FormattingEnabled = true;
+            this.cbNPCType.Location = new System.Drawing.Point(320, 33);
+            this.cbNPCType.Name = "cbNPCType";
+            this.cbNPCType.Size = new System.Drawing.Size(149, 21);
+            this.cbNPCType.TabIndex = 45;
             // 
-            // btnCancelCharacter
+            // btnCancelNPC
             // 
-            this.btnCancelCharacter.Location = new System.Drawing.Point(709, 394);
-            this.btnCancelCharacter.Name = "btnCancelCharacter";
-            this.btnCancelCharacter.Size = new System.Drawing.Size(75, 23);
-            this.btnCancelCharacter.TabIndex = 44;
-            this.btnCancelCharacter.Text = "Cancel";
-            this.btnCancelCharacter.UseVisualStyleBackColor = true;
-            this.btnCancelCharacter.Click += new System.EventHandler(this.btnCharacterCancel_Click);
+            this.btnCancelNPC.Location = new System.Drawing.Point(709, 394);
+            this.btnCancelNPC.Name = "btnCancelNPC";
+            this.btnCancelNPC.Size = new System.Drawing.Size(75, 23);
+            this.btnCancelNPC.TabIndex = 44;
+            this.btnCancelNPC.Text = "Cancel";
+            this.btnCancelNPC.UseVisualStyleBackColor = true;
+            this.btnCancelNPC.Click += new System.EventHandler(this.btnNPCCancel_Click);
             // 
-            // dgvCharacterTags
+            // dgvNPCTags
             // 
-            this.dgvCharacterTags.AllowUserToResizeColumns = false;
-            this.dgvCharacterTags.AllowUserToResizeRows = false;
-            this.dgvCharacterTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvCharacterTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colCharacterTags});
-            this.dgvCharacterTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dgvCharacterTags.Location = new System.Drawing.Point(320, 60);
-            this.dgvCharacterTags.Name = "dgvCharacterTags";
-            this.dgvCharacterTags.RowHeadersVisible = false;
-            this.dgvCharacterTags.Size = new System.Drawing.Size(464, 328);
-            this.dgvCharacterTags.TabIndex = 42;
+            this.dgvNPCTags.AllowUserToResizeColumns = false;
+            this.dgvNPCTags.AllowUserToResizeRows = false;
+            this.dgvNPCTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvNPCTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colNPCTags});
+            this.dgvNPCTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.dgvNPCTags.Location = new System.Drawing.Point(320, 60);
+            this.dgvNPCTags.Name = "dgvNPCTags";
+            this.dgvNPCTags.RowHeadersVisible = false;
+            this.dgvNPCTags.Size = new System.Drawing.Size(464, 328);
+            this.dgvNPCTags.TabIndex = 42;
             // 
-            // colCharacterTags
+            // colNPCTags
             // 
-            this.colCharacterTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colCharacterTags.HeaderText = "Tags";
-            this.colCharacterTags.Name = "colCharacterTags";
-            this.colCharacterTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colNPCTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colNPCTags.HeaderText = "Tags";
+            this.colNPCTags.Name = "colNPCTags";
+            this.colNPCTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // label3
             // 
@@ -559,19 +559,19 @@
             this.label3.TabIndex = 41;
             this.label3.Text = "ID:";
             // 
-            // tbCharacterID
+            // tbNPCID
             // 
-            this.tbCharacterID.Location = new System.Drawing.Point(741, 6);
-            this.tbCharacterID.Name = "tbCharacterID";
-            this.tbCharacterID.Size = new System.Drawing.Size(43, 20);
-            this.tbCharacterID.TabIndex = 40;
+            this.tbNPCID.Location = new System.Drawing.Point(741, 6);
+            this.tbNPCID.Name = "tbNPCID";
+            this.tbNPCID.Size = new System.Drawing.Size(43, 20);
+            this.tbNPCID.TabIndex = 40;
             // 
-            // tbCharacterName
+            // tbNPCName
             // 
-            this.tbCharacterName.Location = new System.Drawing.Point(361, 6);
-            this.tbCharacterName.Name = "tbCharacterName";
-            this.tbCharacterName.Size = new System.Drawing.Size(108, 20);
-            this.tbCharacterName.TabIndex = 39;
+            this.tbNPCName.Location = new System.Drawing.Point(361, 6);
+            this.tbNPCName.Name = "tbNPCName";
+            this.tbNPCName.Size = new System.Drawing.Size(108, 20);
+            this.tbNPCName.TabIndex = 39;
             // 
             // label6
             // 
@@ -582,52 +582,52 @@
             this.label6.TabIndex = 38;
             this.label6.Text = "Name:";
             // 
-            // dgvCharacters
+            // dgvNPCs
             // 
-            this.dgvCharacters.AllowUserToAddRows = false;
-            this.dgvCharacters.AllowUserToDeleteRows = false;
-            this.dgvCharacters.AllowUserToResizeColumns = false;
-            this.dgvCharacters.AllowUserToResizeRows = false;
-            this.dgvCharacters.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvCharacters.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colCharactersName});
-            this.dgvCharacters.ContextMenuStrip = this.contextMenu;
-            this.dgvCharacters.Location = new System.Drawing.Point(6, 6);
-            this.dgvCharacters.MultiSelect = false;
-            this.dgvCharacters.Name = "dgvCharacters";
-            this.dgvCharacters.ReadOnly = true;
-            this.dgvCharacters.RowHeadersVisible = false;
-            this.dgvCharacters.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvCharacters.Size = new System.Drawing.Size(308, 411);
-            this.dgvCharacters.TabIndex = 37;
-            this.dgvCharacters.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCharacters_CellClick);
+            this.dgvNPCs.AllowUserToAddRows = false;
+            this.dgvNPCs.AllowUserToDeleteRows = false;
+            this.dgvNPCs.AllowUserToResizeColumns = false;
+            this.dgvNPCs.AllowUserToResizeRows = false;
+            this.dgvNPCs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvNPCs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colNPCsName});
+            this.dgvNPCs.ContextMenuStrip = this.contextMenu;
+            this.dgvNPCs.Location = new System.Drawing.Point(6, 6);
+            this.dgvNPCs.MultiSelect = false;
+            this.dgvNPCs.Name = "dgvNPCs";
+            this.dgvNPCs.ReadOnly = true;
+            this.dgvNPCs.RowHeadersVisible = false;
+            this.dgvNPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvNPCs.Size = new System.Drawing.Size(308, 411);
+            this.dgvNPCs.TabIndex = 37;
+            this.dgvNPCs.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvNPCs_CellClick);
             // 
-            // colCharactersName
+            // colNPCsName
             // 
-            this.colCharactersName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colCharactersName.FillWeight = 90F;
-            this.colCharactersName.HeaderText = "Name";
-            this.colCharactersName.Name = "colCharactersName";
-            this.colCharactersName.ReadOnly = true;
-            this.colCharactersName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colNPCsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colNPCsName.FillWeight = 90F;
+            this.colNPCsName.HeaderText = "Name";
+            this.colNPCsName.Name = "colNPCsName";
+            this.colNPCsName.ReadOnly = true;
+            this.colNPCsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tabClasses
+            // tabClass
             // 
-            this.tabClasses.Controls.Add(this.tbClassDescription);
-            this.tabClasses.Controls.Add(this.label37);
-            this.tabClasses.Controls.Add(this.btnClassCancel);
-            this.tabClasses.Controls.Add(this.dgClassTags);
-            this.tabClasses.Controls.Add(this.label7);
-            this.tabClasses.Controls.Add(this.tbClassID);
-            this.tabClasses.Controls.Add(this.tbClassName);
-            this.tabClasses.Controls.Add(this.label8);
-            this.tabClasses.Controls.Add(this.dgvClasses);
-            this.tabClasses.Location = new System.Drawing.Point(4, 22);
-            this.tabClasses.Name = "tabClasses";
-            this.tabClasses.Size = new System.Drawing.Size(790, 425);
-            this.tabClasses.TabIndex = 3;
-            this.tabClasses.Text = "Classes";
-            this.tabClasses.UseVisualStyleBackColor = true;
+            this.tabClass.Controls.Add(this.tbClassDescription);
+            this.tabClass.Controls.Add(this.label37);
+            this.tabClass.Controls.Add(this.btnClassCancel);
+            this.tabClass.Controls.Add(this.dgvClassTags);
+            this.tabClass.Controls.Add(this.label7);
+            this.tabClass.Controls.Add(this.tbClassID);
+            this.tabClass.Controls.Add(this.tbClassName);
+            this.tabClass.Controls.Add(this.label8);
+            this.tabClass.Controls.Add(this.dgvClasses);
+            this.tabClass.Location = new System.Drawing.Point(4, 22);
+            this.tabClass.Name = "tabClass";
+            this.tabClass.Size = new System.Drawing.Size(790, 425);
+            this.tabClass.TabIndex = 3;
+            this.tabClass.Text = "Classes";
+            this.tabClass.UseVisualStyleBackColor = true;
             // 
             // tbClassDescription
             // 
@@ -656,19 +656,19 @@
             this.btnClassCancel.UseVisualStyleBackColor = true;
             this.btnClassCancel.Click += new System.EventHandler(this.btnClassCancel_Click);
             // 
-            // dgClassTags
+            // dgvClassTags
             // 
-            this.dgClassTags.AllowUserToResizeColumns = false;
-            this.dgClassTags.AllowUserToResizeRows = false;
-            this.dgClassTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgClassTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvClassTags.AllowUserToResizeColumns = false;
+            this.dgvClassTags.AllowUserToResizeRows = false;
+            this.dgvClassTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvClassTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colClassTags});
-            this.dgClassTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dgClassTags.Location = new System.Drawing.Point(320, 110);
-            this.dgClassTags.Name = "dgClassTags";
-            this.dgClassTags.RowHeadersVisible = false;
-            this.dgClassTags.Size = new System.Drawing.Size(464, 278);
-            this.dgClassTags.TabIndex = 51;
+            this.dgvClassTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.dgvClassTags.Location = new System.Drawing.Point(320, 110);
+            this.dgvClassTags.Name = "dgvClassTags";
+            this.dgvClassTags.RowHeadersVisible = false;
+            this.dgvClassTags.Size = new System.Drawing.Size(464, 278);
+            this.dgvClassTags.TabIndex = 51;
             // 
             // colClassTags
             // 
@@ -738,26 +738,42 @@
             this.colClassName.ReadOnly = true;
             this.colClassName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tabCutscenes
+            // tabCutscene
             // 
-            this.tabCutscenes.Controls.Add(this.label26);
-            this.tabCutscenes.Controls.Add(this.tbCutsceneID);
-            this.tabCutscenes.Controls.Add(this.btnEditCutsceneDialogue);
-            this.tabCutscenes.Controls.Add(this.tbCutsceneDetails);
-            this.tabCutscenes.Controls.Add(this.label17);
-            this.tabCutscenes.Controls.Add(this.tbCutsceneTriggers);
-            this.tabCutscenes.Controls.Add(this.label14);
-            this.tabCutscenes.Controls.Add(this.button2);
-            this.tabCutscenes.Controls.Add(this.dgvCutsceneTags);
-            this.tabCutscenes.Controls.Add(this.tbCutsceneName);
-            this.tabCutscenes.Controls.Add(this.label16);
-            this.tabCutscenes.Controls.Add(this.dgvCutscenes);
-            this.tabCutscenes.Location = new System.Drawing.Point(4, 22);
-            this.tabCutscenes.Name = "tabCutscenes";
-            this.tabCutscenes.Size = new System.Drawing.Size(790, 425);
-            this.tabCutscenes.TabIndex = 6;
-            this.tabCutscenes.Text = "Cutscenes";
-            this.tabCutscenes.UseVisualStyleBackColor = true;
+            this.tabCutscene.Controls.Add(this.label26);
+            this.tabCutscene.Controls.Add(this.tbCutsceneID);
+            this.tabCutscene.Controls.Add(this.btnEditCutsceneDialogue);
+            this.tabCutscene.Controls.Add(this.tbCutsceneDetails);
+            this.tabCutscene.Controls.Add(this.label17);
+            this.tabCutscene.Controls.Add(this.tbCutsceneTriggers);
+            this.tabCutscene.Controls.Add(this.label14);
+            this.tabCutscene.Controls.Add(this.button2);
+            this.tabCutscene.Controls.Add(this.dgvCutsceneTags);
+            this.tabCutscene.Controls.Add(this.tbCutsceneName);
+            this.tabCutscene.Controls.Add(this.label16);
+            this.tabCutscene.Controls.Add(this.dgvCutscenes);
+            this.tabCutscene.Location = new System.Drawing.Point(4, 22);
+            this.tabCutscene.Name = "tabCutscene";
+            this.tabCutscene.Size = new System.Drawing.Size(790, 425);
+            this.tabCutscene.TabIndex = 6;
+            this.tabCutscene.Text = "Cutscenes";
+            this.tabCutscene.UseVisualStyleBackColor = true;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(714, 9);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(21, 13);
+            this.label26.TabIndex = 58;
+            this.label26.Text = "ID:";
+            // 
+            // tbCutsceneID
+            // 
+            this.tbCutsceneID.Location = new System.Drawing.Point(741, 6);
+            this.tbCutsceneID.Name = "tbCutsceneID";
+            this.tbCutsceneID.Size = new System.Drawing.Size(43, 20);
+            this.tbCutsceneID.TabIndex = 57;
             // 
             // btnEditCutsceneDialogue
             // 
@@ -877,23 +893,23 @@
             this.colCutscenesName.ReadOnly = true;
             this.colCutscenesName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tabDungeons
+            // tabDungeon
             // 
-            this.tabDungeons.Controls.Add(this.tbDungeonDescription);
-            this.tabDungeons.Controls.Add(this.label40);
-            this.tabDungeons.Controls.Add(this.label38);
-            this.tabDungeons.Controls.Add(this.tbDungeonID);
-            this.tabDungeons.Controls.Add(this.tbDungeonName);
-            this.tabDungeons.Controls.Add(this.label39);
-            this.tabDungeons.Controls.Add(this.button4);
-            this.tabDungeons.Controls.Add(this.dgvDungeonTags);
-            this.tabDungeons.Controls.Add(this.dgvDungeons);
-            this.tabDungeons.Location = new System.Drawing.Point(4, 22);
-            this.tabDungeons.Name = "tabDungeons";
-            this.tabDungeons.Size = new System.Drawing.Size(790, 425);
-            this.tabDungeons.TabIndex = 15;
-            this.tabDungeons.Text = "Dungeons";
-            this.tabDungeons.UseVisualStyleBackColor = true;
+            this.tabDungeon.Controls.Add(this.tbDungeonDescription);
+            this.tabDungeon.Controls.Add(this.label40);
+            this.tabDungeon.Controls.Add(this.label38);
+            this.tabDungeon.Controls.Add(this.tbDungeonID);
+            this.tabDungeon.Controls.Add(this.tbDungeonName);
+            this.tabDungeon.Controls.Add(this.label39);
+            this.tabDungeon.Controls.Add(this.button4);
+            this.tabDungeon.Controls.Add(this.dgvDungeonTags);
+            this.tabDungeon.Controls.Add(this.dgvDungeons);
+            this.tabDungeon.Location = new System.Drawing.Point(4, 22);
+            this.tabDungeon.Name = "tabDungeon";
+            this.tabDungeon.Size = new System.Drawing.Size(790, 425);
+            this.tabDungeon.TabIndex = 15;
+            this.tabDungeon.Text = "Dungeon";
+            this.tabDungeon.UseVisualStyleBackColor = true;
             // 
             // tbDungeonDescription
             // 
@@ -1022,7 +1038,7 @@
             this.tabItems.Padding = new System.Windows.Forms.Padding(3);
             this.tabItems.Size = new System.Drawing.Size(790, 425);
             this.tabItems.TabIndex = 0;
-            this.tabItems.Text = "Items";
+            this.tabItems.Text = "Item";
             this.tabItems.UseVisualStyleBackColor = true;
             // 
             // cbItemSubtype
@@ -1154,21 +1170,21 @@
             this.colItemName.ReadOnly = true;
             this.colItemName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tabLights
+            // tabLight
             // 
-            this.tabLights.Controls.Add(this.label9);
-            this.tabLights.Controls.Add(this.tbLightID);
-            this.tabLights.Controls.Add(this.tbLightName);
-            this.tabLights.Controls.Add(this.label10);
-            this.tabLights.Controls.Add(this.button1);
-            this.tabLights.Controls.Add(this.dgvLightTags);
-            this.tabLights.Controls.Add(this.dgvLights);
-            this.tabLights.Location = new System.Drawing.Point(4, 22);
-            this.tabLights.Name = "tabLights";
-            this.tabLights.Size = new System.Drawing.Size(790, 425);
-            this.tabLights.TabIndex = 14;
-            this.tabLights.Text = "Lights";
-            this.tabLights.UseVisualStyleBackColor = true;
+            this.tabLight.Controls.Add(this.label9);
+            this.tabLight.Controls.Add(this.tbLightID);
+            this.tabLight.Controls.Add(this.tbLightName);
+            this.tabLight.Controls.Add(this.label10);
+            this.tabLight.Controls.Add(this.button1);
+            this.tabLight.Controls.Add(this.dgvLightTags);
+            this.tabLight.Controls.Add(this.dgvLights);
+            this.tabLight.Location = new System.Drawing.Point(4, 22);
+            this.tabLight.Name = "tabLight";
+            this.tabLight.Size = new System.Drawing.Size(790, 425);
+            this.tabLight.TabIndex = 14;
+            this.tabLight.Text = "Light";
+            this.tabLight.UseVisualStyleBackColor = true;
             // 
             // label9
             // 
@@ -1262,23 +1278,23 @@
             this.colLightsName.ReadOnly = true;
             this.colLightsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tabMonsters
+            // tabMonster
             // 
-            this.tabMonsters.Controls.Add(this.btnMonsterCancel);
-            this.tabMonsters.Controls.Add(this.dgvMonsterTags);
-            this.tabMonsters.Controls.Add(this.tbMonsterDescription);
-            this.tabMonsters.Controls.Add(this.label15);
-            this.tabMonsters.Controls.Add(this.label18);
-            this.tabMonsters.Controls.Add(this.tbMonsterID);
-            this.tabMonsters.Controls.Add(this.tbMonsterName);
-            this.tabMonsters.Controls.Add(this.label19);
-            this.tabMonsters.Controls.Add(this.dgvMonsters);
-            this.tabMonsters.Location = new System.Drawing.Point(4, 22);
-            this.tabMonsters.Name = "tabMonsters";
-            this.tabMonsters.Size = new System.Drawing.Size(790, 425);
-            this.tabMonsters.TabIndex = 16;
-            this.tabMonsters.Text = "Monsters";
-            this.tabMonsters.UseVisualStyleBackColor = true;
+            this.tabMonster.Controls.Add(this.btnMonsterCancel);
+            this.tabMonster.Controls.Add(this.dgvMonsterTags);
+            this.tabMonster.Controls.Add(this.tbMonsterDescription);
+            this.tabMonster.Controls.Add(this.label15);
+            this.tabMonster.Controls.Add(this.label18);
+            this.tabMonster.Controls.Add(this.tbMonsterID);
+            this.tabMonster.Controls.Add(this.tbMonsterName);
+            this.tabMonster.Controls.Add(this.label19);
+            this.tabMonster.Controls.Add(this.dgvMonsters);
+            this.tabMonster.Location = new System.Drawing.Point(4, 22);
+            this.tabMonster.Name = "tabMonster";
+            this.tabMonster.Size = new System.Drawing.Size(790, 425);
+            this.tabMonster.TabIndex = 16;
+            this.tabMonster.Text = "Monster";
+            this.tabMonster.UseVisualStyleBackColor = true;
             // 
             // btnMonsterCancel
             // 
@@ -1388,21 +1404,21 @@
             this.colMonstersName.ReadOnly = true;
             this.colMonstersName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tabShops
+            // tabShop
             // 
-            this.tabShops.Controls.Add(this.label36);
-            this.tabShops.Controls.Add(this.tbShopID);
-            this.tabShops.Controls.Add(this.btnShopCancel);
-            this.tabShops.Controls.Add(this.dgvShopTags);
-            this.tabShops.Controls.Add(this.tbShopName);
-            this.tabShops.Controls.Add(this.label24);
-            this.tabShops.Controls.Add(this.dgvShops);
-            this.tabShops.Location = new System.Drawing.Point(4, 22);
-            this.tabShops.Name = "tabShops";
-            this.tabShops.Size = new System.Drawing.Size(790, 425);
-            this.tabShops.TabIndex = 9;
-            this.tabShops.Text = "Shops";
-            this.tabShops.UseVisualStyleBackColor = true;
+            this.tabShop.Controls.Add(this.label36);
+            this.tabShop.Controls.Add(this.tbShopID);
+            this.tabShop.Controls.Add(this.btnShopCancel);
+            this.tabShop.Controls.Add(this.dgvShopTags);
+            this.tabShop.Controls.Add(this.tbShopName);
+            this.tabShop.Controls.Add(this.label24);
+            this.tabShop.Controls.Add(this.dgvShops);
+            this.tabShop.Location = new System.Drawing.Point(4, 22);
+            this.tabShop.Name = "tabShop";
+            this.tabShop.Size = new System.Drawing.Size(790, 425);
+            this.tabShop.TabIndex = 9;
+            this.tabShop.Text = "Shop";
+            this.tabShop.UseVisualStyleBackColor = true;
             // 
             // label36
             // 
@@ -1496,24 +1512,24 @@
             this.colShopsName.ReadOnly = true;
             this.colShopsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tabStatusEffects
+            // tabStatusEffect
             // 
-            this.tabStatusEffects.Controls.Add(this.cbStatusEffect);
-            this.tabStatusEffects.Controls.Add(this.btnStatusEffectCancel);
-            this.tabStatusEffects.Controls.Add(this.dgvStatusEffectTags);
-            this.tabStatusEffects.Controls.Add(this.tbStatusEffectDescription);
-            this.tabStatusEffects.Controls.Add(this.label33);
-            this.tabStatusEffects.Controls.Add(this.label34);
-            this.tabStatusEffects.Controls.Add(this.tbStatusEffectID);
-            this.tabStatusEffects.Controls.Add(this.tbStatusEffectName);
-            this.tabStatusEffects.Controls.Add(this.label35);
-            this.tabStatusEffects.Controls.Add(this.dgvStatusEffects);
-            this.tabStatusEffects.Location = new System.Drawing.Point(4, 22);
-            this.tabStatusEffects.Name = "tabStatusEffects";
-            this.tabStatusEffects.Size = new System.Drawing.Size(790, 425);
-            this.tabStatusEffects.TabIndex = 13;
-            this.tabStatusEffects.Text = "Status Effects";
-            this.tabStatusEffects.UseVisualStyleBackColor = true;
+            this.tabStatusEffect.Controls.Add(this.cbStatusEffect);
+            this.tabStatusEffect.Controls.Add(this.btnStatusEffectCancel);
+            this.tabStatusEffect.Controls.Add(this.dgvStatusEffectTags);
+            this.tabStatusEffect.Controls.Add(this.tbStatusEffectDescription);
+            this.tabStatusEffect.Controls.Add(this.label33);
+            this.tabStatusEffect.Controls.Add(this.label34);
+            this.tabStatusEffect.Controls.Add(this.tbStatusEffectID);
+            this.tabStatusEffect.Controls.Add(this.tbStatusEffectName);
+            this.tabStatusEffect.Controls.Add(this.label35);
+            this.tabStatusEffect.Controls.Add(this.dgvStatusEffects);
+            this.tabStatusEffect.Location = new System.Drawing.Point(4, 22);
+            this.tabStatusEffect.Name = "tabStatusEffect";
+            this.tabStatusEffect.Size = new System.Drawing.Size(790, 425);
+            this.tabStatusEffect.TabIndex = 13;
+            this.tabStatusEffect.Text = "Status Effect";
+            this.tabStatusEffect.UseVisualStyleBackColor = true;
             // 
             // cbStatusEffect
             // 
@@ -1632,24 +1648,24 @@
             this.colStatusEffectsName.ReadOnly = true;
             this.colStatusEffectsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tabTasks
+            // tabTask
             // 
-            this.tabTasks.Controls.Add(this.cbTaskType);
-            this.tabTasks.Controls.Add(this.btnTaskCancel);
-            this.tabTasks.Controls.Add(this.dgvTaskTags);
-            this.tabTasks.Controls.Add(this.tbTaskDescription);
-            this.tabTasks.Controls.Add(this.label11);
-            this.tabTasks.Controls.Add(this.label12);
-            this.tabTasks.Controls.Add(this.tbTaskID);
-            this.tabTasks.Controls.Add(this.tbTaskName);
-            this.tabTasks.Controls.Add(this.label13);
-            this.tabTasks.Controls.Add(this.dgvTasks);
-            this.tabTasks.Location = new System.Drawing.Point(4, 22);
-            this.tabTasks.Name = "tabTasks";
-            this.tabTasks.Size = new System.Drawing.Size(790, 425);
-            this.tabTasks.TabIndex = 5;
-            this.tabTasks.Text = "Tasks";
-            this.tabTasks.UseVisualStyleBackColor = true;
+            this.tabTask.Controls.Add(this.cbTaskType);
+            this.tabTask.Controls.Add(this.btnTaskCancel);
+            this.tabTask.Controls.Add(this.dgvTaskTags);
+            this.tabTask.Controls.Add(this.tbTaskDescription);
+            this.tabTask.Controls.Add(this.label11);
+            this.tabTask.Controls.Add(this.label12);
+            this.tabTask.Controls.Add(this.tbTaskID);
+            this.tabTask.Controls.Add(this.tbTaskName);
+            this.tabTask.Controls.Add(this.label13);
+            this.tabTask.Controls.Add(this.dgvTasks);
+            this.tabTask.Location = new System.Drawing.Point(4, 22);
+            this.tabTask.Name = "tabTask";
+            this.tabTask.Size = new System.Drawing.Size(790, 425);
+            this.tabTask.TabIndex = 5;
+            this.tabTask.Text = "Tasks";
+            this.tabTask.UseVisualStyleBackColor = true;
             // 
             // cbTaskType
             // 
@@ -1768,23 +1784,23 @@
             this.colTasksName.ReadOnly = true;
             this.colTasksName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tabWorldObjects
+            // tabWorldObject
             // 
-            this.tabWorldObjects.Controls.Add(this.cbWorldObjectType);
-            this.tabWorldObjects.Controls.Add(this.btnWorldObjectCancel);
-            this.tabWorldObjects.Controls.Add(this.dgvWorldObjectTags);
-            this.tabWorldObjects.Controls.Add(this.label4);
-            this.tabWorldObjects.Controls.Add(this.tbWorldObjectID);
-            this.tabWorldObjects.Controls.Add(this.tbWorldObjectName);
-            this.tabWorldObjects.Controls.Add(this.label5);
-            this.tabWorldObjects.Controls.Add(this.dgvWorldObjects);
-            this.tabWorldObjects.Location = new System.Drawing.Point(4, 22);
-            this.tabWorldObjects.Name = "tabWorldObjects";
-            this.tabWorldObjects.Padding = new System.Windows.Forms.Padding(3);
-            this.tabWorldObjects.Size = new System.Drawing.Size(790, 425);
-            this.tabWorldObjects.TabIndex = 1;
-            this.tabWorldObjects.Text = "WorldObj";
-            this.tabWorldObjects.UseVisualStyleBackColor = true;
+            this.tabWorldObject.Controls.Add(this.cbWorldObjectType);
+            this.tabWorldObject.Controls.Add(this.btnWorldObjectCancel);
+            this.tabWorldObject.Controls.Add(this.dgvWorldObjectTags);
+            this.tabWorldObject.Controls.Add(this.label4);
+            this.tabWorldObject.Controls.Add(this.tbWorldObjectID);
+            this.tabWorldObject.Controls.Add(this.tbWorldObjectName);
+            this.tabWorldObject.Controls.Add(this.label5);
+            this.tabWorldObject.Controls.Add(this.dgvWorldObjects);
+            this.tabWorldObject.Location = new System.Drawing.Point(4, 22);
+            this.tabWorldObject.Name = "tabWorldObject";
+            this.tabWorldObject.Padding = new System.Windows.Forms.Padding(3);
+            this.tabWorldObject.Size = new System.Drawing.Size(790, 425);
+            this.tabWorldObject.TabIndex = 1;
+            this.tabWorldObject.Text = "WorldObj";
+            this.tabWorldObject.UseVisualStyleBackColor = true;
             // 
             // cbWorldObjectType
             // 
@@ -1887,21 +1903,21 @@
             this.colWorldObjectsName.ReadOnly = true;
             this.colWorldObjectsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tabUpgrades
+            // tabUpgrade
             // 
-            this.tabUpgrades.Controls.Add(this.btnUpgradeCancel);
-            this.tabUpgrades.Controls.Add(this.dgvUpgradeTags);
-            this.tabUpgrades.Controls.Add(this.label23);
-            this.tabUpgrades.Controls.Add(this.tbUpgradeID);
-            this.tabUpgrades.Controls.Add(this.tbUpgradeName);
-            this.tabUpgrades.Controls.Add(this.label25);
-            this.tabUpgrades.Controls.Add(this.dgvUpgrades);
-            this.tabUpgrades.Location = new System.Drawing.Point(4, 22);
-            this.tabUpgrades.Name = "tabUpgrades";
-            this.tabUpgrades.Size = new System.Drawing.Size(790, 425);
-            this.tabUpgrades.TabIndex = 17;
-            this.tabUpgrades.Text = "Upgrades";
-            this.tabUpgrades.UseVisualStyleBackColor = true;
+            this.tabUpgrade.Controls.Add(this.btnUpgradeCancel);
+            this.tabUpgrade.Controls.Add(this.dgvUpgradeTags);
+            this.tabUpgrade.Controls.Add(this.label23);
+            this.tabUpgrade.Controls.Add(this.tbUpgradeID);
+            this.tabUpgrade.Controls.Add(this.tbUpgradeName);
+            this.tabUpgrade.Controls.Add(this.label25);
+            this.tabUpgrade.Controls.Add(this.dgvUpgrades);
+            this.tabUpgrade.Location = new System.Drawing.Point(4, 22);
+            this.tabUpgrade.Name = "tabUpgrade";
+            this.tabUpgrade.Size = new System.Drawing.Size(790, 425);
+            this.tabUpgrade.TabIndex = 17;
+            this.tabUpgrade.Text = "Upgrades";
+            this.tabUpgrade.UseVisualStyleBackColor = true;
             // 
             // btnUpgradeCancel
             // 
@@ -2003,22 +2019,6 @@
             this.tbStatus.Size = new System.Drawing.Size(794, 20);
             this.tbStatus.TabIndex = 13;
             // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(714, 9);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(21, 13);
-            this.label26.TabIndex = 58;
-            this.label26.Text = "ID:";
-            // 
-            // tbCutsceneID
-            // 
-            this.tbCutsceneID.Location = new System.Drawing.Point(741, 6);
-            this.tbCutsceneID.Name = "tbCutsceneID";
-            this.tbCutsceneID.Size = new System.Drawing.Size(43, 20);
-            this.tbCutsceneID.TabIndex = 57;
-            // 
             // FrmDBEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2031,59 +2031,60 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FrmDBEditor";
             this.Text = "Database Editor";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmDBEditor_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabCtl.ResumeLayout(false);
-            this.tabActions.ResumeLayout(false);
-            this.tabActions.PerformLayout();
+            this.tabAction.ResumeLayout(false);
+            this.tabAction.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActionTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActions)).EndInit();
-            this.tabCharacters.ResumeLayout(false);
-            this.tabCharacters.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCharacterTags)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCharacters)).EndInit();
-            this.tabClasses.ResumeLayout(false);
-            this.tabClasses.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgClassTags)).EndInit();
+            this.tabNPC.ResumeLayout(false);
+            this.tabNPC.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvNPCTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvNPCs)).EndInit();
+            this.tabClass.ResumeLayout(false);
+            this.tabClass.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvClassTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvClasses)).EndInit();
-            this.tabCutscenes.ResumeLayout(false);
-            this.tabCutscenes.PerformLayout();
+            this.tabCutscene.ResumeLayout(false);
+            this.tabCutscene.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCutsceneTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCutscenes)).EndInit();
-            this.tabDungeons.ResumeLayout(false);
-            this.tabDungeons.PerformLayout();
+            this.tabDungeon.ResumeLayout(false);
+            this.tabDungeon.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDungeonTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDungeons)).EndInit();
             this.tabItems.ResumeLayout(false);
             this.tabItems.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItemTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvItems)).EndInit();
-            this.tabLights.ResumeLayout(false);
-            this.tabLights.PerformLayout();
+            this.tabLight.ResumeLayout(false);
+            this.tabLight.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLightTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLights)).EndInit();
-            this.tabMonsters.ResumeLayout(false);
-            this.tabMonsters.PerformLayout();
+            this.tabMonster.ResumeLayout(false);
+            this.tabMonster.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMonsterTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMonsters)).EndInit();
-            this.tabShops.ResumeLayout(false);
-            this.tabShops.PerformLayout();
+            this.tabShop.ResumeLayout(false);
+            this.tabShop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvShopTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvShops)).EndInit();
-            this.tabStatusEffects.ResumeLayout(false);
-            this.tabStatusEffects.PerformLayout();
+            this.tabStatusEffect.ResumeLayout(false);
+            this.tabStatusEffect.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffectTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffects)).EndInit();
-            this.tabTasks.ResumeLayout(false);
-            this.tabTasks.PerformLayout();
+            this.tabTask.ResumeLayout(false);
+            this.tabTask.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTaskTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTasks)).EndInit();
-            this.tabWorldObjects.ResumeLayout(false);
-            this.tabWorldObjects.PerformLayout();
+            this.tabWorldObject.ResumeLayout(false);
+            this.tabWorldObject.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjectTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjects)).EndInit();
-            this.tabUpgrades.ResumeLayout(false);
-            this.tabUpgrades.PerformLayout();
+            this.tabUpgrade.ResumeLayout(false);
+            this.tabUpgrade.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUpgradeTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUpgrades)).EndInit();
             this.ResumeLayout(false);
@@ -2108,7 +2109,7 @@
         private System.Windows.Forms.TextBox tbItemName;
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.DataGridView dgvItems;
-        private System.Windows.Forms.TabPage tabWorldObjects;
+        private System.Windows.Forms.TabPage tabWorldObject;
         private System.Windows.Forms.ComboBox cbWorldObjectType;
         private System.Windows.Forms.Button btnWorldObjectCancel;
         private System.Windows.Forms.DataGridView dgvWorldObjectTags;
@@ -2117,25 +2118,25 @@
         private System.Windows.Forms.TextBox tbWorldObjectName;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.DataGridView dgvWorldObjects;
-        private System.Windows.Forms.TabPage tabCharacters;
-        private System.Windows.Forms.Button btnCancelCharacter;
-        private System.Windows.Forms.DataGridView dgvCharacterTags;
+        private System.Windows.Forms.TabPage tabNPC;
+        private System.Windows.Forms.Button btnCancelNPC;
+        private System.Windows.Forms.DataGridView dgvNPCTags;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox tbCharacterID;
-        private System.Windows.Forms.TextBox tbCharacterName;
+        private System.Windows.Forms.TextBox tbNPCID;
+        private System.Windows.Forms.TextBox tbNPCName;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.DataGridView dgvCharacters;
-        private System.Windows.Forms.ComboBox cbCharacterType;
-        private System.Windows.Forms.TabPage tabClasses;
+        private System.Windows.Forms.DataGridView dgvNPCs;
+        private System.Windows.Forms.ComboBox cbNPCType;
+        private System.Windows.Forms.TabPage tabClass;
         private System.Windows.Forms.Button btnClassCancel;
-        private System.Windows.Forms.DataGridView dgClassTags;
+        private System.Windows.Forms.DataGridView dgvClassTags;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox tbClassID;
         private System.Windows.Forms.TextBox tbClassName;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.DataGridView dgvClasses;
         private System.Windows.Forms.Button btnEdit;
-        private System.Windows.Forms.TabPage tabTasks;
+        private System.Windows.Forms.TabPage tabTask;
         private System.Windows.Forms.Button btnTaskCancel;
         private System.Windows.Forms.DataGridView dgvTaskTags;
         private System.Windows.Forms.TextBox tbTaskDescription;
@@ -2147,7 +2148,7 @@
         private System.Windows.Forms.DataGridView dgvTasks;
         private System.Windows.Forms.ComboBox cbTaskType;
         private System.Windows.Forms.ComboBox cbEditableCharData;
-        private System.Windows.Forms.TabPage tabCutscenes;
+        private System.Windows.Forms.TabPage tabCutscene;
         private System.Windows.Forms.TextBox tbCutsceneDetails;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox tbCutsceneTriggers;
@@ -2158,7 +2159,7 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.DataGridView dgvCutscenes;
         private System.Windows.Forms.Button btnEditCutsceneDialogue;
-        private System.Windows.Forms.TabPage tabActions;
+        private System.Windows.Forms.TabPage tabAction;
         private System.Windows.Forms.Button btnActionCancel;
         private System.Windows.Forms.DataGridView dgvActionTags;
         private System.Windows.Forms.TextBox tbActionDescription;
@@ -2169,13 +2170,13 @@
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.DataGridView dgvActions;
         private System.Windows.Forms.ComboBox cbActionType;
-        private System.Windows.Forms.TabPage tabShops;
+        private System.Windows.Forms.TabPage tabShop;
         private System.Windows.Forms.DataGridView dgvShopTags;
         private System.Windows.Forms.TextBox tbShopName;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.DataGridView dgvShops;
         private System.Windows.Forms.Button btnShopCancel;
-        private System.Windows.Forms.TabPage tabStatusEffects;
+        private System.Windows.Forms.TabPage tabStatusEffect;
         private System.Windows.Forms.Button btnStatusEffectCancel;
         private System.Windows.Forms.DataGridView dgvStatusEffectTags;
         private System.Windows.Forms.TextBox tbStatusEffectDescription;
@@ -2193,7 +2194,7 @@
         private System.Windows.Forms.ToolStripMenuItem textToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gameTextToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mailboxMessagesToolStripMenuItem;
-        private System.Windows.Forms.TabPage tabLights;
+        private System.Windows.Forms.TabPage tabLight;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox tbLightID;
         private System.Windows.Forms.TextBox tbLightName;
@@ -2201,7 +2202,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dgvLightTags;
         private System.Windows.Forms.DataGridView dgvLights;
-        private System.Windows.Forms.TabPage tabDungeons;
+        private System.Windows.Forms.TabPage tabDungeon;
         private System.Windows.Forms.Label label38;
         private System.Windows.Forms.TextBox tbDungeonID;
         private System.Windows.Forms.TextBox tbDungeonName;
@@ -2213,7 +2214,7 @@
         private System.Windows.Forms.Label label40;
         private System.Windows.Forms.DataGridViewTextBoxColumn colItemTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colWorldObjectTags;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNPCTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colClassTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTaskTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCutsceneTags;
@@ -2222,7 +2223,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colLightTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDungeonsTag;
         private System.Windows.Forms.ComboBox cbStatusEffect;
-        private System.Windows.Forms.TabPage tabMonsters;
+        private System.Windows.Forms.TabPage tabMonster;
         private System.Windows.Forms.Button btnMonsterCancel;
         private System.Windows.Forms.DataGridView dgvMonsterTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colMonsterTags;
@@ -2236,7 +2237,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colActionTags;
         private System.Windows.Forms.ToolStripMenuItem sortAndSaveToolStripMenuItem1;
         private System.Windows.Forms.DataGridViewTextBoxColumn colActionsName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCharactersName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNPCsName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colClassName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCutscenesName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDungeonsName;
@@ -2248,7 +2249,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colTasksName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colWorldObjectsName;
         private System.Windows.Forms.TextBox tbStatus;
-        private System.Windows.Forms.TabPage tabUpgrades;
+        private System.Windows.Forms.TabPage tabUpgrade;
         private System.Windows.Forms.DataGridView dgvUpgrades;
         private System.Windows.Forms.Button btnUpgradeCancel;
         private System.Windows.Forms.DataGridView dgvUpgradeTags;

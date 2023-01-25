@@ -134,7 +134,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diPlayerAnimationData, @"Data\PlayerClassAnimationConfig", Content, null);
             LoadDictionary(ref _diItemData, @"Data\ItemData", Content, null);
             LoadDictionary(ref _diActions, @"Data\Combat_Actions", Content, null);
-            LoadDictionary(ref _diNPCData, @"Data\CharacterData", Content, null);
+            LoadDictionary(ref _diNPCData, @"Data\NPCData", Content, null);
             LoadDictionary(ref _diMonsterData, @"Data\Monsters", Content, null);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
             LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);

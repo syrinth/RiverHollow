@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ItemXMLData.cs" />
+    <Compile Include="Classes\TabCollection.cs" />
     <Compile Include="Classes\TMXData.cs" />
     <Compile Include="Classes\Constants.cs" />
     <Compile Include="Classes\XMLData.cs" />

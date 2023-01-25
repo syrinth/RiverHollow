@@ -3,7 +3,9 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using static Database_Editor.Classes.Constants;
@@ -20,8 +22,8 @@ namespace Database_Editor
         private int _iNextCurrID = -1;
 
         static Dictionary<int, List<string>> _diCutscenes;
-        static Dictionary<string, Dictionary<string, List<string>>> _diCharacterSchedules;
-        static Dictionary<string, List<XMLData>> _diCharacterDialogue;
+        static Dictionary<string, Dictionary<string, List<string>>> _diNPCSchedules;
+        static Dictionary<string, List<XMLData>> _diNPCDialogue;
         static Dictionary<string, List<XMLData>> _diCutsceneDialogue;
         static List<XMLData> _liMailbox;
         static List<XMLData> _liGameText; 
@@ -29,6 +31,8 @@ namespace Database_Editor
         static Dictionary<ItemEnum, List<ItemXMLData>> _diItems;
         static Dictionary<string, List<XMLData>> _diBasicXML;
         Dictionary<string, TMXData> _diMapData;
+
+        Dictionary<XMLTypeEnum, TabCollection> _diTabCollections;
 
         string _itemFilter = "All";
         string _worldObjFilter = "All";
@@ -39,23 +43,24 @@ namespace Database_Editor
         public FrmDBEditor()
         {
             InitializeComponent();
+            SetupTabCollections();
 
             InitComboBox<ItemEnum>(cbItemType);
             InitComboBox<ObjectTypeEnum>(cbWorldObjectType);
             InitComboBox<TaskTypeEnum>(cbTaskType);
-            InitComboBox<EditableCharacterDataEnum>(cbEditableCharData, false);
+            InitComboBox<EditableNPCDataEnum>(cbEditableCharData, false);
             InitComboBox<ActionEnum>(cbActionType);
             InitComboBox<StatusTypeEnum>(cbStatusEffect);
 
-            cbCharacterType.Items.Clear();
-            InitComboBox(cbCharacterType, true, new List<WorldActorTypeEnum>() { WorldActorTypeEnum.Actor});
+            cbNPCType.Items.Clear();
+            InitComboBox(cbNPCType, true, new List<WorldActorTypeEnum>() { WorldActorTypeEnum.Actor});
 
             _diTabIndices = new Dictionary<string, int>()
             {
                 { "PreviousTab", 0 },
                 { "Items", 0 },
                 { "WorldObjects", 0 },
-                { "Characters", 0 },
+                { "NPCs", 0 },
                 { "Classes", 0 },
                 { "Tasks", 0 },
                 { "Cutscenes", 0},
@@ -64,7 +69,6 @@ namespace Database_Editor
                 { "Actions", 0 },
                 { "Shops", 0 },
                 { "Buildings", 0 },
-                { "NPCs", 0 },
                 { "StatusEffects", 0 },
                 { "Lights", 0 },
                 { "Dungeons", 0 },
@@ -84,11 +88,11 @@ namespace Database_Editor
             }
             
             _diItems = new Dictionary<ItemEnum, List<ItemXMLData>>();
-            _diCharacterDialogue = new Dictionary<string, List<XMLData>>();
+            _diNPCDialogue = new Dictionary<string, List<XMLData>>();
             string[] dialogueFiles = Directory.GetFiles(PATH_TO_VILLAGER_DIALOGUE);
             for (int i = 0; i < dialogueFiles.Length; i++)
             {
-                LoadXMLDictionary(dialogueFiles[i], TEXTFILE_REF_TAGS, "", ref _diCharacterDialogue);
+                LoadXMLDictionary(dialogueFiles[i], TEXTFILE_REF_TAGS, "", ref _diNPCDialogue);
             }
 
             _diCutsceneDialogue = new Dictionary<string, List<XMLData>>();
@@ -101,7 +105,7 @@ namespace Database_Editor
             _liGameText = LoadXMLList(PATH_TO_TEXT_FILES + @"\GameText.xml", TEXTFILE_REF_TAGS, "");
             _liMailbox = LoadXMLList(PATH_TO_TEXT_FILES + @"\Mailbox_Text.xml", TEXTFILE_REF_TAGS, "");
 
-            _diCharacterSchedules = new Dictionary<string, Dictionary<string, List<string>>>();
+            _diNPCSchedules = new Dictionary<string, Dictionary<string, List<string>>>();
             foreach (string s in Directory.GetFiles(PATH_TO_SCHEDULES))
             {
                 string fileName = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0];
@@ -110,7 +114,7 @@ namespace Database_Editor
                 {
                     fileName = s;
                     Util.ParseContentFile(ref fileName);
-                    _diCharacterSchedules.Add(s, ReadXMLFileToStringKeyDictionaryStringList(fileName));//ReadXMLFilToDictionary(fileName));
+                    _diNPCSchedules.Add(s, ReadXMLFileToStringKeyDictionaryStringList(fileName));//ReadXMLFilToDictionary(fileName));
                 }
             }
 
@@ -118,7 +122,7 @@ namespace Database_Editor
 
             _diBasicXML = new Dictionary<string, List<XMLData>>();
             LoadXMLDictionary(TASK_XML_FILE, TASK_REF_TAGS, "", ref _diBasicXML);
-            LoadXMLDictionary(NPC_XML_FILE, CHARACTER_REF_TAGS, TAGS_FOR_CHARACTERS, ref _diBasicXML);
+            LoadXMLDictionary(NPC_XML_FILE, NPC_REF_TAGS, TAGS_FOR_NPCS, ref _diBasicXML);
             LoadXMLDictionary(CLASSES_XML_FILE, CLASSES_REF_TAGS, TAGS_FOR_CLASSES, ref _diBasicXML);
             LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_REF_TAG, "", ref _diBasicXML);
             LoadXMLDictionary(MONSTERS_XML_FILE, MONSTERS_REF_TAGS, TAGS_FOR_MONSTERS, ref _diBasicXML);
@@ -145,7 +149,7 @@ namespace Database_Editor
         {
             LoadItemDataGrid();
             LoadWorldObjectDataGrid();
-            LoadCharacterDataGrid();
+            LoadNPCDataGrid();
             LoadClassDataGrid();
             LoadTaskDataGrid();
             LoadMonsterDataGrid();
@@ -162,7 +166,7 @@ namespace Database_Editor
         {
             LoadItemInfo();
             LoadWorldObjectInfo();
-            LoadCharacterInfo();
+            LoadNPCInfo();
             LoadClassInfo();
             LoadTaskInfo();
             LoadCutsceneInfo();
@@ -173,6 +177,26 @@ namespace Database_Editor
             LoadLightInfo();
             LoadUpgradeInfo();
             LoadDungeonInfo();
+        }
+
+        private void SetupTabCollections()
+        {
+            _diTabCollections = new Dictionary<XMLTypeEnum, TabCollection>
+            {
+                [XMLTypeEnum.WorldObject] = new TabCollection(XMLTypeEnum.WorldObject, new List<string>() { "Image:0-0" }),
+                [XMLTypeEnum.Task] = new TabCollection(XMLTypeEnum.Task),
+                [XMLTypeEnum.Cutscene] = new TabCollection(XMLTypeEnum.Cutscene),
+                [XMLTypeEnum.Class] = new TabCollection(XMLTypeEnum.Class),
+                [XMLTypeEnum.StatusEffect] = new TabCollection(XMLTypeEnum.StatusEffect),
+                [XMLTypeEnum.Dungeon] = new TabCollection(XMLTypeEnum.Dungeon),
+                [XMLTypeEnum.Item] = new TabCollection(XMLTypeEnum.Item, new List<string>() { "Image:", "MerchType:None", "Value:" }),
+                [XMLTypeEnum.NPC] = new TabCollection(XMLTypeEnum.NPC, new List<string>() { "PortRow:1", "Idle:0-0-1-0-T", "Walk:0-0-1-0-T", "FirstArrival:0", "ArrivalPeriod:0" }),
+                [XMLTypeEnum.Shop] = new TabCollection(XMLTypeEnum.Shop, new List<string>() { "ItemID:", "Shopkeeper:" }),
+                [XMLTypeEnum.Light] = new TabCollection(XMLTypeEnum.Light, new List<string>() { "Texture:", "Idle:1-1", "Dimensions:" }),
+                [XMLTypeEnum.Upgrade] = new TabCollection(XMLTypeEnum.Upgrade, new List<string>() { "Icon:", "Cost:100", "ItemID:" }),
+                [XMLTypeEnum.Action] = new TabCollection(XMLTypeEnum.Action, new List<string>() { "Icon:", "DamageAttribute:", "DamageType:", "Target:", "Range:", "AreaType:", "Harm:100", "Action:", "Animation:", "AnimOffset:" }),
+                [XMLTypeEnum.Monster] = new TabCollection(XMLTypeEnum.Monster, new List<string>() { "Texture:", "Condition:", "Lvl", "Ability:", "Loot:", "Trait:", "Walk:0-0-3-0.15-T", "Action1:0-0-3-0.15-T", "Cast:0-0-3-0.15-T", "Hurt:0-0-3-0.15-T", "Critical:0-0-3-0.15-T", "KO:0-0-3-0.15-T" })
+            };
         }
 
         #region Helpers
@@ -274,9 +298,9 @@ namespace Database_Editor
         {
             LoadGenericDatagrid(dgvWorldObjects, _liWorldObjects, "colWorldObjectsID", "colWorldObjectsName", "WorldObjects", selectedIndex == -1 ? _diTabIndices["WorldObjects"] : selectedIndex, filter);
         }
-        private void LoadCharacterDataGrid(string filter = "All", int selectedIndex = -1)
+        private void LoadNPCDataGrid(string filter = "All", int selectedIndex = -1)
         {
-            LoadGenericDatagrid(dgvCharacters, _diBasicXML[NPC_XML_FILE], "colCharactersID", "colCharactersName", "Characters", selectedIndex == -1 ? _diTabIndices["Characters"] : selectedIndex, filter);
+            LoadGenericDatagrid(dgvNPCs, _diBasicXML[NPC_XML_FILE], "colNPCsID", "colNPCsName", "NPCs", selectedIndex == -1 ? _diTabIndices["NPCs"] : selectedIndex, filter);
         }
         private void LoadClassDataGrid()
         {
@@ -495,7 +519,6 @@ namespace Database_Editor
 
             return xmlDictionary;
         }
-
         private Dictionary<string, Dictionary<string, string>> ReadTaggedXMLFile(string fileName)
         {
             string line = string.Empty;
@@ -619,7 +642,7 @@ namespace Database_Editor
                 }
                 FindLinkedXMLObjects(theData, _liMailbox);
                 FindLinkedXMLObjectsInDictionary(theData, _diBasicXML);
-                FindLinkedXMLObjectsInDictionary(theData, _diCharacterDialogue);
+                FindLinkedXMLObjectsInDictionary(theData, _diNPCDialogue);
 
                 //Compare ItemData against the WorldObjectData
 
@@ -644,7 +667,7 @@ namespace Database_Editor
                 FindLinkedXMLObjects(theData, _liWorldObjects);
 
                 FindLinkedXMLObjectsInDictionary(theData, _diBasicXML);
-                FindLinkedXMLObjectsInDictionary(theData, _diCharacterDialogue);
+                FindLinkedXMLObjectsInDictionary(theData, _diNPCDialogue);
 
                 FindLinkedTMXObjects(theData);
             }
@@ -663,7 +686,7 @@ namespace Database_Editor
                     }
 
                     FindLinkedXMLObjects(theData, _liMailbox);
-                    FindLinkedXMLObjectsInDictionary(theData, _diCharacterDialogue);
+                    FindLinkedXMLObjectsInDictionary(theData, _diNPCDialogue);
 
                     FindLinkedTMXObjects(theData);
 
@@ -851,204 +874,36 @@ namespace Database_Editor
             return rv;
         }
 
-        #region Load Info Panes
-        private void LoadGenericDataInfo(XMLData data, TextBox tbName, TextBox tbID, DataGridView dgvTags, TextBox tbDescription = null)
-        {
-            tbName.Text = data.Name;
-            if (tbDescription != null)
-            {
-                tbDescription.Text = data.Description;
-            }
-            tbID.Text = data.ID.ToString();
-
-            dgvTags.Rows.Clear();
-            string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string s in tags)
-            {
-                if (!s.StartsWith("Type"))
-                {
-                    dgvTags.Rows.Add(s);
-                }
-            }
-        }
-        private void LoadItemInfo()
-        {
-            DataGridViewRow r = dgvItems.SelectedRows[0];
-
-            ItemXMLData data = null;
-            if (_itemFilter == "All") { data = _liItemData[r.Index]; }
-            else { data = _liItemData.FindAll(x => x.ItemType.ToString().Equals(_itemFilter))[r.Index]; }
-
-            tbItemName.Text = data.Name;
-            tbItemDesc.Text = data.Description;
-            tbItemID.Text = data.ID.ToString();
-
-            cbItemType.SelectedIndex = (int)data.ItemType;
-            SetItemSubtype();
-
-            dgItemTags.Rows.Clear();
-            string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string s in tags)
-            {
-                if (s.StartsWith("Subtype"))
-                {
-                    cbItemSubtype.SelectedIndex = GetSubtypeIndex(data.ItemType, s.Split(':')[1]);
-                }
-                else if (!s.StartsWith("Type"))
-                {
-                    dgItemTags.Rows.Add(s);
-                }
-            }
-        }
-        private void LoadWorldObjectInfo()
-        {
-            DataGridViewRow r = dgvWorldObjects.SelectedRows[0];
-            XMLData data = null;
-            if (_worldObjFilter == "All") { data = _liWorldObjects[r.Index]; }
-            else { data = _liWorldObjects.FindAll(x => x.GetTagValue("Type").ToString().Equals(_worldObjFilter))[r.Index]; }
-
-            LoadGenericDataInfo(data, tbWorldObjectName, tbWorldObjectID, dgvWorldObjectTags);
-            cbWorldObjectType.SelectedIndex = (int)Util.ParseEnum<ObjectTypeEnum>(data.GetTagValue("Type"));
-        }
-        private void LoadCharacterInfo()
-        {
-            DataGridViewRow r = dgvCharacters.SelectedRows[0];
-            XMLData data = null;
-            if (_worldObjFilter == "All") { data = _diBasicXML[NPC_XML_FILE][_diTabIndices["Characters"]]; }
-            else { data = _diBasicXML[NPC_XML_FILE].FindAll(x => x.GetTagValue("Type").ToString().Equals(_worldObjFilter))[r.Index]; }
-            LoadGenericDataInfo(data, tbCharacterName, tbCharacterID, dgvCharacterTags);
-
-            for (int i = 0; i < cbCharacterType.Items.Count; i++)
-            {
-                if (cbCharacterType.Items[i].ToString().Split(':')[1] == data.GetTagValue("Type"))
-                {
-                    cbCharacterType.SelectedIndex = i;
-                    break;
-                }
-            }
-        }
-        private void LoadClassInfo()
-        {
-            XMLData data = _diBasicXML[CLASSES_XML_FILE][_diTabIndices["Classes"]];
-            LoadGenericDataInfo(data, tbClassName, tbClassID, dgClassTags, tbClassDescription);
-        }
-        private void LoadTaskInfo()
-        {
-            XMLData data = _diBasicXML[TASK_XML_FILE][_diTabIndices["Tasks"]];
-            LoadGenericDataInfo(data, tbTaskName, tbTaskID, dgvTaskTags, tbTaskDescription);
-            cbTaskType.SelectedIndex = (int)Util.ParseEnum<TaskTypeEnum>(data.GetTagValue("Type"));
-        }
-        private void LoadMonsterInfo()
-        {
-            XMLData data = _diBasicXML[MONSTERS_XML_FILE][_diTabIndices["Monsters"]];
-            LoadGenericDataInfo(data, tbMonsterName, tbMonsterID, dgvMonsterTags, tbMonsterDescription);
-        }
-        private void LoadActionInfo()
-        {
-            XMLData data = _diBasicXML[ACTIONS_XML_FILE][_diTabIndices["Actions"]];
-            LoadGenericDataInfo(data, tbActionName, tbActionID, dgvActionTags, tbActionDescription);
-            cbActionType.SelectedIndex = (int)Util.ParseEnum<ActionEnum>(data.GetTagValue("Type"));
-        }
-        private void LoadStatusEffectInfo()
-        {
-            XMLData data = _diBasicXML[STATUS_EFFECTS_XML_FILE][_diTabIndices["StatusEffects"]];
-            LoadGenericDataInfo(data, tbStatusEffectName, tbStatusEffectID, dgvStatusEffectTags, tbStatusEffectDescription);
-            cbStatusEffect.SelectedIndex = (int)Util.ParseEnum<StatusTypeEnum>(data.GetTagValue("Type"));
-        }
-        private void LoadLightInfo()
-        {
-            XMLData data = _diBasicXML[LIGHTS_XML_FILE][_diTabIndices["Lights"]];
-            LoadGenericDataInfo(data, tbLightName, tbLightID, dgvLightTags);
-        }
-        private void LoadUpgradeInfo()
-        {
-            XMLData data = _diBasicXML[UPGRADES_XML_FILE][_diTabIndices["Upgrades"]];
-            LoadGenericDataInfo(data, tbUpgradeName, tbUpgradeID, dgvUpgradeTags);
-        }
-        private void LoadDungeonInfo()
-        {
-            XMLData data = _diBasicXML[DUNGEON_XML_FILE][_diTabIndices["Dungeons"]];
-            LoadGenericDataInfo(data, tbDungeonName, tbDungeonID, dgvDungeonTags);
-        }
-
-        private void LoadDictionaryListInfo(int index, List<XMLData> dataList, TextBox tbName, DataGridView dgvTags, XMLTypeEnum xmlType, TextBox tbDescription = null)
-        {
-            tbName.Text = GetTextValue(xmlType, index, "Name");
-            if (tbDescription != null)
-            {
-                tbDescription.Text = GetTextValue(xmlType, index, "Description");
-            }
-
-            dgvTags.Rows.Clear();
-            foreach (XMLData d in dataList)
-            {
-                dgvTags.Rows.Add(d.GetTagsString());
-            }
-        }
-        private void LoadCutsceneInfo()
-        {
-            List<string> listData = _diCutscenes[_diTabIndices["Cutscenes"]];
-
-            tbCutsceneName.Text = GetTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name");
-            tbCutsceneID.Text = _diTabIndices["Cutscenes"].ToString();
-            tbCutsceneTriggers.Text = listData[0];
-            tbCutsceneDetails.Text = listData[1];
-
-            dgvCutsceneTags.Rows.Clear();
-            string[] tags = listData[2].Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string s in tags)
-            {
-                if (!s.StartsWith("Type"))
-                {
-                    dgvCutsceneTags.Rows.Add(s);
-                }
-            }
-        }
-        private void LoadShopInfo()
-        {
-            XMLData data = _diBasicXML[SHOPS_XML_FILE][_diTabIndices["Shops"]];
-            LoadGenericDataInfo(data, tbShopName, tbShopID, dgvShopTags);
-
-            //tbShopName.Text = GetTextValue(XMLTypeEnum.Shop, _diTabIndices["Shops"], "Name");
-
-            //dgvShopTags.Rows.Clear();
-            //foreach (XMLData d in _diShops[_diTabIndices["Shops"]])
-            //{
-            //    dgvShopTags.Rows.Add(d.GetTagsString());
-            //}
-        }
-        #endregion
-
         #region EventHandlers
         private void btnDialogue_Click(object sender, EventArgs e)
         {
-            string npcKey = @"\NPC_" + _diBasicXML[NPC_XML_FILE][_diTabIndices["Characters"]].GetTagValue("Key") + ".xml";
+            string npcKey = @"\NPC_" + _diBasicXML[NPC_XML_FILE][_diTabIndices["NPCs"]].GetTagValue("Key") + ".xml";
             FormCharExtraData frm = null;
             if (cbEditableCharData.SelectedItem.ToString() == "Dialogue")
             {
                 string key = PATH_TO_VILLAGER_DIALOGUE + npcKey;
-                if (!_diCharacterDialogue.ContainsKey(key))
+                if (!_diNPCDialogue.ContainsKey(key))
                 {
-                    _diCharacterDialogue[key] = new List<XMLData>();
+                    _diNPCDialogue[key] = new List<XMLData>();
                 }
 
-                frm = new FormCharExtraData("Dialogue", _diCharacterDialogue[key], ref _diObjectText);
+                frm = new FormCharExtraData("Dialogue", _diNPCDialogue[key], ref _diObjectText);
                 frm.ShowDialog();
 
-                _diCharacterDialogue[key] = frm.StringData;
+                _diNPCDialogue[key] = frm.StringData;
             }
             else if (cbEditableCharData.SelectedItem.ToString() == "Schedule")
             {
                 string key = PATH_TO_SCHEDULES + npcKey;
-                if (!_diCharacterSchedules.ContainsKey(key))
+                if (!_diNPCSchedules.ContainsKey(key))
                 {
-                    _diCharacterSchedules[key] = new Dictionary<string, List<string>> { ["New"] = new List<string>() };
+                    _diNPCSchedules[key] = new Dictionary<string, List<string>> { ["New"] = new List<string>() };
                 }
 
-                frm = new FormCharExtraData("Schedule", _diCharacterSchedules[key]);
+                frm = new FormCharExtraData("Schedule", _diNPCSchedules[key]);
                 frm.ShowDialog();
 
-                _diCharacterSchedules[key] = frm.ListData;
+                _diNPCSchedules[key] = frm.ListData;
             }
         }
 
@@ -1066,227 +921,6 @@ namespace Database_Editor
 
             _diCutsceneDialogue[cutSceneFileName] = frm.StringData;
         }
-
-        #region SaveInfo
-        private void SaveXMLDataInfo(List<XMLData> liData, string tabIndex, XMLTypeEnum xmlType, TextBox tbName, TextBox tbID, ComboBox cb, DataGridView baseGridView, DataGridView dgTags, string colID, string colName, string tagsReferenced, string tagsThatReferenceMe, TextBox tbDescription = null)
-        {
-            UpdateStatus("Saving " + tabIndex);
-            XMLData data = null;
-            if (liData.Count == _diTabIndices[tabIndex])
-            {
-                data = new XMLData(tbID.Text, new Dictionary<string, string>(), tagsReferenced, tagsThatReferenceMe, xmlType, ref _diObjectText);
-                liData.Add(data);
-            }
-            else { data = liData[int.Parse(tbID.Text)]; }
-
-
-            if (tbDescription == null) { data.SetTextData(tbName.Text); }
-            else { data.SetTextData(tbName.Text, tbDescription.Text); }
-
-            data.ClearTagInfo();
-            if (cb != null)
-            {
-                string[] typeTag = cb.SelectedItem.ToString().Split(':');
-                data.SetTagInfo(typeTag[0], typeTag[1]);
-            }
-            foreach (DataGridViewRow row in dgTags.Rows)
-            {
-                if (row.Cells[0].Value != null)
-                {
-                    string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                    string key = tagInfo[0];
-                    string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
-                    data.SetTagInfo(key, val);
-                }
-            }
-            data.ChangeID(int.Parse(tbID.Text), false);
-
-            DataGridViewRow updatedRow = baseGridView.Rows[_diTabIndices[tabIndex]];
-
-            //updatedRow.Cells[colID].Value = data.ID;
-            updatedRow.Cells[colName].Value = data.Name;
-        }
-
-        private void SaveItemInfo()
-        {
-            UpdateStatus("Saving Items");
-            ItemXMLData data = null;
-            if (_liItemData.Count == _diTabIndices["Items"])
-            {
-                Dictionary<string, string> diText = new Dictionary<string, string>
-                {
-                    ["Name"] = tbItemName.Text,
-                    ["Description"] = tbItemDesc.Text
-                };
-
-                _diObjectText["Item_" + tbItemID.Text] = diText;
-
-                Dictionary<string, string> tags = new Dictionary<string, string>();
-
-                string[] typeTag = cbItemType.SelectedItem.ToString().Split(':');
-                tags[typeTag[0]] = typeTag[1];
-                if (cbItemSubtype.Visible)
-                {
-                    string[] subTypeTag = cbItemSubtype.SelectedItem.ToString().Split(':');
-                    tags[subTypeTag[0]] = subTypeTag[1];
-                }
-                foreach (DataGridViewRow row in dgItemTags.Rows)
-                {
-                    if (row.Cells[0].Value != null)
-                    {
-                        string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                        string key = tagInfo[0];
-                        string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
-                        if (key != "Type" && key != "Subtype")
-                        {
-                            tags[key] = val;
-                        }
-                    }
-                }
-
-                data = new ItemXMLData(tbItemID.Text, tags, ITEM_REF_TAGS, TAGS_FOR_ITEMS, ref _diObjectText);
-                _liItemData.Add(data);
-            }
-            else
-            {
-                data = _liItemData[int.Parse(tbItemID.Text)];
-                data.SetTextData(tbItemName.Text, tbItemDesc.Text);
-
-                data.ClearTagInfo();
-                string[] typeTag = cbItemType.SelectedItem.ToString().Split(':');
-                data.SetTagInfo(typeTag[0], typeTag[1]);
-                data.SetItemType(Util.ParseEnum<ItemEnum>(typeTag[1]));
-                if (cbItemSubtype.Visible)
-                {
-                    string[] subTypeTag = cbItemSubtype.SelectedItem.ToString().Split(':');
-                    data.SetTagInfo(subTypeTag[0], subTypeTag[1]);
-                }
-                foreach (DataGridViewRow row in dgItemTags.Rows)
-                {
-                    if (row.Cells[0].Value != null)
-                    {
-                        string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                        string key = tagInfo[0];
-                        string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
-                        if (key != "Type" && key != "Subtype")
-                        {
-                            data.SetTagInfo(key, val);
-                        }
-                    }
-                }
-            }
-
-            int ID = int.Parse(tbItemID.Text);
-            if (ID != data.ID)
-            {
-                int oldID = data.ID;
-                _liItemData.Remove(data);
-                _liItemData.Insert(ID, data);
-                data.ChangeID(ID);
-                foreach (ItemXMLData d in _liItemData)
-                {
-                    if (d != data)
-                    {
-                        if (d.ID >= ID && d.ID < oldID)
-                        {
-                            d.ChangeID(d.ID + 1);
-                        }
-                        else if (d.ID >= oldID)
-                        {
-                            //    d.ChangeID(d.ID - 1);
-                        }
-                    }
-                }
-
-                LoadItemDataGrid();
-                SelectRow(dgvItems, ID);
-            }
-            else
-            {
-                DataGridViewRow updatedRow = dgvItems.Rows[_diTabIndices["Items"]];
-
-                //updatedRow.Cells["colItemID"].Value = data.ID;
-                updatedRow.Cells["colItemName"].Value = data.Name;
-            }
-        }
-        private void SaveWorldObjectInfo()
-        {
-            SaveXMLDataInfo(_liWorldObjects, "WorldObjects", XMLTypeEnum.WorldObject, tbWorldObjectName, tbWorldObjectID, cbWorldObjectType, dgvWorldObjects, dgvWorldObjectTags, "colWorldObjectsID", "colWorldObjectsName", WORLD_OBJECT_REF_TAGS, TAGS_FOR_WORLD_OBJECTS);
-        }
-        private void SaveCharacterInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[NPC_XML_FILE], "Characters", XMLTypeEnum.NPC, tbCharacterName, tbCharacterID, cbCharacterType, dgvCharacters, dgvCharacterTags, "colCharactersID", "colCharactersName", CHARACTER_REF_TAGS, "");
-        }
-        private void SaveClassInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[CLASSES_XML_FILE], "Classes", XMLTypeEnum.Class, tbClassName, tbClassID, null, dgvClasses, dgClassTags, "colClassID", "colClassName", CLASSES_REF_TAGS, "", tbClassDescription);
-        }
-        private void SaveTaskInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[TASK_XML_FILE], "Tasks", XMLTypeEnum.Task, tbTaskName, tbTaskID, cbTaskType, dgvTasks, dgvTaskTags, "colTasksID", "colTasksName", TASK_REF_TAGS, "", tbTaskDescription);
-        }
-        private void SaveMonsterInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[MONSTERS_XML_FILE], "Monsters", XMLTypeEnum.Monster, tbMonsterName, tbMonsterID, null, dgvMonsters, dgvMonsterTags, "colMonstersID", "colMonstersName", MONSTERS_REF_TAGS, "", tbMonsterDescription);
-        }
-        private void SaveActionInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[ACTIONS_XML_FILE], "Actions", XMLTypeEnum.Action, tbActionName, tbActionID, cbActionType, dgvActions, dgvActionTags, "colActionsID", "colActionsName", "", TAGS_FOR_COMBAT_ACTIONS, tbActionDescription);
-        }
-        private void SaveStatusEffectInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", XMLTypeEnum.StatusEffect, tbStatusEffectName, tbStatusEffectID, cbStatusEffect, dgvStatusEffects, dgvStatusEffectTags, "colStatusEffectsID", "colStatusEffectsName", "", "", tbStatusEffectDescription);
-        }
-        private void SaveLightInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[LIGHTS_XML_FILE], "Lights", XMLTypeEnum.Light, tbLightName, tbLightID, null, dgvLights, dgvLightTags, "colLightsID", "colLightsName", "", "");
-        }
-        private void SaveUpgradeInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[UPGRADES_XML_FILE], "Upgrades", XMLTypeEnum.Upgrade, tbUpgradeName, tbUpgradeID, null, dgvUpgrades, dgvUpgradeTags, "colUpgradesID", "colUpgradesName", "", "");
-        }
-        private void SaveDungeonInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[DUNGEON_XML_FILE], "Dungeons", XMLTypeEnum.Dungeon, tbDungeonName, tbDungeonID, null, dgvDungeons, dgvDungeonTags, "colDungeonsID", "colDungeonsName", "", "");
-        }
-        private void SaveShopInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[SHOPS_XML_FILE], "Shops", XMLTypeEnum.Shop, tbShopName, tbShopID, null, dgvShops, dgvShopTags, "colShopsID", "colShopsName", "", "");
-        }
-
-        private void SaveCutsceneInfo()
-        {
-            UpdateStatus("Saving Cutscenes");
-            List<string> listData;
-            if (!_diCutscenes.ContainsKey(_diTabIndices["Cutscenes"]))
-            {
-                _diCutscenes[_diTabIndices["Cutscenes"]] = new List<string>();
-                listData = _diCutscenes[_diTabIndices["Cutscenes"]];
-            }
-            else { listData = _diCutscenes[_diTabIndices["Cutscenes"]]; }
-
-            listData.Clear();
-            listData.Add(tbCutsceneTriggers.Text);
-            listData.Add(tbCutsceneDetails.Text);
-
-            string tags = string.Empty;
-            foreach (DataGridViewRow r in dgvCutsceneTags.Rows)
-            {
-                if (r.Cells[0].Value != null)
-                {
-                    tags += "[" + r.Cells[0].Value + "]";
-                }
-            }
-            listData.Add(tags);
-            UpdateTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name", tbCutsceneName.Text);
-
-            DataGridViewRow updatedRow = dgvCutscenes.Rows[_diTabIndices["Cutscenes"]];
-
-            //updatedRow.Cells["colCutscenesID"].Value = _diTabIndices["Cutscenes"];
-            updatedRow.Cells["colCutscenesName"].Value = GetTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name");
-        }
-
-        #endregion
 
         private void GenericCancel(List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate del)
         {
@@ -1311,9 +945,9 @@ namespace Database_Editor
         {
             GenericCancel(_liWorldObjects, "WorldObjects", dgvWorldObjects, LoadWorldObjectInfo);
         }
-        private void btnCharacterCancel_Click(object sender, EventArgs e)
+        private void btnNPCCancel_Click(object sender, EventArgs e)
         {
-            GenericCancel(_diBasicXML[NPC_XML_FILE], "Characters", dgvCharacters, LoadCharacterInfo);
+            GenericCancel(_diBasicXML[NPC_XML_FILE], "NPCs", dgvNPCs, LoadNPCInfo);
         }
         private void btnClassCancel_Click(object sender, EventArgs e)
         {
@@ -1379,9 +1013,9 @@ namespace Database_Editor
         {
             GenericCellClick(e, "WorldObjects", dgvWorldObjects, LoadWorldObjectInfo, SaveWorldObjectInfo);
         }
-        private void dgvCharacters_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvNPCs_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            GenericCellClick(e, "Characters", dgvCharacters, LoadCharacterInfo, SaveCharacterInfo);
+            GenericCellClick(e, "NPCs", dgvNPCs, LoadNPCInfo, SaveNPCInfo);
         }
         private void dgvClasses_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1429,36 +1063,6 @@ namespace Database_Editor
             GenericCellClick(e, "Dungeons", dgvDungeons, LoadDungeonInfo, SaveDungeonInfo);
         }
 
-        private void AddNewGenericXMLObject(string tabIndex, DataGridView dg, string colID, string colName, TextBox tbName, TextBox tbID, DataGridView dgTags, string tagCol, ComboBox cb = null, TextBox tbDesc = null, List<string> defaultTags = null)
-        {
-            _diTabIndices[tabIndex] = dg.Rows.Count;
-            dg.Rows.Add();
-            SelectRow(dg, _diTabIndices[tabIndex]);
-
-            DataGridViewRow row = dg.Rows[_diTabIndices[tabIndex]];
-            //row.Cells[colID].Value = _diTabIndices[tabIndex];
-            row.Cells[colName].Value = "";
-
-            tbName.Text = "";
-            if (tbDesc != null) { tbDesc.Text = ""; }
-            tbID.Text = _diTabIndices[tabIndex].ToString();
-
-            if (cb != null) { cb.SelectedIndex = 0; }
-
-            dgTags.Rows.Clear();
-
-            if (defaultTags != null)
-            {
-                foreach (string s in defaultTags) { dgTags.Rows.Add(); }
-                for (int i = 0; i < defaultTags.Count; i++)
-                {
-                    dgTags.Rows[i].Cells[tagCol].Value = defaultTags[i];
-                }
-            }
-
-            tbName.Focus();
-        }
-
         private void cbItemType_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetItemSubtype();
@@ -1493,7 +1097,7 @@ namespace Database_Editor
             AutoSave();
 
             if (tabCtl.SelectedTab == tabCtl.TabPages["tabActions"]) { dgvActions.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCharacters"]) { dgvCharacters.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabNPCs"]) { dgvNPCs.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabClasses"]) { dgvClasses.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscenes"]) { dgvCutscenes.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeons"]) { dgvDungeons.Focus(); }
@@ -1562,13 +1166,13 @@ namespace Database_Editor
 
                 ChangeIDs(ref itemDataList, ref worldObjectDataList);
 
-                //Strip the special case character from the Item files
+                //Strip the special case NPC from the Item files
                 foreach (ItemXMLData data in _liItemData)
                 {
                     if (data != null) { data.StripSpecialCharacter(); }
                 }
 
-                //Strip the special case character from the WorldObject files
+                //Strip the special case NPC from the WorldObject files
                 foreach (XMLData data in _liWorldObjects)
                 {
                     data.StripSpecialCharacter();
@@ -1588,7 +1192,7 @@ namespace Database_Editor
 
             UpdateStatus("Saving...");
             SaveXMLDataDictionary(_diBasicXML, sWriter);
-            SaveXMLDataDictionary(_diCharacterDialogue, sWriter);
+            SaveXMLDataDictionary(_diNPCDialogue, sWriter);
             SaveXMLDataDictionary(_diCutsceneDialogue, sWriter);
 
             //SaveXMLDataDictionary(_diGameText, sWriter);
@@ -1596,9 +1200,9 @@ namespace Database_Editor
             //SaveXMLData(_diGameText, PATH_TO_TEXT_FILES + @"\GameText.xml", sWriter);
             //SaveXMLData(_diMailbox, PATH_TO_TEXT_FILES + @"\Mailbox_Text.xml", sWriter);
 
-            foreach (string s in _diCharacterSchedules.Keys)
+            foreach (string s in _diNPCSchedules.Keys)
             {
-                SaveXMLDictionaryList(_diCharacterSchedules[s], s, sWriter, "string");
+                SaveXMLDictionaryList(_diNPCSchedules[s], s, sWriter, "string");
             }
 
             for (int i = 0; i < _diCutscenes.Count; i++)
@@ -1653,7 +1257,7 @@ namespace Database_Editor
             TabPage prevPage = tabCtl.TabPages[_diTabIndices["PreviousTab"]];
 
             if (prevPage == tabCtl.TabPages["tabActions"]) { SaveActionInfo(); }
-            else if (prevPage == tabCtl.TabPages["tabCharacters"]) { SaveCharacterInfo(); }
+            else if (prevPage == tabCtl.TabPages["tabNPCs"]) { SaveNPCInfo(); }
             else if (prevPage == tabCtl.TabPages["tabClasses"]) { SaveClassInfo(); }        
             else if (prevPage == tabCtl.TabPages["tabCutscenes"]) { SaveCutsceneInfo(); }
             else if (prevPage == tabCtl.TabPages["tabDungeons"]) { SaveDungeonInfo(); }            
@@ -1844,14 +1448,14 @@ namespace Database_Editor
             else if (dgv == dgvTasks) { AddContextMenuItem("Add New", AddNewTask, false); }
             else if (dgv == dgvActions) { AddContextMenuItem("Add New", AddNewAction, false); }
             else if (dgv == dgvCutscenes) { AddContextMenuItem("Add New", AddNewCutscene, false); }
-            else if (dgv == dgvCharacters) {
-                AddContextMenuItem("Add New", AddNewCharacter, true);
-                AddContextMenuItem("All", dgvCharactersContextMenuClick, false);
+            else if (dgv == dgvNPCs) {
+                AddContextMenuItem("Add New", AddNewNPC, true);
+                AddContextMenuItem("All", dgvNPCsContextMenuClick, false);
                 foreach (string s in Enum.GetNames(typeof(WorldActorTypeEnum)))
                 {
                     if (!s.Equals("Actor"))
                     {
-                        AddContextMenuItem(s, dgvCharactersContextMenuClick, false);
+                        AddContextMenuItem(s, dgvNPCsContextMenuClick, false);
                     }
                 }
             }
@@ -1888,82 +1492,12 @@ namespace Database_Editor
             LoadWorldObjectInfo();
         }
 
-        private void dgvCharactersContextMenuClick(object sender, EventArgs e)
+        private void dgvNPCsContextMenuClick(object sender, EventArgs e)
         {
-            _diTabIndices["Characters"] = 0;
-            LoadCharacterDataGrid(((ToolStripMenuItem)sender).Text, 0);
-            LoadCharacterInfo();
+            _diTabIndices["NPCs"] = 0;
+            LoadNPCDataGrid(((ToolStripMenuItem)sender).Text, 0);
+            LoadNPCInfo();
         }
-        #endregion
-        #region Add New
-        private void AddNewItem(object sender, EventArgs e)
-        {
-            SaveItemInfo();
-            List<string> defaultTags = new List<string>() { "Image:", "MerchType:None", "Value:" };
-            AddNewGenericXMLObject("Items", dgvItems, "colItemID", "colItemName", tbItemName, tbItemID, dgItemTags, "colItemTags", cbItemType, tbItemDesc, defaultTags);
-        }
-        private void AddNewWorldObject(object sender, EventArgs e)
-        {
-            SaveWorldObjectInfo();
-            AddNewGenericXMLObject("WorldObjects", dgvWorldObjects, "colWorldObjectsID", "colWorldObjectsName", tbWorldObjectName, tbWorldObjectID, dgvWorldObjectTags, "colWorldObjectTags", cbWorldObjectType, null, new List<string>() { "Image:0-0" });
-        }
-        private void AddNewTask(object sender, EventArgs e)
-        {
-            SaveTaskInfo();
-            AddNewGenericXMLObject("Tasks", dgvTasks, "colTasksID", "colTasksName", tbTaskName, tbTaskID, dgvTaskTags, "colTaskTags", cbTaskType, tbTaskDescription);
-        }
-        private void AddNewAction(object sender, EventArgs e)
-        {
-            SaveTaskInfo();
-            List<string> defaultTags = new List<string>() { "Icon:", "DamageAttribute:", "DamageType:", "Target:", "Range:", "AreaType:", "Harm:100", "Action:", "Animation:", "AnimOffset:"};
-            AddNewGenericXMLObject("Actions", dgvActions, "colActionsID", "colActionsName", tbActionName, tbActionID, dgvActionTags, "colActionTags", cbActionType, tbActionDescription, defaultTags);
-        }
-        private void AddNewMonster(object sender, EventArgs e)
-        {
-            SaveMonsterInfo();
-            List<string> defaultTags = new List<string>() { "Texture:", "Condition:", "Lvl", "Ability:", "Loot:", "Trait:", "Walk:0-0-3-0.15-T", "Action1:0-0-3-0.15-T", "Cast:0-0-3-0.15-T", "Hurt:0-0-3-0.15-T", "Critical:0-0-3-0.15-T", "KO:0-0-3-0.15-T" };
-            AddNewGenericXMLObject("Monsters", dgvMonsters, "colMonstersID", "colMonstersName", tbMonsterName, tbMonsterID, dgvMonsterTags, "colMonsterTags", null, tbMonsterDescription, defaultTags);
-        }
-        private void AddNewCutscene(object sender, EventArgs e)
-        {
-            SaveCutsceneInfo();
-            List<string> defaultTags = new List<string>() { "" };
-            tbCutsceneTriggers.Clear();
-            tbCutsceneDetails.Clear();
-            AddNewGenericXMLObject("Cutscenes", dgvCutscenes, "colCutscenesID", "colCutscenesName", tbCutsceneName, tbCutsceneName, dgvCutsceneTags, "colCutsceneTags", null, null, defaultTags);
-        }
-        private void AddNewCharacter(object sender, EventArgs e)
-        {
-            SaveCharacterInfo();
-            List<string> defaultTags = new List<string>() { "PortRow:1", "Idle:0-0-1-0-T", "Walk:0-0-1-0-T", "FirstArrival:0", "ArrivalPeriod:0" };
-            AddNewGenericXMLObject("Characters", dgvCharacters, "colCharactersID", "colCharactersName", tbCharacterName, tbCharacterID, dgvCharacterTags, "colCharacterTags", null, null, defaultTags);
-        }
-        private void AddNewLight(object sender, EventArgs e)
-        {
-            SaveLightInfo();
-            List<string> defaultTags = new List<string>() { "Texture:", "Idle:1-1", "Dimensions:" };
-            AddNewGenericXMLObject("Lights", dgvLights, "colLightsID", "colLightsName", tbLightName, tbLightID, dgvLightTags, "colLightTags", null, null, defaultTags);
-        }
-        private void AddNewUpgrade(object sender, EventArgs e)
-        {
-            SaveUpgradeInfo();
-            List<string> defaultTags = new List<string>() { "Icon:", "Cost:100", "ItemID:" };
-            AddNewGenericXMLObject("Upgrades", dgvUpgrades, "colUpgradesID", "colUpgradesName", tbUpgradeName, tbUpgradeID, dgvUpgradeTags, "colUpgradeTags", null, null, defaultTags);
-        }
-        private void AddNewDungeon(object sender, EventArgs e)
-        {
-            SaveDungeonInfo();
-            List<string> defaultTags = new List<string>() { "" };
-            AddNewGenericXMLObject("Dungeons", dgvDungeons, "colDungeonsID", "colDungeonsName", tbDungeonName, tbDungeonID, dgvDungeonTags, "colDungeonTags", null, null, defaultTags);
-        }
-        private void AddNewShop(object sender, EventArgs e)
-        {
-            SaveShopInfo();
-            List<string> defaultTags = new List<string>() { "ItemID:", "Shopkeeper:" };
-            AddNewGenericXMLObject("Shops", dgvShops, "colShopsID", "colShopsName", tbShopName, tbShopID, dgvShopTags, "colShopTags", null, null, defaultTags);
-        }
-        #endregion
-
         #endregion
 
         private void gameTextToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1985,5 +1519,583 @@ namespace Database_Editor
 
             _liMailbox = frm.StringData;
         }
+
+        private void FrmDBEditor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult res = MessageBox.Show("Save first?", "Closing", MessageBoxButtons.YesNoCancel);
+            switch (res)
+            {
+                case DialogResult.Yes:
+                    SaveAll(false);
+                    break;
+                case DialogResult.Cancel:
+                    e.Cancel = true;
+                    break;
+            }
+        }
+        #endregion
+
+        #region Helpers
+
+        public string GetName(XMLTypeEnum strType, ComponentTypeEnum e)
+        {
+            return GetName(Util.GetEnumString(strType), e);
+        }
+
+        public string GetName(string strType, ComponentTypeEnum e)
+        {
+            switch (e)
+            {
+                case ComponentTypeEnum.TextBoxName:
+                    return "tb" + strType + "Name";
+                case ComponentTypeEnum.TextBoxID:
+                    return "tb" + strType + "ID";
+                case ComponentTypeEnum.TextBoxDescription:
+                    return "tb" + strType + "Description";
+                case ComponentTypeEnum.DataGrid:
+                    return "dgv" + strType + "s";
+                case ComponentTypeEnum.DataGridTags:
+                    return "dgv" + strType + "Tags";
+                case ComponentTypeEnum.TabIndex:
+                    return strType + "s";
+                case ComponentTypeEnum.ColumnName:
+                    return "col" + strType + "sName";
+                case ComponentTypeEnum.ColumnId:
+                    return "col" + strType + "sID";
+                case ComponentTypeEnum.ColumnTags:
+                    return "col" + strType + "Tags";
+                case ComponentTypeEnum.ComboBoxType:
+                    return "cb" + strType + "Type";
+            }
+
+            return string.Empty;
+        }
+        private TabPage GetPage(string xmlType)
+        {
+            return tabCtl.TabPages["tab" + xmlType];
+        }
+        private TextBox FindTextBoxByName(XMLTypeEnum xmlType, ComponentTypeEnum type)
+        {
+            string strXMLType = Util.GetEnumString(xmlType);
+            string name = GetName(strXMLType, type);
+
+            return GetPage(strXMLType).Controls.OfType<TextBox>().FirstOrDefault(val => val.Name == name);
+        }
+
+        private DataGridView FindDGVByName(XMLTypeEnum xmlType, ComponentTypeEnum type)
+        {
+            string strXMLType = Util.GetEnumString(xmlType);
+            string name = GetName(strXMLType, type);
+
+            return GetPage(strXMLType).Controls.OfType<DataGridView>().FirstOrDefault(val => val.Name == name);
+        }
+
+        private ComboBox FindComboBoxByName(XMLTypeEnum xmlType, ComponentTypeEnum type)
+        {
+            string strXMLType = Util.GetEnumString(xmlType);
+            string name = GetName(strXMLType, type);
+
+            return GetPage(strXMLType).Controls.OfType<ComboBox>().FirstOrDefault(val => val.Name == name);
+        }
+        #endregion
+
+        #region Add New
+        private void AddNewGenericXMLObject(TabCollection collection)
+        {
+            string tabIndex = GetName(collection.XMLType, ComponentTypeEnum.TabIndex);
+            string columnName = GetName(collection.XMLType, ComponentTypeEnum.ColumnName);
+            string columnTags = GetName(collection.XMLType, ComponentTypeEnum.ColumnTags);
+            TextBox tbName = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxName);
+            TextBox tbID = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxID);
+            TextBox tbDescription = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxDescription);
+            DataGridView dgv = FindDGVByName(collection.XMLType, ComponentTypeEnum.DataGrid);
+            DataGridView dgvTags = FindDGVByName(collection.XMLType, ComponentTypeEnum.DataGridTags);
+            ComboBox cb = FindComboBoxByName(collection.XMLType, ComponentTypeEnum.ComboBoxType);
+
+            _diTabIndices[tabIndex] = dgv.Rows.Count;
+            dgv.Rows.Add();
+            SelectRow(dgv, _diTabIndices[tabIndex]);
+
+            DataGridViewRow row = dgv.Rows[_diTabIndices[tabIndex]];
+            //row.Cells[collection.ColumnID].Value = _diTabIndices[tabIndex];
+            row.Cells[columnName].Value = "";
+
+            tbName.Text = "";
+            tbID.Text = _diTabIndices[tabIndex].ToString();
+            if (tbDescription != null)
+            {
+                tbDescription.Text = "";
+            }
+
+            if (cb != null)
+            {
+                cb.SelectedIndex = 0;
+            }
+
+            dgvTags.Rows.Clear();
+
+            if (collection.DefaultTags != null)
+            {
+                foreach (string s in collection.DefaultTags) { dgvTags.Rows.Add(); }
+                for (int i = 0; i < collection.DefaultTags.Count; i++)
+                {
+                    dgvTags.Rows[i].Cells[columnTags].Value = collection.DefaultTags[i];
+                }
+            }
+
+            tbName.Focus();
+        }
+        private void AddNewItem(object sender, EventArgs e)
+        {
+            SaveItemInfo();
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Item]);
+        }
+        private void AddNewWorldObject(object sender, EventArgs e)
+        {
+            SaveWorldObjectInfo();
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.WorldObject]);
+        }
+        private void AddNewTask(object sender, EventArgs e)
+        {
+            SaveTaskInfo();
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Task]);
+        }
+        private void AddNewAction(object sender, EventArgs e)
+        {
+            SaveTaskInfo();
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Action]);
+        }
+        private void AddNewMonster(object sender, EventArgs e)
+        {
+            SaveMonsterInfo();
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Monster]);
+        }
+        private void AddNewCutscene(object sender, EventArgs e)
+        {
+            SaveCutsceneInfo();
+            tbCutsceneTriggers.Clear();
+            tbCutsceneDetails.Clear();
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Cutscene]);
+        }
+        private void AddNewNPC(object sender, EventArgs e)
+        {
+            SaveNPCInfo();
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.NPC]);
+        }
+        private void AddNewLight(object sender, EventArgs e)
+        {
+            SaveLightInfo();
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Light]);
+        }
+        private void AddNewUpgrade(object sender, EventArgs e)
+        {
+            SaveUpgradeInfo();
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Upgrade]);
+        }
+        private void AddNewDungeon(object sender, EventArgs e)
+        {
+            SaveDungeonInfo();
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Dungeon]);
+        }
+        private void AddNewShop(object sender, EventArgs e)
+        {
+            SaveShopInfo();
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Shop]);
+        }
+        #endregion
+
+        #region Load Info Panes
+        private void LoadGenericDataInfo(XMLData data, TabCollection collection)
+        {
+            TextBox tbName = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxName);
+            TextBox tbID = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxID);
+            TextBox tbDescription = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxDescription);
+            DataGridView dgvTags = FindDGVByName(collection.XMLType, ComponentTypeEnum.DataGridTags);
+
+            tbName.Text = data.Name;
+            tbID.Text = data.ID.ToString();
+            if (tbDescription != null)
+            {
+                tbDescription.Text = data.Description;
+            }
+
+            dgvTags.Rows.Clear();
+            string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in tags)
+            {
+                if (!s.StartsWith("Type"))
+                {
+                    dgvTags.Rows.Add(s);
+                }
+            }
+        }
+        private void LoadItemInfo()
+        {
+            DataGridViewRow r = dgvItems.SelectedRows[0];
+
+            ItemXMLData data = null;
+            if (_itemFilter == "All") { data = _liItemData[r.Index]; }
+            else { data = _liItemData.FindAll(x => x.ItemType.ToString().Equals(_itemFilter))[r.Index]; }
+
+            tbItemName.Text = data.Name;
+            tbItemDesc.Text = data.Description;
+            tbItemID.Text = data.ID.ToString();
+
+            cbItemType.SelectedIndex = (int)data.ItemType;
+            SetItemSubtype();
+
+            dgItemTags.Rows.Clear();
+            string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in tags)
+            {
+                if (s.StartsWith("Subtype"))
+                {
+                    cbItemSubtype.SelectedIndex = GetSubtypeIndex(data.ItemType, s.Split(':')[1]);
+                }
+                else if (!s.StartsWith("Type"))
+                {
+                    dgItemTags.Rows.Add(s);
+                }
+            }
+        }
+        private void LoadWorldObjectInfo()
+        {
+            DataGridViewRow r = dgvWorldObjects.SelectedRows[0];
+            XMLData data = null;
+            if (_worldObjFilter == "All") { data = _liWorldObjects[r.Index]; }
+            else { data = _liWorldObjects.FindAll(x => x.GetTagValue("Type").ToString().Equals(_worldObjFilter))[r.Index]; }
+
+            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.WorldObject]);
+            cbWorldObjectType.SelectedIndex = (int)Util.ParseEnum<ObjectTypeEnum>(data.GetTagValue("Type"));
+        }
+        private void LoadNPCInfo()
+        {
+            DataGridViewRow r = dgvNPCs.SelectedRows[0];
+            XMLData data = null;
+            if (_worldObjFilter == "All") { data = _diBasicXML[NPC_XML_FILE][_diTabIndices["NPCs"]]; }
+            else { data = _diBasicXML[NPC_XML_FILE].FindAll(x => x.GetTagValue("Type").ToString().Equals(_worldObjFilter))[r.Index]; }
+            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.NPC]);
+
+            for (int i = 0; i < cbNPCType.Items.Count; i++)
+            {
+                if (cbNPCType.Items[i].ToString().Split(':')[1] == data.GetTagValue("Type"))
+                {
+                    cbNPCType.SelectedIndex = i;
+                    break;
+                }
+            }
+        }
+        private void LoadClassInfo()
+        {
+            XMLData data = _diBasicXML[CLASSES_XML_FILE][_diTabIndices["Classes"]];
+            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Class]);
+        }
+        private void LoadTaskInfo()
+        {
+            XMLData data = _diBasicXML[TASK_XML_FILE][_diTabIndices["Tasks"]];
+            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Task]);
+            cbTaskType.SelectedIndex = (int)Util.ParseEnum<TaskTypeEnum>(data.GetTagValue("Type"));
+        }
+        private void LoadMonsterInfo()
+        {
+            XMLData data = _diBasicXML[MONSTERS_XML_FILE][_diTabIndices["Monsters"]];
+            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Monster]);
+        }
+        private void LoadActionInfo()
+        {
+            XMLData data = _diBasicXML[ACTIONS_XML_FILE][_diTabIndices["Actions"]];
+            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Action]);
+            cbActionType.SelectedIndex = (int)Util.ParseEnum<ActionEnum>(data.GetTagValue("Type"));
+        }
+        private void LoadStatusEffectInfo()
+        {
+            XMLData data = _diBasicXML[STATUS_EFFECTS_XML_FILE][_diTabIndices["StatusEffects"]];
+            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.StatusEffect]);
+            cbStatusEffect.SelectedIndex = (int)Util.ParseEnum<StatusTypeEnum>(data.GetTagValue("Type"));
+        }
+        private void LoadLightInfo()
+        {
+            XMLData data = _diBasicXML[LIGHTS_XML_FILE][_diTabIndices["Lights"]];
+            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Light]);
+        }
+        private void LoadUpgradeInfo()
+        {
+            XMLData data = _diBasicXML[UPGRADES_XML_FILE][_diTabIndices["Upgrades"]];
+            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Upgrade]);
+        }
+        private void LoadDungeonInfo()
+        {
+            XMLData data = _diBasicXML[DUNGEON_XML_FILE][_diTabIndices["Dungeons"]];
+            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Dungeon]);
+        }
+
+        private void LoadDictionaryListInfo(int index, List<XMLData> dataList, TextBox tbName, DataGridView dgvTags, XMLTypeEnum xmlType, TextBox tbDescription = null)
+        {
+            tbName.Text = GetTextValue(xmlType, index, "Name");
+            if (tbDescription != null)
+            {
+                tbDescription.Text = GetTextValue(xmlType, index, "Description");
+            }
+
+            dgvTags.Rows.Clear();
+            foreach (XMLData d in dataList)
+            {
+                dgvTags.Rows.Add(d.GetTagsString());
+            }
+        }
+        private void LoadCutsceneInfo()
+        {
+            List<string> listData = _diCutscenes[_diTabIndices["Cutscenes"]];
+
+            tbCutsceneName.Text = GetTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name");
+            tbCutsceneID.Text = _diTabIndices["Cutscenes"].ToString();
+            tbCutsceneTriggers.Text = listData[0];
+            tbCutsceneDetails.Text = listData[1];
+
+            dgvCutsceneTags.Rows.Clear();
+            string[] tags = listData[2].Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in tags)
+            {
+                if (!s.StartsWith("Type"))
+                {
+                    dgvCutsceneTags.Rows.Add(s);
+                }
+            }
+        }
+        private void LoadShopInfo()
+        {
+            XMLData data = _diBasicXML[SHOPS_XML_FILE][_diTabIndices["Shops"]];
+            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Shop]);
+
+            //tbShopName.Text = GetTextValue(XMLTypeEnum.Shop, _diTabIndices["Shops"], "Name");
+
+            //dgvShopTags.Rows.Clear();
+            //foreach (XMLData d in _diShops[_diTabIndices["Shops"]])
+            //{
+            //    dgvShopTags.Rows.Add(d.GetTagsString());
+            //}
+        }
+        #endregion
+
+        #region SaveInfo
+        private void SaveXMLDataInfo(List<XMLData> liData, string tabIndex, XMLTypeEnum xmlType, TextBox tbName, TextBox tbID, ComboBox cb, DataGridView baseGridView, DataGridView dgTags, string colID, string colName, string tagsReferenced, string tagsThatReferenceMe, TextBox tbDescription = null)
+        {
+            UpdateStatus("Saving " + tabIndex);
+            XMLData data = null;
+            if (liData.Count == _diTabIndices[tabIndex])
+            {
+                data = new XMLData(tbID.Text, new Dictionary<string, string>(), tagsReferenced, tagsThatReferenceMe, xmlType, ref _diObjectText);
+                liData.Add(data);
+            }
+            else { data = liData[int.Parse(tbID.Text)]; }
+
+
+            if (tbDescription == null) { data.SetTextData(tbName.Text); }
+            else { data.SetTextData(tbName.Text, tbDescription.Text); }
+
+            data.ClearTagInfo();
+            if (cb != null)
+            {
+                string[] typeTag = cb.SelectedItem.ToString().Split(':');
+                data.SetTagInfo(typeTag[0], typeTag[1]);
+            }
+            foreach (DataGridViewRow row in dgTags.Rows)
+            {
+                if (row.Cells[0].Value != null)
+                {
+                    string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                    string key = tagInfo[0];
+                    string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
+                    data.SetTagInfo(key, val);
+                }
+            }
+            data.ChangeID(int.Parse(tbID.Text), false);
+
+            DataGridViewRow updatedRow = baseGridView.Rows[_diTabIndices[tabIndex]];
+
+            //updatedRow.Cells[colID].Value = data.ID;
+            updatedRow.Cells[colName].Value = data.Name;
+        }
+
+        private void SaveItemInfo()
+        {
+            UpdateStatus("Saving Items");
+            ItemXMLData data = null;
+            if (_liItemData.Count == _diTabIndices["Items"])
+            {
+                Dictionary<string, string> diText = new Dictionary<string, string>
+                {
+                    ["Name"] = tbItemName.Text,
+                    ["Description"] = tbItemDesc.Text
+                };
+
+                _diObjectText["Item_" + tbItemID.Text] = diText;
+
+                Dictionary<string, string> tags = new Dictionary<string, string>();
+
+                string[] typeTag = cbItemType.SelectedItem.ToString().Split(':');
+                tags[typeTag[0]] = typeTag[1];
+                if (cbItemSubtype.Visible)
+                {
+                    string[] subTypeTag = cbItemSubtype.SelectedItem.ToString().Split(':');
+                    tags[subTypeTag[0]] = subTypeTag[1];
+                }
+                foreach (DataGridViewRow row in dgItemTags.Rows)
+                {
+                    if (row.Cells[0].Value != null)
+                    {
+                        string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                        string key = tagInfo[0];
+                        string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
+                        if (key != "Type" && key != "Subtype")
+                        {
+                            tags[key] = val;
+                        }
+                    }
+                }
+
+                data = new ItemXMLData(tbItemID.Text, tags, ITEM_REF_TAGS, TAGS_FOR_ITEMS, ref _diObjectText);
+                _liItemData.Add(data);
+            }
+            else
+            {
+                data = _liItemData[int.Parse(tbItemID.Text)];
+                data.SetTextData(tbItemName.Text, tbItemDesc.Text);
+
+                data.ClearTagInfo();
+                string[] typeTag = cbItemType.SelectedItem.ToString().Split(':');
+                data.SetTagInfo(typeTag[0], typeTag[1]);
+                data.SetItemType(Util.ParseEnum<ItemEnum>(typeTag[1]));
+                if (cbItemSubtype.Visible)
+                {
+                    string[] subTypeTag = cbItemSubtype.SelectedItem.ToString().Split(':');
+                    data.SetTagInfo(subTypeTag[0], subTypeTag[1]);
+                }
+                foreach (DataGridViewRow row in dgItemTags.Rows)
+                {
+                    if (row.Cells[0].Value != null)
+                    {
+                        string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                        string key = tagInfo[0];
+                        string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
+                        if (key != "Type" && key != "Subtype")
+                        {
+                            data.SetTagInfo(key, val);
+                        }
+                    }
+                }
+            }
+
+            int ID = int.Parse(tbItemID.Text);
+            if (ID != data.ID)
+            {
+                int oldID = data.ID;
+                _liItemData.Remove(data);
+                _liItemData.Insert(ID, data);
+                data.ChangeID(ID);
+                foreach (ItemXMLData d in _liItemData)
+                {
+                    if (d != data)
+                    {
+                        if (d.ID >= ID && d.ID < oldID)
+                        {
+                            d.ChangeID(d.ID + 1);
+                        }
+                        else if (d.ID >= oldID)
+                        {
+                            //    d.ChangeID(d.ID - 1);
+                        }
+                    }
+                }
+
+                LoadItemDataGrid();
+                SelectRow(dgvItems, ID);
+            }
+            else
+            {
+                DataGridViewRow updatedRow = dgvItems.Rows[_diTabIndices["Items"]];
+
+                //updatedRow.Cells["colItemID"].Value = data.ID;
+                updatedRow.Cells["colItemName"].Value = data.Name;
+            }
+        }
+        private void SaveWorldObjectInfo()
+        {
+            SaveXMLDataInfo(_liWorldObjects, "WorldObjects", XMLTypeEnum.WorldObject, tbWorldObjectName, tbWorldObjectID, cbWorldObjectType, dgvWorldObjects, dgvWorldObjectTags, "colWorldObjectsID", "colWorldObjectsName", WORLD_OBJECT_REF_TAGS, TAGS_FOR_WORLD_OBJECTS);
+        }
+        private void SaveNPCInfo()
+        {
+            SaveXMLDataInfo(_diBasicXML[NPC_XML_FILE], "NPCs", XMLTypeEnum.NPC, tbNPCName, tbNPCID, cbNPCType, dgvNPCs, dgvNPCTags, "colNPCsID", "colNPCsName", NPC_REF_TAGS, "");
+        }
+        private void SaveClassInfo()
+        {
+            SaveXMLDataInfo(_diBasicXML[CLASSES_XML_FILE], "Classes", XMLTypeEnum.Class, tbClassName, tbClassID, null, dgvClasses, dgvClassTags, "colClassID", "colClassName", CLASSES_REF_TAGS, "", tbClassDescription);
+        }
+        private void SaveTaskInfo()
+        {
+            SaveXMLDataInfo(_diBasicXML[TASK_XML_FILE], "Tasks", XMLTypeEnum.Task, tbTaskName, tbTaskID, cbTaskType, dgvTasks, dgvTaskTags, "colTasksID", "colTasksName", TASK_REF_TAGS, "", tbTaskDescription);
+        }
+        private void SaveMonsterInfo()
+        {
+            SaveXMLDataInfo(_diBasicXML[MONSTERS_XML_FILE], "Monsters", XMLTypeEnum.Monster, tbMonsterName, tbMonsterID, null, dgvMonsters, dgvMonsterTags, "colMonstersID", "colMonstersName", MONSTERS_REF_TAGS, "", tbMonsterDescription);
+        }
+        private void SaveActionInfo()
+        {
+            SaveXMLDataInfo(_diBasicXML[ACTIONS_XML_FILE], "Actions", XMLTypeEnum.Action, tbActionName, tbActionID, cbActionType, dgvActions, dgvActionTags, "colActionsID", "colActionsName", "", TAGS_FOR_COMBAT_ACTIONS, tbActionDescription);
+        }
+        private void SaveStatusEffectInfo()
+        {
+            SaveXMLDataInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", XMLTypeEnum.StatusEffect, tbStatusEffectName, tbStatusEffectID, cbStatusEffect, dgvStatusEffects, dgvStatusEffectTags, "colStatusEffectsID", "colStatusEffectsName", "", "", tbStatusEffectDescription);
+        }
+        private void SaveLightInfo()
+        {
+            SaveXMLDataInfo(_diBasicXML[LIGHTS_XML_FILE], "Lights", XMLTypeEnum.Light, tbLightName, tbLightID, null, dgvLights, dgvLightTags, "colLightsID", "colLightsName", "", "");
+        }
+        private void SaveUpgradeInfo()
+        {
+            SaveXMLDataInfo(_diBasicXML[UPGRADES_XML_FILE], "Upgrades", XMLTypeEnum.Upgrade, tbUpgradeName, tbUpgradeID, null, dgvUpgrades, dgvUpgradeTags, "colUpgradesID", "colUpgradesName", "", "");
+        }
+        private void SaveDungeonInfo()
+        {
+            SaveXMLDataInfo(_diBasicXML[DUNGEON_XML_FILE], "Dungeons", XMLTypeEnum.Dungeon, tbDungeonName, tbDungeonID, null, dgvDungeons, dgvDungeonTags, "colDungeonsID", "colDungeonsName", "", "");
+        }
+        private void SaveShopInfo()
+        {
+            SaveXMLDataInfo(_diBasicXML[SHOPS_XML_FILE], "Shops", XMLTypeEnum.Shop, tbShopName, tbShopID, null, dgvShops, dgvShopTags, "colShopsID", "colShopsName", "", "");
+        }
+
+        private void SaveCutsceneInfo()
+        {
+            UpdateStatus("Saving Cutscenes");
+            List<string> listData;
+            if (!_diCutscenes.ContainsKey(_diTabIndices["Cutscenes"]))
+            {
+                _diCutscenes[_diTabIndices["Cutscenes"]] = new List<string>();
+                listData = _diCutscenes[_diTabIndices["Cutscenes"]];
+            }
+            else { listData = _diCutscenes[_diTabIndices["Cutscenes"]]; }
+
+            listData.Clear();
+            listData.Add(tbCutsceneTriggers.Text);
+            listData.Add(tbCutsceneDetails.Text);
+
+            string tags = string.Empty;
+            foreach (DataGridViewRow r in dgvCutsceneTags.Rows)
+            {
+                if (r.Cells[0].Value != null)
+                {
+                    tags += "[" + r.Cells[0].Value + "]";
+                }
+            }
+            listData.Add(tags);
+            UpdateTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name", tbCutsceneName.Text);
+
+            DataGridViewRow updatedRow = dgvCutscenes.Rows[_diTabIndices["Cutscenes"]];
+
+            //updatedRow.Cells["colCutscenesID"].Value = _diTabIndices["Cutscenes"];
+            updatedRow.Cells["colCutscenesName"].Value = GetTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name");
+        }
+
+        #endregion
     }
 }
