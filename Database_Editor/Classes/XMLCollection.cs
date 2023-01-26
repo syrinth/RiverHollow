@@ -3,15 +3,14 @@ using static Database_Editor.Classes.Constants;
 
 namespace Database_Editor.Classes
 {
-    internal struct TabCollection
+    internal struct XMLCollection
     {
         public XMLTypeEnum XMLType { get; }
         public List<string> DefaultTags { get; }// = null
-
         public string TagsReferenced { get; }
         public string TagsThatReferToMe { get; }
 
-        public TabCollection(XMLTypeEnum xmlType, string tagsReferenced, string tagsToMe, string defaultTags)
+        public XMLCollection(XMLTypeEnum xmlType, string tagsReferenced, string tagsToMe, string defaultTags)
         {
             XMLType = xmlType;
             TagsReferenced = tagsReferenced;

@@ -31,7 +31,7 @@ namespace Database_Editor
         static Dictionary<string, List<XMLData>> _diBasicXML;
         Dictionary<string, TMXData> _diMapData;
 
-        Dictionary<XMLTypeEnum, TabCollection> _diTabCollections;
+        Dictionary<XMLTypeEnum, XMLCollection> _diTabCollections;
 
         string _itemFilter = "All";
         string _worldObjFilter = "All";
@@ -146,21 +146,21 @@ namespace Database_Editor
 
         private void SetupTabCollections()
         {
-            _diTabCollections = new Dictionary<XMLTypeEnum, TabCollection>
+            _diTabCollections = new Dictionary<XMLTypeEnum, XMLCollection>
             {
-                [XMLTypeEnum.WorldObject] = new TabCollection(XMLTypeEnum.WorldObject, WORLD_OBJECT_REF_TAGS, TAGS_FOR_WORLD_OBJECTS, DEFAULT_WORLD_OBJECT_TAGS),
-                [XMLTypeEnum.Task] = new TabCollection(XMLTypeEnum.Task, TASK_REF_TAGS, TAGS_FOR_TASKS, ""),
-                [XMLTypeEnum.Cutscene] = new TabCollection(XMLTypeEnum.Cutscene, CUTSCENE_REF_TAGS, "", ""),
-                [XMLTypeEnum.Job] = new TabCollection(XMLTypeEnum.Job, JOBS_REF_TAGS, TAGS_FOR_JOBS, ""),
-                [XMLTypeEnum.StatusEffect] = new TabCollection(XMLTypeEnum.StatusEffect, "", TAGS_FOR_STATUS_EFFECTS, ""),
-                [XMLTypeEnum.Dungeon] = new TabCollection(XMLTypeEnum.Dungeon, DUNGEON_REF_TAGS, TAGS_FOR_DUNGEONS, ""),
-                [XMLTypeEnum.Item] = new TabCollection(XMLTypeEnum.Item, ITEM_REF_TAGS, TAGS_FOR_ITEMS, DEFAULT_ITEM_TAGS),
-                [XMLTypeEnum.NPC] = new TabCollection(XMLTypeEnum.NPC, NPC_REF_TAGS, "", DEFAULT_NPC_TAGS),
-                [XMLTypeEnum.Shop] = new TabCollection(XMLTypeEnum.Shop, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA, DEFAULT_SHOP_TAGS),
-                [XMLTypeEnum.Light] = new TabCollection(XMLTypeEnum.Light, "", TAGS_FOR_LIGHTS, DEFAULT_LIGHT_TAGS),
-                [XMLTypeEnum.Upgrade] = new TabCollection(XMLTypeEnum.Upgrade, "", TAGS_FOR_UPGRADES, DEFAULT_UPGRADE_TAGS),
-                [XMLTypeEnum.Action] = new TabCollection(XMLTypeEnum.Action, ACTIONS_REF_TAGS, TAGS_FOR_COMBAT_ACTIONS, DEFAULT_ACTION_TAGS),
-                [XMLTypeEnum.Monster] = new TabCollection(XMLTypeEnum.Monster, MONSTERS_REF_TAGS, TAGS_FOR_MONSTERS, DEFAULT_MONSTER_TAGS)
+                [XMLTypeEnum.WorldObject] = new XMLCollection(XMLTypeEnum.WorldObject, WORLD_OBJECT_REF_TAGS, TAGS_FOR_WORLD_OBJECTS, DEFAULT_WORLD_OBJECT_TAGS),
+                [XMLTypeEnum.Task] = new XMLCollection(XMLTypeEnum.Task, TASK_REF_TAGS, TAGS_FOR_TASKS, ""),
+                [XMLTypeEnum.Cutscene] = new XMLCollection(XMLTypeEnum.Cutscene, CUTSCENE_REF_TAGS, "", ""),
+                [XMLTypeEnum.Job] = new XMLCollection(XMLTypeEnum.Job, JOBS_REF_TAGS, TAGS_FOR_JOBS, ""),
+                [XMLTypeEnum.StatusEffect] = new XMLCollection(XMLTypeEnum.StatusEffect, "", TAGS_FOR_STATUS_EFFECTS, ""),
+                [XMLTypeEnum.Dungeon] = new XMLCollection(XMLTypeEnum.Dungeon, DUNGEON_REF_TAGS, TAGS_FOR_DUNGEONS, ""),
+                [XMLTypeEnum.Item] = new XMLCollection(XMLTypeEnum.Item, ITEM_REF_TAGS, TAGS_FOR_ITEMS, DEFAULT_ITEM_TAGS),
+                [XMLTypeEnum.NPC] = new XMLCollection(XMLTypeEnum.NPC, NPC_REF_TAGS, "", DEFAULT_NPC_TAGS),
+                [XMLTypeEnum.Shop] = new XMLCollection(XMLTypeEnum.Shop, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA, DEFAULT_SHOP_TAGS),
+                [XMLTypeEnum.Light] = new XMLCollection(XMLTypeEnum.Light, "", TAGS_FOR_LIGHTS, DEFAULT_LIGHT_TAGS),
+                [XMLTypeEnum.Upgrade] = new XMLCollection(XMLTypeEnum.Upgrade, "", TAGS_FOR_UPGRADES, DEFAULT_UPGRADE_TAGS),
+                [XMLTypeEnum.Action] = new XMLCollection(XMLTypeEnum.Action, ACTIONS_REF_TAGS, TAGS_FOR_COMBAT_ACTIONS, DEFAULT_ACTION_TAGS),
+                [XMLTypeEnum.Monster] = new XMLCollection(XMLTypeEnum.Monster, MONSTERS_REF_TAGS, TAGS_FOR_MONSTERS, DEFAULT_MONSTER_TAGS)
             };
         }
 
@@ -802,7 +802,7 @@ namespace Database_Editor
             LoadDungeonDataGrid();
             LoadUpgradeDataGrid();
         }
-        private void LoadGenericDatagrid(TabCollection collection, List<XMLData> data, int selectRow, string filter = "All")
+        private void LoadGenericDatagrid(XMLCollection collection, List<XMLData> data, int selectRow, string filter = "All")
         {
             string colName = GetName(collection.XMLType, ComponentTypeEnum.ColumnName);
             DataGridView dgv = FindDGVByName(collection.XMLType, ComponentTypeEnum.DataGrid);
@@ -1442,7 +1442,7 @@ namespace Database_Editor
         #endregion
 
         #region Add New
-        private void AddNewGenericXMLObject(TabCollection collection)
+        private void AddNewGenericXMLObject(XMLCollection collection)
         {
             string tabIndex = GetName(collection.XMLType, ComponentTypeEnum.TabIndex);
             string columnName = GetName(collection.XMLType, ComponentTypeEnum.ColumnName);
@@ -1564,7 +1564,7 @@ namespace Database_Editor
             LoadDungeonInfo();
         }
 
-        private void LoadGenericDataInfo(XMLData data, TabCollection collection)
+        private void LoadGenericDataInfo(XMLData data, XMLCollection collection)
         {
             TextBox tbName = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxName);
             TextBox tbID = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxID);
@@ -1687,21 +1687,6 @@ namespace Database_Editor
             XMLData data = _diBasicXML[DUNGEON_XML_FILE][_diTabIndices["Dungeons"]];
             LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Dungeon]);
         }
-
-        private void LoadDictionaryListInfo(int index, List<XMLData> dataList, TextBox tbName, DataGridView dgvTags, XMLTypeEnum xmlType, TextBox tbDescription = null)
-        {
-            tbName.Text = GetTextValue(xmlType, index, "Name");
-            if (tbDescription != null)
-            {
-                tbDescription.Text = GetTextValue(xmlType, index, "Description");
-            }
-
-            dgvTags.Rows.Clear();
-            foreach (XMLData d in dataList)
-            {
-                dgvTags.Rows.Add(d.GetTagsString());
-            }
-        }
         private void LoadCutsceneInfo()
         {
             List<string> listData = _diCutscenes[_diTabIndices["Cutscenes"]];
@@ -1737,7 +1722,7 @@ namespace Database_Editor
         #endregion
 
         #region SaveInfo
-        private void SaveXMLDataInfo(List<XMLData> liData, TabCollection collection)
+        private void SaveXMLDataInfo(List<XMLData> liData, XMLCollection collection)
         {
             string tabIndex = GetName(collection.XMLType, ComponentTypeEnum.TabIndex);
             string columnName = GetName(collection.XMLType, ComponentTypeEnum.ColumnName);

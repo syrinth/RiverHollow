@@ -85,6 +85,7 @@ namespace Database_Editor
             tbCharExtraDataName.Text = data.Name;
 
             dgvExtraTags.Rows.Clear();
+            tbCharExtraDataInfo.Text = string.Empty;
 
             string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in tags)
@@ -92,8 +93,17 @@ namespace Database_Editor
                 if (!s.StartsWith("Type") && !s.StartsWith("Name"))
                 {
                     string[] split = s.Split(':');
-                    if (s.StartsWith("Text") && split.Length > 1) { tbCharExtraDataInfo.Text = split[1]; }
-                    else { dgvExtraTags.Rows.Add(s); }
+                    if (s.StartsWith("Text"))
+                    {
+                        if (split.Length > 1)
+                        {
+                            tbCharExtraDataInfo.Text = split[1];
+                        }
+                    }
+                    else
+                    {
+                        dgvExtraTags.Rows.Add(s);
+                    }
                 }
             }
         }
@@ -130,24 +140,6 @@ namespace Database_Editor
             }
         }
 
-        private void btnAddNew_Click(object sender, EventArgs e)
-        {
-            Save();
-
-            _iIndex = dgvCharExtraData.Rows.Count;
-            dgvCharExtraData.Rows.Add();
-            SelectRow(dgvCharExtraData, _iIndex);
-
-            string newID = (_iIndex).ToString();
-            DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
-            row.Cells["colCharExtraID"].Value = newID;
-
-            tbCharExtraDataName.Text = newID;
-            tbCharExtraDataInfo.Text = "";
-
-            tbCharExtraDataName.Focus();
-        }
-
         private void btnSave_Click(object sender, EventArgs e)
         {
             Save();
@@ -173,7 +165,7 @@ namespace Database_Editor
         {
             DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
 
-            XMLData data = null;
+            XMLData data;
             if (_iIndex == StringData.Count)
             {
                 data = new XMLData(_iIndex.ToString(), new Dictionary<string, string>(), Constants.TEXTFILE_REF_TAGS, "", XMLTypeEnum.TextFile, ref ObjectTextDicitonary);
@@ -212,6 +204,26 @@ namespace Database_Editor
             ListData[tbCharExtraDataName.Text] = listInfo;
             DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
             row.Cells["colCharExtraName"].Value = tbCharExtraDataName.Text;
+        }
+
+        private void addNewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Save();
+
+            _iIndex = dgvCharExtraData.Rows.Count;
+            dgvCharExtraData.Rows.Add();
+            SelectRow(dgvCharExtraData, _iIndex);
+
+            string newID = (_iIndex).ToString();
+            DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
+            row.Cells["colCharExtraID"].Value = newID;
+
+            tbCharExtraDataName.Text = newID;
+            tbCharExtraDataInfo.Text = "";
+
+            dgvExtraTags.Rows.Clear();
+
+            tbCharExtraDataName.Focus();
         }
     }
 }

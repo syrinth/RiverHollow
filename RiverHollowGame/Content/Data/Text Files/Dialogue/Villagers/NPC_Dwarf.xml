@@ -32,7 +32,7 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Text:Sorry,I'm very busy today. Maybe in a few days I can go with you again.][Name:JoinPartyNo]</Value>
+      <Value>[Name:JoinPartyNo][Text:Sorry,I'm very busy today. Maybe in a few days I can go with you again.]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -40,17 +40,21 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Text:Oh... I'm sorry but. No.][Name:MarriageNo]</Value>
+      <Value>[Name:MarriageNo][Text:Oh... I'm sorry but. No.]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Text:You're running around in this rain? Ha, of course you are. There's no stopping you, is there? It's admirable, if concerning.][Weather:Raining][Name:Raining|1]</Value>
+      <Value>[Name:Raining|1][Text:You're running around in this rain? Ha, of course you are. There's no stopping you, is there? It's admirable, if concerning.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Text:Cheery little place here, and the drink ain't bad either! Now that you're here though, let's get down to brass tacks.
+      <Value>[Name:Task_3_Start][Text:Cheery little place here, and the drink ain't bad either! Now that you're here though, let's get down to brass tacks.
 	  I've been looking for a new place to settle down, has some... unpleasantness back home. I was going to head down to one of the big cities like Easthem, but since you help me out I think maybe I'll stay here.
-	  I'm more likely to make a mark in a small village like this anyway! What do I need I hear you ask? Simple! Nothing more than setting up a $WorldObject_35$ for me.][Name:Task_3_Start][UnlockObjectID:35]</Value>
+	  I'm more likely to make a mark in a small village like this anyway! What do I need I hear you ask? Simple! Nothing more than setting up a $WorldObject_35$ for me.][UnlockObjectID:35]</Value>
+    </Item>
+    <Item>
+      <Key>12</Key>
+      <Value>[Name:Testing][Text:Panda][Weather:Raining]</Value>
     </Item>
   </Asset>
 </XnaContent>

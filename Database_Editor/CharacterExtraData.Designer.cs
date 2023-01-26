@@ -28,20 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCharExtraData));
             this.dgvCharExtraData = new System.Windows.Forms.DataGridView();
+            this.colCharExtraID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCharExtraName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tbCharExtraDataInfo = new System.Windows.Forms.TextBox();
             this.tbCharExtraDataName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnAddNew = new System.Windows.Forms.Button();
             this.dgvExtraTags = new System.Windows.Forms.DataGridView();
             this.colTaskTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnSave = new System.Windows.Forms.Button();
-            this.btnRemove = new System.Windows.Forms.Button();
-            this.colCharExtraID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCharExtraName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCharExtraData)).BeginInit();
+            this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvExtraTags)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,15 +57,48 @@
             this.dgvCharExtraData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colCharExtraID,
             this.colCharExtraName});
+            this.dgvCharExtraData.ContextMenuStrip = this.contextMenuStrip;
             this.dgvCharExtraData.Location = new System.Drawing.Point(12, 12);
             this.dgvCharExtraData.MultiSelect = false;
             this.dgvCharExtraData.Name = "dgvCharExtraData";
             this.dgvCharExtraData.ReadOnly = true;
             this.dgvCharExtraData.RowHeadersVisible = false;
             this.dgvCharExtraData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvCharExtraData.Size = new System.Drawing.Size(308, 397);
+            this.dgvCharExtraData.Size = new System.Drawing.Size(308, 426);
             this.dgvCharExtraData.TabIndex = 15;
             this.dgvCharExtraData.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCharExtraData_CellClick);
+            // 
+            // colCharExtraID
+            // 
+            this.colCharExtraID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colCharExtraID.FillWeight = 10F;
+            this.colCharExtraID.HeaderText = "ID";
+            this.colCharExtraID.Name = "colCharExtraID";
+            this.colCharExtraID.ReadOnly = true;
+            this.colCharExtraID.Width = 31;
+            // 
+            // colCharExtraName
+            // 
+            this.colCharExtraName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCharExtraName.FillWeight = 90F;
+            this.colCharExtraName.HeaderText = "Name";
+            this.colCharExtraName.Name = "colCharExtraName";
+            this.colCharExtraName.ReadOnly = true;
+            this.colCharExtraName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addNewToolStripMenuItem});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(124, 26);
+            // 
+            // addNewToolStripMenuItem
+            // 
+            this.addNewToolStripMenuItem.Name = "addNewToolStripMenuItem";
+            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.addNewToolStripMenuItem.Text = "Add New";
+            this.addNewToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuItem_Click);
             // 
             // tbCharExtraDataInfo
             // 
@@ -99,23 +134,13 @@
             this.label1.TabIndex = 24;
             this.label1.Text = "Info:";
             // 
-            // btnAddNew
-            // 
-            this.btnAddNew.Location = new System.Drawing.Point(12, 415);
-            this.btnAddNew.Name = "btnAddNew";
-            this.btnAddNew.Size = new System.Drawing.Size(75, 23);
-            this.btnAddNew.TabIndex = 45;
-            this.btnAddNew.Text = "Add";
-            this.btnAddNew.UseVisualStyleBackColor = true;
-            this.btnAddNew.Click += new System.EventHandler(this.btnAddNew_Click);
-            // 
-            // dgvEditTags
+            // dgvExtraTags
             // 
             this.dgvExtraTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvExtraTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colTaskTags});
             this.dgvExtraTags.Location = new System.Drawing.Point(329, 174);
-            this.dgvExtraTags.Name = "dgvEditTags";
+            this.dgvExtraTags.Name = "dgvExtraTags";
             this.dgvExtraTags.RowHeadersVisible = false;
             this.dgvExtraTags.Size = new System.Drawing.Size(459, 206);
             this.dgvExtraTags.TabIndex = 46;
@@ -136,42 +161,13 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // btnRemove
-            // 
-            this.btnRemove.Location = new System.Drawing.Point(245, 415);
-            this.btnRemove.Name = "btnRemove";
-            this.btnRemove.Size = new System.Drawing.Size(75, 23);
-            this.btnRemove.TabIndex = 48;
-            this.btnRemove.Text = "Remove";
-            this.btnRemove.UseVisualStyleBackColor = true;
-            // 
-            // colCharExtraID
-            // 
-            this.colCharExtraID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colCharExtraID.FillWeight = 10F;
-            this.colCharExtraID.HeaderText = "ID";
-            this.colCharExtraID.Name = "colCharExtraID";
-            this.colCharExtraID.ReadOnly = true;
-            this.colCharExtraID.Width = 31;
-            // 
-            // colCharExtraName
-            // 
-            this.colCharExtraName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colCharExtraName.FillWeight = 90F;
-            this.colCharExtraName.HeaderText = "Name";
-            this.colCharExtraName.Name = "colCharExtraName";
-            this.colCharExtraName.ReadOnly = true;
-            this.colCharExtraName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // FormCharExtraData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.dgvExtraTags);
-            this.Controls.Add(this.btnAddNew);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbCharExtraDataName);
             this.Controls.Add(this.lblName);
@@ -182,6 +178,7 @@
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormCharExtraData_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dgvCharExtraData)).EndInit();
+            this.contextMenuStrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvExtraTags)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -195,12 +192,12 @@
         private System.Windows.Forms.TextBox tbCharExtraDataName;
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnAddNew;
         private System.Windows.Forms.DataGridView dgvExtraTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTaskTags;
         private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharExtraID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharExtraName;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem addNewToolStripMenuItem;
     }
 }
