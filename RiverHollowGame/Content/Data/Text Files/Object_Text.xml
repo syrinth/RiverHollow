@@ -198,35 +198,35 @@
       <Value>[Name:Ulm]</Value>
     </Item>
     <Item>
-      <Key>Class_0</Key>
+      <Key>Job_0</Key>
       <Value>[Name:Wizard][Description:Practitioners of the arcane arts, wizards excel at  handling a multitude of foes.]</Value>
     </Item>
     <Item>
-      <Key>Class_1</Key>
+      <Key>Job_1</Key>
       <Value>[Name:Healer][Description:Healers]</Value>
     </Item>
     <Item>
-      <Key>Class_2</Key>
+      <Key>Job_2</Key>
       <Value>[Name:Summoner][Description:Summon shit]</Value>
     </Item>
     <Item>
-      <Key>Class_3</Key>
+      <Key>Job_3</Key>
       <Value>[Name:Witch][Description:Witches curse your foes]</Value>
     </Item>
     <Item>
-      <Key>Class_4</Key>
+      <Key>Job_4</Key>
       <Value>[Name:Lancer][Description:Stab]</Value>
     </Item>
     <Item>
-      <Key>Class_5</Key>
+      <Key>Job_5</Key>
       <Value>[Name:Knight][Description:He protecc]</Value>
     </Item>
     <Item>
-      <Key>Class_6</Key>
+      <Key>Job_6</Key>
       <Value>[Name:Scout][Description:Shooty boy]</Value>
     </Item>
     <Item>
-      <Key>Class_7</Key>
+      <Key>Job_7</Key>
       <Value>[Name:Bard][Description:Singing!]</Value>
     </Item>
     <Item>

@@ -101,7 +101,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _iId = id;
                 _winData = GUIWindow.Window_1;
 
-                _gName = new GUIText(data.playerData.name + ", " + DataManager.GetClassByIndex(data.playerData.currentClass).Name());
+                _gName = new GUIText(data.playerData.name + ", " + DataManager.GetJobByIndex(data.playerData.currentClass).Name());
                 Vector2 stringsize = _gName.MeasureString("XXXXXXXXXXX XXXXXXXXXXXXXX");
 
                 _gName.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);

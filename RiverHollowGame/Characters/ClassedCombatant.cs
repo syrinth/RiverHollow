@@ -19,8 +19,8 @@ namespace RiverHollow.Characters.Lite
         string _sName;
         public static List<int> LevelRange = new List<int> { 0, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240 };
 
-        protected CharacterClass _class;
-        public CharacterClass CharacterClass { get => _class; }
+        protected Job _class;
+        public Job CharacterClass { get => _class; }
         public int ClassLevel { get; private set; }
         public int CurrentXP { get; private set; }
         public AttributeEnum KeyAttribute => _class.KeyAttribute;
@@ -57,7 +57,7 @@ namespace RiverHollow.Characters.Lite
             if (this == PlayerManager.PlayerCombatant) { return new GUIImage(new Rectangle(0, 0, 18, 18), ScaleIt(18), ScaleIt(18), DataManager.GetTexture(DataManager.COMBAT_PORTRAITS + "Player_Icon")); }
             else { return new GUIImage(new Rectangle(0, 0, 18, 18), ScaleIt(18), ScaleIt(18), DataManager.GetTexture(DataManager.COMBAT_PORTRAITS + "V_" + _class.ID.ToString("00"))); }
         }
-        public virtual void SetClass(CharacterClass x)
+        public virtual void SetClass(Job x)
         {
             _class = x;
             if (x.ID != -1)

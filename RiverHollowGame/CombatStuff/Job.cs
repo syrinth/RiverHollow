@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using RiverHollow.Game_Managers;
+﻿using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
+using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.CombatStuff
 {
-    public class CharacterClass
+    public class Job
     {
         public int ID { get; } = -1;
 
@@ -26,10 +26,10 @@ namespace RiverHollow.CombatStuff
         public int HeadID;
         public int AccessoryID;
 
-        public Dictionary<string, string> ClassStringData => DataManager.GetClassDataByID(ID);
+        public Dictionary<string, string> ClassStringData => DataManager.GetJobDataByID(ID);
 
-        public CharacterClass() { }
-        public CharacterClass(int id, Dictionary<string, string> stringData)
+        public Job() { }
+        public Job(int id, Dictionary<string, string> stringData)
         {
             ID = id;
 
@@ -60,12 +60,12 @@ namespace RiverHollow.CombatStuff
 
         public string Name()
         {
-            return DataManager.GetTextData("Class", ID, "Name");
+            return DataManager.GetTextData("Job", ID, "Name");
         }
 
         public string Description()
         {
-            return DataManager.GetTextData("Class", ID, "Description");
+            return DataManager.GetTextData("Job", ID, "Description");
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿using RiverHollow.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
 using static Database_Editor.Classes.Constants;
 
 namespace Database_Editor.Classes
@@ -14,10 +8,21 @@ namespace Database_Editor.Classes
         public XMLTypeEnum XMLType { get; }
         public List<string> DefaultTags { get; }// = null
 
-        public TabCollection(XMLTypeEnum xmlType, List<string> defaultTags = null)
+        public string TagsReferenced { get; }
+        public string TagsThatReferToMe { get; }
+
+        public TabCollection(XMLTypeEnum xmlType, string tagsReferenced, string tagsToMe, string defaultTags)
         {
             XMLType = xmlType;
-            DefaultTags = defaultTags;
+            TagsReferenced = tagsReferenced;
+            TagsThatReferToMe = tagsToMe;
+
+            DefaultTags = new List<string>();
+            string[] tags = defaultTags.Split(',');
+            for(int i=0; i<tags.Length; i++)
+            {
+                DefaultTags.Add(tags[i]);
+            }
         }
     }
 }

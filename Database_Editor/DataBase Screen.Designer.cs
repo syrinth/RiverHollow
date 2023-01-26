@@ -56,7 +56,7 @@
             this.cbEditableCharData = new System.Windows.Forms.ComboBox();
             this.btnEdit = new System.Windows.Forms.Button();
             this.cbNPCType = new System.Windows.Forms.ComboBox();
-            this.btnCancelNPC = new System.Windows.Forms.Button();
+            this.btnNPCCancel = new System.Windows.Forms.Button();
             this.dgvNPCTags = new System.Windows.Forms.DataGridView();
             this.colNPCTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label3 = new System.Windows.Forms.Label();
@@ -65,18 +65,17 @@
             this.label6 = new System.Windows.Forms.Label();
             this.dgvNPCs = new System.Windows.Forms.DataGridView();
             this.colNPCsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabClass = new System.Windows.Forms.TabPage();
-            this.tbClassDescription = new System.Windows.Forms.TextBox();
+            this.tabJob = new System.Windows.Forms.TabPage();
+            this.tbJobDescription = new System.Windows.Forms.TextBox();
             this.label37 = new System.Windows.Forms.Label();
-            this.btnClassCancel = new System.Windows.Forms.Button();
-            this.dgvClassTags = new System.Windows.Forms.DataGridView();
-            this.colClassTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnJobCancel = new System.Windows.Forms.Button();
+            this.dgvJobTags = new System.Windows.Forms.DataGridView();
+            this.colJobTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label7 = new System.Windows.Forms.Label();
-            this.tbClassID = new System.Windows.Forms.TextBox();
-            this.tbClassName = new System.Windows.Forms.TextBox();
+            this.tbJobID = new System.Windows.Forms.TextBox();
+            this.tbJobName = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.dgvClasses = new System.Windows.Forms.DataGridView();
-            this.colClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvJobs = new System.Windows.Forms.DataGridView();
             this.tabCutscene = new System.Windows.Forms.TabPage();
             this.label26 = new System.Windows.Forms.Label();
             this.tbCutsceneID = new System.Windows.Forms.TextBox();
@@ -85,7 +84,7 @@
             this.label17 = new System.Windows.Forms.Label();
             this.tbCutsceneTriggers = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnCutsceneCancel = new System.Windows.Forms.Button();
             this.dgvCutsceneTags = new System.Windows.Forms.DataGridView();
             this.colCutsceneTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbCutsceneName = new System.Windows.Forms.TextBox();
@@ -99,7 +98,7 @@
             this.tbDungeonID = new System.Windows.Forms.TextBox();
             this.tbDungeonName = new System.Windows.Forms.TextBox();
             this.label39 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
+            this.btnDungeonCancel = new System.Windows.Forms.Button();
             this.dgvDungeonTags = new System.Windows.Forms.DataGridView();
             this.colDungeonsTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvDungeons = new System.Windows.Forms.DataGridView();
@@ -123,7 +122,7 @@
             this.tbLightID = new System.Windows.Forms.TextBox();
             this.tbLightName = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnLightCancel = new System.Windows.Forms.Button();
             this.dgvLightTags = new System.Windows.Forms.DataGridView();
             this.colLightTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvLights = new System.Windows.Forms.DataGridView();
@@ -198,6 +197,7 @@
             this.dgvUpgrades = new System.Windows.Forms.DataGridView();
             this.colUpgradesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbStatus = new System.Windows.Forms.TextBox();
+            this.colJobsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabAction.SuspendLayout();
@@ -206,9 +206,9 @@
             this.tabNPC.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvNPCTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvNPCs)).BeginInit();
-            this.tabClass.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvClassTags)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvClasses)).BeginInit();
+            this.tabJob.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvJobTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvJobs)).BeginInit();
             this.tabCutscene.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCutsceneTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCutscenes)).BeginInit();
@@ -305,7 +305,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabCtl.Controls.Add(this.tabAction);
             this.tabCtl.Controls.Add(this.tabNPC);
-            this.tabCtl.Controls.Add(this.tabClass);
+            this.tabCtl.Controls.Add(this.tabJob);
             this.tabCtl.Controls.Add(this.tabCutscene);
             this.tabCtl.Controls.Add(this.tabDungeon);
             this.tabCtl.Controls.Add(this.tabItems);
@@ -360,7 +360,7 @@
             this.btnActionCancel.TabIndex = 43;
             this.btnActionCancel.Text = "Cancel";
             this.btnActionCancel.UseVisualStyleBackColor = true;
-            this.btnActionCancel.Click += new System.EventHandler(this.btnActionCancel_Click);
+            this.btnActionCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
             // 
             // dgvActionTags
             // 
@@ -455,7 +455,7 @@
             this.dgvActions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvActions.Size = new System.Drawing.Size(308, 411);
             this.dgvActions.TabIndex = 35;
-            this.dgvActions.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvActions_CellClick);
+            this.dgvActions.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
             // 
             // colActionsName
             // 
@@ -477,7 +477,7 @@
             this.tabNPC.Controls.Add(this.cbEditableCharData);
             this.tabNPC.Controls.Add(this.btnEdit);
             this.tabNPC.Controls.Add(this.cbNPCType);
-            this.tabNPC.Controls.Add(this.btnCancelNPC);
+            this.tabNPC.Controls.Add(this.btnNPCCancel);
             this.tabNPC.Controls.Add(this.dgvNPCTags);
             this.tabNPC.Controls.Add(this.label3);
             this.tabNPC.Controls.Add(this.tbNPCID);
@@ -519,15 +519,15 @@
             this.cbNPCType.Size = new System.Drawing.Size(149, 21);
             this.cbNPCType.TabIndex = 45;
             // 
-            // btnCancelNPC
+            // btnNPCCancel
             // 
-            this.btnCancelNPC.Location = new System.Drawing.Point(709, 394);
-            this.btnCancelNPC.Name = "btnCancelNPC";
-            this.btnCancelNPC.Size = new System.Drawing.Size(75, 23);
-            this.btnCancelNPC.TabIndex = 44;
-            this.btnCancelNPC.Text = "Cancel";
-            this.btnCancelNPC.UseVisualStyleBackColor = true;
-            this.btnCancelNPC.Click += new System.EventHandler(this.btnNPCCancel_Click);
+            this.btnNPCCancel.Location = new System.Drawing.Point(709, 394);
+            this.btnNPCCancel.Name = "btnNPCCancel";
+            this.btnNPCCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnNPCCancel.TabIndex = 44;
+            this.btnNPCCancel.Text = "Cancel";
+            this.btnNPCCancel.UseVisualStyleBackColor = true;
+            this.btnNPCCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
             // 
             // dgvNPCTags
             // 
@@ -600,7 +600,7 @@
             this.dgvNPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvNPCs.Size = new System.Drawing.Size(308, 411);
             this.dgvNPCs.TabIndex = 37;
-            this.dgvNPCs.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvNPCs_CellClick);
+            this.dgvNPCs.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
             // 
             // colNPCsName
             // 
@@ -611,31 +611,31 @@
             this.colNPCsName.ReadOnly = true;
             this.colNPCsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tabClass
+            // tabJob
             // 
-            this.tabClass.Controls.Add(this.tbClassDescription);
-            this.tabClass.Controls.Add(this.label37);
-            this.tabClass.Controls.Add(this.btnClassCancel);
-            this.tabClass.Controls.Add(this.dgvClassTags);
-            this.tabClass.Controls.Add(this.label7);
-            this.tabClass.Controls.Add(this.tbClassID);
-            this.tabClass.Controls.Add(this.tbClassName);
-            this.tabClass.Controls.Add(this.label8);
-            this.tabClass.Controls.Add(this.dgvClasses);
-            this.tabClass.Location = new System.Drawing.Point(4, 22);
-            this.tabClass.Name = "tabClass";
-            this.tabClass.Size = new System.Drawing.Size(790, 425);
-            this.tabClass.TabIndex = 3;
-            this.tabClass.Text = "Classes";
-            this.tabClass.UseVisualStyleBackColor = true;
+            this.tabJob.Controls.Add(this.tbJobDescription);
+            this.tabJob.Controls.Add(this.label37);
+            this.tabJob.Controls.Add(this.btnJobCancel);
+            this.tabJob.Controls.Add(this.dgvJobTags);
+            this.tabJob.Controls.Add(this.label7);
+            this.tabJob.Controls.Add(this.tbJobID);
+            this.tabJob.Controls.Add(this.tbJobName);
+            this.tabJob.Controls.Add(this.label8);
+            this.tabJob.Controls.Add(this.dgvJobs);
+            this.tabJob.Location = new System.Drawing.Point(4, 22);
+            this.tabJob.Name = "tabJob";
+            this.tabJob.Size = new System.Drawing.Size(790, 425);
+            this.tabJob.TabIndex = 3;
+            this.tabJob.Text = "Jobs";
+            this.tabJob.UseVisualStyleBackColor = true;
             // 
-            // tbClassDescription
+            // tbJobDescription
             // 
-            this.tbClassDescription.Location = new System.Drawing.Point(320, 51);
-            this.tbClassDescription.Multiline = true;
-            this.tbClassDescription.Name = "tbClassDescription";
-            this.tbClassDescription.Size = new System.Drawing.Size(464, 53);
-            this.tbClassDescription.TabIndex = 55;
+            this.tbJobDescription.Location = new System.Drawing.Point(320, 51);
+            this.tbJobDescription.Multiline = true;
+            this.tbJobDescription.Name = "tbJobDescription";
+            this.tbJobDescription.Size = new System.Drawing.Size(464, 53);
+            this.tbJobDescription.TabIndex = 55;
             // 
             // label37
             // 
@@ -646,36 +646,36 @@
             this.label37.TabIndex = 54;
             this.label37.Text = "Description:";
             // 
-            // btnClassCancel
+            // btnJobCancel
             // 
-            this.btnClassCancel.Location = new System.Drawing.Point(709, 394);
-            this.btnClassCancel.Name = "btnClassCancel";
-            this.btnClassCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnClassCancel.TabIndex = 53;
-            this.btnClassCancel.Text = "Cancel";
-            this.btnClassCancel.UseVisualStyleBackColor = true;
-            this.btnClassCancel.Click += new System.EventHandler(this.btnClassCancel_Click);
+            this.btnJobCancel.Location = new System.Drawing.Point(709, 394);
+            this.btnJobCancel.Name = "btnJobCancel";
+            this.btnJobCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnJobCancel.TabIndex = 53;
+            this.btnJobCancel.Text = "Cancel";
+            this.btnJobCancel.UseVisualStyleBackColor = true;
+            this.btnJobCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
             // 
-            // dgvClassTags
+            // dgvJobTags
             // 
-            this.dgvClassTags.AllowUserToResizeColumns = false;
-            this.dgvClassTags.AllowUserToResizeRows = false;
-            this.dgvClassTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvClassTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colClassTags});
-            this.dgvClassTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dgvClassTags.Location = new System.Drawing.Point(320, 110);
-            this.dgvClassTags.Name = "dgvClassTags";
-            this.dgvClassTags.RowHeadersVisible = false;
-            this.dgvClassTags.Size = new System.Drawing.Size(464, 278);
-            this.dgvClassTags.TabIndex = 51;
+            this.dgvJobTags.AllowUserToResizeColumns = false;
+            this.dgvJobTags.AllowUserToResizeRows = false;
+            this.dgvJobTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvJobTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colJobTags});
+            this.dgvJobTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.dgvJobTags.Location = new System.Drawing.Point(320, 110);
+            this.dgvJobTags.Name = "dgvJobTags";
+            this.dgvJobTags.RowHeadersVisible = false;
+            this.dgvJobTags.Size = new System.Drawing.Size(464, 278);
+            this.dgvJobTags.TabIndex = 51;
             // 
-            // colClassTags
+            // colJobTags
             // 
-            this.colClassTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colClassTags.HeaderText = "Tags";
-            this.colClassTags.Name = "colClassTags";
-            this.colClassTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colJobTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colJobTags.HeaderText = "Tags";
+            this.colJobTags.Name = "colJobTags";
+            this.colJobTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // label7
             // 
@@ -686,19 +686,19 @@
             this.label7.TabIndex = 50;
             this.label7.Text = "ID:";
             // 
-            // tbClassID
+            // tbJobID
             // 
-            this.tbClassID.Location = new System.Drawing.Point(741, 6);
-            this.tbClassID.Name = "tbClassID";
-            this.tbClassID.Size = new System.Drawing.Size(43, 20);
-            this.tbClassID.TabIndex = 49;
+            this.tbJobID.Location = new System.Drawing.Point(741, 6);
+            this.tbJobID.Name = "tbJobID";
+            this.tbJobID.Size = new System.Drawing.Size(43, 20);
+            this.tbJobID.TabIndex = 49;
             // 
-            // tbClassName
+            // tbJobName
             // 
-            this.tbClassName.Location = new System.Drawing.Point(361, 6);
-            this.tbClassName.Name = "tbClassName";
-            this.tbClassName.Size = new System.Drawing.Size(108, 20);
-            this.tbClassName.TabIndex = 48;
+            this.tbJobName.Location = new System.Drawing.Point(361, 6);
+            this.tbJobName.Name = "tbJobName";
+            this.tbJobName.Size = new System.Drawing.Size(108, 20);
+            this.tbJobName.TabIndex = 48;
             // 
             // label8
             // 
@@ -709,34 +709,25 @@
             this.label8.TabIndex = 47;
             this.label8.Text = "Name:";
             // 
-            // dgvClasses
+            // dgvJobs
             // 
-            this.dgvClasses.AllowUserToAddRows = false;
-            this.dgvClasses.AllowUserToDeleteRows = false;
-            this.dgvClasses.AllowUserToResizeColumns = false;
-            this.dgvClasses.AllowUserToResizeRows = false;
-            this.dgvClasses.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvClasses.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colClassName});
-            this.dgvClasses.ContextMenuStrip = this.contextMenu;
-            this.dgvClasses.Location = new System.Drawing.Point(6, 6);
-            this.dgvClasses.MultiSelect = false;
-            this.dgvClasses.Name = "dgvClasses";
-            this.dgvClasses.ReadOnly = true;
-            this.dgvClasses.RowHeadersVisible = false;
-            this.dgvClasses.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvClasses.Size = new System.Drawing.Size(308, 411);
-            this.dgvClasses.TabIndex = 46;
-            this.dgvClasses.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvClasses_CellClick);
-            // 
-            // colClassName
-            // 
-            this.colClassName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colClassName.FillWeight = 90F;
-            this.colClassName.HeaderText = "Name";
-            this.colClassName.Name = "colClassName";
-            this.colClassName.ReadOnly = true;
-            this.colClassName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dgvJobs.AllowUserToAddRows = false;
+            this.dgvJobs.AllowUserToDeleteRows = false;
+            this.dgvJobs.AllowUserToResizeColumns = false;
+            this.dgvJobs.AllowUserToResizeRows = false;
+            this.dgvJobs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvJobs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colJobsName});
+            this.dgvJobs.ContextMenuStrip = this.contextMenu;
+            this.dgvJobs.Location = new System.Drawing.Point(6, 6);
+            this.dgvJobs.MultiSelect = false;
+            this.dgvJobs.Name = "dgvJobs";
+            this.dgvJobs.ReadOnly = true;
+            this.dgvJobs.RowHeadersVisible = false;
+            this.dgvJobs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvJobs.Size = new System.Drawing.Size(308, 411);
+            this.dgvJobs.TabIndex = 46;
+            this.dgvJobs.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
             // 
             // tabCutscene
             // 
@@ -747,7 +738,7 @@
             this.tabCutscene.Controls.Add(this.label17);
             this.tabCutscene.Controls.Add(this.tbCutsceneTriggers);
             this.tabCutscene.Controls.Add(this.label14);
-            this.tabCutscene.Controls.Add(this.button2);
+            this.tabCutscene.Controls.Add(this.btnCutsceneCancel);
             this.tabCutscene.Controls.Add(this.dgvCutsceneTags);
             this.tabCutscene.Controls.Add(this.tbCutsceneName);
             this.tabCutscene.Controls.Add(this.label16);
@@ -817,15 +808,15 @@
             this.label14.TabIndex = 35;
             this.label14.Text = "Triggers:";
             // 
-            // button2
+            // btnCutsceneCancel
             // 
-            this.button2.Location = new System.Drawing.Point(709, 394);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 34;
-            this.button2.Text = "Cancel";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.btnCutsceneCancel_Click);
+            this.btnCutsceneCancel.Location = new System.Drawing.Point(709, 394);
+            this.btnCutsceneCancel.Name = "btnCutsceneCancel";
+            this.btnCutsceneCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCutsceneCancel.TabIndex = 34;
+            this.btnCutsceneCancel.Text = "Cancel";
+            this.btnCutsceneCancel.UseVisualStyleBackColor = true;
+            this.btnCutsceneCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
             // 
             // dgvCutsceneTags
             // 
@@ -882,7 +873,7 @@
             this.dgvCutscenes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvCutscenes.Size = new System.Drawing.Size(308, 411);
             this.dgvCutscenes.TabIndex = 26;
-            this.dgvCutscenes.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCutscenes_CellClick);
+            this.dgvCutscenes.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
             // 
             // colCutscenesName
             // 
@@ -901,7 +892,7 @@
             this.tabDungeon.Controls.Add(this.tbDungeonID);
             this.tabDungeon.Controls.Add(this.tbDungeonName);
             this.tabDungeon.Controls.Add(this.label39);
-            this.tabDungeon.Controls.Add(this.button4);
+            this.tabDungeon.Controls.Add(this.btnDungeonCancel);
             this.tabDungeon.Controls.Add(this.dgvDungeonTags);
             this.tabDungeon.Controls.Add(this.dgvDungeons);
             this.tabDungeon.Location = new System.Drawing.Point(4, 22);
@@ -960,15 +951,15 @@
             this.label39.TabIndex = 65;
             this.label39.Text = "Name:";
             // 
-            // button4
+            // btnDungeonCancel
             // 
-            this.button4.Location = new System.Drawing.Point(709, 394);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 64;
-            this.button4.Text = "Cancel";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.btnDungeonCancel_Click);
+            this.btnDungeonCancel.Location = new System.Drawing.Point(709, 394);
+            this.btnDungeonCancel.Name = "btnDungeonCancel";
+            this.btnDungeonCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnDungeonCancel.TabIndex = 64;
+            this.btnDungeonCancel.Text = "Cancel";
+            this.btnDungeonCancel.UseVisualStyleBackColor = true;
+            this.btnDungeonCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
             // 
             // dgvDungeonTags
             // 
@@ -1009,7 +1000,7 @@
             this.dgvDungeons.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvDungeons.Size = new System.Drawing.Size(308, 411);
             this.dgvDungeons.TabIndex = 62;
-            this.dgvDungeons.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDungeons_CellClick);
+            this.dgvDungeons.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
             // 
             // colDungeonsName
             // 
@@ -1069,7 +1060,7 @@
             this.btnItemCancel.TabIndex = 23;
             this.btnItemCancel.Text = "Cancel";
             this.btnItemCancel.UseVisualStyleBackColor = true;
-            this.btnItemCancel.Click += new System.EventHandler(this.btnItemCancel_Click);
+            this.btnItemCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
             // 
             // dgItemTags
             // 
@@ -1159,7 +1150,7 @@
             this.dgvItems.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvItems.Size = new System.Drawing.Size(308, 411);
             this.dgvItems.TabIndex = 14;
-            this.dgvItems.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvItems_CellClick);
+            this.dgvItems.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
             // 
             // colItemName
             // 
@@ -1176,7 +1167,7 @@
             this.tabLight.Controls.Add(this.tbLightID);
             this.tabLight.Controls.Add(this.tbLightName);
             this.tabLight.Controls.Add(this.label10);
-            this.tabLight.Controls.Add(this.button1);
+            this.tabLight.Controls.Add(this.btnLightCancel);
             this.tabLight.Controls.Add(this.dgvLightTags);
             this.tabLight.Controls.Add(this.dgvLights);
             this.tabLight.Location = new System.Drawing.Point(4, 22);
@@ -1218,15 +1209,15 @@
             this.label10.TabIndex = 58;
             this.label10.Text = "Name:";
             // 
-            // button1
+            // btnLightCancel
             // 
-            this.button1.Location = new System.Drawing.Point(709, 394);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 28;
-            this.button1.Text = "Cancel";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.btnLightCancel_Click);
+            this.btnLightCancel.Location = new System.Drawing.Point(709, 394);
+            this.btnLightCancel.Name = "btnLightCancel";
+            this.btnLightCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnLightCancel.TabIndex = 28;
+            this.btnLightCancel.Text = "Cancel";
+            this.btnLightCancel.UseVisualStyleBackColor = true;
+            this.btnLightCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
             // 
             // dgvLightTags
             // 
@@ -1267,7 +1258,7 @@
             this.dgvLights.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvLights.Size = new System.Drawing.Size(308, 411);
             this.dgvLights.TabIndex = 26;
-            this.dgvLights.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvLights_CellClick);
+            this.dgvLights.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
             // 
             // colLightsName
             // 
@@ -1304,6 +1295,7 @@
             this.btnMonsterCancel.TabIndex = 52;
             this.btnMonsterCancel.Text = "Cancel";
             this.btnMonsterCancel.UseVisualStyleBackColor = true;
+            this.btnMonsterCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
             // 
             // dgvMonsterTags
             // 
@@ -1393,7 +1385,7 @@
             this.dgvMonsters.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvMonsters.Size = new System.Drawing.Size(308, 411);
             this.dgvMonsters.TabIndex = 44;
-            this.dgvMonsters.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMonsters_CellClick);
+            this.dgvMonsters.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
             // 
             // colMonstersName
             // 
@@ -1444,7 +1436,7 @@
             this.btnShopCancel.TabIndex = 58;
             this.btnShopCancel.Text = "Cancel";
             this.btnShopCancel.UseVisualStyleBackColor = true;
-            this.btnShopCancel.Click += new System.EventHandler(this.btnShopCancel_Click);
+            this.btnShopCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
             // 
             // dgvShopTags
             // 
@@ -1501,7 +1493,7 @@
             this.dgvShops.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvShops.Size = new System.Drawing.Size(308, 411);
             this.dgvShops.TabIndex = 52;
-            this.dgvShops.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvShops_CellClick);
+            this.dgvShops.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
             // 
             // colShopsName
             // 
@@ -1548,7 +1540,7 @@
             this.btnStatusEffectCancel.TabIndex = 61;
             this.btnStatusEffectCancel.Text = "Cancel";
             this.btnStatusEffectCancel.UseVisualStyleBackColor = true;
-            this.btnStatusEffectCancel.Click += new System.EventHandler(this.btnStatusEffectCancel_Click);
+            this.btnStatusEffectCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
             // 
             // dgvStatusEffectTags
             // 
@@ -1637,7 +1629,7 @@
             this.dgvStatusEffects.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvStatusEffects.Size = new System.Drawing.Size(308, 411);
             this.dgvStatusEffects.TabIndex = 53;
-            this.dgvStatusEffects.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStatusEffects_CellClick);
+            this.dgvStatusEffects.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
             // 
             // colStatusEffectsName
             // 
@@ -1684,6 +1676,7 @@
             this.btnTaskCancel.TabIndex = 34;
             this.btnTaskCancel.Text = "Cancel";
             this.btnTaskCancel.UseVisualStyleBackColor = true;
+            this.btnTaskCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
             // 
             // dgvTaskTags
             // 
@@ -1773,7 +1766,7 @@
             this.dgvTasks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvTasks.Size = new System.Drawing.Size(308, 411);
             this.dgvTasks.TabIndex = 26;
-            this.dgvTasks.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTasks_CellClick);
+            this.dgvTasks.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
             // 
             // colTasksName
             // 
@@ -1819,7 +1812,7 @@
             this.btnWorldObjectCancel.TabIndex = 35;
             this.btnWorldObjectCancel.Text = "Cancel";
             this.btnWorldObjectCancel.UseVisualStyleBackColor = true;
-            this.btnWorldObjectCancel.Click += new System.EventHandler(this.btnWorldObjectCancel_Click);
+            this.btnWorldObjectCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
             // 
             // dgvWorldObjectTags
             // 
@@ -1892,7 +1885,7 @@
             this.dgvWorldObjects.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvWorldObjects.Size = new System.Drawing.Size(308, 411);
             this.dgvWorldObjects.TabIndex = 26;
-            this.dgvWorldObjects.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvWorldObjects_CellClick);
+            this.dgvWorldObjects.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
             // 
             // colWorldObjectsName
             // 
@@ -1927,6 +1920,7 @@
             this.btnUpgradeCancel.TabIndex = 42;
             this.btnUpgradeCancel.Text = "Cancel";
             this.btnUpgradeCancel.UseVisualStyleBackColor = true;
+            this.btnUpgradeCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
             // 
             // dgvUpgradeTags
             // 
@@ -1999,7 +1993,7 @@
             this.dgvUpgrades.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvUpgrades.Size = new System.Drawing.Size(308, 411);
             this.dgvUpgrades.TabIndex = 27;
-            this.dgvUpgrades.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUpgrades_CellClick);
+            this.dgvUpgrades.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
             // 
             // colUpgradesName
             // 
@@ -2018,6 +2012,15 @@
             this.tbStatus.ReadOnly = true;
             this.tbStatus.Size = new System.Drawing.Size(794, 20);
             this.tbStatus.TabIndex = 13;
+            // 
+            // colJobsName
+            // 
+            this.colJobsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colJobsName.FillWeight = 90F;
+            this.colJobsName.HeaderText = "Name";
+            this.colJobsName.Name = "colJobsName";
+            this.colJobsName.ReadOnly = true;
+            this.colJobsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // FrmDBEditor
             // 
@@ -2043,10 +2046,10 @@
             this.tabNPC.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvNPCTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvNPCs)).EndInit();
-            this.tabClass.ResumeLayout(false);
-            this.tabClass.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvClassTags)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvClasses)).EndInit();
+            this.tabJob.ResumeLayout(false);
+            this.tabJob.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvJobTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvJobs)).EndInit();
             this.tabCutscene.ResumeLayout(false);
             this.tabCutscene.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCutsceneTags)).EndInit();
@@ -2119,7 +2122,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.DataGridView dgvWorldObjects;
         private System.Windows.Forms.TabPage tabNPC;
-        private System.Windows.Forms.Button btnCancelNPC;
+        private System.Windows.Forms.Button btnNPCCancel;
         private System.Windows.Forms.DataGridView dgvNPCTags;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbNPCID;
@@ -2127,14 +2130,14 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DataGridView dgvNPCs;
         private System.Windows.Forms.ComboBox cbNPCType;
-        private System.Windows.Forms.TabPage tabClass;
-        private System.Windows.Forms.Button btnClassCancel;
-        private System.Windows.Forms.DataGridView dgvClassTags;
+        private System.Windows.Forms.TabPage tabJob;
+        private System.Windows.Forms.Button btnJobCancel;
+        private System.Windows.Forms.DataGridView dgvJobTags;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox tbClassID;
-        private System.Windows.Forms.TextBox tbClassName;
+        private System.Windows.Forms.TextBox tbJobID;
+        private System.Windows.Forms.TextBox tbJobName;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.DataGridView dgvClasses;
+        private System.Windows.Forms.DataGridView dgvJobs;
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.TabPage tabTask;
         private System.Windows.Forms.Button btnTaskCancel;
@@ -2153,7 +2156,7 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox tbCutsceneTriggers;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnCutsceneCancel;
         private System.Windows.Forms.DataGridView dgvCutsceneTags;
         private System.Windows.Forms.TextBox tbCutsceneName;
         private System.Windows.Forms.Label label16;
@@ -2188,7 +2191,7 @@
         private System.Windows.Forms.DataGridView dgvStatusEffects;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.TextBox tbShopID;
-        private System.Windows.Forms.TextBox tbClassDescription;
+        private System.Windows.Forms.TextBox tbJobDescription;
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.ContextMenuStrip contextMenu;
         private System.Windows.Forms.ToolStripMenuItem textToolStripMenuItem;
@@ -2199,7 +2202,7 @@
         private System.Windows.Forms.TextBox tbLightID;
         private System.Windows.Forms.TextBox tbLightName;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnLightCancel;
         private System.Windows.Forms.DataGridView dgvLightTags;
         private System.Windows.Forms.DataGridView dgvLights;
         private System.Windows.Forms.TabPage tabDungeon;
@@ -2207,7 +2210,7 @@
         private System.Windows.Forms.TextBox tbDungeonID;
         private System.Windows.Forms.TextBox tbDungeonName;
         private System.Windows.Forms.Label label39;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button btnDungeonCancel;
         private System.Windows.Forms.DataGridView dgvDungeonTags;
         private System.Windows.Forms.DataGridView dgvDungeons;
         private System.Windows.Forms.TextBox tbDungeonDescription;
@@ -2215,7 +2218,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colItemTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colWorldObjectTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNPCTags;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colClassTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colJobTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTaskTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCutsceneTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colShopTags;
@@ -2238,7 +2241,6 @@
         private System.Windows.Forms.ToolStripMenuItem sortAndSaveToolStripMenuItem1;
         private System.Windows.Forms.DataGridViewTextBoxColumn colActionsName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNPCsName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colClassName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCutscenesName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDungeonsName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colItemName;
@@ -2261,6 +2263,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colUpgradeTags;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.TextBox tbCutsceneID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colJobsName;
     }
 }
 

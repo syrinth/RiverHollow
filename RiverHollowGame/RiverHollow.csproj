@@ -114,7 +114,7 @@
     <Compile Include="CombatStuff\CombatAction.cs" />
     <Compile Include="CombatStuff\LiteCombatTile.cs" />
     <Compile Include="CombatStuff\StatusEffect.cs" />
-    <Compile Include="CombatStuff\CharacterClass.cs" />
+    <Compile Include="CombatStuff\Job.cs" />
     <Compile Include="Game Managers\CombatManager.cs" />
     <Compile Include="Game Managers\TacticalCombatManager.cs" />
     <Compile Include="Game Managers\CutSceneManager.cs" />

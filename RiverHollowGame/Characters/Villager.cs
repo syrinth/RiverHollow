@@ -85,11 +85,11 @@ namespace RiverHollow.Characters
             if (stringData.ContainsKey("Class"))
             {
                 Combatant = true;
-                CombatVersion.SetClass(DataManager.GetClassByIndex(int.Parse(stringData["Class"])));
+                CombatVersion.SetClass(DataManager.GetJobByIndex(int.Parse(stringData["Class"])));
                 CombatVersion.AssignStartingGear();
                 CombatVersion.SetName(Name());
             }
-            else { CombatVersion.SetClass(new CharacterClass()); }
+            else { CombatVersion.SetClass(new Job()); }
 
             if (stringData.ContainsKey("Collection"))
             {

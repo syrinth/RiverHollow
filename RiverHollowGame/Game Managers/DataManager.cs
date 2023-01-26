@@ -86,7 +86,7 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, Merchant> DIMerchants { get; private set; }
         static Dictionary<int, Dictionary<string, string>> _diActions;
 
-        static Dictionary<int, Dictionary<string, string>> _diClasses;
+        static Dictionary<int, Dictionary<string, string>> _diJobs;
         static Dictionary<string, Dictionary<string, List<string>>> _diSchedule;
 
         public static Dictionary<int, Dictionary<string, string>> Config;
@@ -138,7 +138,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diMonsterData, @"Data\Monsters", Content, null);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
             LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);
-            LoadDictionary(ref _diClasses, @"Data\Classes", Content, null);
+            LoadDictionary(ref _diJobs, @"Data\Classes", Content, null);
             LoadDictionary(ref Config, @"Data\Config", Content, null);
             LoadDictionary(ref _diLightData, @"Data\LightData", Content, null);
             LoadDictionary(ref _diUpgradeData, @"Data\Upgrades", Content, null);
@@ -357,7 +357,7 @@ namespace RiverHollow.Game_Managers
                     if (_diNPCData[id].ContainsKey(key)) { return _diNPCData[id][key]; }
                     break;
                 case DataType.Class:
-                    if (_diClasses[id].ContainsKey(key)) { return _diClasses[id][key]; }
+                    if (_diJobs[id].ContainsKey(key)) { return _diJobs[id][key]; }
                     break;
                 case DataType.Item:
                     if (_diItemData[id].ContainsKey(key)) { return _diItemData[id][key]; }
@@ -395,7 +395,7 @@ namespace RiverHollow.Game_Managers
                     if (_diNPCData[id].ContainsKey(key)) { return _diNPCData[id].ContainsKey(key); }
                     break;
                 case DataType.Class:
-                    if (_diClasses[id].ContainsKey(key)) { return _diClasses[id].ContainsKey(key); }
+                    if (_diJobs[id].ContainsKey(key)) { return _diJobs[id].ContainsKey(key); }
                     break;
                 case DataType.Item:
                     if (_diItemData[id].ContainsKey(key)) { return _diItemData[id].ContainsKey(key); }
@@ -654,7 +654,7 @@ namespace RiverHollow.Game_Managers
 
         public static int NumberOfClasses()
         {
-            return _diClasses.Count;
+            return _diJobs.Count;
         }
 
         public static string GetCharacterNameByIndex(int i)
@@ -774,13 +774,13 @@ namespace RiverHollow.Game_Managers
             return b;
         }
 
-        public static Dictionary<string, string> GetClassDataByID(int id) { return _diClasses[id]; }
-        public static CharacterClass GetClassByIndex(int id)
+        public static Dictionary<string, string> GetJobDataByID(int id) { return _diJobs[id]; }
+        public static Job GetJobByIndex(int id)
         {
-            CharacterClass c = null;
+            Job c = null;
             if (id != -1)
             {
-                c = new CharacterClass(id, _diClasses[id]);
+                c = new Job(id, _diJobs[id]);
             }
             return c;
         }

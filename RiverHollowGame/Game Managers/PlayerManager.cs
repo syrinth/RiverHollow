@@ -116,7 +116,7 @@ namespace RiverHollow.Game_Managers
             PlayerCombatant = new ClassedCombatant();
 
             //Sets a default class so we can load and display the character to start
-            PlayerCombatant.SetClass(DataManager.GetClassByIndex(1));
+            PlayerCombatant.SetClass(DataManager.GetJobByIndex(1));
 
             _arrParty = new ClassedCombatant[4] { PlayerCombatant, null, null, null};
         }
@@ -644,7 +644,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void SetClass(int x)
         {
-            PlayerCombatant.SetClass(DataManager.GetClassByIndex(x));
+            PlayerCombatant.SetClass(DataManager.GetJobByIndex(x));
             PlayerCombatant.SetName(Name);
         }
 
