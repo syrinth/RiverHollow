@@ -4,6 +4,7 @@ using RiverHollow.Items;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
+using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.WorldObjects
@@ -11,7 +12,7 @@ namespace RiverHollow.WorldObjects
     public class WrappedItem : WorldObject
     {
         readonly int _iItemID;
-        public int ItemdID => _iItemID;
+        public int ItemID => _iItemID;
 
         public WrappedItem(int itemID) : base(-1)
         {
@@ -56,6 +57,19 @@ namespace RiverHollow.WorldObjects
         public override bool CanPickUp()
         {
             return true;
+        }
+
+        public override WorldObjectData SaveData()
+        {
+            WorldObjectData data = new WorldObjectData
+            {
+                ID = ID,
+                X = CollisionBox.X,
+                Y = CollisionBox.Y,
+                stringData = _iItemID.ToString()
+            };
+
+            return data;
         }
     }
 }

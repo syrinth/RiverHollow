@@ -14,16 +14,17 @@ using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.WorldObjects;
 using RiverHollow.Buildings;
+using Microsoft.Win32;
 
 namespace RiverHollow.Characters
 {
     public class Villager : TravellingNPC
     {
-        public string StartMap => DataManager.GetStringByIDKey(ID, "StartMap", DataType.Character);
-        public int HouseID => DataManager.GetIntByIDKey(ID, "HouseID", DataType.Character, 1);
-        public bool Marriable => DataManager.GetBoolByIDKey(ID, "CanMarry", DataType.Character);
-        public bool CanBecomePregnant => DataManager.GetBoolByIDKey(ID, "CanBecomePregnant", DataType.Character);
-        private int TaxMultiplier => DataManager.GetIntByIDKey(ID, "TaxValue", DataType.Character, 1);
+        public string StartMap => DataManager.GetStringByIDKey(ID, "StartMap", DataType.NPC);
+        public int HouseID => DataManager.GetIntByIDKey(ID, "HouseID", DataType.NPC, 1);
+        public bool Marriable => DataManager.GetBoolByIDKey(ID, "CanMarry", DataType.NPC);
+        public bool CanBecomePregnant => DataManager.GetBoolByIDKey(ID, "CanBecomePregnant", DataType.NPC);
+        private int TaxMultiplier => DataManager.GetIntByIDKey(ID, "TaxValue", DataType.NPC, 1);
 
         protected Dictionary<int, bool> _diCollection;
         
@@ -46,9 +47,9 @@ namespace RiverHollow.Characters
         }
         public bool Married => RelationshipState == RelationShipStatusEnum.Married;
 
-        protected VillagerSpawnStatus _eSpawnStatus = VillagerSpawnStatus.OffMap;
-        public bool LivesInTown => _eSpawnStatus == VillagerSpawnStatus.HasHome;
-        public bool SpawnOnTheMap => _eSpawnStatus != VillagerSpawnStatus.OffMap;
+        protected SpawnStateEnum _eSpawnStatus = SpawnStateEnum.OffMap;
+        public bool LivesInTown => _eSpawnStatus == SpawnStateEnum.HasHome;
+        public bool SpawnOnTheMap => _eSpawnStatus != SpawnStateEnum.OffMap;
 
         List<Request> _liHousingRequests;
 
@@ -77,7 +78,7 @@ namespace RiverHollow.Characters
 
             if (!string.IsNullOrEmpty(StartMap))
             {
-                _eSpawnStatus = VillagerSpawnStatus.NonTownMap;
+                _eSpawnStatus = SpawnStateEnum.NonTownMap;
             }
 
             CombatVersion = new ClassedCombatant();
@@ -170,6 +171,7 @@ namespace RiverHollow.Characters
                 CanGiveGift = true;
             }
 
+            bool startedDayInTown = _eSpawnStatus == SpawnStateEnum.WaitAtInn || _eSpawnStatus == SpawnStateEnum.VisitInn || _eSpawnStatus == SpawnStateEnum.HasHome;
             if (TownRequirementsMet())
             {
                 HandleTravelTiming();
@@ -177,20 +179,27 @@ namespace RiverHollow.Characters
 
             switch (_eSpawnStatus)
             {
-                case VillagerSpawnStatus.OffMap:
+                case SpawnStateEnum.OffMap:
                     CurrentMap?.RemoveActor(this);
                     CurrentMapName = string.Empty;
-                    _iNextArrival = ArrivalPeriod;
+                    if (ArrivalPeriod > 0)
+                    {
+                        _iNextArrival = ArrivalPeriod;
+                    }
+            
                     break;
-                case VillagerSpawnStatus.SendingToInn:
+                case SpawnStateEnum.SendingToInn:
                     SendToTown();
                     goto default;
-                case VillagerSpawnStatus.HasHome:
+                case SpawnStateEnum.HasHome:
                     Income = CalculateIncome();
                     goto default;
-                case VillagerSpawnStatus.VisitInn:
-                case VillagerSpawnStatus.WaitAtInn:
-                    
+                case SpawnStateEnum.VisitInn:
+                case SpawnStateEnum.WaitAtInn:
+                    if (!startedDayInTown)
+                    {
+                        SpawnPets();
+                    }
                     goto default;
                 default:
                     ClearPath();
@@ -199,6 +208,7 @@ namespace RiverHollow.Characters
             }
 
             JoinPartyCheck();
+            VillagerMapHandling();
         }
 
         /// <summary>
@@ -241,13 +251,13 @@ namespace RiverHollow.Characters
         #region Travel Methods
         public void QueueSendToTown()
         {
-            _eSpawnStatus = VillagerSpawnStatus.SendingToInn;
+            _eSpawnStatus = SpawnStateEnum.SendingToInn;
         }
         public void SendToTown()
         {
-            if (_eSpawnStatus == VillagerSpawnStatus.SendingToInn)
+            if (_eSpawnStatus == SpawnStateEnum.SendingToInn)
             {
-                _eSpawnStatus = VillagerSpawnStatus.WaitAtInn;
+                _eSpawnStatus = SpawnStateEnum.WaitAtInn;
                 MoveToSpawn();
             }
         }
@@ -255,15 +265,14 @@ namespace RiverHollow.Characters
         {
             bool rv = false;
 
-            if (_eSpawnStatus == VillagerSpawnStatus.VisitInn || _eSpawnStatus == VillagerSpawnStatus.OffMap)
+            if (_eSpawnStatus == SpawnStateEnum.OffMap || (_eSpawnStatus == SpawnStateEnum.VisitInn && ArrivalPeriod > 0 ))
             {
                 rv = base.HandleTravelTiming();
-                _eSpawnStatus =  rv ? VillagerSpawnStatus.VisitInn : VillagerSpawnStatus.OffMap;
+                _eSpawnStatus =  rv ? SpawnStateEnum.VisitInn : SpawnStateEnum.OffMap;
             }
 
             return rv;
         }
-
 
         public void VillagerMapHandling()
         {
@@ -282,7 +291,7 @@ namespace RiverHollow.Characters
         {
             if (TownRequirementsMet() && HouseID != -1 && PlayerManager.TownObjectBuilt(HouseID))
             {
-                _eSpawnStatus = VillagerSpawnStatus.HasHome;
+                _eSpawnStatus = SpawnStateEnum.HasHome;
             }
         }
 
@@ -305,13 +314,13 @@ namespace RiverHollow.Characters
             {
                 switch (_eSpawnStatus)
                 {
-                    case VillagerSpawnStatus.VisitInn:
-                    case VillagerSpawnStatus.WaitAtInn:
+                    case SpawnStateEnum.VisitInn:
+                    case SpawnStateEnum.WaitAtInn:
                         return "mapInn";
-                    case VillagerSpawnStatus.HasHome:
+                    case SpawnStateEnum.HasHome:
                         return PlayerManager.GetBuildingByID(HouseID)?.BuildingMapName;
-                    case VillagerSpawnStatus.SendingToInn:
-                    case VillagerSpawnStatus.NonTownMap:
+                    case SpawnStateEnum.SendingToInn:
+                    case SpawnStateEnum.NonTownMap:
                         return StartMap;
                 }
             }
@@ -343,8 +352,8 @@ namespace RiverHollow.Characters
                 {
                     switch (_eSpawnStatus)
                     {
-                        case VillagerSpawnStatus.VisitInn:
-                        case VillagerSpawnStatus.WaitAtInn:
+                        case SpawnStateEnum.VisitInn:
+                        case SpawnStateEnum.WaitAtInn:
                             Vector2 position = map.DictionaryCharacterLayer["InnFloor"];
                             List<RHTile> tiles = map.GetTilesFromRectangleExcludeEdgePoints(new Rectangle((int)position.X, (int)position.Y, 8 * Constants.TILE_SIZE, 6 * Constants.TILE_SIZE));
                             do
@@ -359,8 +368,8 @@ namespace RiverHollow.Characters
 
                             } while (tiles.Count > 0);
                             break;
-                        case VillagerSpawnStatus.HasHome:
-                        case VillagerSpawnStatus.NonTownMap:
+                        case SpawnStateEnum.HasHome:
+                        case SpawnStateEnum.NonTownMap:
                             Position = Util.SnapToGrid(map.GetCharacterSpawn("NPC_" + ID.ToString()));
                             break;
 
@@ -554,9 +563,9 @@ namespace RiverHollow.Characters
             {
                 switch (_eSpawnStatus)
                 {
-                    case VillagerSpawnStatus.HasHome:
-                    case VillagerSpawnStatus.VisitInn:
-                    case VillagerSpawnStatus.WaitAtInn:
+                    case SpawnStateEnum.HasHome:
+                    case SpawnStateEnum.VisitInn:
+                    case SpawnStateEnum.WaitAtInn:
                         JoinParty();
                         break;
                 }
@@ -598,6 +607,22 @@ namespace RiverHollow.Characters
             else { return SatisfactionStateEnum.Ecastatic; }
         }
 
+        private void SpawnPets()
+        {
+            string petInfo = DataManager.GetStringByIDKey(ID, "PetID", DataType.NPC);
+            int petHome = DataManager.GetIntByIDKey(ID, "PetHomeID", DataType.NPC);
+            if (!string.IsNullOrEmpty(petInfo) && !PlayerManager.TownObjectBuilt(petHome))
+            {
+                int[] split = Util.FindIntArguments(petInfo);
+                int num = split.Length > 1 ? split[1] : 1;
+
+                for (int i = 0; i < num; i++)
+                {
+                    PlayerManager.AddAnimal(DataManager.CreateProducer(split[0]));
+                }
+            }
+        }
+
         public bool AvailableToDate() { return CanBeMarried && GetFriendshipLevel() >= 6 && RelationshipState == RelationShipStatusEnum.Friends; }
         public bool AvailableToMarry() { return CanBeMarried && GetFriendshipLevel() >= 6 && RelationshipState == RelationShipStatusEnum.Dating; }
 
@@ -621,7 +646,7 @@ namespace RiverHollow.Characters
         }
         public void LoadData(VillagerData data)
         {
-            _eSpawnStatus = (VillagerSpawnStatus)data.spawnStatus;
+            _eSpawnStatus = (SpawnStateEnum)data.spawnStatus;
             _iNextArrival = data.nextArrival;
             FriendshipPoints = data.friendshipPoints;
             CanGiveGift = data.canGiveGift;

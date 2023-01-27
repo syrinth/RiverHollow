@@ -51,7 +51,7 @@
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:0][ArrivalPeriod:0][TaxValue:2][Key:Helen]</Value>
+      <Value>[Type:Villager][Key:Helen][PortRow:1][HouseID:5][Collection:7|188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][TaxValue:2][PetID:44]</Value>
     </Item>
     <Item>
       <Key>13</Key>
@@ -63,7 +63,7 @@
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:0][TaxValue:5][Key:June]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:0][TaxValue:5][TotalMoneyEarnedReq:15000][Key:June]</Value>
     </Item>
     <Item>
       <Key>16</Key>
@@ -123,7 +123,7 @@
     </Item>
     <Item>
       <Key>30</Key>
-      <Value>[Type:Pet][Walk:0-0-3-0.3-T][Idle:0-32-3-0.3-T][Action1:0-64-3-0.5-T][ObjectID:4][Value:500][Key:Pet_Slime]</Value>
+      <Value>[Type:Pet][Key:Pet_Slime][Idle:0-32-3-0.3-T][Walk:0-0-3-0.3-T][Action1:0-64-3-0.5-T][ObjectID:4]</Value>
     </Item>
     <Item>
       <Key>31</Key>
@@ -176,6 +176,10 @@
     <Item>
       <Key>43</Key>
       <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][StartMap:mapGrove][HouseID:18]</Value>
+    </Item>
+    <Item>
+      <Key>44</Key>
+      <Value>[Type:Producer][Key:Chicken][Idle:0-0-1-0-T][Walk:64-0-3-.11-F][Size:16-20][ItemID:150][ObjectID:27]</Value>
     </Item>
   </Asset>
 </XnaContent>

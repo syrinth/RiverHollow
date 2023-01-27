@@ -204,6 +204,11 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Cutscenes/Cutscene_4.xml
 
+#begin Data/Text Files/Dialogue/Cutscenes/Cutscene_5.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Cutscenes/Cutscene_5.xml
+
 #begin Data/Text Files/Dialogue/Villagers/NPC_Abeline.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -273,6 +278,11 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Harrison.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_Helen.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_Helen.xml
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Isabelle.xml
 /importer:XmlImporter
@@ -1094,6 +1104,11 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapCarpenter.tmx
 
+#begin Maps/Town/mapCoop.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapCoop.tmx
+
 #begin Maps/Town/mapFlower_Shop.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -1119,10 +1134,10 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapHouse_1_17.tmx
 
-#begin Maps/Town/mapHouse_11.tmx
+#begin Maps/Town/mapHouse_12.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_11.tmx
+/build:Maps/Town/mapHouse_12.tmx
 
 #begin Maps/Town/mapHouse_14.tmx
 /importer:TiledMapImporter
@@ -1747,6 +1762,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Birb_1.png
+
+#begin Textures/Actors/NPCs/Chicken.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/Chicken.png
 
 #begin Textures/Actors/NPCs/Damien.png
 /importer:TextureImporter
@@ -2984,6 +3011,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/Carpenter.png
 
+#begin Textures/Buildings/Coop.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/Coop.png
+
 #begin Textures/Buildings/Flower_Shop.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -3007,6 +3046,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/GeneralStore.png
+
+#begin Textures/Buildings/House_12.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/House_12.png
 
 #begin Textures/Buildings/House_Player.png
 /importer:TextureImporter

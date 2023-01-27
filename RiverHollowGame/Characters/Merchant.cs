@@ -19,8 +19,8 @@ namespace RiverHollow.Characters
     /// </summary>
     public class Merchant : TravellingNPC
     {
-        MerchType Needs => DataManager.GetEnumByIDKey<MerchType>(ID, "Needs", DataType.Character);
-        MerchType Wants => DataManager.GetEnumByIDKey<MerchType>(ID, "Wants", DataType.Character);
+        MerchType Needs => DataManager.GetEnumByIDKey<MerchType>(ID, "Needs", DataType.NPC);
+        MerchType Wants => DataManager.GetEnumByIDKey<MerchType>(ID, "Wants", DataType.NPC);
 
         List<RequestItem> _liRequestItems;
         public int[] ChosenRequests;

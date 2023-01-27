@@ -11,6 +11,8 @@ using RiverHollow.Misc;
 using System.Linq;
 using RiverHollow.GUIComponents.Screens.HUDScreens;
 using RiverHollow.Items;
+using RiverHollow.Characters;
+using System.Xml.Linq;
 
 namespace RiverHollow.Buildings
 {
@@ -18,7 +20,6 @@ namespace RiverHollow.Buildings
     {
         public MerchType StoreType => DataManager.GetEnumByIDKey<MerchType>(ID, "ShopSells", DataType.WorldObject);
 
-        private int _iNPCBuilderID;
         private Rectangle _rEntrance;
         public Item[,] Inventory { get; }
 
@@ -32,6 +33,8 @@ namespace RiverHollow.Buildings
         public Rectangle SelectionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _sprite.Width, _sprite.Height);
 
         public Rectangle TravelBox { get; private set; }
+
+        private int MaxAnimals => DataManager.GetIntByIDKey(ID, "MaxAnimals", DataType.WorldObject, 0);
 
         public Building(int id, Dictionary<string, string> stringData) : base(id)
         {
@@ -49,7 +52,6 @@ namespace RiverHollow.Buildings
             Util.AssignValue(ref _rBase, "Base", stringData);
             Util.AssignValue(ref _rEntrance, "Entrance", stringData);
 
-            Util.AssignValue(ref _iNPCBuilderID, "Builder", stringData);
             Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
 
             if (stringData.ContainsKey("LightID"))

@@ -2,7 +2,7 @@
 {
     public static class Enums
     {
-        public enum DataType { Action, Character, Class, Item, Light, Monster, StatusEffect, Task, WorldObject, Upgrade };
+        public enum DataType { Action, NPC, Class, Item, Light, Monster, StatusEffect, Task, WorldObject, Upgrade };
 
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, Sell, Propose, Date, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Party };
@@ -39,7 +39,7 @@
 
         public enum ActorStateEnum { Climb, Grab, Swim, Walk };
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
-        public enum WorldActorTypeEnum { Actor, Child, Critter, Merchant, Mob, Mount, Pet, ShippingGremlin, Spirit, Villager };
+        public enum WorldActorTypeEnum { Actor, Child, Critter, Merchant, Mob, Mount, Pet, Producer, ShippingGremlin, Spirit, Villager };
         public enum CombatActorTypeEnum { Monster, PartyMember };
         public enum AttributeEnum { Damage, Vitality, Agility, Magic, Strength, Defence, Resistance, Evasion, Speed };
         public enum AttributeBonusEnum { Minor, Moderate, Major };
@@ -61,7 +61,7 @@
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
         public enum ExpectingChildEnum { None, Adoption, Pregnant };
         public enum RelationShipStatusEnum { None, Friends, Dating, Engaged, Married };
-        public enum VillagerSpawnStatus { OffMap, WaitAtInn, VisitInn, HasHome, NonTownMap, SendingToInn };
+        public enum SpawnStateEnum { OffMap, WaitAtInn, VisitInn, HasHome, NonTownMap, SendingToInn };
         public enum SatisfactionStateEnum { Miserable, Sad, Neutral, Pleased, Happy, Ecastatic };
         public enum NPCStateEnum { Alert, Idle, Leashing, TrackPlayer, Wander };
         public enum ChildStageEnum { Newborn, Infant, Toddler };

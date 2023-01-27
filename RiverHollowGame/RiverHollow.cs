@@ -340,13 +340,17 @@ namespace RiverHollow
 
             foreach (Villager v in DataManager.DIVillagers.Values)
             {
-                v.VillagerMapHandling();
+                v.RollOver();
             }
             foreach (Merchant m in DataManager.DIMerchants.Values) {
                 if (PlayerManager.GetNumberTownObjects(int.Parse(DataManager.Config[15]["ObjectID"])) > 0)
                 {
                     m.RollOver();
                 }
+            }
+            foreach(WorldActor npc in PlayerManager.TownAnimals)
+            {
+                npc.RollOver();
             }
 
             MapManager.Rollover();

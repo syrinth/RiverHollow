@@ -69,7 +69,7 @@ namespace RiverHollow.Characters
         protected bool _bOnTheMap = true;
         public virtual bool OnTheMap => _bOnTheMap;
 
-        protected bool _bHover => DataManager.GetBoolByIDKey(ID, "Hover", DataType.Character);
+        protected bool _bHover => DataManager.GetBoolByIDKey(ID, "Hover", DataType.NPC);
 
         protected float _fBaseSpeed = 1f;
         public float BuffedSpeed => _fBaseSpeed * SpdMult;
@@ -124,6 +124,8 @@ namespace RiverHollow.Characters
 
         public virtual void ProcessRightButtonClick() { }
 
+        public virtual void RollOver() { }
+
         public override string Name()
         {
             return DataManager.GetTextData("NPC", ID, "Name");
@@ -131,7 +133,7 @@ namespace RiverHollow.Characters
 
         protected string SpriteName()
         {
-            return DataManager.NPC_FOLDER + DataManager.GetStringByIDKey(ID, "Key", DataType.Character);
+            return DataManager.NPC_FOLDER + DataManager.GetStringByIDKey(ID, "Key", DataType.NPC);
         }
 
         /// <summary>

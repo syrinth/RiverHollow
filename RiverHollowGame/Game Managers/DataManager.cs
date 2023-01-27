@@ -346,6 +346,13 @@ namespace RiverHollow.Game_Managers
             if (!string.IsNullOrEmpty(rv)) { return Util.ParseInt(rv); }
             else { return defaultValue; }
         }
+        public static RHSize GetSizeByIDKey(int id, string key, DataType type)
+        {
+            string rv = GetStringByIDKey(id, key, type);
+
+            if (!string.IsNullOrEmpty(rv)) { return new RHSize(Util.FindIntArguments(rv)); }
+            else { return new RHSize(0, 0); }
+        }
         public static string GetStringByIDKey(int id, string key, DataType type)
         {
             switch (type)
@@ -353,7 +360,7 @@ namespace RiverHollow.Game_Managers
                 case DataType.Action:
                     if (_diActions[id].ContainsKey(key)) { return _diActions[id][key]; }
                     break;
-                case DataType.Character:
+                case DataType.NPC:
                     if (_diNPCData[id].ContainsKey(key)) { return _diNPCData[id][key]; }
                     break;
                 case DataType.Class:
@@ -391,7 +398,7 @@ namespace RiverHollow.Game_Managers
                 case DataType.Action:
                     if (_diActions[id].ContainsKey(key)) { return _diActions[id].ContainsKey(key); }
                     break;
-                case DataType.Character:
+                case DataType.NPC:
                     if (_diNPCData[id].ContainsKey(key)) { return _diNPCData[id].ContainsKey(key); }
                     break;
                 case DataType.Class:
@@ -684,6 +691,8 @@ namespace RiverHollow.Game_Managers
                         return new Mount(id, diData);
                     case WorldActorTypeEnum.Pet:
                         return new Pet(id, diData);
+                    case WorldActorTypeEnum.Producer:
+                        return new Producer(id, diData);
                     case WorldActorTypeEnum.ShippingGremlin:
                         return new ShippingGremlin(id, diData);
                     case WorldActorTypeEnum.Spirit:
@@ -727,6 +736,15 @@ namespace RiverHollow.Game_Managers
                 rv = null;
             }
             return (Pet)rv;
+        }
+        public static Producer CreateProducer(int id)
+        {
+            WorldActor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Producer))
+            {
+                rv = null;
+            }
+            return (Producer)rv;
         }
         public static Critter CreateCritter(int id)
         {

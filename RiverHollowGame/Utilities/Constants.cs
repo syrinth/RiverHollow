@@ -4,7 +4,7 @@
     {
         public const string TOWN_MAP_NAME = "mapTown";
         public const string PLAYER_HOME_NAME = "mapHouse_Player";
-        public const float PLAYER_STARTING_STAMINE = 100f;
+        public const float PLAYER_STARTING_STAMINA = 100f;
 
         public const double GAME_PLAYER_INVULN_TIME = 0.5;
         public const double MOB_STUN_TIME = 5;

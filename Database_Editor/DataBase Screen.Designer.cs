@@ -76,6 +76,7 @@
             this.tbJobName = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.dgvJobs = new System.Windows.Forms.DataGridView();
+            this.colJobsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabCutscene = new System.Windows.Forms.TabPage();
             this.label26 = new System.Windows.Forms.Label();
             this.tbCutsceneID = new System.Windows.Forms.TextBox();
@@ -197,7 +198,6 @@
             this.dgvUpgrades = new System.Windows.Forms.DataGridView();
             this.colUpgradesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbStatus = new System.Windows.Forms.TextBox();
-            this.colJobsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabAction.SuspendLayout();
@@ -304,13 +304,13 @@
             this.tabCtl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabCtl.Controls.Add(this.tabAction);
-            this.tabCtl.Controls.Add(this.tabNPC);
-            this.tabCtl.Controls.Add(this.tabJob);
             this.tabCtl.Controls.Add(this.tabCutscene);
             this.tabCtl.Controls.Add(this.tabDungeon);
             this.tabCtl.Controls.Add(this.tabItems);
+            this.tabCtl.Controls.Add(this.tabJob);
             this.tabCtl.Controls.Add(this.tabLight);
             this.tabCtl.Controls.Add(this.tabMonster);
+            this.tabCtl.Controls.Add(this.tabNPC);
             this.tabCtl.Controls.Add(this.tabShop);
             this.tabCtl.Controls.Add(this.tabStatusEffect);
             this.tabCtl.Controls.Add(this.tabTask);
@@ -728,6 +728,15 @@
             this.dgvJobs.Size = new System.Drawing.Size(308, 411);
             this.dgvJobs.TabIndex = 46;
             this.dgvJobs.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
+            // 
+            // colJobsName
+            // 
+            this.colJobsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colJobsName.FillWeight = 90F;
+            this.colJobsName.HeaderText = "Name";
+            this.colJobsName.Name = "colJobsName";
+            this.colJobsName.ReadOnly = true;
+            this.colJobsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tabCutscene
             // 
@@ -2013,15 +2022,6 @@
             this.tbStatus.Size = new System.Drawing.Size(794, 20);
             this.tbStatus.TabIndex = 13;
             // 
-            // colJobsName
-            // 
-            this.colJobsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colJobsName.FillWeight = 90F;
-            this.colJobsName.HeaderText = "Name";
-            this.colJobsName.Name = "colJobsName";
-            this.colJobsName.ReadOnly = true;
-            this.colJobsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // FrmDBEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2033,6 +2033,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FrmDBEditor";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Database Editor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmDBEditor_FormClosing);
             this.menuStrip1.ResumeLayout(false);

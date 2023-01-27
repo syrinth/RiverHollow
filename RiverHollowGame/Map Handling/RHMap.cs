@@ -2245,6 +2245,30 @@ namespace RiverHollow.Map_Handling
             return rvList;
         }
 
+        public Vector2 GetRandomPosition()
+        {
+            return GetRandomPosition(new Rectangle(0, 0, MapWidthTiles * Constants.TILE_SIZE, MapHeightTiles * Constants.TILE_SIZE));
+        }
+        public Vector2 GetRandomPosition(Rectangle r)
+        {
+            Vector2 rv = Vector2.Zero;
+
+            List<RHTile> tiles = GetTilesFromRectangleExcludeEdgePoints(r);
+            do
+            {
+                RHTile tile = tiles[RHRandom.Instance().Next(tiles.Count)];
+                if (tile.TileIsPassable() && !TileContainsActor(tile))
+                {
+                    rv = tile.Position;
+                    break;
+                }
+                else { tiles.Remove(tile); }
+
+            } while (tiles.Count > 0);
+
+            return rv;
+        }
+
         public List<RHTile> GetAllTiles(bool passableOnly)
         {
             List<RHTile> tileList = new List<RHTile>();
@@ -2292,6 +2316,11 @@ namespace RiverHollow.Map_Handling
             foreach (WorldObjectData data in mData.worldObjects)
             {
                 WorldObject obj = DataManager.CreateWorldObjectByID(data.ID);
+                if (data.ID == -1)
+                {
+                    obj = new WrappedItem(int.Parse(data.stringData));
+                }
+
                 if (obj != null)
                 {
                     obj.LoadData(data);

@@ -66,6 +66,7 @@ namespace RiverHollow.Game_Managers
             if (CurrentMin > 59)
             {
                 CurrentMin = 0;
+                CurrentHour++;
             }
 
             if (!_bHasNightFallen && IsNight())

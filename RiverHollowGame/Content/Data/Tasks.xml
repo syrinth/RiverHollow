@@ -15,11 +15,15 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Fetch][StartNPC:4][AssignTrigger:GameStart][TargetObjectID:18][EndBuildingID:35][CutsceneID:4]</Value>
+      <Value>[Type:Fetch][StartNPC:4][AssignTrigger:GameStart][TargetObjectID:35][EndBuildingID:35][CutsceneID:4]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Build]</Value>
+      <Value>[Type:Build][StartNPC:12][AssignTrigger:GameStart][TargetObjectID:5][EndBuildingID:5][CutsceneID:5]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Type:Build][StartNPC:12][AssignTrigger:Task-4][TargetObjectID:27][EndBuildingID:27]</Value>
     </Item>
   </Asset>
 </XnaContent>

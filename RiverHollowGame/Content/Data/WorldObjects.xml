@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Building][Subtype:None][Texture:House_11][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
+      <Value>[Type:Building][Texture:House_12][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -83,7 +83,7 @@
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Building][Texture:StoneMason][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][UpgradeTime:3][ReqItems:0-2|2-3]</Value>
+      <Value>[Type:Building][Texture:Jeweller][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:0-2|2-3]</Value>
     </Item>
     <Item>
       <Key>21</Key>
@@ -111,7 +111,7 @@
     </Item>
     <Item>
       <Key>27</Key>
-      <Value>[Type:Building][Subtype:None][Texture:Home][Size:7-8][Base:0-4-7-4][Entrance:56-97-16-32]</Value>
+      <Value>[Type:Building][Texture:Coop][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20][MaxAnimals:5]</Value>
     </Item>
     <Item>
       <Key>28</Key>
@@ -351,7 +351,7 @@
     </Item>
     <Item>
       <Key>87</Key>
-      <Value>[Type:Machine][Image:0-32][Size:2-2][Makes:194][Base:2-1][Daily]</Value>
+      <Value>[Type:Machine][Image:0-32][Size:2-2][Makes:194][Base:2-1][BaseOffset:0-1][Daily]</Value>
     </Item>
     <Item>
       <Key>88</Key>
@@ -359,7 +359,7 @@
     </Item>
     <Item>
       <Key>89</Key>
-      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Size:1-2][Makes:62|37|38][WorkEffect:stove_fire]</Value>
+      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Size:1-2][Makes:62|37|38][WorkEffect:stove_fire][Base:1-1][BaseOffset:0-1]</Value>
     </Item>
     <Item>
       <Key>90</Key>

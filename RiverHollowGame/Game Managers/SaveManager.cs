@@ -164,6 +164,9 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Children")]
             public List<ChildData> ChildList;
 
+            [XmlArray(ElementName = "TownAnimals")]
+            public List<int> TownAnimals;
+
             [XmlElement(ElementName = "AdventurerData")]
             public ClassedCharData adventurerData;
 
@@ -381,7 +384,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "TypeData")]
             public string stringData;
         }
-
         public struct ShopData
         {
             [XmlElement(ElementName = "ShopID")]
@@ -494,7 +496,7 @@ namespace RiverHollow.Game_Managers
 
         public static void Save()
         {
-            SaveData data = new SaveData()
+            SaveData data = new SaveData
             {
                 saveID = GetSaveID(),
                 Calendar = GameCalendar.SaveCalendar(),
@@ -510,10 +512,9 @@ namespace RiverHollow.Game_Managers
                 ShopData = new List<ShopData>(),
                 CSData = new List<CutsceneData>(),
                 TheMailbox = PlayerManager.PlayerMailbox.SaveData(),
-                optionData = SaveOptions()
-            };          
-            
-            data.playerData = PlayerManager.SaveData();
+                optionData = SaveOptions(),
+                playerData = PlayerManager.SaveData()
+            };
 
             foreach (RHMap tileMap in MapManager.Maps.Values)
             {
@@ -547,7 +548,7 @@ namespace RiverHollow.Game_Managers
                 data.MerchantQueue.Add(m.ID);
             }
 
-            foreach(Shop s in GameManager.DIShops.Values)
+            foreach (Shop s in GameManager.DIShops.Values)
             {
                 data.ShopData.Add(s.SaveData());
             }
@@ -668,13 +669,14 @@ namespace RiverHollow.Game_Managers
             GameCalendar.LoadCalendar(dataToLoad.Calendar);
             EnvironmentManager.LoadEnvironment(dataToLoad.Environment);
             PlayerManager.Initialize();
-            PlayerManager.LoadData(dataToLoad.playerData);
 
             foreach (MapData mapData in dataToLoad.MapData)
             {
                 RHMap map = MapManager.Maps[mapData.mapName];
                 map.LoadData(mapData);
             }
+
+            PlayerManager.LoadData(dataToLoad.playerData);
 
             PlayerManager.MoveToSpawn();
             PlayerManager.LoadToolData(dataToLoad.Tools);

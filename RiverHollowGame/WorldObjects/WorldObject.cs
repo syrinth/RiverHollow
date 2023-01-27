@@ -223,10 +223,9 @@ namespace RiverHollow.WorldObjects
 
         public virtual bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
         {
-            bool rv = false;
             pos = new Vector2(pos.X - (_rBase.X * Constants.TILE_SIZE), pos.Y - (_rBase.Y * Constants.TILE_SIZE));
             SnapPositionToGrid(pos);
-            rv = map.PlaceWorldObject(this, ignoreActors);
+            bool rv = map.PlaceWorldObject(this, ignoreActors);
             if (rv)
             {
                 MapName = map.Name;

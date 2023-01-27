@@ -11,7 +11,7 @@ namespace RiverHollow.Characters
 {
     public class Mount : TalkingActor
     {
-        private int StableID => DataManager.GetIntByIDKey(ID, "BuildingID", DataType.Character);
+        private int StableID => DataManager.GetIntByIDKey(ID, "BuildingID", DataType.NPC);
         public override Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, Constants.TILE_SIZE);
 
         public Mount(int id, Dictionary<string, string> stringData) : base(id)

@@ -939,7 +939,7 @@ namespace Database_Editor
         private void btnDialogue_Click(object sender, EventArgs e)
         {
             string npcKey = @"\NPC_" + _diBasicXML[NPC_XML_FILE][_diTabIndices["NPCs"]].GetTagValue("Key") + ".xml";
-            FormCharExtraData frm = null;
+            FormCharExtraData frm;
             if (cbEditableCharData.SelectedItem.ToString() == "Dialogue")
             {
                 string key = PATH_TO_VILLAGER_DIALOGUE + npcKey;

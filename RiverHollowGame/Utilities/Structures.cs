@@ -2,6 +2,7 @@
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.WorldObjects;
+using System;
 
 namespace RiverHollow.Utilities
 {
@@ -13,6 +14,20 @@ namespace RiverHollow.Utilities
         {
             Width = width;
             Height = height;
+        }
+
+        public RHSize(int[] array)
+        {
+            if(array.Length == 2)
+            {
+                Width = array[0];
+                Height = array[1];
+            }
+            else
+            {
+                Width= 0;
+                Height = 0;
+            }
         }
     }
 

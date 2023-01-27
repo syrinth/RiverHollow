@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[Name:Introduction][Text:Hello! My name is $NPC_12$, it's so nice to meet you. I've been on the road for a few days and it's such a relief to relax.
+I hear that you're looking for more people? I'd love to settle down here.]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Name:Task_4_Start][Text:I don't need much to be happy really, just a small place to call my own.][UnlockObjectID:5]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Name:Task_5_Start][Text:It's lovely, small and cozy. Just like I'm used to.
+Now then, as for how I can contribute, I need a $WorldObject_27$ for my little friends to roost in.][UnlockObjectID:27]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Name:Gift][Text:For me? Oh, $Name$, you shouldn't have.]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Name:Selection][Text:Oh, hello. ][Selection:VillageTalk]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Name:Tailor request][Text:Well, if I'm to stay here i suppose I'll need to find a way to earn my keep. I'm not too bad witha needle and thread. I'm sure $NPC_16$ could design a shop for me or something.][Default][Priority:50][Once][ShopTargetID:2][UnlockItemID:139]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

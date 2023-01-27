@@ -19,7 +19,11 @@
     </Item>
     <Item>
       <Key>Task_4</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:$NPC_12$'s Home]</Value>
+    </Item>
+    <Item>
+      <Key>Task_5</Key>
+      <Value>[Name:Home to Roost]</Value>
     </Item>
     <Item>
       <Key>NPC_0</Key>
@@ -196,6 +200,10 @@
     <Item>
       <Key>NPC_43</Key>
       <Value>[Name:Ulm]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_44</Key>
+      <Value>[Name:Chicken]</Value>
     </Item>
     <Item>
       <Key>Job_0</Key>
@@ -624,6 +632,10 @@
     <Item>
       <Key>Cutscene_4</Key>
       <Value>[Name:Smithy]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_5</Key>
+      <Value>[Name:Helen's Home]</Value>
     </Item>
     <Item>
       <Key>Item_0</Key>
@@ -1403,7 +1415,7 @@
     </Item>
     <Item>
       <Key>Item_194</Key>
-      <Value>[Name:Copper Ring][Description:]</Value>
+      <Value>[Name:Copper Blade][Description:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_0</Key>
@@ -1427,7 +1439,7 @@
     </Item>
     <Item>
       <Key>WorldObject_5</Key>
-      <Value>[Name:$Character_11$s House]</Value>
+      <Value>[Name:$NPC_12$s House]</Value>
     </Item>
     <Item>
       <Key>WorldObject_6</Key>

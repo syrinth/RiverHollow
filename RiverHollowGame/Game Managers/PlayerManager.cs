@@ -22,7 +22,7 @@ namespace RiverHollow.Game_Managers
         #region Properties
         public static bool Busy { get; private set; }
 
-        public static double MaxStamina = Constants.PLAYER_STARTING_STAMINE;
+        public static double MaxStamina = Constants.PLAYER_STARTING_STAMINA;
         public static double Stamina = MaxStamina;
         private static string _currentMap;
         public static string CurrentMap
@@ -90,6 +90,7 @@ namespace RiverHollow.Game_Managers
 
         #region Data Collections
         private static Dictionary<int, List<WorldObject>> _diTownObjects;
+        public static List<WorldActor> TownAnimals { get; set; }
         #endregion
 
         public static void Initialize()
@@ -109,6 +110,7 @@ namespace RiverHollow.Game_Managers
 
             _diStorage = new Dictionary<int, int>();
             _diTownObjects = new Dictionary<int, List<WorldObject>>();
+            TownAnimals = new List<WorldActor>();
             _liUniqueItemsBought = new List<int>();
             _diTools = new Dictionary<ToolEnum, Tool>();
 
@@ -427,6 +429,12 @@ namespace RiverHollow.Game_Managers
                     _diStorage.Remove(itemID);
                 }
             }
+        }
+
+        public static void AddAnimal(Producer npc)
+        {
+            TownAnimals.Add(npc);
+            npc.MoveToSpawn();
         }
 
         public static void AddToTownObjects(WorldObject obj)
@@ -766,6 +774,7 @@ namespace RiverHollow.Game_Managers
                 liPets = new List<int>(),
                 MountList = new List<int>(),
                 ChildList = new List<ChildData>(),
+                TownAnimals = new List<int>(),
                 CraftingList = new List<int>()
             };
 
@@ -802,7 +811,12 @@ namespace RiverHollow.Game_Managers
                 data.ChildList.Add(c.SaveData());
             }
 
-            foreach(List<int> craftList in _diCrafting.Values)
+            foreach (WorldActor m in TownAnimals)
+            {
+                data.TownAnimals.Add(m.ID);
+            }
+
+            foreach (List<int> craftList in _diCrafting.Values)
             {
                 data.CraftingList.AddRange(craftList);
             }
@@ -880,6 +894,12 @@ namespace RiverHollow.Game_Managers
                 Child m = DataManager.CreateChild(data.childID);
                 m.SpawnNearPlayer();
                 AddChild(m);
+            }
+
+            foreach (int id in saveData.TownAnimals)
+            {
+                Producer m = DataManager.CreateProducer(id);
+                AddAnimal(m);
             }
 
             foreach (int i in saveData.CraftingList)

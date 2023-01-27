@@ -5,14 +5,13 @@ using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
     public class Pet : TalkingActor
     {
-        private int GatherZoneID => DataManager.GetIntByIDKey(ID, "ObjectID", DataType.Character);
+        private int GatherZoneID => DataManager.GetIntByIDKey(ID, "ObjectID", DataType.NPC);
 
         public Pet(int id, Dictionary<string, string> stringData) : base(id)
         {
