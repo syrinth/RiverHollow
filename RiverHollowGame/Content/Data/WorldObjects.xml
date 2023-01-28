@@ -163,7 +163,7 @@
     </Item>
     <Item>
       <Key>40</Key>
-      <Value>[Type:Container][Image:0-16][Rows:1][Cols:8][ReqItems:2-10][Opens]</Value>
+      <Value>[Type:Container][Image:0-16][Rows:3][Cols:3][ReqItems:60-20][Opens]</Value>
     </Item>
     <Item>
       <Key>41</Key>

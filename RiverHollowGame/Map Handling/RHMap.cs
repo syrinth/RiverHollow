@@ -946,24 +946,27 @@ namespace RiverHollow.Map_Handling
 
         public void ItemPickUpdate()
         {
-            WorldActor player = PlayerManager.PlayerActor;
-            for (int i = 0; i < _liItems.Count; i++)
+            if (this == MapManager.CurrentMap)
             {
-                Item it = _liItems[i];
-                if (InventoryManager.HasSpaceInInventory(it.ID, it.Number))
+                WorldActor player = PlayerManager.PlayerActor;
+                for (int i = 0; i < _liItems.Count; i++)
                 {
-                    if (it.OnTheMap && it.AutoPickup)
+                    Item it = _liItems[i];
+                    if (InventoryManager.HasSpaceInInventory(it.ID, it.Number))
                     {
-                        if (it.FinishedMoving() && it.CollisionBox.Intersects(player.CollisionBox))
+                        if (it.OnTheMap && it.AutoPickup)
                         {
-                            AddItemToPlayerInventory(it);
-                        }
-                        else if (PlayerManager.PlayerInRange(it.CollisionBox.Center, 80))
-                        {
-                            float speed = 3;
-                            Vector2 direction = Util.MoveUpTo(it.Position, player.CollisionBox.Location.ToVector2(), speed);
-                            direction.Normalize();
-                            it.Position += (direction * speed);
+                            if (it.FinishedMoving() && it.CollisionBox.Intersects(player.CollisionBox))
+                            {
+                                AddItemToPlayerInventory(it);
+                            }
+                            else if (PlayerManager.PlayerInRange(it.CollisionBox.Center, 80))
+                            {
+                                float speed = 3;
+                                Vector2 direction = Util.MoveUpTo(it.Position, player.CollisionBox.Location.ToVector2(), speed);
+                                direction.Normalize();
+                                it.Position += (direction * speed);
+                            }
                         }
                     }
                 }

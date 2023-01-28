@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
-using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.GUIComponents.GUIObjects.GUIItemBox;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
