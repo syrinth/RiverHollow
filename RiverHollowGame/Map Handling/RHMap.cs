@@ -1041,9 +1041,9 @@ namespace RiverHollow.Map_Handling
         /// <param name="actor">The moving WorldActor</param>
         /// <param name="dir"></param>
         /// <returns>The direction they are moving in</returns>
-        private List<Rectangle> GetPossibleCollisions(WorldActor actor, Vector2 dir)
+        private List<KeyValuePair<Rectangle, WorldActor>> GetPossibleCollisions(WorldActor actor, Vector2 dir)
         {
-            List<Rectangle> list = new List<Rectangle>();
+            List<KeyValuePair<Rectangle, WorldActor>> list = new List<KeyValuePair<Rectangle, WorldActor>>();
             Rectangle rEndCollision = new Rectangle((int)(actor.CollisionBox.X + dir.X), (int)(actor.CollisionBox.Y + dir.Y), actor.CollisionBox.Width, actor.CollisionBox.Height);
             //The following if-blocks get the tiles that the four corners of the
             //moved CollisionBox will be inside of, based off of the movement direction.
@@ -1099,20 +1099,17 @@ namespace RiverHollow.Map_Handling
 
             //Because RHTiles do not contain WorldActors outside of combat, we need to add each
             //WorldActor's CollisionBox to the list, as long as the WorldActor in question is not the moving WorldActor.
-            foreach (WorldActor w in _liActors)
+            foreach (WorldActor npc in _liActors)
             {
-                if (w.OnTheMap && w != actor)
+                if (npc.OnTheMap && npc != actor)
                 {
-                    switch (w.ActorType)
+                    switch (npc.ActorType)
                     {
-                        case WorldActorTypeEnum.Critter:
-                        case WorldActorTypeEnum.Pet:
-                            break;
                         case WorldActorTypeEnum.Mount:
                             if (!PlayerManager.PlayerActor.Mounted) { goto default; }
                             else { break; }
                         default:
-                            list.Add(w.CollisionBox);
+                            list.Add(new KeyValuePair<Rectangle, WorldActor>(npc.CollisionBox, npc));
                             break;
                     }
                 }
@@ -1121,55 +1118,72 @@ namespace RiverHollow.Map_Handling
             //If the actor is not the Player Character, add the Player Character's CollisionBox to the list as well
             if (actor != PlayerManager.PlayerActor && MapManager.CurrentMap == actor.CurrentMap && !actor.IsActorType(WorldActorTypeEnum.Pet) && !actor.IsActorType(WorldActorTypeEnum.Mob))
             {
-                list.Add(PlayerManager.PlayerActor.CollisionBox);
+                list.Add(new KeyValuePair<Rectangle, WorldActor>(PlayerManager.PlayerActor.CollisionBox, PlayerManager.PlayerActor));
             }
 
             return list;
         }
-        private void AddTile(ref List<Rectangle> list, int one, int two, string mapName)
+        private void AddTile(ref List<KeyValuePair<Rectangle, WorldActor>> list, int one, int two, string mapName)
         {
             RHTile tile = MapManager.Maps[mapName].GetTileByGridCoords(Util.GetGridCoords(one, two));
-            if (TileValid(tile, list)) { list.Add(tile.Rect); }
+            if (TileValid(tile, list)) { list.Add(new KeyValuePair<Rectangle, WorldActor>(tile.Rect, null)); }
         }
-        private bool TileValid(RHTile tile, List<Rectangle> list)
+        private bool TileValid(RHTile tile, List<KeyValuePair<Rectangle, WorldActor>> list)
         {
-            return tile != null && !tile.Passable() && !list.Contains(tile.Rect);
+            return tile != null && !tile.Passable() && !list.Any(x => x.Key == tile.Rect);
         }
 
-        private void ChangeDir(WorldActor act,  List<Rectangle> possibleCollisions, ref Vector2 dir)
+        private void ChangeDir(WorldActor act,  List<KeyValuePair<Rectangle, WorldActor>> possibleCollisions, ref Vector2 dir, ref bool impeded)
         {
             //Because of how objects interact with each other, this check needs to be broken up so that the x and y movement can be
             //calculated seperately. If an object is above you and you move into it at an angle, if you check the collision as one rectangle
             //then the collision nullification will hit the entire damn movement mode.
             Rectangle newRectangleX = Util.FloatRectangle(act.CollisionBoxPosition.X + dir.X, act.CollisionBoxPosition.Y, act.CollisionBox.Width, act.CollisionBox.Height);
             Rectangle newRectangleY = Util.FloatRectangle(act.CollisionBoxPosition.X, act.CollisionBoxPosition.Y + dir.Y, act.CollisionBox.Width, act.CollisionBox.Height);
-            foreach (Rectangle r in possibleCollisions)
+            foreach (KeyValuePair<Rectangle, WorldActor> kvp in possibleCollisions)
             {
+                Rectangle r = kvp.Key;
+                WorldActor npc = kvp.Value;
+
                 Vector2 coords = Util.GetGridCoords(r.Location);
                 if (dir.Y != 0 && r.Intersects(newRectangleY))
                 {
-                    dir.Y = 0;
-
-                    //Modifier is to determine if the nudge is positive or negative
-                    float modifier = CheckToNudge(newRectangleY.Center.X, r.Center.X, coords.X, coords.Y, "Col");
-                    float xVal = (modifier > 0 ? newRectangleX.Right : newRectangleX.Left) + modifier;               //Constructs the new rectangle based on the mod
-
-                    if (dir.X == 0 && modifier != 0)
+                    if (npc != null && npc.SlowDontBlock)
                     {
-                        dir.X += CheckNudgeAllowed(modifier, new Vector2(xVal, newRectangleY.Top), new Vector2(xVal, newRectangleY.Bottom), act.CurrentMapName);
+                        impeded = true;
+                    }
+                    else
+                    {
+                        dir.Y = 0;
+
+                        //Modifier is to determine if the nudge is positive or negative
+                        float modifier = CheckToNudge(newRectangleY.Center.X, r.Center.X, coords.X, coords.Y, "Col");
+                        float xVal = (modifier > 0 ? newRectangleX.Right : newRectangleX.Left) + modifier;               //Constructs the new rectangle based on the mod
+
+                        if (dir.X == 0 && modifier != 0)
+                        {
+                            dir.X += CheckNudgeAllowed(modifier, new Vector2(xVal, newRectangleY.Top), new Vector2(xVal, newRectangleY.Bottom), act.CurrentMapName);
+                        }
                     }
                 }
                 if (dir.X != 0 && r.Intersects(newRectangleX))
                 {
-                    dir.X = 0;
-
-                    //Modifier is to determine if the nudge is positive or negative
-                    float modifier = CheckToNudge(newRectangleX.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
-                    float yVal = (modifier > 0 ? newRectangleX.Bottom : newRectangleX.Top) + modifier;               //Constructs the new rectangle based on the mod
-
-                    if (dir.Y == 0 && modifier != 0)
+                    if (npc != null && npc.SlowDontBlock)
                     {
-                        dir.Y += CheckNudgeAllowed(modifier, new Vector2(newRectangleY.Left, yVal), new Vector2(newRectangleY.Right, yVal), act.CurrentMapName);
+                        impeded = true;
+                    }
+                    else
+                    {
+                        dir.X = 0;
+
+                        //Modifier is to determine if the nudge is positive or negative
+                        float modifier = CheckToNudge(newRectangleX.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
+                        float yVal = (modifier > 0 ? newRectangleX.Bottom : newRectangleX.Top) + modifier;               //Constructs the new rectangle based on the mod
+
+                        if (dir.Y == 0 && modifier != 0)
+                        {
+                            dir.Y += CheckNudgeAllowed(modifier, new Vector2(newRectangleY.Left, yVal), new Vector2(newRectangleY.Right, yVal), act.CurrentMapName);
+                        }
                     }
                 }
 
@@ -1177,7 +1191,8 @@ namespace RiverHollow.Map_Handling
                 //diagonal to the actor. In this case, just null out the X movement.
                 if (dir.X != 0 && dir.Y != 0 && r.Intersects(newRectangleX) && r.Intersects(newRectangleY))
                 {
-                    dir.X = 0;
+                    if (npc != null && npc.SlowDontBlock) { impeded = true; }
+                    else { dir.X = 0; }
                 }
             }
         }
@@ -1206,7 +1221,7 @@ namespace RiverHollow.Map_Handling
         /// <param name="dir">Reference to the direction to move the WorldActor</param>
         /// <param name="ignoreCollisions">Whether or not to check collisions</param>
         /// <returns>False if we are to prevent movement</returns>
-        public bool CheckForCollisions(WorldActor c, Vector2 position, Rectangle collision, ref Vector2 dir, bool ignoreCollisions = false)
+        public bool CheckForCollisions(WorldActor c, Vector2 position, Rectangle collision, ref Vector2 dir, ref bool impeded, bool ignoreCollisions = false)
         {
             bool rv = true;
 
@@ -1220,8 +1235,8 @@ namespace RiverHollow.Map_Handling
             }
             else if (!ignoreCollisions)
             {
-                List<Rectangle> list = GetPossibleCollisions(c, dir);
-                ChangeDir(c, list, ref dir);
+                List<KeyValuePair<Rectangle, WorldActor>> list = GetPossibleCollisions(c, dir);
+                ChangeDir(c, list, ref dir, ref impeded);
             }
 
             return rv;
@@ -1259,21 +1274,21 @@ namespace RiverHollow.Map_Handling
             float centerDelta = movingCenter - objCenter;
             if (varCol == -1 && varRow == -1)
             {
-                if (centerDelta > 0) { rv = Constants.NUDGE_SPEED; }
-                else if (centerDelta < 0) { rv = -Constants.NUDGE_SPEED; }
+                if (centerDelta > 0) { rv = Constants.NUDGE_RATE; }
+                else if (centerDelta < 0) { rv = -Constants.NUDGE_RATE; }
             }
             else if (centerDelta > 0)
             {
                 RHTile testTile = GetTileByGridCoords((int)(varCol + (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0)));
                 if (testTile != null && testTile.Passable())
                 {
-                    rv = Constants.NUDGE_SPEED;
+                    rv = Constants.NUDGE_RATE;
                 }
             }
             else if (centerDelta < 0)
             {
                 RHTile testTile = GetTileByGridCoords((int)(varCol - (v.Equals("Col") ? 1 : 0)), (int)(varRow - (v.Equals("Row") ? 1 : 0)));
-                if (testTile != null && testTile.Passable()) { rv = -Constants.NUDGE_SPEED; }
+                if (testTile != null && testTile.Passable()) { rv = -Constants.NUDGE_RATE; }
             }
 
             return rv;

@@ -5,13 +5,11 @@ using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 using System.Threading;
-using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Characters
 {
@@ -25,8 +23,8 @@ namespace RiverHollow.Characters
         public DirectionEnum Facing = DirectionEnum.Down;
         public ActorStateEnum State { get; protected set; } = ActorStateEnum.Walk;
 
-        protected WorldActorTypeEnum _eActorType = WorldActorTypeEnum.Actor;
-        public WorldActorTypeEnum ActorType => _eActorType;
+        public WorldActorTypeEnum ActorType { get; protected set; }
+
         public Vector2 MoveToLocation { get; private set; }
 
         public string CurrentMapName;
@@ -58,6 +56,7 @@ namespace RiverHollow.Characters
 
         protected bool _bBumpedIntoSomething = false;
         protected bool _bIgnoreCollisions;
+        public bool SlowDontBlock { get; protected set; } = false;
 
         protected double _dCooldown = 0;
 
@@ -325,11 +324,12 @@ namespace RiverHollow.Characters
                     }
                 }
 
+                bool impeded = false;
                 Vector2 initial = direction;
-                if (CurrentMap.CheckForCollisions(this, Position, CollisionBox, ref direction) && direction != Vector2.Zero)
+                if (CurrentMap.CheckForCollisions(this, Position, CollisionBox, ref direction, ref impeded) && direction != Vector2.Zero)
                 {
                     DetermineAnimationState(direction);
-                    Position += new Vector2(direction.X, direction.Y);
+                    Position += direction * (impeded ? Constants.IMPEDED_SPEED : 1f);
                 }
 
                 if(initial != direction)
@@ -525,7 +525,7 @@ namespace RiverHollow.Characters
             }
         }
 
-        public bool IsActorType(WorldActorTypeEnum act) { return _eActorType == act; }
+        public bool IsActorType(WorldActorTypeEnum act) { return ActorType == act; }
         public void ChangeState(NPCStateEnum state)
         {
             _eCurrentState = state;

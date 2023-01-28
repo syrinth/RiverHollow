@@ -29,7 +29,7 @@ namespace RiverHollow.Characters
 
         public Merchant(int index, Dictionary<string, string> stringData, bool loadanimations = true) : base(index, stringData, loadanimations)
         {
-            _eActorType = WorldActorTypeEnum.Merchant;
+            ActorType = WorldActorTypeEnum.Merchant;
 
             _diRequiredObjectIDs = new Dictionary<int, int>();
 

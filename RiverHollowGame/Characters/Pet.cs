@@ -16,8 +16,9 @@ namespace RiverHollow.Characters
         public Pet(int id, Dictionary<string, string> stringData) : base(id)
         {
             _fBaseSpeed = 1;
-            _eActorType = WorldActorTypeEnum.Pet;
+            ActorType = WorldActorTypeEnum.Pet;
             _bCanWander = true;
+            SlowDontBlock = true;
 
             //_sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Adventurer", stringData["Key"]);
 

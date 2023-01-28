@@ -70,7 +70,7 @@ namespace RiverHollow.Characters
 
         public Villager(int index, Dictionary<string, string> stringData, bool loadanimations = true) : base(index, stringData, loadanimations)
         {
-            _eActorType = WorldActorTypeEnum.Villager;
+            ActorType = WorldActorTypeEnum.Villager;
             _liHousingRequests = new List<Request>();
             _diCollection = new Dictionary<int, bool>();
             _diRequiredObjectIDs = new Dictionary<int, int>();
@@ -618,7 +618,7 @@ namespace RiverHollow.Characters
 
                 for (int i = 0; i < num; i++)
                 {
-                    PlayerManager.AddAnimal(DataManager.CreateProducer(split[0]));
+                    PlayerManager.AddAnimal(DataManager.CreateAnimal(split[0]));
                 }
             }
         }

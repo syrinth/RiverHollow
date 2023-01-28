@@ -691,8 +691,8 @@ namespace RiverHollow.Game_Managers
                         return new Mount(id, diData);
                     case WorldActorTypeEnum.Pet:
                         return new Pet(id, diData);
-                    case WorldActorTypeEnum.Producer:
-                        return new Producer(id, diData);
+                    case WorldActorTypeEnum.Animal:
+                        return new Animal(id, diData);
                     case WorldActorTypeEnum.ShippingGremlin:
                         return new ShippingGremlin(id, diData);
                     case WorldActorTypeEnum.Spirit:
@@ -737,14 +737,14 @@ namespace RiverHollow.Game_Managers
             }
             return (Pet)rv;
         }
-        public static Producer CreateProducer(int id)
+        public static Animal CreateAnimal(int id)
         {
             WorldActor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Producer))
+            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Animal))
             {
                 rv = null;
             }
-            return (Producer)rv;
+            return (Animal)rv;
         }
         public static Critter CreateCritter(int id)
         {

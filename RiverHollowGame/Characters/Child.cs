@@ -30,8 +30,9 @@ namespace RiverHollow.Characters
         public Child(int id, Dictionary<string, string> stringData) : base(id)
         {
             ID = id;
-            _eActorType = WorldActorTypeEnum.Child;
+            ActorType = WorldActorTypeEnum.Child;
             _bCanWander = true;
+            SlowDontBlock = true;
 
             _liGrowthPeriods = new List<int>() { 4, 10 };
 

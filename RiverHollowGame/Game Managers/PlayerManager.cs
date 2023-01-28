@@ -140,7 +140,6 @@ namespace RiverHollow.Game_Managers
 
             if (AllowMovement)
             {
-                bool stop = InputManager.IsKeyDown(Keys.D);
                 Vector2 newMovement = Vector2.Zero;
                 MovementHelper(ref _eHorizontal, ref newMovement, true, Keys.A, DirectionEnum.Left, Keys.D, DirectionEnum.Right);
                 MovementHelper(ref _eVertical, ref newMovement, false, Keys.W, DirectionEnum.Up, Keys.S, DirectionEnum.Down);
@@ -161,9 +160,10 @@ namespace RiverHollow.Game_Managers
                 }
                 else if (newMovement != Vector2.Zero)
                 {
-                    if (MapManager.CurrentMap.CheckForCollisions(PlayerActor, PlayerActor.CollisionBox.Location.ToVector2(), PlayerActor.CollisionBox, ref newMovement))
+                    bool impeded = false;
+                    if (MapManager.CurrentMap.CheckForCollisions(PlayerActor, PlayerActor.CollisionBox.Location.ToVector2(), PlayerActor.CollisionBox, ref newMovement, ref impeded))
                     {
-                        PlayerActor.Position += newMovement;
+                        PlayerActor.Position += newMovement * (impeded ? Constants.IMPEDED_SPEED : 1f);
                     }
                 }
             }
@@ -428,7 +428,7 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void AddAnimal(Producer npc)
+        public static void AddAnimal(Animal npc)
         {
             TownAnimals.Add(npc);
             npc.MoveToSpawn();
@@ -895,7 +895,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (int id in saveData.TownAnimals)
             {
-                Producer m = DataManager.CreateProducer(id);
+                Animal m = DataManager.CreateAnimal(id);
                 AddAnimal(m);
             }
 

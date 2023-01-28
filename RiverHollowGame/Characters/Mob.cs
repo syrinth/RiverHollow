@@ -47,7 +47,7 @@ namespace RiverHollow.Characters
         public Mob(int id, Dictionary<string, string> data) : base(id)
         {
             _liSpawnConditions = new List<SpawnConditionEnum>();
-            _eActorType = WorldActorTypeEnum.Mob;
+            ActorType = WorldActorTypeEnum.Mob;
             _liMonsters = new List<CombatActor>();
 
             _iXP = 0;

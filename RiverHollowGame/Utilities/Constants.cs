@@ -10,7 +10,6 @@
         public const double MOB_STUN_TIME = 5;
         public const double WANDER_COUNTDOWN = 2.5;
         public const double PUSH_COOLDOWN = 0.1;
-        public const float NUDGE_SPEED = 0.5f;
 
         public const double COMBAT_DAMAGE_FLOAT_TIMER = 0.55;
         public const double COMBAT_STATUS_REFRESH_RATE = 3;
@@ -38,6 +37,8 @@
         public const float NORMAL_SPEED = 1.5f;
         public const float PUSH_SPEED = 0.5f;
         public const float NPC_WALK_SPEED = 0.6f;
+        public const float NUDGE_RATE = 0.5f;
+        public const float IMPEDED_SPEED = 0.6f;
 
         public const int ACTION_COST = 2;
 

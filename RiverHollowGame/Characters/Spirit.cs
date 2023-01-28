@@ -25,7 +25,7 @@ namespace RiverHollow.Characters
 
         public Spirit(Dictionary<string, string> stringData) : base()
         {
-            _eActorType = WorldActorTypeEnum.Spirit;
+            ActorType = WorldActorTypeEnum.Spirit;
             _fVisibility = MIN_VISIBILITY;
 
             Util.AssignValue(ref _iID, "SpiritID", stringData);

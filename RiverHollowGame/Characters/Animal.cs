@@ -9,17 +9,18 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
-    public class Producer : TalkingActor
+    public class Animal : TalkingActor
     {
         public int ItemID => DataManager.GetIntByIDKey(ID, "ItemID", DataType.NPC);
 
         public int HouseID => DataManager.GetIntByIDKey(ID, "ObjectID", DataType.NPC);
 
-        public Producer(int id, Dictionary<string, string> stringData) : base(id)
+        public Animal(int id, Dictionary<string, string> stringData) : base(id)
         {
             _fBaseSpeed = Constants.NPC_WALK_SPEED;
-            _eActorType = WorldActorTypeEnum.Producer;
+            ActorType = WorldActorTypeEnum.Animal;
             _bCanWander = true;
+            SlowDontBlock = true;
 
             RHSize size = DataManager.GetSizeByIDKey(ID, "Size", DataType.NPC);
             _iBodyWidth = size.Width;

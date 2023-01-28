@@ -16,7 +16,7 @@ namespace RiverHollow.Characters
 
         public Mount(int id, Dictionary<string, string> stringData) : base(id)
         {
-            _eActorType = WorldActorTypeEnum.Mount;
+            ActorType = WorldActorTypeEnum.Mount;
 
             Util.AssignValue(ref _iBodyWidth, "Width", stringData);
             Util.AssignValue(ref _iBodyHeight, "Height", stringData);

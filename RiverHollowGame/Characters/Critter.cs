@@ -14,8 +14,9 @@ namespace RiverHollow.Characters
 
         public Critter(int id, Dictionary<string, string> stringData) : base(id)
         {
-            _eActorType = WorldActorTypeEnum.Critter;
+            ActorType = WorldActorTypeEnum.Critter;
             _bIgnoreCollisions = true;
+            SlowDontBlock = true;
             _animationTimer = new RHTimer(1 + SetRandom(4, 0.5));
             _iBodyHeight = Constants.TILE_SIZE;
 
