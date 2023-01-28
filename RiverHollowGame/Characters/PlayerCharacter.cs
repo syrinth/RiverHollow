@@ -260,10 +260,7 @@ namespace RiverHollow.Characters
 
         public override void SetMoveTo(Vector2 v, bool update = true)
         {
-            if (State == ActorStateEnum.Grab && PlayerManager.StillMoving()){
-                update = false;
-            }
-            base.SetMoveTo(v, update);
+            base.SetMoveTo(v, State != ActorStateEnum.Grab);
         }
     }
 }

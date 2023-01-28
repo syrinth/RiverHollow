@@ -439,7 +439,7 @@ namespace RiverHollow.Game_Managers
                 {
                     _liToRemove.Add(c);
                 }
-                c.SetMoveTo(Vector2.Zero, false);
+                c.SetMoveTo(Vector2.Zero);
             }
         }
 
@@ -636,7 +636,7 @@ namespace RiverHollow.Game_Managers
             foreach(WorldActor act in _liUsedNPCs)
             {
                 act.ClearPath();
-                act.SetMoveTo(Vector2.Zero, false);
+                act.SetMoveTo(Vector2.Zero);
             }
 
             GUIManager.ClearBackgroundImage();

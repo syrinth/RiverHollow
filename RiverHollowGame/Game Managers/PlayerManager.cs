@@ -975,7 +975,7 @@ namespace RiverHollow.Game_Managers
             MoveObjectToPosition = nextObjectTile.Position;
 
             AllowMovement = false;
-            PlayerActor.SetMoveTo(nextPlayerTile.Position, false);
+            PlayerActor.SetMoveTo(nextPlayerTile.Position);
             PlayerActor.SpdMult = Constants.PUSH_SPEED;
             GrabbedObject.RemoveSelfFromTiles();
         }

@@ -227,7 +227,6 @@ namespace RiverHollow.Characters
         }
         public virtual void DetermineAnimationState(Vector2 direction)
         {
-            bool initiallyMoving = Moving;
             Moving = direction.Length() != 0;
 
             switch (State)
@@ -264,7 +263,7 @@ namespace RiverHollow.Characters
             if (update)
             {
                 DetermineFacing(v - Position);
-                DetermineAnimationState(v - Position);
+                DetermineAnimationState(v);
             }
         }
 
@@ -363,7 +362,7 @@ namespace RiverHollow.Characters
                 //If, after movement, we've reached the given location, zero it.
                 if (MoveToLocation == Position && !CutsceneManager.Playing)
                 {
-                    SetMoveTo(Vector2.Zero, false);
+                    SetMoveTo(Vector2.Zero);
                     if (_liTilePath.Count > 0)
                     {
                         _liTilePath.RemoveAt(0);
