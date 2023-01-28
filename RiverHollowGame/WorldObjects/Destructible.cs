@@ -12,11 +12,9 @@ namespace RiverHollow.WorldObjects
         protected int _iHP = 1;
         public int HP => _iHP;
 
-        protected ToolEnum _eToolType;
-        public ToolEnum NeededTool => _eToolType;
+        public ToolEnum NeededTool => DataManager.GetEnumByIDKey<ToolEnum>(ID, "Tool", DataType.WorldObject);
 
-        protected int _iNeededToolLevel;
-        public int NeededToolLevel => _iNeededToolLevel;
+        public int NeededToolLevel => DataManager.GetIntByIDKey(ID, "ReqLvl", DataType.WorldObject);
 
         public Destructible(int id, Dictionary<string, string> stringData, bool loadSprite = true) : base(id)
         {
@@ -32,9 +30,7 @@ namespace RiverHollow.WorldObjects
                 _kvpDrop = new KeyValuePair<int, int>(itemID, num);
             }
 
-            if (stringData.ContainsKey("Tool")) { _eToolType = Util.ParseEnum<ToolEnum>(stringData["Tool"]); }
             if (stringData.ContainsKey("Hp")) { _iHP = int.Parse(stringData["Hp"]); }
-            if (stringData.ContainsKey("ReqLvl")) { _iNeededToolLevel = int.Parse(stringData["ReqLvl"]); }
 
             if (loadSprite && stringData.ContainsKey("DestructionAnim"))
             {
@@ -88,17 +84,19 @@ namespace RiverHollow.WorldObjects
                         MapManager.DropItemsOnMap(GetDroppedItems(), CollisionBox.Location.ToVector2());
                         CurrentMap.AlertSpawnPoint(this);
                     }
+                    else
+                    {
+                        //Nudge the Object in the direction of the 'attack'
+                        int xMod = 0, yMod = 0;
+                        if (PlayerManager.PlayerActor.Facing == DirectionEnum.Left) { xMod = -1; }
+                        else if (PlayerManager.PlayerActor.Facing == DirectionEnum.Right) { xMod = 1; }
+
+                        if (PlayerManager.PlayerActor.Facing == DirectionEnum.Up) { yMod = -1; }
+                        else if (PlayerManager.PlayerActor.Facing == DirectionEnum.Down) { yMod = 1; }
+
+                        _sprite.Position = new Vector2(_sprite.Position.X + xMod, _sprite.Position.Y + yMod);
+                    }
                 }
-
-                //Nudge the Object in the direction of the 'attack'
-                int xMod = 0, yMod = 0;
-                if (PlayerManager.PlayerActor.Facing == DirectionEnum.Left) { xMod = -1; }
-                else if (PlayerManager.PlayerActor.Facing == DirectionEnum.Right) { xMod = 1; }
-
-                if (PlayerManager.PlayerActor.Facing == DirectionEnum.Up) { yMod = -1; }
-                else if (PlayerManager.PlayerActor.Facing == DirectionEnum.Down) { yMod = 1; }
-
-                _sprite.Position = new Vector2(_sprite.Position.X + xMod, _sprite.Position.Y + yMod);
             }
             else if (NeededTool != toolUsed.ToolType)
             {

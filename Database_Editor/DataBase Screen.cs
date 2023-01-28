@@ -838,7 +838,7 @@ namespace Database_Editor
                     DataGridViewRow row = dgvItems.Rows[index++];
 
                     //row.Cells["colItemID"].Value = _liItemData[i].ID;
-                    row.Cells["colItemName"].Value = _liItemData[i].Name;
+                    row.Cells["colItemsName"].Value = _liItemData[i].Name;
                 }
             }
 
@@ -1603,7 +1603,7 @@ namespace Database_Editor
             cbItemType.SelectedIndex = (int)data.ItemType;
             SetItemSubtype();
 
-            dgItemTags.Rows.Clear();
+            dgvItemTags.Rows.Clear();
             string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in tags)
             {
@@ -1613,7 +1613,7 @@ namespace Database_Editor
                 }
                 else if (!s.StartsWith("Type"))
                 {
-                    dgItemTags.Rows.Add(s);
+                    dgvItemTags.Rows.Add(s);
                 }
             }
         }
@@ -1795,7 +1795,7 @@ namespace Database_Editor
                     string[] subTypeTag = cbItemSubtype.SelectedItem.ToString().Split(':');
                     tags[subTypeTag[0]] = subTypeTag[1];
                 }
-                foreach (DataGridViewRow row in dgItemTags.Rows)
+                foreach (DataGridViewRow row in dgvItemTags.Rows)
                 {
                     if (row.Cells[0].Value != null)
                     {
@@ -1826,7 +1826,7 @@ namespace Database_Editor
                     string[] subTypeTag = cbItemSubtype.SelectedItem.ToString().Split(':');
                     data.SetTagInfo(subTypeTag[0], subTypeTag[1]);
                 }
-                foreach (DataGridViewRow row in dgItemTags.Rows)
+                foreach (DataGridViewRow row in dgvItemTags.Rows)
                 {
                     if (row.Cells[0].Value != null)
                     {
@@ -1871,7 +1871,7 @@ namespace Database_Editor
                 DataGridViewRow updatedRow = dgvItems.Rows[_diTabIndices["Items"]];
 
                 //updatedRow.Cells["colItemID"].Value = data.ID;
-                updatedRow.Cells["colItemName"].Value = data.Name;
+                updatedRow.Cells["colItemsName"].Value = data.Name;
             }
         }
         private void SaveWorldObjectInfo()

@@ -263,7 +263,7 @@
     </Item>
     <Item>
       <Key>65</Key>
-      <Value>[Type:Destructible][Tree][Texture:Textures\tree][Image:0-0][Size:3-4][Hp:8][ReqLvl:1][ItemID:2-10][Base:1-1][BaseShift:1]</Value>
+      <Value>[Type:Destructible][Tree][Texture:Textures\tree][Image:0-0][Size:3-4][Hp:8][ReqLvl:1][ItemID:2-10][Base:1-1][BaseShift:1][Tool:Axe]</Value>
     </Item>
     <Item>
       <Key>66</Key>
