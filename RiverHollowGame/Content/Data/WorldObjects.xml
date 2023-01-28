@@ -589,5 +589,9 @@
       <Key>146</Key>
       <Value>[Type:WorldObject][Image:0-16][OpenStock][StoreType:General]</Value>
     </Item>
+    <Item>
+      <Key>147</Key>
+      <Value>[Type:Destructible][Image:192-48][Tool:Scythe][Hp:1][ReqLvl:1]</Value>
+    </Item>
   </Asset>
 </XnaContent>

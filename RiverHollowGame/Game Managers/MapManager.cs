@@ -171,13 +171,14 @@ namespace RiverHollow.Game_Managers
             {
                 int rockID = int.Parse(DataManager.Config[1]["ObjectID"]);
                 int treeID = int.Parse(DataManager.Config[3]["ObjectID"]);
-                int grassID = int.Parse(DataManager.Config[11]["ObjectID"]);
+                int weedID = int.Parse(DataManager.Config[11]["ObjectID"]);
 
                 List<RHTile> possibleTiles = Maps[Constants.TOWN_MAP_NAME].TileList;
                 possibleTiles.RemoveAll(x => !x.Passable() || x.Flooring != null);
 
                 PopulateHomeMapHelper(ref possibleTiles, rockID, 50);
                 PopulateHomeMapHelper(ref possibleTiles, treeID, 50);
+                PopulateHomeMapHelper(ref possibleTiles, weedID, 100);
             }
         }
 

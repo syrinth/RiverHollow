@@ -2005,5 +2005,9 @@
       <Key>WorldObject_146</Key>
       <Value>[Name:BuildingStock]</Value>
     </Item>
+    <Item>
+      <Key>WorldObject_147</Key>
+      <Value>[Name:Weed]</Value>
+    </Item>
   </Asset>
 </XnaContent>
