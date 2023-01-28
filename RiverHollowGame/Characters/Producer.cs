@@ -17,7 +17,7 @@ namespace RiverHollow.Characters
 
         public Producer(int id, Dictionary<string, string> stringData) : base(id)
         {
-            _fBaseSpeed = 1;
+            _fBaseSpeed = Constants.NPC_WALK_SPEED;
             _eActorType = WorldActorTypeEnum.Producer;
             _bCanWander = true;
 

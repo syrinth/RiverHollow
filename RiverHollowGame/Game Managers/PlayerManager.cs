@@ -161,12 +161,9 @@ namespace RiverHollow.Game_Managers
                 }
                 else if (newMovement != Vector2.Zero)
                 {
-                    Rectangle testRectX = new Rectangle((int)PlayerActor.CollisionBox.X + (int)newMovement.X, (int)PlayerActor.CollisionBox.Y, PlayerActor.CollisionBox.Width, PlayerActor.CollisionBox.Height);
-                    Rectangle testRectY = new Rectangle((int)PlayerActor.CollisionBox.X, (int)PlayerActor.CollisionBox.Y + (int)newMovement.Y, PlayerActor.CollisionBox.Width, PlayerActor.CollisionBox.Height);
-
-                    if (MapManager.CurrentMap.CheckForCollisions(PlayerActor, testRectX, testRectY, ref newMovement))
+                    if (MapManager.CurrentMap.CheckForCollisions(PlayerActor, PlayerActor.CollisionBox.Location.ToVector2(), PlayerActor.CollisionBox, ref newMovement))
                     {
-                        PlayerActor.Position = PlayerActor.Position + newMovement;
+                        PlayerActor.Position += newMovement;
                     }
                 }
             }

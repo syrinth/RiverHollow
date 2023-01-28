@@ -1151,12 +1151,12 @@ namespace RiverHollow.Map_Handling
                     dir.Y = 0;
 
                     //Modifier is to determine if the nudge is positive or negative
-                    int modifier = (int)CheckToNudge(newRectangleY.Center.X, r.Center.X, coords.X, coords.Y, "Col");
-                    int xVal = (int)(modifier > 0 ? newRectangleX.Right : newRectangleX.Left) + modifier;               //Constructs the new rectangle based on the mod
+                    float modifier = CheckToNudge(newRectangleY.Center.X, r.Center.X, coords.X, coords.Y, "Col");
+                    float xVal = (modifier > 0 ? newRectangleX.Right : newRectangleX.Left) + modifier;               //Constructs the new rectangle based on the mod
 
                     if (dir.X == 0 && modifier != 0)
                     {
-                        dir.X += CheckNudgeAllowed(modifier, new Point(xVal, newRectangleY.Top), new Point(xVal, newRectangleY.Bottom), act.CurrentMapName);
+                        dir.X += CheckNudgeAllowed(modifier, new Vector2(xVal, newRectangleY.Top), new Vector2(xVal, newRectangleY.Bottom), act.CurrentMapName);
                     }
                 }
                 if (dir.X != 0 && r.Intersects(newRectangleX))
@@ -1164,12 +1164,12 @@ namespace RiverHollow.Map_Handling
                     dir.X = 0;
 
                     //Modifier is to determine if the nudge is positive or negative
-                    int modifier = (int)CheckToNudge(newRectangleX.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
-                    int yVal = (int)(modifier > 0 ? newRectangleX.Bottom : newRectangleX.Top) + modifier;               //Constructs the new rectangle based on the mod
+                    float modifier = CheckToNudge(newRectangleX.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
+                    float yVal = (modifier > 0 ? newRectangleX.Bottom : newRectangleX.Top) + modifier;               //Constructs the new rectangle based on the mod
 
                     if (dir.Y == 0 && modifier != 0)
                     {
-                        dir.Y += CheckNudgeAllowed(modifier, new Point(newRectangleY.Left, yVal), new Point(newRectangleY.Right, yVal), act.CurrentMapName);
+                        dir.Y += CheckNudgeAllowed(modifier, new Vector2(newRectangleY.Left, yVal), new Vector2(newRectangleY.Right, yVal), act.CurrentMapName);
                     }
                 }
 
@@ -1181,7 +1181,7 @@ namespace RiverHollow.Map_Handling
                 }
             }
         }
-        private float CheckNudgeAllowed(float modifier, Point first, Point second, string map)
+        private float CheckNudgeAllowed(float modifier, Vector2 first, Vector2 second, string map)
         {
             float rv = 0;
             RHTile firstTile = MapManager.Maps[map].GetTileByGridCoords(Util.GetGridCoords(first));
@@ -1206,13 +1206,15 @@ namespace RiverHollow.Map_Handling
         /// <param name="dir">Reference to the direction to move the WorldActor</param>
         /// <param name="ignoreCollisions">Whether or not to check collisions</param>
         /// <returns>False if we are to prevent movement</returns>
-        public bool CheckForCollisions(WorldActor c, Rectangle testX, Rectangle testY, ref Vector2 dir, bool ignoreCollisions = false)
+        public bool CheckForCollisions(WorldActor c, Vector2 position, Rectangle collision, ref Vector2 dir, bool ignoreCollisions = false)
         {
             bool rv = true;
 
-            Rectangle box = c.CollisionBox;
+            Rectangle testRectX = Util.FloatRectangle(position.X + dir.X, position.Y, collision.Width, collision.Height);
+            Rectangle testRectY = Util.FloatRectangle(position.X, position.Y + dir.Y, collision.Width, collision.Height);
+
             //Checking for a MapChange takes priority overlooking for collisions.
-            if (CheckForMapChange(c, testX) || CheckForMapChange(c, testY))
+            if (CheckForMapChange(c, testRectX) || CheckForMapChange(c, testRectY))
             {
                 return false;
             }
@@ -1257,21 +1259,21 @@ namespace RiverHollow.Map_Handling
             float centerDelta = movingCenter - objCenter;
             if (varCol == -1 && varRow == -1)
             {
-                if (centerDelta > 0) { rv = 1; }
-                else if (centerDelta < 0) { rv = -1; }
+                if (centerDelta > 0) { rv = Constants.NUDGE_SPEED; }
+                else if (centerDelta < 0) { rv = -Constants.NUDGE_SPEED; }
             }
             else if (centerDelta > 0)
             {
                 RHTile testTile = GetTileByGridCoords((int)(varCol + (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0)));
                 if (testTile != null && testTile.Passable())
                 {
-                    rv = 1;
+                    rv = Constants.NUDGE_SPEED;
                 }
             }
             else if (centerDelta < 0)
             {
                 RHTile testTile = GetTileByGridCoords((int)(varCol - (v.Equals("Col") ? 1 : 0)), (int)(varRow - (v.Equals("Row") ? 1 : 0)));
-                if (testTile != null && testTile.Passable()) { rv = -1; }
+                if (testTile != null && testTile.Passable()) { rv = -Constants.NUDGE_SPEED; }
             }
 
             return rv;

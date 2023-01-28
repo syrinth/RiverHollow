@@ -179,7 +179,7 @@
     </Item>
     <Item>
       <Key>44</Key>
-      <Value>[Type:Producer][Key:Chicken][Idle:0-0-1-0-T][Walk:64-0-3-.11-F][Size:16-20][ItemID:150][ObjectID:27]</Value>
+      <Value>[Type:Producer][Key:Chicken][Idle:0-0-1-0-T][Walk:64-0-3-.5-F][Size:16-16][ItemID:150][ObjectID:27]</Value>
     </Item>
   </Asset>
 </XnaContent>

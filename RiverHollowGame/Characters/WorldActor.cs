@@ -262,7 +262,10 @@ namespace RiverHollow.Characters
             MoveToLocation = v;
             if (update)
             {
-                DetermineFacing(v - Position);
+                if (v != Vector2.Zero)
+                {
+                    DetermineFacing(v - Position);
+                }
                 DetermineAnimationState(v);
             }
         }
@@ -284,33 +287,6 @@ namespace RiverHollow.Characters
         public void PlayAnimationVerb(VerbEnum verb) { PlayAnimation(verb, Facing); }
         public bool IsCurrentAnimationVerb(VerbEnum verb) { return _sprBody.IsCurrentAnimation(verb, Facing); }
         public bool IsCurrentAnimationVerbFinished(VerbEnum verb) { return _sprBody.AnimationVerbFinished(verb, Facing); }
-
-        /// <summary>
-        /// Check the direction in which we wish to move the Actor for any possible collisions.
-        /// 
-        /// If none are found, move the Actor andthen recalculate the facing based on the moved direction.
-        /// </summary>
-        /// <param name="direction">The direction to move the Actor in pixels</param>
-        /// <param name="ignoreCollisions">Whether or not we are to ignore collisions</param>
-        /// <returns></returns>
-        protected bool CheckMapForCollisionsAndMove(Vector2 direction)
-        {
-            bool rv = false;
-
-            //Create the X and Y rectangles to test for collisions
-            Rectangle testRectX = Util.FloatRectangle(Position.X + direction.X, Position.Y, CollisionBox.Width, CollisionBox.Height);
-            Rectangle testRectY = Util.FloatRectangle(Position.X, Position.Y + direction.Y, CollisionBox.Width, CollisionBox.Height);
-
-            //Check for collisions against the map and, if none are detected, move. Do not move if the direction Vector2 is Zero
-            if (CurrentMap.CheckForCollisions(this, testRectX, testRectY, ref direction) && direction != Vector2.Zero)
-            {
-                DetermineAnimationState(direction);
-                Position += new Vector2(direction.X, direction.Y);
-                rv = true;
-            }
-
-            return rv;
-        }
 
         public Thread CalculatePathThreaded()
         {
@@ -349,14 +325,16 @@ namespace RiverHollow.Characters
                     }
                 }
 
-                //Attempt to move
-                if (!CheckMapForCollisionsAndMove(direction))
+                Vector2 initial = direction;
+                if (CurrentMap.CheckForCollisions(this, Position, CollisionBox, ref direction) && direction != Vector2.Zero)
+                {
+                    DetermineAnimationState(direction);
+                    Position += new Vector2(direction.X, direction.Y);
+                }
+
+                if(initial != direction)
                 {
                     _bBumpedIntoSomething = true;
-                    if( this == PlayerManager.PlayerActor)
-                    {
-                        PlayerManager.ClearDamagedMovement();
-                    }
                 }
 
                 //If, after movement, we've reached the given location, zero it.
@@ -437,7 +415,6 @@ namespace RiverHollow.Characters
         {
             SpdMult = speed;
             SetMoveTo(Vector2.Zero);
-            PlayAnimation(VerbEnum.Walk, Facing);
             _movementTimer.Reset(Constants.WANDER_COUNTDOWN);
         }
 
