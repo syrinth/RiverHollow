@@ -1145,6 +1145,11 @@ namespace RiverHollow.Map_Handling
                 Rectangle r = kvp.Key;
                 WorldActor npc = kvp.Value;
 
+                if (npc != null && npc.IgnoreCollisions)
+                {
+                    continue;
+                }
+
                 Vector2 coords = Util.GetGridCoords(r.Location);
                 if (dir.Y != 0 && r.Intersects(newRectangleY))
                 {

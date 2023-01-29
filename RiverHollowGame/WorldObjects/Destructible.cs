@@ -3,6 +3,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
+using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.WorldObjects
@@ -12,6 +13,8 @@ namespace RiverHollow.WorldObjects
         protected int _iHP = 1;
         public int HP => _iHP;
 
+        protected int _iAltSprite = 0;
+
         public ToolEnum NeededTool => DataManager.GetEnumByIDKey<ToolEnum>(ID, "Tool", DataType.WorldObject);
 
         public int NeededToolLevel => DataManager.GetIntByIDKey(ID, "ReqLvl", DataType.WorldObject);
@@ -19,6 +22,8 @@ namespace RiverHollow.WorldObjects
         public Destructible(int id, Dictionary<string, string> stringData, bool loadSprite = true) : base(id)
         {
             LoadDictionaryData(stringData, loadSprite);
+
+            ReloadAlternateSprite(RHRandom.Instance().Next(0, Util.FindParams(stringData["Image"]).Length - 1), stringData["Image"]);
 
             if (stringData.ContainsKey("ItemID"))
             {
@@ -106,6 +111,33 @@ namespace RiverHollow.WorldObjects
             {
                 GUIManager.OpenTextWindow("Weak_Tool");
             }
+        }
+
+        private void ReloadAlternateSprite(int altSprite, string imageSprite)
+        {
+            _iAltSprite = altSprite;
+            string[] split = Util.FindParams(imageSprite);
+
+            string[] splitVal = split[_iAltSprite].Split('-');
+            _pImagePos = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
+
+            Dictionary<string, string> data = DataManager.GetWorldObjectData(ID);
+            if (data.ContainsKey("Texture")) { LoadSprite(data, data["Texture"]); }
+            else { LoadSprite(data); }
+        }
+
+        public override WorldObjectData SaveData()
+        {
+            WorldObjectData data = base.SaveData();
+            data.stringData = _iAltSprite.ToString();
+
+            return data;
+        }
+        public override void LoadData(WorldObjectData data)
+        {
+            base.LoadData(data);
+
+            ReloadAlternateSprite(int.Parse(data.stringData), DataManager.GetStringByIDKey(ID, "Image", DataType.WorldObject));
         }
     }
 }

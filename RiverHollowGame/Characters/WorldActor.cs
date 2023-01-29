@@ -55,7 +55,7 @@ namespace RiverHollow.Characters
         protected List<RHTile> _liTilePath;
 
         protected bool _bBumpedIntoSomething = false;
-        protected bool _bIgnoreCollisions;
+        public bool IgnoreCollisions { get; protected set; } = false;
         public bool SlowDontBlock { get; protected set; } = false;
 
         protected double _dCooldown = 0;

@@ -11,6 +11,8 @@ using static RiverHollow.Utilities.Enums;
 using System;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.GUIComponents.Screens;
+using Newtonsoft.Json.Linq;
+using System.Windows.Input;
 
 namespace RiverHollow.WorldObjects
 {
@@ -92,7 +94,12 @@ namespace RiverHollow.WorldObjects
 
         protected virtual void LoadDictionaryData(Dictionary<string, string> stringData, bool loadSprite = true)
         {
-            Util.AssignValue(ref _pImagePos, "Image", stringData);
+            string[] split = Util.FindParams(stringData["Image"]);
+            if (split.Length == 1)
+            {
+                string[] splitVal = split[0].Split('-');
+                _pImagePos = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
+            }
 
             Util.AssignValue(ref _uSize, "Size", stringData);
 
@@ -117,7 +124,7 @@ namespace RiverHollow.WorldObjects
 
                 foreach (string s in Util.FindParams(stringData["LightID"]))
                 {
-                    string[] split = s.Split('-');
+                    split = s.Split('-');
 
                     LightInfo info;
                     info.LightObject = DataManager.GetLight(int.Parse(split[0]));
@@ -418,7 +425,6 @@ namespace RiverHollow.WorldObjects
         }
         public virtual void LoadData(WorldObjectData data)
         {
-            ID = data.ID;
             SnapPositionToGrid(new Vector2(data.X, data.Y));
         }
         #endregion
