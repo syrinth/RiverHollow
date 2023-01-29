@@ -11,8 +11,6 @@ using RiverHollow.Misc;
 using System.Linq;
 using RiverHollow.GUIComponents.Screens.HUDScreens;
 using RiverHollow.Items;
-using RiverHollow.Characters;
-using System.Xml.Linq;
 
 namespace RiverHollow.Buildings
 {

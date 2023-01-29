@@ -70,9 +70,9 @@ namespace RiverHollow.WorldObjects
             {
                 for (int j = 0; j < Columns; j++)
                 {
-                    if (!string.Equals(strData[i * InventoryManager.maxItemRows + j], "null"))
+                    if (!string.Equals(strData[i * Rows + j], "null"))
                     {
-                        string[] itemData = Util.FindArguments(strData[i * InventoryManager.maxItemRows + j]);
+                        string[] itemData = Util.FindArguments(strData[i * Rows + j]);
                         Item newItem = DataManager.GetItem(int.Parse(itemData[0]), int.Parse(itemData[1]));
                         if (newItem != null && itemData.Length > 2) { newItem.ApplyUniqueData(itemData[2]); }
 

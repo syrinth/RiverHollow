@@ -142,27 +142,31 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 do
                 {
-                    Villager v = _liVillagers[_iCurrentVillager];
-                    int index = RHRandom.Instance().Next(_liPoints.Count);
-                    v.Position = _liPoints[index];
-                    v.Activate(true);
+                    if (_iCurrentVillager < _liVillagers.Count)
+                    {
+                        Villager npc = _liVillagers[_iCurrentVillager];
+                        int index = RHRandom.Instance().Next(_liPoints.Count);
+                        npc.Position = _liPoints[index];
+                        npc.Activate(true);
 
-                    _liPoints.RemoveAt(index);
+                        _liPoints.RemoveAt(index);
 
-                    GUIImage coin = DataManager.GetIcon(GameIconEnum.Coin);
-                    coin.Position(v.BodySprite.Position);
-                    coin.ScaledMoveBy(0, -Constants.TILE_SIZE);
-                    _liCoins.Add(coin);
+                        GUIImage coin = DataManager.GetIcon(GameIconEnum.Coin);
+                        coin.Position(npc.BodySprite.Position);
+                        coin.ScaledMoveBy(0, -Constants.TILE_SIZE);
+                        _liCoins.Add(coin);
 
-                    _iCurrentVillager++;
-                    _timer.Reset(MAX_POP_TIME / _liVillagers.Count);
 
-                    _iVillagerTax = v.Income;
-                    _dVillagerTaxIncrement = _iVillagerTax / (_timer.TimerSpeed / 0.02);
+                        _timer.Reset(MAX_POP_TIME / _liVillagers.Count);
 
-                    _iTotalTaxes += _iVillagerTax;
+                        _iVillagerTax = DataManager.DIVillagers[npc.ID].Income;
+                        _dVillagerTaxIncrement = _iVillagerTax / (_timer.TimerSpeed / 0.02);
 
-                    if (_iCurrentVillager == _liVillagers.Count)
+                        _iTotalTaxes += _iVillagerTax;
+                    }
+
+                    //Only switch off after we have added all of the villagers
+                    if (++_iCurrentVillager == _liVillagers.Count + 1)
                     {
                         _eCurrentPhase = DayEndPhaseEnum.VillagersWait;
                         _btnOK = new GUIButton("OK", BtnOK);

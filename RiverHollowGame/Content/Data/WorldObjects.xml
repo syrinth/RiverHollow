@@ -595,7 +595,7 @@
     </Item>
     <Item>
       <Key>148</Key>
-      <Value>[Type:Machine][Image:0-304][Size:3-2][Base:3-1][BaseOffset:0-1][Makes:195][Daily]</Value>
+      <Value>[Type:Machine][Image:0-304][Size:3-2][Base:3-1][BaseOffset:0-1][Makes:195]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -783,7 +783,7 @@
     </Item>
     <Item>
       <Key>195</Key>
-      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:30][ReqItems:150-2]</Value>
+      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:30][ReqItems:150-2][Stam:16]</Value>
     </Item>
   </Asset>
 </XnaContent>

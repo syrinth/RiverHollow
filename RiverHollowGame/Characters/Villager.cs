@@ -575,17 +575,7 @@ namespace RiverHollow.Characters
 
         private int CalculateIncome()
         {
-            int baseIncome = 10;
-
-            Building b = PlayerManager.GetBuildingByID(HouseID);
-            int buildingIncome = b != null ? b.CalculateIncome() : 0;
-
-            return (baseIncome + buildingIncome) * (int)GetSatisfaction() * TaxMultiplier;
-        }
-
-        public void ClearIncome()
-        {
-            Income = 0;
+            return Constants.BASE_INCOME * (int)GetSatisfaction() * TaxMultiplier;
         }
 
         public SatisfactionStateEnum GetSatisfaction()
