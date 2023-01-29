@@ -27,7 +27,7 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Population][StartNPC:16][AssignTrigger:Task-0][Count:3][ItemRewardID:180][TriggerTask:7][GoalNPC:16]</Value>
+      <Value>[Type:Population][StartNPC:16][AssignTrigger:Task-0][Count:7][ItemRewardID:180][TriggerTask:7][GoalNPC:16]</Value>
     </Item>
     <Item>
       <Key>7</Key>
