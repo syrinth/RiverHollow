@@ -603,7 +603,7 @@
     </Item>
     <Item>
       <Key>150</Key>
-      <Value>[Type:Food][Image:1-0][Value:20][Stam:2]</Value>
+      <Value>[Type:Food][Image:1-0][Value:5][Stam:2]</Value>
     </Item>
     <Item>
       <Key>151</Key>
@@ -780,6 +780,10 @@
     <Item>
       <Key>194</Key>
       <Value>[Type:Resource][Image:3-9][MerchType:Metalwork][Value:200][ReqItems:37-2]</Value>
+    </Item>
+    <Item>
+      <Key>195</Key>
+      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:30][ReqItems:150-2]</Value>
     </Item>
   </Asset>
 </XnaContent>

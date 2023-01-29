@@ -351,11 +351,11 @@
     </Item>
     <Item>
       <Key>87</Key>
-      <Value>[Type:Machine][Image:0-32][Size:2-2][Makes:194][Base:2-1][BaseOffset:0-1][Daily]</Value>
+      <Value>[Type:Machine][Image:0-32][Size:2-2][Base:2-1][BaseOffset:0-1][Makes:194][Daily]</Value>
     </Item>
     <Item>
       <Key>88</Key>
-      <Value>[Type:Machine][Image:0-256][Size:3-3][Makes:167|168|57|58][Base:3-2][BaseOffset:0-1][WorkEffect:Cauldron][Daily]</Value>
+      <Value>[Type:Machine][Image:0-256][Size:3-3][Base:3-2][BaseOffset:0-1][Makes:167|168|57|58][WorkEffect:Cauldron][Daily]</Value>
     </Item>
     <Item>
       <Key>89</Key>
@@ -592,6 +592,10 @@
     <Item>
       <Key>147</Key>
       <Value>[Type:Destructible][Image:192-48|208-48|224-48][Tool:Scythe][Hp:1][ReqLvl:1]</Value>
+    </Item>
+    <Item>
+      <Key>148</Key>
+      <Value>[Type:Machine][Image:0-304][Size:3-2][Base:3-1][BaseOffset:0-1][Makes:195][Daily]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -1426,6 +1426,10 @@
       <Value>[Name:Copper Blade][Description:]</Value>
     </Item>
     <Item>
+      <Key>Item_195</Key>
+      <Value>[Name:Fried Eggs][Description:Yum]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_0</Key>
       <Value>[Name:Beehive]</Value>
     </Item>
@@ -2016,6 +2020,10 @@
     <Item>
       <Key>WorldObject_147</Key>
       <Value>[Name:Weed]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_148</Key>
+      <Value>[Name:Kitchen]</Value>
     </Item>
   </Asset>
 </XnaContent>
