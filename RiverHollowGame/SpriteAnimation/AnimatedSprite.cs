@@ -71,7 +71,7 @@ namespace RiverHollow.SpriteAnimations
 
             if(_texture == null)
             {
-                int i = 0;
+                ErrorManager.TrackError();
             }
         }
 

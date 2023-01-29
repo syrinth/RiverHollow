@@ -84,7 +84,7 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        public MailboxData SaveData()
+        public new MailboxData SaveData()
         {
             MailboxData data = new MailboxData();
             data.MailboxMessages = new List<string>();

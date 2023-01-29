@@ -21,15 +21,12 @@ namespace RiverHollow.Characters
         private int _iGatherZoneID;
 
         const double MOVE_COUNTDOWN = 2.5;
-        public int ID { get; } = -1;
-        private bool _bFollow = false;
         private bool _bIdleCooldown = false;
 
         private double _dCountdown = 0;
 
         public Child(int id, Dictionary<string, string> stringData) : base(id)
         {
-            ID = id;
             ActorType = WorldActorTypeEnum.Child;
             _bCanWander = true;
             SlowDontBlock = true;

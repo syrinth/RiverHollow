@@ -82,6 +82,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Characters\Animal.cs" />
+    <Compile Include="Game Managers\ErrorManager.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDMerchantWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDMiniInventory.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDUpgrade.cs" />

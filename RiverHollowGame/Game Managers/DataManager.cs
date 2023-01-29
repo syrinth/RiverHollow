@@ -829,7 +829,7 @@ namespace RiverHollow.Game_Managers
             }
             else
             {
-                int j = 0;
+                ErrorManager.TrackError();
             }
 
             return rv;

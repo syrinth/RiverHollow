@@ -124,7 +124,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 if (!Show())
                 {
-                    int i = 0;
+                    ErrorManager.TrackError();
                 }
                 base.Draw(spriteBatch);
             }

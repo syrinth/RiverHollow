@@ -54,7 +54,7 @@ namespace RiverHollow.Characters
                 RHMap map = MapManager.Maps[PlayerManager.GetBuildingByID(HouseID).BuildingMapName];
                 if(!new WrappedItem(ItemID).PlaceOnMap(map.GetRandomPosition(), map))
                 {
-                    int i = 0;
+                    ErrorManager.TrackError();
                 }
             }
         }
