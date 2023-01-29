@@ -363,7 +363,7 @@ namespace RiverHollow.Game_Managers
                 case DataType.NPC:
                     if (_diNPCData[id].ContainsKey(key)) { return _diNPCData[id][key]; }
                     break;
-                case DataType.Class:
+                case DataType.Job:
                     if (_diJobs[id].ContainsKey(key)) { return _diJobs[id][key]; }
                     break;
                 case DataType.Item:
@@ -401,7 +401,7 @@ namespace RiverHollow.Game_Managers
                 case DataType.NPC:
                     if (_diNPCData[id].ContainsKey(key)) { return _diNPCData[id].ContainsKey(key); }
                     break;
-                case DataType.Class:
+                case DataType.Job:
                     if (_diJobs[id].ContainsKey(key)) { return _diJobs[id].ContainsKey(key); }
                     break;
                 case DataType.Item:
@@ -1011,9 +1011,9 @@ namespace RiverHollow.Game_Managers
         {
             return _diObjectText.ContainsKey(identifier);
         }
-        public static string GetTextData(string identifier, int id, string key)
+        public static string GetTextData(int id, string key, DataType type)
         {
-            return GetTextData(identifier + "_" + id, key);
+            return GetTextData(Util.GetEnumString(type) + "_" + id, key);
         }
         public static string GetTextData(string textKey, string key)
         {

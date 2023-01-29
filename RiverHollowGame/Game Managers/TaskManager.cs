@@ -38,17 +38,17 @@ namespace RiverHollow.Game_Managers
         }
         public static void AssignTaskByID(int taskID)
         {
-            _liTasks.Find(x => x.TaskID == taskID).AssignTaskToNPC();
+            _liTasks.Find(x => x.ID == taskID).AssignTaskToNPC();
         }
 
         public static bool TaskCompleted(int taskID)
         {
-            return _liTasks.Find(x => x.TaskID == taskID).TaskState == TaskStateEnum.Completed;
+            return _liTasks.Find(x => x.ID == taskID).TaskState == TaskStateEnum.Completed;
         }
 
         public static void AddToTaskLog(int taskID)
         {
-            AddToTaskLog(_liTasks.Find(x => x.TaskID == taskID));
+            AddToTaskLog(_liTasks.Find(x => x.ID == taskID));
         }
         public static void AddToTaskLog(RHTask t)
         {
@@ -57,7 +57,7 @@ namespace RiverHollow.Game_Managers
 
         public static void AddDelayedTask(int taskID)
         {
-            _liDelayedTasks.Add(_liTasks.Find(x => x.TaskID == taskID));
+            _liDelayedTasks.Add(_liTasks.Find(x => x.ID == taskID));
         }
 
         public static void AssignDelayedTasks()
@@ -71,7 +71,7 @@ namespace RiverHollow.Game_Managers
         {
             foreach (RHTask q in TaskLog)
             {
-                if (q.AttemptStructureBuildProgress(obj.ID))
+                if (q.AttemptProgressBuild(obj.ID))
                 {
                     break;
                 }
@@ -88,10 +88,20 @@ namespace RiverHollow.Game_Managers
             }
         }
         public static void AdvanceTaskProgress(Item i)
-        {
+        { 
             foreach (RHTask q in TaskLog)
             {
                 if (q.AttemptProgress(i))
+                {
+                    break;
+                }
+            }
+        }
+        public static void AdvanceTaskProgress()
+        {
+            foreach (RHTask q in TaskLog)
+            {
+                if (q.AttemptProgress())
                 {
                     break;
                 }
@@ -122,7 +132,7 @@ namespace RiverHollow.Game_Managers
         }
         public static bool HasTaskID(int taskID)
         {
-            return TaskLog.Find(t => t.TaskID == taskID) != null;
+            return TaskLog.Find(t => t.ID == taskID) != null;
         }
 
         public static List<TaskData> SaveTaskData()

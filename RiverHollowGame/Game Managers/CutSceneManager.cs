@@ -129,18 +129,18 @@ namespace RiverHollow.Game_Managers
     public class Cutscene
     {
         #region CutScene Commandinformation
-        enum EnumCSCommand { Activate, Speak, Move, Face, Wait, End, Task, Speed, Text, Background, RemoveBackground, Join, Combat };
+        enum CutsceneCommandEnum { Activate, Speak, Move, Face, Wait, End, Task, Speed, Text, Background, RemoveBackground, Join, Combat, MoveToTown };
 
         /// <summary>
         /// A class to hold the information for a CutSceneCommand step
         /// </summary>
         private class CutSceneCommand
         {
-            public EnumCSCommand Command;   //What is the command
+            public CutsceneCommandEnum Command;   //What is the command
             public string[] Data;           //What data does it have
             public bool ActionPerformed;    //Has it been performed yet.
 
-            public CutSceneCommand(EnumCSCommand command, string[] v = null)
+            public CutSceneCommand(CutsceneCommandEnum command, string[] v = null)
             {
                 ActionPerformed = false;
                 Command = command;
@@ -233,9 +233,9 @@ namespace RiverHollow.Game_Managers
             foreach (string s in commands)
             {
                 string[] tags = s.Split(':');
-                _liCommands.Add(new CutSceneCommand(Util.ParseEnum<EnumCSCommand>(tags[0]), (tags.Length > 1 ? tags[1].Split('|') : null)));
+                _liCommands.Add(new CutSceneCommand(Util.ParseEnum<CutsceneCommandEnum>(tags[0]), (tags.Length > 1 ? tags[1].Split('|') : null)));
             }
-            _liCommands.Add(new CutSceneCommand(EnumCSCommand.End));
+            _liCommands.Add(new CutSceneCommand(CutsceneCommandEnum.End));
         }
 
         /// <summary>
@@ -260,76 +260,83 @@ namespace RiverHollow.Game_Managers
                         {
                             int npcID = -1;
                             string[] sCommandData = s.Split('-');   //split the data into segments
+                            WorldActor npc;
                             switch (currentCommand.Command)
                             {
-                                case EnumCSCommand.Activate:
+                                case CutsceneCommandEnum.Activate:
                                     npcID = GetNPCData(sCommandData[0]);
-                                    WorldActor a = _liUsedNPCs.Find(test => test.ID == npcID);
-                                    if(a != null)
-                                    {
-                                        a.Activate(true);
-                                    }
+                                    npc = _liUsedNPCs.Find(test => test.ID == npcID);
+                                    npc?.Activate(true);
                                     bGoToNext = true;
                                     break;
-                                case EnumCSCommand.Speak:
+                                case CutsceneCommandEnum.Speak:
                                     npcID = GetNPCData(sCommandData[0]);
                                     if (npcID != -1)    //Player should never be talking
                                     {
-                                        Villager v = (Villager)_liUsedNPCs.Find(test => test.ID == npcID);
-                                        v.TalkCutscene(CutsceneManager.GetDialogue(_iID, sCommandData[1]));
+                                        Villager b = (Villager)_liUsedNPCs.Find(test => test.ID == npcID);
+                                        b.TalkCutscene(CutsceneManager.GetDialogue(_iID, sCommandData[1]));
                                         bGoToNext = true;
                                     }
                                     break;
-                                case EnumCSCommand.Background:
+                                case CutsceneCommandEnum.Background:
                                     GUIManager.AssignBackgroundImage(new GUIImage(new Rectangle(0, 0, 480, 336), ScaleIt(480), ScaleIt(336), sCommandData[0]));
                                     bGoToNext = true;
                                     break;
-                                case EnumCSCommand.RemoveBackground:
+                                case CutsceneCommandEnum.RemoveBackground:
                                     GUIManager.ClearBackgroundImage();
                                     bGoToNext = true;
                                     break;
-                                case EnumCSCommand.Text:
+                                case CutsceneCommandEnum.Text:
                                     GUIManager.OpenTextWindow(CutsceneManager.GetDialogue(_iID, sCommandData[0]));
                                     bGoToNext = true;
                                     break;
-                                case EnumCSCommand.Move:
+                                case CutsceneCommandEnum.Move:
                                     _bWaitForMove = true;
                                     AssignMovement(sCommandData[0], int.Parse(sCommandData[1]), Util.ParseEnum<DirectionEnum>(sCommandData[2]));
                                     break;
-                                case EnumCSCommand.Wait:
+                                case CutsceneCommandEnum.Wait:
                                     _timer = new RHTimer(double.Parse(sCommandData[0]));
                                     break;
-                                case EnumCSCommand.Task:
+                                case CutsceneCommandEnum.Task:
                                     TaskManager.AddToTaskLog(int.Parse(sCommandData[0]));
                                     bGoToNext = true;
                                     break;
-                                case EnumCSCommand.Speed:
-                                    WorldActor c = GetActor(sCommandData[0]);
-                                    c.SpdMult = float.Parse(sCommandData[1]);
+                                case CutsceneCommandEnum.Speed:
+                                    npc = GetActor(sCommandData[0]);
+                                    npc.SpdMult = float.Parse(sCommandData[1]);
                                     bGoToNext = true;
                                     break;
-                                case EnumCSCommand.Face:
-                                    WorldActor n = GetActor(sCommandData[0]);
-                                    n.SetWalkingDir(Util.ParseEnum<DirectionEnum>(sCommandData[1]));
-                                    n.PlayAnimationVerb(VerbEnum.Idle);
+                                case CutsceneCommandEnum.Face:
+                                    npc = GetActor(sCommandData[0]);
+                                    npc.SetWalkingDir(Util.ParseEnum<DirectionEnum>(sCommandData[1]));
+                                    npc.PlayAnimationVerb(VerbEnum.Idle);
                                     bGoToNext = true;
                                     break;
-                                case EnumCSCommand.Join:
+                                case CutsceneCommandEnum.Join:
                                     {
-                                        Villager v = (Villager)GetActor(sCommandData[0]);
-                                        if (v.Combatant)
+                                        Villager v1 = (Villager)GetActor(sCommandData[0]);
+                                        if (v1.Combatant)
                                         {
-                                            PlayerManager.AddToParty(v.CombatVersion);
+                                            PlayerManager.AddToParty(v1.CombatVersion);
                                         }
-                                        v.SendToTown();
+                                        v1.SendToTown();
                                         bGoToNext = true;
                                     }
                                     break;
-                                case EnumCSCommand.Combat:
+                                case CutsceneCommandEnum.Combat:
                                     queuedMob = DataManager.CreateMob(int.Parse(sCommandData[0]));
                                     bGoToNext = true;
                                     break;
-                                case EnumCSCommand.End:
+                                case CutsceneCommandEnum.MoveToTown:
+                                    int characterID = -1;
+                                    if (!int.TryParse(sCommandData[0], out characterID))
+                                    {
+                                        //If the NPC ID could not be converted, effect the player. The string should be 'Player', but does not need to be
+                                        characterID = -1;
+                                    }
+                                    DataManager.DIVillagers[characterID].TryMoveIn();
+                                    break;
+                                case CutsceneCommandEnum.End:
                                     EndCutscene();
                                     break;
                             }
@@ -596,7 +603,7 @@ namespace RiverHollow.Game_Managers
                     foreach (string s in currentCommand.Data)   //Need to perform the action for each character
                     {
                         string[] sCommandData = s.Split('-');   //split the data into segments
-                        if (currentCommand.Command == EnumCSCommand.Task)
+                        if (currentCommand.Command == CutsceneCommandEnum.Task)
                         {
                             //MAR
                             //foreach (string questID in sCommandData)
@@ -604,15 +611,12 @@ namespace RiverHollow.Game_Managers
                             //    PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(questID)]);
                             //}
                         }
-                        else if (currentCommand.Command == EnumCSCommand.Activate)
+                        else if (currentCommand.Command == CutsceneCommandEnum.Activate)
                         {
-                            WorldActor a = _liUsedNPCs.Find(test => test.ID == GetNPCData(sCommandData[0]));
-                            if (a != null)
-                            {
-                                a.Activate(true);
-                            }
+                            WorldActor npc = _liUsedNPCs.Find(test => test.ID == GetNPCData(sCommandData[0]));
+                            npc?.Activate(true);
                         }
-                        else if (currentCommand.Command == EnumCSCommand.Join)
+                        else if (currentCommand.Command == CutsceneCommandEnum.Join)
                         {
                             Villager v = DataManager.DIVillagers[int.Parse(sCommandData[0])];
                             if (v.Combatant)
@@ -621,10 +625,22 @@ namespace RiverHollow.Game_Managers
                             }
                             v.SendToTown();
                         }
-                        else if (currentCommand.Command == EnumCSCommand.Combat)
+                        else if (currentCommand.Command == CutsceneCommandEnum.Combat)
                         {
                             queuedMob = (Mob)_liUsedNPCs.Find(x => x.ID == int.Parse(sCommandData[0]));
                         }
+                        else if (currentCommand.Command == CutsceneCommandEnum.MoveToTown)
+                        {
+                            int characterID = -1;
+                            if (!int.TryParse(sCommandData[0], out characterID))
+                            {
+                                //If the NPC ID could not be converted, effect the player. The string should be 'Player', but does not need to be
+                                characterID = -1;
+                            }
+                            DataManager.DIVillagers[characterID].TryMoveIn();
+                        }
+                                   
+                        break;
                     }
 
                     //After all command tags have been processed, set the

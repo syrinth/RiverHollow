@@ -127,7 +127,7 @@ namespace RiverHollow.Characters
 
         public override string Name()
         {
-            return DataManager.GetTextData("NPC", ID, "Name");
+            return DataManager.GetTextData(ID, "Name", DataType.NPC);
         }
 
         protected string SpriteName()

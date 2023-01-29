@@ -92,6 +92,7 @@
             this.tbItemName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
             this.dgvItems = new System.Windows.Forms.DataGridView();
+            this.colItemsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabJob = new System.Windows.Forms.TabPage();
             this.tbJobDescription = new System.Windows.Forms.TextBox();
             this.label37 = new System.Windows.Forms.Label();
@@ -197,7 +198,6 @@
             this.dgvUpgrades = new System.Windows.Forms.DataGridView();
             this.colUpgradesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbStatus = new System.Windows.Forms.TextBox();
-            this.colItemsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabAction.SuspendLayout();
@@ -301,7 +301,8 @@
             // 
             // tabCtl
             // 
-            this.tabCtl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.tabCtl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabCtl.Controls.Add(this.tabAction);
             this.tabCtl.Controls.Add(this.tabCutscene);
@@ -388,6 +389,8 @@
             // 
             // tbActionDescription
             // 
+            this.tbActionDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tbActionDescription.Location = new System.Drawing.Point(320, 51);
             this.tbActionDescription.Multiline = true;
             this.tbActionDescription.Name = "tbActionDescription";
@@ -405,6 +408,7 @@
             // 
             // label21
             // 
+            this.label21.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(714, 9);
             this.label21.Name = "label21";
@@ -414,6 +418,7 @@
             // 
             // tbActionID
             // 
+            this.tbActionID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tbActionID.Location = new System.Drawing.Point(741, 6);
             this.tbActionID.Name = "tbActionID";
             this.tbActionID.Size = new System.Drawing.Size(43, 20);
@@ -894,6 +899,15 @@
             this.dgvItems.Size = new System.Drawing.Size(308, 411);
             this.dgvItems.TabIndex = 14;
             this.dgvItems.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
+            // 
+            // colItemsName
+            // 
+            this.colItemsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colItemsName.FillWeight = 90F;
+            this.colItemsName.HeaderText = "Name";
+            this.colItemsName.Name = "colItemsName";
+            this.colItemsName.ReadOnly = true;
+            this.colItemsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tabJob
             // 
@@ -2006,21 +2020,14 @@
             // 
             // tbStatus
             // 
+            this.tbStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tbStatus.Enabled = false;
             this.tbStatus.Location = new System.Drawing.Point(12, 484);
             this.tbStatus.Name = "tbStatus";
             this.tbStatus.ReadOnly = true;
             this.tbStatus.Size = new System.Drawing.Size(794, 20);
             this.tbStatus.TabIndex = 13;
-            // 
-            // colItemsName
-            // 
-            this.colItemsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colItemsName.FillWeight = 90F;
-            this.colItemsName.HeaderText = "Name";
-            this.colItemsName.Name = "colItemsName";
-            this.colItemsName.ReadOnly = true;
-            this.colItemsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // FrmDBEditor
             // 
@@ -2032,6 +2039,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MinimumSize = new System.Drawing.Size(832, 550);
             this.Name = "FrmDBEditor";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Database Editor";

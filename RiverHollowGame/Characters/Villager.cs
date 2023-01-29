@@ -291,6 +291,7 @@ namespace RiverHollow.Characters
         {
             if (TownRequirementsMet() && HouseID != -1 && PlayerManager.TownObjectBuilt(HouseID))
             {
+                TaskManager.AdvanceTaskProgress();
                 _eSpawnStatus = SpawnStateEnum.HasHome;
             }
         }

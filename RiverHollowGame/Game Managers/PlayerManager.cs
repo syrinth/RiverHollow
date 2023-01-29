@@ -14,6 +14,7 @@ using RiverHollow.Misc;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
+using System.Linq;
 
 namespace RiverHollow.Game_Managers
 {
@@ -338,9 +339,8 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            WorldObject obj = DataManager.CreateWorldObjectByID(id);
-            ObjectTypeEnum e = obj.Type;
-            switch (obj.Type)
+            ObjectTypeEnum e = DataManager.GetEnumByIDKey<ObjectTypeEnum>(id, "Type", DataType.WorldObject);
+            switch (e)
             {
                 case ObjectTypeEnum.Building:
                     e = ObjectTypeEnum.Building;
@@ -393,6 +393,11 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Town Helpers
+
+        public static int GetPopulation()
+        {
+            return DataManager.DIVillagers.Count(x => x.Value.LivesInTown);
+        }
         public static int GetTownScore() {
             int rv = 0;
 

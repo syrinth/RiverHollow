@@ -13,11 +13,12 @@ namespace RiverHollow.Misc
 {
     public class RHTask
     {
-        public int TaskID { get; private set; }
-        public string Name => DataManager.GetTextData("Task", TaskID, "Name");
-        public string Description => DataManager.GetTextData("Task", TaskID, "Description");
-        public string StartTaskDialogue => "Task_" + TaskID + "_Start";
-        public string EndTaskDialogue => "Task_" + TaskID + "_End";
+        public int ID { get; }
+        public string StartTaskDialogue => "Task_" + ID + "_Start";
+        public string EndTaskDialogue => "Task_" + ID + "_End";
+
+        public string Name {get; private set;}
+        public string Description { get; private set; }
 
         private TaskTypeEnum _eTaskType;
         public TaskStateEnum TaskState { get; private set; } = TaskStateEnum.Waiting;
@@ -28,15 +29,15 @@ namespace RiverHollow.Misc
         private Dictionary<TaskTriggerEnum, string> _diAssignationTriggers;
         private List<KeyValuePair<int, bool>> _liTasksToTrigger;
 
-        int _iCutsceneID;
-        public int RequiredItemAmount { get; private set; }
+        private readonly int _iCutsceneID;
+        public int NeededCount { get; private set; }
         public int TargetsAccomplished { get; private set; }
 
-        private int _iBuildingEndID = -1;
+        private readonly int _iBuildingEndID = -1;
         private Monster _questMonster;
         private Item _targetItem;
         private int _iTargetObjectID = -1;
-        private int _iTargetWorldObjNum = -1;
+        private readonly int _iTargetWorldObjNum = -1;
         public bool ReadyForHandIn { get; private set; } = false;
         
 
@@ -56,9 +57,10 @@ namespace RiverHollow.Misc
         string _sSpawnMap;
         string _sLocName;
         #endregion
+
         #region Reqs
-        int _iDay;
-        int _iSeason;
+        int _iDay => DataManager.GetIntByIDKey(ID, "Day", DataType.Task);
+        int _iSeason => DataManager.GetIntByIDKey(ID, "Season", DataType.Task);
         #endregion
 
         private RHTask()
@@ -66,15 +68,13 @@ namespace RiverHollow.Misc
             _iCutsceneID = -1;
             _bFinishOnCompletion = false;
             _iActivateID = -1;
-            TaskID = -1;
-            _iSeason = -1;
-            _iDay = -1;
+            ID = -1;
             FriendTarget = string.Empty;
             StartNPC = null;
             GoalNPC = null;
             _targetItem = null;
             _questMonster = null;
-            RequiredItemAmount = -1;
+            NeededCount = -1;
             TargetsAccomplished = -1;
             ReadyForHandIn = false;
 
@@ -88,7 +88,7 @@ namespace RiverHollow.Misc
         {
             _eTaskType = type;
             GoalNPC = giver;
-            RequiredItemAmount = target;
+            NeededCount = target;
             _questMonster = m;
             _targetItem = i;
             TargetsAccomplished = 0;
@@ -97,7 +97,12 @@ namespace RiverHollow.Misc
 
         public RHTask(int id, Dictionary<string, string> stringData) : this()
         {
-            TaskID = id;
+            ID = id;
+
+            
+            Name = DataManager.GetTextData(ID, "Name", DataType.Task);
+            Description = DataManager.GetTextData(ID, "Task", DataType.Task);
+
             TargetsAccomplished = 0;
             LiRewardItems = new List<Item>();
 
@@ -111,10 +116,6 @@ namespace RiverHollow.Misc
             if (stringData.ContainsKey("GoalNPC"))
             {
                 GoalNPC = DataManager.DIVillagers[int.Parse(stringData["GoalNPC"])];
-            }
-            else
-            {
-                GoalNPC = StartNPC;
             }
 
             if (stringData.ContainsKey("AssignTrigger"))
@@ -146,9 +147,12 @@ namespace RiverHollow.Misc
 
             if (stringData.ContainsKey("GoalItem"))
             {
-                string[] info = stringData["GoalItem"].Split('-');
-                _targetItem = DataManager.GetItem(int.Parse(info[0]));
-                RequiredItemAmount = info.Length == 1 ? 1 : int.Parse(info[1]);
+                _targetItem = DataManager.GetItem(int.Parse(stringData["GoalItem"]));
+            }
+
+            if (stringData.ContainsKey("Count"))
+            {
+                NeededCount = int.Parse(stringData["Count"]);
             }
 
             if (stringData.ContainsKey("ItemRewardID"))
@@ -198,9 +202,6 @@ namespace RiverHollow.Misc
                 _iTargetObjectID = int.Parse(split[0]);
                 _iTargetWorldObjNum = split.Length == 2 ? int.Parse(split[1]) : 1;
             }
-
-            Util.AssignValue(ref _iDay, "Day", stringData);
-            Util.AssignValue(ref _iSeason, "Season", stringData);
 
             Util.AssignValue(ref _bFinishOnCompletion, "Immediate", stringData);
             Util.AssignValue(ref _iActivateID, "Activate", stringData);
@@ -262,18 +263,36 @@ namespace RiverHollow.Misc
             if (TaskState == TaskStateEnum.Talking)
             {
                 TaskState = TaskStateEnum.TaskLog;
-                foreach (Item i in InventoryManager.PlayerInventory) { if (i != null) { AttemptProgress(i); } }
-                foreach (int k in PlayerManager.GetTownObjects().Keys)
+                switch (_eTaskType)
                 {
-                    AttemptStructureBuildProgress(k);
+                    case TaskTypeEnum.Fetch:
+                        foreach (Item i in InventoryManager.PlayerInventory) { if (i != null) { AttemptProgress(i); } }
+                        break;
+                    case TaskTypeEnum.Build:
+                        foreach (int k in PlayerManager.GetTownObjects().Keys) { AttemptProgressBuild(k); }
+                        break;
+                    case TaskTypeEnum.Population:
+                        AttemptProgress();
+                        break;
                 }
-
+                
                 SpawnTaskMobs();
 
                 GUIManager.NewAlertIcon("New Task");
             }
         }
 
+        public bool TaskProgressEnterBuilding(int i)
+        {
+            bool rv = false;
+
+            if (_iBuildingEndID == i)
+            {
+                TurnInTask();
+            }
+
+            return rv;
+        }
         public bool AttemptProgress(Villager a)
         {
             bool rv = false;
@@ -309,19 +328,7 @@ namespace RiverHollow.Misc
 
             return rv;
         }
-        public bool TaskProgressEnterBuilding(int i)
-        {
-            bool rv = false;
-
-            if(_iBuildingEndID == i)
-            {
-                TurnInTask();
-            }
-
-            return rv;
-        }
-
-        public bool AttemptStructureBuildProgress(int i)
+        public bool AttemptProgressBuild(int i)
         {
             bool rv = false;
 
@@ -334,14 +341,27 @@ namespace RiverHollow.Misc
             return rv;
         }
 
+        public bool AttemptProgress()
+        {
+            bool rv = false;
+
+            if (_eTaskType == TaskTypeEnum.Population)
+            {
+                rv = true;
+                SetReadyForHandIn(PlayerManager.GetPopulation() >= NeededCount);
+            }
+
+            return rv;
+        }
+
         public void IncrementProgress(int num)
         {
-            if (TargetsAccomplished < RequiredItemAmount)
+            if (TargetsAccomplished < NeededCount)
             {
                 TargetsAccomplished += num;
-                if (TargetsAccomplished >= RequiredItemAmount)
+                if (TargetsAccomplished >= NeededCount)
                 {
-                    TargetsAccomplished = RequiredItemAmount;
+                    TargetsAccomplished = NeededCount;
                     SetReadyForHandIn(true);
                 }
             }
@@ -357,7 +377,7 @@ namespace RiverHollow.Misc
                     rv = true;
                 }
 
-                if(TargetsAccomplished < RequiredItemAmount)
+                if(TargetsAccomplished < NeededCount)
                 {
                     SetReadyForHandIn(false);
                 }
@@ -402,7 +422,7 @@ namespace RiverHollow.Misc
 
             if (_targetItem != null && _targetItem.ID > -1)
             {
-                InventoryManager.RemoveItemsFromInventory(_targetItem.ID, RequiredItemAmount);
+                InventoryManager.RemoveItemsFromInventory(_targetItem.ID, NeededCount);
             }
 
             //If a cutscene will play defer the actual End of the Task until the Cutscene ends
@@ -430,6 +450,7 @@ namespace RiverHollow.Misc
                 {
                     InventoryManager.AddToInventory(i);
                 }
+
                 PlayerManager.AddMoney(_iRewardMoney);
 
                 if (FriendTarget.Equals("Giver"))
@@ -447,7 +468,7 @@ namespace RiverHollow.Misc
                     DataManager.DIVillagers[_iActivateID].Activate(true);
                 }
 
-                if (DataManager.TaskData[TaskID].ContainsKey("SendToTown"))
+                if (DataManager.TaskData[ID].ContainsKey("SendToTown"))
                 {
                     ((Villager)GoalNPC).QueueSendToTown();
                 }
@@ -468,8 +489,7 @@ namespace RiverHollow.Misc
                     rv = "Speak to " + GoalNPC.Name();
                     if (_iBuildingEndID != -1)
                     {
-                        string name = string.Empty;
-                        name = DataManager.GetTextData("WorldObject", _iBuildingEndID, "Name");
+                        string name = DataManager.GetTextData(_iBuildingEndID, "Name", DataType.WorldObject);
                         rv += " at the " + name;
                     }
                 }
@@ -478,17 +498,20 @@ namespace RiverHollow.Misc
             {
                 switch (_eTaskType)
                 {
+                    case TaskTypeEnum.Population:
+                        rv = " Population: " + PlayerManager.GetPopulation() + "/" + NeededCount;
+                        break;
                     case TaskTypeEnum.Fetch:
-                        rv = _targetItem.Name() + " Found: " + TargetsAccomplished + "/" + RequiredItemAmount;
+                        rv = _targetItem.Name() + " Found: " + TargetsAccomplished + "/" + NeededCount;
                         break;
                     case TaskTypeEnum.GroupSlay:
-                        rv = _questMonster.Name() + " Defeated: " + TargetsAccomplished + "/" + RequiredItemAmount;
+                        rv = _questMonster.Name() + " Defeated: " + TargetsAccomplished + "/" + NeededCount;
                         break;
                     case TaskTypeEnum.Slay:
-                        rv = _questMonster.Name() + " Defeated: " + TargetsAccomplished + "/" + RequiredItemAmount;
+                        rv = _questMonster.Name() + " Defeated: " + TargetsAccomplished + "/" + NeededCount;
                         break;
                     case TaskTypeEnum.Build:
-                        string objName = DataManager.GetTextData("WorldObject", _iTargetObjectID, "Name");
+                        string objName = DataManager.GetTextData(_iTargetObjectID, "Name", DataType.WorldObject);
 
                         if (_iTargetWorldObjNum > 1) { rv = "Build " + _iTargetWorldObjNum.ToString() + objName + "s"; }
                         else { rv = "Build " + objName; }
@@ -509,9 +532,6 @@ namespace RiverHollow.Misc
 
             [XmlElement(ElementName = "TaskState")]
             public int taskState;
-
-            [XmlElement(ElementName = "TaskID")]
-            public int taskID;
 
             [XmlElement(ElementName = "RewardText")]
             public string rewardText;
@@ -555,21 +575,19 @@ namespace RiverHollow.Misc
             TaskData qData = new TaskData
             {
                 questType = (int)_eTaskType,
-                taskID = TaskID,
                 goalNPC = GoalNPC != null ? GoalNPC.ID : -1,
                 itemID = _targetItem != null ? _targetItem.ID : -1,
                 monsterID = _questMonster != null ? _questMonster.ID : -1,
                 targetWorldObjectID = _iTargetObjectID,
                 unlockBuildingID = _iUnlockObjectID,
-                targetGoal = RequiredItemAmount, 
+                targetGoal = NeededCount,
                 hiddenGoal = _bHiddenGoal,
-                accomplished = TargetsAccomplished, 
+                accomplished = TargetsAccomplished,
                 readyForHandIn = ReadyForHandIn,
-                taskState = (int)TaskState
+                taskState = (int)TaskState,
+                Items = new List<ItemData>()
             };
-
-            qData.Items = new List<ItemData>();
-            foreach(Item i in LiRewardItems)
+            foreach (Item i in LiRewardItems)
             {
                 qData.Items.Add(Item.SaveData(i));
             }
@@ -578,15 +596,26 @@ namespace RiverHollow.Misc
         }
         public void LoadData(TaskData qData)
         {
-            _eTaskType = (TaskTypeEnum)qData.questType;
-            TaskID = qData.taskID;
-            GoalNPC = qData.goalNPC != -1 ? DataManager.DIVillagers[qData.goalNPC] : null;
-            _targetItem = qData.itemID != -1 ? DataManager.GetItem(qData.itemID) : null;
-            _questMonster = qData.monsterID != -1 ? DataManager.GetLiteMonsterByIndex(qData.monsterID) : null;
-            _iTargetObjectID = qData.targetWorldObjectID;
-            _iUnlockObjectID = qData.unlockBuildingID;
-            RequiredItemAmount = qData.targetGoal;
-            _bHiddenGoal = qData.hiddenGoal;
+            if(ID == -1)
+            {
+                _eTaskType = (TaskTypeEnum)qData.questType;
+                GoalNPC = qData.goalNPC != -1 ? DataManager.DIVillagers[qData.goalNPC] : null;
+                _targetItem = qData.itemID != -1 ? DataManager.GetItem(qData.itemID) : null;
+                _questMonster = qData.monsterID != -1 ? DataManager.GetLiteMonsterByIndex(qData.monsterID) : null;
+                _iTargetObjectID = qData.targetWorldObjectID;
+                _iUnlockObjectID = qData.unlockBuildingID;
+                NeededCount = qData.targetGoal;
+                _bHiddenGoal = qData.hiddenGoal;
+                
+                foreach (ItemData i in qData.Items)
+                {
+                    Item newItem = DataManager.GetItem(i.itemID, i.num);
+
+                    if (newItem != null) { newItem.ApplyUniqueData(i.strData); }
+                    LiRewardItems.Add(newItem);
+                }
+            }
+
             TargetsAccomplished = qData.accomplished;
             ReadyForHandIn = qData.readyForHandIn;
             TaskState = (TaskStateEnum)qData.taskState;
@@ -594,14 +623,6 @@ namespace RiverHollow.Misc
             if (ReadyForHandIn && TaskState != TaskStateEnum.Completed)
             {
                 SetReadyForHandIn(true);
-            }
-
-            foreach (ItemData i in qData.Items)
-            {
-                Item newItem = DataManager.GetItem(i.itemID, i.num);
-
-                if (newItem != null) { newItem.ApplyUniqueData(i.strData); }
-                LiRewardItems.Add(newItem);
             }
         }
     }

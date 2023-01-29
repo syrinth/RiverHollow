@@ -30,7 +30,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapApothecary][Player][Actors:43-Cutscene_Entrance][Deactivate:43]</Item>
-        <Item>[Speed:Player-0.5|43-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:43][Move:43-4-Up][Face:Player-Up][Face:43-Down][Speak:43-0]</Item>
+        <Item>[Speed:Player-0.5|43-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:43][Move:43-4-Up][Face:Player-Up][Face:43-Down][Speak:43-0][MoveToTown:43]</Item>
       </Value>
     </Item>
     <Item>
@@ -38,7 +38,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapSmithy][Player][Actors:4-Cutscene_Entrance][Deactivate:4]</Item>
-        <Item>[Speed:Player-0.5|4-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:4][Move:4-4-Up][Face:Player-Up][Face:4-Down][Speak:4-0]</Item>
+        <Item>[Speed:Player-0.5|4-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:4][Move:4-4-Up][Face:Player-Up][Face:4-Down][Speak:4-0][MoveToTown:4]</Item>
       </Value>
     </Item>
     <Item>
@@ -46,7 +46,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapHouse_12][Player][Actors:12-Cutscene_Entrance][Deactivate:12]</Item>
-        <Item>[Speed:Player-0.5|12-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:12][Move:12-4-Up][Face:Player-Up][Face:12-Down][Speak:12-0]</Item>
+        <Item>[Speed:Player-0.5|12-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:12][Move:12-4-Up][Face:Player-Up][Face:12-Down][Speak:12-0][MoveToTown:12]</Item>
       </Value>
     </Item>
   </Asset>

@@ -3,11 +3,11 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Build][StartNPC:16][AssignTrigger:GameStart][TargetObjectID:112][ItemRewardID:178]</Value>
+      <Value>[Type:Build][StartNPC:16][AssignTrigger:GameStart][TargetObjectID:112][ItemRewardID:178][GoalNPC:16]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Fetch][StartNPC:43][AssignTrigger:GameStart][SendToTown][GoalItem:162-4][TriggerTask:2-Delayed]</Value>
+      <Value>[Type:Fetch][StartNPC:43][AssignTrigger:GameStart][SendToTown][GoalItem:162][Count:4][TriggerTask:2-Delayed][GoalNPC:16]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Fetch][StartNPC:4][AssignTrigger:GameStart][TargetObjectID:35][EndBuildingID:35][CutsceneID:4]</Value>
+      <Value>[Type:Build][StartNPC:4][AssignTrigger:GameStart][TargetObjectID:35][EndBuildingID:35][CutsceneID:4]</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -24,6 +24,14 @@
     <Item>
       <Key>5</Key>
       <Value>[Type:Build][StartNPC:12][AssignTrigger:Task-4][TargetObjectID:27][EndBuildingID:27]</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Type:Population][StartNPC:16][AssignTrigger:Task-0][Count:3][ItemRewardID:180][TriggerTask:7][GoalNPC:16]</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>[Type:Build][StartNPC:16][AssignTrigger:Task-6][TargetObjectID:38][EndBuildingID:38]</Value>
     </Item>
   </Asset>
 </XnaContent>

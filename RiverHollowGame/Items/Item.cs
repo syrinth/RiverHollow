@@ -136,11 +136,11 @@ namespace RiverHollow.Items
 
         public virtual string Name()
         {
-            return DataManager.GetTextData("Item", ID, "Name");
+            return DataManager.GetTextData(ID, "Name", DataType.Item);
         }
         public virtual string Description()
         {
-            return Name() + System.Environment.NewLine + DataManager.GetTextData("Item", ID, "Description");
+            return Name() + System.Environment.NewLine + DataManager.GetTextData(ID, "Description", DataType.Item);
         }
 
         public void Pop(Vector2 pos)

@@ -2,7 +2,7 @@
 {
     public static class Enums
     {
-        public enum DataType { Action, NPC, Class, Item, Light, Monster, StatusEffect, Task, WorldObject, Upgrade };
+        public enum DataType { Action, NPC, Job, Item, Light, Monster, StatusEffect, Task, WorldObject, Upgrade };
 
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, Sell, Propose, Date, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Party };
@@ -68,7 +68,7 @@
        
         public enum TaskStateEnum { Waiting, Assigned, Talking, TaskLog, Completed };
         public enum TaskTriggerEnum { GameStart, FriendLevel, Building, Task };
-        public enum TaskTypeEnum { None, GroupSlay, Slay, Fetch, Talk, Build };
+        public enum TaskTypeEnum { Build, Fetch, GroupSlay, Population, Slay, Talk };
 
         public enum VillagerRequestEnum { Close, Far, TownWide };
 

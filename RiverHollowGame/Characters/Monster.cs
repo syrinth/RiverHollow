@@ -104,7 +104,7 @@ namespace RiverHollow.Characters
 
         public override string Name()
         {
-            return DataManager.GetTextData("Monster", ID, "Name") + _sUnique;
+            return DataManager.GetTextData(ID, "Name", DataType.Monster) + _sUnique;
         }
 
         public override GUIImage GetIcon()

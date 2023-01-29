@@ -211,11 +211,11 @@ namespace RiverHollow.CombatStuff
 
         public string Name()
         {
-            return DataManager.GetTextData("Action", _iId, "Name");
+            return DataManager.GetTextData(_iId, "Name", DataType.Action);
         }
         public string Description()
         {
-            return DataManager.GetTextData("Action", _iId, "Description");
+            return DataManager.GetTextData(_iId, "Description", DataType.Action);
         }
 
         /// <summary>

@@ -26,7 +26,7 @@ namespace RiverHollow.Buildings
         public int Income { get; private set; } = 1;
         public int Level { get; private set; } = 1;
 
-        public string Description => DataManager.GetTextData("WorldObject", ID, "Description");
+        public string Description => DataManager.GetTextData(ID, "Description", DataType.WorldObject);
 
         public string BuildingMapName => "map" + DataManager.GetStringByIDKey(ID, "Texture", DataType.WorldObject);
 
@@ -306,7 +306,7 @@ namespace RiverHollow.Buildings
         {
             _iID = id;
 
-            _sDescription = DataManager.GetTextData("Building", _iID, "Description");
+            _sDescription = DataManager.GetTextData(_iID, "Description", DataType.WorldObject);
 
             Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
 
@@ -315,7 +315,7 @@ namespace RiverHollow.Buildings
 
         public string Name()
         {
-            return DataManager.GetTextData("Building", _iID, "Name");
+            return DataManager.GetTextData(_iID, "Name", DataType.WorldObject);
         }
 
         public BuildInfoData SaveData()

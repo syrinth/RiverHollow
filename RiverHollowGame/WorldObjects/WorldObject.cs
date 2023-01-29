@@ -75,7 +75,7 @@ namespace RiverHollow.WorldObjects
 
         public virtual string Name()
         {
-            return DataManager.GetTextData("WorldObject", ID, "Name");
+            return DataManager.GetTextData(ID, "Name", DataType.WorldObject);
         }
 
         protected WorldObject(int id)

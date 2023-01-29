@@ -72,13 +72,8 @@ namespace RiverHollow.Characters
 
             if(RequiredPopulation != -1)
             {
-                int livesintown = 0;
-                foreach(Villager v in DataManager.DIVillagers.Values)
-                {
-                    if (v.LivesInTown) { livesintown++; }
-                }
 
-                if(livesintown < RequiredPopulation)
+                if (PlayerManager.GetPopulation() < RequiredPopulation)
                 {
                     return false;
                 }

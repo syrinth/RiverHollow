@@ -1760,9 +1760,11 @@ namespace Database_Editor
                 if (row.Cells[0].Value != null)
                 {
                     string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                    string key = tagInfo[0];
-                    string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
-                    data.SetTagInfo(key, val);
+                    if (tagInfo.Length > 0)
+                    {
+                        string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
+                        data.SetTagInfo(tagInfo[0], val);
+                    }
                 }
             }
             data.ChangeID(int.Parse(tbID.Text), false);

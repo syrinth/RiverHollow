@@ -37,7 +37,19 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Name:Architect][Text:$Name$! I'm glad to see you. So, I've been thinking... I've just about finished with the plans I brought with me. If I'm going to design any more buildings, I'm going to need a place to work.  Could you build this for me?]</Value>
+      <Value>[Name:Task_6_Start][Text:NEED MORE PEOPLE]</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Name:Task_6_End][Text:BIG TOWN!]</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Name:Task_7_Start][Text:BUILD TOWN HALL]</Value>
+    </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>[Name:Task_7_End][Text:ITS BUILT!]</Value>
     </Item>
   </Asset>
 </XnaContent>

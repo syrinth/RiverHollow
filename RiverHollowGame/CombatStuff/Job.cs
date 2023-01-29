@@ -60,12 +60,12 @@ namespace RiverHollow.CombatStuff
 
         public string Name()
         {
-            return DataManager.GetTextData("Job", ID, "Name");
+            return DataManager.GetTextData(ID, "Name", DataType.Job);
         }
 
         public string Description()
         {
-            return DataManager.GetTextData("Job", ID, "Description");
+            return DataManager.GetTextData(ID, "Description", DataType.Job);
         }
     }
 }

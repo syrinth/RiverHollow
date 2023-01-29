@@ -26,6 +26,14 @@
       <Value>[Name:Home to Roost]</Value>
     </Item>
     <Item>
+      <Key>Task_6</Key>
+      <Value>[Name:Time to Grow]</Value>
+    </Item>
+    <Item>
+      <Key>Task_7</Key>
+      <Value>[Name:A growing settlement]</Value>
+    </Item>
+    <Item>
       <Key>NPC_0</Key>
       <Value>[Name:Amanda]</Value>
     </Item>

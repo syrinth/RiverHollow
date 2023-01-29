@@ -178,7 +178,7 @@ namespace RiverHollow.Game_Managers
 
                 PopulateHomeMapHelper(ref possibleTiles, rockID, 50);
                 PopulateHomeMapHelper(ref possibleTiles, treeID, 50);
-                PopulateHomeMapHelper(ref possibleTiles, weedID, 100);
+                PopulateHomeMapHelper(ref possibleTiles, weedID, 200);
             }
         }
 
