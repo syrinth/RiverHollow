@@ -34,6 +34,14 @@
       <Value>[Name:A growing settlement]</Value>
     </Item>
     <Item>
+      <Key>Task_8</Key>
+      <Value>[Name:Part of Their World]</Value>
+    </Item>
+    <Item>
+      <Key>Task_9</Key>
+      <Value>[Name:Shortcut to Mushrooms]</Value>
+    </Item>
+    <Item>
       <Key>NPC_0</Key>
       <Value>[Name:Amanda]</Value>
     </Item>
@@ -646,6 +654,10 @@
       <Value>[Name:Helen's Home]</Value>
     </Item>
     <Item>
+      <Key>Cutscene_6</Key>
+      <Value>[Name:]</Value>
+    </Item>
+    <Item>
       <Key>Item_0</Key>
       <Value>[Name:Stone][Description:Stone, for building things]</Value>
     </Item>
@@ -863,7 +875,7 @@
     </Item>
     <Item>
       <Key>Item_54</Key>
-      <Value>[Name:Token of Mirth][Description:A jade token from the spirits blessing the bearer with mirth]</Value>
+      <Value>[Name:Fungal Brew][Description:A special potion that promotes decomposition and fungal growth]</Value>
     </Item>
     <Item>
       <Key>Item_55</Key>
@@ -1511,7 +1523,7 @@
     </Item>
     <Item>
       <Key>WorldObject_20</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Mushroomery]</Value>
     </Item>
     <Item>
       <Key>WorldObject_21</Key>
@@ -2024,6 +2036,10 @@
     <Item>
       <Key>WorldObject_148</Key>
       <Value>[Name:Kitchen]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_149</Key>
+      <Value>[Name:Mushroom Pot]</Value>
     </Item>
   </Asset>
 </XnaContent>

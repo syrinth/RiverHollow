@@ -42,6 +42,9 @@
             this.dgvExtraTags = new System.Windows.Forms.DataGridView();
             this.colTaskTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnSave = new System.Windows.Forms.Button();
+            this.btnInsert = new System.Windows.Forms.Button();
+            this.cbDataType = new System.Windows.Forms.ComboBox();
+            this.tbID = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCharExtraData)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvExtraTags)).BeginInit();
@@ -142,7 +145,7 @@
             this.dgvExtraTags.Location = new System.Drawing.Point(329, 174);
             this.dgvExtraTags.Name = "dgvExtraTags";
             this.dgvExtraTags.RowHeadersVisible = false;
-            this.dgvExtraTags.Size = new System.Drawing.Size(459, 206);
+            this.dgvExtraTags.Size = new System.Drawing.Size(459, 235);
             this.dgvExtraTags.TabIndex = 46;
             // 
             // colTaskTags
@@ -153,7 +156,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(713, 386);
+            this.btnSave.Location = new System.Drawing.Point(713, 415);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 47;
@@ -161,11 +164,41 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // btnInsert
+            // 
+            this.btnInsert.Location = new System.Drawing.Point(511, 415);
+            this.btnInsert.Name = "btnInsert";
+            this.btnInsert.Size = new System.Drawing.Size(75, 23);
+            this.btnInsert.TabIndex = 48;
+            this.btnInsert.Text = "Insert";
+            this.btnInsert.UseVisualStyleBackColor = true;
+            this.btnInsert.Click += new System.EventHandler(this.btnInsertName_Click);
+            // 
+            // cbDataType
+            // 
+            this.cbDataType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDataType.FormattingEnabled = true;
+            this.cbDataType.Location = new System.Drawing.Point(326, 417);
+            this.cbDataType.Name = "cbDataType";
+            this.cbDataType.Size = new System.Drawing.Size(121, 21);
+            this.cbDataType.TabIndex = 49;
+            this.cbDataType.SelectedValueChanged += new System.EventHandler(this.cbDataType_SelectedValueChanged);
+            // 
+            // tbID
+            // 
+            this.tbID.Location = new System.Drawing.Point(453, 417);
+            this.tbID.Name = "tbID";
+            this.tbID.Size = new System.Drawing.Size(52, 20);
+            this.tbID.TabIndex = 50;
+            // 
             // FormCharExtraData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.tbID);
+            this.Controls.Add(this.cbDataType);
+            this.Controls.Add(this.btnInsert);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.dgvExtraTags);
             this.Controls.Add(this.label1);
@@ -199,5 +232,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharExtraName;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem addNewToolStripMenuItem;
+        private System.Windows.Forms.Button btnInsert;
+        private System.Windows.Forms.ComboBox cbDataType;
+        private System.Windows.Forms.TextBox tbID;
     }
 }

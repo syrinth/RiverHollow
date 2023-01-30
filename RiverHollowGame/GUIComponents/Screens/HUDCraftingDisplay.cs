@@ -308,20 +308,23 @@ namespace RiverHollow.GUIComponents.Screens
             _gName.ScaledMoveBy(0, 6);
             _gName.AlignToObject(_gComponents, SideEnum.CenterX);
 
-            int totalReqWidth = (_liRequiredItems.Count * _liRequiredItems[0].Width) + (_liRequiredItems.Count - 1 * ScaleIt(2));
-            int firstPosition = (_gComponents.Width / 2) - (totalReqWidth / 2);
-            for (int i = 0; i < _liRequiredItems.Count; i++)
+            if (_liRequiredItems.Count > 0)
             {
-                if (i == 0)
+                int totalReqWidth = (_liRequiredItems.Count * _liRequiredItems[0].Width) + (_liRequiredItems.Count - 1 * ScaleIt(2));
+                int firstPosition = (_gComponents.Width / 2) - (totalReqWidth / 2);
+                for (int i = 0; i < _liRequiredItems.Count; i++)
                 {
-                    _liRequiredItems[i].Position(_gComponents.Position());
-                    _liRequiredItems[i].MoveBy(firstPosition, ScaleIt(24));
+                    if (i == 0)
+                    {
+                        _liRequiredItems[i].Position(_gComponents.Position());
+                        _liRequiredItems[i].MoveBy(firstPosition, ScaleIt(24));
+                    }
+                    else
+                    {
+                        _liRequiredItems[i].AnchorAndAlignToObject(_liRequiredItems[i - 1], SideEnum.Right, SideEnum.Top, ScaleIt(2));
+                    }
+                    _gComponents.AddControl(_liRequiredItems[i]);
                 }
-                else
-                {
-                    _liRequiredItems[i].AnchorAndAlignToObject(_liRequiredItems[i - 1], SideEnum.Right, SideEnum.Top, ScaleIt(2));
-                }
-                _gComponents.AddControl(_liRequiredItems[i]);
             }
 
             _btnBuild.Enable(InventoryManager.HasSufficientItems(chosenItem.GetRequiredItems()) && !_objMachine.CapacityFull());

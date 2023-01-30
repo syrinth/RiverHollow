@@ -9,7 +9,7 @@ namespace RiverHollow.Misc
     {
         public int ID { get; private set; }
         public int Cost => DataManager.GetIntByIDKey(ID, "Cost", DataType.Upgrade);
-        public Point Icon => DataManager.PointFromLookup(ID, "Icon", DataType.Upgrade);
+        public Point Icon => DataManager.GetPointByIDKey(ID, "Icon", DataType.Upgrade);
         public Dictionary<int, int> UpgradeRequirements => DataManager.IntDictionaryFromLookup(ID, "ItemID", DataType.Upgrade);
 
         public int Profit => DataManager.GetIntByIDKey(ID, "Profit", DataType.Upgrade);

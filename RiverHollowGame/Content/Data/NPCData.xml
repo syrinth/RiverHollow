@@ -171,7 +171,7 @@
     </Item>
     <Item>
       <Key>42</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Kevin]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Kevin][StartMap:mapShroomCity][HouseID:20]</Value>
     </Item>
     <Item>
       <Key>43</Key>

@@ -201,7 +201,7 @@ namespace RiverHollow.GUIComponents.Screens
             Item purchaseItem = DataManager.GetItem(ID);
             if (purchaseItem.IsUnique())
             {
-                PlayerManager.AddToUniqueBoughtItems(ID);
+                PlayerManager.AddUniqueItemToList(ID);
                 _action();
             }
             InventoryManager.AddToInventory(purchaseItem);

@@ -248,6 +248,7 @@ namespace RiverHollow.Items
             switch (_eItemType)
             {
                 case ItemEnum.Blueprint:
+                case ItemEnum.Special:
                 case ItemEnum.NPCToken:
                 case ItemEnum.Tool:
                     rv = true;

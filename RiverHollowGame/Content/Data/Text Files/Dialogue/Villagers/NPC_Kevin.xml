@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[Name:Introduction][Text:*Gaaaaasp* A human!
+Hello! Hi! I'm $NPC_42$ and I am SO excited to meet you!]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Name:Task_8_Start][Text:Ok ok, this is so exciting! You have NO idea how much I've been wanting to meet a real life human!
+Is it true that you all live in cities made of stone? And you make htings with METAL?!
+Could you maybe give me a $Item_37$?]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Name:Task_8_End][Text:So this is what a $Item_37$ looks like? Wow, it's so shiny... and HEAVY!
+You made this in your village? Oh... that sounds so neat, could I come live with you? I promise I'll be useful!][SendToTown]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Name:Gift][Text:For me? Oh, $Name$, you shouldn't have.]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Name:Selection][Text:Oh, hello. ][Selection:VillageTalk]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Name:Task_9_Start][Text: $Town$ is so nice! I always imagined what a human village would look like but this is amazing.
+And this $WorldObject_28$ is so fancy, I've never seen beds like this before! That being said though... I kind of miss home a little bit. Do you think you could help me get a bit more comfortable?][UnlockObjectID:20]</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Name:6][Text]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

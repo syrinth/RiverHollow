@@ -154,7 +154,6 @@
     <property name="ObjectID" type="int" value="65"/>
    </properties>
   </object>
-  <object id="186" x="-61" y="-175" width="2" height="5"/>
   <object id="189" name="Resource" x="64" y="128" width="288" height="176">
    <properties>
     <property name="ItemID" value="162-C|163-R"/>

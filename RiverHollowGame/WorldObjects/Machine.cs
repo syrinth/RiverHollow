@@ -10,6 +10,7 @@ using RiverHollow.Buildings;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace RiverHollow.WorldObjects
 {
@@ -19,6 +20,9 @@ namespace RiverHollow.WorldObjects
 
         public Recipe[] CraftingSlots { get; private set; }
         public bool CraftDaily => DataManager.GetBoolByIDKey(ID, "Daily", DataType.WorldObject);
+        private bool HoldItem => DataManager.GetBoolByIDKey(ID, "HoldItem", DataType.WorldObject);
+
+        private Point ItemOffset => DataManager.GetPointByIDKey(ID, "ItemOffset", DataType.WorldObject);
 
         protected int _iWorkingFrames = 2;
         protected float _fFrameSpeed = 0.3f;
@@ -80,6 +84,16 @@ namespace RiverHollow.WorldObjects
             }
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (HoldingItem())
+            {
+                Item i = DataManager.CraftItem(CraftingSlots[0].ID);
+                i.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X - ItemOffset.X), (int)(_vMapPosition.Y - ItemOffset.Y), Constants.TILE_SIZE, Constants.TILE_SIZE), true, _sprite.LayerDepth + 1);
+            }
+            base.Draw(spriteBatch);
+        }
+
         /// <summary>
         /// Override method for Rollover. Shouldn't matter since item crafting should take no time
         /// but for future proofing we'll have this here.
@@ -90,8 +104,8 @@ namespace RiverHollow.WorldObjects
             {
                 for (int i = 0; i < Capacity; i++)
                 {
-                    CraftingSlots[i].CraftTime--;
-                    if (CraftingSlots[i].CraftTime == 0)
+                    CraftingSlots[i].CraftTime -= CraftingSlots[i].CraftTime > 0 ? 1 : 0;
+                    if (CraftingSlots[i].CraftTime == 0 && !HoldingItem())
                     {
                         if (CurrentMap.BuildingID != -1)
                         {
@@ -110,7 +124,15 @@ namespace RiverHollow.WorldObjects
 
         private bool ClickProcess()
         {
-            GUIManager.OpenMainObject(new HUDCraftingDisplay(this));
+            if (HoldingItem())
+            {
+                InventoryManager.AddToInventory(DataManager.CraftItem(CraftingSlots[0].ID));
+                CraftingSlots[0].ID = -1;
+            }
+            else
+            {
+                GUIManager.OpenMainObject(new HUDCraftingDisplay(this));
+            }
 
             return true;
         }
@@ -128,6 +150,11 @@ namespace RiverHollow.WorldObjects
             }
 
             return rv;
+        }
+
+        private bool HoldingItem()
+        {
+            return HoldItem && CraftingSlots[0].ID != -1 && CraftingSlots[0].CraftTime == 0;
         }
 
         public bool CapacityFull()
@@ -215,15 +242,18 @@ namespace RiverHollow.WorldObjects
         public override void LoadData(WorldObjectData data)
         {
             base.LoadData(data);
-            string[] strData = Util.FindParams(data.stringData);
-
-            for (int i = 0; i < strData.Length; i++)
+            if (data.stringData != null)
             {
-                if (i >= Capacity) { break; } 
+                string[] strData = Util.FindParams(data.stringData);
 
-                string[] split = Util.FindArguments(strData[i]);
-                CraftingSlots[i].ID = Util.LoadInt(split[0]);
-                CraftingSlots[i].CraftTime = int.Parse(split[1]);
+                for (int i = 0; i < strData.Length; i++)
+                {
+                    if (i >= Capacity) { break; }
+
+                    string[] split = Util.FindArguments(strData[i]);
+                    CraftingSlots[i].ID = Util.LoadInt(split[0]);
+                    CraftingSlots[i].CraftTime = int.Parse(split[1]);
+                }
             }
         }
 

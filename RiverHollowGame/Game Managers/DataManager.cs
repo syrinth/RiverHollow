@@ -430,7 +430,7 @@ namespace RiverHollow.Game_Managers
             return false;
         }
 
-        public static Point PointFromLookup(int id, string key, DataType type)
+        public static Point GetPointByIDKey(int id, string key, DataType type)
         {
             Point rv = Point.Zero;
             string value = GetStringByIDKey(id, key, type);

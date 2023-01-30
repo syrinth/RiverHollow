@@ -242,7 +242,6 @@ namespace RiverHollow.Characters
                 {
                     rv = _diDialogue["Selection"];
                 }
-
             }
 
             return rv;
@@ -649,7 +648,6 @@ namespace RiverHollow.Characters
 
             if (_iNextArrival <= 0 || !string.IsNullOrEmpty(StartMap))
             {
-                MoveToSpawn();
                 DetermineValidSchedule();
             }
 

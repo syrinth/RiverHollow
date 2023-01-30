@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="191">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="192">
  <properties>
   <property name="ItemID" value="162-C|163-R"/>
   <property name="MapType" value="Town"/>
@@ -121,6 +121,12 @@
    <properties>
     <property name="EntranceDir" value="Down"/>
     <property name="Map" value="mapDwarfCave_Small"/>
+   </properties>
+  </object>
+  <object id="191" name="Entrance" x="368" y="176" width="16" height="4">
+   <properties>
+    <property name="EntranceDir" value="Down"/>
+    <property name="Map" value="mapShroomCity"/>
    </properties>
   </object>
  </objectgroup>

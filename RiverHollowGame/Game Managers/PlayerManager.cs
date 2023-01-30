@@ -746,9 +746,14 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void AddToUniqueBoughtItems(int id)
+        public static void AddUniqueItemToList(int id)
         {
             Util.AddUniquelyToList(ref _liUniqueItemsBought, id);
+
+            foreach (Shop s in GameManager.DIShops.Values)
+            {
+                s.CheckForUniqueItems();
+            }
         }
         public static bool AlreadyBoughtUniqueItem(int id)
         {

@@ -683,6 +683,11 @@ namespace RiverHollow.Game_Managers
             //Needs to be here because the Mailbox is a worldobject
             PlayerManager.PlayerMailbox.LoadData(dataToLoad.TheMailbox);
 
+            foreach (Villager n in DataManager.DIVillagers.Values)
+            {
+                n.MoveToSpawn();
+            }
+
             foreach (VillagerData n in dataToLoad.VillagerData)
             {
                 Villager target = DataManager.DIVillagers[n.npcID];
@@ -693,7 +698,6 @@ namespace RiverHollow.Game_Managers
             {
                 Shop s = GameManager.DIShops[i];
                 s.LoadData(dataToLoad.ShopData[i]);
-
             }
 
             foreach (MerchantData n in dataToLoad.MerchantData)

@@ -552,10 +552,7 @@ namespace RiverHollow.Map_Handling
 
         public void PopulateMap(bool gameStart)
         {
-            RHRandom rand = RHRandom.Instance();
             TiledMapProperties props = _map.Properties;
-            List<int> _liMobs = new List<int>();
-            List<int> resources = new List<int>();
 
             foreach (TiledMapObject tiledObj in _liMapObjects)
             {
@@ -2282,7 +2279,7 @@ namespace RiverHollow.Map_Handling
             do
             {
                 RHTile tile = tiles[RHRandom.Instance().Next(tiles.Count)];
-                if (tile.TileIsPassable() && !TileContainsActor(tile))
+                if (tile.Passable() && !TileContainsActor(tile))
                 {
                     rv = tile.Position;
                     break;

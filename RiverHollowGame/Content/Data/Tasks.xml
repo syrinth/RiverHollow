@@ -33,5 +33,13 @@
       <Key>7</Key>
       <Value>[Type:Build][StartNPC:16][AssignTrigger:Task-6][TargetObjectID:38][EndBuildingID:38]</Value>
     </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>[Type:Fetch][StartNPC:42][AssignTrigger:GameStart][SendToTown][GoalItem:37][Count:1][TriggerTask:9-Delayed][GoalNPC:42]</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Type:Build][StartNPC:42][AssignTrigger:Task-8][TargetObjectID:20][CutsceneID:6]</Value>
+    </Item>
   </Asset>
 </XnaContent>

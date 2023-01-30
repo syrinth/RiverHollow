@@ -3,10 +3,10 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:!
+      <Value>[Name:Introduction][Text:!
 	  Come to finish the job, have ye? Alright then, Bigjob, come and get it!
 	  ...
-	  What's that? You're not a bandit? A village you say? Well now, that's convenient ain't it? Name's Ulm, and it'll be a pleasure to meet you once you do me a small favor.][Name:Introduction]</Value>
+	  What's that? You're not a bandit? A village you say? Well now, that's convenient ain't it? Name's Ulm, and it'll be a pleasure to meet you once you do me a small favor.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -30,17 +30,17 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Text: Y'see, I twisted my ankle when I was scarpering from some thugs the other day. It would be real sweet of you to find me three $Item_432$, that should patch me up for now.][Name:Task_1_Start]</Value>
+      <Value>[Name:Task_1_Start][Text: Y'see, I twisted my ankle when I was scarpering from some thugs the other day. It would be real sweet of you to find me three $Item_432$, that should patch me up for now.]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Text:Is that $Item_162$ I smell?
-	  Knew I could count on you, Bigjob. Now let me just... Ah! Much better. So I believe you said something about a town yes? I'll see you there, and we can talk business!][Name:Task_1_End]</Value>
+      <Value>[Name:Task_1_End][Text:Is that $Item_162$ I smell?
+Knew I could count on you, Bigjob. Now let me just... Ah! Much better. So I believe you said something about a town yes? I'll see you there, and we can talk business!]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Text:You call this a town? More like a sad clump of buildings if you ask me...
-	  Lucky for you, I am an expert Apothecary. You build me a nice little home to call my own, and I'll see to it that the merchants have more than enough potions and unguents to keep them coming.][Name:Task_2_Start][UnlockObjectID:18]</Value>
+      <Value>[Name:Task_2_Start][Text:You call this a town? More like a sad clump of buildings if you ask me...
+	  Lucky for you, I am an expert Apothecary. You build me a nice little home to call my own, and I'll see to it that the merchants have more than enough potions and unguents to keep them coming.][UnlockObjectID:18]</Value>
     </Item>
   </Asset>
 </XnaContent>

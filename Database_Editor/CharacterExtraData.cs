@@ -27,6 +27,18 @@ namespace Database_Editor
 
             dgvCharExtraData.Focus();
             _eDataMode = DataMode.Dialogue;
+
+            cbDataType.Items.Clear();
+            foreach (XMLTypeEnum e in Enum.GetValues(typeof(XMLTypeEnum)))
+            {
+                if (e != XMLTypeEnum.None && e != XMLTypeEnum.TextFile)
+                {
+                    cbDataType.Items.Add(e.ToString());
+                }
+            }
+            cbDataType.Items.Add("Name");
+            cbDataType.Items.Add("Town");
+            cbDataType.SelectedIndex = 0;
         }
 
         public FormCharExtraData(string value, Dictionary<string, List<string>> diNPCData)
@@ -224,6 +236,34 @@ namespace Database_Editor
             dgvExtraTags.Rows.Clear();
 
             tbCharExtraDataName.Focus();
+        }
+
+        private void btnInsertName_Click(object sender, EventArgs e)
+        {
+            int cursorPosition = tbCharExtraDataInfo.SelectionStart;
+            string value = " $" + cbDataType.SelectedItem.ToString();
+            if (cbDataType.SelectedItem.ToString().Equals("Name") || cbDataType.SelectedItem.ToString().Equals("Town"))
+            {
+                value += "$ ";
+            }
+            else
+            {
+                value += "_" + tbID.Text.ToString() + "$ ";
+            }
+
+            tbCharExtraDataInfo.Text = tbCharExtraDataInfo.Text.Insert(cursorPosition, value);
+        }
+
+        private void cbDataType_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if(cbDataType.SelectedItem.ToString().Equals("Name") || cbDataType.SelectedItem.ToString().Equals("Town"))
+            {
+                tbID.Hide();
+            }
+            else
+            {
+                tbID.Show();
+            }
         }
     }
 }

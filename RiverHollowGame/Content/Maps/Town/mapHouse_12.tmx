@@ -350,10 +350,6 @@
  <objectgroup id="9" name="MapObject"/>
  <objectgroup id="5" name="Character Layer">
   <object id="35" name="NPC_12" x="112" y="112" width="16" height="16"/>
-  <object id="37" name="Cutscene_Entrance" x="112" y="240" width="16" height="16">
-   <properties>
-    <property name="ObjectID" type="int" value="92"/>
-   </properties>
-  </object>
+  <object id="37" name="Cutscene_Entrance" x="112" y="240" width="16" height="16"/>
  </objectgroup>
 </map>

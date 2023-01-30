@@ -5,7 +5,7 @@ namespace Database_Editor.Classes
     public static class Constants
     {
         public enum EditableNPCDataEnum { Dialogue, Schedule };
-        public enum XMLTypeEnum { None, Task, NPC, Job, Building, WorldObject, Item, Monster, Action, Shop, StatusEffect, Cutscene, Light, Dungeon, Upgrade, TextFile };
+        public enum XMLTypeEnum { None, NPC, Task, Job, WorldObject, Item, Monster, Action, Shop, StatusEffect, Cutscene, Light, Dungeon, Upgrade, TextFile };
 
         public enum ComponentTypeEnum { TextBoxName, TextBoxID, TextBoxDescription, DataGrid, DataGridTags, TabIndex, ColumnId, ColumnName, ColumnTags, ComboBoxType };
 

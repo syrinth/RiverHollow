@@ -83,7 +83,7 @@
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Building][Texture:Jeweller][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:0-2|2-3]</Value>
+      <Value>[Type:Building][Texture:Mushroomery][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20|54]</Value>
     </Item>
     <Item>
       <Key>21</Key>
@@ -596,6 +596,10 @@
     <Item>
       <Key>148</Key>
       <Value>[Type:Machine][Image:0-304][Size:3-2][Base:3-1][BaseOffset:0-1][Makes:195]</Value>
+    </Item>
+    <Item>
+      <Key>149</Key>
+      <Value>[Type:Machine][Image:48-320][Size:1-1][Base:1-1][Makes:23][ItemOffset:0-11][Daily][HoldItem]</Value>
     </Item>
   </Asset>
 </XnaContent>

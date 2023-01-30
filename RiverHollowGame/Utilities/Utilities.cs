@@ -481,7 +481,7 @@ namespace RiverHollow.Utilities
             Point rv = Point.Zero;
 
             string[] splitVal = str.Split('-');
-            if (str.Length == 2)
+            if (splitVal.Length == 2)
             {
                 rv = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
             }

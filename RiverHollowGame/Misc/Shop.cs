@@ -3,6 +3,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static RiverHollow.Game_Managers.SaveManager;
@@ -76,8 +77,7 @@ namespace RiverHollow.Misc
                 PlayerManager.TakeMoney(purchaseItem.TotalBuyValue);
                 if (purchaseItem.IsUnique())
                 {
-                    PlayerManager.AddToUniqueBoughtItems(purchaseItem.ID);
-                    _liShopItemSpots.Find(x => x.MerchID == purchaseItem.ID).SetMerchandise(null);
+                    PlayerManager.AddUniqueItemToList(purchaseItem.ID);
                 }
                 InventoryManager.AddToInventory(purchaseItem);
             }
@@ -122,15 +122,28 @@ namespace RiverHollow.Misc
 
             string[] random = Util.FindParams(RandomIndices);
 
-            int totalMerch = _liMerchandise.Count;
+            List<Merchandise> copy = new List<Merchandise>(_liMerchandise.Where(x => !PlayerManager.AlreadyBoughtUniqueItem(x.MerchID)));
+
+            int totalMerch = copy.Count;
             for (int i = 0; i < _liShopItemSpots.Count && i < totalMerch; i++)
             {
                 if (randomize && !string.IsNullOrEmpty(RandomIndices) && random.Length > i)
                 {
-                    Merchandise m = _liMerchandise[int.Parse(random[i])];
+                    Merchandise m = copy[int.Parse(random[i])];
                     _liShopItemSpots[i].SetMerchandise(m);
                 }
-                else { _liShopItemSpots[i].SetMerchandise(_liMerchandise[i]); }
+                else { _liShopItemSpots[i].SetMerchandise(copy[i]); }
+            }
+        }
+
+        public void CheckForUniqueItems()
+        {
+            for (int i = 0; i < _liShopItemSpots.Count; i++)
+            {
+                if (PlayerManager.AlreadyBoughtUniqueItem(_liShopItemSpots[i].MerchID))
+                {
+                    _liShopItemSpots[i].SetMerchandise(null);
+                }
             }
         }
 
