@@ -6,6 +6,7 @@ using RiverHollow.Items;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
+using System.Windows.Input;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -29,7 +30,7 @@ namespace RiverHollow.Characters
             }
         }
 
-        public ShippingGremlin(int id, Dictionary<string, string> stringData) : base(id)
+        public ShippingGremlin(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             //_bLivesInTown = true;
             //_diRequiredObjectIDs = new Dictionary<int, int>();
@@ -39,7 +40,6 @@ namespace RiverHollow.Characters
             _iBodyWidth = 32;
             _iBodyHeight = 32;
 
-            _diDialogue = DataManager.GetNPCDialogue(stringData["Key"]);
             _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Gremlin", stringData["Key"]);
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
 

@@ -3,16 +3,14 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Misc;
-using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
-using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.TravelManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
-    public abstract class TalkingActor : WorldActor
+    public class TalkingActor : WorldActor
     {
         protected ActorFaceEnum _eFaceEnum;
         protected List<ActorFaceEnum> _liActorFaceQueue;
@@ -32,18 +30,24 @@ namespace RiverHollow.Characters
 
         protected List<string> _liSpokenKeys;
 
-        public TalkingActor(int id) : base(id)
-        {
-            _bCanTalk = true;
-            _liActorFaceQueue = new List<ActorFaceEnum>();
-            _liSpokenKeys = new List<string>();
-        }
-
         public TalkingActor() : base()
         {
             _bCanTalk = true;
             _liActorFaceQueue = new List<ActorFaceEnum>();
             _liSpokenKeys = new List<string>();
+        }
+        public TalkingActor(int id, Dictionary<string, string> stringData) : base(id, stringData)
+        {
+            ActorType = WorldActorTypeEnum.TalkingActor;
+            _bCanTalk = true;
+            _liActorFaceQueue = new List<ActorFaceEnum>();
+            _liSpokenKeys = new List<string>();
+
+            _diDialogue = DataManager.GetNPCDialogue(stringData["Key"]);
+
+            List<AnimationData> liAnimationData = Util.LoadWorldAnimations(stringData);
+            LoadSpriteAnimations(ref _sprBody, liAnimationData, SpriteName());
+            PlayAnimationVerb(VerbEnum.Idle);
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -53,13 +57,35 @@ namespace RiverHollow.Characters
             {
                 if (_iTaskGoals > 0)
                 {
-                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)Position.X, (int)Position.Y - 32, 16, 16), new Rectangle(208, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)_sprBody.Position.X, (int)_sprBody.Position.Y - Constants.TASK_ICON_OFFSET, 16, 16), new Rectangle(208, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                 }
                 if (_assignedTask?.TaskState == TaskStateEnum.Assigned)
                 {
-                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)Position.X, (int)Position.Y - 32, 16, 16), new Rectangle(224, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)_sprBody.Position.X, (int)_sprBody.Position.Y - Constants.TASK_ICON_OFFSET, 16, 16), new Rectangle(224, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                 }
             }
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+
+            if (_bBumpedIntoSomething)
+            {
+                _bBumpedIntoSomething = false;
+                ChangeState(NPCStateEnum.Idle);
+                SetMoveTo(Vector2.Zero);
+            }
+
+            if (_bFollow && !PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 8) && _eCurrentState != NPCStateEnum.TrackPlayer)
+            {
+                if (!_sprBody.IsCurrentAnimation(VerbEnum.Action1, Facing))
+                {
+                    ChangeState(NPCStateEnum.Alert);
+                }
+            }
+
+            ProcessStateEnum(gTime, true);
         }
 
         public bool AssignTask(RHTask task)

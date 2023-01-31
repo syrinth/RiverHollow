@@ -44,7 +44,7 @@ namespace RiverHollow.Characters
 
         #endregion
 
-        public Mob(int id, Dictionary<string, string> data) : base(id)
+        public Mob(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             _liSpawnConditions = new List<SpawnConditionEnum>();
             ActorType = WorldActorTypeEnum.Mob;
@@ -60,7 +60,7 @@ namespace RiverHollow.Characters
             NewFoV();
 
             _fBaseSpeed = 1;
-            string[] monsterPool = Util.FindParams(data["MonsterID"]);
+            string[] monsterPool = Util.FindParams(stringData["MonsterID"]);
             int index = RHRandom.Instance().Next(0, monsterPool.Length - 1);
 
             string[] split = monsterPool[index].Split('-');
@@ -90,7 +90,7 @@ namespace RiverHollow.Characters
                 }
             }
 
-            LoadSpriteAnimations(ref _sprBody, Util.LoadWorldAnimations(data), DataManager.FOLDER_MOBS + data["Texture"]);
+            LoadSpriteAnimations(ref _sprBody, Util.LoadWorldAnimations(stringData), DataManager.FOLDER_MOBS + stringData["Texture"]);
         }
 
         public void NewFoV()

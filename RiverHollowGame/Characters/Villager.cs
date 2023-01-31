@@ -68,7 +68,7 @@ namespace RiverHollow.Characters
 
         public int Income { get; private set; }
 
-        public Villager(int index, Dictionary<string, string> stringData, bool loadanimations = true) : base(index, stringData, loadanimations)
+        public Villager(int index, Dictionary<string, string> stringData) : base(index, stringData)
         {
             ActorType = WorldActorTypeEnum.Villager;
             _liHousingRequests = new List<Request>();

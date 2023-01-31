@@ -27,7 +27,7 @@ namespace RiverHollow.Characters
         public int _iShopID = -1;
         public int ShopID => _iShopID;
 
-        public Merchant(int index, Dictionary<string, string> stringData, bool loadanimations = true) : base(index, stringData, loadanimations)
+        public Merchant(int index, Dictionary<string, string> stringData) : base(index, stringData)
         {
             ActorType = WorldActorTypeEnum.Merchant;
 

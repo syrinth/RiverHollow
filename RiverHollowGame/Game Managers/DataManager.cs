@@ -697,6 +697,8 @@ namespace RiverHollow.Game_Managers
                         return new ShippingGremlin(id, diData);
                     case WorldActorTypeEnum.Spirit:
                         return new Spirit(diData);
+                    case WorldActorTypeEnum.TalkingActor:
+                        return new TalkingActor(id, diData);
                 }
             }
             return null;

@@ -123,7 +123,7 @@
     </Item>
     <Item>
       <Key>30</Key>
-      <Value>[Type:Pet][Key:Pet_Slime][Idle:0-32-3-0.3-T][Walk:0-0-3-0.3-T][Action1:0-64-3-0.5-T][ObjectID:4]</Value>
+      <Value>[Type:Pet][Key:Pet_Slime][Idle:0-32-3-0.3-T][Walk:0-0-3-0.3-T][Alert:0-64-3-0.5-T][ObjectID:4]</Value>
     </Item>
     <Item>
       <Key>31</Key>
@@ -175,11 +175,19 @@
     </Item>
     <Item>
       <Key>43</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][StartMap:mapGrove][HouseID:18]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][StartMap:mapGrove][HouseID:18][Size:16-24]</Value>
     </Item>
     <Item>
       <Key>44</Key>
       <Value>[Type:Animal][Key:Chicken][Idle:0-0-1-0-T][Walk:64-0-3-.5-F][Size:16-16][ItemID:150][ObjectID:27]</Value>
+    </Item>
+    <Item>
+      <Key>45</Key>
+      <Value>[Type:TalkingActor][Key:Traveller1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Wander]</Value>
+    </Item>
+    <Item>
+      <Key>46</Key>
+      <Value>[Type:TalkingActor][Key:Traveller2][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Wander]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Building][Texture:House_12][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20]</Value>
+      <Value>[Type:Building][Texture:House_12][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20][LightID:3-30-86|3-80-86]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -83,7 +83,7 @@
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Building][Texture:Mushroomery][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20|54]</Value>
+      <Value>[Type:Building][Texture:Mushroomery][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20|54][LightID:3-30-86|3-80-86]</Value>
     </Item>
     <Item>
       <Key>21</Key>
@@ -111,7 +111,7 @@
     </Item>
     <Item>
       <Key>27</Key>
-      <Value>[Type:Building][Texture:Coop][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20][MaxAnimals:5]</Value>
+      <Value>[Type:Building][Texture:Coop][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20][MaxAnimals:5][LightID:3-30-86|3-80-86]</Value>
     </Item>
     <Item>
       <Key>28</Key>
@@ -143,7 +143,7 @@
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Type:Building][Texture:Smithy][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20|188][Subtype:Ore]</Value>
+      <Value>[Type:Building][Texture:Smithy][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20|188][LightID:3-30-86|3-80-86][Subtype:Ore]</Value>
     </Item>
     <Item>
       <Key>36</Key>

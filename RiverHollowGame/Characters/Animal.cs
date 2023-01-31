@@ -15,35 +15,17 @@ namespace RiverHollow.Characters
 
         public int HouseID => DataManager.GetIntByIDKey(ID, "ObjectID", DataType.NPC);
 
-        public Animal(int id, Dictionary<string, string> stringData) : base(id)
+        public Animal(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             _fBaseSpeed = Constants.NPC_WALK_SPEED;
             ActorType = WorldActorTypeEnum.Animal;
             _bCanWander = true;
             SlowDontBlock = true;
 
-            RHSize size = DataManager.GetSizeByIDKey(ID, "Size", DataType.NPC);
-            _iBodyWidth = size.Width;
-            _iBodyHeight = size.Height;
-
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
             LoadSpriteAnimations(ref _sprBody, liData, SpriteName());
-        }
-
-        public override void Update(GameTime gTime)
-        {
-            base.Update(gTime);
-
-            if (_bBumpedIntoSomething)
-            {
-                _bBumpedIntoSomething = false;
-                ChangeState(NPCStateEnum.Idle);
-                SetMoveTo(Vector2.Zero);
-            }
-
-            ProcessStateEnum(gTime, true);
         }
 
         public override void RollOver()

@@ -67,8 +67,6 @@ namespace RiverHollow.Characters
         public PlayerCharacter() : base()
         {
             //_sName = PlayerManager.Name;
-            _iBodyWidth = Constants.TILE_SIZE;
-            _iBodyHeight = Constants.HUMAN_HEIGHT;
 
             HairColor = Color.Red;
             EyeColor = Color.Blue;

@@ -222,6 +222,14 @@
       <Value>[Name:Chicken]</Value>
     </Item>
     <Item>
+      <Key>NPC_45</Key>
+      <Value>[Name:Human Traveller]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_46</Key>
+      <Value>[Name:Human Traveller2]</Value>
+    </Item>
+    <Item>
       <Key>Job_0</Key>
       <Value>[Name:Wizard][Description:Practitioners of the arcane arts, wizards excel at  handling a multitude of foes.]</Value>
     </Item>

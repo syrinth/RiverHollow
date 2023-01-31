@@ -25,7 +25,7 @@ namespace RiverHollow.Characters
 
         private double _dCountdown = 0;
 
-        public Child(int id, Dictionary<string, string> stringData) : base(id)
+        public Child(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             ActorType = WorldActorTypeEnum.Child;
             _bCanWander = true;
@@ -42,27 +42,27 @@ namespace RiverHollow.Characters
             LoadSpriteAnimations(ref _sprBody, _liData, SpriteName() + "_" + (int)_eCurrentStage);
         }
 
-        public override void Update(GameTime gTime)
-        {
-            base.Update(gTime);
+        //public override void Update(GameTime gTime)
+        //{
+        //    base.Update(gTime);
 
-            if (_bBumpedIntoSomething)
-            {
-                _bBumpedIntoSomething = false;
-                ChangeState(NPCStateEnum.Idle);
-                SetMoveTo(Vector2.Zero);
-            }
+        //    if (_bBumpedIntoSomething)
+        //    {
+        //        _bBumpedIntoSomething = false;
+        //        ChangeState(NPCStateEnum.Idle);
+        //        SetMoveTo(Vector2.Zero);
+        //    }
 
-            if (_bFollow && !PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 8) && _eCurrentState != NPCStateEnum.TrackPlayer)
-            {
-                if (!_sprBody.IsCurrentAnimation(VerbEnum.Alert, Facing))
-                {
-                    ChangeState(NPCStateEnum.Alert);
-                }
-            }
+        //    if (_bFollow && !PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 8) && _eCurrentState != NPCStateEnum.TrackPlayer)
+        //    {
+        //        if (!_sprBody.IsCurrentAnimation(VerbEnum.Alert, Facing))
+        //        {
+        //            ChangeState(NPCStateEnum.Alert);
+        //        }
+        //    }
 
-            ProcessStateEnum(gTime, true);
-        }
+        //    ProcessStateEnum(gTime, true);
+        //}
 
         public void Rollover()
         {

@@ -51,6 +51,8 @@
         public const int MERCHANT_REQUEST_NUM = 3;
         public const int MAX_RECIPE_DISPLAY = 5;
 
+        public const int TASK_ICON_OFFSET = 15;
+
         public const string STRING_NULL = "null";
     }
 }

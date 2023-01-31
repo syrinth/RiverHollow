@@ -33,7 +33,7 @@ namespace RiverHollow.Characters
             Util.AssignValue(ref _sCondition, "Condition", stringData);
             Util.AssignValue(ref _sAwakenTrigger, "AwakenTrigger", stringData);
 
-            //_sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Spirit", stringData["Key"]);
+            //_sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Spirit", _sKey);
 
             _bOnTheMap = false;
 

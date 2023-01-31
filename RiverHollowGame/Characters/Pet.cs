@@ -13,7 +13,7 @@ namespace RiverHollow.Characters
     {
         private int GatherZoneID => DataManager.GetIntByIDKey(ID, "ObjectID", DataType.NPC);
 
-        public Pet(int id, Dictionary<string, string> stringData) : base(id)
+        public Pet(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             _fBaseSpeed = 1;
             ActorType = WorldActorTypeEnum.Pet;
@@ -25,30 +25,8 @@ namespace RiverHollow.Characters
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
-            Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Action1);
+            Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Alert);
             LoadSpriteAnimations(ref _sprBody, liData, SpriteName());
-        }
-
-        public override void Update(GameTime gTime)
-        {
-            base.Update(gTime);
-
-            if (_bBumpedIntoSomething)
-            {
-                _bBumpedIntoSomething = false;
-                ChangeState(NPCStateEnum.Idle);
-                SetMoveTo(Vector2.Zero);
-            }
-
-            if (_bFollow && !PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 8) && _eCurrentState != NPCStateEnum.TrackPlayer)
-            {
-                if (!_sprBody.IsCurrentAnimation(VerbEnum.Action1, Facing))
-                {
-                    ChangeState(NPCStateEnum.Alert);
-                }
-            }
-
-            ProcessStateEnum(gTime, true);
         }
 
         public override void ProcessRightButtonClick()

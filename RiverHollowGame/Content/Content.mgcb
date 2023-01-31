@@ -344,6 +344,16 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Sammy.xml
 
+#begin Data/Text Files/Dialogue/Villagers/NPC_Traveller1.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_Traveller1.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_Traveller2.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_Traveller2.xml
+
 #begin Data/Text Files/Dialogue/Villagers/NPC_Ulm.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -2161,6 +2171,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Sybil.png
+
+#begin Textures/Actors/NPCs/Traveller1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/Traveller1.png
+
+#begin Textures/Actors/NPCs/Traveller2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/Traveller2.png
 
 #begin Textures/Actors/NPCs/Ulm.png
 /importer:TextureImporter

@@ -21,10 +21,9 @@ namespace RiverHollow.Characters
         public bool Introduced => RelationshipState != RelationShipStatusEnum.None;
         protected bool _bArrivedOnce = false;
 
-        public TravellingNPC(int index, Dictionary<string, string> stringData, bool loadanimations = true) : base(index)
+        public TravellingNPC(int index, Dictionary<string, string> stringData) : base(index, stringData)
         {
             _diRequiredObjectIDs = new Dictionary<int, int>();
-            _diDialogue = DataManager.GetNPCDialogue(stringData["Key"]);
 
             _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Villager", stringData["Key"]);
 
@@ -36,14 +35,6 @@ namespace RiverHollow.Characters
                     string[] split = i.Split('-');
                     _diRequiredObjectIDs[int.Parse(split[0])] = int.Parse(split[1]);
                 }
-            }
-
-            if (loadanimations)
-            {
-                List<AnimationData> liAnimationData = Util.LoadWorldAnimations(stringData);
-
-                LoadSpriteAnimations(ref _sprBody, liAnimationData, SpriteName());
-                PlayAnimationVerb(VerbEnum.Idle);
             }
 
             _bOnTheMap = !stringData.ContainsKey("Inactive");

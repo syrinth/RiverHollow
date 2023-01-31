@@ -91,7 +91,8 @@ namespace RiverHollow.Game_Managers
 
         #region Data Collections
         private static Dictionary<int, List<WorldObject>> _diTownObjects;
-        public static List<WorldActor> TownAnimals { get; set; }
+        public static List<Animal> TownAnimals { get; set; }
+        public static List<TalkingActor> Visitors { get; set; }
         #endregion
 
         public static void Initialize()
@@ -111,7 +112,8 @@ namespace RiverHollow.Game_Managers
 
             _diStorage = new Dictionary<int, int>();
             _diTownObjects = new Dictionary<int, List<WorldObject>>();
-            TownAnimals = new List<WorldActor>();
+            TownAnimals = new List<Animal>();
+            Visitors = new List<TalkingActor>();
             _liUniqueItemsBought = new List<int>();
             _diTools = new Dictionary<ToolEnum, Tool>();
 
@@ -439,6 +441,14 @@ namespace RiverHollow.Game_Managers
             npc.MoveToSpawn();
         }
 
+        public static void AddVisitor(int id)
+        {
+            TalkingActor npc = (TalkingActor)DataManager.CreateNPCByIndex(id);
+            Visitors.Add(npc);
+            npc.Position = MapManager.TownMap.GetRandomPosition();
+            MapManager.TownMap.AddActor(npc);
+        }
+
         public static void AddToTownObjects(WorldObject obj)
         {
             bool buildable = false;
@@ -723,9 +733,25 @@ namespace RiverHollow.Game_Managers
 
             foreach(Child c in Children) { c.Rollover(); }
 
+            HandleVisitors();
+
             PlayerMailbox.Rollover();
 
             MoveToSpawn();
+        }
+
+        private static void HandleVisitors()
+        {
+            for (int i = 0; i < Visitors.Count; i++)
+            {
+                MapManager.TownMap.RemoveCharacterImmediately(Visitors[i]);
+            }
+            Visitors.Clear();
+
+            if (RHRandom.Instance().RollPercent(30))
+            {
+                AddVisitor(RHRandom.Instance().Next(45, 46));
+            }
         }
 
         public static void GetStamina(ref double curr, ref double max)
@@ -782,6 +808,7 @@ namespace RiverHollow.Game_Managers
                 MountList = new List<int>(),
                 ChildList = new List<ChildData>(),
                 TownAnimals = new List<int>(),
+                Visitors = new List<int>(),
                 CraftingList = new List<int>()
             };
 
@@ -818,9 +845,14 @@ namespace RiverHollow.Game_Managers
                 data.ChildList.Add(c.SaveData());
             }
 
-            foreach (WorldActor m in TownAnimals)
+            foreach (WorldActor npc in TownAnimals)
             {
-                data.TownAnimals.Add(m.ID);
+                data.TownAnimals.Add(npc.ID);
+            }
+
+            foreach (WorldActor npc in Visitors)
+            {
+                data.Visitors.Add(npc.ID);
             }
 
             foreach (List<int> craftList in _diCrafting.Values)
@@ -907,6 +939,11 @@ namespace RiverHollow.Game_Managers
             {
                 Animal m = DataManager.CreateAnimal(id);
                 AddAnimal(m);
+            }
+
+            foreach (int id in saveData.Visitors)
+            {
+                AddVisitor(id);
             }
 
             foreach (int i in saveData.CraftingList)

@@ -167,6 +167,9 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "TownAnimals")]
             public List<int> TownAnimals;
 
+            [XmlArray(ElementName = "Visitors")]
+            public List<int> Visitors;
+
             [XmlElement(ElementName = "AdventurerData")]
             public ClassedCharData adventurerData;
 

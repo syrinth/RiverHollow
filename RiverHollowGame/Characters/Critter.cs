@@ -12,7 +12,7 @@ namespace RiverHollow.Characters
         private bool _bFlee = false;
         private RHTimer _animationTimer;
 
-        public Critter(int id, Dictionary<string, string> stringData) : base(id)
+        public Critter(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             ActorType = WorldActorTypeEnum.Critter;
             IgnoreCollisions = true;

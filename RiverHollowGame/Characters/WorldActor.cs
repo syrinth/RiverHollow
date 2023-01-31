@@ -93,15 +93,23 @@ namespace RiverHollow.Characters
             _liTilePath = new List<RHTile>();
         }
 
-        public WorldActor(int id) : base()
+        public WorldActor(int id, Dictionary<string, string> stringData) : base()
         {
             ID = id;
 
-            _iBodyWidth = Constants.TILE_SIZE;
-            _iBodyHeight = Constants.HUMAN_HEIGHT;
-
             _liTilePath = new List<RHTile>();
             _movementTimer = new RHTimer(Constants.WANDER_COUNTDOWN);
+
+            if (stringData.ContainsKey("Size"))
+            {
+                RHSize size = new RHSize();
+                Util.AssignValue(ref size, "Size", stringData);
+
+                _iBodyWidth = size.Width;
+                _iBodyHeight = size.Height;
+            }
+
+            Util.AssignValue(ref _bCanWander, "Wander", stringData);
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -426,23 +434,26 @@ namespace RiverHollow.Characters
 
         protected void ProcessStateEnum(GameTime gTime, bool getInRange)
         {
-            switch (_eCurrentState)
+            if (_bCanWander)
             {
-                case NPCStateEnum.Alert:
-                    Alert();
-                    break;
-                case NPCStateEnum.Idle:
-                    Idle(gTime);
-                    break;
-                case NPCStateEnum.Wander:
-                    Wander(gTime);
-                    break;
-                case NPCStateEnum.TrackPlayer:
-                    TrackPlayer(getInRange);
-                    break;
-                case NPCStateEnum.Leashing:
-                    TravelManager.RequestPathing(this);
-                    break;
+                switch (_eCurrentState)
+                {
+                    case NPCStateEnum.Alert:
+                        Alert();
+                        break;
+                    case NPCStateEnum.Idle:
+                        Idle(gTime);
+                        break;
+                    case NPCStateEnum.Wander:
+                        Wander(gTime);
+                        break;
+                    case NPCStateEnum.TrackPlayer:
+                        TrackPlayer(getInRange);
+                        break;
+                    case NPCStateEnum.Leashing:
+                        TravelManager.RequestPathing(this);
+                        break;
+                }
             }
         }
 
