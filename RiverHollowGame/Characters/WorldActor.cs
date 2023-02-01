@@ -63,7 +63,7 @@ namespace RiverHollow.Characters
         public virtual Vector2 CollisionBoxPosition => Position;
         public virtual Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, Constants.TILE_SIZE);
         public Point CollisionCenter => CollisionBox.Center;
-        public virtual Rectangle HoverBox => new Rectangle((int)Position.X, (int)Position.Y - Constants.TILE_SIZE, Width, Height);
+        public virtual Rectangle HoverBox => new Rectangle((int)_sprBody.Position.X, (int)_sprBody.Position.Y, _sprBody.Width, _sprBody.Height);
 
         protected bool _bOnTheMap = true;
         public virtual bool OnTheMap => _bOnTheMap;
