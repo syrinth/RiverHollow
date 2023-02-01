@@ -203,7 +203,6 @@ namespace RiverHollow.Characters
                     goto default;
                 default:
                     ClearPath();
-                    MoveToSpawn();
                     break;
             }
 

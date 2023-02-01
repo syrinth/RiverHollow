@@ -40,18 +40,12 @@ namespace RiverHollow.WorldObjects
 
         public bool Gather()
         {
-            bool rv = false;
+            CurrentMap.AlertSpawnPoint(this);
+            InventoryManager.AddToInventory(DataManager.GetItem(_iItemID));
+            MapManager.RemoveWorldObject(this);
+            RemoveSelfFromTiles();
 
-            if (PlayerManager.DecreaseStamina(Constants.ACTION_COST / 2))
-            {
-                rv = true;
-                CurrentMap.AlertSpawnPoint(this);
-                InventoryManager.AddToInventory(DataManager.GetItem(_iItemID));
-                MapManager.RemoveWorldObject(this);
-                RemoveSelfFromTiles();
-            }
-
-            return rv;
+            return true;
         }
 
         public override bool CanPickUp()
