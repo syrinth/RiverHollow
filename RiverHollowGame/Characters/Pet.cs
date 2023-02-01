@@ -38,7 +38,7 @@ namespace RiverHollow.Characters
 
         public void SpawnInHome()
         {
-            WorldObject obj = Util.GetRandomItem(PlayerManager.GetTownObjectsByID(GatherZoneID));
+            WorldObject obj = Util.GetRandomItem(TownManager.GetTownObjectsByID(GatherZoneID));
             if (obj == null)
             {
                 if (CurrentMap == null) { MapManager.TownMap.AddCharacterImmediately(this); }

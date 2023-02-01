@@ -161,7 +161,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 PlayerManager.TakeMoney(Cost);
                 if (ShopItem != null) { PurchaseItem(ShopItem.ID); }
-                if (WorldObject != null) { PlayerManager.AddToStorage(WorldObject.ID); }
+                if (WorldObject != null) { TownManager.AddToStorage(WorldObject.ID); }
                 if (Actor != null)
                 {
                     //if (Actor.IsActorType(WorldActorTypeEnum.Mount))

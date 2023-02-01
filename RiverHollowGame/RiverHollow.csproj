@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="Characters\Animal.cs" />
     <Compile Include="Game Managers\ErrorManager.cs" />
+    <Compile Include="Game Managers\TownManager.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDMerchantWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDMiniInventory.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDUpgrade.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Items\IceStaff.cs" />
     <Compile Include="Items\Seed.cs" />
     <Compile Include="Items\Special.cs" />
+    <Compile Include="Misc\EnvironmentalEffect.cs" />
     <Compile Include="Misc\Upgrade.cs" />
     <Compile Include="WorldObjects\Building.cs" />
     <Compile Include="Map Handling\Dungeon.cs" />

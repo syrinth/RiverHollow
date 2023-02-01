@@ -73,6 +73,7 @@ namespace RiverHollow
             _effectLights = Content.Load<Effect>(@"Effects\lighteffect");
 
             PlayerManager.Initialize();
+            TownManager.Initialize();
             InventoryManager.InitPlayerInventory();
 
             //Done here for the WorldObjects that need to be unlocked
@@ -321,7 +322,7 @@ namespace RiverHollow
             SoundManager.PlayBackgroundMusic();
 
             //Places NPCs on the map
-            foreach (Villager v in DataManager.DIVillagers.Values)
+            foreach (Villager v in TownManager.DIVillagers.Values)
             {
                 v.VillagerMapHandling();
             }
@@ -334,25 +335,9 @@ namespace RiverHollow
         /// </summary>
         public static void Rollover()
         {
-            GameManager.RollOver();
             TaskManager.Rollover();
             PlayerManager.Rollover();
-
-            foreach (Villager v in DataManager.DIVillagers.Values)
-            {
-                v.RollOver();
-            }
-            foreach (Merchant m in DataManager.DIMerchants.Values) {
-                if (PlayerManager.GetNumberTownObjects(int.Parse(DataManager.Config[15]["ObjectID"])) > 0)
-                {
-                    m.RollOver();
-                }
-            }
-            foreach(WorldActor npc in PlayerManager.TownAnimals)
-            {
-                npc.RollOver();
-            }
-
+            TownManager.Rollover();
             MapManager.Rollover();
             DungeonManager.ResetDungeons();
         }

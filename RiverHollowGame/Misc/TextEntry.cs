@@ -185,7 +185,7 @@ namespace RiverHollow.Misc
                     }
                     else if (args.Length == 3)
                     {
-                        if (int.TryParse(args[1], out int NPCID) && int.TryParse(args[2], out int tempLevel) && DataManager.DIVillagers[NPCID].GetFriendshipLevel() > tempLevel) { rv = true; }
+                        if (int.TryParse(args[1], out int NPCID) && int.TryParse(args[2], out int tempLevel) && TownManager.DIVillagers[NPCID].GetFriendshipLevel() > tempLevel) { rv = true; }
                         else { return false; }
                     }
                 }
@@ -193,7 +193,7 @@ namespace RiverHollow.Misc
                 {
                     foreach (string i in _diTags["RequiredObjectID"].Split('-'))
                     {
-                        if (!PlayerManager.TownObjectBuilt(int.Parse(i))) { return false; }
+                        if (!TownManager.TownObjectBuilt(int.Parse(i))) { return false; }
                     }
 
                     rv = true;
@@ -202,7 +202,7 @@ namespace RiverHollow.Misc
                 {
                     foreach (string i in _diTags["Villager"].Split('-'))
                     {
-                        if (!DataManager.DIVillagers[int.Parse(i)].LivesInTown) { return false; }
+                        if (!TownManager.DIVillagers[int.Parse(i)].LivesInTown) { return false; }
                     }
 
                     rv = true;

@@ -164,7 +164,7 @@ namespace RiverHollow.Utilities
                 {
                     string value = specialSections[i];
                     if (value == "Name") { value = PlayerManager.Name; }
-                    else if (value == "Town") { value = PlayerManager.TownName; }
+                    else if (value == "Town") { value = TownManager.TownName; }
                     else if (DataManager.TextDataHasKey(value))
                     {
                         value = DataManager.GetTextData(value, "Name");

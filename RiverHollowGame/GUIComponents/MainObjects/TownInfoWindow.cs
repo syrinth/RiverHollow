@@ -11,11 +11,11 @@ namespace RiverHollow.GUIComponents.MainObjects
         public TownInfoWindow()
         {
             _winMain = SetMainWindow();
-            GUIText text = new GUIText("Town Score: " + PlayerManager.GetTownScore());
+            GUIText text = new GUIText("Town Score: " + TownManager.GetTownScore());
             text.AnchorToInnerSide(_winMain, SideEnum.Top);
 
             int plants = 0;
-            foreach (KeyValuePair<int, List<WorldObject>> kvp in PlayerManager.GetTownObjects())
+            foreach (KeyValuePair<int, List<WorldObject>> kvp in TownManager.GetTownObjects())
             {
                 switch (kvp.Value[0].Type)
                 {

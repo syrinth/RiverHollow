@@ -50,7 +50,7 @@ namespace RiverHollow.WorldObjects
 
         public bool CanBuild()
         {
-            if (Unique && PlayerManager.GetNumberTownObjects(ID) != 0)
+            if (Unique && TownManager.GetNumberTownObjects(ID) != 0)
             {
                 return false;
             }

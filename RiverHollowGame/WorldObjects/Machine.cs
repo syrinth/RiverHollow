@@ -109,7 +109,7 @@ namespace RiverHollow.WorldObjects
                     {
                         if (CurrentMap.BuildingID != -1)
                         {
-                            Building b = PlayerManager.GetBuildingByID(CurrentMap.BuildingID);
+                            Building b = TownManager.GetBuildingByID(CurrentMap.BuildingID);
                             b.AddToStock(DataManager.CraftItem(CraftingSlots[i].ID));
                         }
 
@@ -214,18 +214,6 @@ namespace RiverHollow.WorldObjects
             {
                 SoundManager.PlayEffect(_sEffectWorking);
             }
-        }
-
-        public override bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
-        {
-            bool rv = false;
-            if (base.PlaceOnMap(pos, map))
-            {
-                rv = true;
-                GameManager.AddMachine(this, Name());
-            }
-
-            return rv;
         }
 
         public override WorldObjectData SaveData()

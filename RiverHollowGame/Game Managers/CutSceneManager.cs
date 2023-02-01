@@ -334,7 +334,7 @@ namespace RiverHollow.Game_Managers
                                         //If the NPC ID could not be converted, effect the player. The string should be 'Player', but does not need to be
                                         characterID = -1;
                                     }
-                                    DataManager.DIVillagers[characterID].TryMoveIn();
+                                    TownManager.DIVillagers[characterID].TryMoveIn();
                                     break;
                                 case CutsceneCommandEnum.End:
                                     EndCutscene();
@@ -497,7 +497,7 @@ namespace RiverHollow.Game_Managers
                     {
                         string[] friendData = f.Split('-');
                         WorldActor act = null;
-                        if (DataManager.DIVillagers.ContainsKey(int.Parse(friendData[0]))) {
+                        if (TownManager.DIVillagers.ContainsKey(int.Parse(friendData[0]))) {
                             int npcID = int.Parse(friendData[0]);
                             act = new Villager(npcID, DataManager.NPCData[npcID]);
                         }
@@ -583,7 +583,7 @@ namespace RiverHollow.Game_Managers
             bool rv = false;
             foreach (KeyValuePair<int, int> kvp in _liReqFriendship)
             {
-                if (DataManager.DIVillagers[kvp.Key].FriendshipPoints < kvp.Value) { goto friendshipExit; }
+                if (TownManager.DIVillagers[kvp.Key].FriendshipPoints < kvp.Value) { goto friendshipExit; }
             }
 
             rv = true;
@@ -618,7 +618,7 @@ namespace RiverHollow.Game_Managers
                         }
                         else if (currentCommand.Command == CutsceneCommandEnum.Join)
                         {
-                            Villager v = DataManager.DIVillagers[int.Parse(sCommandData[0])];
+                            Villager v = TownManager.DIVillagers[int.Parse(sCommandData[0])];
                             if (v.Combatant)
                             {
                                 PlayerManager.AddToParty(v.CombatVersion);
@@ -637,7 +637,7 @@ namespace RiverHollow.Game_Managers
                                 //If the NPC ID could not be converted, effect the player. The string should be 'Player', but does not need to be
                                 characterID = -1;
                             }
-                            DataManager.DIVillagers[characterID].TryMoveIn();
+                            TownManager.DIVillagers[characterID].TryMoveIn();
                         }
                                    
                         break;

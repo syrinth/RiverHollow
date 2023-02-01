@@ -37,7 +37,7 @@ namespace RiverHollow.GUIComponents.Screens
             _eCurrentMenu = MenuEnum.BuildMenu;
             Scry(true);
             storageButton = new GUIButton("Storage", BtnStorage);
-            storageButton.Enable(PlayerManager.GetStorageItems().Count > 0);
+            storageButton.Enable(TownManager.GetStorageItems().Count > 0);
 
             _liBuildMenuObjects = new List<GUIObject>();
             if (MapManager.CurrentMap.IsOutside && MapManager.CurrentMap.IsTown) {
@@ -258,7 +258,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 case MenuEnum.BuildMenu:
                     AddControls(_liBuildMenuObjects);
-                    storageButton.Enable(PlayerManager.GetStorageItems().Count > 0);
+                    storageButton.Enable(TownManager.GetStorageItems().Count > 0);
                     for (int i = 0; i < _liBuildMenuObjects.Count; i++)
                     {
                         _liBuildMenuObjects[i].Show(true);
@@ -315,7 +315,7 @@ namespace RiverHollow.GUIComponents.Screens
                         GenerateConstructBoxes(PlayerManager.GetCraftingList(ObjectTypeEnum.Structure));
                         break;
                     case BuildTypeEnum.Storage:
-                        GenerateConstructBoxes(PlayerManager.GetStorageItems());
+                        GenerateConstructBoxes(TownManager.GetStorageItems());
                         break;
                     case BuildTypeEnum.Building:
                         GenerateConstructBoxes(PlayerManager.GetCraftingList(ObjectTypeEnum.Building));

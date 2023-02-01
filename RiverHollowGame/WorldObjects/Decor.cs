@@ -278,7 +278,7 @@ namespace RiverHollow.WorldObjects
             }
             if (_objDisplay != null)
             {
-                PlayerManager.AddToStorage(_objDisplay.ID);
+                TownManager.AddToStorage(_objDisplay.ID);
                 _objDisplay = null;
             }
 

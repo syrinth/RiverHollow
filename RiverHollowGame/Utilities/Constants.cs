@@ -50,6 +50,7 @@
         public const int BUILDING_STOCK_SIZE = 3;
         public const int MERCHANT_REQUEST_NUM = 3;
         public const int MAX_RECIPE_DISPLAY = 5;
+        public const int BASE_TRAVELER_RATE = 30;
 
         public const int TASK_ICON_OFFSET = 15;
 

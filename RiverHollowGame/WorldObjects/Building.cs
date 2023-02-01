@@ -130,7 +130,7 @@ namespace RiverHollow.Buildings
                 SyncLightPositions();
                 map.AddLights(GetLights());
 
-                PlayerManager.AddToTownObjects(this);
+                TownManager.AddToTownObjects(this);
             }
 
             return rv;

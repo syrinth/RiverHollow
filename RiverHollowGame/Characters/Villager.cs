@@ -288,7 +288,7 @@ namespace RiverHollow.Characters
         /// </summary>
         public void TryMoveIn()
         {
-            if (TownRequirementsMet() && HouseID != -1 && PlayerManager.TownObjectBuilt(HouseID))
+            if (TownRequirementsMet() && HouseID != -1 && TownManager.TownObjectBuilt(HouseID))
             {
                 TaskManager.AdvanceTaskProgress();
                 _eSpawnStatus = SpawnStateEnum.HasHome;
@@ -318,7 +318,7 @@ namespace RiverHollow.Characters
                     case SpawnStateEnum.WaitAtInn:
                         return "mapInn";
                     case SpawnStateEnum.HasHome:
-                        return PlayerManager.GetBuildingByID(HouseID)?.BuildingMapName;
+                        return TownManager.GetBuildingByID(HouseID)?.BuildingMapName;
                     case SpawnStateEnum.SendingToInn:
                     case SpawnStateEnum.NonTownMap:
                         return StartMap;
@@ -404,7 +404,7 @@ namespace RiverHollow.Characters
                         string[] split = arg.Split(':');
                         if (split[0].Equals("Built"))
                         {
-                            if (!PlayerManager.TownObjectBuilt(int.Parse(split[1])))
+                            if (!TownManager.TownObjectBuilt(int.Parse(split[1])))
                             {
                                 valid = false;
                                 break;
@@ -579,7 +579,7 @@ namespace RiverHollow.Characters
 
         public SatisfactionStateEnum GetSatisfaction()
         {
-            if(!PlayerManager.TownObjectBuilt(int.Parse(DataManager.Config[19]["ObjectID"]))){
+            if(!TownManager.TownObjectBuilt(int.Parse(DataManager.Config[19]["ObjectID"]))){
                 return SatisfactionStateEnum.Neutral;
             }
 
@@ -601,14 +601,14 @@ namespace RiverHollow.Characters
         {
             string petInfo = DataManager.GetStringByIDKey(ID, "PetID", DataType.NPC);
             int petHome = DataManager.GetIntByIDKey(ID, "PetHomeID", DataType.NPC);
-            if (!string.IsNullOrEmpty(petInfo) && !PlayerManager.TownObjectBuilt(petHome))
+            if (!string.IsNullOrEmpty(petInfo) && !TownManager.TownObjectBuilt(petHome))
             {
                 int[] split = Util.FindIntArguments(petInfo);
                 int num = split.Length > 1 ? split[1] : 1;
 
                 for (int i = 0; i < num; i++)
                 {
-                    PlayerManager.AddAnimal(DataManager.CreateAnimal(split[0]));
+                    TownManager.AddAnimal(DataManager.CreateAnimal(split[0]));
                 }
             }
         }
@@ -707,11 +707,11 @@ namespace RiverHollow.Characters
 
             public int ConditionsMet(int houseID)
             {
-                if (PlayerManager.GetNumberTownObjects(ObjectID) < Number) { return 0; }
+                if (TownManager.GetNumberTownObjects(ObjectID) < Number) { return 0; }
 
-                RHMap houseMap = PlayerManager.GetTownObjectsByID(houseID)[0].CurrentMap;
+                RHMap houseMap = TownManager.GetTownObjectsByID(houseID)[0].CurrentMap;
                 List<RHTile> validTiles = new List<RHTile>();
-                List<RHTile> houseTiles = houseMap.GetTilesFromRectangleExcludeEdgePoints(PlayerManager.GetTownObjectsByID(houseID)[0].CollisionBox);
+                List<RHTile> houseTiles = houseMap.GetTilesFromRectangleExcludeEdgePoints(TownManager.GetTownObjectsByID(houseID)[0].CollisionBox);
 
                 for (int i = 0; i < houseTiles.Count; i++) {
                     foreach (RHTile t in houseMap.GetAllTilesInRange(houseTiles[i], 10))
@@ -721,9 +721,9 @@ namespace RiverHollow.Characters
                 }
             
                 int numAtCorrectRange = 0;
-                for (int i = 0; i < PlayerManager.GetTownObjectsByID(ObjectID).Count; i++)
+                for (int i = 0; i < TownManager.GetTownObjectsByID(ObjectID).Count; i++)
                 {
-                    WorldObject obj = PlayerManager.GetTownObjectsByID(ObjectID)[i];
+                    WorldObject obj = TownManager.GetTownObjectsByID(ObjectID)[i];
                     List<RHTile> objTiles = houseMap.GetTilesFromRectangleExcludeEdgePoints(obj.CollisionBox);
 
                     List<RHTile> inRange = objTiles.FindAll(o => validTiles.Contains(o));
@@ -747,7 +747,7 @@ namespace RiverHollow.Characters
                     }
                 }
 
-                if (numAtCorrectRange == PlayerManager.GetNumberTownObjects(ObjectID))
+                if (numAtCorrectRange == TownManager.GetNumberTownObjects(ObjectID))
                 {
                     return 10;
                 }

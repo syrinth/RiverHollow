@@ -22,7 +22,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
             List<GUIObject> vList;
             vList = new List<GUIObject>();
 
-            foreach (Villager n in DataManager.DIVillagers.Values)
+            foreach (Villager n in TownManager.DIVillagers.Values)
             {
                 if (n.RelationshipState == Utilities.Enums.RelationShipStatusEnum.None) { continue; }
                 FriendshipBox f = new FriendshipBox(n, _gWindow.InnerWidth() - GUIList.BTNSIZE);

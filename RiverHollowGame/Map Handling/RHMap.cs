@@ -802,7 +802,7 @@ namespace RiverHollow.Map_Handling
 
         public void StockShop()
         {
-            if (this != MapManager.TownMap && PlayerManager.TownObjectBuilt(BuildingID))
+            if (this != MapManager.TownMap && TownManager.TownObjectBuilt(BuildingID))
             {
                 TheShop?.PlaceStock(false);
             }
@@ -1664,7 +1664,7 @@ namespace RiverHollow.Map_Handling
                             }
                             else if (TownModeStorage())
                             {
-                                PlayerManager.AddToStorage(toRemove.ID);
+                                TownManager.AddToStorage(toRemove.ID);
                             }
                             break;
                     }
@@ -1702,7 +1702,7 @@ namespace RiverHollow.Map_Handling
                 {
                     if (this == MapManager.TownMap)
                     {
-                        PlayerManager.AddToTownObjects(toBuild);
+                        TownManager.AddToTownObjects(toBuild);
                     }
 
                     //Drop the Building from the GameManger
@@ -1712,7 +1712,7 @@ namespace RiverHollow.Map_Handling
                     //Only leave TownMode if we were in Build Mode
                     if (TownModeBuild())
                     {
-                        if (GameManager.BuildFromStorage) { PlayerManager.RemoveFromStorage(toBuild.ID); }
+                        if (GameManager.BuildFromStorage) { TownManager.RemoveFromStorage(toBuild.ID); }
                         TaskManager.AdvanceTaskProgress(toBuild);
 
                         LeaveTownMode();
@@ -1755,10 +1755,10 @@ namespace RiverHollow.Map_Handling
             {
                 if (this == MapManager.TownMap)
                 {
-                    PlayerManager.AddToTownObjects(placeObject);
+                    TownManager.AddToTownObjects(placeObject);
                 }
 
-                if (GameManager.BuildFromStorage) { PlayerManager.RemoveFromStorage(placeObject.ID); }
+                if (GameManager.BuildFromStorage) { TownManager.RemoveFromStorage(placeObject.ID); }
 
                 switch (placeObject.Type)
                 {
@@ -1774,7 +1774,7 @@ namespace RiverHollow.Map_Handling
                 //If we cannot build the WorldObject again due to lack of resources or running out of storage,
                 //clean up after ourselves and drop the WorldObject that we're holding
                 //If we're moving, we need to drop the object but do not leave build mode
-                if (TownModeMoving() || (GameManager.BuildFromStorage && !PlayerManager.HasInStorage(placeObject.ID)) || (!GameManager.BuildFromStorage && !InventoryManager.HasSufficientItems(placeObject.RequiredToMake)))
+                if (TownModeMoving() || (GameManager.BuildFromStorage && !TownManager.HasInStorage(placeObject.ID)) || (!GameManager.BuildFromStorage && !InventoryManager.HasSufficientItems(placeObject.RequiredToMake)))
                 {
                     if (!TownModeMoving())
                     {
@@ -2347,11 +2347,11 @@ namespace RiverHollow.Map_Handling
                 {
                     obj.LoadData(data);
                     obj.PlaceOnMap(this);
-                    if (this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
+                    if (this == MapManager.TownMap) { TownManager.AddToTownObjects(obj); }
                 }
 
                 //obj?.PlaceOnMap(new Vector2(w.x, w.y), this);
-                //if (obj != null && this == MapManager.TownMap) { PlayerManager.AddToTownObjects(obj); }
+                //if (obj != null && this == MapManager.TownMap) { TownManager.AddToTownObjects(obj); }
             }
         }
     }

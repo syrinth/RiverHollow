@@ -48,7 +48,6 @@ namespace RiverHollow.GUIComponents.Screens
             //Stop showing the WorldMap
             GameManager.ShowMap(false);
             GameManager.CurrentScreen = GameScreenEnum.Info;
-            GameManager.ShippingGremlin.SellAll();
 
             _liCoins = new List<GUIImage>();
             _liPoints = new List<Vector2>();
@@ -99,7 +98,7 @@ namespace RiverHollow.GUIComponents.Screens
                     _timer.TickDown(gTime);
                     if (_timer.Finished())
                     {
-                        foreach (Villager v in DataManager.DIVillagers.Values)
+                        foreach (Villager v in TownManager.DIVillagers.Values)
                         {
                             if (v.LivesInTown)
                             {
@@ -127,7 +126,7 @@ namespace RiverHollow.GUIComponents.Screens
                     if(_timer.Finished())
                     {
                         GUIManager.BeginFadeOut();
-                        GameManager.MoveMerchants();
+                        TownManager.MoveMerchants();
                         PlayerManager.PlayerActor.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
                         GameManager.GoToHUDScreen();
                     }
@@ -159,7 +158,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                         _timer.Reset(MAX_POP_TIME / _liVillagers.Count);
 
-                        _iVillagerTax = DataManager.DIVillagers[npc.ID].Income;
+                        _iVillagerTax = TownManager.DIVillagers[npc.ID].Income;
                         _dVillagerTaxIncrement = _iVillagerTax / (_timer.TimerSpeed / 0.02);
 
                         _iTotalTaxes += _iVillagerTax;
@@ -332,7 +331,7 @@ namespace RiverHollow.GUIComponents.Screens
     //        foreach (GUISprite spr in GameManager.SlainMonsters) { TileCheck(spr, ref _iRows); }
     //        _iTotalTiles = 0;
 
-    //        foreach (Villager v in DataManager.DIVillagers.Values)
+    //        foreach (Villager v in TownManager.DIVillagers.Values)
     //        {
     //            v.JustMovedIn();
     //        }

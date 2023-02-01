@@ -44,7 +44,7 @@ namespace RiverHollow.Characters
 
         public void SpawnInHome()
         {
-            RHMap stableMap = MapManager.Maps[PlayerManager.GetBuildingByID(StableID)?.BuildingMapName];
+            RHMap stableMap = MapManager.Maps[TownManager.GetBuildingByID(StableID)?.BuildingMapName];
             stableMap.AddActor(this);
             Position = Util.GetRandomItem(stableMap.FindFreeTiles()).Position;
         }
@@ -53,7 +53,7 @@ namespace RiverHollow.Characters
         {
             bool rv = false;
 
-            RHMap stableMap = MapManager.Maps[PlayerManager.GetBuildingByID(StableID)?.BuildingMapName];
+            RHMap stableMap = MapManager.Maps[TownManager.GetBuildingByID(StableID)?.BuildingMapName];
             if (mapName.Equals(stableMap.Name))
             {
                 rv = true;
@@ -61,6 +61,6 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        public bool StableBuilt() { return PlayerManager.TownObjectBuilt(StableID); }
+        public bool StableBuilt() { return TownManager.TownObjectBuilt(StableID); }
     }
 }

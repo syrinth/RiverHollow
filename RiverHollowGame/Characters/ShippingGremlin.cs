@@ -53,8 +53,6 @@ namespace RiverHollow.Characters
             _sprBody.AddAnimation(AnimationEnum.Action_Finished, 128, 0, _iBodyWidth, _iBodyHeight);
             _sprBody.AddAnimation(AnimationEnum.Action2, 160, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);
             PlayAnimation(AnimationEnum.ObjectIdle);
-
-            if (GameManager.ShippingGremlin == null) { GameManager.ShippingGremlin = this; }
         }
 
         public override void Update(GameTime gTime)

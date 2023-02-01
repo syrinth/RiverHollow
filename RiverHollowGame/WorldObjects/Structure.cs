@@ -41,7 +41,7 @@ namespace RiverHollow.WorldObjects
                 rv = true;
                 if (ID == int.Parse(DataManager.Config[15]["ObjectID"]))
                 {
-                    foreach (Merchant m in DataManager.DIMerchants.Values)
+                    foreach (Merchant m in TownManager.DIMerchants.Values)
                     {
                         if (m.OnTheMap)
                         {
@@ -80,7 +80,7 @@ namespace RiverHollow.WorldObjects
 
                 if (ID == int.Parse(DataManager.Config[15]["ObjectID"]))
                 {
-                    foreach (Merchant m in DataManager.DIMerchants.Values)
+                    foreach (Merchant m in TownManager.DIMerchants.Values)
                     {
                         if (m.OnTheMap)
                         {

@@ -110,12 +110,12 @@ namespace RiverHollow.Misc
 
             if (stringData.ContainsKey("StartNPC"))
             {
-                StartNPC = DataManager.DIVillagers[int.Parse(stringData["StartNPC"])];
+                StartNPC = TownManager.DIVillagers[int.Parse(stringData["StartNPC"])];
             }
 
             if (stringData.ContainsKey("GoalNPC"))
             {
-                GoalNPC = DataManager.DIVillagers[int.Parse(stringData["GoalNPC"])];
+                GoalNPC = TownManager.DIVillagers[int.Parse(stringData["GoalNPC"])];
             }
 
             if (stringData.ContainsKey("AssignTrigger"))
@@ -269,7 +269,7 @@ namespace RiverHollow.Misc
                         foreach (Item i in InventoryManager.PlayerInventory) { if (i != null) { AttemptProgress(i); } }
                         break;
                     case TaskTypeEnum.Build:
-                        foreach (int k in PlayerManager.GetTownObjects().Keys) { AttemptProgressBuild(k); }
+                        foreach (int k in TownManager.GetTownObjects().Keys) { AttemptProgressBuild(k); }
                         break;
                     case TaskTypeEnum.Population:
                         AttemptProgress();
@@ -335,7 +335,7 @@ namespace RiverHollow.Misc
             if (_eTaskType == TaskTypeEnum.Build && i == _iTargetObjectID)
             {
                 rv = true;
-                SetReadyForHandIn(PlayerManager.GetNumberTownObjects(_iTargetObjectID) == _iTargetWorldObjNum);
+                SetReadyForHandIn(TownManager.GetNumberTownObjects(_iTargetObjectID) == _iTargetWorldObjNum);
             }
 
             return rv;
@@ -348,7 +348,7 @@ namespace RiverHollow.Misc
             if (_eTaskType == TaskTypeEnum.Population)
             {
                 rv = true;
-                SetReadyForHandIn(PlayerManager.GetPopulation() >= NeededCount);
+                SetReadyForHandIn(TownManager.GetPopulation() >= NeededCount);
             }
 
             return rv;
@@ -465,7 +465,7 @@ namespace RiverHollow.Misc
 
                 if (_iActivateID > -1)
                 {
-                    DataManager.DIVillagers[_iActivateID].Activate(true);
+                    TownManager.DIVillagers[_iActivateID].Activate(true);
                 }
 
                 if (DataManager.TaskData[ID].ContainsKey("SendToTown"))
@@ -499,7 +499,7 @@ namespace RiverHollow.Misc
                 switch (_eTaskType)
                 {
                     case TaskTypeEnum.Population:
-                        rv = " Population: " + PlayerManager.GetPopulation() + "/" + NeededCount;
+                        rv = " Population: " + TownManager.GetPopulation() + "/" + NeededCount;
                         break;
                     case TaskTypeEnum.Fetch:
                         rv = _targetItem.Name() + " Found: " + TargetsAccomplished + "/" + NeededCount;
@@ -599,7 +599,7 @@ namespace RiverHollow.Misc
             if(ID == -1)
             {
                 _eTaskType = (TaskTypeEnum)qData.questType;
-                GoalNPC = qData.goalNPC != -1 ? DataManager.DIVillagers[qData.goalNPC] : null;
+                GoalNPC = qData.goalNPC != -1 ? TownManager.DIVillagers[qData.goalNPC] : null;
                 _targetItem = qData.itemID != -1 ? DataManager.GetItem(qData.itemID) : null;
                 _questMonster = qData.monsterID != -1 ? DataManager.GetLiteMonsterByIndex(qData.monsterID) : null;
                 _iTargetObjectID = qData.targetWorldObjectID;

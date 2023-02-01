@@ -55,7 +55,7 @@ namespace RiverHollow.Characters
         {
             foreach (KeyValuePair<int, int> kvp in _diRequiredObjectIDs)
             {
-                if (PlayerManager.GetNumberTownObjects(kvp.Key) < kvp.Value)
+                if (TownManager.GetNumberTownObjects(kvp.Key) < kvp.Value)
                 {
                     return false;
                 }
@@ -64,14 +64,14 @@ namespace RiverHollow.Characters
             if(RequiredPopulation != -1)
             {
 
-                if (PlayerManager.GetPopulation() < RequiredPopulation)
+                if (TownManager.GetPopulation() < RequiredPopulation)
                 {
                     return false;
                 }
             }
             if (RequiredVillagerID != -1)
             {
-                if (!DataManager.DIVillagers[RequiredVillagerID].LivesInTown)
+                if (!TownManager.DIVillagers[RequiredVillagerID].LivesInTown)
                 {
                     return false;
                 }

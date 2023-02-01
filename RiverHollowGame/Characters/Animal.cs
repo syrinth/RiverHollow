@@ -31,9 +31,9 @@ namespace RiverHollow.Characters
         public override void RollOver()
         {
             MoveToSpawn();
-            if (PlayerManager.TownObjectBuilt(HouseID))
+            if (TownManager.TownObjectBuilt(HouseID))
             {
-                RHMap map = MapManager.Maps[PlayerManager.GetBuildingByID(HouseID).BuildingMapName];
+                RHMap map = MapManager.Maps[TownManager.GetBuildingByID(HouseID).BuildingMapName];
                 if(!new WrappedItem(ItemID).PlaceOnMap(map.GetRandomPosition(), map))
                 {
                     ErrorManager.TrackError();
@@ -45,9 +45,9 @@ namespace RiverHollow.Characters
         {
             CurrentMap?.RemoveActor(this);
             RHMap map = MapManager.TownMap;
-            if (PlayerManager.TownObjectBuilt(HouseID))
+            if (TownManager.TownObjectBuilt(HouseID))
             {
-                map = MapManager.Maps[PlayerManager.GetBuildingByID(HouseID).BuildingMapName];
+                map = MapManager.Maps[TownManager.GetBuildingByID(HouseID).BuildingMapName];
             }
 
             map.AddActor(this);

@@ -65,10 +65,8 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Managed Data Lists
-        public static List<Merchant> MerchantQueue;
         private static List<TriggerObject> _liTriggerObjects;
         private static List<Spirit> _liSpirits;
-        private static List<Machine> _liMachines;
         public static Dictionary<int, Shop> DIShops;
         #endregion
 
@@ -89,7 +87,6 @@ namespace RiverHollow.Game_Managers
 
         public static bool HideMiniInventory = true;
 
-        public static ShippingGremlin ShippingGremlin;
         public static DisplayTypeEnum CurrentInventoryDisplay;
 
         public static GameScreenEnum CurrentScreen;
@@ -100,8 +97,6 @@ namespace RiverHollow.Game_Managers
 
         public static void Initialize()
         {
-            MerchantQueue = new List<Merchant>();
-            _liMachines = new List<Machine>();
             _liSpirits = new List<Spirit>();
             _liTriggerObjects = new List<TriggerObject>();
             SlainMonsters = new List<GUISprite>();
@@ -143,35 +138,6 @@ namespace RiverHollow.Game_Managers
         {
             return new Vector2(ScaleIt((int)val.X), ScaleIt((int)val.Y));
         }
-
-        #region Special Handling
-        public static void AddMachine(Machine m, string mapName)
-        {
-            _liMachines.Add(m);
-        }
-        public static void RemoveMachine(Machine m)
-        {
-            _liMachines.Remove(m);
-        }
-
-        public static void RollOver()
-        {
-            foreach (Machine m in _liMachines)
-            {
-                m.Rollover();
-            }
-        }
-
-        public static void MoveMerchants()
-        {
-            if (MerchantQueue.Count > 0)
-            {
-                Merchant chosenMerchant = MerchantQueue[0];
-                chosenMerchant.ArriveInTown();
-                MerchantQueue.Remove(chosenMerchant);
-            }
-        }
-        #endregion
 
         #region Trigger Handling
         public static void AddTriggerObject(TriggerObject t)
@@ -336,7 +302,7 @@ namespace RiverHollow.Game_Managers
             BuildFromStorage = false;
             _eBuildType = EnumBuildType.None;
             
-            foreach(Villager v in DataManager.DIVillagers.Values)
+            foreach(Villager v in TownManager.DIVillagers.Values)
             {
                 v.DetermineValidSchedule();
                 v.RecalculatePath();

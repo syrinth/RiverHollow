@@ -46,7 +46,7 @@ namespace RiverHollow.Game_Managers
         private static DirectionEnum _eHorizontal = DirectionEnum.None;
         private static DirectionEnum _eVertical = DirectionEnum.None;
 
-        public static Building PlayerHome => (Building)GetTownObjectsByID(27)[0];
+        public static Building PlayerHome => TownManager.GetBuildingByID(27);
 
         public static bool ReadyToSleep = false;
 
@@ -54,10 +54,9 @@ namespace RiverHollow.Game_Managers
 
         private static List<Mount> _liMounts;
         private static ClassedCombatant[] _arrParty;
-        private static Dictionary<int, int> _diStorage;
+
 
         public static string Name;
-        public static string TownName;
 
         public static int TotalMoneyEarned { get; private set; } = 0;
         public static int Money { get; private set; } = 0;
@@ -89,12 +88,6 @@ namespace RiverHollow.Game_Managers
         static FloatingText _hazardDamage;
         #endregion
 
-        #region Data Collections
-        private static Dictionary<int, List<WorldObject>> _diTownObjects;
-        public static List<Animal> TownAnimals { get; set; }
-        public static List<TalkingActor> Visitors { get; set; }
-        #endregion
-
         public static void Initialize()
         {
             _diCrafting = new Dictionary<ObjectTypeEnum, List<int>>
@@ -110,10 +103,6 @@ namespace RiverHollow.Game_Managers
             _liPets = new List<Pet>();
             _liMounts = new List<Mount>();
 
-            _diStorage = new Dictionary<int, int>();
-            _diTownObjects = new Dictionary<int, List<WorldObject>>();
-            TownAnimals = new List<Animal>();
-            Visitors = new List<TalkingActor>();
             _liUniqueItemsBought = new List<int>();
             _diTools = new Dictionary<ToolEnum, Tool>();
 
@@ -394,152 +383,6 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
-        #region Town Helpers
-
-        public static int GetPopulation()
-        {
-            return DataManager.DIVillagers.Count(x => x.Value.LivesInTown);
-        }
-        public static int GetTownScore() {
-            int rv = 0;
-
-            return rv;
-        }
-
-        public static Dictionary<int, int> GetStorageItems()
-        {
-            Dictionary<int, int> rvDictionary = new Dictionary<int, int>();
-
-            foreach(KeyValuePair<int, int> kvp in _diStorage)
-            {
-                rvDictionary[kvp.Key] = kvp.Value;
-            }
-
-            return rvDictionary;
-        }
-        public static void AddToStorage(int itemID, int num = 1)
-        {
-            if (_diStorage.ContainsKey(itemID)) { _diStorage[itemID] += num; }
-            else { _diStorage[itemID] = num; }
-        }
-        public static bool HasInStorage(int itemID) { return _diStorage.ContainsKey(itemID) && _diStorage[itemID] > 0; }
-        public static void RemoveFromStorage(int itemID)
-        {
-            if (_diStorage.ContainsKey(itemID)) {
-                _diStorage[itemID]--;
-
-                if (_diStorage[itemID] == 0)
-                {
-                    _diStorage.Remove(itemID);
-                }
-            }
-        }
-
-        public static void AddAnimal(Animal npc)
-        {
-            TownAnimals.Add(npc);
-            npc.MoveToSpawn();
-        }
-
-        public static void AddVisitor(int id)
-        {
-            TalkingActor npc = (TalkingActor)DataManager.CreateNPCByIndex(id);
-            Visitors.Add(npc);
-            npc.Position = MapManager.TownMap.GetRandomPosition();
-            MapManager.TownMap.AddActor(npc);
-        }
-
-        public static void AddToTownObjects(WorldObject obj)
-        {
-            bool buildable = false;
-            switch (obj.Type)
-            {
-                case ObjectTypeEnum.Building:
-                case ObjectTypeEnum.Mailbox:
-                case ObjectTypeEnum.Structure:
-                case ObjectTypeEnum.Floor:
-                case ObjectTypeEnum.Wallpaper:
-                case ObjectTypeEnum.Beehive:
-                case ObjectTypeEnum.Buildable:
-                case ObjectTypeEnum.Container:
-                case ObjectTypeEnum.Decor:
-                case ObjectTypeEnum.Garden:
-                case ObjectTypeEnum.Wall:
-                    buildable = true;
-                    break;
-            }
-
-            if (buildable)
-            {
-                if (!_diTownObjects.ContainsKey(obj.ID)) { _diTownObjects[obj.ID] = new List<WorldObject>(); }
-                if (!_diTownObjects[obj.ID].Contains(obj))
-                {
-                    _diTownObjects[obj.ID].Add(obj);
-                }
-            }
-        }
-        public static void RemoveTownObjects(WorldObject obj)
-        {
-            if (!_diTownObjects[obj.ID].Contains(obj))
-            {
-                _diTownObjects[obj.ID].Add(obj);
-            }
-        }
-        public static int GetNumberTownObjects(int objID)
-        {
-            int rv = 0;
-
-            if (_diTownObjects.ContainsKey(objID))
-            {
-                rv = _diTownObjects[objID].Count;
-            }
-            return rv;
-        }
-        public static bool TownObjectBuilt(int objID)
-        {
-            return GetNumberTownObjects(objID) > 0;
-        }
-        public static List<WorldObject> GetTownObjectsByID(int objID)
-        {
-            List<WorldObject> rv = new List<WorldObject>();
-
-            if (_diTownObjects.ContainsKey(objID))
-            {
-                rv = _diTownObjects[objID];
-            }
-            return rv;
-        }
-        public static Building GetBuildingByID(int objID)
-        {
-            Building rv = null;
-            if (TownObjectBuilt(objID))
-            {
-                WorldObject obj = GetTownObjectsByID(objID)[0];
-                if (obj.CompareType(ObjectTypeEnum.Building))
-                {
-                    rv = (Building)obj;
-                }
-            }
-
-            return rv;
-        }
-        public static IReadOnlyDictionary<int, List<WorldObject>> GetTownObjects() { return _diTownObjects; }
-
-        public static int CalculateIncome()
-        {
-            int rv = 0;
-
-            foreach (Villager n in DataManager.DIVillagers.Values)
-            {
-                if (n.LivesInTown) {
-                    rv += n.Income;
-                }
-            }
-
-            return rv;
-        }
-        #endregion
-
         #region PlayerInRange
 
         public static bool PlayerInRange(Rectangle rect)
@@ -658,10 +501,7 @@ namespace RiverHollow.Game_Managers
         {
             Name = x;
         }
-        public static void SetTownName(string x)
-        {
-            TownName = x;
-        }
+
         public static void SetClass(int x)
         {
             PlayerCombatant.SetClass(DataManager.GetJobByIndex(x));
@@ -733,25 +573,9 @@ namespace RiverHollow.Game_Managers
 
             foreach(Child c in Children) { c.Rollover(); }
 
-            HandleVisitors();
-
             PlayerMailbox.Rollover();
 
             MoveToSpawn();
-        }
-
-        private static void HandleVisitors()
-        {
-            for (int i = 0; i < Visitors.Count; i++)
-            {
-                MapManager.TownMap.RemoveCharacterImmediately(Visitors[i]);
-            }
-            Visitors.Clear();
-
-            if (RHRandom.Instance().RollPercent(30))
-            {
-                AddVisitor(RHRandom.Instance().Next(45, 46));
-            }
         }
 
         public static void GetStamina(ref double curr, ref double max)
@@ -790,12 +614,12 @@ namespace RiverHollow.Game_Managers
         {
             PlayerData data = new PlayerData()
             {
-                name = PlayerManager.Name,
-                money = PlayerManager.Money,
-                totalMoneyEarned = PlayerManager.TotalMoneyEarned,
-                bodyTypeIndex = PlayerManager.PlayerActor.BodyType,
-                hairColor = PlayerManager.PlayerActor.HairColor,
-                hairIndex = PlayerManager.PlayerActor.HairIndex,
+                name = Name,
+                money = Money,
+                totalMoneyEarned = TotalMoneyEarned,
+                bodyTypeIndex = PlayerActor.BodyType,
+                hairColor = PlayerActor.HairColor,
+                hairIndex = PlayerActor.HairIndex,
                 hat = Item.SaveData(PlayerActor.Hat),
                 chest = Item.SaveData(PlayerActor.Chest),
                 adventurerData = PlayerCombatant.SaveClassedCharData(),
@@ -803,12 +627,9 @@ namespace RiverHollow.Game_Managers
                 weddingCountdown = WeddingCountdown,
                 babyCountdown = BabyCountdown,
                 Items = new List<ItemData>(),
-                Storage = new List<StorageData>(),
                 liPets = new List<int>(),
                 MountList = new List<int>(),
                 ChildList = new List<ChildData>(),
-                TownAnimals = new List<int>(),
-                Visitors = new List<int>(),
                 CraftingList = new List<int>()
             };
 
@@ -817,16 +638,6 @@ namespace RiverHollow.Game_Managers
             {
                 ItemData itemData = Item.SaveData(i);
                 data.Items.Add(itemData);
-            }
-
-            foreach (KeyValuePair<int, int> kvp in PlayerManager.GetStorageItems())
-            {
-                StorageData storageData = new StorageData
-                {
-                    objID = kvp.Key,
-                    number = kvp.Value
-                };
-                data.Storage.Add(storageData);
             }
 
             data.activePet = PlayerManager.PlayerActor.ActivePet == null ? -1 : PlayerManager.PlayerActor.ActivePet.ID;
@@ -843,16 +654,6 @@ namespace RiverHollow.Game_Managers
             foreach (Child c in Children)
             {
                 data.ChildList.Add(c.SaveData());
-            }
-
-            foreach (WorldActor npc in TownAnimals)
-            {
-                data.TownAnimals.Add(npc.ID);
-            }
-
-            foreach (WorldActor npc in Visitors)
-            {
-                data.Visitors.Add(npc.ID);
             }
 
             foreach (List<int> craftList in _diCrafting.Values)
@@ -906,11 +707,6 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            foreach(StorageData storageData in saveData.Storage)
-            {
-                PlayerManager.AddToStorage(storageData.objID, storageData.number);
-            }
-
             foreach (int i in saveData.liPets)
             {
                 Pet p = DataManager.CreatePet(i);
@@ -933,17 +729,6 @@ namespace RiverHollow.Game_Managers
                 Child m = DataManager.CreateChild(data.childID);
                 m.SpawnNearPlayer();
                 AddChild(m);
-            }
-
-            foreach (int id in saveData.TownAnimals)
-            {
-                Animal m = DataManager.CreateAnimal(id);
-                AddAnimal(m);
-            }
-
-            foreach (int id in saveData.Visitors)
-            {
-                AddVisitor(id);
             }
 
             foreach (int i in saveData.CraftingList)

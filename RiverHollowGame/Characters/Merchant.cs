@@ -75,8 +75,8 @@ namespace RiverHollow.Characters
 
                     if (HandleTravelTiming())
                     {
-                        if (!_bArrivedOnce) { GameManager.MerchantQueue.Add(this); }
-                        else { GameManager.MerchantQueue.Insert(0, this); }
+                        if (!_bArrivedOnce) { TownManager.MerchantQueue.Add(this); }
+                        else { TownManager.MerchantQueue.Insert(0, this); }
                     }
                 }
             }
@@ -189,7 +189,7 @@ namespace RiverHollow.Characters
             CurrentMapName = Constants.TOWN_MAP_NAME;
             MapManager.Maps[CurrentMapName].AddCharacterImmediately(this);
 
-            Structure market = (Structure)PlayerManager.GetTownObjectsByID(int.Parse(DataManager.Config[15]["ObjectID"]))[0];
+            Structure market = (Structure)TownManager.GetTownObjectsByID(int.Parse(DataManager.Config[15]["ObjectID"]))[0];
             Position = Util.SnapToGrid(new Vector2(market.MapPosition.X + market.SpecialCoords.X, market.MapPosition.Y + market.SpecialCoords.Y));
 
             if (_iShopID != -1)

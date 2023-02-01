@@ -57,8 +57,8 @@ namespace RiverHollow.Misc
             {
                 if (itemSpot.Contains(mouseLocation) && PlayerManager.PlayerInRange(itemSpot.Box.Center, Constants.TILE_SIZE * 2))
                 {
-                    if (DataManager.DIVillagers.ContainsKey(ShopkeeperID) && map.ContainsActor(DataManager.DIVillagers[ShopkeeperID]) ||
-                        DataManager.DIMerchants.ContainsKey(ShopkeeperID) && map.ContainsActor(DataManager.DIMerchants[ShopkeeperID]))
+                    if (TownManager.DIVillagers.ContainsKey(ShopkeeperID) && map.ContainsActor(TownManager.DIVillagers[ShopkeeperID]) ||
+                        TownManager.DIMerchants.ContainsKey(ShopkeeperID) && map.ContainsActor(TownManager.DIMerchants[ShopkeeperID]))
                     {
                         itemSpot.Buy();
                         return true;
@@ -209,7 +209,7 @@ namespace RiverHollow.Misc
             UnlockMerchandise(data.merchUnlockedString);
             RandomIndices = data.randomized;
 
-            if (_iShopBuildingID != -1 && PlayerManager.TownObjectBuilt(_iShopBuildingID))
+            if (_iShopBuildingID != -1 && TownManager.TownObjectBuilt(_iShopBuildingID))
             {
                 PlaceStock(false);
             }

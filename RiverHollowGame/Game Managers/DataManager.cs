@@ -82,8 +82,6 @@ namespace RiverHollow.Game_Managers
         public static IReadOnlyDictionary<int, Dictionary<string, string>> TaskData => _diTaskData;
 
         static Dictionary<int, Dictionary<string, string>> _diMonsterData;
-        public static Dictionary<int, Villager> DIVillagers { get; private set; }
-        public static Dictionary<int, Merchant> DIMerchants { get; private set; }
         static Dictionary<int, Dictionary<string, string>> _diActions;
 
         static Dictionary<int, Dictionary<string, string>> _diJobs;
@@ -120,7 +118,6 @@ namespace RiverHollow.Game_Managers
             AddDirectoryTextures(FOLDER_ENVIRONMENT, Content);
 
             LoadNPCSchedules(Content);
-            LoadActiveNPCs();
 
             _liForest = new List<int>();
             _liMountain = new List<int>();
@@ -297,32 +294,6 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        private static void LoadActiveNPCs()
-        {
-            DIMerchants = new Dictionary<int, Merchant>();
-            DIVillagers = new Dictionary<int, Villager>();
-            foreach (KeyValuePair<int, Dictionary<string, string>> npcData in _diNPCData)
-            {
-                Dictionary<string, string> diData = _diNPCData[npcData.Key];
-                switch (diData["Type"])
-                {
-                    case "ShippingGremlin":
-                        GameManager.ShippingGremlin = new ShippingGremlin(npcData.Key, diData);
-                        //DIVillagers.Add(npcData.Key, GameManager.ShippingGremlin);
-                        break;
-                    case "Merchant":
-                        DIMerchants.Add(npcData.Key, new Merchant(npcData.Key, diData));
-                        break;
-
-                    case "Villager":
-                        DIVillagers.Add(npcData.Key, new Villager(npcData.Key, diData));
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-        }
         private static void LoadNPCSchedules(ContentManager Content)
         {
             _diSchedule = new Dictionary<string, Dictionary<string, List<string>>>();
@@ -664,11 +635,6 @@ namespace RiverHollow.Game_Managers
             return _diJobs.Count;
         }
 
-        public static string GetCharacterNameByIndex(int i)
-        {
-            return DIVillagers[i].Name();
-        }
-
         public static string GetMonsterTraitData(string trait)
         {
             return _diMonsterTraits[trait];
@@ -698,6 +664,7 @@ namespace RiverHollow.Game_Managers
                     case WorldActorTypeEnum.Spirit:
                         return new Spirit(diData);
                     case WorldActorTypeEnum.TalkingActor:
+                    case WorldActorTypeEnum.Traveler:
                         return new TalkingActor(id, diData);
                 }
             }

@@ -54,6 +54,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Player")]
             public PlayerData playerData;
 
+            [XmlElement(ElementName = "TownData")]
+            public TownData townData;
+
             [XmlElement(ElementName = "Options")]
             public OptionsData optionData;
 
@@ -77,15 +80,6 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "AvailableMissions")]
             public List<MissionData> AvailableMissions;
-
-            [XmlArray(ElementName = "VillagerData")]
-            public List<VillagerData> VillagerData;
-
-            [XmlArray(ElementName = "MerchantData")]
-            public List<MerchantData> MerchantData;
-
-            [XmlArray(ElementName = "MerchantQueue")]
-            public List<int> MerchantQueue;
 
             [XmlArray(ElementName = "ShopIData")]
             public List<ShopData> ShopData;
@@ -140,9 +134,6 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Items")]
             public List<ItemData> Items;
 
-            [XmlArray(ElementName = "Storage")]
-            public List<StorageData> Storage;
-
             [XmlElement(ElementName = "ActivePet")]
             public int activePet;
 
@@ -164,17 +155,35 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Children")]
             public List<ChildData> ChildList;
 
-            [XmlArray(ElementName = "TownAnimals")]
-            public List<int> TownAnimals;
-
-            [XmlArray(ElementName = "Visitors")]
-            public List<int> Visitors;
-
             [XmlElement(ElementName = "AdventurerData")]
             public ClassedCharData adventurerData;
 
             [XmlArray(ElementName = "CraftingDictionary")]
             public List<int> CraftingList;
+        }
+        public struct TownData
+        {
+            [XmlElement(ElementName = "Name")]
+            public string townName;
+
+            [XmlArray(ElementName = "Storage")]
+            public List<StorageData> Storage;
+
+            [XmlArray(ElementName = "VillagerData")]
+            public List<VillagerData> VillagerData;
+
+            [XmlArray(ElementName = "MerchantData")]
+            public List<MerchantData> MerchantData;
+
+            [XmlArray(ElementName = "MerchantQueue")]
+            public List<int> MerchantQueue;
+
+            [XmlArray(ElementName = "TownAnimals")]
+            public List<int> TownAnimals;
+
+            [XmlArray(ElementName = "Visitors")]
+            public List<int> Travelers;
+
         }
         public struct StorageData
         {
@@ -471,7 +480,7 @@ namespace RiverHollow.Game_Managers
             _bSaving = true;
             GameCalendar.NextDay();
             RiverHollow.Rollover();
-            PlayerManager.AddMoney(PlayerManager.CalculateIncome());
+            PlayerManager.AddMoney(TownManager.CalculateIncome());
             SaveManager.Save();
             PlayerManager.Stamina = PlayerManager.MaxStamina;
             foreach (CombatActor actor in PlayerManager.GetParty())
@@ -509,14 +518,12 @@ namespace RiverHollow.Game_Managers
                 TaskInfo = new List<TaskData>(),
                 CurrentMissions = new List<MissionData>(),
                 AvailableMissions = new List<MissionData>(),
-                VillagerData = new List<VillagerData>(),
-                MerchantData = new List<MerchantData>(),
-                MerchantQueue = new List<int>(),
                 ShopData = new List<ShopData>(),
                 CSData = new List<CutsceneData>(),
                 TheMailbox = PlayerManager.PlayerMailbox.SaveData(),
                 optionData = SaveOptions(),
-                playerData = PlayerManager.SaveData()
+                playerData = PlayerManager.SaveData(),
+                townData = TownManager.SaveData()
             };
 
             foreach (RHMap tileMap in MapManager.Maps.Values)
@@ -535,21 +542,6 @@ namespace RiverHollow.Game_Managers
             //{
             //    data.CurrentMissions.Add(m.SaveData());
             //}
-
-            foreach (Villager n in DataManager.DIVillagers.Values)
-            {
-                data.VillagerData.Add(n.SaveData());
-            }
-
-            foreach (Merchant m in DataManager.DIMerchants.Values)
-            {
-                data.MerchantData.Add(m.SaveData());
-            }
-
-            foreach(Merchant m in GameManager.MerchantQueue)
-            {
-                data.MerchantQueue.Add(m.ID);
-            }
 
             foreach (Shop s in GameManager.DIShops.Values)
             {
@@ -672,6 +664,7 @@ namespace RiverHollow.Game_Managers
             GameCalendar.LoadCalendar(dataToLoad.Calendar);
             EnvironmentManager.LoadEnvironment(dataToLoad.Environment);
             PlayerManager.Initialize();
+            TownManager.Initialize();
 
             foreach (MapData mapData in dataToLoad.MapData)
             {
@@ -680,41 +673,18 @@ namespace RiverHollow.Game_Managers
             }
 
             PlayerManager.LoadData(dataToLoad.playerData);
+            TownManager.LoadData(dataToLoad.townData);
 
             PlayerManager.MoveToSpawn();
             PlayerManager.LoadToolData(dataToLoad.Tools);
             //Needs to be here because the Mailbox is a worldobject
             PlayerManager.PlayerMailbox.LoadData(dataToLoad.TheMailbox);
 
-            foreach (Villager n in DataManager.DIVillagers.Values)
-            {
-                n.MoveToSpawn();
-            }
-
-            foreach (VillagerData n in dataToLoad.VillagerData)
-            {
-                Villager target = DataManager.DIVillagers[n.npcID];
-                target.LoadData(n);
-            }
-
             for (int i = 0; i < dataToLoad.ShopData.Count; i++)
             {
                 Shop s = GameManager.DIShops[i];
                 s.LoadData(dataToLoad.ShopData[i]);
             }
-
-            foreach (MerchantData n in dataToLoad.MerchantData)
-            {
-                Merchant target = DataManager.DIMerchants[n.npcID];
-                target.LoadData(n);
-            }
-
-            for (int i = 0; i < dataToLoad.MerchantQueue.Count; i++)
-            {
-                GameManager.MerchantQueue.Add(DataManager.DIMerchants[dataToLoad.MerchantQueue[i]]);
-            }
-
-            GameManager.MoveMerchants();
 
             CutsceneManager.LoadCutscenes(dataToLoad.CSData);
 

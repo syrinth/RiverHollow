@@ -39,7 +39,7 @@
 
         public enum ActorStateEnum { Climb, Grab, Swim, Walk };
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
-        public enum WorldActorTypeEnum { Actor, Animal, Child, Critter, Merchant, Mob, Mount, Pet, ShippingGremlin, Spirit, TalkingActor, Villager };
+        public enum WorldActorTypeEnum { Actor, Animal, Child, Critter, Merchant, Mob, Mount, Pet, ShippingGremlin, Spirit, TalkingActor, Traveler, Villager };
         public enum CombatActorTypeEnum { Monster, PartyMember };
         public enum AttributeEnum { Damage, Vitality, Agility, Magic, Strength, Defence, Resistance, Evasion, Speed };
         public enum AttributeBonusEnum { Minor, Moderate, Major };
