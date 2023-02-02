@@ -23,7 +23,7 @@ namespace Database_Editor.Classes
 
         public static readonly string DEFAULT_WORLD_OBJECT_TAGS = "Image:0-0";
         public static readonly string DEFAULT_ITEM_TAGS = "Image:,MerchType:None,Value:";
-        public static readonly string DEFAULT_NPC_TAGS = "PortRow:1,Idle:0-0-1-0-T,Walk:0-0-1-0-T,FirstArrival:0,ArrivalPeriod:0";
+        public static readonly string DEFAULT_NPC_TAGS = "Key:,PortRow:1,Size:16-34,Idle:0-0-1-0-T,Walk:0-0-1-0-T";
         public static readonly string DEFAULT_SHOP_TAGS = "ItemID:,Shopkeeper:";
         public static readonly string DEFAULT_LIGHT_TAGS = "Texture:,Idle:1-1,Dimensions:";
         public static readonly string DEFAULT_UPGRADE_TAGS = "Icon:,Cost:100,ItemID:";
