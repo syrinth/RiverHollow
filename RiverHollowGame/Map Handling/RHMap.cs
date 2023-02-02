@@ -995,7 +995,12 @@ namespace RiverHollow.Map_Handling
                 List<RHTile> collisionTiles = GetTilesFromRectangleExcludeEdgePoints(testCollision);
                 for (int i = 0; i < collisionTiles.Count; i++)
                 {
-                    if (!collisionTiles[i].Passable())
+                    if (collisionTiles[i] == null)
+                    {
+                        ErrorManager.TrackError();
+                    }
+
+                    if (collisionTiles[i] == null || !collisionTiles[i].Passable())
                     {
                         passable = false;
                         break;

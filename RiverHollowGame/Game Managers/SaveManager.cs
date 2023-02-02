@@ -664,7 +664,6 @@ namespace RiverHollow.Game_Managers
             GameCalendar.LoadCalendar(dataToLoad.Calendar);
             EnvironmentManager.LoadEnvironment(dataToLoad.Environment);
             PlayerManager.Initialize();
-            TownManager.Initialize();
 
             foreach (MapData mapData in dataToLoad.MapData)
             {
