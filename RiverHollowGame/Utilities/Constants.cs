@@ -41,7 +41,6 @@
         public const float IMPEDED_SPEED = 0.6f;
 
         public const int ACTION_COST = 2;
-        public const int BASE_INCOME = 5;
 
         public const int HUMAN_HEIGHT = (TILE_SIZE * 2) + 2;
         public const float EYE_DEPTH = 0.001f;
@@ -50,7 +49,11 @@
         public const int BUILDING_STOCK_SIZE = 3;
         public const int MERCHANT_REQUEST_NUM = 3;
         public const int MAX_RECIPE_DISPLAY = 5;
+
         public const int BASE_TRAVELER_RATE = 30;
+        public const int EXTRA_TRAVELER_THRESHOLD = 10;
+        public const int GROUP_DIVISOR = 3;
+        public const int MEMBER_DIVISOR = 2;
 
         public const int TASK_ICON_OFFSET = 15;
 

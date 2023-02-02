@@ -54,7 +54,7 @@ namespace RiverHollow.Game_Managers
                 IncrementMinutes();
             }
 
-            if (GameCalendar.CurrentHour == 2)
+            if (CurrentHour == 2)
             {
                 GUIManager.SetScreen(new DayEndScreen());
             }

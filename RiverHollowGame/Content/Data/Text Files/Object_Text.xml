@@ -230,6 +230,18 @@
       <Value>[Name:Human Traveller2]</Value>
     </Item>
     <Item>
+      <Key>NPC_47</Key>
+      <Value>[Name:adv1]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_48</Key>
+      <Value>[Name:adv2]</Value>
+    </Item>
+    <Item>
+      <Key>NPC_49</Key>
+      <Value>[Name:neutral]</Value>
+    </Item>
+    <Item>
       <Key>Job_0</Key>
       <Value>[Name:Wizard][Description:Practitioners of the arcane arts, wizards excel at  handling a multitude of foes.]</Value>
     </Item>

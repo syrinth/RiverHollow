@@ -24,7 +24,6 @@ namespace RiverHollow.Characters
         public int HouseID => DataManager.GetIntByIDKey(ID, "HouseID", DataType.NPC, 1);
         public bool Marriable => DataManager.GetBoolByIDKey(ID, "CanMarry", DataType.NPC);
         public bool CanBecomePregnant => DataManager.GetBoolByIDKey(ID, "CanBecomePregnant", DataType.NPC);
-        private int TaxMultiplier => DataManager.GetIntByIDKey(ID, "TaxValue", DataType.NPC, 1);
 
         protected Dictionary<int, bool> _diCollection;
         
@@ -65,8 +64,6 @@ namespace RiverHollow.Characters
         string _sScheduleKey;
 
         public ClassedCombatant CombatVersion { get; private set; }
-
-        public int Income { get; private set; }
 
         public Villager(int index, Dictionary<string, string> stringData) : base(index, stringData)
         {
@@ -191,9 +188,6 @@ namespace RiverHollow.Characters
                 case SpawnStateEnum.SendingToInn:
                     SendToTown();
                     goto default;
-                case SpawnStateEnum.HasHome:
-                    Income = CalculateIncome();
-                    goto default;
                 case SpawnStateEnum.VisitInn:
                 case SpawnStateEnum.WaitAtInn:
                     if (!startedDayInTown)
@@ -201,6 +195,7 @@ namespace RiverHollow.Characters
                         SpawnPets();
                     }
                     goto default;
+                case SpawnStateEnum.HasHome:
                 default:
                     ClearPath();
                     break;
@@ -569,11 +564,6 @@ namespace RiverHollow.Characters
                         break;
                 }
             }
-        }
-
-        private int CalculateIncome()
-        {
-            return Constants.BASE_INCOME * (int)GetSatisfaction() * TaxMultiplier;
         }
 
         public SatisfactionStateEnum GetSatisfaction()

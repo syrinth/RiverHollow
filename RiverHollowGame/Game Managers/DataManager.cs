@@ -664,8 +664,9 @@ namespace RiverHollow.Game_Managers
                     case WorldActorTypeEnum.Spirit:
                         return new Spirit(diData);
                     case WorldActorTypeEnum.TalkingActor:
-                    case WorldActorTypeEnum.Traveler:
                         return new TalkingActor(id, diData);
+                    case WorldActorTypeEnum.Traveler:
+                        return new Traveler(id, diData);
                 }
             }
             return null;
@@ -705,6 +706,15 @@ namespace RiverHollow.Game_Managers
                 rv = null;
             }
             return (Pet)rv;
+        }
+        public static Traveler CreateTraveler(int id)
+        {
+            WorldActor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Traveler))
+            {
+                rv = null;
+            }
+            return (Traveler)rv;
         }
         public static Animal CreateAnimal(int id)
         {

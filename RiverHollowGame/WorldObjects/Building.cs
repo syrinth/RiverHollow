@@ -4,13 +4,14 @@ using RiverHollow.Game_Managers;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Map_Handling;
 using RiverHollow.WorldObjects;
-using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.Utilities;
-using static RiverHollow.Utilities.Enums;
 using RiverHollow.Misc;
 using System.Linq;
 using RiverHollow.GUIComponents.Screens.HUDScreens;
 using RiverHollow.Items;
+
+using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Buildings
 {
@@ -196,6 +197,26 @@ namespace RiverHollow.Buildings
             InventoryManager.ClearExtraInventory();
         }
 
+        public int GetTravelerChance()
+        {
+            int rv = 0;
+            foreach (var upgrade in GetUnlockedUpgrades())
+            {
+                rv += upgrade.Chance;
+            }
+            return rv;
+        }
+
+        public float GetShopValueModifier()
+        {
+            float rv = 0;
+            foreach(var upgrade in GetUnlockedUpgrades())
+            {
+                rv += upgrade.Profit;
+            }
+            return rv / 100;
+        }
+
         #region Upgrade Handlers
         public bool MaxLevel()
         {
@@ -279,61 +300,5 @@ namespace RiverHollow.Buildings
                 }
             }
         }
-    }
-
-    /// <summary>
-    /// Represents surface level information needed for buildings so we can avoid
-    /// maintaining a complete list of all Building structures that aren't required.
-    /// </summary>
-    public class BuildInfo
-    {
-        private Dictionary<int, int> _diReqToMake;
-        public Dictionary<int, int> RequiredToMake => _diReqToMake;
-
-        private string _sDescription;
-        public string Description => _sDescription;
-
-        protected int _iID;
-        public int ID => _iID;
-
-        private bool _bUnlocked = false;
-        public bool Unlocked => _bUnlocked;
-        public bool Built { get; set; } = false;
-
-        public BuildInfo(int id, Dictionary<string, string> stringData)
-        {
-            _iID = id;
-
-            _sDescription = DataManager.GetTextData(_iID, "Description", DataType.WorldObject);
-
-            Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
-
-            Util.AssignValue(ref _bUnlocked, "Unlocked", stringData);
-        }
-
-        public string Name()
-        {
-            return DataManager.GetTextData(_iID, "Name", DataType.WorldObject);
-        }
-
-        public BuildInfoData SaveData()
-        {
-            BuildInfoData buildInfoData = new BuildInfoData
-            {
-                id = this.ID,
-                built = this.Built,
-                unlocked = this.Unlocked
-            };
-
-            return buildInfoData;
-        }
-
-        public void LoadData(BuildInfoData data)
-        {
-            Built = data.built;
-            if (data.unlocked) { Unlock(); }
-        }
-
-        public void Unlock() { _bUnlocked = true; }
     }
 }

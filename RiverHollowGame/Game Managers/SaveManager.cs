@@ -480,7 +480,7 @@ namespace RiverHollow.Game_Managers
             _bSaving = true;
             GameCalendar.NextDay();
             RiverHollow.Rollover();
-            PlayerManager.AddMoney(TownManager.CalculateIncome());
+            PlayerManager.AddMoney(TownManager.Income);
             SaveManager.Save();
             PlayerManager.Stamina = PlayerManager.MaxStamina;
             foreach (CombatActor actor in PlayerManager.GetParty())

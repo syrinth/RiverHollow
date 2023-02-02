@@ -13,6 +13,7 @@ namespace RiverHollow.Misc
         public Dictionary<int, int> UpgradeRequirements => DataManager.IntDictionaryFromLookup(ID, "ItemID", DataType.Upgrade);
 
         public int Profit => DataManager.GetIntByIDKey(ID, "Profit", DataType.Upgrade);
+        public int Chance => DataManager.GetIntByIDKey(ID, "Chance", DataType.Upgrade);
 
         public Upgrade(int id)
         {

@@ -1535,6 +1535,8 @@ namespace RiverHollow.Map_Handling
                             case WorldActorTypeEnum.Merchant:
                             case WorldActorTypeEnum.ShippingGremlin:
                             case WorldActorTypeEnum.Spirit:
+                            case WorldActorTypeEnum.TalkingActor:
+                            case WorldActorTypeEnum.Traveler:
                             case WorldActorTypeEnum.Villager:
                                 GUICursor.SetCursor(GUICursor.CursorTypeEnum.Talk, c.HoverBox);
                                 found = true;

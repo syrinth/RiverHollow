@@ -2,6 +2,7 @@
 using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.Items;
+using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
@@ -15,20 +16,24 @@ namespace RiverHollow.Game_Managers
     {
         public static string TownName { get; private set; }
 
+        private static bool _bTravelers = false;
+
+        public static int Income { get; private set; }
+
         private static Dictionary<int, List<WorldObject>> _diTownObjects;
         private static Dictionary<int, int> _diStorage;
         public static Dictionary<int, Villager> DIVillagers { get; private set; }
         public static Dictionary<int, Merchant> DIMerchants { get; private set; }
         public static List<Merchant> MerchantQueue;
         public static List<Animal> TownAnimals { get; set; }
-        public static List<TalkingActor> Visitors { get; set; }
+        public static List<Traveler> Travelers { get; set; }
 
         public static void Initialize()
         {
             _diTownObjects = new Dictionary<int, List<WorldObject>>();
             _diStorage = new Dictionary<int, int>();
             TownAnimals = new List<Animal>();
-            Visitors = new List<TalkingActor>();
+            Travelers = new List<Traveler>();
             MerchantQueue = new List<Merchant>();
 
             DIMerchants = new Dictionary<int, Merchant>();
@@ -76,31 +81,167 @@ namespace RiverHollow.Game_Managers
                 npc.RollOver();
             }
 
-            HandleTravelers();
+            Income = 0;
+            Travelers.ForEach(x => Income += x.CalculateValue());
+
+            SpawnTravelers();
         }
 
-        private static void HandleTravelers()
+        #region Traveler Code
+        private static int IncreasedTravelerChance()
         {
-            for (int i = 0; i < Visitors.Count; i++)
+            int rv = 0;
+            foreach (var kvp in _diTownObjects)
             {
-                MapManager.TownMap.RemoveCharacterImmediately(Visitors[i]);
-            }
-            Visitors.Clear();
-
-            if (RHRandom.Instance().RollPercent(Constants.BASE_TRAVELER_RATE))
-            {
-                var newTraveler = new List<int>();
-                foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.NPCData)
+                Building b = GetBuildingByID(kvp.Key);
+                if (b != null)
                 {
-                    if (kvp.Value["Type"] == Util.GetEnumString(WorldActorTypeEnum.Traveler))
+                    rv += b.GetTravelerChance();
+                }
+            }
+            return rv;
+        }
+        private static void SpawnTravelers()
+        {
+            for (int i = 0; i < Travelers.Count; i++)
+            {
+                MapManager.TownMap.RemoveCharacterImmediately(Travelers[i]);
+            }
+            Travelers.Clear();
+
+            //Find all Travelers
+            var travelerList = new List<Traveler>();
+            foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.NPCData)
+            {
+                if (kvp.Value["Type"] == Util.GetEnumString(WorldActorTypeEnum.Traveler))
+                {
+                    Traveler npc = DataManager.CreateTraveler(kvp.Key);
+                    if (npc.Validate() || RHRandom.Instance().RollPercent(10))
                     {
-                        newTraveler.Add(kvp.Key);
+                        travelerList.Add(npc);
                     }
                 }
-                int chosenID = RHRandom.Instance().Next(0, newTraveler.Count - 1);
-                AddTraveler(newTraveler[chosenID]);
+            }
+
+            int successChance = Constants.BASE_TRAVELER_RATE + IncreasedTravelerChance();
+            do {
+                //Guaranteed at least one set of Travelers/week
+                if ((GameCalendar.DayOfWeek == 6 && !_bTravelers) ||  RHRandom.Instance().RollPercent(successChance))
+                {
+                    _bTravelers = true;
+
+                    if (travelerList.Count == 0)
+                    {
+                        break;
+                    }
+
+                    var options = travelerList;
+                    CheckForRareTraveler(ref options);
+
+                    Traveler npc = Util.GetRandomItem(options);
+                    AddTraveler(npc);
+                    travelerList.Remove(npc);
+
+                    MakeGroup(ref travelerList, successChance, npc.Group);
+                    successChance /= Constants.GROUP_DIVISOR;
+                }
+                else
+                {
+                    break;
+                }
+            } while (successChance > Constants.EXTRA_TRAVELER_THRESHOLD);
+        }
+
+        private static void MakeGroup(ref List<Traveler> travelerList, int successChance, TravelerGroupEnum group)
+        {
+            int chainSuccess = successChance * 2;
+            do
+            {
+                if (RHRandom.Instance().RollPercent(chainSuccess))
+                {
+                    List<Traveler> options;
+                    var noneList = travelerList.FindAll(x => x.Group == TravelerGroupEnum.None);
+                    var groupList = travelerList.FindAll(x => x.Group == group);
+
+                    Traveler npc = null;
+                    if (noneList.Count == 0 || groupList.Count == 0)
+                    {
+                        options = new List<Traveler>();
+                        options.AddRange(groupList);
+                        options.AddRange(noneList);
+                    }
+                    else if (group == TravelerGroupEnum.None) { options = travelerList; }
+                    else
+                    {
+                        if (RHRandom.Instance().RollPercent(80)) { options = groupList; }
+                        else { options = noneList; }
+                    }
+
+                    CheckForRareTraveler(ref options);
+
+                    npc = Util.GetRandomItem(options);
+                    if (npc == null)
+                    {
+                        break;
+                    }
+
+                    AddTraveler(npc);
+                    travelerList.Remove(npc);
+
+                    //If we're making a group off of a None group, need to transition to any actual group we roll on
+                    if (group == TravelerGroupEnum.None)
+                    {
+                        group = npc.Group;
+                    }
+
+                    chainSuccess /= Constants.MEMBER_DIVISOR;
+                }
+                else { break; }
+
+            } while (chainSuccess > Constants.EXTRA_TRAVELER_THRESHOLD);
+        }
+        private static void CheckForRareTraveler(ref List<Traveler> options)
+        {
+            //Check for a rare traveller
+            if (options.Any(x => x.Rare()))
+            {
+                bool getRare = RHRandom.Instance().Next(1, 10) == 10;
+                options = options.FindAll(x => x.Rare() == getRare);
             }
         }
+
+        public static void AddTraveler(int id)
+        {
+            AddTraveler((Traveler)DataManager.CreateNPCByIndex(id));
+        }
+        public static void AddTraveler(Traveler npc)
+        {
+            Travelers.Add(npc);
+
+            RHMap map = null;
+            int roll = RHRandom.Instance().Next(0, 2);
+            switch (roll)
+            {
+                case 0:
+                    if (EnvironmentManager.IsRaining()) { map = MapManager.Maps["mapInn"]; }
+                    else { map = MapManager.TownMap; }
+                    break;
+                case 1:
+                    map = MapManager.Maps["mapInn"];
+                    break;
+                case 2:
+                    if (TownObjectBuilt(npc.BuildingID()))
+                    {
+                        map = MapManager.Maps[GetBuildingByID(npc.BuildingID()).BuildingMapName];
+                    }
+                    else { goto case 0; }
+                    break;
+
+            }
+            npc.Position = map.GetRandomPosition();
+            map.AddActor(npc);
+        }
+        #endregion
 
         public static void MoveMerchants()
         {
@@ -118,13 +259,6 @@ namespace RiverHollow.Game_Managers
             npc.MoveToSpawn();
         }
 
-        public static void AddTraveler(int id)
-        {
-            TalkingActor npc = (TalkingActor)DataManager.CreateNPCByIndex(id);
-            Visitors.Add(npc);
-            npc.Position = MapManager.TownMap.GetRandomPosition();
-            MapManager.TownMap.AddActor(npc);
-        }
 
         #region Town Helpers
         public static int GetPopulation()
@@ -231,33 +365,14 @@ namespace RiverHollow.Game_Managers
         public static Building GetBuildingByID(int objID)
         {
             Building rv = null;
-            if (TownObjectBuilt(objID))
+            if (TownObjectBuilt(objID) && DataManager.GetEnumByIDKey<ObjectTypeEnum>(objID, "Type", DataType.WorldObject) == ObjectTypeEnum.Building)
             {
-                WorldObject obj = GetTownObjectsByID(objID)[0];
-                if (obj.CompareType(ObjectTypeEnum.Building))
-                {
-                    rv = (Building)obj;
-                }
+                rv = (Building)GetTownObjectsByID(objID)[0];
             }
 
             return rv;
         }
         public static IReadOnlyDictionary<int, List<WorldObject>> GetTownObjects() { return _diTownObjects; }
-
-        public static int CalculateIncome()
-        {
-            int rv = 0;
-
-            foreach (Villager n in DIVillagers.Values)
-            {
-                if (n.LivesInTown)
-                {
-                    rv += n.Income;
-                }
-            }
-
-            return rv;
-        }
         #endregion
 
         public static TownData SaveData()
@@ -289,7 +404,7 @@ namespace RiverHollow.Game_Managers
                 data.TownAnimals.Add(npc.ID);
             }
 
-            foreach (WorldActor npc in Visitors)
+            foreach (WorldActor npc in Travelers)
             {
                 data.Travelers.Add(npc.ID);
             }

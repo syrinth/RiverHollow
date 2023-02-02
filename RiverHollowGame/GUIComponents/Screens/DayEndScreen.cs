@@ -1,28 +1,25 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Misc;
+using RiverHollow.Utilities;
+using System.Collections.Generic;
+using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.Utilities.Enums;
-using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.Utilities;
-using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Misc;
 
 namespace RiverHollow.GUIComponents.Screens
 {
     public class DayEndScreen : GUIScreen
     {
-        private enum DayEndPhaseEnum { StartSave, SaveFinished, SpawnVillagers, VillagersWait, NextDay };
+        private enum DayEndPhaseEnum { StartSave, SaveFinished, SpawnNPCs, NPCsWait, NextDay };
         DayEndPhaseEnum _eCurrentPhase = DayEndPhaseEnum.StartSave;
-        const int MAX_TILES = 15;
         const double MAX_POP_TIME = 4.0;
         const double DAY_DISPLAY_PAUSE = 2;
         readonly Vector2 _pGridOffset = new Vector2(96, 112);
-
-        double _dPopTime = 0;
         RHTimer _timer;
 
         GUIImage _gBackgroundImage;
@@ -31,16 +28,15 @@ namespace RiverHollow.GUIComponents.Screens
 
         GUIButton _btnOK;
         GUIButton _btnExit;
-        List<Villager> _liVillagers;
+        List<TalkingActor> _liNPCs;
+        List<Traveler> _liOldTravelers;
         List<Vector2> _liPoints;
         List<GUIImage> _liCoins;
 
-        int _iCurrentVillager = 0;
-        int _iTotalTaxes = 0;
-        double _dTotalDisplayedTaxes = 0;
+        int _iTotalIncome = 0;
 
-        int _iVillagerTax = 0;
-        double _dVillagerTaxIncrement = 0;
+        int _iCurrentNPC = 0;
+
         bool _bPopAll;
 
         public DayEndScreen()
@@ -61,7 +57,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
                 loops++;
             }
-            _liVillagers = new List<Villager>();
+            _liNPCs = new List<TalkingActor>();
 
             _gBackgroundImage = new GUIImage(new Rectangle(0, 0, 480, 270), DataManager.GUI_COMPONENTS + @"\Combat_Background_Forest");
             AddControl(_gBackgroundImage);
@@ -71,6 +67,8 @@ namespace RiverHollow.GUIComponents.Screens
             _gText.AnchorToInnerSide(_gWindow, SideEnum.TopLeft);
             _gWindow.Resize();
             _gWindow.CenterOnScreen();
+
+            _liOldTravelers = TownManager.Travelers;
 
             SaveManager.StartSaveThread();
         }
@@ -98,26 +96,34 @@ namespace RiverHollow.GUIComponents.Screens
                     _timer.TickDown(gTime);
                     if (_timer.Finished())
                     {
-                        foreach (Villager v in TownManager.DIVillagers.Values)
+                        foreach (Villager npc in TownManager.DIVillagers.Values)
                         {
-                            if (v.LivesInTown)
+                            if (npc.LivesInTown)
                             {
-                                Villager copy = new Villager(v.ID, DataManager.NPCData[v.ID]);
+                                Villager copy = new Villager(npc.ID, DataManager.NPCData[npc.ID]);
                                 copy.Activate(false);
                                 copy.BodySprite.SetScale(CurrentScale);
                                 copy.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
-                                _liVillagers.Add(copy);
+                                _liNPCs.Add(copy);
                             }
                         }
 
-                        StartVillagerSpawn();
+                        foreach (Traveler npc in _liOldTravelers)
+                        {
+                            npc.Activate(false);
+                            npc.BodySprite.SetScale(CurrentScale);
+                            npc.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
+                            _liNPCs.Add(npc);
+                        }
+
+                        StartNPCSpawn();
                     }
 
                     break;
-                case DayEndPhaseEnum.SpawnVillagers:
-                    SpawnVillagers(gTime);
-                    goto case DayEndPhaseEnum.VillagersWait;
-                case DayEndPhaseEnum.VillagersWait:
+                case DayEndPhaseEnum.SpawnNPCs:
+                    SpawnNPCs(gTime);
+                    goto case DayEndPhaseEnum.NPCsWait;
+                case DayEndPhaseEnum.NPCsWait:
                     UpdateMoney();
                     break;
                 case DayEndPhaseEnum.NextDay:
@@ -134,40 +140,40 @@ namespace RiverHollow.GUIComponents.Screens
             }
         }
 
-        private void SpawnVillagers(GameTime gTime)
+        private void SpawnNPCs(GameTime gTime)
         {
             _timer.TickDown(gTime);
             if (_timer.Finished())
             {
                 do
                 {
-                    if (_iCurrentVillager < _liVillagers.Count)
+                    if (_iCurrentNPC < _liNPCs.Count)
                     {
-                        Villager npc = _liVillagers[_iCurrentVillager];
+                        TalkingActor npc = _liNPCs[_iCurrentNPC];
                         int index = RHRandom.Instance().Next(_liPoints.Count);
                         npc.Position = _liPoints[index];
                         npc.Activate(true);
 
                         _liPoints.RemoveAt(index);
 
-                        GUIImage coin = DataManager.GetIcon(GameIconEnum.Coin);
-                        coin.Position(npc.BodySprite.Position);
-                        coin.ScaledMoveBy(0, -Constants.TILE_SIZE);
-                        _liCoins.Add(coin);
+                        if (npc.IsActorType(WorldActorTypeEnum.Traveler))
+                        {
+                            GUIImage coin = DataManager.GetIcon(GameIconEnum.Coin);
+                            coin.Position(npc.BodySprite.Position);
+                            coin.ScaledMoveBy(0, -Constants.TILE_SIZE);
+                            _liCoins.Add(coin);
 
+                            _iTotalIncome += ((Traveler)npc).CalculateValue();
+                            _gText.SetText(_iTotalIncome);
+                        }
 
-                        _timer.Reset(MAX_POP_TIME / _liVillagers.Count);
-
-                        _iVillagerTax = TownManager.DIVillagers[npc.ID].Income;
-                        _dVillagerTaxIncrement = _iVillagerTax / (_timer.TimerSpeed / 0.02);
-
-                        _iTotalTaxes += _iVillagerTax;
+                        _timer.Reset(MAX_POP_TIME / _liNPCs.Count);
                     }
 
                     //Only switch off after we have added all of the villagers
-                    if (++_iCurrentVillager == _liVillagers.Count + 1)
+                    if (++_iCurrentNPC == _liNPCs.Count)
                     {
-                        _eCurrentPhase = DayEndPhaseEnum.VillagersWait;
+                        _eCurrentPhase = DayEndPhaseEnum.NPCsWait;
                         _btnOK = new GUIButton("OK", BtnOK);
                         _btnOK.AnchorAndAlignToObject(_gWindow, SideEnum.Bottom, SideEnum.CenterX, ScaleIt(1));
                         AddControl(_btnOK);
@@ -175,33 +181,17 @@ namespace RiverHollow.GUIComponents.Screens
                         _btnExit = new GUIButton("Exit Game", BtnExit);
                         _btnExit.AnchorToScreen(SideEnum.BottomLeft, ScaleIt(2));
                         AddControl(_btnExit);
-
-                        _dTotalDisplayedTaxes = _iTotalTaxes;
-                        _gText.SetText((int)_dTotalDisplayedTaxes);
                     }
                 }
-                while (_bPopAll && _eCurrentPhase == DayEndPhaseEnum.SpawnVillagers);
+                while (_bPopAll && _eCurrentPhase == DayEndPhaseEnum.SpawnNPCs);
             }
         }
+
         private void UpdateMoney()
         {
             foreach (GUIImage c in _liCoins)
             {
                 c.Alpha(c.Alpha() - (_bPopAll ? 0.005f : 0.02f));
-            }
-
-            if (_iVillagerTax > 0 && _dTotalDisplayedTaxes < _iTotalTaxes)
-            {
-                if (_iTotalTaxes > _dTotalDisplayedTaxes + _dVillagerTaxIncrement)
-                {
-                    _dTotalDisplayedTaxes += _dVillagerTaxIncrement;
-                }
-                else
-                {
-                    _dTotalDisplayedTaxes += _iTotalTaxes - _dTotalDisplayedTaxes;
-                }
-
-                _gText.SetText((int)_dTotalDisplayedTaxes);
             }
         }
 
@@ -209,12 +199,12 @@ namespace RiverHollow.GUIComponents.Screens
         {
             switch (_eCurrentPhase)
             {
-                case DayEndPhaseEnum.SpawnVillagers:
-                case DayEndPhaseEnum.VillagersWait:
+                case DayEndPhaseEnum.SpawnNPCs:
+                case DayEndPhaseEnum.NPCsWait:
                     _gBackgroundImage.Draw(spriteBatch);
-                    foreach (Villager v in _liVillagers)
+                    foreach (TalkingActor npc in _liNPCs)
                     {
-                        v.Draw(spriteBatch);
+                        npc.Draw(spriteBatch);
                     }
 
                     foreach (GUIImage c in _liCoins)
@@ -239,11 +229,11 @@ namespace RiverHollow.GUIComponents.Screens
             bool rv = false;
             switch (_eCurrentPhase)
             {
-                case DayEndPhaseEnum.SpawnVillagers:
+                case DayEndPhaseEnum.SpawnNPCs:
                     rv = true;
                     _bPopAll = true;
                     break;
-                case DayEndPhaseEnum.VillagersWait:
+                case DayEndPhaseEnum.NPCsWait:
                     rv = _btnOK.ProcessLeftButtonClick(mouse) || _btnExit.ProcessLeftButtonClick(mouse);
                     break;
             }
@@ -278,10 +268,10 @@ namespace RiverHollow.GUIComponents.Screens
             RiverHollow.PrepExit();
         }
 
-        private void StartVillagerSpawn()
+        private void StartNPCSpawn()
         {
             _timer.Reset(0.01);
-            _eCurrentPhase = DayEndPhaseEnum.SpawnVillagers;
+            _eCurrentPhase = DayEndPhaseEnum.SpawnNPCs;
 
             _gWindow = new GUIWindow(GUIWindow.Window_1, ScaleIt(76), ScaleIt(28));
             GUIImage gCoin = DataManager.GetIcon(GameIconEnum.Coin);
@@ -291,7 +281,7 @@ namespace RiverHollow.GUIComponents.Screens
             _gWindow.ScaledMoveBy(200, 214);
             AddControl(_gWindow);
 
-            _gText = new GUIText(_iTotalTaxes);
+            _gText = new GUIText(_iTotalIncome);
             _gText.AnchorAndAlignToObject(gCoin, SideEnum.Right, SideEnum.CenterY, ScaleIt(1));
             _gWindow.AddControl(_gText);
         }

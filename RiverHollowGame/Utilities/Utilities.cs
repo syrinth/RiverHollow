@@ -749,9 +749,7 @@ namespace RiverHollow.Utilities
 
         public override int Next(int min, int max)
         {
-            int rv = 0;
-            rv = base.Next(min, max + 1);
-            return rv;
+            return base.Next(min, max + 1);
         }
 
         public bool RollPercent(int percent)

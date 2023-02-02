@@ -214,6 +214,16 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Abeline.xml
 
+#begin Data/Text Files/Dialogue/Villagers/NPC_Adventurer1.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_Adventurer1.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_Adventurer2.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_Adventurer2.xml
+
 #begin Data/Text Files/Dialogue/Villagers/NPC_Amanda.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -333,6 +343,11 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Michael.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_Neutral1.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_Neutral1.xml
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Penelope.xml
 /importer:XmlImporter
@@ -1752,6 +1767,30 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Adventurer_6.png
 
+#begin Textures/Actors/NPCs/Adventurer1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/Adventurer1.png
+
+#begin Textures/Actors/NPCs/Adventurer2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/Adventurer2.png
+
 #begin Textures/Actors/NPCs/Amanda.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2087,6 +2126,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Michael.png
+
+#begin Textures/Actors/NPCs/Neutral1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/Neutral1.png
 
 #begin Textures/Actors/NPCs/Nevar.png
 /importer:TextureImporter
