@@ -574,12 +574,17 @@ namespace RiverHollow.Utilities
         /// <typeparam name="T">Generic type</typeparam>
         /// <param name="list">Reference to the list to add to</param>
         /// <param name="obj">The object to add.</param>
-        public static void AddUniquelyToList<T>(ref List<T> list, T obj)
+        public static bool AddUniquelyToList<T>(ref List<T> list, T obj)
         {
+            bool rv = false;
+
             if (!list.Contains(obj))
             {
+                rv = true;
                 list.Add(obj);
             }
+
+            return rv;
         }
 
         public static List<Vector2> GetAllPointsInArea(Vector2 position, Size2 dimensions, int incrementSize = 1)

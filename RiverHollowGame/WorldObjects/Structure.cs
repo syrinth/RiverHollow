@@ -41,11 +41,11 @@ namespace RiverHollow.WorldObjects
                 rv = true;
                 if (ID == int.Parse(DataManager.Config[15]["ObjectID"]))
                 {
-                    foreach (Merchant m in TownManager.DIMerchants.Values)
+                    foreach (Merchant npc in TownManager.DIMerchants.Values)
                     {
-                        if (m.OnTheMap)
+                        if (npc.OnTheMap)
                         {
-                            m.MoveToSpawn();
+                            npc.MoveToSpawn();
                         }
                     }
                 }

@@ -3,6 +3,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
+using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -98,6 +99,8 @@ namespace RiverHollow.Misc
         }
         public void Randomize()
         {
+            ClearItemSpots();
+
             if (string.IsNullOrEmpty(RandomIndices))
             {
                 int totalMerch = _liMerchandise.Count;
@@ -105,7 +108,7 @@ namespace RiverHollow.Misc
                 List<int> indices = new List<int>();
                 for (int i = 0; i < totalMerch; i++) { indices.Add(i); }
 
-                for (int i = 0; i < _liShopItemSpots.Count && i < totalMerch; i++)
+                for (int i = 0; i < TownManager.Market.ObjectInfo.Count && i < totalMerch; i++)
                 {
                     int index = RHRandom.Instance().Next(indices.Count);
                     RandomIndices += indices[index] + "|";

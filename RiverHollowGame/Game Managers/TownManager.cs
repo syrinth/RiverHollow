@@ -21,6 +21,7 @@ namespace RiverHollow.Game_Managers
         public static int Income { get; private set; }
 
         public static Building Inn { get; private set; }
+        public static Structure Market { get; private set; }
 
         private static Dictionary<int, List<WorldObject>> _diTownObjects;
         private static Dictionary<int, int> _diStorage;
@@ -359,6 +360,10 @@ namespace RiverHollow.Game_Managers
             if(DataManager.GetBoolByIDKey(obj.ID, "Inn", DataType.WorldObject))
             {
                 Inn = (Building)obj;
+            }
+            if (DataManager.GetBoolByIDKey(obj.ID, "Market", DataType.WorldObject))
+            {
+                Market = (Structure)obj;
             }
 
             if (buildable)

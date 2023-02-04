@@ -65,18 +65,21 @@ namespace RiverHollow.Characters
                         {
                             int chosenValue = RHRandom.Instance().Next(0, copy.Count - 1);
 
-                            RequestItem request = copy[chosenValue];
-                            Item it = DataManager.GetItem(request.ID, request.Number);
-
-                            ChosenRequests[i] = request.ID;
+                            ChosenRequests[i] = copy[chosenValue].ID;
                             copy.RemoveAt(chosenValue);
                         }
                     }
 
                     if (HandleTravelTiming())
                     {
-                        if (!_bArrivedOnce) { TownManager.MerchantQueue.Add(this); }
-                        else { TownManager.MerchantQueue.Insert(0, this); }
+                        if (!_bArrivedOnce) { TownManager.MerchantQueue.Insert(0, this); }
+                        else
+                        {
+                            if (Util.AddUniquelyToList(ref TownManager.MerchantQueue, this))
+                            {
+                                DIShops[ShopID].Randomize();
+                            }
+                        }
                     }
                 }
             }
@@ -189,18 +192,17 @@ namespace RiverHollow.Characters
             CurrentMapName = Constants.TOWN_MAP_NAME;
             MapManager.Maps[CurrentMapName].AddCharacterImmediately(this);
 
-            Structure market = (Structure)TownManager.GetTownObjectsByID(int.Parse(DataManager.Config[15]["ObjectID"]))[0];
-            Position = Util.SnapToGrid(new Vector2(market.MapPosition.X + market.SpecialCoords.X, market.MapPosition.Y + market.SpecialCoords.Y));
+            Position = Util.SnapToGrid(new Vector2(TownManager.Market.MapPosition.X + TownManager.Market.SpecialCoords.X, TownManager.Market.MapPosition.Y + TownManager.Market.SpecialCoords.Y));
+            PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
 
             if (_iShopID != -1)
             {
                 Shop marketShop = DIShops[_iShopID];
                 marketShop.ClearItemSpots();
-                foreach (Structure.SubObjectInfo info in market.ObjectInfo)
+                foreach (Structure.SubObjectInfo info in TownManager.Market.ObjectInfo)
                 {
-                    marketShop.AddItemSpot(new ShopItemSpot(CurrentMapName, market.MapPosition + info.Position + new Vector2(8, -13)));
+                    marketShop.AddItemSpot(new ShopItemSpot(CurrentMapName, TownManager.Market.MapPosition + info.Position + new Vector2(8, -13)));
                 }
-                DIShops[ShopID].Randomize();
                 marketShop.PlaceStock(true);
             }
         }
@@ -217,7 +219,7 @@ namespace RiverHollow.Characters
             {
                 npcID = ID,
                 timeToNextArrival = _iNextArrival,
-                introduced = Introduced,
+                relationShipStatus = (int)RelationshipState,
                 spokenKeys = _liSpokenKeys,
                 arrivedOnce = _bArrivedOnce,
                 requestString = string.Join("|", ChosenRequests)

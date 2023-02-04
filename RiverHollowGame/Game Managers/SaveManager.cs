@@ -351,9 +351,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "NPCID")]
             public int npcID;
 
-            [XmlElement(ElementName = "Introduced")]
-            public bool introduced;
-
             [XmlElement(ElementName = "NextArrival")]
             public int timeToNextArrival;
 
@@ -677,18 +674,18 @@ namespace RiverHollow.Game_Managers
                 map.LoadData(mapData);
             }
 
+            for (int i = 0; i < dataToLoad.ShopData.Count; i++)
+            {
+                Shop s = GameManager.DIShops[i];
+                s.LoadData(dataToLoad.ShopData[i]);
+            }
+
             PlayerManager.LoadData(dataToLoad.playerData);
             TownManager.LoadData(dataToLoad.townData);
 
             PlayerManager.LoadToolData(dataToLoad.Tools);
             //Needs to be here because the Mailbox is a worldobject
             PlayerManager.PlayerMailbox.LoadData(dataToLoad.TheMailbox);
-
-            for (int i = 0; i < dataToLoad.ShopData.Count; i++)
-            {
-                Shop s = GameManager.DIShops[i];
-                s.LoadData(dataToLoad.ShopData[i]);
-            }
 
             CutsceneManager.LoadCutscenes(dataToLoad.CSData);
 
