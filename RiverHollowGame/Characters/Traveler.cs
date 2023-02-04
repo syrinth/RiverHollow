@@ -74,7 +74,7 @@ namespace RiverHollow.Characters
         {
             if (_fFoodModifier == 0 && f.Remove(1, false))
             {
-                _fFoodModifier = (f.Value / 100f);
+                _fFoodModifier = (f.FoodValue / 100f);
 
                 if (f.FoodType == FavoriteFood())
                 {
@@ -85,7 +85,7 @@ namespace RiverHollow.Characters
                 {
                     MoodVerb = AnimationEnum.Neutral;
                 }
-                else if (f.FoodType == DislikedFood())
+                else if (f.FoodType == DislikedFood() || f.FoodType == FoodTypeEnum.Forage)
                 {
                     MoodVerb = AnimationEnum.Sad;
                     _fFoodModifier -= .5f;
@@ -101,7 +101,7 @@ namespace RiverHollow.Characters
 
         public bool NeutralFood(FoodTypeEnum e)
         {
-            bool rv = (e != FavoriteFood() && e != DislikedFood());
+            bool rv = (e != FavoriteFood() && e != DislikedFood() && e != FoodTypeEnum.Forage);
             return rv;
         }
 

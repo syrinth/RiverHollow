@@ -1,43 +1,70 @@
 ﻿using Microsoft.Xna.Framework;
+using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Items;
 using RiverHollow.Misc;
+using RiverHollow.Utilities;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
     class QuantityWindow : GUIMainObject
     {
         int MAX_VALUE => (GameManager.CurrentItem != null ? PlayerManager.Money / GameManager.CurrentItem.BuyPrice : 0);
-        int _iNum;
         GUIText _gText;
         GUIButton _btnUp;
         GUIButton _btnDown;
         GUIButton _btnOk;
 
+
+        ///
+        Item[,] _arrToSell;
+        GUIText _gSellValue;
+        GUIButton _btnBuy;
+
         public QuantityWindow()
         {
-            SetMainWindow(GUIWindow.Window_1, GameManager.ScaleIt(58), GameManager.ScaleIt(21));
+            _arrToSell = new Item[1, 1];
+            InventoryManager.InitExtraInventory(_arrToSell);
 
-            _iNum = GameManager.CurrentItem.Number;
+            _winMain = SetMainWindow(GUIWindow.Window_2, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
 
-            _btnDown = new GUIButton(new Rectangle(137, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Decrement);
-            _btnDown.Position(Position());
-            _btnDown.ScaledMoveBy(8, 7);
-            AddControl(_btnDown);
+            GUIItemBox box = new GUIItemBox(GameManager.CurrentItem);
+            box.Position(_winMain);
+            box.ScaledMoveBy(47, 20);
+            box.AlignToObject(_winMain, SideEnum.CenterX);
+            AddControl(box);
 
-            _gText = new GUIText(_iNum.ToString("000"));
-            _gText.AnchorAndAlignToObject(_btnDown, SideEnum.Right, SideEnum.CenterY, GameManager.ScaleIt(1));
-            AddControl(_gText);
+            GUIText text = new GUIText(GameManager.CurrentItem.Name());
+            text.Position(_winMain);
+            text.AlignToObject(box, SideEnum.CenterX);
+            text.ScaledMoveBy(0, 7);
+            AddControl(text);
 
             _btnUp = new GUIButton(new Rectangle(128, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Increment);
-            _btnUp.Position(Position());
-            _btnUp.ScaledMoveBy(29, 7);
+            _btnUp.AnchorAndAlignToObject(box, SideEnum.Right, SideEnum.CenterY, GameManager.ScaleIt(2));
             AddControl(_btnUp);
 
-            _btnOk = new GUIButton(new Rectangle(130, 55, 11, 9), DataManager.DIALOGUE_TEXTURE, ProceedToPurchase);
-            _btnOk.Position(Position());
-            _btnOk.ScaledMoveBy(40, 6);
-            AddControl(_btnOk);
+            _btnDown = new GUIButton(new Rectangle(137, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Decrement);
+            _btnDown.AnchorAndAlignToObject(box, SideEnum.Left, SideEnum.CenterY, GameManager.ScaleIt(2));
+            AddControl(_btnDown);
+
+
+            GUIImage img = new GUIImage(new Rectangle(2, 120, 100, 3), GameManager.ScaleIt(100), GameManager.ScaleIt(3), DataManager.HUD_COMPONENTS);
+            img.AnchorAndAlignToObject(box, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(2));
+            AddControl(img);
+
+            _btnBuy = new GUIButton(new Rectangle(164, 0, 18, 19), DataManager.HUD_COMPONENTS, ProceedToPurchase);
+            _btnBuy.Position(_winMain);
+            _btnBuy.ScaledMoveBy(89, 48);
+            AddControl(_btnBuy);
+
+            _gSellValue = new GUIText(GameManager.CurrentItem.TotalBuyValue);
+            _gSellValue.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.CenterY, GameManager.ScaleIt(2));
+            AddControl(_gSellValue);
+
+            CenterOnScreen();
         }
 
         public override bool ProcessRightButtonClick(Point mouse)
@@ -48,34 +75,37 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public void Increment()
         {
-            if (_iNum < MAX_VALUE) { _iNum++; }
-            else { _iNum = 1; }
+            if (GameManager.CurrentItem.Number < MAX_VALUE) { GameManager.CurrentItem.Add(1, false); }
+            else { GameManager.CurrentItem.SetNumber(1); }
 
-            Refresh();
+            RefreshPrice();
         }
 
         public void Decrement()
         {
-            if (_iNum > 1) { _iNum--; }
-            else { _iNum = MAX_VALUE; }
+            if (GameManager.CurrentItem.Number > 1) { GameManager.CurrentItem.Remove(1, false); }
+            else { GameManager.CurrentItem.SetNumber(MAX_VALUE); }
 
-            Refresh();
+            RefreshPrice();
         }
 
-        public void Refresh()
+        private void RefreshPrice()
         {
-            _gText.SetText(_iNum.ToString("000"));
+            Color c = Color.Black;
+            int offer = GameManager.CurrentItem.TotalBuyValue;
+            _gSellValue.SetText(offer);
+            _gSellValue.SetColor(c);
+            _gSellValue.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.CenterY, GameManager.ScaleIt(2));
+
+            _btnBuy.Enable(offer > 0);
         }
 
         public void ProceedToPurchase()
         {
-            if (InventoryManager.HasSpaceInInventory(GameManager.CurrentItem.ID, _iNum))
+            if (InventoryManager.HasSpaceInInventory(GameManager.CurrentItem.ID, GameManager.CurrentItem.Number))
             {
-                GameManager.CurrentItem.Add(_iNum - 1);
-                TextEntry entry = DataManager.GetGameTextEntry("BuyMerch_Confirm");
-                entry.FormatText(string.Format(GameManager.CurrentItem.Name() + " x" + GameManager.CurrentItem.Number), GameManager.CurrentItem.TotalBuyValue);
+                MapManager.CurrentMap.TheShop.Purchase(GameManager.CurrentItem);
                 GUIManager.CloseMainObject();
-                GUIManager.OpenTextWindow(entry);
             }
             else
             {

@@ -179,7 +179,7 @@ namespace RiverHollow.Items
                 InventoryManager.AddToInventory(ID, leftOver, playerInventory);
             }
         }
-        public virtual bool Remove(int x, bool playerInventory = true)
+        public bool Remove(int x, bool playerInventory = true)
         {
             bool rv = false;
             if (x <= _iNum)
@@ -194,6 +194,14 @@ namespace RiverHollow.Items
                 }
             }
             return rv;
+        }
+
+        public void SetNumber(int value)
+        {
+            if (value > 0 && value < 999)
+            {
+                _iNum = value;
+            }
         }
 
         public Dictionary<int, int> GetRequiredItems()

@@ -95,7 +95,7 @@
     </Item>
     <Item>
       <Key>23</Key>
-      <Value>[Type:Resource][Image:5-3][Value:10]</Value>
+      <Value>[Type:Food][Image:1-0][Value:10][FoodType:Forage][Stam:1][FoodValue:0]</Value>
     </Item>
     <Item>
       <Key>24</Key>
@@ -655,7 +655,7 @@
     </Item>
     <Item>
       <Key>163</Key>
-      <Value>[Type:Food][Image:5-2][MerchType:Herb][Value:30][Stam:10][FoodType:Healthy]</Value>
+      <Value>[Type:Food][Image:5-2][MerchType:Herb][Value:30][Stam:10][FoodType:Healthy][FoodValue:10]</Value>
     </Item>
     <Item>
       <Key>164</Key>
@@ -783,15 +783,15 @@
     </Item>
     <Item>
       <Key>195</Key>
-      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:30][ReqItems:150-1][Stam:16][FoodType:Plain]</Value>
+      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:30][ReqItems:150-1][Stam:16][FoodType:Plain][FoodValue:30]</Value>
     </Item>
     <Item>
       <Key>196</Key>
-      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:50][ReqItems:150-1][FoodType:Plain]</Value>
+      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:50][ReqItems:150-1][FoodType:Plain][FoodValue:50]</Value>
     </Item>
     <Item>
       <Key>197</Key>
-      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:50][ReqItems:150-1][FoodType:Healthy]</Value>
+      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:50][ReqItems:150-1][FoodType:Healthy][FoodValue:50]</Value>
     </Item>
   </Asset>
 </XnaContent>
