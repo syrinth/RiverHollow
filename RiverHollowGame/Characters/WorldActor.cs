@@ -79,7 +79,7 @@ namespace RiverHollow.Characters
         protected bool _bFollow = false;
         protected bool _bIdleCooldown = false;
 
-        protected bool _bCanWander = false;
+        public bool Wandering { get; protected set; } = false;
         protected NPCStateEnum _eCurrentState = NPCStateEnum.Idle;
         #endregion
 
@@ -109,7 +109,7 @@ namespace RiverHollow.Characters
                 _iBodyHeight = size.Height;
             }
 
-            Util.AssignValue(ref _bCanWander, "Wander", stringData);
+            Wandering = stringData.ContainsKey("Wander");
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -434,7 +434,7 @@ namespace RiverHollow.Characters
 
         protected void ProcessStateEnum(GameTime gTime, bool getInRange)
         {
-            if (_bCanWander)
+            if (Wandering)
             {
                 switch (_eCurrentState)
                 {

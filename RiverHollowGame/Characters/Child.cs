@@ -28,7 +28,7 @@ namespace RiverHollow.Characters
         public Child(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             ActorType = WorldActorTypeEnum.Child;
-            _bCanWander = true;
+            Wandering = true;
             SlowDontBlock = true;
 
             _liGrowthPeriods = new List<int>() { 4, 10 };

@@ -153,7 +153,7 @@ namespace RiverHollow.Characters
 
                     if (_currentPathData.Wander)
                     {
-                        _bCanWander = true;
+                        Wandering = true;
                     }
 
                     _currentPathData = null;

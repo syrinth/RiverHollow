@@ -76,13 +76,14 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void ChangeMaps(WorldActor c, string currMap, TravelPoint travelPoint)
+        public static void ChangeMaps(WorldActor actor, string currMap, TravelPoint travelPoint)
         {
             //Get the entry rectangle on the new map
-            TravelPoint entryPoint = null;
+            TravelPoint entryPoint;
+            RHMap linkedMap = Maps[travelPoint.LinkedMap];
 
             //Handling for if the WorldActor is the player character
-            if (c == PlayerManager.PlayerActor)
+            if (actor == PlayerManager.PlayerActor)
             {
                 //If the travel point has no linked map yet and is supposed to generate a level,
                 //send a message off to the DungeonManager to initialize it
@@ -91,9 +92,9 @@ namespace RiverHollow.Game_Managers
                     DungeonManager.InitializeProceduralDungeon(MapManager.CurrentMap.DungeonName, MapManager.CurrentMap.Name, travelPoint);
                 }
 
-                entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
+                entryPoint = linkedMap.DictionaryTravelPoints[currMap];
 
-                Vector2 newPos = Vector2.Zero;
+                Vector2 newPos;
                 if (travelPoint.IsDoor)
                 {
                     newPos = entryPoint.GetMovedCenter();
@@ -101,29 +102,30 @@ namespace RiverHollow.Game_Managers
                 }
                 else if (travelPoint.NoMove)
                 {
-                    newPos = c.Position;
+                    newPos = actor.Position;
                 }
                 else
                 {
-                    newPos = entryPoint.FindLinkedPointPosition(travelPoint.Center, c);
+                    newPos = entryPoint.FindLinkedPointPosition(travelPoint.Center, actor);
                 }
 
-                Maps[travelPoint.LinkedMap].SpawnMapEntities();
+                linkedMap.SpawnMapEntities();
+
                 PlayerManager.PlayerActor.ActivePet?.ChangeState(NPCStateEnum.Alert);
-                FadeToNewMap(Maps[travelPoint.LinkedMap], newPos, travelPoint.TargetBuilding);
+                FadeToNewMap(linkedMap, newPos, travelPoint.TargetBuilding);
 
                 PlayerManager.ReleaseTile();
             }
-            else
+            else if (!actor.Wandering)
             {
-                entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
+                entryPoint = linkedMap.DictionaryTravelPoints[currMap];
 
-                c.ClearTileForMapChange();
+                actor.ClearTileForMapChange();
 
-                Maps[currMap].RemoveActor(c);
-                Maps[travelPoint.LinkedMap].AddActor(c);
-                RHTile newTile = Maps[travelPoint.LinkedMap].GetTileByGridCoords(Util.GetGridCoords(entryPoint.GetMovedCenter()));
-                c.NewMapPosition = newTile.Position;
+                Maps[currMap].RemoveActor(actor);
+                linkedMap.AddActor(actor);
+                RHTile newTile = linkedMap.GetTileByGridCoords(Util.GetGridCoords(entryPoint.GetMovedCenter()));
+                actor.NewMapPosition = newTile.Position;
             }
         }
 

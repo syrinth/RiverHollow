@@ -17,7 +17,7 @@ namespace RiverHollow.Characters
         {
             _fBaseSpeed = 1;
             ActorType = WorldActorTypeEnum.Pet;
-            _bCanWander = true;
+            Wandering = true;
             SlowDontBlock = true;
 
             //_sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Adventurer", stringData["Key"]);

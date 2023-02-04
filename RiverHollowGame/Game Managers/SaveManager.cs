@@ -297,6 +297,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "MapName")]
             public string mapName;
 
+            [XmlElement(ElementName = "Visited")]
+            public bool visited;
+
             [XmlArray(ElementName = "WorldObjects")]
             public List<WorldObjectData> worldObjects;
         }

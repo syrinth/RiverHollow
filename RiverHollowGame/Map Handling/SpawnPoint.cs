@@ -63,9 +63,9 @@ namespace RiverHollow.Map_Handling
 
         public virtual void Spawn() { }
 
-        public virtual void Rollover() { }
+        public virtual void Rollover(bool reset = false) { }
 
-        protected struct SpawnData
+        protected readonly struct SpawnData
         {
             public readonly int ID;
             public readonly SpawnTypeEnum Type;
@@ -129,7 +129,7 @@ namespace RiverHollow.Map_Handling
                 RHTile targetTile = validTiles[RHRandom.Instance().Next(0, validTiles.Count - 1)];
 
                 //If the object could not be placed, keep trying until you find one that can be
-                bool objectIsValid = true;
+                bool objectIsValid;
                 do
                 {
                     objectIsValid = true;
@@ -214,11 +214,15 @@ namespace RiverHollow.Map_Handling
             return false;
         }
 
-        public override void Rollover()
+        public override void Rollover(bool reset)
         {
-            if (_iCurrent < _iMax)
+            if (reset) { _bHasSpawned = false; }
+            else
             {
-                SpawnObject(1);
+                if (_iCurrent < _iMax)
+                {
+                    SpawnObject(1);
+                }
             }
         }
     }

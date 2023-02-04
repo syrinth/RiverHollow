@@ -19,7 +19,7 @@ namespace RiverHollow.Characters
         {
             _fBaseSpeed = Constants.NPC_WALK_SPEED;
             ActorType = WorldActorTypeEnum.Animal;
-            _bCanWander = true;
+            Wandering = true;
             SlowDontBlock = true;
 
             List<AnimationData> liData = new List<AnimationData>();

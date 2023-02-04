@@ -42,7 +42,9 @@ namespace RiverHollow.Map_Handling
         public bool IsOutside => _map.Properties.ContainsKey("Outside");
         public float Lighting => _map.Properties.ContainsKey("Lighting") ? float.Parse(_map.Properties["Lighting"]) : 1;
         public string MapType => _map.Properties.ContainsKey("MapType") ? _map.Properties["MapType"] : string.Empty;
-        bool _bSpawned = false;
+
+        public bool Visited { get; private set; } = false;
+        private bool Randomize => _map.Properties.ContainsKey("Randomize");
         public MonsterFood PrimedFood { get; private set; }
         public RHTile TargetTile { get; private set; } = null;
 
@@ -68,6 +70,7 @@ namespace RiverHollow.Map_Handling
         public List<WorldActor> ToAdd;
         private List<Building> _liBuildings;
         private List<WorldObject> _liPlacedWorldObjects;
+        private List<WorldObject> _liResourceObjects;
         private List<ResourceSpawn> _liResourceSpawns;
         private List<MobSpawn> _liMobSpawns;
         private List<int> _liCutscenes;
@@ -89,6 +92,7 @@ namespace RiverHollow.Map_Handling
         public RHMap()
         {
             _liResourceSpawns = new List<ResourceSpawn>();
+            _liResourceObjects = new List<WorldObject>();
             _liMobSpawns = new List<MobSpawn>();
             _liWallTiles = new List<RHTile>();
             _liTestTiles = new List<RHTile>();
@@ -583,24 +587,17 @@ namespace RiverHollow.Map_Handling
 
         public void SpawnMapEntities(bool spawnAboveAndBelow = true)
         {
-            if (!_bSpawned)
+            if (!Visited)
             {
+                Visited = true;
                 if (spawnAboveAndBelow)
                 {
                     if (MapAboveValid()) { MapManager.Maps[MapAbove].SpawnMapEntities(false); }
                     if (MapBelowValid()) { MapManager.Maps[MapBelow].SpawnMapEntities(false); }
                 }
-                _bSpawned = true;
-                SpawnResources();
-                SpawnMobs();
-            }
-        }
 
-        private void SpawnResources()
-        {
-            for (int i = 0; i < _liResourceSpawns.Count; i++)
-            {
-                _liResourceSpawns[i].Spawn();
+                _liResourceSpawns.ForEach(x => x.Spawn());
+                SpawnMobs();
             }
         }
 
@@ -790,10 +787,14 @@ namespace RiverHollow.Map_Handling
 
         public void Rollover()
         {
-            for (int i = 0; i < _liPlacedWorldObjects.Count; i++) { _liPlacedWorldObjects[i].Rollover(); }
-            for (int i = 0; i < _liResourceSpawns.Count; i++) { _liResourceSpawns[i].Rollover(); }
-
-            _bSpawned = false;
+            if (Randomize)
+            {
+                Visited = false;
+                _liPlacedWorldObjects.ForEach(x => x.RemoveSelfFromTiles());
+                _liPlacedWorldObjects.Clear();
+            }
+            _liPlacedWorldObjects.ForEach(x => x.Rollover());
+            _liResourceSpawns.ForEach(x => x.Rollover(Randomize));
 
             StockShop();
             CheckSpirits();
@@ -2022,10 +2023,7 @@ namespace RiverHollow.Map_Handling
             }
 
             //Sets the WorldObject to each RHTile
-            foreach (RHTile t in tiles)
-            {
-                t.SetObject(obj);
-            }
+            tiles.ForEach(x => x.SetObject(obj));
 
             //Iterate over the WorldObject image in Constants.TILE_SIZE increments to discover any tiles
             //that the image overlaps. Add those tiles as Shadow Tiles as long as they're not
@@ -2327,6 +2325,7 @@ namespace RiverHollow.Map_Handling
             MapData mapData = new MapData
             {
                 mapName = this.Name,
+                visited = this.Visited,
                 worldObjects = new List<WorldObjectData>()
             };
 
@@ -2342,6 +2341,7 @@ namespace RiverHollow.Map_Handling
         }
         internal void LoadData(MapData mData)
         {
+            Visited = mData.visited;
             foreach (WorldObjectData data in mData.worldObjects)
             {
                 WorldObject obj = DataManager.CreateWorldObjectByID(data.ID);
