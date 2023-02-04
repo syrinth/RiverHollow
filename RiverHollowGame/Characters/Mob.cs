@@ -34,7 +34,6 @@ namespace RiverHollow.Characters
         //AnimatedSprite _sprAlert;
 
         FieldOfVision _FoV;
-        Vector2 _vLeashPoint;
         float _fLeashRange = Constants.TILE_SIZE * 30;
 
         List<SpawnConditionEnum> _liSpawnConditions;
@@ -313,30 +312,6 @@ namespace RiverHollow.Characters
         public void DrainXP(int v)
         {
             XP -= Math.Min(v, XP);
-        }
-
-        protected override void CalculatePath()
-        {
-            if (PlayerManager.CurrentMap != CurrentMapName)
-            {
-                return;
-            }
-
-            Vector2 startPosition = Position;
-            Vector2 target = _eCurrentState == NPCStateEnum.TrackPlayer ? PlayerManager.PlayerActor.CollisionCenter.ToVector2() : _vLeashPoint;
-            //RHTile lastTile = _liTilePath.Count > 0 ? _liTilePath[0] : null;
-            _liTilePath = TravelManager.FindPathToLocation(ref startPosition, target, null, false, false);
-
-            if (_liTilePath?.Count > 0 && _liTilePath?.Count < 30)
-            {
-                SetMoveTo(_liTilePath[0].Position);
-            }
-            else
-            {
-                _liTilePath = new List<RHTile>();
-            }
-
-            TravelManager.FinishThreading(ref _pathingThread);
         }
 
         public void ResetPathing()

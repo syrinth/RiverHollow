@@ -26,6 +26,7 @@ namespace RiverHollow.Characters
         public WorldActorTypeEnum ActorType { get; protected set; }
 
         public Vector2 MoveToLocation { get; private set; }
+        protected Vector2 _vLeashPoint;
 
         public string CurrentMapName;
         public RHMap CurrentMap => (!string.IsNullOrEmpty(CurrentMapName) ? MapManager.Maps[CurrentMapName] : null);
@@ -303,7 +304,30 @@ namespace RiverHollow.Characters
             return _pathingThread;
         }
 
-        protected virtual void CalculatePath() { }
+        protected virtual void CalculatePath()
+        {
+            if (PlayerManager.CurrentMap != CurrentMapName || _eCurrentState != NPCStateEnum.TrackPlayer)
+            {
+                TravelManager.FinishThreading(ref _pathingThread);
+                return;
+            }
+
+            Vector2 startPosition = Position;
+            Vector2 target = _eCurrentState == NPCStateEnum.TrackPlayer ? PlayerManager.PlayerActor.CollisionCenter.ToVector2() : _vLeashPoint; ;
+            //RHTile lastTile = _liTilePath.Count > 0 ? _liTilePath[0] : null;
+            _liTilePath = TravelManager.FindPathToLocation(ref startPosition, target, null, false, false);
+
+            if (_liTilePath?.Count > 0 && _liTilePath?.Count < 30)
+            {
+                SetMoveTo(_liTilePath[0].Position);
+            }
+            else
+            {
+                _liTilePath = new List<RHTile>();
+            }
+
+            TravelManager.FinishThreading(ref _pathingThread);
+        }
 
         /// <summary>
         /// Attempts to move the Actor to the indicated location
@@ -315,8 +339,6 @@ namespace RiverHollow.Characters
             {
                 //Determines the distance that needs to be traveled from the current position to the target
                 Vector2 direction = Vector2.Zero;
-                float deltaX = Math.Abs(MoveToLocation.X - this.Position.X);
-                float deltaY = Math.Abs(MoveToLocation.Y - this.Position.Y);
 
                 //Determines how much of the needed position we're capable of  in one movement
                 Util.GetMoveSpeed(Position, MoveToLocation, BuffedSpeed, ref direction);
@@ -487,6 +509,21 @@ namespace RiverHollow.Characters
             }
         }
 
+        private bool CanMove(DirectionEnum dir)
+        {
+            bool rv = false;
+
+            RHTile currentTile = CurrentMap.GetTileByPixelPosition(CollisionBox.Center);
+            RHTile testTile = currentTile.GetTileByDirection(dir);
+            if (testTile.Passable())
+            {
+                rv = true;
+                SetMoveTo(testTile.Position);
+            }
+
+            return rv;
+        }
+
         protected void Wander(GameTime gTime)
         {
             _movementTimer.TickDown(gTime);
@@ -547,6 +584,7 @@ namespace RiverHollow.Characters
                     break;
                 case NPCStateEnum.Idle:
                     PlayAnimation(VerbEnum.Idle, Facing);
+                    ChangeMovement(Constants.NPC_WALK_SPEED);
                     break;
                 case NPCStateEnum.TrackPlayer:
                     ChangeMovement(Constants.NORMAL_SPEED);

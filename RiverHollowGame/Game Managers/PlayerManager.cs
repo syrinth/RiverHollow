@@ -672,8 +672,7 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadData(PlayerData saveData)
         {
-            //We've already loaded in the player position
-            Vector2 pos = PlayerActor.Position;
+            MoveToSpawn();
 
             SetName(saveData.name);
             SetMoney(saveData.money);
@@ -694,7 +693,7 @@ namespace RiverHollow.Game_Managers
             PlayerCombatant.IncreaseHealth(PlayerCombatant.MaxHP);
             PlayerActor.SetBodyType(saveData.bodyTypeIndex);
 
-            for (int i = 0; i < PlayerManager.BackpackLevel; i++)
+            for (int i = 0; i < BackpackLevel; i++)
             {
                 for (int j = 0; j < InventoryManager.maxItemColumns; j++)
                 {
@@ -702,7 +701,7 @@ namespace RiverHollow.Game_Managers
                     ItemData item = saveData.Items[index];
                     Item newItem = DataManager.GetItem(item.itemID, item.num);
  
-                    if (newItem != null) { newItem.ApplyUniqueData(item.strData); }
+                    newItem?.ApplyUniqueData(item.strData);
                     InventoryManager.AddItemToInventorySpot(newItem, i, j);
                 }
             }

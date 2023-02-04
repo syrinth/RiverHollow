@@ -680,7 +680,6 @@ namespace RiverHollow.Game_Managers
             PlayerManager.LoadData(dataToLoad.playerData);
             TownManager.LoadData(dataToLoad.townData);
 
-            PlayerManager.MoveToSpawn();
             PlayerManager.LoadToolData(dataToLoad.Tools);
             //Needs to be here because the Mailbox is a worldobject
             PlayerManager.PlayerMailbox.LoadData(dataToLoad.TheMailbox);

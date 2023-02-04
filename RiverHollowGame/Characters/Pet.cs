@@ -29,6 +29,11 @@ namespace RiverHollow.Characters
             LoadSpriteAnimations(ref _sprBody, liData, SpriteName());
         }
 
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+        }
+
         public override void ProcessRightButtonClick()
         {
             //TextEntry text = DataManager.GetGameTextEntry(_bFollow ? "Unfollow" : "PetFollow");

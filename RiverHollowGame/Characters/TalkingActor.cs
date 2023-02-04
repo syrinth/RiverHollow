@@ -73,15 +73,30 @@ namespace RiverHollow.Characters
             if (_bBumpedIntoSomething)
             {
                 _bBumpedIntoSomething = false;
-                ChangeState(NPCStateEnum.Idle);
-                SetMoveTo(Vector2.Zero);
+                if (_eCurrentState == NPCStateEnum.Wander)
+                {
+                    ChangeState(NPCStateEnum.Idle);
+                    SetMoveTo(Vector2.Zero);
+                }
             }
 
-            if (_bFollow && !PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 8) && _eCurrentState != NPCStateEnum.TrackPlayer)
+            if (_bFollow)
             {
-                if (!_sprBody.IsCurrentAnimation(VerbEnum.Action1, Facing))
+                switch (_eCurrentState)
                 {
-                    ChangeState(NPCStateEnum.Alert);
+                    case NPCStateEnum.TrackPlayer:
+                        if(IsActorType(WorldActorTypeEnum.Pet) && PlayerManager.PlayerInRange(CollisionCenter, Constants.FOLLOW_ARRIVED))
+                        {
+                            ChangeState(NPCStateEnum.Idle);
+                        }
+                        break;
+                    default:
+                        if (!_sprBody.IsCurrentAnimation(VerbEnum.Action1, Facing) && !PlayerManager.PlayerInRange(CollisionCenter, Constants.FOLLOW_ALERT_THRESHOLD))
+                        {
+                            ChangeState(NPCStateEnum.Alert);
+                        }
+                        break;
+
                 }
             }
 

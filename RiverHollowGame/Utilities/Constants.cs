@@ -55,6 +55,9 @@
         public const int GROUP_DIVISOR = 3;
         public const int MEMBER_DIVISOR = 2;
 
+        public const int FOLLOW_ALERT_THRESHOLD = TILE_SIZE * 8;
+        public const int FOLLOW_ARRIVED = TILE_SIZE * 3;
+
         public const int TASK_ICON_OFFSET = 15;
 
         public const string STRING_NULL = "null";
