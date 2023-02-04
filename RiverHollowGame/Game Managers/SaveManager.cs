@@ -184,6 +184,9 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Visitors")]
             public List<int> Travelers;
 
+            [XmlElement(ElementName = "TravelersCame")]
+            public bool travelersCame;
+
         }
         public struct StorageData
         {

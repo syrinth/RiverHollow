@@ -238,15 +238,19 @@ namespace RiverHollow.GUIComponents.Screens
             _gMainObject = o;
             AddControl(_gMainObject);
         }
-        public virtual void CloseMainObject()
+        public virtual bool CloseMainObject()
         {
+            bool rv = false;
             if (_gMainObject != null)
             {
+                rv = true;
                 _gMainObject.CloseMainWindow();
                 RemoveControl(_gMainObject);
                 _gMainObject = null;
                 CloseHoverWindow();
             }
+
+            return rv;
         }
         #endregion
 

@@ -137,7 +137,7 @@ namespace RiverHollow.GUIComponents.Screens
                     CloseMenu();
                 }
 
-                GUIManager.CloseMainObject();
+                rv = GUIManager.CloseMainObject();
             }
 
             return rv;

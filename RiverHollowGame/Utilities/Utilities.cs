@@ -608,6 +608,20 @@ namespace RiverHollow.Utilities
             return default;
         }
 
+        public static List<T> MultiArrayToList<T>(T[,] array){
+            List<T> list = new List<T>();
+
+            foreach(T obj in array)
+            {
+                if (obj != null)
+                {
+                    list.Add(obj);
+                }
+            }
+
+            return list;
+        }
+
         public static DirectionEnum GetOppositeDirection(DirectionEnum value)
         {
             switch (value)

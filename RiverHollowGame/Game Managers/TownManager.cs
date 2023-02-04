@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using RiverHollow.Buildings;
+﻿using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.Items;
 using RiverHollow.Map_Handling;
@@ -7,6 +6,7 @@ using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -16,9 +16,11 @@ namespace RiverHollow.Game_Managers
     {
         public static string TownName { get; private set; }
 
-        private static bool _bTravelers = false;
+        private static bool _bTravelersCame = false;
 
         public static int Income { get; private set; }
+
+        public static Building Inn { get; private set; }
 
         private static Dictionary<int, List<WorldObject>> _diTownObjects;
         private static Dictionary<int, int> _diStorage;
@@ -64,6 +66,11 @@ namespace RiverHollow.Game_Managers
 
         public static void Rollover()
         {
+            if(GameCalendar.DayOfWeek == 0)
+            {
+                _bTravelersCame = false;
+            }
+
             foreach (Villager v in DIVillagers.Values)
             {
                 v.RollOver();
@@ -82,7 +89,31 @@ namespace RiverHollow.Game_Managers
             }
 
             Income = 0;
-            Travelers.ForEach(x => Income += x.CalculateValue());
+            if (Travelers.Count > 0)
+            {
+                InventoryManager.InitExtraInventory(Inn.Inventory);
+
+                List<Food> sortedFood = Util.MultiArrayToList(Inn.Inventory).ConvertAll(x => (Food)x);
+                sortedFood = sortedFood.OrderBy(x => x.FoodType).ThenByDescending(x => x.Value).ToList();
+                foreach (Food f in sortedFood)
+                {
+                    if (f != null)
+                    {
+                        var set = Travelers.FindAll(npc => f.FoodType == npc.FavoriteFood());
+                        set.ForEach(npc => npc.TryEat(f));
+
+                        set = Travelers.FindAll(npc => npc.NeutralFood(f.FoodType));
+                        set.ForEach(npc => npc.TryEat(f));
+
+                        set = Travelers.FindAll(npc => f.FoodType == npc.DislikedFood());
+                        set.ForEach(npc => npc.TryEat(f));
+                    }
+                }
+
+                InventoryManager.ClearExtraInventory();
+
+                Travelers.ForEach(npc => Income += npc.CalculateIncome());
+            }
 
             SpawnTravelers();
         }
@@ -116,7 +147,7 @@ namespace RiverHollow.Game_Managers
                 if (kvp.Value["Type"] == Util.GetEnumString(WorldActorTypeEnum.Traveler))
                 {
                     Traveler npc = DataManager.CreateTraveler(kvp.Key);
-                    if (npc.Validate() || RHRandom.Instance().RollPercent(10))
+                    if (npc.Validate() || (!npc.Rare() && RHRandom.Instance().RollPercent(10)))
                     {
                         travelerList.Add(npc);
                     }
@@ -126,9 +157,9 @@ namespace RiverHollow.Game_Managers
             int successChance = Constants.BASE_TRAVELER_RATE + IncreasedTravelerChance();
             do {
                 //Guaranteed at least one set of Travelers/week
-                if ((GameCalendar.DayOfWeek == 6 && !_bTravelers) ||  RHRandom.Instance().RollPercent(successChance))
+                if ((GameCalendar.DayOfWeek == 6 && !_bTravelersCame) ||  RHRandom.Instance().RollPercent(successChance))
                 {
-                    _bTravelers = true;
+                    _bTravelersCame = true;
 
                     if (travelerList.Count == 0)
                     {
@@ -139,16 +170,17 @@ namespace RiverHollow.Game_Managers
                     CheckForRareTraveler(ref options);
 
                     Traveler npc = Util.GetRandomItem(options);
-                    AddTraveler(npc);
-                    travelerList.Remove(npc);
+                    if (npc != null)
+                    {
+                        AddTraveler(npc);
+                        travelerList.Remove(npc);
 
-                    MakeGroup(ref travelerList, successChance, npc.Group);
-                    successChance /= Constants.GROUP_DIVISOR;
+                        MakeGroup(ref travelerList, successChance, npc.Group());
+                        successChance /= Constants.GROUP_DIVISOR;
+                    }
+                    else { break; }
                 }
-                else
-                {
-                    break;
-                }
+                else { break; }
             } while (successChance > Constants.EXTRA_TRAVELER_THRESHOLD);
         }
 
@@ -160,8 +192,8 @@ namespace RiverHollow.Game_Managers
                 if (RHRandom.Instance().RollPercent(chainSuccess))
                 {
                     List<Traveler> options;
-                    var noneList = travelerList.FindAll(x => x.Group == TravelerGroupEnum.None);
-                    var groupList = travelerList.FindAll(x => x.Group == group);
+                    var noneList = travelerList.FindAll(x => x.Group() == TravelerGroupEnum.None);
+                    var groupList = travelerList.FindAll(x => x.Group() == group);
 
                     Traveler npc = null;
                     if (noneList.Count == 0 || groupList.Count == 0)
@@ -191,7 +223,7 @@ namespace RiverHollow.Game_Managers
                     //If we're making a group off of a None group, need to transition to any actual group we roll on
                     if (group == TravelerGroupEnum.None)
                     {
-                        group = npc.Group;
+                        group = npc.Group();
                     }
 
                     chainSuccess /= Constants.MEMBER_DIVISOR;
@@ -218,19 +250,21 @@ namespace RiverHollow.Game_Managers
         {
             Travelers.Add(npc);
 
-            RHMap map = null;
+            RHMap map = MapManager.TownMap;
             int roll = RHRandom.Instance().Next(0, 2);
             switch (roll)
             {
                 case 0:
-                    if (EnvironmentManager.IsRaining()) { map = MapManager.Maps["mapInn"]; }
-                    else { map = MapManager.TownMap; }
+                    if (EnvironmentManager.IsRaining())
+                    {
+                        map = MapManager.Maps[Inn.BuildingMapName];
+                    }
                     break;
                 case 1:
-                    map = MapManager.Maps["mapInn"];
+                    map = MapManager.Maps[Inn.BuildingMapName];
                     break;
                 case 2:
-                    if (TownObjectBuilt(npc.BuildingID()))
+                    if (npc.BuildingID() != -1 && TownObjectBuilt(npc.BuildingID()))
                     {
                         map = MapManager.Maps[GetBuildingByID(npc.BuildingID()).BuildingMapName];
                     }
@@ -320,6 +354,11 @@ namespace RiverHollow.Game_Managers
                 case ObjectTypeEnum.Wall:
                     buildable = true;
                     break;
+            }
+
+            if(DataManager.GetBoolByIDKey(obj.ID, "Inn", DataType.WorldObject))
+            {
+                Inn = (Building)obj;
             }
 
             if (buildable)
@@ -424,6 +463,8 @@ namespace RiverHollow.Game_Managers
                 data.MerchantQueue.Add(npc.ID);
             }
 
+            data.travelersCame = _bTravelersCame;
+
             return data;
         }
         public static void LoadData(TownData saveData)
@@ -463,6 +504,8 @@ namespace RiverHollow.Game_Managers
             {
                 MerchantQueue.Add(TownManager.DIMerchants[saveData.MerchantQueue[i]]);
             }
+
+            _bTravelersCame = saveData.travelersCame;
 
             MoveMerchants();
         }

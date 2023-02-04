@@ -603,7 +603,7 @@
     </Item>
     <Item>
       <Key>150</Key>
-      <Value>[Type:Food][Image:1-0][Value:5][Stam:2]</Value>
+      <Value>[Type:Resource][Image:7-6][Value:5]</Value>
     </Item>
     <Item>
       <Key>151</Key>
@@ -655,7 +655,7 @@
     </Item>
     <Item>
       <Key>163</Key>
-      <Value>[Type:Food][Image:5-2][MerchType:Herb][Value:30][Stam:10]</Value>
+      <Value>[Type:Food][Image:5-2][MerchType:Herb][Value:30][Stam:10][FoodType:Healthy]</Value>
     </Item>
     <Item>
       <Key>164</Key>
@@ -783,7 +783,15 @@
     </Item>
     <Item>
       <Key>195</Key>
-      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:30][ReqItems:150-2][Stam:16]</Value>
+      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:30][ReqItems:150-1][Stam:16][FoodType:Plain]</Value>
+    </Item>
+    <Item>
+      <Key>196</Key>
+      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:50][ReqItems:150-1][FoodType:Plain]</Value>
+    </Item>
+    <Item>
+      <Key>197</Key>
+      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:50][ReqItems:150-1][FoodType:Healthy]</Value>
     </Item>
   </Asset>
 </XnaContent>

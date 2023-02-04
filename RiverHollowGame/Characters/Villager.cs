@@ -566,10 +566,10 @@ namespace RiverHollow.Characters
             }
         }
 
-        public SatisfactionStateEnum GetSatisfaction()
+        public MoodEnum GetSatisfaction()
         {
             if(!TownManager.TownObjectBuilt(int.Parse(DataManager.Config[19]["ObjectID"]))){
-                return SatisfactionStateEnum.Neutral;
+                return MoodEnum.Neutral;
             }
 
             int points = 40;
@@ -578,12 +578,12 @@ namespace RiverHollow.Characters
                 points += r.ConditionsMet(HouseID);
             }
 
-            if (points <= 10) { return SatisfactionStateEnum.Miserable; }
-            else if (points >= 10 && points < 40) { return SatisfactionStateEnum.Sad; }
-            else if (points >= 40 && points < 50) { return SatisfactionStateEnum.Neutral; }
-            else if (points >= 50 && points < 70) { return SatisfactionStateEnum.Pleased; }
-            else if (points >= 70 && points < 90) { return SatisfactionStateEnum.Happy; }
-            else { return SatisfactionStateEnum.Ecastatic; }
+            if (points <= 10) { return MoodEnum.Miserable; }
+            else if (points >= 10 && points < 40) { return MoodEnum.Sad; }
+            else if (points >= 40 && points < 50) { return MoodEnum.Neutral; }
+            else if (points >= 50 && points < 70) { return MoodEnum.Pleased; }
+            else if (points >= 70 && points < 90) { return MoodEnum.Happy; }
+            else { return MoodEnum.Ecastatic; }
         }
 
         private void SpawnPets()

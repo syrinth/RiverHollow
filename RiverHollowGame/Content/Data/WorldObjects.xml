@@ -115,7 +115,7 @@
     </Item>
     <Item>
       <Key>28</Key>
-      <Value>[Type:Building][Texture:Inn][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86|3-80-86]</Value>
+      <Value>[Type:Building][Texture:Inn][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86|3-80-86][Inn]</Value>
     </Item>
     <Item>
       <Key>29</Key>
@@ -595,7 +595,7 @@
     </Item>
     <Item>
       <Key>148</Key>
-      <Value>[Type:Machine][Image:0-304][Size:3-2][Base:3-1][BaseOffset:0-1][Makes:195]</Value>
+      <Value>[Type:Machine][Image:0-304][Size:3-2][Base:3-1][BaseOffset:0-1][Makes:195|196|197][Stockpile]</Value>
     </Item>
     <Item>
       <Key>149</Key>

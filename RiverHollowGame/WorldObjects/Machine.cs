@@ -20,6 +20,8 @@ namespace RiverHollow.WorldObjects
 
         public Recipe[] CraftingSlots { get; private set; }
         public bool CraftDaily => DataManager.GetBoolByIDKey(ID, "Daily", DataType.WorldObject);
+        public bool Stockpile => DataManager.GetBoolByIDKey(ID, "Stockpile", DataType.WorldObject);
+
         private bool HoldItem => DataManager.GetBoolByIDKey(ID, "HoldItem", DataType.WorldObject);
 
         private Point ItemOffset => DataManager.GetPointByIDKey(ID, "ItemOffset", DataType.WorldObject);
@@ -199,6 +201,14 @@ namespace RiverHollow.WorldObjects
                         }
                         break;
                     }
+                }
+            }
+            else if (Stockpile)
+            {
+                if (CurrentMap.BuildingID != -1 && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
+                {
+                    Building b = TownManager.GetBuildingByID(CurrentMap.BuildingID);
+                    b.AddToStock(DataManager.CraftItem(itemToCraft.ID));
                 }
             }
             else if (InventoryManager.HasSpaceInInventory(itemToCraft.ID, 1)

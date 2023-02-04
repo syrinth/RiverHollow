@@ -1462,6 +1462,14 @@
       <Value>[Name:Fried Eggs][Description:Yum]</Value>
     </Item>
     <Item>
+      <Key>Item_196</Key>
+      <Value>[Name:Eggs2][Description:]</Value>
+    </Item>
+    <Item>
+      <Key>Item_197</Key>
+      <Value>[Name:Eggs3][Description:]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_0</Key>
       <Value>[Name:Beehive]</Value>
     </Item>

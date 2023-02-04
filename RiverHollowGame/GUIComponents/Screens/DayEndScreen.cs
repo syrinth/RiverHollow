@@ -68,7 +68,7 @@ namespace RiverHollow.GUIComponents.Screens
             _gWindow.Resize();
             _gWindow.CenterOnScreen();
 
-            _liOldTravelers = TownManager.Travelers;
+            _liOldTravelers = new List<Traveler>(TownManager.Travelers);
 
             SaveManager.StartSaveThread();
         }
@@ -112,7 +112,7 @@ namespace RiverHollow.GUIComponents.Screens
                         {
                             npc.Activate(false);
                             npc.BodySprite.SetScale(CurrentScale);
-                            npc.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
+                            npc.PlayAnimation(npc.MoodVerb);
                             _liNPCs.Add(npc);
                         }
 
@@ -158,13 +158,19 @@ namespace RiverHollow.GUIComponents.Screens
 
                         if (npc.IsActorType(WorldActorTypeEnum.Traveler))
                         {
-                            GUIImage coin = DataManager.GetIcon(GameIconEnum.Coin);
-                            coin.Position(npc.BodySprite.Position);
-                            coin.ScaledMoveBy(0, -Constants.TILE_SIZE);
-                            _liCoins.Add(coin);
+                            Traveler t = (Traveler)npc;
+                            t.PlayAnimation(t.MoodVerb);
 
-                            _iTotalIncome += ((Traveler)npc).CalculateValue();
+                            _iTotalIncome += t.Income;
                             _gText.SetText(_iTotalIncome);
+
+                            if (((Traveler)npc).Income > 0)
+                            {
+                                GUIImage coin = DataManager.GetIcon(GameIconEnum.Coin);
+                                coin.Position(npc.BodySprite.Position);
+                                coin.ScaledMoveBy(0, -Constants.TILE_SIZE);
+                                _liCoins.Add(coin);
+                            }
                         }
 
                         _timer.Reset(MAX_POP_TIME / _liNPCs.Count);

@@ -23,13 +23,14 @@
         public enum DirectionEnum { None, Down, Right, Up, Left };
         public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };
         public enum VerbEnum { Idle, Walk, GrabIdle, Pull, Push, Ground, Air, UseTool, MakeItem, Alert, Action1, Action2 };
-        public enum AnimationEnum { None, PlayAnimation, Rain, Snow, ObjectIdle, Action_Finished, Idle, Action1, Action2, Action3, Action4, Critical, Hurt, KO, Spawn, Victory };
+        public enum AnimationEnum { None, PlayAnimation, Rain, Snow, ObjectIdle, Action_Finished, Angry, Sad, Neutral, Happy, Idle, Action1, Action2, Action3, Action4, Critical, Hurt, KO, Spawn, Victory };
 
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
         public enum MerchType { None, Gem, Herb, Magic, Medicine, Metalwork, Ore, Textile, Wheat };
         public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, Clothing, MonsterFood, NPCToken, Blueprint, Seed, Special };
+        public enum FoodTypeEnum { Dessert, Expensive, Healthy, Plain };
         public enum ToolEnum { None, Backpack, CapeOfBlinking, Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return, Scythe, StaffOfIce };
         public enum GearTypeEnum { None, Accessory, Chest, Head, Weapon };
         public enum WeaponEnum { None, Spear, Shield, Rapier, Bow, Wand, Knife, Orb, Staff };
@@ -63,7 +64,7 @@
         public enum ExpectingChildEnum { None, Adoption, Pregnant };
         public enum RelationShipStatusEnum { None, Friends, Dating, Engaged, Married };
         public enum SpawnStateEnum { OffMap, WaitAtInn, VisitInn, HasHome, NonTownMap, SendingToInn };
-        public enum SatisfactionStateEnum { Miserable, Sad, Neutral, Pleased, Happy, Ecastatic };
+        public enum MoodEnum { Miserable, Sad, Neutral, Pleased, Happy, Ecastatic };
         public enum NPCStateEnum { Alert, Idle, Leashing, TrackPlayer, Wander };
         public enum ChildStageEnum { Newborn, Infant, Toddler };
        

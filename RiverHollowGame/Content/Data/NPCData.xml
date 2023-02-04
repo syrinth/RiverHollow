@@ -183,23 +183,23 @@
     </Item>
     <Item>
       <Key>45</Key>
-      <Value>[Type:Traveler][Key:Traveller1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Subtype:Human]</Value>
+      <Value>[Type:Traveler][Key:Traveller1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Subtype:Human][FavFood:Plain][Disliked:Desert][Angry:0-32-1-0-F][Sad:0-32-1-0-F][Neutral:0-32-1-0-F][Happy:0-32-1-0-F]</Value>
     </Item>
     <Item>
       <Key>46</Key>
-      <Value>[Type:Traveler][Key:Traveller2][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Subtype:Human][Rare]</Value>
+      <Value>[Type:Traveler][Key:Traveller2][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Subtype:Human][Rare][FavFood:Dessert][Disliked:Plain][Angry:0-32-1-0-F][Sad:0-32-1-0-F][Neutral:0-32-1-0-F][Happy:0-32-1-0-F]</Value>
     </Item>
     <Item>
       <Key>47</Key>
-      <Value>[Type:Traveler][Key:Adventurer1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Subtype:Adventurer]</Value>
+      <Value>[Type:Traveler][Key:Adventurer1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Subtype:Adventurer][FavFood:Plain][Disliked:Desert]</Value>
     </Item>
     <Item>
       <Key>48</Key>
-      <Value>[Type:Traveler][Key:Adventurer2][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Subtype:Adventurer][Rare]</Value>
+      <Value>[Type:Traveler][Key:Adventurer2][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Subtype:Adventurer][Rare][FavFood:Dessert][Disliked:Plain]</Value>
     </Item>
     <Item>
       <Key>49</Key>
-      <Value>[Type:Traveler][Key:Neutral1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Subtype:None]</Value>
+      <Value>[Type:Traveler][Key:Neutral1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Subtype:None][FavFood:Plain][Disliked:Desert]</Value>
     </Item>
   </Asset>
 </XnaContent>

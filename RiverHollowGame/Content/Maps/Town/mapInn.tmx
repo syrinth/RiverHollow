@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="13">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="14">
+ <properties>
+  <property name="BuildingID" type="int" value="28"/>
+  <property name="MapType" value="Town"/>
+ </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetHouses.tsx"/>
  <tileset firstgid="521" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="484" columns="22">
   <image source="../Tilesets/tsWalls_Floors.png" trans="ffffff" width="352" height="353"/>
@@ -414,6 +418,11 @@
   <object id="12" name="WorldObject" x="192" y="64" width="48" height="16">
    <properties>
     <property name="ObjectID" type="int" value="148"/>
+   </properties>
+  </object>
+  <object id="13" name="WorldObject" x="176" y="64" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="146"/>
    </properties>
   </object>
  </objectgroup>

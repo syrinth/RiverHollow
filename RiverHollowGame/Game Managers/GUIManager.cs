@@ -158,7 +158,7 @@ namespace RiverHollow.Game_Managers
         #region MainObject Control
         public static bool IsMainObjectOpen() { return _currentGUIScreen.IsMainObjectOpen(); }
         public static void OpenMainObject(GUIMainObject o) { _currentGUIScreen.OpenMainObject(o); }
-        public static void CloseMainObject() { _currentGUIScreen.CloseMainObject(); }
+        public static bool CloseMainObject() { return _currentGUIScreen.CloseMainObject(); }
         #endregion
 
         public static void SetScreen(GUIScreen newScreen)

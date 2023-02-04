@@ -9,7 +9,7 @@ namespace RiverHollow.Items
     public class Food : Item
     {
         public int Stamina => DataManager.GetIntByIDKey(ID, "Stam", DataType.Item);
-        public int Health => DataManager.GetIntByIDKey(ID, "Hp", DataType.Item);
+        public FoodTypeEnum FoodType => DataManager.GetEnumByIDKey<FoodTypeEnum>(ID, "FoodType", DataType.Item);
 
         public Food(int id, Dictionary<string, string> stringData, int num) : base(id, stringData, num)
         {
@@ -20,7 +20,6 @@ namespace RiverHollow.Items
         {
             string rv = base.Description();
             rv += System.Environment.NewLine;
-            if (Health > 0) { rv += "Health: +" + Health + " "; }
             if (Stamina > 0) { rv += "Stamina: +" + Stamina + " "; }
             rv = rv.Trim();
 
@@ -44,7 +43,6 @@ namespace RiverHollow.Items
             {
                 Remove(1);
                 PlayerManager.IncreaseStamina(Stamina);
-                PlayerManager.PlayerCombatant.IncreaseHealth(Health);
             }
             ClearGMObjects();
         }
