@@ -12,22 +12,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
     class QuantityWindow : GUIMainObject
     {
         int MAX_VALUE => (GameManager.CurrentItem != null ? PlayerManager.Money / GameManager.CurrentItem.BuyPrice : 0);
-        GUIText _gText;
         GUIButton _btnUp;
         GUIButton _btnDown;
-        GUIButton _btnOk;
 
-
-        ///
-        Item[,] _arrToSell;
         GUIText _gSellValue;
         GUIButton _btnBuy;
 
         public QuantityWindow()
         {
-            _arrToSell = new Item[1, 1];
-            InventoryManager.InitExtraInventory(_arrToSell);
-
             _winMain = SetMainWindow(GUIWindow.Window_2, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
 
             GUIItemBox box = new GUIItemBox(GameManager.CurrentItem);

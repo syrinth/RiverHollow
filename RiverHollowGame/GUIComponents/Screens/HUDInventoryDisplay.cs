@@ -54,13 +54,6 @@ namespace RiverHollow.GUIComponents.Screens
             if (_inventory.Contains(mouse))
             {
                 rv = _inventory.ProcessLeftButtonClick(mouse);
-
-                if(GameManager.CurrentNPC != null && GameManager.CurrentItem != null && GameManager.CurrentInventoryDisplay == DisplayTypeEnum.Gift)
-                {
-                    TextEntry entry = DataManager.GetGameTextEntry("GiftConfirm");
-                    entry.FormatText(GameManager.CurrentItem.Name(), GameManager.CurrentNPC.Name());
-                    GUIManager.OpenTextWindow(entry);
-                }
             }
             else if (_altInventory != null && _altInventory.Contains(mouse))
             {

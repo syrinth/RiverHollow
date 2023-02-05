@@ -400,6 +400,26 @@ namespace RiverHollow.Game_Managers
 
             return false;
         }
+        public static List<TEnum> GetEnumListByIDKey<TEnum>(int id, string key, DataType type) where TEnum : struct
+        {
+            var rv = new List<TEnum>();
+            string str = GetStringByIDKey(id, key, type);
+            string[] split = Util.FindParams(str);
+
+            if (split.Length == 0)
+            {
+                rv.Add(default);
+            }
+            else
+            {
+                foreach (var s in split)
+                {
+                    rv.Add(Util.ParseEnum<TEnum>(s));
+                }
+            }
+
+            return rv;
+        }
 
         public static Point GetPointByIDKey(int id, string key, DataType type)
         {

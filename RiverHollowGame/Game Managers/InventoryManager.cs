@@ -10,10 +10,12 @@ namespace RiverHollow.Game_Managers
         public static bool LockedInventory = false;
         public static int maxItemRows = 4;
         public static int maxItemColumns = 10;
+        public static bool ExtraHoldSingular = false;
         public static Item[,] PlayerInventory { get; private set; }
         public static Item[,] ExtraInventory { get; private set; }
 
         public static List<Item> AddedItemList;
+
         #endregion
 
         /// <summary>
@@ -320,7 +322,7 @@ Exit:
         {
             bool rv = false;
 
-            if(itemToAdd == null)
+            if(itemToAdd == null || itemToAdd.Number == 0)
             {
                 return false;
             }
@@ -545,7 +547,7 @@ Exit:
 
         public static Item GetItemFromLocation(int row, int column, bool PlayerInventory = true)
         {
-            return GetInventory(PlayerInventory)[row, column];
+            return GetInventory(PlayerInventory)?[row, column];
         }
 
         /// <summary>

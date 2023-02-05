@@ -327,7 +327,7 @@ namespace RiverHollow.Game_Managers
             public bool canJoinParty;
 
             [XmlElement(ElementName = "CanGiveGift")]
-            public bool canGiveGift;
+            public bool weeklyGiftGiven;
 
             [XmlElement(ElementName = "AdventurerData")]
             public ClassedCharData classedData;

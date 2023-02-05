@@ -26,8 +26,6 @@ namespace RiverHollow.Characters
         protected int _iTaskGoals = 0;
         protected RHTask _assignedTask;
 
-        public bool CanGiveGift = true;
-
         protected List<string> _liSpokenKeys;
 
         public TalkingActor() : base()

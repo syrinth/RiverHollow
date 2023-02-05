@@ -4,6 +4,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
+using System;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
@@ -17,7 +18,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         protected int _iColumns;
         protected int _iRows;
 
-        bool _bPlayerInventory;
+        private bool _bPlayerInventory;
 
         public GUIInventory(bool PlayerInventory = false)
         {
@@ -125,17 +126,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             else
             {
                 Item clickedItem = IsItemThere(mouse);
-                if (GameManager.CurrentInventoryDisplay == DisplayTypeEnum.Gift)
-                {
-                    if (clickedItem != null && clickedItem.Giftable())
-                    {
-                        rv = true;
-                        //Do not pick the item up, instead assign it.
-                        GameManager.SetSelectedItem(clickedItem);
-                        
-                    }
-                }
-                else if (GameManager.CurrentWorldObject != null)
+                if (GameManager.CurrentWorldObject != null)
                 {
 
                     if (!GUIManager.IsTextWindowOpen() && Contains(mouse) && clickedItem != null)
@@ -317,22 +308,30 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 if (box.Contains(mouse) && box.BoxItem != null)
                 {
                     Item chosenItem = box.BoxItem;
-                    if (takeHalf && chosenItem.Stacks())
+                    if (InventoryManager.ExtraHoldSingular && chosenItem.Number > 1)
                     {
-                        int num = chosenItem.Number;
-                        num = num / 2;
-                        chosenItem.Remove(num);
-                        rv = DataManager.GetItem(chosenItem.ID, num);
+                        chosenItem.Remove(1);
+                        rv = DataManager.GetItem(chosenItem.ID, 1);
                     }
                     else
                     {
-                        rv = chosenItem;
-                    }
+                        if (takeHalf && chosenItem.Stacks())
+                        {
+                            int num = chosenItem.Number;
+                            num /= 2;
+                            chosenItem.Remove(num);
+                            rv = DataManager.GetItem(chosenItem.ID, num);
+                        }
+                        else
+                        {
+                            rv = chosenItem;
+                        }
 
-                    if (!takeHalf)
-                    {
-                        box.SetItem(null);
-                        InventoryManager.RemoveItemFromInventorySpot(box.Rows, box.Columns, _bPlayerInventory);
+                        if (!takeHalf)
+                        {
+                            box.SetItem(null);
+                            InventoryManager.RemoveItemFromInventorySpot(box.Rows, box.Columns, _bPlayerInventory);
+                        }
                     }
 
                     break;

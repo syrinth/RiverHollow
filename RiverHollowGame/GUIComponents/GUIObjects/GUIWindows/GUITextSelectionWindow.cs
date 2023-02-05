@@ -5,6 +5,7 @@ using RiverHollow.Characters;
 using RiverHollow.Characters.Lite;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
+using RiverHollow.GUIComponents.Screens.HUDScreens.RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
@@ -105,11 +106,13 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             if (GameManager.CurrentNPC != null)
             {
-                TalkingActor act = CurrentNPC;
-                List<TextEntry> liCommands = new List<TextEntry> { DataManager.GetGameTextEntry("Selection_Talk") };
-                liCommands.Add(DataManager.GetGameTextEntry("Selection_Buy"));
-                liCommands.Add(DataManager.GetGameTextEntry("Selection_Sell"));
-                liCommands.Add(DataManager.GetGameTextEntry("Selection_NeverMind"));
+                List<TextEntry> liCommands = new List<TextEntry>
+                {
+                    DataManager.GetGameTextEntry("Selection_Talk"),
+                    DataManager.GetGameTextEntry("Selection_Buy"),
+                    DataManager.GetGameTextEntry("Selection_Sell"),
+                    DataManager.GetGameTextEntry("Selection_NeverMind")
+                };
 
                 AddOptions(liCommands);
             }
@@ -125,7 +128,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 TalkingActor act = CurrentNPC;
                 List<TextEntry> liCommands = new List<TextEntry> { DataManager.GetGameTextEntry("Selection_Talk") };
 
-                if (act.CanGiveGift) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Gift")); }
+                if (act.IsActorType(WorldActorTypeEnum.Villager) && ((Villager)act).CanGiveGift)
+                {
+                    liCommands.Add(DataManager.GetGameTextEntry("Selection_Gift"));
+                }
                 liCommands.Add(DataManager.GetGameTextEntry("Selection_Buy"));
                 liCommands.Add(DataManager.GetGameTextEntry("Selection_NeverMind"));
 
@@ -241,21 +247,21 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             TextEntry chosenAction = _diOptions[_iKeySelection].SelectionEntry;
             TextEntry nextText = null;
 
-            TalkingActor act = GameManager.CurrentNPC;
+            TalkingActor npc = GameManager.CurrentNPC;
             switch (chosenAction.TextVerb)
             {
                 case TextEntryVerbEnum.Buy:
-                    act?.OpenShop();
+                    npc?.OpenShop();
                     break;
                 case TextEntryVerbEnum.Date:
-                    if (act != null)
+                    if (npc != null)
                     {
-                        ((Villager)act).RelationshipState = RelationShipStatusEnum.Dating;
-                        nextText = act.GetDialogEntry("DateYes");
+                        ((Villager)npc).RelationshipState = RelationShipStatusEnum.Dating;
+                        nextText = npc.GetDialogEntry("DateYes");
                     }
                     break;
                 case TextEntryVerbEnum.Gift:
-                    GUIManager.OpenMainObject(new HUDInventoryDisplay(DisplayTypeEnum.Gift));
+                    GUIManager.OpenMainObject(new HUDGiftWindow((Villager)npc));
                     break;
                 case TextEntryVerbEnum.No:
                     switch (_textEntry.GameTrigger)
@@ -263,7 +269,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         case TextEntryTriggerEnum.Donate:
                             ((Villager)GameManager.CurrentNPC).FriendshipPoints += 1000;
                             break;
-                        case TextEntryTriggerEnum.ConfirmGift:
                         case TextEntryTriggerEnum.ConfirmPurchase:
                         case TextEntryTriggerEnum.UseItem:
                             GameManager.SetSelectedItem(null);
@@ -271,43 +276,38 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     }
 
                     //Just pop this here for now
-                    if (act != null && act.IsActorType(WorldActorTypeEnum.ShippingGremlin))
+                    if (npc != null && npc.IsActorType(WorldActorTypeEnum.ShippingGremlin))
                     {
-                        act.PlayAnimation(AnimationEnum.Action2);
+                        npc.PlayAnimation(AnimationEnum.Action2);
                     }
                     break;
                 case TextEntryVerbEnum.Party:
-                    nextText = act?.JoinParty();
+                    nextText = npc?.JoinParty();
                     break;
                 case TextEntryVerbEnum.Propose:
-                    if (act != null && act.GetFriendshipLevel() >= 8)
+                    if (npc != null && npc.GetFriendshipLevel() >= 8)
                     {
-                        Villager v = ((Villager)act);
+                        Villager v = ((Villager)npc);
                         v.RelationshipState = RelationShipStatusEnum.Engaged;
 
-                        nextText = act.GetDialogEntry("MarriageYes");
+                        nextText = npc.GetDialogEntry("MarriageYes");
                     }
-                    else { nextText = act?.GetDialogEntry("MarriageNo"); }
+                    else { nextText = npc?.GetDialogEntry("MarriageNo"); }
                     break;
                 case TextEntryVerbEnum.ShipGoods:
                     ((ShippingGremlin)GameManager.CurrentNPC).OpenShipping();
                     break;
                 case TextEntryVerbEnum.Sell:
-                    act?.OpenMerchantWindow();
+                    npc?.OpenMerchantWindow();
                     break;
                 case TextEntryVerbEnum.Talk:
-                    nextText = act?.GetDailyDialogue();
+                    nextText = npc?.GetDailyDialogue();
                     break;
                 case TextEntryVerbEnum.Yes:
                     switch (_textEntry.GameTrigger)
                     {
                         case TextEntryTriggerEnum.GetBaby:
                             PlayerManager.DetermineBabyAcquisition();
-                            break;
-                        case TextEntryTriggerEnum.ConfirmGift:
-                            nextText = act?.Gift(GameManager.CurrentItem);
-                            GUIManager.CloseMainObject();
-                            GameManager.SetSelectedItem(null);
                             break;
                         case TextEntryTriggerEnum.ConfirmPurchase:
                             MapManager.CurrentMap.TheShop.Purchase(GameManager.CurrentItem);

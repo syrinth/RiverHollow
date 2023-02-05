@@ -15,7 +15,7 @@ namespace RiverHollow.Items
         #region properties
         protected ItemEnum _eItemType;
         public ItemEnum ItemType => _eItemType;
-        public MerchType MerchType => DataManager.GetEnumByIDKey<MerchType>(ID, "MerchType", DataType.Item);
+        private List<ItemGroupEnum> _liItemGroups => DataManager.GetEnumListByIDKey<ItemGroupEnum>(ID, "ItemGroups", DataType.Item);
         public int ID { get; } = -1;
         protected Color _c = Color.White;
         public Color ItemColor => _c;
@@ -263,6 +263,10 @@ namespace RiverHollow.Items
                     break;
             }
             return rv;
+        }
+        public bool IsItemGroup(ItemGroupEnum e)
+        {
+            return _liItemGroups.Contains(e);
         }
         public bool CompareType(ItemEnum type) { return _eItemType == type; }
 

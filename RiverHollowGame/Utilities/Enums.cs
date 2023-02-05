@@ -6,7 +6,7 @@
 
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, Sell, Propose, Date, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Party };
-        public enum TextEntryTriggerEnum { None, UseItem, ConfirmGift, ConfirmPurchase, EndDay, Exit, Donate, PetFollow, PetUnfollow, GetBaby }
+        public enum TextEntryTriggerEnum { None, UseItem, ConfirmPurchase, EndDay, Exit, Donate, PetFollow, PetUnfollow, GetBaby }
 
         public enum SpawnTypeEnum { Item, Object, Mob };
         public enum RarityEnum { C, U, R, M };
@@ -16,7 +16,7 @@
         public enum HazardTypeEnum { Passive, Timed, Triggered };
 
         public enum GameScreenEnum { Info, Combat, World };
-        public enum DisplayTypeEnum { Inventory, Gift, Ship };
+        public enum DisplayTypeEnum { Inventory, Ship };
 
         public enum SeasonEnum { None, Spring, Summer, Fall, Winter };
         public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };
@@ -28,7 +28,7 @@
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
-        public enum MerchType { None, Gem, Herb, Magic, Medicine, Metalwork, Ore, Textile, Wheat };
+        public enum ItemGroupEnum { None, Clothes, Flower, Gem, Herb, Magic, Medicine, Metal, Ore };
         public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, Clothing, MonsterFood, NPCToken, Blueprint, Seed, Special };
         public enum FoodTypeEnum { Dessert, Expensive, Forage, Healthy, Plain };
         public enum ToolEnum { None, Backpack, CapeOfBlinking, Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return, Scythe, StaffOfIce };
@@ -64,7 +64,7 @@
         public enum ExpectingChildEnum { None, Adoption, Pregnant };
         public enum RelationShipStatusEnum { None, Friends, Dating, Engaged, Married };
         public enum SpawnStateEnum { OffMap, WaitAtInn, VisitInn, HasHome, NonTownMap, SendingToInn };
-        public enum MoodEnum { Miserable, Sad, Neutral, Pleased, Happy, Ecastatic };
+        public enum MoodEnum { Miserable, Sad, Neutral, Pleased, Happy, Ecstatic };
         public enum NPCStateEnum { Alert, Idle, Leashing, TrackPlayer, Wander };
         public enum ChildStageEnum { Newborn, Infant, Toddler };
        

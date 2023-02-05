@@ -124,6 +124,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             InventoryManager.AddToInventory(_arrToSell[0, 0], true, true);
             GameManager.SetCurrentNPC(null);
+            InventoryManager.ClearExtraInventory();
         }
     }
 }

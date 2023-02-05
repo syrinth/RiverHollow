@@ -19,8 +19,8 @@ namespace RiverHollow.Characters
     /// </summary>
     public class Merchant : TravellingNPC
     {
-        MerchType Needs => DataManager.GetEnumByIDKey<MerchType>(ID, "Needs", DataType.NPC);
-        MerchType Wants => DataManager.GetEnumByIDKey<MerchType>(ID, "Wants", DataType.NPC);
+        ItemGroupEnum Needs => DataManager.GetEnumByIDKey<ItemGroupEnum>(ID, "Needs", DataType.NPC);
+        ItemGroupEnum Wants => DataManager.GetEnumByIDKey<ItemGroupEnum>(ID, "Wants", DataType.NPC);
 
         List<RequestItem> _liRequestItems;
         public int[] ChosenRequests;
@@ -106,8 +106,6 @@ namespace RiverHollow.Characters
             _bArrivedOnce = true;
 
             MoveToSpawn();
-
-            CanGiveGift = true;
         }
 
         /// <summary>
@@ -149,12 +147,12 @@ namespace RiverHollow.Characters
         }
         public int EvaluateItem(Item it, ref Color c)
         {
-            if (it == null || it.MerchType == MerchType.None)
+            if (it == null || it.CompareType(ItemEnum.Tool) || it.IsItemGroup(ItemGroupEnum.None))
             {
                 return 0;
             }
 
-            int offer = it.Value > 0 ? it.Value : 0;
+            int offer = 0;
 
             bool requested = false;
             for (int i = 0; i < Constants.MERCHANT_REQUEST_NUM; i++)
@@ -170,15 +168,15 @@ namespace RiverHollow.Characters
 
             if (!requested)
             {
-                if (it.MerchType == Needs)
+                if (it.IsItemGroup(Needs))
                 {
                     c = Color.Blue;
-                    offer = (int)(offer * 1.5);
+                    offer = (int)(it.Value * 1.5);
                 }
-                else if (it.MerchType == Wants)
+                else if (it.IsItemGroup(Wants))
                 {
                     c = Color.Green;
-                    offer = (int)(offer * 1.2);
+                    offer = (int)(it.Value * 1.2);
                 }
             }
 

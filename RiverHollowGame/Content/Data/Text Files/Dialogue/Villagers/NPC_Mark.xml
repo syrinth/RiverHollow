@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Hello there! Welcome to the Blue Hare Inn. You must be $Name$. You can call me $NPC_20$. The town's been abuzz about the manor being filled again. Let me know if you need anything.][Name:Introduction]</Value>
+      <Value>[Name:Introduction][Text:Hello there! Welcome to the Blue Hare Inn. You must be $Name$. You can call me $NPC_20$. The town's been abuzz about the manor being filled again. Let me know if you need anything.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -27,11 +27,11 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Text:Oh, that's surprising. Thank you.][Name:Gift]</Value>
+      <Value>[Name:Gift_Happy][Text:Happy]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Text:Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?][Name:Collection]</Value>
+      <Value>[Name:Collection][Text:Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -39,7 +39,7 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Text:Certainly, I'd like to see what we can accomplish together.][Name:JoinPartyYes]</Value>
+      <Value>[Name:JoinPartyYes][Text:Certainly, I'd like to see what we can accomplish together.]</Value>
     </Item>
     <Item>
       <Key>10</Key>
@@ -51,7 +51,23 @@
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Text:Oh... I'm sorry but. No.][Name:MarriageNo]</Value>
+      <Value>[Name:MarriageNo][Text:Oh... I'm sorry but. No.]</Value>
+    </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>[Name:Gift_Pleased][Text:Pleased]</Value>
+    </Item>
+    <Item>
+      <Key>14</Key>
+      <Value>[Name:Gift_Neutral][Text:Neutral]</Value>
+    </Item>
+    <Item>
+      <Key>15</Key>
+      <Value>[Name:Gift_Sad][Text:Sad]</Value>
+    </Item>
+    <Item>
+      <Key>16</Key>
+      <Value>[Name:Gift_Miserable][Text:Miserable]</Value>
     </Item>
   </Asset>
 </XnaContent>

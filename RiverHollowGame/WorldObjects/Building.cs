@@ -17,7 +17,7 @@ namespace RiverHollow.Buildings
 {
     public class Building : Buildable
     {
-        public MerchType StoreType => DataManager.GetEnumByIDKey<MerchType>(ID, "ShopSells", DataType.WorldObject);
+        public ItemGroupEnum StoreType => DataManager.GetEnumByIDKey<ItemGroupEnum>(ID, "ShopSells", DataType.WorldObject);
 
         private Rectangle _rEntrance;
         public Item[,] Inventory { get; }
@@ -150,10 +150,10 @@ namespace RiverHollow.Buildings
                     Item i = Inventory[row, column];
                     if (i != null)
                     {
-                        if (i.MerchType == StoreType)
-                        {
-                            items.Add(i);
-                        }
+                        //if (i.ItemGroup == StoreType)
+                        //{
+                        //    items.Add(i);
+                        //}
                     }
                 }
             }

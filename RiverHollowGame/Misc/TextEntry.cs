@@ -92,9 +92,9 @@ namespace RiverHollow.Misc
         /// Removes unneeded entries from the possible list of options given by the text.
         /// </summary>
         /// <param name="options">The string list of options</param>
-        /// <param name="act">The Villager we are talking to.</param>
+        /// <param name="npc">The Villager we are talking to.</param>
         /// <returns></returns>
-        private List<string> RemoveEntries(string[] options, Villager act)
+        private List<string> RemoveEntries(string[] options, Villager npc)
         {
             List<string> _liCommands = new List<string>();
             for (int i = 0; i < options.Length; i++)
@@ -110,16 +110,16 @@ namespace RiverHollow.Misc
 
                     int.TryParse(specialVal[1], out int val);
 
-                    if (act != null && specialVal[0].Equals("Friend"))
+                    if (npc != null && specialVal[0].Equals("Friend"))
                     {
-                        removeIt = act.FriendshipPoints < val;
+                        removeIt = npc.FriendshipPoints < val;
                     }
 
                     s = s.Remove(s.IndexOf(specialParse[0]) - 1, specialParse[0].Length + 2);
                 }
-                else if (act != null)
+                else if (npc != null)
                 {
-                    if (!act.CanGiveGift && s.Contains("GiveGift"))
+                    if (!npc.CanGiveGift && s.Contains("GiveGift"))
                     {
                         removeIt = true;
                     }

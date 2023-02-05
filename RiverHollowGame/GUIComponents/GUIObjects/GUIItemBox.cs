@@ -64,7 +64,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     RemoveControl(_guiItem);
                     _guiItem = new GUIItem(it);
                     _guiItem.CenterOnObject(this);
-                    if (GameManager.CurrentInventoryDisplay == DisplayTypeEnum.Gift && !it.Giftable()) { _guiItem.Alpha(0.5f); }
                     AddControl(_guiItem);
                 }
             }

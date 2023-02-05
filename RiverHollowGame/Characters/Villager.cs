@@ -4,7 +4,6 @@ using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Misc;
-using RiverHollow.SpriteAnimations;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System;
@@ -13,8 +12,6 @@ using System.Globalization;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.WorldObjects;
-using RiverHollow.Buildings;
-using Microsoft.Win32;
 
 namespace RiverHollow.Characters
 {
@@ -24,6 +21,13 @@ namespace RiverHollow.Characters
         public int HouseID => DataManager.GetIntByIDKey(ID, "HouseID", DataType.NPC, 1);
         public bool Marriable => DataManager.GetBoolByIDKey(ID, "CanMarry", DataType.NPC);
         public bool CanBecomePregnant => DataManager.GetBoolByIDKey(ID, "CanBecomePregnant", DataType.NPC);
+
+        private Dictionary<int, MoodEnum> _diItemMoods;
+
+        public bool GiftedToday = false;
+        public bool WeeklyGiftGiven = false;
+
+        public bool CanGiveGift => !WeeklyGiftGiven && !GiftedToday;
 
         protected Dictionary<int, bool> _diCollection;
         
@@ -70,6 +74,7 @@ namespace RiverHollow.Characters
             ActorType = WorldActorTypeEnum.Villager;
             _liHousingRequests = new List<Request>();
             _diCollection = new Dictionary<int, bool>();
+            _diItemMoods = new Dictionary<int, MoodEnum>();
             _diRequiredObjectIDs = new Dictionary<int, int>();
             _diCompleteSchedule = new Dictionary<string, List<Dictionary<string, string>>>();
 
@@ -113,6 +118,32 @@ namespace RiverHollow.Characters
                     }
                     _diCompleteSchedule.Add(kvp.Key, pathingData);
                 }
+            }
+
+            if (stringData.ContainsKey("HappyID"))
+            {
+                var ids = Util.FindIntParams(stringData["HappyID"]);
+                ids.ForEach(x => _diItemMoods[x] = MoodEnum.Happy);
+            }
+            if (stringData.ContainsKey("PleasedID"))
+            {
+                var ids = Util.FindIntParams(stringData["PleasedID"]);
+                ids.ForEach(x => _diItemMoods[x] = MoodEnum.Pleased);
+            }
+            if (stringData.ContainsKey("NeutralID"))
+            {
+                var ids = Util.FindIntParams(stringData["NeutralID"]);
+                ids.ForEach(x => _diItemMoods[x] = MoodEnum.Neutral);
+            }
+            if (stringData.ContainsKey("SadID"))
+            {
+                var ids = Util.FindIntParams(stringData["SadID"]);
+                ids.ForEach(x => _diItemMoods[x] = MoodEnum.Sad);
+            }
+            if (stringData.ContainsKey("MiserableID"))
+            {
+                var ids = Util.FindIntParams(stringData["MiserableID"]);
+                ids.ForEach(x => _diItemMoods[x] = MoodEnum.Miserable);
             }
         }
 
@@ -163,9 +194,10 @@ namespace RiverHollow.Characters
 
         public override void RollOver()
         {
+            GiftedToday = false;
             if (GameCalendar.DayOfWeek == 0)
             {
-                CanGiveGift = true;
+                WeeklyGiftGiven = false;
             }
 
             bool startedDayInTown = _eSpawnStatus == SpawnStateEnum.WaitAtInn || _eSpawnStatus == SpawnStateEnum.VisitInn || _eSpawnStatus == SpawnStateEnum.HasHome;
@@ -509,9 +541,9 @@ namespace RiverHollow.Characters
             bool giftGiven = true;
             if (item != null)
             {
-                if (_diCollection.ContainsKey(item.ID))
+                if (_diCollection.ContainsKey(item.ID) && !_diCollection[item.ID])
                 {
-                    FriendshipPoints += _diCollection[item.ID] ? 50 : 20;
+                    FriendshipPoints += 50;
                     rv = GetDialogEntry("Collection");
                     int index = new List<int>(_diCollection.Keys).FindIndex(x => x == item.ID);
 
@@ -520,18 +552,73 @@ namespace RiverHollow.Characters
                 }
                 else
                 {
-                    rv = GetDialogEntry("Gift");
-                    FriendshipPoints += 1000;
+                    if (giftGiven)
+                    {
+                        item.Remove(1);
+                        GiftedToday = true;
+
+                        MoodEnum mood = ItemOpinion(item);
+                        switch (mood)
+                        {
+                            case MoodEnum.Happy:
+                                WeeklyGiftGiven = true;
+                                FriendshipPoints += 20;
+                                rv = GetDialogEntry("Gift_Happy");
+                                break;
+                            case MoodEnum.Pleased:
+                                WeeklyGiftGiven = true;
+                                FriendshipPoints += 10;
+                                rv = GetDialogEntry("Gift_Pleased");
+                                break;
+                            case MoodEnum.Neutral:
+                                FriendshipPoints += 5;
+                                rv = GetDialogEntry("Gift_Neutral");
+                                break;
+                            case MoodEnum.Sad:
+                                FriendshipPoints -= 2;
+                                rv = GetDialogEntry("Gift_Sad");
+                                break;
+                            case MoodEnum.Miserable:
+                                FriendshipPoints -= 10;
+                                rv = GetDialogEntry("Gift_Miserable");
+                                break;
+                        }
+                    }
                 }
             }
 
-            if (giftGiven)
+            return rv;
+        }
+
+        public MoodEnum ItemOpinion(Item it)
+        {
+            if (_diItemMoods.ContainsKey(it.ID))
             {
-                item.Remove(1);
-                CanGiveGift = false;
+                return _diItemMoods[it.ID];
             }
 
-            return rv;
+            if (it.IsItemGroup(ItemGroupEnum.Gem))
+            {
+                return MoodEnum.Happy;
+            }
+            if (it.IsItemGroup(ItemGroupEnum.Magic))
+            {
+                return MoodEnum.Pleased;
+            }
+            if (it.IsItemGroup(ItemGroupEnum.Flower))
+            {
+                return MoodEnum.Pleased;
+            }
+            if (it.IsItemGroup(ItemGroupEnum.Ore))
+            {
+                return MoodEnum.Sad;
+            }
+            if (it.IsItemGroup(ItemGroupEnum.None))
+            {
+                return MoodEnum.Sad;
+            }
+
+            return MoodEnum.Neutral;
         }
 
         public override TextEntry JoinParty()
@@ -583,7 +670,7 @@ namespace RiverHollow.Characters
             else if (points >= 40 && points < 50) { return MoodEnum.Neutral; }
             else if (points >= 50 && points < 70) { return MoodEnum.Pleased; }
             else if (points >= 70 && points < 90) { return MoodEnum.Happy; }
-            else { return MoodEnum.Ecastatic; }
+            else { return MoodEnum.Ecstatic; }
         }
 
         private void SpawnPets()
@@ -615,7 +702,7 @@ namespace RiverHollow.Characters
                 friendshipPoints = FriendshipPoints,
                 collection = new List<bool>(_diCollection.Values),
                 relationShipStatus = (int)RelationshipState,
-                canGiveGift = CanGiveGift,
+                weeklyGiftGiven = WeeklyGiftGiven,
                 spokenKeys = _liSpokenKeys,
             };
             
@@ -628,7 +715,7 @@ namespace RiverHollow.Characters
             _eSpawnStatus = (SpawnStateEnum)data.spawnStatus;
             _iNextArrival = data.nextArrival;
             FriendshipPoints = data.friendshipPoints;
-            CanGiveGift = data.canGiveGift;
+            WeeklyGiftGiven = data.weeklyGiftGiven;
             RelationshipState = (RelationShipStatusEnum)data.relationShipStatus;
             if (RelationshipState == RelationShipStatusEnum.Engaged || RelationshipState == RelationShipStatusEnum.Married)
             {

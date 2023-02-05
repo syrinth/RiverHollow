@@ -262,6 +262,10 @@ namespace RiverHollow.Utilities
         {
             return data.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
         }
+        public static List<int> FindIntParams(string data)
+        {
+            return data.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList();
+        }
         public static string[] FindArguments(string data)
         {
             return data.Split(new string[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
