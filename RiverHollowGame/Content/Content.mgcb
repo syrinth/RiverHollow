@@ -1401,6 +1401,12 @@
 /processorParam:Quality=Best
 /build:Sound/Stock/Effects/buildingGrab.mp3
 
+#begin Sound/Stock/Effects/bush.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Effects/bush.wav
+
 #begin Sound/Stock/Effects/buzz.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

@@ -167,6 +167,11 @@ namespace RiverHollow.SpriteAnimations
             PlayCount = 0;
         }
 
+        public void SetFrameStartLocation(Point startPosition)
+        {
+            rectInitialFrame = new Rectangle(startPosition.X, startPosition.Y, FrameWidth, FrameHeight);
+        }
+
         object ICloneable.Clone()
         {
                 return new FrameAnimation(this.rectInitialFrame.X, this.rectInitialFrame.Y,

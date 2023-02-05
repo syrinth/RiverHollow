@@ -28,7 +28,7 @@ namespace RiverHollow.Game_Managers
         private static float MuteMemoryEffect = 0f;
         public static bool IsMuted { get; private set; } = false;
         public static float MusicVolume { get; private set; } = 0;//0.4f;
-        public static float EffectVolume { get; private set; } = 0;//0.4f;
+        public static float EffectVolume { get; private set; } = 0.4f;
 
         private static Dictionary<string, string> BackgroundKeys => DataManager.Config[14];
 

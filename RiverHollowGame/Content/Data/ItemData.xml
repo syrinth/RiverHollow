@@ -531,11 +531,11 @@
     </Item>
     <Item>
       <Key>132</Key>
-      <Value>[Type:Tool][Subtype:Pick][Image:0-0][Stam:2][Level:1][AnimationPosition:0-0][SoundEffect:pickaxe]</Value>
+      <Value>[Type:Tool][Subtype:Pick][Image:0-0][Stam:2][Level:1][AnimationPosition:0-0][SoundEffect:pickaxe][HitAt:2]</Value>
     </Item>
     <Item>
       <Key>133</Key>
-      <Value>[Type:Tool][Subtype:Axe][Image:0-1][Stam:2][Level:1][AnimationPosition:0-4][SoundEffect:axe]</Value>
+      <Value>[Type:Tool][Subtype:Axe][Image:0-1][Stam:2][Level:1][AnimationPosition:0-4][SoundEffect:axe][HitAt:2]</Value>
     </Item>
     <Item>
       <Key>134</Key>
@@ -559,7 +559,7 @@
     </Item>
     <Item>
       <Key>139</Key>
-      <Value>[Type:Tool][Subtype:Scythe][Image:0-8][Stam:1][Level:1]</Value>
+      <Value>[Type:Tool][Subtype:Scythe][Image:0-8][Stam:1][Level:1][SoundEffect:bush][HitAt:2]</Value>
     </Item>
     <Item>
       <Key>140</Key>

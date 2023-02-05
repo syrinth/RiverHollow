@@ -73,43 +73,42 @@ namespace RiverHollow.WorldObjects
 
         public void DealDamage(Tool toolUsed)
         {
-            if (NeededTool == toolUsed.ToolType && toolUsed.ToolLevel >= NeededToolLevel)
+            if (NeededTool == toolUsed.ToolType)
             {
-                SoundManager.PlayEffectAtLoc(toolUsed.SoundEffect, MapName, CollisionCenter.ToVector2(), toolUsed);
-
-                if (_iHP > 0)
+                if (toolUsed.ToolLevel >= NeededToolLevel)
                 {
-                    _iHP -= toolUsed.ToolLevel;
+                    SoundManager.PlayEffectAtLoc(toolUsed.SoundEffect, MapName, CollisionCenter.ToVector2());
 
-                    if (_iHP <= 0)
+                    if (_iHP > 0)
                     {
-                        _bWalkable = true;
-                        _sprite.PlayAnimation(AnimationEnum.KO);
+                        _iHP -= toolUsed.ToolLevel;
 
-                        MapManager.DropItemsOnMap(GetDroppedItems(), CollisionBox.Location.ToVector2());
-                        CurrentMap.AlertSpawnPoint(this);
-                    }
-                    else
-                    {
-                        //Nudge the Object in the direction of the 'attack'
-                        int xMod = 0, yMod = 0;
-                        if (PlayerManager.PlayerActor.Facing == DirectionEnum.Left) { xMod = -1; }
-                        else if (PlayerManager.PlayerActor.Facing == DirectionEnum.Right) { xMod = 1; }
+                        if (_iHP <= 0)
+                        {
+                            _bWalkable = true;
+                            _sprite.PlayAnimation(AnimationEnum.KO);
 
-                        if (PlayerManager.PlayerActor.Facing == DirectionEnum.Up) { yMod = -1; }
-                        else if (PlayerManager.PlayerActor.Facing == DirectionEnum.Down) { yMod = 1; }
+                            MapManager.DropItemsOnMap(GetDroppedItems(), CollisionBox.Location.ToVector2());
+                            CurrentMap.AlertSpawnPoint(this);
+                        }
+                        else
+                        {
+                            //Nudge the Object in the direction of the 'attack'
+                            int xMod = 0, yMod = 0;
+                            if (PlayerManager.PlayerActor.Facing == DirectionEnum.Left) { xMod = -1; }
+                            else if (PlayerManager.PlayerActor.Facing == DirectionEnum.Right) { xMod = 1; }
 
-                        _sprite.Position = new Vector2(_sprite.Position.X + xMod, _sprite.Position.Y + yMod);
+                            if (PlayerManager.PlayerActor.Facing == DirectionEnum.Up) { yMod = -1; }
+                            else if (PlayerManager.PlayerActor.Facing == DirectionEnum.Down) { yMod = 1; }
+
+                            _sprite.Position = new Vector2(_sprite.Position.X + xMod, _sprite.Position.Y + yMod);
+                        }
                     }
                 }
-            }
-            else if (NeededTool != toolUsed.ToolType)
-            {
-                GUIManager.OpenTextWindow("Wrong_Tool");
-            }
-            else if (toolUsed.ToolLevel < NeededToolLevel)
-            {
-                GUIManager.OpenTextWindow("Weak_Tool");
+                else
+                {
+                    GUIManager.OpenTextWindow("Weak_Tool");
+                }
             }
         }
 
@@ -121,9 +120,7 @@ namespace RiverHollow.WorldObjects
             string[] splitVal = split[_iAltSprite].Split('-');
             _pImagePos = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
 
-            Dictionary<string, string> data = DataManager.GetWorldObjectData(ID);
-            if (data.ContainsKey("Texture")) { LoadSprite(data, data["Texture"]); }
-            else { LoadSprite(data); }
+            _sprite.SetAlternate(_pImagePos, AnimationEnum.ObjectIdle);
         }
 
         public override WorldObjectData SaveData()

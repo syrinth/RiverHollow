@@ -123,8 +123,8 @@ namespace RiverHollow.Game_Managers
 
         public static void Update(GameTime gTime)
         {
-            UpdateTool(gTime);
-            
+            ToolInUse?.Update(gTime);
+
             if (Mouse.GetState().LeftButton == ButtonState.Released && PlayerActor.State == ActorStateEnum.Grab && AllowMovement)
             {
                 ReleaseTile();
@@ -823,47 +823,6 @@ namespace RiverHollow.Game_Managers
 
         private static Dictionary<ToolEnum, Tool> _diTools;
 
-        private static void UpdateTool(GameTime gTime)
-        {
-            if (ToolInUse != null)
-            {
-                ToolInUse.Update(gTime);
-
-                RHTile target = MapManager.CurrentMap.TargetTile;
-
-                if (target != null && ToolInUse.ToolAnimation.AnimationVerbFinished(VerbEnum.UseTool, PlayerManager.PlayerActor.Facing))
-                {
-                    if (PlayerManager.ToolIsAxe() || PlayerManager.ToolIsPick() || PlayerManager.ToolIsLantern())
-                    {
-                        target.DamageObject(PlayerManager.ToolInUse);
-                    }
-                    else if (PlayerManager.ToolIsScythe())
-                    {
-                        target.DamageObject(PlayerManager.ToolInUse);
-
-                        if(PlayerManager.PlayerActor.Facing == DirectionEnum.Left || PlayerManager.PlayerActor.Facing == DirectionEnum.Right)
-                        {
-                            target.GetTileByDirection(DirectionEnum.Up).DamageObject(PlayerManager.ToolInUse);
-                            target.GetTileByDirection(DirectionEnum.Down).DamageObject(PlayerManager.ToolInUse);
-                        }
-                        else
-                        {
-                            target.GetTileByDirection(DirectionEnum.Left).DamageObject(PlayerManager.ToolInUse);
-                            target.GetTileByDirection(DirectionEnum.Right).DamageObject(PlayerManager.ToolInUse);
-                        }
-                    }
-                    else if (PlayerManager.ToolIsWateringCan() && target.Flooring != null)
-                    {
-                        //target.Water(true);
-                    }
-
-                    target = null;
-                    PlayerManager.FinishedWithTool();
-                    PlayerActor.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
-                }
-            }
-        }
-
         /// <summary>
         /// Given a Tool, compare is against the current tools, if it's better than the
         /// old tool of it's type, replace the tool.
@@ -952,7 +911,6 @@ namespace RiverHollow.Game_Managers
 
         public static bool ToolIsAxe() { return ToolInUse.ToolType == ToolEnum.Axe; }
         public static bool ToolIsPick() { return ToolInUse.ToolType == ToolEnum.Pick; }
-        public static bool ToolIsLantern() { return ToolInUse.ToolType == ToolEnum.Lantern; }
         public static bool ToolIsScythe() { return ToolInUse.ToolType == ToolEnum.Scythe; }
         public static bool ToolIsShovel() { return ToolInUse.ToolType == ToolEnum.Shovel; }
         public static bool ToolIsWateringCan() { return ToolInUse.ToolType == ToolEnum.WateringCan; }

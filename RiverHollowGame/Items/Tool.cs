@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
+using RiverHollow.Map_Handling;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
@@ -15,7 +16,11 @@ namespace RiverHollow.Items
         public ToolEnum ToolType => DataManager.GetEnumByIDKey<ToolEnum>(ID, "Subtype", DataType.Item);
         public int StaminaCost => DataManager.GetIntByIDKey(ID, "Stam", DataType.Item);
         public int ToolLevel => DataManager.GetIntByIDKey(ID, "Level", DataType.Item);
+
+        private int HitAt => DataManager.GetIntByIDKey(ID, "HitAt", DataType.Item);
         private int _iCharges = 0;
+
+        bool _bUsed = false;
 
         public string SoundEffect => DataManager.GetStringByIDKey(ID, "SoundEffect", DataType.Item);
 
@@ -60,7 +65,6 @@ namespace RiverHollow.Items
             _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Up, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, Constants.TOOL_ANIM_SPEED, false, true);
             xCrawl += crawlIncrement;
             _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Left, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, Constants.TOOL_ANIM_SPEED, false, true);
-            xCrawl += crawlIncrement;
 
             _sprite.Drawing = false;
         }
@@ -68,6 +72,52 @@ namespace RiverHollow.Items
         public override void Update(GameTime gTime)
         {
             _sprite.Update(gTime);
+
+            RHTile target = MapManager.CurrentMap.TargetTile;
+
+            if (target != null && !_bUsed)
+            {
+                if (ReadyToHit() && (PlayerManager.ToolIsAxe() || PlayerManager.ToolIsPick()))
+                {
+                    _bUsed = true;
+                    target.DamageObject(PlayerManager.ToolInUse);
+                }
+                else if (ReadyToHit() && PlayerManager.ToolIsScythe())
+                {
+                    _bUsed = true;
+                    target.DamageObject(PlayerManager.ToolInUse);
+
+                    if (PlayerManager.PlayerActor.Facing == DirectionEnum.Left || PlayerManager.PlayerActor.Facing == DirectionEnum.Right)
+                    {
+                        target.GetTileByDirection(DirectionEnum.Up).DamageObject(PlayerManager.ToolInUse);
+                        target.GetTileByDirection(DirectionEnum.Down).DamageObject(PlayerManager.ToolInUse);
+                    }
+                    else
+                    {
+                        target.GetTileByDirection(DirectionEnum.Left).DamageObject(PlayerManager.ToolInUse);
+                        target.GetTileByDirection(DirectionEnum.Right).DamageObject(PlayerManager.ToolInUse);
+                    }
+                }
+                else if (PlayerManager.ToolIsWateringCan() && target.Flooring != null)
+                {
+                    //target.Water(true);
+                }
+            }
+
+            if (ToolAnimation.AnimationVerbFinished(VerbEnum.UseTool, PlayerManager.PlayerActor.Facing))
+            {
+                _bUsed = false;
+                PlayerManager.FinishedWithTool();
+                PlayerManager.PlayerActor.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
+            }
+        }
+
+        private bool ReadyToHit()
+        {
+            bool needsToFinish = HitAt == -1 && ToolAnimation.AnimationVerbFinished(VerbEnum.UseTool, PlayerManager.PlayerActor.Facing);
+            bool hitAt = HitAt > -1 && _sprite.CurrentFrame == HitAt;
+
+            return needsToFinish || hitAt;
         }
 
         public void DrawToolAnimation(SpriteBatch spriteBatch)
@@ -128,6 +178,10 @@ namespace RiverHollow.Items
                 _iCharges--;
             }
 
+            if (ToolType == ToolEnum.Scythe)
+            {
+
+            }
         }
 
         public bool HasCharges()

@@ -45,6 +45,8 @@ namespace RiverHollow.SpriteAnimations
 
         public bool PlayedOnce => CurrentFrameAnimation.PlayCount > 0;
 
+        public int CurrentFrame => CurrentFrameAnimation.CurrentFrame;
+
         /// The FrameAnimation object of the currently playing animation
         public FrameAnimation CurrentFrameAnimation
         {
@@ -142,6 +144,11 @@ namespace RiverHollow.SpriteAnimations
         public void SetColor(Color c)
         {
             _color = c;
+        }
+
+        public void SetAlternate(Point newStart, AnimationEnum frameToShift)
+        {
+            _diFrameAnimations[Util.GetEnumString(frameToShift)].SetFrameStartLocation(newStart);
         }
 
         public void SetLayerDepthMod(float val)
