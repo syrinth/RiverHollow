@@ -107,7 +107,14 @@ namespace RiverHollow.GUIComponents.Screens
             for (int i = 0; i < _objMachine.Capacity; i++)
             {
                 if (_objMachine.CraftingSlots[i].ID == -1) { _arrMaking[i] = new GUIItemBox(); }
-                else { _arrMaking[i] = new GUIItemBox(DataManager.CraftItem(_objMachine.CraftingSlots[i].ID)); }
+                else
+                {
+                    _arrMaking[i] = new GUIItemBox(DataManager.CraftItem(_objMachine.CraftingSlots[i].ID));
+                    if (_objMachine.CraftingSlots[i].CraftTime > 0)
+                    {
+                        _arrMaking[i].SetAlpha(0.5f);
+                    }
+                }
 
                 if (i == 0) { _arrMaking[i].AnchorToInnerSide(_winMaking, SideEnum.TopLeft, ScaleIt(1)); }
                 else { _arrMaking[i].AnchorAndAlignToObject(_arrMaking[i - 1], SideEnum.Right, SideEnum.Top, ScaleIt(2)); }
@@ -174,7 +181,20 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 rv = true;
             }
-            else if (_winMaking.Contains(mouse)) { rv = true; }
+            else if (_winMaking.Contains(mouse))
+            {
+                rv = true;
+                for (int i = 0; i < _arrMaking.Length; i++)
+                {
+                    GUIItemBox box = _arrMaking[i];
+                    if (box.Contains(mouse) && _objMachine.CraftingSlots[i].CraftTime == 0 && InventoryManager.HasSpaceInInventory(box.BoxItem.ID, box.BoxItem.Number))
+                    {
+                        _objMachine.TakeItem(i);
+                        box.SetItem(null);
+                        UpdateInfo(DataManager.CraftItem(_iSelectedItemID));
+                    }
+                }
+            }
 
             return rv;
         }
@@ -247,6 +267,7 @@ namespace RiverHollow.GUIComponents.Screens
                     if (_arrMaking[i].BoxItem == null)
                     {
                         _arrMaking[i].SetItem(DataManager.CraftItem(_objMachine.CraftingSlots[i].ID));
+                        _arrMaking[i].SetAlpha(.5f);
                         break;
                     }
                 }
@@ -276,6 +297,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         private void UpdateInfo(Item chosenItem)
         {
+            _iSelectedItemID = chosenItem.ID;
+
             for (int i = 0; i < _arrRecipes.Length; i++)
             {
                 int index = i + _iRecipeListStart;
@@ -291,7 +314,6 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             _liRequiredItems.Clear();
-            _iSelectedItemID = chosenItem.ID;
             foreach (KeyValuePair<int, int> kvp in chosenItem.GetRequiredItems())
             {
                 GUIItemBox newItem = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));

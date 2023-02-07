@@ -198,7 +198,7 @@ namespace RiverHollow.WorldObjects
             bool rv = false;
             if (DataManager.GetBoolByIDKey(ID, "OpenStock", DataType.WorldObject) && GameManager.CurrentBuilding != null){
                 rv = true;
-                GUIManager.OpenMainObject(new HUDInventoryDisplay(GameManager.CurrentBuilding.Inventory, DisplayTypeEnum.Inventory));
+                GUIManager.OpenMainObject(new HUDInventoryDisplay(TownManager.Inventory, DisplayTypeEnum.Inventory));
             }
             return rv;
         }

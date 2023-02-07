@@ -20,7 +20,7 @@ namespace RiverHollow.WorldObjects
 
         public Recipe[] CraftingSlots { get; private set; }
         public bool CraftDaily => DataManager.GetBoolByIDKey(ID, "Daily", DataType.WorldObject);
-        public bool Stockpile => DataManager.GetBoolByIDKey(ID, "Stockpile", DataType.WorldObject);
+        public bool Kitchen => DataManager.GetBoolByIDKey(ID, "Kitchen", DataType.WorldObject);
 
         private bool HoldItem => DataManager.GetBoolByIDKey(ID, "HoldItem", DataType.WorldObject);
 
@@ -107,16 +107,6 @@ namespace RiverHollow.WorldObjects
                 for (int i = 0; i < Capacity; i++)
                 {
                     CraftingSlots[i].CraftTime -= CraftingSlots[i].CraftTime > 0 ? 1 : 0;
-                    if (CraftingSlots[i].CraftTime == 0 && !HoldingItem())
-                    {
-                        if (CurrentMap.BuildingID != -1)
-                        {
-                            Building b = TownManager.GetBuildingByID(CurrentMap.BuildingID);
-                            b.AddToStock(DataManager.CraftItem(CraftingSlots[i].ID));
-                        }
-
-                        CraftingSlots[i].ID = -1;
-                    }
                 }
             }
         }
@@ -174,6 +164,13 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
+        public void TakeItem(int capacityIndex)
+        {
+            InventoryManager.AddToInventory(DataManager.CraftItem(CraftingSlots[capacityIndex].ID));
+            CraftingSlots[capacityIndex].ID = -1;
+            CraftingSlots[capacityIndex].CraftTime = 0;
+        }
+
 
         /// <summary>
         /// Called by the HUDCraftingMenu to craft the selected item.
@@ -203,12 +200,11 @@ namespace RiverHollow.WorldObjects
                     }
                 }
             }
-            else if (Stockpile)
+            else if (Kitchen)
             {
                 if (CurrentMap.BuildingID != -1 && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
                 {
-                    Building b = TownManager.GetBuildingByID(CurrentMap.BuildingID);
-                    b.AddToStock(DataManager.CraftItem(itemToCraft.ID));
+                    TownManager.AddToKitchen(DataManager.CraftItem(itemToCraft.ID));
                 }
             }
             else if (InventoryManager.HasSpaceInInventory(itemToCraft.ID, 1)

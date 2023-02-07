@@ -32,6 +32,8 @@ namespace RiverHollow.Game_Managers
         public static List<Animal> TownAnimals { get; set; }
         public static List<Traveler> Travelers { get; set; }
 
+        public static Item[,] Inventory { get; private set; }
+
         public static void Initialize()
         {
             _diTownObjects = new Dictionary<int, List<WorldObject>>();
@@ -39,6 +41,8 @@ namespace RiverHollow.Game_Managers
             TownAnimals = new List<Animal>();
             Travelers = new List<Traveler>();
             MerchantQueue = new List<Merchant>();
+
+            Inventory = new Item[Constants.KITCHEN_STOCK_SIZE, Constants.KITCHEN_STOCK_SIZE];
 
             DIMerchants = new Dictionary<int, Merchant>();
             DIVillagers = new Dictionary<int, Villager>();
@@ -93,9 +97,9 @@ namespace RiverHollow.Game_Managers
             Income = 0;
             if (Travelers.Count > 0)
             {
-                InventoryManager.InitExtraInventory(Inn.Inventory);
+                InventoryManager.InitExtraInventory(Inventory);
 
-                List<Food> sortedFood = Util.MultiArrayToList(Inn.Inventory).ConvertAll(x => (Food)x);
+                List<Food> sortedFood = Util.MultiArrayToList(Inventory).ConvertAll(x => (Food)x);
                 sortedFood = sortedFood.OrderBy(x => x.FoodType).ThenByDescending(x => x.Value).ToList();
                 foreach (Food f in sortedFood)
                 {
@@ -107,7 +111,7 @@ namespace RiverHollow.Game_Managers
                         set = Travelers.FindAll(npc => npc.NeutralFood(f.FoodType));
                         set.ForEach(npc => npc.TryEat(f));
 
-                        set = Travelers.FindAll(npc => f.FoodType == npc.DislikedFood());
+                        set = Travelers.FindAll(npc => f.FoodType == npc.DislikedFood() || f.FoodType == FoodTypeEnum.Forage);
                         set.ForEach(npc => npc.TryEat(f));
                     }
                 }
@@ -118,6 +122,13 @@ namespace RiverHollow.Game_Managers
             }
 
             SpawnTravelers();
+        }
+
+        public static void AddToKitchen(Item i)
+        {
+            InventoryManager.InitExtraInventory(Inventory);
+            InventoryManager.AddToInventory(i, false);
+            InventoryManager.ClearExtraInventory();
         }
 
         #region Traveler Code

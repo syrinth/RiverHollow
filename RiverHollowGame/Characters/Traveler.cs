@@ -12,7 +12,7 @@ namespace RiverHollow.Characters
 {
     public class Traveler : TalkingActor
     {
-        private float _fFoodModifier = 0;
+        private float _fFoodModifier = Constants.HUNGER_MOD;
         public int Income { get; private set; } = 0;
 
         public AnimationEnum MoodVerb { get;  private set; } = AnimationEnum.Angry;
@@ -71,7 +71,7 @@ namespace RiverHollow.Characters
 
         public void TryEat(Food f)
         {
-            if (_fFoodModifier == 0 && f.Remove(1, false))
+            if (_fFoodModifier == Constants.HUNGER_MOD && f.Remove(1, false))
             {
                 _fFoodModifier = (f.FoodValue / 100f);
 
