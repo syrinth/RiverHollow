@@ -49,9 +49,8 @@ namespace RiverHollow.WorldObjects
         {
             if (_eHazardType == HazardTypeEnum.Timed)
             {
-                if (_timer.TickDown(gTime))
+                if (_timer.TickDown(gTime, true))
                 {
-                    _timer.Reset();
                     Activate(!Active);
                 }
             }

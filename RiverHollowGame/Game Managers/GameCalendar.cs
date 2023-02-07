@@ -43,14 +43,12 @@ namespace RiverHollow.Game_Managers
 
         public static void Update(GameTime gTime)
         {
-            _timer.TickDown(gTime);
             if(CurrentHour >= 26)
             {
                 GUIManager.SetScreen(new DayEndScreen());
             }
-            if (_timer.Finished())
+            if (_timer.TickDown(gTime, true))
             {
-                _timer.Reset();
                 IncrementMinutes();
             }
 

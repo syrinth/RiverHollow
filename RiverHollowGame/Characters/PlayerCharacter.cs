@@ -103,9 +103,8 @@ namespace RiverHollow.Characters
 
             if(_damageTimer != null)
             {
-                if (_flickerTimer != null && _flickerTimer.TickDown(gTime))
+                if (_flickerTimer != null && _flickerTimer.TickDown(gTime, true))
                 {
-                    _flickerTimer.Reset();
                     _fAlphaFlicker = _fAlphaFlicker == 1 ? 0 : 1;
                     GetSprites().ForEach(x => x.SetColor(Color.White * _fAlphaFlicker));
                 }

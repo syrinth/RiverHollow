@@ -36,7 +36,7 @@ namespace RiverHollow.Characters
             base.Update(gTime);
             if (!_bFlee)
             {
-                if(_animationTimer.TickDown(gTime))
+                if (_animationTimer.TickDown(gTime))
                 {
                     _animationTimer.Reset(1 + SetRandom(4, 0.5));
                     PlayAnimation(VerbEnum.Action1, Facing);
