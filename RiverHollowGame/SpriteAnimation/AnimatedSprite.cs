@@ -4,8 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
-
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.SpriteAnimations
@@ -17,7 +15,7 @@ namespace RiverHollow.SpriteAnimations
         public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth - 0.1f) : Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100);
 
         Texture2D _texture;                         // The texture that holds the images for this sprite
-        Color _color = Color.White;              // If set to anything other than Color.White, will colorize the sprite with that color.
+        public Color SpriteColor { get; private set; } = Color.White;
 
         // Dictionary holding all of the FrameAnimation objects
         Dictionary<string, FrameAnimation> _diFrameAnimations = new Dictionary<string, FrameAnimation>();
@@ -81,7 +79,7 @@ namespace RiverHollow.SpriteAnimations
         {
             _texture = sprite._texture;
             FrameCutoff = sprite.FrameCutoff;
-            _color = sprite._color;
+            SpriteColor = sprite.SpriteColor;
             CurrentAnimation = sprite.CurrentAnimation;
             _iScale = sprite._iScale;
 
@@ -97,8 +95,8 @@ namespace RiverHollow.SpriteAnimations
         }
 
         #region AddAnimation Helpers
-        public void AddAnimation(AnimationEnum verb, int startX, int startY, RHSize size, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, size.Width * Constants.TILE_SIZE, size.Height * Constants.TILE_SIZE, Frames, FrameLength, pingPong, playsOnce); }
-        public void AddAnimation(AnimationEnum verb, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce); }
+        public void AddAnimation<TEnum>(TEnum verb, int startX, int startY, RHSize size, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, size.Width * Constants.TILE_SIZE, size.Height * Constants.TILE_SIZE, Frames, FrameLength, pingPong, playsOnce); }
+        public void AddAnimation<TEnum>(TEnum verb, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce); }
         public void AddAnimation(VerbEnum verb, DirectionEnum dir, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetActorString(verb, dir), startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce); }
         public void AddAnimation(string animationName, int startX, int startY, RHSize size, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(animationName, startX, startY, size.Width * Constants.TILE_SIZE, size.Height * Constants.TILE_SIZE, Frames, FrameLength, pingPong, playsOnce); }
         public void AddAnimation(string animationName, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false)
@@ -114,7 +112,7 @@ namespace RiverHollow.SpriteAnimations
         #endregion
 
         #region RemoveAnimation Helpers
-        public void RemoveAnimation(AnimationEnum verb) { RemoveAnimation(Util.GetEnumString(verb)); }
+        public void RemoveAnimation<TEnum>(TEnum verb) { RemoveAnimation(Util.GetEnumString(verb)); }
         public void RemoveAnimation(VerbEnum verb, DirectionEnum dir) { RemoveAnimation(Util.GetActorString(verb, dir)); }
         private void RemoveAnimation(string animationName) { _diFrameAnimations.Remove(animationName); }
         #endregion
@@ -143,10 +141,10 @@ namespace RiverHollow.SpriteAnimations
 
         public void SetColor(Color c)
         {
-            _color = c;
+            SpriteColor = c;
         }
 
-        public void SetAlternate(Point newStart, AnimationEnum frameToShift)
+        public void SetAlternate<TEnum>(Point newStart, TEnum frameToShift)
         {
             _diFrameAnimations[Util.GetEnumString(frameToShift)].SetFrameStartLocation(newStart);
         }
@@ -273,7 +271,7 @@ namespace RiverHollow.SpriteAnimations
                         drawThis = new Rectangle(drawThis.X, FrameCutoff, drawThis.Width, drawThis.Height - FrameCutoff);
                     }
 
-                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, drawAtY, this.Width, this.Height - newFrameCutoff), drawThis, _color * visibility);
+                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, drawAtY, this.Width, this.Height - newFrameCutoff), drawThis, SpriteColor * visibility);
                 }
             }
         }
@@ -308,7 +306,7 @@ namespace RiverHollow.SpriteAnimations
             Rectangle rotationalRect = destinationRectangle;
             rotationalRect.X += (int)_vRotationOrigin.X;
             rotationalRect.Y += (int)_vRotationOrigin.Y;
-            spriteBatch.Draw(_texture, rotationalRect, CurrentFrameAnimation.FrameRectangle, _color * visibility, _fRotationAngle, _vRotationOrigin, SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(_texture, rotationalRect, CurrentFrameAnimation.FrameRectangle, SpriteColor * visibility, _fRotationAngle, _vRotationOrigin, SpriteEffects.None, layerDepth);
         }
 
         /// <summary>
@@ -343,7 +341,7 @@ namespace RiverHollow.SpriteAnimations
         /// </summary>
         /// <param name="val">The AnimationVerb to guard for</param>
         /// <returns></returns>
-        public bool AnimationFinished(AnimationEnum val)
+        public bool AnimationFinished<TEnum>(TEnum val)
         {
             bool rv = false;
 
@@ -366,7 +364,7 @@ namespace RiverHollow.SpriteAnimations
             return rv;
         }
 
-        public bool ContainsAnimation(AnimationEnum val)
+        public bool ContainsAnimation<TEnum>(TEnum val)
         {
             return _diFrameAnimations.ContainsKey(Util.GetEnumString(val));
         }

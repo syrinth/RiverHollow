@@ -16,7 +16,6 @@ namespace RiverHollow.Characters
         public Pet(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             _fBaseSpeed = 1;
-            ActorType = WorldActorTypeEnum.Pet;
             Wandering = true;
             SlowDontBlock = true;
 

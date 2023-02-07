@@ -239,8 +239,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         protected void HandleOpening(GameTime gTime)
         {
-            _timer.TickDown(gTime);
-            if (_timer.Finished())
+            
+            if (_timer.TickDown(gTime))
             {
                 _dStartScale += _dOpenScale;
                 if (_dStartScale >= 1)

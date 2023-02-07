@@ -48,7 +48,6 @@ namespace Database_Editor
             InitComboBox<ObjectTypeEnum>(cbWorldObjectType);
             InitComboBox<TaskTypeEnum>(cbTaskType);
             InitComboBox<EditableNPCDataEnum>(cbEditableCharData, false);
-            InitComboBox<ActionEnum>(cbActionType);
             InitComboBox<StatusTypeEnum>(cbStatusEffect);
 
             cbNPCType.Items.Clear();
@@ -60,12 +59,9 @@ namespace Database_Editor
                 { "Items", 0 },
                 { "WorldObjects", 0 },
                 { "NPCs", 0 },
-                { "Jobs", 0 },
                 { "Tasks", 0 },
                 { "Cutscenes", 0},
                 { "Mobs", 0},
-                { "Monsters", 0},
-                { "Actions", 0 },
                 { "Shops", 0 },
                 { "Buildings", 0 },
                 { "StatusEffects", 0 },
@@ -122,10 +118,7 @@ namespace Database_Editor
             _diBasicXML = new Dictionary<string, List<XMLData>>();
             LoadXMLDictionary(TASK_XML_FILE, TASK_REF_TAGS, "", ref _diBasicXML);
             LoadXMLDictionary(NPC_XML_FILE, NPC_REF_TAGS, TAGS_FOR_NPCS, ref _diBasicXML);
-            LoadXMLDictionary(JOBS_XML_FILE, JOBS_REF_TAGS, TAGS_FOR_JOBS, ref _diBasicXML);
             LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_REF_TAG, "", ref _diBasicXML);
-            LoadXMLDictionary(MONSTERS_XML_FILE, MONSTERS_REF_TAGS, TAGS_FOR_MONSTERS, ref _diBasicXML);
-            LoadXMLDictionary(ACTIONS_XML_FILE, ACTIONS_REF_TAGS, TAGS_FOR_COMBAT_ACTIONS, ref _diBasicXML);
             LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", TAGS_FOR_STATUS_EFFECTS, ref _diBasicXML);
             LoadXMLDictionary(LIGHTS_XML_FILE, "", TAGS_FOR_LIGHTS, ref _diBasicXML);
             LoadXMLDictionary(UPGRADES_XML_FILE, "", TAGS_FOR_UPGRADES, ref _diBasicXML);
@@ -151,7 +144,6 @@ namespace Database_Editor
                 [XMLTypeEnum.WorldObject] = new XMLCollection(XMLTypeEnum.WorldObject, WORLD_OBJECT_REF_TAGS, TAGS_FOR_WORLD_OBJECTS, DEFAULT_WORLD_OBJECT_TAGS),
                 [XMLTypeEnum.Task] = new XMLCollection(XMLTypeEnum.Task, TASK_REF_TAGS, TAGS_FOR_TASKS, ""),
                 [XMLTypeEnum.Cutscene] = new XMLCollection(XMLTypeEnum.Cutscene, CUTSCENE_REF_TAGS, "", ""),
-                [XMLTypeEnum.Job] = new XMLCollection(XMLTypeEnum.Job, JOBS_REF_TAGS, TAGS_FOR_JOBS, ""),
                 [XMLTypeEnum.StatusEffect] = new XMLCollection(XMLTypeEnum.StatusEffect, "", TAGS_FOR_STATUS_EFFECTS, ""),
                 [XMLTypeEnum.Dungeon] = new XMLCollection(XMLTypeEnum.Dungeon, DUNGEON_REF_TAGS, TAGS_FOR_DUNGEONS, ""),
                 [XMLTypeEnum.Item] = new XMLCollection(XMLTypeEnum.Item, ITEM_REF_TAGS, TAGS_FOR_ITEMS, DEFAULT_ITEM_TAGS),
@@ -159,8 +151,6 @@ namespace Database_Editor
                 [XMLTypeEnum.Shop] = new XMLCollection(XMLTypeEnum.Shop, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA, DEFAULT_SHOP_TAGS),
                 [XMLTypeEnum.Light] = new XMLCollection(XMLTypeEnum.Light, "", TAGS_FOR_LIGHTS, DEFAULT_LIGHT_TAGS),
                 [XMLTypeEnum.Upgrade] = new XMLCollection(XMLTypeEnum.Upgrade, "", TAGS_FOR_UPGRADES, DEFAULT_UPGRADE_TAGS),
-                [XMLTypeEnum.Action] = new XMLCollection(XMLTypeEnum.Action, ACTIONS_REF_TAGS, TAGS_FOR_COMBAT_ACTIONS, DEFAULT_ACTION_TAGS),
-                [XMLTypeEnum.Monster] = new XMLCollection(XMLTypeEnum.Monster, MONSTERS_REF_TAGS, TAGS_FOR_MONSTERS, DEFAULT_MONSTER_TAGS)
             };
         }
 
@@ -556,7 +546,6 @@ namespace Database_Editor
 
         private void SortDictionaryByType(ref List<XMLData> xmlDataDictionary)
         {
-            //Test, Sort Monsters by name
             xmlDataDictionary.Sort((x, y) =>
             {
                 var typeComp = y.GetTagValue("Type").CompareTo(x.GetTagValue("Type"));
@@ -573,7 +562,6 @@ namespace Database_Editor
 
         private void SortDictionaryByName(ref List<XMLData> xmlDataDictionary)
         {
-            //Test, Sort Monsters by name
             xmlDataDictionary.Sort((x, y) =>
             {
                 var typeComp = x.Name.CompareTo(y.Name);
@@ -669,14 +657,11 @@ namespace Database_Editor
         {
             int rv = 0;
 
-            if (tabCtl.SelectedTab == tabCtl.TabPages["tabAction"]) { rv = _diBasicXML[ACTIONS_XML_FILE].Count; }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabNPC"]) { rv = _diBasicXML[NPC_XML_FILE].Count; }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabJob"]) { rv = _diBasicXML[JOBS_XML_FILE].Count; }
+            if (tabCtl.SelectedTab == tabCtl.TabPages["tabNPC"]) { rv = _diBasicXML[NPC_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscene"]) { rv = _diBasicXML[CUTSCENE_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeon"]) { rv = _diBasicXML[DUNGEON_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItem"]) { rv = _liItemData.Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabLight"]) { rv = _diBasicXML[LIGHTS_XML_FILE].Count; }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabMonster"]) { rv = _diBasicXML[MONSTERS_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabShop"]) { rv = _diBasicXML[SHOPS_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabStatusEffect"]) { rv = _diBasicXML[STATUS_EFFECTS_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabTask"]) { rv = _diBasicXML[TASK_XML_FILE].Count; }
@@ -703,10 +688,7 @@ namespace Database_Editor
 
             if (fileName == TASK_XML_FILE) { rv = XMLTypeEnum.Task; }
             else if (fileName == NPC_XML_FILE) { rv = XMLTypeEnum.NPC; }
-            else if (fileName == JOBS_XML_FILE) { rv = XMLTypeEnum.Job; }
             else if (fileName == WORLD_OBJECTS_DATA_XML_FILE) { rv = XMLTypeEnum.WorldObject; }
-            else if (fileName == MONSTERS_XML_FILE) { rv = XMLTypeEnum.Monster; }
-            else if (fileName == ACTIONS_XML_FILE) { rv = XMLTypeEnum.Action; }
             else if (fileName == STATUS_EFFECTS_XML_FILE) { rv = XMLTypeEnum.StatusEffect; }
             else if (fileName == LIGHTS_XML_FILE) { rv = XMLTypeEnum.Light; }
             else if (fileName == UPGRADES_XML_FILE) { rv = XMLTypeEnum.Upgrade; }
@@ -808,10 +790,7 @@ namespace Database_Editor
             LoadItemDataGrid();
             LoadWorldObjectDataGrid();
             LoadNPCDataGrid();
-            LoadJobDataGrid();
             LoadTaskDataGrid();
-            LoadMonsterDataGrid();
-            LoadActionDataGrid();
             LoadStatusEffectDataGrid();
             LoadLightDataGrid();
             LoadCutsceneDataGrid();
@@ -870,21 +849,9 @@ namespace Database_Editor
         {
             LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.NPC], _diBasicXML[NPC_XML_FILE], selectedIndex == -1 ? _diTabIndices["NPCs"] : selectedIndex, filter);
         }
-        private void LoadJobDataGrid()
-        {
-            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.Job], _diBasicXML[JOBS_XML_FILE], _diTabIndices["Jobs"]);
-        }
         private void LoadTaskDataGrid()
         {
             LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.Task], _diBasicXML[TASK_XML_FILE], _diTabIndices["Tasks"]);
-        }
-        private void LoadMonsterDataGrid()
-        {
-            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.Monster], _diBasicXML[MONSTERS_XML_FILE], _diTabIndices["Monsters"]);
-        }
-        private void LoadActionDataGrid()
-        {
-            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.Action], _diBasicXML[ACTIONS_XML_FILE], _diTabIndices["Actions"]);
         }
         private void LoadStatusEffectDataGrid()
         {
@@ -1033,14 +1000,11 @@ namespace Database_Editor
         {
             AutoSave();
 
-            if (tabCtl.SelectedTab == tabCtl.TabPages["tabActions"]) { dgvActions.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabNPCs"]) { dgvNPCs.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabJobs"]) { dgvJobs.Focus(); }
+            if (tabCtl.SelectedTab == tabCtl.TabPages["tabNPCs"]) { dgvNPCs.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscenes"]) { dgvCutscenes.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeons"]) { dgvDungeons.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItems"]) { dgvItems.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabLights"]) { dgvLights.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabMonsters"]) { dgvMonsters.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabShops"]) { dgvShops.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabStatusEffects"]) { dgvStatusEffects.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabTasks"]) { dgvTasks.Focus(); }
@@ -1116,9 +1080,7 @@ namespace Database_Editor
                 }
 
                 //Sort the following Dictionaries by name
-                List<XMLData> listToSort = _diBasicXML[MONSTERS_XML_FILE];
-                SortDictionaryByName(ref listToSort);
-                listToSort = _diBasicXML[NPC_XML_FILE];
+                List<XMLData> listToSort = _diBasicXML[NPC_XML_FILE];
                 SortDictionaryByType(ref listToSort);
             }
             else
@@ -1193,15 +1155,12 @@ namespace Database_Editor
         {
             TabPage prevPage = tabCtl.TabPages[_diTabIndices["PreviousTab"]];
 
-            if (prevPage == tabCtl.TabPages["tabActions"]) { SaveActionInfo(); }
-            else if (prevPage == tabCtl.TabPages["tabNPCs"]) { SaveNPCInfo(); }
-            else if (prevPage == tabCtl.TabPages["tabJobs"]) { SaveJobInfo(); }        
+            if (prevPage == tabCtl.TabPages["tabNPCs"]) { SaveNPCInfo(); }      
             else if (prevPage == tabCtl.TabPages["tabCutscenes"]) { SaveCutsceneInfo(); }
             else if (prevPage == tabCtl.TabPages["tabDungeons"]) { SaveDungeonInfo(); }            
             else if (prevPage == tabCtl.TabPages["tabItems"]) { SaveItemInfo(); }
             else if (prevPage == tabCtl.TabPages["tabLights"]) { SaveLightInfo(); }
             else if (prevPage == tabCtl.TabPages["tabUpgrades"]) { SaveUpgradeInfo(); }
-            else if (prevPage == tabCtl.TabPages["tabMonsters"]) { SaveMonsterInfo(); }
             else if (prevPage == tabCtl.TabPages["tabShops"]) { SaveShopInfo(); }
             else if (prevPage == tabCtl.TabPages["tabStatusEffects"]) { SaveStatusEffectInfo(); }
             else if (prevPage == tabCtl.TabPages["tabTasks"]) { SaveTaskInfo(); }
@@ -1381,9 +1340,7 @@ namespace Database_Editor
                     }
                 }
             }
-            else if (dgv == dgvMonsters) { AddContextMenuItem("Add New", AddNewMonster, false); }
             else if (dgv == dgvTasks) { AddContextMenuItem("Add New", AddNewTask, false); }
-            else if (dgv == dgvActions) { AddContextMenuItem("Add New", AddNewAction, false); }
             else if (dgv == dgvCutscenes) { AddContextMenuItem("Add New", AddNewCutscene, false); }
             else if (dgv == dgvNPCs) {
                 AddContextMenuItem("Add New", AddNewNPC, true);
@@ -1519,16 +1476,6 @@ namespace Database_Editor
             SaveTaskInfo();
             AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Task]);
         }
-        private void AddNewAction(object sender, EventArgs e)
-        {
-            SaveTaskInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Action]);
-        }
-        private void AddNewMonster(object sender, EventArgs e)
-        {
-            SaveMonsterInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Monster]);
-        }
         private void AddNewCutscene(object sender, EventArgs e)
         {
             SaveCutsceneInfo();
@@ -1569,11 +1516,8 @@ namespace Database_Editor
             LoadItemInfo();
             LoadWorldObjectInfo();
             LoadNPCInfo();
-            LoadJobInfo();
             LoadTaskInfo();
             LoadCutsceneInfo();
-            LoadMonsterInfo();
-            LoadActionInfo();
             LoadShopInfo();
             LoadStatusEffectInfo();
             LoadLightInfo();
@@ -1661,27 +1605,11 @@ namespace Database_Editor
                 }
             }
         }
-        private void LoadJobInfo()
-        {
-            XMLData data = _diBasicXML[JOBS_XML_FILE][_diTabIndices["Jobs"]];
-            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Job]);
-        }
         private void LoadTaskInfo()
         {
             XMLData data = _diBasicXML[TASK_XML_FILE][_diTabIndices["Tasks"]];
             LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Task]);
             cbTaskType.SelectedIndex = (int)Util.ParseEnum<TaskTypeEnum>(data.GetTagValue("Type"));
-        }
-        private void LoadMonsterInfo()
-        {
-            XMLData data = _diBasicXML[MONSTERS_XML_FILE][_diTabIndices["Monsters"]];
-            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Monster]);
-        }
-        private void LoadActionInfo()
-        {
-            XMLData data = _diBasicXML[ACTIONS_XML_FILE][_diTabIndices["Actions"]];
-            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Action]);
-            cbActionType.SelectedIndex = (int)Util.ParseEnum<ActionEnum>(data.GetTagValue("Type"));
         }
         private void LoadStatusEffectInfo()
         {
@@ -1900,21 +1828,9 @@ namespace Database_Editor
         {
             SaveXMLDataInfo(_diBasicXML[NPC_XML_FILE], _diTabCollections[XMLTypeEnum.NPC]);
         }
-        private void SaveJobInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[JOBS_XML_FILE], _diTabCollections[XMLTypeEnum.Job]);
-        }
         private void SaveTaskInfo()
         {
             SaveXMLDataInfo(_diBasicXML[TASK_XML_FILE], _diTabCollections[XMLTypeEnum.Task]);
-        }
-        private void SaveMonsterInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[MONSTERS_XML_FILE], _diTabCollections[XMLTypeEnum.Monster]);
-        }
-        private void SaveActionInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[ACTIONS_XML_FILE], _diTabCollections[XMLTypeEnum.Action]);
         }
         private void SaveStatusEffectInfo()
         {
@@ -1976,11 +1892,8 @@ namespace Database_Editor
         {
             if (e.RowIndex > -1)
             {
-                if (sender == dgvActions) { GenericCellClick(e, "Actions", LoadActionInfo, SaveActionInfo); }
-                else if (sender == dgvJobs) { GenericCellClick(e, "Jobs", LoadJobInfo, SaveJobInfo); }
-                else if (sender == dgvDungeons) { GenericCellClick(e, "Dungeons", LoadDungeonInfo, SaveDungeonInfo); }
+                if (sender == dgvDungeons) { GenericCellClick(e, "Dungeons", LoadDungeonInfo, SaveDungeonInfo); }
                 else if (sender == dgvLights) { GenericCellClick(e, "Lights", LoadLightInfo, SaveLightInfo); }
-                else if (sender == dgvMonsters) { GenericCellClick(e, "Monsters", LoadMonsterInfo, SaveMonsterInfo); }
                 else if (sender == dgvNPCs) { GenericCellClick(e, "NPCs", LoadNPCInfo, SaveNPCInfo); }
                 else if (sender == dgvShops) { GenericCellClick(e, "Shops", LoadShopInfo, SaveShopInfo); }
                 else if (sender == dgvStatusEffects) { GenericCellClick(e, "StatusEffects", LoadStatusEffectInfo, SaveStatusEffectInfo); }
@@ -2015,12 +1928,8 @@ namespace Database_Editor
         #region Cancel Button
         private void ProcessCancel_Click(object sender, EventArgs e)
         {
-            if (sender == btnActionCancel) { GenericCancel(_diBasicXML[ACTIONS_XML_FILE], "Actions", dgvActions, LoadActionInfo); }
-            else if (sender == btnJobCancel) { GenericCancel(_diBasicXML[CUTSCENE_XML_FILE], "Cutscene", dgvCutscenes, LoadCutsceneInfo); }
-
-            else if (sender == btnDungeonCancel) { GenericCancel(_diBasicXML[DUNGEON_XML_FILE], "Dungeon", dgvDungeons, LoadDungeonInfo); }
+            if (sender == btnDungeonCancel) { GenericCancel(_diBasicXML[DUNGEON_XML_FILE], "Dungeon", dgvDungeons, LoadDungeonInfo); }
             else if (sender == btnLightCancel) { GenericCancel(_diBasicXML[LIGHTS_XML_FILE], "Light", dgvLights, LoadLightInfo); }
-            else if (sender == btnMonsterCancel) { GenericCancel(_diBasicXML[MONSTERS_XML_FILE], "Monsters", dgvMonsters, LoadMonsterInfo); }
             else if (sender == btnNPCCancel) { GenericCancel(_diBasicXML[NPC_XML_FILE], "NPCs", dgvNPCs, LoadNPCInfo); }
             else if (sender == btnShopCancel) { GenericCancel(_diBasicXML[SHOPS_XML_FILE], "Shops", dgvShops, LoadShopInfo); }
             else if (sender == btnStatusEffectCancel) { GenericCancel(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", dgvStatusEffects, LoadStatusEffectInfo); }

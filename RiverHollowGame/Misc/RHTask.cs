@@ -34,7 +34,7 @@ namespace RiverHollow.Misc
         public int TargetsAccomplished { get; private set; }
 
         private readonly int _iBuildingEndID = -1;
-        private Monster _questMonster;
+        private Mob _questMonster;
         private Item _targetItem;
         private int _iTargetObjectID = -1;
         private readonly int _iTargetWorldObjNum = -1;
@@ -84,7 +84,7 @@ namespace RiverHollow.Misc
             _diAssignationTriggers = new Dictionary<TaskTriggerEnum, string>();
         }
 
-        public RHTask(string name, TaskTypeEnum type, string desc, int target, Monster m, Item i, Villager giver = null) : this()
+        public RHTask(string name, TaskTypeEnum type, string desc, int target, Mob m, Item i, Villager giver = null) : this()
         {
             _eTaskType = type;
             GoalNPC = giver;
@@ -304,7 +304,7 @@ namespace RiverHollow.Misc
 
             return rv;
         }
-        public bool AttemptProgress(Monster m)
+        public bool AttemptProgress(Mob m)
         {
             bool rv = false;
 
@@ -601,7 +601,7 @@ namespace RiverHollow.Misc
                 _eTaskType = (TaskTypeEnum)qData.questType;
                 GoalNPC = qData.goalNPC != -1 ? TownManager.DIVillagers[qData.goalNPC] : null;
                 _targetItem = qData.itemID != -1 ? DataManager.GetItem(qData.itemID) : null;
-                _questMonster = qData.monsterID != -1 ? DataManager.GetLiteMonsterByIndex(qData.monsterID) : null;
+                _questMonster = qData.monsterID != -1 ? DataManager.CreateMob(qData.monsterID) : null;
                 _iTargetObjectID = qData.targetWorldObjectID;
                 _iUnlockObjectID = qData.unlockBuildingID;
                 NeededCount = qData.targetGoal;

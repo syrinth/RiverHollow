@@ -36,7 +36,6 @@ namespace RiverHollow.Characters
         }
         public TalkingActor(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            ActorType = WorldActorTypeEnum.TalkingActor;
             _bCanTalk = true;
             _liActorFaceQueue = new List<ActorFaceEnum>();
             _liSpokenKeys = new List<string>();

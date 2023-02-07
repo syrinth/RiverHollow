@@ -107,7 +107,7 @@
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Building][Subtype:None][Texture:House_Player][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86|3-80-86][Upgrade_1:55-10|60-10][Upgrade_2:55-20|60-20][ReqItems:55-5|60-5][House]</Value>
+      <Value>[Type:Building][Subtype:None][Texture:House_Player][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86|3-80-86][Upgrade_1:55-10|60-10][Upgrade_2:55-20|60-20][ReqItems:55-5|60-5][Home]</Value>
     </Item>
     <Item>
       <Key>27</Key>

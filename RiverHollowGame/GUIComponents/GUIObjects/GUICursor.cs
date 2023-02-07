@@ -135,8 +135,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         /// <summary>
         /// This method draws the image of the item that we are holding onto the 
-        /// World Map. However, we do not draw the image if we are Scrying, or on
-        /// a map that is for combat.
+        /// World Map. However, we do not draw the image if we are Scrying.
         /// </summary>
         /// <param name="spriteBatch"></param>
         public static void DrawPotentialWorldObject(SpriteBatch spriteBatch)

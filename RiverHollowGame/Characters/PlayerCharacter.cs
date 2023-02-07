@@ -9,7 +9,6 @@ using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.WorldObjects;
-using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Characters
 {
@@ -64,12 +63,17 @@ namespace RiverHollow.Characters
         public Mount ActiveMount { get; private set; }
         public bool Mounted => ActiveMount != null;
 
+        private float _fAlphaFlicker = 1f;
+
         public PlayerCharacter() : base()
         {
-            //_sName = PlayerManager.Name;
+            Invulnerable = false;
 
             HairColor = Color.Red;
             EyeColor = Color.Blue;
+
+            MaxHP = Constants.PLAYER_STARTING_HP;
+            CurrentHP = MaxHP;
 
             _liTilePath = new List<RHTile>();
 
@@ -96,6 +100,21 @@ namespace RiverHollow.Characters
         {
             base.Update(gTime);
             _lightSource.Position = _sprBody.Position - new Vector2((_lightSource.Width - _sprBody.Width) / 2, (_lightSource.Height - _sprBody.Height) / 2);
+
+            if(_damageTimer != null)
+            {
+                if (_flickerTimer != null && _flickerTimer.TickDown(gTime))
+                {
+                    _flickerTimer.Reset();
+                    _fAlphaFlicker = _fAlphaFlicker == 1 ? 0 : 1;
+                    GetSprites().ForEach(x => x.SetColor(Color.White * _fAlphaFlicker));
+                }
+            }
+            else if(_flickerTimer != null)
+            {
+                _flickerTimer = null;
+                GetSprites().ForEach(x => x.SetColor(Color.White));
+            }
         }
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
@@ -108,7 +127,6 @@ namespace RiverHollow.Characters
             //Hat?.Sprite.Draw(spriteBatch, useLayerDepth);
             //Legs?.Sprite.Draw(spriteBatch, useLayerDepth);
         }
-
         protected override void HandleMove()
         {
             base.HandleMove();

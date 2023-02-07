@@ -18,7 +18,6 @@ namespace RiverHollow.Characters
         public Animal(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             _fBaseSpeed = Constants.NPC_WALK_SPEED;
-            ActorType = WorldActorTypeEnum.Animal;
             Wandering = true;
             SlowDontBlock = true;
 

@@ -25,7 +25,7 @@ namespace RiverHollow.Utilities
             }
             else
             {
-                Width= 0;
+                Width = 0;
                 Height = 0;
             }
         }

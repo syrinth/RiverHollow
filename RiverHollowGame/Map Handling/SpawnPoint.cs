@@ -26,6 +26,7 @@ namespace RiverHollow.Map_Handling
             _map = map;
             _vPosition = map.GetTileByGridCoords(Util.GetGridCoords(obj.Position)).Position;
             _szDimensions = obj.Size;
+            _szDimensions = obj.Size;
         }
 
         protected void AssignSpawnData(string spawnData, SpawnTypeEnum t)

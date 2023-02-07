@@ -35,7 +35,7 @@ namespace RiverHollow.Characters
             //_bLivesInTown = true;
             //_diRequiredObjectIDs = new Dictionary<int, int>();
             _arrInventory = new Item[_iRows, _iCols];
-            ActorType = WorldActorTypeEnum.ShippingGremlin;
+
             //_eSpawnStatus = VillagerSpawnStatus.NonTownMap;
             _iBodyWidth = 32;
             _iBodyHeight = 32;

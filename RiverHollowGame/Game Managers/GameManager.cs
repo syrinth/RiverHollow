@@ -7,12 +7,12 @@ using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 
 using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Items;
-using static RiverHollow.Utilities.Enums;
-using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using RiverHollow.Utilities;
 using RiverHollow.Buildings;
+
+using static RiverHollow.Utilities.Enums;
+using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 
 namespace RiverHollow.Game_Managers
 {
@@ -22,46 +22,6 @@ namespace RiverHollow.Game_Managers
         public static int CurrentScale = Constants.NORMAL_SCALE;
         public static int ScaledTileSize => (int)(Constants.TILE_SIZE * CurrentScale);
         public static int ScaledPixel => (int)CurrentScale;
-        #endregion
-
-        #region Game Enums
-        public static GameIconEnum GetGameIconFromAttribute(AttributeEnum e)
-        {
-            GameIconEnum rv = GameIconEnum.None;
-            switch (e)
-            {
-                case AttributeEnum.Agility:
-                    return GameIconEnum.Agility;
-                case AttributeEnum.Damage:
-                    return GameIconEnum.Damage;
-                case AttributeEnum.Defence:
-                    return GameIconEnum.Defence;
-                case AttributeEnum.Evasion:
-                    return GameIconEnum.Evasion;
-                case AttributeEnum.Magic:
-                    return GameIconEnum.Magic;
-                case AttributeEnum.Vitality:
-                    return GameIconEnum.MaxHealth;
-                case AttributeEnum.Resistance:
-                    return GameIconEnum.Resistance;
-                case AttributeEnum.Speed:
-                    return GameIconEnum.Speed;
-                case AttributeEnum.Strength:
-                    return GameIconEnum.Strength;
-            }
-
-            return rv;
-        }
-        public static AttributeEnum GetDefenceType(AttributeEnum e)
-        {
-            switch (e)
-            {
-                case AttributeEnum.Magic:
-                    return AttributeEnum.Resistance;
-                default:
-                    return AttributeEnum.Defence;
-            }
-        }
         #endregion
 
         #region Managed Data Lists
@@ -234,7 +194,6 @@ namespace RiverHollow.Game_Managers
             bool rv = false;
             switch (CurrentScreen)
             {
-                case GameScreenEnum.Combat:
                 case GameScreenEnum.Info:
                     rv = true;
                     break;
@@ -265,11 +224,6 @@ namespace RiverHollow.Game_Managers
         public static void ShowMap(bool val = true) { _bShowMap = val; }
         public static bool IsMapShown() { return _bShowMap; }
         #endregion
-
-        public static void GoToCombatScreen(EmptyDelegate combatSwitch)
-        {
-            GUIManager.SetScreen(new CombatScreen(combatSwitch));
-        }
 
         public static void GoToHUDScreen()
         {

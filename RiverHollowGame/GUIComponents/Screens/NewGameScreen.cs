@@ -36,8 +36,6 @@ namespace RiverHollow.GUIComponents.Screens
         GUICheck _gCheckSkipCutscene;
         GUIButton _gMuteButton;
 
-        List<GUIObject> _liClassBoxes;
-        ClassSelector _csbSelected;
         ActorDisplayBox _displayBox;
 
         ColorPicker _gColorPicker;
@@ -117,29 +115,6 @@ namespace RiverHollow.GUIComponents.Screens
             _townWindow = new GUITextInputWindow(12);
             _townWindow.AnchorAndAlignToObject(townLabel, SideEnum.Bottom, SideEnum.CenterX, ScaleIt(3));
             _townWindow.SetText("River Hollow");
-
-            GUIText classLabel = new GUIText(DataManager.GetGameTextEntry("Label_Class").GetFormattedText());
-            classLabel.AnchorAndAlignToObject(_townWindow, SideEnum.Bottom, SideEnum.CenterX, ScaleIt(4));
-            _window.AddControl(classLabel);
-
-            _liClassBoxes = new List<GUIObject>();
-            for (int i = 0; i < DataManager.NumberOfClasses(); i++)
-            {
-                ClassSelector w = new ClassSelector(i, BtnAssignClass);
-                w.Enable(false);
-
-                if (i == 0) {
-                    w.Position(classLabel.Position());
-                    w.ScaledMoveBy(-24, 11);
-                }
-                else if (i % 4 == 0) { w.AnchorAndAlignToObject(_liClassBoxes[i - 4], SideEnum.Bottom, SideEnum.Left, ScaleIt(2)); }
-                else { w.AnchorAndAlignToObject(_liClassBoxes[i - 1], SideEnum.Right, SideEnum.Top, ScaleIt(2)); }
-
-                _liClassBoxes.Add(w);
-                _window.AddControl(w);
-            }
-            _csbSelected = (ClassSelector)_liClassBoxes[0];
-            _csbSelected.Enable(true);
 
             _gCheckSkipCutscene = new GUICheck("Skip Intro");
             _gCheckSkipCutscene.SetChecked(true);
@@ -266,8 +241,6 @@ namespace RiverHollow.GUIComponents.Screens
         {
             PlayerManager.PlayerActor.SetScale();
             PlayerManager.SetName(_nameWindow.GetText());
-            PlayerManager.SetClass(_csbSelected.ClassID);
-            PlayerManager.PlayerCombatant.AssignStartingGear();
             TownManager.SetTownName(_townWindow.GetText());
 
             RiverHollow.NewGame(!_gCheckSkipCutscene.Checked());
@@ -375,16 +348,6 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _eCurrentDirection = ChangeDirection(false);
             _displayBox.PlayAnimation(VerbEnum.Idle, _eCurrentDirection);
-        }
-
-        public void BtnAssignClass(ClassSelector obj)
-        {
-            if (obj != null && _csbSelected != obj)
-            {
-                _csbSelected.Enable(false);
-                _csbSelected = obj;
-                _csbSelected.Enable(true);
-            }
         }
         #endregion
 
@@ -701,40 +664,6 @@ namespace RiverHollow.GUIComponents.Screens
                         _arrPixelArray[i].SetColor(ColorPicker.ColorFromHSV(newHue, newSaturation, newValue));
                     }
                 }
-            }
-        }
-
-        /// <summary>
-        /// This class is a GUIImage that will diplay a class Icon and maintain an associated
-        /// ClassID number to return to a query.
-        /// </summary>
-        public class ClassSelector : GUIImage
-        {
-            public int ClassID { get; } = -1;
-            private ClickDelegate _delClassAction;
-            public delegate void ClickDelegate(ClassSelector obj);
-
-            public ClassSelector(int classID, ClickDelegate del) : base(new Rectangle(0 + (classID * Constants.TILE_SIZE), 112, Constants.TILE_SIZE, Constants.TILE_SIZE), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE)
-            {
-                ClassID = classID;
-                _delClassAction = del;
-            }
-
-            public override void Draw(SpriteBatch spriteBatch)
-            {
-                this.Alpha(Enabled ? 1.0f : 0.5f);
-                base.Draw(spriteBatch);
-            }
-
-            public override bool ProcessLeftButtonClick(Point mouse)
-            {
-                bool rv = false;
-                if (Contains(mouse) && _delClassAction != null)
-                {
-                    _delClassAction(this);
-                    rv = true;
-                }
-                return rv;
             }
         }
     }

@@ -44,7 +44,7 @@ namespace RiverHollow.Game_Managers
         public static void Update(GameTime gTime)
         {
             _timer.TickDown(gTime);
-            if(CurrentHour == 26)
+            if(CurrentHour >= 26)
             {
                 GUIManager.SetScreen(new DayEndScreen());
             }
@@ -60,6 +60,16 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        public static void IncrementHours(int x)
+        {
+            CurrentHour += x;
+
+            if (!_bHasNightFallen && IsNight())
+            {
+                _bHasNightFallen = true;
+                MapManager.CheckSpirits();
+            }
+        }
         public static void IncrementMinutes()
         {
             CurrentMin += Constants.CALENDAR_MINUTES_PER_SECOND;

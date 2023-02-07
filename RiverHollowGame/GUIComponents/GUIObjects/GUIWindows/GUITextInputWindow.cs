@@ -178,8 +178,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             public override void Update(GameTime gTime)
             {
-                _timer.TickDown(gTime);
-                if (_timer.Finished())
+                if (_timer.TickDown(gTime))
                 {
                     _timer.Reset();
                     _bShow = !_bShow;

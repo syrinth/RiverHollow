@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters;
-using RiverHollow.Characters.Lite;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.GUIComponents.Screens.HUDScreens.RiverHollow.GUIComponents.Screens;
@@ -67,9 +66,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 case TextEntrySelectionEnum.Shop:
                     AddShopOptions();
                     break;
-                case TextEntrySelectionEnum.Party:
-                    AddPartyOptions();
-                    break;
                 default:
                     break;
             }
@@ -86,7 +82,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 List<TextEntry> liCommands = new List<TextEntry> { DataManager.GetGameTextEntry("Selection_Talk") };
 
                 if (v.CanGiveGift) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Gift")); }
-                if (v.Combatant && v.GetFriendshipLevel() >= 2) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Party")); }
                 if (_textEntry.HasTag("ShipGoods")) { liCommands.Add(DataManager.GetGameTextEntry("Selection_ShipGoods")); }
                 if (v.CanBeMarried)
                 {
@@ -137,26 +132,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
                 AddOptions(liCommands);
             }
-        }
-
-        /// <summary>
-        /// Constructs new TextEntry objects for each character in the party
-        /// with an Option_# verb attached
-        /// </summary>
-        private void AddPartyOptions()
-        {
-            List<TextEntry> liCommands = new List<TextEntry>();
-
-            int i = 0;
-            foreach(ClassedCombatant act in PlayerManager.GetParty())
-            {
-                string verb = "Option_" + i++;
-                Dictionary<string, string> stringData = new Dictionary<string, string> { ["Text"] = act.Name(), ["TextVerb"] = verb };
-
-                liCommands.Add(new TextEntry(verb, stringData));
-            }
-
-            AddOptions(liCommands);
         }
 
         /// <summary>
@@ -329,7 +304,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             PlayerManager.PlayerActor.SetPet(null);
                             break;
                         case TextEntryTriggerEnum.UseItem:
-                            GameManager.CurrentItem.UseItem(chosenAction.TextVerb);
+                            GameManager.CurrentItem.UseItem();
                             GameManager.SetSelectedItem(null);
                             break;
 

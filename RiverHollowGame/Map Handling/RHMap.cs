@@ -9,6 +9,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens.HUDScreens;
 using RiverHollow.Items;
+using RiverHollow.Items.Tools;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
@@ -626,6 +627,16 @@ namespace RiverHollow.Map_Handling
             }
         }
 
+        public void TestHitboxOnMobs(HitboxTool t)
+        {
+            foreach(Mob npc in _liMobs)
+            {
+                if (npc.CollisionBox.Intersects(t.Hitbox))
+                {
+                    npc.DealDamage(t.ToolLevel);
+                }
+            }
+        }
         public bool AllMobsDefeated()
         {
             return _liMobs.Count - _liActorsToRemove.FindAll(x => x.ActorType == WorldActorTypeEnum.Mob).Count <= 0;
@@ -756,7 +767,7 @@ namespace RiverHollow.Map_Handling
 
         /// <summary>
         /// Call to retrieve a list of RHTiles that cannot be used to spawn resources on. These tiles
-        /// are chosen due to proximity to monster spawn points, combat start tiles, and travel points.
+        /// are chosen due to proximity to monster spawn points, and travel points.
         /// 
         /// Additionally, it ensures that there exists a path between each monster spawn point and each
         /// potential player combat start area
@@ -1446,7 +1457,11 @@ namespace RiverHollow.Map_Handling
 
                     if (i != null && i.HasUse())
                     {
-                        PlayerManager.PlayerActor.DetermineFacing(MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition()));
+                        int distance = 0;
+                        if (PlayerManager.PlayerInRangeGetDist(GUICursor.GetWorldMousePosition().ToPoint(), 3 * Constants.TILE_SIZE, ref distance))
+                        {
+                            PlayerManager.PlayerActor.DetermineFacing(MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition()));
+                        }
 
                         RHTile playerTile = GetTileByPixelPosition(PlayerManager.PlayerActor.CollisionCenter);
                         TargetTile = playerTile.GetTileByDirection(PlayerManager.PlayerActor.Facing);
@@ -1551,15 +1566,6 @@ namespace RiverHollow.Map_Handling
                         if (found) { break; }
                     }
                 }
-
-                //Do not draw test tiles on a map for combat
-                //WorldObject constructToBuild = GameManager.ConstructionObject;
-                //if (!IsCombatMap && constructToBuild != null)
-                //{
-                //    Vector2 vec = mouseLocation.ToVector2() - new Vector2(0, constructToBuild.Height - constructToBuild.BaseHeight);
-                //    constructToBuild.SetCoordinates(Util.SnapToGrid(vec));
-                //    TestMapTiles(constructToBuild, _liTestTiles);
-                //}
 
                 if (!found)
                 {
@@ -2260,6 +2266,25 @@ namespace RiverHollow.Map_Handling
             for (int y = obj.Top; y < obj.Top + obj.Height; y += Constants.TILE_SIZE)
             {
                 for (int x = obj.Left; x < obj.Left + obj.Width; x += Constants.TILE_SIZE)
+                {
+                    RHTile tile = GetTileByPixelPosition(new Point(x, y));
+                    if (!rvList.Contains(tile))
+                    {
+                        rvList.Add(tile);
+                    }
+                }
+            }
+
+            return rvList;
+        }
+
+        public List<RHTile> GetTilesFromRectangleIncludeEdgePoints(Rectangle obj)
+        {
+            List<RHTile> rvList = new List<RHTile>();
+
+            for (int y = obj.Top; y <= obj.Top + obj.Height; y += Constants.TILE_SIZE)
+            {
+                for (int x = obj.Left; x <= obj.Left + obj.Width; x += Constants.TILE_SIZE)
                 {
                     RHTile tile = GetTileByPixelPosition(new Point(x, y));
                     if (!rvList.Contains(tile))

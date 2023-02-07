@@ -6,15 +6,16 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Characters;
 using RiverHollow.Buildings;
-using RiverHollow.CombatStuff;
 using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 using RiverHollow.Misc;
 using RiverHollow.Map_Handling;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Items;
-using static RiverHollow.Utilities.Enums;
 using RiverHollow.WorldObjects.Trigger_Objects;
+using RiverHollow.Items.Tools;
+
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {
@@ -25,7 +26,6 @@ namespace RiverHollow.Game_Managers
 
         public const string NPC_FOLDER = FOLDER_ACTOR + @"NPCs\";
         public const string PORTRAIT_FOLDER = FOLDER_ACTOR + @"Portraits\";
-        public const string COMBAT_PORTRAITS = FOLDER_ACTOR + @"Portraits\CombatPortraits\";
 
         public const string FILE_WORLDOBJECTS = @"Textures\worldObjects";
         public const string FILE_FLOORING = @"Textures\texFlooring";
@@ -47,7 +47,6 @@ namespace RiverHollow.Game_Managers
         public const string DIALOGUE_TEXTURE = @"Textures\Dialog";
         public const string UPGRADE_ICONS = GUI_COMPONENTS + @"\GUI_Upgrade_Icons";
         public const string GUI_COMPONENTS = @"Textures\GUI Components";
-        public const string COMBAT_TEXTURE = GUI_COMPONENTS + @"\GUI_Combat";
         public const string ACTION_ICONS = GUI_COMPONENTS + @"\GUI_Action_Icons";
         public const string HUD_COMPONENTS = GUI_COMPONENTS + @"\GUI_HUD_Components";
         #endregion
@@ -65,7 +64,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diNPCData;
         public static Dictionary<int, Dictionary<string, string>> NPCData => _diNPCData;
         static Dictionary<int, Dictionary<string, string>> _diPlayerAnimationData;
-        public static Dictionary<int, Dictionary<string, string>> PlayerCombatAnimationData => _diPlayerAnimationData;
 
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
         static Dictionary<string, string> _diMailboxMessages;
@@ -130,7 +128,6 @@ namespace RiverHollow.Game_Managers
         {
             LoadDictionary(ref _diPlayerAnimationData, @"Data\PlayerClassAnimationConfig", Content, null);
             LoadDictionary(ref _diItemData, @"Data\ItemData", Content, null);
-            LoadDictionary(ref _diActions, @"Data\Combat_Actions", Content, null);
             LoadDictionary(ref _diNPCData, @"Data\NPCData", Content, null);
             LoadDictionary(ref _diMonsterData, @"Data\Monsters", Content, null);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
@@ -504,8 +501,6 @@ namespace RiverHollow.Game_Managers
                         return new Clothing(id, diData); 
                     case ItemEnum.Consumable:
                         return new Consumable(id, diData, num);
-                    case ItemEnum.Equipment:
-                        return new Equipment(id, diData);
                     case ItemEnum.Food:
                         return new Food(id, diData, num);
                     case ItemEnum.MonsterFood:
@@ -521,6 +516,10 @@ namespace RiverHollow.Game_Managers
                         {
                             case ToolEnum.StaffOfIce:
                                 return new IceStaff(id, diData);
+                            case ToolEnum.Scythe:
+                                return new Scythe(id, diData);
+                            case ToolEnum.Sword:
+                                return new Sword(id, diData);
                             case ToolEnum.CapeOfBlinking:
                                 return new CapeOfBlinking(id, diData);
                             default:
@@ -755,32 +754,6 @@ namespace RiverHollow.Game_Managers
             return (Critter)rv;
         }
 
-        public static Monster GetLiteMonsterByIndex(int id)
-        {
-            Monster m = null;
-
-            if (_diMonsterData.ContainsKey(id))
-            {
-                m = new Monster(id, _diMonsterData[id]);
-            }
-            return m;
-        }
-        public static Monster GetLiteMonsterByIndex(int id, Vector2 pos)
-        {
-            Monster m = GetLiteMonsterByIndex(id);
-            m.Position = pos;
-            return m;
-        }
-
-        public static CombatAction GetCombatActionByIndex(int id)
-        {
-            if (id != -1)
-            {
-                return new CombatAction(id, _diActions[id]);
-            }
-
-            return null;
-        }
         public static StatusEffect GetStatusEffectByIndex(int id)
         {
             StatusEffect b = null;
@@ -789,17 +762,6 @@ namespace RiverHollow.Game_Managers
                 b = new StatusEffect(id, _diStatusEffects[id]);
             }
             return b;
-        }
-
-        public static Dictionary<string, string> GetJobDataByID(int id) { return _diJobs[id]; }
-        public static Job GetJobByIndex(int id)
-        {
-            Job c = null;
-            if (id != -1)
-            {
-                c = new Job(id, _diJobs[id]);
-            }
-            return c;
         }
 
         public static Dictionary<string, List<string>> GetSchedule(string npc)
@@ -864,107 +826,11 @@ namespace RiverHollow.Game_Managers
 
             switch (e)
             {
-                case GameIconEnum.Agility:
-                    rv = new GUIImage(new Rectangle(112, 80, 8, 9), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.AreaAll:
-                    rv = new GUIImage(new Rectangle(144, 64, 9, 9), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.AreaColumnAlly:
-                    rv = new GUIImage(new Rectangle(113, 61, 6, 10), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.AreaColumnEnemy:
-                    rv = new GUIImage(new Rectangle(121, 61, 6, 10), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.AreaRow:
-                    rv = new GUIImage(new Rectangle(129, 75, 13, 4), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.AreaSelf:
-                    rv = new GUIImage(new Rectangle(121, 73, 6, 7), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.AreaSingle:
-                    rv = new GUIImage(new Rectangle(113, 74, 5, 5), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.AreaSquare:
-                    rv = new GUIImage(new Rectangle(129, 54, 9, 9), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.BuffArrow:
-                    rv = new GUIImage(new Rectangle(195, 64, 10, 6), COMBAT_TEXTURE);
-                    break;
                 case GameIconEnum.Coin:
                     rv = new GUIImage(new Rectangle(0, 32, 16, 16), DIALOGUE_TEXTURE);
                     break;
-                case GameIconEnum.DebuffArrow:
-                    rv = new GUIImage(new Rectangle(195, 74, 10, 6), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.Damage:
-                    rv = new GUIImage(new Rectangle(193, 96, 8, 8), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.Defence:
-                    rv = new GUIImage(new Rectangle(136, 87, 8, 8), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.ElementFire:
-                    rv = new GUIImage(new Rectangle(185, 80, 7, 9), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.ElementIce:
-                    rv = new GUIImage(new Rectangle(178, 89, 7, 7), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.ElementLightning:
-                    rv = new GUIImage(new Rectangle(176, 80, 6, 9), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.Evasion:
-                    rv = new GUIImage(new Rectangle(120, 88, 8, 7), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.Experience:
-                    rv = new GUIImage(new Rectangle(211, 96, 8, 8), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.Heal:
-                    rv = new GUIImage(new Rectangle(211, 87, 8, 8), COMBAT_TEXTURE);
-                    break;
                 case GameIconEnum.Key:
                     rv = new GUIImage(new Rectangle(16, 16, 16, 16), DIALOGUE_TEXTURE);
-                    break;
-                case GameIconEnum.MaxHealth:
-                    rv = new GUIImage(new Rectangle(179, 103, 10, 9), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.Magic:
-                    rv = new GUIImage(new Rectangle(144, 80, 9, 8), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.MagicDamage:
-                    rv = new GUIImage(new Rectangle(202, 87, 8, 8), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.Melee:
-                    rv = new GUIImage(new Rectangle(199, 55, 9, 9), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.MoveDown:
-                    rv = new GUIImage(new Rectangle(214, 56, 9, 8), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.MoveLeft:
-                    rv = new GUIImage(new Rectangle(128, 64, 8, 9), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.MoveRight:
-                    rv = new GUIImage(new Rectangle(136, 64, 8, 9), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.MoveUp:
-                    rv = new GUIImage(new Rectangle(214, 48, 9, 8), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.PhysicalDamage:
-                    rv = new GUIImage(new Rectangle(193, 87, 8, 8), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.Ranged:
-                    rv = new GUIImage(new Rectangle(192, 48, 9, 9), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.Resistance:
-                    rv = new GUIImage(new Rectangle(151, 87, 8, 8), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.Speed:
-                    rv = new GUIImage(new Rectangle(166, 80, 10, 8), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.Strength:
-                    rv = new GUIImage(new Rectangle(128, 80, 8, 8), COMBAT_TEXTURE);
-                    break;
-                case GameIconEnum.Timer:
-                    rv = new GUIImage(new Rectangle(160, 88, 7, 8), COMBAT_TEXTURE);
                     break;
             }
 

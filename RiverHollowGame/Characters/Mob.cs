@@ -2,11 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
-using RiverHollow.Map_Handling;
+using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
-
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -15,59 +14,32 @@ namespace RiverHollow.Characters
     public class Mob : WorldActor
     {
         #region Properties
-        
-        protected double _dIdleFor;
-        protected int _iLeash = 7;
 
-        protected List<CombatActor> _liMonsters;
-        public List<CombatActor> Monsters { get => _liMonsters; }
+        public override Rectangle CollisionBox => GetCollisionBox();
 
-        RHTimer _stunTimer;
-        int _iMaxRange = Constants.TILE_SIZE * 10;
-        bool _bAlert;
+        public int Damage => DataManager.GetIntByIDKey(ID, "Damage", DataType.NPC);
+        private string[] LootData => Util.FindParams(DataManager.GetStringByIDKey(ID, "ItemID", DataType.NPC));
+        public override float MaxHP => DataManager.GetIntByIDKey(ID, "HP", DataType.NPC);
+
         bool _bJump;
+        int _iMaxRange = Constants.TILE_SIZE * 10;
 
-        public bool Defeated { get; private set; } = false;
         Vector2 _vJumpTo;
-        const double MAX_ALERT = 1;
-        double _dAlertTimer;
-        //AnimatedSprite _sprAlert;
 
         FieldOfVision _FoV;
-        float _fLeashRange = Constants.TILE_SIZE * 30;
 
         List<SpawnConditionEnum> _liSpawnConditions;
-
-        int _iXP;
-        public int XP { get; private set; }
 
         #endregion
 
         public Mob(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             _liSpawnConditions = new List<SpawnConditionEnum>();
-            ActorType = WorldActorTypeEnum.Mob;
-            _liMonsters = new List<CombatActor>();
-
-            _iXP = 0;
-            foreach (Monster mon in _liMonsters)
-            {
-                _iXP += mon.XP;
-            }
-            XP = _iXP;
-
-            NewFoV();
+            CurrentHP = MaxHP;
 
             _fBaseSpeed = 1;
-            string[] monsterPool = Util.FindParams(stringData["MonsterID"]);
-            int index = RHRandom.Instance().Next(0, monsterPool.Length - 1);
-
-            string[] split = monsterPool[index].Split('-');
-            for (int i = 0; i < split.Length; i++)
-            {
-                int mID = int.Parse(split[i]);
-                _liMonsters.Add(DataManager.GetLiteMonsterByIndex(mID));
-            }
+            Invulnerable = false;
+            Wandering = true;
 
             //split = data["Condition"].Split('-');
             //for (int i = 0; i < split.Length; i++)
@@ -77,19 +49,9 @@ namespace RiverHollow.Characters
 
             //_bJump = data.ContainsKey("Jump");
 
-            foreach (CombatActor m in _liMonsters)
-            {
-                List<CombatActor> match = _liMonsters.FindAll(x => ((Monster)x).ID == ((Monster)m).ID);
-                if (match.Count > 1)
-                {
-                    for (int i = 0; i < match.Count; i++)
-                    {
-                        match[i].SetUnique(Util.NumToString(i + 1, true));
-                    }
-                }
-            }
-
             LoadSpriteAnimations(ref _sprBody, Util.LoadWorldAnimations(stringData), DataManager.FOLDER_MOBS + stringData["Texture"]);
+
+            NewFoV();
         }
 
         public void NewFoV()
@@ -101,40 +63,47 @@ namespace RiverHollow.Characters
         {
             base.Update(gTime);
 
+            if (_flickerTimer != null && _flickerTimer.TickDown(gTime))
+            {
+                if(_sprBody.SpriteColor == Color.Red)
+                {
+                    _flickerTimer = null;
+                    _sprBody.SetColor(Color.White);
+                }
+            }
+
             if (!CutsceneManager.Playing && !GamePaused())
             {
-                bool stunned = _stunTimer != null;
-                //Check if the mob is still stunned
-                if (stunned)
+                if (_sprBody.IsCurrentAnimation(AnimationEnum.KO) && _sprBody.PlayedOnce)
                 {
-                    _stunTimer.TickDown(gTime);
-                    if (_stunTimer.Finished())
-                    {
-                        _stunTimer = null;
-                    }
+                    DropLoot();
+                    CurrentMap.RemoveActor(this);
+                    TaskManager.AdvanceTaskProgress(this);
+                    return;
                 }
-                else
+
+                if (CurrentHP > 0)
                 {
                     switch (_eCurrentState)
                     {
+                        case NPCStateEnum.Stun:
+                            break;
                         case NPCStateEnum.Wander:
                             if (_bBumpedIntoSomething)
                             {
                                 _bBumpedIntoSomething = false;
                                 ChangeState(NPCStateEnum.Idle);
                                 SetMoveTo(Vector2.Zero);
-                                break;
+                                goto default;
                             }
-                            else {
-                                goto case NPCStateEnum.Idle;
-                            }
+                            else { goto case NPCStateEnum.Idle; }
                         case NPCStateEnum.Idle:
                             if (CurrentMap == MapManager.CurrentMap && PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 8))
                             {
                                 ChangeState(NPCStateEnum.TrackPlayer);
                                 _vLeashPoint = new Vector2(CollisionBox.Left, CollisionBox.Top);
                             }
-                            break;
+                            goto default;
                         case NPCStateEnum.TrackPlayer:
                             int distance = (int)Util.GetDistance(Position, _vLeashPoint);
 
@@ -142,26 +111,25 @@ namespace RiverHollow.Characters
                             {
                                 ChangeState(NPCStateEnum.Leashing);
                             }
-                            break;
+                            goto default;
                         case NPCStateEnum.Leashing:
-                            if(Position == _vLeashPoint)
+                            if (Position == _vLeashPoint)
                             {
                                 ChangeState(NPCStateEnum.Wander);
                             }
+                            goto default;
+                        default:
+                            ProcessStateEnum(gTime, false);
+                            if (CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
+                            {
+                                SetMoveTo(Vector2.Zero);
+                                _liTilePath.Clear();
+                                ChangeState(NPCStateEnum.Idle);
+
+                                PlayerManager.PlayerActor.DealDamage(Damage);
+                            }
                             break;
 
-                    }
-
-                    ProcessStateEnum(gTime, false);
-                    if (CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
-                    {
-                        if (!Defeated)
-                        {
-                            _bAlert = false;
-                            CombatManager.NewBattle(this);
-                            SetMoveTo(Vector2.Zero);
-                            _liTilePath.Clear();
-                        }
                     }
                 }
             }
@@ -173,9 +141,25 @@ namespace RiverHollow.Characters
             //if (_bAlert) { _sprAlert.Draw(spriteBatch, userLayerDepth); }
         }
 
+        public Rectangle GetCollisionBox()
+        {
+            if (DataManager.GetBoolByIDKey(ID, "CollisionBox", DataType.NPC))
+            {
+                int[] args = Util.FindIntArguments(DataManager.GetStringByIDKey(ID, "CollisionBox", DataType.NPC));
+                return new Rectangle((int)_sprBody.Position.X + args[0], (int)_sprBody.Position.Y + args[1], args[2], args[3]);
+            }
+            else
+            {
+                return new Rectangle((int)Position.X, (int)Position.Y, Width, Constants.TILE_SIZE);
+            }
+        }
+
         public override void DetermineAnimationState(Vector2 direction)
         {
-            string animation = string.Empty;
+            if (CurrentHP == 0)
+            {
+                return;
+            }
 
             if (direction.Length() == 0)
             {
@@ -258,60 +242,42 @@ namespace RiverHollow.Characters
             return check.Equals(season) && !Util.ParseEnum<SpawnConditionEnum>(GameCalendar.GetSeason()).Equals(season);
         }
 
-        public void Defeat()
-        {
-            Defeated = true;
-            CurrentMap.RemoveActor(this);
-        }
-
-        public void Stun()
-        {
-            _stunTimer = new RHTimer(Constants.MOB_STUN_TIME);
-        }
-
         /// <summary>
         /// Gets all the items that the Monsters drop. Each monster gives one item
         /// </summary>
         /// <returns>The list of items to be given to the player</returns>
-        public Item[,] GetLoot()
+        public void DropLoot()
         {
-            List<Item> items = new List<Item>();
-            foreach(Monster m in _liMonsters)
+            var lootDictionary = new Dictionary<RarityEnum, List<int>>
             {
-                Item newItem = m.GetLoot();
-                int index = items.FindIndex(x => x.ID == newItem.ID);
+                [RarityEnum.C] = new List<int>() { -1 }
+            };
 
-                if (index != -1) { items[index].Add(newItem.Number); }
-                else { items.Add(newItem); }
+            foreach (string s in LootData)
+            {
+                int resourceID = -1;
+                RarityEnum rarity = RarityEnum.C;
+                Util.GetRarity(s, ref resourceID, ref rarity);
+
+                if (!lootDictionary.ContainsKey(rarity))
+                {
+                    lootDictionary[rarity] = new List<int>();
+                }
+
+                lootDictionary[rarity].Add(resourceID);
             }
 
-            Item[,] rv = new Item[1, items.Count];
-            for (int i = 0; i < items.Count; i++)
+            RarityEnum rarityKey = Util.RollAgainstRarity(lootDictionary);
+            Item drop = DataManager.GetItem(lootDictionary[rarityKey][RHRandom.Instance().Next(0, lootDictionary[rarityKey].Count - 1)]);
+
+            if (drop != null)
             {
-                rv[0, i] = items[i];
+                MapManager.CurrentMap.DropItemOnMap(drop, Position, false);
             }
-            return rv;
-        }
-
-        /// <summary>
-        /// Delegate method to retrieve XP data
-        /// </summary>
-        /// <param name="xpLeftToGive">The amount of xp left to give</param>
-        /// <param name="totalXP">The total amount of XP to give</param>
-        public void GetXP(ref double xpLeftToGive, ref double totalXP)
-        {
-            xpLeftToGive = XP;
-            totalXP = _iXP;
-        }
-
-        /// <summary>
-        /// Drains away the given amount of XP fromt he pool of XP left to give.
-        /// If it would go below zero, we instead drain whatever remains.
-        /// </summary>
-        /// <param name="v"></param>
-        public void DrainXP(int v)
-        {
-            XP -= Math.Min(v, XP);
+            else
+            {
+                int j = 0;
+            }
         }
 
         public void ResetPathing()
@@ -326,81 +292,18 @@ namespace RiverHollow.Characters
             }
         }
 
-        private class FieldOfVision
+        public override bool DealDamage(int value)
         {
-            int _iMaxRange;
-            Vector2 _vFirst;            //The LeftMost of the TopMost
-            Vector2 _vSecond;           //The RightMost of the BottomMost
-            DirectionEnum _eDir;
+            bool rv = base.DealDamage(value);
 
-            public FieldOfVision(Mob theMob, int maxRange)
+            if (rv)
             {
-                int sideRange = Constants.TILE_SIZE * 2;
-                _iMaxRange = maxRange;
-                _eDir = theMob.Facing;
-                if (_eDir == DirectionEnum.Up || _eDir == DirectionEnum.Down)
-                {
-                    _vFirst = theMob.Center - new Vector2(sideRange, 0);
-                    _vSecond = theMob.Center + new Vector2(sideRange, 0);
-                }
-                else
-                {
-                    _vFirst = theMob.Center - new Vector2(0, sideRange);
-                    _vSecond = theMob.Center + new Vector2(0, sideRange);
-                }
+                _sprBody.SetColor(Color.Red);
+                _eCurrentState = NPCStateEnum.Stun;
             }
 
-            public void MoveBy(Vector2 v)
-            {
-                _vFirst += v;
-                _vSecond += v;
-            }
-
-            public bool Contains(WorldActor actor)
-            {
-                bool rv = false;
-                Vector2 center = actor.CollisionCenter.ToVector2();
-
-                Vector2 firstFoV = _vFirst;
-                Vector2 secondFoV = _vSecond;
-                //Make sure the actor could be in range
-                if (_eDir == DirectionEnum.Up && Util.InBetween(center.Y, firstFoV.Y - _iMaxRange, firstFoV.Y))
-                {
-                    float yMod = Math.Abs(center.Y - firstFoV.Y);
-                    firstFoV += new Vector2(-yMod, -yMod);
-                    secondFoV += new Vector2(yMod, -yMod);
-
-                    rv = Util.InBetween(center.X, firstFoV.X, secondFoV.X) && Util.InBetween(center.Y, firstFoV.Y, _vFirst.Y);
-                }
-                else if (_eDir == DirectionEnum.Down && Util.InBetween(center.Y, firstFoV.Y, firstFoV.Y + _iMaxRange))
-                {
-                    float yMod = Math.Abs(center.Y - firstFoV.Y);
-                    firstFoV += new Vector2(-yMod, yMod);
-                    secondFoV += new Vector2(yMod, yMod);
-
-                    rv = Util.InBetween(center.X, firstFoV.X, secondFoV.X) && Util.InBetween(center.Y, _vFirst.Y, firstFoV.Y);
-                }
-                else if (_eDir == DirectionEnum.Left && Util.InBetween(center.X, firstFoV.X - _iMaxRange, firstFoV.X))
-                {
-                    float xMod = Math.Abs(center.X - firstFoV.X);
-                    firstFoV += new Vector2(-xMod, -xMod);
-                    secondFoV += new Vector2(-xMod, xMod);
-
-                    rv = Util.InBetween(center.Y, firstFoV.Y, secondFoV.Y) && Util.InBetween(center.X, firstFoV.X, _vFirst.X);
-                }
-                else if (_eDir == DirectionEnum.Right && Util.InBetween(center.X, firstFoV.X, firstFoV.X + _iMaxRange))
-                {
-                    float xMod = Math.Abs(center.X - firstFoV.X);
-                    firstFoV += new Vector2(xMod, -xMod);
-                    secondFoV += new Vector2(xMod, xMod);
-
-                    rv = Util.InBetween(center.Y, firstFoV.Y, secondFoV.Y) && Util.InBetween(center.X, _vFirst.X, firstFoV.X);
-                }
-
-                return rv;
-            }
+            return rv;
         }
-
 
         #region Jumping Code
         //private void UpdateMovement(GameTime theGameTime)

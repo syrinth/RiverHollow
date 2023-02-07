@@ -113,9 +113,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "TotalMoneyEarned")]
             public int totalMoneyEarned;
 
-            [XmlElement(ElementName = "CurrentClass")]
-            public int currentClass;
-
             [XmlElement(ElementName = "BodyType")]
             public int bodyTypeIndex;
 
@@ -154,9 +151,6 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "Children")]
             public List<ChildData> ChildList;
-
-            [XmlElement(ElementName = "AdventurerData")]
-            public ClassedCharData adventurerData;
 
             [XmlArray(ElementName = "CraftingDictionary")]
             public List<int> CraftingList;
@@ -329,9 +323,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "CanGiveGift")]
             public bool weeklyGiftGiven;
 
-            [XmlElement(ElementName = "AdventurerData")]
-            public ClassedCharData classedData;
-
             [XmlArray(ElementName = "SpokenKeys")]
             public List<string> spokenKeys;
         }
@@ -486,10 +477,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.AddMoney(TownManager.Income);
             SaveManager.Save();
             PlayerManager.Stamina = PlayerManager.MaxStamina;
-            foreach (CombatActor actor in PlayerManager.GetParty())
-            {
-                actor?.IncreaseHealth(actor.MaxHP);
-            }
+            PlayerManager.PlayerActor.RefillHealth();
 
             _bSaving = false;
         }

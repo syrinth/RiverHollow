@@ -28,17 +28,14 @@ namespace RiverHollow.Items
             return true;
         }
 
-        public override void UseItem(TextEntryVerbEnum action)
+        public override void UseItem()
         {
-            if (action == TextEntryVerbEnum.Yes)
+            if (_arrCraftingUnlocks != null)
             {
-                if (_arrCraftingUnlocks != null)
-                {
-                    PlayerManager.AddToCraftingDictionary(_arrCraftingUnlocks);
-                }
-
-                Remove(1);
+                PlayerManager.AddToCraftingDictionary(_arrCraftingUnlocks);
             }
+
+            Remove(1);
         }
     }
 }

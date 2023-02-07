@@ -7,9 +7,10 @@ using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Utilities.Enums;
 using System.Threading;
+
+using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters
 {
@@ -18,6 +19,14 @@ namespace RiverHollow.Characters
         #region Properties
 
         public int ID { get; } = -1;
+
+        public bool Invulnerable { get; protected set; } = true;
+
+        public virtual float MaxHP { get; protected set; } = 2;
+        public float CurrentHP { get; protected set; } = 2;
+
+        protected RHTimer _flickerTimer;
+        protected RHTimer _damageTimer;
 
         public bool Moving { get; set; } = false;
         public DirectionEnum Facing = DirectionEnum.Down;
@@ -63,6 +72,7 @@ namespace RiverHollow.Characters
 
         public virtual Vector2 CollisionBoxPosition => Position;
         public virtual Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, Constants.TILE_SIZE);
+
         public Point CollisionCenter => CollisionBox.Center;
         public virtual Rectangle HoverBox => new Rectangle((int)_sprBody.Position.X, (int)_sprBody.Position.Y, _sprBody.Width, _sprBody.Height);
 
@@ -97,6 +107,7 @@ namespace RiverHollow.Characters
         public WorldActor(int id, Dictionary<string, string> stringData) : base()
         {
             ID = id;
+            ActorType = Util.ParseEnum<WorldActorTypeEnum>(stringData["Type"]);
 
             _liTilePath = new List<RHTile>();
             _movementTimer = new RHTimer(Constants.WANDER_COUNTDOWN);
@@ -118,15 +129,28 @@ namespace RiverHollow.Characters
             if (_bOnTheMap)
             {
                 base.Draw(spriteBatch, useLayerDepth);
+                if (Constants.DRAW_COLLISION)
+                {
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), CollisionBox, new Rectangle(160, 128, 2, 2), Color.White * 0.5f);
+                }
             }
         }
 
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            if (!GamePaused())
+            if (!GamePaused() && CurrentHP > 0)
             {
                 HandleMove();
+
+                if (_damageTimer != null)
+                {
+                    if (_damageTimer.TickDown(gTime))
+                    {
+                        _eCurrentState = NPCStateEnum.Idle;
+                        _damageTimer = null;
+                    }
+                }
             }
         }
 
@@ -162,7 +186,7 @@ namespace RiverHollow.Characters
                 }
                 else
                 {
-                    sprite.AddAnimation(data.Animation, data.XLocation, data.YLocation, _iBodyWidth, _iBodyHeight, data.Frames, data.FrameSpeed, data.PingPong);
+                    sprite.AddAnimation(data.Animation, data.XLocation, data.YLocation, _iBodyWidth, _iBodyHeight, data.Frames, data.FrameSpeed, data.PingPong, data.Animation == AnimationEnum.KO);
                 }
             }
 
@@ -290,12 +314,49 @@ namespace RiverHollow.Characters
 
         /// <summary>
         /// Constructs the proper animation string for the current facing.
-        /// During Combat, the Idle animation is the Walk animation.
         /// </summary>
         public void PlayAnimationVerb(VerbEnum verb) { PlayAnimation(verb, Facing); }
         public bool IsCurrentAnimationVerb(VerbEnum verb) { return _sprBody.IsCurrentAnimation(verb, Facing); }
         public bool IsCurrentAnimationVerbFinished(VerbEnum verb) { return _sprBody.AnimationVerbFinished(verb, Facing); }
 
+        /// <summary>
+        /// Sets the active status of the WorldActor
+        /// </summary>
+        /// <param name="value">Whether the actor is active or not.</param>
+        public void Activate(bool value)
+        {
+            _bOnTheMap = value;
+        }
+        protected void ChangeMovement(float speed)
+        {
+            SpdMult = speed;
+            SetMoveTo(Vector2.Zero);
+            _movementTimer.Reset(Constants.WANDER_COUNTDOWN);
+        }
+        public bool IsActorType(WorldActorTypeEnum act) { return ActorType == act; }
+        public void ChangeState(NPCStateEnum state)
+        {
+            _eCurrentState = state;
+            switch (state)
+            {
+                case NPCStateEnum.Alert:
+                    PlayAnimation(VerbEnum.Alert, Facing);
+                    break;
+                case NPCStateEnum.Idle:
+                    PlayAnimation(VerbEnum.Idle, Facing);
+                    ChangeMovement(Constants.NPC_WALK_SPEED);
+                    break;
+                case NPCStateEnum.TrackPlayer:
+                    ChangeMovement(Constants.NORMAL_SPEED);
+                    break;
+                case NPCStateEnum.Wander:
+                    ChangeMovement(Constants.NPC_WALK_SPEED);
+                    break;
+            }
+        }
+
+
+        #region Pathing
         public Thread CalculatePathThreaded()
         {
             _pathingThread = new Thread(CalculatePath);
@@ -417,15 +478,6 @@ namespace RiverHollow.Characters
         }
 
         /// <summary>
-        /// Sets the active status of the WorldActor
-        /// </summary>
-        /// <param name="value">Whether the actor is active or not.</param>
-        public void Activate(bool value)
-        {
-            _bOnTheMap = value;
-        }
-
-        /// <summary>
         /// Sets the WorldActors TilePath to follow.
         /// </summary>
         public void SetPath(List<RHTile> list)
@@ -440,13 +492,7 @@ namespace RiverHollow.Characters
         {
             _liTilePath.Clear();
         }
-
-        protected void ChangeMovement(float speed)
-        {
-            SpdMult = speed;
-            SetMoveTo(Vector2.Zero);
-            _movementTimer.Reset(Constants.WANDER_COUNTDOWN);
-        }
+        #endregion
 
         #region Wander Logic
         public void SetFollow(bool value)
@@ -456,7 +502,7 @@ namespace RiverHollow.Characters
 
         protected void ProcessStateEnum(GameTime gTime, bool getInRange)
         {
-            if (Wandering)
+            if (Wandering && _damageTimer == null)
             {
                 switch (_eCurrentState)
                 {
@@ -489,8 +535,7 @@ namespace RiverHollow.Characters
 
         protected void Idle(GameTime gTime)
         {
-            _movementTimer.TickDown(gTime);
-            if (_movementTimer.Finished())
+            if (_movementTimer.TickDown(gTime))
             {
                 if (RHRandom.Instance().RollPercent(50))
                 {
@@ -526,8 +571,7 @@ namespace RiverHollow.Characters
 
         protected void Wander(GameTime gTime)
         {
-            _movementTimer.TickDown(gTime);
-            if (_movementTimer.Finished() && MoveToLocation == Vector2.Zero)
+            if (_movementTimer.TickDown(gTime) && MoveToLocation == Vector2.Zero)
             {
                 Vector2 moveTo = Vector2.Zero;
                 while (moveTo == Vector2.Zero)
@@ -572,28 +616,86 @@ namespace RiverHollow.Characters
                 HandleMove();
             }
         }
+        #endregion
 
-        public bool IsActorType(WorldActorTypeEnum act) { return ActorType == act; }
-        public void ChangeState(NPCStateEnum state)
+        #region Combat Logic
+        public void RefillHealth()
         {
-            _eCurrentState = state;
-            switch (state)
-            {
-                case NPCStateEnum.Alert:
-                    PlayAnimation(VerbEnum.Alert, Facing);
-                    break;
-                case NPCStateEnum.Idle:
-                    PlayAnimation(VerbEnum.Idle, Facing);
-                    ChangeMovement(Constants.NPC_WALK_SPEED);
-                    break;
-                case NPCStateEnum.TrackPlayer:
-                    ChangeMovement(Constants.NORMAL_SPEED);
-                    break;
-                case NPCStateEnum.Wander:
-                    ChangeMovement(Constants.NPC_WALK_SPEED);
-                    break;
-            }
+            CurrentHP = MaxHP;
         }
+
+        /// <summary>
+        /// Reduces health by the given value. Cannot deal more damage than health exists.
+        /// </summary>
+        public virtual bool DealDamage(int value)
+        {
+            bool rv = false;
+
+            if (!Invulnerable && _damageTimer == null)
+            {
+                _damageTimer = new RHTimer(Constants.INVULN_PERIOD);
+                DecreaseHealth(value);
+
+                if (CurrentHP == 0) { PlayAnimation(AnimationEnum.KO); }
+                else
+                {
+                    rv = true;
+                    _flickerTimer = new RHTimer(Constants.FLICKER_PERIOD);
+                }
+            }
+
+            return rv;
+        }
+
+        public void DecreaseHealth(int value)
+        {
+            CurrentHP -= (CurrentHP - value >= 0) ? value : CurrentHP;
+        }
+
+        /// <summary>
+        /// As long as the target is not KnockedOut, recover the given amount of HP up to max
+        /// </summary>
+        public float IncreaseHealth(float x)
+        {
+            float amountHealed = x;
+            if (CurrentHP + x <= MaxHP)
+            {
+                CurrentHP += x;
+            }
+            else
+            {
+                amountHealed = MaxHP - CurrentHP;
+                CurrentHP = MaxHP;
+            }
+
+            return amountHealed;
+        }
+
+        /// <summary>
+        /// Adds the StatusEffect objectto the character's list of status effects.
+        /// </summary>
+        /// <param name="effect">Effect toadd</param>
+        public void ApplyStatusEffect(StatusEffect effect)
+        {
+            //if (effect.EffectType == StatusTypeEnum.DoT || effect.EffectType == StatusTypeEnum.HoT)
+            //{
+            //    StatusEffect find = _liStatusEffects.Find(status => status.ID == effect.ID);
+            //    if (find != null)
+            //    {
+            //        _liStatusEffects.Remove(find);
+            //    }
+            //    _liStatusEffects.Add(effect);
+            //}
+            //else
+            //{
+            //    foreach (KeyValuePair<AttributeEnum, string> kvp in effect.AffectedAttributes)
+            //    {
+            //        AssignAttributeEffect(kvp.Key, kvp.Value, effect.Duration, effect.EffectType);
+            //    }
+            //    _liStatusEffects.Add(effect);
+            //}
+        }
+
         #endregion
     }
 }

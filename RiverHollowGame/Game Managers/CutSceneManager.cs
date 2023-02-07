@@ -129,7 +129,7 @@ namespace RiverHollow.Game_Managers
     public class Cutscene
     {
         #region CutScene Commandinformation
-        enum CutsceneCommandEnum { Activate, Speak, Move, Face, Wait, End, Task, Speed, Text, Background, RemoveBackground, Join, Combat, MoveToTown };
+        enum CutsceneCommandEnum { Activate, Speak, Move, Face, Wait, End, Task, Speed, Text, Background, RemoveBackground, MoveToTown };
 
         /// <summary>
         /// A class to hold the information for a CutSceneCommand step
@@ -157,7 +157,6 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
-        Mob queuedMob;
         int _iID;
         RHMap _originalMap;
         Vector2 _vOriginalPlayerPos;
@@ -245,8 +244,8 @@ namespace RiverHollow.Game_Managers
         public void Update(GameTime gTime)
         {
             //If the Wait command has been called, we need to count down to zero
-            _timer?.TickDown(gTime);
-            if(_timer == null || _timer.Finished())
+            ;
+            if(_timer == null || _timer.TickDown(gTime))
             {
                 _timer = null;
                 //If someone is currently talking, do NOT process additional tags
@@ -310,21 +309,6 @@ namespace RiverHollow.Game_Managers
                                     npc = GetActor(sCommandData[0]);
                                     npc.SetWalkingDir(Util.ParseEnum<DirectionEnum>(sCommandData[1]));
                                     npc.PlayAnimationVerb(VerbEnum.Idle);
-                                    bGoToNext = true;
-                                    break;
-                                case CutsceneCommandEnum.Join:
-                                    {
-                                        Villager v1 = (Villager)GetActor(sCommandData[0]);
-                                        if (v1.Combatant)
-                                        {
-                                            PlayerManager.AddToParty(v1.CombatVersion);
-                                        }
-                                        v1.SendToTown();
-                                        bGoToNext = true;
-                                    }
-                                    break;
-                                case CutsceneCommandEnum.Combat:
-                                    queuedMob = DataManager.CreateMob(int.Parse(sCommandData[0]));
                                     bGoToNext = true;
                                     break;
                                 case CutsceneCommandEnum.MoveToTown:
@@ -616,19 +600,6 @@ namespace RiverHollow.Game_Managers
                             WorldActor npc = _liUsedNPCs.Find(test => test.ID == GetNPCData(sCommandData[0]));
                             npc?.Activate(true);
                         }
-                        else if (currentCommand.Command == CutsceneCommandEnum.Join)
-                        {
-                            Villager v = TownManager.DIVillagers[int.Parse(sCommandData[0])];
-                            if (v.Combatant)
-                            {
-                                PlayerManager.AddToParty(v.CombatVersion);
-                            }
-                            v.SendToTown();
-                        }
-                        else if (currentCommand.Command == CutsceneCommandEnum.Combat)
-                        {
-                            queuedMob = (Mob)_liUsedNPCs.Find(x => x.ID == int.Parse(sCommandData[0]));
-                        }
                         else if (currentCommand.Command == CutsceneCommandEnum.MoveToTown)
                         {
                             int characterID = -1;
@@ -675,13 +646,6 @@ namespace RiverHollow.Game_Managers
             GUIManager.RemoveSkipCutsceneButton();
 
             _triggerTask?.EndTask();
-            if(queuedMob != null)
-            {
-                string realMapName = _cutsceneMap.Name.Replace("Clone", "");
-                queuedMob.CurrentMapName = realMapName;
-                MapManager.Maps[realMapName].AddActor(queuedMob);
-                CombatManager.NewBattle(queuedMob);
-            }
         }
 
         public CutsceneData SaveData()

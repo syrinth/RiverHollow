@@ -1,6 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Characters.Lite;
-using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Misc;
@@ -32,7 +30,6 @@ namespace RiverHollow.Characters
         protected Dictionary<int, bool> _diCollection;
         
         public bool Pregnant { get; set; }
-        public bool Combatant { get; private set; } = false;
         public bool CanBeMarried => Marriable;
 
         public override RelationShipStatusEnum RelationshipState
@@ -67,11 +64,8 @@ namespace RiverHollow.Characters
 
         string _sScheduleKey;
 
-        public ClassedCombatant CombatVersion { get; private set; }
-
         public Villager(int index, Dictionary<string, string> stringData) : base(index, stringData)
         {
-            ActorType = WorldActorTypeEnum.Villager;
             _liHousingRequests = new List<Request>();
             _diCollection = new Dictionary<int, bool>();
             _diItemMoods = new Dictionary<int, MoodEnum>();
@@ -83,16 +77,6 @@ namespace RiverHollow.Characters
                 _eSpawnStatus = SpawnStateEnum.NonTownMap;
             }
 
-            CombatVersion = new ClassedCombatant();
-            //CombatVersion.SetName(Name);
-            if (stringData.ContainsKey("Class"))
-            {
-                Combatant = true;
-                CombatVersion.SetClass(DataManager.GetJobByIndex(int.Parse(stringData["Class"])));
-                CombatVersion.AssignStartingGear();
-                CombatVersion.SetName(Name());
-            }
-            else { CombatVersion.SetClass(new Job()); }
 
             if (stringData.ContainsKey("Collection"))
             {
@@ -233,7 +217,6 @@ namespace RiverHollow.Characters
                     break;
             }
 
-            JoinPartyCheck();
             VillagerMapHandling();
         }
 
@@ -621,38 +604,6 @@ namespace RiverHollow.Characters
             return MoodEnum.Neutral;
         }
 
-        public override TextEntry JoinParty()
-        {
-            TextEntry rv = null;
-            if (Combatant)
-            {
-                _bOnTheMap = false;
-                PlayerManager.AddToParty(CombatVersion);
-                rv = GetDialogEntry("JoinPartyYes");
-            }
-            else
-            {
-                rv = GetDialogEntry("JoinPartyNo");
-            }
-
-            return rv;
-        }
-
-        public void JoinPartyCheck()
-        {
-            if (RelationshipState != RelationShipStatusEnum.None)
-            {
-                switch (_eSpawnStatus)
-                {
-                    case SpawnStateEnum.HasHome:
-                    case SpawnStateEnum.VisitInn:
-                    case SpawnStateEnum.WaitAtInn:
-                        JoinParty();
-                        break;
-                }
-            }
-        }
-
         public MoodEnum GetSatisfaction()
         {
             if(!TownManager.TownObjectBuilt(int.Parse(DataManager.Config[19]["ObjectID"]))){
@@ -705,8 +656,6 @@ namespace RiverHollow.Characters
                 weeklyGiftGiven = WeeklyGiftGiven,
                 spokenKeys = _liSpokenKeys,
             };
-            
-            if (CombatVersion!= null && CombatVersion.CharacterClass != null) { npcData.classedData = CombatVersion.SaveClassedCharData(); }
 
             return npcData;
         }
@@ -725,11 +674,6 @@ namespace RiverHollow.Characters
             if (_iNextArrival <= 0 || !string.IsNullOrEmpty(StartMap))
             {
                 DetermineValidSchedule();
-            }
-
-            if (CombatVersion != null && CombatVersion.CharacterClass != null) {
-                CombatVersion.LoadClassedCharData(data.classedData);
-                JoinPartyCheck();
             }
 
             foreach (string s in data.spokenKeys)

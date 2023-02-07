@@ -19,16 +19,6 @@
 /processor:PassThroughProcessor
 /build:Data/Buildings.xml
 
-#begin Data/Classes.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Classes.xml
-
-#begin Data/Combat_Actions.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Combat_Actions.xml
-
 #begin Data/Config.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -53,11 +43,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/LightData.xml
-
-#begin Data/Monsters.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Monsters.xml
 
 #begin Data/MonsterTraitTable.xml
 /importer:XmlImporter
@@ -408,11 +393,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Upgrades.xml
-
-#begin Data/Workers.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Workers.xml
 
 #begin Data/WorldObjects.xml
 /importer:XmlImporter
@@ -3488,30 +3468,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/GUI Components/Combat_Background_Forest.png
-
-#begin Textures/GUI Components/GUI_Action_Icons.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/GUI Components/GUI_Action_Icons.png
-
-#begin Textures/GUI Components/GUI_Combat.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/GUI Components/GUI_Combat.png
 
 #begin Textures/GUI Components/GUI_HUD_Components.png
 /importer:TextureImporter

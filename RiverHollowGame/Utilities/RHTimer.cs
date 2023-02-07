@@ -15,12 +15,14 @@ namespace RiverHollow.Utilities
             _bStopped = stopped;
         }
 
-        public void TickDown(GameTime gTime)
+        public bool TickDown(GameTime gTime)
         {
             if(!_bStopped && TimerSpeed > 0)
             {
                 TimeLeft -= gTime.ElapsedGameTime.TotalSeconds;
             }
+
+            return Finished();
         }
 
         public void TickDown(double time)

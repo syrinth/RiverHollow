@@ -1,11 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Content.Pipeline.Animations;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.Map_Handling;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
+using System;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 
@@ -17,10 +19,10 @@ namespace RiverHollow.Items
         public int StaminaCost => DataManager.GetIntByIDKey(ID, "Stam", DataType.Item);
         public int ToolLevel => DataManager.GetIntByIDKey(ID, "Level", DataType.Item);
 
-        private int HitAt => DataManager.GetIntByIDKey(ID, "HitAt", DataType.Item);
-        private int _iCharges = 0;
+        protected int HitAt => DataManager.GetIntByIDKey(ID, "HitAt", DataType.Item);
+        protected int _iCharges = 0;
 
-        bool _bUsed = false;
+        protected bool _bUsed = false;
 
         public string SoundEffect => DataManager.GetStringByIDKey(ID, "SoundEffect", DataType.Item);
 
@@ -40,38 +42,34 @@ namespace RiverHollow.Items
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Tools");
 
-            _iColTexSize = 128;
-            _iRowTexSize = Constants.TILE_SIZE;
-
-            _sprite = new AnimatedSprite(@"Textures\Items\ToolAnimations");
-
-            Vector2 animationPosition = Vector2.Zero;
-            if (stringData.ContainsKey("AnimationPosition"))
+            if (stringData.ContainsKey("AnimationData"))
             {
-                string[] texIndices = stringData["AnimationPosition"].Split('-');
-                animationPosition = new Vector2(int.Parse(texIndices[0]), int.Parse(texIndices[1]));
+                _sprite = new AnimatedSprite(@"Textures\Items\ToolAnimations")
+                {
+                    Drawing = false
+                };
+
+                string[] par = Util.FindParams(stringData["AnimationData"]);
+                Vector2 start = Util.FindVectorArguments(par[0]);
+                RHSize size = new RHSize(Util.FindIntArguments(par[1]));
+                int frames = int.Parse(par[2]);
+                float frameSpeed = float.Parse(par[3]);
+
+                int xCrawl = 0;
+                foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
+                {
+                    if(e == DirectionEnum.None) { continue; }
+
+                    _sprite.AddAnimation(e, (int)start.X + xCrawl, (int)start.Y, size, frames, frameSpeed, false, true);
+                    xCrawl += size.Width * Constants.TILE_SIZE * frames;
+                }
             }
-
-            int toolFrames = 5;
-            int toolWidth = Constants.TILE_SIZE * 3;
-            int toolHeight = Constants.TILE_SIZE * 4;
-            int xCrawl = 0;
-            int crawlIncrement = toolWidth * toolFrames;
-
-            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Down, (int)animationPosition.X, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, Constants.TOOL_ANIM_SPEED, false, true);
-            xCrawl += crawlIncrement;
-            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Right, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, Constants.TOOL_ANIM_SPEED, false, true);
-            xCrawl += crawlIncrement;
-            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Up, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, Constants.TOOL_ANIM_SPEED, false, true);
-            xCrawl += crawlIncrement;
-            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Left, (int)animationPosition.X + xCrawl, (int)animationPosition.Y, toolWidth, toolHeight, toolFrames, Constants.TOOL_ANIM_SPEED, false, true);
-
-            _sprite.Drawing = false;
         }
 
         public override void Update(GameTime gTime)
         {
             _sprite.Update(gTime);
+            DirectionEnum dir = PlayerManager.PlayerActor.Facing;
 
             RHTile target = MapManager.CurrentMap.TargetTile;
 
@@ -82,47 +80,42 @@ namespace RiverHollow.Items
                     _bUsed = true;
                     target.DamageObject(PlayerManager.ToolInUse);
                 }
-                else if (ReadyToHit() && PlayerManager.ToolIsScythe())
-                {
-                    _bUsed = true;
-                    target.DamageObject(PlayerManager.ToolInUse);
-
-                    if (PlayerManager.PlayerActor.Facing == DirectionEnum.Left || PlayerManager.PlayerActor.Facing == DirectionEnum.Right)
-                    {
-                        target.GetTileByDirection(DirectionEnum.Up).DamageObject(PlayerManager.ToolInUse);
-                        target.GetTileByDirection(DirectionEnum.Down).DamageObject(PlayerManager.ToolInUse);
-                    }
-                    else
-                    {
-                        target.GetTileByDirection(DirectionEnum.Left).DamageObject(PlayerManager.ToolInUse);
-                        target.GetTileByDirection(DirectionEnum.Right).DamageObject(PlayerManager.ToolInUse);
-                    }
-                }
                 else if (PlayerManager.ToolIsWateringCan() && target.Flooring != null)
                 {
                     //target.Water(true);
                 }
             }
 
-            if (ToolAnimation.AnimationVerbFinished(VerbEnum.UseTool, PlayerManager.PlayerActor.Facing))
+            FinishTool(dir);
+        }
+
+        protected bool FinishTool(DirectionEnum dir)
+        {
+            bool rv = false;
+
+            if (ToolAnimation.AnimationFinished(dir))
             {
+                rv = true;
                 _bUsed = false;
                 PlayerManager.FinishedWithTool();
                 PlayerManager.PlayerActor.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
             }
+            return rv;
         }
 
-        private bool ReadyToHit()
+        protected bool ReadyToHit()
         {
-            bool needsToFinish = HitAt == -1 && ToolAnimation.AnimationVerbFinished(VerbEnum.UseTool, PlayerManager.PlayerActor.Facing);
+            bool needsToFinish = HitAt == -1 && ToolAnimation.AnimationFinished(PlayerManager.PlayerActor.Facing);
             bool hitAt = HitAt > -1 && _sprite.CurrentFrame == HitAt;
 
             return needsToFinish || hitAt;
         }
 
-        public void DrawToolAnimation(SpriteBatch spriteBatch)
+        public virtual void DrawToolAnimation(SpriteBatch spriteBatch)
         {
-            _sprite.SetLayerDepthMod(1);
+            if (PlayerManager.PlayerActor.Facing == DirectionEnum.Up) { _sprite.SetLayerDepthMod(-20); }
+            else { _sprite.SetLayerDepthMod(1); }
+
             _sprite.Draw(spriteBatch);
         }
 
@@ -170,7 +163,7 @@ namespace RiverHollow.Items
             return true;
         }
 
-        public override void UseItem(TextEntryVerbEnum action)
+        public override void UseItem()
         {
             if (ToolType == ToolEnum.Return)
             {

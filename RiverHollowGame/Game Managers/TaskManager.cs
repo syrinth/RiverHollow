@@ -77,7 +77,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
-        public static void AdvanceTaskProgress(Monster m)
+        public static void AdvanceTaskProgress(Mob m)
         {
             foreach (RHTask q in TaskLog)
             {

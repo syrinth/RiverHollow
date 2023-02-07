@@ -14,7 +14,6 @@ namespace RiverHollow.Characters
 
         public Critter(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            ActorType = WorldActorTypeEnum.Critter;
             IgnoreCollisions = true;
             SlowDontBlock = true;
             _animationTimer = new RHTimer(1 + SetRandom(4, 0.5));
@@ -37,8 +36,7 @@ namespace RiverHollow.Characters
             base.Update(gTime);
             if (!_bFlee)
             {
-                _animationTimer.TickDown(gTime);
-                if(_animationTimer.Finished())
+                if(_animationTimer.TickDown(gTime))
                 {
                     _animationTimer.Reset(1 + SetRandom(4, 0.5));
                     PlayAnimation(VerbEnum.Action1, Facing);
@@ -54,8 +52,7 @@ namespace RiverHollow.Characters
             }
             else
             {
-                _animationTimer.TickDown(gTime);
-                if (_animationTimer.Finished())
+                if (_animationTimer.TickDown(gTime))
                 {
                     _sprBody.SetLayerDepthMod(Constants.MAX_LAYER_DEPTH);
                 }

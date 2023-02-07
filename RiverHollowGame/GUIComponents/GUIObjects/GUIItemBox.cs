@@ -16,7 +16,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public int Columns { get; }
         public int Rows { get; }
 
-        public GUIItemBox(Rectangle r) : base(r, ScaleIt(r.Width), ScaleIt(r.Height), DataManager.COMBAT_TEXTURE) { }
+        public GUIItemBox(Rectangle r) : base(RECT_IMG, ScaleIt(RECT_IMG.Width), ScaleIt(RECT_IMG.Height), DataManager.DIALOGUE_TEXTURE) { }
 
         public GUIItemBox(Item it = null) : base(RECT_IMG, ScaleIt(RECT_IMG.Width), ScaleIt(RECT_IMG.Height), DataManager.DIALOGUE_TEXTURE)
         {
@@ -116,18 +116,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 SetItem(item);
                 ItemType = itemType;
                 _delOpenItemWindow = del;
-            }
-
-            public SpecializedBox(WeaponEnum weaponType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Equipment, item, del)
-            {
-                GearType = GearTypeEnum.Weapon;
-                WeaponType = weaponType;
-            }
-
-            public SpecializedBox(ArmorTypeEnum armorType, GearTypeEnum gearType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Equipment, item, del)
-            {
-                GearType = gearType;
-                ArmorType = armorType;
             }
 
             public SpecializedBox(ClothingEnum clothesType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Clothing, item, del)

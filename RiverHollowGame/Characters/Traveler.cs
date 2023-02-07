@@ -54,7 +54,6 @@ namespace RiverHollow.Characters
 
         public Traveler(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            ActorType = WorldActorTypeEnum.Traveler;
             Wandering = true;
             SlowDontBlock = true;
 

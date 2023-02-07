@@ -38,7 +38,7 @@ namespace RiverHollow.Items
             return true;
         }
 
-        public override void UseItem(TextEntryVerbEnum action)
+        public override void UseItem()
         {
             if (Number > 0)
             {

@@ -36,7 +36,7 @@ namespace RiverHollow.GUIComponents.Screens
             GameManager.CurrentScreen = GameScreenEnum.World;
 
             _liTaskIcons = new List<HUDNewAlert>();
-            _gHealthDisplay = new GUIOldStatDisplay(PlayerManager.PlayerCombatant.GetHP, Color.Green);
+            _gHealthDisplay = new GUIOldStatDisplay(PlayerManager.GetHP, Color.Green);
             _gHealthDisplay.AnchorToScreen(this, SideEnum.TopLeft, 10);
             AddControl(_gHealthDisplay);
             _gStaminaDisplay = new GUIOldStatDisplay(PlayerManager.GetStamina, Color.Red);
@@ -106,7 +106,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         protected override void HandleInput()
         {
-            if (!TakingInput() && !CutsceneManager.Playing)
+            if (!TakingInput() && !CutsceneManager.Playing && !PlayerManager.Defeated())
             {
                 if (InputManager.CheckPressedKey(Keys.Escape))
                 {
@@ -127,7 +127,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override bool ProcessRightButtonClick(Point mouse)
         {
-            bool rv = base.ProcessRightButtonClick(mouse);
+            bool rv = !PlayerManager.Defeated() && base.ProcessRightButtonClick(mouse);
 
             //If the right click has not been processed, we probably want to close anything that we have open.
             if (!rv)
@@ -225,8 +225,7 @@ namespace RiverHollow.GUIComponents.Screens
             _closeMenu = closeMenu;
 
             _liButtons = new List<GUIObject>() {
-                new GUIButton("Inventory", BtnInventory),
-                new GUIButton("Party", BtnParty)
+                new GUIButton("Inventory", BtnInventory)
             };
 
             GUIButton btnBuild = new GUIButton("Build", BtnBuild);
@@ -301,11 +300,6 @@ namespace RiverHollow.GUIComponents.Screens
         public void BtnTaskLog()
         {
             _gMenuObject = new HUDTaskLog();
-            GUIManager.OpenMainObject(_gMenuObject);
-        }
-        public void BtnParty()
-        {
-            _gMenuObject = new HUDParty();
             GUIManager.OpenMainObject(_gMenuObject);
         }
         public void BtnOptions()

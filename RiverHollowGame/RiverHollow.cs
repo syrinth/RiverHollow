@@ -117,8 +117,6 @@ namespace RiverHollow
                 //GUIManager always needs to update, regardless of game state
                 GUIManager.Update(gTime);
 
-                CombatManager.Update(gTime);
-
                 Point mousePoint = Mouse.GetState().Position;
                 Vector3 translate = Camera._transform.Translation;
 
@@ -129,7 +127,7 @@ namespace RiverHollow
                         //GUI does NOT use Camera translations
                         mousePoint.X = (int)((mousePoint.X - translate.X) / CurrentScale);
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / CurrentScale);
-                        if (!GamePaused() || Scrying())
+                        if (!PlayerManager.Defeated() && (!GamePaused() || Scrying()))
                         {
                             MapManager.ProcessRightButtonClick(mousePoint);
                         }
@@ -141,7 +139,7 @@ namespace RiverHollow
                     {
                         mousePoint.X = (int)((mousePoint.X - translate.X) / CurrentScale);
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / CurrentScale);
-                        if (!GamePaused() || Scrying())
+                        if (!PlayerManager.Defeated() && (!GamePaused() || Scrying()))
                         {
                             MapManager.ProcessLeftButtonClick(mousePoint);
                         }
@@ -280,14 +278,6 @@ namespace RiverHollow
         {
             PlayerManager.NewPlayer();
             MapManager.PopulateMaps(true);
-
-           // PlayerManager._diBuildings[0].AddWorker(a);
-           //PlayerManager._diBuildings[0].AddWorker(b);
-
-            //PlayerManager.AddToParty(a);
-            //PlayerManager.AddToParty(b);
-
-            //MapManager.Maps[PlayerManager.Buildings[0].MapName].AddBuildingObjectsToMap(PlayerManager.Buildings[0]);
 
             GoToHUDScreen();
             GameCalendar.NewCalendar();

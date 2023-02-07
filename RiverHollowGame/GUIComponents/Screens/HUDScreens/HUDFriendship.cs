@@ -54,7 +54,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
         {
             private BitmapFont _font;
             GUIText _gTextName;
-            GUIImage _gAdventure;
             GUIImage _gGift;
             List<GUIImage> _liFriendship;
 
@@ -97,17 +96,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                 _gGift.AnchorToInnerSide(this, SideEnum.Right);
                 _gGift.AlignToObject(_gTextName, SideEnum.CenterY);
                 _gGift.Alpha((v.CanGiveGift) ? 1 : 0.3f);
-
-                if (v.CanBeMarried)
-                {
-                    _gAdventure = new GUIImage(new Rectangle(4, 52, 8, 9), ScaleIt(8), ScaleIt(9), DataManager.DIALOGUE_TEXTURE);
-                    _gAdventure.AnchorAndAlignToObject(_gGift, SideEnum.Left, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
-                    if (Array.Find(PlayerManager.GetParty(), x => x == v.CombatVersion) != null)
-                    {
-                        _gAdventure.SetColor(Color.Gold);
-                    }
-                    else { _gAdventure.Alpha(v.Combatant ? 1 : 0.3f); }
-                }
 
                 Resize();
             }

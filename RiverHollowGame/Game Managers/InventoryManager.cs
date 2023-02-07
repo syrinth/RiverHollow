@@ -417,11 +417,7 @@ Exit:
 
                 if (inventory[row, column] == null)
                 {
-                    if (item.CompareType(ItemEnum.Equipment))
-                    {
-                        inventory[row, column] = (Equipment)(item);
-                    }
-                    else if (item.CompareType(ItemEnum.Tool))
+                    if (item.CompareType(ItemEnum.Tool))
                     {
                         inventory[row, column] = (Tool)(item);
                     }

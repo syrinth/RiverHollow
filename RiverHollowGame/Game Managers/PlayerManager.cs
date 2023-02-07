@@ -8,13 +8,11 @@ using RiverHollow.Characters;
 using RiverHollow.WorldObjects;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
-using RiverHollow.Characters.Lite;
 using RiverHollow.Items;
 using RiverHollow.Misc;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
-using System.Linq;
 
 namespace RiverHollow.Game_Managers
 {
@@ -23,8 +21,8 @@ namespace RiverHollow.Game_Managers
         #region Properties
         public static bool Busy { get; private set; }
 
-        public static double MaxStamina = Constants.PLAYER_STARTING_STAMINA;
-        public static double Stamina = MaxStamina;
+        public static float MaxStamina = Constants.PLAYER_STARTING_STAMINA;
+        public static float Stamina = MaxStamina;
         private static string _currentMap;
         public static string CurrentMap
         {
@@ -35,11 +33,7 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static ClassedCombatant PlayerCombatant;
         public static PlayerCharacter PlayerActor;
-
-        public static int HitPoints => PlayerCombatant.CurrentHP;
-        public static int MaxHitPoints  => PlayerCombatant.MaxHP;
 
         private static Dictionary<ObjectTypeEnum, List<int>> _diCrafting;
 
@@ -53,8 +47,6 @@ namespace RiverHollow.Game_Managers
         private static List<Pet> _liPets;
 
         private static List<Mount> _liMounts;
-        private static ClassedCombatant[] _arrParty;
-
 
         public static string Name;
 
@@ -84,8 +76,6 @@ namespace RiverHollow.Game_Managers
         }
 
         static RHTimer _pushTimer;
-        static RHTimer _damageTimer;
-        static FloatingText _hazardDamage;
         #endregion
 
         public static void Initialize()
@@ -107,12 +97,6 @@ namespace RiverHollow.Game_Managers
             _diTools = new Dictionary<ToolEnum, Tool>();
 
             PlayerActor = new PlayerCharacter();
-            PlayerCombatant = new ClassedCombatant();
-
-            //Sets a default class so we can load and display the character to start
-            PlayerCombatant.SetClass(DataManager.GetJobByIndex(1));
-
-            _arrParty = new ClassedCombatant[4] { PlayerCombatant, null, null, null};
         }
 
         public static void NewPlayer()
@@ -125,12 +109,12 @@ namespace RiverHollow.Game_Managers
         {
             ToolInUse?.Update(gTime);
 
-            if (Mouse.GetState().LeftButton == ButtonState.Released && PlayerActor.State == ActorStateEnum.Grab && AllowMovement)
+            if (Defeated() || (Mouse.GetState().LeftButton == ButtonState.Released && PlayerActor.State == ActorStateEnum.Grab && AllowMovement))
             {
                 ReleaseTile();
             }
 
-            if (AllowMovement)
+            if (AllowMovement && !Defeated())
             {
                 Vector2 newMovement = Vector2.Zero;
                 MovementHelper(ref _eHorizontal, ref newMovement, true, Keys.A, DirectionEnum.Left, Keys.D, DirectionEnum.Right);
@@ -143,9 +127,9 @@ namespace RiverHollow.Game_Managers
                 }
                 PlayerActor.DetermineAnimationState(newMovement);
 
-                if(PlayerActor.State == ActorStateEnum.Grab && newMovement != Vector2.Zero) {
-                    _pushTimer?.TickDown(gTime);
-                    if (_pushTimer == null || _pushTimer.Finished())
+                if (PlayerActor.State == ActorStateEnum.Grab && newMovement != Vector2.Zero)
+                {
+                    if (_pushTimer == null || _pushTimer.TickDown(gTime))
                     {
                         GrabbedObject.InitiateMove(newMovement);
                     }
@@ -166,23 +150,13 @@ namespace RiverHollow.Game_Managers
 
             PlayerActor.Update(gTime);
 
-            if (_damageTimer != null)
+            if (Defeated())
             {
-                _damageTimer.TickDown(gTime);
-                if (_damageTimer.Finished())
-                {
-                    _hazardDamage = null;
-                    _damageTimer = null;
-                    ClearDamagedMovement();
-                }
+                GameCalendar.IncrementHours(2);
+                RHMap homeMap = MapManager.Maps[TownManager.Home.BuildingMapName];
+                MapManager.FadeToNewMap(homeMap, homeMap.GetCharacterSpawn("PlayerSpawn"), TownManager.Home);
+                PlayerActor.IncreaseHealth(1);
             }
-
-            if (_damageTimer != null && PlayerActor.MoveToLocation == Vector2.Zero)
-            {
-                ClearDamagedMovement();
-            }
-
-            _hazardDamage?.Update(gTime);
         }
 
         private static void MovementHelper(ref DirectionEnum mainEnum, ref Vector2 v, bool horizontal, Keys key1, DirectionEnum dir1, Keys key2, DirectionEnum dir2)
@@ -227,7 +201,6 @@ namespace RiverHollow.Game_Managers
             {
                 PlayerActor.Draw(spriteBatch, true);
                 ToolInUse?.DrawToolAnimation(spriteBatch);
-                _hazardDamage?.Draw(spriteBatch);
             }
         }
 
@@ -252,57 +225,6 @@ namespace RiverHollow.Game_Managers
             PlayerManager.AllowMovement = false;
             ReadyToSleep = true;
             PlayerActor.SetPath(list);
-        }
-
-        public static ClassedCombatant[] GetParty()
-        {
-            return _arrParty;
-        }
-
-        public static void AddToParty(ClassedCombatant c)
-        {
-            if (Array.Find(_arrParty, x => x == c) == null)
-            {
-                foreach (ClassedCombatant oldChar in _arrParty)
-                {
-                    if (oldChar != null && oldChar.StartPosition.Equals(c.StartPosition))
-                    {
-                        c.IncreaseStartPos();
-                    }
-                }
-
-                _arrParty[Array.IndexOf(_arrParty, null)] = c;
-            }
-        }
-        public static void RemoveFromParty(ClassedCombatant c)
-        {
-            if (Array.Find(_arrParty, x => x == c) != null)
-            {
-                _arrParty[Array.IndexOf(_arrParty, c)] = null;
-            }
-        }
-
-        public static void HazardHarmParty(int damage, Point sourceCenter)
-        {
-            if(_damageTimer == null) {
-                _damageTimer = new RHTimer(Constants.GAME_PLAYER_INVULN_TIME);
-
-                foreach(ClassedCombatant act in GetParty())
-                {
-                    act?.DecreaseHealth(damage);
-                }
-
-                _hazardDamage = new FloatingText(PlayerActor.Position, PlayerActor.BodySprite.Width, damage.ToString(), Color.Red);
-                AllowMovement = false;
-                PlayerActor.SetMoveTo(PlayerActor.Position + (5 * (PlayerActor.CollisionCenter - sourceCenter).ToVector2()));
-                PlayerActor.SpdMult = 2;
-            }
-        }
-        public static void ClearDamagedMovement()
-        {
-            AllowMovement = true;
-            PlayerActor.SpdMult = Constants.NORMAL_SPEED;
-            PlayerActor.SetMoveTo(Vector2.Zero);
         }
 
         /// <summary>
@@ -502,13 +424,11 @@ namespace RiverHollow.Game_Managers
             Name = x;
         }
 
-        public static void SetClass(int x)
+        public static bool Defeated()
         {
-            PlayerCombatant.SetClass(DataManager.GetJobByIndex(x));
-            PlayerCombatant.SetName(Name);
+            return PlayerActor != null && PlayerActor.CurrentHP == 0;
         }
-
-        public static bool DecreaseStamina(double x)
+        public static bool DecreaseStamina(float x)
         {
             bool rv = false;
             if (Stamina >= x)
@@ -519,7 +439,7 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static void IncreaseStamina(double x)
+        public static void IncreaseStamina(float x)
         {
             if (Stamina + x <= MaxStamina)
             {
@@ -584,6 +504,12 @@ namespace RiverHollow.Game_Managers
             max = MaxStamina;
         }
 
+        public static void GetHP(ref double curr, ref double max)
+        {
+            curr = PlayerActor.CurrentHP;
+            max = PlayerActor.MaxHP;
+        }
+
         public static void DetermineBabyAcquisition()
         {
             if (PlayerActor.CanBecomePregnant == Spouse.CanBecomePregnant) { PlayerManager.ChildStatus = ExpectingChildEnum.Adoption; }
@@ -610,141 +536,6 @@ namespace RiverHollow.Game_Managers
             return _liUniqueItemsBought.Contains(id);
         }
 
-        public static PlayerData SaveData()
-        {
-            PlayerData data = new PlayerData()
-            {
-                name = Name,
-                money = Money,
-                totalMoneyEarned = TotalMoneyEarned,
-                bodyTypeIndex = PlayerActor.BodyType,
-                hairColor = PlayerActor.HairColor,
-                hairIndex = PlayerActor.HairIndex,
-                hat = Item.SaveData(PlayerActor.Hat),
-                chest = Item.SaveData(PlayerActor.Chest),
-                adventurerData = PlayerCombatant.SaveClassedCharData(),
-                currentClass = PlayerCombatant.CharacterClass.ID,
-                weddingCountdown = WeddingCountdown,
-                babyCountdown = BabyCountdown,
-                Items = new List<ItemData>(),
-                liPets = new List<int>(),
-                MountList = new List<int>(),
-                ChildList = new List<ChildData>(),
-                CraftingList = new List<int>()
-            };
-
-            // Initialize the new data values.
-            foreach (Item i in InventoryManager.PlayerInventory)
-            {
-                ItemData itemData = Item.SaveData(i);
-                data.Items.Add(itemData);
-            }
-
-            data.activePet = PlayerManager.PlayerActor.ActivePet == null ? -1 : PlayerManager.PlayerActor.ActivePet.ID;
-            foreach (Pet p in _liPets)
-            {
-                data.liPets.Add(p.ID);
-            }
-
-            foreach (Mount m in _liMounts)
-            {
-                data.MountList.Add(m.ID);
-            }
-
-            foreach (Child c in Children)
-            {
-                data.ChildList.Add(c.SaveData());
-            }
-
-            foreach (List<int> craftList in _diCrafting.Values)
-            {
-                data.CraftingList.AddRange(craftList);
-            }
-
-            for (int i = 0; i < _liUniqueItemsBought.Count; i++)
-            {
-                if (i == 0) { data.UniqueItemsBought = _liUniqueItemsBought[i].ToString(); }
-                else { data.UniqueItemsBought += "|" + _liUniqueItemsBought[i].ToString(); }
-            }
-
-            return data;
-        }
-
-        public static void LoadData(PlayerData saveData)
-        {
-            MoveToSpawn();
-
-            SetName(saveData.name);
-            SetMoney(saveData.money);
-            TotalMoneyEarned = saveData.totalMoneyEarned;
-
-            BabyCountdown = saveData.babyCountdown;
-            WeddingCountdown = saveData.weddingCountdown;
-
-            PlayerActor.SetHairColor(saveData.hairColor);
-            PlayerActor.SetHairType(saveData.hairIndex);
-
-            SetClass(saveData.currentClass);
-            PlayerCombatant.LoadClassedCharData(saveData.adventurerData);
-
-            PlayerActor.SetClothes((Clothing)DataManager.GetItem(saveData.hat.itemID));
-            PlayerActor.SetClothes((Clothing)DataManager.GetItem(saveData.chest.itemID));
-
-            PlayerCombatant.IncreaseHealth(PlayerCombatant.MaxHP);
-            PlayerActor.SetBodyType(saveData.bodyTypeIndex);
-
-            for (int i = 0; i < BackpackLevel; i++)
-            {
-                for (int j = 0; j < InventoryManager.maxItemColumns; j++)
-                {
-                    int index = i * InventoryManager.maxItemColumns + j;
-                    ItemData item = saveData.Items[index];
-                    Item newItem = DataManager.GetItem(item.itemID, item.num);
- 
-                    newItem?.ApplyUniqueData(item.strData);
-                    InventoryManager.AddItemToInventorySpot(newItem, i, j);
-                }
-            }
-
-            foreach (int i in saveData.liPets)
-            {
-                Pet p = DataManager.CreatePet(i);
-                if (p.ID == saveData.activePet) {
-                    p.SpawnNearPlayer();
-                    PlayerActor.SetPet(p);
-                }
-                else { p.SpawnInHome(); }
-                AddPet(p);
-            }
-
-            foreach (int i in saveData.MountList)
-            {
-                Mount m = DataManager.CreateMount(i);
-                AddMount(m);
-            }
-
-            foreach (ChildData data in saveData.ChildList)
-            {
-                Child m = DataManager.CreateChild(data.childID);
-                m.SpawnNearPlayer();
-                AddChild(m);
-            }
-
-            foreach (int i in saveData.CraftingList)
-            {
-                AddToCraftingDictionary(i, false);
-            }
-
-            if (saveData.UniqueItemsBought != null)
-            {
-                string[] uniqueSplit = Util.FindParams(saveData.UniqueItemsBought);
-                for (int i = 0; i < uniqueSplit.Length; i++)
-                {
-                    _liUniqueItemsBought.Add(int.Parse(uniqueSplit[i]));
-                }
-            }
-        }
-
         public static List<RHTile> GetTiles()
         {
             List<RHTile> rv = new List<RHTile>
@@ -757,22 +548,6 @@ namespace RiverHollow.Game_Managers
 
 
             return rv;
-        }
-        public static bool StillMoving()
-        {
-            switch (PlayerActor.Facing)
-            {
-                case DirectionEnum.Down:
-                    return InputManager.IsKeyDown(Keys.S);
-                case DirectionEnum.Left:
-                    return InputManager.IsKeyDown(Keys.A);
-                case DirectionEnum.Right:
-                    return InputManager.IsKeyDown(Keys.D);
-                case DirectionEnum.Up:
-                    return InputManager.IsKeyDown(Keys.W);
-
-            }
-            return false;
         }
 
         #region Grabbing Objects
@@ -889,7 +664,7 @@ namespace RiverHollow.Game_Managers
                         Busy = true;
                         AllowMovement = false;
                         PlayerActor.PlayAnimationVerb(VerbEnum.Idle);
-                        ToolInUse.ToolAnimation.PlayAnimation(VerbEnum.UseTool, PlayerActor.Facing);
+                        ToolInUse.ToolAnimation.PlayAnimation(PlayerActor.Facing);
                     }
                     else
                     {
@@ -952,22 +727,136 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static Mailbox PlayerMailbox;
 
-        //private struct MovementDir
-        //{
-        //    public bool Moving;
-        //    private DirectionEnum _eDirection;
-        //    public DirectionEnum Direction
-        //    {
-        //        get { return _eDirection; }
-        //        set
-        //        {
-        //            if (value == DirectionEnum.None) { Moving = false; }
-        //            else { Moving = true; }
-        //            _eDirection = value;
-        //        }
-        //    }
-        //}
+        public static PlayerData SaveData()
+        {
+            PlayerData data = new PlayerData()
+            {
+                name = Name,
+                money = Money,
+                totalMoneyEarned = TotalMoneyEarned,
+                bodyTypeIndex = PlayerActor.BodyType,
+                hairColor = PlayerActor.HairColor,
+                hairIndex = PlayerActor.HairIndex,
+                hat = Item.SaveData(PlayerActor.Hat),
+                chest = Item.SaveData(PlayerActor.Chest),
+                weddingCountdown = WeddingCountdown,
+                babyCountdown = BabyCountdown,
+                Items = new List<ItemData>(),
+                liPets = new List<int>(),
+                MountList = new List<int>(),
+                ChildList = new List<ChildData>(),
+                CraftingList = new List<int>()
+            };
+
+            // Initialize the new data values.
+            foreach (Item i in InventoryManager.PlayerInventory)
+            {
+                ItemData itemData = Item.SaveData(i);
+                data.Items.Add(itemData);
+            }
+
+            data.activePet = PlayerManager.PlayerActor.ActivePet == null ? -1 : PlayerManager.PlayerActor.ActivePet.ID;
+            foreach (Pet p in _liPets)
+            {
+                data.liPets.Add(p.ID);
+            }
+
+            foreach (Mount m in _liMounts)
+            {
+                data.MountList.Add(m.ID);
+            }
+
+            foreach (Child c in Children)
+            {
+                data.ChildList.Add(c.SaveData());
+            }
+
+            foreach (List<int> craftList in _diCrafting.Values)
+            {
+                data.CraftingList.AddRange(craftList);
+            }
+
+            for (int i = 0; i < _liUniqueItemsBought.Count; i++)
+            {
+                if (i == 0) { data.UniqueItemsBought = _liUniqueItemsBought[i].ToString(); }
+                else { data.UniqueItemsBought += "|" + _liUniqueItemsBought[i].ToString(); }
+            }
+
+            return data;
+        }
+
+        public static void LoadData(PlayerData saveData)
+        {
+            MoveToSpawn();
+
+            SetName(saveData.name);
+            SetMoney(saveData.money);
+            TotalMoneyEarned = saveData.totalMoneyEarned;
+
+            BabyCountdown = saveData.babyCountdown;
+            WeddingCountdown = saveData.weddingCountdown;
+
+            PlayerActor.SetHairColor(saveData.hairColor);
+            PlayerActor.SetHairType(saveData.hairIndex);
+
+            PlayerActor.SetClothes((Clothing)DataManager.GetItem(saveData.hat.itemID));
+            PlayerActor.SetClothes((Clothing)DataManager.GetItem(saveData.chest.itemID));
+            PlayerActor.SetBodyType(saveData.bodyTypeIndex);
+
+            for (int i = 0; i < BackpackLevel; i++)
+            {
+                for (int j = 0; j < InventoryManager.maxItemColumns; j++)
+                {
+                    int index = i * InventoryManager.maxItemColumns + j;
+                    ItemData item = saveData.Items[index];
+                    Item newItem = DataManager.GetItem(item.itemID, item.num);
+
+                    newItem?.ApplyUniqueData(item.strData);
+                    InventoryManager.AddItemToInventorySpot(newItem, i, j);
+                }
+            }
+
+            foreach (int i in saveData.liPets)
+            {
+                Pet p = DataManager.CreatePet(i);
+                if (p.ID == saveData.activePet)
+                {
+                    p.SpawnNearPlayer();
+                    PlayerActor.SetPet(p);
+                }
+                else { p.SpawnInHome(); }
+                AddPet(p);
+            }
+
+            foreach (int i in saveData.MountList)
+            {
+                Mount m = DataManager.CreateMount(i);
+                AddMount(m);
+            }
+
+            foreach (ChildData data in saveData.ChildList)
+            {
+                Child m = DataManager.CreateChild(data.childID);
+                m.SpawnNearPlayer();
+                AddChild(m);
+            }
+
+            foreach (int i in saveData.CraftingList)
+            {
+                AddToCraftingDictionary(i, false);
+            }
+
+            if (saveData.UniqueItemsBought != null)
+            {
+                string[] uniqueSplit = Util.FindParams(saveData.UniqueItemsBought);
+                for (int i = 0; i < uniqueSplit.Length; i++)
+                {
+                    _liUniqueItemsBought.Add(int.Parse(uniqueSplit[i]));
+                }
+            }
+        }
+
+        public static Mailbox PlayerMailbox;
     }
 }

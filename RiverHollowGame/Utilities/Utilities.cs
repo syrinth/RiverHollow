@@ -275,6 +275,18 @@ namespace RiverHollow.Utilities
             return FindArguments(data).Select(Int32.Parse)?.ToArray();
         }
 
+        public static Vector2 FindVectorArguments(string data)
+        {
+            Vector2 rv = Vector2.Zero;
+            int[] vec = FindIntArguments(data);
+            if (vec.Length >= 2)
+            {
+                rv = new Vector2(vec[0], vec[1]);
+            }
+
+            return rv;
+        }
+
         public static String NumToString(int number, bool isCaps)
         {
             Char c = (Char)((isCaps ? 65 : 97) + (number - 1));
@@ -611,6 +623,11 @@ namespace RiverHollow.Utilities
             return rv;
         }
 
+        public static T GetRandomItem<T>(T[] theArray)
+        {
+            if (theArray.Length > 0) { return theArray[RHRandom.Instance().Next(0, theArray.Length - 1)]; }
+            return default;
+        }
         public static T GetRandomItem<T>(List<T> theList)
         {
             if (theList.Count > 0) { return theList[RHRandom.Instance().Next(0, theList.Count - 1)]; }
@@ -676,23 +693,7 @@ namespace RiverHollow.Utilities
             List<AnimationData> listAnimations = new List<AnimationData>();
             AddToAnimationsList(ref listAnimations, data, VerbEnum.Idle);
             AddToAnimationsList(ref listAnimations, data, VerbEnum.Walk);
-            return listAnimations;
-        }
-        public static List<AnimationData> LoadCombatAnimations(Dictionary<string, string> data)
-        {
-            List<AnimationData> listAnimations = new List<AnimationData>();
-
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Spawn);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Idle);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Critical);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Hurt);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action1);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action2);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action3);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Action4);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.KO);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.Victory);
-
             return listAnimations;
         }
 

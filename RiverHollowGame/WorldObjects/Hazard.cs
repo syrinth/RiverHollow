@@ -1,11 +1,11 @@
 ﻿using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using static RiverHollow.Utilities.Enums;
 using Microsoft.Xna.Framework;
 using RiverHollow.Map_Handling;
-using Microsoft.Xna.Framework.Graphics;
 using System;
+
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.WorldObjects
 {
@@ -49,8 +49,7 @@ namespace RiverHollow.WorldObjects
         {
             if (_eHazardType == HazardTypeEnum.Timed)
             {
-                _timer.TickDown(gTime);
-                if (_timer.Finished())
+                if (_timer.TickDown(gTime))
                 {
                     _timer.Reset();
                     Activate(!Active);
@@ -75,9 +74,12 @@ namespace RiverHollow.WorldObjects
                 }
             }
 
-            if (Active && CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
+            if (Active)
             {
-                PlayerManager.HazardHarmParty(Damage, CollisionCenter);
+                if (CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
+                {
+                    PlayerManager.PlayerActor.DealDamage(Damage);
+                }
             }
         }
 

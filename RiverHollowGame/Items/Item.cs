@@ -42,8 +42,6 @@ namespace RiverHollow.Items
         protected bool _bManualPickup = false;
         public bool ManualPickup { get => _bManualPickup; set => _bManualPickup = value; }
 
-        protected int _iColTexSize = Constants.TILE_SIZE;
-        protected int _iRowTexSize = Constants.TILE_SIZE;
         private Parabola _movement;
 
         protected int _iNum;
@@ -220,7 +218,7 @@ namespace RiverHollow.Items
         }
         public virtual bool ItemBeingUsed() { return false; }
         public virtual bool HasUse() { return false; }
-        public virtual void UseItem(TextEntryVerbEnum action) { }
+        public virtual void UseItem() { }
 
         public virtual void ApplyUniqueData(string str) { }
         public virtual string GetUniqueData() { return string.Empty; }
@@ -359,8 +357,7 @@ namespace RiverHollow.Items
 
             public void Update(GameTime gTime)
             {
-                _timer.TickDown(gTime);
-                if (_timer.Finished())
+                if (_timer.TickDown(gTime))
                 {
                     if (_bBounce || (_bBounce && subBounce != null))
                     {
@@ -427,17 +424,14 @@ namespace RiverHollow.Items
             return true;
         }
 
-        public override void UseItem(TextEntryVerbEnum action)
+        public override void UseItem()
         {
-            if (action.Equals("UseItem"))
-            {
-                MapManager.CurrentMap.PrimeMonsterSpawns(this);
-                MapManager.CurrentMap.DropItemOnMap(this, PlayerManager.PlayerActor.Position);
-                _bAutoPickup = false;
-                _bManualPickup = false;
-                Remove(1);
-                ClearGMObjects();
-            }
+            MapManager.CurrentMap.PrimeMonsterSpawns(this);
+            MapManager.CurrentMap.DropItemOnMap(this, PlayerManager.PlayerActor.Position);
+            _bAutoPickup = false;
+            _bManualPickup = false;
+            Remove(1);
+            ClearGMObjects();
         }
     }
 }

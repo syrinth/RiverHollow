@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="191">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="196">
  <properties>
   <property name="ItemID" value="162-C|163-R"/>
   <property name="MapType" value="Town"/>
+  <property name="Mobs" value="4-4"/>
   <property name="Outside" type="bool" value="true"/>
   <property name="ResourceNumber" value="5"/>
  </properties>
@@ -160,9 +161,26 @@
     <property name="Number" value="5"/>
    </properties>
   </object>
+  <object id="192" name="Mob" x="80" y="368" width="32" height="32">
+   <properties>
+    <property name="MobID" value="32-C"/>
+   </properties>
+  </object>
+  <object id="193" name="Mob" x="96" y="224" width="32" height="32">
+   <properties>
+    <property name="MobID" value="32-C"/>
+   </properties>
+  </object>
+  <object id="194" name="Mob" x="368" y="80" width="32" height="32">
+   <properties>
+    <property name="MobID" value="32-C"/>
+   </properties>
+  </object>
+  <object id="195" name="Mob" x="304" y="80" width="32" height="32">
+   <properties>
+    <property name="MobID" value="32-C"/>
+   </properties>
+  </object>
  </objectgroup>
- <objectgroup id="6" name="Character">
-  <object id="52" name="CS0" x="144" y="256" width="16" height="16"/>
-  <object id="53" name="CS0_Mob" x="336" y="144" width="16" height="16"/>
- </objectgroup>
+ <objectgroup id="6" name="Character"/>
 </map>

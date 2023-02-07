@@ -1,6 +1,4 @@
-﻿using RiverHollow.Characters;
-using RiverHollow.CombatStuff;
-using RiverHollow.Game_Managers;
+﻿using RiverHollow.Game_Managers;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
@@ -53,16 +51,12 @@ namespace RiverHollow.Items
             return true;
         }
 
-        public override void UseItem(TextEntryVerbEnum action)
+        public override void UseItem()
         {
             if (Helpful)
             {
-                //We're passing in a verb entry of Option_#, need to isolate the int
-                int partyPosition = int.Parse(Util.GetEnumString<TextEntryVerbEnum>(action).Replace("Option_", ""));
-                CombatActor target = PlayerManager.GetParty()[partyPosition];
-
-                if (Health > 0) { target.IncreaseHealth(Health); }
-                if (_statusEffect != null) { target.ApplyStatusEffect(_statusEffect); }
+                if (Health > 0) { PlayerManager.PlayerActor.IncreaseHealth(Health); }
+                if (_statusEffect != null) { PlayerManager.PlayerActor.ApplyStatusEffect(_statusEffect); }
 
                 Remove(1);
             }

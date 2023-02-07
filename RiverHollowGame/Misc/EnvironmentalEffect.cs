@@ -54,7 +54,6 @@ namespace RiverHollow.Misc
                 {
                     Vector2 landingPos = _sprBody.Position + new Vector2(0, Constants.TILE_SIZE);
                     RHTile landingTile = MapManager.CurrentMap.GetTileByPixelPosition(landingPos);
-                    //if (landingTile == null) { _sprBody.PlayAnimation(CombatAnimationEnum.Action_Finished); }//_sprBody.Drawing = false; }
                     if (_iFallDistance <= 0 && (landingTile == null || landingTile.WorldObject == null || landingTile.WorldObject.CompareType(ObjectTypeEnum.Structure)))
                     {
                         _sprBody.PlayAnimation(AnimationEnum.Action_Finished);
