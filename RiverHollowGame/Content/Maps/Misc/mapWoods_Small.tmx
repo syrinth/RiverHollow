@@ -163,22 +163,22 @@
   </object>
   <object id="192" name="Mob" x="80" y="368" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C"/>
+    <property name="MobID" value="32-C|33-C"/>
    </properties>
   </object>
   <object id="193" name="Mob" x="96" y="224" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C"/>
+    <property name="MobID" value="32-C|33-C"/>
    </properties>
   </object>
   <object id="194" name="Mob" x="368" y="80" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C"/>
+    <property name="MobID" value="32-C|33-C"/>
    </properties>
   </object>
   <object id="195" name="Mob" x="304" y="80" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C"/>
+    <property name="MobID" value="32-C|33-C"/>
    </properties>
   </object>
  </objectgroup>

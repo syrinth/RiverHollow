@@ -231,7 +231,6 @@ namespace RiverHollow.Items
             {
                 case ItemEnum.Blueprint:
                 case ItemEnum.Clothing:
-                case ItemEnum.Equipment:
                 case ItemEnum.NPCToken:
                 case ItemEnum.Special:
                 case ItemEnum.Tool:

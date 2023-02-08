@@ -103,10 +103,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public class SpecializedBox : GUIItemBox
         {
             public ItemEnum ItemType { get; }
-            public GearTypeEnum GearType { get; }
-            public ArmorTypeEnum ArmorType { get; }
             public ClothingEnum ClothingType { get; }
-            public WeaponEnum WeaponType { get; }
 
             public delegate void OpenItemWindow(SpecializedBox itemBox);
             private OpenItemWindow _delOpenItemWindow;

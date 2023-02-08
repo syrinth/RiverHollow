@@ -598,13 +598,6 @@ namespace Database_Editor
                         cbItemSubtype.Items.Add("Subtype:" + en.ToString());
                     }
                     break;
-                case ItemEnum.Equipment:
-                    cbItemSubtype.Visible = true;
-                    foreach (GearTypeEnum en in Enum.GetValues(typeof(GearTypeEnum)))
-                    {
-                        cbItemSubtype.Items.Add("Subtype:" + en.ToString());
-                    }
-                    break;
                 case ItemEnum.NPCToken:
                     cbItemSubtype.Visible = true;
                     foreach (NPCTokenTypeEnum en in Enum.GetValues(typeof(NPCTokenTypeEnum)))
@@ -637,9 +630,6 @@ namespace Database_Editor
             {
                 case ItemEnum.Clothing:
                     rv = (int)Util.ParseEnum<ClothingEnum>(value);
-                    break;
-                case ItemEnum.Equipment:
-                    rv = (int)Util.ParseEnum<GearTypeEnum>(value);
                     break;
                 case ItemEnum.NPCToken:
                     rv = (int)Util.ParseEnum<NPCTokenTypeEnum>(value);

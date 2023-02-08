@@ -26,8 +26,8 @@
         public const float ITEM_BOUNCE_SPEED = 0.2f;
 
         public const int CALENDAR_DAYS_IN_MONTH = 28;
-        public const int CALENDAR_MINUTES_PER_SECOND = 1;
-        public const int CALENDAR_NEW_DAY_HOUR = 6;
+        public const int CALENDAR_MINUTES_PER_SECOND = 10;
+        public const int CALENDAR_NEW_DAY_HOUR = 14;
         public const int CALENDAR_NEW_DAY_MIN = 0;
 
         public const string TRIGGER_MOB_OPEN = "MOB";

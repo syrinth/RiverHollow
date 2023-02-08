@@ -487,7 +487,7 @@
     </Item>
     <Item>
       <Key>121</Key>
-      <Value>[Type:Tool][Subtype:Sword][Image:0-7][Level:1][SoundEffect:1][Stam:1][AnimationData:0-192|3-4|3|0.08][Damage:1]</Value>
+      <Value>[Type:Tool][Subtype:Sword][Image:0-7][Level:1][SoundEffect:1][AnimationData:0-192|3-4|3|0.08][Damage:1]</Value>
     </Item>
     <Item>
       <Key>122</Key>

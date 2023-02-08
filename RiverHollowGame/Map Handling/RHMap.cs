@@ -44,7 +44,8 @@ namespace RiverHollow.Map_Handling
         public float Lighting => _map.Properties.ContainsKey("Lighting") ? float.Parse(_map.Properties["Lighting"]) : 1;
         public string MapType => _map.Properties.ContainsKey("MapType") ? _map.Properties["MapType"] : string.Empty;
 
-        public bool Visited { get; private set; } = false;
+        public bool ItemsSpawned { get; private set; } = false;
+        public MobSpawnStateEnum MobsSpawned { get; private set; } = MobSpawnStateEnum.None;
         private bool Randomize => _map.Properties.ContainsKey("Randomize");
         public MonsterFood PrimedFood { get; private set; }
         public RHTile TargetTile { get; private set; } = null;
@@ -588,9 +589,9 @@ namespace RiverHollow.Map_Handling
 
         public void SpawnMapEntities(bool spawnAboveAndBelow = true)
         {
-            if (!Visited)
+            if (!ItemsSpawned)
             {
-                Visited = true;
+                ItemsSpawned = true;
                 if (spawnAboveAndBelow)
                 {
                     if (MapAboveValid()) { MapManager.Maps[MapAbove].SpawnMapEntities(false); }
@@ -598,7 +599,21 @@ namespace RiverHollow.Map_Handling
                 }
 
                 _liResourceSpawns.ForEach(x => x.Spawn());
+            }
+
+            if (MobsSpawned == MobSpawnStateEnum.None) {
+
                 SpawnMobs();
+                if (GameCalendar.IsNight()) { MobsSpawned = MobSpawnStateEnum.Night; }
+                else { MobsSpawned = MobSpawnStateEnum.Day; }
+            }
+            else if (MobsSpawned == MobSpawnStateEnum.Day)
+            {
+                if (GameCalendar.IsNight())
+                {
+                    SpawnMobs();
+                    MobsSpawned = MobSpawnStateEnum.Night;
+                }
             }
         }
 
@@ -657,64 +672,6 @@ namespace RiverHollow.Map_Handling
                 }
             }
         }
-
-        ///// <summary>
-        ///// Call this to make the MonsterSpawns on the map spawn their monsters
-        ///// </summary>
-        //private void SpawnMonsters()
-        //{
-        //    //Remove all monsters from the map
-        //    foreach (TacticalMonster m in Monsters)
-        //    {
-        //        RemoveActor(m);
-        //    }
-        //    Monsters.Clear();
-
-        //    if (PrimedFood != null)
-        //    {
-        //        //Check to see if the spawn points have been set by MonsterFood and
-        //        //resets any monsters that may already be set to them.
-        //        foreach (MonsterSpawn spawn in MonsterSpawnPoints)
-        //        {
-        //            if (spawn.IsPrimed)
-        //            {
-        //                spawn.Spawn();
-        //            }
-        //            else
-        //            {
-        //                spawn.ClearSpawn();
-        //            }
-        //        }
-        //        _liItemsToRemove.Add(PrimedFood);
-        //        PrimedFood = null;
-        //    }
-        //    else
-        //    {
-        //        //Copy the spawn points to a list we can safely modify
-        //        List<MonsterSpawn> spawnCopy = new List<MonsterSpawn>();
-        //        spawnCopy.AddRange(MonsterSpawnPoints);
-
-        //        //Trigger x number of SpawnPoints
-        //        for (int i = 0; i < _iActiveSpawnPoints; i++)
-        //        {
-        //            try
-        //            {
-        //                //Get a random Spawn Point
-        //                int point = RHRandom.Instance().Next(0, spawnCopy.Count - 1);
-        //                if (!spawnCopy[point].HasSpawned())
-        //                {
-        //                    //Trigger the Spawn point and remove it from the copied list
-        //                    //so it won't be an option for future spawning.
-        //                    spawnCopy[point].Spawn();
-        //                    spawnCopy.RemoveAt(point);
-        //                }
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //            }
-        //        }
-        //    }
-        //}
 
         /// <summary>
         /// Sets the MonsterFood for the map
@@ -800,10 +757,11 @@ namespace RiverHollow.Map_Handling
         {
             if (Randomize)
             {
-                Visited = false;
+                ItemsSpawned = false;
                 _liPlacedWorldObjects.ForEach(x => x.RemoveSelfFromTiles());
                 _liPlacedWorldObjects.Clear();
             }
+            MobsSpawned =MobSpawnStateEnum.None;
             _liPlacedWorldObjects.ForEach(x => x.Rollover());
             _liResourceSpawns.ForEach(x => x.Rollover(Randomize));
 
@@ -2350,7 +2308,7 @@ namespace RiverHollow.Map_Handling
             MapData mapData = new MapData
             {
                 mapName = this.Name,
-                visited = this.Visited,
+                visited = this.ItemsSpawned,
                 worldObjects = new List<WorldObjectData>()
             };
 
@@ -2366,7 +2324,7 @@ namespace RiverHollow.Map_Handling
         }
         internal void LoadData(MapData mData)
         {
-            Visited = mData.visited;
+            ItemsSpawned = mData.visited;
             foreach (WorldObjectData data in mData.worldObjects)
             {
                 WorldObject obj = DataManager.CreateWorldObjectByID(data.ID);

@@ -36,7 +36,7 @@ namespace RiverHollow.Game_Managers
             CurrentMin = Constants.CALENDAR_NEW_DAY_MIN;
             _bHasNightFallen = false;
 
-            _timer = new RHTimer(Constants.CALENDAR_MINUTES_PER_SECOND);
+            _timer = new RHTimer(1);
 
             MapManager.CheckSpirits();
         }

@@ -9,6 +9,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using MonoGame.Extended;
 using RiverHollow.Characters;
 using System;
+using System.Linq;
 
 namespace RiverHollow.Map_Handling
 {
@@ -240,15 +241,61 @@ namespace RiverHollow.Map_Handling
 
         public override void Spawn()
         {
-            List<RHTile> validTiles = TilesInArea(true);
+            var copy = _diSpawnData.ToDictionary(entry => entry.Key, entry => new List<SpawnData>(entry.Value));
+            foreach (var key in _diSpawnData.Keys)
+            {
+                foreach (SpawnData data in _diSpawnData[key])
+                {
+                    if (!Validate(data.ID))
+                    {
+                        copy[key].Remove(data);
+                        if (copy[key].Count == 0)
+                        {
+                            copy.Remove(key);
+                        }
+                    }
+                }
+            }
 
             RarityEnum rarityKey = Util.RollAgainstRarity(_diSpawnData);
+            if (copy.ContainsKey(rarityKey) && copy[rarityKey].Count > 0)
+            {
+                List<RHTile> validTiles = TilesInArea(true);
 
-            int roll = RHRandom.Instance().Next(0, _diSpawnData[rarityKey].Count - 1);
+                int roll = RHRandom.Instance().Next(0, copy[rarityKey].Count - 1);
+                Mob m = DataManager.CreateMob(copy[rarityKey][roll].ID);
+                RHTile t = validTiles[RHRandom.Instance().Next(0, validTiles.Count - 1)];
+                _map.AddMobByPosition(m, t.Position);
+            }
+        }
 
-            Mob m = DataManager.CreateMob(_diSpawnData[rarityKey][roll].ID);
-            RHTile t = validTiles[RHRandom.Instance().Next(0, validTiles.Count - 1)];
-            _map.AddMobByPosition(m, t.Position);
+        public bool Validate(int id)
+        {
+
+            if (DataManager.GetBoolByIDKey(id, "Day", DataType.NPC) && GameCalendar.IsNight()) { return false; }
+            else if (DataManager.GetBoolByIDKey(id, "Night", DataType.NPC) && !GameCalendar.IsNight()) { return false; }
+
+            var seasonList = DataManager.GetEnumListByIDKey<SeasonEnum>(id, "Season", DataType.NPC);
+
+            bool validSeason = seasonList[0] == SeasonEnum.None;
+            if (!validSeason)
+            {
+                foreach (var season in seasonList)
+                {
+                    if (season == Util.ParseEnum<SeasonEnum>(GameCalendar.GetSeason()))
+                    {
+                        validSeason = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!validSeason)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

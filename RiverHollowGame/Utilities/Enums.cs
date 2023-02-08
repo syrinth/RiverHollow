@@ -29,12 +29,10 @@
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
         public enum ItemGroupEnum { None, Clothes, Flower, Gem, Herb, Magic, Medicine, Metal, Ore };
-        public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, Clothing, MonsterFood, NPCToken, Blueprint, Seed, Special };
+        public enum ItemEnum { Resource, Tool, Food, Consumable, Clothing, MonsterFood, NPCToken, Blueprint, Seed, Special };
         public enum FoodTypeEnum { Dessert, Expensive, Forage, Healthy, Plain };
         public enum ToolEnum { None, Axe, Backpack, CapeOfBlinking, Harp, Lantern, Pick, Return, Scythe, Shovel, StaffOfIce, Sword, WateringCan };
         public enum GearTypeEnum { None, Accessory, Chest, Head, Weapon };
-        public enum WeaponEnum { None, Spear, Shield, Rapier, Bow, Wand, Knife, Orb, Staff };
-        public enum ArmorTypeEnum { None, Cloth, Light, Heavy };
         public enum ClothingEnum { None, Chest, Legs, Hat };
         public enum NPCTokenTypeEnum { Mount, Pet };
 
@@ -48,7 +46,7 @@
 
         public enum ObjectPlacementEnum { Ground, Floor, Wall };
         public enum ObjectTypeEnum { WorldObject, Beehive, Buildable, Building, Hazard, Container, Decor, Destructible, DungeonObject, Floor, Gatherable, Garden, Machine, Mailbox, Plant, Structure, Wall, Wallpaper, WarpPoint };
-        public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
+        public enum MobSpawnStateEnum { None, Day, Night };
         public enum ExpectingChildEnum { None, Adoption, Pregnant };
         public enum RelationShipStatusEnum { None, Friends, Dating, Engaged, Married };
         public enum SpawnStateEnum { OffMap, WaitAtInn, VisitInn, HasHome, NonTownMap, SendingToInn };

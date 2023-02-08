@@ -28,24 +28,15 @@ namespace RiverHollow.Characters
 
         FieldOfVision _FoV;
 
-        List<SpawnConditionEnum> _liSpawnConditions;
-
         #endregion
 
         public Mob(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            _liSpawnConditions = new List<SpawnConditionEnum>();
             CurrentHP = MaxHP;
 
             _fBaseSpeed = 1;
             Invulnerable = false;
             Wandering = true;
-
-            //split = data["Condition"].Split('-');
-            //for (int i = 0; i < split.Length; i++)
-            //{
-            //    _liSpawnConditions.Add(Util.ParseEnum<SpawnConditionEnum>(split[i]));
-            //}
 
             //_bJump = data.ContainsKey("Jump");
 
@@ -199,47 +190,6 @@ namespace RiverHollow.Characters
                     PlayAnimationVerb(VerbEnum.Walk);
                 }
             }
-        }
-
-        public bool CheckValidConditions(SpawnConditionEnum s)
-        {
-            bool rv = true;
-
-            if (_liSpawnConditions.Contains(s))
-            {
-                foreach (SpawnConditionEnum e in _liSpawnConditions)
-                {
-                    if (e.Equals(SpawnConditionEnum.Night) && !GameCalendar.IsNight())
-                    {
-                        rv = false;
-                    }
-                    else if (CompareSpawnSeason(e, SpawnConditionEnum.Spring))
-                    {
-                        rv = false;
-                    }
-                    else if (CompareSpawnSeason(e, SpawnConditionEnum.Summer))
-                    {
-                        rv = false;
-                    }
-                    else if (CompareSpawnSeason(e, SpawnConditionEnum.Winter))
-                    {
-                        rv = false;
-                    }
-                    else if (CompareSpawnSeason(e, SpawnConditionEnum.Fall))
-                    {
-                        rv = false;
-                    }
-
-                    if (!rv) { break; }
-                }
-            }
-
-            return rv;
-        }
-
-        private bool CompareSpawnSeason(SpawnConditionEnum check, SpawnConditionEnum season)
-        {
-            return check.Equals(season) && !Util.ParseEnum<SpawnConditionEnum>(GameCalendar.GetSeason()).Equals(season);
         }
 
         /// <summary>
