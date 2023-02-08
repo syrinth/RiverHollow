@@ -38,7 +38,6 @@
             this.gameTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mailboxMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabCtl = new System.Windows.Forms.TabControl();
-            this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tabCutscene = new System.Windows.Forms.TabPage();
             this.label26 = new System.Windows.Forms.Label();
             this.tbCutsceneID = new System.Windows.Forms.TextBox();
@@ -54,6 +53,7 @@
             this.label16 = new System.Windows.Forms.Label();
             this.dgvCutscenes = new System.Windows.Forms.DataGridView();
             this.colCutscenesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tabDungeon = new System.Windows.Forms.TabPage();
             this.tbDungeonDescription = new System.Windows.Forms.TextBox();
             this.label40 = new System.Windows.Forms.Label();
@@ -275,12 +275,6 @@
             this.tabCtl.TabIndex = 12;
             this.tabCtl.SelectedIndexChanged += new System.EventHandler(this.tabCtl_SelectedIndexChanged);
             // 
-            // contextMenu
-            // 
-            this.contextMenu.Name = "contextMenuStripItems";
-            this.contextMenu.Size = new System.Drawing.Size(61, 4);
-            this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
-            // 
             // tabCutscene
             // 
             this.tabCutscene.Controls.Add(this.label26);
@@ -435,6 +429,12 @@
             this.colCutscenesName.Name = "colCutscenesName";
             this.colCutscenesName.ReadOnly = true;
             this.colCutscenesName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // contextMenu
+            // 
+            this.contextMenu.Name = "contextMenuStripItems";
+            this.contextMenu.Size = new System.Drawing.Size(61, 4);
+            this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // tabDungeon
             // 

@@ -36,6 +36,8 @@ namespace RiverHollow.Characters
 
         public Vector2 MoveToLocation { get; private set; }
         protected Vector2 _vLeashPoint;
+        protected Vector2 _vVelocity;
+        protected float _fDecay;
 
         public string CurrentMapName;
         public RHMap CurrentMap => (!string.IsNullOrEmpty(CurrentMapName) ? MapManager.Maps[CurrentMapName] : null);
@@ -141,7 +143,8 @@ namespace RiverHollow.Characters
             base.Update(gTime);
             if (!GamePaused() && CurrentHP > 0)
             {
-                HandleMove();
+                if (HasVelocity()) { ApplyVelocity(); }
+                else { HandleMove(); }
 
                 if (_damageTimer != null)
                 {
@@ -149,6 +152,7 @@ namespace RiverHollow.Characters
                     {
                         _eCurrentState = NPCStateEnum.Idle;
                         _damageTimer = null;
+                        _vVelocity = Vector2.Zero;
                     }
                 }
             }
@@ -554,21 +558,6 @@ namespace RiverHollow.Characters
             }
         }
 
-        private bool CanMove(DirectionEnum dir)
-        {
-            bool rv = false;
-
-            RHTile currentTile = CurrentMap.GetTileByPixelPosition(CollisionBox.Center);
-            RHTile testTile = currentTile.GetTileByDirection(dir);
-            if (testTile.Passable())
-            {
-                rv = true;
-                SetMoveTo(testTile.Position);
-            }
-
-            return rv;
-        }
-
         protected void Wander(GameTime gTime)
         {
             if (_movementTimer.TickDown(gTime) && MoveToLocation == Vector2.Zero)
@@ -627,7 +616,7 @@ namespace RiverHollow.Characters
         /// <summary>
         /// Reduces health by the given value. Cannot deal more damage than health exists.
         /// </summary>
-        public virtual bool DealDamage(int value)
+        public virtual bool DealDamage(int value, Rectangle hitbox)
         {
             bool rv = false;
 
@@ -641,6 +630,8 @@ namespace RiverHollow.Characters
                 {
                     rv = true;
                     _flickerTimer = new RHTimer(Constants.FLICKER_PERIOD);
+
+                    AssignVelocity(hitbox);
                 }
             }
 
@@ -694,6 +685,56 @@ namespace RiverHollow.Characters
             //    }
             //    _liStatusEffects.Add(effect);
             //}
+        }
+
+        public bool HasVelocity()
+        {
+            return _vVelocity != Vector2.Zero;
+        }
+        public void ApplyVelocity()
+        {
+            Vector2 startPos = Position;
+            Vector2 dir = _vVelocity;
+
+            bool impeded = false;
+            if (CurrentMap.CheckForCollisions(this, Position, CollisionBox, ref dir, ref impeded))
+            {
+                Position += dir;
+            }
+            _vVelocity *= 0.98f;
+        }
+
+        private void AssignVelocity(Rectangle hitbox)
+        {
+            _vVelocity = hitbox.Center.ToVector2() - CollisionBox.Center.ToVector2();
+            _vVelocity.Normalize();
+            switch (GetWeight())
+            {
+                case WeightEnum.Light:
+                    _vVelocity *= -4;
+                    _fDecay = 0.98f;
+                    goto default;
+                case WeightEnum.Medium:
+                    _vVelocity *= -2;
+                    _fDecay = 0.97f;
+                    goto default;
+                case WeightEnum.Heavy:
+                    _vVelocity *= -1;
+                    _fDecay = 0.90f;
+                    goto default;
+                case WeightEnum.Immovable:
+                    _vVelocity *= 0;
+                    break;
+                default:
+                    SetMoveTo(Vector2.Zero);
+                    ClearPath();
+                    break;
+            }
+        }
+
+        protected virtual WeightEnum GetWeight()
+        {
+            return WeightEnum.Medium;
         }
 
         #endregion

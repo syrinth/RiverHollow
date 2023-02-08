@@ -633,7 +633,7 @@ namespace RiverHollow.Map_Handling
             {
                 if (npc.CollisionBox.Intersects(t.Hitbox))
                 {
-                    npc.DealDamage(t.ToolLevel);
+                    npc.DealDamage(t.ToolLevel, PlayerManager.PlayerActor.CollisionBox);
                 }
             }
         }

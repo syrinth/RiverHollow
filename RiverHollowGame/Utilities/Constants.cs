@@ -9,21 +9,21 @@
         public const float PLAYER_STARTING_STAMINA = 100f;
         public const float PLAYER_STARTING_HP = 10f;
 
-        public const double INVULN_PERIOD = 1;
-        public const double FLICKER_PERIOD = 0.2;
+        public const float INVULN_PERIOD = 0.5f;
+        public const float FLICKER_PERIOD = 0.1f;
         public const double MOB_STUN_TIME = 5;
-        public const double WANDER_COUNTDOWN = 2.5;
-        public const double PUSH_COOLDOWN = 0.1;
+        public const float WANDER_COUNTDOWN = 2.5f;
+        public const float PUSH_COOLDOWN = 0.1f;
 
-        public const double GUI_TEXT_DELAY = 0.06;
-        public const double GUI_TEXT_MARKER_FLASH_RATE = 0.5;
-        public const double GUI_WINDOW_OPEN_SPEED = 0.004;
+        public const float GUI_TEXT_DELAY = 0.06f;
+        public const float GUI_TEXT_MARKER_FLASH_RATE = 0.5f;
+        public const float GUI_WINDOW_OPEN_SPEED = 0.004f;
 
         public const int MINIMUM_DAYS_OF_PRECIPITATION = 6;
         public const int NORMAL_SCALE = 4;
         public const int TILE_SIZE = 16;
         public const int MAX_LAYER_DEPTH = 999999;
-        public const double ITEM_BOUNCE_SPEED = 0.2;
+        public const float ITEM_BOUNCE_SPEED = 0.2f;
 
         public const int CALENDAR_DAYS_IN_MONTH = 28;
         public const int CALENDAR_MINUTES_PER_SECOND = 1;

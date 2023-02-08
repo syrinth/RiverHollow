@@ -77,7 +77,7 @@ namespace RiverHollow.WorldObjects
             {
                 if (CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
                 {
-                    PlayerManager.PlayerActor.DealDamage(Damage);
+                    PlayerManager.PlayerActor.DealDamage(Damage, CollisionBox);
                 }
             }
         }

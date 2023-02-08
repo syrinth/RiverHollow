@@ -39,6 +39,7 @@
         public enum NPCTokenTypeEnum { Mount, Pet };
 
         public enum ActorStateEnum { Climb, Grab, Swim, Walk };
+        public enum WeightEnum { Light, Medium, Heavy, Immovable};
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum WorldActorTypeEnum { Actor, Animal, Child, Critter, Merchant, Mob, Mount, Pet, ShippingGremlin, Spirit, TalkingActor, Traveler, Villager };
         public enum TravelerGroupEnum { None, Adventurer, Dwarf, Goblin, Human, Noble};

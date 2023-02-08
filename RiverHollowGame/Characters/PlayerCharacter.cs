@@ -63,7 +63,7 @@ namespace RiverHollow.Characters
         public Mount ActiveMount { get; private set; }
         public bool Mounted => ActiveMount != null;
 
-        private float _fAlphaFlicker = 1f;
+        private bool _bFlicker = false;
 
         public PlayerCharacter() : base()
         {
@@ -105,8 +105,8 @@ namespace RiverHollow.Characters
             {
                 if (_flickerTimer != null && _flickerTimer.TickDown(gTime, true))
                 {
-                    _fAlphaFlicker = _fAlphaFlicker == 1 ? 0 : 1;
-                    GetSprites().ForEach(x => x.SetColor(Color.White * _fAlphaFlicker));
+                    _bFlicker = !_bFlicker;
+                    GetSprites().ForEach(x => x.SetColor(Color.White * (_bFlicker ? 1 : 0)));
                 }
             }
             else if(_flickerTimer != null)
@@ -130,7 +130,7 @@ namespace RiverHollow.Characters
         {
             base.HandleMove();
 
-            if (PlayerManager.GrabbedObject != null && PlayerManager.MoveObjectToPosition != Vector2.Zero && PlayerManager.GrabbedObject.CollisionPosition != PlayerManager.MoveObjectToPosition)
+            if (!HasVelocity() && PlayerManager.GrabbedObject != null && PlayerManager.MoveObjectToPosition != Vector2.Zero && PlayerManager.GrabbedObject.CollisionPosition != PlayerManager.MoveObjectToPosition)
             {
                 Vector2 moveBy = Vector2.Zero;
                 Util.GetMoveSpeed(PlayerManager.GrabbedObject.CollisionPosition, PlayerManager.MoveObjectToPosition, BuffedSpeed, ref moveBy);

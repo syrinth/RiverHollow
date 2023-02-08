@@ -109,12 +109,12 @@ namespace RiverHollow.Game_Managers
         {
             ToolInUse?.Update(gTime);
 
-            if (Defeated() || (Mouse.GetState().LeftButton == ButtonState.Released && PlayerActor.State == ActorStateEnum.Grab && AllowMovement))
+            if (PlayerActor.HasVelocity() || Defeated() || (Mouse.GetState().LeftButton == ButtonState.Released && PlayerActor.State == ActorStateEnum.Grab && AllowMovement))
             {
                 ReleaseTile();
             }
-
-            if (AllowMovement && !Defeated())
+            
+            if (!PlayerActor.HasVelocity() && AllowMovement && !Defeated())
             {
                 Vector2 newMovement = Vector2.Zero;
                 MovementHelper(ref _eHorizontal, ref newMovement, true, Keys.A, DirectionEnum.Left, Keys.D, DirectionEnum.Right);

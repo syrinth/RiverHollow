@@ -82,7 +82,7 @@ namespace RiverHollow.Characters
                     return;
                 }
 
-                if (CurrentHP > 0)
+                if (CurrentHP > 0 && !HasVelocity())
                 {
                     switch (_eCurrentState)
                     {
@@ -126,7 +126,7 @@ namespace RiverHollow.Characters
                                 _liTilePath.Clear();
                                 ChangeState(NPCStateEnum.Idle);
 
-                                PlayerManager.PlayerActor.DealDamage(Damage);
+                                PlayerManager.PlayerActor.DealDamage(Damage, CollisionBox);
                             }
                             break;
 
@@ -292,9 +292,9 @@ namespace RiverHollow.Characters
             }
         }
 
-        public override bool DealDamage(int value)
+        public override bool DealDamage(int value, Rectangle hitbox)
         {
-            bool rv = base.DealDamage(value);
+            bool rv = base.DealDamage(value, hitbox);
 
             if (rv)
             {
@@ -303,6 +303,11 @@ namespace RiverHollow.Characters
             }
 
             return rv;
+        }
+
+        protected override WeightEnum GetWeight()
+        {
+            return DataManager.GetEnumByIDKey<WeightEnum>(ID, "Weight", DataType.NPC);
         }
 
         #region Jumping Code
