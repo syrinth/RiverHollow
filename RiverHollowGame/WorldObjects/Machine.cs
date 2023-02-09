@@ -171,6 +171,11 @@ namespace RiverHollow.WorldObjects
             CraftingSlots[capacityIndex].CraftTime = 0;
         }
 
+        public bool SufficientStamina()
+        {
+            return !CraftDaily && PlayerManager.Stamina >= Constants.ACTION_COST / 2;
+        }
+
 
         /// <summary>
         /// Called by the HUDCraftingMenu to craft the selected item.
@@ -200,20 +205,20 @@ namespace RiverHollow.WorldObjects
                     }
                 }
             }
-            else if (Kitchen)
-            {
-                if (CurrentMap.BuildingID != -1 && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
-                {
-                    TownManager.AddToKitchen(DataManager.CraftItem(itemToCraft.ID));
-                }
-            }
             else if (InventoryManager.HasSpaceInInventory(itemToCraft.ID, 1)
-                && PlayerManager.Stamina >= Constants.ACTION_COST / 2 
+                && SufficientStamina()
                 && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
             {
                 success = true;
                 PlayerManager.DecreaseStamina(Constants.ACTION_COST / 2);
-                InventoryManager.AddToInventory(itemToCraft.ID, itemToCraft.Number);
+                if (Kitchen && CurrentMap.BuildingID == TownManager.Inn.ID)
+                {
+                    TownManager.AddToKitchen(DataManager.CraftItem(itemToCraft.ID));
+                }
+                else
+                {
+                    InventoryManager.AddToInventory(itemToCraft.ID, itemToCraft.Number);
+                }
             }
 
             if (success && !string.IsNullOrEmpty(_sEffectWorking))

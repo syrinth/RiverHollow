@@ -349,7 +349,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
             }
 
-            _btnBuild.Enable(InventoryManager.HasSufficientItems(chosenItem.GetRequiredItems()) && !_objMachine.CapacityFull());
+            _btnBuild.Enable(InventoryManager.HasSufficientItems(chosenItem.GetRequiredItems()) && !_objMachine.CapacityFull() && _objMachine.SufficientStamina());
         }
     }
 }
