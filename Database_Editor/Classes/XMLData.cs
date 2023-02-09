@@ -96,6 +96,10 @@ namespace Database_Editor.Classes
             return rv;
         }
 
+        public bool HasTag(string key)
+        {
+            return _diTags.ContainsKey(key);
+        }
         public string GetTagValue(string key)
         {
             if (_diTags.ContainsKey(key)) { return _diTags[key]; }

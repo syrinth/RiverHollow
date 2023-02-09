@@ -54,7 +54,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\ItemXMLData.cs" />
     <Compile Include="Classes\XMLCollection.cs" />
     <Compile Include="Classes\TMXData.cs" />
     <Compile Include="Classes\Constants.cs" />
