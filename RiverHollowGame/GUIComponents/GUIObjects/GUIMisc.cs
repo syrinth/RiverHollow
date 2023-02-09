@@ -253,7 +253,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public override void Draw(SpriteBatch spriteBatch)
         {
             _gImg.Draw(spriteBatch);
-            if (ItemObject.Stacks() && _gText != null && DrawNumber) {
+            if ((DrawNumber || ItemObject.Stacks()) && _gText != null) {
                 _gText.Draw(spriteBatch);
             }
         }
@@ -353,6 +353,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             foreach (KeyValuePair<int, int> kvp in requiredToMake)
             {
                 GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
+                box.DrawNumber(true);
 
                 if (list.Count == 0) { box.AnchorToInnerSide(_window, SideEnum.BottomRight); }
                 else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Left, SideEnum.Bottom); }
