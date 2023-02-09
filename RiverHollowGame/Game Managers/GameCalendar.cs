@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.SaveManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {
@@ -11,11 +12,8 @@ namespace RiverHollow.Game_Managers
         //One day goes from 6 AM - 2 AM => 20 hours
         //Each hour should be one minute
         //Every 10 minutes is 10 seconds real time.
-        static string[] ListSeasons = { "Spring", "Summer", "Fall", "Winter" };
-        static string[] ListDays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
-
-        public static int CurrentSeason { get; private set; }
-        public static int DayOfWeek { get; private set; }
+        public static SeasonEnum CurrentSeason { get; private set; }
+        public static DayEnum DayOfWeek { get; private set; }
         public static int CurrentHour { get; private set; }
         public static int CurrentMin { get; private set; }
         public static int CurrentDay { get; private set; }
@@ -29,9 +27,9 @@ namespace RiverHollow.Game_Managers
 
         public static void NewCalendar()
         {
-            DayOfWeek = 0;
             CurrentDay = 1;
-            CurrentSeason = 0;
+            DayOfWeek = DayEnum.Monday;
+            CurrentSeason = SeasonEnum.Spring;
             CurrentHour = Constants.CALENDAR_NEW_DAY_HOUR;
             CurrentMin = Constants.CALENDAR_NEW_DAY_MIN;
             _bHasNightFallen = false;
@@ -124,23 +122,47 @@ namespace RiverHollow.Game_Managers
             _bHasNightFallen = false;
             CurrentHour = Constants.CALENDAR_NEW_DAY_HOUR;
             CurrentMin = Constants.CALENDAR_NEW_DAY_MIN;
-            if(DayOfWeek < ListDays.Length - 1) { DayOfWeek++; }
-            else { DayOfWeek = 0; }
+            if (DayOfWeek == DayEnum.Sunday) { DayOfWeek = DayEnum.Monday; }
+            else { DayOfWeek++; }
 
             if(CurrentDay == Constants.CALENDAR_DAYS_IN_MONTH)
             {
                 CurrentDay = 1;
-                if (CurrentSeason == 3) { CurrentSeason = 0; }
-                else { CurrentSeason++; }
+                if (CurrentSeason == SeasonEnum.Winter) { CurrentSeason = SeasonEnum.Spring; }
+                else
+                {
+                    CurrentSeason++;
+                }
             }
             else { CurrentDay++; }
 
             EnvironmentManager.RollForWeatherEffects();
         }
 
+        public static int Nightfall()
+        {
+            switch (CurrentSeason)
+            {
+                case SeasonEnum.Summer:
+                    return Constants.NIGHTFALL_LATE;
+                case SeasonEnum.Winter:
+                    return Constants.NIGHTFALL_EARLY;
+                default:
+                    return Constants.NIGHTFALL_STANDARD;
+            }
+        }
         public static bool IsNight()
         {
             return CurrentHour >= 18;
+        }
+
+        public static void GoToNightfall()
+        {
+            if (CurrentHour < Nightfall())
+            {
+                CurrentHour = Nightfall();
+                CurrentMin = 0;
+            }
         }
 
         public static string GetTime()
@@ -148,24 +170,14 @@ namespace RiverHollow.Game_Managers
             return CurrentHour + ":" + CurrentMin.ToString("00");
         }
 
-        public static string GetDayOfWeek()
-        {
-            return ListDays[DayOfWeek];
-        }
-
         public static string GetCurrentSeason()
         {
-            return ListSeasons[CurrentSeason];
+            return Util.GetEnumString(CurrentSeason);
         }
 
         public static string GetSeason(int val)
         {
-            return ListSeasons[val];
-        }
-
-        public static string GetSeason()
-        {
-            return ListSeasons[CurrentSeason];
+            return Util.GetEnumString((SeasonEnum)val);
         }
 
         /// <summary>
@@ -190,8 +202,8 @@ namespace RiverHollow.Game_Managers
             _timer = new RHTimer(Constants.CALENDAR_MINUTES_PER_SECOND);
 
             CurrentDay = d.dayOfMonth;
-            DayOfWeek = d.dayOfWeek;
-            CurrentSeason = d.currSeason;
+            DayOfWeek = (DayEnum)d.dayOfWeek;
+            CurrentSeason = (SeasonEnum)d.currSeason;
             _bHasNightFallen = false;
 
             CurrentHour = Constants.CALENDAR_NEW_DAY_HOUR;
@@ -202,9 +214,9 @@ namespace RiverHollow.Game_Managers
         {
             return new CalendarData
             {
-                dayOfWeek = DayOfWeek,
+                dayOfWeek = (int)DayOfWeek,
                 dayOfMonth = CurrentDay,
-                currSeason = CurrentSeason
+                currSeason = (int)CurrentSeason
             };
         }
     }

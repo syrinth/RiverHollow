@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Name:Save][Text:Save and end the day?][Selection:YesNo][Trigger:EndDay]</Value>
+      <Value>[Name:Selection_Sleep][Text:Go to sleep and save][TextVerb:EndDay]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -272,6 +272,14 @@
 	<Item>
       <Key>67</Key>
       <Value>[Name:Selection_Sell][Text:Sell][TextVerb:Sell]</Value>
+    </Item>
+	<Item>
+      <Key>68</Key>
+      <Value>[Name:Selection_Bed][Text:Take a nap?][Selection:Bed]</Value>
+    </Item>
+	<Item>
+      <Key>69</Key>
+      <Value>[Name:Selection_Nightfall][Text:Sleep until nightfall][TextVerb:GoToNight]</Value>
     </Item>
   </Asset>
 </XnaContent>

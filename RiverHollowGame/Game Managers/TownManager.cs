@@ -170,7 +170,7 @@ namespace RiverHollow.Game_Managers
             int successChance = Constants.BASE_TRAVELER_RATE + IncreasedTravelerChance();
             do {
                 //Guaranteed at least one set of Travelers/week
-                if ((GameCalendar.DayOfWeek == 6 && !_bTravelersCame) ||  RHRandom.Instance().RollPercent(successChance))
+                if ((GameCalendar.DayOfWeek == DayEnum.Sunday && !_bTravelersCame) ||  RHRandom.Instance().RollPercent(successChance))
                 {
                     _bTravelersCame = true;
 

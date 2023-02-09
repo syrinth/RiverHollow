@@ -4,9 +4,9 @@
     {
         public enum DataType { Action, NPC, Job, Item, Light, Monster, StatusEffect, Task, WorldObject, Upgrade };
 
-        public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, Sell, Propose, Date, Option_0, Option_1, Option_2, Option_3 };
-        public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop };
-        public enum TextEntryTriggerEnum { None, UseItem, ConfirmPurchase, EndDay, Exit, Donate, PetFollow, PetUnfollow, GetBaby }
+        public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, Sell, Propose, Date, EndDay, GoToNight, Option_0, Option_1, Option_2, Option_3 };
+        public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Bed };
+        public enum TextEntryTriggerEnum { None, UseItem, ConfirmPurchase, Exit, Donate, PetFollow, PetUnfollow, GetBaby }
 
         public enum SpawnTypeEnum { Item, Object, Mob };
         public enum RarityEnum { C, U, R, M };
@@ -19,6 +19,7 @@
         public enum DisplayTypeEnum { Inventory, Ship };
 
         public enum SeasonEnum { None, Spring, Summer, Fall, Winter };
+        public enum DayEnum { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday };
         public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };
         public enum DirectionEnum { None, Down, Right, Up, Left };
         public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };

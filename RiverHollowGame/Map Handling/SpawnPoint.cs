@@ -282,7 +282,7 @@ namespace RiverHollow.Map_Handling
             {
                 foreach (var season in seasonList)
                 {
-                    if (season == Util.ParseEnum<SeasonEnum>(GameCalendar.GetSeason()))
+                    if (season == GameCalendar.CurrentSeason)
                     {
                         validSeason = true;
                         break;

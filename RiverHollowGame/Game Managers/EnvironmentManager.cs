@@ -148,8 +148,14 @@ namespace RiverHollow.Game_Managers
             if (roll > 2 || (_iSeasonPrecipDays < Constants.MINIMUM_DAYS_OF_PRECIPITATION && GameCalendar.CurrentDay + _iSeasonPrecipDays - 1 == Constants.CALENDAR_DAYS_IN_MONTH))
             {
                 _iSeasonPrecipDays++;
-                if (GameCalendar.CurrentSeason == 0) { _eCurrentWeather = WeatherEnum.Raining; }
-                else if (GameCalendar.CurrentSeason == 3) { _eCurrentWeather = WeatherEnum.Snowing; }
+                if (GameCalendar.CurrentSeason == SeasonEnum.Winter)
+                {
+                    _eCurrentWeather = WeatherEnum.Snowing;
+                }
+                else
+                {
+                    _eCurrentWeather = WeatherEnum.Raining;
+                }
             }
             else { _eCurrentWeather = WeatherEnum.Sunny; }
         }

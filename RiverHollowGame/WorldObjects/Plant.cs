@@ -200,7 +200,7 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        public bool InSeason() { return Util.GetEnumString(_eSeason).Equals(GameCalendar.GetSeason(GameCalendar.CurrentSeason)); }
+        public bool InSeason() { return Util.GetEnumString(_eSeason).Equals(GameCalendar.GetCurrentSeason()); }
 
         /// <summary>
         /// Check if the plant has finished growing or not.

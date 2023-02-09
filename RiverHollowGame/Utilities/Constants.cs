@@ -8,10 +8,11 @@
         public const string PLAYER_HOME_NAME = "mapHouse_Player";
         public const float PLAYER_STARTING_STAMINA = 100f;
         public const float PLAYER_STARTING_HP = 10f;
+        public const int STAMINA_NAP_RECOVERY = 20;
 
         public const float INVULN_PERIOD = 0.5f;
         public const float FLICKER_PERIOD = 0.1f;
-        public const double MOB_STUN_TIME = 5;
+        public const float MOB_STUN_TIME = 5;
         public const float WANDER_COUNTDOWN = 2.5f;
         public const float PUSH_COOLDOWN = 0.1f;
 
@@ -26,9 +27,12 @@
         public const float ITEM_BOUNCE_SPEED = 0.2f;
 
         public const int CALENDAR_DAYS_IN_MONTH = 28;
-        public const int CALENDAR_MINUTES_PER_SECOND = 10;
-        public const int CALENDAR_NEW_DAY_HOUR = 14;
+        public const int CALENDAR_MINUTES_PER_SECOND = 1;
+        public const int CALENDAR_NEW_DAY_HOUR = 8;
         public const int CALENDAR_NEW_DAY_MIN = 0;
+        public const int NIGHTFALL_STANDARD = 18;
+        public const int NIGHTFALL_LATE = 21;
+        public const int NIGHTFALL_EARLY = 16;
 
         public const string TRIGGER_MOB_OPEN = "MOB";
         public const string TRIGGER_ITEM_OPEN = "VALID_ITEM";

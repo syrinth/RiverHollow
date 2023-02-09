@@ -6,6 +6,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.GUIComponents.Screens.HUDScreens.RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
+using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -65,6 +66,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     break;
                 case TextEntrySelectionEnum.Shop:
                     AddShopOptions();
+                    break;
+                case TextEntrySelectionEnum.Bed:
+                    AddBedOptions();
                     break;
                 default:
                     break;
@@ -132,6 +136,18 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
                 AddOptions(liCommands);
             }
+        }
+
+        private void AddBedOptions()
+        {
+            List<TextEntry> liCommands = new List<TextEntry>
+            {
+                DataManager.GetGameTextEntry("Selection_Sleep"),
+                DataManager.GetGameTextEntry("Selection_Nightfall"),
+                DataManager.GetGameTextEntry("Selection_NeverMind")
+            };
+
+            AddOptions(liCommands);
         }
 
         /// <summary>
@@ -225,6 +241,19 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             TalkingActor npc = GameManager.CurrentNPC;
             switch (chosenAction.TextVerb)
             {
+                case TextEntryVerbEnum.EndDay:
+                    Vector2 pos = PlayerManager.PlayerActor.CollisionCenter.ToVector2();
+                    PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
+                    GUIManager.SetScreen(new DayEndScreen());
+                    break;
+                case TextEntryVerbEnum.GoToNight:
+                    MapManager.FadeToNewMap(MapManager.CurrentMap, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]);
+                    if (GameCalendar.CurrentHour <= GameCalendar.Nightfall())
+                    {
+                        PlayerManager.IncreaseStamina(Constants.STAMINA_NAP_RECOVERY);
+                    }
+                    GameCalendar.GoToNightfall();
+                    break;
                 case TextEntryVerbEnum.Buy:
                     npc?.OpenShop();
                     break;
@@ -289,11 +318,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             break;
                         case TextEntryTriggerEnum.Donate:
                             ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;
-                            break;
-                        case TextEntryTriggerEnum.EndDay:
-                            Vector2 pos = PlayerManager.PlayerActor.CollisionCenter.ToVector2();
-                            PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
-                            GUIManager.SetScreen(new DayEndScreen());
                             break;
                         case TextEntryTriggerEnum.Exit:
                             break;

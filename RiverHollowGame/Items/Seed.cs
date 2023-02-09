@@ -35,7 +35,7 @@ namespace RiverHollow.Items
 
         public bool InSeason() {
             string mySeason = DataManager.GetItemDictionaryKey(ID, "Season");
-            return mySeason.Equals(GameCalendar.GetSeason(GameCalendar.CurrentSeason));
+            return mySeason.Equals(GameCalendar.GetCurrentSeason());
         }
     }
 }
