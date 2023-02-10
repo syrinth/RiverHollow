@@ -69,6 +69,7 @@ namespace RiverHollow.Map_Handling
         private List<RHTile> _liTestTiles;
         private List<WorldActor> _liActors;
         protected List<Mob> _liMobs;
+        public IList<Mob> Mobs { get { return _liMobs.AsReadOnly(); } }
         public List<WorldActor> ToAdd;
         private List<Building> _liBuildings;
         private List<WorldObject> _liPlacedWorldObjects;
@@ -970,7 +971,7 @@ namespace RiverHollow.Map_Handling
                         ErrorManager.TrackError();
                     }
 
-                    if (collisionTiles[i] == null || !collisionTiles[i].Passable())
+                    if (collisionTiles[i] == null || !collisionTiles[i].Passable() && !collisionTiles[i].Contains(traveler))
                     {
                         passable = false;
                         break;
@@ -1088,7 +1089,7 @@ namespace RiverHollow.Map_Handling
             }
 
             //If the actor is not the Player Character, add the Player Character's CollisionBox to the list as well
-            if (actor != PlayerManager.PlayerActor && MapManager.CurrentMap == actor.CurrentMap && !actor.IsActorType(WorldActorTypeEnum.Pet) && !actor.IsActorType(WorldActorTypeEnum.Mob))
+            if (actor != PlayerManager.PlayerActor && MapManager.CurrentMap == actor.CurrentMap && actor.CollidesWithPlayer())
             {
                 list.Add(new KeyValuePair<Rectangle, WorldActor>(PlayerManager.PlayerActor.CollisionBox, PlayerManager.PlayerActor));
             }
@@ -1192,13 +1193,13 @@ namespace RiverHollow.Map_Handling
         /// 
         /// Also checks for collisions with objects that will change maps. If we connect with one, do not move by command anymore.
         /// </summary>
-        /// <param name="c">The moving WorldActor</param>
+        /// <param name="actor">The moving WorldActor</param>
         /// <param name="testX">Movement along the X Axis</param>
         /// <param name="testY">Movement along the Y Axis</param>
         /// <param name="dir">Reference to the direction to move the WorldActor</param>
         /// <param name="ignoreCollisions">Whether or not to check collisions</param>
         /// <returns>False if we are to prevent movement</returns>
-        public bool CheckForCollisions(WorldActor c, Vector2 position, Rectangle collision, ref Vector2 dir, ref bool impeded, bool ignoreCollisions = false)
+        public bool CheckForCollisions(WorldActor actor, Vector2 position, Rectangle collision, ref Vector2 dir, ref bool impeded, bool ignoreCollisions = false)
         {
             bool rv = true;
 
@@ -1206,14 +1207,33 @@ namespace RiverHollow.Map_Handling
             Rectangle testRectY = Util.FloatRectangle(position.X, position.Y + dir.Y, collision.Width, collision.Height);
 
             //Checking for a MapChange takes priority overlooking for collisions.
-            if (CheckForMapChange(c, testRectX) || CheckForMapChange(c, testRectY))
+            if (!actor.Wandering && (CheckForMapChange(actor, testRectX) || CheckForMapChange(actor, testRectY)))
             {
                 return false;
             }
             else if (!ignoreCollisions)
             {
-                List<KeyValuePair<Rectangle, WorldActor>> list = GetPossibleCollisions(c, dir);
-                ChangeDir(c, list, ref dir, ref impeded);
+                List<KeyValuePair<Rectangle, WorldActor>> list = GetPossibleCollisions(actor, dir);
+                ChangeDir(actor, list, ref dir, ref impeded);
+
+                Rectangle newBox = actor.CollisionBox;
+
+                int newX = 0;
+                if(dir.X > 0) { newX = (int)Math.Ceiling(dir.X); }
+                else if (dir.X > 0) { newX = (int)Math.Floor(dir.X); }
+
+                int newY = 0;
+                if (dir.Y > 0) { newY = (int)Math.Ceiling(dir.Y); }
+                else if (dir.Y > 0) { newY = (int)Math.Floor(dir.Y); }
+
+                newBox.Location += new Point(newX, newY);
+
+                Rectangle map = new Rectangle(0, 0, Map.WidthInPixels, Map.HeightInPixels);
+                if (actor != PlayerManager.PlayerActor && !map.Contains(newBox))
+                {
+                    rv = false;
+                    actor.SetMoveTo(Vector2.Zero);
+                }
             }
 
             return rv;

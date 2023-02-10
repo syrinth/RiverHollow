@@ -16,7 +16,7 @@ namespace RiverHollow.Items
     public class Tool : Item
     {
         public ToolEnum ToolType => DataManager.GetEnumByIDKey<ToolEnum>(ID, "Subtype", DataType.Item);
-        public int StaminaCost => DataManager.GetIntByIDKey(ID, "Stam", DataType.Item);
+        public int StaminaCost => DataManager.GetIntByIDKey(ID, "Stam", DataType.Item, 0);
         public int ToolLevel => DataManager.GetIntByIDKey(ID, "Level", DataType.Item);
 
         protected int HitAt => DataManager.GetIntByIDKey(ID, "HitAt", DataType.Item);

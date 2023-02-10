@@ -506,9 +506,18 @@ namespace RiverHollow.Utilities
         }
         public static int ParseInt(string str)
         {
-            int rv = -1;
+            int rv;
+            if (!int.TryParse(str, out rv))
+            {
+                rv = -1;
+            }
 
-            if(!int.TryParse(str, out rv))
+            return rv;
+        }
+        public static float ParseFloat(string str)
+        {
+            float rv;
+            if (!float.TryParse(str, out rv))
             {
                 rv = -1;
             }

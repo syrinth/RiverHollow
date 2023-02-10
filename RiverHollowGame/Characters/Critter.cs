@@ -42,12 +42,14 @@ namespace RiverHollow.Characters
                     PlayAnimation(VerbEnum.Action1, Facing);
                 }
 
-                if (PlayerManager.PlayerInRange(_sprBody.Center, 80))
+                CheckFlee(PlayerManager.PlayerActor);
+                foreach(Mob npc in CurrentMap.Mobs)
                 {
-                    _bFlee = true;
-                    _animationTimer.Stop();
-
-                    PlayAnimation(VerbEnum.Action2, Facing);
+                    CheckFlee(npc);
+                    if (_bFlee)
+                    {
+                        break;
+                    }
                 }
             }
             else
@@ -63,6 +65,17 @@ namespace RiverHollow.Characters
                 {
                     CurrentMap.RemoveActor(this);
                 }
+            }
+        }
+
+        private void CheckFlee(WorldActor actor)
+        {
+            if (Util.GetDistance(actor.Center.ToPoint(), CollisionCenter) <= 80)
+            {
+                _bFlee = true;
+                _animationTimer.Stop();
+
+                PlayAnimation(VerbEnum.Action2, Facing);
             }
         }
 

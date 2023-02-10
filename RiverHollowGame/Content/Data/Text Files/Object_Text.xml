@@ -426,34 +426,6 @@
       <Value>[Name:Apothecary]</Value>
     </Item>
     <Item>
-      <Key>Cutscene_0</Key>
-      <Value>[Name:Combat_Intro]</Value>
-    </Item>
-    <Item>
-      <Key>Cutscene_1</Key>
-      <Value>[Name:Intro]</Value>
-    </Item>
-    <Item>
-      <Key>Cutscene_2</Key>
-      <Value>[Name:Workshop]</Value>
-    </Item>
-    <Item>
-      <Key>Cutscene_3</Key>
-      <Value>[Name:Apothecary]</Value>
-    </Item>
-    <Item>
-      <Key>Cutscene_4</Key>
-      <Value>[Name:Smithy]</Value>
-    </Item>
-    <Item>
-      <Key>Cutscene_5</Key>
-      <Value>[Name:Helen's Home]</Value>
-    </Item>
-    <Item>
-      <Key>Cutscene_6</Key>
-      <Value>[Name:]</Value>
-    </Item>
-    <Item>
       <Key>Item_0</Key>
       <Value>[Name:Stone][Description:Stone, for building things]</Value>
     </Item>
@@ -695,7 +667,7 @@
     </Item>
     <Item>
       <Key>Item_60</Key>
-      <Value>[Name:Wooden Plank][Description:]</Value>
+      <Value>[Name:Wooden Plank]</Value>
     </Item>
     <Item>
       <Key>Item_61</Key>
@@ -703,47 +675,47 @@
     </Item>
     <Item>
       <Key>Item_62</Key>
-      <Value>[Name:Coal][Description:]</Value>
+      <Value>[Name:Coal]</Value>
     </Item>
     <Item>
       <Key>Item_63</Key>
-      <Value>[Name:Aether Shroom][Description:]</Value>
+      <Value>[Name:Aether Shroom]</Value>
     </Item>
     <Item>
       <Key>Item_64</Key>
-      <Value>[Name:Vision Shroom][Description:]</Value>
+      <Value>[Name:Vision Shroom]</Value>
     </Item>
     <Item>
       <Key>Item_65</Key>
-      <Value>[Name:Dream Root][Description:]</Value>
+      <Value>[Name:Dream Root]</Value>
     </Item>
     <Item>
       <Key>Item_66</Key>
-      <Value>[Name:Clay][Description:]</Value>
+      <Value>[Name:Clay]</Value>
     </Item>
     <Item>
       <Key>Item_67</Key>
-      <Value>[Name:Witchstone][Description:]</Value>
+      <Value>[Name:Witchstone]</Value>
     </Item>
     <Item>
       <Key>Item_68</Key>
-      <Value>[Name:Witchstone Block][Description:]</Value>
+      <Value>[Name:Witchstone Block]</Value>
     </Item>
     <Item>
       <Key>Item_69</Key>
-      <Value>[Name:Spider Silk][Description:]</Value>
+      <Value>[Name:Spider Silk]</Value>
     </Item>
     <Item>
       <Key>Item_70</Key>
-      <Value>[Name:Glow Flower][Description:]</Value>
+      <Value>[Name:Glow Flower]</Value>
     </Item>
     <Item>
       <Key>Item_71</Key>
-      <Value>[Name:Cave Moss][Description:]</Value>
+      <Value>[Name:Cave Moss]</Value>
     </Item>
     <Item>
       <Key>Item_72</Key>
-      <Value>[Name:Enchanted Clay][Description:]</Value>
+      <Value>[Name:Enchanted Clay]</Value>
     </Item>
     <Item>
       <Key>Item_73</Key>
@@ -751,7 +723,7 @@
     </Item>
     <Item>
       <Key>Item_74</Key>
-      <Value>[Name:Vampire Berry][Description:]</Value>
+      <Value>[Name:Vampire Berry]</Value>
     </Item>
     <Item>
       <Key>Item_75</Key>
@@ -771,75 +743,75 @@
     </Item>
     <Item>
       <Key>Item_79</Key>
-      <Value>[Name:Glow Flower][Description:]</Value>
+      <Value>[Name:Glow Flower]</Value>
     </Item>
     <Item>
       <Key>Item_80</Key>
-      <Value>[Name:Mage's Cup Seeds][Description:]</Value>
+      <Value>[Name:Mage's Cup Seeds]</Value>
     </Item>
     <Item>
       <Key>Item_81</Key>
-      <Value>[Name:Trumpet Seeds][Description:]</Value>
+      <Value>[Name:Trumpet Seeds]</Value>
     </Item>
     <Item>
       <Key>Item_82</Key>
-      <Value>[Name:Piff-Puff Seeds][Description:]</Value>
+      <Value>[Name:Piff-Puff Seeds]</Value>
     </Item>
     <Item>
       <Key>Item_83</Key>
-      <Value>[Name:Spirean Seed][Description:]</Value>
+      <Value>[Name:Spirean Seed]</Value>
     </Item>
     <Item>
       <Key>Item_84</Key>
-      <Value>[Name:Honey Bee][Description:]</Value>
+      <Value>[Name:Honey Bee]</Value>
     </Item>
     <Item>
       <Key>Item_85</Key>
-      <Value>[Name:Black Iris Seeds][Description:]</Value>
+      <Value>[Name:Black Iris Seeds]</Value>
     </Item>
     <Item>
       <Key>Item_86</Key>
-      <Value>[Name:Blood Rose Seeds][Description:]</Value>
+      <Value>[Name:Blood Rose Seeds]</Value>
     </Item>
     <Item>
       <Key>Item_87</Key>
-      <Value>[Name:Windblossom Seeds][Description:]</Value>
+      <Value>[Name:Windblossom Seeds]</Value>
     </Item>
     <Item>
       <Key>Item_88</Key>
-      <Value>[Name:Calla Seeds][Description:]</Value>
+      <Value>[Name:Calla Seeds]</Value>
     </Item>
     <Item>
       <Key>Item_89</Key>
-      <Value>[Name:Spirean][Description:]</Value>
+      <Value>[Name:Spirean]</Value>
     </Item>
     <Item>
       <Key>Item_90</Key>
-      <Value>[Name:Trumpet Flower][Description:]</Value>
+      <Value>[Name:Trumpet Flower]</Value>
     </Item>
     <Item>
       <Key>Item_91</Key>
-      <Value>[Name:Calla][Description:]</Value>
+      <Value>[Name:Calla]</Value>
     </Item>
     <Item>
       <Key>Item_92</Key>
-      <Value>[Name:Black Iris][Description:]</Value>
+      <Value>[Name:Black Iris]</Value>
     </Item>
     <Item>
       <Key>Item_93</Key>
-      <Value>[Name:Piff-Puff][Description:]</Value>
+      <Value>[Name:Piff-Puff]</Value>
     </Item>
     <Item>
       <Key>Item_94</Key>
-      <Value>[Name:Blood Rose][Description:]</Value>
+      <Value>[Name:Blood Rose]</Value>
     </Item>
     <Item>
       <Key>Item_95</Key>
-      <Value>[Name:Mage's Cup][Description:]</Value>
+      <Value>[Name:Mage's Cup]</Value>
     </Item>
     <Item>
       <Key>Item_96</Key>
-      <Value>[Name:Windblossom][Description:]</Value>
+      <Value>[Name:Windblossom]</Value>
     </Item>
     <Item>
       <Key>Item_97</Key>
@@ -939,7 +911,7 @@
     </Item>
     <Item>
       <Key>Item_121</Key>
-      <Value>[Name:Sword][Description:]</Value>
+      <Value>[Name:Sword]</Value>
     </Item>
     <Item>
       <Key>Item_122</Key>
@@ -979,7 +951,7 @@
     </Item>
     <Item>
       <Key>Item_131</Key>
-      <Value>[Name:Enchanted Ring][Description:]</Value>
+      <Value>[Name:Enchanted Ring]</Value>
     </Item>
     <Item>
       <Key>Item_132</Key>
@@ -1011,43 +983,43 @@
     </Item>
     <Item>
       <Key>Item_139</Key>
-      <Value>[Name:Scythe][Description:]</Value>
+      <Value>[Name:Scythe]</Value>
     </Item>
     <Item>
       <Key>Item_140</Key>
-      <Value>[Name:Backpack][Description:]</Value>
+      <Value>[Name:Backpack]</Value>
     </Item>
     <Item>
       <Key>Item_141</Key>
-      <Value>[Name:Canvas Bag][Description:]</Value>
+      <Value>[Name:Canvas Bag]</Value>
     </Item>
     <Item>
       <Key>Item_142</Key>
-      <Value>[Name:Windblossom Honey][Description:]</Value>
+      <Value>[Name:Windblossom Honey]</Value>
     </Item>
     <Item>
       <Key>Item_143</Key>
-      <Value>[Name:Piff-Puff Honey][Description:]</Value>
+      <Value>[Name:Piff-Puff Honey]</Value>
     </Item>
     <Item>
       <Key>Item_144</Key>
-      <Value>[Name:Calla Honey][Description:]</Value>
+      <Value>[Name:Calla Honey]</Value>
     </Item>
     <Item>
       <Key>Item_145</Key>
-      <Value>[Name:Rose Honey][Description:]</Value>
+      <Value>[Name:Rose Honey]</Value>
     </Item>
     <Item>
       <Key>Item_146</Key>
-      <Value>[Name:Trumpet Honey][Description:]</Value>
+      <Value>[Name:Trumpet Honey]</Value>
     </Item>
     <Item>
       <Key>Item_147</Key>
-      <Value>[Name:Glow Honey][Description:]</Value>
+      <Value>[Name:Glow Honey]</Value>
     </Item>
     <Item>
       <Key>Item_148</Key>
-      <Value>[Name:Cave Berry][Description:]</Value>
+      <Value>[Name:Cave Berry]</Value>
     </Item>
     <Item>
       <Key>Item_149</Key>
@@ -1075,15 +1047,15 @@
     </Item>
     <Item>
       <Key>Item_155</Key>
-      <Value>[Name:Blue Jelly][Description:]</Value>
+      <Value>[Name:Blue Jelly]</Value>
     </Item>
     <Item>
       <Key>Item_156</Key>
-      <Value>[Name:YumYum Slime][Description:]</Value>
+      <Value>[Name:YumYum Slime]</Value>
     </Item>
     <Item>
       <Key>Item_157</Key>
-      <Value>[Name:Muck Root][Description:]</Value>
+      <Value>[Name:Muck Root]</Value>
     </Item>
     <Item>
       <Key>Item_158</Key>
@@ -1091,23 +1063,23 @@
     </Item>
     <Item>
       <Key>Item_159</Key>
-      <Value>[Name:Black Honey][Description:]</Value>
+      <Value>[Name:Black Honey]</Value>
     </Item>
     <Item>
       <Key>Item_160</Key>
-      <Value>[Name:Mages Honey][Description:]</Value>
+      <Value>[Name:Mages Honey]</Value>
     </Item>
     <Item>
       <Key>Item_161</Key>
-      <Value>[Name:Spirean Honey][Description:]</Value>
+      <Value>[Name:Spirean Honey]</Value>
     </Item>
     <Item>
       <Key>Item_162</Key>
-      <Value>[Name:Juice Berry][Description:]</Value>
+      <Value>[Name:Juice Berry]</Value>
     </Item>
     <Item>
       <Key>Item_163</Key>
-      <Value>[Name:Sun Root][Description:]</Value>
+      <Value>[Name:Sun Root]</Value>
     </Item>
     <Item>
       <Key>Item_164</Key>
@@ -1163,7 +1135,7 @@
     </Item>
     <Item>
       <Key>Item_177</Key>
-      <Value>[Name:Horse ][Description:]</Value>
+      <Value>[Name:Horse ]</Value>
     </Item>
     <Item>
       <Key>Item_178</Key>
@@ -1175,23 +1147,23 @@
     </Item>
     <Item>
       <Key>Item_180</Key>
-      <Value>[Name:$WorldObject_38$ Blueprint][Description:]</Value>
+      <Value>[Name:$WorldObject_38$ Blueprint]</Value>
     </Item>
     <Item>
       <Key>Item_181</Key>
-      <Value>[Name:$Building_20$ Blueprint][Description:]</Value>
+      <Value>[Name:$Building_20$ Blueprint]</Value>
     </Item>
     <Item>
       <Key>Item_182</Key>
-      <Value>[Name:$Building_22$ Blueprint][Description:]</Value>
+      <Value>[Name:$Building_22$ Blueprint]</Value>
     </Item>
     <Item>
       <Key>Item_183</Key>
-      <Value>[Name:$Building_21$ Blueprint][Description:]</Value>
+      <Value>[Name:$Building_21$ Blueprint]</Value>
     </Item>
     <Item>
       <Key>Item_184</Key>
-      <Value>[Name:$Building_25$ Blueprint][Description:]</Value>
+      <Value>[Name:$Building_25$ Blueprint]</Value>
     </Item>
     <Item>
       <Key>Item_185</Key>
@@ -1215,23 +1187,23 @@
     </Item>
     <Item>
       <Key>Item_190</Key>
-      <Value>[Name:Ornate Ledger][Description:]</Value>
+      <Value>[Name:Ornate Ledger]</Value>
     </Item>
     <Item>
       <Key>Item_191</Key>
-      <Value>[Name:Staff of Ice][Description:]</Value>
+      <Value>[Name:Staff of Ice]</Value>
     </Item>
     <Item>
       <Key>Item_192</Key>
-      <Value>[Name:Cape of Blink][Description:]</Value>
+      <Value>[Name:Cape of Blink]</Value>
     </Item>
     <Item>
       <Key>Item_193</Key>
-      <Value>[Name:Sundries][Description:]</Value>
+      <Value>[Name:Sundries]</Value>
     </Item>
     <Item>
       <Key>Item_194</Key>
-      <Value>[Name:Copper Blade][Description:]</Value>
+      <Value>[Name:Copper Blade]</Value>
     </Item>
     <Item>
       <Key>Item_195</Key>
@@ -1239,11 +1211,11 @@
     </Item>
     <Item>
       <Key>Item_196</Key>
-      <Value>[Name:Eggs2][Description:]</Value>
+      <Value>[Name:Eggs2]</Value>
     </Item>
     <Item>
       <Key>Item_197</Key>
-      <Value>[Name:Eggs3][Description:]</Value>
+      <Value>[Name:Eggs3]</Value>
     </Item>
     <Item>
       <Key>WorldObject_0</Key>
@@ -1844,6 +1816,34 @@
     <Item>
       <Key>WorldObject_149</Key>
       <Value>[Name:Mushroom Pot]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_0</Key>
+      <Value>[Name:Combat_Intro]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_1</Key>
+      <Value>[Name:Intro]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_2</Key>
+      <Value>[Name:Workshop]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_3</Key>
+      <Value>[Name:Apothecary]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_4</Key>
+      <Value>[Name:Smithy]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_5</Key>
+      <Value>[Name:Helen's Home]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_6</Key>
+      <Value>[Name:]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -9,6 +9,7 @@ using RiverHollow.WorldObjects;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -62,7 +63,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 Item recipe = DataManager.CraftItem(recipes[i]);
                 GUIItemBox newBox = new GUIItemBox(recipe);
-                newBox.DrawNumber(true);
+                newBox.DrawNumber(ItemBoxDraw.Always);
                 if (i == 0)
                 {
                     _iSelectedItemID = recipe.ID;

@@ -20,6 +20,7 @@ namespace RiverHollow.Characters
         public int Damage => DataManager.GetIntByIDKey(ID, "Damage", DataType.NPC);
         private string[] LootData => Util.FindParams(DataManager.GetStringByIDKey(ID, "ItemID", DataType.NPC));
         public override float MaxHP => DataManager.GetIntByIDKey(ID, "HP", DataType.NPC);
+        public bool Skitter => DataManager.GetBoolByIDKey(ID, "Skitter", DataType.NPC);
 
         bool _bJump;
         int _iMaxRange = Constants.TILE_SIZE * 10;
@@ -34,9 +35,18 @@ namespace RiverHollow.Characters
         {
             CurrentHP = MaxHP;
 
-            _fBaseSpeed = 1;
+            _fBaseSpeed = DataManager.GetFloatByIDKey(ID, "Speed", DataType.NPC, 1);
             Invulnerable = false;
             Wandering = true;
+
+            if (Skitter)
+            {
+                _eCurrentState = NPCStateEnum.Wander;
+                _fBaseWanderTimer = 0.5f;
+                _iMinWander = 4;
+                _iMaxWander = 16;
+                _movementTimer = new RHTimer(_fBaseWanderTimer); 
+            }
 
             //_bJump = data.ContainsKey("Jump");
 
@@ -87,9 +97,14 @@ namespace RiverHollow.Characters
                                 SetMoveTo(Vector2.Zero);
                                 goto default;
                             }
+                            else if (MoveToLocation == Vector2.Zero)
+                            {
+                                Wander(gTime);
+                                goto default;
+                            }
                             else { goto case NPCStateEnum.Idle; }
                         case NPCStateEnum.Idle:
-                            if (CurrentMap == MapManager.CurrentMap && PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 8))
+                            if (!Skitter && CurrentMap == MapManager.CurrentMap && PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 8))
                             {
                                 ChangeState(NPCStateEnum.TrackPlayer);
                                 _vLeashPoint = new Vector2(CollisionBox.Left, CollisionBox.Top);
@@ -113,10 +128,6 @@ namespace RiverHollow.Characters
                             ProcessStateEnum(gTime, false);
                             if (CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
                             {
-                                SetMoveTo(Vector2.Zero);
-                                _liTilePath.Clear();
-                                ChangeState(NPCStateEnum.Idle);
-
                                 PlayerManager.PlayerActor.DealDamage(Damage, CollisionBox);
                             }
                             break;
@@ -130,6 +141,38 @@ namespace RiverHollow.Characters
         {
             base.Draw(spriteBatch, userLayerDepth);
             //if (_bAlert) { _sprAlert.Draw(spriteBatch, userLayerDepth); }
+        }
+
+        public override void ChangeState(NPCStateEnum state)
+        {
+            if (!Skitter)
+            {
+                base.ChangeState(state);
+            }
+        }
+        protected override void ProcessStateEnum(GameTime gTime, bool getInRange)
+        {
+            if (Wandering && _damageTimer == null)
+            {
+                switch (_eCurrentState)
+                {
+                    case NPCStateEnum.Alert:
+                        Alert();
+                        break;
+                    case NPCStateEnum.Idle:
+                        Idle(gTime);
+                        break;
+                    case NPCStateEnum.Wander:
+                        Wander(gTime);
+                        break;
+                    case NPCStateEnum.TrackPlayer:
+                        TrackPlayer(getInRange);
+                        break;
+                    case NPCStateEnum.Leashing:
+                        TravelManager.RequestPathing(this);
+                        break;
+                }
+            }
         }
 
         public Rectangle GetCollisionBox()
@@ -249,7 +292,9 @@ namespace RiverHollow.Characters
             if (rv)
             {
                 _sprBody.SetColor(Color.Red);
-                _eCurrentState = NPCStateEnum.Stun;
+                ChangeState(NPCStateEnum.Stun);
+                SetMoveTo(Vector2.Zero);
+                _bBumpedIntoSomething = true;
             }
 
             return rv;

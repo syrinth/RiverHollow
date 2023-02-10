@@ -38,7 +38,7 @@ namespace RiverHollow.GUIComponents.Screens
             for (int i = 0; i < Constants.MERCHANT_REQUEST_NUM; i++)
             {
                 boxes[i] = new GUIItemBox(DataManager.GetItem(_merchant.ChosenRequests[i]));
-                boxes[i].DrawNumber(false);
+                boxes[i].DrawNumber(ItemBoxDraw.Never);
                 if (i == 0) { boxes[i].ScaledMoveBy(32, 20); }
                 else { boxes[i].AnchorAndAlignToObject(boxes[i - 1], SideEnum.Right, SideEnum.Top, GameManager.ScaleIt(5)); }
 

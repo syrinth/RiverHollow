@@ -17,6 +17,7 @@
 
         public enum GameScreenEnum { Info, World };
         public enum DisplayTypeEnum { Inventory, Ship };
+        public enum ItemBoxDraw { Always, Never, OnlyStacks };
 
         public enum SeasonEnum { None, Spring, Summer, Fall, Winter };
         public enum DayEnum { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday };

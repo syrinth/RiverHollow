@@ -9,6 +9,7 @@ using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.WorldObjects;
+using System.ComponentModel.Design;
 
 namespace RiverHollow.Characters
 {
@@ -45,8 +46,7 @@ namespace RiverHollow.Characters
             }
         }
 
-        public override Vector2 CollisionBoxPosition => Position + new Vector2(2, 2);
-        public override Rectangle CollisionBox => ActiveMount != null ? ActiveMount.CollisionBox : new Rectangle((int)CollisionBoxPosition.X, (int)CollisionBoxPosition.Y, Width - 4, Constants.TILE_SIZE - 4);
+        public override Rectangle CollisionBox => ActiveMount != null ? ActiveMount.CollisionBox : base.CollisionBox;
 
         #region Clothing
         public Clothing Hat { get; private set; }
@@ -271,6 +271,26 @@ namespace RiverHollow.Characters
             {
                 spr.SetLinkedSprite(null);
             }
+        }
+
+        public override void DamageTimerFinished()
+        {
+            if (CurrentHP == 0) { PlayAnimation(AnimationEnum.KO); }
+            ClearCombatStates();
+            _bFlicker = true;
+            GetSprites().ForEach(x => x.SetColor(Color.White * (_bFlicker ? 1 : 0)));
+        }
+
+        public override bool DealDamage(int value, Rectangle hitbox)
+        {
+            bool rv = base.DealDamage(value, hitbox);
+            if (rv && CurrentHP == 0)
+            {
+                PlayAnimation(AnimationEnum.KO);
+                ClearCombatStates();
+            }
+
+            return rv;
         }
 
         public override void SetMoveTo(Vector2 v, bool update = true)

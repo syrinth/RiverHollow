@@ -79,9 +79,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _guiItem?.SetColor(c);
         }
 
-        public void DrawNumber(bool val)
+        public void DrawNumber(ItemBoxDraw val)
         {
-            _guiItem.DrawNumber = val;
+            _guiItem.DrawNumbers = val;
         }
 
         public void CompareNumToPlayer()

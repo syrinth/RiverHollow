@@ -72,8 +72,9 @@ namespace RiverHollow.Characters
 
         protected double _dCooldown = 0;
 
-        public virtual Vector2 CollisionBoxPosition => Position;
-        public virtual Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, Constants.TILE_SIZE);
+        public virtual Rectangle CollisionBox => new Rectangle((int)_sprBody.Position.X + CollisionOffset.X, (int)_sprBody.Position.Y + CollisionOffset.Y, Width, Constants.TILE_SIZE);
+        public Point CollisionOffset => new Point(0, Height - Constants.TILE_SIZE);
+        public Vector2 CollisionBoxPosition => CollisionBox.Location.ToVector2();
 
         public Point CollisionCenter => CollisionBox.Center;
         public virtual Rectangle HoverBox => new Rectangle((int)_sprBody.Position.X, (int)_sprBody.Position.Y, _sprBody.Width, _sprBody.Height);
@@ -88,9 +89,12 @@ namespace RiverHollow.Characters
         public float SpdMult = Constants.NPC_WALK_SPEED;
 
         #region Wander Properties
-        RHTimer _movementTimer;
+        protected RHTimer _movementTimer;
         protected bool _bFollow = false;
         protected bool _bIdleCooldown = false;
+        protected int _iMinWander = 8;
+        protected int _iMaxWander = 32;
+        protected float _fBaseWanderTimer = Constants.WANDER_COUNTDOWN;
 
         public bool Wandering { get; protected set; } = false;
         protected NPCStateEnum _eCurrentState = NPCStateEnum.Idle;
@@ -112,7 +116,7 @@ namespace RiverHollow.Characters
             ActorType = Util.ParseEnum<WorldActorTypeEnum>(stringData["Type"]);
 
             _liTilePath = new List<RHTile>();
-            _movementTimer = new RHTimer(Constants.WANDER_COUNTDOWN);
+            _movementTimer = new RHTimer(_fBaseWanderTimer);
 
             if (stringData.ContainsKey("Size"))
             {
@@ -133,7 +137,7 @@ namespace RiverHollow.Characters
                 base.Draw(spriteBatch, useLayerDepth);
                 if (Constants.DRAW_COLLISION)
                 {
-                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), CollisionBox, new Rectangle(160, 128, 2, 2), Color.White * 0.5f);
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), CollisionBox, new Rectangle(160, 128, 2, 2), Color.White * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, GetSprites()[0].LayerDepth - 1);
                 }
             }
         }
@@ -141,19 +145,14 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            if (!GamePaused() && CurrentHP > 0)
-            {
+            if (!GamePaused())
+            {                
                 if (HasVelocity()) { ApplyVelocity(); }
-                else { HandleMove(); }
+                else if (CurrentHP > 0) { HandleMove(); }
 
-                if (_damageTimer != null)
+                if (_damageTimer != null && _damageTimer.TickDown(gTime))
                 {
-                    if (_damageTimer.TickDown(gTime))
-                    {
-                        _eCurrentState = NPCStateEnum.Idle;
-                        _damageTimer = null;
-                        _vVelocity = Vector2.Zero;
-                    }
+                    DamageTimerFinished();
                 }
             }
         }
@@ -337,8 +336,21 @@ namespace RiverHollow.Characters
             SetMoveTo(Vector2.Zero);
             _movementTimer.Reset(Constants.WANDER_COUNTDOWN);
         }
+
+        public bool CollidesWithPlayer()
+        {
+            switch (ActorType)
+            {
+                case WorldActorTypeEnum.Mob:
+                case WorldActorTypeEnum.Mount:
+                case WorldActorTypeEnum.Critter:
+                    return false;
+            }
+
+            return true;
+        }
         public bool IsActorType(WorldActorTypeEnum act) { return ActorType == act; }
-        public void ChangeState(NPCStateEnum state)
+        public virtual void ChangeState(NPCStateEnum state)
         {
             _eCurrentState = state;
             switch (state)
@@ -358,7 +370,6 @@ namespace RiverHollow.Characters
                     break;
             }
         }
-
 
         #region Pathing
         public Thread CalculatePathThreaded()
@@ -421,11 +432,12 @@ namespace RiverHollow.Characters
 
                 bool impeded = false;
                 Vector2 initial = direction;
-                if (CurrentMap.CheckForCollisions(this, Position, CollisionBox, ref direction, ref impeded) && direction != Vector2.Zero)
+                if (CurrentMap.CheckForCollisions(this, CollisionBox.Location.ToVector2(), CollisionBox, ref direction, ref impeded) && direction != Vector2.Zero)
                 {
                     DetermineAnimationState(direction);
                     Position += direction * (impeded ? Constants.IMPEDED_SPEED : 1f);
                 }
+                else { _bBumpedIntoSomething = true; }
 
                 if(initial != direction)
                 {
@@ -504,7 +516,7 @@ namespace RiverHollow.Characters
             _bFollow = value;
         }
 
-        protected void ProcessStateEnum(GameTime gTime, bool getInRange)
+        protected virtual void ProcessStateEnum(GameTime gTime, bool getInRange)
         {
             if (Wandering && _damageTimer == null)
             {
@@ -565,7 +577,7 @@ namespace RiverHollow.Characters
                 Vector2 moveTo = Vector2.Zero;
                 while (moveTo == Vector2.Zero)
                 {
-                    _movementTimer.Reset(Constants.WANDER_COUNTDOWN + RHRandom.Instance().Next(4) * 0.25);
+                    _movementTimer.Reset(_fBaseWanderTimer + RHRandom.Instance().Next(4) * 0.25);
 
                     if (!_bIdleCooldown && RHRandom.Instance().RollPercent(20))
                     {
@@ -575,26 +587,10 @@ namespace RiverHollow.Characters
 
                     _bIdleCooldown = false;
 
-                    bool moveX = RHRandom.Instance().Next(0, 1) == 0;
+                    RHTile myTile = CurrentMap.GetTileByPixelPosition(CollisionCenter);
+                    var tileDir = Util.GetRandomItem(myTile.GetWalkableNeighbours());
 
-                    if (moveX)
-                    {
-                        moveTo = new Vector2(RHRandom.Instance().Next(8, 32), 0);
-                        if (RHRandom.Instance().Next(1, 2) == 1)
-                        {
-                            moveTo.X *= -1;
-                        }
-                    }
-                    else
-                    {
-                        moveTo = new Vector2(0, RHRandom.Instance().Next(8, 32));
-                        if (RHRandom.Instance().Next(1, 2) == 1)
-                        {
-                            moveTo.Y *= -1;
-                        }
-                    }
-
-                    moveTo = CurrentMap.GetFarthestUnblockedPath(Position + moveTo, this);
+                    moveTo = Position + (tileDir.Position - myTile.Position) * RHRandom.Instance().Next(_iMinWander, _iMaxWander);
                 }
 
                 SetMoveTo(moveTo);
@@ -608,6 +604,15 @@ namespace RiverHollow.Characters
         #endregion
 
         #region Combat Logic
+
+        public virtual void DamageTimerFinished()
+        {
+            if (CurrentHP == 0){ PlayAnimation(AnimationEnum.KO); }
+            else { ChangeState(NPCStateEnum.Idle); }
+
+            ClearCombatStates();
+        }
+
         public void RefillHealth()
         {
             CurrentHP = MaxHP;
@@ -620,19 +625,15 @@ namespace RiverHollow.Characters
         {
             bool rv = false;
 
-            if (!Invulnerable && _damageTimer == null)
+            if (!Invulnerable && _damageTimer == null && CurrentHP > 0)
             {
+                rv = true;
+
                 _damageTimer = new RHTimer(Constants.INVULN_PERIOD);
+                _flickerTimer = new RHTimer(Constants.FLICKER_PERIOD);
+
                 DecreaseHealth(value);
-
-                if (CurrentHP == 0) { PlayAnimation(AnimationEnum.KO); }
-                else
-                {
-                    rv = true;
-                    _flickerTimer = new RHTimer(Constants.FLICKER_PERIOD);
-
-                    AssignVelocity(hitbox);
-                }
+                AssignVelocity(hitbox);
             }
 
             return rv;
@@ -693,7 +694,6 @@ namespace RiverHollow.Characters
         }
         public void ApplyVelocity()
         {
-            Vector2 startPos = Position;
             Vector2 dir = _vVelocity;
 
             bool impeded = false;
@@ -715,11 +715,11 @@ namespace RiverHollow.Characters
                     _fDecay = 0.98f;
                     goto default;
                 case WeightEnum.Medium:
-                    _vVelocity *= -2;
+                    _vVelocity *= -1.5f;
                     _fDecay = 0.97f;
                     goto default;
                 case WeightEnum.Heavy:
-                    _vVelocity *= -1;
+                    _vVelocity *= -0.75f;
                     _fDecay = 0.90f;
                     goto default;
                 case WeightEnum.Immovable:
@@ -735,6 +735,13 @@ namespace RiverHollow.Characters
         protected virtual WeightEnum GetWeight()
         {
             return WeightEnum.Medium;
+        }
+
+        protected void ClearCombatStates()
+        {
+            _damageTimer = null;
+            _flickerTimer = null;
+            _vVelocity = Vector2.Zero;
         }
 
         #endregion

@@ -11,7 +11,7 @@
         public const int STAMINA_NAP_RECOVERY = 20;
 
         public const float INVULN_PERIOD = 0.5f;
-        public const float FLICKER_PERIOD = 0.1f;
+        public const float FLICKER_PERIOD = 0.08f;
         public const float MOB_STUN_TIME = 5;
         public const float WANDER_COUNTDOWN = 2.5f;
         public const float PUSH_COOLDOWN = 0.1f;

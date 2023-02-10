@@ -13,6 +13,7 @@ using RiverHollow.Misc;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
+using RiverHollow.SpriteAnimations;
 
 namespace RiverHollow.Game_Managers
 {
@@ -350,12 +351,9 @@ namespace RiverHollow.Game_Managers
         }
         public static bool PlayerInRange(Point centre, int range)
         {
-            bool rv = false;
-
             int distance = (int)Util.GetDistance(PlayerActor.CollisionCenter, centre);
 
-            rv = distance <= range;
-
+            bool rv = distance <= range;
             return rv;
         }
 
@@ -426,7 +424,8 @@ namespace RiverHollow.Game_Managers
 
         public static bool Defeated()
         {
-            return PlayerActor != null && PlayerActor.CurrentHP == 0;
+            AnimatedSprite spr = PlayerActor.GetSprites()[0];
+            return PlayerActor != null && PlayerActor.CurrentHP == 0 && spr.IsCurrentAnimation(AnimationEnum.KO) && spr.PlayedOnce;
         }
         public static bool DecreaseStamina(float x)
         {

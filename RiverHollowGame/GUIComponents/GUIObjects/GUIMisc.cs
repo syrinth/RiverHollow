@@ -218,7 +218,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public Item ItemObject {get;}
         GUIImage _gImg;
         GUIText _gText;
-        public bool DrawNumber = true;
+        public ItemBoxDraw DrawNumbers = ItemBoxDraw.OnlyStacks;
         public bool CompareNumToPlayer = false;
 
         public GUIItem(Item it)
@@ -253,8 +253,17 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public override void Draw(SpriteBatch spriteBatch)
         {
             _gImg.Draw(spriteBatch);
-            if ((DrawNumber || ItemObject.Stacks()) && _gText != null) {
-                _gText.Draw(spriteBatch);
+            switch (DrawNumbers)
+            {
+                case ItemBoxDraw.Always:
+                    _gText.Draw(spriteBatch);
+                    break;
+                case ItemBoxDraw.OnlyStacks:
+                    if (ItemObject.Stacks())
+                    {
+                        _gText.Draw(spriteBatch);
+                    }
+                    break;
             }
         }
 
@@ -353,7 +362,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             foreach (KeyValuePair<int, int> kvp in requiredToMake)
             {
                 GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
-                box.DrawNumber(true);
+                box.DrawNumber(ItemBoxDraw.Always);
 
                 if (list.Count == 0) { box.AnchorToInnerSide(_window, SideEnum.BottomRight); }
                 else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Left, SideEnum.Bottom); }
