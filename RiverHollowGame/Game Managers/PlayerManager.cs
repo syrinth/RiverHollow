@@ -14,6 +14,7 @@ using RiverHollow.Misc;
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.SpriteAnimations;
+using System.Net;
 
 namespace RiverHollow.Game_Managers
 {
@@ -57,7 +58,8 @@ namespace RiverHollow.Game_Managers
         public static bool AllowMovement = true;
 
         public static WorldObject GrabbedObject;
-        public static Vector2 MoveObjectToPosition;
+        public static Point MoveObjectToPosition;
+        private static VectorBuffer _vbMovement;
 
         public static int WeddingCountdown { get; set; } = 0;
         public static Villager Spouse { get; set; }
@@ -81,6 +83,7 @@ namespace RiverHollow.Game_Managers
 
         public static void Initialize()
         {
+            _vbMovement = new VectorBuffer();
             _diCrafting = new Dictionary<ObjectTypeEnum, List<int>>
             {
                 [ObjectTypeEnum.Building] = new List<int>(),
@@ -124,8 +127,10 @@ namespace RiverHollow.Game_Managers
                 //Only change facing if the current Facing is not a direction we're moving in
                 if (PlayerActor.Facing != _eHorizontal && PlayerActor.Facing != _eVertical && PlayerActor.State != ActorStateEnum.Grab)
                 {
-                    PlayerActor.DetermineFacing(newMovement);
+                    PlayerActor.DetermineFacing(newMovement.ToPoint());
+                    PlayerActor.ClearBuffer();
                 }
+
                 PlayerActor.DetermineAnimationState(newMovement);
 
                 if (PlayerActor.State == ActorStateEnum.Grab && newMovement != Vector2.Zero)
@@ -138,13 +143,13 @@ namespace RiverHollow.Game_Managers
                 else if (newMovement != Vector2.Zero)
                 {
                     bool impeded = false;
-                    if (MapManager.CurrentMap.CheckForCollisions(PlayerActor, PlayerActor.CollisionBox.Location.ToVector2(), PlayerActor.CollisionBox, ref newMovement, ref impeded))
+                    if (MapManager.CurrentMap.CheckForCollisions(PlayerActor, ref newMovement, ref impeded))
                     {
-                        PlayerActor.Position += newMovement * (impeded ? Constants.IMPEDED_SPEED : 1f);
+                        PlayerActor.MoveActor(newMovement * (impeded ? Constants.IMPEDED_SPEED : 1f));
                     }
                 }
             }
-            else if (PlayerActor.State == ActorStateEnum.Grab && PlayerActor.MoveToLocation == Vector2.Zero && GrabbedObject != null)
+            else if (PlayerActor.State == ActorStateEnum.Grab && !PlayerActor.HasMovement() && GrabbedObject != null)
             {
                 FinishedMovingObject();
             }
@@ -455,7 +460,7 @@ namespace RiverHollow.Game_Managers
             MapManager.CurrentMap = MapManager.Maps[Constants.PLAYER_HOME_NAME];
             CurrentMap = MapManager.CurrentMap.Name;
             PlayerActor.Position = Util.SnapToGrid(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn"));
-            PlayerActor.DetermineAnimationState(new Vector2(0, 1));
+            PlayerActor.DetermineAnimationState(new Point(0, 1));
         }
 
         public static void Rollover()
@@ -539,10 +544,10 @@ namespace RiverHollow.Game_Managers
         {
             List<RHTile> rv = new List<RHTile>
             {
-                MapManager.CurrentMap.GetTileByPixelPosition(new Vector2(PlayerActor.CollisionBox.Left, PlayerActor.CollisionBox.Top)),
-                MapManager.CurrentMap.GetTileByPixelPosition(new Vector2(PlayerActor.CollisionBox.Right, PlayerActor.CollisionBox.Top)),
-                MapManager.CurrentMap.GetTileByPixelPosition(new Vector2(PlayerActor.CollisionBox.Left, PlayerActor.CollisionBox.Bottom)),
-                MapManager.CurrentMap.GetTileByPixelPosition(new Vector2(PlayerActor.CollisionBox.Right, PlayerActor.CollisionBox.Bottom))
+                MapManager.CurrentMap.GetTileByPixelPosition(new Point(PlayerActor.CollisionBox.Left, PlayerActor.CollisionBox.Top)),
+                MapManager.CurrentMap.GetTileByPixelPosition(new Point(PlayerActor.CollisionBox.Right, PlayerActor.CollisionBox.Top)),
+                MapManager.CurrentMap.GetTileByPixelPosition(new Point(PlayerActor.CollisionBox.Left, PlayerActor.CollisionBox.Bottom)),
+                MapManager.CurrentMap.GetTileByPixelPosition(new Point(PlayerActor.CollisionBox.Right, PlayerActor.CollisionBox.Bottom))
             };
 
 
@@ -550,11 +555,15 @@ namespace RiverHollow.Game_Managers
         }
 
         #region Grabbing Objects
+        public static void MoveGrabbedObject(Vector2 dir)
+        {
+            GrabbedObject.MoveObject(_vbMovement.AddMovement(dir));
+        }
         public static void GrabTile(RHTile t)
         {
             GrabbedObject = t.WorldObject;
 
-            PlayerActor.Position = Util.SnapToGrid(PlayerActor.CollisionCenter.ToVector2());
+            PlayerActor.Position = Util.SnapToGrid(PlayerActor.CollisionCenter);
             PlayerActor.DetermineFacing(t);
             PlayerActor.SetState(ActorStateEnum.Grab);
         }
@@ -569,7 +578,8 @@ namespace RiverHollow.Game_Managers
 
                 GrabbedObject = null;
                 PlayerActor.SetState(ActorStateEnum.Walk);
-                MoveObjectToPosition = Vector2.Zero;
+                MoveObjectToPosition = Point.Zero;
+                _vbMovement.Clear();
             }
         }
         public static void HandleGrabMovement(RHTile nextObjectTile, RHTile nextPlayerTile)
@@ -655,7 +665,7 @@ namespace RiverHollow.Game_Managers
             if (t != null && ToolInUse == null)
             {
                 ToolInUse = t;
-                ToolInUse.Position = new Vector2(PlayerActor.Position.X - Constants.TILE_SIZE, PlayerActor.Position.Y - (Constants.TILE_SIZE * 2));
+                ToolInUse.Position = new Point(PlayerActor.Position.X - Constants.TILE_SIZE, PlayerActor.Position.Y - (Constants.TILE_SIZE * 2));
                 if (ToolInUse != null && !Busy)
                 {
                     if (DecreaseStamina(ToolInUse.StaminaCost))

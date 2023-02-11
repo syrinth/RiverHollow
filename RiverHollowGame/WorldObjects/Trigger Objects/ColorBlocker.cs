@@ -24,7 +24,7 @@ namespace RiverHollow.WorldObjects
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
         {
             base.LoadSprite(stringData, textureName);
-            _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _uSize);
+            _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
         }
 
         public override void AttemptToTrigger(string name)

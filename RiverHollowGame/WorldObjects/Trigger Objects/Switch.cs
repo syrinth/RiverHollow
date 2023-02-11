@@ -24,7 +24,7 @@ namespace RiverHollow.WorldObjects.Trigger_Objects
             }
         }
 
-        public override bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
+        public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
         {
             bool rv = base.PlaceOnMap(pos, map);
             if (rv)

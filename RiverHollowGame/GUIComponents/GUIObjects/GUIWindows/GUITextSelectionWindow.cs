@@ -204,9 +204,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 else
                 {
                     //Until fixed for specific motion
-                    if (_poiMouse != GUICursor.Position.ToPoint() && Contains(GUICursor.Position.ToPoint()))
+                    if (_poiMouse != GUICursor.Position && Contains(GUICursor.Position))
                     {
-                        _poiMouse = GUICursor.Position.ToPoint();
+                        _poiMouse = GUICursor.Position;
                         if (_iKeySelection - 1 >= 0 && GUICursor.Position.Y < _giSelection.Position().Y)
                         {
                             _giSelection.AlignToObject(_diOptions[_iKeySelection - 1].GText, SideEnum.Bottom);
@@ -242,7 +242,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             switch (chosenAction.TextVerb)
             {
                 case TextEntryVerbEnum.EndDay:
-                    Vector2 pos = PlayerManager.PlayerActor.CollisionCenter.ToVector2();
+                    Point pos = PlayerManager.PlayerActor.CollisionCenter;
                     PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
                     GUIManager.SetScreen(new DayEndScreen());
                     break;

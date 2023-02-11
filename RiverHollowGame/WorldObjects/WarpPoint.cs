@@ -17,10 +17,10 @@ namespace RiverHollow.WorldObjects
         public WarpPoint(int id, Dictionary<string, string> stringData) : base(id)
         {
             LoadDictionaryData(stringData);
-            _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _uSize);
+            _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
         }
 
-        public override bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
+        public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
         {
             bool rv = base.PlaceOnMap(pos, map);
             _sDungeonName = map.DungeonName;

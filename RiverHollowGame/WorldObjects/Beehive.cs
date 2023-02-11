@@ -18,7 +18,7 @@ namespace RiverHollow.WorldObjects
         bool _bReady = false;
         public Beehive(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            _sprite.AddAnimation(AnimationEnum.Action_Finished, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _uSize);
+            _sprite.AddAnimation(AnimationEnum.Action_Finished, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
 
             Util.AssignValue(ref _iItemID, "ItemID", stringData);
             Util.AssignValue(ref _iPeriod, "Period", stringData);

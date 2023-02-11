@@ -16,19 +16,6 @@ namespace RiverHollow.Game_Managers
 {
     public static class MapManager
     {
-        struct NewMapInfo
-        {
-            public RHMap NextMap;
-            public Vector2 PlayerPosition;
-            public Building EnteredBuilding;
-            public NewMapInfo(RHMap map, Vector2 pos, Building b)
-            {
-                NextMap = map;
-                PlayerPosition = pos;
-                EnteredBuilding = b;
-            }
-        }//[Friends:1-30]
-
         public static RHMap TownMap => Maps[Constants.TOWN_MAP_NAME];
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
@@ -94,11 +81,11 @@ namespace RiverHollow.Game_Managers
 
                 entryPoint = linkedMap.DictionaryTravelPoints[currMap];
 
-                Vector2 newPos;
+                Point newPos;
                 if (travelPoint.IsDoor)
                 {
                     newPos = entryPoint.GetMovedCenter();
-                    PlayerManager.PlayerActor.DetermineAnimationState(new Vector2(0, -1));
+                    PlayerManager.PlayerActor.DetermineAnimationState(Util.GetPointFromDirection(DirectionEnum.Up));
                 }
                 else if (travelPoint.NoMove)
                 {
@@ -135,14 +122,14 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         /// <param name="newMap">Map to move to</param>
         /// <param name="playerPos">The position of the player</param>
-        public static void FadeToNewMap(RHMap newMap, Vector2 playerPos, Building b = null)
+        public static void FadeToNewMap(RHMap newMap, Point playerPos, Building b = null)
         {
             if (newMap.Name != CurrentMap.MapAbove && newMap.Name != CurrentMap.MapBelow)
             {
                 GUIManager.BeginFadeOut();
             }
 
-            PlayerManager.PlayerActor.DetermineAnimationState(Vector2.Zero);
+            PlayerManager.PlayerActor.DetermineAnimationState(Point.Zero);
             _newMapInfo = new NewMapInfo(newMap, playerPos, b);
         }
 
@@ -336,7 +323,11 @@ namespace RiverHollow.Game_Managers
             CurrentMap.RemoveActor(c);
         }
 
-        public static void DropItemsOnMap(List<Item> items, Vector2 position, bool flyingPop = true)
+        public static void DropItemOnMap(Item item, Point position, bool flyingPop = true)
+        {
+            CurrentMap.DropItemOnMap(item, position, flyingPop);
+        }
+        public static void DropItemsOnMap(List<Item> items, Point position, bool flyingPop = true)
         {
             CurrentMap.DropItemsOnMap(items, position, flyingPop);
         }

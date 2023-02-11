@@ -31,7 +31,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
 
             _gVolumeControl = new GUINumberControl("Music", SoundManager.MusicVolume * SOUND_VOLUME_SCALAR, UpdateMusicVolume);
             _gVolumeControl.AnchorAndAlignToObject(_gSoundSettings, SideEnum.Bottom, SideEnum.Left);
-            _gVolumeControl.MoveBy(new Vector2(32, 0));
+            _gVolumeControl.MoveBy(new Point(32, 0));
 
             _gEffectControl = new GUINumberControl("Effects", SoundManager.EffectVolume * SOUND_VOLUME_SCALAR, UpdateEffectsVolume);
             _gEffectControl.AnchorAndAlignToObject(_gVolumeControl, SideEnum.Bottom, SideEnum.Left);

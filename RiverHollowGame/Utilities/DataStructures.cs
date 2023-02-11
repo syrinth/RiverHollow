@@ -1,33 +1,23 @@
 ﻿using Microsoft.Xna.Framework;
+using RiverHollow.Buildings;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Map_Handling;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.WorldObjects;
 using System;
 
 namespace RiverHollow.Utilities
 {
-    public struct RHSize
+    struct NewMapInfo
     {
-        public int Width;
-        public int Height;
-        public RHSize(int width, int height)
+        public RHMap NextMap;
+        public Point PlayerPosition;
+        public Building EnteredBuilding;
+        public NewMapInfo(RHMap map, Point pos, Building b)
         {
-            Width = width;
-            Height = height;
-        }
-
-        public RHSize(int[] array)
-        {
-            if(array.Length == 2)
-            {
-                Width = array[0];
-                Height = array[1];
-            }
-            else
-            {
-                Width = 0;
-                Height = 0;
-            }
+            NextMap = map;
+            PlayerPosition = pos;
+            EnteredBuilding = b;
         }
     }
 
@@ -62,6 +52,6 @@ namespace RiverHollow.Utilities
     public struct LightInfo
     {
         public Light LightObject;
-        public Vector2 Offset;
+        public Point Offset;
     }
 }

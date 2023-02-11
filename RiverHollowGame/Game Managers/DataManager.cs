@@ -321,12 +321,17 @@ namespace RiverHollow.Game_Managers
             if (!string.IsNullOrEmpty(rv)) { return Util.ParseFloat(rv); }
             else { return defaultValue; }
         }
-        public static RHSize GetSizeByIDKey(int id, string key, DataType type)
+        public static Point GetPointByIDKey(int id, string key, DataType type)
         {
-            string rv = GetStringByIDKey(id, key, type);
+            Point rv = Point.Zero;
+            string value = GetStringByIDKey(id, key, type);
 
-            if (!string.IsNullOrEmpty(rv)) { return new RHSize(Util.FindIntArguments(rv)); }
-            else { return new RHSize(0, 0); }
+            if (!string.IsNullOrEmpty(value))
+            {
+                rv = Util.ParsePoint(value);
+            }
+
+            return rv;
         }
         public static string GetStringByIDKey(int id, string key, DataType type)
         {
@@ -425,18 +430,6 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static Point GetPointByIDKey(int id, string key, DataType type)
-        {
-            Point rv = Point.Zero;
-            string value = GetStringByIDKey(id, key, type);
-
-            if (!string.IsNullOrEmpty(value))
-            {
-                rv = Util.ParsePoint(value);
-            }
-
-            return rv;
-        }
         public static Dictionary<int, int> IntDictionaryFromLookup(int id, string key, DataType type)
         {
             Dictionary<int, int> dictValue = new Dictionary<int, int>();
@@ -645,7 +638,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="id">The ID of the WorldObject</param>
         /// <param name="pos">The position in pixels of the place to put the object</param>
         /// <param name="map">The map the WorldObject is to be put on</param>
-        public static void CreateAndPlaceNewWorldObject(int id, Vector2 pos, RHMap map)
+        public static void CreateAndPlaceNewWorldObject(int id, Point pos, RHMap map)
         {
             CreateWorldObjectByID(id)?.PlaceOnMap(pos, map);
         }

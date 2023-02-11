@@ -47,14 +47,13 @@ namespace RiverHollow.WorldObjects
         protected bool _bDrawUnder = false;
 
         protected Point _pImagePos;
-        public Vector2 PickupOffset { get; private set; }
+        public Point PickupOffset { get; private set; }
 
-        protected Vector2 _vMapPosition;
-        public virtual Vector2 MapPosition => _vMapPosition;
+        public Point MapPosition { get; protected set; }
 
-        protected RHSize _uSize = new RHSize(1, 1);
-        public int Width => _uSize.Width * Constants.TILE_SIZE;
-        public int Height => _uSize.Height * Constants.TILE_SIZE;
+        protected Point _pSize = new Point(1, 1);
+        public int Width => _pSize.X * Constants.TILE_SIZE;
+        public int Height => _pSize.Y * Constants.TILE_SIZE;
 
         public int BaseWidth => _rBase.Width;
         public int BaseHeight => _rBase.Height;
@@ -65,11 +64,11 @@ namespace RiverHollow.WorldObjects
         protected Rectangle _rBase = new Rectangle(0, 0, 1, 1);
 
         //The ClickBox is always the Sprite itself
-        public Rectangle ClickBox => Util.FloatRectangle(MapPosition, _uSize);
+        public Rectangle ClickBox => new Rectangle(MapPosition, _pSize);
 
         //Base is always described in # of Tiles so we must multiply by the Constants.TILE_SIZE
-        public Vector2 CollisionPosition => new Vector2(MapPosition.X + (_rBase.X * Constants.TILE_SIZE), MapPosition.Y + (_rBase.Y * Constants.TILE_SIZE));
-        public Rectangle CollisionBox => Util.FloatRectangle(MapPosition.X + (_rBase.X * Constants.TILE_SIZE), MapPosition.Y + (_rBase.Y * Constants.TILE_SIZE), (_rBase.Width * Constants.TILE_SIZE), (_rBase.Height * Constants.TILE_SIZE));
+        public Point CollisionPosition => CollisionBox.Location;
+        public Rectangle CollisionBox => new Rectangle(MapPosition.X + (_rBase.X * Constants.TILE_SIZE), MapPosition.Y + (_rBase.Y * Constants.TILE_SIZE), (_rBase.Width * Constants.TILE_SIZE), (_rBase.Height * Constants.TILE_SIZE));
         public Point CollisionCenter => CollisionBox.Center;
 
         public int ID { get; protected set; }
@@ -101,15 +100,15 @@ namespace RiverHollow.WorldObjects
                 _pImagePos = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
             }
 
-            Util.AssignValue(ref _uSize, "Size", stringData);
+            Util.AssignValue(ref _pSize, "Size", stringData);
 
-            Vector2 baseOffset = Vector2.Zero;
+            Point baseOffset = Point.Zero;
             Util.AssignValue(ref baseOffset, "BaseOffset", stringData);
 
-            RHSize baseSize = new RHSize(1, 1);
+            Point baseSize = new Point(1, 1);
             Util.AssignValue(ref baseSize, "Base", stringData);
 
-            _rBase = Util.FloatRectangle(baseOffset, baseSize);
+            _rBase = new Rectangle(baseOffset, baseSize);
 
             Util.AssignValue(ref _eObjectType, "Type", stringData);
             Util.AssignValue(ref _ePlacement, "Placement", stringData);
@@ -128,7 +127,7 @@ namespace RiverHollow.WorldObjects
 
                     LightInfo info;
                     info.LightObject = DataManager.GetLight(int.Parse(split[0]));
-                    info.Offset = new Vector2(int.Parse(split[1]), int.Parse(split[2]));
+                    info.Offset = new Point(int.Parse(split[1]), int.Parse(split[2]));
 
                     SyncLightPositions();
                     _liLights.Add(info);
@@ -148,11 +147,11 @@ namespace RiverHollow.WorldObjects
             if (stringData.ContainsKey("Idle"))
             {
                 string[] idleSplit = stringData["Idle"].Split('-');
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _uSize, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _pSize, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
             }
             else
             {
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _uSize);
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _pSize);
             }
 
             //MAR
@@ -161,7 +160,7 @@ namespace RiverHollow.WorldObjects
             //    string[] gatherSplit = stringData["Gathered"].Split('-');
             //    _sprite.AddAnimation(WorldObjAnimEnum.Gathered, startX, startY, _iWidth, _iHeight, int.Parse(gatherSplit[0]), float.Parse(gatherSplit[1]));
             //}
-            SetSpritePos(_vMapPosition);
+            SetSpritePos(MapPosition);
         }
 
         public virtual void Update(GameTime gTime) {
@@ -181,16 +180,20 @@ namespace RiverHollow.WorldObjects
             if (_bDrawUnder) { _sprite.Draw(spriteBatch, 1); }
             else {
                 float alpha = 1f;
-                if(((BaseHeight + 1) * Constants.TILE_SIZE < Height) && new Rectangle((int)Sprite.Position.X, (int)Sprite.Position.Y, Sprite.Width, Sprite.Height).Contains(PlayerManager.PlayerActor.CollisionCenter))
+                if(((BaseHeight + 1) * Constants.TILE_SIZE < Height) && new Rectangle(Sprite.Position.X, Sprite.Position.Y, Sprite.Width, Sprite.Height).Contains(PlayerManager.PlayerActor.CollisionCenter))
                 {
                     alpha = 0.7f;
                 }
                 _sprite.Draw(spriteBatch, true, alpha);
             }
+            if (Constants.DRAW_COLLISION)
+            {
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), CollisionBox, new Rectangle(160, 128, 2, 2), Color.White * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, Sprite.LayerDepth - 1);
+            }
         }
-        public virtual void DrawItem(SpriteBatch spriteBatch, Item i)
+        public void DrawItem(SpriteBatch spriteBatch, MapItem i)
         {
-            i.Draw(spriteBatch, new Rectangle((int)(i.Position.X), (int)(i.Position.Y), Constants.TILE_SIZE, Constants.TILE_SIZE), true, _sprite.LayerDepth + 1);
+            i.Draw(spriteBatch, _sprite.LayerDepth + 1);
         }
 
         public virtual bool ProcessLeftClick() { return false; }
@@ -228,9 +231,9 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
-        public virtual bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
+        public virtual bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
         {
-            pos = new Vector2(pos.X - (_rBase.X * Constants.TILE_SIZE), pos.Y - (_rBase.Y * Constants.TILE_SIZE));
+            pos = new Point(pos.X - (_rBase.X * Constants.TILE_SIZE), pos.Y - (_rBase.Y * Constants.TILE_SIZE));
             SnapPositionToGrid(pos);
             bool rv = map.PlaceWorldObject(this, ignoreActors);
             if (rv)
@@ -241,7 +244,7 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
-        protected void SetSpritePos(Vector2 position)
+        protected void SetSpritePos(Point position)
         {
             if (_sprite != null)
             {
@@ -249,11 +252,10 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        public virtual void SnapPositionToGrid(Point position) { SnapPositionToGrid(position.ToVector2()); }
-        public virtual void SnapPositionToGrid(Vector2 position)
+        public virtual void SnapPositionToGrid(Point position)
         {
-            _vMapPosition = Util.SnapToGrid(position);
-            SetSpritePos(_vMapPosition);
+            MapPosition = Util.SnapToGrid(position);
+            SetSpritePos(MapPosition);
         }
 
         /// <summary>
@@ -292,7 +294,7 @@ namespace RiverHollow.WorldObjects
 
             xOffset = (xOffset / Constants.TILE_SIZE) * Constants.TILE_SIZE;
             yOffset = (yOffset / Constants.TILE_SIZE) * Constants.TILE_SIZE;
-            PickupOffset = new Vector2(xOffset, yOffset);
+            PickupOffset = new Point(xOffset, yOffset);
             
         }
 
@@ -304,8 +306,8 @@ namespace RiverHollow.WorldObjects
         {
             int xOffset = (_rBase.Width > 1) ? (_rBase.Width - 1) / 2 : 0;
             int yOffset = (_rBase.Height > 1) ? (_rBase.Height -1) / 2 : 0;
-            PickupOffset = new Vector2((_rBase.X + xOffset) * Constants.TILE_SIZE, (_rBase.Y + yOffset) * Constants.TILE_SIZE);
-            PickupOffset = (PickupOffset / Constants.TILE_SIZE) * Constants.TILE_SIZE;
+            PickupOffset = new Point((_rBase.X + xOffset) * Constants.TILE_SIZE, (_rBase.Y + yOffset) * Constants.TILE_SIZE);
+            PickupOffset = Util.MultiplyPoint(Util.DividePoint(PickupOffset, Constants.TILE_SIZE),  Constants.TILE_SIZE);
         }
 
         public List<Item> GetDroppedItems()
@@ -339,7 +341,7 @@ namespace RiverHollow.WorldObjects
             {
                 foreach (LightInfo info in _liLights)
                 {
-                    info.LightObject.Position = new Vector2(MapPosition.X - info.LightObject.Width / 2, MapPosition.Y - info.LightObject.Height / 2);
+                    info.LightObject.Position = new Point(MapPosition.X - info.LightObject.Width / 2, MapPosition.Y - info.LightObject.Height / 2);
                     info.LightObject.Position += info.Offset;
                 }
             }
@@ -376,7 +378,7 @@ namespace RiverHollow.WorldObjects
 
         public void InitiateMove(Vector2 newMovement)
         {
-            DirectionEnum moveDir = Util.GetDirectionFromNormalVector(newMovement);
+            DirectionEnum moveDir = Util.GetDirection(newMovement);
             bool canMove = _bMovable && (!_bMoveOnce || (_bMoveOnce && !_bHasMoved));
             bool goingBackwards = moveDir == Util.GetOppositeDirection(PlayerManager.PlayerActor.Facing);
             bool shoveMatches = !goingBackwards && _eShoveDirection == PlayerManager.PlayerActor.Facing;
@@ -405,9 +407,9 @@ namespace RiverHollow.WorldObjects
                 }
             }
         }
-        public void MoveBy(Vector2 direction)
+        public void MoveObject(Point direction)
         {
-            _vMapPosition += direction;
+            MapPosition += direction;
             _sprite.Position += direction;
         }
 
@@ -425,7 +427,7 @@ namespace RiverHollow.WorldObjects
         }
         public virtual void LoadData(WorldObjectData data)
         {
-            SnapPositionToGrid(new Vector2(data.X, data.Y));
+            SnapPositionToGrid(new Point(data.X, data.Y));
         }
         #endregion
     }

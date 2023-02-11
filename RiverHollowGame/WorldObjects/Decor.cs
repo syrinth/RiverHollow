@@ -22,12 +22,12 @@ namespace RiverHollow.WorldObjects
         protected DirectionEnum _eFacingDir = DirectionEnum.Down;
         public DirectionEnum Facing => _eFacingDir;
 
-        protected Vector2 _vDisplayOffset = Vector2.Zero;
-        protected Vector2 _vRotatedDisplayOffset = Vector2.Zero;
+        protected Point _pDisplayOffset = Point.Zero;
+        protected Point _pRotatedDisplayOffset = Point.Zero;
 
         protected int _iRotationBaseOffsetX;
         protected int _iRotationBaseOffsetY;
-        protected RHSize _uRotationSize;
+        protected Point _pRotationSize;
 
         private readonly bool _bDisplaysObject = false;
         public bool CanDisplay => _bDisplaysObject;
@@ -43,11 +43,11 @@ namespace RiverHollow.WorldObjects
             _eObjectType = ObjectTypeEnum.Decor;
             Util.AssignValue(ref _eRotationType, "Rotation", stringData);
             Util.AssignValues(ref _iRotationBaseOffsetX, ref _iRotationBaseOffsetY, "RotationBaseOffset", stringData);
-            Util.AssignValue(ref _uRotationSize, "RotationSize", stringData);
+            Util.AssignValue(ref _pRotationSize, "RotationSize", stringData);
             Util.AssignValue(ref _bDisplaysObject, "Display", stringData);
             Util.AssignValue(ref _bCanBeDisplayed, "CanBeDisplayed", stringData);
-            Util.AssignValue(ref _vDisplayOffset, "DisplayOffset", stringData);
-            Util.AssignValue(ref _vRotatedDisplayOffset, "RotatedDisplayOffset", stringData);
+            Util.AssignValue(ref _pDisplayOffset, "DisplayOffset", stringData);
+            Util.AssignValue(ref _pRotatedDisplayOffset, "RotatedDisplayOffset", stringData);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -62,7 +62,7 @@ namespace RiverHollow.WorldObjects
             {
                 //Because Items don't exist directly on the map, we only need to tell it where to draw itself here
                 _itemDisplay.SetColor(_bSelected ? Color.Green : Color.White);
-                _itemDisplay.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X + _vDisplayOffset.X), (int)(_vMapPosition.Y + _vDisplayOffset.Y), Constants.TILE_SIZE, Constants.TILE_SIZE), true, _sprite.LayerDepth + 1);
+                _itemDisplay.Draw(spriteBatch, new Rectangle((int)(MapPosition.X + _pDisplayOffset.X), (int)(MapPosition.Y + _pDisplayOffset.Y), Constants.TILE_SIZE, Constants.TILE_SIZE), true, _sprite.LayerDepth + 1);
             }
         }
 
@@ -89,7 +89,7 @@ namespace RiverHollow.WorldObjects
         /// matches the new position
         /// </summary>
         /// <param name="position">The position to snap to.</param>
-        public override void SnapPositionToGrid(Vector2 position)
+        public override void SnapPositionToGrid(Point position)
         {
             base.SnapPositionToGrid(position);
             SyncDisplayObject();
@@ -108,7 +108,7 @@ namespace RiverHollow.WorldObjects
         {
             bool rv = false;
 
-            RHTile tile = map.GetTileByPixelPosition(_vMapPosition);
+            RHTile tile = map.GetTileByPixelPosition(MapPosition);
             if (tile.CanPlaceOnTabletop(this))
             {
                 rv = ((Decor)tile.WorldObject).SetDisplayObject(this);
@@ -133,12 +133,12 @@ namespace RiverHollow.WorldObjects
                 //We don't need to do any swaps if the object has the same base and height
                 if (_rBase.Width != _rBase.Height)
                 {
-                    Vector2 temp = _vDisplayOffset;
-                    _vDisplayOffset = _vRotatedDisplayOffset;
-                    _vRotatedDisplayOffset = temp;
+                    Point temp = _pDisplayOffset;
+                    _pDisplayOffset = _pRotatedDisplayOffset;
+                    _pRotatedDisplayOffset = temp;
 
                     Util.SwitchValues(ref _rBase.Width, ref _rBase.Height);
-                    Util.SwitchValues(ref _uSize, ref _uRotationSize);
+                    Util.SwitchValues(ref _pSize, ref _pRotationSize);
                     Util.SwitchValues(ref _rBase.X, ref _iRotationBaseOffsetX);
                     Util.SwitchValues(ref _rBase.Y, ref _iRotationBaseOffsetY);
                 }
@@ -182,8 +182,8 @@ namespace RiverHollow.WorldObjects
 
                 //Updates the sprite info
                 _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, newImage.X, newImage.Y, _uSize);
-                SetSpritePos(_vMapPosition);
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, newImage.X, newImage.Y, _pSize);
+                SetSpritePos(MapPosition);
 
                 //Sets the pickup offset to the center of the object.
                 SetPickupOffset();
@@ -292,9 +292,9 @@ namespace RiverHollow.WorldObjects
         {
             if (_objDisplay != null)
             {
-                _objDisplay.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objDisplay.Sprite.Height - Constants.TILE_SIZE)));
-                _objDisplay._vMapPosition += _vDisplayOffset;
-                _objDisplay.SetSpritePos(_objDisplay._vMapPosition);
+                _objDisplay.SnapPositionToGrid(new Point(MapPosition.X, MapPosition.Y - (_objDisplay.Sprite.Height - Constants.TILE_SIZE)));
+                _objDisplay.MapPosition += _pDisplayOffset;
+                _objDisplay.SetSpritePos(_objDisplay.MapPosition);
             }
         }
 

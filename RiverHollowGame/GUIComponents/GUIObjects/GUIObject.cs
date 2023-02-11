@@ -31,7 +31,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             get { return _parentScreen; }
             set { _parentScreen = value; }
         }
-        internal static Vector2 CenterScreen = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
+        internal static Point CenterScreen = new Point(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
 
         protected double _dScale = 1;
 
@@ -55,12 +55,12 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
-        public int Top => (int)_vPos.Y;
-        public int Left => (int)_vPos.X;
-        public int Bottom => (int)_vPos.Y + Height;
-        public int Right => (int)_vPos.X + Width;
+        public int Top => (int)_pPos.Y;
+        public int Left => (int)_pPos.X;
+        public int Bottom => (int)_pPos.Y + Height;
+        public int Right => (int)_pPos.X + Width;
 
-        private Vector2 _vPos;
+        private Point _pPos;
         protected float _fAlpha = 1.0f;
 
         protected Rectangle _drawRect;
@@ -78,8 +78,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public bool Visible { get; private set; } = true;
 
         protected bool _bInitScaleSet = false;
-        protected Vector2 _vInitVals;       //X = Width, Y = Height
-        protected Vector2 _vInitPos;
+        protected Point _pInitVals;       //X = Width, Y = Height
+        protected Point _pInitPos;
 
         public GUIObject() {
             Controls = new List<GUIObject>();
@@ -210,9 +210,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
             return rv;
         }
 
-        public virtual Vector2 Position()
+        public virtual Point Position()
         {
-            return _vPos;
+            return _pPos;
         }
 
         /// <summary>
@@ -223,9 +223,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
         /// </summary>
         /// <param name="value">The value to subtract from the GUIObject's location</param>
         /// <returns>The new value of the Object</returns>
-        public Vector2 PositionAdd(Vector2 value) {
-            _vPos += value;
-            _drawRect.Location += value.ToPoint();
+        public Point PositionAdd(Point value) {
+            _pPos += value;
+            _drawRect.Location += value;
 
             foreach (GUIObject g in Controls)
             {
@@ -234,8 +234,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             //This is an important redundancy, because it will ensure that any Positional
             //overrides are called. This is NEEDED for GUISprites.
-            Position(_vPos);
-            return _vPos;
+            Position(_pPos);
+            return _pPos;
         }
 
         /// <summary>
@@ -246,10 +246,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
         /// </summary>
         /// <param name="value">The value to subtract from the GUIObject's location</param>
         /// <returns>The new value of the Object</returns>
-        public Vector2 PositionSub(Vector2 value)
+        public Point PositionSub(Point value)
         {
-            _vPos -= value;
-            _drawRect.Location -= value.ToPoint();
+            _pPos -= value;
+            _drawRect.Location -= value;
 
             foreach (GUIObject g in Controls)
             {
@@ -258,9 +258,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             //This is an important redundancy, because it will ensure that any Positional
             //overrides are called. This is NEEDED for GUISprites.
-            Position(_vPos);
+            Position(_pPos);
 
-            return _vPos;
+            return _pPos;
         }
         public virtual void Position(GUIObject obj)
         {
@@ -273,14 +273,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
         /// from the location of every control within the object.
         /// </summary>
         /// <param name="value">The new TopLeft value of the GUIObject</param>
-        public virtual void Position(Vector2 value)
+        public virtual void Position(Point value)
         {
-            Vector2 startVec = Position();
+            Point startVec = Position();
 
-            _vPos = value;
-            _drawRect = new Rectangle((int)_vPos.X, (int)_vPos.Y, Width, Height);
+            _pPos = value;
+            _drawRect = new Rectangle((int)_pPos.X, (int)_pPos.Y, Width, Height);
 
-            Vector2 delta = startVec - value;
+            Point delta = startVec - value;
 
             foreach (GUIObject g in Controls)
             {
@@ -294,8 +294,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 _bInitScaleSet = true;
 
-                _vInitPos = Position();
-                _vInitVals = new Vector2(Width, Height);
+                _pInitPos = Position();
+                _pInitVals = new Point(Width, Height);
             }
 
             int oldWidth = Width;
@@ -303,14 +303,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             if (x == 1)
             {
-                Width = (int)_vInitVals.X;
-                Height = (int)_vInitVals.Y;
-                Position(_vInitPos);
+                Width = (int)_pInitVals.X;
+                Height = (int)_pInitVals.Y;
+                Position(_pInitPos);
             }
             else
             {
-                Width = (int)(_vInitVals.X * x);
-                Height = (int)(_vInitVals.Y * x);
+                Width = (int)(_pInitVals.X * x);
+                Height = (int)(_pInitVals.Y * x);
             }
 
             int deltaWidth = Math.Abs(oldWidth - Width) / 2;
@@ -318,14 +318,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             if (!anchorToPos)
             {
-                Vector2 newPos = Position();
+                Point newPos = Position();
                 if (_dScale < x)
                 {
-                    newPos -= new Vector2(deltaWidth, deltaHeight);
+                    newPos -= new Point(deltaWidth, deltaHeight);
                 }
                 else
                 {
-                    newPos += new Vector2(deltaWidth, deltaHeight);
+                    newPos += new Point(deltaWidth, deltaHeight);
                 }
                 Position(newPos);
             }
@@ -403,26 +403,26 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             MoveBy(GameManager.ScaleIt((int)dir.X), GameManager.ScaleIt((int)dir.Y));
         }
-        public void MoveBy(Vector2 dir)
+        public void MoveBy(Point dir)
         {
             MoveBy(dir.X, dir.Y);
         }
-        public void MoveBy(float x, float y)
+        public void MoveBy(int x, int y)
         {
-            Vector2 pos = Position();
-            Position(new Vector2(pos.X + x, pos.Y + y));
+            Point pos = Position();
+            Position(new Point(pos.X + x, pos.Y + y));
         }
-        public void SetX(float x) {
-            Position(new Vector2(x, _vPos.Y));
+        public void SetX(int x) {
+            Position(new Point(x, _pPos.Y));
         }
-        public void SetY(float y)
+        public void SetY(int y)
         {
-            Position(new Vector2(_vPos.X, y));
+            Position(new Point(_pPos.X, y));
         }
-        internal static void CreateSpacedColumn(ref List<GUIObject> components, int columnLine, float start, int totalHeight, int spacing, bool alignToColumnLine = false)
+        internal static void CreateSpacedColumn(ref List<GUIObject> components, int columnLine, int start, int totalHeight, int spacing, bool alignToColumnLine = false)
         {
-            float startY = start + ((totalHeight - (components.Count * components[0].Height) - (spacing * components.Count - 1)) / 2) + components[0].Height / 2;
-            Vector2 position = new Vector2(alignToColumnLine ? columnLine : columnLine - components[0].Width / 2, startY);
+            int startY = start + ((totalHeight - (components.Count * components[0].Height) - (spacing * components.Count - 1)) / 2) + components[0].Height / 2;
+            Point position = new Point(alignToColumnLine ? columnLine : columnLine - components[0].Width / 2, startY);
 
             foreach (GUIObject o in components)
             {
@@ -430,10 +430,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 position.Y += o.Height + spacing;
             }
         }
-        internal static void CreateSpacedRow(ref List<GUIObject> components, int rowLine, float start, int totalWidth, int spacing, bool alignToRowLine = false)
+        internal static void CreateSpacedRow(ref List<GUIObject> components, int rowLine, int start, int totalWidth, int spacing, bool alignToRowLine = false)
         {
-            float startX = start + ((totalWidth - (components.Count * components[0].Width) - (spacing * components.Count - 1)) / 2) + components[0].Width / 2;
-            Vector2 position = new Vector2(startX, alignToRowLine ? rowLine : rowLine - components[0].Height / 2);
+            int startX = start + ((totalWidth - (components.Count * components[0].Width) - (spacing * components.Count - 1)) / 2) + components[0].Width / 2;
+            Point position = new Point(startX, alignToRowLine ? rowLine : rowLine - components[0].Height / 2);
 
             foreach (GUIObject o in components)
             {
@@ -441,7 +441,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 position.X += o.Width + spacing;
             }
         }
-        internal static void CreateSpacedGrid(ref List<GUIObject> components, Vector2 start, int totalWidth, int columns, int spacing = 0)
+        internal static void CreateSpacedGrid(ref List<GUIObject> components, Point start, int totalWidth, int columns, int spacing = 0)
         {
             if (components.Count == 0) { return; }
             if (spacing == 0) { spacing = (totalWidth - (components[0].Width * columns)) / columns; }
@@ -482,8 +482,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 right = (int)MathHelper.Max(right, o.Position().X + o.Width);
             }
 
-            Vector2 stackCenter = new Rectangle(left, top, right - left, bottom - top).Center.ToVector2();
-            Vector2 delta = CenterScreen - stackCenter;
+            Point stackCenter = new Rectangle(left, top, right - left, bottom - top).Center;
+            Point delta = CenterScreen - stackCenter;
 
             foreach (GUIObject o in components)
             {
@@ -496,7 +496,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             AnchorToObject(focus, sidePlacement, spacing, addToWindow);
             AlignToObject(focus, sideToAlign, addToWindow);
         }
-        internal Vector2 GetAnchorAndAlignToObject(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, int spacing = 0, bool addToWindow = true)
+        internal Point GetAnchorAndAlignToObject(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, int spacing = 0, bool addToWindow = true)
         {
             GUIObject g = new GUIObject(this);
             g.AnchorToObject(focus, sidePlacement, spacing, addToWindow);
@@ -508,7 +508,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (focus.ParentWindow != null && addToWindow) { focus.ParentWindow.AddControl(this); }
 
-            Vector2 position = focus.Position();
+            Point position = focus.Position();
             switch (sidePlacement)
             {
                 case SideEnum.Bottom:
@@ -530,7 +530,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
             this.Position(position);
         }
-        internal Vector2 GetAnchorToObject(GUIWindow focus, SideEnum sidePlacement, int spacing = 0)
+        internal Point GetAnchorToObject(GUIWindow focus, SideEnum sidePlacement, int spacing = 0)
         {
             GUIObject g = new GUIObject(this);
             g.AnchorToObject(focus, sidePlacement, spacing);
@@ -554,7 +554,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
 
         }
-        internal Vector2 GetAffixToCenter(GUIWindow window, SideEnum whichCenter, bool onMain, int spacing = 0)
+        internal Point GetAffixToCenter(GUIWindow window, SideEnum whichCenter, bool onMain, int spacing = 0)
         {
             GUIObject g = new GUIObject(this);
             g.AffixToCenter(window, whichCenter, onMain, spacing);
@@ -642,7 +642,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     break;
             }
         }
-        internal Vector2 GetAnchorToInnerSide(GUIWindow window, SideEnum sidePlacement, int spacing = 0)
+        internal Point GetAnchorToInnerSide(GUIWindow window, SideEnum sidePlacement, int spacing = 0)
         {
             GUIObject g = new GUIObject(this);
             g.AnchorToInnerSide(window, sidePlacement, spacing);
@@ -685,7 +685,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     break;
             }
         }
-        internal Vector2 GetAnchorToInnerSide(GUIObject obj, SideEnum sidePlacement, int spacing = 0)
+        internal Point GetAnchorToInnerSide(GUIObject obj, SideEnum sidePlacement, int spacing = 0)
         {
             GUIObject g = new GUIObject(this);
             g.AnchorToInnerSide(obj, sidePlacement, spacing);
@@ -740,7 +740,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     break;
             }
         }
-        internal Vector2 GetAnchorToScreen(SideEnum sidePlacement, int spacing = 0)
+        internal Point GetAnchorToScreen(SideEnum sidePlacement, int spacing = 0)
         {
             GUIObject g = new GUIObject(this);
             g.AnchorToScreen(sidePlacement, spacing);
@@ -751,7 +751,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (focus.ParentWindow != null && AddToParentWindow) { focus.ParentWindow.AddControl(this); }
 
-            Vector2 position = focus.Position();
+            Point position = focus.Position();
             switch (sideToAlign)
             {
                 case SideEnum.Bottom:
@@ -780,7 +780,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     break;
             }
         }
-        internal Vector2 GetAlignToObject(GUIObject focus, SideEnum sideToAlign)
+        internal Point GetAlignToObject(GUIObject focus, SideEnum sideToAlign)
         {
             GUIObject g = new GUIObject(this);
             g.AlignToObject(focus, sideToAlign);
@@ -809,8 +809,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
         internal void CenterOnObject(GUIObject obj)
         {
-            float centerX = obj.Position().X + (obj.Width / 2);
-            float centerY = obj.Position().Y + (obj.Height / 2);
+            int centerX = obj.Position().X + (obj.Width / 2);
+            int centerY = obj.Position().Y + (obj.Height / 2);
 
             this.SetX(centerX - Width / 2);
             this.SetY(centerY - Height / 2);

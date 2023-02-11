@@ -18,15 +18,15 @@ namespace RiverHollow.Characters
         private int _iCols = 10;
         private Item[,] _arrInventory;
 
-        public override Vector2 Position
+        public override Point Position
         {
             get
             {
-                return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - Constants.TILE_SIZE);
+                return new Point(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - Constants.TILE_SIZE);
             }
             set
             {
-                _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + Constants.TILE_SIZE);
+                _sprBody.Position = new Point(value.X, value.Y - _sprBody.Height + Constants.TILE_SIZE);
             }
         }
 

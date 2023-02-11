@@ -18,9 +18,9 @@ namespace RiverHollow.Map_Handling
         public string MapName { get; }
         public int X { get; }
         public int Y { get; }
-        public Vector2 Position => new Vector2(X * Constants.TILE_SIZE, Y * Constants.TILE_SIZE);
-        public Vector2 Center => new Vector2(Position.X + Constants.TILE_SIZE / 2, Position.Y + Constants.TILE_SIZE / 2);
-        public Rectangle Rect => Util.FloatRectangle(Position, Constants.TILE_SIZE, Constants.TILE_SIZE);
+        public Point Position => new Point(X * Constants.TILE_SIZE, Y * Constants.TILE_SIZE);
+        public Rectangle CollisionBox => new Rectangle(Position.X, Position.Y, Constants.TILE_SIZE, Constants.TILE_SIZE);
+        public Point Center => CollisionBox.Center;
 
         string _sClickAction = string.Empty;
         TravelPoint _travelPoint;
@@ -72,7 +72,7 @@ namespace RiverHollow.Map_Handling
             }
             else if (GetWorldObject() != null)
             {
-                if (PlayerManager.PlayerInRange(Center.ToPoint()))
+                if (PlayerManager.PlayerInRange(Center))
                 {
                     GetWorldObject().ProcessRightClick();
                     rv = true;
@@ -230,7 +230,7 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = false;
 
-            rv = Rect.Contains(n.CollisionCenter);
+            rv = CollisionBox.Contains(n.CollisionCenter);
 
             return rv;
         }
@@ -322,7 +322,7 @@ namespace RiverHollow.Map_Handling
 
         public bool PlayerIsAdjacent()
         {
-            return PlayerManager.PlayerInRange(Center.ToPoint(), Constants.TILE_SIZE) && GetWalkableNeighbours(true).Find(x => x.Rect.Contains(PlayerManager.PlayerActor.CollisionCenter)) != null;
+            return PlayerManager.PlayerInRange(Center, Constants.TILE_SIZE) && GetWalkableNeighbours(true).Find(x => x.CollisionBox.Contains(PlayerManager.PlayerActor.CollisionCenter)) != null;
         }
 
         public List<RHTile> GetWalkableNeighbours(bool getDiagonal = false)

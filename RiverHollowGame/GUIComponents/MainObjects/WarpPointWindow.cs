@@ -60,7 +60,7 @@ namespace RiverHollow.GUIComponents.MainObjects
 
         public void ChooseWarpPoint(WarpPoint obj)
         {
-            MapManager.FadeToNewMap(obj.CurrentMap, obj.CollisionBox.Location.ToVector2() + new Vector2(0, Constants.TILE_SIZE));
+            MapManager.FadeToNewMap(obj.CurrentMap, obj.CollisionBox.Location + new Point(0, Constants.TILE_SIZE));
 
             GUIManager.CloseMainObject();
         }

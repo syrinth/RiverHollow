@@ -21,12 +21,12 @@ namespace RiverHollow.Characters
         protected AnimatedSprite _sprBody;
         public AnimatedSprite BodySprite => _sprBody;
 
-        public virtual Vector2 Position
+        public virtual Point Position
         {
-            get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y); }
+            get { return new Point(_sprBody.Position.X, _sprBody.Position.Y); }
             set { _sprBody.Position = value; }
         }
-        public virtual Vector2 Center => _sprBody.Center;
+        public virtual Point Center => _sprBody.Center;
 
         protected int _iBodyWidth = Constants.TILE_SIZE;
         public int Width => _iBodyWidth;

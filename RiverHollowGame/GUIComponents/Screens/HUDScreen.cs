@@ -260,7 +260,7 @@ namespace RiverHollow.GUIComponents.Screens
                     if (o.Position().X > -GUIButton.BTN_WIDTH) { val = -16; }
                 }
 
-                Vector2 temp = o.Position();
+                Point temp = o.Position();
                 temp.X += val;
                 o.Position(temp);
                 if (_bOpen && o.Position().X == 0) { _openingFinished++; }
@@ -367,7 +367,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _delAction(this); }
             else
             {
-                MoveBy(new Vector2(0, -1));
+                MoveBy(new Point(0, -1));
                 Alpha(Alpha() - 0.005f);
             }
         }

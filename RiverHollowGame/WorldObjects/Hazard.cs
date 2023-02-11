@@ -58,8 +58,8 @@ namespace RiverHollow.WorldObjects
             {
                 RHTile currentTile = CurrentMap.GetTileByPixelPosition(CollisionCenter);
                 RHTile nextTile = currentTile.GetTileByDirection(_eMoveDir);
-                float deltaX = Math.Abs((nextTile.Center - CollisionCenter.ToVector2()).X);
-                float deltaY = Math.Abs((nextTile.Center - CollisionCenter.ToVector2()).Y);
+                float deltaX = Math.Abs((nextTile.Center - CollisionCenter).X);
+                float deltaY = Math.Abs((nextTile.Center - CollisionCenter).Y);
 
                 if (!nextTile.Passable() && deltaX < Constants.TILE_SIZE + 2 && deltaY < Constants.TILE_SIZE + 2)
                 {
@@ -67,9 +67,9 @@ namespace RiverHollow.WorldObjects
                 }
                 else
                 {
-                    Vector2 vec = Util.GetVectorFromDirection(_eMoveDir);
-                    _sprite.Position += vec * 2;
-                    _vMapPosition += vec * 2;
+                    Point vec = Util.GetPointFromDirection(_eMoveDir);
+                    _sprite.Position += Util.MultiplyPoint(vec, 2);
+                    MapPosition += Util.MultiplyPoint(vec, 2);
                 }
             }
 
@@ -88,11 +88,11 @@ namespace RiverHollow.WorldObjects
 
             if (_eHazardType != HazardTypeEnum.Passive)
             {
-                _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _uSize);
+                _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
             }
         }
 
-        public override bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
+        public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
         {
             bool rv = base.PlaceOnMap(pos, map);
 

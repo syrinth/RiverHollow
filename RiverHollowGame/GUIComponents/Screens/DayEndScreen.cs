@@ -19,7 +19,7 @@ namespace RiverHollow.GUIComponents.Screens
         DayEndPhaseEnum _eCurrentPhase = DayEndPhaseEnum.StartSave;
         const double MAX_POP_TIME = 4.0;
         const double DAY_DISPLAY_PAUSE = 2;
-        readonly Vector2 _pGridOffset = new Vector2(96, 112);
+        readonly Point _pGridOffset = new Point(96, 112);
         RHTimer _timer;
 
         GUIImage _gBackgroundImage;
@@ -30,7 +30,7 @@ namespace RiverHollow.GUIComponents.Screens
         GUIButton _btnExit;
         List<TalkingActor> _liNPCs;
         List<Traveler> _liOldTravelers;
-        List<Vector2> _liPoints;
+        List<Point> _liPoints;
         List<GUIImage> _liCoins;
 
         int _iTotalIncome = 0;
@@ -46,14 +46,14 @@ namespace RiverHollow.GUIComponents.Screens
             GameManager.CurrentScreen = GameScreenEnum.Info;
 
             _liCoins = new List<GUIImage>();
-            _liPoints = new List<Vector2>();
+            _liPoints = new List<Point>();
 
             int loops = 0;
             for (int row = 0; row < 7 * Constants.TILE_SIZE; row += (Constants.TILE_SIZE))
             {
                 for (int column = (loops % 2 == 0) ? 0 : (Constants.TILE_SIZE); column < 18 * Constants.TILE_SIZE; column += (Constants.TILE_SIZE * 2))
                 {
-                    _liPoints.Add(new Vector2(ScaleIt((int)_pGridOffset.X + column), ScaleIt((int)_pGridOffset.Y + row)));
+                    _liPoints.Add(new Point(ScaleIt(_pGridOffset.X + column), ScaleIt(_pGridOffset.Y + row)));
                 }
                 loops++;
             }

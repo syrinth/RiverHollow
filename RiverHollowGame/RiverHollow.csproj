@@ -90,6 +90,7 @@
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDMerchantWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDMiniInventory.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDUpgrade.cs" />
+    <Compile Include="Items\MapItem.cs" />
     <Compile Include="Items\Tools\CapeOfBlinking.cs" />
     <Compile Include="Items\Tools\HitboxTool.cs" />
     <Compile Include="Items\Tools\IceStaff.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Misc\FieldOfVision.cs" />
     <Compile Include="Misc\StatusEffect.cs" />
     <Compile Include="Misc\Upgrade.cs" />
+    <Compile Include="Misc\VectorBuffer.cs" />
     <Compile Include="WorldObjects\Building.cs" />
     <Compile Include="Map Handling\Dungeon.cs" />
     <Compile Include="Map Handling\ProceduralDungeon.cs" />
@@ -223,7 +225,7 @@
     <Compile Include="SpriteAnimation\AnimatedSprite.cs" />
     <Compile Include="Map Handling\RHMap.cs" />
     <Compile Include="Map Handling\RHTile.cs" />
-    <Compile Include="Utilities\Structures.cs" />
+    <Compile Include="Utilities\DataStructures.cs" />
     <Compile Include="Utilities\Utilities.cs" />
   </ItemGroup>
   <ItemGroup>

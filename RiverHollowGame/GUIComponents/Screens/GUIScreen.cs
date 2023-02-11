@@ -92,7 +92,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (_guiTextWindow != null) { _guiTextWindow.Update(gTime); }
 
-            if (_rHoverArea != Rectangle.Empty && !_rHoverArea.Contains(_bGUIObject ? GUICursor.Position.ToPoint() : GUICursor.GetWorldMousePosition().ToPoint())) {
+            if (_rHoverArea != Rectangle.Empty && !_rHoverArea.Contains(_bGUIObject ? GUICursor.Position : GUICursor.GetWorldMousePosition())) {
                 CloseHoverWindow();
             }
         }

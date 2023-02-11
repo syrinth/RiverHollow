@@ -17,22 +17,22 @@ namespace RiverHollow.Items.Tools
             Rectangle hitbox = Rectangle.Empty;
             if (dir == DirectionEnum.Up)
             {
-                hitbox = new Rectangle(PlayerManager.PlayerActor.CollisionBoxPosition.ToPoint(), new Point(3 * Constants.TILE_SIZE, Constants.TILE_SIZE));
+                hitbox = new Rectangle(PlayerManager.PlayerActor.CollisionBoxLocation, new Point(3 * Constants.TILE_SIZE, Constants.TILE_SIZE));
                 hitbox.Offset(-Constants.TILE_SIZE, -Constants.TILE_SIZE);
             }
             else if (dir == DirectionEnum.Down)
             {
-                hitbox = new Rectangle(PlayerManager.PlayerActor.CollisionBoxPosition.ToPoint(), new Point(3 * Constants.TILE_SIZE, Constants.TILE_SIZE));
+                hitbox = new Rectangle(PlayerManager.PlayerActor.CollisionBoxLocation, new Point(3 * Constants.TILE_SIZE, Constants.TILE_SIZE));
                 hitbox.Offset(-Constants.TILE_SIZE, PlayerManager.PlayerActor.CollisionBox.Height);
             }
             else if (dir == DirectionEnum.Left)
             {
-                hitbox = new Rectangle(PlayerManager.PlayerActor.CollisionBoxPosition.ToPoint(), new Point(Constants.TILE_SIZE, 3 * Constants.TILE_SIZE));
+                hitbox = new Rectangle(PlayerManager.PlayerActor.CollisionBoxLocation, new Point(Constants.TILE_SIZE, 3 * Constants.TILE_SIZE));
                 hitbox.Offset(-Constants.TILE_SIZE, -Constants.TILE_SIZE);
             }
             else if (dir == DirectionEnum.Right)
             {
-                hitbox = new Rectangle(PlayerManager.PlayerActor.CollisionBoxPosition.ToPoint(), new Point(Constants.TILE_SIZE, 3 * Constants.TILE_SIZE));
+                hitbox = new Rectangle(PlayerManager.PlayerActor.CollisionBoxLocation, new Point(Constants.TILE_SIZE, 3 * Constants.TILE_SIZE));
                 hitbox.Offset(PlayerManager.PlayerActor.CollisionBox.Width, -Constants.TILE_SIZE);
             }
 

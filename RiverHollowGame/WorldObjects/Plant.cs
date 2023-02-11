@@ -47,7 +47,7 @@ namespace RiverHollow.WorldObjects
             _bWalkable = true;
 
             _iCurrentState = 0;
-            _rBase.Y = _uSize.Height - 1;
+            _rBase.Y = _pSize.Y - 1;
 
             Util.AssignValue(ref _eSeason, "Season", stringData);
             Util.AssignValue(ref _iHoneyID, "HoneyID", stringData);
@@ -62,26 +62,26 @@ namespace RiverHollow.WorldObjects
             for (int j = 0; j < _iMaxStates - 1; j++)
             {
                 _diTransitionTimes.Add(j, int.Parse(dayStr[j]));
-                _sprite.AddAnimation((j + 1).ToString(), _pImagePos.X + (Constants.TILE_SIZE * (j + 1)), _pImagePos.Y, _uSize);
+                _sprite.AddAnimation((j + 1).ToString(), _pImagePos.X + (Constants.TILE_SIZE * (j + 1)), _pImagePos.Y, _pSize);
             }
             _iDaysLeft = _diTransitionTimes[0];
 
             if (stringData.ContainsKey("DestructionAnim"))
             {
                 string[] splitString = stringData["DestructionAnim"].Split('-');
-                _sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), _uSize, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
+                _sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), _pSize, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
             }
 
-            _sprite.SetRotationOrigin(new Vector2((_uSize.Width * Constants.TILE_SIZE) / 2, (_uSize.Height * Constants.TILE_SIZE) - 1));    //Subtract one to keep it in the bounds of the rectangle
+            _sprite.SetRotationOrigin(new Vector2(_pSize.X * Constants.TILE_SIZE / 2, (_pSize.Y * Constants.TILE_SIZE) - 1));    //Subtract one to keep it in the bounds of the rectangle
         }
 
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
         {
             _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-            _sprite.AddAnimation(0.ToString(), (int)_pImagePos.X, (int)_pImagePos.Y, _uSize);
+            _sprite.AddAnimation(0.ToString(), (int)_pImagePos.X, (int)_pImagePos.Y, _pSize);
             for (int j = 1; j < _diTransitionTimes.Count + 1; j++)
             {
-                _sprite.AddAnimation(j.ToString(), (int)_pImagePos.X + (Constants.TILE_SIZE * j), (int)_pImagePos.Y, _uSize);
+                _sprite.AddAnimation(j.ToString(), (int)_pImagePos.X + (Constants.TILE_SIZE * j), (int)_pImagePos.Y, _pSize);
             }
         }
 
@@ -149,7 +149,7 @@ namespace RiverHollow.WorldObjects
                     Item it = DataManager.GetItem(_iResourceID);
                     if (_bPopItem)
                     {
-                        it.Pop(MapPosition);
+                        MapManager.DropItemOnMap(it, MapPosition);
                     }
                     else
                     {

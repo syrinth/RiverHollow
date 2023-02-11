@@ -64,13 +64,13 @@ namespace RiverHollow.WorldObjects
             _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
         }
 
-        public override bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
+        public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
         {
             bool rv = base.PlaceOnMap(pos, map);
 
             if (_objPlant != null)
             {
-                _objPlant?.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objPlant.Sprite.Height - Constants.TILE_SIZE)));
+                _objPlant?.SnapPositionToGrid(new Point(MapPosition.X, MapPosition.Y - (_objPlant.Sprite.Height - Constants.TILE_SIZE)));
                 _objPlant?.SyncLightPositions();
 
                 if (_objPlant.FinishedGrowing())
@@ -128,7 +128,7 @@ namespace RiverHollow.WorldObjects
 
             _objPlant = obj;
             _objPlant?.SetGarden(this);
-            _objPlant?.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objPlant.Sprite.Height - Constants.TILE_SIZE)));
+            _objPlant?.SnapPositionToGrid(new Point(MapPosition.X, MapPosition.Y - (_objPlant.Sprite.Height - Constants.TILE_SIZE)));
             _objPlant?.SyncLightPositions();
         }
         public Plant GetPlant() { return _objPlant; }
@@ -137,11 +137,11 @@ namespace RiverHollow.WorldObjects
         /// Syncs up the _sprWatered and the plant with the new position
         /// </summary>
         /// <param name="position"></param>
-        public override void SnapPositionToGrid(Vector2 position)
+        public override void SnapPositionToGrid(Point position)
         {
             base.SnapPositionToGrid(position);
-            _sprWatered.Position = _vMapPosition;
-            _objPlant?.SnapPositionToGrid(new Vector2(_vMapPosition.X, _vMapPosition.Y - (_objPlant.Sprite.Height - Constants.TILE_SIZE)));
+            _sprWatered.Position = MapPosition;
+            _objPlant?.SnapPositionToGrid(new Point(MapPosition.X, MapPosition.Y - (_objPlant.Sprite.Height - Constants.TILE_SIZE)));
         }
 
         public override void Rollover()

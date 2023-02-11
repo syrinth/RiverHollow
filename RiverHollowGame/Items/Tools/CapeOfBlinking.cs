@@ -12,14 +12,14 @@ namespace RiverHollow.Items
 
         public override bool ItemBeingUsed()
         {
-            Vector2 initialPosition = PlayerManager.PlayerActor.Position;
-            PlayerManager.PlayerActor.Position += Util.GetVectorFromDirection(PlayerManager.PlayerActor.Facing) * Constants.TILE_SIZE * 2;
+            Point initialPosition = PlayerManager.PlayerActor.Position;
+            PlayerManager.PlayerActor.MoveActor(Util.MultiplyPoint(Util.GetPointFromDirection(PlayerManager.PlayerActor.Facing), Constants.TILE_SIZE * 2));
 
             //Need to get all tiles touched by the player Rectangle as we are only touching on the Position and not the entirety
             List<RHTile> tiles = PlayerManager.GetTiles();
             while (tiles.Find(x => !x.Passable()) != null)
             {
-                PlayerManager.PlayerActor.Position += Util.GetVectorFromDirection(Util.GetOppositeDirection(PlayerManager.PlayerActor.Facing));
+                PlayerManager.PlayerActor.MoveActor(Util.GetPointFromDirection(Util.GetOppositeDirection(PlayerManager.PlayerActor.Facing)));
                 tiles = PlayerManager.GetTiles();
             }
 

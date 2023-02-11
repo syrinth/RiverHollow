@@ -59,7 +59,7 @@ namespace RiverHollow.Characters
                     _sprBody.SetLayerDepthMod(Constants.MAX_LAYER_DEPTH);
                 }
 
-                Position += new Vector2(-2, -2);
+                MoveActor(new Vector2(-2, -2));
 
                 if (Position.X < 0 || Position.Y < 0)
                 {
@@ -70,7 +70,7 @@ namespace RiverHollow.Characters
 
         private void CheckFlee(WorldActor actor)
         {
-            if (Util.GetDistance(actor.Center.ToPoint(), CollisionCenter) <= 80)
+            if (Util.GetDistance(actor.Center, CollisionCenter) <= 80)
             {
                 _bFlee = true;
                 _animationTimer.Stop();

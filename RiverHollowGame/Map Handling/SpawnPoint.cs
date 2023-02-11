@@ -25,7 +25,7 @@ namespace RiverHollow.Map_Handling
             _diSpawnData = new Dictionary<RarityEnum, List<SpawnData>>();
 
             _map = map;
-            _vPosition = map.GetTileByGridCoords(Util.GetGridCoords(obj.Position)).Position;
+            _vPosition = map.GetTileByGridCoords(Util.GetGridCoords(obj.Position.ToPoint())).Position.ToVector2();
             _szDimensions = obj.Size;
             _szDimensions = obj.Size;
         }
@@ -51,7 +51,7 @@ namespace RiverHollow.Map_Handling
         protected List<RHTile> TilesInArea(bool onlyValid)
         {
             List<RHTile> validTiles = new List<RHTile>();
-            foreach (Vector2 v in Util.GetAllPointsInArea(_vPosition, _szDimensions, Constants.TILE_SIZE))
+            foreach (Point v in Util.GetAllPointsInArea(_vPosition, _szDimensions, Constants.TILE_SIZE))
             {
                 RHTile tile = _map.GetTileByPixelPosition(v);
                 if (!onlyValid || tile.Passable())
@@ -148,7 +148,7 @@ namespace RiverHollow.Map_Handling
                     else
                     {
                         WorldObject wObj = DataManager.CreateWorldObjectByID(sData.ID);
-                        wObj.SnapPositionToGrid(new Vector2(targetTile.Position.X, targetTile.Position.Y));
+                        wObj.SnapPositionToGrid(new Point(targetTile.Position.X, targetTile.Position.Y));
 
                         if (wObj.CompareType(ObjectTypeEnum.Plant) && !_bHasSpawned)
                         {

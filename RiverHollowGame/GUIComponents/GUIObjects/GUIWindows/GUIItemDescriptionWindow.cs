@@ -10,7 +10,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
     public class GUIItemDescriptionWindow : GUITextWindow
     {
         GUIImage _gBar;
-        public GUIItemDescriptionWindow(Item it, Vector2 position) : base(new TextEntry(it.Description()), position)
+        public GUIItemDescriptionWindow(Item it, Point position) : base(new TextEntry(it.Description()), position)
         {
             _gBar = new GUIImage(new Rectangle(106, 122, 8, 1), _giText.Width, ScaleIt(1), DataManager.HUD_COMPONENTS);
             _gBar.AnchorAndAlignToObject(_giText, SideEnum.Bottom, SideEnum.Left, ScaleIt(2));

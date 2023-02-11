@@ -21,7 +21,7 @@ namespace RiverHollow.SpriteAnimations
         Dictionary<string, FrameAnimation> _diFrameAnimations = new Dictionary<string, FrameAnimation>();
 
         // Calculated center of the sprite
-        public Vector2 Center => new Vector2(Position.X + Width / 2, Position.Y + Height / 2);
+        public Point Center => new Point(Position.X + Width / 2, Position.Y + Height / 2);
         public int Width { get; private set; } = -1;
         public int Height { get; private set; } = -1;
 
@@ -30,7 +30,7 @@ namespace RiverHollow.SpriteAnimations
 
         /// Vector2 representing the position of the sprite's upper left
         /// corner pixel.
-        public Vector2 Position { get; set; } = Vector2.Zero;
+        public Point Position { get; set; } = Point.Zero;
 
         public bool Drawing { get; set; } = true;
 
@@ -95,10 +95,10 @@ namespace RiverHollow.SpriteAnimations
         }
 
         #region AddAnimation Helpers
-        public void AddAnimation<TEnum>(TEnum verb, int startX, int startY, RHSize size, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, size.Width * Constants.TILE_SIZE, size.Height * Constants.TILE_SIZE, Frames, FrameLength, pingPong, playsOnce); }
+        public void AddAnimation<TEnum>(TEnum verb, int startX, int startY, Point size, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, size.X * Constants.TILE_SIZE, size.Y * Constants.TILE_SIZE, Frames, FrameLength, pingPong, playsOnce); }
         public void AddAnimation<TEnum>(TEnum verb, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetEnumString(verb), startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce); }
         public void AddAnimation(VerbEnum verb, DirectionEnum dir, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(Util.GetActorString(verb, dir), startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce); }
-        public void AddAnimation(string animationName, int startX, int startY, RHSize size, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(animationName, startX, startY, size.Width * Constants.TILE_SIZE, size.Height * Constants.TILE_SIZE, Frames, FrameLength, pingPong, playsOnce); }
+        public void AddAnimation(string animationName, int startX, int startY, Point size, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(animationName, startX, startY, size.X * Constants.TILE_SIZE, size.Y * Constants.TILE_SIZE, Frames, FrameLength, pingPong, playsOnce); }
         public void AddAnimation(string animationName, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false)
         {
             _diFrameAnimations.Add(animationName, new FrameAnimation(startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce));
@@ -202,11 +202,6 @@ namespace RiverHollow.SpriteAnimations
             {
                 return null;
             }
-        }
-
-        public void MoveBy(float x, float y)
-        {
-            Position = new Vector2(Position.X + x, Position.Y + y);
         }
 
         public void Update(GameTime gTime)

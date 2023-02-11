@@ -11,16 +11,16 @@ namespace RiverHollow.WorldObjects
     public class Light
     {
         AnimatedSprite _sprite;
-        public Vector2 Position
+        public Point Position
         {
             get { return _sprite.Position; }
             set { _sprite.Position = value; }
         }
 
-        private Vector2 _vecDimensions;
+        private Point _pDimensions;
 
-        public int Width => (int)_vecDimensions.X;
-        public int Height => (int)_vecDimensions.Y;
+        public int Width => _pDimensions.X;
+        public int Height => _pDimensions.Y;
 
         public Light(int id, Dictionary<string, string> stringData)
         {
@@ -31,7 +31,7 @@ namespace RiverHollow.WorldObjects
 
             Vector2 animDescriptor = new Vector2(1, 1);
             Util.AssignValue(ref animDescriptor, "Idle", stringData);
-            Util.AssignValue(ref _vecDimensions, "Dimensions", stringData);
+            Util.AssignValue(ref _pDimensions, "Dimensions", stringData);
             _sprite.AddAnimation(AnimationEnum.ObjectIdle, 0, 0, Width, Height, (int)animDescriptor.X, animDescriptor.Y, true);
         }
 

@@ -133,7 +133,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         /// </summary>
         private void PopulateList()
         {
-            Vector2 position = GetAnchorToInnerSide(this, GUIObject.SideEnum.Top);
+            Point position = GetAnchorToInnerSide(this, GUIObject.SideEnum.Top);
 
             foreach (GUIObject o in Objects)
             {

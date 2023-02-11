@@ -76,7 +76,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (KeyValuePair<object, EffectData> kvp in _diCurrentEffects)
             {
-                if (kvp.Value.Position != Vector2.Zero)
+                if (kvp.Value.Position != Point.Zero)
                 {
                     kvp.Value.SetVolume(GetDistanceVolume(kvp.Value.Position));
                 }
@@ -159,7 +159,7 @@ namespace RiverHollow.Game_Managers
             EffectVolume = value;
             foreach (KeyValuePair<object, EffectData> kvp in _diCurrentEffects)
             {
-                if (kvp.Value.Position != Vector2.Zero)
+                if (kvp.Value.Position != Point.Zero)
                 {
                     kvp.Value.SetVolume(GetDistanceVolume(kvp.Value.Position));
                 }
@@ -261,7 +261,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="effect">Name of the ffect</param>
         /// <param name="mapName">Which map to play it on</param>
         /// <param name="loc">The location of the effect</param>
-        public static void PlayEffectAtLoc(string effectName, string mapName, Vector2 loc, object obj = null)
+        public static void PlayEffectAtLoc(string effectName, string mapName, Point loc, object obj = null)
         {
             if (string.IsNullOrEmpty(effectName)) { return; }
 
@@ -287,14 +287,14 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        private static float GetDistanceVolume(Vector2 loc)
+        private static float GetDistanceVolume(Point loc)
         {
             //TODO: There should probably be a log function here? The sound seems to drop off and vanish almost immediately when we're out of range but be clear beforehand
-            int range = (int)(RiverHollow.ScreenWidth / 8);
+            int range = (RiverHollow.ScreenWidth / 8);
             int distance = -1;
 
-            PlayerManager.PlayerInRangeGetDist(loc.ToPoint(), range, ref distance);
-            float volume = Math.Max(0f, ((float)range - (float)distance) / (float)range) * EffectVolume;
+            PlayerManager.PlayerInRangeGetDist(loc, range, ref distance);
+            float volume = Math.Max(0f, (float)(range - distance) / range) * EffectVolume;
             return volume;
         }
 
@@ -304,8 +304,7 @@ namespace RiverHollow.Game_Managers
             public object EffectObject => _obj;
             string _sMapName;
             public string MapName => _sMapName;
-            Vector2 _vPosition;
-            public Vector2 Position => _vPosition;
+            public Point Position { get; private set; }
             SoundEffectInstance _instance;
             public SoundEffectInstance SoundEffect => _instance;
             float _fVolume;
@@ -324,9 +323,9 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            public void SetPosition(Vector2 val)
+            public void SetPosition(Point val)
             {
-                _vPosition = val;
+                Position = val;
             }
 
             public void SetVolume(float val)

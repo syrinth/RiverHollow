@@ -34,32 +34,34 @@ namespace RiverHollow.Characters
 
         public WorldActorTypeEnum ActorType { get; protected set; }
 
-        public Vector2 MoveToLocation { get; private set; }
-        protected Vector2 _vLeashPoint;
-        protected Vector2 _vVelocity;
-        protected float _fDecay;
-
-        public string CurrentMapName;
-        public RHMap CurrentMap => (!string.IsNullOrEmpty(CurrentMapName) ? MapManager.Maps[CurrentMapName] : null);
-        public Vector2 NewMapPosition;
-
         /// <summary>
         /// For World Actors, the Position is the top-left corner of the Actor's bounding box. Because the bounding
         /// box of the Acotr is not located at the same position as the top-left of the sprite, calculations need to be
         /// made to set the sprite's position value above the given position, and retrieving the Actor's Position value must
         /// likewise work backwards from the Sprite's Position to find where it is below.
         /// </summary>
-        public override Vector2 Position
+        public override Point Position
         {
             get
             {
-                return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - Constants.TILE_SIZE);
+                return new Point(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - Constants.TILE_SIZE);
             } //MAR this is fucked up
             set
             {
-                _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + Constants.TILE_SIZE);
+                _sprBody.Position = new Point(value.X, value.Y - _sprBody.Height + Constants.TILE_SIZE);
             }
         }
+        public Point MoveToLocation { get; private set; }
+        protected Point _pLeashPoint;
+        protected Vector2 _vVelocity;
+        protected float _fDecay;
+
+        protected VectorBuffer _vbMovement;
+        public Vector2 AccumulatedMovement => _vbMovement.AccumulatedMovement;
+
+        public string CurrentMapName;
+        public RHMap CurrentMap => (!string.IsNullOrEmpty(CurrentMapName) ? MapManager.Maps[CurrentMapName] : null);
+        public Point NewMapPosition;
 
         protected Thread _pathingThread;
 
@@ -72,11 +74,13 @@ namespace RiverHollow.Characters
 
         protected double _dCooldown = 0;
 
+        #region CollisionBox
         public virtual Rectangle CollisionBox => new Rectangle((int)_sprBody.Position.X + CollisionOffset.X, (int)_sprBody.Position.Y + CollisionOffset.Y, Width, Constants.TILE_SIZE);
         public Point CollisionOffset => new Point(0, Height - Constants.TILE_SIZE);
-        public Vector2 CollisionBoxPosition => CollisionBox.Location.ToVector2();
-
+        public Point CollisionBoxLocation => CollisionBox.Location;
         public Point CollisionCenter => CollisionBox.Center;
+        #endregion
+
         public virtual Rectangle HoverBox => new Rectangle((int)_sprBody.Position.X, (int)_sprBody.Position.Y, _sprBody.Width, _sprBody.Height);
 
         protected bool _bOnTheMap = true;
@@ -108,6 +112,7 @@ namespace RiverHollow.Characters
             _iBodyHeight = Constants.HUMAN_HEIGHT;
 
             _liTilePath = new List<RHTile>();
+            _vbMovement = new VectorBuffer();
         }
 
         public WorldActor(int id, Dictionary<string, string> stringData) : base()
@@ -115,16 +120,17 @@ namespace RiverHollow.Characters
             ID = id;
             ActorType = Util.ParseEnum<WorldActorTypeEnum>(stringData["Type"]);
 
+            _vbMovement = new VectorBuffer();
             _liTilePath = new List<RHTile>();
             _movementTimer = new RHTimer(_fBaseWanderTimer);
 
             if (stringData.ContainsKey("Size"))
             {
-                RHSize size = new RHSize();
+                Point size = new Point();
                 Util.AssignValue(ref size, "Size", stringData);
 
-                _iBodyWidth = size.Width;
-                _iBodyHeight = size.Height;
+                _iBodyWidth = size.X;
+                _iBodyHeight = size.Y;
             }
 
             Wandering = stringData.ContainsKey("Wander");
@@ -217,7 +223,7 @@ namespace RiverHollow.Characters
             //Only do this if they are idle so as to not disturb other animations they may be performing.
             if (facePlayer && BodySprite.CurrentAnimation.StartsWith("Idle"))
             {
-                Vector2 diff = Center - PlayerManager.PlayerActor.Center;
+                Point diff = Center - PlayerManager.PlayerActor.Center;
                 if (Math.Abs(diff.X) > Math.Abs(diff.Y))
                 {
                     if (diff.X > 0)  //The player is to the left
@@ -249,16 +255,20 @@ namespace RiverHollow.Characters
         {
             if (tile != null)
             {
-                DetermineFacing(new Vector2(tile.Position.X - Position.X, tile.Position.Y - Position.Y));
+                DetermineFacing(new Point(tile.Position.X - Position.X, tile.Position.Y - Position.Y));
             }
         }
 
-        public void DetermineFacing(Vector2 direction)
+        public void DetermineFacing(Point direction)
         {
-            DirectionEnum newFacing = Util.GetDirectionFromNormalVector(direction);
+            DirectionEnum newFacing = Util.GetDirection(direction);
             if (newFacing != DirectionEnum.None) {
                 Facing = newFacing;
             }
+        }
+        public void DetermineAnimationState(Point direction)
+        {
+            DetermineAnimationState(direction.ToVector2());
         }
         public virtual void DetermineAnimationState(Vector2 direction)
         {
@@ -271,7 +281,7 @@ namespace RiverHollow.Characters
                 case ActorStateEnum.Grab:
                     if (Moving)
                     {
-                        DirectionEnum moveDir = Util.GetDirectionFromNormalVector(direction);
+                        DirectionEnum moveDir = Util.GetDirection(direction);
                         if(moveDir == Facing) { PlayAnimationVerb(VerbEnum.Push); }
                         else if(moveDir == Util.GetOppositeDirection(Facing)) { PlayAnimationVerb(VerbEnum.Pull); }
                     }
@@ -292,17 +302,23 @@ namespace RiverHollow.Characters
             _sprBody.PlayAnimation(VerbEnum.Walk, Facing);
         }
 
-        public virtual void SetMoveTo(Vector2 v, bool update = true)
+        public virtual void SetMoveTo(Point v, bool update = true)
         {
             MoveToLocation = v;
+            _vbMovement.Clear();
             if (update)
             {
-                if (v != Vector2.Zero)
+                if (v != Point.Zero)
                 {
                     DetermineFacing(v - Position);
                 }
                 DetermineAnimationState(v);
             }
+        }
+
+        public bool HasMovement()
+        {
+            return MoveToLocation != Point.Zero;
         }
 
         /// <summary>
@@ -333,7 +349,7 @@ namespace RiverHollow.Characters
         protected void ChangeMovement(float speed)
         {
             SpdMult = speed;
-            SetMoveTo(Vector2.Zero);
+            SetMoveTo(Point.Zero);
             _movementTimer.Reset(Constants.WANDER_COUNTDOWN);
         }
 
@@ -371,6 +387,27 @@ namespace RiverHollow.Characters
             }
         }
 
+        #region MoveBuffer Methods
+        public void MoveActor(Point p)
+        {
+            Position += _vbMovement.AddMovement(p.ToVector2());
+        }
+        public void MoveActor(Vector2 v)
+        {
+            Position += _vbMovement.AddMovement(v);
+        }
+
+        public Point ProjectedMovement(Vector2 dir)
+        {
+            return _vbMovement.ProjectMovement(dir); ;
+        }
+
+        public void ClearBuffer()
+        {
+            _vbMovement.Clear();
+        }
+        #endregion
+
         #region Pathing
         public Thread CalculatePathThreaded()
         {
@@ -388,8 +425,8 @@ namespace RiverHollow.Characters
                 return;
             }
 
-            Vector2 startPosition = Position;
-            Vector2 target = _eCurrentState == NPCStateEnum.TrackPlayer ? PlayerManager.PlayerActor.CollisionCenter.ToVector2() : _vLeashPoint; ;
+            Point startPosition = Position;
+            Point target = _eCurrentState == NPCStateEnum.TrackPlayer ? PlayerManager.PlayerActor.CollisionCenter : _pLeashPoint; ;
             //RHTile lastTile = _liTilePath.Count > 0 ? _liTilePath[0] : null;
             _liTilePath = TravelManager.FindPathToLocation(ref startPosition, target, null, false, false);
 
@@ -411,13 +448,10 @@ namespace RiverHollow.Characters
         /// <param name="target">The target location on the world map to move to</param>
         protected virtual void HandleMove()
         {
-            if (MoveToLocation != Vector2.Zero)
+            if (HasMovement())
             {
-                //Determines the distance that needs to be traveled from the current position to the target
-                Vector2 direction = Vector2.Zero;
-
-                //Determines how much of the needed position we're capable of  in one movement
-                Util.GetMoveSpeed(Position, MoveToLocation, BuffedSpeed, ref direction);
+                //Determines how much of the needed position we're capable of in one movement
+                Vector2  direction = Util.GetMoveSpeed(Position, MoveToLocation, BuffedSpeed);
 
                 //If we're following a path and there's more than one tile left, we don't want to cut
                 //short on individual steps, so recalculate based on the next target
@@ -432,10 +466,10 @@ namespace RiverHollow.Characters
 
                 bool impeded = false;
                 Vector2 initial = direction;
-                if (CurrentMap.CheckForCollisions(this, CollisionBox.Location.ToVector2(), CollisionBox, ref direction, ref impeded) && direction != Vector2.Zero)
+                if (CurrentMap.CheckForCollisions(this, ref direction, ref impeded) && direction != Vector2.Zero)
                 {
                     DetermineAnimationState(direction);
-                    Position += direction * (impeded ? Constants.IMPEDED_SPEED : 1f);
+                    MoveActor(direction * (impeded ? Constants.IMPEDED_SPEED : 1f));
                 }
                 else { _bBumpedIntoSomething = true; }
 
@@ -447,7 +481,7 @@ namespace RiverHollow.Characters
                 //If, after movement, we've reached the given location, zero it.
                 if (MoveToLocation == Position && !CutsceneManager.Playing)
                 {
-                    SetMoveTo(Vector2.Zero);
+                    SetMoveTo(Point.Zero);
                     if (_liTilePath.Count > 0)
                     {
                         _liTilePath.RemoveAt(0);
@@ -572,10 +606,10 @@ namespace RiverHollow.Characters
 
         protected void Wander(GameTime gTime)
         {
-            if (_movementTimer.TickDown(gTime) && MoveToLocation == Vector2.Zero)
+            if (_movementTimer.TickDown(gTime) && !HasMovement())
             {
-                Vector2 moveTo = Vector2.Zero;
-                while (moveTo == Vector2.Zero)
+                Point moveTo = Point.Zero;
+                while (moveTo == Point.Zero)
                 {
                     _movementTimer.Reset(_fBaseWanderTimer + RHRandom.Instance().Next(4) * 0.25);
 
@@ -590,13 +624,13 @@ namespace RiverHollow.Characters
                     RHTile myTile = CurrentMap.GetTileByPixelPosition(CollisionCenter);
                     var tileDir = Util.GetRandomItem(myTile.GetWalkableNeighbours());
 
-                    moveTo = Position + (tileDir.Position - myTile.Position) * RHRandom.Instance().Next(_iMinWander, _iMaxWander);
+                    moveTo = Position + Util.MultiplyPoint((tileDir.Position - myTile.Position), RHRandom.Instance().Next(_iMinWander, _iMaxWander));
                 }
 
                 SetMoveTo(moveTo);
             }
 
-            if (MoveToLocation != Vector2.Zero)
+            if (HasMovement())
             {
                 HandleMove();
             }
@@ -697,9 +731,9 @@ namespace RiverHollow.Characters
             Vector2 dir = _vVelocity;
 
             bool impeded = false;
-            if (CurrentMap.CheckForCollisions(this, Position, CollisionBox, ref dir, ref impeded))
+            if (CurrentMap.CheckForCollisions(this, ref dir, ref impeded))
             {
-                Position += dir;
+                MoveActor(dir);
             }
             _vVelocity *= 0.98f;
         }
@@ -726,7 +760,7 @@ namespace RiverHollow.Characters
                     _vVelocity *= 0;
                     break;
                 default:
-                    SetMoveTo(Vector2.Zero);
+                    SetMoveTo(Point.Zero);
                     ClearPath();
                     break;
             }

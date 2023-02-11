@@ -36,7 +36,7 @@ namespace RiverHollow.Characters
         {
             AnimatedSprite playerSprite = PlayerManager.PlayerActor.BodySprite;
             MapManager.CurrentMap.AddActor(this);
-            Vector2 mod = new Vector2((playerSprite.Width - BodySprite.Width) / 2, BodySprite.Height - 8);
+            Point mod = new Point((playerSprite.Width - BodySprite.Width) / 2, BodySprite.Height - 8);
             Position = playerSprite.Position + mod;
         }
 

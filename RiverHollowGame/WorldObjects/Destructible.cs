@@ -49,7 +49,7 @@ namespace RiverHollow.WorldObjects
             base.Update(gTime);
 
             //Destructibles move when hit, so reset position
-            _sprite.Position = _vMapPosition;
+            _sprite.Position = MapPosition;
             if (_iHP <= 0)
             {
                 if (!_sprite.ContainsAnimation(AnimationEnum.KO) || _sprite.AnimationFinished(AnimationEnum.KO))
@@ -77,7 +77,7 @@ namespace RiverHollow.WorldObjects
             {
                 if (toolUsed.ToolLevel >= NeededToolLevel)
                 {
-                    SoundManager.PlayEffectAtLoc(toolUsed.SoundEffect, MapName, CollisionCenter.ToVector2());
+                    SoundManager.PlayEffectAtLoc(toolUsed.SoundEffect, MapName, CollisionCenter);
 
                     if (_iHP > 0)
                     {
@@ -88,20 +88,14 @@ namespace RiverHollow.WorldObjects
                             _bWalkable = true;
                             _sprite.PlayAnimation(AnimationEnum.KO);
 
-                            MapManager.DropItemsOnMap(GetDroppedItems(), CollisionBox.Location.ToVector2());
+                            MapManager.DropItemsOnMap(GetDroppedItems(), CollisionBox.Location);
                             CurrentMap.AlertSpawnPoint(this);
                         }
                         else
                         {
                             //Nudge the Object in the direction of the 'attack'
-                            int xMod = 0, yMod = 0;
-                            if (PlayerManager.PlayerActor.Facing == DirectionEnum.Left) { xMod = -1; }
-                            else if (PlayerManager.PlayerActor.Facing == DirectionEnum.Right) { xMod = 1; }
-
-                            if (PlayerManager.PlayerActor.Facing == DirectionEnum.Up) { yMod = -1; }
-                            else if (PlayerManager.PlayerActor.Facing == DirectionEnum.Down) { yMod = 1; }
-
-                            _sprite.Position = new Vector2(_sprite.Position.X + xMod, _sprite.Position.Y + yMod);
+                            Point nudgePoint = Util.GetPointFromDirection(PlayerManager.PlayerActor.Facing);
+                            _sprite.Position = new Point(_sprite.Position.X + nudgePoint.X, _sprite.Position.Y + nudgePoint.Y);
                         }
                     }
                 }

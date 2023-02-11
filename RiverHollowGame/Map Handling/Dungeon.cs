@@ -12,7 +12,7 @@ namespace RiverHollow.Map_Handling
         protected List<string> _liMapNames;
         protected List<TriggerObject> _liTriggerObjects;
         protected string _sEntranceMapName;
-        protected Vector2 _vRecallPoint;
+        protected Point _pRecallPoint;
         public int NumKeys { get; private set; }
         public string Name { get; private set; }
         protected List<WarpPoint> _liWarpPoints;
@@ -53,7 +53,7 @@ namespace RiverHollow.Map_Handling
 
         public void GoToEntrance()
         {
-            MapManager.FadeToNewMap(MapManager.Maps[_sEntranceMapName], _vRecallPoint);
+            MapManager.FadeToNewMap(MapManager.Maps[_sEntranceMapName], _pRecallPoint);
             PlayerManager.PlayerActor.Facing = DirectionEnum.Down;
         }
 

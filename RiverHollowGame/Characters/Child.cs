@@ -99,9 +99,9 @@ namespace RiverHollow.Characters
             {
                 List<RHTile> validTiles = new List<RHTile>();
                 Point objLocation = obj.CollisionBox.Location;
-                foreach (Vector2 v in Util.GetAllPointsInArea(objLocation.X - (3 * Constants.TILE_SIZE), objLocation.Y - (3 * Constants.TILE_SIZE), Constants.TILE_SIZE * 7, Constants.TILE_SIZE * 7, Constants.TILE_SIZE))
+                foreach (Point p in Util.GetAllPointsInArea(objLocation.X - (3 * Constants.TILE_SIZE), objLocation.Y - (3 * Constants.TILE_SIZE), Constants.TILE_SIZE * 7, Constants.TILE_SIZE * 7, Constants.TILE_SIZE))
                 {
-                    RHTile t = obj.CurrentMap.GetTileByPixelPosition(v);
+                    RHTile t = obj.CurrentMap.GetTileByPixelPosition(p);
                     if (t != null && t.Passable() && (t.WorldObject == null || t.WorldObject.Walkable)) { validTiles.Add(t); }
                 }
 
@@ -119,9 +119,9 @@ namespace RiverHollow.Characters
 
             List<RHTile> validTiles = new List<RHTile>();
             Point playerLocation = PlayerManager.PlayerActor.CollisionBox.Location;
-            foreach (Vector2 v in Util.GetAllPointsInArea(playerLocation.X - (3 * Constants.TILE_SIZE), playerLocation.Y - (3 * Constants.TILE_SIZE), Constants.TILE_SIZE * 7, Constants.TILE_SIZE * 7, Constants.TILE_SIZE))
+            foreach (Point p in Util.GetAllPointsInArea(playerLocation.X - (3 * Constants.TILE_SIZE), playerLocation.Y - (3 * Constants.TILE_SIZE), Constants.TILE_SIZE * 7, Constants.TILE_SIZE * 7, Constants.TILE_SIZE))
             {
-                RHTile t = MapManager.CurrentMap.GetTileByPixelPosition(v);
+                RHTile t = MapManager.CurrentMap.GetTileByPixelPosition(p);
                 if (t != null && t.Passable() && (t.WorldObject == null || t.WorldObject.Walkable)) { validTiles.Add(t); }
             }
 

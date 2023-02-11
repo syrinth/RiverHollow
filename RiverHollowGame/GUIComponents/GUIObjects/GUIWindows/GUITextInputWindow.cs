@@ -153,7 +153,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _gMarker.Position(_gText.Position());
             if (_gText.Text.Length > 0)
             {
-                _gMarker.PositionAdd(new Vector2(_gText.MeasureString(_iCurr).X, 0));
+                _gMarker.PositionAdd(new Point((int)_gText.MeasureString(_iCurr).X, 0));
             }
         }
 

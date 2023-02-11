@@ -23,7 +23,7 @@ namespace RiverHollow.Map_Handling
         private string _sLinkedMapName = string.Empty;
         public int LinkedBuildingID => TargetBuilding != null ? TargetBuilding.ID : -1;
         public string LinkedMap => (TargetBuilding != null ? TargetBuilding.BuildingMapName : _sLinkedMapName);
-        public Vector2 Center => CollisionBox.Center.ToVector2();
+        public Point Center => CollisionBox.Center;
         public bool IsDoor { get; private set; }
         public bool IsActive { get; private set; } = false;
         private bool _bNoMove;
@@ -44,7 +44,7 @@ namespace RiverHollow.Map_Handling
         public TravelPoint(TiledMapObject obj, string mapName)
         {
             _sMapName = mapName;
-            CollisionBox = Util.FloatRectangle(obj.Position, obj.Size.Width, obj.Size.Height);
+            CollisionBox = Util.RectFromTiledMapObject(obj);
             if (obj.Properties.ContainsKey("Map"))
             {
                 _sLinkedMapName = obj.Properties["Map"] == "Home" ? Constants.TOWN_MAP_NAME : obj.Properties["Map"];
@@ -82,36 +82,36 @@ namespace RiverHollow.Map_Handling
         /// <param name="oldPointCenter">The center of the previous TravelPoint</param>
         /// <param name="c">The moving Actor</param>
         /// <returns></returns>
-        public Vector2 FindLinkedPointPosition(Vector2 oldPointCenter, WorldActor c)
+        public Point FindLinkedPointPosition(Point oldPointCenter, WorldActor c)
         {
             //Find the difference between the position of the center of the actor's collisionBox
             //and the TravelPoint that the actor interacted with.
             Point actorCollisionCenter = c.CollisionCenter;
-            Vector2 vDiff = actorCollisionCenter.ToVector2() - oldPointCenter;
+            Point pDiff = actorCollisionCenter - oldPointCenter;
 
             //If we move Left/Right, ignore the X axis, Up/Down, ignore the Y axis then just set
             //the difference in the relevant axis to the difference between the centers of those two boxes
             switch (_eEntranceDir)
             {
                 case DirectionEnum.Left:
-                    vDiff.X = -1 * (CollisionBox.Width / 2 + c.CollisionBox.Width / 2);
+                    pDiff.X = -1 * (CollisionBox.Width / 2 + c.CollisionBox.Width / 2);
                     break;
                 case DirectionEnum.Right:
-                    vDiff.X = (CollisionBox.Width / 2 + c.CollisionBox.Width / 2);
+                    pDiff.X = (CollisionBox.Width / 2 + c.CollisionBox.Width / 2);
                     break;
                 case DirectionEnum.Up:
-                    vDiff.Y = -1 * (CollisionBox.Height / 2 + c.CollisionBox.Height / 2);
+                    pDiff.Y = -1 * (CollisionBox.Height / 2 + c.CollisionBox.Height / 2);
                     break;
                 case DirectionEnum.Down:
-                    vDiff.Y = (CollisionBox.Height / 2 + c.CollisionBox.Height / 2);
+                    pDiff.Y = (CollisionBox.Height / 2 + c.CollisionBox.Height / 2);
                     break;
             }
 
             //Add the diff to the center of the current TravelPoint
-            Vector2 rv = new Vector2(Center.X + vDiff.X, Center.Y + vDiff.Y);
+            Point rv = new Point(Center.X + pDiff.X, Center.Y + pDiff.Y);
 
             //Get the difference between the Position of the character and the center of their collision box
-            rv += c.Position - actorCollisionCenter.ToVector2();
+            rv += c.Position - actorCollisionCenter;
 
             return rv;
         }
@@ -128,12 +128,12 @@ namespace RiverHollow.Map_Handling
         /// This method is primarily/mostly used for NPC pathfinding to TravelPoints
         /// </summary>
         /// <returns></returns>
-        public Vector2 GetCenterTilePosition()
+        public Point GetCenterTilePosition()
         {
-            return CollisionBox.Center.ToVector2();
+            return CollisionBox.Center;
         }
 
-        public Vector2 GetMovedCenter()
+        public Point GetMovedCenter()
         {
             RHTile rv = MapManager.Maps[_sMapName].GetTileByPixelPosition(GetCenterTilePosition());
             return rv.GetTileByDirection(_eEntranceDir).Position;

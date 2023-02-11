@@ -647,7 +647,7 @@ namespace RiverHollow.GUIComponents.Screens
                     ChosenValue =  value;
 
                     _gToggle.Position(_gFrame.Position());
-                    _gToggle.MoveBy(value, 0);
+                    _gToggle.MoveBy((int)value, 0);
                 }
 
                 public void Colorize(float imagePixelValue, float hue, float saturation, float value)

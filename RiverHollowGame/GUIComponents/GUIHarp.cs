@@ -81,7 +81,7 @@ namespace RiverHollow.GUIComponents
 
             public override void Update(GameTime gTime)
             {
-                PositionAdd(new Vector2(0, 2));
+                PositionAdd(new Point(0, 2));
             }
         }
     }

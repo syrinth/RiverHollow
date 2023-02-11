@@ -22,7 +22,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public GUIInventory(bool PlayerInventory = false)
         {
-            Position(Vector2.Zero);
+            Position(Point.Zero);
             
             _bPlayerInventory = PlayerInventory;
 

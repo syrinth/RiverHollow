@@ -11,7 +11,7 @@ namespace RiverHollow.WorldObjects
     {
         public TriggerDoorObject(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            _rBase.Y = _uSize.Height - BaseHeight;
+            _rBase.Y = _pSize.Y - BaseHeight;
         }
 
         /// <summary>

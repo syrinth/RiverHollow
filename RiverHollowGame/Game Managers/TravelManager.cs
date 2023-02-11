@@ -182,14 +182,14 @@ namespace RiverHollow.Game_Managers
         /// <param name="mapName">The map the actor is currently on</param>
         /// <param name="newStart">Reference to the start point. Changes for subsequent pathfinding calulations</param>
         /// <returns></returns>
-        public static List<RHTile> FindRouteToLocation(string findKey, string mapName, Vector2 newStart, string logName = "")
+        public static List<RHTile> FindRouteToLocation(string findKey, string mapName, Point newStart, string logName = "")
         {
             if (!string.IsNullOrEmpty(logName)) { TravelManager.NewTravelLog(logName); }
 
             List<RHTile> _liCompletePath = new List<RHTile>();            //The path from start to finish, between maps
             _diMapPathing = new Dictionary<string, List<RHTile>>();         //Dictionary of all pathing
 
-            Vector2 start = newStart;                                       //Set the start to the given location
+            Point start = newStart;                                       //Set the start to the given location
             Dictionary<string, string> mapCameFrom = new Dictionary<string, string>();      
             Dictionary<string, double> mapCostSoFar = new Dictionary<string, double>();     //Records the cost to travel to maps that we've discovered
 
@@ -266,10 +266,10 @@ namespace RiverHollow.Game_Managers
                 {
                     if (exit.Value.Modular) { continue; }
                     TravelPoint exitPoint = exit.Value;
-                    Vector2 pathToVector = exitPoint.GetCenterTilePosition();
+                    Point pathToVector = exitPoint.GetCenterTilePosition();
                     if (exitPoint.IsDoor)
                     {
-                        Vector2 gridCoords = Util.GetGridCoords(exitPoint.GetCenterTilePosition());
+                        Point gridCoords = Util.GetGridCoords(exitPoint.GetCenterTilePosition());
                         RHTile doorTile = theTestMap.GetTileByGridCoords(gridCoords);
 
                         //If the exit points to a door, then path to the RHTile below the door because the door, itself is impassable
@@ -279,7 +279,7 @@ namespace RiverHollow.Game_Managers
                     //Find the shortest path to the exit in question. We copy the start vector into a new one
                     //so that our start point doesn't get overridden. We do not care about the location of the last
                     //tile in the previous pathfinding instance for this operation.
-                    Vector2 startVector = new Vector2(start.X, start.Y);
+                    Point startVector = new Point(start.X, start.Y);
                     List<RHTile> pathToExit = FindPathToLocation(ref startVector, pathToVector, testMapStr, exitPoint.IsDoor);
                     if (pathToExit != null)
                     {
@@ -308,19 +308,19 @@ namespace RiverHollow.Game_Managers
         }
 
         //Pathfinds from one point to another on a given map
-        public static List<RHTile> FindPathToLocationClean(ref Vector2 start, Vector2 target, string mapName)
+        public static List<RHTile> FindPathToLocationClean(ref Point start, Point target, string mapName)
         {
             List<RHTile> rvList = FindPathToLocation(ref start, target, mapName);
             return rvList;
         }
-        public static List<RHTile> FindPathToLocation(ref Vector2 start, Vector2 target, string mapName = null, bool addDoor = false, bool avoidWalls = true, bool meander = false)
+        public static List<RHTile> FindPathToLocation(ref Point start, Point target, string mapName = null, bool addDoor = false, bool avoidWalls = true, bool meander = false)
         {
-            WriteToTravelLog(System.Environment.NewLine + "+++ " + mapName + " -- [" + (int)start.X/16 + ", " + (int)start.Y / 16 + "] == > [ " + (int)target.X / 16 + ", " + (int)target.Y / 16 + " ] +++");
+            WriteToTravelLog(System.Environment.NewLine + "+++ " + mapName + " -- [" + start.X/16 + ", " + start.Y / 16 + "] == > [ " + target.X / 16 + ", " + target.Y / 16 + " ] +++");
             
             List<RHTile> returnList = null;
             RHMap map = MapManager.Maps[(mapName ?? MapManager.CurrentMap.Name).Split(':')[0]];     //Returns mapName if it isn't null, else uses the CurrentMap
-            RHTile startTile = map.GetTileByPixelPosition(start.ToPoint());
-            RHTile goalNode = map.GetTileByPixelPosition(target.ToPoint());
+            RHTile startTile = map.GetTileByPixelPosition(start);
+            RHTile goalNode = map.GetTileByPixelPosition(target);
             var travelMap = new TravelMap(startTile);
             var frontier = new PriorityQueue<RHTile>();
 

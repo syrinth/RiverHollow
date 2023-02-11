@@ -46,7 +46,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         /// the Position method like other GUIObjects,so this method call is required.
         /// </summary>
         /// <param name="value"></param>
-        public override void Position(Vector2 value)
+        public override void Position(Point value)
         {
             base.Position(value);
             _sprite.Position = Position();

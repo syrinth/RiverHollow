@@ -78,15 +78,15 @@ namespace RiverHollow.Map_Handling
         private List<MobSpawn> _liMobSpawns;
         private List<int> _liCutscenes;
         private Dictionary<RarityEnum, List<int>> _diResources;
-        protected List<Item> _liItems;
+        protected List<MapItem> _liItems;
         public Dictionary<string, TravelPoint> DictionaryTravelPoints { get; }
-        public Dictionary<string, Vector2> DictionaryCharacterLayer { get; }
+        public Dictionary<string, Point> DictionaryCharacterLayer { get; }
         private List<TiledMapObject> _liMapObjects;
         private List<KeyValuePair<Rectangle, string>> _liClickObjects;
         private int _iShopID = -1;
         public Shop TheShop => (_iShopID > -1) ? GameManager.DIShops[_iShopID] : null;
 
-        private List<Item> _liItemsToRemove;
+        private List<MapItem> _liItemsToRemove;
         private List<WorldActor> _liActorsToRemove;
         private List<WorldObject> _liObjectsToRemove;
 
@@ -103,7 +103,7 @@ namespace RiverHollow.Map_Handling
             _liActors = new List<WorldActor>();
             _liMobs = new List<Mob>();
             _liBuildings = new List<Building>();
-            _liItems = new List<Item>();
+            _liItems = new List<MapItem>();
             _liMapObjects = new List<TiledMapObject>();
             _liClickObjects = new List<KeyValuePair<Rectangle, string>>();
 
@@ -114,9 +114,9 @@ namespace RiverHollow.Map_Handling
             _diResources = new Dictionary<RarityEnum, List<int>>();
 
             DictionaryTravelPoints = new Dictionary<string, TravelPoint>();
-            DictionaryCharacterLayer = new Dictionary<string, Vector2>();
+            DictionaryCharacterLayer = new Dictionary<string, Point>();
 
-            _liItemsToRemove = new List<Item>();
+            _liItemsToRemove = new List<MapItem>();
             _liActorsToRemove = new List<WorldActor>();
             _liObjectsToRemove = new List<WorldObject>();
 
@@ -224,15 +224,8 @@ namespace RiverHollow.Map_Handling
 
                 EnvironmentManager.Update(gTime);
 
-                foreach (Mob m in _liMobs)
-                {
-                    m.Update(gTime);
-                }
-
-                foreach (Item i in _liItems)
-                {
-                    ((Item)i).Update(gTime);
-                }
+                _liMobs.ForEach(x => x.Update(gTime));
+                _liItems.ForEach(x => x.Update(gTime));
             }
         
             foreach (WorldObject obj in _liObjectsToRemove)
@@ -294,10 +287,7 @@ namespace RiverHollow.Map_Handling
 
             ItemPickUpdate();
 
-            foreach (Item i in _liItemsToRemove)
-            {
-                _liItems.Remove(i);
-            }
+            _liItemsToRemove.ForEach(x => _liItems.Remove(x));
             _liItemsToRemove.Clear();
         }
 
@@ -350,30 +340,11 @@ namespace RiverHollow.Map_Handling
 
             _renderer.Draw(_map, Camera._transform);
 
-            foreach (WorldActor c in _liActors)
-            {
-                c.Draw(spriteBatch, true);
-            }
-
-            foreach (Mob m in _liMobs)
-            {
-                m.Draw(spriteBatch, true);
-            }
-
-            foreach (Building b in _liBuildings)
-            {
-                b.Draw(spriteBatch);
-            }
-
-            foreach (WorldObject obj in _liPlacedWorldObjects)
-            {
-                obj.Draw(spriteBatch);
-            }
-
-            foreach (Item i in _liItems)
-            {
-                i.Draw(spriteBatch);
-            }
+            _liActors.ForEach(x => x.Draw(spriteBatch, true));
+            _liMobs.ForEach(x => x.Draw(spriteBatch, true));
+            _liBuildings.ForEach(x => x.Draw(spriteBatch));
+            _liPlacedWorldObjects.ForEach(x => x.Draw(spriteBatch));
+            _liItems.ForEach(x => x.Draw(spriteBatch));
 
             if (TheShop != null)
             {
@@ -507,7 +478,7 @@ namespace RiverHollow.Map_Handling
                         {
                             Spirit s = new Spirit(obj.Properties)
                             {
-                                Position = Util.SnapToGrid(obj.Position),
+                                Position = Util.SnapToGrid(obj.Position.ToPoint()),
                                 CurrentMapName = _sName
                             };
                             GameManager.AddSpirit(s);
@@ -517,12 +488,12 @@ namespace RiverHollow.Map_Handling
                         {
                             if (obj.Properties.ContainsKey("NPC_ID"))
                             {
-                                DictionaryCharacterLayer.Add("NPC_" + obj.Properties["NPC_ID"], obj.Position);
+                                DictionaryCharacterLayer.Add("NPC_" + obj.Properties["NPC_ID"], obj.Position.ToPoint());
                             }
                         }
                         else
                         {
-                            DictionaryCharacterLayer.Add(obj.Name, obj.Position);
+                            DictionaryCharacterLayer.Add(obj.Name, obj.Position.ToPoint());
                         }
                     }
                 }
@@ -532,18 +503,18 @@ namespace RiverHollow.Map_Handling
                     {
                         if (mapObject.Name.Equals("Wall"))
                         {
-                            foreach (Vector2 v in Util.GetAllPointsInArea(mapObject.Position, mapObject.Size, Constants.TILE_SIZE))
+                            foreach (Point p in Util.GetAllPointsInArea(mapObject.Position, mapObject.Size, Constants.TILE_SIZE))
                             {
-                                RHTile tile = GetTileByPixelPosition(v);
+                                RHTile tile = GetTileByPixelPosition(p);
                                 Util.AddUniquelyToList(ref _liWallTiles, tile);
                                 tile.SetWallTrue();
                             }
                         }
                         else if (mapObject.Name.StartsWith("Display"))
                         {
-                            foreach (Vector2 v in Util.GetAllPointsInArea(mapObject.Position, mapObject.Size, Constants.TILE_SIZE))
+                            foreach (Point p in Util.GetAllPointsInArea(mapObject.Position, mapObject.Size, Constants.TILE_SIZE))
                             {
-                                GetTileByPixelPosition(v).SetClickAction(mapObject.Name);
+                                GetTileByPixelPosition(p).SetClickAction(mapObject.Name);
                             }
                         }
                         else if (mapObject.Name.StartsWith("Resource"))
@@ -574,13 +545,13 @@ namespace RiverHollow.Map_Handling
                             if (tiledObj.Properties.ContainsKey("ObjectID"))
                             {
                                 WorldObject obj = DataManager.CreateWorldObjectByID(int.Parse(tiledObj.Properties["ObjectID"]), tiledObj.Properties);
-                                obj.PlaceOnMap(new Vector2(x, y), this);
+                                obj.PlaceOnMap(new Point(x, y), this);
                                 objWidth = obj.BaseWidth * Constants.TILE_SIZE;
                                 objHeight = obj.BaseHeight * Constants.TILE_SIZE;
                             }
                             else if (tiledObj.Properties.ContainsKey("ItemID"))
                             {
-                                new WrappedItem(int.Parse(tiledObj.Properties["ItemID"])).PlaceOnMap(tiledObj.Position, this);
+                                new WrappedItem(int.Parse(tiledObj.Properties["ItemID"])).PlaceOnMap(tiledObj.Position.ToPoint(), this);
                             }
                         }
                     }
@@ -812,7 +783,7 @@ namespace RiverHollow.Map_Handling
         /// <param name="height">The Height</param>
         public void CreateDoor(TravelPoint trvlPt, float rectX, float rectY, float width, float height)
         {
-            foreach (Vector2 vec in Util.GetAllPointsInArea((int)rectX, (int)rectY, (int)width, (int)height, Constants.TILE_SIZE))
+            foreach (Point vec in Util.GetAllPointsInArea((int)rectX, (int)rectY, (int)width, (int)height, Constants.TILE_SIZE))
             {
                 RHTile t = GetTileByPixelPosition(vec);
                 if (t != null)
@@ -834,7 +805,7 @@ namespace RiverHollow.Map_Handling
             string mapName = b.BuildingMapName;
             TravelPoint pt = DictionaryTravelPoints[mapName];
 
-            foreach (Vector2 vec in Util.GetAllPointsInArea(pt.Location.X, pt.Location.Y, pt.CollisionBox.Width, pt.CollisionBox.Height, Constants.TILE_SIZE))
+            foreach (Point vec in Util.GetAllPointsInArea(pt.Location.X, pt.Location.Y, pt.CollisionBox.Width, pt.CollisionBox.Height, Constants.TILE_SIZE))
             {
                 RHTile t = GetTileByPixelPosition(vec);
                 if (t != null)
@@ -874,7 +845,7 @@ namespace RiverHollow.Map_Handling
                     int upgradeLevel = int.Parse(tiledObj.Properties["UpgradeLevel"]);
                     if (newLevel == upgradeLevel)
                     {
-                        DataManager.CreateAndPlaceNewWorldObject(int.Parse(tiledObj.Properties["ObjectID"]), tiledObj.Position, this);
+                        DataManager.CreateAndPlaceNewWorldObject(int.Parse(tiledObj.Properties["ObjectID"]), tiledObj.Position.ToPoint(), this);
                     }
 
                 }
@@ -898,7 +869,7 @@ namespace RiverHollow.Map_Handling
 
             foreach (WorldActor a in _liActors)
             {
-                if (a.IsActorType(WorldActorTypeEnum.Spirit) && PlayerManager.PlayerInRange(a.Position.ToPoint(), 500))
+                if (a.IsActorType(WorldActorTypeEnum.Spirit) && PlayerManager.PlayerInRange(a.Position, 500))
                 {
                     rv = (Spirit)a;
                 }
@@ -919,10 +890,11 @@ namespace RiverHollow.Map_Handling
                 WorldActor player = PlayerManager.PlayerActor;
                 for (int i = 0; i < _liItems.Count; i++)
                 {
-                    Item it = _liItems[i];
-                    if (InventoryManager.HasSpaceInInventory(it.ID, it.Number))
+                    MapItem it = _liItems[i];
+                    Item wrapped = it.WrappedItem;
+                    if (InventoryManager.HasSpaceInInventory(wrapped.ID, wrapped.Number))
                     {
-                        if (it.OnTheMap && it.AutoPickup)
+                        if (it.AutoPickup && !it.ManualPickup)
                         {
                             if (it.FinishedMoving() && it.CollisionBox.Intersects(player.CollisionBox))
                             {
@@ -930,10 +902,10 @@ namespace RiverHollow.Map_Handling
                             }
                             else if (PlayerManager.PlayerInRange(it.CollisionBox.Center, 80))
                             {
-                                float speed = 3;
-                                Vector2 direction = Util.MoveUpTo(it.Position, player.CollisionBox.Location.ToVector2(), speed);
+                                int speed = 3;
+                                Vector2 direction = Util.MoveUpTo(it.Position, player.CollisionBox.Location, 3);
                                 direction.Normalize();
-                                it.Position += (direction * speed);
+                                it.MoveItem(direction * speed);
                             }
                         }
                     }
@@ -941,63 +913,23 @@ namespace RiverHollow.Map_Handling
             }
         }
 
-        public void AddItemToPlayerInventory(Item it)
+        public void AddItemToPlayerInventory(MapItem it)
         {
             _liItemsToRemove.Add(it);
-            InventoryManager.AddToInventory(DataManager.GetItem(it.ID, it.Number));
+            InventoryManager.AddToInventory(it.WrappedItem);
         }
 
         #region Collision Code
-        public Vector2 GetFarthestUnblockedPath(Vector2 target, WorldActor traveler) {
-            Vector2 rv = Vector2.Zero;
-
-
-            Vector2 rayPosition = traveler.Position;
-            while (true)
-            {
-                Vector2 direction = Vector2.Zero;
-                Util.GetMoveSpeed(rayPosition, target, traveler.BuffedSpeed, ref direction);
-
-                rayPosition += direction;
-
-                //Rectangles use ints for Location, cannot update a Rectangle's Location with floats
-                Rectangle testCollision = Util.FloatRectangle(rayPosition.X, rayPosition.Y, traveler.CollisionBox.Width, traveler.CollisionBox.Height);
-                bool passable = true;
-                List<RHTile> collisionTiles = GetTilesFromRectangleExcludeEdgePoints(testCollision);
-                for (int i = 0; i < collisionTiles.Count; i++)
-                {
-                    if (collisionTiles[i] == null)
-                    {
-                        ErrorManager.TrackError();
-                    }
-
-                    if (collisionTiles[i] == null || !collisionTiles[i].Passable() && !collisionTiles[i].Contains(traveler))
-                    {
-                        passable = false;
-                        break;
-                    }
-                }
-                if (passable) { rv = rayPosition; }
-
-                if (!passable || rayPosition.X == target.X && rayPosition.Y == target.Y)
-                {
-                    break;
-                }
-            }
-
-            return rv;
-        }
-
         public bool TileContainsActor(RHTile t, bool checkPlayer = true)
         {
             bool rv = false;
 
-            if (checkPlayer && this == PlayerManager.PlayerActor.CurrentMap && PlayerManager.PlayerActor.CollisionIntersects(t.Rect)) { rv = true; }
+            if (checkPlayer && this == PlayerManager.PlayerActor.CurrentMap && PlayerManager.PlayerActor.CollisionIntersects(t.CollisionBox)) { rv = true; }
             else
             {
                 foreach (WorldActor act in _liActors)
                 {
-                    if (act.CollisionIntersects(t.Rect))
+                    if (act.CollisionIntersects(t.CollisionBox))
                     {
                         rv = true;
                         break;
@@ -1026,9 +958,9 @@ namespace RiverHollow.Map_Handling
                 AddTile(ref list, rEndCollision.Right, rEndCollision.Bottom, actor.CurrentMapName);
                 if (rEndCollision.Height > Constants.TILE_SIZE)
                 {
-                    foreach (Vector2 v in Util.GetAllPointsInArea(rEndCollision.Right - 1, rEndCollision.Top, 1, rEndCollision.Height, Constants.TILE_SIZE))
+                    foreach (Point p in Util.GetAllPointsInArea(rEndCollision.Right - 1, rEndCollision.Top, 1, rEndCollision.Height, Constants.TILE_SIZE))
                     {
-                        AddTile(ref list, (int)v.X, (int)v.Y, actor.CurrentMapName);
+                        AddTile(ref list, p.X, p.Y, actor.CurrentMapName);
                     }
                 }
             }
@@ -1038,9 +970,9 @@ namespace RiverHollow.Map_Handling
                 AddTile(ref list, rEndCollision.Left, rEndCollision.Bottom, actor.CurrentMapName);
                 if (rEndCollision.Height > Constants.TILE_SIZE)
                 {
-                    foreach (Vector2 v in Util.GetAllPointsInArea(rEndCollision.Left - 1, rEndCollision.Top, 1, rEndCollision.Height, Constants.TILE_SIZE))
+                    foreach (Point p in Util.GetAllPointsInArea(rEndCollision.Left - 1, rEndCollision.Top, 1, rEndCollision.Height, Constants.TILE_SIZE))
                     {
-                        AddTile(ref list, (int)v.X, (int)v.Y, actor.CurrentMapName);
+                        AddTile(ref list, p.X, p.Y, actor.CurrentMapName);
                     }
                 }
             }
@@ -1051,9 +983,9 @@ namespace RiverHollow.Map_Handling
                 AddTile(ref list, rEndCollision.Right, rEndCollision.Bottom, actor.CurrentMapName);
                 if (rEndCollision.Width > Constants.TILE_SIZE)
                 {
-                    foreach (Vector2 v in Util.GetAllPointsInArea(rEndCollision.Left, rEndCollision.Bottom - 1, rEndCollision.Width, 1, Constants.TILE_SIZE))
+                    foreach (Point p in Util.GetAllPointsInArea(rEndCollision.Left, rEndCollision.Bottom - 1, rEndCollision.Width, 1, Constants.TILE_SIZE))
                     {
-                        AddTile(ref list, (int)v.X, (int)v.Y, actor.CurrentMapName);
+                        AddTile(ref list, p.X, p.Y, actor.CurrentMapName);
                     }
                 }
             }
@@ -1063,9 +995,9 @@ namespace RiverHollow.Map_Handling
                 AddTile(ref list, rEndCollision.Right, rEndCollision.Top, actor.CurrentMapName);
                 if (rEndCollision.Width > Constants.TILE_SIZE)
                 {
-                    foreach (Vector2 v in Util.GetAllPointsInArea(rEndCollision.Left, rEndCollision.Top - 1, rEndCollision.Width, 1, Constants.TILE_SIZE))
+                    foreach (Point p in Util.GetAllPointsInArea(rEndCollision.Left, rEndCollision.Top - 1, rEndCollision.Width, 1, Constants.TILE_SIZE))
                     {
-                        AddTile(ref list, (int)v.X, (int)v.Y, actor.CurrentMapName);
+                        AddTile(ref list, p.X, p.Y, actor.CurrentMapName);
                     }
                 }
             }
@@ -1099,20 +1031,25 @@ namespace RiverHollow.Map_Handling
         private void AddTile(ref List<KeyValuePair<Rectangle, WorldActor>> list, int one, int two, string mapName)
         {
             RHTile tile = MapManager.Maps[mapName].GetTileByGridCoords(Util.GetGridCoords(one, two));
-            if (TileValid(tile, list)) { list.Add(new KeyValuePair<Rectangle, WorldActor>(tile.Rect, null)); }
+            if (TileValid(tile, list)) { list.Add(new KeyValuePair<Rectangle, WorldActor>(tile.CollisionBox, null)); }
         }
         private bool TileValid(RHTile tile, List<KeyValuePair<Rectangle, WorldActor>> list)
         {
-            return tile != null && !tile.Passable() && !list.Any(x => x.Key == tile.Rect);
+            return tile != null && !tile.Passable() && !list.Any(x => x.Key == tile.CollisionBox);
         }
 
-        private void ChangeDir(WorldActor act,  List<KeyValuePair<Rectangle, WorldActor>> possibleCollisions, ref Vector2 dir, ref bool impeded)
+        private void ChangeDir(WorldActor actor,  List<KeyValuePair<Rectangle, WorldActor>> possibleCollisions, ref Vector2 dir, ref bool impeded)
         {
             //Because of how objects interact with each other, this check needs to be broken up so that the x and y movement can be
             //calculated seperately. If an object is above you and you move into it at an angle, if you check the collision as one rectangle
             //then the collision nullification will hit the entire damn movement mode.
-            Rectangle newRectangleX = Util.FloatRectangle(act.CollisionBoxPosition.X + dir.X, act.CollisionBoxPosition.Y, act.CollisionBox.Width, act.CollisionBox.Height);
-            Rectangle newRectangleY = Util.FloatRectangle(act.CollisionBoxPosition.X, act.CollisionBoxPosition.Y + dir.Y, act.CollisionBox.Width, act.CollisionBox.Height);
+
+            Point projected = actor.ProjectedMovement(dir);
+            Point location = actor.CollisionBoxLocation;
+            Point size = actor.CollisionBox.Size;
+
+            Rectangle testRectX = new Rectangle(location.X + projected.X, location.Y, size.X, size.Y);
+            Rectangle testRectY = new Rectangle(location.X, location.Y + projected.Y, size.X, size.Y);
             foreach (KeyValuePair<Rectangle, WorldActor> kvp in possibleCollisions)
             {
                 Rectangle r = kvp.Key;
@@ -1123,8 +1060,8 @@ namespace RiverHollow.Map_Handling
                     continue;
                 }
 
-                Vector2 coords = Util.GetGridCoords(r.Location);
-                if (dir.Y != 0 && r.Intersects(newRectangleY))
+                Point coords = Util.GetGridCoords(r.Location);
+                if (dir.Y != 0 && r.Intersects(testRectY))
                 {
                     if (npc != null && npc.SlowDontBlock)
                     {
@@ -1135,16 +1072,21 @@ namespace RiverHollow.Map_Handling
                         dir.Y = 0;
 
                         //Modifier is to determine if the nudge is positive or negative
-                        float modifier = CheckToNudge(newRectangleY.Center.X, r.Center.X, coords.X, coords.Y, "Col");
-                        float xVal = (modifier > 0 ? newRectangleX.Right : newRectangleX.Left) + modifier;               //Constructs the new rectangle based on the mod
+                        float modifier = CheckToNudge(testRectY.Center.X, r.Center.X, coords.X, coords.Y, "Col");
 
+                        //Constructs the new rectangle based on the mod. Need to change the Right/Left values by one because the Right/Left value are
+                        //the first pixel where they DON'T exist. Not the last where they do.
+                        int xVal = Util.RoundForPoint(((modifier > 0 ? testRectY.Right - 1 : testRectY.Left + 1) ) + modifier);
+
+                        projected = actor.ProjectedMovement(dir + new Vector2(modifier, 0));
+                        testRectY = new Rectangle(location + projected, size);
                         if (dir.X == 0 && modifier != 0)
                         {
-                            dir.X += CheckNudgeAllowed(modifier, new Vector2(xVal, newRectangleY.Top), new Vector2(xVal, newRectangleY.Bottom), act.CurrentMapName);
+                            dir.X += CheckNudgeAllowed(modifier, new Point(xVal, testRectY.Top + 1), new Point(xVal, testRectY.Bottom - 1), actor.CurrentMapName);
                         }
                     }
                 }
-                if (dir.X != 0 && r.Intersects(newRectangleX))
+                if (dir.X != 0 && r.Intersects(testRectX))
                 {
                     if (npc != null && npc.SlowDontBlock)
                     {
@@ -1155,26 +1097,31 @@ namespace RiverHollow.Map_Handling
                         dir.X = 0;
 
                         //Modifier is to determine if the nudge is positive or negative
-                        float modifier = CheckToNudge(newRectangleX.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
-                        float yVal = (modifier > 0 ? newRectangleX.Bottom : newRectangleX.Top) + modifier;               //Constructs the new rectangle based on the mod
+                        float modifier = CheckToNudge(testRectX.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
 
+                        //Constructs the new rectangle based on the mod. Need to change the Right/Left values by one because the Right/Left value are
+                        //the first pixel where they DON'T exist. Not the last where they do.
+                        int yVal = Util.RoundForPoint(((modifier > 0 ? testRectX.Bottom - 1 : testRectX.Top + 1)) + modifier);
+
+                        projected = actor.ProjectedMovement(dir + new Vector2(0, modifier));
+                        testRectX = new Rectangle(location + projected, size);
                         if (dir.Y == 0 && modifier != 0)
                         {
-                            dir.Y += CheckNudgeAllowed(modifier, new Vector2(newRectangleY.Left, yVal), new Vector2(newRectangleY.Right, yVal), act.CurrentMapName);
+                            dir.Y += CheckNudgeAllowed(modifier, new Point(testRectX.Left + 1, yVal), new Point(testRectX.Right - 1, yVal), actor.CurrentMapName);
                         }
                     }
                 }
 
                 //Because of diagonal movement, it's possible to have no issue on either the X axis or Y axis but have a collision
                 //diagonal to the actor. In this case, just null out the X movement.
-                if (dir.X != 0 && dir.Y != 0 && r.Intersects(newRectangleX) && r.Intersects(newRectangleY))
+                if (dir.X != 0 && dir.Y != 0 && r.Intersects(testRectX) && r.Intersects(testRectY))
                 {
                     if (npc != null && npc.SlowDontBlock) { impeded = true; }
                     else { dir.X = 0; }
                 }
             }
         }
-        private float CheckNudgeAllowed(float modifier, Vector2 first, Vector2 second, string map)
+        private float CheckNudgeAllowed(float modifier, Point first, Point second, string map)
         {
             float rv = 0;
             RHTile firstTile = MapManager.Maps[map].GetTileByGridCoords(Util.GetGridCoords(first));
@@ -1199,12 +1146,16 @@ namespace RiverHollow.Map_Handling
         /// <param name="dir">Reference to the direction to move the WorldActor</param>
         /// <param name="ignoreCollisions">Whether or not to check collisions</param>
         /// <returns>False if we are to prevent movement</returns>
-        public bool CheckForCollisions(WorldActor actor, Vector2 position, Rectangle collision, ref Vector2 dir, ref bool impeded, bool ignoreCollisions = false)
+        public bool CheckForCollisions(WorldActor actor, ref Vector2 dir, ref bool impeded, bool ignoreCollisions = false)
         {
             bool rv = true;
 
-            Rectangle testRectX = Util.FloatRectangle(position.X + dir.X, position.Y, collision.Width, collision.Height);
-            Rectangle testRectY = Util.FloatRectangle(position.X, position.Y + dir.Y, collision.Width, collision.Height);
+            Point projected = actor.ProjectedMovement(dir);
+            Point location = actor.CollisionBoxLocation;
+            Point size = actor.CollisionBox.Size;
+
+            Rectangle testRectX = new Rectangle(location.X + projected.X, location.Y, size.X, size.Y);
+            Rectangle testRectY = new Rectangle(location.X, location.Y + projected.Y, size.X, size.Y);
 
             //Checking for a MapChange takes priority overlooking for collisions.
             if (!actor.Wandering && (CheckForMapChange(actor, testRectX) || CheckForMapChange(actor, testRectY)))
@@ -1217,22 +1168,12 @@ namespace RiverHollow.Map_Handling
                 ChangeDir(actor, list, ref dir, ref impeded);
 
                 Rectangle newBox = actor.CollisionBox;
+                newBox.Offset(actor.ProjectedMovement(dir));
 
-                int newX = 0;
-                if(dir.X > 0) { newX = (int)Math.Ceiling(dir.X); }
-                else if (dir.X > 0) { newX = (int)Math.Floor(dir.X); }
-
-                int newY = 0;
-                if (dir.Y > 0) { newY = (int)Math.Ceiling(dir.Y); }
-                else if (dir.Y > 0) { newY = (int)Math.Floor(dir.Y); }
-
-                newBox.Location += new Point(newX, newY);
-
-                Rectangle map = new Rectangle(0, 0, Map.WidthInPixels, Map.HeightInPixels);
-                if (actor != PlayerManager.PlayerActor && !map.Contains(newBox))
+                if (!OnMap(newBox))
                 {
                     rv = false;
-                    actor.SetMoveTo(Vector2.Zero);
+                    actor.SetMoveTo(Point.Zero);
                 }
             }
 
@@ -1303,10 +1244,11 @@ namespace RiverHollow.Map_Handling
 
         public void AddCollectionItem(int itemID, int npcIndex, int index)
         {
-            Item displayItem = DataManager.GetItem(itemID);
-            displayItem.AutoPickup = false;
-            displayItem.OnTheMap = true;
-            displayItem.Position = DictionaryCharacterLayer[npcIndex + "Col" + index];
+            MapItem displayItem = new MapItem(DataManager.GetItem(itemID))
+            {
+                AutoPickup = false,
+                Position = DictionaryCharacterLayer[npcIndex + "Col" + index]
+            };
             _liItems.Add(displayItem);
         }
 
@@ -1336,9 +1278,9 @@ namespace RiverHollow.Map_Handling
             return propList;
         }
 
-        public Vector2 GetCharacterSpawn(string val)
+        public Point GetCharacterSpawn(string val)
         {
-            Vector2 rv = Vector2.Zero;
+            Point rv = Point.Zero;
             if (DictionaryCharacterLayer.ContainsKey(val))
             {
                 rv = DictionaryCharacterLayer[val];
@@ -1377,24 +1319,20 @@ namespace RiverHollow.Map_Handling
                 }
             }
 
-            List<Item> removedList = new List<Item>();
+            var removedList = new List<MapItem>();
             for (int i = 0; i < _liItems.Count; i++)
             {
-                Item it = _liItems[i];
+                MapItem it = _liItems[i];
                 if (it.ManualPickup && it.CollisionBox.Contains(GUICursor.GetWorldMousePosition()))
                 {
-                    if (InventoryManager.AddToInventory(it))
+                    if (InventoryManager.AddToInventory(it.WrappedItem))
                     {
                         removedList.Add(it);
                         break;
                     }
                 }
             }
-
-            foreach (Item i in removedList)
-            {
-                _liItems.Remove(i);
-            }
+            removedList.ForEach(x => _liItems.Remove(x));
             removedList.Clear();
 
             if (Scrying())
@@ -1436,7 +1374,7 @@ namespace RiverHollow.Map_Handling
                     if (i != null && i.HasUse())
                     {
                         int distance = 0;
-                        if (PlayerManager.PlayerInRangeGetDist(GUICursor.GetWorldMousePosition().ToPoint(), 3 * Constants.TILE_SIZE, ref distance))
+                        if (PlayerManager.PlayerInRangeGetDist(GUICursor.GetWorldMousePosition(), 3 * Constants.TILE_SIZE, ref distance))
                         {
                             PlayerManager.PlayerActor.DetermineFacing(MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition()));
                         }
@@ -1510,7 +1448,7 @@ namespace RiverHollow.Map_Handling
             {
                 bool found = false;
 
-                RHTile t = GetTileByPixelPosition(GUICursor.GetWorldMousePosition().ToPoint());
+                RHTile t = GetTileByPixelPosition(GUICursor.GetWorldMousePosition());
                 if (t != null)
                 {
                     if (t.GetTravelPoint() != null)
@@ -1831,7 +1769,7 @@ namespace RiverHollow.Map_Handling
             Util.AddUniquelyToList(ref _liActorsToRemove, c);
         }
 
-        public void DropItemsOnMap(List<Item> items, Vector2 position, bool flyingPop = true)
+        public void DropItemsOnMap(List<Item> items, Point position, bool flyingPop = true)
         {
             foreach (Item i in items)
             {
@@ -1839,13 +1777,19 @@ namespace RiverHollow.Map_Handling
             }
         }
 
-        public void DropItemOnMap(Item item, Vector2 position, bool flyingPop = true)
+        public void DropItemOnMap(Item item, Point position, bool flyingPop = true)
         {
-            if (flyingPop) { item.Pop(position); }
-            else { item.Position = position; }
+            MapItem mItem = new MapItem(item);
+            if (flyingPop)
+            {
+                mItem.Pop(position);
+            }
+            else
+            {
+                mItem.Position = position;
+            }
 
-            item.OnTheMap = true;
-            _liItems.Add(item);
+            _liItems.Add(mItem);
         }
 
         public void LayerVisible(string name, bool val)
@@ -2012,9 +1956,9 @@ namespace RiverHollow.Map_Handling
             //Iterate over the WorldObject image in Constants.TILE_SIZE increments to discover any tiles
             //that the image overlaps. Add those tiles as Shadow Tiles as long as they're not
             //actual Tiles the object sits on. Also add the Tiles to the objects Shadow Tiles list
-            for (int i = (int)obj.MapPosition.X; i < obj.MapPosition.X + obj.Width; i += Constants.TILE_SIZE)
+            for (int i = obj.MapPosition.X; i < obj.MapPosition.X + obj.Width; i += Constants.TILE_SIZE)
             {
-                for (int j = (int)obj.MapPosition.Y; j < obj.MapPosition.Y + obj.Height; j += Constants.TILE_SIZE)
+                for (int j = obj.MapPosition.Y; j < obj.MapPosition.Y + obj.Height; j += Constants.TILE_SIZE)
                 {
                     RHTile t = GetTileByGridCoords(Util.GetGridCoords(i, j));
                     if (t != null && !obj.Tiles.Contains(t))
@@ -2067,8 +2011,8 @@ namespace RiverHollow.Map_Handling
                 else { Util.AddUniquelyToList(ref _liActors, c); }
 
                 c.CurrentMapName = _sName;
-                c.Position = c.NewMapPosition == Vector2.Zero ? c.Position : c.NewMapPosition;
-                c.NewMapPosition = Vector2.Zero;
+                c.Position = c.NewMapPosition == Point.Zero ? c.Position : c.NewMapPosition;
+                c.NewMapPosition = Point.Zero;
 
                 if (c.IsActorType(WorldActorTypeEnum.Merchant))
                 {
@@ -2105,7 +2049,7 @@ namespace RiverHollow.Map_Handling
         //    }
         //}
 
-        public void AddMobByPosition(Mob m, Vector2 position)
+        public void AddMobByPosition(Mob m, Point position)
         {
             m.CurrentMapName = _sName;
             m.Position = Util.SnapToGrid(position);
@@ -2174,10 +2118,6 @@ namespace RiverHollow.Map_Handling
         {
             return GetTileByPixelPosition(GUICursor.GetWorldMousePosition());
         }
-        public RHTile GetTileByPixelPosition(Vector2 targetLoc)
-        {
-            return GetTileByPixelPosition((int)targetLoc.X, (int)targetLoc.Y);
-        }
         public RHTile GetTileByPixelPosition(Point targetLoc)
         {
             return GetTileByPixelPosition(targetLoc.X, targetLoc.Y);
@@ -2192,11 +2132,7 @@ namespace RiverHollow.Map_Handling
 
         public RHTile GetTileByGridCoords(Point targetLoc)
         {
-            return GetTileByGridCoords(targetLoc.ToVector2());
-        }
-        public RHTile GetTileByGridCoords(Vector2 pos)
-        {
-            return GetTileByGridCoords((int)pos.X, (int)pos.Y);
+            return GetTileByGridCoords(targetLoc.X, targetLoc.Y);
         }
         public RHTile GetTileByGridCoords(int x, int y)
         {
@@ -2217,7 +2153,7 @@ namespace RiverHollow.Map_Handling
             int startY = startTile.Y - range;
 
             int dimensions = ((range * 2) + 1);
-            foreach (Vector2 vec in Util.GetAllPointsInArea(startX, startY, dimensions, dimensions))
+            foreach (Point vec in Util.GetAllPointsInArea(startX, startY, dimensions, dimensions))
             {
                 RHTile tile = GetTileByGridCoords(vec);
                 if (tile != null)
@@ -2275,13 +2211,13 @@ namespace RiverHollow.Map_Handling
             return rvList;
         }
 
-        public Vector2 GetRandomPosition()
+        public Point GetRandomPosition()
         {
             return GetRandomPosition(new Rectangle(0, 0, MapWidthTiles * Constants.TILE_SIZE, MapHeightTiles * Constants.TILE_SIZE));
         }
-        public Vector2 GetRandomPosition(Rectangle r)
+        public Point GetRandomPosition(Rectangle r)
         {
-            Vector2 rv = Vector2.Zero;
+            Point rv = Point.Zero;
 
             List<RHTile> tiles = GetTilesFromRectangleExcludeEdgePoints(r);
             do
@@ -2321,6 +2257,18 @@ namespace RiverHollow.Map_Handling
         public bool MapBelowValid()
         {
             return !string.IsNullOrEmpty(MapBelow) && MapBelow != MapManager.CurrentMap.Name;
+        }
+
+        public bool OnMap(Rectangle box)
+        {
+            bool rv = false;
+            Rectangle map = new Rectangle(0, 0, Map.WidthInPixels, Map.HeightInPixels);
+            if (map.Contains(box))
+            {
+                rv = true;
+            }
+
+            return rv;
         }
 
         internal MapData SaveData()

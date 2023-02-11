@@ -363,7 +363,7 @@ namespace RiverHollow.Characters
                     {
                         case SpawnStateEnum.VisitInn:
                         case SpawnStateEnum.WaitAtInn:
-                            Vector2 position = map.DictionaryCharacterLayer["InnFloor"];
+                            Point position = map.DictionaryCharacterLayer["InnFloor"];
                             List<RHTile> tiles = map.GetTilesFromRectangleExcludeEdgePoints(new Rectangle((int)position.X, (int)position.Y, 8 * Constants.TILE_SIZE, 6 * Constants.TILE_SIZE));
                             do
                             {
@@ -467,7 +467,7 @@ namespace RiverHollow.Characters
             Dictionary<string, string> pathingData = _diCompleteSchedule[_sScheduleKey][timeKeyIndex];
 
             RHTile nextTile = _liTilePath.Count > 0 ? _liTilePath[0] : null;
-            Vector2 startPosition = nextTile != null ? nextTile.Position : Position;
+            Point startPosition = nextTile != null ? nextTile.Position : Position;
             List<RHTile> timePath = TravelManager.FindRouteToLocation(pathingData["Location"], CurrentMapName, startPosition, Name());
 
             string direction = string.Empty;

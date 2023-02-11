@@ -25,9 +25,9 @@ namespace RiverHollow.Items
             row = int.Parse(stringData["Row"]);
         }
 
-        public void SetSpritePosition(Vector2 Position)
+        public void SetSpritePosition(Point p)
         {
-            Sprite.Position = Position;
+            Sprite.Position = p;
         }
 
         public bool SlotMatch(ClothingEnum type) { return ClothingType == type; }

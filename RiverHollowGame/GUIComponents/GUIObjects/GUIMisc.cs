@@ -133,8 +133,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _gText = new GUIText(" - " + text);
 
             int delta = _gText.Height - squareSize;
-            _gUnchecked.MoveBy(new Vector2(0, delta));
-            _gChecked.MoveBy(new Vector2(0, delta));
+            _gUnchecked.MoveBy(new Point(0, delta));
+            _gChecked.MoveBy(new Point(0, delta));
 
             _gText.AnchorAndAlignToObject(_gChecked, SideEnum.Right, SideEnum.CenterY);
 
@@ -274,8 +274,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 if (!GUIManager.IsHoverWindowOpen())
                 {
-                    GUIItemDescriptionWindow win = new GUIItemDescriptionWindow(ItemObject, new Vector2(DrawRectangle.Left, DrawRectangle.Bottom));
-                    GUIManager.OpenHoverWindow(win, Util.FloatRectangle(Position(), Width, Height), true);
+                    GUIItemDescriptionWindow win = new GUIItemDescriptionWindow(ItemObject, new Point(DrawRectangle.Left, DrawRectangle.Bottom));
+                    GUIManager.OpenHoverWindow(win, new Rectangle(Position().X, Position().Y, Width, Height), true);
                 }
                 rv = true;
             }

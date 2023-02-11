@@ -11,7 +11,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _texture = DataManager.GetTexture(texture);
             Width = GameManager.ScaleIt(sourceRect.Width);
             Height = GameManager.ScaleIt(sourceRect.Height);
-            _drawRect = new Rectangle((int)Position().X, (int)Position().Y, Width, Height);
+            _drawRect = new Rectangle(Position().X, Position().Y, Width, Height);
             _sourceRect = sourceRect;
         }
 
@@ -20,7 +20,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _texture = texture;
             Width = width;
             Height = height;
-            _drawRect = new Rectangle((int)Position().X, (int)Position().Y, Width, Height);
+            _drawRect = new Rectangle(Position().X, Position().Y, Width, Height);
             _sourceRect = sourceRect;
         }
 
@@ -29,20 +29,20 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _texture = DataManager.GetTexture(texture);
             Width = width;
             Height = height;
-            _drawRect = new Rectangle((int)Position().X, (int)Position().Y, Width, Height);
+            _drawRect = new Rectangle(Position().X, Position().Y, Width, Height);
             _sourceRect = sourceRect;
         }
 
-        public void MoveImageTo(Vector2 pos)
+        public void MoveImageTo(Point pos)
         {
             Position(pos);
-            _drawRect = new Rectangle((int)Position().X, (int)Position().Y, Width, Height);
+            _drawRect = new Rectangle(Position().X, Position().Y, Width, Height);
         }
 
-        public void MoveImageBy(Vector2 pos)
+        public void MoveImageBy(Point pos)
         {
             PositionAdd(pos);
-            _drawRect = new Rectangle((int)Position().X, (int)Position().Y, Width, Height);
+            _drawRect = new Rectangle(Position().X, Position().Y, Width, Height);
         }
 
         public void Draw(SpriteBatch spriteBatch, float alpha)

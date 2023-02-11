@@ -17,7 +17,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         private static Rectangle _rCollisionRectangle;
         public static MouseState LastMouseState = new MouseState();
         public static int WorkerToPlace { get; private set; } = -1;
-        public static Vector2 Position { get; set; }
+        public static Point Position { get; set; }
 
         private static Texture2D _texture;
         private static Rectangle _rSource;
@@ -29,19 +29,19 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public static void LoadContent()
         {
             _texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
-            Position = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+            Position = new Point(Mouse.GetState().X, Mouse.GetState().Y);
             ResetCursor();
         }
 
         public static void Update()
         {
-            Position = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-            _guiItem?.Position(new Vector2((int)Position.X + 16, (int)Position.Y + 16));
+            Position = new Point(Mouse.GetState().X, Mouse.GetState().Y);
+            _guiItem?.Position(new Point(Position.X + 16, Position.Y + 16));
         }
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, Constants.TILE_SIZE * 2, Constants.TILE_SIZE * 2);
+            Rectangle drawRectangle = new Rectangle(Position.X, Position.Y, Constants.TILE_SIZE * 2, Constants.TILE_SIZE * 2);
 
             if (_eCursorType == CursorTypeEnum.Normal) { Alpha = 1; }
             else { Alpha = (PlayerManager.PlayerInRange(_rCollisionRectangle)) ? 1 : 0.5f; }
@@ -55,7 +55,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             if (heldItem == null) { _guiItem = null; }
             else {
                 _guiItem = new GUIItem(heldItem);
-                _guiItem.Position(new Vector2((int)Position.X + 16, (int)Position.Y + 16));
+                _guiItem.Position(new Point(Position.X + 16, Position.Y + 16));
             }
         }
 
@@ -89,10 +89,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
-        public static Vector2 GetWorldMousePosition()
+        public static Point GetWorldMousePosition()
         {
             Vector3 translate = Camera._transform.Translation;
-            Vector2 mousePoint = Vector2.Zero;
+            Point mousePoint = Point.Zero;
             mousePoint.X = (int)((Position.X - translate.X) / CurrentScale);
             mousePoint.Y = (int)((Position.Y - translate.Y) / CurrentScale);
 

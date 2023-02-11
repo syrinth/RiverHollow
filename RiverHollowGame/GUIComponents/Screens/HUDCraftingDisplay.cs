@@ -89,7 +89,7 @@ namespace RiverHollow.GUIComponents.Screens
             AddControl(_winMain);
 
             _gComponents = new GUIImage(new Rectangle(192, 0, 160, 71), DataManager.HUD_COMPONENTS);
-            _winMain.MoveBy(new Vector2((_gComponents.Width - _winMain.Width) / 2, 0));
+            _winMain.MoveBy(new Point((_gComponents.Width - _winMain.Width) / 2, 0));
             _gComponents.AnchorAndAlignToObject(_winMain, SideEnum.Bottom, SideEnum.CenterX, ScaleIt(2));
             _gComponents.AddControl(_gName);
 

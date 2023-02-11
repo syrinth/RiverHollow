@@ -26,7 +26,7 @@ namespace RiverHollow.WorldObjects
 
         public Buildable(int id, Dictionary<string, string> stringData) : base(id)
         {
-            _rBase.Y = _uSize.Height - BaseHeight;
+            _rBase.Y = _pSize.Y - BaseHeight;
 
             if (stringData.ContainsKey("Unique")) { Unique = true; }
             LoadDictionaryData(stringData);

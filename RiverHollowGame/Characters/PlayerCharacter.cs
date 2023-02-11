@@ -36,13 +36,13 @@ namespace RiverHollow.Characters
         }
 
         private int HeightMod => _sprBody.Height - Constants.TILE_SIZE;
-        public override Vector2 Position
+        public override Point Position
         {
-            get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + HeightMod); }
+            get { return new Point(_sprBody.Position.X, _sprBody.Position.Y + HeightMod); }
             set
             {
-                Vector2 vPos = new Vector2(value.X, value.Y - HeightMod);
-                foreach (AnimatedSprite spr in GetSprites()) { spr.Position = vPos; }
+                Point pos = new Point(value.X, value.Y - HeightMod);
+                foreach (AnimatedSprite spr in GetSprites()) { spr.Position = pos; }
             }
         }
 
@@ -99,7 +99,7 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            _lightSource.Position = _sprBody.Position - new Vector2((_lightSource.Width - _sprBody.Width) / 2, (_lightSource.Height - _sprBody.Height) / 2);
+            _lightSource.Position = _sprBody.Position - new Point((_lightSource.Width - _sprBody.Width) / 2, (_lightSource.Height - _sprBody.Height) / 2);
 
             if(_damageTimer != null)
             {
@@ -130,11 +130,9 @@ namespace RiverHollow.Characters
         {
             base.HandleMove();
 
-            if (!HasVelocity() && PlayerManager.GrabbedObject != null && PlayerManager.MoveObjectToPosition != Vector2.Zero && PlayerManager.GrabbedObject.CollisionPosition != PlayerManager.MoveObjectToPosition)
+            if (!HasVelocity() && PlayerManager.GrabbedObject != null && PlayerManager.MoveObjectToPosition != Point.Zero && PlayerManager.GrabbedObject.CollisionPosition != PlayerManager.MoveObjectToPosition)
             {
-                Vector2 moveBy = Vector2.Zero;
-                Util.GetMoveSpeed(PlayerManager.GrabbedObject.CollisionPosition, PlayerManager.MoveObjectToPosition, BuffedSpeed, ref moveBy);
-                PlayerManager.GrabbedObject.MoveBy(moveBy);
+                PlayerManager.MoveGrabbedObject(Util.GetMoveSpeed(PlayerManager.GrabbedObject.CollisionPosition, PlayerManager.MoveObjectToPosition, BuffedSpeed));
             }
         }
 
@@ -254,7 +252,7 @@ namespace RiverHollow.Characters
             ActiveMount = actor;
             SpdMult = 1.5f;
 
-            Position = ActiveMount.BodySprite.Position + new Vector2((ActiveMount.BodySprite.Width - BodySprite.Width) / 2, 8);
+            Position = ActiveMount.BodySprite.Position + new Point((ActiveMount.BodySprite.Width - BodySprite.Width) / 2, 8);
 
             foreach (AnimatedSprite spr in GetSprites())
             {
@@ -263,7 +261,7 @@ namespace RiverHollow.Characters
         }
         public void Dismount()
         {
-            Position = ActiveMount.BodySprite.Position + new Vector2(Constants.TILE_SIZE, 0);
+            Position = ActiveMount.BodySprite.Position + new Point(Constants.TILE_SIZE, 0);
             ActiveMount = null;
             SpdMult = Constants.NORMAL_SPEED;
 
@@ -293,7 +291,7 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        public override void SetMoveTo(Vector2 v, bool update = true)
+        public override void SetMoveTo(Point v, bool update = true)
         {
             base.SetMoveTo(v, State != ActorStateEnum.Grab);
         }

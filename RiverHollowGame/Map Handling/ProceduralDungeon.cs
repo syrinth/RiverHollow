@@ -44,7 +44,7 @@ namespace RiverHollow.Map_Handling
             RoomInfo firstRoom = RetrieveRandomRoomInfo(ref modularMaps);
 
             //Assign the first room to the center of the map
-            firstRoom.SetCoordinates(new Vector2(3, 3));
+            firstRoom.SetCoordinates(new Point(3, 3));
             arrDungeonMap[3, 3] = firstRoom;
 
             List<RoomInfo> mapsInUse = new List<RoomInfo> { firstRoom };
@@ -82,7 +82,7 @@ namespace RiverHollow.Map_Handling
             if (!string.IsNullOrEmpty(recallPoint))
             {
                 string[] split = recallPoint.Split(',');
-                _vRecallPoint = new Vector2(int.Parse(split[0]), int.Parse(split[1]));
+                _pRecallPoint = new Point(int.Parse(split[0]), int.Parse(split[1]));
                 _sEntranceMapName = map.Name;
             }
         }
@@ -104,7 +104,7 @@ namespace RiverHollow.Map_Handling
             {
                 List<TravelPoint> pointsToConnect = new List<TravelPoint>();
 
-                Vector2 roomCoordinates = rmInfo.Coordinates;
+                Point roomCoordinates = rmInfo.Coordinates;
                 //Because we are modifying the Dictionary of TravelPoints, we need to first determine
                 //which TravelPoints will be used and act on that list separately.
                 foreach (TravelPoint pt in rmInfo.Map.DictionaryTravelPoints.Values)
@@ -112,7 +112,7 @@ namespace RiverHollow.Map_Handling
                     //Do a string empty check to ensure that we don't overwrite a connected map
                     if (RHRandom.Instance().Next(1, 100) <= chancePerEntrance && string.IsNullOrEmpty(pt.LinkedMap))
                     {
-                        Vector2 newCoords = roomCoordinates + Util.GetVectorFromDirection(pt.Dir);
+                        Point newCoords = roomCoordinates + Util.GetPointFromDirection(pt.Dir);
                         if (AreCoordinatesValid(newCoords))
                         {
                             pointsToConnect.Add(pt);
@@ -126,7 +126,7 @@ namespace RiverHollow.Map_Handling
 
                     //Update the coordinates of the new room, relative to the coordinates of the room it is now attached to.
                     //This will overwrite if a room gets attached to multiple times, but they should all be in sync
-                    Vector2 newCoords = roomCoordinates + Util.GetVectorFromDirection(pt.Dir);
+                    Point newCoords = roomCoordinates + Util.GetPointFromDirection(pt.Dir);
                     if (dungeonMap[(int)newCoords.X, (int)newCoords.Y] != null) { room = dungeonMap[(int)newCoords.X, (int)newCoords.Y]; }
                     else
                     {
@@ -184,7 +184,7 @@ namespace RiverHollow.Map_Handling
                 TravelPoint point = rmInfo.Map.DictionaryTravelPoints.Values.ToList().Find(x => x.Dir == dirToConnectTo && x.LinkedMap == string.Empty);
 
                 //Ensure that the corresponding DungeonRoom location isn't occupied
-                Vector2 targetCoords = rmInfo.Coordinates + Util.GetVectorFromDirection(Util.GetOppositeDirection(dirToConnectTo));
+                Point targetCoords = rmInfo.Coordinates + Util.GetPointFromDirection(Util.GetOppositeDirection(dirToConnectTo));
                 if (point != null && AreCoordinatesValid(targetCoords) && arrDungeonMap[(int)targetCoords.X, (int)targetCoords.Y] != null)
                 {
                     ConnectMaps(terminalMap, rmInfo.Map, Util.GetOppositeDirection(dirToConnectTo));
@@ -203,7 +203,7 @@ namespace RiverHollow.Map_Handling
         /// </summary>
         /// <param name="coordinates">The Dungeon coordinates of the room</param>
         /// <returns>True if the coordinate numbers are within range</returns>
-        private bool AreCoordinatesValid(Vector2 coordinates)
+        private bool AreCoordinatesValid(Point coordinates)
         {
             return coordinates.X > 0 && coordinates.X < DUNGEON_SIZE && coordinates.Y > 0 && coordinates.Y < DUNGEON_SIZE;
         }
@@ -261,25 +261,26 @@ namespace RiverHollow.Map_Handling
         {
             string[] strsplit = Util.FindParams(_diDungeonInfo["EntranceID"]);
 
-            foreach (TiledMapObject blocker in map.GetMapObjectsByName("BlockObject"))
+            foreach (TiledMapObject obj in map.GetMapObjectsByName("BlockObject"))
             {
-                Vector2 pos = Vector2.Zero;
-                DirectionEnum dir = Util.ParseEnum<DirectionEnum>(blocker.Properties["Dir"]);
+                Rectangle blocker = Util.RectFromTiledMapObject(obj);
+                DirectionEnum dir = Util.ParseEnum<DirectionEnum>(obj.Properties["Dir"]);
+                Point pos;
                 switch (dir)
                 {
                     case DirectionEnum.Up:
-                        pos = new Vector2(blocker.Position.X + blocker.Size.Width, (int)blocker.Position.Y);
-                        CreateEntranceObject(blocker, map, int.Parse(strsplit[0]), int.Parse(strsplit[1]), int.Parse(strsplit[2]), blocker.Position, pos, blocker.Position);
+                        pos = new Point(blocker.X + blocker.Width, blocker.Y);
+                        CreateEntranceObject(obj, map, int.Parse(strsplit[0]), int.Parse(strsplit[1]), int.Parse(strsplit[2]), blocker.Location, pos, blocker.Location);
                         break;
                     case DirectionEnum.Down:
-                        pos = blocker.Position + new Vector2(0, Constants.TILE_SIZE);
-                        CreateEntranceObject(blocker, map, int.Parse(strsplit[3]), int.Parse(strsplit[4]), int.Parse(strsplit[5]), pos, new Vector2(pos.X + blocker.Size.Width, pos.Y), pos);
+                        pos = blocker.Location + new Point(0, Constants.TILE_SIZE);
+                        CreateEntranceObject(obj, map, int.Parse(strsplit[3]), int.Parse(strsplit[4]), int.Parse(strsplit[5]), pos, new Point(pos.X + blocker.Width, pos.Y), pos);
                         break;
                     case DirectionEnum.Left:
-                        CreateEntranceObject(blocker, map, int.Parse(strsplit[6]), int.Parse(strsplit[7]), int.Parse(strsplit[8]), blocker.Position, blocker.Position + new Vector2(0, blocker.Size.Height), blocker.Position);
+                        CreateEntranceObject(obj, map, int.Parse(strsplit[6]), int.Parse(strsplit[7]), int.Parse(strsplit[8]), blocker.Location, blocker.Location + new Point(0, blocker.Height), blocker.Location);
                         break;
                     case DirectionEnum.Right:
-                        CreateEntranceObject(blocker, map, int.Parse(strsplit[9]), int.Parse(strsplit[10]), int.Parse(strsplit[11]), blocker.Position, blocker.Position + new Vector2(0, blocker.Size.Height), blocker.Position);
+                        CreateEntranceObject(obj, map, int.Parse(strsplit[9]), int.Parse(strsplit[10]), int.Parse(strsplit[11]), blocker.Location, blocker.Location + new Point(0, blocker.Height), blocker.Location);
                         break;
                 }
             }
@@ -296,7 +297,7 @@ namespace RiverHollow.Map_Handling
         /// <param name="firstObj">The location to create the first open WorldObject</param>
         /// <param name="secondObj">The location to create the second open WorldObject</param>
         /// <param name="closedObject">The location to create the closed WorldObject</param>
-        private void CreateEntranceObject(TiledMapObject entranceObject, RHMap map, int closedID, int openID1, int openID2, Vector2 firstObj, Vector2 secondObj, Vector2 closedObject)
+        private void CreateEntranceObject(TiledMapObject entranceObject, RHMap map, int closedID, int openID1, int openID2, Point firstObj, Point secondObj, Point closedObject)
         {
             if (bool.Parse(entranceObject.Properties["Open"]))
             {
@@ -357,7 +358,7 @@ namespace RiverHollow.Map_Handling
         private class RoomInfo
         {
             public readonly RHMap Map;
-            public Vector2 Coordinates = Vector2.Zero;
+            public Point Coordinates = Point.Zero;
 
             public bool Modular => Map.Modular;
 
@@ -366,7 +367,7 @@ namespace RiverHollow.Map_Handling
                 Map = map;
             }
 
-            public void SetCoordinates(Vector2 coords)
+            public void SetCoordinates(Point coords)
             {
                 Coordinates = coords;
             }

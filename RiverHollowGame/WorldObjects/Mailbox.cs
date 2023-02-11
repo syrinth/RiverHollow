@@ -23,7 +23,7 @@ namespace RiverHollow.WorldObjects
             _liSentMessages = new List<string>();
             PlayerManager.PlayerMailbox = this;
 
-            _rBase.Y = _uSize.Height - BaseHeight;
+            _rBase.Y = _pSize.Y - BaseHeight;
         }
 
         public override void Update(GameTime gTime)
@@ -80,7 +80,7 @@ namespace RiverHollow.WorldObjects
             {
                 _alertSprite = new AnimatedSprite(DataManager.DIALOGUE_TEXTURE);
                 _alertSprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 64, Constants.TILE_SIZE, Constants.TILE_SIZE, 3, 0.150f, true);
-                _alertSprite.Position = new Vector2(_vMapPosition.X, _vMapPosition.Y - Constants.TILE_SIZE);
+                _alertSprite.Position = new Point(MapPosition.X, MapPosition.Y - Constants.TILE_SIZE);
             }
         }
 

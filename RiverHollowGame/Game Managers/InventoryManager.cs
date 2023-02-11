@@ -283,8 +283,6 @@ Exit:
         #endregion
         public static void DropItemOnMap(Item item)
         {
-            item.AutoPickup = false;
-            item.ManualPickup = true;
             MapManager.CurrentMap.DropItemOnMap(item, PlayerManager.PlayerActor.Position);
         }
 
@@ -378,7 +376,7 @@ Exit:
             }
 
             //If we failed to add it, then we need to drop it onto the world map.
-            if (!rv && !itemToAdd.ManualPickup)
+            if (!rv)
             {
                 DropItemOnMap(itemToAdd);
                 //Todo mail Tools to player

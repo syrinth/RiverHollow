@@ -20,29 +20,15 @@ namespace RiverHollow.Items
         protected Color _c = Color.White;
         public Color ItemColor => _c;
 
-        protected double _dWidth = 16;
-        protected double _dHeight = 16;
+        protected int _iWidth = 16;
+        protected int _iHeight = 16;
 
         protected Texture2D _texTexture;
         public Texture2D Texture => _texTexture;
 
-        protected Vector2 _vSourcePos;
+        protected Point _pSourcePos;
+        public Rectangle SourceRectangle => new Rectangle(_pSourcePos.X, _pSourcePos.Y, _iWidth, _iHeight);
 
-        protected Vector2 _vPosition;
-        public virtual Vector2 Position { get => _vPosition; set => _vPosition = value; }
-
-        public virtual Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, Constants.TILE_SIZE, Constants.TILE_SIZE); }
-        public Rectangle SourceRectangle { get => new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight); }
-
-        protected bool _bOnMap;
-        public bool OnTheMap { get => _bOnMap; set => _bOnMap = value; }
-
-        protected bool _bAutoPickup = true;
-        public bool AutoPickup { get => _bAutoPickup; set => _bAutoPickup = value; }
-        protected bool _bManualPickup = false;
-        public bool ManualPickup { get => _bManualPickup; set => _bManualPickup = value; }
-
-        private Parabola _movement;
 
         protected int _iNum;
         public int Number { get => _iNum; }
@@ -72,8 +58,7 @@ namespace RiverHollow.Items
 
             //Image information
             string[] texIndices = stringData["Image"].Split('-');
-            _vSourcePos = new Vector2(int.Parse(texIndices[0]), int.Parse(texIndices[1]));
-            _vSourcePos *= Constants.TILE_SIZE;
+            _pSourcePos = new Point(int.Parse(texIndices[0]) * Constants.TILE_SIZE, int.Parse(texIndices[1]) * Constants.TILE_SIZE);
 
             Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
 
@@ -91,44 +76,22 @@ namespace RiverHollow.Items
         {
             ID = item.ID;
             _eItemType = item.ItemType;
-            _vSourcePos = item._vSourcePos;
+            _pSourcePos = item._pSourcePos;
             _texTexture = item.Texture;
             _iNum = item.Number;
         }
 
-        public virtual void Update(GameTime gTime)
-        {
-            if (_movement != null)
-            {
-                if (!_movement.Finished)
-                {
-                    _vPosition = _movement.MoveTo();
-                    _movement.Update(gTime);
-                }
-                else
-                {
-                    _movement = null;
-                }
-            }
-        }
-
-        public virtual void Draw(SpriteBatch spriteBatch)
-        {
-            if (_bOnMap)
-            {
-                spriteBatch.Draw(_texTexture, new Rectangle((int)_vPosition.X, (int)_vPosition.Y, (int)_dWidth, (int)_dHeight), SourceRectangle, _c, 0, Vector2.Zero, SpriteEffects.None, (float)(Position.Y + _dHeight + (Position.X / 100)));
-            }
-        }
+        public virtual void Update(GameTime gTime) { }
 
         public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox, bool LayerDepth = false, float forcedLayerDepth = Constants.MAX_LAYER_DEPTH, float alpha = 1f)
         {
             if (LayerDepth)
             {
-                spriteBatch.Draw(_texTexture, drawBox, new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight), _c * alpha, 0, Vector2.Zero, SpriteEffects.None, forcedLayerDepth);
+                spriteBatch.Draw(_texTexture, drawBox, SourceRectangle, _c * alpha, 0, Vector2.Zero, SpriteEffects.None, forcedLayerDepth);
             }
             else
             {
-                spriteBatch.Draw(_texTexture, drawBox, new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight), _c * alpha);
+                spriteBatch.Draw(_texTexture, drawBox, new Rectangle(_pSourcePos.X, _pSourcePos.Y, _iWidth, _iHeight), _c * alpha);
             }
         }
 
@@ -139,23 +102,6 @@ namespace RiverHollow.Items
         public virtual string Description()
         {
             return Name() + System.Environment.NewLine + DataManager.GetTextData(ID, "Description", DataType.Item);
-        }
-
-        public void Pop(Vector2 pos)
-        {
-            _vPosition = pos;
-            _movement = new Parabola(_vPosition);
-        }
-
-        public bool FinishedMoving()
-        {
-            bool rv = true;
-
-            if (_movement != null && !_movement.Finished)
-            {
-                rv = false;
-            }
-            return rv;
         }
 
         /// <summary>
@@ -304,99 +250,6 @@ namespace RiverHollow.Items
 
             return itemData;
         }
-
-        private class Parabola
-        {
-            readonly double _dCurveDegree = -0.1;
-            readonly double _dCurveWidth = 2.8;
-
-            Vector2 _vPosition;
-            Vector2 _vStartPosition;
-            public bool Finished { get; private set; } = false;
-
-            RHTimer _timer;
-            double _dPauseTimer = 0.1;
-            float _fXOffset = 0;
-            readonly bool _bGoLeft = false;
-            readonly bool _bBounce = true;
-
-            Parabola subBounce;
-            public Parabola(Vector2 pos)
-            {
-                RHRandom r = RHRandom.Instance();
-
-                float widthChange = r.Next(0, 5);
-                widthChange *= 0.1f;
-                if (r.Next(0, 1) == 1) { widthChange *= -1; }
-                _dCurveWidth += widthChange;
-                if (r.Next(0, 1) == 1) {
-                    _bGoLeft = true;
-                    _dCurveWidth *= -1;
-                }
-
-                double timerChange = r.Next(0, 9);
-                timerChange *= 0.01;
-                if (r.Next(0, 1) == 1) { timerChange *= -1; }
-                _timer = new RHTimer(Constants.ITEM_BOUNCE_SPEED + timerChange);
-
-                _vStartPosition = pos;
-                _vPosition = pos;
-            }
-
-            public Parabola(Vector2 pos, double curveDegree, double curveWidth, bool goingLeft)
-            {
-                _timer = new RHTimer(Constants.ITEM_BOUNCE_SPEED);
-                _bBounce = false;
-                _vStartPosition = pos;
-                _vPosition = pos;
-                _dCurveDegree = curveDegree;
-                _dCurveWidth = curveWidth;
-                _bGoLeft = goingLeft;
-            }
-
-            public void Update(GameTime gTime)
-            {
-                if (_timer.TickDown(gTime))
-                {
-                    if (_bBounce || (_bBounce && subBounce != null))
-                    {
-                        if (subBounce == null)
-                        {
-                            subBounce = new Parabola(_vPosition, _dCurveDegree + 0.04, _dCurveWidth + (_bGoLeft ? 1.5 : -1.5), _bGoLeft);
-                        }
-                        else if (!subBounce.Finished)
-                        {
-                            subBounce.Update(gTime);
-                        }
-                        else { Finished = true; }
-                    }
-                    else
-                    {
-                        if (_dPauseTimer > 0)
-                        {
-                            _dPauseTimer -= gTime.ElapsedGameTime.TotalSeconds;
-                        }
-                        else
-                        {
-                            Finished = true;
-                        }
-                    }
-                }
-                else
-                {
-                    _fXOffset += _bGoLeft ? -2f : 2f;
-                    float yOffset = (float)((_dCurveDegree * (_fXOffset * _fXOffset)) + (_dCurveWidth * _fXOffset));
-                    _vPosition.X = _vStartPosition.X + _fXOffset;
-                    _vPosition.Y = _vStartPosition.Y - yOffset;
-                }
-            }
-
-            public Vector2 MoveTo()
-            {
-                if (subBounce != null) { return subBounce.MoveTo(); }
-                else { return _vPosition; }
-            }
-        }
     }
 
     public class MonsterFood : Item
@@ -427,8 +280,6 @@ namespace RiverHollow.Items
         {
             MapManager.CurrentMap.PrimeMonsterSpawns(this);
             MapManager.CurrentMap.DropItemOnMap(this, PlayerManager.PlayerActor.Position);
-            _bAutoPickup = false;
-            _bManualPickup = false;
             Remove(1);
             ClearGMObjects();
         }

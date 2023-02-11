@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
+using MonoGame.Extended.Tiled;
 
 namespace RiverHollow.Utilities
 {
@@ -22,8 +23,15 @@ namespace RiverHollow.Utilities
         /// <param name="targetPos">The end goal position for the Actor</param>
         /// <param name="speed">The actor's movement speed</param>
         /// <param name="direction">Reference to the direction the actor will move in</param>
-        public static void GetMoveSpeed(Vector2 currentPos, Vector2 targetPos, float speed, ref Vector2 direction)
+        public static Vector2 GetMoveSpeed(Point currentPos, Point targetPos, float speed)
         {
+            return GetMoveSpeed(currentPos.ToVector2(), targetPos.ToVector2(), speed);
+        }
+
+        public static Vector2 GetMoveSpeed(Vector2 currentPos, Vector2 targetPos, float speed)
+        {
+            Vector2 rv = Vector2.Zero;
+
             float newX = 0; float newY = 0;
 
             //Determine in which direction(s) the character needs to move
@@ -37,34 +45,21 @@ namespace RiverHollow.Utilities
             //Normalize the Vector2 to a total length of 1
             Vector2 dir = new Vector2(deltaX, deltaY);
             dir.Normalize();
-            dir = dir * speed;
+            dir *= speed;
 
             //If the absolute value of the X or Y movement is less than the speed then set the movement
             //direction to the delta, otherwise, multiply the needed movement Vector2 by the Normalized movement
-            direction.X = (deltaX < speed) ? newX * deltaX : newX * dir.X;
-            direction.Y = (deltaY < speed) ? newY * deltaY : newY * dir.Y;
+            rv.X = (deltaX < speed) ? newX * deltaX : newX * dir.X;
+            rv.Y = (deltaY < speed) ? newY * deltaY : newY * dir.Y;
+
+            return rv;
         }
 
-        public static Vector2 SnapToGrid(Vector2 p)
+        public static Point SnapToGrid(Point p)
         {
-            Vector2 newVec = Vector2.Zero;
-            newVec.X = ((int)(p.X / Constants.TILE_SIZE)) * Constants.TILE_SIZE;
-            newVec.Y = ((int)(p.Y / Constants.TILE_SIZE)) * Constants.TILE_SIZE;
-
-            return newVec;
-        }
-
-        /// <summary>
-        /// Takes in a Vector2 representing a tile on the map and converts it to find its
-        /// actual pixel world position.
-        /// </summary>
-        /// <param name="tile">The Vector2 of the tile</param>
-        /// <returns>The world position</returns>
-        public static Vector2 GetMapPositionOfTile(Vector2 tile)
-        {
-            Vector2 newVec = Vector2.Zero;
-            newVec.X = tile.X * Constants.TILE_SIZE;
-            newVec.Y = tile.Y  * Constants.TILE_SIZE;
+            Point newVec = Point.Zero;
+            newVec.X = (p.X / Constants.TILE_SIZE) * Constants.TILE_SIZE;
+            newVec.Y = (p.Y / Constants.TILE_SIZE) * Constants.TILE_SIZE;
 
             return newVec;
         }
@@ -74,22 +69,17 @@ namespace RiverHollow.Utilities
         /// These methods return a Vector2 representing the grid coordinates of an
         /// RHTile based off of the input, which is a pixel centered map position.
         /// <returns></returns>
-        public static Vector2 GetGridCoords(int x, int y)
+        public static Point GetGridCoords(int x, int y)
         {
-            return GetGridCoords(new Vector2(x, y));
+            return GetGridCoords(new Point(x, y));
         }
-        public static Vector2 GetGridCoords(Point p)
+        public static Point GetGridCoords(Point vec)
         {
-            return GetGridCoords(p.ToVector2());
-        }
-        public static Vector2 GetGridCoords(Vector2 vec)
-        {
-            Vector2 rv = new Vector2(vec.X / Constants.TILE_SIZE, vec.Y / Constants.TILE_SIZE);
-            return rv;
+            return new Point(vec.X / Constants.TILE_SIZE, vec.Y / Constants.TILE_SIZE);
         }
         #endregion
 
-        public static Vector2 MoveUpTo(Vector2 currPos, Vector2 moveTo, float speed)
+        public static Vector2 MoveUpTo(Point currPos, Point moveTo, float speed)
         {
             Vector2 rv = Vector2.Zero;
 
@@ -99,7 +89,7 @@ namespace RiverHollow.Utilities
             return rv;
         }
 
-        private static float EvalAxisChange(float currAxis, float moveToAxis, float speed)
+        private static float EvalAxisChange(int currAxis, int moveToAxis, float speed)
         {
             float rv = 0;
             if (currAxis > moveToAxis)
@@ -135,19 +125,6 @@ namespace RiverHollow.Utilities
 
                 name = f.Name.Remove(f.Name.Length - 4);
             }
-        }
-
-        public static Rectangle FloatRectangle(Vector2 pos, RHSize size)
-        {
-            return FloatRectangle(pos.X, pos.Y, size.Width, size.Height);
-        }
-        public static Rectangle FloatRectangle(Vector2 pos, float width, float height)
-        {
-            return FloatRectangle(pos.X, pos.Y, width, height);
-        }
-        public static Rectangle FloatRectangle(float x, float y, float width, float height)
-        {
-            return new Rectangle((int)x, (int)y, (int)width, (int)height);
         }
 
         public static string ProcessText(string text)
@@ -420,14 +397,6 @@ namespace RiverHollow.Utilities
                 value = float.Parse(dict[key]);
             }
         }
-        public static void AssignValue(ref RHSize value, string key, Dictionary<string, string> dict)
-        {
-            if (dict.ContainsKey(key))
-            {
-                string[] splitVal = dict[key].Split('-');
-                value = new RHSize(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
-            }
-        }
         public static void AssignValue(ref Vector2 value, string key, Dictionary<string, string> dict)
         {
             if (dict.ContainsKey(key))
@@ -524,6 +493,16 @@ namespace RiverHollow.Utilities
 
             return rv;
         }
+
+        public static int RoundForPoint(float val)
+        {
+            int rv = 0;
+
+            if (val > 0) { rv = (int)Math.Ceiling(val); }
+            else if (val < 0) { rv = (int)Math.Floor(val); }
+
+            return rv;
+        }
         #endregion
 
         #region StringParseHelpers
@@ -544,6 +523,11 @@ namespace RiverHollow.Utilities
             return rv;
         }
         #endregion
+
+        public static float PointLength(Point p)
+        {
+            return p.ToVector2().Length();
+        }
 
         public static double GetDistance(Point pOne, Point pTwo) { return GetDistance(pOne.ToVector2(), pTwo.ToVector2()); }
         public static double GetDistance(Vector2 vOne, Vector2 vTwo)
@@ -612,20 +596,20 @@ namespace RiverHollow.Utilities
             return rv;
         }
 
-        public static List<Vector2> GetAllPointsInArea(Vector2 position, Size2 dimensions, int incrementSize = 1)
+        public static List<Point> GetAllPointsInArea(Vector2 position, Size2 dimensions, int incrementSize = 1)
         {
             return GetAllPointsInArea((int)position.X, (int)position.Y, (int)dimensions.Width, (int)dimensions.Height, incrementSize);
         }
 
-        public static List<Vector2> GetAllPointsInArea(int startX, int startY, int width, int height, int incrementSize = 1)
+        public static List<Point> GetAllPointsInArea(int startX, int startY, int width, int height, int incrementSize = 1)
         {
-            List<Vector2> rv = new List<Vector2>();
+            List<Point> rv = new List<Point>();
 
             for (int y = startY; y < startY + height; y += incrementSize)
             {
                 for (int x = startX; x < startX + width; x += incrementSize)
                 {
-                    rv.Add(new Vector2(x, y));
+                    rv.Add(new Point(x, y));
                 }
             }
 
@@ -680,9 +664,9 @@ namespace RiverHollow.Utilities
             x = y;
             y = temp;
         }
-        public static void SwitchValues(ref RHSize x, ref RHSize y)
+        public static void SwitchValues(ref Point x, ref Point y)
         {
-            RHSize temp = x;
+            Point temp = x;
             x = y;
             y = temp;
         }
@@ -734,7 +718,11 @@ namespace RiverHollow.Utilities
             }
         }
 
-        public static DirectionEnum GetDirectionFromNormalVector(Vector2 direction)
+        public static DirectionEnum GetDirection(Point direction)
+        {
+            return GetDirection(direction.ToVector2());
+        }
+        public static DirectionEnum GetDirection(Vector2 direction)
         {
             DirectionEnum rv = DirectionEnum.None;
             if (Math.Abs(direction.X) > Math.Abs(direction.Y))
@@ -750,21 +738,36 @@ namespace RiverHollow.Utilities
 
             return rv;
         }
-        public static Vector2 GetVectorFromDirection(DirectionEnum e)
+        public static Point GetPointFromDirection(DirectionEnum e)
         {
             switch (e)
             {
                 case DirectionEnum.Down:
-                    return new Vector2(0, 1);
+                    return new Point(0, 1);
                 case DirectionEnum.Left:
-                    return new Vector2(-1, 0);
+                    return new Point(-1, 0);
                 case DirectionEnum.Right:
-                    return new Vector2(1, 0);
+                    return new Point(1, 0);
                 case DirectionEnum.Up:
-                    return new Vector2(0, -1);
+                    return new Point(0, -1);
                 default:
-                    return Vector2.Zero;
+                    return Point.Zero;
             }
+        }
+
+        public static Rectangle RectFromTiledMapObject(TiledMapObject obj)
+        {
+            return new Rectangle((int)obj.Position.X, (int)obj.Position.Y, (int)obj.Size.Width, (int)obj.Size.Height);
+        }
+
+        public static Point MultiplyPoint(Point point, int value)
+        {
+            return new Point(point.X * value, point.Y * value);
+        }
+
+        public static Point DividePoint(Point point, int value)
+        {
+            return new Point(point.X / value, point.Y / value);
         }
     }
 

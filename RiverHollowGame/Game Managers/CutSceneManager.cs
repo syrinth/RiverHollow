@@ -159,7 +159,7 @@ namespace RiverHollow.Game_Managers
 
         int _iID;
         RHMap _originalMap;
-        Vector2 _vOriginalPlayerPos;
+        Point _pOriginalPlayerPos;
         RHMap _cutsceneMap;
         int _iTaskID = -1;
         int _iMinTime = -1;                                         //The earliest the cutscene can be triggered
@@ -405,9 +405,9 @@ namespace RiverHollow.Game_Managers
         private void AssignMovement(string characterID, int numSquares, DirectionEnum dir)
         {
             WorldActor c = GetActor(characterID);
-            if (c.MoveToLocation == Vector2.Zero)
+            if (!c.HasMovement())
             {
-                Vector2 vec = Util.GetVectorFromDirection(dir) * numSquares * Constants.TILE_SIZE;
+                Point vec = Util.MultiplyPoint(Util.GetPointFromDirection(dir), numSquares * Constants.TILE_SIZE);
                 
                 c.SetMoveTo(c.Position + vec);
                 if (!_liMoving.Contains(c))
@@ -430,7 +430,7 @@ namespace RiverHollow.Game_Managers
                 {
                     _liToRemove.Add(c);
                 }
-                c.SetMoveTo(Vector2.Zero);
+                c.SetMoveTo(Point.Zero);
             }
         }
 
@@ -446,7 +446,7 @@ namespace RiverHollow.Game_Managers
             GUIManager.AddSkipCutsceneButton();
 
             _originalMap = MapManager.CurrentMap;
-            _vOriginalPlayerPos = PlayerManager.PlayerActor.Position;
+            _pOriginalPlayerPos = PlayerManager.PlayerActor.Position;
 
             //Iterates over all of the setup commands
             foreach (string s in _liSetupCommands)
@@ -623,7 +623,7 @@ namespace RiverHollow.Game_Managers
             foreach(WorldActor act in _liUsedNPCs)
             {
                 act.ClearPath();
-                act.SetMoveTo(Vector2.Zero);
+                act.SetMoveTo(Point.Zero);
             }
 
             GUIManager.ClearBackgroundImage();
@@ -640,9 +640,9 @@ namespace RiverHollow.Game_Managers
             PlayerManager.PlayerActor.SpdMult = Constants.NORMAL_SPEED;
             PlayerManager.AllowMovement = true;
             CutsceneManager.Playing = false;
-            PlayerManager.PlayerActor.SetMoveTo(Vector2.Zero);
+            PlayerManager.PlayerActor.SetMoveTo(Point.Zero);
             MapManager.Maps.Remove(_cutsceneMap.Name);
-            MapManager.FadeToNewMap(_originalMap, _vOriginalPlayerPos, GameManager.CurrentBuilding);
+            MapManager.FadeToNewMap(_originalMap, _pOriginalPlayerPos, GameManager.CurrentBuilding);
             GUIManager.RemoveSkipCutsceneButton();
 
             _triggerTask?.EndTask();

@@ -13,8 +13,8 @@ namespace RiverHollow.Misc
     public class FieldOfVision
     {
         int _iMaxRange;
-        Vector2 _vFirst;            //The LeftMost of the TopMost
-        Vector2 _vSecond;           //The RightMost of the BottomMost
+        Point _pFirst;            //The LeftMost of the TopMost
+        Point _pSecond;           //The RightMost of the BottomMost
         DirectionEnum _eDir;
 
         public FieldOfVision(Mob theMob, int maxRange)
@@ -24,61 +24,61 @@ namespace RiverHollow.Misc
             _eDir = theMob.Facing;
             if (_eDir == DirectionEnum.Up || _eDir == DirectionEnum.Down)
             {
-                _vFirst = theMob.Center - new Vector2(sideRange, 0);
-                _vSecond = theMob.Center + new Vector2(sideRange, 0);
+                _pFirst = theMob.Center - new Point(sideRange, 0);
+                _pSecond = theMob.Center + new Point(sideRange, 0);
             }
             else
             {
-                _vFirst = theMob.Center - new Vector2(0, sideRange);
-                _vSecond = theMob.Center + new Vector2(0, sideRange);
+                _pFirst = theMob.Center - new Point(0, sideRange);
+                _pSecond = theMob.Center + new Point(0, sideRange);
             }
         }
 
-        public void MoveBy(Vector2 v)
+        public void MoveBy(Point v)
         {
-            _vFirst += v;
-            _vSecond += v;
+            _pFirst += v;
+            _pSecond += v;
         }
 
         public bool Contains(WorldActor actor)
         {
             bool rv = false;
-            Vector2 center = actor.CollisionCenter.ToVector2();
+            Point center = actor.CollisionCenter;
 
-            Vector2 firstFoV = _vFirst;
-            Vector2 secondFoV = _vSecond;
+            Point firstFoV = _pFirst;
+            Point secondFoV = _pSecond;
             //Make sure the actor could be in range
             if (_eDir == DirectionEnum.Up && Util.InBetween(center.Y, firstFoV.Y - _iMaxRange, firstFoV.Y))
             {
-                float yMod = Math.Abs(center.Y - firstFoV.Y);
-                firstFoV += new Vector2(-yMod, -yMod);
-                secondFoV += new Vector2(yMod, -yMod);
+                int yMod = Math.Abs(center.Y - firstFoV.Y);
+                firstFoV += new Point(-yMod, -yMod);
+                secondFoV += new Point(yMod, -yMod);
 
-                rv = Util.InBetween(center.X, firstFoV.X, secondFoV.X) && Util.InBetween(center.Y, firstFoV.Y, _vFirst.Y);
+                rv = Util.InBetween(center.X, firstFoV.X, secondFoV.X) && Util.InBetween(center.Y, firstFoV.Y, _pFirst.Y);
             }
             else if (_eDir == DirectionEnum.Down && Util.InBetween(center.Y, firstFoV.Y, firstFoV.Y + _iMaxRange))
             {
-                float yMod = Math.Abs(center.Y - firstFoV.Y);
-                firstFoV += new Vector2(-yMod, yMod);
-                secondFoV += new Vector2(yMod, yMod);
+                int yMod = Math.Abs(center.Y - firstFoV.Y);
+                firstFoV += new Point(-yMod, yMod);
+                secondFoV += new Point(yMod, yMod);
 
-                rv = Util.InBetween(center.X, firstFoV.X, secondFoV.X) && Util.InBetween(center.Y, _vFirst.Y, firstFoV.Y);
+                rv = Util.InBetween(center.X, firstFoV.X, secondFoV.X) && Util.InBetween(center.Y, _pFirst.Y, firstFoV.Y);
             }
             else if (_eDir == DirectionEnum.Left && Util.InBetween(center.X, firstFoV.X - _iMaxRange, firstFoV.X))
             {
-                float xMod = Math.Abs(center.X - firstFoV.X);
-                firstFoV += new Vector2(-xMod, -xMod);
-                secondFoV += new Vector2(-xMod, xMod);
+                int xMod = Math.Abs(center.X - firstFoV.X);
+                firstFoV += new Point(-xMod, -xMod);
+                secondFoV += new Point(-xMod, xMod);
 
-                rv = Util.InBetween(center.Y, firstFoV.Y, secondFoV.Y) && Util.InBetween(center.X, firstFoV.X, _vFirst.X);
+                rv = Util.InBetween(center.Y, firstFoV.Y, secondFoV.Y) && Util.InBetween(center.X, firstFoV.X, _pFirst.X);
             }
             else if (_eDir == DirectionEnum.Right && Util.InBetween(center.X, firstFoV.X, firstFoV.X + _iMaxRange))
             {
-                float xMod = Math.Abs(center.X - firstFoV.X);
-                firstFoV += new Vector2(xMod, -xMod);
-                secondFoV += new Vector2(xMod, xMod);
+                int xMod = Math.Abs(center.X - firstFoV.X);
+                firstFoV += new Point(xMod, -xMod);
+                secondFoV += new Point(xMod, xMod);
 
-                rv = Util.InBetween(center.Y, firstFoV.Y, secondFoV.Y) && Util.InBetween(center.X, _vFirst.X, firstFoV.X);
+                rv = Util.InBetween(center.Y, firstFoV.Y, secondFoV.Y) && Util.InBetween(center.X, _pFirst.X, firstFoV.X);
             }
 
             return rv;

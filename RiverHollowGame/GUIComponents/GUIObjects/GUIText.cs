@@ -80,7 +80,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (!string.IsNullOrEmpty(_sText) && Show())
             {
-                spriteBatch.DrawString(_font, _sText, Position(), _Color * Alpha());
+                spriteBatch.DrawString(_font, _sText, Position().ToVector2(), _Color * Alpha());
             }
         }
 

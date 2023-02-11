@@ -73,7 +73,7 @@ namespace RiverHollow.Characters
                 if (_eCurrentState == NPCStateEnum.Wander)
                 {
                     ChangeState(NPCStateEnum.Idle);
-                    SetMoveTo(Vector2.Zero);
+                    SetMoveTo(Point.Zero);
                 }
             }
 

@@ -63,7 +63,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         }
 
         //Informational boxes that show up anywhere, like tooltips
-        public GUITextWindow(TextEntry text, Vector2 position) : this()
+        public GUITextWindow(TextEntry text, Point position) : this()
         {
             _textEntry = text;
             _textEntry.HandlePreWindowActions();

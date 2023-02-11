@@ -39,12 +39,7 @@ namespace RiverHollow.Misc
                 _sprBody.AddAnimation(AnimationEnum.Action_Finished, Constants.TILE_SIZE, 0, Constants.TILE_SIZE, Constants.TILE_SIZE * 2, 2, 0.1f, false, true);
                 _sprBody.PlayAnimation(AnimationEnum.Action1);
 
-                int top = (0 - 400);
-                int bottom = (mapWidth * Constants.TILE_SIZE) + _iFallDistance;
-                int left = (0 - _iFallDistance);
-                int right = (mapWidth * Constants.TILE_SIZE) + _iFallDistance;
-                Vector2 pos = new Vector2(RHRandom.Instance().Next(0, (mapWidth * Constants.TILE_SIZE) + 300), RHRandom.Instance().Next(-400, mapHeight * Constants.TILE_SIZE));
-                //Vector2 pos = new Vector2(300, -300);
+                Point pos = new Point(RHRandom.Instance().Next(0, (mapWidth * Constants.TILE_SIZE) + 300), RHRandom.Instance().Next(-400, mapHeight * Constants.TILE_SIZE));
                 _sprBody.Position = pos;
             }
 
@@ -52,7 +47,7 @@ namespace RiverHollow.Misc
             {
                 if (_sprBody.IsCurrentAnimation(AnimationEnum.Action1))
                 {
-                    Vector2 landingPos = _sprBody.Position + new Vector2(0, Constants.TILE_SIZE);
+                    Point landingPos = _sprBody.Position + new Point(0, Constants.TILE_SIZE);
                     RHTile landingTile = MapManager.CurrentMap.GetTileByPixelPosition(landingPos);
                     if (_iFallDistance <= 0 && (landingTile == null || landingTile.WorldObject == null || landingTile.WorldObject.CompareType(ObjectTypeEnum.Structure)))
                     {
@@ -62,7 +57,7 @@ namespace RiverHollow.Misc
                     {
                         int modifier = RHRandom.Instance().Next(2, 3);
                         _iFallDistance -= modifier;
-                        _sprBody.Position += new Vector2(-2 * modifier, 3 * modifier);
+                        _sprBody.Position += new Point(-2 * modifier, 3 * modifier);
                     }
                 }
 
@@ -86,13 +81,13 @@ namespace RiverHollow.Misc
                 _sprBody.AddAnimation(AnimationEnum.Action1, 0, 0, Constants.TILE_SIZE, Constants.TILE_SIZE, 3, frameLength, true);
                 _sprBody.PlayAnimation(AnimationEnum.Action1);
 
-                Vector2 pos = new Vector2(RHRandom.Instance().Next(0, mapWidth * GameManager.ScaledTileSize), RHRandom.Instance().Next(0, mapHeight * GameManager.ScaledTileSize));
+                Point pos = new Point(RHRandom.Instance().Next(0, mapWidth * GameManager.ScaledTileSize), RHRandom.Instance().Next(0, mapHeight * GameManager.ScaledTileSize));
                 _sprBody.Position = pos;
             }
 
             public override void Update(GameTime gTime)
             {
-                _sprBody.Position += new Vector2(0, 2);
+                _sprBody.Position += new Point(0, 2);
 
                 _sprBody.Update(gTime);
             }

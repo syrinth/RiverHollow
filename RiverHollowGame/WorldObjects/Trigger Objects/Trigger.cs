@@ -21,7 +21,7 @@ namespace RiverHollow.WorldObjects
 
             if (_iItemKeyID == -1)
             {
-                _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Width, _pImagePos.Y, _uSize);
+                _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Width, _pImagePos.Y, _pSize);
             }
         }
 
@@ -31,7 +31,7 @@ namespace RiverHollow.WorldObjects
             if (_item != null)
             {
                 float visibility = _bHasBeenTriggered ? 1f : 0.25f;
-                _item.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X), (int)(_vMapPosition.Y - 6), Constants.TILE_SIZE, Constants.TILE_SIZE), true, _sprite.LayerDepth + 1, visibility);
+                _item.Draw(spriteBatch, new Rectangle((int)(MapPosition.X), (int)(MapPosition.Y - 6), Constants.TILE_SIZE, Constants.TILE_SIZE), true, _sprite.LayerDepth + 1, visibility);
             }
         }
 

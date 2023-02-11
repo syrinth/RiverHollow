@@ -25,7 +25,7 @@ namespace RiverHollow.Characters
         bool _bJump;
         int _iMaxRange = Constants.TILE_SIZE * 10;
 
-        Vector2 _vJumpTo;
+        Point _vJumpTo;
 
         FieldOfVision _FoV;
 
@@ -94,10 +94,10 @@ namespace RiverHollow.Characters
                             {
                                 _bBumpedIntoSomething = false;
                                 ChangeState(NPCStateEnum.Idle);
-                                SetMoveTo(Vector2.Zero);
+                                SetMoveTo(Point.Zero);
                                 goto default;
                             }
-                            else if (MoveToLocation == Vector2.Zero)
+                            else if (!HasMovement())
                             {
                                 Wander(gTime);
                                 goto default;
@@ -107,11 +107,11 @@ namespace RiverHollow.Characters
                             if (!Skitter && CurrentMap == MapManager.CurrentMap && PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 8))
                             {
                                 ChangeState(NPCStateEnum.TrackPlayer);
-                                _vLeashPoint = new Vector2(CollisionBox.Left, CollisionBox.Top);
+                                _pLeashPoint = new Point(CollisionBox.Left, CollisionBox.Top);
                             }
                             goto default;
                         case NPCStateEnum.TrackPlayer:
-                            int distance = (int)Util.GetDistance(Position, _vLeashPoint);
+                            int distance = (int)Util.GetDistance(Position, _pLeashPoint);
 
                             if (distance > Constants.TILE_SIZE * 25)
                             {
@@ -119,7 +119,7 @@ namespace RiverHollow.Characters
                             }
                             goto default;
                         case NPCStateEnum.Leashing:
-                            if (Position == _vLeashPoint)
+                            if (Position == _pLeashPoint)
                             {
                                 ChangeState(NPCStateEnum.Wander);
                             }
@@ -180,11 +180,11 @@ namespace RiverHollow.Characters
             if (DataManager.GetBoolByIDKey(ID, "CollisionBox", DataType.NPC))
             {
                 int[] args = Util.FindIntArguments(DataManager.GetStringByIDKey(ID, "CollisionBox", DataType.NPC));
-                return new Rectangle((int)_sprBody.Position.X + args[0], (int)_sprBody.Position.Y + args[1], args[2], args[3]);
+                return new Rectangle(_sprBody.Position.X + args[0], _sprBody.Position.Y + args[1], args[2], args[3]);
             }
             else
             {
-                return new Rectangle((int)Position.X, (int)Position.Y, Width, Constants.TILE_SIZE);
+                return new Rectangle(Position.X, Position.Y, Width, Constants.TILE_SIZE);
             }
         }
 
@@ -278,10 +278,10 @@ namespace RiverHollow.Characters
             if(_eCurrentState == NPCStateEnum.TrackPlayer)
             {
                 ChangeState(NPCStateEnum.Idle);
-                Position = _vLeashPoint;
+                Position = _pLeashPoint;
                 _liTilePath.Clear();
-                SetMoveTo(Vector2.Zero);
-                _vLeashPoint = Vector2.Zero;
+                SetMoveTo(Point.Zero);
+                _pLeashPoint = Point.Zero;
             }
         }
 
@@ -293,7 +293,7 @@ namespace RiverHollow.Characters
             {
                 _sprBody.SetColor(Color.Red);
                 ChangeState(NPCStateEnum.Stun);
-                SetMoveTo(Vector2.Zero);
+                SetMoveTo(Point.Zero);
                 _bBumpedIntoSomething = true;
             }
 

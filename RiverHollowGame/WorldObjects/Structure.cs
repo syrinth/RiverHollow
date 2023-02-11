@@ -12,8 +12,8 @@ namespace RiverHollow.WorldObjects
         List<SubObjectInfo> _liSubObjectInfo;
         public IList<SubObjectInfo> ObjectInfo => _liSubObjectInfo.AsReadOnly();
 
-        readonly Vector2 _vecSpecialCoords = Vector2.Zero;
-        public Vector2 SpecialCoords => _vecSpecialCoords;
+        readonly Point _vecSpecialCoords = Point.Zero;
+        public Point SpecialCoords => _vecSpecialCoords;
         public Structure(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             _liSubObjectInfo = new List<SubObjectInfo>();
@@ -25,7 +25,7 @@ namespace RiverHollow.WorldObjects
                 foreach (string s in Util.FindParams(stringData["SubObjects"]))
                 {
                     string[] split = s.Split('-');
-                    _liSubObjectInfo.Add(new SubObjectInfo() { ObjectID = int.Parse(split[0]), Position = new Vector2(int.Parse(split[1]), int.Parse(split[2])) });
+                    _liSubObjectInfo.Add(new SubObjectInfo() { ObjectID = int.Parse(split[0]), Position = new Point(int.Parse(split[1]), int.Parse(split[2])) });
                 }
             }
 
@@ -33,7 +33,7 @@ namespace RiverHollow.WorldObjects
             _bDrawUnder = true;
         }
 
-        public override bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
+        public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
         {
             bool rv = false;
             if (base.PlaceOnMap(pos, map))
@@ -53,7 +53,7 @@ namespace RiverHollow.WorldObjects
                 foreach (SubObjectInfo info in _liSubObjectInfo)
                 {
                     WorldObject obj = DataManager.CreateWorldObjectByID(info.ObjectID);
-                    RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Vector2(pos.X + info.Position.X, pos.Y + info.Position.Y));
+                    RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Point(pos.X + info.Position.X, pos.Y + info.Position.Y));
                     RHTile temp = targetTile;
                     for (int i = 0; i < obj.CollisionBox.Width / 16; i++)
                     {
@@ -71,7 +71,7 @@ namespace RiverHollow.WorldObjects
         {
             foreach (SubObjectInfo info in _liSubObjectInfo)
             {
-                RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Vector2(_vMapPosition.X + info.Position.X, _vMapPosition.Y + info.Position.Y));
+                RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Point(MapPosition.X + info.Position.X, MapPosition.Y + info.Position.Y));
                 if (targetTile.WorldObject != null)
                 {
                     targetTile.WorldObject.Sprite.Drawing = false;
@@ -84,7 +84,7 @@ namespace RiverHollow.WorldObjects
                     {
                         if (m.OnTheMap)
                         {
-                            m.Position = new Vector2(-99, 99);
+                            m.Position = new Point(-99, 99);
                         }
                     }
                 }
@@ -95,7 +95,7 @@ namespace RiverHollow.WorldObjects
         public struct SubObjectInfo
         {
             public int ObjectID;
-            public Vector2 Position;
+            public Point Position;
         }
     }
 }

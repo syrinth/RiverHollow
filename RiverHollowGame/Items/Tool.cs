@@ -29,12 +29,14 @@ namespace RiverHollow.Items
         protected AnimatedSprite _sprite;
         public AnimatedSprite ToolAnimation { get => _sprite; }
 
-        public override Vector2 Position
+        Point _pPosition;
+
+        public Point Position
         {
             set
             {
-                _vPosition = value;
-                _sprite.Position = _vPosition;
+                _pPosition = value;
+                _sprite.Position = _pPosition;
             }
         }
 
@@ -51,7 +53,8 @@ namespace RiverHollow.Items
 
                 string[] par = Util.FindParams(stringData["AnimationData"]);
                 Vector2 start = Util.FindVectorArguments(par[0]);
-                RHSize size = new RHSize(Util.FindIntArguments(par[1]));
+                int[] sz = Util.FindIntArguments(par[1]);
+                Point size = new Point(sz[0], sz[1]);
                 int frames = int.Parse(par[2]);
                 float frameSpeed = float.Parse(par[3]);
 
@@ -61,7 +64,7 @@ namespace RiverHollow.Items
                     if(e == DirectionEnum.None) { continue; }
 
                     _sprite.AddAnimation(e, (int)start.X + xCrawl, (int)start.Y, size, frames, frameSpeed, false, true);
-                    xCrawl += size.Width * Constants.TILE_SIZE * frames;
+                    xCrawl += size.X * Constants.TILE_SIZE * frames;
                 }
             }
         }

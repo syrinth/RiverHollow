@@ -43,7 +43,7 @@ namespace RiverHollow.Buildings
             OutsideOnly = true;
 
             //The dimensions of the Building in tiles
-            Util.AssignValue(ref _uSize, "Size", stringData);
+            Util.AssignValue(ref _pSize, "Size", stringData);
 
             Util.AssignValue(ref _rBase, "Base", stringData);
             Util.AssignValue(ref _rEntrance, "Entrance", stringData);
@@ -60,7 +60,7 @@ namespace RiverHollow.Buildings
 
                     LightInfo info;
                     info.LightObject = DataManager.GetLight(int.Parse(split[0]));
-                    info.Offset = new Vector2(int.Parse(split[1]), int.Parse(split[2]));
+                    info.Offset = new Point(int.Parse(split[1]), int.Parse(split[2]));
 
                     SyncLightPositions();
                     _liLights.Add(info);
@@ -85,8 +85,8 @@ namespace RiverHollow.Buildings
             int maxLevel = GetAllUpgrades().Length > 0 ? GetAllUpgrades().Length : 1;
             for (int i = 1; i <= maxLevel; i++)
             {
-                _sprite.AddAnimation(i.ToString(), startX, startY, _uSize);
-                startX += _uSize.Width * Constants.TILE_SIZE;
+                _sprite.AddAnimation(i.ToString(), startX, startY, _pSize);
+                startX += _pSize.X * Constants.TILE_SIZE;
             }
             _sprite.PlayAnimation("1");
         }
@@ -96,24 +96,24 @@ namespace RiverHollow.Buildings
         /// when placing the Building onto the map.
         /// </summary>
         /// <param name="position"></param>
-        public override void SnapPositionToGrid(Vector2 position)
+        public override void SnapPositionToGrid(Point position)
         {
             //Set the top-left corner of the building position 
             base.SnapPositionToGrid(position);
 
             //Determine where the top-left corner of the entrance Rectangle should be
-            int startX = (int)_vMapPosition.X + (_rEntrance.X * Constants.TILE_SIZE);
-            int startY = (int)_vMapPosition.Y + (_rEntrance.Y * Constants.TILE_SIZE);
+            int startX = (int)MapPosition.X + (_rEntrance.X * Constants.TILE_SIZE);
+            int startY = (int)MapPosition.Y + (_rEntrance.Y * Constants.TILE_SIZE);
 
             //Create the entrance and exit rectangles attached to the building
             TravelBox = new Rectangle(startX, startY, _rEntrance.Width * Constants.TILE_SIZE, _rEntrance.Height * Constants.TILE_SIZE);
         }
 
-        public override bool PlaceOnMap(Vector2 pos, RHMap map, bool ignoreActors = false)
+        public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
         {
             bool rv = false;
 
-            pos = new Vector2(pos.X - (_rBase.X * Constants.TILE_SIZE), pos.Y - (_rBase.Y * Constants.TILE_SIZE));
+            pos = new Point(pos.X - (_rBase.X * Constants.TILE_SIZE), pos.Y - (_rBase.Y * Constants.TILE_SIZE));
             SnapPositionToGrid(pos);
 
             List<RHTile> tiles = new List<RHTile>();

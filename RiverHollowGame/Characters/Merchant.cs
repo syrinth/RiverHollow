@@ -188,7 +188,7 @@ namespace RiverHollow.Characters
             CurrentMapName = Constants.TOWN_MAP_NAME;
             MapManager.Maps[CurrentMapName].AddCharacterImmediately(this);
 
-            Position = Util.SnapToGrid(new Vector2(TownManager.Market.MapPosition.X + TownManager.Market.SpecialCoords.X, TownManager.Market.MapPosition.Y + TownManager.Market.SpecialCoords.Y));
+            Position = Util.SnapToGrid(new Point(TownManager.Market.MapPosition.X + TownManager.Market.SpecialCoords.X, TownManager.Market.MapPosition.Y + TownManager.Market.SpecialCoords.Y));
             PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
 
             if (_iShopID != -1)
@@ -197,7 +197,7 @@ namespace RiverHollow.Characters
                 marketShop.ClearItemSpots();
                 foreach (Structure.SubObjectInfo info in TownManager.Market.ObjectInfo)
                 {
-                    marketShop.AddItemSpot(new ShopItemSpot(CurrentMapName, TownManager.Market.MapPosition + info.Position + new Vector2(8, -13)));
+                    marketShop.AddItemSpot(new ShopItemSpot(CurrentMapName, (TownManager.Market.MapPosition + info.Position + new Point(8, -13)).ToVector2()));
                 }
                 marketShop.PlaceStock(true);
             }

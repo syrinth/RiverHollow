@@ -24,9 +24,9 @@ namespace RiverHollow.WorldObjects
             {
                 string[] split = Util.FindArguments(DataManager.GetItemDictionaryData(itemID)["WrappedImage"]);
                 _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, int.Parse(split[0]), int.Parse(split[1]), _uSize);
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, int.Parse(split[0]), int.Parse(split[1]), _pSize);
             }
-            else { _sprite.AddAnimation(AnimationEnum.ObjectIdle, wrappedItem.SourceRectangle.Left, wrappedItem.SourceRectangle.Top, _uSize); }
+            else { _sprite.AddAnimation(AnimationEnum.ObjectIdle, wrappedItem.SourceRectangle.Left, wrappedItem.SourceRectangle.Top, _pSize); }
         }
 
         public WrappedItem(int id, Dictionary<string, string> stringData) : base(id)

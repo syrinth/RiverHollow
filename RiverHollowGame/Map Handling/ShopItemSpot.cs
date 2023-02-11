@@ -16,17 +16,17 @@ namespace RiverHollow.Map_Handling
     public class ShopItemSpot
     {
         string _sMapName;
-        Vector2 _vPos;
+        Point _pPosition;
         Merchandise _merch;
-        Item merchItem;
+        MapItem merchItem;
         public int MerchID => _merch != null ? _merch.MerchID : -1;
         public Rectangle Box { get; private set; }
 
         public ShopItemSpot(string mapName, Vector2 position, float width = Constants.TILE_SIZE, float height = Constants.TILE_SIZE * 2)
         {
             _sMapName = mapName;
-            _vPos = new Vector2((int)position.X, (int)position.Y);
-            Box = Util.FloatRectangle(_vPos, width, height);
+            _pPosition = position.ToPoint();
+            Box = new Rectangle(_pPosition.X, _pPosition.Y, (int)width, (int)height);
         }
 
         public void Draw(SpriteBatch spritebatch)
@@ -36,13 +36,13 @@ namespace RiverHollow.Map_Handling
                 if (!GameManager.GamePaused() &&  Box.Contains(GUICursor.GetWorldMousePosition()))
                 {
                     BitmapFont font = DataManager.GetBitMapFont(@"Fonts\FontBattle");
-                    Size2 size = font.MeasureString(merchItem.BuyPrice.ToString());
-                    float delta = size.Width - Box.Width;
-                    spritebatch.DrawString(font, merchItem.BuyPrice.ToString(), _vPos + new Vector2(-delta / 2, -8), Color.White, Constants.MAX_LAYER_DEPTH);
+                    Size2 size = font.MeasureString(merchItem.WrappedItem.BuyPrice.ToString());
+                    int delta = (int)size.Width - Box.Width;
+                    spritebatch.DrawString(font, merchItem.WrappedItem.BuyPrice.ToString(), _pPosition.ToVector2() + new Vector2(-delta / 2, -8), Color.White, Constants.MAX_LAYER_DEPTH);
 
                     if (!GUIManager.IsHoverWindowOpen())
                     {
-                        GUIItemDescriptionWindow win = new GUIItemDescriptionWindow(merchItem, Vector2.Zero);
+                        GUIItemDescriptionWindow win = new GUIItemDescriptionWindow(merchItem.WrappedItem, Point.Zero);
                         win.AnchorToScreen(SideEnum.BottomRight);
                         GUIManager.OpenHoverWindow(win, Box, false);
                     }
@@ -64,10 +64,10 @@ namespace RiverHollow.Map_Handling
             _merch = m;
             if (m != null)
             {
-                merchItem = DataManager.GetItem(m.MerchID);
-
-                merchItem.Position = _vPos;
-                merchItem.OnTheMap = true;
+                merchItem = new MapItem(DataManager.GetItem(m.MerchID))
+                {
+                    Position = _pPosition
+                };
             }
             else
             {
@@ -84,27 +84,27 @@ namespace RiverHollow.Map_Handling
         {
             if (merchItem != null)
             {
-                if (PlayerManager.Money < merchItem.BuyPrice)
+                if (PlayerManager.Money < merchItem.WrappedItem.BuyPrice)
                 {
                     GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("BuyMerch_NoMoney"));
                 }
-                else if (!InventoryManager.HasSpaceInInventory(merchItem.ID, 1))
+                else if (!InventoryManager.HasSpaceInInventory(merchItem.WrappedItem.ID, 1))
                 {
                     GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("BuyMerch_NoSpace"));
                 }
                 else
                 {
                     GUIManager.CloseHoverWindow();
-                    if (!merchItem.Stacks())
+                    if (!merchItem.WrappedItem.Stacks())
                     {
-                        GameManager.SetSelectedItem(DataManager.GetItem(merchItem.ID));
+                        GameManager.SetSelectedItem(DataManager.GetItem(merchItem.WrappedItem.ID));
                         TextEntry entry = DataManager.GetGameTextEntry("BuyMerch_Confirm");
-                        entry.FormatText(merchItem.Name(), merchItem.TotalBuyValue);
+                        entry.FormatText(merchItem.WrappedItem.Name(), merchItem.WrappedItem.TotalBuyValue);
                         GUIManager.OpenTextWindow(entry);
                     }
                     else
                     {
-                        GameManager.SetSelectedItem(DataManager.GetItem(merchItem.ID));
+                        GameManager.SetSelectedItem(DataManager.GetItem(merchItem.WrappedItem.ID));
                         GUIManager.OpenMainObject(new QuantityWindow());
                     }
                 }
