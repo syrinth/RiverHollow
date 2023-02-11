@@ -1038,18 +1038,23 @@ namespace RiverHollow.Map_Handling
             return tile != null && !tile.Passable() && !list.Any(x => x.Key == tile.CollisionBox);
         }
 
-        private void ChangeDir(WorldActor actor,  List<KeyValuePair<Rectangle, WorldActor>> possibleCollisions, ref Vector2 dir, ref bool impeded)
+        private void ChangeDir(WorldActor actor, List<KeyValuePair<Rectangle, WorldActor>> possibleCollisions, ref Vector2 dir, ref bool impeded)
         {
             //Because of how objects interact with each other, this check needs to be broken up so that the x and y movement can be
             //calculated seperately. If an object is above you and you move into it at an angle, if you check the collision as one rectangle
             //then the collision nullification will hit the entire damn movement mode.
+            //Diagonal checks need to be done but only enacted if no other intersection has been found
+
+            Vector2 initialDir = dir;
+            Vector2 diagonalChange = dir;
 
             Point projected = actor.ProjectedMovement(dir);
             Point location = actor.CollisionBoxLocation;
             Point size = actor.CollisionBox.Size;
 
-            Rectangle testRectX = new Rectangle(location.X + projected.X, location.Y, size.X, size.Y);
-            Rectangle testRectY = new Rectangle(location.X, location.Y + projected.Y, size.X, size.Y);
+            Rectangle testHorizontal = new Rectangle(location.X + projected.X, location.Y, size.X, size.Y);
+            Rectangle testVertical = new Rectangle(location.X, location.Y + projected.Y, size.X, size.Y);
+            Rectangle testDiagonal = new Rectangle(location + projected, size);
             foreach (KeyValuePair<Rectangle, WorldActor> kvp in possibleCollisions)
             {
                 Rectangle r = kvp.Key;
@@ -1061,7 +1066,7 @@ namespace RiverHollow.Map_Handling
                 }
 
                 Point coords = Util.GetGridCoords(r.Location);
-                if (dir.Y != 0 && r.Intersects(testRectY))
+                if (dir.Y != 0 && r.Intersects(testVertical))
                 {
                     if (npc != null && npc.SlowDontBlock)
                     {
@@ -1069,24 +1074,27 @@ namespace RiverHollow.Map_Handling
                     }
                     else
                     {
-                        dir.Y = 0;
+                        bool aboveCollision = (r.Location.Y - actor.CollisionBox.Location.Y) > 0;
+                        int distance = aboveCollision ? r.Top - actor.CollisionBox.Bottom : r.Bottom - actor.CollisionBox.Top;
+
+                        dir.Y = Math.Abs(distance) < Math.Abs(dir.Y) ? distance : 0;
 
                         //Modifier is to determine if the nudge is positive or negative
-                        float modifier = CheckToNudge(testRectY.Center.X, r.Center.X, coords.X, coords.Y, "Col");
+                        float modifier = CheckToNudge(testVertical.Center.X, r.Center.X, coords.X, coords.Y, "Col");
 
                         //Constructs the new rectangle based on the mod. Need to change the Right/Left values by one because the Right/Left value are
                         //the first pixel where they DON'T exist. Not the last where they do.
-                        int xVal = Util.RoundForPoint(((modifier > 0 ? testRectY.Right - 1 : testRectY.Left + 1) ) + modifier);
+                        int xVal = Util.RoundForPoint(((modifier > 0 ? testVertical.Right - 1 : testVertical.Left + 1)) + modifier);
 
                         projected = actor.ProjectedMovement(dir + new Vector2(modifier, 0));
-                        testRectY = new Rectangle(location + projected, size);
+                        testVertical = new Rectangle(location + projected, size);
                         if (dir.X == 0 && modifier != 0)
                         {
-                            dir.X += CheckNudgeAllowed(modifier, new Point(xVal, testRectY.Top + 1), new Point(xVal, testRectY.Bottom - 1), actor.CurrentMapName);
+                            dir.X += CheckNudgeAllowed(modifier, new Point(xVal, testVertical.Top + 1), new Point(xVal, testVertical.Bottom - 1), actor.CurrentMapName);
                         }
                     }
                 }
-                if (dir.X != 0 && r.Intersects(testRectX))
+                else if (dir.X != 0 && r.Intersects(testHorizontal))
                 {
                     if (npc != null && npc.SlowDontBlock)
                     {
@@ -1094,33 +1102,39 @@ namespace RiverHollow.Map_Handling
                     }
                     else
                     {
-                        dir.X = 0;
+                        bool leftOfCollision = (r.Location.X - actor.CollisionBox.Location.X) > 0;
+                        int distance = leftOfCollision ? r.Left - actor.CollisionBox.Right : r.Right - actor.CollisionBox.Left;
+
+                        dir.X = Math.Abs(distance) < Math.Abs(dir.X) ? distance : 0;
 
                         //Modifier is to determine if the nudge is positive or negative
-                        float modifier = CheckToNudge(testRectX.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
+                        float modifier = CheckToNudge(testHorizontal.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
 
                         //Constructs the new rectangle based on the mod. Need to change the Right/Left values by one because the Right/Left value are
                         //the first pixel where they DON'T exist. Not the last where they do.
-                        int yVal = Util.RoundForPoint(((modifier > 0 ? testRectX.Bottom - 1 : testRectX.Top + 1)) + modifier);
+                        int yVal = Util.RoundForPoint(((modifier > 0 ? testHorizontal.Bottom - 1 : testHorizontal.Top + 1)) + modifier);
 
                         projected = actor.ProjectedMovement(dir + new Vector2(0, modifier));
-                        testRectX = new Rectangle(location + projected, size);
+                        testHorizontal = new Rectangle(location + projected, size);
                         if (dir.Y == 0 && modifier != 0)
                         {
-                            dir.Y += CheckNudgeAllowed(modifier, new Point(testRectX.Left + 1, yVal), new Point(testRectX.Right - 1, yVal), actor.CurrentMapName);
+                            dir.Y += CheckNudgeAllowed(modifier, new Point(testHorizontal.Left + 1, yVal), new Point(testHorizontal.Right - 1, yVal), actor.CurrentMapName);
                         }
                     }
                 }
-
-                //Because of diagonal movement, it's possible to have no issue on either the X axis or Y axis but have a collision
-                //diagonal to the actor. In this case, just null out the X movement.
-                if (dir.X != 0 && dir.Y != 0 && r.Intersects(testRectX) && r.Intersects(testRectY))
+                else if (kvp.Key.Intersects(testDiagonal))
                 {
-                    if (npc != null && npc.SlowDontBlock) { impeded = true; }
-                    else { dir.X = 0; }
+                    if (kvp.Value != null && kvp.Value.SlowDontBlock) { impeded = true; }
+                    else { diagonalChange.X = 0; }
                 }
             }
+
+            if(initialDir == dir && diagonalChange != dir)
+            {
+                dir = diagonalChange;
+            }
         }
+
         private float CheckNudgeAllowed(float modifier, Point first, Point second, string map)
         {
             float rv = 0;
