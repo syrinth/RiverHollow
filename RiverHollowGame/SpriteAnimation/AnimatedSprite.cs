@@ -12,7 +12,7 @@ namespace RiverHollow.SpriteAnimations
     {
         #region Properties
         AnimatedSprite _sprLinkedSprite;
-        public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth - 0.1f) : Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100);
+        public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth - 0.1f) : Position.Y + CurrentFrameAnimation.FrameHeight - (Position.X / 100f);
 
         Texture2D _texture;                         // The texture that holds the images for this sprite
         public Color SpriteColor { get; private set; } = Color.White;
