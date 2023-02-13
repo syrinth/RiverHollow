@@ -133,6 +133,11 @@ namespace RiverHollow.Characters
             {
                 MoveActor(dir);
             }
+            if(initial != dir && CurrentHP == 0)
+            {
+                ClearCombatStates();
+                PlayAnimation(AnimationEnum.KO);
+            }
 
             _vKnockbackVelocity *= 0.96f;
         }

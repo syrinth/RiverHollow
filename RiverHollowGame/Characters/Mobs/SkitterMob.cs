@@ -32,8 +32,6 @@ namespace RiverHollow.Characters.Mobs
                 {
                     Wander(gTime, 0);
                 }
-
-                //ProcessStateEnum(gTime, false);
             }
         }
     }

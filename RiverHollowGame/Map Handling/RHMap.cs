@@ -1172,7 +1172,7 @@ namespace RiverHollow.Map_Handling
             Rectangle testRectY = new Rectangle(location.X, location.Y + projected.Y, size.X, size.Y);
 
             //Checking for a MapChange takes priority overlooking for collisions.
-            if (!actor.Wandering && (CheckForMapChange(actor, testRectX) || CheckForMapChange(actor, testRectY)))
+            if (CheckForMapChange(actor, testRectX) || CheckForMapChange(actor, testRectY))
             {
                 return false;
             }
@@ -1203,17 +1203,18 @@ namespace RiverHollow.Map_Handling
         /// <returns></returns>
         public bool CheckForMapChange(WorldActor c, Rectangle movingChar)
         {
-            foreach (KeyValuePair<string, TravelPoint> kvp in DictionaryTravelPoints)
+            if (!c.Wandering && (c.ActorType == WorldActorTypeEnum.Villager || c == PlayerManager.PlayerActor))
             {
-                if (kvp.Value.Intersects(movingChar) && !kvp.Value.IsDoor && kvp.Value.IsActive)
+                foreach (KeyValuePair<string, TravelPoint> kvp in DictionaryTravelPoints)
                 {
-                    if (c.IsActorType(WorldActorTypeEnum.Pet)) { return false; }
+                    if (kvp.Value.Intersects(movingChar) && !kvp.Value.IsDoor && kvp.Value.IsActive)
+                    {
+                        MapManager.ChangeMaps(c, this.Name, kvp.Value);
+                        return true;
 
-                    MapManager.ChangeMaps(c, this.Name, kvp.Value);
-                    return true;
-
-                    //Unused code for now since AdventureMaps are unused
-                    //if (IsDungeon) { if (c == PlayerManager.World) { MapManager.ChangeDungeonRoom(kvp.Value); return true; } }
+                        //Unused code for now since AdventureMaps are unused
+                        //if (IsDungeon) { if (c == PlayerManager.World) { MapManager.ChangeDungeonRoom(kvp.Value); return true; } }
+                    }
                 }
             }
             return false;
