@@ -573,6 +573,37 @@ namespace Database_Editor
             }
         }
 
+        private void SetNPCSubtype()
+        {
+            cbNPCSubtype.Items.Clear();
+            WorldActorTypeEnum itemType = Util.ParseEnum<WorldActorTypeEnum>(cbNPCType.SelectedItem.ToString().Split(':')[1]);
+            switch (itemType)
+            {
+                case WorldActorTypeEnum.Mob:
+                    cbNPCSubtype.Visible = true;
+                    foreach (MobTypeEnum e in Enum.GetValues(typeof(MobTypeEnum)))
+                    {
+                        cbNPCSubtype.Items.Add("Subtype:" + e.ToString());
+                    }
+                    break;
+                case WorldActorTypeEnum.Traveler:
+                    cbNPCSubtype.Visible = true;
+                    foreach (TravelerGroupEnum e in Enum.GetValues(typeof(TravelerGroupEnum)))
+                    {
+                        cbNPCSubtype.Items.Add("Subtype:" + e.ToString());
+                    }
+                    break;
+                default:
+                    cbNPCSubtype.Visible = false;
+                    break;
+            }
+
+            if (cbNPCSubtype.Visible)
+            {
+                cbNPCSubtype.SelectedIndex = 0;
+            }
+        }
+
         #region Helpers
         private int GetTotalEntries()
         {
@@ -878,6 +909,11 @@ namespace Database_Editor
         private void cbItemType_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetItemSubtype();
+        }
+
+        private void cbNPCType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetNPCSubtype();
         }
 
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)

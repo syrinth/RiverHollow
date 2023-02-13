@@ -42,6 +42,7 @@
         public enum WeightEnum { Light, Medium, Heavy, Immovable};
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum WorldActorTypeEnum { Actor, Animal, Child, Critter, Merchant, Mob, Mount, Pet, ShippingGremlin, Spirit, TalkingActor, Traveler, Villager };
+        public enum MobTypeEnum { Skitter, Fly };
         public enum TravelerGroupEnum { None, Adventurer, Dwarf, Goblin, Human, Noble};
         public enum PlayerColorEnum { None, yes, Hair, Skin };
         public enum StatusTypeEnum { Buff, Debuff, DoT, HoT };
@@ -53,7 +54,7 @@
         public enum RelationShipStatusEnum { None, Friends, Dating, Engaged, Married };
         public enum SpawnStateEnum { OffMap, WaitAtInn, VisitInn, HasHome, NonTownMap, SendingToInn };
         public enum MoodEnum { Miserable, Sad, Neutral, Pleased, Happy, Ecstatic };
-        public enum NPCStateEnum { Alert, Idle, Leashing, Stun, TrackPlayer, Wander };
+        public enum NPCStateEnum { Alert, Idle, Leashing, TrackPlayer, Wander };
         public enum ChildStageEnum { Newborn, Infant, Toddler };
        
         public enum TaskStateEnum { Waiting, Assigned, Talking, TaskLog, Completed };

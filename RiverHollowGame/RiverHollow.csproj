@@ -82,6 +82,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Characters\Animal.cs" />
+    <Compile Include="Characters\CombatActor.cs" />
+    <Compile Include="Characters\Mobs\FlyingMob.cs" />
+    <Compile Include="Characters\Mobs\SkitterMob.cs" />
     <Compile Include="Characters\ShippingGremlin.cs" />
     <Compile Include="Characters\Traveler.cs" />
     <Compile Include="Game Managers\ErrorManager.cs" />
@@ -115,7 +118,7 @@
     <Compile Include="Characters\Pet.cs" />
     <Compile Include="Characters\PlayerCharacter.cs" />
     <Compile Include="Characters\Spirit.cs" />
-    <Compile Include="Characters\Mob.cs" />
+    <Compile Include="Characters\Mobs\Mob.cs" />
     <Compile Include="Characters\TalkingActor.cs" />
     <Compile Include="Characters\TravellingNPC.cs" />
     <Compile Include="Characters\Villager.cs" />

@@ -13,7 +13,7 @@ using System.ComponentModel.Design;
 
 namespace RiverHollow.Characters
 {
-    public class PlayerCharacter : WorldActor
+    public class PlayerCharacter : CombatActor
     {
         AnimatedSprite _sprEyes;
         public AnimatedSprite EyeSprite => _sprEyes;
@@ -101,20 +101,14 @@ namespace RiverHollow.Characters
             base.Update(gTime);
             _lightSource.Position = _sprBody.Position - new Point((_lightSource.Width - _sprBody.Width) / 2, (_lightSource.Height - _sprBody.Height) / 2);
 
-            if(_damageTimer != null)
+            if (HasKnockbackVelocity())
             {
-                if (_flickerTimer != null && _flickerTimer.TickDown(gTime, true))
-                {
-                    _bFlicker = !_bFlicker;
-                    GetSprites().ForEach(x => x.SetColor(Color.White * (_bFlicker ? 1 : 0)));
-                }
+                ApplyKnockbackVelocity();
             }
-            else if(_flickerTimer != null)
-            {
-                _flickerTimer = null;
-                GetSprites().ForEach(x => x.SetColor(Color.White));
-            }
+
+            CheckDamageTimers(gTime);
         }
+
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             base.Draw(spriteBatch, useLayerDepth);
@@ -130,7 +124,7 @@ namespace RiverHollow.Characters
         {
             base.HandleMove();
 
-            if (!HasVelocity() && PlayerManager.GrabbedObject != null && PlayerManager.MoveObjectToPosition != Point.Zero && PlayerManager.GrabbedObject.CollisionPosition != PlayerManager.MoveObjectToPosition)
+            if (!HasKnockbackVelocity() && PlayerManager.GrabbedObject != null && PlayerManager.MoveObjectToPosition != Point.Zero && PlayerManager.GrabbedObject.CollisionPosition != PlayerManager.MoveObjectToPosition)
             {
                 PlayerManager.MoveGrabbedObject(Util.GetMoveSpeed(PlayerManager.GrabbedObject.CollisionPosition, PlayerManager.MoveObjectToPosition, BuffedSpeed));
             }
@@ -271,14 +265,6 @@ namespace RiverHollow.Characters
             }
         }
 
-        public override void DamageTimerFinished()
-        {
-            if (CurrentHP == 0) { PlayAnimation(AnimationEnum.KO); }
-            ClearCombatStates();
-            _bFlicker = true;
-            GetSprites().ForEach(x => x.SetColor(Color.White * (_bFlicker ? 1 : 0)));
-        }
-
         public override bool DealDamage(int value, Rectangle hitbox)
         {
             bool rv = base.DealDamage(value, hitbox);
@@ -289,6 +275,31 @@ namespace RiverHollow.Characters
             }
 
             return rv;
+        }
+
+        protected override void CheckDamageTimers(GameTime gTime)
+        {
+            if (_damageTimer != null)
+            {
+                if (_damageTimer.TickDown(gTime))
+                {
+                    DamageTimerEnd();
+
+                    _bFlicker = true;
+                    GetSprites().ForEach(x => x.SetColor(Color.White * (_bFlicker ? 1 : 0)));
+                }
+
+                if (_flickerTimer != null && _flickerTimer.TickDown(gTime, true))
+                {
+                    _bFlicker = !_bFlicker;
+                    GetSprites().ForEach(x => x.SetColor(Color.White * (_bFlicker ? 1 : 0)));
+                }
+            }
+            else if (_flickerTimer != null)
+            {
+                _flickerTimer = null;
+                GetSprites().ForEach(x => x.SetColor(Color.White));
+            }
         }
 
         public override void SetMoveTo(Point v, bool update = true)

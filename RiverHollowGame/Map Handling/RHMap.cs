@@ -629,9 +629,9 @@ namespace RiverHollow.Map_Handling
             return _liMobs.Count - _liActorsToRemove.FindAll(x => x.ActorType == WorldActorTypeEnum.Mob).Count <= 0;
         }
 
-        public void ResetMobPositioning()
+        public void ResetMobs()
         {
-            _liMobs.ForEach(x => x.ResetPathing());
+            _liMobs.ForEach(x => x.Reset());
         }
 
         public void AlertSpawnPoint(WorldObject obj)

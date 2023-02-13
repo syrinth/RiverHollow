@@ -20,13 +20,6 @@ namespace RiverHollow.Characters
 
         public int ID { get; } = -1;
 
-        public bool Invulnerable { get; protected set; } = true;
-
-        public virtual float MaxHP { get; protected set; } = 2;
-        public float CurrentHP { get; protected set; } = 2;
-
-        protected RHTimer _flickerTimer;
-        protected RHTimer _damageTimer;
 
         public bool Moving { get; set; } = false;
         public DirectionEnum Facing = DirectionEnum.Down;
@@ -52,8 +45,8 @@ namespace RiverHollow.Characters
             }
         }
         public Point MoveToLocation { get; private set; }
-        protected Point _pLeashPoint;
-        protected Vector2 _vVelocity;
+        public Point _pLeashPoint { get; protected set; }
+        protected Vector2 _vKnockbackVelocity;
         protected float _fDecay;
 
         protected VectorBuffer _vbMovement;
@@ -61,6 +54,8 @@ namespace RiverHollow.Characters
 
         public string CurrentMapName;
         public RHMap CurrentMap => (!string.IsNullOrEmpty(CurrentMapName) ? MapManager.Maps[CurrentMapName] : null);
+        public bool OnScreen() { return CurrentMap == MapManager.CurrentMap; }
+
         public Point NewMapPosition;
 
         protected Thread _pathingThread;
@@ -152,14 +147,8 @@ namespace RiverHollow.Characters
         {
             base.Update(gTime);
             if (!GamePaused())
-            {                
-                if (HasVelocity()) { ApplyVelocity(); }
-                else if (CurrentHP > 0) { HandleMove(); }
-
-                if (_damageTimer != null && _damageTimer.TickDown(gTime))
-                {
-                    DamageTimerFinished();
-                }
+            {
+                HandleMove();
             }
         }
 
@@ -346,9 +335,8 @@ namespace RiverHollow.Characters
         {
             _bOnTheMap = value;
         }
-        protected void ChangeMovement(float speed)
+        protected void ChangeMovement()
         {
-            SpdMult = speed;
             SetMoveTo(Point.Zero);
             _movementTimer.Reset(Constants.WANDER_COUNTDOWN);
         }
@@ -376,13 +364,13 @@ namespace RiverHollow.Characters
                     break;
                 case NPCStateEnum.Idle:
                     PlayAnimation(VerbEnum.Idle, Facing);
-                    ChangeMovement(Constants.NPC_WALK_SPEED);
+                    ChangeMovement();
                     break;
                 case NPCStateEnum.TrackPlayer:
-                    ChangeMovement(Constants.NORMAL_SPEED);
+                    ChangeMovement();
                     break;
                 case NPCStateEnum.Wander:
-                    ChangeMovement(Constants.NPC_WALK_SPEED);
+                    ChangeMovement();
                     break;
             }
         }
@@ -505,7 +493,7 @@ namespace RiverHollow.Characters
             if (potentialTravelPoint != null && potentialTravelPoint.IsDoor)
             {
                 SoundManager.PlayEffectAtLoc("close_door_1", this.CurrentMapName, potentialTravelPoint.Center);
-                MapManager.ChangeMaps(this, this.CurrentMapName, potentialTravelPoint);
+                MapManager.ChangeMaps(this, CurrentMapName, potentialTravelPoint);
                 rv = true;
             }
 
@@ -552,7 +540,7 @@ namespace RiverHollow.Characters
 
         protected virtual void ProcessStateEnum(GameTime gTime, bool getInRange)
         {
-            if (Wandering && _damageTimer == null)
+            if (Wandering)
             {
                 switch (_eCurrentState)
                 {
@@ -604,7 +592,7 @@ namespace RiverHollow.Characters
             }
         }
 
-        protected void Wander(GameTime gTime)
+        protected void Wander(GameTime gTime, int rollChance = 20)
         {
             if (_movementTimer.TickDown(gTime) && !HasMovement())
             {
@@ -613,7 +601,7 @@ namespace RiverHollow.Characters
                 {
                     _movementTimer.Reset(_fBaseWanderTimer + RHRandom.Instance().Next(4) * 0.25);
 
-                    if (!_bIdleCooldown && RHRandom.Instance().RollPercent(20))
+                    if (!_bIdleCooldown && RHRandom.Instance().RollPercent(rollChance))
                     {
                         ChangeState(NPCStateEnum.Idle);
                         return;
@@ -635,149 +623,6 @@ namespace RiverHollow.Characters
                 HandleMove();
             }
         }
-        #endregion
-
-        #region Combat Logic
-
-        public virtual void DamageTimerFinished()
-        {
-            if (CurrentHP == 0){ PlayAnimation(AnimationEnum.KO); }
-            else { ChangeState(NPCStateEnum.Idle); }
-
-            ClearCombatStates();
-        }
-
-        public void RefillHealth()
-        {
-            CurrentHP = MaxHP;
-        }
-
-        /// <summary>
-        /// Reduces health by the given value. Cannot deal more damage than health exists.
-        /// </summary>
-        public virtual bool DealDamage(int value, Rectangle hitbox)
-        {
-            bool rv = false;
-
-            if (!Invulnerable && _damageTimer == null && CurrentHP > 0)
-            {
-                rv = true;
-
-                _damageTimer = new RHTimer(Constants.INVULN_PERIOD);
-                _flickerTimer = new RHTimer(Constants.FLICKER_PERIOD);
-
-                DecreaseHealth(value);
-                AssignVelocity(hitbox);
-            }
-
-            return rv;
-        }
-
-        public void DecreaseHealth(int value)
-        {
-            CurrentHP -= (CurrentHP - value >= 0) ? value : CurrentHP;
-        }
-
-        /// <summary>
-        /// As long as the target is not KnockedOut, recover the given amount of HP up to max
-        /// </summary>
-        public float IncreaseHealth(float x)
-        {
-            float amountHealed = x;
-            if (CurrentHP + x <= MaxHP)
-            {
-                CurrentHP += x;
-            }
-            else
-            {
-                amountHealed = MaxHP - CurrentHP;
-                CurrentHP = MaxHP;
-            }
-
-            return amountHealed;
-        }
-
-        /// <summary>
-        /// Adds the StatusEffect objectto the character's list of status effects.
-        /// </summary>
-        /// <param name="effect">Effect toadd</param>
-        public void ApplyStatusEffect(StatusEffect effect)
-        {
-            //if (effect.EffectType == StatusTypeEnum.DoT || effect.EffectType == StatusTypeEnum.HoT)
-            //{
-            //    StatusEffect find = _liStatusEffects.Find(status => status.ID == effect.ID);
-            //    if (find != null)
-            //    {
-            //        _liStatusEffects.Remove(find);
-            //    }
-            //    _liStatusEffects.Add(effect);
-            //}
-            //else
-            //{
-            //    foreach (KeyValuePair<AttributeEnum, string> kvp in effect.AffectedAttributes)
-            //    {
-            //        AssignAttributeEffect(kvp.Key, kvp.Value, effect.Duration, effect.EffectType);
-            //    }
-            //    _liStatusEffects.Add(effect);
-            //}
-        }
-
-        public bool HasVelocity()
-        {
-            return _vVelocity != Vector2.Zero;
-        }
-        public void ApplyVelocity()
-        {
-            Vector2 dir = _vVelocity;
-
-            bool impeded = false;
-            if (CurrentMap.CheckForCollisions(this, ref dir, ref impeded))
-            {
-                MoveActor(dir);
-            }
-            _vVelocity *= 0.98f;
-        }
-
-        private void AssignVelocity(Rectangle hitbox)
-        {
-            _vVelocity = hitbox.Center.ToVector2() - CollisionBox.Center.ToVector2();
-            _vVelocity.Normalize();
-            switch (GetWeight())
-            {
-                case WeightEnum.Light:
-                    _vVelocity *= -4;
-                    _fDecay = 0.98f;
-                    goto default;
-                case WeightEnum.Medium:
-                    _vVelocity *= -1.5f;
-                    _fDecay = 0.97f;
-                    goto default;
-                case WeightEnum.Heavy:
-                    _vVelocity *= -0.75f;
-                    _fDecay = 0.90f;
-                    goto default;
-                case WeightEnum.Immovable:
-                    _vVelocity *= 0;
-                    break;
-                default:
-                    SetMoveTo(Point.Zero);
-                    ClearPath();
-                    break;
-            }
-        }
-
-        protected virtual WeightEnum GetWeight()
-        {
-            return WeightEnum.Medium;
-        }
-
-        protected void ClearCombatStates()
-        {
-            _damageTimer = null;
-            _flickerTimer = null;
-            _vVelocity = Vector2.Zero;
-        }
-
         #endregion
     }
 }

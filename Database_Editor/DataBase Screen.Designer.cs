@@ -91,6 +91,7 @@
             this.dgvLights = new System.Windows.Forms.DataGridView();
             this.colLightsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabNPC = new System.Windows.Forms.TabPage();
+            this.cbNPCSubtype = new System.Windows.Forms.ComboBox();
             this.cbEditableCharData = new System.Windows.Forms.ComboBox();
             this.btnEdit = new System.Windows.Forms.Button();
             this.cbNPCType = new System.Windows.Forms.ComboBox();
@@ -823,6 +824,7 @@
             // 
             // tabNPC
             // 
+            this.tabNPC.Controls.Add(this.cbNPCSubtype);
             this.tabNPC.Controls.Add(this.cbEditableCharData);
             this.tabNPC.Controls.Add(this.btnEdit);
             this.tabNPC.Controls.Add(this.cbNPCType);
@@ -839,6 +841,16 @@
             this.tabNPC.TabIndex = 2;
             this.tabNPC.Text = "NPCs";
             this.tabNPC.UseVisualStyleBackColor = true;
+            // 
+            // cbNPCSubtype
+            // 
+            this.cbNPCSubtype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbNPCSubtype.FormattingEnabled = true;
+            this.cbNPCSubtype.Location = new System.Drawing.Point(475, 33);
+            this.cbNPCSubtype.Name = "cbNPCSubtype";
+            this.cbNPCSubtype.Size = new System.Drawing.Size(149, 21);
+            this.cbNPCSubtype.TabIndex = 57;
+            this.cbNPCSubtype.Visible = false;
             // 
             // cbEditableCharData
             // 
@@ -867,6 +879,7 @@
             this.cbNPCType.Name = "cbNPCType";
             this.cbNPCType.Size = new System.Drawing.Size(149, 21);
             this.cbNPCType.TabIndex = 45;
+            this.cbNPCType.SelectedIndexChanged += new System.EventHandler(this.cbNPCType_SelectedIndexChanged);
             // 
             // btnNPCCancel
             // 
@@ -1774,6 +1787,7 @@
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.TextBox tbCutsceneID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colItemsName;
+        private System.Windows.Forms.ComboBox cbNPCSubtype;
     }
 }
 

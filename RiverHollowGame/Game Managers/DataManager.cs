@@ -16,6 +16,7 @@ using RiverHollow.WorldObjects.Trigger_Objects;
 using RiverHollow.Items.Tools;
 
 using static RiverHollow.Utilities.Enums;
+using RiverHollow.Characters.Mobs;
 
 namespace RiverHollow.Game_Managers
 {
@@ -671,7 +672,14 @@ namespace RiverHollow.Game_Managers
                     case WorldActorTypeEnum.Critter:
                         return new Critter(id, diData);
                     case WorldActorTypeEnum.Mob:
-                        return new Mob(id, diData);
+                        switch (Util.ParseEnum<MobTypeEnum>(diData["Subtype"]))
+                        {
+                            case MobTypeEnum.Fly:
+                                return new FlyingMob(id, diData);
+                            case MobTypeEnum.Skitter:
+                                return new SkitterMob(id, diData);
+                        }
+                        break;
                     case WorldActorTypeEnum.Mount:
                         return new Mount(id, diData);
                     case WorldActorTypeEnum.Pet:

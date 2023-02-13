@@ -131,11 +131,11 @@
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Mob][Texture:Batty][MonsterID:1|1-8|1-1-1|1-1-8-1][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][ItemID:56][HP:2][Damage:1][CollisionBox:4-13-8-19][Night]</Value>
+      <Value>[Type:Mob][Subtype:Fly][Texture:Batty][MonsterID:1|1-8|1-1-1|1-1-8-1][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][ItemID:56][HP:2][Damage:1][CollisionBox:2-11-12-11][Night][Speed:1.8]</Value>
     </Item>
     <Item>
       <Key>33</Key>
-      <Value>[Type:Mob][Texture:Mossy_Slime][MonsterID:8|8-8|8-8-9][Walk:3-.2-T][Idle:3-.2-T][KO:384-0-6-0.2-F][ItemID:56][HP:4][Damage:1][CollisionBox:1-14-14-10][Day][Skitter][Size:16-24][Speed:0.8]</Value>
+      <Value>[Type:Mob][Subtype:Skitter][Texture:Mossy_Slime][MonsterID:8|8-8|8-8-9][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:56][HP:4][Damage:1][CollisionBox:0-14-16-10][Day][Size:16-24][Speed:1]</Value>
     </Item>
     <Item>
       <Key>34</Key>

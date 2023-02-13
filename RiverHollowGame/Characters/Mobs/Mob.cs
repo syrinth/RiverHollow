@@ -11,7 +11,7 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
-    public class Mob : WorldActor
+    public abstract class Mob : CombatActor
     {
         #region Properties
 
@@ -20,7 +20,7 @@ namespace RiverHollow.Characters
         public int Damage => DataManager.GetIntByIDKey(ID, "Damage", DataType.NPC);
         private string[] LootData => Util.FindParams(DataManager.GetStringByIDKey(ID, "ItemID", DataType.NPC));
         public override float MaxHP => DataManager.GetIntByIDKey(ID, "HP", DataType.NPC);
-        public bool Skitter => DataManager.GetBoolByIDKey(ID, "Skitter", DataType.NPC);
+        public MobTypeEnum Subtype => DataManager.GetEnumByIDKey<MobTypeEnum>(ID, "Subtype", DataType.NPC);
 
         bool _bJump;
         int _iMaxRange = Constants.TILE_SIZE * 10;
@@ -33,20 +33,12 @@ namespace RiverHollow.Characters
 
         public Mob(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
+            SpdMult = 1;
             CurrentHP = MaxHP;
 
             _fBaseSpeed = DataManager.GetFloatByIDKey(ID, "Speed", DataType.NPC, 1);
             Invulnerable = false;
             Wandering = true;
-
-            if (Skitter)
-            {
-                _eCurrentState = NPCStateEnum.Wander;
-                _fBaseWanderTimer = 0.5f;
-                _iMinWander = 4;
-                _iMaxWander = 16;
-                _movementTimer = new RHTimer(_fBaseWanderTimer); 
-            }
 
             //_bJump = data.ContainsKey("Jump");
 
@@ -62,18 +54,9 @@ namespace RiverHollow.Characters
 
         public override void Update(GameTime gTime)
         {
-            base.Update(gTime);
+            _sprBody.Update(gTime);
 
-            if (_flickerTimer != null && _flickerTimer.TickDown(gTime))
-            {
-                if(_sprBody.SpriteColor == Color.Red)
-                {
-                    _flickerTimer = null;
-                    _sprBody.SetColor(Color.White);
-                }
-            }
-
-            if (!CutsceneManager.Playing && !GamePaused())
+            if (!GamePaused())
             {
                 if (_sprBody.IsCurrentAnimation(AnimationEnum.KO) && _sprBody.PlayedOnce)
                 {
@@ -83,56 +66,20 @@ namespace RiverHollow.Characters
                     return;
                 }
 
-                if (CurrentHP > 0 && !HasVelocity())
+                if (HasKnockbackVelocity())
                 {
-                    switch (_eCurrentState)
-                    {
-                        case NPCStateEnum.Stun:
-                            break;
-                        case NPCStateEnum.Wander:
-                            if (_bBumpedIntoSomething)
-                            {
-                                _bBumpedIntoSomething = false;
-                                ChangeState(NPCStateEnum.Idle);
-                                SetMoveTo(Point.Zero);
-                                goto default;
-                            }
-                            else if (!HasMovement())
-                            {
-                                Wander(gTime);
-                                goto default;
-                            }
-                            else { goto case NPCStateEnum.Idle; }
-                        case NPCStateEnum.Idle:
-                            if (!Skitter && CurrentMap == MapManager.CurrentMap && PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 8))
-                            {
-                                ChangeState(NPCStateEnum.TrackPlayer);
-                                _pLeashPoint = new Point(CollisionBox.Left, CollisionBox.Top);
-                            }
-                            goto default;
-                        case NPCStateEnum.TrackPlayer:
-                            int distance = (int)Util.GetDistance(Position, _pLeashPoint);
+                    ApplyKnockbackVelocity();
+                }
+                else if (CurrentHP > 0)
+                {
+                    HandleMove();
+                }
 
-                            if (distance > Constants.TILE_SIZE * 25)
-                            {
-                                ChangeState(NPCStateEnum.Leashing);
-                            }
-                            goto default;
-                        case NPCStateEnum.Leashing:
-                            if (Position == _pLeashPoint)
-                            {
-                                ChangeState(NPCStateEnum.Wander);
-                            }
-                            goto default;
-                        default:
-                            ProcessStateEnum(gTime, false);
-                            if (CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
-                            {
-                                PlayerManager.PlayerActor.DealDamage(Damage, CollisionBox);
-                            }
-                            break;
+                CheckDamageTimers(gTime);
 
-                    }
+                if (CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
+                {
+                    PlayerManager.PlayerActor.DealDamage(Damage, CollisionBox);
                 }
             }
         }
@@ -143,13 +90,26 @@ namespace RiverHollow.Characters
             //if (_bAlert) { _sprAlert.Draw(spriteBatch, userLayerDepth); }
         }
 
-        public override void ChangeState(NPCStateEnum state)
+        public bool CanAct()
         {
-            if (!Skitter)
-            {
-                base.ChangeState(state);
-            }
+            return !GamePaused() && CurrentHP > 0 && !HasKnockbackVelocity();
         }
+
+        protected Vector2 GetPlayerDirection()
+        {
+            return (PlayerManager.PlayerActor.Position - Position).ToVector2();
+        }
+        protected Vector2 GetPlayerDirectionNormal()
+        {
+            Vector2 rv = (PlayerManager.PlayerActor.Position - Position).ToVector2();
+            if (rv != Vector2.Zero)
+            {
+                rv.Normalize();
+            }
+
+            return rv;
+        }
+
         protected override void ProcessStateEnum(GameTime gTime, bool getInRange)
         {
             if (Wandering && _damageTimer == null)
@@ -167,9 +127,6 @@ namespace RiverHollow.Characters
                         break;
                     case NPCStateEnum.TrackPlayer:
                         TrackPlayer(getInRange);
-                        break;
-                    case NPCStateEnum.Leashing:
-                        TravelManager.RequestPathing(this);
                         break;
                 }
             }
@@ -273,16 +230,17 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void ResetPathing()
+        public void Reset()
         {
-            if(_eCurrentState == NPCStateEnum.TrackPlayer)
-            {
-                ChangeState(NPCStateEnum.Idle);
-                Position = _pLeashPoint;
-                _liTilePath.Clear();
-                SetMoveTo(Point.Zero);
-                _pLeashPoint = Point.Zero;
-            }
+            ChangeState(NPCStateEnum.Idle);
+            Position = _pLeashPoint;
+            SetMoveTo(Point.Zero);
+            CurrentHP = MaxHP;
+        }
+
+        public void SetInitialPoint(Point p)
+        {
+            _pLeashPoint = p;
         }
 
         public override bool DealDamage(int value, Rectangle hitbox)
@@ -292,7 +250,6 @@ namespace RiverHollow.Characters
             if (rv)
             {
                 _sprBody.SetColor(Color.Red);
-                ChangeState(NPCStateEnum.Stun);
                 SetMoveTo(Point.Zero);
                 _bBumpedIntoSomething = true;
             }

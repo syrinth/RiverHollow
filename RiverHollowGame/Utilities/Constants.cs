@@ -7,10 +7,10 @@
         public const string TOWN_MAP_NAME = "mapTown";
         public const string PLAYER_HOME_NAME = "mapHouse_Player";
         public const float PLAYER_STARTING_STAMINA = 100f;
-        public const float PLAYER_STARTING_HP = 10f;
+        public const float PLAYER_STARTING_HP = 100f;
         public const int STAMINA_NAP_RECOVERY = 20;
 
-        public const float INVULN_PERIOD = 0.5f;
+        public const float INVULN_PERIOD = 1;
         public const float FLICKER_PERIOD = 0.08f;
         public const float MOB_STUN_TIME = 5;
         public const float WANDER_COUNTDOWN = 2.5f;
@@ -28,7 +28,7 @@
 
         public const int CALENDAR_DAYS_IN_MONTH = 28;
         public const int CALENDAR_MINUTES_PER_SECOND = 1;
-        public const int CALENDAR_NEW_DAY_HOUR = 8;
+        public const int CALENDAR_NEW_DAY_HOUR = 18;
         public const int CALENDAR_NEW_DAY_MIN = 0;
         public const int NIGHTFALL_STANDARD = 18;
         public const int NIGHTFALL_LATE = 21;
@@ -40,9 +40,9 @@
 
         public const float NORMAL_SPEED = 1.5f;
         public const float PUSH_SPEED = 0.5f;
-        public const float NPC_WALK_SPEED = 0.6f;
         public const float NUDGE_RATE = 0.5f;
         public const float IMPEDED_SPEED = 0.6f;
+        public const float NPC_WALK_SPEED = 0.6f;
 
         public const int ACTION_COST = 2;
 
