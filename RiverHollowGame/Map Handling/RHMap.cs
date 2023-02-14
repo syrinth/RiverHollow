@@ -341,7 +341,7 @@ namespace RiverHollow.Map_Handling
             _renderer.Draw(_map, Camera._transform);
 
             _liActors.ForEach(x => x.Draw(spriteBatch, true));
-            _liMobs.ForEach(x => x.Draw(spriteBatch, true));
+            _liMobs.FindAll(x => x.Subtype != MobTypeEnum.Flier || x.CurrentHP == 0).ForEach(x => x.Draw(spriteBatch, true));
             _liBuildings.ForEach(x => x.Draw(spriteBatch));
             _liPlacedWorldObjects.ForEach(x => x.Draw(spriteBatch));
             _liItems.ForEach(x => x.Draw(spriteBatch));
@@ -388,6 +388,7 @@ namespace RiverHollow.Map_Handling
             SetLayerVisibiltyByName(true, "Upper");
             _renderer.Draw(_map, Camera._transform);
 
+            _liMobs.FindAll(x => x.Subtype == MobTypeEnum.Flier && x.CurrentHP > 0).ForEach(x => x.Draw(spriteBatch, true));
             EnvironmentManager.Draw(spriteBatch);
 
             SetLayerVisibiltyByName(true, "Base");

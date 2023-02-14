@@ -5,12 +5,10 @@ using System.Collections.Generic;
 
 namespace RiverHollow.Characters.Mobs
 {
-    public class FlyingMob : Mob
+    public class Flier : Mob
     {
         Vector2 _vFlightVelocity;
-        public FlyingMob(int id, Dictionary<string, string> stringdata) : base(id, stringdata)
-        {
-        }
+        public Flier(int id, Dictionary<string, string> stringdata) : base(id, stringdata) { }
 
         public override void Update(GameTime gTime)
         {
@@ -31,8 +29,13 @@ namespace RiverHollow.Characters.Mobs
                     case Enums.NPCStateEnum.TrackPlayer:
                         MoveActor(_vFlightVelocity);
 
-                        _vFlightVelocity += GetPlayerDirectionNormal() * 0.15f;
+                        float modifier = 0.15f;
+                        if (GetPlayerDirection().Length() < Constants.TILE_SIZE)
+                        {
+                            modifier = 0.08f;
+                        }
 
+                        _vFlightVelocity += GetPlayerDirectionNormal() * modifier;
                         _vFlightVelocity.Normalize();
                         _vFlightVelocity *= _fBaseSpeed;
                         break;

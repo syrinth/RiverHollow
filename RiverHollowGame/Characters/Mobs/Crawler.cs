@@ -5,9 +5,9 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters.Mobs
 {
-    public class SkitterMob : Mob
+    public class Crawler : Mob
     {
-        public SkitterMob(int id, Dictionary<string, string> stringdata) : base(id, stringdata)
+        public Crawler(int id, Dictionary<string, string> stringdata) : base(id, stringdata)
         {
             _eCurrentState = NPCStateEnum.Wander;
             _fBaseWanderTimer = 0.5f;
