@@ -131,7 +131,7 @@
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Mob][Subtype:Fly][Texture:Batty][MonsterID:1|1-8|1-1-1|1-1-8-1][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][ItemID:56][HP:2][Damage:1][CollisionBox:2-11-12-11][Night][Speed:1.8]</Value>
+      <Value>[Type:Mob][Subtype:Fly][Texture:Batty][MonsterID:1|1-8|1-1-1|1-1-8-1][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][ItemID:56][HP:2][Damage:1][CollisionBox:2-11-12-11][Night][Speed:1.8][HitBox:5-12-6-8]</Value>
     </Item>
     <Item>
       <Key>33</Key>

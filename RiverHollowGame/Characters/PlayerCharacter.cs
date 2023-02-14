@@ -9,7 +9,6 @@ using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.WorldObjects;
-using System.ComponentModel.Design;
 
 namespace RiverHollow.Characters
 {
@@ -47,6 +46,7 @@ namespace RiverHollow.Characters
         }
 
         public override Rectangle CollisionBox => ActiveMount != null ? ActiveMount.CollisionBox : base.CollisionBox;
+        public override Rectangle HitBox => new Rectangle(_sprBody.Position.X + 2, _sprBody.Position.Y + 22, 12, 10);
 
         #region Clothing
         public Clothing Hat { get; private set; }
@@ -67,8 +67,6 @@ namespace RiverHollow.Characters
 
         public PlayerCharacter() : base()
         {
-            Invulnerable = false;
-
             HairColor = Color.Red;
             EyeColor = Color.Blue;
 

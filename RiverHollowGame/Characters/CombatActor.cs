@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Game_Managers;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
@@ -8,16 +10,25 @@ namespace RiverHollow.Characters
 {
     public abstract class CombatActor : WorldActor
     {
-        public bool Invulnerable { get; protected set; } = true;
-
         public virtual float MaxHP { get; protected set; } = 2;
         public float CurrentHP { get; protected set; } = 2;
 
         protected RHTimer _flickerTimer;
         protected RHTimer _damageTimer;
 
+        public virtual Rectangle HitBox => CollisionBox;
+
         public CombatActor() : base() { }
         public CombatActor(int id, Dictionary<string, string> stringData) : base(id, stringData) { }
+
+        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
+        {
+            base.Draw(spriteBatch, useLayerDepth);
+            if (Constants.DRAW_HITBOX)
+            {
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), HitBox, new Rectangle(160, 128, 2, 2), Color.Red * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, GetSprites()[0].LayerDepth - 1);
+            }
+        }
 
         #region Combat Logic
 
@@ -33,7 +44,7 @@ namespace RiverHollow.Characters
         {
             bool rv = false;
 
-            if (!Invulnerable && _damageTimer == null && CurrentHP > 0)
+            if (_damageTimer == null && CurrentHP > 0)
             {
                 rv = true;
 

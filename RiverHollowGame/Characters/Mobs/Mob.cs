@@ -16,6 +16,7 @@ namespace RiverHollow.Characters
         #region Properties
 
         public override Rectangle CollisionBox => GetCollisionBox();
+        public override Rectangle HitBox => GetHitbox();
 
         public int Damage => DataManager.GetIntByIDKey(ID, "Damage", DataType.NPC);
         private string[] LootData => Util.FindParams(DataManager.GetStringByIDKey(ID, "ItemID", DataType.NPC));
@@ -37,7 +38,6 @@ namespace RiverHollow.Characters
             CurrentHP = MaxHP;
 
             _fBaseSpeed = DataManager.GetFloatByIDKey(ID, "Speed", DataType.NPC, 1);
-            Invulnerable = false;
             Wandering = true;
 
             //_bJump = data.ContainsKey("Jump");
@@ -77,7 +77,7 @@ namespace RiverHollow.Characters
 
                 CheckDamageTimers(gTime);
 
-                if (CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
+                if (HitBox.Intersects(PlayerManager.PlayerActor.HitBox))
                 {
                     PlayerManager.PlayerActor.DealDamage(Damage, CollisionBox);
                 }
@@ -136,12 +136,26 @@ namespace RiverHollow.Characters
         {
             if (DataManager.GetBoolByIDKey(ID, "CollisionBox", DataType.NPC))
             {
-                int[] args = Util.FindIntArguments(DataManager.GetStringByIDKey(ID, "CollisionBox", DataType.NPC));
-                return new Rectangle(_sprBody.Position.X + args[0], _sprBody.Position.Y + args[1], args[2], args[3]);
+                Rectangle r =  DataManager.GetRectangleByIDKey(ID, "CollisionBox", DataType.NPC);
+                r.Offset(_sprBody.Position);
+                return r;
             }
             else
             {
                 return new Rectangle(Position.X, Position.Y, Width, Constants.TILE_SIZE);
+            }
+        }
+
+        public Rectangle GetHitbox()
+        {
+            if (DataManager.GetBoolByIDKey(ID, "HitBox", DataType.NPC))
+            {
+                int[] args = Util.FindIntArguments(DataManager.GetStringByIDKey(ID, "HitBox", DataType.NPC));
+                return new Rectangle(_sprBody.Position.X + args[0], _sprBody.Position.Y + args[1], args[2], args[3]);
+            }
+            else
+            {
+                return CollisionBox;
             }
         }
 

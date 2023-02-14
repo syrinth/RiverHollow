@@ -334,6 +334,18 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
+        public static Rectangle GetRectangleByIDKey(int id, string key, DataType type)
+        {
+            Rectangle rv = Rectangle.Empty;
+
+            int[] args = Util.FindIntArguments(GetStringByIDKey(id, key, type));
+            if (args.Length == 4)
+            {
+                rv = new Rectangle(args[0], args[1], args[2], args[3]);
+            }
+
+            return rv;
+        }
         public static string GetStringByIDKey(int id, string key, DataType type)
         {
             switch (type)

@@ -70,7 +70,7 @@ namespace RiverHollow.Characters
         protected double _dCooldown = 0;
 
         #region CollisionBox
-        public virtual Rectangle CollisionBox => new Rectangle((int)_sprBody.Position.X + CollisionOffset.X, (int)_sprBody.Position.Y + CollisionOffset.Y, Width, Constants.TILE_SIZE);
+        public virtual Rectangle CollisionBox => new Rectangle(_sprBody.Position.X + CollisionOffset.X, _sprBody.Position.Y + CollisionOffset.Y, Width, Constants.TILE_SIZE);
         public Point CollisionOffset => new Point(0, Height - Constants.TILE_SIZE);
         public Point CollisionBoxLocation => CollisionBox.Location;
         public Point CollisionCenter => CollisionBox.Center;

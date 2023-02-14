@@ -3,6 +3,7 @@
     static class Constants
     {
         public const bool DRAW_COLLISION = true;
+        public const bool DRAW_HITBOX = false;
 
         public const string TOWN_MAP_NAME = "mapTown";
         public const string PLAYER_HOME_NAME = "mapHouse_Player";
@@ -28,7 +29,7 @@
 
         public const int CALENDAR_DAYS_IN_MONTH = 28;
         public const int CALENDAR_MINUTES_PER_SECOND = 1;
-        public const int CALENDAR_NEW_DAY_HOUR = 18;
+        public const int CALENDAR_NEW_DAY_HOUR = 8;
         public const int CALENDAR_NEW_DAY_MIN = 0;
         public const int NIGHTFALL_STANDARD = 18;
         public const int NIGHTFALL_LATE = 21;
