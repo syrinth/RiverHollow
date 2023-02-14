@@ -7,7 +7,7 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
-    public class Critter : WorldActor
+    public class Critter : Actor
     {
         private bool _bFlee = false;
         private RHTimer _animationTimer;
@@ -17,18 +17,18 @@ namespace RiverHollow.Characters
             IgnoreCollisions = true;
             SlowDontBlock = true;
             _animationTimer = new RHTimer(1 + SetRandom(4, 0.5));
-            _iBodyHeight = Constants.TILE_SIZE;
+            Size.Y = Constants.TILE_SIZE;
 
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Action1);
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Action2);
-            LoadSpriteAnimations(ref _sprBody, liData, SpriteName());
+            BodySprite = LoadSpriteAnimations(liData, SpriteName());
 
             Facing = DirectionEnum.Down;
             PlayAnimation(VerbEnum.Idle);
 
-            _sprBody.SetNextAnimation(Util.GetActorString(VerbEnum.Action1, Facing), Util.GetActorString(VerbEnum.Idle, Facing));
+            BodySprite.SetNextAnimation(Util.GetActorString(VerbEnum.Action1, Facing), Util.GetActorString(VerbEnum.Idle, Facing));
         }
 
         public override void Update(GameTime gTime)
@@ -56,7 +56,7 @@ namespace RiverHollow.Characters
             {
                 if (_animationTimer.TickDown(gTime))
                 {
-                    _sprBody.SetLayerDepthMod(Constants.MAX_LAYER_DEPTH);
+                    BodySprite.SetLayerDepthMod(Constants.MAX_LAYER_DEPTH);
                 }
 
                 MoveActor(new Vector2(-2, -2));
@@ -68,7 +68,7 @@ namespace RiverHollow.Characters
             }
         }
 
-        private void CheckFlee(WorldActor actor)
+        private void CheckFlee(Actor actor)
         {
             if (Util.GetDistance(actor.Center, CollisionCenter) <= 80)
             {

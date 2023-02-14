@@ -26,8 +26,8 @@ namespace RiverHollow.Misc
             _sName = DataManager.GetTextData(ID, "Name", DataType.StatusEffect);
             _sDescription = DataManager.GetTextData(ID, "Description", DataType.StatusEffect);
 
-            Util.AssignValue(ref _iDuration, "Duration", data);
-            Util.AssignValue(ref _iPotency, "Potency", data);
+            _iDuration = Util.AssignValue("Duration", data);
+            _iPotency = Util.AssignValue("Potency", data);
             Util.AssignValue(ref _eEffectType, "Type", data);
 
             if (data.ContainsKey("Modify"))

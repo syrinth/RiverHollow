@@ -127,7 +127,7 @@
     </Item>
     <Item>
       <Key>31</Key>
-      <Value>[Type:Mount][Walk:0-0-3-0.15-T][Width:32][Height:48][BuildingID:75][Key:Giant_Slime]</Value>
+      <Value>[Type:Mount][Walk:0-0-3-0.15-T][Size:32-48][BuildingID:75][Key:Giant_Slime]</Value>
     </Item>
     <Item>
       <Key>32</Key>

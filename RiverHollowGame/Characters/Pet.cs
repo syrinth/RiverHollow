@@ -25,7 +25,7 @@ namespace RiverHollow.Characters
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Alert);
-            LoadSpriteAnimations(ref _sprBody, liData, SpriteName());
+            BodySprite = LoadSpriteAnimations(liData, SpriteName());
         }
 
         public override void Update(GameTime gTime)

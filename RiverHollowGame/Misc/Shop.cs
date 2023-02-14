@@ -28,7 +28,7 @@ namespace RiverHollow.Misc
             _iShopID = id;
             _liShopItemSpots = new List<ShopItemSpot>();
 
-            Util.AssignValue(ref _iShopBuildingID, "BuildingID", stringDictionary);
+            _iShopBuildingID = Util.AssignValue("BuildingID", stringDictionary);
 
             if (stringDictionary.ContainsKey("Shopkeeper"))
             {

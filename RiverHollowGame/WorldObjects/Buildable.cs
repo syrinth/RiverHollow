@@ -36,7 +36,7 @@ namespace RiverHollow.WorldObjects
         {
             base.LoadDictionaryData(stringData, loadSprite);
 
-            Util.AssignValue(ref _iValue, "Value", stringData);
+            _iValue = Util.AssignValue("Value", stringData);
             Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
         }
 

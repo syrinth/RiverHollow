@@ -37,12 +37,9 @@ namespace RiverHollow.Characters
                 }
             }
 
-            _bOnTheMap = !stringData.ContainsKey("Inactive");
+            OnTheMap = !stringData.ContainsKey("Inactive");
 
-
-            int arrivalDelay = -1;
-            Util.AssignValue(ref arrivalDelay, "FirstArrival", stringData);
-
+            int arrivalDelay = Util.AssignValue("FirstArrival", stringData);
             _iNextArrival = arrivalDelay;
         }
 

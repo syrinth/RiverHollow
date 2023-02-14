@@ -15,7 +15,7 @@ namespace RiverHollow
     {
         static bool _bTrackToTarget = false;
         static Vector2 _vObserver;
-        static WorldActor _actObserver; //The WorldActor the Camera needs to be following
+        static Actor _actObserver; //The WorldActor the Camera needs to be following
 
         public static Matrix _transform;
         public static Viewport _view;
@@ -76,7 +76,7 @@ namespace RiverHollow
             _transform = Matrix.CreateScale(new Vector3(CurrentScale, CurrentScale, 0)) * Matrix.CreateTranslation(new Vector3(-_vCenter.X, -_vCenter.Y, 0));
         }
 
-        public static void SetObserver(WorldActor act, bool swoopToTarget = false)
+        public static void SetObserver(Actor act, bool swoopToTarget = false)
         {
             _actObserver = act;
             _bTrackToTarget = swoopToTarget;

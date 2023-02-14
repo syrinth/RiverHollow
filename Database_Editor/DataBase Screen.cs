@@ -45,7 +45,7 @@ namespace Database_Editor
             InitComboBox<StatusTypeEnum>(cbStatusEffect);
 
             cbNPCType.Items.Clear();
-            InitComboBox(cbNPCType, true, new List<WorldActorTypeEnum>() { WorldActorTypeEnum.Actor});
+            InitComboBox<ActorTypeEnum>(cbNPCType, true);
 
             _diTabIndices = new Dictionary<string, int>()
             {
@@ -576,17 +576,17 @@ namespace Database_Editor
         private void SetNPCSubtype()
         {
             cbNPCSubtype.Items.Clear();
-            WorldActorTypeEnum itemType = Util.ParseEnum<WorldActorTypeEnum>(cbNPCType.SelectedItem.ToString().Split(':')[1]);
+            ActorTypeEnum itemType = Util.ParseEnum<ActorTypeEnum>(cbNPCType.SelectedItem.ToString().Split(':')[1]);
             switch (itemType)
             {
-                case WorldActorTypeEnum.Mob:
+                case ActorTypeEnum.Mob:
                     cbNPCSubtype.Visible = true;
                     foreach (MobTypeEnum e in Enum.GetValues(typeof(MobTypeEnum)))
                     {
                         cbNPCSubtype.Items.Add("Subtype:" + e.ToString());
                     }
                     break;
-                case WorldActorTypeEnum.Traveler:
+                case ActorTypeEnum.Traveler:
                     cbNPCSubtype.Visible = true;
                     foreach (TravelerGroupEnum e in Enum.GetValues(typeof(TravelerGroupEnum)))
                     {
@@ -1272,7 +1272,7 @@ namespace Database_Editor
             else if (dgv == dgvNPCs) {
                 AddContextMenuItem("Add New", AddNewNPC, true);
                 AddContextMenuItem("All", dgvNPCsContextMenuClick, false);
-                foreach (string s in Enum.GetNames(typeof(WorldActorTypeEnum)))
+                foreach (string s in Enum.GetNames(typeof(ActorTypeEnum)))
                 {
                     if (!s.Equals("Actor"))
                     {

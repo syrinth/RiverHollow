@@ -50,10 +50,10 @@ namespace RiverHollow.WorldObjects
             _rBase.Y = _pSize.Y - 1;
 
             Util.AssignValue(ref _eSeason, "Season", stringData);
-            Util.AssignValue(ref _iHoneyID, "HoneyID", stringData);
-            Util.AssignValue(ref _iSeedID, "SeedID", stringData);
-            Util.AssignValue(ref _iResourceID, "ItemID", stringData);
-            Util.AssignValue(ref _iMaxStates, "TrNum", stringData); //Number of growth phases
+            _iHoneyID = Util.AssignValue("HoneyID", stringData);
+            _iSeedID =  Util.AssignValue("SeedID", stringData);
+            _iResourceID = Util.AssignValue("ItemID", stringData);
+            _iMaxStates = Util.AssignValue("TrNum", stringData); //Number of growth phases
 
             _bPopItem = false;
 

@@ -19,12 +19,12 @@ namespace RiverHollow.Game_Managers
 
         private static int _iSeasonPrecipDays = 0;
         private static List<EnvironmentalEffect> _liEnvironmentalEffects;
-        private static List<WorldActor> _liCritters;
+        private static List<Actor> _liCritters;
 
         public static void Initialize()
         {
             _liEnvironmentalEffects = new List<EnvironmentalEffect>();
-            _liCritters = new List<WorldActor>();
+            _liCritters = new List<Actor>();
         }
 
         public static void Update(GameTime gTime)
@@ -89,7 +89,7 @@ namespace RiverHollow.Game_Managers
         public static void UnloadEnvironment()
         {
             _liEnvironmentalEffects.Clear();
-            foreach(WorldActor actor in _liCritters)
+            foreach(Actor actor in _liCritters)
             {
                 actor.CurrentMap.RemoveActor(actor);
             }

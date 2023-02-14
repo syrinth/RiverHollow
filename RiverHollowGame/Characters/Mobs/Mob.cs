@@ -42,7 +42,7 @@ namespace RiverHollow.Characters
 
             //_bJump = data.ContainsKey("Jump");
 
-            LoadSpriteAnimations(ref _sprBody, Util.LoadWorldAnimations(stringData), DataManager.FOLDER_MOBS + stringData["Texture"]);
+            BodySprite = LoadSpriteAnimations(Util.LoadWorldAnimations(stringData), DataManager.FOLDER_MOBS + stringData["Texture"]);
 
             NewFoV();
         }
@@ -54,11 +54,11 @@ namespace RiverHollow.Characters
 
         public override void Update(GameTime gTime)
         {
-            _sprBody.Update(gTime);
+            BodySprite.Update(gTime);
 
             if (!GamePaused())
             {
-                if (_sprBody.IsCurrentAnimation(AnimationEnum.KO) && _sprBody.PlayedOnce)
+                if (BodySprite.IsCurrentAnimation(AnimationEnum.KO) && BodySprite.PlayedOnce)
                 {
                     DropLoot();
                     CurrentMap.RemoveActor(this);
@@ -137,7 +137,7 @@ namespace RiverHollow.Characters
             if (DataManager.GetBoolByIDKey(ID, "CollisionBox", DataType.NPC))
             {
                 Rectangle r =  DataManager.GetRectangleByIDKey(ID, "CollisionBox", DataType.NPC);
-                r.Offset(_sprBody.Position);
+                r.Offset(BodySprite.Position);
                 return r;
             }
             else
@@ -151,7 +151,7 @@ namespace RiverHollow.Characters
             if (DataManager.GetBoolByIDKey(ID, "HitBox", DataType.NPC))
             {
                 int[] args = Util.FindIntArguments(DataManager.GetStringByIDKey(ID, "HitBox", DataType.NPC));
-                return new Rectangle(_sprBody.Position.X + args[0], _sprBody.Position.Y + args[1], args[2], args[3]);
+                return new Rectangle(BodySprite.Position.X + args[0], BodySprite.Position.Y + args[1], args[2], args[3]);
             }
             else
             {
@@ -263,7 +263,7 @@ namespace RiverHollow.Characters
 
             if (rv)
             {
-                _sprBody.SetColor(Color.Red);
+                BodySprite.SetColor(Color.Red);
                 SetMoveTo(Point.Zero);
                 _bBumpedIntoSomething = true;
             }
@@ -428,8 +428,8 @@ namespace RiverHollow.Characters
         //    #endregion
         //    Facing = DirectionEnum.Down;
 
-        //    _iBodyWidth = _sprBody.Width;
-        //    _iBodyHeight = _sprBody.Height;
+        //    Width = _sprBody.Width;
+        //    Height = _sprBody.Height;
 
         //    //_sprAlert = new AnimatedSprite(@"Textures\Dialog");
         //    //_sprAlert.AddAnimation(GenAnimEnum.Play, 64, 64, 16, 16, 3, 0.2f, true);

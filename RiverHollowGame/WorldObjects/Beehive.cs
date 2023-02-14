@@ -20,8 +20,8 @@ namespace RiverHollow.WorldObjects
         {
             _sprite.AddAnimation(AnimationEnum.Action_Finished, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
 
-            Util.AssignValue(ref _iItemID, "ItemID", stringData);
-            Util.AssignValue(ref _iPeriod, "Period", stringData);
+            _iItemID = Util.AssignValue("ItemID", stringData);
+            _iPeriod = Util.AssignValue("Period", stringData);
             _iDaysToHoney = _iPeriod;
         }
 

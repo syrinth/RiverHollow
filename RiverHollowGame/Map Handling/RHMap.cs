@@ -67,10 +67,10 @@ namespace RiverHollow.Map_Handling
         private List<Light> _liLights;
         private List<Light> _liHeldLights;
         private List<RHTile> _liTestTiles;
-        private List<WorldActor> _liActors;
+        private List<Actor> _liActors;
         protected List<Mob> _liMobs;
         public IList<Mob> Mobs { get { return _liMobs.AsReadOnly(); } }
-        public List<WorldActor> ToAdd;
+        public List<Actor> ToAdd;
         private List<Building> _liBuildings;
         private List<WorldObject> _liPlacedWorldObjects;
         private List<WorldObject> _liResourceObjects;
@@ -87,7 +87,7 @@ namespace RiverHollow.Map_Handling
         public Shop TheShop => (_iShopID > -1) ? GameManager.DIShops[_iShopID] : null;
 
         private List<MapItem> _liItemsToRemove;
-        private List<WorldActor> _liActorsToRemove;
+        private List<Actor> _liActorsToRemove;
         private List<WorldObject> _liObjectsToRemove;
 
         Buildable _objSelectedObject = null;
@@ -100,7 +100,7 @@ namespace RiverHollow.Map_Handling
             _liWallTiles = new List<RHTile>();
             _liTestTiles = new List<RHTile>();
             _liTilesets = new List<TiledMapTileset>();
-            _liActors = new List<WorldActor>();
+            _liActors = new List<Actor>();
             _liMobs = new List<Mob>();
             _liBuildings = new List<Building>();
             _liItems = new List<MapItem>();
@@ -117,10 +117,10 @@ namespace RiverHollow.Map_Handling
             DictionaryCharacterLayer = new Dictionary<string, Point>();
 
             _liItemsToRemove = new List<MapItem>();
-            _liActorsToRemove = new List<WorldActor>();
+            _liActorsToRemove = new List<Actor>();
             _liObjectsToRemove = new List<WorldObject>();
 
-            ToAdd = new List<WorldActor>();
+            ToAdd = new List<Actor>();
         }
 
         /// <summary>
@@ -243,26 +243,26 @@ namespace RiverHollow.Map_Handling
 
             if (ToAdd.Count > 0)
             {
-                List<WorldActor> moved = new List<WorldActor>();
-                foreach (WorldActor c in ToAdd)
+                List<Actor> moved = new List<Actor>();
+                foreach (Actor c in ToAdd)
                 {
                     if (AddCharacterImmediately(c))
                     {
                         moved.Add(c);
                     }
                 }
-                foreach (WorldActor c in moved)
+                foreach (Actor c in moved)
                 {
                     ToAdd.Remove(c);
                 }
                 moved.Clear();
             }
 
-            foreach (WorldActor c in _liActorsToRemove)
+            foreach (Actor c in _liActorsToRemove)
             {
                 switch (c.ActorType)
                 {
-                    case WorldActorTypeEnum.Mob:
+                    case ActorTypeEnum.Mob:
                         _liMobs.Remove((Mob)c);
                         if (_liMobs.Count == 0)
                         {
@@ -279,7 +279,7 @@ namespace RiverHollow.Map_Handling
 
             if (!GamePaused())
             {
-                foreach (WorldActor c in _liActors)
+                foreach (Actor c in _liActors)
                 {
                     c.Update(gTime);
                 }
@@ -626,7 +626,7 @@ namespace RiverHollow.Map_Handling
         }
         public bool AllMobsDefeated()
         {
-            return _liMobs.Count - _liActorsToRemove.FindAll(x => x.ActorType == WorldActorTypeEnum.Mob).Count <= 0;
+            return _liMobs.Count - _liActorsToRemove.FindAll(x => x.ActorType == ActorTypeEnum.Mob).Count <= 0;
         }
 
         public void ResetMobs()
@@ -854,9 +854,9 @@ namespace RiverHollow.Map_Handling
 
         public void CheckSpirits()
         {
-            foreach (WorldActor c in _liActors)
+            foreach (Actor c in _liActors)
             {
-                if (c.IsActorType(WorldActorTypeEnum.Spirit))
+                if (c.IsActorType(ActorTypeEnum.Spirit))
                 {
                     ((Spirit)c).CheckCondition();
                 }
@@ -867,9 +867,9 @@ namespace RiverHollow.Map_Handling
         {
             Spirit rv = null;
 
-            foreach (WorldActor a in _liActors)
+            foreach (Actor a in _liActors)
             {
-                if (a.IsActorType(WorldActorTypeEnum.Spirit) && PlayerManager.PlayerInRange(a.Position, 500))
+                if (a.IsActorType(ActorTypeEnum.Spirit) && PlayerManager.PlayerInRange(a.Position, 500))
                 {
                     rv = (Spirit)a;
                 }
@@ -878,7 +878,7 @@ namespace RiverHollow.Map_Handling
             return rv;
         }
 
-        public bool ContainsActor(WorldActor c)
+        public bool ContainsActor(Actor c)
         {
             return _liActors.Contains(c);//|| (c.IsActorType(ActorEnum.Monster) && Monsters.Contains((TacticalMonster)c));
         }
@@ -887,7 +887,7 @@ namespace RiverHollow.Map_Handling
         {
             if (this == MapManager.CurrentMap)
             {
-                WorldActor player = PlayerManager.PlayerActor;
+                Actor player = PlayerManager.PlayerActor;
                 for (int i = 0; i < _liItems.Count; i++)
                 {
                     MapItem it = _liItems[i];
@@ -927,7 +927,7 @@ namespace RiverHollow.Map_Handling
             if (checkPlayer && this == PlayerManager.PlayerActor.CurrentMap && PlayerManager.PlayerActor.CollisionIntersects(t.CollisionBox)) { rv = true; }
             else
             {
-                foreach (WorldActor act in _liActors)
+                foreach (Actor act in _liActors)
                 {
                     if (act.CollisionIntersects(t.CollisionBox))
                     {
@@ -946,9 +946,9 @@ namespace RiverHollow.Map_Handling
         /// <param name="actor">The moving WorldActor</param>
         /// <param name="dir"></param>
         /// <returns>The direction they are moving in</returns>
-        private List<KeyValuePair<Rectangle, WorldActor>> GetPossibleCollisions(WorldActor actor, Vector2 dir)
+        private List<KeyValuePair<Rectangle, Actor>> GetPossibleCollisions(Actor actor, Vector2 dir)
         {
-            List<KeyValuePair<Rectangle, WorldActor>> list = new List<KeyValuePair<Rectangle, WorldActor>>();
+            List<KeyValuePair<Rectangle, Actor>> list = new List<KeyValuePair<Rectangle, Actor>>();
             Rectangle rEndCollision = new Rectangle((int)(actor.CollisionBox.X + dir.X), (int)(actor.CollisionBox.Y + dir.Y), actor.CollisionBox.Width, actor.CollisionBox.Height);
             //The following if-blocks get the tiles that the four corners of the
             //moved CollisionBox will be inside of, based off of the movement direction.
@@ -1004,17 +1004,17 @@ namespace RiverHollow.Map_Handling
 
             //Because RHTiles do not contain WorldActors outside of combat, we need to add each
             //WorldActor's CollisionBox to the list, as long as the WorldActor in question is not the moving WorldActor.
-            foreach (WorldActor npc in _liActors)
+            foreach (Actor npc in _liActors)
             {
                 if (npc.OnTheMap && npc != actor)
                 {
                     switch (npc.ActorType)
                     {
-                        case WorldActorTypeEnum.Mount:
+                        case ActorTypeEnum.Mount:
                             if (!PlayerManager.PlayerActor.Mounted) { goto default; }
                             else { break; }
                         default:
-                            list.Add(new KeyValuePair<Rectangle, WorldActor>(npc.CollisionBox, npc));
+                            list.Add(new KeyValuePair<Rectangle, Actor>(npc.CollisionBox, npc));
                             break;
                     }
                 }
@@ -1023,22 +1023,22 @@ namespace RiverHollow.Map_Handling
             //If the actor is not the Player Character, add the Player Character's CollisionBox to the list as well
             if (actor != PlayerManager.PlayerActor && MapManager.CurrentMap == actor.CurrentMap && actor.CollidesWithPlayer())
             {
-                list.Add(new KeyValuePair<Rectangle, WorldActor>(PlayerManager.PlayerActor.CollisionBox, PlayerManager.PlayerActor));
+                list.Add(new KeyValuePair<Rectangle, Actor>(PlayerManager.PlayerActor.CollisionBox, PlayerManager.PlayerActor));
             }
 
             return list;
         }
-        private void AddTile(ref List<KeyValuePair<Rectangle, WorldActor>> list, int one, int two, string mapName)
+        private void AddTile(ref List<KeyValuePair<Rectangle, Actor>> list, int one, int two, string mapName)
         {
             RHTile tile = MapManager.Maps[mapName].GetTileByGridCoords(Util.GetGridCoords(one, two));
-            if (TileValid(tile, list)) { list.Add(new KeyValuePair<Rectangle, WorldActor>(tile.CollisionBox, null)); }
+            if (TileValid(tile, list)) { list.Add(new KeyValuePair<Rectangle, Actor>(tile.CollisionBox, null)); }
         }
-        private bool TileValid(RHTile tile, List<KeyValuePair<Rectangle, WorldActor>> list)
+        private bool TileValid(RHTile tile, List<KeyValuePair<Rectangle, Actor>> list)
         {
             return tile != null && !tile.Passable() && !list.Any(x => x.Key == tile.CollisionBox);
         }
 
-        private void ChangeDir(WorldActor actor, List<KeyValuePair<Rectangle, WorldActor>> possibleCollisions, ref Vector2 dir, ref bool impeded)
+        private void ChangeDir(Actor actor, List<KeyValuePair<Rectangle, Actor>> possibleCollisions, ref Vector2 dir, ref bool impeded)
         {
             //Because of how objects interact with each other, this check needs to be broken up so that the x and y movement can be
             //calculated seperately. If an object is above you and you move into it at an angle, if you check the collision as one rectangle
@@ -1055,10 +1055,10 @@ namespace RiverHollow.Map_Handling
             Rectangle testHorizontal = new Rectangle(location.X + projected.X, location.Y, size.X, size.Y);
             Rectangle testVertical = new Rectangle(location.X, location.Y + projected.Y, size.X, size.Y);
             Rectangle testDiagonal = new Rectangle(location + projected, size);
-            foreach (KeyValuePair<Rectangle, WorldActor> kvp in possibleCollisions)
+            foreach (KeyValuePair<Rectangle, Actor> kvp in possibleCollisions)
             {
                 Rectangle r = kvp.Key;
-                WorldActor npc = kvp.Value;
+                Actor npc = kvp.Value;
 
                 if (npc != null && npc.IgnoreCollisions)
                 {
@@ -1160,7 +1160,7 @@ namespace RiverHollow.Map_Handling
         /// <param name="dir">Reference to the direction to move the WorldActor</param>
         /// <param name="ignoreCollisions">Whether or not to check collisions</param>
         /// <returns>False if we are to prevent movement</returns>
-        public bool CheckForCollisions(WorldActor actor, ref Vector2 dir, ref bool impeded, bool ignoreCollisions = false)
+        public bool CheckForCollisions(Actor actor, ref Vector2 dir, ref bool impeded, bool ignoreCollisions = false)
         {
             bool rv = true;
 
@@ -1178,7 +1178,7 @@ namespace RiverHollow.Map_Handling
             }
             else if (!ignoreCollisions)
             {
-                List<KeyValuePair<Rectangle, WorldActor>> list = GetPossibleCollisions(actor, dir);
+                List<KeyValuePair<Rectangle, Actor>> list = GetPossibleCollisions(actor, dir);
                 ChangeDir(actor, list, ref dir, ref impeded);
 
                 Rectangle newBox = actor.CollisionBox;
@@ -1201,9 +1201,9 @@ namespace RiverHollow.Map_Handling
         /// <param name="c">The WorldActor to check</param>
         /// <param name="movingChar">The prospective endpoint of the movement</param>
         /// <returns></returns>
-        public bool CheckForMapChange(WorldActor c, Rectangle movingChar)
+        public bool CheckForMapChange(Actor c, Rectangle movingChar)
         {
-            if (!c.Wandering && (c.ActorType == WorldActorTypeEnum.Villager || c == PlayerManager.PlayerActor))
+            if (!c.Wandering && (c.ActorType == ActorTypeEnum.Villager || c == PlayerManager.PlayerActor))
             {
                 foreach (KeyValuePair<string, TravelPoint> kvp in DictionaryTravelPoints)
                 {
@@ -1325,7 +1325,7 @@ namespace RiverHollow.Map_Handling
 
             TheShop?.Interact(this, mouseLocation);
 
-            foreach (WorldActor c in _liActors)
+            foreach (Actor c in _liActors)
             {
                 if (PlayerManager.PlayerInRange(c.HoverBox, (int)(Constants.TILE_SIZE * 1.5)) && c.HoverContains(mouseLocation) && c.OnTheMap)
                 {
@@ -1478,18 +1478,18 @@ namespace RiverHollow.Map_Handling
                     }
                 }
 
-                foreach (WorldActor c in _liActors)
+                foreach (Actor c in _liActors)
                 {
                     if (c.HoverContains(mouseLocation) && c.OnTheMap)
                     {
                         switch (c.ActorType)
                         {
-                            case WorldActorTypeEnum.Merchant:
-                            case WorldActorTypeEnum.ShippingGremlin:
-                            case WorldActorTypeEnum.Spirit:
-                            case WorldActorTypeEnum.TalkingActor:
-                            case WorldActorTypeEnum.Traveler:
-                            case WorldActorTypeEnum.Villager:
+                            case ActorTypeEnum.Merchant:
+                            case ActorTypeEnum.ShippingGremlin:
+                            case ActorTypeEnum.Spirit:
+                            case ActorTypeEnum.TalkingActor:
+                            case ActorTypeEnum.Traveler:
+                            case ActorTypeEnum.Villager:
                                 GUICursor.SetCursor(GUICursor.CursorTypeEnum.Talk, c.HoverBox);
                                 found = true;
                                 break;
@@ -1779,7 +1779,7 @@ namespace RiverHollow.Map_Handling
             _liObjectsToRemove.Add(o);
             o.RemoveSelfFromTiles();
         }
-        public void RemoveActor(WorldActor c)
+        public void RemoveActor(Actor c)
         {
             Util.AddUniquelyToList(ref _liActorsToRemove, c);
         }
@@ -1985,21 +1985,21 @@ namespace RiverHollow.Map_Handling
             }
         }
 
-        public void AddActor(WorldActor c)
+        public void AddActor(Actor c)
         {
             ToAdd.Add(c);
         }
 
-        public bool RemoveCharacterImmediately(WorldActor c)
+        public bool RemoveCharacterImmediately(Actor c)
         {
             bool rv = false;
             if (MapManager.Maps[c.CurrentMapName].ContainsActor(c))
             {
                 rv = true;
-                if (c.IsActorType(WorldActorTypeEnum.Mob) && _liMobs.Contains((Mob)c)) { _liMobs.Remove((Mob)c); }
+                if (c.IsActorType(ActorTypeEnum.Mob) && _liMobs.Contains((Mob)c)) { _liMobs.Remove((Mob)c); }
                 else if (_liActors.Contains(c)) { _liActors.Remove(c); }
 
-                if (c.IsActorType(WorldActorTypeEnum.Merchant))
+                if (c.IsActorType(ActorTypeEnum.Merchant))
                 {
                     _iShopID = -1;
                 }
@@ -2015,21 +2015,21 @@ namespace RiverHollow.Map_Handling
         /// </summary>
         /// <param name="c">The WorldActor to add</param>
         /// <returns>True if successful</returns>
-        public bool AddCharacterImmediately(WorldActor c)
+        public bool AddCharacterImmediately(Actor c)
         {
             bool rv = false;
             if (string.IsNullOrEmpty(c.CurrentMapName) || !MapManager.Maps[c.CurrentMapName].ContainsActor(c))
             {
                 rv = true;
 
-                if (c.IsActorType(WorldActorTypeEnum.Mob) && !_liMobs.Contains((Mob)c)) { _liMobs.Add((Mob)c); }
+                if (c.IsActorType(ActorTypeEnum.Mob) && !_liMobs.Contains((Mob)c)) { _liMobs.Add((Mob)c); }
                 else { Util.AddUniquelyToList(ref _liActors, c); }
 
                 c.CurrentMapName = _sName;
                 c.Position = c.NewMapPosition == Point.Zero ? c.Position : c.NewMapPosition;
                 c.NewMapPosition = Point.Zero;
 
-                if (c.IsActorType(WorldActorTypeEnum.Merchant))
+                if (c.IsActorType(ActorTypeEnum.Merchant))
                 {
                     _iShopID = ((Merchant)c).ShopID;
                 }
@@ -2103,10 +2103,10 @@ namespace RiverHollow.Map_Handling
         public void LeaveMap()
         {
             EnvironmentManager.UnloadEnvironment();
-            List<WorldActor> copy = new List<WorldActor>(_liActors);
+            List<Actor> copy = new List<Actor>(_liActors);
             for (int i = 0; i < copy.Count; i++)
             {
-                if (copy[i].IsActorType(WorldActorTypeEnum.Villager))
+                if (copy[i].IsActorType(ActorTypeEnum.Villager))
                 {
                     Villager v = (Villager)copy[i];
                     v.SendToTown();

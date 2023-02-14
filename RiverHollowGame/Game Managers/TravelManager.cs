@@ -16,11 +16,11 @@ namespace RiverHollow.Game_Managers
         private static StreamWriter _swWriter;
         private static int _iSize = 1;
         private static int _iMaxPath = -1;
-        private static WorldActor _actTraveller;
+        private static Actor _actTraveller;
 
         #region Threading
         static Thread _thread;
-        static List<WorldActor> _liPathingRequest;
+        static List<Actor> _liPathingRequest;
 
         /// <summary>
         /// Nulls the threads
@@ -36,9 +36,9 @@ namespace RiverHollow.Game_Managers
         /// Call to register a pathing request with the TravelManager
         /// </summary>
         /// <param name="actor">The actor to register to pathfind</param>
-        public static void RequestPathing(WorldActor actor)
+        public static void RequestPathing(Actor actor)
         {
-            if(_liPathingRequest == null) { _liPathingRequest = new List<WorldActor>(); }
+            if(_liPathingRequest == null) { _liPathingRequest = new List<Actor>(); }
             if (!_liPathingRequest.Contains(actor)) { _liPathingRequest.Add(actor); }
         }
 
@@ -678,7 +678,7 @@ namespace RiverHollow.Game_Managers
             return target.IsRoad ? 1 : DEFAULT_COST;
         }
 
-        public static void SetParams(int size, WorldActor act, int maxPath = -1)
+        public static void SetParams(int size, Actor act, int maxPath = -1)
         {
             _iSize = size;
             _iMaxPath = maxPath;

@@ -110,7 +110,6 @@
     <Compile Include="Map Handling\Dungeon.cs" />
     <Compile Include="Map Handling\ProceduralDungeon.cs" />
     <Compile Include="Camera.cs" />
-    <Compile Include="Characters\Actor.cs" />
     <Compile Include="Characters\Child.cs" />
     <Compile Include="Characters\Critter.cs" />
     <Compile Include="Characters\Merchant.cs" />
@@ -122,7 +121,7 @@
     <Compile Include="Characters\TalkingActor.cs" />
     <Compile Include="Characters\TravellingNPC.cs" />
     <Compile Include="Characters\Villager.cs" />
-    <Compile Include="Characters\WorldActor.cs" />
+    <Compile Include="Characters\Actor.cs" />
     <Compile Include="Game Managers\CutSceneManager.cs" />
     <Compile Include="Game Managers\DungeonManager.cs" />
     <Compile Include="Game Managers\EnvironmentManager.cs" />

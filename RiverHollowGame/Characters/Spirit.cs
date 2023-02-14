@@ -25,30 +25,29 @@ namespace RiverHollow.Characters
 
         public Spirit(Dictionary<string, string> stringData) : base()
         {
-            ActorType = WorldActorTypeEnum.Spirit;
+            ActorType = ActorTypeEnum.Spirit;
             _fVisibility = MIN_VISIBILITY;
 
-            Util.AssignValue(ref _iID, "SpiritID", stringData);
+            _iID = Util.AssignValue("SpiritID", stringData);
             Util.AssignValue(ref _sText, "Text", stringData);
             Util.AssignValue(ref _sCondition, "Condition", stringData);
             Util.AssignValue(ref _sAwakenTrigger, "AwakenTrigger", stringData);
 
             //_sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Spirit", _sKey);
 
-            _bOnTheMap = false;
+            OnTheMap = false;
 
-            _iBodyWidth = Constants.TILE_SIZE;
-            _iBodyHeight = Constants.TILE_SIZE + 2;
+            Size = new Point(Constants.TILE_SIZE, Constants.TILE_SIZE + 2);
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
-            LoadSpriteAnimations(ref _sprBody, liData, DataManager.NPC_FOLDER + "Spirit_" + _iID);
+            BodySprite = LoadSpriteAnimations(liData, DataManager.NPC_FOLDER + "Spirit_" + _iID);
         }
 
         public override void Update(GameTime gTime)
         {
-            if (_bOnTheMap && _bAwoken)
+            if (OnTheMap && _bAwoken)
             {
-                _sprBody.Update(gTime);
+                BodySprite.Update(gTime);
                 //if (_bActive)
                 //{
                 //    base.Update(gTime);
@@ -71,9 +70,9 @@ namespace RiverHollow.Characters
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
-            if (_bOnTheMap && _bAwoken)
+            if (OnTheMap && _bAwoken)
             {
-                _sprBody.Draw(spriteBatch, useLayerDepth, _fVisibility);
+                BodySprite.Draw(spriteBatch, useLayerDepth, _fVisibility);
             }
         }
 
@@ -106,13 +105,13 @@ namespace RiverHollow.Characters
                 if (!active) { break; }
             }
 
-            _bOnTheMap = active;
+            OnTheMap = active;
             Triggered = false;
         }
         public override TextEntry GetOpeningText()
         {
             TextEntry rv = null;
-            if (_bOnTheMap)
+            if (OnTheMap)
             {
                 Triggered = true;
                 _fVisibility = 1.0f;

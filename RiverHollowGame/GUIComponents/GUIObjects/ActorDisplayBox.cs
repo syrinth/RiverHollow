@@ -12,7 +12,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         VerbEnum _eLastVerb = VerbEnum.Idle;
         DirectionEnum _eLastDir = DirectionEnum.Down;
 
-        WorldActor _act;
+        Actor _act;
         List<GUISprite> _liSprites;
 
         GUIImage _gBackdrop;

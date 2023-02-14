@@ -191,10 +191,10 @@ namespace RiverHollow.Misc
                 }
             }
 
-            Util.AssignValue(ref _iBuildingEndID, "EndBuildingID", stringData);
+            _iBuildingEndID = Util.AssignValue("EndBuildingID", stringData);
 
-            Util.AssignValue(ref _iRewardMoney, "Money", stringData);
-            Util.AssignValue(ref _iUnlockObjectID, "UnlockBuildingID", stringData);
+            _iRewardMoney = Util.AssignValue("Money", stringData);
+            _iUnlockObjectID = Util.AssignValue("UnlockBuildingID", stringData);
 
             if (stringData.ContainsKey("TargetObjectID"))
             {
@@ -204,8 +204,8 @@ namespace RiverHollow.Misc
             }
 
             Util.AssignValue(ref _bFinishOnCompletion, "Immediate", stringData);
-            Util.AssignValue(ref _iActivateID, "Activate", stringData);
-            Util.AssignValue(ref _iCutsceneID, "CutsceneID", stringData);
+            _iActivateID = Util.AssignValue("Activate", stringData);
+            _iCutsceneID = Util.AssignValue("CutsceneID", stringData);
             Util.AssignValue(ref _bHiddenGoal, "HideGoal", stringData);
         }
 

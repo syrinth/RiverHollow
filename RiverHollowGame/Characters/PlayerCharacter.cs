@@ -29,15 +29,15 @@ namespace RiverHollow.Characters
 
         public override List<AnimatedSprite> GetSprites()
         {
-            List<AnimatedSprite> liRv = new List<AnimatedSprite>() { _sprBody, _sprEyes, _sprHair, Chest?.Sprite, Hat?.Sprite, Legs?.Sprite };
+            List<AnimatedSprite> liRv = new List<AnimatedSprite>() { BodySprite, _sprEyes, _sprHair, Chest?.Sprite, Hat?.Sprite, Legs?.Sprite };
             liRv.RemoveAll(x => x == null);
             return liRv;
         }
 
-        private int HeightMod => _sprBody.Height - Constants.TILE_SIZE;
+        private int HeightMod => BodySprite.Height - Constants.TILE_SIZE;
         public override Point Position
         {
-            get { return new Point(_sprBody.Position.X, _sprBody.Position.Y + HeightMod); }
+            get { return new Point(BodySprite.Position.X, BodySprite.Position.Y + HeightMod); }
             set
             {
                 Point pos = new Point(value.X, value.Y - HeightMod);
@@ -46,7 +46,7 @@ namespace RiverHollow.Characters
         }
 
         public override Rectangle CollisionBox => ActiveMount != null ? ActiveMount.CollisionBox : base.CollisionBox;
-        public override Rectangle HitBox => new Rectangle(_sprBody.Position.X + 2, _sprBody.Position.Y + 22, 12, 10);
+        public override Rectangle HitBox => new Rectangle(BodySprite.Position.X + 2, BodySprite.Position.Y + 22, 12, 10);
 
         #region Clothing
         public Clothing Hat { get; private set; }
@@ -77,15 +77,15 @@ namespace RiverHollow.Characters
 
             // SetClothes((Clothes)DataManager.GetItem(int.Parse(DataManager.Config[6]["ItemID"])));
 
-            LoadSpriteAnimations(ref _sprBody, LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, BodyTypeStr));
+            BodySprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, BodyTypeStr));
 
             //Hair type has already been set either by default or by being allocated.
             SetHairType(HairIndex);
 
             //Loads the Sprites for the players body for the appropriate class
-            LoadSpriteAnimations(ref _sprEyes, LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER));
+            _sprEyes = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER));
 
-            _sprBody.SetColor(Color.White);
+            BodySprite.SetColor(Color.White);
             _sprHair.SetColor(HairColor);
             _sprEyes.SetColor(EyeColor);
 
@@ -97,7 +97,7 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            _lightSource.Position = _sprBody.Position - new Point((_lightSource.Width - _sprBody.Width) / 2, (_lightSource.Height - _sprBody.Height) / 2);
+            _lightSource.Position = BodySprite.Position - new Point((_lightSource.Width - BodySprite.Width) / 2, (_lightSource.Height - BodySprite.Height) / 2);
 
             if (HasKnockbackVelocity())
             {
@@ -166,7 +166,7 @@ namespace RiverHollow.Characters
         { 
             HairIndex = index;
             //Loads the Sprites for the players hair animations for the class based off of the hair ID
-            LoadSpriteAnimations(ref _sprHair, Util.LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex));
+            _sprHair = LoadSpriteAnimations(Util.LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex));
             _sprHair.SetLayerDepthMod(Constants.HAIR_DEPTH);
             _sprHair.SetColor(HairColor);
         }
@@ -196,7 +196,7 @@ namespace RiverHollow.Characters
                 string clothingTexture = string.Format(@"Textures\Items\Clothing\{0}\{1}", c.ClothingType.ToString(), c.TextureKey);
                 if (!c.GenderNeutral) { clothingTexture += ("_" + BodyTypeStr); }
 
-                LoadSpriteAnimations(ref c.Sprite, Util.LoadPlayerAnimations(DataManager.Config[17]), clothingTexture);
+                c.Sprite = LoadSpriteAnimations(Util.LoadPlayerAnimations(DataManager.Config[17]), clothingTexture);
 
                 if (c.SlotMatch(ClothingEnum.Chest)) { Chest = c; }
                 else if (c.SlotMatch(ClothingEnum.Hat))
@@ -207,8 +207,8 @@ namespace RiverHollow.Characters
                 else if (c.SlotMatch(ClothingEnum.Legs)) { Legs = c; }
 
                 //MAR AWKWARD
-                c.Sprite.Position = _sprBody.Position;
-                c.Sprite.PlayAnimation(_sprBody.CurrentAnimation);
+                c.Sprite.Position = BodySprite.Position;
+                c.Sprite.PlayAnimation(BodySprite.CurrentAnimation);
                 c.Sprite.SetLayerDepthMod(0.004f);
             }
         }

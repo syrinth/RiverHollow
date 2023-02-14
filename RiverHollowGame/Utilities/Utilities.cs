@@ -376,12 +376,15 @@ namespace RiverHollow.Utilities
                 value = dict[key];
             }
         }
-        public static void AssignValue(ref int value, string key, Dictionary<string, string> dict)
+        public static int AssignValue(string key, Dictionary<string, string> dict, int defaultValue = -1)
         {
+            int rv = defaultValue;
             if (dict.ContainsKey(key))
             {
-                value = int.Parse(dict[key]);
+                rv = int.Parse(dict[key]);
             }
+
+            return rv;
         }
         public static void AssignValue(ref double value, string key, Dictionary<string, string> dict)
         {

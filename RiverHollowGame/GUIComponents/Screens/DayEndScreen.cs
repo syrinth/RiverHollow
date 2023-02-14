@@ -155,7 +155,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                         _liPoints.RemoveAt(index);
 
-                        if (npc.IsActorType(WorldActorTypeEnum.Traveler))
+                        if (npc.IsActorType(ActorTypeEnum.Traveler))
                         {
                             Traveler t = (Traveler)npc;
                             t.PlayAnimation(t.MoodVerb);

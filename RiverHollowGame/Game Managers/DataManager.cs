@@ -672,18 +672,18 @@ namespace RiverHollow.Game_Managers
             return _diMonsterTraits[trait];
         }
 
-        public static WorldActor CreateNPCByIndex(int id)
+        public static Actor CreateNPCByIndex(int id)
         {
             if (id != -1 && _diItemData.ContainsKey(id))
             {
                 Dictionary<string, string> diData = _diNPCData[id];
-                switch (Util.ParseEnum<WorldActorTypeEnum>(diData["Type"]))
+                switch (Util.ParseEnum<ActorTypeEnum>(diData["Type"]))
                 {
-                    case WorldActorTypeEnum.Child:
+                    case ActorTypeEnum.Child:
                         return new Child(id, diData);
-                    case WorldActorTypeEnum.Critter:
+                    case ActorTypeEnum.Critter:
                         return new Critter(id, diData);
-                    case WorldActorTypeEnum.Mob:
+                    case ActorTypeEnum.Mob:
                         switch (Util.ParseEnum<MobTypeEnum>(diData["Subtype"]))
                         {
                             case MobTypeEnum.Fly:
@@ -692,19 +692,19 @@ namespace RiverHollow.Game_Managers
                                 return new SkitterMob(id, diData);
                         }
                         break;
-                    case WorldActorTypeEnum.Mount:
+                    case ActorTypeEnum.Mount:
                         return new Mount(id, diData);
-                    case WorldActorTypeEnum.Pet:
+                    case ActorTypeEnum.Pet:
                         return new Pet(id, diData);
-                    case WorldActorTypeEnum.Animal:
+                    case ActorTypeEnum.Animal:
                         return new Animal(id, diData);
-                    case WorldActorTypeEnum.ShippingGremlin:
+                    case ActorTypeEnum.ShippingGremlin:
                         return new ShippingGremlin(id, diData);
-                    case WorldActorTypeEnum.Spirit:
+                    case ActorTypeEnum.Spirit:
                         return new Spirit(diData);
-                    case WorldActorTypeEnum.TalkingActor:
+                    case ActorTypeEnum.TalkingActor:
                         return new TalkingActor(id, diData);
-                    case WorldActorTypeEnum.Traveler:
+                    case ActorTypeEnum.Traveler:
                         return new Traveler(id, diData);
                 }
             }
@@ -712,8 +712,8 @@ namespace RiverHollow.Game_Managers
         }
         public static Mob CreateMob(int id)
         {
-            WorldActor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Mob))
+            Actor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(ActorTypeEnum.Mob))
             {
                 rv = null;
             }
@@ -721,8 +721,8 @@ namespace RiverHollow.Game_Managers
         }
         public static Child CreateChild(int id)
         {
-            WorldActor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Child))
+            Actor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(ActorTypeEnum.Child))
             {
                 rv = null;
             }
@@ -730,8 +730,8 @@ namespace RiverHollow.Game_Managers
         }
         public static Mount CreateMount(int id)
         {
-            WorldActor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Mount))
+            Actor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(ActorTypeEnum.Mount))
             {
                 rv = null;
             }
@@ -739,8 +739,8 @@ namespace RiverHollow.Game_Managers
         }
         public static Pet CreatePet(int id)
         {
-            WorldActor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Pet))
+            Actor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(ActorTypeEnum.Pet))
             {
                 rv = null;
             }
@@ -748,8 +748,8 @@ namespace RiverHollow.Game_Managers
         }
         public static Traveler CreateTraveler(int id)
         {
-            WorldActor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Traveler))
+            Actor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(ActorTypeEnum.Traveler))
             {
                 rv = null;
             }
@@ -757,8 +757,8 @@ namespace RiverHollow.Game_Managers
         }
         public static Animal CreateAnimal(int id)
         {
-            WorldActor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Animal))
+            Actor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(ActorTypeEnum.Animal))
             {
                 rv = null;
             }
@@ -766,8 +766,8 @@ namespace RiverHollow.Game_Managers
         }
         public static Critter CreateCritter(int id)
         {
-            WorldActor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(WorldActorTypeEnum.Critter))
+            Actor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(ActorTypeEnum.Critter))
             {
                 rv = null;
             }

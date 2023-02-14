@@ -28,8 +28,8 @@ namespace RiverHollow.WorldObjects
 
             Util.AssignValue(ref _sOutTrigger, "OutTrigger", stringData);
             Util.AssignValue(ref _sMatchTrigger, "MatchTrigger", stringData);
-            Util.AssignValue(ref _iTriggerNumber, "TriggerNumber", stringData);
-            Util.AssignValue(ref _iItemKeyID, "ItemKeyID", stringData);
+            _iTriggerNumber = Util.AssignValue("TriggerNumber", stringData);
+            _iItemKeyID = Util.AssignValue("ItemKeyID", stringData);
 
             _iTriggersLeft = _iTriggerNumber;
         }

@@ -89,7 +89,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            foreach (WorldActor npc in TownAnimals)
+            foreach (Actor npc in TownAnimals)
             {
                 npc.RollOver();
             }
@@ -157,7 +157,7 @@ namespace RiverHollow.Game_Managers
             var travelerList = new List<Traveler>();
             foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.NPCData)
             {
-                if (kvp.Value["Type"] == Util.GetEnumString(WorldActorTypeEnum.Traveler))
+                if (kvp.Value["Type"] == Util.GetEnumString(ActorTypeEnum.Traveler))
                 {
                     Traveler npc = DataManager.CreateTraveler(kvp.Key);
                     if (npc.Validate() || (!npc.Rare() && RHRandom.Instance().RollPercent(10)))
@@ -450,12 +450,12 @@ namespace RiverHollow.Game_Managers
                 data.Storage.Add(storageData);
             }
 
-            foreach (WorldActor npc in TownAnimals)
+            foreach (Actor npc in TownAnimals)
             {
                 data.TownAnimals.Add(npc.ID);
             }
 
-            foreach (WorldActor npc in Travelers)
+            foreach (Actor npc in Travelers)
             {
                 data.Travelers.Add(npc.ID);
             }

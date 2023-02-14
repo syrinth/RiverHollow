@@ -40,7 +40,7 @@ namespace RiverHollow.Misc
             _pSecond += v;
         }
 
-        public bool Contains(WorldActor actor)
+        public bool Contains(Actor actor)
         {
             bool rv = false;
             Point center = actor.CollisionCenter;

@@ -22,11 +22,11 @@ namespace RiverHollow.Characters
         {
             get
             {
-                return new Point(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - Constants.TILE_SIZE);
+                return new Point(BodySprite.Position.X, BodySprite.Position.Y + BodySprite.Height - Constants.TILE_SIZE);
             }
             set
             {
-                _sprBody.Position = new Point(value.X, value.Y - _sprBody.Height + Constants.TILE_SIZE);
+                BodySprite.Position = new Point(value.X, value.Y - BodySprite.Height + Constants.TILE_SIZE);
             }
         }
 
@@ -37,8 +37,7 @@ namespace RiverHollow.Characters
             _arrInventory = new Item[_iRows, _iCols];
 
             //_eSpawnStatus = VillagerSpawnStatus.NonTownMap;
-            _iBodyWidth = 32;
-            _iBodyHeight = 32;
+            Size = new Point(32, 32);
 
             _sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Gremlin", stringData["Key"]);
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
@@ -46,25 +45,25 @@ namespace RiverHollow.Characters
            // Util.AssignValue(ref _sStartMap, "StartMap", stringData);
            // Util.AssignValue(ref _iHouseBuildingID, "HouseID", stringData);
 
-            _sprBody = new AnimatedSprite(SpriteName());
+            BodySprite = new AnimatedSprite(SpriteName());
             
-            _sprBody.AddAnimation(AnimationEnum.ObjectIdle, 0, 0, _iBodyWidth, _iBodyHeight);
-            _sprBody.AddAnimation(AnimationEnum.Action1, 32, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);
-            _sprBody.AddAnimation(AnimationEnum.Action_Finished, 128, 0, _iBodyWidth, _iBodyHeight);
-            _sprBody.AddAnimation(AnimationEnum.Action2, 160, 0, _iBodyWidth, _iBodyHeight, 3, 0.1f);
+            BodySprite.AddAnimation(AnimationEnum.ObjectIdle, 0, 0, Width, Height);
+            BodySprite.AddAnimation(AnimationEnum.Action1, 32, 0, Width, Height, 3, 0.1f);
+            BodySprite.AddAnimation(AnimationEnum.Action_Finished, 128, 0, Width, Height);
+            BodySprite.AddAnimation(AnimationEnum.Action2, 160, 0, Width, Height, 3, 0.1f);
             PlayAnimation(AnimationEnum.ObjectIdle);
         }
 
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            if (IsCurrentAnimation(AnimationEnum.Action1) && _sprBody.CurrentFrameAnimation.PlayCount == 1)
+            if (IsCurrentAnimation(AnimationEnum.Action1) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
             {
                 PlayAnimation(AnimationEnum.Action_Finished);
                 PlayerManager.AllowMovement = true;
                 base.StartConversation(false);
             }
-            else if (IsCurrentAnimation(AnimationEnum.Action2) && _sprBody.CurrentFrameAnimation.PlayCount == 1)
+            else if (IsCurrentAnimation(AnimationEnum.Action2) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
             {
                 PlayAnimation(AnimationEnum.ObjectIdle);
             }
@@ -81,7 +80,7 @@ namespace RiverHollow.Characters
         public override void ProcessRightButtonClick()
         {
             PlayerManager.AllowMovement = false;
-            _sprBody.PlayAnimation(AnimationEnum.Action1);
+            BodySprite.PlayAnimation(AnimationEnum.Action1);
         }
 
         /// <summary>
@@ -90,7 +89,7 @@ namespace RiverHollow.Characters
         public override void StopTalking()
         {
             base.StopTalking();
-            _sprBody.PlayAnimation(AnimationEnum.Action2);
+            BodySprite.PlayAnimation(AnimationEnum.Action2);
         }
 
         public void OpenShipping()

@@ -65,7 +65,7 @@ namespace RiverHollow.Characters
 
             foreach (AnimationData data in listAnimations)
             {
-                _sprBody.AddAnimation(data.Animation, data.XLocation, data.YLocation, _iBodyWidth, _iBodyHeight);
+                BodySprite.AddAnimation(data.Animation, data.XLocation, data.YLocation, Width, Height);
             }
         }
 

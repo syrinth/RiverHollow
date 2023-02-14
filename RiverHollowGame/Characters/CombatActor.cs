@@ -8,7 +8,7 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
-    public abstract class CombatActor : WorldActor
+    public abstract class CombatActor : Actor
     {
         public virtual float MaxHP { get; protected set; } = 2;
         public float CurrentHP { get; protected set; } = 2;
@@ -73,10 +73,10 @@ namespace RiverHollow.Characters
 
             if (_flickerTimer != null && _flickerTimer.TickDown(gTime))
             {
-                if (_sprBody.SpriteColor == Color.Red)
+                if (BodySprite.SpriteColor == Color.Red)
                 {
                     _flickerTimer = null;
-                    _sprBody.SetColor(Color.White);
+                    BodySprite.SetColor(Color.White);
                 }
             }
         }

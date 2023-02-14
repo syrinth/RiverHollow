@@ -34,9 +34,9 @@ namespace RiverHollow.Characters
             _liRequestItems = new List<RequestItem>();
             ChosenRequests = new int[3] { -1, -1, -1 };
 
-            _bOnTheMap = false;
+            OnTheMap = false;
 
-            Util.AssignValue(ref _iShopID, "ShopData", stringData);
+            _iShopID = Util.AssignValue("ShopData", stringData);
 
             foreach (string s in Util.FindParams(stringData["RequestIDs"]))
             {
@@ -51,7 +51,7 @@ namespace RiverHollow.Characters
 
         public override void RollOver()
         {
-            if (!_bOnTheMap)
+            if (!OnTheMap)
             {
                 if (TownRequirementsMet())
                 {
@@ -88,7 +88,7 @@ namespace RiverHollow.Characters
                     ChosenRequests[i] = -1;
                 }
 
-                _bOnTheMap = false;
+                OnTheMap = false;
                 _iNextArrival = ArrivalPeriod;
                 CurrentMap?.RemoveCharacterImmediately(this);
                 if (_iShopID != -1)
@@ -183,7 +183,7 @@ namespace RiverHollow.Characters
 
         public override void MoveToSpawn()
         {
-            _bOnTheMap = true;
+            OnTheMap = true;
 
             CurrentMapName = Constants.TOWN_MAP_NAME;
             MapManager.Maps[CurrentMapName].AddCharacterImmediately(this);

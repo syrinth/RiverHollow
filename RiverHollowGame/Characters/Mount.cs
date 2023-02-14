@@ -16,12 +16,11 @@ namespace RiverHollow.Characters
 
         public Mount(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            Util.AssignValue(ref _iBodyWidth, "Width", stringData);
-            Util.AssignValue(ref _iBodyHeight, "Height", stringData);
+            Size = Util.ParsePoint(stringData["Size"]);
 
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
-            LoadSpriteAnimations(ref _sprBody, liData, SpriteName());
+            BodySprite = LoadSpriteAnimations(liData, SpriteName());
         }
 
         public override void ProcessRightButtonClick()

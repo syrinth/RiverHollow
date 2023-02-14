@@ -134,7 +134,7 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             //Only follow schedules ATM if they are active and not married
-            if (_bOnTheMap && !Married)
+            if (OnTheMap && !Married)
             {
                 //Only start to find a path if we are not currently on one.
                 if (_pathingThread == null && _liTilePath.Count == 0 && _diCompleteSchedule != null && _sScheduleKey != null && _diCompleteSchedule[_sScheduleKey].Count > _iNextTimeKeyID && NextScheduledTime == GameCalendar.GetTime())
@@ -163,7 +163,7 @@ namespace RiverHollow.Characters
 
                     if (!string.IsNullOrEmpty(animation))
                     {
-                        _sprBody.PlayAnimation(animation);
+                        BodySprite.PlayAnimation(animation);
                     }
 
                     if (_currentPathData.Wander)
@@ -342,7 +342,7 @@ namespace RiverHollow.Characters
         /// </summary>
         public override void MoveToSpawn()
         {
-            _bOnTheMap = true;
+            OnTheMap = true;
 
             string mapName = GetSpawnMapName();
 

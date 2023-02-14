@@ -31,7 +31,7 @@ namespace RiverHollow.WorldObjects
 
         public WrappedItem(int id, Dictionary<string, string> stringData) : base(id)
         {
-            Util.AssignValue(ref _iItemID, "ItemID", stringData);
+            _iItemID = Util.AssignValue("ItemID", stringData);
             LoadDictionaryData(stringData);
         }
 

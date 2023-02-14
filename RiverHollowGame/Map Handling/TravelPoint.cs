@@ -52,7 +52,7 @@ namespace RiverHollow.Map_Handling
             }
 
             Util.AssignValue(ref _eEntranceDir, "EntranceDir", obj.Properties);
-            Util.AssignValue(ref _iDungeonInfoID, "DungeonID", obj.Properties);
+            _iDungeonInfoID = Util.AssignValue("DungeonID", obj.Properties);
             Util.AssignValue(ref _sGoToMap, "GoTo", obj.Properties);
             Util.AssignValue(ref _bModular, "Modular", obj.Properties);
             Util.AssignValue(ref _bNoMove, "NoMove", obj.Properties);
@@ -82,7 +82,7 @@ namespace RiverHollow.Map_Handling
         /// <param name="oldPointCenter">The center of the previous TravelPoint</param>
         /// <param name="c">The moving Actor</param>
         /// <returns></returns>
-        public Point FindLinkedPointPosition(Point oldPointCenter, WorldActor c)
+        public Point FindLinkedPointPosition(Point oldPointCenter, Actor c)
         {
             //Find the difference between the position of the center of the actor's collisionBox
             //and the TravelPoint that the actor interacted with.

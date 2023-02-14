@@ -63,7 +63,7 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void ChangeMaps(WorldActor actor, string currMap, TravelPoint travelPoint)
+        public static void ChangeMaps(Actor actor, string currMap, TravelPoint travelPoint)
         {
             //Get the entry rectangle on the new map
             TravelPoint entryPoint;
@@ -318,7 +318,7 @@ namespace RiverHollow.Game_Managers
             CurrentMap.RemoveWorldObject(o);
         }
 
-        public static void RemoveActor(WorldActor c)
+        public static void RemoveActor(Actor c)
         {
             CurrentMap.RemoveActor(c);
         }

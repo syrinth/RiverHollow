@@ -165,7 +165,7 @@ namespace RiverHollow.Game_Managers
         int _iMinTime = -1;                                         //The earliest the cutscene can be triggered
         int _iMaxTime = -1;                                         //The latest the cutscene can be triggered
         int _iCurrentCommand;
-        List<WorldActor> _liUsedNPCs;                                 //The list of NPCs that take part in the cutscene.
+        List<Actor> _liUsedNPCs;                                 //The list of NPCs that take part in the cutscene.
         List<KeyValuePair<int, int>> _liReqFriendship;              //The list of required Friendships to trigger the cutscene, key is NPC index
         List<CutSceneCommand> _liCommands;                          //The sequence of commands to follow for the cutscene
         List<string> _liSetupCommands;
@@ -173,8 +173,8 @@ namespace RiverHollow.Game_Managers
         bool _bWaitForMove;
         RHTask _triggerTask;
 
-        List<WorldActor> _liMoving;
-        List<WorldActor> _liToRemove;
+        List<Actor> _liMoving;
+        List<Actor> _liToRemove;
 
         RHTimer _timer;
 
@@ -190,12 +190,12 @@ namespace RiverHollow.Game_Managers
             _bWaitForMove = false;
             _iCurrentCommand = 0;
 
-            _liUsedNPCs = new List<WorldActor>();
+            _liUsedNPCs = new List<Actor>();
             _liCommands = new List<CutSceneCommand>();
             _liReqFriendship = new List<KeyValuePair<int, int>>();
             _liSetupCommands = new List<string>();
-            _liMoving = new List<WorldActor>();
-            _liToRemove = new List<WorldActor>();
+            _liMoving = new List<Actor>();
+            _liToRemove = new List<Actor>();
 
             //Get the cutscene triggers
             string[] triggers = Util.FindTags(strData[0]);
@@ -259,7 +259,7 @@ namespace RiverHollow.Game_Managers
                         {
                             int npcID = -1;
                             string[] sCommandData = s.Split('-');   //split the data into segments
-                            WorldActor npc;
+                            Actor npc;
                             switch (currentCommand.Command)
                             {
                                 case CutsceneCommandEnum.Activate:
@@ -336,13 +336,13 @@ namespace RiverHollow.Game_Managers
                     }
 
                     //See if the moving characters have finished moving
-                    foreach (WorldActor actor in _liMoving)
+                    foreach (Actor actor in _liMoving)
                     {
                         CheckFinishedMovement(actor);
                     }
 
                     //Remove any characters that have finished moving from the list
-                    foreach (WorldActor actor in _liToRemove)
+                    foreach (Actor actor in _liToRemove)
                     {
                         _liMoving.Remove(actor);
                     }
@@ -368,7 +368,7 @@ namespace RiverHollow.Game_Managers
         /// Retrieves the desired actor from the list of Actors usedin the Cutscene
         /// </summary>
         /// <param name="npcID">A string value representing the NPC ID</param>
-        private WorldActor GetActor(string npcID) {
+        private Actor GetActor(string npcID) {
             int characterID = -1;
             if (!int.TryParse(npcID, out characterID))
             {
@@ -376,7 +376,7 @@ namespace RiverHollow.Game_Managers
                 characterID = -1;
             }
 
-            return (characterID == -1 ? (WorldActor)PlayerManager.PlayerActor : _liUsedNPCs.Find(test => test.ID == characterID));
+            return (characterID == -1 ? (Actor)PlayerManager.PlayerActor : _liUsedNPCs.Find(test => test.ID == characterID));
         }
 
         /// <summary>
@@ -404,7 +404,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="dir">The directional to move in</param>
         private void AssignMovement(string characterID, int numSquares, DirectionEnum dir)
         {
-            WorldActor c = GetActor(characterID);
+            Actor c = GetActor(characterID);
             if (!c.HasMovement())
             {
                 Point vec = Util.MultiplyPoint(Util.GetPointFromDirection(dir), numSquares * Constants.TILE_SIZE);
@@ -422,7 +422,7 @@ namespace RiverHollow.Game_Managers
         /// If they have, make them Idle, and then add them to the ToRemove list.
         /// </summary>
         /// <param name="c">The WorldActor to check</param>
-        private void CheckFinishedMovement(WorldActor c)
+        private void CheckFinishedMovement(Actor c)
         {
             if (c.Position == c.MoveToLocation)
             {
@@ -480,7 +480,7 @@ namespace RiverHollow.Game_Managers
                     foreach (string f in friend)
                     {
                         string[] friendData = f.Split('-');
-                        WorldActor act = null;
+                        Actor act = null;
                         if (TownManager.DIVillagers.ContainsKey(int.Parse(friendData[0]))) {
                             int npcID = int.Parse(friendData[0]);
                             act = new Villager(npcID, DataManager.NPCData[npcID]);
@@ -500,7 +500,7 @@ namespace RiverHollow.Game_Managers
                     string[] friends = tags[1].Split('|');
                     foreach (string npcIDs in friends)
                     {
-                        foreach (WorldActor v in _liUsedNPCs)
+                        foreach (Actor v in _liUsedNPCs)
                         {
                             if (v.ID == int.Parse(npcIDs))
                             {
@@ -597,7 +597,7 @@ namespace RiverHollow.Game_Managers
                         }
                         else if (currentCommand.Command == CutsceneCommandEnum.Activate)
                         {
-                            WorldActor npc = _liUsedNPCs.Find(test => test.ID == GetNPCData(sCommandData[0]));
+                            Actor npc = _liUsedNPCs.Find(test => test.ID == GetNPCData(sCommandData[0]));
                             npc?.Activate(true);
                         }
                         else if (currentCommand.Command == CutsceneCommandEnum.MoveToTown)
@@ -620,7 +620,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            foreach(WorldActor act in _liUsedNPCs)
+            foreach(Actor act in _liUsedNPCs)
             {
                 act.ClearPath();
                 act.SetMoveTo(Point.Zero);

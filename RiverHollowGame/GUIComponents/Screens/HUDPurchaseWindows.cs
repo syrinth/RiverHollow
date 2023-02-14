@@ -87,7 +87,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public Item ShopItem { get; }
         public WorldObject WorldObject { get; }
-        public WorldActor Actor { get; }
+        public Actor Actor { get; }
 
         public int Cost { get; }
         public bool CanBuy { get; private set; }
@@ -125,7 +125,7 @@ namespace RiverHollow.GUIComponents.Screens
             _gMoney.AnchorToInnerSide(this, SideEnum.Right, ScaleIt(2));
         }
 
-        public PurchaseBox(WorldActor actor, int cost, int mainWidth, EmptyDelegate action) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
+        public PurchaseBox(Actor actor, int cost, int mainWidth, EmptyDelegate action) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
         {
             _action = action;
             Actor = actor;
@@ -213,7 +213,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (ShopItem != null && !InventoryManager.HasSpaceInInventory(ShopItem.ID, ShopItem.Number)){
                 rv = false;
             }
-            else if (Actor != null && Actor.IsActorType(WorldActorTypeEnum.Mount) && !((Mount)Actor).StableBuilt())
+            else if (Actor != null && Actor.IsActorType(ActorTypeEnum.Mount) && !((Mount)Actor).StableBuilt())
             {
                 rv = false;
             }

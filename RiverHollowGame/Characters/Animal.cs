@@ -24,7 +24,7 @@ namespace RiverHollow.Characters
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Idle);
-            LoadSpriteAnimations(ref _sprBody, liData, SpriteName());
+            BodySprite = LoadSpriteAnimations(liData, SpriteName());
         }
 
         public override void RollOver()

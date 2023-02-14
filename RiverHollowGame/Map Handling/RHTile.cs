@@ -226,7 +226,7 @@ namespace RiverHollow.Map_Handling
             return _travelPoint;
         }
 
-        public bool Contains(WorldActor n)
+        public bool Contains(Actor n)
         {
             bool rv = false;
 

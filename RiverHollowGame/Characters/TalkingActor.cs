@@ -10,7 +10,7 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
-    public class TalkingActor : WorldActor
+    public class TalkingActor : Actor
     {
         protected ActorFaceEnum _eFaceEnum;
         protected List<ActorFaceEnum> _liActorFaceQueue;
@@ -30,35 +30,33 @@ namespace RiverHollow.Characters
 
         public TalkingActor() : base()
         {
-            _bCanTalk = true;
             _liActorFaceQueue = new List<ActorFaceEnum>();
             _liSpokenKeys = new List<string>();
         }
         public TalkingActor(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            _bCanTalk = true;
             _liActorFaceQueue = new List<ActorFaceEnum>();
             _liSpokenKeys = new List<string>();
 
             _diDialogue = DataManager.GetNPCDialogue(stringData["Key"]);
 
             List<AnimationData> liAnimationData = Util.LoadWorldAnimations(stringData);
-            LoadSpriteAnimations(ref _sprBody, liAnimationData, SpriteName());
+            BodySprite = LoadSpriteAnimations(liAnimationData, SpriteName());
             PlayAnimationVerb(VerbEnum.Idle);
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             base.Draw(spriteBatch, useLayerDepth);
-            if (_bOnTheMap)
+            if (OnTheMap)
             {
                 if (_iTaskGoals > 0)
                 {
-                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)_sprBody.Position.X, (int)_sprBody.Position.Y - Constants.TASK_ICON_OFFSET, 16, 16), new Rectangle(208, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)BodySprite.Position.X, (int)BodySprite.Position.Y - Constants.TASK_ICON_OFFSET, 16, 16), new Rectangle(208, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                 }
                 if (_assignedTask?.TaskState == TaskStateEnum.Assigned)
                 {
-                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)_sprBody.Position.X, (int)_sprBody.Position.Y - Constants.TASK_ICON_OFFSET, 16, 16), new Rectangle(224, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)BodySprite.Position.X, (int)BodySprite.Position.Y - Constants.TASK_ICON_OFFSET, 16, 16), new Rectangle(224, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                 }
             }
         }
@@ -82,13 +80,13 @@ namespace RiverHollow.Characters
                 switch (_eCurrentState)
                 {
                     case NPCStateEnum.TrackPlayer:
-                        if(IsActorType(WorldActorTypeEnum.Pet) && PlayerManager.PlayerInRange(CollisionCenter, Constants.FOLLOW_ARRIVED))
+                        if(IsActorType(ActorTypeEnum.Pet) && PlayerManager.PlayerInRange(CollisionCenter, Constants.FOLLOW_ARRIVED))
                         {
                             ChangeState(NPCStateEnum.Idle);
                         }
                         break;
                     default:
-                        if (!_sprBody.IsCurrentAnimation(VerbEnum.Action1, Facing) && !PlayerManager.PlayerInRange(CollisionCenter, Constants.FOLLOW_ALERT_THRESHOLD))
+                        if (!BodySprite.IsCurrentAnimation(VerbEnum.Action1, Facing) && !PlayerManager.PlayerInRange(CollisionCenter, Constants.FOLLOW_ALERT_THRESHOLD))
                         {
                             ChangeState(NPCStateEnum.Alert);
                         }
