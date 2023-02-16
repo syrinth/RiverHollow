@@ -46,9 +46,9 @@ namespace RiverHollow.Game_Managers
 
             DIMerchants = new Dictionary<int, Merchant>();
             DIVillagers = new Dictionary<int, Villager>();
-            foreach (KeyValuePair<int, Dictionary<string, string>> npcData in DataManager.NPCData)
+            foreach (KeyValuePair<int, Dictionary<string, string>> npcData in DataManager.ActorData)
             {
-                Dictionary<string, string> diData = DataManager.NPCData[npcData.Key];
+                Dictionary<string, string> diData = DataManager.ActorData[npcData.Key];
                 switch (diData["Type"])
                 {
                     case "Merchant":
@@ -155,7 +155,7 @@ namespace RiverHollow.Game_Managers
 
             //Find all Travelers
             var travelerList = new List<Traveler>();
-            foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.NPCData)
+            foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.ActorData)
             {
                 if (kvp.Value["Type"] == Util.GetEnumString(ActorTypeEnum.Traveler))
                 {

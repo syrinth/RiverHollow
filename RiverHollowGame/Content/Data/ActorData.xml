@@ -131,11 +131,11 @@
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Mob][Subtype:Flier][Texture:Batty][MonsterID:1|1-8|1-1-1|1-1-8-1][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][ItemID:56][HP:2][Damage:1][CollisionBox:2-11-12-11][Night][Speed:1.8][HitBox:5-12-6-8]</Value>
+      <Value>[Type:Mob][Subtype:Flyer][Texture:Batty][MonsterID:1|1-8|1-1-1|1-1-8-1][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12-6-8][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][Night][ItemID:56][Speed:1.8]</Value>
     </Item>
     <Item>
       <Key>33</Key>
-      <Value>[Type:Mob][Subtype:Crawler][Texture:Mossy_Slime][MonsterID:8|8-8|8-8-9][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:56][HP:4][Damage:1][CollisionBox:0-14-16-10][Day][Size:16-24][Speed:1]</Value>
+      <Value>[Type:Mob][Subtype:Crawler][Texture:Mossy_Slime][MonsterID:8|8-8|8-8-9][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:8][HP:4][Damage:1][Day][Size:16-24][Speed:1]</Value>
     </Item>
     <Item>
       <Key>34</Key>
@@ -183,11 +183,11 @@
     </Item>
     <Item>
       <Key>45</Key>
-      <Value>[Type:Traveler][Key:Traveller1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Subtype:Human][FavFood:Plain][Disliked:Desert][Angry:0-32-1-0-F][Sad:0-32-1-0-F][Neutral:0-32-1-0-F][Happy:0-32-1-0-F]</Value>
+      <Value>[Type:Traveler][Subtype:Human][Key:Traveller1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][FavFood:Plain][Disliked:Desert][Angry:0-32-1-0-F][Sad:0-32-1-0-F][Neutral:0-32-1-0-F][Happy:0-32-1-0-F]</Value>
     </Item>
     <Item>
       <Key>46</Key>
-      <Value>[Type:Traveler][Key:Traveller2][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Subtype:Human][Rare][FavFood:Dessert][Disliked:Plain][Angry:0-32-1-0-F][Sad:0-32-1-0-F][Neutral:0-32-1-0-F][Happy:0-32-1-0-F]</Value>
+      <Value>[Type:Traveler][Subtype:Human][Key:Traveller2][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Rare][FavFood:Dessert][Disliked:Plain][Angry:0-32-1-0-F][Sad:0-32-1-0-F][Neutral:0-32-1-0-F][Happy:0-32-1-0-F]</Value>
     </Item>
     <Item>
       <Key>47</Key>
@@ -195,11 +195,19 @@
     </Item>
     <Item>
       <Key>48</Key>
-      <Value>[Type:Traveler][Key:Adventurer2][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Subtype:Adventurer][Rare][FavFood:Dessert][Disliked:Plain]</Value>
+      <Value>[Type:Traveler][Subtype:Adventurer][Key:Adventurer2][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Rare][FavFood:Dessert][Disliked:Plain]</Value>
     </Item>
     <Item>
       <Key>49</Key>
-      <Value>[Type:Traveler][Key:Neutral1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Subtype:None][FavFood:Plain][Disliked:Desert]</Value>
+      <Value>[Type:Traveler][Subtype:None][Key:Neutral1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][FavFood:Plain][Disliked:Desert]</Value>
+    </Item>
+    <Item>
+      <Key>50</Key>
+      <Value>[Type:Mob][Subtype:Crawler][Texture:Spitter][MonsterID:8|8-8|8-8-9][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:9][HP:4][Damage:1][Size:16-24][Speed:1][Cooldown:1.5][Projectile:51]</Value>
+    </Item>
+    <Item>
+      <Key>51</Key>
+      <Value>[Type:Projectile][Size:16-16][Idle:0-0-1-1-T][KO:16-0-1-0.1-F][CollisionOffset:3-1][CollisionSize:10-10][Speed:3][Damage:1]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -46,8 +46,8 @@ namespace RiverHollow.Misc
         bool _bHiddenGoal;
         #region Rewards
         private int _iUnlockObjectID = -1;
-        private int _iRewardMoney = 0;
-        private int _iFriendPoints = 0;
+        private int _iRewardMoney;
+        private int _iFriendPoints;
         public string FriendTarget { get; }
 
         public List<Item> LiRewardItems { get; }
@@ -193,7 +193,7 @@ namespace RiverHollow.Misc
 
             _iBuildingEndID = Util.AssignValue("EndBuildingID", stringData);
 
-            _iRewardMoney = Util.AssignValue("Money", stringData);
+            _iRewardMoney = Util.AssignValue("Money", stringData, 0);
             _iUnlockObjectID = Util.AssignValue("UnlockBuildingID", stringData);
 
             if (stringData.ContainsKey("TargetObjectID"))

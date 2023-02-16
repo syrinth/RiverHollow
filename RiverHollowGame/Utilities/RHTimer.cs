@@ -47,5 +47,10 @@ namespace RiverHollow.Utilities
         {
             _bStopped = true;
         }
+
+        public static bool TimerCheck(RHTimer timer, GameTime gTime)
+        {
+            return timer != null && timer.TickDown(gTime);
+        }
     }
 }

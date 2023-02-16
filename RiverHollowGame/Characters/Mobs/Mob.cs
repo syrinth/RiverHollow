@@ -14,14 +14,14 @@ namespace RiverHollow.Characters
     public abstract class Mob : CombatActor
     {
         #region Properties
-
-        public override Rectangle CollisionBox => GetCollisionBox();
         public override Rectangle HitBox => GetHitbox();
 
-        public int Damage => DataManager.GetIntByIDKey(ID, "Damage", DataType.NPC);
-        private string[] LootData => Util.FindParams(DataManager.GetStringByIDKey(ID, "ItemID", DataType.NPC));
-        public override float MaxHP => DataManager.GetIntByIDKey(ID, "HP", DataType.NPC);
-        public MobTypeEnum Subtype => DataManager.GetEnumByIDKey<MobTypeEnum>(ID, "Subtype", DataType.NPC);
+        public bool HasProjectiles => DataManager.GetBoolByIDKey(ID, "Projectile", DataType.Actor);
+        public int Damage => DataManager.GetIntByIDKey(ID, "Damage", DataType.Actor);
+        protected float Cooldown => DataManager.GetFloatByIDKey(ID, "Cooldown", DataType.Actor);
+        private string[] LootData => Util.FindParams(DataManager.GetStringByIDKey(ID, "ItemID", DataType.Actor));
+        public override float MaxHP => DataManager.GetIntByIDKey(ID, "HP", DataType.Actor);
+        public MobTypeEnum Subtype => DataManager.GetEnumByIDKey<MobTypeEnum>(ID, "Subtype", DataType.Actor);
 
         bool _bJump;
         int _iMaxRange = Constants.TILE_SIZE * 10;
@@ -30,6 +30,8 @@ namespace RiverHollow.Characters
 
         FieldOfVision _FoV;
 
+        protected List<Projectile> _liProjectiles;
+
         #endregion
 
         public Mob(int id, Dictionary<string, string> stringData) : base(id, stringData)
@@ -37,7 +39,8 @@ namespace RiverHollow.Characters
             SpdMult = 1;
             CurrentHP = MaxHP;
 
-            _fBaseSpeed = DataManager.GetFloatByIDKey(ID, "Speed", DataType.NPC, 1);
+            _liProjectiles = new List<Projectile>();
+            _fBaseSpeed = DataManager.GetFloatByIDKey(ID, "Speed", DataType.Actor, 1);
             Wandering = true;
 
             //_bJump = data.ContainsKey("Jump");
@@ -55,6 +58,8 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             BodySprite.Update(gTime);
+            _liProjectiles.ForEach(x => x.Update(gTime));
+            _liProjectiles.RemoveAll(x => x.Finished);
 
             if (!GamePaused())
             {
@@ -87,6 +92,7 @@ namespace RiverHollow.Characters
         public override void Draw(SpriteBatch spriteBatch, bool userLayerDepth = false)
         {
             base.Draw(spriteBatch, userLayerDepth);
+            _liProjectiles.ForEach(x => x.Draw(spriteBatch));
             //if (_bAlert) { _sprAlert.Draw(spriteBatch, userLayerDepth); }
         }
 
@@ -134,9 +140,9 @@ namespace RiverHollow.Characters
 
         public Rectangle GetCollisionBox()
         {
-            if (DataManager.GetBoolByIDKey(ID, "CollisionBox", DataType.NPC))
+            if (DataManager.GetBoolByIDKey(ID, "CollisionBox", DataType.Actor))
             {
-                Rectangle r =  DataManager.GetRectangleByIDKey(ID, "CollisionBox", DataType.NPC);
+                Rectangle r =  DataManager.GetRectangleByIDKey(ID, "CollisionBox", DataType.Actor);
                 r.Offset(BodySprite.Position);
                 return r;
             }
@@ -148,9 +154,9 @@ namespace RiverHollow.Characters
 
         public Rectangle GetHitbox()
         {
-            if (DataManager.GetBoolByIDKey(ID, "HitBox", DataType.NPC))
+            if (DataManager.GetBoolByIDKey(ID, "HitBox", DataType.Actor))
             {
-                int[] args = Util.FindIntArguments(DataManager.GetStringByIDKey(ID, "HitBox", DataType.NPC));
+                int[] args = Util.FindIntArguments(DataManager.GetStringByIDKey(ID, "HitBox", DataType.Actor));
                 return new Rectangle(BodySprite.Position.X + args[0], BodySprite.Position.Y + args[1], args[2], args[3]);
             }
             else
@@ -238,10 +244,6 @@ namespace RiverHollow.Characters
             {
                 MapManager.CurrentMap.DropItemOnMap(drop, Position, false);
             }
-            else
-            {
-                int j = 0;
-            }
         }
 
         public void Reset()
@@ -263,6 +265,11 @@ namespace RiverHollow.Characters
 
             if (rv)
             {
+                if(CurrentHP == 0)
+                {
+                    IgnoreCollisions = false;
+                }
+
                 BodySprite.SetColor(Color.Red);
                 SetMoveTo(Point.Zero);
                 _bBumpedIntoSomething = true;
@@ -273,7 +280,7 @@ namespace RiverHollow.Characters
 
         protected override WeightEnum GetWeight()
         {
-            return DataManager.GetEnumByIDKey<WeightEnum>(ID, "Weight", DataType.NPC);
+            return DataManager.GetEnumByIDKey<WeightEnum>(ID, "Weight", DataType.Actor);
         }
 
         #region Jumping Code

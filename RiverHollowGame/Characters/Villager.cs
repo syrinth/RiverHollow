@@ -15,10 +15,10 @@ namespace RiverHollow.Characters
 {
     public class Villager : TravellingNPC
     {
-        public string StartMap => DataManager.GetStringByIDKey(ID, "StartMap", DataType.NPC);
-        public int HouseID => DataManager.GetIntByIDKey(ID, "HouseID", DataType.NPC, 1);
-        public bool Marriable => DataManager.GetBoolByIDKey(ID, "CanMarry", DataType.NPC);
-        public bool CanBecomePregnant => DataManager.GetBoolByIDKey(ID, "CanBecomePregnant", DataType.NPC);
+        public string StartMap => DataManager.GetStringByIDKey(ID, "StartMap", DataType.Actor);
+        public int HouseID => DataManager.GetIntByIDKey(ID, "HouseID", DataType.Actor, 1);
+        public bool Marriable => DataManager.GetBoolByIDKey(ID, "CanMarry", DataType.Actor);
+        public bool CanBecomePregnant => DataManager.GetBoolByIDKey(ID, "CanBecomePregnant", DataType.Actor);
 
         private Dictionary<int, MoodEnum> _diItemMoods;
 
@@ -626,8 +626,8 @@ namespace RiverHollow.Characters
 
         private void SpawnPets()
         {
-            string petInfo = DataManager.GetStringByIDKey(ID, "PetID", DataType.NPC);
-            int petHome = DataManager.GetIntByIDKey(ID, "PetHomeID", DataType.NPC);
+            string petInfo = DataManager.GetStringByIDKey(ID, "PetID", DataType.Actor);
+            int petHome = DataManager.GetIntByIDKey(ID, "PetHomeID", DataType.Actor);
             if (!string.IsNullOrEmpty(petInfo) && !TownManager.TownObjectBuilt(petHome))
             {
                 int[] split = Util.FindIntArguments(petInfo);

@@ -341,7 +341,7 @@ namespace RiverHollow.Map_Handling
             _renderer.Draw(_map, Camera._transform);
 
             _liActors.ForEach(x => x.Draw(spriteBatch, true));
-            _liMobs.FindAll(x => x.Subtype != MobTypeEnum.Flier || x.CurrentHP == 0).ForEach(x => x.Draw(spriteBatch, true));
+            _liMobs.FindAll(x => x.Subtype != MobTypeEnum.Flyer || x.CurrentHP == 0).ForEach(x => x.Draw(spriteBatch, true));
             _liBuildings.ForEach(x => x.Draw(spriteBatch));
             _liPlacedWorldObjects.ForEach(x => x.Draw(spriteBatch));
             _liItems.ForEach(x => x.Draw(spriteBatch));
@@ -388,7 +388,7 @@ namespace RiverHollow.Map_Handling
             SetLayerVisibiltyByName(true, "Upper");
             _renderer.Draw(_map, Camera._transform);
 
-            _liMobs.FindAll(x => x.Subtype == MobTypeEnum.Flier && x.CurrentHP > 0).ForEach(x => x.Draw(spriteBatch, true));
+            _liMobs.FindAll(x => x.Subtype == MobTypeEnum.Flyer && x.CurrentHP > 0).ForEach(x => x.Draw(spriteBatch, true));
             EnvironmentManager.Draw(spriteBatch);
 
             SetLayerVisibiltyByName(true, "Base");
@@ -1003,28 +1003,31 @@ namespace RiverHollow.Map_Handling
                 }
             }
 
-            //Because RHTiles do not contain WorldActors outside of combat, we need to add each
-            //WorldActor's CollisionBox to the list, as long as the WorldActor in question is not the moving WorldActor.
-            foreach (Actor npc in _liActors)
+            if (!actor.IsActorType(ActorTypeEnum.Projectile))
             {
-                if (npc.OnTheMap && npc != actor)
+                //Because RHTiles do not contain WorldActors outside of combat, we need to add each
+                //WorldActor's CollisionBox to the list, as long as the WorldActor in question is not the moving WorldActor.
+                foreach (Actor npc in _liActors)
                 {
-                    switch (npc.ActorType)
+                    if (npc.OnTheMap && npc != actor)
                     {
-                        case ActorTypeEnum.Mount:
-                            if (!PlayerManager.PlayerActor.Mounted) { goto default; }
-                            else { break; }
-                        default:
-                            list.Add(new KeyValuePair<Rectangle, Actor>(npc.CollisionBox, npc));
-                            break;
+                        switch (npc.ActorType)
+                        {
+                            case ActorTypeEnum.Mount:
+                                if (!PlayerManager.PlayerActor.Mounted) { goto default; }
+                                else { break; }
+                            default:
+                                list.Add(new KeyValuePair<Rectangle, Actor>(npc.CollisionBox, npc));
+                                break;
+                        }
                     }
                 }
-            }
 
-            //If the actor is not the Player Character, add the Player Character's CollisionBox to the list as well
-            if (actor != PlayerManager.PlayerActor && MapManager.CurrentMap == actor.CurrentMap && actor.CollidesWithPlayer())
-            {
-                list.Add(new KeyValuePair<Rectangle, Actor>(PlayerManager.PlayerActor.CollisionBox, PlayerManager.PlayerActor));
+                //If the actor is not the Player Character, add the Player Character's CollisionBox to the list as well
+                if (actor != PlayerManager.PlayerActor && MapManager.CurrentMap == actor.CurrentMap && actor.CollidesWithPlayer())
+                {
+                    list.Add(new KeyValuePair<Rectangle, Actor>(PlayerManager.PlayerActor.CollisionBox, PlayerManager.PlayerActor));
+                }
             }
 
             return list;
@@ -1041,6 +1044,11 @@ namespace RiverHollow.Map_Handling
 
         private void ChangeDir(Actor actor, List<KeyValuePair<Rectangle, Actor>> possibleCollisions, ref Vector2 dir, ref bool impeded)
         {
+            if (actor.IgnoreCollisions)
+            {
+                return;
+            }
+
             //Because of how objects interact with each other, this check needs to be broken up so that the x and y movement can be
             //calculated seperately. If an object is above you and you move into it at an angle, if you check the collision as one rectangle
             //then the collision nullification will hit the entire damn movement mode.
@@ -1060,11 +1068,6 @@ namespace RiverHollow.Map_Handling
             {
                 Rectangle r = kvp.Key;
                 Actor npc = kvp.Value;
-
-                if (npc != null && npc.IgnoreCollisions)
-                {
-                    continue;
-                }
 
                 Point coords = Util.GetGridCoords(r.Location);
                 if (dir.Y != 0 && r.Intersects(testVertical))
@@ -1188,6 +1191,7 @@ namespace RiverHollow.Map_Handling
                 if (!OnMap(newBox))
                 {
                     rv = false;
+                    dir = Vector2.Zero;
                     actor.SetMoveTo(Point.Zero);
                 }
             }

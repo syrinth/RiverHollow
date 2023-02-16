@@ -10,12 +10,12 @@ namespace RiverHollow.Characters
     public abstract class TravellingNPC : TalkingActor
     {
         protected int _iNextArrival = -1;
-        protected int ArrivalPeriod => DataManager.GetIntByIDKey(ID, "ArrivalPeriod", DataType.NPC);
-        protected int TotalMoneyEarnedNeeded => DataManager.GetIntByIDKey(ID, "TotalMoneyEarnedReq", DataType.NPC);
+        protected int ArrivalPeriod => DataManager.GetIntByIDKey(ID, "ArrivalPeriod", DataType.Actor);
+        protected int TotalMoneyEarnedNeeded => DataManager.GetIntByIDKey(ID, "TotalMoneyEarnedReq", DataType.Actor);
 
         protected Dictionary<int, int> _diRequiredObjectIDs;
-        protected int RequiredPopulation => DataManager.GetIntByIDKey(ID, "RequiredPopulation", DataType.NPC);
-        protected int RequiredVillagerID => DataManager.GetIntByIDKey(ID, "RequiredVillager", DataType.NPC);
+        protected int RequiredPopulation => DataManager.GetIntByIDKey(ID, "RequiredPopulation", DataType.Actor);
+        protected int RequiredVillagerID => DataManager.GetIntByIDKey(ID, "RequiredVillager", DataType.Actor);
 
         public virtual RelationShipStatusEnum RelationshipState { get; set; }
         public bool Introduced => RelationshipState != RelationShipStatusEnum.None;

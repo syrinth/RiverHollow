@@ -145,7 +145,8 @@ namespace RiverHollow.Game_Managers
                     bool impeded = false;
                     if (MapManager.CurrentMap.CheckForCollisions(PlayerActor, ref newMovement, ref impeded))
                     {
-                        PlayerActor.MoveActor(newMovement * (impeded ? Constants.IMPEDED_SPEED : 1f));
+                        newMovement *= impeded ? Constants.IMPEDED_SPEED : 1f;
+                        PlayerActor.MoveActor(newMovement, newMovement != Vector2.Zero);
                     }
                 }
             }

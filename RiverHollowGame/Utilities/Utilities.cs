@@ -11,6 +11,7 @@ using System.Linq;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 using MonoGame.Extended.Tiled;
+using System.Windows.Input;
 
 namespace RiverHollow.Utilities
 {
@@ -472,6 +473,18 @@ namespace RiverHollow.Utilities
             if (splitVal.Length == 2)
             {
                 rv = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
+            }
+
+            return rv;
+        }
+        public static Rectangle ParseRectangle(string str)
+        {
+            Rectangle rv = Rectangle.Empty;
+
+            int[] args = Util.FindIntArguments(str);
+            if (args.Length == 4)
+            {
+                rv = new Rectangle(args[0], args[1], args[2], args[3]);
             }
 
             return rv;

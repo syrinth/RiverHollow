@@ -273,10 +273,10 @@ namespace RiverHollow.Map_Handling
         public bool Validate(int id)
         {
 
-            if (DataManager.GetBoolByIDKey(id, "Day", DataType.NPC) && GameCalendar.IsNight()) { return false; }
-            else if (DataManager.GetBoolByIDKey(id, "Night", DataType.NPC) && !GameCalendar.IsNight()) { return false; }
+            if (DataManager.GetBoolByIDKey(id, "Day", DataType.Actor) && GameCalendar.IsNight()) { return false; }
+            else if (DataManager.GetBoolByIDKey(id, "Night", DataType.Actor) && !GameCalendar.IsNight()) { return false; }
 
-            var seasonList = DataManager.GetEnumListByIDKey<SeasonEnum>(id, "Season", DataType.NPC);
+            var seasonList = DataManager.GetEnumListByIDKey<SeasonEnum>(id, "Season", DataType.Actor);
 
             bool validSeason = seasonList[0] == SeasonEnum.None;
             if (!validSeason)

@@ -123,7 +123,7 @@ namespace RiverHollow.SpriteAnimations
         public void PlayAnimation(string verb, DirectionEnum dir) { PlayAnimation(Util.GetActorString(verb, dir)); }
         public void PlayAnimation(string animate)
         {
-            if (!Drawing || CurrentAnimation != animate && _diFrameAnimations.ContainsKey(animate))
+            if (_diFrameAnimations.ContainsKey(animate) && (!Drawing || CurrentAnimation != animate))
             {
                 Drawing = true;
                 CurrentAnimation = animate;

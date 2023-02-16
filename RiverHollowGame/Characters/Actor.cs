@@ -11,6 +11,7 @@ using System.Threading;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.WorldObjects;
 
 namespace RiverHollow.Characters
 {
@@ -74,8 +75,9 @@ namespace RiverHollow.Characters
         #endregion
 
         #region CollisionBox
-        public virtual Rectangle CollisionBox => new Rectangle(BodySprite.Position.X + CollisionOffset.X, BodySprite.Position.Y + CollisionOffset.Y, Width, Constants.TILE_SIZE);
-        public Point CollisionOffset => new Point(0, Height - Constants.TILE_SIZE);
+        public virtual Rectangle CollisionBox => new Rectangle(BodySprite.Position.X + CollisionOffset.X, BodySprite.Position.Y + CollisionOffset.Y, CollisionSize.X, CollisionSize.Y);
+        public virtual Point CollisionOffset => DataManager.GetPointByIDKey(ID, "CollisionOffset", DataType.Actor, new Point(0, Height - Constants.TILE_SIZE));
+        public virtual Point CollisionSize => DataManager.GetPointByIDKey(ID, "CollisionSize", DataType.Actor, new Point(Width, Constants.TILE_SIZE));
         public Point CollisionBoxLocation => CollisionBox.Location;
         public Point CollisionCenter => CollisionBox.Center;
         #endregion
@@ -159,12 +161,12 @@ namespace RiverHollow.Characters
 
         public string Name()
         {
-            return DataManager.GetTextData(ID, "Name", DataType.NPC);
+            return DataManager.GetTextData(ID, "Name", DataType.Actor);
         }
 
         protected string SpriteName()
         {
-            return DataManager.NPC_FOLDER + DataManager.GetStringByIDKey(ID, "Key", DataType.NPC);
+            return DataManager.NPC_FOLDER + DataManager.GetStringByIDKey(ID, "Key", DataType.Actor);
         }
 
         /// <summary>
@@ -342,9 +344,10 @@ namespace RiverHollow.Characters
         {
             switch (ActorType)
             {
+                case ActorTypeEnum.Critter:
                 case ActorTypeEnum.Mob:
                 case ActorTypeEnum.Mount:
-                case ActorTypeEnum.Critter:
+                case ActorTypeEnum.Projectile:
                     return false;
             }
 
@@ -377,9 +380,13 @@ namespace RiverHollow.Characters
         {
             Position += _vbMovement.AddMovement(p.ToVector2());
         }
-        public void MoveActor(Vector2 v)
+        public void MoveActor(Vector2 v, bool faceDir = true)
         {
             Position += _vbMovement.AddMovement(v);
+            if (faceDir)
+            {
+                DetermineAnimationState(v);
+            }
         }
 
         public Point ProjectedMovement(Vector2 dir)
@@ -453,7 +460,6 @@ namespace RiverHollow.Characters
                 Vector2 initial = direction;
                 if (CurrentMap.CheckForCollisions(this, ref direction, ref impeded) && direction != Vector2.Zero)
                 {
-                    DetermineAnimationState(direction);
                     MoveActor(direction * (impeded ? Constants.IMPEDED_SPEED : 1f));
                 }
                 else { _bBumpedIntoSomething = true; }

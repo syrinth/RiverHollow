@@ -50,6 +50,7 @@ namespace RiverHollow.Game_Managers
         public const string GUI_COMPONENTS = @"Textures\GUI Components";
         public const string ACTION_ICONS = GUI_COMPONENTS + @"\GUI_Action_Icons";
         public const string HUD_COMPONENTS = GUI_COMPONENTS + @"\GUI_HUD_Components";
+        public const string PROJECTILE_TEXTURE = @"Textures\Projectiles";
         #endregion
 
         #region Dictionaries
@@ -62,8 +63,8 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, Dictionary<string, string>> _diNPCDialogue;
         static Dictionary<int, Shop> _diShops;
 
-        static Dictionary<int, Dictionary<string, string>> _diNPCData;
-        public static Dictionary<int, Dictionary<string, string>> NPCData => _diNPCData;
+        static Dictionary<int, Dictionary<string, string>> _diActorData;
+        public static Dictionary<int, Dictionary<string, string>> ActorData => _diActorData;
         static Dictionary<int, Dictionary<string, string>> _diPlayerAnimationData;
 
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
@@ -129,7 +130,7 @@ namespace RiverHollow.Game_Managers
         {
             LoadDictionary(ref _diPlayerAnimationData, @"Data\PlayerClassAnimationConfig", Content, null);
             LoadDictionary(ref _diItemData, @"Data\ItemData", Content, null);
-            LoadDictionary(ref _diNPCData, @"Data\NPCData", Content, null);
+            LoadDictionary(ref _diActorData, @"Data\ActorData", Content, null);
             LoadDictionary(ref _diMonsterData, @"Data\Monsters", Content, null);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
             LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);
@@ -231,6 +232,7 @@ namespace RiverHollow.Game_Managers
         private static void LoadGUIs(ContentManager Content)
         {
             AddTexture(DataManager.DIALOGUE_TEXTURE, Content);
+            AddTexture(DataManager.PROJECTILE_TEXTURE, Content);
             AddTexture(@"Textures\Valley", Content);
         }
         private static void LoadIcons(ContentManager Content)
@@ -322,9 +324,9 @@ namespace RiverHollow.Game_Managers
             if (!string.IsNullOrEmpty(rv)) { return Util.ParseFloat(rv); }
             else { return defaultValue; }
         }
-        public static Point GetPointByIDKey(int id, string key, DataType type)
+        public static Point GetPointByIDKey(int id, string key, DataType type, Point defaultPoint = default(Point))
         {
-            Point rv = Point.Zero;
+            Point rv = defaultPoint;
             string value = GetStringByIDKey(id, key, type);
 
             if (!string.IsNullOrEmpty(value))
@@ -337,49 +339,52 @@ namespace RiverHollow.Game_Managers
         public static Rectangle GetRectangleByIDKey(int id, string key, DataType type)
         {
             Rectangle rv = Rectangle.Empty;
+            string value = GetStringByIDKey(id, key, type);
 
-            int[] args = Util.FindIntArguments(GetStringByIDKey(id, key, type));
-            if (args.Length == 4)
+            if (!string.IsNullOrEmpty(value))
             {
-                rv = new Rectangle(args[0], args[1], args[2], args[3]);
+                rv = Util.ParseRectangle(GetStringByIDKey(id, key, type));
             }
 
             return rv;
         }
         public static string GetStringByIDKey(int id, string key, DataType type)
         {
-            switch (type)
+            if (id != -1)
             {
-                case DataType.Action:
-                    if (_diActions[id].ContainsKey(key)) { return _diActions[id][key]; }
-                    break;
-                case DataType.NPC:
-                    if (_diNPCData[id].ContainsKey(key)) { return _diNPCData[id][key]; }
-                    break;
-                case DataType.Job:
-                    if (_diJobs[id].ContainsKey(key)) { return _diJobs[id][key]; }
-                    break;
-                case DataType.Item:
-                    if (_diItemData[id].ContainsKey(key)) { return _diItemData[id][key]; }
-                    break;
-                case DataType.Light:
-                    if (_diLightData[id].ContainsKey(key)) { return _diLightData[id][key]; }
-                    break;
-                case DataType.Monster:
-                    if (_diMonsterData[id].ContainsKey(key)) { return _diMonsterData[id][key]; }
-                    break;
-                case DataType.StatusEffect:
-                    if (_diStatusEffects[id].ContainsKey(key)) { return _diStatusEffects[id][key]; }
-                    break;
-                case DataType.Task:
-                    if (_diTaskData[id].ContainsKey(key)) { return _diTaskData[id][key]; }
-                    break;
-                case DataType.Upgrade:
-                    if (_diUpgradeData[id].ContainsKey(key)) { return _diUpgradeData[id][key]; }
-                    break;
-                case DataType.WorldObject:
-                    if (_diWorldObjects[id].ContainsKey(key)) { return _diWorldObjects[id][key]; }
-                    break;
+                switch (type)
+                {
+                    case DataType.Action:
+                        if (_diActions[id].ContainsKey(key)) { return _diActions[id][key]; }
+                        break;
+                    case DataType.Actor:
+                        if (_diActorData[id].ContainsKey(key)) { return _diActorData[id][key]; }
+                        break;
+                    case DataType.Job:
+                        if (_diJobs[id].ContainsKey(key)) { return _diJobs[id][key]; }
+                        break;
+                    case DataType.Item:
+                        if (_diItemData[id].ContainsKey(key)) { return _diItemData[id][key]; }
+                        break;
+                    case DataType.Light:
+                        if (_diLightData[id].ContainsKey(key)) { return _diLightData[id][key]; }
+                        break;
+                    case DataType.Monster:
+                        if (_diMonsterData[id].ContainsKey(key)) { return _diMonsterData[id][key]; }
+                        break;
+                    case DataType.StatusEffect:
+                        if (_diStatusEffects[id].ContainsKey(key)) { return _diStatusEffects[id][key]; }
+                        break;
+                    case DataType.Task:
+                        if (_diTaskData[id].ContainsKey(key)) { return _diTaskData[id][key]; }
+                        break;
+                    case DataType.Upgrade:
+                        if (_diUpgradeData[id].ContainsKey(key)) { return _diUpgradeData[id][key]; }
+                        break;
+                    case DataType.WorldObject:
+                        if (_diWorldObjects[id].ContainsKey(key)) { return _diWorldObjects[id][key]; }
+                        break;
+                }
             }
 
             return string.Empty;
@@ -391,8 +396,8 @@ namespace RiverHollow.Game_Managers
                 case DataType.Action:
                     if (_diActions[id].ContainsKey(key)) { return _diActions[id].ContainsKey(key); }
                     break;
-                case DataType.NPC:
-                    if (_diNPCData[id].ContainsKey(key)) { return _diNPCData[id].ContainsKey(key); }
+                case DataType.Actor:
+                    if (_diActorData[id].ContainsKey(key)) { return _diActorData[id].ContainsKey(key); }
                     break;
                 case DataType.Job:
                     if (_diJobs[id].ContainsKey(key)) { return _diJobs[id].ContainsKey(key); }
@@ -676,7 +681,7 @@ namespace RiverHollow.Game_Managers
         {
             if (id != -1 && _diItemData.ContainsKey(id))
             {
-                Dictionary<string, string> diData = _diNPCData[id];
+                Dictionary<string, string> diData = _diActorData[id];
                 switch (Util.ParseEnum<ActorTypeEnum>(diData["Type"]))
                 {
                     case ActorTypeEnum.Child:
@@ -686,8 +691,8 @@ namespace RiverHollow.Game_Managers
                     case ActorTypeEnum.Mob:
                         switch (Util.ParseEnum<MobTypeEnum>(diData["Subtype"]))
                         {
-                            case MobTypeEnum.Flier:
-                                return new Flier(id, diData);
+                            case MobTypeEnum.Flyer:
+                                return new Flyer(id, diData);
                             case MobTypeEnum.Crawler:
                                 return new Crawler(id, diData);
                         }
@@ -696,6 +701,8 @@ namespace RiverHollow.Game_Managers
                         return new Mount(id, diData);
                     case ActorTypeEnum.Pet:
                         return new Pet(id, diData);
+                    case ActorTypeEnum.Projectile:
+                        return new Projectile(id, diData);
                     case ActorTypeEnum.Animal:
                         return new Animal(id, diData);
                     case ActorTypeEnum.ShippingGremlin:
@@ -745,6 +752,15 @@ namespace RiverHollow.Game_Managers
                 rv = null;
             }
             return (Pet)rv;
+        }
+        public static Projectile CreateProjectile(int id)
+        {
+            Actor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(ActorTypeEnum.Projectile))
+            {
+                rv = null;
+            }
+            return (Projectile)rv;
         }
         public static Traveler CreateTraveler(int id)
         {

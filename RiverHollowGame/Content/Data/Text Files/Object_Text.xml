@@ -3,15 +3,15 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Task_0</Key>
-      <Value>[Name:Build a $WorldObject_112$][Description:$NPC_16$ want you to build a $WorldObject_112$]</Value>
+      <Value>[Name:Build a $WorldObject_112$][Description:$Actor_16$ want you to build a $WorldObject_112$]</Value>
     </Item>
     <Item>
       <Key>Task_1</Key>
-      <Value>[Name:$NPC_43$ needs an ankle][Description:$NPC_43$ needs you to get her some $Item_162$ for her twisted ankle.]</Value>
+      <Value>[Name:$Actor_43$ needs an ankle][Description:$Actor_43$ needs you to get her some $Item_162$ for her twisted ankle.]</Value>
     </Item>
     <Item>
       <Key>Task_2</Key>
-      <Value>[Name:$WorldObject_18$ Now][Description:$NPC_43$ is offering her services to the town, all you need to do is build her a place to settle downand sell her wares.]</Value>
+      <Value>[Name:$WorldObject_18$ Now][Description:$Actor_43$ is offering her services to the town, all you need to do is build her a place to settle downand sell her wares.]</Value>
     </Item>
     <Item>
       <Key>Task_3</Key>
@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>Task_4</Key>
-      <Value>[Name:$NPC_12$'s Home]</Value>
+      <Value>[Name:$Actor_12$'s Home]</Value>
     </Item>
     <Item>
       <Key>Task_5</Key>
@@ -42,204 +42,212 @@
       <Value>[Name:Shortcut to Mushrooms]</Value>
     </Item>
     <Item>
-      <Key>NPC_0</Key>
+      <Key>Actor_0</Key>
       <Value>[Name:Amanda]</Value>
     </Item>
     <Item>
-      <Key>NPC_1</Key>
+      <Key>Actor_1</Key>
       <Value>[Name:Ander]</Value>
     </Item>
     <Item>
-      <Key>NPC_2</Key>
+      <Key>Actor_2</Key>
       <Value>[Name:Damien]</Value>
     </Item>
     <Item>
-      <Key>NPC_3</Key>
+      <Key>Actor_3</Key>
       <Value>[Name:Daria]</Value>
     </Item>
     <Item>
-      <Key>NPC_4</Key>
+      <Key>Actor_4</Key>
       <Value>[Name:Dwarf]</Value>
     </Item>
     <Item>
-      <Key>NPC_5</Key>
+      <Key>Actor_5</Key>
       <Value>[Name:Eldra]</Value>
     </Item>
     <Item>
-      <Key>NPC_6</Key>
+      <Key>Actor_6</Key>
       <Value>[Name:Emmanuel]</Value>
     </Item>
     <Item>
-      <Key>NPC_7</Key>
+      <Key>Actor_7</Key>
       <Value>[Name:Eric]</Value>
     </Item>
     <Item>
-      <Key>NPC_8</Key>
+      <Key>Actor_8</Key>
       <Value>[Name:Fran]</Value>
     </Item>
     <Item>
-      <Key>NPC_9</Key>
+      <Key>Actor_9</Key>
       <Value>[Name:Gail]</Value>
     </Item>
     <Item>
-      <Key>NPC_10</Key>
+      <Key>Actor_10</Key>
       <Value>[Name:Griselda]</Value>
     </Item>
     <Item>
-      <Key>NPC_11</Key>
+      <Key>Actor_11</Key>
       <Value>[Name:Harrison]</Value>
     </Item>
     <Item>
-      <Key>NPC_12</Key>
+      <Key>Actor_12</Key>
       <Value>[Name:Helen]</Value>
     </Item>
     <Item>
-      <Key>NPC_13</Key>
+      <Key>Actor_13</Key>
       <Value>[Name:Isabelle]</Value>
     </Item>
     <Item>
-      <Key>NPC_14</Key>
+      <Key>Actor_14</Key>
       <Value>[Name:Jase]</Value>
     </Item>
     <Item>
-      <Key>NPC_15</Key>
+      <Key>Actor_15</Key>
       <Value>[Name:June]</Value>
     </Item>
     <Item>
-      <Key>NPC_16</Key>
+      <Key>Actor_16</Key>
       <Value>[Name:Kyle]</Value>
     </Item>
     <Item>
-      <Key>NPC_17</Key>
+      <Key>Actor_17</Key>
       <Value>[Name:Leanne]</Value>
     </Item>
     <Item>
-      <Key>NPC_18</Key>
+      <Key>Actor_18</Key>
       <Value>[Name:Lucia]</Value>
     </Item>
     <Item>
-      <Key>NPC_19</Key>
+      <Key>Actor_19</Key>
       <Value>[Name:Manor Spirit]</Value>
     </Item>
     <Item>
-      <Key>NPC_20</Key>
+      <Key>Actor_20</Key>
       <Value>[Name:Mark]</Value>
     </Item>
     <Item>
-      <Key>NPC_21</Key>
+      <Key>Actor_21</Key>
       <Value>[Name:Michael]</Value>
     </Item>
     <Item>
-      <Key>NPC_22</Key>
+      <Key>Actor_22</Key>
       <Value>[Name:Nevar]</Value>
     </Item>
     <Item>
-      <Key>NPC_23</Key>
+      <Key>Actor_23</Key>
       <Value>[Name:Octavia]</Value>
     </Item>
     <Item>
-      <Key>NPC_24</Key>
+      <Key>Actor_24</Key>
       <Value>[Name:Penelope]</Value>
     </Item>
     <Item>
-      <Key>NPC_25</Key>
+      <Key>Actor_25</Key>
       <Value>[Name:Sammy]</Value>
     </Item>
     <Item>
-      <Key>NPC_26</Key>
+      <Key>Actor_26</Key>
       <Value>[Name:Yulia]</Value>
     </Item>
     <Item>
-      <Key>NPC_27</Key>
+      <Key>Actor_27</Key>
       <Value>[Name:Felicia]</Value>
     </Item>
     <Item>
-      <Key>NPC_28</Key>
+      <Key>Actor_28</Key>
       <Value>[Name:Henry]</Value>
     </Item>
     <Item>
-      <Key>NPC_29</Key>
+      <Key>Actor_29</Key>
       <Value>[Name:Shipping Gremlin]</Value>
     </Item>
     <Item>
-      <Key>NPC_30</Key>
+      <Key>Actor_30</Key>
       <Value>[Name:Slime Pet]</Value>
     </Item>
     <Item>
-      <Key>NPC_31</Key>
+      <Key>Actor_31</Key>
       <Value>[Name:Slime Mount]</Value>
     </Item>
     <Item>
-      <Key>NPC_32</Key>
+      <Key>Actor_32</Key>
       <Value>[Name:Batty]</Value>
     </Item>
     <Item>
-      <Key>NPC_33</Key>
+      <Key>Actor_33</Key>
       <Value>[Name:Mossy_Slime]</Value>
     </Item>
     <Item>
-      <Key>NPC_34</Key>
+      <Key>Actor_34</Key>
       <Value>[Name:Abeline]</Value>
     </Item>
     <Item>
-      <Key>NPC_35</Key>
+      <Key>Actor_35</Key>
       <Value>[Name:Erron]</Value>
     </Item>
     <Item>
-      <Key>NPC_36</Key>
+      <Key>Actor_36</Key>
       <Value>[Name:Magda]</Value>
     </Item>
     <Item>
-      <Key>NPC_37</Key>
+      <Key>Actor_37</Key>
       <Value>[Name:Sybil]</Value>
     </Item>
     <Item>
-      <Key>NPC_38</Key>
+      <Key>Actor_38</Key>
       <Value>[Name:Wagren]</Value>
     </Item>
     <Item>
-      <Key>NPC_39</Key>
+      <Key>Actor_39</Key>
       <Value>[Name:Birb_1]</Value>
     </Item>
     <Item>
-      <Key>NPC_40</Key>
+      <Key>Actor_40</Key>
       <Value>[Name:Squirrel]</Value>
     </Item>
     <Item>
-      <Key>NPC_41</Key>
+      <Key>Actor_41</Key>
       <Value>[Name:Child_1]</Value>
     </Item>
     <Item>
-      <Key>NPC_42</Key>
+      <Key>Actor_42</Key>
       <Value>[Name:Kevin]</Value>
     </Item>
     <Item>
-      <Key>NPC_43</Key>
+      <Key>Actor_43</Key>
       <Value>[Name:Ulm]</Value>
     </Item>
     <Item>
-      <Key>NPC_44</Key>
+      <Key>Actor_44</Key>
       <Value>[Name:Chicken]</Value>
     </Item>
     <Item>
-      <Key>NPC_45</Key>
+      <Key>Actor_45</Key>
       <Value>[Name:Human Traveller]</Value>
     </Item>
     <Item>
-      <Key>NPC_46</Key>
+      <Key>Actor_46</Key>
       <Value>[Name:Human Traveller2]</Value>
     </Item>
     <Item>
-      <Key>NPC_47</Key>
+      <Key>Actor_47</Key>
       <Value>[Name:adv1]</Value>
     </Item>
     <Item>
-      <Key>NPC_48</Key>
+      <Key>Actor_48</Key>
       <Value>[Name:adv2]</Value>
     </Item>
     <Item>
-      <Key>NPC_49</Key>
+      <Key>Actor_49</Key>
       <Value>[Name:neutral]</Value>
+    </Item>
+    <Item>
+      <Key>Actor_50</Key>
+      <Value>[Name:Spitter]</Value>
+    </Item>
+    <Item>
+      <Key>Actor_51</Key>
+      <Value>[Name:Spitter Seed]</Value>
     </Item>
     <Item>
       <Key>StatusEffect_0</Key>
@@ -459,11 +467,11 @@
     </Item>
     <Item>
       <Key>Item_8</Key>
-      <Value>[Name:Song Bottle][Description:An enchanted bottle holding a magical song.]</Value>
+      <Value>[Name:Green Slime][Description:An enchanted bottle holding a magical song.]</Value>
     </Item>
     <Item>
       <Key>Item_9</Key>
-      <Value>[Name:Poppet][Description:A doll imbued with an animate spirit]</Value>
+      <Value>[Name:Living Seed][Description:A doll imbued with an animate spirit]</Value>
     </Item>
     <Item>
       <Key>Item_10</Key>
@@ -1239,7 +1247,7 @@
     </Item>
     <Item>
       <Key>WorldObject_5</Key>
-      <Value>[Name:$NPC_12$s House]</Value>
+      <Value>[Name:$Actor_12$s House]</Value>
     </Item>
     <Item>
       <Key>WorldObject_6</Key>
@@ -1291,7 +1299,7 @@
     </Item>
     <Item>
       <Key>WorldObject_18</Key>
-      <Value>[Name:$NPC_43$'s Apothecary]</Value>
+      <Value>[Name:$Actor_43$'s Apothecary]</Value>
     </Item>
     <Item>
       <Key>WorldObject_19</Key>

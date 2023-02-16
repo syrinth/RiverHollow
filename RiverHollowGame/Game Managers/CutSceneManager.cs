@@ -483,7 +483,7 @@ namespace RiverHollow.Game_Managers
                         Actor act = null;
                         if (TownManager.DIVillagers.ContainsKey(int.Parse(friendData[0]))) {
                             int npcID = int.Parse(friendData[0]);
-                            act = new Villager(npcID, DataManager.NPCData[npcID]);
+                            act = new Villager(npcID, DataManager.ActorData[npcID]);
                         }
                         else { act = DataManager.CreateNPCByIndex(int.Parse(friendData[0])); }
                         act.CurrentMapName = _cutsceneMap.Name;

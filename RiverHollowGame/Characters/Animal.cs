@@ -11,9 +11,9 @@ namespace RiverHollow.Characters
 {
     public class Animal : TalkingActor
     {
-        public int ItemID => DataManager.GetIntByIDKey(ID, "ItemID", DataType.NPC);
+        public int ItemID => DataManager.GetIntByIDKey(ID, "ItemID", DataType.Actor);
 
-        public int HouseID => DataManager.GetIntByIDKey(ID, "ObjectID", DataType.NPC);
+        public int HouseID => DataManager.GetIntByIDKey(ID, "ObjectID", DataType.Actor);
 
         public Animal(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {

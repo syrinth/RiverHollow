@@ -2,7 +2,7 @@
 {
     static class Constants
     {
-        public const bool DRAW_COLLISION = true;
+        public const bool DRAW_COLLISION = false;
         public const bool DRAW_HITBOX = false;
 
         public const string TOWN_MAP_NAME = "mapTown";
@@ -16,6 +16,10 @@
         public const float MOB_STUN_TIME = 5;
         public const float WANDER_COUNTDOWN = 2.5f;
         public const float PUSH_COOLDOWN = 0.1f;
+
+        public const int FLIER_MAX_DIST = 6 * TILE_SIZE;
+        public const int FLIER_MIN_DIST = 3 * TILE_SIZE;
+        public const float FLIER_RATE_OF_CHANGE = 0.4f;
 
         public const float GUI_TEXT_DELAY = 0.06f;
         public const float GUI_TEXT_MARKER_FLASH_RATE = 0.5f;

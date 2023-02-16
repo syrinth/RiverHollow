@@ -11,7 +11,7 @@ namespace RiverHollow.Characters
 {
     public class Pet : TalkingActor
     {
-        private int GatherZoneID => DataManager.GetIntByIDKey(ID, "ObjectID", DataType.NPC);
+        private int GatherZoneID => DataManager.GetIntByIDKey(ID, "ObjectID", DataType.Actor);
 
         public Pet(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {

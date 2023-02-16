@@ -44,15 +44,15 @@ namespace Database_Editor
             InitComboBox<EditableNPCDataEnum>(cbEditableCharData, false);
             InitComboBox<StatusTypeEnum>(cbStatusEffect);
 
-            cbNPCType.Items.Clear();
-            InitComboBox<ActorTypeEnum>(cbNPCType, true);
+            cbActorType.Items.Clear();
+            InitComboBox<ActorTypeEnum>(cbActorType, true);
 
             _diTabIndices = new Dictionary<string, int>()
             {
                 { "PreviousTab", 0 },
                 { "Items", 0 },
                 { "WorldObjects", 0 },
-                { "NPCs", 0 },
+                { "Actors", 0 },
                 { "Tasks", 0 },
                 { "Cutscenes", 0},
                 { "Mobs", 0},
@@ -110,7 +110,7 @@ namespace Database_Editor
 
             _diBasicXML = new Dictionary<string, List<XMLData>>();
             LoadXMLDictionary(TASK_XML_FILE, TASK_REF_TAGS, "", ref _diBasicXML);
-            LoadXMLDictionary(NPC_XML_FILE, NPC_REF_TAGS, TAGS_FOR_NPCS, ref _diBasicXML);
+            LoadXMLDictionary(ACTOR_XML_FILE, ACTOR_REF_TAGS, TAGS_FOR_ACTORS, ref _diBasicXML);
             LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_REF_TAG, "", ref _diBasicXML);
             LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", TAGS_FOR_STATUS_EFFECTS, ref _diBasicXML);
             LoadXMLDictionary(LIGHTS_XML_FILE, "", TAGS_FOR_LIGHTS, ref _diBasicXML);
@@ -139,7 +139,7 @@ namespace Database_Editor
                 [XMLTypeEnum.StatusEffect] = new XMLCollection(XMLTypeEnum.StatusEffect, "", TAGS_FOR_STATUS_EFFECTS, ""),
                 [XMLTypeEnum.Dungeon] = new XMLCollection(XMLTypeEnum.Dungeon, DUNGEON_REF_TAGS, TAGS_FOR_DUNGEONS, ""),
                 [XMLTypeEnum.Item] = new XMLCollection(XMLTypeEnum.Item, ITEM_REF_TAGS, TAGS_FOR_ITEMS, DEFAULT_ITEM_TAGS),
-                [XMLTypeEnum.NPC] = new XMLCollection(XMLTypeEnum.NPC, NPC_REF_TAGS, "", DEFAULT_NPC_TAGS),
+                [XMLTypeEnum.Actor] = new XMLCollection(XMLTypeEnum.Actor, ACTOR_REF_TAGS, "", DEFAULT_ACTOR_TAGS),
                 [XMLTypeEnum.Shop] = new XMLCollection(XMLTypeEnum.Shop, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA, DEFAULT_SHOP_TAGS),
                 [XMLTypeEnum.Light] = new XMLCollection(XMLTypeEnum.Light, "", TAGS_FOR_LIGHTS, DEFAULT_LIGHT_TAGS),
                 [XMLTypeEnum.Upgrade] = new XMLCollection(XMLTypeEnum.Upgrade, "", TAGS_FOR_UPGRADES, DEFAULT_UPGRADE_TAGS),
@@ -573,34 +573,34 @@ namespace Database_Editor
             }
         }
 
-        private void SetNPCSubtype()
+        private void SetActorSubtype()
         {
-            cbNPCSubtype.Items.Clear();
-            ActorTypeEnum itemType = Util.ParseEnum<ActorTypeEnum>(cbNPCType.SelectedItem.ToString().Split(':')[1]);
+            cbActorSubtype.Items.Clear();
+            ActorTypeEnum itemType = Util.ParseEnum<ActorTypeEnum>(cbActorType.SelectedItem.ToString().Split(':')[1]);
             switch (itemType)
             {
                 case ActorTypeEnum.Mob:
-                    cbNPCSubtype.Visible = true;
+                    cbActorSubtype.Visible = true;
                     foreach (MobTypeEnum e in Enum.GetValues(typeof(MobTypeEnum)))
                     {
-                        cbNPCSubtype.Items.Add("Subtype:" + e.ToString());
+                        cbActorSubtype.Items.Add("Subtype:" + e.ToString());
                     }
                     break;
                 case ActorTypeEnum.Traveler:
-                    cbNPCSubtype.Visible = true;
+                    cbActorSubtype.Visible = true;
                     foreach (TravelerGroupEnum e in Enum.GetValues(typeof(TravelerGroupEnum)))
                     {
-                        cbNPCSubtype.Items.Add("Subtype:" + e.ToString());
+                        cbActorSubtype.Items.Add("Subtype:" + e.ToString());
                     }
                     break;
                 default:
-                    cbNPCSubtype.Visible = false;
+                    cbActorSubtype.Visible = false;
                     break;
             }
 
-            if (cbNPCSubtype.Visible)
+            if (cbActorSubtype.Visible)
             {
-                cbNPCSubtype.SelectedIndex = 0;
+                cbActorSubtype.SelectedIndex = 0;
             }
         }
 
@@ -609,7 +609,7 @@ namespace Database_Editor
         {
             int rv = 0;
 
-            if (tabCtl.SelectedTab == tabCtl.TabPages["tabNPC"]) { rv = _diBasicXML[NPC_XML_FILE].Count; }
+            if (tabCtl.SelectedTab == tabCtl.TabPages["tabActor"]) { rv = _diBasicXML[ACTOR_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscene"]) { rv = _diBasicXML[CUTSCENE_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeon"]) { rv = _diBasicXML[DUNGEON_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItem"]) { rv = _diBasicXML[ITEM_DATA_XML_FILE].Count; }
@@ -639,7 +639,7 @@ namespace Database_Editor
             XMLTypeEnum rv = XMLTypeEnum.None;
 
             if (fileName == TASK_XML_FILE) { rv = XMLTypeEnum.Task; }
-            else if (fileName == NPC_XML_FILE) { rv = XMLTypeEnum.NPC; }
+            else if (fileName == ACTOR_XML_FILE) { rv = XMLTypeEnum.Actor; }
             else if (fileName == WORLD_OBJECTS_DATA_XML_FILE) { rv = XMLTypeEnum.WorldObject; }
             else if (fileName == STATUS_EFFECTS_XML_FILE) { rv = XMLTypeEnum.StatusEffect; }
             else if (fileName == LIGHTS_XML_FILE) { rv = XMLTypeEnum.Light; }
@@ -744,7 +744,7 @@ namespace Database_Editor
         {
             LoadItemDataGrid();
             LoadWorldObjectDataGrid();
-            LoadNPCDataGrid();
+            LoadActorDataGrid();
             LoadTaskDataGrid();
             LoadStatusEffectDataGrid();
             LoadLightDataGrid();
@@ -784,9 +784,9 @@ namespace Database_Editor
         {
             LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.WorldObject], _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE], selectedIndex == -1 ? _diTabIndices["WorldObjects"] : selectedIndex, filter);
         }
-        private void LoadNPCDataGrid(string filter = "All", int selectedIndex = -1)
+        private void LoadActorDataGrid(string filter = "All", int selectedIndex = -1)
         {
-            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.NPC], _diBasicXML[NPC_XML_FILE], selectedIndex == -1 ? _diTabIndices["NPCs"] : selectedIndex, filter);
+            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.Actor], _diBasicXML[ACTOR_XML_FILE], selectedIndex == -1 ? _diTabIndices["Actors"] : selectedIndex, filter);
         }
         private void LoadTaskDataGrid()
         {
@@ -861,7 +861,7 @@ namespace Database_Editor
         }
         private void btnDialogue_Click(object sender, EventArgs e)
         {
-            string npcKey = @"\NPC_" + _diBasicXML[NPC_XML_FILE][_diTabIndices["NPCs"]].GetTagValue("Key") + ".xml";
+            string npcKey = @"\NPC_" + _diBasicXML[ACTOR_XML_FILE][_diTabIndices["Actors"]].GetTagValue("Key") + ".xml";
             FormCharExtraData frm;
             if (cbEditableCharData.SelectedItem.ToString() == "Dialogue")
             {
@@ -911,9 +911,9 @@ namespace Database_Editor
             SetItemSubtype();
         }
 
-        private void cbNPCType_SelectedIndexChanged(object sender, EventArgs e)
+        private void cbActorType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SetNPCSubtype();
+            SetActorSubtype();
         }
 
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -945,7 +945,7 @@ namespace Database_Editor
             AutoSave();
 
             _filter = "All";
-            if (tabCtl.SelectedTab == tabCtl.TabPages["tabNPCs"]) { dgvNPCs.Focus(); }
+            if (tabCtl.SelectedTab == tabCtl.TabPages["tabNPCs"]) { dgvActors.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscenes"]) { dgvCutscenes.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeons"]) { dgvDungeons.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItems"]) { dgvItems.Focus(); }
@@ -1009,20 +1009,20 @@ namespace Database_Editor
 
             //    ChangeIDs(ref itemDataList, ref worldObjectDataList);
 
-            //    //Strip the special case NPC from the Item files
+            //    //Strip the special case character from the Item files
             //    foreach (XMLData data in _liItems)
             //    {
             //        if (data != null) { data.StripSpecialCharacter(); }
             //    }
 
-            //    //Strip the special case NPC from the WorldObject files
+            //    //Strip the special case character from the WorldObject files
             //    foreach (XMLData data in _liWorldObjects)
             //    {
             //        data.StripSpecialCharacter();
             //    }
 
             //    //Sort the following Dictionaries by name
-            //    List<XMLData> listToSort = _diBasicXML[NPC_XML_FILE];
+            //    List<XMLData> listToSort = _diBasicXML[ACTOR_XML_FILE];
             //    SortDictionaryByType(ref listToSort);
             //}
             //else
@@ -1095,7 +1095,7 @@ namespace Database_Editor
         {
             TabPage prevPage = tabCtl.TabPages[_diTabIndices["PreviousTab"]];
 
-            if (prevPage == tabCtl.TabPages["tabNPCs"]) { SaveNPCInfo(); }      
+            if (prevPage == tabCtl.TabPages["tabNPCs"]) { SaveActorInfo(); }      
             else if (prevPage == tabCtl.TabPages["tabCutscenes"]) { SaveCutsceneInfo(); }
             else if (prevPage == tabCtl.TabPages["tabDungeons"]) { SaveDungeonInfo(); }            
             else if (prevPage == tabCtl.TabPages["tabItems"]) { SaveItemInfo(); }
@@ -1269,14 +1269,14 @@ namespace Database_Editor
             }
             else if (dgv == dgvTasks) { AddContextMenuItem("Add New", AddNewTask, false); }
             else if (dgv == dgvCutscenes) { AddContextMenuItem("Add New", AddNewCutscene, false); }
-            else if (dgv == dgvNPCs) {
-                AddContextMenuItem("Add New", AddNewNPC, true);
-                AddContextMenuItem("All", dgvNPCsContextMenuClick, false);
+            else if (dgv == dgvActors) {
+                AddContextMenuItem("Add New", AddNewActor, true);
+                AddContextMenuItem("All", dgActorsContextMenuClick, false);
                 foreach (string s in Enum.GetNames(typeof(ActorTypeEnum)))
                 {
                     if (!s.Equals("Actor"))
                     {
-                        AddContextMenuItem(s, dgvNPCsContextMenuClick, false);
+                        AddContextMenuItem(s, dgActorsContextMenuClick, false);
                     }
                 }
             }
@@ -1313,11 +1313,11 @@ namespace Database_Editor
             LoadWorldObjectInfo();
         }
 
-        private void dgvNPCsContextMenuClick(object sender, EventArgs e)
+        private void dgActorsContextMenuClick(object sender, EventArgs e)
         {
-            _diTabIndices["NPCs"] = 0;
-            LoadNPCDataGrid(((ToolStripMenuItem)sender).Text, 0);
-            LoadNPCInfo();
+            _diTabIndices["Actors"] = 0;
+            LoadActorDataGrid(((ToolStripMenuItem)sender).Text, 0);
+            LoadActorInfo();
         }
         #endregion
 
@@ -1410,10 +1410,10 @@ namespace Database_Editor
             tbCutsceneDetails.Clear();
             AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Cutscene]);
         }
-        private void AddNewNPC(object sender, EventArgs e)
+        private void AddNewActor(object sender, EventArgs e)
         {
-            SaveNPCInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.NPC]);
+            SaveActorInfo();
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Actor]);
         }
         private void AddNewLight(object sender, EventArgs e)
         {
@@ -1442,7 +1442,7 @@ namespace Database_Editor
         {
             LoadItemInfo();
             LoadWorldObjectInfo();
-            LoadNPCInfo();
+            LoadActorInfo();
             LoadTaskInfo();
             LoadCutsceneInfo();
             LoadShopInfo();
@@ -1504,13 +1504,13 @@ namespace Database_Editor
 
             LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.WorldObject]);
         }
-        private void LoadNPCInfo()
+        private void LoadActorInfo()
         {
-            DataGridViewRow r = dgvNPCs.SelectedRows[0];
+            DataGridViewRow r = dgvActors.SelectedRows[0];
             XMLData data = null;
-            if (_filter == "All") { data = _diBasicXML[NPC_XML_FILE][_diTabIndices["NPCs"]]; }
-            else { data = _diBasicXML[NPC_XML_FILE].FindAll(x => x.GetTagValue("Type").ToString().Equals(_filter))[r.Index]; }
-            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.NPC]);
+            if (_filter == "All") { data = _diBasicXML[ACTOR_XML_FILE][_diTabIndices["Actors"]]; }
+            else { data = _diBasicXML[ACTOR_XML_FILE].FindAll(x => x.GetTagValue("Type").ToString().Equals(_filter))[r.Index]; }
+            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Actor]);
         }
         private void LoadTaskInfo()
         {
@@ -1631,9 +1631,9 @@ namespace Database_Editor
         {
             SaveXMLDataInfo(_diBasicXML[WORLD_OBJECTS_DATA_XML_FILE], _diTabCollections[XMLTypeEnum.WorldObject]);
         }
-        private void SaveNPCInfo()
+        private void SaveActorInfo()
         {
-            SaveXMLDataInfo(_diBasicXML[NPC_XML_FILE], _diTabCollections[XMLTypeEnum.NPC]);
+            SaveXMLDataInfo(_diBasicXML[ACTOR_XML_FILE], _diTabCollections[XMLTypeEnum.Actor]);
         }
         private void SaveTaskInfo()
         {
@@ -1700,7 +1700,7 @@ namespace Database_Editor
             {
                 if (sender == dgvDungeons) { GenericCellClick(e, "Dungeons", LoadDungeonInfo, SaveDungeonInfo); }
                 else if (sender == dgvLights) { GenericCellClick(e, "Lights", LoadLightInfo, SaveLightInfo); }
-                else if (sender == dgvNPCs) { GenericCellClick(e, "NPCs", LoadNPCInfo, SaveNPCInfo); }
+                else if (sender == dgvActors) { GenericCellClick(e, "Actors", LoadActorInfo, SaveActorInfo); }
                 else if (sender == dgvShops) { GenericCellClick(e, "Shops", LoadShopInfo, SaveShopInfo); }
                 else if (sender == dgvStatusEffects) { GenericCellClick(e, "StatusEffects", LoadStatusEffectInfo, SaveStatusEffectInfo); }
                 else if (sender == dgvTasks) { GenericCellClick(e, "Tasks", LoadTaskInfo, SaveTaskInfo); }
@@ -1731,7 +1731,7 @@ namespace Database_Editor
         {
             if (sender == btnDungeonCancel) { GenericCancel(_diBasicXML[DUNGEON_XML_FILE], "Dungeon", dgvDungeons, LoadDungeonInfo); }
             else if (sender == btnLightCancel) { GenericCancel(_diBasicXML[LIGHTS_XML_FILE], "Light", dgvLights, LoadLightInfo); }
-            else if (sender == btnNPCCancel) { GenericCancel(_diBasicXML[NPC_XML_FILE], "NPCs", dgvNPCs, LoadNPCInfo); }
+            else if (sender == btnActorCancel) { GenericCancel(_diBasicXML[ACTOR_XML_FILE], "Actors", dgvActors, LoadActorInfo); }
             else if (sender == btnShopCancel) { GenericCancel(_diBasicXML[SHOPS_XML_FILE], "Shops", dgvShops, LoadShopInfo); }
             else if (sender == btnStatusEffectCancel) { GenericCancel(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", dgvStatusEffects, LoadStatusEffectInfo); }
             else if (sender == btnTaskCancel) { GenericCancel(_diBasicXML[TASK_XML_FILE], "Tasks", dgvTasks, LoadTaskInfo); }

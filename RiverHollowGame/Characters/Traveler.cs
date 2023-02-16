@@ -19,37 +19,37 @@ namespace RiverHollow.Characters
 
         public int BuildingID()
         {
-            return DataManager.GetIntByIDKey(ID, "Building", DataType.NPC);
+            return DataManager.GetIntByIDKey(ID, "Building", DataType.Actor);
         }
 
         private int NPC()
         {
-            return DataManager.GetIntByIDKey(ID, "NPC", DataType.NPC);
+            return DataManager.GetIntByIDKey(ID, "NPC", DataType.Actor);
         }
 
         private int Value()
         {
-            return DataManager.GetIntByIDKey(ID, "Value", DataType.NPC);
+            return DataManager.GetIntByIDKey(ID, "Value", DataType.Actor);
         }
 
         public bool Rare()
         {
-            return DataManager.GetBoolByIDKey(ID, "Rare", DataType.NPC);
+            return DataManager.GetBoolByIDKey(ID, "Rare", DataType.Actor);
         }
 
         public TravelerGroupEnum Group()
         {
-            return DataManager.GetEnumByIDKey<TravelerGroupEnum>(ID, "Subtype", DataType.NPC);
+            return DataManager.GetEnumByIDKey<TravelerGroupEnum>(ID, "Subtype", DataType.Actor);
         }
 
         public FoodTypeEnum FavoriteFood()
         {
-            return DataManager.GetEnumByIDKey<FoodTypeEnum>(ID, "FavFood", DataType.NPC);
+            return DataManager.GetEnumByIDKey<FoodTypeEnum>(ID, "FavFood", DataType.Actor);
         }
 
         public FoodTypeEnum DislikedFood()
         {
-            return DataManager.GetEnumByIDKey<FoodTypeEnum>(ID, "Disliked", DataType.NPC);
+            return DataManager.GetEnumByIDKey<FoodTypeEnum>(ID, "Disliked", DataType.Actor);
         }
 
         public Traveler(int id, Dictionary<string, string> stringData) : base(id, stringData)

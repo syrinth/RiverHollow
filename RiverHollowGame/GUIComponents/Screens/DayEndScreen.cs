@@ -100,7 +100,7 @@ namespace RiverHollow.GUIComponents.Screens
                         {
                             if (npc.LivesInTown)
                             {
-                                Villager copy = new Villager(npc.ID, DataManager.NPCData[npc.ID]);
+                                Villager copy = new Villager(npc.ID, DataManager.ActorData[npc.ID]);
                                 copy.Activate(false);
                                 copy.BodySprite.SetScale(CurrentScale);
                                 copy.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);

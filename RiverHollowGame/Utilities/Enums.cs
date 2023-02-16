@@ -2,7 +2,7 @@
 {
     public static class Enums
     {
-        public enum DataType { Action, NPC, Job, Item, Light, Monster, StatusEffect, Task, WorldObject, Upgrade };
+        public enum DataType { Action, Actor, Job, Item, Light, Monster, StatusEffect, Task, WorldObject, Upgrade };
 
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, Sell, Propose, Date, EndDay, GoToNight, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Bed };
@@ -41,8 +41,8 @@
         public enum ActorStateEnum { Climb, Grab, Swim, Walk };
         public enum WeightEnum { Light, Medium, Heavy, Immovable};
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
-        public enum ActorTypeEnum { Animal, Child, Critter, Merchant, Mob, Mount, Pet, ShippingGremlin, Spirit, TalkingActor, Traveler, Villager };
-        public enum MobTypeEnum { Crawler, Flier };
+        public enum ActorTypeEnum { Animal, Child, Critter, Merchant, Mob, Mount, Pet, Projectile, ShippingGremlin, Spirit, TalkingActor, Traveler, Villager };
+        public enum MobTypeEnum { Crawler, Flyer };
         public enum TravelerGroupEnum { None, Adventurer, Dwarf, Goblin, Human, Noble};
         public enum PlayerColorEnum { None, yes, Hair, Skin };
         public enum StatusTypeEnum { Buff, Debuff, DoT, HoT };

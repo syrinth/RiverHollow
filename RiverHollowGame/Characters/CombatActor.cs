@@ -15,8 +15,11 @@ namespace RiverHollow.Characters
 
         protected RHTimer _flickerTimer;
         protected RHTimer _damageTimer;
+        protected RHTimer _cooldownTimer;
 
-        public virtual Rectangle HitBox => CollisionBox;
+        public virtual Rectangle HitBox => new Rectangle(BodySprite.Position.X + HitBoxOffset.X, BodySprite.Position.Y + HitBoxOffset.Y, HitBoxSize.X, HitBoxSize.Y);
+        public Point HitBoxOffset => DataManager.GetPointByIDKey(ID, "HitBoxOffset", DataType.Actor, new Point(0, Height - Constants.TILE_SIZE));
+        public Point HitBoxSize => DataManager.GetPointByIDKey(ID, "HitBoxSize", DataType.Actor, new Point(Width, Constants.TILE_SIZE));
 
         public CombatActor() : base() { }
         public CombatActor(int id, Dictionary<string, string> stringData) : base(id, stringData) { }
@@ -60,18 +63,22 @@ namespace RiverHollow.Characters
 
         protected void DamageTimerEnd()
         {
-            if (CurrentHP == 0) { PlayAnimation(AnimationEnum.KO); }
+            if (CurrentHP == 0)
+            {
+                BodySprite.SetColor(Color.White);
+                PlayAnimation(AnimationEnum.KO);
+            }
             ClearCombatStates();
         }
         
         protected virtual void CheckDamageTimers(GameTime gTime)
         {
-            if (_damageTimer != null && _damageTimer.TickDown(gTime))
+            if (RHTimer.TimerCheck(_damageTimer, gTime))
             {
                 DamageTimerEnd();
             }
 
-            if (_flickerTimer != null && _flickerTimer.TickDown(gTime))
+            if (RHTimer.TimerCheck(_flickerTimer, gTime))
             {
                 if (BodySprite.SpriteColor == Color.Red)
                 {
@@ -142,14 +149,20 @@ namespace RiverHollow.Characters
             Vector2 initial = dir;
             if (CurrentMap.CheckForCollisions(this, ref dir, ref impeded))
             {
-                MoveActor(dir);
+                MoveActor(dir, false);
             }
             if(initial != dir && CurrentHP == 0)
             {
                 ClearCombatStates();
+                BodySprite.SetColor(Color.White);
                 PlayAnimation(AnimationEnum.KO);
             }
 
+            KnockbackDecay();
+        }
+
+        protected void KnockbackDecay()
+        {
             _vKnockbackVelocity *= 0.96f;
         }
 

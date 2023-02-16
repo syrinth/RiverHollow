@@ -188,7 +188,7 @@ namespace Database_Editor.Classes
                     //The first entry is always the object, split by the '-', find it and compare
                     string[] splitData = s.Split('-');
 
-                    if (_eXMLType == XMLTypeEnum.NPC && tag == "MonsterID")
+                    if (_eXMLType == XMLTypeEnum.Actor && tag == "MonsterID")
                     {
                         for (int i = 0; i < splitData.Length; i++)
                         {
@@ -309,7 +309,7 @@ namespace Database_Editor.Classes
                     //overwriting this change.
                     string[] splitData = split[i].Split('-');
 
-                    if (_eXMLType == XMLTypeEnum.NPC && tag == "MonsterID")
+                    if (_eXMLType == XMLTypeEnum.Actor && tag == "MonsterID")
                     {
                         for (int j = 0; j < splitData.Length; j++)
                         {
