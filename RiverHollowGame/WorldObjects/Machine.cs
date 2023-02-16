@@ -173,7 +173,7 @@ namespace RiverHollow.WorldObjects
 
         public bool SufficientStamina()
         {
-            return !CraftDaily && PlayerManager.Stamina >= Constants.ACTION_COST / 2;
+            return CraftDaily || PlayerManager.Stamina >= Constants.ACTION_COST / 2;
         }
 
 

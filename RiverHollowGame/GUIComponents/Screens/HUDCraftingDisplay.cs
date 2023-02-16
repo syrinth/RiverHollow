@@ -188,7 +188,7 @@ namespace RiverHollow.GUIComponents.Screens
                 for (int i = 0; i < _arrMaking.Length; i++)
                 {
                     GUIItemBox box = _arrMaking[i];
-                    if (box.Contains(mouse) && _objMachine.CraftingSlots[i].CraftTime == 0 && InventoryManager.HasSpaceInInventory(box.BoxItem.ID, box.BoxItem.Number))
+                    if (box.Contains(mouse) && box.BoxItem != null && _objMachine.CraftingSlots[i].CraftTime == 0 && InventoryManager.HasSpaceInInventory(box.BoxItem.ID, box.BoxItem.Number))
                     {
                         _objMachine.TakeItem(i);
                         box.SetItem(null);
