@@ -45,5 +45,17 @@ namespace RiverHollow.Characters.Mobs
                 }
             }
         }
+
+        public override bool DealDamage(int value, Rectangle hitbox)
+        {
+            bool rv = base.DealDamage(value, hitbox);
+
+            if (rv && !HasHP)
+            {
+                IgnoreCollisions = false;
+            }
+
+            return rv;
+        }
     }
 }

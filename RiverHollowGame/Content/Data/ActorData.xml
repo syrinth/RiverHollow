@@ -131,11 +131,11 @@
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Mob][Subtype:Flyer][Texture:Batty][MonsterID:1|1-8|1-1-1|1-1-8-1][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12-6-8][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][Night][ItemID:56][Speed:1.8]</Value>
+      <Value>[Type:Mob][Subtype:Flyer][Texture:Batty][MonsterID:1|1-8|1-1-1|1-1-8-1][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12-6-8][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][Night][ItemID:56][Speed:1.8][Weight:Light]</Value>
     </Item>
     <Item>
       <Key>33</Key>
-      <Value>[Type:Mob][Subtype:Crawler][Texture:Mossy_Slime][MonsterID:8|8-8|8-8-9][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:8][HP:4][Damage:1][Day][Size:16-24][Speed:1]</Value>
+      <Value>[Type:Mob][Subtype:Crawler][Texture:Mossy_Slime][MonsterID:8|8-8|8-8-9][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:8][HP:4][Damage:1][Day][Size:16-24][Speed:1][Weight:Medium]</Value>
     </Item>
     <Item>
       <Key>34</Key>
@@ -203,7 +203,7 @@
     </Item>
     <Item>
       <Key>50</Key>
-      <Value>[Type:Mob][Subtype:Crawler][Texture:Spitter][MonsterID:8|8-8|8-8-9][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:9][HP:4][Damage:1][Size:16-24][Speed:1][Cooldown:1.5][Projectile:51]</Value>
+      <Value>[Type:Mob][Subtype:Crawler][Texture:Spitter][MonsterID:8|8-8|8-8-9][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:9][HP:4][Damage:1][Size:16-24][Speed:1][Cooldown:1.5][Projectile:51][Weight:Medium]</Value>
     </Item>
     <Item>
       <Key>51</Key>

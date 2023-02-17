@@ -63,8 +63,6 @@ namespace RiverHollow.Characters
         public Mount ActiveMount { get; private set; }
         public bool Mounted => ActiveMount != null;
 
-        private bool _bFlicker = false;
-
         public PlayerCharacter() : base()
         {
             HairColor = Color.Red;
@@ -266,38 +264,18 @@ namespace RiverHollow.Characters
         public override bool DealDamage(int value, Rectangle hitbox)
         {
             bool rv = base.DealDamage(value, hitbox);
-            if (rv && CurrentHP == 0)
+            if (rv && !HasHP)
             {
-                PlayAnimation(AnimationEnum.KO);
-                ClearCombatStates();
+                Kill();
             }
 
             return rv;
         }
 
-        protected override void CheckDamageTimers(GameTime gTime)
+        protected override void Flicker(bool value)
         {
-            if (_damageTimer != null)
-            {
-                if (_damageTimer.TickDown(gTime))
-                {
-                    DamageTimerEnd();
-
-                    _bFlicker = true;
-                    GetSprites().ForEach(x => x.SetColor(Color.White * (_bFlicker ? 1 : 0)));
-                }
-
-                if (_flickerTimer != null && _flickerTimer.TickDown(gTime, true))
-                {
-                    _bFlicker = !_bFlicker;
-                    GetSprites().ForEach(x => x.SetColor(Color.White * (_bFlicker ? 1 : 0)));
-                }
-            }
-            else if (_flickerTimer != null)
-            {
-                _flickerTimer = null;
-                GetSprites().ForEach(x => x.SetColor(Color.White));
-            }
+            base.Flicker(value);
+            GetSprites().ForEach(x => x.SetColor(Color.White * (_bFlicker ? 1 : 0)));
         }
 
         public override void SetMoveTo(Point v, bool update = true)

@@ -125,7 +125,8 @@ namespace RiverHollow.Game_Managers
                 MovementHelper(ref _eVertical, ref newMovement, false, Keys.W, DirectionEnum.Up, Keys.S, DirectionEnum.Down);
 
                 //Only change facing if the current Facing is not a direction we're moving in
-                if (PlayerActor.Facing != _eHorizontal && PlayerActor.Facing != _eVertical && PlayerActor.State != ActorStateEnum.Grab)
+                bool facingNewDirection = PlayerActor.Facing == _eHorizontal || PlayerActor.Facing == _eVertical;
+                if (!PlayerActor.HasKnockbackVelocity() && !facingNewDirection && PlayerActor.State != ActorStateEnum.Grab)
                 {
                     PlayerActor.DetermineFacing(newMovement.ToPoint());
                     PlayerActor.ClearBuffer();
@@ -431,7 +432,7 @@ namespace RiverHollow.Game_Managers
         public static bool Defeated()
         {
             AnimatedSprite spr = PlayerActor.GetSprites()[0];
-            return PlayerActor != null && PlayerActor.CurrentHP == 0 && spr.IsCurrentAnimation(AnimationEnum.KO) && spr.PlayedOnce;
+            return PlayerActor != null && !PlayerActor.HasHP && spr.IsCurrentAnimation(AnimationEnum.KO) && spr.PlayedOnce;
         }
         public static bool DecreaseStamina(float x)
         {

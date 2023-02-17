@@ -11,7 +11,8 @@
         public const float PLAYER_STARTING_HP = 10;
         public const int STAMINA_NAP_RECOVERY = 20;
 
-        public const float INVULN_PERIOD = 1;
+        public const float PLAYER_INVULN_PERIOD = 1;
+        public const float MOB_INVULN_PERIOD = 0.3f;
         public const float FLICKER_PERIOD = 0.08f;
         public const float MOB_STUN_TIME = 5;
         public const float WANDER_COUNTDOWN = 2.5f;

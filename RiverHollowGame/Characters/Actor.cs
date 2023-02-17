@@ -57,6 +57,7 @@ namespace RiverHollow.Characters
         #region Knockback
         protected VectorBuffer _vbMovement;
         protected Vector2 _vKnockbackVelocity;
+        protected Vector2 _vInitialKnockback;
         public Vector2 AccumulatedMovement => _vbMovement.AccumulatedMovement;
         protected float _fDecay;
         #endregion

@@ -10,9 +10,11 @@ namespace RiverHollow.Characters
 {
     public abstract class CombatActor : Actor
     {
+        public bool HasHP => CurrentHP > 0;
         public virtual float MaxHP { get; protected set; } = 2;
         public float CurrentHP { get; protected set; } = 2;
 
+        protected bool _bFlicker = false;
         protected RHTimer _flickerTimer;
         protected RHTimer _damageTimer;
         protected RHTimer _cooldownTimer;
@@ -47,15 +49,18 @@ namespace RiverHollow.Characters
         {
             bool rv = false;
 
-            if (_damageTimer == null && CurrentHP > 0)
+            if (_damageTimer == null)
             {
                 rv = true;
 
-                _damageTimer = new RHTimer(Constants.INVULN_PERIOD);
+                _damageTimer = new RHTimer(IsActorType(ActorTypeEnum.Mob) ? Constants.MOB_INVULN_PERIOD : Constants.PLAYER_INVULN_PERIOD);
                 _flickerTimer = new RHTimer(Constants.FLICKER_PERIOD);
 
-                DecreaseHealth(value);
-                AssignKnockbackVelocity(hitbox);
+                if (HasHP)
+                {
+                    DecreaseHealth(value);
+                    AssignKnockbackVelocity(hitbox);
+                }
             }
 
             return rv;
@@ -63,15 +68,18 @@ namespace RiverHollow.Characters
 
         protected void DamageTimerEnd()
         {
-            if (CurrentHP == 0)
-            {
-                BodySprite.SetColor(Color.White);
-                PlayAnimation(AnimationEnum.KO);
-            }
-            ClearCombatStates();
+            _damageTimer = null;
+            _flickerTimer = null;
+            Flicker(true);
         }
-        
-        protected virtual void CheckDamageTimers(GameTime gTime)
+
+        protected virtual void Flicker(bool value)
+        {
+            _bFlicker = value;
+            _flickerTimer?.Reset();
+        }
+
+        protected void CheckDamageTimers(GameTime gTime)
         {
             if (RHTimer.TimerCheck(_damageTimer, gTime))
             {
@@ -80,11 +88,7 @@ namespace RiverHollow.Characters
 
             if (RHTimer.TimerCheck(_flickerTimer, gTime))
             {
-                if (BodySprite.SpriteColor == Color.Red)
-                {
-                    _flickerTimer = null;
-                    BodySprite.SetColor(Color.White);
-                }
+                Flicker(!_bFlicker);
             }
         }
 
@@ -110,6 +114,13 @@ namespace RiverHollow.Characters
             }
 
             return amountHealed;
+        }
+
+        protected void Kill()
+        {
+            _vKnockbackVelocity = Vector2.Zero;
+            DamageTimerEnd();
+            PlayAnimation(AnimationEnum.KO);
         }
 
         /// <summary>
@@ -151,11 +162,9 @@ namespace RiverHollow.Characters
             {
                 MoveActor(dir, false);
             }
-            if(initial != dir && CurrentHP == 0)
+            if(initial != dir && !HasHP)
             {
-                ClearCombatStates();
-                BodySprite.SetColor(Color.White);
-                PlayAnimation(AnimationEnum.KO);
+                Kill();
             }
 
             KnockbackDecay();
@@ -163,13 +172,22 @@ namespace RiverHollow.Characters
 
         protected void KnockbackDecay()
         {
-            _vKnockbackVelocity *= 0.96f;
+            _vKnockbackVelocity *= _fDecay;
+            if (_vKnockbackVelocity.Length() < (_vInitialKnockback / 4).Length())
+            {
+                _vKnockbackVelocity = Vector2.Zero;
+                if (!HasHP)
+                {
+                    Kill();
+                }
+            }
         }
 
         private void AssignKnockbackVelocity(Rectangle hitbox)
         {
             _vKnockbackVelocity = hitbox.Center.ToVector2() - CollisionBox.Center.ToVector2();
             _vKnockbackVelocity.Normalize();
+
             switch (GetWeight())
             {
                 case WeightEnum.Light:
@@ -177,7 +195,7 @@ namespace RiverHollow.Characters
                     _fDecay = 0.96f;
                     goto default;
                 case WeightEnum.Medium:
-                    _vKnockbackVelocity *= -1.5f;
+                    _vKnockbackVelocity *= -2;
                     _fDecay = 0.96f;
                     goto default;
                 case WeightEnum.Heavy:
@@ -192,18 +210,13 @@ namespace RiverHollow.Characters
                     ClearPath();
                     break;
             }
+
+            _vInitialKnockback = _vKnockbackVelocity;
         }
 
         protected virtual WeightEnum GetWeight()
         {
             return WeightEnum.Medium;
-        }
-
-        protected void ClearCombatStates()
-        {
-            _damageTimer = null;
-            _flickerTimer = null;
-            _vKnockbackVelocity = Vector2.Zero;
         }
 
         #endregion

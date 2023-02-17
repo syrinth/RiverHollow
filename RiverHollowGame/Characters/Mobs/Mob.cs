@@ -75,14 +75,14 @@ namespace RiverHollow.Characters
                 {
                     ApplyKnockbackVelocity();
                 }
-                else if (CurrentHP > 0)
+                else if (HasHP)
                 {
                     HandleMove();
                 }
 
                 CheckDamageTimers(gTime);
 
-                if (HitBox.Intersects(PlayerManager.PlayerActor.HitBox))
+                if (HasHP && HitBox.Intersects(PlayerManager.PlayerActor.HitBox))
                 {
                     PlayerManager.PlayerActor.DealDamage(Damage, CollisionBox);
                 }
@@ -96,9 +96,28 @@ namespace RiverHollow.Characters
             //if (_bAlert) { _sprAlert.Draw(spriteBatch, userLayerDepth); }
         }
 
+        public override bool DealDamage(int value, Rectangle hitbox)
+        {
+            bool rv = base.DealDamage(value, hitbox);
+
+            if (rv)
+            {
+                SetMoveTo(Point.Zero);
+                _bBumpedIntoSomething = true;
+            }
+
+            return rv;
+        }
+
+        protected override void Flicker(bool value)
+        {
+            base.Flicker(value);
+            BodySprite.SetColor(_bFlicker ? Color.White : Color.Red);
+        }
+
         public bool CanAct()
         {
-            return !GamePaused() && CurrentHP > 0 && !HasKnockbackVelocity();
+            return !GamePaused() && HasHP && !HasKnockbackVelocity();
         }
 
         protected Vector2 GetPlayerDirection()
@@ -167,7 +186,7 @@ namespace RiverHollow.Characters
 
         public override void DetermineAnimationState(Vector2 direction)
         {
-            if (CurrentHP == 0)
+            if (!HasHP)
             {
                 return;
             }
@@ -257,25 +276,6 @@ namespace RiverHollow.Characters
         public void SetInitialPoint(Point p)
         {
             _pLeashPoint = p;
-        }
-
-        public override bool DealDamage(int value, Rectangle hitbox)
-        {
-            bool rv = base.DealDamage(value, hitbox);
-
-            if (rv)
-            {
-                if(CurrentHP == 0)
-                {
-                    IgnoreCollisions = false;
-                }
-
-                BodySprite.SetColor(Color.Red);
-                SetMoveTo(Point.Zero);
-                _bBumpedIntoSomething = true;
-            }
-
-            return rv;
         }
 
         protected override WeightEnum GetWeight()
