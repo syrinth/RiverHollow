@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.SpriteAnimations;
+using RiverHollow.Utilities;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
@@ -10,16 +11,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
     public class GUISprite : GUIObject
     {
         protected AnimatedSprite _sprite;
-        public AnimatedSprite Sprite => _sprite;
-
-        public bool PlayedOnce => _sprite.PlayedOnce;
-
-        public int PlayCount => _sprite.GetPlayCount();
-
-        public bool IsAnimating {
-            get { return _sprite.Drawing; }
-            set { _sprite.Drawing = value; }
-        }
 
         public GUISprite(AnimatedSprite sprite, bool overwrite = false)
         {

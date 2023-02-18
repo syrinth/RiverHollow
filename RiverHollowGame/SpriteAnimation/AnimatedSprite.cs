@@ -14,7 +14,7 @@ namespace RiverHollow.SpriteAnimations
         AnimatedSprite _sprLinkedSprite;
         public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth - 0.1f) : Position.Y + CurrentFrameAnimation.FrameHeight - (Position.X / 100f);
 
-        Texture2D _texture;                         // The texture that holds the images for this sprite
+        readonly Texture2D _texture;                         // The texture that holds the images for this sprite
         public Color SpriteColor { get; private set; } = Color.White;
 
         // Dictionary holding all of the FrameAnimation objects
@@ -32,16 +32,13 @@ namespace RiverHollow.SpriteAnimations
         /// corner pixel.
         public Point Position { get; set; } = Point.Zero;
 
-        public bool Drawing { get; set; } = true;
-
-        public bool Show = true;
+        public bool Show { get; set; } = true;
+        public bool Finished { get; set; } = false;
 
         float _fLayerDepthMod;
 
         float _fRotationAngle = 0;
         Vector2 _vRotationOrigin = Vector2.Zero;
-
-        public bool PlayedOnce => CurrentFrameAnimation.PlayCount > 0;
 
         public int CurrentFrame => CurrentFrameAnimation.CurrentFrame;
 
@@ -83,7 +80,7 @@ namespace RiverHollow.SpriteAnimations
             CurrentAnimation = sprite.CurrentAnimation;
             _iScale = sprite._iScale;
 
-            Drawing = sprite.Drawing;
+            Show = sprite.Show;
 
             _diFrameAnimations = new Dictionary<string, FrameAnimation>();
             foreach (KeyValuePair<string, FrameAnimation> kvp in sprite._diFrameAnimations){
@@ -112,7 +109,6 @@ namespace RiverHollow.SpriteAnimations
         #endregion
 
         #region RemoveAnimation Helpers
-        public void RemoveAnimation<TEnum>(TEnum verb) { RemoveAnimation(Util.GetEnumString(verb)); }
         public void RemoveAnimation(VerbEnum verb, DirectionEnum dir) { RemoveAnimation(Util.GetActorString(verb, dir)); }
         private void RemoveAnimation(string animationName) { _diFrameAnimations.Remove(animationName); }
         #endregion
@@ -123,9 +119,10 @@ namespace RiverHollow.SpriteAnimations
         public void PlayAnimation(string verb, DirectionEnum dir) { PlayAnimation(Util.GetActorString(verb, dir)); }
         public void PlayAnimation(string animate)
         {
-            if (_diFrameAnimations.ContainsKey(animate) && (!Drawing || CurrentAnimation != animate))
+            if (_diFrameAnimations.ContainsKey(animate) && (!Show || CurrentAnimation != animate))
             {
-                Drawing = true;
+                Show = true;
+                Finished = false;
                 CurrentAnimation = animate;
                 Reset();   
             }
@@ -133,9 +130,12 @@ namespace RiverHollow.SpriteAnimations
         #endregion
 
         #region IsCurrentAnimation Helpers
+        public bool AnimationFinished<TEnum>(TEnum e)
+        {
+            return IsCurrentAnimation(e) && Finished;
+        }
         public bool IsCurrentAnimation<TEnum>(TEnum e) { return IsCurrentAnimation(Util.GetEnumString(e)); }
         public bool IsCurrentAnimation(VerbEnum verb, DirectionEnum dir) { return IsCurrentAnimation(Util.GetActorString(verb, dir)); }
-        public bool IsCurrentAnimation(string verb, DirectionEnum dir) { return IsCurrentAnimation(Util.GetActorString(verb, dir)); }
         private bool IsCurrentAnimation(string animate) { return CurrentAnimation.Equals(animate); }
         #endregion
 
@@ -182,11 +182,11 @@ namespace RiverHollow.SpriteAnimations
 
         public void SetScale(int x)
         {
-            Width = Width / _iScale;
-            Height = Height / _iScale;
+            Width /= _iScale;
+            Height /= _iScale;
 
-            Width = Width * x;
-            Height = Height * x;
+            Width *= x;
+            Height *= x;
 
             _iScale = x;
         }
@@ -206,8 +206,7 @@ namespace RiverHollow.SpriteAnimations
 
         public void Update(GameTime gTime)
         {
-            // Don't do anything if the sprite is not animating
-            if (Drawing)
+            if (Show && !Finished)
             {
                 // If there is not a currently active animation
                 if (CurrentFrameAnimation == null)
@@ -232,11 +231,13 @@ namespace RiverHollow.SpriteAnimations
 
                 if (CurrentFrameAnimation.PlayCount > 0)
                 {
-                    if(CurrentFrameAnimation.PlayCount == 1 && CurrentFrameAnimation.PlayOnce)
+                    if (CurrentFrameAnimation.PlayCount == 1 && CurrentFrameAnimation.PlayOnce)
                     {
-                        Drawing  = false;
+                        Finished = true;
+                        Reset();
                     }
-                    if(!String.IsNullOrEmpty(CurrentFrameAnimation.NextAnimation))
+
+                    if (!String.IsNullOrEmpty(CurrentFrameAnimation.NextAnimation))
                     {
                         PlayAnimation(CurrentFrameAnimation.NextAnimation);
                     }
@@ -246,7 +247,7 @@ namespace RiverHollow.SpriteAnimations
 
         public void Draw(SpriteBatch spriteBatch, bool useLayerDepth = true, float visibility = 1.0f, float forcedLayerDepth = -1)
         {
-            if (Drawing)
+            if (Show)
             {
                 if (useLayerDepth)
                 {
@@ -273,7 +274,7 @@ namespace RiverHollow.SpriteAnimations
 
         public void Draw(SpriteBatch spriteBatch, float layerDepth, float visibility = 1.0f)
         {
-            if (Drawing)
+            if (Show)
             {
                 int drawAtY = (int)this.Position.Y;
                 Rectangle drawThis = CurrentFrameAnimation.FrameRectangle;
@@ -328,35 +329,6 @@ namespace RiverHollow.SpriteAnimations
         public void SetRotationOrigin(Vector2 center)
         {
             _vRotationOrigin = center;
-        }
-
-        /// <summary>
-        /// Call this to confirm whether the Current Animation is the one we're looking for
-        /// and whether or not the animation is currently animating.
-        /// </summary>
-        /// <param name="val">The AnimationVerb to guard for</param>
-        /// <returns></returns>
-        public bool AnimationFinished<TEnum>(TEnum val)
-        {
-            bool rv = false;
-
-            if(IsCurrentAnimation(val) && !Drawing && PlayedOnce)
-            {
-                rv = true;
-            }
-
-            return rv;
-        }
-        public bool AnimationVerbFinished(VerbEnum verb, DirectionEnum dir)
-        {
-            bool rv = false;
-
-            if (IsCurrentAnimation(Util.GetActorString(verb, dir)) && !Drawing)
-            {
-                rv = true;
-            }
-
-            return rv;
         }
 
         public bool ContainsAnimation<TEnum>(TEnum val)

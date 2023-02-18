@@ -57,13 +57,13 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            if (IsCurrentAnimation(AnimationEnum.Action1) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
+            if (BodySprite.AnimationFinished(AnimationEnum.Action1))
             {
                 PlayAnimation(AnimationEnum.Action_Finished);
                 PlayerManager.AllowMovement = true;
                 base.StartConversation(false);
             }
-            else if (IsCurrentAnimation(AnimationEnum.Action2) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
+            else if (BodySprite.AnimationFinished(AnimationEnum.Action2))
             {
                 PlayAnimation(AnimationEnum.ObjectIdle);
             }

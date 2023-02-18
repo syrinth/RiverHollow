@@ -25,10 +25,10 @@ namespace RiverHollow.WorldObjects
 
             LoadDictionaryData(stringData, false);
 
-            LoadAdjustableSprite(ref _sprite, DataManager.FILE_WORLDOBJECTS);
+            Sprite = LoadAdjustableSprite(DataManager.FILE_WORLDOBJECTS);
             _pImagePos.Y += Constants.TILE_SIZE;
 
-            LoadAdjustableSprite(ref _sprWatered, DataManager.FILE_WORLDOBJECTS);
+            _sprWatered = LoadAdjustableSprite(DataManager.FILE_WORLDOBJECTS);
             _pImagePos.Y -= Constants.TILE_SIZE;
 
             WaterGardenBed(EnvironmentManager.IsRaining());
@@ -46,11 +46,11 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _sprite.SetColor(_bSelected ? Color.Green : Color.White);
+            Sprite.SetColor(_bSelected ? Color.Green : Color.White);
             _sprWatered.SetColor(_bSelected ? Color.Green : Color.White);
 
             if (_bWatered) { _sprWatered.Draw(spriteBatch, 0); }
-            else { _sprite.Draw(spriteBatch, 0); }
+            else { Sprite.Draw(spriteBatch, 0); }
 
             _objPlant?.Draw(spriteBatch);
         }
@@ -61,7 +61,7 @@ namespace RiverHollow.WorldObjects
         protected override void AdjustmentHelper(RHTile startTile, bool adjustAdjacent = true)
         {
             base.AdjustmentHelper(startTile, adjustAdjacent);
-            _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
+            _sprWatered.PlayAnimation(Sprite.CurrentAnimation.ToString());
         }
 
         public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
@@ -154,7 +154,7 @@ namespace RiverHollow.WorldObjects
         public void WaterGardenBed(bool value)
         {
             _bWatered = value;
-            _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
+            _sprWatered.PlayAnimation(Sprite.CurrentAnimation.ToString());
         }
 
         public override List<Light> GetLights()

@@ -17,7 +17,7 @@ namespace RiverHollow.WorldObjects
         public Floor(int id, Dictionary<string, string> stringData) : base(id)
         {
             LoadDictionaryData(stringData, false);
-            LoadAdjustableSprite(ref _sprite, DataManager.FILE_FLOORING);
+            Sprite = LoadAdjustableSprite(DataManager.FILE_FLOORING);
 
             _eObjectType = ObjectTypeEnum.Floor;
             _ePlacement = ObjectPlacementEnum.Floor;
@@ -25,8 +25,8 @@ namespace RiverHollow.WorldObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _sprite.SetColor(_bSelected ? Color.Green : Color.White);
-            _sprite.Draw(spriteBatch, 0);
+            Sprite.SetColor(_bSelected ? Color.Green : Color.White);
+            Sprite.Draw(spriteBatch, 0);
         }
 
         /// <summary>

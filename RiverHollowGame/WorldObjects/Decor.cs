@@ -56,13 +56,13 @@ namespace RiverHollow.WorldObjects
             if (_objDisplay != null)
             {
                 _objDisplay.Sprite.SetColor(_bSelected ? Color.Green : Color.White);
-                _objDisplay.Sprite.Draw(spriteBatch, _sprite.LayerDepth + 1);
+                _objDisplay.Sprite.Draw(spriteBatch, Sprite.LayerDepth + 1);
             }
             else if (_itemDisplay != null)
             {
                 //Because Items don't exist directly on the map, we only need to tell it where to draw itself here
                 _itemDisplay.SetColor(_bSelected ? Color.Green : Color.White);
-                _itemDisplay.Draw(spriteBatch, new Rectangle((int)(MapPosition.X + _pDisplayOffset.X), (int)(MapPosition.Y + _pDisplayOffset.Y), Constants.TILE_SIZE, Constants.TILE_SIZE), true, _sprite.LayerDepth + 1);
+                _itemDisplay.Draw(spriteBatch, new Rectangle((int)(MapPosition.X + _pDisplayOffset.X), (int)(MapPosition.Y + _pDisplayOffset.Y), Constants.TILE_SIZE, Constants.TILE_SIZE), true, Sprite.LayerDepth + 1);
             }
         }
 
@@ -143,7 +143,7 @@ namespace RiverHollow.WorldObjects
                     Util.SwitchValues(ref _rBase.Y, ref _iRotationBaseOffsetY);
                 }
 
-                Rectangle spriteFrameRectangle = _sprite.CurrentFrameAnimation.FrameRectangle;
+                Rectangle spriteFrameRectangle = Sprite.CurrentFrameAnimation.FrameRectangle;
                 Point newImage = spriteFrameRectangle.Location + new Point(spriteFrameRectangle.Width, 0);
 
                 //Direction handling for the different rotation types
@@ -181,8 +181,8 @@ namespace RiverHollow.WorldObjects
                 }
 
                 //Updates the sprite info
-                _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, newImage.X, newImage.Y, _pSize);
+                Sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
+                Sprite.AddAnimation(AnimationEnum.ObjectIdle, newImage.X, newImage.Y, _pSize);
                 SetSpritePos(MapPosition);
 
                 //Sets the pickup offset to the center of the object.

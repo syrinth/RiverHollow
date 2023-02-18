@@ -40,7 +40,7 @@ namespace RiverHollow.WorldObjects
             if (loadSprite && stringData.ContainsKey("DestructionAnim"))
             {
                 string[] splitString = stringData["DestructionAnim"].Split('-');
-                _sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), Constants.TILE_SIZE, Constants.TILE_SIZE, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
+                Sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), Constants.TILE_SIZE, Constants.TILE_SIZE, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
             }
         }
 
@@ -49,10 +49,10 @@ namespace RiverHollow.WorldObjects
             base.Update(gTime);
 
             //Destructibles move when hit, so reset position
-            _sprite.Position = MapPosition;
+            Sprite.Position = MapPosition;
             if (_iHP <= 0)
             {
-                if (!_sprite.ContainsAnimation(AnimationEnum.KO) || _sprite.AnimationFinished(AnimationEnum.KO))
+                if (!Sprite.ContainsAnimation(AnimationEnum.KO) || Sprite.AnimationFinished(AnimationEnum.KO))
                 {
                     MapManager.Maps[Tiles[0].MapName].RemoveWorldObject(this);
                 }
@@ -86,7 +86,7 @@ namespace RiverHollow.WorldObjects
                         if (_iHP <= 0)
                         {
                             _bWalkable = true;
-                            _sprite.PlayAnimation(AnimationEnum.KO);
+                            Sprite.PlayAnimation(AnimationEnum.KO);
 
                             MapManager.DropItemsOnMap(GetDroppedItems(), CollisionBox.Location);
                             CurrentMap.AlertSpawnPoint(this);
@@ -95,7 +95,7 @@ namespace RiverHollow.WorldObjects
                         {
                             //Nudge the Object in the direction of the 'attack'
                             Point nudgePoint = Util.GetPointFromDirection(PlayerManager.PlayerActor.Facing);
-                            _sprite.Position = new Point(_sprite.Position.X + nudgePoint.X, _sprite.Position.Y + nudgePoint.Y);
+                            Sprite.Position = new Point(Sprite.Position.X + nudgePoint.X, Sprite.Position.Y + nudgePoint.Y);
                         }
                     }
                 }
@@ -114,7 +114,7 @@ namespace RiverHollow.WorldObjects
             string[] splitVal = split[_iAltSprite].Split('-');
             _pImagePos = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
 
-            _sprite.SetAlternate(_pImagePos, AnimationEnum.ObjectIdle);
+            Sprite.SetAlternate(_pImagePos, AnimationEnum.ObjectIdle);
         }
 
         public override WorldObjectData SaveData()

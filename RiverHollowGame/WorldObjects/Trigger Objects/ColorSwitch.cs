@@ -41,8 +41,8 @@ namespace RiverHollow.WorldObjects.Trigger_Objects
             if (_eCurrentState == ColorStateEnum.Blue) { _eCurrentState = ColorStateEnum.Red; }
             else if (_eCurrentState == ColorStateEnum.Red) { _eCurrentState = ColorStateEnum.Blue; }
 
-            if (_sprite.CurrentAnimation == AnimationEnum.Action1.ToString()) { _sprite.PlayAnimation(AnimationEnum.ObjectIdle); }
-            else { _sprite.PlayAnimation(AnimationEnum.Action1); }
+            if (Sprite.CurrentAnimation == AnimationEnum.Action1.ToString()) { Sprite.PlayAnimation(AnimationEnum.ObjectIdle); }
+            else { Sprite.PlayAnimation(AnimationEnum.Action1); }
         }
     }
 }

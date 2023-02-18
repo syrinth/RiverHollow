@@ -11,7 +11,7 @@ namespace RiverHollow.WorldObjects
         public Wall(int id, Dictionary<string, string> stringData) : base(id)
         {
             LoadDictionaryData(stringData, false);
-            LoadAdjustableSprite(ref _sprite, DataManager.FILE_WORLDOBJECTS);
+            Sprite = LoadAdjustableSprite(DataManager.FILE_WORLDOBJECTS);
         }
     }
 }

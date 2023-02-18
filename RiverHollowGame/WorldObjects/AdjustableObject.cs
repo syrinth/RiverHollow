@@ -26,9 +26,9 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         /// <param name="sprite">The AnimatedSprite to load the animations into</param>
         /// <param name="vStart">The source position for this texture series</param>
-        protected void LoadAdjustableSprite(ref AnimatedSprite spr, string textureName = DataManager.FILE_FLOORING)
+        protected AnimatedSprite LoadAdjustableSprite(string textureName = DataManager.FILE_FLOORING)
         {
-            spr = new AnimatedSprite(textureName);
+            AnimatedSprite spr = new AnimatedSprite(textureName);
             spr.AddAnimation("None", _pImagePos.X, _pImagePos.Y, _pSize);
             spr.AddAnimation("NS", _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
             spr.AddAnimation("EW", _pImagePos.X + Constants.TILE_SIZE * 2, _pImagePos.Y, _pSize);
@@ -45,6 +45,8 @@ namespace RiverHollow.WorldObjects
             spr.AddAnimation("E", _pImagePos.X + Constants.TILE_SIZE * 13, _pImagePos.Y, _pSize);
             spr.AddAnimation("S", _pImagePos.X + Constants.TILE_SIZE * 14, _pImagePos.Y, _pSize);
             spr.AddAnimation("N", _pImagePos.X + Constants.TILE_SIZE * 15, _pImagePos.Y, _pSize);
+
+            return spr;
         }
 
         public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
@@ -104,7 +106,7 @@ namespace RiverHollow.WorldObjects
             MakeAdjustments("E", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[mapName].GetTileByGridCoords(new Point((int)(startTile.X + 1), (int)(startTile.Y))));
             MakeAdjustments("W", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[mapName].GetTileByGridCoords(new Point((int)(startTile.X - 1), (int)(startTile.Y))));
 
-            _sprite.PlayAnimation(string.IsNullOrEmpty(sAdjacent) ? "None" : sAdjacent);
+            Sprite.PlayAnimation(string.IsNullOrEmpty(sAdjacent) ? "None" : sAdjacent);
 
             //Find all matching objects in the adjacent tiles and call
             //this method without recursion on them.

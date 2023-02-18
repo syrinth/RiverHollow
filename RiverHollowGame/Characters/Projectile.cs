@@ -27,7 +27,7 @@ namespace RiverHollow.Characters
         {
             BodySprite.Update(gTime);
 
-            if (BodySprite.IsCurrentAnimation(AnimationEnum.KO) && BodySprite.PlayedOnce)
+            if (BodySprite.AnimationFinished(AnimationEnum.KO))
             {
                 Finished = true;
             }

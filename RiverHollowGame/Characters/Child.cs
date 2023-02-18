@@ -37,7 +37,7 @@ namespace RiverHollow.Characters
             _liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref _liData, stringData, VerbEnum.Walk);
             Util.AddToAnimationsList(ref _liData, stringData, VerbEnum.Idle);
-            Util.AddToAnimationsList(ref _liData, stringData, VerbEnum.Alert);
+            Util.AddToAnimationsList(ref _liData, stringData, AnimationEnum.Alert);
             BodySprite = LoadSpriteAnimations(_liData, SpriteName() + "_" + (int)_eCurrentStage);
         }
 

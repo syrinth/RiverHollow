@@ -63,7 +63,7 @@ namespace RiverHollow.Characters
 
             if (!GamePaused())
             {
-                if (BodySprite.IsCurrentAnimation(AnimationEnum.KO) && BodySprite.PlayedOnce)
+                if (BodySprite.AnimationFinished(AnimationEnum.KO))
                 {
                     DropLoot();
                     CurrentMap.RemoveActor(this);

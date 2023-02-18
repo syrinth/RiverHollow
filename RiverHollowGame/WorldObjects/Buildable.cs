@@ -42,7 +42,7 @@ namespace RiverHollow.WorldObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _sprite.SetColor(_bSelected ? Color.Green : Color.White);
+            Sprite.SetColor(_bSelected ? Color.Green : Color.White);
             base.Draw(spriteBatch);
         }
 

@@ -158,7 +158,7 @@ namespace RiverHollow.Characters
                     if (!string.IsNullOrEmpty(direction))
                     {
                         Facing = Util.ParseEnum<DirectionEnum>(direction);
-                        PlayAnimation(VerbEnum.Idle, Facing);
+                        PlayAnimation(VerbEnum.Idle);
                     }
 
                     if (!string.IsNullOrEmpty(animation))

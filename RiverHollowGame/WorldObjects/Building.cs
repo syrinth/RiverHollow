@@ -28,7 +28,7 @@ namespace RiverHollow.Buildings
 
         public string BuildingMapName => "map" + DataManager.GetStringByIDKey(ID, "Texture", DataType.WorldObject);
 
-        public Rectangle SelectionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _sprite.Width, _sprite.Height);
+        public Rectangle SelectionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, Sprite.Width, Sprite.Height);
 
         public Rectangle TravelBox { get; private set; }
 
@@ -81,14 +81,14 @@ namespace RiverHollow.Buildings
             int startX = 0;
             int startY = 0;
 
-            _sprite = new AnimatedSprite(textureName);
+            Sprite = new AnimatedSprite(textureName);
             int maxLevel = GetAllUpgrades().Length > 0 ? GetAllUpgrades().Length : 1;
             for (int i = 1; i <= maxLevel; i++)
             {
-                _sprite.AddAnimation(i.ToString(), startX, startY, _pSize);
+                Sprite.AddAnimation(i.ToString(), startX, startY, _pSize);
                 startX += _pSize.X * Constants.TILE_SIZE;
             }
-            _sprite.PlayAnimation("1");
+            Sprite.PlayAnimation("1");
         }
 
         /// <summary>

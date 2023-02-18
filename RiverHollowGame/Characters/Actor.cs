@@ -311,21 +311,9 @@ namespace RiverHollow.Characters
         }
 
         /// <summary>
-        /// Checks to see if the current animation is that of the verb and current facing
-        /// </summary>
-        /// <param name="verb">Verb to compare against</param>
-        /// <returns>Returns true if the current animation is the verb and facing</returns>
-        public bool IsDirectionalAnimation(VerbEnum verb)
-        {
-            return IsCurrentAnimation(verb, Facing);
-        }
-
-        /// <summary>
         /// Constructs the proper animation string for the current facing.
         /// </summary>
         public void PlayAnimationVerb(VerbEnum verb) { PlayAnimation(verb, Facing); }
-        public bool IsCurrentAnimationVerb(VerbEnum verb) { return BodySprite.IsCurrentAnimation(verb, Facing); }
-        public bool IsCurrentAnimationVerbFinished(VerbEnum verb) { return BodySprite.AnimationVerbFinished(verb, Facing); }
 
         /// <summary>
         /// Sets the active status of the WorldActor
@@ -361,10 +349,10 @@ namespace RiverHollow.Characters
             switch (state)
             {
                 case NPCStateEnum.Alert:
-                    PlayAnimation(VerbEnum.Alert, Facing);
+                    PlayAnimation(AnimationEnum.Alert);
                     break;
                 case NPCStateEnum.Idle:
-                    PlayAnimation(VerbEnum.Idle, Facing);
+                    PlayAnimation(VerbEnum.Idle);
                     ChangeMovement();
                     break;
                 case NPCStateEnum.TrackPlayer:
@@ -569,7 +557,7 @@ namespace RiverHollow.Characters
 
         protected void Alert()
         {
-            if (BodySprite.PlayedOnce)
+            if (BodySprite.AnimationFinished(AnimationEnum.Alert))
             {
                 ChangeState(NPCStateEnum.TrackPlayer);
             }
@@ -637,6 +625,7 @@ namespace RiverHollow.Characters
         }
 
         public virtual void PlayAnimation<TEnum>(TEnum e) { BodySprite.PlayAnimation(e); }
+        public virtual void PlayAnimation(VerbEnum verb) { BodySprite.PlayAnimation(verb, Facing); }
         public virtual void PlayAnimation(VerbEnum verb, DirectionEnum dir) { BodySprite.PlayAnimation(verb, dir); }
         public virtual void PlayAnimation(string verb, DirectionEnum dir) { BodySprite.PlayAnimation(verb, dir); }
 
@@ -683,19 +672,6 @@ namespace RiverHollow.Characters
         {
             sprite.SetNextAnimation(Util.GetActorString(verb, dir), Util.GetActorString(VerbEnum.Idle, dir));
         }
-
-        protected void RemoveDirectionalAnimations(ref AnimatedSprite sprite, VerbEnum verb)
-        {
-            sprite.RemoveAnimation(verb, DirectionEnum.Down);
-            sprite.RemoveAnimation(verb, DirectionEnum.Right);
-            sprite.RemoveAnimation(verb, DirectionEnum.Up);
-            sprite.RemoveAnimation(verb, DirectionEnum.Left);
-        }
-
-        public bool IsCurrentAnimation(AnimationEnum val) { return BodySprite.IsCurrentAnimation(val); }
-        public bool IsCurrentAnimation(VerbEnum verb, DirectionEnum dir) { return BodySprite.IsCurrentAnimation(verb, dir); }
-        public bool IsAnimating() { return BodySprite.Drawing; }
-        public bool AnimationPlayedXTimes(int x) { return BodySprite.GetPlayCount() >= x; }
         #endregion
     }
 }

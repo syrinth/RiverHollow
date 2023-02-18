@@ -118,7 +118,7 @@ namespace RiverHollow.Game_Managers
                 ReleaseTile();
             }
             
-            if (AllowMovement && !Defeated())
+            if (AllowMovement && PlayerActor.HasHP)
             {
                 Vector2 newMovement = Vector2.Zero;
                 MovementHelper(ref _eHorizontal, ref newMovement, true, Keys.A, DirectionEnum.Left, Keys.D, DirectionEnum.Right);
@@ -432,7 +432,7 @@ namespace RiverHollow.Game_Managers
         public static bool Defeated()
         {
             AnimatedSprite spr = PlayerActor.GetSprites()[0];
-            return PlayerActor != null && !PlayerActor.HasHP && spr.IsCurrentAnimation(AnimationEnum.KO) && spr.PlayedOnce;
+            return PlayerActor != null && !PlayerActor.HasHP && spr.AnimationFinished(AnimationEnum.KO);
         }
         public static bool DecreaseStamina(float x)
         {

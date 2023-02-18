@@ -74,7 +74,7 @@ namespace RiverHollow.WorldObjects
                 RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Point(MapPosition.X + info.Position.X, MapPosition.Y + info.Position.Y));
                 if (targetTile.WorldObject != null)
                 {
-                    targetTile.WorldObject.Sprite.Drawing = false;
+                    targetTile.WorldObject.Sprite.Show = false;
                     MapManager.Maps[MapName].RemoveWorldObject(targetTile.WorldObject);
                 }
 

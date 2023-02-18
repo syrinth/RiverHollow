@@ -21,9 +21,7 @@ namespace RiverHollow.WorldObjects
         #region Properties
         protected ObjectTypeEnum _eObjectType;
         public ObjectTypeEnum Type => _eObjectType;
-
-        protected AnimatedSprite _sprite;
-        public AnimatedSprite Sprite => _sprite;
+        public AnimatedSprite Sprite { get; protected set; }
 
         public List<RHTile> Tiles;
 
@@ -143,15 +141,15 @@ namespace RiverHollow.WorldObjects
 
         protected virtual void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
         {
-            _sprite = new AnimatedSprite(textureName);
+            Sprite = new AnimatedSprite(textureName);
             if (stringData.ContainsKey("Idle"))
             {
                 string[] idleSplit = stringData["Idle"].Split('-');
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _pSize, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
+                Sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _pSize, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
             }
             else
             {
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _pSize);
+                Sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _pSize);
             }
 
             //MAR
@@ -164,7 +162,7 @@ namespace RiverHollow.WorldObjects
         }
 
         public virtual void Update(GameTime gTime) {
-            _sprite.Update(gTime);
+            Sprite.Update(gTime);
             SyncLightPositions();
             if (_liLights != null)
             {
@@ -177,14 +175,14 @@ namespace RiverHollow.WorldObjects
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if (_bDrawUnder) { _sprite.Draw(spriteBatch, 1); }
+            if (_bDrawUnder) { Sprite.Draw(spriteBatch, 1); }
             else {
                 float alpha = 1f;
                 if(((BaseHeight + 1) * Constants.TILE_SIZE < Height) && new Rectangle(Sprite.Position.X, Sprite.Position.Y, Sprite.Width, Sprite.Height).Contains(PlayerManager.PlayerActor.CollisionCenter))
                 {
                     alpha = 0.7f;
                 }
-                _sprite.Draw(spriteBatch, true, alpha);
+                Sprite.Draw(spriteBatch, true, alpha);
             }
             if (Constants.DRAW_COLLISION)
             {
@@ -193,7 +191,7 @@ namespace RiverHollow.WorldObjects
         }
         public void DrawItem(SpriteBatch spriteBatch, MapItem i)
         {
-            i.Draw(spriteBatch, _sprite.LayerDepth + 1);
+            i.Draw(spriteBatch, Sprite.LayerDepth + 1);
         }
 
         public virtual bool ProcessLeftClick() { return false; }
@@ -246,9 +244,9 @@ namespace RiverHollow.WorldObjects
 
         protected void SetSpritePos(Point position)
         {
-            if (_sprite != null)
+            if (Sprite != null)
             {
-                _sprite.Position = position;
+                Sprite.Position = position;
             }
         }
 
@@ -289,8 +287,8 @@ namespace RiverHollow.WorldObjects
         /// <param name="mousePosition">The current mousePosition</param>
         public void SetPickupOffset(Vector2 mousePosition)
         {
-            int xOffset = (Width > Constants.TILE_SIZE) ? (int)(mousePosition.X - _sprite.Position.X) : 0;
-            int yOffset = (Height > Constants.TILE_SIZE) ? (int)(mousePosition.Y - _sprite.Position.Y) : 0;
+            int xOffset = (Width > Constants.TILE_SIZE) ? (int)(mousePosition.X - Sprite.Position.X) : 0;
+            int yOffset = (Height > Constants.TILE_SIZE) ? (int)(mousePosition.Y - Sprite.Position.Y) : 0;
 
             xOffset = (xOffset / Constants.TILE_SIZE) * Constants.TILE_SIZE;
             yOffset = (yOffset / Constants.TILE_SIZE) * Constants.TILE_SIZE;
@@ -410,7 +408,7 @@ namespace RiverHollow.WorldObjects
         public void MoveObject(Point direction)
         {
             MapPosition += direction;
-            _sprite.Position += direction;
+            Sprite.Position += direction;
         }
 
         #region Save Handlers

@@ -66,7 +66,7 @@ namespace RiverHollow.Misc
 
             public override bool IsFinished()
             {
-                return !_sprBody.Drawing;
+                return _sprBody.Finished;
             }
         }
 

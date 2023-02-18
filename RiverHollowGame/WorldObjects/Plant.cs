@@ -62,26 +62,26 @@ namespace RiverHollow.WorldObjects
             for (int j = 0; j < _iMaxStates - 1; j++)
             {
                 _diTransitionTimes.Add(j, int.Parse(dayStr[j]));
-                _sprite.AddAnimation((j + 1).ToString(), _pImagePos.X + (Constants.TILE_SIZE * (j + 1)), _pImagePos.Y, _pSize);
+                Sprite.AddAnimation((j + 1).ToString(), _pImagePos.X + (Constants.TILE_SIZE * (j + 1)), _pImagePos.Y, _pSize);
             }
             _iDaysLeft = _diTransitionTimes[0];
 
             if (stringData.ContainsKey("DestructionAnim"))
             {
                 string[] splitString = stringData["DestructionAnim"].Split('-');
-                _sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), _pSize, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
+                Sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), _pSize, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
             }
 
-            _sprite.SetRotationOrigin(new Vector2(_pSize.X * Constants.TILE_SIZE / 2, (_pSize.Y * Constants.TILE_SIZE) - 1));    //Subtract one to keep it in the bounds of the rectangle
+            Sprite.SetRotationOrigin(new Vector2(_pSize.X * Constants.TILE_SIZE / 2, (_pSize.Y * Constants.TILE_SIZE) - 1));    //Subtract one to keep it in the bounds of the rectangle
         }
 
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
         {
-            _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-            _sprite.AddAnimation(0.ToString(), (int)_pImagePos.X, (int)_pImagePos.Y, _pSize);
+            Sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
+            Sprite.AddAnimation(0.ToString(), (int)_pImagePos.X, (int)_pImagePos.Y, _pSize);
             for (int j = 1; j < _diTransitionTimes.Count + 1; j++)
             {
-                _sprite.AddAnimation(j.ToString(), (int)_pImagePos.X + (Constants.TILE_SIZE * j), (int)_pImagePos.Y, _pSize);
+                Sprite.AddAnimation(j.ToString(), (int)_pImagePos.X + (Constants.TILE_SIZE * j), (int)_pImagePos.Y, _pSize);
             }
         }
 
@@ -93,7 +93,7 @@ namespace RiverHollow.WorldObjects
                 if (dir == DirectionEnum.Right) { _fCurrentRotation += ROTATION_MOD; }
                 else if (dir == DirectionEnum.Left) { _fCurrentRotation -= ROTATION_MOD; }
 
-                _sprite.SetRotationAngle(_fCurrentRotation);
+                Sprite.SetRotationAngle(_fCurrentRotation);
 
                 //If we've reached the end of our bounce, increment the bounce count
                 //and set us to just below the trigger value for the statement we just hit.
@@ -188,7 +188,7 @@ namespace RiverHollow.WorldObjects
             else if (!FinishedGrowing()) //If it hasn't finished growing, and there's no days left, go to the next phase
             {
                 _iCurrentState++;
-                _sprite.PlayAnimation(_iCurrentState.ToString());
+                Sprite.PlayAnimation(_iCurrentState.ToString());
                 if (_diTransitionTimes.ContainsKey(_iCurrentState))
                 {
                     _iDaysLeft = _diTransitionTimes[_iCurrentState];
@@ -240,7 +240,7 @@ namespace RiverHollow.WorldObjects
             _iCurrentState = int.Parse(strData[0]);
             _iDaysLeft = int.Parse(strData[1]);
 
-            _sprite.PlayAnimation(_iCurrentState.ToString());
+            Sprite.PlayAnimation(_iCurrentState.ToString());
         }
     }
 }

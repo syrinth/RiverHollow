@@ -50,27 +50,11 @@ namespace RiverHollow.SpriteAnimations
             get { return rectInitialFrame.Height; }
         }
 
-        public FrameAnimation(Rectangle FirstFrame, int Frames, bool pingPong, bool playsOnce)
-        {
-            rectInitialFrame = FirstFrame;
-            FrameCount = Frames;
-            _bPingPong = pingPong;
-            PlayOnce = playsOnce;
-        }
-
-        public FrameAnimation(int X, int Y, int Width, int Height, int Frames, bool pingPong, bool playsOnce)
+        public FrameAnimation(int X, int Y, int Width, int Height, int Frames, float frameLength, bool pingPong, bool playsOnce)
         {
             rectInitialFrame = new Rectangle(X, Y, Width, Height);
             FrameCount = Frames;
-            _bPingPong = pingPong;
-            PlayOnce = playsOnce;
-        }
-
-        public FrameAnimation(int X, int Y, int Width, int Height, int Frames, float FrameLength, bool pingPong, bool playsOnce)
-        {
-            rectInitialFrame = new Rectangle(X, Y, Width, Height);
-            FrameCount = Frames;
-            this.FrameLength = FrameLength;
+            FrameLength = frameLength;
             _bPingPong = pingPong;
             PlayOnce = playsOnce;
         }
@@ -79,7 +63,7 @@ namespace RiverHollow.SpriteAnimations
         {
             rectInitialFrame = initial.rectInitialFrame;
             FrameCount = initial.FrameCount;
-            this.FrameLength = initial.FrameLength;
+            FrameLength = initial.FrameLength;
             _bPingPong = initial._bPingPong;
             PlayOnce = initial.PlayOnce;
             NextAnimation = initial.NextAnimation;
@@ -137,7 +121,7 @@ namespace RiverHollow.SpriteAnimations
                 if (FrameTimer > FrameLength)
                 {
                     FrameTimer = 0.0f;
-                    PlayCount = (int)MathHelper.Min(PlayCount + 1, int.MaxValue);
+                    PlayCount = MathHelper.Min(PlayCount + 1, int.MaxValue);
                 }
             }
         }

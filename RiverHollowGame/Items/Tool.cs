@@ -48,7 +48,7 @@ namespace RiverHollow.Items
             {
                 _sprite = new AnimatedSprite(@"Textures\Items\ToolAnimations")
                 {
-                    Drawing = false
+                    Show = false
                 };
 
                 string[] par = Util.FindParams(stringData["AnimationData"]);
@@ -100,6 +100,7 @@ namespace RiverHollow.Items
             {
                 rv = true;
                 _bUsed = false;
+                ToolAnimation.Finished = false;
                 PlayerManager.FinishedWithTool();
                 PlayerManager.PlayerActor.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
             }

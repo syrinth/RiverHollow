@@ -30,7 +30,7 @@ namespace RiverHollow.WorldObjects
             Damage = int.Parse(stringData["Damage"]);
             Util.AssignValue(ref _bDrawOver, "DrawOver", stringData);
             _bWalkable = true;
-            _sprite.SetLayerDepthMod(_bDrawOver ? 1 : -999);
+            Sprite.SetLayerDepthMod(_bDrawOver ? 1 : -999);
 
             Activate(_eHazardType == HazardTypeEnum.Passive);
 
@@ -68,7 +68,7 @@ namespace RiverHollow.WorldObjects
                 else
                 {
                     Point vec = Util.GetPointFromDirection(_eMoveDir);
-                    _sprite.Position += Util.MultiplyPoint(vec, 2);
+                    Sprite.Position += Util.MultiplyPoint(vec, 2);
                     MapPosition += Util.MultiplyPoint(vec, 2);
                 }
             }
@@ -88,7 +88,7 @@ namespace RiverHollow.WorldObjects
 
             if (_eHazardType != HazardTypeEnum.Passive)
             {
-                _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
+                Sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
             }
         }
 
@@ -110,11 +110,11 @@ namespace RiverHollow.WorldObjects
             switch (_eHazardType)
             {
                 case HazardTypeEnum.Passive:
-                    _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
+                    Sprite.PlayAnimation(AnimationEnum.ObjectIdle);
                     break;
                 case HazardTypeEnum.Timed:
                 case HazardTypeEnum.Triggered:
-                    _sprite.PlayAnimation(value ? AnimationEnum.Action1 : AnimationEnum.ObjectIdle);
+                    Sprite.PlayAnimation(value ? AnimationEnum.Action1 : AnimationEnum.ObjectIdle);
                     break;
             }
         }

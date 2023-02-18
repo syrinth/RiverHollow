@@ -17,7 +17,7 @@ namespace RiverHollow.WorldObjects
         public WarpPoint(int id, Dictionary<string, string> stringData) : base(id)
         {
             LoadDictionaryData(stringData);
-            _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
+            Sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
         }
 
         public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
@@ -36,7 +36,7 @@ namespace RiverHollow.WorldObjects
             {
                 rv = true;
                 Active = true;
-                _sprite.PlayAnimation(AnimationEnum.Action1);
+                Sprite.PlayAnimation(AnimationEnum.Action1);
             }
             else
             {
@@ -59,7 +59,7 @@ namespace RiverHollow.WorldObjects
             base.LoadData(data);
             Active = bool.Parse(data.stringData);
 
-            if (Active) { _sprite.PlayAnimation(AnimationEnum.Action1); }
+            if (Active) { Sprite.PlayAnimation(AnimationEnum.Action1); }
         }
     }
 }

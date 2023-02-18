@@ -69,11 +69,11 @@ namespace RiverHollow.WorldObjects
 
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\texMachines")
         {
-            _sprite = new AnimatedSprite(@"Textures\texMachines");
-            _sprite.AddAnimation(AnimationEnum.ObjectIdle, (int)_pImagePos.X, (int)_pImagePos.Y, _pSize, 1, 0.3f, false);
-            _sprite.AddAnimation(AnimationEnum.PlayAnimation, (int)_pImagePos.X + _pSize.Y, (int)_pImagePos.Y, _pSize, _iWorkingFrames, _fFrameSpeed, false);
-            _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
-            _sprite.Drawing = true;
+            Sprite = new AnimatedSprite(@"Textures\texMachines");
+            Sprite.AddAnimation(AnimationEnum.ObjectIdle, (int)_pImagePos.X, (int)_pImagePos.Y, _pSize, 1, 0.3f, false);
+            Sprite.AddAnimation(AnimationEnum.PlayAnimation, (int)_pImagePos.X + _pSize.Y, (int)_pImagePos.Y, _pSize, _iWorkingFrames, _fFrameSpeed, false);
+            Sprite.PlayAnimation(AnimationEnum.ObjectIdle);
+            Sprite.Show = true;
 
             SetSpritePos(MapPosition);
         }
@@ -82,7 +82,7 @@ namespace RiverHollow.WorldObjects
         {
             if (MakingSomething())
             {
-                _sprite.Update(gTime);
+                Sprite.Update(gTime);
             }
         }
 
@@ -91,7 +91,7 @@ namespace RiverHollow.WorldObjects
             if (HoldingItem())
             {
                 Item i = DataManager.CraftItem(CraftingSlots[0].ID);
-                i.Draw(spriteBatch, new Rectangle((int)(MapPosition.X - ItemOffset.X), (int)(MapPosition.Y - ItemOffset.Y), Constants.TILE_SIZE, Constants.TILE_SIZE), true, _sprite.LayerDepth + 1);
+                i.Draw(spriteBatch, new Rectangle((int)(MapPosition.X - ItemOffset.X), (int)(MapPosition.Y - ItemOffset.Y), Constants.TILE_SIZE, Constants.TILE_SIZE), true, Sprite.LayerDepth + 1);
             }
             base.Draw(spriteBatch);
         }

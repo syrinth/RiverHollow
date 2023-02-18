@@ -173,18 +173,13 @@ namespace RiverHollow.Utilities
         }
         public static TEnum ParseEnum<TEnum>(string convertThis) where TEnum : struct
         {
-            TEnum rv = default;
-
-            rv = Enum.TryParse(convertThis, true, out rv) ? rv : default;
+            TEnum rv = Enum.TryParse(convertThis, true, out rv) ? rv : default;
             return rv;
         }
         public static string GetEnumString<TEnum>(TEnum convertThis)
         {
-            string rv = string.Empty;
 
-            rv = Enum.GetName(typeof(TEnum), convertThis);
-
-            return rv;
+            return Enum.GetName(typeof(TEnum), convertThis);
         }
 
         public static string GetActorString(VerbEnum verb)

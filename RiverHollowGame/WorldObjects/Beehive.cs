@@ -18,7 +18,7 @@ namespace RiverHollow.WorldObjects
         bool _bReady = false;
         public Beehive(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            _sprite.AddAnimation(AnimationEnum.Action_Finished, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
+            Sprite.AddAnimation(AnimationEnum.Action_Finished, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
 
             _iItemID = Util.AssignValue("ItemID", stringData);
             _iPeriod = Util.AssignValue("Period", stringData);
@@ -36,7 +36,7 @@ namespace RiverHollow.WorldObjects
                 _bReady = false;
                 _iDaysToHoney = _iPeriod;
                 _iHoneyToGather = -1;
-                _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
+                Sprite.PlayAnimation(AnimationEnum.ObjectIdle);
             }
 
             return rv;
@@ -63,7 +63,7 @@ namespace RiverHollow.WorldObjects
                 else { _iHoneyToGather = ((Garden)closestFlowerTile.WorldObject).GetPlant().HoneyID; }
 
                 _bReady = true;
-                _sprite.PlayAnimation(AnimationEnum.Action_Finished);
+                Sprite.PlayAnimation(AnimationEnum.Action_Finished);
             }
             else
             {
@@ -92,7 +92,7 @@ namespace RiverHollow.WorldObjects
             if (_iHoneyToGather != -1)
             {
                 _bReady = true;
-                _sprite.PlayAnimation(AnimationEnum.Action_Finished);
+                Sprite.PlayAnimation(AnimationEnum.Action_Finished);
             }
         }
     }

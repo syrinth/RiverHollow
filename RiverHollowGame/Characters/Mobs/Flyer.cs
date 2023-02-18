@@ -34,7 +34,7 @@ namespace RiverHollow.Characters.Mobs
                         if (!HasKnockbackVelocity())
                         {
                             MoveActor(_vFlightVelocity);
-                            PlayAnimation(VerbEnum.Walk, Facing);
+                            PlayAnimation(VerbEnum.Walk);
 
                             Vector2 mod = GetPlayerDirection() * 0.015f;
                             _vFlightVelocity += mod;

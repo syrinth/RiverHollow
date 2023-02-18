@@ -24,7 +24,7 @@ namespace RiverHollow.WorldObjects
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
         {
             base.LoadSprite(stringData, textureName);
-            _sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
+            Sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
         }
 
         public override void AttemptToTrigger(string name)
@@ -42,12 +42,12 @@ namespace RiverHollow.WorldObjects
             if (_bActive)
             {
                 _bWalkable = false;
-                _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
+                Sprite.PlayAnimation(AnimationEnum.ObjectIdle);
             }
             else
             {
                 _bWalkable = true;
-                _sprite.PlayAnimation(AnimationEnum.Action1);
+                Sprite.PlayAnimation(AnimationEnum.Action1);
             }
         }
     }
