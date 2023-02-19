@@ -409,7 +409,7 @@ namespace RiverHollow.Game_Managers
             {
                 Point vec = Util.MultiplyPoint(Util.GetPointFromDirection(dir), numSquares * Constants.TILE_SIZE);
                 
-                c.SetMoveTo(c.Position + vec);
+                c.SetMoveTo(c.CollisionBoxLocation + vec);
                 if (!_liMoving.Contains(c))
                 {
                     _liMoving.Add(c);
@@ -424,7 +424,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="c">The WorldActor to check</param>
         private void CheckFinishedMovement(Actor c)
         {
-            if (c.Position == c.MoveToLocation)
+            if (c.CollisionBoxLocation == c.MoveToLocation)
             {
                 if (!_liToRemove.Contains(c))
                 {
@@ -446,7 +446,7 @@ namespace RiverHollow.Game_Managers
             GUIManager.AddSkipCutsceneButton();
 
             _originalMap = MapManager.CurrentMap;
-            _pOriginalPlayerPos = PlayerManager.PlayerActor.Position;
+            _pOriginalPlayerPos = PlayerManager.PlayerActor.CollisionBoxLocation;
 
             //Iterates over all of the setup commands
             foreach (string s in _liSetupCommands)
@@ -469,7 +469,7 @@ namespace RiverHollow.Game_Managers
                 {
                     if (tags.Length > 1)
                     {
-                        PlayerManager.PlayerActor.Position = Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(tags[1]));
+                        PlayerManager.PlayerActor.SetPosition(Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(tags[1])));
                     }
                 }
                 else if (tags[0].Equals("Actors"))
@@ -487,7 +487,7 @@ namespace RiverHollow.Game_Managers
                         }
                         else { act = DataManager.CreateNPCByIndex(int.Parse(friendData[0])); }
                         act.CurrentMapName = _cutsceneMap.Name;
-                        act.Position = Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(friendData[1]));
+                        act.SetPosition(Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(friendData[1])));
 
                         _cutsceneMap.AddActor(act);
                         _liUsedNPCs.Add(act);

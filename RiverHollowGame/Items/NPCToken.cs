@@ -7,8 +7,8 @@ namespace RiverHollow.Items
 {
     public class NPCToken : Item
     {
-        private NPCTokenTypeEnum TokenType => DataManager.GetEnumByIDKey<NPCTokenTypeEnum>(ID, "Subtype", DataType.Item);
-        private int NPCID => DataManager.GetIntByIDKey(ID, "NPC_ID", DataType.Item);
+        private NPCTokenTypeEnum TokenType => GetEnumByIDKey<NPCTokenTypeEnum>("Subtype");
+        private int NPCID => GetIntByIDKey("NPC_ID");
 
         public NPCToken(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
         {

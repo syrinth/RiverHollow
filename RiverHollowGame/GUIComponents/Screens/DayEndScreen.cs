@@ -150,7 +150,7 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         TalkingActor npc = _liNPCs[_iCurrentNPC];
                         int index = RHRandom.Instance().Next(_liPoints.Count);
-                        npc.Position = _liPoints[index];
+                        npc.SetPosition(_liPoints[index]);
                         npc.Activate(true);
 
                         _liPoints.RemoveAt(index);
@@ -166,7 +166,7 @@ namespace RiverHollow.GUIComponents.Screens
                             if (((Traveler)npc).Income > 0)
                             {
                                 GUIImage coin = DataManager.GetIcon(GameIconEnum.Coin);
-                                coin.Position(npc.BodySprite.Position);
+                                coin.Position(npc.Position);
                                 coin.ScaledMoveBy(0, -Constants.TILE_SIZE);
                                 _liCoins.Add(coin);
                             }

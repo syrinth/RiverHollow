@@ -19,8 +19,8 @@ namespace RiverHollow.Characters
     /// </summary>
     public class Merchant : TravellingNPC
     {
-        ItemGroupEnum Needs => DataManager.GetEnumByIDKey<ItemGroupEnum>(ID, "Needs", DataType.Actor);
-        ItemGroupEnum Wants => DataManager.GetEnumByIDKey<ItemGroupEnum>(ID, "Wants", DataType.Actor);
+        ItemGroupEnum Needs => GetEnumByIDKey<ItemGroupEnum>("Needs");
+        ItemGroupEnum Wants => GetEnumByIDKey<ItemGroupEnum>("Wants");
 
         List<RequestItem> _liRequestItems;
         public int[] ChosenRequests;
@@ -188,7 +188,7 @@ namespace RiverHollow.Characters
             CurrentMapName = Constants.TOWN_MAP_NAME;
             MapManager.Maps[CurrentMapName].AddCharacterImmediately(this);
 
-            Position = Util.SnapToGrid(new Point(TownManager.Market.MapPosition.X + TownManager.Market.SpecialCoords.X, TownManager.Market.MapPosition.Y + TownManager.Market.SpecialCoords.Y));
+            SetPosition(Util.SnapToGrid(new Point(TownManager.Market.MapPosition.X + TownManager.Market.SpecialCoords.X, TownManager.Market.MapPosition.Y + TownManager.Market.SpecialCoords.Y)));
             PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
 
             if (_iShopID != -1)

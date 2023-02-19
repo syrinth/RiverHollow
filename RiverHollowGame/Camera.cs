@@ -29,7 +29,7 @@ namespace RiverHollow
 
         public static void Update(GameTime gTime)
         {
-            Vector2 target = Scrying() ? _vObserver : (_actObserver.BodySprite.Center.ToVector2() + _actObserver.AccumulatedMovement) * CurrentScale;
+            Vector2 target = Scrying() ? _vObserver : (_actObserver.Center.ToVector2() + _actObserver.AccumulatedMovement) * CurrentScale;
 
             //If Scrying is turned on and we are not taking input, process input commands to move the camera
             if (!TakingInput() && Scrying())

@@ -8,9 +8,9 @@ namespace RiverHollow.Items
 {
     public class Food : Item
     {
-        public int Stamina => DataManager.GetIntByIDKey(ID, "Stam", DataType.Item);
-        public int FoodValue => DataManager.GetIntByIDKey(ID, "FoodValue", DataType.Item);
-        public FoodTypeEnum FoodType => DataManager.GetEnumByIDKey<FoodTypeEnum>(ID, "FoodType", DataType.Item);
+        public int Stamina => GetIntByIDKey("Stam");
+        public int FoodValue => GetIntByIDKey("FoodValue");
+        public FoodTypeEnum FoodType => GetEnumByIDKey<FoodTypeEnum>("FoodType");
 
         public Food(int id, Dictionary<string, string> stringData, int num) : base(id, stringData, num)
         {

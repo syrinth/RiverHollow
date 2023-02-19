@@ -36,7 +36,7 @@ namespace RiverHollow.Characters.Mobs
                     if (_cooldownTimer.TickDown(gTime) && Facing == playerDir)
                     {
                         _cooldownTimer.Reset(Cooldown + (RHRandom.Instance().Next(0, 20) / 10));
-                        Projectile p = DataManager.CreateProjectile(DataManager.GetIntByIDKey(ID, "Projectile", DataType.Actor));
+                        Projectile p = DataManager.CreateProjectile(GetIntByIDKey("Projectile"));
                         p.Kickstart(this);
 
                         _liProjectiles.Add(p);

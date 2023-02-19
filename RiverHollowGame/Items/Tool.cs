@@ -15,16 +15,16 @@ namespace RiverHollow.Items
 {
     public class Tool : Item
     {
-        public ToolEnum ToolType => DataManager.GetEnumByIDKey<ToolEnum>(ID, "Subtype", DataType.Item);
-        public int StaminaCost => DataManager.GetIntByIDKey(ID, "Stam", DataType.Item, 0);
-        public int ToolLevel => DataManager.GetIntByIDKey(ID, "Level", DataType.Item);
+        public ToolEnum ToolType => GetEnumByIDKey<ToolEnum>("Subtype");
+        public int StaminaCost => GetIntByIDKey("Stam", 0);
+        public int ToolLevel => GetIntByIDKey("Level");
 
-        protected int HitAt => DataManager.GetIntByIDKey(ID, "HitAt", DataType.Item);
+        protected int HitAt => GetIntByIDKey("HitAt");
         protected int _iCharges = 0;
 
         protected bool _bUsed = false;
 
-        public string SoundEffect => DataManager.GetStringByIDKey(ID, "SoundEffect", DataType.Item);
+        public string SoundEffect => GetStringByIDKey("SoundEffect");
 
         protected AnimatedSprite _sprite;
         public AnimatedSprite ToolAnimation { get => _sprite; }

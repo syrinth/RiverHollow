@@ -89,7 +89,7 @@ namespace RiverHollow.Game_Managers
                 }
                 else if (travelPoint.NoMove)
                 {
-                    newPos = actor.Position;
+                    newPos = actor.CollisionBoxLocation;
                 }
                 else
                 {
@@ -203,7 +203,7 @@ namespace RiverHollow.Game_Managers
 
                 SoundManager.ChangeMap();
                 PlayerManager.CurrentMap = _newMapInfo.NextMap.Name;
-                PlayerManager.PlayerActor.Position = _newMapInfo.PlayerPosition;
+                PlayerManager.PlayerActor.SetPosition(_newMapInfo.PlayerPosition);
 
                 if (_newMapInfo.EnteredBuilding != null)
                 {
@@ -226,7 +226,7 @@ namespace RiverHollow.Game_Managers
                     if (CurrentMap.IsDungeon)
                     {
                         PlayerManager.PlayerActor.Dismount();
-                        PlayerManager.PlayerActor.Position = _newMapInfo.PlayerPosition;
+                        PlayerManager.PlayerActor.SetPosition(_newMapInfo.PlayerPosition);
                     }
                     else { PlayerManager.PlayerActor.ActiveMount.SyncToPlayer(); }
                 }

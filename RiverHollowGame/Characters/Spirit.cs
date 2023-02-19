@@ -10,8 +10,6 @@ namespace RiverHollow.Characters
 {
     public class Spirit : TalkingActor
     {
-        public override Rectangle HoverBox => new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
-
         const float MIN_VISIBILITY = 0.05f;
         float _fVisibility;
         int _iID;

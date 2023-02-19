@@ -11,7 +11,7 @@ namespace RiverHollow.Characters
 {
     public class Pet : TalkingActor
     {
-        private int GatherZoneID => DataManager.GetIntByIDKey(ID, "ObjectID", DataType.Actor);
+        private int GatherZoneID => GetIntByIDKey("ObjectID");
 
         public Pet(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
@@ -47,7 +47,7 @@ namespace RiverHollow.Characters
             {
                 if (CurrentMap == null) { MapManager.TownMap.AddCharacterImmediately(this); }
                 else { MapManager.TownMap.AddActor(this); }
-                Position = Util.GetRandomItem(MapManager.TownMap.FindFreeTiles()).Position;
+                SetPosition(Util.GetRandomItem(MapManager.TownMap.FindFreeTiles()).Position);
             }
             else
             {
@@ -60,7 +60,7 @@ namespace RiverHollow.Characters
                 }
 
                 obj.CurrentMap.AddActor(this);
-                Position = Util.GetRandomItem(validTiles).Position;
+                SetPosition(Util.GetRandomItem(validTiles).Position);
 
                 ChangeState(NPCStateEnum.Wander);
             }
@@ -79,7 +79,7 @@ namespace RiverHollow.Characters
                 if (t != null && t.Passable() && (t.WorldObject == null || t.WorldObject.Walkable)) { validTiles.Add(t); }
             }
 
-            Position = Util.GetRandomItem(validTiles).Position;
+            SetPosition(Util.GetRandomItem(validTiles).Position);
 
             ChangeState(NPCStateEnum.Wander);
         }

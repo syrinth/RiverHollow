@@ -15,10 +15,10 @@ namespace RiverHollow.Characters
 {
     public class Villager : TravellingNPC
     {
-        public string StartMap => DataManager.GetStringByIDKey(ID, "StartMap", DataType.Actor);
-        public int HouseID => DataManager.GetIntByIDKey(ID, "HouseID", DataType.Actor, 1);
-        public bool Marriable => DataManager.GetBoolByIDKey(ID, "CanMarry", DataType.Actor);
-        public bool CanBecomePregnant => DataManager.GetBoolByIDKey(ID, "CanBecomePregnant", DataType.Actor);
+        public string StartMap => GetStringByIDKey("StartMap");
+        public int HouseID => GetIntByIDKey("HouseID", 1);
+        public bool Marriable => GetBoolByIDKey("CanMarry");
+        public bool CanBecomePregnant => GetBoolByIDKey("CanBecomePregnant");
 
         private Dictionary<int, MoodEnum> _diItemMoods;
 
@@ -370,7 +370,7 @@ namespace RiverHollow.Characters
                                 RHTile tile = tiles[RHRandom.Instance().Next(tiles.Count)];
                                 if (tile.TileIsPassable() && !map.TileContainsActor(tile))
                                 {
-                                    Position = tile.Position;
+                                    SetPosition(tile.Position);
                                     break;
                                 }
                                 else { tiles.Remove(tile); }
@@ -379,7 +379,7 @@ namespace RiverHollow.Characters
                             break;
                         case SpawnStateEnum.HasHome:
                         case SpawnStateEnum.NonTownMap:
-                            Position = Util.SnapToGrid(map.GetCharacterSpawn("NPC_" + ID.ToString()));
+                            SetPosition(Util.SnapToGrid(map.GetCharacterSpawn("NPC_" + ID.ToString())));
                             break;
 
                     }
@@ -467,7 +467,7 @@ namespace RiverHollow.Characters
             Dictionary<string, string> pathingData = _diCompleteSchedule[_sScheduleKey][timeKeyIndex];
 
             RHTile nextTile = _liTilePath.Count > 0 ? _liTilePath[0] : null;
-            Point startPosition = nextTile != null ? nextTile.Position : Position;
+            Point startPosition = nextTile != null ? nextTile.Position : CollisionBoxLocation;
             List<RHTile> timePath = TravelManager.FindRouteToLocation(pathingData["Location"], CurrentMapName, startPosition, Name());
 
             string direction = string.Empty;
@@ -626,8 +626,8 @@ namespace RiverHollow.Characters
 
         private void SpawnPets()
         {
-            string petInfo = DataManager.GetStringByIDKey(ID, "PetID", DataType.Actor);
-            int petHome = DataManager.GetIntByIDKey(ID, "PetHomeID", DataType.Actor);
+            string petInfo = GetStringByIDKey("PetID");
+            int petHome = GetIntByIDKey("PetHomeID");
             if (!string.IsNullOrEmpty(petInfo) && !TownManager.TownObjectBuilt(petHome))
             {
                 int[] split = Util.FindIntArguments(petInfo);

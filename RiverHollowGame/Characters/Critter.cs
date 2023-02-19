@@ -61,7 +61,7 @@ namespace RiverHollow.Characters
 
                 MoveActor(new Vector2(-2, -2));
 
-                if (Position.X < 0 || Position.Y < 0)
+                if (CollisionBoxLocation.X < 0 || CollisionBoxLocation.Y < 0)
                 {
                     CurrentMap.RemoveActor(this);
                 }

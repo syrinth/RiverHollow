@@ -20,8 +20,6 @@ namespace RiverHollow.SpriteAnimations
         // Dictionary holding all of the FrameAnimation objects
         Dictionary<string, FrameAnimation> _diFrameAnimations = new Dictionary<string, FrameAnimation>();
 
-        // Calculated center of the sprite
-        public Point Center => new Point(Position.X + Width / 2, Position.Y + Height / 2);
         public int Width { get; private set; } = -1;
         public int Height { get; private set; } = -1;
 
@@ -267,7 +265,7 @@ namespace RiverHollow.SpriteAnimations
                         drawThis = new Rectangle(drawThis.X, FrameCutoff, drawThis.Width, drawThis.Height - FrameCutoff);
                     }
 
-                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, drawAtY, this.Width, this.Height - newFrameCutoff), drawThis, SpriteColor * visibility);
+                    spriteBatch.Draw(_texture, new Rectangle(Position.X, drawAtY, Width, Height - newFrameCutoff), drawThis, SpriteColor * visibility);
                 }
             }
         }

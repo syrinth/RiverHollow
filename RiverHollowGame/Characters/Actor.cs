@@ -11,7 +11,6 @@ using System.Threading;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.WorldObjects;
 
 namespace RiverHollow.Characters
 {
@@ -20,38 +19,40 @@ namespace RiverHollow.Characters
         #region Properties
         public int ID { get; } = -1;
         public AnimatedSprite BodySprite { get; protected set; }
-        public virtual Point Center => BodySprite.Center;
+        public Point Position => BodySprite.Position;
+        public void SetPosition(Point value)
+        {
+            BodySprite.Position = new Point(value.X - CollisionOffset.X, value.Y - CollisionOffset.Y);
+        }
+        public void MovePosition(Point value)
+        {
+            BodySprite.Position += value;
+        }
 
         protected Point Size = new Point(Constants.TILE_SIZE, Constants.TILE_SIZE * 2);
         public int Width => Size.X;
         public int Height => Size.Y;
+
+        public Rectangle HoverBox => new Rectangle(Position, Size);
+        public Point Center => HoverBox.Center;
+
+        #region CollisionBox
+        public virtual Rectangle CollisionBox => new Rectangle(Position.X + CollisionOffset.X, Position.Y + CollisionOffset.Y, CollisionSize.X, CollisionSize.Y);
+        public virtual Point CollisionOffset => GetPointByIDKey("CollisionOffset", new Point(0, Height - Constants.TILE_SIZE));
+        public virtual Point CollisionSize => GetPointByIDKey("CollisionSize", new Point(Width, Constants.TILE_SIZE));
+        public Point CollisionBoxLocation => CollisionBox.Location;
+        public Point CollisionCenter => CollisionBox.Center;
+        #endregion
 
         public bool Moving { get; set; } = false;
         public DirectionEnum Facing = DirectionEnum.Down;
         public ActorStateEnum State { get; protected set; } = ActorStateEnum.Walk;
         public ActorTypeEnum ActorType { get; protected set; }
 
-        public Point NewMapPosition;
-        /// <summary>
-        /// For World Actors, the Position is the top-left corner of the Actor's bounding box. Because the bounding
-        /// box of the Actor is not located at the same position as the top-left of the sprite, calculations need to be
-        /// made to set the sprite's position value above the given position, and retrieving the Actor's Position value must
-        /// likewise work backwards from the Sprite's Position to find where it is below.
-        /// </summary>
-        public virtual Point Position
-        {
-            get
-            {
-                return new Point(BodySprite.Position.X, BodySprite.Position.Y + BodySprite.Height - Constants.TILE_SIZE);
-            } //MAR this is fucked up
-            set
-            {
-                BodySprite.Position = new Point(value.X, value.Y - BodySprite.Height + Constants.TILE_SIZE);
-            }
-        }
-
         public string CurrentMapName;
         public RHMap CurrentMap => (!string.IsNullOrEmpty(CurrentMapName) ? MapManager.Maps[CurrentMapName] : null);
+        public bool OnTheMap { get; protected set; } = true;
+        public Point NewMapPosition;
         public bool OnScreen() { return CurrentMap == MapManager.CurrentMap; }
 
         #region Knockback
@@ -62,7 +63,7 @@ namespace RiverHollow.Characters
         protected float _fDecay;
         #endregion
 
-        #region Movement
+        #region Pathing
         protected Thread _pathingThread;
         public bool FollowingPath => _liTilePath.Count > 0;
         protected List<RHTile> _liTilePath;
@@ -74,18 +75,6 @@ namespace RiverHollow.Characters
         public bool IgnoreCollisions { get; protected set; } = false;
         public bool SlowDontBlock { get; protected set; } = false;
         #endregion
-
-        #region CollisionBox
-        public virtual Rectangle CollisionBox => new Rectangle(BodySprite.Position.X + CollisionOffset.X, BodySprite.Position.Y + CollisionOffset.Y, CollisionSize.X, CollisionSize.Y);
-        public virtual Point CollisionOffset => DataManager.GetPointByIDKey(ID, "CollisionOffset", DataType.Actor, new Point(0, Height - Constants.TILE_SIZE));
-        public virtual Point CollisionSize => DataManager.GetPointByIDKey(ID, "CollisionSize", DataType.Actor, new Point(Width, Constants.TILE_SIZE));
-        public Point CollisionBoxLocation => CollisionBox.Location;
-        public Point CollisionCenter => CollisionBox.Center;
-        #endregion
-
-        public virtual Rectangle HoverBox => new Rectangle((int)BodySprite.Position.X, (int)BodySprite.Position.Y, BodySprite.Width, BodySprite.Height);
-
-        public bool OnTheMap { get; protected set; } = true;
 
         public float BuffedSpeed => _fBaseSpeed * SpdMult;
         public float SpdMult = Constants.NPC_WALK_SPEED;
@@ -167,7 +156,7 @@ namespace RiverHollow.Characters
 
         protected string SpriteName()
         {
-            return DataManager.NPC_FOLDER + DataManager.GetStringByIDKey(ID, "Key", DataType.Actor);
+            return DataManager.NPC_FOLDER + GetStringByIDKey("Key");
         }
 
         /// <summary>
@@ -245,7 +234,7 @@ namespace RiverHollow.Characters
         {
             if (tile != null)
             {
-                DetermineFacing(new Point(tile.Position.X - Position.X, tile.Position.Y - Position.Y));
+                DetermineFacing(new Point(tile.Position.X - CollisionBoxLocation.X, tile.Position.Y - CollisionBoxLocation.Y));
             }
         }
         public void DetermineFacing(Point direction)
@@ -299,7 +288,7 @@ namespace RiverHollow.Characters
             {
                 if (v != Point.Zero)
                 {
-                    DetermineFacing(v - Position);
+                    DetermineFacing(v - CollisionBoxLocation);
                 }
                 DetermineAnimationState(v);
             }
@@ -367,11 +356,11 @@ namespace RiverHollow.Characters
         #region MoveBuffer Methods
         public void MoveActor(Point p)
         {
-            Position += _vbMovement.AddMovement(p.ToVector2());
+            MovePosition(_vbMovement.AddMovement(p.ToVector2()));
         }
         public void MoveActor(Vector2 v, bool faceDir = true)
         {
-            Position += _vbMovement.AddMovement(v);
+            MovePosition(_vbMovement.AddMovement(v));
             if (faceDir)
             {
                 DetermineAnimationState(v);
@@ -406,7 +395,7 @@ namespace RiverHollow.Characters
                 return;
             }
 
-            Point startPosition = Position;
+            Point startPosition = CollisionBoxLocation;
             Point target = _eCurrentState == NPCStateEnum.TrackPlayer ? PlayerManager.PlayerActor.CollisionCenter : _pLeashPoint; ;
             //RHTile lastTile = _liTilePath.Count > 0 ? _liTilePath[0] : null;
             _liTilePath = TravelManager.FindPathToLocation(ref startPosition, target, null, false, false);
@@ -432,7 +421,7 @@ namespace RiverHollow.Characters
             if (HasMovement())
             {
                 //Determines how much of the needed position we're capable of in one movement
-                Vector2  direction = Util.GetMoveSpeed(Position, MoveToLocation, BuffedSpeed);
+                Vector2  direction = Util.GetMoveSpeed(CollisionBoxLocation, MoveToLocation, BuffedSpeed);
 
                 //If we're following a path and there's more than one tile left, we don't want to cut
                 //short on individual steps, so recalculate based on the next target
@@ -459,7 +448,7 @@ namespace RiverHollow.Characters
                 }
 
                 //If, after movement, we've reached the given location, zero it.
-                if (MoveToLocation == Position && !CutsceneManager.Playing)
+                if (MoveToLocation == CollisionBoxLocation && !CutsceneManager.Playing)
                 {
                     SetMoveTo(Point.Zero);
                     if (_liTilePath.Count > 0)
@@ -604,7 +593,7 @@ namespace RiverHollow.Characters
                     RHTile myTile = CurrentMap.GetTileByPixelPosition(CollisionCenter);
                     var tileDir = Util.GetRandomItem(myTile.GetWalkableNeighbours());
 
-                    moveTo = Position + Util.MultiplyPoint((tileDir.Position - myTile.Position), RHRandom.Instance().Next(_iMinWander, _iMaxWander));
+                    moveTo = CollisionBoxLocation + Util.MultiplyPoint((tileDir.Position - myTile.Position), RHRandom.Instance().Next(_iMinWander, _iMaxWander));
                 }
 
                 SetMoveTo(moveTo);
@@ -671,6 +660,33 @@ namespace RiverHollow.Characters
         private void SetNextAnimationToIdle(ref AnimatedSprite sprite, VerbEnum verb, DirectionEnum dir)
         {
             sprite.SetNextAnimation(Util.GetActorString(verb, dir), Util.GetActorString(VerbEnum.Idle, dir));
+        }
+        #endregion
+
+        #region Lookup Handlers
+        public bool GetBoolByIDKey(string key)
+        {
+            return DataManager.GetBoolByIDKey(ID, key, DataType.Actor);
+        }
+        public int GetIntByIDKey(string key, int defaultValue = -1)
+        {
+            return DataManager.GetIntByIDKey(ID, key, DataType.Actor, defaultValue);
+        }
+        public float GetFloatByIDKey(string key, int defaultValue = -1)
+        {
+            return DataManager.GetFloatByIDKey(ID, key, DataType.Actor, defaultValue);
+        }
+        public string GetStringByIDKey(string key)
+        {
+            return DataManager.GetStringByIDKey(ID, key, DataType.Actor);
+        }
+        protected TEnum GetEnumByIDKey<TEnum>(string key) where TEnum : struct
+        {
+            return DataManager.GetEnumByIDKey<TEnum>(ID, key, DataType.Actor);
+        }
+        protected Point GetPointByIDKey(string key, Point defaultPoint = default)
+        {
+            return DataManager.GetPointByIDKey(ID, key, DataType.Actor, defaultPoint);
         }
         #endregion
     }

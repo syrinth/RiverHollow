@@ -35,18 +35,9 @@ namespace RiverHollow.Characters
         }
 
         private int HeightMod => BodySprite.Height - Constants.TILE_SIZE;
-        public override Point Position
-        {
-            get { return new Point(BodySprite.Position.X, BodySprite.Position.Y + HeightMod); }
-            set
-            {
-                Point pos = new Point(value.X, value.Y - HeightMod);
-                foreach (AnimatedSprite spr in GetSprites()) { spr.Position = pos; }
-            }
-        }
 
         public override Rectangle CollisionBox => ActiveMount != null ? ActiveMount.CollisionBox : base.CollisionBox;
-        public override Rectangle HitBox => new Rectangle(BodySprite.Position.X + 2, BodySprite.Position.Y + 22, 12, 10);
+        public override Rectangle HitBox => new Rectangle(Position.X + 2, Position.Y + 22, 12, 10);
 
         #region Clothing
         public Clothing Hat { get; private set; }
@@ -95,7 +86,7 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            _lightSource.Position = BodySprite.Position - new Point((_lightSource.Width - BodySprite.Width) / 2, (_lightSource.Height - BodySprite.Height) / 2);
+            _lightSource.Position = Position - new Point((_lightSource.Width - Width) / 2, (_lightSource.Height - Height) / 2);
 
             if (HasKnockbackVelocity())
             {
@@ -205,7 +196,7 @@ namespace RiverHollow.Characters
                 else if (c.SlotMatch(ClothingEnum.Legs)) { Legs = c; }
 
                 //MAR AWKWARD
-                c.Sprite.Position = BodySprite.Position;
+                c.Sprite.Position = Position;
                 c.Sprite.PlayAnimation(BodySprite.CurrentAnimation);
                 c.Sprite.SetLayerDepthMod(0.004f);
             }
@@ -242,7 +233,7 @@ namespace RiverHollow.Characters
             ActiveMount = actor;
             SpdMult = 1.5f;
 
-            Position = ActiveMount.BodySprite.Position + new Point((ActiveMount.BodySprite.Width - BodySprite.Width) / 2, 8);
+            SetPosition(ActiveMount.Position + new Point((ActiveMount.Width - Width) / 2, 8));
 
             foreach (AnimatedSprite spr in GetSprites())
             {
@@ -251,7 +242,7 @@ namespace RiverHollow.Characters
         }
         public void Dismount()
         {
-            Position = ActiveMount.BodySprite.Position + new Point(Constants.TILE_SIZE, 0);
+            SetPosition(ActiveMount.Position + new Point(Constants.TILE_SIZE, 0));
             ActiveMount = null;
             SpdMult = Constants.NORMAL_SPEED;
 

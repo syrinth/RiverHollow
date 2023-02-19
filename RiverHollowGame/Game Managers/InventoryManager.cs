@@ -283,7 +283,7 @@ Exit:
         #endregion
         public static void DropItemOnMap(Item item)
         {
-            MapManager.CurrentMap.DropItemOnMap(item, PlayerManager.PlayerActor.Position);
+            MapManager.CurrentMap.DropItemOnMap(item, PlayerManager.PlayerActor.CollisionBoxLocation);
         }
 
         #region Add Item to Inventory

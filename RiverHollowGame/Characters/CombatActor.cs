@@ -19,9 +19,9 @@ namespace RiverHollow.Characters
         protected RHTimer _damageTimer;
         protected RHTimer _cooldownTimer;
 
-        public virtual Rectangle HitBox => new Rectangle(BodySprite.Position.X + HitBoxOffset.X, BodySprite.Position.Y + HitBoxOffset.Y, HitBoxSize.X, HitBoxSize.Y);
-        public Point HitBoxOffset => DataManager.GetPointByIDKey(ID, "HitBoxOffset", DataType.Actor, new Point(0, Height - Constants.TILE_SIZE));
-        public Point HitBoxSize => DataManager.GetPointByIDKey(ID, "HitBoxSize", DataType.Actor, new Point(Width, Constants.TILE_SIZE));
+        public virtual Rectangle HitBox => new Rectangle(Position.X + HitBoxOffset.X, Position.Y + HitBoxOffset.Y, HitBoxSize.X, HitBoxSize.Y);
+        public Point HitBoxOffset => GetPointByIDKey("HitBoxOffset",new Point(0, Height - Constants.TILE_SIZE));
+        public Point HitBoxSize => GetPointByIDKey("HitBoxSize", new Point(Width, Constants.TILE_SIZE));
 
         public CombatActor() : base() { }
         public CombatActor(int id, Dictionary<string, string> stringData) : base(id, stringData) { }

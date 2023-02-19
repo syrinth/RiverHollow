@@ -461,7 +461,7 @@ namespace RiverHollow.Game_Managers
         {
             MapManager.CurrentMap = MapManager.Maps[Constants.PLAYER_HOME_NAME];
             CurrentMap = MapManager.CurrentMap.Name;
-            PlayerActor.Position = Util.SnapToGrid(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn"));
+            PlayerActor.SetPosition(Util.SnapToGrid(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn")));
             PlayerActor.DetermineAnimationState(new Point(0, 1));
         }
 
@@ -565,7 +565,7 @@ namespace RiverHollow.Game_Managers
         {
             GrabbedObject = t.WorldObject;
 
-            PlayerActor.Position = Util.SnapToGrid(PlayerActor.CollisionCenter);
+            PlayerActor.SetPosition(Util.SnapToGrid(PlayerActor.CollisionCenter));
             PlayerActor.DetermineFacing(t);
             PlayerActor.SetState(ActorStateEnum.Grab);
         }
@@ -667,7 +667,7 @@ namespace RiverHollow.Game_Managers
             if (t != null && ToolInUse == null)
             {
                 ToolInUse = t;
-                ToolInUse.Position = new Point(PlayerActor.Position.X - Constants.TILE_SIZE, PlayerActor.Position.Y - (Constants.TILE_SIZE * 2));
+                ToolInUse.Position = new Point(PlayerActor.CollisionBoxLocation.X - Constants.TILE_SIZE, PlayerActor.CollisionBoxLocation.Y - (Constants.TILE_SIZE * 2));
                 if (ToolInUse != null && !Busy)
                 {
                     if (DecreaseStamina(ToolInUse.StaminaCost))

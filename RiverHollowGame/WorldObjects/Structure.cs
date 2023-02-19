@@ -84,7 +84,7 @@ namespace RiverHollow.WorldObjects
                     {
                         if (m.OnTheMap)
                         {
-                            m.Position = new Point(-99, 99);
+                            m.SetPosition(new Point(-99, 99));
                         }
                     }
                 }

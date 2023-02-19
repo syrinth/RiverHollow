@@ -14,14 +14,12 @@ namespace RiverHollow.Characters
     public abstract class Mob : CombatActor
     {
         #region Properties
-        public override Rectangle HitBox => GetHitbox();
-
-        public bool HasProjectiles => DataManager.GetBoolByIDKey(ID, "Projectile", DataType.Actor);
-        public int Damage => DataManager.GetIntByIDKey(ID, "Damage", DataType.Actor);
-        protected float Cooldown => DataManager.GetFloatByIDKey(ID, "Cooldown", DataType.Actor);
-        private string[] LootData => Util.FindParams(DataManager.GetStringByIDKey(ID, "ItemID", DataType.Actor));
-        public override float MaxHP => DataManager.GetIntByIDKey(ID, "HP", DataType.Actor);
-        public MobTypeEnum Subtype => DataManager.GetEnumByIDKey<MobTypeEnum>(ID, "Subtype", DataType.Actor);
+        public bool HasProjectiles => GetBoolByIDKey("Projectile");
+        public int Damage => GetIntByIDKey("Damage");
+        protected float Cooldown => GetFloatByIDKey("Cooldown");
+        public override float MaxHP => GetIntByIDKey("HP");
+        public MobTypeEnum Subtype => GetEnumByIDKey<MobTypeEnum>("Subtype");
+        private string[] LootData => Util.FindParams(GetStringByIDKey("ItemID"));
 
         bool _bJump;
         int _iMaxRange = Constants.TILE_SIZE * 10;
@@ -40,7 +38,7 @@ namespace RiverHollow.Characters
             CurrentHP = MaxHP;
 
             _liProjectiles = new List<Projectile>();
-            _fBaseSpeed = DataManager.GetFloatByIDKey(ID, "Speed", DataType.Actor, 1);
+            _fBaseSpeed = GetFloatByIDKey("Speed", 1);
             Wandering = true;
 
             //_bJump = data.ContainsKey("Jump");
@@ -122,11 +120,11 @@ namespace RiverHollow.Characters
 
         protected Vector2 GetPlayerDirection()
         {
-            return (PlayerManager.PlayerActor.Position - Position).ToVector2();
+            return (PlayerManager.PlayerActor.CollisionBoxLocation - CollisionBoxLocation).ToVector2();
         }
         protected Vector2 GetPlayerDirectionNormal()
         {
-            Vector2 rv = (PlayerManager.PlayerActor.Position - Position).ToVector2();
+            Vector2 rv = (PlayerManager.PlayerActor.CollisionBoxLocation - CollisionBoxLocation).ToVector2();
             if (rv != Vector2.Zero)
             {
                 rv.Normalize();
@@ -154,33 +152,6 @@ namespace RiverHollow.Characters
                         TrackPlayer(getInRange);
                         break;
                 }
-            }
-        }
-
-        public Rectangle GetCollisionBox()
-        {
-            if (DataManager.GetBoolByIDKey(ID, "CollisionBox", DataType.Actor))
-            {
-                Rectangle r =  DataManager.GetRectangleByIDKey(ID, "CollisionBox", DataType.Actor);
-                r.Offset(BodySprite.Position);
-                return r;
-            }
-            else
-            {
-                return new Rectangle(Position.X, Position.Y, Width, Constants.TILE_SIZE);
-            }
-        }
-
-        public Rectangle GetHitbox()
-        {
-            if (DataManager.GetBoolByIDKey(ID, "HitBox", DataType.Actor))
-            {
-                int[] args = Util.FindIntArguments(DataManager.GetStringByIDKey(ID, "HitBox", DataType.Actor));
-                return new Rectangle(BodySprite.Position.X + args[0], BodySprite.Position.Y + args[1], args[2], args[3]);
-            }
-            else
-            {
-                return CollisionBox;
             }
         }
 
@@ -261,14 +232,14 @@ namespace RiverHollow.Characters
 
             if (drop != null)
             {
-                MapManager.CurrentMap.DropItemOnMap(drop, Position, false);
+                MapManager.CurrentMap.DropItemOnMap(drop, CollisionBoxLocation, false);
             }
         }
 
         public void Reset()
         {
             ChangeState(NPCStateEnum.Idle);
-            Position = _pLeashPoint;
+            SetPosition(_pLeashPoint);
             SetMoveTo(Point.Zero);
             CurrentHP = MaxHP;
         }
@@ -280,7 +251,7 @@ namespace RiverHollow.Characters
 
         protected override WeightEnum GetWeight()
         {
-            return DataManager.GetEnumByIDKey<WeightEnum>(ID, "Weight", DataType.Actor);
+            return GetEnumByIDKey<WeightEnum>("Weight");
         }
 
         #region Jumping Code

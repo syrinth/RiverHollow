@@ -285,7 +285,7 @@ namespace RiverHollow.Game_Managers
                     break;
 
             }
-            npc.Position = map.GetRandomPosition();
+            npc.SetPosition(map.GetRandomPosition());
             map.AddActor(npc);
         }
         #endregion

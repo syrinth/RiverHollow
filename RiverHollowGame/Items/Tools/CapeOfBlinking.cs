@@ -12,7 +12,7 @@ namespace RiverHollow.Items
 
         public override bool ItemBeingUsed()
         {
-            Point initialPosition = PlayerManager.PlayerActor.Position;
+            Point initialPosition = PlayerManager.PlayerActor.CollisionBoxLocation;
             PlayerManager.PlayerActor.MoveActor(Util.MultiplyPoint(Util.GetPointFromDirection(PlayerManager.PlayerActor.Facing), Constants.TILE_SIZE * 2));
 
             //Need to get all tiles touched by the player Rectangle as we are only touching on the Position and not the entirety

@@ -33,7 +33,7 @@ namespace RiverHollow.Items
         protected int _iNum;
         public int Number { get => _iNum; }
 
-        public int Value => DataManager.GetIntByIDKey(ID, "Value", DataType.Item);
+        public int Value => GetIntByIDKey("Value");
         public int TotalSellValue => Value * _iNum;
 
         public int BuyPrice => Value * 2;
@@ -213,6 +213,25 @@ namespace RiverHollow.Items
         }
         public bool CompareType(ItemEnum type) { return _eItemType == type; }
 
+        #region Lookup Handlers
+        public bool GetBoolByIDKey(string key)
+        {
+            return DataManager.GetBoolByIDKey(ID, key, DataType.Item);
+        }
+        public int GetIntByIDKey(string key, int defaultValue = -1)
+        {
+            return DataManager.GetIntByIDKey(ID, key, DataType.Item, defaultValue);
+        }
+        public string GetStringByIDKey(string key)
+        {
+            return DataManager.GetStringByIDKey(ID, key, DataType.Item);
+        }
+        protected TEnum GetEnumByIDKey<TEnum>(string key) where TEnum : struct
+        {
+            return DataManager.GetEnumByIDKey<TEnum>(ID, key, DataType.Item);
+        }
+        #endregion
+
         public static string SaveItemToString(Item i)
         {
             string rv = string.Empty;
@@ -279,7 +298,7 @@ namespace RiverHollow.Items
         public override void UseItem()
         {
             MapManager.CurrentMap.PrimeMonsterSpawns(this);
-            MapManager.CurrentMap.DropItemOnMap(this, PlayerManager.PlayerActor.Position);
+            MapManager.CurrentMap.DropItemOnMap(this, PlayerManager.PlayerActor.CollisionBoxLocation);
             Remove(1);
             ClearGMObjects();
         }

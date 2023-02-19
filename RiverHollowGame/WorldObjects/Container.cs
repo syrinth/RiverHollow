@@ -11,8 +11,8 @@ namespace RiverHollow.WorldObjects
 {
     public class Container : Buildable
     {
-        public int Rows => DataManager.GetIntByIDKey(ID, "Rows", DataType.WorldObject);
-        public int Columns => DataManager.GetIntByIDKey(ID, "Cols", DataType.WorldObject);
+        public int Rows => GetIntByIDKey("Rows");
+        public int Columns => GetIntByIDKey("Cols");
         public Item[,] Inventory { get; }
 
         public Container(int id, Dictionary<string, string> stringData) : base(id, stringData)

@@ -13,7 +13,7 @@ namespace RiverHollow.Items
 
         public bool HasSpecialTag(string specialKey)
         {
-            return DataManager.GetBoolByIDKey(ID, specialKey, DataType.Item);
+            return GetBoolByIDKey(specialKey);
         }
 
         public override bool AddToInventoryTrigger()

@@ -479,9 +479,9 @@ namespace RiverHollow.Map_Handling
                         {
                             Spirit s = new Spirit(obj.Properties)
                             {
-                                Position = Util.SnapToGrid(obj.Position.ToPoint()),
                                 CurrentMapName = _sName
                             };
+                            s.SetPosition(Util.SnapToGrid(obj.Position.ToPoint()));
                             GameManager.AddSpirit(s);
                             _liActors.Add(s);
                         }
@@ -870,7 +870,7 @@ namespace RiverHollow.Map_Handling
 
             foreach (Actor a in _liActors)
             {
-                if (a.IsActorType(ActorTypeEnum.Spirit) && PlayerManager.PlayerInRange(a.Position, 500))
+                if (a.IsActorType(ActorTypeEnum.Spirit) && PlayerManager.PlayerInRange(a.CollisionBoxLocation, 500))
                 {
                     rv = (Spirit)a;
                 }
@@ -2029,7 +2029,7 @@ namespace RiverHollow.Map_Handling
                 else { Util.AddUniquelyToList(ref _liActors, c); }
 
                 c.CurrentMapName = _sName;
-                c.Position = c.NewMapPosition == Point.Zero ? c.Position : c.NewMapPosition;
+                c.SetPosition(c.NewMapPosition == Point.Zero ? c.CollisionBoxLocation : c.NewMapPosition);
                 c.NewMapPosition = Point.Zero;
 
                 if (c.IsActorType(ActorTypeEnum.Merchant))
@@ -2070,7 +2070,7 @@ namespace RiverHollow.Map_Handling
         public void AddMobByPosition(Mob m, Point position)
         {
             m.CurrentMapName = _sName;
-            m.Position = Util.SnapToGrid(position);
+            m.SetPosition(Util.SnapToGrid(position));
 
             _liMobs.Add(m);
         }

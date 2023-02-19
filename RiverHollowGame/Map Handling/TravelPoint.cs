@@ -111,7 +111,7 @@ namespace RiverHollow.Map_Handling
             Point rv = new Point(Center.X + pDiff.X, Center.Y + pDiff.Y);
 
             //Get the difference between the Position of the character and the center of their collision box
-            rv += c.Position - actorCollisionCenter;
+            rv += c.CollisionBoxLocation - actorCollisionCenter;
 
             return rv;
         }

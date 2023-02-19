@@ -19,17 +19,17 @@ namespace RiverHollow.WorldObjects
         readonly string _sEffectWorking = "";
 
         public Recipe[] CraftingSlots { get; private set; }
-        public bool CraftDaily => DataManager.GetBoolByIDKey(ID, "Daily", DataType.WorldObject);
-        public bool Kitchen => DataManager.GetBoolByIDKey(ID, "Kitchen", DataType.WorldObject);
+        public bool CraftDaily => GetBoolByIDKey("Daily");
+        public bool Kitchen => GetBoolByIDKey("Kitchen");
 
-        private bool HoldItem => DataManager.GetBoolByIDKey(ID, "HoldItem", DataType.WorldObject);
+        private bool HoldItem => GetBoolByIDKey("HoldItem");
 
-        private Point ItemOffset => DataManager.GetPointByIDKey(ID, "ItemOffset", DataType.WorldObject);
+        private Point ItemOffset => GetPointByIDKey("ItemOffset");
 
         protected int _iWorkingFrames = 2;
         protected float _fFrameSpeed = 0.3f;
 
-        public int Capacity => DataManager.GetIntByIDKey(ID, "Capacity", DataType.WorldObject, 1);
+        public int Capacity => GetIntByIDKey("Capacity", 1);
         public List<int> CraftingList { get; }
 
         public Machine(int id, Dictionary<string, string> stringData) : base(id)

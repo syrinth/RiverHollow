@@ -18,18 +18,6 @@ namespace RiverHollow.Characters
         private int _iCols = 10;
         private Item[,] _arrInventory;
 
-        public override Point Position
-        {
-            get
-            {
-                return new Point(BodySprite.Position.X, BodySprite.Position.Y + BodySprite.Height - Constants.TILE_SIZE);
-            }
-            set
-            {
-                BodySprite.Position = new Point(value.X, value.Y - BodySprite.Height + Constants.TILE_SIZE);
-            }
-        }
-
         public ShippingGremlin(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             //_bLivesInTown = true;

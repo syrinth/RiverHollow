@@ -9,11 +9,7 @@ namespace RiverHollow.Characters
 {
     public class Projectile : Actor
     {
-        public override Point Position
-        {
-            get => BodySprite.Position; set => BodySprite.Position = value;
-        }
-        public int Damage => DataManager.GetIntByIDKey(ID, "Damage", DataType.Actor);
+        public int Damage => GetIntByIDKey("Damage");
 
         Vector2 _vVelocity;
         public bool Finished { get; private set; }
@@ -54,9 +50,9 @@ namespace RiverHollow.Characters
 
         public void Kickstart(Mob user)
         {
-            Position = user.Position;
+            SetPosition(user.CollisionBoxLocation);
             CurrentMapName = user.CurrentMapName;
-            _vVelocity = Util.GetPointFromDirection(user.Facing).ToVector2() * DataManager.GetFloatByIDKey(ID, "Speed", DataType.Actor);
+            _vVelocity = Util.GetPointFromDirection(user.Facing).ToVector2() * GetFloatByIDKey("Speed");
         }
     }
 }

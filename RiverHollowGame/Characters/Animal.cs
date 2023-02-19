@@ -11,9 +11,9 @@ namespace RiverHollow.Characters
 {
     public class Animal : TalkingActor
     {
-        public int ItemID => DataManager.GetIntByIDKey(ID, "ItemID", DataType.Actor);
+        public int ItemID => GetIntByIDKey("ItemID");
 
-        public int HouseID => DataManager.GetIntByIDKey(ID, "ObjectID", DataType.Actor);
+        public int HouseID => GetIntByIDKey("ObjectID");
 
         public Animal(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
@@ -50,7 +50,7 @@ namespace RiverHollow.Characters
             }
 
             map.AddActor(this);
-            Position = map.GetRandomPosition();
+            SetPosition(map.GetRandomPosition());
         }
     }
 }

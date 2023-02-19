@@ -15,9 +15,9 @@ namespace RiverHollow.WorldObjects
 
         protected int _iAltSprite = 0;
 
-        public ToolEnum NeededTool => DataManager.GetEnumByIDKey<ToolEnum>(ID, "Tool", DataType.WorldObject);
+        public ToolEnum NeededTool => GetEnumByIDKey<ToolEnum>("Tool");
 
-        public int NeededToolLevel => DataManager.GetIntByIDKey(ID, "ReqLvl", DataType.WorldObject);
+        public int NeededToolLevel => GetIntByIDKey("ReqLvl");
 
         public Destructible(int id, Dictionary<string, string> stringData, bool loadSprite = true) : base(id)
         {
@@ -128,7 +128,7 @@ namespace RiverHollow.WorldObjects
         {
             base.LoadData(data);
 
-            ReloadAlternateSprite(int.Parse(data.stringData), DataManager.GetStringByIDKey(ID, "Image", DataType.WorldObject));
+            ReloadAlternateSprite(int.Parse(data.stringData), GetStringByIDKey("Image"));
         }
     }
 }

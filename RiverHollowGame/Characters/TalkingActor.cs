@@ -52,11 +52,11 @@ namespace RiverHollow.Characters
             {
                 if (_iTaskGoals > 0)
                 {
-                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)BodySprite.Position.X, (int)BodySprite.Position.Y - Constants.TASK_ICON_OFFSET, 16, 16), new Rectangle(208, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle(Position.X, Position.Y - Constants.TASK_ICON_OFFSET, 16, 16), new Rectangle(208, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                 }
                 if (_assignedTask?.TaskState == TaskStateEnum.Assigned)
                 {
-                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)BodySprite.Position.X, (int)BodySprite.Position.Y - Constants.TASK_ICON_OFFSET, 16, 16), new Rectangle(224, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle(Position.X, Position.Y - Constants.TASK_ICON_OFFSET, 16, 16), new Rectangle(224, 16, 16, 16), Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                 }
             }
         }

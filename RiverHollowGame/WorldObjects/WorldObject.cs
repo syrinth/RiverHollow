@@ -74,7 +74,7 @@ namespace RiverHollow.WorldObjects
 
         public virtual string Name()
         {
-            return DataManager.GetTextData(ID, "Name", DataType.WorldObject);
+            return GetTextData("Name");
         }
 
         protected WorldObject(int id)
@@ -197,7 +197,7 @@ namespace RiverHollow.WorldObjects
         public virtual bool ProcessLeftClick() { return false; }
         public virtual bool ProcessRightClick() {
             bool rv = false;
-            if (DataManager.GetBoolByIDKey(ID, "OpenStock", DataType.WorldObject) && GameManager.CurrentBuilding != null){
+            if (GetBoolByIDKey("OpenStock") && GameManager.CurrentBuilding != null){
                 rv = true;
                 GUIManager.OpenMainObject(new HUDInventoryDisplay(TownManager.Inventory, DisplayTypeEnum.Inventory));
             }
@@ -410,6 +410,33 @@ namespace RiverHollow.WorldObjects
             MapPosition += direction;
             Sprite.Position += direction;
         }
+
+        #region Lookup Handlers
+        public string GetTextData(string key)
+        {
+            return DataManager.GetTextData(ID, key, DataType.WorldObject);
+        }
+        public bool GetBoolByIDKey(string key)
+        {
+            return DataManager.GetBoolByIDKey(ID, key, DataType.WorldObject);
+        }
+        public int GetIntByIDKey(string key, int defaultValue = -1)
+        {
+            return DataManager.GetIntByIDKey(ID, key, DataType.WorldObject, defaultValue);
+        }
+        public string GetStringByIDKey(string key)
+        {
+            return DataManager.GetStringByIDKey(ID, key, DataType.WorldObject);
+        }
+        protected TEnum GetEnumByIDKey<TEnum>(string key) where TEnum : struct
+        {
+            return DataManager.GetEnumByIDKey<TEnum>(ID, key, DataType.WorldObject);
+        }
+        protected Point GetPointByIDKey(string key, Point defaultPoint = default)
+        {
+            return DataManager.GetPointByIDKey(ID, key, DataType.WorldObject, defaultPoint);
+        }
+        #endregion
 
         #region Save Handlers
         public virtual WorldObjectData SaveData()

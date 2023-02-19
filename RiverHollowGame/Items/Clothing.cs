@@ -12,17 +12,15 @@ namespace RiverHollow.Items
         public AnimatedSprite Sprite;
         public string TextureKey { get; }
 
-        public ClothingEnum ClothingType => DataManager.GetEnumByIDKey<ClothingEnum>(ID, "Subtype", DataType.Item);
-        public bool GenderNeutral => DataManager.GetBoolByIDKey(ID, "Neutral", DataType.Item);
+        public ClothingEnum ClothingType => GetEnumByIDKey<ClothingEnum>("Subtype");
+        public bool GenderNeutral => GetBoolByIDKey("Neutral");
 
         public Clothing(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
         {
             //This is the texture to draw for the inventory representation
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Clothing");
             TextureKey = stringData["Key"];
-
-            int row = 0;
-            row = int.Parse(stringData["Row"]);
+            int row = int.Parse(stringData["Row"]);
         }
 
         public void SetSpritePosition(Point p)

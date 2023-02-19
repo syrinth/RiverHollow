@@ -17,22 +17,22 @@ namespace RiverHollow.Buildings
 {
     public class Building : Buildable
     {
-        public ItemGroupEnum StoreType => DataManager.GetEnumByIDKey<ItemGroupEnum>(ID, "ShopSells", DataType.WorldObject);
+        public ItemGroupEnum StoreType => GetEnumByIDKey<ItemGroupEnum>("ShopSells");
 
         private Rectangle _rEntrance;
 
         public int Income { get; private set; } = 1;
         public int Level { get; private set; } = 1;
 
-        public string Description => DataManager.GetTextData(ID, "Description", DataType.WorldObject);
+        public string Description => GetTextData("Description");
 
-        public string BuildingMapName => "map" + DataManager.GetStringByIDKey(ID, "Texture", DataType.WorldObject);
+        public string BuildingMapName => "map" + GetStringByIDKey("Texture");
 
-        public Rectangle SelectionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, Sprite.Width, Sprite.Height);
+        public Rectangle SelectionBox => new Rectangle(MapPosition.X, MapPosition.Y, Sprite.Width, Sprite.Height);
 
         public Rectangle TravelBox { get; private set; }
 
-        private int MaxAnimals => DataManager.GetIntByIDKey(ID, "MaxAnimals", DataType.WorldObject, 0);
+        private int MaxAnimals => GetIntByIDKey("MaxAnimals", 0);
 
         public Building(int id, Dictionary<string, string> stringData) : base(id)
         {
@@ -67,7 +67,7 @@ namespace RiverHollow.Buildings
                 }
             }
 
-            LoadSprite(stringData, DataManager.FOLDER_BUILDINGS + DataManager.GetStringByIDKey(ID, "Texture", DataType.WorldObject));
+            LoadSprite(stringData, DataManager.FOLDER_BUILDINGS + GetStringByIDKey("Texture"));
         }
 
         public override bool ProcessLeftClick()
@@ -161,7 +161,7 @@ namespace RiverHollow.Buildings
         }
         public Upgrade[] GetAllUpgrades()
         {
-            int[] upgradeIDs = Util.FindIntArguments(DataManager.GetStringByIDKey(ID, "UpgradeID", DataType.WorldObject));
+            int[] upgradeIDs = Util.FindIntArguments(GetStringByIDKey("UpgradeID"));
             Upgrade[] allUpgrades = new Upgrade[upgradeIDs.Length];
             for (int i = 0; i < upgradeIDs.Length; i++)
             {

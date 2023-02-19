@@ -324,7 +324,7 @@ namespace RiverHollow.Game_Managers
             if (!string.IsNullOrEmpty(rv)) { return Util.ParseFloat(rv); }
             else { return defaultValue; }
         }
-        public static Point GetPointByIDKey(int id, string key, DataType type, Point defaultPoint = default(Point))
+        public static Point GetPointByIDKey(int id, string key, DataType type, Point defaultPoint = default)
         {
             Point rv = defaultPoint;
             string value = GetStringByIDKey(id, key, type);
@@ -332,18 +332,6 @@ namespace RiverHollow.Game_Managers
             if (!string.IsNullOrEmpty(value))
             {
                 rv = Util.ParsePoint(value);
-            }
-
-            return rv;
-        }
-        public static Rectangle GetRectangleByIDKey(int id, string key, DataType type)
-        {
-            Rectangle rv = Rectangle.Empty;
-            string value = GetStringByIDKey(id, key, type);
-
-            if (!string.IsNullOrEmpty(value))
-            {
-                rv = Util.ParseRectangle(GetStringByIDKey(id, key, type));
             }
 
             return rv;

@@ -17,8 +17,9 @@ namespace RiverHollow.Items.Tools
             _sprite.Update(gTime);
             DirectionEnum dir = PlayerManager.PlayerActor.Facing;
 
-            if (ReadyToHit())
+            if (ReadyToHit() && !_bUsed)
             {
+                _bUsed = true;
                 Hitbox = GetHitbox(dir);
 
                 RHMap map = MapManager.CurrentMap;

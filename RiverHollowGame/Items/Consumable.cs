@@ -9,10 +9,10 @@ namespace RiverHollow.Items
 {
     public class Consumable : Item
     {
-        public bool Helpful => DataManager.GetStringByIDKey(ID, "CombatType", DataType.Item).Equals("Helpful");
-        public bool Recover => DataManager.GetBoolByIDKey(ID, "Recover", DataType.Item);
-        public int Health => DataManager.GetIntByIDKey(ID, "Hp", DataType.Item);
-        public int Mana => DataManager.GetIntByIDKey(ID, "Mana", DataType.Item);
+        public bool Helpful => GetStringByIDKey("CombatType").Equals("Helpful");
+        public bool Recover => GetBoolByIDKey("Recover");
+        public int Health => GetIntByIDKey("Hp");
+        public int Mana => GetIntByIDKey("Mana");
         private StatusEffect _statusEffect;
         private int _iStatusDuration;
 

@@ -11,11 +11,9 @@ namespace RiverHollow.Characters
 {
     public class Mount : TalkingActor
     {
-        private int StableID => DataManager.GetIntByIDKey(ID, "BuildingID", DataType.Actor);
+        private int StableID => GetIntByIDKey("BuildingID");
         public Mount(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            Size = Util.ParsePoint(stringData["Size"]);
-
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
             BodySprite = LoadSpriteAnimations(liData, SpriteName());
@@ -33,15 +31,15 @@ namespace RiverHollow.Characters
         {
             AnimatedSprite playerSprite = PlayerManager.PlayerActor.BodySprite;
             MapManager.CurrentMap.AddActor(this);
-            Point mod = new Point((playerSprite.Width - BodySprite.Width) / 2, BodySprite.Height - 8);
-            Position = playerSprite.Position + mod;
+            Point mod = new Point((playerSprite.Width - Width) / 2, Height - 8);
+            SetPosition(playerSprite.Position + mod);
         }
 
         public void SpawnInHome()
         {
             RHMap stableMap = MapManager.Maps[TownManager.GetBuildingByID(StableID)?.BuildingMapName];
             stableMap.AddActor(this);
-            Position = Util.GetRandomItem(stableMap.FindFreeTiles()).Position;
+            SetPosition(Util.GetRandomItem(stableMap.FindFreeTiles()).Position);
         }
 
         public bool CanEnterBuilding(string mapName)
