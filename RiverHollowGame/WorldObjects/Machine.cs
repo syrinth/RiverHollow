@@ -21,7 +21,6 @@ namespace RiverHollow.WorldObjects
         public Recipe[] CraftingSlots { get; private set; }
         public bool CraftDaily => GetBoolByIDKey("Daily");
         public bool Kitchen => GetBoolByIDKey("Kitchen");
-
         private bool HoldItem => GetBoolByIDKey("HoldItem");
 
         private Point ItemOffset => GetPointByIDKey("ItemOffset");
@@ -30,6 +29,7 @@ namespace RiverHollow.WorldObjects
         protected float _fFrameSpeed = 0.3f;
 
         public int Capacity => GetIntByIDKey("Capacity", 1);
+        public int MaxBatch => GetIntByIDKey("Batch", CraftDaily ? 3 : 1);
         public List<int> CraftingList { get; }
 
         public Machine(int id, Dictionary<string, string> stringData) : base(id)
@@ -166,8 +166,9 @@ namespace RiverHollow.WorldObjects
 
         public void TakeItem(int capacityIndex)
         {
-            InventoryManager.AddToInventory(DataManager.CraftItem(CraftingSlots[capacityIndex].ID));
+            InventoryManager.AddToInventory(DataManager.CraftItem(CraftingSlots[capacityIndex].ID, CraftingSlots[capacityIndex].BatchSize));
             CraftingSlots[capacityIndex].ID = -1;
+            CraftingSlots[capacityIndex].BatchSize = 1;
             CraftingSlots[capacityIndex].CraftTime = 0;
         }
 
@@ -186,7 +187,7 @@ namespace RiverHollow.WorldObjects
         /// Perform the Crafting steps and add the item to the inventory.
         /// </summary>
         /// <param name="itemToCraft">The Item object to craft</param>
-        public void AttemptToCraftChosenItem(Item itemToCraft)
+        public void AttemptToCraftChosenItem(Item itemToCraft, int batchSize)
         {
             bool success = false;
             if (CraftDaily)
@@ -195,10 +196,11 @@ namespace RiverHollow.WorldObjects
                 {
                     if (CraftingSlots[i].ID == -1)
                     {
-                        if (PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
+                        if (PlayerManager.ExpendResources(itemToCraft.GetRequiredItems(), batchSize))
                         {
                             success = true;
                             CraftingSlots[i].ID = itemToCraft.ID;
+                            CraftingSlots[i].BatchSize = batchSize;
                             CraftingSlots[i].CraftTime = DataManager.GetIntByIDKey(CraftingSlots[i].ID, "CraftTime", DataType.Item, 1);
                         }
                         break;
@@ -232,7 +234,7 @@ namespace RiverHollow.WorldObjects
             WorldObjectData data = base.SaveData();
             for (int i = 0; i < Capacity; i++)
             {
-                data.stringData += Util.SaveInt(CraftingSlots[i].ID) + "-" + CraftingSlots[i].CraftTime + "|";
+                data.stringData += Util.SaveInt(CraftingSlots[i].ID) + "-" + CraftingSlots[i].BatchSize + "-" + CraftingSlots[i].CraftTime + "|";
             }
             data.stringData =  data.stringData.TrimEnd('|');
 
@@ -251,7 +253,11 @@ namespace RiverHollow.WorldObjects
 
                     string[] split = Util.FindArguments(strData[i]);
                     CraftingSlots[i].ID = Util.LoadInt(split[0]);
-                    CraftingSlots[i].CraftTime = int.Parse(split[1]);
+                    CraftingSlots[i].BatchSize = int.Parse(split[1]);
+                    if (split.Length > 2)
+                    {
+                        CraftingSlots[i].CraftTime = int.Parse(split[2]);
+                    }
                 }
             }
         }
@@ -260,6 +266,7 @@ namespace RiverHollow.WorldObjects
         {
             public int ID;
             public int CraftTime;
+            public int BatchSize;
         }
     }
 }

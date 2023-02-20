@@ -112,6 +112,7 @@ namespace RiverHollow.GUIComponents.Screens
                         {
                             npc.Activate(false);
                             npc.BodySprite.SetScale(CurrentScale);
+                            npc.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
                             npc.PlayAnimation(npc.MoodVerb);
                             _liNPCs.Add(npc);
                         }

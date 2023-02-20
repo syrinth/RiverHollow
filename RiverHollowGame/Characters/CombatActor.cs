@@ -49,18 +49,15 @@ namespace RiverHollow.Characters
         {
             bool rv = false;
 
-            if (_damageTimer == null)
+            if (_damageTimer == null && HasHP)
             {
                 rv = true;
 
                 _damageTimer = new RHTimer(IsActorType(ActorTypeEnum.Mob) ? Constants.MOB_INVULN_PERIOD : Constants.PLAYER_INVULN_PERIOD);
                 _flickerTimer = new RHTimer(Constants.FLICKER_PERIOD);
 
-                if (HasHP)
-                {
-                    DecreaseHealth(value);
-                    AssignKnockbackVelocity(hitbox);
-                }
+                DecreaseHealth(value);
+                AssignKnockbackVelocity(hitbox);
             }
 
             return rv;

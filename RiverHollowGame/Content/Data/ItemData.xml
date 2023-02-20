@@ -231,11 +231,11 @@
     </Item>
     <Item>
       <Key>57</Key>
-      <Value>[Type:Resource][Image:1-6][MerchType:Medicine][Value:150][ReqItems:163-2|23-1]</Value>
+      <Value>[Type:Resource][Image:1-6][ItemGroups:Medicine][Value:150][ReqItems:163-2|23-1]</Value>
     </Item>
     <Item>
       <Key>58</Key>
-      <Value>[Type:Resource][Image:2-6][MerchType:Medicine][Value:80][ReqItems:56-1|162-2]</Value>
+      <Value>[Type:Resource][Image:2-6][ItemGroups:Medicine][Value:80][ReqItems:56-1|162-2]</Value>
     </Item>
     <Item>
       <Key>59</Key>
@@ -651,11 +651,11 @@
     </Item>
     <Item>
       <Key>162</Key>
-      <Value>[Type:Resource][Image:6-7][MerchType:Herb][Value:10]</Value>
+      <Value>[Type:Resource][Image:6-7][ItemGroups:Herb][Value:10]</Value>
     </Item>
     <Item>
       <Key>163</Key>
-      <Value>[Type:Food][Image:5-2][MerchType:Herb][Value:30][Stam:10][FoodType:Healthy][FoodValue:10]</Value>
+      <Value>[Type:Food][Image:5-2][ItemGroups:Herb][Value:30][Stam:10][FoodType:Healthy][FoodValue:10]</Value>
     </Item>
     <Item>
       <Key>164</Key>
@@ -671,11 +671,11 @@
     </Item>
     <Item>
       <Key>167</Key>
-      <Value>[Type:Consumable][Image:1-0][MerchType:Medicine][Value:40][ReqItems:162-2][CombatType:Helpful][Hp:10]</Value>
+      <Value>[Type:Consumable][Image:1-0][ItemGroups:Medicine][Value:40][ReqItems:162-2][CombatType:Helpful][Hp:10]</Value>
     </Item>
     <Item>
       <Key>168</Key>
-      <Value>[Type:Consumable][Image:1-1][Value:100][CombatType:Helpful][Mana:20][ReqItems:8-1|9-1|162-1]</Value>
+      <Value>[Type:Consumable][Image:1-1][ItemGroups:Medicine][Value:50][ReqItems:8-1|9-1|162-1][CombatType:Helpful][Mana:20]</Value>
     </Item>
     <Item>
       <Key>169</Key>
@@ -775,23 +775,23 @@
     </Item>
     <Item>
       <Key>193</Key>
-      <Value>[Type:Resource][Image:7-10][Value:20][MerchType:None]</Value>
+      <Value>[Type:Resource][Image:7-10][Value:20][ItemGroups:None]</Value>
     </Item>
     <Item>
       <Key>194</Key>
-      <Value>[Type:Resource][Image:3-9][MerchType:Metalwork][Value:200][ReqItems:37-2]</Value>
+      <Value>[Type:Resource][Image:3-9][ItemGroups:Metalwork][Value:200][ReqItems:37-2]</Value>
     </Item>
     <Item>
       <Key>195</Key>
-      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:30][ReqItems:150-1][Stam:16][FoodType:Plain][FoodValue:30]</Value>
+      <Value>[Type:Food][Image:8-0][ItemGroups:Food][Value:30][ReqItems:150-1][Stam:16][FoodType:Plain][FoodValue:30]</Value>
     </Item>
     <Item>
       <Key>196</Key>
-      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:50][ReqItems:150-1][FoodType:Plain][FoodValue:50]</Value>
+      <Value>[Type:Food][Image:8-0][ItemGroups:Food][Value:50][ReqItems:150-1][FoodType:Plain][FoodValue:50]</Value>
     </Item>
     <Item>
       <Key>197</Key>
-      <Value>[Type:Food][Image:8-0][MerchType:Food][Value:50][ReqItems:150-1][FoodType:Healthy][FoodValue:50]</Value>
+      <Value>[Type:Food][Image:8-0][ItemGroups:Food][Value:50][ReqItems:150-1][FoodType:Healthy][FoodValue:50]</Value>
     </Item>
   </Asset>
 </XnaContent>

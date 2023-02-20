@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Newtonsoft.Json.Linq;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
@@ -159,7 +160,7 @@ namespace RiverHollow.Characters
                 {
                     c = Color.Purple;
                     requested = true;
-                    offer *= 2;
+                    offer = it.Value * 2;
                     break;
                 }
             }

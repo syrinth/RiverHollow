@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Hey, name's $NPC_1$. I heard that you might be needing some extra hands to help withsome of the monsters around here. All I ask is that you build me a place to live. Doesn't need to be anything fancy. There is no way I'm moving back in with dad.][UnlockBuildingID:55][Name:Introduction]</Value>
+      <Value>[Text:Hey, name's $Actor_1$. I heard that you might be needing some extra hands to help withsome of the monsters around here. All I ask is that you build me a place to live. Doesn't need to be anything fancy. There is no way I'm moving back in with dad.][UnlockBuildingID:55][Name:Introduction]</Value>
     </Item>
     <Item>
       <Key>1</Key>

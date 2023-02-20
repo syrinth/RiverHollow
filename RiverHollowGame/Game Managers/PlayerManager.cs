@@ -391,7 +391,7 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
-        public static bool ExpendResources(Dictionary<int, int> requiredItems)
+        public static bool ExpendResources(Dictionary<int, int> requiredItems, int batch = 1)
         {
             bool rv = false;
             if (requiredItems == null)
@@ -404,7 +404,7 @@ namespace RiverHollow.Game_Managers
                 rv = true;
                 foreach (KeyValuePair<int, int> kvp in requiredItems)
                 {
-                    InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                    InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value * batch);
                 }
             }
 

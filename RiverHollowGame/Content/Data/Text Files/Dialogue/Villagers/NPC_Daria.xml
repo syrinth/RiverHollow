@@ -4,7 +4,7 @@
     <Item>
       <Key>0</Key>
       <Value>[Name:Introduction][Text:You $Name$? I heard that you were starting a town out here and figured you could use a hand.
-My name's $NPC_3$, a $Class_5$ looking for work. I'd appreciate it if you could set up a house for me. Maybe something that looks like this.][UnlockObjectID:13]</Value>
+My name's $Actor_3$, a $Class_5$ looking for work. I'd appreciate it if you could set up a house for me. Maybe something that looks like this.][UnlockObjectID:13]</Value>
     </Item>
     <Item>
       <Key>1</Key>

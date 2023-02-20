@@ -6,6 +6,7 @@ using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Policy;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
@@ -99,7 +100,7 @@ namespace RiverHollow.Game_Managers
             {
                 InventoryManager.InitExtraInventory(Inventory);
 
-                List<Food> sortedFood = Util.MultiArrayToList(Inventory).ConvertAll(x => (Food)x);
+                List<Food> sortedFood = Util.MultiArrayToList(Inventory).FindAll(x => x.CompareType(ItemEnum.Food)).ConvertAll(x => (Food)x);
                 sortedFood = sortedFood.OrderBy(x => x.FoodType).ThenByDescending(x => x.Value).ToList();
                 foreach (Food f in sortedFood)
                 {
@@ -436,7 +437,8 @@ namespace RiverHollow.Game_Managers
                 Travelers = new List<int>(),
                 VillagerData = new List<VillagerData>(),
                 MerchantData = new List<MerchantData>(),
-                MerchantQueue = new List<int>()
+                MerchantQueue = new List<int>(),
+                Inventory = new List<ItemData>()
             };
 
 
@@ -473,6 +475,11 @@ namespace RiverHollow.Game_Managers
             foreach (Merchant npc in MerchantQueue)
             {
                 data.MerchantQueue.Add(npc.ID);
+            }
+
+            foreach (Item i in Inventory)
+            {
+                data.Inventory.Add(Item.SaveData(i));
             }
 
             data.travelersCame = _bTravelersCame;
@@ -516,6 +523,21 @@ namespace RiverHollow.Game_Managers
             {
                 MerchantQueue.Add(TownManager.DIMerchants[saveData.MerchantQueue[i]]);
             }
+
+            InventoryManager.InitExtraInventory(Inventory);
+            for (int i = 0; i < Constants.KITCHEN_STOCK_SIZE; i++)
+            {
+                for (int j = 0; j < Constants.KITCHEN_STOCK_SIZE; j++)
+                {
+                    int index = i * Constants.KITCHEN_STOCK_SIZE + j;
+                    ItemData item = saveData.Inventory[index];
+
+                    Item newItem = DataManager.GetItem(item.itemID, item.num);
+                    newItem?.ApplyUniqueData(item.strData);
+                    InventoryManager.AddItemToInventorySpot(newItem, i, j, false);
+                }
+            }
+            InventoryManager.ClearExtraInventory();
 
             _bTravelersCame = saveData.travelersCame;
 

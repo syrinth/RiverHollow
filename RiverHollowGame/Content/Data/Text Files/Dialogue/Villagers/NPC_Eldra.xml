@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Welcome to the Adventurer's Guild. I'm $NPC_5$, the guildmaster here. It's good to see a new face in town.
+      <Value>[Text:Welcome to the Adventurer's Guild. I'm $Actor_5$, the guildmaster here. It's good to see a new face in town.
 If you decide to put some of that land to use constructing housing, I can get you in contact with other adventurers.][Name:Introduction]</Value>
     </Item>
     <Item>

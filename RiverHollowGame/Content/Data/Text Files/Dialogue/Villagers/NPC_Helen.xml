@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name:Introduction][Text:Hello! My name is $NPC_12$, it's so nice to meet you. I've been on the road for a few days and it's such a relief to relax.
+      <Value>[Name:Introduction][Text:Hello! My name is $Actor_12$, it's so nice to meet you. I've been on the road for a few days and it's such a relief to relax.
 I hear that you're looking for more people? I'd love to settle down here.]</Value>
     </Item>
     <Item>
@@ -25,7 +25,7 @@ Now then, as for how I can contribute, I need a $WorldObject_27$ for my little f
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Name:Tailor request][Text:Well, if I'm to stay here i suppose I'll need to find a way to earn my keep. I'm not too bad witha needle and thread. I'm sure $NPC_16$ could design a shop for me or something.][Default][Priority:50][Once][ShopTargetID:2][UnlockItemID:139]</Value>
+      <Value>[Name:Tailor request][Text:Well, if I'm to stay here i suppose I'll need to find a way to earn my keep. I'm not too bad witha needle and thread. I'm sure $Actor_16$ could design a shop for me or something.][Default][Priority:50][Once][ShopTargetID:2][UnlockItemID:139]</Value>
     </Item>
   </Asset>
 </XnaContent>

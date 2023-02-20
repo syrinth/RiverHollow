@@ -4,7 +4,7 @@
     <Item>
       <Key>0</Key>
       <Value>[Name:Introduction][Text:*Gaaaaasp* A human!
-Hello! Hi! I'm $NPC_42$ and I am SO excited to meet you!]</Value>
+Hello! Hi! I'm $Actor_42$ and I am SO excited to meet you!]</Value>
     </Item>
     <Item>
       <Key>1</Key>

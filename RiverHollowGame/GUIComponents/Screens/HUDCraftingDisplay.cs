@@ -23,6 +23,8 @@ namespace RiverHollow.GUIComponents.Screens
         private GUIButton _btnBuild;
         private GUIButton _btnLeft;
         private GUIButton _btnRight;
+        private GUIButton _btnUp;
+        private GUIButton _btnDown;
         private GUIItemBox[] _arrRecipes;
         private List<GUIItemBox> _liRequiredItems;
         private GUIItemBox[] _arrMaking;
@@ -31,6 +33,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         private int _iSelectedItemID = -1;
         private int _iRecipeListStart = 0;
+        private int _iBatchSize = 1;
 
         public HUDCraftingDisplay(Machine m)
         {
@@ -40,7 +43,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             Setup(m.CraftingList);
 
-            UpdateInfo(DataManager.CraftItem(_iSelectedItemID));
+            UpdateInfo(_iSelectedItemID);
 
             DetermineSize();
 
@@ -97,8 +100,18 @@ namespace RiverHollow.GUIComponents.Screens
             _btnBuild.Position(_gComponents);
             _btnBuild.AlignToObject(_gComponents, SideEnum.CenterX);
             _btnBuild.ScaledMoveBy(0, 49);
-
             _gComponents.AddControl(_btnBuild);
+
+            if (_objMachine.MaxBatch > 1)
+            {
+                _btnDown = new GUIButton(new Rectangle(137, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, BatchDecrease);
+                _btnDown.AnchorAndAlignToObject(_btnBuild, SideEnum.Left, SideEnum.CenterY, GameManager.ScaleIt(2));
+                _gComponents.AddControl(_btnDown);
+
+                _btnUp = new GUIButton(new Rectangle(128, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, BatchIncrease);
+                _btnUp.AnchorAndAlignToObject(_btnBuild, SideEnum.Right, SideEnum.CenterY, GameManager.ScaleIt(2));
+                _gComponents.AddControl(_btnUp);
+            }
 
             AddControl(_gComponents);
 
@@ -110,7 +123,7 @@ namespace RiverHollow.GUIComponents.Screens
                 if (_objMachine.CraftingSlots[i].ID == -1) { _arrMaking[i] = new GUIItemBox(); }
                 else
                 {
-                    _arrMaking[i] = new GUIItemBox(DataManager.CraftItem(_objMachine.CraftingSlots[i].ID));
+                    _arrMaking[i] = new GUIItemBox(DataManager.CraftItem(_objMachine.CraftingSlots[i].ID, _objMachine.CraftingSlots[i].BatchSize));
                     if (_objMachine.CraftingSlots[i].CraftTime > 0)
                     {
                         _arrMaking[i].SetAlpha(0.5f);
@@ -166,7 +179,8 @@ namespace RiverHollow.GUIComponents.Screens
                         if (_arrRecipes[i].BoxItem != null && _arrRecipes[i].BoxItem.ID != _iSelectedItemID)
                         {
                             _gSelection.CenterOnObject(_arrRecipes[i]);
-                            UpdateInfo(_arrRecipes[i].BoxItem);
+                            _iBatchSize = 1;
+                            UpdateInfo(_arrRecipes[i].BoxItem.ID);
 
                             break;
                         }
@@ -175,8 +189,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
             else if (_gComponents.Contains(mouse))
             {
-                rv = true;
-                _btnBuild.ProcessLeftButtonClick(mouse);
+                rv = _gComponents.ProcessLeftButtonClick(mouse);
             }
             else if (_btnLeft.ProcessLeftButtonClick(mouse) || _btnRight.ProcessLeftButtonClick(mouse))
             {
@@ -192,7 +205,7 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         _objMachine.TakeItem(i);
                         box.SetItem(null);
-                        UpdateInfo(DataManager.CraftItem(_iSelectedItemID));
+                        UpdateInfo(_iSelectedItemID);
                     }
                 }
             }
@@ -256,10 +269,25 @@ namespace RiverHollow.GUIComponents.Screens
             return rv;
         }
 
+        private void BatchDecrease()
+        {
+            if (_iBatchSize > 1) { _iBatchSize--; }
+            else { _iBatchSize = _objMachine.MaxBatch; }
+
+            UpdateInfo(_iSelectedItemID);
+        }
+        private void BatchIncrease()
+        {
+            if (_iBatchSize < _objMachine.MaxBatch) { _iBatchSize++; }
+            else { _iBatchSize = 1; }
+
+            UpdateInfo(_iSelectedItemID);
+        }
+
         private void BtnBuild()
         {
-            Item craft = DataManager.CraftItem(_iSelectedItemID);
-            _objMachine?.AttemptToCraftChosenItem(craft);
+            Item craft = DataManager.CraftItem(_iSelectedItemID, _iBatchSize);
+            _objMachine?.AttemptToCraftChosenItem(craft, _iBatchSize);
 
             if (_objMachine.CraftDaily)
             {
@@ -267,14 +295,15 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     if (_arrMaking[i].BoxItem == null)
                     {
-                        _arrMaking[i].SetItem(DataManager.CraftItem(_objMachine.CraftingSlots[i].ID));
+                        _iBatchSize = 1;
+                        _arrMaking[i].SetItem(craft);
                         _arrMaking[i].SetAlpha(.5f);
                         break;
                     }
                 }
             }
 
-            UpdateInfo(craft);
+            UpdateInfo(_iSelectedItemID);
         }
         private void ShiftLeft()
         {
@@ -283,9 +312,8 @@ namespace RiverHollow.GUIComponents.Screens
             _btnRight.Enable(true);
 
             _gSelection.CenterOnObject(_arrRecipes[0]);
-            UpdateInfo(DataManager.CraftItem(_objMachine.CraftingList[_iRecipeListStart]));
+            UpdateInfo(_objMachine.CraftingList[_iRecipeListStart]);
         }
-
         private void ShiftRight()
         {
             _iRecipeListStart += Constants.MAX_RECIPE_DISPLAY;
@@ -293,17 +321,18 @@ namespace RiverHollow.GUIComponents.Screens
             _btnLeft.Enable(true);
 
             _gSelection.CenterOnObject(_arrRecipes[0]);
-            UpdateInfo(DataManager.CraftItem(_objMachine.CraftingList[_iRecipeListStart]));
+            UpdateInfo(_objMachine.CraftingList[_iRecipeListStart]);
         }
 
-        private void UpdateInfo(Item chosenItem)
+        private void UpdateInfo(int chosenID)
         {
+            Item chosenItem = DataManager.CraftItem(chosenID);
             _iSelectedItemID = chosenItem.ID;
 
             for (int i = 0; i < _arrRecipes.Length; i++)
             {
                 int index = i + _iRecipeListStart;
-                if (i + _iRecipeListStart < _objMachine.CraftingList.Count) { _arrRecipes[i].SetItem(DataManager.CraftItem(_objMachine.CraftingList[index])); }
+                if (i + _iRecipeListStart < _objMachine.CraftingList.Count) { _arrRecipes[i].SetItem(DataManager.CraftItem(_objMachine.CraftingList[index], _iBatchSize)); }
                 else { _arrRecipes[i].SetItem(null); }
 
                 _arrRecipes[i].Enable(_arrRecipes[i].BoxItem != null && InventoryManager.HasSufficientItems(_arrRecipes[i].BoxItem.GetRequiredItems()) && !_objMachine.CapacityFull());
@@ -317,9 +346,9 @@ namespace RiverHollow.GUIComponents.Screens
             _liRequiredItems.Clear();
             foreach (KeyValuePair<int, int> kvp in chosenItem.GetRequiredItems())
             {
-                GUIItemBox newItem = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
+                GUIItemBox newItem = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value * _iBatchSize));
                 newItem.CompareNumToPlayer();
-                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
+                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value * _iBatchSize))
                 {
                     newItem.SetColor(Color.Red);
                 }
@@ -350,7 +379,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
             }
 
-            _btnBuild.Enable(InventoryManager.HasSufficientItems(chosenItem.GetRequiredItems()) && !_objMachine.CapacityFull() && _objMachine.SufficientStamina());
+            _btnBuild.Enable(InventoryManager.HasSufficientItems(chosenItem.GetRequiredItems(), _iBatchSize) && !_objMachine.CapacityFull() && _objMachine.SufficientStamina());
         }
     }
 }

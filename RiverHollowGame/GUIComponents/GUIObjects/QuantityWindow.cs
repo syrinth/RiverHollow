@@ -34,14 +34,13 @@ namespace RiverHollow.GUIComponents.GUIObjects
             text.ScaledMoveBy(0, 7);
             AddControl(text);
 
-            _btnUp = new GUIButton(new Rectangle(128, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Increment);
-            _btnUp.AnchorAndAlignToObject(box, SideEnum.Right, SideEnum.CenterY, GameManager.ScaleIt(2));
-            AddControl(_btnUp);
-
             _btnDown = new GUIButton(new Rectangle(137, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Decrement);
             _btnDown.AnchorAndAlignToObject(box, SideEnum.Left, SideEnum.CenterY, GameManager.ScaleIt(2));
             AddControl(_btnDown);
 
+            _btnUp = new GUIButton(new Rectangle(128, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Increment);
+            _btnUp.AnchorAndAlignToObject(box, SideEnum.Right, SideEnum.CenterY, GameManager.ScaleIt(2));
+            AddControl(_btnUp);
 
             GUIImage img = new GUIImage(new Rectangle(2, 120, 100, 3), GameManager.ScaleIt(100), GameManager.ScaleIt(3), DataManager.HUD_COMPONENTS);
             img.AnchorAndAlignToObject(box, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(2));
@@ -65,18 +64,17 @@ namespace RiverHollow.GUIComponents.GUIObjects
             return base.ProcessRightButtonClick(mouse);
         }
 
-        public void Increment()
-        {
-            if (GameManager.CurrentItem.Number < MAX_VALUE) { GameManager.CurrentItem.Add(1, false); }
-            else { GameManager.CurrentItem.SetNumber(1); }
-
-            RefreshPrice();
-        }
-
         public void Decrement()
         {
             if (GameManager.CurrentItem.Number > 1) { GameManager.CurrentItem.Remove(1, false); }
             else { GameManager.CurrentItem.SetNumber(MAX_VALUE); }
+
+            RefreshPrice();
+        }
+        public void Increment()
+        {
+            if (GameManager.CurrentItem.Number < MAX_VALUE) { GameManager.CurrentItem.Add(1, false); }
+            else { GameManager.CurrentItem.SetNumber(1); }
 
             RefreshPrice();
         }
