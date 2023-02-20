@@ -60,9 +60,9 @@
         public const int MERCHANT_REQUEST_NUM = 3;
         public const int MAX_RECIPE_DISPLAY = 5;
 
-        public const int HUNGER_MOD = 0;
+        public const float HUNGER_MOD = -0.5f;
 
-        public const int BASE_TRAVELER_RATE = 100;
+        public const int BASE_TRAVELER_RATE = 30;
         public const int EXTRA_TRAVELER_THRESHOLD = 10;
         public const int GROUP_DIVISOR = 3;
         public const int MEMBER_DIVISOR = 2;

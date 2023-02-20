@@ -1,5 +1,4 @@
-﻿using MonoGame.Extended.Sprites;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.Xna.Framework;
 using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
@@ -13,6 +12,7 @@ namespace RiverHollow.Characters
     public class Traveler : TalkingActor
     {
         private float _fFoodModifier = Constants.HUNGER_MOD;
+        private bool _bEaten = false;
         public int Income { get; private set; } = 0;
 
         public AnimationEnum MoodVerb { get;  private set; } = AnimationEnum.Angry;
@@ -71,8 +71,9 @@ namespace RiverHollow.Characters
 
         public void TryEat(Food f)
         {
-            if (_fFoodModifier == Constants.HUNGER_MOD && f.Remove(1, false))
+            if (!_bEaten && f.Remove(1, false))
             {
+                _bEaten = true;
                 _fFoodModifier = (f.FoodValue / 100f);
 
                 if (f.FoodType == FavoriteFood())
@@ -109,7 +110,7 @@ namespace RiverHollow.Characters
             Building shop = TownManager.GetBuildingByID(BuildingID());
             if (shop != null)
             {
-                var modifier = 1 + shop.GetShopValueModifier() + _fFoodModifier;
+                var modifier = !_bEaten ? 0 : (1 + shop.GetShopValueModifier() + _fFoodModifier);
                 Income = (int)(Value() * modifier);
             }
 

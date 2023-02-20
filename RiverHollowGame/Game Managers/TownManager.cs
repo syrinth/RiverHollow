@@ -150,7 +150,7 @@ namespace RiverHollow.Game_Managers
         {
             for (int i = 0; i < Travelers.Count; i++)
             {
-                MapManager.TownMap.RemoveCharacterImmediately(Travelers[i]);
+                Travelers[i].CurrentMap.RemoveCharacterImmediately(Travelers[i]);
             }
             Travelers.Clear();
 

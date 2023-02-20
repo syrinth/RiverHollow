@@ -364,18 +364,7 @@ namespace RiverHollow.Characters
                         case SpawnStateEnum.VisitInn:
                         case SpawnStateEnum.WaitAtInn:
                             Point position = map.DictionaryCharacterLayer["InnFloor"];
-                            List<RHTile> tiles = map.GetTilesFromRectangleExcludeEdgePoints(new Rectangle((int)position.X, (int)position.Y, 8 * Constants.TILE_SIZE, 6 * Constants.TILE_SIZE));
-                            do
-                            {
-                                RHTile tile = tiles[RHRandom.Instance().Next(tiles.Count)];
-                                if (tile.TileIsPassable() && !map.TileContainsActor(tile))
-                                {
-                                    SetPosition(tile.Position);
-                                    break;
-                                }
-                                else { tiles.Remove(tile); }
-
-                            } while (tiles.Count > 0);
+                            SetPosition(map.GetRandomPosition(new Rectangle(position.X, position.Y, 8 * Constants.TILE_SIZE, 6 * Constants.TILE_SIZE)));
                             break;
                         case SpawnStateEnum.HasHome:
                         case SpawnStateEnum.NonTownMap:
