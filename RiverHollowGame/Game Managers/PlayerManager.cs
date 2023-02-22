@@ -160,7 +160,7 @@ namespace RiverHollow.Game_Managers
 
             if (Defeated())
             {
-                GameCalendar.IncrementHours(2);
+                GameCalendar.AddTime(2, 0);
                 RHMap homeMap = MapManager.Maps[TownManager.Home.BuildingMapName];
                 MapManager.FadeToNewMap(homeMap, homeMap.GetCharacterSpawn("PlayerSpawn"), TownManager.Home);
                 PlayerActor.IncreaseHealth(1);

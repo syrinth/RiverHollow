@@ -94,6 +94,7 @@
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDMerchantWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDMiniInventory.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDUpgrade.cs" />
+    <Compile Include="GUIComponents\Screens\WorldMapScreen.cs" />
     <Compile Include="Items\MapItem.cs" />
     <Compile Include="Items\Tools\CapeOfBlinking.cs" />
     <Compile Include="Items\Tools\HitboxTool.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Items\Tools\Sword.cs" />
     <Compile Include="Misc\EnvironmentalEffect.cs" />
     <Compile Include="Misc\FieldOfVision.cs" />
+    <Compile Include="Misc\PriorityQueuer.cs" />
     <Compile Include="Misc\StatusEffect.cs" />
     <Compile Include="Misc\Upgrade.cs" />
     <Compile Include="Misc\VectorBuffer.cs" />

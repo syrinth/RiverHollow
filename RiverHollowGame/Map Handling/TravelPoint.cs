@@ -38,6 +38,9 @@ namespace RiverHollow.Map_Handling
         private string _sGoToMap;
         public string GoToMap => _sGoToMap;
 
+        private bool _bWorldMap = false;
+        public bool WorldMap => _bWorldMap;
+
         DirectionEnum _eEntranceDir;
         public DirectionEnum Dir => _eEntranceDir;
 
@@ -56,6 +59,7 @@ namespace RiverHollow.Map_Handling
             Util.AssignValue(ref _sGoToMap, "GoTo", obj.Properties);
             Util.AssignValue(ref _bModular, "Modular", obj.Properties);
             Util.AssignValue(ref _bNoMove, "NoMove", obj.Properties);
+            Util.AssignValue(ref _bWorldMap, "WorldMap", obj.Properties);
 
             if (_iDungeonInfoID > -1) { IsActive = true; }
 

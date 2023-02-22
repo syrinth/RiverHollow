@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="196">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="197">
  <properties>
   <property name="ItemID" value="162-C|163-R"/>
   <property name="MapType" value="Town"/>
   <property name="Mobs" value="3-4"/>
   <property name="Outside" type="bool" value="true"/>
   <property name="ResourceNumber" value="5"/>
+  <property name="WorldData" value="176-128"/>
+  <property name="WorldLink" value="mapTown-30|mapFoothills_Small-30|mapGrove-10"/>
+  <property name="WorldMapCost" type="int" value="5"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsBuildings.tsx"/>
@@ -116,18 +119,21 @@
    <properties>
     <property name="EntranceDir" value="Left"/>
     <property name="Map" value="mapTown"/>
+    <property name="WorldMap" type="bool" value="true"/>
    </properties>
   </object>
   <object id="162" name="Entrance" x="272" y="0" width="32" height="4">
    <properties>
     <property name="EntranceDir" value="Down"/>
     <property name="Map" value="mapFoothills_Small"/>
+    <property name="WorldMap" type="bool" value="true"/>
    </properties>
   </object>
   <object id="187" name="Entrance" x="80" y="476" width="64" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
     <property name="Map" value="mapGrove"/>
+    <property name="WorldMap" type="bool" value="true"/>
    </properties>
   </object>
  </objectgroup>
@@ -182,5 +188,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="6" name="Character"/>
+ <objectgroup id="6" name="Character">
+  <object id="196" x="460" y="144" width="16" height="16"/>
+ </objectgroup>
 </map>

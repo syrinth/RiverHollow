@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Buildings;
+using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Map_Handling;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.WorldObjects;
 using System;
+using System.Collections.Generic;
 
 namespace RiverHollow.Utilities
 {
@@ -53,5 +55,42 @@ namespace RiverHollow.Utilities
     {
         public Light LightObject;
         public Point Offset;
+    }
+
+    public struct MapNode
+    {
+        public Point MapPosition;
+        public int Cost;
+        public Dictionary<string, int> MapConnections;
+
+        public MapNode(Point position, int time, string connections)
+        {
+            MapPosition = position;
+            Cost= time;
+
+            MapConnections = new Dictionary<string, int>();
+            string[] allConnections = Util.FindParams(connections);
+            foreach (var s in allConnections)
+            {
+                string[] connectionData = Util.FindArguments(s);
+                MapConnections[connectionData[0]] = int.Parse(connectionData[1]);
+            }
+        }
+    }
+
+    public struct MapPathInfo
+    {
+        public string MapName { get; }
+        public string MapConnection { get; }
+        public int Time { get; }
+        public bool Unlocked;
+
+        public MapPathInfo(string name, string connection, int travel)
+        {
+            MapName = name;
+            MapConnection = connection;
+            Time = travel;
+            Unlocked = false;
+        }
     }
 }

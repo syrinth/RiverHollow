@@ -11,6 +11,8 @@ using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
+using RiverHollow.GUIComponents.Screens;
+using System.Linq;
 
 namespace RiverHollow.Game_Managers
 {
@@ -29,7 +31,7 @@ namespace RiverHollow.Game_Managers
         {
             Maps = new Dictionary<string, RHMap>();
 
-            foreach(string dir in Directory.GetDirectories(_sMapFolder))
+            foreach (string dir in Directory.GetDirectories(_sMapFolder))
             {
                 if (!dir.Contains("Textures"))
                 {
@@ -67,44 +69,53 @@ namespace RiverHollow.Game_Managers
         {
             //Get the entry rectangle on the new map
             TravelPoint entryPoint;
-            RHMap linkedMap = Maps[travelPoint.LinkedMap];
 
             //Handling for if the WorldActor is the player character
             if (actor == PlayerManager.PlayerActor)
             {
-                //If the travel point has no linked map yet and is supposed to generate a level,
-                //send a message off to the DungeonManager to initialize it
-                if (travelPoint.DungeonInfoID > -1 && string.IsNullOrEmpty(travelPoint.LinkedMap))
-                {
-                    DungeonManager.InitializeProceduralDungeon(MapManager.CurrentMap.DungeonName, MapManager.CurrentMap.Name, travelPoint);
-                }
+                RHMap linkedMap = Maps[travelPoint.LinkedMap];
+                linkedMap.SpawnMapEntities();
 
-                entryPoint = linkedMap.DictionaryTravelPoints[currMap];
-
-                Point newPos;
-                if (travelPoint.IsDoor)
+                if (travelPoint.WorldMap)
                 {
-                    newPos = entryPoint.GetMovedCenter();
-                    PlayerManager.PlayerActor.DetermineAnimationState(Util.GetPointFromDirection(DirectionEnum.Up));
-                }
-                else if (travelPoint.NoMove)
-                {
-                    newPos = actor.CollisionBoxLocation;
+                    GUIManager.SetScreen(new WorldMapScreen(travelPoint));
                 }
                 else
                 {
-                    newPos = entryPoint.FindLinkedPointPosition(travelPoint.Center, actor);
+                    //If the travel point has no linked map yet and is supposed to generate a level,
+                    //send a message off to the DungeonManager to initialize it
+                    if (travelPoint.DungeonInfoID > -1 && string.IsNullOrEmpty(travelPoint.LinkedMap))
+                    {
+                        DungeonManager.InitializeProceduralDungeon(MapManager.CurrentMap.DungeonName, MapManager.CurrentMap.Name, travelPoint);
+                    }
+
+                    entryPoint = linkedMap.DictionaryTravelPoints[currMap];
+
+                    Point newPos;
+                    if (travelPoint.IsDoor)
+                    {
+                        newPos = entryPoint.GetMovedCenter();
+                        PlayerManager.PlayerActor.DetermineAnimationState(Util.GetPointFromDirection(DirectionEnum.Up));
+                    }
+                    else if (travelPoint.NoMove)
+                    {
+                        newPos = actor.CollisionBoxLocation;
+                    }
+                    else
+                    {
+                        newPos = entryPoint.FindLinkedPointPosition(travelPoint.Center, actor);
+                    }
+
+                    PlayerManager.PlayerActor.ActivePet?.ChangeState(NPCStateEnum.Alert);
+                    FadeToNewMap(linkedMap, newPos, travelPoint.TargetBuilding);
+
+                    PlayerManager.ReleaseTile();
                 }
-
-                linkedMap.SpawnMapEntities();
-
-                PlayerManager.PlayerActor.ActivePet?.ChangeState(NPCStateEnum.Alert);
-                FadeToNewMap(linkedMap, newPos, travelPoint.TargetBuilding);
-
-                PlayerManager.ReleaseTile();
             }
             else if (!actor.Wandering)
             {
+                RHMap linkedMap = Maps[travelPoint.LinkedMap];
+
                 entryPoint = linkedMap.DictionaryTravelPoints[currMap];
 
                 actor.ClearTileForMapChange();
@@ -170,7 +181,6 @@ namespace RiverHollow.Game_Managers
                 PopulateHomeMapHelper(ref possibleTiles, weedID, 200);
             }
         }
-
         private static void PopulateHomeMapHelper(ref List<RHTile> possibleTiles, int ID, int numToPlace)
         {
             RHRandom rand = RHRandom.Instance();
@@ -198,7 +208,6 @@ namespace RiverHollow.Game_Managers
                 CurrentMap.ResetMobs();
                 CurrentMap.LeaveMap();
                 TaskManager.AssignDelayedTasks();
-                string oldMap = CurrentMap.Name;
                 CurrentMap = _newMapInfo.NextMap;
 
                 SoundManager.ChangeMap();
@@ -345,6 +354,36 @@ namespace RiverHollow.Game_Managers
             foreach (RHMap map in Maps.Values)
             {
                 map.CheckSpirits();
+            }
+        }
+        public static void QueryWorldMapPathing(ref Dictionary<string, MapPathInfo> travelMap, TravelPoint travelpoint)
+        {
+            RHMap tempMap = CurrentMap;
+
+            //Assign currentmap travel time to 0
+            MapPathInfo pathInfo = new MapPathInfo(tempMap.Name, tempMap.Name, 0)
+            {
+                Unlocked = tempMap.Visited
+            };
+
+            travelMap[tempMap.Name] = pathInfo;
+            Recursive(tempMap, ref travelMap, travelpoint);
+        }
+
+        private static void Recursive(RHMap tempMap, ref Dictionary<string, MapPathInfo> travelMap, TravelPoint travelpoint)
+        {
+            foreach (KeyValuePair<string, int> kvp in tempMap.WorldMapNode.MapConnections)
+            {
+                if (!travelMap.ContainsKey(kvp.Key))
+                {
+                    int cost = (CurrentMap != tempMap || travelpoint.LinkedMap != kvp.Key) ? tempMap.WorldMapNode.Cost : 0;
+                    MapPathInfo pathInfo = new MapPathInfo(kvp.Key, tempMap.Name, cost + travelMap[tempMap.Name].Time + tempMap.WorldMapNode.MapConnections[kvp.Key])
+                    {
+                        Unlocked = Maps[kvp.Key].Visited
+                    };
+                    travelMap[kvp.Key] = pathInfo;
+                    Recursive(Maps[kvp.Key], ref travelMap, travelpoint);
+                }
             }
         }
     }

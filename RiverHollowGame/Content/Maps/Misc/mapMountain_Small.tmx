@@ -5,6 +5,9 @@
   <property name="MapType" value="Town"/>
   <property name="Outside" type="bool" value="true"/>
   <property name="ResourceNumber" value="5"/>
+  <property name="WorldData" value="256-32"/>
+  <property name="WorldLink" value="mapFoothills_Small-20"/>
+  <property name="WorldMapCost" type="int" value="10"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsBuildings.tsx"/>
@@ -115,6 +118,7 @@
    <properties>
     <property name="EntranceDir" value="Up"/>
     <property name="Map" value="mapFoothills_Small"/>
+    <property name="WorldMap" type="bool" value="true"/>
    </properties>
   </object>
   <object id="190" name="Entrance" x="208" y="48" width="16" height="4">

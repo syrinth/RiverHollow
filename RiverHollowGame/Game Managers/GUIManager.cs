@@ -44,10 +44,7 @@ namespace RiverHollow.Game_Managers
             }
             else
             {
-                if (_currentGUIScreen != null)
-                {
-                    _currentGUIScreen.Update(gTime);
-                }
+                _currentGUIScreen?.Update(gTime);
                 GUICursor.Update();
             }
         }

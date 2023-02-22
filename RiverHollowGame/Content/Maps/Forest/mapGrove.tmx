@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="12">
+ <properties>
+  <property name="WorldData" value="160-176"/>
+  <property name="WorldLink" value="mapWoods_Small-10"/>
+  <property name="WorldMapCost" type="int" value="2"/>
+ </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsBuildings.tsx"/>
  <layer id="1" name="Base" width="30" height="30">
@@ -109,6 +114,7 @@
    <properties>
     <property name="EntranceDir" value="Down"/>
     <property name="Map" value="mapWoods_Small"/>
+    <property name="WorldMap" type="bool" value="true"/>
    </properties>
   </object>
  </objectgroup>

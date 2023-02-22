@@ -56,16 +56,6 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void IncrementHours(int x)
-        {
-            CurrentHour += x;
-
-            if (!_bHasNightFallen && IsNight())
-            {
-                _bHasNightFallen = true;
-                MapManager.CheckSpirits();
-            }
-        }
         public static void IncrementMinutes()
         {
             CurrentMin += Constants.CALENDAR_MINUTES_PER_SECOND;
@@ -74,6 +64,21 @@ namespace RiverHollow.Game_Managers
                 CurrentMin = 0;
                 CurrentHour++;
             }
+
+            if (!_bHasNightFallen && IsNight())
+            {
+                _bHasNightFallen = true;
+                MapManager.CheckSpirits();
+            }
+        }
+
+        public static void AddTime(int hours, int minutes)
+        {
+            int totalMinutes = CurrentMin + minutes;
+            int hoursOfMinutes = totalMinutes / 60;
+
+            CurrentMin = totalMinutes % 60;
+            CurrentHour += hours + hoursOfMinutes;
 
             if (!_bHasNightFallen && IsNight())
             {

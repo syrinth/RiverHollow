@@ -44,12 +44,12 @@ namespace RiverHollow.Map_Handling
         public float Lighting => _map.Properties.ContainsKey("Lighting") ? float.Parse(_map.Properties["Lighting"]) : 1;
         public string MapType => _map.Properties.ContainsKey("MapType") ? _map.Properties["MapType"] : string.Empty;
 
-        public bool ItemsSpawned { get; private set; } = false;
+        public bool Visited { get; private set; } = false;
         public MobSpawnStateEnum MobsSpawned { get; private set; } = MobSpawnStateEnum.None;
         private bool Randomize => _map.Properties.ContainsKey("Randomize");
         public MonsterFood PrimedFood { get; private set; }
-        public RHTile TargetTile { get; private set; } = null;
 
+        public RHTile TargetTile { get; private set; } = null;
         private RHTile MouseTile => GetMouseOverTile();
 
         protected TiledMap _map;
@@ -89,6 +89,8 @@ namespace RiverHollow.Map_Handling
         private List<MapItem> _liItemsToRemove;
         private List<Actor> _liActorsToRemove;
         private List<WorldObject> _liObjectsToRemove;
+
+        public MapNode WorldMapNode { get; private set; }
 
         Buildable _objSelectedObject = null;
 
@@ -204,6 +206,12 @@ namespace RiverHollow.Map_Handling
                 {
                     _liCutscenes.Add(int.Parse(cutsceneID));
                 }
+            }
+
+            if (_map.Properties.ContainsKey("WorldData"))
+            {
+                string worldData = _map.Properties["WorldData"];
+                WorldMapNode = new MapNode(Util.ParsePoint(worldData), int.Parse(_map.Properties["WorldMapCost"]), _map.Properties["WorldLink"]);
             }
 
             _renderer = new TiledMapRenderer(GraphicsDevice);
@@ -562,9 +570,9 @@ namespace RiverHollow.Map_Handling
 
         public void SpawnMapEntities(bool spawnAboveAndBelow = true)
         {
-            if (!ItemsSpawned)
+            if (!Visited)
             {
-                ItemsSpawned = true;
+                Visited = true;
                 if (spawnAboveAndBelow)
                 {
                     if (MapAboveValid()) { MapManager.Maps[MapAbove].SpawnMapEntities(false); }
@@ -730,7 +738,7 @@ namespace RiverHollow.Map_Handling
         {
             if (Randomize)
             {
-                ItemsSpawned = false;
+                Visited = false;
                 _liPlacedWorldObjects.ForEach(x => x.RemoveSelfFromTiles());
                 _liPlacedWorldObjects.Clear();
             }
@@ -2294,7 +2302,7 @@ namespace RiverHollow.Map_Handling
             MapData mapData = new MapData
             {
                 mapName = this.Name,
-                visited = this.ItemsSpawned,
+                visited = this.Visited,
                 worldObjects = new List<WorldObjectData>()
             };
 
@@ -2310,7 +2318,7 @@ namespace RiverHollow.Map_Handling
         }
         internal void LoadData(MapData mData)
         {
-            ItemsSpawned = mData.visited;
+            Visited = mData.visited;
             foreach (WorldObjectData data in mData.worldObjects)
             {
                 WorldObject obj = DataManager.CreateWorldObjectByID(data.ID);

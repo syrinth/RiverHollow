@@ -247,6 +247,7 @@ namespace RiverHollow.Game_Managers
             AddTexture(@"Textures\AbilityAnimations", Content);
             AddTexture(@"Textures\texMachines", Content);
             AddTexture(@"Textures\texCmbtActions", Content);
+            AddTexture(@"Textures\Overworld", Content);
         }
         private static void AddDirectoryTextures(string directory, ContentManager Content, bool AddContent = true)
         {
