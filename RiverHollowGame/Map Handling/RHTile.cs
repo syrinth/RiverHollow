@@ -463,8 +463,7 @@ namespace RiverHollow.Map_Handling
         /// <returns>Returns True if the Tile is a legal tile to target</returns>
         public bool CanTargetTile()
         {
-            //&& GetTravelPoint() == null
-            return Passable() && WorldObject == null;
+            return Passable() && (WorldObject == null || WorldObject.Walkable);
         }
 
         /// <summary>
