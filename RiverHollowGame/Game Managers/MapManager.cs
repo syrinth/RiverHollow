@@ -322,9 +322,9 @@ namespace RiverHollow.Game_Managers
         {
             return CurrentMap.GetTileByGridCoords(x, y);
         }
-        public static void RemoveWorldObject(WorldObject o)
+        public static void RemoveWorldObject(WorldObject o, bool immediately = false)
         {
-            CurrentMap.RemoveWorldObject(o);
+            CurrentMap.RemoveWorldObject(o, immediately);
         }
 
         public static void RemoveActor(Actor c)

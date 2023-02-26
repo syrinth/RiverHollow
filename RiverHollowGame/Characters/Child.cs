@@ -81,9 +81,7 @@ namespace RiverHollow.Characters
 
         public override void ProcessRightButtonClick()
         {
-            TextEntry text = DataManager.GetGameTextEntry(_bFollow ? "PetUnfollow" : "PetFollow");
-            text.FormatText(Name());
-            GUIManager.OpenTextWindow(text, this, true);
+            GUIManager.OpenTextWindow(_bFollow ? "PetUnfollow" : "PetFollow", Name(), this, true);
         }
 
         public void SpawnInHome()

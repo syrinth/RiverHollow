@@ -14,7 +14,7 @@ using RiverHollow.Misc;
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.SpriteAnimations;
-using System.Net;
+using RiverHollow.GUIComponents.Screens;
 
 namespace RiverHollow.Game_Managers
 {
@@ -23,8 +23,50 @@ namespace RiverHollow.Game_Managers
         #region Properties
         public static bool Busy { get; private set; }
 
-        public static float MaxStamina = Constants.PLAYER_STARTING_STAMINA;
-        public static float Stamina = MaxStamina;
+        public static float CurrentEnergy = MaxEnergy();
+        public static float CurrentMagic = MaxMagic();
+        public static bool HasMagic = false;
+
+        #region Increases
+        public static int EnergyIncrease { get; set; } = 0;
+        public static float MaxEnergy()
+        {
+            return Constants.PLAYER_STARTING_ENERGY + EnergyIncrease * 20;
+        }
+        public static int HPIncrease { get; private set; } = 0;
+        public static float MaxPlayerHP()
+        {
+            return Constants.PLAYER_STARTING_HP + (HPIncrease * 10);
+        }
+        public static int HPBonus() { return HPIncrease * 10; }
+        public static int MagicIncrease { get; private set; } = 0;
+        public static float MaxMagic()
+        {
+            return !HasMagic ? 0 : Constants.PLAYER_STARTING_MAGIC + (MagicIncrease * 10);
+        }
+
+        public static void IncreaseValue(PlayerResourceEnum e)
+        {
+            switch (e)
+            {
+                case PlayerResourceEnum.Energy:
+                    EnergyIncrease++;
+                    CurrentEnergy = MaxEnergy();
+                    break;
+                case PlayerResourceEnum.Health:
+                    HPIncrease++;
+                    PlayerActor.IncreaseHealth(PlayerActor.MaxHP);
+                    break;
+                case PlayerResourceEnum.Magic:
+                    MagicIncrease++;
+                    CurrentMagic = MaxMagic();
+                    break;
+            }
+
+        }
+        #endregion
+
+
         private static string _currentMap;
         public static string CurrentMap
         {
@@ -78,7 +120,9 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        static RHTimer _pushTimer;
+        public static MapItem ObtainedItem;
+
+        static RHTimer _timer;
         #endregion
 
         public static void Initialize()
@@ -136,7 +180,7 @@ namespace RiverHollow.Game_Managers
 
                 if (PlayerActor.State == ActorStateEnum.Grab && newMovement != Vector2.Zero)
                 {
-                    if (_pushTimer == null || _pushTimer.TickDown(gTime))
+                    if (_timer == null || _timer.TickDown(gTime))
                     {
                         GrabbedObject.InitiateMove(newMovement);
                     }
@@ -160,10 +204,15 @@ namespace RiverHollow.Game_Managers
 
             if (Defeated())
             {
-                GameCalendar.AddTime(2, 0);
-                RHMap homeMap = MapManager.Maps[TownManager.Home.BuildingMapName];
-                MapManager.FadeToNewMap(homeMap, homeMap.GetCharacterSpawn("PlayerSpawn"), TownManager.Home);
-                PlayerActor.IncreaseHealth(1);
+                if(_timer == null)
+                {
+                    _timer = new RHTimer(2);
+                }
+                else if(RHTimer.TimerCheck(_timer, gTime))
+                {
+                    _timer = null;
+                    GUIManager.SetScreen(new DefeatedScreen());
+                }
             }
         }
 
@@ -209,6 +258,7 @@ namespace RiverHollow.Game_Managers
             {
                 PlayerActor.Draw(spriteBatch, true);
                 ToolInUse?.DrawToolAnimation(spriteBatch);
+                ObtainedItem?.Draw(spriteBatch, PlayerActor.BodySprite.LayerDepth);
             }
         }
 
@@ -434,26 +484,48 @@ namespace RiverHollow.Game_Managers
             AnimatedSprite spr = PlayerActor.GetSprites()[0];
             return PlayerActor != null && !PlayerActor.HasHP && spr.AnimationFinished(AnimationEnum.KO);
         }
-        public static bool DecreaseStamina(float x)
+
+        public static bool LoseEnergy(float x)
         {
             bool rv = false;
-            if (Stamina >= x)
+            if (CurrentEnergy >= x)
             {
-                Stamina -= x;
+                CurrentEnergy -= x;
                 rv = true;
             }
             return rv;
         }
-
-        public static void IncreaseStamina(float x)
+        public static void RecoverEnergy(float x)
         {
-            if (Stamina + x <= MaxStamina)
+            if (CurrentEnergy + x <= MaxEnergy())
             {
-                Stamina += x;
+                CurrentEnergy += x;
             }
             else
             {
-                Stamina = MaxStamina;
+                CurrentEnergy = MaxEnergy();
+            }
+        }
+
+        public static bool LoseMagic(float x)
+        {
+            bool rv = false;
+            if (CurrentMagic >= x)
+            {
+                CurrentMagic -= x;
+                rv = true;
+            }
+            return rv;
+        }
+        public static void RecoverMagic(float x)
+        {
+            if (CurrentMagic + x <= MaxMagic())
+            {
+                CurrentMagic += x;
+            }
+            else
+            {
+                CurrentMagic = MaxMagic();
             }
         }
 
@@ -504,13 +576,13 @@ namespace RiverHollow.Game_Managers
             MoveToSpawn();
         }
 
-        public static void GetStamina(ref double curr, ref double max)
+        public static void GetStamina(ref float curr, ref float max)
         {
-            curr = Stamina;
-            max = MaxStamina;
+            curr = CurrentEnergy;
+            max = MaxEnergy();
         }
 
-        public static void GetHP(ref double curr, ref double max)
+        public static void GetHP(ref float curr, ref float max)
         {
             curr = PlayerActor.CurrentHP;
             max = PlayerActor.MaxHP;
@@ -573,7 +645,7 @@ namespace RiverHollow.Game_Managers
         {
             if (PlayerActor.State == ActorStateEnum.Grab)
             {
-                _pushTimer?.Stop();
+                _timer = null;
 
                 //Safety for if we hit a map change while holding a tile
                 if (GrabbedObject?.Tiles.Count == 0) { GrabbedObject.PlaceOnMap(MoveObjectToPosition, GrabbedObject.CurrentMap, true); }
@@ -595,7 +667,7 @@ namespace RiverHollow.Game_Managers
         }
         private static void FinishedMovingObject()
         {
-            _pushTimer = new RHTimer(Constants.PUSH_COOLDOWN);
+            _timer = new RHTimer(Constants.PUSH_COOLDOWN);
             AllowMovement = true;
             PlayerActor.SpdMult = Constants.NORMAL_SPEED;
             GrabbedObject.PlaceOnMap(MoveObjectToPosition, GrabbedObject.CurrentMap, true);
@@ -670,7 +742,7 @@ namespace RiverHollow.Game_Managers
                 ToolInUse.Position = new Point(PlayerActor.CollisionBoxLocation.X - Constants.TILE_SIZE, PlayerActor.CollisionBoxLocation.Y - (Constants.TILE_SIZE * 2));
                 if (ToolInUse != null && !Busy)
                 {
-                    if (DecreaseStamina(ToolInUse.StaminaCost))
+                    if (LoseEnergy(ToolInUse.EnergyCost))
                     {
                         Busy = true;
                         AllowMovement = false;
@@ -753,6 +825,10 @@ namespace RiverHollow.Game_Managers
                 chest = Item.SaveData(PlayerActor.Chest),
                 weddingCountdown = WeddingCountdown,
                 babyCountdown = BabyCountdown,
+                hpIncreases = HPIncrease,
+                energyIncreases = EnergyIncrease,
+                magicIncreases = MagicIncrease,
+                hasMagic = HasMagic,
                 Items = new List<ItemData>(),
                 liPets = new List<int>(),
                 MountList = new List<int>(),
@@ -807,6 +883,11 @@ namespace RiverHollow.Game_Managers
 
             BabyCountdown = saveData.babyCountdown;
             WeddingCountdown = saveData.weddingCountdown;
+
+            HPIncrease = saveData.hpIncreases;
+            EnergyIncrease = saveData.energyIncreases;
+            MagicIncrease = saveData.magicIncreases;
+            HasMagic = saveData.hasMagic;
 
             PlayerActor.SetHairColor(saveData.hairColor);
             PlayerActor.SetHairType(saveData.hairIndex);

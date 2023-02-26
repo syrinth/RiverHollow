@@ -260,8 +260,7 @@ namespace RiverHollow.GUIComponents.Screens
             _eCurrentPhase = DayEndPhaseEnum.NextDay;
             _gWindow = new GUIWindow(GUIWindow.Window_1, 8, 8);
 
-            TextEntry entry = DataManager.GetGameTextEntry("Day_End");
-            entry.FormatText(GameCalendar.CurrentDay, GameCalendar.GetCurrentSeason());
+            TextEntry entry = DataManager.GetGameTextEntry("Day_End", GameCalendar.CurrentDay, GameCalendar.GetCurrentSeason());
             _gText = new GUIText(entry.GetFormattedText(), false);
             _gText.AnchorToInnerSide(_gWindow, SideEnum.TopLeft);
             _gWindow.Resize();

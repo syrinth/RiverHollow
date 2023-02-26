@@ -81,7 +81,7 @@ namespace RiverHollow.Map_Handling
 
             if (ContainsProperty("Save", out string val) && val.Equals("true"))
             {
-                GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("Selection_Bed"));
+                GUIManager.OpenTextWindow("Selection_Bed");
             }
 
             return rv;

@@ -281,5 +281,9 @@
       <Key>69</Key>
       <Value>[Name:Selection_Nightfall][Text:Sleep until nightfall][TextVerb:GoToNight]</Value>
     </Item>
+	<Item>
+      <Key>70</Key>
+      <Value>[Name:Found_Increaser][Text:You found a {0}! Your {1} has increased!][ItemPose]</Value>
+    </Item>
   </Asset>
 </XnaContent>

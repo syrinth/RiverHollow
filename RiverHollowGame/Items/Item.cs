@@ -187,11 +187,7 @@ namespace RiverHollow.Items
         }
         public bool Giftable()
         {
-            bool rv = false;
-
-            rv = !(CompareType(ItemEnum.Tool) || CompareType(ItemEnum.Special));
-
-            return rv;
+            return !(CompareType(ItemEnum.Tool) || CompareType(ItemEnum.Special));
         }
         public bool IsUnique()
         {
@@ -200,6 +196,8 @@ namespace RiverHollow.Items
             {
                 case ItemEnum.Blueprint:
                 case ItemEnum.Special:
+                    rv = !GetBoolByIDKey("Increase");
+                    break;
                 case ItemEnum.NPCToken:
                 case ItemEnum.Tool:
                     rv = true;
@@ -226,7 +224,7 @@ namespace RiverHollow.Items
         {
             return DataManager.GetStringByIDKey(ID, key, DataType.Item);
         }
-        protected TEnum GetEnumByIDKey<TEnum>(string key) where TEnum : struct
+        public TEnum GetEnumByIDKey<TEnum>(string key) where TEnum : struct
         {
             return DataManager.GetEnumByIDKey<TEnum>(ID, key, DataType.Item);
         }

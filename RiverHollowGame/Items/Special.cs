@@ -1,4 +1,7 @@
-﻿using RiverHollow.Game_Managers;
+﻿using Microsoft.Xna.Framework;
+using RiverHollow.Game_Managers;
+using RiverHollow.Misc;
+using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 
@@ -11,16 +14,21 @@ namespace RiverHollow.Items
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Special");
         }
 
-        public bool HasSpecialTag(string specialKey)
-        {
-            return GetBoolByIDKey(specialKey);
-        }
-
         public override bool AddToInventoryTrigger()
         {
-            if (HasSpecialTag("DungeonKey"))
+            if (GetBoolByIDKey("DungeonKey"))
             {
                 DungeonManager.AddDungeonKey();
+                return true;
+            }
+            else if (GetBoolByIDKey("Increase"))
+            {
+                PlayerManager.ObtainedItem = new MapItem(this)
+                {
+                    Position = PlayerManager.PlayerActor.Position + new Point(0, -(Constants.TILE_SIZE - 9))
+                };
+
+                GUIManager.OpenTextWindow("Found_Increaser", Name(), GetStringByIDKey("Increase"));
                 return true;
             }
             else

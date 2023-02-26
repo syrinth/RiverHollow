@@ -174,7 +174,7 @@ namespace RiverHollow.WorldObjects
 
         public bool SufficientStamina()
         {
-            return CraftDaily || PlayerManager.Stamina >= Constants.ACTION_COST / 2;
+            return CraftDaily || PlayerManager.CurrentEnergy >= Constants.ACTION_COST / 2;
         }
 
 
@@ -212,7 +212,7 @@ namespace RiverHollow.WorldObjects
                 && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
             {
                 success = true;
-                PlayerManager.DecreaseStamina(Constants.ACTION_COST / 2);
+                PlayerManager.LoseEnergy(Constants.ACTION_COST / 2);
                 if (Kitchen && CurrentMap.BuildingID == TownManager.Inn.ID)
                 {
                     TownManager.AddToKitchen(DataManager.CraftItem(itemToCraft.ID));

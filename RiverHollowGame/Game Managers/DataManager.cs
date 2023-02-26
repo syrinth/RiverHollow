@@ -874,9 +874,11 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static TextEntry GetGameTextEntry(string key)
+        public static TextEntry GetGameTextEntry(string key, params object[] formatParameters)
         {
-            return new TextEntry(key, Util.DictionaryFromTaggedString(GetGameText(key)));
+            TextEntry entry = new TextEntry(key, Util.DictionaryFromTaggedString(GetGameText(key)));
+            entry.FormatText(formatParameters);
+            return entry;
         }
         public static TextEntry GetMailboxMessage(string messageID)
         {

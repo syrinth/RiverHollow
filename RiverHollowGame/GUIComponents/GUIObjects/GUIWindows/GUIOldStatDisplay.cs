@@ -12,17 +12,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         GUIImage _gFill;
         GUIText _gText;
 
-        double _iMax;
-        double _iCurr;
-        const int EDGE = 4;
+        float _fMax;
+        float _fCurr;
 
-        public delegate void DelegateRetrieveValues(ref double curr, ref double max);
+        public delegate void DelegateRetrieveValues(ref float curr, ref float max);
         DelegateRetrieveValues _delAction;
 
         public GUIOldStatDisplay(DelegateRetrieveValues del, Color c, int width = 200) : base(DisplayWin, width, GameManager.ScaledTileSize/2)
         {
-            _iMax = 0;
-            _iCurr = 0;
+            _fMax = 0;
+            _fCurr = 0;
 
             _delAction = del;
             _font = DataManager.GetBitMapFont(DataManager.FONT_STAT_DISPLAY);
@@ -35,15 +34,15 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             SetColor(c);
             _gFill.SetColor(c);
 
-            _delAction(ref _iCurr, ref _iMax);
+            _delAction(ref _fCurr, ref _fMax);
         }
 
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if(_iMax != 0)
+            if(_fMax != 0)
             {
-                _gFill.Width = (int)((Width - WidthEdges()) * _iCurr / _iMax);
+                _gFill.Width = (int)((Width - WidthEdges()) * _fCurr / _fMax);
             }
             base.Draw(spriteBatch);
             RemoveControl(_gText);
@@ -52,7 +51,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            _delAction(ref _iCurr, ref _iMax);
+            _delAction(ref _fCurr, ref _fMax);
         }
 
         public override bool ProcessHover(Point mouse)
@@ -60,7 +59,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             bool rv = false;
             if (Contains(mouse))
             {
-                _gText.SetText(string.Format("{0}/{1}", _iCurr, _iMax));
+                _gText.SetText(string.Format("{0}/{1}", _fCurr, _fMax));
                 _gText.AlignToObject(this, SideEnum.Center, false);
                 AddControl(_gText);
                 rv = true;

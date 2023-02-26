@@ -25,7 +25,7 @@
         public enum DirectionEnum { None, Down, Right, Up, Left };
         public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };
         public enum VerbEnum { Idle, Walk, GrabIdle, Pull, Push, Ground, Air, UseTool, MakeItem, Action1, Action2 };
-        public enum AnimationEnum { None, PlayAnimation, Rain, Snow, ObjectIdle, Action1, Action2, Action_Finished, Alert, Angry, Sad, Neutral, Happy, KO, Spawn };
+        public enum AnimationEnum { None, PlayAnimation, Rain, Snow, ObjectIdle, Action1, Action2, Action_Finished, Alert, Angry, Sad, Neutral, Happy, KO, Spawn, Pose };
 
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
@@ -64,6 +64,8 @@
         public enum VillagerRequestEnum { Close, Far, TownWide };
 
         public enum GameIconEnum { None, Coin, Key};
+
+        public enum PlayerResourceEnum { Energy, Health, Magic };
 
         public enum ColorStateEnum { None, Blue, Red };
     }

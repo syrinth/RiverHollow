@@ -144,7 +144,7 @@ namespace RiverHollow.WorldObjects
             if (NeededTool != ToolEnum.None) { }// PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool)); }
             else
             {
-                if (FinishedGrowing() && PlayerManager.DecreaseStamina(Constants.ACTION_COST))
+                if (FinishedGrowing() && PlayerManager.LoseEnergy(Constants.ACTION_COST))
                 {
                     Item it = DataManager.GetItem(_iResourceID);
                     if (_bPopItem)

@@ -68,7 +68,7 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public override bool ProcessRightClick()
         {
-            GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("Trigger_Door"));
+            GUIManager.OpenTextWindow("Trigger_Door");
             return true;
         }
     }
@@ -86,7 +86,7 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public override bool ProcessRightClick()
         {
-            GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("Trigger_Door"));
+            GUIManager.OpenTextWindow("Trigger_Door");
             return true;
         }
     }
@@ -123,7 +123,7 @@ namespace RiverHollow.WorldObjects
                 else
                 {
                     rv = true;
-                    GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("Key_Door"));
+                    GUIManager.OpenTextWindow("Key_Door");
                 }
             }
             else if (_iItemKeyID != -1)

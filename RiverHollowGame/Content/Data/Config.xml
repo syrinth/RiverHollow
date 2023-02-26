@@ -71,7 +71,7 @@
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Idle:0-0-1-.15-F][Walk:64-0-8-.06-F][GrabIdle:0-32-1-.15-F][Pull:64-32-2-.4-F][Push:192-32-6-.1-F][KO:0-64-2-.15-F][UseTool:0-32-5-.08-F]</Value>
+      <Value>[Idle:0-0-1-.15-F][Walk:64-0-8-.06-F][GrabIdle:0-32-1-.15-F][Pull:64-32-2-.4-F][Push:192-32-6-.1-F][KO:0-64-2-.15-F][Pose:32-64-1-.15-F][UseTool:0-32-5-.08-F]</Value>
     </Item>
     <Item>
       <Key>18</Key>

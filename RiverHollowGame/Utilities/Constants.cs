@@ -7,9 +7,10 @@
 
         public const string TOWN_MAP_NAME = "mapTown";
         public const string PLAYER_HOME_NAME = "mapHouse_Player";
-        public const float PLAYER_STARTING_STAMINA = 80;
         public const float PLAYER_STARTING_HP = 10;
-        public const int STAMINA_NAP_RECOVERY = 20;
+        public const float PLAYER_STARTING_ENERGY = 80;
+        public const int ENERGY_NAP_RECOVERY = 20;
+        public const float PLAYER_STARTING_MAGIC = 20;
 
         public const float PLAYER_INVULN_PERIOD = 1;
         public const float MOB_INVULN_PERIOD = 0.3f;

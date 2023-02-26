@@ -21,9 +21,7 @@ namespace RiverHollow.Items
         public override bool ItemBeingUsed()
         {
             GameManager.SetSelectedItem(this);
-            TextEntry entry = DataManager.GetGameTextEntry("Read_Book");
-            entry.FormatText(Name());
-            ConfirmItemUse(entry);
+            ConfirmItemUse(DataManager.GetGameTextEntry("Read_Book", Name()));
 
             return true;
         }

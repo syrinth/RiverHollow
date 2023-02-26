@@ -787,11 +787,15 @@
     </Item>
     <Item>
       <Key>196</Key>
-      <Value>[Type:Food][Image:8-0][ItemGroups:Food][Value:50][ReqItems:150-1][FoodType:Plain][FoodValue:50]</Value>
+      <Value>[Type:Special][Image:0-1][Increase:Magic]</Value>
     </Item>
     <Item>
       <Key>197</Key>
-      <Value>[Type:Food][Image:8-0][ItemGroups:Food][Value:50][ReqItems:150-1][FoodType:Healthy][FoodValue:50]</Value>
+      <Value>[Type:Special][Image:1-1][Increase:Health]</Value>
+    </Item>
+    <Item>
+      <Key>198</Key>
+      <Value>[Type:Special][Image:2-1][Increase:Energy]</Value>
     </Item>
   </Asset>
 </XnaContent>

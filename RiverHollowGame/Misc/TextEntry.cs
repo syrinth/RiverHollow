@@ -1,6 +1,7 @@
 ﻿using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
+using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -219,9 +220,16 @@ namespace RiverHollow.Misc
         public void HandlePreWindowActions(TalkingActor act = null)
         {
             Spoken(act);
-            if (_diTags != null && _diTags.ContainsKey("Face"))
+            if (_diTags != null)
             {
-                act?.QueueActorFace(_diTags["Face"]);
+                if (_diTags.ContainsKey("Face"))
+                {
+                    act?.QueueActorFace(_diTags["Face"]);
+                }
+                else if (_diTags.ContainsKey("ItemPose"))
+                {
+                    PlayerManager.PlayerActor.PlayAnimation(AnimationEnum.Pose);
+                }
             }
         }
 
@@ -255,6 +263,15 @@ namespace RiverHollow.Misc
             if (_diTags.ContainsKey("SendToTown"))
             {
                 ((Villager)GameManager.CurrentNPC).QueueSendToTown();
+            }
+            if (_diTags.ContainsKey("ItemPose"))
+            {
+                PlayerResourceEnum eType = PlayerManager.ObtainedItem.WrappedItem.GetEnumByIDKey<PlayerResourceEnum>("Increase");
+                PlayerManager.IncreaseValue(eType);
+
+                PlayerManager.ObtainedItem = null;
+                PlayerManager.PlayerActor.Facing = DirectionEnum.Down;
+                PlayerManager.PlayerActor.PlayAnimation(VerbEnum.Idle);
             }
         }
 

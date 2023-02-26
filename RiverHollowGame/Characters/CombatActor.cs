@@ -11,7 +11,7 @@ namespace RiverHollow.Characters
     public abstract class CombatActor : Actor
     {
         public bool HasHP => CurrentHP > 0;
-        public virtual float MaxHP { get; protected set; } = 2;
+        public virtual float MaxHP => 2;
         public float CurrentHP { get; protected set; } = 2;
 
         protected bool _bFlicker = false;

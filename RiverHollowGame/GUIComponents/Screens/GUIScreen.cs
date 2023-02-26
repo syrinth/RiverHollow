@@ -185,9 +185,11 @@ namespace RiverHollow.GUIComponents.Screens
             bool rv = false;
             if (_guiTextWindow != null)
             {
-                _guiTextWindow.ClosingWindow();
+                GUITextWindow temp = _guiTextWindow;
                 RemoveControl(_guiTextWindow);
                 _guiTextWindow = null;
+
+                temp.ClosingWindow();
                 rv = true;
             }
 

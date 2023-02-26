@@ -487,18 +487,16 @@ namespace RiverHollow.Characters
         protected bool CheckTaskLog(ref TextEntry taskEntry)
         {
             bool rv = false;
-
+             
             foreach (RHTask t in TaskManager.TaskLog)
             {
                 if (t.ReadyForHandIn && t.GoalNPC == this)
                 {
-                    string taskCompleteKey = string.Empty;
-                    t.TurnInTask();
-
+                    rv = true;
+                    TaskManager.QueuedHandin = t;
+                    ModifyTaskGoalValue(-1);
                     taskEntry = _diDialogue[t.EndTaskDialogue];
 
-                    ModifyTaskGoalValue(-1);
-                    rv = true;
                     break;
                 }
             }

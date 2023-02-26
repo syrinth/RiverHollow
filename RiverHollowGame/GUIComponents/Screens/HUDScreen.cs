@@ -36,10 +36,10 @@ namespace RiverHollow.GUIComponents.Screens
             GameManager.CurrentScreen = GameScreenEnum.World;
 
             _liTaskIcons = new List<HUDNewAlert>();
-            _gHealthDisplay = new GUIOldStatDisplay(PlayerManager.GetHP, Color.Green);
+            _gHealthDisplay = new GUIOldStatDisplay(PlayerManager.GetHP, Color.Red);
             _gHealthDisplay.AnchorToScreen(this, SideEnum.TopLeft, 10);
             AddControl(_gHealthDisplay);
-            _gStaminaDisplay = new GUIOldStatDisplay(PlayerManager.GetStamina, Color.Red);
+            _gStaminaDisplay = new GUIOldStatDisplay(PlayerManager.GetStamina, Color.ForestGreen);
             _gStaminaDisplay.AnchorAndAlignToObject(_gHealthDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             AddControl(_gStaminaDisplay);
 
@@ -114,7 +114,7 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         CloseMainObject();
                     }
-                    else
+                    else if (_guiTextWindow == null)
                     {
                         if (_gMenu == null) { OpenMenu(); }
                         else { CloseMenu(); }

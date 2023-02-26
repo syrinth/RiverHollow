@@ -6,13 +6,9 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
-using System;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.GUIComponents.Screens;
-using Newtonsoft.Json.Linq;
-using System.Windows.Input;
 
 namespace RiverHollow.WorldObjects
 {

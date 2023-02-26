@@ -31,9 +31,7 @@ namespace RiverHollow.Items
         public override bool ItemBeingUsed()
         {
             GameManager.SetSelectedItem(this);
-            TextEntry entry = DataManager.GetGameTextEntry("FoodConfirm");
-            entry.FormatText(Name());
-            ConfirmItemUse(entry);
+            ConfirmItemUse(DataManager.GetGameTextEntry("FoodConfirm", Name()));
 
             return true;
         }
@@ -43,7 +41,7 @@ namespace RiverHollow.Items
             if (Number > 0)
             {
                 Remove(1);
-                PlayerManager.IncreaseStamina(Stamina);
+                PlayerManager.RecoverEnergy(Stamina);
             }
             ClearGMObjects();
         }

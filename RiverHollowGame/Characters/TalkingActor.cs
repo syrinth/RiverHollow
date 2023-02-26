@@ -130,6 +130,8 @@ namespace RiverHollow.Characters
                 _assignedTask.AddTaskToLog();
                 _assignedTask = null;
             }
+
+            TaskManager.HandleQueuedTask();
         }
 
         public override void ProcessRightButtonClick()

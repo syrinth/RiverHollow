@@ -143,6 +143,18 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "UniqueItemsBought")]
             public string UniqueItemsBought;
 
+            [XmlElement(ElementName = "HPIncreases")]
+            public int hpIncreases;
+
+            [XmlElement(ElementName = "EnergyIncreases")]
+            public int energyIncreases;
+
+            [XmlElement(ElementName = "MagicIncreases")]
+            public int magicIncreases;
+
+            [XmlElement(ElementName = "HasMagic")]
+            public bool hasMagic;
+
             [XmlArray(ElementName = "Pets")]
             public List<int> liPets;
 
@@ -479,7 +491,7 @@ namespace RiverHollow.Game_Managers
             RiverHollow.Rollover();
             PlayerManager.AddMoney(TownManager.Income);
             SaveManager.Save();
-            PlayerManager.Stamina = PlayerManager.MaxStamina;
+            PlayerManager.CurrentEnergy = PlayerManager.MaxEnergy();
             PlayerManager.PlayerActor.RefillHealth();
 
             _bSaving = false;

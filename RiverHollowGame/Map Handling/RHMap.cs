@@ -539,8 +539,6 @@ namespace RiverHollow.Map_Handling
 
         public void PopulateMap(bool gameStart)
         {
-            TiledMapProperties props = _map.Properties;
-
             foreach (TiledMapObject tiledObj in _liMapObjects)
             {
                 if (gameStart || !tiledObj.Properties.ContainsKey("DoNotLoad"))
@@ -1785,9 +1783,10 @@ namespace RiverHollow.Map_Handling
             GUIManager.OpenMenu();
         }
 
-        public void RemoveWorldObject(WorldObject o)
+        public void RemoveWorldObject(WorldObject o, bool immediately = false)
         {
-            _liObjectsToRemove.Add(o);
+            if (immediately) { _liPlacedWorldObjects.Remove(o); }
+            else { _liObjectsToRemove.Add(o); }
             o.RemoveSelfFromTiles();
         }
         public void RemoveActor(Actor c)

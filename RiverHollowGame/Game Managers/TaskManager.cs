@@ -12,6 +12,8 @@ namespace RiverHollow.Game_Managers
     {
         private static List<RHTask> _liDelayedTasks;
         private static List<RHTask> _liTasks;
+
+        public static RHTask QueuedHandin;
         public static List<RHTask> TaskLog
         {
             get { return _liTasks.FindAll(x => x.TaskState == TaskStateEnum.TaskLog); }
@@ -59,7 +61,6 @@ namespace RiverHollow.Game_Managers
         {
             _liDelayedTasks.Add(_liTasks.Find(x => x.ID == taskID));
         }
-
         public static void AssignDelayedTasks()
         {
             _liDelayedTasks.ForEach(x => x.AssignTaskToNPC());
@@ -135,6 +136,12 @@ namespace RiverHollow.Game_Managers
             return TaskLog.Find(t => t.ID == taskID) != null;
         }
 
+        public static void HandleQueuedTask()
+        {
+            QueuedHandin?.TurnInTask();
+            QueuedHandin = null;
+        }
+
         public static List<TaskData> SaveTaskData()
         {
             List<TaskData> rv = new List<TaskData>();
@@ -145,7 +152,6 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
-
         public static void LoadTaskData(List<TaskData> list)
         {
             for (int i = 0; i < list.Count; i++)

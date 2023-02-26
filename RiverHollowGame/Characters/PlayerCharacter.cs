@@ -34,8 +34,6 @@ namespace RiverHollow.Characters
             return liRv;
         }
 
-        private int HeightMod => BodySprite.Height - Constants.TILE_SIZE;
-
         public override Rectangle CollisionBox => ActiveMount != null ? ActiveMount.CollisionBox : base.CollisionBox;
         public override Rectangle HitBox => new Rectangle(Position.X + 2, Position.Y + 22, 12, 10);
 
@@ -54,12 +52,13 @@ namespace RiverHollow.Characters
         public Mount ActiveMount { get; private set; }
         public bool Mounted => ActiveMount != null;
 
+        public override float MaxHP => PlayerManager.MaxPlayerHP(); 
+
         public PlayerCharacter() : base()
         {
             HairColor = Color.Red;
             EyeColor = Color.Blue;
 
-            MaxHP = Constants.PLAYER_STARTING_HP;
             CurrentHP = MaxHP;
 
             _liTilePath = new List<RHTile>();
@@ -132,6 +131,7 @@ namespace RiverHollow.Characters
             rv = Util.LoadPlayerAnimations(data);
 
             Util.AddToAnimationsList(ref rv, data, VerbEnum.UseTool, true, true);
+            Util.AddToAnimationsList(ref rv, data, AnimationEnum.Pose);
             return rv;
         }
 
@@ -162,20 +162,20 @@ namespace RiverHollow.Characters
 
         public override void PlayAnimation<TEnum>(TEnum anim)
         {
-            foreach (AnimatedSprite spr in GetSprites()) { spr.PlayAnimation(anim); }
+            GetSprites().ForEach(spr => spr.PlayAnimation(anim));
             Chest?.Sprite.PlayAnimation(anim);
         }
         public override void PlayAnimation(VerbEnum verb, DirectionEnum dir)
         {
             if (verb == VerbEnum.Walk && ActiveMount != null) { verb = VerbEnum.Idle; }
 
-            foreach (AnimatedSprite spr in GetSprites()) { spr.PlayAnimation(verb, dir); }
+            GetSprites().ForEach(spr => spr.PlayAnimation(verb, dir));
             Chest?.Sprite.PlayAnimation(verb, dir);
         }
 
         public void SetScale(int scale = 1)
         {
-            foreach (AnimatedSprite spr in GetSprites()) { spr.SetScale(scale); }
+            GetSprites().ForEach(spr => spr.SetScale(scale));
         }
 
         public void SetClothes(Clothing c)
@@ -262,7 +262,6 @@ namespace RiverHollow.Characters
 
             return rv;
         }
-
         protected override void Flicker(bool value)
         {
             base.Flicker(value);

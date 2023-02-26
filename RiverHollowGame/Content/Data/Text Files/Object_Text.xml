@@ -1219,11 +1219,15 @@
     </Item>
     <Item>
       <Key>Item_196</Key>
-      <Value>[Name:Eggs2]</Value>
+      <Value>[Name:Mageberry]</Value>
     </Item>
     <Item>
       <Key>Item_197</Key>
-      <Value>[Name:Eggs3]</Value>
+      <Value>[Name:Potion of Vitality]</Value>
+    </Item>
+    <Item>
+      <Key>Item_198</Key>
+      <Value>[Name:Energy Root]</Value>
     </Item>
     <Item>
       <Key>WorldObject_0</Key>

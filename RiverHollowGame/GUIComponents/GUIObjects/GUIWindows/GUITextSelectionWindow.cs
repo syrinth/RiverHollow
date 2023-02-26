@@ -250,7 +250,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     MapManager.FadeToNewMap(MapManager.CurrentMap, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]);
                     if (GameCalendar.CurrentHour <= GameCalendar.Nightfall())
                     {
-                        PlayerManager.IncreaseStamina(Constants.STAMINA_NAP_RECOVERY);
+                        PlayerManager.RecoverEnergy(Constants.ENERGY_NAP_RECOVERY);
                     }
                     GameCalendar.GoToNightfall();
                     break;

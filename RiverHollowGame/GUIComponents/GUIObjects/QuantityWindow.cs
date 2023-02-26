@@ -99,7 +99,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
             else
             {
-                GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("BuyMerch_NoSpace"));
+                GUIManager.OpenTextWindow("BuyMerch_NoSpace");
             }
         }
     }

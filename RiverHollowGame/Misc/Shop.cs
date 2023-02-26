@@ -64,7 +64,7 @@ namespace RiverHollow.Misc
                         itemSpot.Buy();
                         return true;
                     }
-                    else { GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("BuyMerch_NoShopkeep")); }
+                    else { GUIManager.OpenTextWindow("BuyMerch_NoShopkeep"); }
                 }
             }
 

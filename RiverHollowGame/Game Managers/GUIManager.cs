@@ -110,6 +110,10 @@ namespace RiverHollow.Game_Managers
         /// <param name="text">Text to speak</param>
         /// <param name="talker">NPC being talked to</param>
         /// <param name="open">Whether or not to play the animation for an opening window.</param>
+        public static void OpenTextWindow(string textEntryKey, params object[] formatParameters)
+        {
+            OpenTextWindow(DataManager.GetGameTextEntry(textEntryKey, formatParameters));
+        }
         public static void OpenTextWindow(string textEntryKey, bool open = true)
         {
             OpenTextWindow(DataManager.GetGameTextEntry(textEntryKey), open);

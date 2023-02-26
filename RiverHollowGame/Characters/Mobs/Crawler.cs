@@ -30,7 +30,7 @@ namespace RiverHollow.Characters.Mobs
                     _bBumpedIntoSomething = false;
                 }
 
-                if (HasProjectiles)
+                if (HasProjectiles && PlayerManager.PlayerActor.HasHP)
                 {
                     DirectionEnum playerDir = Util.GetDirection(GetPlayerDirection());
                     if (_cooldownTimer.TickDown(gTime) && Facing == playerDir)
