@@ -17,6 +17,7 @@ using RiverHollow.Items.Tools;
 
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.Characters.Mobs;
+using System.Linq;
 
 namespace RiverHollow.Game_Managers
 {
@@ -71,6 +72,7 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, string> _diMailboxMessages;
 
         static Dictionary<int, Dictionary<string, string>> _diItemData;
+        public static List<int> ItemKeys => _diItemData.Keys.ToList();
 
         static Dictionary<int, Dictionary<string, string>> _diDungeonData;
         static Dictionary<int, Dictionary<string, string>> _diLightData;

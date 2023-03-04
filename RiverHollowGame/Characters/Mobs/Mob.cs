@@ -94,6 +94,11 @@ namespace RiverHollow.Characters
             //if (_bAlert) { _sprAlert.Draw(spriteBatch, userLayerDepth); }
         }
 
+        protected override void Kill()
+        {
+            base.Kill();
+            PlayerManager.DIMobInfo[ID] += 1;
+        }
         public override bool DealDamage(int value, Rectangle hitbox)
         {
             bool rv = base.DealDamage(value, hitbox);

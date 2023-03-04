@@ -7,7 +7,7 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
-    public class ActorDisplayBox : GUIObject
+    public class PlayerDisplayBox : GUIObject
     {
         VerbEnum _eLastVerb = VerbEnum.Idle;
         DirectionEnum _eLastDir = DirectionEnum.Down;
@@ -17,7 +17,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         GUIImage _gBackdrop;
 
-        public ActorDisplayBox(PlayerCharacter actor, GUIImage backDrop)
+        public PlayerDisplayBox(PlayerCharacter actor, GUIImage backDrop)
         {
             _act = actor;
 
@@ -48,7 +48,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
             if (sprite != null)
             {
                 GUISprite spr = new GUISprite(sprite);
-                spr.SetScale(GameManager.ScaledPixel);
                 spr.Position(this.Position());
                 spr.ScaledMoveBy(17, 14);
                 _liSprites.Add(spr);

@@ -4,6 +4,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
+using System;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 
@@ -67,6 +68,12 @@ namespace RiverHollow.Characters
             {
                 BodySprite.AddAnimation(data.Animation, data.XLocation, data.YLocation, Width, Height);
             }
+        }
+
+        public override TextEntry GetOpeningText()
+        {
+            TownManager.DITravelerInfo[ID] = new ValueTuple<bool, int>(true, TownManager.DITravelerInfo[ID].Item2);
+            return base.GetOpeningText();
         }
 
         public void TryEat(Food f)

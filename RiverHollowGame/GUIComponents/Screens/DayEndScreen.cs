@@ -62,7 +62,7 @@ namespace RiverHollow.GUIComponents.Screens
             _gBackgroundImage = new GUIImage(new Rectangle(0, 0, 480, 270), DataManager.GUI_COMPONENTS + @"\Combat_Background_Forest");
             AddControl(_gBackgroundImage);
 
-            _gWindow = new GUIWindow(GUIWindow.Window_1, ScaleIt(8), ScaleIt(8));
+            _gWindow = new GUIWindow(GUIWindow.Brown_Window, ScaleIt(8), ScaleIt(8));
             _gText = new GUIText(DataManager.GetGameTextEntry("Label_Saving_Start").GetFormattedText(), false);
             _gText.AnchorToInnerSide(_gWindow, SideEnum.TopLeft);
             _gWindow.Resize();
@@ -258,7 +258,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _timer = new RHTimer(DAY_DISPLAY_PAUSE);
             _eCurrentPhase = DayEndPhaseEnum.NextDay;
-            _gWindow = new GUIWindow(GUIWindow.Window_1, 8, 8);
+            _gWindow = new GUIWindow(GUIWindow.Brown_Window, 8, 8);
 
             TextEntry entry = DataManager.GetGameTextEntry("Day_End", GameCalendar.CurrentDay, GameCalendar.GetCurrentSeason());
             _gText = new GUIText(entry.GetFormattedText(), false);
@@ -278,7 +278,7 @@ namespace RiverHollow.GUIComponents.Screens
             _timer.Reset(0.01);
             _eCurrentPhase = DayEndPhaseEnum.SpawnNPCs;
 
-            _gWindow = new GUIWindow(GUIWindow.Window_1, ScaleIt(76), ScaleIt(28));
+            _gWindow = new GUIWindow(GUIWindow.Brown_Window, ScaleIt(76), ScaleIt(28));
             GUIImage gCoin = DataManager.GetIcon(GameIconEnum.Coin);
             _gWindow.AddControl(gCoin);
 

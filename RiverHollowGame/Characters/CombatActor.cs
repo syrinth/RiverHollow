@@ -113,7 +113,7 @@ namespace RiverHollow.Characters
             return amountHealed;
         }
 
-        protected void Kill()
+        protected virtual void Kill()
         {
             _vKnockbackVelocity = Vector2.Zero;
             DamageTimerEnd();

@@ -12,11 +12,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
     {
         protected AnimatedSprite _sprite;
 
-        public GUISprite(AnimatedSprite sprite, bool overwrite = false)
+        public GUISprite(AnimatedSprite sprite, bool newSprite = false)
         {
-            _sprite = overwrite ? new AnimatedSprite(sprite) : sprite;
-            Width = sprite.Width;
-            Height = sprite.Height;
+            _sprite = newSprite ? new AnimatedSprite(sprite) : sprite;
+            _sprite.SetScale(GameManager.ScaledPixel);
+            Width = GameManager.ScaleIt(sprite.Width);
+            Height = GameManager.ScaleIt(sprite.Height);
         }
 
         public override void Update(GameTime gTime)
@@ -51,6 +52,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _sprite.SetScale((int)x);
             Width = _sprite.Width;
             Height = _sprite.Height;
+        }
+
+        public override void SetColor(Color c)
+        {
+            _sprite.SetColor(c);
         }
 
         /// <summary>

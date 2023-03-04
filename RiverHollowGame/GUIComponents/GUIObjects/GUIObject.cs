@@ -73,9 +73,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
         protected Texture2D _texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
         protected Color EnabledColor => _bEnabled ? _Color : Color.Gray;
         protected bool _bEnabled = true;
-        public bool Enabled => _bEnabled && Visible;
+        public bool Active => _bEnabled && Visible;
 
-        public bool Visible { get; private set; } = true;
+        public bool Visible { get; protected set; } = true;
 
         protected bool _bInitScaleSet = false;
         protected Point _pInitVals;       //X = Width, Y = Height
@@ -837,7 +837,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
-        internal void Show(bool val)
+        internal virtual void Show(bool val)
         {
             Visible = val;
             foreach(GUIObject obj in Controls)

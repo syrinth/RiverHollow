@@ -80,6 +80,7 @@ namespace RiverHollow.Game_Managers
         public static PlayerCharacter PlayerActor;
 
         private static Dictionary<ObjectTypeEnum, List<int>> _diCrafting;
+        public static Dictionary<int, int> DIMobInfo { get; private set; }
 
         private static DirectionEnum _eHorizontal = DirectionEnum.None;
         private static DirectionEnum _eVertical = DirectionEnum.None;
@@ -145,6 +146,15 @@ namespace RiverHollow.Game_Managers
             _diTools = new Dictionary<ToolEnum, Tool>();
 
             PlayerActor = new PlayerCharacter();
+
+            DIMobInfo = new Dictionary<int, int>();
+            foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.ActorData)
+            {
+                if (kvp.Value["Type"] == Util.GetEnumString(ActorTypeEnum.Mob))
+                {
+                    DIMobInfo[kvp.Key] = 0;
+                }
+            }
         }
 
         public static void NewPlayer()
@@ -833,6 +843,7 @@ namespace RiverHollow.Game_Managers
                 liPets = new List<int>(),
                 MountList = new List<int>(),
                 ChildList = new List<ChildData>(),
+                MobInfo = new List<ValueTuple<int, int>>(),
                 CraftingList = new List<int>()
             };
 
@@ -862,6 +873,11 @@ namespace RiverHollow.Game_Managers
             foreach (List<int> craftList in _diCrafting.Values)
             {
                 data.CraftingList.AddRange(craftList);
+            }
+
+            foreach (var kvp in DIMobInfo)
+            {
+                data.MobInfo.Add(new ValueTuple<int, int>(kvp.Key, kvp.Value));
             }
 
             for (int i = 0; i < _liUniqueItemsBought.Count; i++)
@@ -937,6 +953,11 @@ namespace RiverHollow.Game_Managers
             foreach (int i in saveData.CraftingList)
             {
                 AddToCraftingDictionary(i, false);
+            }
+
+            foreach(var tpl in saveData.MobInfo)
+            {
+                DIMobInfo[tpl.Item1] = tpl.Item2;
             }
 
             if (saveData.UniqueItemsBought != null)

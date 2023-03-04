@@ -378,7 +378,7 @@ Exit:
         GUIInventory _inventory;
         public GUIInventoryWindow(bool PlayerInventory = false)
         {
-            _winData = GUIWindow.Window_2;
+            _winData = GUIWindow.DarkBlue_Window;
 
             _inventory = new GUIInventory(PlayerInventory);
             _inventory.ScaledMoveBy(7, 6);

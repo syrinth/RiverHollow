@@ -103,14 +103,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (Show())
             {
-                if (_bFadeOnDisable) { _btnObject.Alpha(Enabled ? 1.0f : 0.5f); }
+                if (_bFadeOnDisable) { _btnObject.Alpha(Active ? 1.0f : 0.5f); }
                 _btnObject.Draw(spriteBatch);
             }
-        }
-
-        public void SetDelegate(EmptyDelegate del)
-        {
-            _delAction = del;
         }
 
         public override bool Contains(Point mouse)
@@ -121,7 +116,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (Contains(mouse) && Enabled && _delAction != null)
+            if (Contains(mouse) && Active && _delAction != null)
             {
                 SoundManager.PlayEffect("ButtonPress");
                 _delAction();

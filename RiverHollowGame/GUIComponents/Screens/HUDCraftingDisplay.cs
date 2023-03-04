@@ -60,7 +60,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             int recipeNumber = Math.Min(recipes.Count, Constants.MAX_RECIPE_DISPLAY);
             _arrRecipes = new GUIItemBox[recipeNumber];
-            _winMain = new GUIWindow(GUIWindow.Window_1, 10, 10);
+            _winMain = new GUIWindow(GUIWindow.Brown_Window, 10, 10);
 
             for (int i = 0; i < recipeNumber; i++)
             {
@@ -116,7 +116,7 @@ namespace RiverHollow.GUIComponents.Screens
             AddControl(_gComponents);
 
             // Making Window
-            _winMaking = new GUIWindow(GUIWindow.Window_1, 10, 10);
+            _winMaking = new GUIWindow(GUIWindow.Brown_Window, 10, 10);
             _arrMaking = new GUIItemBox[_objMachine.Capacity];
             for (int i = 0; i < _objMachine.Capacity; i++)
             {

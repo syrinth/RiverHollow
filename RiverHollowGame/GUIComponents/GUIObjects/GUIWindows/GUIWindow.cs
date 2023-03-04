@@ -35,8 +35,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             public int WidthEdges() { return ScaledLeftEdge + ScaledRightEdge; }
             public int HeightEdges() { return ScaledTopEdge + ScaledBottomEdge; }
         };
-        internal static WindowData Window_1 = new WindowData(128, 65, 5, 5, 6, 6, 4);
-        internal static WindowData Window_2 = new WindowData(144, 65, 5, 5, 6, 6, 4);
+        internal static WindowData Brown_Window = new WindowData(128, 65, 5, 5, 6, 6, 4);
+        internal static WindowData DarkBlue_Window = new WindowData(144, 65, 5, 5, 6, 6, 4);
+        internal static WindowData Codex_NPC_Window = new WindowData(160, 65, 5, 5, 6, 6, 4);
         internal static WindowData GreyWin = new WindowData(206, 62, 2, 2, 2, 2, 16);
         internal static WindowData DisplayWin = new WindowData(48, 32, 1, 1, 1, 1, 14);
         internal static WindowData WoodenPanel = new WindowData(128, 32, 3, 3, 3, 3, 10);
@@ -50,7 +51,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Height = 184;
             Width = RiverHollow.ScreenWidth / 2;
 
-            _winData = Window_1;
+            _winData = Brown_Window;
         }
 
         public GUIWindow(WindowData winData, int width, int height)

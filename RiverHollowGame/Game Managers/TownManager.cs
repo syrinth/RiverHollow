@@ -4,10 +4,9 @@ using RiverHollow.Items;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Security.Policy;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -29,6 +28,8 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<int, int> _diStorage;
         public static Dictionary<int, Villager> DIVillagers { get; private set; }
         public static Dictionary<int, Merchant> DIMerchants { get; private set; }
+        public static Dictionary<int, ValueTuple<bool, int>> DITravelerInfo { get; private set; }
+        public static Dictionary<int, bool> DICodexItems { get; private set; }
         public static List<Merchant> MerchantQueue;
         public static List<Animal> TownAnimals { get; set; }
         public static List<Traveler> Travelers { get; set; }
@@ -63,6 +64,22 @@ namespace RiverHollow.Game_Managers
                         break;
                 }
 
+            }
+
+            DITravelerInfo = new Dictionary<int, ValueTuple<bool, int>>();
+            foreach(KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.ActorData)
+            {
+                if (kvp.Value["Type"] == Util.GetEnumString(ActorTypeEnum.Traveler))
+                {
+                    DITravelerInfo[kvp.Key] = new ValueTuple<bool, int>(false, 0);
+                }
+            }
+
+            DICodexItems = new Dictionary<int, bool>();
+            foreach (var id in DataManager.ItemKeys)
+            {
+                ItemEnum type = DataManager.GetEnumByIDKey<ItemEnum>(id, "Type", DataType.Item);
+                DICodexItems[id] = false;
             }
         }
 
@@ -156,15 +173,12 @@ namespace RiverHollow.Game_Managers
 
             //Find all Travelers
             var travelerList = new List<Traveler>();
-            foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.ActorData)
+            foreach (int value in DITravelerInfo.Keys)
             {
-                if (kvp.Value["Type"] == Util.GetEnumString(ActorTypeEnum.Traveler))
+                Traveler npc = DataManager.CreateTraveler(value);
+                if (npc.Validate() || (!npc.Rare() && RHRandom.Instance().RollPercent(10)))
                 {
-                    Traveler npc = DataManager.CreateTraveler(kvp.Key);
-                    if (npc.Validate() || (!npc.Rare() && RHRandom.Instance().RollPercent(10)))
-                    {
-                        travelerList.Add(npc);
-                    }
+                    travelerList.Add(npc);
                 }
             }
 
@@ -288,6 +302,10 @@ namespace RiverHollow.Game_Managers
             }
             npc.SetPosition(map.GetRandomPosition());
             map.AddActor(npc);
+
+            ValueTuple<bool, int> tuple = DITravelerInfo[npc.ID];
+            tuple.Item2 += 1;
+            DITravelerInfo[npc.ID] = new ValueTuple<bool, int>(DITravelerInfo[npc.ID].Item1, DITravelerInfo[npc.ID].Item2 + 1);
         }
         #endregion
 
@@ -437,7 +455,9 @@ namespace RiverHollow.Game_Managers
                 Travelers = new List<int>(),
                 VillagerData = new List<VillagerData>(),
                 MerchantData = new List<MerchantData>(),
+                TravelerData = new List<TravelerData>(),
                 MerchantQueue = new List<int>(),
+                CodexItems = new List<int>(),
                 Inventory = new List<ItemData>()
             };
 
@@ -472,6 +492,17 @@ namespace RiverHollow.Game_Managers
                 data.MerchantData.Add(npc.SaveData());
             }
 
+            foreach (var kvp in DITravelerInfo)
+            {
+                TravelerData travelerData = new TravelerData()
+                {
+                    npcID = kvp.Key,
+                    introduced = kvp.Value.Item1,
+                    numVisits = kvp.Value.Item2
+                };
+                data.TravelerData.Add(travelerData);
+            }
+
             foreach (Merchant npc in MerchantQueue)
             {
                 data.MerchantQueue.Add(npc.ID);
@@ -480,6 +511,14 @@ namespace RiverHollow.Game_Managers
             foreach (Item i in Inventory)
             {
                 data.Inventory.Add(Item.SaveData(i));
+            }
+
+            foreach(var kvp in DICodexItems)
+            {
+                if (kvp.Value)
+                {
+                    data.CodexItems.Add(kvp.Key);
+                }
             }
 
             data.travelersCame = _bTravelersCame;
@@ -519,10 +558,17 @@ namespace RiverHollow.Game_Managers
                 npc.LoadData(data);
             }
 
+            foreach (TravelerData data in saveData.TravelerData)
+            {
+                DITravelerInfo[data.npcID] = new ValueTuple<bool, int>(data.introduced, data.numVisits);
+            }
+
             for (int i = 0; i < saveData.MerchantQueue.Count; i++)
             {
                 MerchantQueue.Add(TownManager.DIMerchants[saveData.MerchantQueue[i]]);
             }
+
+            saveData.CodexItems.ForEach(x => DICodexItems[x] = true);
 
             InventoryManager.InitExtraInventory(Inventory);
             for (int i = 0; i < Constants.KITCHEN_STOCK_SIZE; i++)

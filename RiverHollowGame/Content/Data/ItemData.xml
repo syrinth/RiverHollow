@@ -455,7 +455,7 @@
     </Item>
     <Item>
       <Key>113</Key>
-      <Value>[Type:Equipment][Subtype:Weapon][Image:7-2][Value:2000][ESub:Orb][Tier:8][Atk:Moderate][Mag:Major][ReqItems:49-4]</Value>
+      <Value>[Type:Resource][Image:7-2][Value:2000][ESub:Orb][Tier:8][Atk:Moderate][Mag:Major][ReqItems:49-4]</Value>
     </Item>
     <Item>
       <Key>114</Key>
@@ -687,19 +687,19 @@
     </Item>
     <Item>
       <Key>171</Key>
-      <Value>[Type:Clothing][Subtype:Chest][Image:7-0][ReqItems:2-10|0-5][TexName:400][Row:1]</Value>
+      <Value>[Type:Clothing][Subtype:Chest][Image:7-0][ReqItems:2-10|0-5][TexName:400][Row:1][Key:Blue_Tunic]</Value>
     </Item>
     <Item>
       <Key>172</Key>
-      <Value>[Type:Clothing][Subtype:Hat][Image:0-4][Value:0][Row:0][TexName:400]</Value>
+      <Value>[Type:Clothing][Subtype:Hat][Image:0-4][Value:0][Row:0][TexName:400][Key:Blue_Tunic]</Value>
     </Item>
     <Item>
       <Key>173</Key>
-      <Value>[Type:Clothing][Subtype:Chest][Image:1-4][Value:0][Row:1][TexName:401]</Value>
+      <Value>[Type:Clothing][Subtype:Chest][Image:1-4][Value:0][Row:1][TexName:401][Key:Blue_Tunic]</Value>
     </Item>
     <Item>
       <Key>174</Key>
-      <Value>[Type:Clothing][Subtype:Legs][Image:2-4][Value:0][Row:2][TexName:404]</Value>
+      <Value>[Type:Clothing][Subtype:Legs][Image:2-4][Value:0][Row:2][TexName:404][Key:Blue_Tunic]</Value>
     </Item>
     <Item>
       <Key>175</Key>

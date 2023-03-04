@@ -153,7 +153,11 @@ namespace RiverHollow.Items
             return _diReqToMake;
         }
 
-        public virtual bool AddToInventoryTrigger() { return false; }
+        public virtual bool AddToInventoryTrigger()
+        {
+            TownManager.DICodexItems[ID] = true;
+            return false;
+        }
 
         protected void ConfirmItemUse(TextEntry entry)
         {

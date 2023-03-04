@@ -11,6 +11,7 @@ using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.GUIComponents.Screens.HUDScreens;
+using RiverHollow.GUIComponents.Screens.HUDComponents;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -43,7 +44,7 @@ namespace RiverHollow.GUIComponents.Screens
             _gStaminaDisplay.AnchorAndAlignToObject(_gHealthDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             AddControl(_gStaminaDisplay);
 
-            GUIWindow win = new GUIWindow(GUIWindow.Window_1, ScaleIt(48), ScaleIt(26));
+            GUIWindow win = new GUIWindow(GUIWindow.Brown_Window, ScaleIt(48), ScaleIt(26));
             
             _gMoney = new GUIMoneyDisplay();
             _gMoney.AnchorToInnerSide(win, SideEnum.TopLeft);
@@ -208,124 +209,10 @@ namespace RiverHollow.GUIComponents.Screens
         }
     }
 
-    public class HUDMenu : GUIObject
-    {
-        const int BTN_PADDING = 10;
-        GUIMainObject _gMenuObject;
-        List<GUIObject> _liButtons;
-
-        bool _bOpen = false;
-        bool _bClose = false;
-
-        public delegate void CloseMenuDelegate();
-        private CloseMenuDelegate _closeMenu;
-
-        public HUDMenu(CloseMenuDelegate closeMenu)
-        {
-            _closeMenu = closeMenu;
-
-            _liButtons = new List<GUIObject>() {
-                new GUIButton("Inventory", BtnInventory)
-            };
-
-            GUIButton btnBuild = new GUIButton("Build", BtnBuild);
-            btnBuild.Enable(!MapManager.CurrentMap.Modular);
-            _liButtons.Add(btnBuild);
-
-            _liButtons.Add(new GUIButton("Task Log", BtnTaskLog));
-            _liButtons.Add(new GUIButton("Options", BtnOptions));
-            _liButtons.Add(new GUIButton("Friends", BtnFriendship));
-            _liButtons.Add(new GUIButton("Exit Game", BtnExitGame));
-
-            AddControls(_liButtons);
-           
-            GUIObject.CreateSpacedColumn(ref _liButtons, -GUIButton.BTN_WIDTH, 0, RiverHollow.ScreenHeight, BTN_PADDING);
-
-            _bOpen = true;
-        }
-
-        public override void Update(GameTime gTime)
-        {
-            base.Update(gTime);
-            int _openingFinished = 0;
-            foreach (GUIObject o in Controls)
-            {
-                int val = 0;
-                if (_bOpen)
-                {
-                    if (o.Position().X < 0) { val = 16; }
-                }
-                if (_bClose)
-                {
-                    if (o.Position().X > -GUIButton.BTN_WIDTH) { val = -16; }
-                }
-
-                Point temp = o.Position();
-                temp.X += val;
-                o.Position(temp);
-                if (_bOpen && o.Position().X == 0) { _openingFinished++; }
-                if (_bClose && o.Position().X == -GUIButton.BTN_WIDTH) { /*Finished closing */ }
-            }
-            if (_openingFinished == _liButtons.Count) { _bOpen = false; }
-        }
-
-        public override bool ProcessRightButtonClick(Point mouse)
-        {
-            //Returns false here because we don't handle it
-            //By returning false, we will start closing options
-            return false;
-        }
-
-        #region Buttons
-        public void BtnExitGame()
-        {
-            RiverHollow.PrepExit();
-        }
-        public void BtnInventory()
-        {
-            Item[,] toolBox = new Item[1, 1];
-            //toolBox[0, 0] = PlayerManager.RetrieveTool(ToolEnum.Axe);
-            //toolBox[0, 1] = PlayerManager.RetrieveTool(ToolEnum.Pick);
-            //toolBox[0, 2] = PlayerManager.RetrieveTool(ToolEnum.WateringCan);
-            //toolBox[0, 3] = PlayerManager.RetrieveTool(ToolEnum.Scythe);
-            //toolBox[0, 4] = PlayerManager.RetrieveTool(ToolEnum.Lantern);
-            //toolBox[0, 5] = PlayerManager.RetrieveTool(ToolEnum.Harp);
-            toolBox[0, 0] = PlayerManager.RetrieveTool(ToolEnum.Backpack);
-
-            _gMenuObject = new HUDInventoryDisplay(toolBox, DisplayTypeEnum.Inventory, true);
-            //_gMenuObject = new HUDInventoryDisplay();
-            _gMenuObject.CenterOnScreen();
-            GUIManager.OpenMainObject(_gMenuObject);
-        }
-        public void BtnTaskLog()
-        {
-            _gMenuObject = new HUDTaskLog();
-            GUIManager.OpenMainObject(_gMenuObject);
-        }
-        public void BtnOptions()
-        {
-            _gMenuObject = new HUDOptions();
-            GUIManager.OpenMainObject(_gMenuObject);
-        }
-        public void BtnBuild()
-        {
-            if (!MapManager.CurrentMap.Modular)
-            {
-                GUIManager.SetScreen(new BuildScreen());
-            }
-        }
-        public void BtnFriendship()
-        {
-            _gMenuObject = new HUDFriendship();
-            GUIManager.OpenMainObject(_gMenuObject);
-        }
-        #endregion
-    }
-
     public class HUDCalendar : GUIWindow
     {
         static GUIText _gText;
-        public HUDCalendar() : base(GUIWindow.Window_2, ScaledTileSize, ScaledTileSize)
+        public HUDCalendar() : base(GUIWindow.DarkBlue_Window, ScaledTileSize, ScaledTileSize)
         {
             _gText = new GUIText("Day XX, XX:XX", DataManager.GetBitMapFont(DataManager.FONT_NEW));
 
@@ -347,7 +234,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public delegate void RemoveDelegate(HUDNewAlert q);
         private RemoveDelegate _delAction;
-        public HUDNewAlert(string text, RemoveDelegate del) : base(Window_1, 10, 10)
+        public HUDNewAlert(string text, RemoveDelegate del) : base(Brown_Window, 10, 10)
         {
             _delAction = del;
             _gMarker = new GUIImage(new Rectangle(54, 83, 4, 10), ScaleIt(4), ScaleIt(10), DataManager.DIALOGUE_TEXTURE);

@@ -316,7 +316,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             int boxWidth = CONSTRUCTBOX_WIDTH;
             int boxHeight = CONSTRUCTBOX_HEIGHT;            
 
-            _window = new GUIWindow(GUIWindow.Window_1, boxWidth, boxHeight);
+            _window = new GUIWindow(GUIWindow.Brown_Window, boxWidth, boxHeight);
             AddControl(_window);
             Width = _window.Width;
             Height = _window.Height;

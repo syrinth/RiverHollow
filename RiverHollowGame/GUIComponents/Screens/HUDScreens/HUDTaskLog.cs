@@ -25,7 +25,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
             _winMain = SetMainWindow();
 
             _liTasks = new List<GUIObject>();
-            _detailWindow = new DetailBox(GUIWindow.Window_1, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
+            _detailWindow = new DetailBox(GUIWindow.Brown_Window, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
             _detailWindow.Show(false);
             _detailWindow.CenterOnScreen();
             AddControl(_detailWindow);
@@ -117,7 +117,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
 
                 int boxHeight = height;
                 int boxWidth = width;
-                _window = new GUIWindow(GUIWindow.Window_1, boxWidth, boxHeight);
+                _window = new GUIWindow(GUIWindow.Brown_Window, boxWidth, boxHeight);
                 AddControl(_window);
                 Width = _window.Width;
                 Height = _window.Height;

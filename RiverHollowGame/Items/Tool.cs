@@ -91,7 +91,7 @@ namespace RiverHollow.Items
 
             FinishTool(dir);
         }
-
+        
         protected bool FinishTool(DirectionEnum dir)
         {
             bool rv = false;
@@ -125,9 +125,11 @@ namespace RiverHollow.Items
 
         public override bool AddToInventoryTrigger()
         {
+            base.AddToInventoryTrigger();
+
             if (ToolType == ToolEnum.Backpack)
             {
-                PlayerManager.AddTool(this);
+                PlayerManager.AddTool(this); 
                 return true;
             }
             else { return false; }

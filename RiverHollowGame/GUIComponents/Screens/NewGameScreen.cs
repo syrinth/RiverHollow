@@ -36,7 +36,7 @@ namespace RiverHollow.GUIComponents.Screens
         GUICheck _gCheckSkipCutscene;
         GUIButton _gMuteButton;
 
-        ActorDisplayBox _displayBox;
+        PlayerDisplayBox _displayBox;
 
         ColorPicker _gColorPicker;
 
@@ -47,7 +47,7 @@ namespace RiverHollow.GUIComponents.Screens
             //AssignClothes(ref _liHats, Util.FindParams(DataManager.Config[4]["ItemID"]));
             AssignClothes(ref _liShirts, Util.FindParams(DataManager.Config[5]["ItemID"]));
 
-            int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.Window_2.WidthEdges();
+            int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.DarkBlue_Window.WidthEdges();
 
             GUIImage background = new GUIImage(new Rectangle(0, 0, 480, 270), DataManager.GUI_COMPONENTS + @"\Newgame_Background");
             AddControl(background);
@@ -59,7 +59,7 @@ namespace RiverHollow.GUIComponents.Screens
             AddControl(_window);
 
             //Create Player Display Box
-            _displayBox = new ActorDisplayBox(PlayerManager.PlayerActor, new GUIImage(new Rectangle(0, 144, 50, 49), DataManager.DIALOGUE_TEXTURE));
+            _displayBox = new PlayerDisplayBox(PlayerManager.PlayerActor, new GUIImage(new Rectangle(0, 144, 50, 49), DataManager.DIALOGUE_TEXTURE));
             _displayBox.Position(_window.Position());
             _displayBox.ScaledMoveBy(23, 17);
             _window.AddControl(_displayBox);
@@ -466,7 +466,7 @@ namespace RiverHollow.GUIComponents.Screens
             OptionLabel _linkedLabel;
             public ColorPicker()
             {
-                _gWindow = new GUIWindow(GUIWindow.Window_1, ScaleIt(48), ScaleIt(36));
+                _gWindow = new GUIWindow(GUIWindow.Brown_Window, ScaleIt(48), ScaleIt(36));
                 AddControl(_gWindow);
 
                 _gHue = new Slider();

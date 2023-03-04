@@ -164,6 +164,9 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Children")]
             public List<ChildData> ChildList;
 
+            [XmlArray(ElementName = "MobInfo")]
+            public List<ValueTuple<int, int>> MobInfo;
+
             [XmlArray(ElementName = "CraftingDictionary")]
             public List<int> CraftingList;
         }
@@ -181,8 +184,14 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "MerchantData")]
             public List<MerchantData> MerchantData;
 
+            [XmlArray(ElementName = "TravelerData")]
+            public List<TravelerData> TravelerData;
+
             [XmlArray(ElementName = "MerchantQueue")]
             public List<int> MerchantQueue;
+
+            [XmlArray(ElementName = "CodexItems")]
+            public List<int> CodexItems;
 
             [XmlArray(ElementName = "TownAnimals")]
             public List<int> TownAnimals;
@@ -371,6 +380,17 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "Requests")]
             public string requestString;
+        }
+        public struct TravelerData
+        {
+            [XmlElement(ElementName = "NPCID")]
+            public int npcID;
+
+            [XmlElement(ElementName = "Introduced")]
+            public bool introduced;
+
+            [XmlElement(ElementName = "NumberOfVists")]
+            public int numVisits;
         }
         public struct CollectionData
         {

@@ -19,8 +19,8 @@ namespace RiverHollow.Characters
 
         protected Dictionary<string, TextEntry> _diDialogue;
 
-        public static List<int> FriendRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000 };
-        public int FriendshipPoints = 1600;
+        public static List<int> FriendRange = new List<int> { 0, 2000, 4000, 6000, 8000, 10000, 12000 };
+        public int FriendshipPoints;
 
         protected bool _bHasTalked;
         protected int _iTaskGoals = 0;
@@ -35,6 +35,7 @@ namespace RiverHollow.Characters
         }
         public TalkingActor(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
+            FriendshipPoints = 1000 * ID/2;
             _liActorFaceQueue = new List<ActorFaceEnum>();
             _liSpokenKeys = new List<string>();
 
@@ -224,10 +225,8 @@ namespace RiverHollow.Characters
             int rv = 0;
             for (int i = 0; i < FriendRange.Count; i++)
             {
-                if (FriendshipPoints >= FriendRange[i])
-                {
-                    rv = i;
-                }
+                if (FriendshipPoints >= FriendRange[i]) { rv = i; }
+                else { break; }
             }
 
             return rv;

@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using RiverHollow.Characters;
 using RiverHollow.GUIComponents.Screens;
-using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 
@@ -12,7 +11,6 @@ using RiverHollow.Utilities;
 using RiverHollow.Buildings;
 
 using static RiverHollow.Utilities.Enums;
-using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 
 namespace RiverHollow.Game_Managers
 {
@@ -43,7 +41,6 @@ namespace RiverHollow.Game_Managers
         public static int MAX_NAME_LEN = 8;
 
         public static int TotalExperience = 0;
-        public static List<GUISprite> SlainMonsters;
 
         public static bool HideMiniInventory = true;
 
@@ -59,7 +56,6 @@ namespace RiverHollow.Game_Managers
         {
             _liSpirits = new List<Spirit>();
             _liTriggerObjects = new List<TriggerObject>();
-            SlainMonsters = new List<GUISprite>();
         }
 
         public static void LoadManagedDataLists()

@@ -28,7 +28,7 @@
                 InventoryManager.InitExtraInventory(_arrToSell);
                 InventoryManager.ExtraHoldSingular = true;
 
-                _gVillagerWindow = new GUIWindow(GUIWindow.Window_2, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
+                _gVillagerWindow = new GUIWindow(GUIWindow.DarkBlue_Window, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
  
                 GUIText text = new GUIText(_npc.Name());
                 text.AnchorToInnerSide(_gVillagerWindow, SideEnum.Top, GameManager.ScaleIt(1));
@@ -39,7 +39,6 @@
                 _gVillagerWindow.AddControl(img);
 
                 GUISprite spr = new GUISprite(npc.BodySprite, true);
-                spr.SetScale(GameManager.ScaledPixel);
                 spr.AnchorAndAlignToObject(img, SideEnum.Top, SideEnum.Left, GameManager.ScaleIt(2));
                 spr.ScaledMoveBy(1, 0);
                 spr.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);

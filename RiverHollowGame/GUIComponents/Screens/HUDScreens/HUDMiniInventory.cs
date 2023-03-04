@@ -24,7 +24,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
         static Rectangle RECT_SELECT_IMG = new Rectangle(260, 0, 20, 20);
         GUIImage _gSelected;
 
-        public HUDMiniInventory() : base(GUIWindow.Window_2, Constants.TILE_SIZE, Constants.TILE_SIZE)
+        public HUDMiniInventory() : base(GUIWindow.DarkBlue_Window, Constants.TILE_SIZE, Constants.TILE_SIZE)
         {
             _btnChangeRow = new GUIButton(new Rectangle(256, 96, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, RowUp);
             _btnChangeRow.FadeOnDisable(false);

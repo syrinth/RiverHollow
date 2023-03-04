@@ -138,7 +138,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                     RemoveControl(_gWindow);
                     _gSelector.CenterOnObject(kvp.Key);
-                    _gWindow = new GUIWindow(GUIWindow.Window_1, 10, 10);
+                    _gWindow = new GUIWindow(GUIWindow.Brown_Window, 10, 10);
                     GUIText text = new GUIText(kvp.Value.MapName + " - " + kvp.Value.Time + " minutes");
                     text.AnchorToInnerSide(_gWindow, GUIObject.SideEnum.TopLeft);
                     _gWindow.Resize();

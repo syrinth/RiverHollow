@@ -215,7 +215,8 @@
     </Item>
     <Item>
       <Key>Actor_43</Key>
-      <Value>[Name:Ulm]</Value>
+      <Value>[Name:Ulm][Description:A cranky grandmother with a heart
+of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Actor_44</Key>

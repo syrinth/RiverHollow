@@ -90,7 +90,12 @@
     <Compile Include="Characters\Traveler.cs" />
     <Compile Include="Game Managers\ErrorManager.cs" />
     <Compile Include="Game Managers\TownManager.cs" />
+    <Compile Include="GUIComponents\GUIObjects\GUIToggle.cs" />
     <Compile Include="GUIComponents\Screens\DefeatedScreen.cs" />
+    <Compile Include="GUIComponents\Screens\HUDComponents\HUDMenu.cs" />
+    <Compile Include="GUIComponents\Screens\HUDComponents\ItemDisplayWindow.cs" />
+    <Compile Include="GUIComponents\Screens\HUDComponents\NPCDisplayWindow.cs" />
+    <Compile Include="GUIComponents\Screens\HUDScreens\HUDJournal.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDGiftWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDMerchantWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDMiniInventory.cs" />
@@ -139,7 +144,7 @@
     <Compile Include="Game Managers\ZoneManager.cs" />
     <Compile Include="GUIComponents\GUIHarp.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIList.cs" />
-    <Compile Include="GUIComponents\GUIObjects\ActorDisplayBox.cs" />
+    <Compile Include="GUIComponents\GUIObjects\PlayerDisplayBox.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIText.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIMisc.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIItemDescriptionWindow.cs" />
@@ -149,7 +154,6 @@
     <Compile Include="GUIComponents\MainObjects\WarpPointWindow.cs" />
     <Compile Include="GUIComponents\Screens\BuildScreen.cs" />
     <Compile Include="GUIComponents\Screens\ConfigScreen.cs" />
-    <Compile Include="GUIComponents\Screens\HUDScreens\HUDFriendship.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDOptions.cs" />
     <Compile Include="GUIComponents\Screens\HUDScreens\HUDTaskLog.cs" />
     <Compile Include="GUIComponents\Screens\LoadScreen.cs" />
