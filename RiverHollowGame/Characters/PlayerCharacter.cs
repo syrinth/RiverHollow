@@ -257,6 +257,7 @@ namespace RiverHollow.Characters
             bool rv = base.DealDamage(value, hitbox);
             if (rv && !HasHP)
             {
+                PlayerManager.FinishedWithTool();
                 Kill();
             }
 

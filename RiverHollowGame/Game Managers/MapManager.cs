@@ -202,6 +202,7 @@ namespace RiverHollow.Game_Managers
         {
             if (!_newMapInfo.Equals(default(NewMapInfo)) && (GUIManager.FadingIn || GUIManager.NotFading))
             {
+                if (PlayerManager.PlayerActor.CurrentHP == 0) { PlayerManager.PlayerActor.IncreaseHealth(1); }
                 if (PlayerManager.PlayerActor.ActivePet != null) { CurrentMap.RemoveActor(PlayerManager.PlayerActor.ActivePet); }
                 if (PlayerManager.PlayerActor.ActiveMount != null) { CurrentMap.RemoveActor(PlayerManager.PlayerActor.ActiveMount); }
 

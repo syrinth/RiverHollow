@@ -772,7 +772,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static void FinishedWithTool()
         {
-            PlayerManager.ToolInUse = null;
+            ToolInUse = null;
             Busy = false;
             AllowMovement = true;
         }
