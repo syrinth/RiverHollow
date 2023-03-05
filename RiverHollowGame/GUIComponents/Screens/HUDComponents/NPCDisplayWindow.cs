@@ -13,12 +13,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         public bool Found { get; private set; }
         const float FADE = 0.8f;
 
-        public delegate void CodexDelegate(NPCDisplayWindow window);
-        protected CodexDelegate _delAction;
-        public NPCDisplayWindow(Actor npc, CodexDelegate del) : base(GUIWindow.Codex_NPC_Window, GameManager.ScaleIt(32), GameManager.ScaleIt(44))
+        public NPCDisplayWindow(Actor npc) : base(GUIWindow.Codex_NPC_Window, GameManager.ScaleIt(32), GameManager.ScaleIt(44))
         {
             ID = npc.ID;
-            _delAction = del;
             npc.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
 
             GUISprite spr = new GUISprite(npc.BodySprite, true);
@@ -87,18 +84,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
                     Found = true;
                 }
             }
-        }
-
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-            //if (Contains(mouse) && Enabled && _delAction != null)
-            //{
-            //    _delAction(this);
-            //    rv = true;
-            //}
-
-            return rv;
         }
     }
 }

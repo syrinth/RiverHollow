@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
@@ -28,16 +29,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
         GUIText _gLabel;
         GUIText _gTotal;
 
-        GUITabButton _btnVillagers;
-        GUITabButton _btnMerchants;
-        GUITabButton _btnTravelers;
-        GUITabButton _btnMobs;
-        GUITabButton _btnItems;
-
-        GUIToggle _gResourceToggle;
-        GUIToggle _gConsumableToggle;
-        GUIToggle _gToolToggle;
-        GUIToggle _gSpecialToggle;
+        GUIToggle[] _gTabToggles;
+        GUIToggle[] _gItemToggles;
 
         GUIWindow _gInfoWindow;
 
@@ -64,52 +57,52 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
             _btnRight.ScaledMoveBy(169, 158);
             _gWindow.AddControl(_btnRight);
 
-            _btnVillagers = new GUITabButton(new Rectangle(0, 143, 22, 17), new Rectangle(23, 139, 22, 21), DataManager.HUD_COMPONENTS, ShowVillagers);
-            _btnVillagers.Position(_gWindow);
-            _btnVillagers.ScaledMoveBy(10, -16);
-            AddControl(_btnVillagers);
+            _gTabToggles = new GUIToggle[5];
+            AddTab(0, ShowVillagers, new Rectangle(23, 139, 22, 21), new Rectangle(0, 143, 22, 17));
+            AddTab(1, ShowMerchants, new Rectangle(71, 139, 22, 21), new Rectangle(48, 143, 22, 17));
+            AddTab(2, ShowTravelers, new Rectangle(23, 171, 22, 21), new Rectangle(0, 175, 22, 17));
+            AddTab(3, ShowMobs, new Rectangle(71, 171, 22, 21), new Rectangle(48, 175, 22, 17));
+            AddTab(4, ShowItems, new Rectangle(23, 203, 22, 21), new Rectangle(0, 207, 22, 17));
 
-            _btnMerchants = new GUITabButton(new Rectangle(48, 143, 22, 17), new Rectangle(71, 139, 22, 21), DataManager.HUD_COMPONENTS, ShowMerchants);
-            _btnMerchants.Position(_btnVillagers);
-            _btnMerchants.MoveBy(_btnMerchants.Width - GameManager.ScaledPixel, 0);
-            AddControl(_btnMerchants);
+            _gItemToggles = new GUIToggle[4];
+            AddItemToggle(0, ItemResourceToggle, new Point(96, 160), new Point(96, 176));
+            AddItemToggle(1, ItemPotionToggle, new Point(112, 160), new Point(112, 176));
+            AddItemToggle(2, ItemToolToggle, new Point(128, 160), new Point(128, 176));
+            AddItemToggle(3, ItemSpecialToggle, new Point(144, 160), new Point(144, 176));
 
-            _btnTravelers = new GUITabButton(new Rectangle(0, 175, 22, 17), new Rectangle(23, 171, 22, 21), DataManager.HUD_COMPONENTS, ShowTravelers);
-            _btnTravelers.Position(_btnMerchants);
-            _btnTravelers.MoveBy(_btnTravelers.Width - GameManager.ScaledPixel, 0);
-            AddControl(_btnTravelers);
+            _gTabToggles[0].AssignToggleGroup(_gTabToggles[1], _gTabToggles[2], _gTabToggles[3], _gTabToggles[4]);
+            _gItemToggles[0].AssignToggleGroup(_gItemToggles[1], _gItemToggles[2], _gItemToggles[3]);
 
-            _btnMobs = new GUITabButton(new Rectangle(48, 175, 22, 17), new Rectangle(71, 171, 22, 21), DataManager.HUD_COMPONENTS, ShowMobs);
-            _btnMobs.Position(_btnTravelers);
-            _btnMobs.MoveBy(_btnMobs.Width - GameManager.ScaledPixel, 0);
-            AddControl(_btnMobs);
-
-            _btnItems = new GUITabButton(new Rectangle(0, 207, 22, 17), new Rectangle(23, 203, 22, 21), DataManager.HUD_COMPONENTS, ShowItems);
-            _btnItems.Position(_btnMobs);
-            _btnItems.MoveBy(_btnItems.Width - GameManager.ScaledPixel, 0);
-            AddControl(_btnItems);
-
-            _gResourceToggle = new GUIToggle(new Point(96, 160), new Point(96, 176), new Point(16, 16), DataManager.HUD_COMPONENTS, ItemResourceToggle);
-            _gResourceToggle.Position(_gWindow);
-            _gResourceToggle.ScaledMoveBy(58, 19);
-            _gWindow.AddControl(_gResourceToggle);
-
-            _gConsumableToggle = new GUIToggle(new Point(112, 160), new Point(112, 176), new Point(16, 16), DataManager.HUD_COMPONENTS, ItemPotionToggle);
-            _gConsumableToggle.AnchorAndAlignToObject(_gResourceToggle, SideEnum.Right, SideEnum.Bottom, GameManager.ScaleIt(2));
-            _gWindow.AddControl(_gConsumableToggle);
-
-            _gToolToggle = new GUIToggle(new Point(128, 160), new Point(128, 176), new Point(16, 16), DataManager.HUD_COMPONENTS, ItemToolToggle);
-            _gToolToggle.AnchorAndAlignToObject(_gConsumableToggle, SideEnum.Right, SideEnum.Bottom, GameManager.ScaleIt(2));
-            _gWindow.AddControl(_gToolToggle);
-
-            _gSpecialToggle = new GUIToggle(new Point(144, 160), new Point(144, 176), new Point(16, 16), DataManager.HUD_COMPONENTS, ItemSpecialToggle);
-            _gSpecialToggle.AnchorAndAlignToObject(_gToolToggle, SideEnum.Right, SideEnum.Bottom, GameManager.ScaleIt(2));
-            _gWindow.AddControl(_gSpecialToggle);
-
-            _btnVillagers.SetSelected(true);
-
-            SyncToggles(_gResourceToggle);
             SetUpActorWindows();
+        }
+        private void AddTab(int index, EmptyDelegate del, Rectangle unselected, Rectangle selected)
+        {
+            _gTabToggles[index] = new GUIToggle(unselected, selected, DataManager.HUD_COMPONENTS, del);
+            if (index == 0)
+            {
+                _gTabToggles[index].Position(_gWindow);
+                _gTabToggles[index].ScaledMoveBy(10, -16);
+            }
+            else
+            {
+                _gTabToggles[index].Position(_gTabToggles[index - 1]);
+                _gTabToggles[index].MoveBy(_gTabToggles[index].Width - GameManager.ScaledPixel, 0);
+            }
+            AddControl(_gTabToggles[index]);
+        }
+        private void AddItemToggle(int index, EmptyDelegate del, Point unselected, Point selected)
+        {
+            _gItemToggles[index] = new GUIToggle(unselected, selected, new Point(16, 16), DataManager.HUD_COMPONENTS, del);
+            if (index == 0)
+            {
+                _gItemToggles[index].Position(_gWindow);
+                _gItemToggles[index].ScaledMoveBy(58, 19);
+            }
+            else
+            {
+                _gItemToggles[index].AnchorAndAlignToObject(_gItemToggles[index - 1], SideEnum.Right, SideEnum.Bottom, GameManager.ScaleIt(2));
+            }
+            _gWindow.AddControl(_gItemToggles[index]);
         }
 
         public override bool ProcessRightButtonClick(Point mouse)
@@ -153,7 +146,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
 
             return false;
         }
-
         public void CreateActorHoverWindow()
         {
             NPCDisplayWindow hover = _liActorDisplay[_iHoverIndex];
@@ -215,13 +207,22 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
             _liItemDisplay.ForEach(x => RemoveControl(x));
             _liItemDisplay.Clear();
         }
-
         private void ShowItemToggles(bool value)
         {
-            _gResourceToggle.Show(value);
-            _gConsumableToggle.Show(value);
-            _gToolToggle.Show(value);
-            _gSpecialToggle.Show(value);
+            for (int i = 0; i < _gItemToggles.Length; i++)
+            {
+                _gItemToggles[i].Show(value);
+            }
+        }
+
+        private void SetupNewPage(CodexPageEnum e)
+        {
+            _iIndex = 0;
+            _eCurrentPage = e;
+            RemoveControl(_gInfoWindow);
+
+            if (IsItemPage()) { SetUpItemWindows(_eItemDisplay, false); }
+            else { SetUpActorWindows(); }
         }
         private void SetUpActorWindows()
         {
@@ -257,15 +258,15 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                     break;
             }
             _gLabel.AnchorToInnerSide(_gWindow, SideEnum.Top);
-            
+
             for (int i = _iIndex; i < _iIndex + 15; i++)
             {
-                if(actors.Count <= i)
+                if (actors.Count <= i)
                 {
                     break;
                 }
 
-                NPCDisplayWindow npc = new NPCDisplayWindow(actors[i], CreateInfoWindow);
+                NPCDisplayWindow npc = new NPCDisplayWindow(actors[i]);
 
                 int listIndex = i - _iIndex;
                 if (i == _iIndex)
@@ -286,7 +287,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                 AddControl(npc);
             }
 
-            
+
             _gTotal = new GUIText(string.Format("{0}/{1}", found, actors.Count));
             _gTotal.AlignToObject(_gWindow, SideEnum.Center);
             _gTotal.AlignToObject(_btnLeft, SideEnum.CenterY);
@@ -294,8 +295,13 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
             _btnLeft.Enable(_iIndex >= MAX_ACTOR_DISPLAY);
             _btnRight.Enable(_iIndex + MAX_ACTOR_DISPLAY < actors.Count);
         }
-        private void SetUpItemWindows()
+        private void SetUpItemWindows(ItemEnum itemWindow, bool reset)
         {
+            if (reset)
+            {
+                _iIndex = 0;
+                _eItemDisplay = itemWindow;
+            }
             ClearWindows();
             ShowItemToggles(true);
 
@@ -314,25 +320,25 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                 }
 
                 int museumIndex = itemIDs[i];
-                ItemDisplayWindow npc = new ItemDisplayWindow(museumIndex, TownManager.DICodexItems[museumIndex]);
+                ItemDisplayWindow displayWindow = new ItemDisplayWindow(museumIndex, TownManager.DICodexItems[museumIndex]);
 
                 int listIndex = i - _iIndex;
                 if (i == _iIndex)
                 {
-                    npc.Position(this);
-                    npc.ScaledMoveBy(14, 40);
+                    displayWindow.Position(this);
+                    displayWindow.ScaledMoveBy(14, 40);
                 }
                 else if (i % 7 == 0)
                 {
-                    npc.AnchorAndAlignToObject(_liItemDisplay[listIndex - 7], SideEnum.Bottom, SideEnum.Left, GameManager.ScaleIt(3));
+                    displayWindow.AnchorAndAlignToObject(_liItemDisplay[listIndex - 7], SideEnum.Bottom, SideEnum.Left, GameManager.ScaleIt(3));
                 }
                 else
                 {
-                    npc.AnchorAndAlignToObject(_liItemDisplay[listIndex - 1], SideEnum.Right, SideEnum.Bottom, GameManager.ScaleIt(3));
+                    displayWindow.AnchorAndAlignToObject(_liItemDisplay[listIndex - 1], SideEnum.Right, SideEnum.Bottom, GameManager.ScaleIt(3));
                 }
 
-                _liItemDisplay.Add(npc);
-                AddControl(npc);
+                _liItemDisplay.Add(displayWindow);
+                AddControl(displayWindow);
             }
 
 
@@ -346,43 +352,23 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
 
         public void BtnLeft()
         {
-            
             _iIndex -= DisplayValue;
             _btnRight.Enable(true);
-            if (IsItemPage()) { SetUpItemWindows(); }
+            if (IsItemPage()) { SetUpItemWindows(_eItemDisplay, false); }
             else { SetUpActorWindows(); }
         }
-
         public void BtnRight()
         {
             _iIndex += DisplayValue;
             _btnLeft.Enable(true);
-            if (IsItemPage()) { SetUpItemWindows(); }
+            if (IsItemPage()) { SetUpItemWindows(_eItemDisplay, false); }
             else { SetUpActorWindows(); }
         }
 
-        private void SetupNewPage(CodexPageEnum e)
-        {
-            _iIndex = 0;
-            _eCurrentPage = e;
-            RemoveControl(_gInfoWindow);
-
-            _btnVillagers.SetSelected(_eCurrentPage == CodexPageEnum.Villagers);
-            _btnMerchants.SetSelected(_eCurrentPage == CodexPageEnum.Merchants);
-            _btnTravelers.SetSelected(_eCurrentPage == CodexPageEnum.Travelers);
-            _btnMobs.SetSelected(_eCurrentPage == CodexPageEnum.Mobs);
-            _btnItems.SetSelected(_eCurrentPage == CodexPageEnum.Items);
-
-            if (IsItemPage()) { SetUpItemWindows(); }
-            else { SetUpActorWindows(); }
-        }
-
+        #region PageToggles
         public void ShowVillagers()
         {
-            if (_eCurrentPage != CodexPageEnum.Villagers)
-            {
-                SetupNewPage(CodexPageEnum.Villagers);
-            }
+            SetupNewPage(CodexPageEnum.Villagers);
         }
         public void ShowMerchants()
         {
@@ -400,124 +386,25 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
         {
             SetupNewPage(CodexPageEnum.Items);
         }
+        #endregion
 
-        private void ToggleHelper(GUIToggle toggle, GUIToggle checkAgainst)
-        {
-            if (checkAgainst == toggle)
-            {
-                if (!checkAgainst.Selected)
-                {
-                    checkAgainst.Select(true);
-                }
-            }
-            else
-            {
-                checkAgainst.Select(false);
-            }
-        }
-        private void SyncToggles(GUIToggle toggle)
-        {
-            _iIndex = 0;
-            ToggleHelper(toggle, _gResourceToggle);
-            ToggleHelper(toggle, _gConsumableToggle);
-            ToggleHelper(toggle, _gToolToggle);
-            ToggleHelper(toggle, _gSpecialToggle);
-        }
+        #region ItemTypeToggles
         public void ItemResourceToggle()
         {
-            SyncToggles(_gResourceToggle);
-            _eItemDisplay = ItemEnum.Resource;
-            SetUpItemWindows();
+            SetUpItemWindows(ItemEnum.Resource, true);
         }
         public void ItemPotionToggle()
         {
-            SyncToggles(_gConsumableToggle);
-            _eItemDisplay = ItemEnum.Consumable;
-            SetUpItemWindows();
+            SetUpItemWindows(ItemEnum.Consumable, true);
         }
         public void ItemToolToggle()
         {
-            SyncToggles(_gToolToggle);
-            _eItemDisplay = ItemEnum.Tool;
-            SetUpItemWindows();
+            SetUpItemWindows(ItemEnum.Tool, true);
         }
         public void ItemSpecialToggle()
         {
-            SyncToggles(_gSpecialToggle);
-            _eItemDisplay = ItemEnum.Special;
-            SetUpItemWindows();
+            SetUpItemWindows(ItemEnum.Special, true);
         }
-
-        public void CreateInfoWindow(NPCDisplayWindow window)
-        {
-            RemoveControl(_gInfoWindow);
-            _gInfoWindow = new GUIWindow(GUIWindow.WoodenPanel, 10, 10);
-
-            string strText = window.Found ? DataManager.GetTextData(window.ID, "Name", DataType.Actor) : "???";
-            GUIText text = new GUIText(strText);
-            text.AnchorToInnerSide(_gInfoWindow, SideEnum.TopLeft);
-
-            if (window.Found)
-            {
-                string strDescText = DataManager.GetTextData(window.ID, "Description", DataType.Actor);
-                if (!string.IsNullOrEmpty(strDescText))
-                {
-                    GUIText descText = new GUIText(strDescText);
-                    descText.AnchorAndAlignToObject(text, SideEnum.Bottom, SideEnum.Left, GameManager.ScaleIt(2));
-                }
-            }
-
-            _gInfoWindow.Resize(false);
-            _gInfoWindow.AnchorAndAlignToObject(window, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(-4));
-            text.AlignToObject(_gInfoWindow, SideEnum.CenterX);
-            AddControl(_gInfoWindow);
-        }
-
-        public class GUITabButton : GUIObject
-        {
-            private bool _bSelected;
-            private GUIImage _gSelected;
-            private GUIImage _gUnselected;
-
-            protected EmptyDelegate _delAction;
-
-            public GUITabButton(Rectangle rSelected, Rectangle unSelected, string texture, EmptyDelegate del)
-            {
-                _delAction = del;
-
-                _gUnselected = new GUIImage(unSelected, texture);
-
-                _gSelected = new GUIImage(rSelected, texture);
-                _gSelected.Show(false);
-                _gSelected.MoveBy(0, _gUnselected.Height - _gSelected.Height);
-
-                AddControl(_gSelected);
-                AddControl(_gUnselected);
-
-                Width = _gUnselected.Width;
-                Height = _gUnselected.Height;
-            }
-
-            public void SetSelected(bool value)
-            {
-                (_bSelected ? _gSelected : _gUnselected).Show(false);
-                _bSelected = value;
-                (_bSelected ? _gSelected : _gUnselected).Show(true);
-            }
-
-            public override bool ProcessLeftButtonClick(Point mouse)
-            {
-                bool rv = false;
-
-                if((_gSelected.Contains(mouse) && _gSelected.Show()) ||
-                    (_gUnselected.Contains(mouse) && _gUnselected.Show()))
-                {
-                    rv = true;
-                    _delAction();
-                }
-
-                return rv;
-            }
-        }
+        #endregion
     }
 }
