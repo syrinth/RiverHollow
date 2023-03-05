@@ -86,7 +86,10 @@ namespace RiverHollow.Misc
         /// <param name="list">List of variables to format</param>
         public void FormatText(params object[] list)
         {
-            _sText = string.Format(_sText, list);
+            if (_sText != null)
+            {
+                _sText = string.Format(_sText, list);
+            }
         }
 
         /// <summary>

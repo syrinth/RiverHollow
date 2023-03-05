@@ -7,15 +7,15 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Name:GiftConfirm][Text:Give {0} to {1}?][Selection:YesNo][Trigger:ConfirmGift]</Value>
+      <Value>[Name:QuitGame][Text:Really ready to quit?][Selection:YesNo][Trigger:Quit]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Name:ItemConfirm][Text:Use {0} on who?][Selection:Party][Trigger:UseItem]</Value>
+      <Value>[Name:Empty]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Name:ClassItemConfirm][Text:Really use the {0}?][Selection:YesNo][Trigger:UseItem]</Value>
+      <Value>[Name:Empty_2]</Value>
     </Item>
     <Item>
       <Key>4</Key>

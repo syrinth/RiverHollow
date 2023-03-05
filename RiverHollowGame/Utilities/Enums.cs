@@ -6,7 +6,7 @@
 
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, Sell, Propose, Date, EndDay, GoToNight, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Bed };
-        public enum TextEntryTriggerEnum { None, UseItem, ConfirmPurchase, Exit, Donate, PetFollow, PetUnfollow, GetBaby }
+        public enum TextEntryTriggerEnum { None, UseItem, ConfirmPurchase, Exit, Donate, PetFollow, PetUnfollow, GetBaby, Quit }
 
         public enum SpawnTypeEnum { Item, Object, Mob };
         public enum RarityEnum { C, U, R, M };

@@ -79,7 +79,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         #region Buttons
         public void BtnExitGame()
         {
-            RiverHollow.PrepExit();
+            GUIManager.CloseMainObject();
+            GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("QuitGame"));
         }
         public void BtnInventory()
         {

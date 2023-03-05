@@ -331,6 +331,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             GameManager.CurrentItem.UseItem();
                             GameManager.SetSelectedItem(null);
                             break;
+                        case TextEntryTriggerEnum.Quit:
+                            RiverHollow.PrepExit();
+                            break;
 
                     }
                     break;
