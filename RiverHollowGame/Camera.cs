@@ -97,5 +97,15 @@ namespace RiverHollow
         {
             return _bTrackToTarget;
         }
+
+        public static Point GetWorldPosition(Point screenPosition)
+        {
+            Vector3 translate = Camera._transform.Translation;
+            Point mousePoint = Point.Zero;
+            mousePoint.X = (int)((screenPosition.X - translate.X) / CurrentScale);
+            mousePoint.Y = (int)((screenPosition.Y - translate.Y) / CurrentScale);
+
+            return mousePoint;
+        }
     }
 }

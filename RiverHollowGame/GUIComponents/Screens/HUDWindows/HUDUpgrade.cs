@@ -6,7 +6,7 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using System.Collections.Generic;
 
-namespace RiverHollow.GUIComponents.Screens.HUDScreens
+namespace RiverHollow.GUIComponents.Screens.HUDWindows
 {
     public class HUDBuildingUpgrade : GUIMainObject
     {

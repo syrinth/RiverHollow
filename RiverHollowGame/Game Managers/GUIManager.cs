@@ -42,11 +42,9 @@ namespace RiverHollow.Game_Managers
             {
                 UpdateFade();
             }
-            else
-            {
-                _currentGUIScreen?.Update(gTime);
-                GUICursor.Update();
-            }
+
+            _currentGUIScreen?.Update(gTime);
+            GUICursor.Update();
         }
 
         public static void Draw(SpriteBatch spriteBatch)

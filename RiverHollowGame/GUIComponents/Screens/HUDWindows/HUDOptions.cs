@@ -5,7 +5,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using static RiverHollow.Game_Managers.GameManager;
 
-namespace RiverHollow.GUIComponents.Screens.HUDScreens
+namespace RiverHollow.GUIComponents.Screens.HUDWindows
 {
     public class HUDOptions : GUIMainObject
     {

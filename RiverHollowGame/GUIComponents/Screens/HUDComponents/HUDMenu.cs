@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.GUIComponents.Screens.HUDScreens;
+using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Items;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;

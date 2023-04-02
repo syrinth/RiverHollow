@@ -7,7 +7,7 @@ using RiverHollow.Misc;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RiverHollow.GUIComponents.Screens.HUDScreens
+namespace RiverHollow.GUIComponents.Screens.HUDWindows
 {
     public class HUDTaskLog : GUIMainObject
     {

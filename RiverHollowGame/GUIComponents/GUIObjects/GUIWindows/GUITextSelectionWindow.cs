@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
-using RiverHollow.GUIComponents.Screens.HUDScreens.RiverHollow.GUIComponents.Screens;
+using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.GameManager;

@@ -1,19 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIComponents.Screens.HUDComponents;
-using RiverHollow.Items;
-using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using static RiverHollow.Utilities.Enums;
 
-namespace RiverHollow.GUIComponents.Screens.HUDScreens
+namespace RiverHollow.GUIComponents.Screens.HUDWindows
 {
     internal class HUDCodex : GUIMainObject
     {

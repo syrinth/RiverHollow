@@ -7,8 +7,7 @@ using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 using RiverHollow.Misc;
 using System.Linq;
-using RiverHollow.GUIComponents.Screens.HUDScreens;
-using RiverHollow.Items;
+using RiverHollow.GUIComponents.Screens.HUDWindows;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;

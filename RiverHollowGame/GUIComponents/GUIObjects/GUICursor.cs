@@ -91,12 +91,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public static Point GetWorldMousePosition()
         {
-            Vector3 translate = Camera._transform.Translation;
-            Point mousePoint = Point.Zero;
-            mousePoint.X = (int)((Position.X - translate.X) / CurrentScale);
-            mousePoint.Y = (int)((Position.Y - translate.Y) / CurrentScale);
-
-            return mousePoint;
+            return Camera.GetWorldPosition(Position);
         }
 
         public static bool PickUpWorker(int id)

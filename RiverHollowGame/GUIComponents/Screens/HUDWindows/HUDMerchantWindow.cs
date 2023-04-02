@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
@@ -8,7 +7,7 @@ using RiverHollow.Items;
 using RiverHollow.Utilities;
 using static RiverHollow.Utilities.Enums;
 
-namespace RiverHollow.GUIComponents.Screens
+namespace RiverHollow.GUIComponents.Screens.HUDWindows
 {
     public class HUDMerchantWindow : GUIMainObject
     {

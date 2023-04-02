@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 using static RiverHollow.Game_Managers.GameManager;
 
-namespace RiverHollow.GUIComponents.Screens.HUDScreens
+namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDMiniInventory : GUIWindow
     {
@@ -20,6 +20,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
         float _fBarFade;
         float _fItemFade = 1.0f;
         const float FADE_OUT = 0.1f;
+
+        SideEnum _eSnapPosition = SideEnum.Center;
 
         static Rectangle RECT_SELECT_IMG = new Rectangle(260, 0, 20, 20);
         GUIImage _gSelected;
@@ -53,6 +55,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
 
             Alpha(_fBarFade);
             MoveSelector(0);
+
+            Snap(SideEnum.Bottom);
         }
 
         public override void Update(GameTime gTime)
@@ -81,22 +85,26 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                     UpdateItemFade(gTime);
 
                 }
-                if (startFade != _fBarFade)
-                {
-                    Alpha(_fBarFade);
-
-                    foreach (GUIItemBox gib in _liItems)
-                    {
-                        gib.SetAlpha(Alpha());
-                    }
-                    _btnChangeRow.Alpha(Alpha());
-                }
+                SetFade(startFade);
             }
 
             for (int i = 0; i < _liItems.Count; i++)
             {
                 _liItems[i].SetItem(InventoryManager.PlayerInventory[GameManager.HUDItemRow, i]);
                 _liItems[i].SetAlpha(Alpha());
+            }
+
+            int playerHeight = GameManager.ScaleIt(PlayerManager.PlayerActor.Position.Y);
+            int mapHeight = MapManager.CurrentMap.GetMapHeightInScaledPixels();
+            int screenHeight = RiverHollow.ScreenHeight;
+
+            if(mapHeight > screenHeight && playerHeight > mapHeight - (screenHeight / 2))
+            {
+                Snap(SideEnum.Top);
+            }
+            else
+            {
+                Snap(SideEnum.Bottom);
             }
         }
 
@@ -108,8 +116,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
         {
             if (_bFadeItemsOut)
             {
-                float currFade = _fItemFade;
-                if (currFade - FADE_OUT > FADE_OUT)
+                if (_fItemFade - FADE_OUT > FADE_OUT)
                 {
                     _fItemFade -= FADE_OUT;
                     foreach (GUIItemBox gib in _liItems)
@@ -119,16 +126,15 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                 }
                 else
                 {
-                    currFade = FADE_OUT;
                     _bFadeItemsOut = false;
                     _bFadeItemsIn = true;
                     SyncItems();
                 }
             }
+
             if (_bFadeItemsIn)
             {
-                float currFade = _fItemFade;
-                if (currFade < 1)
+                if (_fItemFade < 1)
                 {
                     _fItemFade += FADE_OUT;
                 }
@@ -141,6 +147,20 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                 {
                     gib.SetItemAlpha(_fItemFade);
                 }
+            }
+        }
+
+        private void SetFade(float startFade)
+        {
+            if (startFade != _fBarFade)
+            {
+                Alpha(_fBarFade);
+
+                foreach (GUIItemBox gib in _liItems)
+                {
+                    gib.SetAlpha(Alpha());
+                }
+                _btnChangeRow.Alpha(Alpha());
             }
         }
 
@@ -240,6 +260,20 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
         private void MoveSelector(int val)
         {
             _gSelected.CenterOnObject(_liItems[val]);
+        }
+
+        public void Snap(SideEnum snapPosition)
+        {
+            if (_eSnapPosition != snapPosition)
+            {
+                _eSnapPosition = snapPosition;
+                AnchorToScreen(_eSnapPosition, ScaleIt(2));
+
+                _bFadeOutBar = true;
+                float startFade = _fBarFade;
+                _fBarFade = FADE_OUT;
+                SetFade(startFade);
+            }
         }
     }
 }

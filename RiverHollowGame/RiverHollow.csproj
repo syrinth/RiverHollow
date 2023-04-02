@@ -95,11 +95,11 @@
     <Compile Include="GUIComponents\Screens\HUDComponents\HUDMenu.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\ItemDisplayWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\NPCDisplayWindow.cs" />
-    <Compile Include="GUIComponents\Screens\HUDScreens\HUDCodex.cs" />
-    <Compile Include="GUIComponents\Screens\HUDScreens\HUDGiftWindow.cs" />
-    <Compile Include="GUIComponents\Screens\HUDScreens\HUDMerchantWindow.cs" />
-    <Compile Include="GUIComponents\Screens\HUDScreens\HUDMiniInventory.cs" />
-    <Compile Include="GUIComponents\Screens\HUDScreens\HUDUpgrade.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\HUDCodex.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\HUDGiftWindow.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\HUDMerchantWindow.cs" />
+    <Compile Include="GUIComponents\Screens\HUDComponents\HUDMiniInventory.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\HUDUpgrade.cs" />
     <Compile Include="GUIComponents\Screens\WorldMapScreen.cs" />
     <Compile Include="Items\MapItem.cs" />
     <Compile Include="Items\Tools\CapeOfBlinking.cs" />
@@ -154,8 +154,8 @@
     <Compile Include="GUIComponents\MainObjects\WarpPointWindow.cs" />
     <Compile Include="GUIComponents\Screens\BuildScreen.cs" />
     <Compile Include="GUIComponents\Screens\ConfigScreen.cs" />
-    <Compile Include="GUIComponents\Screens\HUDScreens\HUDOptions.cs" />
-    <Compile Include="GUIComponents\Screens\HUDScreens\HUDTaskLog.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\HUDOptions.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\HUDTaskLog.cs" />
     <Compile Include="GUIComponents\Screens\LoadScreen.cs" />
     <Compile Include="GUIComponents\Screens\NewGameScreen.cs" />
     <Compile Include="GUIComponents\Screens\HUDPurchaseWindows.cs" />

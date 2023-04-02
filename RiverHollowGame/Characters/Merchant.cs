@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using Newtonsoft.Json.Linq;
 using RiverHollow.Game_Managers;
-using RiverHollow.GUIComponents.Screens;
+using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Items;
 using RiverHollow.Map_Handling;
 using RiverHollow.Misc;
