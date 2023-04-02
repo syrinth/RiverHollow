@@ -155,7 +155,7 @@ namespace RiverHollow.Items
 
         public virtual bool AddToInventoryTrigger()
         {
-            TownManager.DICodexItems[ID] = true;
+            TownManager.AddToCodex(ID);
             return false;
         }
 

@@ -3,11 +3,11 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:43][Collection:0|1|2][Class:4][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:56][CanMarry][FirstArrival:3][ArrivalPeriod:7][CanBecomePregnant][Key:Amanda][StartMap:mapWoods]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:43][Collection:0|1|2][Class:4][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:56][CanMarry][CanBecomePregnant][Key:Amanda][StartMap:mapWoods]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:47][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:65][CanMarry][FirstArrival:4][ArrivalPeriod:7][Key:Ander]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:47][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:65][CanMarry][Key:Ander]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Villager][PortRow:1][Collection:0|1|2][Class:5][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:13][RequiredPopulationr:8][CanMarry][FirstArrival:2][ArrivalPeriod:5][CanBecomePregnant][Key:Daria]</Value>
+      <Value>[Type:Villager][PortRow:1][Collection:0|1|2][Class:5][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][HouseID:13][RequiredPopulationr:8][CanMarry][CanBecomePregnant][Key:Daria]</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -27,7 +27,7 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:41][Collection:0|1|2][Class:2][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][CanMarry][RequiredVillager:8][FirstArrival:2][ArrivalPeriod:7][Key:Emmanuel]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:41][Collection:0|1|2][Class:2][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][CanMarry][RequiredVillager:8][Key:Emmanuel]</Value>
     </Item>
     <Item>
       <Key>7</Key>
@@ -59,11 +59,11 @@
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:42][Collection:7|188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:2][RequiredObjectID:77-5][ShopData:6][CanMarry][Key:Jase]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:42][Collection:7|188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][RequiredObjectID:77-5][ShopData:6][CanMarry][Key:Jase]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:1][ArrivalPeriod:0][TaxValue:5][TotalMoneyEarnedReq:15000][Key:June]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][TaxValue:5][TotalMoneyEarnedReq:15000][Key:June]</Value>
     </Item>
     <Item>
       <Key>16</Key>
@@ -87,11 +87,11 @@
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:9][Collection:0|1|2][Class:1][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:46][CanMarry][FirstArrival:1][ArrivalPeriod:7][Key:Michael]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:9][Collection:0|1|2][Class:1][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:46][CanMarry][Key:Michael]</Value>
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:8][Collection:7|167][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:0][ArrivalPeriod:0][Key:Nevar]</Value>
+      <Value>[Type:Villager][Key:Nevar][PortRow:1][HouseID:30][Collection:7|167][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:3]</Value>
     </Item>
     <Item>
       <Key>23</Key>

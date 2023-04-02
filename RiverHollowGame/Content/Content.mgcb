@@ -334,6 +334,11 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Neutral1.xml
 
+#begin Data/Text Files/Dialogue/Villagers/NPC_Nevar.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_Nevar.xml
+
 #begin Data/Text Files/Dialogue/Villagers/NPC_Penelope.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -1108,6 +1113,11 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapArchitect.tmx
+
+#begin Maps/Town/mapArchives.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapArchives.tmx
 
 #begin Maps/Town/mapBoutique.tmx
 /importer:TiledMapImporter
@@ -3097,6 +3107,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/Apothecary.png
 
+#begin Textures/Buildings/Archives.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/Archives.png
+
 #begin Textures/Buildings/Boutique.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -4092,18 +4114,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Items/Weapons.png
-
-#begin Textures/Overworld.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Overworld.png
 
 #begin Textures/Overworld.png
 /importer:TextureImporter

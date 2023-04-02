@@ -191,7 +191,7 @@ namespace RiverHollow.Game_Managers
             public List<int> MerchantQueue;
 
             [XmlArray(ElementName = "CodexItems")]
-            public List<int> CodexItems;
+            public List<CodexEntryData> CodexEntries;
 
             [XmlArray(ElementName = "TownAnimals")]
             public List<int> TownAnimals;
@@ -391,6 +391,17 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "NumberOfVists")]
             public int numVisits;
+        }
+        public struct CodexEntryData
+        {
+            [XmlElement(ElementName = "ID")]
+            public int id;
+
+            [XmlElement(ElementName = "Found")]
+            public bool found;
+
+            [XmlElement(ElementName = "Archived")]
+            public bool archived;
         }
         public struct CollectionData
         {

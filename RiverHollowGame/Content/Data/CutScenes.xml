@@ -57,5 +57,13 @@
         <Item>[Speed:Player-0.5|42-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:42][Move:42-4-Up][Face:Player-Up][Face:42-Down][Speak:42-0][MoveToTown:42]</Item>
       </Value>
     </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>
+        <Item></Item>
+        <Item>[Map:mapArchives][Player][Actors:22-Cutscene_Entrance][Deactivate:22]</Item>
+        <Item>[Speed:Player-0.5|22-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:22][Move:22-4-Up][Face:Player-Up][Face:22-Down][Speak:22-0][MoveToTown:22]</Item>
+      </Value>
+    </Item>
   </Asset>
 </XnaContent>

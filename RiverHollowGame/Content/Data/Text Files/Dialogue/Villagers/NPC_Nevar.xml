@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name:Introduction][Text:Greetings. I am a traveler of sorts, searching the lands for curios and curiosities. $Character_19$ is my name and I would entreat your aid.]</Value>
+      <Value>[Name:Introduction][Text:Greetings. I am a traveler of sorts, searching the lands for curios and curiosities. $Actor_22$ is my name and I would entreat your aid.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -11,7 +11,7 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:Oh, that's a shame][Name:IntroNo]</Value>
+      <Value>[Name:IntroNo][Text:Oh, that's a shame]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -27,7 +27,7 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Text:Oh, that's surprising. Thank you.][Name:Gift]</Value>
+      <Value>[Name:Gift][Text:Oh, that's surprising. Thank you.]</Value>
     </Item>
     <Item>
       <Key>7</Key>
@@ -39,7 +39,8 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Text:Certainly, I'd like to see what we can accomplish together.][Name:JoinPartyYes]</Value>
+      <Value>[Name:Task_10_Start][Text:I have spent years studying ancient texts that pre-date the war. They were scattered, hard to find and difficult to understand. I would build an $WorldObject_30$ here to better record our history.
+This land has a sense of importance about it and I feel that this task is of the utmost importance. Should warfare come again, greater than the last, we must prepare to preserve our knowledge for the future.][UnlockObjectID:30]</Value>
     </Item>
     <Item>
       <Key>10</Key>

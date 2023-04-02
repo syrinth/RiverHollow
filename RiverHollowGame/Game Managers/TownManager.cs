@@ -29,7 +29,7 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, Villager> DIVillagers { get; private set; }
         public static Dictionary<int, Merchant> DIMerchants { get; private set; }
         public static Dictionary<int, ValueTuple<bool, int>> DITravelerInfo { get; private set; }
-        public static Dictionary<int, bool> DICodexItems { get; private set; }
+        public static Dictionary<int, ValueTuple<bool, bool>> DIArchive { get; private set; }
         public static List<Merchant> MerchantQueue;
         public static List<Animal> TownAnimals { get; set; }
         public static List<Traveler> Travelers { get; set; }
@@ -75,11 +75,11 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            DICodexItems = new Dictionary<int, bool>();
+            DIArchive = new Dictionary<int, ValueTuple<bool, bool>>();
             foreach (var id in DataManager.ItemKeys)
             {
                 ItemEnum type = DataManager.GetEnumByIDKey<ItemEnum>(id, "Type", DataType.Item);
-                DICodexItems[id] = false;
+                DIArchive[id] = new ValueTuple<bool, bool>(false, false);
             }
         }
 
@@ -327,6 +327,24 @@ namespace RiverHollow.Game_Managers
 
 
         #region Town Helpers
+        public static void AddToCodex(int id)
+        {
+            DIArchive[id] = new ValueTuple<bool, bool>(true, false);
+        }
+        public static void AddToArchive(int id)
+        {
+            DIArchive[id] = new ValueTuple<bool, bool>(true, true);
+        }
+
+        public static bool AtArchive()
+        {
+            return GameManager.CurrentWorldObject != null && GameManager.CurrentWorldObject.GetBoolByIDKey("Archive");
+        }
+        public static bool CanArchiveItem(Item it)
+        {
+            return it != null && DIArchive.ContainsKey(it.ID) && !DIArchive[it.ID].Item2;
+        }
+
         public static int GetPopulation()
         {
             return DIVillagers.Count(x => x.Value.LivesInTown);
@@ -457,7 +475,7 @@ namespace RiverHollow.Game_Managers
                 MerchantData = new List<MerchantData>(),
                 TravelerData = new List<TravelerData>(),
                 MerchantQueue = new List<int>(),
-                CodexItems = new List<int>(),
+                CodexEntries = new List<CodexEntryData>(),
                 Inventory = new List<ItemData>()
             };
 
@@ -513,11 +531,17 @@ namespace RiverHollow.Game_Managers
                 data.Inventory.Add(Item.SaveData(i));
             }
 
-            foreach(var kvp in DICodexItems)
+            foreach (var kvp in DIArchive)
             {
-                if (kvp.Value)
+                if (kvp.Value.Item1)
                 {
-                    data.CodexItems.Add(kvp.Key);
+                    CodexEntryData travelerData = new CodexEntryData()
+                    {
+                        id = kvp.Key,
+                        found = kvp.Value.Item1,
+                        archived = kvp.Value.Item2
+                    };
+                    data.CodexEntries.Add(travelerData);
                 }
             }
 
@@ -568,7 +592,15 @@ namespace RiverHollow.Game_Managers
                 MerchantQueue.Add(TownManager.DIMerchants[saveData.MerchantQueue[i]]);
             }
 
-            saveData.CodexItems.ForEach(x => DICodexItems[x] = true);
+            foreach (TravelerData data in saveData.TravelerData)
+            {
+                DITravelerInfo[data.npcID] = new ValueTuple<bool, int>(data.introduced, data.numVisits);
+            }
+
+            foreach (CodexEntryData data in saveData.CodexEntries)
+            {
+                DIArchive[data.id] = new ValueTuple<bool, bool>(data.found, data.archived);
+            }
 
             InventoryManager.InitExtraInventory(Inventory);
             for (int i = 0; i < Constants.KITCHEN_STOCK_SIZE; i++)

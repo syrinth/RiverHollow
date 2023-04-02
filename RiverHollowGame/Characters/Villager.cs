@@ -249,7 +249,14 @@ namespace RiverHollow.Characters
                 else if (!_bHasTalked) { rv = GetDailyDialogue(); }
                 else
                 {
-                    rv = _diDialogue["Selection"];
+                    if (_diDialogue.ContainsKey("Selection"))
+                    {
+                        rv = _diDialogue["Selection"];
+                    }
+                    else
+                    {
+                        rv = new TextEntry();
+                    }
                 }
             }
 

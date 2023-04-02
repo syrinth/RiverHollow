@@ -1,10 +1,8 @@
-﻿using RiverHollow.Characters;
-using RiverHollow.Game_Managers;
-using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+﻿using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
-using static RiverHollow.Utilities.Enums;
 using Microsoft.Xna.Framework;
 using RiverHollow.Items;
+using System;
 
 namespace RiverHollow.GUIComponents.Screens.HUDComponents
 {
@@ -14,19 +12,23 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         public bool Found { get; private set; }
         const float FADE = 0.8f;
 
-        public ItemDisplayWindow(int ItemID, bool found) : base(new Rectangle(96, 128, 20, 20), DataManager.HUD_COMPONENTS)
+        public ItemDisplayWindow(int ItemID, ValueTuple<bool, bool> state) : base(new Rectangle(96, 128, 20, 20), DataManager.HUD_COMPONENTS)
         {
             ID = ItemID;
-            Found = found;
+            Found = state.Item1;
 
             Item item = DataManager.GetItem(ItemID);
             GUIImage spr = new GUIImage(item.SourceRectangle, item.Texture);
             spr.CenterOnObject(this);
             AddControl(spr);
 
-            if (!found)
+            if (!state.Item1)
             {
                 spr.SetColor(Color.Black * FADE);
+            }
+            else if (state.Item1 && !state.Item2)
+            {
+                spr.SetColor(Color.White * 0.6f);
             }
         }
     }

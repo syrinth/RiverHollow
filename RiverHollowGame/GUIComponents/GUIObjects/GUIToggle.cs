@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
-using System.Collections.Generic;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {

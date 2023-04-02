@@ -9,7 +9,6 @@ using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.WorldObjects
@@ -37,6 +36,7 @@ namespace RiverHollow.WorldObjects
         private Item _itemDisplay;
         private Decor _objDisplay;
         public bool HasDisplay => _objDisplay != null || _itemDisplay != null;
+        bool Archive => GetBoolByIDKey("Archive");
 
         public Decor(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
@@ -62,7 +62,7 @@ namespace RiverHollow.WorldObjects
             {
                 //Because Items don't exist directly on the map, we only need to tell it where to draw itself here
                 _itemDisplay.SetColor(_bSelected ? Color.Green : Color.White);
-                _itemDisplay.Draw(spriteBatch, new Rectangle((int)(MapPosition.X + _pDisplayOffset.X), (int)(MapPosition.Y + _pDisplayOffset.Y), Constants.TILE_SIZE, Constants.TILE_SIZE), true, Sprite.LayerDepth + 1);
+                _itemDisplay.Draw(spriteBatch, new Rectangle(MapPosition.X + _pDisplayOffset.X, MapPosition.Y + _pDisplayOffset.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), true, Sprite.LayerDepth + 1);
             }
         }
 
@@ -77,8 +77,11 @@ namespace RiverHollow.WorldObjects
             if (CanDisplay)
             {
                 rv = true;
-                GameManager.SetSelectedWorldObject(this);
-                GUIManager.OpenMainObject(new HUDInventoryDisplay());
+                if (Archive && _itemDisplay == null)
+                {
+                    GameManager.SetSelectedWorldObject(this);
+                    GUIManager.OpenMainObject(new HUDInventoryDisplay());
+                }
             }
 
             return rv;
@@ -106,9 +109,8 @@ namespace RiverHollow.WorldObjects
         /// <returns></returns>
         public override bool PlaceOnMap(RHMap map, bool ignoreActors = false)
         {
-            bool rv = false;
-
             RHTile tile = map.GetTileByPixelPosition(MapPosition);
+            bool rv;
             if (tile.CanPlaceOnTabletop(this))
             {
                 rv = ((Decor)tile.WorldObject).SetDisplayObject(this);
@@ -133,10 +135,7 @@ namespace RiverHollow.WorldObjects
                 //We don't need to do any swaps if the object has the same base and height
                 if (_rBase.Width != _rBase.Height)
                 {
-                    Point temp = _pDisplayOffset;
-                    _pDisplayOffset = _pRotatedDisplayOffset;
-                    _pRotatedDisplayOffset = temp;
-
+                    (_pRotatedDisplayOffset, _pDisplayOffset) = (_pDisplayOffset, _pRotatedDisplayOffset);
                     Util.SwitchValues(ref _rBase.Width, ref _rBase.Height);
                     Util.SwitchValues(ref _pSize, ref _pRotationSize);
                     Util.SwitchValues(ref _rBase.X, ref _iRotationBaseOffsetX);
@@ -249,11 +248,19 @@ namespace RiverHollow.WorldObjects
         /// <param name="it">The Item object to display</param>
         public void SetDisplayItem(Item it)
         {
-            if (StoreDisplayEntity())
+            if (!Archive || !TownManager.DIArchive[it.ID].Item2)
             {
-                _itemDisplay = DataManager.GetItem(it.ID);
-                InventoryManager.RemoveItemsFromInventory(it.ID, 1);
-                GUIManager.CloseMainObject();
+                if (StoreDisplayEntity())
+                {
+                    _itemDisplay = DataManager.GetItem(it.ID);
+                    InventoryManager.RemoveItemsFromInventory(it.ID, 1);
+                    GUIManager.CloseMainObject();
+
+                    if (Archive)
+                    {
+                        TownManager.AddToArchive(it.ID);
+                    }
+                }
             }
         }
 
@@ -300,10 +307,11 @@ namespace RiverHollow.WorldObjects
 
         public override WorldObjectData SaveData()
         {
+            //Need to save null items
             WorldObjectData data = base.SaveData();
             data.stringData += (int)_eFacingDir;
-            data.stringData += (_objDisplay == null ? -1 : _objDisplay.ID);
-            data.stringData += (_itemDisplay == null ? -1 : _itemDisplay.ID);
+            data.stringData += (_objDisplay == null ? "|null|" : _objDisplay.ID.ToString());
+            data.stringData += (_itemDisplay == null ? "|null" : _itemDisplay.ID.ToString());
 
             return data;
         }
@@ -314,11 +322,16 @@ namespace RiverHollow.WorldObjects
             string[] strData = Util.FindParams(data.stringData);
             RotateToDirection(Util.ParseEnum<DirectionEnum>(strData[0]));
 
-            int objDisplayID = int.Parse(strData[1]);
-            int itemDisplayID = int.Parse(strData[2]);
-
-            if (objDisplayID != -1) { SetDisplayObject((Decor)DataManager.CreateWorldObjectByID(objDisplayID)); }
-            if (itemDisplayID != -1) { SetDisplayItem(DataManager.GetItem(itemDisplayID)); }
+            if (!strData[1].Equals("null"))
+            {
+                int objDisplayID = int.Parse(strData[1]);
+                SetDisplayObject((Decor)DataManager.CreateWorldObjectByID(objDisplayID));
+            }
+            else if (!strData[2].Equals("null"))
+            {
+                int itemDisplayID = int.Parse(strData[2]);
+                SetDisplayItem(DataManager.GetItem(itemDisplayID));
+            }
         }
     }
 }

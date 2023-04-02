@@ -47,7 +47,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 for (int j = 0; j < _iColumns; j++)
                 {
-                    _arrItemBoxes[i,j].SetItem(InventoryManager.GetItemFromLocation(i, j, _bPlayerInventory));
+                    _arrItemBoxes[i, j].SetItem(InventoryManager.GetItemFromLocation(i, j, _bPlayerInventory));
+                    if (TownManager.AtArchive() && !TownManager.CanArchiveItem(_arrItemBoxes[i, j].BoxItem))
+                    {
+                        _arrItemBoxes[i, j].Enable(false);
+                    }
                     _arrItemBoxes[i, j].Update(gTime);
                 }
             }
@@ -125,29 +129,29 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
             else
             {
-                Item clickedItem = IsItemThere(mouse);
                 if (GameManager.CurrentWorldObject != null)
                 {
-
+                    Item clickedItem = IsItemThere(mouse);
                     if (!GUIManager.IsTextWindowOpen() && Contains(mouse) && clickedItem != null)
                     {
                         if (GameManager.CurrentWorldObject.CompareType(ObjectTypeEnum.DungeonObject))
                         {
                             if (((TriggerObject)GameManager.CurrentWorldObject).CheckForKey(clickedItem))
                             {
+                                rv = true;
                                 ((TriggerObject)GameManager.CurrentWorldObject).AttemptToTrigger(Constants.TRIGGER_ITEM_OPEN);
                                 GUIManager.CloseMainObject();
                             }
                         }
                         else if (GameManager.CurrentWorldObject.CompareType(ObjectTypeEnum.Decor))
                         {
+                            rv = true;
                             ((Decor)GameManager.CurrentWorldObject).SetDisplayItem(clickedItem);
                         }
                     }
                 }
                 else
                 {
-                    rv = true;
                     bool takeHalf = InputManager.IsKeyDown(Keys.LeftShift) || InputManager.IsKeyDown(Keys.RightShift);
                     rv = GameManager.GrabItem(TakeItem(mouse, takeHalf));
                 }

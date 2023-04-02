@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="15" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="61">
+ <properties>
+  <property name="BuildingID" type="int" value="18"/>
+  <property name="MapType" value="Town"/>
+ </properties>
+ <tileset firstgid="1" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="484" columns="22">
+  <image source="../Tilesets/tsWalls_Floors.png" trans="ffffff" width="352" height="353"/>
+  <tile id="9">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="24">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="25">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="27">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="28">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="29">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="30">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="31">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="33">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="44">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="46">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="47">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="49">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="50">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="52">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="53">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="55">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="66">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="68">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="69">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="71">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="72">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="73">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="74">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="75">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="77">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="88">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="89">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="90">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="91">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="92">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="93">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="94">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="95">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="96">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="97">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="98">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="99">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="121">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="128">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="140">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="143">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="152">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="153">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="160">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="161">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="163">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="164">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="165">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="185">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="186">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="289">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="290">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="291">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="292">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="309">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="310">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="485" source="../Tilesets/tsFurniture.tsx"/>
+ <tileset firstgid="785" source="../Tilesets/tilesetHouses.tsx"/>
+ <layer id="6" name="Base Layer" width="15" height="12">
+  <data encoding="csv">
+74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,
+74,103,103,103,103,103,103,103,103,103,103,103,103,103,74,
+74,103,103,103,103,103,103,103,103,103,103,103,103,103,74,
+74,103,103,103,103,103,103,103,103,103,103,103,103,103,74,
+74,299,300,301,299,300,301,299,300,301,301,299,300,301,74,
+74,321,322,323,321,322,323,321,322,323,323,321,322,323,74,
+74,299,300,301,299,300,301,299,300,301,301,299,300,301,74,
+74,321,322,323,321,322,323,321,322,323,323,321,322,323,74,
+74,299,300,301,299,300,301,299,300,301,301,299,300,301,74,
+74,321,322,323,321,322,323,321,322,323,323,321,322,323,74,
+74,299,300,301,299,300,301,299,300,301,301,299,300,301,74,
+74,74,74,74,74,74,74,321,74,74,74,74,74,74,74
+</data>
+ </layer>
+ <layer id="7" name="Ground Layer" width="15" height="12">
+  <data encoding="csv">
+249,224,225,225,225,225,225,225,225,225,225,225,225,226,250,
+223,246,247,247,247,247,247,247,247,247,247,247,247,248,222,
+223,268,269,269,269,269,1271,1272,1273,269,269,0,0,270,222,
+223,290,291,291,291,291,1297,1298,1299,291,291,291,291,292,222,
+223,0,0,0,0,0,0,0,0,0,0,0,0,0,222,
+223,0,0,0,0,0,0,0,0,0,0,0,0,1303,222,
+223,0,0,0,0,0,0,0,0,0,0,0,0,0,222,
+223,0,0,0,0,0,0,0,0,0,1300,1301,1302,1303,222,
+223,0,0,0,0,0,0,0,0,0,0,0,0,0,222,
+223,1300,1303,0,0,0,0,0,0,0,1300,1301,1302,1303,222,
+293,0,0,0,0,0,0,0,0,0,0,0,0,0,294,
+0,0,0,0,0,0,227,0,229,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="8" name="Upper Layer" width="15" height="12">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,1274,1275,1276,1277,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,1274,1275,1276,1277,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1274,1277,0,0,0,0,0,0,1274,1275,1276,1277,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,230,230,230,230,230,201,0,200,230,230,230,230,230,0,
+0,0,0,0,0,0,0,228,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="4" name="Travel Layer">
+  <object id="1" name="Entrance" x="112" y="188" width="16" height="4">
+   <properties>
+    <property name="EntranceDir" value="Up"/>
+    <property name="Map" value="mapTown"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="MapObject">
+  <object id="46" name="WorldObject" x="16" y="64" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="119"/>
+   </properties>
+  </object>
+  <object id="48" name="WorldObject" x="80" y="64" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="119"/>
+   </properties>
+  </object>
+  <object id="49" name="WorldObject" x="16" y="96" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="119"/>
+   </properties>
+  </object>
+  <object id="50" name="WorldObject" x="48" y="96" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="119"/>
+   </properties>
+  </object>
+  <object id="51" name="WorldObject" x="16" y="128" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="119"/>
+   </properties>
+  </object>
+  <object id="52" name="WorldObject" x="48" y="128" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="119"/>
+   </properties>
+  </object>
+  <object id="53" name="WorldObject" x="176" y="64" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="119"/>
+   </properties>
+  </object>
+  <object id="54" name="WorldObject" x="208" y="64" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="119"/>
+   </properties>
+  </object>
+  <object id="55" name="WorldObject" x="176" y="96" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="119"/>
+   </properties>
+  </object>
+  <object id="56" name="WorldObject" x="208" y="96" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="119"/>
+   </properties>
+  </object>
+  <object id="57" name="WorldObject" x="176" y="128" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="119"/>
+   </properties>
+  </object>
+  <object id="58" name="WorldObject" x="208" y="128" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="119"/>
+   </properties>
+  </object>
+  <object id="59" name="WorldObject" x="48" y="64" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="119"/>
+   </properties>
+  </object>
+  <object id="60" name="WorldObject" x="144" y="64" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="119"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="5" name="Character Layer">
+  <object id="18" name="NPC_22" x="112" y="64" width="16" height="16"/>
+  <object id="41" name="Cutscene_Entrance" x="112" y="160" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="92"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

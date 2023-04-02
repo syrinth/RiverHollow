@@ -17,6 +17,8 @@ namespace RiverHollow.Items
         public override bool AddToInventoryTrigger()
         {
             base.AddToInventoryTrigger();
+            TownManager.AddToArchive(ID);
+
             if (GetBoolByIDKey("DungeonKey"))
             {
                 DungeonManager.AddDungeonKey();

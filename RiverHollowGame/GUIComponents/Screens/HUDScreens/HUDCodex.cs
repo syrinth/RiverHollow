@@ -309,8 +309,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
             _gLabel = new GUIText("Items");
             _gLabel.AnchorToInnerSide(_gWindow, SideEnum.Top);
 
-            List<int> itemIDs = new List<int>(TownManager.DICodexItems.Keys.ToList().Where(x => DataManager.GetEnumByIDKey<ItemEnum>(x, "Type", DataType.Item) == _eItemDisplay));
-            found = itemIDs.Count(x => TownManager.DICodexItems[x]);
+            List<int> itemIDs = new List<int>(TownManager.DIArchive.Keys.ToList().Where(x => DataManager.GetEnumByIDKey<ItemEnum>(x, "Type", DataType.Item) == _eItemDisplay));
+            found = itemIDs.Count(x => TownManager.DIArchive[x].Item1);
 
             for (int i = _iIndex; i < _iIndex + MAX_ITEM_DISPLAY; i++)
             {
@@ -320,7 +320,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDScreens
                 }
 
                 int museumIndex = itemIDs[i];
-                ItemDisplayWindow displayWindow = new ItemDisplayWindow(museumIndex, TownManager.DICodexItems[museumIndex]);
+                ItemDisplayWindow displayWindow = new ItemDisplayWindow(museumIndex, TownManager.DIArchive[museumIndex]);
 
                 int listIndex = i - _iIndex;
                 if (i == _iIndex)

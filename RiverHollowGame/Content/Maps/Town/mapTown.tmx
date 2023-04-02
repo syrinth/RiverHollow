@@ -308,7 +308,7 @@
     <property name="ObjectID" type="int" value="63"/>
    </properties>
   </object>
-  <object id="127" name="Stump" x="586" y="414" width="32" height="32">
+  <object id="127" name="Stump" x="576" y="400" width="32" height="32">
    <properties>
     <property name="ObjectID" type="int" value="63"/>
    </properties>
@@ -318,11 +318,5 @@
     <property name="ObjectID" type="int" value="63"/>
    </properties>
   </object>
- </objectgroup>
- <objectgroup id="10" name="Object Layer 4">
-  <object id="130" name="Rock" x="416" y="432" width="16" height="15.6364"/>
-  <object id="131" name="Bush" x="384" y="416" width="15.6364" height="15.6364"/>
-  <object id="132" name="Bush" x="416" y="416" width="16" height="16"/>
-  <object id="133" name="Me" x="398" y="433" width="15.8182" height="15.8182"/>
  </objectgroup>
 </map>

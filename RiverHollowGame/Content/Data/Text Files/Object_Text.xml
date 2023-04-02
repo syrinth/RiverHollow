@@ -42,6 +42,10 @@
       <Value>[Name:Shortcut to Mushrooms]</Value>
     </Item>
     <Item>
+      <Key>Task_10</Key>
+      <Value>[Name:$WorldObject_30$ are better than people]</Value>
+    </Item>
+    <Item>
       <Key>Actor_0</Key>
       <Value>[Name:Amanda]</Value>
     </Item>
@@ -1352,7 +1356,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_30</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Archives]</Value>
     </Item>
     <Item>
       <Key>WorldObject_31</Key>
@@ -1708,7 +1712,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_119</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Archive Pedestal]</Value>
     </Item>
     <Item>
       <Key>WorldObject_120</Key>
@@ -1856,6 +1860,10 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Cutscene_6</Key>
+      <Value>[Name:Archival Inspection]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_7</Key>
       <Value>[Name:]</Value>
     </Item>
   </Asset>

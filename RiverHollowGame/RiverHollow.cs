@@ -98,7 +98,7 @@ namespace RiverHollow
 
         protected override void Update(GameTime gTime)
         {
-            if (this.IsActive)
+            if (IsActive)
             {
                 if (_bExit)
                 {
