@@ -11,15 +11,15 @@ namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDMiniInventory : GUIWindow
     {
+        private enum StateEnum { None, FadeOut, FadeIn };
         List<GUIItemBox> _liItems;
         GUIButton _btnChangeRow;
 
-        bool _bFadeOutBar = true;
-        bool _bFadeItemsOut;
-        bool _bFadeItemsIn;
-        float _fBarFade;
+        StateEnum _eFadeState = StateEnum.FadeIn;
+
+        float _fAlphaValue;
         float _fItemFade = 1.0f;
-        const float FADE_OUT = 0.1f;
+        const float MIN_FADE = 0.1f;
 
         SideEnum _eSnapPosition = SideEnum.Center;
 
@@ -40,7 +40,7 @@ namespace RiverHollow.GUIComponents.Screens
                 if (i == 0) { ib.AnchorToInnerSide(this, SideEnum.TopLeft); }
                 else { ib.AnchorAndAlignToObject(_liItems[i - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
 
-                ib.SetAlpha(_fBarFade);
+                ib.SetAlpha(_fAlphaValue);
             }
 
             Resize();
@@ -48,12 +48,12 @@ namespace RiverHollow.GUIComponents.Screens
             _btnChangeRow.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.CenterY);
             AddControl(_btnChangeRow);
 
-            _fBarFade = GameManager.HideMiniInventory ? FADE_OUT : 1.0f;
+            _fAlphaValue = GameManager.HideMiniInventory ? MIN_FADE : 1.0f;
 
             _gSelected = new GUIImage(RECT_SELECT_IMG, ScaleIt(RECT_SELECT_IMG.Width), ScaleIt(RECT_SELECT_IMG.Height), DataManager.DIALOGUE_TEXTURE);
             AddControl(_gSelected);
 
-            Alpha(_fBarFade);
+            Alpha(_fAlphaValue);
             MoveSelector(0);
 
             Snap(SideEnum.Bottom);
@@ -66,26 +66,33 @@ namespace RiverHollow.GUIComponents.Screens
                 _btnChangeRow.Show(PlayerManager.BackpackLevel != 1);
 
                 base.Update(gTime);
-                float startFade = _fBarFade;
-                if (_bFadeOutBar && GameManager.HideMiniInventory)
+                float startFade = _fAlphaValue;
+                if (GameManager.HideMiniInventory)
                 {
-                    if (_fBarFade - FADE_OUT > FADE_OUT) { _fBarFade -= FADE_OUT; }
+                    if (_eFadeState == StateEnum.FadeOut)
+                    {
+                        if (_fAlphaValue - MIN_FADE > MIN_FADE) { _fAlphaValue -= MIN_FADE; }
+                        else
+                        {
+                            _fAlphaValue = MIN_FADE;
+                        }
+                    }
                     else
                     {
-                        _fBarFade = FADE_OUT;
+                        if (_eFadeState == StateEnum.FadeIn && _fAlphaValue < 1)
+                        {
+                            _fAlphaValue += MIN_FADE;
+                        }
+
+                        UpdateItemFade(gTime);
+
                     }
                 }
                 else
                 {
-                    if (_fBarFade < 1)
-                    {
-                        _fBarFade += FADE_OUT;
-                    }
-
-                    UpdateItemFade(gTime);
-
+                    _fAlphaValue = 1;
                 }
-                SetFade(startFade);
+                SetAlpha(startFade);
             }
 
             for (int i = 0; i < _liItems.Count; i++)
@@ -114,11 +121,11 @@ namespace RiverHollow.GUIComponents.Screens
         /// <param name="gTime"></param>
         private void UpdateItemFade(GameTime gTime)
         {
-            if (_bFadeItemsOut)
+            if (_eFadeState == StateEnum.FadeOut)
             {
-                if (_fItemFade - FADE_OUT > FADE_OUT)
+                if (_fItemFade - MIN_FADE > MIN_FADE)
                 {
-                    _fItemFade -= FADE_OUT;
+                    _fItemFade -= MIN_FADE;
                     foreach (GUIItemBox gib in _liItems)
                     {
                         gib.SetItemAlpha(_fItemFade);
@@ -126,21 +133,20 @@ namespace RiverHollow.GUIComponents.Screens
                 }
                 else
                 {
-                    _bFadeItemsOut = false;
-                    _bFadeItemsIn = true;
+                    _eFadeState = StateEnum.None;
                     SyncItems();
                 }
             }
 
-            if (_bFadeItemsIn)
+            if (_eFadeState == StateEnum.FadeIn)
             {
                 if (_fItemFade < 1)
                 {
-                    _fItemFade += FADE_OUT;
+                    _fItemFade += MIN_FADE;
                 }
                 else
                 {
-                    _bFadeItemsIn = false;
+                    _eFadeState = StateEnum.None;
                 }
 
                 foreach (GUIItemBox gib in _liItems)
@@ -150,11 +156,11 @@ namespace RiverHollow.GUIComponents.Screens
             }
         }
 
-        private void SetFade(float startFade)
+        private void SetAlpha(float startFade)
         {
-            if (startFade != _fBarFade)
+            if (startFade != _fAlphaValue)
             {
-                Alpha(_fBarFade);
+                Alpha(_fAlphaValue);
 
                 foreach (GUIItemBox gib in _liItems)
                 {
@@ -219,14 +225,13 @@ namespace RiverHollow.GUIComponents.Screens
             bool rv = false;
             if (!GameManager.GamePaused())
             {
-                if (Contains(mouse) && Alpha() != 1)
+                if (Contains(mouse))
                 {
-                    rv = true;
-                    _bFadeOutBar = false;
+                    _eFadeState = StateEnum.FadeIn;
                 }
                 else if (!Contains(mouse) && GameManager.HideMiniInventory && Alpha() != 0.1f)
                 {
-                    _bFadeOutBar = true;
+                    _eFadeState = StateEnum.FadeOut;
                 }
             }
 
@@ -244,8 +249,7 @@ namespace RiverHollow.GUIComponents.Screens
                 GameManager.HUDItemRow = 0;
             }
 
-            _bFadeItemsOut = true;
-            _bFadeItemsIn = false;
+            _eFadeState = StateEnum.FadeOut;
         }
 
         public void SyncItems()
@@ -269,10 +273,10 @@ namespace RiverHollow.GUIComponents.Screens
                 _eSnapPosition = snapPosition;
                 AnchorToScreen(_eSnapPosition, ScaleIt(2));
 
-                _bFadeOutBar = true;
-                float startFade = _fBarFade;
-                _fBarFade = FADE_OUT;
-                SetFade(startFade);
+                _eFadeState = StateEnum.None;
+                float startFade = _fAlphaValue;
+                _fAlphaValue = MIN_FADE;
+                SetAlpha(startFade);
             }
         }
     }
