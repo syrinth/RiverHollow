@@ -335,11 +335,11 @@ namespace RiverHollow.Game_Managers
 
         public static void DropItemOnMap(Item item, Point position, bool flyingPop = true)
         {
-            CurrentMap.DropItemOnMap(item, position, flyingPop);
+            CurrentMap.SpawnItemOnMap(item, position, flyingPop);
         }
         public static void DropItemsOnMap(List<Item> items, Point position, bool flyingPop = true)
         {
-            CurrentMap.DropItemsOnMap(items, position, flyingPop);
+            CurrentMap.SpawnItemsOnMap(items, position, flyingPop);
         }
 
         public static void Rollover()

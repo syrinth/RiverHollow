@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Items
 {
@@ -9,12 +10,11 @@ namespace RiverHollow.Items
     {
         public Point Position;
         public Rectangle CollisionBox { get => new Rectangle(Position.X, Position.Y, Constants.TILE_SIZE, Constants.TILE_SIZE); }
-        private VectorBuffer _vbMovement;
+        private readonly VectorBuffer _vbMovement;
 
         public Item WrappedItem { get; }
 
-        public bool AutoPickup { get; set; } = true;
-        public bool ManualPickup { get; set; } = false;
+        public ItemPickupState PickupState = ItemPickupState.Auto;
 
         private Parabola _movement;
 

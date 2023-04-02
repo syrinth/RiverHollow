@@ -237,7 +237,7 @@ namespace RiverHollow.Characters
 
             if (drop != null)
             {
-                MapManager.CurrentMap.DropItemOnMap(drop, CollisionBoxLocation, false);
+                MapManager.CurrentMap.SpawnItemOnMap(drop, CollisionBoxLocation, false);
             }
         }
 

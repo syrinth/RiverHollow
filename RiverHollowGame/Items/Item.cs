@@ -300,7 +300,7 @@ namespace RiverHollow.Items
         public override void UseItem()
         {
             MapManager.CurrentMap.PrimeMonsterSpawns(this);
-            MapManager.CurrentMap.DropItemOnMap(this, PlayerManager.PlayerActor.CollisionBoxLocation);
+            MapManager.CurrentMap.SpawnItemOnMap(this, PlayerManager.PlayerActor.CollisionBoxLocation, true);
             Remove(1);
             ClearGMObjects();
         }

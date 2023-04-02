@@ -235,7 +235,7 @@ namespace RiverHollow.Map_Handling
                 _liMobs.ForEach(x => x.Update(gTime));
                 _liItems.ForEach(x => x.Update(gTime));
             }
-        
+
             foreach (WorldObject obj in _liObjectsToRemove)
             {
                 _liPlacedWorldObjects.Remove(obj);
@@ -324,7 +324,7 @@ namespace RiverHollow.Map_Handling
                 {
                     t.DrawWallpaper(spriteBatch);
                 }
-            }            
+            }
         }
 
         public void DrawBelowGround(SpriteBatch spriteBatch) {
@@ -598,7 +598,7 @@ namespace RiverHollow.Map_Handling
 
         private void SpawnMobs()
         {
-            if (Map.Properties.ContainsKey("Mobs")){
+            if (Map.Properties.ContainsKey("Mobs")) {
                 for (int i = 0; i < _liMobs.Count; i++)
                 {
                     RemoveActor(_liMobs[i]);
@@ -623,7 +623,7 @@ namespace RiverHollow.Map_Handling
 
         public void TestHitboxOnMobs(HitboxTool t)
         {
-            foreach(Mob npc in _liMobs)
+            foreach (Mob npc in _liMobs)
             {
                 if (npc.CollisionBox.Intersects(t.Hitbox))
                 {
@@ -740,7 +740,7 @@ namespace RiverHollow.Map_Handling
                 _liPlacedWorldObjects.ForEach(x => x.RemoveSelfFromTiles());
                 _liPlacedWorldObjects.Clear();
             }
-            MobsSpawned =MobSpawnStateEnum.None;
+            MobsSpawned = MobSpawnStateEnum.None;
             _liPlacedWorldObjects.ForEach(x => x.Rollover());
             _liResourceSpawns.ForEach(x => x.Rollover(Randomize));
 
@@ -901,7 +901,7 @@ namespace RiverHollow.Map_Handling
                     Item wrapped = it.WrappedItem;
                     if (InventoryManager.HasSpaceInInventory(wrapped.ID, wrapped.Number))
                     {
-                        if (it.AutoPickup && !it.ManualPickup)
+                        if (it.PickupState == ItemPickupState.Auto)
                         {
                             if (it.FinishedMoving() && it.CollisionBox.Intersects(player.CollisionBox))
                             {
@@ -1073,7 +1073,7 @@ namespace RiverHollow.Map_Handling
             {
                 Rectangle r = kvp.Key;
                 Actor npc = kvp.Value;
-                
+
                 if (dir.Y != 0 && r.Intersects(testVertical))
                 {
                     ChangeDirHelper(actor, kvp, dir, testVertical, true, ref dir.Y, ref dir.X, ref impeded);
@@ -1090,7 +1090,7 @@ namespace RiverHollow.Map_Handling
             }
 
             //Diagonal change only gets applied after if the direction hasn't been changed
-            if(initialDir == dir && diagonalChange != dir)
+            if (initialDir == dir && diagonalChange != dir)
             {
                 dir = diagonalChange;
             }
@@ -1270,7 +1270,7 @@ namespace RiverHollow.Map_Handling
         {
             MapItem displayItem = new MapItem(DataManager.GetItem(itemID))
             {
-                AutoPickup = false,
+                PickupState = ItemPickupState.None,
                 Position = DictionaryCharacterLayer[npcIndex + "Col" + index]
             };
             _liItems.Add(displayItem);
@@ -1347,7 +1347,7 @@ namespace RiverHollow.Map_Handling
             for (int i = 0; i < _liItems.Count; i++)
             {
                 MapItem it = _liItems[i];
-                if (it.ManualPickup && it.CollisionBox.Contains(GUICursor.GetWorldMousePosition()))
+                if (it.PickupState == ItemPickupState.Manual && it.CollisionBox.Contains(GUICursor.GetWorldMousePosition()) && PlayerManager.PlayerInRange(it.CollisionBox))
                 {
                     if (InventoryManager.AddToInventory(it.WrappedItem))
                     {
@@ -1421,7 +1421,7 @@ namespace RiverHollow.Map_Handling
                                 rv = obj.ProcessLeftClick();
                             }
 
-                            if(!rv && !TargetTile.Passable())
+                            if (!rv && !TargetTile.Passable())
                             {
                                 PlayerManager.GrabTile(TargetTile);
                             }
@@ -1484,6 +1484,13 @@ namespace RiverHollow.Map_Handling
                     {
                         found = true;
                         GUICursor.SetCursor(GUICursor.CursorTypeEnum.Pickup, t.GetWorldObject().CollisionBox);
+                    }
+
+                    MapItem hoverItem = _liItems.Find(x => x.CollisionBox.Contains(GUICursor.GetWorldMousePosition()));
+                    if (hoverItem != null && hoverItem.PickupState == ItemPickupState.Manual)
+                    {
+                        found = true;
+                        GUICursor.SetCursor(GUICursor.CursorTypeEnum.Pickup, hoverItem.CollisionBox);
                     }
                 }
 
@@ -1794,17 +1801,21 @@ namespace RiverHollow.Map_Handling
             Util.AddUniquelyToList(ref _liActorsToRemove, c);
         }
 
-        public void DropItemsOnMap(List<Item> items, Point position, bool flyingPop = true)
+        public void SpawnItemsOnMap(List<Item> items, Point position, bool flyingPop = true)
         {
             foreach (Item i in items)
             {
-                DropItemOnMap(i, position, flyingPop);
+                SpawnItemOnMap(i, position, flyingPop);
             }
         }
 
-        public void DropItemOnMap(Item item, Point position, bool flyingPop = true)
+        public void SpawnItemOnMap(Item item, Point position, bool flyingPop, ItemPickupState pickupState = ItemPickupState.Auto)
         {
-            MapItem mItem = new MapItem(item);
+            MapItem mItem = new MapItem(item)
+            {
+                PickupState = pickupState
+            };
+
             if (flyingPop)
             {
                 mItem.Pop(position);

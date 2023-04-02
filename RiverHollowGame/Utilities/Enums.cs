@@ -27,6 +27,7 @@
         public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };
         public enum VerbEnum { Idle, Walk, GrabIdle, Pull, Push, Ground, Air, UseTool, MakeItem, Action1, Action2 };
         public enum AnimationEnum { None, PlayAnimation, Rain, Snow, ObjectIdle, Action1, Action2, Action_Finished, Alert, Angry, Sad, Neutral, Happy, KO, Spawn, Pose };
+        public enum ItemPickupState { Auto, Manual, None };
 
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
