@@ -56,10 +56,7 @@ namespace RiverHollow.Game_Managers
             }
             else
             {
-                if (_currentGUIScreen != null)
-                {
-                    _currentGUIScreen.Draw(spriteBatch);
-                }
+                _currentGUIScreen?.Draw(spriteBatch);
 
                 GUICursor.Draw(spriteBatch);
             }

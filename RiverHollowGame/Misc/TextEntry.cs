@@ -231,7 +231,7 @@ namespace RiverHollow.Misc
                 }
                 else if (_diTags.ContainsKey("ItemPose"))
                 {
-                    PlayerManager.PlayerActor.PlayAnimation(AnimationEnum.Pose);
+                    GameManager.CurrentItem.StrikeAPose();
                 }
             }
         }

@@ -26,11 +26,6 @@ namespace RiverHollow.Items
             }
             else if (GetBoolByIDKey("Increase"))
             {
-                PlayerManager.ObtainedItem = new MapItem(this)
-                {
-                    Position = PlayerManager.PlayerActor.Position + new Point(0, -(Constants.TILE_SIZE - 9))
-                };
-
                 GUIManager.OpenTextWindow("Found_Increaser", Name(), GetStringByIDKey("Increase"));
                 return true;
             }

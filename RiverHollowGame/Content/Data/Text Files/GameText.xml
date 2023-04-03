@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name:FoodConfirm][Text:Really eat the {0}?][Selection:YesNo][Trigger:UseItem]</Value>
+      <Value>[Name:FoodConfirm][Text:Really eat the {0}?][Selection:YesNo][Trigger:UseItem][ItemPose]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -63,7 +63,7 @@
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Name:MonsterFood_Confirm][Text:Set out the {0} here?][Selection:YesNo][Trigger:UseItem]</Value>
+      <Value>[Name:MonsterFood_Confirm][Text:Set out the {0} here?][Selection:YesNo][Trigger:UseItem][ItemPose]</Value>
     </Item>
     <Item>
       <Key>16</Key>
@@ -155,7 +155,7 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Name:Read_Book][Text:Read {0}?][Selection:YesNo][Trigger:UseItem]</Value>
+      <Value>[Name:Read_Book][Text:Read {0}?][Selection:YesNo][Trigger:UseItem][ItemPose]</Value>
     </Item>
 	<Item>
       <Key>39</Key>

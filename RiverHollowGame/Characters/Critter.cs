@@ -10,12 +10,11 @@ namespace RiverHollow.Characters
     public class Critter : Actor
     {
         private bool _bFlee = false;
-        private RHTimer _animationTimer;
+        private readonly RHTimer _animationTimer;
 
         public Critter(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             IgnoreCollisions = true;
-            SlowDontBlock = true;
             _animationTimer = new RHTimer(1 + SetRandom(4, 0.5));
             Size.Y = Constants.TILE_SIZE;
 
@@ -72,11 +71,16 @@ namespace RiverHollow.Characters
         {
             if (Util.GetDistance(actor.Center, CollisionCenter) <= 80)
             {
-                _bFlee = true;
-                _animationTimer.Stop();
-
-                PlayAnimation(VerbEnum.Action2);
+                Flee();
             }
+        }
+
+        public void Flee()
+        {
+            _bFlee = true;
+            _animationTimer.Stop();
+
+            PlayAnimation(VerbEnum.Action2);
         }
 
         private double SetRandom(int max, double mod)

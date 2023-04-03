@@ -68,7 +68,17 @@ namespace RiverHollow.Game_Managers
             {
                 List<RHTile> validTiles = MapManager.CurrentMap.GetAllTiles(true);
 
-                for (int i = 0; i < 10; i++)
+                int num = 0;
+                int percent = RHRandom.Instance().Next(100);
+                if (percent > 50)
+                {
+                    if (percent < 70) { num = 1; }
+                    if (percent < 85) { num = 2; }
+                    if (percent < 95) { num = 3; }
+                    if (percent < 100) { num = 4; }
+                }
+
+                for (int i = 0; i < num; i++)
                 {
                     Critter actor = DataManager.CreateCritter(int.Parse(DataManager.Config[20]["NPC_ID"]));
                     actor.SetPosition(Util.GetRandomItem(validTiles).Position);

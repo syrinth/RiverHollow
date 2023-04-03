@@ -927,7 +927,7 @@ namespace RiverHollow.Map_Handling
         }
 
         #region Collision Code
-        public bool TileContainsActor(RHTile t, bool checkPlayer = true)
+        public bool TileContainsBlockingActor(RHTile t, bool checkPlayer = true)
         {
             bool rv = false;
 
@@ -936,7 +936,7 @@ namespace RiverHollow.Map_Handling
             {
                 foreach (Actor act in _liActors)
                 {
-                    if (act.CollisionIntersects(t.CollisionBox))
+                    if (act.CollisionIntersects(t.CollisionBox) && !act.IsActorType(ActorTypeEnum.Critter))
                     {
                         rv = true;
                         break;
@@ -1020,8 +1020,8 @@ namespace RiverHollow.Map_Handling
                         switch (npc.ActorType)
                         {
                             case ActorTypeEnum.Mount:
-                                if (!PlayerManager.PlayerActor.Mounted) { goto default; }
-                                else { break; }
+                            case ActorTypeEnum.Critter:
+                                break;
                             default:
                                 list.Add(new KeyValuePair<Rectangle, Actor>(npc.CollisionBox, npc));
                                 break;
@@ -1942,7 +1942,7 @@ namespace RiverHollow.Map_Handling
             {
                 rv = (testTile.WorldObject == null && testTile.IsWallpaperWall);
             }
-            else if (ignoreActors || !TileContainsActor(testTile))
+            else if (ignoreActors || !TileContainsBlockingActor(testTile))
             {
                 if (testTile.CanPlaceOnTabletop(obj) || (testTile.Passable() && testTile.WorldObject == null))
                 {
@@ -2004,6 +2004,10 @@ namespace RiverHollow.Map_Handling
                     }
                 }
             }
+
+            var actors = _liActors.FindAll(x => obj.CollisionBox.Contains(x.CollisionBox) && x.IsActorType(ActorTypeEnum.Critter)).Cast<Critter>().ToList();
+            actors.ForEach(x => x.Flee());
+
         }
 
         public void AddActor(Actor c)
@@ -2259,7 +2263,7 @@ namespace RiverHollow.Map_Handling
             do
             {
                 RHTile tile = tiles[RHRandom.Instance().Next(tiles.Count)];
-                if (tile.Passable() && !TileContainsActor(tile))
+                if (tile.Passable() && !TileContainsBlockingActor(tile))
                 {
                     rv = tile.Position;
                     break;

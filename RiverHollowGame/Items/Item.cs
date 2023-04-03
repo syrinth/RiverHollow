@@ -170,6 +170,16 @@ namespace RiverHollow.Items
         public virtual bool HasUse() { return false; }
         public virtual void UseItem() { }
 
+        public void StrikeAPose()
+        {
+            PlayerManager.ObtainedItem = new MapItem(this)
+            {
+                Position = PlayerManager.PlayerActor.Position + new Point(0, -(Constants.TILE_SIZE - 9))
+            };
+
+            PlayerManager.PlayerActor.PlayAnimation(AnimationEnum.Pose);
+        }
+
         public virtual void ApplyUniqueData(string str) { }
         public virtual string GetUniqueData() { return string.Empty; }
 
