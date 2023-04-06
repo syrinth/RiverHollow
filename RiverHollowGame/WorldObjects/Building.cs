@@ -33,6 +33,8 @@ namespace RiverHollow.Buildings
 
         private int MaxAnimals => GetIntByIDKey("MaxAnimals", 0);
 
+        public bool UpgradeQueued { get; private set; } = false;
+
         public Building(int id, Dictionary<string, string> stringData) : base(id)
         {
             ID = id;
@@ -73,6 +75,15 @@ namespace RiverHollow.Buildings
         {
             GUIManager.OpenMainObject(new HUDBuildingUpgrade(this));
             return true;
+        }
+
+        public override void Rollover()
+        {
+            base.Rollover();
+            if (UpgradeQueued)
+            {
+                Upgrade();
+            }
         }
 
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\worldObjects")
@@ -156,7 +167,7 @@ namespace RiverHollow.Buildings
         #region Upgrade Handlers
         public bool MaxLevel()
         {
-            return Level <= GetAllUpgrades().Length;
+            return Level == GetAllUpgrades().Length + 1;
         }
         public Upgrade[] GetAllUpgrades()
         {
@@ -184,21 +195,28 @@ namespace RiverHollow.Buildings
 
             return null;
         }
-        public void Upgrade()
+
+        public void QueueUpgrade()
+        {
+            TownManager.IncreaseTravelerBonus();
+            UpgradeQueued = true;
+        }
+        private void Upgrade()
         {
             string initialLevel = MapName;
-            if (MaxLevel())
+            if (!MaxLevel())
             {
                 Level++;
-            //    _sprite.PlayAnimation(Level.ToString());
+
+                MapManager.Maps[BuildingMapName].UpdateBuildingEntrance(initialLevel, MapName);
+                MapManager.Maps[MapName].UpgradeMap(Level);
+
+                //_sprite.PlayAnimation(Level.ToString());
             }
-
-            MapManager.Maps[BuildingMapName].UpdateBuildingEntrance(initialLevel, MapName);
-            MapManager.Maps[MapName].UpgradeMap(Level);
-
-            //_sprite.PlayAnimation(Level.ToString());
+            UpgradeQueued = false;
         }
         #endregion
+
         public override WorldObjectData SaveData()
         {
             WorldObjectData data = base.SaveData();

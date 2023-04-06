@@ -17,6 +17,7 @@ namespace RiverHollow.Game_Managers
         public static string TownName { get; private set; }
 
         private static bool _bTravelersCame = false;
+        private static int _iTravelerBonus = 0;
 
         public static int Income { get; private set; }
 
@@ -150,7 +151,11 @@ namespace RiverHollow.Game_Managers
         }
 
         #region Traveler Code
-        private static int IncreasedTravelerChance()
+        public static void IncreaseTravelerBonus()
+        {
+            _iTravelerBonus += 50;
+        }
+        private static int BuildingTravelerChance()
         {
             int rv = 0;
             foreach (var kvp in _diTownObjects)
@@ -182,7 +187,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            int successChance = Constants.BASE_TRAVELER_RATE + IncreasedTravelerChance();
+            int successChance = Constants.BASE_TRAVELER_RATE + BuildingTravelerChance() + _iTravelerBonus;
             do {
                 //Guaranteed at least one set of Travelers/week
                 if ((GameCalendar.DayOfWeek == DayEnum.Sunday && !_bTravelersCame) ||  RHRandom.Instance().RollPercent(successChance))
@@ -210,6 +215,8 @@ namespace RiverHollow.Game_Managers
                 }
                 else { break; }
             } while (successChance > Constants.EXTRA_TRAVELER_THRESHOLD);
+
+            _iTravelerBonus = 0;
         }
 
         private static void MakeGroup(ref List<Traveler> travelerList, int successChance, TravelerGroupEnum group)

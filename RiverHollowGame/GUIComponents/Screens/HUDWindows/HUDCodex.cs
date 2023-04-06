@@ -124,7 +124,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 }
             }
 
-
             if (!rv)
             {
                 RemoveControl(_gInfoWindow);

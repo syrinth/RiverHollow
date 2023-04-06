@@ -75,7 +75,7 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Building][Texture:Apothecary][Size:7-8][Base:1-5-5-3][Entrance:3-6-1-2][ReqItems:55-10|60-20][ShopSells:Herbs][UpgradeID:0-1]</Value>
+      <Value>[Type:Building][Texture:Apothecary][Size:7-8][Base:1-5-5-3][Entrance:3-6-1-2][ReqItems:55-10|60-20][ShopSells:Herbs][UpgradeID:0-1][CraftingSlots:1]</Value>
     </Item>
     <Item>
       <Key>19</Key>

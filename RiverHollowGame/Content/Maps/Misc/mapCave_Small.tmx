@@ -85,11 +85,6 @@
     <property name="ObjectID" value="60-C|53-U"/>
    </properties>
   </object>
-  <object id="65" name="Potion" x="224" y="48" width="16" height="16">
-   <properties>
-    <property name="ItemID" type="int" value="197"/>
-   </properties>
-  </object>
  </objectgroup>
  <objectgroup id="6" name="Character"/>
 </map>

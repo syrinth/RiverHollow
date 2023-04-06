@@ -26,6 +26,7 @@ namespace RiverHollow.Items
             }
             else if (GetBoolByIDKey("Increase"))
             {
+                GameManager.SetSelectedItem(this);
                 GUIManager.OpenTextWindow("Found_Increaser", Name(), GetStringByIDKey("Increase"));
                 return true;
             }

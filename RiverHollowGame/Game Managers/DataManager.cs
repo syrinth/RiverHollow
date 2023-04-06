@@ -859,6 +859,12 @@ namespace RiverHollow.Game_Managers
                 case GameIconEnum.Key:
                     rv = new GUIImage(new Rectangle(16, 16, 16, 16), DIALOGUE_TEXTURE);
                     break;
+                case GameIconEnum.Traveler:
+                    rv = new GUIImage(new Rectangle(336, 80, 14, 15), HUD_COMPONENTS);
+                    break;
+                case GameIconEnum.Hammer:
+                    rv = new GUIImage(new Rectangle(320, 80, 14, 14), HUD_COMPONENTS);
+                    break;
             }
 
             return rv;

@@ -4,18 +4,26 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
+using RiverHollow.Utilities;
 using System.Collections.Generic;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens.HUDWindows
 {
     public class HUDBuildingUpgrade : GUIMainObject
     {
-        GUIImage _gImage;
-        Building _building;
+        readonly GUIImage _gImage;
+        readonly Building _building;
+
+        List<KeyValuePair<GUIImage, Enums.GameIconEnum>> _liIcons;
+
+        Dictionary<int, int> _diUpgradeItems;
+        int _iCost;
 
         public HUDBuildingUpgrade(Building b)
         {
             _building = b;
+            _liIcons = new List<KeyValuePair<GUIImage, GameIconEnum>>();
 
             _gImage = new GUIImage(new Rectangle(0, 0, 162, 119), DataManager.HUD_COMPONENTS);
             AddControl(_gImage);
@@ -28,6 +36,40 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             CenterOnScreen();
         }
 
+        public override bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+
+            for (int i = 0; i < _liIcons.Count; i++)
+            {
+                if (_liIcons[i].Key.Contains(mouse) && !GUIManager.IsHoverWindowOpen())
+                {
+                    string iconDescription = string.Empty;
+                    switch (_liIcons[i].Value)
+                    {
+                        case GameIconEnum.Traveler:
+                            iconDescription = "Upgrade_Chance";
+                            break;
+                        case GameIconEnum.Coin:
+                            iconDescription = "Upgrade_Profit";
+                            break;
+                        case GameIconEnum.Hammer:
+                            iconDescription = "Upgrade_CraftSlots";
+                            break;
+                        case GameIconEnum.Book:
+                            iconDescription = "Upgrade_Recipe";
+                            break;
+                    }
+
+                    var win = new GUITextWindow(DataManager.GetGameTextEntry(iconDescription), Point.Zero);
+                    win.AnchorAndAlignToObject(_liIcons[i].Key, SideEnum.Bottom, SideEnum.CenterX);
+                    GUIManager.OpenHoverWindow(win, _liIcons[i].Key.DrawRectangle, true);
+                }
+            }
+
+            return rv;
+        }
+
         private void DisplayDetails()
         {
             _gImage.CleanControls();
@@ -36,60 +78,134 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             name.AnchorToObjectInnerSide(_gImage, SideEnum.Top, GameManager.ScaledPixel * 3);
             _gImage.AddControl(name);
 
-            GUIButton btn = new GUIButton(new Rectangle(164, 0, 18, 19), DataManager.HUD_COMPONENTS, Upgrade);
-            btn.Position(_gImage.Position());
-            btn.ScaledMoveBy(135, 93);
-            _gImage.AddControl(btn);
-
             GUIText lvl = new GUIText("Level " + _building.Level);
             lvl.AnchorToObjectInnerSide(_gImage, SideEnum.Top, GameManager.ScaledPixel * 18);
             _gImage.AddControl(lvl);
 
-            Upgrade[] buildingUpgrades = _building.GetAllUpgrades();
-            if (!_building.MaxLevel() && buildingUpgrades.Length > 0)
+            //Traveler Display
+            var travelers = DataManager.GetIcon(GameIconEnum.Traveler);
+            travelers.Position(_gImage.Position());
+            travelers.ScaledMoveBy(37, 36);
+            _gImage.AddControl(travelers);
+
+            var travelerPercent = new GUIText(_building.GetTravelerChance());
+            travelerPercent.AnchorAndAlignToObject(travelers, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(3));
+            _gImage.AddControl(travelerPercent);
+
+            //Profit Display
+            var profits = DataManager.GetIcon(GameIconEnum.Coin);
+            profits.Position(_gImage.Position());
+            profits.ScaledMoveBy(111, 36);
+            _gImage.AddControl(profits);
+
+            var profitPercent = new GUIText((int)(_building.GetShopValueModifier() * 100));
+            profitPercent.AnchorAndAlignToObject(profits, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(3));
+            _gImage.AddControl(profitPercent);
+
+            var scroll = new GUIImage(new Rectangle(209, 96, 142, 3), DataManager.HUD_COMPONENTS);
+            scroll.Position(_gImage.Position());
+            scroll.ScaledMoveBy(10, 65);
+            _gImage.AddControl(scroll);
+
+            _liIcons.Add(new KeyValuePair<GUIImage, GameIconEnum>(travelers, GameIconEnum.Traveler));
+            _liIcons.Add(new KeyValuePair<GUIImage, GameIconEnum>(profits, GameIconEnum.Coin));
+
+            if (_building.UpgradeQueued)
             {
-                Upgrade nextUpgrade = buildingUpgrades[_building.Level - 1];
-                Dictionary<int, int> upgradeItems = nextUpgrade.UpgradeRequirements;
-
-                Color textColor = Color.White;
-                if (!InventoryManager.HasSufficientItems(upgradeItems))
-                {
-                    textColor = Color.Red;
-                    btn.Enable(false);
-                }
-
-                List<GUIItemBox> list = new List<GUIItemBox>();
-                foreach (KeyValuePair<int, int> kvp in upgradeItems)
-                {
-                    GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
-                    if (list.Count == 0)
-                    {
-                        box.Position(_gImage.Position());
-                        box.ScaledMoveBy(9,91);
-                    }
-                    else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Right, SideEnum.Bottom); }
-                    _gImage.AddControl(box);
-
-                    if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value)) { box.SetColor(Color.Red); }
-
-                    list.Add(box);
-                }
-
-                GUIMoneyDisplay cost = new GUIMoneyDisplay(nextUpgrade.Cost, false);
-                cost.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Right, SideEnum.CenterY, GameManager.ScaledPixel); 
-                _gImage.AddControl(cost);
+                GUIText upgradeText = new GUIText("Upgrade in Progress");
+                upgradeText.AnchorAndAlignToObject(scroll, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(16));
+                _gImage.AddControl(upgradeText);
             }
             else
             {
-                btn.Show(false);
+                Upgrade[] buildingUpgrades = _building.GetAllUpgrades();
+                bool isMaxLevel = _building.MaxLevel();
+                bool hasUpgrades = buildingUpgrades.Length > 0;
+                if (!isMaxLevel && hasUpgrades)
+                {
+                    GUIButton btn = new GUIButton(new Rectangle(164, 0, 18, 19), DataManager.HUD_COMPONENTS, Upgrade);
+                    btn.Position(_gImage.Position());
+                    btn.ScaledMoveBy(135, 93);
+                    _gImage.AddControl(btn);
+
+                    Upgrade nextUpgrade = buildingUpgrades[_building.Level - 1];
+                    Dictionary<int, int> upgradeItems = nextUpgrade.UpgradeRequirements;
+
+                    Color textColor = Color.White;
+                    if (!InventoryManager.HasSufficientItems(upgradeItems) || PlayerManager.Money < nextUpgrade.Cost)
+                    {
+                        textColor = Color.Red;
+                        btn.Enable(false);
+                    }
+
+                    string bonusValue = string.Empty;
+                    GameIconEnum icon = GameIconEnum.None;
+                    if (nextUpgrade.Profit > 0)
+                    {
+                        icon = GameIconEnum.Coin;
+                        bonusValue = nextUpgrade.Profit.ToString();
+                    }
+                    else if (nextUpgrade.Chance > 0)
+                    {
+                        icon = GameIconEnum.Traveler;
+                        bonusValue = nextUpgrade.Chance.ToString();
+                    }
+                    else if (nextUpgrade.CraftingSlots > 0)
+                    {
+                        icon = GameIconEnum.Hammer;
+                        bonusValue = nextUpgrade.CraftingSlots.ToString();
+                    }
+
+                    var bonusIcon = DataManager.GetIcon(icon);
+                    bonusIcon.Position(_gImage.Position());
+                    bonusIcon.ScaledMoveBy(63, 71);
+                    _gImage.AddControl(bonusIcon);
+
+                    var bonusText = new GUIText(bonusValue);
+                    bonusText.AnchorAndAlignToObject(bonusIcon, SideEnum.Right, SideEnum.CenterY, GameManager.ScaleIt(1));
+                    _gImage.AddControl(bonusText);
+
+                    _liIcons.Add(new KeyValuePair<GUIImage, GameIconEnum>(bonusIcon, icon));
+
+                    List<GUIItemBox> list = new List<GUIItemBox>();
+                    foreach (KeyValuePair<int, int> kvp in upgradeItems)
+                    {
+                        GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
+                        if (list.Count == 0)
+                        {
+                            box.Position(_gImage.Position());
+                            box.ScaledMoveBy(9, 91);
+                        }
+                        else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Right, SideEnum.Bottom); }
+                        _gImage.AddControl(box);
+
+                        if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value)) { box.SetColor(Color.Red); }
+
+                        list.Add(box);
+                    }
+
+                    GUIText cost = new GUIText(nextUpgrade.Cost);
+                    cost.AnchorAndAlignToObject(btn, SideEnum.Left, SideEnum.CenterY, GameManager.ScaleIt(2));
+                    _gImage.AddControl(cost);
+
+                    _diUpgradeItems = upgradeItems;
+                    _iCost = nextUpgrade.Cost;
+                }
+                else
+                {
+                    GUIText upgradeText = new GUIText("Max Level");
+                    upgradeText.AnchorAndAlignToObject(scroll, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(16));
+                    _gImage.AddControl(upgradeText);
+                }
             }
         }
 
         private void Upgrade()
         {
-            if (PlayerManager.ExpendResources(_building.UpgradeReqs()))
+            if (PlayerManager.ExpendResources(_diUpgradeItems) && PlayerManager.Money >= _iCost)
             {
-                _building.Upgrade();
+                PlayerManager.TakeMoney(_iCost);
+                _building.QueueUpgrade();
                 DisplayDetails();
             }
         }

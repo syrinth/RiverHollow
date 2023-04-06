@@ -35,18 +35,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _sourceRect = sourceRect;
         }
 
-        public void MoveImageTo(Point pos)
-        {
-            Position(pos);
-            _drawRect = new Rectangle(Position().X, Position().Y, Width, Height);
-        }
-
-        public void MoveImageBy(Point pos)
-        {
-            PositionAdd(pos);
-            _drawRect = new Rectangle(Position().X, Position().Y, Width, Height);
-        }
-
         public void Draw(SpriteBatch spriteBatch, float alpha)
         {
             if (Show())

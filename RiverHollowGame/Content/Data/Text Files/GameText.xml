@@ -285,5 +285,21 @@
       <Key>70</Key>
       <Value>[Name:Found_Increaser][Text:You found a {0}! Your {1} has increased!][ItemPose]</Value>
     </Item>
+	<Item>
+      <Key>71</Key>
+      <Value>[Name:Upgrade_Profit][Text:Increases the income earned from Travelers.]</Value>
+    </Item>
+	<Item>
+      <Key>72</Key>
+      <Value>[Name:Upgrade_Chance][Text:Increases the chance of attracting Travelers to the town.]</Value>
+    </Item>
+	<Item>
+      <Key>73</Key>
+      <Value>[Name:Upgrade_CraftSlots][Text:Increases the number of Crafting Slots.]</Value>
+    </Item>
+	<Item>
+      <Key>74</Key>
+      <Value>[Name:Upgrade_Recipe][Text:Unlocks new recipes.]</Value>
+    </Item>
   </Asset>
 </XnaContent>

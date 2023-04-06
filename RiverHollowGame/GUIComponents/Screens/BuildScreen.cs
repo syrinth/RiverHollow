@@ -60,7 +60,6 @@ namespace RiverHollow.GUIComponents.Screens
             _liEditMenuObjects = new List<GUIObject>
             {
                 new GUIButton("Move", BtnMove),
-                new GUIButton("Upgrade", BtnUpgrade),
                 new GUIButton("Destroy", BtnDestroy),
                 new GUIButton("Storage", BtnStorageMode),
                 new GUIButton("Exit", BtnLeaveEditMode)
@@ -102,15 +101,7 @@ namespace RiverHollow.GUIComponents.Screens
             //If the right click has not been processed, we probably want to close anything that we have open.
             if (!rv)
             {
-                if (TownModeUpgrade()) {
-                    if (_gMainObject != null) { GUIManager.CloseMainObject(); }
-                    else {
-                        LeaveTownMode();
-                        GUIManager.OpenMenu();
-                        GameManager.DropWorldObject();
-                    }
-                }
-                else if (InTownMode())
+                if (InTownMode())
                 {
                     LeaveTownMode();
                     GUIManager.OpenMenu();
@@ -204,14 +195,6 @@ namespace RiverHollow.GUIComponents.Screens
             GUIManager.CloseMainObject();
             GameManager.ClearGMObjects();
             GameManager.EnterTownModeMoving();
-        }
-
-        public void BtnUpgrade()
-        {
-            CloseMenu();
-            GUIManager.CloseMainObject();
-            GameManager.ClearGMObjects();
-            GameManager.EnterTownModeUpgrade();
         }
 
         public void BtnDestroy()

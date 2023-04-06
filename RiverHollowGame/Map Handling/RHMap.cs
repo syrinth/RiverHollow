@@ -1450,16 +1450,6 @@ namespace RiverHollow.Map_Handling
                 }
             }
 
-            if (TownModeUpgrade() && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasBuildableObject())
-            {
-                WorldObject obj = MouseTile.RetrieveUppermostStructureObject();
-                if (obj != null && obj.CompareType(ObjectTypeEnum.Building))
-                {
-                    _objSelectedObject = (Buildable)obj;
-                    _objSelectedObject.SelectObject(true);
-                }
-            }
-
             if (Scrying())
             {
                 _liTestTiles = new List<RHTile>();
@@ -1631,18 +1621,6 @@ namespace RiverHollow.Map_Handling
                     }
                 }
             }
-            else if (TownModeUpgrade())
-            {
-                if (MouseTile != null && MouseTile.HasBuildableObject())
-                {
-                    WorldObject obj = MouseTile.RetrieveUppermostStructureObject();
-
-                    if (obj.CompareType(ObjectTypeEnum.Building))
-                    {
-                        GUIManager.OpenMainObject(new HUDBuildingUpgrade((Building)obj));
-                    }
-                }
-            }
 
             return rv;
         }
@@ -1678,6 +1656,11 @@ namespace RiverHollow.Map_Handling
 
                         LeaveTownMode();
                         FinishBuilding();
+
+                        if (toBuild.CompareType(ObjectTypeEnum.Building))
+                        {
+                            TownManager.IncreaseTravelerBonus();
+                        }
                     }
                     rv = true;
                 }

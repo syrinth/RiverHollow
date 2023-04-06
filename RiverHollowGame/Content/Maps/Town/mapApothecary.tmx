@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="14" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="46">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="14" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="47">
  <properties>
   <property name="BuildingID" type="int" value="18"/>
   <property name="MapType" value="Town"/>
@@ -328,7 +328,7 @@
 223,268,269,269,269,269,1271,1272,1273,269,0,0,270,222,
 223,290,291,291,291,291,1297,1298,1299,291,291,291,292,222,
 223,0,0,0,0,0,0,0,0,0,0,0,0,222,
-223,1228,1228,1229,1228,1230,0,0,0,1300,1301,1302,1303,222,
+223,1152,1228,1229,1228,1230,0,0,0,1300,1301,1302,1303,222,
 223,0,0,0,0,0,0,0,0,0,0,1103,0,222,
 223,0,0,0,0,0,0,0,0,1300,1301,1302,1303,222,
 223,0,0,0,0,0,0,0,0,0,0,0,0,222,
@@ -343,7 +343,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1202,1202,1203,1202,1256,0,0,0,1274,1275,1276,1277,0,
+0,1126,1202,1203,1202,1256,0,0,0,1274,1275,1276,1277,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,1274,1275,1276,1277,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -382,6 +382,7 @@
     <property name="ObjectID" type="int" value="88"/>
    </properties>
   </object>
+  <object id="46" name="Display_Upgrade" x="16" y="68.0057" width="16" height="32"/>
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
   <object id="16" name="Apothecary" x="48" y="64" width="16" height="16"/>

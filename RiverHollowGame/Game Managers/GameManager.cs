@@ -170,7 +170,7 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region States
-        private enum EnumBuildType { None, BuildMode, Destroy, Storage, Move, Upgrade };
+        private enum EnumBuildType { None, BuildMode, Destroy, Storage, Move };
         private static EnumBuildType _eBuildType;
         public static bool BuildFromStorage { get; private set; } = false;
 
@@ -236,17 +236,15 @@ namespace RiverHollow.Game_Managers
             Scry();
         }
 
-        public static bool InTownMode() { return TownModeBuild() || TownModeMoving() || TownModeDestroy() || TownModeStorage() || TownModeUpgrade(); }
+        public static bool InTownMode() { return TownModeBuild() || TownModeMoving() || TownModeDestroy() || TownModeStorage();  }
         public static bool TownModeBuild() { return _eBuildType == EnumBuildType.BuildMode; }
         public static bool TownModeMoving() { return _eBuildType == EnumBuildType.Move; }
         public static bool TownModeDestroy() { return _eBuildType == EnumBuildType.Destroy; }
         public static bool TownModeStorage() { return _eBuildType == EnumBuildType.Storage; }
-        public static bool TownModeUpgrade() { return _eBuildType == EnumBuildType.Upgrade; }
 
         public static void EnterTownModeMoving() { _eBuildType = EnumBuildType.Move; }
         public static void EnterTownModeDestroy() { _eBuildType = EnumBuildType.Destroy; }
         public static void EnterTownModeStorage() { _eBuildType = EnumBuildType.Storage; }
-        public static void EnterTownModeUpgrade() { _eBuildType = EnumBuildType.Upgrade; }
 
         public static void LeaveTownMode() {
             BuildFromStorage = false;

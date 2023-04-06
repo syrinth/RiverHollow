@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="193">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="195">
  <properties>
   <property name="ItemID" value="162-C|163-R"/>
   <property name="MapType" value="Town"/>
@@ -152,6 +152,11 @@
    <properties>
     <property name="Number" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
+   </properties>
+  </object>
+  <object id="194" name="Potion" x="32" y="80" width="16" height="16">
+   <properties>
+    <property name="ItemID" type="int" value="197"/>
    </properties>
   </object>
  </objectgroup>

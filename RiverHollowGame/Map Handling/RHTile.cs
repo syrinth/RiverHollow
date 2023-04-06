@@ -4,6 +4,7 @@ using MonoGame.Extended.Tiled;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.MainObjects;
+using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
@@ -56,9 +57,10 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = false;
 
-            if (!string.IsNullOrEmpty(_sClickAction))
+            if (!string.IsNullOrEmpty(_sClickAction) && PlayerManager.PlayerInRange(Center))
             {
                 if (_sClickAction.Equals("Town_Display")) { GUIManager.OpenMainObject(new TownInfoWindow()); }
+                else if (_sClickAction.Equals("Display_Upgrade")) { GUIManager.OpenMainObject(new HUDBuildingUpgrade(TownManager.GetBuildingByID(MapManager.Maps[MapName].BuildingID))); }
             }
             if (GetTravelPoint() != null)
             {
