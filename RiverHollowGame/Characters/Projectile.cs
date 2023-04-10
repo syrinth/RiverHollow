@@ -48,11 +48,19 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void Kickstart(Mob user)
+        public void Kickstart(Mob user, string[] data)
         {
             SetPosition(user.CollisionBoxLocation);
             CurrentMapName = user.CurrentMapName;
-            _vVelocity = Util.GetPointFromDirection(user.Facing).ToVector2() * GetFloatByIDKey("Speed");
+
+            if (data.Length > 1 && data[1].Equals("Aim"))
+            {
+                _vVelocity = user.GetPlayerDirectionNormal() * GetFloatByIDKey("Speed");
+            }
+            else
+            {
+                _vVelocity = Util.GetPointFromDirection(user.Facing).ToVector2() * GetFloatByIDKey("Speed");
+            }
         }
     }
 }

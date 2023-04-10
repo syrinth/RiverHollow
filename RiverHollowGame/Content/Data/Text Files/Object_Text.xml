@@ -255,6 +255,14 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Spitter Seed]</Value>
     </Item>
     <Item>
+      <Key>Actor_52</Key>
+      <Value>[Name:Wisp]</Value>
+    </Item>
+    <Item>
+      <Key>Actor_53</Key>
+      <Value>[Name:Wisp Shot]</Value>
+    </Item>
+    <Item>
       <Key>StatusEffect_0</Key>
       <Value>[Name:Defend]</Value>
     </Item>

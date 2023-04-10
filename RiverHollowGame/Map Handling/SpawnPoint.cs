@@ -135,12 +135,8 @@ namespace RiverHollow.Map_Handling
                 do
                 {
                     objectIsValid = true;
-                    RarityEnum rarityKey = Util.RollAgainstRarity(_diSpawnData);
 
-                    int roll = RHRandom.Instance().Next(0, _diSpawnData[rarityKey].Count - 1);
-
-                    SpawnData sData = _diSpawnData[rarityKey][roll];
-
+                    SpawnData sData = Util.RollOnRarityTable(_diSpawnData);
                     if (sData.Type == SpawnTypeEnum.Item)
                     {
                         new WrappedItem(sData.ID).PlaceOnMap(targetTile.Position, _map);
@@ -257,17 +253,13 @@ namespace RiverHollow.Map_Handling
                 }
             }
 
-            RarityEnum rarityKey = Util.RollAgainstRarity(_diSpawnData);
-            if (copy.ContainsKey(rarityKey) && copy[rarityKey].Count > 0)
-            {
-                List<RHTile> validTiles = TilesInArea(true);
+            List<RHTile> validTiles = TilesInArea(true);
+            SpawnData copyData = Util.RollOnRarityTable(copy);
 
-                int roll = RHRandom.Instance().Next(0, copy[rarityKey].Count - 1);
-                Mob m = DataManager.CreateMob(copy[rarityKey][roll].ID);
-                RHTile t = validTiles[RHRandom.Instance().Next(0, validTiles.Count - 1)];
-                _map.AddMobByPosition(m, t.Position);
-                m.SetInitialPoint(t.Position);
-            }
+            Mob m = DataManager.CreateMob(copyData.ID);
+            RHTile t = validTiles[RHRandom.Instance().Next(0, validTiles.Count - 1)];
+            _map.AddMobByPosition(m, t.Position);
+            m.SetInitialPoint(t.Position);
         }
 
         public bool Validate(int id)

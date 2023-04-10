@@ -580,17 +580,17 @@ namespace RiverHollow.Utilities
         /// </summary>
         /// <param name="dictionary">The dictionary to check against the rarities</param>
         /// <returns>The highest valid rarity</returns>
-        public static RarityEnum RollAgainstRarity<T>(Dictionary<RarityEnum, List<T>> dictionary)
+        public static T RollOnRarityTable<T>(Dictionary<RarityEnum, List<T>> dictionary)
         {
-            RarityEnum rv = RarityEnum.C;
+            RarityEnum rolledRarity = RarityEnum.C;
 
-            int rarityIndex = (int)RHRandom.Instance().Next(1, 1000);
+            int rarityIndex = RHRandom.Instance().Next(1, 1000);
 
-            if (rarityIndex > 990 && dictionary.ContainsKey(RarityEnum.M)) { rv = RarityEnum.M; }
-            else if (rarityIndex > 950 && dictionary.ContainsKey(RarityEnum.R)) { rv = RarityEnum.R; }
-            else if (rarityIndex > 850 && dictionary.ContainsKey(RarityEnum.U)) { rv = RarityEnum.U; }
+            if (rarityIndex > 990 && dictionary.ContainsKey(RarityEnum.M)) { rolledRarity = RarityEnum.M; }
+            else if (rarityIndex > 950 && dictionary.ContainsKey(RarityEnum.R)) { rolledRarity = RarityEnum.R; }
+            else if (rarityIndex > 850 && dictionary.ContainsKey(RarityEnum.U)) { rolledRarity = RarityEnum.U; }
 
-            return rv;
+            return dictionary[rolledRarity][RHRandom.Instance().Next(0, dictionary[rolledRarity].Count - 1)];
         }
 
         /// <summary>

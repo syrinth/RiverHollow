@@ -40,6 +40,8 @@ namespace RiverHollow.Characters.Mobs
                             _vFlightVelocity += mod;
                             _vFlightVelocity.Normalize();
                             _vFlightVelocity *= _fBaseSpeed;
+
+                            HandleProjectile(gTime);
                         }
                         break;
                 }

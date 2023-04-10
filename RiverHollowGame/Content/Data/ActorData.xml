@@ -131,11 +131,11 @@
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Mob][Subtype:Flyer][Texture:Batty][MonsterID:1|1-8|1-1-1|1-1-8-1][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][Night][ItemID:56][Speed:1.8][Weight:Light]</Value>
+      <Value>[Type:Mob][Subtype:Flyer][Texture:Batty][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][Night][ItemID:56][Speed:1.8][Weight:Light]</Value>
     </Item>
     <Item>
       <Key>33</Key>
-      <Value>[Type:Mob][Subtype:Crawler][Texture:Mossy_Slime][MonsterID:8|8-8|8-8-9][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:8][HP:4][Damage:1][Day][Size:16-24][Speed:1][Weight:Medium]</Value>
+      <Value>[Type:Mob][Subtype:Crawler][Texture:Mossy_Slime][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:8][HP:4][Damage:1][Day][Size:16-24][Speed:1][Weight:Medium]</Value>
     </Item>
     <Item>
       <Key>34</Key>
@@ -179,7 +179,7 @@
     </Item>
     <Item>
       <Key>44</Key>
-      <Value>[Type:Animal][Key:Chicken][Idle:0-0-1-0-T][Walk:64-0-3-.5-F][Size:16-16][ItemID:150][ObjectID:27]</Value>
+      <Value>[Type:Animal][Key:Chicken][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][Size:16-16][ItemID:150][ObjectID:27]</Value>
     </Item>
     <Item>
       <Key>45</Key>
@@ -203,11 +203,19 @@
     </Item>
     <Item>
       <Key>50</Key>
-      <Value>[Type:Mob][Subtype:Crawler][Texture:Spitter][MonsterID:8|8-8|8-8-9][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:9][HP:4][Damage:1][Size:16-24][Speed:1][Cooldown:1.5][Projectile:51][Weight:Medium]</Value>
+      <Value>[Type:Mob][Subtype:Crawler][Texture:Spitter][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:9][HP:4][Damage:1][Size:16-24][Speed:1][Cooldown:1.5][Projectile:51][Weight:Medium]</Value>
     </Item>
     <Item>
       <Key>51</Key>
       <Value>[Type:Projectile][Size:16-16][Idle:0-0-1-1-T][KO:16-0-1-0.1-F][CollisionOffset:3-1][CollisionSize:10-10][Speed:3][Damage:1]</Value>
+    </Item>
+    <Item>
+      <Key>52</Key>
+      <Value>[Type:Mob][Subtype:Flyer][Texture:Wisp][Walk:4-.2-F][Idle:4-.2-F][KO:256-0-5-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:3-9][CollisionSize:10-14][HP:3][Damage:1][ItemID:1][Speed:0.8][Weight:Light][Cooldown:1][Projectile:53|Aim]</Value>
+    </Item>
+    <Item>
+      <Key>53</Key>
+      <Value>[Type:Projectile][Size:16-16][Idle:32-0-1-1-T][KO:48-0-1-0.1-F][CollisionOffset:3-2][CollisionSize:8-8][Speed:2.5][Damage:2]</Value>
     </Item>
   </Asset>
 </XnaContent>

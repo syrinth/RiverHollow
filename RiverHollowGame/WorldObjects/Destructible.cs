@@ -126,8 +126,7 @@ namespace RiverHollow.WorldObjects
                     Util.AddToListDictionary(ref bonusItemDictionary, rarity, tuple);
                 }
 
-                RarityEnum chosenRarity = Util.RollAgainstRarity(bonusItemDictionary);
-                var chosenTuple = bonusItemDictionary[chosenRarity][RHRandom.Instance().Next(bonusItemDictionary[chosenRarity].Count)];
+                var chosenTuple = Util.RollOnRarityTable(bonusItemDictionary);
                 if (chosenTuple.Item1 > -1)
                 {
                     dropList.Add(chosenTuple);

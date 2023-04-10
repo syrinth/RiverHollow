@@ -39,6 +39,7 @@ namespace RiverHollow.Characters
 
             _liProjectiles = new List<Projectile>();
             _fBaseSpeed = GetFloatByIDKey("Speed", 1);
+            _cooldownTimer = new RHTimer(0.5f, true);
             Wandering = true;
 
             //_bJump = data.ContainsKey("Jump");
@@ -122,12 +123,29 @@ namespace RiverHollow.Characters
         {
             return !GamePaused() && HasHP && !HasKnockbackVelocity();
         }
+        protected void HandleProjectile(GameTime gTime)
+        {
+            if (HasProjectiles && PlayerManager.PlayerActor.HasHP)
+            {
+                DirectionEnum playerDir = Util.GetDirection(GetPlayerDirection());
+                if (_cooldownTimer.TickDown(gTime) && Facing == playerDir)
+                {
+                    _cooldownTimer.Reset(Cooldown + (Cooldown * RHRandom.Instance().Next(1, 5) / 10));
 
-        protected Vector2 GetPlayerDirection()
+                    string[] data = Util.FindParams(GetStringByIDKey("Projectile"));
+                    Projectile p = DataManager.CreateProjectile(int.Parse(data[0]));
+                    p.Kickstart(this, data);
+
+                    _liProjectiles.Add(p);
+                }
+            }
+        }
+
+        public Vector2 GetPlayerDirection()
         {
             return (PlayerManager.PlayerActor.CollisionBoxLocation - CollisionBoxLocation).ToVector2();
         }
-        protected Vector2 GetPlayerDirectionNormal()
+        public Vector2 GetPlayerDirectionNormal()
         {
             Vector2 rv = (PlayerManager.PlayerActor.CollisionBoxLocation - CollisionBoxLocation).ToVector2();
             if (rv != Vector2.Zero)
@@ -224,17 +242,10 @@ namespace RiverHollow.Characters
                 RarityEnum rarity = RarityEnum.C;
                 Util.GetRarity(s, ref resourceID, ref rarity);
 
-                if (!lootDictionary.ContainsKey(rarity))
-                {
-                    lootDictionary[rarity] = new List<int>();
-                }
-
-                lootDictionary[rarity].Add(resourceID);
+                Util.AddToListDictionary(ref lootDictionary, rarity, resourceID);
             }
 
-            RarityEnum rarityKey = Util.RollAgainstRarity(lootDictionary);
-            Item drop = DataManager.GetItem(lootDictionary[rarityKey][RHRandom.Instance().Next(0, lootDictionary[rarityKey].Count - 1)]);
-
+            Item drop = DataManager.GetItem(Util.RollOnRarityTable(lootDictionary));
             if (drop != null)
             {
                 MapManager.CurrentMap.SpawnItemOnMap(drop, CollisionBoxLocation, false);

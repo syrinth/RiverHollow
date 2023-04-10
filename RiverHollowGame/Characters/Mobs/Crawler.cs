@@ -15,7 +15,6 @@ namespace RiverHollow.Characters.Mobs
             _iMinWander = 4;
             _iMaxWander = 16;
             _movementTimer = new RHTimer(_fBaseWanderTimer);
-            _cooldownTimer = new RHTimer(0.5f, true);
         }
 
         public override void Update(GameTime gTime)
@@ -30,18 +29,7 @@ namespace RiverHollow.Characters.Mobs
                     _bBumpedIntoSomething = false;
                 }
 
-                if (HasProjectiles && PlayerManager.PlayerActor.HasHP)
-                {
-                    DirectionEnum playerDir = Util.GetDirection(GetPlayerDirection());
-                    if (_cooldownTimer.TickDown(gTime) && Facing == playerDir)
-                    {
-                        _cooldownTimer.Reset(Cooldown + (RHRandom.Instance().Next(0, 20) / 10));
-                        Projectile p = DataManager.CreateProjectile(GetIntByIDKey("Projectile"));
-                        p.Kickstart(this);
-
-                        _liProjectiles.Add(p);
-                    }
-                }
+                HandleProjectile(gTime);
 
                 if (!HasMovement() || _bBumpedIntoSomething)
                 {
