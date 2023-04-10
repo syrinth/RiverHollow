@@ -32,6 +32,7 @@ namespace RiverHollow.Items
             }
             else
             {
+                PlayerManager.AddUniqueItemToList(ID);
                 return false;
             }
         }

@@ -36,8 +36,6 @@ namespace RiverHollow.WorldObjects
         public bool Walkable => _bWalkable;
         protected ObjectPlacementEnum _ePlacement;
 
-        protected KeyValuePair<int, int> _kvpDrop; //itemID, # of items dropped
-
         protected bool _bDrawUnder = false;
 
         protected Point _pImagePos;
@@ -302,17 +300,6 @@ namespace RiverHollow.WorldObjects
             int yOffset = (_rBase.Height > 1) ? (_rBase.Height -1) / 2 : 0;
             PickupOffset = new Point((_rBase.X + xOffset) * Constants.TILE_SIZE, (_rBase.Y + yOffset) * Constants.TILE_SIZE);
             PickupOffset = Util.MultiplyPoint(Util.DividePoint(PickupOffset, Constants.TILE_SIZE),  Constants.TILE_SIZE);
-        }
-
-        public List<Item> GetDroppedItems()
-        {
-            List<Item> itemList = new List<Item>();
-            for (int i = 0; i < _kvpDrop.Value; i++)
-            {
-                itemList.Add(DataManager.GetItem(_kvpDrop.Key, 1));
-            }
-
-            return itemList;
         }
 
         public virtual List<Light> GetLights()

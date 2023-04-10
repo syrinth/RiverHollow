@@ -75,7 +75,7 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Building][Texture:Apothecary][Size:7-8][Base:1-5-5-3][Entrance:3-6-1-2][ReqItems:55-10|60-20][ShopSells:Herbs][UpgradeID:0-1][CraftingSlots:1]</Value>
+      <Value>[Type:Building][Texture:Apothecary][Size:7-8][Base:1-5-5-3][Entrance:3-6-1-2][ReqItems:55-10|60-20][UpgradeID:0-1]</Value>
     </Item>
     <Item>
       <Key>19</Key>
@@ -99,7 +99,7 @@
     </Item>
     <Item>
       <Key>24</Key>
-      <Value>[Type:Building][Subtype:None][Texture:Flower_Shop][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
+      <Value>[Type:Building][Texture:Flower_Shop][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
     </Item>
     <Item>
       <Key>25</Key>
@@ -107,7 +107,7 @@
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Building][Subtype:None][Texture:House_Player][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86|3-80-86][Upgrade_1:55-10|60-10][Upgrade_2:55-20|60-20][ReqItems:55-5|60-5][Home]</Value>
+      <Value>[Type:Building][Texture:House_Player][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86|3-80-86][Upgrade_1:55-10|60-10][Upgrade_2:55-20|60-20][ReqItems:55-5|60-5][Home]</Value>
     </Item>
     <Item>
       <Key>27</Key>
@@ -127,7 +127,7 @@
     </Item>
     <Item>
       <Key>31</Key>
-      <Value>[Type:Building][Texture:MagicShop][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5][ShopSells:Magic]</Value>
+      <Value>[Type:Building][Texture:MagicShop][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:199-1|1-10|12-5|22-5|47-3][UpgradeID:0-1]</Value>
     </Item>
     <Item>
       <Key>32</Key>
@@ -243,7 +243,7 @@
     </Item>
     <Item>
       <Key>60</Key>
-      <Value>[Type:Destructible][Image:0-0|16-0|32-0][Tool:Pick][Hp:1][ReqLvl:1][ItemID:0-1][DestructionAnim:208-0-3-0.1][Movable]</Value>
+      <Value>[Type:Destructible][Image:0-0|2][Tool:Pick][Hp:1][ReqLvl:1][ItemID:0-1][DestructionAnim:208-0-3-0.1]</Value>
     </Item>
     <Item>
       <Key>61</Key>
@@ -263,7 +263,7 @@
     </Item>
     <Item>
       <Key>65</Key>
-      <Value>[Type:Destructible][Tree][Texture:Textures\tree][Image:0-0][Size:3-4][Hp:8][ReqLvl:1][ItemID:2-10][Base:1-1][BaseShift:1][Tool:Axe]</Value>
+      <Value>[Type:Destructible][Tree][Texture:Textures\tree][Image:0-0][Size:3-4][Hp:8][ReqLvl:1][ItemID:2-10][Base:1-1][BaseOffset:1-3][Tool:Axe]</Value>
     </Item>
     <Item>
       <Key>66</Key>
@@ -591,7 +591,7 @@
     </Item>
     <Item>
       <Key>147</Key>
-      <Value>[Type:Destructible][Image:192-48|208-48|224-48][Tool:Scythe][Hp:1][ReqLvl:1][DestructionAnim:80-192-3-0.1]</Value>
+      <Value>[Type:Destructible][Image:192-48|2][Tool:Scythe][Hp:1][ReqLvl:1][DestructionAnim:80-192-3-0.1]</Value>
     </Item>
     <Item>
       <Key>148</Key>
@@ -600,6 +600,14 @@
     <Item>
       <Key>149</Key>
       <Value>[Type:Machine][Image:48-320][Size:1-1][Base:1-1][Makes:23][ItemOffset:0-11][Daily][HoldItem]</Value>
+    </Item>
+    <Item>
+      <Key>150</Key>
+      <Value>[Type:Destructible][Image:256-304|2][Tool:Pick][Hp:4][ReqLvl:1][ItemID:67-1][DestructionAnim:208-0-3-0.1][BonusItemID:1-1-C]</Value>
+    </Item>
+    <Item>
+      <Key>151</Key>
+      <Value>[Type:Destructible][Tree][Texture:Textures\WhisperingTree][Image:0-0][Size:3-5][Hp:16][ReqLvl:1][ItemID:200-10][Base:1-1][BaseOffset:1-4][Tool:Axe][BonusItemID:1-3-C]</Value>
     </Item>
   </Asset>
 </XnaContent>

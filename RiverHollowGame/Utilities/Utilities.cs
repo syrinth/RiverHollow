@@ -12,6 +12,8 @@ using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 using MonoGame.Extended.Tiled;
 using System.Windows.Input;
+using Microsoft.Xna.Framework.Input;
+using System.Xml.Linq;
 
 namespace RiverHollow.Utilities
 {
@@ -231,6 +233,9 @@ namespace RiverHollow.Utilities
         {
             return data.Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
         }
+        /// <summary>
+        /// Splits the given string by the | character to find the object parameters
+        /// </summary>
         public static string[] FindParams(string data)
         {
             return data.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
@@ -605,6 +610,16 @@ namespace RiverHollow.Utilities
             }
 
             return rv;
+        }
+
+        public static void AddToListDictionary<T, T1>(ref Dictionary<T, List<T1>> dictionary, T key, T1 value)
+        {
+            if (!dictionary.ContainsKey(key))
+            {
+                dictionary[key] = new List<T1>();
+            }
+
+            dictionary[key].Add(value);
         }
 
         public static List<Point> GetAllPointsInArea(Vector2 position, Size2 dimensions, int incrementSize = 1)

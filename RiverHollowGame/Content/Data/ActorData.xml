@@ -43,7 +43,7 @@
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:1][Collection:7|188][ShopData:0][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:64][FirstArrival:10][ArrivalPeriod:8][Key:Griselda]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:1][Collection:7|188][ShopData:0][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][ItemID:199][FirstArrival:1][Key:Griselda][Size:16-29]</Value>
     </Item>
     <Item>
       <Key>11</Key>

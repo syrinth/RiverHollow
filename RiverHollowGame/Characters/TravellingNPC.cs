@@ -3,6 +3,7 @@ using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
@@ -16,6 +17,7 @@ namespace RiverHollow.Characters
         protected Dictionary<int, int> _diRequiredObjectIDs;
         protected int RequiredPopulation => GetIntByIDKey("RequiredPopulation");
         protected int RequiredVillagerID => GetIntByIDKey("RequiredVillager");
+        protected int RequiredSpecialItem => GetIntByIDKey("ItemID");
 
         public virtual RelationShipStatusEnum RelationshipState { get; set; }
         public bool Introduced => RelationshipState != RelationShipStatusEnum.None;
@@ -69,6 +71,14 @@ namespace RiverHollow.Characters
             if (RequiredVillagerID != -1)
             {
                 if (!TownManager.DIVillagers[RequiredVillagerID].LivesInTown)
+                {
+                    return false;
+                }
+            }
+
+            if(RequiredSpecialItem != -1)
+            {
+                if (!PlayerManager.AlreadyBoughtUniqueItem(RequiredSpecialItem))
                 {
                     return false;
                 }

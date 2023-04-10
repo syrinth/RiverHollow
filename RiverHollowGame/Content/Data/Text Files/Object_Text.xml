@@ -444,7 +444,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_1</Key>
-      <Value>[Name:Arcane Essence][Description:Holds a spark of magic]</Value>
+      <Value>[Name:Arcane Crystal][Description:Holds a spark of magic]</Value>
     </Item>
     <Item>
       <Key>Item_2</Key>
@@ -1235,6 +1235,14 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Energy Root]</Value>
     </Item>
     <Item>
+      <Key>Item_199</Key>
+      <Value>[Name:Mysterious Orb]</Value>
+    </Item>
+    <Item>
+      <Key>Item_200</Key>
+      <Value>[Name:Whispering Wood]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_0</Key>
       <Value>[Name:Beehive]</Value>
     </Item>
@@ -1833,6 +1841,14 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>WorldObject_149</Key>
       <Value>[Name:Mushroom Pot]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_150</Key>
+      <Value>[Name:Witchstone]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_151</Key>
+      <Value>[Name:Whispering Tree]</Value>
     </Item>
     <Item>
       <Key>Cutscene_0</Key>

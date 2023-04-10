@@ -523,6 +523,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.AddMoney(TownManager.Income);
             SaveManager.Save();
             PlayerManager.CurrentEnergy = PlayerManager.MaxEnergy();
+            PlayerManager.CurrentMagic = PlayerManager.MaxMagic();
             PlayerManager.PlayerActor.RefillHealth();
 
             _bSaving = false;

@@ -25,7 +25,7 @@ namespace RiverHollow.Game_Managers
 
         public static float CurrentEnergy = MaxEnergy();
         public static float CurrentMagic = MaxMagic();
-        public static bool HasMagic = false;
+        public static bool MagicUnlocked = false;
 
         #region Increases
         public static int EnergyIncrease { get; set; } = 0;
@@ -42,7 +42,7 @@ namespace RiverHollow.Game_Managers
         public static int MagicIncrease { get; private set; } = 0;
         public static float MaxMagic()
         {
-            return !HasMagic ? 0 : Constants.PLAYER_STARTING_MAGIC + (MagicIncrease * 10);
+            return Constants.PLAYER_STARTING_MAGIC + (MagicIncrease * 10);
         }
 
         public static void IncreaseValue(PlayerResourceEnum e)
@@ -598,6 +598,12 @@ namespace RiverHollow.Game_Managers
             max = PlayerActor.MaxHP;
         }
 
+        public static void GetMagic(ref float curr, ref float max)
+        {
+            curr = CurrentMagic;
+            max = MaxMagic();
+        }
+
         public static void DetermineBabyAcquisition()
         {
             if (PlayerActor.CanBecomePregnant == Spouse.CanBecomePregnant) { PlayerManager.ChildStatus = ExpectingChildEnum.Adoption; }
@@ -838,7 +844,7 @@ namespace RiverHollow.Game_Managers
                 hpIncreases = HPIncrease,
                 energyIncreases = EnergyIncrease,
                 magicIncreases = MagicIncrease,
-                hasMagic = HasMagic,
+                hasMagic = MagicUnlocked,
                 Items = new List<ItemData>(),
                 liPets = new List<int>(),
                 MountList = new List<int>(),
@@ -903,7 +909,7 @@ namespace RiverHollow.Game_Managers
             HPIncrease = saveData.hpIncreases;
             EnergyIncrease = saveData.energyIncreases;
             MagicIncrease = saveData.magicIncreases;
-            HasMagic = saveData.hasMagic;
+            MagicUnlocked = saveData.hasMagic;
 
             PlayerActor.SetHairColor(saveData.hairColor);
             PlayerActor.SetHairType(saveData.hairIndex);

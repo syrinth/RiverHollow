@@ -935,6 +935,11 @@
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapMountain_Small.tmx
 
+#begin Maps/Misc/mapRuined_Manor.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapRuined_Manor.tmx
+
 #begin Maps/Misc/mapShroomCity.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -4246,6 +4251,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Valley.png
+
+#begin Textures/WhisperingTree.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/WhisperingTree.png
 
 #begin Textures/worldObjects.png
 /importer:TextureImporter

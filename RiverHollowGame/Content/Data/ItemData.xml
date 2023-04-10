@@ -271,11 +271,11 @@
     </Item>
     <Item>
       <Key>67</Key>
-      <Value>[Type:Resource][Image:1-8][Value:70]</Value>
+      <Value>[Type:Resource][Image:1-8]</Value>
     </Item>
     <Item>
       <Key>68</Key>
-      <Value>[Type:Resource][Image:2-8][ReqItems:67-2][Value:150]</Value>
+      <Value>[Type:Resource][Image:2-8][ReqItems:67-1][CraftAmount:2]</Value>
     </Item>
     <Item>
       <Key>69</Key>
@@ -796,6 +796,14 @@
     <Item>
       <Key>198</Key>
       <Value>[Type:Special][Image:2-1][Increase:Energy]</Value>
+    </Item>
+    <Item>
+      <Key>199</Key>
+      <Value>[Type:Special][Image:6-0]</Value>
+    </Item>
+    <Item>
+      <Key>200</Key>
+      <Value>[Type:Resource][Image:5-3][Value]</Value>
     </Item>
   </Asset>
 </XnaContent>

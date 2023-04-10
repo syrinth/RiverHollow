@@ -221,7 +221,6 @@
     <Compile Include="WorldObjects\Mailbox.cs" />
     <Compile Include="WorldObjects\Plant.cs" />
     <Compile Include="WorldObjects\Structure.cs" />
-    <Compile Include="WorldObjects\Tree.cs" />
     <Compile Include="WorldObjects\Trigger Objects\Trigger.cs" />
     <Compile Include="WorldObjects\Trigger Objects\TriggerObject.cs" />
     <Compile Include="WorldObjects\Wall.cs" />

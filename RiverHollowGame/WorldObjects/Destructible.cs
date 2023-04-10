@@ -2,6 +2,7 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
+using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
@@ -24,16 +25,6 @@ namespace RiverHollow.WorldObjects
             LoadDictionaryData(stringData, loadSprite);
 
             ReloadAlternateSprite(RHRandom.Instance().Next(0, Util.FindParams(stringData["Image"]).Length - 1), stringData["Image"]);
-
-            if (stringData.ContainsKey("ItemID"))
-            {
-                string[] split = stringData["ItemID"].Split('-');
-                int itemID = int.Parse(split[0]);
-                int num = 1;
-
-                if (split.Length == 2) { num = int.Parse(split[1]); }
-                _kvpDrop = new KeyValuePair<int, int>(itemID, num);
-            }
 
             if (stringData.ContainsKey("Hp")) { _iHP = int.Parse(stringData["Hp"]); }
 
@@ -106,14 +97,60 @@ namespace RiverHollow.WorldObjects
             }
         }
 
+        private List<Item> GetDroppedItems()
+        {
+            string items = GetStringByIDKey("ItemID");
+            string[] strParams = Util.FindParams(items);
+            var dropList = new List<Tuple<int, int>>();
+            for (int i = 0; i < strParams.Length; i++)
+            {
+                string[] split = Util.FindArguments(strParams[i]);
+                var tup = new Tuple<int, int>(int.Parse(split[0]), int.Parse(split[1]));
+                dropList.Add(tup);
+            }
+
+            items = GetStringByIDKey("BonusItemID");
+            if (!string.IsNullOrEmpty(items))
+            {
+                var bonusItemDictionary = new Dictionary<RarityEnum, List<Tuple<int, int>>>();
+                Util.AddToListDictionary(ref bonusItemDictionary, RarityEnum.C, new Tuple<int, int>(-1, 0));
+
+                string[] bonusItems = Util.FindParams(items);
+                for (int i = 0; i < bonusItems.Length; i++)
+                {
+                    string[] arguments = Util.FindArguments(bonusItems[i]);
+
+                    RarityEnum rarity = arguments.Length > 2 ? Util.ParseEnum<RarityEnum>(arguments[2]) : RarityEnum.C;
+                    var tuple = new Tuple<int, int>(int.Parse(arguments[0]), int.Parse(arguments[1]));
+
+                    Util.AddToListDictionary(ref bonusItemDictionary, rarity, tuple);
+                }
+
+                RarityEnum chosenRarity = Util.RollAgainstRarity(bonusItemDictionary);
+                var chosenTuple = bonusItemDictionary[chosenRarity][RHRandom.Instance().Next(bonusItemDictionary[chosenRarity].Count)];
+                if (chosenTuple.Item1 > -1)
+                {
+                    dropList.Add(chosenTuple);
+                }
+            }
+
+            List<Item> itemList = new List<Item>();
+            dropList.ForEach(x => { 
+                for(int i = 0; i < x.Item2; i++)
+                {
+                    itemList.Add(DataManager.GetItem(x.Item1));
+                }
+            });
+
+            return itemList;
+        }
+
         private void ReloadAlternateSprite(int altSprite, string imageSprite)
         {
             _iAltSprite = altSprite;
             string[] split = Util.FindParams(imageSprite);
 
-            string[] splitVal = split[_iAltSprite].Split('-');
-            _pImagePos = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
-
+            _pImagePos = Util.ParsePoint(split[0]) + new Point(altSprite * Constants.TILE_SIZE, 0);
             Sprite.SetAlternate(_pImagePos, AnimationEnum.ObjectIdle);
         }
 

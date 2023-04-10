@@ -16,8 +16,6 @@ namespace RiverHollow.Buildings
 {
     public class Building : Buildable
     {
-        public ItemGroupEnum StoreType => GetEnumByIDKey<ItemGroupEnum>("ShopSells");
-
         private Rectangle _rEntrance;
 
         public int Income { get; private set; } = 1;

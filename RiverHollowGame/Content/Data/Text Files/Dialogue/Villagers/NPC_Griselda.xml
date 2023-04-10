@@ -3,15 +3,16 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Greetings, young one. I am $Actor_10$, a purveyor of magic and enchantments. My daughter and I heard about $Town$ and thought we should visit. A charming place, if lacking in amenities. Build us a house, and I'll see what can be done here.][UnlockBuildingID:49][Name:Introduction]</Value>
+      <Value>[Name:Introduction][Text:Ah! There it is, you found my orb didn't you? I have been searching for it for some time now, and to think it brings me back here...
+I've gotten ahead of myself though. Greetings, I am $Actor_10$ and I would repay you for finding my Orb. I shall teach you a spell to call my home here and unlock your magical potential.][UnlockObjectID:31]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:For me? Oh, $Name$, you shouldn't have.][Name:Gift]</Value>
+      <Value>[Name:Gift][Text:For me? Oh, $Name$, you shouldn't have.]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:Greeeeeeeetings...][Name:ShopOpen]</Value>
+      <Value>[Name:ShopOpen][Text:Greetings.]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -29,7 +30,7 @@ Here. It's not much, just a few odds and ends I had laying around but it should 
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Text:Hm. Do you need something from me? It seems that people only want to talk to me when they need something. Out with it.][Default][Name:Dialogue|1]</Value>
+      <Value>[Name:Dialogue|1][Text:Hm. Do you need something from me? It seems that people only want to talk to me when they need something. Out with it.][Default]</Value>
     </Item>
     <Item>
       <Key>7</Key>
@@ -49,7 +50,7 @@ Here. It's not much, just a few odds and ends I had laying around but it should 
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Text:Hm. Well done, this is... adequate enough for now. Once I've gotten settled, we'll see what I can cook up for you.][Once][RequiredBuildingID:13][SendMessage:1][Name:House Built]</Value>
+      <Value>[Name:House Built][Text:Hm. Well done, this is... adequate enough for now. Once I've gotten settled, we'll see what I can cook up for you.][Once][RequiredBuildingID:13][SendMessage:1]</Value>
     </Item>
   </Asset>
 </XnaContent>

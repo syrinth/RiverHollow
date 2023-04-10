@@ -244,6 +244,7 @@ namespace RiverHollow.Game_Managers
             AddTexture(@"Textures\worldObjects", Content);
             AddTexture(@"Textures\portraits", Content);
             AddTexture(@"Textures\tree", Content);
+            AddTexture(@"Textures\WhisperingTree", Content);
             AddTexture(@"Textures\DarkWoodTree", Content);
             AddTexture(@"Textures\items", Content);
             AddTexture(@"Textures\AbilityAnimations", Content);
@@ -587,8 +588,7 @@ namespace RiverHollow.Game_Managers
                     case ObjectTypeEnum.Decor:
                         return new Decor(id, data);
                     case ObjectTypeEnum.Destructible:
-                        if (data.ContainsKey("Tree")) { return new Tree(id, data); }
-                        else { return new Destructible(id, data); }
+                        return new Destructible(id, data);
                     case ObjectTypeEnum.DungeonObject:
                         switch (Util.ParseEnum<TriggerObjectEnum>(data["Subtype"]))
                         {

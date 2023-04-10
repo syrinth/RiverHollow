@@ -23,6 +23,7 @@ namespace RiverHollow.GUIComponents.Screens
         GUIObject _gMenu;
         GUIOldStatDisplay _gHealthDisplay;
         GUIOldStatDisplay _gStaminaDisplay;
+        GUIOldStatDisplay _gMagicDisplay;
         GUIMoneyDisplay _gMoney;
         GUIDungeonKeyDisplay _gDungeonKeys;
 
@@ -40,16 +41,24 @@ namespace RiverHollow.GUIComponents.Screens
             _gHealthDisplay = new GUIOldStatDisplay(PlayerManager.GetHP, Color.Red);
             _gHealthDisplay.AnchorToScreen(this, SideEnum.TopLeft, 10);
             AddControl(_gHealthDisplay);
+
             _gStaminaDisplay = new GUIOldStatDisplay(PlayerManager.GetStamina, Color.ForestGreen);
             _gStaminaDisplay.AnchorAndAlignToObject(_gHealthDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             AddControl(_gStaminaDisplay);
+
+            if (PlayerManager.MagicUnlocked)
+            {
+                _gMagicDisplay = new GUIOldStatDisplay(PlayerManager.GetMagic, Color.Blue);
+                _gMagicDisplay.AnchorAndAlignToObject(_gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
+                AddControl(_gMagicDisplay);
+            }
 
             GUIWindow win = new GUIWindow(GUIWindow.Brown_Window, ScaleIt(48), ScaleIt(26));
             
             _gMoney = new GUIMoneyDisplay();
             _gMoney.AnchorToInnerSide(win, SideEnum.TopLeft);
             //win.Resize(false, ScaleIt(1));
-            win.AnchorAndAlignToObject(_gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, ScaleIt(2));
+            win.AnchorAndAlignToObject(PlayerManager.MagicUnlocked ? _gMagicDisplay : _gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, ScaleIt(2));
             AddControl(win);
 
             _gDungeonKeys = new GUIDungeonKeyDisplay();
