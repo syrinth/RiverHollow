@@ -156,6 +156,7 @@
   </object>
   <object id="194" name="Potion" x="32" y="80" width="16" height="16">
    <properties>
+    <property name="DoNotLoad" type="bool" value="true"/>
     <property name="ItemID" type="int" value="197"/>
    </properties>
   </object>

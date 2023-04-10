@@ -127,18 +127,36 @@ namespace RiverHollow.Characters
         {
             if (HasProjectiles && PlayerManager.PlayerActor.HasHP)
             {
-                DirectionEnum playerDir = Util.GetDirection(GetPlayerDirection());
-                if (_cooldownTimer.TickDown(gTime) && Facing == playerDir)
+                string[] data = Util.FindParams(GetStringByIDKey("Projectile"));
+
+                if (CanFire(gTime, data))
                 {
                     _cooldownTimer.Reset(Cooldown + (Cooldown * RHRandom.Instance().Next(1, 5) / 10));
 
-                    string[] data = Util.FindParams(GetStringByIDKey("Projectile"));
                     Projectile p = DataManager.CreateProjectile(int.Parse(data[0]));
-                    p.Kickstart(this, data);
+                    p.Kickstart(this, AimsProjectiles(data));
 
                     _liProjectiles.Add(p);
                 }
             }
+        }
+
+        private bool CanFire(GameTime gTime, string[] data)
+        {
+            bool rv = false;
+
+            if (_cooldownTimer.TickDown(gTime))
+            {
+                if (AimsProjectiles(data)) { rv = true; }
+                else if (Facing == Util.GetDirection(GetPlayerDirection())) { rv = true; }
+            }
+
+            return rv;
+        }
+
+        private bool AimsProjectiles(string[] data)
+        {
+            return data.Length > 0 && data[1].Equals("Aim");
         }
 
         public Vector2 GetPlayerDirection()
@@ -193,7 +211,7 @@ namespace RiverHollow.Characters
             {
                 if (!_bJump || (_bJump && !BodySprite.CurrentAnimation.StartsWith("Air")))
                 {
-                    if (Math.Abs((int)direction.X) > Math.Abs((int)direction.Y))
+                    if (Math.Abs(direction.X) > Math.Abs(direction.Y))
                     {
                         if (direction.X > 0)
                         {

@@ -215,7 +215,7 @@
     </Item>
     <Item>
       <Key>53</Key>
-      <Value>[Type:Projectile][Size:16-16][Idle:32-0-1-1-T][KO:48-0-1-0.1-F][CollisionOffset:3-2][CollisionSize:8-8][Speed:2.5][Damage:2]</Value>
+      <Value>[Type:Projectile][Size:16-16][Idle:32-0-1-1-T][KO:48-0-1-0.1-F][CollisionOffset:3-2][CollisionSize:8-8][Speed:3][Damage:1]</Value>
     </Item>
   </Asset>
 </XnaContent>

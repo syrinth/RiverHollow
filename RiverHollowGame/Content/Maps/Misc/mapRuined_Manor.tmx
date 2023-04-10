@@ -153,6 +153,7 @@
   </object>
   <object id="198" name="Mysterious Orb" x="160" y="192" width="16" height="16">
    <properties>
+    <property name="DoNotLoad" type="bool" value="true"/>
     <property name="ItemID" type="int" value="199"/>
    </properties>
   </object>
