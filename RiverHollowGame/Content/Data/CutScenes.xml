@@ -65,5 +65,13 @@
         <Item>[Speed:Player-0.5|22-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:22][Move:22-4-Up][Face:Player-Up][Face:22-Down][Speak:22-0][MoveToTown:22]</Item>
       </Value>
     </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>
+        <Item></Item>
+        <Item>[Map:mapMagicShop][Player][Actors:10-Cutscene_Entrance][Deactivate:10]</Item>
+        <Item>[Speed:Player-0.5|10-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:10][Move:10-4-Up][Face:Player-Up][Face:10-Down][Speak:10-0][MoveToTown:10]</Item>
+      </Value>
+    </Item>
   </Asset>
 </XnaContent>

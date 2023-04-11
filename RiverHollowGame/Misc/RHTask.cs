@@ -473,6 +473,12 @@ namespace RiverHollow.Misc
                     ((Villager)GoalNPC).QueueSendToTown();
                 }
 
+                if (DataManager.TaskData[ID].ContainsKey("UnlockMagic"))
+                {
+                    PlayerManager.MagicUnlocked = true;
+                    GameManager.GoToHUDScreen();
+                }
+
                 TaskManager.TaskLog.Remove(this);
                 GUIManager.NewAlertIcon("Task Complete");
             }

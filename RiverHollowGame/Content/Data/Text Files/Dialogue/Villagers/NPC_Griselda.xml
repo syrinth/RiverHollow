@@ -4,7 +4,7 @@
     <Item>
       <Key>0</Key>
       <Value>[Name:Introduction][Text:Ah! There it is, you found my orb didn't you? I have been searching for it for some time now, and to think it brings me back here...
-I've gotten ahead of myself though. Greetings, I am $Actor_10$ and I would repay you for finding my Orb. I shall teach you a spell to call my home here and unlock your magical potential.][UnlockObjectID:31]</Value>
+I've gotten ahead of myself though. Greetings, I am $Actor_10$ and I would repay you for finding my orb.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -42,15 +42,16 @@ Here. It's not much, just a few odds and ends I had laying around but it should 
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Text:Hm, snowing outside is it? $Actor_18$ loves the snow, but I can't stand it. I'll leave trudging through the snow to you younger ones and stay inside, thank you very much.][Weather:Snowing][Name:Snow|1]</Value>
+      <Value>[Name:Snow|1][Text:Hm, snowing outside is it? $Actor_18$ loves the snow, but I can't stand it. I'll leave trudging through the snow to you younger ones and stay inside, thank you very much.][Weather:Snowing]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Text:Keep your eyes peeled for the mushrooms that live in the forest. Their caps are useful for a lot of things, but they have an innate affinity for magic. Young $Actor_2$ got a nasty shock from one a few years back.][Name:Dialogue|3]</Value>
+      <Value>[Name:Task_11_Start][Text:I require a home with the right magical energies, you understand. I won't be able to do much living out of a hovel. This is what you'll need in order to meet my requirements.
+I'll meet you when you're done, I have much to meditate on.][UnlockObjectID:31]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Name:House Built][Text:Hm. Well done, this is... adequate enough for now. Once I've gotten settled, we'll see what I can cook up for you.][Once][RequiredBuildingID:13][SendMessage:1]</Value>
+      <Value>[Name][Text][Once][RequiredBuildingID:13][SendMessage:1]</Value>
     </Item>
   </Asset>
 </XnaContent>

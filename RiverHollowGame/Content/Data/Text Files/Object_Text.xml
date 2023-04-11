@@ -46,6 +46,10 @@
       <Value>[Name:$WorldObject_30$ are better than people]</Value>
     </Item>
     <Item>
+      <Key>Task_11</Key>
+      <Value>[Name:Making Magic]</Value>
+    </Item>
+    <Item>
       <Key>Actor_0</Key>
       <Value>[Name:Amanda]</Value>
     </Item>
@@ -1912,11 +1916,15 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Cutscene_6</Key>
-      <Value>[Name:Archival Inspection]</Value>
+      <Value>[Name:Mushroom Time]</Value>
     </Item>
     <Item>
       <Key>Cutscene_7</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Archival Inspection]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_8</Key>
+      <Value>[Name:Making Magic]</Value>
     </Item>
   </Asset>
 </XnaContent>

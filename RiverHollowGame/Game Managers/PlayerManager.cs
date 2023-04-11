@@ -495,6 +495,13 @@ namespace RiverHollow.Game_Managers
             return PlayerActor != null && !PlayerActor.HasHP && spr.AnimationFinished(AnimationEnum.KO);
         }
 
+        private static void NewDayRecovery()
+        {
+            CurrentEnergy = MaxEnergy();
+            CurrentMagic = MaxMagic();
+            PlayerActor.RefillHealth();
+        }
+
         public static bool LoseEnergy(float x)
         {
             bool rv = false;
@@ -515,6 +522,10 @@ namespace RiverHollow.Game_Managers
             {
                 CurrentEnergy = MaxEnergy();
             }
+        }
+        public static void RefillEnergy()
+        {
+            CurrentEnergy = MaxEnergy();
         }
 
         public static bool LoseMagic(float x)
@@ -537,6 +548,10 @@ namespace RiverHollow.Game_Managers
             {
                 CurrentMagic = MaxMagic();
             }
+        }
+        public static void RefillMagic()
+        {
+            CurrentMagic = MaxMagic();
         }
 
         public static void MoveToSpawn()
@@ -582,6 +597,8 @@ namespace RiverHollow.Game_Managers
             foreach(Child c in Children) { c.Rollover(); }
 
             PlayerMailbox.Rollover();
+
+            NewDayRecovery();
 
             MoveToSpawn();
         }
@@ -910,6 +927,8 @@ namespace RiverHollow.Game_Managers
             EnergyIncrease = saveData.energyIncreases;
             MagicIncrease = saveData.magicIncreases;
             MagicUnlocked = saveData.hasMagic;
+
+            NewDayRecovery();
 
             PlayerActor.SetHairColor(saveData.hairColor);
             PlayerActor.SetHairType(saveData.hairIndex);

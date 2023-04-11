@@ -156,7 +156,7 @@ namespace RiverHollow.Characters
 
         private bool AimsProjectiles(string[] data)
         {
-            return data.Length > 0 && data[1].Equals("Aim");
+            return data.Length > 1 && data[1].Equals("Aim");
         }
 
         public Vector2 GetPlayerDirection()
