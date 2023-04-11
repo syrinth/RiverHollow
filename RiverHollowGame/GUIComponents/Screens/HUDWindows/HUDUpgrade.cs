@@ -155,6 +155,11 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                         icon = GameIconEnum.Hammer;
                         bonusValue = nextUpgrade.CraftingSlots.ToString();
                     }
+                    else if (nextUpgrade.FormulaLevel > 0)
+                    {
+                        icon = GameIconEnum.Book;
+                        bonusValue = nextUpgrade.FormulaLevel.ToString();
+                    }
 
                     var bonusIcon = DataManager.GetIcon(icon);
                     bonusIcon.Position(_gImage.Position());

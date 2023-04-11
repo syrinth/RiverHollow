@@ -3100,18 +3100,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Summons/WaterElemental.png
 
-#begin Textures/battle.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/battle.png
-
 #begin Textures/Buildings/Apothecary.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -4144,18 +4132,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Overworld.png
 
-#begin Textures/portraits.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/portraits.png
-
 #begin Textures/Projectiles.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -4168,18 +4144,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Projectiles.png
 
-#begin Textures/Shadow.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Shadow.png
-
 #begin Textures/texClothes.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -4191,18 +4155,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/texClothes.png
-
-#begin Textures/texCmbtActions.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/texCmbtActions.png
 
 #begin Textures/texFlooring.png
 /importer:TextureImporter
@@ -4251,18 +4203,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/tree.png
-
-#begin Textures/Valley.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Valley.png
 
 #begin Textures/WhisperingTree.png
 /importer:TextureImporter

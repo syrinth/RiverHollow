@@ -235,21 +235,17 @@ namespace RiverHollow.Game_Managers
         {
             AddTexture(DataManager.DIALOGUE_TEXTURE, Content);
             AddTexture(DataManager.PROJECTILE_TEXTURE, Content);
-            AddTexture(@"Textures\Valley", Content);
         }
         private static void LoadIcons(ContentManager Content)
         {
             AddDirectoryTextures(@"Textures\ActionEffects", Content);
-            AddTexture(@"Textures\battle", Content);
             AddTexture(@"Textures\worldObjects", Content);
-            AddTexture(@"Textures\portraits", Content);
             AddTexture(@"Textures\tree", Content);
             AddTexture(@"Textures\WhisperingTree", Content);
             AddTexture(@"Textures\DarkWoodTree", Content);
             AddTexture(@"Textures\items", Content);
             AddTexture(@"Textures\AbilityAnimations", Content);
             AddTexture(@"Textures\texMachines", Content);
-            AddTexture(@"Textures\texCmbtActions", Content);
             AddTexture(@"Textures\Overworld", Content);
         }
         private static void AddDirectoryTextures(string directory, ContentManager Content, bool AddContent = true)
@@ -853,6 +849,9 @@ namespace RiverHollow.Game_Managers
 
             switch (e)
             {
+                case GameIconEnum.Book:
+                    rv = new GUIImage(new Rectangle(288, 80, 14, 14), HUD_COMPONENTS);
+                    break;
                 case GameIconEnum.Coin:
                     rv = new GUIImage(new Rectangle(0, 32, 16, 16), DIALOGUE_TEXTURE);
                     break;

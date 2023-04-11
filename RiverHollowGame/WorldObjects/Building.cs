@@ -162,6 +162,19 @@ namespace RiverHollow.Buildings
             return rv / 100;
         }
 
+        public int GetFormulaLevel()
+        {
+            int rv = 1;
+            foreach (var upgrade in GetUnlockedUpgrades())
+            {
+                if(upgrade.FormulaLevel > rv)
+                {
+                    rv = upgrade.FormulaLevel;
+                }
+            }
+            return rv;
+        }
+
         #region Upgrade Handlers
         public bool MaxLevel()
         {

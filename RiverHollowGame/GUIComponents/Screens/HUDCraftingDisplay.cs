@@ -35,13 +35,17 @@ namespace RiverHollow.GUIComponents.Screens
         private int _iRecipeListStart = 0;
         private int _iBatchSize = 1;
 
+        private List<int> _liCraftFormula;
+
         public HUDCraftingDisplay(Machine m)
         {
             _liRequiredItems = new List<GUIItemBox>();
             _objMachine = m;
             _gName = new GUIText("");
 
-            Setup(m.CraftingList);
+            _liCraftFormula = m.GetCraftingList();
+
+            Setup(_liCraftFormula);
 
             UpdateInfo(_iSelectedItemID);
 
@@ -312,7 +316,7 @@ namespace RiverHollow.GUIComponents.Screens
             _btnRight.Enable(true);
 
             _gSelection.CenterOnObject(_arrRecipes[0]);
-            UpdateInfo(_objMachine.CraftingList[_iRecipeListStart]);
+            UpdateInfo(_liCraftFormula[_iRecipeListStart]);
         }
         private void ShiftRight()
         {
@@ -321,7 +325,7 @@ namespace RiverHollow.GUIComponents.Screens
             _btnLeft.Enable(true);
 
             _gSelection.CenterOnObject(_arrRecipes[0]);
-            UpdateInfo(_objMachine.CraftingList[_iRecipeListStart]);
+            UpdateInfo(_liCraftFormula[_iRecipeListStart]);
         }
 
         private void UpdateInfo(int chosenID)
@@ -332,7 +336,7 @@ namespace RiverHollow.GUIComponents.Screens
             for (int i = 0; i < _arrRecipes.Length; i++)
             {
                 int index = i + _iRecipeListStart;
-                if (i + _iRecipeListStart < _objMachine.CraftingList.Count) { _arrRecipes[i].SetItem(DataManager.CraftItem(_objMachine.CraftingList[index], _iBatchSize)); }
+                if (i + _iRecipeListStart < _liCraftFormula.Count) { _arrRecipes[i].SetItem(DataManager.CraftItem(_liCraftFormula[index], _iBatchSize)); }
                 else { _arrRecipes[i].SetItem(null); }
 
                 _arrRecipes[i].Enable(_arrRecipes[i].BoxItem != null && InventoryManager.HasSufficientItems(_arrRecipes[i].BoxItem.GetRequiredItems()) && !_objMachine.CapacityFull());

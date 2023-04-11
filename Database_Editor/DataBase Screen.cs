@@ -617,6 +617,7 @@ namespace Database_Editor
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabShop"]) { rv = _diBasicXML[SHOPS_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabStatusEffect"]) { rv = _diBasicXML[STATUS_EFFECTS_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabTask"]) { rv = _diBasicXML[TASK_XML_FILE].Count; }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabUpgrade"]) { rv = _diBasicXML[UPGRADES_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabWorldObject"]) { rv = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE].Count; }
 
             return rv;
@@ -1100,7 +1101,7 @@ namespace Database_Editor
             else if (prevPage == tabCtl.TabPages["tabDungeons"]) { SaveDungeonInfo(); }            
             else if (prevPage == tabCtl.TabPages["tabItems"]) { SaveItemInfo(); }
             else if (prevPage == tabCtl.TabPages["tabLights"]) { SaveLightInfo(); }
-            else if (prevPage == tabCtl.TabPages["tabUpgrades"]) { SaveUpgradeInfo(); }
+            else if (prevPage == tabCtl.TabPages["tabUpgrade"]) { SaveUpgradeInfo(); }
             else if (prevPage == tabCtl.TabPages["tabShops"]) { SaveShopInfo(); }
             else if (prevPage == tabCtl.TabPages["tabStatusEffects"]) { SaveStatusEffectInfo(); }
             else if (prevPage == tabCtl.TabPages["tabTasks"]) { SaveTaskInfo(); }

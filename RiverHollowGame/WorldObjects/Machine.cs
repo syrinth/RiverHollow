@@ -3,14 +3,13 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
 using RiverHollow.SpriteAnimations;
-using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using RiverHollow.Buildings;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Map_Handling;
 
 namespace RiverHollow.WorldObjects
 {
@@ -30,7 +29,6 @@ namespace RiverHollow.WorldObjects
 
         public int Capacity => GetIntByIDKey("Capacity", 1);
         public int MaxBatch => GetIntByIDKey("Batch", CraftDaily ? 3 : 1);
-        public List<int> CraftingList { get; }
 
         public Machine(int id, Dictionary<string, string> stringData) : base(id)
         {
@@ -42,17 +40,6 @@ namespace RiverHollow.WorldObjects
             }
 
             Util.AssignValue(ref _sEffectWorking, "WorkEffect", stringData);
-
-            CraftingList = new List<int>();
-            if (stringData.ContainsKey("Makes"))
-            {
-                //Read in what items the machine can make
-                string[] split = Util.FindParams(stringData["Makes"]);
-                for (int i = 0; i < split.Length; i++)
-                {
-                    CraftingList.Add(int.Parse(split[i]));
-                }
-            }
 
             LoadDictionaryData(stringData);
 
@@ -70,8 +57,8 @@ namespace RiverHollow.WorldObjects
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\texMachines")
         {
             Sprite = new AnimatedSprite(@"Textures\texMachines");
-            Sprite.AddAnimation(AnimationEnum.ObjectIdle, (int)_pImagePos.X, (int)_pImagePos.Y, _pSize, 1, 0.3f, false);
-            Sprite.AddAnimation(AnimationEnum.PlayAnimation, (int)_pImagePos.X + _pSize.Y, (int)_pImagePos.Y, _pSize, _iWorkingFrames, _fFrameSpeed, false);
+            Sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _pSize, 1, 0.3f, false);
+            Sprite.AddAnimation(AnimationEnum.PlayAnimation, _pImagePos.X + _pSize.Y, _pImagePos.Y, _pSize, _iWorkingFrames, _fFrameSpeed, false);
             Sprite.PlayAnimation(AnimationEnum.ObjectIdle);
             Sprite.Show = true;
 
@@ -177,6 +164,26 @@ namespace RiverHollow.WorldObjects
             return CraftDaily || PlayerManager.CurrentEnergy >= Constants.ACTION_COST / 2;
         }
 
+        public List<int> GetCraftingList()
+        {
+            var craftingList = new List<int>();
+            string makes = GetStringByIDKey("Makes");
+            if (!string.IsNullOrEmpty(makes))
+            {
+                //Read in what items the machine can make
+                string[] split = Util.FindParams(makes);
+                for (int i = 0; i < split.Length; i++)
+                {
+                    string[] formula = Util.FindArguments(split[i]);
+                    if (formula.Length == 1 || (int.Parse(formula[1]) <= TownManager.GetBuildingByID(CurrentMap.BuildingID).GetFormulaLevel()))
+                    {
+                        craftingList.Add(int.Parse(formula[0]));
+                    }
+                }
+            }
+
+            return craftingList;
+        }
 
         /// <summary>
         /// Called by the HUDCraftingMenu to craft the selected item.

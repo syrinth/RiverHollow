@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="15" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="42">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="15" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="43">
  <properties>
-  <property name="Building" type="bool" value="true"/>
+  <property name="BuildingID" type="int" value="39"/>
   <property name="MapType" value="Town"/>
  </properties>
  <tileset firstgid="1" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="484" columns="22">
@@ -273,6 +273,7 @@
   </tile>
  </tileset>
  <tileset firstgid="485" source="../Tilesets/tsFurniture.tsx"/>
+ <tileset firstgid="785" source="../Tilesets/tilesetHouses.tsx"/>
  <layer id="6" name="Base Layer" width="15" height="13">
   <data encoding="csv">
 74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,
@@ -297,8 +298,8 @@
 136,52,52,49,49,49,49,49,49,49,49,49,49,49,137,
 136,71,71,71,71,71,71,71,71,71,71,71,71,71,137,
 136,93,93,93,93,93,93,93,93,93,93,93,93,93,137,
-136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
-136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
+136,1126,1256,0,0,0,0,0,0,0,0,0,0,0,137,
+136,1152,1230,0,0,0,0,0,0,0,0,0,0,0,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
 136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
@@ -333,16 +334,17 @@
   </object>
  </objectgroup>
  <objectgroup id="9" name="MapObject">
-  <object id="37" name="WorldObject" x="32.5468" y="96.9427" width="14.1071" height="13.5823">
+  <object id="37" name="WorldObject" x="144" y="96" width="32" height="16">
    <properties>
     <property name="ObjectID" type="int" value="93"/>
    </properties>
   </object>
-  <object id="38" name="WorldObject" x="176.814" y="96.9972" width="14.1071" height="13.5823">
+  <object id="38" name="WorldObject" x="192" y="96" width="32" height="16">
    <properties>
     <property name="ObjectID" type="int" value="92"/>
    </properties>
   </object>
+  <object id="42" name="Display_Upgrade" x="16" y="80" width="16" height="32"/>
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
   <object id="39" name="Workshop_NPC" x="112" y="160" width="16" height="16">
@@ -350,6 +352,6 @@
     <property name="ObjectID" type="int" value="92"/>
    </properties>
   </object>
-  <object id="41" name="NPC_16" x="112" y="80" width="16" height="16"/>
+  <object id="41" name="NPC_16" x="64" y="80" width="16" height="16"/>
  </objectgroup>
 </map>

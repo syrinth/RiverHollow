@@ -11,6 +11,7 @@ namespace RiverHollow.Misc
         public Point Icon => DataManager.GetPointByIDKey(ID, "Icon", DataType.Upgrade);
         public Dictionary<int, int> UpgradeRequirements => DataManager.IntDictionaryFromLookup(ID, "ItemID", DataType.Upgrade);
 
+        public int FormulaLevel => DataManager.GetIntByIDKey(ID, "Formula", DataType.Upgrade, 0);
         public int Profit => DataManager.GetIntByIDKey(ID, "Profit", DataType.Upgrade, 0);
         public int Chance => DataManager.GetIntByIDKey(ID, "Chance", DataType.Upgrade, 0);
         public int CraftingSlots => DataManager.GetIntByIDKey(ID, "CraftingSlots", DataType.Upgrade, 0);

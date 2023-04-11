@@ -395,6 +395,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Advanced Sales]</Value>
     </Item>
     <Item>
+      <Key>Upgrade_2</Key>
+      <Value>[Name:Advanced Workshop]</Value>
+    </Item>
+    <Item>
       <Key>Dungeon_0</Key>
       <Value>[Name:Cave]</Value>
     </Item>
@@ -676,11 +680,11 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_57</Key>
-      <Value>[Name:Calming Draught][Description:Take a deep breath and chug!]</Value>
+      <Value>[Name:Calming Draught][Description:Use this instead of flipping that table.]</Value>
     </Item>
     <Item>
       <Key>Item_58</Key>
-      <Value>[Name:Dreamless Potion][Description:Dreamless sleep guaranteed!]</Value>
+      <Value>[Name:Dreamless Potion][Description:A sleep so deep you might not even wake up.]</Value>
     </Item>
     <Item>
       <Key>Item_59</Key>
@@ -1249,6 +1253,26 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Item_200</Key>
       <Value>[Name:Whispering Wood]</Value>
+    </Item>
+    <Item>
+      <Key>Item_201</Key>
+      <Value>[Name:Garden Charm][Description:Deters unwanted guests from snacking on your hard work.]</Value>
+    </Item>
+    <Item>
+      <Key>Item_202</Key>
+      <Value>[Name:Caterpillar Curse][Description:Who has the prettiest roses now Brenda?!]</Value>
+    </Item>
+    <Item>
+      <Key>Item_203</Key>
+      <Value>[Name:Bird Charm][Description:For when they just don't seem to come to your feeder.]</Value>
+    </Item>
+    <Item>
+      <Key>Item_204</Key>
+      <Value>[Name:Sneezing Curse][Description:Teacher! You forgot to give uh... uuh... atchoo!]</Value>
+    </Item>
+    <Item>
+      <Key>Item_205</Key>
+      <Value>[Name:Whispering Plank]</Value>
     </Item>
     <Item>
       <Key>WorldObject_0</Key>
@@ -1857,6 +1881,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>WorldObject_151</Key>
       <Value>[Name:Whispering Tree]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_152</Key>
+      <Value>[Name:Spellbook]</Value>
     </Item>
     <Item>
       <Key>Cutscene_0</Key>

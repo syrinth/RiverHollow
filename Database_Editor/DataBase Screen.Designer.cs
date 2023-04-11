@@ -88,7 +88,7 @@
             this.btnItemCancel = new System.Windows.Forms.Button();
             this.dgvItemTags = new System.Windows.Forms.DataGridView();
             this.colItemTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tbItemDesc = new System.Windows.Forms.TextBox();
+            this.tbItemDescription = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tbItemID = new System.Windows.Forms.TextBox();
@@ -742,7 +742,7 @@
             this.tabItem.Controls.Add(this.cbItemType);
             this.tabItem.Controls.Add(this.btnItemCancel);
             this.tabItem.Controls.Add(this.dgvItemTags);
-            this.tabItem.Controls.Add(this.tbItemDesc);
+            this.tabItem.Controls.Add(this.tbItemDescription);
             this.tabItem.Controls.Add(this.label1);
             this.tabItem.Controls.Add(this.label2);
             this.tabItem.Controls.Add(this.tbItemID);
@@ -808,13 +808,13 @@
             this.colItemTags.Name = "colItemTags";
             this.colItemTags.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tbItemDesc
+            // tbItemDescription
             // 
-            this.tbItemDesc.Location = new System.Drawing.Point(320, 51);
-            this.tbItemDesc.Multiline = true;
-            this.tbItemDesc.Name = "tbItemDesc";
-            this.tbItemDesc.Size = new System.Drawing.Size(464, 53);
-            this.tbItemDesc.TabIndex = 20;
+            this.tbItemDescription.Location = new System.Drawing.Point(320, 51);
+            this.tbItemDescription.Multiline = true;
+            this.tbItemDescription.Name = "tbItemDescription";
+            this.tbItemDescription.Size = new System.Drawing.Size(464, 53);
+            this.tbItemDescription.TabIndex = 20;
             // 
             // label1
             // 
@@ -1686,7 +1686,7 @@
         private System.Windows.Forms.ComboBox cbItemType;
         private System.Windows.Forms.Button btnItemCancel;
         private System.Windows.Forms.DataGridView dgvItemTags;
-        private System.Windows.Forms.TextBox tbItemDesc;
+        private System.Windows.Forms.TextBox tbItemDescription;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbItemID;

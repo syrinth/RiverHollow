@@ -391,7 +391,7 @@
     </Item>
     <Item>
       <Key>97</Key>
-      <Value>[Type:Equipment][Subtype:Weapon][Image:0-0][Value:1500][ESub:Wand][Tier:1][Damage:Major][Magic:Minor][Resistance:Minor][ReqItems:22-3]</Value>
+      <Value>[Type:Resource][Image:0-0][Value:1500][ESub:Wand][Tier:1][Damage:Major][Magic:Minor][Resistance:Minor][ReqItems:22-3]</Value>
     </Item>
     <Item>
       <Key>98</Key>
@@ -471,7 +471,7 @@
     </Item>
     <Item>
       <Key>117</Key>
-      <Value>[Type:Equipment][Subtype:Weapon][Image:0-4][Value:1000][ESub:Spear][Tier:1][Atk:Major][Str:Major]</Value>
+      <Value>[Type:Resource][Image:0-4][Value:1000][ESub:Spear][Tier:1][Atk:Major][Str:Major]</Value>
     </Item>
     <Item>
       <Key>118</Key>
@@ -804,6 +804,26 @@
     <Item>
       <Key>200</Key>
       <Value>[Type:Resource][Image:5-3][Value]</Value>
+    </Item>
+    <Item>
+      <Key>201</Key>
+      <Value>[Type:Resource][Image:0-12][ItemGroups:Magic][Value:100][ReqItems:1-1]</Value>
+    </Item>
+    <Item>
+      <Key>202</Key>
+      <Value>[Type:Resource][Image:1-12][ItemGroups:Magic][Value:100][ReqItems:1-1|158-1]</Value>
+    </Item>
+    <Item>
+      <Key>203</Key>
+      <Value>[Type:Resource][Image:2-12][ItemGroups:Magic][Value:100][ReqItems:1-1|162-2]</Value>
+    </Item>
+    <Item>
+      <Key>204</Key>
+      <Value>[Type:Resource][Image:3-12][ItemGroups:Magic][Value:100][ReqItems:1-1]</Value>
+    </Item>
+    <Item>
+      <Key>205</Key>
+      <Value>[Type:Resource][Image:9-4][ReqItems:200-1][CraftAmount:2]</Value>
     </Item>
   </Asset>
 </XnaContent>
