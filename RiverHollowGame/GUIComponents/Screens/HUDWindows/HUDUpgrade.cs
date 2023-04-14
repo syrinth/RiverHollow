@@ -98,7 +98,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             profits.ScaledMoveBy(111, 36);
             _gImage.AddControl(profits);
 
-            var profitPercent = new GUIText((int)(_building.GetShopValueModifier() * 100));
+            var profitPercent = new GUIText((int)(_building.GetShopProfitModifier() * 100));
             profitPercent.AnchorAndAlignToObject(profits, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(3));
             _gImage.AddControl(profitPercent);
 

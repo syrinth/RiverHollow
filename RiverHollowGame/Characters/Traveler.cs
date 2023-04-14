@@ -117,7 +117,7 @@ namespace RiverHollow.Characters
             Building shop = TownManager.GetBuildingByID(BuildingID());
             if (shop != null)
             {
-                var modifier = !_bEaten ? 0 : (1 + shop.GetShopValueModifier() + _fFoodModifier);
+                var modifier = !_bEaten ? 0 : (1 + shop.GetShopProfitModifier() + _fFoodModifier);
                 Income = (int)(Value() * modifier);
             }
 

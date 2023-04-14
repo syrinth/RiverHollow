@@ -128,9 +128,9 @@ namespace RiverHollow.Items
             base.AddToInventoryTrigger();
             TownManager.AddToArchive(ID);
 
-            if (ToolType == ToolEnum.Backpack)
+            if (ToolType == ToolEnum.Backpack || ToolType == ToolEnum.Lantern)
             {
-                PlayerManager.AddTool(this); 
+                PlayerManager.AddTool(this);
                 return true;
             }
             else { return false; }

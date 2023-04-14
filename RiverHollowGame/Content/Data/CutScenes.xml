@@ -73,5 +73,13 @@
         <Item>[Speed:Player-0.5|10-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:10][Move:10-4-Up][Face:Player-Up][Face:10-Down][Speak:10-0][MoveToTown:10]</Item>
       </Value>
     </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>
+        <Item></Item>
+        <Item>[Map:mapGeneralStore][Player][Actors:11-Cutscene_Entrance][Deactivate:11]</Item>
+        <Item>[Speed:Player-0.5|11-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:11][Move:11-4-Up][Face:Player-Up][Face:11-Down][Speak:10-0][MoveToTown:11]</Item>
+      </Value>
+    </Item>
   </Asset>
 </XnaContent>

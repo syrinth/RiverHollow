@@ -50,6 +50,10 @@
       <Value>[Name:Making Magic]</Value>
     </Item>
     <Item>
+      <Key>Task_12</Key>
+      <Value>[Name:Generally a good thing]</Value>
+    </Item>
+    <Item>
       <Key>Actor_0</Key>
       <Value>[Name:Amanda]</Value>
     </Item>
@@ -1380,7 +1384,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_25</Key>
-      <Value>[Name:Specialties Shop]</Value>
+      <Value>[Name:General Store]</Value>
     </Item>
     <Item>
       <Key>WorldObject_26</Key>
@@ -1925,6 +1929,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Cutscene_8</Key>
       <Value>[Name:Making Magic]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_9</Key>
+      <Value>[Name:]</Value>
     </Item>
   </Asset>
 </XnaContent>

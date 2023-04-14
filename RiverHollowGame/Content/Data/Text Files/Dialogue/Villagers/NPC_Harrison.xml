@@ -3,7 +3,8 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name:Introduction][Text:Well hello there! The name's $Actor_11$. Merchant by trade, and I'm ready to get to work. If we're going to accomplish anything here, we're going to need a shop. First though, you had better talk to $Actor_16$. He says we need a $WorldObject_39$ before we can do anything else.]</Value>
+      <Value>[Name:Introduction][Text:Well hello there! The name's $Actor_11$. Merchant by trade, and I've heard about this litle village you've got started. Now, I'm a man who knows opportunity when he smells it and let me tell you, that is what this place smells like.
+]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -35,22 +36,19 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Name:Task_1_Start][Text:So, I've been thinking...
-With the store all set up, we've got some goods available and that's great, but that's just the start. We can't stop there, oh no.
-Merchants often wander the roads, buying and selling goods and there is a fortune to be made from them! By setting up a $WorldObject_112$, we'll give them a place to display their wares and sell them ours.
-Never forget, commerce is the lifeblood of a town, my friend. It might not seem like it now, but we'll need a lot of money if we're to grow this town.][UnlockObjectID:112]</Value>
+      <Value>[Name][Text][UnlockObjectID:112]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Name:Task_1_End][Text:The $WorldObject_112$ is finished? Excellent job, I can't wait to see what all the Merchants will bring.]</Value>
+      <Value>[Name][Text]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Name:Task_2_Start][Text:Ah! Good to see you again, I see that you've got the $WorldObject_39$ up and running so now it's time to set up that shop. You just set one up for me, and I'll see to it that we can start getting in supplies.][UnlockObjectID:25]</Value>
+      <Value>[Name:Task_12_Start][Text:I'm here, ready and willing,  to lend my expertise to this little enterprise of yours. It looks like you're lacking a  $WorldObject_25$. If you get me settled, I'll show you what useful things I can bring into town for you.][UnlockObjectID:25]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Name:Task_2_End][Text:Great job! If you come back tomorrow, I think I'll have some more work for you to do.]</Value>
+      <Value>[Name][Text]</Value>
     </Item>
   </Asset>
 </XnaContent>

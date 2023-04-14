@@ -18,7 +18,6 @@ namespace RiverHollow.Buildings
     {
         private Rectangle _rEntrance;
 
-        public int Income { get; private set; } = 1;
         public int Level { get; private set; } = 1;
 
         public string Description => GetTextData("Description");
@@ -144,7 +143,7 @@ namespace RiverHollow.Buildings
 
         public int GetTravelerChance()
         {
-            int rv = 0;
+            int rv = GetIntByIDKey("Traveller");
             foreach (var upgrade in GetUnlockedUpgrades())
             {
                 rv += upgrade.Chance;
@@ -152,9 +151,9 @@ namespace RiverHollow.Buildings
             return rv;
         }
 
-        public float GetShopValueModifier()
+        public float GetShopProfitModifier()
         {
-            float rv = 0;
+            float rv = GetFloatByIDKey("Profit", 0);
             foreach(var upgrade in GetUnlockedUpgrades())
             {
                 rv += upgrade.Profit;

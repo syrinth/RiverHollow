@@ -407,6 +407,10 @@ namespace RiverHollow.WorldObjects
         {
             return DataManager.GetIntByIDKey(ID, key, DataType.WorldObject, defaultValue);
         }
+        public float GetFloatByIDKey(string key, int defaultValue = -1)
+        {
+            return DataManager.GetFloatByIDKey(ID, key, DataType.WorldObject, defaultValue);
+        }
         public string GetStringByIDKey(string key)
         {
             return DataManager.GetStringByIDKey(ID, key, DataType.WorldObject);

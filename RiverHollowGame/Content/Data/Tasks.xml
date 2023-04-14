@@ -49,5 +49,9 @@
       <Key>11</Key>
       <Value>[Type:Build][StartNPC:10][AssignTrigger:GameStart][TargetObjectID:31][EndBuildingID:31][CutsceneID:8][UnlockMagic]</Value>
     </Item>
+    <Item>
+      <Key>12</Key>
+      <Value>[Type:Build][StartNPC:11][AssignTrigger:GameStart][TargetObjectID:25][EndBuildingID:25][CutsceneID:9]</Value>
+    </Item>
   </Asset>
 </XnaContent>
