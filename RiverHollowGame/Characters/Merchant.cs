@@ -53,7 +53,7 @@ namespace RiverHollow.Characters
         {
             if (!OnTheMap)
             {
-                if (TownRequirementsMet())
+                if (CheckArrivalTriggers())
                 {
                     if (ChosenRequests[0] == -1)
                     {
@@ -68,15 +68,12 @@ namespace RiverHollow.Characters
                         }
                     }
 
-                    if (HandleTravelTiming())
+                    if (_iNextArrival != -1) { TownManager.MerchantQueue.Insert(0, this); }
+                    else
                     {
-                        if (!_bArrivedOnce) { TownManager.MerchantQueue.Insert(0, this); }
-                        else
+                        if (Util.AddUniquelyToList(ref TownManager.MerchantQueue, this))
                         {
-                            if (Util.AddUniquelyToList(ref TownManager.MerchantQueue, this))
-                            {
-                                DIShops[ShopID].Randomize();
-                            }
+                            DIShops[ShopID].Randomize();
                         }
                     }
                 }
@@ -97,13 +94,6 @@ namespace RiverHollow.Characters
                     DIShops[_iShopID].ClearRandom();
                 }
             }
-        }
-
-        public void ArriveInTown()
-        {
-            _bArrivedOnce = true;
-
-            MoveToSpawn();
         }
 
         /// <summary>
@@ -217,7 +207,6 @@ namespace RiverHollow.Characters
                 timeToNextArrival = _iNextArrival,
                 relationShipStatus = (int)RelationshipState,
                 spokenKeys = _liSpokenKeys,
-                arrivedOnce = _bArrivedOnce,
                 requestString = string.Join("|", ChosenRequests)
             };
 
@@ -227,7 +216,6 @@ namespace RiverHollow.Characters
         {
             RelationshipState = (RelationShipStatusEnum)data.relationShipStatus;
             _iNextArrival = data.timeToNextArrival;
-            _bArrivedOnce = data.arrivedOnce;
 
             string[] split = Util.FindParams(data.requestString);
             for(int i = 0; i < Constants.MERCHANT_REQUEST_NUM; i++)

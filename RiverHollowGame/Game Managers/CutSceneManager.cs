@@ -318,7 +318,7 @@ namespace RiverHollow.Game_Managers
                                         //If the NPC ID could not be converted, effect the player. The string should be 'Player', but does not need to be
                                         characterID = -1;
                                     }
-                                    TownManager.DIVillagers[characterID].TryMoveIn();
+                                    TownManager.DIVillagers[characterID].TryToMoveIn();
                                     break;
                                 case CutsceneCommandEnum.End:
                                     EndCutscene();
@@ -608,7 +608,7 @@ namespace RiverHollow.Game_Managers
                                 //If the NPC ID could not be converted, effect the player. The string should be 'Player', but does not need to be
                                 characterID = -1;
                             }
-                            TownManager.DIVillagers[characterID].TryMoveIn();
+                            TownManager.DIVillagers[characterID].TryToMoveIn();
                         }
                                    
                         break;

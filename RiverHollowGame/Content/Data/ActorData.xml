@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:47][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:65][CanMarry][Key:Ander]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:47][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][CanMarry][Key:Ander]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:2][Collection:7|188][ShopData:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][FirstArrival:-1][ArrivalPeriod:-1][Key:Eldra]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:2][Collection:7|188][ShopData:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Eldra]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -95,7 +95,7 @@
     </Item>
     <Item>
       <Key>23</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:0][ArrivalPeriod:0][Key:Octavia]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Octavia]</Value>
     </Item>
     <Item>
       <Key>24</Key>
@@ -107,7 +107,7 @@
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:8][Collection:7|188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:64][Key:Yulia][StartMap:map_YuliaCottage]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:8][Collection:7|188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Yulia]</Value>
     </Item>
     <Item>
       <Key>27</Key>
@@ -139,23 +139,23 @@
     </Item>
     <Item>
       <Key>34</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:4][ArrivalPeriod:7][RequestIDs:147|158|168][RequiredObjectID][ShopData:4][Key:Abeline]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:4][ArrivalPeriod:7][RequestIDs:147|158|168][RequiredObjectID][ShopData:4][Key:Abeline]</Value>
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:12][ArrivalPeriod:2][RequestIDs:2-30|2-30|2-30][ShopData:7][Key:Erron]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelayl:12][ArrivalPeriod:2][RequestIDs:2-30|2-30|2-30][ShopData:7][Key:Erron]</Value>
     </Item>
     <Item>
       <Key>36</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:10][ArrivalPeriod:4][RequestIDs:79|89|90|91|92|93|94|95|96][ShopData:5][Key:Magda]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:10][ArrivalPeriod:4][RequestIDs:79|89|90|91|92|93|94|95|96][ShopData:5][Key:Magda]</Value>
     </Item>
     <Item>
       <Key>37</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:10][ArrivalPeriod:14][RequestIDs:2-30|2-30|2-30][ShopData:9][Key:Sybil]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:10][ArrivalPeriod:14][RequestIDs:2-30|2-30|2-30][ShopData:9][Key:Sybil]</Value>
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:2][ArrivalPeriod:4][RequestIDs:58|68|71|167|168][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:2][ArrivalPeriod:4][RequestIDs:58|68|71|167|168][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
     </Item>
     <Item>
       <Key>39</Key>

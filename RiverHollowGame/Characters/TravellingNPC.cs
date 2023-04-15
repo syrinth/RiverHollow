@@ -8,18 +8,19 @@ namespace RiverHollow.Characters
 {
     public abstract class TravellingNPC : TalkingActor
     {
+        static readonly string[] Triggers = { "TotalMoneyEarnedReq", "RequiredPopulation" , "ArrivalDelay", "RequiredVillager", "ItemID", "RequiredObjectID", "FirstArrival" };
+
+        protected Dictionary<int, int> _diRequiredObjectIDs;
+
         protected int _iNextArrival = -1;
         protected int ArrivalPeriod => GetIntByIDKey("ArrivalPeriod");
         protected int TotalMoneyEarnedNeeded => GetIntByIDKey("TotalMoneyEarnedReq");
-
-        protected Dictionary<int, int> _diRequiredObjectIDs;
         protected int RequiredPopulation => GetIntByIDKey("RequiredPopulation");
         protected int RequiredVillagerID => GetIntByIDKey("RequiredVillager");
         protected int RequiredSpecialItem => GetIntByIDKey("ItemID");
 
         public virtual RelationShipStatusEnum RelationshipState { get; set; }
         public bool Introduced => RelationshipState != RelationShipStatusEnum.None;
-        protected bool _bArrivedOnce = false;
 
         public TravellingNPC(int index, Dictionary<string, string> stringData) : base(index, stringData)
         {
@@ -38,9 +39,7 @@ namespace RiverHollow.Characters
             }
 
             OnTheMap = !stringData.ContainsKey("Inactive");
-
-            int arrivalDelay = Util.AssignValue("FirstArrival", stringData);
-            _iNextArrival = arrivalDelay;
+            _iNextArrival = GetIntByIDKey("ArrivalDelay");
         }
 
         public override void OpenShop()
@@ -48,9 +47,15 @@ namespace RiverHollow.Characters
             GUIManager.OpenMainObject(new HUDShopWindow(CurrentMap.TheShop.GetUnlockedMerchandise()));
         }
 
-        protected bool TownRequirementsMet()
+        protected bool CheckArrivalTriggers()
         {
-            foreach (KeyValuePair<int, int> kvp in _diRequiredObjectIDs)
+            //If they have no triggers. Do not pass go
+            if (new List<string>(Triggers).Find(x => GetBoolByIDKey(x)) == null)
+            {
+                return false;
+            }
+
+            foreach (var kvp in _diRequiredObjectIDs)
             {
                 if (TownManager.GetNumberTownObjects(kvp.Key) < kvp.Value)
                 {
@@ -58,7 +63,7 @@ namespace RiverHollow.Characters
                 }
             }
 
-            if(RequiredPopulation != -1)
+            if (RequiredPopulation != -1)
             {
                 if (TownManager.GetPopulation() < RequiredPopulation)
                 {
@@ -73,56 +78,30 @@ namespace RiverHollow.Characters
                 }
             }
 
-            if(RequiredSpecialItem != -1)
+            if (RequiredSpecialItem != -1)
             {
                 if (!PlayerManager.AlreadyBoughtUniqueItem(RequiredSpecialItem))
                 {
                     return false;
                 }
             }
-
-            //If there is a Money Earned Requirement and we have not reached it, fail the test
-            if (TotalMoneyEarnedNeeded != -1 && TotalMoneyEarnedNeeded < PlayerManager.TotalMoneyEarned)
+            if (TotalMoneyEarnedNeeded != -1 && TotalMoneyEarnedNeeded > PlayerManager.TotalMoneyEarned)
             {
                 return false;
             }
 
+            //This clause ensures that the NPC is validated immediately on the day of, or greater if they should have been added due to an update
+            //But is invalid if they are currently counting down to the next arrival.
+            if (GameCalendar.GetTotalDays() < GetIntByIDKey("FirstArrival") && _iNextArrival == -1)
+            {
+                return false;
+            }
+            else if (_iNextArrival > 0)
+            {
+                return --_iNextArrival == 0;
+            }
+
             return true;
-        }
-
-        #region Travel Methods
-        /// <summary>
-        /// Counts down the days until the Villager's first arrival, or
-        /// time to the next arrival if they do not live in town.
-        /// </summary>
-        /// <returns></returns>
-        public virtual bool HandleTravelTiming()
-        {
-            bool rv = false;
-
-            if (_iNextArrival > 0)
-            {
-                rv = TravelTimingHelper(ref _iNextArrival);
-            }
-
-            return rv;
-        }
-
-        /// <summary>
-        /// Given a timer, subtract one from the elapsed time and, if it has become 0
-        /// reset the time to next arrival.
-        /// </summary>
-        /// <param name="arrivalPeriod"></param>
-        /// <returns></returns>
-        private bool TravelTimingHelper(ref int arrivalPeriod)
-        {
-            bool rv = --arrivalPeriod == 0;
-            if (rv)
-            {
-                _iNextArrival = 0;
-            }
-
-            return rv;
         }
 
         /// <summary>
@@ -130,6 +109,5 @@ namespace RiverHollow.Characters
         /// to their home map and back to their spawn point.
         /// </summary>
         public virtual void MoveToSpawn() { }
-        #endregion
     }
 }

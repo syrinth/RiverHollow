@@ -185,6 +185,11 @@ namespace RiverHollow.Game_Managers
             return Util.GetEnumString((SeasonEnum)val);
         }
 
+        public static int GetTotalDays()
+        {
+            return ((int)(CurrentSeason - 1) * 28) + CurrentDay;
+        }
+
         /// <summary>
         /// Returns the number of minutes between the current time and dawn of the next day.
         /// Currently, one minute in game is equal to one second in real time. We are future proofed

@@ -321,7 +321,7 @@ namespace RiverHollow.Game_Managers
             if (MerchantQueue.Count > 0)
             {
                 Merchant chosenMerchant = MerchantQueue[0];
-                chosenMerchant.ArriveInTown();
+                chosenMerchant.MoveToSpawn();
                 MerchantQueue.Remove(chosenMerchant);
             }
         }

@@ -314,7 +314,7 @@ namespace RiverHollow
             //Places NPCs on the map
             foreach (Villager v in TownManager.DIVillagers.Values)
             {
-                v.VillagerMapHandling();
+                v.SetStartingLocation();
             }
 
             Camera.SetObserver(PlayerManager.PlayerActor);

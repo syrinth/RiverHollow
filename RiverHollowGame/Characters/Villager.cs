@@ -49,7 +49,7 @@ namespace RiverHollow.Characters
 
         protected SpawnStateEnum _eSpawnStatus = SpawnStateEnum.OffMap;
         public bool LivesInTown => _eSpawnStatus == SpawnStateEnum.HasHome;
-        public bool SpawnOnTheMap => _eSpawnStatus != SpawnStateEnum.OffMap;
+        public bool SpawnsOnAMap => _eSpawnStatus != SpawnStateEnum.OffMap;
 
         List<Request> _liHousingRequests;
 
@@ -69,7 +69,6 @@ namespace RiverHollow.Characters
             _liHousingRequests = new List<Request>();
             _diCollection = new Dictionary<int, bool>();
             _diItemMoods = new Dictionary<int, MoodEnum>();
-            _diRequiredObjectIDs = new Dictionary<int, int>();
             _diCompleteSchedule = new Dictionary<string, List<Dictionary<string, string>>>();
 
             if (!string.IsNullOrEmpty(StartMap))
@@ -178,46 +177,35 @@ namespace RiverHollow.Characters
 
         public override void RollOver()
         {
+            ClearPath();
             GiftedToday = false;
             if (GameCalendar.DayOfWeek == 0)
             {
                 WeeklyGiftGiven = false;
             }
 
-            bool startedDayInTown = _eSpawnStatus == SpawnStateEnum.WaitAtInn || _eSpawnStatus == SpawnStateEnum.VisitInn || _eSpawnStatus == SpawnStateEnum.HasHome;
-            if (TownRequirementsMet())
-            {
-                HandleTravelTiming();
-            }
-
             switch (_eSpawnStatus)
             {
                 case SpawnStateEnum.OffMap:
-                    CurrentMap?.RemoveActor(this);
-                    CurrentMapName = string.Empty;
+                    if (CheckArrivalTriggers())
+                    {
+                        _eSpawnStatus = ArrivalPeriod > 0 ? SpawnStateEnum.VisitInn : SpawnStateEnum.WaitAtInn;
+                        SpawnPets();
+                    }
+                    break;
+                case SpawnStateEnum.SendingToInn:
+                    _eSpawnStatus = SpawnStateEnum.WaitAtInn;
+                    break;
+                case SpawnStateEnum.VisitInn:
                     if (ArrivalPeriod > 0)
                     {
                         _iNextArrival = ArrivalPeriod;
                     }
-            
-                    break;
-                case SpawnStateEnum.SendingToInn:
-                    SendToTown();
-                    goto default;
-                case SpawnStateEnum.VisitInn:
-                case SpawnStateEnum.WaitAtInn:
-                    if (!startedDayInTown)
-                    {
-                        SpawnPets();
-                    }
-                    goto default;
-                case SpawnStateEnum.HasHome:
-                default:
-                    ClearPath();
+                    _eSpawnStatus = SpawnStateEnum.OffMap;
                     break;
             }
 
-            VillagerMapHandling();
+            MoveToSpawn();
         }
 
         /// <summary>
@@ -276,35 +264,21 @@ namespace RiverHollow.Characters
                 MoveToSpawn();
             }
         }
-        public override bool HandleTravelTiming()
+
+        public void SetStartingLocation()
         {
-            bool rv = false;
+            TryToMoveIn();
 
-            if (_eSpawnStatus == SpawnStateEnum.OffMap || (_eSpawnStatus == SpawnStateEnum.VisitInn && ArrivalPeriod > 0 ))
-            {
-                rv = base.HandleTravelTiming();
-                _eSpawnStatus =  rv ? SpawnStateEnum.VisitInn : SpawnStateEnum.OffMap;
-            }
-
-            return rv;
-        }
-
-        public void VillagerMapHandling()
-        {
-            TryMoveIn();
-
-            if (SpawnOnTheMap)
+            if (SpawnsOnAMap)
             {
                 MoveToSpawn();
-                DetermineValidSchedule();
             }
         }
-        /// <summary>
-        /// Quick call to see if the NPC's home is built.
-        /// </summary>
-        public void TryMoveIn()
+
+        //Try to move into Town
+        public void TryToMoveIn()
         {
-            if (TownRequirementsMet() && HouseID != -1 && TownManager.TownObjectBuilt(HouseID))
+            if (HouseID != -1 && TownManager.TownObjectBuilt(HouseID))
             {
                 TaskManager.AdvanceTaskProgress();
                 _eSpawnStatus = SpawnStateEnum.HasHome;
@@ -349,14 +323,15 @@ namespace RiverHollow.Characters
         /// </summary>
         public override void MoveToSpawn()
         {
-            OnTheMap = true;
-
+            OnTheMap = _eSpawnStatus != SpawnStateEnum.OffMap;
+ 
             string mapName = GetSpawnMapName();
+
+            CurrentMap?.RemoveCharacterImmediately(this);
+            CurrentMapName = mapName;
 
             if (!string.IsNullOrEmpty(mapName))
             {
-                CurrentMap?.RemoveCharacterImmediately(this);
-                CurrentMapName = mapName;
                 RHMap map = MapManager.Maps[mapName];
 
                 string strSpawn = string.Empty;
@@ -383,6 +358,7 @@ namespace RiverHollow.Characters
 
                 
                 map.AddCharacterImmediately(this);
+                DetermineValidSchedule();
             }
         }
         #endregion
