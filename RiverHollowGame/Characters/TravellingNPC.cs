@@ -1,9 +1,7 @@
 ﻿using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
-using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
@@ -62,7 +60,6 @@ namespace RiverHollow.Characters
 
             if(RequiredPopulation != -1)
             {
-
                 if (TownManager.GetPopulation() < RequiredPopulation)
                 {
                     return false;

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[Name:Introduction][Text:Hello, by any chance are you $Name$?
+You are? That's wonderful news. My name is $Actor_54$. I'm a wandering bookseller but it's always been my dream to own my own bookstore. Your town here seems like the perfect place to make my dreams come true.
+]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Text:Hello! You know, my family has been living in this town for over a century. It may not look like much, but this town runs in my blood.][Default][Name:1]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Text:Lovely day today, isn't it? It's a wonder what some fresh air will do for you!][Default][Name:2]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Name:ShopOpen][Text:Oh, hello $Name$, What can I do for you?][Selection:Shop]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Name:Gift][Text:Thank you!]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Name:Selection][Text:Well now, what can I do for you?][Selection:VillageTalk]</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Name:Raining|1][Text:What are you doing running around today? On a day like this, you should be inside where it's warm and dry.][Weather:Raining]</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>[Name:Raining|2][Text:My father used to tell me stories about nature spirits when I was a lad. Apparently some of them like to play in the rain. I fancy I can sometimes hear one, but I've never seen one with my own eyes.][Weather:Raining]</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>[Name][Text][UnlockObjectID:112]</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Name][Text]</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Name:Task_13_Start][Text:I've got a number of books that oyu might find useful and, of course, I'll work hard to make sure my $WorldObject_153$ will help draw more visitors to town.
+Thank you so much, I can't wait to live here!][UnlockObjectID:153]</Value>
+    </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>[Name][Text]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

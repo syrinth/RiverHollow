@@ -47,7 +47,7 @@
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:25][Collection:7|188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][ShopData:3][Key:Harrison][FirstArrival:6]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:25][Collection:7|188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][ShopData:3][Key:Harrison][FirstArrival:6][Size:16-32]</Value>
     </Item>
     <Item>
       <Key>12</Key>
@@ -91,7 +91,7 @@
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Villager][Key:Nevar][PortRow:1][HouseID:30][Collection:7|167][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:3]</Value>
+      <Value>[Type:Villager][Key:Nevar][PortRow:1][HouseID:30][Collection:7|167][Idle:0-0-1-0-T][Walk:0-0-1-0-T][FirstArrival:3][Size:16-28]</Value>
     </Item>
     <Item>
       <Key>23</Key>
@@ -216,6 +216,10 @@
     <Item>
       <Key>53</Key>
       <Value>[Type:Projectile][Size:16-16][Idle:32-0-1-1-T][KO:48-0-1-0.1-F][CollisionOffset:3-2][CollisionSize:8-8][Speed:3][Damage:1]</Value>
+    </Item>
+    <Item>
+      <Key>54</Key>
+      <Value>[Type:Villager][Key:Paige][PortRow:1][HouseID:153][Collection:7|167][Idle:0-0-1-0-T][Walk:0-0-1-0-T][RequiredPopulation:5][FirstArrival:1][Size:16-29]</Value>
     </Item>
   </Asset>
 </XnaContent>

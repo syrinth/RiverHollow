@@ -78,7 +78,15 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapGeneralStore][Player][Actors:11-Cutscene_Entrance][Deactivate:11]</Item>
-        <Item>[Speed:Player-0.5|11-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:11][Move:11-4-Up][Face:Player-Up][Face:11-Down][Speak:10-0][MoveToTown:11]</Item>
+        <Item>[Speed:Player-0.5|11-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:11][Move:11-4-Up][Face:Player-Up][Face:11-Down][Speak:11-0][MoveToTown:11]</Item>
+      </Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>
+        <Item></Item>
+        <Item>[Map:mapBookstore][Player][Actors:54-Cutscene_Entrance][Deactivate:54]</Item>
+        <Item>[Speed:Player-0.5|54-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:54][Move:54-4-Up][Face:Player-Up][Face:54-Down][Speak:54-0][MoveToTown:54]</Item>
       </Value>
     </Item>
   </Asset>

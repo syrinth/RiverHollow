@@ -53,5 +53,9 @@
       <Key>12</Key>
       <Value>[Type:Build][StartNPC:11][AssignTrigger:GameStart][TargetObjectID:25][EndBuildingID:25][CutsceneID:9]</Value>
     </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>[Type:Build][StartNPC:54][AssignTrigger:GameStart][TargetObjectID:153][EndBuildingID:153][CutsceneID:10]</Value>
+    </Item>
   </Asset>
 </XnaContent>

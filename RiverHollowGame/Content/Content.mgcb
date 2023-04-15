@@ -339,6 +339,11 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Nevar.xml
 
+#begin Data/Text Files/Dialogue/Villagers/NPC_Paige.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_Paige.xml
+
 #begin Data/Text Files/Dialogue/Villagers/NPC_Penelope.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -348,6 +353,11 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Sammy.xml
+
+#begin Data/Text Files/Dialogue/Villagers/NPC_TaeJoon.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_TaeJoon.xml
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Traveller1.xml
 /importer:XmlImporter
@@ -1123,6 +1133,11 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapArchives.tmx
+
+#begin Maps/Town/mapBookstore.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapBookstore.tmx
 
 #begin Maps/Town/mapBoutique.tmx
 /importer:TiledMapImporter
@@ -2188,6 +2203,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Octavia.png
 
+#begin Textures/Actors/NPCs/Paige.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/Paige.png
+
 #begin Textures/Actors/NPCs/Penelope.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2247,6 +2274,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Sybil.png
+
+#begin Textures/Actors/NPCs/TaeJoon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/TaeJoon.png
 
 #begin Textures/Actors/NPCs/Traveller1.png
 /importer:TextureImporter
@@ -3123,6 +3162,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Buildings/Archives.png
+
+#begin Textures/Buildings/Bookstore.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Buildings/Bookstore.png
 
 #begin Textures/Buildings/Boutique.png
 /importer:TextureImporter

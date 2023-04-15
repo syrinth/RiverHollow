@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[Name:Introduction][Text:Well hello there! The name's $Actor_11$. Merchant by trade, and I've heard about this litle village you've got started. Now, I'm a man who knows opportunity when he smells it and let me tell you, that is what this place smells like.
+]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Text:Hello! You know, my family has been living in this town for over a century. It may not look like much, but this town runs in my blood.][Default][Name:1]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Text:Lovely day today, isn't it? It's a wonder what some fresh air will do for you!][Default][Name:2]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Name:ShopOpen][Text:Oh, hello $Name$, What can I do for you?][Selection:Shop]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Name:Gift][Text:Thank you!]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Name:Selection][Text:Well now, what can I do for you?][Selection:VillageTalk]</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Name:Raining|1][Text:What are you doing running around today? On a day like this, you should be inside where it's warm and dry.][Weather:Raining]</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>[Name:Raining|2][Text:My father used to tell me stories about nature spirits when I was a lad. Apparently some of them like to play in the rain. I fancy I can sometimes hear one, but I've never seen one with my own eyes.][Weather:Raining]</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>[Name][Text][UnlockObjectID:112]</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Name][Text]</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Name:Task_13_Start][Text:I'm here, ready and willing,  to lend my expertise to this little enterprise of yours. It looks like you're lacking a  $WorldObject_25$. If you get me settled, I'll show you what useful things I can bring into town for you.][UnlockObjectID:25]</Value>
+    </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>[Name][Text]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

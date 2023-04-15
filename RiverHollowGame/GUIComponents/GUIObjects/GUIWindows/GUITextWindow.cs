@@ -95,7 +95,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             if (!GUIManager.IsMainObjectOpen()) {
                 GameManager.CurrentNPC?.StopTalking();
             }
-        }
+         }
 
         public void Setup(bool openUp)
         {

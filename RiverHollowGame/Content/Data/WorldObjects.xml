@@ -135,7 +135,7 @@
     </Item>
     <Item>
       <Key>33</Key>
-      <Value>[Type:Building][Texture:PotionHut][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:60-15|61-15][Upgrade_1:55-10|60-10][Upgrade_2:55-10|60-10][Subtype:Wheat]</Value>
+      <Value>[Type:Building][Texture:PotionHut][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:60-15|61-15][Upgrade_1:55-10|60-10][Upgrade_2:55-10|60-10]</Value>
     </Item>
     <Item>
       <Key>34</Key>
@@ -143,7 +143,7 @@
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Type:Building][Texture:Smithy][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20|188][LightID:3-30-86|3-80-86][Subtype:Ore]</Value>
+      <Value>[Type:Building][Texture:Smithy][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20|188][LightID:3-30-86|3-80-86]</Value>
     </Item>
     <Item>
       <Key>36</Key>
@@ -612,6 +612,10 @@
     <Item>
       <Key>152</Key>
       <Value>[Type:Machine][Image:64-320][Size:2-2][Base:2-1][BaseOffset:0-1][Makes:201|202|203|204][Daily]</Value>
+    </Item>
+    <Item>
+      <Key>153</Key>
+      <Value>[Type:Building][Texture:Bookstore][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20][Profit:50][Traveller:25]</Value>
     </Item>
   </Asset>
 </XnaContent>

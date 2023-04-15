@@ -51,7 +51,11 @@
     </Item>
     <Item>
       <Key>Task_12</Key>
-      <Value>[Name:Generally a good thing]</Value>
+      <Value>[Name:Specially For You]</Value>
+    </Item>
+    <Item>
+      <Key>Task_13</Key>
+      <Value>[Name:Turning a Page]</Value>
     </Item>
     <Item>
       <Key>Actor_0</Key>
@@ -271,6 +275,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Wisp Shot]</Value>
     </Item>
     <Item>
+      <Key>Actor_54</Key>
+      <Value>[Name:Paige]</Value>
+    </Item>
+    <Item>
       <Key>StatusEffect_0</Key>
       <Value>[Name:Defend]</Value>
     </Item>
@@ -457,6 +465,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Shop_11</Key>
       <Value>[Name:Apothecary]</Value>
+    </Item>
+    <Item>
+      <Key>Shop_12</Key>
+      <Value>[Name:Bookstore]</Value>
     </Item>
     <Item>
       <Key>Item_0</Key>
@@ -1895,6 +1907,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Spellbook]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_153</Key>
+      <Value>[Name:Bookstore]</Value>
+    </Item>
+    <Item>
       <Key>Cutscene_0</Key>
       <Value>[Name:Combat_Intro]</Value>
     </Item>
@@ -1932,7 +1948,11 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Cutscene_9</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Specially for you]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_10</Key>
+      <Value>[Name:Turning a Page]</Value>
     </Item>
   </Asset>
 </XnaContent>
