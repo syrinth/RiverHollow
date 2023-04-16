@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Database_Editor.Classes
 {
@@ -21,10 +22,11 @@ namespace Database_Editor.Classes
         public static readonly string PATH_TO_CUTSCENE_DIALOGUE = PATH_TO_DIALOGUE + @"\Cutscenes";
         public static readonly string PATH_TO_SCHEDULES = PATH_TO_DATA + @"\Schedules";
 
-        public static readonly string DEFAULT_WORLD_OBJECT_TAGS = "Image:0-0";
-        public static readonly string DEFAULT_ITEM_TAGS = "Image:,MerchType:None,Value:";
-        public static readonly string DEFAULT_ACTOR_TAGS = "Key:,PortRow:1,Size:16-34,Idle:0-0-1-0-T,Walk:0-0-1-0-T";
-        public static readonly string DEFAULT_SHOP_TAGS = "ItemID:,Shopkeeper:";
+        public static readonly string DEFAULT_ACTOR_TAGS = "Key:,Size:16-32,Idle:0-0-1-0-T,Walk:64-0-3-.2-T";
+        public static readonly string DEFAULT_TASK_TAGS = "StartNPC:,AssignTrigger:";
+        public static readonly string DEFAULT_WORLD_OBJECT_TAGS = "Image:0-0,Size:1-1,BaseOffset:0-0,Base:1-1";
+        public static readonly string DEFAULT_ITEM_TAGS = "Image:,Value:";
+        public static readonly string DEFAULT_SHOP_TAGS = "Shopkeeper:,ItemID:";
         public static readonly string DEFAULT_LIGHT_TAGS = "Texture:,Idle:1-1,Dimensions:";
         public static readonly string DEFAULT_UPGRADE_TAGS = "Icon:,Cost:100,ItemID:";
 

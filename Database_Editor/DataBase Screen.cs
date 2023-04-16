@@ -1,6 +1,7 @@
 ﻿using Database_Editor.Classes;
 using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
+using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -133,16 +134,16 @@ namespace Database_Editor
         {
             _diTabCollections = new Dictionary<XMLTypeEnum, XMLCollection>
             {
-                [XMLTypeEnum.WorldObject] = new XMLCollection(XMLTypeEnum.WorldObject, WORLD_OBJECT_REF_TAGS, TAGS_FOR_WORLD_OBJECTS, DEFAULT_WORLD_OBJECT_TAGS),
-                [XMLTypeEnum.Task] = new XMLCollection(XMLTypeEnum.Task, TASK_REF_TAGS, TAGS_FOR_TASKS, ""),
-                [XMLTypeEnum.Cutscene] = new XMLCollection(XMLTypeEnum.Cutscene, CUTSCENE_REF_TAGS, "", ""),
-                [XMLTypeEnum.StatusEffect] = new XMLCollection(XMLTypeEnum.StatusEffect, "", TAGS_FOR_STATUS_EFFECTS, ""),
-                [XMLTypeEnum.Dungeon] = new XMLCollection(XMLTypeEnum.Dungeon, DUNGEON_REF_TAGS, TAGS_FOR_DUNGEONS, ""),
-                [XMLTypeEnum.Item] = new XMLCollection(XMLTypeEnum.Item, ITEM_REF_TAGS, TAGS_FOR_ITEMS, DEFAULT_ITEM_TAGS),
-                [XMLTypeEnum.Actor] = new XMLCollection(XMLTypeEnum.Actor, ACTOR_REF_TAGS, "", DEFAULT_ACTOR_TAGS),
-                [XMLTypeEnum.Shop] = new XMLCollection(XMLTypeEnum.Shop, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA, DEFAULT_SHOP_TAGS),
-                [XMLTypeEnum.Light] = new XMLCollection(XMLTypeEnum.Light, "", TAGS_FOR_LIGHTS, DEFAULT_LIGHT_TAGS),
-                [XMLTypeEnum.Upgrade] = new XMLCollection(XMLTypeEnum.Upgrade, "", TAGS_FOR_UPGRADES, DEFAULT_UPGRADE_TAGS),
+                [XMLTypeEnum.WorldObject] = new XMLCollection(XMLTypeEnum.WorldObject, WORLD_OBJECT_REF_TAGS, TAGS_FOR_WORLD_OBJECTS),
+                [XMLTypeEnum.Task] = new XMLCollection(XMLTypeEnum.Task, TASK_REF_TAGS, TAGS_FOR_TASKS),
+                [XMLTypeEnum.Cutscene] = new XMLCollection(XMLTypeEnum.Cutscene, CUTSCENE_REF_TAGS, ""),
+                [XMLTypeEnum.StatusEffect] = new XMLCollection(XMLTypeEnum.StatusEffect, "", TAGS_FOR_STATUS_EFFECTS),
+                [XMLTypeEnum.Dungeon] = new XMLCollection(XMLTypeEnum.Dungeon, DUNGEON_REF_TAGS, TAGS_FOR_DUNGEONS),
+                [XMLTypeEnum.Item] = new XMLCollection(XMLTypeEnum.Item, ITEM_REF_TAGS, TAGS_FOR_ITEMS),
+                [XMLTypeEnum.Actor] = new XMLCollection(XMLTypeEnum.Actor, ACTOR_REF_TAGS, ""),
+                [XMLTypeEnum.Shop] = new XMLCollection(XMLTypeEnum.Shop, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA),
+                [XMLTypeEnum.Light] = new XMLCollection(XMLTypeEnum.Light, "", TAGS_FOR_LIGHTS),
+                [XMLTypeEnum.Upgrade] = new XMLCollection(XMLTypeEnum.Upgrade, "", TAGS_FOR_UPGRADES),
             };
         }
 
@@ -1247,7 +1248,7 @@ namespace Database_Editor
             contextMenu.Items.Clear();
             if (dgv == dgvItems)
             {
-                AddContextMenuItem("Add New", AddNewItem, true);
+                AddContextMenuItem("Add New", AddNewItem, true, Enum.GetNames(typeof(ItemEnum)));
                 AddContextMenuItem("All", dgvItemsContextMenuClick, false);
 
                 foreach (string s in Enum.GetNames(typeof(ItemEnum)))
@@ -1257,7 +1258,7 @@ namespace Database_Editor
             }
             else if (dgv == dgvWorldObjects)
             {
-                AddContextMenuItem("Add New", AddNewWorldObject, true);
+                AddContextMenuItem("Add New", AddNewWorldObject, true, Enum.GetNames(typeof(ObjectTypeEnum)));
                 AddContextMenuItem("All", dgvWorldObjectsContextMenuClick, false);
 
                 foreach (string s in Enum.GetNames(typeof(ObjectTypeEnum)))
@@ -1268,10 +1269,10 @@ namespace Database_Editor
                     }
                 }
             }
-            else if (dgv == dgvTasks) { AddContextMenuItem("Add New", AddNewTask, false); }
+            else if (dgv == dgvTasks) { AddContextMenuItem("Add New", AddNewTask, false, Enum.GetNames(typeof(TaskTypeEnum))); }
             else if (dgv == dgvCutscenes) { AddContextMenuItem("Add New", AddNewCutscene, false); }
             else if (dgv == dgvActors) {
-                AddContextMenuItem("Add New", AddNewActor, true);
+                AddContextMenuItem("Add New", AddNewActor, true, Enum.GetNames(typeof(ActorTypeEnum)));
                 AddContextMenuItem("All", dgActorsContextMenuClick, false);
                 foreach (string s in Enum.GetNames(typeof(ActorTypeEnum)))
                 {
@@ -1287,10 +1288,22 @@ namespace Database_Editor
             else if (dgv == dgvShops) { AddContextMenuItem("Add New", AddNewShop, false); }
         }
 
-        private void AddContextMenuItem(string text, EventHandler triggeredEvent, bool separator)
+        private void AddContextMenuItem(string text, EventHandler triggeredEvent, bool separator, params string[] subEntries)
         {
             ToolStripMenuItem tsmi = new ToolStripMenuItem(text);
-            tsmi.Click += new EventHandler(triggeredEvent);
+            if (subEntries.Length > 0)
+            {
+                foreach (var entry in subEntries)
+                {
+                    ToolStripMenuItem e = new ToolStripMenuItem(entry);
+                    e.Click += new EventHandler(triggeredEvent);
+                    tsmi.DropDownItems.Add(e);
+                }
+            }
+            else
+            {
+                tsmi.Click += new EventHandler(triggeredEvent);
+            }
             contextMenu.Items.Add(tsmi);
 
             if (separator)
@@ -1344,7 +1357,7 @@ namespace Database_Editor
         #endregion
 
         #region Add New
-        private void AddNewGenericXMLObject(XMLCollection collection)
+        private void AddNewGenericXMLObject(XMLCollection collection, string chosenType)
         {
             string tabIndex = GetName(collection.XMLType, ComponentTypeEnum.TabIndex);
             string columnName = GetName(collection.XMLType, ComponentTypeEnum.ColumnName);
@@ -1373,68 +1386,215 @@ namespace Database_Editor
 
             if (cb != null)
             {
-                cb.SelectedIndex = 0;
+                if (string.IsNullOrEmpty(chosenType)) { cb.SelectedIndex = 0; }
+                else { cb.SelectedItem = "Type:" + chosenType; }
             }
 
             dgvTags.Rows.Clear();
 
-            if (collection.DefaultTags != null)
+            string defaultTags = string.Empty;
+            switch (collection.XMLType)
             {
-                foreach (string s in collection.DefaultTags) { dgvTags.Rows.Add(); }
-                for (int i = 0; i < collection.DefaultTags.Count; i++)
+                case XMLTypeEnum.Actor:
+                    GetActorDefault(chosenType, ref defaultTags);
+                    break;
+                case XMLTypeEnum.Item:
+                    GetItemDefault(chosenType, ref defaultTags);
+                    break;
+                case XMLTypeEnum.Light:
+                    defaultTags = DEFAULT_LIGHT_TAGS;
+                    break;
+                case XMLTypeEnum.Shop:
+                    defaultTags = DEFAULT_SHOP_TAGS;
+                    break;
+                case XMLTypeEnum.Task:
+                    GetTaskDefault(chosenType, ref defaultTags);
+                    break;
+                case XMLTypeEnum.Upgrade:
+                    defaultTags = DEFAULT_UPGRADE_TAGS;
+                    break;
+                case XMLTypeEnum.WorldObject:
+                    GetWorldObjectDefault(chosenType, ref defaultTags);
+                    break;
+            }
+
+            if (defaultTags != null)
+            {
+                string[] split = defaultTags.Split(',');
+                for (int i = 0; i < split.Length; i++)
                 {
-                    dgvTags.Rows[i].Cells[columnTags].Value = collection.DefaultTags[i];
+                    dgvTags.Rows.Add();
+                    dgvTags.Rows[i].Cells[columnTags].Value = split[i];
                 }
             }
 
             tbName.Focus();
         }
+        private void GetActorDefault(string chosenType, ref string defaultTags)
+        {
+            ActorTypeEnum e = Util.ParseEnum<ActorTypeEnum>(chosenType);
+            switch (e)
+            {
+                case ActorTypeEnum.Animal:
+                    defaultTags = DEFAULT_ACTOR_TAGS + ",ObjectID:,ItemID:";
+                    break;
+                case ActorTypeEnum.Critter:
+                    defaultTags = DEFAULT_ACTOR_TAGS + ",Action1:0-0-3-0.15-T,Action2:64-0-2-0.15-T";
+                    break;
+                case ActorTypeEnum.Merchant:
+                    defaultTags = DEFAULT_ACTOR_TAGS + ",ShopData:,ArrivalDelay:,ArrivalPeriod:";
+                    break;
+                case ActorTypeEnum.Mob:
+                    defaultTags = "Key:,Size:16-32,Idle:3-.15-T,Walk:3-.15-T,KO:384-0-6-0.15-F,HP:,Damage:,Weight:,Speed:,ItemID:";
+                    break;
+                case ActorTypeEnum.Mount:
+                    defaultTags = DEFAULT_ACTOR_TAGS + ",ObjectID:";
+                    break;
+                case ActorTypeEnum.Pet:
+                    defaultTags = DEFAULT_ACTOR_TAGS + ",Alert:0-64-3-0.5-T,ObjectID:";
+                    break;
+                case ActorTypeEnum.Projectile:
+                    defaultTags = "Speed:3,Damage:1,Size:16-16,CollisionOffset:,CollisionSize:,Idle:0-0-1-1-T,KO:16-0-1-0.1-F";
+                    break;
+                case ActorTypeEnum.Traveler:
+                    defaultTags = DEFAULT_ACTOR_TAGS + ",Angry:0-32-1-0-F,Sad:0-32-1-0-F,Neutral:0-32-1-0-F,Happy:0-32-1-0-F,Building:,Value:,FavFood:,Disliked:,";
+                    break;
+                case ActorTypeEnum.Villager:
+                    defaultTags = DEFAULT_ACTOR_TAGS + ",HouseID:,Collection:";
+                    break;
+                default:
+                    defaultTags = DEFAULT_ACTOR_TAGS;
+                    break;
+            }
+        }
+        private void GetItemDefault(string chosenType, ref string defaultTags)
+        {
+            ItemEnum e = Util.ParseEnum<ItemEnum>(chosenType);
+            switch (e)
+            {
+                case ItemEnum.Blueprint:
+                    defaultTags = DEFAULT_ITEM_TAGS + ",ObjectID:";
+                    break;
+                case ItemEnum.Food:
+                    defaultTags = DEFAULT_ITEM_TAGS + ",FoodType:,FoodValue:,Stam:";
+                    break;
+                case ItemEnum.NPCToken:
+                    defaultTags = DEFAULT_ITEM_TAGS + ",NPC_ID:";
+                    break;
+                case ItemEnum.Resource:
+                    defaultTags = DEFAULT_ITEM_TAGS + ",ItemGroups:None,Value:";
+                    break;
+                case ItemEnum.Seed:
+                    defaultTags = DEFAULT_ITEM_TAGS + ",ObjectID:,Season:";
+                    break;
+                case ItemEnum.Tool:
+                    defaultTags = DEFAULT_ITEM_TAGS + ",Level:,Stam:";
+                    break;
+                default:
+                    defaultTags = DEFAULT_ITEM_TAGS + ",Count:";
+                    break;
+            }
+        }
+        private void GetTaskDefault(string chosenType, ref string defaultTags)
+        {
+            TaskTypeEnum e = Util.ParseEnum<TaskTypeEnum>(chosenType);
+            switch (e)
+            {
+                case TaskTypeEnum.Build:
+                    defaultTags = DEFAULT_TASK_TAGS + ",TargetObjectID:,EndBuildingID:,CutsceneID:";
+                    break;
+                case TaskTypeEnum.Fetch:
+                    defaultTags = DEFAULT_TASK_TAGS + ",GoalItem:,Count:,GoalNPC:";
+                    break;
+                case TaskTypeEnum.Talk:
+                    defaultTags = DEFAULT_TASK_TAGS + ",GoalNPC:";
+                    break;
+                default:
+                    defaultTags = DEFAULT_TASK_TAGS + ",Count:,GoalNPC";
+                    break;
+            }
+        }
+        private void GetWorldObjectDefault(string chosenType, ref string defaultTags)
+        {
+            ObjectTypeEnum e = Util.ParseEnum<ObjectTypeEnum>(chosenType);
+            switch (e)
+            {
+                case ObjectTypeEnum.Buildable:
+                    defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",ReqItems:";
+                    break;
+                case ObjectTypeEnum.Building:
+                    defaultTags = "Texture:,Size:7-8,Base:0-4-7-4,Entrance:4-6-1-2,ReqItems:55-5|60-5";
+                    break;
+                case ObjectTypeEnum.Container:
+                    defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",Rows:,Cols:,Opens";
+                    break;
+                case ObjectTypeEnum.Decor:
+                    defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",Rotation:FourWay,RotationBaseOffset:0-1,RotationSize:1-3";
+                    break;
+                case ObjectTypeEnum.Destructible:
+                    defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",HP:,Tool:,ReqLvl:1,ItemID:,DestructionAnim:208-0-3-0.1";
+                    break;
+                case ObjectTypeEnum.Hazard:
+                    defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",Damage:";
+                    break;
+                case ObjectTypeEnum.Machine:
+                    defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",Daily,Makes:";
+                    break;
+                case ObjectTypeEnum.Plant:
+                    defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",TrNum:,TrTime:,Season:,SeedID:,ItemID:";
+                    break;
+                default:
+                    defaultTags = DEFAULT_WORLD_OBJECT_TAGS;
+                    break;
+            }
+        }
+
         private void AddNewItem(object sender, EventArgs e)
         {
             SaveItemInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Item]);
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Item], sender.ToString());
         }
         private void AddNewWorldObject(object sender, EventArgs e)
         {
             SaveWorldObjectInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.WorldObject]);
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.WorldObject], sender.ToString());
         }
         private void AddNewTask(object sender, EventArgs e)
         {
             SaveTaskInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Task]);
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Task], sender.ToString());
         }
         private void AddNewCutscene(object sender, EventArgs e)
         {
             SaveCutsceneInfo();
             tbCutsceneTriggers.Clear();
             tbCutsceneDetails.Clear();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Cutscene]);
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Cutscene], sender.ToString());
         }
         private void AddNewActor(object sender, EventArgs e)
         {
             SaveActorInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Actor]);
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Actor], sender.ToString());
         }
         private void AddNewLight(object sender, EventArgs e)
         {
             SaveLightInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Light]);
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Light], sender.ToString());
         }
         private void AddNewUpgrade(object sender, EventArgs e)
         {
             SaveUpgradeInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Upgrade]);
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Upgrade], sender.ToString());
         }
         private void AddNewDungeon(object sender, EventArgs e)
         {
             SaveDungeonInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Dungeon]);
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Dungeon], "");
         }
         private void AddNewShop(object sender, EventArgs e)
         {
             SaveShopInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Shop]);
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Shop], "");
         }
         #endregion
 

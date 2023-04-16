@@ -44,7 +44,7 @@ namespace RiverHollow.Characters
 
             //_bJump = data.ContainsKey("Jump");
 
-            BodySprite = LoadSpriteAnimations(Util.LoadWorldAnimations(stringData), DataManager.FOLDER_MOBS + stringData["Texture"]);
+            BodySprite = LoadSpriteAnimations(Util.LoadWorldAnimations(stringData), DataManager.FOLDER_MOBS + stringData["Key"]);
 
             NewFoV();
         }
