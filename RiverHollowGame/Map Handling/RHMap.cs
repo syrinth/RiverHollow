@@ -1359,14 +1359,7 @@ namespace RiverHollow.Map_Handling
             removedList.ForEach(x => _liItems.Remove(x));
             removedList.Clear();
 
-            if (Scrying())
-            {
-                SetGameScale(Constants.NORMAL_SCALE);
-                GameManager.DropWorldObject();
-                LeaveTownMode();
-                Scry(false);
-                ResetCamera();
-            }
+            MapManager.EndBuildingAndScrying();
 
             return rv;
         }
@@ -1440,7 +1433,7 @@ namespace RiverHollow.Map_Handling
             if (_liTestTiles.Count > 0) { _liTestTiles.Clear(); }
 
             _objSelectedObject?.SelectObject(false);
-            if ((TownModeMoving() || TownModeDestroy() || TownModeStorage()) && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasBuildableObject())
+            if ((TownModeMoving() || TownModeDestroy()) && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasBuildableObject())
             {
                 WorldObject obj = MouseTile.RetrieveUppermostStructureObject();
                 if (obj != null && obj.IsBuildable())
@@ -1449,14 +1442,11 @@ namespace RiverHollow.Map_Handling
                     _objSelectedObject.SelectObject(true);
                 }
             }
-
-            if (Scrying())
+            
+            if (GameManager.HeldObject != null)
             {
                 _liTestTiles = new List<RHTile>();
-                if (GameManager.HeldObject != null)
-                {
-                    TestMapTiles(GameManager.HeldObject, _liTestTiles);
-                }
+                TestMapTiles(GameManager.HeldObject, _liTestTiles);
             }
             else
             {
@@ -1584,7 +1574,7 @@ namespace RiverHollow.Map_Handling
                     }
                 }
             }
-            else if (TownModeDestroy() || TownModeStorage())
+            else if (TownModeDestroy())
             {
                 if (MouseTile != null && MouseTile.HasBuildableObject())
                 {
@@ -1613,10 +1603,6 @@ namespace RiverHollow.Map_Handling
                                     InventoryManager.AddToInventory(kvp.Key, kvp.Value);
                                 }
                             }
-                            else if (TownModeStorage())
-                            {
-                                TownManager.AddToStorage(toRemove.ID);
-                            }
                             break;
                     }
                 }
@@ -1634,7 +1620,7 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = false;
 
-            if (TownModeMoving() || GameManager.BuildFromStorage || PlayerManager.ExpendResources(toBuild.RequiredToMake))
+            if (TownModeMoving() || PlayerManager.ExpendResources(toBuild.RequiredToMake))
             {
                 toBuild.SnapPositionToGrid(toBuild.CollisionBox.Location);
                 if (toBuild.PlaceOnMap(this))
@@ -1651,7 +1637,6 @@ namespace RiverHollow.Map_Handling
                     //Only leave TownMode if we were in Build Mode
                     if (TownModeBuild())
                     {
-                        if (GameManager.BuildFromStorage) { TownManager.RemoveFromStorage(toBuild.ID); }
                         TaskManager.AdvanceTaskProgress(toBuild);
 
                         LeaveTownMode();
@@ -1695,14 +1680,12 @@ namespace RiverHollow.Map_Handling
             //PlaceOnMap uses the CollisionBox as the base, then calculates backwards
             placeObject.SnapPositionToGrid(templateObject.CollisionBox.Location);
 
-            if (placeObject.PlaceOnMap(this) && (TownModeMoving() || GameManager.BuildFromStorage || PlayerManager.ExpendResources(placeObject.RequiredToMake)))
+            if (placeObject.PlaceOnMap(this))
             {
                 if (this == MapManager.TownMap)
                 {
                     TownManager.AddToTownObjects(placeObject);
                 }
-
-                if (GameManager.BuildFromStorage) { TownManager.RemoveFromStorage(placeObject.ID); }
 
                 switch (placeObject.Type)
                 {
@@ -1715,10 +1698,14 @@ namespace RiverHollow.Map_Handling
                         break;
                 }
 
-                //If we cannot build the WorldObject again due to lack of resources or running out of storage,
-                //clean up after ourselves and drop the WorldObject that we're holding
-                //If we're moving, we need to drop the object but do not leave build mode
-                if (TownModeMoving() || (GameManager.BuildFromStorage && !TownManager.HasInStorage(placeObject.ID)) || (!GameManager.BuildFromStorage && !InventoryManager.HasSufficientItems(placeObject.RequiredToMake)))
+                //Spend the item we just placed
+                if (!InventoryManager.RemoveItemFromInventory(GameManager.CurrentItem))
+                {
+                    InventoryManager.RemoveItemsFromInventory(GameManager.CurrentItem.ID, 1);
+                }
+
+                //Check for if we are done placing the object of that type
+                if (TownModeMoving() || !InventoryManager.HasItemInPlayerInventory(GameManager.CurrentItem.ID, 1))
                 {
                     if (!TownModeMoving())
                     {
@@ -1769,8 +1756,17 @@ namespace RiverHollow.Map_Handling
         {
             SetGameScale(Constants.NORMAL_SCALE);
 
-            //Re-open the Building Menu
-            GUIManager.OpenMenu();
+            if (GameManager.CurrentItem != null)
+            {
+                InventoryManager.RemoveItemFromInventory(GameManager.CurrentItem);
+                LeaveTownMode();
+                MapManager.EndBuildingAndScrying();
+            }
+            else
+            {
+                //Re-open the Building Menu
+                GUIManager.OpenMenu();
+            }
         }
 
         public void RemoveWorldObject(WorldObject o, bool immediately = false)

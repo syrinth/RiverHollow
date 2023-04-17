@@ -109,6 +109,7 @@
     <Compile Include="Items\Special.cs" />
     <Compile Include="Items\Tools\Scythe.cs" />
     <Compile Include="Items\Tools\Sword.cs" />
+    <Compile Include="Items\WrappedObjectItem.cs" />
     <Compile Include="Misc\EnvironmentalEffect.cs" />
     <Compile Include="Misc\FieldOfVision.cs" />
     <Compile Include="Misc\PriorityQueue.cs" />

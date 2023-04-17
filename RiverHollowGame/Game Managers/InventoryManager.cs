@@ -240,7 +240,6 @@ Exit:
         private static void RemoveItemsFromInventory(int itemID, int number, Item[,] inventory)
         {
             int leftToRemove = number;
-            bool done = false;
 
             int maxRows = 0;
             int maxColumns = 0;
@@ -249,10 +248,10 @@ Exit:
             List<Item> toRemove = new List<Item>();
             for (int i = 0; i < maxRows; i++)
             {
-                if (done) { break; }
+                if (leftToRemove == 0) { break; }
                 for (int j = 0; j < maxColumns; j++)
                 {
-                    if (done) { break; }
+                    if (leftToRemove == 0) { break; }
                     Item testItem = inventory[i, j];
                     if (testItem != null && testItem.ID == itemID)
                     {
@@ -269,8 +268,9 @@ Exit:
                         {
                             testItem.Remove(testItem.Number);
                             toRemove.Add(inventory[i, j]);
-                            leftToRemove -= temp;
                         }
+
+                        leftToRemove -= temp;
                     }
                 }
             }
@@ -367,7 +367,7 @@ Exit:
                     if (!noDisplay)
                     {
                         //Used to display an item that was just added to the inventory
-                        AddedItemList.Add(new Item(itemToAdd));
+                        AddedItemList.Add(DataManager.GetItem(itemToAdd.ID));
                     }
                 }
 
@@ -468,9 +468,9 @@ Exit:
         /// Helper to redirect method to the players Inventory
         /// </summary>
         /// <param name="it">The Item object to remove</param>
-        public static void RemoveItemFromInventory(Item it, bool playerInventory = true)
+        public static bool RemoveItemFromInventory(Item it, bool playerInventory = true)
         {
-            RemoveItemFromInventory(it, GetInventory(playerInventory));
+            return RemoveItemFromInventory(it, GetInventory(playerInventory));
         }
 
         /// <summary>
@@ -478,8 +478,10 @@ Exit:
         /// </summary>
         /// <param name="it">The item object to remove</param>
         /// <param name="inventory">The inventory to search</param>
-        public static void RemoveItemFromInventory(Item it, Item[,] inventory)
+        public static bool RemoveItemFromInventory(Item it, Item[,] inventory)
         {
+            bool rv = false;
+
             //Retrieve the max rows and columns from the inventory
             int maxRows = 0;
             int maxColumns = 0;
@@ -503,13 +505,14 @@ Exit:
                         }
                         //null the item and exit
                         inventory[i, j] = null;
+                        rv = true;
                         goto Exit;
                     }
                 }
             }
-        Exit:
+            Exit:
 
-            return;
+            return rv;
         }
         #endregion
 
@@ -539,6 +542,25 @@ Exit:
             return !LockedInventory && ExtraInventory != null;
         }
 
+        public static Item GetItemByID(int id)
+        {
+            int maxRows = 0;
+            int maxColumns = 0;
+            GetDimensions(PlayerInventory, ref maxRows, ref maxColumns);
+
+            for (int i = 0; i < maxRows; i++)
+            {
+                for (int j = 0; j < maxColumns; j++)
+                {
+                    if (PlayerInventory[i,j].ID == id)
+                    {
+                        return PlayerInventory[i, j];
+                    }
+                }
+            }
+
+            return null;
+        }
         public static Item GetItemFromLocation(int row, int column, bool PlayerInventory = true)
         {
             return GetInventory(PlayerInventory)?[row, column];

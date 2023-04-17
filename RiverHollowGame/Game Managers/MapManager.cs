@@ -154,6 +154,18 @@ namespace RiverHollow.Game_Managers
             CurrentMap = Maps[PlayerManager.CurrentMap];
         }
 
+        public static void EndBuildingAndScrying()
+        {
+            if (GameManager.Scrying() || GameManager.InTownMode())
+            {
+                GameManager.SetGameScale(Constants.NORMAL_SCALE);
+                GameManager.DropWorldObject();
+                GameManager.LeaveTownMode();
+                GameManager.Scry(false);
+                RiverHollow.ResetCamera();
+            }
+        }
+
         public static void ViewMap(string newMap)
         {
             CurrentMap = Maps[newMap];

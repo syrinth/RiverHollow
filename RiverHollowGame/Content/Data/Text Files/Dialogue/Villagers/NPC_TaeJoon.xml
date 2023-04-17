@@ -44,7 +44,7 @@
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Name:Task_13_Start][Text:I'm here, ready and willing,  to lend my expertise to this little enterprise of yours. It looks like you're lacking a  $WorldObject_25$. If you get me settled, I'll show you what useful things I can bring into town for you.][UnlockObjectID:25]</Value>
+      <Value>[Name:Task_14_Start][Text:I'm here, ready and willing,  to lend my expertise to this little enterprise of yours. It looks like you're lacking a $WorldObject_17$. If you get me settled, I'll show you what useful things I can bring into town for you.][UnlockObjectID:17]</Value>
     </Item>
     <Item>
       <Key>11</Key>

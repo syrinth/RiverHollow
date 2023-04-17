@@ -14,7 +14,7 @@ namespace RiverHollow.GUIComponents.Screens
     class BuildScreen : GUIScreen
     {
         public enum MenuEnum { BuildMenu, EditMenu };
-        public enum BuildTypeEnum { Building, Floor, Wallpaper, WorldObject, Storage };
+        public enum BuildTypeEnum { Building, Floor, Wallpaper, WorldObject };
         const int BTN_PADDING = 10;
 
         private MenuEnum _eCurrentMenu;
@@ -23,7 +23,6 @@ namespace RiverHollow.GUIComponents.Screens
         public static int CONSTRUCTBOX_WIDTH = 544; //(GUIManager.MAIN_COMPONENT_WIDTH) - (_gWindow.EdgeSize * 2) - ScaledTileSize
         public static int CONSTRUCTBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDTaskLog.MAX_SHOWN_TASKS) - (_gWindow.EdgeSize * 2)
 
-        GUIButton storageButton;
         List<GUIObject> _liBuildMenuObjects;
         List<GUIObject> _liEditMenuObjects;
         GUIMainObject _gMenuObject;
@@ -36,8 +35,6 @@ namespace RiverHollow.GUIComponents.Screens
 
             _eCurrentMenu = MenuEnum.BuildMenu;
             Scry(true);
-            storageButton = new GUIButton("Storage", BtnStorage);
-            storageButton.Enable(TownManager.GetStorageItems().Count > 0);
 
             _liBuildMenuObjects = new List<GUIObject>();
             if (MapManager.CurrentMap.IsOutside && MapManager.CurrentMap.IsTown) {
@@ -50,7 +47,6 @@ namespace RiverHollow.GUIComponents.Screens
             }
             _liBuildMenuObjects.Add(new GUIButton("Structures", BtnStructures));
             _liBuildMenuObjects.Add(new GUIButton("Flooring", BtnFlooring));
-            _liBuildMenuObjects.Add(storageButton);
             _liBuildMenuObjects.Add(new GUIButton("Edit Town", BtnEditTown));
             _liBuildMenuObjects.Add(new GUIButton("Exit", BtnExitBuildMenu));
 
@@ -61,7 +57,6 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 new GUIButton("Move", BtnMove),
                 new GUIButton("Destroy", BtnDestroy),
-                new GUIButton("Storage", BtnStorageMode),
                 new GUIButton("Exit", BtnLeaveEditMode)
             };
             GUIObject.CreateSpacedColumn(ref _liEditMenuObjects, GUIButton.BTN_WIDTH / 2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
@@ -163,13 +158,6 @@ namespace RiverHollow.GUIComponents.Screens
             GUIManager.OpenMainObject(_gMenuObject);
         }
 
-        public void BtnStorage()
-        {
-            _gMenuObject = new HUDConstruction(CloseMenu, BuildTypeEnum.Storage);
-            _gMenuObject.CenterOnScreen();
-            GUIManager.OpenMainObject(_gMenuObject);
-        }
-
         public void BtnEditTown()
         {
             SwitchMenus(MenuEnum.EditMenu);
@@ -205,14 +193,6 @@ namespace RiverHollow.GUIComponents.Screens
             GameManager.EnterTownModeDestroy();
         }
 
-        public void BtnStorageMode()
-        {
-            CloseMenu();
-            GUIManager.CloseMainObject();
-            GameManager.ClearGMObjects();
-            GameManager.EnterTownModeStorage();
-        }
-
         public void BtnLeaveEditMode()
         {
             SwitchMenus(MenuEnum.BuildMenu);
@@ -241,7 +221,6 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 case MenuEnum.BuildMenu:
                     AddControls(_liBuildMenuObjects);
-                    storageButton.Enable(TownManager.GetStorageItems().Count > 0);
                     for (int i = 0; i < _liBuildMenuObjects.Count; i++)
                     {
                         _liBuildMenuObjects[i].Show(true);
@@ -297,9 +276,6 @@ namespace RiverHollow.GUIComponents.Screens
                     case BuildTypeEnum.WorldObject:
                         GenerateConstructBoxes(PlayerManager.GetCraftingList(ObjectTypeEnum.Structure));
                         break;
-                    case BuildTypeEnum.Storage:
-                        GenerateConstructBoxes(TownManager.GetStorageItems());
-                        break;
                     case BuildTypeEnum.Building:
                         GenerateConstructBoxes(PlayerManager.GetCraftingList(ObjectTypeEnum.Building));
                         break;
@@ -326,21 +302,6 @@ namespace RiverHollow.GUIComponents.Screens
                         box.SetConstructionInfo(i, obj.Name(), obj.RequiredToMake);
                         _liStructures.Add(box);
                     }
-                }
-            }
-
-            /// <summary>
-            /// Given a list of WorldObject ids, generate a ConstructBox
-            /// </summary>
-            /// <param name="idList">The list of item IDs to create a box for</param>
-            public void GenerateConstructBoxes(Dictionary<int, int> dictionary)
-            {
-                foreach (KeyValuePair<int, int> kvp in dictionary)
-                {
-                    ConstructBox box = new ConstructBox(ConstructStorageObject);
-                    Buildable obj = (Buildable)DataManager.CreateWorldObjectByID(kvp.Key);
-                    box.SetConstructionInfo(kvp.Key, obj.Name(), kvp.Value);
-                    _liStructures.Add(box);
                 }
             }
 
@@ -380,24 +341,11 @@ namespace RiverHollow.GUIComponents.Screens
 
                 if (InventoryManager.HasSufficientItems(requiredToMake))
                 {
-                    GameManager.EnterTownModeBuild();
+                    GameManager.EnterTownModeBuild(true);
                     GameManager.PickUpWorldObject(obj);
                     MapManager.CurrentMap.AddHeldLights(obj.GetLights());
                     obj.SetPickupOffset();
                 }
-
-                GUIManager.CloseMainObject();
-                _closeMenu();
-            }
-
-            public void ConstructStorageObject(int objID)
-            {
-                Buildable obj = (Buildable)DataManager.CreateWorldObjectByID(objID);
-
-                GameManager.EnterTownModeBuild(true);
-                GameManager.PickUpWorldObject(obj);
-                MapManager.CurrentMap.AddHeldLights(obj.GetLights());
-                obj.SetPickupOffset();
 
                 GUIManager.CloseMainObject();
                 _closeMenu();

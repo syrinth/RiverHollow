@@ -71,7 +71,7 @@
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Type:Building][Texture:House_5][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5|60-5]</Value>
+      <Value>[Type:Building][Texture:Pottery][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86|3-80-86][ReqItems:55-5|60-5][UpgradeID:0-1][Profit:25][Traveller:10]</Value>
     </Item>
     <Item>
       <Key>18</Key>
@@ -191,7 +191,7 @@
     </Item>
     <Item>
       <Key>47</Key>
-      <Value>[Type:Decor][Image:96-416][BaseOffset:0-1][Base:3-2][Size:2-2][Rotation:TwoWay][RotationBaseOffset:0-1][RotationSize:2-4][Display][DisplayOffset:17-12][RotatedDisplayOffset:6-16][Value:500]</Value>
+      <Value>[Type:Decor][Image:96-416][BaseOffset:0-1][Base:3-2][Size:3-3][Rotation:TwoWay][RotationBaseOffset:0-1][RotationSize:2-4][Display][DisplayOffset:17-12][RotatedDisplayOffset:6-16][Value:500]</Value>
     </Item>
     <Item>
       <Key>48</Key>
@@ -616,6 +616,10 @@
     <Item>
       <Key>153</Key>
       <Value>[Type:Building][Texture:Bookstore][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40|60-20][Profit:50][Traveller:25]</Value>
+    </Item>
+    <Item>
+      <Key>154</Key>
+      <Value>[Type:Decor][Image:368-80][Size:1-2][BaseOffset:0-1][Base:1-1][Value:20]</Value>
     </Item>
   </Asset>
 </XnaContent>

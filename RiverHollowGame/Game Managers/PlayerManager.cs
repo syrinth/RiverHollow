@@ -268,7 +268,7 @@ namespace RiverHollow.Game_Managers
             {
                 PlayerActor.Draw(spriteBatch, true);
                 ToolInUse?.DrawToolAnimation(spriteBatch);
-                ObtainedItem?.Draw(spriteBatch, PlayerActor.BodySprite.LayerDepth);
+                ObtainedItem?.Draw(spriteBatch);
             }
         }
 

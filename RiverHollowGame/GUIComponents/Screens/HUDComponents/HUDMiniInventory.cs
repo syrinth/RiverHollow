@@ -187,8 +187,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     if (gib.Contains(mouse))
                     {
-                        GameManager.HUDItemCol = _liItems.IndexOf(gib);
-                        MoveSelector(GameManager.HUDItemCol);
+                        SelectGuiItemBox(gib);
                         break;
                     }
                 }
@@ -211,6 +210,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     if (gib.Contains(mouse) && gib.BoxItem != null)
                     {
+                        SelectGuiItemBox(gib);
                         rv = gib.BoxItem.ItemBeingUsed();
                         break;
                     }
@@ -236,6 +236,12 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             return rv;
+        }
+
+        private void SelectGuiItemBox(GUIItemBox box)
+        {
+            GameManager.HUDItemCol = _liItems.IndexOf(box);
+            MoveSelector(GameManager.HUDItemCol);
         }
 
         public void RowUp()

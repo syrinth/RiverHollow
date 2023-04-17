@@ -111,7 +111,7 @@ namespace RiverHollow.WorldObjects
         {
             RHTile tile = map.GetTileByPixelPosition(MapPosition);
             bool rv;
-            if (tile.CanPlaceOnTabletop(this))
+            if (tile != null && tile.CanPlaceOnTabletop(this))
             {
                 rv = ((Decor)tile.WorldObject).SetDisplayObject(this);
             }

@@ -64,10 +64,20 @@ namespace RiverHollow.Map_Handling
             _merch = m;
             if (m != null)
             {
-                merchItem = new MapItem(DataManager.GetItem(m.MerchID))
+                if (m.MerchType == Merchandise.MerchTypeEnum.Item)
                 {
-                    Position = _pPosition
-                };
+                    merchItem = new MapItem(DataManager.GetItem(m.MerchID))
+                    {
+                        Position = _pPosition
+                    };
+                }
+                else if (m.MerchType == Merchandise.MerchTypeEnum.WorldObject)
+                {
+                    merchItem = new MapItem(new WrappedObjectItem(m.MerchID))
+                    {
+                        Position = _pPosition
+                    };
+                }
             }
             else
             {

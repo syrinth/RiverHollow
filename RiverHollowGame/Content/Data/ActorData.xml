@@ -35,7 +35,7 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:17][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][CanMarry][CanBecomePregnant][Key:Fran][StartMap:mapWoods]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:99][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][CanMarry][CanBecomePregnant][Key:Fran][StartMap:mapWoods]</Value>
     </Item>
     <Item>
       <Key>9</Key>
@@ -220,6 +220,10 @@
     <Item>
       <Key>54</Key>
       <Value>[Type:Villager][Key:Paige][PortRow:1][HouseID:153][Collection:7|167][Idle:0-0-1-0-T][Walk:0-0-1-0-T][RequiredPopulation:5][FirstArrival:1][Size:16-29]</Value>
+    </Item>
+    <Item>
+      <Key>55</Key>
+      <Value>[Type:Villager][Key:TaeJoon][Size:16-30][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][HouseID:17][Collection][FirstArrival:6]</Value>
     </Item>
   </Asset>
 </XnaContent>

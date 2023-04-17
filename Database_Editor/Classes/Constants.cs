@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-
-namespace Database_Editor.Classes
+﻿namespace Database_Editor.Classes
 {
     public static class Constants
     {
         public enum EditableNPCDataEnum { Dialogue, Schedule };
         public enum XMLTypeEnum { None, Actor, Task, WorldObject, Item, Shop, StatusEffect, Cutscene, Light, Dungeon, Upgrade, TextFile };
-
         public enum ComponentTypeEnum { TextBoxName, TextBoxID, TextBoxDescription, DataGrid, DataGridTags, TabIndex, ColumnId, ColumnName, ColumnTags, ComboBoxType, ComboBoxSubtype };
 
         public static readonly string SPECIAL_CHARACTER = "^";

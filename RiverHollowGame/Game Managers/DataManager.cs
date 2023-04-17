@@ -496,6 +496,11 @@ namespace RiverHollow.Game_Managers
         }
         public static Item GetItem(int id, int num)
         {
+            if (id > Constants.FURNITURE_ID_OFFSET)
+            {
+                return new WrappedObjectItem(id - Constants.FURNITURE_ID_OFFSET);
+            }
+
             if (id != -1 && _diItemData.ContainsKey(id))
             {
                 Dictionary<string, string> diData = _diItemData[id];

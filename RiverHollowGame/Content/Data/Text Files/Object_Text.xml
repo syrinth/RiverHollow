@@ -58,6 +58,10 @@
       <Value>[Name:Turning a Page]</Value>
     </Item>
     <Item>
+      <Key>Task_14</Key>
+      <Value>[Name:Spinning Right Round]</Value>
+    </Item>
+    <Item>
       <Key>Actor_0</Key>
       <Value>[Name:Amanda]</Value>
     </Item>
@@ -279,6 +283,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Paige]</Value>
     </Item>
     <Item>
+      <Key>Actor_55</Key>
+      <Value>[Name:Tae Joon]</Value>
+    </Item>
+    <Item>
       <Key>StatusEffect_0</Key>
       <Value>[Name:Defend]</Value>
     </Item>
@@ -469,6 +477,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Shop_12</Key>
       <Value>[Name:Bookstore]</Value>
+    </Item>
+    <Item>
+      <Key>Shop_13</Key>
+      <Value>[Name:Pottery]</Value>
     </Item>
     <Item>
       <Key>Item_0</Key>
@@ -1364,7 +1376,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_17</Key>
-      <Value>[Name:$Character_8$s House]</Value>
+      <Value>[Name:Pottery]</Value>
     </Item>
     <Item>
       <Key>WorldObject_18</Key>
@@ -1911,6 +1923,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Bookstore]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_154</Key>
+      <Value>[Name:Tall Pot]</Value>
+    </Item>
+    <Item>
       <Key>Cutscene_0</Key>
       <Value>[Name:Combat_Intro]</Value>
     </Item>
@@ -1953,6 +1969,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Cutscene_10</Key>
       <Value>[Name:Turning a Page]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_11</Key>
+      <Value>[Name:]</Value>
     </Item>
   </Asset>
 </XnaContent>

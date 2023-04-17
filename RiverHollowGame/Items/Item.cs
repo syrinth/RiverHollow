@@ -33,10 +33,10 @@ namespace RiverHollow.Items
         protected int _iNum;
         public int Number { get => _iNum; }
 
-        public int Value => GetIntByIDKey("Value");
+        public virtual int Value => GetIntByIDKey("Value");
         public int TotalSellValue => Value * _iNum;
 
-        public int BuyPrice => Value * 2;
+        public virtual int BuyPrice => Value * 2;
         public int TotalBuyValue => BuyPrice * _iNum;
 
         //What items and in what numbers are required to make this item
@@ -46,7 +46,10 @@ namespace RiverHollow.Items
         protected KeyValuePair<int, int> _kvpRefinesInto;
         public KeyValuePair<int, int> RefinesInto => _kvpRefinesInto;
         #endregion
-        public Item() { }
+        public Item(int id)
+        {
+            ID = id;
+        }
 
         public Item(int id, Dictionary<string, string> stringData, int num)
         {
@@ -191,6 +194,7 @@ namespace RiverHollow.Items
             {
                 case ItemEnum.Blueprint:
                 case ItemEnum.Clothing:
+                case ItemEnum.Furniture:
                 case ItemEnum.NPCToken:
                 case ItemEnum.Special:
                 case ItemEnum.Tool:

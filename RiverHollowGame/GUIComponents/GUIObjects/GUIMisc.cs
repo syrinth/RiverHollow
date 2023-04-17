@@ -6,6 +6,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.Utilities;
+using System;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
@@ -225,7 +226,14 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             ItemObject = it;
             _gImg = new GUIImage(ItemObject.SourceRectangle, ItemObject.SourceRectangle.Width, ItemObject.SourceRectangle.Height, ItemObject.Texture);
-            _gImg.SetScale(CurrentScale);
+
+            int chosenScale = CurrentScale;
+            int biggestValue = Math.Max(ItemObject.SourceRectangle.Width, ItemObject.SourceRectangle.Height);
+
+            if(biggestValue > Constants.TILE_SIZE && biggestValue == Constants.TILE_SIZE * 2) { chosenScale = 2; }
+            else if(biggestValue > Constants.TILE_SIZE) { chosenScale = 1; }
+
+            _gImg.SetScale(chosenScale);
 
             _gText = new GUIText(ItemObject.Number.ToString(), true, DataManager.FONT_NUMBER_DISPLAY);
             _gText.SetColor(Color.White);

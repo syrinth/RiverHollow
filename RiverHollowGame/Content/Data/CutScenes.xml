@@ -89,5 +89,13 @@
         <Item>[Speed:Player-0.5|54-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:54][Move:54-4-Up][Face:Player-Up][Face:54-Down][Speak:54-0][MoveToTown:54]</Item>
       </Value>
     </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>
+        <Item></Item>
+        <Item>[Map:mapPottery][Player][Actors:55-Cutscene_Entrance][Deactivate:55]</Item>
+        <Item>[Speed:Player-0.5|55-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:55][Move:55-4-Up][Face:Player-Up][Face:55-Down][Speak:55-0][MoveToTown:55]</Item>
+      </Value>
+    </Item>
   </Asset>
 </XnaContent>
