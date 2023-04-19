@@ -26,7 +26,6 @@ namespace RiverHollow.Game_Managers
         public static Structure Market { get; private set; }
 
         private static Dictionary<int, List<WorldObject>> _diTownObjects;
-        private static Dictionary<int, int> _diStorage;
         public static Dictionary<int, Villager> DIVillagers { get; private set; }
         public static Dictionary<int, Merchant> DIMerchants { get; private set; }
         public static Dictionary<int, ValueTuple<bool, int>> DITravelerInfo { get; private set; }
@@ -40,7 +39,6 @@ namespace RiverHollow.Game_Managers
         public static void Initialize()
         {
             _diTownObjects = new Dictionary<int, List<WorldObject>>();
-            _diStorage = new Dictionary<int, int>();
             TownAnimals = new List<Animal>();
             Travelers = new List<Traveler>();
             MerchantQueue = new List<Merchant>();
@@ -363,36 +361,6 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static Dictionary<int, int> GetStorageItems()
-        {
-            Dictionary<int, int> rvDictionary = new Dictionary<int, int>();
-
-            foreach (KeyValuePair<int, int> kvp in _diStorage)
-            {
-                rvDictionary[kvp.Key] = kvp.Value;
-            }
-
-            return rvDictionary;
-        }
-        public static void AddToStorage(int itemID, int num = 1)
-        {
-            if (_diStorage.ContainsKey(itemID)) { _diStorage[itemID] += num; }
-            else { _diStorage[itemID] = num; }
-        }
-        public static bool HasInStorage(int itemID) { return _diStorage.ContainsKey(itemID) && _diStorage[itemID] > 0; }
-        public static void RemoveFromStorage(int itemID)
-        {
-            if (_diStorage.ContainsKey(itemID))
-            {
-                _diStorage[itemID]--;
-
-                if (_diStorage[itemID] == 0)
-                {
-                    _diStorage.Remove(itemID);
-                }
-            }
-        }
-
         public static void AddToTownObjects(WorldObject obj)
         {
             bool buildable = false;
@@ -475,7 +443,6 @@ namespace RiverHollow.Game_Managers
             TownData data = new TownData
             {
                 townName = TownName,
-                Storage = new List<StorageData>(),
                 TownAnimals = new List<int>(),
                 Travelers = new List<int>(),
                 VillagerData = new List<VillagerData>(),
@@ -485,17 +452,6 @@ namespace RiverHollow.Game_Managers
                 CodexEntries = new List<CodexEntryData>(),
                 Inventory = new List<ItemData>()
             };
-
-
-            foreach (KeyValuePair<int, int> kvp in GetStorageItems())
-            {
-                StorageData storageData = new StorageData
-                {
-                    objID = kvp.Key,
-                    number = kvp.Value
-                };
-                data.Storage.Add(storageData);
-            }
 
             foreach (Actor npc in TownAnimals)
             {
@@ -559,11 +515,6 @@ namespace RiverHollow.Game_Managers
         public static void LoadData(TownData saveData)
         {
             SetTownName(saveData.townName);
-
-            foreach (StorageData storageData in saveData.Storage)
-            {
-                AddToStorage(storageData.objID, storageData.number);
-            }
 
             foreach (int id in saveData.TownAnimals)
             {

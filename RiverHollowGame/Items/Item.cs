@@ -203,6 +203,16 @@ namespace RiverHollow.Items
                     return true;
             }
         }
+        public bool CanBeDropped()
+        {
+            switch (_eItemType)
+            {
+                case ItemEnum.Tool:
+                case ItemEnum.Furniture:
+                    return false;
+                default: return true;
+            }
+        }
         public bool Giftable()
         {
             return !(CompareType(ItemEnum.Tool) || CompareType(ItemEnum.Special));

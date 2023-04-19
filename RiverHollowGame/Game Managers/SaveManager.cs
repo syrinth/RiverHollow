@@ -175,9 +175,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Name")]
             public string townName;
 
-            [XmlArray(ElementName = "Storage")]
-            public List<StorageData> Storage;
-
             [XmlArray(ElementName = "VillagerData")]
             public List<VillagerData> VillagerData;
 
@@ -205,14 +202,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "TravelersCame")]
             public bool travelersCame;
 
-        }
-        public struct StorageData
-        {
-            [XmlElement(ElementName = "ObjectID")]
-            public int objID;
-
-            [XmlElement(ElementName = "Number")]
-            public int number;
         }
         public struct CalendarData
         {

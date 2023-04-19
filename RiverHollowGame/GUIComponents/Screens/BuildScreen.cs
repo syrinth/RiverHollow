@@ -56,7 +56,6 @@ namespace RiverHollow.GUIComponents.Screens
             _liEditMenuObjects = new List<GUIObject>
             {
                 new GUIButton("Move", BtnMove),
-                new GUIButton("Destroy", BtnDestroy),
                 new GUIButton("Exit", BtnLeaveEditMode)
             };
             GUIObject.CreateSpacedColumn(ref _liEditMenuObjects, GUIButton.BTN_WIDTH / 2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
@@ -183,14 +182,6 @@ namespace RiverHollow.GUIComponents.Screens
             GUIManager.CloseMainObject();
             GameManager.ClearGMObjects();
             GameManager.EnterTownModeMoving();
-        }
-
-        public void BtnDestroy()
-        {
-            CloseMenu();
-            GUIManager.CloseMainObject();
-            GameManager.ClearGMObjects();
-            GameManager.EnterTownModeDestroy();
         }
 
         public void BtnLeaveEditMode()

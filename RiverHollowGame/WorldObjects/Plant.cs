@@ -122,8 +122,7 @@ namespace RiverHollow.WorldObjects
         public override bool ProcessLeftClick()
         {
             bool rv = false;
-
-            if (FinishedGrowing() && _iHP > 0)
+            if (Tiles.Find(x => x.PlayerIsAdjacent()) != null && FinishedGrowing() && _iHP > 0)
             {
                 Harvest();
                 rv = true;

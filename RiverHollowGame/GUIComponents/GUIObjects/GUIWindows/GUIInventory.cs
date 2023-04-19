@@ -146,7 +146,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         else if (GameManager.CurrentWorldObject.CompareType(ObjectTypeEnum.Decor))
                         {
                             rv = true;
-                            ((Decor)GameManager.CurrentWorldObject).SetDisplayItem(clickedItem);
+                            ((Decor)GameManager.CurrentWorldObject).SetDisplayEntity(clickedItem);
                         }
                     }
                 }

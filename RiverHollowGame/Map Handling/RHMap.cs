@@ -483,6 +483,10 @@ namespace RiverHollow.Map_Handling
                         {
                             TheShop.AddItemSpot(new ShopItemSpot(this.Name, obj.Position, obj.Size.Width, obj.Size.Height));
                         }
+                        else if (obj.Name.Equals("ShopObject"))
+                        {
+                            TheShop.AddObjectSpot(GetTileByPixelPosition(obj.Position.ToPoint()));
+                        }
                         else if (obj.Name.Equals("Spirit"))
                         {
                             Spirit s = new Spirit(obj.Properties)
@@ -1359,7 +1363,16 @@ namespace RiverHollow.Map_Handling
             removedList.ForEach(x => _liItems.Remove(x));
             removedList.Clear();
 
-            MapManager.EndBuildingAndScrying();
+            Item dummyItem = DataManager.GetItem(GameManager.HeldObject);
+            if (dummyItem != null && InventoryManager.HasSpaceInInventory(dummyItem.ID, 1))
+            {
+                InventoryManager.AddToInventory(dummyItem.ID, 1);
+                MapManager.EndBuildingAndScrying();
+            }
+            else if (dummyItem == null)
+            {
+                MapManager.EndBuildingAndScrying();
+            }
 
             return rv;
         }
@@ -1403,7 +1416,7 @@ namespace RiverHollow.Map_Handling
                     }
                     else
                     {
-                        if (TargetTile != null && TargetTile.PlayerIsAdjacent())
+                        if (TargetTile != null)
                         {
                             //Retrieves any object associated with the tile, this will include
                             //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
@@ -1414,7 +1427,7 @@ namespace RiverHollow.Map_Handling
                                 rv = obj.ProcessLeftClick();
                             }
 
-                            if (!rv && !TargetTile.Passable())
+                            if (!rv && !TargetTile.Passable() && TargetTile.PlayerIsAdjacent())
                             {
                                 PlayerManager.GrabTile(TargetTile);
                             }
@@ -1433,10 +1446,10 @@ namespace RiverHollow.Map_Handling
             if (_liTestTiles.Count > 0) { _liTestTiles.Clear(); }
 
             _objSelectedObject?.SelectObject(false);
-            if ((TownModeMoving() || TownModeDestroy()) && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasBuildableObject())
+            if ((TownModeMoving()) && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasBuildableObject())
             {
                 WorldObject obj = MouseTile.RetrieveUppermostStructureObject();
-                if (obj != null && obj.IsBuildable())
+                if (obj != null && obj.IsBuildable() && obj.PlayerCanMove)
                 {
                     _objSelectedObject = (Buildable)obj;
                     _objSelectedObject.SelectObject(true);
@@ -1550,7 +1563,7 @@ namespace RiverHollow.Map_Handling
                     if (MouseTile.HasBuildableObject())
                     {
                         WorldObject targetObj = MouseTile.RetrieveUppermostStructureObject();
-                        if (targetObj != null)
+                        if (targetObj != null && targetObj.PlayerCanMove)
                         {
                             switch (targetObj.Type)
                             {
@@ -1571,39 +1584,6 @@ namespace RiverHollow.Map_Handling
                             }
                             rv = true;
                         }
-                    }
-                }
-            }
-            else if (TownModeDestroy())
-            {
-                if (MouseTile != null && MouseTile.HasBuildableObject())
-                {
-                    WorldObject toRemove = MouseTile.RetrieveUppermostStructureObject();
-
-                    switch (toRemove.Type)
-                    {
-                        case ObjectTypeEnum.Decor:
-                            if (((Decor)toRemove).HasDisplay) { ((Decor)toRemove).RemoveDisplayEntity(); }
-                            else { goto case ObjectTypeEnum.Wall; }
-                            break;
-                        case ObjectTypeEnum.Beehive:
-                        case ObjectTypeEnum.Buildable:
-                        case ObjectTypeEnum.Container:
-                            if (((Container)toRemove).HasItem()) { break; }
-                            else { goto case ObjectTypeEnum.Wall; }
-                        case ObjectTypeEnum.Floor:
-                        case ObjectTypeEnum.Garden:
-                        case ObjectTypeEnum.Wall:
-                            SoundManager.PlayEffect("buildingGrab");
-                            RemoveWorldObject(toRemove);
-                            if (TownModeDestroy())
-                            {
-                                foreach (KeyValuePair<int, int> kvp in ((Buildable)toRemove).RequiredToMake)
-                                {
-                                    InventoryManager.AddToInventory(kvp.Key, kvp.Value);
-                                }
-                            }
-                            break;
                     }
                 }
             }
@@ -1640,7 +1620,7 @@ namespace RiverHollow.Map_Handling
                         TaskManager.AdvanceTaskProgress(toBuild);
 
                         LeaveTownMode();
-                        FinishBuilding();
+                        FinishBuilding(true);
 
                         if (toBuild.CompareType(ObjectTypeEnum.Building))
                         {
@@ -1698,23 +1678,22 @@ namespace RiverHollow.Map_Handling
                         break;
                 }
 
-                //Spend the item we just placed
-                if (!InventoryManager.RemoveItemFromInventory(GameManager.CurrentItem))
-                {
-                    InventoryManager.RemoveItemsFromInventory(GameManager.CurrentItem.ID, 1);
-                }
-
+                Item dummyItem = DataManager.GetItem(GameManager.HeldObject);
                 //Check for if we are done placing the object of that type
-                if (TownModeMoving() || !InventoryManager.HasItemInPlayerInventory(GameManager.CurrentItem.ID, 1))
+                if (TownModeMoving() || !InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
                 {
                     if (!TownModeMoving())
                     {
                         LeaveTownMode();
-                        FinishBuilding();
+                        FinishBuilding(false);
                     }
 
                     GameManager.DropWorldObject();
                     ClearHeldLights();
+                }
+                else if(InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
+                {
+                    InventoryManager.RemoveItemsFromInventory(dummyItem.ID, 1);
                 }
 
                 rv = true;
@@ -1752,20 +1731,19 @@ namespace RiverHollow.Map_Handling
 
         #endregion
 
-        public void FinishBuilding()
+        public void FinishBuilding(bool openMenu)
         {
             SetGameScale(Constants.NORMAL_SCALE);
 
-            if (GameManager.CurrentItem != null)
-            {
-                InventoryManager.RemoveItemFromInventory(GameManager.CurrentItem);
-                LeaveTownMode();
-                MapManager.EndBuildingAndScrying();
-            }
-            else
+            if (openMenu)
             {
                 //Re-open the Building Menu
                 GUIManager.OpenMenu();
+            }
+            else
+            {
+                LeaveTownMode();
+                MapManager.EndBuildingAndScrying();
             }
         }
 

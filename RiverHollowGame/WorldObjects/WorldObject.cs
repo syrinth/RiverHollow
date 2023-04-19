@@ -9,6 +9,11 @@ using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.GUIComponents.Screens;
+using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.GUIComponents.GUIObjects;
+using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 
 namespace RiverHollow.WorldObjects
 {
@@ -26,6 +31,8 @@ namespace RiverHollow.WorldObjects
         public string MapName { get; protected set; } = string.Empty;
         public RHMap CurrentMap => MapManager.Maps.ContainsKey(MapName) ? MapManager.Maps[MapName] : null;
 
+        public bool PlayerCanMove => !ShopItem;
+        public bool ShopItem { get; protected set; } = false;
         private bool _bMovable = false;
         private DirectionEnum _eShoveDirection = DirectionEnum.None;
         private DirectionEnum _ePullDirection = DirectionEnum.None;
@@ -69,6 +76,10 @@ namespace RiverHollow.WorldObjects
         public virtual string Name()
         {
             return GetTextData("Name");
+        }
+        public virtual string Description()
+        {
+            return Name() + System.Environment.NewLine + GetTextData("Description");
         }
 
         protected WorldObject(int id)
@@ -181,6 +192,23 @@ namespace RiverHollow.WorldObjects
             if (Constants.DRAW_COLLISION)
             {
                 spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), CollisionBox, new Rectangle(160, 128, 2, 2), Color.White * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, Sprite.LayerDepth - 1);
+            }
+
+            if (ShopItem && !GameManager.GamePaused() && !CutsceneManager.Playing && Sprite.SpriteRectangle.Contains(GUICursor.GetWorldMousePosition()))
+            {
+                int value = GetIntByIDKey("Value");
+
+                BitmapFont font = DataManager.GetBitMapFont(@"Fonts\FontBattle");
+                Size2 size = font.MeasureString(value.ToString());
+                int delta = (int)size.Width - Sprite.SpriteRectangle.Width;
+                spriteBatch.DrawString(font, value.ToString(), Sprite.Position.ToVector2() + new Vector2(-delta / 2, -8), Color.White, Constants.MAX_LAYER_DEPTH);
+
+                if (!GUIManager.IsHoverWindowOpen())
+                {
+                    GUIItemDescriptionWindow win = new GUIItemDescriptionWindow(this, Point.Zero);
+                    win.AnchorToScreen(SideEnum.BottomRight);
+                    GUIManager.OpenHoverWindow(win, Sprite.SpriteRectangle, false);
+                }
             }
         }
         public void DrawItem(SpriteBatch spriteBatch, MapItem i)
@@ -302,6 +330,15 @@ namespace RiverHollow.WorldObjects
             PickupOffset = Util.MultiplyPoint(Util.DividePoint(PickupOffset, Constants.TILE_SIZE),  Constants.TILE_SIZE);
         }
 
+        public void AddToInventory()
+        {
+            Item displayItem = DataManager.GetItem(this);
+            if (InventoryManager.HasSpaceInInventory(displayItem.ID, 1))
+            {
+                InventoryManager.AddToInventory(displayItem);
+            }
+        }
+
         public virtual List<Light> GetLights()
         {
             List<Light> lights = null;
@@ -354,6 +391,11 @@ namespace RiverHollow.WorldObjects
 
         public bool WallObject() { return _ePlacement == ObjectPlacementEnum.Wall; }
         public bool FlooringObject() { return _ePlacement == ObjectPlacementEnum.Floor; }
+
+        public void SetShopItem()
+        {
+            ShopItem = true;
+        }
 
         public virtual bool CanPickUp() { return false; }
 

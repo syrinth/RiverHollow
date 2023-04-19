@@ -73,14 +73,21 @@ namespace RiverHollow.WorldObjects
         {
             bool rv = false;
 
-            //Currently, only display Decor objects can be interacted with.
-            if (CanDisplay)
+            if (ShopItem)
             {
-                rv = true;
-                if (Archive && _itemDisplay == null)
+                MapManager.CurrentMap.TheShop?.Interact(MapManager.CurrentMap, GUICursor.Position);
+            }
+            else
+            {
+                //Currently, only display Decor objects can be interacted with.
+                if (CanDisplay)
                 {
-                    GameManager.SetSelectedWorldObject(this);
-                    GUIManager.OpenMainObject(new HUDInventoryDisplay());
+                    rv = true;
+                    if (Archive || _itemDisplay == null)
+                    {
+                        GameManager.SetSelectedWorldObject(this);
+                        GUIManager.OpenMainObject(new HUDInventoryDisplay());
+                    }
                 }
             }
 
@@ -200,7 +207,7 @@ namespace RiverHollow.WorldObjects
         public void RotateToDirection(DirectionEnum dir) { RotateToDirection((int)dir); }
         private void RotateToDirection(int dir)
         {
-            for (int i = 0; i < dir; i++)
+            for (int i = 1; i < dir; i++)
             {
                 Rotate();
             }
@@ -208,19 +215,24 @@ namespace RiverHollow.WorldObjects
 
         /// <summary>
         /// Handler for removing, and not swapping out, the display entity.
-        /// If we're in destroy mode, destroy the display object. Otherwise, send
+        /// If we're in PutAway mode, destroy the display object. Otherwise, send
         /// the entity to storage
         /// </summary>
         public void RemoveDisplayEntity()
         {
-            if (_objDisplay != null && GameManager.TownModeDestroy())
+            if (_objDisplay != null)
             {
-                foreach (KeyValuePair<int, int> kvp in _objDisplay.RequiredToMake)
+                _objDisplay.AddToInventory();
+                _objDisplay = null;
+            }
+            else if (_itemDisplay != null)
+            {
+                if (InventoryManager.HasSpaceInInventory(_itemDisplay.ID, 1))
                 {
-                    InventoryManager.AddToInventory(kvp.Key, kvp.Value);
+                    InventoryManager.AddToInventory(_itemDisplay);
+                    _itemDisplay = null;
                 }
             }
-            else { StoreDisplayEntity(); }
         }
 
         /// <summary>
@@ -235,7 +247,7 @@ namespace RiverHollow.WorldObjects
             {
                 rv = true;
                 _objDisplay = obj;
-                SyncDisplayObject();
+                
             }
 
             return rv;
@@ -246,13 +258,19 @@ namespace RiverHollow.WorldObjects
         /// for the given item.
         /// </summary>
         /// <param name="it">The Item object to display</param>
-        public void SetDisplayItem(Item it)
+        public void SetDisplayEntity(Item it)
         {
             if (!Archive || !TownManager.DIArchive[it.ID].Item2)
             {
                 if (StoreDisplayEntity())
                 {
-                    _itemDisplay = DataManager.GetItem(it.ID);
+                    if (it.ID > Constants.FURNITURE_ID_OFFSET)
+                    {
+                        _objDisplay = (Decor)DataManager.CreateWorldObjectByID(it.ID);
+                        SyncDisplayObject();
+                    }
+                    else { _itemDisplay = DataManager.GetItem(it.ID); }
+
                     InventoryManager.RemoveItemsFromInventory(it.ID, 1);
                     GUIManager.CloseMainObject();
 
@@ -274,19 +292,19 @@ namespace RiverHollow.WorldObjects
         private bool StoreDisplayEntity()
         {
             bool rv = true;
-            if (_itemDisplay != null)
+            Item displayItem = null;
+
+            if (_itemDisplay != null) { displayItem = _itemDisplay; }
+            else if (_objDisplay != null) { displayItem = DataManager.GetItem(_objDisplay); }
+
+            if (displayItem != null)
             {
-                if (InventoryManager.HasSpaceInInventory(_itemDisplay.ID, 1))
+                if (InventoryManager.HasSpaceInInventory(displayItem.ID, 1))
                 {
-                    InventoryManager.AddToInventory(_itemDisplay);
+                    InventoryManager.AddToInventory(displayItem);
                     _itemDisplay = null;
                 }
                 else { rv = false; }
-            }
-            if (_objDisplay != null)
-            {
-                TownManager.AddToStorage(_objDisplay.ID);
-                _objDisplay = null;
             }
 
             return rv;
@@ -330,7 +348,7 @@ namespace RiverHollow.WorldObjects
             else if (!strData[2].Equals("null"))
             {
                 int itemDisplayID = int.Parse(strData[2]);
-                SetDisplayItem(DataManager.GetItem(itemDisplayID));
+                SetDisplayEntity(DataManager.GetItem(itemDisplayID));
             }
         }
     }

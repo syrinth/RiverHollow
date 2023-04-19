@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
+using RiverHollow.Items;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 
@@ -56,6 +57,19 @@ namespace RiverHollow.WorldObjects
             }
 
             return !OutsideOnly || (OutsideOnly && MapManager.CurrentMap.IsOutside);
+        }
+
+        public override bool ProcessLeftClick()
+        {
+            bool rv = false;
+            if (GameManager.HeldObject == null)
+            {
+                rv = true;
+                CurrentMap.RemoveWorldObject(this, true);
+                GameManager.MovingWorldObject(this);
+            }
+
+            return rv;
         }
     }
 }

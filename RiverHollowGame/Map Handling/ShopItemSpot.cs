@@ -71,13 +71,6 @@ namespace RiverHollow.Map_Handling
                         Position = _pPosition
                     };
                 }
-                else if (m.MerchType == Merchandise.MerchTypeEnum.WorldObject)
-                {
-                    merchItem = new MapItem(new WrappedObjectItem(m.MerchID))
-                    {
-                        Position = _pPosition
-                    };
-                }
             }
             else
             {

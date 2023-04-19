@@ -10,6 +10,7 @@ using RiverHollow.Misc;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -43,21 +44,14 @@ namespace RiverHollow.GUIComponents.Screens
             foreach (Merchandise m in _liMerch)
             {
                 PurchaseBox newBox = null;
-                if (m.MerchType == Merchandise.MerchTypeEnum.Item)
+                if (!PlayerManager.AlreadyBoughtUniqueItem(m.MerchID))
                 {
-                    if (!PlayerManager.AlreadyBoughtUniqueItem(m.MerchID))
-                    {
-                        Item it = DataManager.GetItem(m.MerchID);
-                        it.ApplyUniqueData(m.UniqueData);
+                    Item it = DataManager.GetItem(m.MerchType == Merchandise.MerchTypeEnum.WorldObject ? m.MerchID + Constants.FURNITURE_ID_OFFSET : m.MerchID);
+                    it.ApplyUniqueData(m.UniqueData);
 
-                        newBox = new PurchaseBox(it, m.MoneyCost, _winMain.InnerWidth() - GUIList.BTNSIZE, ShowDisplay);
-                    }
-                    else { continue; }
+                    newBox = new PurchaseBox(it, m.MoneyCost, _winMain.InnerWidth() - GUIList.BTNSIZE, ShowDisplay);
                 }
-                else if (m.MerchType == Merchandise.MerchTypeEnum.WorldObject)
-                {
-                    newBox = new PurchaseBox(DataManager.CreateWorldObjectByID(m.MerchID), m.MoneyCost, _winMain.InnerWidth() - GUIList.BTNSIZE, ShowDisplay);
-                }
+                else { continue; }
 
                 items.Add(newBox);
 
@@ -81,7 +75,7 @@ namespace RiverHollow.GUIComponents.Screens
     internal class PurchaseBox : GUIWindow
     {
         private BitmapFont _font;
-        GUIImage _giItem;
+        GUIItem _giItem;
         GUIText _gTextName;
         GUIMoneyDisplay _gMoney;
 
@@ -100,7 +94,7 @@ namespace RiverHollow.GUIComponents.Screens
             _font = DataManager.GetBitMapFont(DataManager.FONT_NEW);
             Cost = cost;
             ShopItem = i;
-            _giItem = new GUIImage(ShopItem.SourceRectangle, ScaledTileSize, ScaledTileSize, ShopItem.Texture);
+            _giItem = new GUIItem(i);
             _giItem.SetColor(i.ItemColor);
             _gTextName = new GUIText(ShopItem.Name());
 
@@ -161,26 +155,6 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 PlayerManager.TakeMoney(Cost);
                 if (ShopItem != null) { PurchaseItem(ShopItem.ID); }
-                if (WorldObject != null) { TownManager.AddToStorage(WorldObject.ID); }
-                if (Actor != null)
-                {
-                    //if (Actor.IsActorType(WorldActorTypeEnum.Mount))
-                    //{
-                    //    Mount act = (Mount)Actor;
-                    //    PlayerManager.AddMount(act);
-                    //    act.SpawnInHome();
-                    //}
-                    //else if (Actor.IsActorType(WorldActorTypeEnum.Pet))
-                    //{
-                    //    Pet act = (Pet)Actor;
-                    //    PlayerManager.AddPet(act);
-                    //    act.SpawnNearPlayer();
-                    //    if (PlayerManager.PlayerActor.ActivePet == null)
-                    //    {
-                    //        PlayerManager.PlayerActor.SetPet(act);
-                    //    }
-                    //}
-                }
 
                 rv = true;
             }

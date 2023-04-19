@@ -70,7 +70,7 @@ namespace RiverHollow.Buildings
 
         public override bool ProcessLeftClick()
         {
-            GUIManager.OpenMainObject(new HUDBuildingUpgrade(this));
+            
             return true;
         }
 

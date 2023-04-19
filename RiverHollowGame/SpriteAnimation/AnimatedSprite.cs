@@ -20,6 +20,7 @@ namespace RiverHollow.SpriteAnimations
         // Dictionary holding all of the FrameAnimation objects
         Dictionary<string, FrameAnimation> _diFrameAnimations = new Dictionary<string, FrameAnimation>();
 
+        public Rectangle SpriteRectangle => new Rectangle(Position, new Point(Width, Height));
         public int Width { get; private set; } = -1;
         public int Height { get; private set; } = -1;
 

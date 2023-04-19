@@ -65,7 +65,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
             else
             {
-                if(GameManager.HeldItem != null && GameManager.HeldItem.ItemType != ItemEnum.Tool)
+                if(GameManager.HeldItem != null && GameManager.HeldItem.CanBeDropped())
                 {
                     InventoryManager.DropItemOnMap(GameManager.HeldItem);
                     GameManager.DropItem();

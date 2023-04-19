@@ -42,15 +42,8 @@ namespace RiverHollow.Items
 
         public override bool ItemBeingUsed()
         {
-            Buildable obj = (Buildable)DataManager.CreateWorldObjectByID(_iObjectID);
-
-            GameManager.EnterTownModeBuild(false);
-            GameManager.SetSelectedItem(this);
-            GameManager.PickUpWorldObject(obj);
-            MapManager.CurrentMap.AddHeldLights(obj.GetLights());
-            obj.SetPickupOffset();
-
-            GUIManager.CloseMainObject();
+            InventoryManager.RemoveItemFromInventory(this);
+            GameManager.MovingWorldObject(DataManager.CreateWorldObjectByID(_iObjectID));
 
             return true;
         }

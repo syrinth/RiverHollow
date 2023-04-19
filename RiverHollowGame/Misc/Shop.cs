@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Items;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
+using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using System.Linq;
 using static RiverHollow.Game_Managers.SaveManager;
@@ -17,6 +19,7 @@ namespace RiverHollow.Misc
         int _iShopBuildingID = -1;
         public string RandomIndices { get; private set; } = string.Empty;
         List<ShopItemSpot> _liShopItemSpots;
+        List<RHTile> _liShopObjectSpots;
         public IList<ShopItemSpot> ItemSpots => _liShopItemSpots.AsReadOnly();
         List<Merchandise> _liMerchandise;
         public int Count => _liMerchandise.Count;
@@ -25,6 +28,7 @@ namespace RiverHollow.Misc
         {
             _iShopID = id;
             _liShopItemSpots = new List<ShopItemSpot>();
+            _liShopObjectSpots = new List<RHTile>();
 
             _iShopBuildingID = Util.AssignValue("BuildingID", stringDictionary);
 
@@ -66,6 +70,35 @@ namespace RiverHollow.Misc
                 }
             }
 
+            RHTile tile = map.GetMouseOverTile();
+            WorldObject obj = tile.WorldObject;
+            if (tile != null && obj != null && obj.ShopItem)
+            {
+                WrappedObjectItem item = new WrappedObjectItem(obj.ID);
+                if (PlayerManager.Money < item.Value)
+                {
+                    GUIManager.OpenTextWindow("BuyMerch_NoMoney");
+                }
+                else if (!InventoryManager.HasSpaceInInventory(item.ID, 1))
+                {
+                    GUIManager.OpenTextWindow("BuyMerch_NoSpace");
+                }
+                else
+                {
+                    GUIManager.CloseHoverWindow();
+                    if (!item.Stacks())
+                    {
+                        GameManager.SetSelectedItem(DataManager.GetItem(item.ID));
+                        GUIManager.OpenTextWindow("BuyMerch_Confirm", item.Name(), item.TotalBuyValue);
+                    }
+                    else
+                    {
+                        GameManager.SetSelectedItem(DataManager.GetItem(item.ID));
+                        GUIManager.OpenMainObject(new QuantityWindow());
+                    }
+                }
+            }
+
             return false;
         }
 
@@ -80,6 +113,15 @@ namespace RiverHollow.Misc
                 }
                 InventoryManager.AddToInventory(purchaseItem);
             }
+        }
+
+        public void AddObjectSpot(RHTile t)
+        {
+            _liShopObjectSpots.Add(t);
+        }
+        public void ClearObjectSpots()
+        {
+            _liShopObjectSpots.Clear();
         }
 
         public void AddItemSpot(ShopItemSpot spot)
@@ -120,20 +162,35 @@ namespace RiverHollow.Misc
         public void PlaceStock(bool randomize)
         {
             _liShopItemSpots.ForEach(x => x.SetMerchandise(null));
+            _liShopObjectSpots.ForEach(x => x.WorldObject?.RemoveSelfFromTiles());
 
             string[] random = Util.FindParams(RandomIndices);
 
-            List<Merchandise> copy = new List<Merchandise>(_liMerchandise.Where(x => !PlayerManager.AlreadyBoughtUniqueItem(x.MerchID)));
+            List<Merchandise> copies = new List<Merchandise>(_liMerchandise.Where(x => !PlayerManager.AlreadyBoughtUniqueItem(x.MerchID) && x.MerchType == Merchandise.MerchTypeEnum.Item));
 
-            int totalMerch = copy.Count;
+            int totalMerch = copies.Count;
             for (int i = 0; i < _liShopItemSpots.Count && i < totalMerch; i++)
             {
                 if (randomize && !string.IsNullOrEmpty(RandomIndices) && random.Length > i)
                 {
-                    Merchandise m = copy[int.Parse(random[i])];
+                    Merchandise m = copies[int.Parse(random[i])];
                     _liShopItemSpots[i].SetMerchandise(m);
                 }
-                else { _liShopItemSpots[i].SetMerchandise(copy[i]); }
+                else { _liShopItemSpots[i].SetMerchandise(copies[i]); }
+            }
+
+            copies = new List<Merchandise>(_liMerchandise.Where(x => x.MerchType == Merchandise.MerchTypeEnum.WorldObject));
+            totalMerch = copies.Count;
+            for (int i = 0; i < _liShopObjectSpots.Count && i < totalMerch; i++)
+            {
+                Merchandise m;
+
+                if (randomize && !string.IsNullOrEmpty(RandomIndices) && random.Length > i) { m = copies[int.Parse(random[i])]; }
+                else { m = copies[i]; }
+
+                WorldObject obj = DataManager.CreateWorldObjectByID(m.MerchID);
+                obj.SetShopItem();
+                obj.PlaceOnMap(_liShopObjectSpots[i].Position, MapManager.Maps[_liShopObjectSpots[i].MapName]);
             }
         }
 

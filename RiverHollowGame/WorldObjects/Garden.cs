@@ -94,15 +94,18 @@ namespace RiverHollow.WorldObjects
         private bool HandleGarden()
         {
             bool rv = false;
-            //If the plant is finished growing, harvest it. Otherwise, water it.
-            if (_objPlant != null && _objPlant.FinishedGrowing())
+            if (Tiles.Find(x => x.PlayerIsAdjacent()) != null)
             {
-                rv = _objPlant.ProcessLeftClick();
-            }
-            else if (!_bWatered)
-            {
-                rv = true;
-                WaterGardenBed(true);
+                //If the plant is finished growing, harvest it. Otherwise, water it.
+                if (_objPlant != null && _objPlant.FinishedGrowing())
+                {
+                    rv = _objPlant.ProcessLeftClick();
+                }
+                else if (!_bWatered)
+                {
+                    rv = true;
+                    WaterGardenBed(true);
+                }
             }
 
             return rv;

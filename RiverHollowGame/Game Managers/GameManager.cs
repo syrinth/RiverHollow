@@ -170,7 +170,7 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region States
-        private enum EnumBuildType { None, BuildMode, Destroy, Move };
+        private enum EnumBuildType { None, BuildMode, Move };
         private static EnumBuildType _eBuildType;
 
         #region TakeInput
@@ -226,6 +226,15 @@ namespace RiverHollow.Game_Managers
             ShowMap();
         }
 
+        public static void MovingWorldObject(WorldObject obj)
+        {
+            GameManager.EnterTownModeBuild(false);
+            GameManager.PickUpWorldObject(obj);
+            MapManager.CurrentMap.AddHeldLights(obj.GetLights());
+            obj.SetPickupOffset();
+
+            GUIManager.CloseMainObject();
+        }
         public static void EnterTownModeBuild(bool scry)
         {
             _eBuildType = EnumBuildType.BuildMode;
@@ -237,13 +246,11 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static bool InTownMode() { return TownModeBuild() || TownModeMoving() || TownModeDestroy(); }
+        public static bool InTownMode() { return TownModeBuild() || TownModeMoving(); }
         public static bool TownModeBuild() { return _eBuildType == EnumBuildType.BuildMode; }
         public static bool TownModeMoving() { return _eBuildType == EnumBuildType.Move; }
-        public static bool TownModeDestroy() { return _eBuildType == EnumBuildType.Destroy; }
 
         public static void EnterTownModeMoving() { _eBuildType = EnumBuildType.Move; }
-        public static void EnterTownModeDestroy() { _eBuildType = EnumBuildType.Destroy; }
 
         public static void LeaveTownMode() {
             _eBuildType = EnumBuildType.None;

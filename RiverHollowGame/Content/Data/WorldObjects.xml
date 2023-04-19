@@ -171,7 +171,7 @@
     </Item>
     <Item>
       <Key>42</Key>
-      <Value>[Type:Decor][Image:0-384][BaseOffset:0-1][Size:1-2][Rotation:FourWay][Display][Value:500]</Value>
+      <Value>[Type:Decor][Image:0-384][BaseOffset:0-1][Size:1-2][Rotation:FourWay][Display][Value:50]</Value>
     </Item>
     <Item>
       <Key>43</Key>
@@ -179,19 +179,19 @@
     </Item>
     <Item>
       <Key>44</Key>
-      <Value>[Type:Decor][Image:64-384][BaseOffset:0-1][Size:1-2][CanBeDisplayed][Value:500]</Value>
+      <Value>[Type:Decor][Image:64-384][BaseOffset:0-1][Size:1-2][CanBeDisplayed][Value:50]</Value>
     </Item>
     <Item>
       <Key>45</Key>
-      <Value>[Type:Decor][Image:80-464][BaseOffset:0-1][Size:1-2][Rotation:FourWay][Value:500]</Value>
+      <Value>[Type:Decor][Image:80-464][BaseOffset:0-1][Size:1-2][Rotation:FourWay][Value:50]</Value>
     </Item>
     <Item>
       <Key>46</Key>
-      <Value>[Type:Decor][Image:0-448][Value:500]</Value>
+      <Value>[Type:Decor][Image:0-448][Value:50]</Value>
     </Item>
     <Item>
       <Key>47</Key>
-      <Value>[Type:Decor][Image:96-416][BaseOffset:0-1][Base:3-2][Size:3-3][Rotation:TwoWay][RotationBaseOffset:0-1][RotationSize:2-4][Display][DisplayOffset:17-12][RotatedDisplayOffset:6-16][Value:500]</Value>
+      <Value>[Type:Decor][Image:96-416][BaseOffset:0-1][Base:3-2][Size:3-3][Rotation:TwoWay][RotationBaseOffset:0-1][RotationSize:2-4][Display][DisplayOffset:17-12][RotatedDisplayOffset:6-16][Value:50]</Value>
     </Item>
     <Item>
       <Key>48</Key>

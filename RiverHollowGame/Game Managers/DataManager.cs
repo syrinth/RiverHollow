@@ -490,6 +490,11 @@ namespace RiverHollow.Game_Managers
         {
             return GetItem(id, GetIntByIDKey(id, "CraftAmount", DataType.Item, 1) * batchSize);
         }
+
+        public static Item GetItem(WorldObject obj, int num = 1)
+        {
+            return obj == null ? null : GetItem(obj.ID + Constants.FURNITURE_ID_OFFSET, num);
+        }
         public static Item GetItem(int id)
         {
             return GetItem(id, 1);
@@ -560,6 +565,11 @@ namespace RiverHollow.Game_Managers
         /// <returns>The WorldObject if it was successfully created, null otherwise</returns>
         public static WorldObject CreateWorldObjectByID(int id, Dictionary<string, string> args = null)
         {
+            if (id > Constants.FURNITURE_ID_OFFSET)
+            {
+                id -= Constants.FURNITURE_ID_OFFSET;
+            }
+
             if (id != -1 && _diWorldObjects.ContainsKey(id))
             {
                 Dictionary<string, string> data = new Dictionary<string, string>(_diWorldObjects[id]);
