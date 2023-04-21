@@ -81,7 +81,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public void DrawNumber(ItemBoxDraw val)
         {
-            _guiItem.DrawNumbers = val;
+            if (_guiItem != null)
+            {
+                _guiItem.DrawNumbers = val;
+            }
         }
 
         public void CompareNumToPlayer()
@@ -98,7 +101,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             _guiItem?.Alpha(val);
         }
-        public float GetItemAlpha() { return _guiItem.Alpha(); }
 
         public class SpecializedBox : GUIItemBox
         {

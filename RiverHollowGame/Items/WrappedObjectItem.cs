@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
-using System.Security.Cryptography;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Items
@@ -15,20 +12,32 @@ namespace RiverHollow.Items
         public override int Value => DataManager.GetIntByIDKey(_iObjectID, "Value", DataType.WorldObject);
         public override int BuyPrice => Value;
 
-        public WrappedObjectItem(int objectID) : base(objectID + Constants.FURNITURE_ID_OFFSET)
+        public WrappedObjectItem(int objectID) : base(objectID + Constants.BUILDABLE_ID_OFFSET)
         {
             _iNum = 1;
             _iObjectID = objectID;
-            _eItemType = ItemEnum.Furniture;
+            _eItemType = ItemEnum.Buildable;
 
             Point imgPos = DataManager.GetPointByIDKey(_iObjectID, "Image", DataType.WorldObject);
-            Point size = DataManager.GetPointByIDKey(_iObjectID, "Size", DataType.WorldObject);
+            Point size = DataManager.GetPointByIDKey(_iObjectID, "Size", DataType.WorldObject, new Point (1,1));
             _pSourcePos = imgPos;
 
             _iWidth = size.X * Constants.TILE_SIZE;
             _iHeight = size.Y * Constants.TILE_SIZE;
 
-            _texTexture = DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS);
+            ObjectTypeEnum type = DataManager.GetEnumByIDKey<ObjectTypeEnum>(_iObjectID, "Type", DataType.WorldObject);
+
+            string texture;
+            switch (type)
+            {
+                case ObjectTypeEnum.Floor:
+                    texture = DataManager.FILE_FLOORING;
+                    break;
+                default:
+                    texture = DataManager.FILE_WORLDOBJECTS;
+                    break;
+            }
+            _texTexture = DataManager.GetTexture(texture);
         }
 
         public override string Name()
@@ -42,7 +51,8 @@ namespace RiverHollow.Items
 
         public override bool ItemBeingUsed()
         {
-            InventoryManager.RemoveItemFromInventory(this);
+            if (Number > 1) { Remove(1); }
+            else { InventoryManager.RemoveItemFromInventory(this); }
             GameManager.MovingWorldObject(DataManager.CreateWorldObjectByID(_iObjectID));
 
             return true;

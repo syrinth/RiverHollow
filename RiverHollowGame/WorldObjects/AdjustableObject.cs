@@ -1,17 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Map_Handling;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Utilities.Enums;
 using RiverHollow.Utilities;
 
 namespace RiverHollow.WorldObjects
@@ -71,6 +62,7 @@ namespace RiverHollow.WorldObjects
                 RHTile startTile = Tiles[0];
                 base.RemoveSelfFromTiles();
                 AdjustmentHelper(startTile);
+                Sprite.PlayAnimation("None");
             }
         }
 

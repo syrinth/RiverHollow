@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Cryptography;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.RiverHollow;
@@ -1364,7 +1365,7 @@ namespace RiverHollow.Map_Handling
             removedList.Clear();
 
             Item dummyItem = DataManager.GetItem(GameManager.HeldObject);
-            if (dummyItem != null && InventoryManager.HasSpaceInInventory(dummyItem.ID, 1))
+            if (dummyItem != null && InventoryManager.HasSpaceInInventory(dummyItem.ID, 1) && !((Buildable)HeldObject).Unique)
             {
                 InventoryManager.AddToInventory(dummyItem.ID, 1);
                 MapManager.EndBuildingAndScrying();
@@ -1448,7 +1449,7 @@ namespace RiverHollow.Map_Handling
             _objSelectedObject?.SelectObject(false);
             if ((TownModeMoving()) && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasBuildableObject())
             {
-                WorldObject obj = MouseTile.RetrieveUppermostStructureObject();
+                WorldObject obj = MouseTile.RetrieveObjectFromLayer();
                 if (obj != null && obj.IsBuildable() && obj.PlayerCanMove)
                 {
                     _objSelectedObject = (Buildable)obj;
@@ -1536,24 +1537,14 @@ namespace RiverHollow.Map_Handling
                 {
                     switch (toBuild.Type)
                     {
-                        case ObjectTypeEnum.Building:
-                        case ObjectTypeEnum.Mailbox:
-                        case ObjectTypeEnum.Structure:
-                            rv = PlaceSingleObject(toBuild);
-                            break;
                         case ObjectTypeEnum.Floor:
-                            if (MouseTile.Flooring == null) { goto case ObjectTypeEnum.Wall; }
+                            if (MouseTile.Flooring == null) { goto default; }
                             break;
                         case ObjectTypeEnum.Wallpaper:
                             rv = PlaceWallpaper((Wallpaper)toBuild);
                             break;
-                        case ObjectTypeEnum.Beehive:
-                        case ObjectTypeEnum.Buildable:
-                        case ObjectTypeEnum.Container:
-                        case ObjectTypeEnum.Decor:
-                        case ObjectTypeEnum.Garden:
-                        case ObjectTypeEnum.Wall:
-                            rv = PlaceMultiObject(toBuild);
+                        default:
+                            rv = PlaceTownObject(toBuild);
                             break;
                     }
                     SoundManager.PlayEffect(rv ? "thump3" : "Cancel");
@@ -1562,23 +1553,16 @@ namespace RiverHollow.Map_Handling
                 {
                     if (MouseTile.HasBuildableObject())
                     {
-                        WorldObject targetObj = MouseTile.RetrieveUppermostStructureObject();
+                        WorldObject targetObj = MouseTile.RetrieveObjectFromLayer();
                         if (targetObj != null && targetObj.PlayerCanMove)
                         {
                             switch (targetObj.Type)
                             {
                                 case ObjectTypeEnum.Building:
                                     RemoveDoor((Building)targetObj);
-                                    goto case ObjectTypeEnum.Structure;
-                                case ObjectTypeEnum.Beehive:
-                                case ObjectTypeEnum.Buildable:
-                                case ObjectTypeEnum.Container:
-                                case ObjectTypeEnum.Decor:
-                                case ObjectTypeEnum.Floor:
-                                case ObjectTypeEnum.Garden:
-                                case ObjectTypeEnum.Mailbox:
-                                case ObjectTypeEnum.Structure:
-                                case ObjectTypeEnum.Wall:
+                                    GUICursor.ResetCursor();
+                                    goto default;
+                                default:
                                     PickUpWorldObject(mouseLocation, targetObj);
                                     break;
                             }
@@ -1592,61 +1576,18 @@ namespace RiverHollow.Map_Handling
         }
 
         /// <summary>
-        /// Helper method to process the placement of a singular object
-        /// </summary>
-        /// <param name="toBuild">The Structure object we are placing down.</param>
-        /// <returns>True if we successfully build.</returns>
-        private bool PlaceSingleObject(Buildable toBuild)
-        {
-            bool rv = false;
-
-            if (TownModeMoving() || PlayerManager.ExpendResources(toBuild.RequiredToMake))
-            {
-                toBuild.SnapPositionToGrid(toBuild.CollisionBox.Location);
-                if (toBuild.PlaceOnMap(this))
-                {
-                    if (this == MapManager.TownMap)
-                    {
-                        TownManager.AddToTownObjects(toBuild);
-                    }
-
-                    //Drop the Building from the GameManger
-                    GameManager.DropWorldObject();
-                    ClearHeldLights();
-
-                    //Only leave TownMode if we were in Build Mode
-                    if (TownModeBuild())
-                    {
-                        TaskManager.AdvanceTaskProgress(toBuild);
-
-                        LeaveTownMode();
-                        FinishBuilding(true);
-
-                        if (toBuild.CompareType(ObjectTypeEnum.Building))
-                        {
-                            TownManager.IncreaseTravelerBonus();
-                        }
-                    }
-                    rv = true;
-                }
-            }
-
-            return rv;
-        }
-
-        /// <summary>
         /// Helper method for building one object and allowing the
         /// possibility of building additional ones
         /// </summary>
         /// <param name="templateObject">The Structure that will act as the template to build offo f</param>
         /// <returns>True if we successfully build.</returns>
-        private bool PlaceMultiObject(Buildable templateObject)
+        private bool PlaceTownObject(Buildable templateObject)
         {
             bool rv = false;
             Buildable placeObject;
 
             //If we're moving the object, set it as the object to be placed. Otherwise, we need
-            //to make a new object based off theo ne we're holding.
+            //to make a new object based off the one we're holding.
             if (TownModeMoving()) { placeObject = templateObject; }
             else
             {
@@ -1665,6 +1606,7 @@ namespace RiverHollow.Map_Handling
                 if (this == MapManager.TownMap)
                 {
                     TownManager.AddToTownObjects(placeObject);
+                    TaskManager.AdvanceTaskProgress(placeObject);
                 }
 
                 switch (placeObject.Type)
@@ -1685,7 +1627,7 @@ namespace RiverHollow.Map_Handling
                     if (!TownModeMoving())
                     {
                         LeaveTownMode();
-                        FinishBuilding(false);
+                        FinishBuilding(placeObject.BuildOnScreen());
                     }
 
                     GameManager.DropWorldObject();
@@ -1889,8 +1831,7 @@ namespace RiverHollow.Map_Handling
             //We can place flooring anywhere there isn't flooring as long as the base tile is passable.
             if (obj.CompareType(ObjectTypeEnum.Floor))
             {
-                if (testTile.Flooring == null && (testTile.Passable()
-                    || testTile.WorldObject.CompareType(ObjectTypeEnum.Building)))
+                if (testTile.Flooring == null && (testTile.Passable() || testTile.WorldObject.IsBuildable()))
                 {
                     rv = true;
                 }
@@ -1901,7 +1842,7 @@ namespace RiverHollow.Map_Handling
             }
             else if (ignoreActors || !TileContainsBlockingActor(testTile))
             {
-                if (testTile.CanPlaceOnTabletop(obj) || (testTile.Passable() && testTile.WorldObject == null))
+                if ((testTile.CanPlaceOnTabletop(obj) )|| (testTile.Passable() && testTile.WorldObject == null))
                 {
                     rv = true;
                 }

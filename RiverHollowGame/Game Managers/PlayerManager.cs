@@ -79,7 +79,7 @@ namespace RiverHollow.Game_Managers
 
         public static PlayerCharacter PlayerActor;
 
-        private static Dictionary<ObjectTypeEnum, List<int>> _diCrafting;
+        private static List<int> _liCrafting;
         public static Dictionary<int, int> DIMobInfo { get; private set; }
 
         private static DirectionEnum _eHorizontal = DirectionEnum.None;
@@ -129,14 +129,7 @@ namespace RiverHollow.Game_Managers
         public static void Initialize()
         {
             _vbMovement = new VectorBuffer();
-            _diCrafting = new Dictionary<ObjectTypeEnum, List<int>>
-            {
-                [ObjectTypeEnum.Building] = new List<int>(),
-                [ObjectTypeEnum.Floor] = new List<int>(),
-                [ObjectTypeEnum.Structure] = new List<int>(),
-                [ObjectTypeEnum.Plant] = new List<int>(),
-                [ObjectTypeEnum.Wall] = new List<int>()
-            };
+            _liCrafting = new List<int>();
 
             Children = new List<Child>();
             _liPets = new List<Pet>();
@@ -312,11 +305,11 @@ namespace RiverHollow.Game_Managers
         }
 
         #region Crafting Dictionary
-        public static List<int> GetCraftingList(ObjectTypeEnum e)
+        public static List<int> GetCraftingList()
         {
-            return _diCrafting[e];
+            return _liCrafting;
         }
-        public static bool  AddToCraftingDictionary(int id, bool displayAlert = true)
+        public static bool AddToCraftingDictionary(int id, bool displayAlert = true)
         {
             bool rv = false;
 
@@ -345,10 +338,10 @@ namespace RiverHollow.Game_Managers
                     break;
             }
 
-            if (!_diCrafting[e].Contains(id))
+            if (!_liCrafting.Contains(id))
             {
                 rv = true;
-                _diCrafting[e].Add(id);
+                _liCrafting.Add(id);
 
                 if (displayAlert)
                 {
@@ -893,10 +886,7 @@ namespace RiverHollow.Game_Managers
                 data.ChildList.Add(c.SaveData());
             }
 
-            foreach (List<int> craftList in _diCrafting.Values)
-            {
-                data.CraftingList.AddRange(craftList);
-            }
+            data.CraftingList.AddRange(_liCrafting);
 
             foreach (var kvp in DIMobInfo)
             {

@@ -59,6 +59,17 @@ namespace RiverHollow.WorldObjects
             return !OutsideOnly || (OutsideOnly && MapManager.CurrentMap.IsOutside);
         }
 
+        public bool BuildOnScreen()
+        {
+            switch (_eObjectType)
+            {
+                case Enums.ObjectTypeEnum.Building:
+                case Enums.ObjectTypeEnum.Structure:
+                    return true;
+                default:
+                    return false;
+            }
+        }
         public override bool ProcessLeftClick()
         {
             bool rv = false;

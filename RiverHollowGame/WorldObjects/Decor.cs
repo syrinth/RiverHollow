@@ -66,6 +66,36 @@ namespace RiverHollow.WorldObjects
             }
         }
 
+        public override bool ProcessLeftClick()
+        {
+            bool rv = false;
+            if (GameManager.HeldObject == null)
+            {
+                rv = true;
+
+                if(_itemDisplay != null)
+                {
+                    if (InventoryManager.HasSpaceInInventory(_itemDisplay.ID, 1))
+                    {
+                        InventoryManager.AddToInventory(_itemDisplay);
+                    }
+                }
+                else if(_objDisplay != null)
+                {
+                    GameManager.MovingWorldObject(_objDisplay);
+                    _objDisplay = null;
+                }
+                else
+                {
+                    CurrentMap.RemoveWorldObject(this, true);
+                    GameManager.MovingWorldObject(this);
+                }
+                
+            }
+
+            return rv;
+        }
+
         /// <summary>
         /// Handler for when a Decor object hasbeen right-clicked
         /// </summary>
@@ -117,6 +147,7 @@ namespace RiverHollow.WorldObjects
         public override bool PlaceOnMap(RHMap map, bool ignoreActors = false)
         {
             RHTile tile = map.GetTileByPixelPosition(MapPosition);
+
             bool rv;
             if (tile != null && tile.CanPlaceOnTabletop(this))
             {
@@ -247,7 +278,7 @@ namespace RiverHollow.WorldObjects
             {
                 rv = true;
                 _objDisplay = obj;
-                
+                SyncDisplayObject();
             }
 
             return rv;
@@ -264,7 +295,7 @@ namespace RiverHollow.WorldObjects
             {
                 if (StoreDisplayEntity())
                 {
-                    if (it.ID > Constants.FURNITURE_ID_OFFSET)
+                    if (it.ID > Constants.BUILDABLE_ID_OFFSET)
                     {
                         _objDisplay = (Decor)DataManager.CreateWorldObjectByID(it.ID);
                         SyncDisplayObject();
@@ -327,9 +358,9 @@ namespace RiverHollow.WorldObjects
         {
             //Need to save null items
             WorldObjectData data = base.SaveData();
-            data.stringData += (int)_eFacingDir;
-            data.stringData += (_objDisplay == null ? "|null|" : _objDisplay.ID.ToString());
-            data.stringData += (_itemDisplay == null ? "|null" : _itemDisplay.ID.ToString());
+            data.stringData += (int)_eFacingDir + "|";
+            data.stringData += (_objDisplay == null ? "null|" : _objDisplay.ID.ToString());
+            data.stringData += (_itemDisplay == null ? "null" : _itemDisplay.ID.ToString());
 
             return data;
         }

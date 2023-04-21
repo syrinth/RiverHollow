@@ -46,7 +46,7 @@ namespace RiverHollow.GUIComponents.Screens
                 PurchaseBox newBox = null;
                 if (!PlayerManager.AlreadyBoughtUniqueItem(m.MerchID))
                 {
-                    Item it = DataManager.GetItem(m.MerchType == Merchandise.MerchTypeEnum.WorldObject ? m.MerchID + Constants.FURNITURE_ID_OFFSET : m.MerchID);
+                    Item it = DataManager.GetItem(m.MerchType == Merchandise.MerchTypeEnum.WorldObject ? m.MerchID + Constants.BUILDABLE_ID_OFFSET : m.MerchID);
                     it.ApplyUniqueData(m.UniqueData);
 
                     newBox = new PurchaseBox(it, m.MoneyCost, _winMain.InnerWidth() - GUIList.BTNSIZE, ShowDisplay);

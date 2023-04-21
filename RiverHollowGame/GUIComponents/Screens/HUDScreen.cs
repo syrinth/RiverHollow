@@ -8,9 +8,7 @@ using RiverHollow.Misc;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
-using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
-using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.GUIComponents.Screens.HUDComponents;
 
 namespace RiverHollow.GUIComponents.Screens

@@ -33,6 +33,8 @@ namespace RiverHollow.WorldObjects
             _bDrawUnder = true;
         }
 
+        public override bool ProcessLeftClick() { return true; }
+
         public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
         {
             bool rv = false;

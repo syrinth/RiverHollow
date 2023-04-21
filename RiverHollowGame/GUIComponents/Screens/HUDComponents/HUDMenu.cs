@@ -10,9 +10,10 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
 {
     public class HUDMenu : GUIObject
     {
+        HUDMenuEnum _eCurrentState = HUDMenuEnum.Main;
+
         const int BTN_PADDING = 10;
-        GUIMainObject _gMenuObject;
-        readonly List<GUIObject> _liButtons;
+        List<GUIObject> _liButtons;
 
         bool _bOpen = false;
         bool _bClose = false;
@@ -24,24 +25,46 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         {
             _closeMenu = closeMenu;
 
-            _liButtons = new List<GUIObject>() {
-                new GUIButton("Inventory", BtnInventory)
-            };
+            _liButtons = new List<GUIObject>();
+            AddButtons(HUDMenuEnum.Main);
+            
+            _bOpen = true;
+        }
 
-            GUIButton btnBuild = new GUIButton("Build", BtnBuild);
-            btnBuild.Enable(!MapManager.CurrentMap.Modular);
-            _liButtons.Add(btnBuild);
+        public void AddButtons(HUDMenuEnum menuType)
+        {
+            _eCurrentState = menuType;
 
-            _liButtons.Add(new GUIButton("Task Log", BtnTaskLog));
-            _liButtons.Add(new GUIButton("Codex", BtnCodex));
-            _liButtons.Add(new GUIButton("Options", BtnOptions));
-            _liButtons.Add(new GUIButton("Exit Game", BtnExitGame));
+            _liButtons.ForEach(x => RemoveControl(x));
+            _liButtons.Clear();
+
+            switch (menuType)
+            {
+                case HUDMenuEnum.Build:
+                    var btn = new GUIButton("Structures", BtnStructure);
+                    btn.Enable(MapManager.CurrentMap.IsOutside && MapManager.CurrentMap.IsTown);
+
+                    _liButtons.Add(btn);
+                    _liButtons.Add(new GUIButton("Crafting", BtnCrafting));
+                    _liButtons.Add(new GUIButton("Move", BtnMove));
+                    _liButtons.Add(new GUIButton("Exit", BtnExitBuildMenu));
+                    break;
+                case HUDMenuEnum.Main:
+                    _liButtons.Add(new GUIButton("Inventory", BtnInventory));
+
+                    GUIButton btnBuild = new GUIButton("Build", BtnBuild);
+                    btnBuild.Enable(!MapManager.CurrentMap.Modular);
+                    _liButtons.Add(btnBuild);
+
+                    _liButtons.Add(new GUIButton("Task Log", BtnTaskLog));
+                    _liButtons.Add(new GUIButton("Codex", BtnCodex));
+                    _liButtons.Add(new GUIButton("Options", BtnOptions));
+                    _liButtons.Add(new GUIButton("Exit Game", BtnExitGame));
+                    break;
+            }
 
             AddControls(_liButtons);
-
             GUIObject.CreateSpacedColumn(ref _liButtons, -GUIButton.BTN_WIDTH, 0, RiverHollow.ScreenHeight, BTN_PADDING);
-
-            _bOpen = true;
         }
 
         public override void Update(GameTime gTime)
@@ -71,9 +94,23 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
 
         public override bool ProcessRightButtonClick(Point mouse)
         {
-            //Returns false here because we don't handle it
-            //By returning false, we will start closing options
-            return false;
+            bool rv = false;
+
+            if (_eCurrentState == HUDMenuEnum.Build)
+            {
+                rv = true;
+                if (GUIManager.IsMainObjectOpen())
+                {
+                    GUIManager.CloseMainObject();
+                }
+                else
+                {
+                    AddButtons(HUDMenuEnum.Main);
+                }
+                
+            }
+
+            return rv;
         }
 
         #region Buttons
@@ -94,33 +131,62 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             toolBox[0, 0] = PlayerManager.RetrieveTool(ToolEnum.Backpack);
             toolBox[0, 1] = PlayerManager.RetrieveTool(ToolEnum.Lantern);
 
-            _gMenuObject = new HUDInventoryDisplay(toolBox, DisplayTypeEnum.Inventory, true);
+            var _gMenuObject = new HUDInventoryDisplay(toolBox, DisplayTypeEnum.Inventory, true);
             //_gMenuObject = new HUDInventoryDisplay();
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
         }
         public void BtnTaskLog()
         {
-            _gMenuObject = new HUDTaskLog();
+            var _gMenuObject = new HUDTaskLog();
             GUIManager.OpenMainObject(_gMenuObject);
         }
         public void BtnOptions()
         {
-            _gMenuObject = new HUDOptions();
+            var _gMenuObject = new HUDOptions();
             GUIManager.OpenMainObject(_gMenuObject);
         }
+        
+        public void BtnCodex()
+        {
+            var _gMenuObject = new HUDCodex();
+            GUIManager.OpenMainObject(_gMenuObject);
+        }
+
         public void BtnBuild()
         {
             if (!MapManager.CurrentMap.Modular)
             {
-                GUIManager.SetScreen(new BuildScreen());
+                AddButtons(HUDMenuEnum.Build);
             }
         }
 
-        public void BtnCodex()
+        public void BtnStructure()
         {
-            _gMenuObject = new HUDCodex();
+            var _gMenuObject = new HUDConstruction(_closeMenu);
+            _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
+        }
+
+        public void BtnCrafting()
+        {
+            var _gMenuObject = new HUDCraftRecipes();
+            _gMenuObject.CenterOnScreen();
+            GUIManager.OpenMainObject(_gMenuObject);
+        }
+
+        public void BtnExitBuildMenu()
+        {
+            AddButtons(HUDMenuEnum.Main);
+            GUIManager.CloseMainObject();
+        }
+
+        public void BtnMove()
+        {
+            _closeMenu();
+            GUIManager.CloseMainObject();
+            GameManager.ClearGMObjects();
+            GameManager.EnterTownModeMoving();
         }
         #endregion
     }

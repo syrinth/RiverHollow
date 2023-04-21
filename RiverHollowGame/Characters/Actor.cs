@@ -592,8 +592,10 @@ namespace RiverHollow.Characters
 
                     RHTile myTile = CurrentMap.GetTileByPixelPosition(CollisionCenter);
                     var tileDir = Util.GetRandomItem(myTile.GetWalkableNeighbours());
-
-                    moveTo = CollisionBoxLocation + Util.MultiplyPoint((tileDir.Position - myTile.Position), RHRandom.Instance().Next(_iMinWander, _iMaxWander));
+                    if (tileDir != null)
+                    {
+                        moveTo = CollisionBoxLocation + Util.MultiplyPoint((tileDir.Position - myTile.Position), RHRandom.Instance().Next(_iMinWander, _iMaxWander));
+                    }
                 }
 
                 SetMoveTo(moveTo);

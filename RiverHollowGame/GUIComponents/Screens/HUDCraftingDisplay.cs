@@ -29,7 +29,7 @@ namespace RiverHollow.GUIComponents.Screens
         private List<GUIItemBox> _liRequiredItems;
         private GUIItemBox[] _arrMaking;
 
-        private Machine _objMachine;
+        private readonly Machine _objMachine;
 
         private int _iSelectedItemID = -1;
         private int _iRecipeListStart = 0;

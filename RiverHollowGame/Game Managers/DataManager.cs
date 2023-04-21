@@ -493,7 +493,7 @@ namespace RiverHollow.Game_Managers
 
         public static Item GetItem(WorldObject obj, int num = 1)
         {
-            return obj == null ? null : GetItem(obj.ID + Constants.FURNITURE_ID_OFFSET, num);
+            return obj == null ? null : GetItem(obj.ID + Constants.BUILDABLE_ID_OFFSET, num);
         }
         public static Item GetItem(int id)
         {
@@ -501,9 +501,9 @@ namespace RiverHollow.Game_Managers
         }
         public static Item GetItem(int id, int num)
         {
-            if (id > Constants.FURNITURE_ID_OFFSET)
+            if (id >= Constants.BUILDABLE_ID_OFFSET)
             {
-                return new WrappedObjectItem(id - Constants.FURNITURE_ID_OFFSET);
+                return new WrappedObjectItem(id - Constants.BUILDABLE_ID_OFFSET);
             }
 
             if (id != -1 && _diItemData.ContainsKey(id))
@@ -565,9 +565,9 @@ namespace RiverHollow.Game_Managers
         /// <returns>The WorldObject if it was successfully created, null otherwise</returns>
         public static WorldObject CreateWorldObjectByID(int id, Dictionary<string, string> args = null)
         {
-            if (id > Constants.FURNITURE_ID_OFFSET)
+            if (id >= Constants.BUILDABLE_ID_OFFSET)
             {
-                id -= Constants.FURNITURE_ID_OFFSET;
+                id -= Constants.BUILDABLE_ID_OFFSET;
             }
 
             if (id != -1 && _diWorldObjects.ContainsKey(id))

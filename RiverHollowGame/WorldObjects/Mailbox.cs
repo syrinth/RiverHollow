@@ -19,6 +19,7 @@ namespace RiverHollow.WorldObjects
 
         public Mailbox(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
+            Unique = true;
             _liCurrentMessages = new List<string>();
             _liSentMessages = new List<string>();
             PlayerManager.PlayerMailbox = this;

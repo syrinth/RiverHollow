@@ -218,6 +218,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
     {
         public Item ItemObject {get;}
         GUIImage _gImg;
+        GUIImage _gDummy;
         GUIText _gText;
         public ItemBoxDraw DrawNumbers = ItemBoxDraw.OnlyStacks;
         public bool CompareNumToPlayer = false;
@@ -225,6 +226,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public GUIItem(Item it)
         {
             ItemObject = it;
+
             _gImg = new GUIImage(ItemObject.SourceRectangle, ItemObject.SourceRectangle.Width, ItemObject.SourceRectangle.Height, ItemObject.Texture);
 
             int chosenScale = CurrentScale;
@@ -238,14 +240,15 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _gText = new GUIText(ItemObject.Number.ToString(), true, DataManager.FONT_NUMBER_DISPLAY);
             _gText.SetColor(Color.White);
 
-            _gText.AlignToObject(_gImg, SideEnum.Right);
-            _gText.AlignToObject(_gImg, SideEnum.Bottom);
+            _gDummy = new GUIImage(ItemObject.SourceRectangle, GameManager.ScaledTileSize, GameManager.ScaledTileSize, ItemObject.Texture);
+            _gImg.CenterOnObject(_gDummy);
+            SetTextPosition();
 
             AddControl(_gImg);
             AddControl(_gText);
 
-            Width = _gImg.Width;
-            Height = _gImg.Height;
+            Width = GameManager.ScaledTileSize;
+            Height = GameManager.ScaledTileSize;
         }
 
         public override void Update(GameTime gTime)
@@ -253,8 +256,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             if (!CompareNumToPlayer)
             {
                 _gText?.SetText(ItemObject.Number.ToString());
-                _gText.AlignToObject(_gImg, SideEnum.Right);
-                _gText.AlignToObject(_gImg, SideEnum.Bottom);
+                SetTextPosition();
             }
         }
 
@@ -290,6 +292,13 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             return rv;
         }
 
+        private void SetTextPosition()
+        {
+            _gDummy.CenterOnObject(_gImg);
+            _gText.AlignToObject(_gDummy, SideEnum.Right);
+            _gText.AlignToObject(_gDummy, SideEnum.Bottom);
+        }
+
         public override void SetColor(Color c)
         {
             _gText.SetColor(c);
@@ -301,8 +310,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             int playerNum = InventoryManager.GetNumberInInventory(ItemObject.ID);
             _gText.SetText(string.Format("{0}/{1}", playerNum, ItemObject.Number));
-            _gText.AlignToObject(_gImg, SideEnum.Right);
-            _gText.AlignToObject(_gImg, SideEnum.Bottom);
+            SetTextPosition();
         }
     }
 
@@ -311,7 +319,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public static int CONSTRUCTBOX_WIDTH = 544; //(GUIManager.MAIN_COMPONENT_WIDTH) - (_gWindow.EdgeSize * 2) - ScaledTileSize
         public static int CONSTRUCTBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDTaskLog.MAX_SHOWN_TASKS) - (_gWindow.EdgeSize * 2)
 
-        GUIWindow _window;
+        readonly GUIWindow _window;
         GUIText _gName;
         public int _iBuildID;
         public delegate void SelectConstructID(int objID);
@@ -356,7 +364,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _iBuildID = id;
 
             Color textColor = Color.Black;
-            if (!InventoryManager.HasSufficientItems(requiredToMake))
+            bool spaceInInventory = InventoryManager.HasSpaceInInventory(id + Constants.BUILDABLE_ID_OFFSET, 1);
+
+            if (!InventoryManager.HasSufficientItems(requiredToMake) || !spaceInInventory)
             {
                 textColor = Color.Red;
                 _delAction = null;

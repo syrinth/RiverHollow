@@ -68,11 +68,7 @@ namespace RiverHollow.Buildings
             LoadSprite(stringData, DataManager.FOLDER_BUILDINGS + GetStringByIDKey("Texture"));
         }
 
-        public override bool ProcessLeftClick()
-        {
-            
-            return true;
-        }
+        public override bool ProcessLeftClick() { return true; }
 
         public override void Rollover()
         {

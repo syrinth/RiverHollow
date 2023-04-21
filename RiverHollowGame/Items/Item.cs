@@ -192,9 +192,13 @@ namespace RiverHollow.Items
         {
             switch (_eItemType)
             {
+                case ItemEnum.Buildable:
+                    ObjectTypeEnum type = DataManager.GetEnumByIDKey<ObjectTypeEnum>(ID - Constants.BUILDABLE_ID_OFFSET, "Type", DataType.WorldObject);
+                    if (type == ObjectTypeEnum.Floor || type == ObjectTypeEnum.Wall) { return true; }
+                    else { return false; }
                 case ItemEnum.Blueprint:
                 case ItemEnum.Clothing:
-                case ItemEnum.Furniture:
+                    return false;
                 case ItemEnum.NPCToken:
                 case ItemEnum.Special:
                 case ItemEnum.Tool:
@@ -208,7 +212,7 @@ namespace RiverHollow.Items
             switch (_eItemType)
             {
                 case ItemEnum.Tool:
-                case ItemEnum.Furniture:
+                case ItemEnum.Buildable:
                     return false;
                 default: return true;
             }

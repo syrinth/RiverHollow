@@ -3,10 +3,12 @@
     public static class Enums
     {
         public enum DataType { Action, Actor, Job, Item, Light, Monster, StatusEffect, Task, WorldObject, Upgrade };
-
+        public enum BuildTypeEnum { Structure, WorldObject };
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, Sell, Propose, Date, EndDay, GoToNight, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Bed };
         public enum TextEntryTriggerEnum { None, UseItem, ConfirmPurchase, Exit, Donate, PetFollow, PetUnfollow, GetBaby, Quit }
+
+        public enum HUDMenuEnum { Main, Build };
 
         public enum SpawnTypeEnum { Item, Object, Mob };
         public enum RarityEnum { C, U, R, M };
@@ -33,12 +35,13 @@
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
         public enum ItemGroupEnum { None, Clothes, Flower, Gem, Herb, Magic, Medicine, Metal, Ore };
-        public enum ItemEnum { Resource, Tool, Food, Consumable, Clothing, Furniture, MonsterFood, NPCToken, Blueprint, Seed, Special };
+        public enum ItemEnum { Resource, Tool, Food, Consumable, Clothing, Buildable, MonsterFood, NPCToken, Blueprint, Seed, Special };
         public enum FoodTypeEnum { Dessert, Expensive, Forage, Healthy, Plain };
         public enum ToolEnum { None, Axe, Backpack, CapeOfBlinking, Harp, Lantern, Pick, Return, Scythe, Shovel, StaffOfIce, Sword, WateringCan };
         public enum GearTypeEnum { None, Accessory, Chest, Head, Weapon };
         public enum ClothingEnum { None, Chest, Legs, Hat };
         public enum NPCTokenTypeEnum { Mount, Pet };
+        public enum CraftFilterEnum { All };
 
         public enum ActorStateEnum { Climb, Grab, Swim, Walk };
         public enum WeightEnum { Light, Medium, Heavy, Immovable};

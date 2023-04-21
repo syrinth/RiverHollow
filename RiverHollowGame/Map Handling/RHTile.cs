@@ -149,9 +149,9 @@ namespace RiverHollow.Map_Handling
         {
             return WorldObject != null || ShadowStructure() != null || Flooring != null;
         }
-        public WorldObject RetrieveUppermostStructureObject()
+        public WorldObject RetrieveObjectFromLayer()
         {
-            return ShadowStructure() ?? WorldObject ?? Flooring;
+            return WorldObject ?? ShadowStructure() ?? Flooring;
         }
 
         public void RemoveWorldObject()
@@ -180,15 +180,9 @@ namespace RiverHollow.Map_Handling
             }
             return rv;
         }
-        public bool SetShadowObject(WorldObject o)
+        public void SetShadowObject(WorldObject o)
         {
-            bool rv = false;
-            if ((!o.WallObject() && Passable()) || (o.WallObject() && IsWallpaperWall))
-            {
-                ShadowObject = o;
-                rv = true;
-            }
-            return rv;
+            ShadowObject = o;
         }
         public WorldObject GetFloorObject()
         {
