@@ -16,6 +16,7 @@ namespace RiverHollow.SpriteAnimations
 
         readonly Texture2D _texture;                         // The texture that holds the images for this sprite
         public Color SpriteColor { get; private set; } = Color.White;
+        public float Alpha { get; private set; } = 1;
 
         // Dictionary holding all of the FrameAnimation objects
         Dictionary<string, FrameAnimation> _diFrameAnimations = new Dictionary<string, FrameAnimation>();
@@ -244,14 +245,14 @@ namespace RiverHollow.SpriteAnimations
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, bool useLayerDepth = true, float visibility = 1.0f, float forcedLayerDepth = -1)
+        public void Draw(SpriteBatch spriteBatch, bool useLayerDepth = true, float alpha = 1.0f, float forcedLayerDepth = -1)
         {
             if (Show)
             {
                 if (useLayerDepth)
                 {
                     float layerDepth = forcedLayerDepth < 0 ? LayerDepth : forcedLayerDepth;
-                    Draw(spriteBatch, layerDepth, visibility);
+                    Draw(spriteBatch, layerDepth, alpha);
                 }
                 else
                 {
@@ -266,7 +267,7 @@ namespace RiverHollow.SpriteAnimations
                         drawThis = new Rectangle(drawThis.X, FrameCutoff, drawThis.Width, drawThis.Height - FrameCutoff);
                     }
 
-                    spriteBatch.Draw(_texture, new Rectangle(Position.X, drawAtY, Width, Height - newFrameCutoff), drawThis, SpriteColor * visibility);
+                    spriteBatch.Draw(_texture, new Rectangle(Position.X, drawAtY, Width, Height - newFrameCutoff), drawThis, SpriteColor * alpha);
                 }
             }
         }

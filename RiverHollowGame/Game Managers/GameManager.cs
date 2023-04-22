@@ -240,10 +240,6 @@ namespace RiverHollow.Game_Managers
             _eBuildType = EnumBuildType.BuildMode;
 
             GUIManager.CloseMainObject();
-            if (scry)
-            {
-                Scry();
-            }
         }
 
         public static bool InTownMode() { return TownModeBuild() || TownModeMoving(); }

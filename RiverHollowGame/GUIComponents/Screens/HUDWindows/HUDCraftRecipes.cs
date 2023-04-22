@@ -6,7 +6,9 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
+using System;
 using System.Collections.Generic;
+using static RiverHollow.GUIComponents.Screens.HUDComponents.HUDMenu;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens.HUDWindows
@@ -32,7 +34,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         private GUIItemBox _gHoverBox;
 
         CraftFilterEnum _eFilter = CraftFilterEnum.All;
-
+        
         public HUDCraftRecipes()
         {
             _liItemDisplay = new List<GUIItemBox>();
@@ -72,21 +74,28 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
-            bool rv = false;
+            bool rv = _btnLeft.ProcessLeftButtonClick(mouse);
 
-            for (int i = 0; i < _liItemDisplay.Count; i++)
+            if (!rv)
             {
-                if (_liItemDisplay[i].Contains(mouse))
+                rv = _btnRight.ProcessLeftButtonClick(mouse);
+            }
+            if (!rv)
+            { 
+                for (int i = 0; i < _liItemDisplay.Count; i++)
                 {
-                    int objID = _liItemDisplay[i].BoxItem.ID;
-                    Buildable obj = (Buildable)DataManager.CreateWorldObjectByID(objID);
-                    Dictionary<int, int> requiredToMake = obj.RequiredToMake;
-
-                    if (PlayerManager.ExpendResources(requiredToMake))
+                    if (_liItemDisplay[i].Contains(mouse))
                     {
-                        InventoryManager.AddToInventory(DataManager.GetItem(obj));
-                        SetUpItemWindows();
-                        SoundManager.PlayEffect("thump3");
+                        int objID = _liItemDisplay[i].BoxItem.ID;
+                        Buildable obj = (Buildable)DataManager.CreateWorldObjectByID(objID);
+                        Dictionary<int, int> requiredToMake = obj.RequiredToMake;
+
+                        if (PlayerManager.ExpendResources(requiredToMake))
+                        {
+                            InventoryManager.AddToInventory(DataManager.GetItem(obj));
+                            SetUpItemWindows();
+                            SoundManager.PlayEffect("thump3");
+                        }
                     }
                 }
             }
@@ -195,14 +204,14 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
             if (_liRequiredItems.Count > 0)
             {
-                int totalReqWidth = (_liRequiredItems.Count * _liRequiredItems[0].Width) + (_liRequiredItems.Count - 1 * GameManager.ScaleIt(2));
+                int totalReqWidth = (_liRequiredItems.Count * _liRequiredItems[0].Width) + ((_liRequiredItems.Count - 1) * GameManager.ScaleIt(2));
                 int firstXPosition = (_gWindow.Width / 2) - (totalReqWidth / 2);
                 for (int i = 0; i < _liRequiredItems.Count; i++)
                 {
                     if (i == 0)
                     {
                         _liRequiredItems[i].Position(new Point(_gWindow.Position().X, _gScroll.Position().Y));
-                        _liRequiredItems[i].MoveBy(firstXPosition, GameManager.ScaleIt(24));
+                        _liRequiredItems[i].MoveBy(firstXPosition, GameManager.ScaleIt(22));
                     }
                     else
                     {

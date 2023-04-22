@@ -1326,25 +1326,26 @@ namespace RiverHollow.Map_Handling
 
             RHTile tile = MouseTile;
 
-            if (PlayerManager.PlayerActor.Mounted && (tile.GetTravelPoint() == null || !PlayerManager.PlayerActor.ActiveMount.CanEnterBuilding(tile.GetTravelPoint().LinkedMap)))
+            if (PlayerManager.PlayerActor.Mounted && (tile == null || tile.GetTravelPoint() == null || !PlayerManager.PlayerActor.ActiveMount.CanEnterBuilding(tile.GetTravelPoint().LinkedMap)))
             {
                 PlayerManager.PlayerActor.Dismount();
                 return true;
             }
 
             //Do nothing if no tile could be retrieved
-            if (tile == null) { return rv; }
-
-            rv = tile.ProcessRightClick();
-
-            TheShop?.Interact(this, mouseLocation);
-
-            foreach (Actor c in _liActors)
+            if (tile != null)
             {
-                if (PlayerManager.PlayerInRange(c.HoverBox, (int)(Constants.TILE_SIZE * 1.5)) && c.HoverContains(mouseLocation) && c.OnTheMap)
+                rv = tile.ProcessRightClick();
+
+                TheShop?.Interact(this, mouseLocation);
+
+                foreach (Actor c in _liActors)
                 {
-                    c.ProcessRightButtonClick();
-                    return true;
+                    if (PlayerManager.PlayerInRange(c.HoverBox, (int)(Constants.TILE_SIZE * 1.5)) && c.HoverContains(mouseLocation) && c.OnTheMap)
+                    {
+                        c.ProcessRightButtonClick();
+                        return true;
+                    }
                 }
             }
 
@@ -1364,15 +1365,15 @@ namespace RiverHollow.Map_Handling
             removedList.ForEach(x => _liItems.Remove(x));
             removedList.Clear();
 
-            Item dummyItem = DataManager.GetItem(GameManager.HeldObject);
+            Item dummyItem = DataManager.GetItem((Buildable)HeldObject);
             if (dummyItem != null && InventoryManager.HasSpaceInInventory(dummyItem.ID, 1) && !((Buildable)HeldObject).Unique)
             {
                 InventoryManager.AddToInventory(dummyItem.ID, 1);
-                MapManager.EndBuildingAndScrying();
+                MapManager.EndBuilding();
             }
-            else if (dummyItem == null)
+            else if ((dummyItem == null && !TownModeMoving()) || HeldObject == null)
             {
-                MapManager.EndBuildingAndScrying();
+                MapManager.EndBuilding();
             }
 
             return rv;
@@ -1620,9 +1621,9 @@ namespace RiverHollow.Map_Handling
                         break;
                 }
 
-                Item dummyItem = DataManager.GetItem(GameManager.HeldObject);
+                Item dummyItem = DataManager.GetItem((Buildable)HeldObject);
                 //Check for if we are done placing the object of that type
-                if (TownModeMoving() || !InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
+                if (TownModeMoving() || dummyItem == null || !InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
                 {
                     if (!TownModeMoving())
                     {
@@ -1685,7 +1686,7 @@ namespace RiverHollow.Map_Handling
             else
             {
                 LeaveTownMode();
-                MapManager.EndBuildingAndScrying();
+                MapManager.EndBuilding();
             }
         }
 

@@ -29,7 +29,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             if (Show())
             {
-                _sprite.Draw(spriteBatch, false);
+                _sprite.Draw(spriteBatch, false, _fAlpha);
             }
         }
 

@@ -92,12 +92,12 @@
     <Compile Include="Game Managers\TownManager.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIToggle.cs" />
     <Compile Include="GUIComponents\Screens\DefeatedScreen.cs" />
-    <Compile Include="GUIComponents\Screens\HUDComponents\HUDConstruction.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\HUDMenu.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\ItemDisplayWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\NPCDisplayWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDCodex.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDCraftRecipes.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\HUDCraftStructures.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDGiftWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDMerchantWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\HUDMiniInventory.cs" />

@@ -491,9 +491,10 @@ namespace RiverHollow.Game_Managers
             return GetItem(id, GetIntByIDKey(id, "CraftAmount", DataType.Item, 1) * batchSize);
         }
 
-        public static Item GetItem(WorldObject obj, int num = 1)
+        public static Item GetItem(Buildable obj, int num = 1)
         {
-            return obj == null ? null : GetItem(obj.ID + Constants.BUILDABLE_ID_OFFSET, num);
+            if (obj == null || obj.Unique) { return null; }
+            else { return GetItem(obj.ID + Constants.BUILDABLE_ID_OFFSET, num); }
         }
         public static Item GetItem(int id)
         {

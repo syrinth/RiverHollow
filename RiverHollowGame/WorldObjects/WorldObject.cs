@@ -332,10 +332,14 @@ namespace RiverHollow.WorldObjects
 
         public void AddToInventory()
         {
-            Item displayItem = DataManager.GetItem(this);
-            if (InventoryManager.HasSpaceInInventory(displayItem.ID, 1))
+            if (IsBuildable())
             {
-                InventoryManager.AddToInventory(displayItem);
+
+                Item displayItem = DataManager.GetItem((Buildable)this);
+                if (InventoryManager.HasSpaceInInventory(displayItem.ID, 1))
+                {
+                    InventoryManager.AddToInventory(displayItem);
+                }
             }
         }
 

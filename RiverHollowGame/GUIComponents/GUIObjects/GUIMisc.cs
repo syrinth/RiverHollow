@@ -232,8 +232,17 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             int chosenScale = CurrentScale;
             int biggestValue = Math.Max(ItemObject.SourceRectangle.Width, ItemObject.SourceRectangle.Height);
 
-            if(biggestValue > Constants.TILE_SIZE && biggestValue == Constants.TILE_SIZE * 2) { chosenScale = 2; }
-            else if(biggestValue > Constants.TILE_SIZE) { chosenScale = 1; }
+            if (biggestValue > Constants.TILE_SIZE)
+            {
+                if (biggestValue == Constants.TILE_SIZE * 2)
+                {
+                    chosenScale = 2;
+                }
+                else
+                {
+                    chosenScale = 1;
+                }
+            }
 
             _gImg.SetScale(chosenScale);
 
@@ -307,7 +316,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public void SetCompareNumToPlayer()
         {
             CompareNumToPlayer = true;
-
+            DrawNumbers = ItemBoxDraw.Always;
             int playerNum = InventoryManager.GetNumberInInventory(ItemObject.ID);
             _gText.SetText(string.Format("{0}/{1}", playerNum, ItemObject.Number));
             SetTextPosition();

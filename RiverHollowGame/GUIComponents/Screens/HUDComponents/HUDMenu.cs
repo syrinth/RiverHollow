@@ -26,12 +26,12 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             _closeMenu = closeMenu;
 
             _liButtons = new List<GUIObject>();
-            AddButtons(HUDMenuEnum.Main);
+            NewButtonMenu(HUDMenuEnum.Main);
             
             _bOpen = true;
         }
 
-        public void AddButtons(HUDMenuEnum menuType)
+        public void NewButtonMenu(HUDMenuEnum menuType)
         {
             _eCurrentState = menuType;
 
@@ -47,7 +47,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
                     _liButtons.Add(btn);
                     _liButtons.Add(new GUIButton("Crafting", BtnCrafting));
                     _liButtons.Add(new GUIButton("Move", BtnMove));
-                    _liButtons.Add(new GUIButton("Exit", BtnExitBuildMenu));
+                    _liButtons.Add(new GUIButton("Back", BtnBackToMain));
                     break;
                 case HUDMenuEnum.Main:
                     _liButtons.Add(new GUIButton("Inventory", BtnInventory));
@@ -105,7 +105,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
                 }
                 else
                 {
-                    AddButtons(HUDMenuEnum.Main);
+                    NewButtonMenu(HUDMenuEnum.Main);
                 }
                 
             }
@@ -157,13 +157,13 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         {
             if (!MapManager.CurrentMap.Modular)
             {
-                AddButtons(HUDMenuEnum.Build);
+                NewButtonMenu(HUDMenuEnum.Build);
             }
         }
 
         public void BtnStructure()
         {
-            var _gMenuObject = new HUDConstruction(_closeMenu);
+            var _gMenuObject = new HUDCraftStructures(_closeMenu);
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
         }
@@ -175,9 +175,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             GUIManager.OpenMainObject(_gMenuObject);
         }
 
-        public void BtnExitBuildMenu()
+        public void BtnBackToMain()
         {
-            AddButtons(HUDMenuEnum.Main);
+            NewButtonMenu(HUDMenuEnum.Main);
             GUIManager.CloseMainObject();
         }
 
