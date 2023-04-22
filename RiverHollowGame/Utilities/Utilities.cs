@@ -11,9 +11,6 @@ using System.Linq;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 using MonoGame.Extended.Tiled;
-using System.Windows.Input;
-using Microsoft.Xna.Framework.Input;
-using System.Xml.Linq;
 
 namespace RiverHollow.Utilities
 {

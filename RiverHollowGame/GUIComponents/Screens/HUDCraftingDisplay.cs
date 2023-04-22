@@ -227,52 +227,6 @@ namespace RiverHollow.GUIComponents.Screens
             return rv;
         }
 
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
-            //if (_winCraftables.Contains(mouse))
-            //{
-            //    foreach (GUIItemBox gIB in _arrDisplay)
-            //    {
-            //        if (gIB != null && gIB.Contains(mouse))
-            //        {
-            //            Item chosenItem = gIB.BoxItem;
-            //            if (chosenItem.ID != _iSelectedItemID)
-            //            {
-            //                foreach (GUIItem r in _liRequiredItems) { _winMain.RemoveControl(r); }
-
-            //                _liRequiredItems.Clear();
-            //                _iSelectedItemID = chosenItem.ID;
-            //                foreach (KeyValuePair<int, int> kvp in chosenItem.GetRequiredItems())
-            //                {
-            //                    GUIItem newItem = new GUIItem(DataManager.GetItem(kvp.Key, kvp.Value));
-            //                    if(!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
-            //                    {
-            //                        newItem.SetColor(Color.Red);
-            //                    }
-            //                    _liRequiredItems.Add(newItem);
-            //                }
-
-            //                _gName.SetText(chosenItem.Name());
-                            
-            //                _gDescription.SetText(_gDescription.ParseText(chosenItem.Description(), _winMain.InnerWidth(), 5)[0]);
-
-            //                ConfigureInfo();
-            //            }
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    foreach (GUIItem r in _liRequiredItems)
-            //    {
-            //        r.ProcessHover(mouse);
-            //    }
-            //}
-
-            return rv;
-        }
-
         private void BatchDecrease()
         {
             if (_iBatchSize > 1) { _iBatchSize--; }
@@ -342,48 +296,16 @@ namespace RiverHollow.GUIComponents.Screens
                 _arrRecipes[i].Enable(_arrRecipes[i].BoxItem != null && InventoryManager.HasSufficientItems(_arrRecipes[i].BoxItem.GetRequiredItems()) && !_objMachine.CapacityFull());
             }
 
-            for (int j = 0; j < _liRequiredItems.Count; j++)
-            {
-                _gComponents.RemoveControl(_liRequiredItems[j]);
-            }
-
-            _liRequiredItems.Clear();
-            foreach (KeyValuePair<int, int> kvp in chosenItem.GetRequiredItems())
-            {
-                GUIItemBox newItem = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value * _iBatchSize));
-                newItem.CompareNumToPlayer();
-                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value * _iBatchSize))
-                {
-                    newItem.SetColor(Color.Red);
-                }
-                _liRequiredItems.Add(newItem);
-            }
+            bool sufficientItems = GUIUtils.CreateRequiredItemsList(ref _liRequiredItems, chosenItem.GetRequiredItems());
 
             _gName.SetText(chosenItem.Name());
-            _gName.Position(_gComponents.Position());// AnchorToInnerSide(_winMain, SideEnum.TopLeft, ScaleIt(1));
+            _gName.Position(_gComponents);
             _gName.ScaledMoveBy(0, 6);
             _gName.AlignToObject(_gComponents, SideEnum.CenterX);
 
-            if (_liRequiredItems.Count > 0)
-            {
-                int totalReqWidth = (_liRequiredItems.Count * _liRequiredItems[0].Width) + (_liRequiredItems.Count - 1 * ScaleIt(2));
-                int firstPosition = (_gComponents.Width / 2) - (totalReqWidth / 2);
-                for (int i = 0; i < _liRequiredItems.Count; i++)
-                {
-                    if (i == 0)
-                    {
-                        _liRequiredItems[i].Position(_gComponents.Position());
-                        _liRequiredItems[i].MoveBy(firstPosition, ScaleIt(24));
-                    }
-                    else
-                    {
-                        _liRequiredItems[i].AnchorAndAlignToObject(_liRequiredItems[i - 1], SideEnum.Right, SideEnum.Top, ScaleIt(2));
-                    }
-                    _gComponents.AddControl(_liRequiredItems[i]);
-                }
-            }
+            GUIUtils.CreateSpacedRowAgainstObject(new List<GUIObject>(_liRequiredItems), _gComponents, _gComponents, 2, 24);
 
-            _btnBuild.Enable(InventoryManager.HasSufficientItems(chosenItem.GetRequiredItems(), _iBatchSize) && !_objMachine.CapacityFull() && _objMachine.SufficientStamina());
+            _btnBuild.Enable(sufficientItems && !_objMachine.CapacityFull() && _objMachine.SufficientStamina());
         }
     }
 }

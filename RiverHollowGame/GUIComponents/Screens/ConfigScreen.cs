@@ -46,7 +46,7 @@ namespace RiverHollow.GUIComponents.Screens
             _btnExit = new GUIButton("Main Menu", Exit);
 
             List<GUIObject> listButtons = new List<GUIObject>() { _btnSpawn, _btnExit };
-            GUIObject.CreateSpacedColumn(ref listButtons, RiverHollow.ScreenWidth / 2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
+            GUIUtils.CreateSpacedColumn(ref listButtons, RiverHollow.ScreenWidth / 2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
 
             AddControls(listButtons);
         }

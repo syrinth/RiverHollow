@@ -28,7 +28,7 @@ namespace RiverHollow.GUIComponents.Screens
             _btnGameData.AnchorToScreen(SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
 
             List <GUIObject> listButtons = new List<GUIObject>() { _btnNewGame, _btnLoadGame, _btnExit };
-            GUIObject.CreateSpacedColumn(ref listButtons, RiverHollow.ScreenWidth/2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
+            GUIUtils.CreateSpacedColumn(ref listButtons, RiverHollow.ScreenWidth/2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
 
             AddControl(_btnNewGame);
             AddControl(_btnLoadGame);

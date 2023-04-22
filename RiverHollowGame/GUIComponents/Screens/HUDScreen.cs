@@ -74,7 +74,7 @@ namespace RiverHollow.GUIComponents.Screens
             _gCalendar.AnchorToScreen(SideEnum.TopRight, 10);
             AddControl(_gCalendar);
 
-            _gBuildIcon = DataManager.GetIcon(GameIconEnum.Hammer);
+            _gBuildIcon = GUIUtils.GetIcon(GameIconEnum.Hammer);
             _gBuildIcon.AnchorAndAlignToObject(_gCalendar, SideEnum.Left, SideEnum.CenterY, ScaleIt(4));
 
         }

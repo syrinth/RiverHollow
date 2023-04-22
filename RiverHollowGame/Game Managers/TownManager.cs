@@ -334,11 +334,17 @@ namespace RiverHollow.Game_Managers
         #region Town Helpers
         public static void AddToCodex(int id)
         {
-            DIArchive[id] = new ValueTuple<bool, bool>(true, false);
+            if (DataManager.ItemKeys.Contains(id))
+            {
+                DIArchive[id] = new ValueTuple<bool, bool>(true, false);
+            }
         }
         public static void AddToArchive(int id)
         {
-            DIArchive[id] = new ValueTuple<bool, bool>(true, true);
+            if (DataManager.ItemKeys.Contains(id))
+            {
+                DIArchive[id] = new ValueTuple<bool, bool>(true, true);
+            }
         }
 
         public static bool AtArchive()
@@ -557,7 +563,14 @@ namespace RiverHollow.Game_Managers
 
             foreach (CodexEntryData data in saveData.CodexEntries)
             {
-                DIArchive[data.id] = new ValueTuple<bool, bool>(data.found, data.archived);
+                if (data.id < 8000)
+                {
+                    DIArchive[data.id] = new ValueTuple<bool, bool>(data.found, data.archived);
+                }
+                else
+                {
+                    int i = 0;
+                }
             }
 
             InventoryManager.InitExtraInventory(Inventory);

@@ -362,9 +362,9 @@ namespace RiverHollow.WorldObjects
         {
             //Need to save null items
             WorldObjectData data = base.SaveData();
-            data.stringData += (int)_eFacingDir + "|";
-            data.stringData += (_objDisplay == null ? "null|" : _objDisplay.ID.ToString());
-            data.stringData += (_itemDisplay == null ? "null" : _itemDisplay.ID.ToString());
+            string objDisplayStr = _objDisplay == null ? "null" : _objDisplay.ID.ToString();
+            string itemDisplayStr = _itemDisplay == null ? "null" : _itemDisplay.ID.ToString();
+            data.stringData = string.Format("{0}|{1}|{2}", (int)_eFacingDir, objDisplayStr, itemDisplayStr);
 
             return data;
         }

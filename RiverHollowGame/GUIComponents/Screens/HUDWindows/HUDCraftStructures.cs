@@ -79,18 +79,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
-            bool rv = false;
-            
-            foreach(var g in new List<GUIObject> { _btnLeft, _btnRight, _btnBuild })
-            {
-                rv = g.ProcessLeftButtonClick(mouse);
-                if (rv)
-                {
-                    break;
-                }
-            }
-
-            return rv;
+            return GUIUtils.ProcessLeftMouseButton(mouse, _btnLeft, _btnRight, _btnBuild);
         }
 
         private void DisplayStructureInfo()
@@ -110,63 +99,19 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gStructure.CenterOnObject(_gBackgroundBox);
             _winMain.AddControl(_gStructure);
 
-            int chosenScale = GameManager.CurrentScale;
-            int biggestValue = Math.Max(obj.Width, obj.Height);
-
-
-            for (int i = 3; i > 0; i--)
-            {
-                if (biggestValue <= (Constants.TILE_SIZE * 4) * i)
-                {
-                    chosenScale = i;
-                }
-            }            
-
-            _gStructure.SetScale(chosenScale);
+            GUIUtils.SetObjectScale(_gStructure, obj.Width, obj.Height, 4);
             _gStructure.CenterOnObject(_gBackgroundBox);
 
-            _liRequiredItems.ForEach(x => _winMain.RemoveControl(x));
-            _liRequiredItems.Clear();
+            bool sufficientItems = GUIUtils.CreateRequiredItemsList(ref _liRequiredItems, obj.RequiredToMake);
 
-            bool canMake = true;
-            Dictionary<int, int> requiredToMake = obj.RequiredToMake;
-            foreach (KeyValuePair<int, int> kvp in obj.RequiredToMake)
-            {
-                GUIItemBox newItem = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
-                newItem.CompareNumToPlayer();
-                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
-                {
-                    canMake = false;
-                    newItem.SetColor(Color.Red);
-                }
-                _liRequiredItems.Add(newItem);
-            }
-
-            _btnBuild.Enable(canMake);
-            _gStructure.Alpha(canMake ? 1 : 0.3f);
+            _btnBuild.Enable(sufficientItems);
+            _gStructure.Alpha(sufficientItems ? 1 : 0.3f);
 
             _gName.SetText(obj.Name());
-            _gName.SetColor(canMake ? Color.Black : Color.Red);
+            _gName.SetColor(sufficientItems ? Color.Black : Color.Red);
             _gName.AnchorAndAlignToObject(_gScroll, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(4));
 
-            if (_liRequiredItems.Count > 0)
-            {
-                int totalReqWidth = (_liRequiredItems.Count * _liRequiredItems[0].Width) + ((_liRequiredItems.Count - 1) * GameManager.ScaleIt(2));
-                int firstXPosition = (_winMain.Width / 2) - (totalReqWidth / 2);
-                for (int i = 0; i < _liRequiredItems.Count; i++)
-                {
-                    if (i == 0)
-                    {
-                        _liRequiredItems[i].Position(new Point(_winMain.Position().X, _gScroll.Position().Y));
-                        _liRequiredItems[i].MoveBy(firstXPosition, GameManager.ScaleIt(22));
-                    }
-                    else
-                    {
-                        _liRequiredItems[i].AnchorAndAlignToObject(_liRequiredItems[i - 1], SideEnum.Right, SideEnum.Top, GameManager.ScaleIt(2));
-                    }
-                    _winMain.AddControl(_liRequiredItems[i]);
-                }
-            }
+            GUIUtils.CreateSpacedRowAgainstObject(new List<GUIObject>(_liRequiredItems), _winMain, _gScroll, 2, 22);
         }
 
         public void BtnLeft()

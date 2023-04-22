@@ -20,7 +20,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         const int COLUMNS = 7;
 
         GUIImage _gSelection;
-        GUIWindow _gWindow;
         GUIText _gName;
         GUIImage _gScroll;
         GUIToggle[] _gFilterTabs;
@@ -41,7 +40,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _liRequiredItems = new List<GUIItemBox>();
             _liCraftingRecipes = PlayerManager.GetCraftingList().FindAll(x => !((Buildable)DataManager.CreateWorldObjectByID(x)).Unique);
 
-            _gWindow = SetMainWindow(GUIWindow.DarkBlue_Window, GameManager.ScaleIt(186), GameManager.ScaleIt(134));
+            _winMain = SetMainWindow(GUIWindow.DarkBlue_Window, GameManager.ScaleIt(186), GameManager.ScaleIt(134));
             _gSelection = new GUIImage(new Rectangle(260, 0, 20, 20), DataManager.DIALOGUE_TEXTURE);
             _gSelection.Show(false);
 
@@ -49,19 +48,19 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _btnLeft.Position(this);
             _btnLeft.ScaledMoveBy(7, 115);
             _btnLeft.Enable(false);
-            _gWindow.AddControl(_btnLeft);
+            _winMain.AddControl(_btnLeft);
 
             _btnRight = new GUIButton(new Rectangle(112, 34, 10, 13), DataManager.DIALOGUE_TEXTURE, BtnRight);
             _btnRight.Position(this);
             _btnRight.ScaledMoveBy(169, 115);
-            _gWindow.AddControl(_btnRight);
+            _winMain.AddControl(_btnRight);
 
             SetUpItemWindows();
 
             _gScroll = new GUIImage(new Rectangle(209, 96, 142, 3), DataManager.HUD_COMPONENTS);
-            _gScroll.AlignToObject(_gWindow, SideEnum.CenterX);
+            _gScroll.AlignToObject(_winMain, SideEnum.CenterX);
             _gScroll.AnchorToObject(_liItemDisplay[MAX_DISPLAY - COLUMNS], SideEnum.Bottom, GameManager.ScaleIt(4));
-            _gWindow.AddControl(_gScroll);
+            _winMain.AddControl(_gScroll);
 
             _gName = new GUIText("");
         }
@@ -74,12 +73,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
-            bool rv = _btnLeft.ProcessLeftButtonClick(mouse);
+            bool rv = GUIUtils.ProcessLeftMouseButton(mouse, _btnLeft, _btnRight);
 
-            if (!rv)
-            {
-                rv = _btnRight.ProcessLeftButtonClick(mouse);
-            }
             if (!rv)
             { 
                 for (int i = 0; i < _liItemDisplay.Count; i++)
@@ -100,12 +95,12 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 }
             }
 
-            return rv;
+            return rv ;
         }
 
         public override bool ProcessHover(Point mouse)
         {
-            bool rv = _gWindow.Contains(mouse);
+            bool rv = _winMain.Contains(mouse);
 
             for(int i =0; i < _liItemDisplay.Count; i++)
             {
@@ -149,24 +144,11 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                     displayWindow.Enable(false);
                 }
 
-                int listIndex = i - _iIndex;
-                if (i == _iIndex)
-                {
-                    displayWindow.Position(this);
-                    displayWindow.ScaledMoveBy(14, 14);
-                }
-                else if (i % COLUMNS == 0)
-                {
-                    displayWindow.AnchorAndAlignToObject(_liItemDisplay[listIndex - COLUMNS], SideEnum.Bottom, SideEnum.Left, GameManager.ScaleIt(3));
-                }
-                else
-                {
-                    displayWindow.AnchorAndAlignToObject(_liItemDisplay[listIndex - 1], SideEnum.Right, SideEnum.Bottom, GameManager.ScaleIt(3));
-                }
-
                 _liItemDisplay.Add(displayWindow);
                 AddControl(displayWindow);
             }
+            
+            GUIUtils.CreateSpacedGrid(new List<GUIObject>(_liItemDisplay), this.Position() + GameManager.ScaleIt(new Point(14, 14)), _iIndex, _iIndex + MAX_DISPLAY, COLUMNS, 3, 3);
 
             _btnLeft.Enable(_iIndex >= MAX_DISPLAY);
             _btnRight.Enable(_iIndex + MAX_DISPLAY < _liCraftingRecipes.Count);
@@ -174,52 +156,20 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
         private void ClearWindows()
         {
-            //RemoveControl(_gInfoWindow);
-
             _liItemDisplay.ForEach(x => RemoveControl(x));
             _liItemDisplay.Clear();
         }
 
         private void UpdateInfo()
         {
-            _liRequiredItems.ForEach(x => _gWindow.RemoveControl(x));
-            _liRequiredItems.Clear();
-
             int objID = _gHoverBox.BoxItem.ID;
             Buildable obj = (Buildable)DataManager.CreateWorldObjectByID(objID);
-            Dictionary<int, int> requiredToMake = obj.RequiredToMake;
-            foreach (KeyValuePair<int, int> kvp in obj.RequiredToMake)
-            {
-                GUIItemBox newItem = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
-                newItem.CompareNumToPlayer();
-                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
-                {
-                    newItem.SetColor(Color.Red);
-                }
-                _liRequiredItems.Add(newItem);
-            }
+            GUIUtils.CreateRequiredItemsList(ref _liRequiredItems, obj.RequiredToMake);
 
             _gName.SetText(obj.Name());
             _gName.AnchorAndAlignToObject(_gScroll, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(4));
 
-            if (_liRequiredItems.Count > 0)
-            {
-                int totalReqWidth = (_liRequiredItems.Count * _liRequiredItems[0].Width) + ((_liRequiredItems.Count - 1) * GameManager.ScaleIt(2));
-                int firstXPosition = (_gWindow.Width / 2) - (totalReqWidth / 2);
-                for (int i = 0; i < _liRequiredItems.Count; i++)
-                {
-                    if (i == 0)
-                    {
-                        _liRequiredItems[i].Position(new Point(_gWindow.Position().X, _gScroll.Position().Y));
-                        _liRequiredItems[i].MoveBy(firstXPosition, GameManager.ScaleIt(22));
-                    }
-                    else
-                    {
-                        _liRequiredItems[i].AnchorAndAlignToObject(_liRequiredItems[i - 1], SideEnum.Right, SideEnum.Top, GameManager.ScaleIt(2));
-                    }
-                    _gWindow.AddControl(_liRequiredItems[i]);
-                }
-            }
+            GUIUtils.CreateSpacedRowAgainstObject(new List<GUIObject>(_liRequiredItems), base._winMain, _gScroll, 2, 22);
         }
 
         public void BtnLeft()

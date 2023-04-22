@@ -38,7 +38,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         private void Setup()
         {
-            _gCoin = DataManager.GetIcon(GameIconEnum.Coin);
+            _gCoin = GUIUtils.GetIcon(GameIconEnum.Coin);
 
             if (_bCoinOnRight)
             {
@@ -89,7 +89,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         private void Setup()
         {
-            _gKeys = DataManager.GetIcon(GameIconEnum.Key);
+            _gKeys = GUIUtils.GetIcon(GameIconEnum.Key);
 
             _gKeysText.AnchorAndAlignToObject(_gKeys, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
 
@@ -229,22 +229,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             _gImg = new GUIImage(ItemObject.SourceRectangle, ItemObject.SourceRectangle.Width, ItemObject.SourceRectangle.Height, ItemObject.Texture);
 
-            int chosenScale = CurrentScale;
-            int biggestValue = Math.Max(ItemObject.SourceRectangle.Width, ItemObject.SourceRectangle.Height);
-
-            if (biggestValue > Constants.TILE_SIZE)
-            {
-                if (biggestValue == Constants.TILE_SIZE * 2)
-                {
-                    chosenScale = 2;
-                }
-                else
-                {
-                    chosenScale = 1;
-                }
-            }
-
-            _gImg.SetScale(chosenScale);
+            GUIUtils.SetObjectScale(_gImg, ItemObject.SourceRectangle.Width, ItemObject.SourceRectangle.Height, 1);
 
             _gText = new GUIText(ItemObject.Number.ToString(), true, DataManager.FONT_NUMBER_DISPLAY);
             _gText.SetColor(Color.White);
@@ -313,102 +298,22 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _gText.SetColor(c);
         }
 
-        public void SetCompareNumToPlayer()
+        public bool SetCompareNumToPlayer()
         {
+            bool rv = true;
             CompareNumToPlayer = true;
             DrawNumbers = ItemBoxDraw.Always;
             int playerNum = InventoryManager.GetNumberInInventory(ItemObject.ID);
             _gText.SetText(string.Format("{0}/{1}", playerNum, ItemObject.Number));
             SetTextPosition();
-        }
-    }
 
-    public class ConstructBox : GUIObject
-    {
-        public static int CONSTRUCTBOX_WIDTH = 544; //(GUIManager.MAIN_COMPONENT_WIDTH) - (_gWindow.EdgeSize * 2) - ScaledTileSize
-        public static int CONSTRUCTBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDTaskLog.MAX_SHOWN_TASKS) - (_gWindow.EdgeSize * 2)
-
-        readonly GUIWindow _window;
-        GUIText _gName;
-        public int _iBuildID;
-        public delegate void SelectConstructID(int objID);
-        private SelectConstructID _delAction;
-
-        public ConstructBox(SelectConstructID del)
-        {
-            _delAction = del;
-
-            int boxWidth = CONSTRUCTBOX_WIDTH;
-            int boxHeight = CONSTRUCTBOX_HEIGHT;            
-
-            _window = new GUIWindow(GUIWindow.Brown_Window, boxWidth, boxHeight);
-            AddControl(_window);
-            Width = _window.Width;
-            Height = _window.Height;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            if (Show())
+            if (!InventoryManager.HasItemInPlayerInventory(ItemObject.ID, ItemObject.Number))
             {
-                _window.Draw(spriteBatch);
-            }
-        }
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-            if (Contains(mouse) && _delAction != null)
-            {
-                rv = true;
-                _delAction(_iBuildID);
+                rv = false;
+                SetColor(Color.Red);
             }
 
             return rv;
-        }
-
-        public override bool ProcessHover(Point mouse) { return false; }
-
-        public void SetConstructionInfo(int id, string objName, Dictionary<int, int> requiredToMake)
-        {
-            _iBuildID = id;
-
-            Color textColor = Color.Black;
-            bool spaceInInventory = InventoryManager.HasSpaceInInventory(id + Constants.BUILDABLE_ID_OFFSET, 1);
-
-            if (!InventoryManager.HasSufficientItems(requiredToMake) || !spaceInInventory)
-            {
-                textColor = Color.Red;
-                _delAction = null;
-            }
-
-            _gName = new GUIText(objName);
-            _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
-            _gName.SetColor(textColor);
-
-            List<GUIItemBox> list = new List<GUIItemBox>();
-            foreach (KeyValuePair<int, int> kvp in requiredToMake)
-            {
-                GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
-                box.DrawNumber(ItemBoxDraw.Always);
-
-                if (list.Count == 0) { box.AnchorToInnerSide(_window, SideEnum.BottomRight); }
-                else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Left, SideEnum.Bottom); }
-
-                if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value)) { box.SetColor(Color.Red); }
-
-                list.Add(box);
-            }
-        }
-
-        public void SetConstructionInfo(int id, string objName, int number)
-        {
-            _iBuildID = id;
-
-            _gName = new GUIText(objName);
-            _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
-
-            GUIText text = new GUIText(number);
-            text.AnchorToInnerSide(_window, SideEnum.Right);
         }
     }
 }

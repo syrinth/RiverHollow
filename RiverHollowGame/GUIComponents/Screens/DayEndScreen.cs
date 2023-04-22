@@ -166,7 +166,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                             if (((Traveler)npc).Income > 0)
                             {
-                                GUIImage coin = DataManager.GetIcon(GameIconEnum.Coin);
+                                GUIImage coin = GUIUtils.GetIcon(GameIconEnum.Coin);
                                 coin.Position(npc.Position);
                                 coin.ScaledMoveBy(0, -Constants.TILE_SIZE);
                                 _liCoins.Add(coin);
@@ -279,7 +279,7 @@ namespace RiverHollow.GUIComponents.Screens
             _eCurrentPhase = DayEndPhaseEnum.SpawnNPCs;
 
             _gWindow = new GUIWindow(GUIWindow.Brown_Window, ScaleIt(76), ScaleIt(28));
-            GUIImage gCoin = DataManager.GetIcon(GameIconEnum.Coin);
+            GUIImage gCoin = GUIUtils.GetIcon(GameIconEnum.Coin);
             _gWindow.AddControl(gCoin);
 
             gCoin.ScaledMoveBy(7, 6);

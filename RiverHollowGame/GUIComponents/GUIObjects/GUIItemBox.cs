@@ -87,9 +87,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
-        public void CompareNumToPlayer()
+        public bool CompareNumToPlayer()
         {
-            _guiItem.SetCompareNumToPlayer();
+            return _guiItem.SetCompareNumToPlayer();
         }
 
         public void SetAlpha(float val)

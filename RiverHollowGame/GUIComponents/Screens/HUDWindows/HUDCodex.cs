@@ -14,6 +14,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
     {
         const int MAX_ACTOR_DISPLAY = 15;
         const int MAX_ITEM_DISPLAY = 35;
+        const int ITEM_COLUMNS = 7;
+        const int ACTOR_COLUMNS = 5;
 
         GUIWindow _gWindow;
         List<NPCDisplayWindow> _liActorDisplay;
@@ -253,33 +255,19 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             }
             _gLabel.AnchorToInnerSide(_gWindow, SideEnum.Top);
 
-            for (int i = _iIndex; i < _iIndex + 15; i++)
+            for (int i = _iIndex; i < _iIndex + MAX_ACTOR_DISPLAY; i++)
             {
                 if (actors.Count <= i)
                 {
                     break;
                 }
 
-                NPCDisplayWindow npc = new NPCDisplayWindow(actors[i]);
-
-                int listIndex = i - _iIndex;
-                if (i == _iIndex)
-                {
-                    npc.Position(this);
-                    npc.ScaledMoveBy(9, 18);
-                }
-                else if (i % 5 == 0)
-                {
-                    npc.AnchorAndAlignToObject(_liActorDisplay[listIndex - 5], SideEnum.Bottom, SideEnum.Left, GameManager.ScaleIt(3));
-                }
-                else
-                {
-                    npc.AnchorAndAlignToObject(_liActorDisplay[listIndex - 1], SideEnum.Right, SideEnum.Bottom, GameManager.ScaleIt(2));
-                }
-
+                var npc = new NPCDisplayWindow(actors[i]);
                 _liActorDisplay.Add(npc);
                 AddControl(npc);
             }
+
+            GUIUtils.CreateSpacedGrid(new List<GUIObject>(_liActorDisplay), this.Position() + GameManager.ScaleIt(new Point(9, 18)), _iIndex, _iIndex + MAX_ACTOR_DISPLAY, ACTOR_COLUMNS, 2, 3);
 
 
             _gTotal = new GUIText(string.Format("{0}/{1}", found, actors.Count));
@@ -314,27 +302,12 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 }
 
                 int museumIndex = itemIDs[i];
-                ItemDisplayWindow displayWindow = new ItemDisplayWindow(museumIndex, TownManager.DIArchive[museumIndex]);
-
-                int listIndex = i - _iIndex;
-                if (i == _iIndex)
-                {
-                    displayWindow.Position(this);
-                    displayWindow.ScaledMoveBy(14, 40);
-                }
-                else if (i % 7 == 0)
-                {
-                    displayWindow.AnchorAndAlignToObject(_liItemDisplay[listIndex - 7], SideEnum.Bottom, SideEnum.Left, GameManager.ScaleIt(3));
-                }
-                else
-                {
-                    displayWindow.AnchorAndAlignToObject(_liItemDisplay[listIndex - 1], SideEnum.Right, SideEnum.Bottom, GameManager.ScaleIt(3));
-                }
-
+                var displayWindow = new ItemDisplayWindow(museumIndex, TownManager.DIArchive[museumIndex]);
                 _liItemDisplay.Add(displayWindow);
                 AddControl(displayWindow);
             }
 
+            GUIUtils.CreateSpacedGrid(new List<GUIObject>(_liItemDisplay), this.Position() + GameManager.ScaleIt(new Point(14, 40)), _iIndex, _iIndex + MAX_ITEM_DISPLAY, ITEM_COLUMNS, 3, 3);
 
             _gTotal = new GUIText(string.Format("{0}/{1}", found, itemIDs.Count));
             _gTotal.AlignToObject(_gWindow, SideEnum.Center);

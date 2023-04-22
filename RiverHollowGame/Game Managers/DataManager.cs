@@ -859,32 +859,6 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static GUIImage GetIcon(GameIconEnum e)
-        {
-            GUIImage rv = null;
-
-            switch (e)
-            {
-                case GameIconEnum.Book:
-                    rv = new GUIImage(new Rectangle(288, 80, 14, 14), HUD_COMPONENTS);
-                    break;
-                case GameIconEnum.Coin:
-                    rv = new GUIImage(new Rectangle(0, 32, 16, 16), DIALOGUE_TEXTURE);
-                    break;
-                case GameIconEnum.Key:
-                    rv = new GUIImage(new Rectangle(16, 16, 16, 16), DIALOGUE_TEXTURE);
-                    break;
-                case GameIconEnum.Traveler:
-                    rv = new GUIImage(new Rectangle(336, 80, 14, 15), HUD_COMPONENTS);
-                    break;
-                case GameIconEnum.Hammer:
-                    rv = new GUIImage(new Rectangle(320, 80, 14, 14), HUD_COMPONENTS);
-                    break;
-            }
-
-            return rv;
-        }
-
         #region Text Handlers
         private static string GetGameText(string key)
         {

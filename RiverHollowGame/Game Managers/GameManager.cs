@@ -95,6 +95,11 @@ namespace RiverHollow.Game_Managers
             return new Vector2(ScaleIt((int)val.X), ScaleIt((int)val.Y));
         }
 
+        public static Point ScaleIt(Point val)
+        {
+            return new Point(ScaleIt(val.X), ScaleIt(val.Y));
+        }
+
         #region Trigger Handling
         public static void AddTriggerObject(TriggerObject t)
         {

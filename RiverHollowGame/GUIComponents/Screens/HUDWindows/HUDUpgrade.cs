@@ -83,7 +83,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gImage.AddControl(lvl);
 
             //Traveler Display
-            var travelers = DataManager.GetIcon(GameIconEnum.Traveler);
+            var travelers = GUIUtils.GetIcon(GameIconEnum.Traveler);
             travelers.Position(_gImage.Position());
             travelers.ScaledMoveBy(37, 36);
             _gImage.AddControl(travelers);
@@ -93,7 +93,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gImage.AddControl(travelerPercent);
 
             //Profit Display
-            var profits = DataManager.GetIcon(GameIconEnum.Coin);
+            var profits = GUIUtils.GetIcon(GameIconEnum.Coin);
             profits.Position(_gImage.Position());
             profits.ScaledMoveBy(111, 36);
             _gImage.AddControl(profits);
@@ -161,7 +161,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                         bonusValue = nextUpgrade.FormulaLevel.ToString();
                     }
 
-                    var bonusIcon = DataManager.GetIcon(icon);
+                    var bonusIcon = GUIUtils.GetIcon(icon);
                     bonusIcon.Position(_gImage.Position());
                     bonusIcon.ScaledMoveBy(63, 71);
                     _gImage.AddControl(bonusIcon);

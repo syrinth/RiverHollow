@@ -31,7 +31,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
             get { return _parentScreen; }
             set { _parentScreen = value; }
         }
-        internal static Point CenterScreen = new Point(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
 
         protected double _dScale = 1;
 
@@ -142,14 +141,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _Color = c;
         }
 
-        public static Vector2 PosFromCenter(Vector2 center, int width, int height)
-        {
-            return new Vector2(center.X - width / 2, center.Y - height / 2);
-        }
-        public static Vector2 PosFromCenter(int x, int y, int width, int height)
-        {
-            return new Vector2(x - width / 2, y - height / 2);
-        }
         public virtual bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
@@ -371,13 +362,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 control.MemberOf = null;
             }
         }
-        public virtual void RemoveControlDelayed(GUIObject g)
+
+        public void RemoveSelfFromControls()
         {
-            if (g != null && Controls.Contains(g) && !ToRemove.Contains(g))
-            {
-                ToRemove.Add(g);
-                g.MemberOf = null;
-            }
+            MemberOf?.RemoveControl(this);
+            ParentWindow?.RemoveControl(this);
         }
 
         #region Alpha
@@ -418,77 +407,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public void SetY(int y)
         {
             Position(new Point(_pPos.X, y));
-        }
-        internal static void CreateSpacedColumn(ref List<GUIObject> components, int columnLine, int start, int totalHeight, int spacing, bool alignToColumnLine = false)
-        {
-            int startY = start + ((totalHeight - (components.Count * components[0].Height) - (spacing * components.Count - 1)) / 2) + components[0].Height / 2;
-            Point position = new Point(alignToColumnLine ? columnLine : columnLine - components[0].Width / 2, startY);
-
-            foreach (GUIObject o in components)
-            {
-                o.Position(position);
-                position.Y += o.Height + spacing;
-            }
-        }
-        internal static void CreateSpacedRow(ref List<GUIObject> components, int rowLine, int start, int totalWidth, int spacing, bool alignToRowLine = false)
-        {
-            int startX = start + ((totalWidth - (components.Count * components[0].Width) - (spacing * components.Count - 1)) / 2) + components[0].Width / 2;
-            Point position = new Point(startX, alignToRowLine ? rowLine : rowLine - components[0].Height / 2);
-
-            foreach (GUIObject o in components)
-            {
-                o.Position(position);
-                position.X += o.Width + spacing;
-            }
-        }
-        internal static void CreateSpacedGrid(ref List<GUIObject> components, Point start, int totalWidth, int columns, int spacing = 0)
-        {
-            if (components.Count == 0) { return; }
-            if (spacing == 0) { spacing = (totalWidth - (components[0].Width * columns)) / columns; }
-
-            int i = 0; int j = 0;
-            for (int index = 0; index < components.Count; index++)
-            {
-                GUIObject g = components[index];
-                if (index == 0) { g.Position(start); }
-                else
-                {
-                    i++;
-                    if (i == columns)
-                    {
-                        i = 0;
-                        j++;
-                        g.AnchorAndAlignToObject(components[index - columns], SideEnum.Bottom, SideEnum.Left, spacing);
-                    }
-                    else
-                    {
-                        g.AnchorAndAlignToObject(components[index - 1], SideEnum.Right, SideEnum.Top, spacing);
-                    }
-                }
-            }
-        }
-        internal static void CenterAndAlignToScreen(ref List<GUIObject> components)
-        {
-            int top = (int)components[0].Position().Y;
-            int bottom = (int)components[0].Position().Y + components[0].Height;
-            int left = (int)components[0].Position().X;
-            int right = (int)components[0].Position().X + components[0].Width;
-
-            foreach (GUIObject o in components)
-            {
-                top = (int)MathHelper.Min(top, o.Position().Y);
-                bottom = (int)MathHelper.Max(bottom, o.Position().Y + o.Height);
-                left = (int)MathHelper.Min(left, o.Position().X);
-                right = (int)MathHelper.Max(right, o.Position().X + o.Width);
-            }
-
-            Point stackCenter = new Rectangle(left, top, right - left, bottom - top).Center;
-            Point delta = CenterScreen - stackCenter;
-
-            foreach (GUIObject o in components)
-            {
-                o.Position(o.Position() + delta);
-            }
         }
 
         internal void AnchorAndAlignToObject(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, int spacing = 0, bool addToWindow = true)
