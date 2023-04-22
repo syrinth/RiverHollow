@@ -103,22 +103,17 @@ namespace RiverHollow.WorldObjects
 
         private bool ClickProcess()
         {
-            bool rv = false;
-            if (Tiles.Find(x => x.PlayerIsAdjacent()) != null)
+            if (HoldingItem())
             {
-                rv = true;
-                if (HoldingItem())
-                {
-                    InventoryManager.AddToInventory(DataManager.CraftItem(CraftingSlots[0].ID));
-                    CraftingSlots[0].ID = -1;
-                }
-                else
-                {
-                    GUIManager.OpenMainObject(new HUDCraftingDisplay(this));
-                }
+                InventoryManager.AddToInventory(DataManager.CraftItem(CraftingSlots[0].ID));
+                CraftingSlots[0].ID = -1;
+            }
+            else
+            {
+                GUIManager.OpenMainObject(new HUDCraftingDisplay(this));
             }
 
-            return rv;
+            return true;
         }
 
         public bool MakingSomething()

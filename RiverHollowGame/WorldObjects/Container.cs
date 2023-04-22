@@ -32,27 +32,6 @@ namespace RiverHollow.WorldObjects
             InventoryManager.ClearExtraInventory();
         }
 
-        public override bool ProcessLeftClick()
-        {
-            bool rv = false;
-            var inventoryList = Util.MultiArrayToList(Inventory);
-            if (GameManager.HeldObject == null)
-            {
-                if (inventoryList.All(x => x == null))
-                {
-                    rv = true;
-                    CurrentMap.RemoveWorldObject(this, true);
-                    GameManager.MovingWorldObject(this);
-                }
-                else
-                {
-                    SoundManager.PlayEffect("Cancel");
-                }
-            }
-
-            return rv;
-        }
-
         public override bool ProcessRightClick()
         {
             GUIManager.OpenMainObject(new HUDInventoryDisplay(Inventory, DisplayTypeEnum.Inventory));

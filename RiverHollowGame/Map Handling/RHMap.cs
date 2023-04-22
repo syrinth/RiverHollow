@@ -72,7 +72,6 @@ namespace RiverHollow.Map_Handling
         protected List<Mob> _liMobs;
         public IList<Mob> Mobs { get { return _liMobs.AsReadOnly(); } }
         public List<Actor> ToAdd;
-        private List<Building> _liBuildings;
         private List<WorldObject> _liPlacedWorldObjects;
         private List<WorldObject> _liResourceObjects;
         private List<ResourceSpawn> _liResourceSpawns;
@@ -105,7 +104,6 @@ namespace RiverHollow.Map_Handling
             _liTilesets = new List<TiledMapTileset>();
             _liActors = new List<Actor>();
             _liMobs = new List<Mob>();
-            _liBuildings = new List<Building>();
             _liItems = new List<MapItem>();
             _liMapObjects = new List<TiledMapObject>();
             _liClickObjects = new List<KeyValuePair<Rectangle, string>>();
@@ -144,8 +142,6 @@ namespace RiverHollow.Map_Handling
                 DungeonName = _map.Properties["Dungeon"];
                 DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], _map.Properties.ContainsKey("Procedural"), this);
             }
-
-            _liBuildings = map._liBuildings;
             _liPlacedWorldObjects = map._liPlacedWorldObjects;
             _liLights = map._liLights;
             _liHeldLights = map._liHeldLights;
@@ -351,7 +347,6 @@ namespace RiverHollow.Map_Handling
 
             _liActors.ForEach(x => x.Draw(spriteBatch, true));
             _liMobs.FindAll(x => x.Subtype != MobTypeEnum.Flyer || !x.HasHP).ForEach(x => x.Draw(spriteBatch, true));
-            _liBuildings.ForEach(x => x.Draw(spriteBatch));
             _liPlacedWorldObjects.ForEach(x => x.Draw(spriteBatch));
             _liItems.ForEach(x => x.Draw(spriteBatch));
 
@@ -370,7 +365,7 @@ namespace RiverHollow.Map_Handling
                     bool passable = CanPlaceObject(t, HeldObject);
                     if (!passable || (passable && !HeldObject.CompareType(ObjectTypeEnum.Wallpaper)))
                     {
-                        spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), new Rectangle(288, 128, Constants.TILE_SIZE, Constants.TILE_SIZE), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
+                        spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle(t.Position.X, t.Position.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), new Rectangle(288, 128, Constants.TILE_SIZE, Constants.TILE_SIZE), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                     }
                 }
             }
@@ -1187,6 +1182,10 @@ namespace RiverHollow.Map_Handling
             //Checking for a MapChange takes priority overlooking for collisions.
             if (CheckForMapChange(actor, testRectX) || CheckForMapChange(actor, testRectY))
             {
+                if (GameManager.InTownMode())
+                {
+                    dir = Vector2.Zero;
+                }
                 return false;
             }
             else if (!ignoreCollisions)
@@ -1223,7 +1222,10 @@ namespace RiverHollow.Map_Handling
                 {
                     if (kvp.Value.Intersects(movingChar) && !kvp.Value.IsDoor && kvp.Value.IsActive)
                     {
-                        MapManager.ChangeMaps(c, this.Name, kvp.Value);
+                        if (c != PlayerManager.PlayerActor || !GameManager.InTownMode())
+                        {
+                            MapManager.ChangeMaps(c, this.Name, kvp.Value);
+                        }
                         return true;
 
                         //Unused code for now since AdventureMaps are unused
@@ -1324,56 +1326,53 @@ namespace RiverHollow.Map_Handling
 
             if (GamePaused()) { return false; }
 
-            RHTile tile = MouseTile;
-
-            if (PlayerManager.PlayerActor.Mounted && (tile == null || tile.GetTravelPoint() == null || !PlayerManager.PlayerActor.ActiveMount.CanEnterBuilding(tile.GetTravelPoint().LinkedMap)))
+            if (InTownMode())
             {
-                PlayerManager.PlayerActor.Dismount();
-                return true;
+                rv = true;
+                TownModeRightClick();
             }
-
-            //Do nothing if no tile could be retrieved
-            if (tile != null)
+            else
             {
-                rv = tile.ProcessRightClick();
+                RHTile tile = MouseTile;
 
-                TheShop?.Interact(this, mouseLocation);
-
-                foreach (Actor c in _liActors)
+                if (PlayerManager.PlayerActor.Mounted && (tile == null || tile.GetTravelPoint() == null || !PlayerManager.PlayerActor.ActiveMount.CanEnterBuilding(tile.GetTravelPoint().LinkedMap)))
                 {
-                    if (PlayerManager.PlayerInRange(c.HoverBox, (int)(Constants.TILE_SIZE * 1.5)) && c.HoverContains(mouseLocation) && c.OnTheMap)
+                    PlayerManager.PlayerActor.Dismount();
+                    return true;
+                }
+
+                //Do nothing if no tile could be retrieved
+                if (tile != null)
+                {
+                    rv = tile.ProcessRightClick();
+
+                    TheShop?.Interact(this, mouseLocation);
+
+                    foreach (Actor c in _liActors)
                     {
-                        c.ProcessRightButtonClick();
-                        return true;
+                        if (PlayerManager.PlayerInRange(c.HoverBox, (int)(Constants.TILE_SIZE * 1.5)) && c.HoverContains(mouseLocation) && c.OnTheMap)
+                        {
+                            c.ProcessRightButtonClick();
+                            return true;
+                        }
                     }
                 }
-            }
 
-            var removedList = new List<MapItem>();
-            for (int i = 0; i < _liItems.Count; i++)
-            {
-                MapItem it = _liItems[i];
-                if (it.PickupState == ItemPickupState.Manual && it.CollisionBox.Contains(GUICursor.GetWorldMousePosition()) && PlayerManager.PlayerInRange(it.CollisionBox))
+                var removedList = new List<MapItem>();
+                for (int i = 0; i < _liItems.Count; i++)
                 {
-                    if (InventoryManager.AddToInventory(it.WrappedItem))
+                    MapItem it = _liItems[i];
+                    if (it.PickupState == ItemPickupState.Manual && it.CollisionBox.Contains(GUICursor.GetWorldMousePosition()) && PlayerManager.PlayerInRange(it.CollisionBox))
                     {
-                        removedList.Add(it);
-                        break;
+                        if (InventoryManager.AddToInventory(it.WrappedItem))
+                        {
+                            removedList.Add(it);
+                            break;
+                        }
                     }
                 }
-            }
-            removedList.ForEach(x => _liItems.Remove(x));
-            removedList.Clear();
-
-            Item dummyItem = DataManager.GetItem((Buildable)HeldObject);
-            if (dummyItem != null && InventoryManager.HasSpaceInInventory(dummyItem.ID, 1) && !((Buildable)HeldObject).Unique)
-            {
-                InventoryManager.AddToInventory(dummyItem.ID, 1);
-                MapManager.EndBuilding();
-            }
-            else if ((dummyItem == null && !TownModeMoving()) || HeldObject == null)
-            {
-                MapManager.EndBuilding();
+                removedList.ForEach(x => _liItems.Remove(x));
+                removedList.Clear();
             }
 
             return rv;
@@ -1418,7 +1417,7 @@ namespace RiverHollow.Map_Handling
                     }
                     else
                     {
-                        if (TargetTile != null)
+                        if (TargetTile != null && TargetTile.PlayerIsAdjacent())
                         {
                             //Retrieves any object associated with the tile, this will include
                             //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
@@ -1429,7 +1428,7 @@ namespace RiverHollow.Map_Handling
                                 rv = obj.ProcessLeftClick();
                             }
 
-                            if (!rv && !TargetTile.Passable() && TargetTile.PlayerIsAdjacent())
+                            if (!rv && !TargetTile.Passable())
                             {
                                 PlayerManager.GrabTile(TargetTile);
                             }
@@ -1448,10 +1447,10 @@ namespace RiverHollow.Map_Handling
             if (_liTestTiles.Count > 0) { _liTestTiles.Clear(); }
 
             _objSelectedObject?.SelectObject(false);
-            if ((TownModeMoving()) && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasBuildableObject())
+            if ((TownModeEdit()) && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasObject())
             {
-                WorldObject obj = MouseTile.RetrieveObjectFromLayer();
-                if (obj != null && obj.IsBuildable() && obj.PlayerCanMove)
+                WorldObject obj = MouseTile.RetrieveObjectFromLayer(true);
+                if (obj != null && obj.PlayerCanEdit)
                 {
                     _objSelectedObject = (Buildable)obj;
                     _objSelectedObject.SelectObject(true);
@@ -1529,7 +1528,7 @@ namespace RiverHollow.Map_Handling
             bool rv = false;
 
             //Are we constructing or moving a building?
-            if (TownModeBuild() || TownModeMoving())
+            if (InTownMode())
             {
                 Buildable toBuild = (Buildable)GameManager.HeldObject;
 
@@ -1542,20 +1541,20 @@ namespace RiverHollow.Map_Handling
                             if (MouseTile.Flooring == null) { goto default; }
                             break;
                         case ObjectTypeEnum.Wallpaper:
-                            rv = PlaceWallpaper((Wallpaper)toBuild);
+                            rv = TownModePlaceWallpaper((Wallpaper)toBuild);
                             break;
                         default:
-                            rv = PlaceTownObject(toBuild);
+                            rv = TownPlaceObject(toBuild);
                             break;
                     }
                     SoundManager.PlayEffect(rv ? "thump3" : "Cancel");
                 }
-                else if (GameManager.HeldObject == null)
+                else if (GameManager.HeldObject == null && MouseTile != null)
                 {
-                    if (MouseTile.HasBuildableObject())
+                    if (MouseTile.HasObject())
                     {
-                        WorldObject targetObj = MouseTile.RetrieveObjectFromLayer();
-                        if (targetObj != null && targetObj.PlayerCanMove)
+                        WorldObject targetObj = MouseTile.RetrieveObjectFromLayer(true);
+                        if (targetObj != null && targetObj.PlayerCanEdit)
                         {
                             switch (targetObj.Type)
                             {
@@ -1563,6 +1562,17 @@ namespace RiverHollow.Map_Handling
                                     RemoveDoor((Building)targetObj);
                                     GUICursor.ResetCursor();
                                     goto default;
+                                case ObjectTypeEnum.Decor:
+                                    Decor obj = (Decor)targetObj;
+                                    if (obj.HasDisplay)
+                                    {
+                                        obj.StoreDisplayEntity();
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        goto default;
+                                    }
                                 default:
                                     PickUpWorldObject(mouseLocation, targetObj);
                                     break;
@@ -1576,20 +1586,34 @@ namespace RiverHollow.Map_Handling
             return rv;
         }
 
+        private void TownModeRightClick()
+        {
+            Item dummyItem = DataManager.GetItem((Buildable)HeldObject);
+            if (dummyItem != null && InventoryManager.HasSpaceInInventory(dummyItem.ID, 1) && !((Buildable)HeldObject).Unique)
+            {
+                InventoryManager.AddToInventory(dummyItem.ID, 1);
+                GameManager.EmptyHeldObject();
+            }
+            else if ((dummyItem == null && !TownModeEdit()) || HeldObject == null)
+            {
+                GameManager.ExitTownMode();
+            }
+        }
+
         /// <summary>
         /// Helper method for building one object and allowing the
         /// possibility of building additional ones
         /// </summary>
         /// <param name="templateObject">The Structure that will act as the template to build offo f</param>
         /// <returns>True if we successfully build.</returns>
-        private bool PlaceTownObject(Buildable templateObject)
+        private bool TownPlaceObject(Buildable templateObject)
         {
             bool rv = false;
-            Buildable placeObject;
+            Buildable placeObject = null;
 
             //If we're moving the object, set it as the object to be placed. Otherwise, we need
             //to make a new object based off the one we're holding.
-            if (TownModeMoving()) { placeObject = templateObject; }
+            if (TownModeBuild() || templateObject.Unique) { placeObject = templateObject; }
             else
             {
                 placeObject = (Buildable)DataManager.CreateWorldObjectByID(templateObject.ID);
@@ -1623,18 +1647,17 @@ namespace RiverHollow.Map_Handling
 
                 Item dummyItem = DataManager.GetItem((Buildable)HeldObject);
                 //Check for if we are done placing the object of that type
-                if (TownModeMoving() || dummyItem == null || !InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
+                if (dummyItem == null || !InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
                 {
-                    if (!TownModeMoving())
-                    {
-                        LeaveTownMode();
-                        FinishBuilding(placeObject.BuildOnScreen());
-                    }
-
-                    GameManager.DropWorldObject();
+                    GameManager.EmptyHeldObject();
                     ClearHeldLights();
+
+                    if (TownModeBuild())
+                    {
+                        PostBuildingCleanup(placeObject.BuildOnScreen());
+                    }
                 }
-                else if(InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
+                else if (InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
                 {
                     InventoryManager.RemoveItemsFromInventory(dummyItem.ID, 1);
                 }
@@ -1645,7 +1668,7 @@ namespace RiverHollow.Map_Handling
             return rv;
         }
 
-        private bool PlaceWallpaper(Wallpaper wallpaperObject)
+        private bool TownModePlaceWallpaper(Wallpaper wallpaperObject)
         {
             bool rv = false;
 
@@ -1674,7 +1697,7 @@ namespace RiverHollow.Map_Handling
 
         #endregion
 
-        public void FinishBuilding(bool openMenu)
+        public void PostBuildingCleanup(bool openMenu)
         {
             SetGameScale(Constants.NORMAL_SCALE);
 
@@ -1685,8 +1708,7 @@ namespace RiverHollow.Map_Handling
             }
             else
             {
-                LeaveTownMode();
-                MapManager.EndBuilding();
+                GameManager.ExitTownMode();
             }
         }
 
@@ -1744,9 +1766,6 @@ namespace RiverHollow.Map_Handling
         /// <summary>
         /// Look at the tile the mouse is over and, if the tile has an object present,
         /// pick it up.
-        /// 
-        /// We prioritize picking up a ShadowObject so we grab whatever is in front, instead
-        /// of picking up objects hiding behind a building.
         /// </summary>
         /// <param name="mouseLocation"></param>
         public void PickUpWorldObject(Point mouseLocation, WorldObject targetObj)
@@ -1757,6 +1776,8 @@ namespace RiverHollow.Map_Handling
             targetObj.RemoveSelfFromTiles();
             RemoveLights(targetObj.GetLights());
             AddHeldLights(targetObj.GetLights());
+
+            _liPlacedWorldObjects.Remove(targetObj);
         }
 
         public bool PlaceWorldObject(WorldObject o, bool ignoreActors = false)
@@ -1906,7 +1927,6 @@ namespace RiverHollow.Map_Handling
 
             var actors = _liActors.FindAll(x => obj.CollisionBox.Contains(x.CollisionBox) && x.IsActorType(ActorTypeEnum.Critter)).Cast<Critter>().ToList();
             actors.ForEach(x => x.Flee());
-
         }
 
         public void AddActor(Actor c)
@@ -1994,14 +2014,6 @@ namespace RiverHollow.Map_Handling
             m.SetPosition(Util.SnapToGrid(position));
 
             _liMobs.Add(m);
-        }
-
-        public void AddBuilding(Building b)
-        {
-            if (!_liBuildings.Contains(b))
-            {
-                _liBuildings.Add(b);
-            }
         }
         #endregion
 

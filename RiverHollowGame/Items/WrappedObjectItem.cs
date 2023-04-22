@@ -51,11 +51,17 @@ namespace RiverHollow.Items
 
         public override bool ItemBeingUsed()
         {
-            if (Number > 1) { Remove(1); }
-            else { InventoryManager.RemoveItemFromInventory(this); }
-            GameManager.MovingWorldObject(DataManager.CreateWorldObjectByID(_iObjectID));
+            if (GameManager.TownModeEdit())
+            {
+                if (Number > 1) { Remove(1); }
+                else { InventoryManager.RemoveItemFromInventory(this); }
 
-            return true;
+                GameManager.PickUpWorldObject(DataManager.CreateWorldObjectByID(_iObjectID));
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

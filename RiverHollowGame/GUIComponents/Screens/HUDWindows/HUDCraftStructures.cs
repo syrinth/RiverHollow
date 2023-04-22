@@ -197,8 +197,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             {
                 GameManager.EnterTownModeBuild(false);
                 GameManager.PickUpWorldObject(obj);
-                MapManager.CurrentMap.AddHeldLights(obj.GetLights());
-                obj.SetPickupOffset();
 
                 GUIManager.CloseMainObject();
                 _closeMenu();

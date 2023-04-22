@@ -66,35 +66,35 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        public override bool ProcessLeftClick()
-        {
-            bool rv = false;
-            if (GameManager.HeldObject == null)
-            {
-                rv = true;
+        //public override bool ProcessLeftClick()
+        //{
+        //    bool rv = false;
+        //    if (GameManager.CanMoveObject())
+        //    {
+        //        rv = true;
 
-                if(_itemDisplay != null)
-                {
-                    if (InventoryManager.HasSpaceInInventory(_itemDisplay.ID, 1))
-                    {
-                        InventoryManager.AddToInventory(_itemDisplay);
-                    }
-                }
-                else if(_objDisplay != null)
-                {
-                    GameManager.MovingWorldObject(_objDisplay);
-                    _objDisplay = null;
-                }
-                else
-                {
-                    CurrentMap.RemoveWorldObject(this, true);
-                    GameManager.MovingWorldObject(this);
-                }
+        //        if(_itemDisplay != null)
+        //        {
+        //            if (InventoryManager.HasSpaceInInventory(_itemDisplay.ID, 1))
+        //            {
+        //                InventoryManager.AddToInventory(_itemDisplay);
+        //            }
+        //        }
+        //        else if(_objDisplay != null)
+        //        {
+        //            GameManager.MovingWorldObject(_objDisplay);
+        //            _objDisplay = null;
+        //        }
+        //        else
+        //        {
+        //            CurrentMap.RemoveWorldObject(this, true);
+        //            GameManager.MovingWorldObject(this);
+        //        }
                 
-            }
+        //    }
 
-            return rv;
-        }
+        //    return rv;
+        //}
 
         /// <summary>
         /// Handler for when a Decor object hasbeen right-clicked
@@ -295,19 +295,22 @@ namespace RiverHollow.WorldObjects
             {
                 if (StoreDisplayEntity())
                 {
-                    if (it.ID > Constants.BUILDABLE_ID_OFFSET)
+                    if (it != null)
                     {
-                        _objDisplay = (Decor)DataManager.CreateWorldObjectByID(it.ID);
-                        SyncDisplayObject();
-                    }
-                    else { _itemDisplay = DataManager.GetItem(it.ID); }
+                        if (it.ID > Constants.BUILDABLE_ID_OFFSET)
+                        {
+                            _objDisplay = (Decor)DataManager.CreateWorldObjectByID(it.ID);
+                            SyncDisplayObject();
+                        }
+                        else { _itemDisplay = DataManager.GetItem(it.ID); }
 
-                    InventoryManager.RemoveItemsFromInventory(it.ID, 1);
-                    GUIManager.CloseMainObject();
+                        InventoryManager.RemoveItemsFromInventory(it.ID, 1);
+                        GUIManager.CloseMainObject();
 
-                    if (Archive)
-                    {
-                        TownManager.AddToArchive(it.ID);
+                        if (Archive)
+                        {
+                            TownManager.AddToArchive(it.ID);
+                        }
                     }
                 }
             }
@@ -320,7 +323,7 @@ namespace RiverHollow.WorldObjects
         /// Only store entity if there is space in storage
         /// </summary>
         /// <returns>True as long as there is space in storage</returns>
-        private bool StoreDisplayEntity()
+        public bool StoreDisplayEntity()
         {
             bool rv = true;
             Item displayItem = null;
@@ -334,6 +337,7 @@ namespace RiverHollow.WorldObjects
                 {
                     InventoryManager.AddToInventory(displayItem);
                     _itemDisplay = null;
+                    _objDisplay = null;
                 }
                 else { rv = false; }
             }

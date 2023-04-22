@@ -31,7 +31,7 @@ namespace RiverHollow.WorldObjects
         public string MapName { get; protected set; } = string.Empty;
         public RHMap CurrentMap => MapManager.Maps.ContainsKey(MapName) ? MapManager.Maps[MapName] : null;
 
-        public bool PlayerCanMove => !ShopItem;
+        public bool PlayerCanEdit => !ShopItem && IsBuildable();
         public bool ShopItem { get; protected set; } = false;
         private bool _bMovable = false;
         private DirectionEnum _eShoveDirection = DirectionEnum.None;

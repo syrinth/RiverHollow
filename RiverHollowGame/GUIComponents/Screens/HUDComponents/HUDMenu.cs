@@ -46,7 +46,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
 
                     _liButtons.Add(btn);
                     _liButtons.Add(new GUIButton("Crafting", BtnCrafting));
-                    _liButtons.Add(new GUIButton("Move", BtnMove));
+                    _liButtons.Add(new GUIButton("Edit Town", BtnEdit));
                     _liButtons.Add(new GUIButton("Back", BtnBackToMain));
                     break;
                 case HUDMenuEnum.Main:
@@ -181,12 +181,12 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             GUIManager.CloseMainObject();
         }
 
-        public void BtnMove()
+        public void BtnEdit()
         {
             _closeMenu();
             GUIManager.CloseMainObject();
             GameManager.ClearGMObjects();
-            GameManager.EnterTownModeMoving();
+            GameManager.EnterTownModeEdit();
         }
         #endregion
     }

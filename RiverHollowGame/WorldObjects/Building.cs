@@ -124,7 +124,6 @@ namespace RiverHollow.Buildings
             {
                 rv = true;
                 map.AssignMapTiles(this, tiles);
-                map.AddBuilding(this);
                 MapName = map.Name;
                 map.CreateBuildingEntrance(this);
 

@@ -70,17 +70,5 @@ namespace RiverHollow.WorldObjects
                     return false;
             }
         }
-        public override bool ProcessLeftClick()
-        {
-            bool rv = false;
-            if (GameManager.HeldObject == null)
-            {
-                rv = true;
-                CurrentMap.RemoveWorldObject(this, true);
-                GameManager.MovingWorldObject(this);
-            }
-
-            return rv;
-        }
     }
 }

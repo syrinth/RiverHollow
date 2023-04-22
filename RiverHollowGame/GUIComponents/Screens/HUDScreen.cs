@@ -26,8 +26,7 @@ namespace RiverHollow.GUIComponents.Screens
         GUIMoneyDisplay _gMoney;
         GUIDungeonKeyDisplay _gDungeonKeys;
 
-        GUIImage _gBuildIcon1;
-        GUIImage _gBuildIcon2;
+        GUIImage _gBuildIcon;
 
         HUDMiniInventory _gInventory;
         HUDCalendar _gCalendar;
@@ -75,11 +74,9 @@ namespace RiverHollow.GUIComponents.Screens
             _gCalendar.AnchorToScreen(SideEnum.TopRight, 10);
             AddControl(_gCalendar);
 
-            _gBuildIcon1 = DataManager.GetIcon(GameIconEnum.Hammer);
-            _gBuildIcon1.AnchorToScreen(SideEnum.BottomRight, 10);
+            _gBuildIcon = DataManager.GetIcon(GameIconEnum.Hammer);
+            _gBuildIcon.AnchorAndAlignToObject(_gCalendar, SideEnum.Left, SideEnum.CenterY, ScaleIt(4));
 
-            _gBuildIcon2 = DataManager.GetIcon(GameIconEnum.Hammer);
-            _gBuildIcon2.AnchorToScreen(SideEnum.BottomLeft, 10);
         }
 
         public override void Update(GameTime gTime)
@@ -127,8 +124,7 @@ namespace RiverHollow.GUIComponents.Screens
             base.Draw(spriteBatch);
             if (InTownMode())
             {
-                _gBuildIcon1.Draw(spriteBatch);
-                _gBuildIcon2.Draw(spriteBatch);
+                _gBuildIcon.Draw(spriteBatch);
             }
         }
 

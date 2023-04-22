@@ -133,15 +133,18 @@ namespace RiverHollow.Game_Managers
         public static bool PickUpWorldObject(WorldObject obj)
         {
             bool rv = false;
+
             if (obj != null)
             {
-                _heldWorldObject = obj;
                 rv = true;
+                _heldWorldObject = obj;
+                MapManager.CurrentMap.AddHeldLights(obj.GetLights());
+                obj.SetPickupOffset();
             }
 
             return rv;
         }
-        public static void DropWorldObject()
+        public static void EmptyHeldObject()
         {
             _heldWorldObject = null;
         }
@@ -170,7 +173,7 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region States
-        private enum EnumBuildType { None, BuildMode, Move };
+        private enum EnumBuildType { None, BuildMode, Edit };
         private static EnumBuildType _eBuildType;
 
         #region TakeInput
@@ -226,35 +229,29 @@ namespace RiverHollow.Game_Managers
             ShowMap();
         }
 
-        public static void MovingWorldObject(WorldObject obj)
-        {
-            GameManager.EnterTownModeBuild(false);
-            GameManager.PickUpWorldObject(obj);
-            MapManager.CurrentMap.AddHeldLights(obj.GetLights());
-            obj.SetPickupOffset();
+        public static bool InTownMode() { return TownModeBuild() || TownModeEdit(); }
+        public static bool TownModeBuild() { return _eBuildType == EnumBuildType.BuildMode; }
+        public static bool TownModeEdit() { return _eBuildType == EnumBuildType.Edit; }
+        public static bool CanMoveObject() { return HeldObject == null && TownModeEdit(); }
 
-            GUIManager.CloseMainObject();
-        }
         public static void EnterTownModeBuild(bool scry)
         {
             _eBuildType = EnumBuildType.BuildMode;
-
             GUIManager.CloseMainObject();
         }
+        public static void EnterTownModeEdit() { _eBuildType = EnumBuildType.Edit; }
 
-        public static bool InTownMode() { return TownModeBuild() || TownModeMoving(); }
-        public static bool TownModeBuild() { return _eBuildType == EnumBuildType.BuildMode; }
-        public static bool TownModeMoving() { return _eBuildType == EnumBuildType.Move; }
-
-        public static void EnterTownModeMoving() { _eBuildType = EnumBuildType.Move; }
-
-        public static void LeaveTownMode() {
-            _eBuildType = EnumBuildType.None;
-            
-            foreach(Villager v in TownManager.DIVillagers.Values)
+        public static void ExitTownMode() {
+            if (InTownMode())
             {
-                v.DetermineValidSchedule();
-                v.RecalculatePath();
+                EmptyHeldObject();
+                _eBuildType = EnumBuildType.None;
+
+                foreach (Villager v in TownManager.DIVillagers.Values)
+                {
+                    v.DetermineValidSchedule();
+                    v.RecalculatePath();
+                }
             }
         }
         #endregion

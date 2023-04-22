@@ -145,13 +145,22 @@ namespace RiverHollow.Map_Handling
         {
             return (ShadowObject != null && ShadowObject.IsBuildable()) ? ShadowObject : null;
         }
-        public bool HasBuildableObject()
+        public bool HasObject()
         {
             return WorldObject != null || ShadowStructure() != null || Flooring != null;
         }
-        public WorldObject RetrieveObjectFromLayer()
+        public WorldObject RetrieveObjectFromLayer(bool getEditable)
         {
-            return WorldObject ?? ShadowStructure() ?? Flooring;
+            if (getEditable)
+            {
+                if (WorldObject != null && WorldObject.PlayerCanEdit) { return WorldObject; }
+                else if (ShadowStructure() != null && ShadowStructure().PlayerCanEdit) { return ShadowStructure(); }
+                else { return Flooring; }
+            }
+            else
+            {
+                return WorldObject ?? ShadowStructure() ?? Flooring;
+            }
         }
 
         public void RemoveWorldObject()
@@ -439,7 +448,7 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = false;
 
-            if (WorldObject != null && WorldObject.CompareType(ObjectTypeEnum.Decor) && WorldObject.CompareType(ObjectTypeEnum.Decor))
+            if (WorldObject != null && objToPlace.CompareType(ObjectTypeEnum.Decor) && WorldObject.CompareType(ObjectTypeEnum.Decor))
             {
                 Decor decorObj = (Decor)WorldObject;
                 Decor decorToPlace = (Decor)objToPlace;
