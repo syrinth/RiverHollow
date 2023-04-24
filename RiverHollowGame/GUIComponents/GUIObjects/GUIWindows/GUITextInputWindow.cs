@@ -10,7 +10,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUITextInputWindow : GUITextWindow
     {
-        protected GUIText _gText;
         protected GUIMarker _gMarker;
 
         protected int _iCurr;
@@ -27,20 +26,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextInputWindow(int maxLength = -1) : base()
         {
+            Width = GameManager.ScaleIt(80);
+            Height = GameManager.ScaleIt(21);
+
             _iCurr = 0;
             _iMaxLength = maxLength != -1 ? maxLength : GameManager.MAX_NAME_LEN;
 
-            _gText = new GUIText("");
             _gMarker = new GUIMarker();
 
             _gText.AnchorToInnerSide(this, SideEnum.TopLeft);
-            _gMarker.Position(_gText.Position());
-
-            AddControl(_gText);
-            AddControl(_gMarker);
-
-            Width = GameManager.ScaleIt(80);
-            Height = GameManager.ScaleIt(21);
+            _gMarker.Position(_gText);
         }
 
         public override void Update(GameTime gTime)

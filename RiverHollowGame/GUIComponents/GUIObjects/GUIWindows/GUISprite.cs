@@ -16,8 +16,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             _sprite = newSprite ? new AnimatedSprite(sprite) : sprite;
             _sprite.SetScale(GameManager.ScaledPixel);
-            Width = GameManager.ScaleIt(sprite.Width);
-            Height = GameManager.ScaleIt(sprite.Height);
+            Width = _sprite.Width;
+            Height = _sprite.Height;
         }
 
         public override void Update(GameTime gTime)

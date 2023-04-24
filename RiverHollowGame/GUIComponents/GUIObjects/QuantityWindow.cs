@@ -35,15 +35,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
             AddControl(text);
 
             _btnDown = new GUIButton(new Rectangle(137, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Decrement);
-            _btnDown.AnchorAndAlignToObject(box, SideEnum.Left, SideEnum.CenterY, GameManager.ScaleIt(2));
+            _btnDown.AnchorAndAlignWithSpacing(box, SideEnum.Left, SideEnum.CenterY, 2);
             AddControl(_btnDown);
 
             _btnUp = new GUIButton(new Rectangle(128, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Increment);
-            _btnUp.AnchorAndAlignToObject(box, SideEnum.Right, SideEnum.CenterY, GameManager.ScaleIt(2));
+            _btnUp.AnchorAndAlignWithSpacing(box, SideEnum.Right, SideEnum.CenterY, 2);
             AddControl(_btnUp);
 
             GUIImage img = new GUIImage(new Rectangle(2, 120, 100, 3), GameManager.ScaleIt(100), GameManager.ScaleIt(3), DataManager.HUD_COMPONENTS);
-            img.AnchorAndAlignToObject(box, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(2));
+            img.AnchorAndAlignWithSpacing(box, SideEnum.Bottom, SideEnum.CenterX, 2);
             AddControl(img);
 
             _btnBuy = new GUIButton(new Rectangle(164, 0, 18, 19), DataManager.HUD_COMPONENTS, ProceedToPurchase);
@@ -52,7 +52,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             AddControl(_btnBuy);
 
             _gSellValue = new GUIText(GameManager.CurrentItem.TotalBuyValue);
-            _gSellValue.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.CenterY, GameManager.ScaleIt(2));
+            _gSellValue.AnchorAndAlignWithSpacing(_btnBuy, SideEnum.Left, SideEnum.CenterY, 2);
             AddControl(_gSellValue);
 
             CenterOnScreen();
@@ -85,7 +85,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             int offer = GameManager.CurrentItem.TotalBuyValue;
             _gSellValue.SetText(offer);
             _gSellValue.SetColor(c);
-            _gSellValue.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.CenterY, GameManager.ScaleIt(2));
+            _gSellValue.AnchorAndAlignWithSpacing(_btnBuy, SideEnum.Left, SideEnum.CenterY, 2);
 
             _btnBuy.Enable(offer > 0);
         }

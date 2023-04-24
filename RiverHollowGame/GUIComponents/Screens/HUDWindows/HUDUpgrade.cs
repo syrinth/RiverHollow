@@ -62,7 +62,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                     }
 
                     var win = new GUITextWindow(DataManager.GetGameTextEntry(iconDescription), Point.Zero);
-                    win.AnchorAndAlignToObject(_liIcons[i].Key, SideEnum.Bottom, SideEnum.CenterX);
+                    win.AnchorAndAlign(_liIcons[i].Key, SideEnum.Bottom, SideEnum.CenterX);
                     GUIManager.OpenHoverWindow(win, _liIcons[i].Key.DrawRectangle, true);
                 }
             }
@@ -89,7 +89,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gImage.AddControl(travelers);
 
             var travelerPercent = new GUIText(_building.GetTravelerChance());
-            travelerPercent.AnchorAndAlignToObject(travelers, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(3));
+            travelerPercent.AnchorAndAlignWithSpacing(travelers, SideEnum.Bottom, SideEnum.CenterX, 3);
             _gImage.AddControl(travelerPercent);
 
             //Profit Display
@@ -99,7 +99,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gImage.AddControl(profits);
 
             var profitPercent = new GUIText((int)(_building.GetShopProfitModifier() * 100));
-            profitPercent.AnchorAndAlignToObject(profits, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(3));
+            profitPercent.AnchorAndAlignWithSpacing(profits, SideEnum.Bottom, SideEnum.CenterX, 3);
             _gImage.AddControl(profitPercent);
 
             var scroll = new GUIImage(new Rectangle(209, 96, 142, 3), DataManager.HUD_COMPONENTS);
@@ -113,7 +113,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             if (_building.UpgradeQueued)
             {
                 GUIText upgradeText = new GUIText("Upgrade in Progress");
-                upgradeText.AnchorAndAlignToObject(scroll, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(16));
+                upgradeText.AnchorAndAlignWithSpacing(scroll, SideEnum.Bottom, SideEnum.CenterX, 16);
                 _gImage.AddControl(upgradeText);
             }
             else
@@ -167,7 +167,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                     _gImage.AddControl(bonusIcon);
 
                     var bonusText = new GUIText(bonusValue);
-                    bonusText.AnchorAndAlignToObject(bonusIcon, SideEnum.Right, SideEnum.CenterY, GameManager.ScaleIt(1));
+                    bonusText.AnchorAndAlignWithSpacing(bonusIcon, SideEnum.Right, SideEnum.CenterY, 1);
                     _gImage.AddControl(bonusText);
 
                     _liIcons.Add(new KeyValuePair<GUIImage, GameIconEnum>(bonusIcon, icon));
@@ -181,7 +181,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                             box.Position(_gImage.Position());
                             box.ScaledMoveBy(9, 91);
                         }
-                        else { box.AnchorAndAlignToObject(list[list.Count - 1], SideEnum.Right, SideEnum.Bottom); }
+                        else { box.AnchorAndAlign(list[list.Count - 1], SideEnum.Right, SideEnum.Bottom); }
                         _gImage.AddControl(box);
 
                         if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value)) { box.SetColor(Color.Red); }
@@ -190,7 +190,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                     }
 
                     GUIText cost = new GUIText(nextUpgrade.Cost);
-                    cost.AnchorAndAlignToObject(btn, SideEnum.Left, SideEnum.CenterY, GameManager.ScaleIt(2));
+                    cost.AnchorAndAlignWithSpacing(btn, SideEnum.Left, SideEnum.CenterY, 2);
                     _gImage.AddControl(cost);
 
                     _diUpgradeItems = upgradeItems;
@@ -199,7 +199,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 else
                 {
                     GUIText upgradeText = new GUIText("Max Level");
-                    upgradeText.AnchorAndAlignToObject(scroll, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(16));
+                    upgradeText.AnchorAndAlignWithSpacing(scroll, SideEnum.Bottom, SideEnum.CenterX, 16);
                     _gImage.AddControl(upgradeText);
                 }
             }

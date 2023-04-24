@@ -11,19 +11,12 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public GUIImage(Rectangle sourceRect, Texture2D texture)
         {
             _texture = texture;
-            Width = GameManager.ScaleIt(sourceRect.Width);
-            Height = GameManager.ScaleIt(sourceRect.Height);
+            Width = sourceRect.Width;
+            Height = sourceRect.Height;
             _drawRect = new Rectangle(Position().X, Position().Y, Width, Height);
             _sourceRect = sourceRect;
-        }
 
-        public GUIImage(Rectangle sourceRect, int width, int height, Texture2D texture)
-        {
-            _texture = texture;
-            Width = width;
-            Height = height;
-            _drawRect = new Rectangle(Position().X, Position().Y, Width, Height);
-            _sourceRect = sourceRect;
+            SetScale(GameManager.CurrentScale);
         }
 
         public GUIImage(Rectangle sourceRect, int width, int height, string texture)

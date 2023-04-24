@@ -45,10 +45,7 @@ namespace RiverHollow.GUIComponents.Screens
             _btnSpawn = new GUIButton("Spawn Point", ChangeSpawn);
             _btnExit = new GUIButton("Main Menu", Exit);
 
-            List<GUIObject> listButtons = new List<GUIObject>() { _btnSpawn, _btnExit };
-            GUIUtils.CreateSpacedColumn(ref listButtons, RiverHollow.ScreenWidth / 2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
-
-            AddControls(listButtons);
+            GUIUtils.CreateSpacedColumn(new List<GUIObject>() { _btnSpawn, _btnExit }, RiverHollow.ScreenWidth / 2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
         }
 
         public void ChangeSpawn()
@@ -170,9 +167,9 @@ namespace RiverHollow.GUIComponents.Screens
             _liButtons.Add(b);
 
             int index = _liButtons.Count - 1;
-            if (_liButtons.Count == 1) { b.AnchorToScreen(SideEnum.TopLeft, 10); }
-            else if ((float)_liButtons.Count % 6f == 0) { b.AnchorAndAlignToObject(_liButtons[index - 5], SideEnum.Right, SideEnum.Bottom, 10); }
-            else { b.AnchorAndAlignToObject(_liButtons[index - 1], SideEnum.Bottom, SideEnum.Left, 10); }
+            if (_liButtons.Count == 1) { b.AnchorToScreen(SideEnum.TopLeft, 2); }
+            else if ((float)_liButtons.Count % 6f == 0) { b.AnchorAndAlignWithSpacing(_liButtons[index - 5], SideEnum.Right, SideEnum.Bottom, 10); }
+            else { b.AnchorAndAlignWithSpacing(_liButtons[index - 1], SideEnum.Bottom, SideEnum.Left, 10); }
 
             AddControlDelayed(b);
         }

@@ -42,7 +42,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         internal static WindowData DisplayWin = new WindowData(48, 32, 1, 1, 1, 1, 14);
         internal static WindowData WoodenPanel = new WindowData(128, 32, 3, 3, 3, 3, 10);
 
-        protected const int SpaceFromBottom = 32;
+        protected const int SpaceFromBottom = 8;
 
         protected WindowData _winData;
 
@@ -53,6 +53,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             _winData = Brown_Window;
         }
+        public GUIWindow(WindowData winData) : this(winData, GameManager.ScaledTileSize, GameManager.ScaledTileSize) { }
 
         public GUIWindow(WindowData winData, int width, int height)
         {
@@ -66,7 +67,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             bool rv = false;
 
-            foreach(GUIObject c in Controls)
+            foreach (GUIObject c in Controls)
             {
                 if (c.Contains(mouse))
                 {
@@ -82,15 +83,17 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             bool xGrew = false;
             bool yGrew = false;
-            foreach(GUIObject g in Controls)
+            foreach (GUIObject g in Controls)
             {
-                if (g.DrawRectangle.Right + ScaleIt(scaledEdge) > InnerRectangle().Right) {
+                if (g.DrawRectangle.Right + ScaleIt(scaledEdge) > InnerRectangle().Right)
+                {
                     Width += g.DrawRectangle.Right - InnerRectangle().Right + ScaleIt(scaledEdge);
                     xGrew = true;
                 }
                 else if (!xGrew && shrink && g.DrawRectangle.Right < InnerRectangle().Right) { Width -= InnerRectangle().Right - g.DrawRectangle.Right; }
 
-                if (g.DrawRectangle.Bottom + ScaleIt(scaledEdge) > InnerRectangle().Bottom) {
+                if (g.DrawRectangle.Bottom + ScaleIt(scaledEdge) > InnerRectangle().Bottom)
+                {
                     Height += g.DrawRectangle.Bottom - InnerRectangle().Bottom + ScaleIt(scaledEdge);
                     yGrew = true;
                 }
@@ -99,11 +102,20 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
         }
 
-        public override void AddControl(GUIObject g)
+        public void SizeUp(params GUIObject[] objects)
         {
-            if (g != null && !Controls.Contains(g)) {
-                Controls.Add(g);
-                g.ParentWindow = this;
+            foreach (GUIObject g in objects)
+            {
+                if (g.DrawRectangle.Right > InnerRectangle().Right)
+                {
+                    Width += g.DrawRectangle.Right - InnerRectangle().Right;
+                }
+
+                if (g.DrawRectangle.Bottom > InnerRectangle().Bottom)
+                {
+                    Height += g.DrawRectangle.Bottom - InnerRectangle().Bottom;
+                }
+                Position(Position());
             }
         }
 
@@ -149,12 +161,18 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         private Rectangle GetMiddleSource() { return new Rectangle(GetSourceInnerLeftEdge(), GetSourceInnerTopEdge(), _winData.Size, _winData.Size); }
         private Rectangle GetRightMiddleSource() { return new Rectangle(GetSourceInnerRightEdge(), GetSourceInnerTopEdge(), _winData.RightEdge, _winData.Size); }
 
-        private Rectangle GetBottomLeftSource() {
-            return new Rectangle(_winData.SourcePoint.X, GetSourceInnerBottomEdge(), _winData.LeftEdge, _winData.BottomEdge); }
-        private Rectangle GetBottomMiddleSource() {
-            return new Rectangle(GetSourceInnerLeftEdge(), GetSourceInnerBottomEdge(), _winData.Size, _winData.BottomEdge); }
-        private Rectangle GetBottomRightSource() {
-            return new Rectangle(GetSourceInnerRightEdge(), GetSourceInnerBottomEdge(), _winData.RightEdge, _winData.BottomEdge); }
+        private Rectangle GetBottomLeftSource()
+        {
+            return new Rectangle(_winData.SourcePoint.X, GetSourceInnerBottomEdge(), _winData.LeftEdge, _winData.BottomEdge);
+        }
+        private Rectangle GetBottomMiddleSource()
+        {
+            return new Rectangle(GetSourceInnerLeftEdge(), GetSourceInnerBottomEdge(), _winData.Size, _winData.BottomEdge);
+        }
+        private Rectangle GetBottomRightSource()
+        {
+            return new Rectangle(GetSourceInnerRightEdge(), GetSourceInnerBottomEdge(), _winData.RightEdge, _winData.BottomEdge);
+        }
         #endregion
 
         #region DestRectangleMethods

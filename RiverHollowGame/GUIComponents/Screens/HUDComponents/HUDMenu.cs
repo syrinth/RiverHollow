@@ -64,7 +64,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             }
 
             AddControls(_liButtons);
-            GUIUtils.CreateSpacedColumn(ref _liButtons, -GUIButton.BTN_WIDTH, 0, RiverHollow.ScreenHeight, BTN_PADDING);
+            GUIUtils.CreateSpacedColumn(_liButtons, -GUIButton.BTN_WIDTH, 0, RiverHollow.ScreenHeight, BTN_PADDING);
         }
 
         public override void Update(GameTime gTime)

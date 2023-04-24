@@ -18,6 +18,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public IntroMenuScreen()
         {
+            GameManager.ShowMap(false);
             GameManager.CurrentScreen = GameScreenEnum.Info;
 
             _btnNewGame = new GUIButton("New Game", BtnNewGame);
@@ -25,17 +26,9 @@ namespace RiverHollow.GUIComponents.Screens
             _btnExit = new GUIButton("Exit Game", BtnExit);
 
             _btnGameData = new GUIButton("Config", BtnItems);
-            _btnGameData.AnchorToScreen(SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
+            _btnGameData.AnchorToScreen(SideEnum.BottomRight, 1);
 
-            List <GUIObject> listButtons = new List<GUIObject>() { _btnNewGame, _btnLoadGame, _btnExit };
-            GUIUtils.CreateSpacedColumn(ref listButtons, RiverHollow.ScreenWidth/2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
-
-            AddControl(_btnNewGame);
-            AddControl(_btnLoadGame);
-            AddControl(_btnExit);
-            AddControl(_btnGameData);
-
-            GameManager.ShowMap(false);
+            GUIUtils.CreateSpacedColumn(new List<GUIObject>() { _btnNewGame, _btnLoadGame, _btnExit }, RiverHollow.ScreenWidth/2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

@@ -25,6 +25,8 @@ namespace RiverHollow.GUIComponents.Screens
             GameManager.CurrentScreen = GameScreenEnum.Info;
 
             _btnBack = new GUIButton("Back", BtnBack);
+            _btnBack.AnchorToScreen(GUIObject.SideEnum.BottomRight, 1);
+
             _liDataWindows = new List<GUIObject>();
             _liData = SaveManager.LoadFiles();
             _liData.Sort((x, y) => y.timeStamp.CompareTo(x.timeStamp));
@@ -38,13 +40,9 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (_liDataWindows.Count > 0)
             {
-                GUIList _gli = new GUIList(_liDataWindows, 10, 20, RiverHollow.ScreenHeight);
+                GUIList _gli = new GUIList(_liDataWindows, 10, 5, RiverHollow.ScreenHeight);
                 _gli.CenterOnScreen();
-                AddControl(_gli);
-                //GUIObject.CreateSpacedColumn(ref _liDataWindows, RiverHollow.ScreenWidth / 2, 0, RiverHollow.ScreenHeight, 20);
             }
-
-            _btnBack.AnchorToScreen(this, GUIObject.SideEnum.BottomRight, 50);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -107,7 +105,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _gName.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
                 AddControl(_gName);
 
-                _gDelete = new GUIButton(new Rectangle(64, 48, Constants.TILE_SIZE, Constants.TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE, BtnDelete);
+                _gDelete = new GUIButton(new Rectangle(64, 48, Constants.TILE_SIZE, Constants.TILE_SIZE), DataManager.DIALOGUE_TEXTURE, BtnDelete);
                 Height = (int)stringsize.Y + _gDelete.Height + HeightEdges();
                 _gDelete.AnchorToInnerSide(this, SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
 
@@ -115,7 +113,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _gDate.AnchorToInnerSide(this, SideEnum.BottomLeft, GUIManager.STANDARD_MARGIN);
 
                 _gTimeStamp = new GUIText(data.timeStamp.ToString("g"));
-                _gTimeStamp.AnchorAndAlignToObject(_gDelete, SideEnum.Left, SideEnum.Bottom);
+                _gTimeStamp.AnchorAndAlign(_gDelete, SideEnum.Left, SideEnum.Bottom);
 
                 _delAction = del;
             }

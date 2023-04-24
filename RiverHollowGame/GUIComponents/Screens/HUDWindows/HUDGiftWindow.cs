@@ -29,38 +29,30 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gVillagerWindow = new GUIWindow(GUIWindow.DarkBlue_Window, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
 
             GUIText text = new GUIText(_npc.Name());
-            text.AnchorToInnerSide(_gVillagerWindow, SideEnum.Top, GameManager.ScaleIt(1));
-            _gVillagerWindow.AddControl(text);
+            text.AnchorToInnerSide(_gVillagerWindow, SideEnum.Top, 1);
 
             GUIImage img = new GUIImage(new Rectangle(2, 120, 100, 3), GameManager.ScaleIt(100), GameManager.ScaleIt(3), DataManager.HUD_COMPONENTS);
-            img.ScaledMoveBy(7, 42);
-            _gVillagerWindow.AddControl(img);
+            img.PositionAndMove(_gVillagerWindow, 7, 42);
 
             GUISprite spr = new GUISprite(npc.BodySprite, true);
-            spr.AnchorAndAlignToObject(img, SideEnum.Top, SideEnum.Left, GameManager.ScaleIt(2));
-            spr.ScaledMoveBy(1, 0);
+            spr.AnchorAndAlignThenMove(img, SideEnum.Top, SideEnum.Left, 1, -2);
             spr.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
-            _gVillagerWindow.AddControl(spr);
 
             _gToGive = new GUIInventory();
-            _gToGive.ScaledMoveBy(7, 47);
-            _gVillagerWindow.AddControl(_gToGive);
+            _gToGive.PositionAndMove(_gVillagerWindow, 7, 47);
 
             _btnGive = new GUIButton(new Rectangle(164, 58, 18, 19), DataManager.HUD_COMPONENTS, BtnGift);
-            _btnGive.ScaledMoveBy(89, 48);
+            _btnGive.PositionAndMove(_gVillagerWindow, 89, 48);
             _btnGive.Enable(false);
-            _gVillagerWindow.AddControl(_btnGive);
-            AddControl(_gVillagerWindow);
 
             _gVillagerWindow.ScaledMoveBy(54, 0);
             _inventory = new GUIInventoryWindow(true);
-            _inventory.AnchorToObject(_gVillagerWindow, SideEnum.Bottom, GameManager.ScaleIt(2));
-            AddControl(_inventory);
-
-
+            _inventory.AnchorToObject(_gVillagerWindow, SideEnum.Bottom, 2);
+            
             Width = _inventory.Width;
             Height = _inventory.Bottom - _gVillagerWindow.Top;
 
+            AddControls(_gVillagerWindow, _inventory);
             CenterOnScreen();
         }
 

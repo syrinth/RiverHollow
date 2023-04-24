@@ -16,9 +16,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public int Columns { get; }
         public int Rows { get; }
 
-        public GUIItemBox(Rectangle r) : base(RECT_IMG, ScaleIt(RECT_IMG.Width), ScaleIt(RECT_IMG.Height), DataManager.DIALOGUE_TEXTURE) { }
+        public GUIItemBox(Rectangle r) : base(RECT_IMG, DataManager.DIALOGUE_TEXTURE) { }
 
-        public GUIItemBox(Item it = null) : base(RECT_IMG, ScaleIt(RECT_IMG.Width), ScaleIt(RECT_IMG.Height), DataManager.DIALOGUE_TEXTURE)
+        public GUIItemBox(Item it = null) : base(RECT_IMG, DataManager.DIALOGUE_TEXTURE)
         {
             SetItem(it);
         }
@@ -64,7 +64,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     RemoveControl(_guiItem);
                     _guiItem = new GUIItem(it);
                     _guiItem.CenterOnObject(this);
-                    AddControl(_guiItem);
                 }
             }
             else

@@ -45,22 +45,17 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gSelection.Show(false);
 
             _btnLeft = new GUIButton(new Rectangle(102, 34, 10, 13), DataManager.DIALOGUE_TEXTURE, BtnLeft);
-            _btnLeft.Position(this);
-            _btnLeft.ScaledMoveBy(7, 115);
+            _btnLeft.PositionAndMove(_winMain, 7, 115);
             _btnLeft.Enable(false);
-            _winMain.AddControl(_btnLeft);
 
             _btnRight = new GUIButton(new Rectangle(112, 34, 10, 13), DataManager.DIALOGUE_TEXTURE, BtnRight);
-            _btnRight.Position(this);
-            _btnRight.ScaledMoveBy(169, 115);
-            _winMain.AddControl(_btnRight);
+            _btnRight.PositionAndMove(_winMain, 169, 115);
 
             SetUpItemWindows();
 
             _gScroll = new GUIImage(new Rectangle(209, 96, 142, 3), DataManager.HUD_COMPONENTS);
             _gScroll.AlignToObject(_winMain, SideEnum.CenterX);
-            _gScroll.AnchorToObject(_liItemDisplay[MAX_DISPLAY - COLUMNS], SideEnum.Bottom, GameManager.ScaleIt(4));
-            _winMain.AddControl(_gScroll);
+            _gScroll.AnchorToObject(_liItemDisplay[MAX_DISPLAY - COLUMNS], SideEnum.Bottom, 4);
 
             _gName = new GUIText("");
         }
@@ -145,10 +140,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 }
 
                 _liItemDisplay.Add(displayWindow);
-                AddControl(displayWindow);
             }
             
-            GUIUtils.CreateSpacedGrid(new List<GUIObject>(_liItemDisplay), this.Position() + GameManager.ScaleIt(new Point(14, 14)), _iIndex, _iIndex + MAX_DISPLAY, COLUMNS, 3, 3);
+            GUIUtils.CreateSpacedGrid(new List<GUIObject>(_liItemDisplay), _winMain, new Point(14, 14), COLUMNS, 3, 3);
 
             _btnLeft.Enable(_iIndex >= MAX_DISPLAY);
             _btnRight.Enable(_iIndex + MAX_DISPLAY < _liCraftingRecipes.Count);
@@ -156,7 +150,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
         private void ClearWindows()
         {
-            _liItemDisplay.ForEach(x => RemoveControl(x));
+            _liItemDisplay.ForEach(x => x.RemoveSelfFromControl());
             _liItemDisplay.Clear();
         }
 
@@ -167,7 +161,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             GUIUtils.CreateRequiredItemsList(ref _liRequiredItems, obj.RequiredToMake);
 
             _gName.SetText(obj.Name());
-            _gName.AnchorAndAlignToObject(_gScroll, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(4));
+            _gName.AnchorAndAlignWithSpacing(_gScroll, SideEnum.Bottom, SideEnum.CenterX, 4);
 
             GUIUtils.CreateSpacedRowAgainstObject(new List<GUIObject>(_liRequiredItems), base._winMain, _gScroll, 2, 22);
         }

@@ -39,21 +39,17 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         private void Setup()
         {
             _gCoin = GUIUtils.GetIcon(GameIconEnum.Coin);
-
             if (_bCoinOnRight)
             {
-                _gCoin.AnchorAndAlignToObject(_gTextMoney, SideEnum.Right, SideEnum.CenterY, ScaleIt(GUIManager.STANDARD_MARGIN));
+                _gCoin.AnchorToObject(_gTextMoney, SideEnum.Right, GUIManager.STANDARD_MARGIN);
+                _gTextMoney.AlignToObject(_gCoin, SideEnum.CenterY);
             }
-            else
-            {
-                _gTextMoney.AnchorAndAlignToObject(_gCoin, SideEnum.Right, SideEnum.CenterY, ScaleIt(GUIManager.STANDARD_MARGIN));
+            else { 
+                _gTextMoney.AnchorAndAlignWithSpacing(_gCoin, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
             }
 
-            Height = _gCoin.Height > _gTextMoney.Height ? _gCoin.Height : _gTextMoney.Height;
-            Width = _gTextMoney.Width + _gCoin.Width;
-
-            AddControl(_gCoin);
-            AddControl(_gTextMoney);
+            AddControls(_gCoin, _gTextMoney);
+            DetermineSize();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -91,7 +87,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             _gKeys = GUIUtils.GetIcon(GameIconEnum.Key);
 
-            _gKeysText.AnchorAndAlignToObject(_gKeys, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
+            _gKeysText.AnchorAndAlignWithSpacing(_gKeys, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
 
             Height = _gKeys.Height > _gKeysText.Height ? _gKeys.Height : _gKeysText.Height;
             Width = _gKeysText.Width + _gKeys.Width;
@@ -137,7 +133,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _gUnchecked.MoveBy(new Point(0, delta));
             _gChecked.MoveBy(new Point(0, delta));
 
-            _gText.AnchorAndAlignToObject(_gChecked, SideEnum.Right, SideEnum.CenterY);
+            _gText.AnchorAndAlign(_gChecked, SideEnum.Right, SideEnum.CenterY);
 
             AddControl(_gText);
             AddControl(_gUnchecked);
@@ -218,7 +214,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
     {
         public Item ItemObject {get;}
         GUIImage _gImg;
-        GUIImage _gDummy;
+        GUIImage _gInvisible;
         GUIText _gText;
         public ItemBoxDraw DrawNumbers = ItemBoxDraw.OnlyStacks;
         public bool CompareNumToPlayer = false;
@@ -227,22 +223,20 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             ItemObject = it;
 
-            _gImg = new GUIImage(ItemObject.SourceRectangle, ItemObject.SourceRectangle.Width, ItemObject.SourceRectangle.Height, ItemObject.Texture);
+            Width = GameManager.ScaledTileSize;
+            Height = GameManager.ScaledTileSize;
 
+            _gInvisible = new GUIImage(new Rectangle(32, 0, 16, 16), DataManager.DIALOGUE_TEXTURE);
+            _gInvisible.CenterOnObject(this);
+
+            _gImg = new GUIImage(ItemObject.SourceRectangle, ItemObject.Texture);
             GUIUtils.SetObjectScale(_gImg, ItemObject.SourceRectangle.Width, ItemObject.SourceRectangle.Height, 1);
+            _gImg.CenterOnObject(_gInvisible);
 
             _gText = new GUIText(ItemObject.Number.ToString(), true, DataManager.FONT_NUMBER_DISPLAY);
             _gText.SetColor(Color.White);
 
-            _gDummy = new GUIImage(ItemObject.SourceRectangle, GameManager.ScaledTileSize, GameManager.ScaledTileSize, ItemObject.Texture);
-            _gImg.CenterOnObject(_gDummy);
             SetTextPosition();
-
-            AddControl(_gImg);
-            AddControl(_gText);
-
-            Width = GameManager.ScaledTileSize;
-            Height = GameManager.ScaledTileSize;
         }
 
         public override void Update(GameTime gTime)
@@ -288,9 +282,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         private void SetTextPosition()
         {
-            _gDummy.CenterOnObject(_gImg);
-            _gText.AlignToObject(_gDummy, SideEnum.Right);
-            _gText.AlignToObject(_gDummy, SideEnum.Bottom);
+            _gText.AlignToObject(_gInvisible, SideEnum.Right);
+            _gText.AlignToObject(_gInvisible, SideEnum.Bottom);
         }
 
         public override void SetColor(Color c)

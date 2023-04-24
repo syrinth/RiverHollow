@@ -51,7 +51,6 @@ namespace RiverHollow.GUIComponents.Screens
 
             DetermineSize();
 
-            //AddControl(_winExtra);
             Position();
         }
 
@@ -64,7 +63,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             int recipeNumber = Math.Min(recipes.Count, Constants.MAX_RECIPE_DISPLAY);
             _arrRecipes = new GUIItemBox[recipeNumber];
-            _winMain = new GUIWindow(GUIWindow.Brown_Window, 10, 10);
+            _winMain = new GUIWindow(GUIWindow.Brown_Window, GameManager.ScaledTileSize, GameManager.ScaledTileSize);
 
             for (int i = 0; i < recipeNumber; i++)
             {
@@ -74,9 +73,9 @@ namespace RiverHollow.GUIComponents.Screens
                 if (i == 0)
                 {
                     _iSelectedItemID = recipe.ID;
-                    newBox.AnchorToInnerSide(_winMain, SideEnum.TopLeft, ScaleIt(1));
+                    newBox.AnchorToInnerSide(_winMain, SideEnum.TopLeft, 1);
                 }
-                else { newBox.AnchorAndAlignToObject(_arrRecipes[i - 1], SideEnum.Right, SideEnum.Top, ScaleIt(2)); }
+                else { newBox.AnchorAndAlignWithSpacing(_arrRecipes[i - 1], SideEnum.Right, SideEnum.Top, 2, true); }
 
                 if (!InventoryManager.HasSufficientItems(recipe.GetRequiredItems()))
                 {
@@ -87,8 +86,8 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             _gSelection = new GUIImage(new Rectangle(163, 20, 20, 20), DataManager.HUD_COMPONENTS);
-            _gSelection.CenterOnObject(_arrRecipes[0]);
             _winMain.AddControl(_gSelection);
+            _gSelection.CenterOnObject(_arrRecipes[0]);
 
             int widthBetween = (recipeNumber - 1) * ScaleIt(2);
             _winMain.Width = (recipeNumber * _arrRecipes[0].Width) + _winMain.WidthEdges() + ScaleIt(2) + widthBetween;
@@ -97,30 +96,27 @@ namespace RiverHollow.GUIComponents.Screens
 
             _gComponents = new GUIImage(new Rectangle(192, 0, 160, 71), DataManager.HUD_COMPONENTS);
             _winMain.MoveBy(new Point((_gComponents.Width - _winMain.Width) / 2, 0));
-            _gComponents.AnchorAndAlignToObject(_winMain, SideEnum.Bottom, SideEnum.CenterX, ScaleIt(2));
+            _gComponents.AnchorAndAlignWithSpacing(_winMain, SideEnum.Bottom, SideEnum.CenterX, 2);
             _gComponents.AddControl(_gName);
 
             _btnBuild = new GUIButton("Build", BtnBuild);
             _btnBuild.Position(_gComponents);
             _btnBuild.AlignToObject(_gComponents, SideEnum.CenterX);
             _btnBuild.ScaledMoveBy(0, 49);
-            _gComponents.AddControl(_btnBuild);
 
             if (_objMachine.MaxBatch > 1)
             {
                 _btnDown = new GUIButton(new Rectangle(137, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, BatchDecrease);
-                _btnDown.AnchorAndAlignToObject(_btnBuild, SideEnum.Left, SideEnum.CenterY, GameManager.ScaleIt(2));
-                _gComponents.AddControl(_btnDown);
+                _btnDown.AnchorAndAlignWithSpacing(_btnBuild, SideEnum.Left, SideEnum.CenterY, 2);
 
                 _btnUp = new GUIButton(new Rectangle(128, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, BatchIncrease);
-                _btnUp.AnchorAndAlignToObject(_btnBuild, SideEnum.Right, SideEnum.CenterY, GameManager.ScaleIt(2));
-                _gComponents.AddControl(_btnUp);
+                _btnUp.AnchorAndAlignWithSpacing(_btnBuild, SideEnum.Right, SideEnum.CenterY, 2);
             }
 
             AddControl(_gComponents);
 
             // Making Window
-            _winMaking = new GUIWindow(GUIWindow.Brown_Window, 10, 10);
+            _winMaking = new GUIWindow(GUIWindow.Brown_Window, GameManager.ScaledTileSize, GameManager.ScaledTileSize);
             _arrMaking = new GUIItemBox[_objMachine.Capacity];
             for (int i = 0; i < _objMachine.Capacity; i++)
             {
@@ -134,8 +130,8 @@ namespace RiverHollow.GUIComponents.Screens
                     }
                 }
 
-                if (i == 0) { _arrMaking[i].AnchorToInnerSide(_winMaking, SideEnum.TopLeft, ScaleIt(1)); }
-                else { _arrMaking[i].AnchorAndAlignToObject(_arrMaking[i - 1], SideEnum.Right, SideEnum.Top, ScaleIt(2)); }
+                if (i == 0) { _arrMaking[i].AnchorToInnerSide(_winMaking, SideEnum.TopLeft, 1); }
+                else { _arrMaking[i].AnchorAndAlignWithSpacing(_arrMaking[i - 1], SideEnum.Right, SideEnum.Top, 2); }
 
             }
 
@@ -143,7 +139,7 @@ namespace RiverHollow.GUIComponents.Screens
             _winMaking.Width = (_objMachine.Capacity * _arrRecipes[0].Width) + _winMain.WidthEdges() + ScaleIt(2) + widthBetween;
             _winMaking.Height = _arrRecipes[0].Height + _winMain.HeightEdges() + ScaleIt(2);
 
-            _winMaking.AnchorAndAlignToObject(_gComponents, SideEnum.Bottom, SideEnum.CenterX, ScaleIt(2));
+            _winMaking.AnchorAndAlignWithSpacing(_gComponents, SideEnum.Bottom, SideEnum.CenterX, 2);
             AddControl(_winMaking);
 
             if (!_objMachine.CraftDaily)
@@ -158,14 +154,12 @@ namespace RiverHollow.GUIComponents.Screens
 
             bool overflow = recipes.Count > Constants.MAX_RECIPE_DISPLAY;
             _btnLeft = new GUIButton(new Rectangle(163, 43, 10, 12), DataManager.HUD_COMPONENTS, ShiftLeft);
-            _btnLeft.AnchorAndAlignToObject(_winMain, SideEnum.Left, SideEnum.CenterY);
+            _btnLeft.AnchorAndAlign(_winMain, SideEnum.Left, SideEnum.CenterY);
             _btnLeft.Enable(false);
-            AddControl(_btnLeft);
 
             _btnRight = new GUIButton(new Rectangle(173, 43, 10, 12), DataManager.HUD_COMPONENTS, ShiftRight);
-            _btnRight.AnchorAndAlignToObject(_winMain, SideEnum.Right, SideEnum.CenterY);
+            _btnRight.AnchorAndAlign(_winMain, SideEnum.Right, SideEnum.CenterY);
             _btnRight.Enable(overflow);
-            AddControl(_btnRight);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

@@ -28,8 +28,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             _gFill = new GUIImage(new Rectangle(65, 33, 14, 14), Width - WidthEdges(), Height - HeightEdges(), DataManager.DIALOGUE_TEXTURE);
             _gFill.AnchorToInnerSide(this, SideEnum.TopLeft);
+
             _gText = new GUIText("", _font);
             _gText.SetColor(Color.White);
+            _gText.AlignToObject(this, SideEnum.Center);
 
             SetColor(c);
             _gFill.SetColor(c);
@@ -60,8 +62,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             if (Contains(mouse))
             {
                 _gText.SetText(string.Format("{0}/{1}", _fCurr, _fMax));
-                _gText.AlignToObject(this, SideEnum.Center, false);
-                AddControl(_gText);
+                _gText.AlignToObject(this, SideEnum.Center);
                 rv = true;
             }
             return rv;

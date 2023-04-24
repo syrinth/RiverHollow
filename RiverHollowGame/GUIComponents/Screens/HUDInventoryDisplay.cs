@@ -37,7 +37,7 @@ namespace RiverHollow.GUIComponents.Screens
             _altInventory = new GUIInventoryWindow();
             _inventory = new GUIInventoryWindow(true);
 
-            _altInventory.AnchorAndAlignToObject(_inventory, SideEnum.Top, SideEnum.CenterX, GUIManager.STANDARD_MARGIN);           
+            _altInventory.AnchorAndAlignWithSpacing(_inventory, SideEnum.Top, SideEnum.CenterX, GUIManager.STANDARD_MARGIN);           
 
             SetY(_altInventory.Top);
 

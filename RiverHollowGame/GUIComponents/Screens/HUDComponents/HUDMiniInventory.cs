@@ -26,10 +26,9 @@ namespace RiverHollow.GUIComponents.Screens
         static Rectangle RECT_SELECT_IMG = new Rectangle(260, 0, 20, 20);
         GUIImage _gSelected;
 
-        public HUDMiniInventory() : base(GUIWindow.DarkBlue_Window, Constants.TILE_SIZE, Constants.TILE_SIZE)
+        public HUDMiniInventory() : base(GUIWindow.DarkBlue_Window, GameManager.ScaleIt(221), GameManager.ScaleIt(30))
         {
-            _btnChangeRow = new GUIButton(new Rectangle(256, 96, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, RowUp);
-            _btnChangeRow.FadeOnDisable(false);
+            
             _liItems = new List<GUIItemBox>();
 
             for (int i = 0; i < InventoryManager.maxItemColumns; i++)
@@ -38,21 +37,18 @@ namespace RiverHollow.GUIComponents.Screens
                 _liItems.Add(ib);
 
                 if (i == 0) { ib.AnchorToInnerSide(this, SideEnum.TopLeft); }
-                else { ib.AnchorAndAlignToObject(_liItems[i - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
+                else { ib.AnchorAndAlignWithSpacing(_liItems[i - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
 
                 ib.SetAlpha(_fAlphaValue);
             }
 
-            Resize();
-
-            _btnChangeRow.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.CenterY);
-            AddControl(_btnChangeRow);
+            _btnChangeRow = new GUIButton(new Rectangle(256, 96, 16, 16), DataManager.DIALOGUE_TEXTURE, RowUp);
+            _btnChangeRow.AnchorAndAlign(this, SideEnum.Right, SideEnum.CenterY);
+            _btnChangeRow.FadeOnDisable(false);
 
             _fAlphaValue = GameManager.HideMiniInventory ? MIN_FADE : 1.0f;
 
             _gSelected = new GUIImage(RECT_SELECT_IMG, ScaleIt(RECT_SELECT_IMG.Width), ScaleIt(RECT_SELECT_IMG.Height), DataManager.DIALOGUE_TEXTURE);
-            AddControl(_gSelected);
-
             Alpha(_fAlphaValue);
             MoveSelector(0);
 
@@ -229,7 +225,7 @@ namespace RiverHollow.GUIComponents.Screens
             bool rv = false;
             if (!GameManager.GamePaused())
             {
-                if (Contains(mouse))
+                if (Contains(mouse) || _btnChangeRow.Contains(mouse))
                 {
                     _eFadeState = StateEnum.FadeIn;
                 }
@@ -281,7 +277,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (_eSnapPosition != snapPosition)
             {
                 _eSnapPosition = snapPosition;
-                AnchorToScreen(_eSnapPosition, ScaleIt(2));
+                AnchorToScreen(_eSnapPosition, 2);
 
                 _eFadeState = StateEnum.None;
                 float startFade = _fAlphaValue;

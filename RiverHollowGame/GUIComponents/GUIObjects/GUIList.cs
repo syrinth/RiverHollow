@@ -9,7 +9,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
     public class GUIList : GUIObject
     {
         //Passes all action handlers to it's sub controls.
-        public static int BTNSIZE = ScaledTileSize;
         public int _iMaxShownItems;
 
         int _iListPos = 0;
@@ -31,6 +30,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _iMaxShownItems = maxItems;
             Objects = objects;
             _iSpacing = spacing;
+            int ScaledSpacing = GameManager.ScaleIt(spacing);
 
             int mostWidth = 0;
             int mostHeight = 0;
@@ -47,37 +47,34 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 AddControl(o);
             }
 
-            int calcHeight = (mostHeight * maxItems) + (spacing * (maxItems - 1));
+            int calcHeight = (mostHeight * maxItems) + (ScaledSpacing * (maxItems - 1));
 
             //the following set of if statmenets handles if the maxHeight parameter is used.
             if (maxHeight > 0)
             {
                 if (calcHeight > maxHeight)
                 {
-                    int calcItems = maxHeight / (mostHeight + spacing);
-                    calcHeight = (mostHeight * calcItems) + (spacing * (calcItems - 1));
+                    int calcItems = maxHeight / (mostHeight + ScaledSpacing);
+                    calcHeight = (mostHeight * calcItems) + (ScaledSpacing * (calcItems - 1));
                     _iMaxShownItems = calcItems;
                     Debug.Assert(calcHeight <= maxHeight);
                 }
             }
 
-            this.Height = calcHeight;
-            this.Width = mostWidth;
+            Width = mostWidth;
+            Height = calcHeight;
 
             PopulateList();
 
             if (_iMaxShownItems < objects.Count)
             {
-                this.Width = mostWidth + BTNSIZE;
+                Width = mostWidth + ScaledTileSize;
 
-                _btnUp = new GUIButton(new Rectangle(272, 96, 16, 16), BTNSIZE, BTNSIZE, DataManager.DIALOGUE_TEXTURE, BtnUpClick);
-                _btnDown = new GUIButton(new Rectangle(256, 96, 16, 16), BTNSIZE, BTNSIZE, DataManager.DIALOGUE_TEXTURE, BtnDownClick);
+                _btnUp = new GUIButton(new Rectangle(272, 96, 16, 16), DataManager.DIALOGUE_TEXTURE, BtnUpClick);
+                _btnDown = new GUIButton(new Rectangle(256, 96, 16, 16), DataManager.DIALOGUE_TEXTURE, BtnDownClick);
 
                 _btnUp.AnchorToInnerSide(this, SideEnum.TopRight);
                 _btnDown.AnchorToInnerSide(this, SideEnum.BottomRight);
-
-                AddControl(_btnUp);
-                AddControl(_btnDown);
 
                 _btnUp.Show(false);
             }
@@ -133,19 +130,18 @@ namespace RiverHollow.GUIComponents.GUIObjects
         /// </summary>
         private void PopulateList()
         {
-            Point position = GetAnchorToInnerSide(this, GUIObject.SideEnum.Top);
-
             foreach (GUIObject o in Objects)
             {
                 o.Show(false);
             }
 
-            for (int s = _iListPos; s < _iListPos + _iMaxShownItems && s < Objects.Count; s++)
+            for (int i = _iListPos; i < _iListPos + _iMaxShownItems && i < Objects.Count; i++)
             {
-                GUIObject o = Objects[s];
+                GUIObject o = Objects[i];
 
-                o.Position(position);
-                position.Y += o.Height + _iSpacing;
+                if (i == _iListPos) { o.AnchorToInnerSide(this, GUIObject.SideEnum.Top, _iSpacing); }
+                else { o.AnchorAndAlignWithSpacing(Objects[i - 1], SideEnum.Bottom, SideEnum.Left, _iSpacing); }
+
                 o.Show(true);
             }
         }

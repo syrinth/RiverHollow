@@ -49,30 +49,23 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _winMain = SetMainWindow(GUIWindow.DarkBlue_Window, GameManager.ScaleIt(186), GameManager.ScaleIt(152));
 
             _gBackgroundBox = new GUIImage(new Rectangle(0, 208, 68, 68), GameManager.ScaleIt(68), GameManager.ScaleIt(68), DataManager.DIALOGUE_TEXTURE);
-            _gBackgroundBox.Position(_winMain);
-            _gBackgroundBox.ScaledMoveBy(59, 12);
-            _winMain.AddControl(_gBackgroundBox);
+            _gBackgroundBox.PositionAndMove(_winMain, 59, 12);
 
             _btnLeft = new GUIButton(new Rectangle(102, 34, 10, 13), DataManager.DIALOGUE_TEXTURE, BtnLeft);
-            _btnLeft.AnchorAndAlignToObject(_gBackgroundBox, SideEnum.Left, SideEnum.CenterY, GameManager.ScaleIt(4));
+            _btnLeft.AnchorAndAlignWithSpacing(_gBackgroundBox, SideEnum.Left, SideEnum.CenterY, 4);
             _btnLeft.Enable(false);
-            _winMain.AddControl(_btnLeft);
 
             _btnRight = new GUIButton(new Rectangle(112, 34, 10, 13), DataManager.DIALOGUE_TEXTURE, BtnRight);
-            _btnRight.AnchorAndAlignToObject(_gBackgroundBox, SideEnum.Right, SideEnum.CenterY, GameManager.ScaleIt(4));
+            _btnRight.AnchorAndAlignWithSpacing(_gBackgroundBox, SideEnum.Right, SideEnum.CenterY, 4);
             _btnRight.Enable(_liCanBuild.Count > 1);
-            _winMain.AddControl(_btnRight);
 
             _gScroll = new GUIImage(new Rectangle(209, 96, 142, 3), DataManager.HUD_COMPONENTS);
             _gScroll.AlignToObject(_winMain, SideEnum.CenterX);
-            _gScroll.AnchorToObject(_gBackgroundBox, SideEnum.Bottom, GameManager.ScaleIt(4));
-            _winMain.AddControl(_gScroll);
+            _gScroll.AnchorToObject(_gBackgroundBox, SideEnum.Bottom, 4);
 
             _btnBuild = new GUIButton("Build", BtnBuild);
             _btnBuild.Position(_winMain);
-            _btnBuild.AnchorAndAlignToObject(_gScroll, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(43)); 
-
-            _gName = new GUIText("");
+            _btnBuild.AnchorAndAlignWithSpacing(_gScroll, SideEnum.Bottom, SideEnum.CenterX, 43); 
 
             DisplayStructureInfo();
         }
@@ -92,12 +85,11 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _btnRight.Enable(_iIndex < _liCanBuild.Count - 1);
             _btnLeft.Enable(_iIndex > 0);
 
-            _winMain.RemoveControl(_gStructure);
+            _gStructure?.RemoveSelfFromControl();
+            _gName?.RemoveSelfFromControl();
 
             Buildable obj = (Buildable)DataManager.CreateWorldObjectByID(_liCanBuild[_iIndex]);
             _gStructure = new GUISprite(obj.Sprite, true);
-            _gStructure.CenterOnObject(_gBackgroundBox);
-            _winMain.AddControl(_gStructure);
 
             GUIUtils.SetObjectScale(_gStructure, obj.Width, obj.Height, 4);
             _gStructure.CenterOnObject(_gBackgroundBox);
@@ -107,9 +99,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _btnBuild.Enable(sufficientItems);
             _gStructure.Alpha(sufficientItems ? 1 : 0.3f);
 
-            _gName.SetText(obj.Name());
+            _gName = new GUIText(obj.Name());
             _gName.SetColor(sufficientItems ? Color.Black : Color.Red);
-            _gName.AnchorAndAlignToObject(_gScroll, SideEnum.Bottom, SideEnum.CenterX, GameManager.ScaleIt(4));
+            _gName.AnchorAndAlignWithSpacing(_gScroll, SideEnum.Bottom, SideEnum.CenterX, 4);
 
             GUIUtils.CreateSpacedRowAgainstObject(new List<GUIObject>(_liRequiredItems), _winMain, _gScroll, 2, 22);
         }

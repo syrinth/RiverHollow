@@ -38,7 +38,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 boxes[i] = new GUIItemBox(DataManager.GetItem(_merchant.ChosenRequests[i]));
                 boxes[i].DrawNumber(ItemBoxDraw.Never);
                 if (i == 0) { boxes[i].ScaledMoveBy(32, 20); }
-                else { boxes[i].AnchorAndAlignToObject(boxes[i - 1], SideEnum.Right, SideEnum.Top, GameManager.ScaleIt(5)); }
+                else { boxes[i].AnchorAndAlignWithSpacing(boxes[i - 1], SideEnum.Right, SideEnum.Top, 5); }
 
                 _gMerchantWindow.AddControl(boxes[i]);
             }
@@ -61,7 +61,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gMerchantWindow.AddControl(_btnSell);
 
             _gSellValue = new GUIText(0);
-            _gSellValue.AnchorAndAlignToObject(_btnSell, SideEnum.Left, SideEnum.CenterY, GameManager.ScaleIt(2));
+            _gSellValue.AnchorAndAlignWithSpacing(_btnSell, SideEnum.Left, SideEnum.CenterY, 2);
             _gMerchantWindow.AddControl(_gSellValue);
             AddControl(_gMerchantWindow);
 
@@ -104,7 +104,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             InventoryManager.RemoveItemFromInventory(_arrToSell[0, 0], false);
 
             _gSellValue.SetText(0);
-            _gSellValue.AnchorAndAlignToObject(_btnSell, SideEnum.Left, SideEnum.CenterY, GameManager.ScaleIt(2));
+            _gSellValue.AnchorAndAlignWithSpacing(_btnSell, SideEnum.Left, SideEnum.CenterY, 2);
         }
 
         private void RefreshOffer()
@@ -113,7 +113,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             int offer = _merchant.EvaluateItem(_arrToSell[0, 0], ref c);
             _gSellValue.SetText(offer);
             _gSellValue.SetColor(c);
-            _gSellValue.AnchorAndAlignToObject(_btnSell, SideEnum.Left, SideEnum.CenterY, GameManager.ScaleIt(2));
+            _gSellValue.AnchorAndAlignWithSpacing(_btnSell, SideEnum.Left, SideEnum.CenterY, 2);
 
             _btnSell.Enable(offer > 0);
         }

@@ -138,11 +138,11 @@ namespace RiverHollow.GUIComponents.Screens
 
                     RemoveControl(_gWindow);
                     _gSelector.CenterOnObject(kvp.Key);
-                    _gWindow = new GUIWindow(GUIWindow.Brown_Window, 10, 10);
+                    _gWindow = new GUIWindow(GUIWindow.Brown_Window);
                     GUIText text = new GUIText(kvp.Value.MapName + " - " + kvp.Value.Time + " minutes");
                     text.AnchorToInnerSide(_gWindow, GUIObject.SideEnum.TopLeft);
                     _gWindow.Resize();
-                    _gWindow.AnchorAndAlignToObject(kvp.Key, GUIObject.SideEnum.Bottom, GUIObject.SideEnum.CenterX, GameManager.ScaleIt(2));
+                    _gWindow.AnchorAndAlignWithSpacing(kvp.Key, GUIObject.SideEnum.Bottom, GUIObject.SideEnum.CenterX, 2);
                     AddControl(_gWindow);
                 }
                 else if (!kvp.Key.Contains(mouse) && _sSelectedMap.Equals(kvp.Value.MapName))

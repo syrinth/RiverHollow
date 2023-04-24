@@ -8,6 +8,7 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {
@@ -16,13 +17,15 @@ namespace RiverHollow.Game_Managers
         enum Fade { None, Out, In};
         static Fade _eFade;
 
-        public static int STANDARD_MARGIN = 4;
+        public static int STANDARD_MARGIN = 1;
         public static int MINI_BTN_HEIGHT = ScaledTileSize;
         public static int MINI_BTN_WIDTH = 168;
 
         public static int MAIN_COMPONENT_WIDTH = RiverHollow.ScreenWidth / 3;
         public static int MAIN_COMPONENT_HEIGHT = RiverHollow.ScreenWidth / 3;
-        private static GUIScreen _currentGUIScreen;
+        public static GUIScreen NewScreen { get; private set; }
+        public static GUIScreen CurrentScreen { get; private set; }
+
         private static GUIImage _fadeImg;
         private static float _fFadeVal = 0f;
         private static bool _bFadeSlow = false;
@@ -43,7 +46,7 @@ namespace RiverHollow.Game_Managers
                 UpdateFade();
             }
 
-            _currentGUIScreen?.Update(gTime);
+            CurrentScreen?.Update(gTime);
             GUICursor.Update();
         }
 
@@ -56,7 +59,7 @@ namespace RiverHollow.Game_Managers
             }
             else
             {
-                _currentGUIScreen?.Draw(spriteBatch);
+                CurrentScreen?.Draw(spriteBatch);
 
                 GUICursor.Draw(spriteBatch);
             }
@@ -65,9 +68,9 @@ namespace RiverHollow.Game_Managers
         public static bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_currentGUIScreen != null)
+            if (CurrentScreen != null)
             {
-                rv = _currentGUIScreen.ProcessLeftButtonClick(mouse);
+                rv = CurrentScreen.ProcessLeftButtonClick(mouse);
             }
 
             return rv;
@@ -76,9 +79,9 @@ namespace RiverHollow.Game_Managers
         public static bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_currentGUIScreen != null)
+            if (CurrentScreen != null)
             {
-                rv = _currentGUIScreen.ProcessRightButtonClick(mouse);
+                rv = CurrentScreen.ProcessRightButtonClick(mouse);
             }
 
             return rv;
@@ -87,17 +90,17 @@ namespace RiverHollow.Game_Managers
         public static bool ProcessHover(Point mouse)
         {
             bool rv = false;
-            if (_currentGUIScreen != null)
+            if (CurrentScreen != null)
             {
-                rv = _currentGUIScreen.ProcessHover(mouse);
+                rv = CurrentScreen.ProcessHover(mouse);
             }
 
             return rv;
         }
 
-        public static bool IsMenuOpen() { return _currentGUIScreen.IsMenuOpen(); }
-        public static void OpenMenu() { _currentGUIScreen.OpenMenu(); }
-        public static void CloseMenu() { _currentGUIScreen.CloseMenu(); }
+        public static bool IsMenuOpen() { return CurrentScreen.IsMenuOpen(); }
+        public static void OpenMenu() { CurrentScreen.OpenMenu(); }
+        public static void CloseMenu() { CurrentScreen.CloseMenu(); }
 
         /// <summary>
         /// 
@@ -115,52 +118,58 @@ namespace RiverHollow.Game_Managers
         }
         public static void OpenTextWindow(TextEntry text, bool open = true, bool displayDialogueIcon = false)
         {
-            _currentGUIScreen.OpenTextWindow(text, open, displayDialogueIcon);
+            CurrentScreen.OpenTextWindow(text, open, displayDialogueIcon);
         }
         public static void OpenTextWindow(TextEntry text, TalkingActor talker, bool open = true, bool displayDialogueIcon = false)
         {
-            _currentGUIScreen.OpenTextWindow(text, talker, open, displayDialogueIcon);
+            CurrentScreen.OpenTextWindow(text, talker, open, displayDialogueIcon);
         }
         public static bool CloseTextWindow()
         {
-            return _currentGUIScreen.CloseTextWindow();
+            return CurrentScreen.CloseTextWindow();
         }
-        public static bool IsTextWindowOpen() { return _currentGUIScreen.IsTextWindowOpen(); }
+        public static bool IsTextWindowOpen() { return CurrentScreen.IsTextWindowOpen(); }
 
         public static void SetWindowText(TextEntry value, bool displayDialogueIcon = false)
         {
-            _currentGUIScreen.SetWindowText(value, displayDialogueIcon);
+            CurrentScreen.SetWindowText(value, displayDialogueIcon);
         }
 
-        public static bool IsHoverWindowOpen() { return _currentGUIScreen.IsHoverWindowOpen(); }
+        public static bool IsHoverWindowOpen() { return CurrentScreen.IsHoverWindowOpen(); }
         public static void CloseHoverWindow() {
-            _currentGUIScreen.CloseHoverWindow();
+            CurrentScreen.CloseHoverWindow();
         }
         public static void OpenHoverWindow(GUITextWindow hoverWindow, Rectangle area, bool guiObject)
         {
-            _currentGUIScreen.OpenHoverWindow(hoverWindow, area, guiObject);
+            CurrentScreen.OpenHoverWindow(hoverWindow, area, guiObject);
         }
 
         public static void AssignBackgroundImage(GUIImage newImage)
         {
-            _currentGUIScreen.AssignBackgroundImage(newImage);
+            CurrentScreen.AssignBackgroundImage(newImage);
         }
 
         public static void ClearBackgroundImage()
         {
-            _currentGUIScreen.ClearBackgroundImage();
+            CurrentScreen.ClearBackgroundImage();
         }
 
         #region MainObject Control
-        public static bool IsMainObjectOpen() { return _currentGUIScreen.IsMainObjectOpen(); }
-        public static void OpenMainObject(GUIMainObject o) { _currentGUIScreen.OpenMainObject(o); }
-        public static bool CloseMainObject() { return _currentGUIScreen.CloseMainObject(); }
+        public static bool IsMainObjectOpen() { return CurrentScreen.IsMainObjectOpen(); }
+        public static void OpenMainObject(GUIMainObject o) { CurrentScreen.OpenMainObject(o); }
+        public static bool CloseMainObject() { return CurrentScreen.CloseMainObject(); }
         #endregion
 
         public static void SetScreen(GUIScreen newScreen)
         {
-            _currentGUIScreen = newScreen;
+            CurrentScreen = newScreen;
+            NewScreen = null;
         }
+        public static void SetNewScreen(GUIScreen newScreen)
+        {
+            NewScreen = newScreen;
+        }
+
 
         /// <summary>
         /// Starts a FadeOut
@@ -203,16 +212,16 @@ namespace RiverHollow.Game_Managers
         }
 
         public static void NewAlertIcon(string text) {
-            _currentGUIScreen.NewAlertIcon(text);
+            CurrentScreen.NewAlertIcon(text);
         }
 
         public static void AddSkipCutsceneButton()
         {
-            _currentGUIScreen.AddSkipCutsceneButton();
+            CurrentScreen.AddSkipCutsceneButton();
         }
         public static void RemoveSkipCutsceneButton()
         {
-            _currentGUIScreen.RemoveSkipCutsceneButton();
+            CurrentScreen.RemoveSkipCutsceneButton();
         }
     }
 

@@ -34,7 +34,7 @@ namespace RiverHollow.GUIComponents
         {
             bool rv = true;
 
-            _liRequiredItems.ForEach(x => x.RemoveSelfFromControls());
+            _liRequiredItems.ForEach(x => x.RemoveSelfFromControl());
             _liRequiredItems.Clear();
 
             foreach (KeyValuePair<int, int> kvp in requiredItemList)
@@ -93,7 +93,7 @@ namespace RiverHollow.GUIComponents
             guiObject.SetScale(chosenScale);
         }
 
-        internal static void CreateSpacedColumn(ref List<GUIObject> components, int columnLine, int start, int totalHeight, int spacing, bool alignToColumnLine = false)
+        internal static void CreateSpacedColumn(List<GUIObject> components, int columnLine, int start, int totalHeight, int spacing, bool alignToColumnLine = false)
         {
             int startY = start + ((totalHeight - (components.Count * components[0].Height) - (spacing * components.Count - 1)) / 2) + components[0].Height / 2;
             Point position = new Point(alignToColumnLine ? columnLine : columnLine - components[0].Width / 2, startY);
@@ -119,29 +119,28 @@ namespace RiverHollow.GUIComponents
                     }
                     else
                     {
-                        components[i].AnchorAndAlignToObject(components[i - 1], SideEnum.Right, SideEnum.Top, GameManager.ScaleIt(spacing));
+                        components[i].AnchorAndAlignWithSpacing(components[i - 1], SideEnum.Right, SideEnum.Top, spacing);
                     }
                     mainControl.AddControl(components[i]);
                 }
             }
         }
-        internal static void CreateSpacedGrid(List<GUIObject> components, Point startPoint, int start, int end, int columns, int xSpacing, int ySpacing)
+        internal static void CreateSpacedGrid(List<GUIObject> components, GUIObject objSync, Point offset, int columns, int xSpacing, int ySpacing)
         {
-            for (int i = start; i < end; i++)
+            for (int i = 0; i < components.Count; i++)
             {
                 GUIObject obj = components[i];
-                int listIndex = i - start;
-                if (i == start)
+                if (i == 0)
                 {
-                    obj.Position(startPoint);
+                    obj.PositionAndMove(objSync, offset);
                 }
                 else if (i % columns == 0)
                 {
-                    obj.AnchorAndAlignToObject(components[listIndex - columns], SideEnum.Bottom, SideEnum.Left, GameManager.ScaleIt(ySpacing));
+                    obj.AnchorAndAlignWithSpacing(components[i - columns], SideEnum.Bottom, SideEnum.Left, ySpacing);
                 }
                 else
                 {
-                    obj.AnchorAndAlignToObject(components[listIndex - 1], SideEnum.Right, SideEnum.Bottom, GameManager.ScaleIt(xSpacing));
+                    obj.AnchorAndAlignWithSpacing(components[i - 1], SideEnum.Right, SideEnum.Bottom, xSpacing);
                 }
             }
         }

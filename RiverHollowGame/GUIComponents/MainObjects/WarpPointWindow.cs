@@ -12,7 +12,7 @@ namespace RiverHollow.GUIComponents.MainObjects
     public class WarpPointWindow : GUIMainObject
     {
         public static int MAX_SHOWN_TASKS = 4;
-        public static int TASK_SPACING = 20;
+        public static int TASK_SPACING = 5;
 
         WarpPoint _currWarpPoint;
 

@@ -117,6 +117,10 @@ namespace RiverHollow.Misc
             {
                 GoalNPC = TownManager.DIVillagers[int.Parse(stringData["GoalNPC"])];
             }
+            else
+            {
+                GoalNPC = StartNPC;
+            }
 
             if (stringData.ContainsKey("AssignTrigger"))
             {

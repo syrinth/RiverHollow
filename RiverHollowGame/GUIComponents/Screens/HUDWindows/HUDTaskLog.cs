@@ -13,7 +13,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
     {
         //public static int BTNSIZE = ScaledTileSize;
         public static int MAX_SHOWN_TASKS = 4;
-        public static int TASK_SPACING = 20;
+        public static int TASK_SPACING = 4;
         public static int TASKBOX_WIDTH = 544; //(GUIManager.MAIN_COMPONENT_WIDTH) - (_gWindow.EdgeSize * 2) - ScaledTileSize
         public static int TASKBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDTaskLog.MAX_SHOWN_TASKS) - (_gWindow.EdgeSize * 2)
         List<GUIObject> _liTasks;
@@ -39,8 +39,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
             _gList = new GUIList(_liTasks, MAX_SHOWN_TASKS, TASK_SPACING/*, _gWindow.Height*/);
             _gList.CenterOnObject(_winMain);
-
-            AddControl(_gList);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -77,16 +75,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 rv = _detailWindow.ProcessHover(mouse);
             }
             return rv;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
-
-        public override void Update(GameTime gTime)
-        {
-            base.Update(gTime);
         }
 
         private void OpenDetailBox(RHTask q)
@@ -183,7 +171,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
                 _desc = new GUIText();
                 _desc.ParseAndSetText(q.Description, InnerWidth(), 3, true);
-                _desc.AnchorAndAlignToObject(_name, SideEnum.Bottom, SideEnum.Left, _name.CharHeight);
+                _desc.AnchorAndAlignWithSpacing(_name, SideEnum.Bottom, SideEnum.Left, _name.CharHeight);
 
                 List<GUIObject> boxes = new List<GUIObject>();
                 for (int i = 0; i < q.LiRewardItems.Count; i++)
@@ -191,8 +179,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                     GUIItemBox newBox = new GUIItemBox(DataManager.DIALOGUE_TEXTURE, q.LiRewardItems[i], true);
                     boxes.Add(newBox);
 
-                    if (i == 0) { newBox.AnchorAndAlignToObject(_desc, SideEnum.Bottom, SideEnum.Left); }
-                    else { newBox.AnchorAndAlignToObject(boxes[i - 1], SideEnum.Right, SideEnum.Top); }
+                    if (i == 0) { newBox.AnchorAndAlign(_desc, SideEnum.Bottom, SideEnum.Left); }
+                    else { newBox.AnchorAndAlign(boxes[i - 1], SideEnum.Right, SideEnum.Top); }
                     AddControl(newBox);
                 }
 

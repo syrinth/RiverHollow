@@ -49,78 +49,60 @@ namespace RiverHollow.GUIComponents.Screens
 
             int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.DarkBlue_Window.WidthEdges();
 
-            GUIImage background = new GUIImage(new Rectangle(0, 0, 480, 270), DataManager.GUI_COMPONENTS + @"\Newgame_Background");
-            AddControl(background);
+            new GUIImage(new Rectangle(0, 0, 480, 270), DataManager.GUI_COMPONENTS + @"\Newgame_Background");
 
             //Create the main window
             _window = new GUIWindow(GUIWindow.WoodenPanel, 208, 208);
             _window.SetScale(ScaledPixel);
             _window.CenterOnScreen();
-            AddControl(_window);
 
             //Create Player Display Box
-            _displayBox = new PlayerDisplayBox(PlayerManager.PlayerActor, new GUIImage(new Rectangle(0, 144, 50, 49), DataManager.DIALOGUE_TEXTURE));
-            _displayBox.Position(_window.Position());
-            _displayBox.ScaledMoveBy(23, 17);
-            _window.AddControl(_displayBox);
+            _displayBox = new PlayerDisplayBox(PlayerManager.PlayerActor);
+            _displayBox.PositionAndMove(_window, 23, 17);
 
             //Create Turn Buttons
             GUIButton btnTurnLeft = new GUIButton(new Rectangle(102, 34, 10, 13), DataManager.DIALOGUE_TEXTURE, BtnLeft);
-            btnTurnLeft.AnchorAndAlignToObject(_displayBox, SideEnum.Left, SideEnum.Bottom);
-            btnTurnLeft.ScaledMoveBy(-1, -1);
-            _window.AddControl(btnTurnLeft);
+            btnTurnLeft.AnchorAndAlignThenMove(_displayBox, SideEnum.Left, SideEnum.Bottom, -1, -1);
 
             GUIButton btnTurnRight= new GUIButton(new Rectangle(112, 34, 10, 13), DataManager.DIALOGUE_TEXTURE, BtnRight);
-            btnTurnRight.AnchorAndAlignToObject(_displayBox, SideEnum.Right, SideEnum.Bottom);
-            btnTurnRight.ScaledMoveBy(1, -1);
-            _window.AddControl(btnTurnRight);
+            btnTurnRight.AnchorAndAlignThenMove(_displayBox, SideEnum.Right, SideEnum.Bottom, 1, -1);
 
             //Create the Character Name Window
             _nameWindow = new GUITextInputWindow();
-            _nameWindow.AnchorAndAlignToObject(_displayBox, SideEnum.Bottom, SideEnum.CenterX, ScaleIt(3));
+            _nameWindow.AnchorAndAlignWithSpacing(_displayBox, SideEnum.Bottom, SideEnum.CenterX, 3);
             _nameWindow.SetText("Syrinth");
 
             //Create the Body Picker
             OptionLabel bodyLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Body").GetFormattedText(), ChangeHairType, ChangeHairColor, AssignColorPicker, Color.White);
-            bodyLabel.AnchorAndAlignToObject(_nameWindow, SideEnum.Bottom, SideEnum.Left);
-            bodyLabel.ScaledMoveBy(5, 4);
-            _window.AddControl(bodyLabel);
+            bodyLabel.AnchorAndAlignThenMove(_nameWindow, SideEnum.Bottom, SideEnum.Left, 5, 4);
 
             OptionLabel hairLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Hair").GetFormattedText(), ChangeHairType, ChangeHairColor, AssignColorPicker, PlayerManager.PlayerActor.HairColor);
-            hairLabel.AnchorAndAlignToObject(bodyLabel, SideEnum.Bottom, SideEnum.Left, ScaleIt(3));
-            _window.AddControl(hairLabel);
+            hairLabel.AnchorAndAlignWithSpacing(bodyLabel, SideEnum.Bottom, SideEnum.Left, 3);
 
             OptionLabel eyeLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Eyes").GetFormattedText(), null, ChangeEyeColor, AssignColorPicker, PlayerManager.PlayerActor.EyeColor);
-            eyeLabel.AnchorAndAlignToObject(hairLabel, SideEnum.Bottom, SideEnum.Left, ScaleIt(3));
-            _window.AddControl(eyeLabel);
+            eyeLabel.AnchorAndAlignWithSpacing(hairLabel, SideEnum.Bottom, SideEnum.Left, 3);
 
             OptionLabel shirtLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Shirt").GetFormattedText(), ChangeHairType, null, null, Color.White);
-            shirtLabel.AnchorAndAlignToObject(hairLabel, SideEnum.Bottom, SideEnum.Right, ScaleIt(27));
-            _window.AddControl(shirtLabel);
+            shirtLabel.AnchorAndAlignWithSpacing(hairLabel, SideEnum.Bottom, SideEnum.Right, 27);
 
             OptionLabel pantsLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Pants").GetFormattedText(), ChangeHairType, null, null, Color.White);
-            pantsLabel.AnchorAndAlignToObject(shirtLabel, SideEnum.Bottom, SideEnum.Right, ScaleIt(3));
-            _window.AddControl(pantsLabel);
+            pantsLabel.AnchorAndAlignWithSpacing(shirtLabel, SideEnum.Bottom, SideEnum.Right, 3);
 
             OptionLabel shoesLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Shoes").GetFormattedText(), ChangeHairType, null, null, Color.White);
-            shoesLabel.AnchorAndAlignToObject(pantsLabel, SideEnum.Bottom, SideEnum.Right, ScaleIt(3));
-            _window.AddControl(shoesLabel);
+            shoesLabel.AnchorAndAlignWithSpacing(pantsLabel, SideEnum.Bottom, SideEnum.Right, 3);
 
             //Create the Character Name Window
             GUIText townLabel = new GUIText(DataManager.GetGameTextEntry("Label_Town").GetFormattedText());
-            townLabel.Position(_window.Position());
-            townLabel.ScaledMoveBy(127, 5);
-            _window.AddControl(townLabel);
+            townLabel.PositionAndMove(_window, 127, 5);
 
             _townWindow = new GUITextInputWindow(12);
-            _townWindow.AnchorAndAlignToObject(townLabel, SideEnum.Bottom, SideEnum.CenterX, ScaleIt(3));
+            _townWindow.AnchorAndAlignWithSpacing(townLabel, SideEnum.Bottom, SideEnum.CenterX, 3);
             _townWindow.SetText("River Hollow");
 
             _gCheckSkipCutscene = new GUICheck("Skip Intro");
             _gCheckSkipCutscene.SetChecked(true);
-            _gCheckSkipCutscene.AnchorAndAlignToObject(_window, SideEnum.Bottom, SideEnum.Left);
+            _gCheckSkipCutscene.AnchorAndAlign(_window, SideEnum.Bottom, SideEnum.Left);
             _gCheckSkipCutscene.ScaledMoveBy(7, 0);
-            AddControl(_gCheckSkipCutscene);
 
             _btnOK = new GUIButton("OK", BtnNewGame);
             _window.AddControl(_btnOK);
@@ -130,7 +112,6 @@ namespace RiverHollow.GUIComponents.Screens
 
             _gColorPicker = new ColorPicker();
             _gColorPicker.Show(false);
-            AddControl(_gColorPicker);
 
             //_btnCancel = new GUIButton("Cancel", BtnCancel);
             //_btnCancel.AnchorToInnerSide(_window, SideEnum.BottomRight, 0);
@@ -143,11 +124,9 @@ namespace RiverHollow.GUIComponents.Screens
             //_gCheckPregnancy.AnchorAndAlignToObject(_gShirt, SideEnum.Bottom, SideEnum.Left, 10);
         }
 
-        public override void Update(GameTime gTime)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Update(gTime);
-
-            //_btnOK.Enable(_nameWindow.GetText().Length > 0);
+            base.Draw(spriteBatch);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -201,10 +180,10 @@ namespace RiverHollow.GUIComponents.Screens
         {
             if (SoundManager.IsMuted) {
                 SoundManager.UnmuteAllSound();
-                 _gMuteButton.ChangeImage(new Rectangle(96, 80, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE);
+                 //_gMuteButton.ChangeImage(new Rectangle(96, 80, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE);
             } else { 
                 SoundManager.MuteAllSound();
-                _gMuteButton.ChangeImage(new Rectangle(96, 96, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE);
+                //_gMuteButton.ChangeImage(new Rectangle(96, 96, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE);
             }
         }
         public void AssignClothes(ref List<int> clothesList, string[] clothingIDs)
@@ -267,7 +246,7 @@ namespace RiverHollow.GUIComponents.Screens
         private void AssignColorPicker(OptionLabel obj, ChangeColorDelegate colorDel)
         {
             _gColorPicker.SetAction(colorDel, obj.OptionColor);
-            _gColorPicker.AnchorAndAlignToObject(obj, SideEnum.Left, SideEnum.CenterY, ScaleIt(5), false);
+            _gColorPicker.AnchorAndAlignWithSpacing(obj, SideEnum.Left, SideEnum.CenterY, 5);
             _gColorPicker.SetOptionLabel(obj);
             _gColorPicker.Show(true);
         }
@@ -354,16 +333,17 @@ namespace RiverHollow.GUIComponents.Screens
         private class OptionLabel : GUIObject
         {
             public Color OptionColor => _gColorPicker.ObjColor;
-            GUIImage _gColorPicker;
-            GUIText _gIndex;
+
+            readonly GUIImage _gColorPicker;
+            readonly GUIText _gIndex;
 
             public delegate int ChangeIndexDelegate(bool increase);
-            private ChangeIndexDelegate _delChangeIndex;
-            private ChangeColorDelegate _delChangeColor;
-            private OpenColorPickerDelegate _delOpenPicker;
+            readonly ChangeIndexDelegate _delChangeIndex;
+            readonly ChangeColorDelegate _delChangeColor;
+            readonly OpenColorPickerDelegate _delOpenPicker;
 
-            private GUIButton _btnDecrease;
-            private GUIButton _btnIncrease;
+            readonly GUIButton _btnDecrease;
+            readonly GUIButton _btnIncrease;
 
             public OptionLabel(string label, ChangeIndexDelegate indexDelegate, ChangeColorDelegate colorDelegate, OpenColorPickerDelegate pickerDelegate, Color c)
             {
@@ -382,7 +362,7 @@ namespace RiverHollow.GUIComponents.Screens
                 GUIText bodyLabel = new GUIText(label);
                 if (_gColorPicker != null)
                 {
-                    bodyLabel.AnchorAndAlignToObject(_gColorPicker, SideEnum.Right, SideEnum.Top, ScaleIt(3));
+                    bodyLabel.AnchorAndAlignWithSpacing(_gColorPicker, SideEnum.Right, SideEnum.Top, 3);
                 }
                 else
                 {
@@ -393,17 +373,15 @@ namespace RiverHollow.GUIComponents.Screens
                 if (_delChangeIndex != null)
                 {
                     _btnDecrease = new GUIButton(new Rectangle(102, 34, 10, 13), DataManager.DIALOGUE_TEXTURE);
-                    _btnDecrease.Position(bodyLabel.Position());
-                    _btnDecrease.ScaledMoveBy(26, -2);
+                    _btnDecrease.PositionAndMove(bodyLabel, 26, -2);
                     AddControl(_btnDecrease);
 
                     _gIndex = new GUIText("00");
-                    _gIndex.AnchorAndAlignToObject(_btnDecrease, SideEnum.Right, SideEnum.Top, ScaleIt(2));
-                    _gIndex.ScaledMoveBy(0, 2);
+                    _gIndex.AnchorAndAlignThenMove(_btnDecrease, SideEnum.Right, SideEnum.Top, 2, 2);
                     AddControl(_gIndex);
 
                     _btnIncrease = new GUIButton(new Rectangle(112, 34, 10, 13), DataManager.DIALOGUE_TEXTURE);
-                    _btnIncrease.AnchorAndAlignToObject(_gIndex, SideEnum.Right, SideEnum.CenterY, ScaleIt(2));
+                    _btnIncrease.AnchorAndAlignWithSpacing(_gIndex, SideEnum.Right, SideEnum.CenterY, 2);
                     AddControl(_btnIncrease);
 
                     Width = _btnIncrease.Right;
@@ -450,7 +428,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
         }
 
-        private class ColorPicker : GUIObject
+        private class ColorPicker : GUIWindow
         {
             float _fHue;
             float _fSaturation;
@@ -458,31 +436,21 @@ namespace RiverHollow.GUIComponents.Screens
 
             private ChangeColorDelegate _delChangeColor;
 
-            GUIWindow _gWindow;
             Slider _gHue;
             Slider _gSaturation;
             Slider _gValue;
 
             OptionLabel _linkedLabel;
-            public ColorPicker()
+            public ColorPicker() : base(GUIWindow.Brown_Window, ScaleIt(48), ScaleIt(36))
             {
-                _gWindow = new GUIWindow(GUIWindow.Brown_Window, ScaleIt(48), ScaleIt(36));
-                AddControl(_gWindow);
-
                 _gHue = new Slider();
-                _gHue.AnchorToInnerSide(_gWindow, SideEnum.Top);
-                _gWindow.AddControl(_gHue);
+                _gHue.AnchorToInnerSide(this, SideEnum.Top);
 
                 _gSaturation = new Slider();
-                _gSaturation.AnchorAndAlignToObject(_gHue, SideEnum.Bottom, SideEnum.Left, ScaleIt(3));
-                _gWindow.AddControl(_gSaturation);
+                _gSaturation.AnchorAndAlignWithSpacing(_gHue, SideEnum.Bottom, SideEnum.Left, 3);
 
                 _gValue = new Slider();
-                _gValue.AnchorAndAlignToObject(_gSaturation, SideEnum.Bottom, SideEnum.Left, ScaleIt(3));
-                _gWindow.AddControl(_gValue);
-
-                Width = _gWindow.Width;
-                Height = _gWindow.Height;
+                _gValue.AnchorAndAlignWithSpacing(_gSaturation, SideEnum.Bottom, SideEnum.Left, 3);
 
                 //ToDo:
                 //ColorPicker maintains the individual HSV values.
@@ -508,7 +476,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
                 else
                 {
-                    rv = _gWindow.ProcessHover(mouse);
+                    rv = base.ProcessHover(mouse);
                 }
 
                 return rv;
@@ -612,7 +580,7 @@ namespace RiverHollow.GUIComponents.Screens
                     for (int i = 0; i < PIXEL_NUM; i++)
                     {
                         _arrPixelArray[i] = new GUIImage(new Rectangle(146, 33, 1, 3), DataManager.DIALOGUE_TEXTURE);
-                        if (i > 0) { _arrPixelArray[i].AnchorAndAlignToObject(_arrPixelArray[i - 1], SideEnum.Right, SideEnum.Top); }
+                        if (i > 0) { _arrPixelArray[i].AnchorAndAlign(_arrPixelArray[i - 1], SideEnum.Right, SideEnum.Top); }
                         else { _arrPixelArray[i].ScaledMoveBy(1, 1); }
                         AddControl(_arrPixelArray[i]);
                     }

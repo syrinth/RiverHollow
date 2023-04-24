@@ -29,6 +29,8 @@ namespace RiverHollow.GUIComponents.Screens
             _liToRemove = new List<GUIObject>();
             _liToAdd = new List<GUIObject>();
             Controls = new List<GUIObject>();
+
+            GUIManager.SetNewScreen(this);
         }
         public virtual bool ProcessLeftButtonClick(Point mouse)
         {
@@ -72,7 +74,6 @@ namespace RiverHollow.GUIComponents.Screens
                 if (!Controls.Contains(g))
                 {
                     Controls.Add(g);
-                    g.ParentScreen = this;
                 }
             }
             _liToAdd.Clear();
@@ -90,7 +91,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
             _liToRemove.Clear();
 
-            if (_guiTextWindow != null) { _guiTextWindow.Update(gTime); }
+            _guiTextWindow?.Update(gTime);
 
             if (_rHoverArea != Rectangle.Empty && !_rHoverArea.Contains(_bGUIObject ? GUICursor.Position : GUICursor.GetWorldMousePosition())) {
                 CloseHoverWindow();
@@ -98,10 +99,7 @@ namespace RiverHollow.GUIComponents.Screens
         }
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if (_guiBackgroundImg != null)
-            {
-                _guiBackgroundImg.Draw(spriteBatch);
-            }
+            _guiBackgroundImg?.Draw(spriteBatch);
             foreach (GUIObject g in Controls)
             {
                 g.Draw(spriteBatch);
@@ -177,7 +175,6 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (text.Selection) { _guiTextWindow = new GUITextSelectionWindow(text, open); }
             else { _guiTextWindow = new GUITextWindow(text, open, displayDialogueIcon); }
-            AddControl(_guiTextWindow);
         }
 
         public virtual bool CloseTextWindow()
@@ -260,13 +257,6 @@ namespace RiverHollow.GUIComponents.Screens
         public virtual void AddSkipCutsceneButton() { }
         public virtual void RemoveSkipCutsceneButton() { }
 
-        public void AddControls(List<GUIObject> controls)
-        {
-            foreach(GUIObject obj in controls)
-            {
-                AddControl(obj);
-            }
-        }
         public void AddControl(GUIObject control)
         {
             if (control != null)
@@ -285,8 +275,14 @@ namespace RiverHollow.GUIComponents.Screens
         {
             if (control != null)
             {
-                control.Show(false);
-                _liToRemove.Add(control);
+                if (_liToAdd.Contains(control))
+                {
+                    _liToAdd.Remove(control);
+                }
+                else
+                {
+                    _liToRemove.Add(control);
+                }
             }
         }
     }

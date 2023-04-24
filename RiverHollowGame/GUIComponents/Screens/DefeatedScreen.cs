@@ -20,11 +20,9 @@ namespace RiverHollow.GUIComponents.Screens
 
             GUIWindow win = new GUIWindow(GUIWindow.Brown_Window, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
             win.CenterOnScreen();
-            AddControl(win);
 
             GUIButton btn = new GUIButton("OK", BtnOk);
             btn.AnchorToInnerSide(win, GUIObject.SideEnum.Bottom);
-            win.AddControl(btn);
 
             _gTimeText = new GUIText(GameCalendar.GetTime());
             _gTimeText.CenterOnWindow(win);

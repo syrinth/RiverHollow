@@ -5,12 +5,13 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
+using RiverHollow.GUIComponents.Screens.HUDComponents;
+using Microsoft.Xna.Framework.Graphics;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.Utilities.Enums;
-using RiverHollow.GUIComponents.Screens.HUDComponents;
-using Microsoft.Xna.Framework.Graphics;
+
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -40,43 +41,35 @@ namespace RiverHollow.GUIComponents.Screens
 
             _liTaskIcons = new List<HUDNewAlert>();
             _gHealthDisplay = new GUIOldStatDisplay(PlayerManager.GetHP, Color.Red);
-            _gHealthDisplay.AnchorToScreen(this, SideEnum.TopLeft, 10);
-            AddControl(_gHealthDisplay);
+            _gHealthDisplay.AnchorToScreen(SideEnum.TopLeft, 3);
 
             _gStaminaDisplay = new GUIOldStatDisplay(PlayerManager.GetStamina, Color.ForestGreen);
-            _gStaminaDisplay.AnchorAndAlignToObject(_gHealthDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
-            AddControl(_gStaminaDisplay);
+            _gStaminaDisplay.AnchorAndAlignWithSpacing(_gHealthDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
 
             if (PlayerManager.MagicUnlocked)
             {
                 _gMagicDisplay = new GUIOldStatDisplay(PlayerManager.GetMagic, Color.Blue);
-                _gMagicDisplay.AnchorAndAlignToObject(_gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
-                AddControl(_gMagicDisplay);
+                _gMagicDisplay.AnchorAndAlignWithSpacing(_gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             }
 
             GUIWindow win = new GUIWindow(GUIWindow.Brown_Window, ScaleIt(48), ScaleIt(26));
             
             _gMoney = new GUIMoneyDisplay();
             _gMoney.AnchorToInnerSide(win, SideEnum.TopLeft);
-            //win.Resize(false, ScaleIt(1));
-            win.AnchorAndAlignToObject(PlayerManager.MagicUnlocked ? _gMagicDisplay : _gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, ScaleIt(2));
-            AddControl(win);
+
+            win.AnchorAndAlignWithSpacing(PlayerManager.MagicUnlocked ? _gMagicDisplay : _gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, 2);
 
             _gDungeonKeys = new GUIDungeonKeyDisplay();
-            _gDungeonKeys.AnchorAndAlignToObject(win, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
-            AddControl(_gDungeonKeys);
+            _gDungeonKeys.AnchorAndAlignWithSpacing(win, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
 
             _gInventory = new HUDMiniInventory();
-            _gInventory.AnchorToScreen(SideEnum.Bottom, ScaleIt(2));
-            AddControl(_gInventory);
+            _gInventory.AnchorToScreen(SideEnum.Bottom, 1);
 
             _gCalendar = new HUDCalendar();
-            _gCalendar.AnchorToScreen(SideEnum.TopRight, 10);
-            AddControl(_gCalendar);
+            _gCalendar.AnchorToScreen(SideEnum.TopRight, 3);
 
             _gBuildIcon = GUIUtils.GetIcon(GameIconEnum.Hammer);
-            _gBuildIcon.AnchorAndAlignToObject(_gCalendar, SideEnum.Left, SideEnum.CenterY, ScaleIt(4));
-
+            _gBuildIcon.AnchorAndAlignWithSpacing(_gCalendar, SideEnum.Left, SideEnum.CenterY, 4);
         }
 
         public override void Update(GameTime gTime)
@@ -85,11 +78,13 @@ namespace RiverHollow.GUIComponents.Screens
 
             HandleInput();
 
+            _gBuildIcon.Show(InTownMode());
+
             //If there are items queued to display and there is not currently a display up, create one.
             if (InventoryManager.AddedItemList.Count > 0 && _addedItem == null)
             {
                 _addedItem = new GUIItemBox(InventoryManager.AddedItemList[0]);
-                _addedItem.AnchorToScreen(SideEnum.BottomRight, 12);
+                _addedItem.AnchorToScreen(SideEnum.BottomRight, 3);
                 _dAlphaTimer = 1;
                 AddControl(_addedItem);
                 InventoryManager.AddedItemList.Remove(InventoryManager.AddedItemList[0]);
@@ -116,15 +111,6 @@ namespace RiverHollow.GUIComponents.Screens
                     RemoveControl(_addedItem);
                     _addedItem = null;
                 }
-            }
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-            if (InTownMode())
-            {
-                _gBuildIcon.Draw(spriteBatch);
             }
         }
 
@@ -208,8 +194,8 @@ namespace RiverHollow.GUIComponents.Screens
         {
             HUDNewAlert newAlert = new HUDNewAlert(text, RemoveTaskIcon);
 
-            if (_liTaskIcons.Count == 0) { newAlert.AnchorToScreen(SideEnum.Right, 12); }
-            else { newAlert.AnchorAndAlignToObject(_liTaskIcons[_liTaskIcons.Count - 1], SideEnum.Top, SideEnum.Right, ScaleIt(1)); }
+            if (_liTaskIcons.Count == 0) { newAlert.AnchorToScreen(SideEnum.Right, 3); }
+            else { newAlert.AnchorAndAlignWithSpacing(_liTaskIcons[_liTaskIcons.Count - 1], SideEnum.Top, SideEnum.Right, 1); }
 
             _liTaskIcons.Add(newAlert);
             AddControl(newAlert);
@@ -222,8 +208,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override void AddSkipCutsceneButton()
         {
-            _btnSkipCutscene = new GUIButton(new Rectangle(64, 80, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, CutsceneManager.SkipCutscene);
-            _btnSkipCutscene.AnchorToScreen(SideEnum.BottomRight, 12);
+            _btnSkipCutscene = new GUIButton(new Rectangle(64, 80, 16, 16), DataManager.DIALOGUE_TEXTURE, CutsceneManager.SkipCutscene);
+            _btnSkipCutscene.AnchorToScreen(SideEnum.BottomRight, 3);
             AddControl(_btnSkipCutscene);
         }
         public override void RemoveSkipCutsceneButton()
@@ -235,13 +221,10 @@ namespace RiverHollow.GUIComponents.Screens
     public class HUDCalendar : GUIWindow
     {
         static GUIText _gText;
-        public HUDCalendar() : base(GUIWindow.DarkBlue_Window, ScaledTileSize, ScaledTileSize)
+        public HUDCalendar() : base(GUIWindow.DarkBlue_Window, GameManager.ScaleIt(75), GameManager.ScaleIt(21))
         {
             _gText = new GUIText("Day XX, XX:XX", DataManager.GetBitMapFont(DataManager.FONT_NEW));
-
             _gText.AnchorToInnerSide(this, SideEnum.TopLeft);
-            Resize();
-            Height = GameManager.ScaleIt(21);
         }
 
         public override void Update(GameTime gTime)
@@ -264,7 +247,7 @@ namespace RiverHollow.GUIComponents.Screens
             _gText = new GUIText(text);
 
             _gMarker.AnchorToInnerSide(this, SideEnum.TopLeft);
-            _gText.AnchorAndAlignToObject(_gMarker, SideEnum.Right, SideEnum.CenterY, ScaleIt(1));
+            _gText.AnchorAndAlignWithSpacing(_gMarker, SideEnum.Right, SideEnum.CenterY, 1);
             AddControl(_gMarker);
             AddControl(_gText);
 

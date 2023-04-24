@@ -58,7 +58,7 @@ namespace RiverHollow.GUIComponents
                     break;
                 case "B":
                     gNote = new GUIMusicNote();
-                    gNote.AnchorAndAlignToObject(_gSprite, SideEnum.Bottom, SideEnum.CenterX);
+                    gNote.AnchorAndAlign(_gSprite, SideEnum.Bottom, SideEnum.CenterX);
                     SoundManager.PlayEffect("d2");
                     break;
                 case "C":

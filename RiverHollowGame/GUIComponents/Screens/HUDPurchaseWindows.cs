@@ -28,7 +28,7 @@ namespace RiverHollow.GUIComponents.Screens
             ShowDisplay();
 
             _gMoney = new GUIMoneyDisplay();
-            _gMoney.AnchorAndAlignToObject(_winMain, GUIObject.SideEnum.Top, GUIObject.SideEnum.Left);
+            _gMoney.AnchorAndAlign(_winMain, GUIObject.SideEnum.Top, GUIObject.SideEnum.Left);
 
             AddControl(_gMoney);
         }
@@ -40,7 +40,6 @@ namespace RiverHollow.GUIComponents.Screens
 
             List<GUIObject> items = new List<GUIObject>();
 
-            int i = 0;
             foreach (Merchandise m in _liMerch)
             {
                 PurchaseBox newBox = null;
@@ -49,21 +48,15 @@ namespace RiverHollow.GUIComponents.Screens
                     Item it = DataManager.GetItem(m.MerchType == Merchandise.MerchTypeEnum.WorldObject ? m.MerchID + Constants.BUILDABLE_ID_OFFSET : m.MerchID);
                     it.ApplyUniqueData(m.UniqueData);
 
-                    newBox = new PurchaseBox(it, m.MoneyCost, _winMain.InnerWidth() - GUIList.BTNSIZE, ShowDisplay);
+                    newBox = new PurchaseBox(it, m.MoneyCost, _winMain.InnerWidth() - GameManager.ScaledTileSize, ShowDisplay);
                 }
                 else { continue; }
 
                 items.Add(newBox);
-
-                if (i == 0) { items[i].AnchorToInnerSide(_winMain, GUIObject.SideEnum.TopLeft); }
-                else { items[i].AnchorAndAlignToObject(items[i - 1], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left); }
-                i++;
             }
 
-            _gList = new GUIList(items, 10, ScaleIt(2), _winMain.InnerHeight());
+            _gList = new GUIList(items, 10, 1, _winMain.InnerHeight());
             _gList.CenterOnObject(_winMain);
-
-            AddControl(_gList);
         }
 
         public override void CloseMainWindow()
@@ -99,38 +92,11 @@ namespace RiverHollow.GUIComponents.Screens
             _gTextName = new GUIText(ShopItem.Name());
 
             _giItem.AnchorToInnerSide(this, SideEnum.Left);
-            _gTextName.AnchorAndAlignToObject(_giItem, SideEnum.Right, SideEnum.CenterY);
+            _gTextName.AnchorAndAlign(_giItem, SideEnum.Right, SideEnum.CenterY);
 
             _gMoney = new GUIMoneyDisplay(Cost);
-            _gMoney.AnchorToInnerSide(this, SideEnum.Right, ScaleIt(2));
-        }
-
-        public PurchaseBox(WorldObject obj, int cost, int mainWidth, EmptyDelegate action) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
-        {
-            _action = action;
-            WorldObject = obj;
-            _font = DataManager.GetBitMapFont(DataManager.FONT_NEW);
-            Cost = cost;
-            _gTextName = new GUIText(obj.Name());
-
-            _gTextName.AnchorToInnerSide(this, SideEnum.Left);
-
-            _gMoney = new GUIMoneyDisplay(Cost);
-            _gMoney.AnchorToInnerSide(this, SideEnum.Right, ScaleIt(2));
-        }
-
-        public PurchaseBox(Actor actor, int cost, int mainWidth, EmptyDelegate action) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
-        {
-            _action = action;
-            Actor = actor;
-            _font = DataManager.GetBitMapFont(DataManager.FONT_NEW);
-            Cost = cost;
-            _gTextName = new GUIText(actor.Name());
-
-            _gTextName.AnchorToInnerSide(this, SideEnum.Left);
-
-            _gMoney = new GUIMoneyDisplay(Cost);
-            _gMoney.AnchorToInnerSide(this, SideEnum.Right, ScaleIt(2));
+            _gMoney.AnchorToInnerSide(this, SideEnum.BottomRight);
+            _gMoney.AlignToObject(_giItem, SideEnum.Top);
         }
 
         public override void Update(GameTime gTime)

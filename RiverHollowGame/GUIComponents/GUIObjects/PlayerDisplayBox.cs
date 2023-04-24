@@ -1,4 +1,6 @@
-﻿using RiverHollow.Characters;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.SpriteAnimations;
@@ -7,31 +9,26 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
-    public class PlayerDisplayBox : GUIObject
+    public class PlayerDisplayBox : GUIImage
     {
         VerbEnum _eLastVerb = VerbEnum.Idle;
         DirectionEnum _eLastDir = DirectionEnum.Down;
 
-        Actor _act;
         List<GUISprite> _liSprites;
 
-        GUIImage _gBackdrop;
-
-        public PlayerDisplayBox(PlayerCharacter actor, GUIImage backDrop)
+        public PlayerDisplayBox(PlayerCharacter actor) : base (new Rectangle(0, 144, 50, 49), DataManager.DIALOGUE_TEXTURE)
         {
-            _act = actor;
-
-            _gBackdrop = backDrop;
             AssignActor(actor);
+        }
 
-            Width = backDrop.Width;
-            Height = backDrop.Height;
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
         }
 
         public void AssignActor(PlayerCharacter actor)
         {
             CleanControls();
-            AddControl(_gBackdrop);
 
             _liSprites = new List<GUISprite>();
             for (int i = 0; i < actor.GetSprites().Count; i++)
@@ -48,10 +45,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
             if (sprite != null)
             {
                 GUISprite spr = new GUISprite(sprite);
-                spr.Position(this.Position());
-                spr.ScaledMoveBy(17, 14);
+                spr.PositionAndMove(this, 17, 14);
                 _liSprites.Add(spr);
-                AddControl(spr);
             }
         }
 

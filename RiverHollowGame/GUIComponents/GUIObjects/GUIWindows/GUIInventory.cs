@@ -37,8 +37,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Setup(PlayerInventory);
 
             _texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
-            Width = (_iColumns * BoxSize) + (GUIManager.STANDARD_MARGIN * (_iColumns + 1));
-            Height = (rows * BoxSize) + (GUIManager.STANDARD_MARGIN * (rows + 1));
+            Width = (_iColumns * BoxSize) + GameManager.ScaleIt(_iColumns + 1);
+            Height = (rows * BoxSize) + GameManager.ScaleIt(rows + 1);
         }
 
         public override void Update(GameTime gTime)
@@ -71,8 +71,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     _arrItemBoxes[i, j] = new GUIItemBox(i, j, DataManager.DIALOGUE_TEXTURE, null);
 
                     if (i == 0 && j == 0) { }
-                    else if (j == 0) { _arrItemBoxes[i, j].AnchorAndAlignToObject(_arrItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
-                    else { _arrItemBoxes[i, j].AnchorAndAlignToObject(_arrItemBoxes[i, j - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
+                    else if (j == 0) { _arrItemBoxes[i, j].AnchorAndAlignWithSpacing(_arrItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
+                    else { _arrItemBoxes[i, j].AnchorAndAlignWithSpacing(_arrItemBoxes[i, j - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
 
                     AddControl(_arrItemBoxes[i, j]);
                 }
@@ -90,9 +90,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         temp[i, j] = new GUIImage(GUIItemBox.RECT_IMG, GameManager.ScaleIt(GUIItemBox.RECT_IMG.Width), GameManager.ScaleIt(GUIItemBox.RECT_IMG.Height), DataManager.DIALOGUE_TEXTURE);
                         temp[i, j].Enable(false);
 
-                        if (i == 0 && j == 0) { temp[i, j].AnchorAndAlignToObject(_arrItemBoxes[PlayerManager.BackpackLevel - 1, 0], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
-                        else if (j == 0) { temp[i, j].AnchorAndAlignToObject(temp[i - 1, j], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
-                        else { temp[i, j].AnchorAndAlignToObject(temp[i, j - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
+                        if (i == 0 && j == 0) { temp[i, j].AnchorAndAlignWithSpacing(_arrItemBoxes[PlayerManager.BackpackLevel - 1, 0], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
+                        else if (j == 0) { temp[i, j].AnchorAndAlignWithSpacing(temp[i - 1, j], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
+                        else { temp[i, j].AnchorAndAlignWithSpacing(temp[i, j - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
 
                         AddControl(temp[i, j]);
                     }

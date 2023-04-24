@@ -62,7 +62,7 @@ namespace RiverHollow.GUIComponents.Screens
             _gBackgroundImage = new GUIImage(new Rectangle(0, 0, 480, 270), DataManager.GUI_COMPONENTS + @"\Combat_Background_Forest");
             AddControl(_gBackgroundImage);
 
-            _gWindow = new GUIWindow(GUIWindow.Brown_Window, ScaleIt(8), ScaleIt(8));
+            _gWindow = new GUIWindow(GUIWindow.Brown_Window);
             _gText = new GUIText(DataManager.GetGameTextEntry("Label_Saving_Start").GetFormattedText(), false);
             _gText.AnchorToInnerSide(_gWindow, SideEnum.TopLeft);
             _gWindow.Resize();
@@ -181,11 +181,11 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         _eCurrentPhase = DayEndPhaseEnum.NPCsWait;
                         _btnOK = new GUIButton("OK", BtnOK);
-                        _btnOK.AnchorAndAlignToObject(_gWindow, SideEnum.Bottom, SideEnum.CenterX, ScaleIt(1));
+                        _btnOK.AnchorAndAlignWithSpacing(_gWindow, SideEnum.Bottom, SideEnum.CenterX, 1);
                         AddControl(_btnOK);
 
                         _btnExit = new GUIButton("Exit Game", BtnExit);
-                        _btnExit.AnchorToScreen(SideEnum.BottomLeft, ScaleIt(2));
+                        _btnExit.AnchorToScreen(SideEnum.BottomLeft, 1);
                         AddControl(_btnExit);
                     }
                 }
@@ -258,7 +258,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _timer = new RHTimer(DAY_DISPLAY_PAUSE);
             _eCurrentPhase = DayEndPhaseEnum.NextDay;
-            _gWindow = new GUIWindow(GUIWindow.Brown_Window, 8, 8);
+            _gWindow = new GUIWindow(GUIWindow.Brown_Window);
 
             TextEntry entry = DataManager.GetGameTextEntry("Day_End", GameCalendar.CurrentDay, GameCalendar.GetCurrentSeason());
             _gText = new GUIText(entry.GetFormattedText(), false);
@@ -287,7 +287,7 @@ namespace RiverHollow.GUIComponents.Screens
             AddControl(_gWindow);
 
             _gText = new GUIText(_iTotalIncome);
-            _gText.AnchorAndAlignToObject(gCoin, SideEnum.Right, SideEnum.CenterY, ScaleIt(1));
+            _gText.AnchorAndAlignWithSpacing(gCoin, SideEnum.Right, SideEnum.CenterY, 1);
             _gWindow.AddControl(_gText);
         }
     }

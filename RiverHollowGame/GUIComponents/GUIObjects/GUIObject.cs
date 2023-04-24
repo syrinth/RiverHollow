@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
@@ -11,26 +12,16 @@ namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUIObject
     {
-        public GUIObject MemberOf;
         private List<GUIObject> ToAdd;
         private List<GUIObject> ToRemove;
         internal List<GUIObject> Controls;
 
         public delegate void EmptyDelegate();
 
-        GUIWindow _parentControl;
-        public GUIWindow ParentWindow
-        {
-            get { return _parentControl; }
-            set { _parentControl = value; }
-        }
+        public GUIObject Parent { get; private set; }
 
-        GUIScreen _parentScreen;
-        public GUIScreen ParentScreen
-        {
-            get { return _parentScreen; }
-            set { _parentScreen = value; }
-        }
+        public GUIScreen Screen { get; private set; }
+
 
         protected double _dScale = 1;
 
@@ -54,10 +45,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
-        public int Top => (int)_pPos.Y;
-        public int Left => (int)_pPos.X;
-        public int Bottom => (int)_pPos.Y + Height;
-        public int Right => (int)_pPos.X + Width;
+        public int Top => _pPos.Y;
+        public int Left => _pPos.X;
+        public int Bottom => _pPos.Y + Height;
+        public int Right => _pPos.X + Width;
 
         private Point _pPos;
         protected float _fAlpha = 1.0f;
@@ -84,6 +75,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
             Controls = new List<GUIObject>();
             ToAdd = new List<GUIObject>();
             ToRemove = new List<GUIObject>();
+
+            Screen = GUIManager.NewScreen ?? GUIManager.CurrentScreen;
+            Screen?.AddControl(this);
         }
         public GUIObject(GUIObject g) : this()
         {
@@ -95,6 +89,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public virtual bool Contains(Point mouse)
         {
             return Visible && DrawRectangle.Contains(mouse);
+        }
+        public virtual bool Contains(GUIObject obj)
+        {
+            return DrawRectangle.Contains(obj.DrawRectangle);
         }
         public virtual void Update(GameTime gTime) {
             foreach (GUIObject g in ToRemove)
@@ -256,6 +254,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public virtual void Position(GUIObject obj)
         {
             Position(obj.Position());
+            AddParent(obj);
         }
         /// <summary>
         /// Set the location of this GUIObject to the indicated value.
@@ -277,6 +276,17 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 g.PositionSub(delta);
             }
+        }
+
+        public void PositionAndMove(GUIObject obj, int xMove, int yMove)
+        {
+            PositionAndMove(obj, new Point(xMove, yMove));
+        }
+        public void PositionAndMove(GUIObject obj, Point offset)
+        {
+            Position(obj.Position());
+            ScaledMoveBy(offset);
+            AddParent(obj);
         }
 
         public virtual void SetScale(double x, bool anchorToPos = true)
@@ -330,20 +340,30 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 AddControl(o);
             }
         }
+
+        public virtual void AddControls(params GUIObject[] obj)
+        {
+            foreach (GUIObject o in obj)
+            {
+                AddControl(o);
+            }
+        }
         public virtual void AddControl(GUIObject g)
         {
-            if (g != null && g.MemberOf == null && !Controls.Contains(g))
+            if (g != null && g.Parent == null && !Controls.Contains(g))
             {
                 Controls.Add(g);
-                g.MemberOf = this;
+                g.Parent = this;
+                g.Screen?.RemoveControl(g);
+                g.RemoveScreen();
             }
         }
         public virtual void AddControlDelayed(GUIObject g)
         {
-            if (g != null && g.MemberOf == null && (!Controls.Contains(g) && !ToAdd.Contains(g)))
+            if (g != null && g.Parent == null && (!Controls.Contains(g) && !ToAdd.Contains(g)))
             {
                 ToAdd.Add(g);
-                g.MemberOf = this;
+                g.Parent = this;
             }
         }
         public void CleanControls()
@@ -359,14 +379,19 @@ namespace RiverHollow.GUIComponents.GUIObjects
             if (control != null && Controls.Contains(control))
             {
                 Controls.Remove(control);
-                control.MemberOf = null;
+                control.Parent = null;
             }
         }
 
-        public void RemoveSelfFromControls()
+        private void RemoveScreen()
         {
-            MemberOf?.RemoveControl(this);
-            ParentWindow?.RemoveControl(this);
+            Screen = null;
+        }
+
+        public void RemoveSelfFromControl()
+        {
+            Parent?.RemoveControl(this);
+            Screen?.RemoveControl(this);
         }
 
         #region Alpha
@@ -386,11 +411,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public enum SideEnum { Bottom, BottomLeft, BottomRight, Center, CenterX, CenterY, Left, Right, Top, TopLeft, TopRight, };
         public void ScaledMoveBy(int x, int y)
         {
-            ScaledMoveBy(new Vector2(x, y));
+            ScaledMoveBy(new Point(x, y));
         }
-        private void ScaledMoveBy(Vector2 dir)
+        private void ScaledMoveBy(Point dir)
         {
-            MoveBy(GameManager.ScaleIt((int)dir.X), GameManager.ScaleIt((int)dir.Y));
+            MoveBy(GameManager.ScaleIt(dir.X), GameManager.ScaleIt(dir.Y));
         }
         public void MoveBy(Point dir)
         {
@@ -409,51 +434,101 @@ namespace RiverHollow.GUIComponents.GUIObjects
             Position(new Point(_pPos.X, y));
         }
 
-        internal void AnchorAndAlignToObject(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, int spacing = 0, bool addToWindow = true)
+        internal void AddParent(GUIObject focus, bool forceParent = false)
         {
-            AnchorToObject(focus, sidePlacement, spacing, addToWindow);
-            AlignToObject(focus, sideToAlign, addToWindow);
+            while (Parent == null)
+            {
+                if (focus != null && forceParent || focus.DrawRectangle.Intersects(DrawRectangle))
+                {
+                    focus.AddControl(this);
+                    break;
+                }
+                else if (focus.Parent != null)
+                {
+                    focus = focus.Parent;
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
-        internal Point GetAnchorAndAlignToObject(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, int spacing = 0, bool addToWindow = true)
-        {
-            GUIObject g = new GUIObject(this);
-            g.AnchorToObject(focus, sidePlacement, spacing, addToWindow);
-            g.AlignToObject(focus, sideToAlign, addToWindow);
 
-            return g.Position();
+        internal void AnchorAndAlignThenMove(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, int moveX, int moveY)
+        {
+            AnchorAndAlign(focus, sidePlacement, sideToAlign);
+            ScaledMoveBy(moveX, moveY);
+            AddParent(focus);
         }
-        internal void AnchorToObject(GUIObject focus, SideEnum sidePlacement, int spacing = 0, bool addToWindow = true)
-        {
-            if (focus.ParentWindow != null && addToWindow) { focus.ParentWindow.AddControl(this); }
 
+        internal void AnchorAndAlign(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign)
+        {
+            AnchorAndAlignWithSpacing(focus, sidePlacement, sideToAlign, 0);
+        }
+        internal void AnchorAndAlignWithSpacing(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, int spacing, bool forceParent = false)
+        {
+            AnchorToObject(focus, sidePlacement, spacing, forceParent);
+            AlignToObject(focus, sideToAlign, forceParent);
+        }
+        internal void AnchorToObject(GUIObject focus, SideEnum sidePlacement, int spacing = 0, bool forceParent = false)
+        {
+            int scaledSpace = GameManager.ScaleIt(spacing);
             Point position = focus.Position();
             switch (sidePlacement)
             {
                 case SideEnum.Bottom:
                     position.X = this.Position().X;
-                    position.Y += focus.Height + spacing;
+                    position.Y += focus.Height + scaledSpace;
                     break;
                 case SideEnum.Left:
-                    position.X -= (this.Width + spacing);
+                    position.X -= (this.Width + scaledSpace);
                     position.Y = this.Position().Y;
                     break;
                 case SideEnum.Right:
-                    position.X += focus.Width + spacing;
+                    position.X += focus.Width + scaledSpace;
                     position.Y = this.Position().Y;
                     break;
                 case SideEnum.Top:
                     position.X = this.Position().X;
-                    position.Y -= (this.Height + spacing);
+                    position.Y -= (this.Height + scaledSpace);
                     break;
             }
             this.Position(position);
-        }
-        internal Point GetAnchorToObject(GUIWindow focus, SideEnum sidePlacement, int spacing = 0)
-        {
-            GUIObject g = new GUIObject(this);
-            g.AnchorToObject(focus, sidePlacement, spacing);
 
-            return g.Position();
+            AddParent(focus, forceParent);
+        }
+
+        internal void AlignToObject(GUIObject focus, SideEnum sideToAlign, bool forceParent = false)
+        {
+            switch (sideToAlign)
+            {
+                case SideEnum.Bottom:
+                    this.SetY(focus.Position().Y + focus.Height - this.Height);
+                    break;
+                case SideEnum.Left:
+                    this.SetX(focus.Position().X);
+                    break;
+                case SideEnum.Right:
+                    this.SetX(focus.Position().X + focus.Width - this.Width);
+                    break;
+                case SideEnum.Top:
+                    this.SetY(focus.Position().Y);
+                    break;
+                case SideEnum.CenterX:
+                    this.SetX(focus.DrawRectangle.Center.X - this.Width / 2);
+                    break;
+                case SideEnum.CenterY:
+                    this.SetY(focus.DrawRectangle.Center.Y - this.Height / 2);
+                    break;
+                case SideEnum.Center:
+                    this.SetX(focus.DrawRectangle.Center.X - this.Width / 2);
+                    this.SetY(focus.DrawRectangle.Center.Y - this.Height / 2);
+                    break;
+                default:
+                    break;
+            }
+
+            AddParent(focus, forceParent);
         }
 
         internal void AffixToCenter(GUIWindow window, SideEnum whichCenter, bool onMain, int spacing = 0)
@@ -471,13 +546,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     break;
             }
 
-        }
-        internal Point GetAffixToCenter(GUIWindow window, SideEnum whichCenter, bool onMain, int spacing = 0)
-        {
-            GUIObject g = new GUIObject(this);
-            g.AffixToCenter(window, whichCenter, onMain, spacing);
-
-            return g.Position();
         }
         internal void AnchorToObjectInnerSide(GUIObject obj, SideEnum sidePlacement, int spacing = 0)
         {
@@ -521,191 +589,128 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
         internal void AnchorToInnerSide(GUIWindow window, SideEnum sidePlacement, int spacing = 0)
         {
-            window.AddControl(this);
+            int scaledSpacing = GameManager.ScaleIt(spacing);
             switch (sidePlacement)
             {
                 case SideEnum.Bottom:
-                    this.SetY(window.InnerBottom() - this.Height - spacing);
+                    this.SetY(window.InnerBottom() - this.Height - scaledSpacing);
                     this.AlignToObject(window, SideEnum.CenterX);
                     break;
                 case SideEnum.Left:
-                    this.SetX(window.InnerLeft() + spacing);
+                    this.SetX(window.InnerLeft() + scaledSpacing);
                     this.AlignToObject(window, SideEnum.CenterY);
                     break;
                 case SideEnum.Right:
-                    this.SetX(window.InnerRight() - this.Width - spacing);
+                    this.SetX(window.InnerRight() - this.Width - scaledSpacing);
                     this.AlignToObject(window, SideEnum.CenterY);
                     break;
                 case SideEnum.Top:
-                    this.SetY(window.InnerTop() + spacing);
+                    this.SetY(window.InnerTop() + scaledSpacing);
                     this.AlignToObject(window, SideEnum.CenterX);
                     break;
                 case SideEnum.BottomLeft:
-                    this.SetY(window.InnerBottom() - this.Height - spacing);
-                    this.SetX(window.InnerLeft() + spacing);
+                    this.SetY(window.InnerBottom() - this.Height - scaledSpacing);
+                    this.SetX(window.InnerLeft() + scaledSpacing);
                     break;
                 case SideEnum.BottomRight:
-                    this.SetY(window.InnerBottom() - this.Height - spacing);
-                    this.SetX(window.InnerRight() - this.Width - spacing);
+                    this.SetY(window.InnerBottom() - this.Height - scaledSpacing);
+                    this.SetX(window.InnerRight() - this.Width - scaledSpacing);
                     break;
                 case SideEnum.TopLeft:
-                    this.SetY(window.InnerTop() + spacing);
-                    this.SetX(window.InnerLeft() + spacing);
+                    this.SetY(window.InnerTop() + scaledSpacing);
+                    this.SetX(window.InnerLeft() + scaledSpacing);
                     break;
                 case SideEnum.TopRight:
-                    this.SetY(window.InnerTop() + spacing);
-                    this.SetX(window.InnerRight() - this.Width - spacing);
+                    this.SetY(window.InnerTop() + scaledSpacing);
+                    this.SetX(window.InnerRight() - this.Width - scaledSpacing);
                     break;
                 default:
                     break;
             }
-        }
-        internal Point GetAnchorToInnerSide(GUIWindow window, SideEnum sidePlacement, int spacing = 0)
-        {
-            GUIObject g = new GUIObject(this);
-            g.AnchorToInnerSide(window, sidePlacement, spacing);
-
-            return g.Position();
+            AddParent(window, true);
         }
         internal void AnchorToInnerSide(GUIObject obj, SideEnum sidePlacement, int spacing = 0)
         {
+            int scaledSpacing = GameManager.ScaleIt(spacing);
             switch (sidePlacement)
             {
                 case SideEnum.Bottom:
-                    this.SetY(obj.DrawRectangle.Bottom - this.Height - spacing);
+                    this.SetY(obj.DrawRectangle.Bottom - this.Height - scaledSpacing);
                     break;
                 case SideEnum.Left:
-                    this.SetX(obj.DrawRectangle.Left + spacing);
+                    this.SetX(obj.DrawRectangle.Left + scaledSpacing);
                     break;
                 case SideEnum.Right:
-                    this.SetX(obj.DrawRectangle.Right - this.Width - spacing);
+                    this.SetX(obj.DrawRectangle.Right - this.Width - scaledSpacing);
                     break;
                 case SideEnum.Top:
-                    this.SetY(obj.DrawRectangle.Top + spacing);
+                    this.SetY(obj.DrawRectangle.Top + scaledSpacing);
                     break;
                 case SideEnum.BottomLeft:
-                    this.SetY(obj.DrawRectangle.Bottom - this.Height - spacing);
-                    this.SetX(obj.DrawRectangle.Left + spacing);
+                    this.SetY(obj.DrawRectangle.Bottom - this.Height - scaledSpacing);
+                    this.SetX(obj.DrawRectangle.Left + scaledSpacing);
                     break;
                 case SideEnum.BottomRight:
-                    this.SetY(obj.DrawRectangle.Bottom - this.Height - spacing);
-                    this.SetX(obj.DrawRectangle.Right - this.Width - spacing);
+                    this.SetY(obj.DrawRectangle.Bottom - this.Height - scaledSpacing);
+                    this.SetX(obj.DrawRectangle.Right - this.Width - scaledSpacing);
                     break;
                 case SideEnum.TopLeft:
-                    this.SetY(obj.DrawRectangle.Top + spacing);
-                    this.SetX(obj.DrawRectangle.Left + spacing);
+                    this.SetY(obj.DrawRectangle.Top + scaledSpacing);
+                    this.SetX(obj.DrawRectangle.Left + scaledSpacing);
                     break;
                 case SideEnum.TopRight:
-                    this.SetY(obj.DrawRectangle.Top + spacing);
-                    this.SetX(obj.DrawRectangle.Right - this.Width - spacing);
+                    this.SetY(obj.DrawRectangle.Top + scaledSpacing);
+                    this.SetX(obj.DrawRectangle.Right - this.Width - scaledSpacing);
                     break;
                 default:
                     break;
             }
-        }
-        internal Point GetAnchorToInnerSide(GUIObject obj, SideEnum sidePlacement, int spacing = 0)
-        {
-            GUIObject g = new GUIObject(this);
-            g.AnchorToInnerSide(obj, sidePlacement, spacing);
-
-            return g.Position();
-        }
-        internal void AnchorToScreen(GUIScreen screen, SideEnum sidePlacement, int spacing = 0)
-        {
-            screen.AddControl(this);
-            AnchorToScreen(sidePlacement, spacing);
         }
         internal void AnchorToScreen(SideEnum sidePlacement, int spacing = 0)
         {
             int screenHeight = RiverHollow.ScreenHeight;
             int screenWidth = RiverHollow.ScreenWidth;
 
+            int scaledSpace = GameManager.ScaleIt(spacing);
+
             switch (sidePlacement)
             {
                 case SideEnum.Bottom:
-                    this.SetY(screenHeight - this.Height - spacing);
+                    this.SetY(screenHeight - this.Height - scaledSpace);
                     this.SetX(screenWidth / 2 - this.Width / 2);
                     break;
                 case SideEnum.Left:
                     this.SetY(screenHeight / 2 - this.Height / 2);
-                    this.SetX(0 + spacing);
+                    this.SetX(0 + scaledSpace);
                     break;
                 case SideEnum.Right:
                     this.SetY(screenHeight / 2 - this.Height / 2);
-                    this.SetX(screenWidth - this.Width - spacing);
+                    this.SetX(screenWidth - this.Width - scaledSpace);
                     break;
                 case SideEnum.Top:
-                    this.SetY(0 + spacing);
+                    this.SetY(0 + scaledSpace);
                     this.SetX(screenWidth / 2 - this.Width / 2);
                     break;
                 case SideEnum.BottomLeft:
-                    this.SetY(screenHeight - this.Height - spacing);
-                    this.SetX(0 + spacing);
+                    this.SetY(screenHeight - this.Height - scaledSpace);
+                    this.SetX(0 + scaledSpace);
                     break;
                 case SideEnum.BottomRight:
-                    this.SetY(screenHeight - this.Height - spacing);
-                    this.SetX(screenWidth - this.Width - spacing);
+                    this.SetY(screenHeight - this.Height - scaledSpace);
+                    this.SetX(screenWidth - this.Width - scaledSpace);
                     break;
                 case SideEnum.TopLeft:
-                    this.SetY(0 + spacing);
-                    this.SetX(0 + spacing);
+                    this.SetY(0 + scaledSpace);
+                    this.SetX(0 + scaledSpace);
                     break;
                 case SideEnum.TopRight:
-                    this.SetY(0 + spacing);
-                    this.SetX(screenWidth - this.Width - spacing);
+                    this.SetY(0 + scaledSpace);
+                    this.SetX(screenWidth - this.Width - scaledSpace);
                     break;
                 default:
                     break;
             }
         }
-        internal Point GetAnchorToScreen(SideEnum sidePlacement, int spacing = 0)
-        {
-            GUIObject g = new GUIObject(this);
-            g.AnchorToScreen(sidePlacement, spacing);
-
-            return g.Position();
-        }
-        internal void AlignToObject(GUIObject focus, SideEnum sideToAlign, bool AddToParentWindow = true)
-        {
-            if (focus.ParentWindow != null && AddToParentWindow) { focus.ParentWindow.AddControl(this); }
-
-            Point position = focus.Position();
-            switch (sideToAlign)
-            {
-                case SideEnum.Bottom:
-                    this.SetY(focus.Position().Y + focus.Height - this.Height);
-                    break;
-                case SideEnum.Left:
-                    this.SetX(focus.Position().X);
-                    break;
-                case SideEnum.Right:
-                    this.SetX(focus.Position().X + focus.Width - this.Width);
-                    break;
-                case SideEnum.Top:
-                    this.SetY(focus.Position().Y);
-                    break;
-                case SideEnum.CenterX:
-                    this.SetX(focus.DrawRectangle.Center.X - this.Width / 2);
-                    break;
-                case SideEnum.CenterY:
-                    this.SetY(focus.DrawRectangle.Center.Y - this.Height / 2);
-                    break;
-                case SideEnum.Center:
-                    this.SetX(focus.DrawRectangle.Center.X - this.Width / 2);
-                    this.SetY(focus.DrawRectangle.Center.Y - this.Height / 2);
-                    break;
-                default:
-                    break;
-            }
-        }
-        internal Point GetAlignToObject(GUIObject focus, SideEnum sideToAlign)
-        {
-            GUIObject g = new GUIObject(this);
-            g.AlignToObject(focus, sideToAlign);
-
-            return g.Position();
-        }
-
         internal void CenterOnScreen(GUIScreen screen)
         {
             screen.AddControl(this);
@@ -732,6 +737,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             this.SetX(centerX - Width / 2);
             this.SetY(centerY - Height / 2);
+            AddParent(obj);
         }
 
         internal void DetermineSize()

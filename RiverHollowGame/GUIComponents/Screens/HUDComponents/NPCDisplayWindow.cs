@@ -19,8 +19,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             npc.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
 
             GUISprite spr = new GUISprite(npc.BodySprite, true);
-            spr.AnchorToInnerSide(this, SideEnum.Bottom, GameManager.ScaleIt(1));
-            AddControl(spr);
+            spr.AnchorToInnerSide(this, SideEnum.Bottom, 1);
 
             if (npc.IsActorType(ActorTypeEnum.Villager))
             {
@@ -37,15 +36,12 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
                     pos.X += 10 * villager.GetFriendshipLevel();
 
                     GUIImage heart = new GUIImage(new Rectangle(pos.X, pos.Y, 10, 9), DataManager.HUD_COMPONENTS);
-                    heart.Position(Position());
-                    heart.ScaledMoveBy(22, 34);
-                    AddControl(heart);
+                    heart.PositionAndMove(this, 22, 34);
 
                     if (!villager.CanGiveGift)
                     {
                         GUIImage heartGlow = new GUIImage(new Rectangle(192, 72, 12, 11), DataManager.HUD_COMPONENTS);
                         heartGlow.CenterOnObject(heart);
-                        AddControl(heartGlow);
                     }
                 }
             }

@@ -27,17 +27,16 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gHideMiniInventory.AnchorToInnerSide(_winMain, SideEnum.TopLeft, 8);
 
             _gSoundSettings = new GUIText("Sound Settings");
-            _gSoundSettings.AnchorAndAlignToObject(_gHideMiniInventory, SideEnum.Bottom, SideEnum.Left, 32);
+            _gSoundSettings.AnchorAndAlignWithSpacing(_gHideMiniInventory, SideEnum.Bottom, SideEnum.Left, 8);
 
             _gVolumeControl = new GUINumberControl("Music", SoundManager.MusicVolume * SOUND_VOLUME_SCALAR, UpdateMusicVolume);
-            _gVolumeControl.AnchorAndAlignToObject(_gSoundSettings, SideEnum.Bottom, SideEnum.Left);
-            _gVolumeControl.MoveBy(new Point(32, 0));
+            _gVolumeControl.AnchorAndAlignThenMove(_gSoundSettings, SideEnum.Bottom, SideEnum.Left, 8, 0);
 
             _gEffectControl = new GUINumberControl("Effects", SoundManager.EffectVolume * SOUND_VOLUME_SCALAR, UpdateEffectsVolume);
-            _gEffectControl.AnchorAndAlignToObject(_gVolumeControl, SideEnum.Bottom, SideEnum.Left);
+            _gEffectControl.AnchorAndAlign(_gVolumeControl, SideEnum.Bottom, SideEnum.Left);
 
             _gMute = new GUICheck("Mute All", SoundManager.IsMuted, ProcessMuteAll);
-            _gMute.AnchorAndAlignToObject(_gEffectControl, SideEnum.Bottom, SideEnum.Left);
+            _gMute.AnchorAndAlign(_gEffectControl, SideEnum.Bottom, SideEnum.Left);
 
             _btnSave = new GUIButton("Save", BtnSave);
             _btnSave.AnchorToInnerSide(_winMain, SideEnum.BottomRight);
@@ -66,16 +65,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             bool rv = true;
 
             return rv;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
-
-        public override void Update(GameTime gTime)
-        {
-            base.Update(gTime);
         }
 
         public void ProcessMuteAll()
@@ -131,14 +120,14 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 _fMax = max;
                 _gText = new GUIText("XXXXXXXXXX");
 
-                _btnLeft = new GUIButton(new Rectangle(272, 112, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, BtnLeftClick);
-                _btnLeft.AnchorAndAlignToObject(_gText, SideEnum.Right, SideEnum.CenterY, 12);
+                _btnLeft = new GUIButton(new Rectangle(272, 112, 16, 16), DataManager.DIALOGUE_TEXTURE, BtnLeftClick);
+                _btnLeft.AnchorAndAlignWithSpacing(_gText, SideEnum.Right, SideEnum.CenterY, 3);
 
                 _gValue = new GUIText("000");
-                _gValue.AnchorAndAlignToObject(_btnLeft, SideEnum.Right, SideEnum.CenterY, 12);
+                _gValue.AnchorAndAlignWithSpacing(_btnLeft, SideEnum.Right, SideEnum.CenterY, 3);
 
-                _btnRight = new GUIButton(new Rectangle(256, 112, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE, BtnRightClick);
-                _btnRight.AnchorAndAlignToObject(_gValue, SideEnum.Right, SideEnum.CenterY, 12);
+                _btnRight = new GUIButton(new Rectangle(256, 112, 16, 16), DataManager.DIALOGUE_TEXTURE, BtnRightClick);
+                _btnRight.AnchorAndAlignWithSpacing(_gValue, SideEnum.Right, SideEnum.CenterY, 3);
 
                 _fValue = baseValue;
                 UpdateValue();
@@ -182,7 +171,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             private void UpdateValue()
             {
                 _gValue.SetText((int)_fValue);
-                _gValue.AnchorAndAlignToObject(_btnRight, SideEnum.Left, SideEnum.CenterY, 12);
+                _gValue.AnchorAndAlignWithSpacing(_btnRight, SideEnum.Left, SideEnum.CenterY, 3);
             }
         }
     }

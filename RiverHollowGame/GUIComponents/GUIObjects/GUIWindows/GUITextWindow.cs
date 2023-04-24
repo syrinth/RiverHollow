@@ -14,7 +14,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public bool ProcessClicks = true;
 
         GUIImage _gNext;
-        protected GUIText _giText;
+        protected GUIText _gText;
         protected GUIImage _giPortrait;
         protected List<string> _liTextPages;
 
@@ -43,12 +43,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextWindow() : base()
         {
-            _giText = new GUIText("", true, DataManager.FONT_NEW);
+            _gText = new GUIText("", true, DataManager.FONT_NEW);
             _liTextPages = new List<string>();
-            _iCharWidth = _giText.CharWidth;
-            _iCharHeight = _giText.CharHeight;
-
-            AddControl(_giText);
+            _iCharWidth = _gText.CharWidth;
+            _iCharHeight = _gText.CharHeight;
         }
 
         //Used for the default TextWindow that sits on the bottom of the screen
@@ -67,7 +65,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             _textEntry = text;
             _textEntry.HandlePreWindowActions();
-            Height = (int)_giText.MeasureString(_textEntry.GetFormattedText()).Y + HeightEdges();
+            Height = (int)_gText.MeasureString(_textEntry.GetFormattedText()).Y + HeightEdges();
             Width = (int)(RiverHollow.ScreenWidth / 4);
 
             SyncText(_textEntry.GetFormattedText());
@@ -81,11 +79,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     totalVal += System.Environment.NewLine;
                 }
             }
-            _giText.SetText(totalVal);
+            _gText.SetText(totalVal);
             Position(position);
 
-            _giText.PrintAll = true;
-            _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
+            _gText.PrintAll = true;
+            _gText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
             Resize();
         }
 
@@ -120,9 +118,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         protected void SyncText(string text, bool printAll = false)
         {
-            _liTextPages = _giText.ParseText(text, InnerWidth(), MAX_ROWS, printAll);
-            if (_giText.PrintAll) { _giText.SetText(_liTextPages[0]); }
-            else { _giText.ResetText(_liTextPages[0]); }
+            _liTextPages = _gText.ParseText(text, InnerWidth(), MAX_ROWS, printAll);
+            if (_gText.PrintAll) { _gText.SetText(_liTextPages[0]); }
+            else { _gText.ResetText(_liTextPages[0]); }
         }
         /// <summary>
         /// Method used to ensure that the components for the TextWindow are synced
@@ -133,7 +131,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             DisplayCharacterPortrait();
 
-            _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
+            _gText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
 
             DisplayDialogueFinishedIcon();
 
@@ -163,14 +161,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
             else
             {
-                if (ShowNextButton())
-                {
-                    _gNext.Update(gTime);
-                }
+                _gText.Update(gTime);
 
-                _giText.Update(gTime);
-
-                if (_giText.Done)
+                if (_gText.Done)
                 {
                     Paused = true;
                     DisplayDialogueFinishedIcon();
@@ -184,16 +177,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             if (!_bOpening)
             {
-                _giText.Draw(spriteBatch);
-                if (ShowNextButton())
-                {
-                    _gNext.Draw(spriteBatch);
-                }
-
-                if (_giPortrait != null)
-                {
-                    _giPortrait.Draw(spriteBatch);
-                }
+                _gNext?.Show(Paused);
+                _gText.Draw(spriteBatch);
 
                 foreach (GUIObject g in Controls)
                 {
@@ -278,7 +263,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _iCurrText++;
             if (_iCurrText < _liTextPages.Count)
             {
-                _giText.ResetText(_liTextPages[_iCurrText]);
+                _gText.ResetText(_liTextPages[_iCurrText]);
                 rv = true;
             }
 
@@ -287,34 +272,30 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public void PrintAll()
         {
-            _giText.PrintAll = true;
+            _gText.PrintAll = true;
             DisplayDialogueFinishedIcon();
         }
 
         public bool Done()
         {
-            return _iCurrText == _liTextPages.Count && _giText.Done;
+            return _iCurrText == _liTextPages.Count && _gText.Done;
         }
 
         private void DisplayDialogueFinishedIcon()
         {
             if (_bDisplayDialogueIcon)
             {
-                if (_iCurrText < _liTextPages.Count - 1)
-                {
-                    _gNext = new GUIImage(new Rectangle(288, 64, Constants.TILE_SIZE, Constants.TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
-                }
-                else
-                {
-                    _gNext = new GUIImage(new Rectangle(304, 64, Constants.TILE_SIZE, Constants.TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
-                }
-                _gNext.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.Bottom);
+                RemoveControl(_gNext);
+                Rectangle rect = (_iCurrText < _liTextPages.Count - 1) ? new Rectangle(288, 64, Constants.TILE_SIZE, Constants.TILE_SIZE) : new Rectangle(304, 64, Constants.TILE_SIZE, Constants.TILE_SIZE);
+                _gNext = new GUIImage(rect, GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);
+                _gNext.AnchorAndAlign(this, SideEnum.Right, SideEnum.Bottom);
+                AddControl(_gNext);
             }
         }
 
         public void ResetText(TextEntry text)
         {
-            _giText.ResetText(text.GetFormattedText());
+            _gText.ResetText(text.GetFormattedText());
         }
 
         protected void SetWidthMax(int val, int maxWidth)
