@@ -43,7 +43,7 @@ namespace RiverHollow.Map_Handling
         public bool Modular => _map.Properties.ContainsKey("Modular");
         public bool IsOutside => _map.Properties.ContainsKey("Outside");
         public float Lighting => _map.Properties.ContainsKey("Lighting") ? float.Parse(_map.Properties["Lighting"]) : 1;
-        public string MapType => _map.Properties.ContainsKey("MapType") ? _map.Properties["MapType"] : string.Empty;
+        public MapTypeEnum MapType => Util.ParseEnum<MapTypeEnum>(_map.Properties.ContainsKey("MapType") ? _map.Properties["MapType"] : string.Empty);
 
         public bool Visited { get; private set; } = false;
         public MobSpawnStateEnum MobsSpawned { get; private set; } = MobSpawnStateEnum.None;
@@ -1547,7 +1547,7 @@ namespace RiverHollow.Map_Handling
                             rv = TownPlaceObject(toBuild);
                             break;
                     }
-                    SoundManager.PlayEffect(rv ? "thump3" : "Cancel");
+                    SoundManager.PlayEffect(rv ? SoundEffectEnum.Thump : SoundEffectEnum.Cancel);
                 }
                 else if (GameManager.HeldObject == null && MouseTile != null)
                 {
@@ -1770,7 +1770,7 @@ namespace RiverHollow.Map_Handling
         /// <param name="mouseLocation"></param>
         public void PickUpWorldObject(Point mouseLocation, WorldObject targetObj)
         {
-            SoundManager.PlayEffect("buildingGrab");
+            SoundManager.PlayEffect(SoundEffectEnum.GrabBuilding);
             GameManager.PickUpWorldObject(targetObj);
             targetObj.SetPickupOffset(mouseLocation.ToVector2());
             targetObj.RemoveSelfFromTiles();

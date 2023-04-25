@@ -15,8 +15,6 @@ namespace RiverHollow.WorldObjects
 {
     public class Machine : WorldObject
     {
-        readonly string _sEffectWorking = "";
-
         public Recipe[] CraftingSlots { get; private set; }
         public bool CraftDaily => GetBoolByIDKey("Daily");
         public bool Kitchen => GetBoolByIDKey("Kitchen");
@@ -38,8 +36,6 @@ namespace RiverHollow.WorldObjects
                 _iWorkingFrames = int.Parse(split[0]);
                 _fFrameSpeed = float.Parse(split[1]);
             }
-
-            Util.AssignValue(ref _sEffectWorking, "WorkEffect", stringData);
 
             LoadDictionaryData(stringData);
 
@@ -230,9 +226,9 @@ namespace RiverHollow.WorldObjects
                 }
             }
 
-            if (success && !string.IsNullOrEmpty(_sEffectWorking))
+            if (success)
             {
-                SoundManager.PlayEffect(_sEffectWorking);
+                SoundManager.PlayEffect(GetEnumByIDKey<SoundEffectEnum>("WorkEffect"));
             }
         }
 

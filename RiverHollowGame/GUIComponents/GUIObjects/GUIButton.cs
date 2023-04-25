@@ -6,6 +6,7 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIWindows.GUIWindow;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
@@ -60,7 +61,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             bool rv = false;
             if (Contains(mouse) && Active && _delAction != null)
             {
-                SoundManager.PlayEffect("ButtonPress");
+                SoundManager.PlayEffect(SoundEffectEnum.Button);
                 _delAction();
                 rv = true;
             }

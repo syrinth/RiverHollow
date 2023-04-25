@@ -5,6 +5,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
@@ -12,7 +13,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
     {
         enum LastCharacter { Even, Odd, Space };
         LastCharacter _eCurrChar;
-        const string TYPE_SOUND = "Sample";
 
         protected string _sText;
         protected string _sFullText;
@@ -189,7 +189,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                             else if (_eCurrChar == LastCharacter.Odd) { _eCurrChar = LastCharacter.Even; }
                             else if (_eCurrChar == LastCharacter.Even)
                             {
-                                SoundManager.PlayEffect(TYPE_SOUND);
+                                SoundManager.PlayEffect(SoundEffectEnum.Text);
                                 _eCurrChar = LastCharacter.Odd;
                             }
                         }

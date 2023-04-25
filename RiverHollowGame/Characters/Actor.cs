@@ -473,7 +473,7 @@ namespace RiverHollow.Characters
             TravelPoint potentialTravelPoint = _liTilePath[0].GetTravelPoint();
             if (potentialTravelPoint != null && potentialTravelPoint.IsDoor)
             {
-                SoundManager.PlayEffectAtLoc("close_door_1", this.CurrentMapName, potentialTravelPoint.Center);
+                SoundManager.PlayEffectAtLoc(SoundEffectEnum.Door, this.CurrentMapName, potentialTravelPoint.Center);
                 MapManager.ChangeMaps(this, CurrentMapName, potentialTravelPoint);
                 rv = true;
             }

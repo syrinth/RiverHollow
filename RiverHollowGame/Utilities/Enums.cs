@@ -73,5 +73,9 @@
         public enum PlayerResourceEnum { Energy, Health, Magic };
 
         public enum ColorStateEnum { None, Blue, Red };
+
+        public enum MapTypeEnum { Invalid, Town, Cave };
+        public enum SoundEffectEnum { Invalid, Axe, Button, Cancel, Cauldron, Door, GrabBuilding, GrindStone, Kitchen, Pick, Rainfall, Scythe, Text, Thump};
+        public enum SongEnum { Invalid, Cave, Swamp, Town };
     }
 }

@@ -54,18 +54,18 @@ namespace RiverHollow.GUIComponents
                     gNote = new GUIMusicNote();
                     gNote.AnchorToInnerSide(this, SideEnum.Left);
                     gNote.AlignToObject(_gSprite, SideEnum.Bottom);
-                    SoundManager.PlayEffect("c3");
+                   // SoundManager.PlayEffect("c3");
                     break;
                 case "B":
                     gNote = new GUIMusicNote();
                     gNote.AnchorAndAlign(_gSprite, SideEnum.Bottom, SideEnum.CenterX);
-                    SoundManager.PlayEffect("d2");
+                   // SoundManager.PlayEffect("d2");
                     break;
                 case "C":
                     gNote = new GUIMusicNote();
                     gNote.AnchorToInnerSide(this, SideEnum.Right);
                     gNote.AlignToObject(_gSprite, SideEnum.Bottom);
-                    SoundManager.PlayEffect("e2");
+                   // SoundManager.PlayEffect("e2");
                     break;
             }
 

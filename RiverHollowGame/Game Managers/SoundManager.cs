@@ -7,12 +7,15 @@ using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {
     public static class SoundManager
     {
         enum QueuePhase { None, Down, Up };
+
         static QueuePhase _eQueuePhase = QueuePhase.None;
         static Song _queuedSong;
         const float PHASE_VAL = 0.02f;
@@ -29,8 +32,6 @@ namespace RiverHollow.Game_Managers
         public static bool IsMuted { get; private set; } = false;
         public static float MusicVolume { get; private set; } = 0;//0.4f;
         public static float EffectVolume { get; private set; } = 0.4f;
-
-        private static Dictionary<string, string> BackgroundKeys => DataManager.Config[14];
 
         static Dictionary<string, Song> _diSongs;
         static Dictionary<string, SoundEffect> _diEffects;
@@ -206,21 +207,21 @@ namespace RiverHollow.Game_Managers
             if (EnvironmentManager.IsRaining() && MapManager.CurrentMap.IsOutside)
             {
                 MediaPlayer.Stop();
-                PlayEffect("Rainfall", environmentObject, true);
+                PlayEffect(SoundEffectEnum.Rainfall, environmentObject, true);
             }
             else
             {
                 StopEffect(environmentObject);
 
-                string mapType = MapManager.CurrentMap.MapType;
-                if (mapType != null && BackgroundKeys.ContainsKey(mapType) && _diSongs.ContainsKey(BackgroundKeys[mapType]))
+                string songStr = SongLookup(MapManager.CurrentMap.MapType);
+                if (_diSongs.ContainsKey(songStr))
                 {
-                    Song s = _diSongs[BackgroundKeys[mapType]];
+                    Song song = _diSongs[songStr];
 
-                    if (BackgroundSong != s || MediaPlayer.State == MediaState.Stopped)
+                    if (BackgroundSong != song || MediaPlayer.State == MediaState.Stopped)
                     {
                         _eQueuePhase = QueuePhase.Down;
-                        _queuedSong = s;
+                        _queuedSong = song;
                     }
                 }
             }
@@ -237,21 +238,9 @@ namespace RiverHollow.Game_Managers
             MediaPlayer.IsRepeating = repeating;
         }
 
-        public static void PlayEffect(string effectName, object obj = null, bool loop = false)
+        public static void PlayEffect(SoundEffectEnum e, object obj = null, bool loop = false)
         {
-            EffectData data = new EffectData("", effectName, obj, EffectVolume);
-            data.SoundEffect.IsLooped = loop;
-            PlayEffect(data);
-        }
-
-        private static void PlayEffect(EffectData data)
-        {
-            if (data.EffectObject == null || !_diCurrentEffects.ContainsKey(data.EffectObject))
-            {
-                data.SoundEffect.Play();
-
-                if (data.EffectObject != null) { _diCurrentEffects[data.EffectObject] = data; }
-            }
+            PlayEffect(new EffectData("", EffectLookup(e), obj, EffectVolume), loop);
         }
 
         /// <summary>
@@ -261,16 +250,28 @@ namespace RiverHollow.Game_Managers
         /// <param name="effect">Name of the ffect</param>
         /// <param name="mapName">Which map to play it on</param>
         /// <param name="loc">The location of the effect</param>
-        public static void PlayEffectAtLoc(string effectName, string mapName, Point loc, object obj = null)
+        public static void PlayEffectAtLoc(SoundEffectEnum e, string mapName, Point loc, object obj = null)
         {
-            if (string.IsNullOrEmpty(effectName)) { return; }
-
             //If we're not currently on the map, don't play the effect
             if (MapManager.CurrentMap.Name.Equals(mapName))
             {
-                EffectData data = new EffectData(mapName, effectName, obj, GetDistanceVolume(loc));
+                EffectData data = new EffectData(mapName, EffectLookup(e), obj, GetDistanceVolume(loc));
                 data.SetPosition(loc);
                 PlayEffect(data);
+            }
+        }
+
+        private static void PlayEffect(EffectData data, bool loop = false)
+        {
+            if (data.SoundEffect != null && (data.EffectObject == null || !_diCurrentEffects.ContainsKey(data.EffectObject)))
+            {
+                data.SoundEffect.IsLooped = loop;
+                data.SoundEffect.Play();
+
+                if (data.EffectObject != null)
+                {
+                    _diCurrentEffects[data.EffectObject] = data;
+                }
             }
         }
 
@@ -296,6 +297,71 @@ namespace RiverHollow.Game_Managers
             PlayerManager.PlayerInRangeGetDist(loc, range, ref distance);
             float volume = Math.Max(0f, (float)(range - distance) / range) * EffectVolume;
             return volume;
+        }
+
+        private static string EffectLookup(SoundEffectEnum e)
+        {
+            switch(e){
+                case SoundEffectEnum.Axe:
+                    return "axe";
+                case SoundEffectEnum.Button:
+                    return "ButtonPress";
+                case SoundEffectEnum.Cancel:
+                    return "Cancel";
+                case SoundEffectEnum.Cauldron:
+                    return "Cauldron";
+                case SoundEffectEnum.Door:
+                    return "close_door_1";
+                case SoundEffectEnum.GrindStone:
+                    return "grinding_stone";
+                case SoundEffectEnum.Kitchen:
+                    return "stove_fire";
+                case SoundEffectEnum.Rainfall:
+                    return "Rainfall";
+                case SoundEffectEnum.Pick:
+                    return "pickaxe";
+                case SoundEffectEnum.Scythe:
+                    return "bush";
+                case SoundEffectEnum.Thump:
+                    return "thump3";
+                case SoundEffectEnum.Text:
+                    return "Sample";
+                case SoundEffectEnum.GrabBuilding:
+                    return "buildingGrab";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        private static SongEnum MapTypeSongLookup(MapTypeEnum e)
+        {
+            switch (e)
+            {
+                case MapTypeEnum.Cave:
+                    return SongEnum.Cave;
+                case MapTypeEnum.Town:
+                    return SongEnum.Town;
+                default:
+                    return SongEnum.Invalid;
+            }
+        }
+        private static string SongLookup(MapTypeEnum e)
+        {
+            return SongLookup(MapTypeSongLookup(e));
+        }
+        private static string SongLookup(SongEnum e)
+        {
+            switch (e)
+            {
+                case SongEnum.Cave:
+                    return "DarkCaveMusic";
+                case SongEnum.Swamp:
+                    return "LostInTheForest";
+                case SongEnum.Town:
+                    return "UO-Stones";
+                default:
+                    return string.Empty;
+            }
         }
 
         private class EffectData

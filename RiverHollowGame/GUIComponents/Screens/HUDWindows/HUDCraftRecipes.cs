@@ -84,7 +84,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                         {
                             InventoryManager.AddToInventory(DataManager.GetItem(obj));
                             SetUpItemWindows();
-                            SoundManager.PlayEffect("thump3");
+                            SoundManager.PlayEffect(SoundEffectEnum.Thump);
                         }
                     }
                 }

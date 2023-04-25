@@ -68,7 +68,7 @@ namespace RiverHollow.Map_Handling
                 {
                     PlayerManager.PlayerActor.Facing = DirectionEnum.Up;
                     MapManager.ChangeMaps(PlayerManager.PlayerActor, MapName, _travelPoint);
-                    SoundManager.PlayEffect("close_door_1");
+                    SoundManager.PlayEffect(SoundEffectEnum.Door);
                     return true;
                 }
             }

@@ -24,8 +24,6 @@ namespace RiverHollow.Items
 
         protected bool _bUsed = false;
 
-        public string SoundEffect => GetStringByIDKey("SoundEffect");
-
         protected AnimatedSprite _sprite;
         public AnimatedSprite ToolAnimation { get => _sprite; }
 

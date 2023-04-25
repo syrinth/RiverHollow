@@ -68,7 +68,7 @@ namespace RiverHollow.WorldObjects
             {
                 if (toolUsed.ToolLevel >= NeededToolLevel)
                 {
-                    SoundManager.PlayEffectAtLoc(toolUsed.SoundEffect, MapName, CollisionCenter);
+                    SoundManager.PlayEffectAtLoc(toolUsed.GetEnumByIDKey<SoundEffectEnum>("SoundEffect"), MapName, CollisionCenter);
 
                     if (_iHP > 0)
                     {

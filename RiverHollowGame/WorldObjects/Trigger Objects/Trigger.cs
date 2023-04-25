@@ -11,13 +11,10 @@ namespace RiverHollow.WorldObjects
 {
     public class Trigger : TriggerObject
     {
-        string _sSoundEffect;
         Item _item;
         public Trigger(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             _item = DataManager.GetItem(_iItemKeyID);
-
-            Util.AssignValue(ref _sSoundEffect, "SoundEffect", stringData);
 
             if (_iItemKeyID == -1)
             {
@@ -56,7 +53,7 @@ namespace RiverHollow.WorldObjects
                 else
                 {
                     rv = true;
-                    SoundManager.PlayEffectAtLoc(_sSoundEffect, MapName, MapPosition, this);
+                    SoundManager.PlayEffectAtLoc(GetEnumByIDKey<SoundEffectEnum>("SoundEffect"), MapName, MapPosition, this);
                     FireTrigger();
                 }
             }

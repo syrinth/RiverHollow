@@ -49,6 +49,7 @@ namespace RiverHollow.GUIComponents.Screens
             _fAlphaValue = GameManager.HideMiniInventory ? MIN_FADE : 1.0f;
 
             _gSelected = new GUIImage(RECT_SELECT_IMG, ScaleIt(RECT_SELECT_IMG.Width), ScaleIt(RECT_SELECT_IMG.Height), DataManager.DIALOGUE_TEXTURE);
+            AddControl(_gSelected);
             Alpha(_fAlphaValue);
             MoveSelector(0);
 
