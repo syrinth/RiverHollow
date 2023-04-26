@@ -133,6 +133,7 @@ namespace RiverHollow.GUIComponents.Screens
         #region Hover Window Code
         public virtual void CloseHoverWindow() {
             RemoveControl(_guiHoverWindow);
+            _guiHoverWindow?.RemoveSelfFromControl();
             _guiHoverWindow = null;
             _rHoverArea = Rectangle.Empty;
         }

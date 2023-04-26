@@ -40,20 +40,20 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _liRequiredItems = new List<GUIItemBox>();
             _liCraftingRecipes = PlayerManager.GetCraftingList().FindAll(x => !((Buildable)DataManager.CreateWorldObjectByID(x)).Unique);
 
-            _winMain = SetMainWindow(GUIWindow.DarkBlue_Window, GameManager.ScaleIt(186), GameManager.ScaleIt(134));
-            _gSelection = new GUIImage(new Rectangle(260, 0, 20, 20), DataManager.DIALOGUE_TEXTURE);
+            _winMain = SetMainWindow(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(186), GameManager.ScaleIt(134));
+            _gSelection = new GUIImage(GUIUtils.SELECT_CORNER);
             _gSelection.Show(false);
 
-            _btnLeft = new GUIButton(new Rectangle(102, 34, 10, 13), DataManager.DIALOGUE_TEXTURE, BtnLeft);
+            _btnLeft = new GUIButton(GUIUtils.BTN_LEFT_SMALL, BtnLeft);
             _btnLeft.PositionAndMove(_winMain, 7, 115);
             _btnLeft.Enable(false);
 
-            _btnRight = new GUIButton(new Rectangle(112, 34, 10, 13), DataManager.DIALOGUE_TEXTURE, BtnRight);
+            _btnRight = new GUIButton(GUIUtils.BTN_RIGHT_SMALL, BtnRight);
             _btnRight.PositionAndMove(_winMain, 169, 115);
 
             SetUpItemWindows();
 
-            _gScroll = new GUIImage(new Rectangle(209, 96, 142, 3), DataManager.HUD_COMPONENTS);
+            _gScroll = new GUIImage(GUIUtils.HUD_SCROLL_L);
             _gScroll.AlignToObject(_winMain, SideEnum.CenterX);
             _gScroll.AnchorToObject(_liItemDisplay[MAX_DISPLAY - COLUMNS], SideEnum.Bottom, 4);
 

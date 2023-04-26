@@ -29,10 +29,10 @@ namespace RiverHollow.GUIComponents.Screens
 
             _timerFlicker = new RHTimer(0.5f);
 
-            AssignBackgroundImage(new GUIImage(new Rectangle(0, 0, 480, 270), @"Textures\Overworld"));
+            AssignBackgroundImage(new GUIImage(GUIUtils.WORLDMAP, @"Textures\Overworld"));
 
-            _gPlayer = new GUIImage(new Rectangle(144, 0, 16, 16), DataManager.DIALOGUE_TEXTURE);
-            _gSelector = new GUIImage(new Rectangle(260, 0, 20, 20), DataManager.DIALOGUE_TEXTURE);
+            _gPlayer = new GUIImage(GUIUtils.ICON_FACE);
+            _gSelector = new GUIImage(GUIUtils.SELECT_CORNER);
 
             //Key is the map name, KVP key is the map its linked to to get there and the value is the time
             Dictionary<string, MapPathInfo> PathInfoDictionary = new Dictionary<string, MapPathInfo>();
@@ -41,7 +41,7 @@ namespace RiverHollow.GUIComponents.Screens
             mapDictionary = new Dictionary<GUIImage, MapPathInfo>();
             foreach (RHMap map in MapManager.Maps.Values.Where(map => !map.WorldMapNode.Equals(default(MapNode)) && PathInfoDictionary[map.Name].Unlocked))
             {
-                GUIImage img = new GUIImage(new Rectangle(160, 0, 16, 16), DataManager.DIALOGUE_TEXTURE);
+                GUIImage img = new GUIImage(GUIUtils.ICON_MAP_MARKER);
                 img.Position(Util.MultiplyPoint(map.WorldMapNode.MapPosition, GameManager.ScaledPixel));
                 mapDictionary[img] = PathInfoDictionary[map.Name];
                 AddControl(img);
@@ -138,7 +138,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                     RemoveControl(_gWindow);
                     _gSelector.CenterOnObject(kvp.Key);
-                    _gWindow = new GUIWindow(GUIWindow.Brown_Window);
+                    _gWindow = new GUIWindow(GUIUtils.Brown_Window);
                     GUIText text = new GUIText(kvp.Value.MapName + " - " + kvp.Value.Time + " minutes");
                     text.AnchorToInnerSide(_gWindow, GUIObject.SideEnum.TopLeft);
                     _gWindow.Resize();

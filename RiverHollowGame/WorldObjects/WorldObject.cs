@@ -14,6 +14,7 @@ using MonoGame.Extended;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIComponents.GUIObjects;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
+using RiverHollow.GUIComponents;
 
 namespace RiverHollow.WorldObjects
 {
@@ -191,7 +192,7 @@ namespace RiverHollow.WorldObjects
             }
             if (Constants.DRAW_COLLISION)
             {
-                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), CollisionBox, new Rectangle(160, 128, 2, 2), Color.White * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, Sprite.LayerDepth - 1);
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), CollisionBox, GUIUtils.BLACK_BOX, Color.White * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, Sprite.LayerDepth - 1);
             }
 
             if (ShopItem && !GameManager.GamePaused() && !CutsceneManager.Playing && Sprite.SpriteRectangle.Contains(GUICursor.GetWorldMousePosition()))

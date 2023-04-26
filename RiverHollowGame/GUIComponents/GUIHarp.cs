@@ -74,7 +74,7 @@ namespace RiverHollow.GUIComponents
 
         public class GUIMusicNote : GUIImage
         {
-            public GUIMusicNote() : base(new Rectangle(0, 0, Constants.TILE_SIZE, Constants.TILE_SIZE), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE)
+            public GUIMusicNote() : base(new Rectangle(0, 0, Constants.TILE_SIZE, Constants.TILE_SIZE))
             {
 
             }

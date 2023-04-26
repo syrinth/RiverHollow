@@ -97,7 +97,7 @@ namespace RiverHollow.GUIComponents.Screens
                 //Creates the Individual Save Tiles on the load screen.
                 Data = data;
                 _iId = id;
-                _winData = GUIWindow.Brown_Window;
+                _winData = GUIUtils.Brown_Window;
 
                 _gName = new GUIText(data.playerData.name);
                 Vector2 stringsize = _gName.MeasureString("XXXXXXXXXXX XXXXXXXXXXXXXX");
@@ -105,7 +105,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _gName.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
                 AddControl(_gName);
 
-                _gDelete = new GUIButton(new Rectangle(64, 48, Constants.TILE_SIZE, Constants.TILE_SIZE), DataManager.DIALOGUE_TEXTURE, BtnDelete);
+                _gDelete = new GUIButton(GUIUtils.ICON_GARBAGE, BtnDelete);
                 Height = (int)stringsize.Y + _gDelete.Height + HeightEdges();
                 _gDelete.AnchorToInnerSide(this, SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
 

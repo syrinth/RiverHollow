@@ -278,7 +278,7 @@ namespace RiverHollow.Game_Managers
                                     }
                                     break;
                                 case CutsceneCommandEnum.Background:
-                                    GUIManager.AssignBackgroundImage(new GUIImage(new Rectangle(0, 0, 480, 336), ScaleIt(480), ScaleIt(336), sCommandData[0]));
+                                    GUIManager.AssignBackgroundImage(new GUIImage(DataManager.GetTexture(sCommandData[0])));
                                     bGoToNext = true;
                                     break;
                                 case CutsceneCommandEnum.RemoveBackground:

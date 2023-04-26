@@ -41,27 +41,27 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         {
             _liActorDisplay = new List<NPCDisplayWindow>();
             _liItemDisplay = new List<ItemDisplayWindow>();
-            _winMain = SetMainWindow(GUIWindow.DarkBlue_Window, GameManager.ScaleIt(186), GameManager.ScaleIt(177));
+            _winMain = SetMainWindow(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(186), GameManager.ScaleIt(177));
 
-            _btnLeft = new GUIButton(new Rectangle(102, 34, 10, 13), DataManager.DIALOGUE_TEXTURE, BtnLeft);
+            _btnLeft = new GUIButton(GUIUtils.BTN_LEFT_SMALL, BtnLeft);
             _btnLeft.PositionAndMove(_winMain, 7, 158);
             _btnLeft.Enable(false);
 
-            _btnRight = new GUIButton(new Rectangle(112, 34, 10, 13), DataManager.DIALOGUE_TEXTURE, BtnRight);
+            _btnRight = new GUIButton(GUIUtils.BTN_RIGHT_SMALL, BtnRight);
             _btnRight.PositionAndMove(_winMain, 169, 158);
 
             _gTabToggles = new GUIToggle[5];
-            AddTab(0, ShowVillagers, new Rectangle(23, 139, 22, 21), new Rectangle(0, 143, 22, 17));
-            AddTab(1, ShowMerchants, new Rectangle(71, 139, 22, 21), new Rectangle(48, 143, 22, 17));
-            AddTab(2, ShowTravelers, new Rectangle(23, 171, 22, 21), new Rectangle(0, 175, 22, 17));
-            AddTab(3, ShowMobs, new Rectangle(71, 171, 22, 21), new Rectangle(48, 175, 22, 17));
-            AddTab(4, ShowItems, new Rectangle(23, 203, 22, 21), new Rectangle(0, 207, 22, 17));
+            AddTab(0, ShowVillagers, GUIUtils.TOGGLE_VILLAGERS_ON, GUIUtils.TOGGLE_VILLAGERS_OFF);
+            AddTab(1, ShowMerchants, GUIUtils.TOGGLE_MERCHANTS_ON, GUIUtils.TOGGLE_MERCHANTS_OFF);
+            AddTab(2, ShowTravelers, GUIUtils.TOGGLE_TRAVELERS_ON, GUIUtils.TOGGLE_TRAVELERS_OFF);
+            AddTab(3, ShowMobs, GUIUtils.TOGGLE_MOBS_ON, GUIUtils.TOGGLE_MOBS_OFF);
+            AddTab(4, ShowItems, GUIUtils.TOGGLE_ITEMS_ON, GUIUtils.TOGGLE_ITEMS_OFF);
 
             _gItemToggles = new GUIToggle[4];
-            AddItemToggle(0, ItemResourceToggle, new Point(96, 160), new Point(96, 176));
-            AddItemToggle(1, ItemPotionToggle, new Point(112, 160), new Point(112, 176));
-            AddItemToggle(2, ItemToolToggle, new Point(128, 160), new Point(128, 176));
-            AddItemToggle(3, ItemSpecialToggle, new Point(144, 160), new Point(144, 176));
+            AddItemToggle(0, ItemResourceToggle, GUIUtils.TOGGLE_RESOURCE_OFF, GUIUtils.TOGGLE_RESOURCE_ON);
+            AddItemToggle(1, ItemPotionToggle, GUIUtils.TOGGLE_POTIONS_OFF, GUIUtils.TOGGLE_POTIONS_ON);
+            AddItemToggle(2, ItemToolToggle, GUIUtils.TOGGLE_TOOLS_OFF, GUIUtils.TOGGLE_TOOLS_ON);
+            AddItemToggle(3, ItemSpecialToggle, GUIUtils.TOGGLE_SPECIAL_OFF, GUIUtils.TOGGLE_SPECIAL_ON);
 
             _gTabToggles[0].AssignToggleGroup(_gTabToggles[1], _gTabToggles[2], _gTabToggles[3], _gTabToggles[4]);
             _gItemToggles[0].AssignToggleGroup(_gItemToggles[1], _gItemToggles[2], _gItemToggles[3]);
@@ -82,9 +82,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             }
             
         }
-        private void AddItemToggle(int index, EmptyDelegate del, Point unselected, Point selected)
+        private void AddItemToggle(int index, EmptyDelegate del, Rectangle unselected, Rectangle selected)
         {
-            _gItemToggles[index] = new GUIToggle(unselected, selected, new Point(16, 16), DataManager.HUD_COMPONENTS, del);
+            _gItemToggles[index] = new GUIToggle(unselected.Location, selected.Location, new Point(16, 16), DataManager.HUD_COMPONENTS, del);
             if (index == 0)
             {
                 _gItemToggles[index].PositionAndMove(_winMain, 58, 19);
@@ -137,7 +137,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         {
             NPCDisplayWindow hover = _liActorDisplay[_iHoverIndex];
             _gInfoWindow?.RemoveSelfFromControl();
-            _gInfoWindow = new GUIWindow(GUIWindow.WoodenPanel);
+            _gInfoWindow = new GUIWindow(GUIUtils.WoodenPanel);
             AddControl(_gInfoWindow);
 
             string strText = hover.Found ? DataManager.GetTextData(hover.ID, "Name", DataType.Actor) : "???";
@@ -161,8 +161,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         public void CreateItemHoverWindow()
         {
             ItemDisplayWindow hover = _liItemDisplay[_iHoverIndex];
-            RemoveControl(_gInfoWindow);
-            _gInfoWindow = new GUIWindow(GUIWindow.WoodenPanel);
+            _gInfoWindow?.RemoveSelfFromControl();
+            _gInfoWindow = new GUIWindow(GUIUtils.WoodenPanel);
+            AddControl(_gInfoWindow);
 
             string strText = hover.Found ? DataManager.GetTextData(hover.ID, "Name", DataType.Item) : "???";
             GUIText text = new GUIText(strText);

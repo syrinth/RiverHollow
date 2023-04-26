@@ -68,7 +68,7 @@
 
         public enum VillagerRequestEnum { Close, Far, TownWide };
 
-        public enum GameIconEnum { None, Coin, Key, Traveler, Hammer, Book };
+        public enum GameIconEnum { None, Book, Coin, Hammer, Traveler };
 
         public enum PlayerResourceEnum { Energy, Health, Magic };
 

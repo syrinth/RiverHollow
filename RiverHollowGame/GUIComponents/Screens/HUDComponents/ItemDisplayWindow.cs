@@ -12,7 +12,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         public bool Found { get; private set; }
         const float FADE = 0.8f;
 
-        public ItemDisplayWindow(int ItemID, ValueTuple<bool, bool> state) : base(new Rectangle((state.Item1 && state.Item2) ? 116 : 96, 128, 20, 20), DataManager.HUD_COMPONENTS)
+        public ItemDisplayWindow(int ItemID, ValueTuple<bool, bool> state) : base((state.Item1 && state.Item2) ? GUIUtils.CODEX_ITEM_ARCHIVED : GUIUtils.CODEX_ITEM)
         {
             ID = ItemID;
             Found = state.Item1;

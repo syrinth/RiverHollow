@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace RiverHollow.Characters
             base.Draw(spriteBatch, useLayerDepth);
             if (Constants.DRAW_HITBOX)
             {
-                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), HitBox, new Rectangle(160, 128, 2, 2), Color.Red * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, GetSprites()[0].LayerDepth - 1);
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), HitBox, GUIUtils.BLACK_BOX, Color.Red * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, GetSprites()[0].LayerDepth - 1);
             }
         }
 

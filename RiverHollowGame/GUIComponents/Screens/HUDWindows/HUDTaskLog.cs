@@ -25,7 +25,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _winMain = SetMainWindow();
 
             _liTasks = new List<GUIObject>();
-            _detailWindow = new DetailBox(GUIWindow.Brown_Window, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
+            _detailWindow = new DetailBox(GUIUtils.Brown_Window, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
             _detailWindow.Show(false);
             _detailWindow.CenterOnScreen();
             AddControl(_detailWindow);
@@ -105,7 +105,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
                 int boxHeight = height;
                 int boxWidth = width;
-                _window = new GUIWindow(GUIWindow.Brown_Window, boxWidth, boxHeight);
+                _window = new GUIWindow(GUIUtils.Brown_Window, boxWidth, boxHeight);
                 AddControl(_window);
                 Width = _window.Width;
                 Height = _window.Height;
@@ -176,7 +176,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 List<GUIObject> boxes = new List<GUIObject>();
                 for (int i = 0; i < q.LiRewardItems.Count; i++)
                 {
-                    GUIItemBox newBox = new GUIItemBox(DataManager.DIALOGUE_TEXTURE, q.LiRewardItems[i], true);
+                    GUIItemBox newBox = new GUIItemBox(q.LiRewardItems[i]);
                     boxes.Add(newBox);
 
                     if (i == 0) { newBox.AnchorAndAlign(_desc, SideEnum.Bottom, SideEnum.Left); }

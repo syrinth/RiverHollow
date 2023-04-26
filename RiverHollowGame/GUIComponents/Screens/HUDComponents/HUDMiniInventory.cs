@@ -6,6 +6,7 @@ using RiverHollow.Utilities;
 using System.Collections.Generic;
 
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -23,10 +24,9 @@ namespace RiverHollow.GUIComponents.Screens
 
         SideEnum _eSnapPosition = SideEnum.Center;
 
-        static Rectangle RECT_SELECT_IMG = new Rectangle(260, 0, 20, 20);
         GUIImage _gSelected;
 
-        public HUDMiniInventory() : base(GUIWindow.DarkBlue_Window, GameManager.ScaleIt(221), GameManager.ScaleIt(30))
+        public HUDMiniInventory() : base(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(221), GameManager.ScaleIt(30))
         {
             
             _liItems = new List<GUIItemBox>();
@@ -42,13 +42,13 @@ namespace RiverHollow.GUIComponents.Screens
                 ib.SetAlpha(_fAlphaValue);
             }
 
-            _btnChangeRow = new GUIButton(new Rectangle(256, 96, 16, 16), DataManager.DIALOGUE_TEXTURE, RowUp);
+            _btnChangeRow = new GUIButton(GUIUtils.BTN_DOWN, RowUp);
             _btnChangeRow.AnchorAndAlign(this, SideEnum.Right, SideEnum.CenterY);
             _btnChangeRow.FadeOnDisable(false);
 
             _fAlphaValue = GameManager.HideMiniInventory ? MIN_FADE : 1.0f;
 
-            _gSelected = new GUIImage(RECT_SELECT_IMG, ScaleIt(RECT_SELECT_IMG.Width), ScaleIt(RECT_SELECT_IMG.Height), DataManager.DIALOGUE_TEXTURE);
+            _gSelected = new GUIImage(GUIUtils.SELECT_CORNER);
             AddControl(_gSelected);
             Alpha(_fAlphaValue);
             MoveSelector(0);

@@ -9,30 +9,23 @@ namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUIItemBox : GUIImage
     {
-        public static Rectangle RECT_IMG = new Rectangle(240, 0, 20, 20);
-        public Item BoxItem => _guiItem?.ItemObject;
+       public Item BoxItem => _guiItem?.ItemObject;
         GUIItem _guiItem;
 
         public int Columns { get; }
         public int Rows { get; }
 
-        public GUIItemBox(Rectangle r) : base(RECT_IMG, DataManager.DIALOGUE_TEXTURE) { }
-
-        public GUIItemBox(Item it = null) : base(RECT_IMG, DataManager.DIALOGUE_TEXTURE)
+        public GUIItemBox(Item it = null) : base(GUIUtils.ITEM_BOX)
         {
             SetItem(it);
         }
 
-        public GUIItemBox(int row, int col, string texture, Item item) : base(RECT_IMG, ScaleIt(RECT_IMG.Width), ScaleIt(RECT_IMG.Height), texture)
+        public GUIItemBox(int row, int col, Item item) : base(GUIUtils.ITEM_BOX)
         {
             SetItem(item);
             
             Columns = col;
             Rows = row;
-        }
-
-        public GUIItemBox(string texture, Item item, bool crafting = false) : this(0, 0, texture, item)
-        {
         }
 
         public override void Update(GameTime gTime)
@@ -109,7 +102,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             public delegate void OpenItemWindow(SpecializedBox itemBox);
             private OpenItemWindow _delOpenItemWindow;
 
-            public SpecializedBox(ItemEnum itemType, Item item = null, OpenItemWindow del = null) : base(new Rectangle(156, 160, 20, 20))
+            public SpecializedBox(ItemEnum itemType, Item item = null, OpenItemWindow del = null)
             {
                 SetItem(item);
                 ItemType = itemType;

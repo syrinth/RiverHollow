@@ -46,20 +46,20 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 }
             }
             
-            _winMain = SetMainWindow(GUIWindow.DarkBlue_Window, GameManager.ScaleIt(186), GameManager.ScaleIt(152));
+            _winMain = SetMainWindow(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(186), GameManager.ScaleIt(152));
 
-            _gBackgroundBox = new GUIImage(new Rectangle(0, 208, 68, 68), GameManager.ScaleIt(68), GameManager.ScaleIt(68), DataManager.DIALOGUE_TEXTURE);
+            _gBackgroundBox = new GUIImage(GUIUtils.STRUCTURE_BOX);
             _gBackgroundBox.PositionAndMove(_winMain, 59, 12);
 
-            _btnLeft = new GUIButton(new Rectangle(102, 34, 10, 13), DataManager.DIALOGUE_TEXTURE, BtnLeft);
+            _btnLeft = new GUIButton(GUIUtils.BTN_LEFT_SMALL, BtnLeft);
             _btnLeft.AnchorAndAlignWithSpacing(_gBackgroundBox, SideEnum.Left, SideEnum.CenterY, 4);
             _btnLeft.Enable(false);
 
-            _btnRight = new GUIButton(new Rectangle(112, 34, 10, 13), DataManager.DIALOGUE_TEXTURE, BtnRight);
+            _btnRight = new GUIButton(GUIUtils.BTN_RIGHT_SMALL, BtnRight);
             _btnRight.AnchorAndAlignWithSpacing(_gBackgroundBox, SideEnum.Right, SideEnum.CenterY, 4);
             _btnRight.Enable(_liCanBuild.Count > 1);
 
-            _gScroll = new GUIImage(new Rectangle(209, 96, 142, 3), DataManager.HUD_COMPONENTS);
+            _gScroll = new GUIImage(GUIUtils.HUD_SCROLL_L);
             _gScroll.AlignToObject(_winMain, SideEnum.CenterX);
             _gScroll.AnchorToObject(_gBackgroundBox, SideEnum.Bottom, 4);
 

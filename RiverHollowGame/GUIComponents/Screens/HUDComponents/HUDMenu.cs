@@ -64,7 +64,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             }
 
             AddControls(_liButtons);
-            GUIUtils.CreateSpacedColumn(_liButtons, -GUIButton.BTN_WIDTH, 0, RiverHollow.ScreenHeight, BTN_PADDING);
+            GUIUtils.CreateSpacedColumn(_liButtons, -_liButtons[0].Width, 0, RiverHollow.ScreenHeight, BTN_PADDING);
         }
 
         public override void Update(GameTime gTime)
@@ -80,14 +80,14 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
                 }
                 if (_bClose)
                 {
-                    if (o.Position().X > -GUIButton.BTN_WIDTH) { val = -16; }
+                    if (o.Position().X > -o.Width) { val = -16; }
                 }
 
                 Point temp = o.Position();
                 temp.X += val;
                 o.Position(temp);
                 if (_bOpen && o.Position().X == 0) { _openingFinished++; }
-                if (_bClose && o.Position().X == -GUIButton.BTN_WIDTH) { /*Finished closing */ }
+                if (_bClose && o.Position().X == -o.Width) { /*Finished closing */ }
             }
             if (_openingFinished == _liButtons.Count) { _bOpen = false; }
         }

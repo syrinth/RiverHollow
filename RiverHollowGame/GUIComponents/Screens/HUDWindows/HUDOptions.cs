@@ -120,13 +120,13 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 _fMax = max;
                 _gText = new GUIText("XXXXXXXXXX");
 
-                _btnLeft = new GUIButton(new Rectangle(272, 112, 16, 16), DataManager.DIALOGUE_TEXTURE, BtnLeftClick);
+                _btnLeft = new GUIButton(GUIUtils.BTN_LEFT, BtnLeftClick);
                 _btnLeft.AnchorAndAlignWithSpacing(_gText, SideEnum.Right, SideEnum.CenterY, 3);
 
                 _gValue = new GUIText("000");
                 _gValue.AnchorAndAlignWithSpacing(_btnLeft, SideEnum.Right, SideEnum.CenterY, 3);
 
-                _btnRight = new GUIButton(new Rectangle(256, 112, 16, 16), DataManager.DIALOGUE_TEXTURE, BtnRightClick);
+                _btnRight = new GUIButton(GUIUtils.BTN_RIGHT, BtnRightClick);
                 _btnRight.AnchorAndAlignWithSpacing(_gValue, SideEnum.Right, SideEnum.CenterY, 3);
 
                 _fValue = baseValue;

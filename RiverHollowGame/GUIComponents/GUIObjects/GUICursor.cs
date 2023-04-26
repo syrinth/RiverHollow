@@ -28,7 +28,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public static void LoadContent()
         {
-            _texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
+            _texture = DataManager.GetTexture(DataManager.HUD_COMPONENTS);
             Position = new Point(Mouse.GetState().X, Mouse.GetState().Y);
             ResetCursor();
         }
@@ -75,16 +75,16 @@ namespace RiverHollow.GUIComponents.GUIObjects
             switch (_eCursorType)
             {
                 case CursorTypeEnum.Normal:
-                    _rSource = new Rectangle(304, 160, 16, 16);
+                    _rSource = GUIUtils.CURSOR_POINT;
                     break;
                 case CursorTypeEnum.Talk:
-                    _rSource = new Rectangle(288, 160, 16, 16);
+                    _rSource = GUIUtils.CURSOR_TALK;
                     break;
                 case CursorTypeEnum.Door:
-                    _rSource = new Rectangle(288, 176, 16, 16);
+                    _rSource = GUIUtils.CURSOR_DOOR;
                     break;
                 case CursorTypeEnum.Pickup:
-                    _rSource = new Rectangle(304, 176, 16, 16);
+                    _rSource = GUIUtils.CURSOR_PICKUP;
                     break;
             }
         }

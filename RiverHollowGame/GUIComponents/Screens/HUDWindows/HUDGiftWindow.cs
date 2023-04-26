@@ -26,12 +26,12 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             InventoryManager.InitExtraInventory(_arrToSell);
             InventoryManager.ExtraHoldSingular = true;
 
-            _gVillagerWindow = new GUIWindow(GUIWindow.DarkBlue_Window, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
+            _gVillagerWindow = new GUIWindow(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
 
             GUIText text = new GUIText(_npc.Name());
             text.AnchorToInnerSide(_gVillagerWindow, SideEnum.Top, 1);
 
-            GUIImage img = new GUIImage(new Rectangle(2, 120, 100, 3), GameManager.ScaleIt(100), GameManager.ScaleIt(3), DataManager.HUD_COMPONENTS);
+            GUIImage img = new GUIImage(GUIUtils.HUD_SCROLL_S);
             img.PositionAndMove(_gVillagerWindow, 7, 42);
 
             GUISprite spr = new GUISprite(npc.BodySprite, true);
@@ -41,7 +41,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gToGive = new GUIInventory();
             _gToGive.PositionAndMove(_gVillagerWindow, 7, 47);
 
-            _btnGive = new GUIButton(new Rectangle(164, 58, 18, 19), DataManager.HUD_COMPONENTS, BtnGift);
+            _btnGive = new GUIButton(GUIUtils.BTN_GIVE, BtnGift);
             _btnGive.PositionAndMove(_gVillagerWindow, 89, 48);
             _btnGive.Enable(false);
 

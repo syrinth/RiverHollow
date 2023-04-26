@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.Utilities;
+using RiverHollow.GUIComponents;
 
 namespace RiverHollow.Items.Tools
 {
@@ -46,8 +47,8 @@ namespace RiverHollow.Items.Tools
 
             if (Hitbox != Rectangle.Empty && Constants.DRAW_COLLISION)
             {
-                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), Hitbox, new Rectangle(160, 128, 2, 2), Color.White * 0.5f);
-                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), PlayerManager.PlayerActor.CollisionBox, new Rectangle(160, 128, 2, 2), Color.White * 0.5f);
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), Hitbox, GUIUtils.BLACK_BOX, Color.White * 0.5f);
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), PlayerManager.PlayerActor.CollisionBox, GUIUtils.BLACK_BOX, Color.White * 0.5f);
             }
 
             _sprite.Draw(spriteBatch);

@@ -18,7 +18,7 @@ namespace RiverHollow.GUIComponents.Screens
             GameManager.ShowMap(false);
             GameManager.CurrentScreen = GameScreenEnum.Info;
 
-            GUIWindow win = new GUIWindow(GUIWindow.Brown_Window, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
+            GUIWindow win = new GUIWindow(GUIUtils.Brown_Window, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
             win.CenterOnScreen();
 
             GUIButton btn = new GUIButton("OK", BtnOk);

@@ -52,7 +52,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _gMagicDisplay.AnchorAndAlignWithSpacing(_gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             }
 
-            GUIWindow win = new GUIWindow(GUIWindow.Brown_Window, ScaleIt(48), ScaleIt(26));
+            GUIWindow win = new GUIWindow(GUIUtils.Brown_Window, ScaleIt(48), ScaleIt(26));
             
             _gMoney = new GUIMoneyDisplay();
             _gMoney.AnchorToInnerSide(win, SideEnum.TopLeft);
@@ -68,7 +68,7 @@ namespace RiverHollow.GUIComponents.Screens
             _gCalendar = new HUDCalendar();
             _gCalendar.AnchorToScreen(SideEnum.TopRight, 3);
 
-            _gBuildIcon = GUIUtils.GetIcon(GameIconEnum.Hammer);
+            _gBuildIcon = new GUIImage(GUIUtils.ICON_HAMMER);
             _gBuildIcon.AnchorAndAlignWithSpacing(_gCalendar, SideEnum.Left, SideEnum.CenterY, 4);
         }
 
@@ -208,7 +208,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override void AddSkipCutsceneButton()
         {
-            _btnSkipCutscene = new GUIButton(new Rectangle(64, 80, 16, 16), DataManager.DIALOGUE_TEXTURE, CutsceneManager.SkipCutscene);
+            _btnSkipCutscene = new GUIButton(GUIUtils.BTN_SKIP, CutsceneManager.SkipCutscene);
             _btnSkipCutscene.AnchorToScreen(SideEnum.BottomRight, 3);
             AddControl(_btnSkipCutscene);
         }
@@ -221,7 +221,7 @@ namespace RiverHollow.GUIComponents.Screens
     public class HUDCalendar : GUIWindow
     {
         static GUIText _gText;
-        public HUDCalendar() : base(GUIWindow.DarkBlue_Window, GameManager.ScaleIt(75), GameManager.ScaleIt(21))
+        public HUDCalendar() : base(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(75), GameManager.ScaleIt(21))
         {
             _gText = new GUIText("Day XX, XX:XX", DataManager.GetBitMapFont(DataManager.FONT_NEW));
             _gText.AnchorToInnerSide(this, SideEnum.TopLeft);
@@ -240,10 +240,10 @@ namespace RiverHollow.GUIComponents.Screens
 
         public delegate void RemoveDelegate(HUDNewAlert q);
         private RemoveDelegate _delAction;
-        public HUDNewAlert(string text, RemoveDelegate del) : base(Brown_Window, 10, 10)
+        public HUDNewAlert(string text, RemoveDelegate del) : base(GUIUtils.Brown_Window, 10, 10)
         {
             _delAction = del;
-            _gMarker = new GUIImage(new Rectangle(54, 83, 4, 10), ScaleIt(4), ScaleIt(10), DataManager.DIALOGUE_TEXTURE);
+            _gMarker = new GUIImage(GUIUtils.ICON_EXCLAMATION);
             _gText = new GUIText(text);
 
             _gMarker.AnchorToInnerSide(this, SideEnum.TopLeft);

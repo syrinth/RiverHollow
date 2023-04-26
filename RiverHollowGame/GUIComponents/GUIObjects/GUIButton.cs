@@ -2,9 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Game_Managers;
-using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIWindows.GUIWindow;
 using static RiverHollow.Utilities.Enums;
 
@@ -12,8 +9,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUIButton : GUIImage
     {
-        public static int BTN_WIDTH = 208;
-        public static int BTN_HEIGHT = 64;
         protected BitmapFont _font;
         public bool IsMouseHovering = false;
 
@@ -25,7 +20,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         internal static WindowData BaseBtn = new WindowData(96, 0, 2, 2, 2, 2, 12);
 
-        public GUIButton(string text, EmptyDelegate del = null) : base(new Rectangle(64, 0, 52, 16), DataManager.DIALOGUE_TEXTURE)
+        public GUIButton(string text, EmptyDelegate del = null) : base(GUIUtils.BTN_MAIN, DataManager.HUD_COMPONENTS)
         {
             _gText = new GUIText(text);
             _gText.CenterOnObject(this);
@@ -36,7 +31,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
-        public GUIButton(Rectangle sourceRect, string texture, EmptyDelegate del = null) : base(sourceRect, texture)
+        public GUIButton(Rectangle sourceRect, EmptyDelegate del, string texture = DataManager.HUD_COMPONENTS) : base(sourceRect, texture)
         {
             if (del != null)
             {

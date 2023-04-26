@@ -286,8 +286,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             if (_bDisplayDialogueIcon)
             {
                 RemoveControl(_gNext);
-                Rectangle rect = (_iCurrText < _liTextPages.Count - 1) ? new Rectangle(288, 64, Constants.TILE_SIZE, Constants.TILE_SIZE) : new Rectangle(304, 64, Constants.TILE_SIZE, Constants.TILE_SIZE);
-                _gNext = new GUIImage(rect, GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);
+                _gNext = new GUIImage((_iCurrText < _liTextPages.Count - 1) ? GUIUtils.DIALOGUE_MORE : GUIUtils.DIALOGUE_DONE);
                 _gNext.AnchorAndAlign(this, SideEnum.Right, SideEnum.Bottom);
                 AddControl(_gNext);
             }

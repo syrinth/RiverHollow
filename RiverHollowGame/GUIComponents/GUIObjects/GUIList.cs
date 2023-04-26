@@ -70,8 +70,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 Width = mostWidth + ScaledTileSize;
 
-                _btnUp = new GUIButton(new Rectangle(272, 96, 16, 16), DataManager.DIALOGUE_TEXTURE, BtnUpClick);
-                _btnDown = new GUIButton(new Rectangle(256, 96, 16, 16), DataManager.DIALOGUE_TEXTURE, BtnDownClick);
+                _btnUp = new GUIButton(GUIUtils.BTN_UP, BtnUpClick);
+                _btnDown = new GUIButton(GUIUtils.BTN_DOWN, BtnDownClick);
 
                 _btnUp.AnchorToInnerSide(this, SideEnum.TopRight);
                 _btnDown.AnchorToInnerSide(this, SideEnum.BottomRight);

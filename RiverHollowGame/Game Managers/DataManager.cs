@@ -46,7 +46,6 @@ namespace RiverHollow.Game_Managers
         public const string FONT_NUMBER_DISPLAY = @"Fonts\Font_Number_Display";
         public const string FONT_STAT_DISPLAY = @"Fonts\Font_Stat_Display";
 
-        public const string DIALOGUE_TEXTURE = @"Textures\Dialog";
         public const string UPGRADE_ICONS = GUI_COMPONENTS + @"\GUI_Upgrade_Icons";
         public const string GUI_COMPONENTS = @"Textures\GUI Components";
         public const string ACTION_ICONS = GUI_COMPONENTS + @"\GUI_Action_Icons";
@@ -233,7 +232,6 @@ namespace RiverHollow.Game_Managers
         }
         private static void LoadGUIs(ContentManager Content)
         {
-            AddTexture(DataManager.DIALOGUE_TEXTURE, Content);
             AddTexture(DataManager.PROJECTILE_TEXTURE, Content);
         }
         private static void LoadIcons(ContentManager Content)

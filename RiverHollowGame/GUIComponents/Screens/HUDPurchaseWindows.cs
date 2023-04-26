@@ -81,7 +81,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         EmptyDelegate _action;
 
-        public PurchaseBox(Item i, int cost, int mainWidth, EmptyDelegate action) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
+        public PurchaseBox(Item i, int cost, int mainWidth, EmptyDelegate action) : base(GUIUtils.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
         {
             _action = action;
             _font = DataManager.GetBitMapFont(DataManager.FONT_NEW);

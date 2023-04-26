@@ -12,7 +12,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         GUIImage _gBar;
         public GUIItemDescriptionWindow(Item it, Point position) : base(new TextEntry(it.Description()), position)
         {
-            _gBar = new GUIImage(new Rectangle(106, 122, 8, 1), _gText.Width, ScaleIt(1), DataManager.HUD_COMPONENTS);
+            _gBar = new GUIImage(GUIUtils.HUD_DIVIDER, _gText.Width, ScaleIt(1));
             _gBar.AnchorAndAlignWithSpacing(_gText, SideEnum.Bottom, SideEnum.Left, 2);
             AddControl(_gBar);
 
@@ -21,7 +21,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public GUIItemDescriptionWindow(WorldObject it, Point position) : base(new TextEntry(it.Description()), position)
         {
-            _gBar = new GUIImage(new Rectangle(106, 122, 8, 1), _gText.Width, ScaleIt(1), DataManager.HUD_COMPONENTS);
+            _gBar = new GUIImage(GUIUtils.HUD_DIVIDER, _gText.Width, ScaleIt(1));
             _gBar.AnchorAndAlignWithSpacing(_gText, SideEnum.Bottom, SideEnum.Left, 2);
             AddControl(_gBar);
 

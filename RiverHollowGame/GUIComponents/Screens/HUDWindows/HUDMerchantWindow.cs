@@ -26,7 +26,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _arrToSell = new Item[1, 1];
             InventoryManager.InitExtraInventory(_arrToSell);
 
-            _gMerchantWindow = new GUIWindow(GUIWindow.DarkBlue_Window, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
+            _gMerchantWindow = new GUIWindow(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
             GUISprite spr = new GUISprite(m.BodySprite, true);
             spr.ScaledMoveBy(9, 8);
             spr.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
@@ -47,7 +47,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             text.ScaledMoveBy(31, 7);
             _gMerchantWindow.AddControl(text);
 
-            GUIImage img = new GUIImage(new Rectangle(2, 120, 100, 3), GameManager.ScaleIt(100), GameManager.ScaleIt(3), DataManager.HUD_COMPONENTS);
+            GUIImage img = new GUIImage(GUIUtils.HUD_SCROLL_S);
             img.ScaledMoveBy(7, 42);
             _gMerchantWindow.AddControl(img);
 
@@ -55,7 +55,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gToSell.ScaledMoveBy(7, 47);
             _gMerchantWindow.AddControl(_gToSell);
 
-            _btnSell = new GUIButton(new Rectangle(164, 0, 18, 19), DataManager.HUD_COMPONENTS, BtnSell);
+            _btnSell = new GUIButton(GUIUtils.BTN_BUY, BtnSell);
             _btnSell.ScaledMoveBy(89, 48);
             _btnSell.Enable(false);
             _gMerchantWindow.AddControl(_btnSell);

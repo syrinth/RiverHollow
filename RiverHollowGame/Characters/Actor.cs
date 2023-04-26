@@ -11,6 +11,7 @@ using System.Threading;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.GUIComponents;
 
 namespace RiverHollow.Characters
 {
@@ -127,7 +128,7 @@ namespace RiverHollow.Characters
 
                 if (Constants.DRAW_COLLISION)
                 {
-                    spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), CollisionBox, new Rectangle(160, 128, 2, 2), Color.White * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, GetSprites()[0].LayerDepth - 1);
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), CollisionBox, GUIUtils.BLACK_BOX, Color.White * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, GetSprites()[0].LayerDepth - 1);
                 }
             }
         }

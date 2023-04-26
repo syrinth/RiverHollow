@@ -39,7 +39,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             SyncText(_sStatement, true);
             _gText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
-            _giSelection = new GUIImage(new Rectangle(288, 96, 8, 9), GameManager.ScaleIt(8), GameManager.ScaleIt(9), DataManager.DIALOGUE_TEXTURE);
+            _giSelection = new GUIImage(GUIUtils.POINTER);
             _giSelection.AnchorAndAlignWithSpacing(_gText, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             AddControl(_giSelection);
 

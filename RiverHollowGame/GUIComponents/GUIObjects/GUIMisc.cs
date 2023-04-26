@@ -38,7 +38,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         private void Setup()
         {
-            _gCoin = GUIUtils.GetIcon(GameIconEnum.Coin);
+            _gCoin = new GUIImage(GUIUtils.ICON_COIN);
             if (_bCoinOnRight)
             {
                 _gCoin.AnchorToObject(_gTextMoney, SideEnum.Right, GUIManager.STANDARD_MARGIN);
@@ -85,7 +85,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         private void Setup()
         {
-            _gKeys = GUIUtils.GetIcon(GameIconEnum.Key);
+            _gKeys = new GUIImage(GUIUtils.ICON_KEY);
 
             _gKeysText.AnchorAndAlignWithSpacing(_gKeys, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
 
@@ -123,21 +123,18 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         protected EmptyDelegate _delAction;
         public GUICheck(string text, bool isChecked = false, EmptyDelegate del = null)
         {
-            int squareSize = Constants.TILE_SIZE * 2;
             _bChecked = isChecked;
-            _gUnchecked = new GUIImage(new Rectangle(16, 32, Constants.TILE_SIZE, Constants.TILE_SIZE), squareSize, squareSize, DataManager.DIALOGUE_TEXTURE);
-            _gChecked = new GUIImage(new Rectangle(32, 32, Constants.TILE_SIZE, Constants.TILE_SIZE), squareSize, squareSize, DataManager.DIALOGUE_TEXTURE);
+            _gUnchecked = new GUIImage(GUIUtils.TOGGLE_UNCHECK);
+            _gChecked = new GUIImage(GUIUtils.TOGGLE_CHECK);
             _gText = new GUIText(" - " + text);
-
-            int delta = _gText.Height - squareSize;
-            _gUnchecked.MoveBy(new Point(0, delta));
-            _gChecked.MoveBy(new Point(0, delta));
 
             _gText.AnchorAndAlign(_gChecked, SideEnum.Right, SideEnum.CenterY);
 
             AddControl(_gText);
             AddControl(_gUnchecked);
             AddControl(_gChecked);
+
+            DetermineSize();
 
             Width = _gText.Right - _gChecked.Left;
             Height = _gText.Height;
@@ -180,36 +177,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public void SetChecked(bool val) { _bChecked = val; }
     }
 
-    public class GUISwatch : GUIImage
-    {
-        private EmptyDelegate _delAction;
-        public Color SwatchColor => _Color;
-
-        public GUISwatch(Color c, EmptyDelegate del = null) : base(new Rectangle(0, 80, Constants.TILE_SIZE, Constants.TILE_SIZE), 8, 16, DataManager.DIALOGUE_TEXTURE)
-        {
-            _Color = c;
-            _delAction = del;
-        }
-
-        public GUISwatch(Color c, int width, int height, EmptyDelegate del = null) : base(new Rectangle(0, 80, Constants.TILE_SIZE, Constants.TILE_SIZE), width, height, DataManager.DIALOGUE_TEXTURE)
-        {
-            _Color = c;
-            _delAction = del;
-        }
-
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-            if (Contains(mouse) && _delAction != null)
-            {
-                _delAction();
-                rv = true;
-            }
-
-            return rv;
-        }
-    }
-
     public class GUIItem : GUIObject
     {
         public Item ItemObject {get;}
@@ -226,7 +193,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Width = GameManager.ScaledTileSize;
             Height = GameManager.ScaledTileSize;
 
-            _gInvisible = new GUIImage(new Rectangle(32, 0, 16, 16), DataManager.DIALOGUE_TEXTURE);
+            _gInvisible = new GUIImage(GUIUtils.INVISIBLE);
             _gInvisible.CenterOnObject(this);
 
             _gImg = new GUIImage(ItemObject.SourceRectangle, ItemObject.Texture);

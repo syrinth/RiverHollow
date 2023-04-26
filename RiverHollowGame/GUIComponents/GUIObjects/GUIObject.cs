@@ -60,7 +60,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         protected Color _Color = Color.White;
         public Color ObjColor => _Color;
-        protected Texture2D _texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
+        protected Texture2D _texture = DataManager.GetTexture(DataManager.HUD_COMPONENTS);
         protected Color EnabledColor => _bEnabled ? _Color : Color.Gray;
         protected bool _bEnabled = true;
         public bool Active => _bEnabled && Visible;
@@ -147,7 +147,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 if (c.Contains(mouse))
                 {
-                    rv = c.ProcessLeftButtonClick(mouse);
+                     rv = c.ProcessLeftButtonClick(mouse);
                     if (rv) { break; }
                 }
             }

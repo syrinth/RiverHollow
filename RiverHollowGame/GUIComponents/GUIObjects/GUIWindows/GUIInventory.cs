@@ -13,7 +13,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
     {
         protected GUIItemBox[,] _arrItemBoxes;
 
-        protected int BoxSize => GameManager.ScaleIt(GUIItemBox.RECT_IMG.Width);
+        protected int BoxSize => GameManager.ScaleIt(GUIUtils.ITEM_BOX.Width);
 
         protected int _iColumns;
         protected int _iRows;
@@ -36,7 +36,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             
             Setup(PlayerInventory);
 
-            _texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
+            //_texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
             Width = (_iColumns * BoxSize) + GameManager.ScaleIt(_iColumns + 1);
             Height = (rows * BoxSize) + GameManager.ScaleIt(rows + 1);
         }
@@ -68,7 +68,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 for (int j = 0; j < _iColumns; j++)
                 {
-                    _arrItemBoxes[i, j] = new GUIItemBox(i, j, DataManager.DIALOGUE_TEXTURE, null);
+                    _arrItemBoxes[i, j] = new GUIItemBox(i, j, null);
 
                     if (i == 0 && j == 0) { }
                     else if (j == 0) { _arrItemBoxes[i, j].AnchorAndAlignWithSpacing(_arrItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
@@ -87,7 +87,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 {
                     for (int j = 0; j < _iColumns; j++)
                     {
-                        temp[i, j] = new GUIImage(GUIItemBox.RECT_IMG, GameManager.ScaleIt(GUIItemBox.RECT_IMG.Width), GameManager.ScaleIt(GUIItemBox.RECT_IMG.Height), DataManager.DIALOGUE_TEXTURE);
+                        temp[i, j] = new GUIImage(GUIUtils.ITEM_BOX);
                         temp[i, j].Enable(false);
 
                         if (i == 0 && j == 0) { temp[i, j].AnchorAndAlignWithSpacing(_arrItemBoxes[PlayerManager.BackpackLevel - 1, 0], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
@@ -382,7 +382,7 @@ Exit:
         GUIInventory _inventory;
         public GUIInventoryWindow(bool PlayerInventory = false)
         {
-            _winData = GUIWindow.DarkBlue_Window;
+            _winData = GUIUtils.DarkBlue_Window;
 
             _inventory = new GUIInventory(PlayerInventory);
             _inventory.ScaledMoveBy(7, 6);

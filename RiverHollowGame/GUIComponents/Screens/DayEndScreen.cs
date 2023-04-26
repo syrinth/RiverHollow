@@ -59,10 +59,10 @@ namespace RiverHollow.GUIComponents.Screens
             }
             _liNPCs = new List<TalkingActor>();
 
-            _gBackgroundImage = new GUIImage(new Rectangle(0, 0, 480, 270), DataManager.GUI_COMPONENTS + @"\Combat_Background_Forest");
+            _gBackgroundImage = new GUIImage(DataManager.GetTexture(DataManager.GUI_COMPONENTS + @"\Combat_Background_Forest"));
             AddControl(_gBackgroundImage);
 
-            _gWindow = new GUIWindow(GUIWindow.Brown_Window);
+            _gWindow = new GUIWindow(GUIUtils.Brown_Window);
             _gText = new GUIText(DataManager.GetGameTextEntry("Label_Saving_Start").GetFormattedText(), false);
             _gText.AnchorToInnerSide(_gWindow, SideEnum.TopLeft);
             _gWindow.Resize();
@@ -166,7 +166,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                             if (((Traveler)npc).Income > 0)
                             {
-                                GUIImage coin = GUIUtils.GetIcon(GameIconEnum.Coin);
+                                GUIImage coin = new GUIImage(GUIUtils.ICON_COIN);
                                 coin.Position(npc.Position);
                                 coin.ScaledMoveBy(0, -Constants.TILE_SIZE);
                                 _liCoins.Add(coin);
@@ -258,7 +258,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _timer = new RHTimer(DAY_DISPLAY_PAUSE);
             _eCurrentPhase = DayEndPhaseEnum.NextDay;
-            _gWindow = new GUIWindow(GUIWindow.Brown_Window);
+            _gWindow = new GUIWindow(GUIUtils.Brown_Window);
 
             TextEntry entry = DataManager.GetGameTextEntry("Day_End", GameCalendar.CurrentDay, GameCalendar.GetCurrentSeason());
             _gText = new GUIText(entry.GetFormattedText(), false);
@@ -278,8 +278,8 @@ namespace RiverHollow.GUIComponents.Screens
             _timer.Reset(0.01);
             _eCurrentPhase = DayEndPhaseEnum.SpawnNPCs;
 
-            _gWindow = new GUIWindow(GUIWindow.Brown_Window, ScaleIt(76), ScaleIt(28));
-            GUIImage gCoin = GUIUtils.GetIcon(GameIconEnum.Coin);
+            _gWindow = new GUIWindow(GUIUtils.Brown_Window, ScaleIt(76), ScaleIt(28));
+            GUIImage gCoin = new GUIImage(GUIUtils.ICON_COIN);
             _gWindow.AddControl(gCoin);
 
             gCoin.ScaledMoveBy(7, 6);

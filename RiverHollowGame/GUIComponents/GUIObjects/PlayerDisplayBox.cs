@@ -16,7 +16,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         List<GUISprite> _liSprites;
 
-        public PlayerDisplayBox(PlayerCharacter actor) : base (new Rectangle(0, 144, 50, 49), DataManager.DIALOGUE_TEXTURE)
+        public PlayerDisplayBox(PlayerCharacter actor) : base (GUIUtils.NEW_DISPLAY)
         {
             AssignActor(actor);
         }

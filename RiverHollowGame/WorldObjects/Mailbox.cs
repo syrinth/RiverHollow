@@ -8,6 +8,7 @@ using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Utilities;
+using RiverHollow.GUIComponents;
 
 namespace RiverHollow.WorldObjects
 {
@@ -79,8 +80,9 @@ namespace RiverHollow.WorldObjects
 
             if (_liCurrentMessages.Count > 0)
             {
-                _alertSprite = new AnimatedSprite(DataManager.DIALOGUE_TEXTURE);
-                _alertSprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 64, Constants.TILE_SIZE, Constants.TILE_SIZE, 3, 0.150f, true);
+                Rectangle animation = GUIUtils.ALERT_ANIMATION;
+                _alertSprite = new AnimatedSprite(DataManager.HUD_COMPONENTS);
+                _alertSprite.AddAnimation(AnimationEnum.ObjectIdle, animation.X, animation.Y, animation.Width, animation.Height, 3, 0.150f, true);
                 _alertSprite.Position = new Point(MapPosition.X, MapPosition.Y - Constants.TILE_SIZE);
             }
         }

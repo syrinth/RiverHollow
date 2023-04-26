@@ -31,7 +31,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             _delAction = del;
 
-
             Width = GameManager.ScaleIt(size.X);
             Height = GameManager.ScaleIt(size.Y);
             _gUnselected = new GUIImage(new Rectangle(unselected, size), Width, Height, texture);

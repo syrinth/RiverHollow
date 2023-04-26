@@ -13,7 +13,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         public bool Found { get; private set; }
         const float FADE = 0.8f;
 
-        public NPCDisplayWindow(Actor npc) : base(GUIWindow.Codex_NPC_Window, GameManager.ScaleIt(32), GameManager.ScaleIt(44))
+        public NPCDisplayWindow(Actor npc) : base(GUIUtils.Codex_NPC_Window, GameManager.ScaleIt(32), GameManager.ScaleIt(44))
         {
             ID = npc.ID;
             npc.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
@@ -32,15 +32,16 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
                 else
                 {
                     Found = true;
-                    Point pos = new Point(208, 72);
-                    pos.X += 10 * villager.GetFriendshipLevel();
 
-                    GUIImage heart = new GUIImage(new Rectangle(pos.X, pos.Y, 10, 9), DataManager.HUD_COMPONENTS);
+                    Rectangle heartRectangle = GUIUtils.ICON_HEART;
+                    heartRectangle.Offset(10 * villager.GetFriendshipLevel(), 0);
+
+                    GUIImage heart = new GUIImage(heartRectangle);
                     heart.PositionAndMove(this, 22, 34);
 
                     if (!villager.CanGiveGift)
                     {
-                        GUIImage heartGlow = new GUIImage(new Rectangle(192, 72, 12, 11), DataManager.HUD_COMPONENTS);
+                        GUIImage heartGlow = new GUIImage(GUIUtils.ICON_HEART_GLOW);
                         heartGlow.CenterOnObject(heart);
                     }
                 }

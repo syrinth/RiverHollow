@@ -6,6 +6,7 @@ using MonoGame.Extended.Tiled.Graphics;
 using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Items;
@@ -365,7 +366,7 @@ namespace RiverHollow.Map_Handling
                     bool passable = CanPlaceObject(t, HeldObject);
                     if (!passable || (passable && !HeldObject.CompareType(ObjectTypeEnum.Wallpaper)))
                     {
-                        spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle(t.Position.X, t.Position.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), new Rectangle(288, 128, Constants.TILE_SIZE, Constants.TILE_SIZE), passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
+                        spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), new Rectangle(t.Position.X, t.Position.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), GUIUtils.PLACEMENT_BOX, passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                     }
                 }
             }

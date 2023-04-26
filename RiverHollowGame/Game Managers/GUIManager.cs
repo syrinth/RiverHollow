@@ -9,6 +9,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using static RiverHollow.Utilities.Enums;
+using RiverHollow.GUIComponents;
 
 namespace RiverHollow.Game_Managers
 {
@@ -35,7 +36,7 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadContent()
         {
-            _fadeImg = new GUIImage(new Rectangle(160, 128, Constants.TILE_SIZE, Constants.TILE_SIZE), RiverHollow.ScreenWidth*2, RiverHollow.ScreenHeight*2, DataManager.DIALOGUE_TEXTURE);
+            _fadeImg = new GUIImage(GUIUtils.BLACK_BOX, RiverHollow.ScreenWidth*2, RiverHollow.ScreenHeight*2, DataManager.HUD_COMPONENTS);
             GUICursor.LoadContent();
         }
 
@@ -236,11 +237,11 @@ namespace RiverHollow.Game_Managers
         /// <returns>The created GUIWindow</returns>
         protected GUIWindow SetMainWindow()
         {
-            return SetMainWindow(GUIWindow.Brown_Window, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
+            return SetMainWindow(GUIUtils.Brown_Window, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
         }
         protected GUIWindow SetMainWindow(int w, int h)
         {
-            return SetMainWindow(GUIWindow.Brown_Window, w, h);
+            return SetMainWindow(GUIUtils.Brown_Window, w, h);
         }
         protected GUIWindow SetMainWindow(GUIWindow.WindowData wd, int w, int h)
         {

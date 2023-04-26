@@ -20,7 +20,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public QuantityWindow()
         {
-            _winMain = SetMainWindow(GUIWindow.DarkBlue_Window, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
+            _winMain = SetMainWindow(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
 
             GUIItemBox box = new GUIItemBox(GameManager.CurrentItem);
             box.Position(_winMain);
@@ -34,19 +34,19 @@ namespace RiverHollow.GUIComponents.GUIObjects
             text.ScaledMoveBy(0, 7);
             AddControl(text);
 
-            _btnDown = new GUIButton(new Rectangle(137, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Decrement);
+            _btnDown = new GUIButton(GUIUtils.BTN_DECREASE, Decrement);
             _btnDown.AnchorAndAlignWithSpacing(box, SideEnum.Left, SideEnum.CenterY, 2);
             AddControl(_btnDown);
 
-            _btnUp = new GUIButton(new Rectangle(128, 48, 7, 7), DataManager.DIALOGUE_TEXTURE, Increment);
+            _btnUp = new GUIButton(GUIUtils.BTN_INCREASE, Increment);
             _btnUp.AnchorAndAlignWithSpacing(box, SideEnum.Right, SideEnum.CenterY, 2);
             AddControl(_btnUp);
 
-            GUIImage img = new GUIImage(new Rectangle(2, 120, 100, 3), GameManager.ScaleIt(100), GameManager.ScaleIt(3), DataManager.HUD_COMPONENTS);
+            GUIImage img = new GUIImage(GUIUtils.HUD_SCROLL_S);
             img.AnchorAndAlignWithSpacing(box, SideEnum.Bottom, SideEnum.CenterX, 2);
             AddControl(img);
 
-            _btnBuy = new GUIButton(new Rectangle(164, 0, 18, 19), DataManager.HUD_COMPONENTS, ProceedToPurchase);
+            _btnBuy = new GUIButton(GUIUtils.BTN_BUY, ProceedToPurchase);
             _btnBuy.Position(_winMain);
             _btnBuy.ScaledMoveBy(89, 48);
             AddControl(_btnBuy);

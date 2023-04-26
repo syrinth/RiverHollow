@@ -18,7 +18,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public delegate void DelegateRetrieveValues(ref float curr, ref float max);
         DelegateRetrieveValues _delAction;
 
-        public GUIOldStatDisplay(DelegateRetrieveValues del, Color c, int width = 200) : base(DisplayWin, width, GameManager.ScaledTileSize/2)
+        public GUIOldStatDisplay(DelegateRetrieveValues del, Color c, int width = 200) : base(GUIUtils.DisplayWin, width, GameManager.ScaledTileSize/2)
         {
             _fMax = 0;
             _fCurr = 0;
@@ -26,7 +26,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _delAction = del;
             _font = DataManager.GetBitMapFont(DataManager.FONT_STAT_DISPLAY);
 
-            _gFill = new GUIImage(new Rectangle(65, 33, 14, 14), Width - WidthEdges(), Height - HeightEdges(), DataManager.DIALOGUE_TEXTURE);
+            _gFill = new GUIImage(GUIUtils.HUD_FILL, Width - WidthEdges(), Height - HeightEdges(), DataManager.HUD_COMPONENTS);
             _gFill.AnchorToInnerSide(this, SideEnum.TopLeft);
 
             _gText = new GUIText("", _font);
