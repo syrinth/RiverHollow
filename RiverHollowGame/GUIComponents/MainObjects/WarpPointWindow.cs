@@ -34,8 +34,7 @@ namespace RiverHollow.GUIComponents.MainObjects
                 }
             }
 
-            _gList = new GUIList(_liStructures, MAX_SHOWN_TASKS, TASK_SPACING);
-            _gList.CenterOnObject(_winMain);
+            _gList = new GUIList(_liStructures, MAX_SHOWN_TASKS, TASK_SPACING, _winMain);
 
             AddControl(_gList);
         }

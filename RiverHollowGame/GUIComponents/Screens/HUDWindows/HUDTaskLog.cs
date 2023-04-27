@@ -37,8 +37,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 _liTasks.Add(q);
             }
 
-            _gList = new GUIList(_liTasks, MAX_SHOWN_TASKS, TASK_SPACING/*, _gWindow.Height*/);
-            _gList.CenterOnObject(_winMain);
+            _gList = new GUIList(_liTasks, MAX_SHOWN_TASKS, TASK_SPACING, _winMain);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

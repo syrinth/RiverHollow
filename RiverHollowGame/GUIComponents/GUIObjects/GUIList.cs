@@ -25,7 +25,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         /// <param name="maxItems">The maximum number of objects that should be displayed in the List at any given time.</param>
         /// <param name="spacing">The amount of space (in px) to set inbetween items in the List.</param>
         /// <param name="maxHeight">The maximum height the GUIList is allowed to take up on the screen. If set, it will override maxItems if necessary.</param>
-        public GUIList(List<GUIObject> objects, int maxItems, int spacing, int maxHeight = 0)
+        public GUIList(List<GUIObject> objects, int maxItems, int spacing, GUIObject obj, int maxHeight = 0)
         {
             _iMaxShownItems = maxItems;
             Objects = objects;
@@ -66,39 +66,21 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             PopulateList();
 
+            if (obj != null) { CenterOnObject(obj); }
+            else { CenterOnScreen(); }
+
             if (_iMaxShownItems < objects.Count)
             {
-                Width = mostWidth + ScaledTileSize;
+                _btnUp = new GUIButton(GUIUtils.BTN_UP_SMALL, BtnUpClick);
+                _btnUp.AnchorAndAlign(Objects[0], SideEnum.Right, SideEnum.CenterY);
 
-                _btnUp = new GUIButton(GUIUtils.BTN_UP, BtnUpClick);
-                _btnDown = new GUIButton(GUIUtils.BTN_DOWN, BtnDownClick);
-
-                _btnUp.AnchorToInnerSide(this, SideEnum.TopRight);
-                _btnDown.AnchorToInnerSide(this, SideEnum.BottomRight);
+                _btnDown = new GUIButton(GUIUtils.BTN_DOWN_SMALL, BtnDownClick);
+                _btnDown.AnchorAndAlign(Objects[_iMaxShownItems - 1], SideEnum.Right, SideEnum.CenterY);
 
                 _btnUp.Show(false);
+
+                DetermineSize();
             }
-        }
-
-        public GUIObject GetMousedOverEntry(Point mouse)
-        {
-            GUIObject rv = null;
-
-            foreach(GUIObject obj in Objects)
-            {
-                if (obj.Contains(mouse))
-                {
-                    rv = obj;
-                    break;
-                }
-            }
-
-            return rv;
-        }
-
-        public List<GUIObject> GetEntries()
-        {
-            return Objects;
         }
 
         public void BtnUpClick()

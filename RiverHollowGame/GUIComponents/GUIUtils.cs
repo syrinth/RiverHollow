@@ -52,13 +52,11 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle CURSOR_TALK = new Rectangle(336, 176, 16, 16);
 
         internal static Rectangle BTN_MAIN = new Rectangle(176, 112, 52, 16);
-        internal static Rectangle BTN_LEFT_SMALL = new Rectangle(163, 43, 10, 13);
-        internal static Rectangle BTN_RIGHT_SMALL = new Rectangle(173, 43, 10, 13);
+        internal static Rectangle BTN_UP_SMALL = new Rectangle(295, 147, 12, 10);
+        internal static Rectangle BTN_DOWN_SMALL = new Rectangle(307, 157, 12, 10);
+        internal static Rectangle BTN_LEFT_SMALL = new Rectangle(297, 157, 10, 12);
+        internal static Rectangle BTN_RIGHT_SMALL = new Rectangle(307, 145, 10, 12);
         internal static Rectangle BTN_SKIP = new Rectangle(304, 128, 16, 16);
-        internal static Rectangle BTN_DOWN = new Rectangle(288, 160, 16, 16);
-        internal static Rectangle BTN_UP = new Rectangle(304, 160, 16, 16);
-        internal static Rectangle BTN_RIGHT = new Rectangle(288, 176, 16, 16);
-        internal static Rectangle BTN_LEFT = new Rectangle(304, 160, 16, 16);
         internal static Rectangle BTN_INCREASE = new Rectangle(192, 96, 7, 7);
         internal static Rectangle BTN_DECREASE = new Rectangle(201, 96, 7, 7);
         internal static Rectangle BTN_OK_TINY = new Rectangle(194, 103, 11, 9);

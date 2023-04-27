@@ -55,8 +55,7 @@ namespace RiverHollow.GUIComponents.Screens
                 items.Add(newBox);
             }
 
-            _gList = new GUIList(items, 10, 1, _winMain.InnerHeight());
-            _gList.CenterOnObject(_winMain);
+            _gList = new GUIList(items, 10, 1, _winMain, _winMain.InnerHeight());
         }
 
         public override void CloseMainWindow()

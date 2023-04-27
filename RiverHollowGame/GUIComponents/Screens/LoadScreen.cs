@@ -40,8 +40,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (_liDataWindows.Count > 0)
             {
-                GUIList _gli = new GUIList(_liDataWindows, 10, 5, RiverHollow.ScreenHeight);
-                _gli.CenterOnScreen();
+                GUIList _gli = new GUIList(_liDataWindows, 10, 5, null, RiverHollow.ScreenHeight);
             }
         }
 

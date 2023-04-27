@@ -42,7 +42,7 @@ namespace RiverHollow.GUIComponents.Screens
                 ib.SetAlpha(_fAlphaValue);
             }
 
-            _btnChangeRow = new GUIButton(GUIUtils.BTN_DOWN, RowUp);
+            _btnChangeRow = new GUIButton(GUIUtils.BTN_DOWN_SMALL, RowUp);
             _btnChangeRow.AnchorAndAlign(this, SideEnum.Right, SideEnum.CenterY);
             _btnChangeRow.FadeOnDisable(false);
 
