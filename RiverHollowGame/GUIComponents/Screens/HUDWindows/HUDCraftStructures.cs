@@ -79,6 +79,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         {
             if (_liCanBuild.Count == 0)
             {
+                _btnBuild.Enable(false);
                 return;
             }
 
