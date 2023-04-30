@@ -210,7 +210,7 @@ namespace RiverHollow.WorldObjects
                     }
                 }
             }
-            else if (InventoryManager.HasSpaceInInventory(itemToCraft.ID, 1)
+            else if (SpaceToCraft(itemToCraft, batchSize)
                 && SufficientStamina()
                 && PlayerManager.ExpendResources(itemToCraft.GetRequiredItems()))
             {
@@ -230,6 +230,11 @@ namespace RiverHollow.WorldObjects
             {
                 SoundManager.PlayEffect(GetEnumByIDKey<SoundEffectEnum>("WorkEffect"));
             }
+        }
+
+        public bool SpaceToCraft(Item itemToCraft, int batchSize)
+        {
+            return CraftDaily || (!Kitchen && InventoryManager.HasSpaceInInventory(itemToCraft.ID, itemToCraft.GetIntByIDKey("CraftAmount", 1) * batchSize)) || (Kitchen && TownManager.CheckKitchenSpace(itemToCraft));
         }
 
         public override WorldObjectData SaveData()

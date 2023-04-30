@@ -148,6 +148,16 @@ namespace RiverHollow.Game_Managers
             InventoryManager.ClearExtraInventory();
         }
 
+        public static bool CheckKitchenSpace(Item i)
+        {
+            bool rv = false;
+            InventoryManager.InitExtraInventory(Inventory);
+            rv = InventoryManager.HasSpaceInInventory(i.ID, i.Number, false);
+            InventoryManager.ClearExtraInventory();
+
+            return rv;
+        }
+
         #region Traveler Code
         public static void IncreaseTravelerBonus()
         {

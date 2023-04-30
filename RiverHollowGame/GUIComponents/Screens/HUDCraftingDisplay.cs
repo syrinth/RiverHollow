@@ -6,10 +6,10 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.WorldObjects;
 
-using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -298,7 +298,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             GUIUtils.CreateSpacedRowAgainstObject(new List<GUIObject>(_liRequiredItems), _gComponents, _gComponents, 2, 24);
 
-            _btnBuild.Enable(sufficientItems && !_objMachine.CapacityFull() && _objMachine.SufficientStamina());
+            _btnBuild.Enable(sufficientItems && !_objMachine.CapacityFull() && _objMachine.SufficientStamina() && _objMachine.SpaceToCraft(chosenItem));
         }
     }
 }
