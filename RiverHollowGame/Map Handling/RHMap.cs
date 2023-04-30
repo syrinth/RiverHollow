@@ -8,7 +8,6 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents;
 using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Items;
 using RiverHollow.Items.Tools;
 using RiverHollow.Misc;
@@ -18,10 +17,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Security.Cryptography;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.RiverHollow;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Map_Handling
@@ -1448,7 +1445,7 @@ namespace RiverHollow.Map_Handling
             if (_liTestTiles.Count > 0) { _liTestTiles.Clear(); }
 
             _objSelectedObject?.SelectObject(false);
-            if ((TownModeEdit()) && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasObject())
+            if (TownModeEdit() && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasObject())
             {
                 WorldObject obj = MouseTile.RetrieveObjectFromLayer(true);
                 if (obj != null && obj.PlayerCanEdit)

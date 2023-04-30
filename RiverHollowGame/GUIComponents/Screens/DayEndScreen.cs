@@ -7,6 +7,7 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.Utilities.Enums;
@@ -28,10 +29,9 @@ namespace RiverHollow.GUIComponents.Screens
 
         GUIButton _btnOK;
         GUIButton _btnExit;
-        List<TalkingActor> _liNPCs;
+        List<GUIActor> _liNPCs;
         List<Traveler> _liOldTravelers;
         List<Point> _liPoints;
-        List<GUIImage> _liCoins;
 
         int _iTotalIncome = 0;
 
@@ -45,7 +45,6 @@ namespace RiverHollow.GUIComponents.Screens
             GameManager.ShowMap(false);
             GameManager.CurrentScreen = GameScreenEnum.Info;
 
-            _liCoins = new List<GUIImage>();
             _liPoints = new List<Point>();
 
             int loops = 0;
@@ -57,7 +56,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
                 loops++;
             }
-            _liNPCs = new List<TalkingActor>();
+            _liNPCs = new List<GUIActor>();
 
             _gBackgroundImage = new GUIImage(DataManager.GetTexture(DataManager.GUI_COMPONENTS + @"\Combat_Background_Forest"));
             AddControl(_gBackgroundImage);
@@ -100,21 +99,19 @@ namespace RiverHollow.GUIComponents.Screens
                         {
                             if (npc.LivesInTown)
                             {
-                                Villager copy = new Villager(npc.ID, DataManager.ActorData[npc.ID]);
-                                copy.Activate(false);
-                                copy.BodySprite.SetScale(CurrentScale);
-                                copy.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
-                                _liNPCs.Add(copy);
+                                var actor = new GUIActor(npc);
+                                actor.Show(false);
+                                actor.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
+                                _liNPCs.Add(actor);
                             }
                         }
 
                         foreach (Traveler npc in _liOldTravelers)
                         {
-                            npc.Activate(false);
-                            npc.BodySprite.SetScale(CurrentScale);
-                            npc.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
-                            npc.PlayAnimation(npc.MoodVerb);
-                            _liNPCs.Add(npc);
+                            var actor = new GUIActor(npc);
+                            actor.Show(false);
+                            actor.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
+                            _liNPCs.Add(actor);
                         }
 
                         StartNPCSpawn();
@@ -125,7 +122,6 @@ namespace RiverHollow.GUIComponents.Screens
                     SpawnNPCs(gTime);
                     goto case DayEndPhaseEnum.NPCsWait;
                 case DayEndPhaseEnum.NPCsWait:
-                    UpdateMoney();
                     break;
                 case DayEndPhaseEnum.NextDay:
                     _gText.Update(gTime);
@@ -149,28 +145,19 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     if (_iCurrentNPC < _liNPCs.Count)
                     {
-                        TalkingActor npc = _liNPCs[_iCurrentNPC];
+                        GUIActor npc = _liNPCs[_iCurrentNPC];
                         int index = RHRandom.Instance().Next(_liPoints.Count);
-                        npc.SetPosition(_liPoints[index]);
-                        npc.Activate(true);
+                        npc.Position(_liPoints[index]);
+                        npc.Show(true);
 
                         _liPoints.RemoveAt(index);
 
-                        if (npc.IsActorType(ActorTypeEnum.Traveler))
+                        if (npc.Income > 0)
                         {
-                            Traveler t = (Traveler)npc;
-                            t.PlayAnimation(t.MoodVerb);
-
-                            _iTotalIncome += t.Income;
+                            _iTotalIncome += npc.Income;
                             _gText.SetText(_iTotalIncome);
 
-                            if (((Traveler)npc).Income > 0)
-                            {
-                                GUIImage coin = new GUIImage(GUIUtils.ICON_COIN);
-                                coin.Position(npc.Position);
-                                coin.ScaledMoveBy(0, -Constants.TILE_SIZE);
-                                _liCoins.Add(coin);
-                            }
+                            npc.ShowCoin();
                         }
 
                         _timer.Reset(MAX_POP_TIME / _liNPCs.Count);
@@ -193,14 +180,6 @@ namespace RiverHollow.GUIComponents.Screens
             }
         }
 
-        private void UpdateMoney()
-        {
-            foreach (GUIImage c in _liCoins)
-            {
-                c.Alpha(c.Alpha() - (_bPopAll ? 0.005f : 0.02f));
-            }
-        }
-
         public override void Draw(SpriteBatch spriteBatch)
         {
             switch (_eCurrentPhase)
@@ -208,15 +187,8 @@ namespace RiverHollow.GUIComponents.Screens
                 case DayEndPhaseEnum.SpawnNPCs:
                 case DayEndPhaseEnum.NPCsWait:
                     _gBackgroundImage.Draw(spriteBatch);
-                    foreach (TalkingActor npc in _liNPCs)
-                    {
-                        npc.Draw(spriteBatch);
-                    }
 
-                    foreach (GUIImage c in _liCoins)
-                    {
-                        c.Draw(spriteBatch);
-                    }
+                    _liNPCs.ForEach(x => x.Draw(spriteBatch));
 
                     _gWindow.Draw(spriteBatch);
                     _btnOK?.Draw(spriteBatch);
@@ -237,7 +209,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 case DayEndPhaseEnum.SpawnNPCs:
                     rv = true;
-                    _bPopAll = true;
+                    Pop();
                     break;
                 case DayEndPhaseEnum.NPCsWait:
                     rv = _btnOK.ProcessLeftButtonClick(mouse) || _btnExit.ProcessLeftButtonClick(mouse);
@@ -249,9 +221,40 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override bool ProcessRightButtonClick(Point mouse)
         {
-            _bPopAll = true;
+            if (_eCurrentPhase == DayEndPhaseEnum.SpawnNPCs)
+            {
+                Pop();
+            }
 
             return true;
+        }
+
+        private void Pop()
+        {
+            _bPopAll = true;
+            _liNPCs.ForEach(x => x.Pop());
+        }
+
+        public override bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+
+            foreach(var actor in _liNPCs)
+            {
+                if (actor.Income == -1)
+                {
+                    continue;
+                }
+
+                rv = actor.ProcessHover(mouse);
+
+                if (rv)
+                {
+                    break;
+                }
+            }
+
+            return rv;
         }
 
         private void BtnOK()
@@ -289,6 +292,128 @@ namespace RiverHollow.GUIComponents.Screens
             _gText = new GUIText(_iTotalIncome);
             _gText.AnchorAndAlignWithSpacing(gCoin, SideEnum.Right, SideEnum.CenterY, 1);
             _gWindow.AddControl(_gText);
+        }
+    }
+
+    public class GUIActor : GUISprite
+    {
+        const int FLICKER_TIMER = 1;
+        public int Income { get; } = -1;
+        private bool _bHovering = false;
+        private bool _bPopped = false;
+
+        GUIImage _gCoin;
+        GUIItem _gItem;
+        GUIImage _gMood;
+
+        RHTimer _timer;
+
+        public GUIActor(Villager v) : base(v.BodySprite, true) { }
+        public GUIActor(Traveler t) : base(t.BodySprite, true)
+        {
+            Income = t.Income;
+            _timer = new RHTimer(FLICKER_TIMER, true);
+
+            if (Income > 0)
+            {
+                _gCoin = new GUIImage(GUIUtils.ICON_COIN);
+                _gCoin.AnchorAndAlign(this, SideEnum.Top, SideEnum.CenterX);
+            }
+
+            if (t.FoodID > -1)
+            {
+                _gItem = new GUIItem(DataManager.GetItem(t.FoodID), ItemBoxDraw.Never);
+                _gItem.AnchorAndAlign(this, SideEnum.Top, SideEnum.CenterX);
+            }
+            
+            _gMood = null;
+            switch (t.MoodVerb)
+            {
+                case TravelerMoodEnum.Angry:
+                    _gMood = new GUIImage(GUIUtils.TRAVELER_ANGRY);
+                    break;
+                case TravelerMoodEnum.Sad:
+                    _gMood = new GUIImage(GUIUtils.TRAVELER_SAD);
+                    break;
+                case TravelerMoodEnum.Neutral:
+                    _gMood = new GUIImage(GUIUtils.TRAVELER_NEUTRAL);
+                    break;
+                case TravelerMoodEnum.Happy:
+                    _gMood = new GUIImage(GUIUtils.TRAVELER_HAPPY);
+                    break;
+            }
+
+            _gMood.AnchorAndAlign(this, SideEnum.Top, SideEnum.CenterX);
+
+            AddControls(_gCoin, _gMood, _gItem);
+
+            _gCoin.Show(false);
+            SetIcons(false, false);
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            if (_gCoin != null && _gCoin.Visible)
+            {
+                _gCoin.Alpha(_gCoin.Alpha() - (_bPopped ? 0.005f : 0.02f));
+                if(_gCoin.Alpha() == 0)
+                {
+                    _gCoin.Show(false);
+                }
+            }
+
+            if (_bHovering && _timer != null && _timer.TickDown(gTime, true))
+            {
+                SetIcons(!_gMood.Visible, !_gItem.Visible);
+            }
+        }
+
+        internal override void Show(bool val)
+        {
+            Visible = val;
+        }
+
+        public override bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+            if (Contains(mouse))
+            {
+                rv = true;
+                if (!_bHovering)
+                {
+                    _bHovering = true;
+                    _timer.Reset(FLICKER_TIMER);
+
+                    SetIcons(true, false);
+                    _gCoin.Show(false);
+                }
+            }
+            else if (_bHovering)
+            {
+                _bHovering = false;
+                SetIcons(false, false);
+                _timer.Stop();
+            }
+            return rv;
+        }
+
+        public void ShowCoin()
+        {
+            if (Income > 0)
+            {
+                _gCoin.Show(true);
+            }
+        }
+
+        public void Pop()
+        {
+            _bPopped = true;
+        }
+
+        private void SetIcons(bool mood, bool item)
+        {
+            _gMood?.Show(mood);
+            _gItem?.Show(item);
         }
     }
 }

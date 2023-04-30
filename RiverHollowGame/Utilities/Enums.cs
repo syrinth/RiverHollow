@@ -28,7 +28,7 @@
         public enum DirectionEnum { None, Down, Right, Up, Left };
         public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };
         public enum VerbEnum { Idle, Walk, GrabIdle, Pull, Push, Ground, Air, UseTool, MakeItem, Action1, Action2 };
-        public enum AnimationEnum { None, PlayAnimation, Rain, Snow, ObjectIdle, Action1, Action2, Action_Finished, Alert, Angry, Sad, Neutral, Happy, KO, Spawn, Pose };
+        public enum AnimationEnum { None, PlayAnimation, Rain, Snow, ObjectIdle, Action1, Action2, Action_Finished, Alert, KO, Spawn, Pose };
         public enum ItemPickupState { Auto, Manual, None };
 
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
@@ -59,6 +59,7 @@
         public enum RelationShipStatusEnum { None, Friends, Dating, Engaged, Married };
         public enum SpawnStateEnum { OffMap, WaitAtInn, VisitInn, HasHome, NonTownMap, SendingToInn };
         public enum MoodEnum { Miserable, Sad, Neutral, Pleased, Happy, Ecstatic };
+        public enum TravelerMoodEnum { Angry, Sad, Neutral, Happy };
         public enum NPCStateEnum { Alert, Idle, Leashing, TrackPlayer, Wander };
         public enum ChildStageEnum { Newborn, Infant, Toddler };
        

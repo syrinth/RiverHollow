@@ -30,6 +30,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             if (Show())
             {
                 _sprite.Draw(spriteBatch, false, _fAlpha);
+
+                foreach (GUIObject g in Controls)
+                {
+                    g.Draw(spriteBatch);
+                }
             }
         }
 

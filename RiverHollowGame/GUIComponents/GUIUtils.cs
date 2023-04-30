@@ -28,6 +28,11 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle INVISIBLE = new Rectangle(164, 21, 16, 16);
         internal static Rectangle ALERT_ANIMATION = new Rectangle(0, 256, 16, 16);
 
+        internal static Rectangle TRAVELER_ANGRY = new Rectangle(208, 128, 16, 16);
+        internal static Rectangle TRAVELER_SAD = new Rectangle(224, 128, 16, 16);
+        internal static Rectangle TRAVELER_NEUTRAL = new Rectangle(240, 128, 16, 16);
+        internal static Rectangle TRAVELER_HAPPY = new Rectangle(256, 128, 16, 16);
+
         internal static Rectangle ICON_BOOK = new Rectangle(288, 80, 14, 14);
         internal static Rectangle ICON_COIN = new Rectangle(304, 80, 16, 16);
         internal static Rectangle ICON_HAMMER = new Rectangle(320, 80, 14, 14);

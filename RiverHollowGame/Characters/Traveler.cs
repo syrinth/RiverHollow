@@ -13,10 +13,10 @@ namespace RiverHollow.Characters
     public class Traveler : TalkingActor
     {
         private float _fFoodModifier = Constants.HUNGER_MOD;
-        private bool _bEaten = false;
+        public int FoodID { get; private set;} = -1;
         public int Income { get; private set; } = 0;
 
-        public AnimationEnum MoodVerb { get;  private set; } = AnimationEnum.Angry;
+        public TravelerMoodEnum MoodVerb { get;  private set; } = TravelerMoodEnum.Angry;
 
         public int BuildingID()
         {
@@ -57,17 +57,6 @@ namespace RiverHollow.Characters
         {
             Wandering = true;
             SlowDontBlock = true;
-
-            List<AnimationData> listAnimations = new List<AnimationData>();
-            Util.AddToAnimationsList(ref listAnimations, stringData, AnimationEnum.Angry);
-            Util.AddToAnimationsList(ref listAnimations, stringData, AnimationEnum.Sad);
-            Util.AddToAnimationsList(ref listAnimations, stringData, AnimationEnum.Neutral);
-            Util.AddToAnimationsList(ref listAnimations, stringData, AnimationEnum.Happy);
-
-            foreach (AnimationData data in listAnimations)
-            {
-                BodySprite.AddAnimation(data.Animation, data.XLocation, data.YLocation, Width, Height);
-            }
         }
 
         public override TextEntry GetOpeningText()
@@ -78,23 +67,23 @@ namespace RiverHollow.Characters
 
         public void TryEat(Food f)
         {
-            if (!_bEaten && f.Remove(1, false))
+            if (FoodID == -1 && f.Remove(1, false))
             {
-                _bEaten = true;
+                FoodID = f.ID;
                 _fFoodModifier = (f.FoodValue / 100f);
 
                 if (f.FoodType == FavoriteFood())
                 {
-                    MoodVerb = AnimationEnum.Happy;
+                    MoodVerb = TravelerMoodEnum.Happy;
                     _fFoodModifier += .5f;
                 }
                 else if (NeutralFood(f.FoodType))
                 {
-                    MoodVerb = AnimationEnum.Neutral;
+                    MoodVerb = TravelerMoodEnum.Neutral;
                 }
                 else if (f.FoodType == DislikedFood() || f.FoodType == FoodTypeEnum.Forage)
                 {
-                    MoodVerb = AnimationEnum.Sad;
+                    MoodVerb = TravelerMoodEnum.Sad;
                     _fFoodModifier -= .5f;
                 }
             }
@@ -117,7 +106,7 @@ namespace RiverHollow.Characters
             Building shop = TownManager.GetBuildingByID(BuildingID());
             if (shop != null)
             {
-                var modifier = !_bEaten ? 0 : (1 + shop.GetShopProfitModifier() + _fFoodModifier);
+                var modifier = FoodID == -1 ? 0 : (1 + shop.GetShopProfitModifier() + _fFoodModifier);
                 Income = (int)(Value() * modifier);
             }
 

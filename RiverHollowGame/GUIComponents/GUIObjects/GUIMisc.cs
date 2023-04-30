@@ -183,12 +183,13 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         GUIImage _gImg;
         GUIImage _gInvisible;
         GUIText _gText;
-        public ItemBoxDraw DrawNumbers = ItemBoxDraw.OnlyStacks;
+        public ItemBoxDraw DrawNumbers { get; private set; }
         public bool CompareNumToPlayer = false;
 
-        public GUIItem(Item it)
+        public GUIItem(Item it, ItemBoxDraw e = ItemBoxDraw.OnlyStacks)
         {
             ItemObject = it;
+            DrawNumbers = e;
 
             Width = GameManager.ScaledTileSize;
             Height = GameManager.ScaledTileSize;

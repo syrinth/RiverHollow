@@ -123,8 +123,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                     newItem = DataManager.GetItem(_liCraftingRecipes[i] + Constants.BUILDABLE_ID_OFFSET);
                 }
                 
-                var displayWindow = new GUIItemBox(newItem);
-                displayWindow.DrawNumber(ItemBoxDraw.Never);
+                var displayWindow = new GUIItemBox(newItem, ItemBoxDraw.Never);
 
                 if (newItem != null)
                 {

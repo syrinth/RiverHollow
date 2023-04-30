@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
-using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
@@ -12,20 +10,20 @@ namespace RiverHollow.GUIComponents.GUIObjects
        public Item BoxItem => _guiItem?.ItemObject;
         GUIItem _guiItem;
 
-        public int Columns { get; }
-        public int Rows { get; }
+        public int ColumnID { get; }
+        public int RowID { get; }
 
-        public GUIItemBox(Item it = null) : base(GUIUtils.ITEM_BOX)
+        public GUIItemBox(Item it = null, ItemBoxDraw e = ItemBoxDraw.OnlyStacks) : base(GUIUtils.ITEM_BOX)
         {
-            SetItem(it);
+            SetItem(it, e);
         }
 
         public GUIItemBox(int row, int col, Item item) : base(GUIUtils.ITEM_BOX)
         {
             SetItem(item);
             
-            Columns = col;
-            Rows = row;
+            ColumnID = col;
+            RowID = row;
         }
 
         public override void Update(GameTime gTime)
@@ -48,14 +46,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
             return rv;
         }
 
-        public void SetItem(Item it)
+        public void SetItem(Item it, ItemBoxDraw e = ItemBoxDraw.OnlyStacks)
         {
             if (it != null)
             {
                 if (_guiItem == null || (_guiItem != null && _guiItem.ItemObject != it))
                 {
                     RemoveControl(_guiItem);
-                    _guiItem = new GUIItem(it);
+                    _guiItem = new GUIItem(it, e);
                     _guiItem.CenterOnObject(this);
                 }
             }
@@ -69,14 +67,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public override void SetColor(Color c)
         {
             _guiItem?.SetColor(c);
-        }
-
-        public void DrawNumber(ItemBoxDraw val)
-        {
-            if (_guiItem != null)
-            {
-                _guiItem.DrawNumbers = val;
-            }
         }
 
         public bool CompareNumToPlayer()
