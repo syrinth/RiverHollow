@@ -298,7 +298,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             GUIUtils.CreateSpacedRowAgainstObject(new List<GUIObject>(_liRequiredItems), _gComponents, _gComponents, 2, 24);
 
-            _btnBuild.Enable(sufficientItems && !_objMachine.CapacityFull() && _objMachine.SufficientStamina() && _objMachine.SpaceToCraft(chosenItem));
+            _btnBuild.Enable(sufficientItems && !_objMachine.CapacityFull() && _objMachine.SufficientStamina() && _objMachine.SpaceToCraft(chosenItem, _iBatchSize));
         }
     }
 }
