@@ -4,21 +4,18 @@ using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-
-using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Game_Managers.SaveManager;
-using System;
 using Microsoft.Xna.Framework.Graphics;
+
 using static RiverHollow.Utilities.Enums;
-using RiverHollow.Utilities;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.GUIComponents.Screens
 {
     class LoadScreen : GUIScreen
     {
-        List<SaveInfoData> _liData;
-        List<GUIObject> _liDataWindows;
-        GUIButton _btnBack;
+        readonly List<SaveInfoData> _liData;
+        readonly List<GUIObject> _liDataWindows;
+        readonly GUIButton _btnBack;
 
         public LoadScreen()
         {
@@ -33,8 +30,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             foreach (SaveInfoData data in _liData)
             {
-                SaveWindow s = new SaveWindow(data, _liData.IndexOf(data), RefreshScreen);
-                //AddControl(s);
+                SaveWindow s = new SaveWindow(data, _liData.IndexOf(data));
                 _liDataWindows.Add(s);
             }
 
@@ -44,37 +40,15 @@ namespace RiverHollow.GUIComponents.Screens
             }
         }
 
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-
-            foreach (GUIObject c in Controls)
-            {
-                rv = c.ProcessLeftButtonClick(mouse);
-                if (rv) { break; }
-            }
-
-            return rv;
-        }
-
         public override bool ProcessRightButtonClick(Point mouse)
         {
-            bool rv = false;
-
             GUIManager.SetScreen(new IntroMenuScreen());
-            rv = true;
-
-            return rv;
+            return true;
         }
 
         public void BtnBack()
         {
             GUIManager.SetScreen(new IntroMenuScreen());
-        }
-
-        public void RefreshScreen()
-        {
-            GUIManager.SetScreen(new LoadScreen());
         }
 
         private class SaveWindow : GUIWindow
@@ -85,13 +59,10 @@ namespace RiverHollow.GUIComponents.Screens
             GUIText _gDate;
             public SaveInfoData Data { get; }
 
-            public delegate void ReloadScreenDelegate();
-            private ReloadScreenDelegate _delAction;
-
             int _iId;
             public int SaveID => _iId;
 
-            public SaveWindow(SaveInfoData data, int id, ReloadScreenDelegate del)
+            public SaveWindow(SaveInfoData data, int id)
             {
                 //Creates the Individual Save Tiles on the load screen.
                 Data = data;
@@ -113,8 +84,6 @@ namespace RiverHollow.GUIComponents.Screens
 
                 _gTimeStamp = new GUIText(data.timeStamp.ToString("g"));
                 _gTimeStamp.AnchorAndAlign(_gDelete, SideEnum.Left, SideEnum.Bottom);
-
-                _delAction = del;
             }
 
             public override void Draw(SpriteBatch spriteBatch)
@@ -149,8 +118,6 @@ namespace RiverHollow.GUIComponents.Screens
                 }
 
                 Directory.Delete(folder);
-
-                _delAction();
             }
         }
     }
