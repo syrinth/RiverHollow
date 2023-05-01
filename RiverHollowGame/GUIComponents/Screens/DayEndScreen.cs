@@ -232,6 +232,7 @@ namespace RiverHollow.GUIComponents.Screens
         private void Pop()
         {
             _bPopAll = true;
+            _timer.Stop();
             _liNPCs.ForEach(x => x.Pop());
         }
 

@@ -248,7 +248,7 @@ namespace RiverHollow.Items
         {
             return DataManager.GetBoolByIDKey(ID, key, DataType.Item);
         }
-        public int GetIntByIDKey(string key, int defaultValue = -1)
+        public virtual int GetIntByIDKey(string key, int defaultValue = -1)
         {
             return DataManager.GetIntByIDKey(ID, key, DataType.Item, defaultValue);
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
+using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Items
@@ -24,6 +25,8 @@ namespace RiverHollow.Items
 
             _iWidth = size.X * Constants.TILE_SIZE;
             _iHeight = size.Y * Constants.TILE_SIZE;
+
+            _diReqToMake = DataManager.IntDictionaryFromLookup(_iObjectID, "ReqItems", DataType.WorldObject);
 
             ObjectTypeEnum type = DataManager.GetEnumByIDKey<ObjectTypeEnum>(_iObjectID, "Type", DataType.WorldObject);
 
@@ -62,6 +65,11 @@ namespace RiverHollow.Items
             }
 
             return false;
+        }
+
+        public override int GetIntByIDKey(string key, int defaultValue = -1)
+        {
+            return DataManager.GetIntByIDKey(_iObjectID, key, DataType.WorldObject, defaultValue);
         }
     }
 }

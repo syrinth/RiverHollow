@@ -379,7 +379,7 @@
     </Item>
     <Item>
       <Key>94</Key>
-      <Value>[Type:Machine][Image:0-0]</Value>
+      <Value>[Type:Machine][Image:96-320][Size:2-2][Base:2-1][BaseOffset:0-1][Makes:8155|8156][Daily][Batch:1]</Value>
     </Item>
     <Item>
       <Key>95</Key>
@@ -619,7 +619,15 @@
     </Item>
     <Item>
       <Key>154</Key>
-      <Value>[Type:Decor][Image:368-80][Size:1-2][BaseOffset:0-1][Base:1-1][Value:20]</Value>
+      <Value>[Type:Decor][Image:368-80][Size:1-2][BaseOffset:0-1][Base:1-1][Value:20][ReqItems:64-4]</Value>
+    </Item>
+    <Item>
+      <Key>155</Key>
+      <Value>[Type:Decor][Image:368-128][Size:1-1][BaseOffset:0-0][Base:1-1][ReqItems:66-1]</Value>
+    </Item>
+    <Item>
+      <Key>156</Key>
+      <Value>[Type:Decor][Image:352-96][Size:1-1][BaseOffset:0-0][Base:1-1][ReqItems:66-1]</Value>
     </Item>
   </Asset>
 </XnaContent>

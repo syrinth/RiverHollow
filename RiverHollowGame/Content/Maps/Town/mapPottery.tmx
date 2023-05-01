@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="14" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="134">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="14" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="136">
  <properties>
   <property name="BuildingID" type="int" value="17"/>
   <property name="MapType" value="Town"/>
@@ -297,10 +297,10 @@
 223,246,247,247,247,247,247,247,247,247,247,247,248,222,
 223,268,269,269,269,269,1271,1272,1273,269,0,0,270,222,
 223,290,291,291,291,291,1297,1298,1299,291,291,291,292,222,
-223,0,0,0,0,0,0,0,0,0,0,0,0,222,
-223,1152,1228,1229,1228,1230,0,0,0,1300,1301,1302,1303,222,
-223,0,0,0,0,0,0,0,0,0,0,0,0,222,
 223,0,0,0,0,0,0,0,0,1300,1301,1302,1303,222,
+223,1152,1228,1229,1228,1230,0,0,0,0,0,1103,1103,222,
+223,0,0,0,0,0,0,0,0,1300,1301,1302,1303,222,
+223,0,0,0,0,0,0,0,0,0,0,0,0,222,
 223,0,0,0,0,0,0,0,0,0,0,0,0,222,
 223,1300,1303,0,0,0,0,0,0,1300,1301,1302,1303,222,
 293,0,0,0,0,0,0,0,0,0,0,0,0,294,
@@ -333,12 +333,16 @@
  </objectgroup>
  <objectgroup id="9" name="MapObject">
   <object id="41" name="Display_Upgrade" x="16" y="64" width="16" height="32"/>
+  <object id="135" name="WorldObject" x="176" y="64" width="32" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="94"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
-  <object id="16" name="Bookstore" x="50.2008" y="68.6059" width="12.1696" height="11.2477"/>
+  <object id="16" name="Pottery" x="50.2008" y="68.6059" width="12.1696" height="11.2477"/>
   <object id="18" name="NPC_55" x="112" y="64" width="16" height="16"/>
   <object id="108" name="ShopObject" x="16" y="144" width="16" height="16"/>
-  <object id="127" name="ShopObject" x="160" y="64" width="16" height="16"/>
   <object id="128" name="ShopObject" x="96" y="144" width="16" height="16"/>
   <object id="131" name="ShopObject" x="160" y="144" width="16" height="16"/>
  </objectgroup>

@@ -486,7 +486,14 @@ namespace RiverHollow.Game_Managers
 
         public static Item CraftItem(int id, int batchSize = 1)
         {
-            return GetItem(id, GetIntByIDKey(id, "CraftAmount", DataType.Item, 1) * batchSize);
+            if (id >= Constants.BUILDABLE_ID_OFFSET)
+            {
+                return GetItem(id, batchSize);
+            }
+            else
+            {
+                return GetItem(id, GetIntByIDKey(id, "CraftAmount", DataType.Item, 1) * batchSize);
+            }
         }
 
         public static Item GetItem(Buildable obj, int num = 1)

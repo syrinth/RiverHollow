@@ -1684,7 +1684,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_94</Key>
-      <Value>[Name:Tannery]</Value>
+      <Value>[Name:Pottery Wheel]</Value>
     </Item>
     <Item>
       <Key>WorldObject_95</Key>
@@ -1925,6 +1925,14 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>WorldObject_154</Key>
       <Value>[Name:Tall Pot]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_155</Key>
+      <Value>[Name:Small Pot]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_156</Key>
+      <Value>[Name:Blue Pot]</Value>
     </Item>
     <Item>
       <Key>Cutscene_0</Key>

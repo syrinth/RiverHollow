@@ -204,7 +204,7 @@ namespace RiverHollow.WorldObjects
                             success = true;
                             CraftingSlots[i].ID = itemToCraft.ID;
                             CraftingSlots[i].BatchSize = batchSize;
-                            CraftingSlots[i].CraftTime = DataManager.GetIntByIDKey(CraftingSlots[i].ID, "CraftTime", DataType.Item, 1);
+                            CraftingSlots[i].CraftTime = itemToCraft.GetIntByIDKey("CraftTime", 1);
                         }
                         break;
                     }
