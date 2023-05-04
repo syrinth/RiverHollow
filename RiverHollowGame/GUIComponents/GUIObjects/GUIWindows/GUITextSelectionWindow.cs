@@ -147,6 +147,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 DataManager.GetGameTextEntry("Selection_NeverMind")
             };
 
+            if (GameCalendar.CurrentHour >= GameCalendar.Nightfall())
+            {
+                liCommands.RemoveAt(1);
+            }
+
             AddOptions(liCommands);
         }
 

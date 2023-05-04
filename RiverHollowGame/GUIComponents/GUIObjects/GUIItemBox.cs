@@ -40,10 +40,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (BoxItem != null)
             {
-                var win = new GUIItemDescriptionWindow(BoxItem, new Point(DrawRectangle.Left, DrawRectangle.Bottom))
-                {
-                    ProcessClicks = false
-                };
+                var win = new GUIItemDescriptionWindow(BoxItem, new Point(DrawRectangle.Left, DrawRectangle.Bottom));
                 win.AnchorAndAlignWithSpacing(this, SideEnum.Bottom, SideEnum.CenterX, -1);
                 GUIManager.OpenHoverObject(win, DrawRectangle, true);
             }
