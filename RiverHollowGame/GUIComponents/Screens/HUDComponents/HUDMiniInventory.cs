@@ -5,9 +5,6 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 
-using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Utilities.Enums;
-
 namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDMiniInventory : GUIWindow
@@ -28,7 +25,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         public HUDMiniInventory() : base(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(221), GameManager.ScaleIt(30))
         {
-            
+            HoverControls = false;
+
             _liItems = new List<GUIItemBox>();
 
             for (int i = 0; i < InventoryManager.maxItemColumns; i++)
@@ -120,12 +118,13 @@ namespace RiverHollow.GUIComponents.Screens
         {
             if (_eFadeState == StateEnum.FadeOut)
             {
-                if (_fItemFade - MIN_FADE > MIN_FADE)
+                var value = _fAlphaValue;
+                if (_fAlphaValue - MIN_FADE > MIN_FADE)
                 {
-                    _fItemFade -= MIN_FADE;
+                    value -= MIN_FADE;
                     foreach (GUIItemBox gib in _liItems)
                     {
-                        gib.SetItemAlpha(_fItemFade);
+                        gib.SetItemAlpha(value);
                     }
                 }
                 else
@@ -137,9 +136,10 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (_eFadeState == StateEnum.FadeIn)
             {
-                if (_fItemFade < 1)
+                var value = _fAlphaValue;
+                if (_fAlphaValue < 1)
                 {
-                    _fItemFade += MIN_FADE;
+                    value += MIN_FADE;
                 }
                 else
                 {
@@ -148,7 +148,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                 foreach (GUIItemBox gib in _liItems)
                 {
-                    gib.SetItemAlpha(_fItemFade);
+                    gib.SetItemAlpha(value);
                 }
             }
         }
@@ -221,22 +221,20 @@ namespace RiverHollow.GUIComponents.Screens
             return rv;
         }
 
-        public override bool ProcessHover(Point mouse)
+        protected override void BeginHover()
         {
-            bool rv = false;
             if (!GameManager.GamePaused())
             {
-                if (Contains(mouse) || _btnChangeRow.Contains(mouse))
-                {
-                    _eFadeState = StateEnum.FadeIn;
-                }
-                else if (!Contains(mouse) && GameManager.HideMiniInventory && Alpha() != 0.1f)
-                {
-                    _eFadeState = StateEnum.FadeOut;
-                }
+                _eFadeState = StateEnum.FadeIn;
             }
+        }
 
-            return rv;
+        protected override void EndHover()
+        {
+            if (!GameManager.GamePaused() && GameManager.HideMiniInventory && Alpha() != 0.1f)
+            {
+                _eFadeState = StateEnum.FadeOut;
+            }
         }
 
         private void SelectGuiItemBox(GUIItemBox box)

@@ -160,18 +160,6 @@ namespace RiverHollow.GUIComponents.Screens
 
             return true;
         }
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
-
-            if (_gColorPicker.Show())
-            {
-                _gColorPicker.ProcessHover(mouse);
-            }
-            //_btnOK.IsMouseHovering = _btnOK.Contains(mouse);
-            //_btnCancel.IsMouseHovering = _btnCancel.Contains(mouse);
-            return rv;
-        }
 
         public void ClickMuteButton()
         {

@@ -232,45 +232,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             return rv;
         }
 
-        /// <summary>
-        /// Triggers a ProcessHover for each GUIItemBox
-        /// </summary>
-        /// <param name="mouse"></param>
-        /// <returns></returns>
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
-            if (!GUIManager.IsTextWindowOpen())
-            {
-                foreach (GUIItemBox i in _arrItemBoxes)
-                {
-                    if (i.ProcessHover(mouse))
-                    {
-                        rv = true;
-                    }
-                }
-            }
-            return rv;
-        }
-
-        private Vector2 GetItemVector(Point mouse)
-        {
-            Vector2 rv = new Vector2(-1, -1);
-            for (int i = 0; i < _iRows; i++)
-            {
-                for (int j = 0; j < _iColumns; j++)
-                {
-                    if (_arrItemBoxes[i, j].Contains(mouse) && _arrItemBoxes[i, j].BoxItem != null)
-                    {
-                        rv = new Vector2(i, j);
-                        goto Exit;
-                    }
-                }
-            }
-        Exit:
-            return rv;
-        }
-
         private GUIItemBox GetItemBox(Point mouse)
         {
             GUIItemBox rv = null;

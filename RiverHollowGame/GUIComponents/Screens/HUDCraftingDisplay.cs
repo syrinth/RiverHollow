@@ -74,7 +74,7 @@ namespace RiverHollow.GUIComponents.Screens
                     _iSelectedItemID = recipe.ID;
                     newBox.AnchorToInnerSide(_winMain, SideEnum.TopLeft, 1);
                 }
-                else { newBox.AnchorAndAlignWithSpacing(_arrRecipes[i - 1], SideEnum.Right, SideEnum.Top, 2, true); }
+                else { newBox.AnchorAndAlignWithSpacing(_arrRecipes[i - 1], SideEnum.Right, SideEnum.Top, 2, GUIUtils.ParentRuleEnum.ForceToParent); }
 
                 if (!InventoryManager.HasSufficientItems(recipe.GetRequiredItems()))
                 {

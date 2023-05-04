@@ -66,16 +66,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             return rv;
         }
 
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = true;
-            if (_detailWindow.Show())
-            {
-                rv = _detailWindow.ProcessHover(mouse);
-            }
-            return rv;
-        }
-
         private void OpenDetailBox(RHTask q)
         {
             _detailWindow.SetData(q);
@@ -128,11 +118,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
                 return rv;
             }
-            public override bool ProcessHover(Point mouse)
-            {
-                bool rv = false;
-                return rv;
-            }
+
             public override bool Contains(Point mouse)
             {
                 return _window.Contains(mouse);

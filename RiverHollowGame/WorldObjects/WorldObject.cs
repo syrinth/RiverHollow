@@ -206,9 +206,9 @@ namespace RiverHollow.WorldObjects
 
                 if (!GUIManager.IsHoverWindowOpen())
                 {
-                    GUIItemDescriptionWindow win = new GUIItemDescriptionWindow(this, Point.Zero);
+                    var win = new GUIItemDescriptionWindow(this, Point.Zero);
                     win.AnchorToScreen(SideEnum.BottomRight);
-                    GUIManager.OpenHoverWindow(win, Sprite.SpriteRectangle, false);
+                    GUIManager.OpenHoverObject(win, Sprite.SpriteRectangle, false);
                 }
             }
         }

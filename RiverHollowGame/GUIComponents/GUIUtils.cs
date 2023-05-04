@@ -11,6 +11,8 @@ namespace RiverHollow.GUIComponents
 {
     internal class GUIUtils
     {
+        public enum ParentRuleEnum { Auto, ForceToObject, ForceToParent, Skip };
+
         internal static Point SCREEN_CENTER = new Point(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
 
         internal static Rectangle SELECT_CORNER = new Rectangle(160, 128, 20, 20);

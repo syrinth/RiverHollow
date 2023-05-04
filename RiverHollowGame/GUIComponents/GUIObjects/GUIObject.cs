@@ -6,14 +6,14 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIComponents.Screens;
-
+using static RiverHollow.GUIComponents.GUIUtils;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUIObject
     {
-        private List<GUIObject> ToAdd;
-        private List<GUIObject> ToRemove;
+        private readonly List<GUIObject> ToAdd;
+        private readonly List<GUIObject> ToRemove;
         internal List<GUIObject> Controls;
 
         public delegate void EmptyDelegate();
@@ -21,7 +21,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public GUIObject Parent { get; private set; }
 
         public GUIScreen Screen { get; private set; }
-
 
         protected double _dScale = 1;
 
@@ -67,6 +66,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public bool Visible { get; protected set; } = true;
 
+        public bool HoverControls = true;
+        protected bool _bMouseOver = false;
         protected bool _bInitScaleSet = false;
         protected Point _pInitVals;       //X = Width, Y = Height
         protected Point _pInitPos;
@@ -185,19 +186,37 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             bool rv = false;
 
-            foreach (GUIObject c in Controls)
+            if (HoverControls)
             {
-                rv = c.ProcessHover(mouse);
-                if (rv) { break; }
+                for(int i = 0; i < Controls.Count; i++)
+                {
+                    rv = Controls[i].ProcessHover(mouse) || rv;
+                }
             }
 
             if (!rv)
             {
-                rv = Contains(mouse);
+                if (Contains(mouse))
+                {
+                    rv = true;
+                    if (!_bMouseOver)
+                    {
+                        _bMouseOver = true;
+                        BeginHover();
+                    }
+                }
+                else if (_bMouseOver)
+                {
+                    _bMouseOver = false;
+                    EndHover();
+                }
             }
 
             return rv;
         }
+
+        protected virtual void BeginHover() { }
+        protected virtual void EndHover() { }
 
         public virtual Point Position()
         {
@@ -434,11 +453,20 @@ namespace RiverHollow.GUIComponents.GUIObjects
             Position(new Point(_pPos.X, y));
         }
 
-        internal void AddParent(GUIObject focus, bool forceParent = false)
+        internal void AddParent(GUIObject focus, ParentRuleEnum rule = ParentRuleEnum.Auto)
         {
+            switch (rule)
+            {
+                case ParentRuleEnum.Skip:
+                    return;
+                case ParentRuleEnum.ForceToParent:
+                    focus.Parent?.AddControl(this);
+                    break;
+            }
+
             while (Parent == null)
             {
-                if (focus != null && forceParent || focus.DrawRectangle.Intersects(DrawRectangle))
+                if (focus != null && rule == ParentRuleEnum.ForceToObject || focus.DrawRectangle.Intersects(DrawRectangle))
                 {
                     focus.AddControl(this);
                     break;
@@ -461,16 +489,16 @@ namespace RiverHollow.GUIComponents.GUIObjects
             AddParent(focus);
         }
 
-        internal void AnchorAndAlign(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign)
+        internal void AnchorAndAlign(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, ParentRuleEnum rule = ParentRuleEnum.Auto)
         {
-            AnchorAndAlignWithSpacing(focus, sidePlacement, sideToAlign, 0);
+            AnchorAndAlignWithSpacing(focus, sidePlacement, sideToAlign, 0, rule);
         }
-        internal void AnchorAndAlignWithSpacing(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, int spacing, bool forceParent = false)
+        internal void AnchorAndAlignWithSpacing(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, int spacing, ParentRuleEnum rule = ParentRuleEnum.Auto)
         {
-            AnchorToObject(focus, sidePlacement, spacing, forceParent);
-            AlignToObject(focus, sideToAlign, forceParent);
+            AnchorToObject(focus, sidePlacement, spacing, rule);
+            AlignToObject(focus, sideToAlign, rule);
         }
-        internal void AnchorToObject(GUIObject focus, SideEnum sidePlacement, int spacing = 0, bool forceParent = false)
+        internal void AnchorToObject(GUIObject focus, SideEnum sidePlacement, int spacing = 0, ParentRuleEnum rule = ParentRuleEnum.Auto)
         {
             int scaledSpace = GameManager.ScaleIt(spacing);
             Point position = focus.Position();
@@ -495,10 +523,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
             this.Position(position);
 
-            AddParent(focus, forceParent);
+            AddParent(focus, rule);
         }
 
-        internal void AlignToObject(GUIObject focus, SideEnum sideToAlign, bool forceParent = false)
+        internal void AlignToObject(GUIObject focus, SideEnum sideToAlign, ParentRuleEnum rule = ParentRuleEnum.Auto)
         {
             switch (sideToAlign)
             {
@@ -528,7 +556,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     break;
             }
 
-            AddParent(focus, forceParent);
+            AddParent(focus, rule);
         }
 
         internal void AffixToCenter(GUIWindow window, SideEnum whichCenter, bool onMain, int spacing = 0)
@@ -627,7 +655,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 default:
                     break;
             }
-            AddParent(window, true);
+            AddParent(window, ParentRuleEnum.ForceToObject);
         }
         internal void AnchorToInnerSide(GUIObject obj, SideEnum sidePlacement, int spacing = 0)
         {
@@ -730,14 +758,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
             if (!win.Controls.Contains(this)) { win.AddControl(this); }
             this.CenterOnObject(win);
         }
-        internal void CenterOnObject(GUIObject obj)
+        internal void CenterOnObject(GUIObject obj, ParentRuleEnum rule = ParentRuleEnum.Auto)
         {
             int centerX = obj.Position().X + (obj.Width / 2);
             int centerY = obj.Position().Y + (obj.Height / 2);
 
             this.SetX(centerX - Width / 2);
             this.SetY(centerY - Height / 2);
-            AddParent(obj);
+            AddParent(obj, rule);
         }
 
         internal void DetermineSize()

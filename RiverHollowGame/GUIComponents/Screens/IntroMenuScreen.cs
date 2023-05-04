@@ -70,13 +70,5 @@ namespace RiverHollow.GUIComponents.Screens
             GUIManager.SetScreen(new DataScreen());
         }
         #endregion
-
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
-            _btnNewGame.IsMouseHovering = _btnNewGame.Contains(mouse);
-            _btnLoadGame.IsMouseHovering = _btnLoadGame.Contains(mouse);
-            return rv;
-        }
     }
 }

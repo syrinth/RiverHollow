@@ -10,7 +10,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
     public class GUIButton : GUIImage
     {
         protected BitmapFont _font;
-        public bool IsMouseHovering = false;
 
         protected GUIText _gText;
 

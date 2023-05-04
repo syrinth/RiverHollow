@@ -233,21 +233,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
         }
 
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
-            if (Contains(mouse))
-            {
-                if (!GUIManager.IsHoverWindowOpen())
-                {
-                    GUIItemDescriptionWindow win = new GUIItemDescriptionWindow(ItemObject, new Point(DrawRectangle.Left, DrawRectangle.Bottom));
-                    GUIManager.OpenHoverWindow(win, new Rectangle(Position().X, Position().Y, Width, Height), true);
-                }
-                rv = true;
-            }
-            return rv;
-        }
-
         private void SetTextPosition()
         {
             _gText.AlignToObject(_gInvisible, SideEnum.Right);

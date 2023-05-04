@@ -99,20 +99,6 @@ namespace RiverHollow.GUIComponents.Screens
             return rv;
         }
 
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = true;
-            if (!_inventory.ProcessHover(mouse))
-            {
-                rv = false;
-            }
-            if (_altInventory != null && !_altInventory.ProcessHover(mouse))
-            {
-                rv = false;
-            }
-            return rv;
-        }
-
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);

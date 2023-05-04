@@ -13,9 +13,9 @@ namespace RiverHollow.GUIComponents.Screens
     public abstract class GUIScreen
     {
         protected GUIMainObject _gMainObject;
-        GUIImage _guiBackgroundImg;
+        protected GUIImage _guiBackgroundImg;
         protected GUITextWindow _guiTextWindow;
-        protected GUITextWindow _guiHoverWindow;
+        protected GUIObject _gHoverObject;
         Rectangle _rHoverArea;
         bool _bGUIObject;
         protected GUITextSelectionWindow _gSelectionWindow;
@@ -61,9 +61,7 @@ namespace RiverHollow.GUIComponents.Screens
             bool rv = false;
             foreach (GUIObject g in Controls)
             {
-                rv = g.ProcessHover(mouse);
-
-                if (rv) { break; }
+                rv = g.ProcessHover(mouse) || rv;
             }
             return rv;
         }
@@ -106,7 +104,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             _guiTextWindow?.Draw(spriteBatch);
-            _guiHoverWindow?.Draw(spriteBatch);
+            _gHoverObject?.Draw(spriteBatch);
         }
 
         public virtual bool IsMenuOpen() { return false; }
@@ -132,21 +130,19 @@ namespace RiverHollow.GUIComponents.Screens
 
         #region Hover Window Code
         public virtual void CloseHoverWindow() {
-            RemoveControl(_guiHoverWindow);
-            _guiHoverWindow?.RemoveSelfFromControl();
-            _guiHoverWindow = null;
+            RemoveControl(_gHoverObject);
+            _gHoverObject?.RemoveSelfFromControl();
+            _gHoverObject = null;
             _rHoverArea = Rectangle.Empty;
         }
-        public bool IsHoverWindowOpen() { return _guiHoverWindow != null; }
-        public virtual void OpenHoverWindow(GUITextWindow hoverWindow, Rectangle area, bool guiObject)
+        public bool IsHoverWindowOpen() { return _gHoverObject != null; }
+        public virtual void OpenHoverWindow(GUIObject hoverObj, Rectangle area, bool guiObject)
         {
-            hoverWindow.ProcessClicks = false;
-
             CloseHoverWindow();
-            _guiHoverWindow = hoverWindow;
+            _gHoverObject = hoverObj;
             _rHoverArea = area;
             _bGUIObject = guiObject;
-            AddControl(_guiHoverWindow);
+            AddControl(_gHoverObject);
         }
         #endregion
 

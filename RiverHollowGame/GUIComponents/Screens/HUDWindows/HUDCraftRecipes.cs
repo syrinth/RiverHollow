@@ -2,13 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
-using System;
 using System.Collections.Generic;
-using static RiverHollow.GUIComponents.Screens.HUDComponents.HUDMenu;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens.HUDWindows
@@ -27,16 +24,14 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         readonly GUIButton _btnLeft;
         readonly GUIButton _btnRight;
         readonly List<int> _liCraftingRecipes;
-        readonly List<GUIItemBox> _liItemDisplay;
+        readonly List<GUIItemBoxHover> _liItemDisplay;
         private List<GUIItemBox> _liRequiredItems;
-
-        private GUIItemBox _gHoverBox;
 
         CraftFilterEnum _eFilter = CraftFilterEnum.All;
         
         public HUDCraftRecipes()
         {
-            _liItemDisplay = new List<GUIItemBox>();
+            _liItemDisplay = new List<GUIItemBoxHover>();
             _liRequiredItems = new List<GUIItemBox>();
             _liCraftingRecipes = PlayerManager.GetCraftingList().FindAll(x => !((Buildable)DataManager.CreateWorldObjectByID(x)).Unique);
 
@@ -93,24 +88,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             return rv ;
         }
 
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = _winMain.Contains(mouse);
-
-            for(int i =0; i < _liItemDisplay.Count; i++)
-            {
-                if (_liItemDisplay[i].Contains(mouse) && _gHoverBox != _liItemDisplay[i] && _liItemDisplay[i].BoxItem != null)
-                {
-                    _gHoverBox = _liItemDisplay[i];
-                    _gSelection.CenterOnObject(_gHoverBox);
-                    _gSelection.Show(true);
-                    UpdateInfo();
-                }
-            }
-
-            return rv;
-        }
-
         private void SetUpItemWindows()
         {
             ClearWindows();
@@ -123,7 +100,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                     newItem = DataManager.GetItem(_liCraftingRecipes[i] + Constants.BUILDABLE_ID_OFFSET);
                 }
                 
-                var displayWindow = new GUIItemBox(newItem, ItemBoxDraw.Never);
+                var displayWindow = new GUIItemBoxHover(newItem, ItemBoxDraw.Never, UpdateInfo);
 
                 if (newItem != null)
                 {
@@ -153,16 +130,22 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _liItemDisplay.Clear();
         }
 
-        private void UpdateInfo()
+        private void UpdateInfo(GUIItemBoxHover obj)
         {
-            int objID = _gHoverBox.BoxItem.ID;
-            Buildable obj = (Buildable)DataManager.CreateWorldObjectByID(objID);
-            GUIUtils.CreateRequiredItemsList(ref _liRequiredItems, obj.RequiredToMake);
+            if (obj.BoxItem != null)
+            {
+                _gSelection.CenterOnObject(obj);
+                _gSelection.Show(true);
 
-            _gName.SetText(obj.Name());
-            _gName.AnchorAndAlignWithSpacing(_gScroll, SideEnum.Bottom, SideEnum.CenterX, 4);
+                int objID = obj.BoxItem.ID;
+                Buildable building = (Buildable)DataManager.CreateWorldObjectByID(objID);
+                GUIUtils.CreateRequiredItemsList(ref _liRequiredItems, building.RequiredToMake);
 
-            GUIUtils.CreateSpacedRowAgainstObject(new List<GUIObject>(_liRequiredItems), base._winMain, _gScroll, 2, 22);
+                _gName.SetText(building.Name());
+                _gName.AnchorAndAlignWithSpacing(_gScroll, SideEnum.Bottom, SideEnum.CenterX, 4);
+
+                GUIUtils.CreateSpacedRowAgainstObject(new List<GUIObject>(_liRequiredItems), base._winMain, _gScroll, 2, 22);
+            }
         }
 
         public void BtnLeft()

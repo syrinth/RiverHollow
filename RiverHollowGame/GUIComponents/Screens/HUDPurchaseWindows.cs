@@ -11,6 +11,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.Utilities;
+using Microsoft.Xna.Framework.Input;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -96,6 +97,8 @@ namespace RiverHollow.GUIComponents.Screens
             _gMoney = new GUIMoneyDisplay(Cost);
             _gMoney.AnchorToInnerSide(this, SideEnum.BottomRight);
             _gMoney.AlignToObject(_giItem, SideEnum.Top);
+
+            Enable(false);
         }
 
         public override void Update(GameTime gTime)
@@ -127,12 +130,14 @@ namespace RiverHollow.GUIComponents.Screens
             return rv;
         }
 
-        public override bool ProcessHover(Point mouse)
+        protected override void BeginHover()
         {
-            Enable(Contains(mouse) && CanBuyMerch());
+            Enable(CanBuyMerch());
+        }
 
-            //Return false here to not skip any other ProcessHovers that are coming
-            return false;
+        protected override void EndHover()
+        {
+            Enable(false);
         }
 
         private void PurchaseItem(int ID)

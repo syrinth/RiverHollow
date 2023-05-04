@@ -32,7 +32,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         GUIWindow _gInfoWindow;
 
         int _iIndex = 0;
-        int _iHoverIndex = -1;
         CodexPageEnum _eCurrentPage = CodexPageEnum.Villagers;
         ItemEnum _eItemDisplay = ItemEnum.Resource;
         private bool IsItemPage() { return _eCurrentPage == CodexPageEnum.Items; }
@@ -103,85 +102,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 return true;
             }
             return base.ProcessRightButtonClick(mouse);
-        }
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
-            int initIndex = _iHoverIndex;
-
-            List<GUIObject> boxList = IsItemPage() ? _liItemDisplay.Cast<GUIObject>().ToList() : _liActorDisplay.Cast<GUIObject>().ToList();
-            for (int i = 0; i < boxList.Count; i++)
-            {
-                if (boxList[i].Contains(mouse))
-                {
-                    rv = true;
-                    _iHoverIndex = i;
-                }
-            }
-
-            if (!rv)
-            {
-                RemoveControl(_gInfoWindow);
-                _gInfoWindow = null;
-                _iHoverIndex = -1;
-            }
-            else if (initIndex != _iHoverIndex)
-            {
-                if (IsItemPage()) { CreateItemHoverWindow(); }
-                else { CreateActorHoverWindow(); }
-            }
-
-            return false;
-        }
-        public void CreateActorHoverWindow()
-        {
-            NPCDisplayWindow hover = _liActorDisplay[_iHoverIndex];
-            _gInfoWindow?.RemoveSelfFromControl();
-            _gInfoWindow = new GUIWindow(GUIUtils.WoodenPanel);
-            AddControl(_gInfoWindow);
-
-            string strText = hover.Found ? DataManager.GetTextData(hover.ID, "Name", DataType.Actor) : "???";
-            GUIText text = new GUIText(strText);
-            text.AnchorToInnerSide(_gInfoWindow, SideEnum.TopLeft);
-
-            if (hover.Found)
-            {
-                string strDescText = DataManager.GetTextData(hover.ID, "Description", DataType.Actor);
-                if (!string.IsNullOrEmpty(strDescText))
-                {
-                    GUIText descText = new GUIText(strDescText);
-                    descText.AnchorAndAlignWithSpacing(text, SideEnum.Bottom, SideEnum.Left, 2);
-                }
-            }
-
-            _gInfoWindow.Resize(false);
-            _gInfoWindow.AnchorAndAlignWithSpacing(hover, SideEnum.Bottom, SideEnum.CenterX, -4);
-            text.AlignToObject(_gInfoWindow, SideEnum.CenterX);
-        }
-        public void CreateItemHoverWindow()
-        {
-            ItemDisplayWindow hover = _liItemDisplay[_iHoverIndex];
-            _gInfoWindow?.RemoveSelfFromControl();
-            _gInfoWindow = new GUIWindow(GUIUtils.WoodenPanel);
-            AddControl(_gInfoWindow);
-
-            string strText = hover.Found ? DataManager.GetTextData(hover.ID, "Name", DataType.Item) : "???";
-            GUIText text = new GUIText(strText);
-            text.AnchorToInnerSide(_gInfoWindow, SideEnum.TopLeft);
-
-            if (hover.Found)
-            {
-                string strDescText = DataManager.GetTextData(hover.ID, "Description", DataType.Item);
-                if (!string.IsNullOrEmpty(strDescText))
-                {
-                    GUIText descText = new GUIText(strDescText);
-                    descText.AnchorAndAlignWithSpacing(text, SideEnum.Bottom, SideEnum.Left, 2);
-                }
-            }
-
-            _gInfoWindow.Resize(false);
-            _gInfoWindow.AnchorAndAlignWithSpacing(hover, SideEnum.Bottom, SideEnum.CenterX, -4);
-            text.AlignToObject(_gInfoWindow, SideEnum.CenterX);
         }
 
         private void ClearWindows()
@@ -297,7 +217,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 _liItemDisplay.Add(displayWindow);
             }
 
-            GUIUtils.CreateSpacedGrid(new List<GUIObject>(_liItemDisplay), this, new Point(14, 40), ITEM_COLUMNS, 3, 3);
+            GUIUtils.CreateSpacedGrid(new List<GUIObject>(_liItemDisplay), _winMain, new Point(14, 40), ITEM_COLUMNS, 3, 3);
 
             _gTotal = new GUIText(string.Format("{0}/{1}", found, itemIDs.Count));
             _gTotal.AlignToObject(_winMain, SideEnum.Center);

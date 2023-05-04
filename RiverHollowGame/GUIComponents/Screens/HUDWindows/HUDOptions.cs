@@ -60,13 +60,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             return rv;
         }
 
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = true;
-
-            return rv;
-        }
-
         public void ProcessMuteAll()
         {
             if (SoundManager.IsMuted)

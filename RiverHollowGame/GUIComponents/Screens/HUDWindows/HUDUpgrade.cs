@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
@@ -15,7 +16,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         readonly GUIImage _gImage;
         readonly Building _building;
 
-        List<KeyValuePair<GUIImage, Enums.GameIconEnum>> _liIcons;
+        List<GUIIcon> _liIcons;
 
         Dictionary<int, int> _diUpgradeItems;
         int _iCost;
@@ -23,7 +24,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         public HUDBuildingUpgrade(Building b)
         {
             _building = b;
-            _liIcons = new List<KeyValuePair<GUIImage, GameIconEnum>>();
+            _liIcons = new List<GUIIcon>();
 
             _gImage = new GUIImage(GUIUtils.WIN_UPGRADE);
             AddControl(_gImage);
@@ -34,40 +35,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             Height = _gImage.Height;
 
             CenterOnScreen();
-        }
-
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
-
-            for (int i = 0; i < _liIcons.Count; i++)
-            {
-                if (_liIcons[i].Key.Contains(mouse) && !GUIManager.IsHoverWindowOpen())
-                {
-                    string iconDescription = string.Empty;
-                    switch (_liIcons[i].Value)
-                    {
-                        case GameIconEnum.Traveler:
-                            iconDescription = "Upgrade_Chance";
-                            break;
-                        case GameIconEnum.Coin:
-                            iconDescription = "Upgrade_Profit";
-                            break;
-                        case GameIconEnum.Hammer:
-                            iconDescription = "Upgrade_CraftSlots";
-                            break;
-                        case GameIconEnum.Book:
-                            iconDescription = "Upgrade_Recipe";
-                            break;
-                    }
-
-                    var win = new GUITextWindow(DataManager.GetGameTextEntry(iconDescription), Point.Zero);
-                    win.AnchorAndAlign(_liIcons[i].Key, SideEnum.Bottom, SideEnum.CenterX);
-                    GUIManager.OpenHoverWindow(win, _liIcons[i].Key.DrawRectangle, true);
-                }
-            }
-
-            return rv;
         }
 
         private void DisplayDetails()
@@ -83,7 +50,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gImage.AddControl(lvl);
 
             //Traveler Display
-            var travelers = new GUIImage(GUIUtils.ICON_TRAVELER);
+            var travelers = new GUIIcon(GUIUtils.ICON_TRAVELER, GameIconEnum.Traveler);
             travelers.Position(_gImage.Position());
             travelers.ScaledMoveBy(37, 36);
             _gImage.AddControl(travelers);
@@ -93,7 +60,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gImage.AddControl(travelerPercent);
 
             //Profit Display
-            var profits = new GUIImage(GUIUtils.ICON_COIN);
+            var profits = new GUIIcon(GUIUtils.ICON_COIN, GameIconEnum.Coin);
             profits.Position(_gImage.Position());
             profits.ScaledMoveBy(111, 36);
             _gImage.AddControl(profits);
@@ -107,8 +74,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             scroll.ScaledMoveBy(10, 65);
             _gImage.AddControl(scroll);
 
-            _liIcons.Add(new KeyValuePair<GUIImage, GameIconEnum>(travelers, GameIconEnum.Traveler));
-            _liIcons.Add(new KeyValuePair<GUIImage, GameIconEnum>(profits, GameIconEnum.Coin));
+            _liIcons.Add(travelers);
+            _liIcons.Add(profits);
 
             if (_building.UpgradeQueued)
             {
@@ -166,7 +133,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                         bonusValue = nextUpgrade.FormulaLevel.ToString();
                     }
 
-                    var bonusIcon = new GUIImage(drawRect);
+                    var bonusIcon = new GUIIcon(drawRect, icon);
                     bonusIcon.Position(_gImage.Position());
                     bonusIcon.ScaledMoveBy(63, 71);
                     _gImage.AddControl(bonusIcon);
@@ -175,7 +142,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                     bonusText.AnchorAndAlignWithSpacing(bonusIcon, SideEnum.Right, SideEnum.CenterY, 1);
                     _gImage.AddControl(bonusText);
 
-                    _liIcons.Add(new KeyValuePair<GUIImage, GameIconEnum>(bonusIcon, icon));
+                    _liIcons.Add(bonusIcon);
 
                     List<GUIItemBox> list = new List<GUIItemBox>();
                     foreach (KeyValuePair<int, int> kvp in upgradeItems)
@@ -230,6 +197,40 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             }
 
             return rv;
+        }
+    }
+
+    public class GUIIcon : GUIImage
+    {
+        GameIconEnum Icon { get; }
+
+        public GUIIcon(Rectangle sourceRect, GameIconEnum e) : base(sourceRect, DataManager.HUD_COMPONENTS)
+        {
+            Icon = e;
+        }
+
+        protected override void BeginHover()
+        {
+            string iconDescription = string.Empty;
+            switch (Icon)
+            {
+                case GameIconEnum.Traveler:
+                    iconDescription = "Upgrade_Chance";
+                    break;
+                case GameIconEnum.Coin:
+                    iconDescription = "Upgrade_Profit";
+                    break;
+                case GameIconEnum.Hammer:
+                    iconDescription = "Upgrade_CraftSlots";
+                    break;
+                case GameIconEnum.Book:
+                    iconDescription = "Upgrade_Recipe";
+                    break;
+            }
+
+            var win = new GUITextWindow(DataManager.GetGameTextEntry(iconDescription), Point.Zero);
+            win.AnchorAndAlign(this, SideEnum.Bottom, SideEnum.CenterX, GUIUtils.ParentRuleEnum.Skip);
+            GUIManager.OpenHoverObject(win, DrawRectangle, true);
         }
     }
 }

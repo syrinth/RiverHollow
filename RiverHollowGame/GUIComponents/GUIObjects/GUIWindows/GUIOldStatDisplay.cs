@@ -20,6 +20,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public GUIOldStatDisplay(DelegateRetrieveValues del, Color c, int width = 200) : base(GUIUtils.DisplayWin, width, GameManager.ScaledTileSize/2)
         {
+            HoverControls = false;
+
             _fMax = 0;
             _fCurr = 0;
 
@@ -39,7 +41,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _delAction(ref _fCurr, ref _fMax);
         }
 
-
         public override void Draw(SpriteBatch spriteBatch)
         {
             if(_fMax != 0)
@@ -47,7 +48,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 _gFill.Width = (int)((Width - WidthEdges()) * _fCurr / _fMax);
             }
             base.Draw(spriteBatch);
-            RemoveControl(_gText);
         }
 
         public override void Update(GameTime gTime)
@@ -56,16 +56,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _delAction(ref _fCurr, ref _fMax);
         }
 
-        public override bool ProcessHover(Point mouse)
+        protected override void BeginHover()
         {
-            bool rv = false;
-            if (Contains(mouse))
-            {
-                _gText.SetText(string.Format("{0}/{1}", _fCurr, _fMax));
-                _gText.AlignToObject(this, SideEnum.Center);
-                rv = true;
-            }
-            return rv;
+            _gText.SetText(string.Format("{0}/{1}", _fCurr, _fMax));
+            _gText.AlignToObject(this, SideEnum.Center);
+            _gText.Show(true);
+        }
+
+        protected override void EndHover()
+        {
+            _gText.Show(false);
         }
     }
 }

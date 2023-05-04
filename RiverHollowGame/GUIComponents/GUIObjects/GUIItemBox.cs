@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
@@ -7,7 +8,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUIItemBox : GUIImage
     {
-       public Item BoxItem => _guiItem?.ItemObject;
+        public Item BoxItem => _guiItem?.ItemObject;
         GUIItem _guiItem;
 
         public int ColumnID { get; }
@@ -35,19 +36,23 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _guiItem?.Update(gTime);
         }
 
-        public override bool ProcessHover(Point mouse)
+        protected override void BeginHover()
         {
-            bool rv = false;
-            if (Contains(mouse))
+            if (BoxItem != null)
             {
-                _guiItem?.ProcessHover(mouse);
-                rv = true;
+                var win = new GUIItemDescriptionWindow(BoxItem, new Point(DrawRectangle.Left, DrawRectangle.Bottom))
+                {
+                    ProcessClicks = false
+                };
+                win.AnchorAndAlignWithSpacing(this, SideEnum.Bottom, SideEnum.CenterX, -1);
+                GUIManager.OpenHoverObject(win, DrawRectangle, true);
             }
-            return rv;
         }
 
         public void SetItem(Item it, ItemBoxDraw e = ItemBoxDraw.OnlyStacks)
         {
+            HoverControls = false;
+
             if (it != null)
             {
                 if (_guiItem == null || (_guiItem != null && _guiItem.ItemObject != it))
@@ -114,6 +119,23 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 }
                 return rv;
             }
+        }
+    }
+
+    public class GUIItemBoxHover : GUIItemBox
+    {
+        public delegate void HoverMethod(GUIItemBoxHover obj);
+        private HoverMethod _delAction;
+
+        public GUIItemBoxHover(Item it = null, ItemBoxDraw e = ItemBoxDraw.OnlyStacks, HoverMethod action = null) : base(it, e)
+        {
+            _delAction = action;
+            SetItem(it, e);
+        }
+
+        protected override void BeginHover()
+        {
+            _delAction(this);
         }
     }
 }

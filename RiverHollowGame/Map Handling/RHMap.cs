@@ -1624,7 +1624,7 @@ namespace RiverHollow.Map_Handling
             //PlaceOnMap uses the CollisionBox as the base, then calculates backwards
             placeObject.SnapPositionToGrid(templateObject.CollisionBox.Location);
 
-            if ((!TownModeBuild() || PlayerManager.ExpendResources(placeObject.RequiredToMake)) && placeObject.PlaceOnMap(this))
+            if (placeObject.PlaceOnMap(this) && (!TownModeBuild() || PlayerManager.ExpendResources(placeObject.RequiredToMake)))
             {
                 if (this == MapManager.TownMap)
                 {

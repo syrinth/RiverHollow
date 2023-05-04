@@ -7,6 +7,9 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
@@ -200,6 +203,8 @@ namespace RiverHollow.GUIComponents.Screens
                     _gWindow.Draw(spriteBatch);
                     break;
             }
+
+            _gHoverObject?.Draw(spriteBatch);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -240,19 +245,12 @@ namespace RiverHollow.GUIComponents.Screens
         {
             bool rv = false;
 
-            foreach(var actor in _liNPCs)
+            switch (_eCurrentPhase)
             {
-                if (actor.Income == -1)
-                {
-                    continue;
-                }
-
-                rv = actor.ProcessHover(mouse);
-
-                if (rv)
-                {
+                case DayEndPhaseEnum.SpawnNPCs:
+                case DayEndPhaseEnum.NPCsWait:
+                    rv = base.ProcessHover(mouse);
                     break;
-                }
             }
 
             return rv;
@@ -298,58 +296,28 @@ namespace RiverHollow.GUIComponents.Screens
 
     public class GUIActor : GUISprite
     {
-        const int FLICKER_TIMER = 1;
         public int Income { get; } = -1;
-        private bool _bHovering = false;
-        private bool _bPopped = false;
+
+        bool _bPopped = false;
+        int _iFoodID = -1;
+        TravelerMoodEnum _eMood = TravelerMoodEnum.Angry;    
 
         GUIImage _gCoin;
-        GUIItem _gItem;
-        GUIImage _gMood;
-
-        RHTimer _timer;
 
         public GUIActor(Villager v) : base(v.BodySprite, true) { }
         public GUIActor(Traveler t) : base(t.BodySprite, true)
         {
             Income = t.Income;
-            _timer = new RHTimer(FLICKER_TIMER, true);
+            _iFoodID = t.FoodID;
+            _eMood = t.MoodVerb;
 
             if (Income > 0)
             {
                 _gCoin = new GUIImage(GUIUtils.ICON_COIN);
                 _gCoin.AnchorAndAlign(this, SideEnum.Top, SideEnum.CenterX);
-            }
-
-            if (t.FoodID > -1)
-            {
-                _gItem = new GUIItem(DataManager.GetItem(t.FoodID), ItemBoxDraw.Never);
-                _gItem.AnchorAndAlign(this, SideEnum.Top, SideEnum.CenterX);
-            }
-            
-            _gMood = null;
-            switch (t.MoodVerb)
-            {
-                case TravelerMoodEnum.Angry:
-                    _gMood = new GUIImage(GUIUtils.TRAVELER_ANGRY);
-                    break;
-                case TravelerMoodEnum.Sad:
-                    _gMood = new GUIImage(GUIUtils.TRAVELER_SAD);
-                    break;
-                case TravelerMoodEnum.Neutral:
-                    _gMood = new GUIImage(GUIUtils.TRAVELER_NEUTRAL);
-                    break;
-                case TravelerMoodEnum.Happy:
-                    _gMood = new GUIImage(GUIUtils.TRAVELER_HAPPY);
-                    break;
-            }
-
-            _gMood.AnchorAndAlign(this, SideEnum.Top, SideEnum.CenterX);
-
-            AddControls(_gCoin, _gMood, _gItem);
-
-            _gCoin.Show(false);
-            SetIcons(false, false);
+                _gCoin.Show(false);
+                AddControl(_gCoin);
+            }         
         }
 
         public override void Update(GameTime gTime)
@@ -362,11 +330,6 @@ namespace RiverHollow.GUIComponents.Screens
                     _gCoin.Show(false);
                 }
             }
-
-            if (_bHovering && _timer != null && _timer.TickDown(gTime, true))
-            {
-                SetIcons(!_gMood.Visible, !_gItem.Visible);
-            }
         }
 
         internal override void Show(bool val)
@@ -374,28 +337,15 @@ namespace RiverHollow.GUIComponents.Screens
             Visible = val;
         }
 
-        public override bool ProcessHover(Point mouse)
+        protected override void BeginHover()
         {
-            bool rv = false;
-            if (Contains(mouse))
+            if (Income > -1)
             {
-                rv = true;
-                if (!_bHovering)
-                {
-                    _bHovering = true;
-                    _timer.Reset(FLICKER_TIMER);
-
-                    SetIcons(true, false);
-                    _gCoin.Show(false);
-                }
+                _gCoin?.Show(false);
+                var status = new TravelerStatus(_iFoodID, _eMood);
+                status.AnchorAndAlign(this, SideEnum.Top, SideEnum.CenterX);
+                GUIManager.OpenHoverObject(status, DrawRectangle, true);
             }
-            else if (_bHovering)
-            {
-                _bHovering = false;
-                SetIcons(false, false);
-                _timer.Stop();
-            }
-            return rv;
         }
 
         public void ShowCoin()
@@ -411,10 +361,62 @@ namespace RiverHollow.GUIComponents.Screens
             _bPopped = true;
         }
 
-        private void SetIcons(bool mood, bool item)
+        private class TravelerStatus : GUIObject
         {
-            _gMood?.Show(mood);
-            _gItem?.Show(item);
+            const int FLICKER_TIMER = 1;
+            readonly GUIItem _gItem;
+            readonly GUIImage _gMood;
+            readonly RHTimer _timer;
+
+            public TravelerStatus(int foodID, TravelerMoodEnum e)
+            {
+                _timer = new RHTimer(FLICKER_TIMER, true);
+                if (foodID > -1)
+                {
+                    _gItem = new GUIItem(DataManager.GetItem(foodID), ItemBoxDraw.Never);
+                }
+
+                _gMood = null;
+                switch (e)
+                {
+                    case TravelerMoodEnum.Angry:
+                        _gMood = new GUIImage(GUIUtils.TRAVELER_ANGRY);
+                        break;
+                    case TravelerMoodEnum.Sad:
+                        _gMood = new GUIImage(GUIUtils.TRAVELER_SAD);
+                        break;
+                    case TravelerMoodEnum.Neutral:
+                        _gMood = new GUIImage(GUIUtils.TRAVELER_NEUTRAL);
+                        break;
+                    case TravelerMoodEnum.Happy:
+                        _gMood = new GUIImage(GUIUtils.TRAVELER_HAPPY);
+                        break;
+                }
+
+                AddControls(_gItem, _gMood);
+                DetermineSize();
+            }
+
+            public override void Update(GameTime gTime)
+            {
+                if (Visible && _gItem != null && _timer.TickDown(gTime, true))
+                {
+                    _gMood.Show(!_gMood.Visible);
+                    _gItem.Show(!_gItem.Visible);
+                }
+            }
+
+            internal override void Show(bool val)
+            {
+                Visible = true;
+
+                if (val)
+                {
+                    _timer.Reset(FLICKER_TIMER);
+                    _gMood.Show(true);
+                    _gItem?.Show(false);
+                }
+            }
         }
     }
 }
