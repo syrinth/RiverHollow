@@ -17,6 +17,8 @@ namespace RiverHollow
     /// </summary>
     public class RiverHollow : Game
     {
+        public static RiverHollow Instance;
+
         static bool _bExit = false;
 
         public GraphicsDeviceManager _graphicsDeviceManager;
@@ -39,6 +41,7 @@ namespace RiverHollow
             };
 
             Content.RootDirectory = "Content";
+            Instance = this;
         }
 
         protected override void Initialize()
@@ -84,7 +87,6 @@ namespace RiverHollow
             TaskManager.Initialize();
 
             GUICursor.ResetCursor();
-           // GameManager.Pause();
             //Set the Main Menu Screen
             GUIManager.SetScreen(new IntroMenuScreen());
             StopTakingInput();
@@ -262,7 +264,7 @@ namespace RiverHollow
             }
         }
 
-        public static void ResetCamera()
+        public void ResetCamera()
         {
             Camera.ResetObserver();
             MapManager.BackToPlayer();
@@ -274,7 +276,7 @@ namespace RiverHollow
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <param name="playIntro"></param>
-        public static void NewGame(bool playIntro)
+        public void NewGame(bool playIntro)
         {
             PlayerManager.NewPlayer();
             MapManager.PopulateMaps(true);
@@ -293,7 +295,7 @@ namespace RiverHollow
         /// already previously loaded objects.
         /// </summary>
         /// <param name="savefile"></param>
-        public static void LoadGame(string savefile)
+        public void LoadGame(string savefile)
         {
             SaveManager.Load(savefile);
             
@@ -335,6 +337,37 @@ namespace RiverHollow
         public static void PrepExit()
         {
             _bExit = true;
+        }
+
+        public void GoToTitle() {
+            GameManager.Initialize();
+            DungeonManager.Instantiate();
+            InputManager.Load();
+            SoundManager.LoadContent(Content);
+            DataManager.LoadContent(Content);
+            EnvironmentManager.Initialize();
+            MapManager.LoadContent(Content, GraphicsDevice);
+
+            GUIManager.LoadContent();
+
+            CutsceneManager.LoadContent(Content);
+
+            PlayerManager.Initialize();
+            TownManager.Initialize();
+            InventoryManager.InitPlayerInventory();
+
+            //Done here for the WorldObjects that need to be unlocked
+            DataManager.SecondaryLoad(Content);
+            GameManager.LoadManagedDataLists();
+            MapManager.LoadObjects();
+
+            TaskManager.Initialize();
+
+            GUICursor.ResetCursor();
+
+            //Set the Main Menu Screen
+            GUIManager.SetScreen(new IntroMenuScreen());
+            StopTakingInput();
         }
     }
 }

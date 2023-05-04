@@ -324,8 +324,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         case TextEntryTriggerEnum.Donate:
                             ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;
                             break;
-                        case TextEntryTriggerEnum.Exit:
-                            break;
                         case TextEntryTriggerEnum.PetFollow:
                             PlayerManager.PlayerActor.SetPet((Pet)GameManager.CurrentNPC);
                             break;
@@ -336,8 +334,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             GameManager.CurrentItem.UseItem();
                             GameManager.SetSelectedItem(null);
                             break;
-                        case TextEntryTriggerEnum.Quit:
-                            RiverHollow.PrepExit();
                             break;
 
                     }

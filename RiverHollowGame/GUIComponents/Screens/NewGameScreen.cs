@@ -207,7 +207,7 @@ namespace RiverHollow.GUIComponents.Screens
             PlayerManager.SetName(_nameWindow.GetText());
             TownManager.SetTownName(_townWindow.GetText());
 
-            RiverHollow.NewGame(!_gCheckSkipCutscene.Checked());
+            RiverHollow.Instance.NewGame(!_gCheckSkipCutscene.Checked());
             GameManager.StopTakingInput();
 
         }

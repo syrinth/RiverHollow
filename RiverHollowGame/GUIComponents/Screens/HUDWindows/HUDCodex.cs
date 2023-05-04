@@ -29,8 +29,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         GUIToggle[] _gTabToggles;
         GUIToggle[] _gItemToggles;
 
-        GUIWindow _gInfoWindow;
-
         int _iIndex = 0;
         CodexPageEnum _eCurrentPage = CodexPageEnum.Villagers;
         ItemEnum _eItemDisplay = ItemEnum.Resource;
@@ -94,19 +92,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             }
         }
 
-        public override bool ProcessRightButtonClick(Point mouse)
-        {
-            if (_gInfoWindow != null)
-            {
-                RemoveControl(_gInfoWindow);
-                return true;
-            }
-            return base.ProcessRightButtonClick(mouse);
-        }
-
         private void ClearWindows()
         {
-            RemoveControl(_gInfoWindow);
             _winMain.RemoveControl(_gLabel);
             _winMain.RemoveControl(_gTotal);
 
@@ -128,7 +115,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         {
             _iIndex = 0;
             _eCurrentPage = e;
-            RemoveControl(_gInfoWindow);
 
             if (IsItemPage()) { SetUpItemWindows(_eItemDisplay, false); }
             else { SetUpActorWindows(); }

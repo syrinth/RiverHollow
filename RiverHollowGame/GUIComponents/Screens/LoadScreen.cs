@@ -8,36 +8,27 @@ using Microsoft.Xna.Framework.Graphics;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
+using System.Collections;
 
 namespace RiverHollow.GUIComponents.Screens
 {
     class LoadScreen : GUIScreen
     {
-        readonly List<SaveInfoData> _liData;
-        readonly List<GUIObject> _liDataWindows;
-        readonly GUIButton _btnBack;
+        List<SaveInfoData> _liData;
+        List<GUIObject> _liDataWindows;
+
+        GUIList _gList;
 
         public LoadScreen()
         {
             GameManager.CurrentScreen = GameScreenEnum.Info;
 
-            _btnBack = new GUIButton("Back", BtnBack);
-            _btnBack.AnchorToScreen(GUIObject.SideEnum.BottomRight, 1);
-
             _liDataWindows = new List<GUIObject>();
-            _liData = SaveManager.LoadFiles();
-            _liData.Sort((x, y) => y.timeStamp.CompareTo(x.timeStamp));
 
-            foreach (SaveInfoData data in _liData)
-            {
-                SaveWindow s = new SaveWindow(data, _liData.IndexOf(data));
-                _liDataWindows.Add(s);
-            }
+            var btn = new GUIButton("Back", BtnBack);
+            btn.AnchorToScreen(GUIObject.SideEnum.BottomRight, 1);
 
-            if (_liDataWindows.Count > 0)
-            {
-                GUIList _gli = new GUIList(_liDataWindows, 10, 5, null, RiverHollow.ScreenHeight);
-            }
+            LoadSaves();
         }
 
         public override bool ProcessRightButtonClick(Point mouse)
@@ -51,6 +42,26 @@ namespace RiverHollow.GUIComponents.Screens
             GUIManager.SetScreen(new IntroMenuScreen());
         }
 
+        public void LoadSaves()
+        {
+            _gList?.RemoveSelfFromControl();
+            _liDataWindows?.Clear();
+            
+            _liData = SaveManager.LoadFiles();
+            _liData.Sort((x, y) => y.timeStamp.CompareTo(x.timeStamp));
+
+            foreach (SaveInfoData data in _liData)
+            {
+                SaveWindow s = new SaveWindow(data, _liData.IndexOf(data), LoadSaves);
+                _liDataWindows.Add(s);
+            }
+
+            if (_liDataWindows.Count > 0)
+            {
+                _gList = new GUIList(_liDataWindows, 10, 5, null, RiverHollow.ScreenHeight);
+            }
+        }
+
         private class SaveWindow : GUIWindow
         {
             GUIButton _gDelete;
@@ -59,10 +70,13 @@ namespace RiverHollow.GUIComponents.Screens
             GUIText _gDate;
             public SaveInfoData Data { get; }
 
+            public delegate void ReloadScreenDelegate();
+            private ReloadScreenDelegate _delAction;
+
             int _iId;
             public int SaveID => _iId;
 
-            public SaveWindow(SaveInfoData data, int id)
+            public SaveWindow(SaveInfoData data, int id, ReloadScreenDelegate del)
             {
                 //Creates the Individual Save Tiles on the load screen.
                 Data = data;
@@ -84,6 +98,8 @@ namespace RiverHollow.GUIComponents.Screens
 
                 _gTimeStamp = new GUIText(data.timeStamp.ToString("g"));
                 _gTimeStamp.AnchorAndAlign(_gDelete, SideEnum.Left, SideEnum.Bottom);
+
+                _delAction = del;
             }
 
             public override void Draw(SpriteBatch spriteBatch)
@@ -97,11 +113,10 @@ namespace RiverHollow.GUIComponents.Screens
 
             public override bool ProcessLeftButtonClick(Point mouse)
             {
-                bool rv = false;
-                rv = _gDelete.ProcessLeftButtonClick(mouse);
+                bool rv = _gDelete.ProcessLeftButtonClick(mouse);
                 if (!rv && Contains(mouse))
                 {
-                    RiverHollow.LoadGame(Data.saveFile);
+                    RiverHollow.Instance.LoadGame(Data.saveFile);
                     rv = true;
                 }
 
@@ -112,12 +127,14 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 string[] split = Data.saveFile.Split('\\');
                 string folder = split[0] + "\\" + split[1];
+
                 foreach (string s in Directory.GetFiles(folder))
                 {
                     File.Delete(s);
                 }
-
                 Directory.Delete(folder);
+
+                _delAction();
             }
         }
     }

@@ -14,7 +14,7 @@ namespace RiverHollow.GUIComponents.Screens
         private GUIButton _btnNewGame;
         private GUIButton _btnLoadGame;
         private GUIButton _btnExit;
-        private GUIButton _btnGameData;
+        //private GUIButton _btnGameData;
 
         public IntroMenuScreen()
         {
@@ -25,8 +25,8 @@ namespace RiverHollow.GUIComponents.Screens
             _btnLoadGame = new GUIButton("Load Game", BtnLoadGame);
             _btnExit = new GUIButton("Exit Game", BtnExit);
 
-            _btnGameData = new GUIButton("Config", BtnItems);
-            _btnGameData.AnchorToScreen(SideEnum.BottomRight, 1);
+            //_btnGameData = new GUIButton("Config", BtnItems);
+            //_btnGameData.AnchorToScreen(SideEnum.BottomRight, 1);
 
             GUIUtils.CreateSpacedColumn(new List<GUIObject>() { _btnNewGame, _btnLoadGame, _btnExit }, RiverHollow.ScreenWidth/2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
         }

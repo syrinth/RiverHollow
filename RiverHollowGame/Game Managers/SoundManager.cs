@@ -238,6 +238,11 @@ namespace RiverHollow.Game_Managers
             MediaPlayer.IsRepeating = repeating;
         }
 
+        public static void StopSong()
+        {
+            MediaPlayer.Stop();
+        }
+
         public static void PlayEffect(SoundEffectEnum e, object obj = null, bool loop = false)
         {
             PlayEffect(new EffectData("", EffectLookup(e), obj, EffectVolume), loop);
@@ -286,6 +291,16 @@ namespace RiverHollow.Game_Managers
                 _diCurrentEffects[obj].SoundEffect.Stop();
                 _diCurrentEffects.Remove(obj);
             }
+        }
+
+        public static void StopAll()
+        {
+            foreach(var value in _diCurrentEffects.Values)
+            {
+                value.SoundEffect.Stop();
+            }
+
+            StopSong();
         }
 
         private static float GetDistanceVolume(Point loc)

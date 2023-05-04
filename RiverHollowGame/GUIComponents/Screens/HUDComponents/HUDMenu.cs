@@ -107,7 +107,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
                 {
                     NewButtonMenu(HUDMenuEnum.Main);
                 }
-                
             }
 
             return rv;
@@ -116,8 +115,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         #region Buttons
         public void BtnExitGame()
         {
-            GUIManager.CloseMainObject();
-            GUIManager.OpenTextWindow(DataManager.GetGameTextEntry("QuitGame"));
+            var _gMenuObject = new HUDExit();
+            GUIManager.OpenMainObject(_gMenuObject);
         }
         public void BtnInventory()
         {

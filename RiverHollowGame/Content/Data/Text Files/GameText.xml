@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Name:QuitGame][Text:Really ready to quit?][Selection:YesNo][Trigger:Quit]</Value>
+      <Value></Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -27,7 +27,7 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Name:ReallyExit][Text:Are you sure?][Selection:YesNo][Trigger:Exit]</Value>
+      <Value></Value>
     </Item>
     <Item>
       <Key>7</Key>

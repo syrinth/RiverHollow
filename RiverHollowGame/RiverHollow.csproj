@@ -99,6 +99,7 @@
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDCodex.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDCraftRecipes.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDCraftStructures.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\HUDExit.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDGiftWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDMerchantWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\HUDMiniInventory.cs" />
