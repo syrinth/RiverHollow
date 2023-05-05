@@ -11,7 +11,6 @@ using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.Utilities;
-using Microsoft.Xna.Framework.Input;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -79,7 +78,7 @@ namespace RiverHollow.GUIComponents.Screens
         public int Cost { get; }
         public bool CanBuy { get; private set; }
 
-        EmptyDelegate _action;
+        readonly EmptyDelegate _action;
 
         public PurchaseBox(Item i, int cost, int mainWidth, EmptyDelegate action) : base(GUIUtils.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
         {
@@ -146,7 +145,8 @@ namespace RiverHollow.GUIComponents.Screens
             if (purchaseItem.IsUnique())
             {
                 PlayerManager.AddUniqueItemToList(ID);
-                _action();
+                GUIManager.CloseMainObject();
+                purchaseItem.StrikeAPose();
             }
             InventoryManager.AddToInventory(purchaseItem);
         }

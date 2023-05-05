@@ -289,7 +289,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _arrRecipes[i].Enable(_arrRecipes[i].BoxItem != null && InventoryManager.HasSufficientItems(_arrRecipes[i].BoxItem.GetRequiredItems()) && !_objMachine.CapacityFull());
             }
 
-            bool sufficientItems = GUIUtils.CreateRequiredItemsList(ref _liRequiredItems, chosenItem.GetRequiredItems());
+            bool sufficientItems = GUIUtils.CreateRequiredItemsList(ref _liRequiredItems, chosenItem.GetRequiredItems(), _iBatchSize);
 
             _gName.SetText(chosenItem.Name());
             _gName.Position(_gComponents);

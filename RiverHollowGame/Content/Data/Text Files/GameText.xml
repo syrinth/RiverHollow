@@ -7,15 +7,15 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value></Value>
+      <Value>[Name:Pose_196][Text:You found a {0}! Your magic has increased!][ItemPose]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Name:Empty]</Value>
+      <Value>[Name:Pose_198][Text:You found a {0}! Your energy has increased!][ItemPose]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Name:Empty_2]</Value>
+      <Value>[Name:Pose_137][Text:You found a {0}! Now you can see in the dark!][ItemPose]</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -27,7 +27,7 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value></Value>
+      <Value>[Name:Pose_141][Text:You found a {0}! Your carrying capacity has increased!][ItemPose]</Value>
     </Item>
     <Item>
       <Key>7</Key>
@@ -283,7 +283,7 @@
     </Item>
 	<Item>
       <Key>70</Key>
-      <Value>[Name:Found_Increaser][Text:You found a {0}! Your {1} has increased!][ItemPose]</Value>
+      <Value>[Name:Pose_197][Text:You found a {0}! Your vitality has increased!][ItemPose]</Value>
     </Item>
 	<Item>
       <Key>71</Key>

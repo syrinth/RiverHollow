@@ -189,7 +189,7 @@ namespace RiverHollow.Game_Managers
 
             _diGameText = new Dictionary<string, string>();
             Dictionary<string, string> rawTextInfo = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + "GameText");
-            Dictionary<string, string> newDialogue = new Dictionary<string, string>();
+            Dictionary<string, string> newDialogue;
             foreach (string dialogueTags in rawTextInfo.Values)
             {
                 Dictionary<string, string> tags = Util.DictionaryFromTaggedString(dialogueTags);

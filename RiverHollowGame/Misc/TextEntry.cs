@@ -229,10 +229,6 @@ namespace RiverHollow.Misc
                 {
                     act?.QueueActorFace(_diTags["Face"]);
                 }
-                else if (_diTags.ContainsKey("ItemPose"))
-                {
-                    GameManager.CurrentItem.StrikeAPose();
-                }
             }
         }
 
@@ -266,15 +262,6 @@ namespace RiverHollow.Misc
             if (_diTags.ContainsKey("SendToTown"))
             {
                 ((Villager)GameManager.CurrentNPC).QueueSendToTown();
-            }
-            if (_diTags.ContainsKey("ItemPose"))
-            {
-                PlayerResourceEnum eType = PlayerManager.ObtainedItem.WrappedItem.GetEnumByIDKey<PlayerResourceEnum>("Increase");
-                PlayerManager.IncreaseValue(eType);
-
-                PlayerManager.ObtainedItem = null;
-                PlayerManager.PlayerActor.Facing = DirectionEnum.Down;
-                PlayerManager.PlayerActor.PlayAnimation(VerbEnum.Idle);
             }
         }
 

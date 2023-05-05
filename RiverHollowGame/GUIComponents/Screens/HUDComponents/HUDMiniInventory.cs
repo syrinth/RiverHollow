@@ -41,7 +41,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             _btnChangeRow = new GUIButton(GUIUtils.BTN_DOWN_SMALL, RowUp);
-            _btnChangeRow.AnchorAndAlign(this, SideEnum.Right, SideEnum.CenterY);
+            _btnChangeRow.AnchorAndAlign(this, SideEnum.Right, SideEnum.CenterY, GUIUtils.ParentRuleEnum.ForceToObject);
             _btnChangeRow.FadeOnDisable(false);
 
             _fAlphaValue = GameManager.HideMiniInventory ? MIN_FADE : 1.0f;
@@ -253,8 +253,6 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 GameManager.HUDItemRow = 0;
             }
-
-            _eFadeState = StateEnum.FadeOut;
         }
 
         public void SyncItems()

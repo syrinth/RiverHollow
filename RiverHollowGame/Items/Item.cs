@@ -175,6 +175,16 @@ namespace RiverHollow.Items
 
         public void StrikeAPose()
         {
+            var poseEntry = DataManager.GetGameTextEntry("Pose_" + ID, Name());
+            if (GUIManager.IsTextWindowOpen())
+            {
+                GUIManager.QueueTextWindow(poseEntry);
+            }
+            else
+            {
+                GUIManager.OpenTextWindow(poseEntry);
+            }
+
             PlayerManager.ObtainedItem = new MapItem(this)
             {
                 Position = PlayerManager.PlayerActor.Position + new Point(0, -(Constants.TILE_SIZE - 9))

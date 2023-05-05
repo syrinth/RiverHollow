@@ -10,6 +10,7 @@ using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.GUIComponents;
+using System.Net;
 
 namespace RiverHollow.Game_Managers
 {
@@ -26,6 +27,7 @@ namespace RiverHollow.Game_Managers
         public static int MAIN_COMPONENT_HEIGHT = RiverHollow.ScreenWidth / 3;
         public static GUIScreen NewScreen { get; private set; }
         public static GUIScreen CurrentScreen { get; private set; }
+        public static TextEntry QueuedWindowText { get; private set; }
 
         private static GUIImage _fadeImg;
         private static float _fFadeVal = 0f;
@@ -103,6 +105,10 @@ namespace RiverHollow.Game_Managers
         public static void OpenMenu() { CurrentScreen.OpenMenu(); }
         public static void CloseMenu() { CurrentScreen.CloseMenu(); }
 
+        public static void QueueTextWindow(TextEntry txt)
+        {
+            QueuedWindowText = txt;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -127,7 +133,14 @@ namespace RiverHollow.Game_Managers
         }
         public static bool CloseTextWindow()
         {
-            return CurrentScreen.CloseTextWindow();
+            bool rv = CurrentScreen.CloseTextWindow();
+
+            if(QueuedWindowText!= null)
+            {
+                OpenTextWindow(QueuedWindowText);
+                QueuedWindowText = null;
+            }
+            return rv;
         }
         public static bool IsTextWindowOpen() { return CurrentScreen.IsTextWindowOpen(); }
 

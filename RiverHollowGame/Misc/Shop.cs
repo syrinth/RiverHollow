@@ -112,6 +112,11 @@ namespace RiverHollow.Misc
                     PlayerManager.AddUniqueItemToList(purchaseItem.ID);
                 }
                 InventoryManager.AddToInventory(purchaseItem);
+
+                if (purchaseItem.CompareType(ItemEnum.Tool))
+                {
+                    purchaseItem.StrikeAPose();
+                }
             }
         }
 

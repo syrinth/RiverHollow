@@ -167,6 +167,12 @@ namespace RiverHollow.Game_Managers
             
             if (AllowMovement && PlayerActor.HasHP)
             {
+                if(ObtainedItem != null)
+                {
+                    ObtainedItem = null;
+                    PlayerActor.Facing = DirectionEnum.Down;
+                }
+
                 Vector2 newMovement = Vector2.Zero;
                 MovementHelper(ref _eHorizontal, ref newMovement, true, Keys.A, DirectionEnum.Left, Keys.D, DirectionEnum.Right);
                 MovementHelper(ref _eVertical, ref newMovement, false, Keys.W, DirectionEnum.Up, Keys.S, DirectionEnum.Down);
@@ -195,6 +201,11 @@ namespace RiverHollow.Game_Managers
                     {
                         newMovement *= impeded ? Constants.IMPEDED_SPEED : 1f;
                         PlayerActor.MoveActor(newMovement, newMovement != Vector2.Zero);
+                    }
+
+                    if(ObtainedItem != null)
+                    {
+                        PlayerManager.ObtainedItem = null;
                     }
                 }
             }
@@ -261,7 +272,7 @@ namespace RiverHollow.Game_Managers
             {
                 PlayerActor.Draw(spriteBatch, true);
                 ToolInUse?.DrawToolAnimation(spriteBatch);
-                ObtainedItem?.Draw(spriteBatch);
+                ObtainedItem?.Draw(spriteBatch, PlayerActor.BodySprite.LayerDepth * 2);
             }
         }
 

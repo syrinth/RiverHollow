@@ -48,6 +48,8 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     currentNode = node;
                 }
+
+                nodeList.Add(node);
             }
 
             _gPlayer = new GUIImage(GUIUtils.ICON_FACE);

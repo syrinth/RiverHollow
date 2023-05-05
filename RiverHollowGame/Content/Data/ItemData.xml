@@ -503,7 +503,7 @@
     </Item>
     <Item>
       <Key>125</Key>
-      <Value>[Type:Equipment][Subtype:Head][Image:0-3][Value:1000][ESub:Cloth][ASlot:Head][Tier:1][Defence:Minor][Magic:Major][Resistance:Major][Vitality:Minor]</Value>
+      <Value>[Type:Resource][Image:0-3][Value:1000][ESub:Cloth][ASlot:Head][Tier:1][Defence:Minor][Magic:Major][Resistance:Major][Vitality:Minor]</Value>
     </Item>
     <Item>
       <Key>126</Key>
@@ -551,7 +551,7 @@
     </Item>
     <Item>
       <Key>137</Key>
-      <Value>[Type:Tool][Subtype:Lantern][Image:0-4][Level:1][Value:3000]</Value>
+      <Value>[Type:Tool][Subtype:Lantern][Image:0-4][Level:1][Value:200]</Value>
     </Item>
     <Item>
       <Key>138</Key>
@@ -567,7 +567,7 @@
     </Item>
     <Item>
       <Key>141</Key>
-      <Value>[Type:Tool][Subtype:Backpack][Image:1-5][Level:2][Value:5000]</Value>
+      <Value>[Type:Tool][Subtype:Backpack][Image:1-5][Level:2][Value:500]</Value>
     </Item>
     <Item>
       <Key>142</Key>

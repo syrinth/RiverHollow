@@ -128,7 +128,7 @@ namespace RiverHollow.GUIComponents
 
             return rv;
         }
-        public static bool CreateRequiredItemsList(ref List<GUIItemBox> _liRequiredItems, Dictionary<int, int> requiredItemList)
+        public static bool CreateRequiredItemsList(ref List<GUIItemBox> _liRequiredItems, Dictionary<int, int> requiredItemList, int batchSize = 1)
         {
             bool rv = true;
 
@@ -137,7 +137,7 @@ namespace RiverHollow.GUIComponents
 
             foreach (KeyValuePair<int, int> kvp in requiredItemList)
             {
-                GUIItemBox newItem = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
+                GUIItemBox newItem = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value * batchSize));
                 if (!newItem.CompareNumToPlayer())
                 {
                     rv = false;

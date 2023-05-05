@@ -4,6 +4,7 @@ using RiverHollow.Items;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -105,7 +106,7 @@ namespace RiverHollow.WorldObjects
             for (int i = 0; i < strParams.Length; i++)
             {
                 string[] split = Util.FindArguments(strParams[i]);
-                var tup = new Tuple<int, int>(int.Parse(split[0]), int.Parse(split[1]));
+                var tup = new Tuple<int, int>(int.Parse(split[0]), split.Length > 1 ? int.Parse(split[1]) : 1);
                 dropList.Add(tup);
             }
 
