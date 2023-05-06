@@ -74,7 +74,5 @@
         public const int TASK_ICON_OFFSET = 15;
 
         public const int BUILDABLE_ID_OFFSET = 8000;
-
-        public const string STRING_NULL = "null";
     }
 }

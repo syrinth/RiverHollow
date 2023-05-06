@@ -1,10 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using RiverHollow.Game_Managers;
+﻿using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using System.Linq;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -54,12 +52,11 @@ namespace RiverHollow.WorldObjects
         public override WorldObjectData SaveData()
         {
             WorldObjectData data = base.SaveData();
-
-            foreach (Item i in (this.Inventory))
+            foreach (Item i in Inventory)
             {
-                if (i == null) { data.stringData += "|null"; }
-                else { data.stringData += "/" + Item.SaveItemToString(i); }
+                data.stringData += string.Format("{0}/", Item.SaveItemToString(i));
             }
+            data.stringData = data.stringData.TrimEnd('/');
             return data;
         }
         public override void LoadData(WorldObjectData data)
@@ -71,7 +68,7 @@ namespace RiverHollow.WorldObjects
             {
                 for (int j = 0; j < Columns; j++)
                 {
-                    if (!string.Equals(strData[i * Rows + j], "null"))
+                    if (!string.IsNullOrEmpty(strData[i * Rows + j]))
                     {
                         string[] itemData = Util.FindArguments(strData[i * Rows + j]);
                         Item newItem = DataManager.GetItem(int.Parse(itemData[0]), int.Parse(itemData[1]));

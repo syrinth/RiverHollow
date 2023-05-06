@@ -139,7 +139,7 @@
     </Item>
     <Item>
       <Key>34</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:4][ArrivalPeriod:7][RequestIDs:147/158/168][RequiredObjectID][ShopData:4][Key:Abeline]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:4][ArrivalPeriod:7][RequestIDs:147/158/168][ShopData:4][Key:Abeline]</Value>
     </Item>
     <Item>
       <Key>35</Key>
@@ -223,7 +223,7 @@
     </Item>
     <Item>
       <Key>55</Key>
-      <Value>[Type:Villager][Key:TaeJoon][Size:16-30][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][HouseID:17][Collection][FirstArrival:6]</Value>
+      <Value>[Type:Villager][Key:TaeJoon][Size:16-30][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][HouseID:17][Collection:0/1/2][FirstArrival:6]</Value>
     </Item>
   </Asset>
 </XnaContent>

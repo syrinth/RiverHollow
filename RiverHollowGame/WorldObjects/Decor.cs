@@ -362,9 +362,9 @@ namespace RiverHollow.WorldObjects
         {
             //Need to save null items
             WorldObjectData data = base.SaveData();
-            string objDisplayStr = _objDisplay == null ? "null" : _objDisplay.ID.ToString();
-            string itemDisplayStr = _itemDisplay == null ? "null" : _itemDisplay.ID.ToString();
-            data.stringData = string.Format("{0}|{1}|{2}", (int)_eFacingDir, objDisplayStr, itemDisplayStr);
+            string objDisplayStr = _objDisplay == null ? "" : _objDisplay.ID.ToString();
+            string itemDisplayStr = _itemDisplay == null ? "" : _itemDisplay.ID.ToString();
+            data.stringData = string.Format("{0}/{1}/{2}", (int)_eFacingDir, objDisplayStr, itemDisplayStr);
 
             return data;
         }
@@ -375,12 +375,12 @@ namespace RiverHollow.WorldObjects
             string[] strData = Util.FindParams(data.stringData);
             RotateToDirection(Util.ParseEnum<DirectionEnum>(strData[0]));
 
-            if (!strData[1].Equals("null"))
+            if (!strData[1].Equals(""))
             {
                 int objDisplayID = int.Parse(strData[1]);
                 SetDisplayObject((Decor)DataManager.CreateWorldObjectByID(objDisplayID));
             }
-            else if (!strData[2].Equals("null"))
+            else if (!strData[2].Equals(""))
             {
                 int itemDisplayID = int.Parse(strData[2]);
                 SetDisplayEntity(DataManager.GetItem(itemDisplayID));

@@ -395,6 +395,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                 AddControls(_gItem, _gMood);
                 DetermineSize();
+                Show(true);
             }
 
             public override void Update(GameTime gTime)

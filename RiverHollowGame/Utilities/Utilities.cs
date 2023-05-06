@@ -235,15 +235,17 @@ namespace RiverHollow.Utilities
         /// </summary>
         public static string[] FindParams(string data)
         {
-            return data.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+            if (string.IsNullOrEmpty(data)) { return new string[0]; }
+            else { return data.Split(new string[] { "/" }, StringSplitOptions.None); }
         }
         public static List<int> FindIntParams(string data)
         {
-            return data.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList();
+            return data.Split(new string[] { "/" }, StringSplitOptions.None).Select(Int32.Parse).ToList();
         }
         public static string[] FindArguments(string data)
         {
-            return data.Split(new string[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
+            if (string.IsNullOrEmpty(data)) { return new string[0]; }
+            else { return data.Split(new string[] { "-" }, StringSplitOptions.None); }
         }
         public static int[] FindIntArguments(string data)
         {
@@ -519,16 +521,16 @@ namespace RiverHollow.Utilities
         #endregion
 
         #region StringParseHelpers
-        public static string SaveInt(int val)
+        public static string IntToString(int val)
         {
-            return val > -1 ? val.ToString() : Constants.STRING_NULL;
+            return val > -1 ? val.ToString() : "";
         }
 
         public static int LoadInt(string val)
         {
             int rv = -1;
 
-            if (!val.Equals(Constants.STRING_NULL))
+            if (!string.IsNullOrEmpty(val))
             {
                 rv = int.Parse(val);
             }

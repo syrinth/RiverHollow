@@ -274,16 +274,9 @@ namespace RiverHollow.Items
 
         public static string SaveItemToString(Item i)
         {
-            string rv = string.Empty;
             ItemData data = SaveData(i);
-
-            string strData = string.Empty;
-            strData += data.itemID + "-";
-            strData += data.num + "-";
-            strData += data.strData;
-            rv += strData;
-
-            return rv;
+            if (data.itemID == -1) { return ""; }
+            else { return string.Format("{0}-{1}-{2}", Util.IntToString(data.itemID), data.num, data.strData); }
         }
         public static ItemData SaveData(Item i)
         {
