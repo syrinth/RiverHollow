@@ -22,8 +22,8 @@ namespace RiverHollow.SpriteAnimations
         Dictionary<string, FrameAnimation> _diFrameAnimations = new Dictionary<string, FrameAnimation>();
 
         public Rectangle SpriteRectangle => new Rectangle(Position, new Point(Width, Height));
-        public int Width { get; private set; } = -1;
-        public int Height { get; private set; } = -1;
+        public int Width => CurrentFrameAnimation.FrameWidth * _iScale;
+        public int Height => CurrentFrameAnimation.FrameHeight * _iScale;
 
         int _iScale = 1;
         public int FrameCutoff { get; set; }
@@ -86,9 +86,6 @@ namespace RiverHollow.SpriteAnimations
             foreach (KeyValuePair<string, FrameAnimation> kvp in sprite._diFrameAnimations){
                 _diFrameAnimations[kvp.Key] = new FrameAnimation(kvp.Value);
             }
-
-            Width = sprite.Width;
-            Height = sprite.Height;
         }
 
         #region AddAnimation Helpers
@@ -99,8 +96,6 @@ namespace RiverHollow.SpriteAnimations
         public void AddAnimation(string animationName, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false)
         {
             _diFrameAnimations.Add(animationName, new FrameAnimation(startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce));
-            if (this.Width == -1) { this.Width = Width; }
-            if (this.Height == -1) { this.Height = Height; }
             if (_diFrameAnimations.Count == 1)
             {
                 PlayAnimation(animationName);
@@ -182,12 +177,6 @@ namespace RiverHollow.SpriteAnimations
 
         public void SetScale(int x)
         {
-            Width /= _iScale;
-            Height /= _iScale;
-
-            Width *= x;
-            Height *= x;
-
             _iScale = x;
         }
 

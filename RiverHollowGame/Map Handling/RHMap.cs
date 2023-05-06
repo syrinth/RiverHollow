@@ -1873,7 +1873,7 @@ namespace RiverHollow.Map_Handling
                 List<RHTile> arr = testTile.GetAdjacentTiles(true);
                 for(int i =0; i < arr.Count; i++)
                 {
-                    if(DataManager.GetBoolByIDKey(obj.ID, "Tree", DataType.WorldObject) && (!arr[i].TileIsPassable()) || (arr[i].WorldObject != null && arr[i].WorldObject.WideOnTop()))
+                    if(arr[i].WorldObject != null && arr[i].WorldObject.WideOnTop())
                     {
                         rv = false;
                         break;

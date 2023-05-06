@@ -102,6 +102,7 @@ namespace RiverHollow.WorldObjects
             {
                 string[] splitVal = split[0].Split('-');
                 _pImagePos = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
+                _pImagePos = Util.MultiplyPoint(_pImagePos, Constants.TILE_SIZE);
             }
 
             Util.AssignValue(ref _pSize, "Size", stringData);
@@ -158,12 +159,6 @@ namespace RiverHollow.WorldObjects
                 Sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _pSize);
             }
 
-            //MAR
-            //if (stringData.ContainsKey("Gathered"))
-            //{
-            //    string[] gatherSplit = stringData["Gathered"].Split('-');
-            //    _sprite.AddAnimation(WorldObjAnimEnum.Gathered, startX, startY, _iWidth, _iHeight, int.Parse(gatherSplit[0]), float.Parse(gatherSplit[1]));
-            //}
             SetSpritePos(MapPosition);
         }
 

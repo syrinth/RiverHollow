@@ -150,7 +150,7 @@ namespace RiverHollow.WorldObjects
             _iAltSprite = altSprite;
             string[] split = Util.FindParams(imageSprite);
 
-            _pImagePos = Util.ParsePoint(split[0]) + new Point(altSprite * Constants.TILE_SIZE, 0);
+            _pImagePos = Util.MultiplyPoint(Util.ParsePoint(split[0]) + new Point(altSprite, 0), Constants.TILE_SIZE);
             Sprite.SetAlternate(_pImagePos, AnimationEnum.ObjectIdle);
         }
 

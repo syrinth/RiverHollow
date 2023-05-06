@@ -159,14 +159,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         protected class GUIMarker : GUIText
         {
-            
-
             bool _bShow;
             RHTimer _timer;
 
             public GUIMarker()
             {
-                _sText = "/";
+                _sText = "|";
                 SetDimensions(_sText);
                 _timer = new RHTimer(Constants.GUI_TEXT_MARKER_FLASH_RATE);
             }
