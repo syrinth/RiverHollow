@@ -5,16 +5,16 @@
       <Key>0</Key>
       <Value>
         <Item></Item>
-        <Item>[Player][Actors:2-CS0|32-CS0_Mob][Deactivate:2]</Item>
-        <Item>[Speak:2-1][Activate:2][Move:2-9-Up][Move:2-7-Right][Speak:2-2][Join:2][Move:2-2-Right|Player-7-Left][Combat:32]</Item>
+        <Item>[Player][Actors:2-CS0/32-CS0_Mob][Deactivate:2]</Item>
+        <Item>[Speak:2-1][Activate:2][Move:2-9-Up][Move:2-7-Right][Speak:2-2][Join:2][Move:2-2-Right/Player-7-Left][Combat:32]</Item>
       </Value>
     </Item>
     <Item>
       <Key>1</Key>
       <Value>
         <Item></Item>
-        <Item>[Map:mapTown][Player:PlayerSpawn][Actors:16-CS1Spawn|21-NPC_21]</Item>
-        <Item>[Background:Textures\Valley][Text:IntroText][RemoveBackground][Face:16-Up|Player-Up][Speed:Player-0.5|14-0.2][Speak:16-1][Move:16-3-Up|Player-3-Up][Speak:16-2][Face:16-Left|Player-Right][Speak:16-3][Wait:0.5][Move:13-1-Down][Wait:1][Face:16-Left][Speak:16-4][Wait:1][Speak:16-5][Move:16-5-Down][Speed:Player-1][TaskID:3]</Item>
+        <Item>[Map:mapTown][Player:PlayerSpawn][Actors:16-CS1Spawn/21-NPC_21]</Item>
+        <Item>[Background:Textures\Valley][Text:IntroText][RemoveBackground][Face:16-Up/Player-Up][Speed:Player-0.5/14-0.2][Speak:16-1][Move:16-3-Up/Player-3-Up][Speak:16-2][Face:16-Left/Player-Right][Speak:16-3][Wait:0.5][Move:13-1-Down][Wait:1][Face:16-Left][Speak:16-4][Wait:1][Speak:16-5][Move:16-5-Down][Speed:Player-1][TaskID:3]</Item>
       </Value>
     </Item>
     <Item>
@@ -22,7 +22,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapWorkshop][Player][Actors:16-Workshop_NPC][Deactivate:16]</Item>
-        <Item>[Speed:Player-0.5|16-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:16][Move:16-4-Up][Face:Player-Up][Face:16-Down][Speak:16-0][Face:16-Left][Speak:16-1][Face:16-Right][Speak:16-2][Face:16-Down][Speak:16-3][Move:16-4-Down]</Item>
+        <Item>[Speed:Player-0.5/16-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:16][Move:16-4-Up][Face:Player-Up][Face:16-Down][Speak:16-0][Face:16-Left][Speak:16-1][Face:16-Right][Speak:16-2][Face:16-Down][Speak:16-3][Move:16-4-Down]</Item>
       </Value>
     </Item>
     <Item>
@@ -30,7 +30,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapApothecary][Player][Actors:43-Cutscene_Entrance][Deactivate:43]</Item>
-        <Item>[Speed:Player-0.5|43-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:43][Move:43-4-Up][Face:Player-Up][Face:43-Down][Speak:43-0][MoveToTown:43]</Item>
+        <Item>[Speed:Player-0.5/43-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:43][Move:43-4-Up][Face:Player-Up][Face:43-Down][Speak:43-0][MoveToTown:43]</Item>
       </Value>
     </Item>
     <Item>
@@ -38,7 +38,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapSmithy][Player][Actors:4-Cutscene_Entrance][Deactivate:4]</Item>
-        <Item>[Speed:Player-0.5|4-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:4][Move:4-4-Up][Face:Player-Up][Face:4-Down][Speak:4-0][MoveToTown:4]</Item>
+        <Item>[Speed:Player-0.5/4-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:4][Move:4-4-Up][Face:Player-Up][Face:4-Down][Speak:4-0][MoveToTown:4]</Item>
       </Value>
     </Item>
     <Item>
@@ -46,7 +46,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapHouse_12][Player][Actors:12-Cutscene_Entrance][Deactivate:12]</Item>
-        <Item>[Speed:Player-0.5|12-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:12][Move:12-4-Up][Face:Player-Up][Face:12-Down][Speak:12-0][MoveToTown:12]</Item>
+        <Item>[Speed:Player-0.5/12-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:12][Move:12-4-Up][Face:Player-Up][Face:12-Down][Speak:12-0][MoveToTown:12]</Item>
       </Value>
     </Item>
     <Item>
@@ -54,7 +54,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapMushroomery][Player][Actors:42-Cutscene_Entrance][Deactivate:42]</Item>
-        <Item>[Speed:Player-0.5|42-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:42][Move:42-4-Up][Face:Player-Up][Face:42-Down][Speak:42-0][MoveToTown:42]</Item>
+        <Item>[Speed:Player-0.5/42-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:42][Move:42-4-Up][Face:Player-Up][Face:42-Down][Speak:42-0][MoveToTown:42]</Item>
       </Value>
     </Item>
     <Item>
@@ -62,7 +62,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapArchives][Player][Actors:22-Cutscene_Entrance][Deactivate:22]</Item>
-        <Item>[Speed:Player-0.5|22-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:22][Move:22-4-Up][Face:Player-Up][Face:22-Down][Speak:22-0][MoveToTown:22]</Item>
+        <Item>[Speed:Player-0.5/22-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:22][Move:22-4-Up][Face:Player-Up][Face:22-Down][Speak:22-0][MoveToTown:22]</Item>
       </Value>
     </Item>
     <Item>
@@ -70,7 +70,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapMagicShop][Player][Actors:10-Cutscene_Entrance][Deactivate:10]</Item>
-        <Item>[Speed:Player-0.5|10-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:10][Move:10-4-Up][Face:Player-Up][Face:10-Down][Speak:10-0][MoveToTown:10]</Item>
+        <Item>[Speed:Player-0.5/10-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:10][Move:10-4-Up][Face:Player-Up][Face:10-Down][Speak:10-0][MoveToTown:10]</Item>
       </Value>
     </Item>
     <Item>
@@ -78,7 +78,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapGeneralStore][Player][Actors:11-Cutscene_Entrance][Deactivate:11]</Item>
-        <Item>[Speed:Player-0.5|11-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:11][Move:11-4-Up][Face:Player-Up][Face:11-Down][Speak:11-0][MoveToTown:11]</Item>
+        <Item>[Speed:Player-0.5/11-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:11][Move:11-4-Up][Face:Player-Up][Face:11-Down][Speak:11-0][MoveToTown:11]</Item>
       </Value>
     </Item>
     <Item>
@@ -86,7 +86,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapBookstore][Player][Actors:54-Cutscene_Entrance][Deactivate:54]</Item>
-        <Item>[Speed:Player-0.5|54-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:54][Move:54-4-Up][Face:Player-Up][Face:54-Down][Speak:54-0][MoveToTown:54]</Item>
+        <Item>[Speed:Player-0.5/54-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:54][Move:54-4-Up][Face:Player-Up][Face:54-Down][Speak:54-0][MoveToTown:54]</Item>
       </Value>
     </Item>
     <Item>
@@ -94,7 +94,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapPottery][Player][Actors:55-Cutscene_Entrance][Deactivate:55]</Item>
-        <Item>[Speed:Player-0.5|55-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:55][Move:55-4-Up][Face:Player-Up][Face:55-Down][Speak:55-0][MoveToTown:55]</Item>
+        <Item>[Speed:Player-0.5/55-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:55][Move:55-4-Up][Face:Player-Up][Face:55-Down][Speak:55-0][MoveToTown:55]</Item>
       </Value>
     </Item>
   </Asset>

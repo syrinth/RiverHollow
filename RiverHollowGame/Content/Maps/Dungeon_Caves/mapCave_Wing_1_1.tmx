@@ -4,7 +4,7 @@
   <property name="ActiveSpawn" type="int" value="3"/>
   <property name="Dungeon" value="Cave"/>
   <property name="MapType" value="Cave"/>
-  <property name="Resources" value="52-C|50-C|53-U|79-R|81-M|83-U"/>
+  <property name="Resources" value="52-C/50-C/53-U/79-R/81-M/83-U"/>
   <property name="ResourcesMinMax" value="50-75"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetDungeon.tsx"/>
@@ -114,32 +114,32 @@
  <objectgroup id="5" name="MapObject">
   <object id="46" name="SpawnPoint" x="385.649" y="369.565" width="10" height="8.5">
    <properties>
-    <property name="Spawn-All" value="0-U|4-R|3-C"/>
+    <property name="Spawn-All" value="0-U/4-R/3-C"/>
    </properties>
   </object>
   <object id="47" name="SpawnPoint" x="387.327" y="69.7033" width="10" height="8.5">
    <properties>
-    <property name="Spawn-All" value="0-U|4-C"/>
+    <property name="Spawn-All" value="0-U/4-C"/>
    </properties>
   </object>
   <object id="50" name="SpawnPoint" x="357.082" y="52.488" width="10" height="8.5">
    <properties>
-    <property name="Spawn-All" value="0-U|4-C"/>
+    <property name="Spawn-All" value="0-U/4-C"/>
    </properties>
   </object>
   <object id="51" name="SpawnPoint" x="99.738" y="372.86" width="10" height="8.5">
    <properties>
-    <property name="Spawn-All" value="0-U|4-C"/>
+    <property name="Spawn-All" value="0-U/4-C"/>
    </properties>
   </object>
   <object id="54" name="SpawnPoint" x="227.667" y="310.083" width="10" height="8.5">
    <properties>
-    <property name="Spawn-All" value="0-U|4-C"/>
+    <property name="Spawn-All" value="0-U/4-C"/>
    </properties>
   </object>
   <object id="57" name="SpawnPoint" x="274.333" y="84.4167" width="10" height="8.5">
    <properties>
-    <property name="Spawn-All" value="0-U|4-C"/>
+    <property name="Spawn-All" value="0-U/4-C"/>
    </properties>
   </object>
  </objectgroup>

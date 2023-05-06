@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="195">
  <properties>
-  <property name="ItemID" value="162-C|163-R"/>
+  <property name="ItemID" value="162-C/163-R"/>
   <property name="MapType" value="Town"/>
   <property name="Outside" type="bool" value="true"/>
   <property name="ResourceNumber" value="5"/>
   <property name="WorldData" value="208-16"/>
-  <property name="WorldLink" value="mapWoods_Small-30|mapMountain_Small-20"/>
+  <property name="WorldLink" value="mapWoods_Small-30/mapMountain_Small-20"/>
   <property name="WorldMapCost" type="int" value="10"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
@@ -144,7 +144,7 @@
   </object>
   <object id="189" name="Resource" x="64" y="128" width="288" height="176">
    <properties>
-    <property name="ItemID" value="162-C|163-R"/>
+    <property name="ItemID" value="162-C/163-R"/>
     <property name="Number" value="5"/>
    </properties>
   </object>

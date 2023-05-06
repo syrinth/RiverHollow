@@ -440,7 +440,7 @@ namespace RiverHollow.Game_Managers
             string value = GetStringByIDKey(id, key, type);
             if (!string.IsNullOrEmpty(value))
             {
-                //Split by "|" for each set
+                //Split by "/" for each set
                 string[] split = Util.FindParams(value);
                 foreach (string s in split)
                 {

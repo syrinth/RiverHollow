@@ -235,11 +235,11 @@ namespace RiverHollow.Utilities
         /// </summary>
         public static string[] FindParams(string data)
         {
-            return data.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+            return data.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
         }
         public static List<int> FindIntParams(string data)
         {
-            return data.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList();
+            return data.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList();
         }
         public static string[] FindArguments(string data)
         {
@@ -436,7 +436,7 @@ namespace RiverHollow.Utilities
             dictValue = new Dictionary<int, int>();
             if (dict.ContainsKey(key))
             {
-                //Split by "|" for each item set required
+                //Split by "/" for each item set required
                 string[] split = Util.FindParams(dict[key]);
                 foreach (string s in split)
                 {

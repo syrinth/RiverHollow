@@ -58,7 +58,7 @@ namespace RiverHollow.WorldObjects
             foreach (Item i in (this.Inventory))
             {
                 if (i == null) { data.stringData += "|null"; }
-                else { data.stringData += "|" + Item.SaveItemToString(i); }
+                else { data.stringData += "/" + Item.SaveItemToString(i); }
             }
             return data;
         }

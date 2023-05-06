@@ -207,7 +207,7 @@ namespace RiverHollow.Characters
                 timeToNextArrival = _iNextArrival,
                 relationShipStatus = (int)RelationshipState,
                 spokenKeys = _liSpokenKeys,
-                requestString = string.Join("|", ChosenRequests)
+                requestString = string.Join("/", ChosenRequests)
             };
 
             return npcData;

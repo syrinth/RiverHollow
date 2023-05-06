@@ -120,7 +120,7 @@ namespace Database_Editor.Classes
         }
         public void AppendToTag(string key, string value)
         {
-            _diTags[key] += "|" + value;
+            _diTags[key] += "/" + value;
         }
         public void ClearTagInfo()
         {
@@ -342,7 +342,7 @@ namespace Database_Editor.Classes
                     //There may or may not be any additional values, if there are more coming, add the '|'
                     if (i < split.Length - 1)
                     {
-                        _diTags[tag] += "|";
+                        _diTags[tag] += "/";
                     }
                 }
             }

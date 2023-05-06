@@ -111,12 +111,12 @@
   </object>
   <object id="11" name="Mob" x="48" y="96" width="64" height="64">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="12" name="Mob" x="320" y="128" width="64" height="64">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="13" name="Trigger 1" x="208" y="176" width="16" height="16">

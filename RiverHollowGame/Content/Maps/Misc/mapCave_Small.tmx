@@ -82,7 +82,7 @@
    <properties>
     <property name="ItemID" value="23-U"/>
     <property name="Number" value="30"/>
-    <property name="ObjectID" value="60-C|53-U"/>
+    <property name="ObjectID" value="60-C/53-U"/>
    </properties>
   </object>
  </objectgroup>

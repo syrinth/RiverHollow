@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="202">
  <properties>
-  <property name="ItemID" value="162-C|163-R"/>
+  <property name="ItemID" value="162-C/163-R"/>
   <property name="MapType" value="Town"/>
   <property name="Mobs" value="3-4"/>
   <property name="Outside" type="bool" value="true"/>
@@ -128,27 +128,27 @@
   <object id="189" name="Resource" x="64" y="112" width="368" height="336">
    <properties>
     <property name="Number" value="20"/>
-    <property name="ObjectID" value="60-C|150-U"/>
+    <property name="ObjectID" value="60-C/150-U"/>
    </properties>
   </object>
   <object id="192" name="Mob" x="80" y="368" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-U|52-C"/>
+    <property name="MobID" value="32-U/52-C"/>
    </properties>
   </object>
   <object id="193" name="Mob" x="96" y="224" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-U|52-C"/>
+    <property name="MobID" value="32-U/52-C"/>
    </properties>
   </object>
   <object id="194" name="Mob" x="368" y="80" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-U|52-C"/>
+    <property name="MobID" value="32-U/52-C"/>
    </properties>
   </object>
   <object id="195" name="Mob" x="304" y="80" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-U|52-C"/>
+    <property name="MobID" value="32-U/52-C"/>
    </properties>
   </object>
   <object id="198" name="Mysterious Orb" x="160" y="192" width="16" height="16">

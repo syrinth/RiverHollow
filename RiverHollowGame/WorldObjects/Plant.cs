@@ -226,7 +226,7 @@ namespace RiverHollow.WorldObjects
         public override WorldObjectData SaveData()
         {
             WorldObjectData data = base.SaveData();
-            data.stringData += _iCurrentState + "|";
+            data.stringData += _iCurrentState + "/";
             data.stringData += _iDaysLeft;
 
             return data;

@@ -134,7 +134,7 @@ namespace Database_Editor.Classes
                             //If there are more entries coming, add the '|' back
                             if (j < splitValues.Length - 1)
                             {
-                                newValue += "|";
+                                newValue += "/";
                             }
                         }
 

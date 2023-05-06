@@ -306,7 +306,7 @@ namespace RiverHollow.GUIComponents.Screens
         }
         public void AppendToTag(string key, string value)
         {
-            _diTags[key] += "|" + value;
+            _diTags[key] += "/" + value;
         }
     }
 }

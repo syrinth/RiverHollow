@@ -156,7 +156,7 @@ namespace RiverHollow.Misc
                 for (int i = 0; i < TownManager.Market.ObjectInfo.Count && i < totalMerch; i++)
                 {
                     int index = RHRandom.Instance().Next(indices.Count);
-                    RandomIndices += indices[index] + "|";
+                    RandomIndices += indices[index] + "/";
                     indices.RemoveAt(index);
                 }
 

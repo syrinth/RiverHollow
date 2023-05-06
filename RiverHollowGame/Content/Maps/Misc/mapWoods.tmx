@@ -2,7 +2,7 @@
 <map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="86" height="98" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="163">
  <properties>
   <property name="Cutscenes" value="0"/>
-  <property name="ItemID" value="162-C|163-R"/>
+  <property name="ItemID" value="162-C/163-R"/>
   <property name="MapType" value="Town"/>
   <property name="Mobs" value="5-10"/>
   <property name="Outside" type="bool" value="true"/>
@@ -339,47 +339,47 @@
  <objectgroup id="5" name="MapObject">
   <object id="80" name="Mob" x="560.334" y="718.334" width="60.3334" height="56">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="83" name="Mob" x="866" y="818.667" width="58.3334" height="54.6667">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="85" name="Mob" x="1003" y="704.667" width="62.6667" height="56">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="86" name="Mob" x="788" y="579" width="56" height="55.6667">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="87" name="Mob" x="1202" y="817.333" width="62.6667" height="56">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="88" name="Mob" x="967.333" y="242.667" width="62.6667" height="56">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="89" name="Mob" x="1242.67" y="244" width="62.6667" height="56">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="90" name="Mob" x="787.333" y="242.667" width="62.6667" height="56">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="91" name="Mob" x="1000.67" y="512" width="108" height="73.3333">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="58" name="Resource" x="1090.38" y="530.749" width="11.75" height="9.5">
@@ -457,63 +457,63 @@
   <object id="72" name="Resource" x="930" y="422" width="124" height="124">
    <properties>
     <property name="Number" value="10-25"/>
-    <property name="ObjectID" value="60-C|51-C"/>
+    <property name="ObjectID" value="60-C/51-C"/>
    </properties>
   </object>
   <object id="107" name="Mob" x="472.667" y="428" width="134.167" height="172">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="108" name="Mob" x="291.333" y="442.667" width="62.6667" height="56">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="109" name="Mob" x="79.3333" y="521.333" width="62.6667" height="56">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="110" name="Mob" x="296.667" y="828" width="62.6667" height="56">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="111" name="Mob" x="314" y="210.667" width="192" height="157.333">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="112" name="Resource" x="743.333" y="288.667" width="124" height="124">
    <properties>
     <property name="Number" value="10-25"/>
-    <property name="ObjectID" value="60-C|51-C"/>
+    <property name="ObjectID" value="60-C/51-C"/>
    </properties>
   </object>
   <object id="113" name="Resource" x="390" y="743.333" width="124" height="124">
    <properties>
     <property name="Number" value="20"/>
-    <property name="ObjectID" value="60-C|51-C"/>
+    <property name="ObjectID" value="60-C/51-C"/>
    </properties>
   </object>
   <object id="114" name="Resource" x="39" y="678" width="176.833" height="210">
    <properties>
     <property name="Number" value="30"/>
-    <property name="ObjectID" value="60-C|51-C"/>
+    <property name="ObjectID" value="60-C/51-C"/>
    </properties>
   </object>
   <object id="115" name="Resource" x="70" y="241.5" width="124" height="119.5">
    <properties>
-    <property name="ItemID" value="162-C|163-R"/>
+    <property name="ItemID" value="162-C/163-R"/>
     <property name="Number" value="5"/>
-    <property name="ObjectID" value="60-R|63-R"/>
+    <property name="ObjectID" value="60-R/63-R"/>
    </properties>
   </object>
   <object id="116" name="Resource" x="247.917" y="293.666" width="322.167" height="276.667">
    <properties>
     <property name="Number" value="25-45"/>
-    <property name="ObjectID" value="60-C|51-C"/>
+    <property name="ObjectID" value="60-C/51-C"/>
    </properties>
   </object>
   <object id="117" name="Resource" x="529.292" y="643.083" width="11.75" height="9.5">
@@ -549,20 +549,20 @@
   <object id="122" name="Resource" x="565.417" y="560.5" width="394.667" height="220">
    <properties>
     <property name="Number" value="20-30"/>
-    <property name="ObjectID" value="60-C|51-C"/>
+    <property name="ObjectID" value="60-C/51-C"/>
    </properties>
   </object>
   <object id="123" name="Resource" x="308.333" y="1078" width="71.6667" height="66">
    <properties>
     <property name="ItemID" value="162-C-161-R"/>
     <property name="Number" value="5"/>
-    <property name="ObjectID" value="60-R|63-R"/>
+    <property name="ObjectID" value="60-R/63-R"/>
    </properties>
   </object>
   <object id="124" name="Resource" x="292.25" y="886" width="57.25" height="107.5">
    <properties>
     <property name="Number" value="10"/>
-    <property name="ObjectID" value="60-C|51-C"/>
+    <property name="ObjectID" value="60-C/51-C"/>
    </properties>
   </object>
   <object id="125" name="WorldObject" x="227.117" y="675.197" width="23" height="25.75">

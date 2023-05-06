@@ -74,8 +74,8 @@ namespace RiverHollow.WorldObjects
         public override WorldObjectData SaveData()
         {
             WorldObjectData data = base.SaveData();
-            data.stringData += _bReady + "|";
-            data.stringData += _iDaysToHoney + "|";
+            data.stringData += _bReady + "/";
+            data.stringData += _iDaysToHoney + "/";
             data.stringData += (_bReady ? _iHoneyToGather : -1);
 
             return data;

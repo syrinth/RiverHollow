@@ -2,7 +2,7 @@
 <map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="58" height="57" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="76">
  <properties>
   <property name="Cutscenes" value="0"/>
-  <property name="ItemID" value="162-C|163-R"/>
+  <property name="ItemID" value="162-C/163-R"/>
   <property name="MapType" value="Town"/>
   <property name="Mobs" value="1-2"/>
   <property name="Outside" type="bool" value="true"/>
@@ -205,23 +205,23 @@
  <objectgroup id="5" name="MapObject">
   <object id="62" name="Mob" x="57.6683" y="310.5" width="62.6667" height="56">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="63" name="Resource" x="234.998" y="283.333" width="124" height="124">
    <properties>
     <property name="Number" value="10-25"/>
-    <property name="ObjectID" value="60-C|51-C"/>
+    <property name="ObjectID" value="60-C/51-C"/>
    </properties>
   </object>
   <object id="69" name="Mob" x="511.333" y="174.667" width="62.6667" height="56">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="70" name="Mob" x="675.333" y="692" width="62.6667" height="56">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
   <object id="74" name="Item" x="529.667" y="628.5" width="12.6667" height="7.5">

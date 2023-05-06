@@ -11,7 +11,7 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Cost:200][ItemID:55-10|60-10|37-5][Formula:2]</Value>
+      <Value>[Cost:200][ItemID:55-10/60-10/37-5][Formula:2]</Value>
     </Item>
   </Asset>
 </XnaContent>

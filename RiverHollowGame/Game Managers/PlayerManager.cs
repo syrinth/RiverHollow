@@ -907,7 +907,7 @@ namespace RiverHollow.Game_Managers
             for (int i = 0; i < _liUniqueItemsBought.Count; i++)
             {
                 if (i == 0) { data.UniqueItemsBought = _liUniqueItemsBought[i].ToString(); }
-                else { data.UniqueItemsBought += "|" + _liUniqueItemsBought[i].ToString(); }
+                else { data.UniqueItemsBought += "/" + _liUniqueItemsBought[i].ToString(); }
             }
 
             return data;

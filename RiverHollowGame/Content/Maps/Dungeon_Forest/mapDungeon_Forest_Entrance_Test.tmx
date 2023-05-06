@@ -82,7 +82,7 @@
  <objectgroup id="5" name="MapObject">
   <object id="9" name="Mob" x="340.167" y="53.5" width="44.6667" height="32">
    <properties>
-    <property name="MobID" value="32-C|33-C"/>
+    <property name="MobID" value="32-C/33-C"/>
    </properties>
   </object>
  </objectgroup>
