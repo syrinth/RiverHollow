@@ -17,22 +17,19 @@ namespace RiverHollow.WorldObjects
         public WrappedItem(int itemID) : base(-1)
         {
             _iItemID = itemID;
+        }
 
-            Item wrappedItem = DataManager.GetItem(itemID);
+        protected override void LoadSprite()
+        {
+            Item wrappedItem = DataManager.GetItem(_iItemID);
             Sprite = new AnimatedSprite(wrappedItem.Texture.Name);
-            if (DataManager.GetItemDictionaryData(itemID).ContainsKey("WrappedImage"))
+            if (DataManager.GetBoolByIDKey(_iItemID, "WrappedImage", DataType.Item))
             {
-                string[] split = Util.FindArguments(DataManager.GetItemDictionaryData(itemID)["WrappedImage"]);
+                string[] split = DataManager.GetStringParamsByIDKey(_iItemID, "WrappedImage", DataType.Item);
                 Sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
                 Sprite.AddAnimation(AnimationEnum.ObjectIdle, int.Parse(split[0]), int.Parse(split[1]), _pSize);
             }
             else { Sprite.AddAnimation(AnimationEnum.ObjectIdle, wrappedItem.SourceRectangle.Left, wrappedItem.SourceRectangle.Top, _pSize); }
-        }
-
-        public WrappedItem(int id, Dictionary<string, string> stringData) : base(id)
-        {
-            _iItemID = Util.AssignValue("ItemID", stringData);
-            LoadDictionaryData(stringData);
         }
 
         public override bool ProcessLeftClick() { return Gather(); }

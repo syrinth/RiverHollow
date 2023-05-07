@@ -1,14 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
+using RiverHollow.Items;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.WorldObjects
 {
-    public class Plant : Destructible
+    public class Flower : Plant
     {
         #region consts
         const float MAX_ROTATION = 0.15f;
@@ -21,20 +23,53 @@ namespace RiverHollow.WorldObjects
         float _fCurrentRotation = 0f;
         int _iBounceCount = 0;
 
-        int _iCurrentState = 0;
-        int _iDaysToNextState = -1;
-
-        int MaxStates => int.Parse(Util.FindParams(GetStringByIDKey("States", "1"))[0]);
-        int[] StateTimes => Util.FindIntArguments(Util.FindParams(GetStringByIDKey("States", "1"))[1]);
-
-        public int HoneyID => GetIntByIDKey("HoneyID");
-
         readonly bool _bPopItem;
+        int _iCurrentState;
+        readonly int _iMaxStates;
+        readonly int _iResourceID;
+        int _iDaysLeft;
+        Dictionary<int, int> _diTransitionTimes;
+        int _iSeedID = 0;
+        public int SeedID => _iSeedID;
 
-        public Plant(int id) : base(id)
+        int _iHoneyID = -1;
+        public int HoneyID => _iHoneyID;
+
+        Garden _objGarden;
+        SeasonEnum _eSeason;
+
+        public Flower(int id, Dictionary<string, string> stringData) : base(id)
         {
-            _bWalkable = GetBoolByIDKey("Walkable");
+            _diTransitionTimes = new Dictionary<int, int>();
+
+
+            _bWalkable = true;
+
+            _iCurrentState = 0;
+            _rBase.Y = _pSize.Y - 1;
+
+            Util.AssignValue(ref _eSeason, "Season", stringData);
+            _iHoneyID = Util.AssignValue("HoneyID", stringData);
+            _iSeedID = Util.AssignValue("SeedID", stringData);
+            _iResourceID = Util.AssignValue("ItemID", stringData);
+            _iMaxStates = Util.AssignValue("TrNum", stringData); //Number of growth phases
+
             _bPopItem = false;
+
+            //The amount of time for each phase
+            string[] dayStr = stringData["TrTime"].Split('-');
+            for (int j = 0; j < _iMaxStates - 1; j++)
+            {
+                _diTransitionTimes.Add(j, int.Parse(dayStr[j]));
+                Sprite.AddAnimation((j + 1).ToString(), _pImagePos.X + (Constants.TILE_SIZE * (j + 1)), _pImagePos.Y, _pSize);
+            }
+            _iDaysLeft = _diTransitionTimes[0];
+
+            if (stringData.ContainsKey("DestructionAnim"))
+            {
+                string[] splitString = stringData["DestructionAnim"].Split('-');
+                Sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), _pSize, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
+            }
 
             Sprite.SetRotationOrigin(new Vector2(_pSize.X * Constants.TILE_SIZE / 2, (_pSize.Y * Constants.TILE_SIZE) - 1));    //Subtract one to keep it in the bounds of the rectangle
         }
@@ -42,15 +77,11 @@ namespace RiverHollow.WorldObjects
         //protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
         //{
         //    Sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-        //    var maxStates = MaxStates;
-        //    var images = GetStringByIDKey("Image");
-
-        //    Sprite.AddAnimation(0.ToString(), _pImagePos.X, _pImagePos.Y, _pSize);
-
-        //    //for (int j = 1; j < _diTransitionTimes.Count + 1; j++)
-        //    //{
-        //    //    Sprite.AddAnimation(j.ToString(), _pImagePos.X + (Constants.TILE_SIZE * j), _pImagePos.Y, _pSize);
-        //    //}
+        //    Sprite.AddAnimation(0.ToString(), (int)_pImagePos.X, (int)_pImagePos.Y, _pSize);
+        //    for (int j = 1; j < _diTransitionTimes.Count + 1; j++)
+        //    {
+        //        Sprite.AddAnimation(j.ToString(), (int)_pImagePos.X + (Constants.TILE_SIZE * j), (int)_pImagePos.Y, _pSize);
+        //    }
         //}
 
         public override void Update(GameTime gTime)
@@ -113,21 +144,19 @@ namespace RiverHollow.WorldObjects
             {
                 if (FinishedGrowing() && PlayerManager.LoseEnergy(Constants.ACTION_COST))
                 {
-                   var items = GetDroppedItems();
-                    foreach (var it in items)
+                    Item it = DataManager.GetItem(_iResourceID);
+                    if (_bPopItem)
                     {
-                        if (_bPopItem)
-                        {
-                            MapManager.DropItemOnMap(it, MapPosition);
-                        }
-                        else
-                        {
-                            InventoryManager.AddToInventory(it);
-                        }
+                        MapManager.DropItemOnMap(it, MapPosition);
+                    }
+                    else
+                    {
+                        InventoryManager.AddToInventory(it);
                     }
 
                     MapManager.RemoveWorldObject(this);
                     RemoveSelfFromTiles();
+                    _objGarden.SetPlant(null);
                 }
             }
         }
@@ -150,32 +179,36 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public override void Rollover()
         {
-            if (_iDaysToNextState >= 0) //Decrement the number of days until the next phase
+            if (_iDaysLeft > 0) //Decrement the number of days until the next phase
             {
-                _iDaysToNextState--;
+                _iDaysLeft--;
             }
             else if (!FinishedGrowing()) //If it hasn't finished growing, and there's no days left, go to the next phase
             {
                 _iCurrentState++;
                 Sprite.PlayAnimation(_iCurrentState.ToString());
-
-                var stateTimes = StateTimes;
-                if (stateTimes.Length > _iCurrentState + 1)
+                if (_diTransitionTimes.ContainsKey(_iCurrentState))
                 {
-                    _iDaysToNextState = stateTimes[_iCurrentState];
+                    _iDaysLeft = _diTransitionTimes[_iCurrentState];
                 }
             }
+            else if (_objGarden == null)
+            {
+                CurrentMap.AddLights(GetLights());
+            }
         }
+
+        public bool InSeason() { return Util.GetEnumString(_eSeason).Equals(GameCalendar.GetCurrentSeason()); }
 
         /// <summary>
         /// Check if the plant has finished growing or not.
         /// </summary>
         /// <returns>True if it's on the last phase</returns>
-        public bool FinishedGrowing() { return _iCurrentState == MaxStates - 1; }
+        public bool FinishedGrowing() { return _iCurrentState == _iMaxStates - 1; }
 
         public void FinishGrowth()
         {
-            _iCurrentState = MaxStates - 1;
+            _iCurrentState = _iMaxStates - 1;
             //_rSource.X += _iWidth * _iCurrentState;
         }
 
@@ -184,11 +217,16 @@ namespace RiverHollow.WorldObjects
             return FinishedGrowing();
         }
 
+        public void SetGarden(Garden g)
+        {
+            _objGarden = g;
+        }
+
         public override WorldObjectData SaveData()
         {
             WorldObjectData data = base.SaveData();
             data.stringData += _iCurrentState + "/";
-            data.stringData += _iDaysToNextState;
+            data.stringData += _iDaysLeft;
 
             return data;
         }
@@ -198,7 +236,7 @@ namespace RiverHollow.WorldObjects
             base.LoadData(data);
             string[] strData = Util.FindParams(data.stringData);
             _iCurrentState = int.Parse(strData[0]);
-            _iDaysToNextState = int.Parse(strData[1]);
+            _iDaysLeft = int.Parse(strData[1]);
 
             Sprite.PlayAnimation(_iCurrentState.ToString());
         }

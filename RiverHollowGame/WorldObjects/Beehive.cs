@@ -16,12 +16,12 @@ namespace RiverHollow.WorldObjects
 
         int _iHoneyToGather = -1;
         bool _bReady = false;
-        public Beehive(int id, Dictionary<string, string> stringData) : base(id, stringData)
+        public Beehive(int id) : base(id)
         {
             Sprite.AddAnimation(AnimationEnum.Action_Finished, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
 
-            _iItemID = Util.AssignValue("ItemID", stringData);
-            _iPeriod = Util.AssignValue("Period", stringData);
+            _iItemID = GetIntByIDKey("ItemID");
+            _iPeriod = GetIntByIDKey("Period");
             _iDaysToHoney = _iPeriod;
         }
 

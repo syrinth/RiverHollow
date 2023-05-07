@@ -139,11 +139,6 @@ namespace RiverHollow.SpriteAnimations
             SpriteColor = c;
         }
 
-        public void SetAlternate<TEnum>(Point newStart, TEnum frameToShift)
-        {
-            _diFrameAnimations[Util.GetEnumString(frameToShift)].SetFrameStartLocation(newStart);
-        }
-
         public void SetLayerDepthMod(float val)
         {
             _fLayerDepthMod = val;

@@ -12,33 +12,20 @@ namespace RiverHollow.WorldObjects
     /// </summary>
     public class Buildable : WorldObject
     {
-        int _iValue = 0;
-        public int Value => _iValue;
+        public int Value => GetIntByIDKey("Value");
 
-        protected Dictionary<int, int> _diReqToMake;
-        public Dictionary<int, int> RequiredToMake => _diReqToMake;
+        public Dictionary<int, int> RequiredToMake => GetIntDictionaryByIDKey("ReqItems");
 
         public bool OutsideOnly { get; protected set; } = false;
         protected bool _bSelected = false;
 
         public bool Unique { get; protected set; }
 
-        protected Buildable(int id) : base(id) { }
-
-        public Buildable(int id, Dictionary<string, string> stringData) : base(id)
+        public Buildable(int id) : base(id)
         {
             _rBase.Y = _pSize.Y - BaseHeight;
 
-            if (stringData.ContainsKey("Unique")) { Unique = true; }
-            LoadDictionaryData(stringData);
-        }
-
-        protected override void LoadDictionaryData(Dictionary<string, string> stringData, bool loadSprite = true)
-        {
-            base.LoadDictionaryData(stringData, loadSprite);
-
-            _iValue = Util.AssignValue("Value", stringData);
-            Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
+            Unique = GetBoolByIDKey("Unique");
         }
 
         public override void Draw(SpriteBatch spriteBatch)

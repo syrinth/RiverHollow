@@ -34,16 +34,15 @@ namespace RiverHollow.WorldObjects
 
         public bool PlayerCanEdit => !ShopItem && IsBuildable();
         public bool ShopItem { get; protected set; } = false;
-        private bool _bMovable = false;
-        private DirectionEnum _eShoveDirection = DirectionEnum.None;
-        private DirectionEnum _ePullDirection = DirectionEnum.None;
-        private bool _bMoveOnce = false;
+
+        private DirectionEnum ShoveDirection => GetEnumByIDKey<DirectionEnum>("ShoveDirection");
+        private DirectionEnum PullDirection => GetEnumByIDKey<DirectionEnum>("PullDirection");
         private bool _bHasMoved = false;
 
         protected bool _bWalkable = false;
         public bool Walkable => _bWalkable;
-        protected ObjectPlacementEnum _ePlacement;
 
+        protected ObjectPlacementEnum _ePlacement;
         protected bool _bDrawUnder = false;
 
         protected Point _pImagePos;
@@ -51,7 +50,7 @@ namespace RiverHollow.WorldObjects
 
         public Point MapPosition { get; protected set; }
 
-        protected Point _pSize = new Point(1, 1);
+        protected Point _pSize;
         public int Width => _pSize.X * Constants.TILE_SIZE;
         public int Height => _pSize.Y * Constants.TILE_SIZE;
 
@@ -83,21 +82,16 @@ namespace RiverHollow.WorldObjects
             return Name() + System.Environment.NewLine + GetTextData("Description");
         }
 
-        protected WorldObject(int id)
+        public bool Movable => GetBoolByIDKey("Movable");
+        public bool MoveOnce => GetBoolByIDKey("MoveOnce");
+
+        public WorldObject(int id)
         {
             Tiles = new List<RHTile>();
 
             ID = id;
-        }
 
-        public WorldObject(int id, Dictionary<string, string> stringData) : this(id)
-        {
-            LoadDictionaryData(stringData);
-        }
-
-        protected virtual void LoadDictionaryData(Dictionary<string, string> stringData, bool loadSprite = true)
-        {
-            string[] split = Util.FindParams(stringData["Image"]);
+            string[] split = GetStringParamsByIDKey("Image");
             if (split.Length == 1)
             {
                 string[] splitVal = split[0].Split('-');
@@ -105,30 +99,20 @@ namespace RiverHollow.WorldObjects
                 _pImagePos = Util.MultiplyPoint(_pImagePos, Constants.TILE_SIZE);
             }
 
-            Util.AssignValue(ref _pSize, "Size", stringData);
+            _eObjectType = GetEnumByIDKey<ObjectTypeEnum>("Type");
 
-            Point baseOffset = Point.Zero;
-            Util.AssignValue(ref baseOffset, "BaseOffset", stringData);
+            _pSize = GetPointByIDKey("Size", new Point(1, 1));
+            _rBase = GetRectangleByIDKey("Base", new Rectangle(0, 0, 1, 1));
 
-            Point baseSize = new Point(1, 1);
-            Util.AssignValue(ref baseSize, "Base", stringData);
+            _ePlacement = GetEnumByIDKey<ObjectPlacementEnum>("Placement");
 
-            _rBase = new Rectangle(baseOffset, baseSize);
-
-            Util.AssignValue(ref _eObjectType, "Type", stringData);
-            Util.AssignValue(ref _ePlacement, "Placement", stringData);
-
-            Util.AssignValue(ref _bMovable, "Movable", stringData);
-            Util.AssignValue(ref _bMoveOnce, "MoveOnce", stringData);
-            Util.AssignValue(ref _eShoveDirection, "ShoveDirection", stringData);
-
-            if (stringData.ContainsKey("LightID"))
+            if (GetBoolByIDKey("LightID"))
             {
                 _liLights = new List<LightInfo>();
 
-                foreach (string s in Util.FindParams(stringData["LightID"]))
+                foreach (string s in Util.FindParams(GetStringByIDKey("LightID")))
                 {
-                    split = s.Split('-');
+                    split = Util.FindArguments(s);
 
                     LightInfo info;
                     info.LightObject = DataManager.GetLight(int.Parse(split[0]));
@@ -139,19 +123,18 @@ namespace RiverHollow.WorldObjects
                 }
             }
 
-            if (loadSprite)
-            {
-                if (stringData.ContainsKey("Texture")) { LoadSprite(stringData, stringData["Texture"]); }
-                else { LoadSprite(stringData); }
-            }
+            LoadSprite();
         }
-
-        protected virtual void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
+        protected virtual void LoadSprite()
         {
-            Sprite = new AnimatedSprite(textureName);
-            if (stringData.ContainsKey("Idle"))
+            LoadSprite(GetStringByIDKey("Texture", DataManager.FILE_WORLDOBJECTS));
+        }
+        protected virtual void LoadSprite(string texture)
+        {
+            Sprite = new AnimatedSprite(texture);
+            if (GetBoolByIDKey("Idle"))
             {
-                string[] idleSplit = stringData["Idle"].Split('-');
+                string[] idleSplit = Util.FindArguments(GetStringByIDKey("Idle"));
                 Sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _pSize, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
             }
             else
@@ -402,12 +385,12 @@ namespace RiverHollow.WorldObjects
         public void InitiateMove(Vector2 newMovement)
         {
             DirectionEnum moveDir = Util.GetDirection(newMovement);
-            bool canMove = _bMovable && (!_bMoveOnce || (_bMoveOnce && !_bHasMoved));
+            bool canMove = Movable && (!MoveOnce || (MoveOnce && !_bHasMoved));
             bool goingBackwards = moveDir == Util.GetOppositeDirection(PlayerManager.PlayerActor.Facing);
-            bool shoveMatches = !goingBackwards && _eShoveDirection == PlayerManager.PlayerActor.Facing;
-            bool pullMatches = goingBackwards && _ePullDirection == Util.GetOppositeDirection(PlayerManager.PlayerActor.Facing);
+            bool shoveMatches = !goingBackwards && ShoveDirection == PlayerManager.PlayerActor.Facing;
+            bool pullMatches = goingBackwards && PullDirection == Util.GetOppositeDirection(PlayerManager.PlayerActor.Facing);
 
-            if (_eShoveDirection == DirectionEnum.None || shoveMatches || pullMatches)
+            if (ShoveDirection == DirectionEnum.None || shoveMatches || pullMatches)
             {
                 if (canMove && (newMovement != Vector2.Zero && moveDir == PlayerManager.PlayerActor.Facing || goingBackwards))
                 {
@@ -449,21 +432,38 @@ namespace RiverHollow.WorldObjects
         {
             return DataManager.GetIntByIDKey(ID, key, DataType.WorldObject, defaultValue);
         }
+        public Dictionary<int, int> GetIntDictionaryByIDKey(string key)
+        {
+            return DataManager.IntDictionaryFromLookup(ID, key, DataType.WorldObject);
+        }
         public float GetFloatByIDKey(string key, int defaultValue = -1)
         {
             return DataManager.GetFloatByIDKey(ID, key, DataType.WorldObject, defaultValue);
         }
-        public string GetStringByIDKey(string key)
+        public string GetStringByIDKey(string key, string defaultValue = default)
         {
-            return DataManager.GetStringByIDKey(ID, key, DataType.WorldObject);
+            return DataManager.GetStringByIDKey(ID, key, DataType.WorldObject, defaultValue);
         }
+        public string[] GetStringArgsByIDKey(string key, string defaultValue = default)
+        {
+            return DataManager.GetStringArgsByIDKey(ID, key, DataType.WorldObject, defaultValue);
+        }
+        public string[] GetStringParamsByIDKey(string key, string defaultValue = default)
+        {
+            return DataManager.GetStringParamsByIDKey(ID, key, DataType.WorldObject, defaultValue);
+        }
+
         protected TEnum GetEnumByIDKey<TEnum>(string key) where TEnum : struct
         {
             return DataManager.GetEnumByIDKey<TEnum>(ID, key, DataType.WorldObject);
         }
-        protected Point GetPointByIDKey(string key, Point defaultPoint = default)
+        protected Point GetPointByIDKey(string key, Point defaultValue = default)
         {
-            return DataManager.GetPointByIDKey(ID, key, DataType.WorldObject, defaultPoint);
+            return DataManager.GetPointByIDKey(ID, key, DataType.WorldObject, defaultValue);
+        }
+        protected Rectangle GetRectangleByIDKey(string key, Rectangle defaultValue = default)
+        {
+            return DataManager.GetRectangleByIDKey(ID, key, DataType.WorldObject, defaultValue);
         }
         #endregion
 

@@ -8,10 +8,8 @@ namespace RiverHollow.WorldObjects
     /// </summary>
     public class Wall : AdjustableObject
     {
-        public Wall(int id, Dictionary<string, string> stringData) : base(id)
+        public Wall(int id) : base(id)
         {
-            LoadDictionaryData(stringData, false);
-            Sprite = LoadAdjustableSprite(DataManager.FILE_WORLDOBJECTS);
         }
     }
 }

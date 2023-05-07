@@ -18,6 +18,7 @@ using RiverHollow.Items.Tools;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.Characters.Mobs;
 using System.Linq;
+using RiverHollow.GUIComponents;
 
 namespace RiverHollow.Game_Managers
 {
@@ -322,9 +323,9 @@ namespace RiverHollow.Game_Managers
             if (!string.IsNullOrEmpty(rv)) { return Util.ParseFloat(rv); }
             else { return defaultValue; }
         }
-        public static Point GetPointByIDKey(int id, string key, DataType type, Point defaultPoint = default)
+        public static Point GetPointByIDKey(int id, string key, DataType type, Point defaultValue = default)
         {
-            Point rv = defaultPoint;
+            Point rv = defaultValue;
             string value = GetStringByIDKey(id, key, type);
 
             if (!string.IsNullOrEmpty(value))
@@ -334,7 +335,19 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
-        public static string GetStringByIDKey(int id, string key, DataType type)
+        public static Rectangle GetRectangleByIDKey(int id, string key, DataType type, Rectangle defaultValue = default)
+        {
+            Rectangle rv = defaultValue;
+            string value = GetStringByIDKey(id, key, type);
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                rv = Util.ParseRectangle(value);
+            }
+
+            return rv;
+        }
+        public static string GetStringByIDKey(int id, string key, DataType type, string defaultValue = default)
         {
             if (id != -1)
             {
@@ -373,41 +386,49 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            return string.Empty;
+            return defaultValue;
+        }
+        public static string[] GetStringArgsByIDKey(int id, string key, DataType type, string defaultValue = default)
+        {
+            return Util.FindArguments(GetStringByIDKey(id, key, type, defaultValue));
+        }
+        public static string[] GetStringParamsByIDKey(int id, string key, DataType type, string defaultValue = default)
+        {
+            return Util.FindParams(GetStringByIDKey(id, key, type, defaultValue));
         }
         public static bool GetBoolByIDKey(int id, string key, DataType type)
         {
             switch (type)
             {
                 case DataType.Action:
-                    if (_diActions[id].ContainsKey(key)) { return _diActions[id].ContainsKey(key); }
+                    if (_diActions.ContainsKey(id) && _diActions[id].ContainsKey(key)) { return _diActions[id].ContainsKey(key); }
                     break;
                 case DataType.Actor:
-                    if (_diActorData[id].ContainsKey(key)) { return _diActorData[id].ContainsKey(key); }
+                    if (_diActorData.ContainsKey(id) && _diActorData[id].ContainsKey(key)) { return _diActorData[id].ContainsKey(key); }
                     break;
                 case DataType.Job:
-                    if (_diJobs[id].ContainsKey(key)) { return _diJobs[id].ContainsKey(key); }
+                    if (_diJobs.ContainsKey(id) && _diJobs[id].ContainsKey(key)) { return _diJobs[id].ContainsKey(key); }
                     break;
                 case DataType.Item:
-                    if (_diItemData[id].ContainsKey(key)) { return _diItemData[id].ContainsKey(key); }
+                    if (_diItemData.ContainsKey(id) && _diItemData[id].ContainsKey(key)) { return _diItemData[id].ContainsKey(key); }
                     break;
                 case DataType.Light:
-                    if (_diLightData[id].ContainsKey(key)) { return _diLightData[id].ContainsKey(key); }
+                    if (_diLightData.ContainsKey(id) && _diLightData[id].ContainsKey(key)) { return _diLightData[id].ContainsKey(key); }
                     break;
                 case DataType.Monster:
-                    if (_diMonsterData[id].ContainsKey(key)) { return _diMonsterData[id].ContainsKey(key); }
+                    if (_diMonsterData.ContainsKey(id) && _diMonsterData[id].ContainsKey(key)) { return _diMonsterData[id].ContainsKey(key); }
                     break;
                 case DataType.StatusEffect:
-                    if (_diStatusEffects[id].ContainsKey(key)) { return _diStatusEffects[id].ContainsKey(key); }
+                    if (_diStatusEffects.ContainsKey(id) && _diStatusEffects[id].ContainsKey(key)) { return _diStatusEffects[id].ContainsKey(key); }
                     break;
                 case DataType.Task:
-                    if (_diTaskData[id].ContainsKey(key)) { return _diTaskData[id].ContainsKey(key); }
+                    if (_diTaskData.ContainsKey(id) && _diTaskData[id].ContainsKey(key)) { return _diTaskData[id].ContainsKey(key); }
                     break;
                 case DataType.Upgrade:
-                    if (_diUpgradeData[id].ContainsKey(key)) { return _diUpgradeData[id].ContainsKey(key); }
+                    if (_diUpgradeData.ContainsKey(id) && _diUpgradeData[id].ContainsKey(key)) { return _diUpgradeData[id].ContainsKey(key); }
                     break;
                 case DataType.WorldObject:
-                    if (_diWorldObjects[id].ContainsKey(key)) { return _diWorldObjects[id].ContainsKey(key); }
+                    if (_diWorldObjects.ContainsKey(id) && _diWorldObjects[id].ContainsKey(key)) { return _diWorldObjects[id].ContainsKey(key); }
                     break;
             }
 
@@ -578,75 +599,63 @@ namespace RiverHollow.Game_Managers
 
             if (id != -1 && _diWorldObjects.ContainsKey(id))
             {
-                Dictionary<string, string> data = new Dictionary<string, string>(_diWorldObjects[id]);
-                if (args != null)
-                {
-                    foreach (KeyValuePair<string, string> kvp in args)
-                    {
-                        if (!data.ContainsKey(kvp.Key))
-                        {
-                            data.Add(kvp.Key, kvp.Value);
-                        }
-                    }
-                }
-
-                switch (Util.ParseEnum<ObjectTypeEnum>(data["Type"]))
+                switch (GetEnumByIDKey<ObjectTypeEnum>(id, "Type", DataType.WorldObject))
                 {
                     case ObjectTypeEnum.Beehive:
-                        return new Beehive(id, data);
+                        return new Beehive(id);
                     case ObjectTypeEnum.Buildable:
-                        return new Buildable(id, data);
+                        return new Buildable(id);
                     case ObjectTypeEnum.Building:
-                        return new Building(id, data);
+                        return new Building(id);
                     case ObjectTypeEnum.Hazard:
-                        return new Hazard(id, data);
+                        return new Hazard(id);
                     case ObjectTypeEnum.Container:
-                        return new Container(id, data);
+                        return new Container(id, args);
                     case ObjectTypeEnum.Decor:
-                        return new Decor(id, data);
+                        return new Decor(id);
                     case ObjectTypeEnum.Destructible:
-                        return new Destructible(id, data);
+                        return new Destructible(id);
                     case ObjectTypeEnum.DungeonObject:
-                        switch (Util.ParseEnum<TriggerObjectEnum>(data["Subtype"]))
+                        switch (GetEnumByIDKey<TriggerObjectEnum>(id, "Subtype", DataType.WorldObject))
                         {
                             case TriggerObjectEnum.ColorBlocker:
-                                return new ColorBlocker(id, data);
+                                return new ColorBlocker(id, args);
                             case TriggerObjectEnum.ColorSwitch:
-                                return new ColorSwitch(id, data);
+                                return new ColorSwitch(id, args);
                             case TriggerObjectEnum.Trigger:
-                                return new Trigger(id, data);
+                                return new Trigger(id, args);
                             case TriggerObjectEnum.KeyDoor:
-                                return new KeyDoor(id, data);
+                                return new KeyDoor(id, args);
                             case TriggerObjectEnum.MobDoor:
-                                return new MobDoor(id, data);
+                                return new MobDoor(id, args);
                             case TriggerObjectEnum.TriggerDoor:
-                                return new TriggerDoor(id, data);
+                                return new TriggerDoor(id, args);
                             case TriggerObjectEnum.FloorSwitch:
-                                return new FloorSwitch(id, data);
+                                return new FloorSwitch(id, args);
                         }
                         break;
                     case ObjectTypeEnum.Floor:
-                        return new Floor(id, data);
+                        return new Floor(id);
                     case ObjectTypeEnum.Garden:
-                        return new Garden(id, data);
+                        return new Garden(id);
                     case ObjectTypeEnum.Gatherable:
-                        return new WrappedItem(id, data);
+                        return new WrappedItem(id);
                     case ObjectTypeEnum.Machine:
-                        return new Machine(id, data);
+                        return new Machine(id);
                     case ObjectTypeEnum.Mailbox:
-                        return new Mailbox(id, data);
+                        return new Mailbox(id);
                     case ObjectTypeEnum.Plant:
-                        return new Plant(id, data);
+                        return new Plant(id);
                     case ObjectTypeEnum.Structure:
-                        return new Structure(id, data);
+                        return new Structure(id);
                     case ObjectTypeEnum.Wall:
-                        return new Wall(id, data);
+                        return new Wall(id);
                     case ObjectTypeEnum.Wallpaper:
-                        return new Wallpaper(id, data);
+                        return new Wallpaper(id);
                     case ObjectTypeEnum.WarpPoint:
-                        return new WarpPoint(id, data);
+                        return new WarpPoint(id);
                     case ObjectTypeEnum.WorldObject:
-                        return new WorldObject(id, data);
+                        return new WorldObject(id);
                 }
             }
 

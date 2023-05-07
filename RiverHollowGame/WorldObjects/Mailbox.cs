@@ -18,7 +18,7 @@ namespace RiverHollow.WorldObjects
         private List<string> _liCurrentMessages;
         private List<string> _liSentMessages;
 
-        public Mailbox(int id, Dictionary<string, string> stringData) : base(id, stringData)
+        public Mailbox(int id) : base(id)
         {
             Unique = true;
             _liCurrentMessages = new List<string>();

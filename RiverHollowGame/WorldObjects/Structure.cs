@@ -9,22 +9,18 @@ namespace RiverHollow.WorldObjects
 {
     public class Structure : Buildable
     {
-        List<SubObjectInfo> _liSubObjectInfo;
+        readonly List<SubObjectInfo> _liSubObjectInfo;
         public IList<SubObjectInfo> ObjectInfo => _liSubObjectInfo.AsReadOnly();
-
-        readonly Point _vecSpecialCoords = Point.Zero;
-        public Point SpecialCoords => _vecSpecialCoords;
-        public Structure(int id, Dictionary<string, string> stringData) : base(id, stringData)
+        public Point SpecialCoords => GetPointByIDKey("SpecialCoords");
+        public Structure(int id) : base(id)
         {
             _liSubObjectInfo = new List<SubObjectInfo>();
 
-            Util.AssignValue(ref _vecSpecialCoords, "SpecialCoords", stringData);
-
-            if (stringData.ContainsKey("SubObjects"))
+            if (GetBoolByIDKey("SubObjects"))
             {
-                foreach (string s in Util.FindParams(stringData["SubObjects"]))
+                foreach (string s in GetStringParamsByIDKey("SubObjects"))
                 {
-                    string[] split = s.Split('-');
+                    string[] split = Util.FindArguments(s);
                     _liSubObjectInfo.Add(new SubObjectInfo() { ObjectID = int.Parse(split[0]), Position = new Point(int.Parse(split[1]), int.Parse(split[2])) });
                 }
             }

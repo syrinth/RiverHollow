@@ -14,34 +14,30 @@ namespace RiverHollow.WorldObjects
     {
         readonly HazardTypeEnum _eHazardType;
 
-        bool _bDrawOver;
-        public int Damage { get; }
+        public int Damage => GetIntByIDKey("Damage");
         public bool Active { get; private set; }
         RHTimer _timer;
 
         DirectionEnum _eMoveDir = DirectionEnum.None;
 
-        public Hazard(int id, Dictionary<string, string> stringData) : base(id)
+        public Hazard(int id) : base(id)
         {
-            _eObjectType = ObjectTypeEnum.Hazard;
-            _eHazardType = Util.ParseEnum<HazardTypeEnum>(stringData["Subtype"]);
-
-            LoadDictionaryData(stringData);
-            Damage = int.Parse(stringData["Damage"]);
-            Util.AssignValue(ref _bDrawOver, "DrawOver", stringData);
             _bWalkable = true;
-            Sprite.SetLayerDepthMod(_bDrawOver ? 1 : -999);
+            _eObjectType = ObjectTypeEnum.Hazard;
+            _eHazardType = GetEnumByIDKey<HazardTypeEnum>("Subtype");
+
+            Sprite.SetLayerDepthMod(GetBoolByIDKey("DrawOver") ? 1 : -999);
 
             Activate(_eHazardType == HazardTypeEnum.Passive);
 
             if(_eHazardType == HazardTypeEnum.Timed)
             {
-                _timer = new RHTimer(float.Parse(stringData["Timer"]));
+                _timer = new RHTimer(GetFloatByIDKey("Timer"));
             }
 
-            if (stringData.ContainsKey("Move"))
+            if (GetBoolByIDKey("Move"))
             {
-                _eMoveDir = Util.ParseEnum<DirectionEnum>(stringData["Move"]);
+                _eMoveDir = GetEnumByIDKey<DirectionEnum>("Move");
             }
         }
 
@@ -82,9 +78,9 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
+        protected override void LoadSprite()
         {
-            base.LoadSprite(stringData, textureName);
+            base.LoadSprite();
 
             if (_eHazardType != HazardTypeEnum.Passive)
             {

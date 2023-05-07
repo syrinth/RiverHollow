@@ -16,9 +16,8 @@ namespace RiverHollow.Buildings
 {
     public class Building : Buildable
     {
-        private Rectangle _rEntrance;
-
         public int Level { get; private set; } = 1;
+        private Rectangle Entrance => GetRectangleByIDKey("Entrance");
 
         public string Description => GetTextData("Description");
 
@@ -32,7 +31,7 @@ namespace RiverHollow.Buildings
 
         public bool UpgradeQueued { get; private set; } = false;
 
-        public Building(int id, Dictionary<string, string> stringData) : base(id)
+        public Building(int id) : base(id)
         {
             ID = id;
             _eObjectType = ObjectTypeEnum.Building;
@@ -40,32 +39,21 @@ namespace RiverHollow.Buildings
             Unique = true;
             OutsideOnly = true;
 
-            //The dimensions of the Building in tiles
-            Util.AssignValue(ref _pSize, "Size", stringData);
+            LoadSprite();
+        }
+        protected override void LoadSprite()
+        {
+            int startX = 0;
+            int startY = 0;
 
-            Util.AssignValue(ref _rBase, "Base", stringData);
-            Util.AssignValue(ref _rEntrance, "Entrance", stringData);
-
-            Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
-
-            if (stringData.ContainsKey("LightID"))
+            Sprite = new AnimatedSprite(DataManager.FOLDER_BUILDINGS + GetStringByIDKey("Texture"));
+            int maxLevel = GetAllUpgrades().Length > 0 ? GetAllUpgrades().Length : 1;
+            for (int i = 1; i <= maxLevel; i++)
             {
-                _liLights = new List<LightInfo>();
-
-                foreach (string s in Util.FindParams(stringData["LightID"]))
-                {
-                    string[] split = s.Split('-');
-
-                    LightInfo info;
-                    info.LightObject = DataManager.GetLight(int.Parse(split[0]));
-                    info.Offset = new Point(int.Parse(split[1]), int.Parse(split[2]));
-
-                    SyncLightPositions();
-                    _liLights.Add(info);
-                }
+                Sprite.AddAnimation(i.ToString(), startX, startY, _pSize);
+                startX += _pSize.X * Constants.TILE_SIZE;
             }
-
-            LoadSprite(stringData, DataManager.FOLDER_BUILDINGS + GetStringByIDKey("Texture"));
+            Sprite.PlayAnimation("1");
         }
 
         public override bool ProcessLeftClick() { return true; }
@@ -79,21 +67,6 @@ namespace RiverHollow.Buildings
             }
         }
 
-        protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\worldObjects")
-        {
-            int startX = 0;
-            int startY = 0;
-
-            Sprite = new AnimatedSprite(textureName);
-            int maxLevel = GetAllUpgrades().Length > 0 ? GetAllUpgrades().Length : 1;
-            for (int i = 1; i <= maxLevel; i++)
-            {
-                Sprite.AddAnimation(i.ToString(), startX, startY, _pSize);
-                startX += _pSize.X * Constants.TILE_SIZE;
-            }
-            Sprite.PlayAnimation("1");
-        }
-
         /// <summary>
         /// Sets up the map position of the map based off of its screen position. Called
         /// when placing the Building onto the map.
@@ -105,11 +78,11 @@ namespace RiverHollow.Buildings
             base.SnapPositionToGrid(position);
 
             //Determine where the top-left corner of the entrance Rectangle should be
-            int startX = (int)MapPosition.X + (_rEntrance.X * Constants.TILE_SIZE);
-            int startY = (int)MapPosition.Y + (_rEntrance.Y * Constants.TILE_SIZE);
+            int startX = (int)MapPosition.X + (Entrance.X * Constants.TILE_SIZE);
+            int startY = (int)MapPosition.Y + (Entrance.Y * Constants.TILE_SIZE);
 
             //Create the entrance and exit rectangles attached to the building
-            TravelBox = new Rectangle(startX, startY, _rEntrance.Width * Constants.TILE_SIZE, _rEntrance.Height * Constants.TILE_SIZE);
+            TravelBox = new Rectangle(startX, startY, Entrance.Width * Constants.TILE_SIZE, Entrance.Height * Constants.TILE_SIZE);
         }
 
         public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)

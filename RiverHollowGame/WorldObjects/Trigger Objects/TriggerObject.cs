@@ -22,14 +22,16 @@ namespace RiverHollow.WorldObjects
 
         protected TriggerObject(int id, Dictionary<string, string> stringData) : base(id)
         {
-            LoadDictionaryData(stringData);
             _eObjectType = ObjectTypeEnum.DungeonObject;
-            _eSubType = Util.ParseEnum<TriggerObjectEnum>(stringData["Subtype"]);
+            _eSubType = GetEnumByIDKey<TriggerObjectEnum>("Subtype");
 
-            Util.AssignValue(ref _sOutTrigger, "OutTrigger", stringData);
-            Util.AssignValue(ref _sMatchTrigger, "MatchTrigger", stringData);
-            _iTriggerNumber = Util.AssignValue("TriggerNumber", stringData);
-            _iItemKeyID = Util.AssignValue("ItemKeyID", stringData);
+            if (stringData != null)
+            {
+                Util.AssignValue(ref _sOutTrigger, "OutTrigger", stringData);
+                Util.AssignValue(ref _sMatchTrigger, "MatchTrigger", stringData);
+                _iTriggerNumber = Util.AssignValue("TriggerNumber", stringData);
+                _iItemKeyID = Util.AssignValue("ItemKeyID", stringData);
+            }
 
             _iTriggersLeft = _iTriggerNumber;
         }

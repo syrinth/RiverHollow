@@ -14,13 +14,15 @@ namespace RiverHollow.WorldObjects
         /// <summary>
         /// Base Constructor to hard define the Height and Width
         /// </summary>
-        public Floor(int id, Dictionary<string, string> stringData) : base(id)
+        public Floor(int id) : base(id)
         {
-            LoadDictionaryData(stringData, false);
-            Sprite = LoadAdjustableSprite(DataManager.FILE_FLOORING);
-
             _eObjectType = ObjectTypeEnum.Floor;
             _ePlacement = ObjectPlacementEnum.Floor;
+        }
+
+        protected override void LoadSprite()
+        {
+            base.LoadSprite(DataManager.FILE_FLOORING);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

@@ -208,6 +208,7 @@
     <Compile Include="WorldObjects\AdjustableObject.cs" />
     <Compile Include="WorldObjects\Beehive.cs" />
     <Compile Include="WorldObjects\Buildable.cs" />
+    <Compile Include="WorldObjects\Flower.cs" />
     <Compile Include="WorldObjects\Trigger Objects\ColorBlocker.cs" />
     <Compile Include="WorldObjects\Hazard.cs" />
     <Compile Include="WorldObjects\Container.cs" />

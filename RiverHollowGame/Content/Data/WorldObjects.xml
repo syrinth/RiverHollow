@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Beehive][Image:7-10][Size:1-2][BaseOffset:0-1][ItemID:158][Period:5][ReqItems:60-4/84-3]</Value>
+      <Value>[Type:Beehive][Image:7-10][Size:1-2][Base:0-1-1-1][ItemID:158][Period:5][ReqItems:60-4/84-3]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -11,7 +11,7 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Buildable][Image:17-0][Size:1-4][ReqItems:2-1/61-5][Idle:1-0.1][BaseOffset:0-2][LightID:1-8-8]</Value>
+      <Value>[Type:Buildable][Image:17-0][Size:1-3][ReqItems:2-1/61-5][Idle:1-0.1][Base:0-2-1-1][LightID:1-8-8]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -167,11 +167,11 @@
     </Item>
     <Item>
       <Key>41</Key>
-      <Value>[Type:Decor][Image:0-26][BaseOffset:0-1][Base:2-1][Size:2-2][Rotation:FourWay][RotationBaseOffset:0-1][RotationSize:1-3][Display][DisplayOffset:8-0][RotatedDisplayOffset:0-8][Value:500]</Value>
+      <Value>[Type:Decor][Image:0-26][Base:0-1-2-1][Size:2-2][Rotation:FourWay][RotationBaseOffset:0-1][RotationSize:1-3][Display][DisplayOffset:8-0][RotatedDisplayOffset:0-8][Value:500]</Value>
     </Item>
     <Item>
       <Key>42</Key>
-      <Value>[Type:Decor][Image:0-24][BaseOffset:0-1][Size:1-2][Rotation:FourWay][Display][Value:50]</Value>
+      <Value>[Type:Decor][Image:0-24][Base:0-1-1-1][Size:1-2][Rotation:FourWay][Display][Value:50]</Value>
     </Item>
     <Item>
       <Key>43</Key>
@@ -179,11 +179,11 @@
     </Item>
     <Item>
       <Key>44</Key>
-      <Value>[Type:Decor][Image:4-24][BaseOffset:0-1][Size:1-2][CanBeDisplayed][Value:50]</Value>
+      <Value>[Type:Decor][Image:4-24][Base:0-1-1-1][Size:1-2][CanBeDisplayed][Value:50]</Value>
     </Item>
     <Item>
       <Key>45</Key>
-      <Value>[Type:Decor][Image:5-29][BaseOffset:0-1][Size:1-2][Rotation:FourWay][Value:50]</Value>
+      <Value>[Type:Decor][Image:5-29][Base:0-1-1-1][Size:1-2][Rotation:FourWay][Value:50]</Value>
     </Item>
     <Item>
       <Key>46</Key>
@@ -191,7 +191,7 @@
     </Item>
     <Item>
       <Key>47</Key>
-      <Value>[Type:Decor][Image:6-26][BaseOffset:0-1][Base:3-2][Size:3-3][Rotation:TwoWay][RotationBaseOffset:0-1][RotationSize:2-4][Display][DisplayOffset:17-12][RotatedDisplayOffset:6-1][Value:50]</Value>
+      <Value>[Type:Decor][Image:6-26][Base:0-1-3-2][Size:3-3][Rotation:TwoWay][RotationBaseOffset:0-1][RotationSize:2-4][Display][DisplayOffset:17-12][RotatedDisplayOffset:6-1][Value:50]</Value>
     </Item>
     <Item>
       <Key>48</Key>
@@ -203,7 +203,7 @@
     </Item>
     <Item>
       <Key>50</Key>
-      <Value>[Type:Destructible][Image:2-2][Size:2-2][Height:32][Tool:Pick][Hp:20][ReqLvl:2][ItemID:0-5][Base:2-2]</Value>
+      <Value>[Type:Destructible][Image:2-2][Size:2-2][Height:32][Tool:Pick][Hp:20][ReqLvl:2][ItemID:0-5][Base:0-0-2-2]</Value>
     </Item>
     <Item>
       <Key>51</Key>
@@ -255,7 +255,7 @@
     </Item>
     <Item>
       <Key>63</Key>
-      <Value>[Type:Destructible][Image:11-6][Size:2-2][Tool:Axe][Hp:20][ReqLvl:2][ItemID:2-5][Base:2-2]</Value>
+      <Value>[Type:Destructible][Image:11-6][Size:2-2][Tool:Axe][Hp:20][ReqLvl:2][ItemID:2-5][Base:0-0-2-2]</Value>
     </Item>
     <Item>
       <Key>64</Key>
@@ -263,7 +263,7 @@
     </Item>
     <Item>
       <Key>65</Key>
-      <Value>[Type:Plant][Texture:Textures\tree][Image:0-4/1-4/1-5/2-4/0-0][Size:1-1/1-1/1-1/1-2/3-4][Hp:1/1/1/2/8][ReqLvl:1][ItemID:///2-1/2-10][Base:1-1][BaseOffset:1-1/1-1/1-1/1-1/1-3][Tool:Axe]</Value>
+      <Value>[Type:Destructible][Texture:Textures\tree][Image:0-0][Size:3-4][Hp:8][ReqLvl:1][ItemID:2-10][Base:1-3-1-1][Tool:Axe]</Value>
     </Item>
     <Item>
       <Key>66</Key>
@@ -279,15 +279,15 @@
     </Item>
     <Item>
       <Key>69</Key>
-      <Value>[Type:DungeonObject][Image:9-6][Size:2-1][Base:2-1][Subtype:TriggerDoor]</Value>
+      <Value>[Type:DungeonObject][Image:9-6][Size:2-1][Base:0-0-2-1][Subtype:TriggerDoor]</Value>
     </Item>
     <Item>
       <Key>70</Key>
-      <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:16-5][Size:1-3][Base:1-2]</Value>
+      <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:16-5][Size:1-3][Base:0-0-1-2]</Value>
     </Item>
     <Item>
       <Key>71</Key>
-      <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:0-34][Size:3-6][Base:1-2][BaseOffset:0-1]</Value>
+      <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:0-34][Size:3-6][Base:0-0-1-2]</Value>
     </Item>
     <Item>
       <Key>72</Key>
@@ -295,11 +295,11 @@
     </Item>
     <Item>
       <Key>73</Key>
-      <Value>[Type:DungeonObject][Subtype:KeyDoor][Image:2-34][Size:2-2][Base:2-1]</Value>
+      <Value>[Type:DungeonObject][Subtype:KeyDoor][Image:2-34][Size:2-2][Base:0-0-2-1]</Value>
     </Item>
     <Item>
       <Key>74</Key>
-      <Value>[Type:DungeonObject][Subtype:MobDoor][Image:4-34][Size:2-2][Base:2-1]</Value>
+      <Value>[Type:DungeonObject][Subtype:MobDoor][Image:4-34][Size:2-2][Base:0-0-2-1]</Value>
     </Item>
     <Item>
       <Key>75</Key>
@@ -307,7 +307,7 @@
     </Item>
     <Item>
       <Key>76</Key>
-      <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:0-34][Size:2-2][Base:2-1]</Value>
+      <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:0-34][Size:2-2][Base:0-0-2-1]</Value>
     </Item>
     <Item>
       <Key>77</Key>
@@ -335,7 +335,7 @@
     </Item>
     <Item>
       <Key>83</Key>
-      <Value>[Type:Gatherable][Image:16-0][Size:1-2][ItemID:74][BaseOffset:0-1]</Value>
+      <Value>[Type:Gatherable][Image:16-0][Size:1-2][ItemID:74][Base:0-1-1-1]</Value>
     </Item>
     <Item>
       <Key>84</Key>
@@ -351,35 +351,35 @@
     </Item>
     <Item>
       <Key>87</Key>
-      <Value>[Type:Machine][Image:0-2][Size:2-2][Base:2-1][BaseOffset:0-1][Makes:194][Daily]</Value>
+      <Value>[Type:Machine][Image:0-2][Size:2-2][Base:0-1-2-1][Makes:194][Daily]</Value>
     </Item>
     <Item>
       <Key>88</Key>
-      <Value>[Type:Machine][Image:0-16][Size:3-3][Base:3-2][BaseOffset:0-1][Makes:167/168/57/58][WorkEffect:Cauldron][Daily]</Value>
+      <Value>[Type:Machine][Image:0-16][Size:3-3][Base:0-1-3-2][Makes:167/168/57/58][WorkEffect:Cauldron][Daily]</Value>
     </Item>
     <Item>
       <Key>89</Key>
-      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Size:1-2][Makes:62/37/38][WorkEffect:stove_fire][Base:1-1][BaseOffset:0-1]</Value>
+      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Size:1-2][Makes:62/37/38][WorkEffect:stove_fire][Base:0-1-1-1]</Value>
     </Item>
     <Item>
       <Key>90</Key>
-      <Value>[Type:Machine][Image:3-16][Work:3-0.15][Size:2-3][Makes:169][Base:2-2]</Value>
+      <Value>[Type:Machine][Image:3-16][Work:3-0.15][Size:2-3][Makes:169][Base:0-1-2-2]</Value>
     </Item>
     <Item>
       <Key>91</Key>
-      <Value>[Type:Machine][Image:0-10][Work:3-0.15][Size:2-2][Makes:3/7/52/53/122][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-10][Work:3-0.15][Size:2-2][Makes:3/7/52/53/122][Base:0-0-2-1]</Value>
     </Item>
     <Item>
       <Key>92</Key>
-      <Value>[Type:Machine][Image:0-14][MachineType:Processor][Size:2-2][Makes:60/205-2][Base:2-2][WorkAnimation:2-0.1]</Value>
+      <Value>[Type:Machine][Image:0-14][MachineType:Processor][Size:2-2][Makes:60/205-2][Base:0-0-2-2][WorkAnimation:2-0.1]</Value>
     </Item>
     <Item>
       <Key>93</Key>
-      <Value>[Type:Machine][Image:0-12][Makes:55/68-2][Size:2-2][Base:2-2][WorkAnimation:2-0.1]</Value>
+      <Value>[Type:Machine][Image:0-12][Makes:55/68-2][Size:2-2][Base:0-0-2-2][WorkAnimation:2-0.1]</Value>
     </Item>
     <Item>
       <Key>94</Key>
-      <Value>[Type:Machine][Image:6-20][Size:2-2][Base:2-1][BaseOffset:0-1][Makes:8155/8156][Daily][Batch:1]</Value>
+      <Value>[Type:Machine][Image:6-20][Size:2-2][Base:0-1-2-1][Makes:8155/8156][Daily][Batch:1]</Value>
     </Item>
     <Item>
       <Key>95</Key>
@@ -387,7 +387,7 @@
     </Item>
     <Item>
       <Key>96</Key>
-      <Value>[Type:Machine][Image:0-6][Work:3-0.15][Size:2-2][Makes:72/71/157/156/73/78/83][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-6][Work:3-0.15][Size:2-2][Makes:72/71/157/156/73/78/83][Base:0-0-2-1]</Value>
     </Item>
     <Item>
       <Key>97</Key>
@@ -395,71 +395,71 @@
     </Item>
     <Item>
       <Key>98</Key>
-      <Value>[Type:Plant][Image:12-19][Size:1-2][SeedID:85][ItemID:92][TrNum:4][TrTime:1-1-1][HoneyID:159][Season:Summer]</Value>
+      <Value>[Type:Plant][Image:12-19][Size:1-2][SeedID:85][ItemID:92][States:4/1-1-1][HoneyID:159][Season:Summer]</Value>
     </Item>
     <Item>
       <Key>99</Key>
-      <Value>[Type:Plant][Image:0-19][Size:1-2][SeedID:86][ItemID:94][TrNum:4][TrTime:1-1-1][HoneyID:145][Season:Summer]</Value>
+      <Value>[Type:Plant][Image:0-19][Size:1-2][SeedID:86][ItemID:94][States:4][TrTime:1-1-1][HoneyID:145][Season:Summer]</Value>
     </Item>
     <Item>
       <Key>100</Key>
-      <Value>[Type:Plant][Image:4-19][Size:1-2][SeedID:88][ItemID:91][TrNum:4][TrTime:1-1-1][HoneyID:144][Season:Summer]</Value>
+      <Value>[Type:Plant][Image:4-19][Size:1-2][SeedID:88][ItemID:91][States:4][TrTime:1-1-1][HoneyID:144][Season:Summer]</Value>
     </Item>
     <Item>
       <Key>101</Key>
-      <Value>[Type:Plant][Image:12-1][Size:1-2][ItemID:152][TrNum:4][TrTime:1-2-3]</Value>
+      <Value>[Type:Plant][Image:12-1][Size:1-2][ItemID:152][States:4][TrTime:1-2-3]</Value>
     </Item>
     <Item>
       <Key>102</Key>
-      <Value>[Type:Plant][Image:8-13][Size:1-2][SeedID:78][ItemID:79][TrNum:4][TrTime:1-1-1][HoneyID:147][LightID:3-8-1][Season:Fall]</Value>
+      <Value>[Type:Plant][Image:8-13][Size:1-2][SeedID:78][ItemID:79][States:4][TrTime:1-1-1][HoneyID:147][LightID:3-8-1][Season:Fall]</Value>
     </Item>
     <Item>
       <Key>103</Key>
-      <Value>[Type:Plant][Image:224-5][Size:1-2][TrNum:2][TrTime:2][Tool:Scythe][ItemID:61][DestructionAnim:13-0-3-0.1][NoWater]</Value>
+      <Value>[Type:Plant][Image:224-5][Size:1-2][States:2][TrTime:2][Tool:Scythe][ItemID:61][DestructionAnim:13-0-3-0.1][NoWater]</Value>
     </Item>
     <Item>
       <Key>104</Key>
-      <Value>[Type:Plant][Image:4-3][ItemID:22][TrNum:4][TrTime:2-3-4]</Value>
+      <Value>[Type:Plant][Image:4-3][ItemID:22][States:4][TrTime:2-3-4]</Value>
     </Item>
     <Item>
       <Key>105</Key>
-      <Value>[Type:Plant][Image:16-272][Size:1-2][SeedID:80][ItemID:95][TrNum:4][TrTime:1-1-1][HoneyID:160][Season:Spring]</Value>
+      <Value>[Type:Plant][Image:16-272][Size:1-2][SeedID:80][ItemID:95][States:4][TrTime:1-1-1][HoneyID:160][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>106</Key>
-      <Value>[Type:Plant][Image:8-336][Size:1-2][SeedID:82][ItemID:93][TrNum:4][TrTime:1-1-1][HoneyID:143][Season:Spring]</Value>
+      <Value>[Type:Plant][Image:8-336][Size:1-2][SeedID:82][ItemID:93][States:4][TrTime:1-1-1][HoneyID:143][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>107</Key>
-      <Value>[Type:Plant][Image:0-4][ItemID:21][TrNum:4][TrTime:1-1-1][SeedID:75]</Value>
+      <Value>[Type:Plant][Image:0-4][ItemID:21][States:4][TrTime:1-1-1][SeedID:75]</Value>
     </Item>
     <Item>
       <Key>108</Key>
-      <Value>[Type:Plant][Image:12-3][Size:1-2][ItemID:175][TrNum:4][TrTime:1-1-1]</Value>
+      <Value>[Type:Plant][Image:12-3][Size:1-2][ItemID:175][States:4][TrTime:1-1-1]</Value>
     </Item>
     <Item>
       <Key>109</Key>
-      <Value>[Type:Plant][Image:4-336][Size:1-2][SeedID:83][ItemID:89][TrNum:4][TrTime:1-1-1][HoneyID:161][Season:Fall]</Value>
+      <Value>[Type:Plant][Image:4-336][Size:1-2][SeedID:83][ItemID:89][States:4][TrTime:1-1-1][HoneyID:161][Season:Fall]</Value>
     </Item>
     <Item>
       <Key>110</Key>
-      <Value>[Type:Plant][Image:0-336][Size:1-2][SeedID:81][ItemID:90][TrNum:4][TrTime:1-1-1][HoneyID:146][Season:Fall]</Value>
+      <Value>[Type:Plant][Image:0-336][Size:1-2][SeedID:81][ItemID:90][States:4][TrTime:1-1-1][HoneyID:146][Season:Fall]</Value>
     </Item>
     <Item>
       <Key>111</Key>
-      <Value>[Type:Plant][Image:8-19][Size:1-2][SeedID:87][ItemID:96][TrNum:4][TrTime:1-1-1][HoneyID:142][Season:Spring]</Value>
+      <Value>[Type:Plant][Image:8-19][Size:1-2][SeedID:87][ItemID:96][States:4][TrTime:1-1-1][HoneyID:142][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>112</Key>
-      <Value>[Type:Structure][Image:11-25][Size:7-7][ReqItems:55-10/60-20][Base:7-7][SpecialCoords:48-3][SubObjects:140-16-16/140-64-16/140-16-80/140-64-80][Unique][Market]</Value>
+      <Value>[Type:Structure][Image:11-25][Size:7-7][ReqItems:55-10/60-20][Base:0-0-7-7][SpecialCoords:48-3][SubObjects:140-16-16/140-64-16/140-16-80/140-64-80][Unique][Market]</Value>
     </Item>
     <Item>
       <Key>113</Key>
-      <Value>[Type:Wall][Image:0-8][Size:1-2][BaseOffset:0-1][ReqItems:0-1]</Value>
+      <Value>[Type:Wall][Image:0-8][Size:1-2][Base:0-1-1-1][ReqItems:0-1]</Value>
     </Item>
     <Item>
       <Key>114</Key>
-      <Value>[Type:Wall][Image:0-272][Size:1-2][BaseOffset:0-1][ReqItems:2-1/60-2]</Value>
+      <Value>[Type:Wall][Image:0-272][Size:1-2][Base:0-1-1-1][ReqItems:2-1/60-2]</Value>
     </Item>
     <Item>
       <Key>115</Key>
@@ -475,11 +475,11 @@
     </Item>
     <Item>
       <Key>118</Key>
-      <Value>[Type:WarpPoint][Image:288-0][Size:1-2][Base:1-1][BaseOffset:0-1]</Value>
+      <Value>[Type:WarpPoint][Image:288-0][Size:1-2][Base:0-1-1-1]</Value>
     </Item>
     <Item>
       <Key>119</Key>
-      <Value>[Type:Decor][Image:16-2][Archive][BaseOffset:0-1][Size:1-2][Display][DisplayOffset:0-3]</Value>
+      <Value>[Type:Decor][Image:16-2][Archive][Base:0-1-1-1][Size:1-2][Display][DisplayOffset:0-3]</Value>
     </Item>
     <Item>
       <Key>120</Key>
@@ -487,51 +487,51 @@
     </Item>
     <Item>
       <Key>121</Key>
-      <Value>[Type:WorldObject][Image:288-10][Size:4-2][Base:4-1][BaseOffset:0-1]</Value>
+      <Value>[Type:WorldObject][Image:288-10][Size:4-2][Base:0-1-4-1]</Value>
     </Item>
     <Item>
       <Key>122</Key>
-      <Value>[Type:WorldObject][Image:288-8][BaseOffset:0-1][Size:2-2]</Value>
+      <Value>[Type:WorldObject][Image:288-8][Base:0-1-1-1][Size:2-2]</Value>
     </Item>
     <Item>
       <Key>123</Key>
-      <Value>[Type:WorldObject][Image:20-8][BaseOffset:1-1][Size:2-2]</Value>
+      <Value>[Type:WorldObject][Image:20-8][Base:1-1-1-1][Size:2-2]</Value>
     </Item>
     <Item>
       <Key>124</Key>
-      <Value>[Type:WorldObject][Image:16-8][Size:2-5][Base:2-5]</Value>
+      <Value>[Type:WorldObject][Image:16-8][Size:2-5][Base:0-0-2-5]</Value>
     </Item>
     <Item>
       <Key>125</Key>
-      <Value>[Type:WorldObject][Image:224-10][Size:2-3][Base:2-3]</Value>
+      <Value>[Type:WorldObject][Image:224-10][Size:2-3][Base:0-0-2-3]</Value>
     </Item>
     <Item>
       <Key>126</Key>
-      <Value>[Type:WorldObject][Image:12-176][BaseOffset:0-3][Size:2-4][Base:2-1]</Value>
+      <Value>[Type:WorldObject][Image:12-176][Size:2-4][Base:0-3-2-1]</Value>
     </Item>
     <Item>
       <Key>127</Key>
-      <Value>[Type:WorldObject][Image:288-192][Size:2-5][Base:2-5]</Value>
+      <Value>[Type:WorldObject][Image:288-192][Size:2-5][Base:0-0-2-5]</Value>
     </Item>
     <Item>
       <Key>128</Key>
-      <Value>[Type:WorldObject][Image:16-224][Size:2-3][Base:2-3]</Value>
+      <Value>[Type:WorldObject][Image:16-224][Size:2-3][Base:0-0-2-3]</Value>
     </Item>
     <Item>
       <Key>129</Key>
-      <Value>[Type:WorldObject][Image:20-13][BaseOffset:0-3][Size:2-4][Base:2-1]</Value>
+      <Value>[Type:WorldObject][Image:20-13][Size:2-4][Base:0-3-2-1]</Value>
     </Item>
     <Item>
       <Key>130</Key>
-      <Value>[Type:WorldObject][Image:288-2][Base:4-3][Size:4-3]</Value>
+      <Value>[Type:WorldObject][Image:18-2][Base:0-0-4-3][Size:4-3]</Value>
     </Item>
     <Item>
       <Key>131</Key>
-      <Value>[Type:WorldObject][Image:288-5][Base:1-3][Size:2-3]</Value>
+      <Value>[Type:WorldObject][Image:18-5][Base:0-0-1-3][Size:2-3]</Value>
     </Item>
     <Item>
       <Key>132</Key>
-      <Value>[Type:WorldObject][Image:20-5][BaseOffset:1-0][Base:1-3][Size:2-3]</Value>
+      <Value>[Type:WorldObject][Image:20-5][Base:1-0-1-3][Size:2-3]</Value>
     </Item>
     <Item>
       <Key>133</Key>
@@ -563,15 +563,15 @@
     </Item>
     <Item>
       <Key>140</Key>
-      <Value>[Type:WorldObject][Image:12-21][Size:2-2][BaseOffset:0-1][Base:2-1]</Value>
+      <Value>[Type:WorldObject][Image:12-21][Size:2-2][Base:0-1-2-1]</Value>
     </Item>
     <Item>
       <Key>141</Key>
-      <Value>[Type:WorldObject][Image:14-21][Size:3-2][BaseOffset:0-1][Base:3-1]</Value>
+      <Value>[Type:WorldObject][Image:14-21][Size:3-2][Base:0-1-3-1]</Value>
     </Item>
     <Item>
       <Key>142</Key>
-      <Value>[Type:WorldObject][Image:13-23][Size:4-2][BaseOffset:0-1][Base:4-1]</Value>
+      <Value>[Type:WorldObject][Image:13-23][Size:4-2][Base:0-1-4-1]</Value>
     </Item>
     <Item>
       <Key>143</Key>
@@ -579,7 +579,7 @@
     </Item>
     <Item>
       <Key>144</Key>
-      <Value>[Type:WorldObject][Image:22-1][Size:1-2][BaseOffset:0-1][Movable]</Value>
+      <Value>[Type:WorldObject][Image:22-1][Size:1-2][Base:0-1-1-1][Movable]</Value>
     </Item>
     <Item>
       <Key>145</Key>
@@ -595,23 +595,23 @@
     </Item>
     <Item>
       <Key>148</Key>
-      <Value>[Type:Machine][Image:0-19][Size:3-2][Base:3-1][BaseOffset:0-1][Makes:195][Kitchen]</Value>
+      <Value>[Type:Machine][Image:0-19][Size:3-2][Base:0-1-3-1][Makes:195][Kitchen]</Value>
     </Item>
     <Item>
       <Key>149</Key>
-      <Value>[Type:Machine][Image:3-20][Size:1-1][Base:1-1][Makes:23][ItemOffset:0-11][Daily][HoldItem]</Value>
+      <Value>[Type:Machine][Image:3-20][Size:1-1][Base:0-0-1-1][Makes:23][ItemOffset:0-11][Daily][HoldItem]</Value>
     </Item>
     <Item>
       <Key>150</Key>
-      <Value>[Type:Destructible][Image:16-19/2][Tool:Pick][Hp:4][ReqLvl:1][ItemID:67-1][DestructionAnim:13-0-3-0.1][BonusItemID:1-1-C]</Value>
+      <Value>[Type:Destructible][Image:16-19/2][Base:0-0-1-1][Tool:Pick][Hp:4][ReqLvl:1][ItemID:67-1][DestructionAnim:13-0-3-0.1][BonusItemID:1-1-C]</Value>
     </Item>
     <Item>
       <Key>151</Key>
-      <Value>[Type:Destructible][Tree][Texture:Textures\WhisperingTree][Image:0-0][Size:3-5][Hp:16][ReqLvl:1][ItemID:200-10][Base:1-1][BaseOffset:1-4][Tool:Axe][BonusItemID:1-3-C]</Value>
+      <Value>[Type:Destructible][Tree][Texture:Textures\WhisperingTree][Image:0-0][Size:3-5][Hp:16][ReqLvl:1][ItemID:200-10][Base:1-4-1-1][Tool:Axe][BonusItemID:1-3-C]</Value>
     </Item>
     <Item>
       <Key>152</Key>
-      <Value>[Type:Machine][Image:4-20][Size:2-2][Base:2-1][BaseOffset:0-1][Makes:201/202/203/204][Daily]</Value>
+      <Value>[Type:Machine][Image:4-20][Size:2-2][Base:0-1-2-1][Makes:201/202/203/204][Daily]</Value>
     </Item>
     <Item>
       <Key>153</Key>
@@ -619,15 +619,15 @@
     </Item>
     <Item>
       <Key>154</Key>
-      <Value>[Type:Decor][Image:23-5][Size:1-2][BaseOffset:0-1][Base:1-1][Value:20][ReqItems:64-4]</Value>
+      <Value>[Type:Decor][Image:23-5][Size:1-2][Base:0-1-1-1][Value:20][ReqItems:64-4]</Value>
     </Item>
     <Item>
       <Key>155</Key>
-      <Value>[Type:Decor][Image:23-8][Size:1-1][BaseOffset:0-0][Base:1-1][ReqItems:66-1]</Value>
+      <Value>[Type:Decor][Image:23-8][Size:1-1][Base:0-0-1-1][ReqItems:66-1]</Value>
     </Item>
     <Item>
       <Key>156</Key>
-      <Value>[Type:Decor][Image:22-6][Size:1-1][BaseOffset:0-0][Base:1-1][ReqItems:66-1]</Value>
+      <Value>[Type:Decor][Image:22-6][Size:1-1][Base:0-0-1-1][ReqItems:66-1]</Value>
     </Item>
   </Asset>
 </XnaContent>

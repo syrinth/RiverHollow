@@ -11,15 +11,17 @@ namespace RiverHollow.WorldObjects
     {
         public AdjustableObject(int id) : base(id) { }
 
+        protected override void LoadSprite(string texture)
+        {
+            Sprite = LoadAdjustableSprite(texture);
+        }
         /// <summary>
         /// Loads in the different sprite versions required for an AdjustableObject
         /// so that they can be easily played and referenced in the future.
         /// </summary>
-        /// <param name="sprite">The AnimatedSprite to load the animations into</param>
-        /// <param name="vStart">The source position for this texture series</param>
-        protected AnimatedSprite LoadAdjustableSprite(string textureName = DataManager.FILE_FLOORING)
+        protected AnimatedSprite LoadAdjustableSprite(string texture)
         {
-            AnimatedSprite spr = new AnimatedSprite(textureName);
+            AnimatedSprite spr = new AnimatedSprite(texture);
             spr.AddAnimation("None", _pImagePos.X, _pImagePos.Y, _pSize);
             spr.AddAnimation("NS", _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
             spr.AddAnimation("EW", _pImagePos.X + Constants.TILE_SIZE * 2, _pImagePos.Y, _pSize);

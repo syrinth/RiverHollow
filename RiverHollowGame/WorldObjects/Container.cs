@@ -14,14 +14,14 @@ namespace RiverHollow.WorldObjects
         public int Columns => GetIntByIDKey("Cols");
         public Item[,] Inventory { get; }
 
-        public Container(int id, Dictionary<string, string> stringData) : base(id, stringData)
+        public Container(int id, Dictionary<string, string> args) : base(id)
         {
             Inventory = new Item[Rows, Columns];
 
             InventoryManager.InitExtraInventory(Inventory);
-            if (stringData.ContainsKey("ItemID"))
+            if (args != null && args.ContainsKey("ItemID"))
             {
-                string[] holdSplit = Util.FindParams(stringData["ItemID"]);
+                string[] holdSplit = Util.FindParams(args["ItemID"]);
                 foreach (string s in holdSplit)
                 {
                     InventoryManager.AddToInventory(int.Parse(s), 1, false);

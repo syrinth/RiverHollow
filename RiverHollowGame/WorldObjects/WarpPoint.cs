@@ -2,10 +2,10 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.MainObjects;
 using RiverHollow.Map_Handling;
-using System.Collections.Generic;
-using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Utilities.Enums;
 using RiverHollow.Utilities;
+
+using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.WorldObjects
 {
@@ -14,9 +14,8 @@ namespace RiverHollow.WorldObjects
         public bool Active { get; private set; } = false;
         private string _sDungeonName;
 
-        public WarpPoint(int id, Dictionary<string, string> stringData) : base(id)
+        public WarpPoint(int id) : base(id)
         {
-            LoadDictionaryData(stringData);
             Sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
         }
 

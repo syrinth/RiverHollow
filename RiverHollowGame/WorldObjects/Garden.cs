@@ -18,14 +18,11 @@ namespace RiverHollow.WorldObjects
         AnimatedSprite _sprWatered;
         bool _bWatered;
 
-        public Garden(int id, Dictionary<string, string> stringData) : base(id)
+        public Garden(int id) : base(id)
         {
             OutsideOnly = true;
             _eObjectType = ObjectTypeEnum.Garden;
 
-            LoadDictionaryData(stringData, false);
-
-            Sprite = LoadAdjustableSprite(DataManager.FILE_WORLDOBJECTS);
             _pImagePos.Y += Constants.TILE_SIZE;
 
             _sprWatered = LoadAdjustableSprite(DataManager.FILE_WORLDOBJECTS);
@@ -128,7 +125,7 @@ namespace RiverHollow.WorldObjects
             }
 
             _objPlant = obj;
-            _objPlant?.SetGarden(this);
+            //_objPlant?.SetGarden(this);
             _objPlant?.SnapPositionToGrid(new Point(MapPosition.X, MapPosition.Y - (_objPlant.Sprite.Height - Constants.TILE_SIZE)));
             _objPlant?.SyncLightPositions();
         }

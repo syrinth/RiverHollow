@@ -16,38 +16,32 @@ namespace RiverHollow.WorldObjects
     public class Decor : Buildable
     {
         protected enum RotationalEnum { None, FourWay, TwoWay };
-        protected RotationalEnum _eRotationType = RotationalEnum.None;
+        protected RotationalEnum RotationType => GetEnumByIDKey<RotationalEnum>("Rotation");
 
-        protected DirectionEnum _eFacingDir = DirectionEnum.Down;
-        public DirectionEnum Facing => _eFacingDir;
+        public DirectionEnum Facing { get; private set; } = DirectionEnum.Down;
 
-        protected Point _pDisplayOffset = Point.Zero;
-        protected Point _pRotatedDisplayOffset = Point.Zero;
+        protected Point _pDisplayOffset;
+        protected Point _pRotatedDisplayOffset;
 
-        protected int _iRotationBaseOffsetX;
-        protected int _iRotationBaseOffsetY;
+        protected Point _pRotationOffset;
         protected Point _pRotationSize;
 
-        private readonly bool _bDisplaysObject = false;
-        public bool CanDisplay => _bDisplaysObject;
+        public bool CanDisplay => GetBoolByIDKey("Display");
+        public bool CanBeDisplayed => GetBoolByIDKey("CanBeDisplayed");
 
-        private readonly bool _bCanBeDisplayed = false;
-        public bool CanBeDisplayed => _bCanBeDisplayed;
         private Item _itemDisplay;
         private Decor _objDisplay;
         public bool HasDisplay => _objDisplay != null || _itemDisplay != null;
         bool Archive => GetBoolByIDKey("Archive");
 
-        public Decor(int id, Dictionary<string, string> stringData) : base(id, stringData)
+        public Decor(int id) : base(id)
         {
             _eObjectType = ObjectTypeEnum.Decor;
-            Util.AssignValue(ref _eRotationType, "Rotation", stringData);
-            Util.AssignValues(ref _iRotationBaseOffsetX, ref _iRotationBaseOffsetY, "RotationBaseOffset", stringData);
-            Util.AssignValue(ref _pRotationSize, "RotationSize", stringData);
-            Util.AssignValue(ref _bDisplaysObject, "Display", stringData);
-            Util.AssignValue(ref _bCanBeDisplayed, "CanBeDisplayed", stringData);
-            Util.AssignValue(ref _pDisplayOffset, "DisplayOffset", stringData);
-            Util.AssignValue(ref _pRotatedDisplayOffset, "RotatedDisplayOffset", stringData);
+            _pRotationOffset = GetPointByIDKey("RotationBaseOffset");
+            _pRotationSize = GetPointByIDKey("RotationSize");
+
+            _pDisplayOffset = GetPointByIDKey("DisplayOffset");
+            _pRotatedDisplayOffset = GetPointByIDKey("RotatedDisplayOffset");
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -168,7 +162,7 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public void Rotate()
         {
-            if (_eRotationType != RotationalEnum.None)
+            if (RotationType != RotationalEnum.None)
             {
                 //We don't need to do any swaps if the object has the same base and height
                 if (_rBase.Width != _rBase.Height)
@@ -176,43 +170,43 @@ namespace RiverHollow.WorldObjects
                     (_pRotatedDisplayOffset, _pDisplayOffset) = (_pDisplayOffset, _pRotatedDisplayOffset);
                     Util.SwitchValues(ref _rBase.Width, ref _rBase.Height);
                     Util.SwitchValues(ref _pSize, ref _pRotationSize);
-                    Util.SwitchValues(ref _rBase.X, ref _iRotationBaseOffsetX);
-                    Util.SwitchValues(ref _rBase.Y, ref _iRotationBaseOffsetY);
+                    Util.SwitchValues(ref _rBase.X, ref _pRotationOffset.X);
+                    Util.SwitchValues(ref _rBase.Y, ref _pRotationOffset.Y);
                 }
 
                 Rectangle spriteFrameRectangle = Sprite.CurrentFrameAnimation.FrameRectangle;
                 Point newImage = spriteFrameRectangle.Location + new Point(spriteFrameRectangle.Width, 0);
 
                 //Direction handling for the different rotation types
-                if (_eRotationType == RotationalEnum.FourWay)
+                if (RotationType == RotationalEnum.FourWay)
                 {
-                    switch (_eFacingDir)
+                    switch (Facing)
                     {
                         case DirectionEnum.Down:
-                            _eFacingDir = DirectionEnum.Right;
+                            Facing = DirectionEnum.Right;
                             break;
                         case DirectionEnum.Right:
-                            _eFacingDir = DirectionEnum.Up;
+                            Facing = DirectionEnum.Up;
                             break;
                         case DirectionEnum.Up:
-                            _eFacingDir = DirectionEnum.Left;
+                            Facing = DirectionEnum.Left;
                             break;
                         case DirectionEnum.Left:
                             newImage = _pImagePos;
-                            _eFacingDir = DirectionEnum.Down;
+                            Facing = DirectionEnum.Down;
                             break;
                     }
                 }
-                else if (_eRotationType == RotationalEnum.TwoWay)
+                else if (RotationType == RotationalEnum.TwoWay)
                 {
-                    switch (_eFacingDir)
+                    switch (Facing)
                     {
                         case DirectionEnum.Down:
-                            _eFacingDir = DirectionEnum.Right;
+                            Facing = DirectionEnum.Right;
                             break;
                         case DirectionEnum.Right:
                             newImage = _pImagePos;
-                            _eFacingDir = DirectionEnum.Down;
+                            Facing = DirectionEnum.Down;
                             break;
                     }
                 }
@@ -364,7 +358,7 @@ namespace RiverHollow.WorldObjects
             WorldObjectData data = base.SaveData();
             string objDisplayStr = _objDisplay == null ? "" : _objDisplay.ID.ToString();
             string itemDisplayStr = _itemDisplay == null ? "" : _itemDisplay.ID.ToString();
-            data.stringData = string.Format("{0}/{1}/{2}", (int)_eFacingDir, objDisplayStr, itemDisplayStr);
+            data.stringData = string.Format("{0}/{1}/{2}", (int)Facing, objDisplayStr, itemDisplayStr);
 
             return data;
         }

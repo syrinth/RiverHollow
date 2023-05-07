@@ -22,23 +22,11 @@ namespace RiverHollow.WorldObjects
 
         private Point ItemOffset => GetPointByIDKey("ItemOffset");
 
-        protected int _iWorkingFrames = 2;
-        protected float _fFrameSpeed = 0.3f;
-
         public int Capacity => GetIntByIDKey("Capacity", 1);
         public int MaxBatch => GetIntByIDKey("Batch", CraftDaily ? 3 : 1);
 
-        public Machine(int id, Dictionary<string, string> stringData) : base(id)
+        public Machine(int id) : base(id)
         {
-            if (stringData.ContainsKey("WorkAnimation"))
-            {
-                string[] split = stringData["WorkAnimation"].Split('-');
-                _iWorkingFrames = int.Parse(split[0]);
-                _fFrameSpeed = float.Parse(split[1]);
-            }
-
-            LoadDictionaryData(stringData);
-
             CraftingSlots = new Recipe[Capacity];
             for (int i = 0; i < Capacity; i++)
             {
@@ -50,11 +38,21 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\texMachines")
+        protected override void LoadSprite()
         {
+            var frames = 2;
+            var frameSpeed = 0.3f;
+
+            if (GetBoolByIDKey("WorkAnimation"))
+            {
+                string[] split = GetStringArgsByIDKey("WorkAnimation");
+                frames = int.Parse(split[0]);
+                frameSpeed = float.Parse(split[1]);
+            }
+
             Sprite = new AnimatedSprite(@"Textures\texMachines");
             Sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _pSize, 1, 0.3f, false);
-            Sprite.AddAnimation(AnimationEnum.PlayAnimation, _pImagePos.X + _pSize.Y, _pImagePos.Y, _pSize, _iWorkingFrames, _fFrameSpeed, false);
+            Sprite.AddAnimation(AnimationEnum.PlayAnimation, _pImagePos.X + _pSize.Y, _pImagePos.Y, _pSize, frames, frameSpeed, false);
             Sprite.PlayAnimation(AnimationEnum.ObjectIdle);
             Sprite.Show = true;
 

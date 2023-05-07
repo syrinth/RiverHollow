@@ -198,7 +198,7 @@ namespace Database_Editor.Classes
                             }
                         }
                     }
-                    else
+                    else if(int.TryParse(splitData[0], out _))
                     {
                         if (int.Parse(splitData[0]) == id)
                         {

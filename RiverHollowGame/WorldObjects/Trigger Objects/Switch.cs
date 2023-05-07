@@ -11,7 +11,7 @@ namespace RiverHollow.WorldObjects.Trigger_Objects
         protected bool _bHasBeenTriggered = false;
         protected bool _bVisible = true;
 
-        public Switch(int id, Dictionary<string, string> data) : base(id, data)
+        public Switch(int id, Dictionary<string, string> data) : base(id)
         {
            
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
+using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
@@ -12,28 +13,47 @@ namespace RiverHollow.WorldObjects
 {
     public class Destructible : WorldObject
     {
-        protected int _iHP = 1;
-        public int HP => _iHP;
+        public int HP {get; private set;}
 
-        protected int _iAltSprite = 0;
+        protected int _iAltSprite = -1;
 
         public ToolEnum NeededTool => GetEnumByIDKey<ToolEnum>("Tool");
 
         public int NeededToolLevel => GetIntByIDKey("ReqLvl");
 
-        public Destructible(int id, Dictionary<string, string> stringData, bool loadSprite = true) : base(id)
+        public Destructible(int id) : base(id)
         {
-            LoadDictionaryData(stringData, loadSprite);
+            HP = GetIntByIDKey("HP", 1);
 
-            ReloadAlternateSprite(RHRandom.Instance().Next(0, Util.FindParams(stringData["Image"]).Length - 1), stringData["Image"]);
-
-            if (stringData.ContainsKey("Hp")) { _iHP = int.Parse(stringData["Hp"]); }
-
-            if (loadSprite && stringData.ContainsKey("DestructionAnim"))
+            if (GetBoolByIDKey("DestructionAnim"))
             {
-                string[] splitString = stringData["DestructionAnim"].Split('-');
+                string[] splitString = GetStringArgsByIDKey("DestructionAnim");
                 Sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), Constants.TILE_SIZE, Constants.TILE_SIZE, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
             }
+        }
+
+        protected override void LoadSprite()
+        {
+            var value = 0;
+            var imageStr = GetStringParamsByIDKey("Image");
+
+            //If -1, it's either unset or no alts present
+            //Else, an alt has been saved
+            if (_iAltSprite == -1)
+            {
+                //If only length of one, no alts present
+                if (imageStr.Length > 1)
+                {
+                    _iAltSprite = RHRandom.Instance().Next(0, int.Parse(imageStr[1]));
+                    value = _iAltSprite;
+                }
+            }
+            else { value = _iAltSprite; }
+            
+            string[] split = GetStringParamsByIDKey("Image");
+
+            _pImagePos = Util.MultiplyPoint(Util.ParsePoint(split[0]) + new Point(value, 0), Constants.TILE_SIZE);
+            base.LoadSprite();
         }
 
         public override void Update(GameTime gTime)
@@ -42,7 +62,7 @@ namespace RiverHollow.WorldObjects
 
             //Destructibles move when hit, so reset position
             Sprite.Position = MapPosition;
-            if (_iHP <= 0)
+            if (HP <= 0)
             {
                 if (!Sprite.ContainsAnimation(AnimationEnum.KO) || Sprite.AnimationFinished(AnimationEnum.KO))
                 {
@@ -55,7 +75,7 @@ namespace RiverHollow.WorldObjects
         {
             bool rv = false;
 
-            if (_iHP > 0)
+            if (HP > 0)
             {
                // PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool));
             }
@@ -71,11 +91,11 @@ namespace RiverHollow.WorldObjects
                 {
                     SoundManager.PlayEffectAtLoc(toolUsed.GetEnumByIDKey<SoundEffectEnum>("SoundEffect"), MapName, CollisionCenter);
 
-                    if (_iHP > 0)
+                    if (HP > 0)
                     {
-                        _iHP -= toolUsed.ToolLevel;
+                        HP -= toolUsed.ToolLevel;
 
-                        if (_iHP <= 0)
+                        if (HP <= 0)
                         {
                             _bWalkable = true;
                             Sprite.PlayAnimation(AnimationEnum.KO);
@@ -98,7 +118,7 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        private List<Item> GetDroppedItems()
+        protected List<Item> GetDroppedItems()
         {
             string items = GetStringByIDKey("ItemID");
             string[] strParams = Util.FindParams(items);
@@ -145,15 +165,6 @@ namespace RiverHollow.WorldObjects
             return itemList;
         }
 
-        private void ReloadAlternateSprite(int altSprite, string imageSprite)
-        {
-            _iAltSprite = altSprite;
-            string[] split = Util.FindParams(imageSprite);
-
-            _pImagePos = Util.MultiplyPoint(Util.ParsePoint(split[0]) + new Point(altSprite, 0), Constants.TILE_SIZE);
-            Sprite.SetAlternate(_pImagePos, AnimationEnum.ObjectIdle);
-        }
-
         public override WorldObjectData SaveData()
         {
             WorldObjectData data = base.SaveData();
@@ -164,8 +175,9 @@ namespace RiverHollow.WorldObjects
         public override void LoadData(WorldObjectData data)
         {
             base.LoadData(data);
+            _iAltSprite = int.Parse(data.stringData);
 
-            ReloadAlternateSprite(int.Parse(data.stringData), GetStringByIDKey("Image"));
+            LoadSprite();
         }
     }
 }
