@@ -550,6 +550,10 @@ namespace RiverHollow.Map_Handling
                             if (tiledObj.Properties.ContainsKey("ObjectID"))
                             {
                                 WorldObject obj = DataManager.CreateWorldObjectByID(int.Parse(tiledObj.Properties["ObjectID"]), tiledObj.Properties);
+                                if (obj.CompareType(ObjectTypeEnum.Plant))
+                                {
+                                    ((Plant)obj).FinishGrowth();
+                                }
                                 obj.PlaceOnMap(new Point(x, y), this);
                                 objWidth = obj.BaseWidth * Constants.TILE_SIZE;
                                 objHeight = obj.BaseHeight * Constants.TILE_SIZE;
@@ -739,7 +743,7 @@ namespace RiverHollow.Map_Handling
                 _liPlacedWorldObjects.Clear();
             }
             MobsSpawned = MobSpawnStateEnum.None;
-            _liPlacedWorldObjects.ForEach(x => x.Rollover());
+            new List<WorldObject>(_liPlacedWorldObjects).ForEach(x => x.Rollover());
             _liResourceSpawns.ForEach(x => x.Rollover(Randomize));
 
             StockShop();

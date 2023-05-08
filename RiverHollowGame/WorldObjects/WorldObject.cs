@@ -440,15 +440,15 @@ namespace RiverHollow.WorldObjects
         {
             return DataManager.GetFloatByIDKey(ID, key, DataType.WorldObject, defaultValue);
         }
-        public string GetStringByIDKey(string key, string defaultValue = default)
+        public string GetStringByIDKey(string key, string defaultValue = "")
         {
             return DataManager.GetStringByIDKey(ID, key, DataType.WorldObject, defaultValue);
         }
-        public string[] GetStringArgsByIDKey(string key, string defaultValue = default)
+        public string[] GetStringArgsByIDKey(string key, string defaultValue = "")
         {
             return DataManager.GetStringArgsByIDKey(ID, key, DataType.WorldObject, defaultValue);
         }
-        public string[] GetStringParamsByIDKey(string key, string defaultValue = default)
+        public string[] GetStringParamsByIDKey(string key, string defaultValue = "")
         {
             return DataManager.GetStringParamsByIDKey(ID, key, DataType.WorldObject, defaultValue);
         }

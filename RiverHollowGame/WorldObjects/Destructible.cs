@@ -22,12 +22,6 @@ namespace RiverHollow.WorldObjects
         public Destructible(int id) : base(id)
         {
             HP = GetIntByIDKey("HP", 1);
-
-            if (GetBoolByIDKey("DestructionAnim"))
-            {
-                string[] splitString = GetStringArgsByIDKey("DestructionAnim");
-                Sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]) * Constants.TILE_SIZE, int.Parse(splitString[1]) * Constants.TILE_SIZE, Constants.TILE_SIZE, Constants.TILE_SIZE, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
-            }
         }
 
         protected override void LoadSprite()
@@ -52,6 +46,12 @@ namespace RiverHollow.WorldObjects
 
             _pImagePos = Util.MultiplyPoint(Util.ParsePoint(split[0]) + new Point(value, 0), Constants.TILE_SIZE);
             base.LoadSprite();
+
+            if (GetBoolByIDKey("DestructionAnim"))
+            {
+                string[] splitString = GetStringArgsByIDKey("DestructionAnim");
+                Sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]) * Constants.TILE_SIZE, int.Parse(splitString[1]) * Constants.TILE_SIZE, Constants.TILE_SIZE, Constants.TILE_SIZE, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
+            }
         }
 
         public override void Update(GameTime gTime)

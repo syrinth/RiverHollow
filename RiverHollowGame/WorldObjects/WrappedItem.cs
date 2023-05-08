@@ -1,9 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-using RiverHollow.Game_Managers;
+﻿using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.SpriteAnimations;
-using RiverHollow.Utilities;
-using System.Collections.Generic;
+
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -17,6 +15,7 @@ namespace RiverHollow.WorldObjects
         public WrappedItem(int itemID) : base(-1)
         {
             _iItemID = itemID;
+            LoadSprite();
         }
 
         protected override void LoadSprite()

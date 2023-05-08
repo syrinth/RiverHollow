@@ -364,13 +364,13 @@ namespace RiverHollow.Map_Handling
 
             if (getDiagonal)
             {
-                temp = GetTileByDirection(DirectionEnum.Down).GetTileByDirection(DirectionEnum.Left);
+                temp = GetTileByDirection(DirectionEnum.Down)?.GetTileByDirection(DirectionEnum.Left);
                 if (temp != null) { adj.Add(temp); }
-                temp = GetTileByDirection(DirectionEnum.Down).GetTileByDirection(DirectionEnum.Right);
+                temp = GetTileByDirection(DirectionEnum.Down)?.GetTileByDirection(DirectionEnum.Right);
                 if (temp != null) { adj.Add(temp); }
-                temp = GetTileByDirection(DirectionEnum.Up).GetTileByDirection(DirectionEnum.Left);
+                temp = GetTileByDirection(DirectionEnum.Up)?.GetTileByDirection(DirectionEnum.Left);
                 if (temp != null) { adj.Add(temp); }
-                temp = GetTileByDirection(DirectionEnum.Up).GetTileByDirection(DirectionEnum.Right);
+                temp = GetTileByDirection(DirectionEnum.Up)?.GetTileByDirection(DirectionEnum.Right);
                 if (temp != null) { adj.Add(temp); }
             }
 

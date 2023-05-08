@@ -347,7 +347,7 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
-        public static string GetStringByIDKey(int id, string key, DataType type, string defaultValue = default)
+        public static string GetStringByIDKey(int id, string key, DataType type, string defaultValue = "")
         {
             if (id != -1)
             {
@@ -388,11 +388,11 @@ namespace RiverHollow.Game_Managers
 
             return defaultValue;
         }
-        public static string[] GetStringArgsByIDKey(int id, string key, DataType type, string defaultValue = default)
+        public static string[] GetStringArgsByIDKey(int id, string key, DataType type, string defaultValue = "")
         {
             return Util.FindArguments(GetStringByIDKey(id, key, type, defaultValue));
         }
-        public static string[] GetStringParamsByIDKey(int id, string key, DataType type, string defaultValue = default)
+        public static string[] GetStringParamsByIDKey(int id, string key, DataType type, string defaultValue = "")
         {
             return Util.FindParams(GetStringByIDKey(id, key, type, defaultValue));
         }

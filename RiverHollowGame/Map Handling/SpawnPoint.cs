@@ -146,7 +146,7 @@ namespace RiverHollow.Map_Handling
                         WorldObject wObj = DataManager.CreateWorldObjectByID(sData.ID);
                         wObj.SnapPositionToGrid(new Point(targetTile.Position.X, targetTile.Position.Y));
 
-                        if (wObj.CompareType(ObjectTypeEnum.Plant) && !_bHasSpawned)
+                        if (wObj.CompareType(ObjectTypeEnum.Plant))
                         {
                             ((Plant)wObj).FinishGrowth();
                         }

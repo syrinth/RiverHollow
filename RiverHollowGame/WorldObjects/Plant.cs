@@ -126,22 +126,29 @@ namespace RiverHollow.WorldObjects
         }
         private void SetGrowthInfo()
         {
-            _iDaysToNextState = int.Parse(GetStringParamsByIDKey("Time")[_iCurrentState]);
-            HP = int.Parse(GetStringParamsByIDKey("Hp")[_iCurrentState]);
-            _pSize = Util.ParsePoint(GetStringParamsByIDKey("Size")[_iCurrentState]);
-            _rBase = Util.ParseRectangle(GetStringParamsByIDKey("Base")[_iCurrentState]);
-
-            if (Tiles != null && Tiles.Count > 0)
+            if (MaxStates > 1)
             {
-                var tile = Tiles[0];
-                RemoveSelfFromTiles();
-                PlaceOnMap(tile.Position, CurrentMap);
+                _iDaysToNextState = int.Parse(GetStringParamsByIDKey("Time", "0")[_iCurrentState]);
+                HP = int.Parse(GetStringParamsByIDKey("Hp")[_iCurrentState]);
+                _pSize = Util.ParsePoint(GetStringParamsByIDKey("Size")[_iCurrentState]);
+                _rBase = Util.ParseRectangle(GetStringParamsByIDKey("Base")[_iCurrentState]);
+
+                if (Tiles != null && Tiles.Count > 0)
+                {
+                    var tile = Tiles[0];
+                    RemoveSelfFromTiles();
+                    PlaceOnMap(tile.Position, CurrentMap);
+                }
             }
         }
 
         protected override string Loot()
         {
-            return GetStringParamsByIDKey("ItemID")[_iCurrentState];
+            if (GetBoolByIDKey("ItemID"))
+            {
+                return GetStringParamsByIDKey("ItemID")[_iCurrentState];
+            }
+            else { return string.Empty; }
         }
 
         /// <summary>
@@ -202,6 +209,19 @@ namespace RiverHollow.WorldObjects
                     SetState(++_iCurrentState);
                 }
             }
+
+            if(FinishedGrowing() && GetBoolByIDKey("Spread"))
+            {
+                var spreadParams = Util.FindIntParams(GetStringByIDKey("Spread"));
+                if (RHRandom.Instance().RollPercent(spreadParams[0]))
+                {
+                    var targetTile = Util.GetRandomItem(CurrentMap.GetAllTilesInRange(Tiles[0], spreadParams[1]));
+                    if (targetTile != null && targetTile.WorldObject == null && targetTile.Flooring == null)
+                    {
+                        DataManager.CreateAndPlaceNewWorldObject(ID, targetTile.Position, CurrentMap);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -217,10 +237,17 @@ namespace RiverHollow.WorldObjects
 
         public override bool WideOnTop()
         {
-            var endSize = Util.ParsePoint(GetStringParamsByIDKey("Size")[MaxStates - 1]);
-            var endBase = Util.ParseRectangle(GetStringParamsByIDKey("Base")[MaxStates - 1]);
+            if (MaxStates > 1)
+            {
+                var endSize = Util.ParsePoint(GetStringParamsByIDKey("Size")[MaxStates - 1]);
+                var endBase = Util.ParseRectangle(GetStringParamsByIDKey("Base")[MaxStates - 1]);
 
-            return endBase.X < endSize.X;
+                return endBase.X < endSize.X;
+            }
+            else
+            {
+                return base.WideOnTop();
+            }
         }
 
         public override WorldObjectData SaveData()
