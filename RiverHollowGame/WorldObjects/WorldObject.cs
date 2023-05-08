@@ -212,7 +212,7 @@ namespace RiverHollow.WorldObjects
             return CollisionBox.Intersects(r);
         }
 
-        public bool WideOnTop()
+        public virtual bool WideOnTop()
         {
             return BaseWidth < Width / Constants.TILE_SIZE;
         }

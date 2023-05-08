@@ -191,7 +191,9 @@ namespace RiverHollow.Game_Managers
                 obj.PlaceOnMap(targetTile.Position, MapManager.Maps[Constants.TOWN_MAP_NAME]);
                 if (obj.CompareType(ObjectTypeEnum.Plant))
                 {
-                    ((Plant)obj).FinishGrowth();
+                    var p = (Plant)obj;
+                    if (i <= numToPlace * 0.5) { p.FinishGrowth(); }
+                    else { p.RandomizeState(); }
                 }
 
                 possibleTiles.Remove(targetTile);

@@ -468,7 +468,7 @@ namespace RiverHollow.Utilities
         {
             Point rv = Point.Zero;
 
-            string[] splitVal = str.Split('-');
+            string[] splitVal = FindArguments(str);
             if (splitVal.Length == 2)
             {
                 rv = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
@@ -480,10 +480,10 @@ namespace RiverHollow.Utilities
         {
             Rectangle rv = Rectangle.Empty;
 
-            int[] args = Util.FindIntArguments(str);
+            string[] args = FindArguments(str);
             if (args.Length == 4)
             {
-                rv = new Rectangle(args[0], args[1], args[2], args[3]);
+                rv = new Rectangle(int.Parse(args[0]), int.Parse(args[1]), int.Parse(args[2]), int.Parse(args[3]));
             }
 
             return rv;

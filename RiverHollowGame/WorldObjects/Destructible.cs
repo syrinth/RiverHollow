@@ -1,11 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
-using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -13,7 +11,7 @@ namespace RiverHollow.WorldObjects
 {
     public class Destructible : WorldObject
     {
-        public int HP {get; private set;}
+        public int HP {get; protected set;}
 
         protected int _iAltSprite = -1;
 
@@ -28,7 +26,7 @@ namespace RiverHollow.WorldObjects
             if (GetBoolByIDKey("DestructionAnim"))
             {
                 string[] splitString = GetStringArgsByIDKey("DestructionAnim");
-                Sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), Constants.TILE_SIZE, Constants.TILE_SIZE, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
+                Sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]) * Constants.TILE_SIZE, int.Parse(splitString[1]) * Constants.TILE_SIZE, Constants.TILE_SIZE, Constants.TILE_SIZE, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
             }
         }
 
@@ -118,9 +116,13 @@ namespace RiverHollow.WorldObjects
             }
         }
 
+        protected virtual string Loot()
+        {
+            return GetStringByIDKey("ItemID");
+        }
         protected List<Item> GetDroppedItems()
         {
-            string items = GetStringByIDKey("ItemID");
+            var items = Loot();
             string[] strParams = Util.FindParams(items);
             var dropList = new List<Tuple<int, int>>();
             for (int i = 0; i < strParams.Length; i++)
@@ -175,7 +177,7 @@ namespace RiverHollow.WorldObjects
         public override void LoadData(WorldObjectData data)
         {
             base.LoadData(data);
-            _iAltSprite = int.Parse(data.stringData);
+            _iAltSprite = int.Parse(Util.FindParams(data.stringData)[0]);
 
             LoadSprite();
         }

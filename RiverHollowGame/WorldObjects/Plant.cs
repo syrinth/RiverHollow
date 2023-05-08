@@ -2,7 +2,6 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
-using System.Collections.Generic;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -24,8 +23,7 @@ namespace RiverHollow.WorldObjects
         int _iCurrentState = 0;
         int _iDaysToNextState = -1;
 
-        int MaxStates => int.Parse(Util.FindParams(GetStringByIDKey("States", "1"))[0]);
-        int[] StateTimes => Util.FindIntArguments(Util.FindParams(GetStringByIDKey("States", "1"))[1]);
+        public int MaxStates => int.Parse(Util.FindParams(GetStringByIDKey("States", "1"))[0]);
 
         public int HoneyID => GetIntByIDKey("HoneyID");
 
@@ -33,25 +31,35 @@ namespace RiverHollow.WorldObjects
 
         public Plant(int id) : base(id)
         {
-            _bWalkable = GetBoolByIDKey("Walkable");
             _bPopItem = false;
+            _bWalkable = GetBoolByIDKey("Walkable");
+            SetGrowthInfo();
 
             Sprite.SetRotationOrigin(new Vector2(_pSize.X * Constants.TILE_SIZE / 2, (_pSize.Y * Constants.TILE_SIZE) - 1));    //Subtract one to keep it in the bounds of the rectangle
         }
 
-        //protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
-        //{
-        //    Sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-        //    var maxStates = MaxStates;
-        //    var images = GetStringByIDKey("Image");
+        protected override void LoadSprite()
+        {
+            var maxStates = MaxStates;
+            if (maxStates == 1)
+            {
+                base.LoadSprite();
+            }
+            else
+            {
+                Sprite = new AnimatedSprite(GetStringByIDKey("Texture"));
 
-        //    Sprite.AddAnimation(0.ToString(), _pImagePos.X, _pImagePos.Y, _pSize);
+                var images = GetStringParamsByIDKey("Image");
+                for(int i =0; i < MaxStates; i++) { 
+                    var size = Util.ParsePoint(GetStringParamsByIDKey("Size")[i]);
+                    var point = Util.ParsePoint(images[i]);
+                    point = Util.MultiplyPoint(point, Constants.TILE_SIZE);
+                    Sprite.AddAnimation(i.ToString(), point.X, point.Y, size);
+                }
 
-        //    //for (int j = 1; j < _diTransitionTimes.Count + 1; j++)
-        //    //{
-        //    //    Sprite.AddAnimation(j.ToString(), _pImagePos.X + (Constants.TILE_SIZE * j), _pImagePos.Y, _pSize);
-        //    //}
-        //}
+                SetSpritePos(MapPosition);
+            }
+        }
 
         public override void Update(GameTime gTime)
         {
@@ -98,7 +106,43 @@ namespace RiverHollow.WorldObjects
 
             return rv;
         }
-        //public override void ProcessRightClick() { Harvest(); }
+
+        public void FinishGrowth()
+        {
+            SetState(MaxStates);
+        }
+        public void RandomizeState()
+        {
+            SetState(RHRandom.Instance().Next(0, MaxStates - 1));
+        }
+        protected void SetState(int val)
+        {
+            if (val < MaxStates) { _iCurrentState = val; }
+            else { _iCurrentState = MaxStates - 1; }
+
+            Sprite.PlayAnimation(_iCurrentState.ToString());
+
+            SetGrowthInfo();
+        }
+        private void SetGrowthInfo()
+        {
+            _iDaysToNextState = int.Parse(GetStringParamsByIDKey("Time")[_iCurrentState]);
+            HP = int.Parse(GetStringParamsByIDKey("Hp")[_iCurrentState]);
+            _pSize = Util.ParsePoint(GetStringParamsByIDKey("Size")[_iCurrentState]);
+            _rBase = Util.ParseRectangle(GetStringParamsByIDKey("Base")[_iCurrentState]);
+
+            if (Tiles != null && Tiles.Count > 0)
+            {
+                var tile = Tiles[0];
+                RemoveSelfFromTiles();
+                PlaceOnMap(tile.Position, CurrentMap);
+            }
+        }
+
+        protected override string Loot()
+        {
+            return GetStringParamsByIDKey("ItemID")[_iCurrentState];
+        }
 
         /// <summary>
         /// Call to tell the plant that it is being Harvested, and follow any logic
@@ -150,19 +194,12 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public override void Rollover()
         {
-            if (_iDaysToNextState >= 0) //Decrement the number of days until the next phase
+            if (_iDaysToNextState > 0) //Decrement the number of days until the next phase
             {
                 _iDaysToNextState--;
-            }
-            else if (!FinishedGrowing()) //If it hasn't finished growing, and there's no days left, go to the next phase
-            {
-                _iCurrentState++;
-                Sprite.PlayAnimation(_iCurrentState.ToString());
-
-                var stateTimes = StateTimes;
-                if (stateTimes.Length > _iCurrentState + 1)
+                if(_iDaysToNextState == 0 && !FinishedGrowing())
                 {
-                    _iDaysToNextState = stateTimes[_iCurrentState];
+                    SetState(++_iCurrentState);
                 }
             }
         }
@@ -173,22 +210,23 @@ namespace RiverHollow.WorldObjects
         /// <returns>True if it's on the last phase</returns>
         public bool FinishedGrowing() { return _iCurrentState == MaxStates - 1; }
 
-        public void FinishGrowth()
-        {
-            _iCurrentState = MaxStates - 1;
-            //_rSource.X += _iWidth * _iCurrentState;
-        }
-
         public override bool CanPickUp()
         {
-            return FinishedGrowing();
+            return FinishedGrowing() && NeededTool == ToolEnum.None;
+        }
+
+        public override bool WideOnTop()
+        {
+            var endSize = Util.ParsePoint(GetStringParamsByIDKey("Size")[MaxStates - 1]);
+            var endBase = Util.ParseRectangle(GetStringParamsByIDKey("Base")[MaxStates - 1]);
+
+            return endBase.X < endSize.X;
         }
 
         public override WorldObjectData SaveData()
         {
             WorldObjectData data = base.SaveData();
-            data.stringData += _iCurrentState + "/";
-            data.stringData += _iDaysToNextState;
+            data.stringData += string.Format("/{0}/{1}", _iCurrentState, _iDaysToNextState);
 
             return data;
         }
@@ -197,10 +235,10 @@ namespace RiverHollow.WorldObjects
         {
             base.LoadData(data);
             string[] strData = Util.FindParams(data.stringData);
-            _iCurrentState = int.Parse(strData[0]);
-            _iDaysToNextState = int.Parse(strData[1]);
+            _iCurrentState = int.Parse(strData[1]);
+            _iDaysToNextState = int.Parse(strData[2]);
 
-            Sprite.PlayAnimation(_iCurrentState.ToString());
+            SetState(_iCurrentState);
         }
     }
 }
