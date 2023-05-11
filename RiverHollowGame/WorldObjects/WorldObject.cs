@@ -127,7 +127,14 @@ namespace RiverHollow.WorldObjects
         }
         protected virtual void LoadSprite()
         {
-            LoadSprite(GetStringByIDKey("Texture", DataManager.FILE_WORLDOBJECTS));
+            if (GetBoolByIDKey("Texture"))
+            {
+                LoadSprite(DataManager.FOLDER_WORLDOBJECTS + GetStringByIDKey("Texture"));
+            }
+            else
+            {
+                LoadSprite(DataManager.FILE_WORLDOBJECTS);
+            }
         }
         protected virtual void LoadSprite(string texture)
         {

@@ -48,7 +48,7 @@ namespace RiverHollow.WorldObjects
             }
             else
             {
-                Sprite = new AnimatedSprite(GetStringByIDKey("Texture"));
+                Sprite = new AnimatedSprite(DataManager.FOLDER_WORLDOBJECTS + GetStringByIDKey("Texture"));
 
                 var images = GetStringParamsByIDKey("Image");
                 for(int i =0; i < MaxStates; i++) { 

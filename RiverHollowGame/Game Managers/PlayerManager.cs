@@ -734,7 +734,7 @@ namespace RiverHollow.Game_Managers
 
                 if(newTool.ToolType == ToolEnum.Backpack)
                 {
-                    InventoryManager.InitPlayerInventory();
+                    InventoryManager.InitPlayerInventory(true);
                 }
                 if(newTool.ToolType == ToolEnum.Lantern)
                 {

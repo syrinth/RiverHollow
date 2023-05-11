@@ -5,10 +5,7 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens;
-using RiverHollow.Utilities;
-using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow
 {
@@ -339,22 +336,22 @@ namespace RiverHollow
             _bExit = true;
         }
 
-        public void GoToTitle() {
+        public void GoToTitle()
+        {
+            StopTakingInput();
+            GUICursor.ResetCursor();
+            SoundManager.StopAll();
+            EnvironmentManager.UnloadEnvironment();
+
             GameManager.Initialize();
             DungeonManager.Instantiate();
-            InputManager.Load();
-            SoundManager.LoadContent(Content);
-            DataManager.LoadContent(Content);
-            EnvironmentManager.Initialize();
             MapManager.LoadContent(Content, GraphicsDevice);
-
-            GUIManager.LoadContent();
 
             CutsceneManager.LoadContent(Content);
 
             PlayerManager.Initialize();
             TownManager.Initialize();
-            InventoryManager.InitPlayerInventory();
+            InventoryManager.InitPlayerInventory(false);
 
             //Done here for the WorldObjects that need to be unlocked
             DataManager.SecondaryLoad(Content);
@@ -363,11 +360,8 @@ namespace RiverHollow
 
             TaskManager.Initialize();
 
-            GUICursor.ResetCursor();
-
             //Set the Main Menu Screen
             GUIManager.SetScreen(new IntroMenuScreen());
-            StopTakingInput();
         }
     }
 }

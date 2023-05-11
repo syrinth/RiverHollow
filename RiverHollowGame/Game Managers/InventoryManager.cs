@@ -22,14 +22,14 @@ namespace RiverHollow.Game_Managers
         /// Called on initial game loading. Readies the players inventory
         /// to hold items.
         /// </summary>
-        public static void InitPlayerInventory()
+        public static void InitPlayerInventory(bool increaseSize = true)
         {
             AddedItemList = new List<Item>();
 
             Item[,] temp = PlayerInventory;
             PlayerInventory = new Item[PlayerManager.BackpackLevel, maxItemColumns];
 
-            if(temp != null)
+            if(increaseSize && temp != null)
             {
                 for (int x = 0; x < PlayerManager.BackpackLevel && x < temp.GetLength(0); x++)
                 {
@@ -287,6 +287,10 @@ Exit:
         }
 
         #region Add Item to Inventory
+        public static bool AddMapItemToInventory(Item itemToAdd)
+        {
+            return AddToInventory(itemToAdd, GetInventory(true), true, false, false);
+        }
         /// <summary>
         /// Creates a new item wth the indicated number and adds it to the indicated inventory
         /// </summary>
@@ -316,7 +320,7 @@ Exit:
         /// <param name="itemToAdd">The Item object to add</param>
         /// <param name="inventory">The Inventory to act on</param>
         /// <returns></returns>
-        private static bool AddToInventory(Item itemToAdd, Item[,] inventory, bool playerInventory = true, bool noDisplay = false)
+        private static bool AddToInventory(Item itemToAdd, Item[,] inventory, bool playerInventory = true, bool noDisplay = false, bool dropOnMap = true)
         {
             bool rv = false;
 
@@ -376,7 +380,7 @@ Exit:
             }
 
             //If we failed to add it, then we need to drop it onto the world map.
-            if (!rv)
+            if (!rv && dropOnMap)
             {
                 DropItemOnMap(itemToAdd);
                 //Todo mail Tools to player

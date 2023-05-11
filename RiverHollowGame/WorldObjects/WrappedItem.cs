@@ -36,10 +36,13 @@ namespace RiverHollow.WorldObjects
 
         public bool Gather()
         {
-            CurrentMap.AlertSpawnPoint(this);
-            MapManager.RemoveWorldObject(this, true);
-            RemoveSelfFromTiles();
-            InventoryManager.AddToInventory(DataManager.GetItem(_iItemID));
+            if (InventoryManager.HasSpaceInInventory(_iItemID, 1))
+            {
+                CurrentMap.AlertSpawnPoint(this);
+                MapManager.RemoveWorldObject(this, true);
+                RemoveSelfFromTiles();
+                InventoryManager.AddToInventory(DataManager.GetItem(_iItemID));
+            }
 
             return true;
         }

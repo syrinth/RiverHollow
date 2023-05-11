@@ -447,7 +447,6 @@ namespace RiverHollow.Map_Handling
 
         public void LoadMapObjects()
         {
-            List<TiledMapObject> spawnObjects = new List<TiledMapObject>();
             ReadOnlyCollection<TiledMapObjectLayer> objectLayers = _map.ObjectLayers;
             foreach (TiledMapObjectLayer ol in objectLayers)
             {
@@ -794,11 +793,7 @@ namespace RiverHollow.Map_Handling
         {
             foreach (Point vec in Util.GetAllPointsInArea((int)rectX, (int)rectY, (int)width, (int)height, Constants.TILE_SIZE))
             {
-                RHTile t = GetTileByPixelPosition(vec);
-                if (t != null)
-                {
-                    t.SetTravelPoint(trvlPt);
-                }
+                GetTileByPixelPosition(vec)?.SetTravelPoint(trvlPt);
             }
         }
 
@@ -917,6 +912,10 @@ namespace RiverHollow.Map_Handling
                                 it.MoveItem(direction * speed);
                             }
                         }
+                    }
+                    else
+                    {
+                        it.PickupState = ItemPickupState.Manual;
                     }
                 }
             }
@@ -1366,7 +1365,7 @@ namespace RiverHollow.Map_Handling
                     MapItem it = _liItems[i];
                     if (it.PickupState == ItemPickupState.Manual && it.CollisionBox.Contains(GUICursor.GetWorldMousePosition()) && PlayerManager.PlayerInRange(it.CollisionBox))
                     {
-                        if (InventoryManager.AddToInventory(it.WrappedItem))
+                        if (InventoryManager.AddMapItemToInventory(it.WrappedItem))
                         {
                             removedList.Add(it);
                             break;

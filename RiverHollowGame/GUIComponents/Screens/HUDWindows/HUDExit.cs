@@ -24,9 +24,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
         public void Title()
         {
-            SoundManager.StopAll();
-            EnvironmentManager.UnloadEnvironment();
-
             RiverHollow.Instance.GoToTitle();
             GUIManager.SetScreen(new IntroMenuScreen());
         }

@@ -50,7 +50,7 @@ namespace RiverHollow.WorldObjects
                 frameSpeed = float.Parse(split[1]);
             }
 
-            Sprite = new AnimatedSprite(@"Textures\texMachines");
+            Sprite = new AnimatedSprite(DataManager.FILE_MACHINES);
             Sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _pSize, 1, 0.3f, false);
             Sprite.AddAnimation(AnimationEnum.PlayAnimation, _pImagePos.X + _pSize.Y, _pImagePos.Y, _pSize, frames, frameSpeed, false);
             Sprite.PlayAnimation(AnimationEnum.ObjectIdle);

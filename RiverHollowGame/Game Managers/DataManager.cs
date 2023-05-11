@@ -10,7 +10,6 @@ using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 using RiverHollow.Misc;
 using RiverHollow.Map_Handling;
-using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Items;
 using RiverHollow.WorldObjects.Trigger_Objects;
 using RiverHollow.Items.Tools;
@@ -18,40 +17,42 @@ using RiverHollow.Items.Tools;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.Characters.Mobs;
 using System.Linq;
-using RiverHollow.GUIComponents;
 
 namespace RiverHollow.Game_Managers
 {
     public static class DataManager
     {
         #region Constants
-        public const string FOLDER_ACTOR = @"Textures\Actors\";
+        private const string TEXTURES = @"Textures\";
+        public const string FOLDER_ACTOR = TEXTURES + @"Actors\";
 
         public const string NPC_FOLDER = FOLDER_ACTOR + @"NPCs\";
         public const string PORTRAIT_FOLDER = FOLDER_ACTOR + @"Portraits\";
 
-        public const string FILE_WORLDOBJECTS = @"Textures\worldObjects";
-        public const string FILE_FLOORING = @"Textures\texFlooring";
-
-        public const string FOLDER_BUILDINGS = @"Textures\Buildings\";
-        public const string FOLDER_ITEMS = @"Textures\Items\";
-        public const string FOLDER_ENVIRONMENT = @"Textures\Environmental\";
-        public const string FOLDER_MONSTERS = @"Textures\Actors\Monsters\";
-        public const string FOLDER_MOBS = @"Textures\Actors\Mobs\";
-        public const string FOLDER_SUMMONS = @"Textures\Actors\Summons\";
-        public const string FOLDER_PLAYER = @"Textures\Actors\Player\";
-        public const string FOLDER_PARTY = @"Textures\Actors\PartyMembers\";
+        public const string FOLDER_ITEMS = TEXTURES + @"Items\";
+        public const string FOLDER_ENVIRONMENT = TEXTURES + @"Environmental\";
+        public const string FOLDER_MONSTERS = TEXTURES + @"ctors\Monsters\";
+        public const string FOLDER_MOBS = TEXTURES + @"Actors\Mobs\";
+        public const string FOLDER_SUMMONS = TEXTURES + @"Actors\Summons\";
+        public const string FOLDER_PLAYER = TEXTURES + @"Actors\Player\";
+        public const string FOLDER_PARTY = TEXTURES + @"Actors\PartyMembers\";
         public const string FOLDER_TEXTFILES = @"Data\Text Files\";
         public const string FONT_NEW = @"Fonts\Font_New\Font_New";
         public const string FONT_MAIN = @"Fonts\Font_Main";
         public const string FONT_NUMBER_DISPLAY = @"Fonts\Font_Number_Display";
         public const string FONT_STAT_DISPLAY = @"Fonts\Font_Stat_Display";
 
+        public const string FOLDER_WORLDOBJECTS = TEXTURES + @"WorldObjects\";
+        public const string FOLDER_BUILDINGS = FOLDER_WORLDOBJECTS + @"Buildings\";
+        public const string FILE_WORLDOBJECTS = FOLDER_WORLDOBJECTS + @"World_Objects";
+        public const string FILE_FLOORING = FOLDER_WORLDOBJECTS + @"texFlooring";
+        public const string FILE_MACHINES = FOLDER_WORLDOBJECTS + @"texMachines";
+
         public const string UPGRADE_ICONS = GUI_COMPONENTS + @"\GUI_Upgrade_Icons";
-        public const string GUI_COMPONENTS = @"Textures\GUI Components";
+        public const string GUI_COMPONENTS = TEXTURES + @"GUI Components";
         public const string ACTION_ICONS = GUI_COMPONENTS + @"\GUI_Action_Icons";
         public const string HUD_COMPONENTS = GUI_COMPONENTS + @"\GUI_HUD_Components";
-        public const string PROJECTILE_TEXTURE = @"Textures\Projectiles";
+        public const string PROJECTILE_TEXTURE = TEXTURES + @"Projectiles";
         #endregion
 
         #region Dictionaries
@@ -84,7 +85,6 @@ namespace RiverHollow.Game_Managers
         public static IReadOnlyDictionary<int, Dictionary<string, string>> TaskData => _diTaskData;
 
         static Dictionary<int, Dictionary<string, string>> _diMonsterData;
-        static Dictionary<int, Dictionary<string, string>> _diActions;
 
         static Dictionary<int, Dictionary<string, string>> _diJobs;
         static Dictionary<string, Dictionary<string, List<string>>> _diSchedule;
@@ -93,9 +93,6 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         public static BitmapFont _bmFont;
-        static List<int> _liForest;
-        static List<int> _liMountain;
-        static List<int> _liNight;
 
         public static void LoadContent(ContentManager Content)
         {
@@ -116,20 +113,18 @@ namespace RiverHollow.Game_Managers
 
             AddDirectoryTextures(GUI_COMPONENTS, Content);
             AddDirectoryTextures(FOLDER_ITEMS, Content);
+            AddDirectoryTextures(FOLDER_WORLDOBJECTS, Content);
             AddDirectoryTextures(FOLDER_BUILDINGS, Content);
             AddDirectoryTextures(FOLDER_ENVIRONMENT, Content);
 
             LoadNPCSchedules(Content);
-
-            _liForest = new List<int>();
-            _liMountain = new List<int>();
-            _liNight = new List<int>();
         }
 
         #region Load Methods
         private delegate void LoadDictionaryWorkDelegate(int id, Dictionary<string, string> taggedDictionary);
         private static void LoadDictionaries(ContentManager Content)
         {
+            LoadDictionary(ref Config, @"Data\Config", Content, null);
             LoadDictionary(ref _diPlayerAnimationData, @"Data\PlayerClassAnimationConfig", Content, null);
             LoadDictionary(ref _diItemData, @"Data\ItemData", Content, null);
             LoadDictionary(ref _diActorData, @"Data\ActorData", Content, null);
@@ -137,14 +132,13 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
             LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);
             LoadDictionary(ref _diJobs, @"Data\Classes", Content, null);
-            LoadDictionary(ref Config, @"Data\Config", Content, null);
             LoadDictionary(ref _diLightData, @"Data\LightData", Content, null);
             LoadDictionary(ref _diUpgradeData, @"Data\Upgrades", Content, null);
             LoadDictionary(ref _diDungeonData, @"Data\DungeonData", Content, null);
+            LoadDictionary(ref _diWorldObjects, @"Data\WorldObjects", Content, LoadWorldObjectsDoWork);
         }
         public static void SecondaryLoad(ContentManager Content)
         {
-            LoadDictionary(ref _diWorldObjects, @"Data\WorldObjects", Content, LoadWorldObjectsDoWork);
             LoadShopFile(Content);
         }
 
@@ -227,7 +221,6 @@ namespace RiverHollow.Game_Managers
         private static void LoadCharacters(ContentManager Content)
         {
             AddDirectoryTextures(FOLDER_ACTOR, Content);
-            AddTexture(@"Textures\texFlooring", Content);
             AddTexture(@"Textures\texWeather", Content);
             AddTexture(@"Textures\texClothes", Content);
         }
@@ -238,13 +231,8 @@ namespace RiverHollow.Game_Managers
         private static void LoadIcons(ContentManager Content)
         {
             AddDirectoryTextures(@"Textures\ActionEffects", Content);
-            AddTexture(@"Textures\worldObjects", Content);
-            AddTexture(@"Textures\tree", Content);
-            AddTexture(@"Textures\WhisperingTree", Content);
-            AddTexture(@"Textures\DarkWoodTree", Content);
             AddTexture(@"Textures\items", Content);
             AddTexture(@"Textures\AbilityAnimations", Content);
-            AddTexture(@"Textures\texMachines", Content);
             AddTexture(@"Textures\Overworld", Content);
         }
         private static void AddDirectoryTextures(string directory, ContentManager Content, bool AddContent = true)
@@ -353,9 +341,6 @@ namespace RiverHollow.Game_Managers
             {
                 switch (type)
                 {
-                    case DataType.Action:
-                        if (_diActions[id].ContainsKey(key)) { return _diActions[id][key]; }
-                        break;
                     case DataType.Actor:
                         if (_diActorData[id].ContainsKey(key)) { return _diActorData[id][key]; }
                         break;
@@ -400,9 +385,6 @@ namespace RiverHollow.Game_Managers
         {
             switch (type)
             {
-                case DataType.Action:
-                    if (_diActions.ContainsKey(id) && _diActions[id].ContainsKey(key)) { return _diActions[id].ContainsKey(key); }
-                    break;
                 case DataType.Actor:
                     if (_diActorData.ContainsKey(id) && _diActorData[id].ContainsKey(key)) { return _diActorData[id].ContainsKey(key); }
                     break;
@@ -928,13 +910,6 @@ namespace RiverHollow.Game_Managers
             return Util.ProcessText(value);
         }
         #endregion
-        #endregion
-
-        #region Spawn Code
-        public static void AddToForest(int ID) { _liForest.Add(ID); }
-        public static void AddToMountain(int ID) { _liMountain.Add(ID); }
-        public static void AddToNight(int ID) { _liNight.Add(ID); }
-
         #endregion
     }
 }
