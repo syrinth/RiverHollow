@@ -1,36 +1,29 @@
 ﻿using RiverHollow.Game_Managers;
-using RiverHollow.WorldObjects;
+using RiverHollow.Utilities;
 using System.Collections.Generic;
-using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Items
 {
     public class Seed : Item
     {
+        int _iObjectID;
         public Seed(int id, Dictionary<string, string> stringData, int num) : base(id, stringData, num)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Seeds");
+            _iObjectID = int.Parse(stringData["ObjectID"]);
         }
 
         public override bool HasUse() { return true; }
-
         public override bool ItemBeingUsed()
         {
-            bool rv = false;
-            WorldObject obj = MapManager.CurrentMap.TargetTile.WorldObject;
-            if (obj != null && obj.Type == ObjectTypeEnum.Garden && InSeason())
+            if (GameManager.TownModeEdit())
             {
-                Garden garden = (Garden)obj;
-                if (garden.GetPlant() == null)
-                {
-                    Plant p = (Plant)DataManager.CreateWorldObjectByID(int.Parse(DataManager.GetItemDictionaryKey(ID, "ObjectID")));
-                    garden.SetPlant(p);
-                    Remove(1);
-                    rv = true;
-                }
+                GameManager.PickUpWorldObject(DataManager.CreateWorldObjectByID(_iObjectID));
+
+                return true;
             }
 
-            return rv;
+            return false;
         }
 
         public bool InSeason() {

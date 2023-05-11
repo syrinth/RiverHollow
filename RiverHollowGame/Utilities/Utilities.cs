@@ -763,6 +763,37 @@ namespace RiverHollow.Utilities
 
             return rv;
         }
+
+        public static DirectionEnum GetDirectionOf(Point start, Point directionOf)
+        {
+            Point diff = start - PlayerManager.PlayerActor.Center;
+
+            DirectionEnum rv;
+            if (Math.Abs(diff.X) > Math.Abs(diff.Y))
+            {
+                if (diff.X > 0)  //The player is to the left
+                {
+                    rv = DirectionEnum.Left;
+                }
+                else
+                {
+                    rv = DirectionEnum.Right;
+                }
+            }
+            else
+            {
+                if (diff.Y > 0)  //The player is above
+                {
+                    rv = DirectionEnum.Up;
+                }
+                else
+                {
+                    rv = DirectionEnum.Down;
+                }
+            }
+
+            return rv;
+        }
         public static Point GetPointFromDirection(DirectionEnum e)
         {
             switch (e)

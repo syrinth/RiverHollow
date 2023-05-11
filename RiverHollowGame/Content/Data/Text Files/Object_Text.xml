@@ -492,7 +492,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_2</Key>
-      <Value>[Name:Wood][Description:Wood, it builds stuff]</Value>
+      <Value>[Name:Alden Wood][Description:Wood, it builds stuff]</Value>
     </Item>
     <Item>
       <Key>Item_3</Key>
@@ -724,7 +724,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_60</Key>
-      <Value>[Name:Wooden Plank]</Value>
+      <Value>[Name:Alden Plank]</Value>
     </Item>
     <Item>
       <Key>Item_61</Key>
@@ -1307,6 +1307,14 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Whispering Plank]</Value>
     </Item>
     <Item>
+      <Key>Item_206</Key>
+      <Value>[Name:Tree Seed]</Value>
+    </Item>
+    <Item>
+      <Key>Item_207</Key>
+      <Value>[Name:Whispering Seed]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_0</Key>
       <Value>[Name:Beehive]</Value>
     </Item>
@@ -1568,7 +1576,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_65</Key>
-      <Value>[Name:Tree]</Value>
+      <Value>[Name:Alden Tree]</Value>
     </Item>
     <Item>
       <Key>WorldObject_66</Key>

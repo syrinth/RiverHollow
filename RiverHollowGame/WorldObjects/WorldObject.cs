@@ -162,9 +162,9 @@ namespace RiverHollow.WorldObjects
             if (_bDrawUnder) { Sprite.Draw(spriteBatch, 1); }
             else {
                 float alpha = 1f;
-                if(((BaseHeight + 1) * Constants.TILE_SIZE < Height) && new Rectangle(Sprite.Position.X, Sprite.Position.Y, Sprite.Width, Sprite.Height).Contains(PlayerManager.PlayerActor.CollisionCenter))
+                if(((BaseHeight + 1) * Constants.TILE_SIZE < Height) && new Rectangle(Sprite.Position.X, Sprite.Position.Y, Sprite.Width, Sprite.Height).Contains(PlayerManager.PlayerActor.CollisionCenter) && PlayerManager.PlayerActor.CollisionBox.Bottom <= CollisionBox.Top)
                 {
-                    alpha = 0.7f;
+                    alpha = 0.9f;
                 }
                 Sprite.Draw(spriteBatch, true, alpha);
             }

@@ -103,9 +103,7 @@ namespace RiverHollow.WorldObjects
                         }
                         else
                         {
-                            //Nudge the Object in the direction of the 'attack'
-                            Point nudgePoint = Util.GetPointFromDirection(PlayerManager.PlayerActor.Facing);
-                            Sprite.Position = new Point(Sprite.Position.X + nudgePoint.X, Sprite.Position.Y + nudgePoint.Y);
+                            NudgeObject(false);
                         }
                     }
                 }
@@ -113,6 +111,17 @@ namespace RiverHollow.WorldObjects
                 {
                     GUIManager.OpenTextWindow("Weak_Tool");
                 }
+            }
+        }
+        protected void NudgeObject(bool playEffect)
+        {
+            //Nudge the Object in the direction of the 'attack'
+            Point nudgePoint = Util.GetPointFromDirection(Util.GetOppositeDirection(Util.GetDirectionOf(CollisionCenter, PlayerManager.PlayerActor.Center)));
+            Sprite.Position = new Point(Sprite.Position.X + nudgePoint.X, Sprite.Position.Y + nudgePoint.Y);
+
+            if (playEffect)
+            {
+                SoundManager.PlayEffectAtLoc(SoundEffectEnum.Scythe, CurrentMap.Name, CollisionCenter, this);
             }
         }
 

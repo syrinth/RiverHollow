@@ -825,5 +825,13 @@
       <Key>205</Key>
       <Value>[Type:Resource][Image:9-4][ReqItems:200-1][CraftAmount:2]</Value>
     </Item>
+    <Item>
+      <Key>206</Key>
+      <Value>[Type:Seed][Image:0-1][Value:5][ObjectID:65]</Value>
+    </Item>
+    <Item>
+      <Key>207</Key>
+      <Value>[Type:Seed][Image:1-1][Value:10][ObjectID:151]</Value>
+    </Item>
   </Asset>
 </XnaContent>

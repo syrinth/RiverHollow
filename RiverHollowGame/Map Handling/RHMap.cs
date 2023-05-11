@@ -1532,7 +1532,7 @@ namespace RiverHollow.Map_Handling
             //Are we constructing or moving a building?
             if (InTownMode())
             {
-                Buildable toBuild = (Buildable)GameManager.HeldObject;
+                var toBuild = GameManager.HeldObject;
 
                 //If we are holding a WorldObject, we should attempt to place it
                 if (GameManager.HeldObject != null)
@@ -1545,8 +1545,11 @@ namespace RiverHollow.Map_Handling
                         case ObjectTypeEnum.Wallpaper:
                             rv = TownModePlaceWallpaper((Wallpaper)toBuild);
                             break;
+                        case ObjectTypeEnum.Plant:
+                            rv = TownPlaceSeed((Plant)toBuild);
+                            break;
                         default:
-                            rv = TownPlaceObject(toBuild);
+                            rv = TownPlaceObject((Buildable)toBuild);
                             break;
                     }
                     SoundManager.PlayEffect(rv ? SoundEffectEnum.Thump : SoundEffectEnum.Cancel);
@@ -1662,6 +1665,44 @@ namespace RiverHollow.Map_Handling
                 else if (InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
                 {
                     InventoryManager.RemoveItemsFromInventory(dummyItem.ID, 1);
+                }
+
+                rv = true;
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Helper method for building one object and allowing the
+        /// possibility of building additional ones
+        /// </summary>
+        /// <param name="templateObject">The Structure that will act as the template to build offo f</param>
+        /// <returns>True if we successfully build.</returns>
+        private bool TownPlaceSeed(Plant templateObject)
+        {
+            bool rv = false;
+            var placeObject = DataManager.CreateWorldObjectByID(templateObject.ID);
+
+            //PlaceOnMap uses the CollisionBox as the base, then calculates backwards
+            placeObject.SnapPositionToGrid(templateObject.CollisionBox.Location);
+
+            var seedID = placeObject.GetIntByIDKey("SeedID");
+            if (placeObject.PlaceOnMap(this) && (!TownModeBuild() || InventoryManager.HasItemInPlayerInventory(seedID, 1)))
+            {
+                InventoryManager.RemoveItemsFromInventory(seedID, 1);
+
+                if (this == MapManager.TownMap)
+                {
+                    TownManager.AddToTownObjects(placeObject);
+                    TaskManager.AdvanceTaskProgress(placeObject);
+                }
+
+                //Check for if we are done placing the object of that type
+                if (!InventoryManager.HasItemInPlayerInventory(seedID, 1))
+                {
+                    GameManager.EmptyHeldObject();
+                    ClearHeldLights();
                 }
 
                 rv = true;

@@ -203,29 +203,7 @@ namespace RiverHollow.Characters
             //Only do this if they are idle so as to not disturb other animations they may be performing.
             if (facePlayer && BodySprite.CurrentAnimation.StartsWith("Idle"))
             {
-                Point diff = Center - PlayerManager.PlayerActor.Center;
-                if (Math.Abs(diff.X) > Math.Abs(diff.Y))
-                {
-                    if (diff.X > 0)  //The player is to the left
-                    {
-                        Facing = DirectionEnum.Left;
-                    }
-                    else
-                    {
-                        Facing = DirectionEnum.Right;
-                    }
-                }
-                else
-                {
-                    if (diff.Y > 0)  //The player is above
-                    {
-                        Facing = DirectionEnum.Up;
-                    }
-                    else
-                    {
-                        Facing = DirectionEnum.Down;
-                    }
-                }
+                Facing = Util.GetDirectionOf(Center, PlayerManager.PlayerActor.Center);
 
                 PlayAnimationVerb(VerbEnum.Idle);
             }

@@ -15,6 +15,8 @@ namespace RiverHollow.WorldObjects
         const float MAX_BOUNCE = 3;
         #endregion
 
+        bool _bShaken = false;
+        bool _bNudge = false;
         bool _bShaking = false;
         DirectionEnum dir = DirectionEnum.Right;
         float _fCurrentRotation = 0f;
@@ -32,7 +34,6 @@ namespace RiverHollow.WorldObjects
         public Plant(int id) : base(id)
         {
             _bPopItem = false;
-            _bWalkable = GetBoolByIDKey("Walkable");
             SetGrowthInfo();
 
             Sprite.SetRotationOrigin(new Vector2(_pSize.X * Constants.TILE_SIZE / 2, (_pSize.Y * Constants.TILE_SIZE) - 1));    //Subtract one to keep it in the bounds of the rectangle
@@ -93,6 +94,12 @@ namespace RiverHollow.WorldObjects
             }
 
             base.Update(gTime);
+
+            if (_bNudge)
+            {
+                _bNudge = false;
+                NudgeObject(true);
+            }
         }
 
         public override bool ProcessLeftClick()
@@ -100,8 +107,35 @@ namespace RiverHollow.WorldObjects
             bool rv = false;
             if (FinishedGrowing() && HP > 0)
             {
-                Harvest();
                 rv = true;
+                Harvest();
+            }
+
+            return rv;
+        }
+
+        public override bool ProcessRightClick()
+        {
+            bool rv = false;
+
+            if (CanPickUp() && FinishedGrowing() && HP > 0)
+            {
+                rv = true;
+                Harvest();
+            }
+            else
+            {
+                if (MaxStates == 1 || _iCurrentState > 0)
+                {
+                    _bNudge = true;
+                }
+
+                if (!_bShaken && FinishedGrowing() && HP > 0 && GetBoolByIDKey("SeedID") && RHRandom.Instance().RollPercent(30))
+                {
+                    rv = true;
+                    MapManager.DropItemOnMap(DataManager.GetItem(GetIntByIDKey("SeedID")), CollisionBox.Location);
+                }
+                _bShaken = true;
             }
 
             return rv;
@@ -128,8 +162,11 @@ namespace RiverHollow.WorldObjects
         {
             if (MaxStates > 1)
             {
-                _iDaysToNextState = int.Parse(GetStringParamsByIDKey("Time", "0")[_iCurrentState]);
                 HP = int.Parse(GetStringParamsByIDKey("Hp")[_iCurrentState]);
+
+                _bWalkable = GetStringParamsByIDKey("Walkable", "0")[_iCurrentState] == "T";
+                _bDrawUnder = _bWalkable && GetBoolByIDKey("DrawUnder");
+                _iDaysToNextState = int.Parse(GetStringParamsByIDKey("Time", "F")[_iCurrentState]);
                 _pSize = Util.ParsePoint(GetStringParamsByIDKey("Size")[_iCurrentState]);
                 _rBase = Util.ParseRectangle(GetStringParamsByIDKey("Base")[_iCurrentState]);
 
@@ -139,6 +176,10 @@ namespace RiverHollow.WorldObjects
                     RemoveSelfFromTiles();
                     PlaceOnMap(tile.Position, CurrentMap);
                 }
+            }
+            else
+            {
+                _bWalkable = GetBoolByIDKey("Walkable");
             }
         }
 
@@ -201,6 +242,8 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public override void Rollover()
         {
+            _bShaken = false;
+
             if (_iDaysToNextState > 0) //Decrement the number of days until the next phase
             {
                 _iDaysToNextState--;

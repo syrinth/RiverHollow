@@ -263,11 +263,11 @@
     </Item>
     <Item>
       <Key>65</Key>
-      <Value>[Type:Plant][Texture:Textures\tree][Image:0-4/1-4/1-5/2-4/0-0][Size:1-1/1-1/1-1/1-2/3-4][Hp:1/1/1/2/8][ReqLvl:1][ItemID:///2-1/2-10][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1/1-3-1-1][Tool:Axe][States:5][Time:1/1/1/1/1][Spread:5/5]</Value>
+      <Value>[Type:Plant][Texture:Textures\tree][Image:0-4/1-4/1-5/2-4/0-0][Size:1-1/1-1/1-1/1-2/3-4][Hp:1/1/1/2/8][ReqLvl:1][ItemID:///2-1/2-10][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1/1-3-1-1][Tool:Axe][States:5][Time:2/2/3/4/4][Spread:5/5][BonusItemID:206-1-C][SeedID:206][Walkable:T/T/F/F/F][DrawUnder]</Value>
     </Item>
     <Item>
       <Key>66</Key>
-      <Value>[Type:DungeonObject][Image:20-0][Subtype:ColorBlocker][Color:Blue]</Value>
+      <Value>[Type:DungeonObject][Image:20-0][Color:Blue]</Value>
     </Item>
     <Item>
       <Key>67</Key>
@@ -287,11 +287,11 @@
     </Item>
     <Item>
       <Key>71</Key>
-      <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:0-34][Size:3-6][Base:0-0-1-2]</Value>
+      <Value>[Type:DungeonObject][Image:0-34][Size:3-6][Base:0-0-1-2]</Value>
     </Item>
     <Item>
       <Key>72</Key>
-      <Value>[Type:DungeonObject][Subtype:Trigger][Image:9-1]</Value>
+      <Value>[Type:DungeonObject][Image:9-1]</Value>
     </Item>
     <Item>
       <Key>73</Key>
@@ -607,7 +607,7 @@
     </Item>
     <Item>
       <Key>151</Key>
-      <Value>[Type:Destructible][Tree][Texture:Textures\WhisperingTree][Image:0-0][Size:3-5][Hp:16][ReqLvl:1][ItemID:200-10][Base:1-4-1-1][Tool:Axe][BonusItemID:1-3-C]</Value>
+      <Value>[Type:Plant][Texture:Textures\WhisperingTree][Image:0-4/1-4/1-5/2-4/0-0][Size:1-1/1-1/1-1/1-2/3-4][Hp:2/2/2/4/16][ReqLvl:1][ItemID:///200-1/200-10][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1/1-3-1-1][Tool:Axe][States:5][Time:2/2/3/4/4][Spread:5/5][BonusItemID:206-1-C|207-1-C][SeedID:207][Walkable:T/T/F/F/F][DrawUnder]</Value>
     </Item>
     <Item>
       <Key>152</Key>
