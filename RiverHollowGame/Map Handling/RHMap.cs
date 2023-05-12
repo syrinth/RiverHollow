@@ -1205,6 +1205,11 @@ namespace RiverHollow.Map_Handling
                 }
             }
 
+            if(actor.CurrentMap.GetTileByPixelPosition(actor.CollisionBox.Center).Flooring != null)
+            {
+                dir *= 1.1f;
+            }
+
             return rv;
         }
 
