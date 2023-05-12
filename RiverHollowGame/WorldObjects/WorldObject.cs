@@ -94,7 +94,7 @@ namespace RiverHollow.WorldObjects
             string[] split = GetStringParamsByIDKey("Image");
             if (split.Length == 1)
             {
-                string[] splitVal = split[0].Split('-');
+                string[] splitVal = Util.FindArguments(split[0]);
                 _pImagePos = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
                 _pImagePos = Util.MultiplyPoint(_pImagePos, Constants.TILE_SIZE);
             }

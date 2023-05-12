@@ -94,7 +94,7 @@ namespace RiverHollow.Map_Handling
             if (obj.Properties.ContainsKey("Number")) { resourceNumbers = obj.Properties["Number"]; }
             else { resourceNumbers = "1"; }
 
-            string[] val = resourceNumbers.Split('-');
+            string[] val = Util.FindArguments(resourceNumbers);
             _iMin = int.Parse(val[0]);
 
             if (val.Length > 1) { _iMax = int.Parse(val[1]); }

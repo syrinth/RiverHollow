@@ -242,7 +242,7 @@ namespace RiverHollow.Characters
         /// <param name="value">A '-' delimited list of facial expressions corresponding to ActoEnumFaces</param>
         public void QueueActorFace(string value)
         {
-            foreach (string s in value.Split('-'))
+            foreach (string s in Util.FindArguments(value))
             {
                 _liActorFaceQueue.Add(Util.ParseEnum<ActorFaceEnum>(s));
             }

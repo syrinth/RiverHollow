@@ -35,7 +35,7 @@ namespace RiverHollow.Misc
                 string[] splitEffects = Util.FindParams(data["Modify"]);
                 foreach (string effect in splitEffects)
                 {
-                    string[] attributeMod = effect.Split('-');
+                    string[] attributeMod = Util.FindArguments(effect);
                 }
             }
         }

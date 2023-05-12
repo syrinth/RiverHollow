@@ -196,7 +196,7 @@ namespace RiverHollow.Map_Handling
 
             if (_map.Properties.ContainsKey("Cutscenes"))
             {
-                string[] split = _map.Properties["Cutscenes"].Split('|');
+                string[] split = Util.FindParams(_map.Properties["Cutscenes"]);
                 foreach (string cutsceneID in split)
                 {
                     _liCutscenes.Add(int.Parse(cutsceneID));
@@ -606,7 +606,7 @@ namespace RiverHollow.Map_Handling
                 }
                 _liMobs.Clear();
 
-                string[] mobRange = Map.Properties["Mobs"].Split('-');
+                string[] mobRange = Util.FindArguments(Map.Properties["Mobs"]);
                 int roll = RHRandom.Instance().Next(int.Parse(mobRange[0]), int.Parse(mobRange[1]));
 
                 List<SpawnPoint> spawnCopy = new List<SpawnPoint>();

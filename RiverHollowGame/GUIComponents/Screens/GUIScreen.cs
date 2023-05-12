@@ -138,6 +138,8 @@ namespace RiverHollow.GUIComponents.Screens
         public bool IsHoverWindowOpen() { return _gHoverObject != null; }
         public virtual void OpenHoverWindow(GUIObject hoverObj, Rectangle area, bool guiObject)
         {
+            hoverObj.RemoveSelfFromControl();
+
             CloseHoverWindow();
             _gHoverObject = hoverObj;
             _rHoverArea = area;

@@ -33,7 +33,7 @@ namespace RiverHollow.Characters
                 string[] args = Util.FindParams(stringData["RequiredObjectID"]);
                 foreach (string i in args)
                 {
-                    string[] split = i.Split('-');
+                    string[] split = Util.FindArguments(i);
                     _diRequiredObjectIDs[int.Parse(split[0])] = int.Parse(split[1]);
                 }
             }

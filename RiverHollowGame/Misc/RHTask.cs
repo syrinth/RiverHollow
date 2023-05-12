@@ -137,7 +137,7 @@ namespace RiverHollow.Misc
                 string[] tasks = Util.FindParams(stringData["TriggerTask"]);
                 for (int i = 0; i < tasks.Length; i++)
                 {
-                    string[] split = tasks[i].Split('-');
+                    string[] split = Util.FindArguments(tasks[i]);
                     if (split.Length == 1)
                     {
                         _liTasksToTrigger.Add(new KeyValuePair<int, bool>(int.Parse(split[0]), false));
@@ -176,7 +176,7 @@ namespace RiverHollow.Misc
 
             if (stringData.ContainsKey("Friendship"))
             {
-                string[] parse = stringData["Friendship"].Split('-');
+                string[] parse = Util.FindArguments(stringData["Friendship"]);
                 if (parse.Length > 1)
                 {
                     FriendTarget = parse[0];
@@ -186,7 +186,7 @@ namespace RiverHollow.Misc
 
             if (stringData.ContainsKey("SpawnMob"))
             {
-                string[] parse = stringData["SpawnMob"].Split('-');
+                string[] parse = Util.FindArguments(stringData["SpawnMob"]);
                 if (parse.Length > 1)
                 {
                     _spawnMob = DataManager.CreateMob(int.Parse(parse[0]));

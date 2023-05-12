@@ -56,7 +56,7 @@ namespace RiverHollow.WorldObjects
             {
                 data.stringData += string.Format("{0}/", Item.SaveItemToString(i));
             }
-            data.stringData = data.stringData.TrimEnd('/');
+            data.stringData = data.stringData.Remove(data.stringData.Length - 1);
             return data;
         }
         public override void LoadData(WorldObjectData data)

@@ -287,7 +287,7 @@ namespace RiverHollow.Game_Managers
             string[] splitItemValues = Util.FindParams(diTesting["ItemID"]);
             foreach (string s in splitItemValues)
             {
-                string[] splitString = s.Split('-');
+                string[] splitString = Util.FindArguments(s);
                 InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1), true, true);
             }
         }

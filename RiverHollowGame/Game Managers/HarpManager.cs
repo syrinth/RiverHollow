@@ -32,7 +32,7 @@ namespace RiverHollow.Game_Managers
 
         public static void SpawnNotes(string newNotes)
         {
-            string[] notes = newNotes.Split('-');
+            string[] notes = Util.FindArguments(newNotes);
             foreach(string note in notes)
             {
                 _gHarp.SpawnGUINote(note);

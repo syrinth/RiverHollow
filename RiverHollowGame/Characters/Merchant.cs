@@ -41,7 +41,7 @@ namespace RiverHollow.Characters
             foreach (string s in Util.FindParams(stringData["RequestIDs"]))
             {
                 RequestItem request = new RequestItem();
-                string[] split = s.Split('-');
+                string[] split = Util.FindArguments(s);
                 request.ID = int.Parse(split[0]);
                 request.Number = (split.Length > 1) ? int.Parse(split[1]) : 1;
 

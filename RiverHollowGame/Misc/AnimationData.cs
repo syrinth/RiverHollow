@@ -1,4 +1,5 @@
-﻿using static RiverHollow.Game_Managers.GameManager;
+﻿using RiverHollow.Utilities;
+using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Misc
@@ -31,7 +32,7 @@ namespace RiverHollow.Misc
 
         public void StoreData(string value)
         {
-            string[] splitString = value.Split('-');
+            string[] splitString = Util.FindArguments(value);
             if (splitString.Length == 5)
             {
                 XLocation = int.Parse(splitString[0]);

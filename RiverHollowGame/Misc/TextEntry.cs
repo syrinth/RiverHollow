@@ -110,7 +110,7 @@ namespace RiverHollow.Misc
                 {
                     //Special checks are in the format %type:val% so, |%Friend:50%Join Party:Party| or |%Task:1%Business:Task1|
                     string[] specialParse = s.Split(new[] { '%' }, StringSplitOptions.RemoveEmptyEntries);
-                    string[] specialVal = specialParse[0].Split('-');
+                    string[] specialVal = Util.FindArguments(specialParse[0]);
 
                     int.TryParse(specialVal[1], out int val);
 
@@ -181,7 +181,7 @@ namespace RiverHollow.Misc
                 }
                 if (_diTags.ContainsKey("Friend"))
                 {
-                    string[] args = _diTags["Friend"].Split('-');
+                    string[] args = Util.FindArguments(_diTags["Friend"]);
                     if (args.Length == 2)
                     {
                         if (int.TryParse(args[1], out int NPCID) && act.GetFriendshipLevel() >= NPCID) { rv = true; }
@@ -195,7 +195,7 @@ namespace RiverHollow.Misc
                 }
                 if (_diTags.ContainsKey("RequiredObjectID"))
                 {
-                    foreach (string i in _diTags["RequiredObjectID"].Split('-'))
+                    foreach (string i in Util.FindArguments(_diTags["RequiredObjectID"]))
                     {
                         if (!TownManager.TownObjectBuilt(int.Parse(i))) { return false; }
                     }
@@ -204,7 +204,7 @@ namespace RiverHollow.Misc
                 }
                 if (_diTags.ContainsKey("Villager"))
                 {
-                    foreach (string i in _diTags["Villager"].Split('-'))
+                    foreach (string i in Util.FindArguments(_diTags["Villager"]))
                     {
                         if (!TownManager.DIVillagers[int.Parse(i)].LivesInTown) { return false; }
                     }

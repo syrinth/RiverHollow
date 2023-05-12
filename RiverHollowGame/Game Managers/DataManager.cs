@@ -447,8 +447,8 @@ namespace RiverHollow.Game_Managers
                 string[] split = Util.FindParams(value);
                 foreach (string s in split)
                 {
-                    string[] splitData = s.Split('-');
-                    dictValue[Util.ParseInt(splitData[0])] = Util.ParseInt(splitData[1]);
+                    string[] splitData = Util.FindArguments(s);
+                    dictValue[Util.ParseInt(splitData[0])] = splitData.Length == 2 ? Util.ParseInt(splitData[1]) : 1; ;
                 }
             }
             return dictValue;

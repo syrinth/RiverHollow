@@ -162,7 +162,7 @@ namespace RiverHollow.GUIComponents.Screens
         /// <param name="m">Spawn Information</param>
         private void AddButton(string m)
         {
-            string[] splitData = m.Split('-');
+            string[] splitData = Util.FindArguments(m);
             GUISpawnButton b = new GUISpawnButton(splitData[0], splitData[1], splitData[2], splitData[3], EnableButtons);
             _liButtons.Add(b);
 

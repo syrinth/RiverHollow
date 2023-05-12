@@ -232,7 +232,7 @@ namespace RiverHollow.Misc
 
         public void UnlockMerchandise(string unlockedMerchandise)
         {
-            string[] split = unlockedMerchandise.Split('-');
+            string[] split = Util.FindArguments(unlockedMerchandise);
             for (int i = 0; i < _liMerchandise.Count; i++)
             {
                 Merchandise m = _liMerchandise.Find(x => x.MerchID == i);
@@ -297,7 +297,7 @@ namespace RiverHollow.Misc
         {
             MerchType = type;
 
-            string[] data = merchData.Split('-');
+            string[] data = Util.FindArguments(merchData);
             MerchID = int.Parse(data[0]);
 
             if (data.Length > 1)

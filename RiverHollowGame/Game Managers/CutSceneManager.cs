@@ -205,16 +205,16 @@ namespace RiverHollow.Game_Managers
                 //Parsing for important data
                 if (tags[0].Equals("Time"))
                 {
-                    string[] time = tags[1].Split('-');
+                    string[] time = Util.FindArguments(tags[1]);
                     _iMinTime = int.Parse(time[0]);
                     _iMaxTime = int.Parse(time[1]);
                 }
                 else if (tags[0].Equals("Friends"))
                 {
-                    string[] friend = tags[1].Split('|');
+                    string[] friend = Util.FindParams(tags[1]);
                     foreach (string f in friend)
                     {
-                        string[] friendData = f.Split('-');
+                        string[] friendData = Util.FindArguments(f);
                         _liReqFriendship.Add(new KeyValuePair<int, int>(int.Parse(friendData[0]), int.Parse(friendData[1])));
                     }
                 }
@@ -232,7 +232,7 @@ namespace RiverHollow.Game_Managers
             foreach (string s in commands)
             {
                 string[] tags = s.Split(':');
-                _liCommands.Add(new CutSceneCommand(Util.ParseEnum<CutsceneCommandEnum>(tags[0]), (tags.Length > 1 ? tags[1].Split('|') : null)));
+                _liCommands.Add(new CutSceneCommand(Util.ParseEnum<CutsceneCommandEnum>(tags[0]), (tags.Length > 1 ? Util.FindParams(tags[1]) : null)));
             }
             _liCommands.Add(new CutSceneCommand(CutsceneCommandEnum.End));
         }
@@ -258,7 +258,7 @@ namespace RiverHollow.Game_Managers
                         foreach (string s in currentCommand.Data)   //Need to perform the action for each character
                         {
                             int npcID = -1;
-                            string[] sCommandData = s.Split('-');   //split the data into segments
+                            string[] sCommandData = Util.FindArguments(s);   //split the data into segments
                             Actor npc;
                             switch (currentCommand.Command)
                             {
@@ -476,10 +476,10 @@ namespace RiverHollow.Game_Managers
                 {
                     //Find all the NPCs that are going to be used in this Cutscene,
                     //and add them to the Clone map at the given positions.
-                    string[] friend = tags[1].Split('|');
+                    string[] friend = Util.FindParams(tags[1]);
                     foreach (string f in friend)
                     {
-                        string[] friendData = f.Split('-');
+                        string[] friendData = Util.FindArguments(f);
                         Actor act = null;
                         if (TownManager.DIVillagers.ContainsKey(int.Parse(friendData[0]))) {
                             int npcID = int.Parse(friendData[0]);
@@ -497,7 +497,7 @@ namespace RiverHollow.Game_Managers
                 {
                     //Find all the NPC IDs for the NPCs that will start deactivated
                     //and then deactivate them.
-                    string[] friends = tags[1].Split('|');
+                    string[] friends = Util.FindParams(tags[1]);
                     foreach (string npcIDs in friends)
                     {
                         foreach (Actor v in _liUsedNPCs)
@@ -586,7 +586,7 @@ namespace RiverHollow.Game_Managers
                 {
                     foreach (string s in currentCommand.Data)   //Need to perform the action for each character
                     {
-                        string[] sCommandData = s.Split('-');   //split the data into segments
+                        string[] sCommandData = Util.FindArguments(s);   //split the data into segments
                         if (currentCommand.Command == CutsceneCommandEnum.Task)
                         {
                             //MAR

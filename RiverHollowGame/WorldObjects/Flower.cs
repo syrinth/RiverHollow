@@ -57,7 +57,7 @@ namespace RiverHollow.WorldObjects
             _bPopItem = false;
 
             //The amount of time for each phase
-            string[] dayStr = stringData["TrTime"].Split('-');
+            string[] dayStr = Util.FindArguments(stringData["TrTime"]);
             for (int j = 0; j < _iMaxStates - 1; j++)
             {
                 _diTransitionTimes.Add(j, int.Parse(dayStr[j]));
@@ -67,7 +67,7 @@ namespace RiverHollow.WorldObjects
 
             if (stringData.ContainsKey("DestructionAnim"))
             {
-                string[] splitString = stringData["DestructionAnim"].Split('-');
+                string[] splitString = Util.FindArguments(stringData["DestructionAnim"]);
                 Sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]), int.Parse(splitString[1]), _pSize, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
             }
 

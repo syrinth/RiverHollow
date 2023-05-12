@@ -21,7 +21,7 @@ namespace RiverHollow.Items
 
             Point imgPos = DataManager.GetPointByIDKey(_iObjectID, "Image", DataType.WorldObject);
             Point size = DataManager.GetPointByIDKey(_iObjectID, "Size", DataType.WorldObject, new Point (1,1));
-            _pSourcePos = imgPos;
+            _pSourcePos = Util.MultiplyPoint(imgPos, Constants.TILE_SIZE);
 
             _iWidth = size.X * Constants.TILE_SIZE;
             _iHeight = size.Y * Constants.TILE_SIZE;

@@ -20,7 +20,7 @@ namespace RiverHollow.Items
         {
             if (stringData.ContainsKey("StatusEffect"))
             {
-                string[] strBuffer = stringData["StatusEffect"].Split('-');
+                string[] strBuffer = Util.FindArguments(stringData["StatusEffect"]);
                 _statusEffect = DataManager.GetStatusEffectByIndex(int.Parse(strBuffer[0]));
                 _iStatusDuration = int.Parse(strBuffer[1]);
             }

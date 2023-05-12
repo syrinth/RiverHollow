@@ -872,7 +872,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_97</Key>
-      <Value>[Name:Simple Wand][Description:A magical wand]</Value>
+      <Value>[Name:Parchment][Description:Careful... careful... don't. Ruin. It.]</Value>
     </Item>
     <Item>
       <Key>Item_98</Key>
@@ -1220,7 +1220,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_184</Key>
-      <Value>[Name:$Building_25$ Blueprint]</Value>
+      <Value>[Name:Beeswax][Description:The bees have absolutely no desire for revenge over the theft of their wax. None at all.]</Value>
     </Item>
     <Item>
       <Key>Item_185</Key>
@@ -1288,19 +1288,19 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_201</Key>
-      <Value>[Name:Garden Charm][Description:Deters unwanted guests from snacking on your hard work.]</Value>
+      <Value>[Name:Lucky Charm][Description:It would be terribly unlucky to lose this, so don't.]</Value>
     </Item>
     <Item>
       <Key>Item_202</Key>
-      <Value>[Name:Caterpillar Curse][Description:Who has the prettiest roses now Brenda?!]</Value>
+      <Value>[Name:Blank Scroll][Description:Ready and waiting for the perfect spell. Do not use to wipe your nose.]</Value>
     </Item>
     <Item>
       <Key>Item_203</Key>
-      <Value>[Name:Bird Charm][Description:For when they just don't seem to come to your feeder.]</Value>
+      <Value>[Name:Apprentice Wand][Description:Helps apprentices focus their magic, easily replaced when the Inevitable happens.]</Value>
     </Item>
     <Item>
       <Key>Item_204</Key>
-      <Value>[Name:Sneezing Curse][Description:Teacher! You forgot to give uh... uuh... atchoo!]</Value>
+      <Value>[Name:Mystic Candle][Description:No self-respecting practitioner would perform a ritual without at least two dozen of these.]</Value>
     </Item>
     <Item>
       <Key>Item_205</Key>
@@ -1313,6 +1313,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Item_207</Key>
       <Value>[Name:Whispering Seed]</Value>
+    </Item>
+    <Item>
+      <Key>Item_208</Key>
+      <Value>[Name:Copper Ink][Description:Perfect for scrolls, spellbooks, and revenge lists.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_0</Key>

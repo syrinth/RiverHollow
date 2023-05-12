@@ -60,14 +60,14 @@ namespace RiverHollow.Items
             _eItemType = Util.ParseEnum<ItemEnum>(stringData["Type"]);
 
             //Image information
-            string[] texIndices = stringData["Image"].Split('-');
+            string[] texIndices = Util.FindArguments(stringData["Image"]);
             _pSourcePos = new Point(int.Parse(texIndices[0]) * Constants.TILE_SIZE, int.Parse(texIndices[1]) * Constants.TILE_SIZE);
 
             Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
 
             if (stringData.ContainsKey("RefinesInto"))
             {
-                string[] splitData = stringData["RefinesInto"].Split('-');
+                string[] splitData = Util.FindArguments(stringData["RefinesInto"]);
                 _kvpRefinesInto = new KeyValuePair<int, int>(int.Parse(splitData[0]), int.Parse(splitData[1]));
             }
 
@@ -313,7 +313,7 @@ namespace RiverHollow.Items
 
         public MonsterFood(int id, Dictionary<string, string> stringData, int num) : base(id, stringData, num)
         {
-            string[] splitData = stringData["Spawn"].Split('-');
+            string[] splitData = Util.FindArguments(stringData["Spawn"]);
             _iSpawnNum = int.Parse(splitData[0]);
             _iSpawnID = int.Parse(splitData[1]);
 

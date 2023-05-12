@@ -242,7 +242,7 @@ namespace RiverHollow.WorldObjects
             {
                 data.stringData += Util.IntToString(CraftingSlots[i].ID) + "-" + CraftingSlots[i].BatchSize + "-" + CraftingSlots[i].CraftTime + "/";
             }
-            data.stringData =  data.stringData.TrimEnd('|');
+            data.stringData =  data.stringData.Remove(data.stringData.Length-1);
 
             return data;
         }

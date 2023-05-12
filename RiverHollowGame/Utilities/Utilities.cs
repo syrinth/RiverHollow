@@ -404,7 +404,7 @@ namespace RiverHollow.Utilities
         {
             if (dict.ContainsKey(key))
             {
-                string[] splitVal = dict[key].Split('-');
+                string[] splitVal = Util.FindArguments(dict[key]);
                 value = new Vector2(float.Parse(splitVal[0]), float.Parse(splitVal[1]));
             }
         }
@@ -412,7 +412,7 @@ namespace RiverHollow.Utilities
         {
             if (dict.ContainsKey(key))
             {
-                string[] splitVal = dict[key].Split('-');
+                string[] splitVal = Util.FindArguments(dict[key]);
                 value = new Point(int.Parse(splitVal[0]), int.Parse(splitVal[1]));
             }
         }
@@ -420,7 +420,7 @@ namespace RiverHollow.Utilities
         {
             if (dict.ContainsKey(key))
             {
-                string[] ent = dict[key].Split('-');
+                string[] ent = Util.FindArguments(dict[key]);
                 value.X = int.Parse(ent[0]);
                 value.Y = int.Parse(ent[1]);
                 value.Width = int.Parse(ent[2]);
@@ -442,7 +442,7 @@ namespace RiverHollow.Utilities
                 string[] split = Util.FindParams(dict[key]);
                 foreach (string s in split)
                 {
-                    string[] splitData = s.Split('-');
+                    string[] splitData = Util.FindArguments(s);
                     dictValue[int.Parse(splitData[0])] = splitData.Length > 1 ? int.Parse(splitData[1]) : 1;
                 }
             }
@@ -452,7 +452,7 @@ namespace RiverHollow.Utilities
             bool rv = false;
             if (dict.ContainsKey(key))
             {
-                string[] dimensions = dict[key].Split('-');
+                string[] dimensions = Util.FindArguments(dict[key]);
                 value1 = int.Parse(dimensions[0]);
                 value2 = int.Parse(dimensions[1]);
 
@@ -566,7 +566,7 @@ namespace RiverHollow.Utilities
         public static void GetRarity(string value, ref int ID, ref RarityEnum rarity)
         {
             //Monster info is written like ID-Rarity|ID-Rarity etc
-            string[] info = value.Split('-');
+            string[] info = Util.FindArguments(value);
             ID = int.Parse(info[0]);
             if (info.Length > 1)
             {
