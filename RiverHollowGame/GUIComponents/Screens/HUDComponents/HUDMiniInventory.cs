@@ -16,7 +16,6 @@ namespace RiverHollow.GUIComponents.Screens
         StateEnum _eFadeState = StateEnum.FadeIn;
 
         float _fAlphaValue;
-        float _fItemFade = 1.0f;
         const float MIN_FADE = 0.1f;
 
         SideEnum _eSnapPosition = SideEnum.Center;
@@ -49,7 +48,8 @@ namespace RiverHollow.GUIComponents.Screens
             _gSelected = new GUIImage(GUIUtils.SELECT_CORNER);
             AddControl(_gSelected);
             Alpha(_fAlphaValue);
-            MoveSelector(0);
+
+            MoveSelector(GameManager.HUDItemCol);
 
             Snap(SideEnum.Bottom);
         }
