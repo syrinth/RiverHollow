@@ -1183,10 +1183,6 @@ namespace RiverHollow.Map_Handling
             //Checking for a MapChange takes priority overlooking for collisions.
             if (CheckForMapChange(actor, testRectX) || CheckForMapChange(actor, testRectY))
             {
-                if (GameManager.InTownMode())
-                {
-                    dir = Vector2.Zero;
-                }
                 return false;
             }
             else if (!ignoreCollisions)
@@ -1228,7 +1224,7 @@ namespace RiverHollow.Map_Handling
                 {
                     if (kvp.Value.Intersects(movingChar) && !kvp.Value.IsDoor && kvp.Value.IsActive)
                     {
-                        if (c != PlayerManager.PlayerActor || !GameManager.InTownMode())
+                        if (c != PlayerManager.PlayerActor || (!GameManager.InTownMode() && !PlayerManager.PlayerActor.HasKnockbackVelocity()))
                         {
                             MapManager.ChangeMaps(c, this.Name, kvp.Value);
                         }
