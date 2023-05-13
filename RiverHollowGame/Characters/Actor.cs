@@ -351,7 +351,7 @@ namespace RiverHollow.Characters
             return _vbMovement.ProjectMovement(dir); ;
         }
 
-        public void ClearBuffer()
+        public void ClearMovementBuffer()
         {
             _vbMovement.Clear();
         }

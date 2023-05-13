@@ -69,6 +69,7 @@ namespace RiverHollow.Game_Managers
         {
             //Get the entry rectangle on the new map
             TravelPoint entryPoint;
+            actor.ClearMovementBuffer();
 
             //Handling for if the WorldActor is the player character
             if (actor == PlayerManager.PlayerActor)

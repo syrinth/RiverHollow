@@ -182,7 +182,7 @@ namespace RiverHollow.Game_Managers
                 if (!PlayerActor.HasKnockbackVelocity() && !facingNewDirection && PlayerActor.State != ActorStateEnum.Grab)
                 {
                     PlayerActor.DetermineFacing(newMovement.ToPoint());
-                    PlayerActor.ClearBuffer();
+                    PlayerActor.ClearMovementBuffer();
                 }
 
                 PlayerActor.DetermineAnimationState(newMovement);
