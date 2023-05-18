@@ -940,6 +940,11 @@
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapLesserForest.tmx
 
+#begin Maps/Misc/mapMageCaves.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapMageCaves.tmx
+
 #begin Maps/Misc/mapMountain_Small.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor

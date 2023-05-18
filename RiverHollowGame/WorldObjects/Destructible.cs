@@ -21,7 +21,7 @@ namespace RiverHollow.WorldObjects
 
         public Destructible(int id) : base(id)
         {
-            HP = GetIntByIDKey("HP", 1);
+            HP = GetIntByIDKey("Hp", 1);
         }
 
         protected override void LoadSprite()

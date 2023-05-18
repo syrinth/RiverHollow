@@ -1947,6 +1947,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Blue Pot]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_157</Key>
+      <Value>[Name:Arcane Crystal Node]</Value>
+    </Item>
+    <Item>
       <Key>Cutscene_0</Key>
       <Value>[Name:Combat_Intro]</Value>
     </Item>

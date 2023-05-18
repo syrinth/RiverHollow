@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="202">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="204">
  <properties>
   <property name="ItemID" value="162-C/163-R"/>
   <property name="MapType" value="Town"/>
-  <property name="Mobs" value="3-4"/>
   <property name="Outside" type="bool" value="true"/>
   <property name="ResourceNumber" value="5"/>
   <property name="WorldData" value="120-176"/>
@@ -13,6 +12,7 @@
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsBuildings.tsx"/>
  <tileset firstgid="2066" source="../Tilesets/stock_dungeon_walls.tsx"/>
+ <tileset firstgid="2549" source="../Tilesets/tsWalls_Floors.tsx"/>
  <layer id="19" name="Base" width="30" height="30">
   <data encoding="csv">
 27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,151,106,127,128,27,27,27,126,127,127,127,
@@ -54,9 +54,9 @@
 19,20,19,20,120,66,67,66,67,66,67,66,67,66,67,66,67,66,67,66,67,66,67,66,67,119,19,20,19,20,
 41,42,41,42,92,91,92,91,92,91,92,91,92,91,92,91,92,91,92,91,92,91,92,91,92,91,41,42,41,42,
 20,19,20,120,117,116,117,116,117,116,117,116,117,116,117,116,117,116,117,116,117,116,117,116,117,116,66,67,66,67,
-42,41,42,92,167,141,142,141,142,141,142,141,142,141,142,141,142,141,142,141,142,141,142,141,142,168,91,92,91,92,
-19,20,120,117,118,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,115,116,117,116,117,
-41,42,92,167,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,140,141,142,141,142,
+42,41,42,92,167,141,142,141,142,2718,2719,2720,2721,141,142,141,142,141,142,141,142,141,142,141,142,168,91,92,91,92,
+19,20,120,117,118,0,0,0,0,2740,2741,2742,2743,0,0,0,0,0,0,0,0,0,0,0,0,115,116,117,116,117,
+41,42,92,167,0,0,0,0,0,2762,2763,2764,2765,0,0,0,0,0,0,0,0,0,0,0,0,140,141,142,141,142,
 20,19,117,118,0,165,91,92,166,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 42,41,42,143,0,115,116,117,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 19,20,120,0,0,140,141,142,2136,2183,2183,2183,2183,2183,2183,2183,2183,2183,2183,2183,2183,2183,2138,0,0,0,0,0,0,0,
@@ -123,32 +123,18 @@
     <property name="WorldMap" type="bool" value="true"/>
    </properties>
   </object>
+  <object id="203" name="Entrance" x="160" y="112" width="32" height="4">
+   <properties>
+    <property name="EntranceDir" value="Down"/>
+    <property name="Map" value="mapMageCaves"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
   <object id="189" name="Resource" x="64" y="112" width="368" height="336">
    <properties>
-    <property name="Number" value="20"/>
-    <property name="ObjectID" value="60-C/150-U"/>
-   </properties>
-  </object>
-  <object id="192" name="Mob" x="80" y="368" width="32" height="32">
-   <properties>
-    <property name="MobID" value="32-U/52-C"/>
-   </properties>
-  </object>
-  <object id="193" name="Mob" x="96" y="224" width="32" height="32">
-   <properties>
-    <property name="MobID" value="32-U/52-C"/>
-   </properties>
-  </object>
-  <object id="194" name="Mob" x="368" y="80" width="32" height="32">
-   <properties>
-    <property name="MobID" value="32-U/52-C"/>
-   </properties>
-  </object>
-  <object id="195" name="Mob" x="304" y="80" width="32" height="32">
-   <properties>
-    <property name="MobID" value="32-U/52-C"/>
+    <property name="Number" value="30"/>
+    <property name="ObjectID" value="60-C"/>
    </properties>
   </object>
   <object id="198" name="Mysterious Orb" x="160" y="192" width="16" height="16">
@@ -157,23 +143,16 @@
     <property name="ItemID" type="int" value="199"/>
    </properties>
   </object>
-  <object id="199" name="WorldObject" x="160" y="96" width="16" height="16">
+  <object id="199" name="WorldObject" x="384" y="368" width="16" height="16">
    <properties>
     <property name="ObjectID" type="int" value="151"/>
    </properties>
   </object>
-  <object id="200" name="WorldObject" x="384" y="256" width="16" height="16">
-   <properties>
-    <property name="ObjectID" type="int" value="151"/>
-   </properties>
-  </object>
-  <object id="201" name="WorldObject" x="96" y="416" width="16" height="16">
+  <object id="202" name="WorldObject" x="80" y="336" width="16" height="16">
    <properties>
     <property name="ObjectID" type="int" value="151"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="6" name="Character">
-  <object id="196" x="460" y="144" width="16" height="16"/>
- </objectgroup>
+ <objectgroup id="6" name="Character"/>
 </map>

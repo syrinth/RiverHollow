@@ -603,11 +603,11 @@
     </Item>
     <Item>
       <Key>150</Key>
-      <Value>[Type:Destructible][Image:16-19/2][Base:0-0-1-1][Tool:Pick][Hp:4][ReqLvl:1][ItemID:67-1][DestructionAnim:13-0-3-0.1][BonusItemID:1-1-C]</Value>
+      <Value>[Type:Destructible][Image:16-19/2][Base:0-0-1-1][Tool:Pick][Hp:4][ReqLvl:1][ItemID:67-1][DestructionAnim:13-0-3-0.1]</Value>
     </Item>
     <Item>
       <Key>151</Key>
-      <Value>[Type:Plant][Texture:Tree_Whispering][Image:0-4/1-4/1-5/2-4/0-0][Size:1-1/1-1/1-1/1-2/3-4][Hp:2/2/2/4/16][ReqLvl:1][ItemID:///200-1/200-10][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1/1-3-1-1][Tool:Axe][States:5][Time:2/2/3/4/4][Spread:5/5][BonusItemID:1-1-C|207-1-C][SeedID:207][Walkable:T/T/F/F/F][DrawUnder]</Value>
+      <Value>[Type:Plant][Texture:Tree_Whispering][Image:0-4/1-4/1-5/2-4/0-0][Size:1-1/1-1/1-1/1-2/3-4][Hp:2/2/2/4/16][ReqLvl:1][ItemID:///200-1/200-10][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1/1-3-1-1][Tool:Axe][States:5][Time:2/2/3/4/4][Spread:5/5][BonusItemID:207-1-C][SeedID:207][Walkable:T/T/F/F/F][DrawUnder]</Value>
     </Item>
     <Item>
       <Key>152</Key>
@@ -628,6 +628,10 @@
     <Item>
       <Key>156</Key>
       <Value>[Type:Decor][Image:22-6][Size:1-1][Base:0-0-1-1][ReqItems:66-1]</Value>
+    </Item>
+    <Item>
+      <Key>157</Key>
+      <Value>[Type:Destructible][Image:3-0/1][BaseOffset:0-0][Hp:3][Tool:Pick][ReqLvl:1][ItemID:1-1][DestructionAnim:208-0-3-0.1][BonusItemID:1-1-C]</Value>
     </Item>
   </Asset>
 </XnaContent>
