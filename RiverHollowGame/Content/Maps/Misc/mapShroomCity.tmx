@@ -80,7 +80,7 @@
   <object id="64" name="Resource" x="32" y="64" width="256" height="176">
    <properties>
     <property name="ItemID" value="23-C"/>
-    <property name="Number" value="3"/>
+    <property name="ResourcesToSpawn" value="3"/>
    </properties>
   </object>
  </objectgroup>

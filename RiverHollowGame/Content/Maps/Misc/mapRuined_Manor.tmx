@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="204">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="205">
  <properties>
-  <property name="ItemID" value="162-C/163-R"/>
   <property name="MapType" value="Town"/>
+  <property name="ObjectID" value="60-C"/>
   <property name="Outside" type="bool" value="true"/>
-  <property name="ResourceNumber" value="5"/>
+  <property name="ResourcesToSpawn" value="30"/>
   <property name="WorldData" value="120-176"/>
   <property name="WorldLink" value="mapGrove-10"/>
   <property name="WorldMapCost" type="int" value="5"/>
@@ -131,12 +131,6 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="189" name="Resource" x="64" y="112" width="368" height="336">
-   <properties>
-    <property name="Number" value="30"/>
-    <property name="ObjectID" value="60-C"/>
-   </properties>
-  </object>
   <object id="198" name="Mysterious Orb" x="160" y="192" width="16" height="16">
    <properties>
     <property name="DoNotLoad" type="bool" value="true"/>
@@ -151,6 +145,12 @@
   <object id="202" name="WorldObject" x="80" y="336" width="16" height="16">
    <properties>
     <property name="ObjectID" type="int" value="151"/>
+   </properties>
+  </object>
+  <object id="204" name="Resource" x="256" y="192" width="94" height="64">
+   <properties>
+    <property name="ObjectID" value="62-C"/>
+    <property name="ResourcesToSpawn" value="4"/>
    </properties>
   </object>
  </objectgroup>

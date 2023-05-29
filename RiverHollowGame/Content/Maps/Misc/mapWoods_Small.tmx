@@ -5,7 +5,7 @@
   <property name="MapType" value="Town"/>
   <property name="Mobs" value="3-4"/>
   <property name="Outside" type="bool" value="true"/>
-  <property name="ResourceNumber" value="5"/>
+  <property name="ResourcesToSpawn" value="5"/>
   <property name="WorldData" value="176-128"/>
   <property name="WorldLink" value="mapTown-30/mapFoothills_Small-30/mapGrove-10"/>
   <property name="WorldMapCost" type="int" value="5"/>
@@ -145,26 +145,20 @@
   </object>
   <object id="173" name="Resource" x="208" y="224" width="16" height="16">
    <properties>
-    <property name="Number" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
+    <property name="ResourcesToSpawn" value="1"/>
    </properties>
   </object>
   <object id="174" name="Resource" x="368" y="192" width="16" height="16">
    <properties>
-    <property name="Number" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
+    <property name="ResourcesToSpawn" value="1"/>
    </properties>
   </object>
   <object id="179" name="Resource" x="144" y="368" width="16" height="16">
    <properties>
-    <property name="Number" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
-   </properties>
-  </object>
-  <object id="189" name="Resource" x="64" y="128" width="288" height="176">
-   <properties>
-    <property name="ItemID" value="162-C/163-R"/>
-    <property name="Number" value="5"/>
+    <property name="ResourcesToSpawn" value="1"/>
    </properties>
   </object>
   <object id="192" name="Mob" x="80" y="368" width="32" height="32">

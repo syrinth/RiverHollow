@@ -6,7 +6,7 @@
   <property name="MapType" value="Town"/>
   <property name="Mobs" value="1-2"/>
   <property name="Outside" type="bool" value="true"/>
-  <property name="ResourceNumber" value="5"/>
+  <property name="ResourcesToSpawn" value="5"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsBuildings.tsx"/>
@@ -210,7 +210,7 @@
   </object>
   <object id="63" name="Resource" x="234.998" y="283.333" width="124" height="124">
    <properties>
-    <property name="Number" value="10-25"/>
+    <property name="ResourcesToSpawn" value="10-25"/>
     <property name="ObjectID" value="60-C/51-C"/>
    </properties>
   </object>

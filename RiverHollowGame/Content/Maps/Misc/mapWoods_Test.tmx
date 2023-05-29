@@ -6,7 +6,7 @@
   <property name="MapType" value="Town"/>
   <property name="Mobs" value="2-4"/>
   <property name="Outside" type="bool" value="true"/>
-  <property name="ResourceNumber" value="5"/>
+  <property name="ResourcesToSpawn" value="5"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsBuildings.tsx"/>
@@ -261,7 +261,7 @@
  <objectgroup id="5" name="MapObject">
   <object id="163" name="Resource" x="89.2498" y="240.583" width="788.834" height="900.667">
    <properties>
-    <property name="Number" value="300"/>
+    <property name="ResourcesToSpawn" value="300"/>
     <property name="ObjectID" value="60-C/51-C"/>
    </properties>
   </object>
@@ -297,79 +297,79 @@
   </object>
   <object id="173" name="Resource" x="577.625" y="482.25" width="11.75" height="9.5">
    <properties>
-    <property name="Number" value="1"/>
+    <property name="ResourcesToSpawn" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
    </properties>
   </object>
   <object id="174" name="Resource" x="434.125" y="579.25" width="11.75" height="9.5">
    <properties>
-    <property name="Number" value="1"/>
+    <property name="ResourcesToSpawn" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
    </properties>
   </object>
   <object id="175" name="Resource" x="308.125" y="389.75" width="11.75" height="9.5">
    <properties>
-    <property name="Number" value="1"/>
+    <property name="ResourcesToSpawn" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
    </properties>
   </object>
   <object id="176" name="Resource" x="293.125" y="451.25" width="11.75" height="9.5">
    <properties>
-    <property name="Number" value="1"/>
+    <property name="ResourcesToSpawn" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
    </properties>
   </object>
   <object id="177" name="Resource" x="338.625" y="197.25" width="11.75" height="9.5">
    <properties>
-    <property name="Number" value="1"/>
+    <property name="ResourcesToSpawn" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
    </properties>
   </object>
   <object id="178" name="Resource" x="194.625" y="258.25" width="11.75" height="9.5">
    <properties>
-    <property name="Number" value="1"/>
+    <property name="ResourcesToSpawn" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
    </properties>
   </object>
   <object id="179" name="Resource" x="130.125" y="628.75" width="11.75" height="9.5">
    <properties>
-    <property name="Number" value="1"/>
+    <property name="ResourcesToSpawn" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
    </properties>
   </object>
   <object id="180" name="Resource" x="657.625" y="868.75" width="11.75" height="9.5">
    <properties>
-    <property name="Number" value="1"/>
+    <property name="ResourcesToSpawn" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
    </properties>
   </object>
   <object id="181" name="Resource" x="608.125" y="884.75" width="11.75" height="9.5">
    <properties>
-    <property name="Number" value="1"/>
+    <property name="ResourcesToSpawn" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
    </properties>
   </object>
   <object id="182" name="Resource" x="642.625" y="929.75" width="11.75" height="9.5">
    <properties>
-    <property name="Number" value="1"/>
+    <property name="ResourcesToSpawn" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
    </properties>
   </object>
   <object id="183" name="Resource" x="562.125" y="1014.25" width="11.75" height="9.5">
    <properties>
-    <property name="Number" value="1"/>
+    <property name="ResourcesToSpawn" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
    </properties>
   </object>
   <object id="184" name="Resource" x="465.625" y="1029.25" width="11.75" height="9.5">
    <properties>
-    <property name="Number" value="1"/>
+    <property name="ResourcesToSpawn" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
    </properties>
   </object>
   <object id="185" name="Resource" x="449.625" y="1060.75" width="11.75" height="9.5">
    <properties>
-    <property name="Number" value="1"/>
+    <property name="ResourcesToSpawn" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
    </properties>
   </object>

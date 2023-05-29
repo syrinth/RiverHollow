@@ -386,6 +386,13 @@ namespace RiverHollow.Utilities
 
             return rv;
         }
+        public static void AssignValue(ref int value, string key, Dictionary<string, string> dict)
+        {
+            if (dict.ContainsKey(key))
+            {
+                value = int.Parse(dict[key]);
+            }
+        }
         public static void AssignValue(ref double value, string key, Dictionary<string, string> dict)
         {
             if (dict.ContainsKey(key))

@@ -4,7 +4,7 @@
   <property name="ItemID" value="162-C/163-R"/>
   <property name="MapType" value="Town"/>
   <property name="Outside" type="bool" value="true"/>
-  <property name="ResourceNumber" value="5"/>
+  <property name="ResourcesToSpawn" value="5"/>
   <property name="WorldData" value="208-16"/>
   <property name="WorldLink" value="mapWoods_Small-30/mapMountain_Small-20"/>
   <property name="WorldMapCost" type="int" value="10"/>
@@ -138,20 +138,14 @@
  <objectgroup id="5" name="MapObject">
   <object id="179" name="Resource" x="144" y="368" width="16" height="16">
    <properties>
-    <property name="Number" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
-   </properties>
-  </object>
-  <object id="189" name="Resource" x="64" y="128" width="288" height="176">
-   <properties>
-    <property name="ItemID" value="162-C/163-R"/>
-    <property name="Number" value="5"/>
+    <property name="ResourcesToSpawn" value="1"/>
    </properties>
   </object>
   <object id="191" name="Resource" x="224" y="80" width="16" height="16">
    <properties>
-    <property name="Number" value="1"/>
     <property name="ObjectID" type="int" value="65"/>
+    <property name="ResourcesToSpawn" value="1"/>
    </properties>
   </object>
   <object id="194" name="Potion" x="32" y="80" width="16" height="16">

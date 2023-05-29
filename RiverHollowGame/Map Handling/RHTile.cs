@@ -116,7 +116,7 @@ namespace RiverHollow.Map_Handling
                     {
                         if (((TiledMapTile)tile).GlobalIdentifier != 0)
                         {
-                            _diProps.Add(l, map.GetProperties((TiledMapTile)tile));
+                            _diProps.Add(l, map.GetTileProperties((TiledMapTile)tile));
                         }
                     }
                 }

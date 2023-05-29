@@ -4,12 +4,12 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
-using static RiverHollow.Utilities.Enums;
-using static RiverHollow.Game_Managers.GameManager;
 using MonoGame.Extended;
 using RiverHollow.Characters;
 using System;
 using System.Linq;
+
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Map_Handling
 {
@@ -20,11 +20,14 @@ namespace RiverHollow.Map_Handling
         protected Vector2 _vPosition;
         protected Dictionary<RarityEnum, List<SpawnData>> _diSpawnData;
 
-        public SpawnPoint(RHMap map, TiledMapObject obj)
+        public SpawnPoint(RHMap map)
         {
             _diSpawnData = new Dictionary<RarityEnum, List<SpawnData>>();
-
             _map = map;
+        }
+
+        public SpawnPoint(RHMap map, TiledMapObject obj) : this(map)
+        {
             _vPosition = map.GetTileByGridCoords(Util.GetGridCoords(obj.Position.ToPoint())).Position.ToVector2();
             _szDimensions = obj.Size;
             _szDimensions = obj.Size;
@@ -45,6 +48,11 @@ namespace RiverHollow.Map_Handling
                 }
 
                 _diSpawnData[rarity].Add(new SpawnData(resourceID, t));
+            }
+
+            if (!_diSpawnData.ContainsKey(RarityEnum.C))
+            {
+                Util.AddToListDictionary(ref _diSpawnData, RarityEnum.C, new SpawnData(-1, t));
             }
         }
 
@@ -82,17 +90,28 @@ namespace RiverHollow.Map_Handling
 
     public class ResourceSpawn : SpawnPoint
     {
-        bool _bHasSpawned = false;
-        int _iRespawnCountdown = 0;
-        int _iCurrent;
-        readonly int _iMin;
-        readonly int _iMax;
+        bool _bFreshSpawn = true;
+        int _iCurrentObjects;
+        int _iMin;
+        int _iMax;
+
+        public ResourceSpawn(RHMap map) : base(map)
+        {
+            _vPosition = map.GetTileByGridCoords(0, 0).Position.ToVector2();
+            _szDimensions = new Size2(map.MapWidthTiles * Constants.TILE_SIZE, map.MapHeightTiles * Constants.TILE_SIZE);
+
+            LoadData(map.GetMapProperties());
+        }
 
         public ResourceSpawn(RHMap map, TiledMapObject obj) : base(map, obj)
         {
-            string resourceNumbers = string.Empty;
-            if (obj.Properties.ContainsKey("Number")) { resourceNumbers = obj.Properties["Number"]; }
-            else { resourceNumbers = "1"; }
+            LoadData(obj.Properties);
+        }
+
+        private void LoadData(Dictionary<string, string> props)
+        {
+            string resourceNumbers = "1";
+            Util.AssignValue(ref resourceNumbers, "ResourcesToSpawn", props);
 
             string[] val = Util.FindArguments(resourceNumbers);
             _iMin = int.Parse(val[0]);
@@ -100,23 +119,22 @@ namespace RiverHollow.Map_Handling
             if (val.Length > 1) { _iMax = int.Parse(val[1]); }
             else { _iMax = _iMin; }
 
-            if (obj.Properties.ContainsKey("ItemID"))
+            if (props.ContainsKey("ItemID"))
             {
-                AssignSpawnData(obj.Properties["ItemID"], SpawnTypeEnum.Item);
+                AssignSpawnData(props["ItemID"], SpawnTypeEnum.Item);
             }
-            if (obj.Properties.ContainsKey("ObjectID"))
+            if (props.ContainsKey("ObjectID"))
             {
-                AssignSpawnData(obj.Properties["ObjectID"], SpawnTypeEnum.Object);
+                AssignSpawnData(props["ObjectID"], SpawnTypeEnum.Object);
             }
         }
 
         public override void Spawn()
         {
-            if (!_bHasSpawned)
+            if (_bFreshSpawn)
             {
-                _bHasSpawned = true;
-                _iCurrent = RHRandom.Instance().Next(_iMin, _iMax);
-                SpawnObject(_iCurrent);
+                SpawnObject(RHRandom.Instance().Next(_iMin, _iMax));
+                _bFreshSpawn = false;
             }
         }
 
@@ -137,33 +155,47 @@ namespace RiverHollow.Map_Handling
                     objectIsValid = true;
 
                     SpawnData sData = Util.RollOnRarityTable(_diSpawnData);
-                    if (sData.Type == SpawnTypeEnum.Item)
+                    if (sData.ID == -1)
                     {
-                        new WrappedItem(sData.ID).PlaceOnMap(targetTile.Position, _map);
+                        targetTile = null;
+                        continue;
+                    }
+                    else if (sData.Type == SpawnTypeEnum.Item)
+                    {
+                        var item = DataManager.GetItem(sData.ID);
+                        if (item != null)
+                        {
+                            new WrappedItem(item.ID).PlaceOnMap(targetTile.Position, _map);
+                        }
                     }
                     else
                     {
-                        WorldObject wObj = DataManager.CreateWorldObjectByID(sData.ID);
-                        wObj.SnapPositionToGrid(new Point(targetTile.Position.X, targetTile.Position.Y));
-
-                        if (wObj.CompareType(ObjectTypeEnum.Plant))
+                        var wObj = DataManager.CreateWorldObjectByID(sData.ID);
+                        if (wObj != null)
                         {
-                            ((Plant)wObj).FinishGrowth();
-                        }
+                            wObj.SnapPositionToGrid(new Point(targetTile.Position.X, targetTile.Position.Y));
 
-                        wObj.PlaceOnMap(_map);
-
-                        //If the object is larger than one tile, we need to ensure it can actually fit on the tile(s) we've placed it
-                        if (wObj.CollisionBox.Width > Constants.TILE_SIZE || wObj.CollisionBox.Height > Constants.TILE_SIZE)
-                        {
-                            foreach (RHTile t in wObj.Tiles)
+                            if (wObj.CompareType(ObjectTypeEnum.Plant) && _bFreshSpawn)
                             {
-                                if (!validTiles.Contains(t) || usedTiles.Contains(t))
+                                ((Plant)wObj).FinishGrowth();
+                            }
+
+                            wObj.PlaceOnMap(_map);
+                            _iCurrentObjects++;
+
+                            //If the object is larger than one tile, we need to ensure it can actually fit on the tile(s) we've placed it
+                            if (wObj.CollisionBox.Width > Constants.TILE_SIZE || wObj.CollisionBox.Height > Constants.TILE_SIZE)
+                            {
+                                foreach (RHTile t in wObj.Tiles)
                                 {
-                                    objectIsValid = false;
-                                    wObj.RemoveSelfFromTiles();
-                                    _map.RemoveWorldObject(wObj);
-                                    break;
+                                    if (!validTiles.Contains(t) || usedTiles.Contains(t))
+                                    {
+                                        objectIsValid = false;
+                                        wObj.RemoveSelfFromTiles();
+                                        _map.RemoveWorldObject(wObj);
+                                        _iCurrentObjects--;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -171,11 +203,14 @@ namespace RiverHollow.Map_Handling
                 }
                 while (!objectIsValid);
 
-                //Remove the targetTile once it has been properly used
-                validTiles.Remove(targetTile);
+                if (targetTile != null)
+                {
+                    //Remove the targetTile once it has been properly used
+                    validTiles.Remove(targetTile);
 
-                //Keep track of which tiles were used
-                usedTiles.Add(targetTile);
+                    //Keep track of which tiles were used
+                    usedTiles.Add(targetTile);
+                }
 
                 if (validTiles.Count == 0)
                 {
@@ -184,6 +219,8 @@ namespace RiverHollow.Map_Handling
             }
         }
 
+        //TODO
+        //Should store as string first, then convert to dictionary data during Spawn
         public bool AlertSpawnPoint(WorldObject obj)
         {
             Rectangle area = new Rectangle((int)_vPosition.X, (int)_vPosition.Y, (int)_szDimensions.Width, (int)_szDimensions.Height);
@@ -199,9 +236,7 @@ namespace RiverHollow.Map_Handling
                             SpawnData data = _diSpawnData[e][j];
                             if ((obj.ID != -1 && obj.ID == data.ID) || (obj.ID == -1 && ((WrappedItem)obj).ItemID == data.ID))
                             {
-                                if (_iRespawnCountdown == 0) { _iRespawnCountdown = 3; }
-                                _iCurrent--;
-
+                                _iCurrentObjects--;
                                 return true;
                             }
                         }
@@ -214,10 +249,10 @@ namespace RiverHollow.Map_Handling
 
         public override void Rollover(bool reset)
         {
-            if (reset) { _bHasSpawned = false; }
+            if (reset) { _bFreshSpawn = true; }
             else
             {
-                if (_iCurrent < _iMax)
+                if (_iCurrentObjects < _iMax)
                 {
                     SpawnObject(1);
                 }

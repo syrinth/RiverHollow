@@ -81,7 +81,7 @@
   <object id="64" name="Resource" x="32" y="48" width="256" height="192">
    <properties>
     <property name="ItemID" value="23-U"/>
-    <property name="Number" value="30"/>
+    <property name="ResourcesToSpawn" value="30"/>
     <property name="ObjectID" value="60-C/53-U"/>
    </properties>
   </object>

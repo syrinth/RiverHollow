@@ -4,7 +4,7 @@
   <property name="ItemID" value="162-C/163-R"/>
   <property name="MapType" value="Town"/>
   <property name="Outside" type="bool" value="true"/>
-  <property name="ResourceNumber" value="5"/>
+  <property name="ResourcesToSpawn" value="5"/>
   <property name="WorldData" value="256-32"/>
   <property name="WorldLink" value="mapFoothills_Small-20"/>
   <property name="WorldMapCost" type="int" value="10"/>

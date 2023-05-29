@@ -71,16 +71,13 @@ namespace RiverHollow.Map_Handling
         public IList<Mob> Mobs { get { return _liMobs.AsReadOnly(); } }
         public List<Actor> ToAdd;
         private List<WorldObject> _liPlacedWorldObjects;
-        private List<WorldObject> _liResourceObjects;
         private List<ResourceSpawn> _liResourceSpawns;
         private List<MobSpawn> _liMobSpawns;
         private List<int> _liCutscenes;
-        private Dictionary<RarityEnum, List<int>> _diResources;
         protected List<MapItem> _liItems;
         public Dictionary<string, TravelPoint> DictionaryTravelPoints { get; }
         public Dictionary<string, Point> DictionaryCharacterLayer { get; }
         private List<TiledMapObject> _liMapObjects;
-        private List<KeyValuePair<Rectangle, string>> _liClickObjects;
         private int _iShopID = -1;
         public Shop TheShop => (_iShopID > -1) ? GameManager.DIShops[_iShopID] : null;
 
@@ -95,7 +92,6 @@ namespace RiverHollow.Map_Handling
         public RHMap()
         {
             _liResourceSpawns = new List<ResourceSpawn>();
-            _liResourceObjects = new List<WorldObject>();
             _liMobSpawns = new List<MobSpawn>();
             _liWallTiles = new List<RHTile>();
             _liTestTiles = new List<RHTile>();
@@ -104,13 +100,11 @@ namespace RiverHollow.Map_Handling
             _liMobs = new List<Mob>();
             _liItems = new List<MapItem>();
             _liMapObjects = new List<TiledMapObject>();
-            _liClickObjects = new List<KeyValuePair<Rectangle, string>>();
 
             _liPlacedWorldObjects = new List<WorldObject>();
             _liLights = new List<Light>();
             _liHeldLights = new List<Light>();
             _liCutscenes = new List<int>();
-            _diResources = new Dictionary<RarityEnum, List<int>>();
 
             DictionaryTravelPoints = new Dictionary<string, TravelPoint>();
             DictionaryCharacterLayer = new Dictionary<string, Point>();
@@ -184,29 +178,30 @@ namespace RiverHollow.Map_Handling
                 }
             }
 
-            if (_map.Properties.ContainsKey("Shop"))
+            var props = _map.Properties;
+            if (props.ContainsKey("Shop"))
             {
-                _iShopID = int.Parse(_map.Properties["Shop"]);
+                _iShopID = int.Parse(props["Shop"]);
             }
-            if (_map.Properties.ContainsKey("Dungeon"))
+            if (props.ContainsKey("Dungeon"))
             {
-                DungeonName = _map.Properties["Dungeon"];
-                DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], _map.Properties.ContainsKey("Procedural"), this);
+                DungeonName = props["Dungeon"];
+                DungeonManager.AddMapToDungeon(props["Dungeon"], props.ContainsKey("Procedural"), this);
             }
 
-            if (_map.Properties.ContainsKey("Cutscenes"))
+            if (props.ContainsKey("Cutscenes"))
             {
-                string[] split = Util.FindParams(_map.Properties["Cutscenes"]);
+                string[] split = Util.FindParams(props["Cutscenes"]);
                 foreach (string cutsceneID in split)
                 {
                     _liCutscenes.Add(int.Parse(cutsceneID));
                 }
             }
 
-            if (_map.Properties.ContainsKey("WorldData"))
+            if (props.ContainsKey("WorldData"))
             {
-                string worldData = _map.Properties["WorldData"];
-                WorldMapNode = new MapNode(Util.ParsePoint(worldData), int.Parse(_map.Properties["WorldMapCost"]), _map.Properties["WorldLink"]);
+                string worldData = props["WorldData"];
+                WorldMapNode = new MapNode(Util.ParsePoint(worldData), int.Parse(props["WorldMapCost"]), props["WorldLink"]);
             }
 
             _renderer = new TiledMapRenderer(GraphicsDevice);
@@ -531,6 +526,12 @@ namespace RiverHollow.Map_Handling
                         else { _liMapObjects.Add(mapObject); }
                     }
                 }
+            }
+
+            //Add the map spawn last
+            if (_map.Properties.ContainsKey("ItemID") || _map.Properties.ContainsKey("ObjectID"))
+            {
+                _liResourceSpawns.Add(new ResourceSpawn(this));
             }
         }
 
@@ -1289,7 +1290,7 @@ namespace RiverHollow.Map_Handling
         {
             return _map.Properties;
         }
-        public Dictionary<string, string> GetProperties(TiledMapTile tile)
+        public Dictionary<string, string> GetTileProperties(TiledMapTile tile)
         {
             Dictionary<string, string> propList = new Dictionary<string, string>();
             foreach (TiledMapTileset ts in _map.Tilesets)
