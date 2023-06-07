@@ -38,8 +38,9 @@ namespace RiverHollow.WorldObjects
         private DirectionEnum ShoveDirection => GetEnumByIDKey<DirectionEnum>("ShoveDirection");
         private DirectionEnum PullDirection => GetEnumByIDKey<DirectionEnum>("PullDirection");
         private bool _bHasMoved = false;
-
         protected bool _bWalkable = false;
+        protected bool _bSelected = false;
+
         public bool Walkable => _bWalkable;
 
         protected ObjectPlacementEnum _ePlacement;
@@ -84,6 +85,8 @@ namespace RiverHollow.WorldObjects
 
         public bool Movable => GetBoolByIDKey("Movable");
         public bool MoveOnce => GetBoolByIDKey("MoveOnce");
+
+        virtual public WorldObject Pickup => this;
 
         public WorldObject(int id)
         {
@@ -166,10 +169,14 @@ namespace RiverHollow.WorldObjects
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
+            Sprite.SetColor(_bSelected ? Color.Green : Color.White);
+
             if (_bDrawUnder) { Sprite.Draw(spriteBatch, 1); }
             else {
                 float alpha = 1f;
-                if(((BaseHeight + 1) * Constants.TILE_SIZE < Height) && new Rectangle(Sprite.Position.X, Sprite.Position.Y, Sprite.Width, Sprite.Height).Contains(PlayerManager.PlayerActor.CollisionCenter) && PlayerManager.PlayerActor.CollisionBox.Bottom <= CollisionBox.Top)
+
+                var spriteRectangle = new Rectangle(Sprite.Position.X, Sprite.Position.Y, Sprite.Width, Sprite.Height);
+                if (!GetBoolByIDKey("NoAlpha") && ((BaseHeight + 1) * Constants.TILE_SIZE < Height) && spriteRectangle.Contains(PlayerManager.PlayerActor.CollisionCenter) && PlayerManager.PlayerActor.CollisionBox.Bottom <= CollisionBox.Top)
                 {
                     alpha = 0.9f;
                 }
@@ -203,12 +210,43 @@ namespace RiverHollow.WorldObjects
         }
 
         public virtual bool ProcessLeftClick() { return false; }
-        public virtual bool ProcessRightClick() {
+        public virtual bool ProcessRightClick()
+        {
             bool rv = false;
-            if (GetBoolByIDKey("OpenStock") && GameManager.CurrentBuilding != null){
+
+            if (GetBoolByIDKey("OpenStock") && GameManager.CurrentBuilding != null)
+            {
                 rv = true;
                 GUIManager.OpenMainObject(new HUDInventoryDisplay(TownManager.Inventory, DisplayTypeEnum.Inventory));
             }
+
+            if (GetBoolByIDKey("Bed"))
+            {
+                rv = true;
+                GUIManager.OpenTextWindow("Selection_Bed");
+            }
+
+            return rv;
+        }
+
+        public virtual void SelectObject(bool val)
+        {
+            _bSelected = val;
+        }
+
+        public virtual bool HasTileInRange()
+        {
+            bool rv = false;
+
+            foreach (var tile in Tiles)
+            {
+                if (PlayerManager.PlayerInRange(tile.Center))
+                {
+                    rv = true;
+                    break;
+                }
+            }
+
             return rv;
         }
 

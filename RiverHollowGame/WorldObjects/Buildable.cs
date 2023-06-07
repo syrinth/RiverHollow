@@ -17,7 +17,6 @@ namespace RiverHollow.WorldObjects
         public Dictionary<int, int> RequiredToMake => GetIntDictionaryByIDKey("ReqItems");
 
         public bool OutsideOnly { get; protected set; } = false;
-        protected bool _bSelected = false;
 
         public bool Unique { get; protected set; }
 
@@ -27,14 +26,6 @@ namespace RiverHollow.WorldObjects
 
             Unique = GetBoolByIDKey("Unique");
         }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            Sprite.SetColor(_bSelected ? Color.Green : Color.White);
-            base.Draw(spriteBatch);
-        }
-
-        public void SelectObject(bool val) { _bSelected = val; }
 
         public bool CanBuild()
         {

@@ -62,6 +62,7 @@ namespace RiverHollow.Map_Handling
                 if (_sClickAction.Equals("Town_Display")) { GUIManager.OpenMainObject(new TownInfoWindow()); }
                 else if (_sClickAction.Equals("Display_Upgrade")) { GUIManager.OpenMainObject(new HUDBuildingUpgrade(TownManager.GetBuildingByID(MapManager.Maps[MapName].BuildingID))); }
             }
+
             if (GetTravelPoint() != null)
             {
                 if (PlayerManager.PlayerInRange(_travelPoint.CollisionBox) && !MapManager.ChangingMaps())
@@ -72,18 +73,10 @@ namespace RiverHollow.Map_Handling
                     return true;
                 }
             }
-            else if (GetWorldObject() != null)
+            else if (GetWorldObject() != null && GetWorldObject().HasTileInRange())
             {
-                if (PlayerManager.PlayerInRange(Center))
-                {
-                    GetWorldObject().ProcessRightClick();
-                    rv = true;
-                }
-            }
-
-            if (ContainsProperty("Save", out string val) && val.Equals("true"))
-            {
-                GUIManager.OpenTextWindow("Selection_Bed");
+                rv = true;
+                GetWorldObject().ProcessRightClick();
             }
 
             return rv;
@@ -153,7 +146,7 @@ namespace RiverHollow.Map_Handling
         {
             if (getEditable)
             {
-                if (WorldObject != null && WorldObject.PlayerCanEdit) { return WorldObject; }
+                if (WorldObject != null && WorldObject.PlayerCanEdit) { return WorldObject.Pickup; }
                 else if (ShadowStructure() != null && ShadowStructure().PlayerCanEdit) { return ShadowStructure(); }
                 else { return Flooring; }
             }

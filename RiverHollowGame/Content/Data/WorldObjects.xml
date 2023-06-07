@@ -633,5 +633,17 @@
       <Key>157</Key>
       <Value>[Type:Destructible][Image:3-0/1][BaseOffset:0-0][Hp:3][Tool:Pick][ReqLvl:1][ItemID:1-1][DestructionAnim:208-0-3-0.1][BonusItemID:1-1-C]</Value>
     </Item>
+    <Item>
+      <Key>158</Key>
+      <Value>[Type:Structure][Image:19-21][Size:2-3][ReqItems:55-10/60-20][Base:0-0-2-3][SubObjects:159-0-0/160-0-32][HideBase][Bed]</Value>
+    </Item>
+    <Item>
+      <Key>159</Key>
+      <Value>[Type:WorldObject][Image:17-21][Size:2-1][Base:0-0-2-1][Bed]</Value>
+    </Item>
+    <Item>
+      <Key>160</Key>
+      <Value>[Type:WorldObject][Image:17-22][Size:2-3][Base:0-2-2-1][NoAlpha][Bed]</Value>
+    </Item>
   </Asset>
 </XnaContent>

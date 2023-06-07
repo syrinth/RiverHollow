@@ -1951,6 +1951,18 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Arcane Crystal Node]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_158</Key>
+      <Value>[Name:Basic Bed]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_159</Key>
+      <Value>[Name:Basic Bed(Head)]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_160</Key>
+      <Value>[Name:Basic Bed(Body)]</Value>
+    </Item>
+    <Item>
       <Key>Cutscene_0</Key>
       <Value>[Name:Combat_Intro]</Value>
     </Item>

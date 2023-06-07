@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.WorldObjects
 {
@@ -29,6 +31,25 @@ namespace RiverHollow.WorldObjects
             _bDrawUnder = true;
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (GameManager.HeldObject == this || !GetBoolByIDKey("HideBase"))
+            {
+                base.Draw(spriteBatch);
+            }
+        }
+
+        public override void SelectObject(bool val)
+        {
+            _bSelected = val;
+
+            foreach (SubObjectInfo info in _liSubObjectInfo)
+            {
+                RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Point(MapPosition.X + info.Position.X, MapPosition.Y + info.Position.Y));
+                targetTile.WorldObject?.SelectObject(val);
+            }
+        }
+
         public override bool ProcessLeftClick() { return true; }
 
         public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
@@ -37,7 +58,7 @@ namespace RiverHollow.WorldObjects
             if (base.PlaceOnMap(pos, map))
             {
                 rv = true;
-                if (ID == int.Parse(DataManager.Config[15]["ObjectID"]))
+                if (GetBoolByIDKey("Market"))
                 {
                     foreach (Merchant npc in TownManager.DIMerchants.Values)
                     {
@@ -50,7 +71,7 @@ namespace RiverHollow.WorldObjects
 
                 foreach (SubObjectInfo info in _liSubObjectInfo)
                 {
-                    WorldObject obj = DataManager.CreateWorldObjectByID(info.ObjectID);
+                    WorldObject obj = new SubObject(this, info.ObjectID);
                     RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Point(pos.X + info.Position.X, pos.Y + info.Position.Y));
                     RHTile temp = targetTile;
                     for (int i = 0; i < obj.CollisionBox.Width / 16; i++)
@@ -90,10 +111,57 @@ namespace RiverHollow.WorldObjects
             base.RemoveSelfFromTiles();
         }
 
+        public override bool HasTileInRange()
+        {
+            bool rv = base.HasTileInRange();
+            if (!rv)
+            {
+                foreach (SubObjectInfo info in _liSubObjectInfo)
+                {
+                    RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Point(MapPosition.X + info.Position.X, MapPosition.Y + info.Position.Y));
+                    if(targetTile.WorldObject != null)
+                    {
+                        foreach (var tile in targetTile.WorldObject.Tiles)
+                        {
+                            if (PlayerManager.PlayerInRange(tile.Center))
+                            {
+                                rv = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return rv;
+        }
+
         public struct SubObjectInfo
         {
             public int ObjectID;
             public Point Position;
+        }
+    }
+
+    public class SubObject : WorldObject
+    {
+        readonly Structure _mainObj;
+
+        public override WorldObject Pickup => _mainObj;
+        public SubObject(Structure mainobj, int id) : base(id)
+        {
+            _eObjectType = ObjectTypeEnum.Structure;
+            _mainObj = mainobj;
+        }
+
+        public override bool ProcessRightClick()
+        {
+            return _mainObj.ProcessRightClick();
+        }
+
+        public override bool HasTileInRange()
+        {
+            return _mainObj.HasTileInRange();
         }
     }
 }
