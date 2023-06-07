@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
-using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
@@ -76,6 +74,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
                 _btnDown = new GUIButton(GUIUtils.BTN_DOWN_SMALL, BtnDownClick);
                 _btnDown.AnchorAndAlign(Objects[_iMaxShownItems - 1], SideEnum.Right, SideEnum.CenterY);
+
+                AddControls(_btnDown, _btnUp);
 
                 _btnUp.Show(false);
 
