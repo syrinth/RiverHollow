@@ -638,11 +638,6 @@ namespace RiverHollow.Map_Handling
             return _liMobs.Count - _liActorsToRemove.FindAll(x => x.ActorType == ActorTypeEnum.Mob).Count <= 0;
         }
 
-        public void ResetMobs()
-        {
-            _liMobs.ForEach(x => x.Reset());
-        }
-
         public void AlertSpawnPoint(WorldObject obj)
         {
             for (int i = 0; i < _liResourceSpawns.Count; i++)
@@ -2082,6 +2077,9 @@ namespace RiverHollow.Map_Handling
 
         public void LeaveMap()
         {
+            _liMobs.ForEach(x => x.Reset());
+            _liItems.Clear();
+
             EnvironmentManager.UnloadEnvironment();
             List<Actor> copy = new List<Actor>(_liActors);
             for (int i = 0; i < copy.Count; i++)
