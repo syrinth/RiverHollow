@@ -106,6 +106,7 @@ namespace RiverHollow.GUIComponents
 
         internal static Rectangle WIN_IMAGE_CRAFTING = new Rectangle(192, 0, 160, 71);
         internal static Rectangle WIN_UPGRADE = new Rectangle(0, 0, 162, 119);
+        internal static Rectangle LEVEL_TAB = new Rectangle(48, 192, 44, 16);
 
         internal static WindowData Brown_Window = new WindowData(0, 240, 5, 5, 6, 6, 4);
         internal static WindowData DarkBlue_Window = new WindowData(16, 240, 5, 5, 6, 6, 4);
@@ -175,7 +176,7 @@ namespace RiverHollow.GUIComponents
                 position.Y += o.Height + spacing;
             }
         }
-        internal static void CreateSpacedRowAgainstObject(List<GUIObject> components, GUIObject mainControl, GUIObject objAbove, int spacing, int yDrop)
+        internal static void CreateSpacedRowAgainstObject(List<GUIObject> components, GUIObject mainControl, GUIObject objAgainst, int spacing, int yChange)
         {
             if (components.Count > 0)
             {
@@ -185,12 +186,12 @@ namespace RiverHollow.GUIComponents
                 {
                     if (i == 0)
                     {
-                        components[i].Position(new Point(mainControl.Position().X, objAbove.Position().Y));
-                        components[i].MoveBy(firstXPosition, GameManager.ScaleIt(yDrop));
+                        components[i].Position(new Point(mainControl.Position().X, objAgainst.Position().Y));
+                        components[i].MoveBy(firstXPosition, GameManager.ScaleIt(yChange));
                     }
                     else
                     {
-                        components[i].AnchorAndAlignWithSpacing(components[i - 1], SideEnum.Right, SideEnum.Top, spacing);
+                        components[i].AnchorAndAlignWithSpacing(components[i - 1], SideEnum.Right, SideEnum.CenterY, spacing);
                     }
                     mainControl.AddControl(components[i]);
                 }

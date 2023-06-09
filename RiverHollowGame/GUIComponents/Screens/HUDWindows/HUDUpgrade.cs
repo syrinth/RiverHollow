@@ -16,7 +16,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         readonly GUIImage _gImage;
         readonly Building _building;
 
-        List<GUIIcon> _liIcons;
+        List<GUIIconText> _liIcons;
 
         Dictionary<int, int> _diUpgradeItems;
         int _iCost;
@@ -24,7 +24,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         public HUDBuildingUpgrade(Building b)
         {
             _building = b;
-            _liIcons = new List<GUIIcon>();
+            _liIcons = new List<GUIIconText>();
 
             _gImage = new GUIImage(GUIUtils.WIN_UPGRADE);
             AddControl(_gImage);
@@ -41,6 +41,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         {
             _gImage.CleanControls();
 
+            var levelTab = new GUIImage(GUIUtils.LEVEL_TAB);
+            levelTab.PositionAndMove(_gImage, new Point(59, 16));
+
             GUIText name = new GUIText(_building.Name());
             name.AnchorToObjectInnerSide(_gImage, SideEnum.Top, GameManager.ScaledPixel * 3);
             _gImage.AddControl(name);
@@ -50,29 +53,19 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gImage.AddControl(lvl);
 
             //Traveler Display
-            var travelers = new GUIIcon(GUIUtils.ICON_TRAVELER, GameIconEnum.Traveler);
-            travelers.Position(_gImage.Position());
-            travelers.ScaledMoveBy(37, 36);
+            var travelerStr = string.Format("+{0}", _building.GetTravelerChance());
+            var travelers = new GUIIconText(travelerStr, 3, GUIUtils.ICON_TRAVELER, GameIconEnum.Traveler, SideEnum.Bottom, SideEnum.CenterX);
+            travelers.PositionAndMove(_gImage, new Point(37, 36));
             _gImage.AddControl(travelers);
 
-            var travelerPercent = new GUIText(_building.GetTravelerChance());
-            travelerPercent.AnchorAndAlignWithSpacing(travelers, SideEnum.Bottom, SideEnum.CenterX, 3);
-            _gImage.AddControl(travelerPercent);
-
             //Profit Display
-            var profits = new GUIIcon(GUIUtils.ICON_COIN, GameIconEnum.Coin);
-            profits.Position(_gImage.Position());
-            profits.ScaledMoveBy(111, 36);
-            _gImage.AddControl(profits);
-
-            var profitPercent = new GUIText((int)(_building.GetShopProfitModifier() * 100));
-            profitPercent.AnchorAndAlignWithSpacing(profits, SideEnum.Bottom, SideEnum.CenterX, 3);
-            _gImage.AddControl(profitPercent);
+            int profit = (int)(_building.GetShopProfitModifier() * 100);
+            var profitStr = string.Format("+{0}", profit);
+            var profits = new GUIIconText(profitStr, 3, GUIUtils.ICON_COIN, GameIconEnum.Coin, SideEnum.Bottom, SideEnum.CenterX);
+            profits.PositionAndMove(_gImage, new Point(111, 36));
 
             var scroll = new GUIImage(GUIUtils.HUD_SCROLL_L);
-            scroll.Position(_gImage.Position());
-            scroll.ScaledMoveBy(10, 65);
-            _gImage.AddControl(scroll);
+            scroll.PositionAndMove(_gImage, new Point(10, 65));
 
             _liIcons.Add(travelers);
             _liIcons.Add(profits);
@@ -133,14 +126,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                         bonusValue = nextUpgrade.FormulaLevel.ToString();
                     }
 
-                    var bonusIcon = new GUIIcon(drawRect, icon);
-                    bonusIcon.Position(_gImage.Position());
-                    bonusIcon.ScaledMoveBy(63, 71);
-                    _gImage.AddControl(bonusIcon);
-
-                    var bonusText = new GUIText(bonusValue);
-                    bonusText.AnchorAndAlignWithSpacing(bonusIcon, SideEnum.Right, SideEnum.CenterY, 1);
-                    _gImage.AddControl(bonusText);
+                    var bonusIcon = new GUIIconText(bonusValue, 1, drawRect, icon, SideEnum.Right, SideEnum.CenterY);
+                    bonusIcon.CenterOnObject(_gImage);
+                    bonusIcon.AnchorToObject(scroll, SideEnum.Bottom, 3);
 
                     _liIcons.Add(bonusIcon);
 
@@ -153,7 +141,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                             box.Position(_gImage.Position());
                             box.ScaledMoveBy(9, 91);
                         }
-                        else { box.AnchorAndAlign(list[list.Count - 1], SideEnum.Right, SideEnum.Bottom); }
+                        else { box.AnchorAndAlignWithSpacing(list[list.Count - 1], SideEnum.Right, SideEnum.Bottom, 2); }
                         _gImage.AddControl(box);
 
                         if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value)) { box.SetColor(Color.Red); }
@@ -197,40 +185,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             }
 
             return rv;
-        }
-    }
-
-    public class GUIIcon : GUIImage
-    {
-        GameIconEnum Icon { get; }
-
-        public GUIIcon(Rectangle sourceRect, GameIconEnum e) : base(sourceRect, DataManager.HUD_COMPONENTS)
-        {
-            Icon = e;
-        }
-
-        protected override void BeginHover()
-        {
-            string iconDescription = string.Empty;
-            switch (Icon)
-            {
-                case GameIconEnum.Traveler:
-                    iconDescription = "Upgrade_Chance";
-                    break;
-                case GameIconEnum.Coin:
-                    iconDescription = "Upgrade_Profit";
-                    break;
-                case GameIconEnum.Hammer:
-                    iconDescription = "Upgrade_CraftSlots";
-                    break;
-                case GameIconEnum.Book:
-                    iconDescription = "Upgrade_Recipe";
-                    break;
-            }
-
-            var win = new GUITextWindow(DataManager.GetGameTextEntry(iconDescription), Point.Zero);
-            win.AnchorAndAlign(this, SideEnum.Bottom, SideEnum.CenterX, GUIUtils.ParentRuleEnum.Skip);
-            GUIManager.OpenHoverObject(win, DrawRectangle, true);
         }
     }
 }

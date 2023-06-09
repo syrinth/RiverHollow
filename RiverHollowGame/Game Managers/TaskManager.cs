@@ -88,16 +88,6 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
-        public static void AdvanceTaskProgress(Item i)
-        { 
-            foreach (RHTask q in TaskLog)
-            {
-                if (q.AttemptProgress(i))
-                {
-                    break;
-                }
-            }
-        }
         public static void AdvanceTaskProgress()
         {
             foreach (RHTask q in TaskLog)
@@ -121,15 +111,10 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
-        public static void RemoveTaskProgress(Item i)
+
+        public static void CheckItemCount()
         {
-            foreach (RHTask q in TaskLog)
-            {
-                if (q.RemoveProgress(i))
-                {
-                    break;
-                }
-            }
+            TaskLog.ForEach(q => q.CheckItems());
         }
         public static bool HasTaskID(int taskID)
         {

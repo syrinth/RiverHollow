@@ -115,10 +115,8 @@ namespace RiverHollow.Items
 
         public virtual void DrawToolAnimation(SpriteBatch spriteBatch)
         {
-            if (PlayerManager.PlayerActor.Facing == DirectionEnum.Up) { _sprite.SetLayerDepthMod(-20); }
-            else { _sprite.SetLayerDepthMod(1); }
-
-            _sprite.Draw(spriteBatch);
+            int mod = PlayerManager.PlayerActor.Facing == DirectionEnum.Up ? -1 : 1;
+            _sprite.Draw(spriteBatch, true, 1, PlayerManager.PlayerActor.BodySprite.LayerDepth + mod);
         }
 
         public override bool AddToInventoryTrigger()

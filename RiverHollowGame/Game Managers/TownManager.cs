@@ -100,7 +100,7 @@ namespace RiverHollow.Game_Managers
             }
             foreach (Merchant m in DIMerchants.Values)
             {
-                if (GetNumberTownObjects(int.Parse(DataManager.Config[15]["ObjectID"])) > 0)
+                if (TownManager.Market != null)
                 {
                     m.RollOver();
                 }
@@ -178,6 +178,12 @@ namespace RiverHollow.Game_Managers
         }
         private static void SpawnTravelers()
         {
+            //No Market, no Travelers
+            if (TownManager.Market == null)
+            {
+                return;
+            }
+
             for (int i = 0; i < Travelers.Count; i++)
             {
                 Travelers[i].CurrentMap.RemoveCharacterImmediately(Travelers[i]);

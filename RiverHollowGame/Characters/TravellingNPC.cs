@@ -17,6 +17,7 @@ namespace RiverHollow.Characters
         protected int TotalMoneyEarnedNeeded => GetIntByIDKey("TotalMoneyEarnedReq");
         protected int RequiredPopulation => GetIntByIDKey("RequiredPopulation");
         protected int RequiredVillagerID => GetIntByIDKey("RequiredVillager");
+        protected int RequiredObjectID => GetIntByIDKey("RequiredObjectID");
         protected int RequiredSpecialItem => GetIntByIDKey("ItemID");
 
         public virtual RelationShipStatusEnum RelationshipState { get; set; }
@@ -34,7 +35,7 @@ namespace RiverHollow.Characters
                 foreach (string i in args)
                 {
                     string[] split = Util.FindArguments(i);
-                    _diRequiredObjectIDs[int.Parse(split[0])] = int.Parse(split[1]);
+                    _diRequiredObjectIDs[int.Parse(split[0])] = split.Length > 1 ? int.Parse(split[1]) : 1;
                 }
             }
 
@@ -49,6 +50,12 @@ namespace RiverHollow.Characters
 
         protected bool CheckArrivalTriggers()
         {
+            //No Market, no visitors
+            if (TownManager.Market == null)
+            {
+                return false;
+            }
+
             //If they have no triggers. Do not pass go
             if (new List<string>(Triggers).Find(x => GetBoolByIDKey(x)) == null)
             {
@@ -85,6 +92,7 @@ namespace RiverHollow.Characters
                     return false;
                 }
             }
+
             if (TotalMoneyEarnedNeeded != -1 && TotalMoneyEarnedNeeded > PlayerManager.TotalMoneyEarned)
             {
                 return false;

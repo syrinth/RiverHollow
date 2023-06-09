@@ -97,7 +97,7 @@ namespace RiverHollow.WorldObjects
                     MapManager.Maps[MapName].RemoveWorldObject(targetTile.WorldObject);
                 }
 
-                if (ID == int.Parse(DataManager.Config[15]["ObjectID"]))
+                if (DataManager.GetBoolByIDKey(ID, "Market", DataType.WorldObject))
                 {
                     foreach (Merchant m in TownManager.DIMerchants.Values)
                     {

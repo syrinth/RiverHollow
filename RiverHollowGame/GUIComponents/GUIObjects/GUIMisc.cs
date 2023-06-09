@@ -262,4 +262,56 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             return rv;
         }
     }
+
+
+    public class GUIIcon : GUIImage
+    {
+        GameIconEnum Icon { get; }
+
+        public GUIIcon(Rectangle sourceRect, GameIconEnum e) : base(sourceRect, DataManager.HUD_COMPONENTS)
+        {
+            Icon = e;
+        }
+
+        protected override void BeginHover()
+        {
+            string iconDescription = string.Empty;
+            switch (Icon)
+            {
+                case GameIconEnum.Traveler:
+                    iconDescription = "Upgrade_Chance";
+                    break;
+                case GameIconEnum.Coin:
+                    iconDescription = "Upgrade_Profit";
+                    break;
+                case GameIconEnum.Hammer:
+                    iconDescription = "Upgrade_CraftSlots";
+                    break;
+                case GameIconEnum.Book:
+                    iconDescription = "Upgrade_Recipe";
+                    break;
+            }
+
+            var win = new GUITextWindow(DataManager.GetGameTextEntry(iconDescription), Point.Zero);
+            win.AnchorAndAlign(this, SideEnum.Bottom, SideEnum.CenterX, GUIUtils.ParentRuleEnum.Skip);
+            GUIManager.OpenHoverObject(win, DrawRectangle, true);
+        }
+    }
+
+    public class GUIIconText : GUIObject
+    {
+        readonly GUIIcon _gIcon;
+        readonly GUIText _gText;
+
+        public GUIIconText(string text, int spacing, Rectangle sourceRect, GameIconEnum e, SideEnum anchorTo, SideEnum alignTo)
+        {
+            _gIcon = new GUIIcon(sourceRect, e);
+            _gText = new GUIText(text);
+            _gText.AnchorAndAlignWithSpacing(_gIcon, anchorTo, alignTo, spacing);
+
+            AddControls(_gIcon, _gText);
+
+            DetermineSize();
+        }
+    }
 }

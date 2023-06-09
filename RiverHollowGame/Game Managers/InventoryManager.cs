@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Items;
 using static RiverHollow.Utilities.Enums;
 
@@ -284,6 +285,7 @@ Exit:
         public static void DropItemOnMap(Item item)
         {
             MapManager.CurrentMap.SpawnItemOnMap(item, PlayerManager.PlayerActor.CollisionBoxLocation, true, ItemPickupState.Manual);
+            TaskManager.CheckItemCount();
         }
 
         #region Add Item to Inventory
@@ -366,12 +368,12 @@ Exit:
                 //Only perform this check if we are adding to the playerInventory
                 if (inventory == PlayerInventory)
                 {
-                    TaskManager.AdvanceTaskProgress(itemToAdd);
+                    TaskManager.CheckItemCount();
 
                     if (!noDisplay)
                     {
                         //Used to display an item that was just added to the inventory
-                        AddedItemList.Add(DataManager.GetItem(itemToAdd.ID));
+                        AddedItemList.Add(DataManager.GetItem(itemToAdd.ID, itemToAdd.Number));
                     }
                 }
 
@@ -429,7 +431,7 @@ Exit:
                     }
                     if (inventory == PlayerInventory)
                     {
-                        TaskManager.AdvanceTaskProgress(item);
+                        TaskManager.CheckItemCount();
                     }
                     rv = true;
                 }
@@ -460,7 +462,7 @@ Exit:
         {
             if (inventory == PlayerInventory)
             {
-                TaskManager.RemoveTaskProgress(inventory[row, column]);
+                TaskManager.CheckItemCount();
             }
 
             inventory[row, column] = null;
@@ -504,7 +506,7 @@ Exit:
                         {
                             if (PlayerInventory[i, j] != null)
                             {
-                                TaskManager.RemoveTaskProgress(inventory[i, j]);
+                                TaskManager.CheckItemCount();
                             }
                         }
                         //null the item and exit

@@ -137,7 +137,7 @@ namespace RiverHollow.Items
                 {
                     if(GameManager.HeldItem == this) { GameManager.DropItem(); }
                     InventoryManager.RemoveItemFromInventory(this, playerInventory);
-                    TaskManager.RemoveTaskProgress(this);
+                    TaskManager.CheckItemCount();
                 }
             }
             return rv;

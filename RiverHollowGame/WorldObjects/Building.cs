@@ -7,7 +7,6 @@ using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 using RiverHollow.Misc;
 using System.Linq;
-using RiverHollow.GUIComponents.Screens.HUDWindows;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
@@ -111,7 +110,7 @@ namespace RiverHollow.Buildings
 
         public int GetTravelerChance()
         {
-            int rv = GetIntByIDKey("Traveller");
+            int rv = GetIntByIDKey("Traveller", 0);
             foreach (var upgrade in GetUnlockedUpgrades())
             {
                 rv += upgrade.Chance;

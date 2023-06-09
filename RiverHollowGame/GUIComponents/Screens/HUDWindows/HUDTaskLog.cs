@@ -6,6 +6,7 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace RiverHollow.GUIComponents.Screens.HUDWindows
 {
@@ -152,25 +153,33 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             {
                 Controls.Clear();
                 _name = new GUIText(q.Name);
-                _name.AnchorToInnerSide(this, SideEnum.TopLeft);
+                _name.AnchorToInnerSide(this, SideEnum.Top, 2);
+
+                var scroll = new GUIImage(GUIUtils.HUD_SCROLL_L);
+                scroll.PositionAndMove(this, new Point(9, 128));
 
                 _desc = new GUIText();
-                _desc.ParseAndSetText(q.Description, InnerWidth(), 3, true);
-                _desc.AnchorAndAlignWithSpacing(_name, SideEnum.Bottom, SideEnum.Left, _name.CharHeight);
+                _desc.ParseAndSetText(q.Description, InnerWidth(), 9, true);
+                _desc.AnchorToInnerSide(this, SideEnum.Left, 2);
+                _desc.AnchorToObject(_name, SideEnum.Bottom, 4);
 
-                List<GUIObject> boxes = new List<GUIObject>();
+                _progress = new GUIText(q.GetProgressString());
+                _progress.SetColor(Color.DarkBlue);
+                _progress.AnchorAndAlignThenMove(scroll, SideEnum.Top, SideEnum.CenterX, 0, -4);
+
+                var rewards = new List<GUIObject>();
                 for (int i = 0; i < q.LiRewardItems.Count; i++)
                 {
                     GUIItemBox newBox = new GUIItemBox(q.LiRewardItems[i]);
-                    boxes.Add(newBox);
-
-                    if (i == 0) { newBox.AnchorAndAlign(_desc, SideEnum.Bottom, SideEnum.Left); }
-                    else { newBox.AnchorAndAlign(boxes[i - 1], SideEnum.Right, SideEnum.Top); }
-                    AddControl(newBox);
+                    rewards.Add(newBox);
                 }
 
-                _progress = new GUIText(q.GetProgressString());
-                _progress.AnchorToInnerSide(this, SideEnum.BottomRight);
+                if(q.RewardMoney > 0)
+                {
+                    rewards.Add(new GUIMoneyDisplay(q.RewardMoney, false));
+                }
+
+                GUIUtils.CreateSpacedRowAgainstObject(new List<GUIObject>(rewards), this, scroll, 4, GUIUtils.HUD_SCROLL_L.Height + 2);
             }
         }
     }

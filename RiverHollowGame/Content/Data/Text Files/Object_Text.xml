@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Task_0</Key>
-      <Value>[Name:Build a $WorldObject_112$][Description:$Actor_16$ want you to build a $WorldObject_112$]</Value>
+      <Value>[Name:Open For Business][Description:$Actor_16$ says that we should build a $WorldObject_112$ to attract Merchants and open up trade.]</Value>
     </Item>
     <Item>
       <Key>Task_1</Key>
