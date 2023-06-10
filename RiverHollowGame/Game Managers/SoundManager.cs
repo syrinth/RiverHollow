@@ -160,10 +160,8 @@ namespace RiverHollow.Game_Managers
             EffectVolume = value;
             foreach (KeyValuePair<object, EffectData> kvp in _diCurrentEffects)
             {
-                if (kvp.Value.Position != Point.Zero)
-                {
-                    kvp.Value.SetVolume(GetDistanceVolume(kvp.Value.Position));
-                }
+                var volume = (kvp.Value.Position != Point.Zero) ? GetDistanceVolume(kvp.Value.Position) : value;
+                kvp.Value.SetVolume(value);
             }
         }
 
