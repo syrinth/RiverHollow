@@ -84,7 +84,7 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         TravelPoint entryPoint = map.DictionaryTravelPoints[node.MapInfo.MapConnection];
 
-                        DirectionEnum entryDir = entryPoint.Dir;
+                        DirectionEnum entryDir = entryPoint.EntranceDir;
                         Point newPos = entryPoint.Center;
 
                         switch (entryDir)
@@ -102,12 +102,12 @@ namespace RiverHollow.GUIComponents.Screens
                                 newPos += new Point(-PlayerManager.PlayerActor.CollisionBox.Width / 2, entryPoint.CollisionBox.Height / 2);
                                 break;
                         }
-                        PlayerManager.PlayerActor.Facing = entryDir;
+                        PlayerManager.PlayerActor.SetFacing(entryDir);
                         map.SpawnMapEntities();
 
                         PlayerManager.PlayerActor.ActivePet?.ChangeState(NPCStateEnum.Alert);
                         GameManager.GoToHUDScreen();
-                        MapManager.FadeToNewMap(map, newPos);
+                        MapManager.FadeToNewMap(map, newPos, entryDir);
 
                         GameCalendar.AddTime(0, node.MapInfo.Time);
 
@@ -141,7 +141,7 @@ namespace RiverHollow.GUIComponents.Screens
         private void ReturnToMap()
         {
             GameManager.GoToHUDScreen();
-            PlayerManager.PlayerActor.Facing = Util.GetOppositeDirection(PlayerManager.PlayerActor.Facing);
+            PlayerManager.PlayerActor.SetFacing(Util.GetOppositeDirection(PlayerManager.PlayerActor.Facing));
         }
 
         public class GUIMapNode : GUIImage

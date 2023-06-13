@@ -45,8 +45,8 @@ namespace RiverHollow.Characters
         public Point CollisionCenter => CollisionBox.Center;
         #endregion
 
-        public bool Moving { get; set; } = false;
-        public DirectionEnum Facing = DirectionEnum.Down;
+        public bool Moving { get; private set; } = false;
+        public DirectionEnum Facing { get; private set; } =  DirectionEnum.Down;
         public ActorStateEnum State { get; protected set; } = ActorStateEnum.Walk;
         public ActorTypeEnum ActorType { get; protected set; }
 
@@ -203,8 +203,7 @@ namespace RiverHollow.Characters
             //Only do this if they are idle so as to not disturb other animations they may be performing.
             if (facePlayer && BodySprite.CurrentAnimation.StartsWith("Idle"))
             {
-                Facing = Util.GetDirectionOf(Center, PlayerManager.PlayerActor.Center);
-
+                SetFacing(Util.GetDirectionOf(Center, PlayerManager.PlayerActor.Center));
                 PlayAnimationVerb(VerbEnum.Idle);
             }
         }
@@ -220,8 +219,12 @@ namespace RiverHollow.Characters
         {
             DirectionEnum newFacing = Util.GetDirection(direction);
             if (newFacing != DirectionEnum.None) {
-                Facing = newFacing;
+                SetFacing(newFacing);
             }
+        }
+        public void DetermineAnimationState()
+        {
+            DetermineAnimationState(Vector2.Zero);
         }
         public void DetermineAnimationState(Point direction)
         {
@@ -229,7 +232,7 @@ namespace RiverHollow.Characters
         }
         public virtual void DetermineAnimationState(Vector2 direction)
         {
-            Moving = direction.Length() != 0;
+            SetMoving(direction.Length() != 0);
 
             switch (State)
             {
@@ -255,8 +258,18 @@ namespace RiverHollow.Characters
         public void SetState(ActorStateEnum e) { State = e; }
         public void SetWalkingDir(DirectionEnum d)
         {
-            Facing = d;
+            SetFacing(d);
             BodySprite.PlayAnimation(VerbEnum.Walk, Facing);
+        }
+
+        public void SetFacing(DirectionEnum dir)
+        {
+            Facing = dir;
+        }
+
+        public void SetMoving(bool val)
+        {
+            Moving = val;
         }
 
         public virtual void SetMoveTo(Point v, bool update = true)

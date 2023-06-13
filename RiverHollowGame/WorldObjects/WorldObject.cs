@@ -35,9 +35,6 @@ namespace RiverHollow.WorldObjects
         public bool PlayerCanEdit => !ShopItem && IsBuildable();
         public bool ShopItem { get; protected set; } = false;
 
-        private DirectionEnum ShoveDirection => GetEnumByIDKey<DirectionEnum>("ShoveDirection");
-        private DirectionEnum PullDirection => GetEnumByIDKey<DirectionEnum>("PullDirection");
-        private bool _bHasMoved = false;
         protected bool _bWalkable = false;
         protected bool _bSelected = false;
 
@@ -83,8 +80,12 @@ namespace RiverHollow.WorldObjects
             return Name() + System.Environment.NewLine + GetTextData("Description");
         }
 
-        public bool Movable => GetBoolByIDKey("Movable");
-        public bool MoveOnce => GetBoolByIDKey("MoveOnce");
+        public bool Reset { get; private set; } = false;
+        public bool Movable { get; private set; }
+        public bool MoveOnce { get; private set; }
+        public DirectionEnum ShoveDirection { get; private set; } = DirectionEnum.None;
+        public DirectionEnum PullDirection { get; private set; } = DirectionEnum.None;
+        private bool _bHasMoved = false;
 
         virtual public WorldObject Pickup => this;
 
@@ -126,8 +127,41 @@ namespace RiverHollow.WorldObjects
                 }
             }
 
+            if (GetBoolByIDKey("Movable"))
+            {
+                Movable = true;
+            }
+
             LoadSprite();
         }
+
+        public WorldObject(int id, Dictionary<string,string> args) : this(id)
+        {
+            if (args != null)
+            {
+                if (args.ContainsKey("Reset"))
+                {
+                    Reset = true;
+                }
+                if (args.ContainsKey("Movable"))
+                {
+                    Movable = true;
+                }
+                if (args.ContainsKey("MoveOnce"))
+                {
+                    MoveOnce = true;
+                }
+                if (args.ContainsKey("ShoveDirection"))
+                {
+                    ShoveDirection = Util.ParseEnum<DirectionEnum>(args["ShoveDirection"]);
+                }
+                if (args.ContainsKey("PullDirection"))
+                {
+                    PullDirection = Util.ParseEnum<DirectionEnum>(args["PullDirection"]);
+                }
+            }
+        }
+
         protected virtual void LoadSprite()
         {
             if (GetBoolByIDKey("Texture"))
@@ -250,7 +284,13 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
-        public virtual void Rollover() { }
+        public virtual void Rollover()
+        {
+            if (Reset)
+            {
+                CurrentMap.RemoveWorldObject(this);
+            }
+        }
 
         public virtual bool IntersectsWith(Rectangle r)
         {

@@ -90,7 +90,7 @@ namespace RiverHollow.Game_Managers
                         DungeonManager.InitializeProceduralDungeon(MapManager.CurrentMap.DungeonName, MapManager.CurrentMap.Name, travelPoint);
                     }
 
-                    entryPoint = linkedMap.DictionaryTravelPoints[currMap];
+                    entryPoint = linkedMap.DictionaryTravelPoints[string.Format("{0}{1}", currMap, travelPoint.MapConnector)];
 
                     Point newPos;
                     if (travelPoint.IsDoor)
@@ -104,11 +104,11 @@ namespace RiverHollow.Game_Managers
                     }
                     else
                     {
-                        newPos = entryPoint.FindLinkedPointPosition(travelPoint.Center, actor);
+                        newPos = entryPoint.FindLinkedPointPosition(travelPoint, actor);
                     }
 
                     PlayerManager.PlayerActor.ActivePet?.ChangeState(NPCStateEnum.Alert);
-                    FadeToNewMap(linkedMap, newPos, travelPoint.TargetBuilding);
+                    FadeToNewMap(linkedMap, newPos, entryPoint.EntranceDir, travelPoint.TargetBuilding);
 
                     PlayerManager.ReleaseTile();
                 }
@@ -125,6 +125,7 @@ namespace RiverHollow.Game_Managers
                 linkedMap.AddActor(actor);
                 RHTile newTile = linkedMap.GetTileByGridCoords(Util.GetGridCoords(entryPoint.GetMovedCenter()));
                 actor.NewMapPosition = newTile.Position;
+                actor.SetFacing(entryPoint.EntranceDir);
             }
         }
 
@@ -134,7 +135,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         /// <param name="newMap">Map to move to</param>
         /// <param name="playerPos">The position of the player</param>
-        public static void FadeToNewMap(RHMap newMap, Point playerPos, Building b = null)
+        public static void FadeToNewMap(RHMap newMap, Point playerPos, DirectionEnum facing, Building b = null)
         {
             if (newMap.Name != CurrentMap.MapAbove && newMap.Name != CurrentMap.MapBelow)
             {
@@ -142,7 +143,7 @@ namespace RiverHollow.Game_Managers
             }
 
             PlayerManager.PlayerActor.DetermineAnimationState(Point.Zero);
-            _newMapInfo = new NewMapInfo(newMap, playerPos, b);
+            _newMapInfo = new NewMapInfo(newMap, playerPos, facing, b);
         }
 
         public static bool ChangingMaps()
@@ -216,6 +217,8 @@ namespace RiverHollow.Game_Managers
                 SoundManager.ChangeMap();
                 PlayerManager.CurrentMap = _newMapInfo.NextMap.Name;
                 PlayerManager.PlayerActor.SetPosition(_newMapInfo.PlayerPosition);
+                PlayerManager.PlayerActor.SetFacing(_newMapInfo.Facing);
+                PlayerManager.PlayerActor.DetermineAnimationState();
 
                 if (_newMapInfo.EnteredBuilding != null)
                 {

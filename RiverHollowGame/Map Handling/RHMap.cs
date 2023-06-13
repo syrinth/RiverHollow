@@ -458,8 +458,8 @@ namespace RiverHollow.Map_Handling
                                 CreateDoor(trvlPt, mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height);
                             }
 
-                            if (!string.IsNullOrEmpty(trvlPt.LinkedMap)) { DictionaryTravelPoints.Add(trvlPt.LinkedMap, trvlPt); }
-                            else { DictionaryTravelPoints.Add(Util.GetEnumString(trvlPt.Dir), trvlPt); }
+                            if (!string.IsNullOrEmpty(trvlPt.MapLink)) { DictionaryTravelPoints.Add(trvlPt.MapLink, trvlPt); }
+                            else { DictionaryTravelPoints.Add(Util.GetEnumString(trvlPt.EntranceDir), trvlPt); }
                         }
                     }
                 }
@@ -535,11 +535,11 @@ namespace RiverHollow.Map_Handling
             }
         }
 
-        public void PopulateMap(bool gameStart)
+        public void PopulateMap(bool forceRepop)
         {
             foreach (TiledMapObject tiledObj in _liMapObjects)
             {
-                if (gameStart || !tiledObj.Properties.ContainsKey("DoNotLoad"))
+                if (forceRepop || tiledObj.Properties.ContainsKey("Reset"))
                 {
                     int objWidth = Constants.TILE_SIZE;
                     int objHeight = Constants.TILE_SIZE;
@@ -741,6 +741,7 @@ namespace RiverHollow.Map_Handling
             new List<WorldObject>(_liPlacedWorldObjects).ForEach(x => x.Rollover());
             _liResourceSpawns.ForEach(x => x.Rollover(Randomize));
 
+            PopulateMap(Randomize);
             StockShop();
             CheckSpirits();
             _liItems.Clear();
@@ -1903,7 +1904,7 @@ namespace RiverHollow.Map_Handling
             }
             else if (ignoreActors || !TileContainsBlockingActor(testTile))
             {
-                if ((testTile.CanPlaceOnTabletop(obj) )|| (testTile.Passable() && testTile.WorldObject == null))
+                if (testTile.CanPlaceOnTabletop(obj) || testTile.CanPlaceObject())
                 {
                     rv = true;
                 }
@@ -2277,7 +2278,10 @@ namespace RiverHollow.Map_Handling
             {
                 foreach (WorldObject wObj in _liPlacedWorldObjects)
                 {
-                    mapData.worldObjects.Add(wObj.SaveData());
+                    if (!wObj.Reset)
+                    {
+                        mapData.worldObjects.Add(wObj.SaveData());
+                    }
                 }
             }
 

@@ -505,440 +505,20 @@
 /processorParam:TextureFormat=Color
 /build:Fonts/FontBattle_0.png
 
-#begin Maps/Dungeon_Caves/mapCave_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_1.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_10.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_10.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_11.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_11.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_12.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_12.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_13.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_13.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_14.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_14.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_15.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_15.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_16.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_16.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_17.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_17.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_18.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_18.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_19.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_19.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_2.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_20.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_20.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_3.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_3.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_4.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_4.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_5.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_5.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_6.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_6.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_7.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_7.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_8.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_8.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_9.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_9.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Checkpoint_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Checkpoint_1.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Entrance.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Entrance.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_1_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_1_1.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_1_10.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_1_10.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_1_11.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_1_11.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_1_12.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_1_12.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_1_2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_1_2.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_1_3.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_1_3.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_1_4.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_1_4.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_1_4a.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_1_4a.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_1_5.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_1_5.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_1_6.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_1_6.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_1_7.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_1_7.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_1_8.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_1_8.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_1_9.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_1_9.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_2_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_2_1.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_2_10.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_2_10.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_2_11.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_2_11.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_2_12.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_2_12.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_2_2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_2_2.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_2_3.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_2_3.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_2_4.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_2_4.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_2_5.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_2_5.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_2_6.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_2_6.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_2_7.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_2_7.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_2_8.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_2_8.tmx
-
-#begin Maps/Dungeon_Caves/mapCave_Wing_2_9.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Caves/mapCave_Wing_2_9.tmx
-
-#begin Maps/Dungeon_Forest/mapDungeon_Forest_1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Forest/mapDungeon_Forest_1.tmx
-
-#begin Maps/Dungeon_Forest/mapDungeon_Forest_2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Forest/mapDungeon_Forest_2.tmx
-
-#begin Maps/Dungeon_Forest/mapDungeon_Forest_3.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Forest/mapDungeon_Forest_3.tmx
-
-#begin Maps/Dungeon_Forest/mapDungeon_Forest_4.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Forest/mapDungeon_Forest_4.tmx
-
-#begin Maps/Dungeon_Forest/mapDungeon_Forest_5.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Forest/mapDungeon_Forest_5.tmx
-
-#begin Maps/Dungeon_Forest/mapDungeon_Forest_6.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Forest/mapDungeon_Forest_6.tmx
-
-#begin Maps/Dungeon_Forest/mapDungeon_Forest_End.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Forest/mapDungeon_Forest_End.tmx
-
-#begin Maps/Dungeon_Forest/mapDungeon_Forest_Entrance.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Forest/mapDungeon_Forest_Entrance.tmx
-
-#begin Maps/Dungeon_Forest/mapDungeon_Forest_Entrance_Test.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Forest/mapDungeon_Forest_Entrance_Test.tmx
-
-#begin Maps/Dungeon_Forest/mapDungeon_Forest_Try.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Forest/mapDungeon_Forest_Try.tmx
-
-#begin Maps/Dungeon_Forest/mapForestShrine_Small.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeon_Forest/mapForestShrine_Small.tmx
-
-#begin Maps/Forest/map_YuliaCottage.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/map_YuliaCottage.tmx
-
-#begin Maps/Forest/mapForest_01.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_01.tmx
-
-#begin Maps/Forest/mapForest_02.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_02.tmx
-
-#begin Maps/Forest/mapForest_03.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_03.tmx
-
-#begin Maps/Forest/mapForest_04.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_04.tmx
-
-#begin Maps/Forest/mapForest_05.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_05.tmx
-
-#begin Maps/Forest/mapForest_06.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_06.tmx
-
-#begin Maps/Forest/mapForest_07.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_07.tmx
-
-#begin Maps/Forest/mapForest_08.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_08.tmx
-
-#begin Maps/Forest/mapForest_09.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_09.tmx
-
-#begin Maps/Forest/mapForest_10.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_10.tmx
-
-#begin Maps/Forest/mapForest_11.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_11.tmx
-
-#begin Maps/Forest/mapForest_12.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_12.tmx
-
-#begin Maps/Forest/mapForest_13.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_13.tmx
-
-#begin Maps/Forest/mapForest_14.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_14.tmx
-
-#begin Maps/Forest/mapForest_15.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_15.tmx
-
-#begin Maps/Forest/mapForest_16.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_16.tmx
-
-#begin Maps/Forest/mapForest_17.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapForest_17.tmx
-
-#begin Maps/Forest/mapGrove.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Forest/mapGrove.tmx
-
 #begin Maps/Misc/mapCave_Small.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapCave_Small.tmx
-
-#begin Maps/Misc/mapConnection_01.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Misc/mapConnection_01.tmx
-
-#begin Maps/Misc/mapConnection_03.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Misc/mapConnection_03.tmx
-
-#begin Maps/Misc/mapDungeon1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Misc/mapDungeon1.tmx
-
-#begin Maps/Misc/mapDungeon2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Misc/mapDungeon2.tmx
 
 #begin Maps/Misc/mapDwarfCave_Small.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapDwarfCave_Small.tmx
 
-#begin Maps/Misc/mapFoothills.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Misc/mapFoothills.tmx
-
 #begin Maps/Misc/mapFoothills_Small.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapFoothills_Small.tmx
-
-#begin Maps/Misc/mapForest.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Misc/mapForest.tmx
-
-#begin Maps/Misc/mapLesserForest.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Misc/mapLesserForest.tmx
 
 #begin Maps/Misc/mapMageCaves.tmx
 /importer:TiledMapImporter
@@ -960,25 +540,15 @@
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapShroomCity.tmx
 
-#begin Maps/Misc/mapTest.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Misc/mapTest.tmx
-
-#begin Maps/Misc/mapWoods.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Misc/mapWoods.tmx
-
 #begin Maps/Misc/mapWoods_Small.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapWoods_Small.tmx
 
-#begin Maps/Swamp/mapSwamp_03.tmx
+#begin Maps/Misc/mapWoodsCave.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:Maps/Swamp/mapSwamp_03.tmx
+/build:Maps/Misc/mapWoodsCave.tmx
 
 #begin Maps/Tilesets/Ground.png
 /importer:TextureImporter
@@ -1129,11 +699,6 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapApothecary.tmx
 
-#begin Maps/Town/mapArchitect.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapArchitect.tmx
-
 #begin Maps/Town/mapArchives.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -1179,95 +744,15 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapHospital.tmx
 
-#begin Maps/Town/mapHouse_1_17.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_1_17.tmx
-
 #begin Maps/Town/mapHouse_12.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapHouse_12.tmx
 
-#begin Maps/Town/mapHouse_14.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_14.tmx
-
-#begin Maps/Town/mapHouse_16.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_16.tmx
-
-#begin Maps/Town/mapHouse_18.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_18.tmx
-
-#begin Maps/Town/mapHouse_19.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_19.tmx
-
-#begin Maps/Town/mapHouse_2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_2.tmx
-
-#begin Maps/Town/mapHouse_20.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_20.tmx
-
-#begin Maps/Town/mapHouse_25.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_25.tmx
-
-#begin Maps/Town/mapHouse_3.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_3.tmx
-
-#begin Maps/Town/mapHouse_4.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_4.tmx
-
-#begin Maps/Town/mapHouse_5.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_5.tmx
-
-#begin Maps/Town/mapHouse_6.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_6.tmx
-
-#begin Maps/Town/mapHouse_7.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_7.tmx
-
 #begin Maps/Town/mapHouse_Player.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapHouse_Player.tmx
-
-#begin Maps/Town/mapHouse_Player_2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_Player_2.tmx
-
-#begin Maps/Town/mapHouse_Player_3.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_Player_3.tmx
-
-#begin Maps/Town/mapHouse_Template.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapHouse_Template.tmx
 
 #begin Maps/Town/mapInn.tmx
 /importer:TiledMapImporter

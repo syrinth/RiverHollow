@@ -24,7 +24,7 @@ namespace RiverHollow.Characters
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Action2);
             BodySprite = LoadSpriteAnimations(liData, SpriteName());
 
-            Facing = DirectionEnum.Down;
+            SetFacing(DirectionEnum.Down);
             PlayAnimation(VerbEnum.Idle);
 
             BodySprite.SetNextAnimation(Util.GetActorString(VerbEnum.Action1, Facing), Util.GetActorString(VerbEnum.Idle, Facing));

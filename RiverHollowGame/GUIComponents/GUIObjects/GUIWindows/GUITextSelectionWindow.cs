@@ -252,7 +252,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     GUIManager.SetScreen(new DayEndScreen());
                     break;
                 case TextEntryVerbEnum.GoToNight:
-                    MapManager.FadeToNewMap(MapManager.CurrentMap, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]);
+                    MapManager.FadeToNewMap(MapManager.CurrentMap, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"], DirectionEnum.Down);
                     if (GameCalendar.CurrentHour <= GameCalendar.Nightfall())
                     {
                         PlayerManager.RecoverEnergy(Constants.ENERGY_NAP_RECOVERY);

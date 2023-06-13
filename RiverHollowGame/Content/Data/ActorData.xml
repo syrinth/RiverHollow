@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:43][Collection:0/1/2][Class:4][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:56][CanMarry][CanBecomePregnant][Key:Amanda][StartMap:mapWoods]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:43][Collection:0/1/2][Class:4][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:56][CanMarry][CanBecomePregnant][Key:Amanda]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -35,7 +35,7 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:99][Collection:0/1/2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][CanMarry][CanBecomePregnant][Key:Fran][StartMap:mapWoods]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:99][Collection:0/1/2][Class:3][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][CanMarry][CanBecomePregnant][Key:Fran]</Value>
     </Item>
     <Item>
       <Key>9</Key>
@@ -79,7 +79,7 @@
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Type:Villager][PortRow:1][HomeMap:mapManor_1][Collection:0/1/2][Hover][Inactive][Idle:0-0-3-.3-T][Walk:0-0-3-.3-T][Key:Manor_Spirit]</Value>
+      <Value>[Type:Villager][PortRow:1][Collection:0/1/2][Hover][Inactive][Idle:0-0-3-.3-T][Walk:0-0-3-.3-T][Key:Manor_Spirit]</Value>
     </Item>
     <Item>
       <Key>20</Key>
@@ -119,7 +119,7 @@
     </Item>
     <Item>
       <Key>29</Key>
-      <Value>[Type:ShippingGremlin][PortRow:3][HouseID:56][InTown][Key:Shipping_Gremlin][StartMap:mapTown]</Value>
+      <Value>[Type:ShippingGremlin][PortRow:3][HouseID:56][InTown][Key:Shipping_Gremlin]</Value>
     </Item>
     <Item>
       <Key>30</Key>
@@ -175,7 +175,7 @@
     </Item>
     <Item>
       <Key>43</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][StartMap:mapGrove][HouseID:18][Size:16-24]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][StartMap:mapWoods_Small][HouseID:18][Size:16-24]</Value>
     </Item>
     <Item>
       <Key>44</Key>

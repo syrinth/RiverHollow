@@ -201,6 +201,14 @@ namespace RiverHollow.Game_Managers
             PlayerManager.AllowMovement = false;
         }
 
+        public static void BeginFadeIn(bool slowFadeout = false)
+        {
+            _fFadeVal = 1;
+            _bFadeSlow = slowFadeout;
+            _eFade = Fade.In;
+            PlayerManager.AllowMovement = false;
+        }
+
         /// <summary>
         /// When we're fading, we need to update how  opaque the blackout is. When fading out
         /// we need to increase the Opacity. When Fading In we need to decrease it.
@@ -214,8 +222,7 @@ namespace RiverHollow.Game_Managers
 
             if(_fFadeVal >= 1)              //We've faded out, start fading back in
             {
-                _eFade = Fade.In;
-                _fFadeVal = 1;
+                BeginFadeIn(_bFadeSlow);
             }
             else if (_fFadeVal <= 0)        //We've faded in, so turn off fading and allow the player to move
             {

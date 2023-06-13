@@ -119,7 +119,7 @@
   <object id="161" name="Entrance" x="476" y="112" width="4" height="64">
    <properties>
     <property name="EntranceDir" value="Left"/>
-    <property name="Map" value="mapGrove"/>
+    <property name="Map" value="mapWoods_Small"/>
     <property name="WorldMap" type="bool" value="true"/>
    </properties>
   </object>

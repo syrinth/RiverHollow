@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.Win32;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
 using RiverHollow.Characters;
@@ -67,7 +68,7 @@ namespace RiverHollow.Map_Handling
             {
                 if (PlayerManager.PlayerInRange(_travelPoint.CollisionBox) && !MapManager.ChangingMaps())
                 {
-                    PlayerManager.PlayerActor.Facing = DirectionEnum.Up;
+                    PlayerManager.PlayerActor.SetFacing(DirectionEnum.Up);
                     MapManager.ChangeMaps(PlayerManager.PlayerActor, MapName, _travelPoint);
                     SoundManager.PlayEffect(SoundEffectEnum.Door);
                     return true;
@@ -222,6 +223,29 @@ namespace RiverHollow.Map_Handling
         public TravelPoint GetTravelPoint()
         {
             return _travelPoint;
+        }
+
+        public bool HasTravelPoint()
+        {
+            bool rv = false;
+            if (_travelPoint != null)
+            {
+                rv = true;
+            }
+            else
+            {
+                var map = MapManager.Maps[MapName];
+                foreach (var point in map.DictionaryTravelPoints.Values)
+                {
+                    if (point.CollisionBox.Intersects(CollisionBox))
+                    {
+                        rv = true;
+                        break;
+                    }
+                }
+            }
+
+            return rv;
         }
 
         public bool Contains(Actor n)
@@ -472,6 +496,10 @@ namespace RiverHollow.Map_Handling
         public bool CanWalkThrough()
         {
             return CanTargetTile();
+        }
+        public bool CanPlaceObject()
+        {
+            return Passable() && WorldObject == null && !HasTravelPoint();
         }
         #endregion
     }

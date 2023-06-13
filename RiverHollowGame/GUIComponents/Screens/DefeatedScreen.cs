@@ -51,7 +51,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
             RHMap homeMap = MapManager.Maps[TownManager.Home.BuildingMapName];
             GameManager.GoToHUDScreen();
-            MapManager.FadeToNewMap(homeMap, homeMap.GetCharacterSpawn("PlayerSpawn"), TownManager.Home);
+            MapManager.FadeToNewMap(homeMap, homeMap.GetCharacterSpawn("PlayerSpawn"), DirectionEnum.Down, TownManager.Home);
         }
     }
 }

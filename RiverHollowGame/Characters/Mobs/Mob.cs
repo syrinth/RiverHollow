@@ -215,12 +215,12 @@ namespace RiverHollow.Characters
                     {
                         if (direction.X > 0)
                         {
-                            Facing = DirectionEnum.Right;
+                            SetFacing(DirectionEnum.Right);
                             //animation = Util.GetEnumString(WActorWalkAnim.WalkRight); //_bJump ? Util.GetEnumString(WActorJumpAnim.GroundRight) : Util.GetEnumString(WActorWalkAnim.WalkRight);
                         }
                         else if (direction.X < 0)
                         {
-                            Facing = DirectionEnum.Left;
+                            SetFacing(DirectionEnum.Left);
                             //animation = Util.GetEnumString(WActorWalkAnim.WalkLeft); //_bJump ? Util.GetEnumString(WActorJumpAnim.GroundLeft) : Util.GetEnumString(WActorWalkAnim.WalkLeft);
                         }
                     }
@@ -228,12 +228,12 @@ namespace RiverHollow.Characters
                     {
                         if (direction.Y > 0)
                         {
-                            Facing = DirectionEnum.Down;
+                            SetFacing(DirectionEnum.Down);
                             //animation = Util.GetEnumString(WActorWalkAnim.WalkDown);//_bJump ? Util.GetEnumString(WActorJumpAnim.GroundDown) : Util.GetEnumString(WActorWalkAnim.WalkDown);
                         }
                         else if (direction.Y < 0)
                         {
-                            Facing = DirectionEnum.Up;
+                            SetFacing(DirectionEnum.Up);
                             // animation = Util.GetEnumString(WActorWalkAnim.WalkUp);// _bJump ? Util.GetEnumString(WActorJumpAnim.GroundUp) : Util.GetEnumString(WActorWalkAnim.WalkUp);
                         }
                     }

@@ -933,11 +933,13 @@
  <tile id="463">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
+   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="464">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
+   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="465">
@@ -1132,12 +1134,12 @@
  </tile>
  <tile id="580">
   <properties>
-   <property name="Impassable" type="" value=""/>
+   <property name="Impassable" value=""/>
   </properties>
  </tile>
  <tile id="581">
   <properties>
-   <property name="Impassable" type="" value=""/>
+   <property name="Impassable" value=""/>
   </properties>
  </tile>
  <tile id="582">
@@ -1162,12 +1164,12 @@
  </tile>
  <tile id="605">
   <properties>
-   <property name="Impassable" type="" value=""/>
+   <property name="Impassable" value=""/>
   </properties>
  </tile>
  <tile id="606">
   <properties>
-   <property name="Impassable" type="" value=""/>
+   <property name="Impassable" value=""/>
   </properties>
  </tile>
  <tile id="607">

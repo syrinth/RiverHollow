@@ -55,8 +55,8 @@ namespace RiverHollow.Map_Handling
             //startingMap.DictionaryTravelPoints.Values.ToList().Find(x => x.Modular).Dir; 
 
             //Connect the start and end rooms to the generated dungeon map
-            ConnectTerminalMap(startingMap, Util.GetOppositeDirection(pt.Dir), mapsInUse, arrDungeonMap);
-            ConnectTerminalMap(targetMap, pt.Dir, mapsInUse, arrDungeonMap);
+            ConnectTerminalMap(startingMap, Util.GetOppositeDirection(pt.EntranceDir), mapsInUse, arrDungeonMap);
+            ConnectTerminalMap(targetMap, pt.EntranceDir, mapsInUse, arrDungeonMap);
 
             //For each map, assign the information needed to spawn resources, and monsters
             //then handle the entrances, and spawn themap entities.
@@ -112,7 +112,7 @@ namespace RiverHollow.Map_Handling
                     //Do a string empty check to ensure that we don't overwrite a connected map
                     if (RHRandom.Instance().Next(1, 100) <= chancePerEntrance && string.IsNullOrEmpty(pt.LinkedMap))
                     {
-                        Point newCoords = roomCoordinates + Util.GetPointFromDirection(pt.Dir);
+                        Point newCoords = roomCoordinates + Util.GetPointFromDirection(pt.EntranceDir);
                         if (AreCoordinatesValid(newCoords))
                         {
                             pointsToConnect.Add(pt);
@@ -126,7 +126,7 @@ namespace RiverHollow.Map_Handling
 
                     //Update the coordinates of the new room, relative to the coordinates of the room it is now attached to.
                     //This will overwrite if a room gets attached to multiple times, but they should all be in sync
-                    Point newCoords = roomCoordinates + Util.GetPointFromDirection(pt.Dir);
+                    Point newCoords = roomCoordinates + Util.GetPointFromDirection(pt.EntranceDir);
                     if (dungeonMap[(int)newCoords.X, (int)newCoords.Y] != null) { room = dungeonMap[(int)newCoords.X, (int)newCoords.Y]; }
                     else
                     {
@@ -137,7 +137,7 @@ namespace RiverHollow.Map_Handling
                         _iCurrentLevelSize++;
                     }
 
-                    ConnectMaps(rmInfo.Map, room.Map, pt.Dir);
+                    ConnectMaps(rmInfo.Map, room.Map, pt.EntranceDir);
 
                     if (_iCurrentLevelSize == MAX_DUNGEON) { return; }
                     else { roomQueue.Add(room); }
@@ -181,7 +181,7 @@ namespace RiverHollow.Map_Handling
             do
             {
                 RoomInfo rmInfo = usedMapCopy[RHRandom.Instance().Next(usedMapCopy.Count)];
-                TravelPoint point = rmInfo.Map.DictionaryTravelPoints.Values.ToList().Find(x => x.Dir == dirToConnectTo && x.LinkedMap == string.Empty);
+                TravelPoint point = rmInfo.Map.DictionaryTravelPoints.Values.ToList().Find(x => x.EntranceDir == dirToConnectTo && x.MapLink == string.Empty);
 
                 //Ensure that the corresponding DungeonRoom location isn't occupied
                 Point targetCoords = rmInfo.Coordinates + Util.GetPointFromDirection(Util.GetOppositeDirection(dirToConnectTo));
@@ -235,10 +235,10 @@ namespace RiverHollow.Map_Handling
             //Remove the initial link between the Direction and the Travelpoint
             //Assign the appropriate map key
             map1.DictionaryTravelPoints.Remove(Util.GetEnumString(movementDir));
-            map1.DictionaryTravelPoints[positionPoint.LinkedMap] = positionPoint;
+            map1.DictionaryTravelPoints[positionPoint.MapLink] = positionPoint;
 
             map2.DictionaryTravelPoints.Remove(Util.GetEnumString(oppDir));
-            map2.DictionaryTravelPoints[linkedPoint.LinkedMap] = linkedPoint;
+            map2.DictionaryTravelPoints[linkedPoint.MapLink] = linkedPoint;
 
             //Set the relevant blockerObject Open value to true
             if (map1.GetMapObjectByTagAndValue("Dir", Util.GetEnumString(oppDir)) != null)
@@ -342,7 +342,7 @@ namespace RiverHollow.Map_Handling
                         pt.Reset();
 
                         m.DictionaryTravelPoints.Remove(kvp.Key);
-                        m.DictionaryTravelPoints[Util.GetEnumString(pt.Dir)] = pt;
+                        m.DictionaryTravelPoints[Util.GetEnumString(pt.EntranceDir)] = pt;
                     }
                 }
 

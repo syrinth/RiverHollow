@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using RiverHollow.Characters;
-using RiverHollow.GUIComponents.Screens;
-using RiverHollow.WorldObjects;
-using RiverHollow.Misc;
-
-using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.Items;
-using RiverHollow.Utilities;
+﻿using Microsoft.Xna.Framework;
 using RiverHollow.Buildings;
-
+using RiverHollow.Characters;
+using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIComponents.Screens;
+using RiverHollow.Items;
+using RiverHollow.Misc;
+using RiverHollow.Utilities;
+using RiverHollow.WorldObjects;
+using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers

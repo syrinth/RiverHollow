@@ -1963,6 +1963,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Basic Bed(Body)]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_161</Key>
+      <Value>[Name:SpiritBlock]</Value>
+    </Item>
+    <Item>
       <Key>Cutscene_0</Key>
       <Value>[Name:Combat_Intro]</Value>
     </Item>

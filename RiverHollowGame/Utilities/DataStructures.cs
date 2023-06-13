@@ -1,22 +1,23 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Buildings;
-using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Map_Handling;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.WorldObjects;
-using System;
 using System.Collections.Generic;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Utilities
 {
     struct NewMapInfo
     {
+        public DirectionEnum Facing;
         public RHMap NextMap;
         public Point PlayerPosition;
         public Building EnteredBuilding;
-        public NewMapInfo(RHMap map, Point pos, Building b)
+        public NewMapInfo(RHMap map, Point pos, DirectionEnum f, Building b)
         {
+            Facing = f;
             NextMap = map;
             PlayerPosition = pos;
             EnteredBuilding = b;

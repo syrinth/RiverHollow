@@ -131,9 +131,10 @@ namespace RiverHollow.GUIComponents.Screens
 
                     if(_timer.TickDown(gTime))
                     {
-                        GUIManager.BeginFadeOut();
+                        GUIManager.BeginFadeIn();
                         TownManager.MoveMerchants();
                         PlayerManager.PlayerActor.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
+                        PlayerManager.PlayerActor.SetFacing(DirectionEnum.Down);
                         GameManager.GoToHUDScreen();
                     }
                     break;

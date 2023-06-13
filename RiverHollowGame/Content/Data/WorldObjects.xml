@@ -645,5 +645,9 @@
       <Key>160</Key>
       <Value>[Type:WorldObject][Image:17-22][Size:2-3][Base:0-2-2-1][NoAlpha][Bed]</Value>
     </Item>
+    <Item>
+      <Key>161</Key>
+      <Value>[Type:WorldObject][Image:17-3][Size:1-2][Base:0-1-1-1]</Value>
+    </Item>
   </Asset>
 </XnaContent>

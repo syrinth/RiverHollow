@@ -156,7 +156,7 @@ namespace RiverHollow.Characters
                     string animation = _currentPathData.Animation;
                     if (!string.IsNullOrEmpty(direction))
                     {
-                        Facing = Util.ParseEnum<DirectionEnum>(direction);
+                        SetFacing(Util.ParseEnum<DirectionEnum>(direction));
                         PlayAnimation(VerbEnum.Idle);
                     }
 

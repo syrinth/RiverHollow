@@ -4,11 +4,6 @@ using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Map_Handling
@@ -21,8 +16,13 @@ namespace RiverHollow.Map_Handling
         string _sMapName;
 
         private string _sLinkedMapName = string.Empty;
-        public int LinkedBuildingID => TargetBuilding != null ? TargetBuilding.ID : -1;
         public string LinkedMap => (TargetBuilding != null ? TargetBuilding.BuildingMapName : _sLinkedMapName);
+
+        private string _sMapConnector = string.Empty;
+        public string MapConnector => (!string.IsNullOrEmpty(_sMapConnector)) ? ":" + _sMapConnector : "";
+        public string MapLink => string.Format("{0}{1}", LinkedMap, MapConnector);
+        public int LinkedBuildingID => TargetBuilding != null ? TargetBuilding.ID : -1;
+
         public Point Center => CollisionBox.Center;
         public bool IsDoor { get; private set; }
         public bool IsActive { get; private set; } = false;
@@ -42,7 +42,7 @@ namespace RiverHollow.Map_Handling
         public bool WorldMap => _bWorldMap;
 
         DirectionEnum _eEntranceDir;
-        public DirectionEnum Dir => _eEntranceDir;
+        public DirectionEnum EntranceDir => _eEntranceDir;
 
         public TravelPoint(TiledMapObject obj, string mapName)
         {
@@ -60,6 +60,7 @@ namespace RiverHollow.Map_Handling
             Util.AssignValue(ref _bModular, "Modular", obj.Properties);
             Util.AssignValue(ref _bNoMove, "NoMove", obj.Properties);
             Util.AssignValue(ref _bWorldMap, "WorldMap", obj.Properties);
+            Util.AssignValue(ref _sMapConnector, "MapConnector", obj.Properties);
 
             if (_iDungeonInfoID > -1) { IsActive = true; }
 
@@ -86,29 +87,33 @@ namespace RiverHollow.Map_Handling
         /// <param name="oldPointCenter">The center of the previous TravelPoint</param>
         /// <param name="c">The moving Actor</param>
         /// <returns></returns>
-        public Point FindLinkedPointPosition(Point oldPointCenter, Actor c)
+        public Point FindLinkedPointPosition(TravelPoint oldPoint, Actor c)
         {
+
             //Find the difference between the position of the center of the actor's collisionBox
             //and the TravelPoint that the actor interacted with.
             Point actorCollisionCenter = c.CollisionCenter;
-            Point pDiff = actorCollisionCenter - oldPointCenter;
+            Point pDiff = actorCollisionCenter - oldPoint.Center;
 
-            //If we move Left/Right, ignore the X axis, Up/Down, ignore the Y axis then just set
-            //the difference in the relevant axis to the difference between the centers of those two boxes
-            switch (_eEntranceDir)
+            if (oldPoint.EntranceDir != _eEntranceDir)
             {
-                case DirectionEnum.Left:
-                    pDiff.X = -1 * (CollisionBox.Width / 2 + c.CollisionBox.Width / 2);
-                    break;
-                case DirectionEnum.Right:
-                    pDiff.X = (CollisionBox.Width / 2 + c.CollisionBox.Width / 2);
-                    break;
-                case DirectionEnum.Up:
-                    pDiff.Y = -1 * (CollisionBox.Height / 2 + c.CollisionBox.Height / 2);
-                    break;
-                case DirectionEnum.Down:
-                    pDiff.Y = (CollisionBox.Height / 2 + c.CollisionBox.Height / 2);
-                    break;
+                //If we move Left/Right, ignore the X axis, Up/Down, ignore the Y axis then just set
+                //the difference in the relevant axis to the difference between the centers of those two boxes
+                switch (_eEntranceDir)
+                {
+                    case DirectionEnum.Left:
+                        pDiff.X = -1 * (CollisionBox.Width / 2 + c.CollisionBox.Width / 2);
+                        break;
+                    case DirectionEnum.Right:
+                        pDiff.X = (CollisionBox.Width / 2 + c.CollisionBox.Width / 2);
+                        break;
+                    case DirectionEnum.Up:
+                        pDiff.Y = -1 * (CollisionBox.Height / 2 + c.CollisionBox.Height / 2);
+                        break;
+                    case DirectionEnum.Down:
+                        pDiff.Y = (CollisionBox.Height / 2 + c.CollisionBox.Height / 2);
+                        break;
+                }
             }
 
             //Add the diff to the center of the current TravelPoint

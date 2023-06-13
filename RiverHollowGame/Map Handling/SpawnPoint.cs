@@ -62,7 +62,7 @@ namespace RiverHollow.Map_Handling
             foreach (Point v in Util.GetAllPointsInArea(_vPosition, _szDimensions, Constants.TILE_SIZE))
             {
                 RHTile tile = _map.GetTileByPixelPosition(v);
-                if (!onlyValid || tile.Passable())
+                if (!onlyValid || tile.CanPlaceObject())
                 {
                     Util.AddUniquelyToList(ref validTiles, tile);
                 }
@@ -288,20 +288,23 @@ namespace RiverHollow.Map_Handling
                 }
             }
 
-            List<RHTile> validTiles = TilesInArea(true);
-            SpawnData copyData = Util.RollOnRarityTable(copy);
+            if (copy.Count > 0)
+            {
+                List<RHTile> validTiles = TilesInArea(true);
+                SpawnData copyData = Util.RollOnRarityTable(copy);
 
-            Mob m = DataManager.CreateMob(copyData.ID);
-            RHTile t = validTiles[RHRandom.Instance().Next(0, validTiles.Count - 1)];
-            _map.AddMobByPosition(m, t.Position);
-            m.SetInitialPoint(t.Position);
+                Mob m = DataManager.CreateMob(copyData.ID);
+                RHTile t = validTiles[RHRandom.Instance().Next(0, validTiles.Count - 1)];
+                _map.AddMobByPosition(m, t.Position);
+                m.SetInitialPoint(t.Position);
+            }
         }
 
         public bool Validate(int id)
         {
 
             if (DataManager.GetBoolByIDKey(id, "Day", DataType.Actor) && GameCalendar.IsNight()) { return false; }
-            else if (DataManager.GetBoolByIDKey(id, "Night", DataType.Actor) && !GameCalendar.IsNight()) { return false; }
+            else if (DataManager.GetBoolByIDKey(id, "Night", DataType.Actor) && !GameCalendar.IsNight() && _map.IsOutside) { return false; }
 
             var seasonList = DataManager.GetEnumListByIDKey<SeasonEnum>(id, "Season", DataType.Actor);
 

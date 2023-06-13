@@ -637,7 +637,7 @@ namespace RiverHollow.Game_Managers
                     case ObjectTypeEnum.WarpPoint:
                         return new WarpPoint(id);
                     case ObjectTypeEnum.WorldObject:
-                        return new WorldObject(id);
+                        return new WorldObject(id, args);
                 }
             }
 

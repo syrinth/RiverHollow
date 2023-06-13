@@ -170,7 +170,7 @@ namespace RiverHollow.Game_Managers
                 if(ObtainedItem != null)
                 {
                     ObtainedItem = null;
-                    PlayerActor.Facing = DirectionEnum.Down;
+                    PlayerActor.SetFacing(DirectionEnum.Down);
                 }
 
                 Vector2 newMovement = Vector2.Zero;
