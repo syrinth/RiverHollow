@@ -27,17 +27,18 @@
         public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };
         public enum DirectionEnum { None, Down, Right, Up, Left };
         public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };
-        public enum VerbEnum { Idle, Walk, GrabIdle, Pull, Push, Ground, Air, UseTool, MakeItem, Action1, Action2 };
+        public enum VerbEnum { Idle, Walk, GrabIdle, Pull, Push, Ground, Air, UseTool, FinishTool, MakeItem, Action1, Action2 };
         public enum AnimationEnum { None, PlayAnimation, Rain, Snow, ObjectIdle, Action1, Action2, Action_Finished, Alert, KO, Spawn, Pose };
         public enum ItemPickupState { Auto, Manual, None };
 
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
+        public enum FishingStateEnum { None, Cast, WaitForFish, AttemptToCatch, Finish, Get };
 
         public enum ItemGroupEnum { None, Clothes, Flower, Gem, Herb, Magic, Medicine, Metal, Ore };
         public enum ItemEnum { Resource, Tool, Food, Consumable, Clothing, Buildable, MonsterFood, NPCToken, Blueprint, Seed, Special };
         public enum FoodTypeEnum { Dessert, Expensive, Forage, Healthy, Plain };
-        public enum ToolEnum { None, Axe, Backpack, CapeOfBlinking, Harp, Lantern, Pick, Return, Scythe, Shovel, StaffOfIce, Sword, WateringCan };
+        public enum ToolEnum { None, Axe, Backpack, CapeOfBlinking, FishingRod, Harp, Lantern, Pick, Return, Scythe, Shovel, StaffOfIce, Sword, WateringCan };
         public enum GearTypeEnum { None, Accessory, Chest, Head, Weapon };
         public enum ClothingEnum { None, Chest, Legs, Hat };
         public enum NPCTokenTypeEnum { Mount, Pet };
@@ -76,7 +77,7 @@
         public enum ColorStateEnum { None, Blue, Red };
 
         public enum MapTypeEnum { Invalid, Town, Cave };
-        public enum SoundEffectEnum { Invalid, Axe, Button, Cancel, Cauldron, Door, GrabBuilding, GrindStone, Kitchen, Pick, Rainfall, Scythe, Text, Thump};
+        public enum SoundEffectEnum { Invalid, Axe, Button, Cancel, Cauldron, Door, GrabBuilding, GrindStone, Kitchen, Pick, Rainfall, Scythe, Success_Fish, Text, Thump};
         public enum SongEnum { Invalid, Cave, Swamp, Town };
     }
 }

@@ -52,6 +52,7 @@
         public const float NPC_WALK_SPEED = 0.6f;
 
         public const int ACTION_COST = 2;
+        public const int FISH_MISSES = 3;
 
         public const int HUMAN_HEIGHT = (TILE_SIZE * 2) + 2;
         public const float EYE_DEPTH = 0.001f;

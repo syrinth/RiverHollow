@@ -598,6 +598,19 @@ namespace RiverHollow.Map_Handling
             }
         }
 
+        public ResourceSpawn GetFishingHole(RHTile t)
+        {
+            foreach(var obj in _liResourceSpawns)
+            {
+                if (obj.ContainsTile(t) && obj.FishingHole)
+                {
+                    return obj;
+                }
+            }
+
+            return null;
+        }
+
         private void SpawnMobs()
         {
             if (Map.Properties.ContainsKey("Mobs")) {
@@ -1340,6 +1353,11 @@ namespace RiverHollow.Map_Handling
                     return true;
                 }
 
+                if (FishingManager.ProcessRightButtonClick())
+                {
+                    return true;
+                }
+
                 //Do nothing if no tile could be retrieved
                 if (tile != null)
                 {
@@ -1434,6 +1452,10 @@ namespace RiverHollow.Map_Handling
                         }
                     }
                 }
+            }
+            else if (FishingManager.ProcessLeftButtonClick())
+            {
+                rv = true;
             }
 
             return rv;

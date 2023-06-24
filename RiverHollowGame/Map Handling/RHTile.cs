@@ -34,6 +34,7 @@ namespace RiverHollow.Map_Handling
         public WorldObject ShadowObject { get; private set; }
         public WorldObject Flooring { get; private set; }
         public bool IsRoad { get; private set; }
+        public bool Water => ContainsProperty("Water", out string value) && value.Equals("true");
 
         bool _bArea = false;
         bool _bSelected = false;

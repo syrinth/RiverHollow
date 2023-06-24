@@ -15,7 +15,7 @@ namespace RiverHollow.Items.Tools
             _sprite.Update(gTime);
             DirectionEnum dir = PlayerManager.PlayerActor.Facing;
 
-            if (ToolAnimation.CurrentFrame == 1)
+            if (ToolSprite.CurrentFrame == 1)
             {
                 Hitbox = GetHitbox(dir);
 
@@ -23,7 +23,7 @@ namespace RiverHollow.Items.Tools
                 map.TestHitboxOnMobs(this);
             }
 
-            if (FinishTool(dir))
+            if (CheckFinishTool(dir))
             {
                 Hitbox = Rectangle.Empty;
             }

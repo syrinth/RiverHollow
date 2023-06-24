@@ -882,6 +882,12 @@
 /processorParam:Quality=Best
 /build:Sound/Original/Effects/Sample4.wav
 
+#begin Sound/Original/Effects/Success_Blip.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Original/Effects/Success_Blip.wav
+
 #begin Sound/Stock/Effects/126426__cabeeno-rossley__timer-ends-time-up.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -2633,6 +2639,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Summons/WaterElemental.png
+
+#begin Textures/Environmental/FishingIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Environmental/FishingIcon.png
 
 #begin Textures/Environmental/GlowLight.png
 /importer:TextureImporter

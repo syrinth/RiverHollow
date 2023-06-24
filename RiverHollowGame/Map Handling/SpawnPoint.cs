@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 
 using static RiverHollow.Utilities.Enums;
+using RiverHollow.Items;
 
 namespace RiverHollow.Map_Handling
 {
@@ -71,6 +72,12 @@ namespace RiverHollow.Map_Handling
             return validTiles;
         }
 
+        public bool ContainsTile(RHTile t)
+        {
+            var rect = new Rectangle((int)_vPosition.X, (int)_vPosition.Y, (int)_szDimensions.Width, (int)_szDimensions.Height);
+            return (rect.Contains(t.Center));
+        }
+
         public virtual void Spawn() { }
 
         public virtual void Rollover(bool reset = false) { }
@@ -90,6 +97,7 @@ namespace RiverHollow.Map_Handling
 
     public class ResourceSpawn : SpawnPoint
     {
+        public bool FishingHole { get; private set; } = false;
         bool _bFreshSpawn = true;
         int _iCurrentObjects;
         int _iMin;
@@ -127,15 +135,31 @@ namespace RiverHollow.Map_Handling
             {
                 AssignSpawnData(props["ObjectID"], SpawnTypeEnum.Object);
             }
+            if (props.ContainsKey("FishingHole"))
+            {
+                FishingHole = true;
+            }
         }
 
         public override void Spawn()
         {
-            if (_bFreshSpawn)
+            if (_bFreshSpawn && !FishingHole)
             {
                 SpawnObject(RHRandom.Instance().Next(_iMin, _iMax));
                 _bFreshSpawn = false;
             }
+        }
+
+        public int GetRandomItemID()
+        {
+            int rv = -1;
+            SpawnData sData = Util.RollOnRarityTable(_diSpawnData);
+            if (sData.Type == SpawnTypeEnum.Item)
+            {
+                rv = sData.ID;
+            }
+
+            return rv;
         }
 
         private void SpawnObject(int number)
@@ -219,8 +243,6 @@ namespace RiverHollow.Map_Handling
             }
         }
 
-        //TODO
-        //Should store as string first, then convert to dictionary data during Spawn
         public bool AlertSpawnPoint(WorldObject obj)
         {
             Rectangle area = new Rectangle((int)_vPosition.X, (int)_vPosition.Y, (int)_szDimensions.Width, (int)_szDimensions.Height);

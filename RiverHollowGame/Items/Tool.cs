@@ -22,10 +22,10 @@ namespace RiverHollow.Items
         protected int HitAt => GetIntByIDKey("HitAt");
         protected int _iCharges = 0;
 
-        protected bool _bUsed = false;
+        protected bool _bTriggered = false;
 
         protected AnimatedSprite _sprite;
-        public AnimatedSprite ToolAnimation { get => _sprite; }
+        public AnimatedSprite ToolSprite { get => _sprite; }
 
         Point _pPosition;
 
@@ -74,11 +74,11 @@ namespace RiverHollow.Items
 
             RHTile target = MapManager.CurrentMap.TargetTile;
 
-            if (target != null && !_bUsed)
+            if (target != null && !_bTriggered)
             {
                 if (ReadyToHit() && (PlayerManager.ToolIsAxe() || PlayerManager.ToolIsPick()))
                 {
-                    _bUsed = true;
+                    _bTriggered = true;
                     target.DamageObject(PlayerManager.ToolInUse);
                 }
                 else if (PlayerManager.ToolIsWateringCan() && target.Flooring != null)
@@ -87,27 +87,31 @@ namespace RiverHollow.Items
                 }
             }
 
-            FinishTool(dir);
+            CheckFinishTool(dir);
         }
         
-        protected bool FinishTool(DirectionEnum dir)
+        protected bool CheckFinishTool(DirectionEnum dir)
         {
             bool rv = false;
 
-            if (ToolAnimation.AnimationFinished(dir))
+            if (ToolSprite.AnimationFinished(dir))
             {
                 rv = true;
-                _bUsed = false;
-                ToolAnimation.Finished = false;
-                PlayerManager.FinishedWithTool();
-                PlayerManager.PlayerActor.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
+                FinishTool();
             }
             return rv;
         }
 
+        public void FinishTool()
+        {
+            _bTriggered = false;
+            ToolSprite.Finished = false;
+            PlayerManager.FinishedWithTool();
+        }
+
         protected bool ReadyToHit()
         {
-            bool needsToFinish = HitAt == -1 && ToolAnimation.AnimationFinished(PlayerManager.PlayerActor.Facing);
+            bool needsToFinish = HitAt == -1 && ToolSprite.AnimationFinished(PlayerManager.PlayerActor.Facing);
             bool hitAt = HitAt > -1 && _sprite.CurrentFrame == HitAt;
 
             return needsToFinish || hitAt;

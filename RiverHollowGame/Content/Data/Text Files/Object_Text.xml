@@ -1319,6 +1319,18 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Copper Ink][Description:Perfect for scrolls, spellbooks, and revenge lists.]</Value>
     </Item>
     <Item>
+      <Key>Item_209</Key>
+      <Value>[Name:Fishing Rod]</Value>
+    </Item>
+    <Item>
+      <Key>Item_210</Key>
+      <Value>[Name:Red Fish]</Value>
+    </Item>
+    <Item>
+      <Key>Item_211</Key>
+      <Value>[Name:Blue Fish]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_0</Key>
       <Value>[Name:Beehive]</Value>
     </Item>

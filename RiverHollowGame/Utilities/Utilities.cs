@@ -231,7 +231,7 @@ namespace RiverHollow.Utilities
             return data.Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
         }
         /// <summary>
-        /// Splits the given string by the | character to find the object parameters
+        /// Splits the given string by the / character to find the object parameters
         /// </summary>
         public static string[] FindParams(string data)
         {

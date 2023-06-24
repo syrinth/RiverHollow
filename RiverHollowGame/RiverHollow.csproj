@@ -89,6 +89,7 @@
     <Compile Include="Characters\ShippingGremlin.cs" />
     <Compile Include="Characters\Traveler.cs" />
     <Compile Include="Game Managers\ErrorManager.cs" />
+    <Compile Include="Game Managers\FishingManager.cs" />
     <Compile Include="Game Managers\TownManager.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIToggle.cs" />
     <Compile Include="GUIComponents\GUIUtils.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="GUIComponents\Screens\WorldMapScreen.cs" />
     <Compile Include="Items\MapItem.cs" />
     <Compile Include="Items\Tools\CapeOfBlinking.cs" />
+    <Compile Include="Items\Tools\FishingRod.cs" />
     <Compile Include="Items\Tools\HitboxTool.cs" />
     <Compile Include="Items\Tools\IceStaff.cs" />
     <Compile Include="Items\Seed.cs" />
@@ -146,7 +148,6 @@
     <Compile Include="Game Managers\SoundManager.cs" />
     <Compile Include="Game Managers\TaskManager.cs" />
     <Compile Include="Game Managers\TravelManager.cs" />
-    <Compile Include="Game Managers\ZoneManager.cs" />
     <Compile Include="GUIComponents\GUIHarp.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIList.cs" />
     <Compile Include="GUIComponents\GUIObjects\PlayerDisplayBox.cs" />

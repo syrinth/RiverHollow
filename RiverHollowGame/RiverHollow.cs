@@ -45,7 +45,6 @@ namespace RiverHollow
         {
             // TODO: Add your initialization logic here
             Camera.SetViewport(GraphicsDevice.Viewport);
-            ZoneManager.Initialize();
             GameManager.ShowMap();
 
             base.Initialize();
@@ -169,6 +168,7 @@ namespace RiverHollow
                         MapManager.Update(gTime);
                         GameCalendar.Update(gTime);
                         if (!Scrying()) { PlayerManager.Update(gTime); }
+                        FishingManager.Update(gTime);
                     }
                 }
 
@@ -202,6 +202,7 @@ namespace RiverHollow
                 spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
                 MapManager.DrawGround(spriteBatch);
                 PlayerManager.Draw(spriteBatch);
+                FishingManager.Draw(spriteBatch);
                 spriteBatch.End();
 
                 spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);

@@ -109,7 +109,10 @@ namespace RiverHollow.SpriteAnimations
                         else
                         {
                             PlayCount = (int)MathHelper.Min(PlayCount + 1, int.MaxValue);
-                            CurrentFrame = 0;
+                            if (!PlayOnce)
+                            {
+                                CurrentFrame = 0;
+                            }
                         }
                     }
                 }

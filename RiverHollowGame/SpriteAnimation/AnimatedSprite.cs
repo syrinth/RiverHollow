@@ -62,7 +62,7 @@ namespace RiverHollow.SpriteAnimations
 
         #endregion
 
-        public AnimatedSprite(string Texture, bool combatSprite = false)
+        public AnimatedSprite(string Texture)
         {
             _texture = DataManager.GetTexture(Texture);
 
@@ -114,7 +114,7 @@ namespace RiverHollow.SpriteAnimations
         public void PlayAnimation(string verb, DirectionEnum dir) { PlayAnimation(Util.GetActorString(verb, dir)); }
         public void PlayAnimation(string animate)
         {
-            if (_diFrameAnimations.ContainsKey(animate) && (!Show || CurrentAnimation != animate))
+            if (_diFrameAnimations.ContainsKey(animate) && (!Show || CurrentAnimation != animate || _diFrameAnimations[CurrentAnimation].PlayOnce))
             {
                 Show = true;
                 Finished = false;
@@ -122,12 +122,23 @@ namespace RiverHollow.SpriteAnimations
                 Reset();   
             }
         }
+
+        public void Replay()
+        {
+            Show = true;
+            Finished = false;
+            Reset();
+        }
         #endregion
 
         #region IsCurrentAnimation Helpers
         public bool AnimationFinished<TEnum>(TEnum e)
         {
             return IsCurrentAnimation(e) && Finished;
+        }
+        public bool AnimationFinished(VerbEnum verb, DirectionEnum dir)
+        {
+            return IsCurrentAnimation(verb, dir) && Finished;
         }
         public bool IsCurrentAnimation<TEnum>(TEnum e) { return IsCurrentAnimation(Util.GetEnumString(e)); }
         public bool IsCurrentAnimation(VerbEnum verb, DirectionEnum dir) { return IsCurrentAnimation(Util.GetActorString(verb, dir)); }
@@ -218,7 +229,6 @@ namespace RiverHollow.SpriteAnimations
                     if (CurrentFrameAnimation.PlayCount == 1 && CurrentFrameAnimation.PlayOnce)
                     {
                         Finished = true;
-                        Reset();
                     }
 
                     if (!String.IsNullOrEmpty(CurrentFrameAnimation.NextAnimation))

@@ -17,9 +17,9 @@ namespace RiverHollow.Items.Tools
             _sprite.Update(gTime);
             DirectionEnum dir = PlayerManager.PlayerActor.Facing;
 
-            if (ReadyToHit() && !_bUsed)
+            if (ReadyToHit() && !_bTriggered)
             {
-                _bUsed = true;
+                _bTriggered = true;
                 Hitbox = GetHitbox(dir);
 
                 RHMap map = MapManager.CurrentMap;
@@ -29,7 +29,7 @@ namespace RiverHollow.Items.Tools
                 tiles.FindAll(x => x != null && x.CollisionBox.Intersects(Hitbox)).ForEach(x => x.DamageObject(this));
             }
 
-            if (FinishTool(dir))
+            if (CheckFinishTool(dir))
             {
                 Hitbox = Rectangle.Empty;
             }

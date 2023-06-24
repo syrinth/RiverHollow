@@ -539,6 +539,8 @@ namespace RiverHollow.Game_Managers
                     case ItemEnum.Tool:
                         switch (Util.ParseEnum<ToolEnum>(diData["Subtype"]))
                         {
+                            case ToolEnum.FishingRod:
+                                return new FishingRod(id, diData);
                             case ToolEnum.StaffOfIce:
                                 return new IceStaff(id, diData);
                             case ToolEnum.Scythe:

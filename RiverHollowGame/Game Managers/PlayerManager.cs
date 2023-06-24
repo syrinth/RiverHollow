@@ -15,6 +15,7 @@ using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.GUIComponents.Screens;
+using RiverHollow.Items.Tools;
 
 namespace RiverHollow.Game_Managers
 {
@@ -784,12 +785,17 @@ namespace RiverHollow.Game_Managers
                         Busy = true;
                         AllowMovement = false;
                         PlayerActor.PlayAnimationVerb(VerbEnum.Idle);
-                        ToolInUse.ToolAnimation.PlayAnimation(PlayerActor.Facing);
+                        ToolInUse.ToolSprite.PlayAnimation(PlayerActor.Facing);
                     }
                     else
                     {
                         ToolInUse = null;
                     }
+                }
+
+                if(ToolInUse.ToolType == ToolEnum.FishingRod)
+                {
+                    FishingManager.BeginFishing((FishingRod)ToolInUse);
                 }
             }
         }
