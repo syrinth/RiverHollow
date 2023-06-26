@@ -3,8 +3,6 @@ using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 
-using static RiverHollow.Game_Managers.GameManager;
-
 namespace RiverHollow.WorldObjects
 {
     public abstract class TriggerDoorObject : TriggerObject
@@ -32,6 +30,8 @@ namespace RiverHollow.WorldObjects
                     _bHasBeenTriggered = true;
                     _bWalkable = true;
                     _bVisible = false;
+
+                    SoundManager.PlayEffect(Enums.SoundEffectEnum.Door);
                 }
                 else
                 {
@@ -43,6 +43,7 @@ namespace RiverHollow.WorldObjects
                     _bHasBeenTriggered = false;
                     _bWalkable = false;
                     _bVisible = true;
+                    SoundManager.PlayEffect(Enums.SoundEffectEnum.Door);
                 }
             }
         }

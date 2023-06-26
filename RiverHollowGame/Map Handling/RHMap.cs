@@ -422,11 +422,15 @@ namespace RiverHollow.Map_Handling
             {
                 foreach (Light obj in newLights)
                 {
-                    if (!_liLights.Contains(obj))
-                    {
-                        _liLights.Add(obj);
-                    }
+                    AddLight(obj);
                 }
+            }
+        }
+        public void AddLight(Light obj)
+        {
+            if (obj != null)
+            {
+                Util.AddUniquelyToList(ref _liLights, obj);
             }
         }
         public void RemoveLights(List<Light> newLights)
@@ -502,7 +506,14 @@ namespace RiverHollow.Map_Handling
                 {
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
-                        if (mapObject.Name.Equals("Wall"))
+                        if (mapObject.Name.StartsWith("Light"))
+                        {
+                            Light newLight = DataManager.GetLight(int.Parse(mapObject.Properties["ID"]));
+                            var center = Util.RectFromTiledMapObject(mapObject).Center;
+                            newLight.Position = center - new Point(newLight.Width/2, newLight.Height/2);
+                            AddLight(newLight);
+                        }
+                        else if (mapObject.Name.Equals("Wall"))
                         {
                             foreach (Point p in Util.GetAllPointsInArea(mapObject.Position, mapObject.Size, Constants.TILE_SIZE))
                             {
@@ -554,9 +565,16 @@ namespace RiverHollow.Map_Handling
                                 {
                                     ((Plant)obj).FinishGrowth();
                                 }
-                                obj.PlaceOnMap(new Point(x, y), this);
-                                objWidth = obj.BaseWidth * Constants.TILE_SIZE;
-                                objHeight = obj.BaseHeight * Constants.TILE_SIZE;
+
+                                if (obj.PlaceOnMap(new Point(x, y), this))
+                                {
+                                    objWidth = obj.BaseWidth * Constants.TILE_SIZE;
+                                    objHeight = obj.BaseHeight * Constants.TILE_SIZE;
+                                }
+                                else
+                                {
+                                    ErrorManager.TrackError();
+                                }
                             }
                             else if (tiledObj.Properties.ContainsKey("ItemID"))
                             {
@@ -1926,7 +1944,7 @@ namespace RiverHollow.Map_Handling
             }
             else if (ignoreActors || !TileContainsBlockingActor(testTile))
             {
-                if (testTile.CanPlaceOnTabletop(obj) || testTile.CanPlaceObject())
+                if (testTile.CanPlaceOnTabletop(obj) || testTile.Passable())
                 {
                     rv = true;
                 }
@@ -2262,7 +2280,51 @@ namespace RiverHollow.Map_Handling
                     tileList.Add(tile);
                 }
             }
+
             return tileList;
+        }
+
+        public void RemoveTilesNearTravelPoints(ref List<RHTile> tiles)
+        {
+            foreach(var travelPoint in DictionaryTravelPoints)
+            {
+                foreach(var t in GetTilesFromRectangleExcludeEdgePoints(travelPoint.Value.CollisionBox))
+                {
+                    if (tiles.Contains(t)) { tiles.Remove(t); }
+                    
+                    foreach (var o in t.GetAdjacentTiles())
+                    {
+                        if (tiles.Contains(o))
+                        {
+                            tiles.Remove(o);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void RemoveTilesNearSpecialObjects(ref List<RHTile> tiles)
+        {
+            foreach (TiledMapObject tiledObj in _liMapObjects)
+            {
+                if (tiledObj.Properties.ContainsKey("Reset") && tiledObj.Properties.ContainsKey("ObjectID"))
+                {
+                    var box = new Rectangle((int)tiledObj.Position.X, (int)tiledObj.Position.Y, (int)tiledObj.Size.Width, (int)tiledObj.Size.Height);
+
+                    var objectTiles = GetTilesFromRectangleExcludeEdgePoints(box);
+                    foreach (var objTile in objectTiles)
+                    {
+                        var adjTiles = objTile.GetAdjacentTiles();
+                        foreach (var adjTile in adjTiles)
+                        {
+                            if (tiles.Contains(adjTile))
+                            {
+                                tiles.Remove(adjTile);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public bool MapAboveValid()

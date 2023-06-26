@@ -918,6 +918,30 @@ namespace Database_Editor
             SetActorSubtype();
         }
 
+        private void cbWorldObjectType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cbWorldObjectSubtype.Items.Clear();
+            ObjectTypeEnum itemType = Util.ParseEnum<ObjectTypeEnum>(cbWorldObjectType.SelectedItem.ToString().Split(':')[1]);
+            switch (itemType)
+            {
+                case ObjectTypeEnum.DungeonObject:
+                    cbWorldObjectSubtype.Visible = true;
+                    foreach (TriggerObjectEnum t in Enum.GetValues(typeof(TriggerObjectEnum)))
+                    {
+                        cbWorldObjectSubtype.Items.Add("Subtype:" + t.ToString());
+                    }
+                    break;
+                default:
+                    cbWorldObjectSubtype.Visible = false;
+                    break;
+            }
+
+            if (cbWorldObjectSubtype.Visible)
+            {
+                cbWorldObjectSubtype.SelectedIndex = 0;
+            }
+        }
+
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             fileToolStripMenuItem.DropDown.Close();

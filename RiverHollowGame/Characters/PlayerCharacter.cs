@@ -77,15 +77,16 @@ namespace RiverHollow.Characters
             _sprHair.SetColor(HairColor);
             _sprEyes.SetColor(EyeColor);
 
-            _lightSource = DataManager.GetLight(7);
-
             SpdMult = Constants.NORMAL_SPEED;
         }
 
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            _lightSource.Position = Position - new Point((_lightSource.Width - Width) / 2, (_lightSource.Height - Height) / 2);
+            if (_lightSource != null)
+            {
+                _lightSource.Position = Position - new Point((_lightSource.Width - Width) / 2, (_lightSource.Height - Height) / 2);
+            }
 
             if (HasKnockbackVelocity())
             {
@@ -122,7 +123,7 @@ namespace RiverHollow.Characters
         }
         public void DrawLight(SpriteBatch spriteBatch)
         {
-            _lightSource.Draw(spriteBatch);
+            _lightSource?.Draw(spriteBatch);
         }
 
         private List<AnimationData> LoadPlayerAnimations(Dictionary<string, string> data)

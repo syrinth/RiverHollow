@@ -77,7 +77,7 @@
         public enum ColorStateEnum { None, Blue, Red };
 
         public enum MapTypeEnum { Invalid, Town, Cave };
-        public enum SoundEffectEnum { Invalid, Axe, Button, Cancel, Cauldron, Door, GrabBuilding, GrindStone, Kitchen, Pick, Rainfall, Scythe, Success_Fish, Text, Thump};
+        public enum SoundEffectEnum { Invalid, Axe, Button, Cancel, Cauldron, Door, GrabBuilding, GrindStone, Kitchen, Pick, Rainfall, Scythe, Success_Fish, Switch, Text, Thump};
         public enum SongEnum { Invalid, Cave, Swamp, Town };
     }
 }

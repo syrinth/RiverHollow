@@ -164,6 +164,7 @@
             this.dgvUpgrades = new System.Windows.Forms.DataGridView();
             this.colUpgradesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbStatus = new System.Windows.Forms.TextBox();
+            this.cbWorldObjectSubtype = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabActor.SuspendLayout();
@@ -1377,6 +1378,7 @@
             // 
             // tabWorldObject
             // 
+            this.tabWorldObject.Controls.Add(this.cbWorldObjectSubtype);
             this.tabWorldObject.Controls.Add(this.cbWorldObjectType);
             this.tabWorldObject.Controls.Add(this.btnWorldObjectCancel);
             this.tabWorldObject.Controls.Add(this.dgvWorldObjectTags);
@@ -1401,6 +1403,7 @@
             this.cbWorldObjectType.Name = "cbWorldObjectType";
             this.cbWorldObjectType.Size = new System.Drawing.Size(149, 21);
             this.cbWorldObjectType.TabIndex = 36;
+            this.cbWorldObjectType.SelectedIndexChanged += new System.EventHandler(this.cbWorldObjectType_SelectedIndexChanged);
             // 
             // btnWorldObjectCancel
             // 
@@ -1613,6 +1616,16 @@
             this.tbStatus.Size = new System.Drawing.Size(794, 20);
             this.tbStatus.TabIndex = 13;
             // 
+            // cbWorldObjectSubtype
+            // 
+            this.cbWorldObjectSubtype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbWorldObjectSubtype.FormattingEnabled = true;
+            this.cbWorldObjectSubtype.Location = new System.Drawing.Point(475, 33);
+            this.cbWorldObjectSubtype.Name = "cbWorldObjectSubtype";
+            this.cbWorldObjectSubtype.Size = new System.Drawing.Size(149, 21);
+            this.cbWorldObjectSubtype.TabIndex = 58;
+            this.cbWorldObjectSubtype.Visible = false;
+            // 
             // FrmDBEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1811,6 +1824,7 @@
         private System.Windows.Forms.ComboBox cbActorSubtype;
         private System.Windows.Forms.TextBox tbActorDescription;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox cbWorldObjectSubtype;
     }
 }
 

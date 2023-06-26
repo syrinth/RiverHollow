@@ -226,36 +226,9 @@ namespace RiverHollow.Map_Handling
             return _travelPoint;
         }
 
-        public bool HasTravelPoint()
-        {
-            bool rv = false;
-            if (_travelPoint != null)
-            {
-                rv = true;
-            }
-            else
-            {
-                var map = MapManager.Maps[MapName];
-                foreach (var point in map.DictionaryTravelPoints.Values)
-                {
-                    if (point.CollisionBox.Intersects(CollisionBox))
-                    {
-                        rv = true;
-                        break;
-                    }
-                }
-            }
-
-            return rv;
-        }
-
         public bool Contains(Actor n)
         {
-            bool rv = false;
-
-            rv = CollisionBox.Contains(n.CollisionCenter);
-
-            return rv;
+            return CollisionBox.Contains(n.CollisionCenter);
         }
         public bool ContainsProperty(string property, out string value)
         {
@@ -497,10 +470,6 @@ namespace RiverHollow.Map_Handling
         public bool CanWalkThrough()
         {
             return CanTargetTile();
-        }
-        public bool CanPlaceObject()
-        {
-            return Passable() && WorldObject == null && !HasTravelPoint();
         }
         #endregion
     }

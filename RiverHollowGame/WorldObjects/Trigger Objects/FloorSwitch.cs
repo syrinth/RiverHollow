@@ -49,6 +49,18 @@ namespace RiverHollow.WorldObjects.Trigger_Objects
             }
         }
 
+        public override void FireTrigger()
+        {
+            SoundManager.PlayEffect(SoundEffectEnum.GrindStone);
+            base.FireTrigger();
+        }
+
+        public override void Reset()
+        {
+            SoundManager.PlayEffect(SoundEffectEnum.Switch);
+            base.Reset();
+        }
+
         private bool HeldDown()
         {
             //We normally will be pushing objects onto switches, but we might create an object directly on top of one, which needs to be tracked as well.

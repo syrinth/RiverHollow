@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="20" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="66">
  <properties>
+  <property name="ItemID" value="23-U"/>
+  <property name="Lighting" type="float" value="0"/>
   <property name="MapType" value="Cave"/>
+  <property name="ObjectID" value="60-C/53-U"/>
+  <property name="ResourcesToSpawn" value="30-50"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsWalls_Floors.tsx"/>
@@ -72,19 +76,11 @@
   <object id="51" name="Entrance" x="144" y="268" width="16" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
-    <property name="Map" value="mapMountain_Small"/>
+    <property name="Map" value="mapMountainPath"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="MapObject">
-  <object id="64" name="Resource" x="32" y="64" width="256" height="176">
-   <properties>
-    <property name="ItemID" value="23-U"/>
-    <property name="ResourcesToSpawn" value="30"/>
-    <property name="ObjectID" value="60-C/53-U"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="5" name="MapObject"/>
  <objectgroup id="6" name="Character">
   <object id="65" name="NPC" x="256" y="64" width="16" height="16">
    <properties>

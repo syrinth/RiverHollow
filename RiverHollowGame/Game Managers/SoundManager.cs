@@ -337,6 +337,8 @@ namespace RiverHollow.Game_Managers
                     return "bush";
                 case SoundEffectEnum.Success_Fish:
                     return "Success_Blip";
+                case SoundEffectEnum.Switch:
+                    return "switch";
                 case SoundEffectEnum.Thump:
                     return "thump3";
                 case SoundEffectEnum.Text:

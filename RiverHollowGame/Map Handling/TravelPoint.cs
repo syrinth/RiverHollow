@@ -59,8 +59,12 @@ namespace RiverHollow.Map_Handling
             Util.AssignValue(ref _sGoToMap, "GoTo", obj.Properties);
             Util.AssignValue(ref _bModular, "Modular", obj.Properties);
             Util.AssignValue(ref _bNoMove, "NoMove", obj.Properties);
-            Util.AssignValue(ref _bWorldMap, "WorldMap", obj.Properties);
             Util.AssignValue(ref _sMapConnector, "MapConnector", obj.Properties);
+
+            if(obj.Properties.ContainsKey("WorldMap") && obj.Properties["WorldMap"].Equals("True"))
+            {
+                _bWorldMap = true;
+            }
 
             if (_iDungeonInfoID > -1) { IsActive = true; }
 

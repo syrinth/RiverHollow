@@ -50,24 +50,21 @@ namespace RiverHollow.Map_Handling
 
                 _diSpawnData[rarity].Add(new SpawnData(resourceID, t));
             }
-
-            if (!_diSpawnData.ContainsKey(RarityEnum.C))
-            {
-                Util.AddToListDictionary(ref _diSpawnData, RarityEnum.C, new SpawnData(-1, t));
-            }
         }
 
-        protected List<RHTile> TilesInArea(bool onlyValid)
+        protected List<RHTile> TilesInArea()
         {
             List<RHTile> validTiles = new List<RHTile>();
             foreach (Point v in Util.GetAllPointsInArea(_vPosition, _szDimensions, Constants.TILE_SIZE))
             {
                 RHTile tile = _map.GetTileByPixelPosition(v);
-                if (!onlyValid || tile.CanPlaceObject())
+                if (tile.Passable())
                 {
                     Util.AddUniquelyToList(ref validTiles, tile);
                 }
             }
+
+            _map.RemoveTilesNearTravelPoints(ref validTiles);
 
             return validTiles;
         }
@@ -135,6 +132,12 @@ namespace RiverHollow.Map_Handling
             {
                 AssignSpawnData(props["ObjectID"], SpawnTypeEnum.Object);
             }
+
+            if (!_diSpawnData.ContainsKey(RarityEnum.C))
+            {
+                Util.AddToListDictionary(ref _diSpawnData, RarityEnum.C, new SpawnData(-1, SpawnTypeEnum.Object));
+            }
+
             if (props.ContainsKey("FishingHole"))
             {
                 FishingHole = true;
@@ -164,11 +167,18 @@ namespace RiverHollow.Map_Handling
 
         private void SpawnObject(int number)
         {
-            List<RHTile> validTiles = TilesInArea(true);
+            List<RHTile> validTiles = TilesInArea();
+            _map.RemoveTilesNearSpecialObjects(ref validTiles);
+
             List<RHTile> usedTiles = new List<RHTile>();
 
-            for (int i = 0; i < number && i < validTiles.Count; i++)
+            for (int i = 0; i < number; i++)
             {
+                if (validTiles.Count == 0)
+                {
+                    break;
+                }
+
                 //from the array as it gets filled so that we bounce less.
                 RHTile targetTile = validTiles[RHRandom.Instance().Next(0, validTiles.Count - 1)];
 
@@ -190,6 +200,7 @@ namespace RiverHollow.Map_Handling
                         if (item != null)
                         {
                             new WrappedItem(item.ID).PlaceOnMap(targetTile.Position, _map);
+                            _iCurrentObjects++;
                         }
                     }
                     else
@@ -234,11 +245,6 @@ namespace RiverHollow.Map_Handling
 
                     //Keep track of which tiles were used
                     usedTiles.Add(targetTile);
-                }
-
-                if (validTiles.Count == 0)
-                {
-                    break;
                 }
             }
         }
@@ -312,7 +318,7 @@ namespace RiverHollow.Map_Handling
 
             if (copy.Count > 0)
             {
-                List<RHTile> validTiles = TilesInArea(true);
+                List<RHTile> validTiles = TilesInArea();
                 SpawnData copyData = Util.RollOnRarityTable(copy);
 
                 Mob m = DataManager.CreateMob(copyData.ID);

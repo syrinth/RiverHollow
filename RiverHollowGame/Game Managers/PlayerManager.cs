@@ -715,7 +715,7 @@ namespace RiverHollow.Game_Managers
         #region Tool Management
         public static Tool ToolInUse;
         public static int BackpackLevel => PlayerManager.RetrieveTool(ToolEnum.Backpack) != null ? PlayerManager.RetrieveTool(ToolEnum.Backpack).ToolLevel : 1;
-        public static int LanternLevel => PlayerManager.RetrieveTool(ToolEnum.Lantern) != null ? PlayerManager.RetrieveTool(ToolEnum.Lantern).ToolLevel : 0;
+        public static int LanternLevel => PlayerManager.RetrieveTool(ToolEnum.Lantern) != null ? PlayerManager.RetrieveTool(ToolEnum.Lantern).ToolLevel : 1;
 
         private static Dictionary<ToolEnum, Tool> _diTools;
 
@@ -786,16 +786,16 @@ namespace RiverHollow.Game_Managers
                         AllowMovement = false;
                         PlayerActor.PlayAnimationVerb(VerbEnum.Idle);
                         ToolInUse.ToolSprite.PlayAnimation(PlayerActor.Facing);
+
+                        if (ToolInUse.ToolType == ToolEnum.FishingRod)
+                        {
+                            FishingManager.BeginFishing((FishingRod)ToolInUse);
+                        }
                     }
                     else
                     {
                         ToolInUse = null;
                     }
-                }
-
-                if(ToolInUse.ToolType == ToolEnum.FishingRod)
-                {
-                    FishingManager.BeginFishing((FishingRod)ToolInUse);
                 }
             }
         }

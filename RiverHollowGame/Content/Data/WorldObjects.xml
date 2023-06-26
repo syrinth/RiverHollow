@@ -267,19 +267,19 @@
     </Item>
     <Item>
       <Key>66</Key>
-      <Value>[Type:DungeonObject][Image:20-0][Color:Blue]</Value>
+      <Value>[Type:DungeonObject][Subtype:ColorBlocker][Image:20-0][Color:Blue]</Value>
     </Item>
     <Item>
       <Key>67</Key>
-      <Value>[Type:DungeonObject][Image:20-1][Subtype:ColorBlocker][Color:Red]</Value>
+      <Value>[Type:DungeonObject][Subtype:ColorBlocker][Image:20-1][Color:Red]</Value>
     </Item>
     <Item>
       <Key>68</Key>
-      <Value>[Type:DungeonObject][Image:22-0][Subtype:ColorSwitch]</Value>
+      <Value>[Type:DungeonObject][Subtype:ColorSwitch][Image:22-0]</Value>
     </Item>
     <Item>
       <Key>69</Key>
-      <Value>[Type:DungeonObject][Image:9-6][Size:2-1][Base:0-0-2-1][Subtype:TriggerDoor]</Value>
+      <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:9-6][Size:2-1][Base:0-0-2-1]</Value>
     </Item>
     <Item>
       <Key>70</Key>
@@ -287,11 +287,11 @@
     </Item>
     <Item>
       <Key>71</Key>
-      <Value>[Type:DungeonObject][Image:0-34][Size:3-6][Base:0-0-1-2]</Value>
+      <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:0-34][Size:3-6][Base:0-0-1-2]</Value>
     </Item>
     <Item>
       <Key>72</Key>
-      <Value>[Type:DungeonObject][Image:9-1]</Value>
+      <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:9-1]</Value>
     </Item>
     <Item>
       <Key>73</Key>
@@ -303,7 +303,7 @@
     </Item>
     <Item>
       <Key>75</Key>
-      <Value>[Type:DungeonObject][Image:9-1][SoundEffect:grinding_stone]</Value>
+      <Value>[Type:DungeonObject][Subtype:Trigger][Image:9-1][SoundEffect:grinding_stone]</Value>
     </Item>
     <Item>
       <Key>76</Key>
@@ -583,7 +583,7 @@
     </Item>
     <Item>
       <Key>145</Key>
-      <Value>[Type:DungeonObject][Image:22-3][Subtype:FloorSwitch]</Value>
+      <Value>[Type:DungeonObject][Subtype:FloorSwitch][Image:22-3]</Value>
     </Item>
     <Item>
       <Key>146</Key>

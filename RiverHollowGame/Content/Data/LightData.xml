@@ -39,19 +39,19 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Texture][Idle:1-1][Dimensions]</Value>
+      <Value>[Texture][Idle:1-1][Dimensions:112-112]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Texture][Idle:1-1][Dimensions]</Value>
+      <Value>[Texture][Idle:1-1][Dimensions:112-112]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Texture][Idle:1-1][Dimensions]</Value>
+      <Value>[Texture][Idle:1-1][Dimensions:112-112]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Texture][Idle:1-1][Dimensions]</Value>
+      <Value>[Texture][Idle:1-1][Dimensions:112-112]</Value>
     </Item>
   </Asset>
 </XnaContent>

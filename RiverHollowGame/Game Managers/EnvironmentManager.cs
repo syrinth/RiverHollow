@@ -67,6 +67,7 @@ namespace RiverHollow.Game_Managers
             if (MapManager.CurrentMap.IsOutside)
             {
                 List<RHTile> validTiles = MapManager.CurrentMap.GetAllTiles(true);
+                MapManager.CurrentMap.RemoveTilesNearTravelPoints(ref validTiles);
 
                 int num = 0;
                 int percent = RHRandom.Instance().Next(100);
@@ -132,8 +133,6 @@ namespace RiverHollow.Game_Managers
         /// <returns>The Color of the night-time darkness mask</returns>
         public static Color GetAmbientLight()
         {
-            Color rv = Color.White;
-
             float darkPercent = MapManager.CurrentMap.Lighting;
 
             if (MapManager.CurrentMap.Lighting == 1)
@@ -142,13 +141,16 @@ namespace RiverHollow.Game_Managers
                 float timeModifier = GameCalendar.CurrentMin + ((GameCalendar.CurrentHour - 18f) * 60f);  //Total number of minutes since 6 P.M.
                 darkPercent = Math.Min(0.9f, timeModifier / totalMinutes);
             }
+            else
+            {
+                darkPercent = 1 - darkPercent;
+            }
 
             //Subtract the percent of darkness we currently have from the max then subtract
             // it from the max value of 255 to find our relative number. Since new Color takes
             //a float between 0 and 1, we need to divide our relative number by the max
             float value = (255 - (255 * darkPercent)) / 255;
-            rv = new Color(value, value, value);
-            return rv;
+            return new Color(value, value, value);
         }
 
         #region Weather handling

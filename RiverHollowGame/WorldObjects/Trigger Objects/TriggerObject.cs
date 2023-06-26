@@ -14,8 +14,8 @@ namespace RiverHollow.WorldObjects
         readonly TriggerObjectEnum _eSubType;
         protected readonly string _sOutTrigger;   //What trigger response is sent
         protected string _sMatchTrigger; //What, if anything, the object responds to
-        protected int _iTriggerNumber = 1;
-        protected int _iTriggersLeft = 1;
+        protected int _iTriggerNumber;
+        protected int _iTriggersLeft;
         protected bool _bVisible = true;
         readonly protected int _iItemKeyID = -1;
         protected bool _bHasBeenTriggered = false;
@@ -29,7 +29,7 @@ namespace RiverHollow.WorldObjects
             {
                 Util.AssignValue(ref _sOutTrigger, "OutTrigger", stringData);
                 Util.AssignValue(ref _sMatchTrigger, "MatchTrigger", stringData);
-                _iTriggerNumber = Util.AssignValue("TriggerNumber", stringData);
+                _iTriggerNumber = Util.AssignValue("TriggerNumber", stringData, 1);
                 _iItemKeyID = Util.AssignValue("ItemKeyID", stringData);
             }
 

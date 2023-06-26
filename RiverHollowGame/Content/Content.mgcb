@@ -530,6 +530,11 @@
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapMountain_Small.tmx
 
+#begin Maps/Misc/mapMountainPath.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapMountainPath.tmx
+
 #begin Maps/Misc/mapRuined_Manor.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -965,6 +970,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sound/Stock/Effects/stove_fire.mp3
+
+#begin Sound/Stock/Effects/switch.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Effects/switch.wav
 
 #begin Sound/Stock/Effects/thump3.mp3
 /importer:Mp3Importer
