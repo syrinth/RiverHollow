@@ -198,7 +198,7 @@
     <property name="MobID" value="32-C"/>
    </properties>
   </object>
-  <object id="72" name="Mob" x="237.333" y="59.3333" width="32" height="32">
+  <object id="72" name="Mob" x="208" y="64" width="32" height="32">
    <properties>
     <property name="MobID" value="32-C"/>
    </properties>

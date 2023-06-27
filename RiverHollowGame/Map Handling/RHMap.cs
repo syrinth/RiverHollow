@@ -1462,11 +1462,6 @@ namespace RiverHollow.Map_Handling
                             {
                                 rv = obj.ProcessLeftClick();
                             }
-
-                            if (!rv && !TargetTile.Passable())
-                            {
-                                PlayerManager.GrabTile(TargetTile);
-                            }
                         }
                     }
                 }

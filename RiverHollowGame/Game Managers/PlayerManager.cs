@@ -16,6 +16,7 @@ using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items.Tools;
+using Microsoft.Win32;
 
 namespace RiverHollow.Game_Managers
 {
@@ -161,7 +162,7 @@ namespace RiverHollow.Game_Managers
         {
             ToolInUse?.Update(gTime);
 
-            if (PlayerActor.HasKnockbackVelocity() || Defeated() || (Mouse.GetState().LeftButton == ButtonState.Released && PlayerActor.State == ActorStateEnum.Grab && AllowMovement))
+            if (PlayerActor.HasKnockbackVelocity() || Defeated() || (Mouse.GetState().RightButton == ButtonState.Released && PlayerActor.State == ActorStateEnum.Grab && AllowMovement))
             {
                 ReleaseTile();
             }
@@ -192,7 +193,7 @@ namespace RiverHollow.Game_Managers
                 {
                     if (_timer == null || _timer.TickDown(gTime))
                     {
-                        GrabbedObject.InitiateMove(newMovement);
+                        GrabbedObject?.InitiateMove(newMovement);
                     }
                 }
                 else if (newMovement != Vector2.Zero)
@@ -424,9 +425,7 @@ namespace RiverHollow.Game_Managers
         public static bool PlayerInRange(Point centre, int range)
         {
             int distance = (int)Util.GetDistance(PlayerActor.CollisionCenter, centre);
-
-            bool rv = distance <= range;
-            return rv;
+            return distance <= range;
         }
 
         public static bool PlayerInRangeGetDist(Point centre, int range, ref int distance)
@@ -671,11 +670,18 @@ namespace RiverHollow.Game_Managers
         {
             GrabbedObject.MoveObject(_vbMovement.AddMovement(dir));
         }
-        public static void GrabTile(RHTile t)
+        public static void GrabTile(RHTile t, bool reposition)
         {
-            GrabbedObject = t.WorldObject;
+            if (t.WorldObject != null)
+            {
+                GrabbedObject = t.WorldObject;
 
-            PlayerActor.SetPosition(Util.SnapToGrid(PlayerActor.CollisionCenter));
+                if (reposition)
+                {
+                    PlayerActor.SetPosition(Util.SnapToGrid(PlayerActor.CollisionCenter));
+                }
+            }
+
             PlayerActor.DetermineFacing(t);
             PlayerActor.SetState(ActorStateEnum.Grab);
         }

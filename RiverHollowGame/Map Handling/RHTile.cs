@@ -58,27 +58,37 @@ namespace RiverHollow.Map_Handling
         public bool ProcessRightClick()
         {
             bool rv = false;
+            bool playerAdjacent = PlayerIsAdjacent();
+            bool inRangeOfObject = GetWorldObject() != null && GetWorldObject().HasTileInRange();
 
-            if (!string.IsNullOrEmpty(_sClickAction) && PlayerManager.PlayerInRange(Center))
+            if (inRangeOfObject)
             {
-                if (_sClickAction.Equals("Town_Display")) { GUIManager.OpenMainObject(new TownInfoWindow()); }
-                else if (_sClickAction.Equals("Display_Upgrade")) { GUIManager.OpenMainObject(new HUDBuildingUpgrade(TownManager.GetBuildingByID(MapManager.Maps[MapName].BuildingID))); }
+                rv = GetWorldObject().ProcessRightClick();
             }
 
-            if (GetTravelPoint() != null)
+            if (playerAdjacent)
             {
-                if (PlayerManager.PlayerInRange(_travelPoint.CollisionBox) && !MapManager.ChangingMaps())
+                if (GetTravelPoint() != null)
                 {
-                    PlayerManager.PlayerActor.SetFacing(DirectionEnum.Up);
-                    MapManager.ChangeMaps(PlayerManager.PlayerActor, MapName, _travelPoint);
-                    SoundManager.PlayEffect(SoundEffectEnum.Door);
-                    return true;
+                    if (PlayerManager.PlayerInRange(_travelPoint.CollisionBox) && !MapManager.ChangingMaps())
+                    {
+                        PlayerManager.PlayerActor.SetFacing(DirectionEnum.Up);
+                        MapManager.ChangeMaps(PlayerManager.PlayerActor, MapName, _travelPoint);
+                        SoundManager.PlayEffect(SoundEffectEnum.Door);
+                        rv = true;
+                    }
+                }
+                else if (!string.IsNullOrEmpty(_sClickAction))
+                {
+                    if (_sClickAction.Equals("Town_Display")) { GUIManager.OpenMainObject(new TownInfoWindow()); }
+                    else if (_sClickAction.Equals("Display_Upgrade")) { GUIManager.OpenMainObject(new HUDBuildingUpgrade(TownManager.GetBuildingByID(MapManager.Maps[MapName].BuildingID))); }
                 }
             }
-            else if (GetWorldObject() != null && GetWorldObject().HasTileInRange())
+
+            if (!rv && (inRangeOfObject || playerAdjacent) && !Passable())
             {
-                rv = true;
-                GetWorldObject().ProcessRightClick();
+                bool reposition = WorldObject != null && WorldObject.Tiles.Count == 1;
+                PlayerManager.GrabTile(this, reposition);
             }
 
             return rv;
