@@ -16,7 +16,6 @@ using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items.Tools;
-using Microsoft.Win32;
 
 namespace RiverHollow.Game_Managers
 {
@@ -670,7 +669,7 @@ namespace RiverHollow.Game_Managers
         {
             GrabbedObject.MoveObject(_vbMovement.AddMovement(dir));
         }
-        public static void GrabTile(RHTile t, bool reposition)
+        public static void GrabTile(RHTile t, bool reposition, DirectionEnum facing)
         {
             if (t.WorldObject != null)
             {
@@ -682,7 +681,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            PlayerActor.DetermineFacing(t);
+            PlayerActor.SetFacing(facing);
             PlayerActor.SetState(ActorStateEnum.Grab);
         }
         public static void ReleaseTile()

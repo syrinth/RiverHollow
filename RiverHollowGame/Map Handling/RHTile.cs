@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
 using RiverHollow.Characters;
@@ -10,7 +9,6 @@ using RiverHollow.Items;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Map_Handling
@@ -58,37 +56,37 @@ namespace RiverHollow.Map_Handling
         public bool ProcessRightClick()
         {
             bool rv = false;
-            bool playerAdjacent = PlayerIsAdjacent();
-            bool inRangeOfObject = GetWorldObject() != null && GetWorldObject().HasTileInRange();
+            var obj = GetWorldObject()?.Pickup;
 
+            DirectionEnum facing = DirectionEnum.None;
+            var travelPoint = GetTravelPoint();
+            if (travelPoint != null && !MapManager.ChangingMaps() && Util.PlayerAdjacent(travelPoint.CollisionBox, ref facing))
+            {
+                PlayerManager.PlayerActor.SetFacing(DirectionEnum.Up);
+                MapManager.ChangeMaps(PlayerManager.PlayerActor, MapName, _travelPoint);
+                SoundManager.PlayEffect(SoundEffectEnum.Door);
+
+                return true;
+            }
+
+            bool playerAdjacent = Util.PlayerAdjacent(CollisionBox, ref facing);
+            bool inRangeOfObject = obj != null && Util.PlayerAdjacent(obj.CollisionBox, ref facing);
             if (inRangeOfObject)
             {
-                rv = GetWorldObject().ProcessRightClick();
+                rv = obj.ProcessRightClick();
             }
 
-            if (playerAdjacent)
+            if (playerAdjacent && !string.IsNullOrEmpty(_sClickAction))
             {
-                if (GetTravelPoint() != null)
-                {
-                    if (PlayerManager.PlayerInRange(_travelPoint.CollisionBox) && !MapManager.ChangingMaps())
-                    {
-                        PlayerManager.PlayerActor.SetFacing(DirectionEnum.Up);
-                        MapManager.ChangeMaps(PlayerManager.PlayerActor, MapName, _travelPoint);
-                        SoundManager.PlayEffect(SoundEffectEnum.Door);
-                        rv = true;
-                    }
-                }
-                else if (!string.IsNullOrEmpty(_sClickAction))
-                {
-                    if (_sClickAction.Equals("Town_Display")) { GUIManager.OpenMainObject(new TownInfoWindow()); }
-                    else if (_sClickAction.Equals("Display_Upgrade")) { GUIManager.OpenMainObject(new HUDBuildingUpgrade(TownManager.GetBuildingByID(MapManager.Maps[MapName].BuildingID))); }
-                }
+                rv = true;
+                if (_sClickAction.Equals("Town_Display")) { GUIManager.OpenMainObject(new TownInfoWindow()); }
+                else if (_sClickAction.Equals("Display_Upgrade")) { GUIManager.OpenMainObject(new HUDBuildingUpgrade(TownManager.GetBuildingByID(MapManager.Maps[MapName].BuildingID))); }
             }
 
-            if (!rv && (inRangeOfObject || playerAdjacent) && !Passable())
+            if (!rv && (playerAdjacent || inRangeOfObject) && !Passable())
             {
                 bool reposition = WorldObject != null && WorldObject.Tiles.Count == 1;
-                PlayerManager.GrabTile(this, reposition);
+                PlayerManager.GrabTile(this, reposition, facing);
             }
 
             return rv;

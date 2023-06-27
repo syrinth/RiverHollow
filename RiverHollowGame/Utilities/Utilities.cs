@@ -832,6 +832,52 @@ namespace RiverHollow.Utilities
         {
             return new Point(point.X / value, point.Y / value);
         }
+
+        public static bool PlayerAdjacent(Rectangle testRectangle, ref DirectionEnum facing)
+        {
+            var playerCenter = PlayerManager.PlayerActor.CollisionCenter;
+            var playerCollision = PlayerManager.PlayerActor.CollisionBox;
+
+            bool rv = false;
+            int size = Constants.TILE_SIZE / 4;
+            List <Rectangle> list = new List<Rectangle>
+            {
+                new Rectangle(playerCollision.Left, playerCollision.Bottom, playerCollision.Width, size),
+                new Rectangle(playerCollision.Right, playerCollision.Top, size, playerCollision.Height),
+                new Rectangle(playerCollision.Left, playerCollision.Top - size, playerCollision.Width, size),
+                new Rectangle(playerCollision.Left - size, playerCollision.Top, size, playerCollision.Height)
+            };
+
+            for(int i = 0; i < list.Count; i++)
+            {
+                var r = list[i];
+                if (r.Intersects(testRectangle) && (CenterInRange(playerCenter, testRectangle) || EdgeInRange(playerCollision, testRectangle)))
+                {
+                    rv = true;
+                    facing = (DirectionEnum)(i + 1);
+                    break;
+                }
+            }
+
+            return rv;
+        }
+        private static bool CenterInRange(Point center, Rectangle testRectangle)
+        {
+            bool xInRange = center.X >= testRectangle.Left && center.X < testRectangle.Right;
+            bool yInRange = center.Y >= testRectangle.Top && center.Y < testRectangle.Bottom;
+
+            return xInRange || yInRange;
+        }
+
+        private static bool EdgeInRange(Rectangle edgeTestRectangle, Rectangle testRectangle)
+        {
+            bool leftEdge = edgeTestRectangle.Left <= testRectangle.Center.X && edgeTestRectangle.Left > testRectangle.Left;
+            bool rightEdge = edgeTestRectangle.Right > testRectangle.Center.X && edgeTestRectangle.Right <= testRectangle.Right;
+            bool topEdge = edgeTestRectangle.Top <= testRectangle.Center.Y && edgeTestRectangle.Top > testRectangle.Top;
+            bool bottomEdge = edgeTestRectangle.Bottom > testRectangle.Center.Y && edgeTestRectangle.Bottom <= testRectangle.Bottom;
+
+            return leftEdge || rightEdge || topEdge || bottomEdge;
+        }
     }
 
     public class RHRandom : Random

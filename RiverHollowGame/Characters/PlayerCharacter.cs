@@ -77,6 +77,8 @@ namespace RiverHollow.Characters
             _sprHair.SetColor(HairColor);
             _sprEyes.SetColor(EyeColor);
 
+            _lightSource = DataManager.GetLight(7);
+
             SpdMult = Constants.NORMAL_SPEED;
         }
 
