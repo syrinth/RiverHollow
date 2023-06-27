@@ -29,6 +29,12 @@ namespace RiverHollow.WorldObjects
             {
                 Util.AssignValue(ref _sOutTrigger, "OutTrigger", stringData);
                 Util.AssignValue(ref _sMatchTrigger, "MatchTrigger", stringData);
+
+                if (stringData.ContainsKey("Reset"))
+                {
+                    Reset = true;
+                }
+
                 _iTriggerNumber = Util.AssignValue("TriggerNumber", stringData, 1);
                 _iItemKeyID = Util.AssignValue("ItemKeyID", stringData);
             }
@@ -87,7 +93,7 @@ namespace RiverHollow.WorldObjects
         /// <summary>
         /// Call this to reset the DungeonObject to its original state.
         /// </summary>
-        public virtual void Reset() { }
+        public virtual void ResetTrigger() { }
 
         /// <summary>
         /// Given an item type, check it against the key for the DungeonObject

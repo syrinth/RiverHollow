@@ -51,7 +51,7 @@ namespace RiverHollow.WorldObjects
         /// <summary>
         /// When triggered, makes doors impassable again
         /// </summary>
-        public override void Reset()
+        public override void ResetTrigger()
         {
             _bWalkable = false;
             _bVisible = true;

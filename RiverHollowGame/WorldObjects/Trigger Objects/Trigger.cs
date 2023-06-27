@@ -77,7 +77,7 @@ namespace RiverHollow.WorldObjects
             }
             else
             {
-                Reset();
+                ResetTrigger();
             }
             
 
@@ -91,7 +91,7 @@ namespace RiverHollow.WorldObjects
             Sprite.PlayAnimation(AnimationEnum.Action1);
         }
 
-        public override void Reset()
+        public override void ResetTrigger()
         {
             _bHasBeenTriggered = false;
             Sprite.PlayAnimation(AnimationEnum.ObjectIdle);

@@ -45,7 +45,7 @@ namespace RiverHollow.WorldObjects.Trigger_Objects
                 {
                     if (!_bHasBeenTriggered) { FireTrigger(); }
                 }
-                else { Reset(); }
+                else { ResetTrigger(); }
             }
         }
 
@@ -55,10 +55,10 @@ namespace RiverHollow.WorldObjects.Trigger_Objects
             base.FireTrigger();
         }
 
-        public override void Reset()
+        public override void ResetTrigger()
         {
             SoundManager.PlayEffect(SoundEffectEnum.Switch);
-            base.Reset();
+            base.ResetTrigger();
         }
 
         private bool HeldDown()

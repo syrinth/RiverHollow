@@ -80,7 +80,7 @@ namespace RiverHollow.WorldObjects
             return Name() + System.Environment.NewLine + GetTextData("Description");
         }
 
-        public bool Reset { get; private set; } = false;
+        public bool Reset { get; protected set; } = false;
         public bool Movable { get; private set; }
         public bool MoveOnce { get; private set; }
         public DirectionEnum ShoveDirection { get; private set; } = DirectionEnum.None;

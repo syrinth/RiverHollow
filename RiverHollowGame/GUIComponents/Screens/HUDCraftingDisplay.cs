@@ -10,7 +10,6 @@ using RiverHollow.Items;
 using RiverHollow.Utilities;
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.GameManager;
-using Microsoft.Xna.Framework.Input;
 
 namespace RiverHollow.GUIComponents.Screens
 {
