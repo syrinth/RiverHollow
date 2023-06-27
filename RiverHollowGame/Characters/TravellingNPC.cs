@@ -106,7 +106,7 @@ namespace RiverHollow.Characters
             }
             else if (_iNextArrival > 0)
             {
-                return --_iNextArrival == 0;
+                return _iNextArrival-- == 0;
             }
 
             return true;

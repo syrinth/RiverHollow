@@ -163,7 +163,7 @@
     </Item>
     <Item>
       <Key>40</Key>
-      <Value>[Type:Container][Image:0-1][Rows:3][Cols:3][ReqItems:60-20][Opens]</Value>
+      <Value>[Type:Container][Image:0-1][Rows:3][Cols:3][ReqItems:60-5][Opens]</Value>
     </Item>
     <Item>
       <Key>41</Key>
@@ -451,7 +451,7 @@
     </Item>
     <Item>
       <Key>112</Key>
-      <Value>[Type:Structure][Image:11-25][Size:7-7][ReqItems:55-10/60-10][Base:0-0-7-7][SpecialCoords:48-48][SubObjects:140-16-16/140-64-16/140-16-80/140-64-80][Unique][Market]</Value>
+      <Value>[Type:Structure][Image:11-25][Size:7-7][ReqItems:55-20/60-20][Base:0-0-7-7][SpecialCoords:48-48][SubObjects:140-16-16/140-64-16/140-16-80/140-64-80][Unique][Market]</Value>
     </Item>
     <Item>
       <Key>113</Key>

@@ -576,6 +576,11 @@ namespace RiverHollow.Game_Managers
         /// <returns>The WorldObject if it was successfully created, null otherwise</returns>
         public static WorldObject CreateWorldObjectByID(int id, Dictionary<string, string> args = null)
         {
+            if(args == null)
+            {
+                args = new Dictionary<string, string>();
+            }
+
             if (id >= Constants.BUILDABLE_ID_OFFSET)
             {
                 id -= Constants.BUILDABLE_ID_OFFSET;

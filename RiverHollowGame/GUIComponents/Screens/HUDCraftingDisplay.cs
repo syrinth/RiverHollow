@@ -10,6 +10,7 @@ using RiverHollow.Items;
 using RiverHollow.Utilities;
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.GameManager;
+using Microsoft.Xna.Framework.Input;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -192,31 +193,43 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 rv = true;
             }
-            else if (_winMaking.Contains(mouse))
+            else
             {
-                rv = true;
-                for (int i = 0; i < _arrMaking.Length; i++)
-                {
-                    GUIItemBox box = _arrMaking[i];
-                    if (box.Contains(mouse) && box.BoxItem != null && _objMachine.CraftingSlots[i].CraftTime == 0 && InventoryManager.HasSpaceInInventory(box.BoxItem.ID, box.BoxItem.Number))
-                    {
-                        _objMachine.TakeItem(i);
-                        box.SetItem(null);
-                        UpdateInfo(_iSelectedItemID);
-                    }
-                }
+                rv = CheckTakeItem(mouse);
             }
 
             return rv;
         }
         public override bool ProcessRightButtonClick(Point mouse)
         {
-            bool rv = false;
-            if (!_gComponents.Contains(mouse) && !_winMain.Contains(mouse) && !_winMaking.Contains(mouse))
+            bool rv = CheckTakeItem(mouse);
+            if (!rv && !_gComponents.Contains(mouse) && !_winMain.Contains(mouse) && !_winMaking.Contains(mouse))
             {
                 GUIManager.CloseMainObject();
                 rv = true;
             }
+            return rv;
+        }
+
+        public bool CheckTakeItem(Point mouse)
+        {
+            bool rv = false;
+            if (_winMaking.Contains(mouse))
+            {
+                for (int i = 0; i < _arrMaking.Length; i++)
+                {
+                    GUIItemBox box = _arrMaking[i];
+                    if (box.Contains(mouse) && box.BoxItem != null && _objMachine.CraftingSlots[i].CraftTime == 0 && InventoryManager.HasSpaceInInventory(box.BoxItem.ID, box.BoxItem.Number))
+                    {
+                        rv = true;
+                        _objMachine.TakeItem(i);
+                        box.SetItem(null);
+                        UpdateInfo(_iSelectedItemID);
+                        GUIManager.CloseHoverWindow();
+                    }
+                }
+            }
+
             return rv;
         }
 

@@ -554,16 +554,6 @@ namespace RiverHollow.Game_Managers
 
             data.TaskInfo = TaskManager.SaveTaskData();
 
-            //foreach (Mission m in MissionManager.AvailableMissions)
-            //{
-            //    data.AvailableMissions.Add(m.SaveData());
-            //}
-
-            //foreach (Mission m in MissionManager.CurrentMissions)
-            //{
-            //    data.CurrentMissions.Add(m.SaveData());
-            //}
-
             foreach (Shop s in GameManager.DIShops.Values)
             {
                 data.ShopData.Add(s.SaveData());
