@@ -849,5 +849,9 @@
       <Key>211</Key>
       <Value>[Type:Food][Image:1-3][Value:20][FoodType:Plain][FoodValue:10][Stam:2][FishingData:4/8/Fast/2]</Value>
     </Item>
+    <Item>
+      <Key>212</Key>
+      <Value>[Type:Blueprint][Image:3-0][ObjectID:27/114/162]</Value>
+    </Item>
   </Asset>
 </XnaContent>

@@ -19,11 +19,11 @@
     </Item>
     <Item>
       <Key>Task_4</Key>
-      <Value>[Name:$Actor_12$'s Home]</Value>
+      <Value>[Name:Home to Roost]</Value>
     </Item>
     <Item>
       <Key>Task_5</Key>
-      <Value>[Name:Home to Roost]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>Task_6</Key>
@@ -1331,6 +1331,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Blue Fish]</Value>
     </Item>
     <Item>
+      <Key>Item_212</Key>
+      <Value>[Name:Homesteading I]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_0</Key>
       <Value>[Name:Beehive]</Value>
     </Item>
@@ -1977,6 +1981,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>WorldObject_161</Key>
       <Value>[Name:SpiritBlock]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_162</Key>
+      <Value>[Name:Chicken Statue]</Value>
     </Item>
     <Item>
       <Key>Cutscene_0</Key>

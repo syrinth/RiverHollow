@@ -111,7 +111,7 @@
     </Item>
     <Item>
       <Key>27</Key>
-      <Value>[Type:Building][Texture:Coop][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40/60-20][MaxAnimals:5][LightID:3-30-86/3-80-86]</Value>
+      <Value>[Type:Building][Texture:Coop][Size:6-5][Base:1-4-4-2][Entrance:2-3-1-2][ReqItems:55-10/60-30][MaxAnimals:5]</Value>
     </Item>
     <Item>
       <Key>28</Key>
@@ -459,7 +459,7 @@
     </Item>
     <Item>
       <Key>114</Key>
-      <Value>[Type:Wall][Image:0-272][Size:1-2][Base:0-1-1-1][ReqItems:2-1/60-2]</Value>
+      <Value>[Type:Wall][Image:0-17][Size:1-2][Base:0-1-1-1][ReqItems:2-2]</Value>
     </Item>
     <Item>
       <Key>115</Key>
@@ -648,6 +648,10 @@
     <Item>
       <Key>161</Key>
       <Value>[Type:WorldObject][Image:17-3][Size:1-2][Base:0-1-1-1]</Value>
+    </Item>
+    <Item>
+      <Key>162</Key>
+      <Value>[Type:Buildable][Image:22-4][Size:1-2][Base:0-1-1-1][ReqItems:0-3]</Value>
     </Item>
   </Asset>
 </XnaContent>
