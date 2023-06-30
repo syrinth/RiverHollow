@@ -166,7 +166,6 @@ namespace RiverHollow.Game_Managers
             foreach (RHMap map in Maps.Values)
             {
                 map.PopulateMap(gameStart);
-                map.StockShop();
             }
 
             if (gameStart)

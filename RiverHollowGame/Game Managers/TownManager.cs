@@ -43,7 +43,7 @@ namespace RiverHollow.Game_Managers
             Travelers = new List<Traveler>();
             MerchantQueue = new List<Merchant>();
 
-            Inventory = new Item[Constants.KITCHEN_STOCK_SIZE, Constants.KITCHEN_STOCK_SIZE];
+            Inventory = new Item[Constants.KITCHEN_STOCK_ROW, Constants.KITCHEN_STOCK_COLUMN];
 
             DIMerchants = new Dictionary<int, Merchant>();
             DIVillagers = new Dictionary<int, Villager>();
@@ -118,19 +118,18 @@ namespace RiverHollow.Game_Managers
 
                 List<Food> sortedFood = Util.MultiArrayToList(Inventory).FindAll(x => x.CompareType(ItemEnum.Food)).ConvertAll(x => (Food)x);
                 sortedFood = sortedFood.OrderBy(x => x.FoodType).ThenByDescending(x => x.Value).ToList();
-                foreach (Food f in sortedFood)
+
+                foreach (Traveler t in Travelers.FindAll(x => !x.HasEaten()))
                 {
-                    if (f != null)
-                    {
-                        var set = Travelers.FindAll(npc => f.FoodType == npc.FavoriteFood());
-                        set.ForEach(npc => npc.TryEat(f));
-
-                        set = Travelers.FindAll(npc => npc.NeutralFood(f.FoodType));
-                        set.ForEach(npc => npc.TryEat(f));
-
-                        set = Travelers.FindAll(npc => f.FoodType == npc.DislikedFood() || f.FoodType == FoodTypeEnum.Forage);
-                        set.ForEach(npc => npc.TryEat(f));
-                    }
+                    TryToEat(sortedFood, t, t.FavoriteFood());
+                }
+                foreach (Traveler t in Travelers.FindAll(x => !x.HasEaten()))
+                {
+                    TryToEatNeutral(sortedFood, t);
+                }
+                foreach (Traveler t in Travelers.FindAll(x => !x.HasEaten()))
+                {
+                    TryToEat(sortedFood, t, t.DislikedFood());
                 }
 
                 InventoryManager.ClearExtraInventory();
@@ -141,19 +140,47 @@ namespace RiverHollow.Game_Managers
             SpawnTravelers();
         }
 
+        private static void TryToEat(List<Food> sortedFood, Traveler t, FoodTypeEnum e)
+        {
+            var eatMe = sortedFood.Find(f => f.FoodType == e);
+            if (eatMe != null)
+            {
+                t.TryEat(eatMe);
+            }
+        }
+
+        private static void TryToEatNeutral(List<Food> sortedFood, Traveler t)
+        {
+            var eatMe = sortedFood.Find(f => t.NeutralFood(f.FoodType));
+            if (eatMe != null)
+            {
+                t.TryEat(eatMe);
+            }
+        }
+
         public static void AddToKitchen(Item i)
         {
+            bool closeAfter = InventoryManager.ExtraInventory != Inventory;
+
             InventoryManager.InitExtraInventory(Inventory);
             InventoryManager.AddToInventory(i, false);
-            InventoryManager.ClearExtraInventory();
+            AddToArchive(i.ID);
+            if (closeAfter)
+            {
+                InventoryManager.ClearExtraInventory();
+            }
         }
 
         public static bool CheckKitchenSpace(Item i)
         {
-            bool rv = false;
+            bool closeAfter = InventoryManager.ExtraInventory != Inventory;
+
             InventoryManager.InitExtraInventory(Inventory);
-            rv = InventoryManager.HasSpaceInInventory(i.ID, i.Number, false);
-            InventoryManager.ClearExtraInventory();
+            bool rv = InventoryManager.HasSpaceInInventory(i.ID, i.Number, false);
+            if (closeAfter)
+            {
+                InventoryManager.ClearExtraInventory();
+            }
 
             return rv;
         }
@@ -590,11 +617,11 @@ namespace RiverHollow.Game_Managers
             }
 
             InventoryManager.InitExtraInventory(Inventory);
-            for (int i = 0; i < Constants.KITCHEN_STOCK_SIZE; i++)
+            for (int i = 0; i < Constants.KITCHEN_STOCK_ROW; i++)
             {
-                for (int j = 0; j < Constants.KITCHEN_STOCK_SIZE; j++)
+                for (int j = 0; j < Constants.KITCHEN_STOCK_COLUMN; j++)
                 {
-                    int index = i * Constants.KITCHEN_STOCK_SIZE + j;
+                    int index = i * Constants.KITCHEN_STOCK_COLUMN + j;
                     ItemData item = saveData.Inventory[index];
 
                     Item newItem = DataManager.GetItem(item.itemID, item.num);

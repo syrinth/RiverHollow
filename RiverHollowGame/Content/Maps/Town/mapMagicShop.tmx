@@ -3,7 +3,7 @@
  <properties>
   <property name="BuildingID" type="int" value="31"/>
   <property name="MapType" value="Town"/>
-  <property name="Shop" type="int" value="1"/>
+  <property name="Shop" type="int" value="0"/>
  </properties>
  <tileset firstgid="1" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="484" columns="22">
   <image source="../Tilesets/tsWalls_Floors.png" trans="ffffff" width="352" height="353"/>

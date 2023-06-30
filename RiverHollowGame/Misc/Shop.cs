@@ -271,11 +271,6 @@ namespace RiverHollow.Misc
         {
             UnlockMerchandise(data.merchUnlockedString);
             RandomIndices = data.randomized;
-
-            if (_iShopBuildingID != -1 && TownManager.TownObjectBuilt(_iShopBuildingID))
-            {
-                PlaceStock(false);
-            }
         }
     }
 

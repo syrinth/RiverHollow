@@ -587,7 +587,7 @@
     </Item>
     <Item>
       <Key>146</Key>
-      <Value>[Type:WorldObject][Image:0-1][OpenStock][StoreType:General]</Value>
+      <Value>[Type:WorldObject]</Value>
     </Item>
     <Item>
       <Key>147</Key>
@@ -595,7 +595,7 @@
     </Item>
     <Item>
       <Key>148</Key>
-      <Value>[Type:Machine][Image:0-19][Size:3-2][Base:0-1-3-1][Makes:195][Kitchen]</Value>
+      <Value>[Type:Machine][Image:0-19][Size:3-2][Base:0-1-3-1][Makes:195/213/214/215/217][Kitchen]</Value>
     </Item>
     <Item>
       <Key>149</Key>

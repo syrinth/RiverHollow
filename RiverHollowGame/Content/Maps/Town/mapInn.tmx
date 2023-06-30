@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="14">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="26">
  <properties>
   <property name="BuildingID" type="int" value="28"/>
   <property name="MapType" value="Town"/>
+  <property name="Shop" type="int" value="1"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetHouses.tsx"/>
  <tileset firstgid="521" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="484" columns="22">
@@ -381,10 +382,10 @@
 743,788,789,789,789,789,789,789,487,488,489,789,789,789,790,742,
 743,810,811,811,811,811,811,811,513,514,515,811,811,811,812,742,
 743,0,0,0,0,0,0,0,0,0,0,0,0,0,0,742,
-743,444,444,445,444,446,0,0,0,0,0,0,0,319,0,742,
-743,501,0,0,0,0,0,0,0,0,0,0,0,0,0,742,
+743,0,0,0,0,0,0,0,0,0,0,0,0,319,0,742,
 743,0,0,0,0,0,0,0,0,0,0,0,0,0,0,742,
-743,0,0,0,0,0,0,0,0,0,0,45,46,47,0,742,
+743,444,444,445,444,446,0,0,0,0,0,0,0,0,0,742,
+743,501,0,0,0,0,0,0,0,0,0,45,46,47,0,742,
 743,0,0,0,0,0,0,0,0,0,0,71,72,73,0,742,
 813,0,0,0,0,0,0,0,0,0,0,0,0,0,0,814,
 0,0,747,0,749,0,0,0,0,0,0,0,0,0,0,0
@@ -396,10 +397,10 @@
 0,0,0,0,0,0,0,0,461,462,463,0,0,0,0,0,
 0,0,350,351,0,0,350,351,0,0,0,0,350,351,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,418,418,419,418,472,0,0,0,0,0,0,0,0,0,0,
-0,475,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,19,20,21,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,418,418,419,418,472,0,0,0,0,0,0,0,0,0,0,
+0,475,0,0,0,0,0,0,0,0,0,19,20,21,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,750,721,0,720,750,750,750,750,750,750,750,750,750,750,0,
@@ -407,12 +408,14 @@
 </data>
  </layer>
  <objectgroup id="5" name="Character">
-  <object id="4" name="NPC" x="48" y="64" width="16" height="16">
+  <object id="4" name="NPC" x="48" y="96" width="16" height="16">
    <properties>
     <property name="NPC_ID" type="int" value="20"/>
    </properties>
   </object>
   <object id="10" name="InnFloor" x="112" y="64" width="16" height="16"/>
+  <object id="22" name="ShopItem" x="58.0007" y="51.0028" width="16" height="29"/>
+  <object id="24" name="ShopItem" x="38.0007" y="51.0028" width="16" height="29"/>
  </objectgroup>
  <objectgroup id="8" name="MapObject">
   <object id="12" name="WorldObject" x="192" y="64" width="48" height="16">
@@ -420,9 +423,9 @@
     <property name="ObjectID" type="int" value="148"/>
    </properties>
   </object>
-  <object id="13" name="WorldObject" x="176" y="64" width="16" height="16">
+  <object id="20" name="WorldObject" x="32.0007" y="64.0028" width="48" height="16">
    <properties>
-    <property name="ObjectID" type="int" value="146"/>
+    <property name="ObjectID" type="int" value="141"/>
    </properties>
   </object>
  </objectgroup>

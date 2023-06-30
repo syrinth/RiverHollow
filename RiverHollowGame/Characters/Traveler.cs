@@ -53,6 +53,11 @@ namespace RiverHollow.Characters
             return GetEnumByIDKey<FoodTypeEnum>("Disliked");
         }
 
+        public bool HasEaten()
+        {
+            return FoodID != -1;
+        }
+
         public Traveler(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             Wandering = true;
@@ -67,7 +72,7 @@ namespace RiverHollow.Characters
 
         public void TryEat(Food f)
         {
-            if (FoodID == -1 && f.Remove(1, false))
+            if (!HasEaten() && f.Remove(1, false))
             {
                 FoodID = f.ID;
                 _fFoodModifier = (f.FoodValue / 100f);
@@ -81,7 +86,7 @@ namespace RiverHollow.Characters
                 {
                     MoodVerb = TravelerMoodEnum.Neutral;
                 }
-                else if (f.FoodType == DislikedFood() || f.FoodType == FoodTypeEnum.Forage)
+                else if (f.FoodType == DislikedFood())
                 {
                     MoodVerb = TravelerMoodEnum.Sad;
                     _fFoodModifier -= .5f;
@@ -97,7 +102,7 @@ namespace RiverHollow.Characters
 
         public bool NeutralFood(FoodTypeEnum e)
         {
-            bool rv = (e != FavoriteFood() && e != DislikedFood() && e != FoodTypeEnum.Forage);
+            bool rv = (e != FavoriteFood() && e != DislikedFood());
             return rv;
         }
 

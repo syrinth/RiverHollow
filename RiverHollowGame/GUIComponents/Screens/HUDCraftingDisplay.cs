@@ -18,6 +18,7 @@ namespace RiverHollow.GUIComponents.Screens
         private GUIImage _gSelection;
         private GUIImage _gComponents;
         private GUIWindow _winMaking;
+        private GUIInventoryWindow _gInventory;
 
         private GUIText _gName;
         private GUIButton _btnBuild;
@@ -146,9 +147,14 @@ namespace RiverHollow.GUIComponents.Screens
                 _winMaking.Show(false);
             }
 
-            Width = _gComponents.Width;
-            Height = _winMaking.Bottom - _winMain.Top;
+            if (_objMachine.GetBoolByIDKey("Kitchen"))
+            {
+                InventoryManager.InitExtraInventory(TownManager.Inventory);
+                _gInventory = new GUIInventoryWindow();
+                _gInventory.AnchorAndAlignWithSpacing(_gComponents, SideEnum.Bottom, SideEnum.CenterX, 2, GUIUtils.ParentRuleEnum.ForceToParent);
+            }
 
+            DetermineSize();
             CenterOnScreen();
 
             bool overflow = recipes.Count > Constants.MAX_RECIPE_DISPLAY;
@@ -163,7 +169,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
-            bool rv = false;
+            bool rv;
 
             if (_winMain.Contains(mouse))
             {
@@ -210,6 +216,12 @@ namespace RiverHollow.GUIComponents.Screens
             return rv;
         }
 
+        public override void CloseMainWindow()
+        {
+            InventoryManager.ClearExtraInventory();
+            base.CloseMainWindow();
+        }
+
         public bool CheckTakeItem(Point mouse)
         {
             bool rv = false;
@@ -227,6 +239,11 @@ namespace RiverHollow.GUIComponents.Screens
                         GUIManager.CloseHoverWindow();
                     }
                 }
+            }
+
+            if(!rv && _gInventory != null && _gInventory.Contains(mouse))
+            {
+                rv = _gInventory.ProcessRightButtonClick(mouse);
             }
 
             return rv;

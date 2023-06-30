@@ -432,7 +432,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Shop_1</Key>
-      <Value>[Name:Adventurer's Guild]</Value>
+      <Value>[Name:Inn]</Value>
     </Item>
     <Item>
       <Key>Shop_2</Key>
@@ -1335,6 +1335,26 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Homesteading I]</Value>
     </Item>
     <Item>
+      <Key>Item_213</Key>
+      <Value>[Name:Sauteed Mushrooms]</Value>
+    </Item>
+    <Item>
+      <Key>Item_214</Key>
+      <Value>[Name:Baked RedBlue]</Value>
+    </Item>
+    <Item>
+      <Key>Item_215</Key>
+      <Value>[Name:Sunny Stew]</Value>
+    </Item>
+    <Item>
+      <Key>Item_216</Key>
+      <Value>[Name:Sugar]</Value>
+    </Item>
+    <Item>
+      <Key>Item_217</Key>
+      <Value>[Name:Cookie]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_0</Key>
       <Value>[Name:Beehive]</Value>
     </Item>
@@ -1920,7 +1940,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_146</Key>
-      <Value>[Name:BuildingStock]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_147</Key>

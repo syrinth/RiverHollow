@@ -614,6 +614,8 @@ namespace RiverHollow.Map_Handling
                     MobsSpawned = MobSpawnStateEnum.Night;
                 }
             }
+
+            StockShop();
         }
 
         public ResourceSpawn GetFishingHole(RHTile t)
@@ -773,7 +775,6 @@ namespace RiverHollow.Map_Handling
             _liResourceSpawns.ForEach(x => x.Rollover(Randomize));
 
             PopulateMap(Randomize);
-            StockShop();
             CheckSpirits();
             _liItems.Clear();
         }

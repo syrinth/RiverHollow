@@ -58,7 +58,8 @@
         public const float EYE_DEPTH = 0.001f;
         public const float HAIR_DEPTH = 0.003f;
 
-        public const int KITCHEN_STOCK_SIZE = 3;
+        public const int KITCHEN_STOCK_ROW = 2;
+        public const int KITCHEN_STOCK_COLUMN = 4;
         public const int MERCHANT_REQUEST_NUM = 3;
         public const int MAX_RECIPE_DISPLAY = 5;
 
