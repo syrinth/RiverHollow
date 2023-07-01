@@ -15,7 +15,6 @@ namespace RiverHollow.Items
         #region properties
         protected ItemEnum _eItemType;
         public ItemEnum ItemType => _eItemType;
-        private List<ItemGroupEnum> _liItemGroups => DataManager.GetEnumListByIDKey<ItemGroupEnum>(ID, "ItemGroups", DataType.Item);
         public int ID { get; } = -1;
         protected Color _c = Color.White;
         public Color ItemColor => _c;
@@ -249,7 +248,7 @@ namespace RiverHollow.Items
         }
         public bool IsItemGroup(ItemGroupEnum e)
         {
-            return _liItemGroups.Contains(e);
+            return GetEnumByIDKey<ItemGroupEnum>("Subtype") == e;
         }
         public bool CompareType(ItemEnum type) { return _eItemType == type; }
 

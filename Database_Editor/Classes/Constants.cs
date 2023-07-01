@@ -4,7 +4,7 @@
     {
         public enum EditableNPCDataEnum { Dialogue, Schedule };
         public enum XMLTypeEnum { None, Actor, Task, WorldObject, Item, Shop, StatusEffect, Cutscene, Light, Dungeon, Upgrade, TextFile };
-        public enum ComponentTypeEnum { TextBoxName, TextBoxID, TextBoxDescription, DataGrid, DataGridTags, TabIndex, ColumnId, ColumnName, ColumnTags, ComboBoxType, ComboBoxSubtype };
+        public enum ComponentTypeEnum { TextBoxName, TextBoxID, TextBoxDescription, DataGrid, DataGridTags, TabIndex, ColumnId, ColumnName, ColumnTags, ComboBoxType, ComboBoxSubtype, ComboBoxGroup };
 
         public static readonly string SPECIAL_CHARACTER = "^";
         public static readonly string LOOKUP_CHARACTER = "$";

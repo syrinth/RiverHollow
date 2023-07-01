@@ -54,11 +54,12 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             AddTab(3, ShowMobs, GUIUtils.TOGGLE_MOBS_ON, GUIUtils.TOGGLE_MOBS_OFF);
             AddTab(4, ShowItems, GUIUtils.TOGGLE_ITEMS_ON, GUIUtils.TOGGLE_ITEMS_OFF);
 
-            _gItemToggles = new GUIToggle[4];
+            _gItemToggles = new GUIToggle[5];
             AddItemToggle(0, ItemResourceToggle, GUIUtils.TOGGLE_RESOURCE_OFF, GUIUtils.TOGGLE_RESOURCE_ON);
             AddItemToggle(1, ItemPotionToggle, GUIUtils.TOGGLE_POTIONS_OFF, GUIUtils.TOGGLE_POTIONS_ON);
             AddItemToggle(2, ItemToolToggle, GUIUtils.TOGGLE_TOOLS_OFF, GUIUtils.TOGGLE_TOOLS_ON);
-            AddItemToggle(3, ItemSpecialToggle, GUIUtils.TOGGLE_SPECIAL_OFF, GUIUtils.TOGGLE_SPECIAL_ON);
+            AddItemToggle(3, ItemFoodToggle, GUIUtils.TOGGLE_FOOD_OFF, GUIUtils.TOGGLE_FOOD_ON);
+            AddItemToggle(4, ItemSpecialToggle, GUIUtils.TOGGLE_SPECIAL_OFF, GUIUtils.TOGGLE_SPECIAL_ON);
 
             _gTabToggles[0].AssignToggleGroup(_gTabToggles[1], _gTabToggles[2], _gTabToggles[3], _gTabToggles[4]);
             _gItemToggles[0].AssignToggleGroup(_gItemToggles[1], _gItemToggles[2], _gItemToggles[3]);
@@ -84,7 +85,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gItemToggles[index] = new GUIToggle(unselected.Location, selected.Location, new Point(16, 16), DataManager.HUD_COMPONENTS, del);
             if (index == 0)
             {
-                _gItemToggles[index].PositionAndMove(_winMain, 58, 19);
+                _gItemToggles[index].PositionAndMove(_winMain, 49, 19);
             }
             else
             {
@@ -189,6 +190,18 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gLabel.AnchorToInnerSide(_winMain, SideEnum.Top);
 
             List<int> itemIDs = new List<int>(TownManager.DIArchive.Keys.ToList().Where(x => DataManager.GetEnumByIDKey<ItemEnum>(x, "Type", DataType.Item) == _eItemDisplay));
+
+            switch (itemWindow)
+            {
+                case ItemEnum.Tool:
+                    itemIDs = itemIDs.OrderBy(x => (int)DataManager.GetEnumByIDKey<ToolEnum>(x, "Subtype", DataType.Item)).ThenBy(x => DataManager.GetIntByIDKey(x, "Level", DataType.Item)).ToList();
+                    break;
+                default:
+                    itemIDs = itemIDs.OrderBy(x => (int)DataManager.GetEnumByIDKey<ItemGroupEnum>(x, "Subtype", DataType.Item)).ThenBy(x => DataManager.GetTextData(x, "Name", DataType.Item)).ToList();
+                    break;
+            }
+
+            
             found = itemIDs.Count(x => TownManager.DIArchive[x].Item1);
 
             for (int i = _iIndex; i < _iIndex + MAX_ITEM_DISPLAY; i++)
@@ -199,7 +212,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 }
 
                 int museumIndex = itemIDs[i];
-                var displayWindow = new ItemDisplayWindow(museumIndex, TownManager.DIArchive[museumIndex]);
+                var displayWindow = new ItemDisplayWindow(museumIndex, (true, true));// TownManager.DIArchive[museumIndex]);
                 _liItemDisplay.Add(displayWindow);
             }
 
@@ -267,6 +280,10 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         public void ItemSpecialToggle()
         {
             SetUpItemWindows(ItemEnum.Special, true);
+        }
+        public void ItemFoodToggle()
+        {
+            SetUpItemWindows(ItemEnum.Food, true);
         }
         #endregion
     }

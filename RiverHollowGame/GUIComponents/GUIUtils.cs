@@ -72,8 +72,8 @@ namespace RiverHollow.GUIComponents
 
         internal static Rectangle TOGGLE_MUTE = new Rectangle(320, 128, 16, 16);
         internal static Rectangle TOGGLE_UNMUTE = new Rectangle(336, 128, 16, 16);
-        internal static Rectangle TOGGLE_CHECK= new Rectangle(160, 170, 10, 10);
-        internal static Rectangle TOGGLE_UNCHECK = new Rectangle(160, 160, 10, 10);
+        internal static Rectangle TOGGLE_CHECK= new Rectangle(96, 218, 10, 10);
+        internal static Rectangle TOGGLE_UNCHECK = new Rectangle(96, 208, 10, 10);
         internal static Rectangle TOGGLE_VILLAGERS_ON = new Rectangle(23, 139, 22, 21);
         internal static Rectangle TOGGLE_VILLAGERS_OFF = new Rectangle(0, 143, 22, 17);
         internal static Rectangle TOGGLE_MERCHANTS_ON = new Rectangle(71, 139, 22, 21);
@@ -93,6 +93,8 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle TOGGLE_TOOLS_OFF = new Rectangle(128, 176, 16, 16);
         internal static Rectangle TOGGLE_SPECIAL_ON = new Rectangle(144, 160, 16, 16);
         internal static Rectangle TOGGLE_SPECIAL_OFF = new Rectangle(144, 176, 16, 16);
+        internal static Rectangle TOGGLE_FOOD_ON = new Rectangle(160, 160, 22, 21);
+        internal static Rectangle TOGGLE_FOOD_OFF = new Rectangle(160, 176, 22, 17);
 
         internal static Rectangle HUD_FILL = new Rectangle(177, 161, 14, 14);
         internal static Rectangle HUD_COLOR_PICK = new Rectangle(177, 176, 7, 9);

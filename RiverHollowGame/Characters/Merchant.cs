@@ -131,7 +131,6 @@ namespace RiverHollow.Characters
         {
             Color c = Color.Black;
             return EvaluateItem(it, ref c);
-            
         }
         public int EvaluateItem(Item it, ref Color c)
         {

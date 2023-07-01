@@ -16,6 +16,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
 
         public ItemDisplayWindow(int ItemID, ValueTuple<bool, bool> state) : base((state.Item1 && state.Item2) ? GUIUtils.CODEX_ITEM_ARCHIVED : GUIUtils.CODEX_ITEM)
         {
+            HoverControls = false;
+
             ID = ItemID;
             Found = state.Item1;
 

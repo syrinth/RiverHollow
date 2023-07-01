@@ -143,6 +143,7 @@
             this.dgvTasks = new System.Windows.Forms.DataGridView();
             this.colTasksName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabWorldObject = new System.Windows.Forms.TabPage();
+            this.cbWorldObjectSubtype = new System.Windows.Forms.ComboBox();
             this.cbWorldObjectType = new System.Windows.Forms.ComboBox();
             this.btnWorldObjectCancel = new System.Windows.Forms.Button();
             this.dgvWorldObjectTags = new System.Windows.Forms.DataGridView();
@@ -164,7 +165,6 @@
             this.dgvUpgrades = new System.Windows.Forms.DataGridView();
             this.colUpgradesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbStatus = new System.Windows.Forms.TextBox();
-            this.cbWorldObjectSubtype = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabActor.SuspendLayout();
@@ -1395,6 +1395,16 @@
             this.tabWorldObject.Text = "WorldObj";
             this.tabWorldObject.UseVisualStyleBackColor = true;
             // 
+            // cbWorldObjectSubtype
+            // 
+            this.cbWorldObjectSubtype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbWorldObjectSubtype.FormattingEnabled = true;
+            this.cbWorldObjectSubtype.Location = new System.Drawing.Point(475, 33);
+            this.cbWorldObjectSubtype.Name = "cbWorldObjectSubtype";
+            this.cbWorldObjectSubtype.Size = new System.Drawing.Size(149, 21);
+            this.cbWorldObjectSubtype.TabIndex = 58;
+            this.cbWorldObjectSubtype.Visible = false;
+            // 
             // cbWorldObjectType
             // 
             this.cbWorldObjectType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -1615,16 +1625,6 @@
             this.tbStatus.ReadOnly = true;
             this.tbStatus.Size = new System.Drawing.Size(794, 20);
             this.tbStatus.TabIndex = 13;
-            // 
-            // cbWorldObjectSubtype
-            // 
-            this.cbWorldObjectSubtype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbWorldObjectSubtype.FormattingEnabled = true;
-            this.cbWorldObjectSubtype.Location = new System.Drawing.Point(475, 33);
-            this.cbWorldObjectSubtype.Name = "cbWorldObjectSubtype";
-            this.cbWorldObjectSubtype.Size = new System.Drawing.Size(149, 21);
-            this.cbWorldObjectSubtype.TabIndex = 58;
-            this.cbWorldObjectSubtype.Visible = false;
             // 
             // FrmDBEditor
             // 

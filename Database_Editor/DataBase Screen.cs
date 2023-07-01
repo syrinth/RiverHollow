@@ -29,7 +29,8 @@ namespace Database_Editor
 
         Dictionary<XMLTypeEnum, XMLCollection> _diTabCollections;
 
-        string _filter = "All";
+        string _typeFilter = "All";
+        string _subtypeFilter = "All";
 
         delegate void VoidDelegate();
         delegate void XMLListDataDelegate();
@@ -543,25 +544,25 @@ namespace Database_Editor
             switch (itemType)
             {
                 case ItemEnum.Clothing:
+                    SubtypeHelper<ClothingEnum>();
+                    break;
+                case ItemEnum.Consumable:
                     cbItemSubtype.Visible = true;
-                    foreach (ClothingEnum en in Enum.GetValues(typeof(ClothingEnum)))
-                    {
-                        cbItemSubtype.Items.Add("Subtype:" + en.ToString());
-                    }
+                    cbItemSubtype.Items.Add("Subtype:" + ItemGroupEnum.None.ToString());
+                    cbItemSubtype.Items.Add("Subtype:" + ItemGroupEnum.Medicine.ToString());
+                    break;
+                case ItemEnum.Food:
+                    cbItemSubtype.Items.Add("Subtype:" + ItemGroupEnum.Food.ToString());
+                    cbItemSubtype.Items.Add("Subtype:" + ItemGroupEnum.Meal.ToString());
                     break;
                 case ItemEnum.NPCToken:
-                    cbItemSubtype.Visible = true;
-                    foreach (NPCTokenTypeEnum en in Enum.GetValues(typeof(NPCTokenTypeEnum)))
-                    {
-                        cbItemSubtype.Items.Add("Subtype:" + en.ToString());
-                    }
+                    SubtypeHelper<NPCTokenTypeEnum>();
+                    break;
+                case ItemEnum.Resource:
+                    SubtypeHelper<ItemGroupEnum>(new List<ItemGroupEnum>() { ItemGroupEnum.Food, ItemGroupEnum.Meal });
                     break;
                 case ItemEnum.Tool:
-                    cbItemSubtype.Visible = true;
-                    foreach (ToolEnum en in Enum.GetValues(typeof(ToolEnum)))
-                    {
-                        cbItemSubtype.Items.Add("Subtype:" + en.ToString());
-                    }
+                    SubtypeHelper<ToolEnum>();
                     break;
                 default:
                     cbItemSubtype.Visible = false;
@@ -571,6 +572,22 @@ namespace Database_Editor
             if (cbItemSubtype.Visible)
             {
                 cbItemSubtype.SelectedIndex = 0;
+            }
+        }
+
+        private void SubtypeHelper<T>(List<T> skip = null)
+        {
+            cbItemSubtype.Visible = true;
+            foreach (T en in Enum.GetValues(typeof(T)))
+            {
+                if (skip != null && skip.Contains(en))
+                {
+                    continue;
+                }
+                else
+                {
+                    cbItemSubtype.Items.Add("Subtype:" + en.ToString());
+                }
             }
         }
 
@@ -742,6 +759,15 @@ namespace Database_Editor
         #endregion
 
         #region DataGridView Loading
+
+        private bool TypeFilterCheck(XMLData data)
+        {
+            return _typeFilter == "All" || data.GetTagValue("Type").ToString().Equals(_typeFilter);
+        }
+        private bool SubTypeFilterCheck(XMLData data)
+        {
+            return _subtypeFilter == "All" || data.GetTagValue("Subtype").ToString().Equals(_subtypeFilter);
+        }
         private void LoadDataGrids()
         {
             LoadItemDataGrid();
@@ -762,10 +788,10 @@ namespace Database_Editor
 
             dgv.Rows.Clear();
             int index = 0;
-            _filter = filter;
+            _typeFilter = filter;
             for (int i = 0; i < data.Count; i++)
             {
-                if (_filter == "All" || data[i].GetTagValue("Type").ToString().Equals(_filter))
+                if (TypeFilterCheck(data[i]) && SubTypeFilterCheck(data[i]))
                 {
                     dgv.Rows.Add();
                     DataGridViewRow row = dgv.Rows[index++];
@@ -970,7 +996,7 @@ namespace Database_Editor
         {
             AutoSave();
 
-            _filter = "All";
+            _typeFilter = "All";
             if (tabCtl.SelectedTab == tabCtl.TabPages["tabNPCs"]) { dgvActors.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscenes"]) { dgvCutscenes.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeons"]) { dgvDungeons.Focus(); }
@@ -1275,9 +1301,29 @@ namespace Database_Editor
                 AddContextMenuItem("Add New", AddNewItem, true, Enum.GetNames(typeof(ItemEnum)));
                 AddContextMenuItem("All", dgvItemsContextMenuClick, false);
 
-                foreach (string s in Enum.GetNames(typeof(ItemEnum)))
+                foreach (ItemEnum en in Enum.GetValues(typeof(ItemEnum)))
                 {
-                    AddContextMenuItem(s, dgvItemsContextMenuClick, false);
+                    var s = Util.GetEnumString(en);
+                    switch (en)
+                    {
+                        case ItemEnum.Resource:
+                            var names = Enum.GetNames(typeof(ItemGroupEnum)).ToList();
+                            names.Insert(0, "All");
+                            names.Remove(Util.GetEnumString(ItemGroupEnum.Food));
+                            names.Remove(Util.GetEnumString(ItemGroupEnum.Meal));
+                            AddContextMenuItem(s, dgvItemsContextMenuClick, false, names.ToArray());
+                            break;
+                        case ItemEnum.Food:
+                            AddContextMenuItem(s, dgvItemsContextMenuClick, false, new string[] { "All", Util.GetEnumString(ItemGroupEnum.Food), Util.GetEnumString(ItemGroupEnum.Meal) });
+                            break;
+                        case ItemEnum.Consumable:
+                            AddContextMenuItem(s, dgvItemsContextMenuClick, false, new string[] { "All", Util.GetEnumString(ItemGroupEnum.None), Util.GetEnumString(ItemGroupEnum.Medicine) });
+                            break;
+                        default:
+                            AddContextMenuItem(s, dgvItemsContextMenuClick, false);
+                            break;
+
+                    }
                 }
             }
             else if (dgv == dgvWorldObjects)
@@ -1340,7 +1386,17 @@ namespace Database_Editor
         private void dgvItemsContextMenuClick(object sender, EventArgs e)
         {
             _diTabIndices["Items"] = 0;
-            LoadItemDataGrid(((ToolStripMenuItem)sender).Text, 0);
+            var selection = ((ToolStripMenuItem)sender);
+            if (selection.OwnerItem == null)
+            {
+                _subtypeFilter = "All";
+                LoadItemDataGrid(selection.Text, 0);
+            }
+            else
+            {
+                _subtypeFilter = selection.Text;
+                LoadItemDataGrid(selection.OwnerItem.Text, 0);
+            }
             LoadItemInfo();
         }
 
@@ -1673,19 +1729,26 @@ namespace Database_Editor
         }
         private void LoadItemInfo()
         {
-            DataGridViewRow r = dgvItems.SelectedRows[0];
-            XMLData data = null;
-            if (_filter == "All") { data = _diBasicXML[ITEM_DATA_XML_FILE][r.Index]; }
-            else { data = _diBasicXML[ITEM_DATA_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_filter))[r.Index]; }
+            if (dgvItems.SelectedRows.Count > 0)
+            {
+                DataGridViewRow r = dgvItems.SelectedRows[0];
+                XMLData data = null;
+                if (_typeFilter == "All") { data = _diBasicXML[ITEM_DATA_XML_FILE][r.Index]; }
+                else if (_subtypeFilter != "All")
+                {
+                    data = _diBasicXML[ITEM_DATA_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter) && x.GetTagValue("Subtype").Equals(_subtypeFilter))[r.Index];
+                }
+                else { data = _diBasicXML[ITEM_DATA_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter))[r.Index]; }
 
-            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Item]);
+                LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Item]);
+            }
         }
         private void LoadWorldObjectInfo()
         {
             DataGridViewRow r = dgvWorldObjects.SelectedRows[0];
             XMLData data = null;
-            if (_filter == "All") { data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE][r.Index]; }
-            else { data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_filter))[r.Index]; }
+            if (_typeFilter == "All") { data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE][r.Index]; }
+            else { data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter))[r.Index]; }
 
             LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.WorldObject]);
         }
@@ -1693,8 +1756,8 @@ namespace Database_Editor
         {
             DataGridViewRow r = dgvActors.SelectedRows[0];
             XMLData data = null;
-            if (_filter == "All") { data = _diBasicXML[ACTOR_XML_FILE][_diTabIndices["Actors"]]; }
-            else { data = _diBasicXML[ACTOR_XML_FILE].FindAll(x => x.GetTagValue("Type").ToString().Equals(_filter))[r.Index]; }
+            if (_typeFilter == "All") { data = _diBasicXML[ACTOR_XML_FILE][_diTabIndices["Actors"]]; }
+            else { data = _diBasicXML[ACTOR_XML_FILE].FindAll(x => x.GetTagValue("Type").ToString().Equals(_typeFilter))[r.Index]; }
             LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Actor]);
         }
         private void LoadTaskInfo()
