@@ -284,18 +284,6 @@ namespace RiverHollow.Map_Handling
             return rv;
         }
 
-        public void Clear()
-        {
-            WorldObject = null;
-            Flooring = null;
-        }
-
-        public void Rollover()
-        {
-            WorldObject.Rollover();
-            Flooring.Rollover();
-        }
-
         /// <summary>
         /// Sets the selected value of the RHTile
         /// </summary>

@@ -97,5 +97,13 @@
         <Item>[Speed:Player-0.5/55-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:55][Move:55-4-Up][Face:Player-Up][Face:55-Down][Speak:55-0][MoveToTown:55]</Item>
       </Value>
     </Item>
+    <Item>
+      <Key>12</Key>
+      <Value>
+        <Item></Item>
+        <Item>[Map:mapFlower_Shop][Player][Actors:14-Cutscene_Entrance][Deactivate:14]</Item>
+        <Item>[Speed:Player-0.5/14-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:14][Move:14-4-Up][Face:Player-Up][Face:14-Down][Speak:14-0][MoveToTown:14]</Item>
+      </Value>
+    </Item>
   </Asset>
 </XnaContent>

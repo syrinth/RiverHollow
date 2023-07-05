@@ -3,8 +3,9 @@
  <properties>
   <property name="ItemID" value="162-C/163-R"/>
   <property name="MapType" value="Town"/>
+  <property name="ObjectID" value="51-U/60-C/147-R/111-R"/>
   <property name="Outside" type="bool" value="true"/>
-  <property name="ResourcesToSpawn" value="5"/>
+  <property name="ResourcesToSpawn" value="25-40"/>
   <property name="WorldData" value="208-16"/>
   <property name="WorldLink" value="mapWoods_Small-30/mapMountain_Small-20"/>
   <property name="WorldMapCost" type="int" value="10"/>

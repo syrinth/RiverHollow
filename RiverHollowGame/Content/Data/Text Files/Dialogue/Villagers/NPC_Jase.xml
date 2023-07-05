@@ -3,7 +3,8 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Eek! Eh... hello! New house person, yes? Me $Actor_14$. Place things here with me, yes, I sell for you at night while you sleeps. Mutually beneficial!][Name:Introduction]</Value>
+      <Value>[Name:Introduction][Text:You look like someone important, can I assume that you're $Name$?  $Actor_20$ told me I should speak with you. It's a cute town you've got here, but I think it could be so much more.
+I'm $Actor_14$, a Florist by trade and I think I could really help out here. Not only are flowers beautiful but, as I'm sure you know, they have a lot of practical uses!]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -20,7 +21,7 @@ Do you want to come inside bin? $21$ can scootch over.][Weather:Raining][Name:Ra
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Text:Hello, hello! How can meek, humble $Actor_14$ be helping you?][Selection:VillageTalk][ShipGoods][Name:Selection]</Value>
+      <Value>[Name:Selection][Text:What have you been up to?][Selection:Shop]</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -36,7 +37,11 @@ Do you want to come inside bin? $21$ can scootch over.][Weather:Raining][Name:Ra
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Text:Cold! Why so cold? You should go inside, yes. Sleep until Spring.][Weather:Snowing][Name:Snowing|1]</Value>
+      <Value>[Name:Snowing|1][Text:Cold! Why so cold? You should go inside, yes. Sleep until Spring.][Weather:Snowing]</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Name:Task_5_Start][Text:I'm pretty excited to get settled in here, and put down some roots if you'll forgive the pun. It's nothing too extravagant, but if you could build this for me, we can get started on beautifying this place.][UnlockObjectID:24]</Value>
     </Item>
   </Asset>
 </XnaContent>

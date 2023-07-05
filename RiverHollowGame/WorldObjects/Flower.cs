@@ -162,19 +162,6 @@ namespace RiverHollow.WorldObjects
         }
 
         /// <summary>
-        /// Tell the object to shake
-        /// </summary>
-        public void Shake()
-        {
-            if (!_bShaking)
-            {
-                if (PlayerManager.PlayerActor.CollisionCenter.X > CollisionCenter.X) { dir = DirectionEnum.Left; }
-                else if (PlayerManager.PlayerActor.CollisionCenter.X < CollisionCenter.X) { dir = DirectionEnum.Right; }
-                _bShaking = true;
-            }
-        }
-
-        /// <summary>
         /// On rollover, increase the plant's growth cycle if it has been watered.
         /// </summary>
         public override void Rollover()

@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Build][StartNPC:12][AssignTrigger:Task-4][TargetObjectID:27][EndBuildingID:27]</Value>
+      <Value>[Type:Build][StartNPC:14][AssignTrigger:GameStart][TargetObjectID:24][EndBuildingID:24][CutsceneID:12][ItemRewardID:93-3/95-1/96-1]</Value>
     </Item>
     <Item>
       <Key>6</Key>

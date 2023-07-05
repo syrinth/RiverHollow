@@ -79,6 +79,7 @@ namespace RiverHollow.Game_Managers
         }
 
         public static PlayerCharacter PlayerActor;
+        public static bool MovedLastFrame = false;
 
         private static List<int> _liCrafting;
         public static Dictionary<int, int> DIMobInfo { get; private set; }
@@ -197,6 +198,7 @@ namespace RiverHollow.Game_Managers
                 }
                 else if (newMovement != Vector2.Zero)
                 {
+                    MovedLastFrame = true;
                     bool impeded = false;
                     if (MapManager.CurrentMap.CheckForCollisions(PlayerActor, ref newMovement, ref impeded))
                     {
@@ -208,6 +210,10 @@ namespace RiverHollow.Game_Managers
                     {
                         PlayerManager.ObtainedItem = null;
                     }
+                }
+                else
+                {
+                    MovedLastFrame = false;
                 }
             }
             else if (PlayerActor.State == ActorStateEnum.Grab && !PlayerActor.HasMovement() && GrabbedObject != null)

@@ -16,8 +16,11 @@ namespace RiverHollow.Items
         public override bool HasUse() { return true; }
         public override bool ItemBeingUsed()
         {
-            if (GameManager.TownModeEdit())
+            if (GameManager.TownModeEdit() && (MapManager.CurrentMap == MapManager.TownMap || DataManager.GetBoolByIDKey(_iObjectID, "NoWater", Enums.DataType.WorldObject)))
             {
+                if (Number > 1) { Remove(1); }
+                else { InventoryManager.RemoveItemFromInventory(this); }
+
                 GameManager.PickUpWorldObject(DataManager.CreateWorldObjectByID(_iObjectID));
 
                 return true;

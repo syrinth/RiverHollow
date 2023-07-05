@@ -212,7 +212,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 }
 
                 int museumIndex = itemIDs[i];
-                var displayWindow = new ItemDisplayWindow(museumIndex, (true, true));// TownManager.DIArchive[museumIndex]);
+                var displayWindow = new ItemDisplayWindow(museumIndex, TownManager.DIArchive[museumIndex]);
                 _liItemDisplay.Add(displayWindow);
             }
 

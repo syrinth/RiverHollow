@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>Task_5</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Putting Down Roots]</Value>
     </Item>
     <Item>
       <Key>Task_6</Key>
@@ -452,7 +452,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Shop_6</Key>
-      <Value>[Name:Flower Shop]</Value>
+      <Value>[Name:Plant Shop]</Value>
     </Item>
     <Item>
       <Key>Shop_7</Key>
@@ -784,7 +784,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_75</Key>
-      <Value>[Name:Silver Seeds][Description:Used to grow a Silver Herb bush]</Value>
+      <Value>[Name: ]</Value>
     </Item>
     <Item>
       <Key>Item_76</Key>
@@ -832,7 +832,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_87</Key>
-      <Value>[Name:Windblossom Seeds]</Value>
+      <Value>[Name:Windblossom Tuber]</Value>
     </Item>
     <Item>
       <Key>Item_88</Key>
@@ -1200,7 +1200,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_179</Key>
-      <Value>[Name:Basic Gardening][Description:A book detailing the construction of several structures used for gardening.]</Value>
+      <Value>[Name:Flowers and You][Description:A book illustrating the construction of several helpful gardening items.]</Value>
     </Item>
     <Item>
       <Key>Item_180</Key>
@@ -1332,7 +1332,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_212</Key>
-      <Value>[Name:Homesteading I]</Value>
+      <Value>[Name:Joy of Chickens]</Value>
     </Item>
     <Item>
       <Key>Item_213</Key>
@@ -1452,7 +1452,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_24</Key>
-      <Value>[Name:Flower Shop]</Value>
+      <Value>[Name:Plant Store]</Value>
     </Item>
     <Item>
       <Key>WorldObject_25</Key>
@@ -2007,6 +2007,14 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Chicken Statue]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_163</Key>
+      <Value>[Name:Candle]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_164</Key>
+      <Value>[Name:Bee Statue]</Value>
+    </Item>
+    <Item>
       <Key>Cutscene_0</Key>
       <Value>[Name:Combat_Intro]</Value>
     </Item>
@@ -2052,7 +2060,11 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Cutscene_11</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Spinning Right Round]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_12</Key>
+      <Value>[Name:Putting Down Roots]</Value>
     </Item>
   </Asset>
 </XnaContent>

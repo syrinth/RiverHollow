@@ -3,15 +3,15 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Hello! Hello! I am $Actor_38$, merchant and wizard extraordinaire!][Name:Introduction]</Value>
+      <Value>[Name:Introduction][Text:Hello! Hello! I am $Actor_38$, merchant and wizard extraordinaire!]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Ah! I'm hoping you can help me. I'm looking for the following items!][Name:Requests]</Value>
+      <Value>[Name:Requests][Text:Ah! I'm hoping you can help me. I'm looking for the following items!]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:Aha! Welcome! How can I help you today?][Selection:MerchantTalk][Name:Selection]</Value>
+      <Value>[Name:Selection][Text:Aha! Welcome! How can I help you today?][Selection:MerchantTalk]</Value>
     </Item>
     <Item>
       <Key>3</Key>

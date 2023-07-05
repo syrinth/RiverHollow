@@ -171,7 +171,7 @@ namespace RiverHollow.Misc
 
             string[] random = Util.FindParams(RandomIndices);
 
-            List<Merchandise> copies = new List<Merchandise>(_liMerchandise.Where(x => !PlayerManager.AlreadyBoughtUniqueItem(x.MerchID) && x.MerchType == Merchandise.MerchTypeEnum.Item));
+            List<Merchandise> copies = new List<Merchandise>(_liMerchandise.Where(x => !PlayerManager.AlreadyBoughtUniqueItem(x.MerchID) && x.MerchType == Merchandise.MerchTypeEnum.Item && ValidateMerchandise(x.MerchID)));
 
             int totalMerch = copies.Count;
             for (int i = 0; i < _liShopItemSpots.Count && i < totalMerch; i++)
@@ -215,7 +215,7 @@ namespace RiverHollow.Misc
             List<Merchandise> rv = new List<Merchandise>();
             foreach (Merchandise m in _liMerchandise)
             {
-                if (m.Unlocked) { rv.Add(m); }
+                if (m.Unlocked && ValidateMerchandise(m.MerchID)) { rv.Add(m); }
             }
 
             return rv;
@@ -241,6 +241,27 @@ namespace RiverHollow.Misc
                     m.Unlock();
                 }
             }
+        }
+
+        public bool ValidateMerchandise(int id)
+        {
+            bool rv = true;
+
+            if (DataManager.GetBoolByIDKey(id, "Season", DataType.Item))
+            {
+                rv = false;
+                var seasons = DataManager.GetStringParamsByIDKey(id, "Season", DataType.Item);
+                for (int i = 0; i < seasons.Count(); i++)
+                {
+                    if (Util.ParseEnum<SeasonEnum>(seasons[i]) == GameCalendar.CurrentSeason)
+                    {
+                        rv = true;
+                        break;
+                    }
+                }
+            }
+
+            return rv;
         }
 
         public ShopData SaveData()

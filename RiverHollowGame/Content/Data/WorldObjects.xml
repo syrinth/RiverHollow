@@ -75,7 +75,7 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Building][Texture:Apothecary][Size:7-8][Base:1-5-5-3][Entrance:3-6-1-2][ReqItems:55-10/60-20][UpgradeID:0-1]</Value>
+      <Value>[Type:Building][Texture:Apothecary][Size:7-8][Base:1-5-5-3][Entrance:3-6-1-2][ReqItems:55-10/60-20][UpgradeID:0-1][Traveller:10]</Value>
     </Item>
     <Item>
       <Key>19</Key>
@@ -99,7 +99,7 @@
     </Item>
     <Item>
       <Key>24</Key>
-      <Value>[Type:Building][Texture:Flower_Shop][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5/60-5]</Value>
+      <Value>[Type:Building][Texture:Flower_Shop][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86/3-80-86][ReqItems:55-5/60-5][Profit:50][Traveller:25]</Value>
     </Item>
     <Item>
       <Key>25</Key>
@@ -263,7 +263,7 @@
     </Item>
     <Item>
       <Key>65</Key>
-      <Value>[Type:Plant][Texture:Tree_Alden][Image:0-4/1-4/1-5/2-4/0-0][Size:1-1/1-1/1-1/1-2/3-4][Hp:1/1/1/2/8][ReqLvl:1][ItemID:///2-1/2-10][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1/1-3-1-1][Tool:Axe][States:5][Time:2/2/3/4/4][Spread:5/5][BonusItemID:206-1-C][SeedID:206][Walkable:T/T/F/F/F][DrawUnder]</Value>
+      <Value>[Type:Plant][Texture:Tree_Alden][States:5][Image:0-4/1-4/1-5/2-4/0-0][Size:1-1/1-1/1-1/1-2/3-4][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1/1-3-1-1][Hp:1/1/1/2/8][ReqLvl:1][ItemID:///2-1/2-10][Tool:Axe][Time:2/2/3/4][Spread:5/5][BonusItemID:206-1-C][SeedID:206][Walkable:T/T/F/F/F][DrawUnder:T/T/F/F/F][NoWater]</Value>
     </Item>
     <Item>
       <Key>66</Key>
@@ -423,11 +423,11 @@
     </Item>
     <Item>
       <Key>105</Key>
-      <Value>[Type:Plant][Image:16-272][Size:1-2][SeedID:80][ItemID:95][States:4][TrTime:1-1-1][HoneyID:160][Season:Spring]</Value>
+      <Value>[Type:Plant][States:4][Time:1/1/2][Image:16-18/17-18/18-17/19-17][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:80][ItemID:///95][BonusItemID:80-1-C][HoneyID:160][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>106</Key>
-      <Value>[Type:Plant][Image:8-336][Size:1-2][SeedID:82][ItemID:93][States:4][TrTime:1-1-1][HoneyID:143][Season:Spring]</Value>
+      <Value>[Type:Plant][States:4][Time:1/1/2][Image:8-22/9-22/10-22/11-21][Size:1-1/1-1/1-1/1-2][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:82][ItemID:///93][BonusItemID:82-1-C][HoneyID:143][Season:Spring][Spread:5/5]</Value>
     </Item>
     <Item>
       <Key>107</Key>
@@ -447,7 +447,7 @@
     </Item>
     <Item>
       <Key>111</Key>
-      <Value>[Type:Plant][Image:8-19][Size:1-2][SeedID:87][ItemID:96][States:4][TrTime:1-1-1][HoneyID:142][Season:Spring]</Value>
+      <Value>[Type:Plant][States:4][Time:1/1/2][Image:8-20/9-20/10-19/11-19][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:87][ItemID:///96][BonusItemID:87-1-C][HoneyID:142][Season:Spring][Spread:5/1]</Value>
     </Item>
     <Item>
       <Key>112</Key>
@@ -591,7 +591,7 @@
     </Item>
     <Item>
       <Key>147</Key>
-      <Value>[Type:Plant][Image:12-3/2][Tool:Scythe][Hp:1][ReqLvl:1][DestructionAnim:5-12-3-0.1][States:1][Spread:10/1]</Value>
+      <Value>[Type:Plant][Image:12-3/2][Tool:Scythe][Hp:1][ReqLvl:1][DestructionAnim:5-12-3-0.1][States:1][Spread:10/1][NoWater]</Value>
     </Item>
     <Item>
       <Key>148</Key>
@@ -607,7 +607,7 @@
     </Item>
     <Item>
       <Key>151</Key>
-      <Value>[Type:Plant][Texture:Tree_Whispering][Image:0-4/1-4/1-5/2-4/0-0][Size:1-1/1-1/1-1/1-2/3-4][Hp:2/2/2/4/16][ReqLvl:1][ItemID:///200-1/200-10][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1/1-3-1-1][Tool:Axe][States:5][Time:2/2/3/4/4][Spread:5/5][BonusItemID:207-1-C][SeedID:207][Walkable:T/T/F/F/F][DrawUnder]</Value>
+      <Value>[Type:Plant][Texture:Tree_Whispering][Image:0-4/1-4/1-5/2-4/0-0][Size:1-1/1-1/1-1/1-2/3-4][Hp:2/2/2/4/16][ReqLvl:1][ItemID:///200-1/200-10][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1/1-3-1-1][Tool:Axe][States:5][Time:2/2/3/4][Spread:5/5][BonusItemID:207-1-C][SeedID:207][Walkable:T/T/F/F/F][DrawUnder:T/T/F/F/F][NoWater]</Value>
     </Item>
     <Item>
       <Key>152</Key>
@@ -652,6 +652,14 @@
     <Item>
       <Key>162</Key>
       <Value>[Type:Buildable][Image:22-4][Size:1-2][Base:0-1-1-1][ReqItems:0-3]</Value>
+    </Item>
+    <Item>
+      <Key>163</Key>
+      <Value>[Type:Buildable][Image:22-9][Size:1-1][Base:0-0-1-1][ReqItems:184-1]</Value>
+    </Item>
+    <Item>
+      <Key>164</Key>
+      <Value>[Type:Buildable][Image:23-9][Size:1-2][Base:0-1-1-1][ReqItems:0-3]</Value>
     </Item>
   </Asset>
 </XnaContent>

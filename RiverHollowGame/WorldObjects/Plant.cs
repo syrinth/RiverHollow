@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.SaveManager;
@@ -10,8 +12,8 @@ namespace RiverHollow.WorldObjects
     public class Plant : Destructible
     {
         #region consts
-        const float MAX_ROTATION = 0.15f;
-        const float ROTATION_MOD = 0.02f;
+        const float MAX_ROTATION = 0.06f;
+        const float ROTATION_MOD = 0.004f;
         const float MAX_BOUNCE = 3;
         #endregion
 
@@ -28,15 +30,17 @@ namespace RiverHollow.WorldObjects
         public int MaxStates => int.Parse(Util.FindParams(GetStringByIDKey("States", "1"))[0]);
 
         public int HoneyID => GetIntByIDKey("HoneyID");
+        public bool NeedsWatering => !GetBoolByIDKey("NoWater");
+        private bool _bWatered;
 
         readonly bool _bPopItem;
 
         public Plant(int id) : base(id)
         {
             _bPopItem = false;
-            SetGrowthInfo();
+            _bWatered = EnvironmentManager.IsRaining();
 
-            Sprite.SetRotationOrigin(new Vector2(_pSize.X * Constants.TILE_SIZE / 2, (_pSize.Y * Constants.TILE_SIZE) - 1));    //Subtract one to keep it in the bounds of the rectangle
+            SetGrowthInfo();
         }
 
         protected override void LoadSprite()
@@ -48,7 +52,8 @@ namespace RiverHollow.WorldObjects
             }
             else
             {
-                Sprite = new AnimatedSprite(DataManager.FOLDER_WORLDOBJECTS + GetStringByIDKey("Texture"));
+                if (GetBoolByIDKey("Texture")) { Sprite = new AnimatedSprite(DataManager.FOLDER_WORLDOBJECTS + GetStringByIDKey("Texture")); }
+                else { Sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS); }
 
                 var images = GetStringParamsByIDKey("Image");
                 for(int i =0; i < MaxStates; i++) { 
@@ -62,11 +67,29 @@ namespace RiverHollow.WorldObjects
             }
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (NeedsWatering && CurrentMap == MapManager.TownMap)
+            {
+                Rectangle dirtRectangle;
+                if (_bWatered) { dirtRectangle = new Rectangle(16, 304, 16, 16); }
+                else { dirtRectangle = new Rectangle(0, 304, 16, 16); }
+
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), CollisionBox, dirtRectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0);
+            }
+            base.Draw(spriteBatch);
+        }
+
         public override void Update(GameTime gTime)
         {
-            //If the object is shaking, we need to determine what step it's in
+            if (!_bShaking && !_bDrawUnder && _bWalkable && PlayerManager.MovedLastFrame && CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
+            {
+                _bShaking = true;
+            }
+
             if (_bShaking)
             {
+
                 if (dir == DirectionEnum.Right) { _fCurrentRotation += ROTATION_MOD; }
                 else if (dir == DirectionEnum.Left) { _fCurrentRotation -= ROTATION_MOD; }
 
@@ -141,6 +164,42 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
+        /// <summary>
+        /// On rollover, increase the plant's growth cycle if it has been watered.
+        /// </summary>
+        public override void Rollover()
+        {
+            _bShaken = false;
+
+            if (NeedsWatering && _bWatered)
+            {
+
+                if (_iDaysToNextState > 0) //Decrement the number of days until the next phase
+                {
+                    _iDaysToNextState--;
+                    if (_iDaysToNextState == 0 && !FinishedGrowing())
+                    {
+                        SetState(++_iCurrentState);
+                    }
+                }
+
+                if (FinishedGrowing() && GetBoolByIDKey("Spread"))
+                {
+                    var spreadParams = Util.FindIntParams(GetStringByIDKey("Spread"));
+                    if (RHRandom.Instance().RollPercent(spreadParams[0]))
+                    {
+                        var targetTile = Util.GetRandomItem(CurrentMap.GetAllTilesInRange(Tiles[0], spreadParams[1]));
+                        if (targetTile != null && targetTile.WorldObject == null && targetTile.Flooring == null)
+                        {
+                            DataManager.CreateAndPlaceNewWorldObject(ID, targetTile.Position, CurrentMap);
+                        }
+                    }
+                }
+            }
+
+            _bWatered = EnvironmentManager.IsRaining();
+        }
+
         public void FinishGrowth()
         {
             SetState(MaxStates);
@@ -162,13 +221,16 @@ namespace RiverHollow.WorldObjects
         {
             if (MaxStates > 1)
             {
-                HP = int.Parse(GetStringParamsByIDKey("Hp")[_iCurrentState]);
+                if (GetBoolByIDKey("Hp")) { HP = int.Parse(GetStringParamsByIDKey("Hp")[_iCurrentState]); }
+                else { HP = 1; }
 
                 _bWalkable = GetStringParamsByIDKey("Walkable", "0")[_iCurrentState] == "T";
-                _bDrawUnder = _bWalkable && GetBoolByIDKey("DrawUnder");
-                _iDaysToNextState = int.Parse(GetStringParamsByIDKey("Time", "F")[_iCurrentState]);
+                _bDrawUnder = GetStringParamsByIDKey("DrawUnder", "0")[_iCurrentState] == "T";
                 _pSize = Util.ParsePoint(GetStringParamsByIDKey("Size")[_iCurrentState]);
                 _rBase = Util.ParseRectangle(GetStringParamsByIDKey("Base")[_iCurrentState]);
+
+                if (_iCurrentState < MaxStates - 1) { _iDaysToNextState = int.Parse(GetStringParamsByIDKey("Time", "F")[_iCurrentState]); }
+                else { _iDaysToNextState = - 1; }
 
                 if (Tiles != null && Tiles.Count > 0)
                 {
@@ -176,6 +238,8 @@ namespace RiverHollow.WorldObjects
                     RemoveSelfFromTiles();
                     PlaceOnMap(tile.Position, CurrentMap);
                 }
+
+                Sprite.SetRotationOrigin(new Vector2(_pSize.X * Constants.TILE_SIZE / 2, (_pSize.Y * Constants.TILE_SIZE) - 1));    //Subtract one to keep it in the bounds of the rectangle
             }
             else
             {
@@ -225,49 +289,6 @@ namespace RiverHollow.WorldObjects
         }
 
         /// <summary>
-        /// Tell the object to shake
-        /// </summary>
-        public void Shake()
-        {
-            if (!_bShaking)
-            {
-                if (PlayerManager.PlayerActor.CollisionCenter.X > CollisionCenter.X) { dir = DirectionEnum.Left; }
-                else if (PlayerManager.PlayerActor.CollisionCenter.X < CollisionCenter.X) { dir = DirectionEnum.Right; }
-                _bShaking = true;
-            }
-        }
-
-        /// <summary>
-        /// On rollover, increase the plant's growth cycle if it has been watered.
-        /// </summary>
-        public override void Rollover()
-        {
-            _bShaken = false;
-
-            if (_iDaysToNextState > 0) //Decrement the number of days until the next phase
-            {
-                _iDaysToNextState--;
-                if(_iDaysToNextState == 0 && !FinishedGrowing())
-                {
-                    SetState(++_iCurrentState);
-                }
-            }
-
-            if(FinishedGrowing() && GetBoolByIDKey("Spread"))
-            {
-                var spreadParams = Util.FindIntParams(GetStringByIDKey("Spread"));
-                if (RHRandom.Instance().RollPercent(spreadParams[0]))
-                {
-                    var targetTile = Util.GetRandomItem(CurrentMap.GetAllTilesInRange(Tiles[0], spreadParams[1]));
-                    if (targetTile != null && targetTile.WorldObject == null && targetTile.Flooring == null)
-                    {
-                        DataManager.CreateAndPlaceNewWorldObject(ID, targetTile.Position, CurrentMap);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
         /// Check if the plant has finished growing or not.
         /// </summary>
         /// <returns>True if it's on the last phase</returns>
@@ -282,15 +303,21 @@ namespace RiverHollow.WorldObjects
         {
             if (MaxStates > 1)
             {
-                var endSize = Util.ParsePoint(GetStringParamsByIDKey("Size")[MaxStates - 1]);
+                var param = GetStringParamsByIDKey("Size");
+                var endSize = Util.ParsePoint(param[MaxStates - 1]);
                 var endBase = Util.ParseRectangle(GetStringParamsByIDKey("Base")[MaxStates - 1]);
 
-                return endBase.X < endSize.X;
+                return endBase.Size.X < endSize.X;
             }
             else
             {
                 return base.WideOnTop();
             }
+        }
+
+        public void Water()
+        {
+            _bWatered= true;
         }
 
         public override WorldObjectData SaveData()
@@ -309,6 +336,8 @@ namespace RiverHollow.WorldObjects
             _iDaysToNextState = int.Parse(strData[2]);
 
             SetState(_iCurrentState);
+
+            _bWatered = EnvironmentManager.IsRaining();
         }
     }
 }

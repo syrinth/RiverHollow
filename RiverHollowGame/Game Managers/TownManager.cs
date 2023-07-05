@@ -222,7 +222,7 @@ namespace RiverHollow.Game_Managers
             foreach (int value in DITravelerInfo.Keys)
             {
                 Traveler npc = DataManager.CreateTraveler(value);
-                if (npc.Validate() || (!npc.Rare() && RHRandom.Instance().RollPercent(10)))
+                if (npc.Validate()) 
                 {
                     travelerList.Add(npc);
                 }
@@ -426,13 +426,14 @@ namespace RiverHollow.Game_Managers
                 case ObjectTypeEnum.Decor:
                 case ObjectTypeEnum.Garden:
                 case ObjectTypeEnum.Wall:
+                case ObjectTypeEnum.Plant:
                     buildable = true;
                     break;
             }
 
-            if (DataManager.GetBoolByIDKey(obj.ID, "Inn", DataType.WorldObject)) { Inn = (Building)obj; }
-            if (DataManager.GetBoolByIDKey(obj.ID, "Home", DataType.WorldObject)) { Home = (Building)obj; }
-            if (DataManager.GetBoolByIDKey(obj.ID, "Market", DataType.WorldObject)) { Market = (Structure)obj; }
+            if (obj.GetBoolByIDKey("Inn")) { Inn = (Building)obj; }
+            if (obj.GetBoolByIDKey("Home")) { Home = (Building)obj; }
+            if (obj.GetBoolByIDKey("Market")) { Market = (Structure)obj; }
 
             if (buildable)
             {
@@ -456,7 +457,20 @@ namespace RiverHollow.Game_Managers
 
             if (_diTownObjects.ContainsKey(objID))
             {
-                rv = _diTownObjects[objID].Count;
+                var objects = _diTownObjects[objID];
+
+                if (DataManager.GetEnumByIDKey<ObjectTypeEnum>(objID, "Type", DataType.WorldObject) == ObjectTypeEnum.Plant)
+                {
+                    for (int i = 0; i < objects.Count; i++)
+                    {
+                        var obj = (Plant)objects[i];
+                        if (obj.FinishedGrowing())
+                        {
+                            rv++;
+                        }
+                    }
+                }
+                else { rv = objects.Count; }
             }
             return rv;
         }

@@ -997,15 +997,52 @@ namespace Database_Editor
             AutoSave();
 
             _typeFilter = "All";
-            if (tabCtl.SelectedTab == tabCtl.TabPages["tabNPCs"]) { dgvActors.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscenes"]) { dgvCutscenes.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeons"]) { dgvDungeons.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItems"]) { dgvItems.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabLights"]) { dgvLights.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabShops"]) { dgvShops.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabStatusEffects"]) { dgvStatusEffects.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabTasks"]) { dgvTasks.Focus(); }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabWorldObjects"]) { dgvWorldObjects.Focus(); }
+            _subtypeFilter = "All";
+            if (tabCtl.SelectedTab == tabCtl.TabPages["tabActor"])
+            {
+                LoadActorDataGrid();
+                dgvActors.Focus();
+            }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscene"])
+            {
+                LoadCutsceneDataGrid();
+                dgvCutscenes.Focus();
+            }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeon"])
+            {
+                LoadDungeonDataGrid();
+                dgvDungeons.Focus();
+            }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItem"])
+            {
+                LoadItemDataGrid();
+                dgvItems.Focus();
+            }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabLight"])
+            {
+                LoadLightDataGrid();
+                dgvLights.Focus();
+            }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabShop"])
+            {
+                LoadShopsDataGrid();
+                dgvShops.Focus();
+            }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabStatusEffect"])
+            {
+                LoadStatusEffectDataGrid();
+                dgvStatusEffects.Focus();
+            }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabTask"])
+            {
+                LoadTaskDataGrid();
+                dgvTasks.Focus();
+            }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabWorldObject"])
+            {
+                LoadWorldObjectDataGrid();
+                dgvWorldObjects.Focus();
+            }
 
             _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
         }
@@ -1298,7 +1335,9 @@ namespace Database_Editor
             contextMenu.Items.Clear();
             if (dgv == dgvItems)
             {
-                AddContextMenuItem("Add New", AddNewItem, true, Enum.GetNames(typeof(ItemEnum)));
+                var items = Enum.GetNames(typeof(ItemEnum)).ToList();
+                items.Remove(Util.GetEnumString(ItemEnum.Buildable));
+                AddContextMenuItem("Add New", AddNewItem, true, items.ToArray());
                 AddContextMenuItem("All", dgvItemsContextMenuClick, false);
 
                 foreach (ItemEnum en in Enum.GetValues(typeof(ItemEnum)))
@@ -1306,6 +1345,8 @@ namespace Database_Editor
                     var s = Util.GetEnumString(en);
                     switch (en)
                     {
+                        case ItemEnum.Buildable:
+                            continue;
                         case ItemEnum.Resource:
                             var names = Enum.GetNames(typeof(ItemGroupEnum)).ToList();
                             names.Insert(0, "All");

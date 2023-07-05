@@ -7,6 +7,7 @@ using RiverHollow.Map_Handling;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
+using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
@@ -81,9 +82,10 @@ namespace RiverHollow.Items
                     _bTriggered = true;
                     target.DamageObject(PlayerManager.ToolInUse);
                 }
-                else if (PlayerManager.ToolIsWateringCan() && target.Flooring != null)
+                else if (PlayerManager.ToolIsWateringCan() && target.WorldObject != null && target.WorldObject.Type == ObjectTypeEnum.Plant)
                 {
-                    //target.Water(true);
+                    var plant = (Plant)target.WorldObject;
+                    plant.Water();
                 }
             }
 

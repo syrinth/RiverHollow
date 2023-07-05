@@ -520,6 +520,11 @@
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapFoothills_Small.tmx
 
+#begin Maps/Misc/mapForest_Glade_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapForest_Glade_1.tmx
+
 #begin Maps/Misc/mapMageCaves.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor

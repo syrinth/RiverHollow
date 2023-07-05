@@ -12,8 +12,7 @@ I hear that you're looking for more people? I'd love to settle down here.]</Valu
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Name:Task_5_Start][Text:It's lovely, small and cozy. Just like I'm used to.
-Now then, as for how I can contribute, I need a $WorldObject_27$ for my little friends to roost in.][UnlockObjectID:27]</Value>
+      <Value>[Name][Text]</Value>
     </Item>
     <Item>
       <Key>3</Key>

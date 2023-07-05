@@ -59,7 +59,7 @@
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:42][Collection:7/188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][RequiredObjectID:77-5][ShopData:6][CanMarry][Key:Jase]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:24][Collection:7/188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][RequiredObjectID:106-1][ShopData:6][CanMarry][Key:Jase][ArrivalDelay:0]</Value>
     </Item>
     <Item>
       <Key>15</Key>
@@ -139,11 +139,11 @@
     </Item>
     <Item>
       <Key>34</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:4][ArrivalPeriod:7][RequestIDs:147/158/168][ShopData:4][Key:Abeline]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:4][ArrivalPeriod:7][RequiredObjectID:24-1][Wants:Herb][Needs:Flower][Key:Abeline][ShopData:4][RequestIDs:147/158/168]</Value>
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelayl:12][ArrivalPeriod:2][RequestIDs:2-30/2-30/2-30][ShopData:7][Key:Erron]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:12][ArrivalPeriod:2][RequestIDs:2-30/2-30/2-30][ShopData:7][Key:Erron]</Value>
     </Item>
     <Item>
       <Key>36</Key>
@@ -219,11 +219,11 @@
     </Item>
     <Item>
       <Key>54</Key>
-      <Value>[Type:Villager][Key:Paige][PortRow:1][HouseID:153][Collection:7/167][Idle:0-0-1-0-T][Walk:0-0-1-0-T][RequiredPopulation:5][FirstArrival:1][Size:16-29]</Value>
+      <Value>[Type:Villager][Key:Paige][PortRow:1][HouseID:153][Collection:7/167][Idle:0-0-1-0-T][Walk:0-0-1-0-T][RequiredPopulation:5][ArrivalDelay:0][Size:16-29]</Value>
     </Item>
     <Item>
       <Key>55</Key>
-      <Value>[Type:Villager][Key:TaeJoon][Size:16-30][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][HouseID:17][Collection:0/1/2][FirstArrival:6]</Value>
+      <Value>[Type:Villager][Key:TaeJoon][Size:16-30][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][HouseID:17][Collection:0/1/2]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -231,7 +231,7 @@
     </Item>
     <Item>
       <Key>57</Key>
-      <Value>[Type:Resource][Subtype:Medicine][Image:1-6][ItemGroups:Medicine][Value:150][ReqItems:163-2/23-1]</Value>
+      <Value>[Type:Resource][Subtype:Medicine][Image:1-6][ItemGroups:Medicine][Value:150][ReqItems:93-1/23-1]</Value>
     </Item>
     <Item>
       <Key>58</Key>
@@ -323,7 +323,7 @@
     </Item>
     <Item>
       <Key>80</Key>
-      <Value>[Type:Seed][Image:8-9][Value:500][ObjectID:105][Season:Spring]</Value>
+      <Value>[Type:Seed][Image:5-0][Value:15][ObjectID:105][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>81</Key>
@@ -331,7 +331,7 @@
     </Item>
     <Item>
       <Key>82</Key>
-      <Value>[Type:Seed][Image:4-9][Value:500][ObjectID:106][Season:Spring]</Value>
+      <Value>[Type:Seed][Image:1-0][Value:10][ObjectID:106][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>83</Key>
@@ -351,7 +351,7 @@
     </Item>
     <Item>
       <Key>87</Key>
-      <Value>[Type:Seed][Image:9-10][Value:500][ObjectID:111][Season:Spring]</Value>
+      <Value>[Type:Seed][Image:8-0][Value:20][ObjectID:111][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>88</Key>
@@ -543,7 +543,7 @@
     </Item>
     <Item>
       <Key>135</Key>
-      <Value>[Type:Tool][Subtype:WateringCan][Image:0-3][Stam:2][Level:1]</Value>
+      <Value>[Type:Tool][Subtype:WateringCan][Image:0-3][Stam:1][Level:1][Value:100][AnimationData:0-256/3-4/5/0.04]</Value>
     </Item>
     <Item>
       <Key>136</Key>
@@ -719,7 +719,7 @@
     </Item>
     <Item>
       <Key>179</Key>
-      <Value>[Type:Blueprint][Image:1-0][ObjectID:78][Value:500]</Value>
+      <Value>[Type:Blueprint][Image:4-0][ObjectID:0/163][Value:500]</Value>
     </Item>
     <Item>
       <Key>180</Key>
@@ -851,7 +851,7 @@
     </Item>
     <Item>
       <Key>212</Key>
-      <Value>[Type:Blueprint][Image:3-0][ObjectID:27/114/162]</Value>
+      <Value>[Type:Blueprint][Image:3-0][ObjectID:27/162]</Value>
     </Item>
     <Item>
       <Key>213</Key>

@@ -1626,15 +1626,21 @@ namespace RiverHollow.Map_Handling
 
         private void TownModeRightClick()
         {
-            Item dummyItem = DataManager.GetItem((Buildable)HeldObject);
-            if (dummyItem != null && InventoryManager.HasSpaceInInventory(dummyItem.ID, 1) && !((Buildable)HeldObject).Unique)
-            {
-                InventoryManager.AddToInventory(dummyItem.ID, 1);
-                GameManager.EmptyHeldObject();
-            }
-            else if ((dummyItem == null && !TownModeEdit()) || HeldObject == null)
+            if ((HeldObject == null && !TownModeEdit()) || HeldObject == null)
             {
                 GameManager.ExitTownMode();
+            }
+            else
+            {
+                Item dummyItem;
+                if (HeldObject.Type == ObjectTypeEnum.Plant && HeldObject.GetBoolByIDKey("SeedID")) { dummyItem = DataManager.GetItem(HeldObject.GetIntByIDKey("SeedID")); }
+                else  { dummyItem = DataManager.GetItem((Buildable)HeldObject); }
+
+                if (dummyItem != null && InventoryManager.HasSpaceInInventory(dummyItem.ID, 1) && (HeldObject.Type == ObjectTypeEnum.Plant || !((Buildable)HeldObject).Unique))
+                {
+                    InventoryManager.AddToInventory(dummyItem.ID, 1, true, true);
+                    GameManager.EmptyHeldObject();
+                }
             }
         }
 
@@ -1647,7 +1653,7 @@ namespace RiverHollow.Map_Handling
         private bool TownPlaceObject(Buildable templateObject)
         {
             bool rv = false;
-            Buildable placeObject = null;
+            Buildable placeObject;
 
             //If we're moving the object, set it as the object to be placed. Otherwise, we need
             //to make a new object based off the one we're holding.
@@ -1723,8 +1729,6 @@ namespace RiverHollow.Map_Handling
             var seedID = placeObject.GetIntByIDKey("SeedID");
             if (placeObject.PlaceOnMap(this) && (!TownModeBuild() || InventoryManager.HasItemInPlayerInventory(seedID, 1)))
             {
-                InventoryManager.RemoveItemsFromInventory(seedID, 1);
-
                 if (this == MapManager.TownMap)
                 {
                     TownManager.AddToTownObjects(placeObject);
@@ -1732,7 +1736,11 @@ namespace RiverHollow.Map_Handling
                 }
 
                 //Check for if we are done placing the object of that type
-                if (!InventoryManager.HasItemInPlayerInventory(seedID, 1))
+                if (InventoryManager.HasItemInPlayerInventory(seedID, 1))
+                {
+                    InventoryManager.RemoveItemsFromInventory(seedID, 1);
+                }
+                else
                 {
                     GameManager.EmptyHeldObject();
                     ClearHeldLights();
