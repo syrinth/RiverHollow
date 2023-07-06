@@ -83,8 +83,8 @@
   <ItemGroup>
     <Compile Include="Characters\Animal.cs" />
     <Compile Include="Characters\CombatActor.cs" />
-    <Compile Include="Characters\Mobs\Flyer.cs" />
-    <Compile Include="Characters\Mobs\Crawler.cs" />
+    <Compile Include="Characters\Mobs\Shooter.cs" />
+    <Compile Include="Characters\Mobs\Summoner.cs" />
     <Compile Include="Characters\Projectile.cs" />
     <Compile Include="Characters\ShippingGremlin.cs" />
     <Compile Include="Characters\Traveler.cs" />

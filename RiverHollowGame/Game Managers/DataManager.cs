@@ -697,10 +697,12 @@ namespace RiverHollow.Game_Managers
                     case ActorTypeEnum.Mob:
                         switch (Util.ParseEnum<MobTypeEnum>(diData["Subtype"]))
                         {
-                            case MobTypeEnum.Flyer:
-                                return new Flyer(id, diData);
-                            case MobTypeEnum.Crawler:
-                                return new Crawler(id, diData);
+                            case MobTypeEnum.Basic:
+                                return new Mob(id, diData);
+                            case MobTypeEnum.Shooter:
+                                return new Shooter(id, diData);
+                            case MobTypeEnum.Summoner:
+                                return new Summoner(id, diData);
                         }
                         break;
                     case ActorTypeEnum.Mount:

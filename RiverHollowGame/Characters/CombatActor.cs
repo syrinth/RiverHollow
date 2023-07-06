@@ -202,6 +202,11 @@ namespace RiverHollow.Characters
                     goto default;
                 case WeightEnum.Immovable:
                     _vKnockbackVelocity *= 0;
+
+                    if (!HasHP)
+                    {
+                        Kill();
+                    }
                     break;
                 default:
                     SetMoveTo(Point.Zero);

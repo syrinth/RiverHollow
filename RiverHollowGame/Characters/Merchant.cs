@@ -58,7 +58,7 @@ namespace RiverHollow.Characters
                     if (ChosenRequests[0] == -1)
                     {
                         //When the Merchant is ready to come to town, determine requests
-                        List<RequestItem> copy = new List<RequestItem>(_liRequestItems);
+                        var copy = new List<RequestItem>(_liRequestItems);
                         for (int i = 0; i < Constants.MERCHANT_REQUEST_NUM; i++)
                         {
                             int chosenValue = RHRandom.Instance().Next(0, copy.Count - 1);

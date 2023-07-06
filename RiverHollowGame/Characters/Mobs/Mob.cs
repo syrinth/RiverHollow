@@ -11,24 +11,24 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
-    public abstract class Mob : CombatActor
+    public class Mob : CombatActor
     {
         #region Properties
         public bool HasProjectiles => GetBoolByIDKey("Projectile");
         public int Damage => GetIntByIDKey("Damage");
         protected float Cooldown => GetFloatByIDKey("Cooldown");
         public override float MaxHP => GetIntByIDKey("HP");
-        public MobTypeEnum Subtype => GetEnumByIDKey<MobTypeEnum>("Subtype");
         private string[] LootData => Util.FindParams(GetStringByIDKey("ItemID"));
+
+        protected MobMovementEnum MovementType => GetEnumByIDKey<MobMovementEnum>("MovementType");
 
         bool _bJump;
         int _iMaxRange = Constants.TILE_SIZE * 10;
 
+        Vector2 _vMovementVelocity;
         Point _vJumpTo;
 
         FieldOfVision _FoV;
-
-        protected List<Projectile> _liProjectiles;
 
         #endregion
 
@@ -36,17 +36,28 @@ namespace RiverHollow.Characters
         {
             SpdMult = 1;
             CurrentHP = MaxHP;
+            IgnoreCollisions = GetBoolByIDKey("Fly");
 
-            _liProjectiles = new List<Projectile>();
             _fBaseSpeed = GetFloatByIDKey("Speed", 1);
-            _cooldownTimer = new RHTimer(0.5f, true);
-            Wandering = true;
-
+            _cooldownTimer = new RHTimer(Cooldown, true);
+            
             //_bJump = data.ContainsKey("Jump");
 
             BodySprite = LoadSpriteAnimations(Util.LoadWorldAnimations(stringData), DataManager.FOLDER_MOBS + stringData["Key"]);
 
             NewFoV();
+
+            switch(MovementType)
+            {
+                case MobMovementEnum.Wander:
+                    Wandering = true;
+                    _eCurrentState = NPCStateEnum.Wander;
+                    _fBaseWanderTimer = 0.5f;
+                    _iMinWander = 4;
+                    _iMaxWander = 16;
+                    _movementTimer = new RHTimer(_fBaseWanderTimer);
+                    break;
+            }
         }
 
         public void NewFoV()
@@ -57,9 +68,7 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             BodySprite.Update(gTime);
-            _liProjectiles.ForEach(x => x.Update(gTime));
-            _liProjectiles.RemoveAll(x => x.Finished);
-
+            
             if (!GamePaused())
             {
                 if (BodySprite.AnimationFinished(AnimationEnum.KO))
@@ -85,15 +94,67 @@ namespace RiverHollow.Characters
                 {
                     PlayerManager.PlayerActor.DealDamage(Damage, CollisionBox);
                 }
+
+                if (CanAct())
+                {
+                    DetermineMovement(gTime);
+                    DetermineAction(gTime);
+                }
             }
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool userLayerDepth = false)
         {
-            base.Draw(spriteBatch, userLayerDepth);
-            _liProjectiles.ForEach(x => x.Draw(spriteBatch));
+            base.Draw(spriteBatch, userLayerDepth); 
             //if (_bAlert) { _sprAlert.Draw(spriteBatch, userLayerDepth); }
         }
+
+        protected void DetermineMovement(GameTime gTime)
+        {
+            switch (MovementType)
+            {
+                case MobMovementEnum.Tracker:
+                    switch (_eCurrentState)
+                    {
+                        case NPCStateEnum.Idle:
+                            if (OnScreen() && PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 6))
+                            {
+                                _eCurrentState = NPCStateEnum.TrackPlayer;
+                                _vMovementVelocity = GetPlayerDirectionNormal();
+                            }
+                            break;
+
+                        case NPCStateEnum.TrackPlayer:
+                            if (!HasKnockbackVelocity())
+                            {
+                                MoveActor(_vMovementVelocity);
+                                PlayAnimation(VerbEnum.Walk);
+
+                                Vector2 mod = GetPlayerDirection() * 0.015f;
+                                _vMovementVelocity += mod;
+                                _vMovementVelocity.Normalize();
+                                _vMovementVelocity *= _fBaseSpeed;
+                            }
+                            break;
+                    }
+                    break;
+                case MobMovementEnum.Stationary:
+                    break;
+                case MobMovementEnum.Wander:
+                    if (_bBumpedIntoSomething)
+                    {
+                        SetMoveTo(Point.Zero);
+                        _bBumpedIntoSomething = false;
+                    }
+
+                    if (!HasMovement() || _bBumpedIntoSomething)
+                    {
+                        Wander(gTime, 0);
+                    }
+                    break;
+            }
+        }
+        protected virtual void DetermineAction(GameTime gTime) { }
 
         protected override void Kill()
         {
@@ -108,6 +169,11 @@ namespace RiverHollow.Characters
             {
                 SetMoveTo(Point.Zero);
                 _bBumpedIntoSomething = true;
+
+                if (!HasHP)
+                {
+                    IgnoreCollisions = false;
+                }
             }
 
             return rv;
@@ -121,42 +187,7 @@ namespace RiverHollow.Characters
 
         public bool CanAct()
         {
-            return !GamePaused() && HasHP && !HasKnockbackVelocity();
-        }
-        protected void HandleProjectile(GameTime gTime)
-        {
-            if (HasProjectiles && PlayerManager.PlayerActor.HasHP)
-            {
-                string[] data = Util.FindParams(GetStringByIDKey("Projectile"));
-
-                if (CanFire(gTime, data))
-                {
-                    _cooldownTimer.Reset(Cooldown + (Cooldown * RHRandom.Instance().Next(1, 5) / 10));
-
-                    Projectile p = DataManager.CreateProjectile(int.Parse(data[0]));
-                    p.Kickstart(this, AimsProjectiles(data));
-
-                    _liProjectiles.Add(p);
-                }
-            }
-        }
-
-        private bool CanFire(GameTime gTime, string[] data)
-        {
-            bool rv = false;
-
-            if (_cooldownTimer.TickDown(gTime))
-            {
-                if (AimsProjectiles(data)) { rv = true; }
-                else if (Facing == Util.GetDirection(GetPlayerDirection())) { rv = true; }
-            }
-
-            return rv;
-        }
-
-        private bool AimsProjectiles(string[] data)
-        {
-            return data.Length > 1 && data[1].Equals("Aim");
+            return HasHP && !HasKnockbackVelocity();
         }
 
         public Vector2 GetPlayerDirection()
