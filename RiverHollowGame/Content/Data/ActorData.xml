@@ -227,7 +227,11 @@
     </Item>
     <Item>
       <Key>56</Key>
-      <Value>[Type:Mob][Subtype:Summoner][Key:Angry_Hive][Size:16-32][Idle:2-.3-T][Walk:2-.15-T][KO:32-0-6-0.15-F][HP:5][Damage:1][Weight:Immovable][MovementType:Stationary][Speed:0][ItemID:84][Summon:32][Cooldown:3][Max:5][Min:2]</Value>
+      <Value>[Type:Mob][Subtype:Summoner][Key:Angry_Hive][Size:16-32][Idle:2-.3-T][Walk:2-.15-T][KO:32-0-6-0.15-F][HP:5][Damage:1][Weight:Immovable][MovementType:Stationary][Speed:0][ItemID:84][Summon:57][Cooldown:3][Max:5]</Value>
+    </Item>
+    <Item>
+      <Key>57</Key>
+      <Value>[Type:Mob][Subtype:Basic][Key:Bee][Size:16-32][Idle:3-.075-T][Walk:3-.075-T][KO:384-0-4-0.15-F][HP:1][Damage:1][Weight:Light][MovementType:Tracker][Speed:2.3][HitBoxOffset:4-13][HitBoxSize:10-10][CollisionOffset:4-13][CollisionSize:10-10][Fly]</Value>
     </Item>
   </Asset>
 </XnaContent>

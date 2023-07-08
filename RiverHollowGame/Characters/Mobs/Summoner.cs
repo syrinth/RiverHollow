@@ -28,17 +28,13 @@ namespace RiverHollow.Characters.Mobs
             base.Update(gTime);
         }
 
-        private bool WantsToSummon()
-        {
-            return PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 6) || _liMinions.Count < GetIntByIDKey("Min", 0);
-        }
         protected override void DetermineAction(GameTime gTime)
         {
             if (_cooldownTimer.TickDown(gTime))
             {
                 _cooldownTimer.Reset();
 
-                if (_liMinions.Count < GetIntByIDKey("Max", 1) && WantsToSummon())
+                if (_liMinions.Count < GetIntByIDKey("Max", 1))
                 {
                     var minion = DataManager.CreateMob(GetIntByIDKey("Summon"));
                     _liMinions.Add(minion);

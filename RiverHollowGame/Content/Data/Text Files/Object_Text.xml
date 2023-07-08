@@ -291,6 +291,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Angry Hive]</Value>
     </Item>
     <Item>
+      <Key>Actor_57</Key>
+      <Value>[Name:Bee]</Value>
+    </Item>
+    <Item>
       <Key>StatusEffect_0</Key>
       <Value>[Name:Defend]</Value>
     </Item>
