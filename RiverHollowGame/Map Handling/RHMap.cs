@@ -1355,7 +1355,10 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = false;
 
-            if (GamePaused()) { return false; }
+            if (!PlayerManager.PlayerActor.HasHP || GamePaused())
+            {
+                return rv;
+            }
 
             if (InTownMode())
             {
@@ -1423,7 +1426,11 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = false;
 
-            if (!PlayerManager.Busy && !CutsceneManager.Playing)
+            if (!PlayerManager.PlayerActor.HasHP)
+            {
+                return rv;
+            }
+            else if (!PlayerManager.Busy && !CutsceneManager.Playing)
             {
                 //Ensure that we have a tile that we clicked on and that the player is close enough to interact with it.
                 TargetTile = MouseTile;
