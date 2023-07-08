@@ -227,7 +227,7 @@
     </Item>
     <Item>
       <Key>56</Key>
-      <Value>[Type:Mob][Subtype:Summoner][Key:Angry_Hive][Size:16-32][Idle:2-.3-T][Walk:2-.15-T][KO:32-0-6-0.15-F][HP:5][Damage:1][Weight:Immovable][MovementType:Stationary][Speed:0][ItemID:84][Summon:32][Cooldown:2][Max:5][Min:2]</Value>
+      <Value>[Type:Mob][Subtype:Summoner][Key:Angry_Hive][Size:16-32][Idle:2-.3-T][Walk:2-.15-T][KO:32-0-6-0.15-F][HP:5][Damage:1][Weight:Immovable][MovementType:Stationary][Speed:0][ItemID:84][Summon:32][Cooldown:3][Max:5][Min:2]</Value>
     </Item>
   </Asset>
 </XnaContent>

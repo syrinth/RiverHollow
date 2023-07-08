@@ -63,6 +63,11 @@ namespace RiverHollow.WorldObjects
                     Sprite.AddAnimation(i.ToString(), point.X, point.Y, size);
                 }
 
+                if (GetBoolByIDKey("SpriteOffset"))
+                {
+                    Sprite.TrimBy(GetIntByIDKey("SpriteOffset", 0));
+                }
+
                 SetSpritePos(MapPosition);
             }
         }

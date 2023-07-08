@@ -186,6 +186,11 @@ namespace RiverHollow.WorldObjects
                 Sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _pSize);
             }
 
+            if (GetBoolByIDKey("SpriteOffset"))
+            {
+                Sprite.TrimBy(GetIntByIDKey("SpriteOffset", 0));
+            }
+
             SetSpritePos(MapPosition);
         }
 

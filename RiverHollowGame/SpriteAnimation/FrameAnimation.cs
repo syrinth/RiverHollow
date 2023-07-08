@@ -159,6 +159,11 @@ namespace RiverHollow.SpriteAnimations
             rectInitialFrame = new Rectangle(startPosition.X, startPosition.Y, FrameWidth, FrameHeight);
         }
 
+        public void TrimBy(int value)
+        {
+            rectInitialFrame.Height -= value;
+        }
+
         object ICloneable.Clone()
         {
                 return new FrameAnimation(this.rectInitialFrame.X, this.rectInitialFrame.Y,

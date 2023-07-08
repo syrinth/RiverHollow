@@ -423,11 +423,11 @@
     </Item>
     <Item>
       <Key>105</Key>
-      <Value>[Type:Plant][States:4][Time:1/1/2][Image:16-18/17-18/18-17/19-17][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:80][ItemID:///95][BonusItemID:80-1-C][HoneyID:160][Season:Spring]</Value>
+      <Value>[Type:Plant][States:4][Time:1/1/2][Image:16-18/17-18/18-17/19-17][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:80][ItemID:///95][BonusItemID:80-1-C][HoneyID:160][Season:Spring][SpriteOffset:4]</Value>
     </Item>
     <Item>
       <Key>106</Key>
-      <Value>[Type:Plant][States:4][Time:1/1/2][Image:8-22/9-22/10-22/11-21][Size:1-1/1-1/1-1/1-2][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:82][ItemID:///93][BonusItemID:82-1-C][HoneyID:143][Season:Spring][Spread:5/5]</Value>
+      <Value>[Type:Plant][States:4][Time:1/1/2][Image:8-22/9-22/10-22/11-21][Size:1-1/1-1/1-1/1-2][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:82][ItemID:///93][BonusItemID:82-1-C][HoneyID:143][Season:Spring][Spread:5/5][SpriteOffset:4]</Value>
     </Item>
     <Item>
       <Key>107</Key>
@@ -447,7 +447,7 @@
     </Item>
     <Item>
       <Key>111</Key>
-      <Value>[Type:Plant][States:4][Time:1/1/2][Image:8-20/9-20/10-19/11-19][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:87][ItemID:///96][BonusItemID:87-1-C][HoneyID:142][Season:Spring][Spread:5/1]</Value>
+      <Value>[Type:Plant][States:4][Time:1/1/2][Image:8-20/9-20/10-19/11-19][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:87][ItemID:///96][BonusItemID:87-1-C][HoneyID:142][Season:Spring][Spread:5/1][SpriteOffset:4]</Value>
     </Item>
     <Item>
       <Key>112</Key>
