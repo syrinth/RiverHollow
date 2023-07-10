@@ -3,7 +3,7 @@
     static class Constants
     {
         public const bool DRAW_COLLISION = false;
-        public const bool DRAW_HITBOX = true;
+        public const bool DRAW_HITBOX = false;
 
         public const string TOWN_MAP_NAME = "mapTown";
         public const string PLAYER_HOME_NAME = "mapHouse_Player";

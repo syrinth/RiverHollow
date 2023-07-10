@@ -1,16 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json.Linq;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Utilities;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Input;
 
 namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDMiniInventory : GUIWindow
     {
         private enum StateEnum { None, FadeOut, FadeIn };
-        List<GUIItemBox> _liItems;
+        GUIItemBox[] _liItems;
         GUIButton _btnChangeRow;
 
         StateEnum _eFadeState = StateEnum.FadeIn;
@@ -26,12 +31,12 @@ namespace RiverHollow.GUIComponents.Screens
         {
             HoverControls = false;
 
-            _liItems = new List<GUIItemBox>();
+            _liItems = new GUIItemBox[InventoryManager.maxItemColumns];
 
             for (int i = 0; i < InventoryManager.maxItemColumns; i++)
             {
                 GUIItemBox ib = new GUIItemBox(InventoryManager.PlayerInventory[GameManager.HUDItemRow, i]);
-                _liItems.Add(ib);
+                _liItems[i] = ib;
 
                 if (i == 0) { ib.AnchorToInnerSide(this, SideEnum.TopLeft); }
                 else { ib.AnchorAndAlignWithSpacing(_liItems[i - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
@@ -58,6 +63,8 @@ namespace RiverHollow.GUIComponents.Screens
         {
             if (Show())
             {
+                HandleInput();
+
                 _btnChangeRow.Show(PlayerManager.BackpackLevel != 1);
 
                 base.Update(gTime);
@@ -90,7 +97,7 @@ namespace RiverHollow.GUIComponents.Screens
                 SetAlpha(startFade);
             }
 
-            for (int i = 0; i < _liItems.Count; i++)
+            for (int i = 0; i < _liItems.Length; i++)
             {
                 _liItems[i].SetItem(InventoryManager.PlayerInventory[GameManager.HUDItemRow, i]);
                 _liItems[i].SetAlpha(Alpha());
@@ -108,6 +115,24 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 Snap(SideEnum.Bottom);
             }
+        }
+
+        private void HandleInput()
+        {
+            foreach (var kvp in InputManager.Numbers)
+            {
+                if (InputManager.CheckForInitialKeyDown(kvp))
+                {
+                    int value = int.Parse(kvp.ToString().Remove(0, 1));
+                    if (value > 0) { value--; }
+                    else { value = 9; }
+                    SelectGuiItemBox(_liItems[value]);
+                }
+            }
+
+            int wheelValue = InputManager.ScrollWheelChanged();
+            int index = Util.GetLoopingValue(GameManager.HUDItemCol, 0, _liItems.Length - 1, wheelValue);
+            SelectGuiItemBox(_liItems[index]);
         }
 
         /// <summary>
@@ -239,7 +264,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         private void SelectGuiItemBox(GUIItemBox box)
         {
-            GameManager.HUDItemCol = _liItems.IndexOf(box);
+            GameManager.HUDItemCol = Array.FindIndex(_liItems, x => x == box);
             MoveSelector(GameManager.HUDItemCol);
         }
 
@@ -257,7 +282,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public void SyncItems()
         {
-            for (int i = 0; i < _liItems.Count; i++)
+            for (int i = 0; i < _liItems.Length; i++)
             {
                 GUIItemBox ib = _liItems[i];
                 ib.SetItem(InventoryManager.PlayerInventory[GameManager.HUDItemRow, i]);

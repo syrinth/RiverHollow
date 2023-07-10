@@ -251,16 +251,12 @@ namespace RiverHollow.GUIComponents.Screens
 
         private void BatchDecrease()
         {
-            if (_iBatchSize > 1) { _iBatchSize--; }
-            else { _iBatchSize = _objMachine.MaxBatch; }
-
+            _iBatchSize = Util.GetLoopingValue(_iBatchSize, 1, _objMachine.MaxBatch, -1);
             UpdateInfo(_iSelectedItemID);
         }
         private void BatchIncrease()
         {
-            if (_iBatchSize < _objMachine.MaxBatch) { _iBatchSize++; }
-            else { _iBatchSize = 1; }
-
+            _iBatchSize = Util.GetLoopingValue(_iBatchSize, 1, _objMachine.MaxBatch, 1);
             UpdateInfo(_iSelectedItemID);
         }
 

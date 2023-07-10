@@ -43,9 +43,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             if (_bTakeInput)
             {
                 _gMarker.Update(gTime);
-                foreach (Keys k in InputManager.KeyDownDictionary.Keys.ToList())
+
+                foreach (Keys k in Enum.GetValues(typeof(Keys)))
                 {
-                    if (InputManager.CheckPressedKey(k))
+                    if (InputManager.CheckForInitialKeyDown(k))
                     {
                         if (k == Keys.Enter)
                         {

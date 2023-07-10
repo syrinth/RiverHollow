@@ -118,7 +118,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             if (!TakingInput() && !CutsceneManager.Playing && !PlayerManager.Defeated())
             {
-                if (InputManager.CheckPressedKey(Keys.Escape))
+                if (InputManager.CheckForInitialKeyDown(Keys.Escape))
                 {
                     if (_gMainObject != null)
                     {
@@ -131,7 +131,7 @@ namespace RiverHollow.GUIComponents.Screens
                     }
                 }
 
-                if (InputManager.CheckPressedKey(Keys.D1)) { }
+                if (InputManager.CheckForInitialKeyDown(Keys.D1)) { }
             }
         }
 

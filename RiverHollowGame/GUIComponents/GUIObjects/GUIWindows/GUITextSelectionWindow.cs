@@ -190,7 +190,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
             else
             {
-                if (InputManager.CheckPressedKey(Keys.W) || InputManager.CheckPressedKey(Keys.Up))
+                if (InputManager.CheckForInitialKeyDown(Keys.W) || InputManager.CheckForInitialKeyDown(Keys.Up))
                 {
                     if (_iKeySelection - 1 >= 0)
                     {
@@ -198,7 +198,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         _iKeySelection--;
                     }
                 }
-                else if (InputManager.CheckPressedKey(Keys.S) || InputManager.CheckPressedKey(Keys.Down))
+                else if (InputManager.CheckForInitialKeyDown(Keys.S) || InputManager.CheckForInitialKeyDown(Keys.Down))
                 {
                     if (_iKeySelection + 1 < _diOptions.Count)
                     {
@@ -225,7 +225,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     }
                 }
 
-                if (InputManager.CheckPressedKey(Keys.Enter))
+                if (InputManager.CheckForInitialKeyDown(Keys.Enter))
                 {
                     SelectAction();
                 }

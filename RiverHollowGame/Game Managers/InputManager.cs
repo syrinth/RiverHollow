@@ -1,42 +1,81 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {
     public static class InputManager
     {
-        public static Dictionary<Keys, bool> KeyDownDictionary { get; private set; }
+        public static List<Keys> Numbers = new List<Keys> { Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9 };
+        private static Dictionary<Keys, bool> _diKeysDown;
+        private static MouseState _lastMouseState = new MouseState();
 
         public static void Load()
         {
-            KeyDownDictionary = new Dictionary<Keys, bool>();
-            foreach (var k in Enum.GetValues(typeof(Keys)))
+            _diKeysDown = new Dictionary<Keys, bool>();
+            foreach (Keys k in Enum.GetValues(typeof(Keys)))
             {
-                KeyDownDictionary.Add((Keys)k, false);
+                _diKeysDown.Add(k, false);
             }
         }
 
-        //Note: This only grabs one button press due to trying to control up/down issues.
-        public static bool CheckPressedKey(Keys key)
+        public static void Update()
         {
-            bool rv = false;
+            _lastMouseState = Mouse.GetState();
             KeyboardState keyboardState = Keyboard.GetState();
-            bool keyDownThisFrame = (keyboardState.IsKeyDown(key));
 
-            if (!KeyDownDictionary[key] && keyDownThisFrame)
+            var keys = new List<Keys>(_diKeysDown.Keys);
+            foreach (var k in keys)
             {
-                rv = true;
+                _diKeysDown[k] = keyboardState.IsKeyDown(k);
             }
-            KeyDownDictionary[key] = keyDownThisFrame;
+        }
+
+        public static bool ButtonPressed(ButtonEnum e)
+        {
+            MouseState ms = Mouse.GetState();
+            switch (e)
+            {
+                case ButtonEnum.Left:
+                    return ms.LeftButton == ButtonState.Pressed && _lastMouseState.LeftButton == ButtonState.Released;
+                case ButtonEnum.Right:
+                    return ms.RightButton == ButtonState.Pressed && _lastMouseState.RightButton == ButtonState.Released;
+                case ButtonEnum.Middle:
+                    return ms.MiddleButton == ButtonState.Pressed && _lastMouseState.MiddleButton == ButtonState.Released;
+            }
+
+            return false;
+        }
+
+        public static int ScrollWheelChanged()
+        {
+            int rv = 0;
+
+            var currValue = Mouse.GetState().ScrollWheelValue;
+            var lastValue = _lastMouseState.ScrollWheelValue;
+
+            if (currValue > lastValue)
+            {
+                return 1;
+            }
+            else if (currValue < lastValue)
+            {
+                return -1;
+            }
 
             return rv;
         }
 
+        //Note: This only grabs one button press due to trying to control up/down issues.
+        public static bool CheckForInitialKeyDown(Keys key)
+        {
+            return _diKeysDown[key] == false && IsKeyDown(key);
+        }
+
         public static bool IsKeyDown(Keys key)
         {
-            KeyboardState keyboardState = Keyboard.GetState();
-            return keyboardState.IsKeyDown(key);
+            return Keyboard.GetState().IsKeyDown(key);
         }
 
         public static string GetCharFromKey(Keys key)
@@ -48,7 +87,8 @@ namespace RiverHollow.Game_Managers
                 if (key == Keys.Space) { rv = " "; }
                 else if (key == Keys.Back) { rv = "--"; }
                 else if (key == Keys.Delete) { rv = "-+"; }
-                else if (key == Keys.OemMinus) {
+                else if (key == Keys.OemMinus)
+                {
                     if (ShiftDown()) { rv = "_"; }
                     else { rv = "-"; }
                 }
@@ -64,7 +104,7 @@ namespace RiverHollow.Game_Managers
         }
 
         private static bool IsLetter(Keys k) { return k >= Keys.A && k <= Keys.Z; }
-        private static bool IsNumber(Keys k) { return k >= Keys.D0 && k <= Keys.D9; }
+        public static bool IsNumber(Keys k) { return k >= Keys.D0 && k <= Keys.D9; }
         private static bool IsShift(Keys k) { return k == Keys.LeftShift || k == Keys.RightShift; }
         private static bool ShiftDown() { return Keyboard.GetState().IsKeyDown(Keys.LeftShift) || Keyboard.GetState().IsKeyDown(Keys.RightShift); }
     }

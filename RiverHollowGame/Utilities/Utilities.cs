@@ -878,6 +878,29 @@ namespace RiverHollow.Utilities
 
             return leftEdge || rightEdge || topEdge || bottomEdge;
         }
+
+        public static int GetLoopingValue(int initValue, int min, int max, int changeBy)
+        {
+            if (changeBy != 0)
+            {
+                if (initValue + changeBy > max)
+                {
+                    return min;
+                }
+                else if (initValue + changeBy < min)
+                {
+                    return max;
+                }
+                else
+                {
+                    return initValue + changeBy;
+                }
+            }
+            else
+            {
+                return initValue;
+            }
+        }
     }
 
     public class RHRandom : Random

@@ -6,6 +6,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow
 {
@@ -102,8 +103,6 @@ namespace RiverHollow
                 {
                     Exit();
                 }
-                MouseState ms = Mouse.GetState();
-                KeyboardState ks = Keyboard.GetState();
 
                 SoundManager.Update(gTime);
 
@@ -118,7 +117,7 @@ namespace RiverHollow
                 Point mousePoint = Mouse.GetState().Position;
                 Vector3 translate = Camera._transform.Translation;
 
-                if (ms.RightButton == ButtonState.Pressed && GUICursor.LastMouseState.RightButton == ButtonState.Released)
+                if (InputManager.ButtonPressed(ButtonEnum.Right))
                 {
                     if (!GUIManager.ProcessRightButtonClick(mousePoint) && IsMapShown())
                     {
@@ -131,7 +130,7 @@ namespace RiverHollow
                         }
                     }
                 }
-                else if (ms.LeftButton == ButtonState.Pressed && GUICursor.LastMouseState.LeftButton == ButtonState.Released)
+                else if (InputManager.ButtonPressed(ButtonEnum.Left))
                 {
                     if (!GUIManager.ProcessLeftButtonClick(mousePoint) && IsMapShown())
                     {
@@ -156,7 +155,7 @@ namespace RiverHollow
                     }
                 }
 
-                GUICursor.LastMouseState = ms;
+                InputManager.Update();
 
                 if (IsMapShown())
                 {
@@ -243,6 +242,7 @@ namespace RiverHollow
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
             GUIManager.Draw(spriteBatch);
+            //fps.DrawFps(spriteBatch, DataManager.GetBitMapFont(DataManager.FONT_NEW), new Vector2(10f, 500f), Color.MonoGameOrange);
             spriteBatch.End();
 
             base.Draw(gTime);
@@ -296,7 +296,7 @@ namespace RiverHollow
         public void LoadGame(string savefile)
         {
             SaveManager.Load(savefile);
-            
+
             MapManager.PopulateMaps(false);
 
             GoToHUDScreen();

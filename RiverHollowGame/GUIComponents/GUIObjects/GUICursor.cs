@@ -15,7 +15,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public enum CursorTypeEnum { Normal, Talk, Gift, Door, Pickup};
         private static CursorTypeEnum _eCursorType;
         private static Rectangle _rCollisionRectangle;
-        public static MouseState LastMouseState = new MouseState();
         public static int WorkerToPlace { get; private set; } = -1;
         public static Point Position { get; set; }
 

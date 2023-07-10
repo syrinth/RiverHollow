@@ -2,6 +2,7 @@
 {
     public static class Enums
     {
+        public enum ButtonEnum { Left, Right, Middle };
         public enum DataType { Actor, Job, Item, Light, Monster, StatusEffect, Task, WorldObject, Upgrade };
         public enum BuildTypeEnum { Structure, WorldObject };
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, Sell, Propose, Date, EndDay, GoToNight, Option_0, Option_1, Option_2, Option_3 };
