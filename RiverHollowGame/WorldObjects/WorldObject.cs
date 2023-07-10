@@ -175,7 +175,11 @@ namespace RiverHollow.WorldObjects
         }
         protected virtual void LoadSprite(string texture)
         {
-            Sprite = new AnimatedSprite(texture);
+            Sprite = new AnimatedSprite(texture)
+            {
+                UseXPosition = Walkable
+            };
+
             if (GetBoolByIDKey("Idle"))
             {
                 string[] idleSplit = Util.FindArguments(GetStringByIDKey("Idle"));
