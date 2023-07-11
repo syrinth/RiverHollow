@@ -283,7 +283,7 @@ namespace RiverHollow.WorldObjects
 
             foreach (var tile in Tiles)
             {
-                if (PlayerManager.PlayerInRange(tile.Center))
+                if (PlayerManager.InRangeOfPlayer(tile.CollisionBox))
                 {
                     rv = true;
                     break;
@@ -488,21 +488,37 @@ namespace RiverHollow.WorldObjects
             {
                 if (canMove && (newMovement != Vector2.Zero && moveDir == PlayerManager.PlayerActor.Facing || goingBackwards))
                 {
-                    RHTile nextObjectTile = CurrentMap.GetTileByPixelPosition(CollisionPosition);
-                    RHTile checkTile = nextObjectTile;
-                    do
-                    {
-                        checkTile = checkTile.GetTileByDirection(moveDir);
-                    } while (checkTile.WorldObject == this);
-                    RHTile nextPlayerTile = MapManager.CurrentMap.GetTileByPixelPosition(PlayerManager.PlayerActor.CollisionCenter).GetTileByDirection(moveDir);
+                    //Confirm the way is clear for the player
+                    var facingRect = PlayerManager.GetAdjacencyRectangle(PlayerManager.PlayerActor.Facing);
+                    var tiles = MapManager.CurrentMap.GetTilesFromRectangleExcludeEdgePoints(facingRect);
 
-                    if (checkTile == null) { return; }
-                    else if (goingBackwards && nextPlayerTile == null) { return; }
-
-                    if ((!goingBackwards && checkTile.Passable()) || (goingBackwards && (nextPlayerTile.WorldObject == this || nextPlayerTile.Passable())))
+                    bool abort = false;
+                    foreach(var t in tiles)
                     {
-                        _bHasMoved = true;
-                        PlayerManager.HandleGrabMovement(nextObjectTile.GetTileByDirection(moveDir), nextPlayerTile);
+                        if(t.WorldObject != null && t.WorldObject != this && !t.WorldObject.Walkable)
+                        {
+                            abort = true;
+                        }
+                    }
+
+                    if (!abort)
+                    {
+                        RHTile nextObjectTile = CurrentMap.GetTileByPixelPosition(CollisionPosition);
+                        RHTile checkTile = nextObjectTile;
+                        do
+                        {
+                            checkTile = checkTile.GetTileByDirection(moveDir);
+                        } while (checkTile.WorldObject == this);
+                        RHTile nextPlayerTile = MapManager.CurrentMap.GetTileByPixelPosition(PlayerManager.PlayerActor.CollisionCenter).GetTileByDirection(moveDir);
+
+                        if (checkTile == null) { return; }
+                        else if (goingBackwards && nextPlayerTile == null) { return; }
+
+                        if ((!goingBackwards && checkTile.Passable()) || (goingBackwards && (nextPlayerTile.WorldObject == this || nextPlayerTile.Passable())))
+                        {
+                            _bHasMoved = true;
+                            PlayerManager.HandleGrabMovement(nextObjectTile.GetTileByDirection(moveDir), nextPlayerTile);
+                        }
                     }
                 }
             }

@@ -4,6 +4,9 @@
     {
         public const bool DRAW_COLLISION = false;
         public const bool DRAW_HITBOX = false;
+        public const bool DRAW_ADJACENCY = false;
+        public const int PLAYER_ADJACENCY_SIZE = TILE_SIZE / 2;
+        public const int GRAB_REACH = 1;
 
         public const string TOWN_MAP_NAME = "mapTown";
         public const string PLAYER_HOME_NAME = "mapHouse_Player";

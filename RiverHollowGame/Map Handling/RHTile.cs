@@ -62,7 +62,7 @@ namespace RiverHollow.Map_Handling
             var travelPoint = GetTravelPoint();
             if (travelPoint != null)
             {
-                if (!MapManager.ChangingMaps() && Util.PlayerAdjacent(travelPoint.CollisionBox, ref facing))
+                if (!MapManager.ChangingMaps() && PlayerManager.InRangeOfPlayer(travelPoint.CollisionBox, ref facing))
                 {
                     PlayerManager.PlayerActor.SetFacing(DirectionEnum.Up);
                     MapManager.ChangeMaps(PlayerManager.PlayerActor, MapName, _travelPoint);
@@ -73,8 +73,8 @@ namespace RiverHollow.Map_Handling
             }
             else
             {
-                bool playerAdjacent = Util.PlayerAdjacent(CollisionBox, ref facing);
-                bool inRangeOfObject = obj != null && Util.PlayerAdjacent(obj.CollisionBox, ref facing);
+                bool playerAdjacent = PlayerManager.InRangeOfPlayer(CollisionBox, ref facing);
+                bool inRangeOfObject = obj != null && PlayerManager.InRangeOfPlayer(obj.CollisionBox, ref facing);
                 if (inRangeOfObject)
                 {
                     rv = obj.ProcessRightClick();
@@ -89,8 +89,7 @@ namespace RiverHollow.Map_Handling
 
                 if (!rv && (playerAdjacent || inRangeOfObject) && !Passable())
                 {
-                    bool reposition = WorldObject != null && WorldObject.Tiles.Count == 1;
-                    PlayerManager.GrabTile(this, reposition, facing);
+                    PlayerManager.TryGrab(this, facing);
                 }
             }
 
@@ -315,11 +314,6 @@ namespace RiverHollow.Map_Handling
         private RHMap MyMap()
         {
             return MapManager.Maps[MapName];
-        }
-
-        public bool PlayerIsAdjacent()
-        {
-            return PlayerManager.PlayerInRange(Center, Constants.TILE_SIZE) && GetWalkableNeighbours(true).Find(x => x.CollisionBox.Contains(PlayerManager.PlayerActor.CollisionCenter)) != null;
         }
 
         public List<RHTile> GetWalkableNeighbours(bool getDiagonal = false)

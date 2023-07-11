@@ -9,6 +9,7 @@ using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.WorldObjects;
+using RiverHollow.GUIComponents;
 
 namespace RiverHollow.Characters
 {
@@ -101,6 +102,14 @@ namespace RiverHollow.Characters
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             base.Draw(spriteBatch, useLayerDepth);
+
+            if (Constants.DRAW_ADJACENCY)
+            {
+                foreach (var r in PlayerManager.AdjacencyRects)
+                {
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), r, GUIUtils.BLACK_BOX, Color.Red * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, GetSprites()[0].LayerDepth - 1);
+                }
+            }
 
             //_sprEyes.Draw(spriteBatch, useLayerDepth);
             //_sprHair.Draw(spriteBatch, useLayerDepth);

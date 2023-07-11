@@ -117,10 +117,32 @@ namespace RiverHollow.Game_Managers
         private static ExpectingChildEnum _eChildStatus;
         public static ExpectingChildEnum ChildStatus {
             get => _eChildStatus;
-            set {                
+            set {
                 _eChildStatus = value;
                 BabyCountdown = _eChildStatus == ExpectingChildEnum.None ? 0 : 7;
             }
+        }
+
+        public static List<Rectangle> AdjacencyRects => new List<Rectangle>{GetAdjacencyRectangle(DirectionEnum.Down),
+            GetAdjacencyRectangle(DirectionEnum.Right),
+            GetAdjacencyRectangle(DirectionEnum.Up),
+            GetAdjacencyRectangle(DirectionEnum.Left)
+        };
+        public static Rectangle GetAdjacencyRectangle(DirectionEnum e)
+        {
+            switch (e)
+            {
+                case DirectionEnum.Down:
+                    return new Rectangle(PlayerActor.CollisionBox.Left, PlayerActor.CollisionBox.Bottom, PlayerActor.CollisionBox.Width, Constants.PLAYER_ADJACENCY_SIZE);
+                case DirectionEnum.Right:
+                    return new Rectangle(PlayerActor.CollisionBox.Right, PlayerActor.CollisionBox.Top, Constants.PLAYER_ADJACENCY_SIZE, PlayerActor.CollisionBox.Height);
+                case DirectionEnum.Up:
+                    return new Rectangle(PlayerActor.CollisionBox.Left, PlayerActor.CollisionBox.Top - Constants.PLAYER_ADJACENCY_SIZE, PlayerActor.CollisionBox.Width, Constants.PLAYER_ADJACENCY_SIZE);
+                case DirectionEnum.Left:
+                    return new Rectangle(PlayerActor.CollisionBox.Left - Constants.PLAYER_ADJACENCY_SIZE, PlayerActor.CollisionBox.Top, Constants.PLAYER_ADJACENCY_SIZE, PlayerActor.CollisionBox.Height);
+            }
+
+            return Rectangle.Empty;
         }
 
         public static MapItem ObtainedItem;
@@ -206,10 +228,7 @@ namespace RiverHollow.Game_Managers
                         PlayerActor.MoveActor(newMovement, newMovement != Vector2.Zero);
                     }
 
-                    if(ObtainedItem != null)
-                    {
-                        PlayerManager.ObtainedItem = null;
-                    }
+                    ObtainedItem = null;
                 }
                 else
                 {
@@ -385,54 +404,37 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region PlayerInRange
-
-        public static bool PlayerInRange(Rectangle rect)
+        public static bool InRangeOfPlayer(Rectangle testRectangle)
         {
-            int hypotenuse = (int)Math.Sqrt(Constants.TILE_SIZE * Constants.TILE_SIZE + Constants.TILE_SIZE * Constants.TILE_SIZE);
-            return PlayerInRange(rect, hypotenuse);
+            DirectionEnum ignore = DirectionEnum.None;
+            return InRangeOfPlayer(testRectangle, ref ignore);
         }
-        public static bool PlayerInRange(Rectangle rect, int range)
+        public static bool InRangeOfPlayer(Rectangle testRectangle, ref DirectionEnum facing)
         {
+            var playerCenter = PlayerActor.CollisionCenter;
+            var playerCollision = PlayerActor.CollisionBox;
+
             bool rv = false;
-            if (PlayerInRange(new Vector2(rect.Center.X, rect.Top), range))
+            List<Rectangle> list = AdjacencyRects;
+
+            for (int i = 0; i < list.Count; i++)
             {
-                rv = true;
-            }
-            else if (PlayerInRange(new Vector2(rect.Center.X, rect.Bottom), range))
-            {
-                rv = true;
-            }
-            else if (PlayerInRange(new Vector2(rect.Left, rect.Center.Y), range))
-            {
-                rv = true;
-            }
-            else if (PlayerInRange(new Vector2(rect.Right, rect.Center.Y), range))
-            {
-                rv = true;
+                var r = list[i];
+                if (r.Intersects(testRectangle) && (Util.CenterInRange(playerCenter, testRectangle) || Util.EdgeInRange(playerCollision, testRectangle)))
+                {
+                    rv = true;
+                    facing = (DirectionEnum)(i + 1);
+                    break;
+                }
             }
 
             return rv;
-        }
-
-        public static bool PlayerInRange(Point centre)
-        {
-            int hypotenuse = (int)Math.Sqrt(Constants.TILE_SIZE* Constants.TILE_SIZE + Constants.TILE_SIZE* Constants.TILE_SIZE);
-            return PlayerInRange(centre, hypotenuse);
-        }
-        public static bool PlayerInRange(Vector2 centre, int range)
-        {
-            return PlayerInRange(centre.ToPoint(), range);
-        }
-        public static bool PlayerInRange(Vector2 centre, int minRange, int maxRange)
-        {
-            return PlayerInRange(centre.ToPoint(), minRange, maxRange);
         }
         public static bool PlayerInRange(Point centre, int range)
         {
             int distance = (int)Util.GetDistance(PlayerActor.CollisionCenter, centre);
             return distance <= range;
         }
-
         public static bool PlayerInRangeGetDist(Point centre, int range, ref int distance)
         {
             bool rv = false;
@@ -441,20 +443,6 @@ namespace RiverHollow.Game_Managers
             distance = (int)Util.GetDistance(playerRect.Center, centre);
 
             rv = distance <= range;
-
-            return rv;
-        }
-
-        public static bool PlayerInRange(Point centre, int minRange, int maxRange)
-        {
-            bool rv = false;
-
-            Rectangle playerRect = PlayerActor.CollisionBox;
-            int a = Math.Abs(playerRect.Center.X - centre.X);
-            int b = Math.Abs(playerRect.Center.Y - centre.Y);
-            int c = (int)Math.Sqrt(a * a + b * b);
-
-            rv = c > minRange && c <= maxRange;
 
             return rv;
         }
@@ -675,20 +663,25 @@ namespace RiverHollow.Game_Managers
         {
             GrabbedObject.MoveObject(_vbMovement.AddMovement(dir));
         }
-        public static void GrabTile(RHTile t, bool reposition, DirectionEnum facing)
+        public static void TryGrab(RHTile t, DirectionEnum facing)
         {
-            if (t.WorldObject != null)
+            var pBox = PlayerActor.CollisionBox;
+            var grabBox = t.WorldObject != null ? t.WorldObject.CollisionBox : t.CollisionBox;
+
+            if (Math.Abs(pBox.Left - grabBox.Right) <= Constants.GRAB_REACH ||
+                Math.Abs(pBox.Right - grabBox.Left) <= Constants.GRAB_REACH ||
+                Math.Abs(pBox.Top - grabBox.Bottom) <= Constants.GRAB_REACH ||
+                Math.Abs(pBox.Bottom - grabBox.Top) <= Constants.GRAB_REACH)
             {
-                GrabbedObject = t.WorldObject;
 
-                if (reposition)
+                if (t.WorldObject != null)
                 {
-                    PlayerActor.SetPosition(Util.SnapToGrid(PlayerActor.CollisionCenter));
+                    GrabbedObject = t.WorldObject;
                 }
-            }
 
-            PlayerActor.SetFacing(facing);
-            PlayerActor.SetState(ActorStateEnum.Grab);
+                PlayerActor.SetFacing(facing);
+                PlayerActor.SetState(ActorStateEnum.Grab);
+            }
         }
         public static void ReleaseTile()
         {
@@ -725,8 +718,8 @@ namespace RiverHollow.Game_Managers
 
         #region Tool Management
         public static Tool ToolInUse;
-        public static int BackpackLevel => PlayerManager.RetrieveTool(ToolEnum.Backpack) != null ? PlayerManager.RetrieveTool(ToolEnum.Backpack).ToolLevel : 1;
-        public static int LanternLevel => PlayerManager.RetrieveTool(ToolEnum.Lantern) != null ? PlayerManager.RetrieveTool(ToolEnum.Lantern).ToolLevel : 1;
+        public static int BackpackLevel => RetrieveTool(ToolEnum.Backpack) != null ? RetrieveTool(ToolEnum.Backpack).ToolLevel : 1;
+        public static int LanternLevel => RetrieveTool(ToolEnum.Lantern) != null ? RetrieveTool(ToolEnum.Lantern).ToolLevel : 1;
 
         private static Dictionary<ToolEnum, Tool> _diTools;
 

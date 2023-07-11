@@ -58,7 +58,7 @@ namespace RiverHollow.Misc
         {
             foreach (ShopItemSpot itemSpot in _liShopItemSpots)
             {
-                if (itemSpot.Contains(mouseLocation) && PlayerManager.PlayerInRange(itemSpot.Box.Center, Constants.TILE_SIZE * 2))
+                if (itemSpot.Contains(mouseLocation) && PlayerManager.InRangeOfPlayer(itemSpot.Box))
                 {
                     if (TownManager.DIVillagers.ContainsKey(ShopkeeperID) && map.ContainsActor(TownManager.DIVillagers[ShopkeeperID]) ||
                         TownManager.DIMerchants.ContainsKey(ShopkeeperID) && map.ContainsActor(TownManager.DIMerchants[ShopkeeperID]))

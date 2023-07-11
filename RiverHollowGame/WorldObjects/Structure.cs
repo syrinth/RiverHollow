@@ -123,7 +123,7 @@ namespace RiverHollow.WorldObjects
                     {
                         foreach (var tile in targetTile.WorldObject.Tiles)
                         {
-                            if (PlayerManager.PlayerInRange(tile.Center))
+                            if (PlayerManager.InRangeOfPlayer(tile.CollisionBox))
                             {
                                 rv = true;
                                 break;

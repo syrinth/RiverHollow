@@ -1383,13 +1383,19 @@ namespace RiverHollow.Map_Handling
                 //Do nothing if no tile could be retrieved
                 if (tile != null)
                 {
-                    rv = tile.ProcessRightClick();
+                    if (TheShop != null && TheShop.Interact(this, mouseLocation))
+                    {
+                        rv = true;
+                    }
 
-                    TheShop?.Interact(this, mouseLocation);
+                    if (!rv)
+                    {
+                        rv = tile.ProcessRightClick();
+                    }
 
                     foreach (Actor c in _liActors)
                     {
-                        if (PlayerManager.PlayerInRange(c.HoverBox, (int)(Constants.TILE_SIZE * 1.5)) && c.HoverContains(mouseLocation) && c.OnTheMap)
+                        if (PlayerManager.InRangeOfPlayer(c.HoverBox) && c.HoverContains(mouseLocation) && c.OnTheMap)
                         {
                             c.ProcessRightButtonClick();
                             return true;
@@ -1401,7 +1407,7 @@ namespace RiverHollow.Map_Handling
                 for (int i = 0; i < _liItems.Count; i++)
                 {
                     MapItem it = _liItems[i];
-                    if (it.PickupState == ItemPickupState.Manual && it.CollisionBox.Contains(GUICursor.GetWorldMousePosition()) && PlayerManager.PlayerInRange(it.CollisionBox))
+                    if (it.PickupState == ItemPickupState.Manual && it.CollisionBox.Contains(GUICursor.GetWorldMousePosition()) && PlayerManager.InRangeOfPlayer(it.CollisionBox))
                     {
                         if (InventoryManager.AddMapItemToInventory(it.WrappedItem))
                         {
@@ -1460,7 +1466,7 @@ namespace RiverHollow.Map_Handling
                     }
                     else
                     {
-                        if (TargetTile != null && TargetTile.PlayerIsAdjacent())
+                        if (TargetTile != null && PlayerManager.InRangeOfPlayer(TargetTile.CollisionBox))
                         {
                             //Retrieves any object associated with the tile, this will include
                             //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
