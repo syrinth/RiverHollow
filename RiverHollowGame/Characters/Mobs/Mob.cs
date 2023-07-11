@@ -20,7 +20,7 @@ namespace RiverHollow.Characters
         public override float MaxHP => GetIntByIDKey("HP");
         private string[] LootData => Util.FindParams(GetStringByIDKey("ItemID"));
 
-        protected MobMovementEnum MovementType => GetEnumByIDKey<MobMovementEnum>("MovementType");
+        protected bool TracksPlayer => GetBoolByIDKey("TracksPlayer");
 
         bool _bJump;
         int _iMaxRange = Constants.TILE_SIZE * 10;
@@ -47,16 +47,14 @@ namespace RiverHollow.Characters
 
             NewFoV();
 
-            switch(MovementType)
+            if (GetBoolByIDKey("Wander"))
             {
-                case MobMovementEnum.Wander:
-                    Wandering = true;
-                    _eCurrentState = NPCStateEnum.Wander;
-                    _fBaseWanderTimer = 0.5f;
-                    _iMinWander = 4;
-                    _iMaxWander = 16;
-                    _movementTimer = new RHTimer(_fBaseWanderTimer);
-                    break;
+                var strParams = Util.FindArguments(GetStringByIDKey("Wander"));
+                _fBaseWanderTimer = float.Parse(strParams[0]);
+                _iMinWander = int.Parse(strParams[1]);
+                _iMaxWander = int.Parse(strParams[2]);
+                _movementTimer = new RHTimer(_fBaseWanderTimer);
+
             }
         }
 
@@ -111,48 +109,53 @@ namespace RiverHollow.Characters
 
         protected void DetermineMovement(GameTime gTime)
         {
-            switch (MovementType)
+            switch (_eCurrentState)
             {
-                case MobMovementEnum.Tracker:
-                    switch (_eCurrentState)
+                case NPCStateEnum.Wander:
+                    if (!ScanForPlayer())
                     {
-                        case NPCStateEnum.Idle:
-                            if (OnScreen() && PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 6))
-                            {
-                                _eCurrentState = NPCStateEnum.TrackPlayer;
-                                _vMovementVelocity = GetPlayerDirectionNormal();
-                            }
-                            break;
+                        if (_bBumpedIntoSomething)
+                        {
+                            SetMoveTo(Point.Zero);
+                            _bBumpedIntoSomething = false;
+                        }
 
-                        case NPCStateEnum.TrackPlayer:
-                            if (!HasKnockbackVelocity())
-                            {
-                                MoveActor(_vMovementVelocity);
-                                PlayAnimation(VerbEnum.Walk);
-
-                                Vector2 mod = GetPlayerDirection() * 0.015f;
-                                _vMovementVelocity += mod;
-                                _vMovementVelocity.Normalize();
-                                _vMovementVelocity *= _fBaseSpeed;
-                            }
-                            break;
+                        if (!HasMovement() || _bBumpedIntoSomething)
+                        {
+                            Wander(gTime, 0);
+                        }
                     }
                     break;
-                case MobMovementEnum.Stationary:
+                case NPCStateEnum.Idle:
+                    ScanForPlayer();
                     break;
-                case MobMovementEnum.Wander:
-                    if (_bBumpedIntoSomething)
+                case NPCStateEnum.TrackPlayer:
+                    if (!HasKnockbackVelocity())
                     {
-                        SetMoveTo(Point.Zero);
-                        _bBumpedIntoSomething = false;
-                    }
+                        MoveActor(_vMovementVelocity);
+                        PlayAnimation(VerbEnum.Walk);
 
-                    if (!HasMovement() || _bBumpedIntoSomething)
-                    {
-                        Wander(gTime, 0);
+                        Vector2 mod = GetPlayerDirection() * 0.015f;
+                        _vMovementVelocity += mod;
+                        _vMovementVelocity.Normalize();
+                        _vMovementVelocity *= _fBaseSpeed;
                     }
                     break;
             }
+        }
+
+        protected bool ScanForPlayer()
+        {
+            bool rv = false;
+            if (TracksPlayer && OnScreen() && PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 6))
+            {
+                rv = true;
+                _eCurrentState = NPCStateEnum.TrackPlayer;
+                _vMovementVelocity = GetPlayerDirectionNormal();
+                SetMoveTo(Point.Zero);
+            }
+
+            return rv;
         }
         protected virtual void DetermineAction(GameTime gTime) { }
 

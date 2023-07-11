@@ -49,7 +49,6 @@
         public enum WeightEnum { Light, Medium, Heavy, Immovable};
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum ActorTypeEnum { Animal, Child, Critter, Merchant, Mob, Mount, Pet, Projectile, ShippingGremlin, Spirit, TalkingActor, Traveler, Villager };
-        public enum MobMovementEnum { Stationary, Tracker, Wander };
         public enum MobTypeEnum { Basic, Shooter, Summoner };
         public enum TravelerGroupEnum { None, Adventurer, Dwarf, Goblin, Human, Noble};
         public enum PlayerColorEnum { None, yes, Hair, Skin };

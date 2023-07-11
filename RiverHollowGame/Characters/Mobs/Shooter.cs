@@ -26,31 +26,9 @@ namespace RiverHollow.Characters.Mobs
 
         protected override void DetermineAction(GameTime gTime)
         {
-            switch (MovementType)
-            {
-                case MobMovementEnum.Tracker:
-                    if (_eCurrentState == NPCStateEnum.TrackPlayer)
-                    {
-                        HandleProjectile(gTime);
-                    }
-                    break;
-                case MobMovementEnum.Wander:
-                    HandleProjectile(gTime);
-                    break;
-            }
-        }
-
-        public override void Draw(SpriteBatch spriteBatch, bool userLayerDepth = false)
-        {
-            base.Draw(spriteBatch, userLayerDepth);
-            _liProjectiles.ForEach(x => x.Draw(spriteBatch));
-        }
-
-        protected void HandleProjectile(GameTime gTime)
-        {
             if (HasProjectiles && PlayerManager.PlayerActor.HasHP)
             {
-                string[] data = Util.FindParams(GetStringByIDKey("Projectile"));
+                var data = Util.FindParams(GetStringByIDKey("Projectile"));
 
                 if (CanFire(gTime, data))
                 {
@@ -62,6 +40,12 @@ namespace RiverHollow.Characters.Mobs
                     _liProjectiles.Add(p);
                 }
             }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch, bool userLayerDepth = false)
+        {
+            base.Draw(spriteBatch, userLayerDepth);
+            _liProjectiles.ForEach(x => x.Draw(spriteBatch));
         }
 
         private bool CanFire(GameTime gTime, string[] data)
@@ -79,7 +63,7 @@ namespace RiverHollow.Characters.Mobs
 
         private bool AimsProjectiles(string[] data)
         {
-            return data.Length > 1 && data[1].Equals("Aim");
+            return data.Length > 1 && data[1].Equals("Aim") && _eCurrentState == NPCStateEnum.TrackPlayer;
         }
     } 
 }

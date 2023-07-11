@@ -37,12 +37,15 @@ namespace RiverHollow.Characters.Mobs
                 if (_liMinions.Count < GetIntByIDKey("Max", 1))
                 {
                     var minion = DataManager.CreateMob(GetIntByIDKey("Summon"));
-                    _liMinions.Add(minion);
-                    CurrentMap.AddActor(minion);
+                    if (minion != null)
+                    {
+                        _liMinions.Add(minion);
+                        CurrentMap.AddActor(minion);
 
-                    var MyTile = CurrentMap.GetTileByPixelPosition(CollisionCenter);
-                    var tiles = MyTile.GetAdjacentTiles(true);
-                    minion.SetPosition(Util.GetRandomItem(tiles).Position);
+                        var MyTile = CurrentMap.GetTileByPixelPosition(CollisionCenter);
+                        var tiles = MyTile.GetWalkableNeighbours(true);
+                        minion.SetPosition(Util.GetRandomItem(tiles).Position);
+                    }
                 }
             }
         }

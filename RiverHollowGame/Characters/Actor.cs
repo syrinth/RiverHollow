@@ -117,7 +117,11 @@ namespace RiverHollow.Characters
                 Size = Util.ParsePoint(stringData["Size"]);
             }
 
-            Wandering = stringData.ContainsKey("Wander");
+            if (stringData.ContainsKey("Wander"))
+            {
+                Wandering = true;
+                _eCurrentState = NPCStateEnum.Wander;
+            }
         }
 
         public virtual void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
