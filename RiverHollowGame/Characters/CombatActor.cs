@@ -184,8 +184,11 @@ namespace RiverHollow.Characters
         private void AssignKnockbackVelocity(Rectangle hitbox)
         {
             _vKnockbackVelocity = hitbox.Center.ToVector2() - CollisionBox.Center.ToVector2();
-            _vKnockbackVelocity.Normalize();
 
+            if (_vKnockbackVelocity.Length() != 0)
+            {
+                _vKnockbackVelocity.Normalize();
+            }
             switch (GetWeight())
             {
                 case WeightEnum.Light:

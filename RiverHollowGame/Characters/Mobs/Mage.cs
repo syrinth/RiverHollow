@@ -19,6 +19,7 @@ namespace RiverHollow.Characters.Mobs
                 _bUsingAction = false;
                 var strParams = DataManager.GetStringArgsByIDKey(ID, "EffectID", DataType.Actor);
                 var effect = DataManager.CreateEffect(int.Parse(strParams[0]));
+                effect.SetSourceCollision(CollisionBox);
 
                 if (strParams.Length > 1 && strParams[1] == "Self") { effect.SetPosition(CollisionBoxLocation); }
                 else { effect.SetPosition(PlayerManager.PlayerActor.CollisionBoxLocation); }

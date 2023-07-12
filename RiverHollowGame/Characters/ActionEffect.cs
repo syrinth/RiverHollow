@@ -8,10 +8,16 @@ namespace RiverHollow.Characters
 {
     public class ActionEffect : Actor
     {
+        Rectangle _rSourceCollisionBox;
         public ActionEffect(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             CollisionState = ActorCollisionState.PassThrough;
             BodySprite = LoadSpriteAnimations(Util.LoadWorldAnimations(stringData), DataManager.FOLDER_EFFECTS + stringData["Key"]);
+        }
+
+        public void SetSourceCollision(Rectangle r)
+        {
+            _rSourceCollisionBox = r;
         }
 
         public override void Update(GameTime gTime)
@@ -23,7 +29,7 @@ namespace RiverHollow.Characters
             {
                 if (CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
                 {
-                    PlayerManager.PlayerActor.DealDamage(GetIntByIDKey("Damage"), CollisionBox);
+                    PlayerManager.PlayerActor.DealDamage(GetIntByIDKey("Damage"), _rSourceCollisionBox);
                 }
             }
 
