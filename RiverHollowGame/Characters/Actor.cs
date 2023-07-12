@@ -50,6 +50,8 @@ namespace RiverHollow.Characters
         public ActorStateEnum State { get; protected set; } = ActorStateEnum.Walk;
         public ActorTypeEnum ActorType { get; protected set; }
 
+        public ActorCollisionState CollisionState { get; protected set; } = ActorCollisionState.Block;
+
         public string CurrentMapName;
         public RHMap CurrentMap => (!string.IsNullOrEmpty(CurrentMapName) ? MapManager.Maps[CurrentMapName] : null);
         public bool OnTheMap { get; protected set; } = true;
@@ -74,12 +76,12 @@ namespace RiverHollow.Characters
 
         protected bool _bBumpedIntoSomething = false;
         public bool IgnoreCollisions { get; protected set; } = false;
-        public bool SlowDontBlock { get; protected set; } = false;
         #endregion
 
-        public float BuffedSpeed => _fBaseSpeed * SpdMult;
+        public float BuffedSpeed => Wandering ? _fWanderSpeed : _fBaseSpeed * SpdMult;
         public float SpdMult = Constants.NPC_WALK_SPEED;
         protected float _fBaseSpeed = 1f;
+        protected float _fWanderSpeed = 1f;
 
         #region Wander Properties
         protected RHTimer _movementTimer;
@@ -629,13 +631,13 @@ namespace RiverHollow.Characters
         protected int AddDirectionalAnimations(ref AnimatedSprite sprite, AnimationData data, int width, int height, bool pingpong, bool backToIdle)
         {
             int xCrawl = 0;
-            sprite.AddAnimation(data.Verb, DirectionEnum.Down, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong);
+            sprite.AddAnimation(data.Verb, DirectionEnum.Down, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong, data.Verb == VerbEnum.Action1);
             xCrawl += width * data.Frames;
-            sprite.AddAnimation(data.Verb, DirectionEnum.Right, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong);
+            sprite.AddAnimation(data.Verb, DirectionEnum.Right, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong, data.Verb == VerbEnum.Action1);
             xCrawl += width * data.Frames;
-            sprite.AddAnimation(data.Verb, DirectionEnum.Up, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong);
+            sprite.AddAnimation(data.Verb, DirectionEnum.Up, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong, data.Verb == VerbEnum.Action1);
             xCrawl += width * data.Frames;
-            sprite.AddAnimation(data.Verb, DirectionEnum.Left, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong);
+            sprite.AddAnimation(data.Verb, DirectionEnum.Left, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong, data.Verb == VerbEnum.Action1);
             xCrawl += width * data.Frames;
 
             if (backToIdle)

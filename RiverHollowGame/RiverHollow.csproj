@@ -81,8 +81,10 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Characters\ActionEffect.cs" />
     <Compile Include="Characters\Animal.cs" />
     <Compile Include="Characters\CombatActor.cs" />
+    <Compile Include="Characters\Mobs\Mage.cs" />
     <Compile Include="Characters\Mobs\Shooter.cs" />
     <Compile Include="Characters\Mobs\Summoner.cs" />
     <Compile Include="Characters\Projectile.cs" />

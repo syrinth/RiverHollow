@@ -46,10 +46,11 @@
         public enum CraftFilterEnum { All };
 
         public enum ActorStateEnum { Climb, Grab, Swim, Walk };
+        public enum ActorCollisionState { Block, Slow, PassThrough };
         public enum WeightEnum { Light, Medium, Heavy, Immovable};
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
-        public enum ActorTypeEnum { Animal, Child, Critter, Merchant, Mob, Mount, Pet, Projectile, ShippingGremlin, Spirit, TalkingActor, Traveler, Villager };
-        public enum MobTypeEnum { Basic, Shooter, Summoner };
+        public enum ActorTypeEnum { Animal, Child, Critter, Effect, Merchant, Mob, Mount, Pet, Projectile, ShippingGremlin, Spirit, TalkingActor, Traveler, Villager };
+        public enum MobTypeEnum { Basic, Mage, Shooter, Summoner };
         public enum TravelerGroupEnum { None, Adventurer, Dwarf, Goblin, Human, Noble};
         public enum PlayerColorEnum { None, yes, Hair, Skin };
         public enum StatusTypeEnum { Buff, Debuff, DoT, HoT };
@@ -62,7 +63,7 @@
         public enum SpawnStateEnum { OffMap, WaitAtInn, VisitInn, HasHome, NonTownMap, SendingToInn };
         public enum MoodEnum { Miserable, Sad, Neutral, Pleased, Happy, Ecstatic };
         public enum TravelerMoodEnum { Angry, Sad, Neutral, Happy };
-        public enum NPCStateEnum { Alert, Idle, Leashing, TrackPlayer, Wander };
+        public enum NPCStateEnum { Alert, Idle, Leashing, MaintainDistance, TrackPlayer, Wander };
         public enum ChildStageEnum { Newborn, Infant, Toddler };
        
         public enum TaskStateEnum { Waiting, Assigned, Talking, TaskLog, Completed };

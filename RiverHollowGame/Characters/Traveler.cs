@@ -61,7 +61,7 @@ namespace RiverHollow.Characters
         public Traveler(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             Wandering = true;
-            SlowDontBlock = true;
+            CollisionState = ActorCollisionState.Slow;
         }
 
         public override TextEntry GetOpeningText()

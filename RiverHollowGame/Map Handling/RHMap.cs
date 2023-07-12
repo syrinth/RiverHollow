@@ -1080,11 +1080,6 @@ namespace RiverHollow.Map_Handling
 
         private void ChangeDir(Actor actor, List<KeyValuePair<Rectangle, Actor>> possibleCollisions, ref Vector2 dir, ref bool impeded)
         {
-            if (actor.IgnoreCollisions)
-            {
-                return;
-            }
-
             //Because of how objects interact with each other, this check needs to be broken up so that the x and y movement can be
             //calculated seperately. If an object is above you and you move into it at an angle, if you check the collision as one rectangle
             //then the collision nullification will hit the entire damn movement mode.
@@ -1114,8 +1109,8 @@ namespace RiverHollow.Map_Handling
                 }
                 else if (kvp.Key.Intersects(testDiagonal))
                 {
-                    if (kvp.Value != null && kvp.Value.SlowDontBlock) { impeded = true; }
-                    else { diagonalChange.X = 0; }
+                    if (kvp.Value != null && kvp.Value.CollisionState == ActorCollisionState.Slow) { impeded = true; }
+                    else if (npc == null || npc.CollisionState == ActorCollisionState.Block) { diagonalChange.X = 0; }
                 }
             }
 
@@ -1135,11 +1130,11 @@ namespace RiverHollow.Map_Handling
             Point location = actor.CollisionBoxLocation;
             Point size = actor.CollisionBox.Size;
 
-            if (npc != null && npc.SlowDontBlock)
+            if (npc != null && npc.CollisionState == ActorCollisionState.Slow)
             {
                 impeded = true;
             }
-            else
+            else if (npc == null || npc.CollisionState == ActorCollisionState.Block)
             {
                 int distance;
                 bool positionLessThan;
@@ -1198,7 +1193,7 @@ namespace RiverHollow.Map_Handling
         /// <param name="dir">Reference to the direction to move the WorldActor</param>
         /// <param name="ignoreCollisions">Whether or not to check collisions</param>
         /// <returns>False if we are to prevent movement</returns>
-        public bool CheckForCollisions(Actor actor, ref Vector2 dir, ref bool impeded, bool ignoreCollisions = false)
+        public bool CheckForCollisions(Actor actor, ref Vector2 dir, ref bool impeded)
         {
             bool rv = true;
 
@@ -1214,7 +1209,7 @@ namespace RiverHollow.Map_Handling
             {
                 return false;
             }
-            else if (!ignoreCollisions)
+            else if (!actor.IgnoreCollisions)
             {
                 List<KeyValuePair<Rectangle, Actor>> list = GetPossibleCollisions(actor, dir);
                 ChangeDir(actor, list, ref dir, ref impeded);
@@ -1230,7 +1225,8 @@ namespace RiverHollow.Map_Handling
                 }
             }
 
-            if(actor.CurrentMap.GetTileByPixelPosition(actor.CollisionBox.Center).Flooring != null)
+            var tile = actor.CurrentMap.GetTileByPixelPosition(actor.CollisionBox.Center);
+            if (tile != null && tile.Flooring != null)
             {
                 dir *= 1.1f;
             }

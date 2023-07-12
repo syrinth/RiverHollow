@@ -231,7 +231,15 @@
     </Item>
     <Item>
       <Key>57</Key>
-      <Value>[Type:Mob][Subtype:Basic][Key:Bee][Size:16-32][Idle:3-.075-T][Walk:3-.075-T][KO:384-0-4-0.15-F][HP:1][Damage:1][Weight:Light][Speed:2.3][HitBoxOffset:4-13][HitBoxSize:10-10][CollisionOffset:4-13][CollisionSize:10-10][Fly][Wander:0.2-1-2][TracksPlayer]</Value>
+      <Value>[Type:Mob][Subtype:Basic][Key:Bee][Size:16-32][Idle:3-.075-T][Walk:3-.075-T][KO:384-0-4-0.15-F][HP:1][Damage:1][Weight:Light][Speed:2.3][HitBoxOffset:4-13][HitBoxSize:10-10][CollisionOffset:4-13][CollisionSize:10-10][Fly][Wander:1-1-2-0.5][TracksPlayer]</Value>
+    </Item>
+    <Item>
+      <Key>58</Key>
+      <Value>[Type:Mob][Subtype:Mage][Key:Mushie][Size:16-32][Idle:0-0-1-0-T][Walk:64-0-4-.175-F][KO:320-0-3-0.15-F][Action1:368-0-3-0.15-F][HP:3][Damage:1][Weight:Light][Speed:0.8][HitBoxOffset:3-16][HitBoxSize:10-15][CollisionOffset:3-16][CollisionSize:10-15][MaintainDistance][Cooldown:3][EffectID:59]</Value>
+    </Item>
+    <Item>
+      <Key>59</Key>
+      <Value>[Type:Effect][Size:80-96][Action1:0-0-9-0.1-F][Damage:1][HitFrame:2][CollisionOffset:32-64][CollisionSize:16-16][Key:LightningSprite]</Value>
     </Item>
   </Asset>
 </XnaContent>

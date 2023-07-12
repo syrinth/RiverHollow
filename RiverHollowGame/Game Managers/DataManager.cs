@@ -30,6 +30,7 @@ namespace RiverHollow.Game_Managers
         public const string PORTRAIT_FOLDER = FOLDER_ACTOR + @"Portraits\";
 
         public const string FOLDER_ITEMS = TEXTURES + @"Items\";
+        public const string FOLDER_EFFECTS = TEXTURES + @"ActionEffects\";
         public const string FOLDER_ENVIRONMENT = TEXTURES + @"Environmental\";
         public const string FOLDER_MONSTERS = TEXTURES + @"ctors\Monsters\";
         public const string FOLDER_MOBS = TEXTURES + @"Actors\Mobs\";
@@ -694,11 +695,15 @@ namespace RiverHollow.Game_Managers
                         return new Child(id, diData);
                     case ActorTypeEnum.Critter:
                         return new Critter(id, diData);
+                    case ActorTypeEnum.Effect:
+                        return new ActionEffect(id, diData);
                     case ActorTypeEnum.Mob:
                         switch (Util.ParseEnum<MobTypeEnum>(diData["Subtype"]))
                         {
                             case MobTypeEnum.Basic:
                                 return new Mob(id, diData);
+                            case MobTypeEnum.Mage:
+                                return new Mage(id, diData);
                             case MobTypeEnum.Shooter:
                                 return new Shooter(id, diData);
                             case MobTypeEnum.Summoner:
@@ -769,6 +774,15 @@ namespace RiverHollow.Game_Managers
                 rv = null;
             }
             return (Projectile)rv;
+        }
+        public static ActionEffect CreateEffect(int id)
+        {
+            Actor rv = CreateNPCByIndex(id);
+            if (rv != null && !rv.IsActorType(ActorTypeEnum.Effect))
+            {
+                rv = null;
+            }
+            return (ActionEffect)rv;
         }
         public static Traveler CreateTraveler(int id)
         {

@@ -295,6 +295,14 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Bee]</Value>
     </Item>
     <Item>
+      <Key>Actor_58</Key>
+      <Value>[Name:Mushie]</Value>
+    </Item>
+    <Item>
+      <Key>Actor_59</Key>
+      <Value>[Name:LightningBolt]</Value>
+    </Item>
+    <Item>
       <Key>StatusEffect_0</Key>
       <Value>[Name:Defend]</Value>
     </Item>

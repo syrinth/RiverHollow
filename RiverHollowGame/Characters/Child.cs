@@ -28,7 +28,7 @@ namespace RiverHollow.Characters
         public Child(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             Wandering = true;
-            SlowDontBlock = true;
+            CollisionState = ActorCollisionState.Slow;
 
             _liGrowthPeriods = new List<int>() { 4, 10 };
 

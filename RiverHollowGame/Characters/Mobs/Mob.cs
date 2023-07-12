@@ -21,6 +21,9 @@ namespace RiverHollow.Characters
         private string[] LootData => Util.FindParams(GetStringByIDKey("ItemID"));
 
         protected bool TracksPlayer => GetBoolByIDKey("TracksPlayer");
+        protected bool MaintainDistance => GetBoolByIDKey("MaintainDistance");
+
+        protected bool _bUsingAction = false;
 
         bool _bJump;
         int _iMaxRange = Constants.TILE_SIZE * 10;
@@ -39,6 +42,7 @@ namespace RiverHollow.Characters
             IgnoreCollisions = GetBoolByIDKey("Fly");
 
             _fBaseSpeed = GetFloatByIDKey("Speed", 1);
+            _fWanderSpeed = _fBaseSpeed;
             _cooldownTimer = new RHTimer(Cooldown, true);
             
             //_bJump = data.ContainsKey("Jump");
@@ -55,6 +59,10 @@ namespace RiverHollow.Characters
                 _iMaxWander = int.Parse(strParams[2]);
                 _movementTimer = new RHTimer(_fBaseWanderTimer);
 
+                if(strParams.Length == 4)
+                {
+                    _fWanderSpeed = float.Parse(strParams[3]);
+                }
             }
         }
 
@@ -81,7 +89,7 @@ namespace RiverHollow.Characters
                 {
                     ApplyKnockbackVelocity();
                 }
-                else if (HasHP)
+                else if (HasHP && ! _bUsingAction)
                 {
                     HandleMove();
                 }
@@ -109,6 +117,11 @@ namespace RiverHollow.Characters
 
         protected void DetermineMovement(GameTime gTime)
         {
+            if (_bUsingAction)
+            {
+                return;
+            }
+
             switch (_eCurrentState)
             {
                 case NPCStateEnum.Wander:
@@ -132,7 +145,11 @@ namespace RiverHollow.Characters
                 case NPCStateEnum.TrackPlayer:
                     if (!HasKnockbackVelocity())
                     {
-                        MoveActor(_vMovementVelocity);
+                        bool impeded = false;
+                        if (CurrentMap.CheckForCollisions(this, ref _vMovementVelocity, ref impeded))
+                        {
+                            MoveActor(_vMovementVelocity);
+                        }
                         PlayAnimation(VerbEnum.Walk);
 
                         Vector2 mod = GetPlayerDirection() * 0.015f;
@@ -141,17 +158,58 @@ namespace RiverHollow.Characters
                         _vMovementVelocity *= _fBaseSpeed;
                     }
                     break;
+                case NPCStateEnum.MaintainDistance:
+                    if (OnScreen() && PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 8))
+                    {
+                        if (!HasKnockbackVelocity())
+                        {
+                            bool impeded = false;
+                            if (CurrentMap.CheckForCollisions(this, ref _vMovementVelocity, ref impeded))
+                            {
+                                MoveActor(_vMovementVelocity);
+                            }
+
+                            PlayAnimation(VerbEnum.Walk); 
+
+                            Vector2 mod = GetPlayerDirection() * -0.015f;
+                            _vMovementVelocity += mod;
+                            _vMovementVelocity.Normalize();
+                            _vMovementVelocity *= _fBaseSpeed;
+                        }
+                    }
+                    else
+                    {
+                        if (GetBoolByIDKey("Wander"))
+                        {
+                            _eCurrentState = NPCStateEnum.Wander;
+                        }
+                        else
+                        {
+                            _eCurrentState = NPCStateEnum.Idle;
+                            PlayAnimation(VerbEnum.Idle);
+                        }
+                    }
+                    break;
             }
         }
 
         protected bool ScanForPlayer()
         {
             bool rv = false;
-            if (TracksPlayer && OnScreen() && PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 6))
+            if ((TracksPlayer || MaintainDistance )&& OnScreen() && PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 6))
             {
                 rv = true;
-                _eCurrentState = NPCStateEnum.TrackPlayer;
-                _vMovementVelocity = GetPlayerDirectionNormal();
+                Wandering = false;
+                if (TracksPlayer)
+                {
+                    _eCurrentState = NPCStateEnum.TrackPlayer;
+                    _vMovementVelocity = GetPlayerDirectionNormal();
+                }
+                else if (MaintainDistance)
+                {
+                    _eCurrentState = NPCStateEnum.MaintainDistance;
+                    _vMovementVelocity = GetPlayerDirectionNormal() * -1;
+                }
                 SetMoveTo(Point.Zero);
             }
 

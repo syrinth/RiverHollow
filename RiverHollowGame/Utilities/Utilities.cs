@@ -718,6 +718,7 @@ namespace RiverHollow.Utilities
             List<AnimationData> listAnimations = new List<AnimationData>();
             AddToAnimationsList(ref listAnimations, data, VerbEnum.Idle);
             AddToAnimationsList(ref listAnimations, data, VerbEnum.Walk);
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Action1);
             AddToAnimationsList(ref listAnimations, data, AnimationEnum.KO);
             return listAnimations;
         }
@@ -737,9 +738,9 @@ namespace RiverHollow.Utilities
         }
         public static void AddToAnimationsList(ref List<AnimationData> list, Dictionary<string, string> data, VerbEnum verb, bool directional, bool backToIdle)
         {
-            if (data.ContainsKey(Util.GetEnumString(verb)))
+            if (data.ContainsKey(GetEnumString(verb)))
             {
-                list.Add(new AnimationData(data[Util.GetEnumString(verb)], verb, backToIdle, directional));
+                list.Add(new AnimationData(data[GetEnumString(verb)], verb, backToIdle, directional));
             }
         }
         public static void AddToAnimationsList(ref List<AnimationData> list, Dictionary<string, string> data, AnimationEnum animation)

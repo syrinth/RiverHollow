@@ -12,6 +12,7 @@ namespace RiverHollow.Misc
         public float FrameSpeed { get; private set; }
         public bool Directional { get; }
         public bool PingPong { get; private set; }
+        public bool PlayOnce { get; private set; } = false;
         public bool BackToIdle { get; private set; }
         public VerbEnum Verb { get; }
         public AnimationEnum Animation { get; }
@@ -33,19 +34,19 @@ namespace RiverHollow.Misc
         public void StoreData(string value)
         {
             string[] splitString = Util.FindArguments(value);
-            if (splitString.Length == 5)
+            if (splitString.Length == 3)
+            {
+                Frames = int.Parse(splitString[0]);
+                FrameSpeed = float.Parse(splitString[1]);
+                PingPong = splitString[2].Equals("T");
+            }
+            else if (splitString.Length >= 5)
             {
                 XLocation = int.Parse(splitString[0]);
                 YLocation = int.Parse(splitString[1]);
                 Frames = int.Parse(splitString[2]);
                 FrameSpeed = float.Parse(splitString[3]);
                 PingPong = splitString[4].Equals("T");
-            }
-            else if(splitString.Length == 3)
-            {
-                Frames = int.Parse(splitString[0]);
-                FrameSpeed = float.Parse(splitString[1]);
-                PingPong = splitString[2].Equals("T");
             }
         }
     }

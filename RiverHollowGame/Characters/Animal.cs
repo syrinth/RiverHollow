@@ -18,8 +18,10 @@ namespace RiverHollow.Characters
         public Animal(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             _fBaseSpeed = Constants.NPC_WALK_SPEED;
+            _fWanderSpeed = Constants.NPC_WALK_SPEED;
+
             Wandering = true;
-            SlowDontBlock = true;
+            CollisionState = ActorCollisionState.Slow;
 
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);
