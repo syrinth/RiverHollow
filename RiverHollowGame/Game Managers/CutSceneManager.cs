@@ -129,7 +129,7 @@ namespace RiverHollow.Game_Managers
     public class Cutscene
     {
         #region CutScene Commandinformation
-        enum CutsceneCommandEnum { Activate, Speak, Move, Face, Wait, End, Task, Speed, Text, Background, RemoveBackground, MoveToTown };
+        enum CutsceneCommandEnum { Activate, Speak, Move, Face, Wait, End, Task, Speed, Text, Background, RemoveBackground, MoveToTown, Sound };
 
         /// <summary>
         /// A class to hold the information for a CutSceneCommand step
@@ -173,7 +173,7 @@ namespace RiverHollow.Game_Managers
         bool _bWaitForMove;
         RHTask _triggerTask;
 
-        List<Actor> _liMoving;
+        Dictionary<Actor, DirectionEnum> _diMoving;
         List<Actor> _liToRemove;
 
         RHTimer _timer;
@@ -194,7 +194,7 @@ namespace RiverHollow.Game_Managers
             _liCommands = new List<CutSceneCommand>();
             _liReqFriendship = new List<KeyValuePair<int, int>>();
             _liSetupCommands = new List<string>();
-            _liMoving = new List<Actor>();
+            _diMoving = new Dictionary<Actor, DirectionEnum>();
             _liToRemove = new List<Actor>();
 
             //Get the cutscene triggers
@@ -291,13 +291,19 @@ namespace RiverHollow.Game_Managers
                                     break;
                                 case CutsceneCommandEnum.Move:
                                     _bWaitForMove = true;
-                                    AssignMovement(sCommandData[0], int.Parse(sCommandData[1]), Util.ParseEnum<DirectionEnum>(sCommandData[2]));
+                                    DirectionEnum faceDir = DirectionEnum.None;
+                                    if(sCommandData.Length > 3) { faceDir = Util.ParseEnum<DirectionEnum>(sCommandData[3]); }
+                                    AssignMovement(sCommandData[0], int.Parse(sCommandData[1]), Util.ParseEnum<DirectionEnum>(sCommandData[2]), faceDir);
                                     break;
                                 case CutsceneCommandEnum.Wait:
                                     _timer = new RHTimer(double.Parse(sCommandData[0]));
                                     break;
                                 case CutsceneCommandEnum.Task:
                                     TaskManager.AddToTaskLog(int.Parse(sCommandData[0]));
+                                    bGoToNext = true;
+                                    break;
+                                case CutsceneCommandEnum.Sound:
+                                    SoundManager.PlayEffect(Util.ParseEnum<SoundEffectEnum>(sCommandData[0]));
                                     bGoToNext = true;
                                     break;
                                 case CutsceneCommandEnum.Speed:
@@ -307,7 +313,7 @@ namespace RiverHollow.Game_Managers
                                     break;
                                 case CutsceneCommandEnum.Face:
                                     npc = GetActor(sCommandData[0]);
-                                    npc.SetWalkingDir(Util.ParseEnum<DirectionEnum>(sCommandData[1]));
+                                    npc.SetFacing(Util.ParseEnum<DirectionEnum>(sCommandData[1]));
                                     npc.PlayAnimationVerb(VerbEnum.Idle);
                                     bGoToNext = true;
                                     break;
@@ -336,20 +342,20 @@ namespace RiverHollow.Game_Managers
                     }
 
                     //See if the moving characters have finished moving
-                    foreach (Actor actor in _liMoving)
+                    foreach (var kvp in _diMoving)
                     {
-                        CheckFinishedMovement(actor);
+                        CheckFinishedMovement(kvp.Key);
                     }
 
                     //Remove any characters that have finished moving from the list
                     foreach (Actor actor in _liToRemove)
                     {
-                        _liMoving.Remove(actor);
+                        _diMoving.Remove(actor);
                     }
                     _liToRemove.Clear();
 
                     //Now that everyone has finished moving, we can go to the next step
-                    if (_bWaitForMove && _liMoving.Count == 0)
+                    if (_bWaitForMove && _diMoving.Count == 0)
                     {
                         _bWaitForMove = false;
                         _iCurrentCommand++;
@@ -402,7 +408,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="characterID">The Id of the NPC we're actingo n</param>
         /// <param name="numSquares">How many squares to move</param>
         /// <param name="dir">The directional to move in</param>
-        private void AssignMovement(string characterID, int numSquares, DirectionEnum dir)
+        private void AssignMovement(string characterID, int numSquares, DirectionEnum dir, DirectionEnum faceDir)
         {
             Actor c = GetActor(characterID);
             if (!c.HasMovement())
@@ -410,9 +416,9 @@ namespace RiverHollow.Game_Managers
                 Point vec = Util.MultiplyPoint(Util.GetPointFromDirection(dir), numSquares * Constants.TILE_SIZE);
                 
                 c.SetMoveTo(c.CollisionBoxLocation + vec);
-                if (!_liMoving.Contains(c))
+                if (!_diMoving.ContainsKey(c))
                 {
-                    _liMoving.Add(c);
+                    _diMoving[c] = faceDir;
                 }
             }
         }
@@ -431,6 +437,12 @@ namespace RiverHollow.Game_Managers
                     _liToRemove.Add(c);
                 }
                 c.SetMoveTo(Point.Zero);
+
+                if (_diMoving[c] != DirectionEnum.None)
+                {
+                    c.SetFacing(_diMoving[c]);
+                    c.PlayAnimationVerb(VerbEnum.Idle);
+                }
             }
         }
 
@@ -470,6 +482,7 @@ namespace RiverHollow.Game_Managers
                     if (tags.Length > 1)
                     {
                         PlayerManager.PlayerActor.SetPosition(Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(tags[1])));
+                        PlayerManager.PlayerActor.PlayAnimation(VerbEnum.Idle);
                     }
                 }
                 else if (tags[0].Equals("Actors"))
@@ -488,6 +501,7 @@ namespace RiverHollow.Game_Managers
                         else { act = DataManager.CreateNPCByIndex(int.Parse(friendData[0])); }
                         act.CurrentMapName = _cutsceneMap.Name;
                         act.SetPosition(Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(friendData[1])));
+                        act.PlayAnimation(VerbEnum.Idle);
 
                         _cutsceneMap.AddActor(act);
                         _liUsedNPCs.Add(act);

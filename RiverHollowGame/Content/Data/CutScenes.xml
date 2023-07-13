@@ -13,8 +13,8 @@
       <Key>1</Key>
       <Value>
         <Item></Item>
-        <Item>[Map:mapTown][Player:PlayerSpawn][Actors:16-CS1Spawn/21-NPC_21]</Item>
-        <Item>[Background:Textures\Valley][Text:IntroText][RemoveBackground][Face:16-Up/Player-Up][Speed:Player-0.5/14-0.2][Speak:16-1][Move:16-3-Up/Player-3-Up][Speak:16-2][Face:16-Left/Player-Right][Speak:16-3][Wait:0.5][Move:13-1-Down][Wait:1][Face:16-Left][Speak:16-4][Wait:1][Speak:16-5][Move:16-5-Down][Speed:Player-1][TaskID:3]</Item>
+        <Item>[Map:mapHouse_Player][Player:PlayerSpawn][Actors:16-Cutscene_Entrance][Deactivate:16]</Item>
+        <Item>[Speak:16-0][Sound:Door][Face:16-Up][Activate:16][Speed:16-0.5][Move:16-5-Up/Player-4-Left-Down][Speak:16-1][Move:16-5-Down]</Item>
       </Value>
     </Item>
     <Item>

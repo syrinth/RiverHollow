@@ -18,6 +18,8 @@ namespace RiverHollow.Game_Managers
         public static int CurrentMin { get; private set; }
         public static int CurrentDay { get; private set; }
 
+        public static int CurrentYear { get; private set; }
+
         private static int _iBedHour = 0;
         private static int _iBedMinute = 0;
 
@@ -27,6 +29,7 @@ namespace RiverHollow.Game_Managers
 
         public static void NewCalendar()
         {
+            CurrentYear = 1;
             CurrentDay = 1;
             DayOfWeek = DayEnum.Monday;
             CurrentSeason = SeasonEnum.Spring;
@@ -133,7 +136,11 @@ namespace RiverHollow.Game_Managers
             if(CurrentDay == Constants.CALENDAR_DAYS_IN_MONTH)
             {
                 CurrentDay = 1;
-                if (CurrentSeason == SeasonEnum.Winter) { CurrentSeason = SeasonEnum.Spring; }
+                if (CurrentSeason == SeasonEnum.Winter)
+                {
+                    CurrentSeason = SeasonEnum.Spring;
+                    CurrentYear++;
+                }
                 else
                 {
                     CurrentSeason++;
@@ -211,6 +218,7 @@ namespace RiverHollow.Game_Managers
         {
             _timer = new RHTimer(Constants.CALENDAR_MINUTES_PER_SECOND);
 
+            CurrentYear = d.currYear;
             CurrentDay = d.dayOfMonth;
             DayOfWeek = (DayEnum)d.dayOfWeek;
             CurrentSeason = (SeasonEnum)d.currSeason;
@@ -226,7 +234,8 @@ namespace RiverHollow.Game_Managers
             {
                 dayOfWeek = (int)DayOfWeek,
                 dayOfMonth = CurrentDay,
-                currSeason = (int)CurrentSeason
+                currSeason = (int)CurrentSeason,
+                currYear = CurrentYear
             };
         }
     }

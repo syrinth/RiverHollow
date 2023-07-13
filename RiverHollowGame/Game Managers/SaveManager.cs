@@ -214,6 +214,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "currSeason")]
             public int currSeason;
 
+            [XmlElement(ElementName = "currYear")]
+            public int currYear;
+
         }
         public struct EnvironmentData
         {

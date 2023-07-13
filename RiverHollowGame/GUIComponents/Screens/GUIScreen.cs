@@ -6,6 +6,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -260,7 +261,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             if (control != null)
             {
-                _liToAdd.Add(control);
+                Util.AddUniquelyToList(ref _liToAdd, control);
             }
         }
         public void RemoveControls(List<GUIObject> controls)

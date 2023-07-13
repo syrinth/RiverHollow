@@ -71,7 +71,7 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diPlayerAnimationData;
 
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
-        static Dictionary<string, string> _diMailboxMessages;
+        static Dictionary<string, string> _diLetters;
 
         static Dictionary<int, Dictionary<string, string>> _diItemData;
         public static List<int> ItemKeys => _diItemData.Keys.ToList();
@@ -102,7 +102,7 @@ namespace RiverHollow.Game_Managers
 
             _diMonsterTraits = Content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
 
-            _diMailboxMessages = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + @"Mailbox_Text");
+            _diLetters = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + @"Mailbox_Text");
 
             //Read in Content and allocate the appropriate Dictionaries
             LoadGUIs(Content);
@@ -896,9 +896,21 @@ namespace RiverHollow.Game_Managers
             entry.FormatText(formatParameters);
             return entry;
         }
-        public static TextEntry GetMailboxMessage(string messageID)
+        public static List<TextEntry> GetAllLetters()
         {
-            return new TextEntry(messageID, Util.DictionaryFromTaggedString(_diMailboxMessages[messageID]));
+            List<TextEntry> rv = new List<TextEntry>();
+
+            foreach (var kvp in _diLetters)
+            {
+                rv.Add(GetLetter(kvp.Key));
+            }
+
+            return rv;
+        }
+
+        public static TextEntry GetLetter(string messageID)
+        {
+            return new TextEntry(messageID, Util.DictionaryFromTaggedString(_diLetters[messageID]));
         }
         public static Dictionary<string, TextEntry> GetNPCDialogue(string key)
         {

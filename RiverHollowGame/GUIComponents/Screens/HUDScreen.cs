@@ -210,7 +210,6 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _btnSkipCutscene = new GUIButton(GUIUtils.BTN_SKIP, CutsceneManager.SkipCutscene);
             _btnSkipCutscene.AnchorToScreen(SideEnum.BottomRight, 3);
-            AddControl(_btnSkipCutscene);
         }
         public override void RemoveSkipCutsceneButton()
         {

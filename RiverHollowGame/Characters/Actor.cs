@@ -262,11 +262,6 @@ namespace RiverHollow.Characters
         }
 
         public void SetState(ActorStateEnum e) { State = e; }
-        public void SetWalkingDir(DirectionEnum d)
-        {
-            SetFacing(d);
-            BodySprite.PlayAnimation(VerbEnum.Walk, Facing);
-        }
 
         public void SetFacing(DirectionEnum dir)
         {

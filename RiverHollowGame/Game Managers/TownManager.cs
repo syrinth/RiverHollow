@@ -89,6 +89,7 @@ namespace RiverHollow.Game_Managers
 
         public static void Rollover()
         {
+            //DataManager.GetMailboxMessage();
             if(GameCalendar.DayOfWeek == 0)
             {
                 _bTravelersCame = false;
@@ -100,7 +101,7 @@ namespace RiverHollow.Game_Managers
             }
             foreach (Merchant m in DIMerchants.Values)
             {
-                if (TownManager.Market != null)
+                if (Market != null)
                 {
                     m.RollOver();
                 }
@@ -372,7 +373,6 @@ namespace RiverHollow.Game_Managers
             TownAnimals.Add(npc);
             npc.MoveToSpawn();
         }
-
 
         #region Town Helpers
         public static void AddToCodex(int id)

@@ -3,10 +3,9 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name:Introduction][Text:!
-	  Come to finish the job, have ye? Alright then, Bigjob, come and get it!
-	  ...
-	  What's that? You're not a bandit? A village you say? Well now, that's convenient ain't it? Name's Ulm, and it'll be a pleasure to meet you once you do me a small favor.]</Value>
+      <Value>[Name:Introduction][Text:Who's there?!
+	  Oh, you don't look threatening. Any chance you came from a place called $Town$? I'm supposed to be heading there but I appear to have gotten turned around.
+	  You do? Great. The name's Ulm, and it'll be a pleasure to meet you once you do me a small favor.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -30,12 +29,14 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Name:Task_1_Start][Text: Y'see, I twisted my ankle when I was scarpering from some thugs the other day. It would be real sweet of you to find me three $Item_432$, that should patch me up for now.]</Value>
+      <Value>[Name:Task_1_Start][Text: I've been wandering through these woods all day and I'm just too tired to move another foor. I think $Item_163$ grows around here, doesn't it? That should give me the strength to continue for now.]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Name:Task_1_End][Text:Is that $Item_162$ I smell?
-Knew I could count on you, Bigjob. Now let me just... Ah! Much better. So I believe you said something about a town yes? I'll see you there, and we can talk business!]</Value>
+      <Value>[Name:Task_1_End][Text:Is that $Item_163$ I smell?
+Knew I could count on you.
+...
+Ah! That hits the spot. Now then, where was that town you said? Great, I'll see you there, and then we can talk business!]</Value>
     </Item>
     <Item>
       <Key>8</Key>

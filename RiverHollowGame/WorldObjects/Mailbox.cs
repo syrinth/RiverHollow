@@ -9,6 +9,7 @@ using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Utilities;
 using RiverHollow.GUIComponents;
+using System;
 
 namespace RiverHollow.WorldObjects
 {
@@ -56,7 +57,7 @@ namespace RiverHollow.WorldObjects
             if (_liCurrentMessages.Count > 0)
             {
                 rv = true;
-                TextEntry tEntry = DataManager.GetMailboxMessage(_liCurrentMessages[0]);
+                TextEntry tEntry = DataManager.GetLetter(_liCurrentMessages[0]);
                 _liCurrentMessages.RemoveAt(0);
 
                 if (_liCurrentMessages.Count == 0)
@@ -89,21 +90,18 @@ namespace RiverHollow.WorldObjects
 
         public new MailboxData SaveData()
         {
-            MailboxData data = new MailboxData();
-            data.MailboxMessages = new List<string>();
-            foreach (string strID in _liCurrentMessages)
+            MailboxData data = new MailboxData
             {
-                data.MailboxMessages.Add(strID);
-            }
+                MailboxMessages = new List<string>()
+            };
+
+            _liCurrentMessages.ForEach(x => data.MailboxMessages.Add(x));
 
             return data;
         }
         public void LoadData(MailboxData data)
         {
-            foreach (string strID in data.MailboxMessages)
-            {
-                _liSentMessages.Add(strID);
-            }
+            data.MailboxMessages.ForEach(x => _liSentMessages.Add(x));
 
             Rollover();
         }

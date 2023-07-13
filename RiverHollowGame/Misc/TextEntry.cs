@@ -11,7 +11,7 @@ namespace RiverHollow.Misc
 {
     public class TextEntry
     {
-        string _sKey = string.Empty;
+        public string Key { get; } = string.Empty;
 
         //The type of selection menu to create, identifies the options
         TextEntrySelectionEnum _eSelectionType = TextEntrySelectionEnum.None;
@@ -56,7 +56,7 @@ namespace RiverHollow.Misc
         {
             _diTags = stringData;
 
-            _sKey = key;
+            Key = key;
 
             Util.AssignValue(ref _sText, "Text", stringData);
             Util.AssignValue(ref _dPriority, "Priority", stringData);
@@ -136,6 +136,20 @@ namespace RiverHollow.Misc
             }
 
             return _liCommands;
+        }
+
+        public bool Validate()
+        {
+            bool rv = false;
+            if (_diTags.ContainsKey("GameStart"))
+            {
+                if (GameCalendar.CurrentDay == 1 && GameCalendar.CurrentSeason == SeasonEnum.Spring && GameCalendar.CurrentYear == 1)
+                {
+                    rv = true;
+                }
+            }
+
+            return rv;
         }
 
         /// <summary>
@@ -270,7 +284,7 @@ namespace RiverHollow.Misc
             if (act != null && _diTags.ContainsKey("Once"))
             {
                 _bSpoken = true;
-                act.AddSpokenKey(_sKey);
+                act.AddSpokenKey(Key);
             }
         }
     }

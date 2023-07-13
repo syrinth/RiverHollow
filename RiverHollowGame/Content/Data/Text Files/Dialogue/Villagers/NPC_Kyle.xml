@@ -31,8 +31,10 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Name:Task_0_End][Text:Is the $WorldObject_112$ finished? Great! I think a merchant is set to come tomorrow, but I don't think we have anything to sell him... Check the woods to the West, yeah?
-	  I'm sure you can find herbs, and berries or something that he'd take money for.
+      <Value>[Name:Task_0_End][Text:Is the $WorldObject_112$ finished? Great! The Merchant's Guild knows we're here, so there should be someone along soon but that leaves the little problem of us not having anything to sell  yet.
+	  ...
+	  A member of the Alchemist's Guild was supposed to meet us. I was expecting her today but I'm worried something happened to her.
+	  Could you check the woods to the West for me? Maybe she got lost or ran into some monsters.
 	  Oh, and before I forget, here. Take a look through these notes when you have a minute.][Face:Happy]</Value>
     </Item>
     <Item>

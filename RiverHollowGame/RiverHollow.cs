@@ -282,8 +282,9 @@ namespace RiverHollow
             GoToHUDScreen();
             GameCalendar.NewCalendar();
 
-            //CutsceneManager.TriggerCutscene(1);
-            //if (!playIntro) { CutsceneManager.SkipCutscene(); }
+
+            CutsceneManager.TriggerCutscene(1);
+            if (!playIntro) { CutsceneManager.SkipCutscene(); }
 
             StartGame();
         }
