@@ -156,8 +156,7 @@ namespace RiverHollow.Game_Managers
         #region Weather handling
         public static void RollForWeatherEffects()
         {
-            int roll = RHRandom.Instance().Next(1, 5);
-            if (roll > 2 || (_iSeasonPrecipDays < Constants.MINIMUM_DAYS_OF_PRECIPITATION && GameCalendar.CurrentDay + _iSeasonPrecipDays - 1 == Constants.CALENDAR_DAYS_IN_MONTH))
+            if (RHRandom.Instance().RollPercent(20) || (_iSeasonPrecipDays < Constants.MINIMUM_DAYS_OF_PRECIPITATION && GameCalendar.CurrentDay + _iSeasonPrecipDays - 1 == Constants.CALENDAR_DAYS_IN_MONTH))
             {
                 _iSeasonPrecipDays++;
                 if (GameCalendar.CurrentSeason == SeasonEnum.Winter)

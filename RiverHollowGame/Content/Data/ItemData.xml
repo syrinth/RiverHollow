@@ -307,7 +307,7 @@
     </Item>
     <Item>
       <Key>76</Key>
-      <Value>[Type:Seed][Image:2-2][Value:3][ObjectID:101][Season:Fall]</Value>
+      <Value>[Type:Seed][Image:2-1][Value:3][ObjectID:101][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>77</Key>
@@ -539,7 +539,7 @@
     </Item>
     <Item>
       <Key>134</Key>
-      <Value>[Type:Tool][Subtype:Shovel][Image:0-2][Stam:2][Level:1]</Value>
+      <Value>[Type:Tool][Subtype:Hoe][Image:0-2][Level:1][SoundEffect:Pick][AnimationData:0-384/3-4/5/0.08][Stam:2][HitAt:1]</Value>
     </Item>
     <Item>
       <Key>135</Key>
@@ -619,7 +619,7 @@
     </Item>
     <Item>
       <Key>154</Key>
-      <Value>[Type:Food][Subtype:Food][Image:2-1][Value:8][Stam:2]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:4-2][Value:8][Stam:2]</Value>
     </Item>
     <Item>
       <Key>155</Key>
@@ -659,15 +659,15 @@
     </Item>
     <Item>
       <Key>164</Key>
-      <Value>[Type:Consumable][Image:1-2][Value:3000][CombatType:Helpful][Status:KO][Hp:1]</Value>
+      <Value>[Type:Consumable][Subtype:None][Image:1-2][Value:3000][CombatType:Helpful][Status:KO][Hp:1]</Value>
     </Item>
     <Item>
       <Key>165</Key>
-      <Value>[Type:Consumable][Image:1-2][Value:3000][CombatType:Helpful][Status:Poisoned]</Value>
+      <Value>[Type:Consumable][Subtype:None][Image:1-2][Value:3000][CombatType:Helpful][Status:Poisoned]</Value>
     </Item>
     <Item>
       <Key>166</Key>
-      <Value>[Type:Consumable][Image:1-2][Value:3000][CombatType:Harmful][Status:Poisoned]</Value>
+      <Value>[Type:Consumable][Subtype:Medicine][Image:1-2][Value:3000][CombatType:Harmful][Status:Poisoned]</Value>
     </Item>
     <Item>
       <Key>167</Key>
@@ -679,7 +679,7 @@
     </Item>
     <Item>
       <Key>169</Key>
-      <Value>[Type:Consumable][Image:5-0][Value:3000][CombatType:Helpful][StatusEffect:5-10][ReqItems:23-4]</Value>
+      <Value>[Type:Consumable][Subtype:Medicine][Image:5-0][Value:3000][CombatType:Helpful][StatusEffect:5-10][ReqItems:23-4]</Value>
     </Item>
     <Item>
       <Key>170</Key>
@@ -863,7 +863,7 @@
     </Item>
     <Item>
       <Key>215</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:9-1][FoodType:Fancy][FoodValue:40][Stam:15][ReqItems:163-1/162-1]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:9-1][FoodType:Fancy][FoodValue:40][Stam:15][ReqItems:154-2]</Value>
     </Item>
     <Item>
       <Key>216</Key>

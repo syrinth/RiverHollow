@@ -4,10 +4,10 @@ using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.Items;
-using static RiverHollow.Utilities.Enums;
 using System;
+using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Misc
 {
@@ -26,8 +26,8 @@ namespace RiverHollow.Misc
         public TalkingActor StartNPC { get; private set; }
         public TalkingActor GoalNPC { get; private set; }
 
-        private Dictionary<TaskTriggerEnum, string> _diAssignationTriggers;
-        private List<KeyValuePair<int, bool>> _liTasksToTrigger;
+        private readonly Dictionary<TaskTriggerEnum, string> _diAssignationTriggers;
+        private readonly List<KeyValuePair<int, bool>> _liTasksToTrigger;
 
         private readonly int _iCutsceneID;
         public int NeededCount { get; private set; }
@@ -37,7 +37,6 @@ namespace RiverHollow.Misc
         private Mob _questMonster;
         private Item _targetItem;
         private int _iTargetObjectID = -1;
-        private readonly int _iTargetWorldObjNum = -1;
         public bool ReadyForHandIn { get; private set; } = false;
         
 
@@ -147,7 +146,9 @@ namespace RiverHollow.Misc
 
             if (stringData.ContainsKey("GoalItem"))
             {
-                _targetItem = DataManager.GetItem(int.Parse(stringData["GoalItem"]));
+                string[] parse = Util.FindArguments(stringData["GoalItem"]);
+                _targetItem = DataManager.GetItem(int.Parse(parse[0]));
+                NeededCount = parse.Length > 1 ? int.Parse(parse[1]) : 1;
             }
 
             if (stringData.ContainsKey("Count"))
@@ -198,9 +199,9 @@ namespace RiverHollow.Misc
 
             if (stringData.ContainsKey("TargetObjectID"))
             {
-                string[] split = Util.FindParams(stringData["TargetObjectID"]);
+                string[] split = Util.FindArguments(stringData["TargetObjectID"]);
                 _iTargetObjectID = int.Parse(split[0]);
-                _iTargetWorldObjNum = split.Length == 2 ? int.Parse(split[1]) : 1;
+                NeededCount = split.Length == 2 ? int.Parse(split[1]) : 1;
             }
 
             Util.AssignValue(ref _bFinishOnCompletion, "Immediate", stringData);
@@ -334,7 +335,7 @@ namespace RiverHollow.Misc
             if (_eTaskType == TaskTypeEnum.Build && i == _iTargetObjectID)
             {
                 rv = true;
-                SetReadyForHandIn(TownManager.GetNumberTownObjects(_iTargetObjectID) == _iTargetWorldObjNum);
+                SetReadyForHandIn(TownManager.GetNumberTownObjects(_iTargetObjectID) == NeededCount);
             }
 
             return rv;
@@ -502,7 +503,7 @@ namespace RiverHollow.Misc
                         rv = " Population: " + TownManager.GetPopulation() + "/" + NeededCount;
                         break;
                     case TaskTypeEnum.Fetch:
-                        rv = _targetItem.Name() + " Found: " + TargetsAccomplished + "/" + NeededCount;
+                        rv = string.Format(@"{0} {1}/{2}", _targetItem.Name(), TargetsAccomplished, NeededCount);
                         break;
                     case TaskTypeEnum.GroupSlay:
                         rv = _questMonster.Name() + " Defeated: " + TargetsAccomplished + "/" + NeededCount;
@@ -513,7 +514,7 @@ namespace RiverHollow.Misc
                     case TaskTypeEnum.Build:
                         string objName = DataManager.GetTextData(_iTargetObjectID, "Name", DataType.WorldObject);
 
-                        if (_iTargetWorldObjNum > 1) { rv = "Build " + _iTargetWorldObjNum.ToString() + objName + "s"; }
+                        if (NeededCount > 1) { rv = string.Format(@"Build {0} {1}s", NeededCount.ToString(), objName); }
                         else if (!DataManager.GetBoolByIDKey(_iTargetObjectID, "SkipArticle", DataType.WorldObject))
                         {
                             var vowels = new List<string>() { "a", "e", "i", "o", "u" };

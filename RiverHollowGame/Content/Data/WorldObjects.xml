@@ -131,7 +131,7 @@
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Building][Subtype:None][Texture:Manor][Size:11-12][Base:0-7-11-5][Entrance:5-10-1-2][UpgradeTime:3][LightID:2-30-166/2-144-166/2-44-123/2-129-123]</Value>
+      <Value>[Type:Building][Texture:Manor][Size:11-12][Base:0-7-11-5][Entrance:5-10-1-2][UpgradeTime:3][LightID:2-30-166/2-144-166/2-44-123/2-129-123]</Value>
     </Item>
     <Item>
       <Key>33</Key>
@@ -155,7 +155,7 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Building][Subtype:None][Texture:Town_Hall][Size:9-11][Base:1-7-7-4][Entrance:4-9-1-2][ReqItems:55-40/60-20/190]</Value>
+      <Value>[Type:Building][Texture:Town_Hall][Size:9-11][Base:1-7-7-4][Entrance:4-9-1-2][ReqItems:55-40/60-20/190]</Value>
     </Item>
     <Item>
       <Key>39</Key>
@@ -407,7 +407,7 @@
     </Item>
     <Item>
       <Key>101</Key>
-      <Value>[Type:Plant][Image:12-1][Size:1-2][ItemID:152][States:4][TrTime:1-2-3]</Value>
+      <Value>[Type:Plant][States:4][Time:1/1/2][Image:0-3/1-3/0-4/1-4][Size:1-1/1-1/1-1/1-1][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-0-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:76][ItemID:///154][BonusItemID:76-1-U][Season:Spring][SpriteOffset:4]</Value>
     </Item>
     <Item>
       <Key>102</Key>
@@ -423,11 +423,11 @@
     </Item>
     <Item>
       <Key>105</Key>
-      <Value>[Type:Plant][States:4][Time:1/1/2][Image:16-18/17-18/18-17/19-17][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:80][ItemID:///95][BonusItemID:80-1-C][HoneyID:160][Season:Spring][SpriteOffset:4]</Value>
+      <Value>[Type:Plant][States:4][Time:1/1/2][Image:14-0/15-0/14-1/15-1][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:80][ItemID:///95][BonusItemID:80-1-C][HoneyID:160][Season:Spring][SpriteOffset:4]</Value>
     </Item>
     <Item>
       <Key>106</Key>
-      <Value>[Type:Plant][States:4][Time:1/1/2][Image:8-22/9-22/10-22/11-21][Size:1-1/1-1/1-1/1-2][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:82][ItemID:///93][BonusItemID:82-1-C][HoneyID:143][Season:Spring][Spread:5/5][SpriteOffset:4]</Value>
+      <Value>[Type:Plant][States:4][Time:1/1/2][Image:2-0/3-0/2-1/3-1][Size:1-1/1-1/1-1/1-2][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:82][ItemID:///93][BonusItemID:82-1-U][HoneyID:143][Season:Spring][Spread:5/5][SpriteOffset:4]</Value>
     </Item>
     <Item>
       <Key>107</Key>
@@ -447,7 +447,7 @@
     </Item>
     <Item>
       <Key>111</Key>
-      <Value>[Type:Plant][States:4][Time:1/1/2][Image:8-20/9-20/10-19/11-19][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:87][ItemID:///96][BonusItemID:87-1-C][HoneyID:142][Season:Spring][Spread:5/1][SpriteOffset:4]</Value>
+      <Value>[Type:Plant][States:4][Time:1/1/2][Image:0-0/1-0/0-1/1-1][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:87][ItemID:///96][BonusItemID:87-1-U][HoneyID:142][Season:Spring][Spread:5/1][SpriteOffset:4]</Value>
     </Item>
     <Item>
       <Key>112</Key>
@@ -595,7 +595,7 @@
     </Item>
     <Item>
       <Key>148</Key>
-      <Value>[Type:Machine][Image:0-19][Size:3-2][Base:0-1-3-1][Makes:195/213/214/215/217][Kitchen]</Value>
+      <Value>[Type:Machine][Image:0-19][Size:2-3][Base:0-2-2-1][Makes:195/213/214/215/217][Kitchen]</Value>
     </Item>
     <Item>
       <Key>149</Key>

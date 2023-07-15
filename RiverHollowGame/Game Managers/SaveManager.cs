@@ -312,6 +312,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "WorldObjects")]
             public List<WorldObjectData> worldObjects;
+
+            [XmlArray(ElementName = "SpecialTiles")]
+            public List<RHTileData> specialTiles;
         }
         public struct VillagerData
         {
@@ -408,8 +411,11 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Y")]
             public int y;
 
-            [XmlElement(ElementName = "WorldObject")]
-            public WorldObjectData worldObject;
+            [XmlElement(ElementName = "Wallpaper")]
+            public int wallpaperData;
+
+            [XmlElement(ElementName = "Tilled")]
+            public bool tilled;
         }
         public struct WorldObjectData
         {

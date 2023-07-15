@@ -56,7 +56,7 @@ namespace RiverHollow.Map_Handling
 
         protected RHTile[,] _arrTiles;
         public List<RHTile> TileList => _arrTiles.Cast<RHTile>().ToList();
-        private List<RHTile> _liWallTiles;
+        private List<RHTile> _liSpecialTiles;
 
         protected TiledMapRenderer _renderer;
         protected List<TiledMapTileset> _liTilesets;
@@ -93,7 +93,7 @@ namespace RiverHollow.Map_Handling
         {
             _liResourceSpawns = new List<ResourceSpawn>();
             _liMobSpawns = new List<MobSpawn>();
-            _liWallTiles = new List<RHTile>();
+            _liSpecialTiles = new List<RHTile>();
             _liTestTiles = new List<RHTile>();
             _liTilesets = new List<TiledMapTileset>();
             _liActors = new List<Actor>();
@@ -126,7 +126,7 @@ namespace RiverHollow.Map_Handling
             _sName = map.Name + "Clone";
             _renderer = map._renderer;
             _arrTiles = map._arrTiles;
-            _liWallTiles = map._liWallTiles;
+            _liSpecialTiles = map._liSpecialTiles;
             _diTileLayers = map._diTileLayers;
 
             if (_map.Properties.ContainsKey("Dungeon"))
@@ -308,13 +308,7 @@ namespace RiverHollow.Map_Handling
             SetLayerVisibiltyByName(false, "Upper");
             _renderer.Draw(_map, Camera._transform);
 
-            if (_liWallTiles.Count > 0)
-            {
-                foreach (RHTile t in _liWallTiles)
-                {
-                    t.DrawWallpaper(spriteBatch);
-                }
-            }
+            _liSpecialTiles.ForEach(x => x.Draw(spriteBatch));
         }
 
         public void DrawBelowGround(SpriteBatch spriteBatch) {
@@ -518,7 +512,7 @@ namespace RiverHollow.Map_Handling
                             foreach (Point p in Util.GetAllPointsInArea(mapObject.Position, mapObject.Size, Constants.TILE_SIZE))
                             {
                                 RHTile tile = GetTileByPixelPosition(p);
-                                Util.AddUniquelyToList(ref _liWallTiles, tile);
+                                Util.AddUniquelyToList(ref _liSpecialTiles, tile);
                                 tile.SetWallTrue();
                             }
                         }
@@ -731,37 +725,6 @@ namespace RiverHollow.Map_Handling
             }
         }
 
-        /// <summary>
-        /// Call to retrieve a list of RHTiles that cannot be used to spawn resources on. These tiles
-        /// are chosen due to proximity to monster spawn points, and travel points.
-        /// 
-        /// Additionally, it ensures that there exists a path between each monster spawn point and each
-        /// potential player combat start area
-        /// </summary>
-        /// <param name="loaded">Whether the map was loaded or not. To avoid double spawning</param>
-        /// <returns>A list of tiles to ignore when spawning resources.</returns>
-        private List<RHTile> GetSkipTiles()
-        {
-            List<RHTile> skipTiles = new List<RHTile>();
-
-            foreach (TravelPoint tp in DictionaryTravelPoints.Values)
-            {
-                List<RHTile> tiles = GetTilesFromRectangleExcludeEdgePoints(tp.CollisionBox);
-                for (int tileIndex = 0; tileIndex < tiles.Count; tileIndex++)
-                {
-                    Util.AddUniquelyToList(ref skipTiles, tiles[tileIndex]);
-
-                    List<RHTile> neighbourList = tiles[tileIndex].GetWalkableNeighbours();
-                    for (int neighbourIndex = 0; neighbourIndex < neighbourList.Count; neighbourIndex++)
-                    {
-                        Util.AddUniquelyToList(ref skipTiles, neighbourList[neighbourIndex]);
-                    }
-                }
-            }
-
-            return skipTiles;
-        }
-
         public void Rollover()
         {
             if (Randomize)
@@ -773,6 +736,8 @@ namespace RiverHollow.Map_Handling
             MobsSpawned = MobSpawnStateEnum.None;
             new List<WorldObject>(_liPlacedWorldObjects).ForEach(x => x.Rollover());
             _liResourceSpawns.ForEach(x => x.Rollover(Randomize));
+
+            _liSpecialTiles.ForEach(x => x.Rollover());
 
             PopulateMap(Randomize);
             CheckSpirits();
@@ -1293,11 +1258,14 @@ namespace RiverHollow.Map_Handling
         #endregion
         #endregion
 
-        public bool IsLocationValid(Vector2 pos)
+        public void AddSpecialTile(RHTile t)
         {
-            bool rv = false;
-            //_map.Layers[_map.Layers.IndexOf("EntranceLayer")].
-            return rv;
+            Util.AddUniquelyToList(ref _liSpecialTiles, t);
+        }
+
+        public void RemoveSpecialTile(RHTile t)
+        {
+            _liSpecialTiles.Remove(t);
         }
 
         public void AddCollectionItem(int itemID, int npcIndex, int index)
@@ -1976,6 +1944,15 @@ namespace RiverHollow.Map_Handling
                 }
             }
 
+            if(obj.Type == ObjectTypeEnum.Plant)
+            {
+                Plant p = (Plant)obj;
+                if (obj == GameManager.HeldObject && p.NeedsWatering && !testTile.Tilled)
+                {
+                    rv = false;
+                }
+            }
+
             return rv;
         }
 
@@ -2366,9 +2343,10 @@ namespace RiverHollow.Map_Handling
         {
             MapData mapData = new MapData
             {
-                mapName = this.Name,
-                visited = this.Visited,
-                worldObjects = new List<WorldObjectData>()
+                mapName = Name,
+                visited = Visited,
+                worldObjects = new List<WorldObjectData>(),
+                specialTiles = new List<RHTileData>()
             };
 
             if (!IsDungeon)
@@ -2380,6 +2358,8 @@ namespace RiverHollow.Map_Handling
                         mapData.worldObjects.Add(wObj.SaveData());
                     }
                 }
+
+                _liSpecialTiles.ForEach(x => mapData.specialTiles.Add(x.SaveData()));
             }
 
             return mapData;
@@ -2387,6 +2367,14 @@ namespace RiverHollow.Map_Handling
         internal void LoadData(MapData mData)
         {
             Visited = mData.visited;
+            foreach (var data in mData.specialTiles)
+            {
+                if (data.tilled)
+                {
+                    _arrTiles[data.x, data.y].TillTile();
+                }
+            }
+
             foreach (WorldObjectData data in mData.worldObjects)
             {
                 WorldObject obj = DataManager.CreateWorldObjectByID(data.ID);

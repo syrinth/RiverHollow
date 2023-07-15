@@ -15,51 +15,55 @@
     </Item>
     <Item>
       <Key>Task_3</Key>
-      <Value>[Name:$WorldObject_35$ for the people]</Value>
+      <Value>[Name:$WorldObject_35$ for the people][Description:Time to set up a Smithy]</Value>
     </Item>
     <Item>
       <Key>Task_4</Key>
-      <Value>[Name:Home to Roost]</Value>
+      <Value>[Name:Home to Roost][Description:Helen wants to set up a home for her flock]</Value>
     </Item>
     <Item>
       <Key>Task_5</Key>
-      <Value>[Name:Putting Down Roots]</Value>
+      <Value>[Name:Putting Down Roots][Description:Jase needs a shop to sell plants]</Value>
     </Item>
     <Item>
       <Key>Task_6</Key>
-      <Value>[Name:Time to Grow]</Value>
+      <Value>[Name:Time to Grow][Description:The time has come to build a Town Hall]</Value>
     </Item>
     <Item>
       <Key>Task_7</Key>
-      <Value>[Name:A growing settlement]</Value>
+      <Value>[Name:A growing settlement][Description:Actually build a Town Hall]</Value>
     </Item>
     <Item>
       <Key>Task_8</Key>
-      <Value>[Name:Part of Their World]</Value>
+      <Value>[Name:Part of Their World][Description:Kevin wants to see some of this metal  stuff]</Value>
     </Item>
     <Item>
       <Key>Task_9</Key>
-      <Value>[Name:Shortcut to Mushrooms]</Value>
+      <Value>[Name:Shortcut to Mushrooms][Description:Set up a home for Kevin]</Value>
     </Item>
     <Item>
       <Key>Task_10</Key>
-      <Value>[Name:$WorldObject_30$ are better than people]</Value>
+      <Value>[Name:$WorldObject_30$ are better than people][Description:Nevar requires an Archives to be build]</Value>
     </Item>
     <Item>
       <Key>Task_11</Key>
-      <Value>[Name:Making Magic]</Value>
+      <Value>[Name:Making Magic][Description:Griselda's Magic Shop]</Value>
     </Item>
     <Item>
       <Key>Task_12</Key>
-      <Value>[Name:Specially For You]</Value>
+      <Value>[Name:Specially For You][Description:Harrison's Specialty Shop]</Value>
     </Item>
     <Item>
       <Key>Task_13</Key>
-      <Value>[Name:Turning a Page]</Value>
+      <Value>[Name:Turning a Page][Description:Page's Book Store]</Value>
     </Item>
     <Item>
       <Key>Task_14</Key>
-      <Value>[Name:Spinning Right Round]</Value>
+      <Value>[Name:Spinning Right Round][Description:Pottery Shop]</Value>
+    </Item>
+    <Item>
+      <Key>Task_15</Key>
+      <Value>[Name:Row By Row][Description:$Actor_20$ has asked you to grow some crops.]</Value>
     </Item>
     <Item>
       <Key>Actor_0</Key>
@@ -804,7 +808,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_76</Key>
-      <Value>[Name:Carrot Seeds][Description:Grows a carrot]</Value>
+      <Value>[Name:Caropa Seed][Description:Grows a plump $Item_154$]</Value>
     </Item>
     <Item>
       <Key>Item_77</Key>
@@ -1036,7 +1040,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_134</Key>
-      <Value>[Name:Shovel][Description:Dig the thing]</Value>
+      <Value>[Name:Hoe][Description:Use to till the soil]</Value>
     </Item>
     <Item>
       <Key>Item_135</Key>
@@ -1116,7 +1120,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_154</Key>
-      <Value>[Name:Carrot][Description:Crisp and crunchy]</Value>
+      <Value>[Name:Caropa][Description:Crisp and crunchy]</Value>
     </Item>
     <Item>
       <Key>Item_155</Key>
@@ -1152,7 +1156,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_163</Key>
-      <Value>[Name:Sun Root]</Value>
+      <Value>[Name:Heart Root]</Value>
     </Item>
     <Item>
       <Key>Item_164</Key>
@@ -1360,7 +1364,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_215</Key>
-      <Value>[Name:Sunny Stew]</Value>
+      <Value>[Name:Boiled Caropa]</Value>
     </Item>
     <Item>
       <Key>Item_216</Key>
@@ -1752,7 +1756,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_95</Key>
-      <Value>[Name:Windblossom]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_96</Key>
@@ -1776,7 +1780,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_101</Key>
-      <Value>[Name:Carrot Plant]</Value>
+      <Value>[Name:Caropa]</Value>
     </Item>
     <Item>
       <Key>WorldObject_102</Key>

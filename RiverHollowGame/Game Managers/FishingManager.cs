@@ -57,7 +57,7 @@ namespace RiverHollow.Game_Managers
                             {
                                 var checkPoint = PlayerManager.PlayerActor.CollisionCenter + Util.MultiplyPoint(facingPoint, Constants.TILE_SIZE * i);
                                 var tile = MapManager.CurrentMap.GetTileByPixelPosition(checkPoint);
-                                if (tile.Water)
+                                if (tile.IsWaterTile)
                                 {
                                     var hole = MapManager.CurrentMap.GetFishingHole(tile);
                                     SetFish(hole.GetRandomItemID(), checkPoint);

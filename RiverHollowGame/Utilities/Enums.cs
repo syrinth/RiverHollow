@@ -39,7 +39,7 @@
         public enum ItemGroupEnum { Ceramic, Construction, Clothing, Fish, Flower, Food, Gem, Herb, Ingredient, Magic, Meal, Medicine, Metal, Ore, None };
         public enum ItemEnum { Resource, Tool, Food, Consumable, Clothing, Buildable, MonsterFood, NPCToken, Blueprint, Seed, Special };
         public enum FoodTypeEnum { Dessert, Fancy, Healthy, Plain, Seafood };
-        public enum ToolEnum { None, Axe, Backpack, CapeOfBlinking, FishingRod, Harp, Lantern, Pick, Return, Scythe, Shovel, StaffOfIce, Sword, WateringCan };
+        public enum ToolEnum { None, Axe, Backpack, CapeOfBlinking, FishingRod, Harp, Lantern, Pick, Return, Scythe, Hoe, StaffOfIce, Sword, WateringCan };
         public enum GearTypeEnum { None, Accessory, Chest, Head, Weapon };
         public enum ClothingEnum { None, Chest, Legs, Hat };
         public enum NPCTokenTypeEnum { Mount, Pet };

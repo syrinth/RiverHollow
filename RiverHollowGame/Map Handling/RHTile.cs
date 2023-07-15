@@ -8,7 +8,9 @@ using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
+using System;
 using System.Collections.Generic;
+using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Map_Handling
@@ -32,7 +34,9 @@ namespace RiverHollow.Map_Handling
         public WorldObject ShadowObject { get; private set; }
         public WorldObject Flooring { get; private set; }
         public bool IsRoad { get; private set; }
-        public bool Water => ContainsProperty("Water", out string value) && value.Equals("true");
+        public bool IsWaterTile => ContainsProperty("Water", out string value) && value.Equals("true");
+        public bool Tilled { get; private set; }
+        public bool Watered { get; private set; }
 
         bool _bArea = false;
         bool _bSelected = false;
@@ -48,9 +52,18 @@ namespace RiverHollow.Map_Handling
             _diProps = new Dictionary<TiledMapTileLayer, Dictionary<string, string>>();
         }
 
-        public void DrawWallpaper(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             _objWallpaper?.Draw(spriteBatch);
+
+            if (Tilled && CurrentMap() == MapManager.TownMap)
+            {
+                Rectangle dirtRectangle;
+                if (Watered) { dirtRectangle = new Rectangle(16, 304, 16, 16); }
+                else { dirtRectangle = new Rectangle(0, 304, 16, 16); }
+
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), CollisionBox, dirtRectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0);
+            }
         }
 
         public bool ProcessRightClick()
@@ -211,26 +224,6 @@ namespace RiverHollow.Map_Handling
 
         public void SetWallpaper(Wallpaper obj) { _objWallpaper = obj; }
 
-        /// <summary>
-        /// Determines whether or not the tile is a valid target for being dug.
-        /// 
-        /// Currently can be dug if the property is set, and there are no objects sitting on it.
-        /// </summary>
-        /// <returns></returns>
-        public bool CanDig()
-        {
-            bool rv = false;
-            foreach (TiledMapTileLayer l in _diProps.Keys)
-            {
-                if (l.IsVisible && ContainsProperty(l, "CanDig", out string val) && val.Equals("true") && WorldObject == null && Flooring == null)
-                {
-                    rv = true;
-                }
-            }
-
-            return rv;
-        }
-
         public void SetClickAction(string str) { _sClickAction = str; }
         public void SetTravelPoint(TravelPoint obj) { _travelPoint = obj; }
         public TravelPoint GetTravelPoint()
@@ -283,35 +276,64 @@ namespace RiverHollow.Map_Handling
             return rv;
         }
 
-        /// <summary>
-        /// Sets the selected value of the RHTile
-        /// </summary>
-        /// <param name="val">Whether to set or unset the selected value</param>
-        public void Select(bool val)
+        public void Rollover()
         {
-            _bSelected = val;
+            if (EnvironmentManager.IsRaining() && CurrentMap().IsOutside) { Watered = true; }
+            else { Watered = false; }
+
+            if (Tilled && WorldObject == null)
+            {
+                if (RHRandom.Instance().RollPercent(20))
+                {
+                    UntillTile();
+                }
+            }
         }
 
-        /// <summary>
-        /// Sets the legal value of the RHTile
-        /// </summary>
-        /// <param name="val">Whether to set or unset the selected value</param>
-        public void LegalTile(bool val)
+        public void TillTile()
         {
-            _bLegalTile = val;
+            if (ContainsProperty("Tillable", out string value))
+            {
+                if (WorldObject != null && WorldObject.Type == ObjectTypeEnum.Plant)
+                {
+                    Plant p = (Plant)WorldObject;
+                    var seedID = WorldObject.GetIntByIDKey("SeedID", -1);
+                    if (p.CurrentState == 0 && seedID != -1)
+                    {
+                        MapManager.RemoveWorldObject(WorldObject);
+                        MapManager.DropItemOnMap(DataManager.GetItem(seedID), CollisionBox.Location);
+                    }
+                }
+                else if (WorldObject == null && GetFloorObject() == null)
+                {
+                    Tilled = !Tilled;
+
+                    if (Tilled)
+                    {
+                        Watered = EnvironmentManager.IsRaining();
+                        CurrentMap().AddSpecialTile(this);
+                    }
+                    else
+                    {
+                        UntillTile();
+                    }
+                }
+            }
         }
 
-        /// <summary>
-        /// Sets the area value of the RHTile
-        /// </summary>
-        /// <param name="val">Whether to set or unset the area value</param>
-        public void AreaTile(bool val)
+        private void UntillTile()
         {
-            _bArea = val;
+            Watered = false;
+            CurrentMap().RemoveSpecialTile(this);
+        }
+
+        public void WaterTile()
+        {
+            Watered = true;
         }
 
         #region TileTraversal
-        private RHMap MyMap()
+        private RHMap CurrentMap()
         {
             return MapManager.Maps[MapName];
         }
@@ -374,27 +396,27 @@ namespace RiverHollow.Map_Handling
             switch (t)
             {
                 case DirectionEnum.Down:
-                    if (this.Y < MyMap().MapHeightTiles - 1)
+                    if (this.Y < CurrentMap().MapHeightTiles - 1)
                     {
-                        rvTile = MyMap().GetTileByGridCoords(this.X, this.Y + 1);
+                        rvTile = CurrentMap().GetTileByGridCoords(this.X, this.Y + 1);
                     }
                     break;
                 case DirectionEnum.Left:
                     if (this.X > 0)
                     {
-                        rvTile = MyMap().GetTileByGridCoords(this.X - 1, this.Y);
+                        rvTile = CurrentMap().GetTileByGridCoords(this.X - 1, this.Y);
                     }
                     break;
                 case DirectionEnum.Up:
                     if (this.Y > 0)
                     {
-                        rvTile = MyMap().GetTileByGridCoords(this.X, this.Y - 1);
+                        rvTile = CurrentMap().GetTileByGridCoords(this.X, this.Y - 1);
                     }
                     break;
                 case DirectionEnum.Right:
-                    if (this.X < MyMap().MapWidthTiles - 1)
+                    if (this.X < CurrentMap().MapWidthTiles - 1)
                     {
-                        rvTile = MyMap().GetTileByGridCoords(this.X + 1, this.Y);
+                        rvTile = CurrentMap().GetTileByGridCoords(this.X + 1, this.Y);
                     }
                     break;
             }
@@ -467,5 +489,18 @@ namespace RiverHollow.Map_Handling
             return CanTargetTile();
         }
         #endregion
+
+        public RHTileData SaveData()
+        {
+            RHTileData data = new RHTileData
+            {
+                x = X,
+                y = Y,
+                tilled = Tilled,
+                wallpaperData = _objWallpaper == null ? -1 : _objWallpaper.ID
+            };
+
+            return data;
+        }
     }
 }

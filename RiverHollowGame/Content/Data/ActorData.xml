@@ -211,7 +211,7 @@
     </Item>
     <Item>
       <Key>52</Key>
-      <Value>[Type:Mob][Subtype:Shooter][Key:Wisp][Walk:4-.2-F][Idle:4-.2-F][KO:256-0-5-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:3-9][CollisionSize:10-14][HP:3][Damage:1][ItemID:1][Speed:0.8][Weight:Light][Cooldown:1][Projectile:53/Aim][Wander][TracksPlayer]</Value>
+      <Value>[Type:Mob][Subtype:Shooter][Key:Wisp][Walk:4-.2-F][Idle:4-.2-F][KO:256-0-5-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:3-9][CollisionSize:10-14][HP:3][Damage:1][ItemID:1][Speed:0.8][Weight:Light][Cooldown:1][Projectile:53/Aim][Wander:0.5-2-4-0.8][TracksPlayer]</Value>
     </Item>
     <Item>
       <Key>53</Key>

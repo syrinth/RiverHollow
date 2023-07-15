@@ -817,7 +817,7 @@ namespace RiverHollow.Game_Managers
         public static bool ToolIsAxe() { return ToolInUse.ToolType == ToolEnum.Axe; }
         public static bool ToolIsPick() { return ToolInUse.ToolType == ToolEnum.Pick; }
         public static bool ToolIsScythe() { return ToolInUse.ToolType == ToolEnum.Scythe; }
-        public static bool ToolIsShovel() { return ToolInUse.ToolType == ToolEnum.Shovel; }
+        public static bool ToolIsHoe() { return ToolInUse.ToolType == ToolEnum.Hoe; }
         public static bool ToolIsWateringCan() { return ToolInUse.ToolType == ToolEnum.WateringCan; }
 
         public static ToolData SaveToolData()

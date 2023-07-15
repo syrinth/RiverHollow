@@ -77,15 +77,23 @@ namespace RiverHollow.Items
 
             if (target != null && !_bTriggered)
             {
-                if (ReadyToHit() && (PlayerManager.ToolIsAxe() || PlayerManager.ToolIsPick()))
+                if (ReadyToHit())
                 {
                     _bTriggered = true;
-                    target.DamageObject(PlayerManager.ToolInUse);
-                }
-                else if (PlayerManager.ToolIsWateringCan() && target.WorldObject != null && target.WorldObject.Type == ObjectTypeEnum.Plant)
-                {
-                    var plant = (Plant)target.WorldObject;
-                    plant.Water();
+
+                    switch (ToolType)
+                    {
+                        case ToolEnum.Axe:
+                        case ToolEnum.Pick:
+                            target.DamageObject(PlayerManager.ToolInUse);
+                            break;
+                        case ToolEnum.Hoe:
+                            target.TillTile();
+                            break;
+                        case ToolEnum.WateringCan:
+                            target.WaterTile();
+                            break;
+                    }
                 }
             }
 

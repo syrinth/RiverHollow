@@ -589,6 +589,10 @@ namespace RiverHollow.Characters
                     {
                         moveTo = CollisionBoxLocation + Util.MultiplyPoint((tileDir.Position - myTile.Position), RHRandom.Instance().Next(_iMinWander, _iMaxWander));
                     }
+                    else
+                    {
+                        break;
+                    }
                 }
 
                 SetMoveTo(moveTo);

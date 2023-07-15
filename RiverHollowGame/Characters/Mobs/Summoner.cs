@@ -45,6 +45,7 @@ namespace RiverHollow.Characters.Mobs
                         var MyTile = CurrentMap.GetTileByPixelPosition(CollisionCenter);
                         var tiles = MyTile.GetWalkableNeighbours(true);
                         minion.SetPosition(Util.GetRandomItem(tiles).Position);
+                        minion.SetInitialPoint(Util.GetRandomItem(tiles).Position);
                     }
                 }
             }

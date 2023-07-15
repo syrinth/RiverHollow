@@ -3,11 +3,12 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name:Introduction][Text:Hello there! Welcome to the Blue Hare Inn. You must be $Name$. You can call me $Actor_20$. The town's been abuzz about the manor being filled again. Let me know if you need anything.]</Value>
+      <Value>[Name:Introduction][Text:Good to see you up and about! My name's $Actor_20$ and welcome to the Blue Hare Inn.
+Not too long until people start showing up eh? We're gonna have our hands full keeping any travellers fed.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Oh. How interesting. In that case, you should speak with $2$, he and his husband make excellent weapons.][Name:IntroYes]</Value>
+      <Value>[Name:IntroYes][Text:Oh. How interesting. In that case, you should speak with $2$, he and his husband make excellent weapons.]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -35,15 +36,15 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Text:Hello, what can I do for you?][Selection:VillageTalk][Name:Selection]</Value>
+      <Value>[Name:Selection][Text:Hello, what can I do for you?][Selection:VillageTalk]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Name:JoinPartyYes][Text:Certainly, I'd like to see what we can accomplish together.]</Value>
+      <Value>[Name:Task_15_Start][Text:Any chance you could do me a favor? I have some $Item_76$s and some gardening tools that I brought, just in case. Could you plant these for me? Make sure you water them every day, or they won't grow.][ItemID:134/135/76-4]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Text:Sorry,I'm very busy today. Maybe in a few days I can go with you again.][Name:JoinPartyNo]</Value>
+      <Value>[Name:Task_15_End][Text:That's amazing! Thanks, a lot.]</Value>
     </Item>
     <Item>
       <Key>11</Key>

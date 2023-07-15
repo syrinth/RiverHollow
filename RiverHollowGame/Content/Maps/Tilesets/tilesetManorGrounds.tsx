@@ -68,13 +68,13 @@
  </tile>
  <tile id="26">
   <properties>
-   <property name="CanDig" type="bool" value="true"/>
+   <property name="Tillable" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="29">
   <properties>
-   <property name="CanDig" type="bool" value="true"/>
    <property name="Road" type="bool" value="true"/>
+   <property name="Tillable" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="31">
@@ -373,7 +373,16 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="129" probability="0.001"/>
+ <tile id="126">
+  <properties>
+   <property name="Tillable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="129" probability="0.001">
+  <properties>
+   <property name="Tillable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="131" probability="0.001"/>
  <tile id="134">
   <properties>
@@ -479,6 +488,11 @@
  <tile id="199">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="204">
+  <properties>
+   <property name="Tillable" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="206">

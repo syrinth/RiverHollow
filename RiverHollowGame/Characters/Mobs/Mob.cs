@@ -179,15 +179,7 @@ namespace RiverHollow.Characters
                     }
                     else
                     {
-                        if (GetBoolByIDKey("Wander"))
-                        {
-                            _eCurrentState = NPCStateEnum.Wander;
-                        }
-                        else
-                        {
-                            _eCurrentState = NPCStateEnum.Idle;
-                            PlayAnimation(VerbEnum.Idle);
-                        }
+                        ResetState();
                     }
                     break;
             }
@@ -364,10 +356,23 @@ namespace RiverHollow.Characters
 
         public void Reset()
         {
-            ChangeState(NPCStateEnum.Idle);
+            ResetState();
             SetPosition(_pLeashPoint);
             SetMoveTo(Point.Zero);
             CurrentHP = MaxHP;
+        }
+
+        private void ResetState()
+        {
+            if (GetBoolByIDKey("Wander"))
+            {
+                _eCurrentState = NPCStateEnum.Wander;
+            }
+            else
+            {
+                _eCurrentState = NPCStateEnum.Idle;
+                PlayAnimation(VerbEnum.Idle);
+            }
         }
 
         public void SetInitialPoint(Point p)
