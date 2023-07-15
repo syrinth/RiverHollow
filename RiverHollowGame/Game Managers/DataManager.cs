@@ -383,6 +383,24 @@ namespace RiverHollow.Game_Managers
         {
             return Util.FindParams(GetStringByIDKey(id, key, type, defaultValue));
         }
+        public static int[] GetIntParamsByIDKey(int id, string key, DataType type, string defaultValue = "")
+        {
+            var p = Util.FindParams(GetStringByIDKey(id, key, type, defaultValue));
+
+            if (p.Length > 0)
+            {
+                int[] rv = new int[p.Length];
+                for (int i = 0; i < p.Length; i++)
+                {
+                    rv[i] = int.Parse(p[i]);
+                }
+
+                return rv;
+            }
+
+            return new int[0];
+        }
+
         public static bool GetBoolByIDKey(int id, string key, DataType type)
         {
             switch (type)

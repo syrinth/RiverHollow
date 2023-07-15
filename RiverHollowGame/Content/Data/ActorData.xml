@@ -143,7 +143,7 @@
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:12][ArrivalPeriod:2][RequestIDs:2-30/2-30/2-30][ShopData:7][Key:Erron]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:12][ArrivalPeriod:2][RequestIDs:2/2/2][ShopData:7][Key:Erron]</Value>
     </Item>
     <Item>
       <Key>36</Key>
@@ -151,11 +151,11 @@
     </Item>
     <Item>
       <Key>37</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:10][ArrivalPeriod:14][RequestIDs:2-30/2-30/2-30][ShopData:9][Key:Sybil]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:10][ArrivalPeriod:14][RequestIDs:2/2/2][ShopData:9][Key:Sybil]</Value>
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:2][ArrivalPeriod:4][RequestIDs:162/167/168/57/58][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:2][ArrivalPeriod:4][RequestIDs:167/168/57/58/162][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
     </Item>
     <Item>
       <Key>39</Key>

@@ -35,7 +35,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             GUIItemBox[] boxes = new GUIItemBox[3];
             for (int i = 0; i < Constants.MERCHANT_REQUEST_NUM; i++)
             {
-                boxes[i] = new GUIItemBox(DataManager.GetItem(_merchant.ChosenRequests[i]), ItemBoxDraw.Never);
+                boxes[i] = new GUIItemBox(DataManager.GetItem(_merchant.GetCurrentRequests()[i]), ItemBoxDraw.Never);
                 if (i == 0) { boxes[i].ScaledMoveBy(32, 20); }
                 else { boxes[i].AnchorAndAlignWithSpacing(boxes[i - 1], SideEnum.Right, SideEnum.Top, 5); }
 

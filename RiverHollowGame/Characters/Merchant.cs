@@ -6,6 +6,7 @@ using RiverHollow.Map_Handling;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
+using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
@@ -22,31 +23,15 @@ namespace RiverHollow.Characters
         ItemGroupEnum Needs => GetEnumByIDKey<ItemGroupEnum>("Needs");
         ItemGroupEnum Wants => GetEnumByIDKey<ItemGroupEnum>("Wants");
 
-        List<RequestItem> _liRequestItems;
-        public int[] ChosenRequests;
-        public int _iShopID = -1;
-        public int ShopID => _iShopID;
+        private int[] RequestIDs => DataManager.GetIntParamsByIDKey(ID, "RequestIDs", DataType.Actor);
+        private int _iRequestIndex = 0;
+
+        public int ShopID => DataManager.GetIntByIDKey(ID, "ShopData", DataType.Actor);
 
         public Merchant(int index, Dictionary<string, string> stringData) : base(index, stringData)
         {
-            _diRequiredObjectIDs = new Dictionary<int, int>();
-
-            _liRequestItems = new List<RequestItem>();
-            ChosenRequests = new int[3] { -1, -1, -1 };
-
             OnTheMap = false;
-
-            _iShopID = Util.AssignValue("ShopData", stringData);
-
-            foreach (string s in Util.FindParams(stringData["RequestIDs"]))
-            {
-                RequestItem request = new RequestItem();
-                string[] split = Util.FindArguments(s);
-                request.ID = int.Parse(split[0]);
-                request.Number = (split.Length > 1) ? int.Parse(split[1]) : 1;
-
-                _liRequestItems.Add(request);
-            }
+            _diRequiredObjectIDs = new Dictionary<int, int>();
         }
 
         public override void RollOver()
@@ -55,19 +40,6 @@ namespace RiverHollow.Characters
             {
                 if (CheckArrivalTriggers())
                 {
-                    if (ChosenRequests[0] == -1)
-                    {
-                        //When the Merchant is ready to come to town, determine requests
-                        var copy = new List<RequestItem>(_liRequestItems);
-                        for (int i = 0; i < Constants.MERCHANT_REQUEST_NUM; i++)
-                        {
-                            int chosenValue = RHRandom.Instance().Next(0, copy.Count - 1);
-
-                            ChosenRequests[i] = copy[chosenValue].ID;
-                            copy.RemoveAt(chosenValue);
-                        }
-                    }
-
                     if (_iNextArrival != -1) { TownManager.MerchantQueue.Insert(0, this); }
                     else
                     {
@@ -80,18 +52,14 @@ namespace RiverHollow.Characters
             }
             else
             {
-                for (int i = 0; i < Constants.MERCHANT_REQUEST_NUM; i++)
-                {
-                    ChosenRequests[i] = -1;
-                }
-
                 OnTheMap = false;
+                _iRequestIndex = Util.GetLoopingValue(_iRequestIndex, 0, RequestIDs.Length - 1, 1);
                 _iNextArrival = ArrivalPeriod;
                 CurrentMap?.RemoveCharacterImmediately(this);
-                if (_iShopID != -1)
+                if (ShopID != -1)
                 {
-                    DIShops[_iShopID].ClearItemSpots();
-                    DIShops[_iShopID].ClearRandom();
+                    DIShops[ShopID].ClearItemSpots();
+                    DIShops[ShopID].ClearRandom();
                 }
             }
         }
@@ -127,6 +95,17 @@ namespace RiverHollow.Characters
             GUIManager.OpenMainObject(new HUDMerchantWindow(this));
         }
 
+        public int[] GetCurrentRequests()
+        {
+            int[] rv = new int[Constants.MERCHANT_REQUEST_NUM];
+            for (int i = 0; i < Constants.MERCHANT_REQUEST_NUM; i++)
+            {
+                rv[i] = RequestIDs[Util.GetLoopingValue(_iRequestIndex, 0, RequestIDs.Length - 1, i)];
+            }
+
+            return rv;
+        }
+
         public int EvaluateItem(Item it)
         {
             Color c = Color.Black;
@@ -140,11 +119,10 @@ namespace RiverHollow.Characters
             }
 
             int offer = 0;
-
             bool requested = false;
-            for (int i = 0; i < Constants.MERCHANT_REQUEST_NUM; i++)
+            foreach(int i in GetCurrentRequests())
             {
-                if(ChosenRequests[i] == it.ID)
+                if (i == it.ID)
                 {
                     c = Color.Purple;
                     requested = true;
@@ -180,9 +158,9 @@ namespace RiverHollow.Characters
             SetPosition(Util.SnapToGrid(new Point(TownManager.Market.MapPosition.X + TownManager.Market.SpecialCoords.X, TownManager.Market.MapPosition.Y + TownManager.Market.SpecialCoords.Y)));
             PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
 
-            if (_iShopID != -1)
+            if (ShopID != -1)
             {
-                Shop marketShop = DIShops[_iShopID];
+                Shop marketShop = DIShops[ShopID];
                 marketShop.ClearItemSpots();
                 foreach (Structure.SubObjectInfo info in TownManager.Market.ObjectInfo)
                 {
@@ -190,12 +168,6 @@ namespace RiverHollow.Characters
                 }
                 marketShop.PlaceStock(true);
             }
-        }
-
-        private struct RequestItem
-        {
-            public int ID;
-            public int Number;
         }
 
         public MerchantData SaveData()
@@ -206,7 +178,7 @@ namespace RiverHollow.Characters
                 timeToNextArrival = _iNextArrival,
                 relationShipStatus = (int)RelationshipState,
                 spokenKeys = _liSpokenKeys,
-                requestString = string.Join("/", ChosenRequests)
+                reqIndex = _iRequestIndex
             };
 
             return npcData;
@@ -215,12 +187,7 @@ namespace RiverHollow.Characters
         {
             RelationshipState = (RelationShipStatusEnum)data.relationShipStatus;
             _iNextArrival = data.timeToNextArrival;
-
-            string[] split = Util.FindParams(data.requestString);
-            for(int i = 0; i < Constants.MERCHANT_REQUEST_NUM; i++)
-            {
-                ChosenRequests[i] = int.Parse(split[i]);
-            }
+            _iRequestIndex = data.reqIndex;
 
             foreach (string s in data.spokenKeys)
             {
