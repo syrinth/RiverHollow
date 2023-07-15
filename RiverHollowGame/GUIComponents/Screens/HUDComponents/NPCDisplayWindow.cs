@@ -15,6 +15,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
 
         public NPCDisplayWindow(Actor npc) : base(GUIUtils.Codex_NPC_Window, GameManager.ScaleIt(32), GameManager.ScaleIt(44))
         {
+            HoverControls = false;
+
             ID = npc.ID;
             npc.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
 
