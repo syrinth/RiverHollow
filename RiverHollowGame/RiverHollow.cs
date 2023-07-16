@@ -117,7 +117,8 @@ namespace RiverHollow
                 Point mousePoint = Mouse.GetState().Position;
                 Vector3 translate = Camera._transform.Translation;
 
-                if (InputManager.ButtonPressed(ButtonEnum.Right))
+                bool wasInterval = false;
+                if (InputManager.ButtonPressed(ButtonEnum.Right, out wasInterval))
                 {
                     if (!GUIManager.ProcessRightButtonClick(mousePoint) && IsMapShown())
                     {
@@ -130,9 +131,9 @@ namespace RiverHollow
                         }
                     }
                 }
-                else if (InputManager.ButtonPressed(ButtonEnum.Left))
+                else if (InputManager.ButtonPressed(ButtonEnum.Left, out wasInterval))
                 {
-                    if (!GUIManager.ProcessLeftButtonClick(mousePoint) && IsMapShown())
+                    if (wasInterval || (!GUIManager.ProcessLeftButtonClick(mousePoint) && IsMapShown()))
                     {
                         mousePoint.X = (int)((mousePoint.X - translate.X) / CurrentScale);
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / CurrentScale);
@@ -155,7 +156,8 @@ namespace RiverHollow
                     }
                 }
 
-                InputManager.Update();
+                //Do not move this. Needs to be after checks
+                InputManager.Update(gTime);
 
                 if (IsMapShown())
                 {

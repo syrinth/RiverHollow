@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
@@ -10,6 +12,7 @@ namespace RiverHollow.Game_Managers
         public static List<Keys> Numbers = new List<Keys> { Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9 };
         private static Dictionary<Keys, bool> _diKeysDown;
         private static MouseState _lastMouseState = new MouseState();
+        private static RHTimer _mouseTimer;
 
         public static void Load()
         {
@@ -20,7 +23,7 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void Update()
+        public static void Update(GameTime gTime)
         {
             _lastMouseState = Mouse.GetState();
             KeyboardState keyboardState = Keyboard.GetState();
@@ -30,14 +33,37 @@ namespace RiverHollow.Game_Managers
             {
                 _diKeysDown[k] = keyboardState.IsKeyDown(k);
             }
+
+            _mouseTimer?.TickDown(gTime);
         }
 
-        public static bool ButtonPressed(ButtonEnum e)
+        public static bool ButtonPressed(ButtonEnum e, out bool interval)
         {
+            interval = false;
+
             MouseState ms = Mouse.GetState();
             switch (e)
             {
                 case ButtonEnum.Left:
+                    if (ms.LeftButton == ButtonState.Pressed)
+                    {
+                        if (_mouseTimer == null)
+                        {
+                            _mouseTimer = new RHTimer(Constants.MOUSE_PRESS_INTERVAL);
+                            return true;
+                        }
+                        else if (_mouseTimer.Finished())
+                        {
+                            interval = true;
+                            _mouseTimer.Reset();
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        _mouseTimer = null;
+                        return false;
+                    }
                     return ms.LeftButton == ButtonState.Pressed && _lastMouseState.LeftButton == ButtonState.Released;
                 case ButtonEnum.Right:
                     return ms.RightButton == ButtonState.Pressed && _lastMouseState.RightButton == ButtonState.Released;
