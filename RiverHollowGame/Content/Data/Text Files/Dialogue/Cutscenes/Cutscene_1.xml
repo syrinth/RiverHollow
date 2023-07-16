@@ -7,9 +7,11 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Good Morning! Get enough sleep? I know you got in late last night, but I hope you're well rested.
-	  Get yourself sorted out, and then when you're ready meet me at the $WorldObject_39$ on the East of town.
-	  I'm looking forward to working with you.]</Value>
+      <Value>[Text:Good Morning! Did you get enough sleep? I know you got in late last night, but I hope you're well rested, we've got a lot of work ahead of us.
+	  ...
+	  Oh, right. I'm $Actor_16$, and I'll help you get started. You are the Builder right? You match the description they sent, but you know what they say about assuming things.
+	  Anyway, I've put the tools you'll need in the chest at the foot of your bed so get yourself sorted out and meet me at the $WorldObject_39$ on the East of Town when you're ready.
+	  I'm really looking forward to working with you.]</Value>
     </Item>
   </Asset>
 </XnaContent>

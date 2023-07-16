@@ -208,6 +208,14 @@ namespace RiverHollow.Characters
             MoveToSpawn();
         }
 
+        public void Introduce()
+        {
+            if(!Introduced)
+            {
+                RelationshipState = RelationShipStatusEnum.Friends;
+            }
+        }
+
         /// <summary>
         /// Returns the initial text for when the Actor is first talked to.
         /// </summary>
@@ -224,7 +232,7 @@ namespace RiverHollow.Characters
             if (!Introduced)
             {
                 rv = GetDialogEntry("Introduction");
-                RelationshipState = RelationShipStatusEnum.Friends;
+                Introduce();
                 _bHasTalked = true;
             }
             else if (!CheckTaskLog(ref rv))

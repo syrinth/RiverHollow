@@ -2035,6 +2035,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Bee Statue]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_165</Key>
+      <Value>[Name:Small Chest]</Value>
+    </Item>
+    <Item>
       <Key>Cutscene_0</Key>
       <Value>[Name:Combat_Intro]</Value>
     </Item>

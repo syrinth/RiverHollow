@@ -283,7 +283,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         if (takeHalf && chosenItem.Stacks())
                         {
                             int num = chosenItem.Number;
-                            num /= 2;
+                            if (num > 1) { num /= 2; }
                             chosenItem.Remove(num);
                             rv = DataManager.GetItem(chosenItem.ID, num);
                         }
@@ -292,7 +292,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             rv = chosenItem;
                         }
 
-                        if (!takeHalf)
+                        if (!takeHalf || !chosenItem.Stacks())
                         {
                             box.SetItem(null);
                             InventoryManager.RemoveItemFromInventorySpot(box.RowID, box.ColumnID, _bPlayerInventory);

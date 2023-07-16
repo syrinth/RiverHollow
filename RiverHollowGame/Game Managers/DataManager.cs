@@ -645,8 +645,6 @@ namespace RiverHollow.Game_Managers
                         break;
                     case ObjectTypeEnum.Floor:
                         return new Floor(id);
-                    case ObjectTypeEnum.Garden:
-                        return new Garden(id);
                     case ObjectTypeEnum.Gatherable:
                         return new WrappedItem(id);
                     case ObjectTypeEnum.Machine:

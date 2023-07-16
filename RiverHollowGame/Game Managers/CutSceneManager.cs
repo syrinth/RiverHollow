@@ -129,7 +129,7 @@ namespace RiverHollow.Game_Managers
     public class Cutscene
     {
         #region CutScene Commandinformation
-        enum CutsceneCommandEnum { Activate, Speak, Move, Face, Wait, End, Task, Speed, Text, Background, RemoveBackground, MoveToTown, Sound };
+        enum CutsceneCommandEnum { Activate, Background, BackgroundRemove, End, Face, Introduce, Move, MoveToTown, Sound, Speak, Speed, Task, Text, Wait };
 
         /// <summary>
         /// A class to hold the information for a CutSceneCommand step
@@ -281,7 +281,7 @@ namespace RiverHollow.Game_Managers
                                     GUIManager.AssignBackgroundImage(new GUIImage(DataManager.GetTexture(sCommandData[0])));
                                     bGoToNext = true;
                                     break;
-                                case CutsceneCommandEnum.RemoveBackground:
+                                case CutsceneCommandEnum.BackgroundRemove:
                                     GUIManager.ClearBackgroundImage();
                                     bGoToNext = true;
                                     break;
@@ -329,6 +329,14 @@ namespace RiverHollow.Game_Managers
                                 case CutsceneCommandEnum.End:
                                     EndCutscene();
                                     break;
+                                case CutsceneCommandEnum.Introduce:
+                                    int id = int.Parse(sCommandData[0]);
+                                    if (TownManager.DIVillagers.ContainsKey(id))
+                                    {
+                                        TownManager.DIVillagers[id].Introduce();
+                                    }
+                                    break;
+
                             }
                         }
 
@@ -624,7 +632,15 @@ namespace RiverHollow.Game_Managers
                             }
                             TownManager.DIVillagers[characterID].TryToMoveIn();
                         }
-                                   
+                        else if (currentCommand.Command == CutsceneCommandEnum.Introduce)
+                        {
+                            int id = int.Parse(sCommandData[0]);
+                            if (TownManager.DIVillagers.ContainsKey(id))
+                            {
+                                TownManager.DIVillagers[id].Introduce();
+                            }
+                        }
+
                         break;
                     }
 

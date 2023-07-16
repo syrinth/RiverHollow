@@ -56,7 +56,7 @@
         public enum StatusTypeEnum { Buff, Debuff, DoT, HoT };
 
         public enum ObjectPlacementEnum { Ground, Floor, Wall };
-        public enum ObjectTypeEnum { WorldObject, Beehive, Buildable, Building, Hazard, Container, Decor, Destructible, DungeonObject, Floor, Gatherable, Garden, Machine, Mailbox, Plant, Structure, Wall, Wallpaper, WarpPoint };
+        public enum ObjectTypeEnum { WorldObject, Beehive, Buildable, Building, Hazard, Container, Decor, Destructible, DungeonObject, Floor, Gatherable, Machine, Mailbox, Plant, Structure, Wall, Wallpaper, WarpPoint };
         public enum MobSpawnStateEnum { None, Day, Night };
         public enum ExpectingChildEnum { None, Adoption, Pregnant };
         public enum RelationShipStatusEnum { None, Friends, Dating, Engaged, Married };

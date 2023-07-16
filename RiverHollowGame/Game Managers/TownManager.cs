@@ -424,7 +424,6 @@ namespace RiverHollow.Game_Managers
                 case ObjectTypeEnum.Buildable:
                 case ObjectTypeEnum.Container:
                 case ObjectTypeEnum.Decor:
-                case ObjectTypeEnum.Garden:
                 case ObjectTypeEnum.Wall:
                 case ObjectTypeEnum.Plant:
                     buildable = true;

@@ -661,5 +661,9 @@
       <Key>164</Key>
       <Value>[Type:Buildable][Image:23-9][Size:1-2][Base:0-1-1-1][ReqItems:0-3]</Value>
     </Item>
+    <Item>
+      <Key>165</Key>
+      <Value>[Type:Container][Image:0-4][Size:1-1][Base:0-0-1-1][Rows:1][Cols:4][Opens]</Value>
+    </Item>
   </Asset>
 </XnaContent>

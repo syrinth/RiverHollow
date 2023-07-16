@@ -1618,6 +1618,11 @@ namespace RiverHollow.Map_Handling
                     InventoryManager.AddToInventory(dummyItem.ID, 1, true, true);
                     GameManager.EmptyHeldObject();
                 }
+                else if(dummyItem == null)
+                {
+                    GameManager.EmptyHeldObject();
+                    PostBuildingCleanup(true);
+                }
             }
         }
 
@@ -1657,9 +1662,6 @@ namespace RiverHollow.Map_Handling
 
                 switch (placeObject.Type)
                 {
-                    case ObjectTypeEnum.Garden:
-                        ((Garden)placeObject).SetPlant(((Garden)placeObject).GetPlant());
-                        goto case ObjectTypeEnum.Wall;
                     case ObjectTypeEnum.Floor:
                     case ObjectTypeEnum.Wall:
                         ((AdjustableObject)placeObject).AdjustObject();

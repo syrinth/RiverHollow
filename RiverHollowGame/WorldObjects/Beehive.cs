@@ -46,21 +46,21 @@ namespace RiverHollow.WorldObjects
         {
             if (_iDaysToHoney == 0 && !_bReady)
             {
-                RHTile closestFlowerTile = Tiles[0];
+                RHTile closestPlantTile = Tiles[0];
                 foreach (RHTile t in MapManager.Maps[Tiles[0].MapName].GetAllTilesInRange(Tiles[0], 7))
                 {
-                    if (t.WorldObject != null && t.WorldObject.CompareType(ObjectTypeEnum.Garden))
+                    if (t.WorldObject != null && t.WorldObject.CompareType(ObjectTypeEnum.Plant))
                     {
-                        Plant p = ((Garden)t.WorldObject).GetPlant();
-                        if (p != null && p.HoneyID != -1 && p.FinishedGrowing() && (closestFlowerTile == Tiles[0] || Util.GetRHTileDelta(Tiles[0], t) < Util.GetRHTileDelta(Tiles[0], closestFlowerTile)))
+                        Plant p = (Plant)t.WorldObject;
+                        if (p != null && p.HoneyID != -1 && p.FinishedGrowing() && (closestPlantTile == Tiles[0] || Util.GetRHTileDelta(Tiles[0], t) < Util.GetRHTileDelta(Tiles[0], closestPlantTile)))
                         {
-                            closestFlowerTile = t;
+                            closestPlantTile = t;
                         }
                     }
                 }
 
-                if (closestFlowerTile == Tiles[0]) { _iHoneyToGather = _iItemID; }
-                else { _iHoneyToGather = ((Garden)closestFlowerTile.WorldObject).GetPlant().HoneyID; }
+                if (closestPlantTile == Tiles[0]) { _iHoneyToGather = _iItemID; }
+                else { _iHoneyToGather = ((Plant)closestPlantTile.WorldObject).HoneyID; }
 
                 _bReady = true;
                 Sprite.PlayAnimation(AnimationEnum.Action_Finished);

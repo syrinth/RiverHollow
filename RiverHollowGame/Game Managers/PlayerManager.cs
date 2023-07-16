@@ -362,7 +362,6 @@ namespace RiverHollow.Game_Managers
                 case ObjectTypeEnum.Beehive:
                 case ObjectTypeEnum.Buildable:
                 case ObjectTypeEnum.Container:
-                case ObjectTypeEnum.Garden:
                 case ObjectTypeEnum.Structure:
                 case ObjectTypeEnum.Wall:
                     e = ObjectTypeEnum.Structure;

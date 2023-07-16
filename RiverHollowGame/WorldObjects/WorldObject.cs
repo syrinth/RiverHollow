@@ -455,7 +455,6 @@ namespace RiverHollow.WorldObjects
                 case ObjectTypeEnum.Container:
                 case ObjectTypeEnum.Decor:
                 case ObjectTypeEnum.Floor:
-                case ObjectTypeEnum.Garden:
                 case ObjectTypeEnum.Mailbox:
                 case ObjectTypeEnum.Structure:
                 case ObjectTypeEnum.Wall:

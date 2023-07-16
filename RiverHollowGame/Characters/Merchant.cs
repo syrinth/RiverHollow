@@ -70,8 +70,7 @@ namespace RiverHollow.Characters
         /// <returns>The text string to display</returns>
         public override TextEntry GetOpeningText()
         {
-            TextEntry rv = null;
-
+            TextEntry rv;
             if (!Introduced)
             {
                 rv = GetDialogEntry("Introduction");
