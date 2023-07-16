@@ -16,7 +16,6 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public Floor(int id) : base(id)
         {
-            _eObjectType = ObjectTypeEnum.Floor;
             _ePlacement = ObjectPlacementEnum.Floor;
         }
 
@@ -43,7 +42,7 @@ namespace RiverHollow.WorldObjects
             if (tile != null)
             {
                 WorldObject floorObj = tile.GetFloorObject();
-                if (floorObj != null && floorObj.CompareType(ObjectTypeEnum.Floor)) { obj = (Floor)floorObj; }
+                if (floorObj != null && floorObj.BuildableType(BuildableEnum.Floor)) { obj = (Floor)floorObj; }
 
                 if (obj != null && obj.Type == Type)
                 {

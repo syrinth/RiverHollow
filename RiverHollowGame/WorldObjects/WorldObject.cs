@@ -32,7 +32,7 @@ namespace RiverHollow.WorldObjects
         public string MapName { get; protected set; } = string.Empty;
         public RHMap CurrentMap => MapManager.Maps.ContainsKey(MapName) ? MapManager.Maps[MapName] : null;
 
-        public bool PlayerCanEdit => !ShopItem && IsBuildable();
+        public bool PlayerCanEdit => !ShopItem && CompareType(ObjectTypeEnum.Buildable);
         public bool ShopItem { get; protected set; } = false;
 
         protected bool _bWalkable = false;
@@ -405,7 +405,7 @@ namespace RiverHollow.WorldObjects
 
         public void AddToInventory()
         {
-            if (IsBuildable())
+            if (CompareType(ObjectTypeEnum.Buildable))
             {
 
                 Item displayItem = DataManager.GetItem((Buildable)this);
@@ -444,25 +444,10 @@ namespace RiverHollow.WorldObjects
 
         public bool CompareType(ObjectTypeEnum t) { return Type == t; }
         public bool IsDestructible() { return CompareType(ObjectTypeEnum.Destructible) || CompareType(ObjectTypeEnum.Plant); }
-        public bool IsBuildable()
-        {
-            bool rv = false;
-            switch (_eObjectType)
-            {
-                case ObjectTypeEnum.Beehive:
-                case ObjectTypeEnum.Building:
-                case ObjectTypeEnum.Buildable:
-                case ObjectTypeEnum.Container:
-                case ObjectTypeEnum.Decor:
-                case ObjectTypeEnum.Floor:
-                case ObjectTypeEnum.Mailbox:
-                case ObjectTypeEnum.Structure:
-                case ObjectTypeEnum.Wall:
-                    rv = true;
-                    break;
-            }
 
-            return rv;
+        public bool BuildableType(BuildableEnum t)
+        {
+            return CompareType(ObjectTypeEnum.Buildable) && GetEnumByIDKey<BuildableEnum>("Subtype") == t;
         }
 
         public bool WallObject() { return _ePlacement == ObjectPlacementEnum.Wall; }
@@ -562,7 +547,7 @@ namespace RiverHollow.WorldObjects
             return DataManager.GetStringParamsByIDKey(ID, key, DataType.WorldObject, defaultValue);
         }
 
-        protected TEnum GetEnumByIDKey<TEnum>(string key) where TEnum : struct
+        public TEnum GetEnumByIDKey<TEnum>(string key) where TEnum : struct
         {
             return DataManager.GetEnumByIDKey<TEnum>(ID, key, DataType.WorldObject);
         }

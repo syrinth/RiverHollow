@@ -28,12 +28,12 @@ namespace RiverHollow.Items
 
             _diReqToMake = DataManager.IntDictionaryFromLookup(_iObjectID, "ReqItems", DataType.WorldObject);
 
-            ObjectTypeEnum type = DataManager.GetEnumByIDKey<ObjectTypeEnum>(_iObjectID, "Type", DataType.WorldObject);
+            BuildableEnum type = DataManager.GetEnumByIDKey<BuildableEnum>(_iObjectID, "Subtype", DataType.WorldObject);
 
             string texture;
             switch (type)
             {
-                case ObjectTypeEnum.Floor:
+                case BuildableEnum.Floor:
                     texture = DataManager.FILE_FLOORING;
                     break;
                 default:

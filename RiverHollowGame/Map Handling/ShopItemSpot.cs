@@ -33,7 +33,7 @@ namespace RiverHollow.Map_Handling
         {
             if (merchItem != null)
             {
-                if (!GameManager.GamePaused() && !CutsceneManager.Playing && Box.Contains(GUICursor.GetWorldMousePosition()))
+                if (!GameManager.GamePaused() && !CutsceneManager.Playing && !GameManager.InTownMode() && Box.Contains(GUICursor.GetWorldMousePosition()))
                 {
                     BitmapFont font = DataManager.GetBitMapFont(@"Fonts\FontBattle");
                     Size2 size = font.MeasureString(merchItem.WrappedItem.BuyPrice.ToString());

@@ -415,16 +415,7 @@ namespace RiverHollow.Game_Managers
             bool buildable = false;
             switch (obj.Type)
             {
-                case ObjectTypeEnum.Building:
-                case ObjectTypeEnum.Mailbox:
-                case ObjectTypeEnum.Structure:
-                case ObjectTypeEnum.Floor:
-                case ObjectTypeEnum.Wallpaper:
-                case ObjectTypeEnum.Beehive:
                 case ObjectTypeEnum.Buildable:
-                case ObjectTypeEnum.Container:
-                case ObjectTypeEnum.Decor:
-                case ObjectTypeEnum.Wall:
                 case ObjectTypeEnum.Plant:
                     buildable = true;
                     break;
@@ -490,7 +481,7 @@ namespace RiverHollow.Game_Managers
         public static Building GetBuildingByID(int objID)
         {
             Building rv = null;
-            if (TownObjectBuilt(objID) && DataManager.GetEnumByIDKey<ObjectTypeEnum>(objID, "Type", DataType.WorldObject) == ObjectTypeEnum.Building)
+            if (TownObjectBuilt(objID) && DataManager.GetEnumByIDKey<BuildableEnum>(objID, "Subtype", DataType.WorldObject) == BuildableEnum.Building)
             {
                 rv = (Building)GetTownObjectsByID(objID)[0];
             }

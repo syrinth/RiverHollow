@@ -610,18 +610,34 @@ namespace RiverHollow.Game_Managers
             {
                 switch (GetEnumByIDKey<ObjectTypeEnum>(id, "Type", DataType.WorldObject))
                 {
-                    case ObjectTypeEnum.Beehive:
-                        return new Beehive(id);
+                    
                     case ObjectTypeEnum.Buildable:
-                        return new Buildable(id);
-                    case ObjectTypeEnum.Building:
-                        return new Building(id);
+                        switch (GetEnumByIDKey<BuildableEnum>(id, "Subtype", DataType.WorldObject))
+                        {
+                            case BuildableEnum.Beehive:
+                                return new Beehive(id);
+                            case BuildableEnum.Building:
+                                return new Building(id);
+                            case BuildableEnum.Container:
+                                return new Container(id, args);
+                            case BuildableEnum.Decor:
+                                return new Decor(id);
+                            case BuildableEnum.Floor:
+                                return new Floor(id);
+                            case BuildableEnum.Mailbox:
+                                return new Mailbox(id);
+                            case BuildableEnum.Structure:
+                                return new Structure(id);
+                            case BuildableEnum.Wall:
+                                return new Wall(id);
+                            case BuildableEnum.Wallpaper:
+                                return new Wallpaper(id);
+                            default:
+                                return new Buildable(id);
+                        }
+
                     case ObjectTypeEnum.Hazard:
                         return new Hazard(id);
-                    case ObjectTypeEnum.Container:
-                        return new Container(id, args);
-                    case ObjectTypeEnum.Decor:
-                        return new Decor(id);
                     case ObjectTypeEnum.Destructible:
                         return new Destructible(id);
                     case ObjectTypeEnum.DungeonObject:
@@ -643,22 +659,13 @@ namespace RiverHollow.Game_Managers
                                 return new FloorSwitch(id, args);
                         }
                         break;
-                    case ObjectTypeEnum.Floor:
-                        return new Floor(id);
+
                     case ObjectTypeEnum.Gatherable:
                         return new WrappedItem(id);
                     case ObjectTypeEnum.Machine:
                         return new Machine(id);
-                    case ObjectTypeEnum.Mailbox:
-                        return new Mailbox(id);
                     case ObjectTypeEnum.Plant:
                         return new Plant(id);
-                    case ObjectTypeEnum.Structure:
-                        return new Structure(id);
-                    case ObjectTypeEnum.Wall:
-                        return new Wall(id);
-                    case ObjectTypeEnum.Wallpaper:
-                        return new Wallpaper(id);
                     case ObjectTypeEnum.WarpPoint:
                         return new WarpPoint(id);
                     case ObjectTypeEnum.WorldObject:

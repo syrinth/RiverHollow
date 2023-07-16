@@ -350,30 +350,6 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            ObjectTypeEnum e = DataManager.GetEnumByIDKey<ObjectTypeEnum>(id, "Type", DataType.WorldObject);
-            switch (e)
-            {
-                case ObjectTypeEnum.Building:
-                    e = ObjectTypeEnum.Building;
-                    break;
-                case ObjectTypeEnum.Floor:
-                    e = ObjectTypeEnum.Floor;
-                    break;
-                case ObjectTypeEnum.Beehive:
-                case ObjectTypeEnum.Buildable:
-                case ObjectTypeEnum.Container:
-                case ObjectTypeEnum.Structure:
-                case ObjectTypeEnum.Wall:
-                    e = ObjectTypeEnum.Structure;
-                    break;
-                case ObjectTypeEnum.Plant:
-                    e = ObjectTypeEnum.Plant;
-                    break;
-                case ObjectTypeEnum.Wallpaper:
-                    e = ObjectTypeEnum.Wallpaper;
-                    break;
-            }
-
             if (!_liCrafting.Contains(id))
             {
                 rv = true;

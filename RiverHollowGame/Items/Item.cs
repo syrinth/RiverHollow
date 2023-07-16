@@ -202,8 +202,8 @@ namespace RiverHollow.Items
             switch (_eItemType)
             {
                 case ItemEnum.Buildable:
-                    ObjectTypeEnum type = DataManager.GetEnumByIDKey<ObjectTypeEnum>(ID - Constants.BUILDABLE_ID_OFFSET, "Type", DataType.WorldObject);
-                    if (type == ObjectTypeEnum.Floor || type == ObjectTypeEnum.Wall) { return true; }
+                    BuildableEnum type = DataManager.GetEnumByIDKey<BuildableEnum>(ID - Constants.BUILDABLE_ID_OFFSET, "Type", DataType.WorldObject);
+                    if (type == BuildableEnum.Floor || type == BuildableEnum.Wall) { return true; }
                     else { return false; }
                 case ItemEnum.Blueprint:
                 case ItemEnum.Clothing:

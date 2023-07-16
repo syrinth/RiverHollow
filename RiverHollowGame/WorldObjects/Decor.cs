@@ -36,7 +36,6 @@ namespace RiverHollow.WorldObjects
 
         public Decor(int id) : base(id)
         {
-            _eObjectType = ObjectTypeEnum.Decor;
             _pRotationOffset = GetPointByIDKey("RotationBaseOffset");
             _pRotationSize = GetPointByIDKey("RotationSize");
 

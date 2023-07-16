@@ -163,7 +163,7 @@ namespace RiverHollow.Map_Handling
 
         private WorldObject ShadowStructure()
         {
-            return (ShadowObject != null && ShadowObject.IsBuildable()) ? ShadowObject : null;
+            return (ShadowObject != null && ShadowObject.CompareType(ObjectTypeEnum.Buildable)) ? ShadowObject : null;
         }
         public bool HasObject()
         {
@@ -456,7 +456,7 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = false;
 
-            if (WorldObject != null && objToPlace.CompareType(ObjectTypeEnum.Decor) && WorldObject.CompareType(ObjectTypeEnum.Decor))
+            if (WorldObject != null && objToPlace.BuildableType(BuildableEnum.Decor) && WorldObject.BuildableType(BuildableEnum.Decor))
             {
                 Decor decorObj = (Decor)WorldObject;
                 Decor decorToPlace = (Decor)objToPlace;

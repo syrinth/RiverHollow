@@ -33,7 +33,6 @@ namespace RiverHollow.Buildings
         public Building(int id) : base(id)
         {
             ID = id;
-            _eObjectType = ObjectTypeEnum.Building;
 
             Unique = true;
             OutsideOnly = true;

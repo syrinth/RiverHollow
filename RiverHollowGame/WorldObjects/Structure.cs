@@ -150,8 +150,8 @@ namespace RiverHollow.WorldObjects
         public override WorldObject Pickup => _mainObj;
         public SubObject(Structure mainobj, int id) : base(id)
         {
-            _eObjectType = ObjectTypeEnum.Structure;
             _mainObj = mainobj;
+            _eObjectType = ObjectTypeEnum.Buildable;
         }
 
         public override bool ProcessRightClick()

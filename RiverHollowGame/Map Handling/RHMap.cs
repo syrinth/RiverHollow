@@ -350,7 +350,7 @@ namespace RiverHollow.Map_Handling
                 foreach (RHTile t in _liTestTiles)
                 {
                     bool passable = CanPlaceObject(t, HeldObject);
-                    if (!passable || (passable && !HeldObject.CompareType(ObjectTypeEnum.Wallpaper)))
+                    if (!passable || (passable && !HeldObject.BuildableType(BuildableEnum.Wallpaper)))
                     {
                         spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), new Rectangle(t.Position.X, t.Position.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), GUIUtils.PLACEMENT_BOX, passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                     }
@@ -1547,20 +1547,24 @@ namespace RiverHollow.Map_Handling
                 //If we are holding a WorldObject, we should attempt to place it
                 if (GameManager.HeldObject != null)
                 {
-                    switch (toBuild.Type)
+                    if (toBuild.CompareType(ObjectTypeEnum.Buildable))
                     {
-                        case ObjectTypeEnum.Floor:
-                            if (MouseTile.Flooring == null) { goto default; }
-                            break;
-                        case ObjectTypeEnum.Wallpaper:
-                            rv = TownModePlaceWallpaper((Wallpaper)toBuild);
-                            break;
-                        case ObjectTypeEnum.Plant:
-                            rv = TownPlaceSeed((Plant)toBuild);
-                            break;
-                        default:
-                            rv = TownPlaceObject((Buildable)toBuild);
-                            break;
+                        switch (toBuild.GetEnumByIDKey<BuildableEnum>("Subtype"))
+                        {
+                            case BuildableEnum.Floor:
+                                if (MouseTile.Flooring == null) { goto default; }
+                                break;
+                            case BuildableEnum.Wallpaper:
+                                rv = TownModePlaceWallpaper((Wallpaper)toBuild);
+                                break;
+                            default:
+                                rv = TownPlaceObject((Buildable)toBuild);
+                                break;
+                        }
+                    }
+                    else if (toBuild.CompareType(ObjectTypeEnum.Plant))
+                    {
+                        rv = TownPlaceSeed((Plant)toBuild);
                     }
                     SoundManager.PlayEffect(rv ? SoundEffectEnum.Thump : SoundEffectEnum.Cancel);
                 }
@@ -1571,13 +1575,14 @@ namespace RiverHollow.Map_Handling
                         WorldObject targetObj = MouseTile.RetrieveObjectFromLayer(true);
                         if (targetObj != null && targetObj.PlayerCanEdit)
                         {
-                            switch (targetObj.Type)
+                            Buildable b = (Buildable)targetObj;
+                            switch (b.GetEnumByIDKey<BuildableEnum>("Subtype"))
                             {
-                                case ObjectTypeEnum.Building:
+                                case BuildableEnum.Building:
                                     RemoveDoor((Building)targetObj);
                                     GUICursor.ResetCursor();
                                     goto default;
-                                case ObjectTypeEnum.Decor:
+                                case BuildableEnum.Decor:
                                     Decor obj = (Decor)targetObj;
                                     if (obj.HasDisplay)
                                     {
@@ -1643,7 +1648,7 @@ namespace RiverHollow.Map_Handling
             else
             {
                 placeObject = (Buildable)DataManager.CreateWorldObjectByID(templateObject.ID);
-                if (templateObject.CompareType(ObjectTypeEnum.Decor))
+                if (templateObject.BuildableType(BuildableEnum.Decor))
                 {
                     ((Decor)placeObject).RotateToDirection(((Decor)templateObject).Facing);
                 }
@@ -1660,12 +1665,9 @@ namespace RiverHollow.Map_Handling
                     TaskManager.AdvanceTaskProgress(placeObject);
                 }
 
-                switch (placeObject.Type)
+                if(placeObject.BuildableType(BuildableEnum.Floor) || placeObject.BuildableType(BuildableEnum.Wall))
                 {
-                    case ObjectTypeEnum.Floor:
-                    case ObjectTypeEnum.Wall:
-                        ((AdjustableObject)placeObject).AdjustObject();
-                        break;
+                    ((AdjustableObject)placeObject).AdjustObject();
                 }
 
                 Item dummyItem = DataManager.GetItem((Buildable)HeldObject);
@@ -1914,9 +1916,9 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = false;
             //We can place flooring anywhere there isn't flooring as long as the base tile is passable.
-            if (obj.CompareType(ObjectTypeEnum.Floor))
+            if (obj.BuildableType(BuildableEnum.Floor))
             {
-                if (testTile.Flooring == null && (testTile.Passable() || testTile.WorldObject.IsBuildable()))
+                if (testTile.Flooring == null && (testTile.Passable() || testTile.WorldObject.CompareType(ObjectTypeEnum.Buildable)))
                 {
                     rv = true;
                 }
@@ -2053,32 +2055,6 @@ namespace RiverHollow.Map_Handling
 
             return rv;
         }
-
-        //public void AddMonster(TacticalMonster m)
-        //{
-        //    bool rv = false;
-
-        //    RHRandom rand = RHRandom.Instance();
-        //    Vector2 position = m.Position;
-        //    position.X = ((int)(position.X / Constants.TILE_SIZE)) * Constants.TILE_SIZE;
-        //    position.Y = ((int)(position.Y / Constants.TILE_SIZE)) * Constants.TILE_SIZE;
-
-        //    rv = _arrTiles[((int)position.X / Constants.TILE_SIZE), ((int)position.Y / Constants.TILE_SIZE)].Passable();
-        //    if (!rv)
-        //    {
-        //        do
-        //        {
-        //            position.X = (int)(rand.Next(1, (MapWidthTiles - 1) * Constants.TILE_SIZE) / Constants.TILE_SIZE) * Constants.TILE_SIZE;
-        //            position.Y = (int)(rand.Next(1, (MapHeightTiles - 1) * Constants.TILE_SIZE) / Constants.TILE_SIZE) * Constants.TILE_SIZE;
-        //            rv = _arrTiles[((int)position.X / Constants.TILE_SIZE), ((int)position.Y / Constants.TILE_SIZE)].Passable();
-        //        } while (!rv);
-        //    }
-
-        //    if (rv)
-        //    {
-        //        AddMonsterByPosition(m, position);
-        //    }
-        //}
 
         public void AddMobByPosition(Mob m, Point position)
         {

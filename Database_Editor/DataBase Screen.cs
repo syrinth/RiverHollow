@@ -950,6 +950,13 @@ namespace Database_Editor
             ObjectTypeEnum itemType = Util.ParseEnum<ObjectTypeEnum>(cbWorldObjectType.SelectedItem.ToString().Split(':')[1]);
             switch (itemType)
             {
+                case ObjectTypeEnum.Buildable:
+                    cbWorldObjectSubtype.Visible = true;
+                    foreach (BuildableEnum t in Enum.GetValues(typeof(BuildableEnum)))
+                    {
+                        cbWorldObjectSubtype.Items.Add("Subtype:" + t.ToString());
+                    }
+                    break;
                 case ObjectTypeEnum.DungeonObject:
                     cbWorldObjectSubtype.Visible = true;
                     foreach (TriggerObjectEnum t in Enum.GetValues(typeof(TriggerObjectEnum)))
@@ -1372,11 +1379,19 @@ namespace Database_Editor
                 AddContextMenuItem("Add New", AddNewWorldObject, true, Enum.GetNames(typeof(ObjectTypeEnum)));
                 AddContextMenuItem("All", dgvWorldObjectsContextMenuClick, false);
 
-                foreach (string s in Enum.GetNames(typeof(ObjectTypeEnum)))
+                foreach (ObjectTypeEnum en in Enum.GetValues(typeof(ObjectTypeEnum)))
                 {
-                    if (!s.Equals("Earth"))
+                    var s = Util.GetEnumString(en);
+                    switch (en)
                     {
-                        AddContextMenuItem(s, dgvWorldObjectsContextMenuClick, false);
+                        case ObjectTypeEnum.Buildable:
+                            var names = Enum.GetNames(typeof(BuildableEnum)).ToList();
+                            names.Insert(0, "All");
+                            AddContextMenuItem(s, dgvWorldObjectsContextMenuClick, false, names.ToArray());
+                            break;
+                        default:
+                            AddContextMenuItem(s, dgvWorldObjectsContextMenuClick, false);
+                            break;
                     }
                 }
             }
@@ -1444,7 +1459,17 @@ namespace Database_Editor
         private void dgvWorldObjectsContextMenuClick(object sender, EventArgs e)
         {
             _diTabIndices["WorldObjects"] = 0;
-            LoadWorldObjectDataGrid(((ToolStripMenuItem)sender).Text, 0);
+            var selection = ((ToolStripMenuItem)sender);
+            if (selection.OwnerItem == null)
+            {
+                _subtypeFilter = "All";
+                LoadWorldObjectDataGrid(selection.Text, 0);
+            }
+            else
+            {
+                _subtypeFilter = selection.Text;
+                LoadWorldObjectDataGrid(selection.OwnerItem.Text, 0);
+            }
             LoadWorldObjectInfo();
         }
 
@@ -1643,15 +1668,15 @@ namespace Database_Editor
                 case ObjectTypeEnum.Buildable:
                     defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",ReqItems:";
                     break;
-                case ObjectTypeEnum.Building:
-                    defaultTags = "Texture:,Size:7-8,Base:0-4-7-4,Entrance:4-6-1-2,ReqItems:55-5|60-5";
-                    break;
-                case ObjectTypeEnum.Container:
-                    defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",Rows:,Cols:,Opens";
-                    break;
-                case ObjectTypeEnum.Decor:
-                    defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",Rotation:FourWay,RotationBaseOffset:0-1,RotationSize:1-3";
-                    break;
+                //case ObjectTypeEnum.Building:
+                //    defaultTags = "Texture:,Size:7-8,Base:0-4-7-4,Entrance:4-6-1-2,ReqItems:55-5|60-5";
+                //    break;
+                //case ObjectTypeEnum.Container:
+                //    defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",Rows:,Cols:,Opens";
+                //    break;
+                //case ObjectTypeEnum.Decor:
+                //    defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",Rotation:FourWay,RotationBaseOffset:0-1,RotationSize:1-3";
+                //    break;
                 case ObjectTypeEnum.Destructible:
                     defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",HP:,Tool:,ReqLvl:1,ItemID:,DestructionAnim:208-0-3-0.1";
                     break;
@@ -1789,6 +1814,10 @@ namespace Database_Editor
             DataGridViewRow r = dgvWorldObjects.SelectedRows[0];
             XMLData data = null;
             if (_typeFilter == "All") { data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE][r.Index]; }
+            else if (_subtypeFilter != "All")
+            {
+                data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter) && x.GetTagValue("Subtype").Equals(_subtypeFilter))[r.Index];
+            }
             else { data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter))[r.Index]; }
 
             LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.WorldObject]);

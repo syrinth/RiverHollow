@@ -4,6 +4,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.WorldObjects
 {
@@ -39,10 +40,10 @@ namespace RiverHollow.WorldObjects
 
         public bool BuildOnScreen()
         {
-            switch (_eObjectType)
+            switch (GetEnumByIDKey<BuildableEnum>("Subtype"))
             {
-                case Enums.ObjectTypeEnum.Building:
-                case Enums.ObjectTypeEnum.Structure:
+                case BuildableEnum.Building:
+                case BuildableEnum.Structure:
                     return true;
                 default:
                     return false;
