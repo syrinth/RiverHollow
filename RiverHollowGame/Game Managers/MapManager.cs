@@ -139,11 +139,16 @@ namespace RiverHollow.Game_Managers
         {
             if (newMap.Name != CurrentMap.MapAbove && newMap.Name != CurrentMap.MapBelow)
             {
-                GUIManager.BeginFadeOut();
+                FadeOut();
             }
 
             PlayerManager.PlayerActor.DetermineAnimationState(Point.Zero);
             _newMapInfo = new NewMapInfo(newMap, playerPos, facing, b);
+        }
+
+        public static void FadeOut()
+        {
+            GUIManager.BeginFadeOut();
         }
 
         public static bool ChangingMaps()
@@ -203,46 +208,53 @@ namespace RiverHollow.Game_Managers
 
         public static void Update(GameTime gTime)
         {
-            if (!_newMapInfo.Equals(default(NewMapInfo)) && (GUIManager.FadingIn || GUIManager.NotFading))
+            if (GUIManager.FadingIn || GUIManager.NotFading)
             {
-                if (PlayerManager.PlayerActor.CurrentHP == 0) { PlayerManager.PlayerActor.IncreaseHealth(1); }
-                if (PlayerManager.PlayerActor.ActivePet != null) { CurrentMap.RemoveActor(PlayerManager.PlayerActor.ActivePet); }
-                if (PlayerManager.PlayerActor.ActiveMount != null) { CurrentMap.RemoveActor(PlayerManager.PlayerActor.ActiveMount); }
-
-                CurrentMap.LeaveMap();
-                TaskManager.AssignDelayedTasks();
-                CurrentMap = _newMapInfo.NextMap;
-
-                SoundManager.ChangeMap();
-                PlayerManager.CurrentMap = _newMapInfo.NextMap.Name;
-                PlayerManager.PlayerActor.SetPosition(_newMapInfo.PlayerPosition);
-                PlayerManager.PlayerActor.SetFacing(_newMapInfo.Facing);
-                PlayerManager.PlayerActor.DetermineAnimationState();
-
-                if (_newMapInfo.EnteredBuilding != null)
+                if (!_newMapInfo.Equals(default(NewMapInfo)))
                 {
-                    GameManager.CurrentBuilding = _newMapInfo.EnteredBuilding;
-                    //CurrentMap.LoadBuilding(_newMapInfo.EnteredBuilding);
-                    TaskManager.TaskProgressEnterBuilding(_newMapInfo.EnteredBuilding.ID);
+                    if (PlayerManager.PlayerActor.CurrentHP == 0) { PlayerManager.PlayerActor.IncreaseHealth(1); }
+                    if (PlayerManager.PlayerActor.ActivePet != null) { CurrentMap.RemoveActor(PlayerManager.PlayerActor.ActivePet); }
+                    if (PlayerManager.PlayerActor.ActiveMount != null) { CurrentMap.RemoveActor(PlayerManager.PlayerActor.ActiveMount); }
+
+                    CurrentMap.LeaveMap();
+                    TaskManager.AssignDelayedTasks();
+                    CurrentMap = _newMapInfo.NextMap;
+
+                    SoundManager.ChangeMap();
+                    PlayerManager.CurrentMap = _newMapInfo.NextMap.Name;
+                    PlayerManager.PlayerActor.SetPosition(_newMapInfo.PlayerPosition);
+                    PlayerManager.PlayerActor.SetFacing(_newMapInfo.Facing);
+                    PlayerManager.PlayerActor.DetermineAnimationState();
+
+                    if (_newMapInfo.EnteredBuilding != null)
+                    {
+                        GameManager.CurrentBuilding = _newMapInfo.EnteredBuilding;
+                        //CurrentMap.LoadBuilding(_newMapInfo.EnteredBuilding);
+                        TaskManager.TaskProgressEnterBuilding(_newMapInfo.EnteredBuilding.ID);
+                    }
+                    else
+                    {
+                        GameManager.CurrentBuilding = null;
+                    }
+                    CurrentMap.EnterMap();
+
+                    _newMapInfo = default;
+
+                    PlayerManager.PlayerActor.ActivePet?.SpawnNearPlayer();
+
+                    if (PlayerManager.PlayerActor.ActiveMount != null)
+                    {
+                        if (CurrentMap.IsDungeon)
+                        {
+                            PlayerManager.PlayerActor.Dismount();
+                            PlayerManager.PlayerActor.SetPosition(_newMapInfo.PlayerPosition);
+                        }
+                        else { PlayerManager.PlayerActor.ActiveMount.SyncToPlayer(); }
+                    }
                 }
                 else
                 {
-                    GameManager.CurrentBuilding = null;
-                }
-                CurrentMap.EnterMap();
-
-                _newMapInfo = default;
-
-                PlayerManager.PlayerActor.ActivePet?.SpawnNearPlayer();
-
-                if (PlayerManager.PlayerActor.ActiveMount != null)
-                {
-                    if (CurrentMap.IsDungeon)
-                    {
-                        PlayerManager.PlayerActor.Dismount();
-                        PlayerManager.PlayerActor.SetPosition(_newMapInfo.PlayerPosition);
-                    }
-                    else { PlayerManager.PlayerActor.ActiveMount.SyncToPlayer(); }
+                    CurrentMap.SendVillagersToTown();
                 }
             }
 

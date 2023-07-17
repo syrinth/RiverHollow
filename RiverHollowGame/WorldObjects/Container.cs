@@ -3,6 +3,7 @@ using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -24,7 +25,8 @@ namespace RiverHollow.WorldObjects
                 string[] holdSplit = Util.FindParams(args["ItemID"]);
                 foreach (string s in holdSplit)
                 {
-                    InventoryManager.AddToInventory(int.Parse(s), 1, false);
+                    var itemStr = Util.FindArguments(s);
+                    InventoryManager.AddToInventory(int.Parse(itemStr[0]), (itemStr.Length > 1 ? int.Parse(itemStr[1]) : 1), false);
                 }
             }
             InventoryManager.ClearExtraInventory();

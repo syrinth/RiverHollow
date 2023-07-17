@@ -275,7 +275,7 @@ namespace RiverHollow.Misc
             }
             if (_diTags.ContainsKey("SendToTown"))
             {
-                ((Villager)GameManager.CurrentNPC).QueueSendToTown();
+                ((Villager)GameManager.CurrentNPC).ReadySmokeBomb();
             }
         }
 

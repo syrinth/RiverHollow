@@ -4,24 +4,26 @@
     <Item>
       <Key>0</Key>
       <Value>[Name:Introduction][Text:Who's there?!
-	  Oh, you don't look threatening. Any chance you came from a place called $Town$? I'm supposed to be heading there but I appear to have gotten turned around.
-	  You do? Great. The name's Ulm, and it'll be a pleasure to meet you once you do me a small favor.]</Value>
+Oh, you don't look threatening. Any chance you came from a place called $Town$? I'm supposed to be heading there but I appear to have gotten turned around.
+You do? Great. The name's Ulm, and it'll be a pleasure to meet you once you do me a small favor.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Hello dear, having a good day?][Default][Name:1]</Value>
+      <Value>[Name:BAM][Text:Every once in a while, some beastie thinks I look like a snack. A quick whack to the head with a stone pestle will sort out most things.
+BAM!
+Hehe...][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:When I was younger, young men and women from all over would come through here. Adventurers and gloryseekers, looking to make names for themselves. I can see the same fire in you.][Default][Name:2]</Value>
+      <Value>[Name:Mortar and Pestle][Text:I've found that there's not much in life that can't be solved with a sturdy mortar and pestle.][Default]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Text:Oh, hello $Name$, What can I do for you?][Name:ShopOpen]</Value>
+      <Value>[Name:ShopOpen][Text:Yes, what is it?]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Text:Wow! Thanks!][Name:Gift]</Value>
+      <Value>[Name:Gift][Text:Wow! Thanks!]</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -29,7 +31,7 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Name:Task_1_Start][Text: I've been wandering through these woods all day and I'm just too tired to move another foor. I think $Item_163$ grows around here, doesn't it? That should give me the strength to continue for now.]</Value>
+      <Value>[Name:Task_1_Start][Text: I've been wandering through these woods all day and I'm just too tired to move another foot. I think $Item_163$ grows around here, doesn't it? That should give me the strength to continue for now.]</Value>
     </Item>
     <Item>
       <Key>7</Key>

@@ -1929,7 +1929,7 @@ namespace RiverHollow.Map_Handling
             }
             else if (ignoreActors || !TileContainsBlockingActor(testTile))
             {
-                if (testTile.CanPlaceOnTabletop(obj) || testTile.Passable())
+                if (testTile.CanPlaceOnTabletop(obj) || (testTile.TileIsPassable() && testTile.WorldObject == null))
                 {
                     rv = true;
                 }
@@ -2003,6 +2003,18 @@ namespace RiverHollow.Map_Handling
             actors.ForEach(x => x.Flee());
         }
 
+        public void SendVillagersToTown()
+        {
+            var copy = new List<Actor>(_liActors);
+            foreach(var actor in copy)
+            {
+                if (actor.IsActorType(ActorTypeEnum.Villager))
+                {
+                    Villager v = (Villager)_liActors.Find(x => x.ID == actor.ID);
+                    v.SendToTown();
+                }
+            }
+        }
         public void AddActor(Actor c)
         {
             ToAdd.Add(c);

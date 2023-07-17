@@ -193,9 +193,6 @@ namespace RiverHollow.Characters
                         SpawnPets();
                     }
                     break;
-                case SpawnStateEnum.SendingToInn:
-                    _eSpawnStatus = SpawnStateEnum.WaitAtInn;
-                    break;
                 case SpawnStateEnum.VisitInn:
                     if (ArrivalPeriod > 0)
                     {
@@ -260,9 +257,10 @@ namespace RiverHollow.Characters
         }
 
         #region Travel Methods
-        public void QueueSendToTown()
+        public void ReadySmokeBomb()
         {
             _eSpawnStatus = SpawnStateEnum.SendingToInn;
+            MapManager.FadeOut();
         }
         public void SendToTown()
         {
@@ -364,7 +362,8 @@ namespace RiverHollow.Characters
                     }
                 }
 
-                
+                SetFacing(DirectionEnum.Down);
+                PlayAnimation(VerbEnum.Idle);
                 map.AddCharacterImmediately(this);
                 DetermineValidSchedule();
             }

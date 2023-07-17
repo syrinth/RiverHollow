@@ -54,17 +54,17 @@ namespace RiverHollow.Items
 
         public override bool ItemBeingUsed()
         {
-            if (GameManager.TownModeEdit())
+            if (!GameManager.TownModeEdit())
             {
-                if (Number > 1) { Remove(1); }
-                else { InventoryManager.RemoveItemFromInventory(this); }
-
-                GameManager.PickUpWorldObject(DataManager.CreateWorldObjectByID(_iObjectID));
-
-                return true;
+                GameManager.EnterTownModeEdit();
             }
 
-            return false;
+            if (Number > 1) { Remove(1); }
+            else { InventoryManager.RemoveItemFromInventory(this); }
+
+            GameManager.PickUpWorldObject(DataManager.CreateWorldObjectByID(_iObjectID));
+
+            return true;
         }
 
         public override int GetIntByIDKey(string key, int defaultValue = -1)

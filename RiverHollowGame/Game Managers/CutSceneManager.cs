@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -8,7 +7,6 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Misc;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 using System.Linq;
 using static RiverHollow.Game_Managers.SaveManager;
@@ -319,12 +317,12 @@ namespace RiverHollow.Game_Managers
                                     break;
                                 case CutsceneCommandEnum.MoveToTown:
                                     int characterID = -1;
-                                    if (!int.TryParse(sCommandData[0], out characterID))
+                                    if (int.TryParse(sCommandData[0], out characterID))
                                     {
-                                        //If the NPC ID could not be converted, effect the player. The string should be 'Player', but does not need to be
-                                        characterID = -1;
+                                        TownManager.DIVillagers[characterID].TryToMoveIn();
+                                        TownManager.DIVillagers[characterID].MoveToSpawn();
                                     }
-                                    TownManager.DIVillagers[characterID].TryToMoveIn();
+                                    
                                     break;
                                 case CutsceneCommandEnum.End:
                                     EndCutscene();
@@ -625,12 +623,11 @@ namespace RiverHollow.Game_Managers
                         else if (currentCommand.Command == CutsceneCommandEnum.MoveToTown)
                         {
                             int characterID = -1;
-                            if (!int.TryParse(sCommandData[0], out characterID))
+                            if (int.TryParse(sCommandData[0], out characterID))
                             {
-                                //If the NPC ID could not be converted, effect the player. The string should be 'Player', but does not need to be
-                                characterID = -1;
+                                TownManager.DIVillagers[characterID].TryToMoveIn();
+                                TownManager.DIVillagers[characterID].MoveToSpawn();
                             }
-                            TownManager.DIVillagers[characterID].TryToMoveIn();
                         }
                         else if (currentCommand.Command == CutsceneCommandEnum.Introduce)
                         {

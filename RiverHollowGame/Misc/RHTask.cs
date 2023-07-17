@@ -460,7 +460,7 @@ namespace RiverHollow.Misc
 
                 if (DataManager.TaskData[ID].ContainsKey("SendToTown"))
                 {
-                    ((Villager)GoalNPC).QueueSendToTown();
+                    ((Villager)GoalNPC).ReadySmokeBomb();
                 }
 
                 if (DataManager.TaskData[ID].ContainsKey("UnlockMagic"))

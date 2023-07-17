@@ -124,7 +124,7 @@ namespace RiverHollow.Game_Managers
 
         public static bool LightingActive()
         {
-            return MapManager.CurrentMap.Lighting < 1 || GameCalendar.CurrentHour >= 18 && MapManager.CurrentMap.IsOutside;
+            return MapManager.CurrentMap.Lighting < 1 || (GameCalendar.CurrentHour >= 18 && MapManager.CurrentMap.IsOutside);
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace RiverHollow.Game_Managers
             {
                 float totalMinutes = 180;
                 float timeModifier = GameCalendar.CurrentMin + ((GameCalendar.CurrentHour - 18f) * 60f);  //Total number of minutes since 6 P.M.
-                darkPercent = Math.Min(0.9f, timeModifier / totalMinutes);
+                darkPercent = Math.Min(0.85f, timeModifier / totalMinutes);
             }
             else
             {

@@ -20,6 +20,7 @@ namespace RiverHollow.Items
         public override bool HasUse() { return true; }
         public override bool ItemBeingUsed()
         {
+            StrikeAPose();
             GameManager.SetSelectedItem(this);
             ConfirmItemUse(DataManager.GetGameTextEntry("Read_Book", Name()));
 

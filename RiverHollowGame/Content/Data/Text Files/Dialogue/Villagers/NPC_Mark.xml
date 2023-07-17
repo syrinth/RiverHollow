@@ -4,35 +4,37 @@
     <Item>
       <Key>0</Key>
       <Value>[Name:Introduction][Text:Good to see you up and about! My name's $Actor_20$ and welcome to the Blue Hare Inn.
-Not too long until people start showing up eh? We're gonna have our hands full keeping any travellers fed.]</Value>
+I know it looks a bit rough, but I think it's a good start yeah?
+It won't be long until people start showing up.
+I'll keep the visitors entertained as best I can, but you'll have to check in because I'm sure there'll be people flocking to move here in no time!]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Name:IntroYes][Text:Oh. How interesting. In that case, you should speak with $2$, he and his husband make excellent weapons.]</Value>
+      <Value>[Name:Hammer][Text:When $Actor_16$ and I were building the Inn, I hit my thumb at least three times with a hammer. I couldn't hold anything for days afterwards.][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:Oh, that's a shame][Name:IntroNo]</Value>
+      <Value>[Name:Clumsy][Text:I've always been kind of clumsy. Just one of those things, you know? My mother never gave me anything valuable to hold onto after the Incident with the pickle jar...]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Text:What does that even mean?][Name:IntroMaybe]</Value>
+      <Value>[Name:Busy][Text:There's always things to do around here to keep me busy. I doubt you have ti any better though, eh?]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Text:Hello $Name$. I hope you're well today.][Default][Name:4]</Value>
+      <Value>[Name:4][Text:Hello $Name$. I hope you're well today.][Default]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Text:You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.][Default][Name:5]</Value>
+      <Value>[Name:5][Text:You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.][Default]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Name:Gift_Happy][Text:Happy]</Value>
+      <Value>[Name:Gift_Happy][Text:Oh. This is a surprise!]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Name:Collection][Text:Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?]</Value>
+      <Value>[Name:Collection][Text:Oh I.. I can't... how did you know? Thank you!]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -60,15 +62,15 @@ Not too long until people start showing up eh? We're gonna have our hands full k
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Name:Gift_Neutral][Text:Neutral]</Value>
+      <Value>[Name:Gift_Neutral][Text:How kind, thank you.]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Name:Gift_Sad][Text:Sad]</Value>
+      <Value>[Name:Gift_Sad][Text:Oh...  thanks.]</Value>
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Name:Gift_Miserable][Text:Miserable]</Value>
+      <Value>[Name:Gift_Miserable][Text:..I appreciate the thought.]</Value>
     </Item>
   </Asset>
 </XnaContent>
