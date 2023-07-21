@@ -639,7 +639,7 @@
     </Item>
     <Item>
       <Key>159</Key>
-      <Value>[Type:WorldObject][Image:17-21][Size:2-1][Base:0-0-2-1][Bed]</Value>
+      <Value>[Type:WorldObject][Image:19-21][Size:2-2][Base:0-1-2-1][Bed]</Value>
     </Item>
     <Item>
       <Key>160</Key>
@@ -664,6 +664,14 @@
     <Item>
       <Key>165</Key>
       <Value>[Type:Buildable][Subtype:Container][Image:0-4][Size:1-1][Base:0-0-1-1][Rows:1][Cols:4][Opens]</Value>
+    </Item>
+    <Item>
+      <Key>166</Key>
+      <Value>[Type:Buildable][Subtype:Decor][Image:0-20][Size:1-2][Base:0-0-1-2][Placement:Wall]</Value>
+    </Item>
+    <Item>
+      <Key>167</Key>
+      <Value>[Type:Buildable][Subtype:Decor][Image:6-23][Size:2-3][Base:0-1-2-2][ReqItems][Display][DisplayOffset:8-10]</Value>
     </Item>
   </Asset>
 </XnaContent>

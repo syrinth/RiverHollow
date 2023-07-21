@@ -276,6 +276,31 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="146">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="147">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="148">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="149">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="150">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="163">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
@@ -291,6 +316,31 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="172">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="173">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="174">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="175">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="176">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="189">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
@@ -302,6 +352,31 @@
   </properties>
  </tile>
  <tile id="191">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="198">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="199">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="200">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="201">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="202">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
@@ -336,12 +411,42 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="250">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="251">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="252">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="253">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="268">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="269">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="278">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="279">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
@@ -361,6 +466,11 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="307">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="312">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
@@ -372,6 +482,26 @@
   </properties>
  </tile>
  <tile id="314">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="330">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="331">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="332">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="333">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
@@ -397,6 +527,26 @@
   </properties>
  </tile>
  <tile id="347">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="356">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="357">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="358">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="359">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
@@ -437,6 +587,11 @@
   </properties>
  </tile>
  <tile id="418">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="419">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>

@@ -2039,6 +2039,14 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Small Chest]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_166</Key>
+      <Value>[Name:Window]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_167</Key>
+      <Value>[Name:Square Table]</Value>
+    </Item>
+    <Item>
       <Key>Cutscene_0</Key>
       <Value>[Name:Combat_Intro]</Value>
     </Item>
