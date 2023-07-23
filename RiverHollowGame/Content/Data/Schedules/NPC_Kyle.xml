@@ -2,18 +2,10 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, List[string]]">
     <Item>
-      <Key>Monday</Key>
-      <Value>
-      </Value>
-    </Item>
-    <Item>
-      <Key>Built_6</Key>
-      <Value>
-      </Value>
-    </Item>
-    <Item>
       <Key>Default</Key>
       <Value>
+	  <Item>[Hour:11][Minute:30][Location:Inn_16][Dir:Down]</Item>
+	  <Item>[Hour:18][Minute:00][Location:NPC_16][Dir:Down]</Item>
       </Value>
     </Item>
   </Asset>

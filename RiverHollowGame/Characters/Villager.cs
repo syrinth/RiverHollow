@@ -150,7 +150,7 @@ namespace RiverHollow.Characters
 
                 //If we ended out movement during the update, process any directional facing
                 //And animations that may be requested
-                if (stillMoving && _liTilePath.Count == 0)
+                if (stillMoving && _liTilePath.Count == 0 && _currentPathData != null)
                 {
                     string direction = _currentPathData.Direction;
                     string animation = _currentPathData.Animation;
@@ -351,8 +351,7 @@ namespace RiverHollow.Characters
                     {
                         case SpawnStateEnum.VisitInn:
                         case SpawnStateEnum.WaitAtInn:
-                            Point position = map.DictionaryCharacterLayer["InnFloor"];
-                            SetPosition(map.GetRandomPosition(new Rectangle(position.X, position.Y, 8 * Constants.TILE_SIZE, 6 * Constants.TILE_SIZE)));
+                            SetPosition(map.GetRandomPosition(map.DictionaryCharacterLayer["Inn_Floor"]));
                             break;
                         case SpawnStateEnum.HasHome:
                         case SpawnStateEnum.NonTownMap:

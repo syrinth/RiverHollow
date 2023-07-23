@@ -42,22 +42,18 @@ I'll keep the visitors entertained as best I can, but you'll have to check in be
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Name:Task_15_Start][Text:Any chance you could do me a favor? I have some $Item_76$s and some gardening tools that I brought, just in case. Could you plant these for me? Make sure you water them every day, or they won't grow.][ItemID:134/135/76-4]</Value>
-    </Item>
-    <Item>
-      <Key>10</Key>
       <Value>[Name:Task_15_End][Text:That's amazing! Thanks, a lot.]</Value>
     </Item>
     <Item>
-      <Key>11</Key>
+      <Key>10</Key>
       <Value>[Text:Yes I will marry you!][Name:MarriageYes]</Value>
     </Item>
     <Item>
-      <Key>12</Key>
+      <Key>11</Key>
       <Value>[Name:MarriageNo][Text:Oh... I'm sorry but. No.]</Value>
     </Item>
     <Item>
-      <Key>13</Key>
+      <Key>12</Key>
       <Value>[Name:Gift_Pleased][Text:Pleased]</Value>
     </Item>
     <Item>

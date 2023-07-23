@@ -248,11 +248,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 case TextEntryVerbEnum.EndDay:
                     Point pos = PlayerManager.PlayerActor.CollisionCenter;
-                    PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
+                    PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"].Location));
                     GUIManager.SetScreen(new DayEndScreen());
                     break;
                 case TextEntryVerbEnum.GoToNight:
-                    MapManager.FadeToNewMap(MapManager.CurrentMap, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"], DirectionEnum.Down);
+                    MapManager.FadeToNewMap(MapManager.CurrentMap, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"].Location, DirectionEnum.Down);
                     if (GameCalendar.CurrentHour <= GameCalendar.Nightfall())
                     {
                         PlayerManager.RecoverEnergy(Constants.ENERGY_NAP_RECOVERY);

@@ -60,14 +60,17 @@ namespace RiverHollow.Characters
 
         public Traveler(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
+            _fBaseSpeed = Constants.NPC_WALK_SPEED;
+            _fWanderSpeed = Constants.NPC_WALK_SPEED;
+
             Wandering = true;
-            CollisionState = ActorCollisionState.Slow;
+            _eCollisionState = ActorCollisionState.Slow;
         }
 
         public override TextEntry GetOpeningText()
         {
             TownManager.DITravelerInfo[ID] = new ValueTuple<bool, int>(true, TownManager.DITravelerInfo[ID].Item2);
-            return base.GetOpeningText();
+            return GetDailyDialogue();
         }
 
         public void TryEat(Food f)

@@ -76,7 +76,7 @@ namespace RiverHollow.Map_Handling
         private List<int> _liCutscenes;
         protected List<MapItem> _liItems;
         public Dictionary<string, TravelPoint> DictionaryTravelPoints { get; }
-        public Dictionary<string, Point> DictionaryCharacterLayer { get; }
+        public Dictionary<string, Rectangle> DictionaryCharacterLayer { get; }
         private List<TiledMapObject> _liMapObjects;
         private int _iShopID = -1;
         public Shop TheShop => (_iShopID > -1) ? GameManager.DIShops[_iShopID] : null;
@@ -107,7 +107,7 @@ namespace RiverHollow.Map_Handling
             _liCutscenes = new List<int>();
 
             DictionaryTravelPoints = new Dictionary<string, TravelPoint>();
-            DictionaryCharacterLayer = new Dictionary<string, Point>();
+            DictionaryCharacterLayer = new Dictionary<string, Rectangle>();
 
             _liItemsToRemove = new List<MapItem>();
             _liActorsToRemove = new List<Actor>();
@@ -487,12 +487,12 @@ namespace RiverHollow.Map_Handling
                         {
                             if (obj.Properties.ContainsKey("NPC_ID"))
                             {
-                                DictionaryCharacterLayer.Add("NPC_" + obj.Properties["NPC_ID"], obj.Position.ToPoint());
+                                DictionaryCharacterLayer.Add("NPC_" + obj.Properties["NPC_ID"], Util.RectFromTiledMapObject(obj));
                             }
                         }
                         else
                         {
-                            DictionaryCharacterLayer.Add(obj.Name, obj.Position.ToPoint());
+                            DictionaryCharacterLayer.Add(obj.Name, Util.RectFromTiledMapObject(obj));
                         }
                     }
                 }
@@ -1074,8 +1074,8 @@ namespace RiverHollow.Map_Handling
                 }
                 else if (kvp.Key.Intersects(testDiagonal))
                 {
-                    if (kvp.Value != null && kvp.Value.CollisionState == ActorCollisionState.Slow) { impeded = true; }
-                    else if (npc == null || npc.CollisionState == ActorCollisionState.Block) { diagonalChange.X = 0; }
+                    if (npc != null && npc.ImpedesActor(actor)) { impeded = true; }
+                    else if (npc == null || npc.BlocksActor(actor)) { diagonalChange.X = 0; }
                 }
             }
 
@@ -1095,11 +1095,11 @@ namespace RiverHollow.Map_Handling
             Point location = actor.CollisionBoxLocation;
             Point size = actor.CollisionBox.Size;
 
-            if (npc != null && npc.CollisionState == ActorCollisionState.Slow)
+            if (npc != null && npc.ImpedesActor(actor))
             {
                 impeded = true;
             }
-            else if (npc == null || npc.CollisionState == ActorCollisionState.Block)
+            else if (npc == null || npc.BlocksActor(actor))
             {
                 int distance;
                 bool positionLessThan;
@@ -1110,7 +1110,7 @@ namespace RiverHollow.Map_Handling
                 if (vertical) { distance = positionLessThan ? r.Top - actor.CollisionBox.Bottom : r.Bottom - actor.CollisionBox.Top; }
                 else { distance = positionLessThan ? r.Left - actor.CollisionBox.Right : r.Right - actor.CollisionBox.Left; }
 
-                dirToCancel = Math.Abs(distance) < Math.Abs(dirToCancel) ? distance : 0;
+                dirToCancel = Math.Abs(distance) <= Math.Abs(dirToCancel) ? distance : 0;
 
                 //Modifier is to determine if the nudge is positive or negative
                 float modifier;
@@ -1273,7 +1273,7 @@ namespace RiverHollow.Map_Handling
             MapItem displayItem = new MapItem(DataManager.GetItem(itemID))
             {
                 PickupState = ItemPickupState.None,
-                Position = DictionaryCharacterLayer[npcIndex + "Col" + index]
+                Position = DictionaryCharacterLayer[npcIndex + "Col" + index].Location
             };
             _liItems.Add(displayItem);
         }
@@ -1309,7 +1309,7 @@ namespace RiverHollow.Map_Handling
             Point rv = Point.Zero;
             if (DictionaryCharacterLayer.ContainsKey(val))
             {
-                rv = DictionaryCharacterLayer[val];
+                rv = DictionaryCharacterLayer[val].Location;
             }
             return rv;
         }

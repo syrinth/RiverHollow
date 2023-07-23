@@ -186,7 +186,6 @@ namespace RiverHollow.Game_Managers
 
             _diGameText = new Dictionary<string, string>();
             Dictionary<string, string> rawTextInfo = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + "GameText");
-            Dictionary<string, string> newDialogue;
             foreach (string dialogueTags in rawTextInfo.Values)
             {
                 Dictionary<string, string> tags = Util.DictionaryFromTaggedString(dialogueTags);
@@ -198,26 +197,34 @@ namespace RiverHollow.Game_Managers
             _diSongs = Content.Load<Dictionary<int, List<string>>>(@"Data\Songs");
             
             _diNPCDialogue = new Dictionary<string, Dictionary<string, string>>();
+
             foreach (string s in Directory.GetFiles(@"Content\" + FOLDER_TEXTFILES + @"Dialogue\Villagers"))
             {
-                string fileName = s;
+                LoadDialogDictionary(Content, s);
+            }
+            foreach (string s in Directory.GetFiles(@"Content\" + FOLDER_TEXTFILES + @"Dialogue\Travelers"))
+            {
+                LoadDialogDictionary(Content, s);
+            }
+        }
+        private static void LoadDialogDictionary(ContentManager Content, string fileName)
+        {
+            Dictionary<string, string> newDialogue;
+            if (fileName.Contains("NPC_"))
+            {
+                string key = Path.GetFileName(fileName).Replace("NPC_", "").Split('.')[0];
 
-                if (s.Contains("NPC_"))
+                Util.ParseContentFile(ref fileName);
+                Dictionary<int, string> rawInfo = Content.Load<Dictionary<int, string>>(fileName);
+                newDialogue = new Dictionary<string, string>();
+                foreach (string dialogueTags in rawInfo.Values)
                 {
-                    string key = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0];
-
-                    Util.ParseContentFile(ref fileName);
-                    Dictionary<int, string> rawInfo = Content.Load<Dictionary<int, string>>(fileName);
-                    newDialogue = new Dictionary<string, string>();
-                    foreach (string dialogueTags in rawInfo.Values)
-                    {
-                        Dictionary<string, string> tags = Util.DictionaryFromTaggedString(dialogueTags);
-                        string newKey = tags["Name"];
-                        tags.Remove("Name");
-                        newDialogue[newKey] = Util.StringFromTaggedDictionary(tags);
-                    }
-                    _diNPCDialogue.Add(key, newDialogue);
+                    Dictionary<string, string> tags = Util.DictionaryFromTaggedString(dialogueTags);
+                    string newKey = tags["Name"];
+                    tags.Remove("Name");
+                    newDialogue[newKey] = Util.StringFromTaggedDictionary(tags);
                 }
+                _diNPCDialogue.Add(key, newDialogue);
             }
         }
         private static void LoadCharacters(ContentManager Content)

@@ -11,7 +11,7 @@ namespace RiverHollow.Characters
         Rectangle _rSourceCollisionBox;
         public ActionEffect(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            CollisionState = ActorCollisionState.PassThrough;
+            _eCollisionState = ActorCollisionState.PassThrough;
             BodySprite = LoadSpriteAnimations(Util.LoadWorldAnimations(stringData), DataManager.FOLDER_EFFECTS + stringData["Key"]);
         }
 

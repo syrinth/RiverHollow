@@ -5,13 +5,13 @@ using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.GUIComponents;
+using System;
 
 namespace RiverHollow.Characters
 {
@@ -50,7 +50,7 @@ namespace RiverHollow.Characters
         public ActorStateEnum State { get; protected set; } = ActorStateEnum.Walk;
         public ActorTypeEnum ActorType { get; protected set; }
 
-        public ActorCollisionState CollisionState { get; protected set; } = ActorCollisionState.Block;
+        protected ActorCollisionState _eCollisionState = ActorCollisionState.Block;
 
         public string CurrentMapName;
         public RHMap CurrentMap => (!string.IsNullOrEmpty(CurrentMapName) ? MapManager.Maps[CurrentMapName] : null);
@@ -324,6 +324,31 @@ namespace RiverHollow.Characters
 
             return true;
         }
+
+        public bool ImpedesActor(Actor act)
+        {
+            bool rv = false;
+
+            if (act != PlayerManager.PlayerActor)
+            {
+                rv = _eCollisionState != ActorCollisionState.PassThrough;
+            }
+
+            return rv;
+        }
+
+        public bool BlocksActor(Actor act)
+        {
+            bool rv = false;
+
+            if (act == PlayerManager.PlayerActor)
+            {
+                rv = _eCollisionState == ActorCollisionState.Block;
+            }
+
+            return rv;
+        }
+
         public bool IsActorType(ActorTypeEnum act) { return ActorType == act; }
         public virtual void ChangeState(NPCStateEnum state)
         {
@@ -414,18 +439,9 @@ namespace RiverHollow.Characters
             if (HasMovement())
             {
                 //Determines how much of the needed position we're capable of in one movement
-                Vector2  direction = Util.GetMoveSpeed(CollisionBoxLocation, MoveToLocation, BuffedSpeed);
-
-                //If we're following a path and there's more than one tile left, we don't want to cut
-                //short on individual steps, so recalculate based on the next target
-                float length = direction.Length();
-                if (_liTilePath.Count > 1 && length < BuffedSpeed)
-                {
-                    if (DoorCheck())
-                    {
-                        return;
-                    }
-                }
+                Vector2 direction = Util.GetMoveSpeed(CollisionBoxLocation, MoveToLocation, BuffedSpeed);
+                Point projection = ProjectedMovement(direction);
+                var deltaDir = CollisionBoxLocation - MoveToLocation;
 
                 bool impeded = false;
                 Vector2 initial = direction;
@@ -433,7 +449,17 @@ namespace RiverHollow.Characters
                 {
                     MoveActor(direction * (impeded ? Constants.IMPEDED_SPEED : 1f));
                 }
-                else { _bBumpedIntoSomething = true; }
+                else
+                {
+                    if (_liTilePath.Count > 1 && DoorCheck())
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        _bBumpedIntoSomething = true;
+                    }
+                }
 
                 if(initial != direction)
                 {
@@ -441,7 +467,7 @@ namespace RiverHollow.Characters
                 }
 
                 //If, after movement, we've reached the given location, zero it.
-                if (MoveToLocation == CollisionBoxLocation && !CutsceneManager.Playing)
+                if (MoveToLocation == CollisionBoxLocation)
                 {
                     SetMoveTo(Point.Zero);
                     if (_liTilePath.Count > 0)
@@ -459,12 +485,12 @@ namespace RiverHollow.Characters
         /// <summary>
         /// This method checks to see whether the next RHTile is a door and handles it.
         /// </summary>
-        /// <returns>True if the next RHTIle is a door</returns>sssssssss
+        /// <returns>True if the next RHTIle is a door</returns>
         protected bool DoorCheck()
         {
             bool rv = false;
             TravelPoint potentialTravelPoint = _liTilePath[0].GetTravelPoint();
-            if (potentialTravelPoint != null && potentialTravelPoint.IsDoor)
+            if (potentialTravelPoint != null && potentialTravelPoint.IsDoor && _liTilePath[0].GetAdjacentTiles().Contains(CurrentMap.GetTileByPixelPosition(CollisionCenter)))
             {
                 SoundManager.PlayEffectAtLoc(SoundEffectEnum.Door, this.CurrentMapName, potentialTravelPoint.Center);
                 MapManager.ChangeMaps(this, CurrentMapName, potentialTravelPoint);

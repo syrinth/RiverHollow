@@ -248,23 +248,23 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Actor_45</Key>
-      <Value>[Name:Human Traveller]</Value>
+      <Value>[Name:Human Traveller][Description:A dour traveler who hasn't had an easy life]</Value>
     </Item>
     <Item>
       <Key>Actor_46</Key>
-      <Value>[Name:Human Traveller2]</Value>
+      <Value>[Name:Human Traveller2][Description:An upbeat traveler who is excited to see the world]</Value>
     </Item>
     <Item>
       <Key>Actor_47</Key>
-      <Value>[Name:adv1]</Value>
+      <Value>[Name:adv1][Description:A swordsman who appreciates life]</Value>
     </Item>
     <Item>
       <Key>Actor_48</Key>
-      <Value>[Name:adv2]</Value>
+      <Value>[Name:adv2][Description:An overprotective healer with a kind heart]</Value>
     </Item>
     <Item>
       <Key>Actor_49</Key>
-      <Value>[Name:neutral]</Value>
+      <Value>[Name:neutral][Description:A quirky traveler with an upbeat personality]</Value>
     </Item>
     <Item>
       <Key>Actor_50</Key>
@@ -2097,6 +2097,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Cutscene_12</Key>
       <Value>[Name:Putting Down Roots]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_13</Key>
+      <Value>[Name:Inn the Right Mindset]</Value>
     </Item>
   </Asset>
 </XnaContent>

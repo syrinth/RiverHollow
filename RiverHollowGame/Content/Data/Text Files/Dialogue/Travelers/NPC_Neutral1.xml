@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>1</Key>
+      <Value>[Text:This is such a nice town, although it could do with more pink.][Name:1][Default]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Text:I wonder if the Inn has anything sweet? My teeth have a craving.][Name:2][Default]</Value>
+    </Item>
+	<Item>
+      <Key>3</Key>
+      <Value>[Text:What kind of food do you like? Personally, I need flavor.][Name:3][Default]</Value>
+    </Item>
+	<Item>
+      <Key>4</Key>
+      <Value>[Text:I'd rather eat my boot than eat bland food. At least then there'd be a funny story.][Name:4][Default]</Value>
+    </Item>
+	<Item>
+      <Key>5</Key>
+      <Value>[Text:I wonder what kind of potions I can find here.][Name:5][Default]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

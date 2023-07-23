@@ -21,7 +21,7 @@ namespace RiverHollow.Characters
             _fWanderSpeed = Constants.NPC_WALK_SPEED;
 
             Wandering = true;
-            CollisionState = ActorCollisionState.Slow;
+            _eCollisionState = ActorCollisionState.Slow;
 
             List<AnimationData> liData = new List<AnimationData>();
             Util.AddToAnimationsList(ref liData, stringData, VerbEnum.Walk);

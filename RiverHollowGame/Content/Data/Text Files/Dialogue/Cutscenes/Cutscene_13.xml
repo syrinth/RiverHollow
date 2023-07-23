@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[Name][Text:They'll be here any minute! Is everything ready?!]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Name][Text:It's fine, it's fine. I'm prepared for this, right?]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Name][Text:Oh! You're here!]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Name][Text:It's a pleasure to meet you. I hope the trip up here wasn't too hard.
+	  My name? OH! $Actor_20$. I'm $Actor_20$, and this is the Blue Hare Inn. I know it's not much, but it's not too shabby right? It was the first thing $Actor_16$ built when we got here, and I even tried to help a bit.
+	  I've been spending the past few days getting it ready for you and our other guests.]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Name][Text:This will be one of the first places guests visit, so you should make sure to pop in and check to see if anyone likes it here enough to want to move in.
+	  Oh, and before I forget...]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Name][Text:I've got food stockpiled but not a lot of really varied ingredients. When you get a chance, you should spend some time whipping up some food here for the travelers that stop by.
+	  Everyone has their own likes and dislikes though, so try to keep it varied if you can. Happy travelers will spend more money in town before they leave.
+	  Speaking of, I set these aside for you...]</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Name][Text:I thought it might be a good idea to bring some gardening tools so we could grow anything we might need. Could you plant these $Item_76$s for me? They'll need to be watered every day or they won't grow.][ItemID:134/135/76-4]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

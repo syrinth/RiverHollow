@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>1</Key>
+      <Value>[Text:What?][Name:1][Default]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Text:I'm not in the mood.][Name:2][Default]</Value>
+    </Item>
+	<Item>
+      <Key>3</Key>
+      <Value>[Text:Why is it that no one wants to keep things simple anymore?][Name:3][Default]</Value>
+    </Item>
+	<Item>
+      <Key>4</Key>
+      <Value>[Text:If you are about to try to inform me about the benefits of healthy eating on my attitude. Don't.][Name:4][Default]</Value>
+    </Item>
+	<Item>
+      <Key>5</Key>
+      <Value>[Text:I need to get my helmet repaired. Think your blacksmith is up to the task or do I need to go elsewhere?][Name:5][Default]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

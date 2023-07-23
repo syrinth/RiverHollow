@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>1</Key>
+      <Value>[Text:Ah! Just breathe in that fresh air!][Name:1][Default]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Text:Adventure, challenges, nothing beats life on the road!][Name:2][Default]</Value>
+    </Item>
+	<Item>
+      <Key>3</Key>
+      <Value>[Text:Nothing beats a stomach full of fresh-caught fish.][Name:3][Default]</Value>
+    </Item>
+	<Item>
+      <Key>4</Key>
+      <Value>[Text:I had to eat $Item_154$ yesterday. Hopefully today will be better.][Name:4][Default]</Value>
+    </Item>
+	<Item>
+      <Key>5</Key>
+      <Value>[Text:I'm looking for a place to get my sword sharpened.][Name:5][Default]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

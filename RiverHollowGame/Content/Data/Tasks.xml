@@ -63,7 +63,7 @@
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Fetch][StartNPC:20][AssignTrigger:GameStart][GoalItem:154-4][GoalNPC:20][Money:100][ItemRewardID:76-10]</Value>
+      <Value>[Type:Fetch][StartNPC:20][GoalItem:154-4][GoalNPC:20][Money:100][ItemRewardID:76-10]</Value>
     </Item>
   </Asset>
 </XnaContent>

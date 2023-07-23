@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>1</Key>
+      <Value>[Text:What a lovely town!][Name:1][Default]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Text:The woods here are really nice!][Name:2][Default]</Value>
+    </Item>
+	<Item>
+      <Key>3</Key>
+      <Value>[Text:Oh man, I'm hungry. I should stop shopping and head to the Inn soon for a crispy snack.][Name:3][Default]</Value>
+    </Item>
+	<Item>
+      <Key>4</Key>
+      <Value>[Text:Did you know that some places I've visited seem to live off desserts? I couldn't imagine that.][Name:4][Default]</Value>
+    </Item>
+	<Item>
+      <Key>5</Key>
+      <Value>[Text:I'm so excited about this trip that I've been having a hard time sleeping. Do you think the Apothecary has something that can help?][Name:5][Default]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

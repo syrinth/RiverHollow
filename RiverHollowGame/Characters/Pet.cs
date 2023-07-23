@@ -17,7 +17,7 @@ namespace RiverHollow.Characters
         {
             _fBaseSpeed = 1;
             Wandering = true;
-            CollisionState = ActorCollisionState.Slow;
+            _eCollisionState = ActorCollisionState.Slow;
 
             //_sPortrait = Util.GetPortraitLocation(DataManager.PORTRAIT_FOLDER, "Adventurer", stringData["Key"]);
 

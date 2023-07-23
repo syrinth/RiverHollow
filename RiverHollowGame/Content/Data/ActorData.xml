@@ -83,7 +83,7 @@
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:28][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Mark][HappyID:55][PleasedID:60][NeutralID:0][SadID:2][MiserableID:23][ShopData:1]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:28][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Mark][HappyID:55][PleasedID:60][NeutralID:0][SadID:2][MiserableID:23][ShopData:1][Size:16-34]</Value>
     </Item>
     <Item>
       <Key>21</Key>
@@ -183,19 +183,19 @@
     </Item>
     <Item>
       <Key>45</Key>
-      <Value>[Type:Traveler][Subtype:Human][Key:Traveller1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][FavFood:Plain][Disliked:Dessert][Angry:0-32-1-0-F][Sad:0-32-1-0-F][Neutral:0-32-1-0-F][Happy:0-32-1-0-F]</Value>
+      <Value>[Type:Traveler][Subtype:Human][Key:Traveller1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:35][Value:10][FavFood:Plain][Disliked:Healthy][Angry:0-32-1-0-F][Sad:0-32-1-0-F][Neutral:0-32-1-0-F][Happy:0-32-1-0-F]</Value>
     </Item>
     <Item>
       <Key>46</Key>
-      <Value>[Type:Traveler][Subtype:Human][Key:Traveller2][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Rare][FavFood:Dessert][Disliked:Plain][Angry:0-32-1-0-F][Sad:0-32-1-0-F][Neutral:0-32-1-0-F][Happy:0-32-1-0-F]</Value>
+      <Value>[Type:Traveler][Subtype:Human][Key:Traveller2][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Rare][FavFood:Healthy][Disliked:Dessert][Angry:0-32-1-0-F][Sad:0-32-1-0-F][Neutral:0-32-1-0-F][Happy:0-32-1-0-F]</Value>
     </Item>
     <Item>
       <Key>47</Key>
-      <Value>[Type:Traveler][Subtype:Adventurer][Key:Adventurer1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][FavFood:Plain][Disliked:Dessert]</Value>
+      <Value>[Type:Traveler][Subtype:Adventurer][Key:Adventurer1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:35][Value:10][FavFood:Seafood][Disliked:Healthy]</Value>
     </Item>
     <Item>
       <Key>48</Key>
-      <Value>[Type:Traveler][Subtype:Adventurer][Key:Adventurer2][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Rare][FavFood:Dessert][Disliked:Plain]</Value>
+      <Value>[Type:Traveler][Subtype:Adventurer][Key:Adventurer2][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Rare][FavFood:Plain][Disliked:Seafood]</Value>
     </Item>
     <Item>
       <Key>49</Key>

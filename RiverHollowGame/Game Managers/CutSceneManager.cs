@@ -127,7 +127,7 @@ namespace RiverHollow.Game_Managers
     public class Cutscene
     {
         #region CutScene Commandinformation
-        enum CutsceneCommandEnum { Activate, Background, BackgroundRemove, End, Face, Introduce, Move, MoveToTown, Sound, Speak, Speed, Task, Text, Wait };
+        enum CutsceneCommandEnum { Activate, Background, BackgroundRemove, End, Face, GoTo, Introduce, Move, MoveToTown, Sound, Speak, Speed, Task, Text, Wait };
 
         /// <summary>
         /// A class to hold the information for a CutSceneCommand step
@@ -156,9 +156,9 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         int _iID;
+        RHMap _cutsceneMap;
         RHMap _originalMap;
         Point _pOriginalPlayerPos;
-        RHMap _cutsceneMap;
         int _iTaskID = -1;
         int _iMinTime = -1;                                         //The earliest the cutscene can be triggered
         int _iMaxTime = -1;                                         //The latest the cutscene can be triggered
@@ -242,29 +242,31 @@ namespace RiverHollow.Game_Managers
         public void Update(GameTime gTime)
         {
             //If the Wait command has been called, we need to count down to zero
-            ;
             if(_timer == null || _timer.TickDown(gTime))
             {
-                _timer = null;
+                if (_timer != null)
+                {
+                    _timer = null;
+                    _iCurrentCommand++;
+                }
                 //If someone is currently talking, do NOT process additional tags
                 if (!GUIManager.IsTextWindowOpen())                 
                 {
                     CutSceneCommand currentCommand = _liCommands[_iCurrentCommand];
                     if (!currentCommand.ActionPerformed)     //If we've already performed the action, do not do it again
                     {
-                        bool bGoToNext = false;
+                        bool goToNext = false;
                         foreach (string s in currentCommand.Data)   //Need to perform the action for each character
                         {
                             int npcID = -1;
                             string[] sCommandData = Util.FindArguments(s);   //split the data into segments
-                            Actor npc;
+                            Actor actor;
                             switch (currentCommand.Command)
                             {
                                 case CutsceneCommandEnum.Activate:
-                                    npcID = GetNPCData(sCommandData[0]);
-                                    npc = _liUsedNPCs.Find(test => test.ID == npcID);
-                                    npc?.Activate(true);
-                                    bGoToNext = true;
+                                    actor = GetActor(sCommandData[0]);
+                                    actor?.Activate(true);
+                                    goToNext = true;
                                     break;
                                 case CutsceneCommandEnum.Speak:
                                     npcID = GetNPCData(sCommandData[0]);
@@ -272,48 +274,82 @@ namespace RiverHollow.Game_Managers
                                     {
                                         Villager b = (Villager)_liUsedNPCs.Find(test => test.ID == npcID);
                                         b.TalkCutscene(CutsceneManager.GetDialogue(_iID, sCommandData[1]));
-                                        bGoToNext = true;
+                                        goToNext = true;
                                     }
                                     break;
                                 case CutsceneCommandEnum.Background:
                                     GUIManager.AssignBackgroundImage(new GUIImage(DataManager.GetTexture(sCommandData[0])));
-                                    bGoToNext = true;
+                                    goToNext = true;
                                     break;
                                 case CutsceneCommandEnum.BackgroundRemove:
                                     GUIManager.ClearBackgroundImage();
-                                    bGoToNext = true;
+                                    goToNext = true;
+                                    break;
+                                case CutsceneCommandEnum.GoTo:
+                                    _bWaitForMove = true;
+                                    Actor c = GetActor(sCommandData[0]);
+                                    DirectionEnum d = DirectionEnum.None;
+                                    if (sCommandData.Length > 2) { d = Util.ParseEnum<DirectionEnum>(sCommandData[2]); }
+
+                                    Point collisionCenter = c.CollisionCenter;
+                                    var path = TravelManager.FindPathToLocation(ref collisionCenter, _cutsceneMap.DictionaryCharacterLayer[sCommandData[1]].Location);
+                                    c.SetPath(path);
+                                    c.SetMoveTo(path[0].Position);
+                                    if (!_diMoving.ContainsKey(c))
+                                    {
+                                        _diMoving[c] = d;
+                                    }
                                     break;
                                 case CutsceneCommandEnum.Text:
                                     GUIManager.OpenTextWindow(CutsceneManager.GetDialogue(_iID, sCommandData[0]));
-                                    bGoToNext = true;
+                                    goToNext = true;
                                     break;
                                 case CutsceneCommandEnum.Move:
                                     _bWaitForMove = true;
                                     DirectionEnum faceDir = DirectionEnum.None;
                                     if(sCommandData.Length > 3) { faceDir = Util.ParseEnum<DirectionEnum>(sCommandData[3]); }
                                     AssignMovement(sCommandData[0], int.Parse(sCommandData[1]), Util.ParseEnum<DirectionEnum>(sCommandData[2]), faceDir);
-                                    break;
+                                    break;                     
                                 case CutsceneCommandEnum.Wait:
                                     _timer = new RHTimer(double.Parse(sCommandData[0]));
                                     break;
                                 case CutsceneCommandEnum.Task:
                                     TaskManager.AddToTaskLog(int.Parse(sCommandData[0]));
-                                    bGoToNext = true;
+                                    goToNext = true;
                                     break;
                                 case CutsceneCommandEnum.Sound:
                                     SoundManager.PlayEffect(Util.ParseEnum<SoundEffectEnum>(sCommandData[0]));
-                                    bGoToNext = true;
+                                    goToNext = true;
                                     break;
                                 case CutsceneCommandEnum.Speed:
-                                    npc = GetActor(sCommandData[0]);
-                                    npc.SpdMult = float.Parse(sCommandData[1]);
-                                    bGoToNext = true;
+                                    actor = GetActor(sCommandData[0]);
+                                    if (sCommandData[1].Equals("P"))
+                                    {
+                                        actor.SpdMult = Constants.NORMAL_SPEED;
+                                    }
+                                    else if (sCommandData[1].Equals("N"))
+                                    {
+                                        actor.SpdMult = Constants.NPC_WALK_SPEED;
+                                    }
+                                    else
+                                    {
+                                        actor.SpdMult = float.Parse(sCommandData[1]);
+                                    }
+                                    goToNext = true;
                                     break;
                                 case CutsceneCommandEnum.Face:
-                                    npc = GetActor(sCommandData[0]);
-                                    npc.SetFacing(Util.ParseEnum<DirectionEnum>(sCommandData[1]));
-                                    npc.PlayAnimationVerb(VerbEnum.Idle);
-                                    bGoToNext = true;
+                                    actor = GetActor(sCommandData[0]);
+                                    actor.SetFacing(Util.ParseEnum<DirectionEnum>(sCommandData[1]));
+                                    actor.PlayAnimationVerb(VerbEnum.Idle);
+
+                                    if (sCommandData.Length == 3)
+                                    {
+                                        _timer = new RHTimer(double.Parse(sCommandData[2]));
+                                    }
+                                    else
+                                    {
+                                        goToNext = true;
+                                    }
                                     break;
                                 case CutsceneCommandEnum.MoveToTown:
                                     int characterID = -1;
@@ -324,15 +360,16 @@ namespace RiverHollow.Game_Managers
                                     }
                                     
                                     break;
-                                case CutsceneCommandEnum.End:
-                                    EndCutscene();
-                                    break;
                                 case CutsceneCommandEnum.Introduce:
                                     int id = int.Parse(sCommandData[0]);
                                     if (TownManager.DIVillagers.ContainsKey(id))
                                     {
                                         TownManager.DIVillagers[id].Introduce();
                                     }
+                                    goToNext = true;
+                                    break;
+                                case CutsceneCommandEnum.End:
+                                    EndCutscene();
                                     break;
 
                             }
@@ -341,7 +378,7 @@ namespace RiverHollow.Game_Managers
                         //After all command tags have been processed, set the
                         //current commands actionPerformed to true so it's not processed again
                         currentCommand.ActionPerformed = true;
-                        if (bGoToNext)
+                        if (goToNext)
                         {
                             _iCurrentCommand++;
                         }
@@ -436,7 +473,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="c">The WorldActor to check</param>
         private void CheckFinishedMovement(Actor c)
         {
-            if (c.CollisionBoxLocation == c.MoveToLocation)
+            if (!c.HasMovement())
             {
                 if (!_liToRemove.Contains(c))
                 {
@@ -500,7 +537,8 @@ namespace RiverHollow.Game_Managers
                     {
                         string[] friendData = Util.FindArguments(f);
                         Actor act = null;
-                        if (TownManager.DIVillagers.ContainsKey(int.Parse(friendData[0]))) {
+                        if (TownManager.DIVillagers.ContainsKey(int.Parse(friendData[0])))
+                        {
                             int npcID = int.Parse(friendData[0]);
                             act = new Villager(npcID, DataManager.ActorData[npcID]);
                         }
@@ -515,18 +553,22 @@ namespace RiverHollow.Game_Managers
                 }
                 else if (tags[0].Equals("Deactivate"))
                 {
-                    //Find all the NPC IDs for the NPCs that will start deactivated
-                    //and then deactivate them.
-                    string[] friends = Util.FindParams(tags[1]);
-                    foreach (string npcIDs in friends)
+                    string[] IDs = Util.FindParams(tags[1]);
+                    foreach (string str in IDs)
                     {
-                        foreach (Actor v in _liUsedNPCs)
-                        {
-                            if (v.ID == int.Parse(npcIDs))
-                            {
-                                v.Activate(false);
-                            }
-                        }
+                        GetActor(str).Activate(false);
+                    }
+                }
+                else if (tags[0].Equals("Face"))
+                {
+                    string[] IDs = Util.FindParams(tags[1]);
+                    foreach (string str in IDs)
+                    {
+                        var args = Util.FindArguments(str);
+
+                        var actor = GetActor(args[0]);
+                        actor.SetFacing(Util.ParseEnum<DirectionEnum>(args[1]));
+                        actor.PlayAnimation(VerbEnum.Idle);
                     }
                 }
             }
@@ -617,8 +659,8 @@ namespace RiverHollow.Game_Managers
                         }
                         else if (currentCommand.Command == CutsceneCommandEnum.Activate)
                         {
-                            Actor npc = _liUsedNPCs.Find(test => test.ID == GetNPCData(sCommandData[0]));
-                            npc?.Activate(true);
+                            var actor = GetActor(sCommandData[0]);
+                            actor?.Activate(true);
                         }
                         else if (currentCommand.Command == CutsceneCommandEnum.MoveToTown)
                         {
@@ -668,6 +710,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.AllowMovement = true;
             CutsceneManager.Playing = false;
             PlayerManager.PlayerActor.SetMoveTo(Point.Zero);
+            PlayerManager.PlayerActor.ClearPath();
             MapManager.Maps.Remove(_cutsceneMap.Name);
             MapManager.FadeToNewMap(_originalMap, _pOriginalPlayerPos, PlayerManager.PlayerActor.Facing, GameManager.CurrentBuilding);
             GUIManager.RemoveSkipCutsceneButton();

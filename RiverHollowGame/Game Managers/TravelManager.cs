@@ -161,9 +161,9 @@ namespace RiverHollow.Game_Managers
                     //To make this work with the reversal later on, start
                     //at the key, and then walk back to the entrance to the map.
                     mapName = testMapStr;
-                    newStart = MapManager.Maps[testMap].DictionaryCharacterLayer[findKey];
+                    newStart = MapManager.Maps[testMap].DictionaryCharacterLayer[findKey].Location;
 
-                    List<RHTile> pathToExit = FindPathToLocation(ref start, MapManager.Maps[testMap].DictionaryCharacterLayer[findKey], testMapStr);
+                    List<RHTile> pathToExit = FindPathToLocation(ref start, MapManager.Maps[testMap].DictionaryCharacterLayer[findKey].Location, testMapStr);
                     fromMap = mapCameFrom[testMapStr];          //Do the backtracking
 
                     List<List<RHTile>> liTotalPath = new List<List<RHTile>> { pathToExit };  //The pathfor this segment
@@ -224,13 +224,20 @@ namespace RiverHollow.Game_Managers
                         double newCost = mapCostSoFar[testMapStr] + pathToExit.Count;
                         if (!mapCostSoFar.ContainsKey(exit.Key) || newCost < mapCostSoFar[exit.Key])
                         {
-                            mapCostSoFar[exit.Key] = newCost;         //Set the map cost to the new cost to arrive
-                            frontier.Enqueue(exit.Key, newCost);      //Queue the map with the new cost to arrive there
+                            if (!exit.Key.Contains(":"))
+                            {
+                                mapCostSoFar[exit.Key] = newCost;         //Set the map cost to the new cost to arrive
+                                frontier.Enqueue(exit.Key, newCost);      //Queue the map with the new cost to arrive there
 
-                            //Setting the backtrack path for the exit map
-                            mapCameFrom[exit.Key] = testMap;
-                            _diMapPathing[testMapStr + ":" + exit.Value.LinkedMap] = pathToExit; // This needs another key for the appropriate exit
-                            WriteToTravelLog("---" + testMapStr + ":" + exit.Value.LinkedMap + "---");
+                                //Setting the backtrack path for the exit map
+                                mapCameFrom[exit.Key] = testMap;
+                                _diMapPathing[testMapStr + ":" + exit.Value.LinkedMap] = pathToExit; // This needs another key for the appropriate exit
+                                WriteToTravelLog("---" + testMapStr + ":" + exit.Value.LinkedMap + "---");
+                            }
+                            else
+                            {
+                                int i = 0;
+                            }
                         }
                     }
                 }
@@ -609,7 +616,7 @@ namespace RiverHollow.Game_Managers
         //Returns how much it costs to enter the next square
         private static int GetMovementCost(RHTile target)
         {
-            return target.IsRoad ? 1 : DEFAULT_COST;
+            return (target.IsRoad || target.Flooring != null) ? 1 : DEFAULT_COST;
         }
 
         public static void SetParams(int size, Actor act, int maxPath = -1)

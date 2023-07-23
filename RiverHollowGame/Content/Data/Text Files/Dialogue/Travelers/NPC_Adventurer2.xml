@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>1</Key>
+      <Value>[Text:Have the monsters nearby been giving you trouble?][Name:1][Default]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Text:An important job of a travelling healer is to prevent harm as well. I find a solid hit with a heavy stick usually suffices.][Name:2][Default]</Value>
+    </Item>
+	<Item>
+      <Key>3</Key>
+      <Value>[Text:I've always thought that simple meals are the best when traveling.][Name:3][Default]</Value>
+    </Item>
+	<Item>
+      <Key>4</Key>
+      <Value>[Text:Oh... I do hope there's more than just seafood at this Inn.][Name:4][Default]</Value>
+    </Item>
+	<Item>
+      <Key>5</Key>
+      <Value>[Text:Do you know if the Apothecary has Healing Potions in stock? I've run low...][Name:5][Default]</Value>
+    </Item>
+  </Asset>
+</XnaContent>
