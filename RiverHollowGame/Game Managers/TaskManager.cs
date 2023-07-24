@@ -116,9 +116,9 @@ namespace RiverHollow.Game_Managers
         {
             TaskLog.ForEach(q => q.CheckItems());
         }
-        public static bool HasTaskID(int taskID)
+        public static RHTask GetTaskByID(int taskID)
         {
-            return TaskLog.Find(t => t.ID == taskID) != null;
+            return _liTasks.Find(t => t.ID == taskID);
         }
 
         public static void HandleQueuedTask()

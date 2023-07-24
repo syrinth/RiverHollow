@@ -32,7 +32,7 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Name][Text:I thought it might be a good idea to bring some gardening tools so we could grow anything we might need. Could you plant these $Item_76$s for me? They'll need to be watered every day or they won't grow.][ItemID:134/135/76-4]</Value>
+      <Value>[Name][Text:I thought it might be a good idea to bring some gardening tools so we could grow anything we might need. Could you plant these $Item_76$s for me? They'll need to be watered every day or they won't grow.]</Value>
     </Item>
   </Asset>
 </XnaContent>

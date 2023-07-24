@@ -132,7 +132,7 @@ namespace RiverHollow.Characters
 
             if(_assignedTask?.TaskState == TaskStateEnum.Talking)
             {
-                _assignedTask.AddTaskToLog();
+                _assignedTask.AddTaskToLog(false);
                 _assignedTask = null;
             }
 

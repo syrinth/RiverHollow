@@ -10,6 +10,7 @@ using RiverHollow.Utilities;
 using static RiverHollow.Utilities.Enums;
 using System.Linq;
 using static RiverHollow.Game_Managers.SaveManager;
+using System;
 
 namespace RiverHollow.Game_Managers
 {
@@ -127,7 +128,7 @@ namespace RiverHollow.Game_Managers
     public class Cutscene
     {
         #region CutScene Commandinformation
-        enum CutsceneCommandEnum { Activate, Background, BackgroundRemove, End, Face, GoTo, Introduce, Move, MoveToTown, Sound, Speak, Speed, Task, Text, Wait };
+        enum CutsceneCommandEnum { Activate, Background, BackgroundRemove, End, Face, GoTo, Introduce, ItemID, Move, MoveToTown, Sound, Speak, Speed, Task, Text, Wait };
 
         /// <summary>
         /// A class to hold the information for a CutSceneCommand step
@@ -264,9 +265,8 @@ namespace RiverHollow.Game_Managers
                             switch (currentCommand.Command)
                             {
                                 case CutsceneCommandEnum.Activate:
-                                    actor = GetActor(sCommandData[0]);
-                                    actor?.Activate(true);
                                     goToNext = true;
+                                    Activate(sCommandData);
                                     break;
                                 case CutsceneCommandEnum.Speak:
                                     npcID = GetNPCData(sCommandData[0]);
@@ -278,12 +278,12 @@ namespace RiverHollow.Game_Managers
                                     }
                                     break;
                                 case CutsceneCommandEnum.Background:
-                                    GUIManager.AssignBackgroundImage(new GUIImage(DataManager.GetTexture(sCommandData[0])));
                                     goToNext = true;
+                                    GUIManager.AssignBackgroundImage(new GUIImage(DataManager.GetTexture(sCommandData[0])));
                                     break;
                                 case CutsceneCommandEnum.BackgroundRemove:
-                                    GUIManager.ClearBackgroundImage();
                                     goToNext = true;
+                                    GUIManager.ClearBackgroundImage();
                                     break;
                                 case CutsceneCommandEnum.GoTo:
                                     _bWaitForMove = true;
@@ -300,9 +300,13 @@ namespace RiverHollow.Game_Managers
                                         _diMoving[c] = d;
                                     }
                                     break;
-                                case CutsceneCommandEnum.Text:
-                                    GUIManager.OpenTextWindow(CutsceneManager.GetDialogue(_iID, sCommandData[0]));
+                                case CutsceneCommandEnum.ItemID:
                                     goToNext = true;
+                                    GiveItem(sCommandData);
+                                    break;
+                                case CutsceneCommandEnum.Text:
+                                    goToNext = true;
+                                    GUIManager.OpenTextWindow(CutsceneManager.GetDialogue(_iID, sCommandData[0]));
                                     break;
                                 case CutsceneCommandEnum.Move:
                                     _bWaitForMove = true;
@@ -314,14 +318,15 @@ namespace RiverHollow.Game_Managers
                                     _timer = new RHTimer(double.Parse(sCommandData[0]));
                                     break;
                                 case CutsceneCommandEnum.Task:
-                                    TaskManager.AddToTaskLog(int.Parse(sCommandData[0]));
                                     goToNext = true;
+                                    SetTask(sCommandData);
                                     break;
                                 case CutsceneCommandEnum.Sound:
-                                    SoundManager.PlayEffect(Util.ParseEnum<SoundEffectEnum>(sCommandData[0]));
                                     goToNext = true;
+                                    SoundManager.PlayEffect(Util.ParseEnum<SoundEffectEnum>(sCommandData[0]));
                                     break;
                                 case CutsceneCommandEnum.Speed:
+                                    goToNext = true;
                                     actor = GetActor(sCommandData[0]);
                                     if (sCommandData[1].Equals("P"))
                                     {
@@ -335,7 +340,6 @@ namespace RiverHollow.Game_Managers
                                     {
                                         actor.SpdMult = float.Parse(sCommandData[1]);
                                     }
-                                    goToNext = true;
                                     break;
                                 case CutsceneCommandEnum.Face:
                                     actor = GetActor(sCommandData[0]);
@@ -352,21 +356,12 @@ namespace RiverHollow.Game_Managers
                                     }
                                     break;
                                 case CutsceneCommandEnum.MoveToTown:
-                                    int characterID = -1;
-                                    if (int.TryParse(sCommandData[0], out characterID))
-                                    {
-                                        TownManager.DIVillagers[characterID].TryToMoveIn();
-                                        TownManager.DIVillagers[characterID].MoveToSpawn();
-                                    }
-                                    
+                                    goToNext = true;
+                                    MoveToTown(sCommandData);                                   
                                     break;
                                 case CutsceneCommandEnum.Introduce:
-                                    int id = int.Parse(sCommandData[0]);
-                                    if (TownManager.DIVillagers.ContainsKey(id))
-                                    {
-                                        TownManager.DIVillagers[id].Introduce();
-                                    }
                                     goToNext = true;
+                                    IntroduceActor(sCommandData);
                                     break;
                                 case CutsceneCommandEnum.End:
                                     EndCutscene();
@@ -649,38 +644,24 @@ namespace RiverHollow.Game_Managers
                     foreach (string s in currentCommand.Data)   //Need to perform the action for each character
                     {
                         string[] sCommandData = Util.FindArguments(s);   //split the data into segments
-                        if (currentCommand.Command == CutsceneCommandEnum.Task)
+                        switch (currentCommand.Command)
                         {
-                            //MAR
-                            //foreach (string questID in sCommandData)
-                            //{
-                            //    PlayerManager.AddToTaskLog(GameManager.DITasks[int.Parse(questID)]);
-                            //}
+                            case CutsceneCommandEnum.Activate:
+                                Activate(sCommandData);
+                                break;
+                            case CutsceneCommandEnum.Introduce:
+                                IntroduceActor(sCommandData);
+                                break;
+                            case CutsceneCommandEnum.ItemID:
+                                GiveItem(sCommandData);
+                                break;
+                            case CutsceneCommandEnum.MoveToTown:
+                                MoveToTown(sCommandData);
+                                break;
+                            case CutsceneCommandEnum.Task:
+                                SetTask(sCommandData);
+                                break;
                         }
-                        else if (currentCommand.Command == CutsceneCommandEnum.Activate)
-                        {
-                            var actor = GetActor(sCommandData[0]);
-                            actor?.Activate(true);
-                        }
-                        else if (currentCommand.Command == CutsceneCommandEnum.MoveToTown)
-                        {
-                            int characterID = -1;
-                            if (int.TryParse(sCommandData[0], out characterID))
-                            {
-                                TownManager.DIVillagers[characterID].TryToMoveIn();
-                                TownManager.DIVillagers[characterID].MoveToSpawn();
-                            }
-                        }
-                        else if (currentCommand.Command == CutsceneCommandEnum.Introduce)
-                        {
-                            int id = int.Parse(sCommandData[0]);
-                            if (TownManager.DIVillagers.ContainsKey(id))
-                            {
-                                TownManager.DIVillagers[id].Introduce();
-                            }
-                        }
-
-                        break;
                     }
 
                     //After all command tags have been processed, set the
@@ -698,6 +679,39 @@ namespace RiverHollow.Game_Managers
             GUIManager.ClearBackgroundImage();
 
             EndCutscene();
+        }
+
+        private void Activate(string[] sCommandData)
+        {
+            var actor = GetActor(sCommandData[0]);
+            actor?.Activate(true);
+        }
+
+        private void GiveItem(string[] sCommandData)
+        {
+            InventoryManager.AddToInventory(int.Parse(sCommandData[0]), sCommandData.Length == 1 ? 1 : int.Parse(sCommandData[1]));
+        }
+        private void IntroduceActor(string[] sCommandData)
+        {
+            int id = int.Parse(sCommandData[0]);
+            if (TownManager.DIVillagers.ContainsKey(id))
+            {
+                TownManager.DIVillagers[id].Introduce();
+            }
+        }
+        private void MoveToTown(string[] sCommandData)
+        {
+            int characterID = -1;
+            if (int.TryParse(sCommandData[0], out characterID))
+            {
+                TownManager.DIVillagers[characterID].TryToMoveIn();
+                TownManager.DIVillagers[characterID].MoveToSpawn();
+            }
+        }
+
+        private void SetTask(string[] sCommandData)
+        {
+            TaskManager.GetTaskByID(int.Parse(sCommandData[0]))?.AddTaskToLog(true);
         }
 
         private void EndCutscene()

@@ -259,9 +259,9 @@ namespace RiverHollow.Misc
         /// 
         /// Some Tasks may involve the defeat of a Task specific monster. If such a monster exists, spawn it now.
         /// </summary>
-        public void AddTaskToLog()
+        public void AddTaskToLog(bool force)
         {
-            if (TaskState == TaskStateEnum.Talking)
+            if (force || TaskState == TaskStateEnum.Talking)
             {
                 TaskState = TaskStateEnum.TaskLog;
                 switch (_eTaskType)
