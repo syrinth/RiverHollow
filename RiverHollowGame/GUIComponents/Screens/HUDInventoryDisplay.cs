@@ -2,10 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Misc;
 using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using static RiverHollow.Utilities.Enums;
-using RiverHollow.Characters;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -115,6 +114,13 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 GUIManager.OpenTextWindow(GameManager.CurrentNPC.GetDialogEntry("Goodbye"));
             }
+
+            if (GameManager.CurrentWorldObject != null && GameManager.CurrentWorldObject.BuildableType(BuildableEnum.Decor))
+            {
+                ((Decor)GameManager.CurrentWorldObject).SetDisplayEntity(InventoryManager.ExtraInventory[0,0], false);
+            }
+
+            InventoryManager.ExtraHoldSingular = false;
         }
     }
 }

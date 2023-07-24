@@ -76,10 +76,15 @@ namespace RiverHollow.WorldObjects
                 if (CanDisplay)
                 {
                     rv = true;
-                    if (Archive || _itemDisplay == null)
+                    if (!Archive || _itemDisplay == null)
                     {
                         GameManager.SetSelectedWorldObject(this);
-                        GUIManager.OpenMainObject(new HUDInventoryDisplay());
+
+                        var display = new Item[1, 1];
+                        display[0, 0] = _itemDisplay;
+
+                        InventoryManager.ExtraHoldSingular = true;
+                        GUIManager.OpenMainObject(new HUDInventoryDisplay(display, DisplayTypeEnum.Inventory));
                     }
                 }
             }
@@ -276,11 +281,11 @@ namespace RiverHollow.WorldObjects
         /// for the given item.
         /// </summary>
         /// <param name="it">The Item object to display</param>
-        public void SetDisplayEntity(Item it)
+        public void SetDisplayEntity(Item it, bool viaBuildMode = true)
         {
             if (!Archive || !TownManager.DIArchive[it.ID].Item2)
             {
-                if (StoreDisplayEntity())
+                if (StoreDisplayEntity(viaBuildMode))
                 {
                     if (it != null)
                     {
@@ -291,8 +296,10 @@ namespace RiverHollow.WorldObjects
                         }
                         else { _itemDisplay = DataManager.GetItem(it.ID); }
 
-                        InventoryManager.RemoveItemsFromInventory(it.ID, 1);
-                        GUIManager.CloseMainObject();
+                        if (viaBuildMode)
+                        {
+                            InventoryManager.RemoveItemsFromInventory(it.ID, 1);
+                        }
 
                         if (Archive)
                         {
@@ -310,7 +317,7 @@ namespace RiverHollow.WorldObjects
         /// Only store entity if there is space in storage
         /// </summary>
         /// <returns>True as long as there is space in storage</returns>
-        public bool StoreDisplayEntity()
+        public bool StoreDisplayEntity(bool viaGUIInventory = true)
         {
             bool rv = true;
             Item displayItem = null;
@@ -320,13 +327,19 @@ namespace RiverHollow.WorldObjects
 
             if (displayItem != null)
             {
-                if (InventoryManager.HasSpaceInInventory(displayItem.ID, 1))
+                if (!viaGUIInventory || InventoryManager.HasSpaceInInventory(displayItem.ID, 1))
                 {
-                    InventoryManager.AddToInventory(displayItem);
+                    if (viaGUIInventory)
+                    {
+                        InventoryManager.AddToInventory(displayItem);
+                    }
                     _itemDisplay = null;
                     _objDisplay = null;
                 }
-                else { rv = false; }
+                else
+                {
+                    rv = false;
+                }
             }
 
             return rv;

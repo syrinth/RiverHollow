@@ -143,11 +143,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                                 GUIManager.CloseMainObject();
                             }
                         }
-                        else if (GameManager.CurrentWorldObject.BuildableType(BuildableEnum.Decor))
-                        {
-                            rv = true;
-                            ((Decor)GameManager.CurrentWorldObject).SetDisplayEntity(clickedItem);
-                        }
                     }
                 }
                 else
