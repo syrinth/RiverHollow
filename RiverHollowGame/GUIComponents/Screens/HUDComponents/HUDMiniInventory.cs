@@ -119,20 +119,23 @@ namespace RiverHollow.GUIComponents.Screens
 
         private void HandleInput()
         {
-            foreach (var kvp in InputManager.Numbers)
+            if (GameManager.HeldObject == null)
             {
-                if (InputManager.CheckForInitialKeyDown(kvp))
+                foreach (var kvp in InputManager.Numbers)
                 {
-                    int value = int.Parse(kvp.ToString().Remove(0, 1));
-                    if (value > 0) { value--; }
-                    else { value = 9; }
-                    SelectGuiItemBox(_liItems[value]);
+                    if (InputManager.CheckForInitialKeyDown(kvp))
+                    {
+                        int value = int.Parse(kvp.ToString().Remove(0, 1));
+                        if (value > 0) { value--; }
+                        else { value = 9; }
+                        SelectGuiItemBox(_liItems[value]);
+                    }
                 }
-            }
 
-            int wheelValue = InputManager.ScrollWheelChanged();
-            int index = Util.GetLoopingValue(GameManager.HUDItemCol, 0, _liItems.Length - 1, wheelValue);
-            SelectGuiItemBox(_liItems[index]);
+                int wheelValue = InputManager.ScrollWheelChanged();
+                int index = Util.GetLoopingValue(GameManager.HUDItemCol, 0, _liItems.Length - 1, wheelValue);
+                SelectGuiItemBox(_liItems[index]);
+            }
         }
 
         /// <summary>

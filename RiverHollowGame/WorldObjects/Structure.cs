@@ -143,7 +143,7 @@ namespace RiverHollow.WorldObjects
         }
     }
 
-    public class SubObject : WorldObject
+    public class SubObject : Buildable
     {
         readonly Structure _mainObj;
 

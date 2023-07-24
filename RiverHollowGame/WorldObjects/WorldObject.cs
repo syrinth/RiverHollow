@@ -23,6 +23,7 @@ namespace RiverHollow.WorldObjects
         #region Properties
         protected ObjectTypeEnum _eObjectType;
         public ObjectTypeEnum Type => _eObjectType;
+
         public AnimatedSprite Sprite { get; protected set; }
 
         public List<RHTile> Tiles;

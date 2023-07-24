@@ -305,7 +305,7 @@ namespace RiverHollow.SpriteAnimations
             Rectangle rotationalRect = destinationRectangle;
             rotationalRect.X += (int)_vRotationOrigin.X;
             rotationalRect.Y += (int)_vRotationOrigin.Y;
-            spriteBatch.Draw(_texture, rotationalRect, CurrentFrameAnimation.FrameRectangle, SpriteColor * visibility, _fRotationAngle, _vRotationOrigin, SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(_texture, rotationalRect, CurrentFrameAnimation.FrameRectangle, SpriteColor * visibility, _fRotationAngle, _vRotationOrigin, CurrentFrameAnimation.Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
         /// <summary>

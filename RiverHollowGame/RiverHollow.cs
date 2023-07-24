@@ -5,6 +5,8 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens;
+using RiverHollow.Utilities;
+using RiverHollow.WorldObjects;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -117,8 +119,17 @@ namespace RiverHollow
                 Point mousePoint = Mouse.GetState().Position;
                 Vector3 translate = Camera._transform.Translation;
 
-                bool wasInterval = false;
-                if (InputManager.ButtonPressed(ButtonEnum.Right, out wasInterval))
+                if (GameManager.HeldObject != null)
+                {
+                    var val = InputManager.ScrollWheelChanged();
+                    if (val != 0 && GameManager.HeldObject.BuildableType(BuildableEnum.Decor))
+                    {
+                        Decor obj = (Decor)GameManager.HeldObject;
+                        obj.Rotate(val > 0);
+                    }
+                }
+
+                if (InputManager.ButtonPressed(ButtonEnum.Right, out _))
                 {
                     if (!GUIManager.ProcessRightButtonClick(mousePoint) && IsMapShown())
                     {
@@ -131,7 +142,7 @@ namespace RiverHollow
                         }
                     }
                 }
-                else if (InputManager.ButtonPressed(ButtonEnum.Left, out wasInterval))
+                else if (InputManager.ButtonPressed(ButtonEnum.Left, out bool wasInterval))
                 {
                     if (wasInterval || (!GUIManager.ProcessLeftButtonClick(mousePoint) && IsMapShown()))
                     {

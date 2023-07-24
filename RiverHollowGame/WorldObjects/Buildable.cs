@@ -28,6 +28,18 @@ namespace RiverHollow.WorldObjects
             Unique = GetBoolByIDKey("Unique");
         }
 
+        protected override void LoadSprite()
+        {
+            if (GetBoolByIDKey("Texture"))
+            {
+                LoadSprite(DataManager.FOLDER_WORLDOBJECTS + GetStringByIDKey("Texture"));
+            }
+            else
+            {
+                LoadSprite(DataManager.FILE_DECOR);
+            }
+        }
+
         public bool CanBuild()
         {
             if (Unique && TownManager.GetNumberTownObjects(ID) != 0)

@@ -613,18 +613,6 @@
 /processorParam:TextureFormat=Color
 /build:Maps/Tilesets/tilesetHouses.png
 
-#begin Maps/Tilesets/tilesetManor.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Maps/Tilesets/tilesetManor.png
-
 #begin Maps/Tilesets/tilesetManorGrounds.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -672,18 +660,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Maps/Tilesets/tsBuildings.png
-
-#begin Maps/Tilesets/tsFurniture.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Maps/Tilesets/tsFurniture.png
 
 #begin Maps/Tilesets/tsWalls_Floors.png
 /importer:TextureImporter
@@ -783,16 +759,6 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapMagicShop.tmx
-
-#begin Maps/Town/mapManor.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapManor.tmx
-
-#begin Maps/Town/mapManor_Basement.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapManor_Basement.tmx
 
 #begin Maps/Town/mapMushroomery.tmx
 /importer:TiledMapImporter
@@ -3836,6 +3802,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/WorldObjects/DarkWoodTree.png
+
+#begin Textures/WorldObjects/Decor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/WorldObjects/Decor.png
 
 #begin Textures/WorldObjects/Plants.png
 /importer:TextureImporter

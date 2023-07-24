@@ -31,6 +31,8 @@ namespace RiverHollow.SpriteAnimations
         // The number of times this animation has been played
         public int PlayCount { get; private set; } = 0;
 
+        public bool Flip = false;
+
         // The rectangle associated with the current animation frame.
         public Rectangle FrameRectangle
         {

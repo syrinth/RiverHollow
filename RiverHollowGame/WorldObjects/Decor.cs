@@ -59,36 +59,6 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        //public override bool ProcessLeftClick()
-        //{
-        //    bool rv = false;
-        //    if (GameManager.CanMoveObject())
-        //    {
-        //        rv = true;
-
-        //        if(_itemDisplay != null)
-        //        {
-        //            if (InventoryManager.HasSpaceInInventory(_itemDisplay.ID, 1))
-        //            {
-        //                InventoryManager.AddToInventory(_itemDisplay);
-        //            }
-        //        }
-        //        else if(_objDisplay != null)
-        //        {
-        //            GameManager.MovingWorldObject(_objDisplay);
-        //            _objDisplay = null;
-        //        }
-        //        else
-        //        {
-        //            CurrentMap.RemoveWorldObject(this, true);
-        //            GameManager.MovingWorldObject(this);
-        //        }
-                
-        //    }
-
-        //    return rv;
-        //}
-
         /// <summary>
         /// Handler for when a Decor object hasbeen right-clicked
         /// </summary>
@@ -159,7 +129,7 @@ namespace RiverHollow.WorldObjects
         /// Assuming the object is capable of rotation, this method does the math
         /// required to change the sprite and base tiles accordingly.
         /// </summary>
-        public void Rotate()
+        public void Rotate(bool forward = true)
         {
             if (RotationType != RotationalEnum.None)
             {
@@ -174,7 +144,14 @@ namespace RiverHollow.WorldObjects
                 }
 
                 Rectangle spriteFrameRectangle = Sprite.CurrentFrameAnimation.FrameRectangle;
-                Point newImage = spriteFrameRectangle.Location + new Point(spriteFrameRectangle.Width, 0);
+
+                Point crawl = new Point(spriteFrameRectangle.Width, 0);
+                if (Facing == DirectionEnum.Up)
+                {
+                    crawl = Util.MultiplyPoint(crawl, -1);
+                }
+
+                Point newImage = spriteFrameRectangle.Location + crawl;
 
                 //Direction handling for the different rotation types
                 if (RotationType == RotationalEnum.FourWay)
@@ -182,17 +159,28 @@ namespace RiverHollow.WorldObjects
                     switch (Facing)
                     {
                         case DirectionEnum.Down:
-                            Facing = DirectionEnum.Right;
+                            if (forward) { Facing = DirectionEnum.Right; }
+                            else { Facing = DirectionEnum.Left; }
                             break;
                         case DirectionEnum.Right:
-                            Facing = DirectionEnum.Up;
+                            if (forward) { Facing = DirectionEnum.Up; }
+                            else
+                            {
+                                newImage = _pImagePos;
+                                Facing = DirectionEnum.Down;
+                            }
                             break;
                         case DirectionEnum.Up:
-                            Facing = DirectionEnum.Left;
+                            if (forward) { Facing = DirectionEnum.Left; }
+                            else { Facing = DirectionEnum.Right; }
                             break;
                         case DirectionEnum.Left:
-                            newImage = _pImagePos;
-                            Facing = DirectionEnum.Down;
+                            if (forward)
+                            {
+                                newImage = _pImagePos;
+                                Facing = DirectionEnum.Down;
+                            }
+                            else { Facing = DirectionEnum.Up; }
                             break;
                     }
                 }
@@ -213,6 +201,12 @@ namespace RiverHollow.WorldObjects
                 //Updates the sprite info
                 Sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
                 Sprite.AddAnimation(AnimationEnum.ObjectIdle, newImage.X, newImage.Y, _pSize);
+
+                if (RotationType == RotationalEnum.FourWay && Facing == DirectionEnum.Left)
+                {
+                    Sprite.CurrentFrameAnimation.Flip = true;
+                }
+
                 SetSpritePos(MapPosition);
 
                 //Sets the pickup offset to the center of the object.
@@ -366,17 +360,20 @@ namespace RiverHollow.WorldObjects
         {
             base.LoadData(data);
             string[] strData = Util.FindParams(data.stringData);
-            RotateToDirection(Util.ParseEnum<DirectionEnum>(strData[0]));
+            if (strData.Length > 0)
+            {
+                RotateToDirection(Util.ParseEnum<DirectionEnum>(strData[0]));
 
-            if (!strData[1].Equals(""))
-            {
-                int objDisplayID = int.Parse(strData[1]);
-                SetDisplayObject((Decor)DataManager.CreateWorldObjectByID(objDisplayID));
-            }
-            else if (!strData[2].Equals(""))
-            {
-                int itemDisplayID = int.Parse(strData[2]);
-                SetDisplayEntity(DataManager.GetItem(itemDisplayID));
+                if (!strData[1].Equals(""))
+                {
+                    int objDisplayID = int.Parse(strData[1]);
+                    SetDisplayObject((Decor)DataManager.CreateWorldObjectByID(objDisplayID));
+                }
+                else if (!strData[2].Equals(""))
+                {
+                    int itemDisplayID = int.Parse(strData[2]);
+                    SetDisplayEntity(DataManager.GetItem(itemDisplayID));
+                }
             }
         }
     }

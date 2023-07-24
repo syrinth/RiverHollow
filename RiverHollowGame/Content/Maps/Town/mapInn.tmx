@@ -7,418 +7,66 @@
   <property name="Shop" type="int" value="1"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetHouses.tsx"/>
- <tileset firstgid="521" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="484" columns="22">
-  <image source="../Tilesets/tsWalls_Floors.png" trans="ffffff" width="352" height="353"/>
-  <tile id="9">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="10">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="22">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="24">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="25">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="27">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="28">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="29">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="30">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="44">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="46">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="47">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="49">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="50">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="52">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="66">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="68">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="69">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="71">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="72">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="73">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="74">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="88">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="89">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="90">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="91">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="92">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="93">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="94">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="95">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="96">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="140">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="160">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="161">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="221">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="222">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="223">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="224">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="225">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="226">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="228">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="243">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="244">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="245">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="246">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="247">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="248">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="249">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="250">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="251">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="265">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="266">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="267">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="268">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="269">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="270">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="271">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="272">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="273">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="287">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="288">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="289">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="290">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="291">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="292">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="293">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="294">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="295">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="309">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="310">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
- </tileset>
- <tileset firstgid="1005" source="../Tilesets/tsWalls_Floors.tsx"/>
+ <tileset firstgid="521" source="../Tilesets/tsWalls_Floors.tsx"/>
+ <tileset firstgid="1005" source="../Tilesets/Decor.tsx"/>
  <layer id="2" name="Base" width="23" height="16">
   <data encoding="csv">
 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
-8,8,8,8,8,8,8,8,1255,1255,1255,1255,1255,1255,1255,1255,1255,1255,1255,1255,1255,8,8,
-8,8,8,8,8,8,8,8,1277,1277,1277,1277,1277,1277,1277,1277,1277,1277,1277,1277,1277,8,8,
-8,8,8,8,8,8,8,8,1299,1299,1299,1299,1299,1299,1299,1299,1299,1299,1299,1299,1299,8,8,
-8,8,8,8,8,8,8,361,361,361,361,361,361,361,361,361,361,361,361,361,361,8,8,
-8,8,8,8,8,8,8,361,361,361,361,361,361,361,361,361,361,361,361,361,361,8,8,
-8,1255,1255,1255,1255,1255,1255,1255,361,361,361,361,361,361,361,361,361,361,361,361,361,8,8,
-8,1277,1277,1277,1277,1277,1277,1277,361,361,361,361,361,361,361,8,8,8,8,8,8,8,8,
-8,1299,1299,1299,1299,1299,1299,1299,361,361,361,361,361,361,361,1255,1255,1255,1255,1255,1255,1255,8,
-8,361,361,361,361,361,361,361,361,361,361,361,361,361,361,1277,1277,1277,1277,1277,1277,1277,8,
-8,361,361,361,361,361,361,361,361,361,361,361,361,361,361,1299,1299,1299,1299,1299,1299,1299,8,
-8,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,8,
-8,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,8,
-8,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,8,
-8,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,361,8,
-8,8,8,8,8,8,8,8,8,8,8,8,361,8,8,8,8,8,8,8,8,8,8
+8,8,8,8,8,8,8,8,771,771,771,771,771,771,771,771,771,771,771,771,771,8,8,
+8,8,8,8,8,8,8,8,793,793,793,793,793,793,793,793,793,793,793,793,793,8,8,
+8,8,8,8,8,8,8,8,815,815,815,815,815,815,815,815,815,815,815,815,815,8,8,
+8,8,8,8,8,8,8,873,873,873,873,873,873,873,873,873,873,873,873,873,873,8,8,
+8,8,8,8,8,8,8,873,873,873,873,873,873,873,873,873,873,873,873,873,873,8,8,
+8,771,771,771,771,771,771,771,873,873,873,873,873,873,873,873,873,873,873,873,873,8,8,
+8,793,793,793,793,793,793,793,873,873,873,873,873,873,873,8,8,8,8,8,8,8,8,
+8,815,815,815,815,815,815,815,873,873,873,873,873,873,873,771,771,771,771,771,771,771,8,
+8,873,873,873,873,873,873,873,873,873,873,873,873,873,873,793,793,793,793,793,793,793,8,
+8,873,873,873,873,873,873,873,873,873,873,873,873,873,873,815,815,815,815,815,815,815,8,
+8,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,8,
+8,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,8,
+8,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,8,
+8,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,873,8,
+8,8,8,8,8,8,8,8,8,8,8,8,873,8,8,8,8,8,8,8,8,8,8
 </data>
  </layer>
  <layer id="1" name="Ground" width="23" height="16">
   <data encoding="csv">
-0,0,0,0,0,0,0,1253,1229,1229,1229,1229,1229,1229,1229,1229,1229,1229,1229,1229,1229,1254,0,
-0,0,0,0,0,0,0,1275,1251,1251,1251,1251,1251,1251,1251,1251,1251,1251,1251,1251,1251,1276,0,
-0,0,0,0,0,0,0,1275,308,487,488,489,1273,350,351,1273,1273,1273,1273,337,1273,1276,0,
-0,0,0,0,0,0,0,1275,334,513,514,515,1295,1295,1295,1295,1295,1295,1295,1295,1295,1276,0,
-0,0,0,0,0,0,0,1275,360,0,0,0,0,0,0,252,0,0,0,0,0,1276,0,
-1253,1229,1229,1229,1229,1229,1229,1249,0,0,0,0,0,0,0,0,362,363,0,0,0,1276,0,
-1275,1251,1251,1251,1251,1251,1251,1271,0,0,0,0,420,0,0,0,0,0,0,0,0,1298,0,
-1275,1273,335,336,1273,1273,1273,1293,444,368,445,444,446,0,0,1248,1229,1229,1229,1229,1229,1229,1254,
-1275,1295,1295,1295,1295,1295,1295,1315,251,387,388,389,0,0,0,1270,121,122,123,124,125,1251,1276,
-1275,0,0,0,0,0,0,0,0,413,414,415,0,0,0,1292,147,148,149,150,151,1273,1276,
-1275,0,253,254,95,0,0,0,0,0,0,0,0,0,0,1314,173,174,175,176,177,1295,1276,
-1275,95,279,280,0,0,0,0,0,0,0,0,0,0,0,0,199,200,201,202,203,95,1276,
-1275,0,0,0,0,0,0,95,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1276,
-1275,0,0,0,0,95,331,332,333,95,0,0,0,0,0,0,0,0,0,0,0,0,1276,
-1297,0,0,0,0,95,357,358,359,95,0,0,0,0,0,0,0,0,0,95,0,0,1298,
-0,0,0,0,0,0,0,0,0,0,0,1231,0,1233,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,769,745,745,745,745,745,745,745,745,745,745,745,745,745,770,0,
+0,0,0,0,0,0,0,791,767,767,767,767,767,767,767,767,767,767,767,767,767,792,0,
+0,0,0,0,0,0,0,791,1166,487,488,489,789,2158,2159,789,789,789,789,2109,789,792,0,
+0,0,0,0,0,0,0,791,1189,513,514,515,811,811,811,811,811,811,811,811,811,792,0,
+0,0,0,0,0,0,0,791,1212,0,0,0,0,0,0,1859,0,0,0,0,0,792,0,
+769,745,745,745,745,745,745,765,0,0,0,0,0,0,0,0,2107,2108,0,0,0,792,0,
+791,767,767,767,767,767,767,787,0,0,0,0,420,0,0,0,0,0,0,0,0,814,0,
+791,789,2110,2111,2155,2156,2157,809,444,368,445,444,446,0,0,764,745,745,745,745,745,745,770,
+791,811,811,811,811,811,811,831,1788,2129,2130,2131,0,0,0,786,1685,1686,1687,1688,1689,767,792,
+791,0,0,0,0,0,0,0,0,2152,2153,2154,0,0,0,808,1708,1709,1710,1711,1712,789,792,
+791,0,1258,1259,1603,0,0,0,0,0,0,0,0,0,0,830,1731,1732,1733,1734,1735,811,792,
+791,1603,1281,1282,0,0,0,0,0,0,0,0,0,0,0,0,1754,1755,1756,1757,1758,1603,792,
+791,0,0,0,0,0,1603,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,792,
+791,0,0,0,1603,1373,1374,1375,1603,0,0,0,0,0,0,0,0,0,0,0,0,0,792,
+813,0,0,0,1603,1396,1397,1398,1603,0,0,0,0,0,0,0,0,0,0,1603,0,0,814,
+0,0,0,0,0,0,0,0,0,0,0,747,0,749,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <layer id="3" name="Upper" width="23" height="16">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,311,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2086,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,226,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1836,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,476,0,0,0,393,0,0,0,0,0,0,0,0,0,0,
-0,0,309,310,113,114,115,0,502,342,419,418,367,0,0,1204,1234,1234,1234,1234,1234,0,0,
-0,0,0,0,139,140,141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,227,228,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,2087,2088,2132,2133,2134,0,502,342,419,418,1793,0,0,720,750,750,750,750,750,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,305,306,307,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,1235,1236,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1234,1234,1234,1234,1234,1234,1234,1234,1234,1234,1205,0,1204,1234,1234,1234,1234,1234,1234,1234,1234,0,
-0,0,0,0,0,0,0,0,0,0,0,0,1232,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1350,1351,1352,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,750,750,750,750,750,750,750,750,750,750,721,0,720,750,750,750,750,750,750,750,750,0,
+0,0,0,0,0,0,0,0,0,0,0,0,748,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <objectgroup id="5" name="Character">
