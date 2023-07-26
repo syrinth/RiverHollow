@@ -36,12 +36,12 @@
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
         public enum FishingStateEnum { None, Cast, WaitForFish, AttemptToCatch, Finish, Get };
 
-        public enum ItemGroupEnum { Ceramic, Construction, Clothing, Fish, Flower, Food, Gem, Herb, Ingredient, Magic, Meal, Medicine, Metal, Ore, None };
-        public enum ItemEnum { Resource, Tool, Food, Consumable, Clothing, Buildable, MonsterFood, NPCToken, Blueprint, Seed, Special };
+        public enum ItemGroupEnum { None, Artifact, Ceramic, Construction, Clothing, Fish, Flower, Food, Gem, Herb, Ingredient, Magic, Meal, Medicine, Metal, Monster, Ore};
+        public enum ItemEnum { Resource, Blueprint, Buildable, Clothing, Consumable, Food, MonsterFood, NPCToken, Seed, Special, Tool };
         public enum FoodTypeEnum { Dessert, Fancy, Healthy, Plain, Seafood };
         public enum ToolEnum { None, Axe, Backpack, CapeOfBlinking, FishingRod, Harp, Lantern, Pick, Return, Scythe, Hoe, StaffOfIce, Sword, WateringCan };
         public enum GearTypeEnum { None, Accessory, Chest, Head, Weapon };
-        public enum ClothingEnum { None, Chest, Legs, Hat };
+        public enum ClothingEnum { None, Shirt, Pants, Hat };
         public enum NPCTokenTypeEnum { Mount, Pet };
         public enum CraftFilterEnum { All };
 
@@ -61,7 +61,7 @@
         public enum MobSpawnStateEnum { None, Day, Night };
         public enum ExpectingChildEnum { None, Adoption, Pregnant };
         public enum RelationShipStatusEnum { None, Friends, Dating, Engaged, Married };
-        public enum SpawnStateEnum { OffMap, WaitAtInn, VisitInn, HasHome, NonTownMap, SendingToInn };
+        public enum SpawnStateEnum { OffMap, WaitAtInn, HasHome, NonTownMap, SendingToInn };
         public enum MoodEnum { Miserable, Sad, Neutral, Pleased, Happy, Ecstatic };
         public enum TravelerMoodEnum { Angry, Sad, Neutral, Happy };
         public enum NPCStateEnum { Alert, Idle, Leashing, MaintainDistance, TrackPlayer, Wander };

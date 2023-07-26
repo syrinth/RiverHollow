@@ -371,11 +371,11 @@
     </Item>
     <Item>
       <Key>92</Key>
-      <Value>[Type:Machine][Image:0-14][MachineType:Processor][Size:2-2][Makes:60/205-2][Base:0-0-2-2][WorkAnimation:2-0.1]</Value>
+      <Value>[Type:Machine][Image:0-14][MachineType:Processor][Size:2-2][Makes:60/205-2][Base:0-1-2-1][WorkAnimation:2-0.1]</Value>
     </Item>
     <Item>
       <Key>93</Key>
-      <Value>[Type:Machine][Image:0-12][Makes:55/68-2][Size:2-2][Base:0-0-2-2][WorkAnimation:2-0.1]</Value>
+      <Value>[Type:Machine][Image:0-12][Makes:55/68-2][Size:2-2][Base:0-1-2-1][WorkAnimation:2-0.1]</Value>
     </Item>
     <Item>
       <Key>94</Key>
@@ -387,7 +387,7 @@
     </Item>
     <Item>
       <Key>96</Key>
-      <Value>[Type:Machine][Image:0-6][Work:3-0.15][Size:2-2][Makes:72/71/157/156/73/78/83][Base:0-0-2-1]</Value>
+      <Value>[Type:Machine][Image:0-6][Work:3-0.15][Size:2-2][Makes:72/71/157/156/73/78/83][Base:0-1-2-1]</Value>
     </Item>
     <Item>
       <Key>97</Key>
@@ -647,7 +647,7 @@
     </Item>
     <Item>
       <Key>161</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:13-36][Size:1-2][Base:0-1-1-1]</Value>
+      <Value>[Type:WorldObject][Image:13-36][Size:1-2][Base:0-1-1-1][Texture:Decor]</Value>
     </Item>
     <Item>
       <Key>162</Key>

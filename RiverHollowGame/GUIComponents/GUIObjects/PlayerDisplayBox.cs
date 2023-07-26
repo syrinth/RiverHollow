@@ -35,7 +35,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 AddSprite(actor.GetSprites()[i]);
             }
-            AddSprite(actor.Chest.Sprite);
+            //AddSprite(actor.Chest.Sprite);
 
             PlayAnimation(_eLastVerb, _eLastDir);
         }

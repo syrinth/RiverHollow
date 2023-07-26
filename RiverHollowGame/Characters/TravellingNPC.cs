@@ -8,12 +8,10 @@ namespace RiverHollow.Characters
 {
     public abstract class TravellingNPC : TalkingActor
     {
-        static readonly string[] Triggers = { "TotalMoneyEarnedReq", "RequiredPopulation" , "ArrivalDelay", "RequiredVillager", "ItemID", "RequiredObjectID", "FirstArrival" };
+        static readonly string[] ArrivalReqs = { "TotalMoneyEarnedReq", "RequiredPopulation" , "ArrivalDelay", "RequiredVillager", "ItemID", "RequiredObjectID" };
 
         protected Dictionary<int, int> _diRequiredObjectIDs;
 
-        protected int _iNextArrival = -1;
-        protected int ArrivalPeriod => GetIntByIDKey("ArrivalPeriod");
         protected int TotalMoneyEarnedNeeded => GetIntByIDKey("TotalMoneyEarnedReq");
         protected int RequiredPopulation => GetIntByIDKey("RequiredPopulation");
         protected int RequiredVillagerID => GetIntByIDKey("RequiredVillager");
@@ -40,7 +38,6 @@ namespace RiverHollow.Characters
             }
 
             OnTheMap = !stringData.ContainsKey("Inactive");
-            _iNextArrival = GetIntByIDKey("ArrivalDelay");
         }
 
         public override void OpenShop()
@@ -50,18 +47,17 @@ namespace RiverHollow.Characters
 
         protected bool CheckArrivalTriggers()
         {
-            //No Market, no visitors
-            if (TownManager.Market == null)
-            {
-                return false;
-            }
-
             //If they have no triggers. Do not pass go
-            if (new List<string>(Triggers).Find(x => GetBoolByIDKey(x)) == null)
+            if (new List<string>(ArrivalReqs).Find(x => GetBoolByIDKey(x)) == null)
             {
                 return false;
             }
 
+            return CheckTriggers();
+        }
+
+        public bool CheckTriggers()
+        {
             foreach (var kvp in _diRequiredObjectIDs)
             {
                 if (TownManager.GetNumberTownObjects(kvp.Key) < kvp.Value)
@@ -96,17 +92,6 @@ namespace RiverHollow.Characters
             if (TotalMoneyEarnedNeeded != -1 && TotalMoneyEarnedNeeded > PlayerManager.TotalMoneyEarned)
             {
                 return false;
-            }
-
-            //This clause ensures that the NPC is validated immediately on the day of, or greater if they should have been added due to an update
-            //But is invalid if they are currently counting down to the next arrival.
-            if (GameCalendar.GetTotalDays() < GetIntByIDKey("FirstArrival") && _iNextArrival == -1)
-            {
-                return false;
-            }
-            else if (_iNextArrival > 0)
-            {
-                return _iNextArrival-- == 0;
             }
 
             return true;

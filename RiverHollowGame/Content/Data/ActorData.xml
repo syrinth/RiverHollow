@@ -51,11 +51,11 @@
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Villager][Key:Helen][PortRow:1][HouseID:5][Collection:7/188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:1][TaxValue:2][PetID:44-1][Size:16-31]</Value>
+      <Value>[Type:Villager][Key:Helen][PortRow:1][HouseID:5][Collection:7/188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:1][TaxValue:2][PetID:44-1][Size:16-31][TotalMoneyEarnedReq:100]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:38][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredVillagerNumber:9][FirstArrival:5][ArrivalPeriod:5][Key:Isabelle]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:38][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredVillagerNumber:9][Key:Isabelle]</Value>
     </Item>
     <Item>
       <Key>14</Key>
@@ -71,11 +71,11 @@
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:0][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:56][FirstArrival:5][ArrivalPeriod:5][Key:Leanne]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:0][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:56][Key:Leanne]</Value>
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Villager][PortRow:1][Collection:0/1/2][Class:0][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:64][HouseID:1][CanMarry][FirstArrival:6][ArrivalPeriod:7][Key:Lucia]</Value>
+      <Value>[Type:Villager][PortRow:1][Collection:0/1/2][Class:0][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][RequiredBuildingID:64][HouseID:1][CanMarry][Key:Lucia]</Value>
     </Item>
     <Item>
       <Key>19</Key>
@@ -131,31 +131,31 @@
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Mob][Subtype:Basic][Key:Batty][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][Night][ItemID:56][Speed:1.8][Weight:Light][TracksPlayer][Fly]</Value>
+      <Value>[Type:Mob][Subtype:Basic][Key:Batty][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][Night][ItemID:56-C/11-U][Speed:1.8][Weight:Light][TracksPlayer][Fly]</Value>
     </Item>
     <Item>
       <Key>33</Key>
-      <Value>[Type:Mob][Subtype:Basic][Key:Mossy_Slime][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:8][HP:4][Damage:1][Day][Size:16-24][Speed:1][Weight:Medium][Wander:0.5-4-16]</Value>
+      <Value>[Type:Mob][Subtype:Basic][Key:Mossy_Slime][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:8-C/5-U][HP:4][Damage:1][Day][Size:16-24][Speed:1][Weight:Medium][Wander:0.5-4-16]</Value>
     </Item>
     <Item>
       <Key>34</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:4][ArrivalPeriod:7][RequiredObjectID:24-1][Wants:Herb][Needs:Flower][Key:Abeline][ShopData:4][RequestIDs:147/158/168]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Tuesday-0][RequiredObjectID:24-1][Wants:Herb][Needs:Flower][Key:Abeline][ShopData:4][RequestIDs:147/158/168]</Value>
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:12][ArrivalPeriod:2][RequestIDs:2/2/2][ShopData:7][Key:Erron]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Monday][RequestIDs:194][ShopData:7][Key:Erron][Size:16-31][Needs:Metal][Wants:Ore]</Value>
     </Item>
     <Item>
       <Key>36</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:10][ArrivalPeriod:4][RequestIDs:79/89/90/91/92/93/94/95/96][ShopData:5][Key:Magda]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Friday][RequestIDs:5/11/16/14/59][ShopData:5][Key:Magda][Size:16-34][Needs:Monster][Wants:Artifact]</Value>
     </Item>
     <Item>
       <Key>37</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:10][ArrivalPeriod:14][RequestIDs:2/2/2][ShopData:9][Key:Sybil]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Thursday-0][RequestIDs:2/2/2][ShopData:9][Key:Sybil]</Value>
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDelay:2][ArrivalPeriod:4][RequestIDs:167/168/57/58/162][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Wednesday][RequestIDs:167/168/57/58/162][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
     </Item>
     <Item>
       <Key>39</Key>
@@ -203,7 +203,7 @@
     </Item>
     <Item>
       <Key>50</Key>
-      <Value>[Type:Mob][Subtype:Shooter][Key:Spitter][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:9][HP:4][Damage:1][Size:16-24][Speed:1][Cooldown:1.5][Projectile:51][Weight:Medium][Wander:0.5-4-16]</Value>
+      <Value>[Type:Mob][Subtype:Shooter][Key:Spitter][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:9-C/16-U][HP:4][Damage:1][Size:16-24][Speed:1][Cooldown:1.5][Projectile:51][Weight:Medium][Wander:0.5-4-16]</Value>
     </Item>
     <Item>
       <Key>51</Key>
@@ -211,7 +211,7 @@
     </Item>
     <Item>
       <Key>52</Key>
-      <Value>[Type:Mob][Subtype:Shooter][Key:Wisp][Walk:4-.2-F][Idle:4-.2-F][KO:256-0-5-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:3-9][CollisionSize:10-14][HP:3][Damage:1][ItemID:1][Speed:0.8][Weight:Light][Cooldown:1][Projectile:53/Aim][Wander:0.5-2-4-0.8][TracksPlayer]</Value>
+      <Value>[Type:Mob][Subtype:Shooter][Key:Wisp][Walk:4-.2-F][Idle:4-.2-F][KO:256-0-5-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:3-9][CollisionSize:10-14][HP:3][Damage:1][ItemID:1-C/59-U][Speed:0.8][Weight:Light][Cooldown:1][Projectile:53/Aim][Wander:0.5-2-4-0.8][TracksPlayer]</Value>
     </Item>
     <Item>
       <Key>53</Key>
@@ -227,7 +227,7 @@
     </Item>
     <Item>
       <Key>56</Key>
-      <Value>[Type:Mob][Subtype:Summoner][Key:Angry_Hive][Size:16-32][Idle:2-.3-T][Walk:2-.15-T][KO:32-0-6-0.15-F][HP:5][Damage:1][Weight:Immovable][Speed:0][ItemID:84][Summon:57][Cooldown:3][Max:5]</Value>
+      <Value>[Type:Mob][Subtype:Summoner][Key:Angry_Hive][Size:16-32][Idle:2-.3-T][Walk:2-.15-T][KO:32-0-6-0.15-F][HP:5][Damage:1][Weight:Immovable][Speed:0][ItemID:84-C\184-U\14-R][Summon:57][Cooldown:3][Max:5]</Value>
     </Item>
     <Item>
       <Key>57</Key>

@@ -18,6 +18,8 @@ namespace RiverHollow.Game_Managers
         public static int CurrentMin { get; private set; }
         public static int CurrentDay { get; private set; }
 
+        public static int CurrentWeek => (CurrentDay / 8) + 1;
+
         public static int CurrentYear { get; private set; }
 
         private static int _iBedHour = 0;

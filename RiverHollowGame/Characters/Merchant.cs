@@ -22,6 +22,22 @@ namespace RiverHollow.Characters
     {
         ItemGroupEnum Needs => GetEnumByIDKey<ItemGroupEnum>("Needs");
         ItemGroupEnum Wants => GetEnumByIDKey<ItemGroupEnum>("Wants");
+        private DayEnum MerchantDay()
+        {
+            var split = Util.FindArguments(GetStringByIDKey("Day"));
+
+            return Util.ParseEnum<DayEnum>(split[0]);
+        }
+        private bool DefaultMerchant()
+        {
+            return Util.FindArguments(GetStringByIDKey("Day")).Length == 1;
+        }
+        private bool MyWeek()
+        {
+            var split = Util.FindArguments(GetStringByIDKey("Day"));
+
+            return GameCalendar.CurrentWeek % 2 == int.Parse(split[0]);
+        }
 
         private int[] RequestIDs => DataManager.GetIntParamsByIDKey(ID, "RequestIDs", DataType.Actor);
         private int _iRequestIndex = 0;
@@ -36,31 +52,28 @@ namespace RiverHollow.Characters
 
         public override void RollOver()
         {
-            if (!OnTheMap)
+            if (TownManager.Merchant == null)
             {
-                if (CheckArrivalTriggers())
+                if (CheckTriggers() && GameCalendar.DayOfWeek == MerchantDay())
                 {
-                    if (_iNextArrival != -1) { TownManager.MerchantQueue.Insert(0, this); }
-                    else
+                    if (DefaultMerchant() || MyWeek())
                     {
-                        if (Util.AddUniquelyToList(ref TownManager.MerchantQueue, this))
-                        {
-                            DIShops[ShopID].Randomize();
-                        }
+                        TownManager.SetMerchant(this);
+                        DIShops[ShopID].Randomize();
                     }
                 }
             }
-            else
+        }
+
+        public void Cleanup()
+        {
+            OnTheMap = false;
+            _iRequestIndex = Util.GetLoopingValue(_iRequestIndex, 0, RequestIDs.Length - 1, 1);
+            CurrentMap?.RemoveCharacterImmediately(this);
+            if (ShopID != -1)
             {
-                OnTheMap = false;
-                _iRequestIndex = Util.GetLoopingValue(_iRequestIndex, 0, RequestIDs.Length - 1, 1);
-                _iNextArrival = ArrivalPeriod;
-                CurrentMap?.RemoveCharacterImmediately(this);
-                if (ShopID != -1)
-                {
-                    DIShops[ShopID].ClearItemSpots();
-                    DIShops[ShopID].ClearRandom();
-                }
+                DIShops[ShopID].ClearItemSpots();
+                DIShops[ShopID].ClearRandom();
             }
         }
 
@@ -174,7 +187,6 @@ namespace RiverHollow.Characters
             MerchantData npcData = new MerchantData()
             {
                 npcID = ID,
-                timeToNextArrival = _iNextArrival,
                 relationShipStatus = (int)RelationshipState,
                 spokenKeys = _liSpokenKeys,
                 reqIndex = _iRequestIndex
@@ -185,7 +197,6 @@ namespace RiverHollow.Characters
         public void LoadData(MerchantData data)
         {
             RelationshipState = (RelationShipStatusEnum)data.relationShipStatus;
-            _iNextArrival = data.timeToNextArrival;
             _iRequestIndex = data.reqIndex;
 
             foreach (string s in data.spokenKeys)

@@ -184,22 +184,10 @@ namespace RiverHollow.Characters
                 WeeklyGiftGiven = false;
             }
 
-            switch (_eSpawnStatus)
+            if (_eSpawnStatus == SpawnStateEnum.OffMap && CheckArrivalTriggers())
             {
-                case SpawnStateEnum.OffMap:
-                    if (CheckArrivalTriggers())
-                    {
-                        _eSpawnStatus = ArrivalPeriod > 0 ? SpawnStateEnum.VisitInn : SpawnStateEnum.WaitAtInn;
-                        SpawnPets();
-                    }
-                    break;
-                case SpawnStateEnum.VisitInn:
-                    if (ArrivalPeriod > 0)
-                    {
-                        _iNextArrival = ArrivalPeriod;
-                    }
-                    _eSpawnStatus = SpawnStateEnum.OffMap;
-                    break;
+                _eSpawnStatus = SpawnStateEnum.WaitAtInn;
+                SpawnPets();
             }
 
             MoveToSpawn();
@@ -310,7 +298,6 @@ namespace RiverHollow.Characters
             {
                 switch (_eSpawnStatus)
                 {
-                    case SpawnStateEnum.VisitInn:
                     case SpawnStateEnum.WaitAtInn:
                         return "mapInn";
                     case SpawnStateEnum.HasHome:
@@ -349,7 +336,6 @@ namespace RiverHollow.Characters
                 {
                     switch (_eSpawnStatus)
                     {
-                        case SpawnStateEnum.VisitInn:
                         case SpawnStateEnum.WaitAtInn:
                             SetPosition(map.GetRandomPosition(map.DictionaryCharacterLayer["Inn_Floor"]));
                             break;
@@ -625,7 +611,6 @@ namespace RiverHollow.Characters
             {
                 npcID = ID,
                 spawnStatus = (int)_eSpawnStatus,
-                nextArrival = _iNextArrival,
                 friendshipPoints = FriendshipPoints,
                 collection = new List<bool>(_diCollection.Values),
                 relationShipStatus = (int)RelationshipState,
@@ -638,7 +623,6 @@ namespace RiverHollow.Characters
         public void LoadData(VillagerData data)
         {
             _eSpawnStatus = (SpawnStateEnum)data.spawnStatus;
-            _iNextArrival = data.nextArrival;
             FriendshipPoints = data.friendshipPoints;
             WeeklyGiftGiven = data.weeklyGiftGiven;
             RelationshipState = (RelationShipStatusEnum)data.relationShipStatus;
@@ -647,7 +631,7 @@ namespace RiverHollow.Characters
                 PlayerManager.Spouse = this;
             }
 
-            if (_iNextArrival <= 0 || !string.IsNullOrEmpty(StartMap))
+            if (!string.IsNullOrEmpty(StartMap))
             {
                 DetermineValidSchedule();
             }

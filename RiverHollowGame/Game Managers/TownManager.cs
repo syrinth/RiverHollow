@@ -30,7 +30,7 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, Merchant> DIMerchants { get; private set; }
         public static Dictionary<int, ValueTuple<bool, int>> DITravelerInfo { get; private set; }
         public static Dictionary<int, ValueTuple<bool, bool>> DIArchive { get; private set; }
-        public static List<Merchant> MerchantQueue;
+        public static Merchant Merchant { get; private set; }
         public static List<Animal> TownAnimals { get; set; }
         public static List<Traveler> Travelers { get; set; }
 
@@ -41,7 +41,6 @@ namespace RiverHollow.Game_Managers
             _diTownObjects = new Dictionary<int, List<WorldObject>>();
             TownAnimals = new List<Animal>();
             Travelers = new List<Traveler>();
-            MerchantQueue = new List<Merchant>();
 
             Inventory = new Item[Constants.KITCHEN_STOCK_ROW, Constants.KITCHEN_STOCK_COLUMN];
 
@@ -99,11 +98,19 @@ namespace RiverHollow.Game_Managers
             {
                 v.RollOver();
             }
-            foreach (Merchant m in DIMerchants.Values)
+
+            if (Market != null)
             {
-                if (Market != null)
+                Merchant?.Cleanup();
+                Merchant = null;
+
+                foreach (Merchant m in DIMerchants.Values)
                 {
-                    m.RollOver();
+                    if (Merchant == null)
+                    {
+                        m.RollOver();
+                    }
+                    else { break; }
                 }
             }
 
@@ -358,15 +365,12 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
-        public static void MoveMerchants()
+        #region Merchant Code
+        public static void SetMerchant(Merchant m)
         {
-            if (MerchantQueue.Count > 0)
-            {
-                Merchant chosenMerchant = MerchantQueue[0];
-                chosenMerchant.MoveToSpawn();
-                MerchantQueue.Remove(chosenMerchant);
-            }
+            Merchant = m;
         }
+        #endregion
 
         public static void AddAnimal(Animal npc)
         {
@@ -501,20 +505,14 @@ namespace RiverHollow.Game_Managers
                 VillagerData = new List<VillagerData>(),
                 MerchantData = new List<MerchantData>(),
                 TravelerData = new List<TravelerData>(),
-                MerchantQueue = new List<int>(),
                 CodexEntries = new List<CodexEntryData>(),
                 Inventory = new List<ItemData>()
             };
 
-            foreach (Actor npc in TownAnimals)
-            {
-                data.TownAnimals.Add(npc.ID);
-            }
+            data.MerchantID = Merchant != null ? Merchant.ID : -1;
 
-            foreach (Actor npc in Travelers)
-            {
-                data.Travelers.Add(npc.ID);
-            }
+            Travelers.ForEach(x => data.Travelers.Add(x.ID));
+            TownAnimals.ForEach(x => data.TownAnimals.Add(x.ID));
 
             foreach (Villager npc in DIVillagers.Values)
             {
@@ -535,11 +533,6 @@ namespace RiverHollow.Game_Managers
                     numVisits = kvp.Value.Item2
                 };
                 data.TravelerData.Add(travelerData);
-            }
-
-            foreach (Merchant npc in MerchantQueue)
-            {
-                data.MerchantQueue.Add(npc.ID);
             }
 
             foreach (Item i in Inventory)
@@ -598,11 +591,6 @@ namespace RiverHollow.Game_Managers
                 DITravelerInfo[data.npcID] = new ValueTuple<bool, int>(data.introduced, data.numVisits);
             }
 
-            for (int i = 0; i < saveData.MerchantQueue.Count; i++)
-            {
-                MerchantQueue.Add(TownManager.DIMerchants[saveData.MerchantQueue[i]]);
-            }
-
             foreach (TravelerData data in saveData.TravelerData)
             {
                 DITravelerInfo[data.npcID] = new ValueTuple<bool, int>(data.introduced, data.numVisits);
@@ -613,10 +601,6 @@ namespace RiverHollow.Game_Managers
                 if (data.id < 8000)
                 {
                     DIArchive[data.id] = new ValueTuple<bool, bool>(data.found, data.archived);
-                }
-                else
-                {
-                    int i = 0;
                 }
             }
 
@@ -637,7 +621,11 @@ namespace RiverHollow.Game_Managers
 
             _bTravelersCame = saveData.travelersCame;
 
-            MoveMerchants();
+            if (saveData.MerchantID != -1)
+            {
+                Merchant = DIMerchants[saveData.MerchantID];
+                Merchant.MoveToSpawn();
+            }
         }
     }
 }

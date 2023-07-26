@@ -194,29 +194,26 @@ namespace RiverHollow.Characters
         {
             if (c != null)
             {
-                string clothingTexture = string.Format(@"Textures\Items\Clothing\{0}\{1}", c.ClothingType.ToString(), c.TextureKey);
-                if (!c.GenderNeutral) { clothingTexture += ("_" + BodyTypeStr); }
+                //c.Sprite = LoadSpriteAnimations(Util.LoadPlayerAnimations(DataManager.Config[17]), c.Texture.Name);
 
-                c.Sprite = LoadSpriteAnimations(Util.LoadPlayerAnimations(DataManager.Config[17]), clothingTexture);
+                //if (c.SlotMatch(ClothingEnum.Shirt)) { Chest = c; }
+                //else if (c.SlotMatch(ClothingEnum.Hat))
+                //{
+                //    _sprHair.FrameCutoff = 9;
+                //    Hat = c;
+                //}
+                //else if (c.SlotMatch(ClothingEnum.Pants)) { Legs = c; }
 
-                if (c.SlotMatch(ClothingEnum.Chest)) { Chest = c; }
-                else if (c.SlotMatch(ClothingEnum.Hat))
-                {
-                    _sprHair.FrameCutoff = 9;
-                    Hat = c;
-                }
-                else if (c.SlotMatch(ClothingEnum.Legs)) { Legs = c; }
-
-                //MAR AWKWARD
-                c.Sprite.Position = Position;
-                c.Sprite.PlayAnimation(BodySprite.CurrentAnimation);
-                c.Sprite.SetLayerDepthMod(0.004f);
+                ////MAR AWKWARD
+                //c.Sprite.Position = Position;
+                //c.Sprite.PlayAnimation(BodySprite.CurrentAnimation);
+                //c.Sprite.SetLayerDepthMod(0.004f);
             }
         }
 
         public void RemoveClothes(ClothingEnum c)
         {
-            if (c.Equals(ClothingEnum.Chest)) { Chest = null; }
+            if (c.Equals(ClothingEnum.Shirt)) { Chest = null; }
             else if (c.Equals(ClothingEnum.Hat))
             {
                 _sprHair.FrameCutoff = 0;

@@ -476,7 +476,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Shop_7</Key>
-      <Value>[Name:Furniture Merchant]</Value>
+      <Value>[Name:Erron's Shopt]</Value>
     </Item>
     <Item>
       <Key>Shop_8</Key>
@@ -524,7 +524,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_5</Key>
-      <Value>[Name:Potion Base][Description:You basically can't make potions without it.]</Value>
+      <Value>[Name:Slime Pearl][Description:A small pearl of hardened slime.]</Value>
     </Item>
     <Item>
       <Key>Item_6</Key>
@@ -548,7 +548,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_11</Key>
-      <Value>[Name:Imp Essence][Description:The swirling essence of a troublesome imp.]</Value>
+      <Value>[Name:Evil Eye][Description:The still moving eye of a $Actor_32$]</Value>
     </Item>
     <Item>
       <Key>Item_12</Key>
@@ -560,7 +560,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_14</Key>
-      <Value>[Name:Enchanted Seed][Description:A small seed glowing with potential.]</Value>
+      <Value>[Name:Royal Jelly][Description:Delicious jelly fed to queens. Decadent.]</Value>
     </Item>
     <Item>
       <Key>Item_15</Key>
@@ -568,7 +568,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_16</Key>
-      <Value>[Name:Magical Leaf][Description:An enchanted leaf bestowed with power]</Value>
+      <Value>[Name:Crawling Root][Description:It's still trying to move around]</Value>
     </Item>
     <Item>
       <Key>Item_17</Key>
@@ -740,7 +740,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_59</Key>
-      <Value>[Name:Beard][Description:A pinch of powdered lizard scales.]</Value>
+      <Value>[Name:Wisp Light][Description:The flickering remains of a $Actor_52$]</Value>
     </Item>
     <Item>
       <Key>Item_60</Key>

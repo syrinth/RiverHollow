@@ -184,8 +184,8 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "TravelerData")]
             public List<TravelerData> TravelerData;
 
-            [XmlArray(ElementName = "MerchantQueue")]
-            public List<int> MerchantQueue;
+            [XmlElement(ElementName = "MerchantID")]
+            public int MerchantID;
 
             [XmlArray(ElementName = "CodexItems")]
             public List<CodexEntryData> CodexEntries;
@@ -324,9 +324,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "SpawnStatus")]
             public int spawnStatus;
 
-            [XmlElement(ElementName = "NextArrival")]
-            public int nextArrival;
-
             [XmlElement(ElementName = "Friendship")]
             public int friendshipPoints;
 
@@ -360,9 +357,6 @@ namespace RiverHollow.Game_Managers
         {
             [XmlElement(ElementName = "NPCID")]
             public int npcID;
-
-            [XmlElement(ElementName = "NextArrival")]
-            public int timeToNextArrival;
 
             [XmlArray(ElementName = "SpokenKeys")]
             public List<string> spokenKeys;

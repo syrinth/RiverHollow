@@ -121,6 +121,8 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             InventoryManager.ExtraHoldSingular = false;
+            InventoryManager.LockedInventory = false;
+            GameManager.SetSelectedWorldObject(null);
         }
     }
 }
