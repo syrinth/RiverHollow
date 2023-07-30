@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
-using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.SpriteAnimations;
 using System.Collections.Generic;
@@ -14,16 +13,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
         VerbEnum _eLastVerb = VerbEnum.Idle;
         DirectionEnum _eLastDir = DirectionEnum.Down;
 
+        Point _pMoveBy;
+
         List<GUISprite> _liSprites;
 
-        public PlayerDisplayBox(PlayerCharacter actor) : base (GUIUtils.NEW_DISPLAY)
+        public PlayerDisplayBox(PlayerCharacter actor, Rectangle pane, Point moveBy) : base (pane)
         {
+            _pMoveBy = moveBy;
             AssignActor(actor);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
         }
 
         public void AssignActor(PlayerCharacter actor)
@@ -44,8 +41,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (sprite != null)
             {
-                GUISprite spr = new GUISprite(sprite);
-                spr.PositionAndMove(this, 17, 14);
+                GUISprite spr = new GUISprite(sprite, true);
+                spr.PositionAndMove(this, _pMoveBy);
                 _liSprites.Add(spr);
             }
         }

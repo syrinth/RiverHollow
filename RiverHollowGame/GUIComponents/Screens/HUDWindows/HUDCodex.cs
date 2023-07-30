@@ -38,7 +38,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         {
             _liActorDisplay = new List<NPCDisplayWindow>();
             _liItemDisplay = new List<ItemDisplayWindow>();
-            _winMain = SetMainWindow(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(186), GameManager.ScaleIt(177));
+            _winMain = SetMainWindow(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(186), GameManager.ScaleIt(177));
 
             _btnLeft = new GUIButton(GUIUtils.BTN_LEFT_SMALL, BtnLeft);
             _btnLeft.PositionAndMove(_winMain, 7, 158);

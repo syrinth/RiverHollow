@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
 using RiverHollow.WorldObjects;
@@ -10,15 +10,15 @@ namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDInventoryDisplay : GUIMainObject
     {
-        GUIInventoryWindow _inventory;
-        GUIInventoryWindow _altInventory;
+        readonly GUIInventoryWindow _inventory;
+        readonly GUIInventoryWindow _altInventory;
 
         public HUDInventoryDisplay(DisplayTypeEnum display = DisplayTypeEnum.Inventory)
         {
             InventoryManager.LockedInventory = false;
 
             InventoryManager.ClearExtraInventory();
-            GameManager.CurrentInventoryDisplay = display;
+            InventoryManager.CurrentInventoryDisplay = display;
             _inventory = new GUIInventoryWindow(true);
             AddControl(_inventory);
 
@@ -32,11 +32,12 @@ namespace RiverHollow.GUIComponents.Screens
 
             InventoryManager.ClearExtraInventory();
             InventoryManager.InitExtraInventory(inventory);
-            GameManager.CurrentInventoryDisplay = display;
-            _altInventory = new GUIInventoryWindow();
+            InventoryManager.CurrentInventoryDisplay = display;
+
             _inventory = new GUIInventoryWindow(true);
 
-            _altInventory.AnchorAndAlignWithSpacing(_inventory, SideEnum.Top, SideEnum.CenterX, GUIManager.STANDARD_MARGIN);           
+            _altInventory = new GUIInventoryWindow(false);
+            _altInventory.AnchorAndAlignWithSpacing(_inventory, SideEnum.Top, SideEnum.CenterX, 2);
 
             SetY(_altInventory.Top);
 
@@ -62,14 +63,6 @@ namespace RiverHollow.GUIComponents.Screens
                 }
                 rv = true;
             }
-            else
-            {
-                if(GameManager.HeldItem != null && GameManager.HeldItem.CanBeDropped())
-                {
-                    InventoryManager.DropItemOnMap(GameManager.HeldItem);
-                    GameManager.DropItem();
-                }
-            }
 
             return rv;
         }
@@ -83,46 +76,20 @@ namespace RiverHollow.GUIComponents.Screens
                 rv = _inventory.ProcessRightButtonClick(mouse);
                 if (!rv)
                 {
-                    Close();
+                    InventoryManager.CleanupInventoryDisplay();
                 }
             }
             else if (_altInventory != null && _altInventory.DrawRectangle.Contains(mouse) && !InventoryManager.LockedInventory)
+
             {
                 rv = _altInventory.ProcessRightButtonClick(mouse);
             }
             else
             {
-                Close();
+                InventoryManager.CleanupInventoryDisplay();
             }
 
             return rv;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
-
-        private void Close()
-        {
-            if (GameManager.HeldItem != null && _altInventory != null)
-            {
-                InventoryManager.AddToInventory(GameManager.HeldItem);
-                GameManager.DropItem();
-            }
-            if (GameManager.CurrentNPC != null)
-            {
-                GUIManager.OpenTextWindow(GameManager.CurrentNPC.GetDialogEntry("Goodbye"));
-            }
-
-            if (GameManager.CurrentWorldObject != null && GameManager.CurrentWorldObject.BuildableType(BuildableEnum.Decor))
-            {
-                ((Decor)GameManager.CurrentWorldObject).SetDisplayEntity(InventoryManager.ExtraInventory[0,0], false);
-            }
-
-            InventoryManager.ExtraHoldSingular = false;
-            InventoryManager.LockedInventory = false;
-            GameManager.SetSelectedWorldObject(null);
         }
     }
 }

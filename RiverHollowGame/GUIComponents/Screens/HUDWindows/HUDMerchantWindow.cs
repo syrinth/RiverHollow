@@ -26,7 +26,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _arrToSell = new Item[1, 1];
             InventoryManager.InitExtraInventory(_arrToSell);
 
-            _gMerchantWindow = new GUIWindow(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
+            _gMerchantWindow = new GUIWindow(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
             GUISprite spr = new GUISprite(m.BodySprite, true);
             spr.ScaledMoveBy(9, 8);
             spr.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
@@ -8,6 +9,8 @@ namespace RiverHollow.Game_Managers
     static class InventoryManager
     {
         #region Properties
+        public static DisplayTypeEnum CurrentInventoryDisplay;
+
         public static bool LockedInventory = false;
         public static int maxItemRows = 4;
         public static int maxItemColumns = 10;
@@ -110,7 +113,6 @@ namespace RiverHollow.Game_Managers
             //Confirm a valid itemId range
             if (itemID != -1)
             {
-
                 //Iterate through the Inventory
                 for (int i = 0; i < maxRows; i++)
                 {
@@ -124,7 +126,7 @@ namespace RiverHollow.Game_Managers
                             validRow = i;
                             validCol = j;
                         }
-                        else if(testItem != null)
+                        else if (testItem != null)
                         {
                             //If there is an item there, check to see if it has the same ID, can stack,
                             //and if the number we want to add is less than the max item stack. Once we find a matching stack
@@ -527,46 +529,6 @@ Exit:
             return PlayerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
         }
 
-        internal static List<Consumable> GetConsumables()
-        {
-            List<Consumable> items = new List<Consumable>();
-            for (int i = 0; i < PlayerManager.BackpackLevel; i++)
-            {
-                for (int j = 0; j < maxItemColumns; j++)
-                {
-                    if (PlayerInventory[i, j] != null && PlayerInventory[i, j].CompareType(ItemEnum.Consumable))
-                    {
-                        items.Add((Consumable)PlayerInventory[i, j]);
-                    }
-                }
-            }
-            return items;
-        }
-
-        internal static bool ManagingExtraInventory()
-        {
-            return !LockedInventory && ExtraInventory != null;
-        }
-
-        public static Item GetItemByID(int id)
-        {
-            int maxRows = 0;
-            int maxColumns = 0;
-            GetDimensions(PlayerInventory, ref maxRows, ref maxColumns);
-
-            for (int i = 0; i < maxRows; i++)
-            {
-                for (int j = 0; j < maxColumns; j++)
-                {
-                    if (PlayerInventory[i,j].ID == id)
-                    {
-                        return PlayerInventory[i, j];
-                    }
-                }
-            }
-
-            return null;
-        }
         public static Item GetItemFromLocation(int row, int column, bool PlayerInventory = true)
         {
             return GetInventory(PlayerInventory)?[row, column];
@@ -590,6 +552,28 @@ Exit:
             }
 
             return rv;
+        }
+
+        public static void CleanupInventoryDisplay()
+        {
+            if (GameManager.HeldItem != null && ExtraInventory != null)
+            {
+                InventoryManager.AddToInventory(GameManager.HeldItem);
+                GameManager.DropItem();
+            }
+            if (GameManager.CurrentNPC != null)
+            {
+                GUIManager.OpenTextWindow(GameManager.CurrentNPC.GetDialogEntry("Goodbye"));
+            }
+
+            if (GameManager.CurrentWorldObject != null && GameManager.CurrentWorldObject.BuildableType(BuildableEnum.Decor))
+            {
+                ((Decor)GameManager.CurrentWorldObject).SetDisplayEntity(InventoryManager.ExtraInventory[0, 0], false);
+            }
+
+            InventoryManager.ExtraHoldSingular = false;
+            InventoryManager.LockedInventory = false;
+            GameManager.SetSelectedWorldObject(null);
         }
     }
 }

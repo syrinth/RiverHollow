@@ -5,12 +5,9 @@ using RiverHollow.GUIComponents.Screens;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
-using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Misc;
-using RiverHollow.Utilities;
-using static RiverHollow.Utilities.Enums;
 using RiverHollow.GUIComponents;
-using System.Net;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Game_Managers
 {
@@ -262,11 +259,11 @@ namespace RiverHollow.Game_Managers
         /// <returns>The created GUIWindow</returns>
         protected GUIWindow SetMainWindow()
         {
-            return SetMainWindow(GUIUtils.Brown_Window, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
+            return SetMainWindow(GUIUtils.WINDOW_BROWN, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
         }
         protected GUIWindow SetMainWindow(int w, int h)
         {
-            return SetMainWindow(GUIUtils.Brown_Window, w, h);
+            return SetMainWindow(GUIUtils.WINDOW_BROWN, w, h);
         }
         protected GUIWindow SetMainWindow(GUIWindow.WindowData wd, int w, int h)
         {

@@ -4,7 +4,6 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
-using System;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
@@ -18,27 +17,26 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         protected int _iColumns;
         protected int _iRows;
 
-        private bool _bPlayerInventory;
+        private readonly bool _bStandard;
+        private readonly bool _bPlayerInventory;
 
-        public GUIInventory(bool PlayerInventory = false)
+        public GUIInventory(bool PlayerInventory = false, bool standard = true)
         {
             Position(Point.Zero);
-            
+            _bStandard = standard;
             _bPlayerInventory = PlayerInventory;
 
             //Retrieve the dimensions of the Inventory we're working on from the InventoryManager
             InventoryManager.GetDimensions(ref _iRows, ref _iColumns, _bPlayerInventory);
 
-            //If it's the player inventory, we need to show the max and then grey them out, otherwise show the real number of rows
-            int rows = PlayerInventory ? InventoryManager.maxItemRows : _iRows;
-
             _arrItemBoxes = new GUIItemBox[_iRows, _iColumns];
-            
+
             Setup(PlayerInventory);
 
             //_texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
-            Width = (_iColumns * BoxSize) + GameManager.ScaleIt(_iColumns + 1);
-            Height = (rows * BoxSize) + GameManager.ScaleIt(rows + 1);
+            DetermineSize();
+            Width += GameManager.ScaleIt(2);
+            Height += GameManager.ScaleIt(2);
         }
 
         public override void Update(GameTime gTime)
@@ -63,38 +61,57 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         /// </summary>
         private void Setup(bool playerInventory)
         {
-            int delta = InventoryManager.maxItemRows - _iRows;
-            for (int i = 0; i < _iRows; i++)
+            if (_bStandard)
             {
-                for (int j = 0; j < _iColumns; j++)
-                {
-                    _arrItemBoxes[i, j] = new GUIItemBox(i, j, null);
-
-                    if (i == 0 && j == 0) { }
-                    else if (j == 0) { _arrItemBoxes[i, j].AnchorAndAlignWithSpacing(_arrItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
-                    else { _arrItemBoxes[i, j].AnchorAndAlignWithSpacing(_arrItemBoxes[i, j - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
-
-                    AddControl(_arrItemBoxes[i, j]);
-                }
-            }
-
-            if (playerInventory)
-            {
-                int rowDelta = InventoryManager.maxItemRows - PlayerManager.BackpackLevel;
-
-                GUIImage[,] temp = new GUIImage[delta, InventoryManager.maxItemColumns];
-                for (int i = 0; i < rowDelta; i++)
+                for (int i = 0; i < _iRows; i++)
                 {
                     for (int j = 0; j < _iColumns; j++)
                     {
-                        temp[i, j] = new GUIImage(GUIUtils.ITEM_BOX);
-                        temp[i, j].Enable(false);
+                        _arrItemBoxes[i, j] = new GUIItemBox(i, j, null);
 
-                        if (i == 0 && j == 0) { temp[i, j].AnchorAndAlignWithSpacing(_arrItemBoxes[PlayerManager.BackpackLevel - 1, 0], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
-                        else if (j == 0) { temp[i, j].AnchorAndAlignWithSpacing(temp[i - 1, j], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
-                        else { temp[i, j].AnchorAndAlignWithSpacing(temp[i, j - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
+                        if (i == 0 && j == 0) { }
+                        else if (j == 0) { _arrItemBoxes[i, j].AnchorAndAlignWithSpacing(_arrItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, 2); }
+                        else { _arrItemBoxes[i, j].AnchorAndAlignWithSpacing(_arrItemBoxes[i, j - 1], SideEnum.Right, SideEnum.Bottom, 2); }
 
-                        AddControl(temp[i, j]);
+                        AddControl(_arrItemBoxes[i, j]);
+                    }
+                }
+
+                if (playerInventory)
+                {
+                    int delta = InventoryManager.maxItemRows - _iRows;
+                    int rowDelta = InventoryManager.maxItemRows - PlayerManager.BackpackLevel;
+
+                    GUIImage[,] temp = new GUIImage[delta, InventoryManager.maxItemColumns];
+                    for (int i = 0; i < rowDelta; i++)
+                    {
+                        for (int j = 0; j < _iColumns; j++)
+                        {
+                            temp[i, j] = new GUIImage(GUIUtils.ITEM_BOX);
+                            temp[i, j].Enable(false);
+
+                            if (i == 0 && j == 0) { temp[i, j].AnchorAndAlignWithSpacing(_arrItemBoxes[PlayerManager.BackpackLevel - 1, 0], SideEnum.Bottom, SideEnum.Left, 2); }
+                            else if (j == 0) { temp[i, j].AnchorAndAlignWithSpacing(temp[i - 1, j], SideEnum.Bottom, SideEnum.Left, 2); }
+                            else { temp[i, j].AnchorAndAlignWithSpacing(temp[i, j - 1], SideEnum.Right, SideEnum.Bottom, 2); }
+
+                            AddControl(temp[i, j]);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < _iRows; i++)
+                {
+                    for (int j = 0; j < _iColumns; j++)
+                    {
+                        _arrItemBoxes[i, j] = new GUIItemBox(i, j, null);
+
+                        if (i == 0 && j == 0) { }
+                        else if (j == 0) { _arrItemBoxes[i, j].AnchorAndAlignWithSpacing(_arrItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, 2); }
+                        else { _arrItemBoxes[i, j].AnchorAndAlignWithSpacing(_arrItemBoxes[i, j - 1], SideEnum.Right, SideEnum.Bottom, 36); }
+
+                        AddControl(_arrItemBoxes[i, j]);
                     }
                 }
             }
@@ -104,56 +121,65 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             bool rv = false;
 
-            if (GameManager.HeldItem != null)
+            var itemBox = GetItemBox(mouse);
+            if (itemBox != null)
             {
-                Item toSwitch = IsItemThere(mouse);
-                if (toSwitch != null)
+                rv = true;
+                if (GameManager.HeldItem != null)
                 {
-                    if (GameManager.HeldItem.ID == toSwitch.ID)
+                    bool canPlaceItem = ItemCanGoThere(itemBox, GameManager.HeldItem);
+
+                    var toSwitch = itemBox.BoxItem;
+                    if (toSwitch != null)
                     {
-                        toSwitch.Add(GameManager.HeldItem.Number);
-                        GameManager.DropItem();
-                    }
-                    else
-                    {
-                        Item temp = GameManager.HeldItem;
-                        GameManager.GrabItem(TakeItem(mouse));
-                        GiveItem(temp, true);
-                    }
-                }
-                else if (GiveItem(GameManager.HeldItem))
-                {
-                    GameManager.DropItem();
-                    rv = true;
-                }
-            }
-            else
-            {
-                if (GameManager.CurrentWorldObject != null)
-                {
-                    Item clickedItem = IsItemThere(mouse);
-                    if (!GUIManager.IsTextWindowOpen() && Contains(mouse) && clickedItem != null)
-                    {
-                        if (GameManager.CurrentWorldObject.CompareType(ObjectTypeEnum.DungeonObject))
+                        if (GameManager.HeldItem.ID == toSwitch.ID)
                         {
-                            if (((TriggerObject)GameManager.CurrentWorldObject).CheckForKey(clickedItem))
-                            {
-                                rv = true;
-                                ((TriggerObject)GameManager.CurrentWorldObject).AttemptToTrigger(Constants.TRIGGER_ITEM_OPEN);
-                                GUIManager.CloseMainObject();
-                            }
+                            toSwitch.Add(GameManager.HeldItem.Number);
+                            GameManager.DropItem();
                         }
+                        else if (canPlaceItem)
+                        {
+                            Item temp = GameManager.HeldItem;
+                            GameManager.GrabItem(TakeItem(mouse));
+                            GiveItem(temp, true);
+                        }
+
+                    }
+                    else if (canPlaceItem && GiveItem(GameManager.HeldItem))
+                    {
+                        GameManager.DropItem();
                     }
                 }
                 else
                 {
-                    bool takeHalf = InputManager.IsKeyDown(Keys.LeftShift) || InputManager.IsKeyDown(Keys.RightShift);
-                    rv = GameManager.GrabItem(TakeItem(mouse, takeHalf));
+                    if (GameManager.CurrentWorldObject != null)
+                    {
+                        Item clickedItem = IsItemThere(mouse);
+                        if (!GUIManager.IsTextWindowOpen() && Contains(mouse) && clickedItem != null)
+                        {
+                            if (GameManager.CurrentWorldObject.CompareType(ObjectTypeEnum.DungeonObject))
+                            {
+                                if (((TriggerObject)GameManager.CurrentWorldObject).CheckForKey(clickedItem))
+                                {
+                                    ((TriggerObject)GameManager.CurrentWorldObject).AttemptToTrigger(Constants.TRIGGER_ITEM_OPEN);
+                                    GUIManager.CloseMainObject();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        bool takeHalf = InputManager.IsKeyDown(Keys.LeftShift) || InputManager.IsKeyDown(Keys.RightShift);
+                        GameManager.GrabItem(TakeItem(mouse, takeHalf));
+                    }
+                }
+
+                //Close any hover windows that may be open
+                if (rv && IsItemThere(mouse) == null)
+                {
+                    GUIManager.CloseHoverWindow();
                 }
             }
-
-            //Close any hover windows that may be open
-            if (rv && IsItemThere(mouse) == null) { GUIManager.CloseHoverWindow(); }
 
             return rv;
         }
@@ -176,42 +202,66 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 {
                     //If the only inventory we are working with is the player's inventory,
                     //pass the handler to the GUIItemBox and have it handle the item click
-                    if (!InventoryManager.ManagingExtraInventory())
+                    if (InventoryManager.CurrentInventoryDisplay == DisplayTypeEnum.PlayerInventory)
                     {
                         rv = i.BoxItem.ItemBeingUsed();
                     }
                     else  //We are managing an additional Inventory
                     {
-                        //Ensure that there is a GUIBox where we clicked, and the box has an Item
-                        if (i != null && i.BoxItem != null)
+                        int row = 0;
+                        int col = 0;
+
+                        Item singleItem = null;
+                        bool takeHalf = InputManager.IsKeyDown(Keys.LeftShift) || InputManager.IsKeyDown(Keys.RightShift);
+                        if (!takeHalf && _arrItemBoxes.Length != 1 && InventoryManager.ExtraInventory.Length == 1 && InventoryManager.ExtraInventory[0, 0] != null)
                         {
-                            int row = 0;
-                            int col = 0;
-
-                            Item singleItem = null;
-                            bool takeHalf = InputManager.IsKeyDown(Keys.LeftShift) || InputManager.IsKeyDown(Keys.RightShift);
-                            if (!takeHalf && this._arrItemBoxes.Length != 1 && InventoryManager.ExtraInventory.Length == 1 && InventoryManager.ExtraInventory[0, 0] != null)
-                            {
-                                singleItem = InventoryManager.ExtraInventory[0, 0];
-                                InventoryManager.RemoveItemFromInventorySpot(0, 0, false);
-                            }
-
-                            //Use _container != null to get the status of the inverse of whichever we are clicking on
-                            if (InventoryManager.HasSpaceInInventory(i.BoxItem.ID, i.BoxItem.Number, ref row, ref col, !_bPlayerInventory))
-                            {
-                                Item clickedItem = TakeItem(mouse, takeHalf);
-                                //If the GUI represents a Container, move the Item to the PlayerInventory
-                                //else, move the Item to the Container's inventory
-                                InventoryManager.AddItemToInventorySpot(clickedItem, row, col, !_bPlayerInventory);
-
-                                if(singleItem != null)
-                                {
-                                    InventoryManager.AddToInventory(singleItem.ID, singleItem.Number, _bPlayerInventory, true);
-                                }
-                            }
-
-                            rv = true;
+                            singleItem = InventoryManager.ExtraInventory[0, 0];
+                            InventoryManager.RemoveItemFromInventorySpot(0, 0, false);
                         }
+
+                        bool performSwap = false;
+                        if (InventoryManager.CurrentInventoryDisplay == DisplayTypeEnum.PlayerInventory && _bPlayerInventory)
+                        {
+                            Point gearPosition = Point.Zero;
+                            if (i.BoxItem.ItemType == ItemEnum.Clothing && PlayerManager.GetGearSlot(((Clothing)i.BoxItem).ClothingType, ref gearPosition))
+                            {
+                                performSwap = true;
+                                row = gearPosition.X;
+                                col = gearPosition.Y;
+                            }
+                        }
+                        else if (InventoryManager.HasSpaceInInventory(i.BoxItem.ID, i.BoxItem.Number, ref row, ref col, !_bPlayerInventory))
+                        {
+                            performSwap = true;
+                        }
+
+                        if (performSwap)
+                        {
+                            Item temp = null;
+                            if(InventoryManager.CurrentInventoryDisplay == DisplayTypeEnum.PlayerInventory && _bPlayerInventory)
+                            {
+                                temp = InventoryManager.GetItemFromLocation(row, col, !_bPlayerInventory);
+                                InventoryManager.RemoveItemFromInventorySpot(row, col, !_bPlayerInventory);
+                            }
+
+                            Item clickedItem = TakeItem(mouse, takeHalf);
+                            //If the GUI represents a Container, move the Item to the PlayerInventory
+                            //else, move the Item to the Container's inventory
+                            InventoryManager.AddItemToInventorySpot(clickedItem, row, col, !_bPlayerInventory);
+
+                            if (singleItem != null)
+                            {
+                                InventoryManager.AddToInventory(singleItem.ID, singleItem.Number, _bPlayerInventory, true);
+                            }
+
+                            if (temp != null)
+                            {
+                                _arrItemBoxes[i.RowID, i.ColumnID].SetItem(temp);
+                                InventoryManager.AddItemToInventorySpot(temp, i.RowID, i.ColumnID, _bPlayerInventory);
+                            }
+                        }
+
+                        rv = true;
                     }
                 }
             }
@@ -233,7 +283,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             foreach (GUIItemBox box in _arrItemBoxes)
             {
-                if (box.Contains(mouse) && box.BoxItem != null)
+                if (box.Contains(mouse))
                 {
                     rv = box;
                     break;
@@ -241,6 +291,18 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
 
             return rv;
+        }
+
+        private bool ItemCanGoThere(GUIItemBox itemBox, Item testItem)
+        {
+            return itemBox.EquipmentType == EquipmentEnum.None || itemBox.EquipmentType == testItem.GetEnumByIDKey<EquipmentEnum>("Subtype");
+        }
+
+        public GUIItemBox GetItemBox(int x, int y)
+        {
+            if (x < 0 || x >= _iRows) { return null; }
+            else if (y < 0 && y >= _iColumns) { return null; }
+            else { return _arrItemBoxes[x, y]; }
         }
 
         private Item IsItemThere(Point mouse)
@@ -320,6 +382,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         {
                             if (_arrItemBoxes[i, j].Contains(mouse) && (Force || _arrItemBoxes[i, j].BoxItem == null))
                             {
+                                _arrItemBoxes[i, j].SetItem(item);
                                 rv = InventoryManager.AddItemToInventorySpot(item, i, j, _bPlayerInventory);
                                 goto Exit;
                             }
@@ -335,17 +398,36 @@ Exit:
 
     public class GUIInventoryWindow : GUIWindow
     {
-        GUIInventory _inventory;
-        public GUIInventoryWindow(bool PlayerInventory = false)
+        public GUIInventory Inventory { get; protected set; }
+        protected GUIInventoryWindow() { }
+        public GUIInventoryWindow(bool PlayerInventory)
         {
-            _winData = GUIUtils.DarkBlue_Window;
+            _winData = GUIUtils.WINDOW_DARKBLUE;
 
-            _inventory = new GUIInventory(PlayerInventory);
-            _inventory.ScaledMoveBy(7, 6);
-            AddControl(_inventory);
+            Inventory = new GUIInventory(PlayerInventory);
+            Inventory.ScaledMoveBy(7, 6);
+            AddControl(Inventory);
 
-            Width = WidthEdges() + _inventory.Width;
-            Height = HeightEdges() + _inventory.Height;
+            Width = WidthEdges() + Inventory.Width;
+            Height = HeightEdges() + Inventory.Height;
+        }
+    }
+
+    public class GUIPlayerGearInventoryWindow : GUIInventoryWindow
+    {
+        public GUIPlayerGearInventoryWindow()
+        {
+            _winData = GUIUtils.WINDOW_DARKBLUE;
+
+            Width = GameManager.ScaleIt(90);
+            Height = GameManager.ScaleIt(74);
+
+            Inventory = new GUIInventory(false, false);
+            Inventory.ScaledMoveBy(7, 6);
+            AddControl(Inventory);
+
+            Width = WidthEdges() + Inventory.Width;
+            Height = HeightEdges() + Inventory.Height;
         }
     }
 }

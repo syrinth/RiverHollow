@@ -23,11 +23,11 @@ namespace RiverHollow.Characters
         public Point Position => BodySprite.Position;
         public void SetPosition(Point value)
         {
-            BodySprite.Position = new Point(value.X - CollisionOffset.X, value.Y - CollisionOffset.Y);
+            GetSprites().ForEach(x => x.Position = new Point(value.X - CollisionOffset.X, value.Y - CollisionOffset.Y));
         }
         public void MovePosition(Point value)
         {
-            BodySprite.Position += value;
+            GetSprites().ForEach(x => x.Position += value);
         }
 
         protected Point Size = new Point(Constants.TILE_SIZE, Constants.TILE_SIZE * 2);

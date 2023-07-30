@@ -750,8 +750,6 @@ namespace RiverHollow.Game_Managers
                         return new Projectile(id, diData);
                     case ActorTypeEnum.Animal:
                         return new Animal(id, diData);
-                    case ActorTypeEnum.ShippingGremlin:
-                        return new ShippingGremlin(id, diData);
                     case ActorTypeEnum.Spirit:
                         return new Spirit(diData);
                     case ActorTypeEnum.TalkingActor:

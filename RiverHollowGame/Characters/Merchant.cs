@@ -36,7 +36,7 @@ namespace RiverHollow.Characters
         {
             var split = Util.FindArguments(GetStringByIDKey("Day"));
 
-            return GameCalendar.CurrentWeek % 2 == int.Parse(split[0]);
+            return GameCalendar.CurrentWeek % 2 == int.Parse(split[1]);
         }
 
         private int[] RequestIDs => DataManager.GetIntParamsByIDKey(ID, "RequestIDs", DataType.Actor);

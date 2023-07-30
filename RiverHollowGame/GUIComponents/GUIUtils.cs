@@ -110,12 +110,20 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle WIN_UPGRADE = new Rectangle(0, 0, 162, 119);
         internal static Rectangle LEVEL_TAB = new Rectangle(48, 192, 44, 16);
 
-        internal static WindowData Brown_Window = new WindowData(0, 240, 5, 5, 6, 6, 4);
-        internal static WindowData DarkBlue_Window = new WindowData(16, 240, 5, 5, 6, 6, 4);
-        internal static WindowData Codex_NPC_Window = new WindowData(32, 240, 5, 5, 6, 6, 4);
-        internal static WindowData GreyWin = new WindowData(48, 240, 2, 2, 2, 2, 12);
-        internal static WindowData DisplayWin = new WindowData(64, 240, 1, 1, 1, 1, 14);
-        internal static WindowData WoodenPanel = new WindowData(80, 240, 3, 3, 3, 3, 10);
+        internal static Rectangle PLAYER_INVENTORY_PANE = new Rectangle(256, 160, 28, 40);
+        internal static Rectangle INVENTORY_ICON_HAT = new Rectangle(208, 144, 16, 16);
+        internal static Rectangle INVENTORY_ICON_SHIRT = new Rectangle(224, 144, 16, 16);
+        internal static Rectangle INVENTORY_ICON_PANTS = new Rectangle(240, 144, 16, 16);
+        internal static Rectangle INVENTORY_ICON_NECK = new Rectangle(208, 160, 16, 16);
+        internal static Rectangle INVENTORY_ICON_RING = new Rectangle(224, 160, 16, 16);
+        internal static Rectangle INVENTORY_ICON_LANTERN = new Rectangle(256, 144, 16, 16);
+
+        internal static WindowData WINDOW_BROWN = new WindowData(0, 240, 5, 5, 6, 6, 4);
+        internal static WindowData WINDOW_DARKBLUE = new WindowData(16, 240, 5, 5, 6, 6, 4);
+        internal static WindowData WINDOW_CODEX_NPC = new WindowData(32, 240, 5, 5, 6, 6, 4);
+        internal static WindowData WINDOW_GREY = new WindowData(48, 240, 2, 2, 2, 2, 12);
+        internal static WindowData WINDOW_DISPLAY = new WindowData(64, 240, 1, 1, 1, 1, 14);
+        internal static WindowData WINDOW_WOODEN_PANEL = new WindowData(80, 240, 3, 3, 3, 3, 10);
 
         public static bool ProcessLeftMouseButton(Point mouse, params GUIObject[] list)
         {

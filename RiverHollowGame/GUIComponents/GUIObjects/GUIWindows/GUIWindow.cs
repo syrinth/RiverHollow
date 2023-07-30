@@ -44,7 +44,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Height = 184;
             Width = RiverHollow.ScreenWidth / 2;
 
-            _winData = GUIUtils.Brown_Window;
+            _winData = GUIUtils.WINDOW_BROWN;
         }
         public GUIWindow(WindowData winData) : this(winData, GameManager.ScaledTileSize, GameManager.ScaledTileSize) { }
 
@@ -95,21 +95,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
         }
 
-        public void SizeUp(params GUIObject[] objects)
+        internal override void DetermineSize(int edge = 0)
         {
-            foreach (GUIObject g in objects)
-            {
-                if (g.DrawRectangle.Right > InnerRectangle().Right)
-                {
-                    Width += g.DrawRectangle.Right - InnerRectangle().Right;
-                }
-
-                if (g.DrawRectangle.Bottom > InnerRectangle().Bottom)
-                {
-                    Height += g.DrawRectangle.Bottom - InnerRectangle().Bottom;
-                }
-                Position(Position());
-            }
+            base.DetermineSize(GameManager.ScaleIt(edge));
+            Width += WidthEdges();
+            Height += HeightEdges();
         }
 
         #region Draw

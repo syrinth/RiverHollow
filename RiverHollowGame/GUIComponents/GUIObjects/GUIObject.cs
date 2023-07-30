@@ -768,7 +768,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             AddParent(obj, rule);
         }
 
-        internal void DetermineSize()
+        internal virtual void DetermineSize(int edge = 0)
         {
             if (Controls.Count > 0)
             {
@@ -784,8 +784,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     if (obj.Right > iRight) { iRight = obj.Right; }
                 }
 
-                Width = iRight - iLeft;
-                Height = iBottom - iTop;
+                Width = iRight - iLeft + edge;
+                Height = iBottom - iTop + edge;
             }
         }
 

@@ -46,7 +46,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 }
             }
             
-            _winMain = SetMainWindow(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(186), GameManager.ScaleIt(152));
+            _winMain = SetMainWindow(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(186), GameManager.ScaleIt(152));
 
             _gBackgroundBox = new GUIImage(GUIUtils.STRUCTURE_BOX);
             _gBackgroundBox.PositionAndMove(_winMain, 59, 12);

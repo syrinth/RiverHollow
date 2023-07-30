@@ -20,7 +20,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public QuantityWindow()
         {
-            _winMain = SetMainWindow(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
+            _winMain = SetMainWindow(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
 
             GUIItemBox box = new GUIItemBox(GameManager.CurrentItem);
             box.Position(_winMain);

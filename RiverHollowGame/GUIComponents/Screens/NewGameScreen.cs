@@ -47,17 +47,17 @@ namespace RiverHollow.GUIComponents.Screens
             //AssignClothes(ref _liHats, Util.FindParams(DataManager.Config[4]["ItemID"]));
             AssignClothes(ref _liShirts, Util.FindParams(DataManager.Config[5]["ItemID"]));
 
-            int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIUtils.DarkBlue_Window.WidthEdges();
+            int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIUtils.WINDOW_DARKBLUE.WidthEdges();
 
             new GUIImage(DataManager.GetTexture(DataManager.GUI_COMPONENTS + @"\Newgame_Background"));
 
             //Create the main window
-            _window = new GUIWindow(GUIUtils.WoodenPanel, 208, 208);
+            _window = new GUIWindow(GUIUtils.WINDOW_WOODEN_PANEL, 208, 208);
             _window.SetScale(ScaledPixel);
             _window.CenterOnScreen();
 
             //Create Player Display Box
-            _displayBox = new PlayerDisplayBox(PlayerManager.PlayerActor);
+            _displayBox = new PlayerDisplayBox(PlayerManager.PlayerActor, GUIUtils.NEW_DISPLAY, new Point(17, 14));
             _displayBox.PositionAndMove(_window, 23, 17);
 
             //Create Turn Buttons
@@ -426,7 +426,7 @@ namespace RiverHollow.GUIComponents.Screens
             Slider _gValue;
 
             OptionLabel _linkedLabel;
-            public ColorPicker() : base(GUIUtils.Brown_Window, ScaleIt(48), ScaleIt(36))
+            public ColorPicker() : base(GUIUtils.WINDOW_BROWN, ScaleIt(48), ScaleIt(36))
             {
                 _gHue = new Slider();
                 _gHue.AnchorToInnerSide(this, SideEnum.Top);

@@ -13,8 +13,10 @@
         public const string PLAYER_HOME_NAME = "mapHouse_Player";
         public const float PLAYER_STARTING_HP = 10;
         public const float PLAYER_STARTING_ENERGY = 80;
-        public const int ENERGY_NAP_RECOVERY = 20;
         public const float PLAYER_STARTING_MAGIC = 20;
+        public const int PLAYER_GEAR_ROWS = 3;
+        public const int PLAYER_GEAR_COLUMNS = 2;
+        public const int ENERGY_NAP_RECOVERY = 20;
 
         public const float PLAYER_INVULN_PERIOD = 1;
         public const float MOB_INVULN_PERIOD = 0.3f;

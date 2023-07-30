@@ -88,7 +88,6 @@
     <Compile Include="Characters\Mobs\Shooter.cs" />
     <Compile Include="Characters\Mobs\Summoner.cs" />
     <Compile Include="Characters\Projectile.cs" />
-    <Compile Include="Characters\ShippingGremlin.cs" />
     <Compile Include="Characters\Traveler.cs" />
     <Compile Include="Game Managers\ErrorManager.cs" />
     <Compile Include="Game Managers\FishingManager.cs" />
@@ -99,6 +98,7 @@
     <Compile Include="GUIComponents\Screens\HUDComponents\HUDMenu.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\ItemDisplayWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\NPCDisplayWindow.cs" />
+    <Compile Include="GUIComponents\Screens\HUDPlayerInventory.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDCodex.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDCraftRecipes.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDCraftStructures.cs" />

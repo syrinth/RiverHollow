@@ -82,7 +82,7 @@ namespace RiverHollow.GUIComponents.MainObjects
             int boxWidth = CONSTRUCTBOX_WIDTH;
             int boxHeight = CONSTRUCTBOX_HEIGHT;
 
-            _window = new GUIWindow(GUIUtils.Brown_Window, boxWidth, boxHeight);
+            _window = new GUIWindow(GUIUtils.WINDOW_BROWN, boxWidth, boxHeight);
             AddControl(_window);
 
             _gName = new GUIText(_objWarpPoint.CurrentMap.Name);

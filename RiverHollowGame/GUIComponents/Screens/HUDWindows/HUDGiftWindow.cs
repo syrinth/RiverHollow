@@ -26,7 +26,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             InventoryManager.InitExtraInventory(_arrToSell);
             InventoryManager.ExtraHoldSingular = true;
 
-            _gVillagerWindow = new GUIWindow(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
+            _gVillagerWindow = new GUIWindow(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
 
             GUIText text = new GUIText(_npc.Name());
             text.AnchorToInnerSide(_gVillagerWindow, SideEnum.Top, 1);

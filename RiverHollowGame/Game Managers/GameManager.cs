@@ -42,8 +42,6 @@ namespace RiverHollow.Game_Managers
 
         public static bool HideMiniInventory = true;
 
-        public static DisplayTypeEnum CurrentInventoryDisplay;
-
         public static GameScreenEnum CurrentScreen;
         #endregion
 

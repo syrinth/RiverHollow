@@ -35,7 +35,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _liRequiredItems = new List<GUIItemBox>();
             _liCraftingRecipes = PlayerManager.GetCraftingList().FindAll(x => !((Buildable)DataManager.CreateWorldObjectByID(x)).Unique);
 
-            _winMain = SetMainWindow(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(186), GameManager.ScaleIt(134));
+            _winMain = SetMainWindow(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(186), GameManager.ScaleIt(134));
             _gSelection = new GUIImage(GUIUtils.SELECT_CORNER);
             _gSelection.Show(false);
 

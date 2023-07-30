@@ -18,7 +18,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public delegate void DelegateRetrieveValues(ref float curr, ref float max);
         DelegateRetrieveValues _delAction;
 
-        public GUIOldStatDisplay(DelegateRetrieveValues del, Color c, int width = 200) : base(GUIUtils.DisplayWin, width, GameManager.ScaledTileSize/2)
+        public GUIOldStatDisplay(DelegateRetrieveValues del, Color c, int width = 200) : base(GUIUtils.WINDOW_DISPLAY, width, GameManager.ScaledTileSize/2)
         {
             HoverControls = false;
 

@@ -81,7 +81,7 @@ namespace RiverHollow.GUIComponents.Screens
                 //Creates the Individual Save Tiles on the load screen.
                 Data = data;
                 _iId = id;
-                _winData = GUIUtils.Brown_Window;
+                _winData = GUIUtils.WINDOW_BROWN;
 
                 _gName = new GUIText(data.playerData.name);
                 Vector2 stringsize = _gName.MeasureString("XXXXXXXXXXX XXXXXXXXXXXXXX");

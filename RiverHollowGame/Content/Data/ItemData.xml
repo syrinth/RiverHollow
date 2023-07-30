@@ -503,7 +503,7 @@
     </Item>
     <Item>
       <Key>125</Key>
-      <Value>[Type:Clothing][Subtype:Hat][Image:0-3][Value:1000][ESub:Cloth][ASlot:Head][Tier:1][Defence:Minor][Magic:Major][Resistance:Major][Vitality:Minor]</Value>
+      <Value>[Type:Clothing][Subtype:Hat][Image:1-0]</Value>
     </Item>
     <Item>
       <Key>126</Key>
@@ -683,11 +683,11 @@
     </Item>
     <Item>
       <Key>170</Key>
-      <Value>[Type:Clothing][Subtype:Chest][Image:0-0][ReqItems:2-10/0-5][Key:Blue_Tunic][Row:1]</Value>
+      <Value>[Type:Clothing][Subtype:Shirt][Image:0-0][ReqItems:2-10/0-5][Key:Blue_Tunic][Row:1]</Value>
     </Item>
     <Item>
       <Key>171</Key>
-      <Value>[Type:Clothing][Subtype:Chest][Image:7-0][ReqItems:2-10/0-5][TexName:400][Key:Blue_Tunic]</Value>
+      <Value>[Type:Clothing][Subtype:Shirt][Image:0-0]</Value>
     </Item>
     <Item>
       <Key>172</Key>

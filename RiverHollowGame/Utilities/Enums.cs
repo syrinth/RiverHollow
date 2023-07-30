@@ -5,7 +5,7 @@
         public enum ButtonEnum { Left, Right, Middle };
         public enum DataType { Actor, Job, Item, Light, Monster, StatusEffect, Task, WorldObject, Upgrade };
         public enum BuildTypeEnum { Structure, WorldObject };
-        public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, ShipGoods, Buy, Sell, Propose, Date, EndDay, GoToNight, Option_0, Option_1, Option_2, Option_3 };
+        public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, Buy, Sell, Propose, Date, EndDay, GoToNight, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Bed };
         public enum TextEntryTriggerEnum { None, UseItem, ConfirmPurchase, Donate, PetFollow, PetUnfollow, GetBaby }
 
@@ -19,7 +19,7 @@
         public enum HazardTypeEnum { Passive, Timed, Triggered };
 
         public enum GameScreenEnum { Info, World };
-        public enum DisplayTypeEnum { Inventory, Ship };
+        public enum DisplayTypeEnum { Inventory, PlayerInventory };
         public enum ItemBoxDraw { Always, Never, OnlyStacks };
         public enum CodexPageEnum { Villagers, Merchants, Travelers, Mobs, Items };
 
@@ -40,8 +40,7 @@
         public enum ItemEnum { Resource, Blueprint, Buildable, Clothing, Consumable, Food, MonsterFood, NPCToken, Seed, Special, Tool };
         public enum FoodTypeEnum { Dessert, Fancy, Healthy, Plain, Seafood };
         public enum ToolEnum { None, Axe, Backpack, CapeOfBlinking, FishingRod, Harp, Lantern, Pick, Return, Scythe, Hoe, StaffOfIce, Sword, WateringCan };
-        public enum GearTypeEnum { None, Accessory, Chest, Head, Weapon };
-        public enum ClothingEnum { None, Shirt, Pants, Hat };
+        public enum EquipmentEnum { None, Hat, Shirt, Pants, Neck, Ring };
         public enum NPCTokenTypeEnum { Mount, Pet };
         public enum CraftFilterEnum { All };
 
@@ -49,7 +48,7 @@
         public enum ActorCollisionState { Block, Slow, PassThrough };
         public enum WeightEnum { Light, Medium, Heavy, Immovable};
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
-        public enum ActorTypeEnum { Animal, Child, Critter, Effect, Merchant, Mob, Mount, Pet, Projectile, ShippingGremlin, Spirit, TalkingActor, Traveler, Villager };
+        public enum ActorTypeEnum { Animal, Child, Critter, Effect, Merchant, Mob, Mount, Pet, Projectile, Spirit, TalkingActor, Traveler, Villager };
         public enum MobTypeEnum { Basic, Mage, Shooter, Summoner };
         public enum TravelerGroupEnum { None, Adventurer, Dwarf, Goblin, Human, Noble};
         public enum PlayerColorEnum { None, yes, Hair, Skin };

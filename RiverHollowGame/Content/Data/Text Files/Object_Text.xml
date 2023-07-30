@@ -476,7 +476,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Shop_7</Key>
-      <Value>[Name:Erron's Shopt]</Value>
+      <Value>[Name:Erron's Shop]</Value>
     </Item>
     <Item>
       <Key>Shop_8</Key>
@@ -1004,7 +1004,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_125</Key>
-      <Value>[Name:Cloth Hat][Description:A floppy brimmed hat]</Value>
+      <Value>[Name:Red Hat][Description:A floppy brimmed hat]</Value>
     </Item>
     <Item>
       <Key>Item_126</Key>

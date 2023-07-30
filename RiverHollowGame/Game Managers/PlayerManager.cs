@@ -821,6 +821,32 @@ namespace RiverHollow.Game_Managers
 
         #endregion
 
+        #region Gear Management
+        public static bool GetGearSlot(EquipmentEnum e, ref Point p)
+        {
+            switch (e)
+            {
+                case EquipmentEnum.Hat:
+                    p = new Point(0, 0);
+                    return true;
+                case EquipmentEnum.Shirt:
+                    p = new Point(1, 0);
+                    return true;
+                case EquipmentEnum.Pants:
+                    p = new Point(2, 0);
+                    return true;
+                case EquipmentEnum.Neck:
+                    p = new Point(0, 1);
+                    return true;
+                case EquipmentEnum.Ring:
+                    p = new Point(0, 2);
+                    return true;
+            }
+
+            return false;
+        }
+        #endregion
+
         public static void AddChild(Child actor) { Children.Add(actor); }
         public static void AddPet(Pet actor) { _liPets.Add(actor); }
         public static void AddMount(Mount actor) { _liMounts.Add(actor); }

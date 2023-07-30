@@ -544,7 +544,7 @@ namespace Database_Editor
             switch (itemType)
             {
                 case ItemEnum.Clothing:
-                    SubtypeHelper<ClothingEnum>();
+                    SubtypeHelper<EquipmentEnum>();
                     break;
                 case ItemEnum.Consumable:
                     cbItemSubtype.Visible = true;

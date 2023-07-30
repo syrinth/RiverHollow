@@ -27,7 +27,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         GUIImage _gSelected;
 
-        public HUDMiniInventory() : base(GUIUtils.DarkBlue_Window, GameManager.ScaleIt(221), GameManager.ScaleIt(30))
+        public HUDMiniInventory() : base(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(221), GameManager.ScaleIt(30))
         {
             HoverControls = false;
 

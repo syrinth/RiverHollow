@@ -1507,7 +1507,6 @@ namespace RiverHollow.Map_Handling
                         switch (c.ActorType)
                         {
                             case ActorTypeEnum.Merchant:
-                            case ActorTypeEnum.ShippingGremlin:
                             case ActorTypeEnum.Spirit:
                             case ActorTypeEnum.TalkingActor:
                             case ActorTypeEnum.Traveler:

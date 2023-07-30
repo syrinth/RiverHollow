@@ -120,18 +120,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         }
         public void BtnInventory()
         {
-            Item[,] toolBox = new Item[1, 2];
-            //toolBox[0, 0] = PlayerManager.RetrieveTool(ToolEnum.Axe);
-            //toolBox[0, 1] = PlayerManager.RetrieveTool(ToolEnum.Pick);
-            //toolBox[0, 2] = PlayerManager.RetrieveTool(ToolEnum.WateringCan);
-            //toolBox[0, 3] = PlayerManager.RetrieveTool(ToolEnum.Scythe);
-            
-            //toolBox[0, 5] = PlayerManager.RetrieveTool(ToolEnum.Harp);
-            toolBox[0, 0] = PlayerManager.RetrieveTool(ToolEnum.Backpack);
-            toolBox[0, 1] = PlayerManager.RetrieveTool(ToolEnum.Lantern);
-
-            var _gMenuObject = new HUDInventoryDisplay(toolBox, DisplayTypeEnum.Inventory, true);
-            //_gMenuObject = new HUDInventoryDisplay();
+            var _gMenuObject = new HUDPlayerInventory();
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
         }

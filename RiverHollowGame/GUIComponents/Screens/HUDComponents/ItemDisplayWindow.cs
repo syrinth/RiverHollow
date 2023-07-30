@@ -34,7 +34,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
 
         protected override void BeginHover()
         {
-            var infoWindow = new GUIWindow(GUIUtils.WoodenPanel);
+            var infoWindow = new GUIWindow(GUIUtils.WINDOW_WOODEN_PANEL);
 
             string strText = Found ? DataManager.GetTextData(ID, "Name", DataType.Item) : "???";
             GUIText text = new GUIText(strText);

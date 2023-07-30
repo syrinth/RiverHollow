@@ -283,12 +283,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             GameManager.SetSelectedItem(null);
                             break;
                     }
-
-                    //Just pop this here for now
-                    if (npc != null && npc.IsActorType(ActorTypeEnum.ShippingGremlin))
-                    {
-                        npc.PlayAnimation(AnimationEnum.Action2);
-                    }
                     break;
                 case TextEntryVerbEnum.Party:
                     nextText = npc?.JoinParty();
@@ -302,9 +296,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         nextText = npc.GetDialogEntry("MarriageYes");
                     }
                     else { nextText = npc?.GetDialogEntry("MarriageNo"); }
-                    break;
-                case TextEntryVerbEnum.ShipGoods:
-                    ((ShippingGremlin)GameManager.CurrentNPC).OpenShipping();
                     break;
                 case TextEntryVerbEnum.Sell:
                     npc?.OpenMerchantWindow();

@@ -28,6 +28,8 @@ namespace RiverHollow.Characters
         public bool CanBecomePregnant { get; set; }
         public bool Pregnant { get; set; }
 
+        public Item[,] PlayerGear;
+
         public override List<AnimatedSprite> GetSprites()
         {
             List<AnimatedSprite> liRv = new List<AnimatedSprite>() { BodySprite, _sprEyes, _sprHair, Chest?.Sprite, Hat?.Sprite, Legs?.Sprite };
@@ -62,11 +64,12 @@ namespace RiverHollow.Characters
 
             CurrentHP = MaxHP;
 
+            PlayerGear = new Item[Constants.PLAYER_GEAR_ROWS, Constants.PLAYER_GEAR_COLUMNS];
             _liTilePath = new List<RHTile>();
 
             // SetClothes((Clothes)DataManager.GetItem(int.Parse(DataManager.Config[6]["ItemID"])));
 
-            BodySprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, BodyTypeStr));
+            BodySprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, "03"));// BodyTypeStr));
 
             //Hair type has already been set either by default or by being allocated.
             SetHairType(HairIndex);
@@ -111,8 +114,8 @@ namespace RiverHollow.Characters
                 }
             }
 
-            //_sprEyes.Draw(spriteBatch, useLayerDepth);
-            //_sprHair.Draw(spriteBatch, useLayerDepth);
+            _sprEyes.Draw(spriteBatch, useLayerDepth);
+            _sprHair.Draw(spriteBatch, useLayerDepth);
 
             //Chest?.Sprite.Draw(spriteBatch, useLayerDepth);
             //Hat?.Sprite.Draw(spriteBatch, useLayerDepth);
@@ -211,10 +214,10 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void RemoveClothes(ClothingEnum c)
+        public void RemoveClothes(EquipmentEnum c)
         {
-            if (c.Equals(ClothingEnum.Shirt)) { Chest = null; }
-            else if (c.Equals(ClothingEnum.Hat))
+            if (c.Equals(EquipmentEnum.Shirt)) { Chest = null; }
+            else if (c.Equals(EquipmentEnum.Hat))
             {
                 _sprHair.FrameCutoff = 0;
                 Hat = null;

@@ -11,20 +11,20 @@ namespace RiverHollow.Items
     {
         public AnimatedSprite Sprite;
 
-        public ClothingEnum ClothingType => GetEnumByIDKey<ClothingEnum>("Subtype");
+        public EquipmentEnum ClothingType => GetEnumByIDKey<EquipmentEnum>("Subtype");
         public bool GenderNeutral => GetBoolByIDKey("Neutral");
 
         public Clothing(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
         {
             switch (ClothingType)
             {
-                case ClothingEnum.Hat:
+                case EquipmentEnum.Hat:
                     _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Hats");
                     break;
-                case ClothingEnum.Shirt:
+                case EquipmentEnum.Shirt:
                     _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Shirts");
                     break;
-                case ClothingEnum.Pants:
+                case EquipmentEnum.Pants:
                     _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Pants");
                     break;
             }           
@@ -35,6 +35,6 @@ namespace RiverHollow.Items
             Sprite.Position = p;
         }
 
-        public bool SlotMatch(ClothingEnum type) { return ClothingType == type; }
+        public bool SlotMatch(EquipmentEnum type) { return ClothingType == type; }
     }
 }

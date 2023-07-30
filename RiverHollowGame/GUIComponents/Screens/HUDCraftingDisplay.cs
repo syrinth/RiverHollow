@@ -64,7 +64,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             int recipeNumber = Math.Min(recipes.Count, Constants.MAX_RECIPE_DISPLAY);
             _arrRecipes = new GUIItemBox[recipeNumber];
-            _winMain = new GUIWindow(GUIUtils.Brown_Window, GameManager.ScaledTileSize, GameManager.ScaledTileSize);
+            _winMain = new GUIWindow(GUIUtils.WINDOW_BROWN, GameManager.ScaledTileSize, GameManager.ScaledTileSize);
 
             for (int i = 0; i < recipeNumber; i++)
             {
@@ -116,7 +116,7 @@ namespace RiverHollow.GUIComponents.Screens
             AddControl(_gComponents);
 
             // Making Window
-            _winMaking = new GUIWindow(GUIUtils.Brown_Window, GameManager.ScaledTileSize, GameManager.ScaledTileSize);
+            _winMaking = new GUIWindow(GUIUtils.WINDOW_BROWN, GameManager.ScaledTileSize, GameManager.ScaledTileSize);
             _arrMaking = new GUIItemBox[_objMachine.Capacity];
             for (int i = 0; i < _objMachine.Capacity; i++)
             {
@@ -150,7 +150,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (_objMachine.GetBoolByIDKey("Kitchen"))
             {
                 InventoryManager.InitExtraInventory(TownManager.Inventory);
-                _gInventory = new GUIInventoryWindow();
+                _gInventory = new GUIInventoryWindow(false);
                 _gInventory.AnchorAndAlignWithSpacing(_gComponents, SideEnum.Bottom, SideEnum.CenterX, 2, GUIUtils.ParentRuleEnum.ForceToParent);
             }
 

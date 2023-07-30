@@ -13,7 +13,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         public bool Found { get; private set; }
         const float FADE = 0.8f;
 
-        public NPCDisplayWindow(Actor npc) : base(GUIUtils.Codex_NPC_Window, GameManager.ScaleIt(32), GameManager.ScaleIt(44))
+        public NPCDisplayWindow(Actor npc) : base(GUIUtils.WINDOW_CODEX_NPC, GameManager.ScaleIt(32), GameManager.ScaleIt(44))
         {
             HoverControls = false;
 
@@ -85,10 +85,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             }
         }
 
-
         protected override void BeginHover()
         {
-            var infoWindow = new GUIWindow(GUIUtils.WoodenPanel);
+            var infoWindow = new GUIWindow(GUIUtils.WINDOW_WOODEN_PANEL);
 
             string strText = Found ? DataManager.GetTextData(ID, "Name", DataType.Actor) : "???";
             GUIText text = new GUIText(strText);

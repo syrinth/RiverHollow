@@ -129,7 +129,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _gSelector.CenterOnObject(obj);
 
-            var window = new GUIWindow(GUIUtils.Brown_Window);
+            var window = new GUIWindow(GUIUtils.WINDOW_BROWN);
             GUIText text = new GUIText(obj.MapInfo.MapName + " - " + obj.MapInfo.Time + " minutes");
             text.AnchorToInnerSide(window, GUIObject.SideEnum.TopLeft);
             window.Resize();

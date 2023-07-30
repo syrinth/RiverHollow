@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
+using RiverHollow.Utilities;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects
@@ -10,6 +12,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
     {
         public Item BoxItem => _guiItem?.ItemObject;
         GUIItem _guiItem;
+        GUIImage _imgIcon;
+        public EquipmentEnum EquipmentType { get; private set; } = EquipmentEnum.None;
 
         public int ColumnID { get; }
         public int RowID { get; }
@@ -39,6 +43,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _guiItem?.Update(gTime);
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+            if (_imgIcon != null) {
+                _imgIcon.Show(BoxItem == null);
+                _imgIcon.Draw(spriteBatch);
+            }
+        }
+
         protected override void BeginHover()
         {
             if (BoxItem != null)
@@ -48,6 +61,36 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 else { win.AnchorToScreen(SideEnum.BottomRight); }
                 GUIManager.OpenHoverObject(win, DrawRectangle, true);
             }
+        }
+
+        public void SetEquipmentType(EquipmentEnum e)
+        {
+            EquipmentType = e;
+            Rectangle icon = Rectangle.Empty;
+            switch (EquipmentType)
+            {
+                case EquipmentEnum.Hat:
+                    icon = GUIUtils.INVENTORY_ICON_HAT;
+                    break;
+                case EquipmentEnum.Shirt:
+                    icon = GUIUtils.INVENTORY_ICON_SHIRT;
+                    break;
+                case EquipmentEnum.Pants:
+                    icon = GUIUtils.INVENTORY_ICON_PANTS;
+                    break;
+                case EquipmentEnum.Neck:
+                    icon = GUIUtils.INVENTORY_ICON_NECK;
+                    break;
+                case EquipmentEnum.Ring:
+                    icon = GUIUtils.INVENTORY_ICON_RING;
+                    break;
+                default:
+                    icon = Rectangle.Empty;
+                    break;
+            }
+
+            _imgIcon = new GUIImage(icon);
+            _imgIcon.CenterOnObject(this, GUIUtils.ParentRuleEnum.ForceToObject);
         }
 
         public void SetItem(Item it, ItemBoxDraw e = ItemBoxDraw.OnlyStacks)
@@ -88,38 +131,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public void SetItemAlpha(float val)
         {
             _guiItem?.Alpha(val);
-        }
-
-        public class SpecializedBox : GUIItemBox
-        {
-            public ItemEnum ItemType { get; }
-            public ClothingEnum ClothingType { get; }
-
-            public delegate void OpenItemWindow(SpecializedBox itemBox);
-            private OpenItemWindow _delOpenItemWindow;
-
-            public SpecializedBox(ItemEnum itemType, Item item = null, OpenItemWindow del = null)
-            {
-                SetItem(item);
-                ItemType = itemType;
-                _delOpenItemWindow = del;
-            }
-
-            public SpecializedBox(ClothingEnum clothesType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Clothing, item, del)
-            {
-                ClothingType = clothesType;
-            }
-
-            public override bool ProcessLeftButtonClick(Point mouse)
-            {
-                bool rv = false;
-
-                if (Contains(mouse))
-                {
-                    _delOpenItemWindow(this);
-                }
-                return rv;
-            }
         }
     }
 
