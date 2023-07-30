@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[ItemID:172]</Value>
+      <Value>[ItemID:172/176]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -39,7 +39,7 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[ItemID:176/177][Shopkeeper:37]</Value>
+      <Value>[ItemID:176][Shopkeeper:37]</Value>
     </Item>
     <Item>
       <Key>10</Key>

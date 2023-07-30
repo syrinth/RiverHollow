@@ -243,43 +243,6 @@ namespace RiverHollow.Characters
             return HasHP && !HasKnockbackVelocity();
         }
 
-        public Vector2 GetPlayerDirection()
-        {
-            return (PlayerManager.PlayerActor.CollisionBoxLocation - CollisionBoxLocation).ToVector2();
-        }
-        public Vector2 GetPlayerDirectionNormal()
-        {
-            Vector2 rv = (PlayerManager.PlayerActor.CollisionBoxLocation - CollisionBoxLocation).ToVector2();
-            if (rv != Vector2.Zero)
-            {
-                rv.Normalize();
-            }
-
-            return rv;
-        }
-
-        protected override void ProcessStateEnum(GameTime gTime, bool getInRange)
-        {
-            if (Wandering && _damageTimer == null)
-            {
-                switch (_eCurrentState)
-                {
-                    case NPCStateEnum.Alert:
-                        Alert();
-                        break;
-                    case NPCStateEnum.Idle:
-                        Idle(gTime);
-                        break;
-                    case NPCStateEnum.Wander:
-                        Wander(gTime);
-                        break;
-                    case NPCStateEnum.TrackPlayer:
-                        TrackPlayer(getInRange);
-                        break;
-                }
-            }
-        }
-
         public override void DetermineAnimationState(Vector2 direction)
         {
             if (!HasHP)

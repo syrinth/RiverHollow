@@ -12,7 +12,7 @@ namespace RiverHollow.Misc
         public float FrameSpeed { get; private set; }
         public bool Directional { get; }
         public bool PingPong { get; private set; }
-        public bool PlayOnce { get; private set; } = false;
+        public bool PlayOnce { get; set; } = false;
         public bool BackToIdle { get; private set; }
         public VerbEnum Verb { get; }
         public AnimationEnum Animation { get; }

@@ -15,7 +15,7 @@ namespace RiverHollow.Items
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Tokens");
         }
 
-        public override bool AddToInventoryTrigger()
+        public override bool ItemBeingUsed()
         {
             if (TokenType == NPCTokenTypeEnum.Mount)
             {
@@ -33,6 +33,8 @@ namespace RiverHollow.Items
                     PlayerManager.PlayerActor.SetPet(act);
                 }
             }
+
+            Remove(1);
 
             return true;
         }

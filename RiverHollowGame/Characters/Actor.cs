@@ -184,7 +184,7 @@ namespace RiverHollow.Characters
                 }
                 else
                 {
-                    sprite.AddAnimation(data.Animation, data.XLocation, data.YLocation, Width, Height, data.Frames, data.FrameSpeed, data.PingPong, data.Animation == AnimationEnum.KO);
+                    sprite.AddAnimation(data.Animation, data.XLocation, data.YLocation, Width, Height, data.Frames, data.FrameSpeed, data.PingPong, data.PlayOnce);
                 }
             }
 
@@ -356,7 +356,10 @@ namespace RiverHollow.Characters
             switch (state)
             {
                 case NPCStateEnum.Alert:
-                    PlayAnimation(AnimationEnum.Alert);
+                    if (!BodySprite.IsCurrentAnimation(AnimationEnum.Alert))
+                    {
+                        PlayAnimation(AnimationEnum.Alert);
+                    }
                     break;
                 case NPCStateEnum.Idle:
                     PlayAnimation(VerbEnum.Idle);
@@ -554,7 +557,7 @@ namespace RiverHollow.Characters
                         Wander(gTime);
                         break;
                     case NPCStateEnum.TrackPlayer:
-                        TrackPlayer(getInRange);
+                        TrackPlayer();
                         break;
                     case NPCStateEnum.Leashing:
                         TravelManager.RequestPathing(this);
@@ -584,7 +587,35 @@ namespace RiverHollow.Characters
             }
         }
 
-        protected void TrackPlayer(bool getInRange)
+        public Vector2 GetPlayerDirection()
+        {
+            return (PlayerManager.PlayerActor.CollisionBoxLocation - CollisionBoxLocation).ToVector2();
+        }
+        public Vector2 GetPlayerDirectionNormal()
+        {
+            Vector2 rv = (PlayerManager.PlayerActor.CollisionBoxLocation - CollisionBoxLocation).ToVector2();
+            if (rv != Vector2.Zero)
+            {
+                rv.Normalize();
+            }
+
+            return rv;
+        }
+
+        protected void MoveTowardsPlayer()
+        {
+            Vector2 mod = GetPlayerDirection() * 0.015f;
+            mod.Normalize();
+            mod *= _fBaseSpeed;
+
+            bool impeded = false;
+            if (CurrentMap.CheckForCollisions(this, ref mod, ref impeded))
+            {
+                MoveActor(mod);
+            }
+            PlayAnimation(VerbEnum.Walk);
+        }
+        protected void TrackPlayer()
         {
             if (_liTilePath.Find(x => x.Contains(PlayerManager.PlayerActor)) == null)
             {
