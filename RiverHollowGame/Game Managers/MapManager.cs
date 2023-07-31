@@ -185,6 +185,7 @@ namespace RiverHollow.Game_Managers
                 PopulateHomeMapHelper(ref possibleTiles, rockID, 50);
                 PopulateHomeMapHelper(ref possibleTiles, treeID, 50);
                 PopulateHomeMapHelper(ref possibleTiles, weedID, 200);
+                PopulateHomeMapHelper(ref possibleTiles, 103, (int)(possibleTiles.Count * 0.4));
             }
         }
         private static void PopulateHomeMapHelper(ref List<RHTile> possibleTiles, int ID, int numToPlace)
@@ -198,7 +199,7 @@ namespace RiverHollow.Game_Managers
                 if (obj.CompareType(ObjectTypeEnum.Plant))
                 {
                     var p = (Plant)obj;
-                    if (i <= numToPlace * 0.5) { p.FinishGrowth(); }
+                    if (i <= numToPlace * 0.2) { p.FinishGrowth(); }
                     else { p.RandomizeState(); }
                 }
 

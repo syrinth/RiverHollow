@@ -12,6 +12,7 @@ using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.GUIComponents;
 using System;
+using RiverHollow.WorldObjects;
 
 namespace RiverHollow.Characters
 {
@@ -381,6 +382,13 @@ namespace RiverHollow.Characters
         }
         public void MoveActor(Vector2 v, bool faceDir = true)
         {
+            var tile = CurrentMap.GetTileByPixelPosition(CollisionCenter);
+            if (!IgnoreCollisions && tile.CollisionBox.Intersects(CollisionBox) && tile.WorldObject != null && tile.WorldObject.CompareType(ObjectTypeEnum.Plant))
+            {
+                Plant obj = (Plant)tile.WorldObject;
+                obj.InitiatePlantShake();
+            }
+
             MovePosition(_vbMovement.AddMovement(v));
             if (faceDir)
             {

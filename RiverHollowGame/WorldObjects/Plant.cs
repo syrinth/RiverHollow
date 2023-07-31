@@ -68,20 +68,19 @@ namespace RiverHollow.WorldObjects
                     Sprite.TrimBy(GetIntByIDKey("SpriteOffset", 0));
                 }
 
+                if (GetBoolByIDKey("FakeHeight"))
+                {
+                    Sprite.FakeHeight = GetIntByIDKey("FakeHeight", 0);
+                }
+
                 SetSpritePos(MapPosition);
             }
         }
 
         public override void Update(GameTime gTime)
         {
-            if (!_bShaking && !_bDrawUnder && _bWalkable && PlayerManager.MovedLastFrame && CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
-            {
-                _bShaking = true;
-            }
-
             if (_bShaking)
             {
-
                 if (dir == DirectionEnum.Right) { _fCurrentRotation += ROTATION_MOD; }
                 else if (dir == DirectionEnum.Left) { _fCurrentRotation -= ROTATION_MOD; }
 
@@ -163,7 +162,7 @@ namespace RiverHollow.WorldObjects
         {
             _bShaken = false;
 
-            if (NeedsWatering && Tiles[0].Watered)
+            if (!NeedsWatering ||Tiles[0].Watered)
             {
 
                 if (_iDaysToNextState > 0) //Decrement the number of days until the next phase
@@ -187,6 +186,14 @@ namespace RiverHollow.WorldObjects
                         }
                     }
                 }
+            }
+        }
+
+        public void InitiatePlantShake()
+        {
+            if (!_bShaking && !_bDrawUnder && _bWalkable)
+            {
+                _bShaking = true;
             }
         }
 
@@ -218,6 +225,10 @@ namespace RiverHollow.WorldObjects
                 _bDrawUnder = GetStringParamsByIDKey("DrawUnder", "0")[CurrentState] == "T";
                 _pSize = Util.ParsePoint(GetStringParamsByIDKey("Size")[CurrentState]);
                 _rBase = Util.ParseRectangle(GetStringParamsByIDKey("Base")[CurrentState]);
+                if (GetBoolByIDKey("BaseOffset"))
+                {
+                    _pSpriteOffset = Util.ParsePoint(GetStringParamsByIDKey("BaseOffset")[CurrentState]);
+                }
 
                 if (CurrentState < MaxStates - 1) { _iDaysToNextState = int.Parse(GetStringParamsByIDKey("Time", "F")[CurrentState]); }
                 else { _iDaysToNextState = - 1; }
@@ -289,7 +300,11 @@ namespace RiverHollow.WorldObjects
 
         public override bool WideOnTop()
         {
-            if (MaxStates > 1)
+            if(_pSpriteOffset != Point.Zero)
+            {
+                return false;
+            }
+            else if (MaxStates > 1)
             {
                 var param = GetStringParamsByIDKey("Size");
                 var endSize = Util.ParsePoint(param[MaxStates - 1]);

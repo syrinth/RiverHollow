@@ -12,7 +12,8 @@ namespace RiverHollow.SpriteAnimations
     {
         #region Properties
         AnimatedSprite _sprLinkedSprite;
-        public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth - 0.1f) : (Position.Y + Height) - (Height / 1000f) + (UseXPosition ? (Position.X / 500f): 0);
+        public int FakeHeight = 0;
+        public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth - 0.1f) : (Position.Y + LayerHeight) - (LayerHeight / 1000f) + (UseXPosition ? (Position.X / 500f): 0);
 
         readonly Texture2D _texture;                         // The texture that holds the images for this sprite
         public Color SpriteColor { get; private set; } = Color.White;
@@ -25,6 +26,7 @@ namespace RiverHollow.SpriteAnimations
         public Rectangle SpriteRectangle => new Rectangle(Position, new Point(Width, Height));
         public int Width => CurrentFrameAnimation.FrameWidth * _iScale;
         public int Height => CurrentFrameAnimation.FrameHeight * _iScale;
+        private int LayerHeight => Height - FakeHeight;
 
         int _iScale = 1;
         public int FrameCutoff { get; set; }

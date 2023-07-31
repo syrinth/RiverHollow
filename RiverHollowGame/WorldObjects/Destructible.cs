@@ -59,7 +59,7 @@ namespace RiverHollow.WorldObjects
             base.Update(gTime);
 
             //Destructibles move when hit, so reset position
-            Sprite.Position = MapPosition;
+            SetSpritePos(MapPosition);
             if (HP <= 0)
             {
                 if (!Sprite.ContainsAnimation(AnimationEnum.KO) || Sprite.AnimationFinished(AnimationEnum.KO))
@@ -136,8 +136,14 @@ namespace RiverHollow.WorldObjects
             var dropList = new List<Tuple<int, int>>();
             for (int i = 0; i < strParams.Length; i++)
             {
+                int number = 0;
                 string[] split = Util.FindArguments(strParams[i]);
-                var tup = new Tuple<int, int>(int.Parse(split[0]), split.Length > 1 ? int.Parse(split[1]) : 1);
+
+                if (split.Length == 1) { number = 1; }
+                else if (split.Length == 2) { number = int.Parse(split[1]); }
+                else if (split.Length == 3) { number = RHRandom.Instance().Next(int.Parse(split[1]), int.Parse(split[2])); }
+
+                var tup = new Tuple<int, int>(int.Parse(split[0]), number);
                 dropList.Add(tup);
             }
 

@@ -60,6 +60,7 @@ namespace RiverHollow.WorldObjects
         public IList<LightInfo> Lights => _liLights.AsReadOnly();
 
         protected Rectangle _rBase = new Rectangle(0, 0, 1, 1);
+        protected Point _pSpriteOffset = new Point(0,0);
 
         //The ClickBox is always the Sprite itself
         public Rectangle ClickBox => new Rectangle(MapPosition, _pSize);
@@ -342,7 +343,7 @@ namespace RiverHollow.WorldObjects
         {
             if (Sprite != null)
             {
-                Sprite.Position = position;
+                Sprite.Position = position - _pSpriteOffset;
             }
         }
 
