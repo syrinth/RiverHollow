@@ -44,7 +44,7 @@ namespace RiverHollow.GUIComponents.Screens
             toolbox[0].PositionAndMove(toolboxWindow, new Point(7, 6));
 
             toolbox[1] = new GUIItemBox(PlayerManager.RetrieveTool(ToolEnum.Lantern));
-            toolbox[1].AnchorAndAlignWithSpacing(toolbox[0], SideEnum.Right, SideEnum.Bottom, 2);
+            toolbox[1].AnchorAndAlignWithSpacing(toolbox[0], SideEnum.Right, SideEnum.Bottom, 2, GUIUtils.ParentRuleEnum.ForceToParent);
             toolboxWindow.DetermineSize(2);
             toolboxWindow.AnchorAndAlignWithSpacing(_playerInventory, SideEnum.Top, SideEnum.Right, 2, GUIUtils.ParentRuleEnum.ForceToParent);
 

@@ -139,9 +139,10 @@ namespace RiverHollow.WorldObjects
             }
             else
             {
-                if (MaxStates == 1 || CurrentState > 0)
+                if (!Walkable)
                 {
                     _bNudge = true;
+                    _bShaken = true;
                 }
 
                 if (!_bShaken && FinishedGrowing() && HP > 0 && GetBoolByIDKey("SeedID") && RHRandom.Instance().RollPercent(30))
@@ -149,7 +150,6 @@ namespace RiverHollow.WorldObjects
                     rv = true;
                     MapManager.DropItemOnMap(DataManager.GetItem(GetIntByIDKey("SeedID")), CollisionBox.Location);
                 }
-                _bShaken = true;
             }
 
             return rv;
