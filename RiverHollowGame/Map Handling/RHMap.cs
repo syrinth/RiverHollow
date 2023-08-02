@@ -64,7 +64,6 @@ namespace RiverHollow.Map_Handling
         public Dictionary<string, List<TiledMapTileLayer>> Layers => _diTileLayers;
 
         private List<Light> _liLights;
-        private List<Light> _liHeldLights;
         private List<RHTile> _liTestTiles;
         private List<Actor> _liActors;
         protected List<Mob> _liMobs;
@@ -103,7 +102,6 @@ namespace RiverHollow.Map_Handling
 
             _liPlacedWorldObjects = new List<WorldObject>();
             _liLights = new List<Light>();
-            _liHeldLights = new List<Light>();
             _liCutscenes = new List<int>();
 
             DictionaryTravelPoints = new Dictionary<string, TravelPoint>();
@@ -136,7 +134,6 @@ namespace RiverHollow.Map_Handling
             }
             _liPlacedWorldObjects = map._liPlacedWorldObjects;
             _liLights = map._liLights;
-            _liHeldLights = map._liHeldLights;
             _iShopID = map._iShopID;
 
             MapWidthTiles = _map.Width;
@@ -398,18 +395,9 @@ namespace RiverHollow.Map_Handling
         public void DrawLights(SpriteBatch spriteBatch)
         {
             foreach (Light obj in _liLights) { obj.Draw(spriteBatch); }
-            foreach (Light obj in _liHeldLights) { obj.Draw(spriteBatch); }
 
             //spriteBatch.Draw(lightMask, new Vector2(PlayerManager.World.CollisionCenter.X - lightMask.Width / 2, PlayerManager.World.CollisionBox.Y - lightMask.Height / 2), Color.White);
         }
-        public void AddHeldLights(List<Light> newLights)
-        {
-            if (newLights != null)
-            {
-                _liHeldLights.AddRange(newLights);
-            }
-        }
-        public void ClearHeldLights() { _liHeldLights.Clear(); }
         public void AddLights(List<Light> newLights)
         {
             if (newLights != null)
@@ -1674,7 +1662,6 @@ namespace RiverHollow.Map_Handling
                 if (dummyItem == null || !InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
                 {
                     GameManager.EmptyHeldObject();
-                    ClearHeldLights();
 
                     if (TownModeBuild())
                     {
@@ -1723,7 +1710,6 @@ namespace RiverHollow.Map_Handling
                 else
                 {
                     GameManager.EmptyHeldObject();
-                    ClearHeldLights();
                 }
 
                 rv = true;
@@ -1839,7 +1825,6 @@ namespace RiverHollow.Map_Handling
             targetObj.SetPickupOffset(mouseLocation.ToVector2());
             targetObj.RemoveSelfFromTiles();
             RemoveLights(targetObj.GetLights());
-            AddHeldLights(targetObj.GetLights());
 
             _liPlacedWorldObjects.Remove(targetObj);
         }
@@ -1914,6 +1899,7 @@ namespace RiverHollow.Map_Handling
         private bool CanPlaceObject(RHTile testTile, WorldObject obj, bool ignoreActors = false)
         {
             bool rv = false;
+
             //We can place flooring anywhere there isn't flooring as long as the base tile is passable.
             if (obj.BuildableType(BuildableEnum.Floor))
             {
@@ -1937,9 +1923,9 @@ namespace RiverHollow.Map_Handling
             if (obj.WideOnTop())
             {
                 List<RHTile> arr = testTile.GetAdjacentTiles(true);
-                for(int i =0; i < arr.Count; i++)
+                for (int i = 0; i < arr.Count; i++)
                 {
-                    if(arr[i].WorldObject != null && arr[i].WorldObject.WideOnTop())
+                    if (arr[i].WorldObject != null && arr[i].WorldObject.WideOnTop())
                     {
                         rv = false;
                         break;
@@ -1953,6 +1939,23 @@ namespace RiverHollow.Map_Handling
                 if (obj == GameManager.HeldObject && p.NeedsWatering && !testTile.Tilled)
                 {
                     rv = false;
+                }
+            }
+
+            if (rv && GameManager.TownModeEdit() && Lighting == 0)
+            {
+                if (!PlayerManager.PlayerInRange(testTile.Center, (int)(Constants.TILE_SIZE * 1.5)))
+                {
+                    bool found = false;
+                    foreach (Light v in _liLights)
+                    {
+                        if (v.Contains(testTile.Center))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) { rv = false; }
                 }
             }
 

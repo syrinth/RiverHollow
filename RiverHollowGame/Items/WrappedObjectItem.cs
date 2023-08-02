@@ -36,8 +36,11 @@ namespace RiverHollow.Items
                 case BuildableEnum.Floor:
                     texture = DataManager.FILE_FLOORING;
                     break;
-                default:
+                case BuildableEnum.Wall:
                     texture = DataManager.FILE_WORLDOBJECTS;
+                    break;
+                default:
+                    texture = DataManager.FILE_DECOR;
                     break;
             }
             _texTexture = DataManager.GetTexture(texture);
@@ -54,10 +57,7 @@ namespace RiverHollow.Items
 
         public override bool ItemBeingUsed()
         {
-            if (!GameManager.TownModeEdit())
-            {
-                GameManager.EnterTownModeEdit();
-            }
+            GameManager.EnterTownModeEdit();
 
             if (Number > 1) { Remove(1); }
             else { InventoryManager.RemoveItemFromInventory(this); }

@@ -124,7 +124,10 @@ namespace RiverHollow.WorldObjects
             else
             {
                 rv = base.PlaceOnMap(map);
-                SyncDisplayObject();
+                if (rv)
+                {
+                    SyncDisplayObject();
+                }
             }
 
             return rv;

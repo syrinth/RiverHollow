@@ -139,7 +139,6 @@ namespace RiverHollow.Game_Managers
             {
                 rv = true;
                 _heldWorldObject = obj;
-                MapManager.CurrentMap.AddHeldLights(obj.GetLights());
                 obj.SetPickupOffset();
             }
 

@@ -139,16 +139,16 @@ namespace RiverHollow.WorldObjects
             }
             else
             {
-                if (!Walkable)
-                {
-                    _bNudge = true;
-                    _bShaken = true;
-                }
-
                 if (!_bShaken && FinishedGrowing() && HP > 0 && GetBoolByIDKey("SeedID") && RHRandom.Instance().RollPercent(30))
                 {
                     rv = true;
                     MapManager.DropItemOnMap(DataManager.GetItem(GetIntByIDKey("SeedID")), CollisionBox.Location);
+                }
+
+                if (!Walkable)
+                {
+                    _bNudge = true;
+                    _bShaken = true;
                 }
             }
 
@@ -306,11 +306,26 @@ namespace RiverHollow.WorldObjects
             }
             else if (MaxStates > 1)
             {
-                var param = GetStringParamsByIDKey("Size");
-                var endSize = Util.ParsePoint(param[MaxStates - 1]);
-                var endBase = Util.ParseRectangle(GetStringParamsByIDKey("Base")[MaxStates - 1]);
+                int maxState = MaxStates - 1;
+                Point offset = Point.Zero;
 
-                return endBase.Size.X < endSize.X;
+                if (GetBoolByIDKey("BaseOffset"))
+                {
+                    offset = Util.ParsePoint(GetStringParamsByIDKey("BaseOffset")[maxState]);
+                }
+
+                if (offset == Point.Zero)
+                {
+                    var param = GetStringParamsByIDKey("Size");
+                    var endSize = Util.ParsePoint(param[maxState]);
+                    var endBase = Util.ParseRectangle(GetStringParamsByIDKey("Base")[maxState]);
+
+                    return endBase.Size.X < endSize.X;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {

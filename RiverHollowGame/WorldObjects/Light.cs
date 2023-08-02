@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
+using System;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 
@@ -43,6 +44,22 @@ namespace RiverHollow.WorldObjects
         public void Draw(SpriteBatch spriteBatch)
         {
             _sprite.Draw(spriteBatch);
+        }
+
+        public bool Contains(Point location)
+        {
+            bool rv = false;
+
+            var center = Position + new Point(Width / 2, Height / 2);
+            var delta = location - center;
+            delta = new Point(Math.Abs(delta.X), Math.Abs(delta.Y));
+
+            if (delta.ToVector2().Length() <= Width / 2)
+            {
+                rv = true;
+            }
+
+            return rv;
         }
     }
 }

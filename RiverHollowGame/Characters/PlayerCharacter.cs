@@ -267,10 +267,14 @@ namespace RiverHollow.Characters
         public override bool DealDamage(int value, Rectangle hitbox)
         {
             bool rv = base.DealDamage(value, hitbox);
-            if (rv && !HasHP)
+            if (rv)
             {
-                PlayerManager.FinishedWithTool();
-                Kill();
+                GameManager.ExitTownMode();
+                if (!HasHP)
+                {
+                    PlayerManager.FinishedWithTool();
+                    Kill();
+                }
             }
 
             return rv;

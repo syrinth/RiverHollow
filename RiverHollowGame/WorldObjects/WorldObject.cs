@@ -321,8 +321,11 @@ namespace RiverHollow.WorldObjects
         public virtual bool PlaceOnMap(RHMap map, bool ignoreActors = false)
         {
             bool rv = PlaceOnMap(this.MapPosition, map, ignoreActors);
-            map.AddLights(GetLights());
-            SyncLightPositions();
+            if (rv)
+            {
+                map.AddLights(GetLights());
+                SyncLightPositions();
+            }
             return rv;
         }
 
