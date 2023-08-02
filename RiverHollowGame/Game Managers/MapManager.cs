@@ -179,8 +179,18 @@ namespace RiverHollow.Game_Managers
                 int treeID = int.Parse(DataManager.Config[3]["ObjectID"]);
                 int weedID = int.Parse(DataManager.Config[11]["ObjectID"]);
 
-                List<RHTile> possibleTiles = Maps[Constants.TOWN_MAP_NAME].TileList;
+                List<RHTile> possibleTiles = TownMap.TileList;
                 possibleTiles.RemoveAll(x => !x.Passable() || x.Flooring != null);
+
+                var objectLayer = TownMap.Map.ObjectLayers.First(x => x.Name.Contains("MapObject"));
+                var skipObjs = objectLayer.Objects.Where(x => x.Name.Equals("Skip"));
+                foreach(var obj in skipObjs)
+                {
+                    foreach(var tile in TownMap.GetTilesFromRectangleExcludeEdgePoints(Util.RectFromTiledMapObject(obj)))
+                    {
+                        possibleTiles.Remove(tile);
+                    }
+                }
 
                 PopulateHomeMapHelper(ref possibleTiles, rockID, 50);
                 PopulateHomeMapHelper(ref possibleTiles, treeID, 50);
