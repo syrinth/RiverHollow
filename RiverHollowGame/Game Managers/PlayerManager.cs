@@ -921,8 +921,6 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadData(PlayerData saveData)
         {
-            MoveToSpawn();
-
             SetName(saveData.name);
             SetMoney(saveData.money);
             TotalMoneyEarned = saveData.totalMoneyEarned;
@@ -943,6 +941,8 @@ namespace RiverHollow.Game_Managers
             PlayerActor.SetClothes((Clothing)DataManager.GetItem(saveData.hat.itemID));
             PlayerActor.SetClothes((Clothing)DataManager.GetItem(saveData.chest.itemID));
             PlayerActor.SetBodyType(saveData.bodyTypeIndex);
+
+            MoveToSpawn();
 
             for (int i = 0; i < BackpackLevel; i++)
             {

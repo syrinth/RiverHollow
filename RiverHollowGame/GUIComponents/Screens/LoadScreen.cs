@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
-using System.Collections;
 
 namespace RiverHollow.GUIComponents.Screens
 {

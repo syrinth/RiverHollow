@@ -282,7 +282,9 @@ namespace RiverHollow.Characters
         protected override void Flicker(bool value)
         {
             base.Flicker(value);
-            GetSprites().ForEach(x => x.SetColor(Color.White * (_bFlicker ? 1 : 0)));
+            BodySprite.SetColor(Color.White * (_bFlicker ? 1 : 0));
+            HairSprite.SetColor(HairColor * (_bFlicker ? 1 : 0));
+            EyeSprite.SetColor(EyeColor * (_bFlicker ? 1 : 0));
         }
 
         public override void SetMoveTo(Point v, bool update = true)

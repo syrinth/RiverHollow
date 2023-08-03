@@ -125,16 +125,10 @@ namespace RiverHollow.GUIComponents.Screens
             //_gCheckPregnancy.AnchorAndAlignToObject(_gShirt, SideEnum.Bottom, SideEnum.Left, 10);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
-
         public override bool ProcessLeftButtonClick(Point mouse)
         {
-            bool rv = false;
+            bool rv = GUIUtils.ProcessLeftMouseButton(mouse, _gCheckSkipCutscene, _gColorPicker);
 
-            rv = GUIUtils.ProcessLeftMouseButton(mouse, _gCheckSkipCutscene, _gColorPicker);
             if (!rv)
             {
                 rv = _window.ProcessLeftButtonClick(mouse);
