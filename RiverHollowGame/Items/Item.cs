@@ -35,9 +35,6 @@ namespace RiverHollow.Items
         public virtual int Value => GetIntByIDKey("Value");
         public int TotalSellValue => Value * _iNum;
 
-        public virtual int BuyPrice => Value * 2;
-        public int TotalBuyValue => BuyPrice * _iNum;
-
         //What items and in what numbers are required to make this item
         protected Dictionary<int, int> _diReqToMake;
 

@@ -1,17 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
-using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Items;
-using RiverHollow.Misc;
-using RiverHollow.Utilities;
-using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
     class QuantityWindow : GUIMainObject
     {
-        int MAX_VALUE => (GameManager.CurrentItem != null ? PlayerManager.Money / GameManager.CurrentItem.BuyPrice : 0);
+        int MAX_VALUE => (GameManager.CurrentMerchandise.MerchItem != null ? PlayerManager.Money / GameManager.CurrentMerchandise.Price : 0);
         GUIButton _btnUp;
         GUIButton _btnDown;
 
@@ -22,13 +16,13 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             _winMain = SetMainWindow(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
 
-            GUIItemBox box = new GUIItemBox(GameManager.CurrentItem);
+            GUIItemBox box = new GUIItemBox(GameManager.CurrentMerchandise.MerchItem);
             box.Position(_winMain);
             box.ScaledMoveBy(47, 20);
             box.AlignToObject(_winMain, SideEnum.CenterX);
             AddControl(box);
 
-            GUIText text = new GUIText(GameManager.CurrentItem.Name());
+            GUIText text = new GUIText(GameManager.CurrentMerchandise.MerchItem.Name());
             text.Position(_winMain);
             text.AlignToObject(box, SideEnum.CenterX);
             text.ScaledMoveBy(0, 7);
@@ -51,7 +45,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _btnBuy.ScaledMoveBy(89, 48);
             AddControl(_btnBuy);
 
-            _gSellValue = new GUIText(GameManager.CurrentItem.TotalBuyValue);
+            _gSellValue = new GUIText(GameManager.CurrentMerchandise.Price);
             _gSellValue.AnchorAndAlignWithSpacing(_btnBuy, SideEnum.Left, SideEnum.CenterY, 2);
             AddControl(_gSellValue);
 
@@ -66,15 +60,17 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public void Decrement()
         {
-            if (GameManager.CurrentItem.Number > 1) { GameManager.CurrentItem.Remove(1, false); }
-            else { GameManager.CurrentItem.SetNumber(MAX_VALUE); }
+            var merchItem = GameManager.CurrentMerchandise.MerchItem;
+            if (merchItem.Number > 1) { merchItem.Remove(1, false); }
+            else { merchItem.SetNumber(MAX_VALUE); }
 
             RefreshPrice();
         }
         public void Increment()
         {
-            if (GameManager.CurrentItem.Number < MAX_VALUE) { GameManager.CurrentItem.Add(1, false); }
-            else { GameManager.CurrentItem.SetNumber(1); }
+            var merchItem = GameManager.CurrentMerchandise.MerchItem;
+            if (merchItem.Number < MAX_VALUE) { merchItem.Add(1, false); }
+            else { merchItem.SetNumber(1); }
 
             RefreshPrice();
         }
@@ -82,7 +78,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         private void RefreshPrice()
         {
             Color c = Color.Black;
-            int offer = GameManager.CurrentItem.TotalBuyValue;
+            int offer = GameManager.CurrentMerchandise.TotalPrice;
             _gSellValue.SetText(offer);
             _gSellValue.SetColor(c);
             _gSellValue.AnchorAndAlignWithSpacing(_btnBuy, SideEnum.Left, SideEnum.CenterY, 2);
@@ -92,9 +88,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public void ProceedToPurchase()
         {
-            if (InventoryManager.HasSpaceInInventory(GameManager.CurrentItem.ID, GameManager.CurrentItem.Number))
+            var merch = GameManager.CurrentMerchandise;
+            if (InventoryManager.HasSpaceInInventory(merch.MerchID, merch.MerchItem.Number))
             {
-                MapManager.CurrentMap.TheShop.Purchase(GameManager.CurrentItem);
+                MapManager.CurrentMap.TheShop.Purchase(merch);
                 GUIManager.CloseMainObject();
             }
             else

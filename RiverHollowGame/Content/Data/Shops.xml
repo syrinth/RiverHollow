@@ -3,59 +3,59 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[ItemID:1/57/21/5][Shopkeeper:10]</Value>
+      <Value>[ItemID:1-10/57-10/21-10/5-10][Shopkeeper:10]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[ItemID:151/216][Shopkeeper:20]</Value>
+      <Value>[ItemID:151-3/216-3][Shopkeeper:20]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[ItemID:0/2][Shopkeeper:16]</Value>
+      <Value>[ItemID:0-10/2-10][Shopkeeper:16]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[ItemID:141/137/209/185/135][Shopkeeper:11][BuildingID:25]</Value>
+      <Value>[ItemID:141-3000/137-250/209-500/185-500/188-1000][Shopkeeper:11][BuildingID:25]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[ItemID:84/78/86/87][Shopkeeper:34]</Value>
+      <Value>[ItemID:84-10/78-10/86-10/87-10][Shopkeeper:34]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[ItemID:172/176]</Value>
+      <Value>[ItemID:172-10/176-10]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[ItemID:80/81/82/83/85/88][Shopkeeper:14]</Value>
+      <Value>[ItemID:80-10/81-10/82-10/83-10/85-10/88-10][Shopkeeper:14]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[ItemID:0/2]</Value>
+      <Value>[ItemID:0-10/2-10]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[ObjectID:42/41/44/43/45/47/46]</Value>
+      <Value>[ObjectID:42-10/41-10/44-10/43-10/45-10/47-10/46-10]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[ItemID:176][Shopkeeper:37]</Value>
+      <Value>[ItemID:176-10][Shopkeeper:37]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[ItemID:188/163/23/56][Shopkeeper:38]</Value>
+      <Value>[ItemID:163-50/23-20/56-40][Shopkeeper:38]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[ItemID:167/54][Shopkeeper:43]</Value>
+      <Value>[ItemID:167-90/54-100][Shopkeeper:43]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[ItemID:179][Shopkeeper:54]</Value>
+      <Value>[ItemID:179-10][Shopkeeper:54]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Shopkeeper:55][ObjectID:154/47/42/41/44]</Value>
+      <Value>[Shopkeeper:55][ObjectID:154-10/47-10/42-10/41-10/44-10]</Value>
     </Item>
   </Asset>
 </XnaContent>

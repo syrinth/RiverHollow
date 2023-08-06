@@ -28,11 +28,12 @@ namespace RiverHollow.Game_Managers
 
         #region Interaction Objects
         public static TalkingActor CurrentNPC { get; private set; }
-        public static Merchandise CurrentMerch { get; private set; }
         public static Item CurrentItem { get; private set; }
         public static Spirit CurrentSpirit { get; private set; }
         public static WorldObject CurrentWorldObject { get; private set; }
         public static Building CurrentBuilding { get; set; }
+
+        public static Merchandise CurrentMerchandise => MapManager.CurrentMap.TheShop.SelectedMerchandise;
         #endregion
 
         #region Game State Values

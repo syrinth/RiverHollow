@@ -134,6 +134,11 @@ namespace RiverHollow.WorldObjects
                 Movable = true;
             }
 
+            if (GetBoolByIDKey("Walkable"))
+            {
+                _bWalkable = true;
+            }
+
             LoadSprite();
         }
 

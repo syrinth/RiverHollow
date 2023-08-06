@@ -24,6 +24,8 @@ namespace RiverHollow.Misc
         List<Merchandise> _liMerchandise;
         public int Count => _liMerchandise.Count;
 
+        public Merchandise SelectedMerchandise { get; private set; }
+
         public Shop(int id, Dictionary<string, string> stringDictionary)
         {
             _iShopID = id;
@@ -54,6 +56,12 @@ namespace RiverHollow.Misc
             }
         }
 
+        public void SetSelectedMerchandise(Merchandise m)
+        {
+            SelectedMerchandise = m;
+            SelectedMerchandise.GenerateSaleItem();
+        }
+
         public bool Interact(RHMap map, Point mouseLocation)
         {
             foreach (ShopItemSpot itemSpot in _liShopItemSpots)
@@ -74,7 +82,8 @@ namespace RiverHollow.Misc
             WorldObject obj = tile.WorldObject;
             if (tile != null && obj != null && obj.ShopItem)
             {
-                WrappedObjectItem item = new WrappedObjectItem(obj.ID);
+                var merch = _liMerchandise.Find(x => x.MerchID == obj.ID);
+                var item = merch.MerchItem;
                 if (PlayerManager.Money < item.Value)
                 {
                     GUIManager.OpenTextWindow("BuyMerch_NoMoney");
@@ -86,14 +95,13 @@ namespace RiverHollow.Misc
                 else
                 {
                     GUIManager.CloseHoverWindow();
+                    SetSelectedMerchandise(merch);
                     if (!item.Stacks())
                     {
-                        GameManager.SetSelectedItem(DataManager.GetItem(item.ID));
-                        GUIManager.OpenTextWindow("BuyMerch_Confirm", item.Name(), item.TotalBuyValue);
+                        GUIManager.OpenTextWindow("BuyMerch_Confirm", item.Name(), merch.Price);
                     }
                     else
                     {
-                        GameManager.SetSelectedItem(DataManager.GetItem(item.ID));
                         GUIManager.OpenMainObject(new QuantityWindow());
                     }
                 }
@@ -102,21 +110,24 @@ namespace RiverHollow.Misc
             return false;
         }
 
-        public void Purchase(Item purchaseItem)
+        public void Purchase(Merchandise merch)
         {
-            if (PlayerManager.Money >= purchaseItem.TotalBuyValue)
+            if (PlayerManager.Money >= merch.TotalPrice)
             {
-                PlayerManager.TakeMoney(purchaseItem.TotalBuyValue);
-                if (purchaseItem.IsUnique())
+                PlayerManager.TakeMoney(merch.TotalPrice);
+                if (merch.MerchItem.IsUnique())
                 {
-                    PlayerManager.AddUniqueItemToList(purchaseItem.ID);
+                    PlayerManager.AddUniqueItemToList(merch.MerchID);
                 }
-                InventoryManager.AddToInventory(purchaseItem);
 
-                if (purchaseItem.CompareType(ItemEnum.Tool))
+                InventoryManager.AddToInventory(merch.MerchItem);
+
+                if (merch.MerchItem.CompareType(ItemEnum.Tool))
                 {
-                    purchaseItem.StrikeAPose();
+                    merch.MerchItem.StrikeAPose();
                 }
+
+                merch.CleanSaleItem();
             }
         }
 
@@ -303,9 +314,13 @@ namespace RiverHollow.Misc
         private bool _bLocked = false;
         public bool Unlocked => !_bLocked;
         public string UniqueData { get; }
+
+        public int Price { get; private set; }
+        public int TotalPrice => Price * MerchItem.Number;
+
         public int MerchID { get; } = -1;
-        private int _iCost;
-        public int MoneyCost => _iCost;
+        public int ItemID => MerchType == MerchTypeEnum.Item ? MerchID : MerchID + Constants.BUILDABLE_ID_OFFSET;
+        public Item MerchItem { get; private set; }
 
         private readonly int _iTaskReq = -1;
 
@@ -315,23 +330,17 @@ namespace RiverHollow.Misc
 
             string[] data = Util.FindArguments(merchData);
             MerchID = int.Parse(data[0]);
+            Price = int.Parse(data[1]);
 
-            if (data.Length > 1)
+            if (data.Length > 2)
             {
-                if (data[1].Equals("Unique")) { UniqueData = data[1]; }
-                else if (data[1].Equals("Locked")) { _bLocked = true; }
-            }
-
-            switch (MerchType)
-            {
-                case MerchTypeEnum.Item:
-                    _iCost = int.Parse(DataManager.GetStringByIDKey(MerchID, "Value", DataType.Item));
-                    break;
-                case MerchTypeEnum.WorldObject:
-                    _iCost = int.Parse(DataManager.GetStringByIDKey(MerchID, "Value", DataType.WorldObject));
-                    break;
+                if (data[2].Equals("Unique")) { UniqueData = data[2]; }
+                else if (data[2].Equals("Locked")) { _bLocked = true; }
             }
         }
+
+        public void GenerateSaleItem() { MerchItem = DataManager.GetItem(ItemID); }
+        public void CleanSaleItem() { MerchItem = null; }
 
         /// <summary>
         /// Call to unlock the Merchandise so that it can be purchased.

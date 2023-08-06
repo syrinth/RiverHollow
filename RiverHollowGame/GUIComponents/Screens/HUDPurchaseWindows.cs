@@ -48,7 +48,7 @@ namespace RiverHollow.GUIComponents.Screens
                     Item it = DataManager.GetItem(m.MerchType == Merchandise.MerchTypeEnum.WorldObject ? m.MerchID + Constants.BUILDABLE_ID_OFFSET : m.MerchID);
                     it.ApplyUniqueData(m.UniqueData);
 
-                    newBox = new PurchaseBox(it, m.MoneyCost * 2, _winMain.InnerWidth() - GameManager.ScaledTileSize, ShowDisplay);
+                    newBox = new PurchaseBox(it, m.Price, _winMain.InnerWidth() - GameManager.ScaledTileSize, ShowDisplay);
                 }
                 else { continue; }
 

@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Resource][Subtype:Monster][Image:0-4][Value:50]</Value>
+      <Value>[Type:Resource][Subtype:Monster][Image:0-4][Value:35]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -47,7 +47,7 @@
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Resource][Subtype:Monster][Image:5-4][Value:60]</Value>
+      <Value>[Type:Resource][Subtype:Monster][Image:5-4][Value:30]</Value>
     </Item>
     <Item>
       <Key>12</Key>
@@ -59,7 +59,7 @@
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Resource][Subtype:Monster][Image:7-4][Value:100]</Value>
+      <Value>[Type:Resource][Subtype:Monster][Image:7-4][Value:70]</Value>
     </Item>
     <Item>
       <Key>15</Key>
@@ -67,7 +67,7 @@
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Resource][Subtype:Monster][Image:1-4][Value:60]</Value>
+      <Value>[Type:Resource][Subtype:Monster][Image:1-4][Value:30]</Value>
     </Item>
     <Item>
       <Key>17</Key>
@@ -231,15 +231,15 @@
     </Item>
     <Item>
       <Key>57</Key>
-      <Value>[Type:Resource][Subtype:Medicine][Image:1-6][ItemGroups:Medicine][Value:150][ReqItems:93-1/23-1]</Value>
+      <Value>[Type:Resource][Subtype:Medicine][Image:1-6][ItemGroups:Medicine][Value:70][ReqItems:93-1/23-1]</Value>
     </Item>
     <Item>
       <Key>58</Key>
-      <Value>[Type:Resource][Subtype:Medicine][Image:2-6][ItemGroups:Medicine][Value:80][ReqItems:56-1/162-2]</Value>
+      <Value>[Type:Resource][Subtype:Medicine][Image:2-6][ItemGroups:Medicine][Value:60][ReqItems:56-1/162-2]</Value>
     </Item>
     <Item>
       <Key>59</Key>
-      <Value>[Type:Resource][Subtype:Monster][Image:2-3][Value:80]</Value>
+      <Value>[Type:Resource][Subtype:Monster][Image:2-3][Value:50]</Value>
     </Item>
     <Item>
       <Key>60</Key>
@@ -551,7 +551,7 @@
     </Item>
     <Item>
       <Key>137</Key>
-      <Value>[Type:Tool][Subtype:Lantern][Image:0-4][Level:1][Value:200]</Value>
+      <Value>[Type:Tool][Subtype:Lantern][Image:0-4][Level:1]</Value>
     </Item>
     <Item>
       <Key>138</Key>
@@ -567,7 +567,7 @@
     </Item>
     <Item>
       <Key>141</Key>
-      <Value>[Type:Tool][Subtype:Backpack][Image:1-5][Level:2][Value:500]</Value>
+      <Value>[Type:Tool][Subtype:Backpack][Image:1-5][Level:2]</Value>
     </Item>
     <Item>
       <Key>142</Key>
@@ -655,7 +655,7 @@
     </Item>
     <Item>
       <Key>163</Key>
-      <Value>[Type:Food][Subtype:Food][Image:5-2][ItemGroups:Herb][Value:30][Stam:5][FoodType:Healthy]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:5-2][ItemGroups:Herb][Value:30][Stam:10][FoodType:Healthy]</Value>
     </Item>
     <Item>
       <Key>164</Key>
@@ -671,11 +671,11 @@
     </Item>
     <Item>
       <Key>167</Key>
-      <Value>[Type:Consumable][Subtype:None][Image:1-0][ItemGroups:Medicine][Value:40][ReqItems:162-2][CombatType:Helpful][Hp:10]</Value>
+      <Value>[Type:Consumable][Subtype:Medicine][Image:1-0][ItemGroups:Medicine][Value:40][ReqItems:162-2][CombatType:Helpful][Hp:10]</Value>
     </Item>
     <Item>
       <Key>168</Key>
-      <Value>[Type:Consumable][Image:1-1][ItemGroups:Medicine][Value:50][ReqItems:8-1/9-1/162-1][CombatType:Helpful][Mana:20]</Value>
+      <Value>[Type:Consumable][Subtype:Medicine][Image:1-1][ItemGroups:Medicine][Value:50][ReqItems:8-1/9-1/162-1][CombatType:Helpful][Mana:20]</Value>
     </Item>
     <Item>
       <Key>169</Key>
@@ -699,7 +699,7 @@
     </Item>
     <Item>
       <Key>174</Key>
-      <Value>[Type:Clothing][Subtype:Legs][Image:2-4][Value:0][Row:2][TexName:404][Key:Blue_Tunic]</Value>
+      <Value>[Type:Clothing][Subtype:Shirt][Image:2-4][Value:0][Row:2][TexName:404][Key:Blue_Tunic]</Value>
     </Item>
     <Item>
       <Key>175</Key>
@@ -743,7 +743,7 @@
     </Item>
     <Item>
       <Key>185</Key>
-      <Value>[Type:Special][Image:1-0][Value:100]</Value>
+      <Value>[Type:Special][Image:1-0]</Value>
     </Item>
     <Item>
       <Key>186</Key>
@@ -755,7 +755,7 @@
     </Item>
     <Item>
       <Key>188</Key>
-      <Value>[Type:Special][Image:4-0][Value:150]</Value>
+      <Value>[Type:Special][Image:4-0]</Value>
     </Item>
     <Item>
       <Key>189</Key>
@@ -839,7 +839,7 @@
     </Item>
     <Item>
       <Key>209</Key>
-      <Value>[Type:Tool][Subtype:FishingRod][Image:0-11][Value:500][Level:1][Stam:2][AnimationData:0-256/3-4/5/0.04][ReelAnimation:0-320/3-4/5/0.04]</Value>
+      <Value>[Type:Tool][Subtype:FishingRod][Image:0-11][Level:1][Stam:2][AnimationData:0-256/3-4/5/0.04][ReelAnimation:0-320/3-4/5/0.04]</Value>
     </Item>
     <Item>
       <Key>210</Key>

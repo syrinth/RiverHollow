@@ -310,7 +310,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             PlayerManager.DetermineBabyAcquisition();
                             break;
                         case TextEntryTriggerEnum.ConfirmPurchase:
-                            MapManager.CurrentMap.TheShop.Purchase(GameManager.CurrentItem);
+                            MapManager.CurrentMap.TheShop.Purchase(GameManager.CurrentMerchandise);
                             break;
                         case TextEntryTriggerEnum.Donate:
                             ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;

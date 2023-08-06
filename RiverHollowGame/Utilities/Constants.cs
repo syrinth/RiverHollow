@@ -66,8 +66,12 @@
 
         public const int KITCHEN_STOCK_ROW = 2;
         public const int KITCHEN_STOCK_COLUMN = 4;
-        public const int MERCHANT_REQUEST_NUM = 3;
         public const int MAX_RECIPE_DISPLAY = 5;
+
+        public const int MERCHANT_REQUEST_NUM = 3;
+        public const float MERCHANT_REQUEST_MOD = 1.5f;
+        public const float MERCHANT_NEED_MOD = 1.25f;
+        public const float MERCHANT_WANT_MOD = 1f;
 
         public const float HUNGER_MOD = -0.5f;
 

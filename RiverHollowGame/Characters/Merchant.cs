@@ -138,7 +138,7 @@ namespace RiverHollow.Characters
                 {
                     c = Color.Purple;
                     requested = true;
-                    offer = it.Value * 2;
+                    offer = (int)(it.Value * Constants.MERCHANT_REQUEST_MOD);
                     break;
                 }
             }
@@ -148,12 +148,12 @@ namespace RiverHollow.Characters
                 if (it.IsItemGroup(Needs))
                 {
                     c = Color.Blue;
-                    offer = (int)(it.Value * 1.5);
+                    offer = (int)(it.Value * Constants.MERCHANT_NEED_MOD);
                 }
                 else if (it.IsItemGroup(Wants))
                 {
                     c = Color.Green;
-                    offer = (int)(it.Value * 1.2);
+                    offer = (int)(it.Value * Constants.MERCHANT_WANT_MOD);
                 }
             }
 

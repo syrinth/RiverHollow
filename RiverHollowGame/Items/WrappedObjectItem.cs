@@ -11,7 +11,6 @@ namespace RiverHollow.Items
         int _iObjectID = -1;
 
         public override int Value => DataManager.GetIntByIDKey(_iObjectID, "Value", DataType.WorldObject);
-        public override int BuyPrice => Value;
 
         public WrappedObjectItem(int objectID) : base(objectID + Constants.BUILDABLE_ID_OFFSET)
         {

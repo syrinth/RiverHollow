@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:0-35][Idle:3-0.15][ReqItems:2-1/61-5][LightID:0-8-8]</Value>
+      <Value>[Type:Buildable][Subtype:Basic][Image:0-35][Idle:3-0.15][ReqItems:2-1/61-5][LightID:0-8-8][Walkable]</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -103,7 +103,7 @@
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:GeneralStore][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86/3-80-86][ReqItems:55-5/60-5][UpgradeID:0-1][Profit:50][Traveller:25]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:GeneralStore][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86/3-80-86][ReqItems:55-20/60-20][UpgradeID:0-1][Profit:50][Traveller:25]</Value>
     </Item>
     <Item>
       <Key>26</Key>
