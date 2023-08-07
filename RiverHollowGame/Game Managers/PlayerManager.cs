@@ -24,8 +24,8 @@ namespace RiverHollow.Game_Managers
         #region Properties
         public static bool Busy { get; private set; }
 
-        public static float CurrentEnergy = MaxEnergy();
-        public static float CurrentMagic = MaxMagic();
+        public static float CurrentEnergy;
+        public static float CurrentMagic;
         public static bool MagicUnlocked = false;
 
         #region Increases
@@ -163,6 +163,8 @@ namespace RiverHollow.Game_Managers
             _diTools = new Dictionary<ToolEnum, Tool>();
 
             PlayerActor = new PlayerCharacter();
+            CurrentEnergy = MaxEnergy();
+            CurrentMagic = MaxMagic();
 
             DIMobInfo = new Dictionary<int, int>();
             foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.ActorData)
@@ -390,7 +392,7 @@ namespace RiverHollow.Game_Managers
             for (int i = 0; i < list.Count; i++)
             {
                 var r = list[i];
-                if (r.Intersects(testRectangle) && (Util.CenterInRange(playerCenter, testRectangle) || Util.EdgeInRange(playerCollision, testRectangle)))
+                if (r.Intersects(testRectangle))// && (Util.CenterInRange(playerCenter, testRectangle) || Util.EdgeInRange(playerCollision, testRectangle)))
                 {
                     rv = true;
                     facing = (DirectionEnum)(i + 1);

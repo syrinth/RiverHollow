@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.WorldObjects;
 using RiverHollow.GUIComponents;
+using System.Diagnostics;
 
 namespace RiverHollow.Characters
 {
@@ -69,6 +70,8 @@ namespace RiverHollow.Characters
 
             // SetClothes((Clothes)DataManager.GetItem(int.Parse(DataManager.Config[6]["ItemID"])));
 
+#if DEBUG
+
             BodySprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, "03"));// BodyTypeStr));
 
             //Hair type has already been set either by default or by being allocated.
@@ -80,7 +83,10 @@ namespace RiverHollow.Characters
             BodySprite.SetColor(Color.White);
             _sprHair.SetColor(HairColor);
             _sprEyes.SetColor(EyeColor);
+#else
 
+            BodySprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Body_01", DataManager.FOLDER_PLAYER, "03"));// BodyTypeStr));
+#endif
             _lightSource = DataManager.GetLight(7);
 
             SpdMult = Constants.NORMAL_SPEED;
@@ -114,8 +120,8 @@ namespace RiverHollow.Characters
                 }
             }
 
-            _sprEyes.Draw(spriteBatch, useLayerDepth);
-            _sprHair.Draw(spriteBatch, useLayerDepth);
+            _sprEyes?.Draw(spriteBatch, useLayerDepth);
+            _sprHair?.Draw(spriteBatch, useLayerDepth);
 
             //Chest?.Sprite.Draw(spriteBatch, useLayerDepth);
             //Hat?.Sprite.Draw(spriteBatch, useLayerDepth);

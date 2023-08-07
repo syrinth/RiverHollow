@@ -161,12 +161,7 @@ namespace RiverHollow.Characters
         /// <param name="dialogTag">The dialog tag to talk with</param>
         public void ContinueConversation(string dialogTag)
         {
-            TextEntry text = null;
-            if (_diDialogue.ContainsKey(dialogTag))
-            {
-                text = _diDialogue[dialogTag];
-            }
-
+            TextEntry text = GetDialogEntry(dialogTag);
             GUIManager.OpenTextWindow(text, this, true, true);
         }
 
@@ -210,7 +205,7 @@ namespace RiverHollow.Characters
         /// <returns>The processed string text for the entry </returns>
         public virtual TextEntry GetDialogEntry(string entry)
         {
-            TextEntry rv = new TextEntry(entry);
+            TextEntry rv = new TextEntry();
 
             if (_diDialogue.ContainsKey(entry))
             {

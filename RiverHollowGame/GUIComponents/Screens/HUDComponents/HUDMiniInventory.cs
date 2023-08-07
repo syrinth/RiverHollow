@@ -119,7 +119,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         private void HandleInput()
         {
-            if (GameManager.HeldObject == null)
+            if (!GameManager.GamePaused() && GameManager.HeldObject == null)
             {
                 foreach (var kvp in InputManager.Numbers)
                 {
@@ -133,7 +133,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
 
                 int wheelValue = InputManager.ScrollWheelChanged();
-                int index = Util.GetLoopingValue(GameManager.HUDItemCol, 0, _liItems.Length - 1, wheelValue);
+                int index = Util.GetLoopingValue(GameManager.HUDItemCol, 0, _liItems.Length - 1, (wheelValue * -1));
                 SelectGuiItemBox(_liItems[index]);
             }
         }

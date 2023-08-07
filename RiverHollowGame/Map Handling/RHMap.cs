@@ -8,6 +8,8 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents;
 using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIComponents.MainObjects;
+using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Items;
 using RiverHollow.Items.Tools;
 using RiverHollow.Misc;
@@ -19,6 +21,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Remoting;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Xml.Linq;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
@@ -785,13 +788,6 @@ namespace RiverHollow.Map_Handling
                                 RHTile tile = GetTileByPixelPosition(p);
                                 Util.AddUniquelyToList(ref _liSpecialTiles, tile);
                                 tile.SetWallTrue();
-                            }
-                        }
-                        else if (mapObject.Name.StartsWith("Display"))
-                        {
-                            foreach (Point p in Util.GetAllPointsInArea(mapObject.Position, mapObject.Size, Constants.TILE_SIZE))
-                            {
-                                GetTileByPixelPosition(p).SetClickAction(mapObject.Name);
                             }
                         }
                         else if (mapObject.Name.StartsWith("Resource"))
@@ -1617,6 +1613,47 @@ namespace RiverHollow.Map_Handling
                 }
                 removedList.ForEach(x => _liItems.Remove(x));
                 removedList.Clear();
+
+                if (!rv)
+                {
+                    foreach (var obj in _liMapObjects)
+                    {
+                        Rectangle objRect = Util.RectFromTiledMapObject(obj);
+                        DirectionEnum facing = DirectionEnum.None;
+                        if (PlayerManager.InRangeOfPlayer(objRect, ref facing))
+                        {
+                            if (obj.Name.Equals("Town_Display"))
+                            {
+                                rv = true;
+                                GUIManager.OpenMainObject(new TownInfoWindow());
+                            }
+                            else if (obj.Name.Equals("Display_Upgrade"))
+                            {
+                                rv = true;
+                                GUIManager.OpenMainObject(new HUDBuildingUpgrade(TownManager.GetBuildingByID(this.BuildingID)));
+                            }
+                            else if (obj.Name.StartsWith("Talk_"))
+                            {
+                                foreach(var actor in _liActors)
+                                {
+                                    if(actor.CollisionBox.Intersects(objRect))
+                                    {
+                                        rv = true;
+                                        actor.ProcessRightButtonClick();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (rv)
+                        {
+                            PlayerManager.PlayerActor.SetFacing(facing);
+                            break;
+                        }
+
+                    }
+                }
             }
 
             return rv;
@@ -1703,7 +1740,7 @@ namespace RiverHollow.Map_Handling
                     _objSelectedObject.SelectObject(true);
                 }
             }
-            
+
             if (GameManager.HeldObject != null)
             {
                 _liTestTiles = new List<RHTile>();
@@ -1751,6 +1788,26 @@ namespace RiverHollow.Map_Handling
                                 break;
                         }
                         if (found) { break; }
+                    }
+                }
+
+                foreach (var obj in _liMapObjects)
+                {
+                    Rectangle objRect = Util.RectFromTiledMapObject(obj);
+                    if (objRect.Contains(mouseLocation))
+                    {
+                        if (obj.Name.StartsWith("Talk_"))
+                        {
+                            foreach (var actor in _liActors)
+                            {
+                                if (actor.CollisionBox.Intersects(objRect))
+                                {
+                                    found = true;
+                                    GUICursor.SetCursor(GUICursor.CursorTypeEnum.Talk, objRect);
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -1859,8 +1916,7 @@ namespace RiverHollow.Map_Handling
                 }
                 else if(dummyItem == null)
                 {
-                    GameManager.EmptyHeldObject();
-                    PostBuildingCleanup(true);
+                    ErrorManager.TrackError();
                 }
             }
         }

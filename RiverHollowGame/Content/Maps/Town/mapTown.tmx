@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="48" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="171">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="48" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="172">
  <properties>
   <property name="FillerID" value="103-60-Spread-80/51-5/60-5/147-20/65-20"/>
   <property name="FillerPercent" type="float" value="0.55"/>
@@ -185,7 +185,7 @@
     <property name="ObjectID" type="int" value="97"/>
    </properties>
   </object>
-  <object id="100" name="Building" x="400" y="368" width="80" height="48">
+  <object id="100" name="Building" x="384" y="368" width="80" height="48">
    <properties>
     <property name="ObjectID" type="int" value="39"/>
    </properties>
@@ -265,15 +265,13 @@
     <property name="ObjectID" type="int" value="63"/>
    </properties>
   </object>
-  <object id="128" name="Stump" x="368" y="480" width="32" height="32">
+  <object id="128" name="Stump" x="462.667" y="474.667" width="32" height="32">
    <properties>
     <property name="ObjectID" type="int" value="63"/>
    </properties>
   </object>
-  <object id="167" name="Skip" x="192" y="416" width="16" height="48"/>
-  <object id="168" name="Skip" x="432" y="416" width="16" height="48"/>
-  <object id="169" name="Skip" x="304" y="336" width="16" height="112"/>
-  <object id="170" name="Skip" x="208" y="448" width="223.997" height="16"/>
+  <object id="169" name="Skip" x="288" y="336" width="48" height="80"/>
+  <object id="170" name="Skip" x="192" y="416" width="240" height="168.667"/>
  </objectgroup>
  <objectgroup id="6" name="Character"/>
 </map>

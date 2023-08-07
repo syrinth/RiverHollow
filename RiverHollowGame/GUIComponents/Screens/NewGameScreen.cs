@@ -75,7 +75,9 @@ namespace RiverHollow.GUIComponents.Screens
             //Create the Body Picker
             OptionLabel bodyLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Body").GetFormattedText(), ChangeHairType, ChangeHairColor, AssignColorPicker, Color.White);
             bodyLabel.AnchorAndAlignThenMove(_nameWindow, SideEnum.Bottom, SideEnum.Left, 5, 4);
+            bodyLabel.Show(false);
 
+#if DEBUG
             OptionLabel hairLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Hair").GetFormattedText(), ChangeHairType, ChangeHairColor, AssignColorPicker, PlayerManager.PlayerActor.HairColor);
             hairLabel.AnchorAndAlignWithSpacing(bodyLabel, SideEnum.Bottom, SideEnum.Left, 3);
 
@@ -84,13 +86,16 @@ namespace RiverHollow.GUIComponents.Screens
 
             OptionLabel shirtLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Shirt").GetFormattedText(), ChangeHairType, null, null, Color.White);
             shirtLabel.AnchorAndAlignWithSpacing(hairLabel, SideEnum.Bottom, SideEnum.Right, 27);
+            shirtLabel.Show(false);
 
             OptionLabel pantsLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Pants").GetFormattedText(), ChangeHairType, null, null, Color.White);
             pantsLabel.AnchorAndAlignWithSpacing(shirtLabel, SideEnum.Bottom, SideEnum.Right, 3);
+            pantsLabel.Show(false);
 
             OptionLabel shoesLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Shoes").GetFormattedText(), ChangeHairType, null, null, Color.White);
             shoesLabel.AnchorAndAlignWithSpacing(pantsLabel, SideEnum.Bottom, SideEnum.Right, 3);
-
+            shoesLabel.Show(false);
+#endif
             //Create the Character Name Window
             GUIText townLabel = new GUIText(DataManager.GetGameTextEntry("Label_Town").GetFormattedText());
             townLabel.PositionAndMove(_window, 127, 5);
@@ -194,7 +199,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
         }
 
-        #region Button Logic
+#region Button Logic
         public void BtnNewGame()
         {
             PlayerManager.PlayerActor.SetScale();
@@ -307,7 +312,7 @@ namespace RiverHollow.GUIComponents.Screens
             _eCurrentDirection = ChangeDirection(false);
             _displayBox.PlayAnimation(VerbEnum.Idle, _eCurrentDirection);
         }
-        #endregion
+#endregion
 
         private class OptionLabel : GUIObject
         {

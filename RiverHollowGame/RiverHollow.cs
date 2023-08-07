@@ -297,7 +297,11 @@ namespace RiverHollow
 
 
             CutsceneManager.TriggerCutscene(1);
-            if (!playIntro) { CutsceneManager.SkipCutscene(); }
+            if (!playIntro)
+            {
+                CutsceneManager.SkipCutscene();
+                GUIManager.BeginFadeIn();
+            }
 
             StartGame();
         }

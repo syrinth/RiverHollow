@@ -41,7 +41,7 @@ namespace RiverHollow.Game_Managers
 
         public static int TotalExperience = 0;
 
-        public static bool HideMiniInventory = true;
+        public static bool HideMiniInventory = false;
 
         public static GameScreenEnum CurrentScreen;
         #endregion
@@ -53,6 +53,7 @@ namespace RiverHollow.Game_Managers
         {
             _liSpirits = new List<Spirit>();
             _liTriggerObjects = new List<TriggerObject>();
+            GameManager.HUDItemCol = 0;
         }
 
         public static void LoadManagedDataLists()

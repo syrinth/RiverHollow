@@ -207,7 +207,7 @@ namespace RiverHollow.Characters
         /// <returns>The text string to display</returns>
         public override TextEntry GetOpeningText()
         {
-            TextEntry rv = null;
+            TextEntry rv = new TextEntry();
 
             foreach (RHTask q in TaskManager.TaskLog)
             {
@@ -222,22 +222,19 @@ namespace RiverHollow.Characters
             }
             else if (!CheckTaskLog(ref rv))
             {
-                if (_assignedTask != null) {
+                if (_assignedTask != null)
+                {
                     _assignedTask.TaskIsTalking();
-                    rv = _diDialogue[_assignedTask.StartTaskDialogue];
+                    rv = GetDialogEntry(_assignedTask.StartTaskDialogue);
                 }
-                else if (CurrentMap.TheShop != null && CurrentMap.TheShop.ShopkeeperID == ID) { rv = _diDialogue["ShopOpen"]; }
+                else if (CurrentMap.TheShop != null && CurrentMap.TheShop.ShopkeeperID == ID)
+                {
+                    rv = GetDialogEntry("ShopOpen");
+                }
                 else if (!_bHasTalked) { rv = GetDailyDialogue(); }
                 else
                 {
-                    if (_diDialogue.ContainsKey("Selection"))
-                    {
-                        rv = _diDialogue["Selection"];
-                    }
-                    else
-                    {
-                        rv = new TextEntry();
-                    }
+                    rv = GetDialogEntry("Selection");
                 }
             }
 
@@ -470,7 +467,7 @@ namespace RiverHollow.Characters
                     rv = true;
                     TaskManager.QueuedHandin = t;
                     ModifyTaskGoalValue(-1);
-                    taskEntry = _diDialogue[t.EndTaskDialogue];
+                    taskEntry = GetDialogEntry(t.EndTaskDialogue);
 
                     break;
                 }
@@ -638,7 +635,7 @@ namespace RiverHollow.Characters
 
             foreach (string s in data.spokenKeys)
             {
-                _diDialogue[s].Spoken(this);
+                GetDialogEntry(s).Spoken(this);
             }
 
             int index = 0;

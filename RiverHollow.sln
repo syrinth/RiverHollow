@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extended", "Extended", "{CC37FEB1-DF38-4DCF-824C-E035F8B480B2}"
 EndProject
@@ -70,6 +70,7 @@ Global
 		{9677F77A-C0DF-4E91-9722-850A8E5DFA3E}.Debug|x86.ActiveCfg = Debug|x86
 		{9677F77A-C0DF-4E91-9722-850A8E5DFA3E}.Debug|x86.Build.0 = Debug|x86
 		{9677F77A-C0DF-4E91-9722-850A8E5DFA3E}.Release|Any CPU.ActiveCfg = Release|x86
+		{9677F77A-C0DF-4E91-9722-850A8E5DFA3E}.Release|Any CPU.Build.0 = Release|x86
 		{9677F77A-C0DF-4E91-9722-850A8E5DFA3E}.Release|x86.ActiveCfg = Release|x86
 		{9677F77A-C0DF-4E91-9722-850A8E5DFA3E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection

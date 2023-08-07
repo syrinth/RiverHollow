@@ -24,7 +24,6 @@ namespace RiverHollow.Map_Handling
         public Rectangle CollisionBox => new Rectangle(Position.X, Position.Y, Constants.TILE_SIZE, Constants.TILE_SIZE);
         public Point Center => CollisionBox.Center;
 
-        string _sClickAction = string.Empty;
         TravelPoint _travelPoint;
 
         Dictionary<TiledMapTileLayer, Dictionary<string, string>> _diProps;
@@ -91,13 +90,6 @@ namespace RiverHollow.Map_Handling
                 if (inRangeOfObject)
                 {
                     rv = obj.ProcessRightClick();
-                }
-
-                if (playerAdjacent && !string.IsNullOrEmpty(_sClickAction))
-                {
-                    rv = true;
-                    if (_sClickAction.Equals("Town_Display")) { GUIManager.OpenMainObject(new TownInfoWindow()); }
-                    else if (_sClickAction.Equals("Display_Upgrade")) { GUIManager.OpenMainObject(new HUDBuildingUpgrade(TownManager.GetBuildingByID(MapManager.Maps[MapName].BuildingID))); }
                 }
 
                 if (!rv && (playerAdjacent || inRangeOfObject) && !Passable())
@@ -224,7 +216,6 @@ namespace RiverHollow.Map_Handling
 
         public void SetWallpaper(Wallpaper obj) { _objWallpaper = obj; }
 
-        public void SetClickAction(string str) { _sClickAction = str; }
         public void SetTravelPoint(TravelPoint obj) { _travelPoint = obj; }
         public TravelPoint GetTravelPoint()
         {

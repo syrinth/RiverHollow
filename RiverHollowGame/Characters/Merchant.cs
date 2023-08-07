@@ -95,7 +95,7 @@ namespace RiverHollow.Characters
                 if (!_bHasTalked) { rv = GetDailyDialogue(); }
                 else
                 {
-                    rv = _diDialogue["Selection"];
+                    rv = GetDialogEntry("Selection");
                 }
             }
 
@@ -201,7 +201,7 @@ namespace RiverHollow.Characters
 
             foreach (string s in data.spokenKeys)
             {
-                _diDialogue[s].Spoken(this);
+                GetDialogEntry(s).Spoken(this);
             }
         }
     }

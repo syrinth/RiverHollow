@@ -4,7 +4,7 @@
     {
         public const bool DRAW_COLLISION = false;
         public const bool DRAW_HITBOX = false;
-        public const bool DRAW_ADJACENCY = false;
+        public const bool DRAW_ADJACENCY = true;
         public const int PLAYER_ADJACENCY_SIZE = TILE_SIZE / 2;
         public const int GRAB_REACH = 1;
         public const float MOUSE_PRESS_INTERVAL = 0.5f;
