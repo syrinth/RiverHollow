@@ -878,6 +878,24 @@ namespace RiverHollow.Utilities
                 return initValue;
             }
         }
+
+        public static void AssignSpawnData(ref Dictionary<RarityEnum, List<SpawnData>> rarityDictionary, string spawnData, SpawnTypeEnum t)
+        {
+            string[] spawnResources = Util.FindParams(spawnData);
+            foreach (string s in spawnResources)
+            {
+                int resourceID = -1;
+                RarityEnum rarity = RarityEnum.C;
+                Util.GetRarity(s, ref resourceID, ref rarity);
+
+                if (!rarityDictionary.ContainsKey(rarity))
+                {
+                    rarityDictionary[rarity] = new List<SpawnData>();
+                }
+
+                rarityDictionary[rarity].Add(new SpawnData(resourceID, t));
+            }
+        }
     }
 
     public class RHRandom : Random

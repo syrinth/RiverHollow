@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="29" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="197">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="29" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="197">
  <properties>
+  <property name="FillerID" value="103-60-Spread-80/51-5/60-40/147-20"/>
+  <property name="FillerPercent" type="float" value="0.3"/>
+  <property name="FillerRate" type="float" value="0.2"/>
   <property name="ItemID" value="162-U/163-R"/>
   <property name="MapType" value="Town"/>
-  <property name="ObjectID" value="51-U/60-C/147-R/111-R"/>
   <property name="Outside" type="bool" value="true"/>
+  <property name="ResourceItemID" value="162-C/111-R/163-R"/>
+  <property name="ResourceRate" type="int" value="1"/>
+  <property name="ResourceTotal" value="6"/>
   <property name="ResourcesToSpawn" value="25-40"/>
   <property name="WorldData" value="208-16"/>
   <property name="WorldLink" value="mapWoods_Small-30/mapMountain_Small-20"/>

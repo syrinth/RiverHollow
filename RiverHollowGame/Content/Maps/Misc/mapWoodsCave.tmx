@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="24" height="34" tilewidth="16" tileheight="16" infinite="0" nextlayerid="23" nextobjectid="78">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="24" height="34" tilewidth="16" tileheight="16" infinite="0" nextlayerid="23" nextobjectid="78">
  <properties>
+  <property name="FillerID" value="60-100/52-10"/>
+  <property name="FillerPercent" type="float" value="0.3"/>
   <property name="ItemID" value="23-U"/>
   <property name="MapType" value="Cave"/>
   <property name="Mobs" value="1-3"/>
-  <property name="ObjectID" value="60-C/52-U"/>
   <property name="Randomize" type="bool" value="true"/>
-  <property name="ResourcesToSpawn" value="30-50"/>
+  <property name="ResourceItemID" value="23-C"/>
+  <property name="ResourceTotal" value="3"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsWalls_Floors.tsx"/>

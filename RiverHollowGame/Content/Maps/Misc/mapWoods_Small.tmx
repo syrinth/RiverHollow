@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="58" height="80" tilewidth="16" tileheight="16" infinite="0" nextlayerid="25" nextobjectid="258">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="58" height="80" tilewidth="16" tileheight="16" infinite="0" nextlayerid="25" nextobjectid="259">
  <properties>
-  <property name="ItemID" value="162-U/163-R"/>
+  <property name="FillerID" value="103-60-Spread-80/51-5/60-5/147-20"/>
+  <property name="FillerPercent" type="float" value="0.3"/>
+  <property name="FillerRate" type="float" value="0.3"/>
   <property name="MapType" value="Forest"/>
   <property name="Mobs" value="4-7"/>
-  <property name="ObjectID" value="51-C/60-C/147-C/106-U"/>
   <property name="Outside" type="bool" value="true"/>
-  <property name="ResourcesToSpawn" value="80-100"/>
-  <property name="WorldData" value="176-128"/>
-  <property name="WorldLink" value="mapTown-30/mapFoothills_Small-30/mapGrove-10"/>
-  <property name="WorldMapCost" type="int" value="5"/>
+  <property name="ResourceItemID" value="162-C/163-R"/>
+  <property name="ResourceObjectID" value="106-U"/>
+  <property name="ResourceRate" type="int" value="1"/>
+  <property name="ResourceTotal" value="10"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsBuildings.tsx"/>
@@ -307,7 +308,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="MapObject" visible="0">
+ <objectgroup id="5" name="MapObject">
   <object id="229" name="Stump" x="384" y="496" width="32" height="32">
    <properties>
     <property name="ObjectID" type="int" value="63"/>
@@ -463,18 +464,6 @@
   <object id="254" name="Heart Root" x="832" y="640" width="16" height="16">
    <properties>
     <property name="ItemID" value="163"/>
-   </properties>
-  </object>
-  <object id="256" name="Resource" x="0" y="0" width="927.998" height="1280">
-   <properties>
-    <property name="ObjectID" value="103-C"/>
-    <property name="ResourcesToSpawn" value="250"/>
-   </properties>
-  </object>
-  <object id="257" name="Resource" x="0" y="0" width="927.998" height="1280">
-   <properties>
-    <property name="ObjectID" value="103-C"/>
-    <property name="ResourcesToSpawn" value="250"/>
    </properties>
   </object>
  </objectgroup>

@@ -25,7 +25,6 @@ namespace RiverHollow.Game_Managers
         public static Building Home { get; private set; }
         public static Structure Market { get; private set; }
 
-        private static Dictionary<int, List<WorldObject>> _diTownObjects;
         public static Dictionary<int, Villager> DIVillagers { get; private set; }
         public static Dictionary<int, Merchant> DIMerchants { get; private set; }
         public static Dictionary<int, ValueTuple<bool, int>> DITravelerInfo { get; private set; }
@@ -38,7 +37,6 @@ namespace RiverHollow.Game_Managers
 
         public static void Initialize()
         {
-            _diTownObjects = new Dictionary<int, List<WorldObject>>();
             TownAnimals = new List<Animal>();
             Travelers = new List<Traveler>();
 
@@ -201,7 +199,7 @@ namespace RiverHollow.Game_Managers
         private static int BuildingTravelerChance()
         {
             int rv = 0;
-            foreach (var kvp in _diTownObjects)
+            foreach (var kvp in MapManager.TownMap.GetObjects())
             {
                 Building b = GetBuildingByID(kvp.Key);
                 if (b != null)
@@ -414,59 +412,18 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static void AddToTownObjects(WorldObject obj)
+        public static void TownManagerCheck(RHMap map, WorldObject obj)
         {
-            bool buildable = false;
-            switch (obj.Type)
+            if (map == MapManager.TownMap)
             {
-                case ObjectTypeEnum.Buildable:
-                case ObjectTypeEnum.Plant:
-                    buildable = true;
-                    break;
-            }
-
-            if (obj.GetBoolByIDKey("Inn")) { Inn = (Building)obj; }
-            if (obj.GetBoolByIDKey("Home")) { Home = (Building)obj; }
-            if (obj.GetBoolByIDKey("Market")) { Market = (Structure)obj; }
-
-            if (buildable)
-            {
-                if (!_diTownObjects.ContainsKey(obj.ID)) { _diTownObjects[obj.ID] = new List<WorldObject>(); }
-                if (!_diTownObjects[obj.ID].Contains(obj))
-                {
-                    _diTownObjects[obj.ID].Add(obj);
-                }
-            }
-        }
-        public static void RemoveTownObjects(WorldObject obj)
-        {
-            if (!_diTownObjects[obj.ID].Contains(obj))
-            {
-                _diTownObjects[obj.ID].Add(obj);
+                if (obj.GetBoolByIDKey("Inn")) { Inn = (Building)obj; }
+                if (obj.GetBoolByIDKey("Home")) { Home = (Building)obj; }
+                if (obj.GetBoolByIDKey("Market")) { Market = (Structure)obj; }
             }
         }
         public static int GetNumberTownObjects(int objID)
         {
-            int rv = 0;
-
-            if (_diTownObjects.ContainsKey(objID))
-            {
-                var objects = _diTownObjects[objID];
-
-                if (DataManager.GetEnumByIDKey<ObjectTypeEnum>(objID, "Type", DataType.WorldObject) == ObjectTypeEnum.Plant)
-                {
-                    for (int i = 0; i < objects.Count; i++)
-                    {
-                        var obj = (Plant)objects[i];
-                        if (obj.FinishedGrowing())
-                        {
-                            rv++;
-                        }
-                    }
-                }
-                else { rv = objects.Count; }
-            }
-            return rv;
+            return MapManager.TownMap.GetNumberObjects(objID, true);
         }
         public static bool TownObjectBuilt(int objID)
         {
@@ -474,25 +431,19 @@ namespace RiverHollow.Game_Managers
         }
         public static List<WorldObject> GetTownObjectsByID(int objID)
         {
-            List<WorldObject> rv = new List<WorldObject>();
-
-            if (_diTownObjects.ContainsKey(objID))
-            {
-                rv = _diTownObjects[objID];
-            }
-            return rv;
+            return MapManager.TownMap.GetObjectsByID(objID);
         }
         public static Building GetBuildingByID(int objID)
         {
             Building rv = null;
             if (TownObjectBuilt(objID) && DataManager.GetEnumByIDKey<BuildableEnum>(objID, "Subtype", DataType.WorldObject) == BuildableEnum.Building)
             {
-                rv = (Building)GetTownObjectsByID(objID)[0];
+                rv = (Building)MapManager.TownMap.GetObjectsByID(objID)[0];
             }
 
             return rv;
         }
-        public static IReadOnlyDictionary<int, List<WorldObject>> GetTownObjects() { return _diTownObjects; }
+        public static IReadOnlyDictionary<int, List<WorldObject>> GetTownObjects() { return MapManager.TownMap.GetObjects(); }
         #endregion
 
         public static TownData SaveData()

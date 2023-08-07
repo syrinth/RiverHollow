@@ -6,16 +6,8 @@
       <Value>[ItemID:140]</Value>
     </Item>
     <Item>
-      <Key>1</Key>
-      <Value>[ObjectID:60]</Value>
-    </Item>
-    <Item>
       <Key>2</Key>
       <Value>[ObjectID:50]</Value>
-    </Item>
-    <Item>
-      <Key>3</Key>
-      <Value>[ObjectID:65]</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -44,10 +36,6 @@
     <Item>
       <Key>10</Key>
       <Value>[ObjectID:40]</Value>
-    </Item>
-    <Item>
-      <Key>11</Key>
-      <Value>[ObjectID:147]</Value>
     </Item>
     <Item>
       <Key>12</Key>

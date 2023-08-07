@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="50" height="48" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="171">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="48" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="171">
  <properties>
+  <property name="FillerID" value="103-60-Spread-80/51-5/60-5/147-20/65-20"/>
+  <property name="FillerPercent" type="float" value="0.55"/>
+  <property name="FillerRate" type="float" value="0.2"/>
   <property name="MapType" value="Town"/>
   <property name="Outside" type="bool" value="true"/>
   <property name="Town" type="bool" value="true"/>
-  <property name="WorldData" value="240-144"/>
-  <property name="WorldLink" value="mapWoods_Small-30"/>
-  <property name="WorldMapCost" type="int" value="10"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsBuildings.tsx"/>

@@ -14,9 +14,12 @@ using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Remoting;
+using System.Xml.Linq;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
@@ -69,7 +72,7 @@ namespace RiverHollow.Map_Handling
         protected List<Mob> _liMobs;
         public IList<Mob> Mobs { get { return _liMobs.AsReadOnly(); } }
         public List<Actor> ToAdd;
-        private List<WorldObject> _liPlacedWorldObjects;
+        private Dictionary<int, List<WorldObject>> _diWorldObjects;
         private List<ResourceSpawn> _liResourceSpawns;
         private List<MobSpawn> _liMobSpawns;
         private List<int> _liCutscenes;
@@ -100,7 +103,7 @@ namespace RiverHollow.Map_Handling
             _liItems = new List<MapItem>();
             _liMapObjects = new List<TiledMapObject>();
 
-            _liPlacedWorldObjects = new List<WorldObject>();
+            _diWorldObjects = new Dictionary<int, List<WorldObject>>();
             _liLights = new List<Light>();
             _liCutscenes = new List<int>();
 
@@ -132,7 +135,7 @@ namespace RiverHollow.Map_Handling
                 DungeonName = _map.Properties["Dungeon"];
                 DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], _map.Properties.ContainsKey("Procedural"), this);
             }
-            _liPlacedWorldObjects = map._liPlacedWorldObjects;
+            _diWorldObjects = map._diWorldObjects;
             _liLights = map._liLights;
             _iShopID = map._iShopID;
 
@@ -225,14 +228,15 @@ namespace RiverHollow.Map_Handling
 
             foreach (WorldObject obj in _liObjectsToRemove)
             {
-                _liPlacedWorldObjects.Remove(obj);
+                DIRemoveObject(obj);
             }
             _liObjectsToRemove.Clear();
 
-            foreach (WorldObject obj in _liPlacedWorldObjects) {
-                if (this == MapManager.CurrentMap || obj.CompareType(ObjectTypeEnum.Machine))
+            if (this == MapManager.CurrentMap)
+            {
+                foreach (var objectList in _diWorldObjects.Values)
                 {
-                    obj.Update(gTime);
+                    objectList.ForEach(x => x.Update(gTime));
                 }
             }
 
@@ -286,6 +290,14 @@ namespace RiverHollow.Map_Handling
             _liItemsToRemove.Clear();
         }
 
+        #region Draw
+        public void SetLayerVisibiltyByName(bool visible, string designation)
+        {
+            foreach (TiledMapTileLayer layer in _diTileLayers[designation])
+            {
+                layer.IsVisible = visible;
+            }
+        }
         public void DrawBelowBase(SpriteBatch spriteBatch)
         {
             if (MapBelowValid()) {
@@ -331,8 +343,12 @@ namespace RiverHollow.Map_Handling
 
             _liActors.ForEach(x => x.Draw(spriteBatch, true));
             _liMobs.FindAll(x => !x.GetBoolByIDKey("Fly") || !x.HasHP).ForEach(x => x.Draw(spriteBatch, true));
-            _liPlacedWorldObjects.ForEach(x => x.Draw(spriteBatch));
             _liItems.ForEach(x => x.Draw(spriteBatch));
+
+            foreach(var objectList in _diWorldObjects.Values)
+            {
+                objectList.ForEach(x => x.Draw(spriteBatch));
+            }
 
             if (TheShop != null)
             {
@@ -383,15 +399,9 @@ namespace RiverHollow.Map_Handling
             SetLayerVisibiltyByName(true, "Ground");
             SetLayerVisibiltyByName(false, "Upper");
         }
+        #endregion
 
-        public void SetLayerVisibiltyByName(bool visible, string designation)
-        {
-            foreach (TiledMapTileLayer layer in _diTileLayers[designation])
-            {
-                layer.IsVisible = visible;
-            }
-        }
-
+        #region Lights
         public void DrawLights(SpriteBatch spriteBatch)
         {
             foreach (Light obj in _liLights) { obj.Draw(spriteBatch); }
@@ -425,6 +435,279 @@ namespace RiverHollow.Map_Handling
                 }
             }
         }
+        #endregion
+
+        #region WorldObject Accessors
+        public IReadOnlyDictionary<int, List<WorldObject>> GetObjects()
+        {
+            return _diWorldObjects;
+        }
+        public void AddToWorldObjects(WorldObject obj)
+        {
+            TownManager.TownManagerCheck(this, obj);
+
+            if (!_diWorldObjects.ContainsKey(obj.ID))
+            {
+                _diWorldObjects[obj.ID] = new List<WorldObject>();
+            }
+            if (!_diWorldObjects[obj.ID].Contains(obj))
+            {
+                _diWorldObjects[obj.ID].Add(obj);
+            }
+        }
+        public void DIRemoveObject(WorldObject obj)
+        {
+            if (_diWorldObjects[obj.ID].Contains(obj))
+            {
+                _diWorldObjects[obj.ID].Remove(obj);
+            }
+        }
+        public int GetNumberObjects(int objID, bool onlyFinished)
+        {
+            int rv = 0;
+
+            if (_diWorldObjects.ContainsKey(objID))
+            {
+                var objects = _diWorldObjects[objID];
+
+                if (onlyFinished && DataManager.GetEnumByIDKey<ObjectTypeEnum>(objID, "Type", DataType.WorldObject) == ObjectTypeEnum.Plant)
+                {
+                    for (int i = 0; i < objects.Count; i++)
+                    {
+                        var obj = (Plant)objects[i];
+                        if (obj.FinishedGrowing())
+                        {
+                            rv++;
+                        }
+                    }
+                }
+                else { rv = objects.Count; }
+            }
+            return rv;
+        }
+        public List<WorldObject> GetObjectsByID(int objID)
+        {
+            List<WorldObject> rv = new List<WorldObject>();
+
+            if (_diWorldObjects.ContainsKey(objID))
+            {
+                rv = _diWorldObjects[objID];
+            }
+            return rv;
+        }
+        #endregion
+
+        #region Resource Generation
+        private List<RHTile> GetValidTiles()
+        {
+            List<RHTile> possibleTiles = TileList;
+            var impassable = possibleTiles.FindAll(x => !x.TileIsPassable());
+            var obj = possibleTiles.FindAll(x => x.WorldObject != null);
+            var flooring = possibleTiles.FindAll(x => x.Flooring != null);
+
+            impassable.ForEach(x => possibleTiles.Remove(x));
+            obj.ForEach(x => possibleTiles.Remove(x));
+            flooring.ForEach(x => possibleTiles.Remove(x));
+
+            //possibleTiles.RemoveAll(x => !x.TileIsPassable() || x.WorldObject != null || x.Flooring != null);
+            RemoveTilesNearTravelPoints(ref possibleTiles);
+            RemoveTilesNearSpecialObjects(ref possibleTiles);
+            RemoveSkipTiles(ref possibleTiles);
+
+            return possibleTiles;
+        }
+        public void SpawnMapEntities(bool spawnAboveAndBelow = true)
+        {
+            if (!Visited)
+            {
+                Visited = true;
+                if (spawnAboveAndBelow)
+                {
+                    if (MapAboveValid()) { MapManager.Maps[MapAbove].SpawnMapEntities(false); }
+                    if (MapBelowValid()) { MapManager.Maps[MapBelow].SpawnMapEntities(false); }
+                }
+
+                GenerateMapObjects();
+            }
+
+            if (MobsSpawned == MobSpawnStateEnum.None)
+            {
+                SpawnMobs();
+                if (GameCalendar.IsNight()) { MobsSpawned = MobSpawnStateEnum.Night; }
+                else { MobsSpawned = MobSpawnStateEnum.Day; }
+            }
+            else if (MobsSpawned == MobSpawnStateEnum.Day)
+            {
+                if (GameCalendar.IsNight())
+                {
+                    SpawnMobs();
+                    MobsSpawned = MobSpawnStateEnum.Night;
+                }
+            }
+
+            StockShop();
+        }
+        private void GenerateMapObjects()
+        {
+            //Step 1 Resource Spawn points need to fire
+            _liResourceSpawns.ForEach(x => x.Spawn());
+
+            //Step 2 Determine valid Tiles
+            var possibleTiles = GetValidTiles();
+
+            //Step 3 Map Resources need to be generated
+            List<RHTile> hiddenTiles = possibleTiles.FindAll(x => !x.GetTileByDirection(DirectionEnum.Down).TileIsPassable());
+            hiddenTiles.ForEach(x => possibleTiles.Remove(x));
+            GenerateMapResources(false,  ref possibleTiles);
+
+            //Step 4 Filler Resources need to be generated
+            hiddenTiles.ForEach(x => possibleTiles.Add(x));
+            GenerateFillerResources(false, ref possibleTiles);
+        }
+        private void GenerateMapResources(bool refresh, ref List<RHTile> possibleTiles)
+        {
+            if (_map.Properties.ContainsKey("ResourceTotal"))
+            {
+                var total = Util.FindIntArguments(_map.Properties["ResourceTotal"]);
+                int totalResources = total.Length == 1 ? total[0] : RHRandom.Instance().Next(total[0], total[1]);
+
+                var rarityTable = new Dictionary<RarityEnum, List<SpawnData>>();
+                if (_map.Properties.ContainsKey("ResourceItemID"))
+                {
+                    Util.AssignSpawnData(ref rarityTable, _map.Properties["ResourceItemID"], SpawnTypeEnum.Item);
+                }
+
+                if (_map.Properties.ContainsKey("ResourceObjectID"))
+                {
+                    Util.AssignSpawnData(ref rarityTable, _map.Properties["ResourceObjectID"], SpawnTypeEnum.Object);
+                }
+
+                int presentResources = 0;
+                var keys = new List<RarityEnum>(rarityTable.Keys);
+                foreach(var key in keys)
+                {
+                    foreach (var data in rarityTable[key])
+                    {
+                        if (data.Type == SpawnTypeEnum.Object)
+                        {
+                            presentResources += GetObjectsByID(data.ID).Count;
+                        }
+                        else if (data.Type == SpawnTypeEnum.Item)
+                        {
+                            var objList = GetObjectsByID(-1);
+                            foreach(var obj in objList)
+                            {
+                                var wrappedObj = (WrappedItem)obj;
+                                if (wrappedObj.ItemID == data.ID)
+                                {
+                                    presentResources++;
+                                }
+                            }
+                        }
+                    }
+                }
+                int spawnNumber = totalResources - presentResources;
+                if (refresh && _map.Properties.ContainsKey("ResourceRate"))
+                {
+                    spawnNumber = Math.Min(spawnNumber, int.Parse(_map.Properties["ResourceRate"]));
+                }
+
+                for (int i = 0; i < spawnNumber; i++)
+                {
+                    WorldObject obj = Util.RollOnRarityTable(rarityTable).GetDataObject();
+                    PlaceGeneratedObject(obj, ref possibleTiles, refresh);
+                }
+            }
+        }
+        private void GenerateFillerResources(bool refresh, ref List<RHTile> possibleTiles)
+        {
+            if (_map.Properties.ContainsKey("FillerPercent") && _map.Properties.ContainsKey("FillerID"))
+            {
+                int totalWeight = 0;
+                int totalPreexisting = 0;
+                int totalValid = possibleTiles.Count;
+                string[] fillerParams = Util.FindParams(_map.Properties["FillerID"]);
+
+                for (int i = 0; i < fillerParams.Length; i++)
+                {
+                    var fillData = Util.FindArguments(fillerParams[i]);
+                    totalWeight += int.Parse(fillData[1]);
+                    totalPreexisting += GetObjectsByID(int.Parse(fillData[0])).Count;
+                }
+
+                int totalResources = (int)((totalValid + totalPreexisting) * float.Parse(_map.Properties["FillerPercent"]));
+
+                for (int i = 0; i < fillerParams.Length; i++)
+                {
+                    var fillData = Util.FindArguments(fillerParams[i]);
+
+                    int id = int.Parse(fillData[0]);
+                    int currentExisting = GetObjectsByID(id).Count;
+                    int totalFill = (int)(totalResources * float.Parse(fillData[1]) / totalWeight);
+                    int spawnNumber = totalFill - currentExisting;
+
+                    //FillerRate is expressed weekly, so need to divide it by days/week
+                    if (refresh && _map.Properties.ContainsKey("FillerRate"))
+                    {
+                        int maxRefresh = (int)Math.Ceiling(totalFill * (float.Parse(_map.Properties["FillerRate"]) / Enum.GetNames(typeof(DayEnum)).Length));
+                        if (spawnNumber > maxRefresh)
+                        {
+                            spawnNumber = maxRefresh;
+                        }
+                    }
+
+                    for (int j = 0; j < spawnNumber; j++)
+                    {
+                        WorldObject obj = DataManager.CreateWorldObjectByID(id);
+                        PlaceGeneratedObject(obj, ref possibleTiles, refresh);
+                    }
+                }
+            }
+        }
+        public void PlaceGeneratedObject(WorldObject obj, ref List<RHTile> possibleTiles, bool refresh)
+        {
+            if (obj != null)
+            {
+                do
+                {
+                    var tile = Util.GetRandomItem(possibleTiles);
+                    obj.SnapPositionToGrid(new Point(tile.Position.X, tile.Position.Y));
+                } while (!obj.PlaceOnMap(this));
+
+                foreach (RHTile t in obj.Tiles)
+                {
+                    possibleTiles.Remove(t);
+                }
+
+                if (!refresh && obj.CompareType(ObjectTypeEnum.Plant))
+                {
+                    var p = (Plant)obj;
+                    if (p.NeedsWatering) { p.FinishGrowth(); }
+                    else { p.RandomizeState(); }
+                }
+            }
+        }
+        private void GenerateRolloverResources()
+        {
+            if (Visited && (this != MapManager.TownMap  || GameCalendar.CurrentDay == 1))
+            {
+                //Step 1 Resource Spawn Points refresh themselves
+                _liResourceSpawns.ForEach(x => x.Rollover(Randomize));
+
+                //Step 2 determine how many tiles are available
+                var possibleTiles = GetValidTiles();
+
+                //Step 3 Map Resources need to be generated
+                List<RHTile> hiddenTiles = possibleTiles.FindAll(x => !x.GetTileByDirection(DirectionEnum.Down).TileIsPassable());
+                hiddenTiles.ForEach(x => possibleTiles.Remove(x));
+                GenerateMapResources(true, ref possibleTiles);
+
+                //Step 4 Filler Resources need to be generated
+                hiddenTiles.ForEach(x => possibleTiles.Add(x));
+                GenerateFillerResources(true, ref possibleTiles);
+            }
+        }
+        #endregion
 
         public void LoadMapObjects()
         {
@@ -520,12 +803,6 @@ namespace RiverHollow.Map_Handling
                     }
                 }
             }
-
-            //Add the map spawn last
-            if (_map.Properties.ContainsKey("ItemID") || _map.Properties.ContainsKey("ObjectID"))
-            {
-                _liResourceSpawns.Add(new ResourceSpawn(this));
-            }
         }
 
         public void PopulateMap(bool forceRepop)
@@ -566,38 +843,6 @@ namespace RiverHollow.Map_Handling
                     }
                 }
             }
-        }
-
-        public void SpawnMapEntities(bool spawnAboveAndBelow = true)
-        {
-            if (!Visited)
-            {
-                Visited = true;
-                if (spawnAboveAndBelow)
-                {
-                    if (MapAboveValid()) { MapManager.Maps[MapAbove].SpawnMapEntities(false); }
-                    if (MapBelowValid()) { MapManager.Maps[MapBelow].SpawnMapEntities(false); }
-                }
-
-                _liResourceSpawns.ForEach(x => x.Spawn());
-            }
-
-            if (MobsSpawned == MobSpawnStateEnum.None) {
-
-                SpawnMobs();
-                if (GameCalendar.IsNight()) { MobsSpawned = MobSpawnStateEnum.Night; }
-                else { MobsSpawned = MobSpawnStateEnum.Day; }
-            }
-            else if (MobsSpawned == MobSpawnStateEnum.Day)
-            {
-                if (GameCalendar.IsNight())
-                {
-                    SpawnMobs();
-                    MobsSpawned = MobSpawnStateEnum.Night;
-                }
-            }
-
-            StockShop();
         }
 
         public ResourceSpawn GetFishingHole(RHTile t)
@@ -653,17 +898,6 @@ namespace RiverHollow.Map_Handling
             return _liMobs.Count - _liActorsToRemove.FindAll(x => x.ActorType == ActorTypeEnum.Mob).Count <= 0;
         }
 
-        public void AlertSpawnPoint(WorldObject obj)
-        {
-            for (int i = 0; i < _liResourceSpawns.Count; i++)
-            {
-                if (_liResourceSpawns[i].AlertSpawnPoint(obj))
-                {
-                    break;
-                }
-            }
-        }
-
         /// <summary>
         /// Sets the MonsterFood for the map
         /// </summary>
@@ -695,20 +929,24 @@ namespace RiverHollow.Map_Handling
         public void ClearMapEntities()
         {
             foreach (Mob m in _liMobs) { RemoveActor(m); }
-            foreach (WorldObject obj in _liPlacedWorldObjects)
+
+            foreach (var objectList in _diWorldObjects.Values)
             {
-                switch (obj.Type)
+                foreach (WorldObject obj in objectList)
                 {
-                    case ObjectTypeEnum.DungeonObject:
-                        if (Modular) { goto case ObjectTypeEnum.WorldObject; }
-                        else { break; }
-                    case ObjectTypeEnum.Hazard:
-                    case ObjectTypeEnum.Destructible:
-                    case ObjectTypeEnum.Gatherable:
-                    case ObjectTypeEnum.Plant:
-                    case ObjectTypeEnum.WorldObject:
-                        RemoveWorldObject(obj);
-                        break;
+                    switch (obj.Type)
+                    {
+                        case ObjectTypeEnum.DungeonObject:
+                            if (Modular) { goto case ObjectTypeEnum.WorldObject; }
+                            else { break; }
+                        case ObjectTypeEnum.Hazard:
+                        case ObjectTypeEnum.Destructible:
+                        case ObjectTypeEnum.Gatherable:
+                        case ObjectTypeEnum.Plant:
+                        case ObjectTypeEnum.WorldObject:
+                            DIRemoveObject(obj);
+                            break;
+                    }
                 }
             }
         }
@@ -718,14 +956,23 @@ namespace RiverHollow.Map_Handling
             if (Randomize)
             {
                 Visited = false;
-                _liPlacedWorldObjects.ForEach(x => x.RemoveSelfFromTiles());
-                _liPlacedWorldObjects.Clear();
+                foreach (var objectList in _diWorldObjects.Values)
+                {
+                    objectList.ForEach(x => x.RemoveSelfFromTiles());
+                }
+                _diWorldObjects.Clear();
             }
+
             MobsSpawned = MobSpawnStateEnum.None;
-            new List<WorldObject>(_liPlacedWorldObjects).ForEach(x => x.Rollover());
-            _liResourceSpawns.ForEach(x => x.Rollover(Randomize));
+            var keys = new List<int>(_diWorldObjects.Keys);
+            foreach (var key in keys)
+            {
+                new List<WorldObject>(_diWorldObjects[key]).ForEach(x => x.Rollover());
+            }
 
             _liSpecialTiles.ForEach(x => x.Rollover());
+            
+            GenerateRolloverResources();
 
             PopulateMap(Randomize);
             CheckSpirits();
@@ -1648,7 +1895,7 @@ namespace RiverHollow.Map_Handling
             {
                 if (this == MapManager.TownMap)
                 {
-                    TownManager.AddToTownObjects(placeObject);
+                    AddToWorldObjects(placeObject);
                     TaskManager.AdvanceTaskProgress(placeObject);
                 }
 
@@ -1698,7 +1945,7 @@ namespace RiverHollow.Map_Handling
             {
                 if (this == MapManager.TownMap)
                 {
-                    TownManager.AddToTownObjects(placeObject);
+                    AddToWorldObjects(placeObject);
                     TaskManager.AdvanceTaskProgress(placeObject);
                 }
 
@@ -1764,7 +2011,7 @@ namespace RiverHollow.Map_Handling
 
         public void RemoveWorldObject(WorldObject o, bool immediately = false)
         {
-            if (immediately) { _liPlacedWorldObjects.Remove(o); }
+            if (immediately) { DIRemoveObject(o); }
             else { _liObjectsToRemove.Add(o); }
             o.RemoveSelfFromTiles();
         }
@@ -1826,7 +2073,7 @@ namespace RiverHollow.Map_Handling
             targetObj.RemoveSelfFromTiles();
             RemoveLights(targetObj.GetLights());
 
-            _liPlacedWorldObjects.Remove(targetObj);
+            DIRemoveObject(targetObj);
         }
 
         public bool PlaceWorldObject(WorldObject o, bool ignoreActors = false)
@@ -1977,10 +2224,7 @@ namespace RiverHollow.Map_Handling
         {
             tiles.FindAll(t => !obj.Tiles.Contains(t)).ForEach(t => obj.Tiles.Add(t));
 
-            if (!_liPlacedWorldObjects.Contains(obj))
-            {
-                _liPlacedWorldObjects.Add(obj);
-            }
+            AddToWorldObjects(obj);
 
             //Sets the WorldObject to each RHTile
             tiles.ForEach(x => x.SetObject(obj));
@@ -2309,6 +2553,19 @@ namespace RiverHollow.Map_Handling
             }
         }
 
+        private void RemoveSkipTiles(ref List<RHTile> tiles)
+        {
+            var objectLayer = Map.ObjectLayers.First(x => x.Name.Contains("MapObject"));
+            var skipObjs = objectLayer.Objects.Where(x => x.Name.Equals("Skip"));
+            foreach (var obj in skipObjs)
+            {
+                foreach (var tile in GetTilesFromRectangleExcludeEdgePoints(Util.RectFromTiledMapObject(obj)))
+                {
+                    tiles.Remove(tile);
+                }
+            }
+        }
+
         public bool MapAboveValid()
         {
             return !string.IsNullOrEmpty(MapAbove) && MapAbove != MapManager.CurrentMap.Name;
@@ -2343,11 +2600,14 @@ namespace RiverHollow.Map_Handling
 
             if (!IsDungeon)
             {
-                foreach (WorldObject wObj in _liPlacedWorldObjects)
+                foreach (var objectList in _diWorldObjects.Values)
                 {
-                    if (!wObj.Reset)
+                    foreach (WorldObject wObj in objectList)
                     {
-                        mapData.worldObjects.Add(wObj.SaveData());
+                        if (!wObj.Reset)
+                        {
+                            mapData.worldObjects.Add(wObj.SaveData());
+                        }
                     }
                 }
 
@@ -2379,7 +2639,6 @@ namespace RiverHollow.Map_Handling
                 {
                     obj.LoadData(data);
                     obj.PlaceOnMap(this);
-                    if (this == MapManager.TownMap) { TownManager.AddToTownObjects(obj); }
                 }
 
                 //obj?.PlaceOnMap(new Vector2(w.x, w.y), this);

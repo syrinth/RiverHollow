@@ -172,49 +172,6 @@ namespace RiverHollow.Game_Managers
             {
                 map.PopulateMap(gameStart);
             }
-
-            if (gameStart)
-            {
-                int rockID = int.Parse(DataManager.Config[1]["ObjectID"]);
-                int treeID = int.Parse(DataManager.Config[3]["ObjectID"]);
-                int weedID = int.Parse(DataManager.Config[11]["ObjectID"]);
-
-                List<RHTile> possibleTiles = TownMap.TileList;
-                possibleTiles.RemoveAll(x => !x.Passable() || x.Flooring != null);
-
-                var objectLayer = TownMap.Map.ObjectLayers.First(x => x.Name.Contains("MapObject"));
-                var skipObjs = objectLayer.Objects.Where(x => x.Name.Equals("Skip"));
-                foreach(var obj in skipObjs)
-                {
-                    foreach(var tile in TownMap.GetTilesFromRectangleExcludeEdgePoints(Util.RectFromTiledMapObject(obj)))
-                    {
-                        possibleTiles.Remove(tile);
-                    }
-                }
-
-                PopulateHomeMapHelper(ref possibleTiles, rockID, 50);
-                PopulateHomeMapHelper(ref possibleTiles, treeID, 50);
-                PopulateHomeMapHelper(ref possibleTiles, weedID, 200);
-                PopulateHomeMapHelper(ref possibleTiles, 103, (int)(possibleTiles.Count * 0.4));
-            }
-        }
-        private static void PopulateHomeMapHelper(ref List<RHTile> possibleTiles, int ID, int numToPlace)
-        {
-            RHRandom rand = RHRandom.Instance();
-            for (int i = 0; i < numToPlace; i++)
-            {
-                RHTile targetTile = possibleTiles[rand.Next(0, possibleTiles.Count - 1)];
-                WorldObject obj = DataManager.CreateWorldObjectByID(ID);
-                obj.PlaceOnMap(targetTile.Position, MapManager.Maps[Constants.TOWN_MAP_NAME]);
-                if (obj.CompareType(ObjectTypeEnum.Plant))
-                {
-                    var p = (Plant)obj;
-                    if (i <= numToPlace * 0.2) { p.FinishGrowth(); }
-                    else { p.RandomizeState(); }
-                }
-
-                possibleTiles.Remove(targetTile);
-            }
         }
 
         public static void Update(GameTime gTime)

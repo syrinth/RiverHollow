@@ -38,7 +38,6 @@ namespace RiverHollow.WorldObjects
         {
             if (InventoryManager.HasSpaceInInventory(_iItemID, 1))
             {
-                CurrentMap.AlertSpawnPoint(this);
                 MapManager.RemoveWorldObject(this, true);
                 RemoveSelfFromTiles();
                 InventoryManager.AddToInventory(DataManager.GetItem(_iItemID));

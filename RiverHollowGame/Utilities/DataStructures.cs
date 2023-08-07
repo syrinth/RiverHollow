@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Buildings;
+using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Map_Handling;
 using RiverHollow.SpriteAnimations;
@@ -9,6 +10,40 @@ using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Utilities
 {
+    public class SpawnData
+    {
+        public readonly int ID;
+        public readonly SpawnTypeEnum Type;
+
+        public SpawnData(int id, SpawnTypeEnum t)
+        {
+            ID = id;
+            Type = t;
+        }
+
+        public WorldObject GetDataObject()
+        {
+            WorldObject rv = null;
+
+            switch (Type)
+            {
+                case SpawnTypeEnum.Item:
+                    var item = DataManager.GetItem(ID);
+                    if (item != null)
+                    {
+                        rv = new WrappedItem(item.ID);
+                    }
+                    break;
+                case SpawnTypeEnum.Object:
+                    rv = DataManager.CreateWorldObjectByID(ID);
+                    break;
+
+            }
+
+            return rv;
+        }
+    }
+
     struct NewMapInfo
     {
         public DirectionEnum Facing;
