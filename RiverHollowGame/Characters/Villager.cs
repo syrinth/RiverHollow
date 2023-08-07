@@ -76,7 +76,6 @@ namespace RiverHollow.Characters
                 _eSpawnStatus = SpawnStateEnum.NonTownMap;
             }
 
-
             if (stringData.ContainsKey("Collection"))
             {
                 string[] vectorSplit = Util.FindParams(stringData["Collection"]);

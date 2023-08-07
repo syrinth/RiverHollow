@@ -2378,7 +2378,6 @@ namespace RiverHollow.Map_Handling
             _liMobs.Add(m);
         }
         #endregion
-
         public List<TiledMapObject> GetMapObjectsByName(string name)
         {
             return _liMapObjects.FindAll(x => x.Name.Equals(name));

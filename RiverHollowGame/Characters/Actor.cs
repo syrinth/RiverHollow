@@ -13,6 +13,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.GUIComponents;
 using System;
 using RiverHollow.WorldObjects;
+using MonoGame.Extended.Sprites;
 
 namespace RiverHollow.Characters
 {
@@ -517,12 +518,14 @@ namespace RiverHollow.Characters
         /// change, a tile or two earlier than anticipated. In which case, we need to wipe
         /// any tiles that are on that map from the remaining path to follow.
         /// </summary>
-        public void ClearTileForMapChange()
+        public void ClearTileForMapChange(Point newPosition)
         {
             while (_liTilePath.Count > 0 && _liTilePath[0].MapName == CurrentMapName)
             {
                 _liTilePath.RemoveAt(0);
                 SetMoveTo(_liTilePath[0].Position);
+
+                DetermineFacing(_liTilePath[0].Position - newPosition);
             }
         }
 
@@ -695,24 +698,27 @@ namespace RiverHollow.Characters
         protected int AddDirectionalAnimations(ref AnimatedSprite sprite, AnimationData data, int width, int height, bool pingpong, bool backToIdle)
         {
             int xCrawl = 0;
-            sprite.AddAnimation(data.Verb, DirectionEnum.Down, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong, data.Verb == VerbEnum.Action1);
-            xCrawl += width * data.Frames;
-            sprite.AddAnimation(data.Verb, DirectionEnum.Right, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong, data.Verb == VerbEnum.Action1);
-            xCrawl += width * data.Frames;
-            sprite.AddAnimation(data.Verb, DirectionEnum.Up, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong, data.Verb == VerbEnum.Action1);
-            xCrawl += width * data.Frames;
-            sprite.AddAnimation(data.Verb, DirectionEnum.Left, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong, data.Verb == VerbEnum.Action1);
-            xCrawl += width * data.Frames;
+            foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
+            {
+                if (e == DirectionEnum.None) { continue; }
+                AddSpriteAnimation(ref sprite, ref xCrawl, e, data, width, height, pingpong);
+            }
 
             if (backToIdle)
             {
-                SetNextAnimationToIdle(ref sprite, data.Verb, DirectionEnum.Down);
-                SetNextAnimationToIdle(ref sprite, data.Verb, DirectionEnum.Right);
-                SetNextAnimationToIdle(ref sprite, data.Verb, DirectionEnum.Up);
-                SetNextAnimationToIdle(ref sprite, data.Verb, DirectionEnum.Left);
+                foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
+                {
+                    if (e == DirectionEnum.None) { continue; }
+                    SetNextAnimationToIdle(ref sprite, data.Verb, e);
+                }
             }
 
             return xCrawl;
+        }
+        private void AddSpriteAnimation(ref AnimatedSprite sprite, ref int xCrawl, DirectionEnum e, AnimationData data, int width, int height, bool pingpong)
+        {
+            sprite.AddAnimation(data.Verb, e, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong, data.Verb == VerbEnum.Action1);
+            xCrawl += width * data.Frames;
         }
 
         /// <summary>

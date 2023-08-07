@@ -119,13 +119,13 @@ namespace RiverHollow.Game_Managers
 
                 entryPoint = linkedMap.DictionaryTravelPoints[currMap];
 
-                actor.ClearTileForMapChange();
-
                 Maps[currMap].RemoveActor(actor);
                 linkedMap.AddActor(actor);
                 RHTile newTile = linkedMap.GetTileByGridCoords(Util.GetGridCoords(entryPoint.GetMovedCenter()));
                 actor.NewMapPosition = newTile.Position;
                 actor.SetFacing(entryPoint.EntranceDir);
+
+                actor.ClearTileForMapChange(newTile.Position);
             }
         }
 
