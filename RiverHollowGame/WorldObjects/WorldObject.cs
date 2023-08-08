@@ -182,10 +182,7 @@ namespace RiverHollow.WorldObjects
         }
         protected virtual void LoadSprite(string texture)
         {
-            Sprite = new AnimatedSprite(texture)
-            {
-                UseXPosition = Walkable
-            };
+            Sprite = new AnimatedSprite(texture);
 
             if (GetBoolByIDKey("Idle"))
             {

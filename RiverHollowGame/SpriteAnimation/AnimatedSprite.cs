@@ -13,12 +13,11 @@ namespace RiverHollow.SpriteAnimations
         #region Properties
         AnimatedSprite _sprLinkedSprite;
         public int FakeHeight = 0;
-        public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth - 0.1f) : (Position.Y + LayerHeight) - (LayerHeight / 1000f) + (UseXPosition ? (Position.X / 500f): 0);
+        public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth - 0.1f) : (Position.Y + LayerHeight) - (LayerHeight / 1000f) + (Position.X / 10000f);
 
         readonly Texture2D _texture;                         // The texture that holds the images for this sprite
         public Color SpriteColor { get; private set; } = Color.White;
         public float Alpha { get; private set; } = 1;
-        public bool UseXPosition = false;
 
         // Dictionary holding all of the FrameAnimation objects
         Dictionary<string, FrameAnimation> _diFrameAnimations = new Dictionary<string, FrameAnimation>();

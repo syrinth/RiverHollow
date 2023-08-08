@@ -52,7 +52,6 @@ namespace RiverHollow.WorldObjects
             {
                 if (GetBoolByIDKey("Texture")) { Sprite = new AnimatedSprite(DataManager.FOLDER_WORLDOBJECTS + GetStringByIDKey("Texture")); }
                 else { Sprite = new AnimatedSprite(DataManager.FILE_PLANTS); }
-                Sprite.UseXPosition = !Walkable;
 
                 var images = GetStringParamsByIDKey("Image");
                 for (int i = 0; i < MaxStates; i++)
