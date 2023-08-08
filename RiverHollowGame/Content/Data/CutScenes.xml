@@ -14,7 +14,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapHouse_Player][Player:PlayerSpawn][Actors:16-Cutscene_Entrance][Deactivate:16]</Item>
-        <Item>[Speak:16-0][Sound:Door][Face:16-Up][Activate:16][Speed:16-0.5][Move:16-5-Up/Player-4-Left-Down][Speak:16-1][Move:16-5-Down][Introduce:16]</Item>
+        <Item>[Speak:16-0][Sound:Door][Face:16-Up][Activate:16][Speed:16-0.5][Move:16-2-Up/Player-4-Left-Down][Speak:16-1][Move:16-3-Down][Introduce:16]</Item>
       </Value>
     </Item>
     <Item>

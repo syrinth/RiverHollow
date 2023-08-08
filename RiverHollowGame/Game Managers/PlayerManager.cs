@@ -354,7 +354,7 @@ namespace RiverHollow.Game_Managers
 
                 if (displayAlert)
                 {
-                    GUIManager.NewAlertIcon("New Blueprint Unlocked");
+                    GUIManager.NewAlertIcon(DataManager.GetGameTextEntry("Alert_BP").GetFormattedText());
                 }
             }
 
@@ -370,7 +370,8 @@ namespace RiverHollow.Game_Managers
 
             if (displayAlert)
             {
-                GUIManager.NewAlertIcon("New " + (unlocks.Length > 1 ? "Blueprints" : "Blueprint") + " Unlocked");
+                string str = unlocks.Length == 1 ? "Alert_BP" : "Alert_BPS";
+                GUIManager.NewAlertIcon(DataManager.GetGameTextEntry(str).GetFormattedText());
             }
         }
         #endregion

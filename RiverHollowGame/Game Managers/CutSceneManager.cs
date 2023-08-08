@@ -7,10 +7,10 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Misc;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
-using static RiverHollow.Utilities.Enums;
 using System.Linq;
+
+using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
-using System;
 
 namespace RiverHollow.Game_Managers
 {
@@ -272,8 +272,7 @@ namespace RiverHollow.Game_Managers
                                     npcID = GetNPCData(sCommandData[0]);
                                     if (npcID != -1)    //Player should never be talking
                                     {
-                                        Villager b = (Villager)_liUsedNPCs.Find(test => test.ID == npcID);
-                                        b.TalkCutscene(CutsceneManager.GetDialogue(_iID, sCommandData[1]));
+                                        TownManager.DIVillagers[npcID].TalkCutscene(CutsceneManager.GetDialogue(_iID, sCommandData[1]));
                                         goToNext = true;
                                     }
                                     break;
@@ -375,6 +374,10 @@ namespace RiverHollow.Game_Managers
                         currentCommand.ActionPerformed = true;
                         if (goToNext)
                         {
+                            if (currentCommand.Command == CutsceneCommandEnum.ItemID && TownManager.DIVillagers[_liUsedNPCs[0].ID].HasHeldItems())
+                            {
+                                GUIManager.NewAlertIcon(DataManager.GetGameTextEntry("Alert_Inventory").GetFormattedText(), Color.Red);
+                            }
                             _iCurrentCommand++;
                         }
                     }
@@ -664,6 +667,11 @@ namespace RiverHollow.Game_Managers
                         }
                     }
 
+                    if (currentCommand.Command == CutsceneCommandEnum.ItemID && TownManager.DIVillagers[_liUsedNPCs[0].ID].HasHeldItems())
+                    {
+                        GUIManager.NewAlertIcon(DataManager.GetGameTextEntry("Alert_Inventory").GetFormattedText(), Color.Red);
+                    }
+
                     //After all command tags have been processed, set the
                     //current commands actionPerformed to true so it's not processed again
                     currentCommand.ActionPerformed = true;
@@ -689,7 +697,17 @@ namespace RiverHollow.Game_Managers
 
         private void GiveItem(string[] sCommandData)
         {
-            InventoryManager.AddToInventory(int.Parse(sCommandData[0]), sCommandData.Length == 1 ? 1 : int.Parse(sCommandData[1]));
+            int id = int.Parse(sCommandData[0]);
+            int number = sCommandData.Length == 1 ? 1 : int.Parse(sCommandData[1]);
+
+            if (InventoryManager.HasSpaceInInventory(id, number))
+            {
+                InventoryManager.AddToInventory(id, number);
+            }
+            else
+            {
+                TownManager.DIVillagers[_liUsedNPCs[0].ID].AssignItemToNPC(int.Parse(sCommandData[0]), sCommandData.Length == 1 ? 1 : int.Parse(sCommandData[1]));
+            }
         }
         private void IntroduceActor(string[] sCommandData)
         {
@@ -701,8 +719,7 @@ namespace RiverHollow.Game_Managers
         }
         private void MoveToTown(string[] sCommandData)
         {
-            int characterID = -1;
-            if (int.TryParse(sCommandData[0], out characterID))
+            if (int.TryParse(sCommandData[0], out int characterID))
             {
                 TownManager.DIVillagers[characterID].TryToMoveIn();
                 TownManager.DIVillagers[characterID].MoveToSpawn();

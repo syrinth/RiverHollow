@@ -145,7 +145,7 @@ namespace RiverHollow.Map_Handling
             MapWidthTiles = _map.Width;
             MapHeightTiles = _map.Height;
 
-            LoadMapObjects();
+            LoadMapObjects(true);
         }
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap, string mapName)
@@ -712,12 +712,12 @@ namespace RiverHollow.Map_Handling
         }
         #endregion
 
-        public void LoadMapObjects()
+        public void LoadMapObjects(bool copying)
         {
             ReadOnlyCollection<TiledMapObjectLayer> objectLayers = _map.ObjectLayers;
             foreach (TiledMapObjectLayer ol in objectLayers)
             {
-                if (ol.Name.Contains("Travel"))
+                if (!copying && ol.Name.Contains("Travel"))
                 {
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
@@ -1550,7 +1550,7 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = false;
 
-            if (!PlayerManager.PlayerActor.HasHP || GamePaused())
+            if (!PlayerManager.PlayerActor.HasHP || GamePaused() || CutsceneManager.Playing)
             {
                 return rv;
             }
@@ -1727,6 +1727,11 @@ namespace RiverHollow.Map_Handling
         public bool ProcessHover(Point mouseLocation)
         {
             bool rv = false;
+
+            if (CutsceneManager.Playing)
+            {
+                return rv;
+            }
 
             if (_liTestTiles.Count > 0) { _liTestTiles.Clear(); }
 

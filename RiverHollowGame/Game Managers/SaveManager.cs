@@ -341,6 +341,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "SpokenKeys")]
             public List<string> spokenKeys;
+
+            [XmlArray(ElementName = "HeldItems")]
+            public List<string> heldItems;
         }
         public struct ChildData
         {

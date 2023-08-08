@@ -190,9 +190,9 @@ namespace RiverHollow.GUIComponents.Screens
         }
         #endregion
 
-        public override void NewAlertIcon(string text)
+        public override void NewAlertIcon(string text, Color c)
         {
-            HUDNewAlert newAlert = new HUDNewAlert(text, RemoveTaskIcon);
+            HUDNewAlert newAlert = new HUDNewAlert(text, c, RemoveTaskIcon);
 
             if (_liTaskIcons.Count == 0) { newAlert.AnchorToScreen(SideEnum.Right, 3); }
             else { newAlert.AnchorAndAlignWithSpacing(_liTaskIcons[_liTaskIcons.Count - 1], SideEnum.Top, SideEnum.Right, 1); }
@@ -239,18 +239,27 @@ namespace RiverHollow.GUIComponents.Screens
 
         public delegate void RemoveDelegate(HUDNewAlert q);
         private RemoveDelegate _delAction;
-        public HUDNewAlert(string text, RemoveDelegate del) : base(GUIUtils.WINDOW_BROWN, 10, 10)
+
+        bool _bSlow = false;
+        public HUDNewAlert(string text, Color c, RemoveDelegate del) : base(GUIUtils.WINDOW_BROWN, 10, 10)
         {
             _delAction = del;
-            _gMarker = new GUIImage(GUIUtils.ICON_EXCLAMATION);
+            if (c == Color.Red)
+            {
+                _bSlow = true;
+                _gMarker = new GUIImage(GUIUtils.ICON_ERROR);
+            }
+            else { _gMarker = new GUIImage(GUIUtils.ICON_EXCLAMATION); }
+
             _gText = new GUIText(text);
+            _gText.SetColor(c);
 
             _gMarker.AnchorToInnerSide(this, SideEnum.TopLeft);
             _gText.AnchorAndAlignWithSpacing(_gMarker, SideEnum.Right, SideEnum.CenterY, 1);
             AddControl(_gMarker);
             AddControl(_gText);
 
-            Resize();
+            DetermineSize();
         }
 
         public override void Update(GameTime gTime)
@@ -260,7 +269,7 @@ namespace RiverHollow.GUIComponents.Screens
             else
             {
                 MoveBy(new Point(0, -1));
-                Alpha(Alpha() - 0.005f);
+                Alpha(Alpha() - (_bSlow ? 0.002f : 0.005f));
             }
         }
     }

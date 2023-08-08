@@ -70,13 +70,15 @@ namespace RiverHollow.GUIComponents.Screens
             //Create the Character Name Window
             _nameWindow = new GUITextInputWindow();
             _nameWindow.AnchorAndAlignWithSpacing(_displayBox, SideEnum.Bottom, SideEnum.CenterX, 3);
+
+#if DEBUG
             _nameWindow.SetText("Syrinth");
 
             //Create the Body Picker
             OptionLabel bodyLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Body").GetFormattedText(), ChangeHairType, ChangeHairColor, AssignColorPicker, Color.White);
             bodyLabel.AnchorAndAlignThenMove(_nameWindow, SideEnum.Bottom, SideEnum.Left, 5, 4);
             bodyLabel.Show(false);
-#if DEBUG
+
             OptionLabel hairLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Hair").GetFormattedText(), ChangeHairType, ChangeHairColor, AssignColorPicker, PlayerManager.PlayerActor.HairColor);
             hairLabel.AnchorAndAlignWithSpacing(bodyLabel, SideEnum.Bottom, SideEnum.Left, 3);
 
@@ -104,9 +106,11 @@ namespace RiverHollow.GUIComponents.Screens
             _townWindow.SetText("River Hollow");
 
             _gCheckSkipCutscene = new GUICheck("Skip Intro");
-            _gCheckSkipCutscene.SetChecked(true);
             _gCheckSkipCutscene.AnchorAndAlign(_window, SideEnum.Bottom, SideEnum.Left);
             _gCheckSkipCutscene.ScaledMoveBy(7, 0);
+#if DEBUG
+            _gCheckSkipCutscene.SetChecked(true);
+#endif
 
             _btnOK = new GUIButton("OK", BtnNewGame);
             _window.AddControl(_btnOK);
@@ -127,6 +131,13 @@ namespace RiverHollow.GUIComponents.Screens
 
             //_gCheckPregnancy = new GUICheck("Pregnancy", false, BtnPregnancy);
             //_gCheckPregnancy.AnchorAndAlignToObject(_gShirt, SideEnum.Bottom, SideEnum.Left, 10);
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+
+            _btnOK.Enable(!string.IsNullOrEmpty(_townWindow.GetText()) && !string.IsNullOrEmpty(_nameWindow.GetText()));
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

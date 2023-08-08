@@ -6,7 +6,6 @@ using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.TravelManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
@@ -28,17 +27,20 @@ namespace RiverHollow.Characters
         protected RHTask _assignedTask;
 
         protected List<string> _liSpokenKeys;
+        protected List<string> _liHeldItems;
 
         public TalkingActor() : base()
         {
             _liActorFaceQueue = new List<ActorFaceEnum>();
             _liSpokenKeys = new List<string>();
+            _liHeldItems = new List<string>();
         }
         public TalkingActor(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             FriendshipPoints = 1000 * ID/2;
             _liActorFaceQueue = new List<ActorFaceEnum>();
             _liSpokenKeys = new List<string>();
+            _liHeldItems = new List<string>();
 
             _diDialogue = DataManager.GetNPCDialogue(stringData["Key"]);
 
@@ -55,11 +57,15 @@ namespace RiverHollow.Characters
                 Rectangle pos = new Rectangle(Position.X, Position.Y, 16, 16);
                 pos.Offset(0, -Constants.TASK_ICON_OFFSET);
 
-                if (_iTaskGoals > 0)
+                if(HasHeldItems())
+                {
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), pos, GUIUtils.HELD_ITEM, Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
+                }
+                else if (_iTaskGoals > 0)
                 {
                     spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), pos, GUIUtils.QUEST_TURNIN, Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                 }
-                if (_assignedTask?.TaskState == TaskStateEnum.Assigned)
+                else if (_assignedTask?.TaskState == TaskStateEnum.Assigned)
                 {
                     spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), pos, GUIUtils.QUEST_NEW, Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                 }
@@ -278,5 +284,54 @@ namespace RiverHollow.Characters
         {
             _liSpokenKeys.Add(key);
         }
+
+        #region HeldItemHandling
+        public bool HasHeldItems()
+        {
+            return _liHeldItems.Count > 0;
+        }
+        public void AssignItemToNPC(int id, int number)
+        {
+            _liHeldItems.Add(string.Format("{0}-{1}", id, number));
+        }
+        public bool PlayerCanHoldItems()
+        {
+            bool rv = _liHeldItems.Count > 0;
+
+            for (int i = 0; i < _liHeldItems.Count; i++)
+            {
+                var split = Util.FindIntArguments(_liHeldItems[i]);
+                if (!InventoryManager.HasSpaceInInventory(split[0], split[1]))
+                {
+                    rv = false;
+                    break;
+                }
+            }
+
+            return rv;
+        }
+        public void GiveItemsToPlayer()
+        {
+            int lastFound = -1;
+            for (int i = 0; i < _liHeldItems.Count; i++)
+            {
+                lastFound = i;
+                var split = Util.FindIntArguments(_liHeldItems[i]);
+                if (InventoryManager.HasSpaceInInventory(split[0], split[1]))
+                {
+                    InventoryManager.AddToInventory(split[0], split[1]);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            if(lastFound > -1)
+            {
+                _liHeldItems.RemoveRange(0, lastFound + 1);
+            }
+        }
+        #endregion
     }
 }

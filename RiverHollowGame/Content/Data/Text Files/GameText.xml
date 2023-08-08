@@ -179,27 +179,27 @@
     </Item>
 	<Item>
       <Key>44</Key>
-      <Value>[Name:Desc_Agility][Text:Agilty \n Increases the damage of speed based characters.]</Value>
+      <Value>[Name:Give_Item][Text:Here you go.][GiveItems]</Value>
     </Item>
 	<Item>
       <Key>45</Key>
-      <Value>[Name:Desc_Damage][Text:Damage]</Value>
+      <Value>[Name:Alert_BP][Text:Blueprint Unlocked]</Value>
     </Item>
 	<Item>
       <Key>46</Key>
-      <Value>[Name:Desc_Defence][Text:Defence \n Reduces the damage taken by physical attacks.]</Value>
+      <Value>[Name:Alert_BPS][Text:Blueprints Unlocked]</Value>
     </Item>
 	<Item>
       <Key>47</Key>
-      <Value>[Name:Desc_Evasion][Text:Evasion \n Increases your chance to avoid being hit.]</Value>
+      <Value>[Name:Alert_Task][Text:New Task]</Value>
     </Item>
 	<Item>
       <Key>48</Key>
-      <Value>[Name:Desc_Magic][Text:Magic \n Increases the damage of magical characters.]</Value>
+      <Value>[Name:Alert_Finished][Text:Task Complete]</Value>
     </Item>
 	<Item>
       <Key>49</Key>
-      <Value>[Name:Desc_Vitality][Vitality \n Increases your maximum hit points.]</Value>
+      <Value>[Name:Alert_Inventory][Text:Inventory Full]</Value>
     </Item>
 	<Item>
       <Key>50</Key>

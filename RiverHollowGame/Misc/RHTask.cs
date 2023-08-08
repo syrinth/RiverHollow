@@ -279,7 +279,7 @@ namespace RiverHollow.Misc
                 
                 SpawnTaskMobs();
 
-                GUIManager.NewAlertIcon("New Task");
+                GUIManager.NewAlertIcon(DataManager.GetGameTextEntry("Alert_Task").GetFormattedText());
             }
         }
 
@@ -470,7 +470,7 @@ namespace RiverHollow.Misc
                 }
 
                 TaskManager.TaskLog.Remove(this);
-                GUIManager.NewAlertIcon("Task Complete");
+                GUIManager.NewAlertIcon(DataManager.GetGameTextEntry("Alert_Finished").GetFormattedText());
             }
         }
 

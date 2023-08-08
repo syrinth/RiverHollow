@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json.Linq;
 using RiverHollow.Game_Managers;
@@ -57,6 +58,13 @@ namespace RiverHollow.GUIComponents.Screens
             MoveSelector(GameManager.HUDItemCol);
 
             Snap(SideEnum.Bottom);
+        }
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (!CutsceneManager.Playing)
+            {
+                base.Draw(spriteBatch);
+            }
         }
 
         public override void Update(GameTime gTime)

@@ -380,7 +380,6 @@ Exit:
                 }
 
                 rv = true;
-
             }
 
             //If we failed to add it, then we need to drop it onto the world map.

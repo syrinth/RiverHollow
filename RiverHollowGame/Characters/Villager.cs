@@ -219,6 +219,10 @@ namespace RiverHollow.Characters
                 Introduce();
                 _bHasTalked = true;
             }
+            else if (PlayerCanHoldItems())
+            {
+                rv = DataManager.GetGameTextEntry("Give_Item");
+            }
             else if (!CheckTaskLog(ref rv))
             {
                 if (_assignedTask != null)
@@ -612,6 +616,7 @@ namespace RiverHollow.Characters
                 relationShipStatus = (int)RelationshipState,
                 weeklyGiftGiven = WeeklyGiftGiven,
                 spokenKeys = _liSpokenKeys,
+                heldItems = _liHeldItems
             };
 
             return npcData;
@@ -635,6 +640,15 @@ namespace RiverHollow.Characters
             foreach (string s in data.spokenKeys)
             {
                 GetDialogEntry(s).Spoken(this);
+            }
+
+            foreach (string s in data.heldItems)
+            {
+                string[] split = Util.FindArguments(s);
+                int id = int.Parse(split[0]);
+                int number = split.Length == 1 ? 1 : int.Parse(split[1]);
+
+                AssignItemToNPC(id, number);
             }
 
             int index = 0;

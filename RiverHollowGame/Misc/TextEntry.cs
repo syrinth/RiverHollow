@@ -1,10 +1,10 @@
-﻿using RiverHollow.Characters;
+﻿using Microsoft.Xna.Framework;
+using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Misc
@@ -262,8 +262,27 @@ namespace RiverHollow.Misc
                 for (int i = 0; i < itemSplit.Length; i++)
                 {
                     string[] split = Util.FindArguments(itemSplit[i]);
-                    InventoryManager.AddToInventory(int.Parse(split[0]), split.Length == 1 ? 1 : int.Parse(split[1]));
+                    int id = int.Parse(split[0]);
+                    int number = split.Length == 1 ? 1 : int.Parse(split[1]);
+
+                    if (InventoryManager.HasSpaceInInventory(id, number))
+                    {
+                        InventoryManager.AddToInventory(id, number);
+                    }
+                    else
+                    {
+                        GameManager.CurrentNPC.AssignItemToNPC(id, number);
+                    }
                 }
+
+                if (GameManager.CurrentNPC.HasHeldItems())
+                {
+                    GUIManager.NewAlertIcon(DataManager.GetGameTextEntry("Alert_Inventory").GetFormattedText(), Color.Red);
+                }
+            }
+            if (_diTags.ContainsKey("GiveItems"))
+            {
+                ((TalkingActor)GameManager.CurrentNPC).GiveItemsToPlayer();
             }
             if (_diTags.ContainsKey("UnlockItemID"))
             {

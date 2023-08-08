@@ -45,7 +45,7 @@ namespace RiverHollow.Game_Managers
         {
             foreach(RHMap m in Maps.Values)
             {
-                m.LoadMapObjects();
+                m.LoadMapObjects(false);
             }
         }
 

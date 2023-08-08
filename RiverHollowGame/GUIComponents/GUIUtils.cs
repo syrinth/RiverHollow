@@ -45,13 +45,15 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle ICON_HEART = new Rectangle(208, 72, 10, 9);
         internal static Rectangle ICON_HEART_GLOW = new Rectangle(192, 72, 12, 11);
         internal static Rectangle ICON_GARBAGE = new Rectangle(336, 112, 16, 16);
-        internal static Rectangle ICON_EXCLAMATION = new Rectangle(278, 131, 4, 10);
+        internal static Rectangle ICON_EXCLAMATION = new Rectangle(272, 128, 4, 10);
+        internal static Rectangle ICON_ERROR = new Rectangle(276, 128, 8, 8);
 
         internal static Rectangle DIALOGUE_MORE = new Rectangle(160, 80, 16, 16);
         internal static Rectangle DIALOGUE_DONE = new Rectangle(176, 80, 16, 16);
 
         internal static Rectangle QUEST_NEW = new Rectangle(160, 96, 16, 16);
         internal static Rectangle QUEST_TURNIN = new Rectangle(176, 96, 16, 16);
+        internal static Rectangle HELD_ITEM = new Rectangle(144, 128, 16, 16);
 
         internal static Rectangle CURSOR_POINT = new Rectangle(320, 160, 16, 16);
         internal static Rectangle CURSOR_PICKUP = new Rectangle(336, 160, 16, 16);
