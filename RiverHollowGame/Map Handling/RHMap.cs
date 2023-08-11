@@ -1919,6 +1919,11 @@ namespace RiverHollow.Map_Handling
                     InventoryManager.AddToInventory(dummyItem.ID, 1, true, true);
                     GameManager.EmptyHeldObject();
                 }
+                else if (TownModeBuild())
+                {
+                    GameManager.EmptyHeldObject();
+                    PostBuildingCleanup(true);
+                }
                 else if(dummyItem == null)
                 {
                     ErrorManager.TrackError();

@@ -472,15 +472,29 @@ namespace RiverHollow.Game_Managers
             PlayerActor.RefillHealth();
         }
 
-        public static bool LoseEnergy(float x)
+        public static bool HasEnergy(float x)
         {
             bool rv = false;
             if (CurrentEnergy >= x)
             {
-                CurrentEnergy -= x;
                 rv = true;
             }
             return rv;
+        }
+        public static void ToolLoseEnergy()
+        {
+            if (ToolInUse != null)
+            {
+                LoseEnergy(ToolInUse.EnergyCost);
+            }
+        }
+
+        public static void LoseEnergy(float x)
+        {
+            if (CurrentEnergy >= x)
+            {
+                CurrentEnergy -= x;
+            }
         }
         public static void RecoverEnergy(float x)
         {
@@ -757,7 +771,7 @@ namespace RiverHollow.Game_Managers
                 ToolInUse.Position = new Point(PlayerActor.CollisionBoxLocation.X - Constants.TILE_SIZE, PlayerActor.CollisionBoxLocation.Y - (Constants.TILE_SIZE * 2));
                 if (ToolInUse != null && !Busy)
                 {
-                    if (LoseEnergy(ToolInUse.EnergyCost))
+                    if (HasEnergy(ToolInUse.EnergyCost))
                     {
                         Busy = true;
                         AllowMovement = false;

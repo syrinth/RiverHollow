@@ -261,6 +261,7 @@ namespace RiverHollow.Map_Handling
             bool rv = false;
             if (WorldObject != null && WorldObject.IsDestructible())
             {
+                rv = true;
                 ((Destructible)WorldObject).DealDamage(toolUsed);
             }
 
@@ -297,8 +298,9 @@ namespace RiverHollow.Map_Handling
                 }
                 else if (WorldObject == null && GetFloorObject() == null)
                 {
-                    Tilled = !Tilled;
+                    PlayerManager.ToolLoseEnergy();
 
+                    Tilled = !Tilled;
                     if (Tilled)
                     {
                         Watered = EnvironmentManager.IsRaining();

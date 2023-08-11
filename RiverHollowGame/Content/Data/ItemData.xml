@@ -559,7 +559,7 @@
     </Item>
     <Item>
       <Key>139</Key>
-      <Value>[Type:Tool][Subtype:Scythe][Image:0-8][Level:1][SoundEffect:Scythe][AnimationData:0-128/3-4/5/0.06][Stam:1][HitAt:2]</Value>
+      <Value>[Type:Tool][Subtype:Scythe][Image:0-8][Level:1][SoundEffect:Scythe][AnimationData:0-128/3-4/5/0.06][Stam:0.5][HitAt:2]</Value>
     </Item>
     <Item>
       <Key>140</Key>

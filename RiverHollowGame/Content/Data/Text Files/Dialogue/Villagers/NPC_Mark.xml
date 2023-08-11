@@ -46,7 +46,7 @@ I'll keep the visitors entertained as best I can, but you'll have to check in be
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Text:Yes I will marry you!][Name:MarriageYes]</Value>
+      <Value>[Name:ShopOpen][Text:Hey]</Value>
     </Item>
     <Item>
       <Key>11</Key>

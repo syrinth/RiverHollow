@@ -17,7 +17,7 @@ namespace RiverHollow.Items
     public class Tool : Item
     {
         public ToolEnum ToolType => GetEnumByIDKey<ToolEnum>("Subtype");
-        public int EnergyCost => GetIntByIDKey("Stam", 0);
+        public float EnergyCost => GetFloatByIDKey("Stam", 0);
         public int ToolLevel => GetIntByIDKey("Level");
 
         protected int HitAt => GetIntByIDKey("HitAt");
@@ -85,12 +85,16 @@ namespace RiverHollow.Items
                     {
                         case ToolEnum.Axe:
                         case ToolEnum.Pick:
-                            target.DamageObject(PlayerManager.ToolInUse);
+                            if (target.DamageObject(PlayerManager.ToolInUse))
+                            {
+                                PlayerManager.ToolLoseEnergy();
+                            }
                             break;
                         case ToolEnum.Hoe:
                             target.TillTile();
                             break;
                         case ToolEnum.WateringCan:
+                            PlayerManager.ToolLoseEnergy();
                             target.WaterTile();
                             break;
                     }

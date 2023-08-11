@@ -314,7 +314,7 @@ namespace RiverHollow.Game_Managers
             if (!string.IsNullOrEmpty(rv)) { return Util.ParseInt(rv); }
             else { return defaultValue; }
         }
-        public static float GetFloatByIDKey(int id, string key, DataType type, int defaultValue = -1)
+        public static float GetFloatByIDKey(int id, string key, DataType type, float defaultValue = -1)
         {
             string rv = GetStringByIDKey(id, key, type);
 

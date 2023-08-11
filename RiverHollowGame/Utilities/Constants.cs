@@ -4,7 +4,11 @@
     {
         public const bool DRAW_COLLISION = false;
         public const bool DRAW_HITBOX = false;
+#if DEBUG
         public const bool DRAW_ADJACENCY = true;
+#else
+        public const bool DRAW_ADJACENCY = false;
+#endif
         public const int PLAYER_ADJACENCY_SIZE = TILE_SIZE / 2;
         public const int GRAB_REACH = 1;
         public const float MOUSE_PRESS_INTERVAL = 0.5f;
@@ -12,7 +16,7 @@
         public const string TOWN_MAP_NAME = "mapTown";
         public const string PLAYER_HOME_NAME = "mapHouse_Player";
         public const float PLAYER_STARTING_HP = 10;
-        public const float PLAYER_STARTING_ENERGY = 80;
+        public const float PLAYER_STARTING_ENERGY = 120;
         public const float PLAYER_STARTING_MAGIC = 20;
         public const int PLAYER_GEAR_ROWS = 3;
         public const int PLAYER_GEAR_COLUMNS = 2;

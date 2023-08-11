@@ -71,21 +71,20 @@ namespace RiverHollow.Characters
             // SetClothes((Clothes)DataManager.GetItem(int.Parse(DataManager.Config[6]["ItemID"])));
 
 #if DEBUG
-
             BodySprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, "03"));// BodyTypeStr));
 
             //Hair type has already been set either by default or by being allocated.
             SetHairType(HairIndex);
 
             //Loads the Sprites for the players body for the appropriate class
-            _sprEyes = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER));
+            _sprEyes = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER), Constants.TILE_SIZE, Constants.TILE_SIZE);
+            _sprEyes.SetLinkedSprite(BodySprite, false);
 
             BodySprite.SetColor(Color.White);
             _sprHair.SetColor(HairColor);
             _sprEyes.SetColor(EyeColor);
 #else
-
-            BodySprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Body_01", DataManager.FOLDER_PLAYER, "03"));// BodyTypeStr));
+            BodySprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Body_01", DataManager.FOLDER_PLAYER));// BodyTypeStr));
 #endif
             _lightSource = DataManager.GetLight(7);
 
@@ -176,9 +175,10 @@ namespace RiverHollow.Characters
         { 
             HairIndex = index;
             //Loads the Sprites for the players hair animations for the class based off of the hair ID
-            _sprHair = LoadSpriteAnimations(Util.LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex));
+            _sprHair = LoadSpriteAnimations(Util.LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex), Constants.TILE_SIZE, Constants.TILE_SIZE);
             _sprHair.SetLayerDepthMod(Constants.HAIR_DEPTH);
             _sprHair.SetColor(HairColor);
+            _sprHair.SetLinkedSprite(BodySprite, false);
         }
 
         public override void PlayAnimation<TEnum>(TEnum anim)
@@ -255,7 +255,7 @@ namespace RiverHollow.Characters
 
             foreach (AnimatedSprite spr in GetSprites())
             {
-                spr.SetLinkedSprite(ActiveMount.BodySprite);
+                spr.SetLinkedSprite(ActiveMount.BodySprite, true);
             }
         }
         public void Dismount()
@@ -266,7 +266,7 @@ namespace RiverHollow.Characters
 
             foreach (AnimatedSprite spr in GetSprites())
             {
-                spr.SetLinkedSprite(null);
+                spr.SetLinkedSprite(null, false);
             }
         }
 
@@ -289,8 +289,8 @@ namespace RiverHollow.Characters
         {
             base.Flicker(value);
             BodySprite.SetColor(Color.White * (_bFlicker ? 1 : 0));
-            HairSprite.SetColor(HairColor * (_bFlicker ? 1 : 0));
-            EyeSprite.SetColor(EyeColor * (_bFlicker ? 1 : 0));
+            HairSprite?.SetColor(HairColor * (_bFlicker ? 1 : 0));
+            EyeSprite?.SetColor(EyeColor * (_bFlicker ? 1 : 0));
         }
 
         public override void SetMoveTo(Point v, bool update = true)

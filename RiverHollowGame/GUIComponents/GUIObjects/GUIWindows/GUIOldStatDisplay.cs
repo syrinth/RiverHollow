@@ -58,7 +58,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         protected override void BeginHover()
         {
-            _gText.SetText(string.Format("{0}/{1}", _fCurr, _fMax));
+            _gText.SetText(string.Format("{0}/{1}", (int)_fCurr, (int)_fMax));
             _gText.AlignToObject(this, SideEnum.Center);
             _gText.Show(true);
         }

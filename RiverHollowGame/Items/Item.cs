@@ -258,6 +258,10 @@ namespace RiverHollow.Items
         {
             return DataManager.GetIntByIDKey(ID, key, DataType.Item, defaultValue);
         }
+        public virtual float GetFloatByIDKey(string key, float defaultValue = -1)
+        {
+            return DataManager.GetFloatByIDKey(ID, key, DataType.Item, defaultValue);
+        }
         public string GetStringByIDKey(string key)
         {
             return DataManager.GetStringByIDKey(ID, key, DataType.Item);

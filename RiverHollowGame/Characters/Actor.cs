@@ -176,6 +176,10 @@ namespace RiverHollow.Characters
         /// <param name="textureName">The texture name for the AnimatedSprite</param>
         protected AnimatedSprite LoadSpriteAnimations(List<AnimationData> listAnimations, string textureName)
         {
+            return LoadSpriteAnimations(listAnimations, textureName, Width, Height);
+        }
+        protected AnimatedSprite LoadSpriteAnimations(List<AnimationData> listAnimations, string textureName, int width, int height)
+        {
             AnimatedSprite sprite = new AnimatedSprite(textureName);
 
             foreach (AnimationData data in listAnimations)

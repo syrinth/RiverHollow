@@ -12,8 +12,9 @@ namespace RiverHollow.SpriteAnimations
     {
         #region Properties
         AnimatedSprite _sprLinkedSprite;
+        bool _bLinkBelow = false;
         public int FakeHeight = 0;
-        public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth - 0.1f) : (Position.Y + LayerHeight) - (LayerHeight / 1000f) + (Position.X / 10000f);
+        public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth + (_bLinkBelow ? -0.1f : 0.1f)) : (Position.Y + LayerHeight) - (LayerHeight / 1000f) + (Position.X / 10000f);
 
         readonly Texture2D _texture;                         // The texture that holds the images for this sprite
         public Color SpriteColor { get; private set; } = Color.White;
@@ -157,8 +158,9 @@ namespace RiverHollow.SpriteAnimations
             _fLayerDepthMod = val;
         }
 
-        public void SetLinkedSprite(AnimatedSprite sprite)
+        public void SetLinkedSprite(AnimatedSprite sprite, bool below)
         {
+            _bLinkBelow = below;
             _sprLinkedSprite = sprite;
         }
 
