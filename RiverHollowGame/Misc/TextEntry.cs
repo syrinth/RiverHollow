@@ -252,6 +252,8 @@ namespace RiverHollow.Misc
         /// <param name="act">The TalkingActor we're talking to</param>
         public void HandlePostWindowActions()
         {
+            TalkingActor talker = ((Villager)GameManager.CurrentNPC);
+
             if (_diTags.ContainsKey("UnlockObjectID"))
             {
                 PlayerManager.AddToCraftingDictionary(int.Parse(_diTags["UnlockObjectID"]));
@@ -271,18 +273,18 @@ namespace RiverHollow.Misc
                     }
                     else
                     {
-                        GameManager.CurrentNPC.AssignItemToNPC(id, number);
+                        talker.AssignItemToNPC(id, number);
                     }
                 }
 
-                if (GameManager.CurrentNPC.HasHeldItems())
+                if (talker.HasHeldItems())
                 {
                     GUIManager.NewAlertIcon(DataManager.GetGameTextEntry("Alert_Inventory").GetFormattedText(), Color.Red);
                 }
             }
             if (_diTags.ContainsKey("GiveItems"))
             {
-                ((TalkingActor)GameManager.CurrentNPC).GiveItemsToPlayer();
+                talker.GiveItemsToPlayer();
             }
             if (_diTags.ContainsKey("UnlockItemID"))
             {
@@ -295,6 +297,13 @@ namespace RiverHollow.Misc
             if (_diTags.ContainsKey("SendToTown"))
             {
                 ((Villager)GameManager.CurrentNPC).ReadySmokeBomb();
+            }
+
+            if (talker.HasAssignedTask() && !CutsceneManager.Playing)
+            {
+                RHTask task = talker.GetAssignedTask();
+                task.TaskIsTalking();
+                GUIManager.QueueTextWindow(GameManager.CurrentNPC.GetDialogEntry(task.StartTaskDialogue));
             }
         }
 

@@ -952,9 +952,10 @@ namespace RiverHollow.Game_Managers
 
             NewDayRecovery();
 
+#if DEBUG
             PlayerActor.SetHairColor(saveData.hairColor);
             PlayerActor.SetHairType(saveData.hairIndex);
-
+#endif
             PlayerActor.SetClothes((Clothing)DataManager.GetItem(saveData.hat.itemID));
             PlayerActor.SetClothes((Clothing)DataManager.GetItem(saveData.chest.itemID));
             PlayerActor.SetBodyType(saveData.bodyTypeIndex);

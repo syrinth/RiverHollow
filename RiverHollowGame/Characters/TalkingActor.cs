@@ -37,7 +37,7 @@ namespace RiverHollow.Characters
         }
         public TalkingActor(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            FriendshipPoints = 1000 * ID/2;
+            FriendshipPoints = 0;
             _liActorFaceQueue = new List<ActorFaceEnum>();
             _liSpokenKeys = new List<string>();
             _liHeldItems = new List<string>();
@@ -109,6 +109,10 @@ namespace RiverHollow.Characters
             ProcessStateEnum(gTime, true);
         }
 
+        public bool HasAssignedTask()
+        {
+            return _assignedTask != null && _assignedTask.TaskState == TaskStateEnum.Assigned;
+        }
         public bool AssignTask(RHTask task)
         {
             bool rv = false;
@@ -120,6 +124,11 @@ namespace RiverHollow.Characters
             }
 
             return rv;
+        }
+        
+        public RHTask GetAssignedTask()
+        {
+            return _assignedTask;
         }
 
         public void ModifyTaskGoalValue(int val)

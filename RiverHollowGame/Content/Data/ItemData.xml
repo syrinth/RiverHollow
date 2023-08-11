@@ -95,7 +95,7 @@
     </Item>
     <Item>
       <Key>23</Key>
-      <Value>[Type:Food][Subtype:Food][Image:1-0][Value:10][FoodType:Forage][Stam:1][FoodValue:0]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:1-0][Value:10][FoodType:Forage][Stam:3][FoodValue:0]</Value>
     </Item>
     <Item>
       <Key>24</Key>
@@ -227,7 +227,7 @@
     </Item>
     <Item>
       <Key>56</Key>
-      <Value>[Type:Resource][Subtype:None][Image:9-3][Value:20]</Value>
+      <Value>[Type:Resource][Subtype:Monster][Image:9-3][Value:20]</Value>
     </Item>
     <Item>
       <Key>57</Key>
@@ -619,7 +619,7 @@
     </Item>
     <Item>
       <Key>154</Key>
-      <Value>[Type:Food][Subtype:Food][Image:4-2][Value:8][Stam:2]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:4-2][Value:8][Stam:4]</Value>
     </Item>
     <Item>
       <Key>155</Key>
@@ -655,7 +655,7 @@
     </Item>
     <Item>
       <Key>163</Key>
-      <Value>[Type:Food][Subtype:Food][Image:5-2][ItemGroups:Herb][Value:30][Stam:10][FoodType:Healthy]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:5-2][ItemGroups:Herb][Value:30][Stam:20][FoodType:Healthy]</Value>
     </Item>
     <Item>
       <Key>164</Key>

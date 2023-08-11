@@ -19,7 +19,7 @@ Hehe...][Default]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Name:ShopOpen][Text:Yes, what is it?]</Value>
+      <Value>[Name:ShopOpen][Text:Yes, what is it?][Selection:Shop]</Value>
     </Item>
     <Item>
       <Key>4</Key>

@@ -16,11 +16,12 @@
         public const string TOWN_MAP_NAME = "mapTown";
         public const string PLAYER_HOME_NAME = "mapHouse_Player";
         public const float PLAYER_STARTING_HP = 10;
-        public const float PLAYER_STARTING_ENERGY = 120;
+        public const float PLAYER_STARTING_ENERGY = 150;
         public const float PLAYER_STARTING_MAGIC = 20;
         public const int PLAYER_GEAR_ROWS = 3;
         public const int PLAYER_GEAR_COLUMNS = 2;
         public const int ENERGY_NAP_RECOVERY = 20;
+        public const int BUILDING_TRAVELER_BOOST = 70;
 
         public const float PLAYER_INVULN_PERIOD = 1;
         public const float MOB_INVULN_PERIOD = 0.3f;
@@ -83,6 +84,14 @@
         public const int EXTRA_TRAVELER_THRESHOLD = 10;
         public const int GROUP_DIVISOR = 3;
         public const int MEMBER_DIVISOR = 2;
+
+        public const int TALK_FRIENDSHIP = 10;
+        public const int GIFT_COLLECTION = 50;
+        public const int GIFT_HAPPY = 20;
+        public const int GIFT_PLEASED = 10;
+        public const int GIFT_NEUTRAL = 5;
+        public const int GIFT_SAD = -2;
+        public const int GIFT_MISERABLE = -10;
 
         public const int FOLLOW_ALERT_THRESHOLD = TILE_SIZE * 8;
         public const int FOLLOW_ARRIVED = TILE_SIZE * 3;

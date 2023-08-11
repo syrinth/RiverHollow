@@ -2,7 +2,6 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Utilities;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
@@ -101,6 +100,12 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             return rv;
+        }
+
+        public override void CloseMainWindow()
+        {
+            InventoryManager.CleanupInventoryDisplay();
+            base.CloseMainWindow();
         }
     }
 }

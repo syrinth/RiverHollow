@@ -19,7 +19,7 @@
         public enum HazardTypeEnum { Passive, Timed, Triggered };
 
         public enum GameScreenEnum { Info, World };
-        public enum DisplayTypeEnum { Inventory, PlayerInventory };
+        public enum DisplayTypeEnum { None, Inventory, PlayerInventory };
         public enum ItemBoxDraw { Always, Never, OnlyStacks };
         public enum CodexPageEnum { Villagers, Merchants, Travelers, Mobs, Items };
 

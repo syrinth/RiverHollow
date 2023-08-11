@@ -91,5 +91,11 @@ namespace RiverHollow.GUIComponents.Screens
 
             return rv;
         }
+
+        public override void CloseMainWindow()
+        {
+            InventoryManager.CleanupInventoryDisplay();
+            base.CloseMainWindow();
+        }
     }
 }

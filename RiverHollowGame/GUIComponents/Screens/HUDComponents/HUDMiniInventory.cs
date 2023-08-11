@@ -61,7 +61,7 @@ namespace RiverHollow.GUIComponents.Screens
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!CutsceneManager.Playing)
+            if (!CutsceneManager.Playing && InventoryManager.CurrentInventoryDisplay == Enums.DisplayTypeEnum.None)
             {
                 base.Draw(spriteBatch);
             }

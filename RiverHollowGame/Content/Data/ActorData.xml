@@ -67,7 +67,7 @@
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:39][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-8-.11-F][ShopData:2][Key:Kyle][Size:16-32]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:39][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-8-.11-F][ShopData:2][Key:Kyle][Size:16-34]</Value>
     </Item>
     <Item>
       <Key>17</Key>
@@ -83,7 +83,7 @@
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:28][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Mark][HappyID:55][PleasedID:60][NeutralID:0][SadID:2][MiserableID:23][ShopData:1][Size:16-34]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:28][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Mark][HappyID:55][PleasedID:60][NeutralID:0][SadID:2][MiserableID:23][ShopData:1][Size:16-36]</Value>
     </Item>
     <Item>
       <Key>21</Key>
@@ -147,7 +147,7 @@
     </Item>
     <Item>
       <Key>36</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Friday][RequestIDs:5/11/16/14/59][ShopData:5][Key:Magda][Size:16-34][Needs:Monster][Wants:Artifact]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Wednesday][RequestIDs:5/11/16/14/59][ShopData:5][Key:Magda][Size:16-34][Needs:Monster][Wants:Artifact]</Value>
     </Item>
     <Item>
       <Key>37</Key>
@@ -155,7 +155,7 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Wednesday][RequestIDs:167/168/57/58/162][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Friday][RequestIDs:167/168/57/58/162][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
     </Item>
     <Item>
       <Key>39</Key>

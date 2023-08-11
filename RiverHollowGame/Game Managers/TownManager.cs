@@ -194,7 +194,7 @@ namespace RiverHollow.Game_Managers
         #region Traveler Code
         public static void IncreaseTravelerBonus()
         {
-            _iTravelerBonus += 50;
+            _iTravelerBonus += Constants.BUILDING_TRAVELER_BOOST;
         }
         private static int BuildingTravelerChance()
         {

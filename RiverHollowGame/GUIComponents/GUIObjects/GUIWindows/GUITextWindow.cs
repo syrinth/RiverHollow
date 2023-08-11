@@ -90,7 +90,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public void ClosingWindow()
         {
             _textEntry.HandlePostWindowActions();
-            if (!GUIManager.IsMainObjectOpen()) {
+            if (!GUIManager.IsMainObjectOpen() && GUIManager.QueuedWindowText == null ) {
                 GameManager.CurrentNPC?.StopTalking();
             }
          }

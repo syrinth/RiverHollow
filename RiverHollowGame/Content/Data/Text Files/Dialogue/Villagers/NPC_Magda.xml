@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Hello! Hello! I am $Actor_41$, merchant and wizard extraordinaire!][Name:Introduction]</Value>
+      <Value>[Name:Introduction][Text:Hello! Hello! I am $Actor_41$, merchant and wizard extraordinaire!]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -11,7 +11,7 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:Aha! Welcome! How can I help you today?][Selection:MerchantTalk][Name:Selection]</Value>
+      <Value>[Name:Selection][Text:Aha! Welcome! How can I help you today?][Selection:MerchantTalk]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Text:You've helped me enough for now!][Name:RequestsComplete]</Value>
+      <Value>[Name:RequestsComplete][Text:You've helped me enough for now!]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -557,7 +557,7 @@ Exit:
         {
             if (GameManager.HeldItem != null && ExtraInventory != null)
             {
-                InventoryManager.AddToInventory(GameManager.HeldItem);
+                AddToInventory(GameManager.HeldItem);
                 GameManager.DropItem();
             }
             if (GameManager.CurrentNPC != null)
@@ -567,11 +567,12 @@ Exit:
 
             if (GameManager.CurrentWorldObject != null && GameManager.CurrentWorldObject.BuildableType(BuildableEnum.Decor))
             {
-                ((Decor)GameManager.CurrentWorldObject).SetDisplayEntity(InventoryManager.ExtraInventory[0, 0], false);
+                ((Decor)GameManager.CurrentWorldObject).SetDisplayEntity(ExtraInventory[0, 0], false);
             }
 
-            InventoryManager.ExtraHoldSingular = false;
-            InventoryManager.LockedInventory = false;
+            ExtraHoldSingular = false;
+            LockedInventory = false;
+            CurrentInventoryDisplay = DisplayTypeEnum.None;
             GameManager.SetSelectedWorldObject(null);
         }
     }

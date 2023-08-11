@@ -132,7 +132,7 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = CurrentScreen.CloseTextWindow();
 
-            if(QueuedWindowText!= null)
+            if (QueuedWindowText != null)
             {
                 OpenTextWindow(QueuedWindowText);
                 QueuedWindowText = null;

@@ -1620,7 +1620,7 @@ namespace RiverHollow.Map_Handling
                     {
                         Rectangle objRect = Util.RectFromTiledMapObject(obj);
                         DirectionEnum facing = DirectionEnum.None;
-                        if (PlayerManager.InRangeOfPlayer(objRect, ref facing))
+                        if (objRect.Contains(mouseLocation) && PlayerManager.InRangeOfPlayer(objRect, ref facing))
                         {
                             if (obj.Name.Equals("Town_Display"))
                             {
@@ -1961,7 +1961,6 @@ namespace RiverHollow.Map_Handling
             {
                 if (this == MapManager.TownMap)
                 {
-                    AddToWorldObjects(placeObject);
                     TaskManager.AdvanceTaskProgress(placeObject);
                 }
 
@@ -1978,6 +1977,10 @@ namespace RiverHollow.Map_Handling
 
                     if (TownModeBuild())
                     {
+                        if (placeObject.BuildableType(BuildableEnum.Building))
+                        {
+                            TownManager.IncreaseTravelerBonus();
+                        }
                         PostBuildingCleanup(placeObject.BuildOnScreen());
                     }
                 }

@@ -1448,7 +1448,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_18</Key>
-      <Value>[Name:$Actor_43$'s Apothecary]</Value>
+      <Value>[Name:Apothecary]</Value>
     </Item>
     <Item>
       <Key>WorldObject_19</Key>

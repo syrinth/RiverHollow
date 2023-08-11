@@ -208,6 +208,11 @@ namespace RiverHollow.Characters
         {
             TextEntry rv = new TextEntry();
 
+            if (!_bHasTalked)
+            {
+                FriendshipPoints += Constants.TALK_FRIENDSHIP;
+            }
+
             foreach (RHTask q in TaskManager.TaskLog)
             {
                 q.AttemptProgress(this);
@@ -488,7 +493,7 @@ namespace RiverHollow.Characters
             {
                 if (_diCollection.ContainsKey(item.ID) && !_diCollection[item.ID])
                 {
-                    FriendshipPoints += 50;
+                    FriendshipPoints += Constants.GIFT_COLLECTION;
                     rv = GetDialogEntry("Collection");
                     int index = new List<int>(_diCollection.Keys).FindIndex(x => x == item.ID);
 
@@ -507,24 +512,24 @@ namespace RiverHollow.Characters
                         {
                             case MoodEnum.Happy:
                                 WeeklyGiftGiven = true;
-                                FriendshipPoints += 20;
+                                FriendshipPoints += Constants.GIFT_HAPPY;
                                 rv = GetDialogEntry("Gift_Happy");
                                 break;
                             case MoodEnum.Pleased:
                                 WeeklyGiftGiven = true;
-                                FriendshipPoints += 10;
+                                FriendshipPoints += Constants.GIFT_PLEASED;
                                 rv = GetDialogEntry("Gift_Pleased");
                                 break;
                             case MoodEnum.Neutral:
-                                FriendshipPoints += 5;
+                                FriendshipPoints += Constants.GIFT_NEUTRAL;
                                 rv = GetDialogEntry("Gift_Neutral");
                                 break;
                             case MoodEnum.Sad:
-                                FriendshipPoints -= 2;
+                                FriendshipPoints += Constants.GIFT_SAD;
                                 rv = GetDialogEntry("Gift_Sad");
                                 break;
                             case MoodEnum.Miserable:
-                                FriendshipPoints -= 10;
+                                FriendshipPoints += Constants.GIFT_MISERABLE;
                                 rv = GetDialogEntry("Gift_Miserable");
                                 break;
                         }
